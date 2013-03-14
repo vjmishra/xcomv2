@@ -15,255 +15,255 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 
 public class XPEDXGetOrderBusinessRulesAction extends WCMashupAction {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1675689407467012708L;
+	private static final long serialVersionUID = 1675689407467012708L;
 
-    public XPEDXGetOrderBusinessRulesAction() {
+	public XPEDXGetOrderBusinessRulesAction() {
 
-	AcceptPriceORFlag = false;
-	PrvntAutoOrdersFlag = false;
-	POAckFlag = false;
+		AcceptPriceORFlag = false;
+		PrvntAutoOrdersFlag = false;
+		POAckFlag = false;
 
-	CustHeaderCommentsFlag = false;
-	DupPOFlag = false;
-	NonStdShipFlag = false;
-	UseCustAmtLimitFlag = false;
-	CustShipCompleteFlag = false;
-	ValSTZipFlag = false;
-	ShipNotNextBusDayFlag = false;
+		CustHeaderCommentsFlag = false;
+		DupPOFlag = false;
+		NonStdShipFlag = false;
+		UseCustAmtLimitFlag = false;
+		CustShipCompleteFlag = false;
+		ValSTZipFlag = false;
+		ShipNotNextBusDayFlag = false;
 
-	CustLineCommentsFlag = false;
-	CustLineAccNoFlag = false;
-	CustLineSeqNoFlag = false;
-	CustLinePONoFlag = false;
-	CustLineField1Flag = false;
-	CustLineField2Flag = false;
-	CustLineField3Flag = false;
-	LineDelDateMatchFlag = false;
-	PrvntBOFlag = false;
-	ItemNotAvlNextDayFlag = false;
-	CustLineLvlCodeFlag = false;
-	PrvntPriceBelowCostFlag = false;
-	PriceDiscrpFlag = false;
+		CustLineCommentsFlag = false;
+		CustLineAccNoFlag = false;
+		CustLineSeqNoFlag = false;
+		CustLinePONoFlag = false;
+		CustLineField1Flag = false;
+		CustLineField2Flag = false;
+		CustLineField3Flag = false;
+		LineDelDateMatchFlag = false;
+		PrvntBOFlag = false;
+		ItemNotAvlNextDayFlag = false;
+		CustLineLvlCodeFlag = false;
+		PrvntPriceBelowCostFlag = false;
+		PriceDiscrpFlag = false;
 
-    }
-
-    @Override
-    public String execute() {
-	try {
-	    outputDoc = prepareAndInvokeMashup("xpedx-cust-GetOrderBusinessRules");
-	    if (log.isDebugEnabled()) {
-		log.debug("getCustomerDetails Output"
-			+ SCXmlUtil.getString(outputDoc));
-	    }
-	} catch (Exception ex) {
-	    log.error(ex);
 	}
-	setBusinessRulesFlags();
-	return "success";
-    }
 
-    protected void setBusinessRulesFlags() {
+	@Override
+	public String execute() {
+		try {
+			outputDoc = prepareAndInvokeMashup("xpedx-cust-GetOrderBusinessRules");
+			if (log.isDebugEnabled()) {
+				log.debug("getCustomerDetails Output"
+						+ SCXmlUtil.getString(outputDoc));
+			}
+		} catch (Exception ex) {
+			log.error(ex);
+		}
+		setBusinessRulesFlags();
+		return "success";
+	}
 
-	Element extnElem = XMLUtilities
-		.getChildElementByName(outputDoc, "Extn");
+	protected void setBusinessRulesFlags() {
 
-	if ("Y".equals(SCXmlUtil
-		.getAttribute(extnElem, "ExtnAcceptPriceORFlag")))
-	    AcceptPriceORFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnPrvntAutoOrdersFlag")))
-	    PrvntAutoOrdersFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnPOAckFlag")))
-	    POAckFlag = true;
+		Element extnElem = XMLUtilities
+				.getChildElementByName(outputDoc, "Extn");
 
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustHeaderCommentsFlag")))
-	    CustHeaderCommentsFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnDupPOFlag")))
-	    DupPOFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnNonStdShipFlag")))
-	    NonStdShipFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnUseCustAmtLimitFlag")))
-	    UseCustAmtLimitFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustShipCompleteFlag")))
-	    CustShipCompleteFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnValSTZipFlag")))
-	    ValSTZipFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnShipNotNextBusDayFlag")))
-	    ShipNotNextBusDayFlag = true;
+		if ("Y".equals(SCXmlUtil
+				.getAttribute(extnElem, "ExtnAcceptPriceORFlag")))
+			AcceptPriceORFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnPrvntAutoOrdersFlag")))
+			PrvntAutoOrdersFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnPOAckFlag")))
+			POAckFlag = true;
 
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustLineCommentsFlag")))
-	    CustLineCommentsFlag = true;
-	if ("Y".equals(SCXmlUtil
-		.getAttribute(extnElem, "ExtnCustLineAccNoFlag")))
-	    CustLineAccNoFlag = true;
-	if ("Y".equals(SCXmlUtil
-		.getAttribute(extnElem, "ExtnCustLineSeqNoFlag")))
-	    CustLineSeqNoFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnCustLinePONoFlag")))
-	    CustLinePONoFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustLineField1Flag")))
-	    CustLineField1Flag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustLineField2Flag")))
-	    CustLineField2Flag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustLineField3Flag")))
-	    CustLineField3Flag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnLineDelDateMatchFlag")))
-	    LineDelDateMatchFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnPrvntBOFlag")))
-	    PrvntBOFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnItemNotAvlNextDayFlag")))
-	    ItemNotAvlNextDayFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnCustLineLvlCodeFlag")))
-	    CustLineLvlCodeFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
-		"ExtnPrvntPriceBelowCostFlag")))
-	    PrvntPriceBelowCostFlag = true;
-	if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnPriceDiscrpFlag")))
-	    PriceDiscrpFlag = true;
-    }
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustHeaderCommentsFlag")))
+			CustHeaderCommentsFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnDupPOFlag")))
+			DupPOFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnNonStdShipFlag")))
+			NonStdShipFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnUseCustAmtLimitFlag")))
+			UseCustAmtLimitFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustShipCompleteFlag")))
+			CustShipCompleteFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnValSTZipFlag")))
+			ValSTZipFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnShipNotNextBusDayFlag")))
+			ShipNotNextBusDayFlag = true;
 
-    public boolean IsAcceptPriceORFlag() {
-	return AcceptPriceORFlag;
-    }
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustLineCommentsFlag")))
+			CustLineCommentsFlag = true;
+		if ("Y".equals(SCXmlUtil
+				.getAttribute(extnElem, "ExtnCustLineAccNoFlag")))
+			CustLineAccNoFlag = true;
+		if ("Y".equals(SCXmlUtil
+				.getAttribute(extnElem, "ExtnCustLineSeqNoFlag")))
+			CustLineSeqNoFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnCustLinePONoFlag")))
+			CustLinePONoFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustLineField1Flag")))
+			CustLineField1Flag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustLineField2Flag")))
+			CustLineField2Flag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustLineField3Flag")))
+			CustLineField3Flag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnLineDelDateMatchFlag")))
+			LineDelDateMatchFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnPrvntBOFlag")))
+			PrvntBOFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnItemNotAvlNextDayFlag")))
+			ItemNotAvlNextDayFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnCustLineLvlCodeFlag")))
+			CustLineLvlCodeFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem,
+				"ExtnPrvntPriceBelowCostFlag")))
+			PrvntPriceBelowCostFlag = true;
+		if ("Y".equals(SCXmlUtil.getAttribute(extnElem, "ExtnPriceDiscrpFlag")))
+			PriceDiscrpFlag = true;
+	}
 
-    public boolean IsPrvntAutoOrdersFlag() {
-	return PrvntAutoOrdersFlag;
-    }
+	public boolean IsAcceptPriceORFlag() {
+		return AcceptPriceORFlag;
+	}
 
-    public boolean IsPOAckFlag() {
-	return POAckFlag;
-    }
+	public boolean IsPrvntAutoOrdersFlag() {
+		return PrvntAutoOrdersFlag;
+	}
 
-    public boolean IsCustHeaderCommentsFlag() {
-	return CustHeaderCommentsFlag;
-    }
+	public boolean IsPOAckFlag() {
+		return POAckFlag;
+	}
 
-    public boolean IsDupPOFlag() {
-	return DupPOFlag;
-    }
+	public boolean IsCustHeaderCommentsFlag() {
+		return CustHeaderCommentsFlag;
+	}
 
-    public boolean IsNonStdShipFlag() {
-	return NonStdShipFlag;
-    }
+	public boolean IsDupPOFlag() {
+		return DupPOFlag;
+	}
 
-    public boolean IsUseCustAmtLimitFlag() {
-	return UseCustAmtLimitFlag;
-    }
+	public boolean IsNonStdShipFlag() {
+		return NonStdShipFlag;
+	}
 
-    public boolean IsCustShipCompleteFlag() {
-	return CustShipCompleteFlag;
-    }
+	public boolean IsUseCustAmtLimitFlag() {
+		return UseCustAmtLimitFlag;
+	}
 
-    public boolean IsValSTZipFlag() {
-	return ValSTZipFlag;
-    }
+	public boolean IsCustShipCompleteFlag() {
+		return CustShipCompleteFlag;
+	}
 
-    public boolean IsShipNotNextBusDayFlag() {
-	return ShipNotNextBusDayFlag;
-    }
+	public boolean IsValSTZipFlag() {
+		return ValSTZipFlag;
+	}
 
-    public boolean IsCustLineCommentsFlag() {
-	return CustLineCommentsFlag;
-    }
+	public boolean IsShipNotNextBusDayFlag() {
+		return ShipNotNextBusDayFlag;
+	}
 
-    public boolean IsCustLineAccNoFlag() {
-	return CustLineAccNoFlag;
-    }
+	public boolean IsCustLineCommentsFlag() {
+		return CustLineCommentsFlag;
+	}
 
-    public boolean IsCustLineSeqNoFlag() {
-	return CustLineSeqNoFlag;
-    }
+	public boolean IsCustLineAccNoFlag() {
+		return CustLineAccNoFlag;
+	}
 
-    public boolean IsCustLinePONoFlag() {
-	return CustLinePONoFlag;
-    }
+	public boolean IsCustLineSeqNoFlag() {
+		return CustLineSeqNoFlag;
+	}
 
-    public boolean IsCustLineField1Flag() {
-	return CustLineField1Flag;
-    }
+	public boolean IsCustLinePONoFlag() {
+		return CustLinePONoFlag;
+	}
 
-    public boolean IsCustLineField2Flag() {
-	return CustLineField2Flag;
-    }
+	public boolean IsCustLineField1Flag() {
+		return CustLineField1Flag;
+	}
 
-    public boolean IsCustLineField3Flag() {
-	return CustLineField3Flag;
-    }
+	public boolean IsCustLineField2Flag() {
+		return CustLineField2Flag;
+	}
 
-    public boolean IsLineDelDateMatchFlag() {
-	return LineDelDateMatchFlag;
-    }
+	public boolean IsCustLineField3Flag() {
+		return CustLineField3Flag;
+	}
 
-    public boolean IsPrvntBOFlag() {
-	return PrvntBOFlag;
-    }
+	public boolean IsLineDelDateMatchFlag() {
+		return LineDelDateMatchFlag;
+	}
 
-    public boolean IsItemNotAvlNextDayFlag() {
-	return ItemNotAvlNextDayFlag;
-    }
+	public boolean IsPrvntBOFlag() {
+		return PrvntBOFlag;
+	}
 
-    public boolean IsCustLineLvlCodeFlag() {
-	return CustLineLvlCodeFlag;
-    }
+	public boolean IsItemNotAvlNextDayFlag() {
+		return ItemNotAvlNextDayFlag;
+	}
 
-    public boolean IsPrvntPriceBelowCostFlag() {
-	return PrvntPriceBelowCostFlag;
-    }
+	public boolean IsCustLineLvlCodeFlag() {
+		return CustLineLvlCodeFlag;
+	}
 
-    public boolean IsPriceDiscrpFlag() {
-	return PriceDiscrpFlag;
-    }
+	public boolean IsPrvntPriceBelowCostFlag() {
+		return PrvntPriceBelowCostFlag;
+	}
 
-    public Element getOutputDoc() {
-	return outputDoc;
-    }
+	public boolean IsPriceDiscrpFlag() {
+		return PriceDiscrpFlag;
+	}
 
-    public void setOutputDoc(Element outputDocument) {
-	outputDoc = outputDocument;
-    }
+	public Element getOutputDoc() {
+		return outputDoc;
+	}
 
-    private static final Logger log = Logger
-	    .getLogger(XPEDXGetOrderBusinessRulesAction.class);
-    protected Element outputDoc;
+	public void setOutputDoc(Element outputDocument) {
+		outputDoc = outputDocument;
+	}
 
-    protected boolean AcceptPriceORFlag;
-    protected boolean PrvntAutoOrdersFlag;
-    protected boolean POAckFlag;
+	private static final Logger log = Logger
+			.getLogger(XPEDXGetOrderBusinessRulesAction.class);
+	protected Element outputDoc;
 
-    protected boolean CustHeaderCommentsFlag;
-    protected boolean DupPOFlag;
-    protected boolean NonStdShipFlag;
-    protected boolean UseCustAmtLimitFlag;
-    protected boolean CustShipCompleteFlag;
-    protected boolean ValSTZipFlag;
-    protected boolean ShipNotNextBusDayFlag;
+	protected boolean AcceptPriceORFlag;
+	protected boolean PrvntAutoOrdersFlag;
+	protected boolean POAckFlag;
 
-    protected boolean CustLineCommentsFlag;
-    protected boolean CustLineAccNoFlag;
-    protected boolean CustLineSeqNoFlag;
-    protected boolean CustLinePONoFlag;
-    protected boolean CustLineField1Flag;
-    protected boolean CustLineField2Flag;
-    protected boolean CustLineField3Flag;
-    protected boolean LineDelDateMatchFlag;
-    protected boolean PrvntBOFlag;
-    protected boolean ItemNotAvlNextDayFlag;
-    protected boolean CustLineLvlCodeFlag;
-    protected boolean PrvntPriceBelowCostFlag;
-    protected boolean PriceDiscrpFlag;
+	protected boolean CustHeaderCommentsFlag;
+	protected boolean DupPOFlag;
+	protected boolean NonStdShipFlag;
+	protected boolean UseCustAmtLimitFlag;
+	protected boolean CustShipCompleteFlag;
+	protected boolean ValSTZipFlag;
+	protected boolean ShipNotNextBusDayFlag;
+
+	protected boolean CustLineCommentsFlag;
+	protected boolean CustLineAccNoFlag;
+	protected boolean CustLineSeqNoFlag;
+	protected boolean CustLinePONoFlag;
+	protected boolean CustLineField1Flag;
+	protected boolean CustLineField2Flag;
+	protected boolean CustLineField3Flag;
+	protected boolean LineDelDateMatchFlag;
+	protected boolean PrvntBOFlag;
+	protected boolean ItemNotAvlNextDayFlag;
+	protected boolean CustLineLvlCodeFlag;
+	protected boolean PrvntPriceBelowCostFlag;
+	protected boolean PriceDiscrpFlag;
 
 }

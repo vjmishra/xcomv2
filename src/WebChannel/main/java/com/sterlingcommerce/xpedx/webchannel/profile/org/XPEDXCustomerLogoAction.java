@@ -11,180 +11,177 @@ import com.yantra.yfs.core.YFSSystem;
 
 public class XPEDXCustomerLogoAction extends WCMashupAction {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = -4731751794963371357L;
-    /**
-     * Logger for this class
-     */
-    private static final Logger LOG = Logger
-	    .getLogger(XPEDXCustomerLogoAction.class);
-    private File upload;// The actual file
-    private String uploadFileName; // The uploaded file name
-    private String filePath;
-    private String absfilePath;
-    private String previewFilePath;
-    private String custLogoUrl;
-    private static String absCustLogoDir;
-    private static String relCustLogoDir;
-    private static String absPreivewLogoDir;
-    private static String relPreivewLogoDir;
+	private static final long serialVersionUID = -4731751794963371357L;
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger LOG = Logger
+			.getLogger(XPEDXCustomerLogoAction.class);
+	private File upload;// The actual file
+	private String uploadFileName; // The uploaded file name
+	private String filePath;
+	private String absfilePath;
+	private String previewFilePath;
+	private String custLogoUrl;
+	private static String absCustLogoDir;
+	private static String relCustLogoDir;
+	private static String absPreivewLogoDir;
+	static {
+		String custpath = YFSSystem.getProperty("customerlogo.path");
+		if (custpath == null) {
+			custpath = "swc/images/CustomerLogo";
+		}
+		custpath = custpath + File.separator;
+		String prevpath = YFSSystem.getProperty("previewlogo.path");
+		if (prevpath == null) {
+			prevpath = "swc/images/PreviewLogo";
+		}
+		prevpath = prevpath + File.separator;
 
-    static {
-	String custpath = YFSSystem.getProperty("customerlogo.path");
-	if (custpath == null) {
-	    custpath = "swc/images/CustomerLogo";
+		absCustLogoDir = custpath;
+		relCustLogoDir = File.separator + custpath;
+		absPreivewLogoDir = prevpath;
 	}
-	custpath = custpath + File.separator;
-	String prevpath = YFSSystem.getProperty("previewlogo.path");
-	if (prevpath == null) {
-	    prevpath = "swc/images/PreviewLogo";
-	}
-	prevpath = prevpath + File.separator;
 
-	absCustLogoDir = custpath;
-	relCustLogoDir = File.separator + custpath;
-	absPreivewLogoDir = prevpath;
-	relPreivewLogoDir = File.separator + prevpath;
-    }
+	public String uploadLogo() {
+		try {
 
-    public String uploadLogo() {
-	try {
+			SCUIContext uictx = getWCContext().getSCUIContext();
+			absfilePath = uictx.getServletContext().getRealPath("/")
+					+ File.separator + absCustLogoDir;
+			String ctxtpath = request.getContextPath();
+			filePath = ctxtpath + relCustLogoDir
+					+ request.getParameter("customerId") + "_" + uploadFileName;
+			absfilePath = absfilePath + request.getParameter("customerId")
+					+ "_" + uploadFileName;
+			File theFile = new File(absfilePath);
 
-	    SCUIContext uictx = getWCContext().getSCUIContext();
-	    absfilePath = uictx.getServletContext().getRealPath("/")
-		    + File.separator + absCustLogoDir;
-	    String ctxtpath = request.getContextPath();
-	    filePath = ctxtpath + relCustLogoDir
-		    + request.getParameter("customerId") + "_" + uploadFileName;
-	    absfilePath = absfilePath + request.getParameter("customerId")
-		    + "_" + uploadFileName;
-	    File theFile = new File(absfilePath);
+			FileUtils.copyFile(upload, theFile);
 
-	    FileUtils.copyFile(upload, theFile);
+			prepareAndInvokeMashups();
 
-	    prepareAndInvokeMashups();
+		} catch (Exception e) {
 
-	} catch (Exception e) {
+			addActionError(e.getMessage());
 
-	    addActionError(e.getMessage());
+			return ERROR;
 
-	    return ERROR;
-
-	}
-	return SUCCESS;
-
-    }
-
-    public String deleteLogo() {
-	try {
-	    String relLogoUrl = request.getParameter("logoUrl");
-	    int index = relLogoUrl.lastIndexOf(File.separator);
-	    String fname = relLogoUrl.substring(index + 1);
-
-	    SCUIContext uictx = getWCContext().getSCUIContext();
-	    absfilePath = uictx.getServletContext().getRealPath("/")
-		    + absCustLogoDir;
-	    absfilePath = absfilePath + fname;
-	    File theFile = new File(absfilePath);
-	    FileUtils.forceDelete(theFile);
-
-	    filePath = "";
-	    prepareAndInvokeMashups();
-	} catch (Exception e) {
-	    addActionError(e.getMessage());
-
-	    return ERROR;
+		}
+		return SUCCESS;
 
 	}
 
-	return SUCCESS;
-    }
+	public String deleteLogo() {
+		try {
+			String relLogoUrl = request.getParameter("logoUrl");
+			int index = relLogoUrl.lastIndexOf(File.separator);
+			String fname = relLogoUrl.substring(index + 1);
 
-    public String previewLogo() {
-	try {
+			SCUIContext uictx = getWCContext().getSCUIContext();
+			absfilePath = uictx.getServletContext().getRealPath("/")
+					+ absCustLogoDir;
+			absfilePath = absfilePath + fname;
+			File theFile = new File(absfilePath);
+			FileUtils.forceDelete(theFile);
 
-	    SCUIContext uictx = getWCContext().getSCUIContext();
-	    filePath = uictx.getServletContext().getRealPath("/")
-		    + File.separator + absPreivewLogoDir;
+			filePath = "";
+			prepareAndInvokeMashups();
+		} catch (Exception e) {
+			addActionError(e.getMessage());
 
-	    previewFilePath = filePath + request.getParameter("customerId")
-		    + "_" + uploadFileName;
+			return ERROR;
 
-	    String ctxtpath = request.getContextPath();
+		}
 
-	    File theFile = new File(previewFilePath);
+		return SUCCESS;
+	}
 
-	    FileUtils.copyFile(upload, theFile);
+	public String previewLogo() {
+		try {
 
-	    // theFile.delete();
+			SCUIContext uictx = getWCContext().getSCUIContext();
+			filePath = uictx.getServletContext().getRealPath("/")
+					+ File.separator + absPreivewLogoDir;
 
-	} catch (Exception e) {
+			previewFilePath = filePath + request.getParameter("customerId")
+					+ "_" + uploadFileName;
 
-	    addActionError(e.getMessage());
+			request.getContextPath();
 
-	    return ERROR;
+			File theFile = new File(previewFilePath);
+
+			FileUtils.copyFile(upload, theFile);
+
+			// theFile.delete();
+
+		} catch (Exception e) {
+
+			addActionError(e.getMessage());
+
+			return ERROR;
+
+		}
+
+		return SUCCESS;
 
 	}
 
-	return SUCCESS;
+	public String viewLogo() {
+		try {
+			custLogoUrl = request.getParameter("logoUrl");
 
-    }
+		} catch (Exception e) {
 
-    public String viewLogo() {
-	try {
-	    custLogoUrl = request.getParameter("logoUrl");
+			addActionError(e.getMessage());
 
-	} catch (Exception e) {
+			return ERROR;
 
-	    addActionError(e.getMessage());
+		}
 
-	    return ERROR;
-
+		return SUCCESS;
 	}
 
-	return SUCCESS;
-    }
+	public String getCustLogoUrl() {
+		return custLogoUrl;
+	}
 
-    public String getCustLogoUrl() {
-	return custLogoUrl;
-    }
+	public void setCustLogoUrl(String custLogoUrl) {
+		this.custLogoUrl = custLogoUrl;
+	}
 
-    public void setCustLogoUrl(String custLogoUrl) {
-	this.custLogoUrl = custLogoUrl;
-    }
+	public File getUpload() {
+		return upload;
+	}
 
-    public File getUpload() {
-	return upload;
-    }
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
 
-    public void setUpload(File upload) {
-	this.upload = upload;
-    }
+	public String getPreviewFilePath() {
+		return previewFilePath;
+	}
 
-    public String getPreviewFilePath() {
-	return previewFilePath;
-    }
+	public void setPreviewFilePath(String previewFilePath) {
+		this.previewFilePath = previewFilePath;
+	}
 
-    public void setPreviewFilePath(String previewFilePath) {
-	this.previewFilePath = previewFilePath;
-    }
+	public String getFilePath() {
+		return filePath;
+	}
 
-    public String getFilePath() {
-	return filePath;
-    }
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 
-    public void setFilePath(String filePath) {
-	this.filePath = filePath;
-    }
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
 
-    public String getUploadFileName() {
-	return uploadFileName;
-    }
-
-    public void setUploadFileName(String uploadFileName) {
-	this.uploadFileName = uploadFileName;
-    }
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
 
 }

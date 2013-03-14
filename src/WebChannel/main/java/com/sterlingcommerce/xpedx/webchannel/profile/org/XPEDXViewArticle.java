@@ -22,88 +22,88 @@ import com.yantra.yfc.util.YFCCommon;
 @SuppressWarnings("all")
 public class XPEDXViewArticle extends WCMashupAction {
 
-    private String customerId;
-    private String customerContactId;
-    private Element articleElement;
+	private String customerId;
+	private String customerContactId;
+	private Element articleElement;
 
-    // ResourceIds
-    private static final String USER_LIST_RESOURCE_ID = "/swc/profile/ManageUserList";
-    private static final String MANAGE_USER_PROFILE_RESOURCE_ID = "/swc/profile/ManageUserProfile";
+	// ResourceIds
+	private static final String USER_LIST_RESOURCE_ID = "/swc/profile/ManageUserList";
+	private static final String MANAGE_USER_PROFILE_RESOURCE_ID = "/swc/profile/ManageUserProfile";
 
-    private static final Logger log = Logger.getLogger(XPEDXViewArticle.class);
+	private static final Logger log = Logger.getLogger(XPEDXViewArticle.class);
 
-    public XPEDXViewArticle() {
-	super();
-    }
-
-    public Element getArticleElement() {
-	return articleElement;
-    }
-
-    public String execute() {
-	customerContactId = getWCContext().getCustomerContactId();
-	String inputCustomerID = customerId;
-	if (YFCCommon.isVoid(inputCustomerID)) {
-	    inputCustomerID = wcContext.getCustomerId();
+	public XPEDXViewArticle() {
+		super();
 	}
-	if (!(ProfileUtility.isCustInCtxCustHierarchy(inputCustomerID,
-		wcContext)))
-	    return ERROR;
-	if (resourceId.equals(MANAGE_USER_PROFILE_RESOURCE_ID)) {
-	    try {
-		if (!(ResourceAccessAuthorizer.getInstance().isAuthorized(
-			USER_LIST_RESOURCE_ID, getWCContext()))) {
-		    if (!isSelfAdmin())
-			return "";
+
+	public Element getArticleElement() {
+		return articleElement;
+	}
+
+	public String execute() {
+		customerContactId = getWCContext().getCustomerContactId();
+		String inputCustomerID = customerId;
+		if (YFCCommon.isVoid(inputCustomerID)) {
+			inputCustomerID = wcContext.getCustomerId();
 		}
-	    } catch (Exception e1) {
-		return ERROR;
-	    }
+		if (!(ProfileUtility.isCustInCtxCustHierarchy(inputCustomerID,
+				wcContext)))
+			return ERROR;
+		if (resourceId.equals(MANAGE_USER_PROFILE_RESOURCE_ID)) {
+			try {
+				if (!(ResourceAccessAuthorizer.getInstance().isAuthorized(
+						USER_LIST_RESOURCE_ID, getWCContext()))) {
+					if (!isSelfAdmin())
+						return "";
+				}
+			} catch (Exception e1) {
+				return ERROR;
+			}
+		}
+
+		try {
+			setArticle();
+		} catch (XMLExceptionWrapper e) {
+			log.error(e);
+			return ERROR;
+		} catch (CannotBuildInputException e) {
+			log.error(e);
+			return ERROR;
+		}
+		return SUCCESS;
+
 	}
 
-	try {
-	    setArticle();
-	} catch (XMLExceptionWrapper e) {
-	    log.error(e);
-	    return ERROR;
-	} catch (CannotBuildInputException e) {
-	    log.error(e);
-	    return ERROR;
+	protected void setArticle() throws XMLExceptionWrapper,
+			CannotBuildInputException {
+		Map outputMaps = prepareAndInvokeMashups();
+		articleElement = (Element) outputMaps.get("XPEDXGetArticle");
 	}
-	return SUCCESS;
 
-    }
-
-    protected void setArticle() throws XMLExceptionWrapper,
-	    CannotBuildInputException {
-	Map outputMaps = prepareAndInvokeMashups();
-	articleElement = (Element) outputMaps.get("XPEDXGetArticle");
-    }
-
-    public String getCustomerId() {
-	return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-	this.customerId = customerId;
-    }
-
-    public boolean isSelfAdmin() {
-	String loggedInCustomerContactId = getWCContext()
-		.getCustomerContactId();
-	if (getCustomerContactId().compareTo(loggedInCustomerContactId) == 0) {
-	    return true;
-	} else {
-	    return false;
+	public String getCustomerId() {
+		return customerId;
 	}
-    }
 
-    public String getCustomerContactId() {
-	return customerContactId;
-    }
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
 
-    public void setCustomerContactId(String customerContactId) {
-	this.customerContactId = customerContactId;
-    }
+	public boolean isSelfAdmin() {
+		String loggedInCustomerContactId = getWCContext()
+				.getCustomerContactId();
+		if (getCustomerContactId().compareTo(loggedInCustomerContactId) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String getCustomerContactId() {
+		return customerContactId;
+	}
+
+	public void setCustomerContactId(String customerContactId) {
+		this.customerContactId = customerContactId;
+	}
 
 }

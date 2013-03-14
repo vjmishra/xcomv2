@@ -24,90 +24,90 @@ import com.yantra.yfc.util.YFCCommon;
 @SuppressWarnings("all")
 public class XPEDXAddArticle extends WCMashupAction {
 
-    private static final Logger log = Logger.getLogger(XPEDXAddArticle.class);
+	private static final Logger log = Logger.getLogger(XPEDXAddArticle.class);
 
-    public Document articleOutputDoc = null;
+	public Document articleOutputDoc = null;
 
-    protected String customerId;
+	protected String customerId;
 
-    public String execute() {
-	try {
-	    Element listInput = WCMashupHelper.getMashupAPI("XPEDXAddArticle",
-		    getWCContext().getSCUIContext());
-	    prepareAndInvokeMashups();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return ERROR;
-	}
-	return SUCCESS;
-    }
-
-    public Document getArticleOutputDoc() {
-	return articleOutputDoc;
-    }
-
-    public String getShipToCustomerCustomerID() {
-	String customerCustomerId = null;
-	try {
-
-	    Map<String, String> valueMap = new HashMap<String, String>();
-	    valueMap.put("/Customer/@OrganizationCode",
-		    wcContext.getStorefrontId());
-	    valueMap.put("/Customer/@CustomerID", wcContext.getCustomerId());
-
-	    Element input = WCMashupHelper.getMashupInput(
-		    "XPEDXParentCustomerList", valueMap, getWCContext()
-			    .getSCUIContext());
-
-	    Object obj = WCMashupHelper.invokeMashup("XPEDXParentCustomerList",
-		    input, getWCContext().getSCUIContext());
-
-	    Document outputDoc = ((Element) obj).getOwnerDocument();
-
-	    String xml = SCXmlUtil.getString(outputDoc);
-
-	    NodeList nlCustomer = outputDoc.getElementsByTagName("Customer");
-	    Element customer = null;
-	    int length = nlCustomer.getLength();
-	    for (int i = 0; i < length; i++) {
-		customer = (Element) nlCustomer.item(i);
-		String custID = SCXmlUtil.getAttribute(customer, "CustomerID");
-		if (i == 2) {
-		    customerCustomerId = custID;
+	public String execute() {
+		try {
+			Element listInput = WCMashupHelper.getMashupAPI("XPEDXAddArticle",
+					getWCContext().getSCUIContext());
+			prepareAndInvokeMashups();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
 		}
-	    }
-
-	} catch (Exception e1) {
-	    // TODO Auto-generated catch block
-	    e1.printStackTrace();
+		return SUCCESS;
 	}
-	if (customerCustomerId == null) {
-	    log.error("There is no customer's customer id is associated for ship to id "
-		    + customerId + " setting creating article for ship to id");
-	    customerCustomerId = getWCContext().getCustomerId();
+
+	public Document getArticleOutputDoc() {
+		return articleOutputDoc;
 	}
-	return customerCustomerId;
-    }
 
-    public String getCustomerId() {
-	// Document
-	// sapCustomerDoc=((Document)wcContext.getSCUIContext().getRequest().getSession().getAttribute("sapCustExtnFields"));
-	XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
-	Document sapCustomerDoc = (Document) XPEDXWCUtils
-		.getObjectFromCache("sapCustExtnFields");
-	if (sapCustomerDoc != null) {
-	    customerId = sapCustomerDoc.getDocumentElement().getAttribute(
-		    "CustomerID");
+	public String getShipToCustomerCustomerID() {
+		String customerCustomerId = null;
+		try {
 
-	}// getShipToCustomerCustomerID();
-	if (YFCCommon.isVoid(customerId)) {
-	    customerId = wcContext.getCustomerId();
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/Customer/@OrganizationCode",
+					wcContext.getStorefrontId());
+			valueMap.put("/Customer/@CustomerID", wcContext.getCustomerId());
+
+			Element input = WCMashupHelper.getMashupInput(
+					"XPEDXParentCustomerList", valueMap, getWCContext()
+							.getSCUIContext());
+
+			Object obj = WCMashupHelper.invokeMashup("XPEDXParentCustomerList",
+					input, getWCContext().getSCUIContext());
+
+			Document outputDoc = ((Element) obj).getOwnerDocument();
+
+			String xml = SCXmlUtil.getString(outputDoc);
+
+			NodeList nlCustomer = outputDoc.getElementsByTagName("Customer");
+			Element customer = null;
+			int length = nlCustomer.getLength();
+			for (int i = 0; i < length; i++) {
+				customer = (Element) nlCustomer.item(i);
+				String custID = SCXmlUtil.getAttribute(customer, "CustomerID");
+				if (i == 2) {
+					customerCustomerId = custID;
+				}
+			}
+
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if (customerCustomerId == null) {
+			log.error("There is no customer's customer id is associated for ship to id "
+					+ customerId + " setting creating article for ship to id");
+			customerCustomerId = getWCContext().getCustomerId();
+		}
+		return customerCustomerId;
 	}
-	return customerId;
-    }
 
-    public void setCustomerId(String customerId) {
-	this.customerId = customerId;
-    }
+	public String getCustomerId() {
+		// Document
+		// sapCustomerDoc=((Document)wcContext.getSCUIContext().getRequest().getSession().getAttribute("sapCustExtnFields"));
+		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
+		Document sapCustomerDoc = (Document) XPEDXWCUtils
+				.getObjectFromCache("sapCustExtnFields");
+		if (sapCustomerDoc != null) {
+			customerId = sapCustomerDoc.getDocumentElement().getAttribute(
+					"CustomerID");
+
+		}// getShipToCustomerCustomerID();
+		if (YFCCommon.isVoid(customerId)) {
+			customerId = wcContext.getCustomerId();
+		}
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
 
 }

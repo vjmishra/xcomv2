@@ -9,83 +9,83 @@ import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 public class XPEDXCustomerShipTo extends WCMashupAction {
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 4073171403781679345L;
-    private Element outputDoc;
-    private Element shipToAddress;
-    private Element associatedBillToAddress;
-    private Element billToCustElem;
-    private boolean success;
+	private static final long serialVersionUID = 4073171403781679345L;
+	private Element outputDoc;
+	private Element shipToAddress;
+	private Element associatedBillToAddress;
+	private Element billToCustElem;
+	private boolean success;
 
-    public boolean isSuccess() {
-	return success;
-    }
-
-    public void setSuccess(boolean isSuccess) {
-	this.success = isSuccess;
-    }
-
-    private static final Logger log = Logger
-	    .getLogger(XPEDXCustomerShipTo.class);
-
-    @Override
-    public String execute() {
-	try {
-	    Document output = XPEDXWCUtils.getCustomerDetails(getWCContext()
-		    .getCustomerId(), getWCContext().getStorefrontId());
-	    outputDoc = output.getDocumentElement();
-	    String associatedBillToID = SCXmlUtil.getXpathAttribute(outputDoc,
-		    "//Customer/ParentCustomer/@CustomerID");
-	    billToCustElem = XPEDXWCUtils.getCustomerDetails(
-		    associatedBillToID, getWCContext().getStorefrontId())
-		    .getDocumentElement();
-	    Element custAddtnlAddresses = SCXmlUtil.getChildElement(outputDoc,
-		    "CustomerAdditionalAddressList");
-	    shipToAddress = SCXmlUtil.getFirstChildElement(custAddtnlAddresses);
-	    Element billToCustAddtnlAddresses = SCXmlUtil.getChildElement(
-		    billToCustElem, "CustomerAdditionalAddressList");
-	    associatedBillToAddress = SCXmlUtil
-		    .getFirstChildElement(billToCustAddtnlAddresses);
-	    setSuccess(true);
-	    return (SUCCESS);
-	} catch (Exception e) {
-	    log.debug("error while getting the Ship to Customer Details");
-	    return (ERROR);
+	public boolean isSuccess() {
+		return success;
 	}
-    }
 
-    public Element getOutputDoc() {
-	return outputDoc;
-    }
+	public void setSuccess(boolean isSuccess) {
+		this.success = isSuccess;
+	}
 
-    public void setOutputDoc(Element outputDoc) {
-	this.outputDoc = outputDoc;
-    }
+	private static final Logger log = Logger
+			.getLogger(XPEDXCustomerShipTo.class);
 
-    public Element getShipToAddress() {
-	return shipToAddress;
-    }
+	@Override
+	public String execute() {
+		try {
+			Document output = XPEDXWCUtils.getCustomerDetails(getWCContext()
+					.getCustomerId(), getWCContext().getStorefrontId());
+			outputDoc = output.getDocumentElement();
+			String associatedBillToID = SCXmlUtil.getXpathAttribute(outputDoc,
+					"//Customer/ParentCustomer/@CustomerID");
+			billToCustElem = XPEDXWCUtils.getCustomerDetails(
+					associatedBillToID, getWCContext().getStorefrontId())
+					.getDocumentElement();
+			Element custAddtnlAddresses = SCXmlUtil.getChildElement(outputDoc,
+					"CustomerAdditionalAddressList");
+			shipToAddress = SCXmlUtil.getFirstChildElement(custAddtnlAddresses);
+			Element billToCustAddtnlAddresses = SCXmlUtil.getChildElement(
+					billToCustElem, "CustomerAdditionalAddressList");
+			associatedBillToAddress = SCXmlUtil
+					.getFirstChildElement(billToCustAddtnlAddresses);
+			setSuccess(true);
+			return (SUCCESS);
+		} catch (Exception e) {
+			log.debug("error while getting the Ship to Customer Details");
+			return (ERROR);
+		}
+	}
 
-    public void setShipToAddress(Element shipToAddress) {
-	this.shipToAddress = shipToAddress;
-    }
+	public Element getOutputDoc() {
+		return outputDoc;
+	}
 
-    public Element getAssociatedBillToAddress() {
-	return associatedBillToAddress;
-    }
+	public void setOutputDoc(Element outputDoc) {
+		this.outputDoc = outputDoc;
+	}
 
-    public void setAssociatedBillToAddress(Element associatedBillToAddress) {
-	this.associatedBillToAddress = associatedBillToAddress;
-    }
+	public Element getShipToAddress() {
+		return shipToAddress;
+	}
 
-    public Element getBillToCustElem() {
-	return billToCustElem;
-    }
+	public void setShipToAddress(Element shipToAddress) {
+		this.shipToAddress = shipToAddress;
+	}
 
-    public void setBillToCustElem(Element billToCustElem) {
-	this.billToCustElem = billToCustElem;
-    }
+	public Element getAssociatedBillToAddress() {
+		return associatedBillToAddress;
+	}
+
+	public void setAssociatedBillToAddress(Element associatedBillToAddress) {
+		this.associatedBillToAddress = associatedBillToAddress;
+	}
+
+	public Element getBillToCustElem() {
+		return billToCustElem;
+	}
+
+	public void setBillToCustElem(Element billToCustElem) {
+		this.billToCustElem = billToCustElem;
+	}
 
 }
