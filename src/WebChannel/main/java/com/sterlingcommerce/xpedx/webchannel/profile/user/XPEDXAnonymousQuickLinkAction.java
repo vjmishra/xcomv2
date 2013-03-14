@@ -13,63 +13,63 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 
 @SuppressWarnings("serial")
 public class XPEDXAnonymousQuickLinkAction extends WCMashupAction {
-    private String codeType = null;
-    private Map<String, String> quickLinkMap = null;
+	private String codeType = null;
+	private Map<String, String> quickLinkMap = null;
 
-    @Override
-    public String execute() {
+	@Override
+	public String execute() {
 
-	setCodeType("QLAnonymous");
+		setCodeType("QLAnonymous");
 
-	Element outputElement = null;
-	try {
-	    outputElement = prepareAndInvokeMashup("xpedxGetCustomCommonCodesForQuickLinks");
-	    String inputXml = SCXmlUtil.getString(outputElement);
-	    LOG.debug("Input XML: " + inputXml);
-	} catch (XMLExceptionWrapper e) {
-	    LOG.debug("Not able to retrieve Quick Link for Anonymous user :->"
-		    + e.getMessage());
-	    return ERROR;
-	} catch (CannotBuildInputException e) {
-	    LOG.debug("Not able to build Quick Link for Anonymous user:->"
-		    + e.getMessage());
-	    return ERROR;
+		Element outputElement = null;
+		try {
+			outputElement = prepareAndInvokeMashup("xpedxGetCustomCommonCodesForQuickLinks");
+			String inputXml = SCXmlUtil.getString(outputElement);
+			LOG.debug("Input XML: " + inputXml);
+		} catch (XMLExceptionWrapper e) {
+			LOG.debug("Not able to retrieve Quick Link for Anonymous user :->"
+					+ e.getMessage());
+			return ERROR;
+		} catch (CannotBuildInputException e) {
+			LOG.debug("Not able to build Quick Link for Anonymous user:->"
+					+ e.getMessage());
+			return ERROR;
+		}
+
+		if (null != outputElement) {
+			Map<String, String> map = getAnonymousQuickLink(outputElement);
+			setQuickLinkMap(map);
+		} else {
+			return ERROR;
+		}
+
+		return SUCCESS;
 	}
 
-	if (null != outputElement) {
-	    Map<String, String> map = getAnonymousQuickLink(outputElement);
-	    setQuickLinkMap(map);
-	} else {
-	    return ERROR;
+	private Map<String, String> getAnonymousQuickLink(Element outputElement) {
+		Map<String, String> map = new HashMap<String, String>();
+		NodeList list = outputElement.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
+			Element ele = (Element) list.item(i);
+			map.put(ele.getAttribute("CodeValue"),
+					ele.getAttribute("CodeShortDescription"));
+		}
+		return map;
 	}
 
-	return SUCCESS;
-    }
-
-    private Map<String, String> getAnonymousQuickLink(Element outputElement) {
-	Map<String, String> map = new HashMap<String, String>();
-	NodeList list = outputElement.getChildNodes();
-	for (int i = 0; i < list.getLength(); i++) {
-	    Element ele = (Element) list.item(i);
-	    map.put(ele.getAttribute("CodeValue"),
-		    ele.getAttribute("CodeShortDescription"));
+	public String getCodeType() {
+		return codeType;
 	}
-	return map;
-    }
 
-    public String getCodeType() {
-	return codeType;
-    }
+	public Map<String, String> getQuickLinkMap() {
+		return quickLinkMap;
+	}
 
-    public Map<String, String> getQuickLinkMap() {
-	return quickLinkMap;
-    }
+	public void setCodeType(String codeType) {
+		this.codeType = codeType;
+	}
 
-    public void setCodeType(String codeType) {
-	this.codeType = codeType;
-    }
-
-    public void setQuickLinkMap(Map<String, String> quickLinkMap) {
-	this.quickLinkMap = quickLinkMap;
-    }
+	public void setQuickLinkMap(Map<String, String> quickLinkMap) {
+		this.quickLinkMap = quickLinkMap;
+	}
 }
