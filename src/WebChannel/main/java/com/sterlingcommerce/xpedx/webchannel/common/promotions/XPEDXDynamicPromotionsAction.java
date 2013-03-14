@@ -406,6 +406,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
 			inputStream = servletContext.getResourceAsStream(fileName);
 			if (null == inputStream ) {
+				log.error("The file "+ fileName + " is missing for dynamic promotions");
 				return null;
 			}
 			
@@ -1090,7 +1091,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				);
 		
 		wcContext.setWCAttribute(XPEDXConstants.REQUEST_ATTR_PROMO_PAGE_URL, finalNameWithPath, WCAttributeScope.REQUEST);
-
+		log.error("The final name with parameters for dynamic promotions is " + finalNameWithPath);
 		logAllVariables("setInRequest");
 		logMessage("##################################### "+ LIZ_MESSAGE + " ########################################################### "  );
 	}
