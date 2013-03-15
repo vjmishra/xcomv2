@@ -172,13 +172,15 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		Element custEle = YRCXmlUtils.getXPathElement(generalInfo, "/CustomerList/Customer");
 		Element customer = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer");
 		String relationShipType = customer.getAttribute("RelationshipType");
+		// Added customerLevel for XBT- 475
+		String customerLevel =  customer.getAttribute("CustomerLevel");
 		
 		System.out.println("The relationshiptype is" + relationShipType);
 		Element userElem = YRCPlatformUI.getUserElement();
 		
 		List nodesList=YRCXmlUtils.getChildren(userElem, "UserGroupLists/UserGroupList");
 		NodeList nodList=userElem.getElementsByTagName("UserGroupList");
-		if(!"null".equalsIgnoreCase(relationShipType) && !"".equalsIgnoreCase(relationShipType)){
+		if(!"null".equalsIgnoreCase(relationShipType) && !"".equalsIgnoreCase(relationShipType) && "Y".equalsIgnoreCase(customerLevel)){
 			setFieldValue("divisionEntitlement", "Y");
 			getControl("divisionEntitlement").setEnabled(false);
 			custEle.setAttribute("RelationshipType", "Y");
