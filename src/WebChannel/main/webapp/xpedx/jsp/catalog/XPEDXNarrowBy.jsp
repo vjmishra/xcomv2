@@ -51,6 +51,8 @@ function setStockItemFlag()
 					</div>
 					</s:if> --%>
 			<s:set name='narrowByCatalogItemsCount' value='%{0}' />
+			<s:set name='expandNarrowByCatalogItems' value='"Y"' />
+			
 			<s:iterator id='subCatElem_dup' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
 				<s:set name='subCatElem_count' value='#subCatElem_dup.getAttribute("ShortDescription")' />
 				 <s:if test='#subCatElem_count!=null'>
@@ -140,29 +142,35 @@ function setStockItemFlag()
 				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 				<s:set name='headercount' value='%{#headercount + 1}' />
 				<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
-				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />
-										
-				<s:if test='%{#narrowByCatalogItemsCount < 4}'>
-					<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
-						<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
+				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />										
+				
+				<s:if test='%{#narrowByCatalogItemsCount <= 3}'>
+					<s:set name='expandNarrowByCatalogItems' value='"Y"' />
+				</s:if>
+				<s:else>
+					<s:set name='expandNarrowByCatalogItems' value='"N"' />
+				</s:else>
+				
+				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
+					<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
+						<s:if test='%{#expandNarrowByCatalogItems == "Y"}'>
 							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand"></a>
-						</span>
-						<s:property value='#ShortDescription1' id="facet" />
-					</div>
+						</s:if>
+						<s:else>
+							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_expand.png" style="margin-top:5px" alt="expand"></a>
+						</s:else>
+					</span>
+					<s:property value='#ShortDescription1' id="facet" />
+				</div>
+				<s:if test='%{#expandNarrowByCatalogItems == "Y"}'>
 					<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes catalog-landing">
 				</s:if>
 				<s:else>
-					<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
-						<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
-							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_expand.png" style="margin-top:5px" alt="expand"></a>
-						</span>
-						<s:property value='#ShortDescription1' id="facet" />
-					</div>
 					<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes default-collapsed">
 				</s:else>
 				
 			<ul>
-			<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
+				<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
 				<s:iterator value="facetMap" id="factVal">
 						<s:set name='count1' value='%{#count1 + 1}' />
 						<s:url id='narrowURL' namespace='/catalog' action='filter.action'>
