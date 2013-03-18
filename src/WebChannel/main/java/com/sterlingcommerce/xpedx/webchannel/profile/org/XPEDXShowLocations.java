@@ -90,7 +90,7 @@ public class XPEDXShowLocations extends WCAction {
 
 	private Boolean isLastPage = Boolean.FALSE;
 	private Boolean isValidPage = Boolean.FALSE;
-	private Integer totalNumberOfPages = new Integer(1);
+	private Integer totalNumberOfPages = Integer.valueOf(1);
 
 	public Integer getTotalNumberOfPages() {
 		return totalNumberOfPages;
@@ -622,7 +622,7 @@ public class XPEDXShowLocations extends WCAction {
 			setPageSetToken(page.getAttribute("PageSetToken"));
 		}
 
-		setTotalNumberOfPages(new Integer(0));
+		setTotalNumberOfPages(Integer.valueOf(0));
 		if ((paginated) && (page != null)) {
 			setTotalNumberOfPages(getIntegerAttribute(page,
 					"TotalNumberOfPages", getTotalNumberOfPages()));

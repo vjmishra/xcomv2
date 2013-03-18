@@ -311,14 +311,6 @@ public class XPEDXGetCustomerOrganizationAction extends WCMashupAction {
 		this.organizationCode = organizationCode;
 	}
 
-	public String getOtherCustomerID() {
-		return OtherCustomerID;
-	}
-
-	public void setOtherCustomerID(String otherCustomerID) {
-		OtherCustomerID = otherCustomerID;
-	}
-
 	public List getCustomerCreditCardPayments() {
 		return customerCreditCardPayments;
 	}
@@ -450,7 +442,6 @@ public class XPEDXGetCustomerOrganizationAction extends WCMashupAction {
 	private String organizationCode;
 	private boolean expandAddressPanel;
 	private String parentCustomerKey;
-	private String OtherCustomerID;
 	private String wCCustomerId;
 	private String wCOrganizationCode;
 	private String isChildCustomer;

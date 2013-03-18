@@ -73,7 +73,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private Boolean isFirstPage = Boolean.FALSE;
 	private Boolean isLastPage = Boolean.FALSE;
 	private Boolean isValidPage = Boolean.FALSE;
-	private Integer totalNumberOfPages = new Integer(1);
+	private Integer totalNumberOfPages = Integer.valueOf(1);
 	private String divId = "ajax-assignedShipToCustomers";
 	private List<String> alreadySelectedCustomers;
 	private String rootCustomerKey;
@@ -387,8 +387,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 
 	// Jira 4146 -- Method added when Add button is clicked
 	public String getCustomersForAuthorize() {
-		String newcustomers = new String(custID);
-		String[] arrayIds1 = newcustomers.split(",");
+		//String newcustomers = new String(custID);
+		String[] arrayIds1 = custID.split(",");
 		// List<String> newcustomersList = new
 		// ArrayList<String>(Arrays.asList(arrayIds1));
 		ArrayList<Element> assignedCustomers = (ArrayList<Element>) XPEDXWCUtils
@@ -1193,10 +1193,6 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 					&& YFCCommon.isStringVoid(xOverriddenShipToAddress
 							.getXpedxSTState()) && YFCCommon
 					.isStringVoid(xOverriddenShipToAddress.getXpedxSTZip()));
-			System.out
-					.println("isShipingAddressOverridden is ********************"
-							+ isNotVoid);
-
 			return isNotVoid;
 		}
 		return false;
@@ -1226,7 +1222,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			return null;
 		ArrayList<XPEDXShipToCustomer> assignedShipToCustomers = new ArrayList<XPEDXShipToCustomer>();
 		Document document = XPEDXWCUtils.getCustomerDetails(customerIds,
-				organizationCode, customerShipToInformationMashUp);
+				organizationCode, CUSTOMER_SHIPTO_INFORMATION_MASHUP);
 		ArrayList<Element> customers = SCXmlUtil.getElements(
 				document.getDocumentElement(), "Customer");
 		if (customers.size() > 0) {
@@ -1392,7 +1388,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			setPageSetToken(page.getAttribute("PageSetToken"));
 		}
 
-		setTotalNumberOfPages(new Integer(0));
+		setTotalNumberOfPages(Integer.valueOf(0));
 		if ((paginated) && (page != null)) {
 			setTotalNumberOfPages(getIntegerAttribute(page,
 					"TotalNumberOfPages", getTotalNumberOfPages()));
@@ -1411,7 +1407,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		return value;
 	}
 
-	private static final String customerShipToInformationMashUp = "xpedx-customerlist-getCustomerAddressInformation";
+	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";
 
 	public String getDefaultShipToCustomerId() {
 		return defaultShipToCustomerId;

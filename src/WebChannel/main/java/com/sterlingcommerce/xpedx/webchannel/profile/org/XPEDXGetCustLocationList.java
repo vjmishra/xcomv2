@@ -96,7 +96,7 @@ public class XPEDXGetCustLocationList extends WCMashupAction {
 		this.childCustomersMap = childCustomersMap;
 	}
 
-	private static final Logger log = Logger
+	private static final Logger LOG = Logger
 			.getLogger(XPEDXGetCustLocationList.class);
 	String organizationCode;
 	String parentCustomerKey;

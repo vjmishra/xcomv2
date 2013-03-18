@@ -14,7 +14,7 @@ import com.yantra.yfc.dom.YFCDocument;
 public class XPEDXSaveCustomerInfo extends WCMashupAction {
 
 	// String for Action Results
-	private String REDIRECT = "redirect";
+	private static final String REDIRECT = "redirect";
 	private String bodyData;
 	private String CustLineAccNoLabel;
 	private String CustLineField1Label;

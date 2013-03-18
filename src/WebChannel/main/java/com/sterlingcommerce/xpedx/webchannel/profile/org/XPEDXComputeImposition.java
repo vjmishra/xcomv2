@@ -46,7 +46,7 @@ public class XPEDXComputeImposition {
 	private static double lncolWaste;
 	private static double lnrProws;
 	private static double lnrPCols;
-	private static final long lnVlong = 300;
+	private static final long LNVLONG = 300;
 
 	public static List<Map<String, String>> calcPage(String sheetSizeW,
 			String sheetSizeH, String trimSizeW, String trimSizeH,
@@ -95,8 +95,7 @@ public class XPEDXComputeImposition {
 		int nNumout1 = (int) (Math.floor(lnPshort / lnfshort) * Math
 				.floor(lnPlong / lnflong));
 		int nWaste1 = (int) Math.floor(((lnPArea - (lnFarea * nNumout1))
-				/ lnPArea * 100));
-		System.out.println("lnPArea = " + lnPArea);
+				/ lnPArea * 100));	
 
 		nAcross1 = (int) Math.floor((lnPlong / lnflong));
 		nDown1 = (int) Math.floor((lnPshort / lnfshort));
@@ -166,7 +165,7 @@ public class XPEDXComputeImposition {
 		} else {
 			// Scaled areas preformatted for HTML table width and height
 			nSUnits = (int) Math
-					.floor((lnVlong / lnPlong + lnSGuide + lnGutter));
+					.floor((LNVLONG / lnPlong + lnSGuide + lnGutter));
 		}
 
 		// Long side of Parent Sheet

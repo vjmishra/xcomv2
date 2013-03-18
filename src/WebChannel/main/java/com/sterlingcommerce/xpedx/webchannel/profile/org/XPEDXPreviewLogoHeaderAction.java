@@ -171,8 +171,6 @@ public class XPEDXPreviewLogoHeaderAction extends WCAction implements
 		relPreivewLogoDir = File.separator + prevpath;
 		absPreivewLogoDir = prevpath;
 	}
-	private static final Logger log = Logger
-			.getLogger(XPEDXPreviewLogoHeaderAction.class);
 	String logoURL;
 	String custLogoUrl;
 	String previewFileName;
