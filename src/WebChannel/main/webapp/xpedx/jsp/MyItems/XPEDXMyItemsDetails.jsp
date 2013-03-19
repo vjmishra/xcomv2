@@ -2001,7 +2001,7 @@ function showSharedListForm(){
 		            			 }
 		            			 var omQtyUom = document.getElementById("orderMultipleQtyFromSrc_"+j).value;
 		            			 
-		            			if( omQtyUom =='' || omQtyUom == null  || myitemskey[k] == undefined){
+		            			if( omQtyUom =='' || omQtyUom == null){
 		            					k++;
 	                	 				continue;
 	                			}
