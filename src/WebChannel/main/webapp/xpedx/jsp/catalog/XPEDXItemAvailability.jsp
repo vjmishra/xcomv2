@@ -240,13 +240,13 @@
 </s:if>
 <s:else>
 <s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
-	<tr align="center"><td>&nbsp;</td>
-	<td width="100%"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
+	<tbody><tr><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
+	</tbody>
 </s:if>	
 </s:else>
 </s:if>
 <s:else>
-		<tr ><td>&nbsp;</td>
+		<tr >
 			<td width="100%">
 			<h5 align="center"><b><font color="red">Could not get the pricing details for this Particular Item at the moment. Please try again Later</font></b></h5>
 			</td>
@@ -255,8 +255,8 @@
 </s:if>
 <s:else>
 <%-- start of jira 2885 --%><tbody>
-<tr align="center"><td>&nbsp;</td>
-	<td width="100%">	
+<tr >
+	<td width="100%">
 			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
 				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
 			</s:if>		
