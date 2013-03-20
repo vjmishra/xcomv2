@@ -15,3 +15,5 @@ Insert into XPX_EMAIL_DEFN (EMAIL_XSL_PATH,EMAIL_TYPE,EMAIL_TO_XPATH,EMAIL_CC_XP
 Insert into XPX_EMAIL_DEFN (EMAIL_XSL_PATH,EMAIL_TYPE,EMAIL_TO_XPATH,EMAIL_CC_XPATH,EMAIL_BCC_XPATH) values ('../extensions/global/template/email/XPX_Order_ApprovedRejected.xsl','ORDER_REJECTED_EMAIL','/Order/CustomerContactList/CustomerContact/@ToEmailID','/Order/CustomerContactList/CustomerContact/@CCEmailID','');
 
 Insert into XPX_EMAIL_DEFN (EMAIL_XSL_PATH,EMAIL_TYPE,EMAIL_TO_XPATH,EMAIL_CC_XPATH,EMAIL_BCC_XPATH) values ('../extensions/global/template/email/ItemReturnRequest.xsl','ITEM_RETURN_REQUEST_EMAIL','/Emails/Email/@ToEmail','/Emails/Email/@InputEmail','');
+
+Insert into XPX_EMAIL_DEFN (EMAIL_XSL_PATH,EMAIL_TYPE,EMAIL_TO_XPATH,EMAIL_CC_XPATH,EMAIL_BCC_XPATH) values ('../extensions/global/template/email/XPXSendEmailChange.xsl','USER_PROFILE_UPDATED_NOTIFICAON','/UserUpdateEmail/@newEmailID','/UserUpdateEmail/@OldEmailID','');

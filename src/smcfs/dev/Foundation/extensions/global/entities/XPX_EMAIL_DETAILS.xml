@@ -26,6 +26,8 @@
 				<Attribute ColumnName="EMAIL_ERROR_MESSAGE" DataType="CLOB"
 					DefaultValue=" " Description="The error message in case of any failure"
 					Nullable="true" XMLName="EmailErrorMessage" />
+				<Attribute ColumnName="BUSINESS_IDENTIFIER" DataType="varchar2-100"
+					DefaultValue=" " Description="Identifies Unique Object of email" Nullable="true" XMLName="BusinessIdentifier"/>
 				<!-- Begin - Mandatory columns -->
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
 			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>

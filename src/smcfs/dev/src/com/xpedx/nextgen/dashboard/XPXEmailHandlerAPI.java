@@ -158,6 +158,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 		Document customerDoc= null;
 		String strOrderType = null;
+		String businessIdentifier="";
 		api = YIFClientFactory.getInstance().getApi();
 
 		Element inputElement = inXML.getDocumentElement();
@@ -284,6 +285,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			String buyerOrgCode = "";	
 			String msapCustomerId = "";
 			String billtoID = "";
+			
 			YFCDocument inDoc = YFCDocument.getDocumentFor(inputElement.getOwnerDocument());
 			YFCElement rootElem = inDoc.getDocumentElement();
 			if(rootElem!=null){
@@ -493,6 +495,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				extnElement.setAttribute("ExtnAddnlEmailAddr",
 						addlnEmailAddresses);
 				
+				businessIdentifier = SCXmlUtil.getXpathAttribute(
+						extnElement, "./@ExtnWebConfNum");
+				
 				// To set Shipping Options
 				StringBuilder shippingOptions = new StringBuilder();
 				String shippingOptions_ = "";
@@ -544,7 +549,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
         StringBuffer emailSubject = new StringBuffer(emailOrgCode);
         emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
-        XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode);
+        XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode,businessIdentifier);
         /*XB-461 : End - Sending email through Java Mail API now*/
 
 		return customerDoc;

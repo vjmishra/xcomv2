@@ -33,8 +33,9 @@ public class XPXReturnItemsRequestEmail implements YIFCustomApi {
 		Element rtrnItemsReqEmailElem=inXML.getDocumentElement();
 		String emailType=XPXEmailUtil.RETURN_ITEMS_REQUEST_EMAIL_TYPE;
         String emailFrom=SCXmlUtil.getXpathAttribute(rtrnItemsReqEmailElem, "/Emails/Email/@FromEmail");
+        String businessIdentifier=SCXmlUtil.getXpathAttribute(rtrnItemsReqEmailElem, "/Emails/Email/@WCNumber");
         String emailSubject = XPXEmailUtil.RETURN_ITEMS_REQUEST_EMAIL_SUBJECT;
-        XPXEmailUtil.insertEmailDetailsIntoDB(env, inputXML, emailType, emailSubject, emailFrom, "");
+        XPXEmailUtil.insertEmailDetailsIntoDB(env, inputXML, emailType, emailSubject, emailFrom, "",businessIdentifier);
 		
 		if(yfcLog.isDebugEnabled())
 			yfcLog.debug("End - Inside sendReturnItemsRequestEmail method of XPXReturnItemsRequestEmail.");

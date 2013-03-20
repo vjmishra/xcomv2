@@ -860,7 +860,7 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API FlowName="XPXSendUserUpdateEmailService">
 			<Input>
-				<UserUpdateEmail BrandName="" EntryType="" OldEmailID="" newEmailID="" EmailFromAddresses="" ImageUrl="">			   
+				<UserUpdateEmail BrandName="" EntryType="" OldEmailID="" newEmailID="" EmailFromAddresses="" ImageUrl="" UserName="">			    
 			</UserUpdateEmail>
 			</Input>
 			

@@ -2280,6 +2280,12 @@ public class XPXUtils implements YIFCustomApi {
 		if(log.isDebugEnabled()){
 			log.debug("stampSubjectLine_UserProfChange()_OutXML: "+ SCXmlUtil.getString(inputDocument));
 		}
+		String inputXML=SCXmlUtil.getString(inputDocument);
+		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;
+		String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
+		String businessIdentifier = rootElem.getAttribute("UserName");
+		XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, _subjectLine, emailFrom, emailOrgCode,businessIdentifier);
 		return inputDocument;
 	}
 	
@@ -2505,6 +2511,7 @@ public class XPXUtils implements YIFCustomApi {
 				String requestID =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@RequestId");
 				String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
 				
+				
 				if(requestID!=null && !requestID.equalsIgnoreCase(""))
 				{
 					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
@@ -2593,7 +2600,8 @@ public class XPXUtils implements YIFCustomApi {
 			
 			/*XB-461 : Begin - Sending email through Java Mail API now*/
 			String emailXML=SCXmlUtil.getString(inputDocument);	
-	        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject, sb.toString(), storeFrontId);
+			String businessIdentifier =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/@Loginid");
+	        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject, sb.toString(), storeFrontId,businessIdentifier);
 	        /*XB-461 : End - Sending email through Java Mail API now*/
 
 		}catch(Exception e){
