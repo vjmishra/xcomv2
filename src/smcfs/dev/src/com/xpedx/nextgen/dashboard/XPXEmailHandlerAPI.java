@@ -549,7 +549,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;
         String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
         StringBuffer emailSubject = new StringBuffer(orderconfSubjecline);
-        emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
+       // emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
         XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode,businessIdentifier);
         /*XB-461 : End - Sending email through Java Mail API now*/
 
