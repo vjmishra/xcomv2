@@ -44,6 +44,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 	/** Added by Arun Sekhar on 13-April-2011 for Email templates **/
 	String orderNo = "";
 	String orderBranch = "";
+	String orderconfSubjecline="";
 	private static YFCLogCategory yfcLogCatalog;
 
 	static {
@@ -231,7 +232,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		stampLegacyOrderNoOnCustomerOrderLine(env, customerDoc,orderListOutput);
 
 		/******* Added by Arun Sekhar on 28-April-2011 *******/
-		utilObj.stampOrderSubjectLine(env, customerDoc);
+		 orderconfSubjecline=utilObj.stampOrderSubjectLine(env, customerDoc);
 		yfcLogCatalog.debug("inputDocument with SubjectLine: "
 				+ SCXmlUtil.getString(customerDoc));
 
@@ -547,7 +548,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		String inputXML=SCXmlUtil.getString(customerDoc);
         String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;
         String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
-        StringBuffer emailSubject = new StringBuffer(emailOrgCode);
+        StringBuffer emailSubject = new StringBuffer(orderconfSubjecline);
         emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
         XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode,businessIdentifier);
         /*XB-461 : End - Sending email through Java Mail API now*/

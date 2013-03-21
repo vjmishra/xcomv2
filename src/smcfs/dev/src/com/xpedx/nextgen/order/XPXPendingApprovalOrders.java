@@ -449,7 +449,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			String inputXML=SCXmlUtil.getString(orderElement);
 			String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
 			String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
-			String businessIdentifier = orderElement.getAttribute("ExtnWebConfNum");
+			String businessIdentifier = SCXmlUtil.getXpathAttribute(orderElement,"./Extn/@ExtnWebConfNum");
 			XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject, emailFrom, emailOrgCode,businessIdentifier);
 			/*XB-461 : End - Sending email through Java Mail API now*/
 		}

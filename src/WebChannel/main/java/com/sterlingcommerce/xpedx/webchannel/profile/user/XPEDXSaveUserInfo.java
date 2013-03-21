@@ -691,12 +691,13 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					.getParameter("emailId");
 			String oldEmailId = (String) wcContext.getSCUIContext()
 					.getSession().getAttribute("emailId");
-			String userId = (String) wcContext.getSCUIContext()
-			.getSession().getAttribute("userName");
+			String useLoginID = wcContext.getSCUIContext()
+            .getRequest().getParameter("userName");
+
 			
 			if (oldEmailId != null && newEmailId != null
 					&& checkIfEmailChanged(oldEmailId, newEmailId)) {
-				updateEMailAddress(oldEmailId, newEmailId,userId);
+				updateEMailAddress(oldEmailId, newEmailId,useLoginID);
 			}
 		} catch (YFCException passexp) {
 			// This exception is put here to handle the password validation
@@ -2038,7 +2039,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/** End of Code for XB 226 **/
 
 	/** JIRA 1998--function to call API for mailId change-- **/
-	private void updateEMailAddress(String oldMailId, String changedMailId, String userId) {
+	private void updateEMailAddress(String oldMailId, String changedMailId, String useLoginID) {
 		// String strEnterpriseCode = "";
 		String strEnterpriseCode = ""; //
 		StringBuffer sb = new StringBuffer();
@@ -2093,7 +2094,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		emailElement.setAttribute("newEmailID", changedMailId);
 		emailElement.setAttribute("SellerOrganizationCode", strEnterpriseCode);
 		emailElement.setAttribute("EmailFromAddresses", emailFromAddresses); // Start
-		emailElement.setAttribute("UserName", userId);
+		emailElement.setAttribute("UserName", useLoginID);
 		// -Jira
 		// 3262
 		emailElement.setAttribute("ImageUrl", imageUrl); // Start -Jira 3262

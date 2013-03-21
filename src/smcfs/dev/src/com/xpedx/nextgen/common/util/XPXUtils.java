@@ -2173,7 +2173,7 @@ public class XPXUtils implements YIFCustomApi {
 	 * All the four immediate below methods will prepare the Subject Line for
 	 * the email corresponding to various email scenarios
 	 */
-	public Document stampOrderSubjectLine(YFSEnvironment env,
+	public String stampOrderSubjectLine(YFSEnvironment env,
 			Document inputDocument) throws Exception {
 		
 		String brand = inputDocument.getDocumentElement().getAttribute(
@@ -2218,7 +2218,7 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		inputDocument.getDocumentElement().setAttribute("Subject", _subjectLine.toString());
 
-		return inputDocument;
+		return _subjectLine.toString();
 	}
 	
 	public void stampOrderChangeStatusSubjectLine(YFSEnvironment env,
