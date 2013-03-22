@@ -152,6 +152,8 @@ function Clear()
 <script type="text/javascript">
 		$(document).ready(function() {
 		$('.phone-numeric').numeric(false); 
+		$("#txtExtnPhone1").mask("999 999-9999");
+		$("#txtExtnFax1").mask("999 999-9999");
 		$("#txtExtnPhone2").mask("999 999-9999");
 		$("#txtExtnFax2").mask("999 999-9999");
 		});
@@ -295,14 +297,14 @@ ul.checkboxTree li
 				    <td class="no-border-right">Phone 1:</td>
 				
 					    <td width="31%" class="no-border-right"> 	
-					     <s:if test="%{#extnElem.getAttribute('ExtnPhone1')!='0000000000'} ">
+					     <%-- <s:if test="%{#extnElem.getAttribute('ExtnPhone1')!='0000000000'} ">
 					    <s:set id="Phone1FormatChange" name="Phone1FormatChange" value="%{#extnElem.getAttribute('ExtnPhone1')}" />								    				    
 				        <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Phone1FormatChange)'/>
-					    	</s:if>
+					    	</s:if> 
 					    	
-					    	<s:hidden name='txtExtnPhone1' value='%{#extnElem.getAttribute("ExtnPhone1")}'></s:hidden>
-					    	 <%--<s:textfield id='txtExtnPhone1' name='txtExtnPhone1' size="25" tabindex="" disabled="true"
-							value='%{#extnElem.getAttribute("ExtnPhone1")}' cssStyle="width:230px;" cssClass="x-input"/> --%>
+					    	<s:hidden name='txtExtnPhone1' value='%{#extnElem.getAttribute("ExtnPhone1")}'></s:hidden> --%>
+					    	 <s:textfield id='txtExtnPhone1' name='txtExtnPhone1' maxlength="10" size="25" tabindex=""
+							value='%{#extnElem.getAttribute("ExtnPhone1")}' cssStyle="width:230px;" cssClass="x-input phone-numeric"/>
 					    </td>
 					    <td width="9%" class="no-border-right">Phone 2:</td>
 					    <td width="46%" class="no-border-right">
@@ -315,13 +317,13 @@ ul.checkboxTree li
 				    <tr>
 					    <td class="no-border-right">Fax 1:</td>
 					    <td class="no-border-right">
-					    	 <s:if test="%{#extnElem.getAttribute('ExtnFax1')!='0000000000'} ">
+					    	 <%-- <s:if test="%{#extnElem.getAttribute('ExtnFax1')!='0000000000'} ">
 					    	<s:set id="Fax1FormatChange" name="Fax1FormatChange" value="%{#extnElem.getAttribute('ExtnFax1')}" />									    
 				            <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormatPhone(#Fax1FormatChange)'/>
 				            </s:if>
-					    	<s:hidden name='txtExtnFax1' value='%{#extnElem.getAttribute("ExtnFax1")}'></s:hidden>
-					    	<%-- <s:textfield id='txtExtnFax1' name='txtExtnFax1' size="25" tabindex="" disabled="true"
-							value='%{#extnElem.getAttribute("ExtnFax1")}' cssStyle="width:230px;" cssClass="x-input"/> --%>
+					    	<s:hidden name='txtExtnFax1' value='%{#extnElem.getAttribute("ExtnFax1")}'></s:hidden> --%>
+					    	<s:textfield id='txtExtnFax1' name='txtExtnFax1' maxlength="10" size="25" tabindex="" 
+							value='%{#extnElem.getAttribute("ExtnFax1")}' cssStyle="width:230px;" cssClass="x-input phone-numeric"/>
 					    </td>
 					    <td class="no-border-right">Fax 2:</td> 				    
 					    <td class="no-border-right">

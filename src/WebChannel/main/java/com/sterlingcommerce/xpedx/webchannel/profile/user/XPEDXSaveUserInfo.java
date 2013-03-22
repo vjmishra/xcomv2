@@ -1044,7 +1044,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		for (int index = 0; index < wList.size(); index++) {
 			try {
 				if (wList.get(index) != null
-						&& !wList.get(index).trim().isEmpty()) {
+						&& wList.get(index).trim().isEmpty()) {
 					continue;
 				}
 				Element customerAssignmentElem = SCXmlUtil.createChild(

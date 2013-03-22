@@ -277,7 +277,7 @@
                                 </table></td>
                                <td width="5%" valign="middle" class="noBorders-fff" > =</td>  <td width="30%"  align="right" class="noBorders-fff"><table cellspacing="0" cellpadding="0" class="noBorders-fff">
                                   <tr>
-                                    <td align="center" valign="middle" class="noBorders-fff" style="border-left:none">157,280</td>
+                                    <td align="center" valign="middle" class="noBorders-fff" style="border-left:none">157,380</td>
                                   </tr>
                                   <tr>
                                     <td align="center" valign="middle" class="noBorders-fff" style="border-left:none; border-top:solid 1px #999;">950</td>
