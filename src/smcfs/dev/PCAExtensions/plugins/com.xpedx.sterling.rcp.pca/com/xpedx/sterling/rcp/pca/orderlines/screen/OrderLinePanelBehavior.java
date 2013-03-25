@@ -196,12 +196,12 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 
 			// populatePnAResponseinUI(elePandALineResponse);
 			setModel("PnAResponse", elePandALineResponse);
-			if ("00".equals(status)) {
+			//if ("00".equals(status)) {
 				populatePnAResponseinUI(elePandALineResponse);
-			} else {
+		/*	} else {
 				String inputString = envCode + "_" + status;
 				displayError(inputString, page);
-			}
+			}*/
 
 		}
 
@@ -269,11 +269,15 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 	private void getPlacedOrderLineError(String status, OrderLinePanel obj) {
 		if (!(obj.getOrderLinesPanel().getPageBehavior().PlacedOrderLineError)
 				.containsKey(status)) {
-			setFieldValue("lblPlacedOrderErr", "Unknown Line Error");
+			//Commented by Vijay
+			//setFieldValue("lblPlacedOrderErr", "Unknown Line Error");
 
 		} else {
+			//Added by Vijay to remove Invalid order multiple error.
+			if(!status.equalsIgnoreCase("M_M0080")){
 			setFieldValue("lblPlacedOrderErr", (page.getOrderLinesPanel()
 					.getPageBehavior().PlacedOrderLineError).get(status));
+			}
 		}
 
 	}
@@ -281,7 +285,8 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 	public void displayError(String status, OrderLinePanel obj) {
 		if (!(obj.getOrderLinesPanel().getPageBehavior().StatusTable)
 				.containsKey(status)) {
-			setFieldValue("lblErr", "Unknown Line Error");
+			//Commented by Vijay
+			//setFieldValue("lblErr", "Unknown Line Error");
 
 		} else {
 			setFieldValue("lblErr", (page.getOrderLinesPanel()
@@ -1476,14 +1481,15 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				}
 
 			}
-			if ((transUOMConvFactor * ordQty)
+			//Commented by Vijay Mishra
+			/*if ((transUOMConvFactor * ordQty)
 					% Double.parseDouble(orderMultiple) != 0
 					|| ordQty == 0.0) {
 				YRCPlatformUI.showError("Error", YRCPlatformUI
 						.getString("Order_Multiple_Quantity_Error"));
 				getControl("txtQuantity").setFocus();
 				return false;
-			}
+			}*/
 		}
 		return true;
 	}

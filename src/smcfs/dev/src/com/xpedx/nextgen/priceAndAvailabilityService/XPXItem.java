@@ -19,7 +19,24 @@ public class XPXItem {
 	private String lineStatusCode;
 	private Vector brackets;
 	private Vector warehouseLocationList;
+	private String orderMultipleQty;
+	private String orderMultipleUOM;
 	
+	public String getOrderMultipleQty() {
+		return orderMultipleQty;
+	}
+
+	public void setOrderMultipleQty(String orderMultipleQty) {
+		this.orderMultipleQty = orderMultipleQty;
+	}
+
+	public String getOrderMultipleUOM() {
+		return orderMultipleUOM;
+	}
+
+	public void setOrderMultipleUOM(String orderMultipleUOM) {
+		this.orderMultipleUOM = orderMultipleUOM;
+	}
 	/**
 	 * Constructor
 	 */

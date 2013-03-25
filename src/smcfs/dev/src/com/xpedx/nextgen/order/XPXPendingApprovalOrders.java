@@ -56,6 +56,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		Double spendingLimit=null;
 		String orderApprovalFlag=null;
 		Document changeOrderOutput = null;
+		boolean isApprovalReq = false;
 		String orderHeaderKey = inXML.getDocumentElement().getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
 		if(orderHeaderKey == null || orderHeaderKey.trim().length() == 0)
 		{
