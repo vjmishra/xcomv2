@@ -1,6 +1,7 @@
 package com.sterlingcommerce.xpedx.webchannel.MyItems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -72,12 +74,37 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	protected ArrayList<String> orderedCustomerPONo = new ArrayList<String>();
 	protected ArrayList<String> orderedCustomerLinePONo = new ArrayList<String>();
 	protected ArrayList<String> transactionalUOMs = new ArrayList<String>();
-	protected String addToCartError;
+	public String addToCartError;
 	protected boolean addingSingleItem = false;
 	protected ArrayList<String> isEditNewline=new ArrayList<String>();
 	public String draftOrderflag;
 	public String draftErrorCatalog="false";
 	public String draftErrorFlagCatalog = "DraftErrorCat";
+	//For Order multiple CR
+	protected HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
+	
+	protected List<String> orderMultipleErrorItems = new ArrayList<String>();
+
+	public List<String> getOrderMultipleErrorItems() {
+		return orderMultipleErrorItems;
+	}
+
+
+	public void setOrderMultipleErrorItems(List<String> orderMultipleErrorItems) {
+		this.orderMultipleErrorItems = orderMultipleErrorItems;
+	}
+
+
+	public HashMap<String, String> getUseOrdermultipleMapFromSourcing() {
+		return useOrdermultipleMapFromSourcing;
+	}
+
+
+	public void setUseOrdermultipleMapFromSourcing(
+			HashMap<String, String> useOrdermultipleMapFromSourcing) {
+		this.useOrdermultipleMapFromSourcing = useOrdermultipleMapFromSourcing;
+	}
+
 
 	@Override
 	public String execute() {
@@ -161,6 +188,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					}
 					XPEDXWCUtils.releaseEnv(wcContext);
 					changeOrderOutputDoc = getDocFromOutput(changeOrderOutput);
+					processPNAResponseForOrderMultiple();
 					if(YFCCommon.isVoid(editedOrderHeaderKey))
 					{
 						XPEDXOrderUtils.refreshMiniCart(getWCContext(),changeOrderOutputDoc.getDocumentElement(),true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
@@ -204,19 +232,74 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		long endTime=System.currentTimeMillis();
 		System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction class : "+(endTime-startTime));
 		//return SUCCESS;
+		if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.size()>0 && requestedItemID==null){				
+			return "MaxError";
+		}
 		return null;
 	}
 
 	
-	/*private void setYFSEnvironmentVariables() {
-		if (orderHeaderKey != null && !"".equals(orderHeaderKey))
-		{
-			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("isPnACall", "true");
-			map.put("isDiscountCalculate", "true");
-			XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(), map);
-		}
-	}*/
+	public void processPNAResponseForOrderMultiple(){
+		
+			try
+ 			{
+         		Integer maxItemLineNum = null;
+         		Integer maxLineNum = null;
+         		String responseXML = null;
+         		String orderMultipleQty = "";
+         		String orderMultipleUOM = "";
+         		
+         		
+         		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutputDoc.getDocumentElement(), "Extn");
+         		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+         		if(additionalAttrXml != null){
+	         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
+	         		Document attrXml =SCXmlUtil.createFromString(responseXML);
+					Element priceAvailXml = attrXml.getDocumentElement();
+	         		
+					Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
+					Document doc  = itemPrice.getOwnerDocument();
+					YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
+					
+					if (rootEle.hasChildNodes()) {
+						YFCElement lineItem =  rootEle.getChildElement("Items");
+						YFCIterable<YFCElement> yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+						
+						yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+						while (yfcItr.hasNext()) {
+							YFCElement lineElem = (YFCElement) yfcItr.next();
+							YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
+							YFCElement legacyProductCodeElem = lineElem.getChildElement("LegacyProductCode");
+							YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
+							YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
+							YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+							YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
+							if(orderMultipleQtyElem!=null){
+								orderMultipleQty= orderMultipleQtyElem.getNodeValue();
+							}
+							YFCElement orderMultipleUOMElem = lineElem.getChildElement("OrderMultipleUOM");
+							if(orderMultipleUOMElem!=null){
+								orderMultipleUOM= orderMultipleUOMElem.getNodeValue();
+							}
+							String lineNumber = lineStatusCodeElem.getNodeValue();							
+							String legacyProductCode = legacyProductCodeElem.getNodeValue();
+							String requestedQty = requestedQtyElem.getNodeValue();
+							String requestedUom = requestedUomElem.getNodeValue();
+							if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){
+								useOrdermultipleMapFromSourcing.put(legacyProductCode+"_"+requestedQty+"_"+requestedUom, orderMultipleQty +"|"+orderMultipleUOM);
+								orderMultipleErrorItems.add(legacyProductCode+"_"+requestedQty+"_"+requestedUom);
+							}
+						}
+						
+					}
+					
+         		}
+ 			}
+ 			catch(Exception e)
+ 			{
+ 				LOG.error("Exception while getting item from PnA Response "+e.getMessage());
+ 			}
+	}
 	
 	private boolean getProductInformationForEnteredProducts() {
 		// enteredProductIDs should never be null in this situation - if it is,
@@ -530,6 +613,12 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		else if(returnVal!=null && returnVal.equalsIgnoreCase(ERROR)){
 			addToCartError = "Error while adding item to cart";
 		}
+		else if(useOrdermultipleMapFromSourcing!=null && useOrdermultipleMapFromSourcing.containsKey(requestedItemID+"_"+requestedQty+"_"+requestedUOM)){
+			addToCartError = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";	
+			return "MaxError";
+		}
+		else
+			addToCartError="";
 		 
 		return returnVal;
 	}

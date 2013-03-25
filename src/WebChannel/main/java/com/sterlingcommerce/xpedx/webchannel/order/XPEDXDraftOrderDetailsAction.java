@@ -225,6 +225,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				 */
 				
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
+				orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),true);
+				useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
 				//Setting the price hover map
 				//added for jira 2885 
 				if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
@@ -2197,6 +2199,18 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected String shipFromDivision;
 	protected String organizationCode;
 	protected HashMap itemUOMsMap;
+	protected HashMap orderMultipleMapFromSourcing;
+	public HashMap getOrderMultipleMapFromSourcing() {
+		return orderMultipleMapFromSourcing;
+	}
+
+
+	public void setOrderMultipleMapFromSourcing(HashMap orderMultipleMapFromSourcing) {
+		this.orderMultipleMapFromSourcing = orderMultipleMapFromSourcing;
+	}
+
+
+
 	protected Map itemOrderMultipleMap;
 	protected Map itemListMap;
 	private HashMap<String, JSONObject> pnaHoverMap;
@@ -2295,6 +2309,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	private String draftOrderList;
 	public String draftOrderFail="false";
+	
+	protected HashMap useOrderMultipleMapFromSourcing;
+	public HashMap getUseOrderMultipleMapFromSourcing() {
+		return useOrderMultipleMapFromSourcing;
+	}
+
+	public void setUseOrderMultipleMapFromSourcing(
+			HashMap useOrderMultipleMapFromSourcing) {
+		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
+	}
 	
 	public String getDraftOrderFail() {
 		return draftOrderFail;

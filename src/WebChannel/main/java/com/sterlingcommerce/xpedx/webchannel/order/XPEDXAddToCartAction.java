@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathExpressionException;
@@ -44,6 +45,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	 {
 		 
 		 this.reqProductUOM = this.productUOM;	
+		 this.reqProductQuantity=this.quantity;
 		 String sOrderHeaderKey =(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext"); //XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
 		 if((sOrderHeaderKey==null || sOrderHeaderKey.equals("_CREATE_NEW_") )&& XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
 			 XPEDXOrderUtils.createNewCartInContext(getWCContext());
@@ -133,6 +135,18 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											YFCElement lineElem = (YFCElement) yfcItr.next();
 											YFCElement lineNumberElem = lineElem.getChildElement("LineNumber");
 											YFCElement itemIdElem = lineElem.getChildElement("LegacyProductCode");
+											YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
+											YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
+											YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+											YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
+																		
+											String legacyProductCode1 = itemIdElem.getNodeValue();
+											String requestedQty = requestedQtyElem.getNodeValue();
+											String requestedUom = requestedUomElem.getNodeValue();
+											if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14") 
+													&& legacyProductCode1.equalsIgnoreCase(this.productID) && requestedQty.equalsIgnoreCase(this.reqProductQuantity) && requestedUom.equalsIgnoreCase(this.reqProductUOM)){								
+												orderMultipleErrorItems.add(legacyProductCode1);
+											}
 											lineElem.getLastChild();
 											String str = lineNumberElem.getNodeValue();
 											String legacyProductCode=itemIdElem.getNodeValue();
@@ -193,7 +207,9 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		         		if(changeOrderOutput == null){
 		         			return ERROR;
 		         		}
-		
+		         		//orderMultipleErrorItems = XPEDXPriceandAvailabilityUtil.processPNAResponseForOrderMultiple(changeOrderOutputDoc);
+		         		if(orderMultipleErrorItems.contains(productID))
+		         			return "MaxError";
 		         		//refreshCartInContext(orderHeaderKey);
 		         		XPEDXWCUtils.releaseEnv(wcContext);
 		         		return SUCCESS;
@@ -381,8 +397,25 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 		this.isEditNewline = isEditNewline;
 	}
 
+	protected List<String> orderMultipleErrorItems = new ArrayList<String>();
+	public List<String> getOrderMultipleErrorItems() {
+		return orderMultipleErrorItems;
+	}
+
+	public void setOrderMultipleErrorItems(List<String> orderMultipleErrorItems) {
+		this.orderMultipleErrorItems = orderMultipleErrorItems;
+	}
 
 	protected String reqProductUOM;
+	protected String reqProductQuantity;
+	public String getReqProductQuantity() {
+		return reqProductQuantity;
+	}
+
+	public void setReqProductQuantity(String reqProductQuantity) {
+		this.reqProductQuantity = reqProductQuantity;
+	}
+
 	protected String reqJobId;
 	protected String reqCustomer;
 	protected String lineType;
