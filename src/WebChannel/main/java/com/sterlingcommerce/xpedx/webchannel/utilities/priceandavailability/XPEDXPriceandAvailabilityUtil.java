@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
 
@@ -34,13 +35,17 @@ import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 /**
@@ -90,7 +95,7 @@ public class XPEDXPriceandAvailabilityUtil {
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_TRANSMISSIONSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithTransmissionStatusError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_HEADERSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithHeaderStatusError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_LINESTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithLineStatusError.xml";
-
+ public static final String WS_ORDERMULTIPLE_ERROR_FROM_MAX="14";
 	
 	
 	/**
@@ -509,7 +514,10 @@ public class XPEDXPriceandAvailabilityUtil {
 				for(int i=0;i<items.size();i++)
 				{
 					XPEDXItem item=items.get(i);
-					if(!"00".equals(item.getLineStatusCode()))
+					if(WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode())){
+						item.setOrderMultipleErrorFromMax("true");
+					}
+					if(!"00".equals(item.getLineStatusCode()) && !WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode()))
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
 						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR);
 				}
@@ -535,6 +543,149 @@ public class XPEDXPriceandAvailabilityUtil {
 		
 		return getPnAHoverMap(items,false);
 	}
+	public static boolean isNumeric(String i)
+	{
+		try {
+			Integer.parseInt(i);
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
+	
+	public static HashMap getOrderMultipleMapFromSourcing(
+			Vector<XPEDXItem> items, boolean isLineNumberRequired) {
+		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
+		if (null == items || items.size() <= 0) {
+			return ordermultipleMapFromSourcing;
+		}		
+		for (XPEDXItem item : items) {	
+			boolean isMaxError = false;
+			int lineNumber=Integer.parseInt(item.getLineNumber());
+			if(isLineNumberRequired){
+				if(item.getOrderMultipleQty()!= null  && !item.getOrderMultipleQty().equalsIgnoreCase("0") && isNumeric(item.getOrderMultipleQty())){
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM());
+				}else
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
+			}
+			else{
+				if(item.getOrderMultipleQty()!= null && !item.getOrderMultipleQty().equalsIgnoreCase("0")){
+					if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+						isMaxError = true;
+					}
+					try {
+						ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM())+"|"+isMaxError);
+					} catch (XPathExpressionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (XMLExceptionWrapper e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (CannotBuildInputException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);
+			}
+		}
+		return ordermultipleMapFromSourcing;
+	}
+	//End of XB 214 BR changes
+	
+	public static HashMap useOrderMultipleErrorMapFromMax(
+			Vector<XPEDXItem> items) {
+		HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
+		if (null == items || items.size() <= 0) {
+			return useOrdermultipleMapFromSourcing;
+		}		
+		for (XPEDXItem item : items) {		
+			int lineNumber=Integer.parseInt(item.getLineNumber());
+			if(item.getOrderMultipleErrorFromMax()!= null && item.getOrderMultipleErrorFromMax().equalsIgnoreCase("true")){
+				useOrdermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleErrorFromMax());
+			}
+			
+		}
+		return useOrdermultipleMapFromSourcing;
+	}
+	// Added for XB 214 for Item line level for BR requirements
+	public static HashMap getItemOrderMultipleFromSourceMap(Vector<XPEDXItem> items) throws XPathExpressionException, XMLExceptionWrapper, CannotBuildInputException {
+		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
+		if (null == items || items.size() <= 0) {
+			return ordermultipleMapFromSourcing;
+		}		
+		for (XPEDXItem item : items) {		
+			//int lineNumber=Integer.parseInt(item.getLineNumber());
+			if(item.getOrderMultipleQty()!= null ){
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM()));
+			}else
+				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);
+		}
+		return ordermultipleMapFromSourcing;
+	}
+	
+	public static List<String> processPNAResponseForOrderMultiple(Document changeOrderOutputDoc, String reqQty, String reqUOM, String reqProductCode){
+		List<String> orderMultipleErrorItems = new ArrayList<String>();
+		try
+			{
+     		Integer maxItemLineNum = null;
+     		Integer maxLineNum = null;
+     		String responseXML = null;
+     		String orderMultipleQty = "";
+     		String orderMultipleUOM = "";
+     		
+     		
+     		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutputDoc.getDocumentElement(), "Extn");
+     		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
+     		if(additionalAttrXml != null){
+         	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
+         		Document attrXml =SCXmlUtil.createFromString(responseXML);
+				Element priceAvailXml = attrXml.getDocumentElement();
+         		
+				Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
+				Document doc  = itemPrice.getOwnerDocument();
+				YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
+				
+				if (rootEle.hasChildNodes()) {
+					YFCElement lineItem =  rootEle.getChildElement("Items");
+					YFCIterable<YFCElement> yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+					
+					yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
+					while (yfcItr.hasNext()) {
+						YFCElement lineElem = (YFCElement) yfcItr.next();
+						YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
+						YFCElement legacyProductCodeElem = lineElem.getChildElement("LegacyProductCode");
+						YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
+						YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
+						YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+						YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
+						if(orderMultipleQtyElem!=null){
+							orderMultipleQty= orderMultipleQtyElem.getNodeValue();
+						}
+						YFCElement orderMultipleUOMElem = lineElem.getChildElement("OrderMultipleUOM");
+						if(orderMultipleUOMElem!=null){
+							orderMultipleUOM= orderMultipleUOMElem.getNodeValue();
+						}
+						String lineNumber = lineStatusCodeElem.getNodeValue();							
+						String legacyProductCode = legacyProductCodeElem.getNodeValue();
+						String requestedQty = requestedQtyElem.getNodeValue();
+						String requestedUom = requestedUomElem.getNodeValue();
+						if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){								
+							orderMultipleErrorItems.add(legacyProductCode+"_"+requestedQty+"_"+requestedUom);
+						}
+					}
+					
+				}
+				
+     		}
+			}
+			catch(Exception e)
+			{
+				log.error("Exception while getting item from PnA Response "+e.getMessage());
+			}
+			return orderMultipleErrorItems;
+}
+	//End of XB 214 	
 	
 	public static HashMap<String, JSONObject> getPnAHoverMap(
 			Vector<XPEDXItem> items,boolean isLineNumberRequired) {
@@ -699,7 +850,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			log.debug("getPnALineErrorMessage: lineStatusCode is null. Returning a empty message.");
 			return errorMessage;
 		}
-		if (lineStatusCode.equals("00")) {
+		if (lineStatusCode.equals("00") || lineStatusCode.equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)) {
 			log.debug("getPnALineErrorMessage: lineStatusCode is zero.Successful. Returning a empty message.");
 			return errorMessage;
 		}
@@ -1254,7 +1405,7 @@ public class XPEDXPriceandAvailabilityUtil {
 				XPEDXItem item=items.get(i);
 				String itemID=item.getLegacyProductCode();
 				//if(!"00".equals(item.getLineStatusCode())){
-				if(item.getLineStatusErrorMsg() == null){
+				if(item.getLineStatusErrorMsg() == null || item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 					errorMessage="";
 				}
 				else{

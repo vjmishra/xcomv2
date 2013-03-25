@@ -159,6 +159,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			return returnVal;
 		}
 		pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems());
+		orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),false);
+		useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
 		/*if("true".equals(isOrderData))
 		{
 			Set<String> itemSet=pnaHoverMap.keySet();
@@ -171,13 +173,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		String lineStatusErrorMsg = "";
 		for (XPEDXItem pandAItem1 : items) {
 			if (pandAItem1.getLegacyProductCode().equals(itemID)) {
+				//Added for XB 214 BR1
 				//added for jira 2885
-				pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
-				lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
+					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());//XB 214
+					lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 						.getPnALineErrorMessage(pandAItem1);
-
-//	for jira 2885	ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
-				
+			
+				//End for XB 214 BR1aa
+				//	for jira 2885 ajaxDisplayStatusCodeMsg = ajaxDisplayStatusCodeMsg + " "+lineStatusErrorMsg;
 				if (!YFCCommon.isVoid(lineStatusErrorMsg)) {
 					setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
 				} else {
@@ -1771,6 +1774,26 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	// Added by anil end
 
 	HashMap<String, JSONObject> pnaHoverMap = null;
+	
+	protected HashMap orderMultipleMapFromSourcing;
+
+	public HashMap getOrderMultipleMapFromSourcing() {
+		return orderMultipleMapFromSourcing;
+	}
+
+	public void setOrderMultipleMapFromSourcing(HashMap orderMultipleMapFromSourcing) {
+		this.orderMultipleMapFromSourcing = orderMultipleMapFromSourcing;
+	}
+	
+	protected HashMap useOrderMultipleMapFromSourcing;
+	public HashMap getUseOrderMultipleMapFromSourcing() {
+		return useOrderMultipleMapFromSourcing;
+	}
+
+	public void setUseOrderMultipleMapFromSourcing(
+			HashMap useOrderMultipleMapFromSourcing) {
+		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
+	}
 
 	/**
 	 * @return the certImagePath
