@@ -275,9 +275,10 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 		} else {
 			//Added by Vijay to remove Invalid order multiple error.
 			if(!status.equalsIgnoreCase("M_M0080")){
-			setFieldValue("lblPlacedOrderErr", (page.getOrderLinesPanel()
-					.getPageBehavior().PlacedOrderLineError).get(status));
+				setFieldValue("lblPlacedOrderErr", (page.getOrderLinesPanel()
+						.getPageBehavior().PlacedOrderLineError).get(status));
 			}
+			
 		}
 
 	}
@@ -1300,8 +1301,9 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 	}
 
 	public boolean isValidMulpleItem(String itemQuantity) {
+		//Commented by vijay
 
-		Element eleOrderLineNS = getTargetModel("OrderLineNS");
+		/*Element eleOrderLineNS = getTargetModel("OrderLineNS");
 		// comboOrderingUOM control Used while editing the UOM, i.e., in case of
 		// add new line.
 		Control ctrlOrderingUOM = getControl("comboOrderingUOM");
@@ -1389,7 +1391,7 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 				Color color = new Color(null, 0, 0, 0);
 				getControl("txtQuantity").setForeground(color);
 			}
-		}
+		}*/
 		return true;
 
 	}

@@ -138,8 +138,11 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	
 	private void removeSpecialCharacters(YFSEnvironment env, YFCElement rootElem) {
 		// TODO Auto-generated method stub
+		int instructionListSize = 0;
 		YFCNodeList<YFCElement> instructionsList = rootElem.getElementsByTagName("Instruction");
-		int instructionListSize = instructionsList.getLength();
+		if (instructionsList != null && instructionsList.getLength() > 0) {
+		instructionListSize = instructionsList.getLength();
+		}
 	    for (int i=0;i<instructionListSize;i++) {
 	    	YFCElement instructionElement = instructionsList.item(i);     
 	        if (instructionElement.hasAttribute("InstructionType")) {
