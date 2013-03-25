@@ -2,7 +2,7 @@
 	<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
 <DBSchema>
 	<Entities>
-		<Entity ApiNeeded="Y" AuditRequired="N" HasHistory="N" Prefix="XPX"
+		<Entity ApiNeeded="Y" AuditRequired="N" HasHistory="False" Prefix="XPX"
 			TableName="XPX_EMAIL_DETAILS">
 			<Attributes>
 				<Attribute ColumnName="EMAIL_DETAILS_KEY" DataType="Key"

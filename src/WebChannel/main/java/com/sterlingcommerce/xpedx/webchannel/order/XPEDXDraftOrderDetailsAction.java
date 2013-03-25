@@ -133,13 +133,6 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//}
 			//END: sort the orderlines based on legacy line number - RUgrani
 			
-				Document rulesDoc1 = (Document) wcContext.getWCAttribute("rulesDoc");
-				if(rulesDoc1 == null){
-					rulesDoc1 = XPEDXOrderUtils.getValidationRulesForCustomer(getOrderElementFromOutputDocument(), wcContext);
-					wcContext.setWCAttribute("rulesDoc", rulesDoc1, WCAttributeScope.LOCAL_SESSION);	
-				}
-				customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(getOrderElementFromOutputDocument(),rulesDoc1, wcContext);
-				//End XB-560
 			//Get the field validateCustomerFields. It will be set to Y when cart is updated
 			if(getValidateCustomerFields()!=null && getValidateCustomerFields().equals("Y"))
 			{
@@ -2201,7 +2194,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected ArrayList<Element> xpedxYouMightConsiderItems;
 	protected ArrayList<Element> xpedxPopularAccessoriesItems;
 	protected LinkedHashMap customerFieldsMap;
-	protected ArrayList<String> customerFieldsRulesMap;
 	private HashMap<String, HashMap<String,String>> skuMap=new HashMap<String, HashMap<String,String>>();
 	private String customerSku;
 	private String adjCatTwoShortDesc = "";
