@@ -967,11 +967,7 @@ function redrawQuickAddList()
 			        code += '<input type="text" name="enteredJobIDs" maxlength="25" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
 			        code += '</td>';
 		        }
-		        if(custPOFlag){
-		        	code += '<td class="col-item">';
-		        	code += '<input type="text" name="enteredPONos" maxlength="25" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\','+ i +')"/>';
-		        	code += '</td>';
-		        }
+		        
 		        var itemDescription = "enteredProductDescs_" + i;
 		        code += '<input type="hidden" name="enteredProductDescs" id="' + encodeForHTML(itemDescription) + '" value="' + encodeForHTML(QuickAddElems[i].itemDesc) + '"/>';
 		        

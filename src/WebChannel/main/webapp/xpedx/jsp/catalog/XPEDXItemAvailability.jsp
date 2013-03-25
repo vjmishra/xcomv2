@@ -24,6 +24,7 @@
 
 <s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId)' />
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemId}" value="%{#orderMultipleQtyFromSrc}"/>
+
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#itemId)}">
@@ -189,20 +190,7 @@
 			<s:if test="displayPriceForUoms.size()>0" >
 				<TABLE  width="100%">
 				<s:set name="break" value="false"></s:set>
-				<s:if test='%{#lineStatusCodeMsg != ""}'>
-				<tbody class="mil-priceDiv-visibility" style="valign:right;">
-				<tr>
-					<td width="auto" class="left" colspan="3"><b>My Price:</b></td>
-					<td class="left" width="auto" colspan="3"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
-				</tr>
-				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-				<tr>
-					<td width="auto" class="left" colspan="3"><strong>Extended Price:</strong></td>
-					<td class="left" width="auto" colspan="3"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD'/> </span> </td>
-				</tr>
-				</tbody>
-				</s:if>	
-				<s:else>
+			
 				<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
 				<s:set name="bracketUOMDesc" value="bracketUOM" />
@@ -255,6 +243,7 @@
 	<tbody><tr><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
 	</tbody>
 </s:if>	
+</s:else>
 </s:if>
 <s:else>
 		<tr >
