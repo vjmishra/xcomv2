@@ -79,7 +79,7 @@ function addItemToCart(itemId) {
 							myMask.hide();
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
 							return false;
-						}
+						}	
 						else if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
 				        {
 							refreshMiniCartLink();
@@ -129,7 +129,7 @@ function addItemToCart(itemId) {
 					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
 						
 							
-							document.getElementById('Qty_'+itemId).value = "";
+							//document.getElementById('Qty_'+itemId).value = "";
 							Ext.Msg.hide();
 							myMask.hide();
 							 //-- Web Trends tag start --
@@ -145,6 +145,7 @@ function addItemToCart(itemId) {
 					},
 					failure: function (response, request){
 					    //Ext.MessageBox.hide(); 
+					    refreshMiniCartLink();
 					    	Ext.Msg.hide();
 						myMask.hide();
 						alert("Error Adding the Item to the cart. Please try again later");
@@ -226,6 +227,7 @@ var myMask;
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = 'inline';
+	            		
 	            		// start of XB 214 BR1
 	            		var qty = document.getElementById("Qty_"+itemId);
 		            	var sourceOrderMulError = document.getElementById("errorMsgForQty_"+itemId);
