@@ -257,7 +257,7 @@ function update()
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
 	if(orderLinesCount > 0)
 	{
-		if(validateOrderMultiple() == false)
+		if(validateQty() == false)
 		{
 			return;
 		}
@@ -346,7 +346,7 @@ var retVal=true;
 			{
 			    ordMul= 0
 			}		
-		if(ordMul != 0 && zeroError == false)
+	/*	if(ordMul != 0 && zeroError == false)
 		{			
 			if(divIdError != null){
 				divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul.value) +" "+baseUOM.value;
@@ -355,7 +355,7 @@ var retVal=true;
 			}
 			retVal=false;
 			noError=false;
-		}
+		} XB 214 removing the Order Multiple Validation in cart page */
 	//	alert("arrOrdMul.value="+arrOrdMul.value);
 		if(arrOrdMul.value > 1 && noError==true) {
 			if(divIdError != null){
@@ -410,7 +410,7 @@ var retVal=true;
 			{
 			    ordMul= 0
 			}		
-		if(ordMul != 0 && zeroError == false)
+	/*	if(ordMul != 0 && zeroError == false)
 		{			
 			if(divIdError != null){
 				divIdError.innerHTML ="Please order in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
