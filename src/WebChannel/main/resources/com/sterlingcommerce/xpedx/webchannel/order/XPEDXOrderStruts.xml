@@ -131,6 +131,13 @@
 				<param name="draft">${draft}</param>
 				<param name="customerFieldsValidated">${customerFieldsValidated}</param>
 			</result>
+			<result name="Order_Multiple_Error" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="isEditOrder">${isEditOrder}</param>
+				<param name="draft">${draft}</param>				
+			</result>
 		</action>
 
 		<action name="draftOrderSummaryUpdate"
@@ -366,6 +373,7 @@
 			<param name="mashups">xpedx_me_addToCartAddOrderLines</param>
 			<param name="resourceId">/swc/order/guestShopping</param>
 			<result name="success">/swc/jsp/order/addToCartSuccess.jsp</result>
+			<result name="MaxError">/xpedx/jsp/catalog/XPEDXItemsDetailsAddtoCartError.jsp</result>
 			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 			<result name="DraftError">/xpedx/jsp/common/XPEDXDraftOrderFlagError.jsp</result>
 		</action>
@@ -624,9 +632,13 @@
             <result name="success">/xpedx/jsp/order/XPEDXMiniCart.jsp</result>
         </action>
 
-    	<action name="XPEDXMiniCartLinkDisplay" class="com.sterlingcommerce.webchannel.order.MiniCartLinkDisplayAction">
+    	<action name="XPEDXMiniCartLinkDisplay" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartLinkDisplayAction">
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>
+        </action>
+        <action name="XPEDXRefreshCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartLinkDisplayAction" method="refreshWithNextOrNewCartInContextOrderHeaderKey">
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>  
         </action>
         <!-- action to check for timeout for JIRA 1650-->
         <action name="checkSessionTimeoutForCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction" method="checkSessionTimeout">
