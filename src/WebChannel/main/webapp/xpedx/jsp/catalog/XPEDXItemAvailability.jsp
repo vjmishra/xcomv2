@@ -21,11 +21,14 @@
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
+
+<s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId)' />
+<s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemId}" value="%{#orderMultipleQtyFromSrc}"/>
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#itemId)}">
 
-
+<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
 	<tbody>
 		<tr class="my-headings" style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td colspan="3"><span><i>Availability</i></span></td>
@@ -237,7 +240,7 @@
 				</s:if>
 				</s:else>				
 				</s:iterator>			
-				</s:else>	
+			
 				</TABLE>
 				</s:if>
 				</s:if>
@@ -246,7 +249,9 @@
 		</tr>	
 		
 </tbody>
-<s:if test='%{#lineStatusCodeMsg != ""}'>
+</s:if>
+<s:else>
+<s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 	<tbody><tr><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
 	</tbody>
 </s:if>	

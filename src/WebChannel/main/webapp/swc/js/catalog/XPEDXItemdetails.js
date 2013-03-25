@@ -94,14 +94,61 @@ function setPandAData() {
 	//added for jira 2885
 	if(errorValue.value != null && errorValue.value != ""){
 		errorMsgDiv.innerHTML = "<h5 align='center'><b><font color=red>" + errorValue.value + "</font></b></h5>";
+		itemAvailDiv.innerHTML ="";
 	}
 	
 	if(errorVal.value != null && errorVal.value != ""){
 		errorMsgDiv.innerHTML = "<h5 align='center'><b><font color=red>" + errorVal.value + "</font></b></h5>";
+		itemAvailDiv.innerHTML ="";
 	}
+	//XB 214 BR1
+	var qty = document.getElementById("qtyBox");
+	var sourceOrderMulError = document.getElementById("errorMsgForQty");
+	var OrderMultipleQtyFromSrc = document.getElementById("OrderMultipleQtyFromSrc");
+	if(OrderMultipleQtyFromSrc != null && OrderMultipleQtyFromSrc.value != ''){
+	var OrderMultipleQtyFromSrc1 = OrderMultipleQtyFromSrc.value;
+	var OrderMultipleQtyUom = OrderMultipleQtyFromSrc1.split("|");
+	var orderMultipleQty = OrderMultipleQtyUom[0];
+	var OrderMultipleUom = OrderMultipleQtyUom[1];
+	var omError = OrderMultipleQtyUom[2];	
+	if(omError == 'true' && qty.value > 0)//omError == 'true' && qty.value > 0 )
+	{
+		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
+		sourceOrderMulError.style.display = "inline-block"; 
+		sourceOrderMulError.setAttribute("class", "error");
+		displayPricesDiv.style.display = "none"; 
+		itemAvailDiv.style.display = "none"; 
+		qty.style.borderColor="";
+	}
+	else if(omError == 'true' && orderMultipleQty != 0)
+	{
+		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
+		sourceOrderMulError.style.display = "inline-block"; 
+		sourceOrderMulError.setAttribute("class", "notice");
+		displayPricesDiv.style.display = "none"; 
+		itemAvailDiv.style.display = "none"; 
+		qty.style.borderColor="";
+	}
+	else if(orderMultipleQty != null && orderMultipleQty != 0 && sourceOrderMulError.innerHTML.indexOf('Item has been added to cart')==-1 )
+	{
+		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
+		sourceOrderMulError.style.display = "inline-block"; 
+		sourceOrderMulError.setAttribute("class", "notice");
+		displayPricesDiv.style.display = "block"; 
+		itemAvailDiv.style.display = "block"; 
+		qty.style.borderColor="";
+	}
+	else{
+		displayPricesDiv.style.display = "block"; 
+		itemAvailDiv.style.display = "block"; 
+		qty.style.borderColor="";
+	}
+	}
+	
 	//if(displayPricesDiv!=null && pricedDiv!=null) 
-	if(errorValue.value == null && errorValue.value == "") {
+	if(errorVal.value == "" && errorValue.value == "") {
 		errorMsgDiv.innerHTML= "";
+		document.getElementById("qtyBox").style.borderColor="";	
 	}
 	
 	document.getElementById("lineStatusCodeMsg").value = "";

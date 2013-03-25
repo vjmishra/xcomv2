@@ -23,6 +23,15 @@
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 
+<s:set name="OrderMultipleQtyFromSrc" value='orderMultipleMapFromSourcing.get(#itemID)' />
+<s:hidden name="OrderMultipleQtyFromSrc" id="OrderMultipleQtyFromSrc" value="%{#OrderMultipleQtyFromSrc}"/>
+ 		 
+<s:set name="orderMultiple" value="#_action.getValidateOrderMul()" />
+<s:hidden name="orderMultiple" value="%{#_action.getValidateOrderMul()}" />
+<s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
+<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)" />
+<s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg" value="%{#lineStatusCodeMsg}"/>
+
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
@@ -158,7 +167,7 @@
 							
 							
 						</s:iterator>			
-					</s:elseif>
+					</s:if>
 				</s:if>
 
 				<tr>

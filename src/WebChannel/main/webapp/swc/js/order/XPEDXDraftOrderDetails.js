@@ -19,7 +19,11 @@ function checkOut()
 		return;
 	}
 	//JIRA 3488 End
-	if(validateOrderMultiple() == false)
+	/*if(validateOrderMultiple() == false)
+	{
+		return;
+	}*/
+	if(validateQty() == false)
 	{
 		return;
 	}
@@ -40,6 +44,54 @@ function checkOut()
     document.OrderDetailsForm.isComingFromCheckout.value = "true";
     document.OrderDetailsForm.action = document.getElementById('checkoutURL');
     document.OrderDetailsForm.submit();
+}
+function validateQty(){
+	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
+	var retVal=true;
+	if(orderLinesCount==1){
+		var arrQty ;		
+		var arrItemID ;		
+		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
+		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+		
+		var divId='errorDiv_'+ arrQty.id;
+		var divIdError=document.getElementById(divId);
+		var qtyElement = document.getElementById(arrQty.id);
+		
+		if(arrQty.value == '' || arrQty.value ==0)
+		{		
+			if(divIdError != null){
+				divIdError.innerHTML='Please enter a valid quantity and try again.';
+				divIdError.setAttribute("class", "error");
+			}
+			retVal=false; 
+		}
+	}else{//if more than one item
+		var arrQty = new Array();		
+		var arrItemID = new Array();
+		
+		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
+		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
+		
+		for(var i = 0; i < arrItemID.length; i++)
+		{			
+			var divId='errorDiv_'+ arrQty[i].id;
+			var divIdError=document.getElementById(divId);
+			var qtyElement = document.getElementById(arrQty[i].id);
+			if(arrQty[i].value == '' || arrQty[i].value ==0)
+			{		
+				if(divIdError != null){
+					divIdError.innerHTML='Please enter a valid quantity and try again.';
+					divIdError.setAttribute("class", "error");
+				}
+				retVal=false;			
+			}else
+			{
+				qtyElement.style.borderColor = "";
+			} 
+		}
+	}//end of else
+	return retVal;
 }
 
 function addProductsToOrder()
@@ -116,7 +168,7 @@ function addProductsToOrder()
 						isError = true;
 						noError = false;
 					}					
-					else if(ordMul != 0 || totalQty ==0)
+				/*	else if(ordMul != 0 || totalQty ==0)
 					{
 						isError = true;
 						//Added for 3098
@@ -126,7 +178,7 @@ function addProductsToOrder()
 						document.getElementById(divId).setAttribute("class", "error");
 						document.getElementById(divId).setAttribute("align", "center");
 						noError = false;
-					}
+					} XB 214 removing the Order Multiple Validation in Quick add & add to cart */
 					if(orderMultiple > 1 && noError == true) {
 						document.getElementById(divId).innerHTML ="Must be ordered in units of " + orderMultiple +" "+baseUOM[i].value;
 						document.getElementById(divId).style.display = "inline-block";
@@ -367,7 +419,7 @@ var retVal=true;
 			}
 			retVal=false;
 			noError=false;
-		}
+		} XB 214 removing the Order Multiple Validation in Quick add & add to cart */
 		if(arrOrdMul[i].value > 1 && noError==true) {
 			if(divIdError != null){
 				divIdError.innerHTML ="Must be ordered in units of " +addComma(arrOrdMul[i].value) +" "+baseUOM[i].value;
@@ -595,6 +647,8 @@ function redrawQuickAddList()
     	code += '<th class="col-header item-col">Item #</th>';
     	code += '<th class="col-header qty-col">Qty</th>';
     	code += '<th class="col-header uom-col">UOM</th>';
+    	if(jobidFlag == true && jobValue!= null)
+    	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
     	if(custPOFlag)
     		code += '<th class="last-col-header col-header job-col">Line PO #</th>';
     	if(jobidFlag == true && jobValue!= null)
@@ -913,7 +967,11 @@ function redrawQuickAddList()
 			        code += '<input type="text" name="enteredJobIDs" maxlength="25" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
 			        code += '</td>';
 		        }
-		        
+		        if(custPOFlag){
+		        	code += '<td class="col-item">';
+		        	code += '<input type="text" name="enteredPONos" maxlength="25" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\','+ i +')"/>';
+		        	code += '</td>';
+		        }
 		        var itemDescription = "enteredProductDescs_" + i;
 		        code += '<input type="hidden" name="enteredProductDescs" id="' + encodeForHTML(itemDescription) + '" value="' + encodeForHTML(QuickAddElems[i].itemDesc) + '"/>';
 		        

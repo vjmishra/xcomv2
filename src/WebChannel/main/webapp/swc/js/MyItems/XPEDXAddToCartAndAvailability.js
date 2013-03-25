@@ -110,13 +110,25 @@
 		        	var draftErr = response.responseText;
 		            var draftErrDiv = document.getElementById("errorMessageDiv");
 		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-		        {
+		        {			refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 		                    Ext.Msg.hide();
 		                	myMask.hide();
 		        }
+		            else if(draftErr.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
+			        {
+		            	refreshMiniCartLink();
+		            	var divVal=document.getElementById('errorDiv_qtys_'+uid);        
+		            	divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
+		            	divVal.style.display = "inline-block"; 
+						divVal.setAttribute("style", "margin-right:5px;float:right;");
+						divVal.setAttribute("class", "error");
+			                    Ext.Msg.hide();
+			                	myMask.hide();
+			        }
 					else if(responseText.indexOf("Error")>-1)
 					{
+						refreshMiniCartLink();
 						Ext.Msg.hide();
 						myMask.hide();
 						alert("Error Adding the Item to the cart. Please try again later");
@@ -168,6 +180,7 @@
 					}	
 				},
 				failure: function (response, request){
+					refreshMiniCartLink();
 				    //Ext.MessageBox.hide(); 
 					Ext.Msg.hide();
 					myMask.hide();
@@ -252,6 +265,45 @@
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = '';
+	            		// start of XB 214 BR1
+	            		var qty = document.getElementById("qtys_"+myItemsKey);
+		            	var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+myItemsKey);
+		            	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc_"+myItemsKey);
+		            	
+		            	if(orderMultipleQtyFromSrc != null && orderMultipleQtyFromSrc.value != ''){
+		            	var orderMultipleQtyFromSrc1 = document.getElementById("orderMultipleQtyFromSrc_"+myItemsKey).value;
+		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
+		            	var orderMultipleQty = orderMultipleQtyUom[0];
+		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	var omError = orderMultipleQtyUom[2];
+		            	
+		            	if(omError == 'true' && qty.value > 0) //(omError == 'true' && qty.value > 0)
+		            	{
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "error");
+		            		availabilityRow.style.display = 'none';
+		            	}
+		            	else if(omError == 'true')
+		            	{	
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = 'none';
+		            	}
+		            	else if(orderMultipleQty != null && orderMultipleQty != 0)
+		            	{	
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = 'block';
+		            	}
+		            	else{
+		            		availabilityRow.style.display = 'block';
+		            	}
+		            	}
+		            	//End of BR1 XB 214
+		            	
 	            		Ext.Msg.hide();
 				myMask.hide();
 	            		//-- Web Trends tag start --

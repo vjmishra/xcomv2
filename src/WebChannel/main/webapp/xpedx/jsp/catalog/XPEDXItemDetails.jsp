@@ -98,6 +98,7 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header.js"></script>
 <!-- Web Trends tag start -->
+<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
 <script>
@@ -160,6 +161,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	//Quantity validation
 	if(Qty =='' || Qty=='0')
 	{
+		/* Commented for XB 214 BR2 - to remove blank Qty validation to display PnA on click of PnA LINK
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
 		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
@@ -167,6 +169,25 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
   		document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
+		Ext.Msg.hide();
+	    myMask.hide();
+	    return;*/
+	    //Change made for XB 214 - Send Base UOM & OM Qty for PnA when Wty is blank
+	    Qty = document.getElementById("OrderMultiple").value;
+	    reqUom = baseUom;
+	}	
+	var itemAvailDiv = document.getElementById("tabs-1");
+	if(Qty=='0')
+	{	
+		
+		document.getElementById("qtyBox").style.borderColor="#FF0000";
+		document.getElementById("qtyBox").focus();
+		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
+  		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
+  		document.getElementById("errorMsgForQty").setAttribute("class", "error");
+		document.getElementById("Qty_Check_Flag").value = true;
+		document.getElementById("qtyBox").value = "";
+		itemAvailDiv.style.display = "none"; 
 		Ext.Msg.hide();
 	    	myMask.hide();
 	    return;
@@ -762,7 +783,8 @@ function validateOrderMultiple() {
 			}
 			return false;
 		}
-		else if (OrdMultiple.value > 1){
+		else Commented for XB 214 BR4 to remove the validation of requested Qty against the order multiple before PnA response */
+		if (OrdMultiple.value > 1){
 			if (priceCheck == true){
 			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
          		      myMessageDiv.style.display ="inline-block";
@@ -812,9 +834,16 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 
 	         if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
              {
+	        	 refreshWithNextOrNewCartInContext();
 	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
              }
-	         
+	         else if(draftErr.indexOf(productID) !== -1){
+	        	 refreshMiniCartLink();
+	        	 myMessageDiv.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
+	        	 myMessageDiv.setAttribute("class", "error");
+					myMessageDiv.style.display = "inline-block"; 
+		             
+				}
 	    	// document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 	    //	 setPandAData();
 	    else
@@ -886,6 +915,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 				 myMessageDiv.innerHTML = "Error in adding item to the cart." ;	            
             myMessageDiv.style.display = "inline-block"; 
             myMessageDiv.setAttribute("class", "error");
+            refreshMiniCartLink();
             Ext.Msg.hide();
     	    myMask.hide();  
              }

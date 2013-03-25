@@ -31,6 +31,8 @@
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
+<s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId)' />
+<s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#id}" value="%{#orderMultipleQtyFromSrc}"/>
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
@@ -69,7 +71,7 @@
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
 <s:set name='currency' value='#priceCurrencyCode'/>
-								
+<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>			
 <tbody>
 		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
@@ -257,7 +259,7 @@
 				<s:div id="myPrice_%{#id}" cssStyle="border-bottom:none;">
 				<table cellpadding="0" cellspacing="0" border="0" class="mil-priceDiv-visibility" width="auto">
 				<s:set name="break" value="false"></s:set>
-				<s:if test='%{#lineStatusCodeMsg != ""}'>
+			<%--	<s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 				<tr>
 					<td width="auto" class="left">My Price: </td>
 					<td class="left" width="auto"><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span> </td>
@@ -268,7 +270,7 @@
 					<td class="left" width="auto"><span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> </td>
 				</tr>
 				</s:if>
-				<s:else>
+				<s:else> --%>
 					<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					<s:set name="bracketPriceForUOM" value="bracketPrice" />
 					<s:set name="bracketUOMDesc" value="bracketUOM" />
@@ -309,7 +311,7 @@
 						</s:if>
 						</s:else>				
 					</s:iterator>
-					</s:else>
+				<%--	</s:else> --%>
 				</table>
 				</s:div>
 				</s:if>
@@ -322,10 +324,13 @@
 		</tr>
 
 </tbody>
-<s:if test='%{#lineStatusCodeMsg != ""}'>
+</s:if>
+<s:else>
+<s:if test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 	<tbody><tr><td>&nbsp;</td><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
 </tbody>
-</s:if>							
+</s:if>	
+</s:else>					
 </s:if>
 <s:else>
 

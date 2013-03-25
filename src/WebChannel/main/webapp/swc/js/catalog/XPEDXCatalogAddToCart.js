@@ -74,13 +74,32 @@ function addItemToCart(itemId) {
 					success: function (response, request){
 						var responseText = response.responseText;
 						if(responseText.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1){
+							refreshWithNextOrNewCartInContext();
 							Ext.Msg.hide();
 							myMask.hide();
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
 							return false;
 						}
-						if(responseText.indexOf("Error")>-1)
+						else if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
+				        {
+							refreshMiniCartLink();
+							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!=''){
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your order. Please review the order to update the item with a valid quantity.";
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");	
+							}else{
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+							}
+							document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+					        document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");						
+							
+							Ext.Msg.hide();
+							myMask.hide();
+							return true;
+				        }
+						else if(responseText.indexOf("Error")>-1)
 						{
+							refreshMiniCartLink();
 							Ext.Msg.hide();
 							myMask.hide();
 							alert("Error Adding the Item to the cart. Please try again later");
@@ -150,6 +169,8 @@ var myMask;
 		if(validateOrderMultiple(itemId) == false)
 		{
 			validateOM =  false;
+			Ext.Msg.hide();
+			myMask.hide();
 		}
 		else{
 			validateOM =  true;
@@ -161,7 +182,7 @@ var myMask;
 			myMask.hide();
 			alert("Item ID cannot be null to make a PnA call");
 		}
-		else{
+		else if(validateOM == true){
 			var qty = document.getElementById('Qty_'+itemId).value;
 			var uomList = document.getElementById('itemUomList_'+itemId);
 			if(uomList!=null && uomList.options.length>0)
@@ -205,6 +226,48 @@ var myMask;
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = 'inline';
+	            		// start of XB 214 BR1
+	            		var qty = document.getElementById("Qty_"+itemId);
+		            	var sourceOrderMulError = document.getElementById("errorMsgForQty_"+itemId);
+		            	
+		            	var orderMultipleQtyFromSrc = document.getElementById("orderMultipleQtyFromSrc_"+itemId);
+		            	if(orderMultipleQtyFromSrc != null && orderMultipleQtyFromSrc.value != ''){
+		            	var orderMultipleQtyFromSrc1 = document.getElementById("orderMultipleQtyFromSrc_"+itemId).value;
+		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
+		            	var orderMultipleQty = orderMultipleQtyUom[0];
+		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	var omError = orderMultipleQtyUom[2];		            			
+		            	if(omError == 'true' && qty.value >0 ){
+				            sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+				            sourceOrderMulError.style.display = "inline"; 
+				            sourceOrderMulError.setAttribute("class", "error");
+				            availabilityRow.style.display = "none"; 
+				            qty.style.borderColor="";			            
+				        }
+		            	else if(omError == 'true')
+		            	{	
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = "none"; 
+		            		qty.style.borderColor="";
+		            		
+		            	} 
+		            	else if(orderMultipleQty != null && orderMultipleQty != 0)
+		            	{	
+		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
+		            		sourceOrderMulError.style.display = "inline"; 
+		            		sourceOrderMulError.setAttribute("class", "notice");
+		            		availabilityRow.style.display = "block"; 
+		            		qty.style.borderColor="";
+		            		
+		            	} 
+		            	else{
+		            		availabilityRow.style.display = "block"; 
+		            		qty.style.borderColor="";
+		            	}
+		            	}
+		            	//End of BR1 XB 214
 	            		Ext.Msg.hide();
 	            		myMask.hide();
 	            		//document.getElementById('addtocart_'+itemId).focus();
@@ -262,16 +325,31 @@ var myMask;
 				}
 			}
 		}
-		if(qty =="" || qty == 0 )
+		//XB 214 BR2 
+		if(qty =="")// || qty == 0 )
 		{
 			//Changed the qty to ordermultiple for Jira 3922. pnA wasnt coming when qty is bank and orderMul flag is N.
 			//qty=1;
 			var qty = document.getElementById('orderMultiple_'+itemId).value;
 			//alert("QTY in vaidateOrderMul===="+ qty);
 		}
+		//XB 214 BR4
+		if( qty == 0 )
+		{
+			document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
+			document.getElementById('Qty_'+itemId).focus();
+			
+			document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please enter a valid quantity and try again.";
+			document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");	
+			return false;
+		}
+		//End of XB 214
 		var totalQty = selectedUomConv * qty;
 		var ordMul = totalQty % orderMultiple;
-		if(ordMul != 0 || totalQty==0)
+		document.getElementById('Qty_'+itemId).style.borderColor="";
+	/*	if(ordMul != 0 || totalQty==0)
 		{		
 			if(priceCheck == true){
 				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Must be ordered in units of " + addComma(orderMultiple) + " " + baseUOM;
@@ -286,8 +364,9 @@ var myMask;
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			}
 			return false;
-		}
-		else if(orderMultiple > 1){
+		} Commented for XB 214 BR4 to remove the validation of requested Qty against the order multiple before PnA response
+		else */ 
+		if(orderMultiple > 1){
 			if(priceCheck == true){
 				document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Must be ordered in units of " + addComma(orderMultiple) + " " + baseUOM;
 				document.getElementById('errorMsgForQty_'+itemId).style.display = "inline-block"; 

@@ -72,8 +72,11 @@ $("#various4").fancybox();
   
   
      <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-	
-	
+			<script>
+			    Ext.onReady(function(){
+			    		refreshWithNextOrNewCartInContext();
+			    	});
+			</script>
     <form id="contact_form" name="contact_form" method="post" action="#">
 
 	

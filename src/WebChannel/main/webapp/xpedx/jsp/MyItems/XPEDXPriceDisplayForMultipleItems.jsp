@@ -9,8 +9,13 @@
 <s:set name="lineNumber" value="%{1}" />
 <s:set name='itemOrderSeq' value="%{1}" />	
 <meta name="DCSext.w_x_sc" content="1"></meta>	
+<meta name ="DCSext.w_x_scr" content='<s:property value="#webtrendTotalQty" />' />
 <s:set name='webtrendTotalQty' value="#_action.buildwebtrendTagForAll()" />
-<meta name ="DCSext.w_x_scr" content='<s:property value="#webtrendTotalQty" />' />			
+<s:iterator value='#_action.getCheckItemKeys()' id="item" status="status" >
+                   <input type="hidden" name="availabilityRowsHide" id="hidden_availabilityRow_<s:property value='#item'/>" />               
+</s:iterator> 
+<s:set name="chkItemKeys1" value="%{#_action.getCheckItemKeys()}" />
+<s:hidden id='chkItemKeys' name="chkItemKeys" value='%{#chkItemKeys1}'/>
 <s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'>
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 					<s:set name='name' value='#item.getAttribute("Name")' />
@@ -49,10 +54,16 @@
 <s:set name='id' value='myItemsKey' />
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
+<s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg_%{#itemOrder}" value="%{#lineStatusCodeMsg}"/>
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
 <s:hidden name="validateOrderMul" value="%{#_action.getValidateOM()}" />
 <s:hidden name="pnaListitem" value="%{#_action.isPnaCall()}" />
+<s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId+"_"+#itemOrder)' />
+<s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemOrder}" value="%{#orderMultipleQtyFromSrc}"/>
+
+<s:set name="orderMulErrorCode" value="useOrderMultipleMapFromSourcing.get(#itemId+'_'+#itemOrder)" />
+<s:hidden name="orderMulErrorCode" id="orderMulErrorCode_%{#itemOrder}" value="%{#orderMulErrorCode}"/>
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
@@ -89,7 +100,7 @@
 
 								
 
-<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
+<s:if test='%{#lineStatusCodeMsg == "" && #pnaErrorStatusMsg== ""}'>
 <s:set name='currency' value='#priceCurrencyCode'/>
 <tbody>
 		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
@@ -347,6 +358,9 @@
 			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
 				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
 			</s:if>		
+			<s:elseif test='%{#lineStatusCodeMsg != ""}'>
+				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
+			</s:elseif>	
 			<s:else>
 				<h5 align="center"><b><font color="red">Your request could not be completed at this time, please try again.</font></b></h5>
 			</s:else>

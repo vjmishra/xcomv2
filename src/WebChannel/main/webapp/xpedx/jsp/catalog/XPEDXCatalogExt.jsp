@@ -726,7 +726,7 @@ return new Ext.XTemplate(
    '</div>',
   </s:if>
   '</td>','</tr>',
-  '<tr>',<s:if test='!#guestUser'>'<td style="height:auto;"></td>','<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
+  '<tr>',<s:if test='!#guestUser'>'<td style="height:auto;"></td>','<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
   <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
   '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
   '</table>',
@@ -1378,7 +1378,7 @@ function validationforDragToCompare()
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/XPEDXCatalogExt<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
+<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <!--<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/dojo.js"></script>
 <script type="text/javascript" src="../xpedx/js/global/dojoRequire.js"></script>
