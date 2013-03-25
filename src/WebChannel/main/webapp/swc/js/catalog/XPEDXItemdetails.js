@@ -152,7 +152,7 @@ function setPandAData() {
 	}
 	
 	document.getElementById("lineStatusCodeMsg").value = "";
-	document.getElementById("qtyBox").style.borderColor="";	
+	
 }
 
 function addItemToList() {
