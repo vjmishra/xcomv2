@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private static final String SWC_CHECKOUT_TYPE = "SWC_CHECKOUT_TYPE";
 	private static final String ENC_USER_KEY = "ENC_USER_KEY";
 	private Element customerOrganizationEle;
-	protected HashMap customerFieldsMap;
+	protected LinkedHashMap customerFieldsMap;
 	protected boolean viewInvoices = false;
 	protected boolean viewReports = false;
 	protected boolean approver = false;
@@ -65,6 +66,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private Boolean shipToBanner = false;
 	private XPEDXShipToCustomer shipToAddress;
 	private String userTypeForWebtrend;
+	private String isFromWhichPage;
 	//Commenting since this is not required
 	//could not get key directly on jsp so added the code.
 	/*private String orderHeaderKey1 = null;
@@ -77,6 +79,13 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	public void setOrderHeaderKey1(String orderHeaderKey1) {
 		this.orderHeaderKey1 = orderHeaderKey1;
 	}*/
+	public String getIsFromWhichPage() {
+		return isFromWhichPage;
+	}
+
+	public void setIsFromWhichPage(String isFromWhichPage) {
+		this.isFromWhichPage = isFromWhichPage;
+	}
 
 	public String getUserTypeForWebtrend() {
 		String temp="";
@@ -640,6 +649,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String toaFlag = null;
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
+		String lastLoginDate = null;
+
 		/**XBT-621 code changes 
 		 * Below code is used to get the CustomerContact extn
 		 * and set them in cache.
