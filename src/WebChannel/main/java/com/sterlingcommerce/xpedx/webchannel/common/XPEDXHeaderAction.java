@@ -649,7 +649,6 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String toaFlag = null;
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
-		String lastLoginDate = null;
 
 		/**XBT-621 code changes 
 		 * Below code is used to get the CustomerContact extn
