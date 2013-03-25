@@ -123,6 +123,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String[] itemIds;
 	private String[] checkItemKeys;
 	private ArrayList<String> enteredUOMs;
+	private ArrayList<String> itemBaseUOM;
 	private ArrayList<String> enteredQuantities;
 	private HashMap<String, JSONObject> pnaHoverMap;
 	private HashMap<String, XPEDXItemPricingInfo> priceHoverMap;
@@ -147,7 +148,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String priceCurrencyCode;
 	public String validateOM;
 	public String catagory;
-	public boolean validateOrderMul = false;
+	//public boolean validateOrderMul = false;
 	public boolean pnaCall;
 	public ArrayList<String> itemOrder;
 	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
@@ -155,7 +156,38 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String modifyts;
     private String createUserId;
     private String modifyUserid;
-    //Added for JIRA 1402 Starts
+// added for XB 214   
+	private Map<String,String>  sourcingOrderMultipleForItems =new HashMap<String,String>();
+    protected String isOMError;
+    protected HashMap useOrderMultipleMapFromSourcing;
+	public HashMap getUseOrderMultipleMapFromSourcing() {
+		return useOrderMultipleMapFromSourcing;
+	}
+
+	public void setUseOrderMultipleMapFromSourcing(
+			HashMap useOrderMultipleMapFromSourcing) {
+		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
+	}
+    
+    public String getIsOMError() {
+		return isOMError;
+	}
+
+	public void setIsOMError(String isOMError) {
+		this.isOMError = isOMError;
+	}
+
+	public Map<String, String> getSourcingOrderMultipleForItems() {
+		return sourcingOrderMultipleForItems;
+	}
+
+	public void setSourcingOrderMultipleForItems(
+			Map<String, String> sourcingOrderMultipleForItems) {
+		this.sourcingOrderMultipleForItems = sourcingOrderMultipleForItems;
+	}
+
+	//End of XB 214
+	//Added for JIRA 1402 Starts
 	private ArrayList<String> itemValue = new ArrayList<String>();
     //Added for JIRA 1402 Ends
 	
@@ -253,13 +285,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.pnaCall = pnaCall;
 	}
 
-	public boolean isValidateOrderMul() {
+/*	public boolean isValidateOrderMul() {
 		return validateOrderMul;
 	}
 
 	public void setValidateOrderMul(boolean validateOrderMul) {
 		this.validateOrderMul = validateOrderMul;
-	}
+	}*/
 
 	public String getCatagory() {
 		return catagory;
@@ -1291,8 +1323,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String itemId = item.getAttribute("ItemId");
 				itemIDList.add(itemId);
 				itemOrderMap.put(itemId+":"+(i+1), itemOrder.get(i));
+				String itemQty = enteredQuantities.get(i);
 				String itemUom = enteredUOMs.get(i);
 				String orderMultiple = (String)orderMulMap.get(itemId);
+				
+				if(itemQty.trim().equals("")){
+					itemQty = orderMultiple;
+					itemUom = itemBaseUOM.get(i);
+				}
+				
 				uoms = (Map) itemCon.get(itemId);
 				convFact = (String) uoms.get(itemUom);
 				if(itemUom==null || itemUom.equals(""))
@@ -1300,12 +1339,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				//String itemSeqNum = item.getAttribute("ItemSeqNumber");
 				String itemLineNum = item.getAttribute("ItemOrder");
 				//String itemQty = item.getAttribute("Qty");
-				String itemQty = enteredQuantities.get(i);
-				if(itemQty==null || itemQty.trim().equals("") || itemQty.equals("0") )
+				/*if(itemQty==null || itemQty.trim().equals("") || itemQty.equals("0") )
 					itemQty = "1";
 
 				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
-				OM = totalQty % (Integer.parseInt(orderMultiple));
+				OM = totalQty % (Integer.parseInt(orderMultiple));*/
 				
 				if(invalidItems != null && invalidItems.length > 0)
 				{
@@ -1316,11 +1354,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							break;
 						}
 					}
-				}
-				if(OM!= 0){
-					validateOrderMul = true;
-					validateCheck.put(itemId+":"+(i+1),validateOrderMul);
-				}
+				}			
 				
 				boolean addThisItem = checkAllItems;
 				if (!checkAllItems) {
@@ -1386,6 +1420,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Vector<XPEDXItem> items = pna.getItems();
 					// prepare the information for JSP
 					pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(items,true);
+					sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(items,true);//Added for XB 214 BR1
+					useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
+
+					//System.out.println("sourcingOrderMultipleForItems : "+sourcingOrderMultipleForItems);
 					Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 					NodeList itemsNode=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
 					for (int i = 0; i < itemsNode.getLength(); i++) {
@@ -2367,6 +2405,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				// prepare the information for JSP
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(items);
 				HashMap<String,XPEDXItemPricingInfo> priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext);
+				sourcingOrderMultipleForItems = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),false);//Added for XB 214 BR
+
 				if(priceHoverMap!=null && priceHoverMap.containsKey(pnaItemId))
 				{
 					XPEDXItemPricingInfo itemPriceInfo = priceHoverMap.get(pnaItemId);
@@ -2375,20 +2415,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					setIsBracketPricing(itemPriceInfo.getIsBracketPricing());
 					setPriceCurrencyCode(itemPriceInfo.getPriceCurrencyCode());
 				}
-				
+				setIsOMError("false");
 				for (XPEDXItem pandAItem : items) {
-					if (pandAItem.getLegacyProductCode().equals(pnaItemId)) {
+					if (pandAItem.getLegacyProductCode().equals(pnaItemId)) {					
 						// set the line status erros mesages if any
 						String lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 								.getPnALineErrorMessage(pandAItem);
 						//added for jira 2885 
 						if (pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
+							//Added for XB 214 BR
+							if(pandAItem.getLineStatusCode().equals(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
+								setIsOMError("true");
+							}	
+							//end for XB 214 BR
 							pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 							if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
 								setIsPnAAvailable("true"); //jira 4094 to display Availability and MyPrice and Extended Price
 							}
 						}
-						//end of jira 2885			
+						//end of jira 2885							
 					}
 				}
 			}
@@ -3031,7 +3076,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setEnteredUOMs(ArrayList<String> enteredUOMs) {
 		this.enteredUOMs = enteredUOMs;
 	}
+	public ArrayList<String> getItemBaseUOM() {
+		return itemBaseUOM;
+	}
 
+	public void setItemBaseUOM(ArrayList<String> itemBaseUOM) {
+		this.itemBaseUOM = itemBaseUOM;
+	}
 	/**
 	 * @return the enteredQuantities
 	 */
