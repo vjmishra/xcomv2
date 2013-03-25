@@ -650,6 +650,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						item.setRequestedQtyUOM(orderLineTran.getAttribute("TransactionalUOM"));
 						item.setUnitPricePerRequestedUOM(extnElem.getAttribute("ExtnReqUOMUnitPrice"));
 						item.setLineNumber(orderLineElem.getAttribute("PrimeLineNo"));
+						item.setOrderMultipleQty("OrderMultipleQty");
+						item.setOrderMultipleUOM("OrderMultipleUOM");
 						
 							Element lineTypeMElem=SCXmlUtil.createChild(lineTypeElem, "Item");
 							lineTypeMElem.setAttribute("ItemID", itemElem.getAttribute("ItemID"));
@@ -2199,6 +2201,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected ArrayList<Element> xpedxYouMightConsiderItems;
 	protected ArrayList<Element> xpedxPopularAccessoriesItems;
 	protected LinkedHashMap customerFieldsMap;
+	protected ArrayList<String> customerFieldsRulesMap;
 	private HashMap<String, HashMap<String,String>> skuMap=new HashMap<String, HashMap<String,String>>();
 	private String customerSku;
 	private String adjCatTwoShortDesc = "";
