@@ -765,7 +765,7 @@ function validateOrderMultiple() {
 	if(OrdMultiple!=null && OrdMultiple!=undefined && OrdMultiple.value!=0){
 		var ordMul = totalQty % OrdMultiple.value;
 		var myMessageDiv = document.getElementById("errorMsgForQty");
-		if (ordMul != 0) {
+	/*	if (ordMul != 0) {
 			//alert("-LP22-Order Quantity must be a multiple of " + OrdMultiple.value);
 			if (priceCheck == true){
 				      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
@@ -784,6 +784,7 @@ function validateOrderMultiple() {
 			return false;
 		}
 		else Commented for XB 214 BR4 to remove the validation of requested Qty against the order multiple before PnA response */
+		
 		if (OrdMultiple.value > 1){
 			if (priceCheck == true){
 			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
