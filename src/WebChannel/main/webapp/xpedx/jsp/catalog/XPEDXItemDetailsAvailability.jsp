@@ -32,17 +32,11 @@
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)" />
 <s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg" value="%{#lineStatusCodeMsg}"/>
 
+			   
 	<div id="jsonAvalabilityDiv">
 		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
 					
 			<tr>
-			   <!-- Fix for Jira 2885 -->			 
-			   <s:set name="orderMultiple" value="#_action.getValidateOrderMul()" />
-				<s:hidden name="orderMultiple" value="%{#_action.getValidateOrderMul()}" />
-			    <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
-			    <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)" />
-			    <s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg" value="%{#lineStatusCodeMsg}"/>
-			   <!-- Fix for Jira 2885 -->
 				<td class="table_center" width="163"><strong>Total Available:</strong></td>
 				<td class="table_right"><strong>
 			<s:if test='%{#jsonTotalQty == null}'>
@@ -100,19 +94,7 @@
 		<table class="table_left" border="0" cellspacing="0" cellpadding="0" width="365" >
 			<tbody>
 				<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-				<s:if test="%{#lineStatusCodeMsg != ''}">
-				<tr>
-					<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
-					<td><span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span></td>
-				</tr>
-					<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-				<tr>
-					<td class="bold">Extended Price (<s:property value='priceCurrencyCode'/>):</td>
-					<td >
-						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
-					</td></tr>
-				</s:if>
-					<s:elseif test="displayPriceForUoms.size()>0" >
+					<s:if test="displayPriceForUoms.size()>0" >
 						<s:iterator value='displayUOMs'	id='disUOM' status='disUOMStatus'>
 							
 							<s:set name="unitPriceForUOM" value='%{displayPriceForUoms.get(#disUOMStatus.index)}' />
