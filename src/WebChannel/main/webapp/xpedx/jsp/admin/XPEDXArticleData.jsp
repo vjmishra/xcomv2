@@ -169,7 +169,7 @@ href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.f
 		                		$("#confirmDeleteArticle").fancybox({
 		                			'autoDimensions'	: false,
 		                			'width' 			: 300,
-		                			'height' 			: 150  
+		                			'height' 			: 180  
 		                		}).trigger('click');
 		                	    
 		                	});							
@@ -207,7 +207,7 @@ href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.f
 				    		$("#confirmDeleteArticle").fancybox({
 				    			'autoDimensions'	: false,
 				    			'width' 			: 300,
-				    			'height' 			: 150  
+				    			'height' 			: 180  
 				    		}).trigger('click');
 				    	    
 				    	});
