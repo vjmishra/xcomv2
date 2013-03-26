@@ -180,7 +180,8 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		
 		List nodesList=YRCXmlUtils.getChildren(userElem, "UserGroupLists/UserGroupList");
 		NodeList nodList=userElem.getElementsByTagName("UserGroupList");
-		if(!"null".equalsIgnoreCase(relationShipType) && !"".equalsIgnoreCase(relationShipType) && "Y".equalsIgnoreCase(customerLevel)){
+		//Modified for XBT-475 to check only customerLevel. 
+		if("Y".equalsIgnoreCase(customerLevel)){
 			setFieldValue("divisionEntitlement", "Y");
 			getControl("divisionEntitlement").setEnabled(false);
 			custEle.setAttribute("RelationshipType", "Y");
@@ -251,14 +252,20 @@ public class DivisionEntitlementPanelBehavior extends YRCBehavior {
 		if (extnShipFromEle != null) {
 			retrieveShipFromBranch = extnShipFromEle.getAttribute("ExtnShipFromBranch");
 		}
-		
-		if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
+		//Commented For Jira XBT-475
+		/*if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
 			targetRulesModel.setAttribute("RelationshipType", "null");	
 		}
 		else if ("Y".equalsIgnoreCase(getFieldValue("divisionEntitlement"))) {
 			if (retrieveShipFromBranch != null && retrieveShipFromBranch != "") {
 				targetRulesModel.setAttribute("RelationshipType",retrieveShipFromBranch);
 			}
+		}*/
+		if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
+			targetRulesModel.setAttribute("CustomerLevel", "N");	
+		}
+		else if ("Y".equalsIgnoreCase(getFieldValue("divisionEntitlement"))) {
+			targetRulesModel.setAttribute("CustomerLevel", "Y");	
 		}
 		else{
 			YRCPlatformUI.showInformation("TITLE_KEY_DIVISION_ENTITLEMENT","MANDATORY_APPLY_DIVISION_ENTITLEMENT");
