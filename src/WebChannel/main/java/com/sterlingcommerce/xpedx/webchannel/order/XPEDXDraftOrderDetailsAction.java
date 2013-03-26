@@ -643,8 +643,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						item.setRequestedQtyUOM(orderLineTran.getAttribute("TransactionalUOM"));
 						item.setUnitPricePerRequestedUOM(extnElem.getAttribute("ExtnReqUOMUnitPrice"));
 						item.setLineNumber(orderLineElem.getAttribute("PrimeLineNo"));
-						item.setOrderMultipleQty("OrderMultipleQty");
-						item.setOrderMultipleUOM("OrderMultipleUOM");
+						
 						
 							Element lineTypeMElem=SCXmlUtil.createChild(lineTypeElem, "Item");
 							lineTypeMElem.setAttribute("ItemID", itemElem.getAttribute("ItemID"));
