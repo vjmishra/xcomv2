@@ -25,6 +25,7 @@ public class XPXEmailUtil {
     public static final String NEW_USER_REGISTRATION_EMAIL_TYPE="NEW_USER_REGISTRATION";
     public static final String RETURN_ITEMS_REQUEST_EMAIL_TYPE="RETURN_ITEMS_REQUEST_EMAIL";
     public static final String USER_PROFILE_UPDATED_NOTIFICAON="USER_PROFILE_UPDATED_NOTIFICAON";
+    public static final String REGISTRATION_REQUEST_NOTIFICATION="Registration Request Notification";
     
    // public static final String ORDER_CONFIRMATION_EMAIL_SUBJECT=".com Order Submitted Notification";
     public static final String RETURN_ITEMS_REQUEST_EMAIL_SUBJECT="Item Return Request";

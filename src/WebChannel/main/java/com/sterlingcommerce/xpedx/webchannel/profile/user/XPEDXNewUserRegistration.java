@@ -59,6 +59,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	public String execute() {
 
 		StringBuffer sb = new StringBuffer();
+		String _subjectLine=null;
 		// StringBuffer sbm = new StringBuffer();
 		// String suffix = "";
 
@@ -101,7 +102,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		setMailCCAddress(sb.toString()); // JIRA 4087 -Change CC address to
 		// ebusiness@xpedx.com
 		setMailFromAddress(sb.toString());
-		setMailSubject("NewUserInfo");
+		setMailSubject(XPXEmailUtil.REGISTRATION_REQUEST_NOTIFICATION);
 		// setMailSubject(storeFrontId+".com Registration Request Notification");
 		setTemplatePath("/global/template/email/newUser_email_CSR.xsl");
 		try {
@@ -142,10 +143,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 					.getSCUIContext().getTransactionContext(true);
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-			String emailSubject = getMailSubject();
-			 String businessIdentifier=SCXmlUtil.getXpathAttribute(newUserElement, "/User/@Loginid");
+			String brand=SCXmlUtil.getXpathAttribute(newUserElement,"/User/@Brand");
+			//StringBuffer emailSubject = new StringBuffer(brand.concat(" ").concat(getMailSubject().toString()));
+			_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
+			String businessIdentifier=SCXmlUtil.getXpathAttribute(newUserElement,"/User/@ToEmailId");
 			    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
-				    emailSubject.toString(), emailFrom, storeFrontId,businessIdentifier);
+			    		_subjectLine, emailFrom, storeFrontId,businessIdentifier);
 			/* XBT-73 : End - Sending email through Java Mail API now */
 
 		} catch (Exception e) {
