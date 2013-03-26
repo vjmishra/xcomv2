@@ -16,7 +16,8 @@
 </s:iterator> 
 <s:set name="chkItemKeys1" value="%{#_action.getCheckItemKeys()}" />
 <s:hidden id='chkItemKeys' name="chkItemKeys" value='%{#chkItemKeys1}'/>
-<s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'>
+
+<s:iterator status="status" id="item" value='#_action.getListOfItemsFromsession()'> 
 					<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 					<s:set name='name' value='#item.getAttribute("Name")' />
 					<s:set name='itemId' value='#item.getAttribute("ItemId")+"" ' />
@@ -36,9 +37,7 @@
                                 <%--Fix For Jira 4144 --%>
                                 <s:set name="itemKEY" value='#id' />
                             <!-- end prefs  -->
-                          
-                           
-                             <s:if test="%{pnaHoverMap.containsKey(#jsonKey)}"> 
+                         
                               
 	                        	<table width="100%" style='margin-top: -2px;border:0px;' class="mil-my-price-availability" border="0">
 
@@ -64,10 +63,11 @@
 
 <s:set name="orderMulErrorCode" value="useOrderMultipleMapFromSourcing.get(#itemId+'_'+#itemOrder)" />
 <s:hidden name="orderMulErrorCode" id="orderMulErrorCode_%{#itemOrder}" value="%{#orderMulErrorCode}"/>
+
 <%-- id will be null if update price and availability is called to check PnA for multiple items --%>
 <s:if test='%{#id==null || #id == ""}'>
 	<s:set name='id' value='#itemKEY' />
-	</s:if>
+</s:if>
 
 <s:if test='#itemOrder == null' >
 		<s:set name="jsonKey" value='%{#itemId}' />
@@ -108,9 +108,8 @@
 			<td colspan="3" width="33%"><i><span>Availability</i></span></td>
 			<td class="left" colspan="3" width="33%"><i>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
 			<s:if test="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq) == 'Paper'}" >
-			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if></s:if>
+			<s:if test="#isBracketPricing == 'true'"><span>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</span></s:if></s:if>
 			<s:else>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</s:else>
@@ -266,7 +265,6 @@
 			<td colspan="3" width="33%" valign="top"><span></span></td>
 			</s:else>
 </s:if>
-<s:if test="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq) != true}">
 			<td colspan="3" width="28%" valign="top">
 				<%--	Using CustomerContactBean object from session
 				<s:if test='%{#session.viewPricesFlag == "Y"}'>	
@@ -339,24 +337,19 @@
 				</s:if>
 				</s:if>
 			</td>
-			</s:if>
 		</tr>		
 		<tr style="border-bottom: 1px solid rgb(204, 204, 204);">
 			<td colspan="10"></td>
 		</tr>
 </tbody>
-<s:if test='%{#lineStatusCodeMsg != ""}'>
-	<tbody><tr><td>&nbsp;</td><td colspan="9" width="100%" align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></td></tr>
-	</tbody>
-</s:if>						
 </s:if>
 <s:else>
 
 <tbody>
 		<tr >
 			<td width="100%">
-			<s:if test='pnaErrorStatusMsg !=null || pnaErrorStatusMsg != "" '>
-				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+			<s:if test='%{#pnaErrorStatusMsg != ""}'>
+				<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5>
 			</s:if>		
 			<s:elseif test='%{#lineStatusCodeMsg != ""}'>
 				<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
@@ -375,7 +368,7 @@
 </tbody>
 </s:else>
 </table>
-                        	</s:if>
+                        	
                         </div>
 					<s:set name="lineNumber" value="%{#lineNumber+1}" />
 					<s:set name='itemOrderSeq' value='%{#itemOrderSeq + 1}' />
