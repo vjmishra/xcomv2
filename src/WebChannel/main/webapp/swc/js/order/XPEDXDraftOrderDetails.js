@@ -647,12 +647,12 @@ function redrawQuickAddList()
     	code += '<th class="col-header item-col">Item #</th>';
     	code += '<th class="col-header qty-col">Qty</th>';
     	code += '<th class="col-header uom-col">UOM</th>';
-    	if(jobidFlag == true && jobValue!= null)
-    	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
+    	
     	if(custPOFlag)
     		code += '<th class="last-col-header col-header job-col">Line PO #</th>';
     	if(jobidFlag == true && jobValue!= null)
-    	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
+        	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
+
     	code += '<!--  <th class="col-header qty-col">Valid Product</th> -->';
     	code += '<!--  <th class="last-col-header col-header job-col">Add as Special Item</th> -->';
     	code += '</tr></thead>';
