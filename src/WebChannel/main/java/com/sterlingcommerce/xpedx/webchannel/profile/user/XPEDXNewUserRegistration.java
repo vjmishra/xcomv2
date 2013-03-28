@@ -143,10 +143,10 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 					.getSCUIContext().getTransactionContext(true);
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-			String brand=SCXmlUtil.getXpathAttribute(newUserElement,"/User/@Brand");
+			String brand=newUserElement.getAttribute("Brand");
 			//StringBuffer emailSubject = new StringBuffer(brand.concat(" ").concat(getMailSubject().toString()));
 			_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
-			String businessIdentifier=SCXmlUtil.getXpathAttribute(newUserElement,"/User/@ToEmailId");
+			String businessIdentifier=newUserElement.getAttribute("ToEmailId");
 			    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
 			    		_subjectLine, emailFrom, storeFrontId,businessIdentifier);
 			/* XBT-73 : End - Sending email through Java Mail API now */
