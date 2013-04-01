@@ -1723,8 +1723,7 @@ public class XPEDXWCUtils {
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		} finally {
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
+			releaseEnv(wcContext);
 			scuiTransactionContext = null;
 			env = null;
 		}
