@@ -159,8 +159,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	}
 	var Qty=document.getElementById("qtyBox").value;
 	//Quantity validation
-	if(Qty =='' || Qty=='0')
-	{
+	if(Qty =='')
+	{	
 		/* Commented for XB 214 BR2 - to remove blank Qty validation to display PnA on click of PnA LINK
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
