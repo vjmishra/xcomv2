@@ -10,14 +10,7 @@
 		<xsl:value-of select="@ImageUrl"/>
 	</xsl:variable> 
     
-     <html>
-		<xsl:template match="/">
-			<xsl:comment>RECIPIENTS=</xsl:comment>
-			<xsl:comment>FROM=tester@stercomm.com</xsl:comment>
-			<xsl:comment>SUBJECT=<xsl:value-of select="@Brand"/>.com Registration Request Notification</xsl:comment>
-			<xsl:comment>CONTENT_TYPE=text/html</xsl:comment>
-		</xsl:template>
-		
+     <html>		
 			<body>
 				<table width="600" border="0" align="left" cellpadding="2" cellspacing="2">
 					<tr>
