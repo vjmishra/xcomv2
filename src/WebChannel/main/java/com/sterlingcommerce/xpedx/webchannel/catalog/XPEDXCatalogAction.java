@@ -71,7 +71,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class XPEDXCatalogAction extends CatalogAction {
 	/**
 	 * 
-	 */
+	 */ ///
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger
 			.getLogger(XPEDXCatalogAction.class);
