@@ -68,7 +68,7 @@ import com.yantra.yfs.japi.YFSException;
 public class XPXCatalogAllAPI implements YIFCustomApi {
 
 	/** API object. */
-	private static YIFApi api = null;
+	private static YIFApi api = null;//
 	private static YFCLogCategory log;
 	private String lowestConvUOM = "";
 	private int currentConversion;
