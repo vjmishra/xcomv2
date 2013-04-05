@@ -44,6 +44,7 @@ public class XPXUpdateInvoiceDetailsAPI {
 	{				
 		/** try-catch block added by Arun Sekhar on 24-Jan-2011 for CENT tool logging **/
 		Document invoiceDetailsDoc = null;
+		boolean isThrowingWebConfExcpt = false;
 		try{
 			log.beginTimer("XPXUpdateInvoiceDetailsAPI.updateInvoice");
 			api = YIFClientFactory.getInstance().getApi();
@@ -116,6 +117,7 @@ public class XPXUpdateInvoiceDetailsAPI {
 					//customer = orderElement.getAttribute("BillToID");
 					customer = orderElement.getAttribute("BuyerOrganizationCode");					
 				} else {
+					isThrowingWebConfExcpt = true;
 					throw new Exception("Webconfirmation number("+webConfNUmber+") and legacy order number("+legacyOrderNo+") combination doesn't exist in Sterling.");
 				}
 			
@@ -195,7 +197,8 @@ public class XPXUpdateInvoiceDetailsAPI {
 			throw yfe;
 		} catch (Exception e) {
 			log.error("Exception: " + e.getStackTrace());
-			prepareErrorObject(e, XPXLiterals.INV_B_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
+			if (!isThrowingWebConfExcpt)
+				prepareErrorObject(e, XPXLiterals.INV_B_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 			throw e;
 		}
 		return invoiceDetailsDoc;
