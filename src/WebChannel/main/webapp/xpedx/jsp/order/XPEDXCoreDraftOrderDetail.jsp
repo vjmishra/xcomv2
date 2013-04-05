@@ -595,7 +595,7 @@
 						<a href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
 							tabindex="100"> Alternate </a>
 					</s:if>
-					<%-- Commenting the Replacement link as 'This Item has been replaced' is the link to replacement items.
+					<%-- Commenting the Replacement link as 'This item has been replaced' is the link to replacement items.
 					<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID).size()>0)'>
 						<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
 							tabindex="100"> Replacement </a>
@@ -663,7 +663,7 @@
 						</s:if>
 						
 						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
-			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
+			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This item has been replaced<img class="replacement-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
 			    		</s:if>					    		
 			    	</div>			    	
     
