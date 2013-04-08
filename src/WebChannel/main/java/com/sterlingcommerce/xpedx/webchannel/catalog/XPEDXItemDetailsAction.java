@@ -1086,6 +1086,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		upSellAssociatedItems = new ArrayList();
 		crossSellAssociatedItems = new ArrayList();
         replacementAssociatedItems = new ArrayList();
+        //XB-673 - Changes Start
+        alternateSBCAssociatedItems = new ArrayList();
+        //XB-673 - Changes End
 		prepareXpedxItemAssociationMap();
 	}
 	
@@ -1099,12 +1102,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 		ArrayList<String> crossSellItemIDs = new ArrayList<String>();
 		ArrayList<String> upSellItemIDs = new ArrayList<String>();
+		//XB-673- Changes Start
+		ArrayList<String> alternateSBCItemIDs = new ArrayList<String>();
+		//XB-673 Changes End
 		try {
-			if(getItemListElem()== null)
+			if(getItemListElem()== null){
+				//System.out.println(SCXmlUtil.getString(getItemListElem()));
 				relatedItemListElem = prepareAndInvokeMashup("xpedxRelatedItemDetails");
-			else
+			}else
 				relatedItemListElem = getItemListElem();
 			itemAssociationDoc = relatedItemListElem.getOwnerDocument();
+			//System.out.println(SCXmlUtil.getString(itemAssociationDoc));
 			//itemAssociationDoc = XPEDXOrderUtils.getXpedxAssociationlItemDetails(itemList, custID, callingOrgCode, wcContext);
 		} catch (CannotBuildInputException e) {
 			LOG.error("Error getting National Level item association.",e);
@@ -1124,6 +1132,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		if (associationTypeListElem != null) {
 			List<Element> crossSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='CrossSell']");
 			List<Element> upSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='UpSell']");
+			//XB-673 - Changes Start
+			List<Element> alternateSBCElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='Alternative.Y']");
+			//XB-673 - Changes End
 			//Cross sell items
 			for (int j = 0; j < crossSellElements.size(); j++) {
 				Element associationTypeElem = crossSellElements.get(j);
@@ -1165,6 +1176,28 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					}
 				}
 			}//for upsell
+			//For ALternative items
+			//XB-673 - Changes Start
+			for (int k = 0; k < alternateSBCElements.size(); k++) {
+				Element associationTypeElem = alternateSBCElements.get(k);
+				Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+				List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+				if (associationList != null && !associationList.isEmpty()) {
+					Iterator associationIter = associationList.iterator();
+					while (associationIter.hasNext()) {
+						Element association = (Element) associationIter.next();
+						Element associateditemEl = XMLUtilities.getElement(association, "Item");
+						String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+						if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+							itemIDListForGetCompleteItemList.add(curritemid);
+						}
+						if(!alternateSBCItemIDs.contains(curritemid)){
+							alternateSBCItemIDs.add(curritemid);
+						}
+					}
+				}
+			}//for Alternative
+			//XB-673 - Changes End
 		}//if
 
 		//Adding Alternate and Complimentary Items
@@ -1313,6 +1346,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 								upSellAssociatedItems.add(curritem);
 								continue;
 							}
+							//XB-673 - Changes Start - 
+							/**
+							 * As it need to display under you might also consider section, we need to add under same upSellAssociated 
+							 * items list
+							 */
+							if(alternateSBCItemIDs.contains(curritemID)){
+								upSellAssociatedItems.add(curritem);
+								continue;
+							}
+							//XB-673 - Changes End -
+							
 					        if(repItemIds.contains(curritemID))
 					        {
 						        replacementAssociatedItems.add(curritem);
@@ -1921,6 +1965,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	List replacementAssociatedItems = null;
 	ArrayList upSellAssociatedItems = null;
 	ArrayList crossSellAssociatedItems = null;
+	//XB-673 - Changes Start
+	ArrayList alternateSBCAssociatedItems = null;
+	//XB-673 - Changes End
 	List displayUOMs = new ArrayList();
 	List displayPriceForUoms = new ArrayList();
 	List bracketsPricingList = null;
@@ -2028,7 +2075,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		alternateAssociatedItems.add("ghi");
 		crossSellAssociatedItems.add("kkk");
 		complimentAssociatedItems.add("zzz");*/
-		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) || (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0)){
+		//XB-673 Changes Start
+		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) 
+				|| (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0) || (alternateSBCAssociatedItems != null && alternateSBCAssociatedItems.size() > 0)){
+			//XB-673 Changes End
 			uMightFlag=true;
 			if(upgradeAssociatedItems.size() > 0){
 				intpromoheight = Integer.valueOf(promoheight);
@@ -2045,6 +2095,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				intpromoheight = intpromoheight+alternateAssociatedItems.size();
 				promoheight=String.valueOf(intpromoheight);
 			}
+			//XB-673 Changes Start
+			if(alternateSBCAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+alternateSBCAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+			//XB-673 Changes End
 		}
 		if((crossSellAssociatedItems != null && crossSellAssociatedItems.size() > 0) || (complimentAssociatedItems != null && complimentAssociatedItems.size() > 0)){
 			populareAccFlag=true;
