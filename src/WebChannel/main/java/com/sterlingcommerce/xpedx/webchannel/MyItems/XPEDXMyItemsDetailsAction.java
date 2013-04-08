@@ -2016,6 +2016,36 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 				}
 			}
+			//XB-673 - Changes Start
+			/**
+			 * XB-673 - Alternative Items added from business center are displayed on MIL screen under yoo might also consider section
+			 */
+			HashMap<String,ArrayList<Element>> alternateSBCListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.ALTERNATE_SBC_ITEMS_KEY);
+			if(alternateSBCListMap!=null && !alternateSBCListMap.isEmpty())
+			{
+				Set alternateSBCItemsKey = alternateSBCListMap.keySet();
+				if(alternateSBCItemsKey!=null){
+					Iterator<String> alternateSBCKeyIter = alternateSBCItemsKey.iterator();
+					while(alternateSBCKeyIter.hasNext())
+					{
+						String key = alternateSBCKeyIter.next();
+						ArrayList<Element> currentItemUSList = alternateSBCListMap.get(key);
+						for(Element alternateSBCItem: currentItemUSList)
+						{
+							String alternateSBCItemId = SCXmlUtil.getAttribute(alternateSBCItem, "ItemID");
+							if(!SCUtil.isVoid(alternateSBCItemId) && !xpedxYouMightConsiderItemIds.contains(alternateSBCItemId)){
+								addToYouMightAlsoConsiderItemList(alternateSBCItem);
+								xpedxYouMightConsiderItemIds.add(alternateSBCItemId);
+							}
+							
+							//String currItemId = SCXmlUtil.getAttribute(usItem, "ItemID");
+							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
+							//	xpedxYouMightConsiderItemIds.add(currItemId);
+						}
+					}
+				}
+			}
+			////XB-673 - Changes End
 			HashMap<String,ArrayList<Element>> compListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.COMPLEMENTARY_ITEMS_KEY);
 			if(compListMap!=null && !compListMap.isEmpty())
 			{
@@ -2049,11 +2079,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemCSList = crossSellListMap.get(key);
 						for(Element csItem: currentItemCSList)
 						{
-							if(!xpedxPopularAccessoriesItems.contains(csItem))
-								xpedxPopularAccessoriesItems.add(csItem);
+							//XB-673 - Changes Start - Changes related Cross-sell Items are not displayed on MIL 
+							//if(!xpedxPopularAccessoriesItems.contains(csItem))
+							//	xpedxPopularAccessoriesItems.add(csItem);
 							String currItemId = SCXmlUtil.getAttribute(csItem, "ItemID");
-							if(!SCUtil.isVoid(currItemId) && !xpedxPopularAccessoriesItemIds.contains(currItemId))
-								xpedxPopularAccessoriesItemIds.add(currItemId);
+							if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
+								addToYouMightAlsoConsiderItemList(csItem);
+							    xpedxYouMightConsiderItemIds.add(currItemId);
+								//xpedxPopularAccessoriesItemIds.add(currItemId);
+							    
+							  //XB-673 - Changes End    
 						}
 					}
 				}
