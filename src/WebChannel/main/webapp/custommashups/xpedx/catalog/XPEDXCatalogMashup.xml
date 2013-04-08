@@ -14,6 +14,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start - Fetching alternative items from business Center -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -129,6 +132,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -205,6 +211,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -256,6 +265,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -716,6 +728,9 @@
 					<ItemAssociationTypeList>
 						  <ItemAssociationType Type="CrossSell"/>
 						  <ItemAssociationType Type="UpSell"/>
+						  <!-- XB-673 Changes Start -->
+						  <ItemAssociationType Type="Alternative.Y"/>
+						  <!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ComplexQuery>
 						<Or>
