@@ -3258,6 +3258,17 @@ function showSharedListForm(){
 
                             
 							</s:if>
+							<s:else>
+							<s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
+	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
+	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
+	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
+	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
+	                               	</div>                               	
+	                              	
+	                               </li>
+                                </s:if>
+							</s:else>
 							 
                         </div>
                     </div>    
