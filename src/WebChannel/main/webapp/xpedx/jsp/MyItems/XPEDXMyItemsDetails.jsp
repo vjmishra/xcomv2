@@ -3055,12 +3055,12 @@ function showSharedListForm(){
 							<s:if test='editMode == true'>
 							<%-- Show Replacement link only in Edit mode --%>
 									<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-										<p class="replacementtext"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This Item has been replaced.</a></p>
+										<p class="replacementtext"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This item has been replaced</a></p>
 									</s:if>
 								</s:if>
 								<s:else>
 								  <s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-									<p class="replacementtext">This item has been replaced.&nbsp;<img
+									<p class="replacementtext">This item has been replaced&nbsp;<img
 					alt="To replace or add item, click the Edit This List button."
 					title="To replace or add item, click the Edit This List button."
 					height="12" border="0" width="12"
@@ -3258,6 +3258,17 @@ function showSharedListForm(){
 
                             
 							</s:if>
+							<s:else>
+							<s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
+	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
+	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
+	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
+	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
+	                               	</div>                               	
+	                              	
+	                               </li>
+                                </s:if>
+							</s:else>
 							 
                         </div>
                     </div>    

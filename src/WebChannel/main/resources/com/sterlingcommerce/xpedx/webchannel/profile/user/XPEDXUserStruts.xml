@@ -106,8 +106,7 @@
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>
 				<param name="selectedTab">${selectedTab}</param>
-				<param name="success">${success}</param>
-				</result>
+				<param name="success">${success}</param>				</result>
 		</action>
 		<action name="xpedxAnonymousQuickLink" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXAnonymousQuickLinkAction">
 			<param name="mashups">xpedxGetCustomCommonCodesForQuickLinks</param>
@@ -137,14 +136,35 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp
 			</result>
 		</action>
+		<action name="DynamicQuery"	class="com.sterlingcommerce.xpedx.webchannel.profile.org.DynamicQueryAction">
+			<param name="mashups">xpedxCustomerAssignment</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXDynaTree.jsp
+			</result>
+		</action>
+	
+	<!-- AjaxDynamic  -->
+	
+		<action name="AjaxDynamic"	class="com.sterlingcommerce.xpedx.webchannel.profile.org.AjaxDynamic">
+			<param name="mashups">xpedxCustomerAssignment</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXDynaTree.jsp
+			</result>
+		</action>
+	
+		
+		
 		<action name="paginatedAuthorizeCustomerAssignment" method="getPaginatedCustomersInHierarchy"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
 			<param name="mashups">xpedxCustomerAssignment</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
-			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp
-			</result>
-		</action>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp</result>
+		</action>	
+		
+		
 		<!-- Start Added For Jira 4146 - On Add we call this action -->
 		<action name="addCustomersToAuthorize" method="getCustomersForAuthorize"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
