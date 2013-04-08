@@ -1281,6 +1281,30 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}
 			}
+			//XB-673 Changes Start - This changes will be on Shopping Cart screen
+			HashMap<String,ArrayList<Element>> alternateSBCListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.ALTERNATE_SBC_ITEMS_KEY);
+			if(alternateSBCListMap!=null && !alternateSBCListMap.isEmpty())
+			{
+				Set upSellItemKeys = alternateSBCListMap.keySet();
+				if(upSellItemKeys!=null){
+					Iterator<String> alternateSBCKeyIter = upSellItemKeys.iterator();
+					while(alternateSBCKeyIter.hasNext())
+					{
+						String key = alternateSBCKeyIter.next();
+						ArrayList<Element> currentItemUSList = alternateSBCListMap.get(key);
+						for(Element alternateSBCItem: currentItemUSList)
+						{
+							String alternateSBCItemID = XMLUtils.getAttributeValue(alternateSBCItem, "ItemID");							
+							if(!SCUtil.isVoid(alternateSBCItemID) && !youMightConsiderItemIDs.contains(alternateSBCItemID))
+							{
+								addToYouMightAlsoConsiderItemList(alternateSBCItem);
+								youMightConsiderItemIDs.add(alternateSBCItemID);
+							}
+						}
+					}
+				}
+			}
+			//XB-673 Changes End
 			HashMap<String,ArrayList<Element>> compListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.COMPLEMENTARY_ITEMS_KEY);
 			if(compListMap!=null && !compListMap.isEmpty())
 			{
@@ -1301,18 +1325,30 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 			HashMap<String,ArrayList<Element>> crossSellListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.CROSS_SELL_ITEMS_KEY);
 			if(crossSellListMap!=null && !crossSellListMap.isEmpty())
-			{
+        {
 				Set crossSellItemKeys = crossSellListMap.keySet();
-				if(crossSellItemKeys!=null){
-					Iterator<String> crossSellKeyIter = crossSellItemKeys.iterator();
-					while(crossSellKeyIter.hasNext())
-					{
+				if (crossSellItemKeys != null) {
+					Iterator<String> crossSellKeyIter = crossSellItemKeys
+							.iterator();
+					while (crossSellKeyIter.hasNext()) {
 						String key = crossSellKeyIter.next();
-						ArrayList<Element> currentItemCSList = crossSellListMap.get(key);
-						for(Element csItem: currentItemCSList)
-						{
-							if(!xpedxPopularAccessoriesItems.contains(csItem))
-								xpedxPopularAccessoriesItems.add(csItem);
+						ArrayList<Element> currentItemCSList = crossSellListMap
+								.get(key);
+						//XB-673 Changes Start - Cross Sell needs to be displayed on Shopping Cart Screen
+						for (Element csItem : currentItemCSList) {
+							String crossSellItemID = XMLUtils
+									.getAttributeValue(csItem, "ItemID");
+							if (!SCUtil.isVoid(crossSellItemID)
+									&& !youMightConsiderItemIDs
+											.contains(crossSellItemID)) {
+								addToYouMightAlsoConsiderItemList(csItem);
+								youMightConsiderItemIDs.add(crossSellItemID);
+							}
+						//XB-673 Changes End - Cross Sell needs to be displayed on Shopping Cart Screen	
+							/*
+							 * if(!xpedxPopularAccessoriesItems.contains(csItem))
+							 * xpedxPopularAccessoriesItems.add(csItem);
+							 */
 						}
 					}
 				}
