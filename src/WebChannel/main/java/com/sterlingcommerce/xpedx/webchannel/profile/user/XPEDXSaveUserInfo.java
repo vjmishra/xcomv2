@@ -4,8 +4,8 @@
  */
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,7 +34,6 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXClientPasswordValidator;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.interop.japi.YIFApi;
-import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.ycp.passwordpolicy.result.PasswordPolicyResult;
 import com.yantra.ycp.passwordpolicy.result.PasswordPolicyResult.ResultType;
@@ -46,7 +45,6 @@ import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
-import com.yantra.yfs.japi.YFSException;
 
 /**
  * @author vsriram
@@ -121,9 +119,27 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String currentSelTab;
 	private String userPwdToValidate;
 	public String defaultShipTo;
-	private List<String> oldAssignCusts = new ArrayList<String>();
+	private ArrayList<String> oldAssignCusts = new ArrayList<String>();
 	private Document manageCustomerAssigmentInputDoc = null;
 	private String orderApprovalFlag;// added for XB 226
+	private String newAssignedCustomers;
+	private String userNotAdmin;
+	
+	public String getUserNotAdmin() {
+		return userNotAdmin;
+	}
+
+	public void setUserNotAdmin(String userNotAdmin) {
+		this.userNotAdmin = userNotAdmin;
+	}
+
+	public String getNewAssignedCustomers() {
+		return newAssignedCustomers;
+	}
+
+	public void setNewAssignedCustomers(String newAssignedCustomers) {
+		this.newAssignedCustomers = newAssignedCustomers;
+	}
 
 	public String getDefaultShipTo() {
 		return defaultShipTo;
@@ -299,9 +315,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	}
 
 	public void setPaper101Grade(String p101g) {
-		if ("true".equals(p101g)) {
+		if ("true".equals(p101g))
 			paper101Grade = "Y";
-		}
 	}
 
 	/* ENDS - Customer-User Profile Changes - adsouza */
@@ -323,13 +338,13 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String dayPhone;
 	private String eveningPhone;
 	private String mobilePhone;
-	private String addnlEmailAddrText = "";
-	private String pOListText = "";
+	private String AddnlEmailAddrText = "";
+	private String POListText = "";
 	// Mode of operation
 	private String operation = "";
 
 	// String for Action Results
-	private static final String REDIRECT = "redirect";
+	private String REDIRECT = "redirect";
 
 	// Request parameters
 	private String customerId;
@@ -440,7 +455,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						"/CustomerContactList/CustomerContact/Extn")).get(0);
 				Element XPXQuickLinkList = SCXmlUtil.createChild(Extn,
 						"XPXQuickLinkList");
-				appendQuickLinkAttributes(XPXQuickLinkList);
+				AppendQuickLinkAttributes(XPXQuickLinkList);
 				// }
 				// End for 4284 - After Review
 				if (UserProfileHelper.userIdExistsForCustomerContact(
@@ -566,7 +581,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 							 */
 							// }
 							// start XB - 319
-							if (!strErrorMessage.isEmpty()) {
+							if (strErrorMessage.size() > 0) {
 								strErrorMessage
 										.add("Please revise and try again.");
 								request.getSession().setAttribute("errorNote",
@@ -691,13 +706,10 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					.getParameter("emailId");
 			String oldEmailId = (String) wcContext.getSCUIContext()
 					.getSession().getAttribute("emailId");
-			String useLoginID = wcContext.getSCUIContext()
-            .getRequest().getParameter("userName");
-
-			
-			if (oldEmailId != null && newEmailId != null
-					&& checkIfEmailChanged(oldEmailId, newEmailId)) {
-				updateEMailAddress(oldEmailId, newEmailId,useLoginID);
+			if (oldEmailId != null || newEmailId != null) {
+				if (checkIfEmailChanged(oldEmailId, newEmailId)) {
+					UpdateEMailAddress(oldEmailId, newEmailId);
+				}
 			}
 		} catch (YFCException passexp) {
 			// This exception is put here to handle the password validation
@@ -730,7 +742,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 								.getAttribute("ErrorDescription");
 						String errorCode = errorMessages
 								.getAttribute("ErrorCode");
-						if (errorMsg != null && !errorMsg.trim().isEmpty()) {
+						if (errorMsg != null && errorMsg.trim().length() != 0) {
 							// Added for JIRA 3553
 							if (errorCode.equalsIgnoreCase("YCP0468")
 									|| errorMsg
@@ -748,11 +760,10 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 				}
 			}
-			if (!isPPMesage) {
+			if (!isPPMesage)
 				request.getSession()
 						.setAttribute("errorNote",
 								"The password is invalid. Please revise and try again.");
-			}
 			// Fix End For Jira-3106
 			setSuccess(false);
 			setSaveAddUser(false);
@@ -819,9 +830,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 		Element xpxCustContExtnEle = XPEDXWCUtils.getXPXCustomerContactExtn(
 				wcContext, this.customerContactId);
-		if (xpxCustContExtnEle == null) {
+		if (xpxCustContExtnEle == null)
 			createCCExtn = true;
-		} else {
+		else {
 			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
 		}
 
@@ -846,10 +857,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR,
 				extnAddnlEmailAddrs.toString());
 
-		if (custContRefKey != null && !custContRefKey.isEmpty()) {
+		if (custContRefKey != null && custContRefKey.length() > 0)
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_REF_ATTR,
 					custContRefKey);
-		}
 
 		if (!YFCCommon.isVoid(getPOListText())
 				&& !"null".equals(getPOListText())) {
@@ -934,9 +944,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		// userInfoMap.put("loginId", wcContext.getLoggedInUserId());
 		if (getLoginId() != null && getLoginId().equalsIgnoreCase("")) {
 			userInfoMap.put("loginId", wcContext.getLoggedInUserId());
-		} else {
+		} else
 			userInfoMap.put("loginId", getLoginId());
-		}
 
 		String returnStr = SUCCESS;
 
@@ -944,7 +953,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			// validate Reset password
 			errorMap = XPEDXClientPasswordValidator
 					.validateClientAllPassword(userInfoMap);
-			if (null != errorMap && !errorMap.isEmpty()) {
+			if (null != errorMap && errorMap.size() > 0) {
 				setPwdValidationResultMap(errorMap);
 			}
 		} catch (Exception e) {
@@ -966,63 +975,55 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 * @return
 	 */
 	private void saveChanges() {
-		if (("true").equalsIgnoreCase(getBuyAdmin())) {
-			List<String> newCustomers1 = new ArrayList<String>();
-			List<String> tmpOldAssCust = new ArrayList<String>();
-			for (int i = 0; i < oldAssignedCustomers.size(); i++) {
-				String custid = oldAssignedCustomers.get(i);
-				if (custid != null) {
-					String[] custIds = custid.split(",");
-					for (int j = 0; j < custIds.length; j++) {
-						String tempCustId = null;
-						if (custIds.length == 1) {
-							tempCustId = custIds[j].substring(1,
-									custIds[j].indexOf("]"));
-						} else if (j == 0) {
-							tempCustId = custIds[j].substring(1);
-						} else if (j == custIds.length - 1) {
-							tempCustId = custIds[j].substring(0,
-									custIds[j].indexOf("]"));
-						} else {
-							tempCustId = custIds[j];
-						}
-						tmpOldAssCust.add(tempCustId);
-					}
-				}
-			}
-			oldAssignCusts.addAll(tmpOldAssCust);
-			Iterator<String> newIterator = tmpOldAssCust.iterator();
-			while (newIterator.hasNext()) {
-				String oldAssignedCustId = newIterator.next();
-
-				if (!customers2.contains(oldAssignedCustId.trim())) {
-					newCustomers1.add(oldAssignedCustId.trim());
-				}
-			}
-			Iterator<String> customers2Iterator = customers2.iterator();
-			while (customers2Iterator.hasNext()) {
-				String assignedCustomerId = customers2Iterator.next();
-				if (oldAssignedCustomers.get(0).contains(
-						assignedCustomerId.trim())) {
-					customers2Iterator.remove();
-				}
-			}
-			manageCustomerAssigmentInputDoc = SCXmlUtil
-					.createDocument("ManageCustomerAndAssignment");
-			Element customerAssignmentListElem = SCXmlUtil.createChild(
-					manageCustomerAssigmentInputDoc.getDocumentElement(),
-					"CustomerAssignmentList");
-			saveChanges(customers2, "Create", customerAssignmentListElem);
-			saveChanges(newCustomers1, "Delete", customerAssignmentListElem);
-			NodeList customerAssignementNodeList = customerAssignmentListElem
-					.getElementsByTagName("CustomerAssignment");
-			if (customerAssignementNodeList != null
-					&& customerAssignementNodeList.getLength() > 0) {
-				WCMashupHelper.invokeMashup("XPEDXManageCustomerAndAssignment",
-						manageCustomerAssigmentInputDoc.getDocumentElement(),
-						wcContext.getSCUIContext());
-			}
+		/* Begin - Changes made for XB-287 : Save functionality */
+		List<String> alNewSelectedCustomers = new ArrayList<String>();
+		List<String> alOldAssignedCustomers = new ArrayList<String>();
+		List<String> alFinalSelectedCustomers = new ArrayList<String>();
+		if (getNewAssignedCustomers().indexOf(",") != -1) {
+			alNewSelectedCustomers = Arrays.asList(getNewAssignedCustomers()
+					.split(","));
+		} else {
+			alNewSelectedCustomers = Arrays.asList(getNewAssignedCustomers());
 		}
+		alOldAssignedCustomers = (List) XPEDXWCUtils
+				.getObjectFromCache("AUTHORIZED_LOCATIONS");
+
+		if(("false").equalsIgnoreCase(getUserNotAdmin())){
+		//if (("true").equalsIgnoreCase(getBuyAdmin())) {
+		/* End - Changes made for XB-287 : Save functionality */
+		String tmpCustomerId = "";
+		for (int i = 0; i < alNewSelectedCustomers.size(); i++) {
+			tmpCustomerId = (String) alNewSelectedCustomers.get(i).trim();
+			if (alOldAssignedCustomers.contains(tmpCustomerId)) {
+				alOldAssignedCustomers.remove(tmpCustomerId);
+			} else {
+				alFinalSelectedCustomers.add(tmpCustomerId.trim());
+			}
+
+		}
+		
+		log.debug("Old Assigned Customers"+alOldAssignedCustomers.toString());
+		log.debug("Final selected Customers"+alFinalSelectedCustomers.toString());
+		manageCustomerAssigmentInputDoc = SCXmlUtil
+				.createDocument("ManageCustomerAndAssignment");
+		Element customerAssignmentListElem = SCXmlUtil.createChild(
+				manageCustomerAssigmentInputDoc.getDocumentElement(),
+				"CustomerAssignmentList");
+		saveChanges(alFinalSelectedCustomers, "Create",
+				customerAssignmentListElem);
+		saveChanges(alOldAssignedCustomers, "Delete",
+				customerAssignmentListElem);
+		NodeList customerAssignementNodeList = customerAssignmentListElem
+				.getElementsByTagName("CustomerAssignment");
+		log.debug("Input for manage customer SERVICE is "
+				+ SCXmlUtil.getString(manageCustomerAssigmentInputDoc));
+		if (customerAssignementNodeList != null
+				&& customerAssignementNodeList.getLength() > 0) {
+			WCMashupHelper.invokeMashup("XPEDXManageCustomerAndAssignment",
+					manageCustomerAssigmentInputDoc.getDocumentElement(),
+					wcContext.getSCUIContext());
+		}
+		 }
 
 		if (getSpendingLtCurrency() != null
 				&& getSpendingLtCurrency().equals("-1")) {
@@ -1033,20 +1034,18 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private void saveChanges(List<String> wList, String operation,
 			Element customerAssignmentListElem) {
 
-		List<String> listOfShipTo = new ArrayList<String>();
+		ArrayList<String> listOfShipTo = new ArrayList<String>();
 		try {
-			if (operation.equals("Delete")) {
+			if (operation.equals("Delete"))
 				listOfShipTo = getAllShipTos(wList);
-			}
 		} catch (Exception e) {
-			log.error("Unable to get all Ship tos", e);
+			e.printStackTrace();
 		}
 		for (int index = 0; index < wList.size(); index++) {
 			try {
 				if (wList.get(index) != null
-						&& wList.get(index).trim().isEmpty()) {
+						&& wList.get(index).trim().length() == 0)
 					continue;
-				}
 				Element customerAssignmentElem = SCXmlUtil.createChild(
 						customerAssignmentListElem, "CustomerAssignment");
 				customerAssignmentElem.setAttribute("CustomerID",
@@ -1057,7 +1056,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 						.setAttribute("UserId", customerContactId);
 				customerAssignmentElem.setAttribute("Operation", operation);
 				if (operation.equals("Delete")) {
-					if (listOfShipTo.isEmpty()) {
+					if (listOfShipTo.size() == 0) {
 						defaultShipTo = "";
 						XPEDXWCUtils.setObectInCache(
 								XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "true");
@@ -1132,8 +1131,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 * log.debug("Record already exists"); } } }
 	 */
 
-	private List<String> getAllShipTos(List<String> wList) {
-		List<String> shipToStr = new ArrayList<String>();
+	private ArrayList<String> getAllShipTos(List<String> wList)
+			throws Exception {
+		ArrayList<String> shipToStr = new ArrayList<String>();
 		Document inputDoc = SCXmlUtil.createDocument("XPXCustHierarchyView");
 		Element complexQuery = inputDoc.createElement("ComplexQuery");
 		Element or = inputDoc.createElement("Or");
@@ -1155,23 +1155,9 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		if (!isAPICall)
 			return shipToStr;
 
-		YIFApi api = null;
-		;
-		try {
-			api = YIFClientFactory.getInstance().getApi();
-		} catch (YIFClientCreationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		Document outputListDocument = null;
-		try {
-			outputListDocument = api.executeFlow(env,
-					"XPXCustomerHierarchyViewService", inputDoc);
-		} catch (YFSException e) {
-			log.error("Unable to get Customer Hierarchy", e);
-		} catch (RemoteException e) {
-			log.error("Unable to connect remotely", e);
-		}
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document outputListDocument = api.executeFlow(env,
+				"XPXCustomerHierarchyViewService", inputDoc);
 		Element custView = outputListDocument.getDocumentElement();
 		ArrayList<Element> xpxCustViewElems = SCXmlUtil.getElements(custView,
 				"XPXCustHierarchyView");
@@ -1972,21 +1958,21 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 *            the addnlEmailAddrText to set
 	 */
 	public void setAddnlEmailAddrText(String addnlEmailAddrText) {
-		this.addnlEmailAddrText = addnlEmailAddrText;
+		AddnlEmailAddrText = addnlEmailAddrText;
 	}
 
 	/**
 	 * @return the addnlEmailAddrText
 	 */
 	public String getAddnlEmailAddrText() {
-		return addnlEmailAddrText;
+		return AddnlEmailAddrText;
 	}
 
 	/**
 	 * @return the pOListText
 	 */
 	public String getPOListText() {
-		return pOListText;
+		return POListText;
 	}
 
 	/**
@@ -1994,7 +1980,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 *            the pOListText to set
 	 */
 	public void setPOListText(String pOListText) {
-		this.pOListText = pOListText;
+		POListText = pOListText;
 	}
 
 	/**
@@ -2039,13 +2025,13 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/** End of Code for XB 226 **/
 
 	/** JIRA 1998--function to call API for mailId change-- **/
-	private void updateEMailAddress(String oldMailId, String changedMailId, String useLoginID) {
+	private void UpdateEMailAddress(String oldMailId, String changedMailId) {
 		// String strEnterpriseCode = "";
 		String strEnterpriseCode = ""; //
 		StringBuffer sb = new StringBuffer();
 		strEnterpriseCode = wcContext.getStorefrontId();
 		String entryType = XPEDXConstants.ENTRY_TYPE_EMAIL_UPDATE;
-		String emailFromAddresses = "";
+		String EmailFromAddresses = "";
 		/* Start - JIRA 3262 */
 
 		/**
@@ -2053,12 +2039,12 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		 * customer_overrides.properties
 		 * 
 		 * */
-		if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
+		if (strEnterpriseCode != null && strEnterpriseCode.trim().length() > 0) {
 			String userName = YFSSystem.getProperty("fromAddress.username");
 			String suffix = YFSSystem.getProperty("fromAddress.suffix");
 			sb.append(userName).append("@").append(strEnterpriseCode)
 					.append(suffix);
-			emailFromAddresses = sb.toString();
+			EmailFromAddresses = sb.toString();
 
 		}
 
@@ -2069,17 +2055,19 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		 **/
 
 		String imageUrl = "";
-		if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
+		if (strEnterpriseCode != null && strEnterpriseCode.trim().length() > 0) {
 			String imageName = getLogoName(strEnterpriseCode);
 			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-			if (imagesRootFolder != null && !imagesRootFolder.trim().isEmpty()
-					&& imageName != null && !imageName.trim().isEmpty()) {
+			if (imagesRootFolder != null
+					&& imagesRootFolder.trim().length() > 0
+					&& imageName != null && imageName.trim().length() > 0) {
 				imageUrl = imagesRootFolder + imageName;
 			}
 		}
 		/* End - JIRA 3262 */
 
 		// Creating input xml to send an email
+		Document outputDoc = null;
 		Document templateEmailDoc = YFCDocument.createDocument(
 				"UserUpdateEmail").getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
@@ -2093,8 +2081,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		emailElement.setAttribute("OldEmailID", oldMailId);
 		emailElement.setAttribute("newEmailID", changedMailId);
 		emailElement.setAttribute("SellerOrganizationCode", strEnterpriseCode);
-		emailElement.setAttribute("EmailFromAddresses", emailFromAddresses); // Start
-		emailElement.setAttribute("UserName", useLoginID);
+		emailElement.setAttribute("EmailFromAddresses", EmailFromAddresses); // Start
 		// -Jira
 		// 3262
 		emailElement.setAttribute("ImageUrl", imageUrl); // Start -Jira 3262
@@ -2103,7 +2090,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		LOG.debug("Input XML: " + inputXml);
 		Object obj = WCMashupHelper.invokeMashup("SendOnEmailChangeEmail",
 				emailElement, wcContext.getSCUIContext());
-		Document outputDoc = ((Element) obj).getOwnerDocument();
+		outputDoc = ((Element) obj).getOwnerDocument();
 		if (null != outputDoc) {
 			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 		}
@@ -2149,15 +2136,17 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 */
 
 	private boolean checkIfEmailChanged(String oldEmailId, String newEmailId) {
-		if (newEmailId.equalsIgnoreCase(oldEmailId)) {
+		if (oldEmailId == null) {
+			oldEmailId = "";
+		} else if (newEmailId != null
+				&& newEmailId.equalsIgnoreCase(oldEmailId)) {
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	// AppendQuickLinkAttributes method added for 4284 - After Review
-	public void appendQuickLinkAttributes(Element eleXPXQuickLinkList) {
+	public void AppendQuickLinkAttributes(Element eleXPXQuickLinkList) {
 		eleXPXQuickLinkList.setAttribute("Reset", "true");
 
 		Element eleXPXQuickLink = null;
