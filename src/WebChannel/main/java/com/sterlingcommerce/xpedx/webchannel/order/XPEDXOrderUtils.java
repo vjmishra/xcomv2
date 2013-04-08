@@ -75,6 +75,14 @@ public class XPEDXOrderUtils {
 	public final static String UPGRADE_ITEMS_KEY = "UPG";
 	public final static String CROSS_SELL_ITEMS_KEY = "CROSS-SELL";
 	public final static String UP_SELL_ITEMS_KEY = "UP-SELL";
+	//XB-673 Changes Start
+	/**
+	 * XB-673 - This request is related to Changes display for associated items(Cross-Sell and Alternative items) added from business center 
+	 *          on MIL page and Shopping cart page
+	 */
+	
+	public final static String ALTERNATE_SBC_ITEMS_KEY = "ALTERNATE-SBC";
+	//XB-673 Changes End
 	public final static String ITEM_EXTN_KEY = "ITEM_EXTN";
 	public final static String ITEM_LIST_KEY = "ITEM_LIST_KEY";
 	public static ArrayList<String> itemList = new ArrayList<String>();
@@ -1458,6 +1466,9 @@ public class XPEDXOrderUtils {
 		HashMap<String, ArrayList<Element>> upgradeItemsMap = new HashMap<String, ArrayList<Element>>();
 		HashMap<String, ArrayList<Element>> crosssellItemsMap = new HashMap<String, ArrayList<Element>>();
 		HashMap<String, ArrayList<Element>> upsellItemsMap = new HashMap<String, ArrayList<Element>>();
+		//XB-673 - Changes Starts
+		HashMap<String, ArrayList<Element>> alternateSBCItemsMap = new HashMap<String, ArrayList<Element>>();
+		//XB-673 - Changes End
 		HashMap<String, ArrayList<Element>> itemExtnElemsMap = new HashMap<String, ArrayList<Element>>();
 		HashMap<String, ArrayList<Element>> itemListElemsMap = new HashMap<String, ArrayList<Element>>();
 		
@@ -1485,6 +1496,9 @@ public class XPEDXOrderUtils {
 
 			ArrayList<Element> crossSellItemsList =  new ArrayList<Element>();
 			ArrayList<Element> upSellItemsList =  new ArrayList<Element>();
+			//XB-673 Changes Starts
+			ArrayList<Element> alternateSBCItemList =  new ArrayList<Element>();
+			//XB-673 Changes End
 			LOG.debug("Preparing national level association for item Id "+itemID);
 			//ArrayList relatedItems = new ArrayList();
 			Element associationTypeListElem = null;
@@ -1492,6 +1506,9 @@ public class XPEDXOrderUtils {
 			if (associationTypeListElem != null) {
 				List<Element> crossSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='CrossSell']");
 				List<Element> upSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='UpSell']");
+				//XB-673 Changes Starts
+				List<Element> alternateSBCElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='Alternative.Y']");
+				//XB-673 Changes End
 				for (int j = 0; j < crossSellElements.size(); j++) {
 					Element associationTypeElem = crossSellElements.get(j);
 					Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
@@ -1528,13 +1545,39 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}//for upsell
+				//XB-673 Changes Start
+				for (int k = 0; k < alternateSBCElements.size(); k++) {
+					Element associationTypeElem = alternateSBCElements.get(k);
+					Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+					List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+					if (associationList != null && !associationList.isEmpty()) {
+						Iterator associationIter = associationList.iterator();
+						while (associationIter.hasNext()) {
+							Element association = (Element) associationIter.next();
+							Element associateditemEl = XMLUtilities.getElement(association, "Item");
+							/*relatedItems.add(associateditemEl);*/
+							alternateSBCItemList.add(associateditemEl);
+							String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+							if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+								itemIDListForGetCompleteItemList.add(curritemid);
+							}
+						}
+					}
+				}//for alternate
+				//XB-673 Changes End
 				crosssellItemsMap.put(itemID, crossSellItemsList);
 				upsellItemsMap.put(itemID, upSellItemsList);
+				//XB-673 Changes Start
+				alternateSBCItemsMap.put(itemID, alternateSBCItemList);
+				//XB-673 Changes End
 			}//if
 		}
 		
 		allAssociatedItemsMap.put(CROSS_SELL_ITEMS_KEY, crosssellItemsMap);
 		allAssociatedItemsMap.put(UP_SELL_ITEMS_KEY, upsellItemsMap);
+		//XB-673 Changes Start
+		allAssociatedItemsMap.put(ALTERNATE_SBC_ITEMS_KEY, alternateSBCItemsMap);
+		//XB-673 Changes End
 		
 		XPEDXWCUtils xPEDXWCUtils = new XPEDXWCUtils();
 		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
