@@ -232,10 +232,6 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 </script>
 <script type="text/javascript">
 	$(function() {
-		// Activate the tabs
-		$("#tabs").tabs({
-			collapsible: false
-		});
 		
 		// Truncate the sell text if needed
 		var sellText = $('#sell-full').text().trim();
@@ -261,8 +257,6 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			$('#sell-expand').show();
 		}
 		
-		// Select availability tab on MP&A click
-		$('#my-price-link').click(function(){ $('a[href=#tabs-1]').click(); return false;});
 		
 		// Truncate promo text
 		$('.promo-txt p').each(function(){
@@ -357,11 +351,6 @@ var isEstUser = <s:property value="#isEstUser"/>;
 		});	
 	});
 	
-	$(function() {
-		$("#tabs").tabs({
-			collapsible: false
-		});
-	});
 
 
 	function showShareList(customerId, showRoot, clFromListId){
@@ -2031,33 +2020,21 @@ function SubmitActionWithValidation()
 			<!-- END prod-config -->
 		<!-- TABS -->
 		<div class="avail-grid">
-			<div id="tabs"class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-				<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-					<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1">Availability</a></li>
-					<li class="ui-state-default ui-corner-top"><a href="#tabs-2" onclick="javascript:blockDiv();">Specifications</a></li>
-				</ul>
-				
-				<p class="tablinks">&nbsp;
-			 	<%-- Commented for JIRA 3288	--%>	 	
-			 	<%-- <s:set name="canRequestProductSample" value="#session.showSampleRequest" />  --%>
-		  	 	<%-- <s:if test='#canRequestProductSample=="Y"'> --%>
- 			 		<%-- 	<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
-					<s:text name='Request Sample' /> </a>&nbsp;&nbsp; --%>
-		   		<%-- </s:if>  --%>
-				<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
-					<s:set name="link" value="value" />
-					<s:set name="desc" value="key" />	
-					<a class="slightly_left" href="<s:property value='#link'/>" target="_blank">MSDS</a>
-				</p>
-				</s:iterator>
-				<!-- tab1 -->
-				<div id="tabs-1" class="ie_floatleft">
+		<!-- tab1 -->
+				<div id="tabs-1">
 					<%-- This will be filled by ajax as the P and A call happens on page load as Ajax --%>
 				</div>
 				<!-- end tab1 -->
                                     
 				<!-- tab2 -->
-		<div id="tabs-2" style="display: none" ><s:set name="certImage"
+		<div id="tabs-2">
+		<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
+						<s:set name="link" value="value" />
+						<s:set name="desc" value="key" />	
+						<a id="msds_link" href="<s:property value='#link'/>" target="_blank">MSDS</a>
+			</s:iterator>
+		<fieldset id="Item_fieldset"><legend style="font-weight: bold;">Specifications</legend>
+		<s:set name="certImage"
 			value="#_action.getCertImagePath()" /> 
 		<s:if
 			test="%{null != #certImage}">
@@ -2066,7 +2043,7 @@ function SubmitActionWithValidation()
 			value='#xutil.getChildElement(#itemElem,"ItemAttributeGroupTypeList")' />		
 		<!-- <div id="tabs-2" class="ie_tabsfix" >	 -->
 		<table id="prod-details-tbl" border="0" cellspacing="0"
-			cellpadding="0" style="overflow: auto;">
+			cellpadding="0" style="overflow: auto;margin-top: 2px;">
 			<tr class="detail-head-prod-bg ui-corner-all">
 				<td class="tblhead-white int-deets2" style="border-top-left-radius: 5px;border-top-right-radius: 0;">Specification</td>
 				<td class="tblhead-white" style="border-top-left-radius: 0px;border-top-right-radius: 5px;">Details</td>
@@ -2198,12 +2175,12 @@ function SubmitActionWithValidation()
 				</s:if>
 			</s:iterator>
 		</table>
+		</fieldset>
 		</div><!-- end tab2 
 			</div>-->
 			
 			<div class="clearall">&nbsp;</div>
 		 <!--</div>   end tabs -->
-	</div>
 	</s:if>
 	
 		<s:url id='addToItemListURLid' namespace='/xpedx/myItems'
@@ -2504,11 +2481,7 @@ function callPnAfromLink(requestedUom){
 	pandaByAjaxFromLink(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
 }
 
-function blockDiv()
-{
-	var divId=document.getElementById("tabs-2");
-	divId.style.display="block";
-}
+
 </script>
 <!-- added for jira 2971 --> 
 <div style="display: none;">

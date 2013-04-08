@@ -34,7 +34,8 @@
 
 			   
 	<div id="jsonAvalabilityDiv">
-		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
+	<fieldset id="Item_fieldset"><legend style="font-weight: bold;">Availability</legend>
+		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;margin-top: 2px;"> 
 					
 			<tr>
 				<td class="table_center" width="163"><strong>Total Available:</strong></td>
@@ -87,6 +88,7 @@
 			<s:property value="#xpedxutil.formatQuantityForCommas(#jsonImmediate)" />
 			<s:property value='%{#jsonUOMDesc}' /> 
 			available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
+			</fieldset>
 	</div>
 	<div id="pricesDiv">
 	<s:if test="%{#orderMultiple}">
