@@ -63,6 +63,8 @@
 				
 				<Attribute ColumnName="SAP_EXTN_CUST_LINE_ACC_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
 					Nullable="true" Size="" XMLName="SAPExtnCustLineAccLbl" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_PO_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLinePOLbl" />
 				<Attribute ColumnName="SAP_EXTN_CUST_LINE_SEQNO_FLAG" DataType="Text-1" DefaultValue="' '" 	Description=" " 
 					Nullable="true" Size="" XMLName="SAPExtnCustLineSeqNoFlag" />
 				<Attribute ColumnName="SAP_EXTN_CUST_LINE_PONO_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " 
