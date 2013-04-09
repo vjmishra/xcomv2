@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.item.price;
 
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -218,6 +219,9 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 							lineItemEle.setAttribute("ListPrice", unitPrice);
 							lineItemEle.setAttribute("UnitPrice", unitPrice);
 							lineItemEle.setAttribute("LinePrice", unitPrice);
+							BigDecimal extendedPriceDB=new BigDecimal(unitPrice);
+							extendedPriceDB =extendedPriceDB.multiply(new BigDecimal(lineItemEle.getAttribute("Quantity")));
+							extendedPriceMap.put(orderlineKeyNumberMap.get(""+lineNum+itemId), extendedPriceDB.toString());
 							continue;
 						}
 						for (int i = 0; i < pAndAitems.size(); i++) {							
@@ -358,6 +362,9 @@ public class XPEDXOverrideGetItemPriceUE implements YPMOverrideGetItemPriceUE {
 						lineItemEle.setAttribute("ListPrice", unitPrice);
 						lineItemEle.setAttribute("UnitPrice", unitPrice);
 						lineItemEle.setAttribute("LinePrice", unitPrice);
+						BigDecimal extendedPriceDB=new BigDecimal(unitPrice);
+						extendedPriceDB =extendedPriceDB.multiply(new BigDecimal(lineItemEle.getAttribute("Quantity")));
+						extendedPriceMap.put(orderLineKey, extendedPriceDB.toString());
 					}
 				}
 			}

@@ -850,7 +850,8 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 	    else
 		    {
 	    	var pricingUOMConvFactor = '<s:property value="#_action.getPricingUOMConvFactor()" />';
-	 		pandaByAjaxFromLink(productID,UOM,quantity,baseUOM,'',pricingUOMConvFactor,'true');
+	    	var prodMweight = '<s:property value="#_action.getProdMweight()" />';
+	 		pandaByAjaxFromLink(productID,UOM,quantity,baseUOM,prodMweight,pricingUOMConvFactor,'true');
               
            // DialogPanel.toggleDialogVisibility('addToCart');	  
          //-- WebTrends tag start --
