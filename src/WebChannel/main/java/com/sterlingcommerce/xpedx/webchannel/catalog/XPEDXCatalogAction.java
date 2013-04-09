@@ -1072,6 +1072,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				String customerId = wcContext.getCustomerId();
 				Map<String, String> valueMaps = new HashMap<String, String>();
 				valueMaps.put("/PricelistAssignment//@CustomerID", customerId);
+				valueMaps.put("/PricelistAssignment//@ExtnPriceWareHouse", shipToCustomer.getExtnPriceWareHouse());
 				valueMaps.put("/PricelistAssignment/PricelistLine/Item/@OrganizationCode", wcContext.getStorefrontId());
 				Element pricLlistAssignmentInput = WCMashupHelper.getMashupInput("xpedxYpmPriceLinelistAssignmentList", valueMaps,getWCContext().getSCUIContext());
 				Document pricLlistAssignmentInputDoc = pricLlistAssignmentInput.getOwnerDocument();
