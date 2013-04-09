@@ -350,8 +350,18 @@ var isEstUser = <s:property value="#isEstUser"/>;
 			'height' 			: 500  
 		});	
 	});
-	
-
+	 /* xb-677 Code Changes */
+	  $(document).ready(function() {
+			var rightColInt= $(document.getElementById('right-col-int'));
+			if(rightColInt != undefined || clFromListId != null){
+				var rightColIntHeight =	$(document.getElementById('right-col-int')).height();
+				var id1Height= $(document.getElementById('containerId')).height();
+				if(id1Height < rightColIntHeight ){
+					rightColIntHeight = parseInt(rightColIntHeight+200) + 'px';
+			    	$("#containerId").css('height',rightColIntHeight);
+				}
+			}
+		} );
 
 	function showShareList(customerId, showRoot, clFromListId){
 		//Populate fields
@@ -1043,8 +1053,7 @@ function SubmitActionWithValidation()
 	</s:action> 
 <!-- // header end -->
    <s:set name="promoheight" value='%{promoheight}'></s:set>     
-		<div class="container" 
-			<s:if test='%{#promoheight!= null }'>style="height:<s:property value="%{#promoheight}"/>"</s:if>>
+		<div class="container" id="containerId"> 
 		<s:set name="emailDialogTitle" scope="page"
 			value="#_action.getText('Email_Title')" />
 
