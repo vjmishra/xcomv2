@@ -575,7 +575,15 @@
 				Size="" 
 				XMLName="ExtnCustLinePONoFlag" 
 				XMLGroup="Extn" />
-
+				<Attribute 
+				ColumnName="EXTN_CUST_LINE_PO_LBL" 
+				DataType="Text-25" 
+				DefaultValue="' '" 
+				Description=" " 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnCustLinePOLbl" 
+				XMLGroup="Extn" />
 
 				<Attribute 
 				ColumnName="EXTN_CUST_LINE_FIELD1_FLAG" 

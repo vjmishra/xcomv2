@@ -160,6 +160,7 @@
 		var rootNode = $("#tree").dynatree("getRoot");
 		// Call the DynaTreeNode.addChild() member function and pass options for the new node
 		var master = '<s:property value="%{#PrntChildComb}" />'; 
+		
 		var masterarray = master.split("|");
 		var msapKeyValue = masterarray[0].split("##");
 		var sapKeyValue = masterarray[1].split("##");
