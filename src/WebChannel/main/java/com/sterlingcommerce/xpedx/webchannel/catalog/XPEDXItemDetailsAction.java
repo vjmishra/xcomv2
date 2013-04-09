@@ -1317,6 +1317,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					try {
 						// invoking a different function which will give onyl the entitiled items - 734
 						itemDetailsListDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(itemIDListForGetCompleteItemList, custID, wcContext.getStorefrontId(), wcContext);
+						System.out.println("ItemListDoc "+SCXmlUtil.getString(itemDetailsListDoc));
 					} catch (Exception e) {
 						LOG.error("Exception while getting item details for associated items",e);
 						return;
@@ -1328,22 +1329,37 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							String curritemID = XMLUtils.getAttributeValue(curritem, "ItemID");
 							if(altItemIds.contains(curritemID)){
 								alternateAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(compItemIds.contains(curritemID)){
 								complimentAssociatedItems.add(curritem);
+								if(upSellItemIDs.contains(curritemID) || altItemIds.contains(curritemID) || upItemIds.contains(curritemID) || alternateSBCItemIDs.contains(curritemID)){
+									upSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(upItemIds.contains(curritemID)){
 								upgradeAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(crossSellItemIDs.contains(curritemID)){
 								crossSellAssociatedItems.add(curritem);
+								if(upSellItemIDs.contains(curritemID) || altItemIds.contains(curritemID) || upItemIds.contains(curritemID) || alternateSBCItemIDs.contains(curritemID)){
+									upSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(upSellItemIDs.contains(curritemID)){
 								upSellAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}	
 								continue;
 							}
 							//XB-673 - Changes Start - 
@@ -1353,6 +1369,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							 */
 							if(alternateSBCItemIDs.contains(curritemID)){
 								upSellAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							//XB-673 - Changes End -
