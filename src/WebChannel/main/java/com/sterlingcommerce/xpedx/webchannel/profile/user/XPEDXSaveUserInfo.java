@@ -112,6 +112,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String backorderEmailFlag;
 	private String bodyData;
 	private List<String> oldAssignedCustomers = new ArrayList<String>();
+	List<String> alNewSelectedCustomers = new ArrayList<String>();
 	private String buyAdmin;
 	private String spendingLtCurrency;
 	private String currentSelTab;
@@ -959,7 +960,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	 */
 	private void saveChanges() {
 		/* Begin - Changes made for XB-287 : Save functionality */
-		List<String> alNewSelectedCustomers = new ArrayList<String>();
+		
 		List<String> alOldAssignedCustomers = new ArrayList<String>();
 		//List<String> alFinalSelectedCustomers = new ArrayList<String>();
 		if (getNewAssignedCustomers().indexOf(",") != -1) {
@@ -1020,7 +1021,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		ArrayList<String> listOfShipTo = new ArrayList<String>();
 		try {
 			if (operation.equals("Delete"))
-				listOfShipTo = getAllShipTos(wList);
+				//listOfShipTo = getAllShipTos(wList);
+				listOfShipTo = getAllShipTos(alNewSelectedCustomers);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1125,14 +1127,14 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 		boolean isAPICall = false;
-		for (int i = 0; i < oldAssignCusts.size(); i++) {
-			if (wList.contains(oldAssignCusts.get(i).trim()))
+		for (int i = 0; i < oldAssignedCustomers.size(); i++) {
+			if (wList.contains(oldAssignedCustomers.get(i).trim()))
 				continue;
-			createInput(inputDoc, oldAssignCusts.get(i), complexQuery, or);
+			createInput(inputDoc, oldAssignedCustomers.get(i), complexQuery, or);
 			isAPICall = true;
 		}
-		for (int k = 0; k < alFinalSelectedCustomers.size(); k++) {
-			createInput(inputDoc, alFinalSelectedCustomers.get(k), complexQuery, or);
+		for (int k = 0; k < alNewSelectedCustomers.size(); k++) {
+			createInput(inputDoc, alNewSelectedCustomers.get(k), complexQuery, or);
 			isAPICall = true;
 		}
 		if (!isAPICall)
