@@ -269,8 +269,8 @@ public class DynamicQueryAction extends WCMashupAction {
 
 				OrgCode = XPEDXWCUtils.formatBillToShipToCustomer(OrgCode);
 
-				CmbString = OrgName + "(" + OrgCode + ")" + AddressLine1 + " "
-						+ City + " " + state + " " + zipcode + " " + country;
+				CmbString = OrgName + "(" + OrgCode + ")" + AddressLine1 + ","
+						+ City + "," + state + "," + zipcode + "," + country;
 			} else {
 				CmbString = OrgName + "(" + OrgCode + ")";
 			}

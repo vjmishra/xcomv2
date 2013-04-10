@@ -126,11 +126,11 @@ span.dynatree-expander
 }
 .dynatree-exp-cd span.dynatree-expander /* Collapsed, delayed, not last sibling */
 {
-	background-position: -64px -80px;
+	background-position: 0px -96px;
 }
 .dynatree-exp-cdl span.dynatree-expander /* Collapsed, delayed, last sibling */
 {
-	background-position: -64px -96px;
+	background-position: 0px -96px;
 }
 .dynatree-exp-e span.dynatree-expander,  /* Expanded, not delayed, not last sibling */
 .dynatree-exp-ed span.dynatree-expander  /* Expanded, delayed, not last sibling */

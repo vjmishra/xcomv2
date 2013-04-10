@@ -98,7 +98,7 @@
 											if(currentNode.isSelected()){	
 												bSelected =true;
 											}
-											else if (childValue[1] == "checked") {
+											else if (childValue[1] != "undefined" && childValue[1].length > 3) {
 												bSelected = true;
 											} else {
 												bSelected = false;
@@ -212,7 +212,7 @@
 
 			<input type=hidden id="echoSelectionRoots3" />
 			<input type=hidden id="echoSelection3" name="echoSelection3" />
-			<input type=hidden id="echoSelectionRootKeys3" name="echoSelection3" />
+			<input type=hidden id="echoSelectionRootKeys3" name="echoSelectionRootKeys3" />
 		</tr>
 	</table>
 
