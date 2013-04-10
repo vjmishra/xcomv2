@@ -691,7 +691,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			String oldEmailId = (String) wcContext.getSCUIContext()
 					.getSession().getAttribute("emailId");
 			if (oldEmailId != null || newEmailId != null) {
-				if (checkIfEmailChanged(oldEmailId, newEmailId)) {
+				if (checkIfEmailChanged(oldEmailId, newEmailId) || checkIfAnswerChanged() || checkIfPasswordChanged()) {
 					UpdateEMailAddress(oldEmailId, newEmailId);
 				}
 			}
