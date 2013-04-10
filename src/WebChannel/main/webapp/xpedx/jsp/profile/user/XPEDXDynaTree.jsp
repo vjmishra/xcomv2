@@ -98,7 +98,7 @@
 											if(currentNode.isSelected()){	
 												bSelected =true;
 											}
-											else if (childValue[1] != "undefined" && childValue[1].length > 3) {
+											else if (typeof(childValue[1]) != "undefined" && childValue[1].length > 3) {
 												bSelected = true;
 											} else {
 												bSelected = false;

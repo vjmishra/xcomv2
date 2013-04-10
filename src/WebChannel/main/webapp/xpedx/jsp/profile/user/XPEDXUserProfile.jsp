@@ -548,6 +548,12 @@ function funDivOpenClose(val1)
 		var myMask;
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();
+
+			/*Begin - Changes made for XB-287 : Save functionality*/
+			document.getElementById('newAssignedCustomers').value=$('#echoSelectionRootKeys3').text();
+			
+		//	alert("New Assigned customers"+document.getElementById('newAssignedCustomers').value);
+			/*End - Changes made for XB-287 : Save functionality*/
 			
 			try{
 				if (mandatoryFieldValidation(docDivId, ignoreDivIds) != "")
@@ -1191,9 +1197,6 @@ function funDivOpenClose(val1)
 		}
 		
 
-		/*Begin - Changes made for XB-287 : Save functionality*/
-		document.getElementById('newAssignedCustomers').value=$('#echoSelectionRootKeys3').text();
-		/*End - Changes made for XB-287 : Save functionality*/
 	</script>
 
 <style type="text/css">
@@ -2492,8 +2495,7 @@ a.underlink:hover {
 															</div></td>
 														<td valign="top" class="no-borders paddingtop0"><div
 																class="float-right">
-																<img height="12" border="0" width="12" alt="help"
-																	src="<s:url value='/xpedx/images/icons/12x12_grey_help.png'/>" />
+																
 															</div> <%-- <s:text name="No Preferred Ship-To is selected"></s:text><br/> --%>
 															<s:text
 																name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO"></s:text><br />

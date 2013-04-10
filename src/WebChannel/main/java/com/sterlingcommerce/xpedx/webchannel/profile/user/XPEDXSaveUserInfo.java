@@ -111,8 +111,6 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String orderShipmentEmailFlag;
 	private String backorderEmailFlag;
 	private String bodyData;
-	private List<String> customers1 = new ArrayList<String>();
-	private List<String> customers2 = new ArrayList<String>();
 	private List<String> oldAssignedCustomers = new ArrayList<String>();
 	private String buyAdmin;
 	private String spendingLtCurrency;
@@ -124,7 +122,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String orderApprovalFlag;// added for XB 226
 	private String newAssignedCustomers;
 	private String userNotAdmin;
-	
+	List<String> alFinalSelectedCustomers = new ArrayList<String>();	
 	public String getUserNotAdmin() {
 		return userNotAdmin;
 	}
@@ -196,21 +194,6 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.buyAdmin = buyAdmin;
 	}
 
-	public List<String> getCustomers1() {
-		return customers1;
-	}
-
-	public List<String> getCustomers2() {
-		return customers2;
-	}
-
-	public void setCustomers2(List<String> customers2) {
-		this.customers2 = customers2;
-	}
-
-	public void setCustomers1(List<String> customers1) {
-		this.customers1 = customers1;
-	}
 
 	public String getBackorderEmailFlag() {
 		return backorderEmailFlag;
@@ -707,7 +690,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			String oldEmailId = (String) wcContext.getSCUIContext()
 					.getSession().getAttribute("emailId");
 			if (oldEmailId != null || newEmailId != null) {
-				if ((checkIfEmailChanged(oldEmailId, newEmailId) || checkIfAnswerChanged() || checkIfPasswordChanged())) {
+				if (checkIfEmailChanged(oldEmailId, newEmailId)) {
 					UpdateEMailAddress(oldEmailId, newEmailId);
 				}
 			}
@@ -978,7 +961,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		/* Begin - Changes made for XB-287 : Save functionality */
 		List<String> alNewSelectedCustomers = new ArrayList<String>();
 		List<String> alOldAssignedCustomers = new ArrayList<String>();
-		List<String> alFinalSelectedCustomers = new ArrayList<String>();
+		//List<String> alFinalSelectedCustomers = new ArrayList<String>();
 		if (getNewAssignedCustomers().indexOf(",") != -1) {
 			alNewSelectedCustomers = Arrays.asList(getNewAssignedCustomers()
 					.split(","));
@@ -1148,8 +1131,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			createInput(inputDoc, oldAssignCusts.get(i), complexQuery, or);
 			isAPICall = true;
 		}
-		for (int k = 0; k < customers2.size(); k++) {
-			createInput(inputDoc, customers2.get(k), complexQuery, or);
+		for (int k = 0; k < alFinalSelectedCustomers.size(); k++) {
+			createInput(inputDoc, alFinalSelectedCustomers.get(k), complexQuery, or);
 			isAPICall = true;
 		}
 		if (!isAPICall)
