@@ -163,22 +163,27 @@
 		
 		var masterarray = master.split("|");
 		var msapKeyValue = masterarray[0].split("##");
-		var sapKeyValue = masterarray[1].split("##");
 		var msapKey = "\"" + msapKeyValue[0] + "\"";
-		var sapKey = "\"" + sapKeyValue[0] + "\"";
 		var msapValuesplit = msapKeyValue[1].split("^^^");
-		var sapValuesplit = sapKeyValue[1].split("^^^");
 		var bSelected = false;
 		if (msapValuesplit[1] == "checked") {
 			bSelected = true;
 		}
-
 		var childNode = rootNode.addChild({
 			key : eval(msapKey),
 			title : eval("\"" + msapValuesplit[0] + "\""),
 			select : bSelected
 		});
 
+		
+		
+		
+		for(var i =1;i <masterarray.length; i++ ){
+			
+			var sapKeyValue = masterarray[i].split("##");
+			var sapKey = "\"" + sapKeyValue[0] + "\"";
+			var sapValuesplit = sapKeyValue[1].split("^^^");
+			
 		var childNodeSap = childNode.addChild({
 			key : eval(sapKey),
 			title : eval("\"" + sapValuesplit[0] + "\""),
@@ -186,6 +191,10 @@
 			isLazy : true
 		});
 		childNode.expand(true);
+		
+		}
+		
+		
 	});
 
 	
