@@ -690,10 +690,13 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					.getParameter("emailId");
 			String oldEmailId = (String) wcContext.getSCUIContext()
 					.getSession().getAttribute("emailId");
-			if (oldEmailId != null || newEmailId != null) {
-				if (checkIfEmailChanged(oldEmailId, newEmailId) || checkIfAnswerChanged() || checkIfPasswordChanged()) {
-					UpdateEMailAddress(oldEmailId, newEmailId);
-				}
+			String useLoginID = wcContext.getSCUIContext()
+            .getRequest().getParameter("userName");
+
+			
+			if (oldEmailId != null && newEmailId != null
+					&& ((checkIfEmailChanged(oldEmailId, newEmailId)) || (checkIfAnswerChanged()) || (checkIfPasswordChanged()))) {
+				updateEMailAddress(oldEmailId, newEmailId,useLoginID);
 			}
 		} catch (YFCException passexp) {
 			// This exception is put here to handle the password validation
@@ -2010,13 +2013,13 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	/** End of Code for XB 226 **/
 
 	/** JIRA 1998--function to call API for mailId change-- **/
-	private void UpdateEMailAddress(String oldMailId, String changedMailId) {
+	private void updateEMailAddress(String oldMailId, String changedMailId, String useLoginID) {
 		// String strEnterpriseCode = "";
 		String strEnterpriseCode = ""; //
 		StringBuffer sb = new StringBuffer();
 		strEnterpriseCode = wcContext.getStorefrontId();
 		String entryType = XPEDXConstants.ENTRY_TYPE_EMAIL_UPDATE;
-		String EmailFromAddresses = "";
+		String emailFromAddresses = "";
 		/* Start - JIRA 3262 */
 
 		/**
@@ -2024,12 +2027,12 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		 * customer_overrides.properties
 		 * 
 		 * */
-		if (strEnterpriseCode != null && strEnterpriseCode.trim().length() > 0) {
+		if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
 			String userName = YFSSystem.getProperty("fromAddress.username");
 			String suffix = YFSSystem.getProperty("fromAddress.suffix");
 			sb.append(userName).append("@").append(strEnterpriseCode)
 					.append(suffix);
-			EmailFromAddresses = sb.toString();
+			emailFromAddresses = sb.toString();
 
 		}
 
@@ -2040,19 +2043,17 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		 **/
 
 		String imageUrl = "";
-		if (strEnterpriseCode != null && strEnterpriseCode.trim().length() > 0) {
+		if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
 			String imageName = getLogoName(strEnterpriseCode);
 			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-			if (imagesRootFolder != null
-					&& imagesRootFolder.trim().length() > 0
-					&& imageName != null && imageName.trim().length() > 0) {
+			if (imagesRootFolder != null && !imagesRootFolder.trim().isEmpty()
+					&& imageName != null && !imageName.trim().isEmpty()) {
 				imageUrl = imagesRootFolder + imageName;
 			}
 		}
 		/* End - JIRA 3262 */
 
 		// Creating input xml to send an email
-		Document outputDoc = null;
 		Document templateEmailDoc = YFCDocument.createDocument(
 				"UserUpdateEmail").getDocument();
 		Element templateElement = templateEmailDoc.getDocumentElement();
@@ -2066,7 +2067,8 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		emailElement.setAttribute("OldEmailID", oldMailId);
 		emailElement.setAttribute("newEmailID", changedMailId);
 		emailElement.setAttribute("SellerOrganizationCode", strEnterpriseCode);
-		emailElement.setAttribute("EmailFromAddresses", EmailFromAddresses); // Start
+		emailElement.setAttribute("EmailFromAddresses", emailFromAddresses); // Start
+		emailElement.setAttribute("UserName", useLoginID);
 		// -Jira
 		// 3262
 		emailElement.setAttribute("ImageUrl", imageUrl); // Start -Jira 3262
@@ -2075,7 +2077,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		LOG.debug("Input XML: " + inputXml);
 		Object obj = WCMashupHelper.invokeMashup("SendOnEmailChangeEmail",
 				emailElement, wcContext.getSCUIContext());
-		outputDoc = ((Element) obj).getOwnerDocument();
+		Document outputDoc = ((Element) obj).getOwnerDocument();
 		if (null != outputDoc) {
 			LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 		}
