@@ -102,7 +102,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 							.getTextContent();
 				}
 				Node customerPartNumberN = XpxItemcustXrefAttributes
-						.getNamedItem("CustomerPartNumber");
+						.getNamedItem("CustomerItemNumber");
 				if (customerPartNumberN != null
 						&& customerPartNumberN.getTextContent().trim().length() > 0) {
 					customerNumberPlusPartNumber += "|"
