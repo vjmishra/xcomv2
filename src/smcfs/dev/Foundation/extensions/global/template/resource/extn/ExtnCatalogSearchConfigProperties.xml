@@ -7,7 +7,7 @@
 						<Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
 							IndexFieldName="customerNumberPlusPartNumber" Searchable="Y"
-							UseSynonyms="N" Sortable="Y" />
+							UseSynonyms="N" Sortable="N" />
 						<Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="NOT_ANALYZED" Store="Y"
 							IndexFieldName="showNormallyStockedItems" Searchable="N"
@@ -63,7 +63,7 @@
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
 						<Attribute IndexFieldName="Item.ExtnShortDescription" 
 							XMLName="ExtnShortDescription" DefaultWeight="1.0" Index="ANALYZED" 
-							Store="N" UseSynonyms="Y" Searchable="Y"/>
+							Store="N" UseSynonyms="Y" Searchable="Y"/>														
 						<Attribute IndexFieldName="Item.ExtnDescription" 
 							XMLName="ExtnDescription" DefaultWeight="1.0" Index="ANALYZED" 
 							Store="N" UseSynonyms="Y" Searchable="Y"/>
