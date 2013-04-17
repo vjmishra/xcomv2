@@ -59,8 +59,6 @@
 				font-size: 12px;
 			}
 			table {
-				
-				
 				font-size: 12px;
 				border-collapse: collapse;
 			}
@@ -130,9 +128,9 @@
 			}
 			table.order-total {
 				border: 1px solid #ccc;
-				width:25%;
+				width:40%;
 				border-radius: 8px;
-				padding: 5px;
+				
 			}
 			.tbd{
 				color: red;
@@ -145,6 +143,11 @@
 				font-weight: bold;
 				background-color: #ccc;				
 			}
+			
+			table.order-total td.last{
+				text-align:right;			
+			}
+			
 			table.order-total tr td:last-of-type {
 				text-align:right;
 			}
@@ -213,13 +216,27 @@
 		<xsl:variable name="shipToID" >
 			<xsl:value-of select="Order/@ShipToID" />
 		</xsl:variable>
+		
+		<xsl:variable name="billToID" >
+			<xsl:value-of select="Order/@BillToID" />
+		</xsl:variable>
+		
 
 		<xsl:variable name="maxDelim" select="'-M'"/>
 		<xsl:variable name="accDelim" select="'-A'"/>	
-			
+		
+		<xsl:variable name="IsOrderSplit" >
+			<xsl:value-of select="Order/@IsOrderSplit" />
+		</xsl:variable>
+		
 		<xsl:variable name="shipToName" >
 			<xsl:value-of select="Order/Extn/@ExtnShipToName" />
 		</xsl:variable>
+		
+		<xsl:variable name="billToName" >
+			<xsl:value-of select="Order/Extn/@ExtnBillToName" />
+		</xsl:variable>
+		
 		
 		<xsl:variable name="viewPricesFlag" >
 			<xsl:value-of select="Order/@viewPricesFlag" />
@@ -245,7 +262,7 @@
 			<xsl:call-template name="applyStyle"/>
 			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma" align="left" >
 			
-			<table  width="60%" border="0" halign="left" cellpadding="0" cellspacing="0" style="margin-left:5px">
+			<table  width="80%" border="0" halign="left" cellpadding="0" cellspacing="0" style="margin:5px;">
 				<tr>	
 					<td >
 						<table width="100%" border="0" >
@@ -274,7 +291,7 @@
 					<tr>
 					
 					
-					<td>
+					<td width="100%">
 					The following order requires your attention. <xsl:choose><xsl:when test = 'Order/@EnvironmentID="STAGING"' ><a href="https://stg.xpedx.com/order">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
 					</xsl:when>
 					<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"' >
@@ -283,8 +300,7 @@
 					<xsl:otherwise>
 					<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com/order. 
 					</xsl:otherwise>
-					</xsl:choose> 
-					
+					</xsl:choose>
 					</td>
 					</tr>
 				</table>
@@ -292,6 +308,7 @@
 					<thead>
 					<tr>
 						<th colspan="2"> Order Information: </th>
+						<th colspan="2"> Bill To Detail: </th>
 						<th colspan="2"> Shipping Information: </th>
 					</tr>
 				</thead>
@@ -322,8 +339,65 @@
 						 	</table>
 						 	
 						</td>	
-						
-						<td width="40%" colspan="2" style="vertical-align:top">
+						<td width="35%" colspan="2" style="vertical-align:top">
+					
+						<xsl:choose>
+						<xsl:when test="(contains($billToID,$maxDelim))">
+						<xsl:value-of select="substring-before($billToID, $maxDelim)" />
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test="$billToName!=''">
+						<xsl:value-of select="$billToName" />
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test='Order/Extn/@ExtnAttnName!=""'>
+						<xsl:value-of select="Order/Extn/@ExtnAttnName"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine1!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine1"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine2"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+						<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine3"/>
+						<BR/>
+						</xsl:when>
+						<xsl:otherwise></xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test = 'Order/PersonInfoBillTo/@City!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@City"/>,&#160;
+						</xsl:if>
+						<xsl:if test = 'Order/PersonInfoBillTo/@State!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@State"/>&#160;
+						</xsl:if>
+						<xsl:if test = 'Order/PersonInfoBillTo/@ZipCode!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@ZipCode"/>&#160;
+						</xsl:if>
+						<xsl:if test = 'Order/PersonInfoBillTo/@Country!=""' >
+						<xsl:value-of select="Order/PersonInfoBillTo/@Country"/>
+						</xsl:if>
+					
+						</td>	
+						<td width="45%" colspan="2" style="vertical-align:top">
 					
 						<xsl:choose>
 						<xsl:when test="(contains($shipToID,$maxDelim))">
@@ -440,68 +514,66 @@
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 				<table class="price" width="100%">
-			<thead>
+				<thead colspan="7">
+				<th colspan="2"> </th>
+				<th colspan="2"> </th>
 				<th> </th>
-
-				<th> </th>
-				<th> </th>
-				<th class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
+				<th valign="top" class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
 				<th class="right"> Extended Price (USD) </th> <!-- The currency code on this line is dynamic.-->
-
 			</thead>
-			<xsl:for-each select="Order/OrderLines/OrderLine">						  
-													
+			<xsl:for-each select="Order/OrderLines/OrderLine">						  										
 			<tbody>
 				<tr>
-					<td rowspan="7" valign="top">
-						
+					<td rowspan="7" colspan="3" valign="top">
 					<xsl:value-of select="Item/@ItemShortDesc" disable-output-escaping="yes"/>
-						<br></br>
 						<xsl:if test = '@LineType!="M"' >					
-						
 					<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
 					</xsl:if>
-					</td>
-					<xsl:choose>
-						<xsl:when test='@LineType!="M"'>					
-							<td class="right"> Ordered Qty:&#160;</td>
-							<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
+											</td>
+						<xsl:choose>
+					<xsl:when test='@LineType!="M"'> 															
+						<td width="20%" class="right"> Ordered Qty:&#160;</td>
+						<td class="left"><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
+						<td class="align-right">
+							<xsl:if test='$viewPricesFlag ="Y"'>						
+								<xsl:choose>
+									<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
+									<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
+									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,##0.00000")'/></xsl:otherwise>
+								</xsl:choose>
+							</xsl:if>		
+						</td>
+						<td class="align-right">
+							<xsl:if test='$viewPricesFlag ="Y"'>		
+								<xsl:choose>
+									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,##0.00")'/></xsl:otherwise>
+								</xsl:choose>
+							</xsl:if>	
+						</td>
+					</xsl:when>
+					<xsl:otherwise>
+						<td class="right"> </td>
+						<td class="left"></td>
+						<td class="right"></td>
+						<td class="right"></td>
+						<td class="align-right">
 							<xsl:if test='$viewPricesFlag ="Y"'>
-								<td class="right">
-									<xsl:choose>
-										<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
-										<xsl:when test='Extn/@ExtnUnitPrice ="0.0"'><span class="tbd">Call for price</span></xsl:when>
-										<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
-										<xsl:when test='Extn/@ExtnUnitPrice ="0.00000"'><span class="tbd">Call for price</span></xsl:when>						
-										<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,###.00000")'/>/<xsl:value-of select="Extn/@ExtnPricingUOMDescription"/></xsl:otherwise>
-									</xsl:choose>					 
-								</td>
-								<td class="right">
-									<xsl:choose>
-										<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
-										<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-										<xsl:when test='Extn/@ExtnExtendedPrice ="0.00000"'><span class="tbd">To be determined</span></xsl:when>
-										<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,###.00")'/></xsl:otherwise>
-									</xsl:choose>
-								</td>
+								<xsl:choose>
+									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,##0.00")'/></xsl:otherwise>
+								</xsl:choose>
 							</xsl:if>
-						</xsl:when>
-						<xsl:otherwise>
-							<td class="right"> </td>
-							<td class="left"></td>
-							<td class="right">
-							 </td>
-							 <xsl:if test='$viewPricesFlag ="Y"'>
-							 	<td class="right">
-								 	<xsl:choose>
-										<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
-										<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-										<xsl:otherwise>$<xsl:value-of select="Extn/@ExtnExtendedPrice"/></xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</xsl:if>					
-						</xsl:otherwise>
+						</td>						
+					</xsl:otherwise>
 					</xsl:choose>
+					
+					
+					
 					
 				</tr>
 				<tr>
@@ -509,11 +581,23 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >
 								
-						<xsl:if test = 'Extn/@ExtnReqShipOrdQty!=""' >	
+						<xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >	
 					
 					<td class="right"> Shippable Qty:&#160;</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnReqShipOrdQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
-					<td class="right"></td>
+					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
+					<td class="align-right">
+					<xsl:if test='$viewPricesFlag ="Y"'>
+						<xsl:choose>
+						<xsl:when test='Extn/@ExtnUnitPrice =""'>
+						</xsl:when>
+						<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'>
+						</xsl:when>
+						<xsl:otherwise>										
+						per <xsl:value-of select='Extn/@ExtnPricingUOMDescription'/>
+						</xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
+					</td>
 					<td class="right"></td>
 					    </xsl:if>
 					</xsl:if>
@@ -522,10 +606,10 @@
 				<tr>
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >					
-						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!=""' >	
+						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!="" and  ($IsOrderSplit ="N")' >	
 					
-					<td class="right"> Backorder Qty:&#160;</td>
-					<td class="left"><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
+					<td class="right"> Backorder Qty:&#160; </td>
+					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -606,7 +690,7 @@
                     </xsl:if>
 				</tr>
 				<tr>
-				<td colspan="6" style="border-bottom:1px solid #ccc;" >
+				<td colspan="7" style="border-bottom:1px solid #ccc;" >
 				</td>
 				</tr>
 				<!-- if (specialInstructions is not null) -->
@@ -641,11 +725,12 @@
 
 				<td>Subtotal:</td>
 				<td>
-				<td class="align-right"><xsl:choose>
+				<td class="align-right">
+				<xsl:choose>
 						<xsl:when test='not(Order/Extn/@ExtnOrderSubTotal)'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnOrderSubTotal =""'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnOrderSubTotal ="0.00"'>$0.00</xsl:when>
-						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnOrderSubTotal,"$#,###,###,###.00")'></xsl:value-of>
+						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnOrderSubTotal,"$#,###,###,##0.00")'></xsl:value-of>
 						</xsl:otherwise>
 					</xsl:choose></td>
 				</td>
@@ -657,7 +742,7 @@
 						<xsl:when test='not(Order/Extn/@ExtnTotOrderAdjustments)'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnTotOrderAdjustments =""'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnTotOrderAdjustments ="0.00"'>$0.00</xsl:when>
-						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrderAdjustments,"$#,###,###,###.00")'></xsl:value-of>
+						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrderAdjustments,"$#,###,###,##0.00")'></xsl:value-of>
 						</xsl:otherwise>
 					</xsl:choose></td>
 				</td>
@@ -669,7 +754,7 @@
 						<xsl:when test='not(Order/Extn/@ExtnTotOrdValWithoutTaxes)'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnTotOrdValWithoutTaxes =""'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnTotOrdValWithoutTaxes ="0.00"'>$0.00</xsl:when>
-						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"$#,###,###,###.00")'></xsl:value-of>
+						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotOrdValWithoutTaxes,"$#,###,###,##0.00")'></xsl:value-of>
 						</xsl:otherwise>
 					</xsl:choose></td>
 				 </td>
@@ -711,7 +796,7 @@
 						<xsl:when test='not(Order/Extn/@ExtnTotalOrderValue)'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnTotalOrderValue =""'>$0.00</xsl:when>
 						<xsl:when test='Order/Extn/@ExtnTotalOrderValue ="0.00"'>$0.00</xsl:when>
-						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$#,###,###,###.00")'></xsl:value-of>
+						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$#,###,###,##0.00")'></xsl:value-of>
 						</xsl:otherwise>
 					</xsl:choose></td>
 				 </td>
