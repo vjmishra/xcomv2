@@ -237,6 +237,26 @@
 				Size="" 
 				XMLName="ExtnViewPricesFlag" 
 				XMLGroup="Extn" />
+			<Attribute 
+				ColumnName="EXTN_MFG_ITEM_FLAG" 
+				DataType="Flag" 
+				DefaultValue=" " 
+				Description=" " 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnMfgItemFlag" 
+				XMLGroup="Extn" />
+				
+			<Attribute 
+				ColumnName="EXTN_CUSTOMER_ITEM_FLAG" 
+				DataType="Flag" 
+				DefaultValue=" " 
+				Description=" " 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnCustomerItemFlag" 
+				XMLGroup="Extn" />
+				
 							<Attribute 
 				ColumnName="EXTN_CAN_ORDER_FLAG" 
 				DataType="Flag" 
