@@ -3254,7 +3254,25 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		//ENDS - Fix for JIRA 1886 : adsouza
 
+		//XB-754 - Added Default value at Bill-To level Customer
+		
+		String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
+		String suffixType = custElement.getAttribute(XPXLiterals.E_SUFFIX_TYPE);
+		String customerType = custElement.getAttribute("CustomerClass");
+		if (processCode.equalsIgnoreCase("A") && suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B)) {
 
+			if (!customerType.equalsIgnoreCase("CU")) {
+				
+				extnElement.setAttribute("ExtnMfgItemFlag", "Y");
+			} else {
+				extnElement.setAttribute("ExtnMfgItemFlag", "N");
+			}
+			
+			extnElement.setAttribute("ExtnCustomerItemFlag", "N");
+
+		}
+		//XB-754 - Added Default value at Bill-To level Customer
+		
 		return extnElement;
 	}
 
