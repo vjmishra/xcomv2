@@ -395,6 +395,7 @@ public String getShipToDivdeliveryInfo() {
 	private String buyerOrganizationCode;
 	private XPEDXShipToCustomer defaultShipToCustomer;
 	private String extnAllowDirectOrderFlag;
+	private String extnPriceWareHouse;
 	
 	public String getExtnShipToSuffix() {
 		return ExtnShipToSuffix;
@@ -472,6 +473,14 @@ public String getShipToDivdeliveryInfo() {
 		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 	}
 	//JIRA 3488 end
+	
+	public String getExtnPriceWareHouse() {
+		return extnPriceWareHouse;
+	}
+	public void setExtnPriceWareHouse(String extnPricingWareHouse) {
+		this.extnPriceWareHouse = extnPricingWareHouse;
+	}
+	
 	
 	//added for jira 4306
 	public XPEDXShipToCustomer()

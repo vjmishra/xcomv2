@@ -5510,6 +5510,7 @@ public class XPEDXWCUtils {
 				shipToCustomer.setCity(personInfoElement.getAttribute("City"));
 				shipToCustomer.setState(personInfoElement.getAttribute("State"));
 				shipToCustomer.setCompany(personInfoElement.getAttribute("Company"));
+				shipToCustomer.setExtnPriceWareHouse(extnElement.getAttribute("ExtnPriceWarehouse"));
 				List<String> arrAddress = new ArrayList<String>();
 				String sAddr = "AddressLine";
 				
