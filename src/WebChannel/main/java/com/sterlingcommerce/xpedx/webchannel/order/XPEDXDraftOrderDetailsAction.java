@@ -189,6 +189,21 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			*/
 			getItemUOMs();
 			checkforEntitlement();
+			//Start of XB-689 - Adding a message , when there are duplicate items in the cart
+			if(allItemIDsWithDuplicates !=null && allItemIDsWithDuplicates.size()>0){
+				if(allItemIDsWithDuplicates.size() == 1)
+					duplicateInfoMsg = "Please note that item " + allItemIDsWithDuplicates.get(0) +" have been added to your cart more than once.";
+				else{
+					String temp = "";
+					for(int i =0; i<allItemIDsWithDuplicates.size(); i++){
+						if(i == allItemIDsWithDuplicates.size()-1)
+							temp = temp + allItemIDsWithDuplicates.get(i);
+						else
+							temp = temp + allItemIDsWithDuplicates.get(i) + ", ";
+					}
+						duplicateInfoMsg = "Please note that items " + temp +" have been added to your cart more than once.";
+				}
+			}//End of XB-689
 			getAllItemSKUs();
 //			getAllItemList();
 			// BEGIN P&A Call: RUgrani
@@ -284,7 +299,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		Iterator productIDIter = allItemIds.iterator();
 		ArrayList<Element> itemlist = new ArrayList<Element>(); 
 		allItemID = new ArrayList<String>();
-		
+		allItemIDsWithDuplicates = new ArrayList<String>();
 		Iterator<Element> it=getMajorLineElements().iterator();
 		int lineCount = 0;
 		String firstItem = "";
@@ -309,7 +324,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			{
 				
 				allItemID.add(itemId);
-			}
+			}// Added for XB-689 
+			else if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemIDsWithDuplicates.contains(itemId)){
+				allItemIDsWithDuplicates.add(itemId);
+			}//End of XB-689
 		}
 		if(!("").equals(firstItem) && !("").equals(OrganizationCodeForFirstItem) && !("").equals(firstItemCategoryPath)) {
 			setAdjCatTwoShortDesc(XPEDXWCUtils.getCatTwoDescFromItemIdForpath(firstItem, OrganizationCodeForFirstItem, firstItemCategoryPath));
@@ -2293,7 +2311,34 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 
 	public ArrayList<String> allItemID;
+	
+// Start for XB-689
+	public ArrayList<String> allItemIDsWithDuplicates;
 
+	
+	public ArrayList<String> getAllItemIDsWithDuplicates() {
+		return allItemIDsWithDuplicates;
+	}
+
+	public String duplicateInfoMsg;
+	
+
+	public String getDuplicateInfoMsg() {
+		return duplicateInfoMsg;
+	}
+
+
+	public void setDuplicateInfoMsg(String duplicateInfoMsg) {
+		this.duplicateInfoMsg = duplicateInfoMsg;
+	}
+
+
+	public void setAllItemIDsWithDuplicates(
+			ArrayList<String> allItemIDsWithDuplicates) {
+		this.allItemIDsWithDuplicates = allItemIDsWithDuplicates;
+	}
+// end for XB-689
+	
 	
 	public ArrayList<String> getAllItemID() {
 		return allItemID;

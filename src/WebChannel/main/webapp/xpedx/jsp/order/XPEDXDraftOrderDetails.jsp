@@ -578,6 +578,7 @@ $(document).ready(function(){
 	<%--jira 2885 --%>
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
+<s:set name="duplicateInfoMsg" value="#_action.getDuplicateInfoMsg()"/>
 <s:url includeParams="none" id="orderNotesListURL"
 	action="orderNotesList.action">
 	<s:param name="OrderHeaderKey" value='#orderHeaderKey' />
@@ -804,7 +805,11 @@ $(document).ready(function(){
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
 	<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5><br/>
 </s:if>
-
+<div id="errorMsgDiv">
+	<s:if test='#duplicateInfoMsg !=null && duplicateInfoMsg != "" '>		
+		<h5 align="center"><b><font color="red"><s:property value="duplicateInfoMsg" /></font></b></h5><br/>
+	</s:if>
+</div>
 
 <!-- breadcrumb / 'print page' button -->
 <div class="breadcrumb-title" id="breadcumbs-list-name">
