@@ -313,10 +313,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			if(pricelistAssignmentElement != null)
 			{
 				String customerID=pricelistAssignmentElement.getAttribute("CustomerID");
-				
+				String priceWareHouse=pricelistAssignmentElement.getAttribute("ExtnPriceWareHouse");
 				PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 				pltQryBuilder.setCurrentTable("YPM_PRICELIST_ASSIGNMENT");
-				pltQryBuilder.append(" CUSTOMER_ID ='"+customerID+"'");
+				pltQryBuilder.append(" PRICELIST_HDR_KEY IN(SELECT DISTINCT PRICELIST_HDR_KEY FROM YPM_PRICELIST_HDR WHERE EXTN_PRICING_WAREHOUSE ='" +priceWareHouse+"' AND PRICING_STATUS = 'ACTIVE' )");
+				pltQryBuilder.append(" AND CUSTOMER_ID ='"+customerID+"'");
 				//pltQryBuilder.appendString(" AND PRICING_STATUS", "=","ACTIVE");
 				
 				List<YPM_Pricelist_Assignment> priceListAssignments=

@@ -71,7 +71,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class XPEDXCatalogAction extends CatalogAction {
 	/**
 	 * 
-	 */ ///
+	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger
 			.getLogger(XPEDXCatalogAction.class);
@@ -88,6 +88,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String msapOrderMultipleFlag = "";
 	private Map <String, List<Element>> PLLineMap;	
 	private String firstItem = "";
+	private String indexField = "";
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
 //XNGTP-4264 and XB 355 Escaping Below words from search criteria.
@@ -105,8 +106,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setSearchString(String searchString) {
 		this.searchString = searchString;
-	}
+	}		
 	
+	public String getIndexField() {
+		return indexField;
+	}
+
+	public void setIndexField(String indexField) {
+		this.indexField = indexField;
+	}
+
+
+
 	//End of addition for JIRA #4195
 	/*Added for Jira 3624*/
 	private String theSpanNameValue;
@@ -576,9 +587,30 @@ public class XPEDXCatalogAction extends CatalogAction {
             */
             YFCDocument template2 = YFCDocument
             .getDocumentFor("<CategoryList ><Category /></CategoryList>");
+            ISCUITransactionContext scuiTransactionContext = null;
+            SCUIContext wSCUIContext = null;
+            YFCElement categoryListElement = null;
+                                  
+            try {
+            	IWCContext context = WCContextHelper
+    					.getWCContext(ServletActionContext.getRequest());
+                wSCUIContext = context.getSCUIContext();
+    			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+                
 
-            YFCElement categoryListElement = SCUIPlatformUtils.invokeXAPI("getCategoryList",
-                        categoryLstEle, template2.getDocumentElement(), wcContext.getSCUIContext());
+                categoryListElement = SCUIPlatformUtils.invokeXAPI("getCategoryList",
+                            categoryLstEle, template2.getDocumentElement(), wcContext.getSCUIContext());
+            	
+            } catch (Exception ex) {
+    			log.error(ex.getMessage());
+    			scuiTransactionContext.rollback();
+    		} finally {
+    			if (scuiTransactionContext != null) {
+    				SCUITransactionContextHelper.releaseTransactionContext(
+    						scuiTransactionContext, wSCUIContext);
+    			}
+    		}
+            
             if(categoryListElement == null )
             {
                   return null;
@@ -612,17 +644,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 			while (iter.hasNext()) {
 				Breadcrumb bc = iter.next();
 				if (bc.getAction() != null && bc.getAction().equals("filter")) {
-					String indexField = (String) bc.getParams().get(
-							"indexField");
+					//String indexField = (String) bc.getParams().get(
+					//		"indexField");										
 					String filterDesc = (String) bc.getParams().get("filterDesc");
 					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : indexField=" + indexField);
 					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : filterDesc=" + filterDesc);
-					String attributeName = null;
+					/*String attributeName = null;
 					if (!YFCCommon.isVoid(filterDesc)
 							&& filterDesc
-									.contains(XPEDXCatalogAction.XPEDX_PRODUCT_TYPE_NARROW_BY)) {
+									.contains(XPEDXCatalogAction.XPEDX_PRODUCT_LINE_INDEX_FIELD)) {
 						attributeName=filterDesc;
-					}
+					}*/
 					// indexField is the Attribute ID. We need to get the
 					// Attribute Name(Short Description) to compare to
 					// XPEDX_PRODUCT_TYPE_NARROW_BY
@@ -639,9 +671,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 								attributeID, wcContext.getStorefrontId(),
 								attDomainID, attGrpID);
 					}*/
-					if (!YFCCommon.isVoid(attributeName)
-							&& attributeName
-									.contains(XPEDXCatalogAction.XPEDX_PRODUCT_TYPE_NARROW_BY)) {
+					if (!YFCCommon.isVoid(indexField)
+							&& indexField
+									.contains(XPEDXCatalogAction.XPEDX_PRODUCT_LINE_INDEX_FIELD)) {						
 						String productType = (String) bc.getParams().get(
 								"cname");
 						columnList = getListOfColumns(productType);
@@ -1072,6 +1104,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				String customerId = wcContext.getCustomerId();
 				Map<String, String> valueMaps = new HashMap<String, String>();
 				valueMaps.put("/PricelistAssignment//@CustomerID", customerId);
+				valueMaps.put("/PricelistAssignment//@ExtnPriceWareHouse", shipToCustomer.getExtnPriceWareHouse());
 				valueMaps.put("/PricelistAssignment/PricelistLine/Item/@OrganizationCode", wcContext.getStorefrontId());
 				Element pricLlistAssignmentInput = WCMashupHelper.getMashupInput("xpedxYpmPriceLinelistAssignmentList", valueMaps,getWCContext().getSCUIContext());
 				Document pricLlistAssignmentInputDoc = pricLlistAssignmentInput.getOwnerDocument();
@@ -3134,7 +3167,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		return selectedView;
 	}
 
-	protected static final String XPEDX_PRODUCT_TYPE_NARROW_BY = "Product Type";
+	protected static final String XPEDX_PRODUCT_LINE_INDEX_FIELD = "ItemAttribute.xpedx.FF_1101";
 	protected static final String XPEDX_DEFAULT_TYPE_COLUMN = "XPXDefault";
 	protected ArrayList<String> columnList;
 	protected String pnaItemId = "";
