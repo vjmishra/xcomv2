@@ -8,7 +8,9 @@ CURRENTZIPFILE="smcfs-${DATE}.zip"
 
 #location of the zip files used for the build is specified below.
 ZIPFILEHOME=/home/share/xpadmin/buildsource
-LOGFILE=/xpedx/sci_build/smcfs/smcfsBuild-nocopy-`date +"%Y%m%d-%H%M"`.log
+mkdir /xpedx/sci_build/smcfs/logs/
+chmod 774 /xpedx/sci_build/smcfs/logs/
+LOGFILE=/xpedx/sci_build/smcfs/logs/smcfsBuild-nocopy-`date +"%Y%m%d-%H%M"`.log
 
 echo "SMCFS build started on $HOST_NAME (without using a zip file)" > $LOGFILE
 echo "Build Start TimeStamp: " `date` >> $LOGFILE
@@ -36,7 +38,8 @@ echo $HOST_NAME
 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
- zxpappd02) ENVIRONMENT=dev;;
+ zxpappd02) ENVIRONMENT=sandbox1;;
+ zxpappint01) ENVIRONMENT=integration;;
  zxpappt01) ENVIRONMENT=staging;; 
  zxpapps01) ENVIRONMENT=prodsupport;; 
  zxpagnt01) ENVIRONMENT=prod;; 
@@ -67,8 +70,9 @@ fi
 echo "about to copy /xpedx/sci_build/smcfs/smcfs/dev/build/recur_dos2unix.sh to /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions" >> $LOGFILE
 cp /xpedx/sci_build/smcfs/smcfs/dev/build/recur_dos2unix.sh /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions
 cd /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions
-chmod +x recur_dos2unix.sh
->recur_dos2unix.sh
+
+chmod +x recur_dos2unix.sh>recur_dos2unix.sh
+
 
 #before triggering the build, stop the order updates coming from the legacy/WebMethods
 echo "about to stop Order Updates " >> $LOGFILE
@@ -98,12 +102,12 @@ if nohup /xpedx/sterling/Foundation/bin/sci_ant.sh -f Xpedxsmcfsbuild.xml -Dbuil
 	if [ "$HOST_NAME" != "zxpappmc01" ]; then
 		ksh -x copycallcentercomzip.sh >> $LOGFILE
 	fi
-	./sendnotification.sh SMCFS Success mahmoud.lamriben@hp.com,mohammad.balkhi@hp.com,kirtesh.lathkar@hp.com,vijay.mishra@hp.com,sameer.vasudeva@hp.com $LOGFILE
+	./sendnotification.sh SMCFS Success mahmoud.lamriben@hp.com,mohammad.balkhi@hp.com,sameer.vasudeva@hp.com $LOGFILE
 	echo "Build Completion TimeStamp: " `date` >> $LOGFILE
 	exit 0
 else
 	echo "ERROR/FAILURE! There were errors in the build. Check logs..." 1>&2 >> $LOGFILE
 	echo "Build With Errors Completion TimeStamp: " `date` >> $LOGFILE
-	./sendnotification.sh SMCFS Error mahmoud.lamriben@hp.com,mohammad.balkhi@hp.com,kirtesh.lathkar@hp.com,vijay.mishra@hp.com,sameer.vasudeva@hp.com $LOGFILE
+	./sendnotification.sh SMCFS Error mahmoud.lamriben@hp.com,mohammad.balkhi@hp.com,sameer.vasudeva@hp.com $LOGFILE
 	exit 1
 fi

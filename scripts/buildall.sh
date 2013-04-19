@@ -10,7 +10,8 @@ echo $HOST_NAME
 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
- zxpappd02) ENVIRONMENT=dev;;
+ zxpappd02) ENVIRONMENT=sandbox1;;
+ zxpappint01) ENVIRONMENT=integration;; 
  zxpappt01) ENVIRONMENT=staging;; 
  zxpapps01) ENVIRONMENT=prodsupport;; 
  zxpagnt01) ENVIRONMENT=prod;; 

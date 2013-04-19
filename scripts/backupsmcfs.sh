@@ -1,6 +1,7 @@
 #!/bin/ksh
 # This script zips up and backs up the smcfs folder prior to doing any builds. 
 # created on 10/11/2012 by mahmoud L.
+#modified - testing GIT
 
 HOST_NAME="$(hostname)"
 echo $HOST_NAME

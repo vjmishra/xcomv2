@@ -12,6 +12,7 @@ echo "Starting smcfs on $HOST_NAME"
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
  zxpappd02) ENVIRONMENT=dev;;
+ zxpappint01) ENVIRONMENT=dev;;
  zxpappt01) ENVIRONMENT=stg;; 
  zxpapps01) ENVIRONMENT=ps;; 
  zxpagnt01) ENVIRONMENT=prd;; 
