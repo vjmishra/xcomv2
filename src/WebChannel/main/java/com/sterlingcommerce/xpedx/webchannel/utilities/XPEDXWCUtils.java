@@ -616,11 +616,6 @@ public class XPEDXWCUtils {
 				String masterCustKey = SCXmlUtil.getAttribute(msapCustElem, "CustomerKey");
 				//Setting the MSAP Customer Key in session
 				wcContext.setWCAttribute(LOGGED_IN_CUSTOMER_KEY,masterCustKey,WCAttributeScope.LOCAL_SESSION);
-				
-				Element msapExtnElem = SCXmlUtil.getChildElement(msapCustElem, "Extn");
-				String customerUseSKU = msapExtnElem.getAttribute("ExtnUseCustSKU");
-				//Setting customer Sku flag in session
-				wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,customerUseSKU,WCAttributeScope.LOCAL_SESSION);
 			}
 		}
 	}
@@ -4039,13 +4034,9 @@ public class XPEDXWCUtils {
 					if(msapId.equals(customerId))
 					{
 						String msapKey = custElem.getAttribute("CustomerKey");
-						Element msapExtnElem = SCXmlUtil.getChildElement(custElem, "Extn");
-						String customerUseSKU = msapExtnElem.getAttribute("ExtnUseCustSKU");
-						//Setting customer Sku flag in session
+
 						if(!(((String)wcContext.getWCAttribute(LOGGED_IN_CUSTOMER_KEY)!=null) && ((String)wcContext.getWCAttribute(LOGGED_IN_CUSTOMER_KEY)).trim().length()>0))
 							wcContext.setWCAttribute(LOGGED_IN_CUSTOMER_KEY,msapKey,WCAttributeScope.LOCAL_SESSION);
-						if(!(((String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU)!=null) && ((String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU)).trim().length()>0))
-							wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,customerUseSKU,WCAttributeScope.LOCAL_SESSION);
 						custContactListEle=custContElem;
 						break;
 					}
@@ -5552,6 +5543,22 @@ public class XPEDXWCUtils {
 					billToCustomer.setExtnECsr2EMailID(parentExtnElem.getAttribute("ExtnECsr2EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnMaxOrderAmount(parentExtnElem.getAttribute("ExtnMaxOrderAmount"));//JIRA 3488
 					billToCustomer.setExtnCustomerClass(parentExtnElem.getAttribute("ExtnCustomerClass"));//XBT-265
+					/* XB-763 Code Changes Start */
+					String extnMfgItemFlag = parentExtnElem.getAttribute("ExtnMfgItemFlag");
+					String extnCustomerItemFlag = parentExtnElem.getAttribute("ExtnCustomerItemFlag");
+					if(!YFCCommon.isVoid(extnMfgItemFlag) && extnMfgItemFlag.equalsIgnoreCase("Y") ){
+						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG,extnMfgItemFlag,WCAttributeScope.LOCAL_SESSION);
+						wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,"2",WCAttributeScope.LOCAL_SESSION); //// Need to remove this line while fixing XB-756 logic
+					}
+					if(!YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y"))
+						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG,extnCustomerItemFlag,WCAttributeScope.LOCAL_SESSION);
+					// Need to remove logic start while fixing XB-756 logic
+					if ((YFCCommon.isVoid(extnMfgItemFlag) && !YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y") ) ||
+						(!YFCCommon.isVoid(extnMfgItemFlag) && !extnMfgItemFlag.equalsIgnoreCase("Y") && !YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y")) ) {
+						wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,"1",WCAttributeScope.LOCAL_SESSION);
+					}
+					// Need to remove logic End while fixing XB-756 logic
+					/* XB-763 Code Changes End */
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);
