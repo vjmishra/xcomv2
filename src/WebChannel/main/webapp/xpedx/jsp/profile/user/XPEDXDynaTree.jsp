@@ -34,25 +34,24 @@
 							selectMode : 3,
 							onSelect : function(select, node) {
 								// Get a list of all selected nodes, and convert to a key array:
-								var selKeys = $.map(node.tree
+								
+						/*		var selKeys = $.map(node.tree
 										.getSelectedNodes(), function(node) {
 									return node.data.key;
 								});
-								$("#echoSelection3").text(selKeys.join(", "));
-
+								alert("selected keys"+selKeys);*/
+								//$("#echoSelection3").text(selKeys.join(", "));
+								
 								// Get a list of all selected TOP nodes
-								var selRootNodes = node.tree
-										.getSelectedNodes(true);
+								var selRootNodes = node.tree.getSelectedNodes(true);
 								// ... and convert to a key array:
 								var selRootKeys = $.map(selRootNodes, function(
 										node) {
 									return node.data.key;
-									//	return node.data.title;
 								});
-								$("#echoSelectionRootKeys3").text(
-										selRootKeys.join(", "));
-								$("#echoSelectionRoots3").text(
-										selRootNodes.join(", "));
+								document.getElementById("newAssignedCustomers").value = selRootKeys;
+								document.getElementById("treeSelected").value = true;
+								
 							},
 							onDblClick : function(node, event) {
 								node.toggleSelect();
@@ -69,7 +68,6 @@
 								var CurrCust = currentNode.data.key;
 
 								if ($('#prevnode').val() == CurrCust) {
-									//alert("prevnode val == currcust");
 									return;
 									} else {
 									$('#prevnode').val(CurrCust);
@@ -219,9 +217,8 @@
 					id="prevnode" type="hidden" name="prevnode" />
 			</p>
 
-			<input type=hidden id="echoSelectionRoots3" />
-			<input type=hidden id="echoSelection3" name="echoSelection3" />
-			<input type=hidden id="echoSelectionRootKeys3" name="echoSelectionRootKeys3" />
+			<s:hidden name='newAssignedCustomers' id='newAssignedCustomers' />
+			<s:hidden name='treeSelected' id='treeSelected'/>
 		</tr>
 	</table>
 

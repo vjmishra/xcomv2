@@ -123,7 +123,19 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String orderApprovalFlag;// added for XB 226
 	private String newAssignedCustomers;
 	private String userNotAdmin;
-	List<String> alFinalSelectedCustomers = new ArrayList<String>();	
+	List<String> alFinalSelectedCustomers = new ArrayList<String>();
+	private boolean treeSelected;
+	
+	
+	public boolean isTreeSelected() {
+		return treeSelected;
+	}
+
+	public void setTreeSelected(boolean treeSelected) {
+		this.treeSelected = treeSelected;
+	}
+
+	
 	public String getUserNotAdmin() {
 		return userNotAdmin;
 	}
@@ -975,7 +987,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		alOldAssignedCustomers = (List) XPEDXWCUtils
 				.getObjectFromCache("AUTHORIZED_LOCATIONS");
 
-		if(("false").equalsIgnoreCase(getUserNotAdmin())){
+		if(("false").equalsIgnoreCase(getUserNotAdmin() ) && isTreeSelected()){
 		//if (("true").equalsIgnoreCase(getBuyAdmin())) {
 		/* End - Changes made for XB-287 : Save functionality */
 		String tmpCustomerId = "";

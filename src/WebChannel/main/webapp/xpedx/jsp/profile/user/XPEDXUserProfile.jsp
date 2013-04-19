@@ -549,12 +549,7 @@ function funDivOpenClose(val1)
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();
 
-			/*Begin - Changes made for XB-287 : Save functionality*/
-			document.getElementById('newAssignedCustomers').value=$('#echoSelectionRootKeys3').text();
-			
-		//	alert("New Assigned customers"+document.getElementById('newAssignedCustomers').value);
-			/*End - Changes made for XB-287 : Save functionality*/
-			
+					
 			try{
 				if (mandatoryFieldValidation(docDivId, ignoreDivIds) != "")
 				{
@@ -2522,7 +2517,6 @@ a.underlink:hover {
 													<td valign="top" class="no-border-right-user ">&nbsp;</td>
 													<td valign="top" class="no-border-right-user ">&nbsp;</td>
 												</tr>
-												<s:hidden name='newAssignedCustomers' id='newAssignedCustomers' />
 												<s:hidden name ='userNotAdmin' id='userNotAdmin' value='%{#isCustomerNotAdmin}'></s:hidden>
 											</table>
 										</div>
