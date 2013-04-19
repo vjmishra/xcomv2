@@ -223,11 +223,14 @@
 				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
 				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
 				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="integration" casesensitive="true" />
+				
+				
 			</or>
 		</condition>
 		<echo message="build.env: ${build.env}"/>
 		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
-		<fail unless="Is_build.env_Set" message="Invalid Build Environment[${build.env}]! Please enter one of these values(casesensitive) - {local, dev, staging, prod} and Restart build Again." />
+		<fail unless="Is_build.env_Set" message="Invalid Build Environment[${build.env}]! Please enter one of these values(casesensitive) - {local, dev, staging, prod, prodsupport, sandbox1, integration} and Restart build Again." />
 	</target>
 	
 	<target name="choose-customer_overrides" description="Renames customer_overrides.properties and cacheoverrides.xml file based on the Build Environment">
@@ -244,12 +247,14 @@
 				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
 				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
 				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="integration" casesensitive="true" />
 			</or>
 		</condition>
 		<echo message="build.env: ${build.env}"/>
 		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
-		<fail unless="Is_build.env_Set" message="Invalid Build Environment - ${build.env}!. Please set build.env property to one of these casesensitive values - {local, dev, staging, prod} and Restart build Again!" />
+		<fail unless="Is_build.env_Set" message="Invalid Build Environment - ${build.env}!. Please set build.env property to one of these casesensitive values - {local, dev, staging, prod, prodsupport, sandbox1, integration} and Restart build Again!" />
 		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/properties/customer_overrides_${build.env}.properties" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/properties/customer_overrides.properties" verbose="true" overwrite="true"/>
+
 		<!-- ML 08/29/2011 Copy the appropriate cacheoverrides.xml to the resources directory . 
 		Note that there is another task (copy-files) below that copies all the files in the  ${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/resources directory into the installdir/resources folder. /-->
 		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/resources/cacheoverride_${build.env}.xml" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/resources/cacheoverride.xml" verbose="true" overwrite="true"/>
@@ -261,6 +266,7 @@
 		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
 		
        <copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
+	   <!-- 04/18/2013-ML: 		Copy the appropriate xpedx_reporting.properties based on the build environment		--> 		<copy file="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/properties/xpedx_reporting_${build.env}.properties" tofile="${cvs.fetch.dir.smcfs}/smcfs/dev/Foundation/properties/xpedx_reporting.properties" verbose="true" overwrite="true"/>
 		
 	</target>
 	

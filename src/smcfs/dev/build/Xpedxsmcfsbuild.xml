@@ -1,979 +1,979 @@
-<?xml version="1.0" ?>
-<project name="Build Script For xpedx_smcfs" default="all" basedir=".">
-
-    <property file="Xpedxsmcfsbuild.properties"/>
-	<property environment="env"/>
-
-	<import file="${env.INSTALL_DIR}/bin/buildcomapplication.xml"/>
-	
-	<path id="implementation.class.path">
-			
-		<fileset dir="${env.INSTALL_DIR}/jar/smcfs/9.0">
-			<include name="**/*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/commons_digester/1_8">
-			<include name="*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/platform_afc/5_5">
-			<include name="**/*.jar"/>
-		</fileset>
-
-		<fileset dir="${env.INSTALL_DIR}/jar/platform_uifwk">
-			<include name="**/*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/platform/5_5">
-			<include name="**/*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/log4j/1_2_15">
-			<include name="**/*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/repository/eardata/platform/war/yfscommon">
-			<include name="**/*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/platform_afc_ui_impl/5_5">
-			<include name="**/*.jar"/>
-		</fileset>	
-
-
-		<fileset dir="${env.INSTALL_DIR}/jar/scecore/9.0">
-			<include name="**/*.jar"/>
-		</fileset>			
-		
-	
-		<fileset dir="${env.INSTALL_DIR}/jar">
-			<include name="*.jar"/>
-		</fileset>
-		
-		<fileset dir="${wls.dir}/wlserver_10.3/server/lib">
-			<include name="wlfullclient.jar"/>
-		</fileset>
-		
-		<fileset dir="${devhome}/Foundation/jar">
-			<include name="*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/commons_collections/3_2">
-			<include name="*.jar"/>
-		</fileset>
-		
-		<fileset dir="${env.INSTALL_DIR}/jar/COM_Add-in/9.0_9.0">
-			<include name="*.jar"/>
-		</fileset>
-		
-		<!--BEGIN: For Search Index multiple node copy -->
-		<fileset dir="${env.INSTALL_DIR}/jar/commons_io/1_4">
-			<include name="*.jar"/>
-		</fileset>
-		<!--END: For Search Index multiple node copy -->
-	</path>
-
-	<path id="project.class.path">
-		<path refid="implementation.class.path" />
-	</path>
-
-	<target name="smcfsBuildWithoutCVSFetch"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithoutCVSFetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
-	
-	<target name="smcfsBuildWithCVSFetch"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
-	
-	<target name="allButCDT"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
-
-	<target name="all"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, cdt_export, cdt_import, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
-	
-	<target name="test" depends="backup_EFrameSQLFiles"/>
-	
-	<target name="validate-buildEnv" description="Validates if the build Env is one of {local, dev, staging, prod}">
-		<!-- Winston 6/22/11 - Updated -->
-		<!-- Changed the script by commenting out the input portion of this target. -->
-		<!-- Ths input should be passed by command line parameter to define the environment -->
-		<!-- e.g. -Dbuild.env=dev -->
-		<!-- input message="Please Enter the Target Build Environment:" validargs="local,dev,staging,prod" addproperty="build.env" / -->
-		<condition property="Is_build.env_Set" value="true">
-			<or>
-				<equals arg1="${build.env}" arg2="local" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="dev" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="staging" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />
-			</or>
-		</condition>
-		<echo message="build.env: ${build.env}"/>
-		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
-		<fail unless="Is_build.env_Set" message="Invalid Build Environment[${build.env}]! Please enter one of these values(casesensitive) - {local, dev, staging, prod} and Restart build Again." />
-	</target>
-	
-	<target name="choose-customer_overrides" description="Renames customer_overrides.properties and cacheoverrides.xml file based on the Build Environment">
-		<!-- Winston 6/22/11 - Updated -->
-		<!-- Changed the script by commenting out the input portion of this target. -->
-		<!-- Ths input should be passed by command line parameter to define the environment -->
-		<!-- e.g. -Dbuild.env=dev -->
-		<!-- input message="Please Enter the Target Build Environment:" validargs="local,dev,staging,prod" addproperty="build.env" / -->
-		<condition property="Is_build.env_Set" value="true">
-			<or>
-				<equals arg1="${build.env}" arg2="local" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="dev" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="staging" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
-				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />
-			</or>
-		</condition>
-		<echo message="build.env: ${build.env}"/>
-		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
-		<fail unless="Is_build.env_Set" message="Invalid Build Environment - ${build.env}!. Please set build.env property to one of these casesensitive values - {local, dev, staging, prod} and Restart build Again!" />
-		<copy file="${cvs.fetch.dir}/smcfs/dev/Foundation/properties/customer_overrides_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/Foundation/properties/customer_overrides.properties" verbose="true" overwrite="true"/>
-		<!-- ML 08/29/2011 Copy the appropriate cacheoverrides.xml to the resources directory . 
-		Note that there is another task (copy-files) below that copies all the files in the  ${cvs.fetch.dir}/smcfs/dev/Foundation/resources directory into the installdir/resources folder. /-->
-		<copy file="${cvs.fetch.dir}/smcfs/dev/Foundation/resources/cacheoverride_${build.env}.xml" tofile="${cvs.fetch.dir}/smcfs/dev/Foundation/resources/cacheoverride.xml" verbose="true" overwrite="true"/>
-		<!-- 
-		ML 09-23-2011
-		Added support for individual locations.ycfg files per environment. This copy task below chooses the appropriate locations.ycfg file based on the environment the build is executed on, and then saves it as plain "locations.ycfg".
-		The PrepareLocationsFile-comini target below then uses the locations.ycfg to include it in the final zip file. 
-		-->
-		<copy file="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
-		
-       <copy file="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
-		
-	</target>
-
-	<target name="RunDosToUnixCleanup" description="Executes the dostounix shell script to cleanup dos paths. ">
-		<!-- Mahmoud 8/18/11 created 
-		processes the /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions and cleans up dos directory paths.
-		-->
-		<echo message="executing RunDOsToUnixCleanup target against /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions directory..." />
-		<!-- Since the recur_dos2unix.sh script is copied from the /dev/build directory from the cvs source, and since the /xpedx/sci_build/smcfs/smcfs is recreated after each build
-		we need to grant exec rights to the script each time the build is done. The rights are granted as part of the buildsmcfs.sh script.
-		--> 
-		<exec dir="/xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions/" executable="recur_dos2unix.sh"></exec> 
-		
-		<echo message="completed RunDOsToUnixCleanup target against /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions directory..." />
-	</target>
-	
-	<target name="backup_EFrameSQLFiles" description="Backs up the EFrame SQL files from the previous build to the backup directory.">
-		<!-- Mahmoud 8/18/11 created -->
-		<echo message="executing backup_EFrameSQLFiles ant target ..." />
-		<tstamp>
-		      <format property="buildtimestamp" pattern="MM-dd-yyyy" />
-		</tstamp>
-	 
-		<echo message="creating directory /xpedx/backup/deployments/" />			
-		<!-- make backup directory if not exist-->
-		<mkdir dir="/xpedx/backup/deployments"/>
-		<echo message="creating directory /xpedx/backup/deployments/EFrame_SQL_Updates" />
-		<mkdir dir="/xpedx/backup/deployments/EFrame_SQL_Updates"/>
-		<echo message="creating directory /xpedx/backup/deployments/EFrame_SQL_Updates/${buildtimestamp}" />		
-		<mkdir dir="/xpedx/backup/deployments/EFrame_SQL_Updates/${buildtimestamp}"/>
-		<!-- copy all the .sql files to the new backup dir-->	
-				
-		<copy todir="/xpedx/backup/deployments/EFrame_SQL_Updates/${buildtimestamp}">
-		    <fileset dir="/xpedx/sterling/Foundation/bin/">
-		      <include name="*.sql"/>
-		    </fileset>
-		</copy> 
-		<echo message="completed backup_EFrameSQLFiles ant target ..." />
-	</target>
-
-	<target name="RunDBVerify" description="Executes the dbverify shell script to extract out SQL updates from the build. ">
-		<!-- Mahmoud 8/18/11 created 
-		This target extracts out the sql updates from the database so they can be handed out to DB services to execute.
-		-->
-		<echo message="executing dbverify ant target ..." />
-		<exec dir="/xpedx/sterling/Foundation/bin/" executable="dbverify.sh"></exec> 
-		<echo message="completed dbverify ant target ..." />
-	</target>
-	
-	<!-- Deletes swc_cust.jar from two directories as SBC was not coming up because of them. This target should be removed once a permanent fix is provided -->
-	<target name="delete_SWCCustJAR" description="Temporary fix provided to solve SBC logging issue. To be removed once a permanent fix is made">
-        <delete file="${env.INSTALL_DIR}/jar/swc_cust/1_0/swc_cust.jar" />
-		<delete file="${env.INSTALL_DIR}/installed_data/swc/jars/swc_cust/1_0/swc_cust.jar" />
-	</target>
-	<!-- Cleans the custom code in INSTALL_DIR -->
-	<target name="cleanFor_smcfsBuildWithoutCVSFetch" description="Deletes directories" >
-		
-		<!-- Delete directories -->
-		<delete dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
-		<delete dir="${env.INSTALL_DIR}/extensions/global" />		
-	    <!--delete dir="${devhome}"/ -->
-
-		<!-- Re-create directories -->
-		<mkdir dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
-		<!--mkdir dir="${devhome}"/ -->
-		<!--mkdir dir="${devhome}/dist" /-->
-	</target>
-	
-	<!-- Cleans the custom code in INSTALL_DIR -->
-	<target name="cleanFor_smcfsBuildWithCVSFetch" description="Prepares for Build" >
-		
-		<!-- Delete directories -->
-		<delete dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
-		<delete dir="${env.INSTALL_DIR}/extensions/global" />		
-	    <delete dir="${devhome}"/>
-
-		<!-- Re-create directories -->
-		<mkdir dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
-		<mkdir dir="${devhome}"/>
-		<mkdir dir="${devhome}/dist" />
-	</target>
-	
-	<!-- Fetches the smcfs save the sale modules from CVS respository -->
-	<target name="cvs-fetch"  description="Fetches latest files from CVS">
-		<!-- First create the CVS fetch directory -->
-		<mkdir dir="${cvs.fetch.dir}"/>
-        <cvs cvsRoot=":pserver:${cvs.user}:${cvs.pass}@${cvs.server}:${cvs.root}" package="${cvs.module.name}" dest="${cvs.fetch.dir}"/> 
-	</target>   
-
-  	<target name="build-jars" description="Make Jar">
-		<!-- Compile the java source files -->
-        <delete dir="${devhome}/dist/Foundation/classes" />
-        <mkdir dir="${devhome}/dist/Foundation/classes" />
-		
-		<javac classpathref="project.class.path" destdir="${devhome}/dist/Foundation/classes" executable="${env.JAVA_HOME}/bin/javac" debug="on" debuglevel="lines,vars,source">
-			<src path="${devhome}/src">
-			
-			</src>
-        </javac>
-
-		<!-- Makes the project jar file -->
-		<!--Create version file -->    		
-        <tstamp>
-            <format property="NOW" pattern="EEE, MMMM dd yyyy hh:mm aa z" />
-        </tstamp>    	
-
-		<echo file="${devhome}/dist/version.txt">
-			Build Version: ${project.name} V ${release.version}
-			Build Date: ${NOW}
-		</echo>
-
-		<!--Copy the version.txt-->
-        <copy file="${devhome}/dist/version.txt" todir="${devhome}/dist/Foundation/classes"/>
-	
-        <jar destfile="${devhome}/dist/Foundation/${project.name}.jar" basedir="${devhome}/dist/Foundation/classes">
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="version-information">
-                    <attribute name="Version" value="${release.version}" />
-                    <attribute name="BuildDate" value="${NOW}" />
-                </section>
-			</manifest>
-        </jar>
-   	</target>
-
-	<target name="copy-files" description="Deploys the project files in the relevant folders of MCF Installation">
-
-		<!--Copy templates -->
-        <echo>Copy the project specific repository to repository folder of APP</echo>
-
-        <copy todir="${env.INSTALL_DIR}/repository/">
-			<fileset dir="${devhome}/Foundation/repository">
-				<exclude name="**/CVS" />
-			</fileset>
-		</copy>
-
-
-		<!--Copy resources-->
-        <echo>Copy the project specific resources to resources folder of APP</echo>
-
-        <copy todir="${env.INSTALL_DIR}/resources/">
-			<fileset dir="${devhome}/Foundation/resources">
-				<exclude name="**/CVS" />
-			</fileset>
-		</copy>
-
-		<!--Copy properties-->
-        <echo>Copy the project specific properties to properties folder of APP</echo>
-
-		<copy todir="${env.INSTALL_DIR}/properties/" overwrite="true">
-			<fileset dir="${devhome}/Foundation/properties">
-				<exclude name="**/CVS" />
-			</fileset>
-		</copy> 
-
-		<!--Copy extensions-->
-        <echo>Copy the project specific extensions to extensions folder of APP</echo>
-
-		<copy todir="${env.INSTALL_DIR}/extensions/" overwrite="true">
-			<fileset dir="${devhome}/Foundation/extensions">
-				<exclude name="**/test.txt" />
-			</fileset>
-		</copy>
-		
-		<!--SetuFiles-->
-		
-		<antcall target="setup-files"/>
-		
-	</target>
-	
-	<target name="setup-files" description="Call Setup files to update the files">
-	            <exec executable="./XpedxSetupfiles.sh">
-	            </exec>
-	</target>
-	
-	
-	<!-- <target name="install3rdparty" description="Installs all required 3rd party jars" depends="cvs-fetch">
-
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="xpedxreportingjars"/>
-			<arg value="1.0"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/ReportingJars/activation-1.1.jar ${devhome}/Foundation/jar/ReportingJars/adv_ivcdzview.jar ${devhome}/Foundation/jar/ReportingJars/AnalyticalReporting_en.jar ${devhome}/Foundation/jar/ReportingJars/AnalyticalReporting.jar ${devhome}/Foundation/jar/ReportingJars/asn1.jar ${devhome}/Foundation/jar/ReportingJars/biarengine.jar ${devhome}/Foundation/jar/ReportingJars/biplugins.jar ${devhome}/Foundation/jar/ReportingJars/boconfig.jar ${devhome}/Foundation/jar/ReportingJars/cafinstall.jar ${devhome}/Foundation/jar/ReportingJars/cdzlet.jar ${devhome}/Foundation/jar/ReportingJars/cecore.jar ${devhome}/Foundation/jar/ReportingJars/celib.jar ${devhome}/Foundation/jar/ReportingJars/ceplugins_client.jar ${devhome}/Foundation/jar/ReportingJars/ceplugins_core.jar ${devhome}/Foundation/jar/ReportingJars/ceplugins_cr.jar ${devhome}/Foundation/jar/ReportingJars/cereports.jar ${devhome}/Foundation/jar/ReportingJars/certj.jar ${devhome}/Foundation/jar/ReportingJars/cesdk.jar ${devhome}/Foundation/jar/ReportingJars/cesearch.jar ${devhome}/Foundation/jar/ReportingJars/cesession.jar ${devhome}/Foundation/jar/ReportingJars/cetaglib.jar ${devhome}/Foundation/jar/ReportingJars/ceutils.jar ${devhome}/Foundation/jar/ReportingJars/clientlogic.jar ${devhome}/Foundation/jar/ReportingJars/clientplugins.jar ${devhome}/Foundation/jar/ReportingJars/commons-configuration-1.2.jar ${devhome}/Foundation/jar/ReportingJars/commons-el.jar ${devhome}/Foundation/jar/ReportingJars/corbaidl.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJavabeansServer.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJavaServer.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJavaServerCommon.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJDBCServer.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="xpedxreportingjars"/>
-			<arg value="1.0"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/ReportingJars/CRDBSForceServer.jar ${devhome}/Foundation/jar/ReportingJars/CRDBXMLServer.jar ${devhome}/Foundation/jar/ReportingJars/credential.jar ${devhome}/Foundation/jar/ReportingJars/crlov.jar ${devhome}/Foundation/jar/ReportingJars/crlovexternal.jar ${devhome}/Foundation/jar/ReportingJars/crlovmanifest.jar ${devhome}/Foundation/jar/ReportingJars/CrystalCommon2.jar ${devhome}/Foundation/jar/ReportingJars/cs_bridge.jar ${devhome}/Foundation/jar/ReportingJars/diagnosticTool.jar ${devhome}/Foundation/jar/ReportingJars/dsws-bicatalog.jar ${devhome}/Foundation/jar/ReportingJars/dsws-biplatform.jar ${devhome}/Foundation/jar/ReportingJars/dsws-common.jar ${devhome}/Foundation/jar/ReportingJars/dsws-federator.jar ${devhome}/Foundation/jar/ReportingJars/dsws-publish.jar ${devhome}/Foundation/jar/ReportingJars/dsws-queryservice.jar ${devhome}/Foundation/jar/ReportingJars/dsws-reportengine.jar ${devhome}/Foundation/jar/ReportingJars/dsws-session.jar ${devhome}/Foundation/jar/ReportingJars/ebus405.jar ${devhome}/Foundation/jar/ReportingJars/encrypt.jar ${devhome}/Foundation/jar/ReportingJars/explorer_jdbc_en.jar ${devhome}/Foundation/jar/ReportingJars/explorer_jdbc.jar ${devhome}/Foundation/jar/ReportingJars/explorer_jsf.jar ${devhome}/Foundation/jar/ReportingJars/explorer_model_sdk.jar ${devhome}/Foundation/jar/ReportingJars/explorer_model.jar ${devhome}/Foundation/jar/ReportingJars/explorer_res_en.jar ${devhome}/Foundation/jar/ReportingJars/flash.jar ${devhome}/Foundation/jar/ReportingJars/freessl201.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="xpedxreportingjars"/>
-			<arg value="1.0"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/ReportingJars/i18n4j.jar ${devhome}/Foundation/jar/ReportingJars/icu4j.jar ${devhome}/Foundation/jar/ReportingJars/JarDownloaderServlet.jar ${devhome}/Foundation/jar/ReportingJars/jdom-beta8.jar ${devhome}/Foundation/jar/ReportingJars/jsafe.jar ${devhome}/Foundation/jar/ReportingJars/jsf-api.jar ${devhome}/Foundation/jar/ReportingJars/jsf-impl.jar ${devhome}/Foundation/jar/ReportingJars/jstl.jar ${devhome}/Foundation/jar/ReportingJars/jtools.jar ${devhome}/Foundation/jar/ReportingJars/jzlib.jar ${devhome}/Foundation/jar/ReportingJars/keycodeDecoder.jar ${devhome}/Foundation/jar/ReportingJars/logging.jar ${devhome}/Foundation/jar/ReportingJars/MetafileRenderer.jar ${devhome}/Foundation/jar/ReportingJars/PlatformServices_en.jar ${devhome}/Foundation/jar/ReportingJars/pluginhelper.jar ${devhome}/Foundation/jar/ReportingJars/procJavaAdapter.jar ${devhome}/Foundation/jar/ReportingJars/procWebiPublishing.jar ${devhome}/Foundation/jar/ReportingJars/pub_common.jar ${devhome}/Foundation/jar/ReportingJars/ras21core.jar ${devhome}/Foundation/jar/ReportingJars/ras21proc.jar ${devhome}/Foundation/jar/ReportingJars/rasapp.jar ${devhome}/Foundation/jar/ReportingJars/rascore.jar ${devhome}/Foundation/jar/ReportingJars/rebean.common.jar ${devhome}/Foundation/jar/ReportingJars/rebean.fc.jar ${devhome}/Foundation/jar/ReportingJars/rebean.jar ${devhome}/Foundation/jar/ReportingJars/rebean.wi.jar ${devhome}/Foundation/jar/ReportingJars/REDynamicRecipients.jar ${devhome}/Foundation/jar/ReportingJars/repo_bridge.jar ${devhome}/Foundation/jar/ReportingJars/repo_proxy.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="xpedxreportingjars"/>
-			<arg value="1.0"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/ReportingJars/ReportPrinter.jar ${devhome}/Foundation/jar/ReportingJars/reporttemplate.jar ${devhome}/Foundation/jar/ReportingJars/ReportViewer.jar ${devhome}/Foundation/jar/ReportingJars/rpoifs.jar ${devhome}/Foundation/jar/ReportingJars/secSAPR3.jar ${devhome}/Foundation/jar/ReportingJars/serialization.jar ${devhome}/Foundation/jar/ReportingJars/sit.jar ${devhome}/Foundation/jar/ReportingJars/SL_plugins.jar ${devhome}/Foundation/jar/ReportingJars/sslj.jar ${devhome}/Foundation/jar/ReportingJars/standard.jar ${devhome}/Foundation/jar/ReportingJars/stax-api-1.0.1.jar ${devhome}/Foundation/jar/ReportingJars/struts.jar ${devhome}/Foundation/jar/ReportingJars/updatefrs.jar ${devhome}/Foundation/jar/ReportingJars/URIUtil.jar ${devhome}/Foundation/jar/ReportingJars/webapp_en.jar ${devhome}/Foundation/jar/ReportingJars/webapp.jar ${devhome}/Foundation/jar/ReportingJars/WebiServerPerf_idl.jar ${devhome}/Foundation/jar/ReportingJars/WebiServerPerfProxies.jar ${devhome}/Foundation/jar/ReportingJars/webreporting.jar ${devhome}/Foundation/jar/ReportingJars/webreporting-jsf.jar ${devhome}/Foundation/jar/ReportingJars/webutil_en.jar ${devhome}/Foundation/jar/ReportingJars/webutil.jar ${devhome}/Foundation/jar/ReportingJars/wi_srvadmin.jar ${devhome}/Foundation/jar/ReportingJars/wilog.jar ${devhome}/Foundation/jar/ReportingJars/wstk_java.jar ${devhome}/Foundation/jar/ReportingJars/xcelsius.jar ${devhome}/Foundation/jar/ReportingJars/xpp3.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-	</target> -->
-	
-	<target name="deploy-extensions" description="Deploys extensions on MCF app">		
-	
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/dist/Foundation/${project.name}.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>					
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${wls.dir}/wlserver_10.3/server/lib/wlfullclient.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="AGENT"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axiom-api-1.2.8.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axiom-impl-1.2.8.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-adb-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-adb-codegen-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-kernel-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-saaj-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-spring-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-transport-http-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/axis2-transport-local-1.5.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/commons-httpclient-3.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/wsdl4j-1.6.2.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/xmlbeans-2.3.0.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/commons-codec-1.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/httpcore-4.0.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/neethi-2.0.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/XmlSchema-1.1.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<!--BEGIN: For Search Index multiple node copy -->
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/bcprov-jdk16-146.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/iText-2.1.5.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/commons-discovery-0.2.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
-			<arg value="${appserver.vendor}"/>
-			<arg value="10_3"/>
-			<arg value="-j"/>
-			<arg value="${devhome}/Foundation/jar/jaxrpc.jar"/>
-			<arg value="-targetJVM"/>
-			<arg value="EVERY"/>
-		</exec>
-		
-		
-		<!--END: For Search Index multiple node copy -->
-		
-		<exec executable="${env.INSTALL_DIR}/bin/${deployerCommand}" failonerror="true">
-			<arg value="-t"/>
-			<arg value="resourcejar"/>
-		</exec>
-
-		<exec executable="${env.INSTALL_DIR}/bin/${deployerCommand}" failonerror="true">
-			<arg value="-t"/>
-			<arg value="entitydeployer"/>
-		</exec> 
-	</target>
-	
-	<target name="cdt_import_setup" description="Deletes Previous Imported CDT XML Files" >
-	
-		<!-- Delete directories -->
-		<delete dir="${cdt.import.dir}" />
-
-		<!-- Re-create directories -->
-		<mkdir dir="${cdt.import.dir}" />
-
-		<!-- now get them from master config -->
-		<unzip src="${cdt.master.config.zip.file}" dest="${cdt.import.dir}"/>
-	</target>
-	
-	<target name="cdt_export_setup" description="Deletes Previous Exported CDT XML Files" >
-		
-		<!-- Delete directories -->
-		<delete dir="${cdt.export.dir}" />
-
-		<!-- Re-create directories -->
-		<mkdir dir="${cdt.export.dir}" />
-
-	</target>
-	
-	<target name="cdt_import" depends="cdt_import_setup" description="Imports the CDT XML files Dev Instance">
-
-		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
-			<arg value="${cdt.file.db.import}" />
-			<arg value="${cdt.file.db.import.password}"/>
-			<arg value="${cdt.dev.db}"/>
-			<arg value="${cdt.dev.db.password}"/>							  
-		</exec>
-		
-	</target>
-	
-	<target name="cdt_export" depends="cdt_export_setup" description="Exports the Master Config as CDT XML Files">
-
-		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
-			<arg value="${cdt.mc.db}" />
-			<arg value="${cdt.mc.db.password}"/>
-			<arg value="${cdt.file.db.export}"/>	
-			<arg value="${cdt.file.db.export.password}"/>
-		</exec>
-		
-		<!-- Delete directories -->
-		<delete dir="${cdt.master.config.zip.dir}" />
-
-		<!-- Re-create directories -->
-		<mkdir dir="${cdt.master.config.zip.dir}" />
-		
-		<!-- create a new master config zip -->
-		<zip destfile="${cdt.master.config.zip.file}" basedir="${cdt.export.dir}" excludes="cdt_metadata.xml" whenempty="create"/>
-		
-	</target>
-	
-	<target name="build-apps" description="Builds Either EAR or WAR file based on the Choice">
-		<antcall target="build-ear" />
-		<antcall target="build-war" />
-	</target>
-	
-	<target name="build-ear" description="Builds EAR file for deployment" unless="build.war">		
-	
-		<exec executable="${env.INSTALL_DIR}/bin/${buildEarCommand}">
-			<arg value="-Dappserver=${appserver.vendor}"/>
-			<arg value="-Dwarfiles=smcfs,sbc"/>
-			<arg value="-Dearfile=smcfs.ear"/>
-			<arg value="-Dnodocear=true"/>
-			<arg value="-Ddevmode=true"/>							  
-			<!--<arg value="-Dnowebservice=true"/>-->
-			<arg value="create-ear"/>							  
-		</exec>
-		
-	</target>
-	
-	<target name="build-war" description="Builds WAR file for deployment" if="build.war">	
-	
-		<exec executable="${env.INSTALL_DIR}/bin/${buildWarCommand}">
-			<arg value="-Dappserver=${appserver.vendor}"/>
-			<arg value="-Dwarfiles=smcfs,sbc"/>
-			<arg value="-Dnodocear=true"/>
-			<arg value="-Ddevmode=true"/>							  
-			<!--<arg value="-Dnowebservice=true"/>-->
-		</exec>
-		
-	</target>
-	
-	<target name="deploy-ear">
-		
-		<delete dir="${wls.deploy.dir}" />
-		<mkdir dir="${wls.deploy.dir}"/>
-		
-		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.ear" todir="${wls.deploy.dir}" /> 
-		
-	</target>	
-	
-	<target name="deploy-war">
-		
-		<delete dir="${wls.deploy.dir}" />
-		<mkdir dir="${wls.deploy.dir}"/>
-		
-		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.war" todir="${wls.deploy.dir}" /> 
-		<copy file="${env.INSTALL_DIR}/external_deployments/sbc.war" todir="${wls.deploy.dir}" /> 
-		
-	</target>
-	
-	<target name="deploy-ear-exploded">
-		
-		<delete dir="${wls.deploy.dir}" />
-		<mkdir dir="${wls.deploy.dir}"/>
-		
-		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.ear" todir="${wls.deploy.dir}" /> 
-		
-		<unzip src="${wls.deploy.dir}/smcfs.ear" dest="${wls.deploy.dir}/smcfs"/>
-		
-		<delete file="${wls.deploy.dir}/smcfs.ear" />
-		
-	</target>	
-	
-	<target name="deploy-war-exploded">
-	
-		<delete dir="${wls.deploy.dir}" />
-		<mkdir dir="${wls.deploy.dir}"/>
-		
-		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.war" todir="${wls.deploy.dir}" /> 
-		<copy file="${env.INSTALL_DIR}/external_deployments/sbc.war" todir="${wls.deploy.dir}" /> 
-		
-		<unzip src="${wls.deploy.dir}/smcfs.war" dest="${wls.deploy.dir}/smcfs"/>
-		<unzip src="${wls.deploy.dir}/sbc.war" dest="${wls.deploy.dir}/sbc"/>
-		
-		<delete file="${wls.deploy.dir}/smcfs.war" />
-		<delete file="${wls.deploy.dir}/sbc.war" />
-		
-	</target>
-	
-	<target name="convertEARtoWAR">
-		 <unzip src="${earpath}/${earname}.ear" dest="${tempdir}/ear-tmp"/>
-		 <zip update="true" destfile="${tempdir}/ear-tmp/${earname}.war" >
-			 <zipfileset dir="${tempdir}/ear-tmp" includes="*.jar" prefix="WEB-INF/lib"/>
-		 </zip>
-		 <copy todir="${smcfs_war_folder}" file="${tempdir}/ear-tmp/${warname_smcfs}.war" overwrite="true"/>
-		 <delete dir="${tempdir}"/>
-		 <!--<delete dir="${smcfs_war_folder_exploded}"/>-->
-		 <!--<mkdir dir="${smcfs_war_folder_exploded}"/>-->
-		 <unzip src="${smcfs_war_folder}/${warname_smcfs}.war" dest="${smcfs_war_folder_exploded}" overwrite="true"/>
-		 <delete dir="${smcfs_war_folder}"/>
-	 </target>
-	 	 	
-	<target name="make-release">
-	
-		<delete dir="${Xpedx.release.dir}/apps"/>
-		<mkdir dir="${Xpedx.release.dir}/apps" />
-		
-		<copy todir="${Xpedx.release.dir}/apps">
-			<fileset dir="${env.INSTALL_DIR}/external_deployments"/>
-		</copy>
-		
-		<delete dir="${Xpedx.release.dir}/com"/>
-		<mkdir dir="${Xpedx.release.dir}/com" />
-		<copy file="${env.INSTALL_DIR}/rcpdrop/windows/${com.version}/com.zip" todir="${Xpedx.release.dir}/com" /> 
-		
-		<delete dir="${Xpedx.release.dir}/temp"/>
-		<mkdir dir="${Xpedx.release.dir}/temp" />
-		
-		<mkdir dir="${Xpedx.release.dir}/temp/Foundation" />
-		<copy todir="${Xpedx.release.dir}/temp/Foundation">
-			<fileset dir="${devhome}/Foundation"/>
-		</copy>
-		
-		<mkdir dir="${Xpedx.release.dir}/temp/src" />
-		<copy todir="${Xpedx.release.dir}/temp/src">
-			<fileset dir="${devhome}/src"/>
-		</copy>
-		
-		<mkdir dir="${Xpedx.release.dir}/temp/PCAExtensions" />
-		<copy todir="${Xpedx.release.dir}/temp/PCAExtensions">
-			<fileset dir="${devhome}/PCAExtensions"/>
-		</copy>
-		
-		<delete file="${Xpedx.release.dir}/${Xpedx.release.dir}/${project.name}_V_${release.version}.zip"/>
-		
-		<copy file="${devhome}/dist/version.txt" todir="${Xpedx.release.dir}/temp"/>
-		
-		<zip destfile="${Xpedx.release.dir}/${project.name}_V_${release.version}.zip" basedir="${Xpedx.release.dir}/temp" >
-			<exclude name="**/CVS" />
-			<exclude name="**/dummy.txt" />
-		</zip>
-		
-		<delete dir="${Xpedx.release.dir}/temp"/>
-		
-	</target>
-	
-	<target name="make-release_old">
-		
-		<delete dir="${release.dir}"/>
-		
-		<mkdir dir="${release.dir}" />
-		<mkdir dir="${release.dir}/temp" />
-		<mkdir dir="${release.dir}/temp/Foundation" />
-		<mkdir dir="${release.dir}/temp/Foundation/src" />
-		<!--mkdir dir="${release.dir}/temp/Foundation/repository" /-->
-		<!--mkdir dir="${release.dir}/temp/Foundation/resources" /-->
-		<mkdir dir="${release.dir}/temp/Foundation/extensions" />
-		<mkdir dir="${release.dir}/temp/Foundation/properties" />
-		<!--<mkdir dir="${release.dir}/temp/Foundation/jar" />-->
-
-		<copy todir="${release.dir}/temp/Foundation/src/com">
-			<fileset dir="${devhome}/Foundation/src/com">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-			</fileset>
-		</copy>
-                
-               
-		<copy todir="${release.dir}/temp/Foundation/repository">
-			<fileset dir="${devhome}/Foundation/repository">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-			</fileset>
-		</copy>
-<!--
-        <copy todir="${release.dir}/temp/Foundation/resources">
-			<fileset dir="${devhome}/Foundation/resources">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-			</fileset>
-		</copy-->
-<!--
-        <copy todir="${release.dir}/temp/Foundation/jar">
-			<fileset dir="${devhome}/Foundation/jar">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-				<exclude name="**/checkstyle.xsl" />
-				<exclude name="**/com.atlassw.tools.eclipse.checkstyle_4.4.2-bin.zip" />
-			</fileset>
-		</copy>-->
-
-        <copy todir="${release.dir}/temp/Foundation/extensions">
-			<fileset dir="${devhome}/Foundation/extensions">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-			</fileset>
-		</copy>
-		
-		<!--copy todir="${release.dir}/temp/Foundation/global">
-			<fileset dir="${devhome}/Foundation/global">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-			</fileset>
-		</copy-->
-		
-		<copy todir="${release.dir}/temp/Foundation/properties">
-			<fileset dir="${devhome}/Foundation/properties">
-				<exclude name="**/CVS" />
-				<exclude name="**/dummy.txt" />
-			</fileset>
-		</copy>
-		
-		<copy file="${devhome}/dist/version.txt" todir="${release.dir}/temp"/>
-		
-		<zip destfile="${release.dir}/${project.name}_CODE_${release.version}.zip" basedir="${release.dir}/temp" >
-			<exclude name="**/CVS" />
-			<exclude name="**/dummy.txt" />
-		</zip>
-
-	</target>
-	
-	<path id="pca.class.path">
-			<fileset dir="${env.INSTALL_DIR}/rcp/COM/9.0/platform/rcpclient" includes="**/*.jar"/>	
-		    <fileset dir="${env.INSTALL_DIR}/rcp/COM/9.0/platform/rcpdependencies/windows/eclipse/plugins" includes="**/*.jar"/>	
-	</path>
-	
-	<!-- Build PCA. -->
-	<target name="build-pca">
-		<!-- 2/07/2013
-		ML: added 2 copy lines below to allow for including changes in locations.ycfs and the rcp properties file in any new com build. 
-		
-		-->
-		<copy file="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
-		<copy file="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
-
-		<antcall target="PrepareLocationsFile-comini" />
-		<antcall target="prepare-rcp-extn-folder" />
-		<antcall target="jar-plugin-clients" />
-		<antcall target="refresh-custom-plugins"/>
-		<antcall target="buildCOMForWindows"/>
-		<!-- 11/11/2011
-		Updated by MLamriben
-		added automatic updates section to :
-		a- Clean the old zip file in the Update Directory
-		b- Unzip the new com.zip file in the Update Directory
-		-->
-		<antcall target="AutomaticUpdates"/>
-		
-	</target>
-	
-	<!-- 09/23/2011
-	Updated by MLamriben
-	Added locations.ycfg to the com.zip file (see includes). The appropriate locations.ycfg is determined by the build target above (choose_customer_overrides)	
-	-->
-	<target name="PrepareLocationsFile-comini">
-		<zip 
-			destfile="${env.INSTALL_DIR}/rcp/COM/9.0/COM/rcpclient/windows/com.zip"
-			basedir="${devhome}/COMSupportFiles"
-			includes="com.ini"
-			update="true" >
-			<!-- Place the locations.ycfg in the appropriate directory (plugins/com.yantra.yfc.rcp_1.0.0)-->
-			<zipfileset dir="${devhome}/COMSupportFiles" includes="locations.ycfg" fullpath="plugins/com.yantra.yfc.rcp_1.0.0/locations.ycfg"/>
-		</zip>				
-	</target>
-
-	<target name="AutomaticUpdates">
-		<!-- 11/11/2011
-		Updated by MLamriben
-		added automatic updates section to :
-		a- Clean the old zip file and all files in the Update Directory
-		b- Unzip the new com.zip file in the Update Directory
-		-->
-		 <delete includeemptydirs="true">
-		    <fileset dir="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86" includes="**/*"/>
-		 </delete>		
-		
-		<copy file="${env.INSTALL_DIR}/rcpdrop/windows/9.0/com.zip" todir="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86" /> 
-		
-		<unzip src="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86/com.zip" dest="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86"/>
-				
-	</target>
-	
-	<!-- deletes and creates destination rcpdrop folder -->
-	<target name="prepare-rcp-extn-folder">
-		<delete dir="${devhome}/dist/rcpdrop" />
-		<mkdir dir="${devhome}/dist/rcpdrop/plugins" />
-		<mkdir dir="${devhome}/dist/rcpdrop/truststore" />
-		<mkdir dir="${devhome}/dist/rcpdrop/resources" />
-		<!--
-		<copy todir="${devhome}/dist/rcpdrop/truststore">
-			<fileset dir="${pca.extn.folder}/truststore">
-				<exclude name="**/CVS/**"/>
-			</fileset>
-		</copy>
-		
-		<copy todir="${devhome}/dist/rcpdrop/resources">
-			<fileset dir="${pca.extn.folder}/resources">
-				<exclude name="**/CVS/**"/>
-			</fileset>
-		</copy>
-		-->
-	</target>
-	
-	<target name="jar-plugin-clients"  description="Compile client java code and builds jar." >
-		<echo>Compiling classes</echo>
-		<macro-build-pca-classes pluginid="${pca.custom.plugin.id}"/>
-		<echo message="${pca.custom.plugin.id} plugin classes are built."/>
-		<macro-jar-pca-client pluginid="${pca.custom.plugin.id}" version="${pca.custom.plugin.version}"/>
-		<echo message="${pca.custom.plugin.id}_${pca.custom.plugin.version}.jar is built."/>
-	</target>
-	
-	<!--This target copies the custom plugin jars to the Foundation RCP_EXTN_FOLDER.-->
-	<target name="refresh-custom-plugins">
-	
-		<delete dir="${env.INSTALL_DIR}/rcpextnworkarea/plugins"/>
-		<mkdir dir="${env.INSTALL_DIR}/rcpextnworkarea/plugins"/>
-		<copy todir="${env.INSTALL_DIR}/rcpextnworkarea/plugins">
-			<fileset dir="${devhome}/dist/rcpdrop/plugins">
-				<exclude name="**/CVS/**"/>
-				<include name="**/*.jar"/>
-			</fileset>
-		</copy>
-	</target>
-	
-	<!-- = = = = = = = = = = = = = = = = =
-          macrodef: macro-build-pca-classes
-          Compiles the PCA client side code and jars the class files
-         = = = = = = = = = = = = = = = = = -->
-    <macrodef name="macro-build-pca-classes">
-        <attribute name="pluginid" />
-    	<sequential>
-    		<delete dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}"/>
-   			<mkdir dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}"/>    		
-    		<javac srcdir="${pca.extn.folder}/plugins/@{pluginid}" 
-    				destdir="${devhome}/dist/rcpdrop/plugins/@{pluginid}" executable="${env.JAVA_HOME}/bin/javac" fork="true">
-    			<classpath refid="pca.class.path" />
-    		</javac>
-    	</sequential>
-    </macrodef>
-
-	<!-- = = = = = = = = = = = = = = = = =
-          macrodef: macro-jar-pca-client
-          Builds the final Jar file containing the PCA client
-         = = = = = = = = = = = = = = = = = -->
-    <macrodef name="macro-jar-pca-client">
-        <attribute name="pluginid" />
-    	<attribute name="version" />
-    	<sequential>
-    		<copy file="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF" tofile="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release"/>
-    		<replace file="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release" token="Bundle-Version: 1.0.0" value="Bundle-Version: @{version}"/>
-    		<jar destfile="${devhome}/dist/rcpdrop/plugins/@{pluginid}_@{version}.jar"
-    			manifest="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release">
-    			<fileset dir="${pca.extn.folder}/plugins/@{pluginid}" >
-    		 		<include name="resources/**"/>
-					<include name="schema/**"/>
-					<include name="icons/**"/>
-    		 		<include name="*.ythm"/>
-    		 		<include name="*.ycfg"/>
-    				<include name="*.ywx"/>
-    		 		<include name="*.yuix"/>
-    		 		<include name="**/*.ycml"/>
-					<include name="**/*.xml"/>
-    		 		<include name="*.properties"/>
-    		 		<include name="*.xml"/>
-    		 	</fileset>
-    			<fileset dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}" >
-    		 		<include name="**"/>
-    		 	</fileset>
-    	 	</jar>
-    		<delete file="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release"/>
-    		<delete dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}"/>
-    	</sequential>
-    </macrodef>
+<?xml version="1.0" ?>
+<project name="Build Script For xpedx_smcfs" default="all" basedir=".">
+
+    <property file="Xpedxsmcfsbuild.properties"/>
+	<property environment="env"/>
+
+	<import file="${env.INSTALL_DIR}/bin/buildcomapplication.xml"/>
+	
+	<path id="implementation.class.path">
+			
+		<fileset dir="${env.INSTALL_DIR}/jar/smcfs/9.0">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/commons_digester/1_8">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/platform_afc/5_5">
+			<include name="**/*.jar"/>
+		</fileset>
+
+		<fileset dir="${env.INSTALL_DIR}/jar/platform_uifwk">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/platform/5_5">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/log4j/1_2_15">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/repository/eardata/platform/war/yfscommon">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/platform_afc_ui_impl/5_5">
+			<include name="**/*.jar"/>
+		</fileset>	
+
+
+		<fileset dir="${env.INSTALL_DIR}/jar/scecore/9.0">
+			<include name="**/*.jar"/>
+		</fileset>			
+		
+	
+		<fileset dir="${env.INSTALL_DIR}/jar">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${wls.dir}/wlserver_10.3/server/lib">
+			<include name="wlfullclient.jar"/>
+		</fileset>
+		
+		<fileset dir="${devhome}/Foundation/jar">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/commons_collections/3_2">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/COM_Add-in/9.0_9.0">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<!--BEGIN: For Search Index multiple node copy -->
+		<fileset dir="${env.INSTALL_DIR}/jar/commons_io/1_4">
+			<include name="*.jar"/>
+		</fileset>
+		<!--END: For Search Index multiple node copy -->
+	</path>
+
+	<path id="project.class.path">
+		<path refid="implementation.class.path" />
+	</path>
+
+	<target name="smcfsBuildWithoutCVSFetch"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithoutCVSFetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
+	
+	<target name="smcfsBuildWithCVSFetch"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, RunDosToUnixCleanup, build-jars, copy-files, deploy-extensions, build-ear, build-pca, RunDBVerify" description="Executes some of the targets"/>
+	
+	<target name="allButCDT"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
+
+	<target name="all"  depends="delete_SWCCustJAR, cleanFor_smcfsBuildWithCVSFetch, cvs-fetch, choose-customer_overrides, backup_EFrameSQLFiles, build-jars, RunDosToUnixCleanup, copy-files, deploy-extensions, cdt_export, cdt_import, build-apps, build-pca, RunDBVerify, make-release" description="Performs complete build tasks"/>
+	
+	<target name="test" depends="backup_EFrameSQLFiles"/>
+	
+	<target name="validate-buildEnv" description="Validates if the build Env is one of {local, dev, staging, prod}">
+		<!-- Winston 6/22/11 - Updated -->
+		<!-- Changed the script by commenting out the input portion of this target. -->
+		<!-- Ths input should be passed by command line parameter to define the environment -->
+		<!-- e.g. -Dbuild.env=dev -->
+		<!-- input message="Please Enter the Target Build Environment:" validargs="local,dev,staging,prod" addproperty="build.env" / -->
+		<condition property="Is_build.env_Set" value="true">
+			<or>
+				<equals arg1="${build.env}" arg2="local" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="dev" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="staging" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />								<equals arg1="${build.env}" arg2="integration" casesensitive="true" />				
+			</or>
+		</condition>
+		<echo message="build.env: ${build.env}"/>
+		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
+		<fail unless="Is_build.env_Set" message="Invalid Build Environment[${build.env}]! Please enter one of these values(casesensitive) - {local, dev, staging, prod} and Restart build Again." />
+	</target>
+	
+	<target name="choose-customer_overrides" description="Renames customer_overrides.properties and cacheoverrides.xml file based on the Build Environment">
+		<!-- Winston 6/22/11 - Updated -->
+		<!-- Changed the script by commenting out the input portion of this target. -->
+		<!-- Ths input should be passed by command line parameter to define the environment -->
+		<!-- e.g. -Dbuild.env=dev -->
+		<!-- input message="Please Enter the Target Build Environment:" validargs="local,dev,staging,prod" addproperty="build.env" / -->
+		<condition property="Is_build.env_Set" value="true">
+			<or>
+				<equals arg1="${build.env}" arg2="local" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="dev" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="staging" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prodsupport" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="prod" casesensitive="true" />
+				<equals arg1="${build.env}" arg2="sandbox1" casesensitive="true" />								<equals arg1="${build.env}" arg2="integration" casesensitive="true" />
+			</or>
+		</condition>
+		<echo message="build.env: ${build.env}"/>
+		<echo message="IsBuildEnvSet: ${Is_build.env_Set}"/>
+		<fail unless="Is_build.env_Set" message="Invalid Build Environment - ${build.env}!. Please set build.env property to one of these casesensitive values - {local, dev, staging, prod} and Restart build Again!" />
+		<copy file="${cvs.fetch.dir}/smcfs/dev/Foundation/properties/customer_overrides_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/Foundation/properties/customer_overrides.properties" verbose="true" overwrite="true"/>		<!-- 04/18/2013-ML		added xpedx_reporting.properties to the list of overrides-->		<copy file="${cvs.fetch.dir}/smcfs/dev/Foundation/properties/xpedx_reporting_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/Foundation/properties/xpedx_reporting.properties" verbose="true" overwrite="true"/>		
+		<!-- ML 08/29/2011 Copy the appropriate cacheoverrides.xml to the resources directory . 
+		Note that there is another task (copy-files) below that copies all the files in the  ${cvs.fetch.dir}/smcfs/dev/Foundation/resources directory into the installdir/resources folder. /-->
+		<copy file="${cvs.fetch.dir}/smcfs/dev/Foundation/resources/cacheoverride_${build.env}.xml" tofile="${cvs.fetch.dir}/smcfs/dev/Foundation/resources/cacheoverride.xml" verbose="true" overwrite="true"/>
+		<!-- 
+		ML 09-23-2011
+		Added support for individual locations.ycfg files per environment. This copy task below chooses the appropriate locations.ycfg file based on the environment the build is executed on, and then saves it as plain "locations.ycfg".
+		The PrepareLocationsFile-comini target below then uses the locations.ycfg to include it in the final zip file. 
+		-->
+		<copy file="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
+		
+       <copy file="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
+		
+	</target>
+
+	<target name="RunDosToUnixCleanup" description="Executes the dostounix shell script to cleanup dos paths. ">
+		<!-- Mahmoud 8/18/11 created 
+		processes the /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions and cleans up dos directory paths.
+		-->
+		<echo message="executing RunDOsToUnixCleanup target against /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions directory..." />
+		<!-- Since the recur_dos2unix.sh script is copied from the /dev/build directory from the cvs source, and since the /xpedx/sci_build/smcfs/smcfs is recreated after each build
+		we need to grant exec rights to the script each time the build is done. The rights are granted as part of the buildsmcfs.sh script.
+		--> 
+		<exec dir="/xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions/" executable="recur_dos2unix.sh"></exec> 
+		
+		<echo message="completed RunDOsToUnixCleanup target against /xpedx/sci_build/smcfs/smcfs/dev/PCAExtensions directory..." />
+	</target>
+	
+	<target name="backup_EFrameSQLFiles" description="Backs up the EFrame SQL files from the previous build to the backup directory.">
+		<!-- Mahmoud 8/18/11 created -->
+		<echo message="executing backup_EFrameSQLFiles ant target ..." />
+		<tstamp>
+		      <format property="buildtimestamp" pattern="MM-dd-yyyy" />
+		</tstamp>
+	 
+		<echo message="creating directory /xpedx/backup/deployments/" />			
+		<!-- make backup directory if not exist-->
+		<mkdir dir="/xpedx/backup/deployments"/>
+		<echo message="creating directory /xpedx/backup/deployments/EFrame_SQL_Updates" />
+		<mkdir dir="/xpedx/backup/deployments/EFrame_SQL_Updates"/>
+		<echo message="creating directory /xpedx/backup/deployments/EFrame_SQL_Updates/${buildtimestamp}" />		
+		<mkdir dir="/xpedx/backup/deployments/EFrame_SQL_Updates/${buildtimestamp}"/>
+		<!-- copy all the .sql files to the new backup dir-->	
+				
+		<copy todir="/xpedx/backup/deployments/EFrame_SQL_Updates/${buildtimestamp}">
+		    <fileset dir="/xpedx/sterling/Foundation/bin/">
+		      <include name="*.sql"/>
+		    </fileset>
+		</copy> 
+		<echo message="completed backup_EFrameSQLFiles ant target ..." />
+	</target>
+
+	<target name="RunDBVerify" description="Executes the dbverify shell script to extract out SQL updates from the build. ">
+		<!-- Mahmoud 8/18/11 created 
+		This target extracts out the sql updates from the database so they can be handed out to DB services to execute.
+		-->
+		<echo message="executing dbverify ant target ..." />
+		<exec dir="/xpedx/sterling/Foundation/bin/" executable="dbverify.sh"></exec> 
+		<echo message="completed dbverify ant target ..." />
+	</target>
+	
+	<!-- Deletes swc_cust.jar from two directories as SBC was not coming up because of them. This target should be removed once a permanent fix is provided -->
+	<target name="delete_SWCCustJAR" description="Temporary fix provided to solve SBC logging issue. To be removed once a permanent fix is made">
+        <delete file="${env.INSTALL_DIR}/jar/swc_cust/1_0/swc_cust.jar" />
+		<delete file="${env.INSTALL_DIR}/installed_data/swc/jars/swc_cust/1_0/swc_cust.jar" />
+	</target>
+	<!-- Cleans the custom code in INSTALL_DIR -->
+	<target name="cleanFor_smcfsBuildWithoutCVSFetch" description="Deletes directories" >
+		
+		<!-- Delete directories -->
+		<delete dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
+		<delete dir="${env.INSTALL_DIR}/extensions/global" />		
+	    <!--delete dir="${devhome}"/ -->
+
+		<!-- Re-create directories -->
+		<mkdir dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
+		<!--mkdir dir="${devhome}"/ -->
+		<!--mkdir dir="${devhome}/dist" /-->
+	</target>
+	
+	<!-- Cleans the custom code in INSTALL_DIR -->
+	<target name="cleanFor_smcfsBuildWithCVSFetch" description="Prepares for Build" >
+		
+		<!-- Delete directories -->
+		<delete dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
+		<delete dir="${env.INSTALL_DIR}/extensions/global" />		
+	    <delete dir="${devhome}"/>
+
+		<!-- Re-create directories -->
+		<mkdir dir="${env.INSTALL_DIR}/repository/xapi/template/merged/xsl/extn" />
+		<mkdir dir="${devhome}"/>
+		<mkdir dir="${devhome}/dist" />
+	</target>
+	
+	<!-- Fetches the smcfs save the sale modules from CVS respository -->
+	<target name="cvs-fetch"  description="Fetches latest files from CVS">
+		<!-- First create the CVS fetch directory -->
+		<mkdir dir="${cvs.fetch.dir}"/>
+        <cvs cvsRoot=":pserver:${cvs.user}:${cvs.pass}@${cvs.server}:${cvs.root}" package="${cvs.module.name}" dest="${cvs.fetch.dir}"/> 
+	</target>   
+
+  	<target name="build-jars" description="Make Jar">
+		<!-- Compile the java source files -->
+        <delete dir="${devhome}/dist/Foundation/classes" />
+        <mkdir dir="${devhome}/dist/Foundation/classes" />
+		
+		<javac classpathref="project.class.path" destdir="${devhome}/dist/Foundation/classes" executable="${env.JAVA_HOME}/bin/javac" debug="on" debuglevel="lines,vars,source">
+			<src path="${devhome}/src">
+			
+			</src>
+        </javac>
+
+		<!-- Makes the project jar file -->
+		<!--Create version file -->    		
+        <tstamp>
+            <format property="NOW" pattern="EEE, MMMM dd yyyy hh:mm aa z" />
+        </tstamp>    	
+
+		<echo file="${devhome}/dist/version.txt">
+			Build Version: ${project.name} V ${release.version}
+			Build Date: ${NOW}
+		</echo>
+
+		<!--Copy the version.txt-->
+        <copy file="${devhome}/dist/version.txt" todir="${devhome}/dist/Foundation/classes"/>
+	
+        <jar destfile="${devhome}/dist/Foundation/${project.name}.jar" basedir="${devhome}/dist/Foundation/classes">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <section name="version-information">
+                    <attribute name="Version" value="${release.version}" />
+                    <attribute name="BuildDate" value="${NOW}" />
+                </section>
+			</manifest>
+        </jar>
+   	</target>
+
+	<target name="copy-files" description="Deploys the project files in the relevant folders of MCF Installation">
+
+		<!--Copy templates -->
+        <echo>Copy the project specific repository to repository folder of APP</echo>
+
+        <copy todir="${env.INSTALL_DIR}/repository/">
+			<fileset dir="${devhome}/Foundation/repository">
+				<exclude name="**/CVS" />
+			</fileset>
+		</copy>
+
+
+		<!--Copy resources-->
+        <echo>Copy the project specific resources to resources folder of APP</echo>
+
+        <copy todir="${env.INSTALL_DIR}/resources/">
+			<fileset dir="${devhome}/Foundation/resources">
+				<exclude name="**/CVS" />
+			</fileset>
+		</copy>
+
+		<!--Copy properties-->
+        <echo>Copy the project specific properties to properties folder of APP</echo>
+
+		<copy todir="${env.INSTALL_DIR}/properties/" overwrite="true">
+			<fileset dir="${devhome}/Foundation/properties">
+				<exclude name="**/CVS" />
+			</fileset>
+		</copy> 
+
+		<!--Copy extensions-->
+        <echo>Copy the project specific extensions to extensions folder of APP</echo>
+
+		<copy todir="${env.INSTALL_DIR}/extensions/" overwrite="true">
+			<fileset dir="${devhome}/Foundation/extensions">
+				<exclude name="**/test.txt" />
+			</fileset>
+		</copy>
+		
+		<!--SetuFiles-->
+		
+		<antcall target="setup-files"/>
+		
+	</target>
+	
+	<target name="setup-files" description="Call Setup files to update the files">
+	            <exec executable="./XpedxSetupfiles.sh">
+	            </exec>
+	</target>
+	
+	
+	<!-- <target name="install3rdparty" description="Installs all required 3rd party jars" depends="cvs-fetch">
+
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="xpedxreportingjars"/>
+			<arg value="1.0"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/ReportingJars/activation-1.1.jar ${devhome}/Foundation/jar/ReportingJars/adv_ivcdzview.jar ${devhome}/Foundation/jar/ReportingJars/AnalyticalReporting_en.jar ${devhome}/Foundation/jar/ReportingJars/AnalyticalReporting.jar ${devhome}/Foundation/jar/ReportingJars/asn1.jar ${devhome}/Foundation/jar/ReportingJars/biarengine.jar ${devhome}/Foundation/jar/ReportingJars/biplugins.jar ${devhome}/Foundation/jar/ReportingJars/boconfig.jar ${devhome}/Foundation/jar/ReportingJars/cafinstall.jar ${devhome}/Foundation/jar/ReportingJars/cdzlet.jar ${devhome}/Foundation/jar/ReportingJars/cecore.jar ${devhome}/Foundation/jar/ReportingJars/celib.jar ${devhome}/Foundation/jar/ReportingJars/ceplugins_client.jar ${devhome}/Foundation/jar/ReportingJars/ceplugins_core.jar ${devhome}/Foundation/jar/ReportingJars/ceplugins_cr.jar ${devhome}/Foundation/jar/ReportingJars/cereports.jar ${devhome}/Foundation/jar/ReportingJars/certj.jar ${devhome}/Foundation/jar/ReportingJars/cesdk.jar ${devhome}/Foundation/jar/ReportingJars/cesearch.jar ${devhome}/Foundation/jar/ReportingJars/cesession.jar ${devhome}/Foundation/jar/ReportingJars/cetaglib.jar ${devhome}/Foundation/jar/ReportingJars/ceutils.jar ${devhome}/Foundation/jar/ReportingJars/clientlogic.jar ${devhome}/Foundation/jar/ReportingJars/clientplugins.jar ${devhome}/Foundation/jar/ReportingJars/commons-configuration-1.2.jar ${devhome}/Foundation/jar/ReportingJars/commons-el.jar ${devhome}/Foundation/jar/ReportingJars/corbaidl.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJavabeansServer.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJavaServer.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJavaServerCommon.jar ${devhome}/Foundation/jar/ReportingJars/CRDBJDBCServer.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="xpedxreportingjars"/>
+			<arg value="1.0"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/ReportingJars/CRDBSForceServer.jar ${devhome}/Foundation/jar/ReportingJars/CRDBXMLServer.jar ${devhome}/Foundation/jar/ReportingJars/credential.jar ${devhome}/Foundation/jar/ReportingJars/crlov.jar ${devhome}/Foundation/jar/ReportingJars/crlovexternal.jar ${devhome}/Foundation/jar/ReportingJars/crlovmanifest.jar ${devhome}/Foundation/jar/ReportingJars/CrystalCommon2.jar ${devhome}/Foundation/jar/ReportingJars/cs_bridge.jar ${devhome}/Foundation/jar/ReportingJars/diagnosticTool.jar ${devhome}/Foundation/jar/ReportingJars/dsws-bicatalog.jar ${devhome}/Foundation/jar/ReportingJars/dsws-biplatform.jar ${devhome}/Foundation/jar/ReportingJars/dsws-common.jar ${devhome}/Foundation/jar/ReportingJars/dsws-federator.jar ${devhome}/Foundation/jar/ReportingJars/dsws-publish.jar ${devhome}/Foundation/jar/ReportingJars/dsws-queryservice.jar ${devhome}/Foundation/jar/ReportingJars/dsws-reportengine.jar ${devhome}/Foundation/jar/ReportingJars/dsws-session.jar ${devhome}/Foundation/jar/ReportingJars/ebus405.jar ${devhome}/Foundation/jar/ReportingJars/encrypt.jar ${devhome}/Foundation/jar/ReportingJars/explorer_jdbc_en.jar ${devhome}/Foundation/jar/ReportingJars/explorer_jdbc.jar ${devhome}/Foundation/jar/ReportingJars/explorer_jsf.jar ${devhome}/Foundation/jar/ReportingJars/explorer_model_sdk.jar ${devhome}/Foundation/jar/ReportingJars/explorer_model.jar ${devhome}/Foundation/jar/ReportingJars/explorer_res_en.jar ${devhome}/Foundation/jar/ReportingJars/flash.jar ${devhome}/Foundation/jar/ReportingJars/freessl201.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="xpedxreportingjars"/>
+			<arg value="1.0"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/ReportingJars/i18n4j.jar ${devhome}/Foundation/jar/ReportingJars/icu4j.jar ${devhome}/Foundation/jar/ReportingJars/JarDownloaderServlet.jar ${devhome}/Foundation/jar/ReportingJars/jdom-beta8.jar ${devhome}/Foundation/jar/ReportingJars/jsafe.jar ${devhome}/Foundation/jar/ReportingJars/jsf-api.jar ${devhome}/Foundation/jar/ReportingJars/jsf-impl.jar ${devhome}/Foundation/jar/ReportingJars/jstl.jar ${devhome}/Foundation/jar/ReportingJars/jtools.jar ${devhome}/Foundation/jar/ReportingJars/jzlib.jar ${devhome}/Foundation/jar/ReportingJars/keycodeDecoder.jar ${devhome}/Foundation/jar/ReportingJars/logging.jar ${devhome}/Foundation/jar/ReportingJars/MetafileRenderer.jar ${devhome}/Foundation/jar/ReportingJars/PlatformServices_en.jar ${devhome}/Foundation/jar/ReportingJars/pluginhelper.jar ${devhome}/Foundation/jar/ReportingJars/procJavaAdapter.jar ${devhome}/Foundation/jar/ReportingJars/procWebiPublishing.jar ${devhome}/Foundation/jar/ReportingJars/pub_common.jar ${devhome}/Foundation/jar/ReportingJars/ras21core.jar ${devhome}/Foundation/jar/ReportingJars/ras21proc.jar ${devhome}/Foundation/jar/ReportingJars/rasapp.jar ${devhome}/Foundation/jar/ReportingJars/rascore.jar ${devhome}/Foundation/jar/ReportingJars/rebean.common.jar ${devhome}/Foundation/jar/ReportingJars/rebean.fc.jar ${devhome}/Foundation/jar/ReportingJars/rebean.jar ${devhome}/Foundation/jar/ReportingJars/rebean.wi.jar ${devhome}/Foundation/jar/ReportingJars/REDynamicRecipients.jar ${devhome}/Foundation/jar/ReportingJars/repo_bridge.jar ${devhome}/Foundation/jar/ReportingJars/repo_proxy.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="xpedxreportingjars"/>
+			<arg value="1.0"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/ReportingJars/ReportPrinter.jar ${devhome}/Foundation/jar/ReportingJars/reporttemplate.jar ${devhome}/Foundation/jar/ReportingJars/ReportViewer.jar ${devhome}/Foundation/jar/ReportingJars/rpoifs.jar ${devhome}/Foundation/jar/ReportingJars/secSAPR3.jar ${devhome}/Foundation/jar/ReportingJars/serialization.jar ${devhome}/Foundation/jar/ReportingJars/sit.jar ${devhome}/Foundation/jar/ReportingJars/SL_plugins.jar ${devhome}/Foundation/jar/ReportingJars/sslj.jar ${devhome}/Foundation/jar/ReportingJars/standard.jar ${devhome}/Foundation/jar/ReportingJars/stax-api-1.0.1.jar ${devhome}/Foundation/jar/ReportingJars/struts.jar ${devhome}/Foundation/jar/ReportingJars/updatefrs.jar ${devhome}/Foundation/jar/ReportingJars/URIUtil.jar ${devhome}/Foundation/jar/ReportingJars/webapp_en.jar ${devhome}/Foundation/jar/ReportingJars/webapp.jar ${devhome}/Foundation/jar/ReportingJars/WebiServerPerf_idl.jar ${devhome}/Foundation/jar/ReportingJars/WebiServerPerfProxies.jar ${devhome}/Foundation/jar/ReportingJars/webreporting.jar ${devhome}/Foundation/jar/ReportingJars/webreporting-jsf.jar ${devhome}/Foundation/jar/ReportingJars/webutil_en.jar ${devhome}/Foundation/jar/ReportingJars/webutil.jar ${devhome}/Foundation/jar/ReportingJars/wi_srvadmin.jar ${devhome}/Foundation/jar/ReportingJars/wilog.jar ${devhome}/Foundation/jar/ReportingJars/wstk_java.jar ${devhome}/Foundation/jar/ReportingJars/xcelsius.jar ${devhome}/Foundation/jar/ReportingJars/xpp3.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+	</target> -->
+	
+	<target name="deploy-extensions" description="Deploys extensions on MCF app">		
+	
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/dist/Foundation/${project.name}.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>					
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${wls.dir}/wlserver_10.3/server/lib/wlfullclient.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="AGENT"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axiom-api-1.2.8.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axiom-impl-1.2.8.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-adb-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-adb-codegen-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-kernel-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-saaj-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-spring-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-transport-http-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/axis2-transport-local-1.5.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/commons-httpclient-3.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/wsdl4j-1.6.2.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/xmlbeans-2.3.0.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/commons-codec-1.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/httpcore-4.0.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/neethi-2.0.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/XmlSchema-1.1.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<!--BEGIN: For Search Index multiple node copy -->
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/bcprov-jdk16-146.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/iText-2.1.5.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/commons-discovery-0.2.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${install3rdPartyCommand}" failonerror="true">
+			<arg value="${appserver.vendor}"/>
+			<arg value="10_3"/>
+			<arg value="-j"/>
+			<arg value="${devhome}/Foundation/jar/jaxrpc.jar"/>
+			<arg value="-targetJVM"/>
+			<arg value="EVERY"/>
+		</exec>
+		
+		
+		<!--END: For Search Index multiple node copy -->
+		
+		<exec executable="${env.INSTALL_DIR}/bin/${deployerCommand}" failonerror="true">
+			<arg value="-t"/>
+			<arg value="resourcejar"/>
+		</exec>
+
+		<exec executable="${env.INSTALL_DIR}/bin/${deployerCommand}" failonerror="true">
+			<arg value="-t"/>
+			<arg value="entitydeployer"/>
+		</exec> 
+	</target>
+	
+	<target name="cdt_import_setup" description="Deletes Previous Imported CDT XML Files" >
+	
+		<!-- Delete directories -->
+		<delete dir="${cdt.import.dir}" />
+
+		<!-- Re-create directories -->
+		<mkdir dir="${cdt.import.dir}" />
+
+		<!-- now get them from master config -->
+		<unzip src="${cdt.master.config.zip.file}" dest="${cdt.import.dir}"/>
+	</target>
+	
+	<target name="cdt_export_setup" description="Deletes Previous Exported CDT XML Files" >
+		
+		<!-- Delete directories -->
+		<delete dir="${cdt.export.dir}" />
+
+		<!-- Re-create directories -->
+		<mkdir dir="${cdt.export.dir}" />
+
+	</target>
+	
+	<target name="cdt_import" depends="cdt_import_setup" description="Imports the CDT XML files Dev Instance">
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.file.db.import}" />
+			<arg value="${cdt.file.db.import.password}"/>
+			<arg value="${cdt.dev.db}"/>
+			<arg value="${cdt.dev.db.password}"/>							  
+		</exec>
+		
+	</target>
+	
+	<target name="cdt_export" depends="cdt_export_setup" description="Exports the Master Config as CDT XML Files">
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.mc.db}" />
+			<arg value="${cdt.mc.db.password}"/>
+			<arg value="${cdt.file.db.export}"/>	
+			<arg value="${cdt.file.db.export.password}"/>
+		</exec>
+		
+		<!-- Delete directories -->
+		<delete dir="${cdt.master.config.zip.dir}" />
+
+		<!-- Re-create directories -->
+		<mkdir dir="${cdt.master.config.zip.dir}" />
+		
+		<!-- create a new master config zip -->
+		<zip destfile="${cdt.master.config.zip.file}" basedir="${cdt.export.dir}" excludes="cdt_metadata.xml" whenempty="create"/>
+		
+	</target>
+	
+	<target name="build-apps" description="Builds Either EAR or WAR file based on the Choice">
+		<antcall target="build-ear" />
+		<antcall target="build-war" />
+	</target>
+	
+	<target name="build-ear" description="Builds EAR file for deployment" unless="build.war">		
+	
+		<exec executable="${env.INSTALL_DIR}/bin/${buildEarCommand}">
+			<arg value="-Dappserver=${appserver.vendor}"/>
+			<arg value="-Dwarfiles=smcfs,sbc"/>
+			<arg value="-Dearfile=smcfs.ear"/>
+			<arg value="-Dnodocear=true"/>
+			<arg value="-Ddevmode=true"/>							  
+			<!--<arg value="-Dnowebservice=true"/>-->
+			<arg value="create-ear"/>							  
+		</exec>
+		
+	</target>
+	
+	<target name="build-war" description="Builds WAR file for deployment" if="build.war">	
+	
+		<exec executable="${env.INSTALL_DIR}/bin/${buildWarCommand}">
+			<arg value="-Dappserver=${appserver.vendor}"/>
+			<arg value="-Dwarfiles=smcfs,sbc"/>
+			<arg value="-Dnodocear=true"/>
+			<arg value="-Ddevmode=true"/>							  
+			<!--<arg value="-Dnowebservice=true"/>-->
+		</exec>
+		
+	</target>
+	
+	<target name="deploy-ear">
+		
+		<delete dir="${wls.deploy.dir}" />
+		<mkdir dir="${wls.deploy.dir}"/>
+		
+		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.ear" todir="${wls.deploy.dir}" /> 
+		
+	</target>	
+	
+	<target name="deploy-war">
+		
+		<delete dir="${wls.deploy.dir}" />
+		<mkdir dir="${wls.deploy.dir}"/>
+		
+		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.war" todir="${wls.deploy.dir}" /> 
+		<copy file="${env.INSTALL_DIR}/external_deployments/sbc.war" todir="${wls.deploy.dir}" /> 
+		
+	</target>
+	
+	<target name="deploy-ear-exploded">
+		
+		<delete dir="${wls.deploy.dir}" />
+		<mkdir dir="${wls.deploy.dir}"/>
+		
+		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.ear" todir="${wls.deploy.dir}" /> 
+		
+		<unzip src="${wls.deploy.dir}/smcfs.ear" dest="${wls.deploy.dir}/smcfs"/>
+		
+		<delete file="${wls.deploy.dir}/smcfs.ear" />
+		
+	</target>	
+	
+	<target name="deploy-war-exploded">
+	
+		<delete dir="${wls.deploy.dir}" />
+		<mkdir dir="${wls.deploy.dir}"/>
+		
+		<copy file="${env.INSTALL_DIR}/external_deployments/smcfs.war" todir="${wls.deploy.dir}" /> 
+		<copy file="${env.INSTALL_DIR}/external_deployments/sbc.war" todir="${wls.deploy.dir}" /> 
+		
+		<unzip src="${wls.deploy.dir}/smcfs.war" dest="${wls.deploy.dir}/smcfs"/>
+		<unzip src="${wls.deploy.dir}/sbc.war" dest="${wls.deploy.dir}/sbc"/>
+		
+		<delete file="${wls.deploy.dir}/smcfs.war" />
+		<delete file="${wls.deploy.dir}/sbc.war" />
+		
+	</target>
+	
+	<target name="convertEARtoWAR">
+		 <unzip src="${earpath}/${earname}.ear" dest="${tempdir}/ear-tmp"/>
+		 <zip update="true" destfile="${tempdir}/ear-tmp/${earname}.war" >
+			 <zipfileset dir="${tempdir}/ear-tmp" includes="*.jar" prefix="WEB-INF/lib"/>
+		 </zip>
+		 <copy todir="${smcfs_war_folder}" file="${tempdir}/ear-tmp/${warname_smcfs}.war" overwrite="true"/>
+		 <delete dir="${tempdir}"/>
+		 <!--<delete dir="${smcfs_war_folder_exploded}"/>-->
+		 <!--<mkdir dir="${smcfs_war_folder_exploded}"/>-->
+		 <unzip src="${smcfs_war_folder}/${warname_smcfs}.war" dest="${smcfs_war_folder_exploded}" overwrite="true"/>
+		 <delete dir="${smcfs_war_folder}"/>
+	 </target>
+	 	 	
+	<target name="make-release">
+	
+		<delete dir="${Xpedx.release.dir}/apps"/>
+		<mkdir dir="${Xpedx.release.dir}/apps" />
+		
+		<copy todir="${Xpedx.release.dir}/apps">
+			<fileset dir="${env.INSTALL_DIR}/external_deployments"/>
+		</copy>
+		
+		<delete dir="${Xpedx.release.dir}/com"/>
+		<mkdir dir="${Xpedx.release.dir}/com" />
+		<copy file="${env.INSTALL_DIR}/rcpdrop/windows/${com.version}/com.zip" todir="${Xpedx.release.dir}/com" /> 
+		
+		<delete dir="${Xpedx.release.dir}/temp"/>
+		<mkdir dir="${Xpedx.release.dir}/temp" />
+		
+		<mkdir dir="${Xpedx.release.dir}/temp/Foundation" />
+		<copy todir="${Xpedx.release.dir}/temp/Foundation">
+			<fileset dir="${devhome}/Foundation"/>
+		</copy>
+		
+		<mkdir dir="${Xpedx.release.dir}/temp/src" />
+		<copy todir="${Xpedx.release.dir}/temp/src">
+			<fileset dir="${devhome}/src"/>
+		</copy>
+		
+		<mkdir dir="${Xpedx.release.dir}/temp/PCAExtensions" />
+		<copy todir="${Xpedx.release.dir}/temp/PCAExtensions">
+			<fileset dir="${devhome}/PCAExtensions"/>
+		</copy>
+		
+		<delete file="${Xpedx.release.dir}/${Xpedx.release.dir}/${project.name}_V_${release.version}.zip"/>
+		
+		<copy file="${devhome}/dist/version.txt" todir="${Xpedx.release.dir}/temp"/>
+		
+		<zip destfile="${Xpedx.release.dir}/${project.name}_V_${release.version}.zip" basedir="${Xpedx.release.dir}/temp" >
+			<exclude name="**/CVS" />
+			<exclude name="**/dummy.txt" />
+		</zip>
+		
+		<delete dir="${Xpedx.release.dir}/temp"/>
+		
+	</target>
+	
+	<target name="make-release_old">
+		
+		<delete dir="${release.dir}"/>
+		
+		<mkdir dir="${release.dir}" />
+		<mkdir dir="${release.dir}/temp" />
+		<mkdir dir="${release.dir}/temp/Foundation" />
+		<mkdir dir="${release.dir}/temp/Foundation/src" />
+		<!--mkdir dir="${release.dir}/temp/Foundation/repository" /-->
+		<!--mkdir dir="${release.dir}/temp/Foundation/resources" /-->
+		<mkdir dir="${release.dir}/temp/Foundation/extensions" />
+		<mkdir dir="${release.dir}/temp/Foundation/properties" />
+		<!--<mkdir dir="${release.dir}/temp/Foundation/jar" />-->
+
+		<copy todir="${release.dir}/temp/Foundation/src/com">
+			<fileset dir="${devhome}/Foundation/src/com">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+			</fileset>
+		</copy>
+                
+               
+		<copy todir="${release.dir}/temp/Foundation/repository">
+			<fileset dir="${devhome}/Foundation/repository">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+			</fileset>
+		</copy>
+<!--
+        <copy todir="${release.dir}/temp/Foundation/resources">
+			<fileset dir="${devhome}/Foundation/resources">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+			</fileset>
+		</copy-->
+<!--
+        <copy todir="${release.dir}/temp/Foundation/jar">
+			<fileset dir="${devhome}/Foundation/jar">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+				<exclude name="**/checkstyle.xsl" />
+				<exclude name="**/com.atlassw.tools.eclipse.checkstyle_4.4.2-bin.zip" />
+			</fileset>
+		</copy>-->
+
+        <copy todir="${release.dir}/temp/Foundation/extensions">
+			<fileset dir="${devhome}/Foundation/extensions">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+			</fileset>
+		</copy>
+		
+		<!--copy todir="${release.dir}/temp/Foundation/global">
+			<fileset dir="${devhome}/Foundation/global">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+			</fileset>
+		</copy-->
+		
+		<copy todir="${release.dir}/temp/Foundation/properties">
+			<fileset dir="${devhome}/Foundation/properties">
+				<exclude name="**/CVS" />
+				<exclude name="**/dummy.txt" />
+			</fileset>
+		</copy>
+		
+		<copy file="${devhome}/dist/version.txt" todir="${release.dir}/temp"/>
+		
+		<zip destfile="${release.dir}/${project.name}_CODE_${release.version}.zip" basedir="${release.dir}/temp" >
+			<exclude name="**/CVS" />
+			<exclude name="**/dummy.txt" />
+		</zip>
+
+	</target>
+	
+	<path id="pca.class.path">
+			<fileset dir="${env.INSTALL_DIR}/rcp/COM/9.0/platform/rcpclient" includes="**/*.jar"/>	
+		    <fileset dir="${env.INSTALL_DIR}/rcp/COM/9.0/platform/rcpdependencies/windows/eclipse/plugins" includes="**/*.jar"/>	
+	</path>
+	
+	<!-- Build PCA. -->
+	<target name="build-pca">
+		<!-- 2/07/2013
+		ML: added 2 copy lines below to allow for including changes in locations.ycfs and the rcp properties file in any new com build. 
+		
+		-->
+		<copy file="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/${build.env}-locations.ycfg" tofile="${cvs.fetch.dir}/smcfs/dev/COMSupportFiles/locations.ycfg" verbose="true" overwrite="true"/>
+		<copy file="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle_${build.env}.properties" tofile="${cvs.fetch.dir}/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/com.xpedx.sterling.rcp.pca_bundle.properties" verbose="true" overwrite="true"/>
+
+		<antcall target="PrepareLocationsFile-comini" />
+		<antcall target="prepare-rcp-extn-folder" />
+		<antcall target="jar-plugin-clients" />
+		<antcall target="refresh-custom-plugins"/>
+		<antcall target="buildCOMForWindows"/>
+		<!-- 11/11/2011
+		Updated by MLamriben
+		added automatic updates section to :
+		a- Clean the old zip file in the Update Directory
+		b- Unzip the new com.zip file in the Update Directory
+		-->
+		<antcall target="AutomaticUpdates"/>
+		
+	</target>
+	
+	<!-- 09/23/2011
+	Updated by MLamriben
+	Added locations.ycfg to the com.zip file (see includes). The appropriate locations.ycfg is determined by the build target above (choose_customer_overrides)	
+	-->
+	<target name="PrepareLocationsFile-comini">
+		<zip 
+			destfile="${env.INSTALL_DIR}/rcp/COM/9.0/COM/rcpclient/windows/com.zip"
+			basedir="${devhome}/COMSupportFiles"
+			includes="com.ini"
+			update="true" >
+			<!-- Place the locations.ycfg in the appropriate directory (plugins/com.yantra.yfc.rcp_1.0.0)-->
+			<zipfileset dir="${devhome}/COMSupportFiles" includes="locations.ycfg" fullpath="plugins/com.yantra.yfc.rcp_1.0.0/locations.ycfg"/>
+		</zip>				
+	</target>
+
+	<target name="AutomaticUpdates">
+		<!-- 11/11/2011
+		Updated by MLamriben
+		added automatic updates section to :
+		a- Clean the old zip file and all files in the Update Directory
+		b- Unzip the new com.zip file in the Update Directory
+		-->
+		 <delete includeemptydirs="true">
+		    <fileset dir="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86" includes="**/*"/>
+		 </delete>		
+		
+		<copy file="${env.INSTALL_DIR}/rcpdrop/windows/9.0/com.zip" todir="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86" /> 
+		
+		<unzip src="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86/com.zip" dest="${env.INSTALL_DIR}/rcpupdatesdir/YFSSYS00011/9.0/win32.win32.x86"/>
+				
+	</target>
+	
+	<!-- deletes and creates destination rcpdrop folder -->
+	<target name="prepare-rcp-extn-folder">
+		<delete dir="${devhome}/dist/rcpdrop" />
+		<mkdir dir="${devhome}/dist/rcpdrop/plugins" />
+		<mkdir dir="${devhome}/dist/rcpdrop/truststore" />
+		<mkdir dir="${devhome}/dist/rcpdrop/resources" />
+		<!--
+		<copy todir="${devhome}/dist/rcpdrop/truststore">
+			<fileset dir="${pca.extn.folder}/truststore">
+				<exclude name="**/CVS/**"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${devhome}/dist/rcpdrop/resources">
+			<fileset dir="${pca.extn.folder}/resources">
+				<exclude name="**/CVS/**"/>
+			</fileset>
+		</copy>
+		-->
+	</target>
+	
+	<target name="jar-plugin-clients"  description="Compile client java code and builds jar." >
+		<echo>Compiling classes</echo>
+		<macro-build-pca-classes pluginid="${pca.custom.plugin.id}"/>
+		<echo message="${pca.custom.plugin.id} plugin classes are built."/>
+		<macro-jar-pca-client pluginid="${pca.custom.plugin.id}" version="${pca.custom.plugin.version}"/>
+		<echo message="${pca.custom.plugin.id}_${pca.custom.plugin.version}.jar is built."/>
+	</target>
+	
+	<!--This target copies the custom plugin jars to the Foundation RCP_EXTN_FOLDER.-->
+	<target name="refresh-custom-plugins">
+	
+		<delete dir="${env.INSTALL_DIR}/rcpextnworkarea/plugins"/>
+		<mkdir dir="${env.INSTALL_DIR}/rcpextnworkarea/plugins"/>
+		<copy todir="${env.INSTALL_DIR}/rcpextnworkarea/plugins">
+			<fileset dir="${devhome}/dist/rcpdrop/plugins">
+				<exclude name="**/CVS/**"/>
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: macro-build-pca-classes
+          Compiles the PCA client side code and jars the class files
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="macro-build-pca-classes">
+        <attribute name="pluginid" />
+    	<sequential>
+    		<delete dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}"/>
+   			<mkdir dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}"/>    		
+    		<javac srcdir="${pca.extn.folder}/plugins/@{pluginid}" 
+    				destdir="${devhome}/dist/rcpdrop/plugins/@{pluginid}" executable="${env.JAVA_HOME}/bin/javac" fork="true">
+    			<classpath refid="pca.class.path" />
+    		</javac>
+    	</sequential>
+    </macrodef>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: macro-jar-pca-client
+          Builds the final Jar file containing the PCA client
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="macro-jar-pca-client">
+        <attribute name="pluginid" />
+    	<attribute name="version" />
+    	<sequential>
+    		<copy file="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF" tofile="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release"/>
+    		<replace file="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release" token="Bundle-Version: 1.0.0" value="Bundle-Version: @{version}"/>
+    		<jar destfile="${devhome}/dist/rcpdrop/plugins/@{pluginid}_@{version}.jar"
+    			manifest="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release">
+    			<fileset dir="${pca.extn.folder}/plugins/@{pluginid}" >
+    		 		<include name="resources/**"/>
+					<include name="schema/**"/>
+					<include name="icons/**"/>
+    		 		<include name="*.ythm"/>
+    		 		<include name="*.ycfg"/>
+    				<include name="*.ywx"/>
+    		 		<include name="*.yuix"/>
+    		 		<include name="**/*.ycml"/>
+					<include name="**/*.xml"/>
+    		 		<include name="*.properties"/>
+    		 		<include name="*.xml"/>
+    		 	</fileset>
+    			<fileset dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}" >
+    		 		<include name="**"/>
+    		 	</fileset>
+    	 	</jar>
+    		<delete file="${pca.extn.folder}/plugins/@{pluginid}/META-INF/MANIFEST.MF.Release"/>
+    		<delete dir="${devhome}/dist/rcpdrop/plugins/@{pluginid}"/>
+    	</sequential>
+    </macrodef>
 </project>
