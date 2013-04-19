@@ -3018,24 +3018,21 @@ function showSharedListForm(){
 										</s:if>
 									</p>
 									
-																
-									<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
+										<%-- JIRA xb-805 Code Changes Begin --%>								
+									<s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}'/>
-										<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-										
-											<p class="fields-padding"><s:if test='%{customerSku == "1"}' >
-												<s:property value="#customerItemLabel" />:
-											</s:if>
-											<s:elseif test='%{customerSku == "2"}'>
-												<s:property value="#manufacturerItemLabel" />:
-											</s:elseif>
-											<s:else>
-												<s:property value="#mpcItemLabel" />:
-											</s:else>
-											
-											<s:property value='#itemSkuVal' /></p>
-										
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y" && #mfgItemVal!=null'> 
+											<p class="fields-padding">
+												<s:property value="#manufacturerItemLabel" />:<s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y" && #partItemVal !=null'>
+											<p class="fields-padding">
+												<s:property value="#customerItemLabel" />:<s:property value='#partItemVal' /></p>
+											</s:if>			
 									</s:if>
+									<%-- JIRA xb-805 Code Changes End --%>	
 					
 								</s:if>
 							<%-- JIRA 356 Code Changes Begin --%>	
