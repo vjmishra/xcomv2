@@ -15,6 +15,7 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
@@ -64,6 +65,9 @@ public class XPXInvokeRulesEngineServiceAPI implements YIFCustomApi
 			}
 			
 			log.debug("XPXInvokeRulesEngineServiceAPI-OutXML: "+SCXmlUtil.getString(rulesEngineOutDoc));
+			 YFCDate orderDate = new YFCDate();
+			String orderPlaceDate = orderDate.getString();
+			 rulesEngineOutDoc.getDocumentElement().setAttribute("OrderDate", orderPlaceDate);
 			return rulesEngineOutDoc;
 					
 		} catch (YFSException e) {
