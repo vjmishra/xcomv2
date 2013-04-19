@@ -807,7 +807,7 @@ $(document).ready(function(){
 </s:if>
 <div id="errorMsgDiv">
 	<s:if test='#duplicateInfoMsg !=null && duplicateInfoMsg != "" '>		
-		<h5 align="center"><b><font color="red"><s:property value="duplicateInfoMsg" /></font></b></h5><br/>
+		<h5 align="center"><b><font color="#828400"><s:property value="duplicateInfoMsg" /></font></b></h5><br/>
 	</s:if>
 </div>
 
