@@ -59,6 +59,10 @@ public class XPEDXConstants {
 	public static final String CUSTOMER_DIVISION="CUSTOMER_DIVISION";
 	public static final String BILL_TO_CUSTOMER="BILL_TO_CUSTOMER";
 	public static final String CUSTOMER_USE_SKU="customerUseSKU";
+	public static final String BILL_TO_CUST_MFG_ITEM_FLAG="BILL_TO_CUST_MFG_ITEM_FLAG"; //Added for xb-763,805
+	public static final String BILL_TO_CUST_PART_ITEM_FLAG="BILL_TO_CUST_PART_ITEM_FLAG"; //Added for xb-763,805
+	public static final String MFG_ITEM_NUMBER="MFG_ITEM_NUMBER"; //Added for xb-763,805
+	public static final String CUST_PART_NUMBER="CUST_PART_ITEM_NUMBER"; //Added for xb-763,805
 	public static final String ENVIRONMENT_CODE="ENVIRONMENT_CODE";
 	public static final String COMPANY_CODE="COMPANY_CODE";
 	public static final String LEGACY_CUST_NUMBER="LEGACY_CUST_NUMBER";
