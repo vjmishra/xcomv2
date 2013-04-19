@@ -740,7 +740,13 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			Element orderLine=outputIt.next();
 			Element orderLineExtn=(Element)orderLine.getElementsByTagName("Extn").item(0);
 			String editOrderflag=orderLineExtn.getAttribute("ExtnEditOrderFlag");
-			if("Y".equals(editOrderflag))
+			if(("0".equals(orderLine.getAttribute("OrderedQty")) || "0.0".equals(orderLine.getAttribute("OrderedQty")) || "0.00".equals(orderLine.getAttribute("OrderedQty")))
+					&& "Y".equals(editOrderflag))
+			{
+				Element orderLines=(Element)outputDoc.getElementsByTagName("OrderLines").item(0);
+				orderLines.removeChild(orderLine);
+			}
+			else if("Y".equals(editOrderflag))
 			{
 				orderLine.setAttribute("Action", "CREATE");
 				orderLine.setAttribute("OrderLineKey", "");

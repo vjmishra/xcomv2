@@ -174,7 +174,7 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
     	
     	inputOrderElem.setAttribute("OrderHeaderKey", cicRefreshingMashupOrderHeaderKey);
     	Element orderLineEle=SCXmlUtil.getXpathElement(inputOrderElem, "OrderLines/OrderLine");
-    	orderLineEle.setAttribute("Action", "REMOVE");
+    	orderLineEle.setAttribute("Action", deleteActions.get(0));
     	orderLineEle.setAttribute("OrderLineKey", selectedLineItem.get(0));
     	orderLineEle.setAttribute("OrderedQty", deleteQuantities.get(0));
 	    
