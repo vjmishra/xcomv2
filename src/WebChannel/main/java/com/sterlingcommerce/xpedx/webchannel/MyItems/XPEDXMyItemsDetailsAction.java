@@ -160,6 +160,24 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private Map<String,String>  sourcingOrderMultipleForItems =new HashMap<String,String>();
     protected String isOMError;
     protected HashMap useOrderMultipleMapFromSourcing;
+	private String customerItemFlag;
+    private String mfgItemFlag;
+    public String getCustomerItemFlag() {
+		return customerItemFlag;
+	}
+
+	public void setCustomerItemFlag(String customerItemFlag) {
+		this.customerItemFlag = customerItemFlag;
+	}
+
+	public String getMfgItemFlag() {
+		return mfgItemFlag;
+	}
+
+	public void setMfgItemFlag(String mfgItemFlag) {
+		this.mfgItemFlag = mfgItemFlag;
+	}
+
 	public HashMap getUseOrderMultipleMapFromSourcing() {
 		return useOrderMultipleMapFromSourcing;
 	}
@@ -876,13 +894,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			
 			checkforEntitlement();//checks if the Items are entitled to the current customer - added for XB 224
 			setItemDescription();
-			
-			String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
-			if(useCustSku!=null && useCustSku.length()>0)
-			{
-				setCustomerSku(useCustSku);
-				getItemSKUMap();
-			}
+			getItemSKUMap();
+
 			
 			if(editMode ==  true)
 			{
@@ -1604,19 +1617,21 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void getItemSKUMap() {
 		//Fetch all the items in MIL and get their respective SKUs
 		if(getListOfItems()==null || getListOfItems().size()==0)
 			return;
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
-		//If sku is for Mpc or Manufacturer item then retrieve them from the Global item Doc
-		if(!SCUtil.isVoid(customerSku) && (XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM.equalsIgnoreCase(customerSku.trim())
-				|| XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM.equalsIgnoreCase(customerSku.trim()))) {
+		// xb-805 code changes start
+		HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
+		 mfgItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		customerItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		if(!SCUtil.isVoid(mfgItemFlag) && mfgItemFlag.equalsIgnoreCase("Y")) {
 			if(allItemsDoc!=null) {
 				Element itemList = allItemsDoc.getDocumentElement();
 				Iterator<Element> itemIter = SCXmlUtil.getChildren(itemList);
 				while(itemIter.hasNext()) {
-					HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
 					Element itemElement = itemIter.next();
 					if(!SCUtil.isVoid(itemElement)) {
 						String itemId = SCXmlUtil.getAttribute(itemElement, "ItemID");
@@ -1626,23 +1641,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							{
 								String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
 								if(manufactureItem!=null && manufactureItem.length()>0)
-									itemSkuMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+									itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
 							}
-							Element extnElem =  SCXmlUtil.getChildElement(itemElement, "Extn");
-							if(extnElem!=null)
-							{
-								String mpcCode = extnElem.getAttribute("ExtnMpc");
-								if(mpcCode!=null && mpcCode.length()>0)
-									itemSkuMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
-							}
-						}
-						skuMap.put(itemId, itemSkuMap);
+					    }
+						skuMap.put(itemId, (HashMap<String, String>)itemSkuMap.clone());
+						itemSkuMap.clear();
 					}
 				}
 			}
 		}
-		else if(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM.equalsIgnoreCase(customerSku.trim()))
-		{
+		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
 			itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allItemIds, getWCContext());
 			if(itemcustXrefDoc!=null) {
 				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
@@ -1650,18 +1658,27 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
 					Iterator<Element> xrefIter = itemCustXrefElems.iterator();
 					while(xrefIter.hasNext()) {
-						HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
 						Element xref = xrefIter.next();
 						String legacyItemNum = xref.getAttribute("LegacyItemNumber");
 						if(allItemIds.contains(legacyItemNum.trim())) {
 							String customerPartNumber = xref.getAttribute("CustomerItemNumber");
-							itemSkuMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM, customerPartNumber);
+							if(customerPartNumber!=null && customerPartNumber.length()>0)
+							{
+								HashMap<String, String> tmpSkuMap = skuMap.get(legacyItemNum);
+								if(SCUtil.isVoid(tmpSkuMap))
+									itemSkuMap = new HashMap<String, String>();
+								else
+									itemSkuMap = tmpSkuMap;
+							itemSkuMap.put(XPEDXConstants.CUST_PART_NUMBER, customerPartNumber);
+							skuMap.put(legacyItemNum, (HashMap<String, String>)itemSkuMap.clone());
+							itemSkuMap.clear();
+							}
 						}
-						skuMap.put(legacyItemNum, itemSkuMap);
 					}
 				}
 			}
-		}
+	   }
+		// xb-805 code changes end
 	}
 	
 	@SuppressWarnings("unchecked")
