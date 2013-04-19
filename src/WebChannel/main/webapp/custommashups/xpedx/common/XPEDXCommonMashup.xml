@@ -54,7 +54,7 @@
 									ExtnCustLineAccLbl="" ExtnCustLineField1Label=""
 									ExtnCustLineField2Label="" ExtnCustLineField3Label="" ExtnMinOrderAmount="" ExtnMinChargeAmount=""
 									ExtnCurrencyCode="" ExtnUseCustSKU="" ExtnEnvironmentCode="" ExtnCompanyCode="" ExtnLegacyCustNumber="" ExtnCustomerStoreNumber="" ExtnShipComplete="" ExtnOrigEnvironmentCode="" ExtnCustOrderBranch="" ExtnCustomerName=""
-									ExtnCustomerDivision="" ExtnPrimarySalesRep="" ExtnPriceWarehouse="">
+									ExtnCustomerDivision="" ExtnPrimarySalesRep="" ExtnPriceWarehouse="" ExtnMfgItemFlag="" ExtnCustomerItemFlag="">
 					  </Extn>
 				</Customer>
 			 </Template>
