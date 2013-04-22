@@ -905,7 +905,15 @@ public class XPEDXOrderUtils {
 		if ("Y".equals(custPONoFlag)) {
 			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
 			//customerFieldsMap.put("CustomerPONo", "Customer PO No");
-			customerFieldsMap.put("CustomerPONo", "Line PO #");
+			//customerFieldsMap.put("CustomerPONo", "Line PO #");
+			//Added for XB 434 / 689
+			String CustLinePOLbl = SCXmlUtil.getAttribute(
+					customerOrganizationExtnEle, prefix+"ExtnCustLinePOLbl");
+			if (CustLinePOLbl != null && CustLinePOLbl.trim().length() > 0)
+				customerFieldsMap.put("CustomerLinePONo", CustLinePOLbl);
+			else
+				customerFieldsMap.put("CustomerLinePONo", "Line PO#");
+			//end of XB 434 / XB 689
 			
 		}
 		

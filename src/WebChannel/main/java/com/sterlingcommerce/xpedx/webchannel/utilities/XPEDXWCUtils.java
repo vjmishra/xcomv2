@@ -5419,6 +5419,7 @@ public class XPEDXWCUtils {
 					customerOrganizationExtnEle, prefix+"ExtnCustLineField3Flag"));
 			sapCustomerExtnElem.setAttribute("ExtnCustLineAccLbl",SCXmlUtil.getAttribute(
 						customerOrganizationExtnEle, prefix+"ExtnCustLineAccLbl"));
+			sapCustomerExtnElem.setAttribute("ExtnCustLinePOLbl",SCXmlUtil.getAttribute(customerOrganizationExtnEle, prefix+"ExtnCustLinePOLbl"));//XB 769 \ XB 434
 			sapCustomerExtnElem.setAttribute("ExtnCustLineField1Label",SCXmlUtil.getAttribute(
 						customerOrganizationExtnEle, prefix+"ExtnCustLineField1Label"));
 			sapCustomerExtnElem.setAttribute("ExtnCustLineField2Label",SCXmlUtil.getAttribute(

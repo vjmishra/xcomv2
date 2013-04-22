@@ -660,6 +660,21 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedx-getSAPCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXCustomerAssignmentViewService">
+			<Input>
+				<XPXCustomerAssignmentView UserId="" />
+			</Input>
+	        <Template>
+	        	<XPXCustomerAssignmentViewList TotalNumberOfRecords="">
+					<XPXCustomerAssignmentView>	
+					</XPXCustomerAssignmentView>
+				</XPXCustomerAssignmentViewList>	        				
+			</Template>
+		</API>
+	</mashup>
 	<mashup id ='xpedx-getCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>

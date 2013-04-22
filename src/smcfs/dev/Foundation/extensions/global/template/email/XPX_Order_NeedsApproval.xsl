@@ -74,6 +74,7 @@
 				background-color: #003399;
 				color: white;
 				padding: 10px;
+				padding-right: 2px;
 				font-size: 11px; 
 				margin:2px;
 
@@ -117,7 +118,7 @@
 				text-align: right;
 			}
 			table.price td.right, table.price th.right{
-				padding-right: 0px;
+				padding-right: 2px;
 				text-align:right;
 			}
 			table.price td.right:last-of-type, table.price th.right:last-of-type{
@@ -128,7 +129,7 @@
 			}
 			table.order-total {
 				border: 1px solid #ccc;
-				width:40%;
+				width:25%;
 				border-radius: 8px;
 				
 			}
@@ -314,7 +315,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td width="60%" colspan="2" style="vertical-align:top">	
+						<td width="50%" colspan="2" style="vertical-align:top">	
 							<table>
 								<tr>
 									<td class="widthLeft">Web Confirmation: </td>
@@ -339,7 +340,7 @@
 						 	</table>
 						 	
 						</td>	
-						<td width="35%" colspan="2" style="vertical-align:top">
+						<td width="25%" colspan="2" style="vertical-align:top">
 					
 						<xsl:choose>
 						<xsl:when test="(contains($billToID,$maxDelim))">
@@ -397,7 +398,7 @@
 						</xsl:if>
 					
 						</td>	
-						<td width="45%" colspan="2" style="vertical-align:top">
+						<td width="40%" colspan="2" style="vertical-align:top">
 					
 						<xsl:choose>
 						<xsl:when test="(contains($shipToID,$maxDelim))">

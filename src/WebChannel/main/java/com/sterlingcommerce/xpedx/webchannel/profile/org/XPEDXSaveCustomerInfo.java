@@ -17,6 +17,7 @@ public class XPEDXSaveCustomerInfo extends WCMashupAction {
 	private static final String REDIRECT = "redirect";
 	private String bodyData;
 	private String CustLineAccNoLabel;
+	private String CustLinePONoLabel;
 	private String CustLineField1Label;
 	private String CustLineField2Label;
 	private String CustLineField3Label;
@@ -89,6 +90,7 @@ public class XPEDXSaveCustomerInfo extends WCMashupAction {
 			viewInvoices = "N";
 		}
 		eleExtn.setAttribute("ExtnCustLineAccLbl", CustLineAccNoLabel);
+		eleExtn.setAttribute("ExtnCustLinePOLbl", CustLinePONoLabel);//Added for XB 434
 		eleExtn.setAttribute("ExtnCustLineField1Label", CustLineField1Label);
 		eleExtn.setAttribute("ExtnCustLineField2Label", CustLineField2Label);
 		eleExtn.setAttribute("ExtnCustLineField3Label", CustLineField3Label);
@@ -197,6 +199,14 @@ public class XPEDXSaveCustomerInfo extends WCMashupAction {
 
 	public void setCustLineAccNoLabel(String custLineAccNoLabel) {
 		CustLineAccNoLabel = custLineAccNoLabel;
+	}
+//added setters & getters for XB 434
+	public String getCustLinePONoLabel() {
+		return CustLinePONoLabel;
+	}
+
+	public void setCustLinePONoLabel(String custLinePONoLabel) {
+		CustLinePONoLabel = custLinePONoLabel;
 	}
 
 	public String getCustLineField1Label() {
