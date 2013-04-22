@@ -50,6 +50,7 @@
 
 <s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 <s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
+<s:set name="custPONo" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 
 <!-- begin styles. These should be the only three styles. -->
 
@@ -2660,7 +2661,7 @@ function showSharedListForm(){
                                     <!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
 									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 										<li>
-											<label>Line PO #</label>
+											 <label><s:property value="#custPONo" />:</label>
 											 <!--Blank space removed 3693  -->
 											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=""></s:textfield>
 										</li>
@@ -2670,7 +2671,7 @@ function showSharedListForm(){
 	                                        <!-- label>Job Number:</label>  -->
 	                                        <label><s:property value="#jobIdFlag" />:</label>
 	                                        <!--Blank space removed 3693  -->
-											<s:textfield maxlength="24" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=""></s:textfield>
+											<s:textfield maxlength="22" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=""></s:textfield>
 	                                    </li>
 									</s:if>
 									<li class="nomarginright">
@@ -2702,7 +2703,7 @@ function showSharedListForm(){
                                             <th class="col-header qty-col">Qty</th>
                                             <th class="col-header uom-col">UOM</th>
                                             <s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-                                            	<th class="col-header col-header job-col">Line PO #</th>
+                                            	<th class="col-header col-header job-col"><s:property value="#custPONo" /></th>
                                             </s:if>
 											<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 												<th class="last-col-header col-header po-col"><!-- Job Number  --><s:property value="#jobIdFlag" /></th>
@@ -3175,7 +3176,7 @@ function showSharedListForm(){
 												<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
 												<%--Start JIRA 3693  --%>
 												<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
-												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="24"
+												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="22"
 													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
 													size='10' value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}" 
 													title="%{#FieldValue}" onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');"/>

@@ -348,27 +348,23 @@ ul.checkboxTree li
           <s:if test="(#_action.IsCustLinePONoFlag())">
             <tr class="odd" >
               <td >Line PO #: </td>
-              <td valign="top">
-              	<s:text name="Line PO #"/>
-              </td>
+              	<td valign="top">
+              		<s:textfield id='CustLinePONoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 180px;" name='CustLinePONoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLinePOLbl")}'/>
+              	</td>
             </tr>
-            </s:if>
+          </s:if>
+           <s:else>
+            	<s:hidden name='CustLinePONoLabel' value='%{#extnElem.getAttribute("ExtnCustLinePOLbl")}'/>
+            </s:else>
           <s:if test="(#_action.IsCustLineAccNoFlag())">  
           <tr>
             <td>Line Account #: </td>
-            <s:if test='%{#extnElem.getAttribute("ExtnCustLineAccLbl") != null && #extnElem.getAttribute("ExtnCustLineAccLbl") != ""}'>
-            <td valign="top" >
-            <s:hidden id='CustLineAccNoLabel' name='CustLineAccNoLabel' value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
-            	<s:property value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
+            <td valign="top">
+              		<s:textfield id='CustLineAccNoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 180px;" name='CustLineAccNoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </td>
-            </s:if>
-            <s:else>
-            <td valign="top" >
-            <s:text name="Line Account #"/>
-            </s:else>
-          </tr>
-          </s:if>
-            <s:else>
+           </tr>
+	   </s:if>
+	   <s:else>
             	<s:hidden name='CustLineAccNoLabel' value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </s:else>
             <s:if test="(#_action.IsCustLineField1Flag())">

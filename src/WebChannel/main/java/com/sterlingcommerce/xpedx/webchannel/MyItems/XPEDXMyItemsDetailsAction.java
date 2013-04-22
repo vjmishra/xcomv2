@@ -1530,8 +1530,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		if ("Y".equals(custPONoFlag)) {
 			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
-			getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
+			//Fix for showing custom PONo label entered by the Customer for XB 769\ XB 434
+			String custLinePONoLbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLinePOLbl");
+			//getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
 			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
+			
+			if (custLinePONoLbl != null && custLinePONoLbl.trim().length() > 0) {
+				getCustomerFieldsMap().put("CustomerPONo", custLinePONoLbl);
+			} else {
+				getCustomerFieldsMap().put("CustomerPONo","Line PO #");
+			}
+			//End of XB 769\ XB 434
 		}
 
 		if ("Y".equals(custLineNoFlag)) {
