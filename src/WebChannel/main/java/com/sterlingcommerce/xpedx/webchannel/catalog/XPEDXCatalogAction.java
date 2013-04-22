@@ -837,7 +837,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
 				//End JIRA XBT-263
 				
-				term.setAttribute("Value", customerNumber + "|" + searchTerm);
+				term.setAttribute("Value", customerNumber + searchTerm);
 			}
 		}
 		if (flag) {
