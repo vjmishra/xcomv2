@@ -708,14 +708,14 @@
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" cssStyle="border-color:#FF0000"/>
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000"/>
 													</s:if>
 													<s:else>
 														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" />
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" />
 													
 													</s:else>
 													

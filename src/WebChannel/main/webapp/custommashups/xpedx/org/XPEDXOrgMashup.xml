@@ -465,7 +465,7 @@
 						ExtnCustomerName="" ExtnBillToSuffix="" ExtnShipToSuffix=""
 						ExtnECSR="" ExtnECSR2="" ExtnCustLineAccNoFlag=""
 						ExtnCustLineAccLbl="" ExtnCustLineSeqNoFlag=""
-						ExtnCustLinePONoFlag="" ExtnCustLineField1Flag=""
+						ExtnCustLinePONoFlag="" ExtnCustLinePOLbl=""  ExtnCustLineField1Flag=""
 						ExtnCustLineField1Label="" ExtnCustLineField2Flag=""
 						ExtnCustLineField2Label="" ExtnCustLineField3Flag=""
 						ExtnCustLineField3Label="" ExtnAttnName="" ExtnShipToOverrideFlag=""
@@ -505,7 +505,7 @@
 						ExtnSampleRequest="" ExtnEmailViewInvoicesFlag=""
 						ExtnPreviewInvoicesFlag="" ExtnAcceptBackOrdersFlag=""
 						ExtnAcceptShipToOvrdFlag="" ExtnLineItemLabel="" ExtnETradingID=""
-						ExtnCustLineAccLbl="" ExtnCustLineField1Label=""
+						ExtnCustLineAccLbl="" ExtnCustLineField1Label="" ExtnCustLinePOLbl=""
 						ExtnInvoiceEMailID="" ExtnCustLineField2Label=""
 						ExtnCustLineField3Label="" ExtnAttnName="" ExtnCustEmailAddress=""
 						ExtnPhone2="" ExtnFax2="" />
