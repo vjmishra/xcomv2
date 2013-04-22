@@ -20,6 +20,7 @@ import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -190,11 +191,26 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 		
 		XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(),new HashMap());
 		boolean chngOrderOutputAvailable=false;
-		if("true".equals(isComingFromCheckout) || "true".equals(modifyOrderLines)){
+		if("true".equals(isComingFromCheckout) || "true".equals(modifyOrderLines))
+		{
 			chngOrderOutputAvailable=true;
 		}
 		if(isEditOrder.contains("true"))
-			processSpecialCharge(outputDocument, chngOrderOutputAvailable);
+		{
+			String applyMinOrderCharge_GlobalLevel=YFSSystem.getProperty("applyMinOrderCharge");
+			if("Y".equalsIgnoreCase(applyMinOrderCharge_GlobalLevel))
+			{
+				XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+				if(shipToCustomer!=null)
+				{
+					String applyMinOrderCharge_DivisionLevel=shipToCustomer.getShipToOrgExtnApplyMinOrderCharge();
+					if("Y".equalsIgnoreCase(applyMinOrderCharge_DivisionLevel))
+					{
+						processSpecialCharge(outputDocument, chngOrderOutputAvailable);
+					}
+				}
+			}
+		}
 		
 		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 		if(outputDocument!=null && retVal.equals(SUCCESS))

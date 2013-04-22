@@ -407,7 +407,10 @@
           <Attribute ColumnName="EXTN_PRICING_WAREHOUSE_NAME" DataType="OrganizationName" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnPriceWareHouseName" 
 
           XMLGroup="Extn" />
+		
+		 <Attribute ColumnName="EXTN_APPLY_MIN_ORDER_CHARGE" DataType="Text-2" DefaultValue="'Y'" Description=" " Nullable="true" XMLName="ExtnApplyMinOrderCharge" 
 
+          XMLGroup="Extn" />
 
 
           

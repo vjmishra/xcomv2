@@ -517,6 +517,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				map.put("ExtnMaxOrderAmount",minAmount.get(0));
 				map.put("ExtnMinOrderAmount",minAmount.get(1));
 				map.put("ExtnChargeAmount",minAmount.get(2));
+				map.put("ExtnApplyMinOrderCharge", minAmount.get(3));
 			}
 			XPEDXWCUtils.removeObectFromCache("ORDER_PLACE_CHNAGE_ORDER_DOC_MAP");
 			XPEDXWCUtils.removeObectFromCache("INVENTORY_INDICATOR_MAP");
@@ -534,141 +535,158 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		float minOrderAmount=0;
 		float chargeAmount=0;
 		String shipFromDivision="";
+		String applyMinOrderCharge=null;
+		
 		ArrayList<String> retVal=new ArrayList<String>();
-		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if(shipToCustomer!=null)
+		{
+			applyMinOrderCharge=shipToCustomer.getShipToOrgExtnApplyMinOrderCharge();
+		}
+		
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
-			try
-			{
-				//Form the input
-				if(wcContext.getCustomerId()!=null) {
-	
-					String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
-					if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr)))  &&
-							Float.parseFloat(maxOrderAmountStr)>0)
+		
+		try
+		{
+			//Form the input
+			if(wcContext.getCustomerId()!=null) {
+
+				String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
+				if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr)))  &&
+						Float.parseFloat(maxOrderAmountStr)>0)
+				{
+					maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
+				
+				}
+				else {
+					XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
+					if(billToElement != null )
 					{
-						maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
-					
-					}
-					else {
-						XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
-						if(billToElement != null )
+						maxOrderAmountStr=billToElement.getExtnMaxOrderAmount();
+						if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr))) &&
+								Float.parseFloat(maxOrderAmountStr)>0)
 						{
-							maxOrderAmountStr=billToElement.getExtnMaxOrderAmount();
-							if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr))) &&
-									Float.parseFloat(maxOrderAmountStr)>0)
-							{
-								maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
+							maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
+				}
 					}
+				}
+				//JIRA 3488 end
+						if(shipToCustomer== null){
+							LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
+							
+							XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
+									.getCustomerDetails(getWCContext().getCustomerId(),
+											getWCContext().getStorefrontId())
+									.getDocumentElement());
+							shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 						}
-					}
-					//JIRA 3488 end
-							if(shipToCustomer== null){
-								LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
-								
-								XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
-										.getCustomerDetails(getWCContext().getCustomerId(),
-												getWCContext().getStorefrontId())
-										.getDocumentElement());
-								shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-							}
-					String minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
-					String chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();;
-							if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
-									(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
+						
+						String minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
+						String chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();;
+						
+						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
+								(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
+						{
+							minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
-								minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-								if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
-								{
-									chargeAmount = Float.parseFloat(chargeAmountStr);
-								}
+								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
-							else
+						}
+						else
+						{
+							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
-								if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+								chargeAmount = Float.parseFloat(chargeAmountStr);
+							}
+							XPEDXShipToCustomer parentElement = shipToCustomer.getBillTo();
+							if(parentElement != null )
+							{
+								minOrderAmountStr=parentElement.getExtnMinOrderAmount();
+								chargeAmountStr=parentElement.getExtnMinChargeAmount();
+								if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
+										(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 								{
-									chargeAmount = Float.parseFloat(chargeAmountStr);
+									minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+									if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+									{
+											chargeAmount = Float.parseFloat(chargeAmountStr);
+									}
 								}
-								XPEDXShipToCustomer parentElement = shipToCustomer.getBillTo();
-								if(parentElement != null )
+								else
 								{
-									minOrderAmountStr=parentElement.getExtnMinOrderAmount();
-									chargeAmountStr=parentElement.getExtnMinChargeAmount();
+									if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
+									{
+										chargeAmount = Float.parseFloat(chargeAmountStr);
+									}
+									//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
+									//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
+									if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
+											shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null)
+									{
+										shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+										String envCode =shipToCustomer.getExtnEnvironmentCode();
+										Map<String, String> valueMap = new HashMap<String, String>();
+										if(envCode!=null && envCode.trim().length()>0){
+											valueMap.put("/Organization/@OrganizationCode", shipFromDivision+"_"+envCode);
+										}else{
+											LOG.error("EnvCode is NULL. Returning back to the caller.");
+											return retVal;
+										}
+										try {
+											Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
+											Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
+											Document outputDoc = ((Element) obj).getOwnerDocument();
+											
+											if(YFCCommon.isVoid(outputDoc)){
+												LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
+												return retVal;
+											}
+											shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
+											shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
+											shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
+											shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
+											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+											//Added For Jira 3465
+											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+											shipToCustomer.setShipToOrgExtnApplyMinOrderCharge(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge"));
+											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
+										} catch (CannotBuildInputException e) {
+											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
+											return retVal;
+										}
+									}
+									minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
+									chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
 									if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 											(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 									{
-										minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-										if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+										minOrderAmount = Float.parseFloat(minOrderAmountStr);				
+										if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 										{
 												chargeAmount = Float.parseFloat(chargeAmountStr);
 										}
 									}
-									else
-									{
-										if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
-										{
-											chargeAmount = Float.parseFloat(chargeAmountStr);
-										}
-										//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
-										//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-										if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
-												shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null)
-										{
-											shipFromDivision = shipToCustomer.getExtnShipFromBranch();
-											String envCode =shipToCustomer.getExtnEnvironmentCode();
-											Map<String, String> valueMap = new HashMap<String, String>();
-											if(envCode!=null && envCode.trim().length()>0){
-												valueMap.put("/Organization/@OrganizationCode", shipFromDivision+"_"+envCode);
-											}else{
-												LOG.error("EnvCode is NULL. Returning back to the caller.");
-												return retVal;
-											}
-											try {
-												Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
-												Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
-												Document outputDoc = ((Element) obj).getOwnerDocument();
-												
-												if(YFCCommon.isVoid(outputDoc)){
-													LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
-													return retVal;
-												}
-												shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
-												shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
-												shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
-												shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
-												shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
-												//Added For Jira 3465
-												shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
-												XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
-											} catch (CannotBuildInputException e) {
-												LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
-												return retVal;
-											}
-										}
-										minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
-										chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
-										if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
-												(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
-										{
-											minOrderAmount = Float.parseFloat(minOrderAmountStr);				
-											if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
-											{
-													chargeAmount = Float.parseFloat(chargeAmountStr);
-											}
-										}
-								}
+									applyMinOrderCharge=(applyMinOrderCharge!=null && applyMinOrderCharge.trim().length()>0 ? applyMinOrderCharge : shipToCustomer.getShipToOrgExtnApplyMinOrderCharge());
+									
 							}
-					}
-				}// if customerId is not null
+						}
+				}
+			}// if customerId is not null
 
-			}
-			catch(Exception e)
-			{
-				log.error("Error While getting Min Order amount");
-			}
-			retVal.add(""+maxOrderAmountFloat);
-			retVal.add(""+minOrderAmount);
-			retVal.add(""+chargeAmount);
-			return retVal;
+		}
+		catch(Exception e)
+		{
+			log.error("Error While getting Min Order amount");
+		}
+		retVal.add(""+maxOrderAmountFloat);
+		retVal.add(""+minOrderAmount);
+		retVal.add(""+chargeAmount);
+		retVal.add(applyMinOrderCharge!=null?applyMinOrderCharge:"");
+		
+		return retVal;
+		
 	}
 	/*public static void setYFSEnvironmentVariables(IWCContext wcContext) 
 	{
