@@ -105,8 +105,8 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 						.getNamedItem("CustomerItemNumber");
 				if (customerPartNumberN != null
 						&& customerPartNumberN.getTextContent().trim().length() > 0) {
-					customerNumberPlusPartNumber += "|"
-							+ customerPartNumberN.getTextContent();
+					customerNumberPlusPartNumber += customerPartNumberN
+							.getTextContent();
 				}
 			}
 			// Now preparing the output
