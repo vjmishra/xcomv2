@@ -1678,7 +1678,7 @@ public class XPEDXOrderUtils {
 		}
 		//prepare the xpedxItemIDUOMToReplacementListMap only when editMode is true
 		Set replacementMapKeySet = replacementItemsMap.keySet();
-		if(editMode ==  true && replacementMapKeySet!=null){
+		if(replacementMapKeySet!=null){
 		Iterator<String> replacementIterator = replacementMapKeySet.iterator();
 			while(replacementIterator.hasNext()){
 				ArrayList replacementItemsElementList = new ArrayList();
