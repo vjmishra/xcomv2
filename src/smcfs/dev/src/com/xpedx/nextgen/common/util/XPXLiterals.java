@@ -800,4 +800,11 @@ public class XPXLiterals {
 	public static final String NFE_M0020 = "M0020";
 	public static final String NFE_M0036 = "M0036";
 	public static final String NFE_M0041 = "M0041";
+	
+	public static final String PENDING_APPROVAL_HOLD = "ORDER_LIMIT_APPROVAL";
+	public static final String PENDING_APPROVAL_ACTIVE_STATUS_ID = "1100";
+	public static final String PENDING_APPROVAL_RELEASE_STATUS_ID = "1300";
+	public static final String PENDING_APPROVAL_RELEASE_DESC="Released during Order Edit";
+	
+	public static final String HOLD_RELEASE_DESC="ReasonText";
 }

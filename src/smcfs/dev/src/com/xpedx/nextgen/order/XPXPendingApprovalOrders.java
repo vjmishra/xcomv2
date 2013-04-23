@@ -17,6 +17,7 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXUtils;
+import com.xpedx.nextgen.customerprofilerulevalidation.api.XPXCustomerProfileRuleConstant;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -69,7 +70,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
 		// Template to the getOrderList Api
-		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' DraftOrderFlag=''><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
+		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' DraftOrderFlag='' OrderType=''><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
 		env.setApiTemplate("getCompleteOrderDetails",orderOutputTemplate);
 		Document orderOutputDoc = api.invoke(env, "getCompleteOrderDetails", inputOrderDoc);
 		env.clearApiTemplate("getCompleteOrderDetails");
@@ -131,6 +132,41 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 							if(totalOrderValue >= spendingLimit)
 							{
 								orderApprovalFlag="Y";
+							
+							} else {
+								
+								if("N".equals(orderElem.getAttribute("DraftOrderFlag")) && "Customer".equals(orderElem.getAttribute(XPXLiterals.A_ORDER_TYPE)))
+								{
+									Element orderHoldTypes = SCXmlUtil.getChildElement(orderElem, XPXLiterals.E_ORDER_HOLD_TYPES);
+									if(orderHoldTypes!=null)
+									{
+										Element orderHoldType = SCXmlUtil.getChildElement(orderElem,XPXLiterals.E_ORDER_HOLD_TYPE);
+										if(orderHoldType!=null)
+										{
+											boolean wasOrderOnPendingApprovalHold = Boolean.parseBoolean(SCXmlUtil.getXpathAttribute(inXML.getDocumentElement(),"/Order/OrderHoldTypes/OrderHoldType[@HoldType='"
+																			+ XPXLiterals.PENDING_APPROVAL_HOLD
+																			+ "']/@Status='"
+																			+ XPXLiterals.PENDING_APPROVAL_ACTIVE_STATUS_ID
+																			+ "'"));
+											if(wasOrderOnPendingApprovalHold)
+											{
+												changeOrderOutput = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
+												Element changeOrderInputElem = changeOrderOutput.getDocumentElement();
+												changeOrderInputElem.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
+												Element holdTypes = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPES);
+												Element holdType = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPE);
+												holdType.setAttribute(XPXLiterals.A_HOLD_TYPE, XPXLiterals.PENDING_APPROVAL_HOLD);
+												holdType.setAttribute(XPXLiterals.A_STATUS, XPXLiterals.PENDING_APPROVAL_RELEASE_STATUS_ID);
+												holdType.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, XPXLiterals.PENDING_APPROVAL_RELEASE_DESC);
+												holdTypes.appendChild(holdType);
+												changeOrderInputElem.appendChild(holdTypes);
+												
+											}
+											
+										}
+									}
+								}
+								
 							}
 						}
 					}
