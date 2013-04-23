@@ -769,12 +769,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	protected void getItemUOMs() throws Exception {
-		/*String customerId = wcContext.getCustomerId();
+		String customerId = wcContext.getCustomerId();
 		String organizationCode = wcContext.getStorefrontId();
 
 		itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID,
-				organizationCode);*/
-		LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
+				organizationCode);
+		/*LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, String> uomListMap = new LinkedHashMap<String, String>();
 		if(getItemListElem() != null) {
 			Element itemElement = SCXmlUtil.getChildElement(m_itemListElem,"Item");
@@ -846,12 +846,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}
 		uomListMap.putAll(wUOMsToConversionFactors);
 		
+		
+		itemUOMsMap = uomListMap;*/
 		//2964 start
 		//displayItemUOMsMap = new HashMap();
-		displayItemUOMsMap = uomListMap;
+		displayItemUOMsMap = itemUOMsMap;
 		//2964 end
 		
-		itemUOMsMap = uomListMap;
+		
 		/*for (Iterator it = itemUOMsMap.keySet().iterator(); it.hasNext();) {
 			String uomDesc = (String) it.next();
 			Object o = itemUOMsMap.get(uomDesc);
@@ -877,6 +879,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		String defaultUOMCode = "";
 		//String orderMultiple = "";
 		defaultShowUOMMap = new HashMap<String,String>();
+		//Start - Code added to fix XNGTP 2964
+		String msapOrderMultipleFlag = "";
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+		if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+			msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+		}
+		//End - Code added to fix XNGTP 2964
     	
 		if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
 			
@@ -1317,7 +1326,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					try {
 						// invoking a different function which will give onyl the entitiled items - 734
 						itemDetailsListDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(itemIDListForGetCompleteItemList, custID, wcContext.getStorefrontId(), wcContext);
-						System.out.println("ItemListDoc "+SCXmlUtil.getString(itemDetailsListDoc));
+						//System.out.println("ItemListDoc "+SCXmlUtil.getString(itemDetailsListDoc));
 					} catch (Exception e) {
 						LOG.error("Exception while getting item details for associated items",e);
 						return;
@@ -1991,8 +2000,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	List displayPriceForUoms = new ArrayList();
 	List bracketsPricingList = null;
 	boolean showSampleRequest = false;
-	protected Map itemUOMsMap;
-	protected Map displayItemUOMsMap;
+	protected Map<String, String> itemUOMsMap;
+	
+	protected Map <String, String> displayItemUOMsMap;
 	protected Map itemOrderMultipleMap;
 	String customerBranch = null;
 	String customerLegNo = null;

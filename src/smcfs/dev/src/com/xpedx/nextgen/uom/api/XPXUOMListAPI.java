@@ -244,11 +244,15 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			Node ConvFactorNode = XpxItemcustXrefAttributes
 					.getNamedItem("ConvFactor");
 			String ConvFactor = ConvFactorNode.getTextContent();
-			if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
+	//Commented code for XB-687
+		//	if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
+			if(customerUnit!=null && !customerUnit.equalsIgnoreCase("")){
 				wUOMsToConversionFactors.clear();
 				wUOMsToConversionFactors.put(customerUnit, ConvFactor);
-				return;
+			//	return;
 			}
+			//}
+				
 			// Null check added.
 			if (useOrderMulUOMFlag != null && useOrderMulUOMFlag.equals("Y")) {
 				int conversion = getConversion(ConvFactor, orderMultiple);
