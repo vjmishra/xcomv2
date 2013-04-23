@@ -632,7 +632,7 @@ function printPOs(customerPos) {
 								<s:set name="isFOOnCSRReviewHold" value="%{#_action.isFOCSRReviewHold(#chainedOrder)}" />
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
-								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation" || #parentOrder.getAttribute("Status") == "Awaiting FO Creation"  || 
+								<s:if test='%{#chainedOrder.getAttribute("MaxOrderStatus") == "1310" || #parentOrder.getAttribute("MaxOrderStatus") == "1310"  || 
 												#chainedOrder.getAttribute("isCSRReview") == "Y" }'>
 												Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 								</s:if>
@@ -743,7 +743,7 @@ function printPOs(customerPos) {
 				            	</td>
 				            	
 				            	<td class="right-cell">
-					            	<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"'>
+					            	<s:if test='%{#chainedOrder.getAttribute("MaxOrderStatus") == "1310"'>
 													Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 									</s:if>
 									<s:else>

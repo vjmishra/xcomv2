@@ -553,7 +553,7 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 		statusList.put("1100.5900", "Quote");
 		statusList.put("1100.5950", "Invoice Only");
 		statusList.put("9000", "Cancelled");
-		statusList.put("1310", "Awaiting FO Creation");
+		statusList.put("1310", "Awaiting Ship Order Creation");
 		statusList.put("1000", "Draft Order Created");
 		statusList.put("1100", "Created");
 		return statusList;

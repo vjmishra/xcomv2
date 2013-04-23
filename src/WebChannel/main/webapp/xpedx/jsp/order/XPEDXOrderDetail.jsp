@@ -665,7 +665,7 @@ function showSplitDiv(divId)
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> 
-                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType == "Customer" && #isCSRReview)}'>
+                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType == "Customer" && #isCSRReview)}'>
                         				Submitted (CSR Reviewing) 
                         			</s:if>
                         			<s:else>
@@ -1109,7 +1109,7 @@ function showSplitDiv(divId)
 												<s:set name='splitqty' value='#splitOrderAttributes.get(2)' />
 												<s:set name='splitqty' value='%{#strUtil.replace(#splitqty, ".00", "")}' />
 												<s:set name='splitqty' value="#xpedxUtilBean.formatQuantityForCommas(#splitqty)"/>
-												<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType != "Customer") || #isFOCSRReview}'>
+												<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType != "Customer") || #isFOCSRReview}'>
 												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
 												</s:if>
 												<s:else>
