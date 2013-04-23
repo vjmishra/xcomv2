@@ -678,7 +678,7 @@
 	<mashup id ='xpedx-getCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
-		<API Name="getCustomerAssignmentList">
+			<API Name="getCustomerAssignmentList">
 			<Input>
 				<CustomerAssignment UserId="" />
 			</Input>
@@ -693,7 +693,6 @@
 			</Template>
 		</API>
 	</mashup>
-	
 	<mashup id ='xpedx-getAssignedShipTos-View' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>

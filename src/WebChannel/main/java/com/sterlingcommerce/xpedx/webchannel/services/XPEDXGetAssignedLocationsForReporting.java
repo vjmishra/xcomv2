@@ -40,6 +40,8 @@ public class XPEDXGetAssignedLocationsForReporting
 	private HashMap<String, String> billToMap;
 	
 	private ArrayList<String> childCustomerList = new ArrayList<String>();
+	private ArrayList<String> SAPCustomerList = new ArrayList<String>();
+	private ArrayList<String> billToCustomerList = new ArrayList<String>();
 	private ArrayList<String> billToList = new ArrayList<String>();
 	private static String BILL_TO = "bill-to";
 	
@@ -74,6 +76,8 @@ public class XPEDXGetAssignedLocationsForReporting
 	
 	 public String getAssignedLocations(){
 		String processBillTo  = request.getParameter("processBillTo");
+		String addSAP = "";
+		String addBillTo = "";
 		try{
 			
 			String userId = wcContext.getLoggedInUserId();
@@ -81,6 +85,7 @@ public class XPEDXGetAssignedLocationsForReporting
 			
 			LOG.debug("Process bill to +++++++++++ " + processBillTo);
 			Document outputDoc = null;
+			Document outputDocSap = null;
 			if (null == userId) {
 				log
 						.debug("getAllAssignedLocations: customerID is a required field. Returning a empty Map");
@@ -88,49 +93,91 @@ public class XPEDXGetAssignedLocationsForReporting
 			}
 			
 			outputDoc = getAllLocationsDoc(userId);
+			outputDocSap = getAssignmentList(userId);
 
 			if (null == outputDoc) {
 				log
 						.debug("getAllAssignedLocations: No data available for customerID. Returning a empty Map");
 				return ERROR;
 			}
-
+			if (null == outputDocSap) {
+				log
+						.debug("getAllAssignedLocations: No data available for customerID. Returning a empty Map");
+				return ERROR;
+			}
 			NodeList customerListElem = outputDoc.getElementsByTagName("Customer");
-
+			NodeList customerSAPListElem = outputDocSap.getElementsByTagName("XPXCustomerAssignmentView");
 			
 			if(customerListElem!=null && customerListElem.getLength()>0)
 			{
 				for(int i=0;i<customerListElem.getLength();i++)
 				{
 					Element customerElem = (Element) customerListElem.item(i);
-					//Modified For Jira 3216
 					Element extElement = (Element) customerElem.getFirstChild();
 					String extSuffixType = SCXmlUtil.getAttribute(extElement, "ExtnSuffixType");
 					
 					if(customerElem!=null) {
 						String strCustId = SCXmlUtil.getAttribute(customerElem, "CustomerID");
+					    
+						if(extSuffixType.equalsIgnoreCase("MC")){
+							addSAP = "true";
+							}
 						if(extSuffixType.equalsIgnoreCase("C")){
-						//if(strCustId.startsWith("CD") && strCustId.endsWith("CC")) {
-							LOG.debug("---- " + strCustId);
-							childCustomerList.add(strCustId);
-							//Code Added for Bill To
-							if(processBillTo.equalsIgnoreCase("true") == true)
-								getAllBillToForSap(strCustId);
-							//Code For Bill To
+							addSAP = "false";
+							addBillTo="true";
+							SAPCustomerList.add(strCustId);		
+							}
+						if(extSuffixType.equalsIgnoreCase("B")){
+							billToCustomerList.add(strCustId);
+							}
 						}
+					}
+				}
+			
+			if(customerSAPListElem!=null && customerSAPListElem.getLength()>0)
+			{
+				for(int i=0;i<customerSAPListElem.getLength();i++)
+				{
+					Element customerElem = (Element) customerSAPListElem.item(i);
+					if(customerElem!=null) {
 						
-						//Check if explicitly assigned bill to location
+						String strCustId = null;
+							if(processBillTo.equalsIgnoreCase("false") == true){
+								strCustId = SCXmlUtil.getAttribute(customerElem, "SAPCustomerID");
+								if(addSAP.equalsIgnoreCase("false")){
+									if(SAPCustomerList.size() >0 && SAPCustomerList.contains(strCustId)){
+										if(!childCustomerList.contains(strCustId))
+											childCustomerList.add(strCustId);
+											LOG.debug("Adding to sap list ---- "+ strCustId);
+									}
+								}
+							else{
+								if(addSAP.equalsIgnoreCase("true") || SAPCustomerList.size() >0 && !childCustomerList.contains(strCustId)){
+									if(!childCustomerList.contains(strCustId))
+										childCustomerList.add(strCustId);
+										LOG.debug("Adding to sap list ---- "+ strCustId);
+									}
+								}
+							}
 						else if(processBillTo.equalsIgnoreCase("true") == true){
-							 //extElement = (Element) customerElem.getFirstChild();
-							//extSuffixType = SCXmlUtil.getAttribute(extElement, "ExtnSuffixType");
-							if(extSuffixType.equalsIgnoreCase("B") == true && ! billToList.contains(strCustId)){
-								LOG.debug("Adding to bill to list ---- "+ strCustId);
-								billToList.add(strCustId);
+							strCustId = SCXmlUtil.getAttribute(customerElem, "BillToCustomerID");
+							if(billToCustomerList.size()>0 && billToCustomerList.contains(strCustId)){
+								if(!billToList.contains(strCustId))
+									billToList.add(strCustId);
+									LOG.debug("Adding to bill to list ---- "+ strCustId);
+								}
+							else{
+								if(addSAP.equalsIgnoreCase("true") || addBillTo.equalsIgnoreCase("true") || SAPCustomerList.size() >0 && !childCustomerList.contains(strCustId)){
+									if(!billToList.contains(strCustId))
+										billToList.add(strCustId);
+										LOG.debug("Adding to bill to list ---- "+ strCustId);
+									}
+								}
 							}
 						}
 						
 					}
-				}
+			}
 				
 				if(childCustomerList!=null && childCustomerList.size()>0)
 				{
@@ -142,7 +189,6 @@ public class XPEDXGetAssignedLocationsForReporting
 				{
 					setBillToMap((HashMap<String, String>) XPEDXWCUtils.custFullAddresses(billToList, wcContext.getStorefrontId()));
 				}							
-			}			
 			
 				
 
@@ -158,7 +204,44 @@ public class XPEDXGetAssignedLocationsForReporting
 			return BILL_TO;
 		return SUCCESS;
 	}
-	 
+	 private Document getAssignmentList(String userId)
+		throws CannotBuildInputException {
+		 Document allAssignedCustomerDoc = null;
+
+			if (null == userId) {
+				log
+						.debug("getAllLocationsDoc: customerID is a required field. Returning a empty Document");
+				LOG.debug("getAllLocationsDoc: customerID is a required field. Returning a empty Document");
+				return allAssignedCustomerDoc;
+			}
+
+			IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+					.getRequest());
+			SCUIContext wSCUIContext = context.getSCUIContext();
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/XPXCustomerAssignmentView/@UserId", userId);
+			
+			Element input = WCMashupHelper.getMashupInput(
+					"xpedx-getSAPCustomerAssignments", valueMap, wSCUIContext);
+			
+			String inputXml = SCXmlUtil.getString(input);
+			
+			log.debug("getAllLocationsDoc: Input XML: " + inputXml);
+			LOG.debug("getAllLocationsDoc: Input XML: " + inputXml);
+			
+			Object obj = WCMashupHelper.invokeMashup("xpedx-getSAPCustomerAssignments",
+					input, wSCUIContext);
+			allAssignedCustomerDoc = ((Element) obj).getOwnerDocument();
+			
+			if (null != allAssignedCustomerDoc) {
+				log.debug("getAllLocationsDoc: Output XML: "
+						+ SCXmlUtil.getString((Element) obj));
+				
+				LOG.debug("Output document ----  " + SCXmlUtil.getString((Element) obj));
+			}
+			return allAssignedCustomerDoc;
+		}
+		 
 	private Document getAllLocationsDoc(String userId)
 			throws CannotBuildInputException {
 		Document allAssignedCustomerDoc = null;
