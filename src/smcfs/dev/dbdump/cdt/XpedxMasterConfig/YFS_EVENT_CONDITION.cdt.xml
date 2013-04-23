@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <YFS_EVENT_CONDITIONList TableName="YFS_EVENT_CONDITION">
-<EventCondition ActionKey="PRINT-PACKLIST" ConditionKey=""
+<EventCondition ActionKey="PRINT-PACKLIST" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200310131140035509"
     EventKey="ADD_TO_CNTNR_SUCCESS_4" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2003112412203819504" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2003112412203819504" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="2003112412232819506"
     EventKey="MOVE_REQUEST_KEY_4" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:41:44-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="PRINT-SHIPMENT-BOL" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="PRINT-SHIPMENT-BOL" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="20031216201913105935"
     EventKey="DEFAULT_EVENT_KEY_233" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="PRINT-LOAD-BOL" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="PRINT-LOAD-BOL" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="20031216202355105947"
     EventKey="DEFAULT_EVENT_KEY_230" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="PRINT-WAVE" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="PRINT-WAVE" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="20031217105625101010"
     EventKey="PRINT_WAVE" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:41:44-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="ON_TASK_COMPLETE" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="ON_TASK_COMPLETE" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="2003121910065132601"
     EventKey="TASK_COMPLETED" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="ON_TASK_PROGRESS" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="ON_TASK_PROGRESS" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="2003121910065132602"
     EventKey="TASK_IN_PROGRESS" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2004011917232183" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2004011917232183" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200401192047032025"
     EventKey="DEFAULT_EVENT_KEY_251" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
+    OwnerType=" " Priority="0.00"/>
 <EventCondition ActionKey="2004030515355116087"
     ConditionKey="200606221213259609" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:38:01-04:00" Createuserid="SYSTEM"
@@ -59,105 +59,105 @@
     EventKey="ON_SHIP_MANIFEST_COMPLT" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20040413185305128504" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20040413185305128504" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="20040414130001129003"
     EventKey="SHORTAGES_DETECTED" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:41:44-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200404161217363312" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200404161217363312" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="200404161229543317"
     EventKey="NO_REQUESTS_CREATED" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:41:44-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200407081806103346" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200407081806103346" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200407081807223348"
     EventKey="200206122336027467" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200407081821353389" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200407081821353389" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200407081823493391"
     EventKey="DEFAULT_EVENT_KEY_78" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200407231158154160" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200407231158154160" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="200407231212304173"
     EventKey="POST_PICK_CNTR" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:41:44-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="PUBLISH-DEFAULT" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="PUBLISH-DEFAULT" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="2004091510000000001"
     EventKey="LOC_EMT_KEY_1001" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="Y" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2004091510000000000" ConditionKey=""
+    MoreActionsFlag="Y" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2004091510000000000" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="2004091510000000002"
     EventKey="LOC_EMT_KEY_1001" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="1.00"/>
-<EventCondition ActionKey="2004091510413935572" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="1.00"/>
+<EventCondition ActionKey="2004091510413935572" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="2004091510593735628"
     EventKey="DEFAULT_EVENT_KEY71_2" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2004091510413935572" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2004091510413935572" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="2004091511000535631"
     EventKey="DEFAULT_EVENT_KEY71_3" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200503041228406347" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200503041228406347" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200503041759247048"
     EventKey="CLOSE_MANIFEST_SUCCESS" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200503081058165383" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200503081058165383" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200503081123285401"
     EventKey="ON_LOAD_MANIFEST_COMPLT" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="200601021749424430" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="200601021749424430" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200601021750294433"
     EventKey="SO_ROUTE_EVENT_2" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2006012411070152006" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2006012411070152006" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200601021750294444"
     EventKey="DEFAULT_EVENT_KEY_263" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2006012411070152006" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2006012411070152006" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="200601021750294445"
     EventKey="DEFAULT_EVENT_KEY_264" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:41:44-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2006012411070152006" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2006012411070152006" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="200601021750294446"
     EventKey="DEFAULT_EVENT_KEY_265" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:41:44-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
+    OwnerType=" " Priority="0.00"/>
 <EventCondition ActionKey="PRINT-SHIPPINGLABEL"
     ConditionKey="200603230723115551" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:38:01-04:00" Createuserid="SYSTEM"
@@ -165,101 +165,101 @@
     EventKey="ADD_TO_CNTNR_SUCCESS_2" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="ChangeRPEntity" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="ChangeRPEntity" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200607132047169107"
     EventKey="MOVE_PLANNED_TASKS_01" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:01-04:00"
     Modifyuserid="SYSTEM" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="TASKS_RELEASED" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="TASKS_RELEASED" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:38:01-04:00"
     Createuserid="SYSTEM" EventConditionKey="200607142339407933"
     EventKey="RT.TASKS_RELEASED" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:38:01-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="START_ZEROOUT_LOC_INV" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="START_ZEROOUT_LOC_INV" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T14:41:44-04:00"
     Createuserid="SYSTEM" EventConditionKey="2006081411051014053"
     EventKey="ZEROOUT_LOC_INV" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:41:44-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2009122411510322020" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2009122411510322020" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:08:46-04:00"
     Createuserid="SYSTEM" EventConditionKey="2009122413072824004"
     EventKey="2009122411493622014" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:08:46-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2009122411513422023" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2009122411513422023" ConditionKey=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:08:46-04:00"
     Createuserid="SYSTEM" EventConditionKey="2009122413170224514"
     EventKey="2009122411500322017" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:08:46-04:00" Modifyuserid="SYSTEM"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2009031710512029197" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2009031710512029197" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-02-02T18:04:38-05:00" Createuserid="admin"
     EventConditionKey="2011020218043990482" EventKey="RP_ON_REQUEST_KEY"
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2011-02-02T18:04:38-05:00" Modifyuserid="ng"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20110308181637112279" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20110308181637112279" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-03-08T18:32:07-05:00" Createuserid="admin"
     EventConditionKey="20110308183208112330"
     EventKey="DEFAULT_EVENT_KEY_219" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-03-08T18:32:07-05:00"
     Modifyuserid="ng" MoreActionsFlag="Y" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="ORDER_CHANGE.OS" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="ORDER_CHANGE.OS" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-03-08T18:32:07-05:00" Createuserid="admin"
     EventConditionKey="20110308183208112332"
     EventKey="DEFAULT_EVENT_KEY_219" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-03-08T18:32:07-05:00"
     Modifyuserid="ng" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="1.00"/>
-<EventCondition ActionKey="20110705123741153498" ConditionKey=""
+    OwnerType=" " Priority="1.00"/>
+<EventCondition ActionKey="20110705123741153498" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-07-05T12:40:02-04:00" Createuserid="admin"
     EventConditionKey="20110705124003153538"
     EventKey="2011022314202296100" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-05T12:40:02-04:00"
     Modifyuserid="ng" MoreActionsFlag="Y" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20110425170244131238" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20110425170244131238" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-07-05T12:40:02-04:00" Createuserid="admin"
     EventConditionKey="20110705124003153540"
     EventKey="2011022314202296100" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-05T12:40:02-04:00"
     Modifyuserid="ng" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="1.00"/>
-<EventCondition ActionKey="20110705123827153506" ConditionKey=""
+    OwnerType=" " Priority="1.00"/>
+<EventCondition ActionKey="20110705123827153506" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-07-05T12:40:45-04:00" Createuserid="admin"
     EventConditionKey="20110705124045153592"
     EventKey="2011022314495596517" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-05T12:40:45-04:00"
     Modifyuserid="ng" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20110705123741153498" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20110705123741153498" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-07-12T12:07:25-04:00" Createuserid="admin"
     EventConditionKey="20110712120725156217"
     EventKey="DEFAULT_EVENT_KEY_01" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-12T12:07:25-04:00"
     Modifyuserid="ng" MoreActionsFlag="Y" OwnerKey="DEFAULT"
-    OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="ORDER_CREATE.OS" ConditionKey=""
+    OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="ORDER_CREATE.OS" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2011-07-12T12:07:25-04:00" Createuserid="admin"
     EventConditionKey="20110712120725156219"
     EventKey="DEFAULT_EVENT_KEY_01" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-12T12:07:25-04:00"
     Modifyuserid="ng" MoreActionsFlag="N" OwnerKey="DEFAULT"
-    OwnerType="" Priority="1.00"/>
+    OwnerType=" " Priority="1.00"/>
 <EventCondition ActionKey="2009010516034321038"
     ConditionKey="20110726172726165375"
     Createprogid=".YCPWFRepositoryAPI"
@@ -267,43 +267,43 @@
     EventConditionKey="20110726180239165542" EventKey="ON_HOLD_TYPE_1"
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2011-07-26T18:02:39-04:00" Modifyuserid="ngmc"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20120207032938117437" ConditionKey=""
-    Createprogid=".YCPWFRepositoryAPI"
-    Createts="2012-02-08T05:16:15-05:00" Createuserid="admin"
-    EventConditionKey="20120208051615117903"
-    EventKey="ON_ASSIGNMENTS_CHANGE" Lockid="0"
-    Modifyprogid=".YCPWFRepositoryAPI"
-    Modifyts="2012-02-08T05:16:15-05:00" Modifyuserid="admin"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20110705123741153498" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20110705123741153498" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2012-04-06T08:15:44-04:00" Createuserid="admin"
     EventConditionKey="20120406081545123656" EventKey="2002081502"
     Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-04-06T08:15:44-04:00" Modifyuserid="admin"
-    MoreActionsFlag="Y" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="20120406081219123637" ConditionKey=""
+    MoreActionsFlag="Y" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20120406081219123637" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2012-04-06T08:15:44-04:00" Createuserid="admin"
     EventConditionKey="20120406081545123658" EventKey="2002081502"
     Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-04-06T08:15:44-04:00" Modifyuserid="admin"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="1.00"/>
-<EventCondition ActionKey="20110826134513173885" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="1.00"/>
+<EventCondition ActionKey="20110826134513173885" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2012-05-28T05:40:58-04:00" Createuserid="admin"
     EventConditionKey="20120528054058648547"
     EventKey="DEFAULT_EVENT_KEY_224" Lockid="0"
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-05-28T05:40:58-04:00" Modifyuserid="admin"
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-<EventCondition ActionKey="2009031917514636641" ConditionKey=""
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="2009031917514636641" ConditionKey=" "
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2012-06-25T01:05:00-04:00" Createuserid="admin"
     EventConditionKey="201206250105001021855"
     EventKey="RP_ON_SUCCESS_KEY" Lockid="0"
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-06-25T01:05:00-04:00" Modifyuserid="admin"
+    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
+<EventCondition ActionKey="20120207032938117437" ConditionKey=""
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-04-22T04:35:02-04:00" Createuserid="admin"
+    EventConditionKey="201304220435022969510"
+    EventKey="ON_ASSIGNMENTS_CHANGE" Lockid="0"
+    Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-04-22T04:35:02-04:00" Modifyuserid="admin"
     MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
 </YFS_EVENT_CONDITIONList>
