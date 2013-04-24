@@ -2521,21 +2521,6 @@
                 <SetData name="yrc:customType" value=""/>
             </NewField>
             <NewField>
-                <Field attachTo="extn_createdClmn" attachType="AFTER"
-                    enabled="true" isAdvanced="false"
-                    name="extn_lastLoginDateTblClmn"
-                    tableName="tblCustomerContact" type="TableColumn"
-                    visible="true" width="50" wizardPageId="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizardpages.YCDBusinessDetails">
-                    <styles>
-                        <style style="NONE"/>
-                    </styles>
-                </Field>
-                <SetData name="YRCTableAttributeBinding" value="Extn/@ExtnLastLoginDate"/>
-                <SetData name="YRCTableColumnBinding" value="lastLogindate"/>
-                <SetData name="YRCSourceBinding" value="getCustomerDetails_output:/Customer/CustomerContactList/CustomerContact"/>
-                <SetData name="yrc:customType" value=""/>
-            </NewField>
-            <NewField>
                 <Field attachTo="tblclmEMailID" attachType="AFTER"
                     enabled="true" isAdvanced="true"
                     name="extn_permissionsTblClmn"
