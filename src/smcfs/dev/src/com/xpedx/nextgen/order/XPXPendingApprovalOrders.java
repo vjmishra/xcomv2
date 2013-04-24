@@ -137,30 +137,35 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 								
 								if("N".equals(orderElem.getAttribute("DraftOrderFlag")) && "Customer".equals(orderElem.getAttribute(XPXLiterals.A_ORDER_TYPE)))
 								{
-									Element orderHoldTypes = SCXmlUtil.getChildElement(orderElem, XPXLiterals.E_ORDER_HOLD_TYPES);
-									if(orderHoldTypes!=null)
+									Element orderHoldTypesElem = SCXmlUtil.getChildElement(orderElem, XPXLiterals.E_ORDER_HOLD_TYPES);
+									if(orderHoldTypesElem!=null)
 									{
-										Element orderHoldType = SCXmlUtil.getChildElement(orderElem,XPXLiterals.E_ORDER_HOLD_TYPE);
-										if(orderHoldType!=null)
+										ArrayList<Element> orderHoldTypeElemList = SCXmlUtil.getChildren(orderElem, XPXLiterals.E_ORDER_HOLD_TYPE);
+										if(orderHoldTypeElemList!=null && orderHoldTypeElemList.size()>0)
 										{
-											boolean wasOrderOnPendingApprovalHold = Boolean.parseBoolean(SCXmlUtil.getXpathAttribute(inXML.getDocumentElement(),"/Order/OrderHoldTypes/OrderHoldType[@HoldType='"
-																			+ XPXLiterals.PENDING_APPROVAL_HOLD
-																			+ "']/@Status='"
-																			+ XPXLiterals.PENDING_APPROVAL_ACTIVE_STATUS_ID
-																			+ "'"));
-											if(wasOrderOnPendingApprovalHold)
+											for(Element orderHoldTypeElem: orderHoldTypeElemList)
 											{
-												changeOrderOutput = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
-												Element changeOrderInputElem = changeOrderOutput.getDocumentElement();
-												changeOrderInputElem.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
-												Element holdTypes = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPES);
-												Element holdType = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPE);
-												holdType.setAttribute(XPXLiterals.A_HOLD_TYPE, XPXLiterals.PENDING_APPROVAL_HOLD);
-												holdType.setAttribute(XPXLiterals.A_STATUS, XPXLiterals.PENDING_APPROVAL_RELEASE_STATUS_ID);
-												holdType.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, XPXLiterals.PENDING_APPROVAL_RELEASE_DESC);
-												holdTypes.appendChild(holdType);
-												changeOrderInputElem.appendChild(holdTypes);
-												
+												if(orderHoldTypeElem!=null)
+												{
+													String holdType = orderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE);
+										        	String holdStatus = orderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS);
+													if(XPXLiterals.PENDING_APPROVAL_HOLD.equals(holdType) && XPXLiterals.PENDING_APPROVAL_ACTIVE_STATUS_ID.equals(holdStatus))
+													{
+														changeOrderOutput = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
+														Element changeOrderInputElem = changeOrderOutput.getDocumentElement();
+														changeOrderInputElem.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
+														Element holdTypesElem = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPES);
+														Element holdTypeElem = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPE);
+														holdTypeElem.setAttribute(XPXLiterals.A_HOLD_TYPE, XPXLiterals.PENDING_APPROVAL_HOLD);
+														holdTypeElem.setAttribute(XPXLiterals.A_STATUS, XPXLiterals.PENDING_APPROVAL_RELEASE_STATUS_ID);
+														holdTypeElem.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, XPXLiterals.PENDING_APPROVAL_RELEASE_DESC);
+														
+														holdTypesElem.appendChild(holdTypeElem);
+														changeOrderInputElem.appendChild(holdTypesElem);
+														break;
+														
+													}
+												}
 											}
 											
 										}
