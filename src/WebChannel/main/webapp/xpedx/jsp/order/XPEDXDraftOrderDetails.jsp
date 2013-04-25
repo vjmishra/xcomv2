@@ -720,7 +720,7 @@ $(document).ready(function(){
 					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)'/>
 					<%--JIRA 3488 end--%>
 					<%--JIRA 3853 start--%>
-					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerLinePONo")}'></s:set>
+					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 					<li>
 						<label><s:property value='#customerPONoFlag' />:</label>
