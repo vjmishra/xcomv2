@@ -86,7 +86,20 @@ public class XPEDXOrderUtils {
 	public final static String ITEM_EXTN_KEY = "ITEM_EXTN";
 	public final static String ITEM_LIST_KEY = "ITEM_LIST_KEY";
 	public static ArrayList<String> itemList = new ArrayList<String>();
+	//XB-687 changes Start
+	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	
+	
+
+	public static LinkedHashMap<String, Map<String, String>> getItemUomIsCustomerUomHashMap() {
+		return itemUomIsCustomerUomHashMap;
+	}
+
+	public static void setItemUomIsCustomerUomHashMap(
+			LinkedHashMap<String, Map<String, String>> itemUomIsCustomerUomHashMap) {
+		XPEDXOrderUtils.itemUomIsCustomerUomHashMap = itemUomIsCustomerUomHashMap;
+	}
+	//XB-687 changes End
 	public static Document getXPEDXItemAssociation(String custID,
 			String divNumber, String itemID, IWCContext wcContext)
 			throws Exception {
@@ -788,6 +801,7 @@ public class XPEDXOrderUtils {
 			if (wNodeList != null) {
 				int length = wNodeList.getLength();
 				String conversion;
+				String isCustomerUOMFlg="";
 				for (int i = 0; i < length; i++) {
 					Node wNode = wNodeList.item(i);
 					if (wNode != null) {
@@ -797,6 +811,7 @@ public class XPEDXOrderUtils {
 									.getNamedItem("ItemID");
 							if(itemId!=null) {
 								LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
+								LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
 								NodeList uomListNodeList =	wNode.getChildNodes();
 								Node uomListNode = uomListNodeList.item(0);
 								
@@ -815,14 +830,28 @@ public class XPEDXOrderUtils {
 														.getNamedItem("UnitOfMeasure");
 												Node Conversion = uomAttributes
 														.getNamedItem("Conversion");
+												Node CustomerUOmFlag = uomAttributes
+												.getNamedItem("IsCustUOMFlag");
 												if (UnitOfMeasure != null && Conversion != null) {
 													conversion = Conversion.getTextContent();
+													if(CustomerUOmFlag!=null){
+														isCustomerUOMFlg = CustomerUOmFlag.getTextContent();
+													}
 													if(!YFCUtils.isVoid(conversion)){
 														long convFactor = Math.round(Double.parseDouble(conversion));
 															wUOMsAndConFactors.put(UnitOfMeasure
 																.getTextContent(), Long.toString(convFactor));
 															
 													}
+													if(!YFCUtils.isVoid(isCustomerUOMFlg)){
+														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
+																.getTextContent(), isCustomerUOMFlg);
+													}
+													else{
+														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
+																.getTextContent(), "N");
+													}
+														
 												}
 											}
 										}
@@ -830,6 +859,7 @@ public class XPEDXOrderUtils {
 								}
 							
 								itemUomHashMap.put(itemId.getTextContent(), wUOMsAndConFactors);
+								itemUomIsCustomerUomHashMap.put(itemId.getTextContent(), wUOMsAndCustomerUOMFlag);
 							}
 						}
 					}

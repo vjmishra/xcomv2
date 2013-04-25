@@ -366,6 +366,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private boolean filterByAllChk 	= false;
 	private String sharePrivateField;
 	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
+	//XB-687 changes Start
+	protected Map<String,Map<String,String>> itemIdsIsCustomerUOMsMap=new HashMap<String,Map<String,String>>();
+	public Map<String, Map<String, String>> getItemIdsIsCustomerUOMsMap() {
+		return itemIdsIsCustomerUOMsMap;
+	}
+
+	public void setItemIdsIsCustomerUOMsMap(
+			Map<String, Map<String, String>> itemIdsIsCustomerUOMsMap) {
+		this.itemIdsIsCustomerUOMsMap = itemIdsIsCustomerUOMsMap;
+	}
+		//XB-687 changes End
 	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	//Start 2964
 	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
@@ -939,7 +950,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(
 					wcContext.getCustomerId(), allItemIds,
 					wcContext.getStorefrontId());
-
+				//XB-687 changes Start
+			itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
+				//XB-687 changes End
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
 				//Get The itemMap From Session For Minicart Jira 3481
 				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
@@ -952,22 +965,36 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					//Added orderMultiple to get OrderMutiple Jira 3481
 					String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(itemIdForUom);
 					Map uommap = itemIdsUOMsMap.get(itemIdForUom);
+					Map uomIsCustomermap = itemIdsIsCustomerUOMsMap.get(itemIdForUom);
 					Set<Entry<String, String>> set = uommap.entrySet();
 					Map<String, String> newUomMap = new HashMap(itemIdsUOMsMap.get(itemIdForUom));
 					itemIdConVUOMMap.put(itemIdForUom, newUomMap);
 					for (Entry<String, String> entry : set) {
 						String uom = entry.getKey();
 						String convFactor = (String) uommap.get(entry.getKey());
+						String isCustomerUom = (String)uomIsCustomermap.get(entry.getKey());
 						long convFac = Math.round(Double
 								.parseDouble(convFactor));
-
-						if (1 == convFac) {
-							uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom));
-						} else {
-							// -FXD- adding space between UOM & Conversion
-							// Factor
-							uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom)
-									+ " (" + convFac + ")");
+						
+						if(isCustomerUom.equalsIgnoreCase("Y")){
+							if(1 == convFac){
+								uommap.put(uom, uom.substring(2, uom.length()));
+							}
+							else
+								uommap.put(uom, uom.substring(2, uom.length())
+										+ " (" + convFac + ")");
+							
+						}
+						else{
+							if(1 == convFac){
+								uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom));
+							}
+							else{
+								// -FXD- adding space between UOM & Conversion
+								// Factor
+								uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom)
+										+ " (" + convFac + ")");
+							}
 						}
 
 					}

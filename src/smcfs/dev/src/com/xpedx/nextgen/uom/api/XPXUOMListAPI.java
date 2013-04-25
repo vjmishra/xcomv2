@@ -406,6 +406,7 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			String Conversion = wUOMsToConversionFactors.get(UnitOfMeasure);
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
+				uOMElement.setAttribute("IsCustUOMFlag", "Y");
 				uOMElement.setAttribute("Conversion", Conversion);
 			}
 		}
