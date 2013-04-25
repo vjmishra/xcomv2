@@ -1425,7 +1425,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 			//New method for getting order multiple .
 			//setInventoryAndOrderMultipleMap();
-			itemUomHashMap =	getXpedxUOMList();//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
+			itemUomHashMap =XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
 			//orderMultipleMap = new HashMap<String,String>();
 			
 			//Start - Code added to fix XNGTP 2964
@@ -1555,10 +1555,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//Set itemMap MAP again in session
 			XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 			//set a itemsUOMMap in Session for ConvFactor
-			XPEDXWCUtils.setObectInCache("itemsUOMMap",getXpedxUOMList());
-
-			
-			
+			XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId()));	
 		}
 		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
 		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
