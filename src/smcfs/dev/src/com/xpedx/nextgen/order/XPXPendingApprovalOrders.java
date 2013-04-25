@@ -140,7 +140,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 									Element orderHoldTypesElem = SCXmlUtil.getChildElement(orderElem, XPXLiterals.E_ORDER_HOLD_TYPES);
 									if(orderHoldTypesElem!=null)
 									{
-										ArrayList<Element> orderHoldTypeElemList = SCXmlUtil.getChildren(orderElem, XPXLiterals.E_ORDER_HOLD_TYPE);
+										ArrayList<Element> orderHoldTypeElemList = SCXmlUtil.getChildren(orderHoldTypesElem, XPXLiterals.E_ORDER_HOLD_TYPE);
 										if(orderHoldTypeElemList!=null && orderHoldTypeElemList.size()>0)
 										{
 											for(Element orderHoldTypeElem: orderHoldTypeElemList)
@@ -152,8 +152,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 													if(XPXLiterals.PENDING_APPROVAL_HOLD.equals(holdType) && XPXLiterals.PENDING_APPROVAL_ACTIVE_STATUS_ID.equals(holdStatus))
 													{
 														changeOrderOutput = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
-														Element changeOrderInputElem = changeOrderOutput.getDocumentElement();
-														changeOrderInputElem.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
+														Element changeOrderOutputElem = changeOrderOutput.getDocumentElement();
+														changeOrderOutputElem.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
 														Element holdTypesElem = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPES);
 														Element holdTypeElem = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPE);
 														holdTypeElem.setAttribute(XPXLiterals.A_HOLD_TYPE, XPXLiterals.PENDING_APPROVAL_HOLD);
@@ -161,7 +161,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 														holdTypeElem.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, XPXLiterals.PENDING_APPROVAL_RELEASE_DESC);
 														
 														holdTypesElem.appendChild(holdTypeElem);
-														changeOrderInputElem.appendChild(holdTypesElem);
+														changeOrderOutputElem.appendChild(holdTypesElem);
 														break;
 														
 													}
