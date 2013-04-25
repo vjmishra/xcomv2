@@ -794,8 +794,7 @@ function showSharedListForm(){
 	           if(jobIdStr != null && jobIdStr != "")
 		           jobIdFlag = true;
 	           var customPOFlagstr = "<s:property value='%{customerFieldsMap.get("CustomerPONo")}'/>";
-	           
-	           if(customPOFlagstr != null && customPOFlagstr == "Line PO #")
+	           if(customPOFlagstr != null && customPOFlagstr != "")
 	           	flag = true;
 	           var url = "<s:property value='#qaAddItem'/>";
 	           url = ReplaceAll(url,"&amp;",'&');
