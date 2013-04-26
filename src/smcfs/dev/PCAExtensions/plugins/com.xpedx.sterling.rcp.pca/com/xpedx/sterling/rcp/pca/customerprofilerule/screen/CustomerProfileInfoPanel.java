@@ -501,7 +501,15 @@ IYRCComposite {
 	private Label lblSecondItemDisplay;
 
 	private Combo comboSecondItemDisplay;
+	
+	private Button chkManufacturerItemNo;	
+	private Label lblManufacturerItemNo;
+	
+	private Button chkCustomerItemNo;
+	private Label lblCustomerItemNo;
 
+	private Label lblOtherItemNumberDisplay;
+	
 	StyledText stxtMinOrderCurrency;
 	StyledText stxtSmallOrderCurrency;
 	StyledText stxtMaxOrderCurrency;
@@ -951,8 +959,23 @@ IYRCComposite {
 		//gridData1.horizontalIndent = 30;
 		gridData1.verticalAlignment = SWT.CENTER;
 		gridData1.widthHint = 30;
-		gridData1.horizontalSpan=1;		
-
+		gridData1.horizontalSpan=1;	
+		
+		/* XB-759 Code Changes Start */
+		GridData gridData11 = new GridData();
+		gridData11.horizontalAlignment = SWT.END;
+		gridData11.verticalAlignment = SWT.CENTER;
+		gridData11.widthHint = 30;
+		gridData11.horizontalSpan=2;	
+		
+		GridData gridDataLbl1 = new GridData();
+		gridDataLbl1.horizontalAlignment = SWT.BEGINNING;
+		gridDataLbl1.grabExcessHorizontalSpace = true;
+		gridDataLbl1.verticalAlignment = SWT.CENTER;
+		gridDataLbl1.widthHint = 180;
+		gridDataLbl1.horizontalSpan=1;
+		/* XB-759 Code Changes End */
+		
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
@@ -1087,6 +1110,41 @@ IYRCComposite {
 		lblCanRequestSample.setData("name", "lblCanRequestSample");
 		addTab(gridDataDummy,"dummyCanRequestSample");
 
+		/* XB-759 Code Changes Start */
+		if(("B".equals(suffixType))){
+			
+			addTab(gridData1,"dummyOtherItemNumberDisplay");
+			lblOtherItemNumberDisplay = new Label(pnlCustomerProfileInfo, SWT.NONE);
+			lblOtherItemNumberDisplay.setText("Other Item Number Display:");
+			lblOtherItemNumberDisplay.setLayoutData(gridDataLbl);
+			lblOtherItemNumberDisplay.setData("name", "lblOtherItemNumberDisplay");
+			addTab(gridDataDummy,"dummyOtherItemNumberDisplay1");
+			
+			chkManufacturerItemNo = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkManufacturerItemNo.setText("");
+			chkManufacturerItemNo.setVisible(true);
+			chkManufacturerItemNo.setData("yrc:customType", "Label");
+			chkManufacturerItemNo.setLayoutData(gridData11);
+			chkManufacturerItemNo.setData("name", "chkManufacturerItemNo");
+			lblManufacturerItemNo = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblManufacturerItemNo.setText("Manufacturer_Item_No");
+			lblManufacturerItemNo.setLayoutData(gridDataLbl1);
+			lblManufacturerItemNo.setData("name", "lblManufacturerItemNo");
+			addTab(gridDataDummy,"dummyManufacturerItemNo");
+			
+			chkCustomerItemNo = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkCustomerItemNo.setText("");
+			chkCustomerItemNo.setVisible(true);
+			chkCustomerItemNo.setData("yrc:customType", "Label");
+			chkCustomerItemNo.setLayoutData(gridData11);
+			chkCustomerItemNo.setData("name", "chkCustomerItemNo");
+			lblCustomerItemNo = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblCustomerItemNo.setText("Customer_Item_No");
+			lblCustomerItemNo.setLayoutData(gridDataLbl1);
+			lblCustomerItemNo.setData("name", "lblCustomerItemNo");
+			addTab(gridDataDummy,"dummyCustomerItemNo");
+		}
+		/* XB-759 Code Changes End */
 		chkViewPriceFlag = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkViewPriceFlag.setText("");
 		chkViewPriceFlag.setVisible(true);
@@ -2220,7 +2278,24 @@ IYRCComposite {
 		bbd
 		.setActionId("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction");
 		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
-
+		/* XB-759 Code Changes Start */
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMfgItemFlag");
+		chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMfgItemFlag");
+		chkBoxBindingData.setName("chkManufacturerItemNo");
+		chkManufacturerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+		
+		
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerItemFlag");
+		chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerItemFlag");
+		chkBoxBindingData.setName("chkCustomerItemNo");
+		chkCustomerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+		/* XB-759 Code Changes End */
 	}
 
 
