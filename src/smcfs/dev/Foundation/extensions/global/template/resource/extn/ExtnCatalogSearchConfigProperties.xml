@@ -85,14 +85,14 @@
 						<Attribute IndexFieldName="Item.Keywords" 
 							XMLName="Keywords" DefaultWeight="1.0" Index="ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />	
+					</Attributes>					
+				</Entity>
+				<Entity Name="XPXCustItemCrossRef">
+					<Attributes>
+						<Attribute IndexFieldName="CustomerItemNumber" 
+						XMLName="CustomerItemNumber" DefaultWeight="1.0" Index="ANALYZED" Store="N" 
+						UseSynonyms="Y" Searchable="Y"/>
 					</Attributes>
-					<Entity Name="XPXCustItemCrossRef">
-						<Attributes>
-							<Attribute IndexFieldName="Item.CustomerItemNumber" 
-							XMLName="CustomerItemNumber" DefaultWeight="1.0" Index="ANALYZED" Store="N" 
-							UseSynonyms="Y" Searchable="Y"/>
-						</Attributes>
-					</Entity>
 				</Entity>
 			</Entities>
 		</IndexSet>
