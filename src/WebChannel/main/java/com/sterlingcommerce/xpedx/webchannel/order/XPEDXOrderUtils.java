@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathConstants;
@@ -42,6 +43,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 
@@ -53,6 +55,7 @@ import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -88,9 +91,28 @@ public class XPEDXOrderUtils {
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	//XB-687 changes Start
 	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
-	
-	
+	//Start of XB-687
+	public static Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
+	public  static Map displayItemUOMsMap = new HashMap();
+	public  static Map <String,String>defaultShowUOMMap;
 
+	public static Map<String, String> getDefaultShowUOMMap() {
+		return defaultShowUOMMap;
+	}
+
+	public static void setDefaultShowUOMMap(Map<String, String> defaultShowUOMMap) {
+		XPEDXOrderUtils.defaultShowUOMMap = defaultShowUOMMap;
+	}
+
+	public static Map<String, Map<String, String>> getItemIdsUOMsDescMap() {
+		return itemIdsUOMsDescMap;
+	}
+
+	public static void setItemIdsUOMsDescMap(
+			Map<String, Map<String, String>> itemIdsUOMsDescMap) {
+		XPEDXOrderUtils.itemIdsUOMsDescMap = itemIdsUOMsDescMap;
+	}
+//End of XB-687
 	public static LinkedHashMap<String, Map<String, String>> getItemUomIsCustomerUomHashMap() {
 		return itemUomIsCustomerUomHashMap;
 	}
@@ -878,6 +900,399 @@ public class XPEDXOrderUtils {
 	}
 		return itemUomHashMap;
 
+	}
+	
+	/*XB-687
+	 * This method is to include a complex query to get the Xpedx Uoms description depending on if the uom code is a customer_uom for multiple Items
+	 * this will return a map of (itemId, map of UOMS)
+	 */
+	
+	public static Map<String, Map<String,String>> getXpedxUOMDescList(String customerID,
+			ArrayList<String> ItemID, String StoreFrontID) {
+		
+		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		
+		if(YFCCommon.isVoid(customerID)){
+			log.warn("customerID is NULL. cannot call xpedxUOMList method for anonymous user.");
+			return itemUomHashMap;
+		}
+		
+		if(ItemID!=null && ItemID.size()>=1) {
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+				.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext
+				.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		try {
+			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+			YFCElement documentElement = inputDocument.getDocumentElement();
+
+			documentElement.setAttribute("CustomerID", customerID);
+			documentElement.setAttribute("OrganizationCode", StoreFrontID);
+			
+			YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+			YFCElement complexQueryOrElement = documentElement.createChild("Or");
+			for (int i = 0; i < ItemID.size(); i++) {
+				YFCElement expElement = documentElement.createChild("Exp");
+				expElement.setAttribute("Name", "ItemID");
+				expElement.setAttribute("Value", ItemID.get(i));
+				complexQueryOrElement.appendChild((YFCNode)expElement);
+			}
+			complexQueryElement.setAttribute("Operator", "AND");
+			complexQueryElement.appendChild(complexQueryOrElement);
+
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+			env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
+					+ "<ItemList><Item><UOMList><UOM>" + "</UOM></UOMList></Item></ItemList>"));
+			Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
+					inputDocument.getDocument());//SCXmlUtil.getString(outputListDocument)
+			Element wElement = outputListDocument.getDocumentElement();
+			NodeList wNodeList = wElement.getChildNodes();
+			if (wNodeList != null) {
+				int length = wNodeList.getLength();
+				String conversion;
+				String isCustomerUOMFlg="";
+				for (int i = 0; i < length; i++) {
+					Node wNode = wNodeList.item(i);
+					if (wNode != null) {
+						NamedNodeMap nodeAttributes = wNode.getAttributes();
+						if (nodeAttributes != null) {
+							Node itemId = nodeAttributes
+									.getNamedItem("ItemID");
+							if(itemId!=null) {
+								LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
+								LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
+								NodeList uomListNodeList =	wNode.getChildNodes();
+								Node uomListNode = uomListNodeList.item(0);
+								
+								//2964 Start
+								if (uomListNode != null) {
+									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListNode);
+								Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
+									
+									for (Element uomNode : listOfUOMElements) {
+									
+										if (uomNode != null) {
+											NamedNodeMap uomAttributes = uomNode.getAttributes();
+											//2964 end
+											if (uomAttributes != null) {
+												Node UnitOfMeasure = uomAttributes
+														.getNamedItem("UnitOfMeasure");
+												Node Conversion = uomAttributes
+														.getNamedItem("Conversion");
+												Node CustomerUOmFlag = uomAttributes
+												.getNamedItem("IsCustUOMFlag");
+												isCustomerUOMFlg = "";
+												if (UnitOfMeasure != null && Conversion != null) {
+													conversion = Conversion.getTextContent();
+													if(CustomerUOmFlag!=null){
+														isCustomerUOMFlg = CustomerUOmFlag.getTextContent();
+													}
+													if(!YFCUtils.isVoid(conversion)){
+														long convFactor = Math.round(Double.parseDouble(conversion));
+															wUOMsAndConFactors.put(UnitOfMeasure
+																.getTextContent(), Long.toString(convFactor));
+															
+													}
+													if(!YFCUtils.isVoid(isCustomerUOMFlg)){
+														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
+																.getTextContent(), isCustomerUOMFlg);
+													}
+													else{
+														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
+																.getTextContent(), "N");
+													}
+														
+												}
+											}
+										}
+									}
+								}
+							
+								itemUomHashMap.put(itemId.getTextContent(), wUOMsAndConFactors);
+								itemUomIsCustomerUomHashMap.put(itemId.getTextContent(), wUOMsAndCustomerUOMFlag);
+							}
+						}
+					}
+				}
+			}	
+			
+			// Start of XB-687
+			
+			if (itemUomHashMap != null && itemUomHashMap.keySet() != null) {
+				//Get The itemMap From Session For Minicart Jira 3481
+				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
+				//Map<String,Map<String,String>> itemIdsIsCustomerUOMsMap=new HashMap<String,Map<String,String>>();
+				Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+				ArrayList<String> itemIdsList = new ArrayList<String>();
+				itemIdsList.addAll(itemUomHashMap.keySet());
+				Iterator<String> iterator = itemIdsList.iterator();
+				while (iterator.hasNext()) {
+					String itemIdForUom = iterator.next();
+					//Added orderMultiple to get OrderMutiple Jira 3481
+					String orderMultiple="";					
+					orderMultiple = getOrderMultipleForItem(itemIdForUom);
+					
+					Map uommap = itemUomHashMap.get(itemIdForUom);
+					Map uomIsCustomermap = itemUomIsCustomerUomHashMap.get(itemIdForUom);
+					Set<Entry<String, String>> set = uommap.entrySet();
+					Map<String, String> newUomMap = new HashMap(itemUomHashMap.get(itemIdForUom));
+					
+					itemIdConVUOMMap.put(itemIdForUom, newUomMap);
+					for (Entry<String, String> entry : set) {
+						String uom = entry.getKey();
+						String convFactor = (String) uommap.get(entry.getKey());
+						String isCustomerUom = (String)uomIsCustomermap.get(entry.getKey());
+						long convFac = Math.round(Double
+								.parseDouble(convFactor));
+						
+						if(isCustomerUom.equalsIgnoreCase("Y")){
+							if(1 == convFac){
+								uommap.put(uom, uom.substring(2, uom.length()));
+							}
+							else
+								uommap.put(uom, uom.substring(2, uom.length())
+										+ " (" + convFac + ")");
+							
+						}
+						else{
+							if(1 == convFac){								
+									uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom));								
+							}
+							else
+								// -FXD- adding space between UOM & Conversion Factor								
+									uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom)
+											+ " (" + convFac + ")");								
+							
+						}
+
+					}
+					if(itemMapObj !=null )
+					{
+						itemMapObj.put(itemIdForUom, orderMultiple);
+					}
+					itemIdsUOMsDescMap.put(itemIdForUom, uommap);
+
+				}
+				//Set itemMap MAP again in session
+				XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+				//set a itemsUOMMap in Session for ConvFactor			
+				
+					XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);				
+			}
+			// End of XB-687
+			
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		} 
+		finally {
+			scuiTransactionContext.end();
+			env.clearApiTemplate("XPXUOMListAPI");
+			SCUITransactionContextHelper.releaseTransactionContext(
+					scuiTransactionContext, wSCUIContext);
+			env = null;
+		}
+	}
+
+		return itemIdsUOMsDescMap;
+
+	}
+	
+	//Added for XB-687 - Retrieving UOMs code and description for a single Item
+	public static Map<String, String> getXpedxUOMDescList(String customerID,
+			String ItemID, String StoreFrontID) {
+		LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+				.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext
+				.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		try {
+			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+			YFCElement documentElement = inputDocument.getDocumentElement();
+
+			documentElement.setAttribute("ItemID", ItemID);
+			documentElement.setAttribute("CustomerID", customerID);
+			documentElement.setAttribute("OrganizationCode", StoreFrontID);
+
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+			env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
+					+ "<UOMList><UOM>" + "</UOM></UOMList>"));
+			Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
+					inputDocument.getDocument());
+			Element wElement = outputListDocument.getDocumentElement();
+			
+			List<Element> listConv = SCXmlUtil.getChildrenList(wElement);
+			
+			String convStr;
+			LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
+			if (listConv != null) {
+				//2964 start
+				Collections.sort(listConv,new XpedxSortUOMListByConvFactor());				
+				String isCustomerUOMFlg="";
+				for (Element eleUOM : listConv) {					
+				//2964 end
+						NamedNodeMap nodeAttributes = eleUOM.getAttributes();
+						if (nodeAttributes != null) {
+							Node UnitOfMeasure = nodeAttributes
+									.getNamedItem("UnitOfMeasure");
+							Node Conversion = nodeAttributes
+									.getNamedItem("Conversion");
+							Node CustomerUOmFlag = nodeAttributes
+							.getNamedItem("IsCustUOMFlag");
+							isCustomerUOMFlg = "";
+							if (UnitOfMeasure != null && Conversion != null) {
+								convStr =  Conversion.getTextContent();
+								if(CustomerUOmFlag!=null){
+									isCustomerUOMFlg = CustomerUOmFlag.getTextContent();
+								}
+								if(!YFCUtils.isVoid(convStr)){
+									long convFactorLong = Math.round(Double.parseDouble(convStr));									
+									wUOMsAndConFactors.put(UnitOfMeasure
+										.getTextContent(), Long.toString(convFactorLong));
+								}
+								if(!YFCUtils.isVoid(isCustomerUOMFlg)){
+									wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
+											.getTextContent(), isCustomerUOMFlg);
+								}
+								else{
+									wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
+											.getTextContent(), "N");
+								}
+							}
+						}
+					}
+				}
+			if(displayItemUOMsMap==null)
+				displayItemUOMsMap  = new HashMap();
+			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);
+			//Added for Jira 4023
+			double minFractUOM = 0.00;
+	    	double maxFractUOM = 0.00;
+	    	String lowestUOM = "";
+	    	String highestUOM = "";
+	    	String minUOMsDesc = "";
+	    	String maxUOMsDesc = "";
+	    	String defaultConvUOM = "";
+			String defaultUOM = "";
+			String defaultUOMCode = "";
+			
+			defaultShowUOMMap = new HashMap<String,String>();
+			String msapOrderMultipleFlag = "";
+			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+			if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+				msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+			}
+			
+			for (Iterator it = wUOMsAndConFactors.keySet().iterator(); it.hasNext();) {
+				String uomCode = (String) it.next();
+				String convFactor = (String)wUOMsAndConFactors.get(uomCode);
+				long convFac = Math.round(Double.parseDouble(convFactor));
+				String isCustomerUom = (String)wUOMsAndCustomerUOMFlag.get(uomCode);
+				if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(convFactor))
+				{			
+				
+					if(convFactor.toString() == orderMultiple){
+						minFractUOM = 1;
+						lowestUOM = uomCode;
+						minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+						
+						
+					}
+					else {
+						double conversion = getConversion(convFactor, orderMultiple);
+						if (conversion != -1 && uomCode != null
+								&& uomCode.length() > 0) {
+							if(conversion <= 1 && conversion >= minFractUOM){
+								minFractUOM = conversion;
+								lowestUOM = uomCode;
+								minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+								
+								
+							}else if(conversion>1 && ( conversion < maxFractUOM || maxFractUOM == 0)){
+								maxFractUOM = conversion;
+								highestUOM = uomCode;
+								maxUOMsDesc =  XPEDXWCUtils.getUOMDescription(highestUOM)+ " (" + Math.round(Double.parseDouble((String)convFactor)) + ")";
+								
+							
+							}
+						}
+					}
+				}
+			
+				if(isCustomerUom!=null && isCustomerUom.equalsIgnoreCase("Y")){
+					if(1 == convFac){
+						displayItemUOMsMap.put(uomCode, uomCode.substring(2, uomCode.length()));
+					}
+					else
+						displayItemUOMsMap.put(uomCode, uomCode.substring(2, uomCode.length())
+								+ " (" + convFac + ")");					
+				}
+				else{
+						if(1 == convFac){								
+							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode));								
+						}
+						else
+						// -FXD- adding space between UOM & Conversion Factor								
+							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)
+									+ " (" + convFac + ")");	
+					}
+				
+			} //End of For loop iterator
+	
+			if(minFractUOM == 1.0 && minFractUOM != 0.0){
+				defaultConvUOM = lowestUOM;
+				defaultUOM = minUOMsDesc;
+				defaultUOMCode = lowestUOM;
+		
+			}else if(maxFractUOM > 1.0){
+				defaultConvUOM = highestUOM;
+				defaultUOM = maxUOMsDesc;
+				lowestUOM = highestUOM;
+			}else{
+		
+				defaultConvUOM = lowestUOM;
+				defaultUOM = minUOMsDesc;
+				defaultUOMCode = lowestUOM;
+		
+			}
+
+			defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+			
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		} catch (Throwable t) {
+			// Just adding this catch block to control the null pointer logging 
+			// happening in staging.
+			log.error(t.getMessage());
+		}
+		finally {
+			scuiTransactionContext.end();
+			env.clearApiTemplate("XPXUOMListAPI");
+			SCUITransactionContextHelper.releaseTransactionContext(
+					scuiTransactionContext, wSCUIContext);
+			env = null;
+		}
+		return displayItemUOMsMap;
+
+	}
+	
+	//Added for Jira 4023
+	public static int getConversion(String convFactor, String orderMultiple) {
+		if (convFactor != null && convFactor.length() > 0
+				&& orderMultiple != null && orderMultiple.length() > 0) {
+			double convFactorD = Double.parseDouble(convFactor);
+			double orderMultipleD = Double.parseDouble(orderMultiple);
+			double factor = (convFactorD / orderMultipleD);
+			if (Math.abs(factor) == factor) {
+				return (int) Math.abs(factor);
+			}
+		}
+		return -1;
 	}
 
 	public static LinkedHashMap<String, String> getSAPCustomerLineFieldMap(

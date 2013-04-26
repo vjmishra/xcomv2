@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -38,6 +39,16 @@ public class XPXUOMListAPI implements YIFCustomApi {
 	private String lowestConvUOM = "";
 	private int currentConversion;
 	private String ExtnIsCustUOMExcl = "";
+	//Added for XB-687	
+	public static ArrayList<String> customerUOMList = new ArrayList<String>();
+	public static ArrayList<String> getCustomerUOMList() {
+		return customerUOMList;
+	}
+
+	public static void setCustomerUOMList(ArrayList<String> customerUOMList) {
+		XPXUOMListAPI.customerUOMList = customerUOMList;
+	}
+
 	private String baseUOM = "";
 	private boolean complexQuery = false;
 	private Document itemsXrefDoc;
@@ -202,7 +213,7 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			throws XPathExpressionException,YFSException, RemoteException, YIFClientCreationException {
 		
 		Node customerUnitNode = null;
-		
+		customerUOMList.clear();
 		/*NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 				customerNumber, customerBranch, env);*/
 		/*Begin - Changes made by Mitesh for JIRA# 3641*/
@@ -244,15 +255,16 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			Node ConvFactorNode = XpxItemcustXrefAttributes
 					.getNamedItem("ConvFactor");
 			String ConvFactor = ConvFactorNode.getTextContent();
-	//Commented code for XB-687
-		//	if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
-			if(customerUnit!=null && !customerUnit.equalsIgnoreCase("")){
+			//XB-687 - Start
+			if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
 				wUOMsToConversionFactors.clear();
-				wUOMsToConversionFactors.put(customerUnit, ConvFactor);
-			//	return;
 			}
-			//}
-				
+			if(customerUnit!=null && !customerUnit.equalsIgnoreCase("")){
+				customerUOMList.add(customerUnit);				
+				wUOMsToConversionFactors.put(customerUnit, ConvFactor);
+			
+			}			
+			//XB-687 - End	
 			// Null check added.
 			if (useOrderMulUOMFlag != null && useOrderMulUOMFlag.equals("Y")) {
 				int conversion = getConversion(ConvFactor, orderMultiple);
@@ -365,6 +377,11 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
 				uOMElement.setAttribute("Conversion", Conversion);
+				//Start of XB-687
+				if(customerUOMList.contains(UnitOfMeasure))
+				{
+					uOMElement.setAttribute("IsCustUOMFlag", "Y");
+				}//End of XB-687
 			}
 		}
 		return inputDocument.getDocument();
@@ -406,7 +423,11 @@ public class XPXUOMListAPI implements YIFCustomApi {
 			String Conversion = wUOMsToConversionFactors.get(UnitOfMeasure);
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
-				uOMElement.setAttribute("IsCustUOMFlag", "Y");
+				//Updated for XB-687 - Start
+				if(customerUOMList.contains(UnitOfMeasure))
+				{
+					uOMElement.setAttribute("IsCustUOMFlag", "Y");
+				}//Updated for XB-687 - End
 				uOMElement.setAttribute("Conversion", Conversion);
 			}
 		}

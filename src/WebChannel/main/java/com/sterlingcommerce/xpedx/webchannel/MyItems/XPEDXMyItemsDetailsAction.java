@@ -945,14 +945,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			*/
 	
 			/*
-			 * getting all the items UOMs at the same time using a complex query
+			 * getting all the items UOMs and description at the same time using a complex query
 			 */
-			itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(
+			//Changed for XB-687
+			itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(
 					wcContext.getCustomerId(), allItemIds,
 					wcContext.getStorefrontId());
-				//XB-687 changes Start
-			itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
-				//XB-687 changes End
+			
+			//itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
+			/*
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
 				//Get The itemMap From Session For Minicart Jira 3481
 				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
@@ -968,6 +969,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Map uomIsCustomermap = itemIdsIsCustomerUOMsMap.get(itemIdForUom);
 					Set<Entry<String, String>> set = uommap.entrySet();
 					Map<String, String> newUomMap = new HashMap(itemIdsUOMsMap.get(itemIdForUom));
+					
 					itemIdConVUOMMap.put(itemIdForUom, newUomMap);
 					for (Entry<String, String> entry : set) {
 						String uom = entry.getKey();
@@ -996,6 +998,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 										+ " (" + convFac + ")");
 							}
 						}
+						
 
 					}
 					if(itemMapObj !=null )
@@ -1016,31 +1019,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				{
 					LOG.error("Exception while setting UOM in to object");
 				}
-			}
-			
+			}*/
+			//itemIdsUOMsDescMap = itemIdsUOMsMap;
 			validateItemUOM();
-			
-			/*
-			 * This is set in the method setItemDocAndInventoryMap() and the item extn elements are set in the Map xpedxItemIDToItemExtnMap
-			 * getAlternativeItems();
-			 */
-			
-			//PNA Call for Replacement Items removed as per JIRA#1357
-			//checkPnAForReplacementItems();
-			
-			//setMyItemsImages();
-			
+						
 			setLastModifiedListInfo();
 			
-			// Debug
-			// setItemCount("150");
-
-			// Debug
-			// canShare = true;
-			// editMode = true;
-			// System.out.print("Stop here");
-			// canEditItem = false;
-
 			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
 			XPEDXWCUtils.setObectInCache("orderMultipleFromSession", getItemOrderMultipleMap());
 			//Added for JIRA 1402 Starts
@@ -2656,6 +2640,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		List items = new ArrayList();
 		items.add(itemId);
 
+		/*Commented for XB-687
 		itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemId,
 				organizationCode);
 		displayItemUOMsMap = new HashMap();
@@ -2670,7 +2655,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				displayItemUOMsMap.put(XPEDXWCUtils.getUOMDescription(uomDesc)
 						+ " (" + o + ")", uomDesc);
 			}
-		}
+		}*/
+		//Added for XB-687 - Start
+		displayItemUOMsMap = new HashMap();
+		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemId,
+				organizationCode);
 	}
 	
 	private ArrayList<XPEDXItem> getPnAInputDoc(String pnaItemId,
@@ -2696,6 +2685,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		Map<String, String> uoms = null;
 		try {
 			//Map containing UOMCode as key and ConvFactor as value
+			/*Commented for XB-687
 			uoms = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID,
 					organizationCode);
 			displayItemUOMsMap = new HashMap();
@@ -2705,7 +2695,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				displayItemUOMsMap.put(XPEDXWCUtils.getUOMDescription(uomDesc)
 						+ " (" + o + ")", o);
 			}*/
-			for (Iterator it = uoms.keySet().iterator(); it.hasNext();) {
+			/*for (Iterator it = uoms.keySet().iterator(); it.hasNext();) {
 				String uomCode = (String) it.next();
 				String convFact = (String)uoms.get(uomCode);
 				long convFac = Math.round(Double.parseDouble(convFact));
@@ -2720,7 +2710,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							+ " (" + convFac + ")");
 				}
 				
-			}
+			}*/
+			displayItemUOMsMap = new HashMap();
+			displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID,
+					organizationCode);
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}

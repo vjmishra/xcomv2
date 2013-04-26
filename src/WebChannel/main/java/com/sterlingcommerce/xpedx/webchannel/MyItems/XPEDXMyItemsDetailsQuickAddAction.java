@@ -182,28 +182,21 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		try {
 			//Added for Jira 4023
 			//Map containing UOMCode as key and ConvFactor as value
+			/* Commented for XB-687
 			String msapOrderMultipleFlag = "";
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 			if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
 				msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
 				}
+			
+			
+			
 			uoms = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID, organizationCode);
 			//displayItemUOMsMap = new HashMap();
 			itemUOMsMap = uoms;
 			displayItemUOMsMap = uoms;
 			orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(itemID);
-			/*for (Iterator it = uoms.keySet().iterator(); it.hasNext();){
-				String uomDesc = (String) it.next();
-				Object o = uoms.get(uomDesc);
-				if("1".equals(o))
-				{
-					displayItemUOMsMap.put(XPEDXWCUtils.getUOMDescription(uomDesc), uomDesc);
-				}
-				else{
-					displayItemUOMsMap.put(XPEDXWCUtils.getUOMDescription(uomDesc) + " (" + o + ")", uomDesc);
-				}
-				
-			}*/
+			
 			
 			//Added for Jira 4023
 			double minFractUOM = 0.00;
@@ -218,7 +211,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 			//String orderMultiple = "";
 			defaultShowUOMMap = new HashMap<String,String>();
 	    	
-			if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
+				if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
 				
 				Iterator<String> iterator = itemUOMsMap.keySet().iterator();
 				while(iterator.hasNext()) {
@@ -265,6 +258,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)+" ("+convFac+")" );
 						}
 				}
+				
 				if(minFractUOM == 1.0 && minFractUOM != 0.0){
 					defaultConvUOM = lowestUOM;
 					defaultUOM = minUOMsDesc;
@@ -284,7 +278,12 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 				
 			}
 			defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+			*/
 			
+			//Start of XB-687
+			displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode);
+			defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
+			//End of XB-687
 			if(requestedDefaultUOM == null && defaultShowUOMMap!=null && !defaultShowUOMMap.isEmpty()){
 				requestedDefaultUOM = (String)defaultShowUOMMap.keySet().iterator().next();
 			}
@@ -316,7 +315,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}
-		return uoms;
+		return displayItemUOMsMap;
 	}
 	
 	//Added for Jira 4023
