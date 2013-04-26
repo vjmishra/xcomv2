@@ -5446,7 +5446,7 @@
     Modifyprogid=".YEntityServlet" Modifyts="2012-06-11T02:53:45-04:00"
     Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
-    CodeShortDescription="Awaiting FO Creation" CodeSymbol=" "
+    CodeShortDescription="Awaiting Ship Order Creation" CodeSymbol=" "
     CodeType="XpedxStatus" CodeValue="1310"
     CommonCodeKey="201209140203542104615" Createprogid=".YEntityServlet"
     Createts="2012-09-14T02:03:54-04:00" Createuserid="admin"
