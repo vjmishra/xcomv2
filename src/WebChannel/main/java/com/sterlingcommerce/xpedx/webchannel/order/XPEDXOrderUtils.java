@@ -93,7 +93,7 @@ public class XPEDXOrderUtils {
 	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	//Start of XB-687
 	public static Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
-	public  static Map displayItemUOMsMap = new HashMap();
+	
 	public  static Map <String,String>defaultShowUOMMap;
 
 	public static Map<String, String> getDefaultShowUOMMap() {
@@ -1104,6 +1104,7 @@ public class XPEDXOrderUtils {
 	public static Map<String, String> getXpedxUOMDescList(String customerID,
 			String ItemID, String StoreFrontID) {
 		LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
+		 Map displayItemUomsMap= new HashMap();;
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
@@ -1167,8 +1168,8 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}
-			if(displayItemUOMsMap==null)
-				displayItemUOMsMap  = new HashMap();
+			if(displayItemUomsMap==null)
+				displayItemUomsMap  = new HashMap();
 			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);
 			//Added for Jira 4023
 			double minFractUOM = 0.00;
@@ -1226,19 +1227,19 @@ public class XPEDXOrderUtils {
 			
 				if(isCustomerUom!=null && isCustomerUom.equalsIgnoreCase("Y")){
 					if(1 == convFac){
-						displayItemUOMsMap.put(uomCode, uomCode.substring(2, uomCode.length()));
+						displayItemUomsMap.put(uomCode, uomCode.substring(2, uomCode.length()));
 					}
 					else
-						displayItemUOMsMap.put(uomCode, uomCode.substring(2, uomCode.length())
+						displayItemUomsMap.put(uomCode, uomCode.substring(2, uomCode.length())
 								+ " (" + convFac + ")");					
 				}
 				else{
 						if(1 == convFac){								
-							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode));								
+							displayItemUomsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode));								
 						}
 						else
 						// -FXD- adding space between UOM & Conversion Factor								
-							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)
+							displayItemUomsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)
 									+ " (" + convFac + ")");	
 					}
 				
@@ -1277,7 +1278,7 @@ public class XPEDXOrderUtils {
 					scuiTransactionContext, wSCUIContext);
 			env = null;
 		}
-		return displayItemUOMsMap;
+		return displayItemUomsMap;
 
 	}
 	
