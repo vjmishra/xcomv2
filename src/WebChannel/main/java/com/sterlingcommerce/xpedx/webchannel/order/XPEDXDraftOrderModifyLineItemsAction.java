@@ -14,6 +14,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
+import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
 import com.sterlingcommerce.webchannel.order.DraftOrderModifyLineItemsAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
@@ -22,11 +26,15 @@ import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
+import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineItemsAction
 {
@@ -204,6 +212,11 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 				if(shipToCustomer!=null)
 				{
 					String applyMinOrderCharge_DivisionLevel=shipToCustomer.getShipToOrgExtnApplyMinOrderCharge();
+					if(applyMinOrderCharge_DivisionLevel==null)
+					{						
+						applyMinOrderCharge_DivisionLevel=getExtnApplyMinOrderCharge(shipToCustomer.getExtnEnvironmentCode(), shipToCustomer.getExtnShipFromBranch());					
+					}
+					
 					if("Y".equalsIgnoreCase(applyMinOrderCharge_DivisionLevel))
 					{
 						processSpecialCharge(outputDocument, chngOrderOutputAvailable);
@@ -672,5 +685,47 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 		this.isComingFromCheckout = isComingFromCheckout;
 	}
 
+	private String getExtnApplyMinOrderCharge(String envCode, String shipFromBranch) {
+		String extnApplyMinOrderCharge=null;
+		if (shipFromBranch != null && shipFromBranch.trim().length() > 0)
+		{
+				
+			if (envCode != null && envCode.trim().length() > 0)
+			{
+				shipFromBranch = shipFromBranch	+ "_" + envCode;
+			}					
+			
+			SCUIContext wSCUIContext = wcContext.getSCUIContext();
+			ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			YFSEnvironment env  = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			
+			YFCDocument organizationListInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORGANIZATION);
+			organizationListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, shipFromBranch);
+			
+			env.setApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API, SCXmlUtil.createFromString("<OrganizationList><Organization OrganizationName=\"\"><Extn ExtnApplyMinOrderCharge=\"\"/></Organization></OrganizationList>"));
+			try
+			{			
+				Document organizationListOutDoc = YIFClientFactory.getInstance().getApi().invoke(env, XPXLiterals.GET_ORGANIZATION_LIST_API, organizationListInputDoc.getDocument());
+				env.clearApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API);
+				if(organizationListOutDoc!=null)
+				{
+					extnApplyMinOrderCharge=SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge");
+					
+				}
+			}catch(Exception ex)
+			{
+				LOG.debug("Exception, inside getExtnApplyMinOrderCharge method of XPEDXDraftOrderModifyLineItemsAction class, while retrieving the value of ExtnApplyMinOrderCharge from yfs_organization table. Exception is : "+ ex);
+			
+			}finally
+			{
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+				scuiTransactionContext = null;
+				env = null;
+			}			
+		}
+		return extnApplyMinOrderCharge;
+		
+	}
 	
 }
