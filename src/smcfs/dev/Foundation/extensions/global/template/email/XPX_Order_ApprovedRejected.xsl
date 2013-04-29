@@ -220,7 +220,7 @@
 		</xsl:template>
 		
 		<xsl:variable name="billToID" >
-			<xsl:value-of select="Order/@BillToID" />
+			<xsl:value-of select="Order/Extn/@ExtnBillToCustomerID" />
 		</xsl:variable>
 	
 		<xsl:variable name="shipToID" >
