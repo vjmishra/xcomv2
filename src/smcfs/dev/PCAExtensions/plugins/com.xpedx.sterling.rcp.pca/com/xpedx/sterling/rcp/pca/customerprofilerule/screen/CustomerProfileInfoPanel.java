@@ -2279,22 +2279,24 @@ IYRCComposite {
 		.setActionId("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction");
 		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
 		/* XB-759 Code Changes Start */
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMfgItemFlag");
-		chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMfgItemFlag");
-		chkBoxBindingData.setName("chkManufacturerItemNo");
-		chkManufacturerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
-		
-		
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerItemFlag");
-		chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerItemFlag");
-		chkBoxBindingData.setName("chkCustomerItemNo");
-		chkCustomerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+		if(("B".equals(suffixType))){
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMfgItemFlag");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMfgItemFlag");
+			chkBoxBindingData.setName("chkManufacturerItemNo");
+			chkManufacturerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerItemFlag");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerItemFlag");
+			chkBoxBindingData.setName("chkCustomerItemNo");
+			chkCustomerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+		}
 		/* XB-759 Code Changes End */
 	}
 
