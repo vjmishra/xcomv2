@@ -1104,7 +1104,7 @@ public class XPEDXOrderUtils {
 	public static Map<String, String> getXpedxUOMDescList(String customerID,
 			String ItemID, String StoreFrontID) {
 		LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
-		 Map displayItemUomsMap= new HashMap();;
+		 Map displayItemUomsMap= new HashMap();
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
