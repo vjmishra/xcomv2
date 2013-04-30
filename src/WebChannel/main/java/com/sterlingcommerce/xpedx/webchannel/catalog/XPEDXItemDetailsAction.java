@@ -771,9 +771,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	protected void getItemUOMs() throws Exception {
 		String customerId = wcContext.getCustomerId();
 		String organizationCode = wcContext.getStorefrontId();
-//COmmented for XB-687
-		//itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID,
-			//	organizationCode);
+
+		itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID,
+			organizationCode);
 		/*LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, String> uomListMap = new LinkedHashMap<String, String>();
 		if(getItemListElem() != null) {
@@ -850,7 +850,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		itemUOMsMap = uomListMap;*/
 		//2964 start
 		//displayItemUOMsMap = new HashMap();
-		//displayItemUOMsMap = itemUOMsMap;
+		displayItemUOMsMap = itemUOMsMap;
 		//2964 end
 		
 		
@@ -869,9 +869,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}*/
 		//Changes start for JIRA 2964
 	
-	/*COmmented for XB-687
-	 * 
-	 * 	double minFractUOM = 0.00;
+		double minFractUOM = 0.00;
     	double maxFractUOM = 0.00;
     	String lowestUOM = "";
     	String highestUOM = "";
@@ -958,14 +956,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 			
 		}
-		defaultShowUOMMap.put(defaultUOMCode, defaultUOM);*/
+		defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
 		//Changes End for JIRA 2964
 		
-		//Start of XB-687
-		defaultShowUOMMap = new HashMap<String,String>();		
-		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode);
-		defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
-		//End of XB-687
+		
 		
 	}
 	
