@@ -3168,7 +3168,7 @@ function showSharedListForm(){
 											value='%{#item.getAttribute(#customKey)}' />
 										</s:if>
 										<tr>
-											<td align="right"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
+											<td align="right" width="120px;"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
 											<td>
 												<%-- Creating text field with name as the Customer field name --%>
 												
