@@ -373,7 +373,9 @@
 			<Template>
 				<ItemList>
 					<Item  GlobalItemID="" ItemID="" ItemKey="" MaxModifyTS="" OrganizationCode="Required" UnitOfMeasure="">
-						<PrimaryInformation Description="" ShortDescription="" /> 
+						 <!-- Added ManufacturerItem for XB-56 -->
+						<PrimaryInformation Description="" ManufacturerItem="" ShortDescription="" /> 
+						<!-- Added ManufacturerItem for XB-56 -->
 					</Item>					
 				</ItemList>			
 			</Template>

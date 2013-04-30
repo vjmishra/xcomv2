@@ -18,6 +18,7 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.w3c.dom.Document;
@@ -86,6 +87,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected HashMap<String, String> inventoryCheckForItemsMap;
 	protected List displayUOMs = new ArrayList();
 	private ArrayList listOfItems;
+	//XB-56 - Start
+	Map<String, String> manufactureItemMap;
+	Map<String, String> itemdescriptionMap;
+	//XB-56 - End
 
 	private ArrayList listOfItemsFromsession;
 	public ArrayList getListOfItemsFromsession() {
@@ -472,7 +477,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			// Get custom fields labels & data
 			// get the data in csv format
-			String exportData = "Supplier Part Number,Customer Part Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
+			String exportData = "Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
 			StringBuilder sbCSV = new StringBuilder();
 			@SuppressWarnings("unused")
 			ArrayList<Element> items = getXMLUtils().getElements(
@@ -481,7 +486,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(items.size() > 0){
 				itemListEntitled=XPEDXMyItemsUtils.getEntitledItem(getWCContext(),items);
 			}
-			sbCSV.append("Supplier Part Number,Customer Part Number,Quantity,Unit of Measure,");
+			//XB-56 - Modfied Label
+			sbCSV.append("Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,");
 			
 			
 			sbCSV.append("Description,Price,");
@@ -499,6 +505,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String id 		 = item.getAttribute("MyItemsKey");
 				String tmpItemId = item.getAttribute("ItemId");
 				String customerPartNumber = "";
+				//Added	this XB-56
+
+				String mfgItemNo = manufactureItemMap.get(item.getAttribute("ItemId"));
+				//XB-56 End
 					
 				//get the customer part number
 				if(itemcustXrefDoc == null)
@@ -527,6 +537,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						XPEDXMyItemsUtils.encodeStringForCSV(customerPartNumber)
 				).append("\"").append(",");
 				
+				// XB- 56 - Start
+				if(null!=mfgItemNo && !mfgItemNo.isEmpty()){
+				sbCSV.append("\"").append(
+						XPEDXMyItemsUtils.encodeStringForCSV(mfgItemNo)).append("\"").append(
+						",");
+				}else{
+					sbCSV.append("\"").append(
+							XPEDXMyItemsUtils.encodeStringForCSV("")).append("\"").append(
+							",");
+				}
+				//XB- 56 - End
 				
 				sbCSV.append("").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(item
@@ -548,20 +569,24 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						XPEDXMyItemsUtils.encodeStringForCSV(uomId)).append(
 						"\"").append(",");
 				
+				//XB-56 - Start - Modified Description by appending Long Description
 				if(item.getAttribute("Name").trim().length()>0)
 				{
+				String name = item.getAttribute("Name");	
+				name = buildDescription(name,item.getAttribute("ItemId"));	
 				sbCSV.append("\"").append(
-						XPEDXMyItemsUtils.encodeStringForCSV(item
-								.getAttribute("Name"))).append("\"")
+						XPEDXMyItemsUtils.encodeStringForCSV(name)).append("\"")
 						.append(",");
 				}
 				else
 				{
+					String desc = item.getAttribute("Desc");	
+					desc = buildDescription(desc,item.getAttribute("ItemId"));
 					sbCSV.append("\"").append(
-							XPEDXMyItemsUtils.encodeStringForCSV(item
-									.getAttribute("Desc"))).append("\"")
+							XPEDXMyItemsUtils.encodeStringForCSV(desc)).append("\"")
 							.append(",");
 				}
+				//XB-56 - Modified Description by appending Long Description - End
 				//item.getAttribute("Desc");
 				// Get the Avail and price
 				String avail = "";
@@ -657,8 +682,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 	
-	//XB-224 Added to check for item entitlement for the logged in customer
+ 	//XB-224 Added to check for item entitlement for the logged in customer
 	
+	//XB-56 - Start
+	/**
+	 * buildDescription - This will build description with combination of short and long description
+	 * @param shortDescrip
+	 * @param itemId
+	 * @return String
+	 */
+	private String buildDescription(String shortDescrip, String itemId) {
+		String longDescription = itemdescriptionMap.get(itemId);
+		String[] longDescript =  StringUtils.replace(longDescription, "<ul><li>","").replace("</ul>", "<li>").split("</li><li>");
+		StringBuffer itemCompleteDescrip = new StringBuffer(shortDescrip);
+		for(int i=0;i<longDescript.length;i++){
+			itemCompleteDescrip.append(",").append(longDescript[i]);
+		}
+		return itemCompleteDescrip.toString();
+	}
+   //XB-56 - End
 	private void checkforEntitlement(){
 		
 		ArrayList<String> entlErrorList = new ArrayList<String>();
@@ -749,6 +791,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	private void setItemDescription()
 	{
+		//XB-56 Start
+		itemdescriptionMap = new HashMap<String, String>();
+		//XB-56 End
 		if(!SCUtil.isVoid(allItemsDoc)) {
 			NodeList itemNodeList=allItemsDoc.getDocumentElement().getElementsByTagName("Item");
 			if(itemNodeList != null)
@@ -760,6 +805,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Element primaryInfoElem=(Element)itemElem.getElementsByTagName("PrimaryInformation").item(0);
 					Element extnEle = (Element)itemElem.getElementsByTagName("Extn").item(0);
 					masterItemExtnMap.put(itemId, extnEle);
+					//XB-56 Start
+					String description = primaryInfoElem.getAttribute("Description");
+					itemdescriptionMap.put(itemId, description);
+					//XB-56 End
 					descriptionMap.put(itemId,primaryInfoElem);
 				}
 			}
@@ -895,10 +944,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// Get the customer fields
 			getCustomerDisplayFields();
 			
-			if (getCommand().equals(COMMAND_EXPORT_LIST)) {
-				exportList();
-				return "export";
-			}
+		
 			
 			// Get related items and their information
 			getRelatedItems();
@@ -911,6 +957,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(editMode ==  true)
 			{
 				setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));
+			}
+			if (getCommand().equals(COMMAND_EXPORT_LIST)) {
+				exportList();
+				return "export";
 			}
 
 			// Get the list of carts for this users
@@ -1640,6 +1690,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	@SuppressWarnings("unchecked")
 	private void getItemSKUMap() {
 		//Fetch all the items in MIL and get their respective SKUs
+		//XB-56 - Added Code to fetch Long Description and Manufacturing Item Number - Start
+		manufactureItemMap = new HashMap<String, String>();
 		if(getListOfItems()==null || getListOfItems().size()==0)
 			return;
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
@@ -1660,6 +1712,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							if(primeInfoElem!=null)
 							{
 								String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+								//XB-56 Start
+								manufactureItemMap.put(itemId, manufactureItem);
+								//XB-56 End
 								if(manufactureItem!=null && manufactureItem.length()>0)
 									itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
 							}

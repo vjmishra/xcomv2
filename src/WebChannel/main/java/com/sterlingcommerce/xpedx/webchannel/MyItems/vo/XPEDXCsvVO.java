@@ -6,12 +6,23 @@ public class XPEDXCsvVO {
 	
 	private String CustomerPartNumber = "";
 	private String SupplierPartNumber = "";
+	//XB-56 Start
+	private String MfgItemNumber = "";
+	//XB-56 End
 	private String Qty = "";
 	private String UOM = "";
 	private HashMap<String, String> customFields = new HashMap<String, String>();
 	private String LineLevelCode = "";
 	private String Description = "";
 	
+	//XB-56 - Start
+	public String getMfgItemNumber() {
+		return MfgItemNumber;
+	}
+	public void setMfgItemNumber(String mfgItemNumber) {
+		MfgItemNumber = mfgItemNumber;
+	}
+	//XB-56 - End
 	public String getCustomerPartNumber() {
 		return CustomerPartNumber;
 	}
@@ -54,6 +65,9 @@ public class XPEDXCsvVO {
 		try {
 			res.append("Customer Part Number: ").append(getCustomerPartNumber()).append(", ");
 			res.append("Supplier Part Number: ").append(getSupplierPartNumber()).append(", ");
+			// XB - 56
+			res.append("Manufacturer Item Number: ").append(getMfgItemNumber()).append(", ");
+			//XB-56 End
 			res.append("Quantity: ").append(getQty()).append(", ");
 			res.append("UOM: ").append(getUOM()).append(", ");
 			res.append("Line Level Code: ").append(getLineLevelCode()).append(", ");

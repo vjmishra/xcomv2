@@ -54,6 +54,9 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
     private String[] itemsName;
 	private String[] itemsDesc;
 	private String[] itemsQty;
+	//XB - 56 Changes - Start
+	private String[] MfgItemsNumber;
+	//XB - 56 Changes - End
 	private String[] itemsUOM;
 	private String[] itemsJobId;
 	private String[] itemsOrder;
@@ -307,7 +310,10 @@ public String getSharePermissionLevel() {
 				
 				vo.setCustomerPartNumber(nextLine[1]);
 				vo.setSupplierPartNumber(nextLine[0]);
-				vo.setQty(nextLine[2]);
+				// XB - 56 
+				vo.setMfgItemNumber(nextLine[2]);
+				//XB - End
+				vo.setQty(nextLine[3]);
 				/* Append the Uom Id in the import create action.
 				 * This way we can avoid the getComplteteItemList call in this class
 				 * if(itemListEntitled.contains(nextLine[1])){
@@ -316,11 +322,11 @@ public String getSharePermissionLevel() {
 				else{
 					vo.setUOM(nextLine[3]);
 				}*/
-				vo.setUOM(nextLine[3]);
+				vo.setUOM(nextLine[4]);
 				//vo.setLineLevelCode(nextLine[4]);
 				
 				int counter = 0;
-				vo.setDescription(nextLine[counter+3+1]);
+				vo.setDescription(nextLine[counter+4+1]);
 				
 				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) {
 					counter++;
@@ -362,6 +368,9 @@ public String getSharePermissionLevel() {
 				itemsIds 	= new String[dataList.size()];
 				itemsName 	= new String[dataList.size()];
 				itemsDesc 	= new String[dataList.size()];
+				//XB- 56
+				MfgItemsNumber = new String[dataList.size()];
+				//XB- 56 End
 				itemsQty 	= new String[dataList.size()];
 				itemsUOM 	= new String[dataList.size()];
 				itemsJobId 	= new String[dataList.size()];
@@ -372,6 +381,9 @@ public String getSharePermissionLevel() {
 					XPEDXCsvVO vo 	= (XPEDXCsvVO)getDataList().get(j);
 					itemsIds[j] 	= vo.getSupplierPartNumber();
 					itemsName[j] 	= vo.getCustomerPartNumber();
+					//XB- 56
+					MfgItemsNumber[j] = vo.getMfgItemNumber();
+					//XB-56 End
 					itemsDesc[j] 	= vo.getDescription();
 					itemsQty[j] 	= vo.getQty();
 					itemsUOM[j] 	= vo.getUOM();
@@ -388,6 +400,9 @@ public String getSharePermissionLevel() {
 			request.getSession().setAttribute("itemsName", 	getItemsName());
 			request.getSession().setAttribute("itemsDesc", 	getItemsDesc());
 			request.getSession().setAttribute("itemsQty", 	getItemsQty());
+			//XB-56 - Start
+			request.getSession().setAttribute("MfgItemsNumber", getMfgItemsNumber());
+			//XB-56 - End
 			request.getSession().setAttribute("itemsUOM", 	getItemsUOM());
 			request.getSession().setAttribute("itemsJobId", getItemsJobId());
 			request.getSession().setAttribute("itemsOrder", getItemsOrder());
@@ -462,7 +477,15 @@ public String getSharePermissionLevel() {
 	public void setItemsQty(String[] itemsQty) {
 		this.itemsQty = itemsQty;
 	}
+  //XB - 56 - Start
+	public String[] getMfgItemsNumber() {
+		return MfgItemsNumber;
+	}
 
+	public void setMfgItemsNumber(String[] mfgItemsNumber) {
+		MfgItemsNumber = mfgItemsNumber;
+	}
+//XB - 56 - End
 	public String[] getItemsUOM() {
 		return itemsUOM;
 	}
