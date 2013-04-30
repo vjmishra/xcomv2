@@ -307,17 +307,18 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		String OrganizationCodeForFirstItem = "";
 		while(it.hasNext())
 		{
-			lineCount++;
+			
 			Element orderLineElem=it.next();			
 			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
 			Element itemDetailEle = SCXmlUtil.getChildElement(orderLineElem, "ItemDetails");
 			String itemId = itemElement.getAttribute("ItemID");
-			if ( lineCount == 1) {
+			if ( lineCount == 0 && itemDetailEle != null ) {
 				Element catlistEle = SCXmlUtil.getChildElement(itemDetailEle, "CategoryList");
 				Element catElement = (Element)catlistEle.getElementsByTagName("Category").item(0);			
 				firstItemCategoryPath = catElement.getAttribute("CategoryPath");
 				OrganizationCodeForFirstItem = catElement.getAttribute("OrganizationCode");
 				firstItem = itemId;
+				lineCount++;
 			}
 			String lineType=orderLineElem.getAttribute("LineType");
 			if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemID.contains(itemId))
