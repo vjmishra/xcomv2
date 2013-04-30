@@ -5547,6 +5547,11 @@ public class XPEDXWCUtils {
 					/* XB-763 Code Changes Start */
 					String extnMfgItemFlag = parentExtnElem.getAttribute("ExtnMfgItemFlag");
 					String extnCustomerItemFlag = parentExtnElem.getAttribute("ExtnCustomerItemFlag");
+					/* xb-758 Code Changes start */
+					wcContext.removeWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG, WCAttributeScope.LOCAL_SESSION);
+					wcContext.removeWCAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG, WCAttributeScope.LOCAL_SESSION);
+					wcContext.removeWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU, WCAttributeScope.LOCAL_SESSION); // Need to remove this line while fixing XB-756 logic
+					/* xb-758 Code Changes end */
 					if(!YFCCommon.isVoid(extnMfgItemFlag) && extnMfgItemFlag.equalsIgnoreCase("Y") ){
 						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG,extnMfgItemFlag,WCAttributeScope.LOCAL_SESSION);
 						wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,"2",WCAttributeScope.LOCAL_SESSION); //// Need to remove this line while fixing XB-756 logic
