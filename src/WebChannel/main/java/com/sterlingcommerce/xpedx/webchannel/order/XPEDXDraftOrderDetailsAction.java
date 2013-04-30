@@ -1671,9 +1671,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		/*
 		 * getting all the items UOMs at the same time using a complex query
 		 */
-		itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
+		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
+		itemIdsUOMsMap = (Map<String, Map<String, String>>) XPEDXWCUtils.getObjectFromCache("itemsUOMMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
 		
-		if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
+		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
 			ArrayList<String> itemIdsList = new ArrayList<String>();
 			itemIdsList.addAll(itemIdsUOMsMap.keySet());
 			Iterator<String> iterator = itemIdsList.iterator();
@@ -1700,7 +1701,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				
 				itemIdsUOMsDescMap.put(itemIdForUom, uommap);
 			}
-		}
+		}*/
 		for (int i = 0; i < items.size(); i++) {
 			String newItemID = (String)items.get(i);
 			String itemIDUOM = (String)itemIDToItemIDUOMMap.get(newItemID);

@@ -91,6 +91,9 @@ public class XPEDXOrderUtils {
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	//XB-687 changes Start
 	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+	public static LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
+	
+	
 	//Start of XB-687
 	public static Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	
@@ -725,6 +728,7 @@ public class XPEDXOrderUtils {
 			//NodeList wNodeList = wElement.getChildNodes();
 			
 			String convStr;
+			String isCustomerUOMFlg="";
 			if (listConv != null) {
 				//2964 start
 				Collections.sort(listConv,new XpedxSortUOMListByConvFactor());
@@ -741,18 +745,31 @@ public class XPEDXOrderUtils {
 									.getNamedItem("UnitOfMeasure");
 							Node Conversion = nodeAttributes
 									.getNamedItem("Conversion");
+							Node CustomerUOmFlag = nodeAttributes
+							.getNamedItem("IsCustUOMFlag");
 							if (UnitOfMeasure != null && Conversion != null) {
 								convStr =  Conversion.getTextContent();
+								if(CustomerUOmFlag!=null){
+									isCustomerUOMFlg = CustomerUOmFlag.getTextContent();
+								}
 								if(!YFCUtils.isVoid(convStr)){
 									long convFactorLong = Math.round(Double.parseDouble(convStr));
 									wUOMsAndConFactors.put(UnitOfMeasure
 										.getTextContent(), Long.toString(convFactorLong));
 								}
+								if(!YFCUtils.isVoid(isCustomerUOMFlg)){
+									itemUomForSingleItemIsCustomerUomHashMap.put(UnitOfMeasure
+											.getTextContent(), isCustomerUOMFlg);
+								}
+								else{
+									itemUomForSingleItemIsCustomerUomHashMap.put(UnitOfMeasure
+											.getTextContent(), "N");
+								}
 							}
 						}
 					}
 				}
-			
+			XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
 
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -1018,7 +1035,7 @@ public class XPEDXOrderUtils {
 					}
 				}
 			}	
-			
+			XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);
 			// Start of XB-687
 			
 			if (itemUomHashMap != null && itemUomHashMap.keySet() != null) {
@@ -1168,6 +1185,8 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}
+			//set UOM map with UOM code as key and flag as value which indicate whether the UOM is a customer UOM or not
+			XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
 			if(displayItemUomsMap==null)
 				displayItemUomsMap  = new HashMap();
 			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);

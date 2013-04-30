@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -39,8 +40,18 @@ public class XPEDXCommonActions extends WCMashupAction {
 	public void getUOMDescription() throws XPathExpressionException,
 			XMLExceptionWrapper, CannotBuildInputException, IOException {
 		String uomDescription = "";
-		if (uomCode != null && uomCode.trim().length() > 0) {
-			uomDescription = XPEDXWCUtils.getUOMDescription(uomCode);
+		// XB-687 - start
+	    LinkedHashMap<String, String> IsCustomerUomHashMap = new LinkedHashMap<String,String>();
+	    if(XPEDXWCUtils.getObjectFromCache("UOMsMap") != null){
+	    	IsCustomerUomHashMap = (LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    }
+		// XB-687 - End
+		if (uomCode != null && uomCode.trim().length() > 0 ) {
+			if(IsCustomerUomHashMap.get(uomCode)!=null && IsCustomerUomHashMap.get(uomCode).equalsIgnoreCase("Y")){
+				uomDescription = uomCode.substring(2, uomCode.length());
+			}
+			else
+				uomDescription = XPEDXWCUtils.getUOMDescription(uomCode);
 		}
 		getWCContext().getSCUIContext().getResponse().setContentType(
 				"text/html");
