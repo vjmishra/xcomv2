@@ -735,7 +735,7 @@
 				<!-- if (specialInstructions is not null) -->
 				<xsl:if test = 'Instructions/Instruction/@InstructionText!=""'>
 				<tr class="special-instructions"> 
-					<td colspan="5"> 
+					<td colspan="6"> 
 						<table class="inner">
 							<tr>
 								

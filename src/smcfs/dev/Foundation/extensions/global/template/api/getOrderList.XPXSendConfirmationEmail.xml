@@ -15,6 +15,7 @@
 		<PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode="">
 			<Extn ExtnZip4=""/>
 		</PersonInfoShipTo>
+		<PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3="" City="" Country="" State="" ZipCode=""/>	
 		<Instructions>
 			</Instructions>
 	</Order>

@@ -208,7 +208,10 @@
 				width: 82%;
 			}
 			
-			
+			.addWidth
+			{
+				width: 120px;
+			}
 			
 
 	    </STYLE>
@@ -608,7 +611,7 @@
 						<xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >	
 					
 					<td class="right"> Shippable Qty:&#160;</td>
-					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
+					<td class="addWidth"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td> 
 					<td class="align-right">
 					<xsl:if test='$viewPricesFlag ="Y"'>
 						<xsl:choose>
@@ -633,7 +636,7 @@
 						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!="" and  ($IsOrderSplit ="N")' >	
 					
 					<td class="right"> Backorder Qty:&#160; </td>
-					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
+					<td class="addWidth"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -646,7 +649,7 @@
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/><xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>  </td>
-					<td class="left"></td>
+					<td class="addWidth"></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -659,7 +662,7 @@
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right"><xsl:value-of select="@Status"/>  </td>
-					<td class="left"></td>
+					<td class="addWidth"></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -673,7 +676,7 @@
 					<xsl:if test = '@CustomerPONo!=""' >					
 					
 					<td class="right"> Line PO#:&#160;</td>
-					<td class="left"><xsl:value-of select="@CustomerPONo"/></td>
+					<td class="addWidth"><xsl:value-of select="@CustomerPONo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -687,7 +690,7 @@
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<td class="right" valign="top"> Cust Acct Line #:&#160;</td>
-					<td class="left" valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
+					<td class="addWidth" valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -709,7 +712,7 @@
 					<xsl:if test = 'Item/@CustomerItem!=""' >					
 				
 					<td class="right">My Item #:&#160;</td>
-					<td class="left"><xsl:value-of select="Item/@CustomerItem"/></td>
+					<td class="addWidth"><xsl:value-of select="Item/@CustomerItem"/></td>
                     </xsl:if>
                     </xsl:if>
 				</tr>
@@ -721,7 +724,7 @@
 				<!-- if (specialInstructions is not null) -->
 				<xsl:if test = 'Instructions/Instruction/@InstructionText!=""'>
 				<tr class="special-instructions"> 
-					<td colspan="5"> 
+					<td colspan="6"> 
 						<table class="inner">
 							<tr>
 								
