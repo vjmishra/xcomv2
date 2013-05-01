@@ -351,9 +351,11 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 								break;
 							}
 						}
-						if("3".equals(itemType) && _productID.equals(xrefMap.get(itemId)))
+						//if("3".equals(itemType) && _productID.equals(xrefMap.get(itemId)))
+						//modified code for xb 686
+						if("3".equals(itemType))
 						{
-							productListMap.put(xrefMap.get(itemId), itemId);
+							productListMap.put(_productID, itemId);
 							isItemEntitle=true;
 							break;
 						}

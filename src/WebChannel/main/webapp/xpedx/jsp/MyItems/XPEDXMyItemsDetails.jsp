@@ -2355,7 +2355,7 @@ function showSharedListForm(){
 <%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
 <!-- Enter one item per line:<br /> -->
 <!-- Qty. [Tab or Comma] Item#</p> -->
-<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
+<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers or customer item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
 <p>To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).<br/> Example: ,5002121  <br />
 </p>
 <br />
@@ -3083,7 +3083,7 @@ function showSharedListForm(){
 
 						<div class="mil-action-list-wrap">
 
-                            <table class="mil-config" width="360" border="0" cellspacing="0" cellpadding="0">
+                            <table class="mil-config" width="330" border="0" cellspacing="0" cellpadding="0">
                                 <s:if test='editMode == true'>
 									<tr>
 
@@ -3168,7 +3168,7 @@ function showSharedListForm(){
 											value='%{#item.getAttribute(#customKey)}' />
 										</s:if>
 										<tr>
-											<td align="right" width="145"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
+											<td align="right"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
 											<td>
 												<%-- Creating text field with name as the Customer field name --%>
 												
