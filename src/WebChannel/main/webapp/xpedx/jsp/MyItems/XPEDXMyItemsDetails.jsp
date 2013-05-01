@@ -3018,21 +3018,21 @@ function showSharedListForm(){
 										</s:if>
 									</p>
 									
-										<%-- JIRA xb-805 Code Changes Begin --%>								
+										<%-- JIRA xb-805 & xb-840 Code Changes Begin --%>								
 									<s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}'/>
 										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
 										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
-										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y" && #mfgItemVal!=null'> 
+									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
 											<p class="fields-padding">
 												<s:property value="#manufacturerItemLabel" />:<s:property value='#mfgItemVal' /></p>
 											 </s:if>
-											<s:if test='customerItemFlag != null && customerItemFlag=="Y" && #partItemVal !=null'>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
 											<p class="fields-padding">
 												<s:property value="#customerItemLabel" />:<s:property value='#partItemVal' /></p>
 											</s:if>			
-									</s:if>
-									<%-- JIRA xb-805 Code Changes End --%>	
+									<%-- JIRA xb-805 & xb-840 Code Changes End --%>	
 					
 								</s:if>
 							<%-- JIRA 356 Code Changes Begin --%>	
