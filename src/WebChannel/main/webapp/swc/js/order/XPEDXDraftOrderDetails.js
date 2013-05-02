@@ -634,10 +634,15 @@ function redrawQuickAddList()
 	var showAddtoCartBtn = false;
     var code = '<table cellspacing="0" cellpadding="0" id="QuickAddTable" width="96%">';
     var jobValue;
+    var customerPONoValue;//added for XB 769
     addToCartDiv = document.getElementById("addProdsToOrder");
     addToCartDiv.style.display = 'none';
     if(document.QuickAddForm.jobIdValue != undefined && document.QuickAddForm.jobIdValue.value !=null )	
     	 jobValue = document.QuickAddForm.jobIdValue.value;
+  //added for XB 769 to display custom PO label
+    if(document.QuickAddForm.customerPONoValue != undefined && document.QuickAddForm.customerPONoValue.value !=null )	{
+    	customerPONoValue = document.QuickAddForm.customerPONoValue.value;
+    }
     
     if(QuickAddElems.length > 0){
     	
@@ -648,8 +653,8 @@ function redrawQuickAddList()
     	code += '<th class="col-header qty-col">Qty</th>';
     	code += '<th class="col-header uom-col">UOM</th>';
     	
-    	if(custPOFlag)
-    		code += '<th class="last-col-header col-header job-col">Line PO #</th>';
+    	if(custPOFlag  == true && customerPONoValue != null)
+    		code += '<th class="last-col-header col-header job-col">'+customerPONoValue+'</th>';
     	if(jobidFlag == true && jobValue!= null)
         	code += '<th class="last-col-header col-header job-col">'+jobValue+'</th>';
 

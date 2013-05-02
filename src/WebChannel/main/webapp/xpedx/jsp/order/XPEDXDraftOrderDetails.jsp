@@ -724,6 +724,7 @@ $(document).ready(function(){
 					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 					<li>
 						<label><s:property value='#customerPONoFlag' />:</label>
+						 <s:hidden name='customerPONoValue' value='%{#customerPONoFlag}' />
 						<input tabindex="3407" maxlength="22" style="width:154px;" type="text" name="purchaseOrder" value="" class="text x-input"></input>
 					</li>
 					</s:if>
