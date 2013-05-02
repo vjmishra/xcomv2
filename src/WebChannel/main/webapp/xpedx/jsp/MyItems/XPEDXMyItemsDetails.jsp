@@ -3083,7 +3083,7 @@ function showSharedListForm(){
 
 						<div class="mil-action-list-wrap">
 
-                            <table class="mil-config" width="330" border="0" cellspacing="0" cellpadding="0">
+                            <table class="mil-config" width="360" border="0" cellspacing="0" cellpadding="0">
                                 <s:if test='editMode == true'>
 									<tr>
 
@@ -3168,7 +3168,7 @@ function showSharedListForm(){
 											value='%{#item.getAttribute(#customKey)}' />
 										</s:if>
 										<tr>
-											<td align="right"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
+											<td align="right" width="145"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
 											<td>
 												<%-- Creating text field with name as the Customer field name --%>
 												
