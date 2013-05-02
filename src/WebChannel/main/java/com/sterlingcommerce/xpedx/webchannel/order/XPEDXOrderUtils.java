@@ -92,8 +92,27 @@ public class XPEDXOrderUtils {
 	//XB-687 changes Start
 	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	public static LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
+	public static Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+	public static LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	
-	
+	public static LinkedHashMap<String, Map<String, String>> getItemUomHashMap() {
+		return itemUomHashMap;
+	}
+
+	public static void setItemUomHashMap(
+			LinkedHashMap<String, Map<String, String>> itemUomHashMap) {
+		XPEDXOrderUtils.itemUomHashMap = itemUomHashMap;
+	}
+
+	public static Map<String, Map<String, String>> getItemIdConVUOMMap() {
+		return itemIdConVUOMMap;
+	}
+
+	public static void setItemIdConVUOMMap(
+			Map<String, Map<String, String>> itemIdConVUOMMap) {
+		XPEDXOrderUtils.itemIdConVUOMMap = itemIdConVUOMMap;
+	}
+
 	//Start of XB-687
 	public static Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	
@@ -927,7 +946,7 @@ public class XPEDXOrderUtils {
 	public static Map<String, Map<String,String>> getXpedxUOMDescList(String customerID,
 			ArrayList<String> ItemID, String StoreFrontID) {
 		
-		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		
 		if(YFCCommon.isVoid(customerID)){
 			log.warn("customerID is NULL. cannot call xpedxUOMList method for anonymous user.");
@@ -1042,7 +1061,7 @@ public class XPEDXOrderUtils {
 				//Get The itemMap From Session For Minicart Jira 3481
 				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 				//Map<String,Map<String,String>> itemIdsIsCustomerUOMsMap=new HashMap<String,Map<String,String>>();
-				Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+				itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 				ArrayList<String> itemIdsList = new ArrayList<String>();
 				itemIdsList.addAll(itemUomHashMap.keySet());
 				Iterator<String> iterator = itemIdsList.iterator();

@@ -1001,7 +1001,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(
 					wcContext.getCustomerId(), allItemIds,
 					wcContext.getStorefrontId());
-			
+			itemIdConVUOMMap = XPEDXOrderUtils.getItemIdConVUOMMap();
+			itemIdsUOMsMap = XPEDXOrderUtils.getItemUomHashMap();
 			//itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
 			/*
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
