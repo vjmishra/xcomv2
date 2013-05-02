@@ -18,6 +18,10 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetails_binding.xml</param>
 		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetails.jsp</result>
 		<result name="export">/xpedx/jsp/MyItems/XPEDXCopyListSuccess.jsp</result>
+		<result name="noListKey" type="redirectAction">
+			<param name="actionName">XPEDXMyItemsList</param>
+			<param name="namespace">/xpedx/myItems</param>
+		</result>
 	</action>
 
 	<action name="XPEDXMyItemsListCreate" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListCreateAction">
@@ -204,7 +208,7 @@
         </result>
         <result name="MaxError">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsAddtoCartError.jsp
 		</result>
-        <result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
+		<result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
 		</result>
 		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
 	</action>

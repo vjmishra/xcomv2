@@ -812,6 +812,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", editListURL.toString());
 				
 			}
+			if(YFCCommon.isVoid(getListKey()))
+			{
+				return "noListKey";
+			}
 			/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 			Map<String, Element> out;
 
