@@ -1085,7 +1085,7 @@ public class XPEDXOrderUtils {
 								.parseDouble(convFactor));
 						
 						if(isCustomerUom.equalsIgnoreCase("Y")){
-							if(1 == convFac){
+							if(1 == convFac || 0== convFac){
 								uommap.put(uom, uom.substring(2, uom.length()));
 							}
 							else
