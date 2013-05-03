@@ -3026,11 +3026,11 @@ function showSharedListForm(){
 									</s:if>
 										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
 											<p class="fields-padding">
-												<s:property value="#manufacturerItemLabel" />:<s:property value='#mfgItemVal' /></p>
+												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
 											 </s:if>
 											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
 											<p class="fields-padding">
-												<s:property value="#customerItemLabel" />:<s:property value='#partItemVal' /></p>
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
 											</s:if>			
 									<%-- JIRA xb-805 & xb-840 Code Changes End --%>	
 					
