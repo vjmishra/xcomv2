@@ -43,6 +43,9 @@ public class XPXUtils {
 	public static String CustomerName;
 	public static String customerKey;
 	public static Element elemModel;
+	// XB-519
+	public static String polbl;
+	public static String lineAcc;
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -666,5 +669,19 @@ public class XPXUtils {
 
 	public static void setCustomerKey(String customerKey) {
 		XPXUtils.customerKey = customerKey;
+	}
+	//XB-519
+	public static void setPoLbl(String polbl){
+		XPXUtils.polbl = polbl;
+	}
+	public static String getPoLbl() {
+		return polbl;
+	}
+	
+	public static void setLineAcc(String polbl){
+		XPXUtils.lineAcc = polbl;
+	}
+	public static String getLineAcc() {
+		return lineAcc;
 	}
 }
