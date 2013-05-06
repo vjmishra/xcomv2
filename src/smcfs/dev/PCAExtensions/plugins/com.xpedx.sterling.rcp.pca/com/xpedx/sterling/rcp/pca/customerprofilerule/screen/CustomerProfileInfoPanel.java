@@ -522,7 +522,7 @@ IYRCComposite {
 	private List<Control> HideControlsList=null;
 	Element eleCustomer =null; 
 	String  suffixType =null; 
-
+	private String ruleId;
 
 	private Text txtZip;
 
@@ -983,6 +983,14 @@ IYRCComposite {
 		gridData2.verticalAlignment = SWT.CENTER;
 		gridData2.widthHint = 300;
 		gridData2.horizontalSpan=3;
+		
+		//XB-519 Modified For UI
+		GridData gridData3 = new GridData();
+		gridData3.horizontalAlignment = SWT.BEGINNING;
+		gridData3.grabExcessHorizontalSpace = true;
+		gridData3.verticalAlignment = 2;
+		gridData3.widthHint = 300;
+		gridData3.horizontalSpan=3;
 
 		GridData gridDataLbl = new GridData();
 		gridDataLbl.horizontalAlignment = SWT.BEGINNING;
@@ -1018,11 +1026,13 @@ IYRCComposite {
 		lblCustLineAcct.setText("Cust Line Acct#:");
 		lblCustLineAcct.setLayoutData(gridDataLbl);
 		lblCustLineAcct.setData("name", "lblCustLineAcct");
-		txtCustLineAcctMsg = new Text(pnlCustomerProfileInfo,SWT.NONE);
+		txtCustLineAcctMsg = new Text(pnlCustomerProfileInfo,2048);
 		txtCustLineAcctMsg.setText("");
-		txtCustLineAcctMsg.setLayoutData(gridData2);
+		//XB-519 Modified
+		txtCustLineAcctMsg.setLayoutData(gridData3);
+		txtCustLineAcctMsg.setTextLimit(22);
 		txtCustLineAcctMsg.setData("name", "txtCustLineAcct");
-		txtCustLineAcctMsg.setVisible(false);
+		txtCustLineAcctMsg.setVisible(true);
 
 		if(!("C".equals(suffixType))){
 			chkCustLineField1 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
@@ -1083,11 +1093,13 @@ IYRCComposite {
 		lblCustomerLinePONumber.setText("Customer Line PO#");
 		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
 		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
-		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,SWT.NONE);
+		//XB-519 -UI Modified
+		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,2048);
 		txtCustomerLinePONumberMsg.setText("");
-		txtCustomerLinePONumberMsg.setLayoutData(gridDataLbl);
+		txtCustomerLinePONumberMsg.setLayoutData(gridData3);
+		txtCustomerLinePONumberMsg.setTextLimit(22);
 		txtCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
-		txtCustomerLinePONumberMsg.setVisible(false);
+		txtCustomerLinePONumberMsg.setVisible(true);
 		addTab(gridDataDummy,"dummyCustomerLinePONumber");
 		lblCustomerFieldMsg = new Label(pnlCustomerProfileInfo, SWT.WRAP);
 		lblCustomerFieldMsg.setText("If checked, the customer fields on this tab display but " +
@@ -1864,6 +1876,17 @@ IYRCComposite {
 		tbd.setName("txtLocationId");
 		txtLocationId.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
+		// XB-519 - Adding in binding - txtCustLineAcctMsg for ExtnCustLineAccLbl
+		tbd = new YRCTextBindingData();
+		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineAccLbl");
+		tbd.setName("txtCustLineAcctMsg");
+		txtCustLineAcctMsg.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		// XB-519 - Adding in binding- txtCustomerLinePONumberMsg for ExtnCustLinePOLbl
+		tbd = new YRCTextBindingData();
+		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLinePOLbl");
+		tbd.setName("txtCustomerLinePONumberMsg");
+		txtCustomerLinePONumberMsg.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 		tbd.setName("txtAddressLine1");
@@ -2616,6 +2639,27 @@ IYRCComposite {
 	private void updateCustomerAddressFields(CustomerProfileMaintenance parentObj)
 	{
 		ArrayList<Element> customerAdditionalAddressList = YRCXmlUtils.getChildren(YRCXmlUtils.getXPathElement(parentObj.getBehavior().getLocalModel("XPXCustomerIn"), "/CustomerList/Customer/CustomerAdditionalAddressList"),"CustomerAdditionalAddress");
+		//XB-519
+		Element customerDetailsEle = parentObj.getBehavior().getCustomerDetails();
+		if(!YRCPlatformUI.isVoid(customerDetailsEle))
+		{
+			/*Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+			if (XPXUtils.poLbl!= null){
+				txtCustomerLinePONumberMsg.setText(XPXUtils.poLbl);
+			}
+			else 
+				txtCustomerLinePONumberMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+			if(XPXUtils.lineAcc!= null){
+				txtCustLineAcctMsg.setText(XPXUtils.lineAcc);
+			}
+			else
+				txtCustLineAcctMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));*/
+			//2 MAY 
+			Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+			txtCustomerLinePONumberMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+			txtCustLineAcctMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+			
+		}
 		if(!YRCPlatformUI.isVoid(customerAdditionalAddressList))
 		{
 			for(int i=0;i<customerAdditionalAddressList.size();i++)

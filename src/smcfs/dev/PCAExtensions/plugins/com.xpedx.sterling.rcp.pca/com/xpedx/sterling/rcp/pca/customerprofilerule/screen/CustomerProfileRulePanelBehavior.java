@@ -7,7 +7,8 @@ package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -34,8 +35,11 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 	private Element inputElement;
 	private String customerKey;	
 	private String extSuffixType;
+	private String extnLinePOLbl;
+	private String extnLineAccLbl;	
 	private List HideRulesList=null;
 	private List ShowRulesList=null;
+	private Composite pnlDynamicLineParent;
 
 	/**
 	 * Constructor for the behavior class.
@@ -192,11 +196,17 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 		targetRulesModel = null;
 		page.getTargetModelAndCallUpdateApi(true);		
 	}
-	public void createRuleXML() {
+	//XB-519 Modified Input XML
+	public void createRuleXML(String linePO, String lineAcc) {
+		targetRulesModel =null;
 		if (null == targetRulesModel){
 			targetRulesModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
 			targetRulesModel.setAttribute("CustomerKey", customerKey);
 			Element extn = YRCXmlUtils.createChild(targetRulesModel, "Extn");
+			extn.setAttribute("ExtnCustLinePOLbl" , linePO); 
+			extn.setAttribute("ExtnCustLineAccLbl", lineAcc); 
+			
+			
 			Element ruleLinesElem = YRCXmlUtils.createChild(extn, "XPXCustomerRulesProfileList");
 			ruleLinesElem.setAttribute("Reset", "true");
 		}

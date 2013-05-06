@@ -16,6 +16,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
@@ -27,6 +29,7 @@ import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorPart;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCScrolledCompositeListener;
+import com.yantra.yfc.rcp.YRCTextBindingData;
 import com.yantra.yfc.rcp.YRCWizard;
 import com.yantra.yfc.rcp.YRCWizardBehavior;
 import com.yantra.yfc.rcp.YRCXmlUtils;
@@ -57,7 +60,8 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 
 		private Button btnUpdateRules;
 		private int pnlNo;
-
+		private String billTo;
+		private String lineAcc;
 		public List<String> errorMessageList=new ArrayList<String>();
 		public CustomerProfileRulePanel(Composite parent, int style, Object inputObject, CustomerProfileMaintenance parentObj) {
 			super(parent, style);
@@ -299,7 +303,10 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 		}
 
 		private CustomerProfileRuleLinePanel createLine(int i, Element eleOrderLine) {
+			Composite pnlParam1;
+			Text txtCustLineAcctMsg;
 			GridData gridData0 = new GridData();
+			Composite pnlCustomerProfileInfo = null;
 			gridData0.horizontalAlignment = 0;
 			gridData0.grabExcessVerticalSpace = false;
 			gridData0.grabExcessHorizontalSpace = true;
@@ -351,7 +358,9 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 			this.wizBehavior = wizBehavior;
 		}
 		public void getTargetModelAndCallUpdateApi(boolean isRefreshReqd) {
-			myBehavior.createRuleXML();
+			String linePOValue ="";
+			String lineAccValue="";
+			
 			Control childIterator[] = pnlDynamicLineParent.getChildren();
 			int noOfChildren = childIterator.length;
 			for (int k = 0; k < noOfChildren; k++) {
@@ -360,10 +369,33 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 				}
 				CustomerProfileRuleLinePanel childpnl = (CustomerProfileRuleLinePanel) childIterator[k];
 				Element ruleLineElem = childpnl.getBehavior().getTargetModelforParent();
+				// XB-519 Added by VJ
+				if(k==3){
+					linePOValue = childpnl.getBehavior().getFieldValue("txtParamRule");
+				}
+				// Added by VJ
+				
+				if(k==4){
+					
+				lineAccValue=childpnl.getBehavior().getFieldValue("txtParamRule"); // Added by VJ
+				//System.out.println("" + lineAccValue);
+				}
+				if("" != linePOValue){
+				 
+				//XPXUtils.poLbl=billToValue;
+				XPXUtils.setPoLbl(linePOValue);
+				}
+				if("" != lineAccValue){
+					 
+					//XPXUtils.lineAcc=lineAccValue;
+					XPXUtils.setLineAcc(lineAccValue);
+					myBehavior.createRuleXML(linePOValue , lineAccValue);
+					}
 				if(ruleLineElem != null){
 					if(childpnl.getBehavior().validateForErrors()){
 						return;
 					}
+					myBehavior.createRuleXML(linePOValue , lineAccValue);
 					myBehavior.appendRuleLine(ruleLineElem);
 				}
 			}
