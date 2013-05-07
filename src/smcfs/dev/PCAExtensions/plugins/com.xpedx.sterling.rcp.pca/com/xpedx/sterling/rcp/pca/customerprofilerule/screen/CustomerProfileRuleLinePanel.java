@@ -401,13 +401,14 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	}
 	private void createParam1Composite() {
 
-		GridLayout gridLayout1 = new GridLayout();
-		gridLayout1.horizontalSpacing = 0;
-		gridLayout1.verticalSpacing = 0;
+		//XB-519 Modified For UI
+		GridLayout gridLayout1 = new GridLayout(6, true);
+		gridLayout1.horizontalSpacing = 2;
+		gridLayout1.verticalSpacing = 2;
 		//gridLayout1.numColumns = 1;
-		gridLayout1.numColumns = 2;
-		gridLayout1.marginWidth = 0;
-		gridLayout1.marginHeight = 5;
+		gridLayout1.numColumns = 6;
+		gridLayout1.marginWidth = 2;
+		gridLayout1.marginHeight = 2;
 		
 		//XB-519 Modified for UI
 		/*GridData gridDataVal = new GridData();
@@ -537,9 +538,10 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		GridData gridData3 = new GridData();
 		gridData3.horizontalAlignment = SWT.BEGINNING;
 		gridData3.grabExcessHorizontalSpace = true;
-		gridData3.verticalAlignment = 2;
-		gridData3.widthHint = 300;
-		gridData3.horizontalSpan=3;
+		gridData3.verticalAlignment = 6;
+		gridData3.widthHint = 600;
+		gridData3.horizontalSpan=4;
+		
 		
 		//XB-519 - TextField UI On Rules TAB
 		GridData gridDataVal = new GridData();
