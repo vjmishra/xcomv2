@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Element;
-
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -63,7 +62,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	private String ruleId;
 	private boolean showParam1=false;
 	private boolean showtext=false;
-	private boolean enablechk=false;
+	boolean enablechk=false;
 	private boolean showParam2=false;
 	private boolean showParam3=false;
 	private StyledText stxtRuleDesc;
@@ -110,6 +109,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		initialize();
 		setBindingForComponents();
 		myBehavior = new CustomerProfileRuleLineBehavior(this, FORM_ID, inputObject, eleRuleLine);
+		
 		populateCustomerLineFields(this.pnlRuleLines.parentObj);
 	}
 	
@@ -231,6 +231,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	}
 	private void setBindingForComponents() {
 		YRCButtonBindingData chkBoxBindingData = new YRCButtonBindingData();
+		
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData.setSourceBinding("Source:/XPXRuleDefn/@Selected");
@@ -243,6 +244,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		stbd.setName("stxtRuleDesc");
 		stxtRuleDesc.setData(YRCConstants.YRC_STYLED_TEXT_BINDING_DEFINATION, stbd);
 		YRCTextBindingData tbd =null;
+		
 		if (showParam1) {
 			tbd = new YRCTextBindingData();
 			tbd.setSourceBinding("Source:/XPXRuleDefn/@Param1");
@@ -469,17 +471,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		txtParam1.setLayoutData(gridDataVal);
 		txtParam1.setText("");
 		txtParam1.setData("name", "txtParam1");
-		if(showParam1){
-			txtParam1.setVisible(true);
-		}else{
-			txtParam1.setVisible(false);
-		}
-		if(enablechk){
-			txtParam1.setEditable(true);
-		}
-		else{
-			txtParam1.setEditable(false);
-		}
+	
 //		if(isIntegAdmin()){
 //			txtParam1.setEditable(false);
 //		}
@@ -523,7 +515,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		}else{
 			txtParam2.setVisible(false);
 		}
-
+		
 	}
 	private void createParam3Composite() {
 
@@ -591,6 +583,17 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 			txtParamRule.setVisible(false);
 			txtParamRule.setEditable(false);
 			
+		}
+		if(showParam1){
+			txtParam1.setVisible(true);
+		}else{
+			txtParam1.setVisible(false);
+		}
+		if(enablechk){
+			txtParam1.setEditable(true);
+		}
+		else{
+			txtParam1.setEditable(false);
 		}
 	}
 	
