@@ -133,8 +133,8 @@
 							<s:set name="json" value='pnaHoverMap.get(#jsonKey)' />
 							<s:set name="jsonUOM" value="#json.get('UOM')" />
 							<s:if test="%{#customerUom == #jsonUOM}">
-								<s:set name="jsonUOMDesc"
-								value="#jsonUOM" />
+								<s:set name='customerUomWithoutM' value='%{#jsonUOM.substring(2, #jsonUOM.length())}' />
+								<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />
 							</s:if>
 							<s:else>
 								<s:set name="jsonUOMDesc"
@@ -303,7 +303,8 @@
 						<s:set name="temp" value="bracketUOM" />
 						<s:set name="customerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#customerUom)"/>
 						<s:if test='%{#customerUOMDesc==#temp}'>	
-							<s:set name="bracketUOMDesc" value="#customerUom" />
+							<s:set name='customerUomWithoutM' value='%{#customerUom.substring(2, #customerUom.length())}' />
+							<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
 						</s:if>
 						<s:else>
 							<s:set name="bracketUOMDesc" value="bracketUOM" />
