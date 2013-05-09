@@ -91,10 +91,22 @@ public class XPEDXOrderUtils {
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	//XB-687 changes Start
 	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+	
+	//This Map will contain item ids and customer UOM for that item if it exist
+	public static LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();
 	public static LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
 	public static Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	public static LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	
+	public static LinkedHashMap<String, String> getItemCustomerUomHashMap() {
+		return itemCustomerUomHashMap;
+	}
+
+	public static void setItemCustomerUomHashMap(
+			LinkedHashMap<String, String> itemCustomerUomHashMap) {
+		XPEDXOrderUtils.itemCustomerUomHashMap = itemCustomerUomHashMap;
+	}
+
 	public static LinkedHashMap<String, Map<String, String>> getItemUomHashMap() {
 		return itemUomHashMap;
 	}
@@ -904,6 +916,7 @@ public class XPEDXOrderUtils {
 													if(!YFCUtils.isVoid(isCustomerUOMFlg)){
 														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
 																.getTextContent(), isCustomerUOMFlg);
+														itemCustomerUomHashMap.put(itemId.getTextContent(),UnitOfMeasure.getTextContent());
 													}
 													else{
 														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
@@ -1035,6 +1048,7 @@ public class XPEDXOrderUtils {
 													if(!YFCUtils.isVoid(isCustomerUOMFlg)){
 														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
 																.getTextContent(), isCustomerUOMFlg);
+														itemCustomerUomHashMap.put(itemId.getTextContent(),UnitOfMeasure.getTextContent());
 													}
 													else{
 														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure

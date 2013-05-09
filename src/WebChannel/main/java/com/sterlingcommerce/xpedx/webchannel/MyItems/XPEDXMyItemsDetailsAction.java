@@ -128,6 +128,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String[] itemIds;
 	private String[] checkItemKeys;
 	private ArrayList<String> enteredUOMs;
+	private ArrayList<String> custUOM;
 	private ArrayList<String> itemBaseUOM;
 	private ArrayList<String> enteredQuantities;
 	private HashMap<String, JSONObject> pnaHoverMap;
@@ -157,6 +158,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public boolean pnaCall;
 	public ArrayList<String> itemOrder;
 	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
+	private Map<String,String> itemCustomerUomMap=new HashMap<String,String>();		
 	private Map<String,String> catMap=new HashMap<String,String>();
 	private String modifyts;
     private String createUserId;
@@ -370,19 +372,38 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private boolean filterByMyListChk 	= false;
 	private boolean filterByAllChk 	= false;
 	private String sharePrivateField;
-	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
-	//XB-687 changes Start
-	protected Map<String,Map<String,String>> itemIdsIsCustomerUOMsMap=new HashMap<String,Map<String,String>>();
-	public Map<String, Map<String, String>> getItemIdsIsCustomerUOMsMap() {
-		return itemIdsIsCustomerUOMsMap;
+	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();	
+	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();	
+	//This Map will contain item ids and customer UOM for that item if it exist
+	public static LinkedHashMap<String, String> itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
+	private String isPnaReqCustomerUOM;
+	private String pnaReqCustomerUOM;
+	public String getPnaReqCustomerUOM() {
+		return pnaReqCustomerUOM;
 	}
 
-	public void setItemIdsIsCustomerUOMsMap(
-			Map<String, Map<String, String>> itemIdsIsCustomerUOMsMap) {
-		this.itemIdsIsCustomerUOMsMap = itemIdsIsCustomerUOMsMap;
+	public void setPnaReqCustomerUOM(String pnaReqCustomerUOM) {
+		this.pnaReqCustomerUOM = pnaReqCustomerUOM;
 	}
-		//XB-687 changes End
-	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
+
+	public String getIsPnaReqCustomerUOM() {
+		return isPnaReqCustomerUOM;
+	}
+
+	public void setIsPnaReqCustomerUOM(String isPnaReqCustomerUOM) {
+		this.isPnaReqCustomerUOM = isPnaReqCustomerUOM;
+	}
+
+	public static LinkedHashMap<String, String> getItemAndCustomerUomHashMap() {
+		return itemAndCustomerUomHashMap;
+	}
+
+	public static void setItemAndCustomerUomHashMap(
+			LinkedHashMap<String, String> itemAndCustomerUomHashMap) {
+		XPEDXMyItemsDetailsAction.itemAndCustomerUomHashMap = itemAndCustomerUomHashMap;
+	}
+	
+	
 	//Start 2964
 	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	//End 2964
@@ -451,7 +472,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setItemOrderMultipleMap(Map itemOrderMultipleMap) {
 		this.itemOrderMultipleMap = itemOrderMultipleMap;
 	}
+	public Map<String, String> getItemCustomerUomMap() {
+		return itemCustomerUomMap;
+	}
 
+	public void setItemCustomerUomMap(Map<String, String> itemCustomerUomMap) {
+		this.itemCustomerUomMap = itemCustomerUomMap;
+	}
 	public ArrayList<String> getItemTypes() {
 		ArrayList<String> res = new ArrayList<String>();
 		try {
@@ -1003,6 +1030,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					wcContext.getStorefrontId());
 			itemIdConVUOMMap = XPEDXOrderUtils.getItemIdConVUOMMap();
 			itemIdsUOMsMap = XPEDXOrderUtils.getItemUomHashMap();
+			itemAndCustomerUomHashMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
 			//itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
 			/*
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
@@ -1401,7 +1429,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String itemQty = enteredQuantities.get(i);
 				String itemUom = enteredUOMs.get(i);
 				String orderMultiple = (String)orderMulMap.get(itemId);
-				
+				String customerUOM = custUOM.get(i);
+				itemCustomerUomMap.put(itemId+":"+(i+1), customerUOM);
 				if(itemQty.trim().equals("")){
 					itemQty = orderMultiple;
 					itemUom = itemBaseUOM.get(i);
@@ -2464,6 +2493,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		String pnaItemId = getPnaItemId();
 		Document itemDoc;
 		String requestedUOM = getPnaRequestedUOM();
+		String reqCustomerUOM = getPnaReqCustomerUOM();
+		if(reqCustomerUOM!=null && reqCustomerUOM.equalsIgnoreCase(requestedUOM)){
+			isPnaReqCustomerUOM="Y";
+		}else{
+			isPnaReqCustomerUOM="N";
+		}
 		setIsBracketPricing("false");
 		setIsPnAAvailable("true");
 		try {
@@ -3213,6 +3248,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setEnteredUOMs(ArrayList<String> enteredUOMs) {
 		this.enteredUOMs = enteredUOMs;
 	}
+	
+	public ArrayList<String> getCustUOM() {
+		return custUOM;
+	}
+
+	public void setCustUOM(ArrayList<String> custUOM) {
+		this.custUOM = custUOM;
+	}
+	
 	public ArrayList<String> getItemBaseUOM() {
 		return itemBaseUOM;
 	}
