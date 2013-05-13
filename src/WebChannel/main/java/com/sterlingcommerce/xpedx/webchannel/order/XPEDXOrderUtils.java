@@ -29,12 +29,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.comergent.appservices.configuredItem.XMLUtils;
+import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
@@ -90,14 +92,28 @@ public class XPEDXOrderUtils {
 	public final static String ITEM_LIST_KEY = "ITEM_LIST_KEY";
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	//XB-687 changes Start
+	//This map will have item id as key and value as a map with all UOMs and "Y" or "N" flag to indicate if it is a customer UOM or not 
 	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	
 	//This Map will contain item ids and customer UOM for that item if it exist
 	public static LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();
 	public static LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
 	public static Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+	//conversion UOM map for single item
+	public static LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();
+	
+
 	public static LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	
+	public static LinkedHashMap<String, String> getUomsAndConFactors() {
+		return uomsAndConFactors;
+	}
+
+	public static void setUomsAndConFactors(
+			LinkedHashMap<String, String> uomsAndConFactors) {
+		XPEDXOrderUtils.uomsAndConFactors = uomsAndConFactors;
+	}
+
 	public static LinkedHashMap<String, String> getItemCustomerUomHashMap() {
 		return itemCustomerUomHashMap;
 	}
@@ -954,10 +970,11 @@ public class XPEDXOrderUtils {
 	/*XB-687
 	 * This method is to include a complex query to get the Xpedx Uoms description depending on if the uom code is a customer_uom for multiple Items
 	 * this will return a map of (itemId, map of UOMS)
+	 * defaultShowUOMFlag - true -  is used in catalog action to retrieve the UOMs of items with showing default UOM as selected if flag is set at msap level
 	 */
 	
 	public static Map<String, Map<String,String>> getXpedxUOMDescList(String customerID,
-			ArrayList<String> ItemID, String StoreFrontID) {
+			ArrayList<String> ItemID, String StoreFrontID, boolean defaultShowUOMFlag) {
 		
 		itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		
@@ -1069,6 +1086,140 @@ public class XPEDXOrderUtils {
 				}
 			}	
 			XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);
+			
+		//This flag comes as true from Catalog action for showing the default UOM  selected as per order multiple flag set at msap level	
+		if(defaultShowUOMFlag){
+			//Start - Code added to fix XNGTP 2964
+			String msapOrderMultipleFlag = "";
+			Map<String,String>orderMultipleMap;
+			orderMultipleMap = (Map<String, String>) wSCUIContext.getRequest().getAttribute("orderMultipleMap");
+			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+				if(xpedxCustomerContactInfoBean!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+					msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+				}		
+			
+			double minFractUOM = 0.00;
+	    	double maxFractUOM = 0.00;
+	    	String lowestUOM = "";
+	    	String highestUOM = "";
+	    	String minUOMsDesc = "";
+	    	String maxUOMsDesc = "";
+	    	String defaultConvUOM = "";
+			String defaultUOM = "";
+			String orderMultiple = "";
+	    	
+			//End - Code added to fix XNGTP 2964
+	    	defaultShowUOMMap = new HashMap<String,String>();
+			if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
+				for(int i=0; i<ItemID.size(); i++) {
+					Map displayUomMap = new HashMap<String, String>();
+					String strItemID = ItemID.get(i);
+					displayUomMap = itemUomHashMap.get(strItemID);
+					defaultUOM = "";
+					defaultConvUOM = "";
+					minFractUOM = 0.00;
+			    	maxFractUOM = 0.00;
+			    	lowestUOM = "";
+			    	highestUOM = "";
+			    	minUOMsDesc = "";
+			    	maxUOMsDesc = "";
+			    	Map uomIsCustomermap = itemUomIsCustomerUomHashMap.get(strItemID);
+			    	
+					for (Iterator it = displayUomMap.keySet().iterator(); it.hasNext();) {
+						try {
+							String uom = (String) it.next();
+							Object objConversionFactor = displayUomMap.get(uom);
+							String isCustomerUom = (String)uomIsCustomermap.get(uom);
+							//Start- Code added to fix XNGTP 2964
+							orderMultiple = orderMultipleMap.get(strItemID);
+							if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(objConversionFactor)){
+								//orderMultiple = "12";
+								if(objConversionFactor.toString() == orderMultiple){
+									minFractUOM = 1;
+									lowestUOM = uom;
+									minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")";
+									
+								}else {
+									double conversion = getConversion(objConversionFactor, orderMultiple);
+									if (conversion != -1 && uom != null
+											&& uom.length() > 0) {
+										if(conversion <= 1 && conversion >= minFractUOM){
+											minFractUOM = conversion;
+											lowestUOM = uom;
+											minUOMsDesc =  XPEDXWCUtils.getUOMDescription(lowestUOM)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")";
+											
+											
+										}else if(conversion>1 && ( conversion < maxFractUOM || maxFractUOM == 0)){
+											maxFractUOM = conversion;
+											highestUOM = uom;
+											maxUOMsDesc =  XPEDXWCUtils.getUOMDescription(highestUOM)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")";
+											
+										
+										}
+									}
+								}
+								//End - Code added to fix XNGTP 2964								
+								
+							}	
+							if(isCustomerUom.equalsIgnoreCase("Y")){ //Show only UOM code without M_
+								if("0".equals(objConversionFactor) || "1".equals(objConversionFactor))
+								{
+									displayUomMap.put(uom,uom.substring(2, uom.length()));
+								}
+								else{
+									if(null != objConversionFactor && !"".equals(objConversionFactor)){//JIRA 1391 - Displaying an Integer instead of a decimal.
+										displayUomMap.put(uom,uom.substring(2, uom.length())+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")");
+									}
+								}
+							}
+							else{
+								if("0".equals(objConversionFactor) || "1".equals(objConversionFactor))
+								{
+									displayUomMap.put(uom,XPEDXWCUtils.getUOMDescription(uom));
+								}
+								else{
+									if(null != objConversionFactor && !"".equals(objConversionFactor)){//JIRA 1391 - Displaying an Integer instead of a decimal.
+										displayUomMap.put(uom,XPEDXWCUtils.getUOMDescription(uom)+ " (" + Math.round(Double.parseDouble((String)objConversionFactor)) + ")");
+									}
+								}
+							}
+						} catch (Exception e) {
+							log.error("Error while getting the UOM Description.....");
+							e.printStackTrace();
+						}
+					}
+						//Start- Code added to fix XNGTP 2964
+						if(minFractUOM == 1.0 && minFractUOM != 0.0){
+							defaultConvUOM = lowestUOM;
+							defaultUOM = minUOMsDesc;
+							
+						}else if(maxFractUOM > 1.0){
+							defaultConvUOM = highestUOM;
+							defaultUOM = maxUOMsDesc;
+							
+						}else{
+							
+							defaultConvUOM = lowestUOM;
+							defaultUOM = minUOMsDesc;
+						}
+						
+						if(!SCUtil.isVoid(defaultUOM))
+							defaultShowUOMMap.put(strItemID, defaultUOM);
+						//End- Code added to fix XNGTP 2964
+						
+						itemUomHashMap.put(strItemID, displayUomMap);
+						/*if(itemMapObj !=null )
+						{
+							itemMapObj.put(strItemID, orderMultiple);
+						}*/
+							
+				}
+			}
+		return itemUomHashMap;	
+		}	//End of defaultShowUOMFlag if loop
+			
+		else{
+			
 			// Start of XB-687
 			
 			if (itemUomHashMap != null && itemUomHashMap.keySet() != null) {
@@ -1133,11 +1284,11 @@ public class XPEDXOrderUtils {
 					XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);				
 			}
 			// End of XB-687
-			
-		} catch (Exception ex) {
+		}//End of else of defaultShowUOM Flag	
+	} catch (Exception ex) {
 			log.error(ex.getMessage());
-		} 
-		finally {
+	} 
+	finally {
 			scuiTransactionContext.end();
 			env.clearApiTemplate("XPXUOMListAPI");
 			SCUITransactionContextHelper.releaseTransactionContext(
@@ -1218,6 +1369,8 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}
+			uomsAndConFactors = wUOMsAndConFactors;
+
 			//set UOM map with UOM code as key and flag as value which indicate whether the UOM is a customer UOM or not
 			XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
 			if(displayItemUomsMap==null)
@@ -1347,7 +1500,19 @@ public class XPEDXOrderUtils {
 		}
 		return -1;
 	}
-
+	public static double getConversion(Object convFactor, String orderMultiple) {
+		if (convFactor != null && orderMultiple != null && orderMultiple.length() > 0) {
+			String parseConvFactor = convFactor.toString();
+			double convFactorD = Double.valueOf(parseConvFactor).doubleValue();
+			double orderMultipleD = Double.parseDouble(orderMultiple);
+			double factor = (convFactorD / orderMultipleD);
+			return factor;
+			/*if (Math.abs(factor) == factor) {
+				return (int) Math.abs(factor);
+			}*/
+		}
+		return -1;
+	}
 	public static LinkedHashMap<String, String> getSAPCustomerLineFieldMap(
 			Element customerOrganizationExtnEle) throws CannotBuildInputException 
 	{

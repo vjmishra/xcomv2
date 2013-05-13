@@ -1672,7 +1672,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		/*
 		 * getting all the items UOMs at the same time using a complex query
 		 */
-		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
+		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
 		itemIdsUOMsMap = (Map<String, Map<String, String>>) XPEDXWCUtils.getObjectFromCache("itemsUOMMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
 		
 		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {

@@ -1027,7 +1027,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			//Changed for XB-687
 			itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(
 					wcContext.getCustomerId(), allItemIds,
-					wcContext.getStorefrontId());
+					wcContext.getStorefrontId(),false);
 			itemIdConVUOMMap = XPEDXOrderUtils.getItemIdConVUOMMap();
 			itemIdsUOMsMap = XPEDXOrderUtils.getItemUomHashMap();
 			itemAndCustomerUomHashMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
