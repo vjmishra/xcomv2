@@ -43,13 +43,6 @@ function setStockItemFlag()
 <!-- begin left column -->
 <div id="left-col"><!-- breadcrumb -->
 <div class="bgleftcol">
-					<%--<div id="normal-stock-select">
-					<s:if test="#isGuestUser == false">	
-					<s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-					<s:checkbox id="stockedItemChk" name="stockedItemChk" fieldValue="true" value="#checkedval" onchange="javascript:setNormallyStockedCheckbox();setStockItemFlag();"></s:checkbox>&nbsp;
-				<span class="checkboxtxt">Search normally stocked items only</span>
-					</div>
-					</s:if> --%>
 			<s:set name='narrowByCatalogItemsCount' value='%{0}' />
 			<s:set name='expandNarrowByCatalogItems' value='"Y"' />
 			
@@ -132,33 +125,15 @@ function setStockItemFlag()
 				<META Name="DCSext.w_x_narrowby" Content="1" />
 			<!-- Webtrends tag end -->
 			
-				<%-- <s:set name='showFacet' value='"N"' />
-				<s:iterator id='facetVal' value='#facetList'>
-					<s:if test='%{#facetVal.getAttribute("IsProvidedFilter") != "Y"}'>
-						<s:set name='showFacet' value='"Y"' /> 
-					</s:if>
-				</s:iterator> --%>
-			
+		
 				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 				<s:set name='headercount' value='%{#headercount + 1}' />
 				<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
 				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />										
 				
-				<s:if test='%{#narrowByCatalogItemsCount <= 3}'>
-					<s:set name='expandNarrowByCatalogItems' value='"Y"' />
-				</s:if>
-				<s:else>
-					<s:set name='expandNarrowByCatalogItems' value='"N"' />
-				</s:else>
-				
 				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
 					<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
-						<s:if test='%{#expandNarrowByCatalogItems == "Y"}'>
 							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand"></a>
-						</s:if>
-						<s:else>
-							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_expand.png" style="margin-top:5px" alt="expand"></a>
-						</s:else>
 					</span>
 					<s:property value='#ShortDescription1' id="facet" />
 				</div>
@@ -195,9 +170,6 @@ function setStockItemFlag()
 			
 			</div>
 	</s:iterator>
-<!--</ul>-->
-<!---->
-<!--</div>-->
 
 </s:if><%-- if condition to check for FacetList size ENDS --%>
 
@@ -205,63 +177,6 @@ function setStockItemFlag()
 </div>
 <!-- end left column -->
 
-<%-- I believe xpedx doesn't use this piece of code - commenting it out for performance 
-<s:iterator id='facets'
-	value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")'>
-	<s:set name='count1' value='%{#count1 + 1}' />
-	<s:set name='facetList'
-		value='XMLUtils.getElements(#facets, "AssignedValueList/AssignedValue")' />
-	<s:set name='showFacet' value='"Y"' />
-	<s:if test='%{#facets.getAttribute("IsProvidedFilter") == "Y"}'>
-		<s:set name='showFacet' value='"N"' />
-		<s:iterator id='facetVal' value='#facetList'>
-			<s:if test='%{#facetVal.getAttribute("IsProvidedFilter") != "Y"}'>
-				<s:set name='showFacet' value='"Y"' />
-			</s:if>
-		</s:iterator>
-	</s:if>
-	<s:set name='AttributeElement' value='XMLUtils.getChildElement(#facets, "Attribute")' />
-	<s:set name='ShortDescription' value='#AttributeElement.getAttribute("ShortDescription")' />
-	<s:set name='AttributeValue' value='%{"viewAll" + #ShortDescription}' />
-
-	<s:if test='%{#showFacet == "Y"}'>
-		<swc:dialogPanel title="View All" isModal="true"
-			id='${AttributeValue}'>
-
-			<table class="listTableBody padding-left" width="100%">
-
-				<s:property value='#ShortDescription' />
-
-				<s:set name='noOfItems' value='0' />
-				<s:iterator id='facetVal' value='#facetList'>
-					<s:if test='#noOfItems == "0" '>
-						<tr>
-					</s:if>
-					<s:if test='%{#facetVal.getAttribute("IsProvidedFilter") != "Y"}'>
-						<s:set name='noOfItems' value='%{#noOfItems + 1}' />
-						<td><s:url id='narrowURL' namespace='/catalog'
-							action='filter.action'>
-							<s:param name='indexField'
-								value='#facets.getAttribute("IndexFieldName")' />
-							<s:param name='facet' value='#facetVal.getAttribute("Value")' />
-							<s:param name='cname' value='#facetVal.getAttribute("Value")' />
-						</s:url> <s:a href="%{narrowURL}" tabindex='%{#count1}'>
-							<s:property value='#facetVal.getAttribute("Value")' />
-		                  &nbsp;(<s:property
-								value='#facetVal.getAttribute("Count")' />)
-		              </s:a></td>
-					</s:if>
-					<s:if test='#noOfItems == "2"'>
-						<s:set name='noOfItems' value='0' />
-						</tr>
-					</s:if>
-				</s:iterator>
-
-			</table>
-		</swc:dialogPanel>
-	</s:if>
-</s:iterator>
---%>
 <script>
 function showViewAllDialog(attr)
 {
