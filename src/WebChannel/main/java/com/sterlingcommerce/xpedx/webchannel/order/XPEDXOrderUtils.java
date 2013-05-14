@@ -1279,7 +1279,7 @@ public class XPEDXOrderUtils {
 
 				}
 				//Set itemMap MAP again in session
-				XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+				//XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 				//set a itemsUOMMap in Session for ConvFactor			
 				
 					XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);				

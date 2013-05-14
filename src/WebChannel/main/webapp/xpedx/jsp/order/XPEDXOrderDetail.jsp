@@ -817,6 +817,8 @@ function showSplitDiv(divId)
 				<s:set name='priceInfo' value='#xutil.getChildElement(#orderLine, "LinePriceInfo")'/>
 				<s:set name='lineTotals' value='#xutil.getChildElement(#orderLine, "LineOverallTotals")'/>
 				<s:set name='item' value='#xutil.getChildElement(#orderLine, "Item")'/>
+				<s:set name='itemID' value='#item.getAttribute("ItemID")'/>
+				<s:set name="customerUom" value='%{#_action.getCustomerUOMMap().get(#itemID)}' />
 				<s:set name='itemDetails' value='#xutil.getChildElement(#orderLine, "ItemDetails")'/>
 				<s:set name='primaryInfo' value='#xutil.getChildElement(#itemDetails, "PrimaryInformation")'/>
 				<s:set name='itemExtnEle' value='#xutil.getChildElement(#itemDetails, "Extn")' />
@@ -958,9 +960,15 @@ function showSplitDiv(divId)
 					    			<s:set name='orderqty' value='#_action.getCalculatedOrderedQuantityWithoutDecimal(#orderLine)' />
 									<%--<s:set name='orderdqty' value='%{#strUtil.replace(#orderqty, ".0", "")}' /> --%> 
 									<s:set name='orderdqty' value="#xpedxUtilBean.formatQuantityForCommas(#orderdqty)"/>
+									<s:if test="%{#customerUom == #uom}">
+										<s:set name='uomDesc' value="#uom"/>
+									</s:if>
+									<s:else>
+										<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+									</s:else>
 					    			<td class="text-left"  width="175">	
 						    			 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
-						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			 </s:if>
 					    			</td>
 					    			<td class="text-right" width="95">						    		
@@ -1022,9 +1030,15 @@ function showSplitDiv(divId)
 					    				<s:set name='shipqty' value='#orderLineExtnElem.getAttribute("ExtnReqShipOrdQty")' />
 										<s:set name='shipqty' value='%{#strUtil.replace(#shipqty, ".00", "")}' />
 										<s:set name='shipqty' value="#xpedxUtilBean.formatQuantityForCommas(#shipqty)"/>
+										<s:if test="%{#customerUom == #uom}">
+											<s:set name='uomDesc' value="#uom"/>
+										</s:if>
+										<s:else>
+											<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+										</s:else>
 						    			<td class="text-left">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-						    			    <s:property value='%{#shipqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			    <s:property value='%{#shipqty}'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			  </s:if>
 						    			</td>
 					    			</s:if>
@@ -1036,7 +1050,13 @@ function showSplitDiv(divId)
 						    		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    			  <s:if test="%{#myPriceValue == 'false'}">
                                               <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-					    						per <s:property value='#wcUtil.getUOMDescription(#orderLineExtnElem.getAttribute("ExtnPricingUOM"))'/>
+                                              		<s:if test="%{#customerUom == (#orderLineExtnElem.getAttribute('ExtnPricingUOM'))}">
+														<s:set name='uomDesc' value="#orderLineExtnElem.getAttribute('ExtnPricingUOM')"/>
+													</s:if>
+													<s:else>
+														<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#orderLineExtnElem.getAttribute('ExtnPricingUOM'))"/>
+													</s:else>
+					    						per <s:property value="#uomDesc"/>
 					    					  </s:if>
 					    				  </s:if>
 					    			</s:if>
@@ -1053,9 +1073,15 @@ function showSplitDiv(divId)
 						    			<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
 										<s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />
 										<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
+										<s:if test="%{#customerUom == #uom}">
+											<s:set name='uomDesc' value="#uom"/>
+										</s:if>
+										<s:else>
+											<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+										</s:else>
 						    			<td class="text-left">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-						    			   <s:property value='%{#backqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			   <s:property value='%{#backqty}'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			  </s:if>
 						    		    </td>
 					    			</s:if>
