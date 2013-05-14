@@ -1409,9 +1409,6 @@ function SubmitActionWithValidation()
 				</s:if>
 				</div>
 				<%--End for Eb 47 display of Mfg & CustomerItem# based on the Flag values set in CC --%>
-								
-				
-			
 			<br/>
 					<div class="red bold"> 
     <s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
