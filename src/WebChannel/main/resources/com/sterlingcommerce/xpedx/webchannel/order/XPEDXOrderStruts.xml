@@ -33,6 +33,7 @@
 			<param name="validationClass">com.sterlingcommerce.webchannel.order.OrderListValidation</param>
 			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
 			</result>
+			
 			<result name="success" type="redirectAction">
 				<param name="actionName">draftOrderDetails</param>
 				<param name="copyFlag">${copyCartName}</param>	
@@ -91,6 +92,12 @@
 			</result>
 			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
 			</result>
+			 <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+            </result>
 		</action>
 
 		<!-- Start:Manohar -->
@@ -151,6 +158,7 @@
 				<param name="OrderHeaderKey">${#parameters.OrderHeaderKey}</param>
 				<param name="draft">${draft}</param>
 			</result>
+			
 		</action>
 
 		<action name="getOrderShipToAddress"
@@ -270,6 +278,13 @@
 				<param name="modifyOrderLines">true</param>
 				<param name="draftOrderError">${draftOrderError}</param>
 			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 
 		<action name="draftOrderModifyEmptyLineItems"
@@ -285,6 +300,13 @@
 				<param name="canCheckout">${#parameters.canCheckout}</param>
 				<param name="draft">${draft}</param>
 			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 
 		<action name="xpedxDraftOrderModifyLineNotes" method="updateNotes"
@@ -301,6 +323,13 @@
 				<param name="canCheckout">${#parameters.canCheckout}</param>
 				<param name="draft">${draft}</param>
 			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 		
 		<action name="xpedxOrderSummaryModifyLineNotes" method="updateNotes"
@@ -316,6 +345,13 @@
 				<param name="fullBackURL">${#parameters.fullBackURL}</param>
 				<param name="draft">${draft}</param>
 			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 		
 
@@ -376,6 +412,7 @@
 			<result name="MaxError">/xpedx/jsp/catalog/XPEDXItemsDetailsAddtoCartError.jsp</result>
 			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
 			<result name="DraftError">/xpedx/jsp/common/XPEDXDraftOrderFlagError.jsp</result>
+			<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>			
 		</action>
 
 		<!-- Product Details Changes End : Manoj Kodagali  -->
@@ -536,7 +573,13 @@
                 <param name="draftOrderFlagOrderSummary">true</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
             </result>
-			
+			 <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 		<action name="draftOrderMakeCartInContext"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderMakeCartInContextAction">
@@ -622,7 +665,13 @@
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
                 <param name="draftOrderError">${draftOrderError}</param>
             </result>
-            
+            <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
             
         </action>
 
@@ -640,6 +689,7 @@
             <param name="resourceId">/swc/order/guestShopping</param>
             <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>  
         </action>
+
         <!-- action to check for timeout for JIRA 1650-->
         <action name="checkSessionTimeoutForCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction" method="checkSessionTimeout">
         <result name="timeout">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
@@ -669,6 +719,13 @@
                 <param name="draft">${draft}</param>
                 <param name="draftOrderError">${draftOrderError}</param>
                 <param name="pendingChangeConflictErrorMsg">${errorMessage}</param>
+            </result>
+            <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
             </result>
         </action>
         
@@ -720,6 +777,13 @@
 			</result>
 			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
 			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 		
         

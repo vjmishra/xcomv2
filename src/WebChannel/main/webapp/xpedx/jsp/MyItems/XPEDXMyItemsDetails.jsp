@@ -935,7 +935,14 @@ function showSharedListForm(){
 	   		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 	   		                    Ext.Msg.hide();
 	   		                	myMask.hide();
-	   		        }
+	   		       		 }
+	   		         	else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+		             	{
+						 	var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+			        	 	var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+			        		 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+			        	 	window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+		            	 }
 	   		            else{
 	                	   setMsgOnAddItemsWithQtyToCart(response);  
 	                	    Ext.Msg.hide();

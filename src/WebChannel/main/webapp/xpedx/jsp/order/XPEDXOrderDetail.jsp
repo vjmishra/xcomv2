@@ -478,6 +478,10 @@ function showSplitDiv(divId)
                  <s:if test='#_action.getResetWithError() == "Y"'>
                 	<h5 align="center"><b><font color="red">Unable to apply changes to your order. Please try again later or contact customer service.</font></b></h5>
                 </s:if>
+                <s:if test='%{isErrorMessage == "Y"}'>
+                	<h5 align="center"><b><font color="red">Your order has been updated by xpedx. Please review the order detail and then make your changes.</font></b></h5>
+                </s:if>
+                
                 <!-- begin top section -->
                 <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
                 <s:form namespace="/order" method="post"  id= "postOrderForm" name='postOrderForm'>

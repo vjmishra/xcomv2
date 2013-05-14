@@ -147,6 +147,8 @@ public class XPEDXConstants {
 	public static final String SHEET_A = "A_SHT";
 	public static final String DO_NOT_DISPLAY_REQUESTED_UOMS[]={"M_ENV","A_ENV","M_SHT","A_SHT"};
 	public static final String CUSTOM_FIELD_FLAG_CHANGE="CUSTOM_FIELD_FLAG";
+	public static final String UE_ERROR_CODE="Exception While Applying cheanges .Order Update was finished before you update";
+	public static final String UE_ERROR_CODE1="com.yantra.yfs.japi.YFSUserExitException";
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
  		  System.out.print ("\n"+msg);

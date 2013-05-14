@@ -79,6 +79,7 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	protected ArrayList<String> isEditNewline=new ArrayList<String>();
 	public String draftOrderflag;
 	public String draftErrorCatalog="false";
+	private String ouErrorMessage;
 	public String draftErrorFlagCatalog = "DraftErrorCat";
 	//For Order multiple CR
 	protected HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
@@ -178,6 +179,23 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 								 }
 							 }
 						 }
+						 YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+						 boolean isOUErrorPage=false;
+			    			for(YFCElement errorEle:errorNodeList)
+			    			{
+			    				String errorCode=errorEle.getAttribute("ErrorCode");
+			    				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+			    				{
+			    					isOUErrorPage=true;
+			    					break;
+			    				}
+			    			}
+			    			if(isOUErrorPage)
+			    			{
+			    				ouErrorMessage=XPEDXConstants.UE_ERROR_CODE;
+			    				return "OUErrorPage"; 
+			    			}
+						 
 						 return draftErrorFlagCatalog;
 					 }catch (Exception dle) {
 						if (dle != null && dle.toString() != null
@@ -218,6 +236,22 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					 }
 				 }
 			 }
+			 YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+			 boolean isOUErrorPage=false;
+ 			for(YFCElement errorEle:errorNodeList)
+ 			{
+ 				String errorCode=errorEle.getAttribute("ErrorCode");
+ 				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+ 				{
+ 					isOUErrorPage=true;
+ 					break;
+ 				}
+ 			}
+ 			if(isOUErrorPage)
+ 			{
+ 				ouErrorMessage=XPEDXConstants.UE_ERROR_CODE;
+ 				return "OUErrorPage"; 
+ 			}
 		 }
 		catch (Exception dle) {
 			LOG.debug(dle.getStackTrace());
@@ -1005,6 +1039,14 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		this.isEditNewline = isEditNewline;
 	}
 	
+	public String getOuErrorMessage() {
+		return ouErrorMessage;
+	}
+
+	public void setOuErrorMessage(String ouErrorMessage) {
+		this.ouErrorMessage = ouErrorMessage;
+	}
+
 	
 
 }

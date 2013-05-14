@@ -838,6 +838,13 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 	        	 refreshWithNextOrNewCartInContext();
 	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
              }
+	         else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+             {
+	        	 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+	        	 var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+	        	 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+	        	 window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+             }
 	         else if(draftErr.indexOf(productID) !== -1){
 	        	 refreshMiniCartLink();
 	        	 myMessageDiv.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;

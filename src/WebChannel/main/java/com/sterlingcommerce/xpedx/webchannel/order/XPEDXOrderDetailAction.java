@@ -786,13 +786,24 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected boolean isCSRReview = false;
 	protected boolean isFOCSRReview = false;
 	protected String resetWithError = "N"; //added for XBT-109
+	private String isErrorMessage;
+	
 	/*
 	JIRA 3999 Start -Set and Get method for pending hold status and reson text
 	*/
 	
 	protected String reasonText = "";
-	protected String pendingHoldStatus = "";
+	protected String pendingHoldStatus = "";	
 	
+	
+	public String getIsErrorMessage() {
+		return isErrorMessage;
+	}
+
+	public void setIsErrorMessage(String isErrorMessage) {
+		this.isErrorMessage = isErrorMessage;
+	}
+
 	public boolean isFOCSRReview() {
 		return isFOCSRReview;
 	}
@@ -847,6 +858,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	private String encInvoiceNo = "";
 	private String encInvoiceDate = "";
 	private String displayTaxAndShipHandlingAmt="N";	
+	
 	
 	public String getDisplayTaxAndShipHandlingAmt() {
 		return displayTaxAndShipHandlingAmt;

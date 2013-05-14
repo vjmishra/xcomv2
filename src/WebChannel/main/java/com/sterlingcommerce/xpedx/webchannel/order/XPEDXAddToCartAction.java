@@ -19,6 +19,7 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.AddToCartAction;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
@@ -236,6 +237,22 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 					 }
 				 }
 			 }
+			 YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+			boolean isOUErrorPage=false;
+ 			for(YFCElement errorEle:errorNodeList)
+ 			{
+ 				String errorCode=errorEle.getAttribute("ErrorCode");
+ 				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+ 				{
+ 					isOUErrorPage=true;
+ 					break;
+ 				}
+ 			}
+ 			if(isOUErrorPage)
+ 			{
+ 				ouErrorMessage=XPEDXConstants.UE_ERROR_CODE;
+ 				return "OUErrorPage"; 
+ 			}
 			 return draftErrorFlag;
 		 }
 	     catch (Exception e)
@@ -424,6 +441,7 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	public String draftOrderflag;
 	public String draftErrorFlag="DraftError";
 	private String draftError= "false";
+	private String ouErrorMessage;
 
 	public String getDraftError() {
 		return draftError;
@@ -431,6 +449,14 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 
 	public void setDraftError(String draftError) {
 		this.draftError = draftError;
+	}
+
+	public String getOuErrorMessage() {
+		return ouErrorMessage;
+	}
+
+	public void setOuErrorMessage(String ouErrorMessage) {
+		this.ouErrorMessage = ouErrorMessage;
 	}
 
 	

@@ -47,7 +47,9 @@
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
 	<s:url id="ValidatePasswordURL" action="xpedxPasswordValidation"/>
-	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>	
+	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>
+	<s:url id="orderdetailsURL" namespace="/order" action="orderDetail"/>
+	<s:hidden id='orderdetailsURLId' value='%{#orderdetailsURL}' />	
 <script type="text/javascript">
 
 function savePassword(){
@@ -784,6 +786,8 @@ var selectedShipCustomer = null;
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='xpedxutil' />    
 <s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 <s:set name='_action' value='[0]' />
+<s:set name="editOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:hidden id='editOrderHeaderKey' value='%{#editOrderHeaderKey}' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 <s:set name="xutil" value="#_action.getXMLUtils()"/>
