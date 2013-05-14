@@ -1394,19 +1394,23 @@ function SubmitActionWithValidation()
 								<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" />
 							</s:if>
 					</div>					
-			<s:if test='custSKU!= ""'>
-				<p style="margin-top:8px;">
-					<s:if test='%{custSKU == "1"}' >
-						<s:property value="#customerItemLabel" />: <s:property value='custPartNumber' />
-					</s:if>
-					<s:elseif test='%{custSKU == "2" }'>
+				<%--Added for Eb 47 display of Mfg & CustomerItem# based on the Flag values set in CC --%>
+				<div>
+				<s:if test= '%{#_action.getExtnMfgItemFlag()== "Y"}'>
+					<p style="margin-top:8px;">
 						<s:property value="#manufacturerItemLabel" />: <s:property value='ManufacturerPartNumber' />
-					</s:elseif>
-					<s:elseif test='%{custSKU == "3" }'>
-						<s:property value="#mpcItemLabel" />: <s:property value='MPC' />
-					</s:elseif>
-				</p>				
-			</s:if>
+					</p>
+				</s:if>
+				
+				<s:if test= '%{#_action.getExtnCustomerItemFlag() == "Y"}'>
+					<p style="margin-top:8px;">
+						<s:property value="#customerItemLabel" />: <s:property value='custPartNumber' />
+					</p>
+				</s:if>
+				</div>
+				<%--End for Eb 47 display of Mfg & CustomerItem# based on the Flag values set in CC --%>
+								
+				
 			
 			<br/>
 					<div class="red bold"> 

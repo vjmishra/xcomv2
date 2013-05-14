@@ -5550,21 +5550,15 @@ public class XPEDXWCUtils {
 					/* xb-758 Code Changes start */
 					wcContext.removeWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG, WCAttributeScope.LOCAL_SESSION);
 					wcContext.removeWCAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG, WCAttributeScope.LOCAL_SESSION);
-					wcContext.removeWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU, WCAttributeScope.LOCAL_SESSION); // Need to remove this line while fixing XB-756 logic
 					/* xb-758 Code Changes end */
 					if(!YFCCommon.isVoid(extnMfgItemFlag) && extnMfgItemFlag.equalsIgnoreCase("Y") ){
 						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG,extnMfgItemFlag,WCAttributeScope.LOCAL_SESSION);
-						wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,"2",WCAttributeScope.LOCAL_SESSION); //// Need to remove this line while fixing XB-756 logic
 					}
-					if(!YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y"))
+					
+					if(!YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG,extnCustomerItemFlag,WCAttributeScope.LOCAL_SESSION);
-					// Need to remove logic start while fixing XB-756 logic
-					if ((YFCCommon.isVoid(extnMfgItemFlag) && !YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y") ) ||
-						(!YFCCommon.isVoid(extnMfgItemFlag) && !extnMfgItemFlag.equalsIgnoreCase("Y") && !YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y")) ) {
-						wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,"1",WCAttributeScope.LOCAL_SESSION);
-					}
-					// Need to remove logic End while fixing XB-756 logic
-					/* XB-763 Code Changes End */
+					} 						
+				      /* XB-763 Code Changes End */
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);

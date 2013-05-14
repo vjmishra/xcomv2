@@ -380,18 +380,16 @@
 		endpoint='CATALOG' description="Item customer X reference Details">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
-		<API FlowName="getXPXItemcustXrefList">
-			<Input>
-				<XPXItemcustXref LegacyItemNumber="" MPC=""
-					CustomerItemNumber="" CustomerDivision="" CustomerNumber=""
-					CompanyCode="" EnvironmentCode="" />
-			</Input>
-			<Template>
-				<XPXItemcustXrefList >
-					<XPXItemcustXref></XPXItemcustXref>
-				</XPXItemcustXrefList>
-			</Template>
-		</API>
+		 <API FlowName="getXPXItemcustXrefList">
+            <Input>
+  				<XPXItemcustXref EnvironmentCode=""  CustomerNumber="" LegacyItemNumber="" CustomerDivision="" />
+            </Input>
+            <Template>
+			<XPXItemcustXrefList>
+			    <XPXItemcustXref />
+			</XPXItemcustXrefList>
+            </Template>
+        </API>
 	</mashup>
 
 	<mashup id='xpedxCatalogSearch' transactional='true' mashuptype='XAPI'

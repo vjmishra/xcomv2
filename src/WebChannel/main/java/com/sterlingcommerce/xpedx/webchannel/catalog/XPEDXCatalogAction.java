@@ -116,6 +116,25 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.indexField = indexField;
 	}
 
+	//added for EB 47
+	private String extnMfgItemFlag;
+	private String extnCustomerItemFlag;
+	public String getExtnMfgItemFlag() {
+		return extnMfgItemFlag;
+	}
+
+	public void setExtnMfgItemFlag(String extnMfgItemFlag) {
+		this.extnMfgItemFlag = extnMfgItemFlag;
+	}
+
+	public String getExtnCustomerItemFlag() {
+		return extnCustomerItemFlag;
+	}
+
+	public void setExtnCustomerItemFlag(String extnCustomerItemFlag) {
+		this.extnCustomerItemFlag = extnCustomerItemFlag;
+	}
+	//End of EB 47
 
 
 	//End of addition for JIRA #4195
@@ -1133,7 +1152,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				complexQueryElement.setAttribute("Operator", "AND");
 				complexQueryElement.appendChild(complexQueryOrElement);
 				Element customerDetails=SCXmlUtil.createChild(inputDocument.getDocument().getDocumentElement(), "CustomerDetails");
-				customerDetails.setAttribute("ExtnCompanyCode", shipToCustomer.getExtnCompanyCode());
+				//EB 47 customerDetails.setAttribute("ExtnCompanyCode", shipToCustomer.getExtnCompanyCode());
 				customerDetails.setAttribute("ExtnEnvironmentCode", shipToCustomer.getExtnEnvironmentCode());
 				customerDetails.setAttribute("ExtnShipFromBranch", shipToCustomer.getExtnShipFromBranch());
 				customerDetails.setAttribute("ExtnCustomerDivision", shipToCustomer.getExtnCustomerDivision());
@@ -2630,7 +2649,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		String customerPartNumber = "";
 		String manufacturerPartNo = "";
 		String extnMpc = "";
-		String customerUseSKU = (String) wcContext.getWCAttribute("customerUseSKU");
+		//Commented for EB 47 String customerUseSKU = (String) wcContext.getWCAttribute("customerUseSKU");
+		//Added for EB 47
+		extnMfgItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		extnCustomerItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		//End of EB 47
+		
 		String legacyCustNumber = (String) wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);
 		// JIRA-901: SKU Changes End
 		String environmentCode = (String) wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
@@ -2641,7 +2665,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			itemIds.add(SCXmlUtil.getAttribute((Element) itemNodeList.item(i), "ItemID"));
 		}
 		
-		if(CUSTOMER_PART_NUMBER_FLAG.equalsIgnoreCase(customerUseSKU)){
+		if(!SCUtil.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y")) {//Added for Eb 47
 			if(itemIds.size()>0){
 				//Document custPartNoDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIds, wcContext);
 				//if(custPartNoDoc!=null){
@@ -2689,15 +2713,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			// JIRA-901: SKU Changes Begin
 			if(itemExtnElement!=null){
 				extnMpc = itemExtnElement.getAttribute("ExtnMpc");
-				
 				Element primaryInformation = SCXmlUtil.getChildElement(itemElement, "PrimaryInformation");
 				manufacturerPartNo = primaryInformation.getAttribute("ManufacturerItem");
-				
-				// need to get the customer part number only if the
-				// customerUseSKU ='1'.
-				if(CUSTOMER_PART_NUMBER_FLAG.equalsIgnoreCase(customerUseSKU)){
-					customerPartNumber = itemToCustPartNoMap.get(itemID) ;
-				}
+				customerPartNumber = itemToCustPartNoMap.get(itemID) ;
 				HashMap<String, String> skuMap = new HashMap<String, String>();
 				skuMap.put("MPN", manufacturerPartNo);
 				skuMap.put("MPC", extnMpc);
@@ -2741,7 +2759,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 								inventoryIndicator);
 		
 						// inject it in HashMap
-						itemToItemBranchBeanMap.put(itemNumber, itemBranchInfoBean);
+						itemToItemBranchBeanMap.put(itemNumber, itemBranchInfoBean);					
 					}
 				}
 				

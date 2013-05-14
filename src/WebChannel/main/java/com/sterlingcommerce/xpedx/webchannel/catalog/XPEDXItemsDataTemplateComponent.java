@@ -233,17 +233,26 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
 		sb.append("partno: \"");
 		
-		String custUserSKU = (String)tag.getWcContext().getWCAttribute("customerUseSKU");
-		if("2".equals(custUserSKU)) {
+		//Added for EB 47
+		String extnMfgItemFlag = (String) tag.getWcContext().getWCAttribute("BILL_TO_CUST_MFG_ITEM_FLAG");
+		String extnCustomerItemFlag = (String) tag.getWcContext().getWCAttribute("BILL_TO_CUST_PART_ITEM_FLAG");
+		//Commented for EB 47 String custUserSKU = (String)tag.getWcContext().getWCAttribute("customerUseSKU");
+		if(extnMfgItemFlag != null && extnMfgItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MANUFACTURER_ITEM_LABEL)
 				.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
-		} else if("3".equals(custUserSKU)) {
+		
+		}
+			sb.append("\",");
+			/* else if("3".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MPC_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPC"))));
-		} else if("1".equals(custUserSKU)) {
+		} else if("1".equals(custUserSKU)) {*/
+			sb.append("customerItemno: \"");
+		if(extnCustomerItemFlag!=null && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
 		}
+		//End of EB 47
 		sb.append("\",");
 		
 		sb.append("uomdisplay: \"<div class=\'uom-select\'><select name='itemUomList' ").append("onmousedown=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class',''); ")

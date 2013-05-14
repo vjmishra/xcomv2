@@ -679,7 +679,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		shipFromDivision = shipToCustomer.getExtnShipFromBranch();
 		//Fetching and setting the other customer profile settings here to use in getCustomerPartNumber
 		envCode = shipToCustomer.getExtnEnvironmentCode();
-		customerCode = shipToCustomer.getExtnCompanyCode();
+		//Commented for EB 47 customerCode = shipToCustomer.getExtnCompanyCode();
 		customerLegNo = shipToCustomer.getExtnLegacyCustNumber();
 		useOrderMulUOMFlag = shipToCustomer.getExtnUseOrderMulUOMFlag();
 		customerBranch = shipFromDivision;
@@ -709,7 +709,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		ZipRequest = shipToCustomer.getZipCode();
 		AccountNumber = shipToCustomer.getAccountNumber();
 		// End of performance issue - itemdetail.action
-		
+		//Added for EB 47
+		extnMfgItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		extnCustomerItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		//End of EB 47
 		
 		/*Element customerOrganizationExtnEle = XMLUtilities.getElement(outputEl,"Extn");
 		shipFromDivision = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnShipFromBranch");
@@ -1065,7 +1068,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			Map<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerDivision",DivisionNumber);
-			valueMap.put("/XPXItemcustXref/@CompanyCode",customerCode);
+			//Commented for EB 47 valueMap.put("/XPXItemcustXref/@CompanyCode",customerCode);
 			valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemID);
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", customerLegNo);
 			Element input;
@@ -2020,6 +2023,27 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	String custPartNumber = null;
 	String requestedUOM = null;
 	String requestedDefaultUOM = null;
+	//added for EB 47
+	private String extnMfgItemFlag;
+	private String extnCustomerItemFlag;
+	public String getExtnMfgItemFlag() {
+		return extnMfgItemFlag;
+	}
+
+	public void setExtnMfgItemFlag(String extnMfgItemFlag) {
+		this.extnMfgItemFlag = extnMfgItemFlag;
+	}
+
+	public String getExtnCustomerItemFlag() {
+		return extnCustomerItemFlag;
+	}
+
+	public void setExtnCustomerItemFlag(String extnCustomerItemFlag) {
+		this.extnCustomerItemFlag = extnCustomerItemFlag;
+	}
+	//End of EB 47
+
+
 	//added for jira 2422
 	private String goBackFlag;
 
