@@ -1425,7 +1425,32 @@ public class XPEDXCatalogAction extends CatalogAction {
 			HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 			//New method for getting order multiple .
 			//setInventoryAndOrderMultipleMap();
-			itemUomHashMap =XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
+			//commented for EB-164
+			//itemUomHashMap =XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
+			//orderMultipleMap = new HashMap<String,String>();
+			
+			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+			if(xpedxCustomerContactInfoBean!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+			msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+			}
+			
+			wcContext.setWCAttribute("orderMultipleMap",orderMultipleMap, WCAttributeScope.REQUEST);
+			itemUomHashMap = XPEDXOrderUtils.getXpedxUOMDescList(
+					wcContext.getCustomerId(), itemIDList,
+					wcContext.getStorefrontId(),true);
+			defaultShowUOMMap = new HashMap<String,String>();
+			defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
+			//Set itemMap MAP again in session
+			XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+			//set a itemsUOMMap in Session for ConvFactor
+			XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getItemUomHashMap());	
+			
+			wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
+			wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
+			
+		}	
+			
+		/*	itemUomHashMap =XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId());
 			//orderMultipleMap = new HashMap<String,String>();
 			
 			//Start - Code added to fix XNGTP 2964
@@ -1433,15 +1458,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if(xpedxCustomerContactInfoBean!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
 			msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
 			}
-			
-			try {
-				//orderMultipleMap = XPEDXOrderUtils.getOrderMultipleForItems(itemIDList);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				//orderMultipleMap = new HashMap();
-			}
 			wcContext.setWCAttribute("orderMultipleMap",orderMultipleMap, WCAttributeScope.REQUEST);
+		
 			
 			double minFractUOM = 0.00;
 	    	double maxFractUOM = 0.00;
@@ -1540,7 +1558,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 						/*if(!SCUtil.isVoid(orderMultiple) && Integer.valueOf(orderMultiple)>1){
 							orderMultipleMap.put(strItemID, orderMultiple);
 						}*/
-						if(!SCUtil.isVoid(defaultUOM))
+					/*	if(!SCUtil.isVoid(defaultUOM))
 							defaultShowUOMMap.put(strItemID, defaultUOM);
 						//End- Code added to fix XNGTP 2964
 						
@@ -1558,7 +1576,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemIDList, wcContext.getStorefrontId()));	
 		}
 		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
-		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
+		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);*/
 	}
 	private void getOrderMultipleMapForItems()
 	{

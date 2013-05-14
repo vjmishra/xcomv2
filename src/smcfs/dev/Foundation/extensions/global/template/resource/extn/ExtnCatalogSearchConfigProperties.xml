@@ -25,6 +25,9 @@
 						<Attribute IndexFieldName="Item.ExtnColor"
 							XMLName="ExtnColor" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnBestMatch"
+							XMLName="ExtnBestMatch" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />	
 						<Attribute IndexFieldName="Item.ExtnBasis"
 							XMLName="ExtnBasis" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />

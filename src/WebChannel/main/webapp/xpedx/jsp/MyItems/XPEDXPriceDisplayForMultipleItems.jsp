@@ -29,6 +29,7 @@
 						<s:hidden id="itemOrder" name="itemOrder" value="%{#tmpItemOrder.substring(#tmpItemOrder.indexOf(':'))}" /> 
 					</s:else>
 					<s:set name="itemOrder" value='%{#_action.getItemOrderMap().get(#itemId+":"+#itemOrderSeq)}' />	
+					<s:set name="customerUom" value='%{#_action.getItemCustomerUomMap().get(#itemId+":"+#itemOrderSeq)}' />	
 					<s:set name="validateOrderMul111" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
 					<s:set name="category" value="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq)}" />
 					<s:hidden id="validateOrderMul111" name="validateOrderMul" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
@@ -131,8 +132,15 @@
 						<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
 							<s:set name="json" value='pnaHoverMap.get(#jsonKey)' />
 							<s:set name="jsonUOM" value="#json.get('UOM')" />
-							<s:set name="jsonUOMDesc"
+							<s:if test="%{#customerUom == #jsonUOM}">
+								<s:set name='customerUomWithoutM' value='%{#jsonUOM.substring(2, #jsonUOM.length())}' />
+								<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />
+							</s:if>
+							<s:else>
+								<s:set name="jsonUOMDesc"
 								value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+							</s:else>
+							
 							<s:set name="jsonImmediate" value="#json.get('Immediate')" />
 							<s:set name="jsonNextDay" value="#json.get('NextDay')" />
 							<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
@@ -289,8 +297,23 @@
 				</s:if>
 				<s:else>
 					<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
-					<s:set name="bracketPriceForUOM" value="bracketPrice" />
-					<s:set name="bracketUOMDesc" value="bracketUOM" />
+					<s:set name="bracketPriceForUOM" value="bracketPrice" />					
+					
+					<s:if test="%{#customerUom != ''}">
+						<s:set name="temp" value="bracketUOM" />
+						<s:set name="customerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#customerUom)"/>
+						<s:if test='%{#customerUOMDesc==#temp}'>	
+							<s:set name='customerUomWithoutM' value='%{#customerUom.substring(2, #customerUom.length())}' />
+							<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+						</s:if>
+						<s:else>
+							<s:set name="bracketUOMDesc" value="bracketUOM" />
+						</s:else>			
+					</s:if>
+					<s:else>
+						<s:set name="bracketUOMDesc" value="bracketUOM" />
+					</s:else>
+					
 					<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 					<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 					

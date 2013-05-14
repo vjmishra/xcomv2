@@ -408,7 +408,8 @@ function showSharedListForm(){
         		 		qty = document.getElementById('QTY_'+myItemsKey).value;
         		 		var uom = document.getElementById('UOM_'+myItemsKey).value;
     				}
-    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
+    				var customerUom = document.getElementById('custUOM_'+myItemsKey).value;
+    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM,customerUom);
     			} 
     			else{
             		Ext.Msg.hide();
@@ -2883,6 +2884,8 @@ function showSharedListForm(){
                
                
                <s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
+               <s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />
+               
              	<s:set name="webtrendsItemTypeMap" value="%{#_action.getItemTypeMap()}" />
 				<s:iterator status="status" id="item"
 					value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
@@ -2901,7 +2904,7 @@ function showSharedListForm(){
 					<s:set name='itemTypeLabel' value="%{#xpedxItemLabel + '+:'}" />
 					<s:set name='showItemType' value='%{true}' />
 					<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
-					
+					<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemId)' />
 					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 					<s:set name="itemBaseUom"  value='#baseUOMs.get(#itemId)' />
 					<s:set name="YFSItmePrimaryInfo" value='descriptionMap.get(#item.getAttribute("ItemId"))' />
@@ -3110,7 +3113,7 @@ function showSharedListForm(){
 										<!-- Qty --> <s:hidden
 											name="itemQty" value="%{#qty}" /> <s:hidden
 											id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" /> 
-
+											<s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
 											<!-- UOM & Custom Fields -->
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
