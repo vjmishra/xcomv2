@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -26,7 +23,6 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
@@ -40,7 +36,6 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	private String approverProxyUserId = null;
 	private static YFCLogCategory log;
 	String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
-	String getCustomerListCSREmailTemplate ="global/template/api/getCustomerList.XPXCSRFlagEmails.xml";
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
@@ -451,16 +446,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			}
 			/*XB-461 : Begin - Sending email through Java Mail API now*/
 			String emailOrgCode=sellerOrgCode!=null?sellerOrgCode:"";
-			Document inputDoc = orderElement.getOwnerDocument();
-			String buyerOrgCode = orderElement.getAttribute("BuyerOrganizationCode");
-			if(buyerOrgCode != null){
-			Map<String,String>getCustIDMap = getCustomerID(buyerOrgCode,env);
-			if(getCustIDMap.size() >0){
-				String billtoID = getCustIDMap.get("BillToCustomerID");
-				inputDoc = setCSREmails(env,inputDoc,billtoID);
-				}
-			}	
-			String inputXML=SCXmlUtil.getString(inputDoc.getDocumentElement());
+			String inputXML=SCXmlUtil.getString(orderElement);
 			String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
 			String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
 			String businessIdentifier = SCXmlUtil.getXpathAttribute(orderElement,"./Extn/@ExtnWebConfNum");
@@ -470,137 +456,6 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 		return inXML;		
 	}
-	
-	public Document setCSREmails(YFSEnvironment env, Document inputDoc,String billToId)
-			throws ParserConfigurationException, FactoryConfigurationError,
-			YFSException, RemoteException, YIFClientCreationException {
-
-				api = YIFClientFactory.getInstance().getApi();
-
-				//		if(api == null){
-				//			log.debug(" inside null for API ");
-				//			api = YIFClientFactory.getInstance().getApi();
-				//			log.debug("api  --> " + api);
-				//		}
-				log.debug("setCSREmails " +  SCXmlUtil.getString(inputDoc));
-
-
-				YFCDocument docCustomer = YFCDocument.createDocument("Customer");
-				YFCElement inputDocElement = docCustomer.getDocumentElement();
-
-				inputDocElement.setAttribute("CustomerID",billToId); //JIRA 4093 -Changes done
-
-				//String billToId = customerDoc.getDocumentElement().getAttribute("BillToID");
-
-
-				if(billToId != null && !billToId.equalsIgnoreCase(""))
-				{
-					env.setApiTemplate("getCustomerList", getCustomerListCSREmailTemplate);
-					log.debug("env " + env);
-					log.debug("docCustomer  " + SCXmlUtil.getString(docCustomer.getDocument()));
-					log.debug(" getCustomerListCSREmailTemplate " + getCustomerListCSREmailTemplate);
-					//log.debug(" api " + api.toString());
-					Document custListDoc = api.getCustomerList(env,docCustomer.getDocument());
-					log.debug("api getCustomerList outdoc "
-							+ SCXmlUtil.getString(custListDoc));
-					if(log.isDebugEnabled()){
-						log.debug("SCXmlUtil.getString(custListDoc) +++++++serCSREmails++++++"+SCXmlUtil.getString(custListDoc));
-					}
-					env.clearApiTemplate("getCustomerList");
-
-					// get the email ids to be sent in to and cc list ends here
-					String strExtnECsr1EMailID = null;
-					String strExtnECsr2EMailID = null;
-					String strExtnECSR1EmailConfirmFlag = null;
-					String strExtnECSR2EmailConfirmFlag = null;
-
-					NodeList custNodeList = custListDoc.getElementsByTagName("Extn");
-					int custLength = custNodeList.getLength();
-					if (custLength != 0) {
-						Element custExtnElement = (Element) custNodeList.item(0);
-						strExtnECSR1EmailConfirmFlag = custExtnElement
-						.getAttribute("ExtnECSR1EmailConfirmFlag");
-						if (!strExtnECSR1EmailConfirmFlag.equalsIgnoreCase("N")) {
-							strExtnECsr1EMailID = custExtnElement
-							.getAttribute("ExtnECsr1EMailID");
-							log.debug("strExtnECsr1EMailID ::"
-									+ strExtnECsr1EMailID);
-							inputDoc.getDocumentElement().setAttribute(
-									"strExtnECsr1EMailID", strExtnECsr1EMailID);
-							
-						}
-						strExtnECSR2EmailConfirmFlag = custExtnElement
-						.getAttribute("ExtnECSR2EmailConfirmFlag");
-						if (!strExtnECSR2EmailConfirmFlag.equalsIgnoreCase("N")) {
-							strExtnECsr2EMailID = custExtnElement
-							.getAttribute("ExtnECsr2EMailID");
-							log.debug("strExtnECsr2EMailID ::"
-									+ strExtnECsr2EMailID);
-							inputDoc.getDocumentElement().setAttribute(
-									"strExtnECsr2EMailID", strExtnECsr2EMailID);
-							
-						}
-
-					}
-
-					
-				}
-				System.out.println("input doc : "+ SCXmlUtil.getString(inputDoc));
-				return inputDoc;
-				
-			}
-	
-	public static Map<String, String> getCustomerID(String customerId, YFSEnvironment env) throws Exception{
-		if(log.isDebugEnabled()){
-			log.debug("getCustomerID ++++++++++++++++++++++"+customerId);
-		}
-
-		String msapId="";
-		String biltoId = "";
-		Map<String,String> customerIDMAP = new HashMap<String,String>();
-
-		Document inputDoc = SCXmlUtil.createDocument("XPXCustHierachyView");
-		inputDoc.getDocumentElement().setAttribute("ShipToCustomerID", customerId);
-		
-		
-		Document outDocument =api.executeFlow(env, "XPXCustomerHierarchyViewService", inputDoc);
-		
-		Element outputElement = null;
-		if(outDocument != null) {
-		outputElement = outDocument.getDocumentElement();
-		}
-		if(log.isDebugEnabled()){
-			log.debug("************getCustomerID : outputElement="+SCXmlUtil.getString(outputElement));
-		}
-		
-		NodeList customerHierView = outputElement.getElementsByTagName("XPXCustHierarchyView");
-		for(int j=0;j<customerHierView.getLength();j++) {
-			Element customerHierViewElem = (Element)customerHierView.item(j);
-			if(log.isDebugEnabled()){
-				log.debug("************customerHierViewElem : outputDoc="+SCXmlUtil.getString(customerHierViewElem));
-			}
-
-			msapId = customerHierViewElem.getAttribute("MSAPCustomerID");
-			biltoId = customerHierViewElem.getAttribute("BillToCustomerID");
-			
-
-			if(msapId!=null && !msapId.trim().equals("")){
-				customerIDMAP.put("MSAPCustomerID",msapId);
-			}
-			if(biltoId!=null && !biltoId.trim().equals("")){
-				customerIDMAP.put("BillToCustomerID",biltoId);
-			}
-
-		}	
-		if(log.isDebugEnabled()){
-			log.debug("customerIDMAP ++++++++++++++++++++"+customerIDMAP.size());
-		}
-		if(log.isDebugEnabled()){
-			log.debug("************getCustomerID : msapId="+msapId);
-		}
-		return customerIDMAP;
-	}
-
 
 	private void addEmailIDToElement(Element orderElement)
 	{
