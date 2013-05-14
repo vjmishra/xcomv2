@@ -794,6 +794,7 @@ public class XPEDXOrderUtils {
 									.getNamedItem("Conversion");
 							Node CustomerUOmFlag = nodeAttributes
 							.getNamedItem("IsCustUOMFlag");
+							isCustomerUOMFlg = "";
 							if (UnitOfMeasure != null && Conversion != null) {
 								convStr =  Conversion.getTextContent();
 								if(CustomerUOmFlag!=null){
