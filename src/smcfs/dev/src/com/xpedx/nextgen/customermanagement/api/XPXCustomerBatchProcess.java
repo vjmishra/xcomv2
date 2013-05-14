@@ -2260,7 +2260,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
       YFCElement extnElement = manageCustomerInputDoc.createElement("Extn");
       extnElement.setAttribute("ExtnSuffixType", "MC");
       /*** Start of code for jira 3552***/
-      extnElement.setAttribute("ExtnUseCustSKU",XpedxConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM);
+      //EB-46 -Removal of old Item Flag
+	  //extnElement.setAttribute("ExtnUseCustSKU",XpedxConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM);
       /*** End of code for jira 3552***/
       manageCustomerInputDoc.getDocumentElement().appendChild(extnElement);
 

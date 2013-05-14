@@ -497,10 +497,7 @@ IYRCComposite {
 	private Label lblLocationId;
 
 	private Text txtLocationId;
-
-	private Label lblSecondItemDisplay;
-
-	private Combo comboSecondItemDisplay;
+	
 	
 	private Button chkManufacturerItemNo;	
 	private Label lblManufacturerItemNo;
@@ -1224,16 +1221,6 @@ IYRCComposite {
 		gridDataDummy1.verticalAlignment = SWT.CENTER;
 		gridDataDummy1.widthHint = 30;
 		gridDataDummy1.horizontalSpan=1;			
-
-		addTab(gridDataDummy1,"dummySecondItemDisplay");
-		lblSecondItemDisplay = new Label(pnlCustomerProfileInfo, SWT.NONE);
-		lblSecondItemDisplay.setText("Second Item# Display:");
-		lblSecondItemDisplay.setLayoutData(gridDataLbl);
-		lblSecondItemDisplay.setData("name", "lblSecondItemDisplay");
-		comboSecondItemDisplay = new Combo(pnlCustomerProfileInfo, 8);
-		comboSecondItemDisplay.setLayoutData(gridDataDummy);
-		comboSecondItemDisplay.setTextLimit(50);
-		comboSecondItemDisplay.setData("name", "comboSecondItemDisplay");
 	}
 
 	private void createCentralContactComposite() {
@@ -1993,11 +1980,7 @@ IYRCComposite {
 		cbd.setCodeBinding("@Code");
 		cbd.setDescriptionBinding("@Description");
 		cbd.setListBinding("XPXUseSKUList:/UseSKUList/UseSKU");
-		cbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseCustSKU");
-		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseCustSKU");
-		cbd.setName("comboSecondItemDisplay");
-		comboSecondItemDisplay.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
-
+		
 		tbd = new YRCTextBindingData();
 		tbd
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMaxOrderAmount");
@@ -2503,7 +2486,6 @@ IYRCComposite {
 					,fillerLabelMap.get("NAICSName"),fillerLabelMap.get("dummyNAICSCode"),lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId")
 					,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample"),chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),
 					chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),
-					fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay,
 					chkCsr1EmailConfirmationFlag,lblCsr1EmailConfirmationFlag,chkCsr2EmailConfirmationFlag,lblCsr2EmailConfirmationFlag,
 					fillerLabelMap.get("dummyCsr1EmailConfirmationFlag"),fillerLabelMap.get("dummyCsr2EmailConfirmationFlag"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag"),
 					fillerLabelMap.get("dummyMaxOrderAmount"),lblMaxOrderAmount,stxtMaxOrderCurrency,txtMaxOrderAmount,fillerLabelMap.get("dummyMinOrderAmount"),lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,txtSmallOrderFee,stxtSmallOrderCurrency,fillerLabelMap.get("dummySmallOrderFee")
@@ -2523,8 +2505,7 @@ IYRCComposite {
 		}
 		else if("S".equalsIgnoreCase(suffixType)){
 			Control[]elements= {
-					fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
-					,chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustomerLinePONumber,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+					chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustomerLinePONumber,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,lblECSR,comboECSR,lblECSR2,comboECSR2,
 					fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod")
 					,chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
@@ -2543,7 +2524,7 @@ IYRCComposite {
 			Control[]elements= {chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 					chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
-					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay,
+					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),
 					lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag")
 					,lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
 			};
@@ -2568,7 +2549,7 @@ IYRCComposite {
 				chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 				chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 				chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
-				chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
+				chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices")
 				,lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag")
 				,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
 				,lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
