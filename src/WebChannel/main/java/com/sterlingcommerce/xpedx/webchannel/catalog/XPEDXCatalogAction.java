@@ -449,8 +449,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} */						
 		
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
-			orderByAttribute = "Item.ExtnBasis";
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";
+			sortField = "Item.ExtnBestMatch--D";
 		}
 		
 		String returnString = super.filter();
@@ -951,8 +951,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		long startTime=System.currentTimeMillis();		
 		
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
-			orderByAttribute = "Item.ExtnBasis";	
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";	
+			sortField = "Item.ExtnBestMatch--D";
 		}
 		
 		String returnString = super.newSearch();
@@ -1319,8 +1319,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} */
 		
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
-			orderByAttribute = "Item.ExtnBasis";
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";
+			sortField = "Item.ExtnBestMatch--D";
 		}
 	//Added below condn for XBT-269
 		if("2".equals(categoryDepthNarrowBy))
@@ -1811,8 +1811,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		StringBuffer sb=new StringBuffer();		
 		
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
-			orderByAttribute = "Item.ExtnBasis";
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";
+			sortField = "Item.ExtnBestMatch--D";
 		}
 		
 		String returnString = super.search();
@@ -1920,8 +1920,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		init();
 				
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
-			orderByAttribute = "Item.ExtnBasis";
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";
+			sortField = "Item.ExtnBestMatch--D";
 		}
 		
 		String returnString = super.sortResultBy();
@@ -2025,8 +2025,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} */
 		
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
-			orderByAttribute = "Item.ExtnBasis";
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";
+			sortField = "Item.ExtnBestMatch--D";
 		}
 		
 		String returnString = super.goToPage();
@@ -2126,8 +2126,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		} */
 		
 		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {						
-			orderByAttribute = "Item.ExtnBasis";
-			sortField = "Item.ExtnBasis--A";
+			orderByAttribute = "Item.ExtnBestMatch";
+			sortField = "Item.ExtnBestMatch--D";
 		}
 		
 		String returnString = super.selectPageSize();
@@ -3246,6 +3246,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private Map<String, String> sortListMap = new LinkedHashMap<String, String>();	
 
 	public Map<String, String> getSortListMap() {
+		sortListMap.put("Item.ExtnBestMatch--D", "Best Match");
 		sortListMap.put("relevancy", "Relevancy");
 		sortListMap.put("Item.ItemID--A", "Item # (Low to High)");
 		sortListMap.put("Item.ItemID--D", "Item # (High to Low)");

@@ -245,17 +245,20 @@ public class XPXItemLoadProcessor {
 	    ResultSet itemResult = null;
 	    int itemIndex = 0;
 	    int arrayCount = 0;
+	    int number = 0;
 	    try{
-	    	itemStatement = dbConn.prepareStatement("SELECT ITEM_KEY, ITEM_ID, KEYWORDS, DESCRIPTION, SHORT_DESCRIPTION, EXTENDED_DESCRIPTION FROM YFS_ITEM");
+	    	itemStatement = dbConn.prepareStatement("SELECT ITEM_KEY, ITEM_ID FROM YFS_ITEM");
 	        itemResult = itemStatement.executeQuery();
 	        while(itemResult.next()){
+	        	number++;
 	        	XPXItemDetail itemDetail = new XPXItemDetail();
 	        	itemDetail.setItemKey(itemResult.getString("ITEM_KEY"));
 	        	itemDetail.setItemId(itemResult.getString("ITEM_ID"));
-	        	itemDetail.setKeyWords(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("KEYWORDS")));
-	        	itemDetail.setDescription(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("DESCRIPTION")));
-	        	itemDetail.setShortDescription(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("SHORT_DESCRIPTION")));
-	        	itemDetail.setExtendedDescription(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("EXTENDED_DESCRIPTION")));
+	        	//itemDetail.setKeyWords(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("KEYWORDS")));
+	        	//itemDetail.setDescription(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("DESCRIPTION")));
+	        	//itemDetail.setShortDescription(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("SHORT_DESCRIPTION")));
+	        	//itemDetail.setExtendedDescription(XPXCatalogDataProcessor.preprocessCatalogData(itemResult.getString("EXTENDED_DESCRIPTION")));
+	        	itemDetail.setBestMatch(String.format("%0200d", number));
 	        	logger.info("Item Detail retrieved from Database: "+itemDetail.toString());
 	        	//Add item to the item array
 	        	itemDetailArray[itemIndex++] = itemDetail;
@@ -304,12 +307,12 @@ public class XPXItemLoadProcessor {
 				logger.info("Items not processed sine the item array was empty");
 				return;
 			}
-			ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "YFS_ITEM_TABLE", dbConn );
+			ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "YFS_ITEM_TBL", dbConn );
 			ARRAY itemArray_Oracle = null;
 			//Iterate through the collection of item detail array objects and pass them to the Stored Procedure
 			for(XPXItemDetail[] itemDetailArray : itemDetailArrayList){
 				itemArray_Oracle = new ARRAY( descriptor, dbConn, itemDetailArray);
-				callStmt = dbConn.prepareCall("call processItems(?,?)");      
+				callStmt = dbConn.prepareCall("call updateItems(?,?)");      
 				callStmt.setArray( 1, itemArray_Oracle );
 				callStmt.registerOutParameter(2, Types.VARCHAR);
 				callStmt.executeUpdate();
