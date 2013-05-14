@@ -20,8 +20,11 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
@@ -98,6 +101,13 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		
 		try{
 			getAllItemSKUs();
+			//Start of EB-64 - getting the item id and customer UOM of that item, if it exist
+			Document xpxItemXRefDoc = (Document) XPEDXWCUtils.getObjectFromCache("xpxItemXRefDoc");
+			if(xpxItemXRefDoc!=null){
+				customerUOMMap =  new HashMap<String, String>(); 
+				customerUOMMap = getItemIdCustomerUOM(xpxItemXRefDoc);
+			}
+			//End of EB-64
 		}
 		catch (Exception ex) {
 			LOG.debug(ex.getMessage());
@@ -228,7 +238,36 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		}
 		/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 	}
-	
+
+//	Added for EB-64 - getting the item id and customer Uoms
+	private HashMap<String, String> getItemIdCustomerUOM(Document xpxItemXRefDoc){
+		HashMap<String, String> custUomMap;
+		custUomMap = new HashMap<String, String>(); 
+		Element wElement = xpxItemXRefDoc.getDocumentElement();
+		NodeList wNodeList = wElement.getChildNodes();
+		if (wNodeList != null) {
+			int length = wNodeList.getLength();
+			
+			for (int i = 0; i < length; i++) {
+				Node wNode = wNodeList.item(i);
+				if (wNode != null) {
+					NamedNodeMap nodeAttributes = wNode.getAttributes();
+					if (nodeAttributes != null) {
+						Node itemId = nodeAttributes
+								.getNamedItem("LegacyItemNumber");
+						Node customerUOM = nodeAttributes
+						.getNamedItem("CustomerUom");
+						if(itemId!=null && customerUOM!=null){
+							custUomMap.put(itemId.getTextContent(), customerUOM.getTextContent());
+						}
+						
+						
+					}
+				}
+			}
+		}
+		return custUomMap;
+	}
 	/**
 	 * JIRA 243
 	 * Modified getCustomerDetails method to consider the mashup to be invoked
@@ -833,6 +872,15 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected String userKey = "";
 	protected String headerComment = "";
 	private HashMap<String, HashMap<String,String>> skuMap;
+	private HashMap<String, String> customerUOMMap;
+	public HashMap<String, String> getCustomerUOMMap() {
+		return customerUOMMap;
+	}
+
+	public void setCustomerUOMMap(HashMap<String, String> customerUOMMap) {
+		this.customerUOMMap = customerUOMMap;
+	}
+
 	private String customerSku;
 	protected LinkedHashMap<String, String> customerFieldsMap;
 	protected HashMap<String, ArrayList<String>> chainedOrderMap;

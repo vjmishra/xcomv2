@@ -1997,6 +1997,12 @@ public class XPEDXWCUtils {
 		String UOMDesc;
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> UOMDescMapFromCache = getUOMDescMapFromCache(wcContext);
+		// XB-687 - start
+	    LinkedHashMap<String, String> IsCustomerUomHashMap = new LinkedHashMap<String,String>();
+	    if(XPEDXWCUtils.getObjectFromCache("UOMsMap") != null){
+	    	IsCustomerUomHashMap = (LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    }
+		// XB-687 - End
 		if (null == UOMDescMapFromCache || UOMDescMapFromCache.size() <=0) {
 			log.debug("Did not get the UOM description map in the cache. Calling the DB");
 			// true to use the locale from the userpreferences
@@ -2009,7 +2015,11 @@ public class XPEDXWCUtils {
 			log.debug("Got the UOM description map in the cache");
 			uomDescMap = UOMDescMapFromCache;
 		}
-		UOMDesc = uomDescMap.get(UOMCode);
+		if(IsCustomerUomHashMap.get(UOMCode)!=null && IsCustomerUomHashMap.get(UOMCode).equalsIgnoreCase("Y")){
+			UOMDesc = UOMCode;
+		}else{
+			UOMDesc = uomDescMap.get(UOMCode);
+		}
 		if (UOMDesc == null || UOMDesc.trim().length() == 0) {
 			return UOMCode;
 		}
@@ -6166,6 +6176,8 @@ public class XPEDXWCUtils {
 		HashMap<String, String> skuMap = new LinkedHashMap<String, String>();
 		HashMap<String, HashMap<String,String>> itemSkuMap = new HashMap<String, HashMap<String,String>>();
 		Document xpxItemXRefDoc = getXpxItemCustXRefDoc(itemIdList, wcContext);
+		// EB-64 - Setting the ItemCustXREF doc in cache so that can retrieve the customerUOM flag for item and UOM for order detail page and Web Conf page
+		XPEDXWCUtils.setObectInCache("xpxItemXRefDoc",xpxItemXRefDoc);
 		Iterator<String> itemIdIterator = itemIdList.iterator();
 		while(itemIdIterator.hasNext()) {
 			String itemId = itemIdIterator.next();

@@ -381,7 +381,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		gridDataPnl.grabExcessHorizontalSpace = true;
 		gridDataPnl.grabExcessVerticalSpace = true;
 		// gridDataPnl.verticalSpan = 2;
-		gridDataPnl.widthHint = 500;
+		gridDataPnl.widthHint = 300;//Modified for Eb-269
 		gridDataPnl.verticalAlignment = 4;
 		pnlRuleDesc = new Composite(LinePnl, 0);
 		pnlRuleDesc.setLayout(gridLayout1);
@@ -447,7 +447,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		gridDataPnl.grabExcessVerticalSpace = true;
 		// gridDataPnl.verticalSpan = 2;
 		//gridDataPnl.widthHint = 100;
-		gridDataPnl.widthHint = 160;
+		gridDataPnl.widthHint = 400; ////Modified for Eb-269
 		gridDataPnl.verticalAlignment = 4;
 		pnlParam1 = new Composite(LinePnl, 0);
 		pnlParam1.setLayout(gridLayout1);
