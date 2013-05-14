@@ -1329,27 +1329,19 @@ from session . We have customer Contact Object in session .
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
 			    		</p>			    		
-			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M"'>	
-				    		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
-								<s:set name='itemSkuMap' value='%{skuMap.get(#itemID)}'/>
-								<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-								
-								<p>
-									<s:if test='%{customerSku == "1"}' >
-										<s:property value="#customerItemLabel" />:
+			    	    	<s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
 									</s:if>
-									<s:elseif test='%{customerSku == "2"}'>
-										<s:property value="#manufacturerItemLabel" />:
-									</s:elseif>
-									<s:else>
-										<s:property value="#mpcItemLabel" />:
-									</s:else>
-									<s:property value='#itemSkuVal' />
-								</p>
-								
-							</s:if>
-						</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p class="fields-padding">
+												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p class="fields-padding">
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+											</s:if>			
 			    	</div>			    	
 			    	<div class="clearall">&nbsp; </div>
 

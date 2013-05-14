@@ -644,7 +644,7 @@ height:auto;
 .bottom-mil-info
 {
  width:583px;
- line-height:30px;
+ line-height:18px;
 }
 
 .mil-container
@@ -1419,7 +1419,7 @@ table#checkout-po-tbl td.first-cell-second-row span { margin-bottom: 3px; }
 div.checkout div.short-description { margin-left: 15px; }
 table#checkout-table-header { width:100%; }
 div.checkout #checkout-table-header td { width: auto; padding-top: 10px 0px;}
-div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:30px; float: left; margin-top: -25px;}
+div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:18px; float: left; margin-top: -25px;}
 div.checkout .cart-summary { padding-right:0px; }
 div.checkout #po_combo_ctr { margin-left: 38px; }
 div.checkout #po_combo_ctr div {margin:0px; border-color:#cccccc;}

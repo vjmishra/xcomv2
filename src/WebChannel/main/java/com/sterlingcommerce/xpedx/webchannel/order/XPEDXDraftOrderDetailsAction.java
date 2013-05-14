@@ -67,6 +67,28 @@ import com.yantra.yfs.japi.YFSException;
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
+	private String customerItemFlag;
+	private String mfgItemFlag;
+	public String getCustomerItemFlag() {
+		return customerItemFlag;
+	}
+
+
+	public void setCustomerItemFlag(String customerItemFlag) {
+		this.customerItemFlag = customerItemFlag;
+	}
+
+
+	public String getMfgItemFlag() {
+		return mfgItemFlag;
+	}
+
+
+	public void setMfgItemFlag(String mfgItemFlag) {
+		this.mfgItemFlag = mfgItemFlag;
+	}
+
+
 	public String execute() {
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
@@ -1763,19 +1785,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		localSession.setAttribute("customerFieldsSessionMap", customerFieldsMap); */
 	}
 	
-	private void getAllItemSKUs() throws Exception
+	private void getAllItemSKUs() throws CannotBuildInputException, XPathExpressionException
 	{
-		//Fetch all the extn fields from customer
 		
-		String useCustSku = (String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,WCAttributeScope.LOCAL_SESSION);
-		/*String envCode = (String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-		String companyCode = (String)wcContext.getWCAttribute(XPEDXConstants.COMPANY_CODE,WCAttributeScope.LOCAL_SESSION);
-		String legacyCustomerNumber = (String)wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);*/
-		
-		//String useCustSku = shipToCustomer.getExtnUseCustSKU();
+		mfgItemFlag ="Y";//(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		customerItemFlag ="Y";// (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		String envCode = shipToCustomer.getExtnEnvironmentCode();
 		String companyCode = shipToCustomer.getExtnCompanyCode();
 		String legacyCustomerNumber = shipToCustomer.getExtnLegacyCustNumber();
+		
 		if(envCode == null || companyCode==null || legacyCustomerNumber == null)
 		{
 			Set mashupSet = buildSetFromDelmitedList("draftOrderGetCustomerLineFields");
@@ -1783,69 +1802,84 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			Element outputEl = (Element) outputMap.get("draftOrderGetCustomerLineFields");
 			Element customerOrganizationExtnEle = XMLUtilities.getChildElementByName(outputEl, "Extn");
 			envCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnEnvironmentCode");
-			useCustSku = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnUseCustSKU");
 			companyCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnCompanyCode");
 			legacyCustomerNumber = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnLegacyCustNumber");
-			//set this in the session
-			//wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,useCustSku,WCAttributeScope.LOCAL_SESSION);
-			/*wcContext.setWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,envCode,WCAttributeScope.LOCAL_SESSION);
-			wcContext.setWCAttribute(XPEDXConstants.COMPANY_CODE,companyCode,WCAttributeScope.LOCAL_SESSION);
-			wcContext.setWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,legacyCustomerNumber,WCAttributeScope.LOCAL_SESSION);*/
-			shipToCustomer.setExtnUseCustSKU(useCustSku);
 			shipToCustomer.setExtnEnvironmentCode(envCode);
 			shipToCustomer.setExtnCompanyCode(companyCode);
 			shipToCustomer.setExtnLegacyCustNumber(legacyCustomerNumber);
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 		}
 		
-		if(useCustSku!=null && useCustSku.length()>0)
+		/*if(useCustSku!=null && useCustSku.length()>0)
 		{
 			setCustomerSku(useCustSku);
-		}
+		}*/
 		
+		//Fetch all the items in Cart and get their respective SKUs
+		Document orderDoc = getOutputDocument();
+		Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
+				.getDocumentElement(), "OrderLines");
+		ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
+		if(orderLineElemList==null || orderLineElemList.size()==0)
+			return;
+		HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
+		setSkuMap(new HashMap<String, HashMap<String,String>>());
+		ArrayList<String> itemIdList = new ArrayList<String>();	
 		
-		
-		try {
-			HashMap<String, HashMap<String, String>> _skuMap = XPEDXWCUtils.getAllSkusForItemsList(getWCContext(), allItemIds,false);
-		
-		
-			//Fetch all the items in Cart and get their respective SKUs
-			Document orderDoc = getOutputDocument();
-			Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
-					.getDocumentElement(), "OrderLines");
-			ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
-			if(orderLineElemList==null || orderLineElemList.size()==0)
-				return;
-			//Get the customer extn fields
+		if(!SCUtil.isVoid(mfgItemFlag) && mfgItemFlag.equalsIgnoreCase("Y")) {				
+			HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
 			for (int i = 0; i < orderLineElemList.size(); i++) {
 				Element orderLineElement = (Element)orderLineElemList.get(i);
-				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
-						"Item");
-				String itemId = "";
-				if(itemElement!=null){
-					itemId = itemElement.getAttribute("ItemID");// orderline/item
-				
-					if(skuMap.containsKey(itemId))
-					{
-						HashMap<String,String> map=skuMap.get(itemId);
-						if(map != null && _skuMap.get(itemId) != null)
-							map.putAll(_skuMap.get(itemId));
-					}
-					else
-					{
-						skuMap.put(itemId,  _skuMap.get(itemId));
-						/*					
-						HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-						skuMap.put(itemId, itemSkuMap);*/
+				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+				String itemId = itemElement.getAttribute("ItemID");
+
+				if(skuMap.containsKey(itemId))
+					continue;
+				/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+				Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
+				Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
+				if(primeInfoElem!=null)
+				{
+					String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+					if(manufactureItem!=null && manufactureItem.length()>0)
+						itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
+				}
+
+				itemIdList.add(itemId);
+				skuMap.put(itemId, (HashMap<String, String>)itemSkuMap.clone());
+				itemSkuMap.clear();
+			}
+
+		}
+		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+			Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+			if(itemcustXrefDoc!=null) {
+				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
+				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
+				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
+					Iterator<Element> xrefIter = itemCustXrefElems.iterator();
+					while(xrefIter.hasNext()) {
+						Element xref = xrefIter.next();
+						String legacyItemNum = xref.getAttribute("LegacyItemNumber");
+						if(itemIdList.contains(legacyItemNum.trim())) {
+							String customerPartNumber = xref.getAttribute("CustomerItemNumber");
+							if(customerPartNumber!=null && customerPartNumber.length()>0)
+							{
+								HashMap<String, String> tmpSkuMap = skuMap.get(legacyItemNum);
+								if(SCUtil.isVoid(tmpSkuMap))
+									itemSkuMap = new HashMap<String, String>();
+								else
+									itemSkuMap = tmpSkuMap;
+							itemSkuMap.put(XPEDXConstants.CUST_PART_NUMBER, customerPartNumber);
+							skuMap.put(legacyItemNum, (HashMap<String, String>)itemSkuMap.clone());
+							itemSkuMap.clear();
+							}
+						}
 					}
 				}
 			}
-		}
-		catch (Exception ex){
-			LOG.debug(ex.getMessage());
-		}
+	   }
 	}
-	
 	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
