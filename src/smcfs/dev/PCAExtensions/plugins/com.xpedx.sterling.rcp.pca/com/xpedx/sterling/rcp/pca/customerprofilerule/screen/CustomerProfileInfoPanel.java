@@ -1020,7 +1020,7 @@ IYRCComposite {
 		chkCustLineAcct.setData("name", "chkCustLineAcct");
 
 		lblCustLineAcct = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustLineAcct.setText("Cust Line Acct#:");
+		lblCustLineAcct.setText("Line Account#:");
 		lblCustLineAcct.setLayoutData(gridDataLbl);
 		lblCustLineAcct.setData("name", "lblCustLineAcct");
 		txtCustLineAcctMsg = new Text(pnlCustomerProfileInfo,2048);
@@ -1087,7 +1087,7 @@ IYRCComposite {
 		chkCustomerLinePONumber.setLayoutData(gridData1);
 		chkCustomerLinePONumber.setData("name", "chkCustomerLinePONumber");
 		lblCustomerLinePONumber = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustomerLinePONumber.setText("Customer Line PO#");
+		lblCustomerLinePONumber.setText("Line PO#");
 		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
 		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
 		//XB-519 -UI Modified

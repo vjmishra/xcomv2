@@ -94,10 +94,17 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 			showParam1= true;
 		}
 		//XB-519 showtext added for manage rule tab text field
-		if("RequiredCustomerLinePO".equals(ruleId)||"RequiredCustomerLineAccountNo".equals(ruleId)){//today
-			
+		//EB-270 Editing the RuleLongDesc
+		if("RequiredCustomerLinePO".equals(ruleId))
+		{
+			eleRuleLine.setAttribute("RuleLongDesc" , "Require Line PO #");
 			showtext= true;
 			
+		}
+		if("RequiredCustomerLineAccountNo".equals(ruleId))
+		{
+			eleRuleLine.setAttribute("RuleLongDesc" , "Require Line Account #");
+			showtext= true;
 		}
 		
 		//Element eleCustomer = this.pnlRuleLines.parentObj.getBehavior().getLocalModel("XPXCustomerIn");
