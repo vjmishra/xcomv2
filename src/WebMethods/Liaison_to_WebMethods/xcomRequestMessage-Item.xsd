@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Based on 'xpedxCatalogMandatoryInputsv1.9.xlsx' -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!-- The Root node of the Batch Feed. Contains at least 1 ItemList element -->
+	<xs:element name="ItemList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Item" maxOccurs="unbounded"
+					minOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="ValidateAdditionalAttributeValues" type="xs:string" use="required" fixed="N"></xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Item element that is contained in the ItemList -->
+	<xs:element name="Item">
+		<xs:complexType>	
+			<!-- ELEMENT SECTION -->
+			<xs:sequence>
+				<xs:element ref="Extn" />												<!-- The Extension Attribute Fields -->
+				<xs:element ref="PrimaryInformation" />									<!-- The Primary Information Fields -->
+				<xs:element ref="AdditionalAttributeList" minOccurs="0" maxOccurs="1"/>	<!-- Optional List containing Additional Attributes -->
+                <xs:element ref="AssetList" minOccurs="0" maxOccurs="1"/>				<!-- Optional List containing Asset Elements -->
+                <xs:element ref="CategoryList" />										<!-- Category List that contains category elements -->
+				<xs:element ref="AlternateUOMList" minOccurs="0" maxOccurs="1" />		<!-- Optional List containing AlternateUOM elements -->
+			</xs:sequence>
+			<!-- END ELEMENT SECTION -->
+			
+			<!-- ATTRIBUTE SECTION -->
+			<!-- Action: Required, String, Choice(Manage, Delete), Length=40 -->
+			<xs:attribute name="Action" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Manage" />
+						<xs:enumeration value="Delete" />
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ItemGroupCode: Required, String, Constant("PROD"), Length=20 -->
+			<xs:attribute name="ItemGroupCode" use="required" fixed="PROD">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ItemID: Required, String, Length=40 -->
+			<xs:attribute name="ItemID" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- GlobalItemID: Required, String, Length=128 -->
+			<xs:attribute name="GlobalItemID" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="128" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- OrganizationCode: Required, String, Constant(xpedx), Length=24 -->
+			<xs:attribute name="OrganizationCode" use="required" fixed="xpedx">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="24" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- UnitOfMeasure: Required, String, Length=40 -->
+			<xs:attribute name="UnitOfMeasure" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Extension element (This Tag is required)-->
+	<xs:element name="Extn">
+		<xs:complexType>
+			<!-- ATTRIBUTE SECTION -->
+			
+			<!-- ExtnItemType: Required, String, Choice(blank) -->
+			<xs:attribute name="ExtnItemType" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ExtnMpc: Required, String -->
+			<xs:attribute name="ExtnMpc" type="xs:string" use="required" />
+			
+			<!-- BEGIN NON REQUIRED STRING ATTRIBUTES (NO FIXED LENGTH) -->
+			<xs:attribute name="ExtnSize" type="xs:string" />
+			<xs:attribute name="ExtnColor" type="xs:string" />
+			<xs:attribute name="ExtnBasis" type="xs:string" />
+			<xs:attribute name="ExtnMwt" type="xs:string" />
+			<xs:attribute name="ExtnMaterial" type="xs:string" />
+			<xs:attribute name="ExtnForm" type="xs:string" />
+			<xs:attribute name="ExtnEnvironment" type="xs:string" />
+			<xs:attribute name="ExtnCapacity" type="xs:string" />
+			<xs:attribute name="ExtnModel" type="xs:string" />
+			<xs:attribute name="ExtnGauge" type="xs:string" />
+			<xs:attribute name="ExtnPly" type="xs:string" />
+			<xs:attribute name="ExtnVendorNo" type="xs:string" />
+			<xs:attribute name="ExtnThickness" type="xs:string" />
+			<xs:attribute name="ExtnPackMethod" type="xs:string" />
+			<!-- END NON REQUIRED STRING ATTRIBUTES -->
+			
+			<!-- ExtnStockStatus: String, Choice(Test) -->
+			<xs:attribute name="ExtnStockStatus">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Test"></xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+
+			<!-- ExtnLegacyId: Required, String, Choice(A, M) -->
+			<xs:attribute name="ExtnLegacyId" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="A" />
+						<xs:enumeration value="M" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ExtnCert: Required, String, Choice(Y, N) -->
+			<xs:attribute name="ExtnCert">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Y" />
+						<xs:enumeration value="N" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- NON REQUIRED STING ATTRIBUTES (No Fixed Length)-->
+			<xs:attribute name="ExtnSupplierNameDisplay" type="xs:string" />
+			<xs:attribute name="ExtnSellText" type="xs:string" />
+			<xs:attribute name="ExtnRollWidth" type="xs:string"/>
+			<xs:attribute name="ExtnRollDiameter" type="xs:string"/>
+			<xs:attribute name="ExtnBrand" type="xs:string"/>
+			<xs:attribute name="ExtnUNSPSC" type="xs:string"/>
+			<xs:attribute name="ExtnPKLV1UPC" type="xs:string"/>
+			<xs:attribute name="ExtnPKLV2UPC" type="xs:string"/>
+			<xs:attribute name="ExtnPKLV3UPC" type="xs:string"/>
+			<xs:attribute name="ExtnPKLV4UPC" type="xs:string"/>
+			<xs:attribute name="ExtnPKLV5UPC" type="xs:string"/>
+			
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Primary Information for the item (This tag is required) -->
+	<xs:element name="PrimaryInformation">
+		<xs:complexType>
+			<!-- ATTRIBUTE SECTION -->
+			
+			<!-- Status: Required, String, Choice(3000), Length=15 -->
+			<xs:attribute name="Status" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="3000" />
+						<xs:maxLength value="15" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- Description: Required, String, Length=200 -->
+			<xs:attribute name="Description" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="200" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- EffectiveEndDate: Required, String, Format="YYYYMMDD" -->
+			<xs:attribute name="EffectiveEndDate" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="8" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- EffectiveStartDate: Required, String, Format="YYYYMMDD" -->
+			<xs:attribute name="EffectiveStartDate" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="8" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ExtendedDescription: Required, String, Length=2000 -->
+			<xs:attribute name="ExtendedDescription" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="2000" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- BEGIN OPTIONAL IMAGE FIELDS -->
+			<xs:attribute name="ImageID" type="xs:string" />
+			<xs:attribute name="ImageLabel" type="xs:string" />
+			<xs:attribute name="ImageLocation" type="xs:string" />
+			<!-- END OPTIONAL IMAGE FIELDS -->
+			
+			<!-- Keywords: Optional, String, Length=1000 -->
+			<xs:attribute name="Keywords">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="1000" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ManufacturerItem: Optional, String -->
+			<xs:attribute name="ManufacturerItem" type="xs:string" />
+			
+			<!-- MasterCatalogID: String, Constant(xpedxMasterCatalog), Length=40 -->
+			<!--<xs:attribute name="MasterCatalogID" fixed="xpedxMasterCatalog">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>-->
+			<xs:attribute name="MasterCatalogID" type="xs:string" />
+			<!-- ShortDescription: Required, String, Length=100 -->
+			<xs:attribute name="ShortDescription" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- This List contains 0 or more AdditionalAttribute Elements. It is optional so if
+	     no elements are in the list, this element can be omitted. -->
+	<xs:element name="AdditionalAttributeList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AdditionalAttribute"  maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="Reset" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Y"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Elements that are stored in the AdditionalAttributesList -->
+	<xs:element name="AdditionalAttribute">
+		<xs:complexType>
+			<!-- ATTRIBUTE SECTION -->
+			
+			<!-- AttributeDomainID: Required, String, Length=40 -->
+			<xs:attribute name="AttributeDomainID" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- AttributeGroupID: Required, String, Constant(xpedx), Length=40 -->
+			<xs:attribute name="AttributeGroupID" use="required" fixed="xpedx">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- Name: Required, String, Length=40 -->
+			<xs:attribute name="Name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- Value: Required, String, Length=2000 -->
+			<xs:attribute name="Value" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="2000" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- This List contains 0 or more Asset Elements. It is optional so if
+	     no elements are in the list, this element can be omitted. -->
+	<xs:element name="AssetList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Asset" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Elements that are stored in the AssetList -->
+	<xs:element name="Asset">
+		<xs:complexType>
+			<!-- ATTRIBUTE SECTION -->
+			
+			<!-- AssetID: Required, String, Length=40 -->
+			<xs:attribute name="AssetID" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- ContentID: Required, String, Length=24 -->
+			<xs:attribute name="ContentID" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="24" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+
+			<!-- Type: Required, String, Constant(ITEM_IMAGE_1, ITEM_DATA_SHEED, URL), Length=40 -->
+			<xs:attribute name="Type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="ITEM_IMAGE_1" />
+						<xs:enumeration value="ITEM_DATA_SHEET" />
+						<xs:enumeration value="URL" />
+						<xs:maxLength value="40" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- Label: Required, String, Length=200 -->
+			<xs:attribute name="Label" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="200" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+
+			<!-- ContentLocation: Required, String, Constant(IMAGE_SERVER, CONTENT_SERVER), Length=255 -->
+			<xs:attribute name="ContentLocation" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="IMAGE_SERVER" />
+						<xs:enumeration value="CONTENT_SERVER" />
+						<xs:enumeration value="https://www.msdsonfile.com" />
+						<xs:maxLength value="255" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- Description: Required, String, Length=500 -->
+			<xs:attribute name="Description" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="500" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- This List contains 1 or more Category Elements. This list is required -->
+	<xs:element name="CategoryList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Category"  maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Elements that are contained in the CategoryList -->
+	<xs:element name="Category">
+		<xs:complexType>
+			<!-- ATTRIBUTE SECTION -->
+			
+			<!-- CategoryID: Required, String -->
+			<xs:attribute name="CategoryID" use="required" type="xs:string" />
+			
+			<!-- CategoryDomain: Required, String, Constant(xpedxMasterCatalog) -->
+			<xs:attribute name="CategoryDomain" use="required" type="xs:string" fixed="xpedxMasterCatalog" />
+			
+			<!-- CategoryPath: Required, String -->
+			<xs:attribute name="CategoryPath" use="required" type="xs:string" />
+			
+			<!-- OrganizationCode: Required, String, Constant(xpedx) -->
+			<xs:attribute name="OrganizationCode" use="required" type="xs:string" fixed="xpedx" />
+			
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- This List contains 0 or more AlternateUOM Elements. It is optional so if
+	     no elements are in the list, this element can be omitted. -->
+	<xs:element name="AlternateUOMList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AlternateUOM" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Elements that are contained in the AlternateUOMList -->
+	<xs:element name="AlternateUOM">
+		<xs:complexType>
+			<!-- ATTRIBUTE SECTION -->
+			
+			<!-- IsOrderingUOM: Required, String, Choice(Y, N) -->
+			<xs:attribute name="IsOrderingUOM" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Y" />
+						<xs:enumeration value="N" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+			<!-- Quantity: Required, String -->
+			<xs:attribute name="Quantity" type="xs:string" use="required" />
+			
+			<!-- UnitOfMeasure: Required, String -->
+			<xs:attribute name="UnitOfMeasure" type="xs:string" use="required" />
+			
+			<!-- END ATTRIBUTE SECTION -->
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

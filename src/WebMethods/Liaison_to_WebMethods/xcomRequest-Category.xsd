@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="CategoryList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="Category" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    		<xsd:attribute name="IgnoreOrdering" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Y" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Category">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="AdditionalAttributeList" maxOccurs="1" minOccurs="0" />
+    			<xsd:element ref="ItemAttributeList" maxOccurs="1" minOccurs="0" />
+    		</xsd:sequence>
+    		<xsd:attribute name="Action" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Manage" />
+    					<xsd:enumeration value="Delete" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="CategoryID" type="xsd:string" use="required" />
+    		<xsd:attribute name="CategoryDomain" type="xsd:string" use="required" fixed="xpedxMasterCatalog" />
+    		<xsd:attribute name="CategoryPath" type="xsd:string" use="required" />
+    		<xsd:attribute name="Description" type="xsd:string" use="required" />
+    		<xsd:attribute name="IsClassification" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="N" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="OrganizationCode" type="xsd:string" use="required" fixed="xpedx" />
+    		<xsd:attribute name="SequenceNo" type="xsd:string" use="optional" />
+    		<xsd:attribute name="ShortDescription" type="xsd:string" use="required" />
+    		<xsd:attribute name="SubCatalogOrganizationCode" type="xsd:string" use="optional" />
+    		<xsd:attribute name="Status" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="3000" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="AdditionalAttributeList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="AdditionalAttribute" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="AdditionalAttribute">
+    	<xsd:complexType>
+    		<xsd:attribute name="Name" type="xsd:string" use="required" />
+    		<xsd:attribute name="Operation" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Manage" />
+    					<xsd:enumeration value="Delete" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="Value" type="xsd:string" use="required" />
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ItemAttributeList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="ItemAttribute" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ItemAttribute">
+    	<xsd:complexType>
+    		<xsd:attribute name="AttributeDomainID" type="xsd:string" use="required" fixed="ItemAttribute" />
+    		<xsd:attribute name="ItemAttributeGroupType" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="SPEC" />
+    					<xsd:enumeration value="FOR_FILTER" />
+    					<xsd:enumeration value="SEARCH" />
+    					<xsd:enumeration value="DISTINCT_ATTRIBUTES" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+		<xsd:attribute name="IsKeyAttribute" type="xsd:string" use="optional" />
+    		<xsd:attribute name="AttributeGroupID" type="xsd:string" use="required" fixed="xpedx" />
+    		<xsd:attribute name="ItemAttributeName" type="xsd:string" use="required" />
+    		<xsd:attribute name="Operation" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Manage" />
+    					<xsd:enumeration value="Delete" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="SequenceNo" type="xsd:string" use="optional" />
+    	</xsd:complexType>
+    </xsd:element>
+</xsd:schema>
