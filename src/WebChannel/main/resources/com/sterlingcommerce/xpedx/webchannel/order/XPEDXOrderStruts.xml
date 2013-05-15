@@ -257,6 +257,13 @@
 				<param name="draft">${draft}</param>
 				<param name="draftOrderError">${draftOrderError}</param>
 			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
 		</action>
 
 		<action name="draftOrderModifyLineItems"

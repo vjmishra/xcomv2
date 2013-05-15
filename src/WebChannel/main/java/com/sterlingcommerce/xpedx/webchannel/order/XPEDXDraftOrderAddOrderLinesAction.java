@@ -107,6 +107,19 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
                           }
                     }
               }
+              YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+              boolean isOUErrorPage=false;
+  			 for(YFCElement errorEle:errorNodeList)
+  			 {
+  				String errorCode=errorEle.getAttribute("ErrorCode");
+  				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+  				{
+  					isOUErrorPage=true;
+  					break;
+  				}
+  			 }
+  			 if(isOUErrorPage)
+  				return "OUErrorPage"; 
         }
 		//end of XBT 252 & 248
 		catch (Exception databaseLockException) {
