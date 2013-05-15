@@ -11,5 +11,5 @@
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="admin"
     MonthDisplayDateFormat="MMMMM yyyy" TimeFormat="HH:mm:ss"
     TimestampFormat="MM/dd/yyyy HH:mm:ss" Timezone="America/New_York"
-    Variant="" VolumeUom="CIN" WeightUom="LBS"/>
+    Variant=" " VolumeUom="CIN" WeightUom="LBS"/>
 </YFS_LOCALEList>

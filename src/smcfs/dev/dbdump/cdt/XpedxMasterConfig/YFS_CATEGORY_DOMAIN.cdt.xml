@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <YFS_CATEGORY_DOMAINList TableName="YFS_CATEGORY_DOMAIN">
-<CategoryDomain AttributeName="" CategoryDomain="DEFAULTMasterCatalog"
+<CategoryDomain AttributeName=" " CategoryDomain="DEFAULTMasterCatalog"
     CategoryDomainKey="20100420210135833" Createprogid="XMLMigrator"
     Createts="2010-04-20T21:01:35-04:00" Createuserid="SYSTEM"
     Description="Master Catalog for DEFAULT" IsClassification="N"
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-04-20T21:01:35-04:00" Modifyuserid="ng"
     OrganizationCode="DEFAULT" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName="" CategoryDomain="MasterCatalog"
+<CategoryDomain AttributeName=" " CategoryDomain="MasterCatalog"
     CategoryDomainKey="2010042921443214269"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-04-29T21:44:32-04:00" Createuserid="admin"
@@ -15,7 +15,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-04-29T21:44:32-04:00" Modifyuserid="ng"
     OrganizationCode="xpedx" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="BulkleyDuntonMasterCatalog"
     CategoryDomainKey="2010090121411544310"
     Createprogid=".YCPOrgDetailsAPI"
@@ -24,7 +24,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T21:41:14-04:00" Modifyuserid="ng"
     OrganizationCode="BulkleyDunton" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="CentralLewmarMasterCatalog"
     CategoryDomainKey="2010090122242645400"
     Createprogid=".YCPOrgDetailsAPI"
@@ -33,7 +33,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T22:24:25-04:00" Modifyuserid="ng"
     OrganizationCode="CentralLewmar" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="CentralMarquardtMasterCatalog"
     CategoryDomainKey="2010090122452846763"
     Createprogid=".YCPOrgDetailsAPI"
@@ -42,7 +42,7 @@
     IsClassification="N" Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T22:45:28-04:00" Modifyuserid="ng"
     OrganizationCode="CentralMarquardt" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName="" CategoryDomain="SaalfeldMasterCatalog"
+<CategoryDomain AttributeName=" " CategoryDomain="SaalfeldMasterCatalog"
     CategoryDomainKey="2010090123083347803"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:08:33-04:00" Createuserid="admin"
@@ -50,7 +50,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T23:08:33-04:00" Modifyuserid="ng"
     OrganizationCode="Saalfeld" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="StrategicPaperMasterCatalog"
     CategoryDomainKey="2010090123272648848"
     Createprogid=".YCPOrgDetailsAPI"
@@ -59,7 +59,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T23:27:25-04:00" Modifyuserid="ng"
     OrganizationCode="StrategicPaper" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="WesternPaperMasterCatalog"
     CategoryDomainKey="2010090123393449735"
     Createprogid=".YCPOrgDetailsAPI"
@@ -68,7 +68,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T23:39:34-04:00" Modifyuserid="ng"
     OrganizationCode="WesternPaper" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="WhitemanTowerMasterCatalog"
     CategoryDomainKey="2010090123510150619"
     Createprogid=".YCPOrgDetailsAPI"
@@ -77,7 +77,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-01T23:51:00-04:00" Modifyuserid="ng"
     OrganizationCode="WhitemanTower" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName=""
+<CategoryDomain AttributeName=" "
     CategoryDomain="ZellerbachMasterCatalog"
     CategoryDomainKey="2010090200014852680"
     Createprogid=".YCPOrgDetailsAPI"
@@ -86,7 +86,7 @@
     Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-09-02T00:01:47-04:00" Modifyuserid="ng"
     OrganizationCode="Zellerbach" ShortDescription="Master Catalog"/>
-<CategoryDomain AttributeName="" CategoryDomain="xpedxMasterCatalog"
+<CategoryDomain AttributeName=" " CategoryDomain="xpedxMasterCatalog"
     CategoryDomainKey="20120203062832116986"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2012-02-03T06:28:31-05:00" Createuserid="admin"
