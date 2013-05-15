@@ -251,13 +251,13 @@
 								<s:set name='formattedbracketUOM'
 										value='#bracketUOMDesc' />
 								
-								<s:if test='%{#reqCustomerUOM != null && #reqCustomerUOM!=#jsonPricingUOM}'>
-									<s:set name='formattedPricingUOM'
-										value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
+								<s:if test='%{#reqCustomerUOM==#jsonPricingUOM}'>
+									<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+									<s:set name="formattedPricingUOM" value="#customerUomWithoutM" />										
 								</s:if>
 								<s:else>
 									<s:set name='formattedPricingUOM'
-										value='#jsonPricingUOM' />
+										value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
 								</s:else>
 	
 						<tr>
