@@ -1345,7 +1345,7 @@ from session . We have customer Contact Object in session .
 			    	</div>			    	
 			    	<div class="clearall">&nbsp; </div>
 
-			    		<table width="44%" style="FONT-SIZE: 12px; MARGIN-LEFT: 366px; MARGIN-TOP: -60px;" border=0>
+			    		<table width="300" style="FONT-SIZE: 12px; MARGIN-LEFT: 366px; MARGIN-TOP: -60px;" border=0>
 			    			<tbody>
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 								<s:iterator value='customerFieldsMap'>
@@ -1357,7 +1357,7 @@ from session . We have customer Contact Object in session .
                                 	<s:if test='(#orderLine.getAttribute("LineType") =="P" || #orderLine.getAttribute("LineType") =="S")'>
 		                                <s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
 											<s:if test="%{#orderLine.getAttribute(#FieldLabel) != null && #orderLine.getAttribute(#FieldLabel) != ''}">
-												<td width="90px" align="right">
+												<td align="right">
 												<s:property value="%{#FieldValue}" />:&nbsp;	
 												</td>
 												<td align="left">				
@@ -1368,7 +1368,7 @@ from session . We have customer Contact Object in session .
 										</s:if>
 										<s:else>
 											<s:if test="%{#lineExtn.getAttribute(#customLbl) != null && #lineExtn.getAttribute(#customLbl) != ''}">
-												<td width="90px" align="right">
+												<td align="right">
 													<s:property value="%{#FieldValue}" />:&nbsp;
 												</td>
 												<td align="left">													
