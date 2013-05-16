@@ -224,14 +224,25 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
 				}
 
-				itemIdList.add(itemId);
+				//itemIdList.add(itemId);
 				skuMap.put(itemId, (HashMap<String, String>)itemSkuMap.clone());
 				itemSkuMap.clear();
 			}
 
 		}
+		// EB-64 - Getting the item id list
+		for (int i = 0; i < orderLineElemList.size(); i++) {
+			Element orderLineElement = (Element)orderLineElemList.get(i);
+			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+			String itemId = itemElement.getAttribute("ItemID");
+			itemIdList.add(itemId);
+		}
+		Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+		// EB-64 - Setting the ItemCustXREF doc in cache so that can retrieve the customerUOM flag for item and UOM for order detail page and Web Conf page
+		XPEDXWCUtils.setObectInCache("xpxItemXRefDoc",itemcustXrefDoc);
+		
 		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
-			Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+
 			if(itemcustXrefDoc!=null) {
 				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
 				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");

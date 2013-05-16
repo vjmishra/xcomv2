@@ -116,14 +116,14 @@
 						<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
 							<s:set name="json" value='pnaHoverMap.get(#jsonKey)' />
 							<s:set name="jsonUOM" value="#json.get('UOM')" />
-							<s:if test='%{#isReqCustomerUOM != null && #isReqCustomerUOM=="Y"}'>
-								<s:set name='customerUomWithoutM' value='%{#jsonUOM.substring(2, #jsonUOM.length())}' />	
-								<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />
-							</s:if>
-							<s:else>
-								<s:set name="jsonUOMDesc"
+							<s:if test='%{#reqCustomerUOM==#jsonUOM}'>
+									<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+									<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />										
+								</s:if>
+								<s:else>
+									<s:set name="jsonUOMDesc"
 									value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
-							</s:else>		
+							</s:else>							
 							<s:set name="jsonImmediate" value="#json.get('Immediate')" />
 							<s:set name="jsonNextDay" value="#json.get('NextDay')" />
 							<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
