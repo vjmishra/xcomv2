@@ -91,7 +91,7 @@
 	<xs:element name="Extn">
 		<xs:complexType>
 			<!-- ATTRIBUTE SECTION -->
-			
+
 			<!-- ExtnItemType: Required, String, Choice(blank) -->
 			<xs:attribute name="ExtnItemType" use="required">
 				<xs:simpleType>
@@ -100,10 +100,11 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			
+
 			<!-- ExtnMpc: Required, String -->
-			<xs:attribute name="ExtnMpc" type="xs:string" use="required" />
-			
+			<xs:attribute name="ExtnMpc" type="xs:string"
+				use="required" />
+
 			<!-- BEGIN NON REQUIRED STRING ATTRIBUTES (NO FIXED LENGTH) -->
 			<xs:attribute name="ExtnSize" type="xs:string" />
 			<xs:attribute name="ExtnColor" type="xs:string" />
@@ -118,9 +119,8 @@
 			<xs:attribute name="ExtnPly" type="xs:string" />
 			<xs:attribute name="ExtnVendorNo" type="xs:string" />
 			<xs:attribute name="ExtnThickness" type="xs:string" />
-			<xs:attribute name="ExtnPackMethod" type="xs:string" />
 			<!-- END NON REQUIRED STRING ATTRIBUTES -->
-			
+
 			<!-- ExtnStockStatus: String, Choice(Test) -->
 			<xs:attribute name="ExtnStockStatus">
 				<xs:simpleType>
@@ -139,7 +139,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			
+
 			<!-- ExtnCert: Required, String, Choice(Y, N) -->
 			<xs:attribute name="ExtnCert">
 				<xs:simpleType>
@@ -149,20 +149,22 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			
+
 			<!-- NON REQUIRED STING ATTRIBUTES (No Fixed Length)-->
-			<xs:attribute name="ExtnSupplierNameDisplay" type="xs:string" />
+			<xs:attribute name="ExtnSupplierNameDisplay"
+				type="xs:string" />
 			<xs:attribute name="ExtnSellText" type="xs:string" />
-			<xs:attribute name="ExtnRollWidth" type="xs:string"/>
-			<xs:attribute name="ExtnRollDiameter" type="xs:string"/>
-			<xs:attribute name="ExtnBrand" type="xs:string"/>
-			<xs:attribute name="ExtnUNSPSC" type="xs:string"/>
-			<xs:attribute name="ExtnPKLV1UPC" type="xs:string"/>
-			<xs:attribute name="ExtnPKLV2UPC" type="xs:string"/>
-			<xs:attribute name="ExtnPKLV3UPC" type="xs:string"/>
-			<xs:attribute name="ExtnPKLV4UPC" type="xs:string"/>
-			<xs:attribute name="ExtnPKLV5UPC" type="xs:string"/>
-			
+			<xs:attribute name="ExtnRollWidth" type="xs:string" />
+			<xs:attribute name="ExtnRollDiameter" type="xs:string" />
+			<xs:attribute name="ExtnBrand" type="xs:string" />
+			<xs:attribute name="ExtnUNSPSC" type="xs:string" />
+			<xs:attribute name="ExtnPKLV1UPC" type="xs:string" />
+			<xs:attribute name="ExtnPKLV2UPC" type="xs:string" />
+			<xs:attribute name="ExtnPKLV3UPC" type="xs:string" />
+			<xs:attribute name="ExtnPKLV4UPC" type="xs:string" />
+			<xs:attribute name="ExtnPKLV5UPC" type="xs:string" />
+			<xs:attribute name="ExtnPackMethod" type="xs:string" />
+			<xs:attribute name="ExtnBestMatch" type="xs:string" />
 			<!-- END ATTRIBUTE SECTION -->
 		</xs:complexType>
 	</xs:element>
