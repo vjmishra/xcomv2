@@ -50,7 +50,8 @@
 	<%--<s:set name="subTotal" value='%{0.00}' /> --%>
 	<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
 	<%--jira 3788 --%>  
-	<s:set name="isOrderTBD" value="%{0}" />        
+	<s:set name="isOrderTBD" value="%{0}" />  
+	<s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />      
 	<s:iterator value='majorLineElements' id='orderLine' status="rowStatus"  >
 		<s:set name='lineTotals' value='#util.getElement(#orderLine, "LineOverallTotals")' />
 		<s:set name='item' value='#util.getElement(#orderLine, "Item")' />
@@ -90,7 +91,8 @@
 		<s:set name='catalogItem' value='#item' />
 		<s:include value="XPEDXCatalogDetailURL.jsp" />
 		<s:set name='itemIDVal' value='%{#item.getAttribute("ItemID")}' />
-		<s:set name="mulVal" value='itemOrderMultipleMap[#itemIDVal]' />
+		<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemIDVal)' />
+		<s:set name="mulVal" value='itemOrderMultipleMap[#itemIDVal]' />		
 		<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>	
 			<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#orderLineKey}" value="%{#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|'))}" />
 		</s:if>
@@ -260,6 +262,7 @@
 											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
+											<s:hidden id="custUOM_%{#orderLineKey}" name="custUOM" value="%{#customerUOM}" />
 									</s:if>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
@@ -374,7 +377,17 @@
 					 		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
 					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-									<s:set name="bracketUOMDesc" value="bracketUOM" />
+					 				
+					 				<s:set name="temp" value="bracketUOM" />
+									<s:set name="customerUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#customerUOM)"/>
+									<s:if test='%{#customerUOMDesc==#temp}'>	
+										<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />
+										<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+									</s:if>
+									<s:else>
+										<s:set name="bracketUOMDesc" value="bracketUOM" />
+									</s:else>		
+									
 									
 									<s:if test='%{!#disUOMStatus.last}' >
 										<s:if test='%{#disUOMStatus.first}' >
@@ -529,7 +542,14 @@
 					<s:set name="jsonFmtTwoPlus" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTwoPlus )' />
 					
 					<s:set name="jsonUOM" value="#json.get('UOM')" />
-					<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)"/>
+					<s:if test='%{#customerUOM==#jsonUOM}'>
+						<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+						<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />										
+					</s:if>
+					<s:else>
+						<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)" />
+					</s:else>	
+					
 					<s:set name="jsonAvailability" value="#json.get('Availability')" />
 					<s:set name="jsonTotal" value="#json.get('Total')" />
 					<s:set name="jsonImage1" value="#XPEDXWCUtils.getImage('Immediate')" />

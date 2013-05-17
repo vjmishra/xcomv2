@@ -1696,7 +1696,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		 */
 		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
 		itemIdsUOMsMap = (Map<String, Map<String, String>>) XPEDXWCUtils.getObjectFromCache("itemsUOMMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
-		
+		itemAndCustomerUomHashMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
 		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
 			ArrayList<String> itemIdsList = new ArrayList<String>();
 			itemIdsList.addAll(itemIdsUOMsMap.keySet());
@@ -2391,6 +2391,20 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
+	
+	//Added for EB-64 - This map contains item ids and their customer UOM , if exist.
+	protected LinkedHashMap<String, String> itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
+	public LinkedHashMap<String, String> getItemAndCustomerUomHashMap() {
+		return itemAndCustomerUomHashMap;
+	}
+
+
+	public void setItemAndCustomerUomHashMap(
+			LinkedHashMap<String, String> itemAndCustomerUomHashMap) {
+		this.itemAndCustomerUomHashMap = itemAndCustomerUomHashMap;
+	}
+
+
 	public Map<String, Map<String, String>> getItemIdConVUOMMap() {
 		return itemIdConVUOMMap;
 	}
