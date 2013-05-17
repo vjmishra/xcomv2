@@ -344,20 +344,29 @@
 </div>
 
 <div class="tool-bar-bottom">
-<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:-171px;float:right">
+<ul id="tool-bar" class="tool-bar-bottom-right" style="margin-right:171px;float:right">
 <s:set name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
-	<li>
+	<s:if test="#defaultShipTo !='' || (#assgnCustomers != null && #assgnCustomers.getNumberOfAssignedShioTos()==0)">
+	<li style="left:500px;float:left;position:relative;">
+	</s:if>
+	<s:if test="#defaultShipTo == null">
+	<li style="left:420px;*left:398px;left:398px\0/;float:left;position:relative;">
+	</s:if>
+	
 <%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
 			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')"><span>Apply</span></a>
 
 	</li>
-	<s:if test="#defaultShipTo!='' || (#assgnCustomers != null && #assgnCustomers.getNumberOfAssignedShioTos()==0)">
-		<li>
-			<a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
-		</li>
+	 <s:if test="#defaultShipTo !=''  && #defaultShipTo != null">
+	<li style="position:relative;left:340px">
+	<s:if test="#defaultShipTo == null">
+	<li style="display:none">
 	</s:if>
-	
+	 <a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
+	 
+		</li>	
+	</s:if>
 </ul>
 
 
