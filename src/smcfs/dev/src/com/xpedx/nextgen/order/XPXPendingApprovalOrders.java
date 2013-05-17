@@ -20,7 +20,6 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXUtils;
-import com.xpedx.nextgen.customerprofilerulevalidation.api.XPXCustomerProfileRuleConstant;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -33,6 +32,9 @@ import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
+
+
+
 
 public class XPXPendingApprovalOrders implements YIFCustomApi{
 
@@ -75,7 +77,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
 		// Template to the getOrderList Api
-		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' DraftOrderFlag='' OrderType=''><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
+		Document orderOutputTemplate = SCXmlUtil.createFromString("<Order DocumentType='' OrderNo='' OrderHeaderKey='' BillToID='' CustomerContactID='' EnterpriseCode='' DraftOrderFlag=''><Extn ExtnTotalOrderValue='' /><OrderHoldTypes><OrderHoldType/></OrderHoldTypes></Order>");
 		env.setApiTemplate("getCompleteOrderDetails",orderOutputTemplate);
 		Document orderOutputDoc = api.invoke(env, "getCompleteOrderDetails", inputOrderDoc);
 		env.clearApiTemplate("getCompleteOrderDetails");
@@ -137,46 +139,6 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 							if(totalOrderValue >= spendingLimit)
 							{
 								orderApprovalFlag="Y";
-							
-							} else {
-								
-								if("N".equals(orderElem.getAttribute("DraftOrderFlag")) && "Customer".equals(orderElem.getAttribute(XPXLiterals.A_ORDER_TYPE)))
-								{
-									Element orderHoldTypesElem = SCXmlUtil.getChildElement(orderElem, XPXLiterals.E_ORDER_HOLD_TYPES);
-									if(orderHoldTypesElem!=null)
-									{
-										ArrayList<Element> orderHoldTypeElemList = SCXmlUtil.getChildren(orderHoldTypesElem, XPXLiterals.E_ORDER_HOLD_TYPE);
-										if(orderHoldTypeElemList!=null && orderHoldTypeElemList.size()>0)
-										{
-											for(Element orderHoldTypeElem: orderHoldTypeElemList)
-											{
-												if(orderHoldTypeElem!=null)
-												{
-													String holdType = orderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE);
-										        	String holdStatus = orderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS);
-													if(XPXLiterals.PENDING_APPROVAL_HOLD.equals(holdType) && XPXLiterals.PENDING_APPROVAL_ACTIVE_STATUS_ID.equals(holdStatus))
-													{
-														changeOrderOutput = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
-														Element changeOrderOutputElem = changeOrderOutput.getDocumentElement();
-														changeOrderOutputElem.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
-														Element holdTypesElem = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPES);
-														Element holdTypeElem = changeOrderOutput.createElement(XPXLiterals.E_ORDER_HOLD_TYPE);
-														holdTypeElem.setAttribute(XPXLiterals.A_HOLD_TYPE, XPXLiterals.PENDING_APPROVAL_HOLD);
-														holdTypeElem.setAttribute(XPXLiterals.A_STATUS, XPXLiterals.PENDING_APPROVAL_RELEASE_STATUS_ID);
-														holdTypeElem.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, XPXLiterals.PENDING_APPROVAL_RELEASE_DESC);
-														
-														holdTypesElem.appendChild(holdTypeElem);
-														changeOrderOutputElem.appendChild(holdTypesElem);
-														break;
-														
-													}
-												}
-											}
-											
-										}
-									}
-								}
-								
 							}
 						}
 					}
