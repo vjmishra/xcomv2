@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,10 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 		orderMultipleMap = orderMultipleMap == null ? new HashMap<String, String>() : orderMultipleMap;
 		defaultShowUOMMap =  (HashMap<String, String>) wcContext.getWCAttribute("defaultShowUOMMap", WCAttributeScope.REQUEST);
 		defaultShowUOMMap = defaultShowUOMMap == null ? new HashMap<String, String>() : defaultShowUOMMap;
+		//Added for EB-225 - Itemids with customer UOM as value if exist
+		itemCustomerUomMap =  (LinkedHashMap<String, String>) wcContext.getWCAttribute("itemCustomerUomMap", WCAttributeScope.REQUEST);
+		itemCustomerUomMap = itemCustomerUomMap == null ? new LinkedHashMap<String, String>() : itemCustomerUomMap;
+		
 		itemUomHashMap = (HashMap<String, HashMap<String, String>>) wcContext.getWCAttribute("itemUomHashMap", WCAttributeScope.REQUEST);
 		itemUomHashMap = itemUomHashMap == null ? new HashMap<String, HashMap<String, String>>() : itemUomHashMap;
 		PLLineMap = (HashMap<String, List<Element>>) wcContext.getWCAttribute("PLLineMap", WCAttributeScope.REQUEST);
@@ -149,7 +154,17 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 		this.itemElement = itemElement;
 	}
 
+	//Start of EB-225
+	public LinkedHashMap<String, String> getItemCustomerUomMap() {
+		return itemCustomerUomMap;
+	}
 
+	public void setItemCustomerUomMap(
+			LinkedHashMap<String, String> itemCustomerUomMap) {
+		this.itemCustomerUomMap = itemCustomerUomMap;
+	}
+	private LinkedHashMap<String, String> itemCustomerUomMap = new LinkedHashMap<String, String>();
+	//End of EB-225
 	private String itemElement;
 	private IWCContext wcContext;
 	private HashMap<String, HashMap<String, String>> itemUomHashMap;

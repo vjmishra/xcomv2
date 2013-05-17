@@ -181,6 +181,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	//Start 2964
 	private Map <String,String>defaultShowUOMMap;
+	
+	//EB-225 - Map containing itemids who has customer UOM values
+	private LinkedHashMap<String, String> itemCustomerUomMap = new LinkedHashMap<String, String>();
+	public LinkedHashMap<String, String> getItemCustomerUomMap() {
+		return itemCustomerUomMap;
+	}
+
+	public void setItemCustomerUomMap(
+			LinkedHashMap<String, String> itemCustomerUomMap) {
+		this.itemCustomerUomMap = itemCustomerUomMap;
+	}
+
 	private Map<String,String>orderMultipleMap;
 	private String itemDtlBackPageURL="";
 	private String productCompareBackPageURL;
@@ -1459,6 +1471,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 					wcContext.getStorefrontId(),true);
 			defaultShowUOMMap = new HashMap<String,String>();
 			defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
+			itemCustomerUomMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
 			//Set itemMap MAP again in session
 			XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 			//set a itemsUOMMap in Session for ConvFactor
@@ -1466,6 +1479,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			
 			wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
 			wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
+			wcContext.setWCAttribute("itemCustomerUomMap", itemCustomerUomMap, WCAttributeScope.REQUEST);
 			
 		}	
 			

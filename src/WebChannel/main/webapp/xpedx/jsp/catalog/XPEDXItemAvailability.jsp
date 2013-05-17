@@ -25,6 +25,8 @@
 <s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId)' />
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemId}" value="%{#orderMultipleQtyFromSrc}"/>
 
+<s:set name="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"></s:set>
+
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap.containsKey(#itemId)}">
@@ -57,8 +59,14 @@
 						<s:if test="%{pnaHoverMap.containsKey(#itemId)}">
 							<s:set name="json" value='pnaHoverMap.get(#itemId)' />
 							<s:set name="jsonUOM" value="#json.get('UOM')" />
-							<s:set name="jsonUOMDesc"
-								value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+							<s:if test='%{#reqCustomerUOM==#jsonUOM}'>
+								<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+								<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />										
+							</s:if>
+							<s:else>
+								<s:set name="jsonUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+							</s:else>	
+							
 							<s:set name="jsonImmediate" value="#json.get('Immediate')" />
 							<s:set name="jsonNextDay" value="#json.get('NextDay')" />
 							<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
@@ -158,10 +166,23 @@
 												<s:set name='formattedBracketpriceForUom'
 													value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#bracketPriceForUOM,#showCurrencySymbol)' />
 												<s:set name="bracketUOMDesc" value="bracketUOM" />
-												<s:set name='formattedbracketUOM'
-													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
-												<s:set name='formattedPricingUOM'
-														value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
+												
+												<s:if test='%{#reqCustomerUOM==#bracketUOMDesc}'>
+													<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+													<s:set name="formattedbracketUOM" value="#customerUomWithoutM" />										
+												</s:if>
+												<s:else>
+													<s:set name='formattedbracketUOM' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+												</s:else>
+												
+												<s:if test='%{#reqCustomerUOM==#jsonPricingUOM}'>
+													<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+													<s:set name="formattedPricingUOM" value="#customerUomWithoutM" />										
+												</s:if>
+												<s:else>
+													<s:set name='formattedPricingUOM' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
+												</s:else>													
+												
 									<TR>
 										<td style="text-align:left; width='35%'; "><s:property value="bracketQTY" /> <s:property value="%{#formattedbracketUOM}" /> - <s:property value='%{#formattedBracketpriceForUom}' />
 											/ <s:property value="%{#formattedPricingUOM}" />
@@ -193,7 +214,18 @@
 			
 				<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-				<s:set name="bracketUOMDesc" value="bracketUOM" />
+				
+				<s:set name="temp" value="bracketUOM" />
+				<s:set name="customerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#reqCustomerUOM)"/>
+				<s:if test='%{#customerUOMDesc==#temp}'>	
+					<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />
+					<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+				</s:if>
+				<s:else>
+					<s:set name="bracketUOMDesc" value="bracketUOM" />
+				</s:else>			
+								
+				
 				<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 				<s:if test="#disUOMStatus.last">	

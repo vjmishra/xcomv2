@@ -54,6 +54,9 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		HashMap<String, String> itemUOMList = tag.getItemUomHashMap().get(itemID);
 		itemUOMList = itemUOMList == null ? new HashMap<String, String>() : itemUOMList;
 		String defaultUOM = validate(tag.getDefaultShowUOMMap().get(itemID));	
+		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
+		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
+		
 		String shortDesc = validate(info.getAttribute("ShortDescription"));
 		String desc = validate(info.getAttribute("Description"));
 		String itemKey = validate(item.getAttribute("ItemKey"));
@@ -266,7 +269,11 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 				sb.append(" selected='selected' ");
 			sb.append(">").append(TextUtils.htmlEncode(pair.getValue().toString())).append("</option>");
 		}
-		sb.append("</select><input type='hidden' id='orderMultiple_");
+		sb.append("</select>");
+		sb.append("<input type='hidden' id='custUOM_");
+		sb.append(itemID).append("' value='");
+		sb.append(custUOM).append("'/>");
+		sb.append("<input type='hidden' id='orderMultiple_");
 		sb.append(itemID).append("' value='");
 		sb.append(orderMultiple).append("'/></div>\",");
 		sb.append("itemtypedesc: \"");
