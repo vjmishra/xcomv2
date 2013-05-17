@@ -5181,7 +5181,7 @@ tr.last td.right-cell {
 
 .condensed-view table.bottable td {
     height: 30px;
-    width : 55px;
+    width : 60%;
     vertical-align: middle;
 }
 .normal-view .show-hide-wrap {
