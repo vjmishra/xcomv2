@@ -89,6 +89,7 @@
 	value='#util.isProcurementInspectMode(wCContext)' />
 <s:set name='isReadOnly' value='#isProcurementInspectMode' />
 <s:hidden name="catagory" id="catagory" value="%{#_action.getCatagory()}" />
+<s:hidden id="custUOM" name="custUOM" value="%{#_action.getCustomerUOM()}" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 </head>
 <!-- END swc:head -->
@@ -117,6 +118,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 		}
 	priceCheck = true;
 	var Category = document.getElementById("catagory").value;
+	var customerUom = document.getElementById("custUOM").value;
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
 	var validationSuccess = validateOrderMultiple();
 	Ext.Ajax.request({
@@ -129,7 +131,8 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
 	       	validateOrderMul : validationSuccess,
-	       	Category : Category
+	       	Category : Category,
+	       	customerUOM : customerUom
 		},      	
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
@@ -194,6 +197,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	}	
 	priceCheck = true;
 	var Category = document.getElementById("catagory").value;
+	var customerUom = document.getElementById("custUOM").value;
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
 	var validationSuccess = validateOrderMultiple();
 	if(validationSuccess==false){
@@ -214,7 +218,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
 	       	validateOrderMul : validationSuccess,
 	       	Category : Category,
-	       	isOrderData :isOrderData
+	       	isOrderData :isOrderData,
+	       	customerUOM : customerUom
 		},      	
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;

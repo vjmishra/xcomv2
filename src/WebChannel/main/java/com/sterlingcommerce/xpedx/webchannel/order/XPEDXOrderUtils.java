@@ -102,6 +102,16 @@ public class XPEDXOrderUtils {
 	//conversion UOM map for single item
 	public static LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();
 	
+	//EB-225 - getting customer UOM if exist, for single item
+	public static String strCustomerUOM;
+	
+	public static String getStrCustomerUOM() {
+		return strCustomerUOM;
+	}
+
+	public static void setStrCustomerUOM(String strCustomerUOM) {
+		XPEDXOrderUtils.strCustomerUOM = strCustomerUOM;
+	}
 
 	public static LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 	
@@ -1387,6 +1397,7 @@ public class XPEDXOrderUtils {
 	    	String defaultConvUOM = "";
 			String defaultUOM = "";
 			String defaultUOMCode = "";
+			strCustomerUOM = "";
 			
 			defaultShowUOMMap = new HashMap<String,String>();
 			String msapOrderMultipleFlag = "";
@@ -1432,6 +1443,7 @@ public class XPEDXOrderUtils {
 				}
 			
 				if(isCustomerUom!=null && isCustomerUom.equalsIgnoreCase("Y")){
+					strCustomerUOM = uomCode;
 					if(1 == convFac){
 						displayItemUomsMap.put(uomCode, uomCode.substring(2, uomCode.length()));
 					}

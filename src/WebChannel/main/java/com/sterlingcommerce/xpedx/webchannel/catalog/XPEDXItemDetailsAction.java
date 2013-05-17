@@ -146,6 +146,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		inputItems.add(item);
 		XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(inputItems,isOrderData);
 		
+		//EB-225 - getCustomerUOM of the item, so that in price section of item details page, only display the UOM code without M_		
+		if(getCustomerUOM()!=null){
+			pnaRequestedCustomerUOM = getCustomerUOM();
+		}
 		//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 		ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 		setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
@@ -626,7 +630,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		//Set itemMap MAP again in session
 		XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 		//set a itemsUOMMap in Session for ConvFactor
-		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemID, wcContext.getStorefrontId()));
+		//XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemID, wcContext.getStorefrontId()));
 		//Added for webtrends -XBT-35
 		XPEDXWCUtils.setObectInCache("itemType",itemType);
 	}
@@ -968,6 +972,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();		
 		itemIdConVUOMMap = XPEDXOrderUtils.getUomsAndConFactors();		
 		//End of EB-164
+		//EB-225 - Getting the customer UOM if exist for a item
+		customerUOM = XPEDXOrderUtils.getStrCustomerUOM();
 		
 	}
 	
@@ -2241,6 +2247,28 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String ExtnIsCustUOMExcl = "";
 	private String pnaRequestedQty;
 	private String isOrderData ="false";
+	
+	//EB-225 - CustomerUOM if exist for a item in Item detail page, to set as hidden field in Item detail page
+	private String customerUOM ="";
+	//EB-225 - if requestedUOM is same as customer UOM for pna of a item in Item detail page, this field will have the value, else it will be empty
+	private String pnaRequestedCustomerUOM = "";
+	
+	public String getPnaRequestedCustomerUOM() {
+		return pnaRequestedCustomerUOM;
+	}
+
+	public void setPnaRequestedCustomerUOM(String pnaRequestedCustomerUOM) {
+		this.pnaRequestedCustomerUOM = pnaRequestedCustomerUOM;
+	}
+
+	public String getCustomerUOM() {
+		return customerUOM;
+	}
+
+	public void setCustomerUOM(String customerUOM) {
+		this.customerUOM = customerUOM;
+	}
+
 	public String getIsOrderData() {
 		return isOrderData;
 	}
