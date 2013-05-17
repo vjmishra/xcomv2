@@ -28,6 +28,12 @@
           Nullable="true" 
           XMLName="ExtnColor"
           XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_BEST_MATCH" 
+          DataType="Text-200"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnBestMatch"
+          XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_BASIS" 
           DataType="Text-40"
 		  Description=" "  
