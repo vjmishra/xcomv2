@@ -663,25 +663,7 @@
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
 			    		</p>
-			  <%--   		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
-			    			<s:set name='itemSkuMap' value='%{skuMap.get(#itemID)}'/>
-			    			<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-							
-							<p class="line-spacing">
-								<s:if test='%{customerSku == "1"}' >
-									<s:property value="#customerItemLabel" />:
-								</s:if>
-								<s:elseif test='%{customerSku == "2"}'>
-									<s:property value="#manufacturerItemLabel" />:
-								</s:elseif>
-								<s:else>
-									<s:property value="#mpcItemLabel" />:
-								</s:else>
-								<s:property value='#itemSkuVal' />
-							</p>
-							
-						</s:if>
-						 --%>
+			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>
 						<s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
 										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
@@ -695,7 +677,7 @@
 											<p class="fields-padding">
 												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
 											</s:if>		
-							
+							</s:if>
 						
 						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
 			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This item has been replaced<img class="replacement-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>

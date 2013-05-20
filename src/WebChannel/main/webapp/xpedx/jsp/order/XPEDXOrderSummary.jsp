@@ -1344,7 +1344,8 @@ from session . We have customer Contact Object in session .
 			    			<s:if test='#certFlag=="Y"'>
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
-			    		</p>			    		
+			    		</p>
+			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>			    		
 			    	    	<s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
 										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
@@ -1357,7 +1358,8 @@ from session . We have customer Contact Object in session .
 											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
 											<p class="fields-padding">
 												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
-											</s:if>			
+											</s:if>	
+							</s:if>		
 			    	</div>			    	
 			    	<div class="clearall">&nbsp; </div>
 

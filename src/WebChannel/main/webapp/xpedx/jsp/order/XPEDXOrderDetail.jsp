@@ -912,7 +912,7 @@ function showSplitDiv(divId)
 							 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>	
 					    </p>
-					    
+					       <s:if test='#orderLine.getAttribute("LineType") != "M"'>
 								<s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
 										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
@@ -925,8 +925,8 @@ function showSplitDiv(divId)
 											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
 											<p class="fields-padding">
 												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
-											</s:if>			
-
+								 			</s:if>			
+                               </s:if>
 					    </div>
 			    	    <!--end left section -->
 			    	    </td>
