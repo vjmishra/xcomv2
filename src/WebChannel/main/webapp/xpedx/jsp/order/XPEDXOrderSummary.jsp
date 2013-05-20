@@ -899,6 +899,7 @@ from session . We have customer Contact Object in session .
 					value='#util.getElement(#orderLine, "KitLines")' />
 				<s:set name='itemIDUOM'
 					value='#_action.getIDUOM(#item.getAttribute("ItemID"), #item.getAttribute("UnitOfMeasure"))' />
+				<s:set name="customerUom" value='%{#_action.getCustomerUOMMap().get(#item.getAttribute("ItemID"))}' />
 				<s:set name='lineNotes'
 					value='#util.getElement(#orderLine, "Instructions/Instruction")' />
 				<s:set name='imageLocation'
@@ -1067,11 +1068,26 @@ from session . We have customer Contact Object in session .
 				 	<table	 width="600" cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 	                	<tbody>
 	                		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
+	                		<s:if test="%{#customerUom == #uom}">
+									<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+									<s:set name='uomDesc' value="#customerUomWithoutM"/>
+							</s:if>
+							<s:else>
+									<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+							</s:else>
 	                		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
 					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-									<s:set name="bracketUOMDesc" value="bracketUOM" />
-									
+									<s:set name="temp" value="bracketUOM" />
+									<s:set name="customerUOMDesc" value="#wcUtil.getUOMDescription(#customerUom)"/>
+									<s:if test='%{#customerUOMDesc==#temp}'>	
+										<s:set name='customerUomWithoutM' value='%{#customerUom.substring(2, #customerUom.length())}' />
+										<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+									</s:if>
+									<s:else>
+										<s:set name="bracketUOMDesc" value="bracketUOM" />
+									</s:else>		
+																		
 					 				<s:if test='#webtrend_orderqty == null' >
 										<s:set name='webtrend_orderqty' value=''/>
 										<s:set name='webtrend_orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
@@ -1094,7 +1110,7 @@ from session . We have customer Contact Object in session .
 											<s:set name='orderdqty' value='%{#_action.replaceString(#orderqty, ".00", "")}' />	
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 												&nbsp;<s:property value='#xpedxUtilBean.formatQuantityForCommas( #orderdqty )' />&nbsp;
-												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
+												<s:property value='#uomDesc'/>
 											</s:if>
 											</td>
 			                         		
@@ -1224,7 +1240,7 @@ from session . We have customer Contact Object in session .
 											<td width="157">
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>	
 												&nbsp;<s:property value='#xpedxUtilBean.formatQuantityForCommas(#lineTran.getAttribute("OrderedQty"))' />&nbsp;
-												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
+												<s:property value='#uomDesc'/>
 											</s:if>
 											</td>
 											<td class="text-right" width="147">

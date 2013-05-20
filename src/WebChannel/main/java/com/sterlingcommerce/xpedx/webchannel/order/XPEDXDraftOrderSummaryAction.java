@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -161,6 +162,15 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	public void setAjaxLineStatusCodeMsg(String ajaxLineStatusCodeMsg) {
 		this.ajaxLineStatusCodeMsg = ajaxLineStatusCodeMsg;
 	}
+	//EB-64 - customerUOMMap will contain itemId and its customerUOM, if exist
+	private HashMap<String, String> customerUOMMap;
+	public HashMap<String, String> getCustomerUOMMap() {
+		return customerUOMMap;
+	}
+
+	public void setCustomerUOMMap(HashMap<String, String> customerUOMMap) {
+		this.customerUOMMap = customerUOMMap;
+	}
 	
 	public String execute() {
 		long startTime=System.currentTimeMillis();
@@ -231,6 +241,14 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			setInventoryIndicatorMap(xpedxwcUtils.getInventoryCheckMap(getOutputDocument(), shipFromBranch, getWCContext()));
 			getEmailAddrs();
 			getAllItemSKUs();
+			//Start of EB-64 - getting the item id and customer UOM of that item, if it exist
+			Document xpxItemXRefDoc = (Document) XPEDXWCUtils.getObjectFromCache("xpxItemXRefDoc");
+			if(xpxItemXRefDoc!=null){
+				customerUOMMap =  new HashMap<String, String>(); 
+				customerUOMMap = getItemIdCustomerUOM(xpxItemXRefDoc);
+			}
+			//End of EB-64
+			
 			//getCustomerPONumbers();
 			// Get the customer fields
 			getCustomerDisplayFields();
@@ -337,6 +355,36 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		}
 		return "success";
 	
+	}
+	
+//	Added for EB-64 - getting the item id and customer Uoms
+	private HashMap<String, String> getItemIdCustomerUOM(Document xpxItemXRefDoc){
+		HashMap<String, String> custUomMap;
+		custUomMap = new HashMap<String, String>(); 
+		Element wElement = xpxItemXRefDoc.getDocumentElement();
+		NodeList wNodeList = wElement.getChildNodes();
+		if (wNodeList != null) {
+			int length = wNodeList.getLength();
+			
+			for (int i = 0; i < length; i++) {
+				Node wNode = wNodeList.item(i);
+				if (wNode != null) {
+					NamedNodeMap nodeAttributes = wNode.getAttributes();
+					if (nodeAttributes != null) {
+						Node itemId = nodeAttributes
+								.getNamedItem("LegacyItemNumber");
+						Node customerUOM = nodeAttributes
+						.getNamedItem("CustomerUom");
+						if(itemId!=null && customerUOM!=null){
+							custUomMap.put(itemId.getTextContent(), customerUOM.getTextContent());
+						}
+						
+						
+					}
+				}
+			}
+		}
+		return custUomMap;
 	}
 	
 	private void setPnaHoverForEditOrderLine(XPEDXPriceAndAvailability pna,Document lineTpeMDoc)
@@ -471,14 +519,25 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 						itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
 				}
 
-				itemIdList.add(itemId);
+				//itemIdList.add(itemId);   commenting this line , since, below populating all the itemds in the list
 				skuMap.put(itemId, (HashMap<String, String>)itemSkuMap.clone());
 				itemSkuMap.clear();
 			}
 
 		}
+		// EB-64 - Getting the item id list
+		for (int i = 0; i < orderLineElemList.size(); i++) {
+			Element orderLineElement = (Element)orderLineElemList.get(i);
+			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+			String itemId = itemElement.getAttribute("ItemID");
+			itemIdList.add(itemId);
+		}
+		// EB-64 - Moving the XPXItemCustXref code from bottom to top for getting the customer UOM irrespective of customerItemFlag
+		Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+		XPEDXWCUtils.setObectInCache("xpxItemXRefDoc",itemcustXrefDoc); 
+		
 		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
-			Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+			
 			if(itemcustXrefDoc!=null) {
 				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
 				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
