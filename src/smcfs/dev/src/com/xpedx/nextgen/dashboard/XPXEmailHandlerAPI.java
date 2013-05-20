@@ -1134,7 +1134,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 						{
 							//salesRepEmail = salesRepEmail + ";"+contactPersonInfo1.getAttribute("EmailID");
 							/*Make the changes on 10/10/2011 start */
-							if(counter==(contactPersonInfoLength-1))
+							if(counter==0)//EB 367 - For Sending Emails to all salesRep when Order is placed
 								salesRepEmail = SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
 							else
 								salesRepEmail = salesRepEmail + ","+SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
