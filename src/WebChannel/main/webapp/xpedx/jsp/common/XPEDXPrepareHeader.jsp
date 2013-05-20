@@ -13,6 +13,7 @@
   	  
   	<s:if test="(#isMergedCSSJS == null && #isMergedCSSJS != 'true')"> 
 		<!-- BEGIN Styles -->
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/change-ship-to<s:property value='#wcUtil.xpedxBuildKey' />.css" />
  		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 		<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
