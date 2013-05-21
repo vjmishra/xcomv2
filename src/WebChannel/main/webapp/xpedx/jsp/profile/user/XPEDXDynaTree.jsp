@@ -181,7 +181,12 @@
 			var sapKeyValue = masterarray[i].split("##");
 			var sapKey = "\"" + sapKeyValue[0] + "\"";
 			var sapValuesplit = sapKeyValue[1].split("^^^");
-			
+			<!-- EB-108 Start -->
+			bSelected = false;
+			if (sapValuesplit[1] == "checked") {
+				bSelected = true;
+			}
+			<!-- EB-108 End -->
 		var childNodeSap = childNode.addChild({
 			key : eval(sapKey),
 			title : eval("\"" + sapValuesplit[0] + "\""),
