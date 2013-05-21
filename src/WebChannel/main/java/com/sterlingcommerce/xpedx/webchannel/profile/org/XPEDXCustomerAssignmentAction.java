@@ -597,8 +597,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		try {
 			outputMap = prepareAndInvokeMashups();
 			setDefaultShipTo();
-			Element outputElem = outputMap
-					.get("XPEDXGetPaginatedCustomerAssignments");
+			Element outputElem = outputMap.get("XPEDXGetPaginatedCustomerAssignments");
 			Element customerAssignment = SCXmlUtil.getChildElement(outputElem,
 					"Output");
 			// Performance Fix - Removal of the mashup call of -

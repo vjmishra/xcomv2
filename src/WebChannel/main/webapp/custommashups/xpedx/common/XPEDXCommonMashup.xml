@@ -586,6 +586,8 @@
 	</mashup>
 <!-- Mashup End For Kubra jira 4146 -->
 		
+	
+	
 	<mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Order List">
 		<classInformation
@@ -597,7 +599,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
 						<Input>
-							<XPXCustomerAssignmentView UserId="">
+							<XPXCustomerAssignmentView UserId="" Status="30"  StatusQryType="NE" >
 								<OrderBy>
 									<Attribute Desc="N" Name="" />
 								</OrderBy>
@@ -623,6 +625,10 @@
 			</Template>
 		</API>
 	</mashup>
+	
+	
+	
+	
 	
 	<mashup id='XPEDXSearchCustomerAssignmentsPaginated' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Order List">
