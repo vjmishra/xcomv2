@@ -273,22 +273,36 @@
 						 		<td>
 						 		<br/>
 						 						 		
-						 						 			
+						 			<s:if test='%{#customerUOM==#MultiUom}'>
+											<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+											<s:set name="multiUomDesc" value="#customerUomWithoutM" />										
+									</s:if>
+									<s:else>
+											<s:set name="multiUomDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)" />
+									</s:else>					 			
 						 			<s:if test='(useOrderMultipleMapFromSourcing.containsKey(#jsonKey))'>
-						 				<s:set id="OrderMultipleUom" name="OrderMultipleUom"  value="%{#OrderMultipleQtyFromSrc.substring(#OrderMultipleQtyFromSrc.indexOf('|')+1,#OrderMultipleQtyFromSrc.length())}"/>						 				
+						 				<s:set id="OrderMultipleUom" name="OrderMultipleUom"  value="%{#OrderMultipleQtyFromSrc.substring(#OrderMultipleQtyFromSrc.indexOf('|')+1,#OrderMultipleQtyFromSrc.length())}"/>
+						 				<s:if test='%{#customerUOM==#OrderMultipleUom}'>
+											<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+											<s:set name="orderMultipleUomDesc" value="#customerUomWithoutM" />										
+										</s:if>
+										<s:else>
+											<s:set name="orderMultipleUomDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#OrderMultipleUom)" />
+										</s:else>
+															 				
                 						<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>						 			
-						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#OrderMultipleUom)'></s:property><br/>
+						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#orderMultipleUomDesc"></s:property><br/>
 						 				</s:if>
 						 				<s:else>
-						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/>
 						 				</s:else>
                 					</s:if>
                 					<s:elseif test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}' >
-                						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+                						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/>
                 					</s:elseif>
                 					<s:else>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/></div>
 						 		</s:if>
 						 			</s:else>
 						 		
