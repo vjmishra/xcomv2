@@ -104,8 +104,9 @@
           			Nullable="false" XMLName="MSAPSAPNumber" />	
 				<Attribute ColumnName="CUSTOMER_PATH" DataType="CustomerId" DefaultValue="' '" Description="Exact path of customer"  
           			Nullable="false" XMLName="CustomerPath" />	
-				
-			</Attributes>
+				<Attribute ColumnName="STATUS" DataType="char-2" DefaultValue="' '" Description="Status of the customer"  
+          			Nullable="true" XMLName="Status" />
+          </Attributes>
 			<PrimaryKey Name="XPX_CUST_H_PK">
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" />
 			</PrimaryKey>

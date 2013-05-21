@@ -1,3 +1,3 @@
 <XPXCustomerAssignmentViewList TotalNumberOfRecords="">
-<XPXCustomerAssignmentView UserId="" ShipToCustomerID="" EnterpriseCode="" FirstName="" LastName="" BillToCustomerID="" SAPCustomerID="" MSAPCustomerID="" ShipToExtnCustStoreNo="" AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode="" EMailID="" ShipToCustomerName="" BillToCustomerName="" ShipToAddressString=""/>
+<XPXCustomerAssignmentView UserId="" ShipToCustomerID="" EnterpriseCode="" FirstName="" LastName="" BillToCustomerID="" SAPCustomerID="" MSAPCustomerID="" ShipToExtnCustStoreNo="" AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode="" EMailID="" ShipToCustomerName="" BillToCustomerName="" ShipToAddressString="" Status =""/>
 </XPXCustomerAssignmentViewList>

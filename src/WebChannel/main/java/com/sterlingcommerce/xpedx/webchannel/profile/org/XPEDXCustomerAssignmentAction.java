@@ -760,8 +760,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * currentCustomer = customerId;
 		 * 
 		 * assignedShipToList.add(xPEDXShipToCustomer); } } }
-		 */
-	}
+		 */}
 
 	private void parseForShipToAddress(Element customerAssignmentViewElem,
 			boolean isForDefaultShipto) {
@@ -771,13 +770,21 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				viewListElem, "XPXCustomerAssignmentView");
 		assignedShipToList = new ArrayList<XPEDXShipToCustomer>();
 		if (assignedCustElems.size() > 0) {
+			
 			shipToResult = false;
+				String status ="";
 			for (int i = 0; i < assignedCustElems.size(); i++) {
 				Element customer = assignedCustElems.get(i);
+				
+				status = SCXmlUtil.getAttribute(customer, "Status");
+				if(!status.equals("30")){
+				
 				XPEDXShipToCustomer defualtShipToAssigned = new XPEDXShipToCustomer();
 				defualtShipToAssigned.setCustomerID(SCXmlUtil.getAttribute(
 						customer, "ShipToCustomerID"));
 				log.debug(SCXmlUtil.getString(customer));
+				
+				
 				defualtShipToAssigned.setOrganizationName(SCXmlUtil
 						.getAttribute(customer, "ShipToCustomerName"));
 				Element element = customer;
@@ -834,7 +841,9 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 							.equals(wcContext.getCustomerId()) ? customerId
 							: "");
 				}
+				
 				assignedShipToList.add(defualtShipToAssigned);
+				}
 			}
 		}
 	}

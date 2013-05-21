@@ -56,6 +56,8 @@
 					Description="The MSAP Customer Key" Nullable="false" XMLName="MSAPCustomerKey" />
 				<Attribute ColumnName="SHIP_TO_ADDRESS_STRING" DataType="Text-1500"
 					Description="The Ship To Customer Address String" Nullable="true" XMLName="ShipToAddressString" />
+				<Attribute ColumnName="STATUS" DataType="char-2" DefaultValue="' '" Description="Status of the customer"  
+          			Nullable="true" XMLName="Status" />	
 			</Attributes>
 			<PrimaryKey Name="XPX_CUST_H_PK">
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" />
