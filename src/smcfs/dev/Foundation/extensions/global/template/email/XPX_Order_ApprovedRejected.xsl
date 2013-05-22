@@ -569,7 +569,16 @@
 					<xsl:choose>
 					<xsl:when test='@LineType!="M"'> 															
 					<td width="20%" class="right"> Ordered Qty:&#160;</td>
-					<td class="left"><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/>&#160;<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/></td>
+					<td class="left"><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/>&#160;
+					<xsl:choose>
+						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
+						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+						</xsl:when>
+						<xsl:otherwise>
+						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
+						</xsl:otherwise>
+						</xsl:choose></td>
+						<td class="align-right"></td>
 					<td class="align-right">
 					<xsl:if test='$viewPricesFlag ="Y"'>						
 						<xsl:choose>
@@ -620,7 +629,16 @@
 						<xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >	
 					
 					<td class="right"> Shippable Qty:&#160;</td>
-					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/></td>
+					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;
+					<xsl:choose>
+						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
+						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+						</xsl:when>
+						<xsl:otherwise>
+						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
+						</xsl:otherwise>
+						</xsl:choose></td>
+						<td class="align-right"></td>
 					<td class="align-right">
 					<xsl:if test='$viewPricesFlag ="Y"'>					
 						<xsl:choose>
@@ -643,7 +661,16 @@
 						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!="" and  ($IsOrderSplit ="N")' >	
 					
 					<td class="right"> Backorder Qty:&#160; </td>
-					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/></td>
+					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;
+					<xsl:choose>
+						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
+						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+						</xsl:when>
+						<xsl:otherwise>
+						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
+						</xsl:otherwise>
+						</xsl:choose></td>
+						<td class="align-right"></td>
 					<td class="right"></td>
 					<td class="right"></td>
 					</xsl:if>
@@ -655,7 +682,16 @@
 				<xsl:if test = '@lineOrderNO!=""' >					
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/></td>
+					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;
+					<xsl:choose>
+						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
+						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+						</xsl:when>
+						<xsl:otherwise>
+						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
+						</xsl:otherwise>
+						</xsl:choose></td>
+						<td class="align-right"></td>
 					<td class="left"></td>
 					<td class="right"></td>
 					<td class="right"></td>
