@@ -163,14 +163,15 @@
 		var msapKeyValue = masterarray[0].split("##");
 		var msapKey = "\"" + msapKeyValue[0] + "\"";
 		var msapValuesplit = msapKeyValue[1].split("^^^");
-		var bSelected = false;
+		var sSelected = false;
+		var mSelected = false;
 		if (msapValuesplit[1] == "checked") {
-			bSelected = true;
+			mSelected = true;
 		}
 		var childNode = rootNode.addChild({
 			key : eval(msapKey),
 			title : eval("\"" + msapValuesplit[0] + "\""),
-			select : bSelected
+			select : mSelected
 		});
 
 		
@@ -182,15 +183,20 @@
 			var sapKey = "\"" + sapKeyValue[0] + "\"";
 			var sapValuesplit = sapKeyValue[1].split("^^^");
 			<!-- EB-108 Start -->
-			bSelected = false;
-			if (sapValuesplit[1] == "checked") {
-				bSelected = true;
+			sSelected = false;
+			if(mSelected){
+				sSelected = true;
+			}
+			else{
+				if (sapValuesplit[1] == "checked") {
+					sSelected = true;
+				}
 			}
 			<!-- EB-108 End -->
 		var childNodeSap = childNode.addChild({
 			key : eval(sapKey),
 			title : eval("\"" + sapValuesplit[0] + "\""),
-			select : bSelected,
+			select : sSelected,
 			isLazy : true
 		});
 		childNode.expand(true);
