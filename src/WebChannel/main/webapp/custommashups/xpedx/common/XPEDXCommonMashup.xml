@@ -588,7 +588,7 @@
 		
 	
 	
-	<mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
+	<!-- <mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Order List">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
@@ -625,7 +625,46 @@
 			</Template>
 		</API>
 	</mashup>
+	 -->
 	
+	
+	<mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
+						<Input>
+							<XPXCustomerAssignmentView UserId=""  >
+								<OrderBy>
+									<Attribute Desc="N" Name="" />
+								</OrderBy>
+							</XPXCustomerAssignmentView>
+						</Input>
+						<Template>
+							<XPXCustomerAssignmentViewList TotalNumberOfRecords="">
+								<XPXCustomerAssignmentView>	
+									<OrderBy>
+										<Attribute Desc="N" Name="" />
+									</OrderBy>
+								</XPXCustomerAssignmentView>
+							</XPXCustomerAssignmentViewList>
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>
 	
 	
 	
