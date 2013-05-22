@@ -110,6 +110,14 @@ function setPandAData() {
 	var OrderMultipleQtyUom = OrderMultipleQtyFromSrc1.split("|");
 	var orderMultipleQty = OrderMultipleQtyUom[0];
 	var OrderMultipleUom = OrderMultipleQtyUom[1];
+	//Added for EB-439 - start
+	var customerUOM = document.getElementById("custUOM");
+	if(customerUOM!=null && customerUOM!=undefined ){
+		var custuom = customerUOM.value;
+		if(custuom!=null && custuom == OrderMultipleUom){
+			OrderMultipleUom = custuom.substr(2);
+		}
+	}//Added for EB-439 - start
 	var omError = OrderMultipleQtyUom[2];	
 	if(omError == 'true' && qty.value > 0)//omError == 'true' && qty.value > 0 )
 	{

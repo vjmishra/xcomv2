@@ -26,6 +26,7 @@
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemId}" value="%{#orderMultipleQtyFromSrc}"/>
 
 <s:set name="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"></s:set>
+<s:hidden name="reqCustomerUOM" id="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"/>
 
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">

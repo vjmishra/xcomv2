@@ -188,7 +188,11 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		
 		String uomDesc = "";
 		try {
-			uomDesc = TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getUOMDescription(unitOfMeasure));
+			if(custUOM!=null && custUOM.equalsIgnoreCase(unitOfMeasure)){
+				uomDesc = custUOM.substring(2);
+			}else{
+				uomDesc = TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getUOMDescription(unitOfMeasure));
+			}
 			sb.append("uomDesc: \"").append(uomDesc).append("\",");
 		} catch (Exception e) {
 			sb.append("uomDesc: \"\",");

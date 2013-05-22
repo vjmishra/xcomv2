@@ -91,6 +91,15 @@
 <s:hidden name="catagory" id="catagory" value="%{#_action.getCatagory()}" />
 <s:hidden id="custUOM" name="custUOM" value="%{#_action.getCustomerUOM()}" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:set name="baseUOM"  value="%{#_action.getBaseUOM()}" />
+<s:set name="customerUOM"  value="%{#_action.getCustomerUOM()}" />
+<s:if test='%{#customerUOM==#baseUOM}'>
+	<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+	<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
+</s:if>
+<s:else>
+	<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOM)" />
+</s:else>	
 </head>
 <!-- END swc:head -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -791,7 +800,7 @@ function validateOrderMultiple() {
 		
 		if (OrdMultiple.value > 1){
 			if (priceCheck == true){
-			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='#baseUOMDesc'></s:property>";	            
          		      myMessageDiv.style.display ="inline-block";
           		      myMessageDiv.setAttribute("class", "notice");
 			}
@@ -1682,7 +1691,7 @@ function SubmitActionWithValidation()
 				
 				<script>
 					var myMessageDiv = document.getElementById("errorMsgForQty");	            
-		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#xpedxutil.formatQuantityForCommas(#mulVal)}'></s:property> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#xpedxutil.formatQuantityForCommas(#mulVal)}'></s:property> <s:property value='#baseUOMDesc'></s:property>";	            
 		            myMessageDiv.style.display = "inline-block"; 
 		            myMessageDiv.setAttribute("class", "notice");
 				</script>
