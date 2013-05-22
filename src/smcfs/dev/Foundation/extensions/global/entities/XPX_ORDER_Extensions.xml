@@ -130,7 +130,22 @@
             <Index Name="XPX_YFS_ORDER_HEADER_I20" Unique="False">
                <Column Name="EXTN_WEB_CONF_NUM"/>
 			   <Column Name="EXTN_LEGACY_ORDER_NO"/>               
-            </Index>			
+            </Index>	
+            <Index Name="XPX_YFS_ORDER_HEADER_I21" Unique="False">
+				<Column Name="SHIP_TO_ID"/>
+				<Column Name="ORDER_TYPE"/>     
+				<Column Name="DRAFT_ORDER_FLAG"/> 
+				<Column Name="EXTN_WEB_CONF_NUM"/> 
+				<Column Name="EXTN_LEGACY_ORDER_NO"/> 
+				<Column Name="BILL_TO_ID"/> 
+				<Column Name="ORDER_HEADER_KEY"/> 
+				<Column Name="BUYER_ORGANIZATION_CODE"/> 
+				<Column Name="SELLER_ORGANIZATION_CODE"/> 
+				<Column Name="CUSTOMER_PO_NO"/> 
+				<Column Name="CUSTOMER_CONTACT_ID"/> 
+				<Column Name="EXTN_ORDER_DIVISION"/> 
+				<Column Name="EXTN_ORDER_STATUS"/> 
+			</Index>		
         </Indices>
 		<!-- End : New index created for XBT-361 -->		
       </Entity>
