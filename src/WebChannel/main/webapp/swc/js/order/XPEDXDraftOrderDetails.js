@@ -963,13 +963,13 @@ function redrawQuickAddList()
 		        
 	        	if(custPOFlag){
 		        	code += '<td class="col-item">';
-		        	code += '<input type="text" name="enteredPONos" maxlength="25" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\','+ i +')"/>';
+		        	code += '<input type="text" name="enteredPONos" maxlength="22" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\','+ i +')"/>';
 		        	code += '</td>';
 		        }
 		        if(jobidFlag == true && jobValue !=null){
 			        code += '<td class="col-item">'; 
 			        //code += encodeForHTML(QuickAddElems[i].jobId);
-			        code += '<input type="text" name="enteredJobIDs" maxlength="25" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
+			        code += '<input type="text" name="enteredJobIDs" maxlength="22" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
 			        code += '</td>';
 		        }
 		        

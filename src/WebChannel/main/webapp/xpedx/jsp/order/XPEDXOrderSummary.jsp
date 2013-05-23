@@ -1375,7 +1375,7 @@ from session . We have customer Contact Object in session .
                                 	<s:if test='(#orderLine.getAttribute("LineType") =="P" || #orderLine.getAttribute("LineType") =="S")'>
 		                                <s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
 											<s:if test="%{#orderLine.getAttribute(#FieldLabel) != null && #orderLine.getAttribute(#FieldLabel) != ''}">
-												<td align="right">
+												<td align="right" width="160">
 												<s:property value="%{#FieldValue}" />:&nbsp;	
 												</td>
 												<td align="left">				
@@ -1386,7 +1386,7 @@ from session . We have customer Contact Object in session .
 										</s:if>
 										<s:else>
 											<s:if test="%{#lineExtn.getAttribute(#customLbl) != null && #lineExtn.getAttribute(#customLbl) != ''}">
-												<td align="right">
+												<td align="right" width="160">
 													<s:property value="%{#FieldValue}" />:&nbsp;
 												</td>
 												<td align="left">													
