@@ -240,6 +240,16 @@ var myMask;
 		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
 		            	var orderMultipleQty = orderMultipleQtyUom[0];
 		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	
+		            	
+		            	//Added for EB-439 - start
+		            	var customerUOM = document.getElementById("reqCustomerUOM");
+		            	if(customerUOM!=null && customerUOM!=undefined ){
+		            		var custuom = customerUOM.value;
+		            		if(custuom!=null && custuom == orderMultipleUom){
+		            			orderMultipleUom = custuom.substr(2);
+		            		}
+		            	}//Added for EB-439 - start
 		            	var omError = orderMultipleQtyUom[2];		            			
 		            	if(omError == 'true' && qty.value >0 ){
 				            sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;

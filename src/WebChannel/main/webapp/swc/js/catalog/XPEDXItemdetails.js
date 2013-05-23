@@ -110,6 +110,14 @@ function setPandAData() {
 	var OrderMultipleQtyUom = OrderMultipleQtyFromSrc1.split("|");
 	var orderMultipleQty = OrderMultipleQtyUom[0];
 	var OrderMultipleUom = OrderMultipleQtyUom[1];
+	//Added for EB-439 - start
+	var customerUOM = document.getElementById("custUOM");
+	if(customerUOM!=null && customerUOM!=undefined ){
+		var custuom = customerUOM.value;
+		if(custuom!=null && custuom == OrderMultipleUom){
+			OrderMultipleUom = custuom.substr(2);
+		}
+	}//Added for EB-439 - start
 	var omError = OrderMultipleQtyUom[2];	
 	if(omError == 'true' && qty.value > 0)//omError == 'true' && qty.value > 0 )
 	{
@@ -129,7 +137,7 @@ function setPandAData() {
 		itemAvailDiv.style.display = "none"; 
 		qty.style.borderColor="";
 	}
-	else if(orderMultipleQty != null && orderMultipleQty != 0 && sourceOrderMulError.innerHTML.indexOf('Item has been added to cart')==-1 )
+	else if(orderMultipleQty != null && orderMultipleQty != 0 && sourceOrderMulError.innerHTML.indexOf('Item has been added to cart')==-1 && sourceOrderMulError.innerHTML.indexOf('Item has been added to order')==-1 )
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 

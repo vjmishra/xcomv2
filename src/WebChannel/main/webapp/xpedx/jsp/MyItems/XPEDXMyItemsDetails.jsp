@@ -2907,6 +2907,16 @@ function showSharedListForm(){
 					<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemId)' />
 					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 					<s:set name="itemBaseUom"  value='#baseUOMs.get(#itemId)' />
+					
+					<s:if test='%{#customerUOM==#itemBaseUom}'>
+						<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+						<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
+					</s:if>
+					<s:else>
+						<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemBaseUom)" />
+					</s:else>
+
+					
 					<s:set name="YFSItmePrimaryInfo" value='descriptionMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name="YFSItmeExtn" value='masterItemExtnMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name='certFlag' value='#YFSItmeExtn.getAttribute("ExtnCert")' />					
@@ -3227,7 +3237,7 @@ function showSharedListForm(){
 	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
-	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
+	                               		<s:property value="#baseUOMDesc"></s:property>
 	                               	</div>
 	                               	<%--Added below hiddens for Jira 3197- MIL Messaging --%>
 	                               	<s:hidden name="hiddenUOMOrdMul_%{#id}"  id="hiddenUOMOrdMul_%{#id}" value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
@@ -3263,7 +3273,7 @@ function showSharedListForm(){
 	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
-	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
+	                               		<s:property value="#baseUOMDesc"></s:property>
 	                               	</div>                               	
 	                              	
 	                               </li>

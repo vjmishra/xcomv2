@@ -597,8 +597,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		try {
 			outputMap = prepareAndInvokeMashups();
 			setDefaultShipTo();
-			Element outputElem = outputMap
-					.get("XPEDXGetPaginatedCustomerAssignments");
+			Element outputElem = outputMap.get("XPEDXGetPaginatedCustomerAssignments");
 			Element customerAssignment = SCXmlUtil.getChildElement(outputElem,
 					"Output");
 			// Performance Fix - Removal of the mashup call of -
@@ -776,9 +775,6 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			for (int i = 0; i < assignedCustElems.size(); i++) {
 				Element customer = assignedCustElems.get(i);
 				
-				status = SCXmlUtil.getAttribute(customer, "Status");
-				if(!status.equals("30")){
-				
 				XPEDXShipToCustomer defualtShipToAssigned = new XPEDXShipToCustomer();
 				defualtShipToAssigned.setCustomerID(SCXmlUtil.getAttribute(
 						customer, "ShipToCustomerID"));
@@ -846,7 +842,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				}
 			}
 		}
-	}
+	
 
 	/**
 	 * <CustomerAssignment CustomerID="" OrganizationCode="" UserId=""

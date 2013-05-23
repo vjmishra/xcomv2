@@ -276,6 +276,11 @@
 		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
 		            	var orderMultipleQty = orderMultipleQtyUom[0];
 		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	
+		            	//Added for EB-439 - start	
+		            	if(pnaRequestedCustomerUOM!=null && pnaRequestedCustomerUOM == orderMultipleUom){
+		            		orderMultipleUom = pnaRequestedCustomerUOM.substr(2);
+		            	}//Added for EB-439 - start
 		            	var omError = orderMultipleQtyUom[2];
 		            	
 		            	if(omError == 'true' && qty.value > 0) //(omError == 'true' && qty.value > 0)

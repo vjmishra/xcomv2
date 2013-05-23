@@ -1261,7 +1261,7 @@ public class XPEDXOrderUtils {
 								.parseDouble(convFactor));
 						
 						if(isCustomerUom.equalsIgnoreCase("Y")){
-							if(1 == convFac || 0== convFac){
+							if(1 == convFac || 0 == convFac){
 								uommap.put(uom, uom.substring(2, uom.length()));
 							}
 							else
@@ -1270,7 +1270,7 @@ public class XPEDXOrderUtils {
 							
 						}
 						else{
-							if(1 == convFac){								
+							if(1 == convFac  || 0 == convFac){								
 									uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom));								
 							}
 							else
@@ -1444,7 +1444,7 @@ public class XPEDXOrderUtils {
 			
 				if(isCustomerUom!=null && isCustomerUom.equalsIgnoreCase("Y")){
 					strCustomerUOM = uomCode;
-					if(1 == convFac){
+					if(1 == convFac || 0 == convFac){
 						displayItemUomsMap.put(uomCode, uomCode.substring(2, uomCode.length()));
 					}
 					else
@@ -1452,7 +1452,7 @@ public class XPEDXOrderUtils {
 								+ " (" + convFac + ")");					
 				}
 				else{
-						if(1 == convFac){								
+						if(1 == convFac  || 0 == convFac){								
 							displayItemUomsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode));								
 						}
 						else
