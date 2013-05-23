@@ -15,7 +15,6 @@ import org.w3c.dom.NodeList;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
@@ -29,20 +28,12 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 	
 	private static YIFApi api = null;
 	private static Properties props;
-// private static List<TestCSV> dataList;
 	 String[] maxItemsIds;
 	 private static String[] assoItemIds;
 	/**
      * Reads text from a file line by line
      */
- /*  public static List<TestCSV> getDataList() {
-		return dataList;
-	} 
-
-	public void setDataList(List<TestCSV> dataList) {
-		this.dataList = dataList;
-	}*/
-	public void setProperties(Properties arg0) throws Exception {
+  public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
 		this.props = arg0;
 	}
@@ -68,15 +59,11 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 			YFCElement complexQueryOrElement = documentElement.createChild("Or");
 			
 			
-			//readFromFile("D:/Kubra_Doc/Jira/White-Sprint/EB-317-DataloadScriptForACUItems/Book2.xlsx");
-			   String fileName = inputElem.getAttribute("FilePath");//"D:/Kubra_Doc/Jira/White-Sprint/EB-317-DataloadScriptForACUItems/Book1.csv";
-			   CSVReader reader = new CSVReader(new FileReader(fileName));
+				String fileName = inputElem.getAttribute("FilePath");//"D:/Kubra_Doc/Jira/White-Sprint/EB-317-DataloadScriptForACUItems/Book1.csv";
+				CSVReader reader = new CSVReader(new FileReader(fileName));
 				String[] nextLine;
 				int i = -1;
 				
-				//ArrayList<TestCSV> tmp = new ArrayList<TestCSV>();
-				//int RegularFieldIndex = 0; // always equal to the last index that will be used
-				//RegularFieldIndex = (getCustomerFieldsMap().size()) + 3;
 				Map<String,String> itemMap=new HashMap<String,String>();
 				while ((nextLine = reader.readNext()) != null) {
 					System.out.println("In while loop");
@@ -97,7 +84,6 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 							complexQueryOrElement.appendChild((YFCNode)expElement1);
 						}
 					}
-					System.out.println("Record: " + nextLine);
 				}//end of while
 				complexQueryElement.appendChild(complexQueryOrElement);
 				documentElement.appendChild(complexQueryElement);
@@ -146,9 +132,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 			associationinputElem.setAttribute("EffectiveFrom", effectiveFrom);
 			associationinputElem.setAttribute("EffectiveTo", effectiveTo);
 			associationsinputElem.appendChild(associationinputElem);
-			/*
-			Element associationElem=SCXmlUtil.createChild(inputElement, "Association");*/
-			YFCElement ItemElem=associationinputDocument.createElement("Item"); //SCXmlUtil.createChild(associationinputElem, "Item");
+			YFCElement ItemElem=associationinputDocument.createElement("Item"); 
 			ItemElem.setAttribute("ItemID", associatedItem);
 			ItemElem.setAttribute("ItemKey", associatedItemKey);
 			associationinputElem.appendChild(ItemElem);
