@@ -1012,6 +1012,25 @@ IYRCComposite {
 		gridDataLblMsg.widthHint = 330;
 		gridDataLblMsg.horizontalSpan=3;
 
+		
+		chkCustomerLinePONumber = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+		chkCustomerLinePONumber.setText("");
+		chkCustomerLinePONumber.setVisible(true);
+		chkCustomerLinePONumber.setData("yrc:customType", "Label");
+		chkCustomerLinePONumber.setLayoutData(gridData1);
+		chkCustomerLinePONumber.setData("name", "chkCustomerLinePONumber");
+		lblCustomerLinePONumber = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+		lblCustomerLinePONumber.setText("Line PO#");
+		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
+		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
+		//XB-519 -UI Modified
+		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,2048);
+		txtCustomerLinePONumberMsg.setText("");
+		txtCustomerLinePONumberMsg.setLayoutData(gridData3);
+		txtCustomerLinePONumberMsg.setTextLimit(22);
+		txtCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
+		txtCustomerLinePONumberMsg.setVisible(true);
+		
 		chkCustLineAcct = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCustLineAcct.setText("");
 		chkCustLineAcct.setVisible(true);
@@ -1080,23 +1099,8 @@ IYRCComposite {
 			txtCustLineField3.setTextLimit(500);
 			txtCustLineField3.setData("name", "txtCustLineField3");	
 		}
-		chkCustomerLinePONumber = new Button(pnlCustomerProfileInfo, SWT.CHECK);
-		chkCustomerLinePONumber.setText("");
-		chkCustomerLinePONumber.setVisible(true);
-		chkCustomerLinePONumber.setData("yrc:customType", "Label");
-		chkCustomerLinePONumber.setLayoutData(gridData1);
-		chkCustomerLinePONumber.setData("name", "chkCustomerLinePONumber");
-		lblCustomerLinePONumber = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustomerLinePONumber.setText("Line PO#");
-		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
-		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
-		//XB-519 -UI Modified
-		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,2048);
-		txtCustomerLinePONumberMsg.setText("");
-		txtCustomerLinePONumberMsg.setLayoutData(gridData3);
-		txtCustomerLinePONumberMsg.setTextLimit(22);
-		txtCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
-		txtCustomerLinePONumberMsg.setVisible(true);
+		
+		
 		addTab(gridDataDummy,"dummyCustomerLinePONumber");
 		lblCustomerFieldMsg = new Label(pnlCustomerProfileInfo, SWT.WRAP);
 		lblCustomerFieldMsg.setText("If checked, the customer fields on this tab display but " +
