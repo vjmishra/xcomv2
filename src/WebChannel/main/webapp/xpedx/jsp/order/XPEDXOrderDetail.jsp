@@ -519,7 +519,7 @@ function showSplitDiv(divId)
 				</s:if>
 				<s:set name="test11" value="%{#_action.isFOCreated()}"/>	
 				<s:hidden name="test1" value='%{#test11}'/>
-				<s:if test="!#isEstimator">
+				<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
@@ -1502,7 +1502,7 @@ function showSplitDiv(divId)
 				</s:if>
 				</s:if>
 			</s:if>
-			<s:if test="!#isEstimator">
+			<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
