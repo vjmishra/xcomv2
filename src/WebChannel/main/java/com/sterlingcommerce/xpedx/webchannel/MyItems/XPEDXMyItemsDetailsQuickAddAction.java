@@ -367,53 +367,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void validateItemForManufacture() {
-		try {
-			//Populate all the fields
-			setItemManufacturerId(getItemId());
-			setItemId("");
-			
-			Element res = prepareAndInvokeMashup("XPEDXMyItemsDetailsAddFromCatalog");
-			ArrayList<Element> itemEle = getXMLUtils().getElements(res, "Item");
-			//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-			//itemEle will be null if item is not entitled
-			if (itemEle != null){
-				for(Iterator<Element> iterator1 = itemEle.iterator(); iterator1.hasNext();){
-					Element itemList = (Element)iterator1.next();
-					Element primaryInfoEle 	= getXMLUtils().getChildElement(itemList, "PrimaryInformation");
-				/* 
-				 * Arun 3/29
-				 * setDesc changed to setDescMil to facilitate the li tags
-				 * that are in the description information . If its changed
-				 * back to setDesc the MIl edit - quick add will break
-				 */
-				if (primaryInfoEle != null){
-					setName(primaryInfoEle.getAttribute("DisplayItemDescription"));
-					//setDesc(primaryInfoEle.getAttribute("Description"));
-					setDescMil(primaryInfoEle.getAttribute("Description"));
-					}
-				setUomId( itemList.getAttribute("UnitOfMeasure") );
-				setItemId(itemList.getAttribute("ItemID"));
-				//setIsItemValid(true);
-				//Validate the item passing the legacy item id
-				if ( validateItemEntitlement(getItemId()) ){
-					setIsItemValid(true);
-					break;
-				} else {
-					setItemId(getItemManufacturerId());
-				}
-			}
-			}
-			else {
-				setItemId(getItemManufacturerId());
-			}
-			
-				
-		} catch (Exception e) {
-			LOG.error(e.getStackTrace());
-		}
-	}
+	
 
 	private void validateItemForCustomerPart() {
 		try {
@@ -511,52 +465,9 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void validateItemForMpcCode() {
-		try {
-			//Populate all the fields
-			setItemMpcId(getItemId());
-			setItemId("");
-			
-			Element res = prepareAndInvokeMashup("XPEDXMyItemsDetailsAddFromCatalog");
-			//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-			//itemEle will be null if item is not entitled
-			ArrayList<Element> itemElement = getXMLUtils().getElements(res, "Item");
-			//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-			//itemEle will be null if item is not entitled
-			if (itemElement != null){
-				for(Iterator<Element> iterator1 = itemElement.iterator(); iterator1.hasNext();){
-					Element itemListMpc = (Element)iterator1.next();
-					Element primaryInfoEle 	= getXMLUtils().getChildElement(itemListMpc, "PrimaryInformation");
-				/* 
-				 * Arun 3/29
-				 * setDesc changed to setDescMil to facilitate the li tags
-				 * that are in the description information . If its changed
-				 * back to setDesc the MIl edit - quick add will break
-				 */
-				if (primaryInfoEle != null){
-					setName(primaryInfoEle.getAttribute("DisplayItemDescription"));
-					//setDesc(primaryInfoEle.getAttribute("Description"));
-					setDescMil(primaryInfoEle.getAttribute("Description"));
-					}
-				setUomId( itemListMpc.getAttribute("UnitOfMeasure") );
-				setItemId(itemListMpc.getAttribute("ItemID"));
-				//setIsItemValid(true);
-				//Validate the item passing the legacy item id
-				if ( validateItemEntitlement(getItemId()) ){
-					setIsItemValid(true);
-					break;
-				}
-				}
-			} else {
-				setItemId(getItemMpcId());
-			}
-			
-		} catch (Exception e) {
-			LOG.error(e.getStackTrace());
-		}
-	}
-
+	/**
+	 * EB-466 Changes. Removed the logic for MPC and Manufacturing Item validation code.
+	 */
 	private void validateItem() {
 		try {
 			int it = Integer.parseInt(getItemType());
@@ -567,15 +478,9 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 				validateItemForXPEDX();
 				break;
 			case 2:
-				validateItemForManufacture();
-				break;
-			case 3:
 				validateItemForCustomerPart();
 				break;
-			case 4:
-				validateItemForMpcCode();
-				break;
-
+			
 			default:
 				break;
 			}

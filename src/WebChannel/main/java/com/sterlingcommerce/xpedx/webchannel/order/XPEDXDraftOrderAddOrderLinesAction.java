@@ -127,7 +127,10 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		XPEDXWCUtils.releaseEnv(wcContext);
 		return "success";
 	}
-	
+	/**
+	 * EB-466 code changes, removed Manufacturing Item, MPC code
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public String validateProductList() {
 		try {
@@ -143,10 +146,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			StringBuilder sb = new StringBuilder();
 			Map<String, String> itemIdsOrderMultipleMap = new HashMap<String, String>();
 			Element itemType1InputElem=null;
-			Element itemType4InputElem=null;
 			List<String> legacyItems=null;
 			Document productInfoDoc = null;
-			Document productInfoOutput = null;
 			ArrayList<String> productList = new ArrayList<String>();
 			Map<String,String> productListMap=new HashMap<String,String>();
 			Map<String,String> xrefMap=new HashMap<String,String>();
@@ -179,86 +180,16 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 						Element exp =SCXmlUtil.createChild(itemType1InputElem, "Exp");
 						exp.setAttribute("Name", "ItemID");
 						exp.setAttribute("Value", productID);
-					}/*
-			        
-			        loggedinCustomer = (Element)WCMashupHelper.invokeMashup("xpedxgetLoggedInCustomer", input, wcContext.getSCUIContext());*/
-					/*Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-					productInfoDoc = getDocFromOutput(productInfoOutput);*/ 
-				} else if ("2".equals(itemType))  { //Manufacturer # 
-					
-					Element productInfoOutputDOc = prepareAndInvokeMashup("xpedxAddToCartGetCompleteItemList");
-					if(productInfoOutput == null)
-						productInfoOutput=productInfoOutputDOc.getOwnerDocument();
-					if(productInfoOutputDOc!=null)
-					{
-						ArrayList<Element> itemElem = getXMLUtils().getElements(productInfoOutputDOc, "Item");
-						if(itemElem!=null){
-							for(Iterator<Element> iterator = itemElem.iterator(); iterator.hasNext();){
-								Element itemList = (Element)iterator.next();
-								productInfoOutput.getDocumentElement().appendChild(productInfoOutput.importNode(itemList, true));
-								productID = itemList.getAttribute("ItemID");
-							} // end of for
-						} // end of if(itemElem!=null)              
 					}
-					
-				} else if("3".equals(itemType)) //Customer Part #
+				} else if("2".equals(itemType)) //Customer Part #
 				{
 					String customerPartNo = productID;
-					//Map itemAttr = new HashMap();
 					if(legacyItems == null)
 						legacyItems =new ArrayList<String>();
 					legacyItems.add(customerPartNo);
-					//itemAttr.put("CustomerItemNumber", customerPartNo);
+
 					
-				} else if("4".equals(itemType)) //4 = MPC Code
-				{
-					/*String mpc = productID;
-					Map itemAttr = new HashMap();
-					itemAttr.put("MPC", mpc);
-					Element itemCustXrefEle = XPEDXWCUtils.getItemCustXrefInfo(itemAttr);
-					if(itemCustXrefEle != null)
-					{
-						Element custXrefEle = XMLUtilities.getElement(itemCustXrefEle,"XPXItemcustXref");
-						String itemId = SCXmlUtils.getAttribute(custXrefEle, "LegacyItemNumber");
-						if(itemId!=null)
-						{
-							productID = itemId;
-							Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-							productInfoDoc = getDocFromOutput(productInfoOutput);
-						}
-					}*/
-					if(itemType4InputElem == null)
-					{
-						
-						Map<String, String> valueMap = new HashMap<String, String>();
-						valueMap.put("/Item/@CallingOrganizationCode", wcContext.getStorefrontId());
-						Element input = WCMashupHelper.getMashupInput("xpedxGetCompleteItemListWithMpc",valueMap,wcContext);
-						
-						Element complexQuery = SCXmlUtil.createChild(input, "ComplexQuery");
-						itemType4InputElem = SCXmlUtil.createChild(complexQuery, "Or");
-							Element exp = input.getOwnerDocument().createElement("Exp");
-							exp.setAttribute("Name", "Extn_ExtnMpc");
-							exp.setAttribute("Value", productID);
-							SCXmlUtil.importElement(itemType4InputElem, exp);
-					}
-					else
-					{
-						Element exp =SCXmlUtil.createChild(itemType4InputElem, "Exp");
-						exp.setAttribute("Name", "Extn_ExtnMpc");
-						exp.setAttribute("Value", productID);
-					}
-					
-					
-					/*Element productInfoOutput = prepareAndInvokeMashup("xpedxGetCompleteItemListWithMpc");
-					productInfoDoc = getDocFromOutput(productInfoOutput);
-					if(productInfoDoc!=null)
-					{
-						Element itemElem = getXMLUtils().getChildElement(productInfoOutput, "Item");
-						if(itemElem!=null)
-							productID = itemElem.getAttribute("ItemID");
-					}*/
-				}
-				
+				} 
 
 			}
 			if(itemType1InputElem != null)//"1 = xpedx Item #" 
@@ -268,8 +199,6 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				/*Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
 				productInfoDoc = getDocFromOutput(productInfoOutput);*/
 			}
-			if(productInfoOutput != null)//Manufacturer # 
-				productInfoDoc=productInfoOutput;
 			if(legacyItems != null) //Customer Part #
 			{
 				Element itemCustXrefEle = getItemCustXrefInfo(legacyItems);
@@ -299,23 +228,9 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					{
 						productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("addToCartGetCompleteItemList", input, wcContext.getSCUIContext()));
 					}
-					//String itemId = SCXmlUtils.getAttribute(custXrefEle, "LegacyItemNumber");
-					/*if(itemId!=null)
-					{
-						productID = itemId;
-						productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("addToCartGetCompleteItemList", input, wcContext.getSCUIContext()));
-						Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-						productInfoDoc = getDocFromOutput(productInfoOutput);
-					}*/
 				}
 			}
-			if(itemType4InputElem != null)
-			{
 
-				productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("xpedxGetCompleteItemListWithMpc", itemType4InputElem.getOwnerDocument().getDocumentElement(), wcContext.getSCUIContext()));
-				/*Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-				productInfoDoc = getDocFromOutput(productInfoOutput);*/
-			}
 			StringTokenizer _itemsStringToken = new StringTokenizer(items, "*");
 			StringTokenizer _itemTypeStringToken = new StringTokenizer(
 					itemTypes, "*");
@@ -325,11 +240,10 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				itemListEl = productInfoDoc.getDocumentElement();
 				ArrayList<Element> itemsList=SCXmlUtil.getElements(itemListEl, "Item");
 				boolean isItemEntitle=false;
-				//itemEl = XMLUtilities.getElement(itemListEl, "Item");
 				while(_itemsStringToken.hasMoreElements())
 				{
 					String _productID=_itemsStringToken.nextToken();
-					//String itemType=_itemTypeStringToken.nextToken();
+					
 					for(Element itemElem:itemsList)
 					{
 						
@@ -341,34 +255,13 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 								isItemEntitle=true;
 								break;
 						}
-						if("2".equals(itemType) )
-						{
-							Element primaryInformationEle= XMLUtilities.getElement(itemElem, "PrimaryInformation");
-							if(primaryInformationEle != null && _productID.equals(primaryInformationEle.getAttribute("ManufacturerItem")))
-							{
-								productListMap.put(_productID, itemId);
-								isItemEntitle=true;
-								break;
-							}
-						}
-						//if("3".equals(itemType) && _productID.equals(xrefMap.get(itemId)))
-						//modified code for xb 686
-						if("3".equals(itemType))
+						if("2".equals(itemType))
 						{
 							productListMap.put(_productID, itemId);
 							isItemEntitle=true;
 							break;
 						}
-						if("4".equals(itemType))
-						{
-							Element extnEle= XMLUtilities.getElement(itemElem, "Extn");
-							if(extnEle != null && _productID.equals(extnEle.getAttribute("ExtnMpc")))
-							{
-								productListMap.put(_productID, itemId);
-								isItemEntitle=true;
-								break;
-							}
-						}
+						
 					}
 					if(!isItemEntitle)
 					{
@@ -510,7 +403,10 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					wcContext.getSCUIContext());
 			return (Element) obj1;
 	}
-	
+	/**
+	 *  EB-466 code changes, removed Manufacturing Item, MPC code
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public String validateProduct() {
 		try {
@@ -534,20 +430,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 				if ("1".equals(itemType)) { //"1 = xpedx Item #" 
 					Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
 					productInfoDoc = getDocFromOutput(productInfoOutput); 
-				} else if ("2".equals(itemType))  { //Manufacturer # 
-					Element productInfoOutput = prepareAndInvokeMashup("xpedxAddToCartGetCompleteItemList");
-					productInfoDoc = getDocFromOutput(productInfoOutput);
-					if(productInfoDoc!=null)
-					{
-						ArrayList<Element> itemElem = getXMLUtils().getElements(productInfoOutput, "Item");
-						if(itemElem!=null){
-							for(Iterator<Element> iterator = itemElem.iterator(); iterator.hasNext();){
-								Element itemList = (Element)iterator.next();						
-								productID = itemList.getAttribute("ItemID");
-							} // end of for
-						} // end of if(itemElem!=null)              
-					}
-				} else if("3".equals(itemType)) //Customer Part #
+				} else if("2".equals(itemType)) //Customer Part #
 				{
 					String customerPartNo = productID;
 					Map itemAttr = new HashMap();
@@ -563,31 +446,6 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 							Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
 							productInfoDoc = getDocFromOutput(productInfoOutput);
 						}
-					}
-				} else if("4".equals(itemType)) //4 = MPC Code
-				{
-					/*String mpc = productID;
-					Map itemAttr = new HashMap();
-					itemAttr.put("MPC", mpc);
-					Element itemCustXrefEle = XPEDXWCUtils.getItemCustXrefInfo(itemAttr);
-					if(itemCustXrefEle != null)
-					{
-						Element custXrefEle = XMLUtilities.getElement(itemCustXrefEle,"XPXItemcustXref");
-						String itemId = SCXmlUtils.getAttribute(custXrefEle, "LegacyItemNumber");
-						if(itemId!=null)
-						{
-							productID = itemId;
-							Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-							productInfoDoc = getDocFromOutput(productInfoOutput);
-						}
-					}*/
-					Element productInfoOutput = prepareAndInvokeMashup("xpedxGetCompleteItemListWithMpc");
-					productInfoDoc = getDocFromOutput(productInfoOutput);
-					if(productInfoDoc!=null)
-					{
-						Element itemElem = getXMLUtils().getChildElement(productInfoOutput, "Item");
-						if(itemElem!=null)
-							productID = itemElem.getAttribute("ItemID");
 					}
 				}
 				
@@ -651,7 +509,11 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 		}
 		return "success";
 	}
-
+	
+	/**
+	 *  EB-466 code changes, removed Manufacturing Item, MPC code
+	 * @return
+	 */
 	private boolean getProductInformationForEnteredProducts() {
 		if (enteredProductIDs == null || enteredQuantities == null) {
 			LOG
@@ -682,23 +544,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 														.getXMLDocString(getDocFromOutput(productInfoOutput)))
 										.toString());
 					}
-				} else if ("2".equals(itemType)) {
-					productID = (String) productIDIter.next();
-					if (verificationOutputMap.get(productID) == null) {
-						Element productInfoOutput = prepareAndInvokeMashup("xpedxAddToCartGetCompleteItemList");
-						Document productInfoDoc = getDocFromOutput(productInfoOutput);
-						verificationOutputMap.put(productID, productInfoDoc
-								.getDocumentElement());
-						LOG
-								.debug((new StringBuilder())
-										.append(
-												"xpedxAddToCartGetCompleteItemList output XML is: ")
-										.append(
-												XMLUtilities
-														.getXMLDocString(getDocFromOutput(productInfoOutput)))
-										.toString());
-					}
-				}else if("3".equals(itemType))
+				} else if("2".equals(itemType))
 				{
 					productID = (String) productIDIter.next();
 					if (verificationOutputMap.get(productID) == null) {
@@ -727,47 +573,6 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 												.toString());
 							}
 						}
-					}
-				}else if("4".equals(itemType))
-				{
-					productID = (String) productIDIter.next();
-					if (verificationOutputMap.get(productID) == null) {
-						String mpc = productID;
-						/*Map itemAttr = new HashMap();
-						itemAttr.put("MPC", mpc);*/
-						
-						Element productInfoOutput = prepareAndInvokeMashup("xpedxGetCompleteItemListWithMpc");
-						Document productInfoDoc = getDocFromOutput(productInfoOutput);
-						if(productInfoDoc!=null)
-						{
-							Element itemElem = getXMLUtils().getChildElement(productInfoOutput, "Item");
-							if(itemElem!=null)
-								productID = itemElem.getAttribute("ItemID");
-							verificationOutputMap.put(mpc, productInfoDoc
-									.getDocumentElement());
-						}
-						/*Element itemCustXrefEle = XPEDXWCUtils.getItemCustXrefInfo(itemAttr);
-						if(itemCustXrefEle != null)
-						{
-							Element custXrefEle = XMLUtilities.getElement(itemCustXrefEle,"XPXItemcustXref");
-							String itemId = SCXmlUtils.getAttribute(custXrefEle, "LegacyItemNumber");
-							if(itemId!=null)
-							{
-								productID = itemId;
-								Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-								Document productInfoDoc = getDocFromOutput(productInfoOutput);
-								verificationOutputMap.put(mpc, productInfoDoc
-										.getDocumentElement());
-								LOG
-										.debug((new StringBuilder())
-												.append(
-														"xpedxAddToCartGetCompleteItemList output XML is: ")
-												.append(
-														XMLUtilities
-																.getXMLDocString(getDocFromOutput(productInfoOutput)))
-												.toString());
-							}
-						}*/
 					}
 				}
 				

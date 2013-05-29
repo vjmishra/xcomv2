@@ -3480,44 +3480,20 @@ public class XPEDXWCUtils {
 		return 0;
 	}
 	
-	public static HashMap<String, String> getSkuTypesForQuickAdd_prev(IWCContext wcContext)
-	{
-		HashMap<String, String> skuTypeList = new LinkedHashMap<String, String>();
-		String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
-		skuTypeList.put("1", wcContext.getStorefrontId()+XPEDXConstants.XPEDX_ITEM_LABEL);
-		if(useCustSku!=null && useCustSku.length()>0)
-		{
-			//The keys in this Hashmap are being read for validating the quick-add section.
-			if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM))
-				skuTypeList.put("2", XPEDXConstants.MANUFACTURER_ITEM_LABEL);
-			else if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM))
-				skuTypeList.put("3", XPEDXConstants.CUSTOMER_ITEM_LABEL);
-			else if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM))
-				skuTypeList.put("4", XPEDXConstants.MPC_ITEM_LABEL);
-		}
-		return skuTypeList;
-	}
-	
 	/*
 	 * Bulk UI changes: 
 	 * Manufacturing Item number is no longer deemed as unique so removed that for search in QuickAdd.
 	 * Biz decision taken and modifications done accordingly.
+	 * EB-466 Changes. Removed the logic for MPC and Manufacturing Item code.
 	 */
 	public static HashMap<String, String> getSkuTypesForQuickAdd(IWCContext wcContext)
 	{
 		HashMap<String, String> skuTypeList = new LinkedHashMap<String, String>();
-		String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
+		String customerItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		
 		skuTypeList.put("1", wcContext.getStorefrontId()+XPEDXConstants.XPEDX_ITEM_LABEL);
-		if(useCustSku!=null && useCustSku.length()>0)
-		{
-			//The keys in this Hashmap are being read for validating the quick-add section.
-			/*if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM))
-				skuTypeList.put("2", XPEDXConstants.MANUFACTURER_ITEM_LABEL);
-			else */
-			if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM))
-				skuTypeList.put("3", XPEDXConstants.CUSTOMER_ITEM_LABEL);
-			else if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM))
-				skuTypeList.put("4", XPEDXConstants.MPC_ITEM_LABEL);
+		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+			skuTypeList.put("2", XPEDXConstants.CUSTOMER_ITEM_LABEL);
 		}
 		return skuTypeList;
 	}
