@@ -263,6 +263,12 @@
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
 											<s:hidden id="custUOM_%{#orderLineKey}" name="custUOM" value="%{#customerUOM}" />
+											 <s:if test='%{#customerUOM.length()>0}'>
+												<s:hidden name="orderLineBaseQtyforCustUom" id="orderLineBaseQtyforCustUom_%{#orderLineKey}" value="%{#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|'))}" />
+											</s:if>
+											<s:else>
+												<s:hidden name="orderLineBaseQtyforCustUom" id="orderLineBaseQtyforCustUom_%{#orderLineKey}" value="0" />
+											</s:else>	
 									</s:if>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
