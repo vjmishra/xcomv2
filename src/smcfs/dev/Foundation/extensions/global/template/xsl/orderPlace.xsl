@@ -400,10 +400,20 @@
 
                  
 
-                  <OrderedQtyInBase>
-                     <!--<xsl:value-of select="Extn/@ExtnBaseOrderedQty" />-->
-                     <xsl:value-of select="@OrderedQty"/>
-                  </OrderedQtyInBase>
+                 
+                  	  <xsl:choose>
+                       	<xsl:when test="Extn/@ExtnBaseOrderedQty = '0'"> 
+                       	 <OrderedQtyInBase>                      	      
+                       	    <xsl:value-of select="@OrderedQty"/>
+                       	  </OrderedQtyInBase>
+                       	</xsl:when>                         	
+                       	<xsl:otherwise>
+                       	 <OrderedQtyInBase>     
+                       	     <xsl:value-of select="Extn/@ExtnBaseOrderedQty"/>
+                       	  </OrderedQtyInBase>
+                       	</xsl:otherwise>
+                 	 </xsl:choose>                   
+                  
 
                   <PriceUnitOfMeasure>
                      <xsl:value-of select="Extn/@ExtnPricingUOM" />
