@@ -1,20 +1,17 @@
 package com.xpedx.nextgen.item;
 
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import au.com.bytecode.opencsv.CSVReader;
-
-import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
@@ -22,14 +19,17 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
+import org.apache.log4j.Logger;
+
 
 public class XPXItemAssociationService  implements YIFCustomApi {
 	
 	private static YIFApi api = null;
 	private static Properties props;
 	 String[] maxItemsIds;
-	 private static String[] assoItemIds;
+
 	/**
      * Reads text from a file line by line
      */
@@ -37,28 +37,29 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 		// TODO Auto-generated method stub
 		this.props = arg0;
 	}
-	
+ 
+   private static final Logger LOG = Logger.getLogger(XPXItemAssociationService.class);
 	
 	public void generateAssociation(YFSEnvironment env, Document inputDoc){
 		try
 		{
+			YFCDate EffectiveFromDt = new YFCDate();
+			YFCDate EffectiveToDt =  new YFCDate();
+			EffectiveToDt.setYear((EffectiveToDt.getYear()+20));
 			Element inputElem=inputDoc.getDocumentElement();
-			String effectiveFrom=inputElem.getAttribute("EffectiveFrom");
-			String effectiveTo=inputElem.getAttribute("EffectiveTo");
+			String effectiveFrom=EffectiveFromDt.getString();
+			LOG.info("effectiveFrom"+effectiveFrom);
+			String effectiveTo=EffectiveToDt.getString();
+			LOG.info("effectiveTo"+effectiveTo);
 			String associationtype=inputElem.getAttribute("AssociationType");
 			String organizationCode=inputElem.getAttribute("OrganizationCode");
-			
-			//File Read Code Start
-			System.out.println("Xml Coming From API Tester"+SCXmlUtil.getString(inputDoc));
-			
+			//LOG.info("Xml Coming From API Tester"+SCXmlUtil.getString(inputDoc));
 			//For calling  getCompleteItemList API inorder to get ItemKey of the items
 			YFCDocument inputDocument = YFCDocument.createDocument("Item");
 			YFCElement documentElement = inputDocument.getDocumentElement();
 			documentElement.setAttribute("CallingOrganizationCode",organizationCode);
 			YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
 			YFCElement complexQueryOrElement = documentElement.createChild("Or");
-			
-			
 				String fileName = inputElem.getAttribute("FilePath");//"D:/Kubra_Doc/Jira/White-Sprint/EB-317-DataloadScriptForACUItems/Book1.csv";
 				CSVReader reader = new CSVReader(new FileReader(fileName));
 				String[] nextLine;
@@ -66,10 +67,9 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 				
 				Map<String,String> itemMap=new HashMap<String,String>();
 				while ((nextLine = reader.readNext()) != null) {
-					System.out.println("In while loop");
 					i++;
 					if (i > 0){
-						System.out.println("In IF Condn");
+						LOG.info("Item Records:"+nextLine[0]);
 						if(!YFCCommon.isVoid(nextLine[1]))
 						{
 							itemMap.put(nextLine[0], nextLine[1]);
@@ -77,7 +77,6 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 							expElement.setAttribute("Name", "ItemID");
 							expElement.setAttribute("Value", nextLine[0]);							
 							complexQueryOrElement.appendChild((YFCNode)expElement);
-							
 							YFCElement expElement1 = documentElement.createChild("Exp");
 							expElement1.setAttribute("Name", "ItemID");
 							expElement1.setAttribute("Value", nextLine[1]);							
@@ -95,7 +94,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 		env.setApiTemplate("getCompleteItemList", "<ItemList><Item ItemID='' ItemKey='' /> </ItemList>");
 		Document outputDoc = api.invoke(env, "getCompleteItemList", inputDocument.getDocument());
 		Element wElement = outputDoc.getDocumentElement();
-		System.out.println(SCXmlUtil.getString(wElement));
+		//LOG.info(SCXmlUtil.getString(wElement));
 		HashMap<String, String> itemKeyMap=  new HashMap<String, String>();
 		if(wElement!= null){
 			
@@ -119,32 +118,43 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 		{
 			String associatedItem=itemMap.get(item);
 			String itemKey=itemKeyMap.get(item);
-			String associatedItemKey=itemKeyMap.get(associatedItem);
-			YFCDocument associationinputDocument = YFCDocument.createDocument("AssociationList");
-			YFCElement associationsinputElem=associationinputDocument.getDocumentElement();
-			associationsinputElem.setAttribute("ItemID", item);
-			associationsinputElem.setAttribute("ItemKey", itemKey);
-			associationsinputElem.setAttribute("OrganizationCode", organizationCode);
-			
-			YFCElement associationinputElem=associationinputDocument.createElement("Association");
-			associationinputElem.setAttribute("Action", "Create");
-			associationinputElem.setAttribute("AssociationType", associationtype);
-			associationinputElem.setAttribute("EffectiveFrom", effectiveFrom);
-			associationinputElem.setAttribute("EffectiveTo", effectiveTo);
-			associationsinputElem.appendChild(associationinputElem);
-			YFCElement ItemElem=associationinputDocument.createElement("Item"); 
-			ItemElem.setAttribute("ItemID", associatedItem);
-			ItemElem.setAttribute("ItemKey", associatedItemKey);
-			associationinputElem.appendChild(ItemElem);
-			
-			 api.invoke(env, "modifyItemAssociations", associationinputDocument.getDocument());
-			System.out.println("!!!!!!!!!!!!We are done!!!!!!!!!!!!!!!!!!!");
-		
-		}
+			if(itemKey!=null && itemKey.length() > 0){
+                String associatedItemKey=itemKeyMap.get(associatedItem);
+                if(associatedItemKey!=null && associatedItemKey.length() > 0){
+					YFCDocument associationinputDocument = YFCDocument.createDocument("AssociationList");
+					YFCElement associationsinputElem=associationinputDocument.getDocumentElement();
+					associationsinputElem.setAttribute("ItemID", item);
+					associationsinputElem.setAttribute("ItemKey", itemKey);
+					associationsinputElem.setAttribute("OrganizationCode", organizationCode);
+					
+					YFCElement associationinputElem=associationinputDocument.createElement("Association");
+					associationinputElem.setAttribute("Action", "Create");
+					associationinputElem.setAttribute("AssociationType", associationtype);
+					associationinputElem.setAttribute("EffectiveFrom", effectiveFrom);
+					associationinputElem.setAttribute("EffectiveTo", effectiveTo);
+					associationsinputElem.appendChild(associationinputElem);
+					YFCElement ItemElem=associationinputDocument.createElement("Item"); 
+					ItemElem.setAttribute("ItemID", associatedItem);
+					ItemElem.setAttribute("ItemKey", associatedItemKey);
+					associationinputElem.appendChild(ItemElem);
+					
+					 api.invoke(env, "modifyItemAssociations", associationinputDocument.getDocument());
+					 LOG.info("Item Associations Completed for Item "+item +" Associated Item "+associatedItem);
+                }
+			 else{
+				 LOG.info(associatedItem+" Associatied Item Not Found");
+			 	}
+			}
+			 else{
+				 LOG.info(item+" Item Not Found");
+				 }
+
+			}
+				LOG.info("itemsSet Size is "+ itemsSet.size());
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+				e.printStackTrace();
 		}
 		
 	}
