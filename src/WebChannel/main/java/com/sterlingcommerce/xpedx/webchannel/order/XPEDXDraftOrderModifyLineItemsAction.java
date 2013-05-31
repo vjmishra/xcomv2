@@ -57,6 +57,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	private String modifyOrderLines="false";
 	public String draftOrderFlag;
 	public String draftOrderError;
+	private boolean isOUErrorPage=false;
 
 	public String getDraftOrderError() {
 		return draftOrderError;
@@ -176,6 +177,18 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                           }
                     }
               }
+              YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+    			for(YFCElement errorEle:errorNodeList)
+    			{
+    				String errorCode=errorEle.getAttribute("ErrorCode");
+    				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+    				{
+    					isOUErrorPage=true;
+    					break;
+    				}
+    			}
+    			if(isOUErrorPage)
+    				return "OUErrorPage"; 
 			  //XBT 248
               if ("true".equals(isComingFromCheckout)){
             		  retVal= "checkoutError"; 

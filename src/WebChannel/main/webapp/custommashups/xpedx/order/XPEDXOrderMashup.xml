@@ -1635,7 +1635,7 @@
 				<Order OrderHeaderKey="" CustomerContactID="" OrderType="" ShipToID=""
 					OrderNo="" EnterpriseCode="" OrderName="" DraftOrderFlag="" Status=""
 					OrderDate="" MaxOrderStatus="" CustomerPONo="" HasPendingChanges="" 
-					PendingChangesUserID="" ReqDeliveryDate="" SellerOrganizationCode="">
+					PendingChangesUserID="" ReqDeliveryDate="" SellerOrganizationCode="" Modifyts="">
 					<Extn />
 					<PriceInfo Currency=""/>
 					<Instructions>

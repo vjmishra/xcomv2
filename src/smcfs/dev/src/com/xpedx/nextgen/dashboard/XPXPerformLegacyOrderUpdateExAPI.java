@@ -392,7 +392,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					// To Calculate the Price Information For The FO.
 					setExtendedPriceInfo(env, rootEle, false);
 					filterAttributes(rootEle, false);					
-					
+					YFCElement pendignElement=rootEle.createChild("PendingChanges");
+					pendignElement.setAttribute("IgnorePendingChanges", "Y");
+					rootEle.appendChild(pendignElement);
 					if(log.isDebugEnabled()){
 						log.debug("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:" + rootEle.getString());
 					}
@@ -452,6 +454,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					if(log.isDebugEnabled()){
 						log.debug("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:" + chngcOrderEle0.getString());
 					}
+					YFCElement pendignElement=chngcOrderEle0.createChild("PendingChanges");
+					pendignElement.setAttribute("IgnorePendingChanges", "Y");
+					chngcOrderEle0.appendChild(pendignElement);
 					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderEx", chngcOrderEle0.getOwnerDocument().getDocument());
 					if (tempDoc == null) {
 						throw new Exception("Service XPXChangeOrder Failed to Update Customer Order!");
@@ -602,7 +607,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if (instElement != null) {
 					setInstructionKeysOnException(inXMLEle, fOrderEle);
 				}
-				
+				YFCElement pendignElement=inXMLEle.createChild("PendingChanges");
+				pendignElement.setAttribute("IgnorePendingChanges", "Y");
+				inXMLEle.appendChild(pendignElement);
 				XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", inXMLEle.getOwnerDocument().getDocument());
 
 				// To update the status of the order.
@@ -762,6 +769,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						if(log.isDebugEnabled()){
 							log.debug("XPXChangeOrder[Update Order Keys]-InXML:" + chngOrderEle.getString());
 						}
+						YFCElement pendignElement=chngOrderEle.createChild("PendingChanges");
+						pendignElement.setAttribute("IgnorePendingChanges", "Y");
+						chngOrderEle.appendChild(pendignElement);
 						XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngOrderEle.getOwnerDocument().getDocument());
 					}
 				}
@@ -1444,6 +1454,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if(log.isDebugEnabled()){
 			log.debug("XPXChangeOrder_CO-InXML:" + chngcOrderEle.getString());
 			}
+			YFCElement pendignElement=chngcOrderEle.createChild("PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
+			chngcOrderEle.appendChild(pendignElement);
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
 				if(log.isDebugEnabled()){
@@ -1481,7 +1494,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if(log.isDebugEnabled()){
 				log.debug("XPXChangeOrder_FO-InXML:" + chngfOrderEle.getString());
 			}
-			
+			YFCElement pendignElement=chngfOrderEle.createChild("PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
+			chngfOrderEle.appendChild(pendignElement);
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngfOrderEle.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
 				fOrderEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
@@ -1522,6 +1537,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if(log.isDebugEnabled()){
 				log.debug("XPXChangeOrder_CO[LPC:D]-InXML:" + chngcOrderEle1.getString());
 			}
+			YFCElement pendignElement=chngcOrderEle1.createChild("PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
+			chngcOrderEle1.appendChild(pendignElement);
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle1.getOwnerDocument().getDocument());
 			if (tempDoc != null) {
 				cOrderEle = YFCDocument.getDocumentFor(tempDoc).getDocumentElement();
@@ -2700,6 +2718,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if(log.isDebugEnabled()){
 		log.debug("XPXChangeOrder_CO-InXML:" + chngcOrdEle.getString());
 		}
+		YFCElement pendignElement=chngcOrdEle.createChild("PendingChanges");
+		pendignElement.setAttribute("IgnorePendingChanges", "Y");
+		chngcOrdEle.appendChild(pendignElement);
 		// Change order call to update the customer order.
 		tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngcOrdEle.getOwnerDocument().getDocument());
 		if (tempDoc != null) {
@@ -6193,7 +6214,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if (log.isDebugEnabled()) {
 				log.debug("XPXChangeOrder_FO-InXML2:" + fOrderInXMLEle2.getString());
 			}
-			
+			Element pendignElement=fOrderInXML2.createElement("PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
+			fOrderInXML2.getDocumentElement().appendChild(pendignElement);
 			// Call Change Order API To Cancel The Order Lines.
 			Document changeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", fOrderInXML2);	
 		}	

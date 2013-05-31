@@ -1,12 +1,15 @@
 package com.xpedx.nextgen.order;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -21,10 +24,12 @@ import com.xpedx.nextgen.priceAndAvailabilityService.XPXItem;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.yfc.date.YTimestamp;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSUserExitException;
 import com.yantra.yfs.japi.ue.YFSBeforeChangeOrderUE;
 
 public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
@@ -38,7 +43,44 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 	private boolean isCreateLine=false;
 	String isCom=null;
 	private static YIFApi api = null;
-		public Document beforeChangeOrder(YFSEnvironment env, Document outputDoc)			
+	
+	private boolean isOrderUpdateDone( YFSEnvironment env, Document outputDoc) 
+	{
+		try
+		{
+			Element _orderElement=outputDoc.getDocumentElement();
+			String orderHeaderKey=_orderElement.getAttribute("OrderHeaderKey");
+			YFCDocument inputDocument = YFCDocument.createDocument("Order");
+			YFCElement inputElement = inputDocument.getDocumentElement();
+			inputElement.setAttribute("OrderHeaderKey", orderHeaderKey);
+			Date changedDate=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(outputDoc.getDocumentElement().getAttribute("Modifyts"));
+			String draftOrderFlag=outputDoc.getDocumentElement().getAttribute("DraftOrderFlag");
+			api = YIFClientFactory.getInstance().getApi();
+			
+			 if("N".equalsIgnoreCase(draftOrderFlag))
+			 {
+					env.setApiTemplate(
+							"getOrderList",
+							SCXmlUtil
+							.createFromString(""+"<OrderList>"
+									+ "<Order  SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty='' Modifyts ='' >"
+									+ "</Order></OrderList>"));
+					Document orderListDocument = api.invoke(env, "getOrderList",
+							inputDocument.getDocument());
+					Element orderElementWithoutPending=(Element)orderListDocument.getDocumentElement().getElementsByTagName("Order").item(0);
+					Date dbDate=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(orderElementWithoutPending.getAttribute("Modifyts"));
+					
+				 
+					return dbDate.after(changedDate);
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("Error while getting OrderList and order Document for pendign changes");
+		}
+		return false;
+		}
+		public Document beforeChangeOrder(YFSEnvironment env, Document outputDoc) throws YFSUserExitException			
 			{
 			if(log.isDebugEnabled()){
 			log.debug("Inside Before Change Order UE");
@@ -78,10 +120,8 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						isPnACall="true";
 						isCom="true";
 					}
-
 				}
 			}
-			
 			NodeList promotions=outputOrderElement.getElementsByTagName("Promotion");
 			boolean isPromotion=(promotions !=null && promotions.getLength()>0);
 			ArrayList<Element> orderLineList=SCXmlUtil.getElements(outputOrderElement,"OrderLines/OrderLine");
@@ -92,6 +132,23 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			if(isDiscountCalculate !=null  && "true".equals(isDiscountCalculate) 
 					|| isPnACall !=null && "true".equalsIgnoreCase(isPnACall))
 			{
+				
+				if(	isOrderUpdateDone(env,outputDoc))
+				{
+					throw new YFSUserExitException("Exception While Applying cheanges .Order Update was finished before you update");
+				}
+				Element pendingChangesElem=(Element)outputDoc.getDocumentElement().getElementsByTagName("PendingChanges").item(0);
+				if(pendingChangesElem != null )
+				{
+					String recordChanges=pendingChangesElem.getAttribute("RecordPendingChanges");
+					if("Y".equalsIgnoreCase(recordChanges))
+					{
+						YTimestamp todayDate=YTimestamp.newTimestamp();
+						//Date d=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").;
+						outputDoc.getDocumentElement().setAttribute("Modifyts", todayDate.getString());
+						outputDoc.getDocumentElement().setAttribute("DraftOrderFlag", "N");
+					}
+				}
 				try
 				{
 					populatePrimeLineNum(outputDoc.getDocumentElement());
@@ -611,7 +668,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 		private Element getOrderElement(YFSEnvironment env,String isDraftOrder,YFCDocument inputDocument) throws Exception 
 		{
 			api = YIFClientFactory.getInstance().getApi();
-			if("N".equals(isDraftOrder))
+			if( "N".equals(isDraftOrder))
 			{
 				env.setApiTemplate(
 						"getCompleteOrderDetails",

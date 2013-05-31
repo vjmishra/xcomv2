@@ -478,6 +478,10 @@ function showSplitDiv(divId)
                  <s:if test='#_action.getResetWithError() == "Y"'>
                 	<h5 align="center"><b><font color="red">Unable to apply changes to your order. Please try again later or contact customer service.</font></b></h5>
                 </s:if>
+                <s:if test='%{isErrorMessage == "Y"}'>
+                	<h5 align="center"><b><font color="red">Your order has been updated by xpedx. Please review the order detail and then make your changes.</font></b></h5>
+                </s:if>
+                
                 <!-- begin top section -->
                 <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
                 <s:form namespace="/order" method="post"  id= "postOrderForm" name='postOrderForm'>
@@ -515,7 +519,7 @@ function showSplitDiv(divId)
 				</s:if>
 				<s:set name="test11" value="%{#_action.isFOCreated()}"/>	
 				<s:hidden name="test1" value='%{#test11}'/>
-				<s:if test="!#isEstimator">
+				<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
@@ -1538,7 +1542,7 @@ function showSplitDiv(divId)
 				</s:if>
 				</s:if>
 			</s:if>
-			<s:if test="!#isEstimator">
+			<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>

@@ -5,13 +5,17 @@
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,6 +27,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
@@ -265,6 +270,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		 		}
 				
 				Document orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				if(isOrderUpdateDone(orderDetailDocument))
+					return "OUErrorPage";
 				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
 				setOrderHeaderKey(SCXmlUtil.getAttribute(orderDetailDocument.getDocumentElement(), "OrderHeaderKey"));
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
@@ -445,6 +452,41 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			return FAILURE;
 		}
 	}
+	
+	private boolean isOrderUpdateDone( Document outputDoc) 
+	{
+		try
+		{
+			Element _orderElement=outputDoc.getDocumentElement();
+			String orderHeaderKey=_orderElement.getAttribute("OrderHeaderKey");
+			YFCDocument inputDocument = YFCDocument.createDocument("Order");
+			YFCElement inputElement = inputDocument.getDocumentElement();
+			inputElement.setAttribute("OrderHeaderKey", orderHeaderKey);
+			Date changedDate=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(outputDoc.getDocumentElement().getAttribute("Modifyts"));
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+			ISCUITransactionContext scuiTransactionContext = wcContext.getSCUIContext().getTransactionContext(true);
+			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+			.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			env.setApiTemplate(
+							"getOrderList",
+							SCXmlUtil
+							.createFromString(""+"<OrderList>"
+									+ "<Order  SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty='' Modifyts ='' >"
+									+ "</Order></OrderList>"));
+					Document orderListDocument = api.invoke(env, "getOrderList",
+							inputDocument.getDocument());
+					Element orderElementWithoutPending=(Element)orderListDocument.getDocumentElement().getElementsByTagName("Order").item(0);
+					Date dbDate=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(orderElementWithoutPending.getAttribute("Modifyts"));
+					
+				 
+					return dbDate.after(changedDate);
+		}
+		catch(Exception e)
+		{
+			log.error("Error while getting OrderList and order Document for pendign changes");
+		}
+		return false;
+		}
 	private Document createCustomerDocument()
 	{
 		shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);

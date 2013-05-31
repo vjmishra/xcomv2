@@ -110,11 +110,18 @@
 		        	var draftErr = response.responseText;
 		            var draftErrDiv = document.getElementById("errorMessageDiv");
 		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-		        {			refreshWithNextOrNewCartInContext();
+		            {		refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 		                    Ext.Msg.hide();
 		                	myMask.hide();
-		        }
+		        	}
+		            else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+		             {
+						 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+			        	 var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+			        	 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+			        	 window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+		             }
 		            else if(draftErr.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
 			        {
 		            	refreshMiniCartLink();
@@ -266,6 +273,7 @@
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = '';
+	            		
 	            		// start of XB 214 BR1
 	            		var qty = document.getElementById("qtys_"+myItemsKey);
 		            	var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+myItemsKey);

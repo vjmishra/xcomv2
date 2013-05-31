@@ -55,11 +55,14 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
+import com.yantra.yfs.japi.YFSUserExitException;
 /**
  * @author rugrani/Manohar/Manoj
  */
@@ -113,6 +116,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				callChangeOrder();
 				if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
 					return draftFlagError;
+				}
+				if(isOUErrorPage == true)
+				{
+					return "OUErrorPage";
 				}
 				
 			} else {				
@@ -856,7 +863,31 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
                           }
                     }
               }
+              YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+    			for(YFCElement errorEle:errorNodeList)
+    			{
+    				String errorCode=errorEle.getAttribute("ErrorCode");
+    				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+    				{
+    					isOUErrorPage=true;
+    					break;
+    				}
+    			}
         }
+		catch(YFCException e)
+		{
+			YFCElement errorXML=e.getXML().getDocumentElement();
+			YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+			for(YFCElement errorEle:errorNodeList)
+			{
+				String errorCode=errorEle.getAttribute("ErrorCode");
+				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+				{
+					isOUErrorPage=true;
+					break;
+				}
+			}
+		}
 		catch(Exception e)
 		{
 			LOG.error("Error while calling change order to Update the price from PNA");
@@ -1802,6 +1833,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			Element outputEl = (Element) outputMap.get("draftOrderGetCustomerLineFields");
 			Element customerOrganizationExtnEle = XMLUtilities.getChildElementByName(outputEl, "Extn");
 			envCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnEnvironmentCode");
+			useCustSku = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnUseCustSKU");
 			companyCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnCompanyCode");
 			legacyCustomerNumber = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnLegacyCustNumber");
 			shipToCustomer.setExtnEnvironmentCode(envCode);
@@ -2444,6 +2476,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
 	private String draftOrderList;
 	public String draftOrderFail="false";
+	private boolean isOUErrorPage=false;
 	
 	protected HashMap useOrderMultipleMapFromSourcing;
 	public HashMap getUseOrderMultipleMapFromSourcing() {

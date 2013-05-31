@@ -857,6 +857,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected boolean isCSRReview = false;
 	protected boolean isFOCSRReview = false;
 	protected String resetWithError = "N"; //added for XBT-109
+	private String isErrorMessage;
+	
 	/*
 	JIRA 3999 Start -Set and Get method for pending hold status and reson text
 	*/
@@ -864,6 +866,15 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected String reasonText = "";
 	protected String pendingHoldStatus = "";
 	
+	
+	public String getIsErrorMessage() {
+		return isErrorMessage;
+	}
+
+	public void setIsErrorMessage(String isErrorMessage) {
+		this.isErrorMessage = isErrorMessage;
+	}
+
 	public boolean isFOCSRReview() {
 		return isFOCSRReview;
 	}

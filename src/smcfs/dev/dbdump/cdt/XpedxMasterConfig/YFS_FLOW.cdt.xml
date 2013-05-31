@@ -4455,6 +4455,17 @@
     Modifyts="2013-04-16T02:07:11-04:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="ORDER_FULFILLMENT"
     SystemDefined="N" TransportTypeKey="LOCAL"/>
+<<<<<<< HEAD
+=======
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-05-10T01:47:49-04:00" Createuserid="admin"
+    FlowGroupName="DefaultAgentGroup" FlowKey="201305100147492970459"
+    FlowName="CATALOG_INDEX_BUILD_TRIGGERED" FlowType="01"
+    GraphUIKey="AgentGraphUI" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="Y" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-05-10T01:47:49-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+>>>>>>> v.2.0.6.4
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"

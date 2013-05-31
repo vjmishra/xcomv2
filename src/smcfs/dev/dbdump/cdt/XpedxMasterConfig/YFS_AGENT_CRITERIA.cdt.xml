@@ -756,6 +756,18 @@
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2013-04-16T02:07:11-04:00" Modifyuserid="admin"
     ServerKey="201304160054582969134" TransactionKey="STATUSAUDITPRG"/>
+<<<<<<< HEAD
+=======
+<AgentCriteria AgentCriteriaId="CATALOG_INDEX_BUILD_TRIGGERED"
+    AgentCriteriaKey="201305100147502970470"
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-05-10T01:47:50-04:00" Createuserid="admin"
+    FlowKey="201305100147492970459" Lockid="0"
+    MessageXml="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;Attributes>&#xa;    &lt;Attribute DataType=&quot;Text-20&quot; DisplayName=&quot;Action&quot; Modifiable=&quot;N&quot;&#xa;        Name=&quot;Action&quot; Value=&quot;Get&quot;/>&#xa;    &lt;Attribute DataType=&quot;Integer4AgentCriteria&quot;&#xa;        DisplayName=&quot;Number of Records To Buffer&quot; Modifiable=&quot;Y&quot;&#xa;        Name=&quot;NumRecordsToBuffer&quot; Value=&quot;0&quot;/>&#xa;    &lt;Attribute DataType=&quot;Key&quot; DisplayName=&quot;Organization Code&quot;&#xa;        Modifiable=&quot;Y&quot; Name=&quot;OrganizationCode&quot; Value=&quot;xpedx&quot;/>&#xa;    &lt;Attribute DataType=&quot;Boolean&quot; DisplayName=&quot;CollectPendingJobs&quot;&#xa;        Modifiable=&quot;Y&quot; Name=&quot;CollectPendingJobs&quot; Value=&quot;Y&quot;/>&#xa;    &lt;Attribute DataType=&quot;Integer4AgentCriteria&quot;&#xa;        DisplayName=&quot;NumberOfMessages&quot; Modifiable=&quot;Y&quot;&#xa;        Name=&quot;NumberOfMessages&quot; Value=&quot;60&quot;/>&#xa;    &lt;Attribute DataType=&quot;Text-200&quot; DisplayName=&quot;IncrementalBuildFlag&quot;&#xa;        Modifiable=&quot;Y&quot; Name=&quot;IncrementalBuildFlag&quot; Value=&quot;N&quot;/>&#xa;    &lt;Attribute DataType=&quot;Text-40&quot; DisplayName=&quot;CategoryDomain&quot;&#xa;        Modifiable=&quot;Y&quot; Name=&quot;CategoryDomain&quot; Value=&quot;MasterCatalog&quot;/>&#xa;    &lt;Attribute DataType=&quot;Boolean&quot; DisplayName=&quot;AutoActivate&quot;&#xa;        Modifiable=&quot;Y&quot; ModifyFlag=&quot;Y&quot; Name=&quot;AutoActivate&quot; Value=&quot;N&quot;/>&#xa;    &lt;Attribute DataType=&quot;Boolean&quot;&#xa;        DisplayName=&quot;AutoInsertSearchIndexTrigger&quot; Modifiable=&quot;Y&quot;&#xa;        Name=&quot;AutoInsertSearchIndexTrigger&quot; Value=&quot;Y&quot;/>&#xa;&lt;/Attributes>&#xa;"
+    Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-05-10T01:47:50-04:00" Modifyuserid="admin"
+    ServerKey="2010091021183455464" TransactionKey="CATALOG_INDEX_BUILD"/>
+>>>>>>> v.2.0.6.4
 <AgentCriteria AgentCriteriaId="ACCEPT_WAVE"
     AgentCriteriaKey="ACCEPT_WAVE" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:58-04:00" Createuserid="SYSTEM"
