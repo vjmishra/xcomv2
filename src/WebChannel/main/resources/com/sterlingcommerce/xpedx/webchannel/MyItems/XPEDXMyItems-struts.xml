@@ -211,6 +211,7 @@
 		<result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
 		</result>
 		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
+		<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>
 	</action>
 	              
 	<action name="XPEDXMyItemsDetailsGetShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsGetShareListAction">
@@ -311,6 +312,7 @@
 		<result name="error">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
 		</result>
 		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
+		<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>
 	</action>
 
   </package>
