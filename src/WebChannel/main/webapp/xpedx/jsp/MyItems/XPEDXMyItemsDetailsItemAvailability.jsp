@@ -194,7 +194,7 @@
 							<s:set name="jsonImmediate" value="%{'0'}"></s:set>
 							<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonImmediate)" />
 						</s:else><s:property value="#jsonUOMDesc" />&nbsp;
-						 available today at <s:property value="%{#reqCustomerUOM}"/><s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></td>
+						 available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></td>
 					</tr>
 					<s:hidden name="price_%{#id}" value="%{#jsonMyPrice}" />
 					<s:hidden name='pricingUom_%{#id}' value="%{#jsonPricingUOM}" />
