@@ -18,6 +18,7 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -38,7 +39,8 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 		this.props = arg0;
 	}
  
-   private static final Logger LOG = Logger.getLogger(XPXItemAssociationService.class);
+  private static YFCLogCategory LOG = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+   
 	
 	public void generateAssociation(YFSEnvironment env, Document inputDoc){
 		try
@@ -69,7 +71,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 				while ((nextLine = reader.readNext()) != null) {
 					i++;
 					if (i > 0){
-						LOG.info("Item Records:"+nextLine[0]);
+						LOG.debug("Item Records:"+nextLine[0]);
 						if(!YFCCommon.isVoid(nextLine[1]))
 						{
 							itemMap.put(nextLine[0], nextLine[1]);
