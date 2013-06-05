@@ -107,8 +107,8 @@
 			}
 			ul {
 				padding-left: 20px;
-				margin-top:-2px;
-				margin-bottom:-1px;
+				margin-top:-3px;
+				margin-bottom:-3px;
 			}
 			div {
 				border: 1px solid #ccc;
