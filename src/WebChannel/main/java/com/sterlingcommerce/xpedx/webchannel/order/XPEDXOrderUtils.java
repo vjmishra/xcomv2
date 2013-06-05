@@ -812,6 +812,10 @@ public class XPEDXOrderUtils {
 								}
 								if(!YFCUtils.isVoid(convStr)){
 									long convFactorLong = Math.round(Double.parseDouble(convStr));
+								//Fixed for issue of displaying 0 as conversion factor in cart page ,quick add section
+									if(convFactorLong==0){
+										convFactorLong = 1;
+									}
 									wUOMsAndConFactors.put(UnitOfMeasure
 										.getTextContent(), Long.toString(convFactorLong));
 								}
