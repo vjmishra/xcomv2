@@ -216,6 +216,9 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 						}
 						orderedQtyForCustUom.add(Long.toString(extnBaseOrderedQty));
 					}
+					else{
+						orderedQtyForCustUom.add("0");
+					}
 				}
 				else{
 					orderedQtyForCustUom.add("0");
