@@ -97,6 +97,9 @@ public class XPEDXOrderUtils {
 	
 	//This Map will contain item ids and customer UOM for that item if it exist
 	public static LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();
+	//This Map will contain item ids and customer UOM with conversionfactors as pipe separated for that item if it exist, else blank
+	public static LinkedHashMap<String, String> itemCustomerUomConvFactHashMap = new LinkedHashMap<String, String>();
+	
 	public static LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
 	public static Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	//conversion UOM map for single item
@@ -111,6 +114,15 @@ public class XPEDXOrderUtils {
 
 	public static void setStrCustomerUOM(String strCustomerUOM) {
 		XPEDXOrderUtils.strCustomerUOM = strCustomerUOM;
+	}
+
+	public static LinkedHashMap<String, String> getItemCustomerUomConvFactHashMap() {
+		return itemCustomerUomConvFactHashMap;
+	}
+
+	public static void setItemCustomerUomConvFactHashMap(
+			LinkedHashMap<String, String> itemCustomerUomConvFactHashMap) {
+		XPEDXOrderUtils.itemCustomerUomConvFactHashMap = itemCustomerUomConvFactHashMap;
 	}
 
 	public static LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
@@ -992,6 +1004,7 @@ public class XPEDXOrderUtils {
 			ArrayList<String> ItemID, String StoreFrontID, boolean defaultShowUOMFlag) {
 		
 		itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		itemCustomerUomConvFactHashMap = new LinkedHashMap<String, String>();
 		
 		if(YFCCommon.isVoid(customerID)){
 			log.warn("customerID is NULL. cannot call xpedxUOMList method for anonymous user.");
@@ -1081,6 +1094,7 @@ public class XPEDXOrderUtils {
 														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure
 																.getTextContent(), isCustomerUOMFlg);
 														itemCustomerUomHashMap.put(itemId.getTextContent(),UnitOfMeasure.getTextContent());
+														itemCustomerUomConvFactHashMap.put(itemId.getTextContent(),UnitOfMeasure.getTextContent() + "|"+conversion);
 													}
 													else{
 														wUOMsAndCustomerUOMFlag.put(UnitOfMeasure

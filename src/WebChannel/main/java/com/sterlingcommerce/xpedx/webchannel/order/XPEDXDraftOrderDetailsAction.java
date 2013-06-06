@@ -1728,6 +1728,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
 		itemIdsUOMsMap = (Map<String, Map<String, String>>) XPEDXWCUtils.getObjectFromCache("itemsUOMMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
 		itemAndCustomerUomHashMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
+		itemAndCustomerUomWithConvHashMap = XPEDXOrderUtils.getItemCustomerUomConvFactHashMap();
+		XPEDXWCUtils.setObectInCache("ItemCustomerUomWithConvFactors", itemAndCustomerUomWithConvHashMap);
 		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
 			ArrayList<String> itemIdsList = new ArrayList<String>();
 			itemIdsList.addAll(itemIdsUOMsMap.keySet());
@@ -2425,6 +2427,19 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	
 	//Added for EB-64 - This map contains item ids and their customer UOM , if exist.
 	protected LinkedHashMap<String, String> itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
+	//Added for EB-64 - This map contains item ids and their customer UOM with conversion factor with pipe separated , if exist. eg : 2001020, PC|2
+	protected LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap = new LinkedHashMap<String, String>();
+	public LinkedHashMap<String, String> getItemAndCustomerUomWithConvHashMap() {
+		return itemAndCustomerUomWithConvHashMap;
+	}
+
+
+	public void setItemAndCustomerUomWithConvHashMap(
+			LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap) {
+		this.itemAndCustomerUomWithConvHashMap = itemAndCustomerUomWithConvHashMap;
+	}
+
+
 	public LinkedHashMap<String, String> getItemAndCustomerUomHashMap() {
 		return itemAndCustomerUomHashMap;
 	}

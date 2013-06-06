@@ -1,7 +1,10 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +60,43 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	private String modifyOrderLines="false";
 	public String draftOrderFlag;
 	public String draftOrderError;
-	private boolean isOUErrorPage=false;
+	
+	//Added for EB-464
+	public ArrayList <String> orderedQtyForCustUom;
+	public ArrayList <String> orderLineQuantities;
+	public ArrayList <String> itemUOMs;
+	public ArrayList <String> orderLineItemIDs;
+	
+	public ArrayList<String> getOrderLineItemIDs() {
+		return orderLineItemIDs;
+	}
+
+	public ArrayList<String> getItemUOMs() {
+		return itemUOMs;
+	}
+
+	public ArrayList<String> getOrderLineQuantities() {
+		return orderLineQuantities;
+	}
+
+	public ArrayList<String> getOrderedQtyForCustUom() {
+		return orderedQtyForCustUom;
+	}
+
+	public void setOrderedQtyForCustUom(ArrayList<String> orderedQtyForCustUom) {
+		this.orderedQtyForCustUom = orderedQtyForCustUom;
+	}
+
+	public LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap = new LinkedHashMap<String, String>();
+
+	public LinkedHashMap<String, String> getItemAndCustomerUomWithConvHashMap() {
+		return itemAndCustomerUomWithConvHashMap;
+	}
+
+	public void setItemAndCustomerUomWithConvHashMap(
+			LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap) {
+		this.itemAndCustomerUomWithConvHashMap = itemAndCustomerUomWithConvHashMap;
+	}
 
 	public String getDraftOrderError() {
 		return draftOrderError;
@@ -151,6 +190,39 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 				draftOrderFlag="N";	
 			}
 			//end of XBT 252 & 248
+		//Added for EB-464 - if clicked on checkout button, since its calling change order, setting the value for ExtnBaseOrderQuantity for customer Uoms
+		if ("true".equals(isComingFromCheckout)){
+			itemAndCustomerUomWithConvHashMap = (LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("ItemCustomerUomWithConvFactors");
+			int i= itemUOMs.size();
+			int j= orderLineQuantities.size();
+			String itemid="";
+			orderedQtyForCustUom = new ArrayList();
+			for (int k=0; k<j;k++){
+				itemid = orderLineItemIDs.get(k);
+				BigDecimal orderlineqty = new BigDecimal(orderLineQuantities.get(k));
+				String temp = itemAndCustomerUomWithConvHashMap.get(itemid);
+				if(temp!=null && !temp.equalsIgnoreCase("")){
+					int cnt = temp.indexOf('|');
+					String custUom = temp.substring(0, cnt);
+					String convFactor = temp.substring(cnt+1, temp.length());
+					BigDecimal convFact = new BigDecimal(convFactor);
+					if(custUom.equalsIgnoreCase(itemUOMs.get(k))){
+						BigDecimal res = orderlineqty.multiply(convFact) ;
+						
+						long extnBaseOrderedQty = res.longValue();
+						if(extnBaseOrderedQty==0)
+						{
+							extnBaseOrderedQty =1;
+						}
+						orderedQtyForCustUom.add(Long.toString(extnBaseOrderedQty));
+					}
+				}
+				else{
+					orderedQtyForCustUom.add("0");
+				}
+			}
+		}	
+			
 			Map<String, Element> out = prepareAndInvokeMashups();
 			/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 			outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
