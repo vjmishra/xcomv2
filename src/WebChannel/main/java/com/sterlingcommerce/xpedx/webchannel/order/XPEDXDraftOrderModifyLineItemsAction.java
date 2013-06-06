@@ -60,7 +60,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	private String modifyOrderLines="false";
 	public String draftOrderFlag;
 	public String draftOrderError;
-	
+	private boolean isOUErrorPage=false;
+
 	//Added for EB-464
 	public ArrayList <String> orderedQtyForCustUom;
 	public ArrayList <String> orderLineQuantities;
