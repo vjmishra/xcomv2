@@ -30,7 +30,7 @@
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 <s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
 <s:set name="isReqCustomerUOM" value="%{#_action.getIsPnaReqCustomerUOM()}"></s:set>
-<s:set name="reqCustomerUOM" value="%{#_action.getPnaRequestedUOM()}"></s:set>
+<s:set name="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"></s:set>
 <s:set name="customerUOM" value="#pnALineErrorMessage.get(#itemId)"></s:set>
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>

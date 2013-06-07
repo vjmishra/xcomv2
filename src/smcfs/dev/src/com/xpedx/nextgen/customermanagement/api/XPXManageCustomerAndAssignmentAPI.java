@@ -53,23 +53,27 @@ private static YFCLogCategory log;
 		return null;
 		
 	}
-	private List<YFS_Customer> getCustomer(YFSEnvironment env,NodeList customerAssignmentNodeList)
-	{
-		List<YFS_Customer> yfsCustomerList=new ArrayList<YFS_Customer>();
+	private void getCustomer(YFSEnvironment env,NodeList customerAssignmentNodeList,int counter,List<YFS_Customer> yfsCustomerList)
+	{	
+		//Modified For EB-340
+		if(counter == (customerAssignmentNodeList.getLength()) )
+			return;
 		PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 		pltQryBuilder.setCurrentTable("YFS_CUSTOMER");
-		if(customerAssignmentNodeList != null && customerAssignmentNodeList.getLength() >0)
-			pltQryBuilder.append(" CUSTOMER_ID IN ('"+((Element)customerAssignmentNodeList.item(0)).getAttribute("CustomerID")+"'");
-		for(int i=1;i<customerAssignmentNodeList.getLength();i++)
-		{
-			Element customerAssignmentElement=(Element)customerAssignmentNodeList.item(i);
-			pltQryBuilder.append(", '"+customerAssignmentElement.getAttribute("CustomerID")+"'");
-			
-		}
-		pltQryBuilder.append(")");
-		yfsCustomerList=YFS_CustomerDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
-		return yfsCustomerList;
+		if(customerAssignmentNodeList != null && customerAssignmentNodeList.getLength()  >0)
+			pltQryBuilder.append(" CUSTOMER_ID IN ('"+((Element)customerAssignmentNodeList.item(counter)).getAttribute("CustomerID")+"'");
+			counter=counter+1;
 		
+			for(;counter<customerAssignmentNodeList.getLength();counter++)
+			{
+				Element customerAssignmentElement=(Element)customerAssignmentNodeList.item(counter);
+				pltQryBuilder.append(", '"+customerAssignmentElement.getAttribute("CustomerID")+"'");
+			}
+			//Calling getCustomer() in order to split the query EB-340
+			getCustomer(env,customerAssignmentNodeList,counter,yfsCustomerList);
+	
+		pltQryBuilder.append(")");
+		yfsCustomerList.addAll(YFS_CustomerDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000));
 	}
 	public Document manageCustomerAssignment(YFSEnvironment env,Document inputXML) throws Exception
 	{
@@ -83,7 +87,9 @@ private static YFCLogCategory log;
 	
 	
 		NodeList customerAssignmentNodeList=inputXML.getElementsByTagName("CustomerAssignment");
-		List<YFS_Customer> customerList=getCustomer(env,customerAssignmentNodeList);
+		//Modified For EB-340
+		List<YFS_Customer> customerList=new ArrayList<YFS_Customer>();
+		getCustomer(env,customerAssignmentNodeList,0,customerList);
 		String userId="";
 		String organizationCode="";
 		Map<String,YFS_Customer> customerIDMap=new HashMap<String,YFS_Customer>();

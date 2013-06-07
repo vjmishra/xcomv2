@@ -298,20 +298,12 @@
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2012-06-25T01:05:00-04:00" Modifyuserid="admin"
     MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
-<<<<<<< HEAD
-<EventCondition ActionKey="20120207032938117437" ConditionKey=""
-=======
 <EventCondition ActionKey="20120207032938117437" ConditionKey=" "
->>>>>>> v.2.0.6.4
     Createprogid=".YCPWFRepositoryAPI"
     Createts="2013-04-22T04:35:02-04:00" Createuserid="admin"
     EventConditionKey="201304220435022969510"
     EventKey="ON_ASSIGNMENTS_CHANGE" Lockid="0"
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2013-04-22T04:35:02-04:00" Modifyuserid="admin"
-<<<<<<< HEAD
-    MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType="" Priority="0.00"/>
-=======
     MoreActionsFlag="N" OwnerKey="DEFAULT" OwnerType=" " Priority="0.00"/>
->>>>>>> v.2.0.6.4
 </YFS_EVENT_CONDITIONList>

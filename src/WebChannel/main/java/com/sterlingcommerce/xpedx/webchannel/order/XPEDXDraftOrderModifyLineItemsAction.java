@@ -210,12 +210,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 					if(custUom.equalsIgnoreCase(itemUOMs.get(k))){
 						BigDecimal res = orderlineqty.multiply(convFact) ;
 						
-						long extnBaseOrderedQty = res.longValue();
+						int extnBaseOrderedQty = res.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();						 
+						 
 						if(extnBaseOrderedQty==0)
 						{
 							extnBaseOrderedQty =1;
 						}
-						orderedQtyForCustUom.add(Long.toString(extnBaseOrderedQty));
+						orderedQtyForCustUom.add(Integer.toString(extnBaseOrderedQty));
 					}
 					else{
 						orderedQtyForCustUom.add("0");
