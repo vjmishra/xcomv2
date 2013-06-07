@@ -51,7 +51,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 			Element inputElem=inputDoc.getDocumentElement();
 			String effectiveFrom=EffectiveFromDt.getString();
 			LOG.info("effectiveFrom"+effectiveFrom);
-			//System.out.println("effectiveFrom"+effectiveFrom);
+			System.out.println("effectiveFrom"+effectiveFrom);
 			String effectiveTo=EffectiveToDt.getString();
 			LOG.info("effectiveTo"+effectiveTo);
 			String associationtype=inputElem.getAttribute("AssociationType");
@@ -73,7 +73,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 					i++;
 					if (i > 0){
 						LOG.debug("Item Records:"+nextLine[0]);
-						//System.out.println("Item Records:"+nextLine[0]);
+						System.out.println("Item Records:"+nextLine[0]);
 						if(!YFCCommon.isVoid(nextLine[1]))
 						{
 							itemMap.put(nextLine[0], nextLine[1]);
@@ -96,7 +96,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 
 		api = YIFClientFactory.getInstance().getApi();
 		env.setApiTemplate("getItemList", "<ItemList><Item ItemID='' ItemKey='' /> </ItemList>");
-		Document outputDoc = api.invoke(env, "getCompleteItemList", inputDocument.getDocument());
+		Document outputDoc = api.invoke(env, "getItemList",inputDocument.getDocument());
 		Element wElement = outputDoc.getDocumentElement();
 		//LOG.info(SCXmlUtil.getString(wElement));
 		HashMap<String, String> itemKeyMap=  new HashMap<String, String>();
@@ -144,11 +144,11 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 					
 					 api.invoke(env, "modifyItemAssociations", associationinputDocument.getDocument());
 					 LOG.info("Item Associations Completed for Item "+item +" Associated Item "+associatedItem);
-					 //System.out.println("Item Associations Completed for Item "+item +" Associated Item "+associatedItem);
+					 System.out.println("Item Associations Completed for Item "+item +" Associated Item "+associatedItem);
                 }
 			 else{
 				 LOG.info(associatedItem+" Associatied Item Not Found");
-				// System.out.println(associatedItem+" Associatied Item Not Found");
+				 System.out.println(associatedItem+" Associatied Item Not Found");
 			 	}
 			}
 			 else{
@@ -157,7 +157,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 
 			}
 				LOG.info("itemsSet Size is "+ itemsSet.size());
-				//System.out.println("itemsSet Size is "+ itemsSet.size());
+				System.out.println("itemsSet Size is "+ itemsSet.size());
 		}
 		catch(Exception e)
 		{
