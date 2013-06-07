@@ -18,6 +18,7 @@ import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
+import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCDate;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -38,7 +39,8 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 		this.props = arg0;
 	}
  
-   private static final Logger LOG = Logger.getLogger(XPXItemAssociationService.class);
+  private static YFCLogCategory LOG = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+   
 	
 	public void generateAssociation(YFSEnvironment env, Document inputDoc){
 		try
@@ -49,6 +51,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 			Element inputElem=inputDoc.getDocumentElement();
 			String effectiveFrom=EffectiveFromDt.getString();
 			LOG.info("effectiveFrom"+effectiveFrom);
+			//System.out.println("effectiveFrom"+effectiveFrom);
 			String effectiveTo=EffectiveToDt.getString();
 			LOG.info("effectiveTo"+effectiveTo);
 			String associationtype=inputElem.getAttribute("AssociationType");
@@ -69,7 +72,8 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 				while ((nextLine = reader.readNext()) != null) {
 					i++;
 					if (i > 0){
-						LOG.info("Item Records:"+nextLine[0]);
+						LOG.debug("Item Records:"+nextLine[0]);
+						//System.out.println("Item Records:"+nextLine[0]);
 						if(!YFCCommon.isVoid(nextLine[1]))
 						{
 							itemMap.put(nextLine[0], nextLine[1]);
@@ -88,10 +92,10 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 				documentElement.appendChild(complexQueryElement);
 				
 			
-			//File Read Code End
+			//File Read Code End  //
 
 		api = YIFClientFactory.getInstance().getApi();
-		env.setApiTemplate("getCompleteItemList", "<ItemList><Item ItemID='' ItemKey='' /> </ItemList>");
+		env.setApiTemplate("getItemList", "<ItemList><Item ItemID='' ItemKey='' /> </ItemList>");
 		Document outputDoc = api.invoke(env, "getCompleteItemList", inputDocument.getDocument());
 		Element wElement = outputDoc.getDocumentElement();
 		//LOG.info(SCXmlUtil.getString(wElement));
@@ -140,9 +144,11 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 					
 					 api.invoke(env, "modifyItemAssociations", associationinputDocument.getDocument());
 					 LOG.info("Item Associations Completed for Item "+item +" Associated Item "+associatedItem);
+					 //System.out.println("Item Associations Completed for Item "+item +" Associated Item "+associatedItem);
                 }
 			 else{
 				 LOG.info(associatedItem+" Associatied Item Not Found");
+				// System.out.println(associatedItem+" Associatied Item Not Found");
 			 	}
 			}
 			 else{
@@ -151,6 +157,7 @@ public class XPXItemAssociationService  implements YIFCustomApi {
 
 			}
 				LOG.info("itemsSet Size is "+ itemsSet.size());
+				//System.out.println("itemsSet Size is "+ itemsSet.size());
 		}
 		catch(Exception e)
 		{

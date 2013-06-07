@@ -107,6 +107,8 @@
 			}
 			ul {
 				padding-left: 20px;
+				margin-top:-3px;
+				margin-bottom:-3px;
 			}
 			div {
 				border: 1px solid #ccc;
@@ -573,10 +575,10 @@
 						<td class="align-right">
 							<xsl:if test='$viewPricesFlag ="Y"'>						
 								<xsl:choose>
-									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.0"'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00000"'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:when test='Extn/@ExtnTotalOfShippableTotals =""'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.0"'><span>$0.00</span></xsl:when>
+									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00"'><span>$0.00</span></xsl:when>
+									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00000"'><span>$0.00</span></xsl:when>
+									<xsl:when test='Extn/@ExtnTotalOfShippableTotals =""'><span>$0.00</span></xsl:when>
 									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,##0.00#")'/></xsl:otherwise>
 								</xsl:choose>
 							</xsl:if>		
