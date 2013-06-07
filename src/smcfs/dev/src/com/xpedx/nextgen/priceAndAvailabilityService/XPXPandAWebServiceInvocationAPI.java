@@ -137,7 +137,8 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 			{
 				log.error("Exception while tring to cast PandANumberofRetries: " + e.getStackTrace());
 			}
-			for(int retry=0;retry<maxretry;retry++)
+			int retry=0;
+			for(;retry<maxretry;retry++)
 			{
 				try
 				{
@@ -219,11 +220,11 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 		String stackTrace=getStackTrace(aThrowable);
 		log.error("YFSException: " + stackTrace);
 		String exceptionStr=SCXmlUtil.getString(inputXML.getDocumentElement());
-		exceptionStr=exceptionStr.replace("<PriceAndAvailabilityRequest", "<PriceAndAvailabilityRequest RetryCount="+(retry+1)+">");
+		exceptionStr=exceptionStr.replace("<PriceAndAvailabilityRequest", "<PriceAndAvailabilityRequest RetryCount=\""+(retry+1)+"\"");
 		log.error("YFSException: " + stackTrace);
 		try
 		{
-		logExceptionIntoCent(env,stackTrace,exceptionStr);
+			logExceptionIntoCent(env,stackTrace,exceptionStr);
 		}
 		catch(Exception e)
 		{
