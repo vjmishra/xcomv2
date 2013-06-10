@@ -290,9 +290,17 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.class", "com.sun.mail.smtp.SMTPTransport");
-        props.put("mail.smtp.host", smtpHost);
-        
+        props.put("mail.smtp.host", smtpHost);        
         props.put("mail.smtp.sendpartial", "true");
+        //email logging issue
+        if(YFSSystem.getProperty("mail.debug")!=null)
+        {
+        	props.put("mail.debug", YFSSystem.getProperty("mail.debug"));
+        
+        } else 
+        {
+        	props.put("mail.debug", "false");
+        }
 		
         Session emailSession = Session.getDefaultInstance(props);
 		
@@ -317,84 +325,14 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		emailMessage.setSubject(subject);
 		emailMessage.setContent(content,"text/html;charset=" + emltencoding);
 		emailMessage.setSentDate(new java.util.Date());
-		emailSession.setDebug(true);
-		Transport.send(emailMessage);	
-		
-		/*SMTPTransport transport=null;
-		try{
-			Properties properties = new Properties();
-			properties.put(XPXEmailUtil.EMAIL_TRANSPORT_PROTOCOL, "smtp");
-			properties.put(XPXEmailUtil.SMTP_EMAIL_HOST, smtpHost);
-			Session emailSession = Session.getInstance(properties,null);
-	        transport = (SMTPTransport)emailSession.getTransport();
-	
-	        SMTPMessage emailMessage = new SMTPMessage(emailSession);
-	        emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-			if(cc!=null && cc.length()>0)
-				emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
-			
-			if(bcc!=null && bcc.length()>0)
-				emailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress(bcc));
-			
-			emailMessage.setFrom(new InternetAddress(from));
-			emailMessage.setSubject(subject);
-			emailMessage.setContent(content,"text/html");
-			emailSession.setDebug(true);			
-			
-			if(transport!=null && !transport.isConnected()){
-                transport.connect();
-			}
-			transport.sendMessage(emailMessage,emailMessage.getAllRecipients());
-			
-			if(transport.getLastReturnCode()!=XPXEmailUtil.SMTP_SUCCESS_RETURN_CODE)
-			{
-				Document emailExceptionDoc = SCXmlUtil.createFromString("<XPXEmailDetails/>");
-				Element emailExceptionEle = emailExceptionDoc.getDocumentElement();
-				String emailDetailsKey=emailDetailsElement.getAttribute("EmailDetailsKey");
-				String emailRetryCount=emailDetailsElement.getAttribute("EmailRetryCount");				
-				
-				emailExceptionEle.setAttribute("EmailDetailsKey", emailDetailsKey);
-				int intRetryCount=0;
-				if(!YFCObject.isVoid(emailRetryCount))
-					intRetryCount = Integer.parseInt(emailRetryCount);
-				
-				if(intRetryCount > -1 && intRetryCount < 9 )
-				{
-					emailExceptionEle.setAttribute("EmailRetryCount", String.valueOf(++intRetryCount));				
-				
-				} else {
-					emailExceptionEle.setAttribute("EmailRetryCount", "-1");
-				}
-				String errorString="SMTP Failure Return Code is : ["+transport.getLastReturnCode()+"]";
-				emailExceptionEle.setAttribute("EmailErrorMessage", errorString);
-				log.error("Exception caught inside XPXSendEmailAgent.sendEmail(). "+ errorString+". Email Details Key is ["+emailDetailsKey+"]");
-				
-				api.executeFlow(env, "changeXPXEmailDetails", emailExceptionDoc);				
-			}
-			
-		}catch(AddressException adrEx)
-		{
-			throw adrEx;
-		
-		}catch(MessagingException msgEx)
-		{
-			throw msgEx;
-		
-		}catch(Exception ex)
-		{
-			throw ex;
-			
-		}finally {
-	        if(transport!=null && transport.isConnected()){
-	        	transport.close(); 
-	        }
-		}*/
-		
+		//email logging issue
+		//emailSession.setDebug(true);
+		Transport.send(emailMessage);		
 	}
 	
 	private String retrieveEmailIds(Element emailXMLElement, String emailXPath) throws Exception {
 		StringBuffer emailIdBuf=new StringBuffer("");
-		if(emailXPath==null || "".equals(emailXPath)){
+		if(emailXPath==null || 	"".equals(emailXPath)){
 			return emailIdBuf.toString();
 		}
 			
