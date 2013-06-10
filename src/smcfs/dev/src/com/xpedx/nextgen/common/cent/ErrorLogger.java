@@ -31,6 +31,7 @@ public class ErrorLogger {
 	/**
 	 * Instance of YIFApi used to invoke Yantra APIs or services.
 	 */
+	private static String Host_Name =  System.getenv("COMPUTERNAME");
 	private static YIFApi api = null;
 	private static YFCLogCategory yfcLogCatlog;
 	private static HashMap<String, String> centExemptErrors = new HashMap<String, String>();
@@ -129,6 +130,9 @@ public class ErrorLogger {
 							logString.append(xpxErrorElem.getAttribute("ErrorClass"));
 							logString.append("|");
 							logString.append("ExceptionID="+randomNumber);
+							//System_name for Jira EB-517
+							logString.append("|");
+							logString.append("Host_Name="+Host_Name);
 							logString.append(" "+errorObj.getException());											
 							yfcLogCatlog.error(logString.toString());
 						}
@@ -162,6 +166,9 @@ public class ErrorLogger {
             originalException.append(errorObj.getErrorClass());
             originalException.append("|");
             originalException.append("ExceptionID = " + randomNumber);
+          //System_name for Jira EB-517
+            originalException.append("|");
+            originalException.append("Host_Name = " + Host_Name);
             originalException.append(" ");
             originalException.append("Original Exception: ");
             originalException.append(errorObj.getException()); 
@@ -180,6 +187,9 @@ public class ErrorLogger {
             centException.append("UnknownErrorClass");
             centException.append("|");
             centException.append("ExceptionID = " + randomNumber);
+          //System_name for Jira EB-517
+            centException.append("|");
+            centException.append("Host_Name = " + Host_Name);
             centException.append(" ");
             centException.append("Exception caught while logging into Cent in ErrorLogger.log method: ");
             if(e instanceof com.yantra.yfs.japi.YFSException) {
@@ -263,6 +273,8 @@ public class ErrorLogger {
 				}
 				
 				xpxErrorNotifyRootElem.setAttribute("ExceptionID",randomNumber);
+				//System_name for Jira EB-517
+				xpxErrorNotifyRootElem.setAttribute("Host_Name",Host_Name);
 				api.executeFlow(yfsEnv, "XPXCreateErrorNotificatnService",createErrorNotificatnInDoc);
 			}
 	}
