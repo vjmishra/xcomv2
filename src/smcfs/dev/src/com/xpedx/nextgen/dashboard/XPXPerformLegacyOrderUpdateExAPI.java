@@ -13,6 +13,7 @@ import java.util.TreeSet;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
@@ -51,7 +52,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	boolean centExempt=false;
 	boolean customerError=false;
 	boolean itemError=false;	
-
+	private String extnCustomerDivision="";
+	private String extnEnvironmentCode="";
+	private String extnCustomerNumber="";
+	private String extnCompanyCode="";
+	
 	static {
 
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -874,6 +879,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (rootExtnEle != null) {
 			if (rootExtnEle.hasAttribute("ExtnCustomerNo")) {
 				custNo = rootExtnEle.getAttribute("ExtnCustomerNo");
+				extnCustomerNumber=custNo;
 				if (YFCObject.isNull(custNo) || YFCObject.isVoid(custNo)) {
 					if (YFCObject.isNull(_custNo) || YFCObject.isVoid(_custNo)) {
 						throw new Exception("Attribute OrderLine/Extn/@ExtnCustomerNo Cannot be NULL or Void!");
@@ -890,6 +896,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 			if (rootExtnEle.hasAttribute("ExtnEnvtId")) {
 				envId = rootExtnEle.getAttribute("ExtnEnvtId");
+				extnEnvironmentCode=envId;
 				if (YFCObject.isNull(envId) || YFCObject.isVoid(envId)) {
 					if (YFCObject.isNull(_envId) || YFCObject.isVoid(_envId)) {
 						throw new Exception("Attribute OrderLine/Extn/@ExtnEnvtId Cannot be NULL or Void!");
@@ -906,6 +913,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 			if (rootExtnEle.hasAttribute("ExtnCompanyId")) {
 				compId = rootExtnEle.getAttribute("ExtnCompanyId");
+				extnCompanyCode=compId;
 				if (YFCObject.isNull(compId) || YFCObject.isVoid(compId)) {
 					if (YFCObject.isNull(_compId) || YFCObject.isVoid(_compId)) {
 						throw new Exception("Attribute OrderLine/Extn/@ExtnCompanyId Cannot be NULL or Void!");
@@ -2445,6 +2453,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
 			customerError = true;
 			String legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");
+			extnCustomerDivision=legacyCompanyNo;
 			if(legacyCompanyNo!=null && legacyCompanyNo.indexOf("_")!=-1){
 				legacyCompanyNo=legacyCompanyNo.substring(0,legacyCompanyNo.indexOf("_"));
 			}
@@ -5115,6 +5124,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		} else {
 			return;
 		}
+		Map<String,YFCElement>customerUOMMap=getCustomerUOMConversionFactor(env,itemIds);
 
 		YFCElement ordLinesEle = rootEle.getChildElement("OrderLines");
 		if (ordLinesEle != null) {
@@ -5173,7 +5183,61 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		}
 	}
 
-	private double getReqUOMPrice(String itemId, String reqUOM, String prcUOM, String unitPrice, YFCElement itemUOMListEle) throws Exception {
+	private Map<String,YFCElement> getCustomerUOMConversionFactor(YFSEnvironment env,Set<String> items)
+	{
+		
+		
+		
+		Map<String ,YFCElement> outputMpa=new HashMap<String,YFCElement>();
+		try {
+			YFCDocument inputDoc=YFCDocument.createDocument("XPXItemcustXref");
+			YFCElement inputElement=inputDoc.getDocumentElement();
+			inputElement.setAttribute("CustomerNumber", extnCustomerNumber);
+			inputElement.setAttribute("EnvironmentCode", extnEnvironmentCode);
+			inputElement.setAttribute("CustomerDivision",extnCustomerDivision );
+			inputElement.setAttribute("CompanyCode",extnCustomerDivision );
+			
+		
+			//Element input = WCMashupHelper.getMashupInput("xpedxItemCustXRef", valueMap, wcContext);
+			YFCElement complexQueryElement=inputElement.createChild("ComplexQuery");
+			//Element complexQuery = input.getOwnerDocument().createElement("ComplexQuery");
+			YFCElement orElement = complexQueryElement.createChild("Or");
+			for(String value : items) {
+				YFCElement exp = orElement.createChild("Exp");
+				exp.setAttribute("Name", "LegacyItemNumber");
+				exp.setAttribute("Value", value);
+				orElement.appendChild(exp);
+			}
+			complexQueryElement.appendChild(orElement);
+			inputElement.appendChild(complexQueryElement);
+			Document outputDoc=api.executeFlow(env, "getXPXItemcustXrefList", inputDoc.getDocument());
+			NodeList itemxrefs=outputDoc.getElementsByTagName("XPXItemcustXref");
+			for(int i=0;itemxrefs != null && i<itemxrefs.getLength();i++)
+			{
+				Element itemXrefElement=(Element)itemxrefs.item(i);
+				if(itemXrefElement != null )
+				{
+					String convFactor=itemXrefElement.getAttribute("ConvFactor");
+					String customerUOM=itemXrefElement.getAttribute("LegacyUom");
+					String legacyItemNumber=itemXrefElement.getAttribute("LegacyItemNumber");
+					YFCDocument _outputDoc=YFCDocument.createDocument("CustomerUOM");
+					YFCElement _outputElement=_outputDoc.getDocumentElement();
+					_outputElement.setAttribute("ConvFactor", convFactor);
+					_outputElement.setAttribute("LegacyUom", customerUOM);
+					_outputElement.setAttribute("LegacyItemNumber", legacyItemNumber);
+					outputMpa.put(legacyItemNumber,_outputElement);
+				}
+			}
+			
+			//Element out = (Element)WCMashupHelper.invokeMashup("getXPXItemcustXrefList", input, wcContext.getSCUIContext());
+		}
+		catch(Exception e)
+		{
+			log.error("Exception while getting Customer UOM");
+		}
+		return outputMpa;
+	}
+	private double getReqUOMPrice(String itemId, String reqUOM, String prcUOM, String unitPrice, YFCElement itemUOMListEle,YFCElement customerUOMElement) throws Exception {
 
 		String cnvrFctrPUOM = null;
 		String cnvrFctrRUOM = null;
@@ -5223,7 +5287,16 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.debug("cnvrFctrPUOM:" + cnvrFctrPUOM);
 			log.debug("cnvrFctrRUOM:" + cnvrFctrRUOM);
 		}
-
+		if(customerUOMElement != null)
+		{
+			String customerUOM=customerUOMElement.getAttribute("LegacyUom");
+			String customerConvFactor=customerUOMElement.getAttribute("ConvFactor");
+			if(reqUOM.equalsIgnoreCase(customerUOM) && YFCObject.isVoid(cnvrFctrRUOM) && !YFCObject.isDoubleVoid(customerConvFactor))
+			{			
+				cnvrFctrRUOM=customerConvFactor;
+			}
+			
+		}
 		double dReqUOMPrice = 0.0;
 		if (!YFCObject.isNull(unitPrice) && !YFCObject.isVoid(unitPrice) && !YFCObject.isNull(cnvrFctrPUOM) && !YFCObject.isVoid(cnvrFctrPUOM) && !YFCObject.isNull(cnvrFctrRUOM)
 				&& !YFCObject.isVoid(cnvrFctrRUOM)) {
