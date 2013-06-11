@@ -1099,7 +1099,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 				for (int counter = 0; counter < salesRepLength ; counter++) {
 					Element salesRep = (Element) nodeList.item(counter);
 					String salesUserKey=salesRep.getAttribute("SalesUserKey");
-					if(!YFCCommon.isStringVoid(salesUserKey))
+					if(!YFCObject.isVoid(salesUserKey))
 					{
 						salesRepUserKeys.add(salesUserKey);
 					}
