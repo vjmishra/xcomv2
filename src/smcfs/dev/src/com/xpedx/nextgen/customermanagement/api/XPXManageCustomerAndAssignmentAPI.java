@@ -64,16 +64,17 @@ private static YFCLogCategory log;
 			pltQryBuilder.append(" CUSTOMER_ID IN ('"+((Element)customerAssignmentNodeList.item(counter)).getAttribute("CustomerID")+"'");
 			counter=counter+1;
 		
-			for(;counter<customerAssignmentNodeList.getLength();counter++)
+			for(int i=1;i<1000 && counter <customerAssignmentNodeList.getLength() ;i++ ,counter++)
 			{
 				Element customerAssignmentElement=(Element)customerAssignmentNodeList.item(counter);
 				pltQryBuilder.append(", '"+customerAssignmentElement.getAttribute("CustomerID")+"'");
 			}
-			//Calling getCustomer() in order to split the query EB-340
-			getCustomer(env,customerAssignmentNodeList,counter,yfsCustomerList);
-	
+			
 		pltQryBuilder.append(")");
 		yfsCustomerList.addAll(YFS_CustomerDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000));
+		//Calling getCustomer() in order to split the query EB-340
+		getCustomer(env,customerAssignmentNodeList,counter,yfsCustomerList);
+
 	}
 	public Document manageCustomerAssignment(YFSEnvironment env,Document inputXML) throws Exception
 	{
