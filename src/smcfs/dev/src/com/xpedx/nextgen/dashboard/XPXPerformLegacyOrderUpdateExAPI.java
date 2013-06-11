@@ -96,6 +96,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		String isOrderPlaceFlag = "";
 		String isOrderEditFlag = "";
 		
+		
 
 		YFCDocument yfcDoc = YFCDocument.getDocumentFor(inXML);
 		
@@ -106,7 +107,26 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if(log.isDebugEnabled()){
 				log.debug("XPXPerformLegacyOrderUpdateAPI-InXML:" + YFCDocument.getDocumentFor(inXML).getString());
 			}
-	
+			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(yfcDoc.getDocument().getDocumentElement(),"Extn");
+			if(orderExtnList != null )
+			{
+				Element orderextn=orderExtnList.get(0);
+				if(orderextn != null)
+				{
+					String customerDivision=orderextn.getAttribute("ExtnCustomerDivision");			
+					if(customerDivision!=null && customerDivision.indexOf("_")!=-1){
+						extnCustomerDivision=customerDivision.substring(0,customerDivision.indexOf("_"));;
+					}
+					else
+					{
+						extnCustomerDivision=rootEle.getAttribute("ExtnCustomerDivision");
+					}
+					
+					extnEnvironmentCode=orderextn.getAttribute("ExtnEnvtId");
+					extnCustomerNumber=orderextn.getAttribute("ExtnCustomerNo");
+					extnCompanyCode=orderextn.getAttribute("ExtnCompanyId");
+				}
+			}
 			// Identify Type Of Request i.e OrderPlace, OrderEdit or OrderUpdate.
 		    isOrderPlaceFlag = (rootEle.getAttribute("IsOrderPlace")!=null && rootEle.getAttribute("IsOrderPlace")!="")?rootEle.getAttribute("IsOrderPlace"):"N";
 			isOrderEditFlag = (rootEle.getAttribute("IsOrderEdit")!=null && rootEle.getAttribute("IsOrderEdit")!="")?rootEle.getAttribute("IsOrderEdit"):"N";
@@ -2452,10 +2472,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
 			customerError = true;
-			String legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");
-			extnCustomerDivision=legacyCompanyNo;
+			String legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");			
 			if(legacyCompanyNo!=null && legacyCompanyNo.indexOf("_")!=-1){
 				legacyCompanyNo=legacyCompanyNo.substring(0,legacyCompanyNo.indexOf("_"));
+				extnCustomerDivision=legacyCompanyNo;
 			}
 			throw new Exception("Customer Doesn't Exist In Web. [Company No:"+legacyCompanyNo+", Customer No:"+legacyCustNo+", Suffix:"+shipToSuffix+" ]");
 		}
@@ -5169,7 +5189,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								itemId = ordLineItemEle.getAttribute("ItemID");
 							}
 						}
-						double reqUOMPrice = getReqUOMPrice(itemId, reqUOM, prcUOM, unitPrc, itemUOMListEle);
+						
+						double reqUOMPrice = getReqUOMPrice(itemId, reqUOM, prcUOM, unitPrc, itemUOMListEle,customerUOMMap.get(itemId));
 						if (ordLineExtnEle != null) {
 							if (reqUOMPrice != 0) {
 								ordLineExtnEle.setAttribute("ExtnReqUOMUnitPrice", new Double(reqUOMPrice).toString());
@@ -5195,7 +5216,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			inputElement.setAttribute("CustomerNumber", extnCustomerNumber);
 			inputElement.setAttribute("EnvironmentCode", extnEnvironmentCode);
 			inputElement.setAttribute("CustomerDivision",extnCustomerDivision );
-			inputElement.setAttribute("CompanyCode",extnCustomerDivision );
+			inputElement.setAttribute("CompanyCode",extnCompanyCode );
 			
 		
 			//Element input = WCMashupHelper.getMashupInput("xpedxItemCustXRef", valueMap, wcContext);
@@ -5218,12 +5239,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				if(itemXrefElement != null )
 				{
 					String convFactor=itemXrefElement.getAttribute("ConvFactor");
-					String customerUOM=itemXrefElement.getAttribute("LegacyUom");
+					String customerUOM=itemXrefElement.getAttribute("CustomerUom");
 					String legacyItemNumber=itemXrefElement.getAttribute("LegacyItemNumber");
 					YFCDocument _outputDoc=YFCDocument.createDocument("CustomerUOM");
 					YFCElement _outputElement=_outputDoc.getDocumentElement();
 					_outputElement.setAttribute("ConvFactor", convFactor);
-					_outputElement.setAttribute("LegacyUom", customerUOM);
+					_outputElement.setAttribute("CustomerUom", customerUOM);
 					_outputElement.setAttribute("LegacyItemNumber", legacyItemNumber);
 					outputMpa.put(legacyItemNumber,_outputElement);
 				}
@@ -5286,12 +5307,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.debug("unitPrice:" + unitPrice);
 			log.debug("cnvrFctrPUOM:" + cnvrFctrPUOM);
 			log.debug("cnvrFctrRUOM:" + cnvrFctrRUOM);
+			
 		}
 		if(customerUOMElement != null)
 		{
-			String customerUOM=customerUOMElement.getAttribute("LegacyUom");
+			String customerUOM=customerUOMElement.getAttribute("CustomerUom");
 			String customerConvFactor=customerUOMElement.getAttribute("ConvFactor");
-			if(reqUOM.equalsIgnoreCase(customerUOM) && YFCObject.isVoid(cnvrFctrRUOM) && !YFCObject.isDoubleVoid(customerConvFactor))
+			if(reqUOM.equalsIgnoreCase(customerUOM) && YFCObject.isVoid(cnvrFctrRUOM) && !YFCObject.isVoid(customerConvFactor))
 			{			
 				cnvrFctrRUOM=customerConvFactor;
 			}
