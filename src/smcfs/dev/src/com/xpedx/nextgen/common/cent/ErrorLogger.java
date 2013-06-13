@@ -27,11 +27,11 @@ import com.yantra.yfs.japi.YFSException;
 public class ErrorLogger {
 
 	
-
 	/**
 	 * Instance of YIFApi used to invoke Yantra APIs or services.
 	 */
-	private static String Host_Name =  System.getenv("COMPUTERNAME");
+	//System_name for Jira EB-517
+	private static String Host_Name=null;
 	private static YIFApi api = null;
 	private static YFCLogCategory yfcLogCatlog;
 	private static HashMap<String, String> centExemptErrors = new HashMap<String, String>();
@@ -42,6 +42,11 @@ public class ErrorLogger {
 		yfcLogCatlog = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.cent");
 		try {
 			api = YIFClientFactory.getInstance().getApi();
+			//System_name for Jira EB-517 for unix
+			Host_Name = System.getenv("PS1");
+			 			//"zxpappd01-[xpbuild]$PWD> ";// this is result in unix box
+			int indexOfspace = Host_Name.indexOf('-',0);
+			Host_Name = Host_Name.substring(1, indexOfspace);
 		} catch (Exception e) {
 			// TO DO
 		}
@@ -132,7 +137,7 @@ public class ErrorLogger {
 							logString.append("ExceptionID="+randomNumber);
 							//System_name for Jira EB-517
 							logString.append("|");
-							logString.append("Host_Name="+Host_Name);
+							logString.append("Host_name="+Host_Name);
 							logString.append(" "+errorObj.getException());											
 							yfcLogCatlog.error(logString.toString());
 						}
@@ -275,6 +280,7 @@ public class ErrorLogger {
 				xpxErrorNotifyRootElem.setAttribute("ExceptionID",randomNumber);
 				//System_name for Jira EB-517
 				xpxErrorNotifyRootElem.setAttribute("Host_Name",Host_Name);
+				
 				api.executeFlow(yfsEnv, "XPXCreateErrorNotificatnService",createErrorNotificatnInDoc);
 			}
 	}
