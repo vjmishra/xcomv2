@@ -1334,7 +1334,7 @@ public class XPEDXOrderUtils {
 	public static Map<String, String> getXpedxUOMDescList(String customerID,
 			String ItemID, String StoreFrontID) {
 		LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
-		 Map displayItemUomsMap= new HashMap();
+		 Map displayItemUomsMap= new LinkedHashMap();
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
@@ -1402,8 +1402,7 @@ public class XPEDXOrderUtils {
 
 			//set UOM map with UOM code as key and flag as value which indicate whether the UOM is a customer UOM or not
 			XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
-			if(displayItemUomsMap==null)
-				displayItemUomsMap  = new HashMap();
+
 			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);
 			//Added for Jira 4023
 			double minFractUOM = 0.00;

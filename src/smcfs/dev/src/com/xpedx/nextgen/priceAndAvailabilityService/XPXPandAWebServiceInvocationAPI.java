@@ -7,8 +7,13 @@ import java.io.Writer;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Properties;
+
+import javax.xml.ws.BindingProvider;
+
 import org.w3c.dom.Document;
 
+import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpaperAvailability;
+import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpaperAvailabilityPortType;
 import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpaperAvailabilityStub;
 /*import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpaperAvailabilityStub.AItems;
 import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpaperAvailabilityStub.ArrayOfaItems;
@@ -99,7 +104,10 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 
 			
 			//Initializing the instance of the stub class generated
-			WsIpaperAvailabilityStub testStub = new WsIpaperAvailabilityStub(endPointURL);
+			//WsIpaperAvailabilityStub testStub = new WsIpaperAvailabilityStub(endPointURL);
+			WsIpaperAvailability iPaperAvailablityService = new WsIpaperAvailability();
+			WsIpaperAvailabilityPortType iPaperAvailablityPortType = iPaperAvailablityService
+							.getComIpaperXpedxWmWebPriceavailabilityWsIpaperAvailabilityPort();
 			//setting the timeout for the web service
 			int maxItemNumber=10;
 			try
@@ -127,7 +135,11 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 			}
 			
 			Integer timeoutInMilliSecs = timeoutInSecs*1000;
-			testStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeoutInMilliSecs);
+			BindingProvider bp =(BindingProvider)iPaperAvailablityPortType;
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointURL);
+			bp.getRequestContext().put("com.sun.xml.ws.connect.timeout", timeoutInMilliSecs);
+			
+			//testStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeoutInMilliSecs);
 			int maxretry=1;
 			try
 			{
@@ -137,47 +149,51 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 			{
 				log.error("Exception while tring to cast PandANumberofRetries: " + e.getStackTrace());
 			}
-			for(int retry=0;retry<maxretry;retry++)
+			int retry=0;
+			for(;retry<maxretry;retry++)
 			{
 				try
 				{
 				
 					//Initializing the instance of the stub class generated
 					
-					FGetAvailabilityE input = new FGetAvailabilityE();
-					FGetAvailability fAvailability = new FGetAvailability();
+					//FGetAvailabilityE input = new FGetAvailabilityE();
+					//FGetAvailability fAvailability = new FGetAvailability();
 					
 					//Converting the input XML Document to a String format
 					String inputXMLString = SCXmlUtil.getString(inputXML);
-					
+					//inputXMLString="<PriceAndAvailabilityRequest>    <sSourceIndicator>1</sSourceIndicator>    <sEnvironmentId>M</sEnvironmentId>    <sCustomerEnvironmentId>T3</sCustomerEnvironmentId>    <sCompany>XX</sCompany>    <sCustomerBranch>60</sCustomerBranch>    <sCustomerNumber>0006101695</sCustomerNumber>    <sShipToSuffix>000003</sShipToSuffix>    <sOrderBranch>6Y</sOrderBranch>    <aItems>        <aItem>            <sLineNumber>1</sLineNumber>            <sLegacyProductCode>2376041</sLegacyProductCode>            <sRequestedQtyUOM>M_BAG</sRequestedQtyUOM>            <sRequestedQty>19200.00</sRequestedQty>        </aItem>    </aItems></PriceAndAvailabilityRequest>>";
 					//Creating the SOAP request input
-					fAvailability.setWsIpaperAvailabilityInput(inputXMLString);
-					input.setFGetAvailability(fAvailability);
+					//fAvailability.setWsIpaperAvailabilityInput(inputXMLString);
+					//input.setFGetAvailability(fAvailability);
 					if(log.isDebugEnabled()){
-						log.debug("Availability of webservice input : " + input.getFGetAvailability().getWsIpaperAvailabilityInput());        
+						log.debug("Availability of webservice input : " + inputXMLString);						
 					}        
 			        //Invoking the WSDL and receiving the response simultaneously
 					log.beginTimer("Calling-the-webmethod-PnA-webservice");
-			        FGetAvailabilityResponseE response = testStub.fGetAvailability(input) ; 
+					String outputString=iPaperAvailablityPortType
+								.fGetAvailability(inputXMLString);
+					outputXML = YFCDocument.getDocumentFor(outputString).getDocument();
+			       // FGetAvailabilityResponseE response = testStub.fGetAvailability(input) ; 
 			        log.endTimer("Calling-the-webmethod-PnA-webservice");
 			        if(log.isDebugEnabled()){
-						log.debug("The response of availability of the webservice is: "+response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput());
+						log.debug("The response of availability of the webservice is: "+outputString);
 			        }
-					
+			        log.error("The response of availability of the webservice is: "+outputString);
 					//Converting the string reponse to XML Document format to return it to the calling app		
-					outputXML = YFCDocument.getDocumentFor(response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput()).getDocument();
+					//outputXML = YFCDocument.getDocumentFor(response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput()).getDocument();
 					break;
 				}
-				catch (RemoteException ne) {
-					/*String stackTrace=getStackTrace(ne);
+				/*catch (SocketException ne) {
+					String stackTrace=getStackTrace(ne);
 					log.error("REmoteException: " + stackTrace);
 					Element inputXMLEelm=(Element)inputXML.getDocumentElement().getFirstChild();
 					inputXMLEelm.setAttribute("RetryCount", ""+(retry+1));
 					logExceptionIntoCent(env,stackTrace,SCXmlUtil.getString(inputXMLEelm));
 					//prepareErrorObject(ne, XPXLiterals.PA_TRANS_TYPE, XPXLiterals.NE_ERROR_CLASS, env, inputXML);
-					*/
+					
 					invokeException(env,ne,inputXML,retry);
-				}
+				}*/
 				catch (NullPointerException ne) {
 					/*String stackTrace=getStackTrace(ne);
 					log.error("NullPointerException: " + stackTrace);
@@ -219,11 +235,11 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 		String stackTrace=getStackTrace(aThrowable);
 		log.error("YFSException: " + stackTrace);
 		String exceptionStr=SCXmlUtil.getString(inputXML.getDocumentElement());
-		exceptionStr=exceptionStr.replace("<PriceAndAvailabilityRequest", "<PriceAndAvailabilityRequest RetryCount="+(retry+1)+">");
+		exceptionStr=exceptionStr.replace("<PriceAndAvailabilityRequest", "<PriceAndAvailabilityRequest RetryCount=\""+(retry+1)+"\"");
 		log.error("YFSException: " + stackTrace);
 		try
 		{
-		logExceptionIntoCent(env,stackTrace,exceptionStr);
+			logExceptionIntoCent(env,stackTrace,exceptionStr);
 		}
 		catch(Exception e)
 		{

@@ -1098,7 +1098,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 			if (salesRepLength > 0) {
 				for (int counter = 0; counter < salesRepLength ; counter++) {
 					Element salesRep = (Element) nodeList.item(counter);
-					salesRepUserKeys.add(salesRep.getAttribute("SalesUserKey"));
+					String salesUserKey=salesRep.getAttribute("SalesUserKey");
+					if(!YFCObject.isVoid(salesUserKey))
+					{
+						salesRepUserKeys.add(salesUserKey);
+					}
 				}
 			}
 			if(salesRepLength > 0)
@@ -1121,25 +1125,27 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 					expEle.setAttribute("Value", itemId);
 					ele.appendChild(expEle);
 				}
-
-				env.setApiTemplate("getUserList", getUserListTemplate);
-				Document outputDoc1 = api.invoke(env, "getUserList", inputXML.getDocument());
-				env.clearApiTemplate("getUserList");	
-				NodeList nodeList1  = outputDoc1.getElementsByTagName("ContactPersonInfo");
-				int contactPersonInfoLength = nodeList1.getLength();
-				if (contactPersonInfoLength > 0) {
-					for (int counter = 0; counter < contactPersonInfoLength; counter++) {
-						Element contactPersonInfo1 = (Element) nodeList1.item(counter);
-						if(contactPersonInfo1 != null && contactPersonInfo1.getAttribute("EMailID") != null)
-						{
-							//salesRepEmail = salesRepEmail + ";"+contactPersonInfo1.getAttribute("EmailID");
-							/*Make the changes on 10/10/2011 start */
-							if(counter==0)//EB 367 - For Sending Emails to all salesRep when Order is placed
-								salesRepEmail = SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
-							else
-								salesRepEmail = salesRepEmail + ","+SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
-
-							/*Make the changes on 10/10/2011 End*/
+				if(salesRepUserKeys.size() > 0)
+				{
+					env.setApiTemplate("getUserList", getUserListTemplate);
+					Document outputDoc1 = api.invoke(env, "getUserList", inputXML.getDocument());
+					env.clearApiTemplate("getUserList");	
+					NodeList nodeList1  = outputDoc1.getElementsByTagName("ContactPersonInfo");
+					int contactPersonInfoLength = nodeList1.getLength();
+					if (contactPersonInfoLength > 0) {
+						for (int counter = 0; counter < contactPersonInfoLength; counter++) {
+							Element contactPersonInfo1 = (Element) nodeList1.item(counter);
+							if(contactPersonInfo1 != null && contactPersonInfo1.getAttribute("EMailID") != null)
+							{
+								//salesRepEmail = salesRepEmail + ";"+contactPersonInfo1.getAttribute("EmailID");
+								/*Make the changes on 10/10/2011 start */
+								if(counter==0)//EB 367 - For Sending Emails to all salesRep when Order is placed
+									salesRepEmail = SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
+								else
+									salesRepEmail = salesRepEmail + ","+SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
+	
+								/*Make the changes on 10/10/2011 End*/
+							}
 						}
 					}
 				}
