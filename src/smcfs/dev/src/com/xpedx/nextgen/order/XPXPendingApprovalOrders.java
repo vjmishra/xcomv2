@@ -194,7 +194,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 					approverOnHold = approverUserId+",";//Added for EB 70
 					if(approverProxyUserId != null && approverProxyUserId.trim().length()>0)
 					{
-						approverOnHold = approverOnHold + ","+ approverProxyUserId+",";//Added for EB 70
+						approverOnHold = approverOnHold + approverProxyUserId+",";//Added for EB 70
 					}
 				
 				}else
