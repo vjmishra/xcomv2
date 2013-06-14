@@ -191,15 +191,15 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				String approverOnHold = null;
 				if(approverUserId != null && approverUserId.trim().length()>0)
 				{
-					approverOnHold = approverUserId;
+					approverOnHold = approverUserId+",";//Added for EB 70
 					if(approverProxyUserId != null && approverProxyUserId.trim().length()>0)
 					{
-						approverOnHold = approverOnHold + ","+ approverProxyUserId;
+						approverOnHold = approverOnHold + ","+ approverProxyUserId+",";//Added for EB 70
 					}
 				
 				}else
 				{
-					approverOnHold = approverProxyUserId;
+					approverOnHold = approverProxyUserId+",";//Added for EB 70
 				}
 				//end of jira 3484
 				if(approverOnHold != null && approverOnHold.trim().length()>0) 

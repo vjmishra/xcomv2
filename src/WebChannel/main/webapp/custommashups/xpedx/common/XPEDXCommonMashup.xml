@@ -639,7 +639,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
 						<Input>
-							<XPXCustomerAssignmentView UserId=""  >
+							<XPXCustomerAssignmentView UserId="" Status=""  StatusQryType="NE" >
 								<OrderBy>
 									<Attribute Desc="N" Name="" />
 								</OrderBy>
@@ -680,7 +680,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
 						<Input>
-							<XPXCustomerAssignmentView UserId="" ShipToAddressString="" ShipToAddressStringQryType="LIKE">
+							<XPXCustomerAssignmentView UserId="" ShipToAddressString="" ShipToAddressStringQryType="LIKE" Status=""  StatusQryType="NE">
 								<OrderBy>
 									<Attribute Desc="N" Name="" />
 								</OrderBy>

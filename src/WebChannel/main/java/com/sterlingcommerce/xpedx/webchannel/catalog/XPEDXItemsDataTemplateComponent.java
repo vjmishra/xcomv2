@@ -91,6 +91,14 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		Element b2cItemExtn = xmlUtils.getChildElement(item, "Extn");
 		String b2cSize = validate(b2cItemExtn.getAttribute("ExtnSize"));
 		String b2cColor = validate(b2cItemExtn.getAttribute("ExtnColor"));
+		
+		// start-- EB-78 Catalog color Grid View
+		
+		if (b2cColor.contains("/"))
+			b2cColor = b2cColor.replace("/", " / ");
+		
+		// END-- EB-78 Catalog color Grid View
+		
 		String b2cMwt = validate(b2cItemExtn.getAttribute("ExtnMwt"));
 		String b2cBasis = validate(b2cItemExtn.getAttribute("ExtnBasis"));
 		String b2cCert = validate(b2cItemExtn.getAttribute("ExtnCert"));

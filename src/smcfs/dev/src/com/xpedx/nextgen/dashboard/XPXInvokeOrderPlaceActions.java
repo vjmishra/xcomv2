@@ -148,7 +148,8 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	        	if(!YFCObject.isNull(instructionType) && (instructionType.equalsIgnoreCase("HEADER") || instructionType.equalsIgnoreCase("LINE"))) {
 	        		String comments = instructionElement.getAttribute("InstructionText");
 	        		if(comments != null && (comments.indexOf("\n") != -1 || comments.indexOf("\r\n") != -1)) {
-	        			comments = comments.replaceAll("\n|\r\n", " ");
+	        			comments = comments.replaceAll("[^\\x00-\\x7f]",""); // Replaces All Non Ascii Characters (EB-343)
+	        			log.info("comments when placing the order"+comments);
 	        			instructionElement.setAttribute("InstructionText", comments);
 	        		}
 	        	}
