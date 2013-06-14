@@ -160,7 +160,7 @@ private static YFCLogCategory log;
 		if(customerList != null && customerList.size()  >0)
 			pltQryBuilder.append(" CUSTOMER_KEY IN ('"+customerList.get(counter).getCustomer_Key()+"'");
 		counter=counter+1;
-		for(int i=1;i<4 && counter <customerList.size() ;i++ ,counter++)
+		for(int i=1;i<1000 && counter <customerList.size() ;i++ ,counter++)
 		{
 				pltQryBuilder.append(", '"+customerList.get(counter).getCustomer_Key()+"'");
 		}
