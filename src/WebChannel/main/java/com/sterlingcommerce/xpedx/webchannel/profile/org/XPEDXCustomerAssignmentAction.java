@@ -85,6 +85,15 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private String removeFromavailable = "";
 	private LinkedHashMap<String, String> availableLocationMap = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> authorizedLocationMap = new LinkedHashMap<String, String>();
+	private String status="";
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public int getAuthListSize() {
 

@@ -9,4 +9,5 @@
 	<entry key="orderByDesc">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Desc,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Desc</entry>
 	<entry key="orderByAttribute">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Name,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Name</entry>
 	<entry key="searchTerm">XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/@ShipToAddressString</entry>
+	<entry key="status">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/@Status,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/@Status</entry>
 </properties>

@@ -977,6 +977,9 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
     	Ext.Ajax.request({
             url :url,
+            params: {
+            	status: "30"
+            },
             method: 'POST',
             success: function (response, request){
 			if(response.responseText.indexOf('Search Catalog...')!=-1 || response.responseText.indexOf('undefined')!=-1 || response.responseText == undefined){
@@ -1819,6 +1822,7 @@ function passwordUpdateModal()
 function searchShipToAddress(divId,url) {
     // look for window.event in case event isn't passed in
     	var searchText = document.getElementById('Text1').value
+    	var suspendedStatus ="";
     	if(divId == null)
 			divId = 'ajax-assignedShipToCustomers';
     	if(divId == 'shipToOrderSearchDiv' && searchText == '')
@@ -1833,8 +1837,10 @@ function searchShipToAddress(divId,url) {
 			url = '<s:property value="#showLocationsDivForReportingSearch"/>'
 		if(divId == 'showShipToLocationsDiv' && searchText != '')                                  
    			url = '<s:property value="#shipToSearchForReporting"/>';
-		if(url == null)
+		if(url == null) {
 			url = '<s:property value="%{searchURL}"/>';
+			suspendedStatus= "30";
+		}
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
 		if(searchText==''|| searchText==null)
 */
@@ -1846,12 +1852,14 @@ function searchShipToAddress(divId,url) {
 		}		
 		else
 		{*/
+			
 			var x = document.getElementById('address-list');
 	         x.innerHTML = "Loading data... please wait!";
 			 Ext.Ajax.request({
 	                url: url,
 	                params: {
-						searchTerm : searchText
+						searchTerm : searchText,
+						status: suspendedStatus
 			 		},
 		            method: 'POST',
 		            success: function (response, request){

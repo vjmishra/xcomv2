@@ -151,7 +151,7 @@ public class XPEDXOrderApprovalAction extends OrderListAction{
 		Document outDoc = null;
 		//
 		if(mashupIds.contains(APPROVAL_LIST_MASHUP_ID)||mashupIds.contains(APPROVAL_LIST_WIDGET_MASHUP_ID)){
-			oUserList.add(wcContext.getCustomerContactId());
+			oUserList.add(wcContext.getCustomerContactId()+",");//Added for EB 70
 			nameExp.add(OrderConstants.RESOLVER_USER_ID);
 			if(mashupIds.contains("orderApprovalList")){
 			outDoc = null;
