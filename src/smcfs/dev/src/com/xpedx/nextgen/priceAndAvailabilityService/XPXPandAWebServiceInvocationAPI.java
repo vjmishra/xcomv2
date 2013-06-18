@@ -158,8 +158,8 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 			BindingProvider bp =(BindingProvider)iPaperAvailablityPortType;
 			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointURL);
 			//bp.getRequestContext().put(com.sun.xml.internal.ws.developer.JAXWSProperties.CONNECT_TIMEOUT, timeoutInMilliSecs);
-			/*bp.getRequestContext().put("com.sun.xml.ws.connect.timeout",timeoutInMilliSecs);
-			bp.getRequestContext().put("com.sun.xml.ws.request.timeout",timeoutInMilliSecs);*/
+			bp.getRequestContext().put("com.sun.xml.ws.connect.timeout",timeoutInMilliSecs);
+			bp.getRequestContext().put("com.sun.xml.ws.request.timeout",timeoutInMilliSecs);
 			//testStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeoutInMilliSecs);
 			int maxretry=1;
 			try

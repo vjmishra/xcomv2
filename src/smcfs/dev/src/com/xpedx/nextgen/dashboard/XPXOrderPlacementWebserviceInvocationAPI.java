@@ -76,10 +76,9 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			//FPlaceOrderResponseE orderResponse = testStub.fPlaceOrder(inputOrderXml);
 			BindingProvider bp =(BindingProvider)orderPlacePort;
 			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointURL);
-			/*bp.getRequestContext().put("com.sun.xml.internal.ws.connect.timeout", timeoutInMilliSecs);
-			bp.getRequestContext().put("com.sun.xml.internal.ws.request.timeout",timeoutInMilliSecs);*/
+			bp.getRequestContext().put("com.sun.xml.ws.connect.timeout", timeoutInMilliSecs);
+			bp.getRequestContext().put("com.sun.xml.ws.request.timeout",timeoutInMilliSecs);
 			String outputString=orderPlacePort.fPlaceOrder(inputXMLString);
-			System.out.println("Out put xml in Edit Order = "+outputString);
 			log.endTimer("Calling-the-webmethod-OrderPlace-webservice");
 			//Document outputXml = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();
 			//YFCDocument outDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput());
