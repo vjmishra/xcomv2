@@ -14,7 +14,6 @@ import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.WsIpaperPl
 import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.WsIpaperPlaceOrderPortType;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFCustomApi;
@@ -63,8 +62,6 @@ public class XPXEditOrderWebServiceInvocationAPI implements YIFCustomApi{
 				//FPlaceOrderResponseE orderResponse = testStub.fPlaceOrder(inputOrderXml);
 				BindingProvider bp =(BindingProvider)orderPlacePort;
 				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointURL);
-				bp.getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, timeoutInMilliSecs);
-				bp.getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeoutInMilliSecs);
 				String outputString=orderPlacePort.fPlaceOrder(inputXMLString);
 				orderEditResponseDoc = YFCDocument.getDocumentFor(outputString).getDocument();
 				System.out.println("Out put xml in Edit Order = "+outputString);

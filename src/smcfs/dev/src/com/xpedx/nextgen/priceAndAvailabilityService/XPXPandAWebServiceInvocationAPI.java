@@ -30,7 +30,6 @@ import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpa
 import zwm1.com.ipaper.xpedx.wm.web.priceavailability.wsipaperavailability.WsIpaperAvailabilityStub.FGetAvailabilityResponseE;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.client.ClientVersionSupport;
