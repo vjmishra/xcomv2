@@ -2694,13 +2694,13 @@ function msgWait(){
 							</s:a>
 						</li>
 						</s:if>					 
-					  <%-- <s:if test='#canRequestProductSample == "Y"'> --%>
-						<li>
-							<s:a href='%{RequestProdSampleLink}' cssClass="link">
-								<s:text name="Request Sample"></s:text>
-							</s:a>
-						</li>
-					<%-- </s:if>  --%>
+					    <s:if test='#canRequestProductSample == "Y"'>
+							<li>
+								<s:a href='%{RequestProdSampleLink}' cssClass="link">
+									<s:text name="Request Sample"></s:text>
+								</s:a>
+							</li>
+					    </s:if>
 						<li>
 							<s:a href='%{estimatingFilesLink}' cssClass="link">
 								<s:text name="Estimating Files"></s:text>
