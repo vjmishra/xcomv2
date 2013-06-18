@@ -17,7 +17,8 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "wsIpaperPlaceOrder", targetNamespace = "http://zwm1/com/ipaper/xpedx/wm/web/orderplacement/wsIpaperPlaceOrder", wsdlLocation = "file:/D:/orderplace.wsdl")
+
+@WebServiceClient(name = "wsIpaperPlaceOrder", targetNamespace = "http://zwm1/com/ipaper/xpedx/wm/web/orderplacement/wsIpaperPlaceOrder", wsdlLocation = "http://wmclustert4.ipaper.com:15000/ws/com.ipaper.xpedx.wm.web.orderplacement:wsIpaperPlaceOrder?WSDL")
 public class WsIpaperPlaceOrder
     extends Service
 {
@@ -30,9 +31,9 @@ public class WsIpaperPlaceOrder
         try {
             URL baseUrl;
             baseUrl = zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.WsIpaperPlaceOrder.class.getResource(".");
-            url = new URL(baseUrl, "file:/D:/orderplace.wsdl");
+            url = new URL(baseUrl, "http://wmclustert4.ipaper.com:15000/ws/com.ipaper.xpedx.wm.web.orderplacement:wsIpaperPlaceOrder?WSDL");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/D:/orderplace.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: http://wmclustert4.ipaper.com:15000/ws/com.ipaper.xpedx.wm.web.orderplacement:wsIpaperPlaceOrder?WSDL, retrying as a local file");
             logger.warning(e.getMessage());
         }
         WSIPAPERPLACEORDER_WSDL_LOCATION = url;

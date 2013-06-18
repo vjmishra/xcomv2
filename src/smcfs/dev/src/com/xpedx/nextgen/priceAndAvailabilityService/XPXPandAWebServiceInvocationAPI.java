@@ -2,12 +2,18 @@ package com.xpedx.nextgen.priceAndAvailabilityService;
 
 
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Properties;
 
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import org.w3c.dom.Document;
@@ -101,14 +107,6 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 				timeout = "30";
 			}
 			
-			
-
-			
-			//Initializing the instance of the stub class generated
-			//WsIpaperAvailabilityStub testStub = new WsIpaperAvailabilityStub(endPointURL);
-			WsIpaperAvailability iPaperAvailablityService = new WsIpaperAvailability();
-			WsIpaperAvailabilityPortType iPaperAvailablityPortType = iPaperAvailablityService
-							.getComIpaperXpedxWmWebPriceavailabilityWsIpaperAvailabilityPort();
 			//setting the timeout for the web service
 			int maxItemNumber=10;
 			try
@@ -135,12 +133,34 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 				timeoutInSecs = 30;
 			}
 			
-			Integer timeoutInMilliSecs = timeoutInSecs*1000;
+			final Integer timeoutInMilliSecs = timeoutInSecs *1000;
+			
+			//Initializing the instance of the stub class generated
+			//WsIpaperAvailabilityStub testStub = new WsIpaperAvailabilityStub(endPointURL);
+			QName qname = new QName("http://zwm1/com/ipaper/xpedx/wm/web/priceavailability/wsIpaperAvailability", "wsIpaperAvailability");
+			 URL url =new URL(null,
+					 endPointURL+"?WSDL",
+	                    new URLStreamHandler() {
+	                    @Override
+	                    protected URLConnection openConnection(URL url) throws IOException {
+	                    URL clone_url = new URL(url.toString());
+	                    HttpURLConnection clone_urlconnection = (HttpURLConnection) clone_url.openConnection();
+	                    // TimeOut settings
+	                    clone_urlconnection.setConnectTimeout(timeoutInMilliSecs);
+	                    clone_urlconnection.setReadTimeout(timeoutInMilliSecs);
+	                    return(clone_urlconnection);
+	                    }
+	                });
+
+	            WsIpaperAvailability iPaperAvailablityService = new WsIpaperAvailability(url, qname);
+			WsIpaperAvailabilityPortType iPaperAvailablityPortType = iPaperAvailablityService
+							.getComIpaperXpedxWmWebPriceavailabilityWsIpaperAvailabilityPort();
+		
 			BindingProvider bp =(BindingProvider)iPaperAvailablityPortType;
 			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointURL);
-			bp.getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, timeoutInMilliSecs);
-			bp.getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,timeoutInMilliSecs);
-			
+			//bp.getRequestContext().put(com.sun.xml.internal.ws.developer.JAXWSProperties.CONNECT_TIMEOUT, timeoutInMilliSecs);
+			/*bp.getRequestContext().put("com.sun.xml.ws.connect.timeout",timeoutInMilliSecs);
+			bp.getRequestContext().put("com.sun.xml.ws.request.timeout",timeoutInMilliSecs);*/
 			//testStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeoutInMilliSecs);
 			int maxretry=1;
 			try
