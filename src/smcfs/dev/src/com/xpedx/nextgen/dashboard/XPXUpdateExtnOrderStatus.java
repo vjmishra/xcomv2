@@ -183,7 +183,7 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 				log.debug("---------------------------------------------\n");
 				Element pendignElement=changeCustOrderDoc.createElement("PendingChanges");
 				pendignElement.setAttribute("IgnorePendingChanges", "Y");
-				changeCustOrderDoc.appendChild(pendignElement);
+				changeCustOrderElement.appendChild(pendignElement);
 				outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", changeCustOrderDoc);
 			}
 		}
