@@ -224,9 +224,11 @@ Ext.onReady(function(){
 		
 		<div id="homepage-ad-area">
 			<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
+			 <img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+			</div>
 			<!-- Ad Juggler Tag Starts -->
 			
-			<s:set name='storefrontId' value="wCContext.storefrontId" />
+			<%--<s:set name='storefrontId' value="wCContext.storefrontId" />
 
 			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
@@ -266,8 +268,8 @@ Ext.onReady(function(){
 				</script>
 			</s:else>			
 			<!-- Ad Juggler Tag Ends -->
-			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
-		</div>
+			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>  --%>
+		
 		
 		<div class="clearall">&nbsp;</div>
     

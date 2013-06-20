@@ -2510,10 +2510,10 @@ function showSharedListForm(){
                         <div class="float-left smallBody">
 						
 						<img class="float-left" style="margin-top:5px; padding-right:5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
-						
+						 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
                         <div class="clear"></div>
                         <!-- Ad Juggler Tag Starts -->
-                        <s:set name='ad_keyword' value='' />						
+                     <%--    <s:set name='ad_keyword' value='' />						
 				<s:iterator status="status" id="item" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 					<s:if test="%{#status.index == 0}">
 							<s:set name='itemId1' value='#item.getAttribute("ItemId")+"" ' />
@@ -2603,7 +2603,7 @@ function showSharedListForm(){
 				</script>
 			</s:else>			
 		</s:else>
-			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
+			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script> --%>
 			<!-- Ad Juggler Tag Ends -->
 </div>
 </s:if>
