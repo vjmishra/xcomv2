@@ -96,6 +96,9 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			log.debug("---------------------------------------------\n");
 			log.debug(SCXmlUtil.getString(inXML)+"\n");
 			log.debug("---------------------------------------------\n");
+			
+			Element pendignElement=SCXmlUtil.createChild(rootElement, "PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
 			outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", inXML); 
 		}
 		else{
@@ -111,9 +114,8 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			log.debug("---------------------------------------------\n");
 			log.debug(SCXmlUtil.getString(changeOrderDoc)+"\n");
 			log.debug("---------------------------------------------\n");
-			Element pendignElement=changeOrderDoc.createElement("PendingChanges");
+			Element pendignElement=SCXmlUtil.createChild(changeOrderElement, "PendingChanges");
 			pendignElement.setAttribute("IgnorePendingChanges", "Y");
-			changeOrderDoc.getDocumentElement().appendChild(pendignElement);
 
 			outDoc = api.executeFlow(env, "XPXUpdateExOrderStatus", changeOrderDoc);
 		}
@@ -181,9 +183,8 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 				log.debug("---------------------------------------------\n");
 				log.debug(SCXmlUtil.getString(changeCustOrderDoc)+"\n");
 				log.debug("---------------------------------------------\n");
-				Element pendignElement=changeCustOrderDoc.createElement("PendingChanges");
+				Element pendignElement=SCXmlUtil.createChild(changeCustOrderElement, "PendingChanges");
 				pendignElement.setAttribute("IgnorePendingChanges", "Y");
-				changeCustOrderDoc.appendChild(pendignElement);
 				outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", changeCustOrderDoc);
 			}
 		}

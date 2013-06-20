@@ -31,8 +31,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 	private String listName		= ""; //For the listing page
 	private String listDesc		= "";
 	private String errorMsg		= "";
-	
-    private File file;
+	private File file;
     private String contentType;
     private String filename;
     
@@ -327,12 +326,35 @@ public String getSharePermissionLevel() {
 				
 				int counter = 0;
 				vo.setDescription(nextLine[counter+4+1]);
-				
-				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) {
-					counter++;
-					String currentField = (String)iterator.next();
-					String currentValue	= nextLine[counter+3+3];
-					vo.getCustomFields().put(currentField, currentValue);
+				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) { 
+						counter++;
+						String currentValue = "";
+						String currentField = "";
+						if(getCustomerFieldsDBMap().keySet().contains("CustLineAccNo")){
+							currentField = (String)iterator.next();
+							currentValue = nextLine[counter+3+4];
+							vo.getCustomFields().put(currentField, currentValue);
+						}
+						if(getCustomerFieldsDBMap().keySet().contains("CustomerPONo")){
+							currentField = (String)iterator.next();
+							currentValue = nextLine[counter+3+5];
+							vo.getCustomFields().put(currentField, currentValue);
+						}
+						if(getCustomerFieldsDBMap().keySet().contains("CustLineField1")){
+							currentField = (String)iterator.next();
+							currentValue = nextLine[counter+3+6];
+							vo.getCustomFields().put(currentField, currentValue);
+						}
+						if(getCustomerFieldsDBMap().keySet().contains("CustLineField2")){
+							currentField = (String)iterator.next();
+							currentValue = nextLine[counter+3+7];
+							vo.getCustomFields().put(currentField, currentValue);
+						}
+						if(getCustomerFieldsDBMap().keySet().contains("CustLineField3")){
+							currentField = (String)iterator.next();
+							currentValue = nextLine[counter+3+8];
+							vo.getCustomFields().put(currentField, currentValue);
+						}
 				}
 				//vo.setDescription(nextLine[counter+3+1]);
 				

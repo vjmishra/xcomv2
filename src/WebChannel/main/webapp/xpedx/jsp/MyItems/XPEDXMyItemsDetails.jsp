@@ -2032,7 +2032,7 @@ function showSharedListForm(){
 		            			 else if(sourceOrderMulErrorInnerHTML.indexOf("is currently not valid. Please delete it from your list and contact Customer Service") > -1){
 		            					 document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            			    }
-		            			 else if(omError == 'true' && qty.value > 0)
+		            			 else if(omError == 'true' && (qty.value > 0 || qty.value == ""))
 		            				{
 		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
 		            					sourceOrderMulError.style.display = "inline-block"; 
@@ -3231,7 +3231,7 @@ function showSharedListForm(){
 							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
 							    <ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
-                                onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
+                                 style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability&nbsp;&nbsp;</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
                                 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
