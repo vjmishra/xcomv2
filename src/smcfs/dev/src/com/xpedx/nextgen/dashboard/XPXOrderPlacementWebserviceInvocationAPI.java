@@ -1,15 +1,19 @@
 package com.xpedx.nextgen.dashboard;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.util.Properties;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
-
-import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.FPlaceOrder;
-import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.FPlaceOrderE;
-import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.FPlaceOrderResponseE;
-import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.WsIpaperPlaceOrderStub;
-
+import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.WsIpaperPlaceOrderPortType;
+import zwm1.com.ipaper.xpedx.wm.web.orderplacement.wsipaperplaceorder.WsIpaperPlaceOrder;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
@@ -37,28 +41,49 @@ public class XPXOrderPlacementWebserviceInvocationAPI implements YIFCustomApi {
 			{//No customer overrides entry so property value is retrieved from the SDF
 			   endPointURL = props.getProperty("ENDPOINT_URL");
 			}
-			WsIpaperPlaceOrderStub testStub = new WsIpaperPlaceOrderStub(endPointURL);
+			//WsIpaperPlaceOrderStub testStub = new WsIpaperPlaceOrderStub(endPointURL);
 			//Setting the time out for the Order placement to legacy also based on the email from pawan dated July 15th 2011
-			Integer timeoutInMilliSecs = getTimeoutInMilliSecondsForWebService();
-			testStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeoutInMilliSecs);
+			final Integer timeoutInMilliSecs = getTimeoutInMilliSecondsForWebService();
+			//testStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeoutInMilliSecs);
 			//End of Setting the time out
-			FPlaceOrderE inputOrderXml = new FPlaceOrderE();
-			FPlaceOrder inputPlaceOrder = new FPlaceOrder();
+			//FPlaceOrderE inputOrderXml = new FPlaceOrderE();
+			//FPlaceOrder inputPlaceOrder = new FPlaceOrder();
 			if(inputXML != null){
 				log.debug("Input xml for OrderPlace to Legacy: "+SCXmlUtil.getString(inputXML));
 			}
 			
 			String inputXMLString = SCXmlUtil.getString(inputXML);
-			inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
-			inputOrderXml.setFPlaceOrder(inputPlaceOrder);
-			
+			//inputXMLString="<Order>     <TransactionStatus/>     <TransactionMessage/>     <SourceIndicator>1</SourceIndicator>     <EnvironmentId>M</EnvironmentId>     <CustomerEnvironmentId>D3</CustomerEnvironmentId>     <Company>XX</Company>     <WebConfirmationNumber>230107E9063321</WebConfirmationNumber>     <OrderingDivision>6R</OrderingDivision>     <LegacyOrderNumber/>     <GenerationNumber/>     <LegacyOrderType>S</LegacyOrderType>     <WebHoldFlag>N</WebHoldFlag>     <ShipFromDivision>6R</ShipFromDivision>     <CustomerDivision>60</CustomerDivision>     <CustomerNumber>0006096461</CustomerNumber>     <ShipToSuffix>000003</ShipToSuffix>     <ShipToName>CINCINNATI ZOO OP R ULRICH</ShipToName>     <AttentionName/>     <ShipToAddress1>3400 VINE ST</ShipToAddress1>     <ShipToAddress2/>     <ShipToAddress3/>     <ShipToCity>CINCINNATI</ShipToCity>     <ShipToState>OH</ShipToState>     <ShipToZIP>452201399</ShipToZIP>     <ShipToCountryCode>US</ShipToCountryCode>     <BillToSuffix>000</BillToSuffix>     <BillToName>CINCINNATI ZOO</BillToName>     <BillToAddress1>3400 VINE ST</BillToAddress1>     <BillToAddress2>ATTN COMMISSARY</BillToAddress2>     <BillToAddress3/>     <BillToCity>CINCINNATI</BillToCity>     <BillToState>OH</BillToState>     <BillToZIP>452201399</BillToZIP>     <BillToCountryCode>US</BillToCountryCode>     <CustomerHeaderPONumber>kirtesh456</CustomerHeaderPONumber>     <OrderCode>O</OrderCode>     <ShipComplete>Y</ShipComplete>     <WillCall/>     <ShipDate/>     <HeaderComments/>     <OrderedByName>Dave Young</OrderedByName>     <OrderCreateDate>2013-01-07T06:03:00-05:00</OrderCreateDate>     <OrderSource>3</OrderSource>     <HeaderProcessCode>A</HeaderProcessCode>     <OrderStatus>100</OrderStatus>     <OrderStatusComment/>     <CurrencyCode>USD</CurrencyCode>     <TotalShippableValue>0.00</TotalShippableValue>     <TotalOrderValue>1264.00</TotalOrderValue>     <OrderSpecialCharges>0.00</OrderSpecialCharges>     <TotalOrderFreight>0.00</TotalOrderFreight>     <OrderTax>0.00</OrderTax>     <SystemIdentifier/>     <WebHoldReason/>     <HeaderStatusCode/>     <AdjustmentAmount/>     <AdjustmentAmountProcessCode/>     <AdjustmentAmountStatusCode/>     <OrderHeaderKey>20130107060301199063355</OrderHeaderKey>     <OrderLockFlag>Y</OrderLockFlag>     <NoBoSplit/>     <LineItems>         <LineItem>             <WebLineNumber>E99063341</WebLineNumber>             <LegacyLineNumber/>             <LineType>P</LineType>             <LineProcessCode>A</LineProcessCode>             <LegacyProductCode>4602441</LegacyProductCode>             <CustomerProductCode/>             <BaseUnitOfMeasure>M_HDL</BaseUnitOfMeasure>             <OrderedQtyInBase>200.00</OrderedQtyInBase>             <PriceUnitOfMeasure>M_CTN</PriceUnitOfMeasure>             <UnitPrice>75.84</UnitPrice>             <LineDescription>Wet Mop Handle</LineDescription>             <PriceOverrideFlag/>             <RequestedUnitOfMeasure>M_HDL</RequestedUnitOfMeasure>             <RequestedOrderQuantity>200.00</RequestedOrderQuantity>             <ShippedQty>0.00</ShippedQty>             <BackOrderQty>0.00</BackOrderQty>             <CustomerLineNumber/>             <CustomerLinePONumber>anv</CustomerLinePONumber>             <CustomerUserField1/>             <CustomerUserField2/>             <CustomerUserField3/>             <ShipFromBranch>6R</ShipFromBranch>             <LineNotes/>             <ShippableLineTotal>0.00</ShippableLineTotal>             <OrderedLineTotal>1264.00</OrderedLineTotal>             <ShippableQtyInBase>0.00</ShippableQtyInBase>             <BackOrderQtyInBase>0.00</BackOrderQtyInBase>             <CustLineAccNumber>aaa</CustLineAccNumber>             <AdjustDollarAmount>0.00</AdjustDollarAmount>             <CouponCode/>             <LineStatusCode/>         </LineItem>     </LineItems> </Order>";
+			//inputPlaceOrder.setWsIpaperPlaceOrderInput(inputXMLString);
+			//inputOrderXml.setFPlaceOrder(inputPlaceOrder);
+			QName qname = new QName("http://zwm1/com/ipaper/xpedx/wm/web/orderplacement/wsIpaperPlaceOrder", "wsIpaperPlaceOrder");
+			 URL url =new URL(null,
+					 endPointURL+"?WSDL",
+	                    new URLStreamHandler() {
+	                    @Override
+	                    protected URLConnection openConnection(URL url) throws IOException {
+	                    URL clone_url = new URL(url.toString());
+	                    HttpURLConnection clone_urlconnection = (HttpURLConnection) clone_url.openConnection();
+	                    // TimeOut settings
+	                    clone_urlconnection.setConnectTimeout(timeoutInMilliSecs);
+	                    clone_urlconnection.setReadTimeout(timeoutInMilliSecs);
+	                    return(clone_urlconnection);
+	                    }
+	                });
+			WsIpaperPlaceOrder orderPlaceService=new WsIpaperPlaceOrder(url,qname);
+			WsIpaperPlaceOrderPortType orderPlacePort= orderPlaceService.getComIpaperXpedxWmWebOrderplacementWsIpaperPlaceOrderPort();
 			log.beginTimer("Calling-the-webmethod-OrderPlace-webservice");
-			FPlaceOrderResponseE orderResponse = testStub.fPlaceOrder(inputOrderXml);
+			//FPlaceOrderResponseE orderResponse = testStub.fPlaceOrder(inputOrderXml);
+			BindingProvider bp =(BindingProvider)orderPlacePort;
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endPointURL);
+			bp.getRequestContext().put("com.sun.xml.ws.connect.timeout", timeoutInMilliSecs);
+			bp.getRequestContext().put("com.sun.xml.ws.request.timeout",timeoutInMilliSecs);
+			String outputString=orderPlacePort.fPlaceOrder(inputXMLString);
 			log.endTimer("Calling-the-webmethod-OrderPlace-webservice");
 			//Document outputXml = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();
 			//YFCDocument outDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput());
 			
-			orderPlaceResponseDoc = YFCDocument.getDocumentFor(orderResponse.getFPlaceOrderResponse().getWsIpaperPlaceOrderOutput()).getDocument();
+			orderPlaceResponseDoc = YFCDocument.getDocumentFor(outputString).getDocument();
 			
 			if(null!=orderPlaceResponseDoc){
 				String outputXMLString = SCXmlUtil.getString(orderPlaceResponseDoc);
