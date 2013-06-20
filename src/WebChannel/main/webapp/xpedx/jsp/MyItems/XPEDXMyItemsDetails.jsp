@@ -2507,9 +2507,9 @@ function showSharedListForm(){
             <div id="mid-col-mil">
            		 	<s:if test='editMode != true'> 
                         <div class="ad-float">
-                        <div class="float-left smallBody">
+                        <div class="smallBody">
 						
-						<img class="float-left" style="margin-top:5px; padding-right:5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
+						<img style="margin-top:5px; padding-right:5px;display: inline;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
 						 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
                         <div class="clear"></div>
                         <!-- Ad Juggler Tag Starts -->
