@@ -859,8 +859,8 @@ $(document).ready(function(){
 	<div class="ad-margin">
 		<!-- ad placeholder, per the mockup. Ad Juggler Starts -->
 		<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="advertisement" />advertisement</div>
-
-		<s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
+		 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+		<%-- <s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
 				
 		<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/  -->
 		
@@ -938,7 +938,7 @@ $(document).ready(function(){
 				</script>
 			</s:else>			
 		</s:else>
-		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
+		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script> --%>
 		<!-- Ad Juggler Tag Ends -->
 				
 			

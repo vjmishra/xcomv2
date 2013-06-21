@@ -197,7 +197,7 @@
 		</fieldset>
 			</div>
 			<!-- Ad Juggler Tag Starts - Cat1 Landing Page -->		
-			<s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
+			<%-- <s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
 			
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115162" />
@@ -213,7 +213,7 @@
 			</s:elseif>
 			<s:else>
 					<s:set name="aj_adspot" value="115712" />
-			</s:else>
+			</s:else> --%>
 			<!-- Ad Juggler Tag Ends -->
 			 </s:if>
 			 <s:else>
@@ -271,7 +271,7 @@
 					</s:iterator>
 					</div>
 			<!-- Ad Juggler Tag Start - Catalog Landing Page 160X600 -->		
-			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
+			<%-- <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118185" />
 			</s:if>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
@@ -285,7 +285,7 @@
 			</s:elseif>
 			<s:else>
 					<s:set name="aj_adspot" value="115722" />
-			</s:else >			
+			</s:else >			 --%>
 			<!-- Ad Juggler Tag Ends -->
 
 					
@@ -298,12 +298,13 @@
 				 <div id="right-col-int" class="cat-landing" style="margin-top:0px;">
 				 <div align="left" style="padding-right: 72px;">
 				<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
-				</div>
+				
 			</div>
 			
 				 <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
+				 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
 				 </br>
-				<!-- Ad Juggler Tag Starts  -->
+				<%--<!-- Ad Juggler Tag Starts  -->
 				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->
 				<s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
 				<s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
@@ -322,7 +323,7 @@
 				</script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:else>
-				<!-- Ad Juggler Tag Ends -->
+				<!-- Ad Juggler Tag Ends -->  --%>
 	 
 			</div>
 			
