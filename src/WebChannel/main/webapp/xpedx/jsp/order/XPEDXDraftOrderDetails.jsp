@@ -802,6 +802,11 @@ $(document).ready(function(){
 	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5><br/>
 	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
 </s:if>
+<s:if test="%{#_action.getCustStatus() == '30' || #_action.getBillToCustomerStatus() == '30'}">
+	<h5 align="center"><b><font color="red">
+		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
+	</font></b></h5><br/> </s:if>
+	
 <s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
 	<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5><br/>
@@ -1459,7 +1464,7 @@ var currentAadd2ItemList = new Object();
 	--%>
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
-	    <s:if test="%{#_action.getCustStatus() != '30'}">
+	   <s:if test="%{#_action.getCustStatus() != '30' && #_action.getBillToCustomerStatus() != '30'}">
 	    <a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>
 		</s:if> 
 	     <s:if test='#hasPendingChanges == "Y"'>

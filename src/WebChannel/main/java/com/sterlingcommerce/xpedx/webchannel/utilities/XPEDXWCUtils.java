@@ -1655,7 +1655,14 @@ public class XPEDXWCUtils {
 			shipToCustomer.setExtnCustomerDivision(customerDivision);
 			shipToCustomer.setExtnCurrencyCode(currencyCode);
 			shipToCustomer.setExtnIndustry(industry);
-			 //Added for JIRA 4306
+			//Added for EB 289 - to set the ShipTo & BillTo Customer status when the ShipTo is changed in the cart page
+			String customerStatus = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/@Status");
+			shipToCustomer.setCustomerStatus(customerStatus);
+			String billToCustomerStatus = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/ParentCustomer/@Status");
+			shipToCustomer.getBillTo().setCustomerStatus(billToCustomerStatus);
+			//End of EB 289
+			
+			//Added for JIRA 4306
 			shipToCustomer.setOrganizationName(SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(),"//Customer/BuyerOrganization/@OrganizationName"));
 			//Ended for JIRA 4306
 			
@@ -5516,6 +5523,7 @@ public class XPEDXWCUtils {
 					billToCustomer.setParentCustomerKey(parentElem.getAttribute("ParentCustomerKey")); //Jira 3162 done Changes
 					billToCustomer.setBuyerOrganizationCode(parentElem.getAttribute("BuyerOrganizationCode"));
 					shipToCustomer.setParentCustomerKey(parentElem.getAttribute("CustomerKey"));
+					billToCustomer.setCustomerStatus(parentElem.getAttribute("Status"));//Added for EB 289
 					Element parentExtnElem = SCXmlUtil.getChildElement(parentElem, "Extn");
 					billToCustomer.setExtnCurrencyCode(parentExtnElem.getAttribute("ExtnCurrencyCode"));
 					billToCustomer.setExtnCustomerDivision(parentExtnElem.getAttribute("ExtnCustomerDivision"));

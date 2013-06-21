@@ -293,6 +293,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
 			custStatus = shipToCustomer.getCustomerStatus();
 			String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
+			billToCustomerStatus = shipToCustomer.getBillTo().getCustomerStatus(); //Added for EB 289 checks Bill-To for suspended Status
 			String envCode =shipToCustomer.getExtnEnvironmentCode();
 			setDivsionAndState(shipFromBranch,envCode);
 			setInventoryMap(xPEDXWCUtils.getInventoryCheckMap(getOutputDocument(), shipFromBranch, getWCContext()));
@@ -2539,6 +2540,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 
 	public String custStatus;
+	//Added for EB 289
+	public String billToCustomerStatus;
+	public String getBillToCustomerStatus() {
+		return billToCustomerStatus;
+	}
+
+
+	public void setBillToCustomerStatus(String billToCustomerStatus) {
+		this.billToCustomerStatus = billToCustomerStatus;
+	}
+	//End of EB 289
 	public String getCustStatus() {
 		return custStatus;
 	}
