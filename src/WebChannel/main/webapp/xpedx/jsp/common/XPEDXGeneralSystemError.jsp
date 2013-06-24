@@ -22,7 +22,7 @@
 		window.location.href = "<s:property value='%{itemDtlBackPageURL.substring(itemDtlBackPageURL.indexOf(xpedxSwcContext))}' escape='false'/>";
 	}
 </script>
-<title><s:property value="wCContext.storefrontId" /> - <s:text name='system.error.title' /> </title>
+<title><s:property value="wCContext.storefrontId" />System Error</title>
 <!-- Start of Webtrends -->
  <Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - Order Confirmation: Error'>
 <!-- End of webtrends -->
