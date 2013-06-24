@@ -803,7 +803,7 @@ $(document).ready(function(){
 	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
 </s:if>
 <s:if test="%{#_action.getCustStatus() == '30' || #_action.getBillToCustomerStatus() == '30'}">
-	<h5 align="center"><b><font color="red">
+	<br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5><br/> </s:if>
 	
@@ -1495,6 +1495,11 @@ var currentAadd2ItemList = new Object();
 </s:else>
 </div>
 <!--Added for 3098  -->
+<s:if test="%{#_action.getCustStatus() == '30' || #_action.getBillToCustomerStatus() == '30'}">
+	<br/><br/><br/><h5 align="center"><b><font color="red">
+		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
+	</font></b></h5><br/> </s:if>
+	
 <br/><br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
 <br/><br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:150px;color:red;display:inline" ></div></b>
 <br/><br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
