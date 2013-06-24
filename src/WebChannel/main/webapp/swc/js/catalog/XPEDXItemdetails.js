@@ -126,7 +126,8 @@ function setPandAData() {
 		sourceOrderMulError.setAttribute("class", "error");
 		displayPricesDiv.style.display = "none"; 
 		itemAvailDiv.style.display = "none"; 
-		qty.style.borderColor="";
+		qty.style.borderColor="#FF0000";
+		qty.focus();
 	}
 	else if(omError == 'true' && orderMultipleQty != 0)
 	{
@@ -156,7 +157,7 @@ function setPandAData() {
 	//if(displayPricesDiv!=null && pricedDiv!=null) 
 	if(errorVal.value == "" && errorValue.value == "") {
 		errorMsgDiv.innerHTML= "";
-		document.getElementById("qtyBox").style.borderColor="";	
+		//document.getElementById("qtyBox").style.borderColor="";	
 	}
 	
 	document.getElementById("lineStatusCodeMsg").value = "";
