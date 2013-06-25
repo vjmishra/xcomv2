@@ -36,7 +36,7 @@
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />	
 						<Attribute IndexFieldName="Item.ExtnMwt"
 							XMLName="ExtnMwt" DefaultWeight="1.0" Index="NOT_ANALYZED"
-							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+							Store="N" UseSynonyms="N" Searchable="Y" Sortable="Y" />
 						<Attribute IndexFieldName="Item.ExtnMaterial"
 							XMLName="ExtnMaterial" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
