@@ -1491,7 +1491,7 @@ function showSplitDiv(divId)
 						<th>Order Total (<s:property value='%{currencyCode}'/>):</th>
 						<td>
 							<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
-		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true}">
+		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true && #status != 'Invoiced'}">
 							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
 	                     	</s:if>
 	                        <s:else> 
