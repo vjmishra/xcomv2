@@ -344,10 +344,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
 				}
 				else{
-
+					String receiveOrderConfirmationFlag = SCXmlUtil.getXpathAttribute(getCustomerContactElement, "/CustomerContact/Extn/@ExtnOrderConfEmailFlag");
+					if("Y".equalsIgnoreCase(receiveOrderConfirmationFlag)){
 					strToEmailid = getCustomerContactElement
 					.getAttribute("EmailID");
-						
+					}	
 				}
 				/*** End of Code Modified for JIra 102 ,JIra 165 *******/
 			}		

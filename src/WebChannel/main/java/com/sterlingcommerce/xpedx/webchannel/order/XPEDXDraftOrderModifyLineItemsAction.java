@@ -622,6 +622,9 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     				
     			}
     		}
+    		Document customerContact = XPEDXWCUtils.getCustomerContactDetails();
+			String customerContactID = SCXmlUtil.getXpathAttribute(customerContact.getDocumentElement(), "/CustomerContactList/CustomerContact/@CustomerContactID");
+			inputXML.setAttribute("CustomerContactID", customerContactID);
     		String inputXml = SCXmlUtil.getString(inputXML);
 			log.debug("Input XML: " + inputXml);
     	}
