@@ -974,7 +974,7 @@ function showSplitDiv(divId)
 					    			<td class="text-right" width="95">						    		
 						    			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    				<s:set name="theMyPrice" value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#wcContext,#currencyCode,#orderLineExtnElem.getAttribute("ExtnUnitPrice"))'/>
-						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">						    			     
+						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1 && #status != 'Invoiced'}">						    			     
 						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>	
 						    			     	<s:set name="isMyPriceZero" value="%{'true'}" />
 						    			     	<s:set name="myPriceValue" value="%{'true'}" />					    			        
