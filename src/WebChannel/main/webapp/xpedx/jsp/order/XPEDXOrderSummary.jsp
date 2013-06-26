@@ -1659,7 +1659,7 @@ from session . We have customer Contact Object in session .
 		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div><br/>
 		<s:if test="%{#isSalesRep}">
 		<!--Added for EB-941  -->
-			<div class="salesProNotice" style="width:65%; float: right;"> Please ensure the correct Ship-To has been selected for this order prior to submitting the order.  To change Ship-To, click on Edit Cart at the bottom of the Checkout page and then click on 'Change' link at top of the Cart page.</div>
+			<div class="salesProNotice" style="width:65%; float: right;"> Please ensure the correct Ship-To has been selected for this order prior to submitting the order. To change Ship-To, click on Edit Cart at the bottom of the Checkout page to return to Cart. Click on the ‘Change’ link at the end of the ‘Shopping for’ banner at the top of the page.</div>
 		</s:if>
   
 <!-- class="container" -->
