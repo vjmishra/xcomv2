@@ -733,8 +733,13 @@ function printPOs(customerPos) {
 				            	<td>
 				            		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 					            		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-											<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp && #chainedOrder.getAttribute('Status') != 'Invoiced' }">
+											<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
+											<s:if test="%{#chainedOrder.getAttribute('Status') != 'Invoiced'}">
 												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+												</s:if>
+												<s:else>
+													(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' />
+												</s:else>
 				                    		</s:if>
 				                            <s:else>
 												(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
