@@ -3,9 +3,7 @@ package com.xpedx.nextgen.om.agent.nontaskq;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,7 +30,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 	private static YFCLogCategory log = YFCLogCategory
 			.instance(XPXRetryToPushFOToLegacyAgent.class);
 	
-	private static Set<String> setOrderHeaderKeys = new HashSet<String>();
+	//private Set<String> setOrderHeaderKeys = new HashSet<String>();
 
 	@Override
 	public List getJobs(YFSEnvironment env, Document criteria,
@@ -44,7 +42,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		Document docOrderList = null;
 		
 		//Log Begin Timer
-		log.beginTimer("getJobs()");
+		log.beginTimer("getJobs");
 		
 		// get YIFApi instance.
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
@@ -91,11 +89,11 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 			Element eleOr = SCXmlUtil.createChild(eleCQ, "Or");
 			
 			//Query all failed Legacy Order posts
-			for (String sOrderHeaderKey : setOrderHeaderKeys) {
+			/*for (String sOrderHeaderKey : setOrderHeaderKeys) {
 				Element eleExp = SCXmlUtil.createChild(eleOr, "Exp");
 				eleExp.setAttribute("Name", "OrderHeaderKey");
 				eleExp.setAttribute("Value", sOrderHeaderKey);
-			}
+			}*/
 			
 			//Query all Orders after the Last Message created.
 			Element eleExpGT = SCXmlUtil.createChild(eleOr, "Exp");
@@ -105,7 +103,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 			
 		}
 		// Initially clear all failed OrderHeaderKeys
-		setOrderHeaderKeys.removeAll(setOrderHeaderKeys);
+		//setOrderHeaderKeys.removeAll(setOrderHeaderKeys);
 		
 		if(log.isDebugEnabled()){
 			log.debug((new StringBuilder()).append("User:" + env.getUserId()).append(" Input document[docInQry] is ").append(YFCLogUtil.toString(docInQry)).toString());
@@ -140,7 +138,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 		if(log.isDebugEnabled()){
 			log.debug("The length of listOfJobs is : " + listOfJobs.size());
 		}
-		log.endTimer("getJobs()");
+		log.endTimer("getJobs");
 		return listOfJobs;
 	}
 
@@ -216,7 +214,7 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 	public void executeJob(YFSEnvironment env, Document docIn)
 			throws Exception {
 		
-		 log.beginTimer("executeJobs()");
+		 log.beginTimer("executeJob");
 
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		
@@ -232,10 +230,10 @@ public class XPXRetryToPushFOToLegacyAgent extends YCPBaseAgent {
 
 			log.error(e);
 			
-			setOrderHeaderKeys.add(SCXmlUtil.getAttribute(docIn.getDocumentElement(), "OrderHeaderKey"));
+			//setOrderHeaderKeys.add(SCXmlUtil.getAttribute(docIn.getDocumentElement(), "OrderHeaderKey"));
 		}
 		
-		log.endTimer("executeJobs()");
+		log.endTimer("executeJob");
 	}
 
 }
