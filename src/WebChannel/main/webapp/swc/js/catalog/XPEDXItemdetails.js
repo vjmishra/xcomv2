@@ -103,6 +103,7 @@ function setPandAData() {
 	}
 	//XB 214 BR1
 	var qty = document.getElementById("qtyBox");
+	qty.style.borderColor="";
 	var sourceOrderMulError = document.getElementById("errorMsgForQty");
 	var OrderMultipleQtyFromSrc = document.getElementById("OrderMultipleQtyFromSrc");
 	if(OrderMultipleQtyFromSrc != null && OrderMultipleQtyFromSrc.value != ''){
