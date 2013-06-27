@@ -434,10 +434,10 @@
 					</CategoryList>
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName=""
-							IsProvidedFilter="">
+							IsProvidedFilter="" SequenceNo="">
 							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
-								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" SequenceNo="" 
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
 								ShortDescription="" /> 
  
 							<AssignedValueList>
