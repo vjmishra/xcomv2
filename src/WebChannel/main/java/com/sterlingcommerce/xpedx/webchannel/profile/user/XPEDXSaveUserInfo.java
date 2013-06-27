@@ -148,11 +148,11 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 
 	public void setNewAssignedCustomers(String newAssignedCustomers) {
 		this.newAssignedCustomers = newAssignedCustomers;
-		System.out.println("newAssignedCustomerssetsssssssssssssssss"+newAssignedCustomers);
+		
 	}
 	
 	public String getNewAssignedCustomers() {
-		System.out.println("the new assigned customers$$$$$$$$$$$$$$$$$$$$$$$$$$$"+newAssignedCustomers);
+		
 		return newAssignedCustomers;
 	}
 
