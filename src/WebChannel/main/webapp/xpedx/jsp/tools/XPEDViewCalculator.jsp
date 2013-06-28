@@ -126,49 +126,49 @@
                           <td width="12" valign="middle" class="padding8">W: 
                             </td>
                           <td width="80" valign="middle" class="padding8">                                               
-                          	<s:textfield name="sheetSizeW" cssStyle="width:70px;" cssClass="x-input" id="sheetSizeW" onkeyup="calcPhone('Value',impCalculatorForm.sheetSizeW);"/>                          
+                          	<s:textfield name="sheetSizeW" cssStyle="width:70px;" cssClass="x-input" id="sheetSizeW" onchange="calcPhone('Value',impCalculatorForm.sheetSizeW);"/>                          
                           </td>
                           <td width="12" class="padding8">X </td>
                           <td width="12" class="padding8">H:                            </td>
                           <td width="256" class="padding8">                          
-                          	<s:textfield name="sheetSizeH" cssStyle="width:70px;" cssClass="x-input" id="sheetSizeH" onkeyup="calcPhone('Value',impCalculatorForm.sheetSizeH);"/>
+                          	<s:textfield name="sheetSizeH" cssStyle="width:70px;" cssClass="x-input" id="sheetSizeH" onchange="calcPhone('Value',impCalculatorForm.sheetSizeH);"/>
                           </td>
                         </tr>
                         <tr>
                           <td>Trim Size:</td>
                           <td width="12" valign="middle" class="padding8">W:</td>
                           <td width="80" valign="middle" class="padding8">							
-							<s:textfield name="trimSizeW" cssStyle="width:70px;" cssClass="x-input" id="trimSizeW" onkeyup="calcPhone('Value',impCalculatorForm.trimSizeW);"/>
+							<s:textfield name="trimSizeW" cssStyle="width:70px;" cssClass="x-input" id="trimSizeW" onchange="calcPhone('Value',impCalculatorForm.trimSizeW);"/>
 						  </td>
                           <td width="12" class="padding8">X </td>
                           <td width="12" class="padding8">H:                            </td>
                           <td width="256" class="padding8">                          	
-                          	<s:textfield name="trimSizeH" cssStyle="width:70px;" cssClass="x-input" id="trimSizeH" onkeyup="calcPhone('Value',impCalculatorForm.trimSizeH);"/>
+                          	<s:textfield name="trimSizeH" cssStyle="width:70px;" cssClass="x-input" id="trimSizeH" onchange="calcPhone('Value',impCalculatorForm.trimSizeH);"/>
                           </td>
                         </tr>
                         <tr>
                          <td>Gripper Width:</td>
                          <td colspan="5">                                                     
-                          <s:textfield name="gripperWidth" cssStyle="width:120px;" onkeyup="calcPhone('Value',impCalculatorForm.gripperWidth);" cssClass="x-input" id="gripperWidth" value="0"/>
+                          <s:textfield name="gripperWidth" cssStyle="width:120px;" onchange="calcPhone('Value',impCalculatorForm.gripperWidth);" cssClass="x-input" id="gripperWidth" value="0"/>
                          </td>
                         </tr>
                         <tr>
                          <td>Color Bar Width:</td>
                          <td colspan="5">
-                          <s:textfield name="colorBarWidth" cssStyle="width:120px;" cssClass="x-input" id="colorBarWidth" onkeyup="calcPhone('Value',impCalculatorForm.colorBarWidth);" value="0"/>
+                          <s:textfield name="colorBarWidth" cssStyle="width:120px;" cssClass="x-input" id="colorBarWidth" onchange="calcPhone('Value',impCalculatorForm.colorBarWidth);" value="0"/>
                          </td>
                         </tr>
                         <tr>
                           <td>Side Guide: </td>
                           <td colspan="5"><span class="no-border-left">                            
                           </span>
-                           <s:textfield name="sideGuide" cssStyle="width:120px;" cssClass="x-input" id="sideGuide" onkeyup="calcPhone('Value',impCalculatorForm.sideGuide);" value="0"/>
+                           <s:textfield name="sideGuide" cssStyle="width:120px;" cssClass="x-input" id="sideGuide" onchange="calcPhone('Value',impCalculatorForm.sideGuide);" value="0"/>
                           </td>
                         </tr>
                       <tr>
                           <td>Gutter: </td>
                           <td colspan="5">                          	
-                          	<s:textfield name="gutter" cssStyle="width:120px;" cssClass="x-input" id="gutter" onkeyup="calcPhone('Value',impCalculatorForm.gutter);" value="0"/>
+                          	<s:textfield name="gutter" cssStyle="width:120px;" cssClass="x-input" id="gutter" onchange="calcPhone('Value',impCalculatorForm.gutter);" value="0"/>
                           </td>
                         </tr>
                         <tr>
