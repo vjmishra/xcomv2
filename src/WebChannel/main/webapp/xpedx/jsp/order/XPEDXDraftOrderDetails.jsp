@@ -798,14 +798,10 @@ $(document).ready(function(){
 <%--	<h5 align="center"><b><font color="red"><s:property
 		value="ajaxLineStatusCodeMsg" /></font></b></h5>  --%>
 	</div>
-	<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5><br/>
+</s:if>
+<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5><br/>
 	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5><br/>
 	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
-</s:if>
-<s:if test="%{#_action.getCustStatus() == '30' || #_action.getBillToCustomerStatus() == '30'}">
-	<br/><h5 align="center"><b><font color="red">
-		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
-	</font></b></h5><br/> </s:if>
 	
 <s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
@@ -816,7 +812,10 @@ $(document).ready(function(){
 		<h5 align="center"><b><font color="#828400"><s:property value="duplicateInfoMsg" /></font></b></h5><br/>
 	</s:if>
 </div>
-
+<s:if test="%{#_action.getCustStatus() == '30' || #_action.getBillToCustomerStatus() == '30'}">
+	<h5 align="center"><b><font color="red"> We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.</font></b></h5><br/> 
+</s:if>
+	
 <!-- breadcrumb / 'print page' button -->
 <div class="breadcrumb-title" id="breadcumbs-list-name">
 	<span class="page-title">
@@ -1498,12 +1497,12 @@ var currentAadd2ItemList = new Object();
 <s:if test="%{#_action.getCustStatus() == '30' || #_action.getBillToCustomerStatus() == '30'}">
 	<br/><br/><br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
-	</font></b></h5><br/> </s:if>
+	</font></b></h5></s:if>
 	
-<br/><br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
-<br/><br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:150px;color:red;display:inline" ></div></b>
-<br/><br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
-<br/><br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
+<br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
+<br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:150px;color:red;display:inline" ></div></b>
+<br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
+<br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
 <div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
