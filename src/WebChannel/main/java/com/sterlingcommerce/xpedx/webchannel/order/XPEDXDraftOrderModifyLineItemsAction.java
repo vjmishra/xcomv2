@@ -59,7 +59,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     private Element modifiedOrderExtnForSpecailCharge;
     private String modifyOrderLines="false";
     public String draftOrderFlag;
-    public String draftOrderError;
+    public String customerContactId;
+	public String draftOrderError;
     private boolean isOUErrorPage=false;
  
     //Added for EB-464
@@ -67,6 +68,15 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public ArrayList <String> orderLineQuantities;
     public ArrayList <String> itemUOMs;
     public ArrayList <String> orderLineItemIDs;
+    
+    public String getCustomerContactId() {
+		return customerContactId;
+	}
+
+	public void setCustomerContactId(String customerContactId) {
+		this.customerContactId = customerContactId;
+	}
+
      
     public ArrayList<String> getOrderLineItemIDs() {
         return orderLineItemIDs;
@@ -165,7 +175,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             mashUpId = CHANGE_ORDER_LINE_DETAILS_MASHUP;
              
         }
-         
+        String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+        if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+			 customerContactId = (String)wcContext.getSCUIContext().getSession().getAttribute("loggedInUserName");
+		}
+		else{
+			customerContactId=wcContext.getCustomerContactId();
+		}
         /*  String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
           if("Single_Step".equals(definitionFromSession))
           {

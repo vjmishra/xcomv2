@@ -1198,7 +1198,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" DraftOrderFlag="">
+                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" DraftOrderFlag="" CustomerContactID="">
                     <OrderLines>
                         <OrderLine Action="MODIFY" OrderLineKey=""
                             DeliveryMethod="" ReservationMandatory="N">
@@ -1282,7 +1282,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="" OrderName="">
+                <Order OrderHeaderKey="" OrderName="" CustomerContactID="">
                     <Extn  ExtnOrderDesc="" />
                 </Order>
             </Input>
@@ -2947,7 +2947,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y">
+                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" CustomerContactID="" >
                     <OrderLines>
                         <OrderLine Action="MODIFY" OrderLineKey=""
                             DeliveryMethod="" ReservationMandatory="N">

@@ -336,18 +336,25 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
                 }
                  
             }else{
-                /*** Start of Code Modified for JIra 102 ,JIra 165 *******/
+            	String receiveOrderConfirmationFlag = SCXmlUtil.getXpathAttribute(getCustomerContactElement,"./Extn/@ExtnOrderConfEmailFlag");
                 if("Y".equalsIgnoreCase(isSalesRepEmailConfirm))
                 {
+                	if("Y".equalsIgnoreCase(receiveOrderConfirmationFlag)){
                     strToEmailid = getCustomerContactElement
                     .getAttribute("EmailID")+","+customerDoc.getDocumentElement().getAttribute("salesRepEmail");
+                	}
+                	else
+                	{
+                	strToEmailid = customerDoc.getDocumentElement().getAttribute("salesRepEmail");
+                	}
  
                 }
                 else{
- 
+                	
+                	if("Y".equalsIgnoreCase(receiveOrderConfirmationFlag)){
                     strToEmailid = getCustomerContactElement
                     .getAttribute("EmailID");
-                         
+                	}   
                 }
                 /*** End of Code Modified for JIra 102 ,JIra 165 *******/
             }        
