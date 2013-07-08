@@ -4511,6 +4511,22 @@
     IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
     Modifyts="2013-05-31T15:24:56-04:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-07-01T03:59:35-04:00" Createuserid="admin"
+    FlowGroupName="DefaultAgentGroup" FlowKey="201307010359353042424"
+    FlowName="CATALOG_INDEX_BUILD_TRIGGERED" FlowType="01"
+    GraphUIKey="AgentGraphUI" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="Y" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-07-01T03:59:35-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-07-05T09:05:29-04:00" Createuserid="admin"
+    FlowGroupName="DefaultAgentGroup" FlowKey="201307050905303042944"
+    FlowName="YFS_INBOX_PURGE" FlowType="01" GraphUIKey="AgentGraphUI"
+    IsOutGoing="Y" IsPrintService="N" IsRealTime="Y" Lockid="0"
+    Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-07-05T09:05:29-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
