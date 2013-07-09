@@ -258,12 +258,13 @@ var myMask;
 		            		}
 		            	}//Added for EB-439 - start
 		            	var omError = orderMultipleQtyUom[2];		            			
-		            	if(omError == 'true' && qty.value >0 ){
+		            	if(omError == 'true' && (qty.value >0 || qty.value == "") ){
 				            sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 				            sourceOrderMulError.style.display = "inline"; 
 				            sourceOrderMulError.setAttribute("class", "error");
 				            availabilityRow.style.display = "none"; 
-				            qty.style.borderColor="";			            
+				            qty.style.borderColor="#FF0000";
+				    		qty.focus();		            
 				        }
 		            	else if(omError == 'true')
 		            	{	

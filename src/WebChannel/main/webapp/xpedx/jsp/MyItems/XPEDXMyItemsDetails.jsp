@@ -2022,6 +2022,7 @@ function showSharedListForm(){
 		            			 var qty = document.getElementById("QTY_"+_myItemKey);
 		            			 var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+_myItemKey);
 		            			 var sourceOrderMulErrorInnerHTML = sourceOrderMulError.innerHTML;
+		            			 document.getElementById("qtys_"+_myItemKey).style.borderColor="";
 		            			 if(qty.value == '0' )
 		            				{
 		            					sourceOrderMulError.innerHTML = "Please enter a valid quantity and try again.";
@@ -2032,12 +2033,13 @@ function showSharedListForm(){
 		            			 else if(sourceOrderMulErrorInnerHTML.indexOf("is currently not valid. Please delete it from your list and contact Customer Service") > -1){
 		            					 document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            			    }
-		            			 else if(omError == 'true' && qty.value > 0)
+		            			 else if(omError == 'true' && (qty.value > 0 || qty.value == ""))
 		            				{
 		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
+		            					document.getElementById("qtys_"+_myItemKey).style.borderColor="#FF0000";
 		            				}
 		            			 else if(omError == 'true')
 		            				{
@@ -3134,7 +3136,7 @@ function showSharedListForm(){
 											<!-- UOM & Custom Fields -->
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
-												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"  maxlength="7" tabindex="1"
+												title="QTY" cssClass="x-input" cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"  maxlength="7" tabindex="1"
 												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -3148,7 +3150,7 @@ function showSharedListForm(){
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}"/>
 											</s:if> <s:else>
 												<s:textfield
-												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}" tabindex="1"
+												title="QTY" cssClass="x-input" cssStyle="width:51px;" name="qtys" id="qtys_%{#id}" tabindex="1"
 												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
@@ -3231,7 +3233,7 @@ function showSharedListForm(){
 							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
 							    <ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
-                                onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
+                                 style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability&nbsp;&nbsp;</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
                                 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">

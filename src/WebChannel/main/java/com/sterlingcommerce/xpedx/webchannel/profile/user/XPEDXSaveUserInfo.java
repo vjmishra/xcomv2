@@ -144,12 +144,16 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.userNotAdmin = userNotAdmin;
 	}
 
-	public String getNewAssignedCustomers() {
-		return newAssignedCustomers;
-	}
+	
 
 	public void setNewAssignedCustomers(String newAssignedCustomers) {
 		this.newAssignedCustomers = newAssignedCustomers;
+		
+	}
+	
+	public String getNewAssignedCustomers() {
+		
+		return newAssignedCustomers;
 	}
 
 	public String getDefaultShipTo() {
@@ -977,8 +981,10 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		/* Begin - Changes made for XB-287 : Save functionality */
 		
 		List<String> alOldAssignedCustomers = new ArrayList<String>();
-		//List<String> alFinalSelectedCustomers = new ArrayList<String>();
-		if (getNewAssignedCustomers().indexOf(",") != -1) {
+		
+		//Added for EB 633
+		
+		if (null!=getNewAssignedCustomers() && getNewAssignedCustomers().indexOf(",") != -1) {
 			alNewSelectedCustomers = Arrays.asList(getNewAssignedCustomers()
 					.split(","));
 		} else {

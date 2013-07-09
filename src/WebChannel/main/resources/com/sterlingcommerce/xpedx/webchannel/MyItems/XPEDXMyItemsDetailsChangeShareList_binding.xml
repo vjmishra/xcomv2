@@ -8,7 +8,7 @@
 	<entry key="listKey">XPEDXMyItemsDetailsChangeShareList:/XPEDXMyItemsListShare/@MyItemsListKey,XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@MyItemsListKey,XPEDXMyItemsListChange:/XPEDXMyItemsList/@MyItemsListKey,XPEDXMyItemsDetailsChangeShareListForSalesPro:/XPEDXMyItemsListShare/@MyItemsListKey</entry>
 	
 	<entry key="sharePermissionLevel">XPEDXMyItemsListChange:/XPEDXMyItemsList/@SharePrivate</entry>
-	<entry key="shareAdminOnly">XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListChange:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@ShareAdminOnly</entry> <!--JIRA 3377 -->
+	<entry key="shareAdminOnly">XPEDXMyItemsDetailsDeleteShareListItems:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListChange:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListCreate:/XPEDXMyItemsList/@ShareAdminOnly,XPEDXMyItemsListCreateForSalesRep:/XPEDXMyItemsList/@ShareAdminOnly</entry> <!--JIRA 3377,EB-762 -->
 	
 	<entry key="name">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Name,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Name,XPEDXMyItemsListCreateAndAddItemForSalesRep:/XPEDXMyItemsList/@Name,XPEDXMyItemsListCreateForSalesRep:/XPEDXMyItemsList/@Name</entry>
 	<entry key="desc">XPEDXMyItemsListCreate:/XPEDXMyItemsList/@Desc,XPEDXMyItemsListCreateAndAddItem:/XPEDXMyItemsList/@Desc,XPEDXMyItemsListCreateAndAddItemForSalesRep:/XPEDXMyItemsList/@Desc,XPEDXMyItemsListCreateForSalesRep:/XPEDXMyItemsList/@Desc</entry>

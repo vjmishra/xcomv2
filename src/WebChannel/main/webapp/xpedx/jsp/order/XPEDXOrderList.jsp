@@ -616,7 +616,12 @@ function printPOs(customerPos) {
 								<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 									<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 									<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+									<s:if test="%{#chainedOrder.getAttribute('Status') == 'Invoiced'  || #chainedOrder.getAttribute('Status') == 'Invoice Only'}">
+											(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+										</s:if>
+										<s:else>
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+										</s:else>  
 		                    		</s:if>
 		                            <s:else>
 										(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
@@ -734,7 +739,12 @@ function printPOs(customerPos) {
 				            		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 					            		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 											<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+											<s:if test="%{#chainedOrder.getAttribute('Status') == 'Invoiced' || #chainedOrder.getAttribute('Status') == 'Invoice Only'}">
+													(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' />
+												</s:if>
+												<s:else>
+												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+												</s:else>
 				                    		</s:if>
 				                            <s:else>
 												(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 

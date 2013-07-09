@@ -667,11 +667,13 @@ function funDivOpenClose(val1)
 		    }
 		}
 
-		//Added for XB 226
-		var spendingLimit="";
-		var primaryApprover="";
-		var OrderApprovalFlag;
-			
+		//Added for EB 633
+		var salesRep = document.getElementById("salesRepFlg").value; 
+		if(!salesRep){
+			//Added for XB 226
+			var spendingLimit="";
+			var primaryApprover="";
+			var OrderApprovalFlag;			
 			if(document.getElementById("spendingLt") != null){
 				spendingLimit = document.getElementById("spendingLt").value;
 			}
@@ -682,8 +684,8 @@ function funDivOpenClose(val1)
 			
 			if(document.getElementById("OrderApprovalFlag")!=null){
 			submitOrderChkValue = document.getElementById("OrderApprovalFlag").checked;
-			}
-			
+			}			
+
 			
 			if(submitOrderChkValue){
 				if((spendingLimit.length > 0)){
@@ -709,7 +711,7 @@ function funDivOpenClose(val1)
 				
 				
 				
-			}
+			}}
 			else{ 
 			
 			// Added AND condition for jira 2055
@@ -739,7 +741,7 @@ function funDivOpenClose(val1)
 				}
 			}
 
-			}	
+			}		
 		
 		//start for XBT 298
 		var waitMsg = Ext.Msg.wait("Processing...");
@@ -1276,6 +1278,8 @@ a.underlink:hover {
 	<s:set name='_action' value='[0]' />
 	<s:set name="isSalesRep"
 		value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}" />
+		<!-- Added for EB 633 -->
+		<s:hidden name='salesRepFlg' id="salesRepFlg" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 	<s:set name="AddressInformationTitle" scope="page"
 		value="getText('Address_Information_Title')" />
 	<s:set name="confirmAddressDeleteMessage" scope="page"

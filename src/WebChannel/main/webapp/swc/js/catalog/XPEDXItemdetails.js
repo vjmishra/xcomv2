@@ -103,6 +103,7 @@ function setPandAData() {
 	}
 	//XB 214 BR1
 	var qty = document.getElementById("qtyBox");
+	qty.style.borderColor="";
 	var sourceOrderMulError = document.getElementById("errorMsgForQty");
 	var OrderMultipleQtyFromSrc = document.getElementById("OrderMultipleQtyFromSrc");
 	if(OrderMultipleQtyFromSrc != null && OrderMultipleQtyFromSrc.value != ''){
@@ -119,14 +120,15 @@ function setPandAData() {
 		}
 	}//Added for EB-439 - start
 	var omError = OrderMultipleQtyUom[2];	
-	if(omError == 'true' && qty.value > 0)//omError == 'true' && qty.value > 0 )
+	if(omError == 'true' && (qty.value > 0 || qty.value == ""))//omError == 'true' && qty.value > 0 )
 	{
 		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+OrderMultipleUom;
 		sourceOrderMulError.style.display = "inline-block"; 
 		sourceOrderMulError.setAttribute("class", "error");
 		displayPricesDiv.style.display = "none"; 
 		itemAvailDiv.style.display = "none"; 
-		qty.style.borderColor="";
+		qty.style.borderColor="#FF0000";
+		qty.focus();
 	}
 	else if(omError == 'true' && orderMultipleQty != 0)
 	{
@@ -156,7 +158,7 @@ function setPandAData() {
 	//if(displayPricesDiv!=null && pricedDiv!=null) 
 	if(errorVal.value == "" && errorValue.value == "") {
 		errorMsgDiv.innerHTML= "";
-		document.getElementById("qtyBox").style.borderColor="";	
+		//document.getElementById("qtyBox").style.borderColor="";	
 	}
 	
 	document.getElementById("lineStatusCodeMsg").value = "";

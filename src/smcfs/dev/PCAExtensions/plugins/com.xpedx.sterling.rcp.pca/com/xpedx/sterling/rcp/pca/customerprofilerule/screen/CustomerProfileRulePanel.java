@@ -358,9 +358,9 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 			this.wizBehavior = wizBehavior;
 		}
 		public void getTargetModelAndCallUpdateApi(boolean isRefreshReqd) {
-			String linePOValue ="";
-			String lineAccValue="";
-			
+			String linePO = "";
+			String lineAcc = "";
+			myBehavior.createRuleXML();
 			Control childIterator[] = pnlDynamicLineParent.getChildren();
 			int noOfChildren = childIterator.length;
 			for (int k = 0; k < noOfChildren; k++) {
@@ -369,36 +369,33 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 				}
 				CustomerProfileRuleLinePanel childpnl = (CustomerProfileRuleLinePanel) childIterator[k];
 				Element ruleLineElem = childpnl.getBehavior().getTargetModelforParent();
-				// XB-519 Added by VJ
-				if(k==3){
-					linePOValue = childpnl.getBehavior().getFieldValue("txtParamRule");
-				}
-				// Added by VJ
-				
-				if(k==4){
-					
-				lineAccValue=childpnl.getBehavior().getFieldValue("txtParamRule"); // Added by VJ
-				//System.out.println("" + lineAccValue);
-				}
-				if("" != linePOValue){
-				 
-				//XPXUtils.poLbl=billToValue;
-				XPXUtils.setPoLbl(linePOValue);
-				}
-				if("" != lineAccValue){
-					 
-					//XPXUtils.lineAcc=lineAccValue;
-					XPXUtils.setLineAcc(lineAccValue);
-					myBehavior.createRuleXML(linePOValue , lineAccValue);
+				if(noOfChildren==7 && k==5 || noOfChildren==5 && k==3)
+				{
+					XPXUtils.setLineAcc(childpnl.getBehavior().getFieldValue("txtParamRule"));
+					lineAcc = childpnl.getBehavior().getFieldValue("txtParamRule");
+					if(lineAcc != null && lineAcc != ""){
+						XPXUtils.setLineAcc(lineAcc);
 					}
+					
+				}
+				else if(noOfChildren==7 && k==6 || noOfChildren==5 && k==4)
+				{
+					linePO = childpnl.getBehavior().getFieldValue("txtParamRule");
+					if(linePO != null && linePO != ""){
+					XPXUtils.setPoLbl(linePO);
+					}
+					
+				}
+				myBehavior.setUpdatedValues(ruleLineElem,lineAcc,linePO);
 				if(ruleLineElem != null){
 					if(childpnl.getBehavior().validateForErrors()){
 						return;
 					}
-					myBehavior.createRuleXML(linePOValue , lineAccValue);
 					myBehavior.appendRuleLine(ruleLineElem);
 				}
+				
 			}
+			
 			if(errorMessageList.size()>0){
 				String errorMessageGTM="";
 				String errorMessage="";
@@ -437,7 +434,7 @@ public class CustomerProfileRulePanel extends Composite implements IYRCComposite
 			myBehavior.callUpdateApi();
 			}
 		}
-
+		
 		public CustomerProfileRulePanelBehavior getPageBehavior() {
 			return myBehavior;
 		}

@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
+import com.xpedx.sterling.rcp.pca.util.XPXPaginationComposite;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -284,9 +285,15 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 								}
 								prepareInputXML(myItemListKey) ;
 					}
-						else{
+					/*BEGIN - Code added for XB-84*/
+					else{
+							setModel("XpedxMilBothLstList",eleOutput);
+							((XPXPaginationComposite)getOwnerForm()).getLnkPrevious().setVisible(false);
+							((XPXPaginationComposite)getOwnerForm()).getLnkNext().setVisible(false);
 							//YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
 						}
+					/*END - Code added for XB-84*/
+					
 					//prepareInputXML(myItemListKey) ;
 			    //	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
 			     	}

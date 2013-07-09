@@ -22,7 +22,7 @@
 		window.location.href = "<s:property value='%{itemDtlBackPageURL.substring(itemDtlBackPageURL.indexOf(xpedxSwcContext))}' escape='false'/>";
 	}
 </script>
-<title><s:property value="wCContext.storefrontId" /> - <s:text name='system.error.title' /> </title>
+<title><s:property value="wCContext.storefrontId" />System Error</title>
 <!-- Start of Webtrends -->
  <Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - Order Confirmation: Error'>
 <!-- End of webtrends -->
@@ -49,10 +49,10 @@
                 <div id="mid-col-mil">
 					<div style="border: 1px solid #CCC; width: auto; padding: 20px;" class="x-corners">
                         <br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span> <s:text name='search.produced.system.error.firstline' /></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>There was an error processing your request. Please try your request again.</span>
                         <br />
                         <br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span> <s:text name='search.produced.system.error.secondline' /></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Should the problem persist or you have any questions please contact eBusiness support at 877-269-1784.</span>
                         <br />
                         <ul>
                         </ul>	
