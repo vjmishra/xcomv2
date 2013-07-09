@@ -954,6 +954,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 						} catch (Exception exception) {
 							exception.printStackTrace();
 						} 
+						finally
+						{
+						 connection.close();
+						}
 
 					}
 				 //3740 - Ends	

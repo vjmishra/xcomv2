@@ -4,6 +4,7 @@ package com.xpedx.nextgen.item;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,10 +57,11 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 	private int getLengthForExtnBasis(YFSEnvironment env)
 	{
 		int length=0;
+		Connection m_Conn = null;
 		try
 		{
 			YFSConnectionHolder connHolder  = (YFSConnectionHolder)env;
-			Connection m_Conn= connHolder.getDBConnection();
+			m_Conn= connHolder.getDBConnection();
 			Statement stmt =m_Conn.createStatement();
 			String query="select max(length(extn_basis)) from yfs_item ";
 			ResultSet itemRs=stmt.executeQuery(query);
@@ -71,6 +73,14 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally{
+			try {
+				m_Conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return length;
@@ -453,6 +463,14 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 		} catch (Exception exception) {
 			log.error("YFSException: " + exception.getStackTrace());
 		}
+		finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return itemId; 
 	}
 
@@ -772,6 +790,15 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 			log.error("Exception: " + e.getStackTrace());
 //			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
 
+		}
+		finally
+		{
+		 try {
+			m_Conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		}
 
 		return m_Conn;
