@@ -821,7 +821,7 @@ return new Ext.XTemplate(
   '<div id="item-ct">',
   '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
   '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" title="Mill / Mfg. Item">M</td>',</s:if>
+   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" title="Mill / Mfg. Item"><a href="#" onclick="toggleStockSort();">M<span id="directionMArrow"></span></a></td>',</s:if>
   '<td class="Item-hname" style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
   <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
   <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
@@ -1314,7 +1314,11 @@ function processSortByTab(sortFieldValue) {
 		if(sortFieldValue.indexOf("ExtnPackMethod")>-1) 
 			{
 			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionPackArrow";
-			}		
+			}
+		if(sortFieldValue.indexOf("showNormallyStockedItems")>-1) 
+			{
+			ArrowDirection="&sortDirection=sortUp&theSpanNameValue=directionMArrow";
+			}
 		}
 	else
 		{
@@ -1349,6 +1353,10 @@ function processSortByTab(sortFieldValue) {
 		     if(sortFieldValue.indexOf("ExtnPackMethod")>-1)
 				{
 				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionPackArrow";
+				}
+		     if(sortFieldValue.indexOf("showNormallyStockedItems")>-1)
+				{
+				ArrowDirection="&sortDirection=sortDown&theSpanNameValue=directionMArrow";
 				}
 		}
 	
