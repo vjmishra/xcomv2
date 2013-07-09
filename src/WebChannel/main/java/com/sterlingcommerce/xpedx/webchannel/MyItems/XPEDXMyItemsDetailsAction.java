@@ -1833,6 +1833,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		
 		//setting all the item Id lists
 		setAllItemIdsOfList();
+		ArrayList<Element> itemsElem = new ArrayList<Element>();
 		/*
 		 *
 			XPEDXWCUtils xPEDXWCUtils = new XPEDXWCUtils();
@@ -1846,8 +1847,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		// getting the primary information Doc for the related Items also here and setting the Inventory also here for those items
 		try {
 			allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
+			if(allItemsDoc != null){
 			//itemXrefDoc = XPEDXOrderUtils.getXpedxItemBranchItemAssociationDetails(allItemIds, wcContext.getCustomerId(), customerDivision, envCode, wcContext);
-			ArrayList<Element> itemsElem=SCXmlUtil.getElements(allItemsDoc.getDocumentElement(), "Item");
+				itemsElem=SCXmlUtil.getElements(allItemsDoc.getDocumentElement(), "Item");
+			}
 			if(itemsElem != null)
 			{
 				for(int i=0;i<itemsElem.size();i++)
