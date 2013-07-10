@@ -35,6 +35,8 @@
 				<param name="namespace">/catalog</param>
 				<param name="parse">true</param>
 				<param name="itemID">${itemID}</param>
+				<!-- Added goBackFlag for Back button issues for JIRA #828 -->
+				<param name="goBackFlag">true</param>
 				<param name="scFlag">Y</param>
 				<param name="unitOfMeasure">${unitOfMeasure}</param>
 			</result>
