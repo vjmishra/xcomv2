@@ -115,6 +115,12 @@ a.green-ui-btn:active span {
 	padding: 5px 0 4px 18px;
 }
 /* Added to see the Forgot Password function pages with green header boxes  for EB #1334 */
+#second-navigation #main-nav li.hover, #second-navigation#main-nav li:hover {
+    background: url("../images/unselected_saalfeld.png") repeat-x scroll 0 0 transparent;
+}
+#second-navigation #main-nav li.active.hover, #second-navigation #main-nav li.active:hover {
+    background: url("../images/current_saalfeld.png") repeat-x scroll center top transparent;
+}
 #second-navigation ul li {
     background: url("../images/unselected_saalfeld.png") repeat-x scroll 0 0 transparent;
     display: block;
@@ -123,8 +129,4 @@ a.green-ui-btn:active span {
     min-width: 111px;
     overflow: visible;
     padding-top: 4px;
-}
-
-#second-navigation #main-nav li.hover, #second-navigation#main-nav li:hover {
-    background: url("../images/unselected_saalfeld.png") repeat-x scroll 0 0 transparent;
 }
