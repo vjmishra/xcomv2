@@ -36,6 +36,8 @@
 		<!-- END JS -->
 	</s:if>
 	<s:else>
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
