@@ -66,10 +66,10 @@ public class ErrorLogger {
 				String errorCode = yfe.getErrorCode();
 				if(!YFCObject.isVoid(errorCode))
 				{
-					if(centExemptErrors.size()==0){
+					if(centExemptErrors != null && centExemptErrors.size()==0){
 						centExemptErrors = XPXUtils.readCentPropertiesFile();									
 					}									
-					if (centExemptErrors.containsKey(errorCode)){
+					if (centExemptErrors != null && centExemptErrors.containsKey(errorCode)){
 						return;										
 					}
 				}
