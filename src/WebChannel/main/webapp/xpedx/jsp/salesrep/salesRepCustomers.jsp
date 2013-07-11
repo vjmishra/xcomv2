@@ -87,7 +87,6 @@ var data="false";
 <div id="listOfCustomers">
 <table width="100%"><tr><td style="width:70%;">
 <!-- Added for EB #769-->
-<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div><br/>
 <div class="salesProNotice" style="width:auto;"> Please ensure correct Ship-To has been selected once you are logged in. You can view/change Ship-To by clicking on customer name on top right corner.</div></td>
  <td style="width:40%;"><div class="search-pagination-bottom">
   <span>
