@@ -76,10 +76,10 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 		}
 		finally{
 			try {
-				m_Conn.close();
+					m_Conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+							e.printStackTrace();
+
 			}
 		}
 
@@ -358,7 +358,12 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			prepareErrorObject(yfe, XPXLiterals.CD_ITEM_TRANS_TYPE,
 					XPXLiterals.YFE_ERROR_CLASS, env, inXML);
 			}
-			outXML = generateResponse(env, inXML, "FAIL", yfe);
+			if(errorCode.equalsIgnoreCase("YCM0033")){
+				outXML = generateResponse(env, inXML, "SUCCESS", null);
+			}
+			else{
+				outXML = generateResponse(env, inXML, "FAIL", yfe);
+			}
 			return outXML;
 		} catch (Exception e) {
 			log.error("------------Failed XML Needs to Catch for Re-Processing XML START ----------");
@@ -467,10 +472,11 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+							e.printStackTrace();
+
 			}
 		}
+
 		return itemId; 
 	}
 
@@ -790,15 +796,6 @@ private void deleteAssetType(YFSEnvironment env, Document inXML, String itemKey)
 			log.error("Exception: " + e.getStackTrace());
 //			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
 
-		}
-		finally
-		{
-		 try {
-			m_Conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		}
 
 		return m_Conn;

@@ -1,3 +1,5 @@
-Supplier Part Number,Customer Part Number,Quantity,Unit of Measure,Description,Price,Price UOM,Line Acct #,Line PO #,Customer Field 1,Customer Field 2,Customer Field 3
-2001015,,1,CTN,"Hammermill Fore, Cut Size",,CTN,,,,,
-4307060,,2,CTN,"Reliable, Hand Wash",,CTN,,,,,
+Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,Description,Price,Price UOM,Line Acct #,Line PO #,Customer Field 1,Customer Field 2,Customer Field 3
+2001015,,103309,,CTN,",8-1/2 x 11,20lb,10M,Blue,Bond,30 %PCW,500/Pkg, 5000/Ctn",,,,,,,
+2025884,,8J8,,,",8 oz,White,PS,Insulated,25/Slv, 1000/Ctn",,,,,,,
+2025883,,6J6,,CTN,",6 oz,White,PS,Insulated,25/Slv, 1000/Ctn",,,,,,,
+2025876,,12J12,,CTN,",12 oz,White,PS,Insulated, Space Saver,25/Slv, 1000/Ctn",,,,,,,
