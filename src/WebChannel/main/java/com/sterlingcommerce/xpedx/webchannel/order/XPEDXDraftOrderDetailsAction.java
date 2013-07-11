@@ -240,8 +240,12 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			if(getMajorLineElements().size()>0){
 				ArrayList<Element> ueAdditionalAttrElem = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
 				XPEDXPriceAndAvailability pna=new XPEDXPriceAndAvailability();
-				if(ueAdditionalAttrElem!=null && ueAdditionalAttrElem.size()>0)
-					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem.get(0));			
+				if(ueAdditionalAttrElem!=null && ueAdditionalAttrElem.size()>0){
+					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem.get(0));	
+				}
+				else {
+					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,null);
+				}//Added else block for EB 812 for null pass
 				
 				//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);			
 				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 

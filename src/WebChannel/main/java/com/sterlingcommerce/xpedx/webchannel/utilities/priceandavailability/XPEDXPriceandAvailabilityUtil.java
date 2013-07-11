@@ -224,7 +224,8 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		if(null == outputDoc){
 			//jira 2885
-			displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ; 
+			displayErrorMsgToUser =  "Your request has timed out. Please try again.";//added for EB 812.
+			//displayErrorMsgToUser =  WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ; 
 			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
 			log.error("PnA did not respond or it sent a Empty xml back.");		
 			return pnaOutput;
