@@ -177,7 +177,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         }
         String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
         if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
-			 customerContactId = (String)wcContext.getSCUIContext().getSession().getAttribute("loggedInUserName");
+			 customerContactId = wcContext.getLoggedInUserId();
 		}
 		else{
 			customerContactId=wcContext.getCustomerContactId();
