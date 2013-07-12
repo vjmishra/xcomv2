@@ -17,7 +17,7 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 	width: 200px;
 }
 
-.header-subnav li { border-right: 1px solid #107555; }
+.header-subnav li { border-right: 0px solid #107555; }
 
 #main-navigation { background: url(../images/unselected_saalfeld.png) repeat-x; }
 #main-navigation ul li { background: url("../images/unselected_saalfeld.png") repeat-x; }

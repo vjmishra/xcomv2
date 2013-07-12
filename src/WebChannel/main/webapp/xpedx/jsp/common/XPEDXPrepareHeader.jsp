@@ -2478,10 +2478,14 @@ function msgWait(){
 				<li><a
 					href="<s:url action="loginFullPage" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
 					tabindex="2006" id="signIn"><span style="font-size: 12px">Sign In</span></a>
-				</li>	
+				</li>
+				<s:set name='storeFront' value='wCContext.storefrontId'/>
+				<s:if test="#storeFront == 'xpedx'">
+					
 					<div id="signId"></div>
 				
 				<div class="float-right" style="margin-top:25px;margin-right:-60px"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="120" height="40" top="15" position="absolute" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/888xpedx76.png"></a></div>
+				</s:if>
 			</s:else>
 	   	</s:if>
 	   	<s:else>
