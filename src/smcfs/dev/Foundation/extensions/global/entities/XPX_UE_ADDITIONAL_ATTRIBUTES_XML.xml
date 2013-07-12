@@ -62,6 +62,9 @@
 					<Column Name="ORDER_HEADER_KEY" />
 					<Column Name="XML_TYPE" />
 				</Index>
+				<Index Name="XPX_UE_ADTIONAL_ATTR_XML_I01" Unique="True">
+					<Column Name="ORDER_HEADER_KEY" />
+				</Index>
 
 			</Indices>
 			

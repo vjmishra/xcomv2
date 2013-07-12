@@ -1083,6 +1083,16 @@
           <Parent ParentTableName="YFS_CUSTOMER" XMLName="YFSCustomer">
                 <Attribute ColumnName="SALES_CUSTOMER_KEY" ParentColumnName="CUSTOMER_KEY"/>
           </Parent>
+
+		  <Indices>
+           
+			<Index Name="XPX_XPEDX_SALES_REP_I0" Unique="False">
+               <Column Name="SALES_CUSTOMER_KEY"/>           
+            </Index>
+			<!-- End : New index created for XBT-361 -->			
+        </Indices> 
+		 
+
       </Entity>
     
       <Entity TableName="YFS_USER" >
