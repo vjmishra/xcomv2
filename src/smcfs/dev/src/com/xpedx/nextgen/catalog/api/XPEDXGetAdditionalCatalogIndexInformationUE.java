@@ -139,12 +139,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 									+ RECORD_SEPARATOR;
 						}
 					}
-					if ("showNormallyStockedItems".equals(searchFieldElement
+					/*if ("showNormallyStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
 						log.debug("getLocaleDoc_showNormallyStockedItems=" + "W");
 						valueElement.setAttribute("Value",
 								"W");
-					}
+					}*/
 					if ("showStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
 						log.debug("getLocaleDoc_showStockedItems=" + divisionForStockedItem.trim());

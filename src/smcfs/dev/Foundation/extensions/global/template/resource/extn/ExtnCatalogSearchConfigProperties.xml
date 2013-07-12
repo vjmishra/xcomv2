@@ -8,10 +8,10 @@
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
 							IndexFieldName="customerNumberPlusPartNumber" Searchable="Y"
 							UseSynonyms="N" Sortable="N" />
-						<Attribute DefaultWeight="1.0"
+						<!-- <Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="NOT_ANALYZED" Store="Y"
-							IndexFieldName="showNormallyStockedItems" Searchable="N"
-							UseSynonyms="N" Sortable="Y"/>
+							IndexFieldName="showNormallyStockedItems" Searchable="N" 
+							UseSynonyms="N" Sortable="Y"/>  -->
 						<Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
 							IndexFieldName="showStockedItems" Searchable="Y"

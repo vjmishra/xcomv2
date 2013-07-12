@@ -3266,8 +3266,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 		sortListMap.put("Item.ItemID--D", "Item # (High to Low)");
 		sortListMap.put("Item.SortableShortDescription--A", "Description (A to Z)");
 		sortListMap.put("Item.SortableShortDescription--D", "Description (Z to A)");
-		sortListMap.put("showNormallyStockedItems--A", "M (A to Z)");
-		sortListMap.put("showNormallyStockedItems--D", "M (Z to A)");
+		//sortListMap.put("showNormallyStockedItems--A", "M (A to Z)");
+		//sortListMap.put("showNormallyStockedItems--D", "M (Z to A)");
 		
 		ArrayList<String> allowedColumns = getColumnList();
 		
