@@ -257,6 +257,10 @@
 					<Column Name="ITEM_GROUP_CODE" />
 					<Column Name="STATUS" />
 				</Index>
+				
+				<Index Name="EXTN_ITEM_I8" Unique="False">
+					<Column Name="EXTN_BEST_MATCH" />
+				</Index>
 		
          </Indices>
         		
