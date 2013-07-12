@@ -4567,7 +4567,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					if (isOrderEdit.equalsIgnoreCase("N")) {
 						if (!this.isCancelledOrder(ordEle) || hpc.equalsIgnoreCase("C")) {
 							retOrdEle = ordEle;
-						}
+						}/*EB-660 Code Changes eliminate unnessessary error logging for OU failures on orders that have already been cancelled on the website */
+						else if (this.isCancelledOrder(ordEle) && hpc.equalsIgnoreCase("D")) 
+						{
+							retOrdEle = ordEle;
+						}	
 					} else {
 						retOrdEle = ordEle;
 					}
