@@ -407,8 +407,8 @@
 						<AdditionalCatalogIndexInformationList>
 							<AdditionalCatalogIndexInformation
 								IndexFieldName="customerNumberPlusPartNumber" />
-							<AdditionalCatalogIndexInformation
-								IndexFieldName="showNormallyStockedItems" />							
+							<!--  <AdditionalCatalogIndexInformation
+								IndexFieldName="showNormallyStockedItems" />  -->							
 						</AdditionalCatalogIndexInformationList>
 					</Item>
 				</SearchCatalogIndex>
