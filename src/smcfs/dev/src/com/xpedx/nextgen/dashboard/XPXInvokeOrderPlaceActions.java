@@ -416,7 +416,9 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		chargeAmountStr = custOrderAmountArray[1];
 		applyMinOrderCharge_DivisionLevel = custOrderAmountArray[2];
 		
-		System.out.println("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of minOrderTotalStr, chargeAmountStr & applyMinOrderCharge_DivisionLevel are : ["+minOrderTotalStr+"], ["+ chargeAmountStr+"] and ["+applyMinOrderCharge_DivisionLevel+ "]");
+		if (log.isDebugEnabled()) {
+			log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of minOrderTotalStr, chargeAmountStr & applyMinOrderCharge_DivisionLevel are : ["+minOrderTotalStr+"], ["+ chargeAmountStr+"] and ["+applyMinOrderCharge_DivisionLevel+ "]");
+		}
 		
 		if (!YFCObject.isNull(minOrderTotalStr) && !YFCObject.isVoid(minOrderTotalStr)) {
 		     minOrderTotal = Float.parseFloat(minOrderTotalStr);
@@ -426,7 +428,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		}
 		
 		// To Set Order Level Attributes.
-		rootElem.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
+		//rootElem.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
 		rootElem.setAttribute(XPXLiterals.A_DOCUMENT_TYPE, "0001");
 		rootElem.setAttribute(XPXLiterals.A_OVERRIDE, XPXLiterals.BOOLEAN_FLAG_Y);
 		rootElem.setAttribute(XPXLiterals.A_ACTION, XPXLiterals.MODIFY);
