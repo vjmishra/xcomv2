@@ -80,6 +80,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public String draftOrderflag;
 	public String draftErrorCatalog="false";
 	public String draftErrorFlagCatalog = "DraftErrorCat";
+	private String quantitydraftError="false";
+	
+
+
 	//For Order multiple CR
 	protected HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
 	
@@ -154,9 +158,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					//end of XBT 252 & 248   
 					try {
 						XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-						long changeOrderStartTime=System.currentTimeMillis();					
+						long changeOrderStartTime=System.currentTimeMillis();
 						changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 						long changeOrderEndTime=System.currentTimeMillis();
+						
 						System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for ChangeOrder : "+(changeOrderEndTime-changeOrderStartTime));
 						
 					} 
@@ -177,6 +182,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 									 draftErrorCatalog = "true";
 								 }
 							 }
+						 }
+						 
+						 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
+						 {
+							 quantitydraftError = "true";
 						 }
 						 return draftErrorFlagCatalog;
 					 }catch (Exception dle) {
@@ -217,6 +227,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 						 draftErrorCatalog = "true";
 					 }
 				 }
+			 }
+			 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
+			 {
+				 quantitydraftError = "true";
 			 }
 		 }
 		catch (Exception dle) {
@@ -1005,6 +1019,14 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		this.isEditNewline = isEditNewline;
 	}
 	
+	public String getQuantitydraftError() {
+		return quantitydraftError;
+	}
+
+
+	public void setQuantitydraftError(String quantitydraftError) {
+		this.quantitydraftError = quantitydraftError;
+	}
 	
 
 }

@@ -696,7 +696,7 @@ function addItemToCart(data)
 		document.getElementById("qtyBox").focus();
 		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
   		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
-  		 document.getElementById("errorMsgForQty").setAttribute("class", "error");
+  		document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
 		document.getElementById("qtyBox").value = "";
 		Ext.Msg.hide();
@@ -850,6 +850,19 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
              {
 	        	 refreshWithNextOrNewCartInContext();
 	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+             }
+	         else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+             {
+	        	document.getElementById("qtyBox").style.borderColor="#FF0000";
+	     		document.getElementById("qtyBox").focus();
+	     		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
+	       		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
+	       		document.getElementById("errorMsgForQty").setAttribute("class", "error");
+	     		document.getElementById("Qty_Check_Flag").value = true;
+	     		document.getElementById("qtyBox").value = "";
+	     		Ext.Msg.hide();
+	     	    myMask.hide();
+	     	    return;
              }
 	         else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
              {

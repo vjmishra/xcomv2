@@ -80,6 +80,20 @@ function addItemToCart(itemId) {
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
 							return false;
 						}	
+						 else if(responseText.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+							 {
+							   	document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
+								document.getElementById('Qty_'+itemId).focus();
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please enter a valid quantity and try again." ;
+								document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
+								document.getElementById('Qty_Check_Flag_'+itemId).value = true;
+								document.getElementById('Qty_'+itemId).value = "";
+								Ext.Msg.hide();
+								myMask.hide();
+								return false;
+							 }
 						 else if(responseText.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
 			             {
 							 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;

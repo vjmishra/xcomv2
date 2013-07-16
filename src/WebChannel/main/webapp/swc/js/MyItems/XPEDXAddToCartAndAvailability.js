@@ -115,6 +115,22 @@
 		                    Ext.Msg.hide();
 		                	myMask.hide();
 		        	}
+		            else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+		             {
+		            	var qty = document.getElementById('qtys_'+uid);
+		            	var errorDiv = document.getElementById('errorDiv_qtys_'+uid); 
+		            	qty.style.borderColor="#FF0000";
+		            	qty.value = "";
+		            	qty.focus();
+		            	errorDiv.innerHTML = "Please enter a valid quantity and try again." ;
+		            	errorDiv.style.display ="inline"; 
+		            	errorDiv.setAttribute("class", "error");
+		            	errorDiv.setAttribute("style", "margin-right:5px;float:right;");
+		            	errorDiv.value = true;						
+						Ext.Msg.hide();
+						myMask.hide();
+						return false;
+		           }
 		            else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
 		             {
 						 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;

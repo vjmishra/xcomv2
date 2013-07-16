@@ -933,11 +933,19 @@ function showSharedListForm(){
 	   		        	var draftErr = response.responseText;
 	   		            var draftErrDiv = document.getElementById("errorMessageDiv");
 	   		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-	   		        {			refreshWithNextOrNewCartInContext();
-	   		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
-	   		                    Ext.Msg.hide();
-	   		                	myMask.hide();
-	   		       		 }
+	   		      		  {			
+		            	    refreshWithNextOrNewCartInContext();
+		                    draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+		                    Ext.Msg.hide();
+		                	myMask.hide();
+		       			 }
+	  		     	    else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+	   		     		 {			
+		            	    refreshWithNextOrNewCartInContext();
+		                    draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+		                    Ext.Msg.hide();
+		                	myMask.hide();
+		       			 }
 	   		         	else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
 		             	{
 						 	var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
@@ -947,6 +955,7 @@ function showSharedListForm(){
 		            	 }
 	   		            else{
 	                	   setMsgOnAddItemsWithQtyToCart(response);  
+	                	   draftErrDiv.innerHTML="";
 	                	    Ext.Msg.hide();
 				    		myMask.hide();
 	   		         	}

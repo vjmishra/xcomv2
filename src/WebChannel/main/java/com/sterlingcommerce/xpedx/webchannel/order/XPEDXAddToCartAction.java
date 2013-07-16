@@ -237,6 +237,10 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 					 }
 				 }
 			 }
+			 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
+			 {
+				 quantitydraftError = "true";
+			 }
 			 YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
 			boolean isOUErrorPage=false;
  			for(YFCElement errorEle:errorNodeList)
@@ -441,7 +445,19 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	public String draftOrderflag;
 	public String draftErrorFlag="DraftError";
 	private String draftError= "false";
+	private String quantitydraftError="false";
+
+	public void setQuantitydraftError(String quantitydraftError) {
+		this.quantitydraftError = quantitydraftError;
+	}
+	
+	public String getQuantitydraftError() {
+		return quantitydraftError;
+	}
+
+
 	private String ouErrorMessage;
+
 
 	public String getDraftError() {
 		return draftError;
