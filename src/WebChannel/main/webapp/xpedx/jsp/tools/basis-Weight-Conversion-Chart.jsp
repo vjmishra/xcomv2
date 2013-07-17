@@ -64,7 +64,8 @@
 <!-- Web trend tag end -->
 </head>
 <!-- Web trend tag start -->
-<s:include value="../../htmls/webtrends/webtrends.html"/>
+<!-- commenting out WT temporarily-->
+<!--s:include value="../../htmls/webtrends/webtrends.html"/-->
 <!-- Web trend tag end -->
 
 <body class="ext-gecko ext-gecko3">
