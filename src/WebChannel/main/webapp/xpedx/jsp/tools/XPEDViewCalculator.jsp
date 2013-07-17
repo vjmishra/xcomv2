@@ -91,7 +91,8 @@
 <!-- Webtrend tag stops --> 
 </head>
 <!-- Web trend tag start -->
-<s:include value="../../htmls/webtrends/webtrends.html"/>
+<!-- Commenting out WT tag temporarily -->
+<!-- s:include value="../../htmls/webtrends/webtrends.html"/ -->
 <!-- Web trend tag end -->
 
 <s:set name='_action' value='[0]' />
