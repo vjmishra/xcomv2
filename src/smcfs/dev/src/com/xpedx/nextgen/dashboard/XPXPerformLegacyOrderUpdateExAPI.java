@@ -175,6 +175,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// To get customer and fulfillment order details if exist.
 				cAndfOrderEle = getCustomerOrderAndFulfillmentOrderList(env, rootEle, headerProcessCode);
 				if (cAndfOrderEle != null) {
+					
+					//Enterprise code is now set dynamically as we have to consider both xpedx and Saalfeld customers. Static value of Enterprise code set in orderUpdate.xsl is now removed
+					rootEle.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, SCXmlUtil.getXpathAttribute((Element)cAndfOrderEle.getDOMNode(), "./Order/@EnterpriseCode"));					
+					
 					// To get fulfillment order details.
 					fOrdHeaderKey = (String) env.getTxnObject("FOKEY");
 					if (YFCObject.isNull(fOrdHeaderKey) || YFCObject.isVoid(fOrdHeaderKey)) {
@@ -223,7 +227,11 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				} else {
 					if (!headerProcessCode.equalsIgnoreCase("A")) {
 						throw new Exception("Either Customer Order Or Fulfillment Order Not Exists!");
+					
 					} else {
+						//Enterprise code is now set dynamically as we have to consider both xpedx and Saalfeld customers. Static value of Enterprise code set in orderUpdate.xsl is now removed
+						String enterpriseCode=getEnterpriseCode(env, rootEle);
+						rootEle.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, enterpriseCode);
 						this.getOrderExtendedPriceInfo(rootEle);
 					}
 				}
@@ -6419,5 +6427,57 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		log.error(errorString.toString());
 		throw new Exception(errorString);
+	}
+	
+	private String getEnterpriseCode(YFSEnvironment env, YFCElement rootEle) throws Exception{
+		
+		System.out.println("Inside getEnterpriseCode method - InXML : "+SCXmlUtil.getString(((Element)rootEle.getDOMNode())));
+		String legacyCustNo=null;
+		String legacyCompanyNo=null;
+		String enterpriseCode=null;
+		
+		YFCElement extnRootEle = rootEle.getChildElement("Extn");
+		
+		YFCDocument getCustListInXML = YFCDocument.getDocumentFor("<Customer/>");
+		YFCElement custInXMLEle = getCustListInXML.getDocumentElement();
+		YFCElement extnCustInXMLEle = getCustListInXML.createElement("Extn");
+		custInXMLEle.appendChild(extnCustInXMLEle);
+		
+		if (extnRootEle.hasAttribute("ExtnCustomerNo")) {
+			legacyCustNo = extnRootEle.getAttribute("ExtnCustomerNo");
+			if (YFCObject.isNull(legacyCustNo) || YFCObject.isVoid(legacyCustNo)) {
+				throw new Exception("Attribute ExtnCustomerNo Cannot be NULL or Void!");
+			}
+			extnCustInXMLEle.setAttribute("ExtnLegacyCustNumber", legacyCustNo);
+		
+		} else {
+			throw new Exception("Attribute ExtnLegacyCustNumber Not Available in Incoming Legacy Message!");
+		}
+		
+		legacyCompanyNo=extnRootEle.getAttribute("ExtnCustomerDivision");
+		if(legacyCompanyNo!=null && legacyCompanyNo.indexOf("_")!=-1){
+			legacyCompanyNo=legacyCompanyNo.substring(0,legacyCompanyNo.indexOf("_"));
+			extnCustInXMLEle.setAttribute("ExtnCustomerDivision", legacyCompanyNo);
+		}
+		
+		extnCustInXMLEle.setAttribute("ExtnSuffixType", "B");
+		
+		if(log.isDebugEnabled()){
+			log.debug("XPXGetCustomerList-InXML:" + getCustListInXML.getString());
+		}
+		
+		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,SCXmlUtil.createFromString("<CustomerList><Customer CustomerID=\"\" OrganizationCode=\"\" ></Customer></CustomerList>"));     
+		Document getCustomerDetailsOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustListInXML.getDocument());	
+		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+		
+		if(log.isDebugEnabled()){
+			log.debug("XPXGetCustomerList-OutXML:" + YFCDocument.getDocumentFor(getCustomerDetailsOutputDoc).getString());
+		}
+		
+		enterpriseCode=SCXmlUtil.getXpathAttribute(getCustomerDetailsOutputDoc.getDocumentElement(), "./Customer/@OrganizationCode");
+		
+		System.out.println("Inside getEnterpriseCode method - Enterpise code is : "+enterpriseCode);
+		return enterpriseCode;
+		
 	}
 }
