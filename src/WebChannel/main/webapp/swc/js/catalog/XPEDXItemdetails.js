@@ -30,14 +30,28 @@ function updatePandAfromLink(){
 	}	
 		/*Web Trends tag end*/
 	//added for jira 3974
+	var errorMessageDiv = document.getElementById("errorMessageDiv");
+	if(errorMessageDiv != null && errorMessageDiv != undefined)
+		errorMessageDiv.innerHTML='';
+	
 	var waitMsg = Ext.Msg.wait("Processing...");
 	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 	myMask.show();
+	try
+	{
+		
 	var UOMelement = document.getElementById("itemUOMsSelect");
 	var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;	
 	callPnAfromLink(uomvalue);
-	//Ext.Msg.hide();
-	//myMask.hide();
+	}
+	catch (err) {
+		var errorMessageDiv = document.getElementById("errorMessageDiv");
+		if(errorMessageDiv != null && errorMessageDiv != undefined)
+			errorMessageDiv.innerHTML='<h5 align="center"><b><font color="red">Could not get the pricing details for this Particular Item at the moment. Please try again Later</font></b></h5>';
+		Ext.Msg.hide();
+		myMask.hide();
+	}
+	
 }
 function updatePandA() {
 	/*var UOMelement = document.getElementById("itemUOMsSelect");

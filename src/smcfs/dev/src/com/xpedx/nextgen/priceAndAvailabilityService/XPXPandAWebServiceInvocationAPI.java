@@ -200,7 +200,6 @@ public class XPXPandAWebServiceInvocationAPI implements YIFCustomApi {
 			        if(log.isDebugEnabled()){
 						log.debug("The response of availability of the webservice is: "+outputString);
 			        }
-			        log.error("The response of availability of the webservice is: "+outputString);
 					//Converting the string reponse to XML Document format to return it to the calling app		
 					//outputXML = YFCDocument.getDocumentFor(response.getFGetAvailabilityResponse().getWsIpaperAvailabilityOutput()).getDocument();
 					break;

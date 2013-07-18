@@ -239,7 +239,15 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			var responseText = response.responseText;
 			writeWebtrendTag(responseText);
 			//-- Web Trends tag end --
-		}
+		},
+		failure: function (response, request){
+			Ext.Msg.hide();
+			myMask.hide(); 
+			var errorMessageDiv = document.getElementById("errorMessageDiv");
+			if(errorMessageDiv != null && errorMessageDiv != undefined)
+				errorMessageDiv.innerHTML='<h5 align="center"><b><font color="red">Could not get the pricing details for this Particular Item at the moment. Please try again Later</font></b></h5>';
+        }
+		
 	});
 }
 }
