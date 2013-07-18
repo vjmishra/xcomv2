@@ -606,11 +606,18 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		Element elePOList = getModel("XPXPOList");
 		NodeList nl= elePOList.getElementsByTagName("PO");
 		String strPOList="";
+		String strPO="";
 		for(int counter=0;counter < nl.getLength(); counter ++){
 			Element POElement = (Element)nl.item(counter);
-			if(!YRCPlatformUI.isVoid(strPOList))
-				strPOList=strPOList+",";
-			strPOList =strPOList+POElement.getAttribute("PONumber");
+			//Modified for EB 1178 to set CC & WC PO data comma seperated
+			strPO =POElement.getAttribute("PONumber");
+			if(!YRCPlatformUI.isVoid(strPOList)){
+				strPOList=strPOList+strPO+",";
+			}
+			else{
+				strPOList=strPO+",";
+			}
+			//strPOList =strPOList+POElement.getAttribute("PONumber");
 		}
 		Element eleEmailList = getModel("XPXEmailList");
 		NodeList nl1= eleEmailList.getElementsByTagName("Email");
@@ -838,13 +845,20 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		String[] apinames = null;
 		Document[] docInput = null;
 		String strPOList="";
+		String strPO = "";
 		Element elePOList = getModel("XPXPOList");
 		NodeList nl= elePOList.getElementsByTagName("PO");
 		for(int counter=0;counter < nl.getLength(); counter ++){
 			Element POElement = (Element)nl.item(counter);
-			if(!YRCPlatformUI.isVoid(strPOList))
-				strPOList=strPOList+",";
-			strPOList =strPOList+POElement.getAttribute("PONumber");
+			//Modified for EB 1178 to set CC & WC PO data comma seperated
+			strPO =POElement.getAttribute("PONumber");
+			if(!YRCPlatformUI.isVoid(strPOList)){
+				strPOList=strPOList+strPO+",";
+			}
+			else{
+				strPOList=strPO+",";
+			}
+			//strPOList =strPOList+POElement.getAttribute("PONumber");
 		}
 		
 		Element eleEmailList = getModel("XPXEmailList");
