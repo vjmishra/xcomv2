@@ -188,7 +188,7 @@
          </HeaderComments>
 
          <OrderedByName> 
-            <xsl:value-of select="Order/Extn/@ExtnOrderedByName" /> 
+            <xsl:value-of select="substring(Order/Extn/@ExtnOrderedByName,0,49)" /> 
          </OrderedByName> 
 
          <OrderCreateDate>
