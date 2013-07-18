@@ -1284,6 +1284,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	public String navigate() {
 		try{
+			long catalogLoadStartTime=System.currentTimeMillis();					
+			
 		/*Start of webtrend tags*/
 			setsearchMetaTag(false);
 		/*End of webtrend tags*/
@@ -1386,6 +1388,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			getSortFieldDocument();
 		}
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),path);
+		
+		long catalogLoadEndTime=System.currentTimeMillis();
+		System.out.println("Time taken in milliseconds to load the catalog with Narrow By : "+(catalogLoadEndTime-catalogLoadStartTime));
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
