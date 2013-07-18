@@ -921,9 +921,11 @@ function funDivOpenClose(val1)
 			var poText = poTextElement.value;
 			var selectElement = document.getElementById('selectPOName');
 			var invalidPO = false;
-			
+			var poTextLength=selectElement.options.length;
 			for(var i=0;i<selectElement.options.length;i++)
-			{
+			{  
+				poTextLength=poTextLength+selectElement.options[i].value.length;
+			
 				if ((selectElement.options[i].value == poText ) )
 				{
 					alert('Please enter a unique Purchase order.');
@@ -931,7 +933,13 @@ function funDivOpenClose(val1)
 					invalidPO = true;
 				}
 			}
-			
+			poTextLength=poTextLength+poText.length;
+			if(poTextLength>499)
+				{
+						alert("PO List Cannot exceed 500 Characters");
+						poTextElement.focus();
+						invalidPO = true;
+				}
 			if(poText == null || poText == ''){
 				alert('Please give a name for the Purchase order.');
 				poTextElement.focus();
