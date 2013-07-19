@@ -422,7 +422,7 @@
 					</SortFieldList>
 					<CategoryDomain AttributeName="" CategoryDomain=""
 						Description="" IsClassification="" ShortDescription="" />
-					<CategoryList>
+					<!-- <CategoryList>
 						<Category CategoryID="" CategoryPath="" Count="" Description=""
 							SequenceNo="" ShortDescription="">
 							<ChildCategoryList>
@@ -444,7 +444,7 @@
 								<AssignedValue Count="" Value="" IsProvidedFilter="" />
 							</AssignedValueList>
 						</ItemAttribute>
-					</FacetList>
+					</FacetList> -->
 					<ItemList Currency="">
 						<Item IsItemSuperseded="" ItemID="" ItemKey="" UnitOfMeasure="">
 							<Extn/>
