@@ -65,6 +65,7 @@ import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 @SuppressWarnings("deprecation")
@@ -86,10 +87,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String catalogLandingMashupID = null;
 	private XPEDXShipToCustomer shipToCustomer;
 	private String msapOrderMultipleFlag = "";
+	private String tryAgain = "";
+	private String errorCode = "";
 	private Map <String, List<Element>> PLLineMap;	
 	private String firstItem = "";
 	private String indexField = "";
-//Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
+	private String remSearchTerms = "";
+
+	//Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
 //XNGTP-4264 and XB 355 Escaping Below words from search criteria.
 	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
@@ -106,7 +111,31 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setSearchString(String searchString) {
 		this.searchString = searchString;
-	}		
+	}
+	
+	public String getRemSearchTerms() {
+		return remSearchTerms;
+	}
+
+	public void setRemSearchTerms(String remSearchTerms) {
+		this.remSearchTerms = remSearchTerms;
+	}
+	
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+	
+	public String getTryAgain() {
+		return tryAgain;
+	}
+
+	public void setTryAgain(String tryAgain) {
+		this.tryAgain = tryAgain;
+	}
 	
 	public String getIndexField() {
 		return indexField;
@@ -1006,9 +1035,34 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		//Webrtends	tag start
 		setsearchMetaTag(true);
-		//Webrtends	tag start
+		//Webrtends	tag start		
+		
 		if (ERROR.equals(returnString)) {
-			return returnString;
+			if ("true".equals(getTryAgain())) {				
+				return returnString; 
+			}
+			if(searchTerm != null && searchTerm.indexOf("*") > -1) {
+				String searchTermList[] = searchTerm.split(" ");
+				String strSearchTerm = "";
+				String removedSearchTerms = "";
+				for (String searchTermToken : searchTermList) {					
+					if(searchTermToken.indexOf("*") > -1 && searchTermToken.length() > 5) {						
+						strSearchTerm = strSearchTerm + searchTermToken + " ";
+						continue;
+					} else if(searchTermToken.indexOf("*") == -1) {
+						strSearchTerm = strSearchTerm + searchTermToken + " ";
+						continue;
+					} 
+					removedSearchTerms = removedSearchTerms + searchTermToken + " ";	
+				}
+				
+				setRemSearchTerms(removedSearchTerms);
+				strSearchTerm = strSearchTerm.trim();
+				if (!("").equals(strSearchTerm)) {
+					searchTerm = strSearchTerm;
+					return "retrySearch";
+				}
+			} 
 		}
 		else if (isSingleItem()) { // First checking if its a single item and doing the redirection with out making any other DB calls
 			YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
@@ -1018,7 +1072,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setUnitOfMeasure(yfcNode.getAttributes().get("UnitOfMeasure"));
 			return "singleItem";
 		}
-		else {
 			long startTimeCustomerService=System.currentTimeMillis();
 			
 			getAllAPIOutput();
@@ -1050,9 +1103,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//}
 			
 	/****End of Code Changed for Promotions JIra 2599 *******/
-		
-
-	}
 	
 		setStockedItemFromSession();				
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
@@ -1075,6 +1125,76 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private void getAllAPIOutput() throws Exception
 	{
 		Document catDoc = getOutDoc();
+		
+		if (catDoc == null) {
+			Document rootDoc = SCXmlUtil.createDocument("CatalogSearch");
+			Element rootEle = rootDoc.getDocumentElement();
+			rootEle.setAttribute("CallingOrganizationCode", wcContext.getStorefrontId());
+			rootEle.setAttribute("CategoryDepth","2");
+			rootEle.setAttribute("DisplayLocalizedFieldInLocale","en_US_EST");
+			rootEle.setAttribute("PageNumber","1");
+			rootEle.setAttribute("PageSize","20");
+			rootEle.setAttribute("SortDescending","");
+			rootEle.setAttribute("SortField","Item.ExtnBestMatch");
+			rootEle.setAttribute("TotalHits","0");
+			rootEle.setAttribute("TotalPages","0");
+			Element sortFieldListEle = SCXmlUtil.createChild(rootEle, "SortFieldList");
+			Element sortFieldEle1 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle1.setAttribute("IndexFieldName", "Item.ItemID");
+			Element sortFieldEle2 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle2.setAttribute("IndexFieldName", "Item.SortableShortDescription");
+			Element sortFieldEle3 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle3.setAttribute("IndexFieldName", "Item.ExtnMpc");
+			Element sortFieldEle4 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle4.setAttribute("IndexFieldName", "Item.ExtnSize");
+			Element sortFieldEle5 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle5.setAttribute("IndexFieldName", "Item.ExtnColor");
+			Element sortFieldEle6 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle6.setAttribute("IndexFieldName", "Item.ExtnBestMatch");
+			Element sortFieldEle7 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle7.setAttribute("IndexFieldName", "Item.ExtnBasis");
+			Element sortFieldEle8 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle8.setAttribute("IndexFieldName", "Item.ExtnPackMethod");
+			Element sortFieldEle9 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle9.setAttribute("IndexFieldName", "Item.ExtnMwt");
+			Element sortFieldEle10 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle10.setAttribute("IndexFieldName", "Item.ExtnMaterial");
+			Element sortFieldEle11 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle11.setAttribute("IndexFieldName", "Item.ExtnForm");
+			Element sortFieldEle12 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle12.setAttribute("IndexFieldName", "Item.ExtnCapacity");
+			Element sortFieldEle13 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle13.setAttribute("IndexFieldName", "Item.ExtnModel");
+			Element sortFieldEle14 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle14.setAttribute("IndexFieldName", "Item.ExtnGauge");
+			Element sortFieldEle15 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle15.setAttribute("IndexFieldName", "Item.ExtnThickness");
+			Element sortFieldEle16 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle16.setAttribute("IndexFieldName", "Item.ExtnPly");
+			Element sortFieldEle17 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle17.setAttribute("IndexFieldName", "Item.ExtnVendorNo");
+			Element sortFieldEle18 = SCXmlUtil.createChild(sortFieldListEle, "SortField");
+			sortFieldEle18.setAttribute("IndexFieldName", "Item.ExtnCert");
+			Element categoryDomainEle = SCXmlUtil.createChild(rootEle, "CategoryDomain");
+			categoryDomainEle.setAttribute("AttributeName", "");
+			categoryDomainEle.setAttribute("CategoryDomain", YFSSystem.getProperty("xpedx.searhindex.categoryDomain"));
+			categoryDomainEle.setAttribute("Description", "Master Catalog for " + wcContext.getStorefrontId());
+			categoryDomainEle.setAttribute("IsClassification", "N");
+			categoryDomainEle.setAttribute("ShortDescription", "Master Catalog");
+			Element itemListEle = SCXmlUtil.createChild(rootEle, "ItemList");
+			itemListEle.setAttribute("Currency", "USD");			
+			catDoc = rootDoc;
+			setOutDoc(rootDoc);		
+			setErrorCode("Your search returned too many items. Please refine your search and try again.");
+		}
+		
+		if("".equals(errorCode) && ("0").equals(getOutDoc().getDocumentElement().getAttribute("TotalHits"))) {
+			setErrorCode("Your search did not yield any results. Please try again.");
+		} else if ("".equals(errorCode) && !"".equals(tryAgain)) {
+				setErrorCode("Your search returned too many items. Therefore \""+ getRemSearchTerms().trim() +"\" was removed from the search term.");
+			}
+			
+			
 		
 		// get the CatalogSearch/ItemList
 		Element itemListElement = SCXmlUtil.getChildElement(catDoc
@@ -1879,7 +1999,31 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*End of webtrend tags*/
 
 		if (ERROR.equals(returnString)) {
-			return returnString;
+			if ("true".equals(getTryAgain())) {
+				return returnString; 
+			}
+			if(searchTerm != null && searchTerm.indexOf("*") > -1) {
+				String searchTermList[] = searchTerm.split(" ");
+				String strSearchTerm = "";
+				String removedSearchTerms = "";
+				for (String searchTermToken : searchTermList) {					
+					if(searchTermToken.indexOf("*") > -1 && searchTermToken.length() > 5) {						
+						strSearchTerm = strSearchTerm + searchTermToken + " ";
+						continue;
+					} else if(searchTermToken.indexOf("*") == -1) {
+						strSearchTerm = strSearchTerm + searchTermToken + " ";
+						continue;
+					}
+					removedSearchTerms = removedSearchTerms + searchTermToken + " ";					
+				}
+				
+				setRemSearchTerms(removedSearchTerms);
+				strSearchTerm = strSearchTerm.trim();
+				if (!("").equals(strSearchTerm)) {
+					searchTerm = strSearchTerm;
+					return "retrySearch";
+				}
+			} 
 		} else if (isSingleItem()) {
 			YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
 					.getDocumentElement().getChildElement("ItemList")
@@ -1888,7 +2032,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setUnitOfMeasure(yfcNode.getAttributes().get("UnitOfMeasure"));
 			return "singleItem";
 		}
-		else {
+
 			try
 			{
 				
@@ -1918,7 +2062,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				
 			}
 			/**End of code for JIra 2599****/
-	}
+	
 		//Webrtends	tag start
 		setStockedItemFromSession();				
 		if(isStockedItem){

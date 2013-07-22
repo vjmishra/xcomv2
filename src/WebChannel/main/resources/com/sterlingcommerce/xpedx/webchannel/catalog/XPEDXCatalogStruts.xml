@@ -30,6 +30,15 @@
 			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
 			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="retrySearch" type="redirectAction">
+				<param name="actionName">newSearch</param>
+				<param name="namespace">/catalog</param>			
+				<param name="tryAgain">true</param>
+				<param name="searchTerm">${searchTerm}</param>
+				<param name="remSearchTerms">${remSearchTerms}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>				
+			</result>
 			<result name="singleItem" type="redirectAction">
 				<param name="actionName">itemDetails</param>
 				<param name="namespace">/catalog</param>
@@ -51,6 +60,15 @@
 			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
 			<!-- result name="error">/swc/jsp/catalog/searchError.jsp</result-->
 			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="retrySearch" type="redirectAction">
+				<param name="actionName">newSearch</param>
+				<param name="namespace">/catalog</param>			
+				<param name="tryAgain">true</param>
+				<param name="searchTerm">${searchTerm}</param>
+				<param name="remSearchTerms">${remSearchTerms}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>				
+			</result>
 			<result name="singleItem" type="redirectAction">
 				<param name="actionName">itemDetails</param>
 				<param name="namespace">/catalog</param>

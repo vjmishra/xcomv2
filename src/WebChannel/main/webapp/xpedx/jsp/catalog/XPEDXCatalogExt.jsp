@@ -910,11 +910,14 @@ var ct = Ext.get('item-box-inner');
 		</tr>
 	</table>
 	</div>
-	<%--Added For Jira 3195 --%>
-	<s:if test="#numResult == 0"> 
-	 <center><div class="error">Your search did not yield any results. Please try again. </div> </center>
-	 </s:if> 
-	 <%--End For Jira 3195 --%>
+	
+	<s:if test='%{errorCode.trim().equals("")}'>		
+	</s:if>	
+	<s:else>
+		<center><div class="error"><s:property value='%{errorCode}' /></div> </center>
+	</s:else>
+			 
+	 
 	<div id="item-box"><!-- Begin: dynamic filled in by javascript -->
 	<div id="item-box-inner"></div>
 	<!-- End: dynamic filled in by javascript --></div>
