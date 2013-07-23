@@ -144,7 +144,11 @@ function setTotalPrice(val){
 	{
 		
 		var errordiv=document.getElementById("requiredCustomerPOErrorDiv");
+		var errorMsg = document.getElementById("errorMsg");
 		errordiv.style.display="none";
+		errorMsg.style.display="none";
+		var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
+		splInstructionsField.style.borderColor="";
 		var po_comboObj=document.getElementById("po_combo_input");
 		if(po_comboObj.value.trim().length == 0)
 		{			
@@ -168,8 +172,13 @@ function setTotalPrice(val){
 		
 		setCustomerPONumber();
 	var deliveryHoldCheck = '<s:property value="%{#_action.isDeliveryHold()}"/>';
+	var poListlength = '<s:property value="%{#_action.getAddnlPoListlength()}"/>';
+	var poboxinputlength=document.getElementById("po_combo_input").value.length;
+	var totalPOLength= Number(poListlength)+Number(poboxinputlength);
+	//var pobox_inout_length=document.getElementById("po_combo_input").value.trim().length;
 	var deliveryHoldFlag = document.getElementById("DeliveryHoldFlag");
     var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
+    var PoNumberSaveNeededFlag =   document.getElementById("PoNumberSaveNeeded");
 	//Special Instructions field validation
 	var OrderSummaryForm_rushOrdrFlagField =   document.getElementById("OrderSummaryForm_rushOrdrFlag"); 	
 	var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
@@ -184,10 +193,7 @@ function setTotalPrice(val){
     errorDiv.innerHTML = "";
     splInstructionsField.style.borderColor="";
     errorDiv.style.display = "none";
-
-    
-    
-    if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
+   if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
     {
     	errorDiv.innerHTML = "Rush Order delivery information is required. Please enter in the Comments field.";
         splInstructionsField.style.borderColor="#FF0000";
@@ -202,6 +208,14 @@ function setTotalPrice(val){
         errorDiv.style.display = 'inline';
         return returnval;	
        }
+    else if ((PoNumberSaveNeededFlag.checked==true && totalPOLength>=500) && (poboxinputlength!= 0))
+    	{
+     	 errorDiv.innerHTML = "The maximum number of saved POs has been exceeded. Uncheck the “Add to My PO List” box <br>"+"on current order or delete previously saved POs by going to Admin/My Profile/Site Preferences.";
+         document.getElementById("po_combo_input").focus();
+         document.getElementById("po_combo_input").style.borderColor="#FF0000";
+         errorDiv.style.display = 'inline';
+         return returnval;
+    	}
     else{
     	writewebtrendTagForQty();
     	//Added for 3475

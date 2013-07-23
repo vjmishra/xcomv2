@@ -98,6 +98,9 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String isCustomerPOMandatory="false";
 	public String draftOrderFlagOrderSummary;
 	public String draftFlagError = "draftFlagError";
+	protected int addnlPoListlength =0;
+	
+
 	public String getDraftOrderFlagOrderSummary() {
 		return draftOrderFlagOrderSummary;
 	}
@@ -900,7 +903,11 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
 		}*/
 		addnlPOList = (String) wcContext.getWCAttribute("addnlPOList");;
-		
+		if(addnlPOList!=null && addnlPOList.length()!=0)
+		{
+			setAddnlPoListlength(addnlPOList.length());
+		}
+	
 /* JIRA 3382 removed userprofile email address from addition email address list*/
 	/*	if(YFCCommon.isVoid(addnlEmailAddrs))
 			addnlEmailAddrs = userEmailId;
@@ -1639,6 +1646,14 @@ END of JIRA 3382*/
 			dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "MM/dd/yyyy");			
 		}
 		return dateToDisplay;
+	}
+	
+	public int getAddnlPoListlength() {
+		return addnlPoListlength;
+	}
+
+	public void setAddnlPoListlength(int addnlPoListlength) {
+		this.addnlPoListlength = addnlPoListlength;
 	}
 	
 	public String replaceString(String qty,String replaceStr,String withString){
