@@ -161,6 +161,15 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	private String currentSelTab;
 	private boolean success;
 	private boolean saveAddUser;
+	public String customerClass = "";
+
+	public String getCustomerClass() {
+		return customerClass;
+	}
+
+	public void setCustomerClass(String customerClass) {
+		this.customerClass = customerClass;
+	}
 
 	public boolean isSaveAddUser() {
 		return saveAddUser;
@@ -2283,8 +2292,23 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		Element ccElem = XMLUtilities.getChildElementByName(
 				customerContactList, "CustomerContact");
 		Element extnElem = XMLUtilities.getChildElementByName(ccElem, "Extn");
-		String defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,
-				"ExtnB2BCatalogView");
+		//String defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,"ExtnB2BCatalogView");
+		String defaultB2bCatalogView="";
+		customerClass = (String) wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC);
+		if(isSaveAddUser()){
+			if(customerClass.contains("Paper")){
+				defaultB2bCatalogView = Integer
+				.toString(XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW);
+			}
+			else{
+				defaultB2bCatalogView = Integer
+				.toString(XPEDXConstants.XPEDX_B2B_FULL_VIEW);
+			}
+				
+		}
+		else{
+			defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,"ExtnB2BCatalogView");
+		}
 		if (YFCCommon.isVoid(defaultB2bCatalogView.trim())) {
 			defaultB2bCatalogView = Integer
 					.toString(XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW);
