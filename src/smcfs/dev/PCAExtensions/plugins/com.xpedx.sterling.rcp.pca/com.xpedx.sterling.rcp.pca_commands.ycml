@@ -202,6 +202,8 @@
             <command APIName="getCustomerList" APIType="API" Name="getDefaultShipToList" URL="DEFAULT" inputNamespace="getDefaultShipToList_input" outputNamespace="getDefaultShipToList_output" version=""/>
             <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="XPXGetCustomerContactList_input"
                 outputNamespace="XPXGetCustomerContactList_output" version=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getBilltoExtnCustomerClass" URL="DEFAULT" inputNamespace="getBilltoExtnCustomerClass_input"
+                outputNamespace="getBilltoExtnCustomerClass_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>
@@ -210,6 +212,7 @@
             <namespace name="getCustomerDetails_output" templateName="getCustomerDetails_output" type="output"/>
             <namespace name="getDefaultShipToList_output" templateName="getDefaultShipToList_output" type="output"/>
             <namespace name="XPXGetCustomerContactList_output" templateName="XPXGetCustomerContactList" type="output"/>
+            <namespace name="getBilltoExtnCustomerClass_output" templateName="getBilltoExtnCustomerClass_output" type="output"/>
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard">
