@@ -1670,7 +1670,7 @@ from session . We have customer Contact Object in session .
 		<!-- <div class="mandatory" id="requiredCustomerPOErrorDiv" style="display:none;">PO #: is required field</div> -->
 		<div id="requiredCustomerPOErrorDiv" style="display: none;  float: right; margin-right: 28px; margin-top: 5px;" class="error" >PO #: is required field</div>
 		<!--Added for 3098  -->
-		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div><br/>
+		<div class="error"  style="float:right; margin-right: 28px;display:none;margin-top: 5px;" id="errorMsg" ></div><br/>
 		<s:if test="%{#isSalesRep}">
 		<!--Added for EB-941  -->
 			<div class="salesProNotice" style="width:65%; float: right;"> Please ensure the correct Ship-To has been selected for this order prior to submitting the order. To change Ship-To, click on Edit Cart at the bottom of the Checkout page to return to Cart. Click on the ‘Change’ link at the end of the ‘Shopping for’ banner at the top of the page.</div>
