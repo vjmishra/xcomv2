@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
@@ -19,6 +20,7 @@ import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
+import com.yantra.yfc.rcp.YRCButtonBindingData;
 import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
@@ -37,7 +39,10 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private String customerContactID;
 	private Document docPOList;
 	public static String defaultShipTo;
-
+	private String billToExtnCustomerClass;
+	private String b2bCatalogView;
+	private String extnDefaultShipTo;
+	
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
 			Object inputObject,Element customerContactEle) {
@@ -186,12 +191,22 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			if(YRCPlatformUI.isTraceEnabled()){
     			YRCPlatformUI.trace("Shared Task: Launching with Input XML - "+YRCXmlUtils.getString(docInput));
     		}
+			System.out.println("input addDefaultShipToAddress : "+YRCXmlUtils.getString(eleInput));
+
+			Element customerContactElement =  getModel("XPXCustomerContactIn");
 			
+			String b2bCatView = YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnB2BCatalogView");
+			setB2bCatalogView(b2bCatView);
+			String defaultShipTo = YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnDefaultShipTo");
+			setExtnDefaultShipTo(defaultShipTo);
+			System.out.println("input defaultShipTo and b2bcatview : "+defaultShipTo + " and "+b2bCatView);
+
 			//Launch Shared Task
     		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask", eleInput);
     		
     		// Get the response 
     		Element eleContactPersonInfo = output.getOutput();
+    		System.out.println(" output addDefaultShipToAddress : "+YRCXmlUtils.getString(eleContactPersonInfo));
     		if(!YRCPlatformUI.isVoid(eleContactPersonInfo)){
     			setModel("DefaultShipToAddress", eleContactPersonInfo);
     			
@@ -200,6 +215,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				}
 	    		if(eleContactPersonInfo.getAttribute("CustomerID") != null ) {
 	    			setFieldValue("txtCustomerID", eleContactPersonInfo.getAttribute("CustomerID"));
+	    			
+	    			if(YRCPlatformUI.isVoid(defaultShipTo) && YRCPlatformUI.isVoid(b2bCatView)){
+		    			String selectedBilltoCustID=eleContactPersonInfo.getAttribute("BillToCustomerID");
+		    			invokeCustomerListAPI(selectedBilltoCustID);
+	    			}
+	    			
 				} else {
 					setFieldValue("txtCustomerID", "");
 				}
@@ -252,12 +273,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						setModel("XPXSearchCatalogIndex",outXml);
 						repopulateModel("XPXCustomerContactIn");
 					}
-					if ("getCustomerDetails".equals(apiname)) {
-						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+					else if ("getCustomerDetails".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();						
 						Element customerContactElement = (Element)YRCXPathUtils.evaluate(outXml, "/Customer/CustomerContactList/CustomerContact[@CustomerContactID='"+customerContactID+"']", XPathConstants.NODE);
 						this.setCoustomerContactModel(customerContactElement);
 					}
-					if("getDefaultShipToList".equals(apiname)){
+					else if("getDefaultShipToList".equals(apiname)){
 						Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement();
 						Element eleCustomer = (Element) YRCXPathUtils.evaluate(eleOutput, "/CustomerList/Customer", XPathConstants.NODE);
 						Document docAddress = YRCXmlUtils.createDocument("ShipTo");
@@ -272,16 +293,15 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						}
 						setModel("DefaultShipToAddress",eleAddress);
 					}
-					if ("createXPXCustContExtn".equals(apiname)) {
+					else if ("createXPXCustContExtn".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						
 					}
-					if ("changeXPXCustContExtn".equals(apiname)) {
+					else if ("changeXPXCustContExtn".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						
-					}
-					
-					if ("getXPXCustContExtn".equals(apiname)) {
+					}					
+					else if ("getXPXCustContExtn".equals(apiname)) {
 						this.docPOList=ctx.getOutputXmls()[i];
 						if(!YRCPlatformUI.isVoid(docPOList)){
 							Element outXml=docPOList.getDocumentElement();
@@ -295,10 +315,59 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						this.createModelForPOList();
 						this.createModelForAdditionalEmails();
 					}
-					if ("getCustomerContactList".equals(ctx.getApiName())) {
+					else if ("getCustomerContactList".equals(ctx.getApiName())) {
 						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
 						adminCustomerContact(eleCustomerContactList);						
 						
+					}
+					else if ("getBilltoExtnCustomerClass".equals(ctx.getApiName())) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						System.out.println("output of getBilltoExtnCustomerClass : "+YRCXmlUtils.getString(outXml));
+						String billToCustomerClass=YRCXmlUtils.getAttributeValue(outXml,"/CustomerList/Customer/Extn/@ExtnCustomerClass" );
+						if("CA".equals(billToCustomerClass)) {
+							Button radMatrix = (Button)getControl("radMatrix");
+							Button radItem1 = (Button)getControl("radItem1");
+							Button radItem2 = (Button)getControl("radItem2");
+							Button radItem4 = (Button)getControl("radItem4");						
+							
+							radMatrix.setSelection(true);
+							radItem1.setSelection(false);
+							radItem2.setSelection(false);
+							radItem4.setSelection(false);
+
+							YRCButtonBindingData radItemMatrixButtonBindingData= (YRCButtonBindingData)radMatrix.getData("YRCButtonBindingDefination");
+							radItemMatrixButtonBindingData.setSourceBinding("3");
+							radItemMatrixButtonBindingData.setTargetBinding("3");
+							radItemMatrixButtonBindingData.setCheckedBinding("3");
+							radMatrix.setData("YRCButtonBindingDefination",radItemMatrixButtonBindingData);						
+							/*Element customerContactElement = getModel("XPXCustomercontactExtn");
+							YRCXmlUtils.setAttributeValue(customerContactElement,"/CustomerContact/Extn/@ExtnB2BCatalogView", "3");
+							setModel("XPXCustomerContactIn", customerContactElement);
+							Element resultOutElement = getTargetModel("XPXResultOut");
+							YRCXmlUtils.setAttributeValue(resultOutElement,"/CustomerContact/Extn/@ExtnB2BCatalogView", "3");
+							setModel("XPXCustomerContactIn", customerContactElement);*/
+						
+						} else {
+							Button radMatrix = (Button)getControl("radMatrix");
+							Button radItem1 = (Button)getControl("radItem1");
+							Button radItem2 = (Button)getControl("radItem2");
+							Button radItem4 = (Button)getControl("radItem4");
+							radMatrix.setSelection(false);
+							radItem1.setSelection(true);
+							radItem2.setSelection(false);
+							radItem4.setSelection(false);
+							
+							YRCButtonBindingData radItem1ButtonBindingData= (YRCButtonBindingData)radItem1.getData("YRCButtonBindingDefination");
+							radItem1ButtonBindingData.setSourceBinding("0");
+							radItem1ButtonBindingData.setTargetBinding("0");
+							radItem1ButtonBindingData.setCheckedBinding("0");
+							/*Element customerContactElement = getModel("XPXCustomercontactExtn");
+							YRCXmlUtils.setAttributeValue(customerContactElement,"/CustomerContact/Extn/@ExtnB2BCatalogView", "0");
+							Element resultOutElement = getTargetModel("XPXResultOut");
+							YRCXmlUtils.setAttributeValue(resultOutElement,"/CustomerContact/Extn/@ExtnB2BCatalogView", "0");*/
+						}
+						System.out.println("output value of billToCustomerClass: "+billToCustomerClass);
+						setBillToExtnCustomerClass(billToCustomerClass);
 					}
 				}
 				if (ctx.getApiName().equals("manageCustomer")) {
@@ -942,5 +1011,39 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 //	optionEle.setAttribute("OptionType", "Text");
 //	setModel("XPXRecieveOrderConfirmationEmails",optionListDoc);
 //}
+
+	private void invokeCustomerListAPI(String billtoCustID ) {
+		String[] apinames = { "getBilltoExtnCustomerClass" };
+		Document[] docInput = { YRCXmlUtils.createFromString("<Customer CustomerID='" + billtoCustID+ "'/>") };
+		
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setFormId(getFormId());
+		ctx.setApiNames(apinames);
+		ctx.setInputXmls(docInput);
+		if (!page.isDisposed())
+			callApi(ctx, page);
+
+	}
+	
+	public String getBillToExtnCustomerClass() {
+		return billToExtnCustomerClass;
+	}
+	
+	public void setBillToExtnCustomerClass(String billToExtnCustomerClass) {
+		this.billToExtnCustomerClass = billToExtnCustomerClass;
+	}
+	
+	public String getB2bCatalogView() {
+		return b2bCatalogView;
+	}
+	public void setB2bCatalogView(String catalogView) {
+		b2bCatalogView = catalogView;
+	}
+	public String getExtnDefaultShipTo() {
+		return extnDefaultShipTo;
+	}
+	public void setExtnDefaultShipTo(String extnDefaultShipTo) {
+		this.extnDefaultShipTo = extnDefaultShipTo;
+	}
 
 }
