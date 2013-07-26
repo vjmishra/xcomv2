@@ -20,6 +20,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1032,9 +1033,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(
 					wcContext.getCustomerId(), allItemIds,
 					wcContext.getStorefrontId(),false);
-			itemIdConVUOMMap = XPEDXOrderUtils.getItemIdConVUOMMap();
-			itemIdsUOMsMap = XPEDXOrderUtils.getItemUomHashMap();
-			itemAndCustomerUomHashMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
+			
+			itemIdConVUOMMap = (Map<String,Map<String,String>>)ServletActionContext.getRequest().getAttribute("ItemIdConVUOMMap");
+			ServletActionContext.getRequest().removeAttribute("ItemIdConVUOMMap");
+			if(itemIdConVUOMMap == null)
+				itemIdConVUOMMap =  new HashMap<String,Map<String,String>>();
+			
+			itemIdsUOMsMap = (LinkedHashMap<String, Map<String,String>>)ServletActionContext.getRequest().getAttribute("ItemUomHashMap");
+			ServletActionContext.getRequest().removeAttribute("ItemUomHashMap");
+			if(itemIdsUOMsMap == null)
+				itemIdsUOMsMap =  new LinkedHashMap<String, Map<String,String>>();
+			
+			itemAndCustomerUomHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("itemCustomerUomHashMap");
+			ServletActionContext.getRequest().removeAttribute("itemCustomerUomHashMap");
+			if(itemAndCustomerUomHashMap == null)
+				itemAndCustomerUomHashMap =  new LinkedHashMap<String, String>();
+			
 			//itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
 			/*
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {

@@ -2005,9 +2005,9 @@ public class XPEDXWCUtils {
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> UOMDescMapFromCache = getUOMDescMapFromCache(wcContext);
 		// XB-687 - start
-	    LinkedHashMap<String, String> IsCustomerUomHashMap = new LinkedHashMap<String,String>();
-	    if(XPEDXWCUtils.getObjectFromCache("UOMsMap") != null){
-	    	IsCustomerUomHashMap = (LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    LinkedHashMap<String, String> IsCustomerUomHashMap = (LinkedHashMap<String,String>)XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    if(IsCustomerUomHashMap == null){
+	    	IsCustomerUomHashMap =  new LinkedHashMap<String,String>();//(LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
 	    }
 		// XB-687 - End
 		if (null == UOMDescMapFromCache || UOMDescMapFromCache.size() <=0) {

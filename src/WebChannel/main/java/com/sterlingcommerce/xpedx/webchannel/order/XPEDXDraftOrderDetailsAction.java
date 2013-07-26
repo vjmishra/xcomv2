@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1728,9 +1729,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		 */
 		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
 		itemIdsUOMsMap = (Map<String, Map<String, String>>) XPEDXWCUtils.getObjectFromCache("itemsUOMMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
-		itemAndCustomerUomHashMap = XPEDXOrderUtils.getItemCustomerUomHashMap();
-		itemAndCustomerUomWithConvHashMap = XPEDXOrderUtils.getItemCustomerUomConvFactHashMap();
-		XPEDXWCUtils.setObectInCache("ItemCustomerUomWithConvFactors", itemAndCustomerUomWithConvHashMap);
+		itemAndCustomerUomHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("itemCustomerUomHashMap");
+		ServletActionContext.getRequest().removeAttribute("itemCustomerUomHashMap");
+		itemAndCustomerUomWithConvHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("ItemCustomerUomConvFactHashMap");
+		//XPEDXWCUtils.setObectInCache("ItemCustomerUomWithConvFactors", itemAndCustomerUomWithConvHashMap);
 		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
 			ArrayList<String> itemIdsList = new ArrayList<String>();
 			itemIdsList.addAll(itemIdsUOMsMap.keySet());
