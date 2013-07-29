@@ -1454,7 +1454,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		if(itemIDList.size()>0) {
 			//get the map from the session. For Minicart Jira - 3481
-			HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
+			//HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 			//New method for getting order multiple .
 			//setInventoryAndOrderMultipleMap();
 			//commented for EB-164
@@ -1609,9 +1609,9 @@ public class XPEDXCatalogAction extends CatalogAction {
                 }
             }
             //Set itemMap MAP again in session
-            XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+           // XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
             //set a itemsUOMMap in Session for ConvFactor
-            XPEDXWCUtils.setObectInCache("itemsUOMMap",getXpedxUOMList());
+            //XPEDXWCUtils.setObectInCache("itemsUOMMap",getXpedxUOMList());
 
            
            

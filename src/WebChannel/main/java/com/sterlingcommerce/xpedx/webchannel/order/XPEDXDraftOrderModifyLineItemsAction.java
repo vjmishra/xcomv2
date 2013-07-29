@@ -70,7 +70,17 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public ArrayList <String> orderLineItemIDs;
     private ArrayList <String> customerUOMConvFactors;
     
-    public String getCustomerContactId() {
+    
+    
+    public ArrayList<String> getCustomerUOMConvFactors() {
+		return customerUOMConvFactors;
+	}
+
+	public void setCustomerUOMConvFactors(ArrayList<String> customerUOMConvFactors) {
+		this.customerUOMConvFactors = customerUOMConvFactors;
+	}
+
+	public String getCustomerContactId() {
 		return customerContactId;
 	}
 
@@ -210,9 +220,12 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             String customerUOMConvFact="";
             for(int i=0;orderLineItemIDs != null && i<orderLineItemIDs.size();i++)
             {
-            	customerUOMConvFact=customerUOMConvFactors.get(i);
-            	if(customerUOMConvFact != null && customerUOMConvFact.trim().length() > 0)
-            		itemAndCustomerUomWithConvHashMap.put(orderLineItemIDs.get(i), customerUOMConvFact);
+            	if(customerUOMConvFactors != null)
+            	{
+	            	customerUOMConvFact=customerUOMConvFactors.get(i);
+	            	if(customerUOMConvFact != null && customerUOMConvFact.trim().length() > 0)
+	            		itemAndCustomerUomWithConvHashMap.put(orderLineItemIDs.get(i), customerUOMConvFact);
+            	}
             }
             //end of XBT 252 & 248
         //Added for EB-464 - if clicked on checkout button, since its calling change order, setting the value for ExtnBaseOrderQuantity for customer Uoms

@@ -1318,7 +1318,7 @@ public class XPEDXOrderUtils {
 				//Set itemMap MAP again in session
 				//XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 				//set a itemsUOMMap in Session for ConvFactor			
-				ServletActionContext.getRequest().setAttribute("itemsUOMMap", itemUomHashMap);
+				ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
 				//XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);				
 			}
 			// End of XB-687
@@ -1335,7 +1335,7 @@ public class XPEDXOrderUtils {
 		}
 	}
 		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemCustomerUomHashMap);
-		ServletActionContext.getRequest().setAttribute("ItemCustomerUomConvFactHashMap", itemCustomerUomHashMap);		
+		ServletActionContext.getRequest().setAttribute("ItemCustomerUomConvFactHashMap", itemCustomerUomConvFactHashMap);		
 		return itemIdsUOMsDescMap;
 
 	}
@@ -2908,7 +2908,8 @@ public class XPEDXOrderUtils {
 	                    }
 	                }
 	            }
-	            XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
+	            //commented for performance to since minicart is not getting displayed.
+	            //XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
 	            
 			}
         } catch (Exception e) {

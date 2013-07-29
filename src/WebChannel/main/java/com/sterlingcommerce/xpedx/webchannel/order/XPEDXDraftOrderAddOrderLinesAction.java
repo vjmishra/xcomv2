@@ -689,9 +689,9 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			}
 		}
 		//Set itemMap MAP again in session Jira 3481
-		XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
+		//XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 		//set a itemsUOMMap in Session for ConvFactor
-		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), getEnteredProductIDs(), wcContext.getStorefrontId()));
+		//XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), getEnteredProductIDs(), wcContext.getStorefrontId()));
 
 	}
 

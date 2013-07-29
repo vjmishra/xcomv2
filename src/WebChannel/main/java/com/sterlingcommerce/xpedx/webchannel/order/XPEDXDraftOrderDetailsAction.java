@@ -1728,10 +1728,18 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		 * getting all the items UOMs at the same time using a complex query
 		 */
 		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
-		itemIdsUOMsMap = (Map<String, Map<String, String>>) XPEDXWCUtils.getObjectFromCache("itemsUOMMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
+		itemIdsUOMsMap = (Map<String, Map<String, String>>)ServletActionContext.getRequest().getAttribute("ItemUomHashMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
+		ServletActionContext.getRequest().removeAttribute("ItemUomHashMap");
+		if(itemIdsUOMsMap == null)
+			itemIdsUOMsMap = new HashMap<String, Map<String, String>>();
 		itemAndCustomerUomHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("itemCustomerUomHashMap");
+		if(itemAndCustomerUomHashMap == null)
+			itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
 		ServletActionContext.getRequest().removeAttribute("itemCustomerUomHashMap");
 		itemAndCustomerUomWithConvHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("ItemCustomerUomConvFactHashMap");
+		if(itemAndCustomerUomWithConvHashMap == null)
+			itemAndCustomerUomWithConvHashMap = new LinkedHashMap<String, String>();
+		ServletActionContext.getRequest().removeAttribute("ItemCustomerUomConvFactHashMap");
 		//XPEDXWCUtils.setObectInCache("ItemCustomerUomWithConvFactors", itemAndCustomerUomWithConvHashMap);
 		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
 			ArrayList<String> itemIdsList = new ArrayList<String>();
