@@ -2028,8 +2028,12 @@ public class XPEDXWCUtils {
 			UOMDesc = uomDescMap.get(UOMCode);
 		}
 		if (UOMDesc == null || UOMDesc.trim().length() == 0) {
+			if(UOMCode.contains("M_"));
+				UOMCode=UOMCode.replaceFirst("M_", "");
 			return UOMCode;
 		}
+		if(UOMDesc.contains("M_"));
+			UOMDesc=UOMDesc.replaceFirst("M_", "");
 		return UOMDesc;
 	}
 	
