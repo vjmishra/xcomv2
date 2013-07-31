@@ -844,7 +844,7 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}
-			XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
+			//XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
 			
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -1413,7 +1413,7 @@ public class XPEDXOrderUtils {
 			ServletActionContext.getRequest().setAttribute("uomsAndConFactors", uomsAndConFactors);
 
 			//set UOM map with UOM code as key and flag as value which indicate whether the UOM is a customer UOM or not
-			XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
+			//XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
 
 			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);
 			//Added for Jira 4023
