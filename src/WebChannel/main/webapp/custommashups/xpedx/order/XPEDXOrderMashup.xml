@@ -2129,7 +2129,7 @@
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="getCommonCodeList">
             <Input>
-                <CommonCode CallingOrganizationCode="" CodeType="XpedxWCStatus"/>
+                <CommonCode CallingOrganizationCode="xpedx" CodeType="XpedxWCStatus"/>
             </Input>
             <Template>
                 <CommonCode CodeShortDescription="" CodeType="" CodeValue=""/>
