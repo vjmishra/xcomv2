@@ -1063,12 +1063,23 @@ public class XPEDXOrderUtils {
 							if(itemId!=null) {
 								LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
 								LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
+								/*
 								NodeList uomListNodeList =	wNode.getChildNodes();
 								Node uomListNode = uomListNodeList.item(0);
-								
+								*///EB-934 start
+								Element uomListElement =null;
+								if(wNode instanceof Element){
+									List<Element> uomListNodeList=SCXmlUtil.getChildrenList((Element) wNode);
+									uomListElement=uomListNodeList.get(0);
+								}
+								else
+								{
+									NodeList uomListNodeList =	wNode.getChildNodes();
+									uomListElement = (Element)uomListNodeList.item(0);
+								}//EB-934 ends here
 								//2964 Start
-								if (uomListNode != null) {
-									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListNode);
+								if (uomListElement != null) {
+									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListElement);
 								Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
 									
 									for (Element uomNode : listOfUOMElements) {
