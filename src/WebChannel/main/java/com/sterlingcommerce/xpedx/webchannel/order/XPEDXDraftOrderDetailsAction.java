@@ -1888,6 +1888,13 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				itemSkuMap.clear();
 			}
 
+		}else{
+				for (int i = 0; i < orderLineElemList.size(); i++) {
+				Element orderLineElement = (Element)orderLineElemList.get(i);
+				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+				String itemId = itemElement.getAttribute("ItemID");
+				itemIdList.add(itemId);
+			}
 		}
 		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
 			Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
