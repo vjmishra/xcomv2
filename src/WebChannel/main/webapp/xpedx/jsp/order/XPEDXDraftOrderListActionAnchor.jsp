@@ -21,6 +21,7 @@ function actionOnList(oForm,oKey){
 		</s:url>
 			document.copyOrder.OrderHeaderKey.value=oKey;
 			$('#various2').trigger('click');
+			$("#copyCartName").focus();
 			document.getElementById("cartActions"+oKey).value="None";
 			
 	}else if(document.getElementById("cartActions"+oKey).value=="Delete"){
