@@ -163,14 +163,6 @@
 											</tr>                                                                                   
                                             
 											<tr>
-												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													<div align="left">                
-														Please do not reply  to this email. This mailbox is not monitored and you will not receive a response.
-													</div>                
-													<p></p>
-												</td>
-											</tr>
-											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">   </td>
 											</tr>
 										</table>
