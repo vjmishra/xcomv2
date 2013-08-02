@@ -23,6 +23,10 @@
 <s:if test="#isGuestUser == false">
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 </s:if>
+<!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--EB-1689 END -->
+ 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MISC<s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 
 <!--[if IE]>
@@ -394,11 +398,9 @@
 	                              	<td valign="top" class="underlines no-border-right-user"> <s:property value='%{#orgCutOffTime}'/></td>
 	                              </s:if>
                               </tr>
-				
-														
-               	  </tbody>
+                             
+							</tbody>
                	  </table>
-
                 
 
                  </s:if>
@@ -411,10 +413,19 @@
 			                   Technical Support: <s:property value='%{#fmtEBusinessPhoneNo}'/>, <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br>
 			                   </td>
           		 		 </tr>
+          		 		
           		 		 </tbody>
           		 	  </table>
 	  				
   				  </s:if>
+  				   <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
+          		 		 <s:set name='storefrontId' value="wCContext.storefrontId" />
+          		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+								<tr>
+									<td><a href="http://www.saalfeldredistribution.com/ContactUs.aspx" target="_blank">Locate Us</a></td>
+								</tr>
+							</s:if>
+						<!-- EB-1689 End -->
   				
                  
    </div> 
