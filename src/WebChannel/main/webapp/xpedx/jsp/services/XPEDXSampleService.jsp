@@ -965,9 +965,9 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                <!-- <td class="no-border-right table-header-bar-right"> </td>  --> 
                               </tr>
                               <tr>
-	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='mil' name='mil'  cssClass="x-input width-120px"	tabindex="" value='' size="10" />
+	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='mfg' name='mfg'  cssClass="x-input width-120px"	tabindex="" value='' size="10" />
 	                                </td>
-	                                <td class="padding8 border-left-gray"><s:textfield id='mfg' name='mfg' maxlength="10" cssClass="x-input width-100px"	tabindex="" value='' size="10" />
+	                                <td class="padding8 border-left-gray"><s:textfield id='mil' name='mil' maxlength="10" cssClass="x-input width-100px"	tabindex="" value='' size="10" />
 	                                 </td>
 	                                <td class="padding8 border-left-gray"><s:textfield id='mfgsku' name='mfgsku' cssClass="x-input width-120px" tabindex="" value='' maxlength="8" size="10" />  
 	                                         </td>
