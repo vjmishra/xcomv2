@@ -808,6 +808,8 @@ var selectedShipCustomer = null;
 <s:url id="userListURL" action="xpedxGetUserList" namespace="/profile/user" />
 <s:url id='targetURL' namespace='/common'
 	action='xpedxGetAssignedCustomers' />
+<s:set name="isDefaultShipToSuspended" value="#_action.isDefaultShipToSuspended()"/>
+<s:url id='targetURLForDefault' namespace='/common' action='xpedxGetAssignedCustomersForDefaultShipTo' />
 <s:url id='xpedxHeaderUrl' action='xpedxHeader' namespace="/common" >
         <s:param name='shipToBanner' value="%{'true'}" />
 </s:url>
@@ -1721,6 +1723,7 @@ function passwordUpdateModal()
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
+			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
 			if((!isSalesRep) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
 				var myMask
 				var waitMsg = Ext.Msg.wait("");
@@ -1728,7 +1731,29 @@ function passwordUpdateModal()
 				 myMask.show();
 				passwordUpdateModal();
 				Ext.Msg.hide();
-			}
+			} /* EB-76 Code Changes start  */
+			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext =="true" && isDefaultShipToSuspended=="true" ){	
+				//Please select an active ship-to as your default
+				$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
+					'onStart' 	: function(){			    	  	        
+			          	if(isguestuser!="true"){			               
+			            	showAssignedShipTo('<s:property value="#targetURLForDefault"/>');
+			 	        }
+			 		},
+			 		'onClosed'	: function(){			 			
+			 			if(isguestuser!="true"){			 			
+			 				 showAssignedShipTo('<s:property value="#targetURLForDefault"/>');
+			 			}
+			 		},
+			 		'hideOnOverlayClick': false,
+			 		'showCloseButton'	: false,
+			 		'enableEscapeButton': false,
+			 		'autoDimensions'	: false,
+			 		'scrolling'   		: 'no',
+			 		'width' 		: 750,
+			 		'height' 		: 530  
+				}).trigger('click');
+			} /* EB-76 Code Changes End */
 			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
 					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
 					'onStart' 	: function(){

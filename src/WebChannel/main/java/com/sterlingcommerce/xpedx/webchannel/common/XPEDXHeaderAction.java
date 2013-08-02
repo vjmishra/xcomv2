@@ -67,6 +67,14 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private XPEDXShipToCustomer shipToAddress;
 	private String userTypeForWebtrend;
 	private String isFromWhichPage;
+	private boolean isDefaultShipToSuspended= false;
+	public boolean isDefaultShipToSuspended() {
+		return isDefaultShipToSuspended;
+	}
+
+	public void setDefaultShipToSuspended(boolean isDefaultShipToSuspended) {
+		this.isDefaultShipToSuspended = isDefaultShipToSuspended;
+	}
 	//Commenting since this is not required
 	//could not get key directly on jsp so added the code.
 	/*private String orderHeaderKey1 = null;
@@ -955,6 +963,16 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				if(shipToCustomer.getOrganizationName()!=null) {
 					XPEDXConstants.USER_CUSTOMER_NAME = shipToCustomer.getOrganizationName();
 				}
+				/*EB-76 Start Changes */
+				if(shipToCustomer!=null && shipToCustomer.getDefaultShipToCustomer()!=null){
+					XPEDXShipToCustomer defaultShipToCustomer= shipToCustomer.getDefaultShipToCustomer();
+					if(defaultShipToCustomer.getCustomerStatus()!=null & defaultShipToCustomer.getCustomerStatus().trim().equals("30")){							
+							isDefaultShipToSuspended = true;
+							XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
+							xpedxCustomerContactInfoBean.setExtnDefaultShipTo(null);							
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean,xpedxCustomerContactInfoBean);					
+					}
+				} /*EB-76 End Changes */
 			}
 		} catch (Exception ex) {
 			log.error("Unable to get logged in users Customer Profile. "
