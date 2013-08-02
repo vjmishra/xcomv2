@@ -2940,13 +2940,14 @@ a.underlink:hover {
 											<tr>
 												<td width="16%" valign="top"
 													class="no-border-right-user padding00">Currency Type:</td>
+											<!-- Added for EB-763 user want to see all fields as grey unclickable boxes on the Spending Limits and Approvers tab  Starts -->
 												<td valign="top" width="84%"
 													class="no-border-right-user padding00"><s:if
 														test="#optedCurrency != null && #optedCurrency !=''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield id="spendingLtCurrency"
 																name="spendingLtCurrency" value="%{#optedCurrency}"
-																readonly="%{true}" cssStyle="width: 148px;" />
+																readonly="%{true}" disabled='%{true}' cssStyle="width: 148px;" />
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Currency -"
@@ -2977,7 +2978,7 @@ a.underlink:hover {
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
 																id="spendingLt" readonly="%{true}" name="spendingLt"
-																maxlength="6" value="%{showSpendingLimit()}"></s:textfield>
+																maxlength="6" value="%{showSpendingLimit()}" disabled='%{true}'></s:textfield>
 														</s:if>
 														<s:else>
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
@@ -3047,7 +3048,7 @@ a.underlink:hover {
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
 																id="primaryApprover" readonly="%{true}"
 																name="primaryApprover" maxlength="6"
-																value="%{#primaryApprover}"></s:textfield>
+																value="%{#primaryApprover}" disabled='%{true}'></s:textfield>
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Approver -"
@@ -3080,9 +3081,10 @@ a.underlink:hover {
 																	cssClass="x-input" cssStyle="width:148px;"
 																	id="alternateApprover" readonly="%{true}"
 																	name="alternateApprover" maxlength="6"
-																	value="%{#alternateApprover}"></s:textfield>
+																	value="%{#alternateApprover}" disabled='%{true}'></s:textfield>
 															</span>
 														</s:if>
+														<!-- EB-763 END -->
 														<s:else>
 															<span class="no-border-right-user padding0 "> <s:select
 																	headerKey="" headerValue="- Select Approver -"
