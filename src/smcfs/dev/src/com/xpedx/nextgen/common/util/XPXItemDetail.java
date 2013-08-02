@@ -6,7 +6,7 @@ import java.sql.SQLInput;
 import java.sql.SQLOutput;
 
 public class XPXItemDetail implements SQLData{
-	private String sql_type = "YFS_ITEM_OBJ";
+	private String sql_type = "YFS_ITEM_OBJECT";
 	
 	private String itemId;
 	private String itemKey;
@@ -75,7 +75,7 @@ public class XPXItemDetail implements SQLData{
 	}
 
 	public String toString(){
-		return getItemId()+"_"+getItemKey()+"_"+getBestMatch();//getKeyWords()+"_"+getDescription()+"_"+getShortDescription()+"_"+getExtendedDescription();
+		return getItemId()+"_"+getItemKey()+"_"+getKeyWords()+"_"+getDescription()+"_"+getShortDescription()+"_"+getExtendedDescription();
 	}
 		
 	public XPXItemDetail () {}
@@ -86,21 +86,21 @@ public class XPXItemDetail implements SQLData{
 		sql_type = typeName;
 		itemKey = stream.readString();
 		itemId  = stream.readString();
-		bestMatch = stream.readString();
-		/*keyWords = stream.readString();
+		//bestMatch = stream.readString();
+		keyWords = stream.readString();
 		shortDescription = stream.readString();
 		description = stream.readString();
-		extendedDescription = stream.readString();*/
+		extendedDescription = stream.readString();
 	}
 	
 	public void writeSQL(SQLOutput stream) throws SQLException {
 		stream.writeString (itemKey);
 		stream.writeString (itemId);
-		stream.writeString (bestMatch);
-		/*stream.writeString (keyWords);
+		//stream.writeString (bestMatch);
+		stream.writeString (keyWords);
 		stream.writeString(shortDescription);
 		stream.writeString(description);
-		stream.writeString(extendedDescription);*/
+		stream.writeString(extendedDescription);
 	}
 	
 	
