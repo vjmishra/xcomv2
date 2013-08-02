@@ -335,7 +335,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private void getStatusList() throws Exception
 	{
 		Map<String, String> valueMap = new HashMap<String, String>();
-		valueMap.put("/CommonCode/@CallingOrganizationCode", wcContext.getCustomerMstrOrg());
+		
+		/* Begin - Code commented for EB-1697. Statuses are being maintained, in YFS_COMMON_CODE, at the xpedx level and they will be the same for all the customers [be it xpedx or Saalfeld or others].
+		 * CallinOrganizationCode is hardcoded to xpedx in XPEDXOrderMashup.xml for mashup - XPEDXgetStatusList*/
+		//valueMap.put("/CommonCode/@CallingOrganizationCode", wcContext.getCustomerMstrOrg());		
+		/*End - Code commented for EB-1697.*/
 		
 		Element input = WCMashupHelper.getMashupInput("XPEDXgetStatusList", valueMap,
 				wcContext.getSCUIContext());

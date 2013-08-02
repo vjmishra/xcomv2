@@ -889,8 +889,7 @@
 					<tr>
 					<td style="text-wrap:7.5in;width:720px;">
 					This document merely confirms your order, it is not an acceptance of your order. Additional fees may apply to accepted orders. 
-					Please do not reply to this email. This mailbox is not monitored and you will not receive a response.
-						</td>
+					</td>
 				</tr>
 			</table></td></tr>
 			

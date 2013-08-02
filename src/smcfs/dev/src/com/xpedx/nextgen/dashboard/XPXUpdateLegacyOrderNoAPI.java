@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -32,6 +33,7 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 	private static YIFApi api = null;
 	
 	String getOrganizationListTemplate = "global/template/api/getOrderList.XPXUpdateExtnOrderStatus.xml";
+	
 	
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -71,12 +73,20 @@ public class XPXUpdateLegacyOrderNoAPI implements YIFCustomApi
 		}
 		try {
 			api.invoke(env, XPXLiterals.CHANGE_ORDER_API, changeOrderInputDoc);
-		} catch (YFSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Element orderExtn  = (Element)  changeOrderInputDoc.getElementsByTagName("Extn").item(0);
+			String extnIsReprocessibleFlag = orderExtn.getAttribute("ExtnIsReprocessibleFlag");
+			if(("Y").equalsIgnoreCase(extnIsReprocessibleFlag))
+			{
+				log.error("The order with the order header key  :: "+ changeOrderInputDoc.getDocumentElement().getAttribute("OrderHeaderKey") + "    " + "and order number "+ legacyOrderNumber + "has been marked Y in the OPR");
+			}
+		} catch (Exception e) {
+			log.error("The order with the order header key  :: "+ changeOrderInputDoc.getDocumentElement().getAttribute("OrderHeaderKey") + "has not been marked as N");
+			com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
+			errorObject.setTransType("OP");
+		    errorObject.setErrorClass("Application");
+		    errorObject.setInputDoc(changeOrderInputDoc);
+		    errorObject.setException(e);
+		    ErrorLogger.log(errorObject, env);
 		}
 		return inputXML;
 	}

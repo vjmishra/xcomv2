@@ -176,7 +176,10 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 
 		YRCApiContext apiContext = new YRCApiContext();
 		apiContext.setApiName("searchCatalogIndex");
-		apiContext.setInputXml(YRCXmlUtils.createFromString("<SearchCatalogIndex  CategoryDepth='1' CallingOrganizationCode='" + orgCode + "' />"));
+		
+		//Changes made for EB-1680. There would be just one active catalog and it will be of 'xpedx' as its the parent enterprise. 
+		apiContext.setInputXml(YRCXmlUtils.createFromString("<SearchCatalogIndex  CategoryDepth='1' CallingOrganizationCode='xpedx' />"));
+		//apiContext.setInputXml(YRCXmlUtils.createFromString("<SearchCatalogIndex  CategoryDepth='1' CallingOrganizationCode='"+orgCode+"' />"));
 		apiContext.setFormId(getFormId());
 		callApi(apiContext);
 	}

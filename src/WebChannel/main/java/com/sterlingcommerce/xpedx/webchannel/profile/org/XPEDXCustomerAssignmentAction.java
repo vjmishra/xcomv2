@@ -86,7 +86,15 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private LinkedHashMap<String, String> availableLocationMap = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> authorizedLocationMap = new LinkedHashMap<String, String>();
 	private String status="";
+	private boolean isDefaultShipToCustSuspended= false;
 
+	public boolean isDefaultShipToCustSuspended() {
+		return isDefaultShipToCustSuspended;
+	}
+
+	public void setDefaultShipToCustSuspended(boolean isDefaultShipToCustSuspended) {
+		this.isDefaultShipToCustSuspended = isDefaultShipToCustSuspended;
+	}
 	public String getStatus() {
 		return status;
 	}
@@ -651,6 +659,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 					.getAttribute("TotalNumberOfRecords"));
 			parsePageInfo(outputElem, true);
 			parseForShipToAddress(customerAssignment, true);
+			/*EB-76 Start Changes */
+			if(defualtShipToAddress!=null && defualtShipToAddress.getCustomerStatus()!=null && defualtShipToAddress.getCustomerStatus().trim().equals("30")){
+				isDefaultShipToCustSuspended = true;
+			}
+			/*EB-76 End Changes */
 		} catch (XMLExceptionWrapper e) {
 			log.error("Error getting the Customer Assignments");
 			e.printStackTrace();
