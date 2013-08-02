@@ -81,7 +81,7 @@ $("#various4").fancybox();
 		<div id="mid-col-mil"><br/>
         <div class="page-title"> 
 			<!-- Printable Catalogs & Estimating Files -->
-			 <!-- Added for EB-1614 Remove any associations to estimating files Starts -->
+			 <!-- Added for EB-1641 Remove any associations to estimating files Starts -->
 				<s:set name='storefrontId' value="wCContext.storefrontId" />
 				  <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 				<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE" />
@@ -89,7 +89,7 @@ $("#various4").fancybox();
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 						<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE_SAALFELD" />
 				</s:elseif> 
-			  <!--  EB-1614 End -->
+			  <!--  EB-1641 End -->
 		</div>
     <div class="x-input margin-top2">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
