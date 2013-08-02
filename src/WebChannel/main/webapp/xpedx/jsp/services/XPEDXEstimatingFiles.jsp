@@ -81,7 +81,15 @@ $("#various4").fancybox();
 		<div id="mid-col-mil"><br/>
         <div class="page-title"> 
 			<!-- Printable Catalogs & Estimating Files -->
-			<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE" />
+			 <!-- Added for EB-1614 Remove any associations to estimating files Starts -->
+				<s:set name='storefrontId' value="wCContext.storefrontId" />
+				  <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+				<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE" />
+				</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE_SAALFELD" />
+				</s:elseif> 
+			  <!--  EB-1614 End -->
 		</div>
     <div class="x-input margin-top2">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -114,7 +122,15 @@ $("#various4").fancybox();
 			   <td>
 			   		<s:if test="%{CatalogExp.size() <= 0 }">
 					   	<%-- <span>No Printable Catalogs & Estimating Files available </span> --%>
-					   	<span> <s:text name="MSG.SWC.MISC.ESTFS.ERROR.NOFILESAVAILABLE" /> </span>
+					  <!-- Added for EB-1614 Remove any associations to estimating files Starts -->
+						<s:set name='storefrontId' value="wCContext.storefrontId" />
+				 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+						   	<span> <s:text name="MSG.SWC.MISC.ESTFS.ERROR.NOFILESAVAILABLE" /> </span>
+						</s:if>
+						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<span> <s:text name="MSG.SWC.MISC.ESTFS.ERROR.NOFILESAVAILABLE_SAALFELD" /> </span>
+						</s:elseif> 
+					 <!--  EB-1614 End -->	
 					 </s:if>
 			   </td>
           </tr>
