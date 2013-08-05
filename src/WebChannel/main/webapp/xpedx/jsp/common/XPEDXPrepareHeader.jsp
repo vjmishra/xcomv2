@@ -2732,11 +2732,16 @@ function msgWait(){
 								</s:a>
 							</li>
 					    </s:if>
+					     <!-- Added for EB-1641 Remove any associations to estimating files Starts -->
+					    <s:set name='storefrontId' value="wCContext.storefrontId" />
+					   <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 						<li>
 							<s:a href='%{estimatingFilesLink}' cssClass="link">
 								<s:text name="Estimating Files"></s:text>
 							</s:a>
 						</li>
+						 </s:if>
+					<!--  EB-1641 End -->
 						<li>
 							<s:a href='%{estimatingFilesLink}' cssClass="link">
 								<s:text name="Printable Catalogs"></s:text>
