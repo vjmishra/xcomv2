@@ -1963,10 +1963,10 @@ public class XPEDXOrderUtils {
 		Map<String, String> valueMap = new HashMap<String, String>();
 		valueMap.put("/Order/@EnterpriseCode", wcContext.getStorefrontId());
 		
-		if("Saalfeld".equals(wcContext.getStorefrontId()))
+		/*if("Saalfeld".equals(wcContext.getStorefrontId()))
 		{
 			valueMap.put("/Order/@SellerOrganizationCode", "xpedx");
-		}
+		}*/
 		
 		valueMap.put("/Order/@BillToID", XPEDXWCUtils
 				.getLoggedInCustomerFromSession(wcContext));
