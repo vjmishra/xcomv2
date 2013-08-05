@@ -45,6 +45,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
     String orderNo = "";
     String orderBranch = "";
     String orderconfSubjecline="";
+    static String sapExtnCustLinePOLbl="";
+    static String sapExtnCustLineAccLbl="";
     private static YFCLogCategory yfcLogCatalog;
  
     static {
@@ -104,6 +106,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
  
             msapId = customerHierViewElem.getAttribute("MSAPCustomerID");
             biltoId = customerHierViewElem.getAttribute("BillToCustomerID");
+            sapExtnCustLinePOLbl=customerHierViewElem.getAttribute("SAPExtnCustLinePOLbl");
+            sapExtnCustLineAccLbl= customerHierViewElem.getAttribute("SAPExtnCustLineAccLbl");
  
             if(msapId!=null && !msapId.trim().equals("")){
                 customerIDMAP.put("MSAPCustomerID",msapId);
@@ -493,6 +497,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
             int length = extnElementList.getLength();
             if (length != 0) {
                 Element extnElement = (Element) extnElementList.item(0);
+                extnElement.setAttribute("SAPExtnCustLinePOLbl", sapExtnCustLinePOLbl); 
+                extnElement.setAttribute("SAPExtnCustLineAccLbl", sapExtnCustLineAccLbl); 
                 String addlnEmailAddresses = SCXmlUtil.getXpathAttribute(
                         extnElement, "./@ExtnAddnlEmailAddr");
                 if (addlnEmailAddresses.indexOf(";") > -1) {
