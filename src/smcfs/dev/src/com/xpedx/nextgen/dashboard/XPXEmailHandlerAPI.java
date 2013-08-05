@@ -551,8 +551,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         } // End of if loop if Customer Contact list doc is empty.
  
         /*XB-461 : Begin - Sending email through Java Mail API now*/
-        String emailOrgCode=(inputElement.getAttribute("SellerOrganizationCode")!=null?inputElement.getAttribute("SellerOrganizationCode"):"");
         String inputXML=SCXmlUtil.getString(customerDoc);
+		String emailOrgCode=((customerDoc!= null && customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null)?customerDoc.getDocumentElement().getAttribute("EnterpriseCode"):"");
         String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;
         String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
         StringBuffer emailSubject = new StringBuffer(orderconfSubjecline);
