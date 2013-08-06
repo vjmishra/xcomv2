@@ -69,7 +69,10 @@
 			'titlePosition' : 'inside',
 			'transitionIn' : 'none',
 			'transitionOut' : 'none',
-			//added for clearing the cart name and description fields			
+			'onComplete' : function() { 
+				$('#newcartname').focus(); 
+				},
+		//added for clearing the cart name and description fields			
 			'onClosed'	: function(){$("#newcartname").val('');$("#orderDescription").val('');}
 								
 		});

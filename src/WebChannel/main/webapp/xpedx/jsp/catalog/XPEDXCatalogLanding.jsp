@@ -300,9 +300,16 @@
 				<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
 				
 			</div>
-			
-				 <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
-				 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+				<!-- Added for EB-1712 Display a Saalfeld advertisement image on Catalog Home page  Starts -->
+						<s:set name='storefrontId' value="wCContext.storefrontId" />
+						 <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+						 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+						 </s:if>
+						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+						</s:elseif>
+				<!-- EB-1549 END -->
 				 </br>
 				<%--<!-- Ad Juggler Tag Starts  -->
 				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->

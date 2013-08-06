@@ -2522,7 +2522,15 @@ function showSharedListForm(){
                         <div class="smallBody">
 						
 						<img style="margin-top:5px; padding-right:5px;display: inline;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
-						 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+						<!-- Added for EB-1714 Display a Saalfeld advertisement image on MIL Starts -->
+							 <s:set name='storefrontId' value="wCContext.storefrontId" />
+							<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+							 </s:if>
+							<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+	                        </s:elseif>
+                   		<!-- EB-1714 END -->     
                         <div class="clear"></div>
                         <!-- Ad Juggler Tag Starts -->
                      <%--    <s:set name='ad_keyword' value='' />						

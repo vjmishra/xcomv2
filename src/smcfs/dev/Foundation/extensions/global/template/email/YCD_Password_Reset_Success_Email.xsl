@@ -166,10 +166,7 @@
 		<p>
 		Thank you for your business!
 		</p>
-		<p>
-		Please do not reply to this email.<xsl:text>&#160;&#160;This mailbox is not monitored and you will not receive a response.</xsl:text>
-    	</p>
-			<p/>
+		<p/>
 		</td></tr></table>
 	</xsl:template>
 

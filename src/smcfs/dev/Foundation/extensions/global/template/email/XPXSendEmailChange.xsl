@@ -32,11 +32,7 @@
 		          <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
 		          </tr>
-		           <tr>
-		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-		              Please do not reply  to this email.&#160;&#160;This mailbox is not monitored and you will not receive a response.</td>
-		          </tr>
-		           <tr>
+		          <tr>
 		            <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; text-align:center"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
 		          </tr>
 		        </table>

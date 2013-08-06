@@ -720,10 +720,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	 */
 	private String buildDescription(String shortDescrip, String itemId) {
 		String longDescription = itemdescriptionMap.get(itemId);
-		String[] longDescript =  StringUtils.replace(longDescription, "<ul><li>","").replace("</ul>", "<li>").split("</li><li>");
 		StringBuffer itemCompleteDescrip = new StringBuffer(shortDescrip);
+		String[] longDescript;
+		if(longDescription != null) {
+		longDescript =  StringUtils.replace(longDescription, "<ul><li>","").replace("</ul>", "<li>").split("</li><li>");
 		for(int i=0;i<longDescript.length;i++){
 			itemCompleteDescrip.append(",").append(longDescript[i]);
+		
+		  }
 		}
 		return itemCompleteDescrip.toString();
 	}
