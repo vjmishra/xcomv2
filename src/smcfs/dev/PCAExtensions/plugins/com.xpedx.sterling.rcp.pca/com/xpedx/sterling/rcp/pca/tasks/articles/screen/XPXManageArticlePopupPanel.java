@@ -4,6 +4,8 @@
  */
 package com.xpedx.sterling.rcp.pca.tasks.articles.screen;
 
+import java.util.HashMap;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -79,6 +81,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 	private Button btnStorefrontCode;
 	private Button btnDivision;
 	private YRCComboBindingData cbd;
+	private HashMap map = new HashMap();
 
 	public XPXManageArticlePopupPanel(Composite parent, int style, Object inputObject) {
 		super(parent, style);
@@ -88,6 +91,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		elePageInput = (Element) inputObject;
 		initialize();
 		setBindingForComponents();
+		getCodeValue();
 		myBehavior = new XPXManageArticlePopupPanelBehavior(this, FORM_ID);
 		checkUserPermissions();
 		pnlRoot.layout(true, true);
@@ -162,7 +166,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@OrganizationCode");
 		cbd.setDescriptionBinding("@OrganizationCode");
-		cbd.setListBinding("StoreFronts:/OrganizationList/Organization");
+		cbd.setListBinding("StoreFronts:/OrganizationList/Organization");		
 		cbd.setSourceBinding("XPXArticle:XPXArticle/@OrganizationCode");
 		cbd.setTargetBinding("SaveArticle:/XPXArticle/@OrganizationCode");
 		cbd.setName("comboStorefrontCode");		
@@ -272,8 +276,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		btnRmv.setText("<--Remove");
 		btnRmv.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				myBehavior.removeSelectedDivisions(e);
-				System.out.println("Remove Requested");
+				myBehavior.removeSelectedDivisions(e);			
 			}
 		});
 		
@@ -335,7 +338,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		if(XPXConstants.DEFAULT_STOREFRONT_COMBO_CHECK.equals("Y"))
 		{
 			btnStorefrontCode.setSelection(true);
-			pnlDivisions.setVisible(false);
+			//pnlDivisions.setVisible(false);
 			lblStorefronCode.setVisible(true);
 			comboStorefrontCode.setVisible(true);
 		}
@@ -343,8 +346,8 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		{
 			btnDivision.setSelection(true);
 			pnlDivisions.setVisible(true);
-			lblStorefronCode.setVisible(false);
-			comboStorefrontCode.setVisible(false);
+		//	lblStorefronCode.setVisible(false);
+		//	comboStorefrontCode.setVisible(false);
 			
 		}
 	}
@@ -403,7 +406,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		btnStorefrontCode.setData("yrc:customType", "Label");
 		btnStorefrontCode.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				pnlDivisions.setVisible(false);
+				//pnlDivisions.setVisible(false);
 				lblStorefronCode.setVisible(true);
 				comboStorefrontCode.setVisible(true);					
 			}
@@ -417,8 +420,8 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		btnDivision.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				pnlDivisions.setVisible(true);
-				lblStorefronCode.setVisible(false);
-				comboStorefrontCode.setVisible(false);				
+				//lblStorefronCode.setVisible(false);
+				//comboStorefrontCode.setVisible(false);				
 			}
 		});		
 
@@ -432,6 +435,14 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		comboStorefrontCode.setLayoutData(gdArticleName);
 		comboStorefrontCode.setTextLimit(50);
 		comboStorefrontCode.setData("name", "comboStorefrontCode");
+		comboStorefrontCode.setText("xpedx");
+		comboStorefrontCode.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+			   			myBehavior.getDivisionList(map.get(comboStorefrontCode.getText()).toString());
+			   			 
+			}
+
+		});	
 		
 		addArticleToDivisions();
 
@@ -619,6 +630,17 @@ public class XPXManageArticlePopupPanel extends Composite implements
 				control.setEnabled(enabled);
 		}
 
-	}	
+	}
+    
+    private HashMap getCodeValue(){
+      
+      map.put("BulkleyDunton"  , "BDUN");
+      map.put("Saalfeld", "SAAL");
+      map.put("xpedxCanada","XPCA");
+      map.put("xpedx","XPED");
+      map.put("DEFAULT","DEFAULT");
+      
+      return map;
+    }
 
 }
