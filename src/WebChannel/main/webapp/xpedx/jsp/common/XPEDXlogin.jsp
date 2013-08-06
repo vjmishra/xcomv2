@@ -116,6 +116,14 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 						<div style="color:#ff0000; font-size: 1.1em; text-align: left;margin-right: 10px;" class="error">
 						<s:text name="login.loginError" /></div>
 					</s:if>
+					<!-- Added for EB 560 on session timeout display the error msg-->
+					<% if(null != request.getParameter("error")){ %>
+						<div style="color:#ff0000; font-size: 1.1em; text-align: left;margin-right: 10px;" class="error">
+						<p>Your session has expired</p>
+						</div>
+					<%}
+					//Added for EB 560
+					%>
 					<%	}
 					%>
 					
