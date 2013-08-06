@@ -146,10 +146,10 @@
 		
 		<!-- begin iterator -->       
 		<s:if test="#rowStatus.last == true ">
-	    	<div class="mil-wrap last" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	<div class="mil-wrap last" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
 	    </s:if>
 	    <s:else>
-	    	 <div class="mil-wrap" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	 <div class="mil-wrap" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
 	    </s:else>
          	<div class="mil-container" >
                 <!--checkbox   -->

@@ -2999,10 +2999,10 @@ function showSharedListForm(){
 
 
     				<s:if test="#status.last" >
-                   		<div class="mil-wrap-condensed-container mil-only last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >    
+                   		<div class="mil-wrap-condensed-container mil-only last"  onmouseover="$(this).addClass('green-background');" onmouseleave="$(this).removeClass('green-background');" >    
            			</s:if>
            			<s:else>
-           				<div class="mil-wrap-condensed-container mil-only"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >  
+           				<div class="mil-wrap-condensed-container mil-only"  onmouseover="$(this).addClass('green-background');" onmouseleave="$(this).removeClass('green-background');" >  
            			</s:else>
            
     
