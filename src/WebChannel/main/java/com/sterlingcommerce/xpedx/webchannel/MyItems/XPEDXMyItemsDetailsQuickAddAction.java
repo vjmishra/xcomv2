@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -282,7 +283,11 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 			
 			//Start of XB-687
 			displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode);
-			defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
+			defaultShowUOMMap = (Map<String, String>)ServletActionContext.getRequest().getAttribute("defaultShowUOMMap");
+			ServletActionContext.getRequest().removeAttribute("defaultShowUOMMap");
+			if(defaultShowUOMMap == null)
+				defaultShowUOMMap =  new HashMap<String, String>();
+			//defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
 			//End of XB-687
 			if(requestedDefaultUOM == null && defaultShowUOMMap!=null && !defaultShowUOMMap.isEmpty()){
 				requestedDefaultUOM = (String)defaultShowUOMMap.keySet().iterator().next();

@@ -2005,9 +2005,9 @@ public class XPEDXWCUtils {
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> UOMDescMapFromCache = getUOMDescMapFromCache(wcContext);
 		// XB-687 - start
-	    LinkedHashMap<String, String> IsCustomerUomHashMap = new LinkedHashMap<String,String>();
-	    if(XPEDXWCUtils.getObjectFromCache("UOMsMap") != null){
-	    	IsCustomerUomHashMap = (LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    LinkedHashMap<String, String> IsCustomerUomHashMap = (LinkedHashMap<String,String>)XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    if(IsCustomerUomHashMap == null){
+	    	IsCustomerUomHashMap =  new LinkedHashMap<String,String>();//(LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
 	    }
 		// XB-687 - End
 		if (null == UOMDescMapFromCache || UOMDescMapFromCache.size() <=0) {
@@ -2028,8 +2028,12 @@ public class XPEDXWCUtils {
 			UOMDesc = uomDescMap.get(UOMCode);
 		}
 		if (UOMDesc == null || UOMDesc.trim().length() == 0) {
+			if(UOMCode.contains("M_"));
+				UOMCode=UOMCode.replaceFirst("M_", "");
 			return UOMCode;
 		}
+		if(UOMDesc.contains("M_"));
+			UOMDesc=UOMDesc.replaceFirst("M_", "");
 		return UOMDesc;
 	}
 	

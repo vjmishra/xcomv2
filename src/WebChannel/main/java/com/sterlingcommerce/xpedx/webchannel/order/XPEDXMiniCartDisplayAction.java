@@ -199,7 +199,7 @@ public class XPEDXMiniCartDisplayAction extends MiniCartDisplayAction {
         LOG.debug("orderHeaderKey-->"+orderHeaderKey);
         try{
         	 majorLineElements=(ArrayList<Element>)XPEDXWCUtils.getObjectFromCache("OrderLinesInContext");
-        	 for(int i=0;i<majorLineElements.size();i++)
+        	 for(int i=0;majorLineElements != null && i<majorLineElements.size();i++)
      		{
      			Element orderLine=majorLineElements.get(i);
      			NodeList itemNodeList = orderLine.getElementsByTagName("Item");
