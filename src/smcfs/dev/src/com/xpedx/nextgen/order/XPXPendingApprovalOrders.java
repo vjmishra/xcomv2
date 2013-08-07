@@ -42,6 +42,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	private static YFCLogCategory log;
 	String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
 	String getCustomerListCSREmailTemplate ="global/template/api/getCustomerList.XPXCSRFlagEmails.xml";
+	static String extnCustLineAccLbl="";
+    static String extnCustLinePOLbl="";
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
@@ -501,6 +503,19 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				inputDoc = setCSREmails(env,inputDoc,billtoID);
 				}
 			}	
+			NodeList extnElementList = inputDoc.getElementsByTagName("Extn");
+            int length = extnElementList.getLength();
+            if (length != 0) {
+            	  Element extnElement = (Element) extnElementList.item(0);
+            	  if(extnCustLinePOLbl!=null && !extnCustLinePOLbl.trim().equals(""))
+            	  {
+                  	extnElement.setAttribute("ExtnCustLinePOLbl", extnCustLinePOLbl); 
+                  }
+            	  if(extnCustLineAccLbl!=null && !extnCustLineAccLbl.trim().equals(""))
+                  {
+                  	extnElement.setAttribute("ExtnCustLineAccLbl", extnCustLineAccLbl); 
+                  }
+            }
 			String inputXML=SCXmlUtil.getString(inputDoc.getDocumentElement());
 			String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
 			String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
@@ -623,8 +638,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 			msapId = customerHierViewElem.getAttribute("MSAPCustomerID");
 			biltoId = customerHierViewElem.getAttribute("BillToCustomerID");
-			
-
+			extnCustLineAccLbl= customerHierViewElem.getAttribute("SAPExtnCustLineAccLbl"); // SAPExtnCustLineAccLbl
+	        extnCustLinePOLbl=customerHierViewElem.getAttribute("SAPExtnCustLinePOLbl"); //SAPExtnCustLinePOLbl
+	
 			if(msapId!=null && !msapId.trim().equals("")){
 				customerIDMAP.put("MSAPCustomerID",msapId);
 			}
