@@ -5,6 +5,8 @@
 package com.xpedx.sterling.rcp.pca.catalogexport.screen;
 
 
+import java.util.ArrayList;
+
 import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.swt.events.MouseEvent;
@@ -88,7 +90,23 @@ public class CatalogExportSearchListPanelBehavior extends YRCBehavior {
 		Element eleInput = (Element)((YRCEditorInput)getInputObject()).getXml();
 		Element eleSearchCriteria = getTargetModel("SearchCriteria");
 		eleSearchCriteria.setAttribute("OrganizationKey", strPricingWarehouse);
+		ArrayList divisionArray = new ArrayList();
+		divisionArray = XPXUtils.getRefDiv();
 		
+		
+		Element e4 = YRCXmlUtils.createChild(eleSearchCriteria, "SearchCriteria");
+		Element attrElemComplex = YRCXmlUtils.createChild(e4, "ComplexQuery");
+		Element attrOr = YRCXmlUtils.createChild(attrElemComplex, "Or");
+		for ( int i=0; i<divisionArray.size();i++) {
+	          String division = (String) divisionArray.get(i);
+	          if (division != null && division != " ") {
+	                Element attrName = YRCXmlUtils.createChild(attrOr, "Exp");
+	                attrName.setAttribute("Name", "DivisionID");
+	                attrName.setAttribute("Value", division);
+	                attrOr.appendChild(attrName);
+	          }
+
+	    }
 	    if(!YRCPlatformUI.isVoid(YRCXmlUtils.getAttributeValue(eleSearchCriteria, "XPXCatalogExp/@BrandCode"))){
 	    	
 	    	YRCXmlUtils.setAttributeValue(eleSearchCriteria, "XPXCatalogExp/@BrandCodeQryType", "LIKE");

@@ -4,21 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfs.core.YFSSystem;
-
-import com.sterlingcommerce.webchannel.core.IWCContext;
-import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import org.apache.struts2.ServletActionContext;
 
 
 public class XPEDXContactAction extends WCMashupAction {
@@ -35,8 +34,12 @@ public class XPEDXContactAction extends WCMashupAction {
 			}
 			
 			String stroeFrontName =  wcContext.getStorefrontId();
-			eBusinessEmailID = "eBusiness@"+stroeFrontName+".com";
-			
+			 // Added for EB-1689 view the correct support information on the Contact Us page Starts 
+			if(XPEDXConstants.XPEDX_STORE_FRONT.equals(stroeFrontName)){
+				eBusinessEmailID = "eBusiness@"+stroeFrontName+".com";	
+			}else if(XPEDXConstants.SAALFELD_STORE_FRONT.equals(stroeFrontName))
+				eBusinessEmailID = "eBusiness@"+stroeFrontName+"redistribution.com";			
+			// EB-1689 END
 			emailSubjects = new HashMap();
 			emailSubjects.put("Order Status", "Order Status");
 			emailSubjects.put("Item Return", "Item Return");

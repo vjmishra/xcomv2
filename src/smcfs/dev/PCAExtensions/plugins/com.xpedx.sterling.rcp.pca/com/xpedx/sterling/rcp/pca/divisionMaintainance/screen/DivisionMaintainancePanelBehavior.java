@@ -6,6 +6,7 @@
 package com.xpedx.sterling.rcp.pca.divisionMaintainance.screen;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
@@ -13,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionMaintainanceEditor;
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
@@ -92,6 +94,7 @@ public class DivisionMaintainancePanelBehavior extends YRCBehavior {
 					String apiname = apinames[i];
 					if (YRCPlatformUI.equals("getOrganizationHierarchy", apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						
 						divisionElementbeforeUpdate = outXml;
 						//Start display all BrandCodes comma seperated
 						Element extnEle =YRCXmlUtils.getChildElement(divisionElementbeforeUpdate, "Extn");
@@ -111,7 +114,19 @@ public class DivisionMaintainancePanelBehavior extends YRCBehavior {
 						}
 						divBrandListEle.setAttribute("BrandCodes", appendedBrandCode);
 						//end
+						
+						
+						Element divListEle = YRCXmlUtils.getChildElement(extnEle, "XPXXferCircleList");
+						NodeList nl1 = divListEle.getElementsByTagName("XPXXferCircle");
+						int noOfDivBrands1 = nl1.getLength();
+						ArrayList refDiv = new ArrayList();
+						for (int j = 0; j < noOfDivBrands1; j++) {
+							Element eleDivBrand = (Element) nl1.item(j);
+							refDiv.add(eleDivBrand.getAttribute("DivisionNo"));
+						}
+						XPXUtils.setRefDiv(refDiv);
 						setModel("Organization", divisionElementbeforeUpdate);
+					//	System.out.println("required " + YRCXmlUtils.getString(divisionElementbeforeUpdate));
 //					System.out.println(YRCXmlUtils.getString(divisionElementbeforeUpdate));
 						page.showRootPanel(true);
 						/*START:1 Following Code is used to get the Modified by user details.**/

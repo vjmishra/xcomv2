@@ -46,6 +46,7 @@ public class XPXUtils {
 	// XB-519
 	public static String polbl;
 	public static String lineAcc;
+	public static ArrayList refDiv;
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -683,5 +684,13 @@ public class XPXUtils {
 	}
 	public static String getLineAcc() {
 		return lineAcc;
+	}
+
+	public static ArrayList getRefDiv() {
+		return refDiv;
+	}
+
+	public static void setRefDiv(ArrayList refDiv) {
+		XPXUtils.refDiv = refDiv;
 	}
 }
