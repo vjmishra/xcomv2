@@ -420,9 +420,10 @@
   				  </s:if>
   				   <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
           		 		 <s:set name='storefrontId' value="wCContext.storefrontId" />
+          		 		 <br/>
           		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 								<tr>
-									<td><a href="http://www.saalfeldredistribution.com/ContactUs.aspx" target="_blank">Locate Us</a></td>
+									<td><a href="http://www.saalfeldredistribution.com/ContactUs.aspx" target="_blank"><b>Locate Us</b></a></td>
 								</tr>
 							</s:if>
 						<!-- EB-1689 End -->
