@@ -151,8 +151,8 @@ public class DynamicQueryAction extends WCMashupAction {
 		getCustomerInfo(wcContext, sParentID);
 
 		valueMap.put("/Customer/@CustomerID", sParentID);
-		valueMap.put("/Customer/@OrganizationCode", "xpedx");
-
+		//valueMap.put("/Customer/@OrganizationCode", "xpedx");
+		valueMap.put("/Customer/@OrganizationCode", wcContext.getStorefrontId());
 		input = WCMashupHelper.getMashupInput("XPEDXMyItemsGetCustomersList",
 				valueMap, wcContext.getSCUIContext());
 
@@ -217,8 +217,8 @@ public class DynamicQueryAction extends WCMashupAction {
 		String zipcode = null;
 		String country = null;
 		valueMap.put("/Customer/@CustomerID", sCustID);
-		valueMap.put("/Customer/@OrganizationCode", "xpedx");
-
+		//valueMap.put("/Customer/@OrganizationCode", "xpedx");
+		valueMap.put("/Customer/@OrganizationCode", wcContext.getStorefrontId());
 		input = WCMashupHelper.getMashupInput("XPEDXGetCustomerInfo", valueMap,
 				wcContext.getSCUIContext());
 
