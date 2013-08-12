@@ -2750,11 +2750,14 @@ function msgWait(){
 						<s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
 							<s:param name="xpedxSelectedHeaderTab1">ServicesTab</s:param>
 						</s:url>
-						<li>
-							<s:a href='%{newToolsLink}' cssClass="link">
-								<s:text name="Tools"></s:text>
-							</s:a>
-						</li>
+						<s:set name='storeFrontId' value='wCContext.storefrontId'/>
+						<s:if test="#storeFrontId == 'xpedx'">
+							<li>
+								<s:a href='%{newToolsLink}' cssClass="link">
+									<s:text name="Tools"></s:text>
+								</s:a>
+							</li>
+						</s:if>
 		            </ul>
 	            </li>
 	            </s:if>	          

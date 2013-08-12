@@ -701,6 +701,23 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			estimator = extnElem.getAttribute("ExtnEstimator");
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
+			
+			String customerPrefClass = (String) wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
+			if(isSaveAddUser()){
+				if(customerPrefClass.equalsIgnoreCase("CJ")){
+					prefCategory = "1000000";
+				}
+				if(customerPrefClass.equalsIgnoreCase("CG")){
+					prefCategory = "2000000";
+				}
+				if(customerPrefClass.equalsIgnoreCase("CU")){
+					prefCategory = "3000000";
+				}
+				if(customerPrefClass.equalsIgnoreCase("CA")){
+					prefCategory = "4000000";
+				}
+					
+			}
 
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
@@ -2294,9 +2311,9 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		Element extnElem = XMLUtilities.getChildElementByName(ccElem, "Extn");
 		//String defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,"ExtnB2BCatalogView");
 		String defaultB2bCatalogView="";
-		customerClass = (String) wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC);
+		customerClass = (String) wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
 		if(isSaveAddUser()){
-			if(customerClass.contains("Paper")){
+			if(customerClass.equalsIgnoreCase("CA")){
 				defaultB2bCatalogView = Integer
 				.toString(XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW);
 			}
