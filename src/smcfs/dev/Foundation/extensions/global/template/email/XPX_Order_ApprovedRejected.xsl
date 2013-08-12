@@ -751,7 +751,7 @@
 					<xsl:when test="$custlineAcctLbl!=''">
 					<td class="right" valign="top"><xsl:value-of select='$custlineAcctLbl'/>:&#160;</td>
 					</xsl:when>
-					<xsl:otherwise><td class="right" valign="top">Cust Acct Line #:&#160;</td></xsl:otherwise>
+					<xsl:otherwise><td class="right" valign="top">Line Account#:&#160;</td></xsl:otherwise>
 					</xsl:choose>
 					<td class="addWidth" valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
 					<td class="right"></td>
