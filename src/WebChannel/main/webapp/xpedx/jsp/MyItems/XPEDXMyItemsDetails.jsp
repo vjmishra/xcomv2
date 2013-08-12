@@ -1843,7 +1843,16 @@ function showSharedListForm(){
 				
 				document.getElementById("prodId").value= itemSku;
 				document.getElementById("qty").value= itemQty;
-				qaAddItem(jobId, itemQty, itemSku, '1','', 'xpedx #' ); 
+				
+				var itemType = document.getElementById("itemType").value;
+	            var itemTypeText = itemType;
+                var itemTypeSelElem = document.getElementById("itemType");
+                if(itemTypeSelElem!=null){
+                    itemType = itemTypeSelElem.options[itemTypeSelElem.selectedIndex].value;
+                    itemTypeText = itemTypeSelElem.options[itemTypeSelElem.selectedIndex].text;
+                }
+				
+				qaAddItem(jobId, itemQty, itemSku, itemType,'', itemTypeText); 
 			}
 					if(flagTestCloseWindow == "true"){ 
 						$.fancybox.close();
