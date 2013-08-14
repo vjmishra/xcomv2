@@ -434,7 +434,7 @@
 					</CategoryList>
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName=""
-							IsProvidedFilter="" SequenceNo="">
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
 								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
@@ -937,7 +937,7 @@
 					</CategoryList>
 					<CurrentCategory CategoryPath="" Count="" ShortDescription=""/>
 					<FacetList>
-						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="">
+						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" IsAllowedValueDefined="" LongDescription="" OrganizationCode="" SequenceNo="" 
 								ShortDescription="" /> 

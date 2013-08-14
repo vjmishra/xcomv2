@@ -3069,13 +3069,35 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public String getFacetList()
 	{
 		String retVal=SUCCESS;
-		Object outputObj=WCMashupHelper.invokeMashup(
-				"xpedxNarrowByCatalogSearch", SCXmlUtil.createFromString(searchIndexInputXML).getDocumentElement(), wcContext
-						.getSCUIContext());
-		Document outputDoc=((Element) outputObj).getOwnerDocument();
-	
-		setOutDoc(outputDoc);
-		setAttributeListForUIForNarrowBy();
+		if(searchIndexInputXML != null)
+		{
+				Element inputDocElemen=SCXmlUtil.createFromString(searchIndexInputXML).getDocumentElement();
+				Element allAssignedListElem=SCXmlUtil.createChild(inputDocElemen, "ShowAllAssignedValues");
+				Element itemAttributeElem=SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
+				itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
+				Object outputObj=WCMashupHelper.invokeMashup(
+						"xpedxNarrowByCatalogSearch", inputDocElemen, wcContext
+								.getSCUIContext());
+				Document outputDoc=((Element) outputObj).getOwnerDocument();
+				/*if(!YFCCommon.isVoid(this.searchTerm)  ){
+					setCustomerNumber();
+					super.newSearch();
+				}		
+		        else
+		        {
+		        	List bcl = null;
+		            if((bcl = (List)req.getAttribute("_bcl_")) == null)
+		            {
+		                bcl = BreadcrumbHelper.preprocessBreadcrumb(get_bcs_());
+		                if((searchTerm == null || searchTerm.trim().length() == 0) && bcl.size() > 0)
+		                    bcl.remove(bcl.size() - 1);
+		            }
+		        
+		            super.process(bcl);
+		        }*/
+				setOutDoc(outputDoc);
+				setAttributeListForUIForNarrowBy();
+		}
 		return retVal;
 	}
 	/**
@@ -3341,6 +3363,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private Map<String, String> sortListMap = new LinkedHashMap<String, String>();
 	//Added for JIRA 1731 to show only 8 facet list woth ajax
 	private String facetDivShortDescription;
+	private String facetListItemAttributeKey;
 
 	public Map<String, String> getSortListMap() {
 		sortListMap.put("Item.ExtnBestMatch--A", "Best Match");
@@ -3499,6 +3522,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setSearchIndexInputXML(String searchIndexInputXML) {
 		this.searchIndexInputXML = searchIndexInputXML;
+	}
+
+	public String getFacetListItemAttributeKey() {
+		return facetListItemAttributeKey;
+	}
+
+	public void setFacetListItemAttributeKey(String facetListItemAttributeKey) {
+		this.facetListItemAttributeKey = facetListItemAttributeKey;
 	}
 	
 

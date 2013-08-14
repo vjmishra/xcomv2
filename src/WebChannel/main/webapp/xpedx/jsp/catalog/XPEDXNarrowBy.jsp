@@ -149,32 +149,32 @@ function setStockItemFlag()
 				
 			<ul>
 				<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
-				<s:iterator value="facetMap" id="factVal">
-						<s:set name='count1' value='%{#count1 + 1}' />
-						<s:url id='narrowURL' namespace='/catalog' action='filter.action'>
-						
+				<div id='narrowByDiv_<s:property value="#ShortDescription1" />' >
+					<s:iterator value="facetMap" id="factVal">
+							<s:set name='count1' value='%{#count1 + 1}' />
+							<s:url id='narrowURL' namespace='/catalog' action='filter.action'>						
+								
+								<s:param name='indexField'
+									value='#facets.getAttribute("IndexFieldName")' />
+								<s:param name='facet' value='#factVal.getAttribute("Value")' />
+								<s:param name='cname' value='#factVal.getAttribute("Value")' />
+								<s:param name='filterDesc' value='#ShortDescription1' />
+								<s:param name="categoryPath" value='#parameters.path'/>
+								<s:param name="path" value='#parameters.path'/>
+							</s:url>
 							
-							<s:param name='indexField'
-								value='#facets.getAttribute("IndexFieldName")' />
-							<s:param name='facet' value='#factVal.getAttribute("Value")' />
-							<s:param name='cname' value='#factVal.getAttribute("Value")' />
-							<s:param name='filterDesc' value='#ShortDescription1' />
-							<s:param name="categoryPath" value='#parameters.path'/>
-							<s:param name="path" value='#parameters.path'/>
+							<li class="roll close"><s:a href="%{narrowURL}"
+								tabindex="%{#count1}">
+								<s:property value='#factVal.getAttribute("Value")' />
+							</s:a> </li>
+					</s:iterator>
+					<s:if test='%{#hasMoreFacetList == "Y"}'>
+						<s:url id="getFacetListURL" action="getFacetList">
 						</s:url>
-						
-						<li class="roll close"><s:a href="%{narrowURL}"
-							tabindex="%{#count1}">
-							<s:property value='#factVal.getAttribute("Value")' />
-						</s:a> </li>
-				</s:iterator>
-				<s:if test='%{#hasMoreFacetList == "Y"}'>
-					<s:url id="getFacetListURL" action="getFacetList">
-					</s:url>			
-					<div id='narrowByDiv_<s:property value="#ShortDescription1" />' >
-						<a style="color: #EE6B03;font-size: 11px;" href="javascript:getFacetList('<s:property value='#ShortDescription1' />');">View All</a> 
-					</div>
-				</s:if>
+							<a style="color: #EE6B03;font-size: 11px;" href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
+					</s:if>
+				</div>
+				
 			</ul>
 			</div>	
 			
@@ -204,7 +204,7 @@ function setDefaultSearchText()
 	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 	myMask.show();
 }
-function getFacetList(shortDescription)
+function getFacetList(shortDescription,itemAttributeKey)
 {
 	var inutXML='<s:property value ="searchIndexInputXML" />'.replace(/&(lt|gt|quot);/g, function (m, p) { 
 	    return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
@@ -222,7 +222,8 @@ function getFacetList(shortDescription)
 			params: {
 				facetDivShortDescription: shortDescription,
 				//facetCurrentDivIndex: currentDivIndex,
-				searchIndexInputXML:inutXML
+				searchIndexInputXML:inutXML,
+				facetListItemAttributeKey:itemAttributeKey
 			},
 			method: 'POST',
 			success: function (response, request){
