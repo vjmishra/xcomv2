@@ -33,7 +33,7 @@
                     <API Name="XPXOrderListDetails" IsFlow="Y">
                         <Input>
                             <XPEDXOrderListView EnterpriseCode="" DraftOrderFlag="Y" DocumentType="0001"
-                                AuthorizedClient="Web" BuyerOrganizationCode="" BuyerOrganizationCodeQryType="FLIKE">
+                                BuyerOrganizationCode="" BuyerOrganizationCodeQryType="FLIKE">
                                  
                                 <OrderBy>
                                     <Attribute Desc="N" Name="Modifyts" />
