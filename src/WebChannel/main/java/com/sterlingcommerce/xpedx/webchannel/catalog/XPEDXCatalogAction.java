@@ -92,6 +92,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 //Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString=null;
+	private String searchIndexInputXML;
 //XNGTP-4264 and XB 355 Escaping Below words from search criteria.
 	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
 			 "for", "if", "in", "into", "is", "it",
@@ -908,6 +909,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 				term.setAttribute("Value", shipFromDivision);
 			}
 		}
+		//EB-1731 Adding api inputXML in request so that it should not do all calculation on View all link
+		//the size of this xml will be around 100 bytes so there will not be any latency.
+		searchIndexInputXML=SCXmlUtil.getString(mashupInput).replace("\n", "");
 	}
 
 	private void changeBasis()
@@ -1243,7 +1247,45 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 		return false;
 	}
-
+/*
+ * Added for JIRA EB-1731
+ */
+	private void setAttributeListForUIForNarrowBy() {
+		NodeList FacetList = SCXmlUtil
+				.getXpathNodes(getOutDoc().getDocumentElement(),
+						"/CatalogSearch/FacetList/ItemAttribute");
+		attributeMap = new HashMap();
+		for (int i = 0; i < FacetList.getLength(); i++) {
+			//Added for JIRA 3821
+			Element facetEle = (Element) FacetList.item(i);
+			Element itemattr = SCXmlUtil.getChildElement(facetEle, "Attribute");
+			String shortDesc = itemattr.getAttribute("ShortDescription");
+			if(facetDivShortDescription != null && !facetDivShortDescription.equalsIgnoreCase(shortDesc))
+				continue;
+			List<Element> itemAttribute = SCXmlUtil.getElements(facetEle, "AssignedValueList/AssignedValue");
+			Collections.sort(itemAttribute, new  Comparator<Element>()			
+			{
+				public int compare(Element elem, Element elem1) {
+					String attrValue =elem.getAttribute("Value");
+					String attrValue1 =elem1.getAttribute("Value");
+					 if(isDouble(attrValue) && isDouble(attrValue1)){
+                         return Double.valueOf(attrValue).compareTo(Double.valueOf(attrValue1));
+					 }
+					return attrValue.compareTo(attrValue1);
+				}
+			});
+			
+			facetListMap.put(shortDesc,itemAttribute);
+			//narrowByDivCount.put(shortDesc, 1);
+			//End of JIRA 3821
+			String attrName = facetEle.getAttribute("ItemAttributeName");
+			String isFiltered = facetEle.getAttribute("IsProvidedFilter");
+			if (!(isFiltered != null && isFiltered.trim().length() > 0 && "Y"
+					.equals(isFiltered)))
+				attributeMap.put(attrName, attrName);
+		}
+	}
+	
 	private void setAttributeListForUI() {
 		NodeList FacetList = SCXmlUtil
 				.getXpathNodes(getOutDoc().getDocumentElement(),
@@ -3024,6 +3066,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			//End JIRA XBT-319
 	
+	public String getFacetList()
+	{
+		String retVal=SUCCESS;
+		Object outputObj=WCMashupHelper.invokeMashup(
+				"xpedxNarrowByCatalogSearch", SCXmlUtil.createFromString(searchIndexInputXML).getDocumentElement(), wcContext
+						.getSCUIContext());
+		Document outputDoc=((Element) outputObj).getOwnerDocument();
+	
+		setOutDoc(outputDoc);
+		setAttributeListForUIForNarrowBy();
+		return retVal;
+	}
 	/**
 	 * @return the pnaItemId
 	 */
@@ -3284,7 +3338,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String tempCategoryPath;
 	private Element allAPIOutputDoc;
 	private String categoryDepthNarrowBy;
-	private Map<String, String> sortListMap = new LinkedHashMap<String, String>();	
+	private Map<String, String> sortListMap = new LinkedHashMap<String, String>();
+	//Added for JIRA 1731 to show only 8 facet list woth ajax
+	private String facetDivShortDescription;
 
 	public Map<String, String> getSortListMap() {
 		sortListMap.put("Item.ExtnBestMatch--A", "Best Match");
@@ -3411,6 +3467,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.path = path;
 	}
 
+
+	public String getFacetDivShortDescription() {
+		return facetDivShortDescription;
+	}
+
+	public void setFacetDivShortDescription(String facetDivShortDescription) {
+		this.facetDivShortDescription = facetDivShortDescription;
+	}
+	
+	
 	/**
 	 * This operation will verfiy if Value is Integer
 	 * isInteger
@@ -3426,5 +3492,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			return false;
 		}
 	}
+
+	public String getSearchIndexInputXML() {
+		return searchIndexInputXML;
+	}
+
+	public void setSearchIndexInputXML(String searchIndexInputXML) {
+		this.searchIndexInputXML = searchIndexInputXML;
+	}
+	
 
 }

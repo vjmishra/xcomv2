@@ -1060,4 +1060,41 @@
 			</Template>
 		</API>
 	</mashup>
+
+	<mashup id='xpedxNarrowByCatalogSearch' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Search and Navigation in Catalog">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" SortField=""
+					SortDescending="" PageSize="" PageNumber="" CategoryPath="">
+					<Item GetAvailabilityFromCache='Y' Currency=""
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="" />						
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" PageNumber=""
+					PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">					
+					<FacetList>
+						<ItemAttribute IndexFieldName="" ItemAttributeName=""
+							IsProvidedFilter="" SequenceNo="">
+							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
+								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
+								ShortDescription="" /> 
+							<AssignedValueList>
+								<AssignedValue Count="" Value="" IsProvidedFilter="" />
+							</AssignedValueList>
+						</ItemAttribute>
+					</FacetList>					
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
 </mashups>       

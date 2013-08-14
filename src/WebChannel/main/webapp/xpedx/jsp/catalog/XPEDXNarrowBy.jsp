@@ -118,6 +118,9 @@ function setStockItemFlag()
 			<s:set name='count1' value='%{#count1 + 1}' />
 			<s:set name='facetList'
 				value='XMLUtils.getElements(#facets, "AssignedValueList/AssignedValue")' />
+			<s:set name='hasMoreFacetList'
+				value='XMLUtils.getElements(#facets, "AssignedValueList").get(0).getAttribute("HasMoreAssignedValues")' />
+				
 			<%-- <s:set name='showFacet' value='"Y"' /> --%>
 			
 			
@@ -165,6 +168,13 @@ function setStockItemFlag()
 							<s:property value='#factVal.getAttribute("Value")' />
 						</s:a> </li>
 				</s:iterator>
+				<s:if test='%{#hasMoreFacetList == "Y"}'>
+					<s:url id="getFacetListURL" action="getFacetList">
+					</s:url>			
+					<div id='narrowByDiv_<s:property value="#ShortDescription1" />' >
+						<a style="color: #EE6B03;font-size: 11px;" href="javascript:getFacetList('<s:property value='#ShortDescription1' />');">View All</a> 
+					</div>
+				</s:if>
 			</ul>
 			</div>	
 			
@@ -194,4 +204,44 @@ function setDefaultSearchText()
 	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 	myMask.show();
 }
+function getFacetList(shortDescription)
+{
+	var inutXML='<s:property value ="searchIndexInputXML" />'.replace(/&(lt|gt|quot);/g, function (m, p) { 
+	    return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
+	  });
+	var divID="narrowByDiv_"+shortDescription;
+	var div=document.getElementById(divID);
+	var url = '<s:property value ="#getFacetListURL" />';
+	url=replaceAll(url,'amp;','');
+	// if(currentDivIndex == null || currentDivIndex=="")
+	//	currentDivIndex="0"; 
+	//if(div != null && dev != undefined)
+	//{
+		Ext.Ajax.request({
+			url: url,
+			params: {
+				facetDivShortDescription: shortDescription,
+				//facetCurrentDivIndex: currentDivIndex,
+				searchIndexInputXML:inutXML
+			},
+			method: 'POST',
+			success: function (response, request){
+				div.innerHTML=response.responseText;
+			},
+			failure:function (response, request){
+				
+			}
+		});
+	//}
+}
+function replaceAll(Source,stringToFind,stringToReplace){
+	  var temp = Source;
+	    var index = temp.indexOf(stringToFind);
+	        while(index != -1){
+	            temp = temp.replace(stringToFind,stringToReplace);
+	            index = temp.indexOf(stringToFind);
+			}
+	        return temp;
+	}
+
 </script>
