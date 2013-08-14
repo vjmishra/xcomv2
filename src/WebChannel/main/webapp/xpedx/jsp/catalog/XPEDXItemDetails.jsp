@@ -231,6 +231,14 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	       	customerUOM : customerUom
 		},      	
 	   	success: function (response, request){
+	   		//Added for EB 560
+	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	   			window.location.reload(true);
+	   			Ext.Msg.hide();
+				myMask.hide();
+				return;
+	   		}
+			//End of EB 560
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 			setPandAData();
 			Ext.Msg.hide();
@@ -635,6 +643,14 @@ var isEstUser = <s:property value="#isEstUser"/>;
 	            },
 	            method: 'POST',
 	            success: function (response, request){
+	            	//Added for EB 560
+	    	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	    	   			window.location.reload(true);
+	    	   			Ext.Msg.hide();
+	    				myMask.hide();
+	    				return;
+	    	   		}
+	    			//End of EB 560
 	                document.body.style.cursor = 'default';
 	                setAndExecute(divId, response.responseText);
 	            },
@@ -850,6 +866,14 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
         // end testing
         method: 'GET',
         success: function (response, request){
+        	//Added for EB 560
+	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	   			window.location.reload(true);
+	   			Ext.Msg.hide();
+				myMask.hide();
+				return;
+	   		}
+			//End of EB 560
 	         var draftErr = response.responseText;
 	         var myMessageDiv = document.getElementById("errorMsgForQty");
 	         var draftErrDiv = document.getElementById("errorMessageDiv");
