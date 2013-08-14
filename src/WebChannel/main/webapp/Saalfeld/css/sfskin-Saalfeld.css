@@ -147,3 +147,6 @@ a.green-ui-btn:active span {
     overflow: visible;
     padding-top: 4px;
 }
+/*EB-1689*/
+.underlines a:link{text-decoration:none;color: #107555;}
+.underlines a:hover{text-decoration:underline;color: #107555;}

@@ -93,7 +93,8 @@ public class XPEDXOrderUtils {
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	//XB-687 changes Start
 	//This map will have item id as key and value as a map with all UOMs and "Y" or "N" flag to indicate if it is a customer UOM or not 
-	public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+	/*public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+	
 	
 	//This Map will contain item ids and customer UOM for that item if it exist
 	public static LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();
@@ -103,18 +104,7 @@ public class XPEDXOrderUtils {
 	public static LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
 	public static Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	//conversion UOM map for single item
-	public static LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();
-	
-	//EB-225 - getting customer UOM if exist, for single item
-	public static String strCustomerUOM;
-	
-	public static String getStrCustomerUOM() {
-		return strCustomerUOM;
-	}
-
-	public static void setStrCustomerUOM(String strCustomerUOM) {
-		XPEDXOrderUtils.strCustomerUOM = strCustomerUOM;
-	}
+	public static LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();	
 
 	public static LinkedHashMap<String, String> getItemCustomerUomConvFactHashMap() {
 		return itemCustomerUomConvFactHashMap;
@@ -194,6 +184,17 @@ public class XPEDXOrderUtils {
 		XPEDXOrderUtils.itemUomIsCustomerUomHashMap = itemUomIsCustomerUomHashMap;
 	}
 	//XB-687 changes End
+	 */
+	//EB-225 - getting customer UOM if exist, for single item
+	public static String strCustomerUOM;
+	
+	public static String getStrCustomerUOM() {
+		return strCustomerUOM;
+	}
+
+	public static void setStrCustomerUOM(String strCustomerUOM) {
+		XPEDXOrderUtils.strCustomerUOM = strCustomerUOM;
+	}
 	public static Document getXPEDXItemAssociation(String custID,
 			String divNumber, String itemID, IWCContext wcContext)
 			throws Exception {
@@ -795,7 +796,7 @@ public class XPEDXOrderUtils {
 			List<Element> listConv = SCXmlUtil.getChildrenList(wElement);
 			
 			//NodeList wNodeList = wElement.getChildNodes();
-			
+			LinkedHashMap<String, String> itemUomForSingleItemIsCustomerUomHashMap = new LinkedHashMap<String,String>();
 			String convStr;
 			String isCustomerUOMFlg="";
 			if (listConv != null) {
@@ -843,8 +844,8 @@ public class XPEDXOrderUtils {
 						}
 					}
 				}
-			XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
-
+			//XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
+			
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		} catch (Throwable t) {
@@ -872,7 +873,8 @@ public class XPEDXOrderUtils {
 			ArrayList<String> ItemID, String StoreFrontID) {
 		
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
-		
+		LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();
 		if(YFCCommon.isVoid(customerID)){
 			log.warn("customerID is NULL. cannot call xpedxUOMList method for anonymous user.");
 			return itemUomHashMap;
@@ -990,6 +992,8 @@ public class XPEDXOrderUtils {
 			env = null;
 		}
 	}
+		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemCustomerUomHashMap);
+		ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
 		return itemUomHashMap;
 
 	}
@@ -1001,14 +1005,15 @@ public class XPEDXOrderUtils {
 	 */
 	
 	public static Map<String, Map<String,String>> getXpedxUOMDescList(String customerID,
-			ArrayList<String> ItemID, String StoreFrontID, boolean defaultShowUOMFlag) {
-		
-		itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
-		itemCustomerUomConvFactHashMap = new LinkedHashMap<String, String>();
-		
+			ArrayList<String> ItemID, String StoreFrontID, boolean defaultShowUOMFlag) {		
+		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		LinkedHashMap<String, String> itemCustomerUomConvFactHashMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 		if(YFCCommon.isVoid(customerID)){
 			log.warn("customerID is NULL. cannot call xpedxUOMList method for anonymous user.");
-			return itemUomHashMap;
+			//return itemUomHashMap;
 		}
 		
 		if(ItemID!=null && ItemID.size()>=1) {
@@ -1058,12 +1063,23 @@ public class XPEDXOrderUtils {
 							if(itemId!=null) {
 								LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
 								LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
+								/*
 								NodeList uomListNodeList =	wNode.getChildNodes();
 								Node uomListNode = uomListNodeList.item(0);
-								
+								*///EB-934 start
+								Element uomListElement =null;
+								if(wNode instanceof Element){
+									List<Element> uomListNodeList=SCXmlUtil.getChildrenList((Element) wNode);
+									uomListElement=uomListNodeList.get(0);
+								}
+								else
+								{
+									NodeList uomListNodeList =	wNode.getChildNodes();
+									uomListElement = (Element)uomListNodeList.item(0);
+								}//EB-934 ends here
 								//2964 Start
-								if (uomListNode != null) {
-									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListNode);
+								if (uomListElement != null) {
+									List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListElement);
 								Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
 									
 									for (Element uomNode : listOfUOMElements) {
@@ -1114,7 +1130,8 @@ public class XPEDXOrderUtils {
 					}
 				}
 			}	
-			XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);
+			//XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);
+			ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
 			
 		//This flag comes as true from Catalog action for showing the default UOM  selected as per order multiple flag set at msap level	
 		if(defaultShowUOMFlag){
@@ -1138,7 +1155,7 @@ public class XPEDXOrderUtils {
 			String orderMultiple = "";
 	    	
 			//End - Code added to fix XNGTP 2964
-	    	defaultShowUOMMap = new HashMap<String,String>();
+			Map <String,String> defaultShowUOMMap = new HashMap<String,String>();
 			if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
 				for(int i=0; i<ItemID.size(); i++) {
 					Map displayUomMap = new HashMap<String, String>();
@@ -1244,6 +1261,8 @@ public class XPEDXOrderUtils {
 							
 				}
 			}
+			ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
+			ServletActionContext.getRequest().setAttribute("defaultShowUOMMap", defaultShowUOMMap);
 		return itemUomHashMap;	
 		}	//End of defaultShowUOMFlag if loop
 			
@@ -1255,7 +1274,7 @@ public class XPEDXOrderUtils {
 				//Get The itemMap From Session For Minicart Jira 3481
 				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
 				//Map<String,Map<String,String>> itemIdsIsCustomerUOMsMap=new HashMap<String,Map<String,String>>();
-				itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
+				Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 				ArrayList<String> itemIdsList = new ArrayList<String>();
 				itemIdsList.addAll(itemUomHashMap.keySet());
 				Iterator<String> iterator = itemIdsList.iterator();
@@ -1306,11 +1325,12 @@ public class XPEDXOrderUtils {
 					itemIdsUOMsDescMap.put(itemIdForUom, uommap);
 
 				}
+				ServletActionContext.getRequest().setAttribute("ItemIdConVUOMMap", itemIdConVUOMMap);
 				//Set itemMap MAP again in session
 				//XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 				//set a itemsUOMMap in Session for ConvFactor			
-				
-					XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);				
+				ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
+				//XPEDXWCUtils.setObectInCache("itemsUOMMap",itemUomHashMap);				
 			}
 			// End of XB-687
 		}//End of else of defaultShowUOM Flag	
@@ -1325,7 +1345,8 @@ public class XPEDXOrderUtils {
 			env = null;
 		}
 	}
-
+		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemCustomerUomHashMap);
+		ServletActionContext.getRequest().setAttribute("ItemCustomerUomConvFactHashMap", itemCustomerUomConvFactHashMap);		
 		return itemIdsUOMsDescMap;
 
 	}
@@ -1342,6 +1363,7 @@ public class XPEDXOrderUtils {
 				.getTransactionContext(true);
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();
 		try {
 			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
 			YFCElement documentElement = inputDocument.getDocumentElement();
@@ -1399,9 +1421,10 @@ public class XPEDXOrderUtils {
 					}
 				}
 			uomsAndConFactors = wUOMsAndConFactors;
+			ServletActionContext.getRequest().setAttribute("uomsAndConFactors", uomsAndConFactors);
 
 			//set UOM map with UOM code as key and flag as value which indicate whether the UOM is a customer UOM or not
-			XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
+			//XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
 
 			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);
 			//Added for Jira 4023
@@ -1416,7 +1439,7 @@ public class XPEDXOrderUtils {
 			String defaultUOMCode = "";
 			strCustomerUOM = "";
 			
-			defaultShowUOMMap = new HashMap<String,String>();
+			Map<String,String> defaultShowUOMMap = new HashMap<String,String>();
 			String msapOrderMultipleFlag = "";
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 			if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
@@ -1498,7 +1521,7 @@ public class XPEDXOrderUtils {
 			}
 
 			defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
-			
+			ServletActionContext.getRequest().setAttribute("defaultShowUOMMap", defaultShowUOMMap);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		} catch (Throwable t) {
@@ -1513,6 +1536,7 @@ public class XPEDXOrderUtils {
 					scuiTransactionContext, wSCUIContext);
 			env = null;
 		}
+		
 		return displayItemUomsMap;
 
 	}
@@ -2901,7 +2925,8 @@ public class XPEDXOrderUtils {
 	                    }
 	                }
 	            }
-	            XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
+	            //commented for performance to since minicart is not getting displayed.
+	            //XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
 	            
 			}
         } catch (Exception e) {
@@ -2931,6 +2956,6 @@ public class XPEDXOrderUtils {
 		
 	}
 	/*End - Changes made by Mitesh Parikh for JIRA 3581*/
-		
+			
 	private static final Logger LOG = Logger.getLogger(XPEDXOrderUtils.class);
 }

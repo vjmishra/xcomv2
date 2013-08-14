@@ -333,11 +333,25 @@ public String getSharePermissionLevel() {
 						if(getCustomerFieldsDBMap().keySet().contains("CustLineAccNo")){
 							currentField = (String)iterator.next();
 							currentValue = nextLine[counter+3+4];
+							//added for EB -1658 / EB 642 to limit the CustLineAccNo character entry to DB from excel sheet while importing to MIL
+							String custLineAccNoString = nextLine[counter+3+4];
+							if(custLineAccNoString!=null && custLineAccNoString.length()>24)
+							{
+								currentValue = custLineAccNoString.substring(0,24);
+							}
+							//End of code for EB 1658 / EB 642
 							vo.getCustomFields().put(currentField, currentValue);
 						}
 						if(getCustomerFieldsDBMap().keySet().contains("CustomerPONo")){
 							currentField = (String)iterator.next();
 							currentValue = nextLine[counter+3+5];
+							//added for EB -1658 / EB 642 to limit the CustomerPONo character entry to DB from excel sheet while importing to MIL
+							String cutPoNoString = nextLine[counter+3+5];
+							if(cutPoNoString!=null && cutPoNoString.length()>22)
+							{
+								currentValue = cutPoNoString.substring(0,22);
+							}
+							//End of code for EB 1658 / EB 642
 							vo.getCustomFields().put(currentField, currentValue);
 						}
 						if(getCustomerFieldsDBMap().keySet().contains("CustLineField1")){

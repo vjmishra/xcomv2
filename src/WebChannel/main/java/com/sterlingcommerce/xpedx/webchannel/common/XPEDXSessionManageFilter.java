@@ -31,6 +31,8 @@ public class XPEDXSessionManageFilter implements Filter {
 		redirectURL.append(config.getServletContext().getInitParameter("wc-postlogin-account-landingpage"));
 		redirectURL.append("?sfId=");
 		redirectURL.append(config.getServletContext().getInitParameter("defaultSfId"));
+		//Added for EB 560 - on session expire return to login page with an error msg
+		redirectURL.append("&error=sessionExpired");
 	}
 
 	

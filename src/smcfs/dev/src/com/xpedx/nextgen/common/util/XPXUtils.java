@@ -2118,10 +2118,10 @@ public class XPXUtils implements YIFCustomApi {
 				log.debug("imagesRootFolder: " + imagesRootFolder);
 			}
 		
-			String sellerOrgCode = inputDocument.getDocumentElement().getAttribute("SellerOrganizationCode");
+			String orgCode = inputDocument.getDocumentElement().getAttribute("EnterpriseCode");
 
-			if (null != sellerOrgCode && null != imagesRootFolder) {
-				_imageName = getLogoImageName(env, sellerOrgCode);
+			if (null != orgCode && null != imagesRootFolder) {
+				_imageName = getLogoImageName(env, orgCode);
 				brandLogo = imagesRootFolder.concat(_imageName);
 				if (log.isDebugEnabled()) {
 					log.debug("brandLogo: " + brandLogo);
@@ -2177,7 +2177,7 @@ public class XPXUtils implements YIFCustomApi {
 			Document inputDocument) throws Exception {
 		
 		String brand = inputDocument.getDocumentElement().getAttribute(
-				"SellerOrganizationCode");
+				"EnterpriseCode");
 		String customerPO = inputDocument.getDocumentElement().getAttribute(
 				"CustomerPONo");
 		String orderNo = inputDocument.getDocumentElement().getAttribute(

@@ -85,6 +85,8 @@
 		</s:if>
 		<s:include value='XPEDXOrderLineTotalAdjustments.jsp' />
 		<s:hidden name="orderLineKeys" id="orderLineKeys_%{#orderLineKey}" value="%{#orderLineKey}" />
+		<s:set name="customerUOM" value="#_action.getItemAndCustomerUomWithConvHashMap().get(#item.getAttribute('ItemID'))" />
+		<s:hidden name="customerUOMConvFactors" id="customerUOMConvFactor_%{#orderLineKey}" value="%{#customerUOM}" />
 		<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#orderLineKey}" value='%{#item.getAttribute("ItemID")}' />
 		<s:hidden name="orderLineItemNames" id="orderLineItemNames_%{#orderLineKey}" value='%{#item.getAttribute("ItemShortDesc")}' />
 		<s:hidden name="orderLineItemDesc" id="orderLineItemDesc_%{#orderLineKey}" value='%{#item.getAttribute("ItemDesc")}' />
@@ -146,10 +148,10 @@
 		
 		<!-- begin iterator -->       
 		<s:if test="#rowStatus.last == true ">
-	    	<div class="mil-wrap last" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	<div class="mil-wrap last" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
 	    </s:if>
 	    <s:else>
-	    	 <div class="mil-wrap" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	 <div class="mil-wrap" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
 	    </s:else>
          	<div class="mil-container" >
                 <!--checkbox   -->

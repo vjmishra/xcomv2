@@ -5,6 +5,10 @@
 package com.xpedx.sterling.rcp.pca.tasks.articles.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -14,6 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCPlatformUI;
@@ -28,7 +33,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 
 	private XPXManageArticlePopupPanel page;
-
+   private String storeFront;
 	/**
 	 * Constructor for the behavior class.
 	 */
@@ -79,10 +84,12 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 
 			callApi(context);*/
 			// JIRA 3622 - Performance Fix - Division Cache 
-			XPXCacheManager.getInstance().getDivisionList(getModel("UserNameSpace").getAttribute("DataSecurityGroupId"), this);
-			String[] apinames = {"getOrganizationList"};
+			//XPXCacheManager.getInstance().getDivisionList(getModel("UserNameSpace").getAttribute("DataSecurityGroupId"), this);
+			
+			String[] apinames = {"getOrganizationList" /*, "getOrganizationList"*/};
 			Document[] docInput = {
 					YRCXmlUtils.createFromString("<Organization IsEnterprise='Y'/>"),
+				//	YRCXmlUtils.createFromString("<Organization  IsNode='Y'>  <Extn ExtnBrandCode='XPED' ExtnBrandCodeQryType='LIKE'/> </Organization>"),
 			};				
 			YRCApiContext context = new YRCApiContext();
 			context.setApiNames(apinames);
@@ -128,7 +135,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 		
 		if(!YRCPlatformUI.isVoid(articlelType)&& "S".equals(articlelType))
 		{
-			eleInput.setAttribute("XPXDivision", "N/A");
+			
 		}
 		String OrganizationCode = YRCXmlUtils.getAttribute(eleInput,"OrganizationCode");		
 		
@@ -144,6 +151,14 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 		if(!YRCPlatformUI.isVoid(articlelType)&& "D".equals(articlelType))
 		{
 			// Retrieve and stamp Divisions in eleInput
+			
+			
+				if(OrganizationCode==null || OrganizationCode.trim().length()<=0)
+				{
+					YRCPlatformUI.showError("Create Article:Mandatory Parameter", "Please select Storefront ID");
+					return ;
+				}
+			
 			Element eleAssignToDivs = getModel("AssignedDivisions");
 			ArrayList<Element> listAssignedDivs = YRCXmlUtils.getChildren(eleAssignToDivs, "Organization");
 			StringBuffer divs = new StringBuffer();
@@ -152,9 +167,11 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 				for (Element eleAssignedDiv : listAssignedDivs) {
 					divs.append(eleAssignedDiv.getAttribute("OrganizationCode")).append("|");
 				}
+			}else{
+				eleInput.setAttribute("XPXDivision", "N/A");
 			}
 			eleInput.setAttribute("XPXDivision", divs.toString());
-			eleInput.setAttribute("OrganizationCode", "");
+			//eleInput.setAttribute("OrganizationCode", "");
 		}
 		
 		
@@ -234,12 +251,12 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 					{
 						setControlVisible("lblStorefronCode", true);
 						setControlVisible("comboStorefrontCode", true);
-						setControlVisible("pnlDivisions", false);
+						setControlVisible("pnlDivisions", true);
 					}
 					else
 					{
-						setControlVisible("lblStorefronCode", false);
-						setControlVisible("comboStorefrontCode", false);
+						setControlVisible("lblStorefronCode", true);
+						setControlVisible("comboStorefrontCode", true);
 						setControlVisible("pnlDivisions", true);
 						
 					}
@@ -260,12 +277,25 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 					setModel("Divisions",eleOutput);
 					setModel("AssignedDivisions",YRCXmlUtils.createDocument("OrganizationList").getDocumentElement());
 				}
-				else if("getOrganizationList".equals(apiname)){
+				else if(("getOrganizationList".equals(apiname) && i==0) && storeFront ==null){
 					Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
 					
 					setModel("StoreFronts",eleOutput);
-				}				
+					
+					
+				}	
+				else if("getOrganizationList".equals(apiname)){
+					Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement(); 
+					if(eleOutput != null){
+						setModel("Divisions", eleOutput);
+					}
+					else{
+						eleOutput = null;
+						setModel("Divisions", eleOutput);
+					}
+				}	
 			}
+			this.storeFront = null;
 		}
 	}
 
@@ -339,4 +369,18 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 		
 	}	
 
+	
+	 public void getDivisionList(String storeFront){
+		 this.storeFront = storeFront;
+			String apinames = "getOrganizationList";
+			Document docInput = 
+				YRCXmlUtils.createFromString("<Organization  IsNode='Y'>  <Extn ExtnBrandCode='"+storeFront+"' ExtnBrandCodeQryType='LIKE'/> </Organization>");
+							
+			YRCApiContext context = new YRCApiContext();
+			context.setApiName(apinames);
+			context.setInputXml(docInput);
+			context.setFormId("com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel");
+
+			callApi(context);
+	   }
 }

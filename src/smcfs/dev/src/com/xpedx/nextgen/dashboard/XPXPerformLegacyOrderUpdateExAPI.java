@@ -304,6 +304,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					custOrderEle = updateCustomerOrder(env, cOrderInXMLEle, cOrderEle).getDocumentElement();
 				} else {
 					this.setExtendedPriceInfo(env, cOrderInXMLEle, true);
+					if("Saalfeld".equalsIgnoreCase(rootEle.getAttribute(XPXLiterals.A_ENTERPRISE_CODE))) {
+						cOrderInXMLEle.setAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE,"xpedx");
+					}
 					// To Create a new customer order.
 					custOrderEle = createCustomerOrder(env, cOrderInXMLEle).getDocumentElement();
 				}
@@ -3759,7 +3762,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		} else {
 			throw new Exception("Order/Extn Element Not Available in Incoming Legacy Message!");
 		}
-
+		if("Saalfeld".equalsIgnoreCase(rootEle.getAttribute(XPXLiterals.A_ENTERPRISE_CODE))) {
+			rootEle.setAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE,"xpedx");
+		}
 		YFCElement rootOrdLinesEle = rootEle.getChildElement("OrderLines");
 		if (rootOrdLinesEle != null) {
 			YFCIterable<YFCElement> yfcItr = rootOrdLinesEle.getChildren("OrderLine");

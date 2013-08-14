@@ -247,6 +247,14 @@
 			<xsl:value-of select="Order/Extn/@ExtnBillToName" />
 		</xsl:variable>
 		
+		<xsl:variable name="custlineAcctLbl" >
+			<xsl:value-of select="Order/Extn/@ExtnCustLineAccLbl" />
+		</xsl:variable>
+		
+		<xsl:variable name="custlinePOLbl" >
+			<xsl:value-of select="Order/Extn/@ExtnCustLinePOLbl" />
+		</xsl:variable>
+		
 		<xsl:variable name="viewPricesFlag" >
 			<xsl:value-of select="Order/@viewPricesFlag" />
 		</xsl:variable>
@@ -719,10 +727,13 @@
 				<tr>
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:if test = '@LineType!="M"' >					
-						
-					<xsl:if test = '@CustomerPONo!=""' >					
-					
-					<td class="right"> Line PO#:&#160;</td>
+					<xsl:if test = '@CustomerPONo!=""' >
+					<xsl:choose>
+					<xsl:when test="$custlinePOLbl!=''">
+					<td class="right"><xsl:value-of select='$custlinePOLbl'/>:&#160;</td>
+					</xsl:when>
+					<xsl:otherwise><td class="right">Line PO#:&#160;</td></xsl:otherwise>
+					</xsl:choose>
 					<td class="addWidth"><xsl:value-of select="@CustomerPONo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>
@@ -736,7 +747,12 @@
 				<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >					
 					
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right" valign="top"> Cust Acct Line #:&#160;</td>
+					<xsl:choose>
+					<xsl:when test="$custlineAcctLbl!=''">
+					<td class="right" valign="top"><xsl:value-of select='$custlineAcctLbl'/>:&#160;</td>
+					</xsl:when>
+					<xsl:otherwise><td class="right" valign="top">Line Account#:&#160;</td></xsl:otherwise>
+					</xsl:choose>
 					<td class="addWidth" valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
 					<td class="right"></td>
 					<td class="right"></td>

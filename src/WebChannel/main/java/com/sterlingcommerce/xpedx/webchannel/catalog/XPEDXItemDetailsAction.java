@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -969,8 +970,16 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		//Start of EB-164
 		defaultShowUOMMap = new HashMap<String,String>();		
 		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode);
-		defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();		
-		itemIdConVUOMMap = XPEDXOrderUtils.getUomsAndConFactors();		
+		//defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();	
+		defaultShowUOMMap = (Map<String, String>)ServletActionContext.getRequest().getAttribute("defaultShowUOMMap");
+		ServletActionContext.getRequest().removeAttribute("defaultShowUOMMap");
+		if(defaultShowUOMMap == null)
+			defaultShowUOMMap =  new HashMap<String, String>();
+		//itemIdConVUOMMap = XPEDXOrderUtils.getUomsAndConFactors();	
+		itemIdConVUOMMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("uomsAndConFactors");
+		ServletActionContext.getRequest().removeAttribute("uomsAndConFactors");
+		if(itemIdConVUOMMap == null)
+			itemIdConVUOMMap =  new LinkedHashMap<String, String>();
 		//End of EB-164
 		//EB-225 - Getting the customer UOM if exist for a item
 		customerUOM = XPEDXOrderUtils.getStrCustomerUOM();

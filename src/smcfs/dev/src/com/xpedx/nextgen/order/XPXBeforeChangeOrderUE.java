@@ -576,7 +576,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 			hasPendingChanges=orderListElem.getAttribute("HasPendingChanges");
 			orderPriceInputElem.setAttribute("Currency", orderPriceInfoElem.getAttribute("Currency"));
 			orderPriceInputElem.setAttribute("CustomerID", orderListElem.getAttribute("ShipToID"));
-			orderPriceInputElem.setAttribute("OrganizationCode", orderListElem.getAttribute("SellerOrganizationCode"));
+			orderPriceInputElem.setAttribute("OrganizationCode", orderListElem.getAttribute("EnterpriseCode"));
 			orderPriceInputElem.setAttribute("OrderReference", orderHeaderKey);
 			applayCoupon(outputDoc.getDocumentElement(),orderPriceInputElem);
 			applayCoupon(orderListElem,orderPriceInputElem);
@@ -673,7 +673,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 				env.setApiTemplate(
 						"getCompleteOrderDetails",
 						SCXmlUtil
-						.createFromString("<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
+						.createFromString("<Order HasPendingChanges='' EnterpriseCode='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
 								+"<Promotions/>"
 								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey='' PrimeLineNo=''>"
 								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"
@@ -693,7 +693,7 @@ public class XPXBeforeChangeOrderUE implements YFSBeforeChangeOrderUE
 						"getOrderList",
 						SCXmlUtil
 						.createFromString(""+"<OrderList>"
-								+ "<Order HasPendingChanges='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
+								+ "<Order HasPendingChanges='' EnterpriseCode='' SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty=''> <PriceInfo Currency=''></PriceInfo>" 
 								+"<Promotions/>"
 								+"<OrderLines><OrderLine OrderedQty='' OrderLineKey='' PrimeLineNo=''>"
 								+"<ItemDetails ItemID='' ItemKey='' UnitOfMeasure=''><AlternateUOMList><AlternateUOM Quantity='' UnitOfMeasure=''/></AlternateUOMList></ItemDetails>"

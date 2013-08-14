@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXUtils;
+import com.xpedx.nextgen.uom.api.XPXUOMListAPI;
 import com.yantra.custom.dbi.XPX_Item_Extn;
 import com.yantra.custom.dbi.XPX_Itemcust_Xref;
 import com.yantra.interop.japi.YIFApi;
@@ -752,7 +753,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			throws XPathExpressionException,YFSException, RemoteException, YIFClientCreationException {
 		
 		Node customerUnitNode = null;
-		
+		customerUOMList.clear();
 		/*NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
 				customerNumber, customerBranch, env);*/
 		/*Begin - Changes made by Mitesh for JIRA# 3641*/
@@ -794,8 +795,12 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			Node ConvFactorNode = XpxItemcustXrefAttributes
 					.getNamedItem("ConvFactor");
 			String ConvFactor = ConvFactorNode.getTextContent();
+			//XB-687 - Start
 			if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
 				wUOMsToConversionFactors.clear();
+			}
+			if(customerUnit!=null && !customerUnit.equalsIgnoreCase("")){
+				customerUOMList.add(customerUnit);				
 				wUOMsToConversionFactors.put(customerUnit, ConvFactor);
 				return;
 			}
@@ -849,6 +854,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
 				uOMElement.setAttribute("Conversion", Conversion);
+				//Start of XB-687
+				if(customerUOMList.contains(UnitOfMeasure))
+				{
+					uOMElement.setAttribute("IsCustUOMFlag", "Y");
+				}//End of XB-687
 			}
 		}
 		return inputDocument.getDocument();
@@ -888,6 +898,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			String Conversion = wUOMsToConversionFactors.get(UnitOfMeasure);
 			if (!UnitOfMeasure.equals(lowestConvUOM)) {
 				uOMElement.setAttribute("UnitOfMeasure", UnitOfMeasure);
+				//Updated for XB-687 - Start
+				if(customerUOMList.contains(UnitOfMeasure))
+				{
+					uOMElement.setAttribute("IsCustUOMFlag", "Y");
+				}//Updated for XB-687 - End
 				uOMElement.setAttribute("Conversion", Conversion);
 			}
 		}
@@ -906,6 +921,15 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 		}
 		return -1;
+	}
+	
+	public static ArrayList<String> customerUOMList = new ArrayList<String>();
+	public static ArrayList<String> getCustomerUOMList() {
+		return customerUOMList;
+	}
+
+	public void setCustomerUOMList(ArrayList<String> customerUOMList) {
+		this.customerUOMList = customerUOMList;
 	}
 
 }

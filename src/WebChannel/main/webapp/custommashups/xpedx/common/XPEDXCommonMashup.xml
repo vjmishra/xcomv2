@@ -386,9 +386,10 @@
 	</mashup>
 	<mashup id ='XPEDXCatalogExport' transactional='true' mashuptype='XAPI' endpoint=''>
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
-		<API Name="getOrganizationList">
+		<API FlowName="XPXGetCatalogExportListService">
 			<Input>
-				<Organization OrganizationCode=""/>
+				<XPXCatalogExp BrandCode='' OrganizationKey=''>
+				</XPXCatalogExp>
 			</Input>			
 			<Template>				
 					<OrganizationList>

@@ -33,7 +33,8 @@
 	value="#wcUtil.getAssignedCustomers(#loggedInUser)" /> --%>
 	 <s:set name="assgnCustomers"
 	value="#wcUtil.getObjectFromCache('XPEDX_Customer_Contact_Info_Bean')" />
-<s:set name="defaultShipTo" value="#assgnCustomers.getExtnDefaultShipTo()" />	
+<s:set name="defaultShipTo" value="#assgnCustomers.getExtnDefaultShipTo()" />
+<s:set name="isDefaultShipToCustSuspended" value="#_action.isDefaultShipToCustSuspended()"/>		
 <s:if test="#_action.isSearch()">
 	<s:url id="assignedCustomersPaginated" action="xpedxSearchAssignedCustomers" namespace="/common">
 		<s:param name="orderByAttribute" value="%{orderByAttribute}"/>
@@ -81,6 +82,9 @@
 	<div class="ship-to-header">
 		<!-- <h2 class="no-border"  style="float:left;" >Change Ship-To</h2> -->
 		<h2 class="no-border"  style="float:left;" ><s:text name='MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE' /></h2>
+		<s:if test="%{#isDefaultShipToCustSuspended}">
+			<span style="padding-left:50px;color:red;font-weight:bold;">Please select an active ship-to as your default</span>
+		</s:if>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
 		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress();errorValidate();">&nbsp;&nbsp;</span>		
 		<s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="Search Ship-To…" theme="simple" onkeypress="javascript:shipToSearchSubmit(event);" />	
@@ -221,7 +225,7 @@
 		</s:if> 
 		<!-- preferred ship-to end -->
 		</div>		
-			<s:if test="%{defualtShipToAssigned.customerID.trim() != ''}">
+			<s:if test="%{defualtShipToAssigned.customerID.trim() != '' && #isDefaultShipToCustSuspended!='true'}">
 			<a id="apply-btn1" style="position:absolute;margin-top:-19px;" href="javascript:applyPreferred('<s:property value="#defaultShipTo"/>','<s:property value="%{targetURL}"/>')" class="green-ui-btn">
 				<span class="apply-ship-to-btn">Apply Preferred</span></a>
 			</s:if>

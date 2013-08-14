@@ -73,6 +73,14 @@ function addItemToCart(itemId) {
 				    method: 'POST',
 					success: function (response, request){
 						var responseText = response.responseText;
+						//Added for EB 560
+		    	   			if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+		    	   				window.location.reload(true);
+		    	   				Ext.Msg.hide();
+		    					myMask.hide();
+		    					return;
+		    	   			}
+		    				//End of EB 560
 						if(responseText.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1){
 							refreshWithNextOrNewCartInContext();
 							Ext.Msg.hide();
@@ -234,6 +242,14 @@ var myMask;
 	            method: 'GET',
 	            success: function (response, request){
 	            	var responseText = response.responseText;
+	            	//Added for EB 560
+	    	   	if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	    	   		window.location.reload(true);
+	    	   		Ext.Msg.hide();
+	    			myMask.hide();
+	    			return;
+	    	   	}
+	    		//End of EB 560
 	            	if(responseText.indexOf("Unable to get Price and Availability.Please contact system admin")>-1)
 	            	{
 						document.getElementById('availabilty_'+itemId).innerHTML='';
