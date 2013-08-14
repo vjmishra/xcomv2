@@ -440,7 +440,7 @@
 								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
 								ShortDescription="" /> 
  
-							<AssignedValueList>
+							<AssignedValueList HasMoreAssignedValues="">
 								<AssignedValue Count="" Value="" IsProvidedFilter="" />
 							</AssignedValueList>
 						</ItemAttribute>
@@ -942,7 +942,7 @@
 								AttributeID="" AttributeKey="" IsAllowedValueDefined="" LongDescription="" OrganizationCode="" SequenceNo="" 
 								ShortDescription="" /> 
  
-							<AssignedValueList>
+							<AssignedValueList HasMoreAssignedValues="">
 								<AssignedValue Count="" Value="" IsProvidedFilter="" />
 							</AssignedValueList>
 						</ItemAttribute>
