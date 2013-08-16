@@ -1504,7 +1504,7 @@ a.underlink:hover {
 							value="%{isSelfAdmin()}" />
 						<s:hidden name="preferredLocale"
 							id="saveNewUserInfo_preferredLocale" value="%{'en_US_EST'}" />
-
+ 						<s:hidden name='saveAddUser' id="saveAddUser" value="%{#_action.isSaveAddUser()}" />
 						<s:if test='#punchoutUser == "Y"'>
 							<s:hidden name='punchoutUsers' value='%{true}' />
 						</s:if>

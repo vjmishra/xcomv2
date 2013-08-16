@@ -38,6 +38,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXAlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
@@ -702,22 +703,27 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
 			
-			String customerPrefClass = (String) wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
 			if(isSaveAddUser()){
+				XPEDXShipToCustomer billToCustomer=new XPEDXShipToCustomer();
+				XPEDXShipToCustomer shipToCustomer=new XPEDXShipToCustomer();
+				shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+				billToCustomer=shipToCustomer.getBillTo();
+				String customerPrefClass = billToCustomer.getExtnCustomerClass();
+				if(customerPrefClass!=null && customerPrefClass.trim().length()>0) {
 				if(customerPrefClass.equalsIgnoreCase("CJ")){
-					prefCategory = "1000000";
+					prefCategory = "300000";
 				}
-				if(customerPrefClass.equalsIgnoreCase("CG")){
-					prefCategory = "2000000";
+				else if(customerPrefClass.equalsIgnoreCase("CG")){
+					prefCategory = "300001";
 				}
-				if(customerPrefClass.equalsIgnoreCase("CU")){
-					prefCategory = "3000000";
+				else if(customerPrefClass.equalsIgnoreCase("CU")){
+					prefCategory = "300002";
 				}
-				if(customerPrefClass.equalsIgnoreCase("CA")){
-					prefCategory = "4000000";
+				else if(customerPrefClass.equalsIgnoreCase("CA")){
+					prefCategory = "300057";
 				}
-					
-			}
+			}	
+		}
 
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
