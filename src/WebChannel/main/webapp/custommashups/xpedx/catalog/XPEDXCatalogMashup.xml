@@ -432,6 +432,7 @@
 							</ChildCategoryList>
 						</Category>
 					</CategoryList>
+					<!--  commented since this will be part of ajax call EB-1731
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName=""
 							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="">
@@ -440,11 +441,12 @@
 								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
 								ShortDescription="" /> 
  
-							<AssignedValueList HasMoreAssignedValues="">
+							<AssignedValueList>
 								<AssignedValue Count="" Value="" IsProvidedFilter="" />
 							</AssignedValueList>
 						</ItemAttribute>
 					</FacetList>
+					 -->
 					<ItemList Currency="">
 						<Item IsItemSuperseded="" ItemID="" ItemKey="" UnitOfMeasure="">
 							<Extn/>
@@ -936,17 +938,19 @@
 						</Category>
 					</CategoryList>
 					<CurrentCategory CategoryPath="" Count="" ShortDescription=""/>
+					<!--  commented since this will be part of ajax call EB-1731
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" IsAllowedValueDefined="" LongDescription="" OrganizationCode="" SequenceNo="" 
 								ShortDescription="" /> 
  
-							<AssignedValueList HasMoreAssignedValues="">
+							<AssignedValueList>
 								<AssignedValue Count="" Value="" IsProvidedFilter="" />
 							</AssignedValueList>
 						</ItemAttribute>
 					</FacetList>
+					-->
 				</CatalogSearch>
 			</Template>
 		</API>

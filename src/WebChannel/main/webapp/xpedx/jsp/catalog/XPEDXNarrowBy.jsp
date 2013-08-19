@@ -11,6 +11,8 @@
 <!-- Getting the cached xml doc for root catalog -->
 <s:set name='catDoc' value='%{outDoc.documentElement}' />
 <s:set name='tabStart' value='1001' />
+<s:url id="getFacetListURL" action="getFacetList"></s:url>
+<s:url id="getNarrowByListURL" action="getNarrowByList"></s:url>
 <s:bean
 	name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils'
 	id='util' />
@@ -41,10 +43,13 @@ function setStockItemFlag()
 </script>
 
 <!-- begin left column -->
+<s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
+<s:set name='narrowByCatalogItemsCount' value='%{0}' />
+<s:set name='expandNarrowByCatalogItems' value='"Y"' />
+<s:if test="%{ !(#FacetsList!=null && #FacetsList.size>0)}">
 <div id="left-col"><!-- breadcrumb -->
 <div class="bgleftcol">
-			<s:set name='narrowByCatalogItemsCount' value='%{0}' />
-			<s:set name='expandNarrowByCatalogItems' value='"Y"' />
+			
 			
 			<s:iterator id='subCatElem_dup' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
 				<s:set name='subCatElem_count' value='#subCatElem_dup.getAttribute("ShortDescription")' />
@@ -106,12 +111,13 @@ function setStockItemFlag()
 						</div>
 			</s:if>
 <!-- end browse category --> <!-- begin narrow by  -->
-<s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
+<div id="narrowByDivList">
+</s:if>
 
 <s:if test="%{#FacetsList!=null && #FacetsList.size>0}"><%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
 
 	
-	<s:set name='headercount' value='%{2}' />
+	<s:set name='headercount' value='%{3}' />
 		<s:iterator id='facets'
 			value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")'>
 			<div id="narrow_spb<s:property value='#headercount'/>" class="browseBox subPanelBox">
@@ -154,6 +160,7 @@ function setStockItemFlag()
 							<s:set name='count1' value='%{#count1 + 1}' />
 							<s:url id='narrowURL' namespace='/catalog' action='filter.action'>						
 								
+								<s:param name='_bcs_' value='_bcs_' />
 								<s:param name='indexField'
 									value='#facets.getAttribute("IndexFieldName")' />
 								<s:param name='facet' value='#factVal.getAttribute("Value")' />
@@ -169,8 +176,7 @@ function setStockItemFlag()
 							</s:a> </li>
 					</s:iterator>
 					<s:if test='%{#hasMoreFacetList == "Y"}'>
-						<s:url id="getFacetListURL" action="getFacetList">
-						</s:url>
+						
 							<a style="color: #EE6B03;font-size: 11px;" href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
 					</s:if>
 				</div>
@@ -182,12 +188,46 @@ function setStockItemFlag()
 	</s:iterator>
 
 </s:if><%-- if condition to check for FacetList size ENDS --%>
+</div>
 
+<s:if test="%{ !(#FacetsList!=null && #FacetsList.size>0)}">
 <!-- end narrow by  --></div>
 </div>
+</s:if>
 <!-- end left column -->
 
 <script>
+function replaceAll(Source,stringToFind,stringToReplace){
+	  var temp = Source;
+	    var index = temp.indexOf(stringToFind);
+	        while(index != -1){
+	            temp = temp.replace(stringToFind,stringToReplace);
+	            index = temp.indexOf(stringToFind);
+			}
+	        return temp;
+	}
+Ext.onReady(function(){		
+	var inutXML='<s:property value ="searchIndexInputXML" />'.replace(/&(lt|gt|quot);/g, function (m, p) { 
+	    return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
+	  });
+	var divID="narrowByDivList";
+	var div=document.getElementById(divID);
+	var url = '<s:property value ="#getNarrowByListURL" />';
+	url=replaceAll(url,'amp;','');
+		Ext.Ajax.request({
+			url: url,
+			params: {
+				searchIndexInputXML:inutXML
+			},
+			method: 'POST',
+			success: function (response, request){
+				div.innerHTML=response.responseText;
+			},
+			failure:function (response, request){
+				
+			}
+		});
+});
 function showViewAllDialog(attr)
 {
 	DialogPanel.show("viewAll" + attr.value );

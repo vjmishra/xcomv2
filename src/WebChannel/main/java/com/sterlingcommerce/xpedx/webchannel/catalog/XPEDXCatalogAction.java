@@ -3072,9 +3072,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if(searchIndexInputXML != null)
 		{
 				Element inputDocElemen=SCXmlUtil.createFromString(searchIndexInputXML).getDocumentElement();
-				Element allAssignedListElem=SCXmlUtil.createChild(inputDocElemen, "ShowAllAssignedValues");
-				Element itemAttributeElem=SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
-				itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
+				if(!YFCCommon.isVoid(facetListItemAttributeKey))
+				{
+					Element allAssignedListElem=SCXmlUtil.createChild(inputDocElemen, "ShowAllAssignedValues");
+					Element itemAttributeElem=SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
+					itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
+				}
 				Object outputObj=WCMashupHelper.invokeMashup(
 						"xpedxNarrowByCatalogSearch", inputDocElemen, wcContext
 								.getSCUIContext());

@@ -187,6 +187,13 @@
 			<param name="categoryDepth">2</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXMoreNarrowBy.jsp</result>
 		</action>
-
+		<action name="getNarrowByList"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="getFacetList">
+			<param name="mashupID">xpedxNarrowByCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXNarrowBy.jsp</result>
+		</action>
+		
 	</package>
 </struts>
