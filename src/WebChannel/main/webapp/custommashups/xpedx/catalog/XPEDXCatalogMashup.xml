@@ -1086,7 +1086,7 @@
 					PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">					
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName=""
-							IsProvidedFilter="" SequenceNo="">
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="" >
 							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
 								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
