@@ -1091,7 +1091,7 @@
 								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
 								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
 								ShortDescription="" /> 
-							<AssignedValueList>
+							<AssignedValueList HasMoreAssignedValues="">
 								<AssignedValue Count="" Value="" IsProvidedFilter="" />
 							</AssignedValueList>
 						</ItemAttribute>
