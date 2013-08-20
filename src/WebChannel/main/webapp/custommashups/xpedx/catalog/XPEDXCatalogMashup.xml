@@ -432,9 +432,10 @@
 							</ChildCategoryList>
 						</Category>
 					</CategoryList>
+					<!--  commented since this will be part of ajax call EB-1731
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName=""
-							IsProvidedFilter="" SequenceNo="">
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
 								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
@@ -445,6 +446,7 @@
 							</AssignedValueList>
 						</ItemAttribute>
 					</FacetList>
+					 -->
 					<ItemList Currency="">
 						<Item IsItemSuperseded="" ItemID="" ItemKey="" UnitOfMeasure="">
 							<Extn/>
@@ -936,8 +938,9 @@
 						</Category>
 					</CategoryList>
 					<CurrentCategory CategoryPath="" Count="" ShortDescription=""/>
+					<!--  commented since this will be part of ajax call EB-1731
 					<FacetList>
-						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="">
+						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" IsAllowedValueDefined="" LongDescription="" OrganizationCode="" SequenceNo="" 
 								ShortDescription="" /> 
@@ -947,6 +950,7 @@
 							</AssignedValueList>
 						</ItemAttribute>
 					</FacetList>
+					-->
 				</CatalogSearch>
 			</Template>
 		</API>
@@ -1060,4 +1064,41 @@
 			</Template>
 		</API>
 	</mashup>
+
+	<mashup id='xpedxNarrowByCatalogSearch' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Search and Navigation in Catalog">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" SortField=""
+					SortDescending="" PageSize="" PageNumber="" CategoryPath="">
+					<Item GetAvailabilityFromCache='Y' Currency=""
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="" />						
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" PageNumber=""
+					PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">					
+					<FacetList>
+						<ItemAttribute IndexFieldName="" ItemAttributeName=""
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="" >
+							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
+								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
+								ShortDescription="" /> 
+							<AssignedValueList HasMoreAssignedValues="">
+								<AssignedValue Count="" Value="" IsProvidedFilter="" />
+							</AssignedValueList>
+						</ItemAttribute>
+					</FacetList>					
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
 </mashups>       
