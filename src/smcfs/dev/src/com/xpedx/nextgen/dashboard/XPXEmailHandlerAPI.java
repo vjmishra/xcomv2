@@ -45,8 +45,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
     String orderNo = "";
     String orderBranch = "";
     String orderconfSubjecline="";
-    static String extnCustLineAccLbl="";
-    static String extnCustLinePOLbl="";
+    static String sapExtnCustLinePOLbl="";
+    static String sapExtnCustLineAccLbl="";
     private static YFCLogCategory yfcLogCatalog;
  
     static {
@@ -106,9 +106,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
  
             msapId = customerHierViewElem.getAttribute("MSAPCustomerID");
             biltoId = customerHierViewElem.getAttribute("BillToCustomerID");
-            extnCustLineAccLbl= customerHierViewElem.getAttribute("SAPExtnCustLineAccLbl"); // SAPExtnCustLineAccLbl
-            extnCustLinePOLbl=customerHierViewElem.getAttribute("SAPExtnCustLinePOLbl"); //SAPExtnCustLinePOLbl
-            
+            sapExtnCustLinePOLbl=customerHierViewElem.getAttribute("SAPExtnCustLinePOLbl");
+            sapExtnCustLineAccLbl= customerHierViewElem.getAttribute("SAPExtnCustLineAccLbl");
+ 
             if(msapId!=null && !msapId.trim().equals("")){
                 customerIDMAP.put("MSAPCustomerID",msapId);
             }
@@ -497,14 +497,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
             int length = extnElementList.getLength();
             if (length != 0) {
                 Element extnElement = (Element) extnElementList.item(0);
-                if(extnCustLinePOLbl!=null &&  !extnCustLinePOLbl.trim().equals(""))
-                {
-                	extnElement.setAttribute("ExtnCustLinePOLbl", extnCustLinePOLbl); 
-                }
-                if(extnCustLineAccLbl!=null &&  !extnCustLineAccLbl.trim().equals(""))
-                {
-                	extnElement.setAttribute("ExtnCustLineAccLbl", extnCustLineAccLbl); 
-                }
+                extnElement.setAttribute("SAPExtnCustLinePOLbl", sapExtnCustLinePOLbl); 
+                extnElement.setAttribute("SAPExtnCustLineAccLbl", sapExtnCustLineAccLbl); 
                 String addlnEmailAddresses = SCXmlUtil.getXpathAttribute(
                         extnElement, "./@ExtnAddnlEmailAddr");
                 if (addlnEmailAddresses.indexOf(";") > -1) {
@@ -563,10 +557,20 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         } // End of if loop if Customer Contact list doc is empty.
  
         /*XB-461 : Begin - Sending email through Java Mail API now*/
-        String inputXML=SCXmlUtil.getString(customerDoc);
+        String inputXML=SCXmlUtil.getString(customerDoc);        
 		String emailOrgCode=((customerDoc!= null && customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null)?customerDoc.getDocumentElement().getAttribute("EnterpriseCode"):"");
-        String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;
-        String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+        String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;  
+        //EB-2061-As a Saalfeld product owner, I want to view the Order Pending Approval Notification Email with correct Saalfeld branding 
+        String emailFrom = null;
+        if((customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(customerDoc.getDocumentElement().getAttribute("EnterpriseCode")) ))// no need to check for seller organization code
+        		{
+        		     emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
+
+		} else {
+			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+		}
+
+
         StringBuffer emailSubject = new StringBuffer(orderconfSubjecline);
        // emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
         XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode,businessIdentifier);
