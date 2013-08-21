@@ -214,7 +214,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	}
 
 	public String execute() {
-		try {
+		String retFail=FAILURE;
+		try {			
 			YFCDate orderDate = new YFCDate();
 			orderPlaceDate = orderDate.getString();
 			Element isPendingApproval = null;
@@ -226,7 +227,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 				if(YFCCommon.isVoid(editedOrderHeaderKey)){
 		 			draftOrderflagOrderSubmit="Y";
-
+		 			retFail="error";
 		 		}
 		 		else{
 		 			draftOrderflagOrderSubmit="N";
@@ -278,7 +279,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				if(YFCCommon.isVoid(orderHeaderKey)){
 					generatedErrorMessage = "Could not process the order with no header key.Please contact system admin.";
 					log.error("OrderHeaderKey is empty. Cannot process OrderChange.");
-					return FAILURE;
+					return retFail;
 				}
 				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
 				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
@@ -367,17 +368,17 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 										if(error == null)
 										{
 											generatedErrorMessage = transactionMessage;
-											return FAILURE;
+											return retFail;
 										}
 										generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
 										log.error("Exception posting the order update to Legacy system..\n");
-										return FAILURE;
+										return retFail;
 									}
 									catch(Exception e)
 									{
 										generatedErrorMessage = transactionMessage;
 										XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
-										return FAILURE;
+										return retFail;
 									}
 							}
 								
@@ -388,7 +389,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
 					log.error("Exception posting the order update to Legacy system..\n",e);
 					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
-					return FAILURE;
+					return retFail;
 				}
 				XPEDXWCUtils.resetEditedOrderShipTo(wcContext); //added for jira 4306
 				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
@@ -435,13 +436,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			 YFCElement errorXML=e.getXML();
 			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
 			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 XPEDXWCUtils.logExceptionIntoCent(e);
 			 if(errorDeasc.contains("Order is not Draft Order"))
 			 {
 				 
 				 return draftErrorFlagOrderSummary;
 			 }
 			 else{
-				 return FAILURE;
+				 return retFail;
 			 }
 		 } 
 		
@@ -449,7 +451,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
 			generatedErrorMessage = "There was an error processing your last  request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
 			XPEDXWCUtils.logExceptionIntoCent(ex);   //JIRA 4289
-			return FAILURE;
+			return retFail;
 		}
 	}
 	

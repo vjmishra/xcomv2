@@ -1036,7 +1036,7 @@
     MeantForSupplier=" " Modifyprogid="YDKConfigDeploy"
     Modifyts="2011-06-29T12:03:02-04:00" Modifyuserid="ng"
     OrganizationCode="xpedx" RuleSetFieldDescription=" "
-    RuleSetFieldName="NUMBER_OF_ATTR_FOR_SEARCH" RuleSetValue="10000" RulesKey="20110629120302149762"/>
+    RuleSetFieldName="NUMBER_OF_ATTR_FOR_SEARCH" RuleSetValue="8" RulesKey="20110629120302149762"/>
 <Rules Createprogid=".YCPBusinessRulesAPI"
     Createts="2011-06-29T12:03:02-04:00" Createuserid="admin"
     DocumentType=" " Lockid="0" MeantForInternal=" "
