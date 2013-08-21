@@ -319,8 +319,12 @@
 <div class="float-right" >
 <ul id="tool-bar" class="tool-bar-bottom" >
 		<li>
-<%-- <a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" onmousedown="cursor_wait()"><span>Apply</span></a> --%>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
+			<s:if test="#wcUtil.getShipToAdress(getCurrentCustomer(),getWCContext().getStorefrontId()) == null">
+				<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>&initPrefs=true')" ><span>Select</span></a>
+			</s:if>
+			<s:if test="#wcUtil.getShipToAdress(getCurrentCustomer(),getWCContext().getStorefrontId()) != null">
+				<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
+			</s:if>
 	
 	</li>
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
