@@ -181,7 +181,7 @@
 				<s:set name="orgCity" value='#xutil.getAttribute(#orgCorpInfoEle,"City")' />
 				<s:set name="orgState" value='#xutil.getAttribute(#orgCorpInfoEle,"State")' />
 				<s:set name="orgZip" value='#xutil.getAttribute(#orgCorpInfoEle,"ZipCode")' />
-				<s:set name="orgZip" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(orgZip)' />
+				<s:set name="fmtorgZip" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#orgZip)'/>
 				<s:set name="orgCountry" value='#xutil.getAttribute(#orgCorpInfoEle,"Country")' />
 				
  				<s:set name="orgPhone" value='#xutil.getAttribute(#orgCorpInfoEle,"DayPhone")' /> 
@@ -384,7 +384,7 @@
                                		<s:property value='%{#orgAddress3}'/><br/>
                                 </s:if>
                                 <s:property value='%{#orgCity}'/>,&nbsp;<s:property value='%{#orgState}'/>
-                                 <s:property value='%{#orgZip}'/>&nbsp;<s:property value='%{#orgCountry}'/><br/>
+                                 <s:property value='%{#fmtorgZip}'/>&nbsp;<s:property value='%{#orgCountry}'/><br/>
                                 <s:property value='%{#fmtOrgPhone}'/> <br/>
                                 <s:if test='%{#orgEmail != ""}'>
                                 	<a href="mailto:<s:property value='%{#orgEmail}'/>"><s:property value='%{#orgEmail}'/></a><br/>
