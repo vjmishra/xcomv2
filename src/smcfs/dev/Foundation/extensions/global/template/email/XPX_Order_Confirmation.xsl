@@ -247,12 +247,12 @@
 			<xsl:value-of select="Order/Extn/@ExtnBillToName" />
 		</xsl:variable>
 		
-		<xsl:variable name="custlinePOLbl" >
-			<xsl:value-of select="Order/Extn/@SAPExtnCustLinePOLbl" />
+		<xsl:variable name="custlineAcctLbl" >
+			<xsl:value-of select="Order/Extn/@ExtnCustLineAccLbl" />
 		</xsl:variable>
 		
-		<xsl:variable name="custlineAcctLbl" >
-			<xsl:value-of select="Order/Extn/@SAPExtnCustLineAccLbl" />
+		<xsl:variable name="custlinePOLbl" >
+			<xsl:value-of select="Order/Extn/@ExtnCustLinePOLbl" />
 		</xsl:variable>
 		
 		<xsl:variable name="viewPricesFlag" >
