@@ -72,7 +72,7 @@
 				padding: 2px;
 				}
 			table.price th{
-				background-color: #003399;
+				background-color: #084823;
 				color: white;
 				padding: 10px;
 				font-size: 11px;
@@ -214,12 +214,18 @@
 		<xsl:variable name="urlPrefix" select="'https://www.'"/>	
 		<xsl:variable name="urlSuffix" select="'.com'"/>
 		
+		<xsl:variable name="urlSaalFeldSuffix" select="'redistribution.com'"/>
+		
 		<xsl:variable name="storeFront" >
-			<xsl:value-of select="Order/@SellerOrganizationCode" />
+			<xsl:value-of select="Order/@EnterpriseCode" />
 		</xsl:variable>
 		
 		<xsl:variable name="storeFrontURL">    
 			<xsl:value-of select="concat($urlPrefix, $storeFront, $urlSuffix)"/>   
+		</xsl:variable> 
+		
+		<xsl:variable name="storeSaalFeldFrontURL">    
+			<xsl:value-of select="concat($urlPrefix, $storeFront, $urlSaalFeldSuffix)"/>   
 		</xsl:variable> 
 		
 		<xsl:variable name="brandLogo" >
@@ -248,8 +254,40 @@
 					
 					
 					<td>
-					Your order has been rejected.If you have any question,please contact your order approver. Click here to review on <xsl:value-of select="Order/@SellerOrganizationCode"/>.com
-
+					
+					Your order has been rejected.If you have any question,please contact your order approver. Click here to review on 
+					
+					 <xsl:choose>
+							<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
+								<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+									<a href="{$storeFrontURL}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+								</xsl:if>
+								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+									<a href="{storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+								</xsl:if>
+							 
+							</xsl:when>
+							<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
+								<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+									<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+								</xsl:if>
+								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
+									<a href="{storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+								</xsl:if>
+						
+						 
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:if test = 'Order/@EnterpriseCode="xpedx"' >
+									<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+								</xsl:if>
+								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
+									<a href="{storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+								</xsl:if>
+					
+							</xsl:otherwise>
+					</xsl:choose>
+					
 												</td>
 									</tr>
 						</table>
@@ -465,7 +503,7 @@
 				</tr>
 
 				<tr>
-					<td><span class="itemno">xpedx item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
+					<td><span class="itemno"><xsl:value-of select="Order/@EnterpriseCode" /> item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
 					<td class="right"> Mfg. Item #:</td>
 					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
 					<td class="right">My Item #:</td>
