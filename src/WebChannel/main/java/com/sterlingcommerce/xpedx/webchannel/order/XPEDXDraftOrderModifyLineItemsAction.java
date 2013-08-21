@@ -271,6 +271,11 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             /*End - Changes made by Mitesh Parikh for JIRA#3595*/
              
             retVal= SUCCESS;
+            if("true".equals(isComingFromCheckout))
+            {
+            	System.out.println(SCXmlUtil.getString(outputDocument));
+            	retVal=validateMaxOrderAmountWhileCheckOut(outputDocument);
+            }
          }
         catch(XMLExceptionWrapper e)
         {
@@ -772,6 +777,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     protected String isComingFromCheckout;
     protected String minOrderAmount;
     protected String chargeAmount;
+    protected String maxOrderAmount;
     public String getIsEditOrder() {
         return isEditOrder;
     }
@@ -812,6 +818,14 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         this.isComingFromCheckout = isComingFromCheckout;
     }
  
+    public String getMaxOrderAmount() {
+		return maxOrderAmount;
+	}
+
+	public void setMaxOrderAmount(String maxOrderAmount) {
+		this.maxOrderAmount = maxOrderAmount;
+	}
+	
     private String getExtnApplyMinOrderCharge(String envCode, String shipFromBranch) {
         String extnApplyMinOrderCharge=null;
         if (shipFromBranch != null && shipFromBranch.trim().length() > 0)
@@ -854,6 +868,28 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         return extnApplyMinOrderCharge;
          
     }
+    
+    /**
+     * Added this validation method while doing checkout.
+     * EB-1389 - As a Customer User when I click either Update or Checkout from Cart, I should be stopped from proceeding to checkout if my order total exceeds the maximum set in CC 
+     * @param outputDocument
+     * @return
+     */
+    private String validateMaxOrderAmountWhileCheckOut(Document outputDocument)    {    	
+    	double totOrdValWithoutTaxes = 0;
+    	 if(YFCCommon.isVoid(maxOrderAmount))
+         {
+    		 maxOrderAmount="0";
+         }  
+    	Element orderExtnElement = SCXmlUtil.getXpathElement(outputDocument.getDocumentElement(), "//Order/Extn");
+    	totOrdValWithoutTaxes =  SCXmlUtil.getDoubleAttribute(orderExtnElement,"ExtnTotOrdValWithoutTaxes");
+		
+    	if(Double.parseDouble(maxOrderAmount) > 0 && totOrdValWithoutTaxes > Double.parseDouble(maxOrderAmount)){    
+    		return "checkoutError";
+    	}
+    	return SUCCESS;
+    	
+      }
      
 }
 
