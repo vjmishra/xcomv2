@@ -702,28 +702,6 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			estimator = extnElem.getAttribute("ExtnEstimator");
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
-			
-			if(isSaveAddUser()){
-				XPEDXShipToCustomer billToCustomer=new XPEDXShipToCustomer();
-				XPEDXShipToCustomer shipToCustomer=new XPEDXShipToCustomer();
-				shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-				billToCustomer=shipToCustomer.getBillTo();
-				String customerPrefClass = billToCustomer.getExtnCustomerClass();
-				if(customerPrefClass!=null && customerPrefClass.trim().length()>0) {
-				if(customerPrefClass.equalsIgnoreCase("CJ")){
-					prefCategory = "300000";
-				}
-				else if(customerPrefClass.equalsIgnoreCase("CG")){
-					prefCategory = "300001";
-				}
-				else if(customerPrefClass.equalsIgnoreCase("CU")){
-					prefCategory = "300002";
-				}
-				else if(customerPrefClass.equalsIgnoreCase("CA")){
-					prefCategory = "300057";
-				}
-			}	
-		}
 
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
