@@ -702,7 +702,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			estimator = extnElem.getAttribute("ExtnEstimator");
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
-
+		
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
 				// Fetch the Additional Email Addresses and PO list from
