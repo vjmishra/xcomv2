@@ -2,13 +2,13 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<comment>Binding entries Catalog Search and Navigation</comment>
-	<entry key="WCContext.storefrontId">xpedxCatalogSearch:/SearchCatalogIndex/@CallingOrganizationCode,xpedxCatalogLandingSearch:/SearchCatalogIndex/@CallingOrganizationCode</entry>
-	<entry key="categoryDepth">xpedxCatalogSearch:/SearchCatalogIndex/@CategoryDepth,xpedxCatalogLandingSearch:/SearchCatalogIndex/@CategoryDepth</entry>
-	<entry key="orderDesc">xpedxCatalogSearch:/SearchCatalogIndex/@SortDescending,xpedxCatalogLandingSearch:/SearchCatalogIndex/@SortDescending</entry>
-	<entry key="orderByAttribute">xpedxCatalogSearch:/SearchCatalogIndex/@SortField,xpedxCatalogLandingSearch:/SearchCatalogIndex/@SortField</entry>
-	<entry key="pageNumber">xpedxCatalogSearch:/SearchCatalogIndex/@PageNumber,xpedxCatalogLandingSearch:/SearchCatalogIndex/@PageNumber</entry>
-	<entry key="pageSize">xpedxCatalogSearch:/SearchCatalogIndex/@PageSize,xpedxCatalogLandingSearch:/SearchCatalogIndex/@PageSize</entry>
-	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">xpedxCatalogSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale,xpedxCatalogLandingSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale</entry>
-	<entry key="WCContext.customerId">xpedxCatalogSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID</entry>
-	<entry key="effectiveCurrency">xpedxCatalogSearch:/SearchCatalogIndex/Item/@Currency,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/@Currency</entry>
+	<entry key="WCContext.storefrontId">xpedxCatalogSearch:/SearchCatalogIndex/@CallingOrganizationCode,xpedxCatalogLandingSearch:/SearchCatalogIndex/@CallingOrganizationCode,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@CallingOrganizationCode</entry>
+	<entry key="categoryDepth">xpedxCatalogSearch:/SearchCatalogIndex/@CategoryDepth,xpedxCatalogLandingSearch:/SearchCatalogIndex/@CategoryDepth,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@CategoryDepth</entry>
+	<entry key="orderDesc">xpedxCatalogSearch:/SearchCatalogIndex/@SortDescending,xpedxCatalogLandingSearch:/SearchCatalogIndex/@SortDescending,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@SortDescending</entry>
+	<entry key="orderByAttribute">xpedxCatalogSearch:/SearchCatalogIndex/@SortField,xpedxCatalogLandingSearch:/SearchCatalogIndex/@SortField,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@SortField</entry>
+	<entry key="pageNumber">xpedxCatalogSearch:/SearchCatalogIndex/@PageNumber,xpedxCatalogLandingSearch:/SearchCatalogIndex/@PageNumber,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@PageNumber</entry>
+	<entry key="pageSize">xpedxCatalogSearch:/SearchCatalogIndex/@PageSize,xpedxCatalogLandingSearch:/SearchCatalogIndex/@PageSize,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@PageSize</entry>
+	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">xpedxCatalogSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale,xpedxCatalogLandingSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale</entry>
+	<entry key="WCContext.customerId">xpedxCatalogSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID</entry>
+	<entry key="effectiveCurrency">xpedxCatalogSearch:/SearchCatalogIndex/Item/@Currency,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/@Currency:</entry>
 </properties>

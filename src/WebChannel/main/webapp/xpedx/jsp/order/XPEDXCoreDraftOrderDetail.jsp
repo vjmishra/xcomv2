@@ -28,6 +28,7 @@
 	<s:hidden id="modifyOrderLines" name="modifyOrderLines" value='false' />
 	<input type="hidden" value='<s:property value="%{chargeAmount}" />' name="chargeAmount" />
 	<input type="hidden" value='<s:property value="%{minOrderAmount}" />' name="minOrderAmount" />
+	<input type="hidden" value='<s:property value="%{maxOrderAmount}" />' name="maxOrderAmount" />
 	<%-- 
 	I don't see this variable used in this jsp so removing it . In case if any one wants to use getUOMDescriptions method please use
 	XPEDXWCUtils.getUOMDescription .

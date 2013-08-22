@@ -566,7 +566,23 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         String inputXML=SCXmlUtil.getString(customerDoc);
 		String emailOrgCode=((customerDoc!= null && customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null)?customerDoc.getDocumentElement().getAttribute("EnterpriseCode"):"");
         String emailType=XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_TYPE;
-        String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+      //EB-2061-As a Saalfeld product owner, I want to view the Order Pending Approval Notification Email with correct Saalfeld branding 
+
+        String emailFrom = null;
+
+        if((customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(customerDoc.getDocumentElement().getAttribute("EnterpriseCode")) ))// no need to check for seller organization code
+
+                        {
+
+                             emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
+
+		} else {
+
+			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+
+		}
+
+
         StringBuffer emailSubject = new StringBuffer(orderconfSubjecline);
        // emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
         XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode,businessIdentifier);
