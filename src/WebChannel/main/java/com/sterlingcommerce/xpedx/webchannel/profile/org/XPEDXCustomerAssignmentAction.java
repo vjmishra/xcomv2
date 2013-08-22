@@ -1090,25 +1090,32 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				}
 
 				// for JIRA 1494: when assigning a preferred ship-to for a new user, set the preferred category and category view based on the class/segment on the associated bill-to
-				// TODO STILL NEED TO DO CATEGORY VIEW (paper = grid view, all others = full view)
 				String initPrefCategory = null;
+				Integer initPrefCategoryView = null;
 				if ("true".equals(request.getParameter("initPrefs"))) {
 					try {
-//						XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) ((XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER)).clone();
 						XPEDXShipToCustomer shipToCustomer = XPEDXWCUtils.getShipToAdress(selectedCustomerID, getWCContext().getStorefrontId());
-						
+
 						String billToId = XPEDXWCUtils.getParentCustomer(shipToCustomer.getCustomerID(), getWCContext());
 						Document billToDetails = XPEDXWCUtils.getCustomerDetails(billToId, getWCContext().getStorefrontId());
 						String billToClass = SCXmlUtil.getChildElement(billToDetails.getDocumentElement(), "Extn").getAttribute("ExtnCustomerClass");
-						
-						if (billToClass.equalsIgnoreCase("CJ")) { // facility supplies
+
+						if (billToClass.equalsIgnoreCase("CJ")) {
+							// facility supplies
 							initPrefCategory = "300000";
-						} else if (billToClass.equalsIgnoreCase("CG")) { // graphics
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_FULL_VIEW;
+						} else if (billToClass.equalsIgnoreCase("CG")) {
+							// graphics
 							initPrefCategory = "300001";
-						} else if (billToClass.equalsIgnoreCase("CU")) { // packaging
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_FULL_VIEW;
+						} else if (billToClass.equalsIgnoreCase("CU")) {
+							// packaging
 							initPrefCategory = "300002";
-						} else if (billToClass.equalsIgnoreCase("CA")) { // paper
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_FULL_VIEW;
+						} else if (billToClass.equalsIgnoreCase("CA")) {
+							// paper
 							initPrefCategory = "300057";
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW;
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -1123,6 +1130,9 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 						+ "<Extn ExtnDefaultShipTo='" + selectedCustomerID + "'";
 				if (initPrefCategory != null) {
 					inputXml += " ExtnPrefCatalog='" + initPrefCategory + "'";
+				}
+				if (initPrefCategoryView != null) {
+					inputXml += " ExtnB2BCatalogView='" + initPrefCategoryView + "'";
 				}
 				inputXml += " /> " // close Extn tag
 						+ "</CustomerContact> " + "</CustomerContactList>" + "</Customer> ";
