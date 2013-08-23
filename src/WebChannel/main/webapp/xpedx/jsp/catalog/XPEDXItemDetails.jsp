@@ -1658,7 +1658,7 @@ function SubmitActionWithValidation()
 					<!-- Job Number represents Customer Line Account # -->
 					<div class="jobNum line-spacing">
 						<label class="left35"><s:property value='custLineAccNoLabel' />:</label>
-						<input name="Job" class="input-details x-input"  id="Job" tabindex="12" title="JobNumber" maxlength="22"/>
+						<input name="Job" class="input-details x-input"  id="Job" tabindex="12" title="JobNumber" maxlength="24"/>
 					</div>
 				</s:if>
 				<input type="hidden" name="Customer" class="input-details x-input" id="Customer"
