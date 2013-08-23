@@ -10,7 +10,7 @@
 		<table width="600" border="0" align="left" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 		<tr>
 		<td>
-		<img src="{$imageURL}"	width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
+		<img src="{$imageURL}"	width="216" height="69" />
 	     </td>
 		</tr>
 		  <tr>
@@ -19,10 +19,26 @@
 		        <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><table width="" border="0" cellpadding="0">
 		          <tr>
 		          <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-		          This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com.&#160;&#160;If you or your administrator did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at
+		          	<xsl:if test = '//@BrandName="xpedx"'>
+				 This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />.com.&#160;&#160;If you or your administrator did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at 
+					</xsl:if>
+					<xsl:if test = '//@BrandName="Saalfeld"' >
+							 This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />redistribution.com.&#160;&#160;If you or your administrator did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at
+					</xsl:if>
+		         
 		          <a><xsl:attribute name="href">
-			       mailto:ebusiness@<xsl:value-of select='//@BrandName' />.com</xsl:attribute>
-			       ebusiness@<xsl:value-of select="//@BrandName" />.com</a><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
+		          
+			       mailto:ebusiness@			       
+			       <xsl:if test = '@Brand="xpedx"'>
+							<xsl:value-of select='//@BrandName' />.com</xsl:attribute>			       
+			       			ebusiness@<xsl:value-of select="//@BrandName" />.com</a><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
+					</xsl:if>
+					<xsl:if test = '@Brand="Saalfeld"' >
+							<xsl:value-of select='//@BrandName' />redistribution.com</xsl:attribute>			       
+			       			ebusiness@<xsl:value-of select="//@BrandName" />redistribution.com</a><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
+					</xsl:if>
+			       
+			       
 			</td>
 			</tr>
 		            <tr>

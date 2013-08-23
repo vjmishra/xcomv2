@@ -14,7 +14,7 @@
 			<body>
 				<table width="600" border="0" align="left" cellpadding="2" cellspacing="2">
 					<tr>
-						<td><img src="{$imageURL}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
+						<td><img src="{$imageURL}" width="216" height="69"  /></td>
 					</tr>
 					<tr>
 						<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
@@ -28,7 +28,14 @@
 											
 											<tr>
 												<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-													<span style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal;"><xsl:value-of select="@Brand"/>.com Registration Request 
+													<span style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal;">
+													<xsl:if test = '@Brand="xpedx"'>
+															<xsl:value-of select="@Brand"/>.com Registration Request 
+													</xsl:if>
+													<xsl:if test = '@Brand="Saalfeld"' >
+															<xsl:value-of select="@Brand"/>redistribution.com Registration Request .
+													</xsl:if>
+													
 													</span>
 												</td>
 											</tr>
@@ -48,7 +55,15 @@
 											</td>
 											 -->
 											 <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												Thank you for registering online with <xsl:value-of select="@Brand"/>.com.                
+												Thank you for registering online with 
+												<xsl:if test = '@Brand="xpedx"'>
+															<xsl:value-of select="@Brand"/>.com. 
+													</xsl:if>
+													<xsl:if test = '@Brand="Saalfeld"' >
+															<xsl:value-of select="@Brand"/>redistribution.com.
+													</xsl:if>
+												
+												                
 												The information below has been sent to your local support contact for processing. A representative will contact you.
 												<span ></span>
 											</td>
@@ -131,7 +146,7 @@
 															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Email Address:
 															</td>
-															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
+															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#084823;">
 																<xsl:value-of select="@EmailID"/>
 															</td></tr>
 															</table>
