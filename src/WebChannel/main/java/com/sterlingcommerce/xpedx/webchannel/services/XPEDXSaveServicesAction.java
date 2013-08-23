@@ -1211,7 +1211,6 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	 * @return Returns the first two pieces of the Bill-To Customer ID. For example: billToCustId="95-0001900012-000-M-XX-B" returns "95-0001900012"
 	 */
 	private String truncateBillToCustomerId(String billToCustId) {
-		// TODO outstanding question to Deanna: instead of truncating, should we instead display ExtnLegacyCustNumber (as we do elsewhere in the application)
 		String[] tokens = billToCustId.split("-");
 		return tokens[0] + "-" + tokens[1];
 	}
