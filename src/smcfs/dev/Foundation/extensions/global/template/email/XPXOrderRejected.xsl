@@ -263,7 +263,7 @@
 									<a href="{$storeFrontURL}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 								</xsl:if>
 								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-									<a href="{storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+									<a href="{$storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 								</xsl:if>
 							 
 							</xsl:when>
@@ -272,7 +272,7 @@
 									<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 								</xsl:if>
 								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
-									<a href="{storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+									<a href="{$storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 								</xsl:if>
 						
 						 
@@ -282,7 +282,7 @@
 									<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 								</xsl:if>
 								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
-									<a href="{storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+									<a href="{$storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 								</xsl:if>
 					
 							</xsl:otherwise>
