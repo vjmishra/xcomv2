@@ -152,8 +152,16 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			String brand=newUserElement.getAttribute("Brand");
+			// EB- 2048-As a Saalfeld product owner, I want to view the Saalfeld Registration Email with correct Saalfeld branding
+			if("Saalfeld".equalsIgnoreCase(brand)){
+				emailFrom = "ebusiness@Saalfeldredistribution.com";
+				_subjectLine=brand.concat("redistribution.com").concat(" ").concat(getMailSubject());
+			}else{
+				_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
+			}
+				
 			//StringBuffer emailSubject = new StringBuffer(brand.concat(" ").concat(getMailSubject().toString()));
-			_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
+			
 			String businessIdentifier=newUserElement.getAttribute("ToEmailId");
 			    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
 			    		_subjectLine, emailFrom, storeFrontId,businessIdentifier);
