@@ -353,7 +353,6 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			outputDocSales = XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext()
 					.getStorefrontId(), customerExtnInformation);
 			
-			
 			Element customerElement = null;
 			
 			if(outputDocSales != null){
@@ -435,7 +434,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String imageUrl = "";
 			if(storefrontId!=null && storefrontId.trim().length() > 0){
 			String imageName = XPEDXWCUtils.getLogoName(storefrontId);
-			String imagesRootFolder = createImageRootFolder();
+			String imagesRootFolder = XPEDXWCUtils.getImagesRootFolder(ServletActionContext.getRequest());
 			if(imagesRootFolder!=null && imagesRootFolder.trim().length() > 0 && imageName!=null && imageName.trim().length() > 0){
 				imageUrl = imagesRootFolder + imageName;
 				setImageUrl(imageUrl);
@@ -1208,21 +1207,6 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	}
 	
 	/**
-	 * @return Returns the fully qualified root url appropriate for <code>getStorefrontId()</code>. For example: "https://www.xpedx.com/swc/commonImages"
-	 */
-	private String createImageRootFolder() {
-		// TODO how do we properly externalize this?
-		String folder = YFSSystem.getProperty("ImagesRootFolder"); // template stored in YFS
-		if ("xpedx".equals(getStorefrontId())) {
-			return folder;
-		} else if ("Saalfeld".equals(getStorefrontId())) {
-			return folder.replaceFirst("xpedx\\.com", createHostName());
-		} else {
-			throw new IllegalArgumentException("Unexpected storefront id: " + getStorefrontId());
-		}
-	}
-	
-	/**
 	 * @param billToCustId
 	 * @return Returns the first two pieces of the Bill-To Customer ID. For example: billToCustId="95-0001900012-000-M-XX-B" returns "95-0001900012"
 	 */
@@ -1230,5 +1214,5 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		String[] tokens = billToCustId.split("-");
 		return tokens[0] + "-" + tokens[1];
 	}
-
+	
 }

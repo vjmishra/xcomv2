@@ -6024,7 +6024,21 @@ public class XPEDXWCUtils {
         JIRA 3160 END
         */
 
+	/**
+	 * Determines the base url using the request url. This is necessary because YFSSystem.getProperty("ImagesRootFolder") does not support multiple brands.
+	 * @param req
+	 * @return Returns the images root folder. For example: https://stg.xpedx.com/swc/commonImages
+	 */
+	public static String getImagesRootFolder(HttpServletRequest req) {
+		String url = req.getRequestURL().toString();
 
+		// get the beginning of the url up to and including the port. for example:
+		//		https://stg.xpedx.com/swc/xpedx/services/XPEDXServices.action -> https://stg.xpedx.com
+		//		http://localhost:8001/swc/xpedx/services/XPEDXServices.action -> http://localhost:8001
+		String baseUrl = url.substring(0, url.indexOf("/", "https://".length() + 1));
+
+		return baseUrl + "/swc/commonImages";
+	}
 
 
 
