@@ -120,11 +120,33 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	if(reqUom == null || reqUom == "null" || reqUom == "") {
 		reqUom = document.getElementById("selectedUOM").value;
 	}
+	// added for  Jira 2101 to get the PnA results based on the selected UOM on page load
+	var uomConvFactor;
+	var orderMul = document.getElementById("OrderMultiple");
+	var conversionFactor = document.getElementById("uomConvFactor");
+	if(conversionFactor!=null && conversionFactor!=undefined){
+		 uomConvFactor = document.getElementById("uomConvFactor").value;
+	}
 	if(Qty == null || Qty == "null" || Qty == "") {
-		
-		//Modifying for jira 3922
-		Qty = document.getElementById("OrderMultiple").value;
+		if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
+			reqUom = document.getElementById("selectedUOM").value;
+			if(uomConvFactor == 1){
+				Qty = document.getElementById("OrderMultiple").value;
+			}
+			else if(uomConvFactor <= orderMul.value){
+				if((uomConvFactor % orderMul.value)==0){
+					Qty = orderMul.value / uomConvFactor;
+				}
+				else{
+					Qty = 1;
+				}
+			}
 		}
+		else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+			Qty=1;
+		}
+	}
+	//End of Jira 2101
 	priceCheck = true;
 	var Category = document.getElementById("catagory").value;
 	var customerUom = document.getElementById("custUOM").value;
