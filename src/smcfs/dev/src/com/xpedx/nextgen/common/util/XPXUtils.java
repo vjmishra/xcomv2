@@ -1,15 +1,14 @@
 package com.xpedx.nextgen.common.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -2520,7 +2519,13 @@ public class XPXUtils implements YIFCustomApi {
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
 			    {
 					emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
-					emailSubject = storeFrontId + ".com" + " User Creation Notification";		    	
+					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding 
+					if("xpedx".equalsIgnoreCase(storeFrontId)){
+					emailSubject = storeFrontId + ".com" + " User Creation Notification";
+					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+						
+						emailSubject = storeFrontId + "redistribution.com" + " User Creation Notification";
+					}
 				}
 				else if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
 				{
