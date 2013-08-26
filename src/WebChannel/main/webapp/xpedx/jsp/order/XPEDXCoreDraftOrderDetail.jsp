@@ -738,19 +738,21 @@
 												</s:if>
 												<s:else>
 												<%--Added if-else condn for giving border-color when Line Acc# and PO# are blank - Jira 3966 --%>
+												<%-- For 24 Characters EB -449 --%>
+												
 													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
 														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" cssStyle="border-color:#FF0000"/>
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" cssStyle="border-color:#FF0000"/>
 													</s:if>
 													<s:else>
 														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
 														id="orderLine%{#FieldLabel}_%{#orderLineKey}"
 														value="%{#lineExtn.getAttribute(#customLbl)}"
-														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="22" />
+														disabled='%{#isReadOnly}' tabindex="%{#tabIndex}" maxlength="24" />
 													
 													</s:else>
 													
