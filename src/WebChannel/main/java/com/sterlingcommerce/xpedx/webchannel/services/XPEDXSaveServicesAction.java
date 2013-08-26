@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -14,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
@@ -24,7 +22,6 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
-import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -356,7 +353,6 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			outputDocSales = XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext()
 					.getStorefrontId(), customerExtnInformation);
 			
-			
 			Element customerElement = null;
 			
 			if(outputDocSales != null){
@@ -426,8 +422,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			
 			if(storefrontId!=null && storefrontId.trim().length() > 0){
 				String userName = YFSSystem.getProperty("fromAddress.username");
-				String suffix = YFSSystem.getProperty("fromAddress.suffix");
-				sb.append(userName).append("@").append(storefrontId).append(suffix);
+				sb.append(userName).append("@").append(createHostName());
 				customerEmail = sb.toString();
 				
 			}
@@ -439,7 +434,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			String imageUrl = "";
 			if(storefrontId!=null && storefrontId.trim().length() > 0){
 			String imageName = XPEDXWCUtils.getLogoName(storefrontId);
-			String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+			String imagesRootFolder = XPEDXWCUtils.getImagesRootFolder(ServletActionContext.getRequest());
 			if(imagesRootFolder!=null && imagesRootFolder.trim().length() > 0 && imageName!=null && imageName.trim().length() > 0){
 				imageUrl = imagesRootFolder + imageName;
 				setImageUrl(imageUrl);
@@ -570,22 +565,22 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			 * If toEmail is empty then ccEamil should be toEmail .
 			 * 
 			 * */
-			if((toEmailGen == null || toEmailGen == "") && (toEmailPaper == null || toEmailPaper == "") && (ccEMail!=null && ccEMail.trim().length() > 0)){
-				if((toEmailGen == null || toEmailGen == "") && (paperFSObj.equalsIgnoreCase("facilitySupplies"))){
+			if((toEmailGen == null || toEmailGen.trim().length() > 0) && (toEmailPaper == null || toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
+				if((toEmailGen == null || toEmailGen.trim().length() > 0) && (paperFSObj.equalsIgnoreCase("facilitySupplies"))){
 					toEmailGen = ccEMail;
 				}
-				if((toEmailPaper == null || toEmailPaper == "") && (paperPSObj.equalsIgnoreCase("PaperSupplies"))){
+				if((toEmailPaper == null || toEmailPaper.trim().length() > 0) && (paperPSObj.equalsIgnoreCase("PaperSupplies"))){
 					toEmailPaper = ccEMail;
 				}
 				ccEMail = "";
 			}else
-			if((toEmailGen == null || toEmailGen == "") && (toEmailPaper != null && toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
+			if((toEmailGen == null || toEmailGen.trim().length() > 0) && (toEmailPaper != null && toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
 				if(paperFSObj.equalsIgnoreCase("facilitySupplies")){
 				toEmailGen = ccEMail;
 				checkCCGFlag = true;
 				}
 				
-			}else if((toEmailGen != null && toEmailGen.trim().length() > 0 ) && (toEmailPaper == null || toEmailPaper == "") && (ccEMail!=null && ccEMail.trim().length() > 0)){
+			}else if((toEmailGen != null && toEmailGen.trim().length() > 0 ) && (toEmailPaper == null || toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
 				if(paperPSObj.equalsIgnoreCase("PaperSupplies")){
 				toEmailPaper = ccEMail;
 				checkCCPFlag = true;
@@ -666,7 +661,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			Object obj = WCMashupHelper.invokeMashup(
 					"SendSampleServiceRequest", input, wcContext
 							.getSCUIContext());
-			outputDoc = ((Element) obj).getOwnerDocument();
+			outputDoc = ((Element) obj).getOwnerDocument();  SCXmlUtil.getString(outputDoc);
 			if (null != outputDoc) {
 				LOG.debug("Output XML: " + SCXmlUtil.getString((Element) obj)); //Jira 3554 Changes done
 			}
@@ -834,7 +829,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			emailElement.setAttribute("ImageUrl",getImageUrl());
 		}
 		if(getBilltoCustid()!=null && getBilltoCustid().trim().length()>0){
-			emailElement.setAttribute("BillToCustid",getBilltoCustid());
+			emailElement.setAttribute("BillToCustid",truncateBillToCustomerId(getBilltoCustid()));
 		}
 		if(getDivisionName()!=null && getDivisionName().trim().length()>0){
 			emailElement.setAttribute("DivisionName",getDivisionName());
@@ -850,11 +845,11 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("ToEmail", sampleRoomEmail);
 		emailElement.setAttribute("CCEmail",ccEMail);
 		if(sampleServiceRequest.equalsIgnoreCase("SampleServiceRequestPaper")){
-			subjectEmail = getStorefrontId() + ".com "+ "" + "Paper Sample Request Notification";
+			subjectEmail = createHostName() + " Paper Sample Request Notification";
 			headerEmail = "Paper";
 		}
 		else{
-			subjectEmail = getStorefrontId() + ".com" + "" + "General Sample Request Notification";
+			subjectEmail = createHostName() + " General Sample Request Notification";
 			headerEmail = "General";
 		}
 		
@@ -999,7 +994,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			emailElement.setAttribute("ImageUrl",getImageUrl());
 		}
 		if(getBilltoCustid()!=null && getBilltoCustid().trim().length()>0){
-			emailElement.setAttribute("BillToCustid",getBilltoCustid());
+			emailElement.setAttribute("BillToCustid",truncateBillToCustomerId(getBilltoCustid()));
 		}
 		if(getDivisionName()!=null && getDivisionName().trim().length()>0){
 			emailElement.setAttribute("DivisionName",getDivisionName());
@@ -1015,11 +1010,11 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		emailElement.setAttribute("ToEmail", sampleRoomEmail);
 		emailElement.setAttribute("CCEmail",ccEMail);
 		if(sampleServiceRequest.equalsIgnoreCase("SampleServiceRequestPaper")){
-			subjectEmail = getStorefrontId() + ".com " + "" + "Paper Sample Request Notification";
+			subjectEmail = createHostName() + " Paper Sample Request Notification";
 			headerEmail = "Paper";
 		}
 		else{
-			subjectEmail = getStorefrontId() + ".com " + "" + "General Sample Request Notification";
+			subjectEmail = createHostName() + " General Sample Request Notification";
 			headerEmail = "General";
 			
 		}
@@ -1197,5 +1192,27 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 	/**
 	 * JIRA 3756 Changes end
 	 */
-
+	
+	/**
+	 * @return Returns the URL domain appropriate for <code>getStorefrontId()</code>. For example: "xpedx.com", "Saalfeldredistribution.com", etc.
+	 */
+	private String createHostName() {
+		if ("xpedx".equals(getStorefrontId())) {
+			return "xpedx.com";
+		} else if ("Saalfeld".equals(getStorefrontId())) {
+			return "Saalfeldredistribution.com";
+		} else {
+			throw new IllegalArgumentException("Unexpected storefront id: " + getStorefrontId());
+		}
+	}
+	
+	/**
+	 * @param billToCustId
+	 * @return Returns the first two pieces of the Bill-To Customer ID. For example: billToCustId="95-0001900012-000-M-XX-B" returns "95-0001900012"
+	 */
+	private String truncateBillToCustomerId(String billToCustId) {
+		String[] tokens = billToCustId.split("-");
+		return tokens[0] + "-" + tokens[1];
+	}
+	
 }

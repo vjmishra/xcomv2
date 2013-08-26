@@ -17,7 +17,7 @@
 			<body>
 				<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
 					<tr>
-						<td><img src="{$imageURL}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
+						<td><img src="{$imageURL}" width="216" height="69" /></td>
 					</tr>
 					<tr>
 					<!-- <xsl:if test = 'Emails/Email/@RequestType ="SampleServiceRequest"'>
