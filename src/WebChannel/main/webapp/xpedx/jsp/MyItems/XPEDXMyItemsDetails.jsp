@@ -2707,7 +2707,7 @@ function showSharedListForm(){
 	                                        <!-- label>Job Number:</label>  -->
 	                                        <label><s:property value="#jobIdFlag" />:</label>
 	                                        <!--Blank space removed 3693  -->
-											<s:textfield maxlength="22" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=""></s:textfield>
+											<s:textfield maxlength="24" cssStyle="width:154px;" cssClass="text x-input" name="jobId" value=""></s:textfield>
 	                                    </li>
 									</s:if>
 									<li class="nomarginright">
@@ -3223,8 +3223,9 @@ function showSharedListForm(){
 												
 												<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
 												<%--Start JIRA 3693  --%>
+												<%--Start JIRA 449  --%>
 												<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
-												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="22"
+												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="24"
 													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
 													size='10' value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}" 
 													title="%{#FieldValue}" onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');"/>
