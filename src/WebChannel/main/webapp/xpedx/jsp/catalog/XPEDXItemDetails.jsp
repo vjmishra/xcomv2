@@ -134,7 +134,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 				Qty = document.getElementById("OrderMultiple").value;
 			}
 			else if(uomConvFactor <= orderMul.value){
-				if((uomConvFactor % orderMul.value)==0){
+				if((orderMul.value % uomConvFactor)==0){
 					Qty = orderMul.value / uomConvFactor;
 				}
 				else{
