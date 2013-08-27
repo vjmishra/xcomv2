@@ -128,8 +128,8 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 		 uomConvFactor = document.getElementById("uomConvFactor").value;
 	}
 	if(Qty == null || Qty == "null" || Qty == "") {
+		reqUom = document.getElementById("selectedUOM").value;
 		if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
-			reqUom = document.getElementById("selectedUOM").value;
 			if(uomConvFactor == 1){
 				Qty = document.getElementById("OrderMultiple").value;
 			}
