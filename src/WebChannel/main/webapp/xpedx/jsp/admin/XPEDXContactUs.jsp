@@ -413,7 +413,11 @@
 			                   Technical Support: <s:property value='%{#fmtEBusinessPhoneNo}'/>, <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br>
 			                   </td>
           		 		 </tr>
-          		 		
+          		 		<tr>
+          		 			<td>
+          		 				<a  href= "https://www.xpedx.com/locate-us.aspx" >Customer Service</a>        		 		
+                   		 	</td>
+          		 		</tr>
           		 		 </tbody>
           		 	  </table>
 	  				

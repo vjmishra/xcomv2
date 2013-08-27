@@ -732,7 +732,7 @@ $(document).ready(function(){
 					<li>
 						<label><s:property value='#jobIdFlag' />:</label>
 						 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
-						<input tabindex="3408" maxlength="22" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
+						<input tabindex="3408" maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
 						<s:hidden name="#qaJobID.type" value="" />
 					</li>
 					</s:if>

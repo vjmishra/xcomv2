@@ -109,7 +109,7 @@
 		<xsl:attribute name="href">mailto:ebusiness@
 		
 		<xsl:value-of select="$Brand"/>.com</xsl:attribute>
-		ebusiness@<xsl:value-of select="$Brand"/>.com>
+		ebusiness@<xsl:value-of select="$Brand"/>.com
 	</xsl:element>
 	</xsl:if>
 	<xsl:if test = '$Brand="Saalfeld"'>
@@ -117,7 +117,7 @@
 		<xsl:attribute name="href">mailto:ebusiness@
 		
 		<xsl:value-of select="$Brand"/>redistribution.com</xsl:attribute>
-		ebusiness@<xsl:value-of select="$Brand"/>redistribution.com>
+		ebusiness@<xsl:value-of select="$Brand"/>redistribution.com
 	</xsl:element>
 	</xsl:if>
 	or by calling <xsl:value-of select="$BrandPhoneNumber"/>. 

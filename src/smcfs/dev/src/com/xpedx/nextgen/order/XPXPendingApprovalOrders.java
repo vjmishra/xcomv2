@@ -517,7 +517,15 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
                   }
             }
 			String inputXML=SCXmlUtil.getString(inputDoc.getDocumentElement());
-			String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+			//EB-2069-As a Saalfeld product owner, I want to view the Approved Notification Email with correct Saalfeld branding 
+			String emailFrom=null;
+			if((inputDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(inputDoc.getDocumentElement().getAttribute("EnterpriseCode"))) )// no need to check for Enterprise organization code)
+			    {
+	                  emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
+
+				} else {
+					YFSSystem.getProperty("EMailFromAddresses");
+				}
 			String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
 			String businessIdentifier = SCXmlUtil.getXpathAttribute(orderElement,"./Extn/@ExtnWebConfNum");
 			XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject, emailFrom, emailOrgCode,businessIdentifier);
