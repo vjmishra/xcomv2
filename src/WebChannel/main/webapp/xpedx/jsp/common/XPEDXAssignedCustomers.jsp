@@ -353,7 +353,7 @@
 <s:hidden name="NoShipTo" value="%{#_action.isShipToResult()}"/>
 	<s:if test="#defaultShipTo !='' || (#assgnCustomers != null && #assgnCustomers.getNumberOfAssignedShioTos()==0)">
 	<li style="left:500px;float:left;position:relative;">
-		<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')"><span>Apply</span></a>
+		<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>&initPrefs=true')"><span>Apply</span></a>
 	</s:if>
 	<s:if test="#defaultShipTo == null">
 	<li style="left:420px;*left:398px;left:398px\0/;float:left;position:relative;">
