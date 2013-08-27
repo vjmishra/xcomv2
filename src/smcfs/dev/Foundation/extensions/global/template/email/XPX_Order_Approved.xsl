@@ -282,10 +282,10 @@
 			<xsl:value-of select="Order/@BrandLogo" />
 		</xsl:variable>	
 		
-		<xsl:variable name="devSaalUrl" select="'dev.saalfeldredistribution.com/order'"/>
+		<xsl:variable name="devSaalUrl" select="'dev.saalfeldredistribution.com'"/>
 		<xsl:variable name="devxpedxUrl" select="'http://xpappd01.ipaper.com:8001/swc/home/home.action?sfId=xpedx'"/>
 		<xsl:variable name="stgSaalUrl" select="'http://stg.saalfeldredistribution.com/'"/>
-		<xsl:variable name="stgxpedxUrl" select="'http://stg.xpedx.com/'"/>
+		<xsl:variable name="stgxpedxUrl" select="'http://stg.xpedx.com'"/>
 		
     <xsl:template match="/">
 		<HTML>
