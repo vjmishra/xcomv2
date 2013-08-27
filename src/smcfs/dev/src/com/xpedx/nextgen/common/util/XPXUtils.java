@@ -2289,7 +2289,19 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		String inputXML=SCXmlUtil.getString(inputDocument);
 		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;
-		String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+		//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding
+		String emailFrom=null;
+				if((inputDocument.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(inputDocument.getDocumentElement().getAttribute("EnterpriseCode")) ))// no need to check for seller organization code
+
+		{
+
+			emailFrom = YFSSystem.getProperty("saalFeldEMailFromAddresses");// new attribute defined in customer_overides properties…
+		} else {
+
+			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+
+		}
+			
 		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
 		XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, _subjectLine, emailFrom, emailOrgCode,businessIdentifier);

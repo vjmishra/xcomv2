@@ -412,6 +412,10 @@
 
           XMLGroup="Extn" />
 
+		 <Attribute ColumnName="EXTN_APPLY_MIN_ORDER_BRANDS" DataType="Text-40" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnApplyMinOrderBrands" 
+
+          XMLGroup="Extn" />
+
 
           
 
