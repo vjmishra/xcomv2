@@ -72,10 +72,19 @@
 				padding: 2px;
 				}
 			table.price th{
-				background-color: #084823;
+				background-color: ##003399;
 				color: white;
 				padding: 10px;
 				font-size: 11px;
+			}
+			table.saalfeldprice th{
+				background-color: ##084823;
+				color: white;
+				padding: 10px;
+				padding-right: 2px;
+				font-size: 11px; 
+				margin:2px;
+
 			}
 			table.price tr.special-instructions td{
 				border-top: 1px solid #ccc;
@@ -231,6 +240,12 @@
 		<xsl:variable name="brandLogo" >
 			<xsl:value-of select="Order/@BrandLogo" />
 		</xsl:variable>	
+		
+		<xsl:variable name="devSaalUrl" select="'dev.saalfeldredistribution.com/order'"/>
+		<xsl:variable name="devxpedxUrl" select="'http://xpappd01.ipaper.com:8001/swc/home/home.action?sfId=xpedx'"/>
+		<xsl:variable name="stgSaalUrl" select="'http://stg.saalfeldredistribution.com/'"/>
+		<xsl:variable name="stgxpedxUrl" select="'http://stg.xpedx.com/'"/>
+		
 
 	<xsl:template match="/">
 	<table width="600" border="0" align="center" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
@@ -260,32 +275,32 @@
 					 <xsl:choose>
 							<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
 								<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-									<a href="{$storeFrontURL}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+									<a href="{$stgxpedxUrl}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 								</xsl:if>
 								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-									<a href="{$storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+									<a href="{$stgSaalUrl}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 								</xsl:if>
-							 
-							</xsl:when>
-							<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
+					 
+					</xsl:when>
+					<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
 								<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-									<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+									<a href="{$devxpedxUrl}">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 								</xsl:if>
 								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
-									<a href="{$storeSaalFeldFrontURL}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+									<a href="{$devSaalUrl}" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 								</xsl:if>
-						
-						 
-							</xsl:when>
-							<xsl:otherwise>
+							
+				 
+					</xsl:when>
+					<xsl:otherwise>
 								<xsl:if test = 'Order/@EnterpriseCode="xpedx"' >
 									<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 								</xsl:if>
 								<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
 									<a href="{$storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 								</xsl:if>
-					
-							</xsl:otherwise>
+						
+					</xsl:otherwise>
 					</xsl:choose>
 					
 												</td>
@@ -427,16 +442,29 @@
 				</tr>
 				<tr>
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table class="price" >
-			<thead>
-				<th> </th>
+				
+							<table class="price" width="100%">
+						
+						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+								<thead >
+									<th> </th>
+									<th> </th>
+									<th> </th>
+									<th valign="top" class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
+									
+									<th class="right" >Extended Price (USD)</th> <!-- The currency code on this line is dynamic.-->
+					                </thead>
+						</xsl:if>
+						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+								<thead class="table.saalfeldprice">
+								<th> </th>
+								<th> </th>
+								<th> </th>
+								<th valign="top" class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
 
-				<th> </th>
-				<th> </th>
-				<th class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
-				<th class="right"> Extended Price (USD) </th> <!-- The currency code on this line is dynamic.-->
-
-			</thead>
+								<th class="right" >Extended Price (USD)</th> <!-- The currency code on this line is dynamic.-->
+				                </thead>
+						</xsl:if>
 			<xsl:for-each select="Order/OrderLines/OrderLine">						  
 													
 			<tbody>
@@ -503,7 +531,7 @@
 				</tr>
 
 				<tr>
-					<td><span class="itemno"><xsl:value-of select="Order/@EnterpriseCode" /> item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
+					<td><span class="itemno"> <xsl:value-of select='$storeFront' />  item #:<xsl:value-of select="Item/@ItemID"/></span> </td>
 					<td class="right"> Mfg. Item #:</td>
 					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
 					<td class="right">My Item #:</td>

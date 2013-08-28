@@ -172,7 +172,7 @@
 			<xsl:if test = '$Brand="Saalfeld"'>
 			Your username ID was recently created for <a><xsl:attribute name="href"><xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>redistribution.com/order</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
-			<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</a>.</xsl:if>
+			<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>redistribution.com/order</a>.</xsl:if>
 			<xsl:text>&#160;&#160;You will be prompted to change your password during your initial login.</xsl:text>
 		</p>
 		<p>Your username is: <b><xsl:value-of select="@DisplayUserID" /></b></p>

@@ -2182,8 +2182,12 @@ public class XPXUtils implements YIFCustomApi {
 				"CustomerPONo");
 		String orderNo = inputDocument.getDocumentElement().getAttribute(
 				"OrderNo");
-		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));		
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat("Order Submitted Notification "));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));
+		}
 		
 		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);
 		YFCElement orderElem = inDoc.getDocumentElement();
@@ -2227,8 +2231,12 @@ public class XPXUtils implements YIFCustomApi {
 		String brand = orderElement.getAttribute("SellerOrganizationCode");
 		String customerPO = orderElement.getAttribute("CustomerPONo");		
 		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
-		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(orderStatusSubjectLine));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		}
 		
 		if(!YFCObject.isVoid(customerPO))
 		{
@@ -2282,7 +2290,19 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		String inputXML=SCXmlUtil.getString(inputDocument);
 		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;
-		String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+		//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding
+		String emailFrom=null;
+				if((inputDocument.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(inputDocument.getDocumentElement().getAttribute("EnterpriseCode")) ))// no need to check for seller organization code
+
+		{
+
+			emailFrom = YFSSystem.getProperty("saalFeldEMailFromAddresses");// new attribute defined in customer_overides properties…
+		} else {
+
+			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+
+		}
+			
 		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
 		XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, _subjectLine, emailFrom, emailOrgCode,businessIdentifier);

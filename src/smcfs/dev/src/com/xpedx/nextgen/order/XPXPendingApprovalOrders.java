@@ -432,12 +432,20 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(orderElement, "OrderLines/OrderLine");
 			adduomDescription(orderLinesElem,getUOMListMap);
-
+			String baseURL = null;
+			String toApproveOrderURL =null;
+			String approvedOrderURL = null;
 			//stamp the approval related URLs.
-
-			String baseURL = YFSSystem.getProperty("baseURL");
-			String toApproveOrderURL = baseURL + "/order/approvalList.action?sfId="+ sellerOrgCode +"&scFlag=y"; //http://stg.xpedx.com/swc/order/approvalList.action?sfId=xpedx&scFlag=y 
-			String approvedOrderURL =  baseURL + "/order/orderList.action?sfId="+ sellerOrgCode + "&scFlag=Y" ;  
+            if("Saalfeld".equalsIgnoreCase(organizationCode)){ 
+            	baseURL = YFSSystem.getProperty("baseSaalURL");
+            	toApproveOrderURL = baseURL + "/order/approvalList.action?sfId="+ organizationCode +"&scFlag=y"; //http://stg.xpedx.com/swc/order/approvalList.action?sfId=xpedx&scFlag=y 
+            	approvedOrderURL=  baseURL + "/order/orderList.action?sfId="+ organizationCode + "&scFlag=Y" ;
+            }else{
+            	baseURL = YFSSystem.getProperty("baseURL");
+            	toApproveOrderURL = baseURL + "/order/approvalList.action?sfId="+ sellerOrgCode +"&scFlag=y"; //http://stg.xpedx.com/swc/order/approvalList.action?sfId=xpedx&scFlag=y 
+            	approvedOrderURL=  baseURL + "/order/orderList.action?sfId="+ sellerOrgCode + "&scFlag=Y" ;
+            }
+            
 			inXML.getDocumentElement().setAttribute("toApproveOrderURL",toApproveOrderURL);
 			inXML.getDocumentElement().setAttribute("approvedOrderURL",approvedOrderURL);
 

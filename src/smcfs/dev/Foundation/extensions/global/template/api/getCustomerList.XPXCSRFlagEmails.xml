@@ -1,6 +1,10 @@
 <CustomerList >
 <Customer CustomerKey='' CustomerID='' OrganizationCode='' ParentCustomerKey='' RootCustomerKey=''>
-<Extn  ExtnECSR1EmailConfirmFlag='' ExtnECsr1EMailID='' ExtnECSR2EmailConfirmFlag='' ExtnECsr2EMailID='' />
+<Extn  ExtnECSR1EmailConfirmFlag='' ExtnECsr1EMailID='' ExtnECSR2EmailConfirmFlag='' ExtnECsr2EMailID=''>
+	<XPXCustomerExtnListList>
+		<XPXCustomerExtnList/>
+	</XPXCustomerExtnListList>
+</Extn>
 <ParentCustomer/>
 </Customer>
 </CustomerList>

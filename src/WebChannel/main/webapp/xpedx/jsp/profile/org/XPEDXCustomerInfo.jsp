@@ -342,14 +342,14 @@ ul.checkboxTree li
       <table id="customerFieldsTable" style="width:100%" class="standard-table">
         <tbody>
           <tr class="table-header-bar no-border">
-          	<td class="no-border table-header-bar-left"width="201"><span class="white txt-small white">Field Name</span></td>
+          	<td class="table-header-bar-left"width="201"><span class="white txt-small white">Field Name</span></td>
           	<td width="357" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small white">Site Label</span></td>
           </tr>
           <s:if test="(#_action.IsCustLinePONoFlag())">
             <tr class="odd" >
               <td >Line PO #: </td>
               	<td valign="top">
-              		<s:textfield id='CustLinePONoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 180px;" name='CustLinePONoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLinePOLbl")}'/>
+              		<s:textfield id='CustLinePONoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 400px;" name='CustLinePONoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLinePOLbl")}'/>
               	</td>
             </tr>
           </s:if>
@@ -360,7 +360,7 @@ ul.checkboxTree li
           <tr>
             <td>Line Account #: </td>
             <td valign="top">
-              		<s:textfield id='CustLineAccNoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 180px;" name='CustLineAccNoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
+              		<s:textfield id='CustLineAccNoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 400px;" name='CustLineAccNoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </td>
            </tr>
 	   </s:if>
@@ -372,7 +372,7 @@ ul.checkboxTree li
             <td >Line Field #1: </td>
             <td valign="top">
             	<s:textfield id='CustLineField1Label' readonly="%{!#_action.IsCustLineField2Flag()}" cssClass="input-details-cart  x-input"
-					maxlength="25" cssStyle="width: 180px;" name='CustLineField1Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField1Label")}'/>
+					maxlength="25" cssStyle="width: 400px;" name='CustLineField1Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField1Label")}'/>
 			</td>
           </tr>
           </s:if>
@@ -384,7 +384,7 @@ ul.checkboxTree li
               <td>Line Field #2: </td>
               <td valign="top">
               <s:textfield id='CustLineField2Label' readonly="%{!#_action.IsCustLineField2Flag()}" cssClass="input-details-cart  x-input"
-						maxlength="25" cssStyle="width: 180px;" name='CustLineField2Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField2Label")}'/>
+						maxlength="25" cssStyle="width: 400px;" name='CustLineField2Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField2Label")}'/>
               </td>
             </tr>
             </s:if>
@@ -396,7 +396,7 @@ ul.checkboxTree li
               <td >Line Field #3: </td>
               <td valign="top">
               	<s:textfield id='CustLineField3Label' readonly="%{!#_action.IsCustLineField3Flag()}" cssClass="input-details-cart  x-input"
-						maxlength="25" cssStyle="width: 180px;" name='CustLineField3Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField3Label")}'/>
+						maxlength="25" cssStyle="width: 400px;" name='CustLineField3Label' size="25" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineField3Label")}'/>
               </td>
             </tr>
             </s:if>
