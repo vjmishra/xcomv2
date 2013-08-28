@@ -33,6 +33,7 @@ public class XPXLiterals {
 	public static final String PB_B_TRANS_TYPE = "PB-B";
 	public static final String UOM_B_TRANS_TYPE = "UOM-B";
 	public static final String ITEM_DIV_B_TRANS_TYPE = "ItemDiv-B";
+	public static final String CUSTOMER_TRANS_TYPE="Customer Maintenance";
 	public static final String YFE_ERROR_VALUE_TOO_LARGE_CLASS = "Column Value Too Large";
 	public static final String YFE_ERROR_INVALID_PRODUCT_CODE_CLASS = "Invalid Legacy Product Number";
 	public static final String IOBE_ERROR_CLASS = "Unexpected / Invalid";

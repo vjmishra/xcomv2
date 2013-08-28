@@ -1028,7 +1028,7 @@ function redrawQuickAddList()
 			    	code += '<td class="col-item" style="color:red" colspan="3" >';
 			    	// TODO -FXD- : make the following line colspan '3' instead of two if the other customer defined fields are shown.
 			    	// ie. stretch into three columns if there are three, or two if there are two
-			    	code += 'Invalid item #. Please review and try again or contact Customer Service.</td>';
+			    	code += 'Invalid item # '+encodeForHTML(QuickAddElems[i].sku)+'. Please review and try again or contact Customer Service.</td>';
 			    	//End Jira 3098
 			    	//code += '<a href="javascript:showSpecialItem(\'' + encodeForHTML(specialDivId) + '\'); ">add it as an Special item</a> </span>';
 			    	

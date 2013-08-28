@@ -14,6 +14,8 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -23,6 +25,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Element;
@@ -41,6 +45,8 @@ import com.yantra.yfc.rcp.YRCLinkBindingData;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCScrolledCompositeListener;
 import com.yantra.yfc.rcp.YRCStyledTextBindingData;
+import com.yantra.yfc.rcp.YRCTableBindingData;
+import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCTextBindingData;
 import com.yantra.yfc.rcp.YRCWizardBehavior;
 import com.yantra.yfc.rcp.YRCXmlUtils;
@@ -528,6 +534,17 @@ IYRCComposite {
 	private Text txtCustLineAcctMsg;
 	private Text txtCustomerLinePONumberMsg;
 	private Label lblCustomerFieldMsg;
+	
+	private Label lblOrderConfirmationAddressList;
+	private Composite pnlOrderConfirmList;
+	private Text txtOrderConfirmationList;	
+	private Composite pnlOrderConfirmListButtons;
+	private Composite pnlOrderConfirmListHolder;	
+	private Button btnAdd;
+	private Button btnRmv;
+	public Table orderConfirmList;
+	private TableColumn tblOrderConfirmListId;
+	
 	public CustomerProfileInfoPanel(Composite parent, int style,
 			Object inputObject, CustomerProfileMaintenance parentObj) {
 		super(parent, style);
@@ -937,7 +954,6 @@ IYRCComposite {
 		lblShipToOverrideFlag.setData("name", "lblShipToOverrideFlag");
 		addTab(gridDataDummy,"dummyShipToOverrideFlag");
 
-
 		addTab(gridData1,"dummyCurrencyCode");
 		lblCurrencyCode = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblCurrencyCode.setText("Currency_Code");
@@ -946,7 +962,45 @@ IYRCComposite {
 		txtCurrencyCode = new Text(pnlCustomerProfileInfo, 2048);
 		txtCurrencyCode.setText("");
 		txtCurrencyCode.setLayoutData(gridData3);
-		txtCurrencyCode.setData("name", "txtCurrencyCode");		
+		txtCurrencyCode.setData("name", "txtCurrencyCode");
+		
+		if("B".equals(suffixType)) 
+		{
+			addTab(gridData1,"dummyOrderConfirmationAddressList");
+			lblOrderConfirmationAddressList = new Label(pnlCustomerProfileInfo, SWT.NONE);
+			lblOrderConfirmationAddressList.setText("Order_Confirmation_Address_List");
+			lblOrderConfirmationAddressList.setLayoutData(gridData2);
+			lblOrderConfirmationAddressList.setData("name", "lblOrderConfirmationAddressList");
+			
+			GridLayout gridLayoutOrdCfrm = new GridLayout(3,false);
+			gridLayoutOrdCfrm.horizontalSpacing = 1;
+			gridLayoutOrdCfrm.verticalSpacing = 5;
+			gridLayoutOrdCfrm.marginHeight = 2;
+			gridLayoutOrdCfrm.marginWidth = 2;
+			
+			GridData gridDataOrdCfrm = new GridData();
+			gridDataOrdCfrm.horizontalAlignment = SWT.BEGINNING;
+			gridDataOrdCfrm.horizontalSpan = 2;
+			gridDataOrdCfrm.verticalIndent = 10;
+			
+			GridData gridData8 = new GridData();
+			gridData8.horizontalAlignment = SWT.BEGINNING;
+			
+			pnlOrderConfirmList = new Composite(pnlCustomerProfileInfo, SWT.NONE);
+			pnlOrderConfirmList.setLayout(gridLayoutOrdCfrm);
+			pnlOrderConfirmList.setLayoutData(gridDataOrdCfrm);
+			pnlOrderConfirmList.setData("name", "pnlOrderConfirmList");
+			
+			txtOrderConfirmationList = new Text(pnlOrderConfirmList, SWT.BORDER);
+			txtOrderConfirmationList.setText("");
+			txtOrderConfirmationList.setLayoutData(gridData8);
+			txtOrderConfirmationList.setTextLimit(500);
+			txtOrderConfirmationList.setData("name", "txtOrderConfirmationList");
+			
+			createPnlOrderConfirmListButtons();
+			createPnlOrderConfirmListHolder();
+			
+		}
 	}
 
 	private void createSiteManagementComposite() {
@@ -2305,9 +2359,22 @@ IYRCComposite {
 			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerItemFlag");
 			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerItemFlag");
 			chkBoxBindingData.setName("chkCustomerItemNo");
-			chkCustomerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			chkCustomerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);			
+
+			YRCTableBindingData tableBindingData = new YRCTableBindingData();
+			YRCTblClmBindingData colBindings1[] = new YRCTblClmBindingData[1];
+			colBindings1[0] = new YRCTblClmBindingData();
+			colBindings1[0].setAttributeBinding("emailAddress");
+			colBindings1[0].setColumnBinding("Email_Address");
+			colBindings1[0].setSortReqd(true);
+			tableBindingData.setSortRequired(true);
+			tableBindingData.setSourceBinding("XPXBillToLevelEmailList:/EmailList/Email");
+			tableBindingData.setName("orderConfirmList");
+			tableBindingData.setTblClmBindings(colBindings1);
+			orderConfirmList.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tableBindingData);
 		}
 		/* XB-759 Code Changes End */
+		
 	}
 
 
@@ -2716,5 +2783,76 @@ IYRCComposite {
 			setControlsEnabled(enableFieldsForMSAP(), true);
 		}
 
+	}
+	
+	private void createPnlOrderConfirmListButtons() {
+		pnlOrderConfirmListButtons = new Composite(pnlOrderConfirmList, 0);
+		pnlOrderConfirmListButtons.setBackgroundMode(0);
+		pnlOrderConfirmListButtons.setData("name", "pnlOrderConfirmListButtons");
+		GridData pnlOrderConfirmListButtonslayoutData = new GridData();
+		pnlOrderConfirmListButtonslayoutData.horizontalAlignment = 4;
+		pnlOrderConfirmListButtons.setLayoutData(pnlOrderConfirmListButtonslayoutData);
+		GridLayout pnlOrderConfirmListButtonslayout = new GridLayout(1, false);
+		pnlOrderConfirmListButtonslayout.marginHeight = 0;
+		pnlOrderConfirmListButtonslayout.marginWidth = 0;
+		pnlOrderConfirmListButtons.setLayout(pnlOrderConfirmListButtonslayout);
+		btnAdd = new Button(pnlOrderConfirmListButtons, 8);
+		GridData btnOrderConfirmationListlayoutData = new GridData();
+		btnOrderConfirmationListlayoutData.horizontalAlignment = SWT.BEGINNING;
+		btnOrderConfirmationListlayoutData.grabExcessHorizontalSpace = true;
+		btnAdd.setLayoutData(btnOrderConfirmationListlayoutData);
+		btnAdd.setText("Btn_Add");
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.addEmail();
+				txtOrderConfirmationList.setFocus();
+			}
+		});
+		btnRmv = new Button(pnlOrderConfirmListButtons, 8);
+		GridData btnRemovelayoutData = new GridData();
+		btnRemovelayoutData.horizontalAlignment = SWT.BEGINNING;
+		btnRmv.setLayoutData(btnRemovelayoutData);
+		btnRmv.setText("Btn_Remove");
+		btnRmv.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.removeEmails();
+			}
+		});
+	}
+	
+	private void createPnlOrderConfirmListHolder() {
+		pnlOrderConfirmListHolder = new Composite(pnlOrderConfirmList, 0);
+		pnlOrderConfirmListHolder.setBackgroundMode(0);
+		pnlOrderConfirmListHolder.setData("name", "pnlOrderConfirmListHolder");
+		GridData pnlOrderConfirmListHolderlayoutData = new GridData();
+		pnlOrderConfirmListHolderlayoutData.horizontalAlignment = 3;
+		pnlOrderConfirmListHolderlayoutData.verticalAlignment = 1;
+		pnlOrderConfirmListHolderlayoutData.grabExcessHorizontalSpace = true;
+		pnlOrderConfirmListHolderlayoutData.widthHint = 300;
+		pnlOrderConfirmListHolderlayoutData.heightHint = 150;
+		pnlOrderConfirmListHolder.setLayoutData(pnlOrderConfirmListHolderlayoutData);
+		GridLayout pnlOrderConfirmListHolderlayout = new GridLayout(1, false);
+		pnlOrderConfirmListHolderlayout.verticalSpacing = 1;
+		pnlOrderConfirmListHolderlayout.marginHeight = 1;
+		pnlOrderConfirmListHolderlayout.marginWidth = 1;
+		pnlOrderConfirmListHolder.setLayout(pnlOrderConfirmListHolderlayout);
+		createOrderConfirmList();
+	}
+	
+	private void createOrderConfirmList() {
+		orderConfirmList = new Table(pnlOrderConfirmListHolder, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		orderConfirmList.setHeaderVisible(true);
+		orderConfirmList.setLinesVisible(true);
+		orderConfirmList.setData("name", "orderConfirmList");
+		GridData orderConfirmListlayoutData = new GridData();
+		orderConfirmListlayoutData.horizontalAlignment = 4;
+		orderConfirmListlayoutData.verticalAlignment = 4;
+		orderConfirmListlayoutData.grabExcessHorizontalSpace = true;
+		orderConfirmListlayoutData.grabExcessVerticalSpace = true;
+		orderConfirmList.setLayoutData(orderConfirmListlayoutData);
+		tblOrderConfirmListId = new TableColumn(orderConfirmList, SWT.NONE);
+		tblOrderConfirmListId.setWidth(300);
+		tblOrderConfirmListId.setResizable(true);
+		tblOrderConfirmListId.setMoveable(true);
 	}
 }

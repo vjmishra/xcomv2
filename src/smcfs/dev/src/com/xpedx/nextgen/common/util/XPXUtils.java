@@ -2181,8 +2181,12 @@ public class XPXUtils implements YIFCustomApi {
 				"CustomerPONo");
 		String orderNo = inputDocument.getDocumentElement().getAttribute(
 				"OrderNo");
-		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));		
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat("Order Submitted Notification "));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));
+		}
 		
 		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);
 		YFCElement orderElem = inDoc.getDocumentElement();
@@ -2226,8 +2230,12 @@ public class XPXUtils implements YIFCustomApi {
 		String brand = orderElement.getAttribute("SellerOrganizationCode");
 		String customerPO = orderElement.getAttribute("CustomerPONo");		
 		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
-		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(orderStatusSubjectLine));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		}
 		
 		if(!YFCObject.isVoid(customerPO))
 		{

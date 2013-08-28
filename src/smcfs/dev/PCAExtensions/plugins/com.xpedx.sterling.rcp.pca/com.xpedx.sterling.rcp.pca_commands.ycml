@@ -116,6 +116,7 @@
             <command APIName="getCommonCodeList" APIType="API" Name="XPXGetBrandCodeList" URL="" inputNamespace="Input_XPXGetBrandCodeList" outputNamespace="XPXGetBrandCodeList" postCommand="" preCommand=""/>
             <command APIName="getCommonCodeList" APIType="API" Name="XPXGetInvoiceDistMethodCodeList" URL="" inputNamespace="Input_XPXGetInvoiceDistMethodCodeList"
                 outputNamespace="XPXGetInvoiceDistMethodCodeList" postCommand="" preCommand=""/>
+            <command APIName="XPXManageCustomerExtnList" APIType="SERVICE" Name="XPXManageCustomerExtnList" OutputTemplateName="" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
@@ -332,7 +333,7 @@
                 URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="XPXManageCustomerAndAssignmentAPIService" APIType="SERVICE" Name="XPXManageCustomerAndAssignmentAPIService" OutputTemplateName="multiApi" URL="DEFAULT" inputNamespace=""
                 outputNamespace="" postCommand="" preCommand="" version="ver77"/>
-			<command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
             <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
             <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
                 inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
