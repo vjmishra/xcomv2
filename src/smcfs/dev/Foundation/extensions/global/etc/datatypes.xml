@@ -57,4 +57,5 @@
 		    <DataType Name="Text-55" Size="55" Type="NVARCHAR"/>
 			<DataType Name="Text-60" Size="60" Type="NVARCHAR"/>
 	<DataType Name="DivisionNo" Size="1800" Type="NCHAR" />
+	<DataType Name="NUMBER-3" Size="3" Type="NUMBER"/>
 </DataTypes>

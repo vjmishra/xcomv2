@@ -6,6 +6,9 @@
 			<YFSUser/>
 		</XPEDXSalesRep>
 	</XPEDXSalesRepList>
+	<XPXCustomerExtnListList>
+		<XPXCustomerExtnList/>
+	</XPXCustomerExtnListList>
 </Extn>
 <CustomerAdditionalAddressList>
 	<CustomerAdditionalAddress>
