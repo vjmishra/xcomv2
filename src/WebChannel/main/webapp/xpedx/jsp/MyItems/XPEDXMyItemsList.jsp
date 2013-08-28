@@ -1259,8 +1259,8 @@
 </div>
 <!-- end main  -->
 
-<!-- CODE_START Footer -PN --><!--EB-519-->
-<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
+<!-- CODE_START Footer -PN -->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- CODE_END Footer -PN -->
 
 </div>
@@ -1311,8 +1311,5 @@ isFirstDesc=true;
 <script type="text/javascript" src="../js/fancybox/jquery.fancybox-1.3.4.js"></script>-->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<!-- CODE_START Footer -PN --><!--EB-519-->
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-<!-- CODE_END Footer -PN -->
 </body>
 </html>

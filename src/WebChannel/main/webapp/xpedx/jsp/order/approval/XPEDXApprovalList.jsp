@@ -613,8 +613,8 @@
 	
 	</div><!-- end second container div-->
         </div>
-	<!-- begin footer --><!--EB-519-->
-   <!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
+	<!-- begin footer -->
+   <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
 		 <swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 
 		
@@ -713,9 +713,7 @@
 	}
 	
     </script>
-        <!-- begin footer --><!--EB-519-->
-   <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-<!-- // footer end -->
+     
 </body>
 
 
