@@ -16,6 +16,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -2760,4 +2761,21 @@ public class XPXUtils implements YIFCustomApi {
         bfr.close();
         return(map);
     }
+	
+	/**
+	 * @param applyMinimumOrderBrands The comma-delimited list of brands that apply minimum order charge.
+	 * @param storefrontId
+	 * @return Returns true if minimum order charge should be applied; false otherwise.
+	 */
+	public static boolean isApplyMinimumOrderChargeForBrand(String applyMinimumOrderBrands, String storefrontId) {
+		if (applyMinimumOrderBrands == null || storefrontId == null) {
+			return false;
+		}
+		
+		// database stores storefrontId as uppercase and truncated at 4 characters (eg, "XPED,SAAL")
+		//		so we can uppercase and truncate the storefrontId
+		String searchKey = storefrontId.length() > 4 ? storefrontId.substring(0, 4) : storefrontId;
+		searchKey = searchKey.toUpperCase();
+		return applyMinimumOrderBrands.contains(searchKey);
+	}
 }

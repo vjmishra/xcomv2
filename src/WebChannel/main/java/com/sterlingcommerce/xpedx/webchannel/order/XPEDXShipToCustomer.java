@@ -396,16 +396,16 @@ public String getShipToDivdeliveryInfo() {
 	private XPEDXShipToCustomer defaultShipToCustomer;
 	private String extnAllowDirectOrderFlag;
 	private String extnPriceWareHouse;
-	private String shipToOrgExtnApplyMinOrderCharge;
+	private String shipToOrgExtnApplyMinOrderBrands;
 	
 	
-	public String getShipToOrgExtnApplyMinOrderCharge() {
-		return shipToOrgExtnApplyMinOrderCharge;
+	public String getShipToOrgExtnApplyMinOrderBrands() {
+		return shipToOrgExtnApplyMinOrderBrands;
 	}
-	public void setShipToOrgExtnApplyMinOrderCharge(
-			String shipToOrgExtnApplyMinOrderCharge) {
-		this.shipToOrgExtnApplyMinOrderCharge = shipToOrgExtnApplyMinOrderCharge;
+	public void setShipToOrgExtnApplyMinOrderBrands(String shipToOrgExtnApplyMinOrderBrands) {
+		this.shipToOrgExtnApplyMinOrderBrands = shipToOrgExtnApplyMinOrderBrands;
 	}
+	
 	public String getExtnShipToSuffix() {
 		return ExtnShipToSuffix;
 	}
@@ -523,7 +523,7 @@ public String getShipToDivdeliveryInfo() {
 			String rootCustomerKey, String customerKey,
 			String buyerOrganizationCode,
 			XPEDXShipToCustomer defaultShipToCustomer,
-			String extnAllowDirectOrderFlag, String extnMaxOrderAmount, String shipToOrgExtnApplyMinOrderCharge) {
+			String extnAllowDirectOrderFlag, String extnMaxOrderAmount, String shipToOrgExtnApplyMinOrderBrands) {
 		FirstName = firstName;
 		MiddleName = middleName;
 		LastName = lastName;
@@ -582,7 +582,7 @@ public String getShipToDivdeliveryInfo() {
 		this.defaultShipToCustomer = defaultShipToCustomer;
 		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 		this.extnMaxOrderAmount = extnMaxOrderAmount;
-		this.shipToOrgExtnApplyMinOrderCharge=shipToOrgExtnApplyMinOrderCharge;
+		this.shipToOrgExtnApplyMinOrderBrands=shipToOrgExtnApplyMinOrderBrands;
 	}
 	
 	public Object clone() throws CloneNotSupportedException
@@ -614,7 +614,7 @@ public String getShipToDivdeliveryInfo() {
 				 rootCustomerKey,  customerKey,
 				 buyerOrganizationCode,
 				 defaultShipToCustomer,
-				extnAllowDirectOrderFlag,  extnMaxOrderAmount, shipToOrgExtnApplyMinOrderCharge);
+				extnAllowDirectOrderFlag,  extnMaxOrderAmount, shipToOrgExtnApplyMinOrderBrands);
 		
 		return shipToCustomer;
 	}
