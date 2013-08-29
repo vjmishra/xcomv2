@@ -44,7 +44,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
     /** Added by Arun Sekhar on 13-April-2011 for Email templates **/
     String orderNo = "";
     String orderBranch = "";
-    String orderconfSubjecline="";
+    String orderconfSubjectline="";
     static String extnCustLineAccLbl="";
     static String extnCustLinePOLbl="";
     private static YFCLogCategory yfcLogCatalog;
@@ -236,7 +236,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         stampLegacyOrderNoOnCustomerOrderLine(env, customerDoc,orderListOutput);
  
         /******* Added by Arun Sekhar on 28-April-2011 *******/
-         orderconfSubjecline=utilObj.stampOrderSubjectLine(env, customerDoc);
+         orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc);
         yfcLogCatalog.debug("inputDocument with SubjectLine: "
                 + SCXmlUtil.getString(customerDoc));
  
@@ -583,7 +583,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 		}
 
 
-        StringBuffer emailSubject = new StringBuffer(orderconfSubjecline);
+        StringBuffer emailSubject = new StringBuffer(orderconfSubjectline);
        // emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);
         XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject.toString(), emailFrom, emailOrgCode,businessIdentifier);
         /*XB-461 : End - Sending email through Java Mail API now*/
@@ -1061,7 +1061,23 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
                     customerDoc.getDocumentElement().setAttribute(
                             "strExtnECsr2EMailID", strExtnECsr2EMailID);
                 }
- 
+                
+                StringBuilder billToCustomerEmailList = new StringBuilder();
+                Element custExtnListParentElement = SCXmlUtil.getChildElement(custExtnElement, "XPXCustomerExtnListList");
+                List<Element> custExtnChildrenList=SCXmlUtil.getChildren(custExtnListParentElement, "XPXCustomerExtnList");                
+                int size = custExtnChildrenList.size();
+                for(Element custExtnListChildElement : custExtnChildrenList) {
+                	String emailAddress=custExtnListChildElement.getAttribute("ExtnListValue");
+                	if(!YFCObject.isVoid(emailAddress)) {
+                		if (--size == 0) {//Last item
+                			billToCustomerEmailList.append(emailAddress);
+                		} else {
+                			billToCustomerEmailList.append(emailAddress).append(",");
+                		}
+                	}                	
+                	
+                }
+                customerDoc.getDocumentElement().setAttribute("billToCustomerEmailList", billToCustomerEmailList.toString());
             }
  
             NodeList parentCustNodeList = custListDoc.getElementsByTagName("ParentCustomer");

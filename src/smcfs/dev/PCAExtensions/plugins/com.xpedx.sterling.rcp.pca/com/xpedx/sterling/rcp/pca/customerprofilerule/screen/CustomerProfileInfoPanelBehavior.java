@@ -5,21 +5,28 @@
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.customerprofilerule.editor.XPXCustomerProfileRuleEditor;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCValidationResponse;
 import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 /**
@@ -32,12 +39,12 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 
 	private CustomerProfileInfoPanel page;
-	private Element customerElementBeforeUpdate;
 	private Element targetRulesModel;
 	private Element inputElement;
 	private String customerKey;
 	private String suffixType;
 	private CustomerProfileMaintenance parentObj;
+	private List<String> newEmailList;
 
 	/**
 	 * Constructor for the behavior class.
@@ -53,6 +60,7 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 		setModel("PrimarySalesRepList",parentObj.getBehavior().getLocalModel("PrimarySalesRepList"));
 		setModel("XPXUseSKUList", YRCXmlUtils.createFromString("<UseSKUList><UseSKU Code='1' Description='Customer Item#' /><UseSKU Code='2' Description='Manufacturer Item#' /><UseSKU Code='3' Description='MPC SKU' /></UseSKUList>").getDocumentElement());
 		setModel("XPXCustomerIn",generalInfo);
+		setModel("XPXBillToLevelEmailList",parentObj.getBehavior().getLocalModel("XPXBillToLevelEmailList"));
 		customerKey = YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
 		suffixType = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(generalInfo, "/CustomerList/Customer/Extn"), "ExtnSuffixType");
 		initPage();
@@ -104,9 +112,12 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 					if(!YRCPlatformUI.isVoid(outXml))
 					{
 						parentObj.getBehavior().setCustomerDetails(outXml);
+						String suffixType = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer/Extn"), "ExtnSuffixType");
+						if ("B".equals(suffixType)) {
+							parentObj.getBehavior().createModelForAdditionalEmails(outXml);
+						}
 						parentObj.refreshTabs(true);
 					}
-					
 					//repopulateModel(arg0)
 					//customerElementBeforeUpdate = outXml;
 					//setModel("XPXCustomerIn",outXml);
@@ -120,7 +131,12 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 					setModel("XPXManageCustomer_output", outXml);
 					YRCPlatformUI.setMessage("UPDATE_STATUS_MESSAGE");
 					//page.clearPage();
-					this.reInitPage();
+					if("B".equals(suffixType)) {						
+						callManageCustomerExtnListService();
+					
+					} else {
+						this.reInitPage();
+					}
 				}
 				if ("XPXGetBrandCodeList".equals(ctx.getApiName())) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
@@ -129,7 +145,11 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 				if ("XPXGetInvoiceDistMethodCodeList".equals(ctx.getApiName())) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
 					updateModelWithInvoiceDistMthds(outXml);
-				}	
+				}
+				
+				if("XPXManageCustomerExtnList".equals(ctx.getApiName())) {
+					this.reInitPage();					
+				}
 				((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 			}
 		}//In case of Invoke API failure
@@ -179,6 +199,7 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 	public void updateProfile() {
 		if(!validateFieldsBeforeUpdate())
 			return;
+		
 		targetRulesModel = this.getTargetModel("XPXCustomerOut");
 		targetRulesModel.setAttribute("CustomerKey", customerKey);
 		targetRulesModel = prepareInputWithCustomerInfo(targetRulesModel);
@@ -187,11 +208,9 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 		String eCSR1LoginId="";
 		String eCSR2LoginId="";
 		if(!page.comboECSR.isDisposed()){
-		 eCSREmail1= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR") +"']/ContactPersonInfo/@EMailID", XPathConstants.STRING);
-		
-		eCSREmail2= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR2") +"']/ContactPersonInfo/@EMailID", XPathConstants.STRING);
-		
-		eCSR1LoginId= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR") +"']/@Loginid",XPathConstants.STRING);
+			eCSREmail1= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR") +"']/ContactPersonInfo/@EMailID", XPathConstants.STRING);			
+			eCSREmail2= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR2") +"']/ContactPersonInfo/@EMailID", XPathConstants.STRING);			
+			eCSR1LoginId= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR") +"']/@Loginid",XPathConstants.STRING);
 		}
 		if(!page.comboECSR2.isDisposed())
 		eCSR2LoginId= (String)YRCXPathUtils.evaluate(this.getModel("XPXGetUserList"), "/UserList/User[@UserKey='"+ getFieldValue("comboECSR2") +"']/@Loginid",XPathConstants.STRING);
@@ -200,6 +219,7 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 		YRCXmlUtils.setAttributeValue(targetRulesModel, "/Customer/Extn/@ExtnECSR",eCSR1LoginId );
 		YRCXmlUtils.setAttributeValue(targetRulesModel, "/Customer/Extn/@ExtnECSR2",eCSR2LoginId);
 		callUpdateApi();		
+		
 	}	
 	private Element prepareInputWithCustomerInfo(Element targetRulesModel2) {
 		if ("".equals(this.page.getCustomerAdditionalAddressKey())) {
@@ -238,20 +258,38 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 			.getXPathElement(targetRulesModel2,
 					"/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress")
 			.setAttribute("CustomerAdditionalAddressKey", this.page.getCustomerAdditionalAddressKey());			
-		}
-		// TODO Auto-generated method stub
+		}	
+		
 		return targetRulesModel2;
 	}
 	public void callUpdateApi() {
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setApiName("manageCustomer");
+		ctx.setInputXml(targetRulesModel.getOwnerDocument());
+		ctx.setFormId(page.getFormId());
+		ctx.setShowError(false);
+		ctx.setUserData("isRefreshReqd", String.valueOf(false));
+		callApi(ctx, page);
+		((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+	}
+	
+	public void callManageCustomerExtnListService() {
+		if(isEmailListUpdated()) { 
+			Element customerExtnListInEle = prepareInputForXPXCustomerExtnList();
 			YRCApiContext ctx = new YRCApiContext();
-			ctx.setApiName("manageCustomer");
-			ctx.setInputXml(targetRulesModel.getOwnerDocument());
+			ctx.setApiName("XPXManageCustomerExtnList");
+			ctx.setInputXml(customerExtnListInEle.getOwnerDocument());
 			ctx.setFormId(page.getFormId());
 			ctx.setShowError(false);
 			ctx.setUserData("isRefreshReqd", String.valueOf(false));
-			callApi(ctx, page);
-			((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
+			callApi(ctx, page);			
+		
+		} else {
+			this.reInitPage();
+		}
+		((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
 	}
+	
 	public String getSuffixType(){
 		return suffixType;
 	}
@@ -390,4 +428,120 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 	        newCustomerElement.setAttribute("CustomerType","01");
 	        return newCustomerElement;
 	}
+	
+	public void addEmail(){
+		String enteredEmail = getFieldValue("txtOrderConfirmationList");
+		Element tempEmailList = getModel("XPXBillToLevelEmailList");
+		NodeList nodeList = tempEmailList.getElementsByTagName("Email");
+		String strAddressAttrName = "emailAddress";
+		if(XPXUtils.validateEmail(enteredEmail))
+        {
+			if(this.doesEmailExistAlready(enteredEmail, nodeList, strAddressAttrName)){
+				setFieldInError("txtOrderConfirmationList", new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_ERROR,"Email Already Exists."));
+	        	String exception = "This Email Already Exists.";
+	        	YRCPlatformUI.showError("Error", exception);
+	        	return ;
+			} else{
+				if(!YRCPlatformUI.isVoid(enteredEmail)){
+					Element optionEle = YRCXmlUtils.createChild(tempEmailList, "Email");
+					optionEle.setAttribute("emailAddress", enteredEmail);
+					setFieldValue("txtOrderConfirmationList", "");
+				}
+				setModel("XPXBillToLevelEmailList", tempEmailList);
+				setFieldInError("txtOrderConfirmationList", new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_ERROR,"Email ID added."));
+			}
+	    }
+        else
+        {	
+        	setFieldInError("txtOrderConfirmationList", new YRCValidationResponse(YRCValidationResponse.YRC_VALIDATION_ERROR,"Invalid Email ID"));
+        	String exception = "Invalid Email Format.";
+        	YRCPlatformUI.showError("Error", exception);
+        }
+    }
+	
+	private boolean doesEmailExistAlready(String enteredEmail,
+		NodeList nodeList, String strAddressAttrName) {
+		int length = nodeList.getLength();
+		int count = 0;
+		boolean emailMatchExists = false;
+		for (count = 0; count < length; count++) {
+			Element assignElement = (Element) nodeList.item(count);
+			String currentString = assignElement
+					.getAttribute(strAddressAttrName);
+			if (enteredEmail.equals(currentString)) {
+				emailMatchExists = true;
+			}
+		}
+		return emailMatchExists;
+	}
+	
+	public void removeEmails(){
+		Element tempEmailList = getModel("XPXBillToLevelEmailList");
+		Table temp2 = page.orderConfirmList;
+		
+        for(int i = temp2.getSelectionCount() - 1; i >= 0; i--)
+        {
+            TableItem ti = temp2.getItem(temp2.getSelectionIndices()[i]);
+            if(!YRCPlatformUI.isVoid(ti))
+            {
+                Element emailEle = (Element)ti.getData();
+                tempEmailList.removeChild(emailEle);
+                
+            }
+        }
+        setModel("XPXBillToLevelEmailList", tempEmailList);        
+	}	
+	
+	private boolean isEmailListUpdated() {
+		addAddnlEmailListToOutXml();
+		
+		if ((parentObj.getBehavior().getExistingEmailList()==null && newEmailList==null) || 
+		    (parentObj.getBehavior().getExistingEmailList()!= null && parentObj.getBehavior().getExistingEmailList().size()== 0 && newEmailList!=null && newEmailList.size()==0) || 
+		    (parentObj.getBehavior().getExistingEmailList().containsAll(newEmailList) && newEmailList.containsAll(parentObj.getBehavior().getExistingEmailList())))
+		{			
+			return false;
+		}
+		
+		return true;
+	}	
+	
+	private List<String> addAddnlEmailListToOutXml() {
+		newEmailList = new ArrayList<String>();
+		Element eleEmailList = getModel("XPXBillToLevelEmailList");
+		NodeList nl1= eleEmailList.getElementsByTagName("Email");
+		for(int counter=0;counter < nl1.getLength(); counter ++) {
+			Element emailElement = (Element)nl1.item(counter);
+			String emailAddress = emailElement.getAttribute("emailAddress");
+			if(!YRCPlatformUI.isVoid(emailAddress)) {
+				newEmailList.add(emailAddress);
+				
+			}		
+		}	
+		return newEmailList;
+	}
+	
+	private Element prepareInputForXPXCustomerExtnList() {
+		Element manageCustExtnListEle = YRCXmlUtils.createFromString("<XPXManageCustomerExtnList/>").getDocumentElement();		
+		
+		List<String> emailsToAdd = new ArrayList<String>(newEmailList);
+		emailsToAdd.removeAll(parentObj.getBehavior().getExistingEmailList());
+		for(String toAddEmailAddress : emailsToAdd) {
+			Element emailListEle=YRCXmlUtils.createChild(manageCustExtnListEle, "XPXCustomerExtnList");
+			emailListEle.setAttribute("Operation", "Create");
+			emailListEle.setAttribute("CustomerKey", customerKey);
+			emailListEle.setAttribute("ExtnListValue", toAddEmailAddress);
+			emailListEle.setAttribute("ExtnListType", "ORDER_CONFIRMATION_EMAIL");
+		}
+		List<String> emailsToDelete = new ArrayList<String>(parentObj.getBehavior().getExistingEmailList());
+		emailsToDelete.removeAll(newEmailList);
+		for(String toDeleteEmailAddress : emailsToDelete) {
+			Element emailListEle=YRCXmlUtils.createChild(manageCustExtnListEle, "XPXCustomerExtnList");
+			emailListEle.setAttribute("Operation", "Delete");
+			emailListEle.setAttribute("ExtnListValue", toDeleteEmailAddress);
+			emailListEle.setAttribute("CustomerExtnListKey", parentObj.getBehavior().getEmailMap().get(toDeleteEmailAddress));
+		}	
+		
+		return manageCustExtnListEle;
+	}
+	
 }

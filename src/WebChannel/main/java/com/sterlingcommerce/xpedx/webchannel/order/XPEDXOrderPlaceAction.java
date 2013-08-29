@@ -531,7 +531,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public void setOrderPlaceYFSEnvironmentVariables(IWCContext wcContext,Document customerListDoc, Element orderHoldTypeElement ) 
 	{
 			Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
-			HashMap map = new HashMap<String, String>();
+			HashMap<String, Object> map = new HashMap<String, Object>();
 			if(orderHoldTypeElement!=null){
 				map.put("ApplyHoldonOrderDoc",orderHoldTypeElement);
 				
@@ -561,7 +561,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				map.put("ExtnMaxOrderAmount",minAmount.get(0));
 				map.put("ExtnMinOrderAmount",minAmount.get(1));
 				map.put("ExtnChargeAmount",minAmount.get(2));
-				map.put("ExtnApplyMinOrderCharge", minAmount.get(3));
+				map.put("ExtnApplyMinOrderBrands", minAmount.get(3));
 			}
 			XPEDXWCUtils.removeObectFromCache("ORDER_PLACE_CHNAGE_ORDER_DOC_MAP");
 			XPEDXWCUtils.removeObectFromCache("INVENTORY_INDICATOR_MAP");
@@ -579,14 +579,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		float minOrderAmount=0;
 		float chargeAmount=0;
 		String shipFromDivision="";
-		String applyMinOrderCharge=null;
+		String applyMinOrderBrands=null;
 		
 		ArrayList<String> retVal=new ArrayList<String>();
 		
 		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if(shipToCustomer!=null)
 		{
-			applyMinOrderCharge=shipToCustomer.getShipToOrgExtnApplyMinOrderCharge();
+			applyMinOrderBrands=shipToCustomer.getShipToOrgExtnApplyMinOrderBrands();
 		}
 		
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
@@ -694,7 +694,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
 											//Added For Jira 3465
 											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
-											shipToCustomer.setShipToOrgExtnApplyMinOrderCharge(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge"));
+											shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
 											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 										} catch (CannotBuildInputException e) {
 											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
@@ -712,7 +712,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 												chargeAmount = Float.parseFloat(chargeAmountStr);
 										}
 									}
-									applyMinOrderCharge=(applyMinOrderCharge!=null && applyMinOrderCharge.trim().length()>0 ? applyMinOrderCharge : shipToCustomer.getShipToOrgExtnApplyMinOrderCharge());
+									applyMinOrderBrands=(applyMinOrderBrands!=null && applyMinOrderBrands.trim().length()>0 ? applyMinOrderBrands : shipToCustomer.getShipToOrgExtnApplyMinOrderBrands());
 									
 							}
 						}
@@ -727,7 +727,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		retVal.add(""+maxOrderAmountFloat);
 		retVal.add(""+minOrderAmount);
 		retVal.add(""+chargeAmount);
-		retVal.add(applyMinOrderCharge!=null?applyMinOrderCharge:"");
+		retVal.add(applyMinOrderBrands!=null?applyMinOrderBrands:"");
 		
 		return retVal;
 		

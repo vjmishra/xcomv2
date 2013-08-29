@@ -342,7 +342,7 @@ ul.checkboxTree li
       <table id="customerFieldsTable" style="width:100%" class="standard-table">
         <tbody>
           <tr class="table-header-bar no-border">
-          	<td class="no-border table-header-bar-left"width="201"><span class="white txt-small white">Field Name</span></td>
+          	<td class="table-header-bar-left"width="209"><span class="white txt-small white">Field Name</span></td>
           	<td width="357" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small white">Site Label</span></td>
           </tr>
           <s:if test="(#_action.IsCustLinePONoFlag())">

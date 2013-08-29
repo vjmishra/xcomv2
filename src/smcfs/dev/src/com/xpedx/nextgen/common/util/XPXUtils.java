@@ -2288,19 +2288,8 @@ public class XPXUtils implements YIFCustomApi {
 			log.debug("stampSubjectLine_UserProfChange()_OutXML: "+ SCXmlUtil.getString(inputDocument));
 		}
 		String inputXML=SCXmlUtil.getString(inputDocument);
-		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;
-		//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding
-		String emailFrom=null;
-				if((inputDocument.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(inputDocument.getDocumentElement().getAttribute("EnterpriseCode")) ))// no need to check for seller organization code
-
-		{
-
-			emailFrom = YFSSystem.getProperty("saalFeldEMailFromAddresses");// new attribute defined in customer_overides properties…
-		} else {
-
-			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
-
-		}
+		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;		
+		String emailFrom = YFSSystem.getProperty("EMailFromAddresses");
 			
 		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
@@ -2520,6 +2509,11 @@ public class XPXUtils implements YIFCustomApi {
 			{
 				String userName = YFSSystem.getProperty("fromAddress.username");
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
+				//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding 
+				if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+				}
+				else
 				sb.append(userName).append("@").append(storeFrontId).append(suffix);
 				
 				String resetSubString = storeFrontId + ".com" + " Password Reset Request Notification ";
@@ -2604,6 +2598,9 @@ public class XPXUtils implements YIFCustomApi {
 			// fetching the server and port details for the email template.
 			String url = null;
 			String ipaddress = YFSSystem.getProperty("ipaddress");
+			
+			
+			
 			String portno = YFSSystem.getProperty("portnumber");
 			String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
 			
@@ -2780,4 +2777,21 @@ public class XPXUtils implements YIFCustomApi {
         bfr.close();
         return(map);
     }
+	
+	/**
+	 * @param applyMinimumOrderBrands The comma-delimited list of brands that apply minimum order charge.
+	 * @param storefrontId
+	 * @return Returns true if minimum order charge should be applied; false otherwise.
+	 */
+	public static boolean isApplyMinimumOrderChargeForBrand(String applyMinimumOrderBrands, String storefrontId) {
+		if (applyMinimumOrderBrands == null || storefrontId == null) {
+			return false;
+		}
+		
+		// database stores storefrontId as uppercase and truncated at 4 characters (eg, "XPED,SAAL")
+		//		so we can uppercase and truncate the storefrontId
+		String searchKey = storefrontId.length() > 4 ? storefrontId.substring(0, 4) : storefrontId;
+		searchKey = searchKey.toUpperCase();
+		return applyMinimumOrderBrands.contains(searchKey);
+	}
 }
