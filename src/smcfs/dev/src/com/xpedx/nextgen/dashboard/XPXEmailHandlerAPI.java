@@ -1062,13 +1062,18 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
                             "strExtnECsr2EMailID", strExtnECsr2EMailID);
                 }
                 
-                Element custExtnListParentElement = SCXmlUtil.getChildElement(custExtnElement, "XPXCustomerExtnListList");
-                List<Element> custExtnChildrenList=SCXmlUtil.getChildren(custExtnListParentElement, "XPXCustomerExtnList");
                 StringBuilder billToCustomerEmailList = new StringBuilder();
+                Element custExtnListParentElement = SCXmlUtil.getChildElement(custExtnElement, "XPXCustomerExtnListList");
+                List<Element> custExtnChildrenList=SCXmlUtil.getChildren(custExtnListParentElement, "XPXCustomerExtnList");                
+                int size = custExtnChildrenList.size();
                 for(Element custExtnListChildElement : custExtnChildrenList) {
                 	String emailAddress=custExtnListChildElement.getAttribute("ExtnListValue");
                 	if(!YFCObject.isVoid(emailAddress)) {
-                		billToCustomerEmailList.append(emailAddress).append(",");
+                		if (--size == 0) {//Last item
+                			billToCustomerEmailList.append(emailAddress);
+                		} else {
+                			billToCustomerEmailList.append(emailAddress).append(",");
+                		}
                 	}                	
                 	
                 }
