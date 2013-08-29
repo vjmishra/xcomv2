@@ -160,7 +160,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	        }
         
         } else {
-        	if("ProductIdValue".equals(getSearchFieldName()))
+        	if("ProductIdValue".equals(getSearchFieldName()) || "PurchaseOrderNumberValue".equalsIgnoreCase(getSearchFieldName()))
 	        {
 				rootElementName="XPEDXOrderSearchLineListView";
 				MASHUP_NAME="XPEDXOrderLineList";

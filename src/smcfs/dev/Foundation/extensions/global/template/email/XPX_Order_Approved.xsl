@@ -597,26 +597,26 @@
 				</tr>
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table class="price" width="100%">
+				<table  width="100%" >
 				<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-								<thead >
-				<th> </th>
-				<th> </th>
-				<th> </th>
-				<th valign="top" class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
-				<th class="right" >Shippable Price (USD)</th> <!-- The currency code on this line is dynamic.-->
-				<th class="right" >Extended Price (USD)</th> <!-- The currency code on this line is dynamic.-->
-                </thead>
+								<thead>
+									<th  bgcolor="#003399" > </th>
+									<th  bgcolor="#003399"> </th>
+									<th  bgcolor="#003399"> </th>
+									<th valign="top" class="right"  bgcolor="#003399" color="#fff"><font color="#fff"> My Price (USD) </font></th> <!-- The currency code on this line is dynamic.-->
+									<th    class="right"  bgcolor="#003399" color="#fff"><font color="#fff">Shippable Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
+									<th    class="right"  bgcolor="#003399" color="#fff"><font color="#fff"> Extended Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
+					                </thead>
 						</xsl:if>
 						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-								<thead class="table.saalfeldprice">
-				<th> </th>
-				<th> </th>
-				<th> </th>
-				<th valign="top" class="right"> My Price (USD) </th> <!-- The currency code on this line is dynamic.-->
-				<th class="right" >Shippable Price (USD)</th> <!-- The currency code on this line is dynamic.-->
-				<th class="right" >Extended Price (USD)</th> <!-- The currency code on this line is dynamic.-->
-                </thead>
+												<thead>
+								<th  bgcolor="##084823" > </th>
+								<th  bgcolor="##084823"> </th>
+								<th  bgcolor="##084823"> </th>
+								<th valign="top" class="right"  bgcolor="##084823" color="#fff"><font color="#fff"> My Price (USD) </font></th> <!-- The currency code on this line is dynamic.-->
+								<th    class="right"  bgcolor="##084823" color="#fff"><font color="#fff">Shippable Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
+								<th    class="right"  bgcolor="##084823" color="#fff"><font color="#fff"> Extended Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
+				                </thead>
 				</xsl:if>			
 			<xsl:for-each select="Order/OrderLines/OrderLine">						  
 								<xsl:sort select="Extn/@ExtnLegacyLineNumber"/>
