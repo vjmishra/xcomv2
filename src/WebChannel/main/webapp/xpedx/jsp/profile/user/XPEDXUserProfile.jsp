@@ -2124,22 +2124,22 @@ a.underlink:hover {
 													</s:if>
 													<s:else>
 														<td colspan="3" class="no-border-right-user"><s:if
-																test='%{isInUserGroup("BUYER-USER")}'>Buyer </s:if> <s:if
+																test='%{isInUserGroup("BUYER-USER")}'>Buyer</s:if> <s:if
 																test='%{isInUserGroup("BUYER-APPROVER")}'>
-			Approver 
+			, Approver
 			<s:hidden name="buyerApprover" id='buyerApprover'
 																	value='%{isInUserGroup("BUYER-APPROVER")}'></s:hidden>
 															</s:if> <s:if test='%{#estimator=="Y"}'>
-			Estimator 
+			, Estimator
 			<s:hidden name='estimator' value='%{true}' />
 															</s:if> <s:if test='%{#viewInvoices=="Y"}'>
-			View Invoices 
+			, View Invoices			
 			<s:hidden name='viewInvoices' value='%{true}' />
 															</s:if> <s:if test='%{isViewPrices()}'> 
-			View Prices 
+			, View Prices
 			<s:hidden name='viewPrices' value='%{true}' />
 															</s:if> <s:if test='%{isViewReports()}'>
-			View Reports 
+			, View Reports
 			<s:hidden name='viewReports' value='%{true}' />
 															</s:if></td>
 													</s:else>
