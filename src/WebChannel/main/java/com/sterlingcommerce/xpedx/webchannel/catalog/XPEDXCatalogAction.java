@@ -1281,7 +1281,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				YFCElement documentElement = inputDocument.getDocumentElement();
 
 				documentElement.setAttribute("CustomerID", customerId);
-				documentElement.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+				
+				// workaround for eb-2035: hard-code 'xpedx' storefrontId here due to brand-specific records in the yfs_item_uom_master table
+				//							this avoids duplicating UOMs per brand in the Sterling configuration, which is not desired as of August 2013
+//				documentElement.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+				documentElement.setAttribute("OrganizationCode", "xpedx");
 				
 				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
 				YFCElement complexQueryOrElement = documentElement.createChild("Or");
