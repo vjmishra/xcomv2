@@ -720,6 +720,12 @@
                         <Input>
                             <XPEDXOrderSearchLineListView  DraftOrderFlag="N" DocumentType="0001"
                                 EnterpriseCode="" >
+                                 <ComplexQuery Operator="AND">
+                                <Or>
+									<Exp Name="CustomerLinePONo" Value="" />
+									<Exp Name="CustomerPONo" Value="" />
+								</Or>
+                                </ComplexQuery>
                                 <OrderBy>
                                     <Attribute Desc="N" Name="Modifyts" />
                                 </OrderBy>
