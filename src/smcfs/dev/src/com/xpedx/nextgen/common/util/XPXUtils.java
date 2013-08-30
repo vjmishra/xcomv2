@@ -2227,7 +2227,7 @@ public class XPXUtils implements YIFCustomApi {
 	public void stampOrderChangeStatusSubjectLine(YFSEnvironment env,
 			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
 		
-		String brand = orderElement.getAttribute("SellerOrganizationCode");
+		String brand = orderElement.getAttribute("EnterpriseCode");
 		String customerPO = orderElement.getAttribute("CustomerPONo");		
 		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
 		StringBuilder _subjectLine = null;
@@ -2793,5 +2793,38 @@ public class XPXUtils implements YIFCustomApi {
 		String searchKey = storefrontId.length() > 4 ? storefrontId.substring(0, 4) : storefrontId;
 		searchKey = searchKey.toUpperCase();
 		return applyMinimumOrderBrands.contains(searchKey);
+	}
+	
+	
+	public String getOrderStatusSubjectLine(YFSEnvironment env,
+			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
+		
+		String brand = orderElement.getAttribute("EnterpriseCode");
+		String customerPO = orderElement.getAttribute("CustomerPONo");		
+		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(orderStatusSubjectLine));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		}
+		
+		if(!YFCObject.isVoid(customerPO))
+		{
+			_subjectLine.append(" - PO # ").append(customerPO);
+		}
+		if ("1300".equalsIgnoreCase(holdStatus) && (!YFCObject.isVoid(formattedOrderNo)))
+		{
+			if(!YFCObject.isVoid(customerPO))
+			{
+				_subjectLine.append(", Order # ").append(formattedOrderNo);
+			
+			}else {
+				_subjectLine.append("- Order # ").append(formattedOrderNo);
+			}
+		}
+		//orderElement.setAttribute("Subject", _subjectLine.toString());
+		return _subjectLine.toString();
+		//log.debug("_subjectLine: " + _subjectLine);
 	}
 }

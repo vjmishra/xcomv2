@@ -403,12 +403,13 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			String organizationCode = SCXmlUtil.getAttribute(orderElement, "EnterpriseCode");
 			String sellerOrgCode = inXML.getDocumentElement().getAttribute("SellerOrganizationCode");
 			String holdStatus=orderHoldTypeElem.getAttribute("Status");
-
+            String emailSubject = null;
 			if(orderHoldTypeElem!=null && ("1100").equalsIgnoreCase(holdStatus))
 			{   
 				orderStatusSubjectlLine="Order Pending Approval Notification";
 				emailType=XPXEmailUtil.ORDER_PENDING_APPROVAL_EMAIL_TYPE;
 				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement ,holdStatus, orderStatusSubjectlLine);
+				emailSubject = utilObj.getOrderStatusSubjectLine(env, orderElement, holdStatus, orderStatusSubjectlLine);
 
 			}
 			else if (orderHoldTypeElem!=null && ("1200").equalsIgnoreCase(holdStatus))
@@ -416,7 +417,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				orderStatusSubjectlLine="Order Rejected Notification";
 				emailType=XPXEmailUtil.ORDER_REJECTED_EMAIL_TYPE;
 				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement ,holdStatus, orderStatusSubjectlLine);
-
+				emailSubject = utilObj.getOrderStatusSubjectLine(env, orderElement, holdStatus, orderStatusSubjectlLine);
 			}
 			else if(orderHoldTypeElem!=null && ("1300").equalsIgnoreCase(holdStatus))
 			{
@@ -426,6 +427,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				String formattedLegacyOrderNo = getLegacyOrderNumber(orderExtn,env);
 				inXML.getDocumentElement().setAttribute("FormattedOrderNo", formattedLegacyOrderNo);
 				utilObj.stampOrderChangeStatusSubjectLine(env, orderElement, holdStatus, orderStatusSubjectlLine);
+				emailSubject = utilObj.getOrderStatusSubjectLine(env, orderElement, holdStatus, orderStatusSubjectlLine);
 			}
 
 			Map<String,String> getUOMListMap = getUOMList(env);
@@ -502,6 +504,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			}
 			/*XB-461 : Begin - Sending email through Java Mail API now*/
 			String emailOrgCode=sellerOrgCode!=null?sellerOrgCode:"";
+			
 			Document inputDoc = orderElement.getOwnerDocument();
 			String buyerOrgCode = orderElement.getAttribute("BuyerOrganizationCode");
 			if(buyerOrgCode != null){
@@ -532,9 +535,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	                  emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
 
 				} else {
-					YFSSystem.getProperty("EMailFromAddresses");
+					emailFrom = YFSSystem.getProperty("EMailFromAddresses");
 				}
-			String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
+			//String emailSubject = orderElement.getAttribute("Subject")!=null?orderElement.getAttribute("Subject"):"";
 			String businessIdentifier = SCXmlUtil.getXpathAttribute(orderElement,"./Extn/@ExtnWebConfNum");
 			XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, emailSubject, emailFrom, emailOrgCode,businessIdentifier);
 			/*XB-461 : End - Sending email through Java Mail API now*/
