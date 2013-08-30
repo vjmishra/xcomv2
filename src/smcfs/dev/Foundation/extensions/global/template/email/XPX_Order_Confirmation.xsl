@@ -813,7 +813,7 @@
 					
 			        <xsl:choose>
 					  <xsl:when test="$custlinePOLbl!=''">
-						<td class="right"> <xsl:value-of select='$custlinePOLbl'/>#:&#160;</td>
+						<td class="right"> <xsl:value-of select='$custlinePOLbl'/>:&#160;</td>
 					  </xsl:when>
 					<xsl:otherwise><td class="right">Line PO#:&#160;</td></xsl:otherwise>
 					</xsl:choose>
@@ -832,7 +832,7 @@
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
 					<xsl:choose>
 					<xsl:when test="$custlineAcctLbl!=''">
-					<td class="right"> <xsl:value-of select='$custlineAcctLbl'/>#:&#160;</td>
+					<td class="right"> <xsl:value-of select='$custlineAcctLbl'/>:&#160;</td>
 					</xsl:when>
 					<xsl:otherwise><td class="right" valign="top">Cust Acct Line #:&#160;</td></xsl:otherwise>
 					</xsl:choose>
