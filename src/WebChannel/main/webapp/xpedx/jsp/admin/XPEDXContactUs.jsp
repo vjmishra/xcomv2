@@ -404,7 +404,8 @@
                 
 
                  </s:if>
-                 
+                 <!--   For EB-1129 For all anonymous users, the contact us page  -->
+                 <s:set name='storefrontId' value="wCContext.storefrontId" />
                   <s:if test="#isGuestUser == true">
                      <table class="full-width">
 			          <tbody>
@@ -413,24 +414,24 @@
 			                   Technical Support: <s:property value='%{#fmtEBusinessPhoneNo}'/>, <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br>
 			                   </td>
           		 		 </tr>
-          		 		<tr>
-          		 			<td>
-          		 				<a  href= "https://www.xpedx.com/locate-us.aspx" >Customer Service</a>        		 		
-                   		 	</td>
-          		 		</tr>
-          		 		 </tbody>
+          		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+								<tr>
+									<td><a href="https://www.xpedx.com/locate-us.aspx" target="_blank"><b>Locate Us</b></a></td>
+								</tr>
+							</s:if>
+         		 		</tbody>
           		 	  </table>
 	  				
   				  </s:if>
-  				   <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
-          		 		 <s:set name='storefrontId' value="wCContext.storefrontId" />
+  				   <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->          		 		 
           		 		 <br/>
           		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 								<tr>
 									<td><a href="http://www.saalfeldredistribution.com/ContactUs.aspx" target="_blank"><b>Locate Us</b></a></td>
 								</tr>
-							</s:if>
+							</s:if>					
 						<!-- EB-1689 End -->
+					
   				
                  
    </div> 
