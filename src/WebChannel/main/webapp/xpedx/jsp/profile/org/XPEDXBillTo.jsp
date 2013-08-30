@@ -352,7 +352,7 @@ ul.checkboxTree li
 						            <td valign="top" class="no-border-right padding0">Sales Professional:</td>
 						            <td colspan="3" valign="top" class="underlines no-border-right padding-bottom1">
 						            <s:property value="%{#salesRepUser.getAttribute('Username')}"/><br/>
-					              	<a href="mailto:<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/>"><s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></a>
+					              	<a href="mailto:<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/>"><s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></a><br/>
 					              	<s:if test='%{#fmtSalesRepPhone != ""}'>
 							              	<s:property value='%{#fmtSalesRepPhone}'/><br/>
 							         </s:if>
@@ -372,7 +372,7 @@ ul.checkboxTree li
 					              		<s:property value="%{#salesRepUserInfo.getAttribute('DayPhone')}"/>, 
 					              	</s:if>		 -->		              	
 							    	
-								<a href="mailto:<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/>" ><s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></a>
+								<a href="mailto:<s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/>" ><s:property value="%{#salesRepUserInfo.getAttribute('EMailID')}"/></a><br/>
 							    <s:if test='%{#fmtSalesRepPhone!= ""}'>
 							              <s:property value='%{#fmtSalesRepPhone}'/><br/>
 							     </s:if>	 
