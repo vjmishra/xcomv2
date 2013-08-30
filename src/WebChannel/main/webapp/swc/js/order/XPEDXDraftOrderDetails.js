@@ -968,8 +968,8 @@ function redrawQuickAddList()
 		        }
 		        if(jobidFlag == true && jobValue !=null){
 			        code += '<td class="col-item">'; 
-			        //code += encodeForHTML(QuickAddElems[i].jobId);
-			        code += '<input type="text" name="enteredJobIDs" maxlength="22" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
+			        //code += encodeForHTML(QuickAddElems[i].jobId); EB-499
+			        code += '<input type="text" name="enteredJobIDs" maxlength="24" id="enteredJobIDs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].jobId) + '" onchange="javascript:updateQuickAddElement(\'JobId\','+ i +')"/>';
 			        code += '</td>';
 		        }
 		        

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class XPEDXSessionManageFilter implements Filter {
 	private static final String SFID_REQUEST_PARAM = "sfId";
-	private static final String SFID_COOKIE_NAME = "StorefrontId";
+	
 	
 	private String[] excludeActions;// --Actions to Exclude -- Read from Web.xml
 	private String timeoutUrlPattern; // use String.format(timeoutUrlPattern, sfId)
@@ -91,29 +91,15 @@ public class XPEDXSessionManageFilter implements Filter {
 		String sfId = req.getParameter(SFID_REQUEST_PARAM);
 		if (sfId != null) {
 			// create or update cookie with this storefront id
-			Cookie cookie = getStorefrontCookie(req);
+			Cookie cookie = CookieUtil.getCookie(req, CookieUtil.STOREFRONT_ID);
 			if (cookie == null) {
-				cookie = new Cookie(SFID_COOKIE_NAME, sfId);
+				cookie = new Cookie(CookieUtil.STOREFRONT_ID, sfId);
 				cookie.setMaxAge(-1); // until user closes browser
 			} else {
 				cookie.setValue(sfId);
 			}
 			resp.addCookie(cookie);
 		}
-	}
-	
-	/**
-	 * @param req
-	 * @return Returns the storefront cookie, or null if not present.
-	 */
-	private Cookie getStorefrontCookie(HttpServletRequest req) {
-		Cookie[] cookies = req.getCookies();
-		for (Cookie cookie : cookies) {
-			if (SFID_COOKIE_NAME.equals(cookie.getName())) {
-				return cookie;
-			}
-		}
-		return null;
 	}
 	
 	/**
@@ -130,7 +116,7 @@ public class XPEDXSessionManageFilter implements Filter {
 	private String getCurrentStorefrontId(HttpServletRequest req) {
 		String sfId = req.getParameter(SFID_REQUEST_PARAM);
 		if (sfId == null) {
-			Cookie cookie = getStorefrontCookie(req);
+			Cookie cookie = CookieUtil.getCookie(req, CookieUtil.STOREFRONT_ID);
 			if (cookie == null) {
 				return defaultSfId;
 			} else {
