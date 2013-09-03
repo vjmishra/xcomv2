@@ -1669,7 +1669,7 @@ function SubmitActionWithValidation()
 				<div class="linePO line-spacing">
 					<s:property value='customerPOLabel' />:
 					<s:textfield name='customerPONo' theme="simple"
-						cssClass="input-details x-input" id="customerPONo" value="" title="CustomerNumber"
+						cssClass="x-input bottom-mill-info-avail" id="customerPONo" value="" title="CustomerNumber"
 						tabindex="%{#tabIndex}" maxlength="22"/>					
 					
 				</div>
@@ -1678,9 +1678,10 @@ function SubmitActionWithValidation()
 				
 				<s:if test=' (isCustomerLinAcc == "Y") '>
 					<!-- Job Number represents Customer Line Account # -->
+					<!-- class="x-input bottom-mill-info-avail for 24 Characters. It relates to EB 449 -->
 					<div class="jobNum line-spacing">
 						<label class="left35"><s:property value='custLineAccNoLabel' />:</label>
-						<input name="Job" class="input-details x-input"  id="Job" tabindex="12" title="JobNumber" maxlength="24"/>
+						<input name="Job" class="x-input bottom-mill-info-avail"  id="Job" tabindex="12" title="JobNumber" maxlength="24"/>
 					</div>
 				</s:if>
 				<input type="hidden" name="Customer" class="input-details x-input" id="Customer"
