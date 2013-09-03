@@ -970,7 +970,7 @@ var prodData = {
 </div>   -->
 <!-- added for jira  3222 -->
 <!--EB-519-->
-<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end --> 
 <swc:dialogPanel title='Add To Cart Result'
 	isModal="true" id="addToCartFailure">
@@ -1038,8 +1038,6 @@ var prodData = {
 
 </swc:dialogPanel>
 <!-- for jira 2422 killing the session in item details --> <%--s:set name='ItemDetailLastPageUrl' value='<s:property value=null />' scope='session'/> --%>
-<!--EB-519-->
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // main end -->
 </body>
 </html>

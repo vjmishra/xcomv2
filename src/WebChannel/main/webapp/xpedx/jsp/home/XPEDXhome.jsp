@@ -70,8 +70,7 @@
 			 	<s:action name="login" executeResult="true" namespace="/common" />
 		  </div>
 		</div>
-		<!--EB-519-->
-		<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
+		
 		<div id="browser-not-supported" style=" display:none">
 		<br/>
 				&nbsp;&nbsp;xpedx.com is designed to work in the latest versions of Internet Explorer,<br/>
@@ -352,8 +351,7 @@ Ext.onReady(function(){
 	</div>
    </div>
     </div>
-	<!--EB-519-->
-		<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
+	
 </s:else>
 <!--EB-519-->
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />

@@ -348,9 +348,6 @@
  
 <!-- end container  -->
 <!-- FOOTER GOES HERE -->
-<!--EB-519
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
-
 
 
 <!--<script type="text/javascript" src="../xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -381,6 +378,8 @@
 -->
 <!--<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 -->
+<!--EB-519-->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -405,7 +404,6 @@
 	   }
 		
 </script>
-<!--EB-519-->
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+
 </body>
 </html>
