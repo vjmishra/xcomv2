@@ -26,14 +26,19 @@
 							 This is a courtesy notification that your profile has been changed at <xsl:value-of select="//@BrandName" />redistribution.com.&#160;&#160;If you or your administrator did not change your profile,<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>please contact us at
 					</xsl:if>
 		         
-		          <a><xsl:attribute name="href">
 		          
-			       mailto:ebusiness@			       
-			       <xsl:if test = '@Brand="xpedx"'>
+		          
+			     <xsl:if test = '//@BrandName="xpedx"'>
+			       <a><xsl:attribute name="href">
+		          
+			       mailto:ebusiness@
 							<xsl:value-of select='//@BrandName' />.com</xsl:attribute>			       
 			       			ebusiness@<xsl:value-of select="//@BrandName" />.com</a><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
 					</xsl:if>
-					<xsl:if test = '@Brand="Saalfeld"' >
+					<xsl:if test = '//@BrandName="Saalfeld"' >
+					<a><xsl:attribute name="href">
+		          
+			       mailto:ebusiness@
 							<xsl:value-of select='//@BrandName' />redistribution.com</xsl:attribute>			       
 			       			ebusiness@<xsl:value-of select="//@BrandName" />redistribution.com</a><xsl:text>&#160;or&#160;877 269-1784.</xsl:text>
 					</xsl:if>
