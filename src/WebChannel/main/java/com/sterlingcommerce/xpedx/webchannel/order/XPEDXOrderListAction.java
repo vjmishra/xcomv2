@@ -1002,7 +1002,27 @@ public class XPEDXOrderListAction extends OrderListAction {
         		//complexQueryElement.setAttribute("Operator", "AND");			
 				
     		//}   
-        } else {
+        } else if("PurchaseOrderNumberValue".equalsIgnoreCase(getSearchFieldName()))
+        {
+        	if(complexQueryElement == null)
+			{
+				complexQueryElement = orderElem.createChild("ComplexQuery");
+			}
+				complexQueryElement.setAttribute("Operator", "AND");
+			 	YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");			 	
+			 	YFCElement expElementCustomerLinePONo = complexQueryOrElement.createChild("Exp");
+			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
+			    expElementCustomerLinePONo.setAttribute("Value",searchFieldValue);
+			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerLinePONo);
+			    
+			    YFCElement expElementCustomerPONo = complexQueryOrElement.createChild("Exp");
+			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
+			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
+			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerPONo);		
+        	
+        }
+        
+        else {
 	        if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch || isRejectedOrdersSearch) {
 	        	String holdTypeToSearch = null;
 	        	if(isPendingApprovalOrdersSearch)
