@@ -72,7 +72,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		if (storeFrontId != null && storeFrontId.length() > 0) {
 			String userName = YFSSystem.getProperty("fromAddress.username");
 			String suffix = YFSSystem.getProperty("fromAddress.suffix");
-			sb.append(userName).append("@").append(storeFrontId).append(suffix);
+			if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+			}else{
+				sb.append(userName).append("@").append(storeFrontId).append(suffix);
+			}
+			
 			// String marketingCC = "marketing";
 			// suffix = YFSSystem.getProperty("fromAddress.suffix");
 			// sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
