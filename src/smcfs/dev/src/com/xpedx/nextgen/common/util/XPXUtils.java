@@ -2265,7 +2265,16 @@ public class XPXUtils implements YIFCustomApi {
 
 		String brand = rootElem.getAttribute("SellerOrganizationCode");
 		imageUrl = rootElem.getAttribute("ImageUrl");
-		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
+		
+		
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = brand.concat("redistribution.com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
+		}else{
+			_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
+		}
+		
+		
+		//_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
 		
 		log.debug("brand:" + brand);
 		log.debug("imageUrl:" + imageUrl);
@@ -2289,7 +2298,14 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		String inputXML=SCXmlUtil.getString(inputDocument);
 		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;		
-		String emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+		String emailFrom = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
+
+		} else {
+			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+		}
+		
 			
 		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
