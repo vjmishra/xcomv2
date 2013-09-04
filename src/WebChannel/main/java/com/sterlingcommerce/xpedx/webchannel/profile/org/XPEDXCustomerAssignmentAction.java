@@ -1118,7 +1118,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW;
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						log.error("Failed to determine preferred category and preferred category view. Error message: " + e.getMessage());
+						log.debug("", e);
 					}
 				}
 
