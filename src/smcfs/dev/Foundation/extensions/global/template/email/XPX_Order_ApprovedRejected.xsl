@@ -523,7 +523,7 @@
 					</tr>
 				
 				<tr>
-					<td colspan="3"> <span class="bold"> Expected Delivery Date: </span>
+					<td colspan="3"> <span class="bold"> Estimated Delivery Date: </span>
 					<xsl:choose>
 					<xsl:when test = 'Order/@ReqDeliveryDate!=""' >
 					<xsl:value-of select="substring(Order/@ReqDeliveryDate,6,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,9,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,1,4)"/>
