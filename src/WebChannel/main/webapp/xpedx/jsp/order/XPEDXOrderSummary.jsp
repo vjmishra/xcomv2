@@ -41,10 +41,9 @@
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
 
 <script type="text/javascript">
 
@@ -177,8 +176,9 @@ function setTotalPrice(val){
 	var totalPOLength= Number(poListlength)+Number(poboxinputlength);
 	//var pobox_inout_length=document.getElementById("po_combo_input").value.trim().length;
 	var deliveryHoldFlag = document.getElementById("DeliveryHoldFlag");
-    var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
-    var PoNumberSaveNeededFlag =   document.getElementById("PoNumberSaveNeeded");
+        var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
+        var OrderSummaryForm_requestDeliveryDate = document.getElementById("requestDeliveryDate");//added for EB 1975
+        var PoNumberSaveNeededFlag =   document.getElementById("PoNumberSaveNeeded");
 	//Special Instructions field validation
 	var OrderSummaryForm_rushOrdrFlagField =   document.getElementById("OrderSummaryForm_rushOrdrFlag"); 	
 	var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
@@ -200,14 +200,15 @@ function setTotalPrice(val){
         errorDiv.style.display = 'inline';
         return returnval;
     }
-    else if (splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrDateFlagField.checked  == true ) )
-       {
-    	
-    	errorDiv.innerHTML = "Requested delivery date information is required. Please enter in the Comments field.";
-        splInstructionsField.style.borderColor="#FF0000";
-        errorDiv.style.display = 'inline';
-        return returnval;	
-       }
+   else if (OrderSummaryForm_rushOrdrDateFlagField.checked  == true && OrderSummaryForm_requestDeliveryDate.value.trim().length == 0)
+	       {
+	    	
+	    	errorDiv.innerHTML = "Requested delivery date information is required. Please select the requested date.";
+	    	document.getElementById("requestDeliveryDate").focus();
+	        document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
+	        errorDiv.style.display = 'inline';
+	        return returnval;	
+	       }
     else if ((PoNumberSaveNeededFlag.checked==true && totalPOLength>=500) && (poboxinputlength!= 0))
     	{
      	 errorDiv.innerHTML = "The maximum number of saved POs has been exceeded. Uncheck the “Add to My PO List” box <br>"+"on current order or delete previously saved POs by going to Admin/My Profile/Site Preferences.";
@@ -218,6 +219,17 @@ function setTotalPrice(val){
     	}
     else{
     	writewebtrendTagForQty();
+    	//Added for EB 1975
+    	if(document.getElementById("requestDateString") != null){
+    	var datetext = document.getElementById("requestDateString").value;
+    	}
+    	if(document.getElementById("OrderSummaryForm_SpecialInstructions").value =="" || document.getElementById("OrderSummaryForm_SpecialInstructions").value== null){
+			document.getElementById("OrderSummaryForm_SpecialInstructions").value= "REQESTED DELIVERY DATE:" +datetext;
+		}
+		else{
+				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQESTED DELIVERY DATE:" +datetext;
+		}
+    	//ENd of EB 1975
     	//Added for 3475
     	Ext.Msg.wait("Processing...");
     	validateForm_OrderSummaryForm(),submitOrder()
@@ -232,6 +244,38 @@ function setTotalPrice(val){
 		writeMetaTag("WT.tx_u",val);
 
 	}
+</script>
+<script type="text/javascript">
+//start of EB 1975	
+	 $(function() {
+			$(".datepicker").datepicker({
+				showOn: 'button',
+							numberOfMonths: 1,
+				buttonImage: '<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/calendar-icon.png',
+				buttonImageOnly: true,
+				buttonText: "Select Date",
+				onSelect: function(datetext){
+					document.getElementById("requestDateString").value = datetext;
+					}
+			}); 
+			$('#requestDeliveryDate').next( $('#requestDeliveryDate').next('img') );
+		});
+	
+	/*$(function() {
+		$( "#datepicker" ).datepicker();
+		});*/
+	
+	function isChecked(){
+		if(document.getElementById("OrderSummaryForm_rushOrdrDateFlag").checked){
+			document.getElementById("requestedDateDiv").style.display = "inline";
+		}
+		else{
+			document.getElementById("requestedDateDiv").style.display = "none";
+			document.getElementById("OrderSummaryForm_requestDeliveryDate").value="";
+		}
+		
+	}
+//end of EB 1975	 
 </script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRSUMMARY.GENERIC.TABTITLE" /></title>
 
@@ -338,6 +382,14 @@ $('#po_combo_input').attr("value","<s:property value='custmerPONumber' escape='f
 		
 
 </script>
+<style type="text/css">
+.ui-datepicker-trigger {
+margin-left: 94px;
+margin-top: -21px;
+align : center;
+hight : 10px;
+}
+</style>
 
 <swc:extDateFieldComponentSetup />
 </head>
@@ -739,16 +791,27 @@ from session . We have customer Contact Object in session .
 <!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
 				</td></tr>
 			
-				<tr><td><s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="if (this.checked) this.form.SpecialInstructions.focus()"
+				<tr>
+				<td>
+						<s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="javascript:isChecked(); if (this.checked) this.form.SpecialInstructions.focus()"
 						disabled="%{! #_action.isDraftOrder()}" fieldValue="true"
-						value="" /><s:if
-						test='%{#_action.isDraftOrder()}'>
+						value="" />
+						<s:if test='%{#_action.isDraftOrder()}'>
 						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.						
-					</s:if> <s:else>
+						</s:if> <s:else>
 						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.
-					</s:else>	  
-<!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
-				</td></tr>			
+						</s:else>	  
+				</td>
+				</tr>	
+				
+				<tr>
+					<td><s:hidden  id="requestDateString"  value="" name="" />
+					<div id="requestedDateDiv" style="display:none;">
+					<table><tr><td><span class="red">*</span>&nbsp;<s:textfield name='requestDeliveryDate' theme="simple" size="15"  id="requestDeliveryDate" cssClass='calendar-input-fields datepicker' value="%{#parameters.requestDeliveryDate}" />
+					</td><td>&nbsp;(mm/dd/yyyy)</td></tr></table></div></td>
+					
+				</tr>
+				
 				<tr>
 					<td>
 						<s:set name='renderPersonInfo' value='#shipFrom' />
@@ -758,6 +821,8 @@ from session . We have customer Contact Object in session .
 						value="/xpedx/jsp/order/XpedxReadOnlyAddress.jsp" /></div>
 					</td>
 				</tr>
+				
+				
 						</table>
 						
 						<!-- bb1 -->

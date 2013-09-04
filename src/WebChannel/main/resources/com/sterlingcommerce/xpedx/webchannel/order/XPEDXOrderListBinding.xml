@@ -30,7 +30,7 @@
   -->
   <entry key="statusSearchFieldName">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnOrderStatus,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnOrderStatus</entry>
   <entry key="statusSearchQryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@ExtnOrderStatusQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@ExtnOrderStatusQryType</entry> 
-  <entry key="purchaseOrderNumberValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@CustomerPONo,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@CustomerPONo,XPEDXEditableOrderList:/Page/API/Input/XPEDXEditableOrderListView/@CustomerPONo,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@CustomerLinePONo</entry>
+  <entry key="purchaseOrderNumberValue">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@CustomerPONo,XPEDXEditableOrderList:/Page/API/Input/XPEDXEditableOrderListView/@CustomerPONo</entry>
   <entry key="purchaseOrderNumberQueryType">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@CustomerPONoQryType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@CustomerPONoQryType</entry>  
   <entry key="holdSearchFieldName">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@HoldType,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@HoldType</entry>   
   <entry key="holdStatusSearch">XPEDXOrderList:/Page/API/Input/XPEDXOrderSearchListView/@Status,XPEDXOrderLineList:/Page/API/Input/XPEDXOrderSearchLineListView/@Status</entry>    

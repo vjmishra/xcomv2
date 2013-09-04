@@ -579,7 +579,7 @@
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 			
-						<table  width="100%" >
+						<table  class="price" width="100%" >
 						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
 										<thead>
 											<th  bgcolor="#003399" > </th>
@@ -596,7 +596,7 @@
 											<th  bgcolor="##084823"> </th>
 											<th  bgcolor="##084823"> </th>
 											<th valign="top" class="right"  bgcolor="##084823" color="#fff"><font color="#fff"> My Price (USD) </font></th> <!-- The currency code on this line is dynamic.-->
-											<th    class="right"  bgcolor="##084823" color="#fff"></font></th> <!-- The currency code on this line is dynamic.-->
+											<th    class="right"  bgcolor="##084823" color="#fff"></th> <!-- The currency code on this line is dynamic.-->
 											<th    class="right"  bgcolor="##084823" color="#fff"><font color="#fff"> Extended Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
 							                </thead>
 				</xsl:if>			

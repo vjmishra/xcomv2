@@ -277,7 +277,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             retVal= SUCCESS;
             if("true".equals(isComingFromCheckout))
             {
-            	System.out.println(SCXmlUtil.getString(outputDocument));
+            	
             	retVal=validateMaxOrderAmountWhileCheckOut(outputDocument);
             }
          }

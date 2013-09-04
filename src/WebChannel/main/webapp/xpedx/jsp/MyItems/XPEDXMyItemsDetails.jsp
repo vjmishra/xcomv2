@@ -3155,7 +3155,7 @@ function showSharedListForm(){
 								</s:if>
 								<tr>
                                     <td align="right" width="112"><label style="text-align:right;">Qty:</label></td>
-                                    <td width="142" colspan="2">                                    
+                                    <td width="142" colspan="2" align="left">                                    
 										<!-- Qty --> <s:hidden
 											name="itemQty" value="%{#qty}" /> <s:hidden
 											id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" /> 

@@ -719,7 +719,7 @@
                     <API Name="XPXGetOrderSearchLineListViewService" IsFlow="Y">
                         <Input>
                             <XPEDXOrderSearchLineListView  DraftOrderFlag="N" DocumentType="0001"
-                                EnterpriseCode="" >
+                                EnterpriseCode="" >              
                                 <OrderBy>
                                     <Attribute Desc="N" Name="Modifyts" />
                                 </OrderBy>

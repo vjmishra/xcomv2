@@ -1151,19 +1151,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(itemIdsUOMsDescMap != null)
 				{
 					Map<String,String> actualUOMList=itemIdsUOMsDescMap.get(item.getAttribute("ItemId"));
-					Set<String> uomiDs=actualUOMList.keySet();
-					boolean isUOMAvaliable=false;
-					for(String uomId :uomiDs)
+					if(actualUOMList!=null) 
 					{
-						
-						if(uomId != null && uomId.contains(item.getAttribute("UomId")))
+						Set<String> uomiDs=actualUOMList.keySet();
+						boolean isUOMAvaliable=false;
+						for(String uomId :uomiDs)
 						{
-							isUOMAvaliable=true;
+							
+							if(uomId != null && uomId.contains(item.getAttribute("UomId")))
+							{
+								isUOMAvaliable=true;
+							}
 						}
-					}
-					if(!isUOMAvaliable)
-					{
-						item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
+						if(!isUOMAvaliable)
+						{
+							item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
+						}
 					}
 				}
 			}
