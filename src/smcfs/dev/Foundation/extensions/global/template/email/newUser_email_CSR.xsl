@@ -33,7 +33,7 @@
 															<xsl:value-of select="@Brand"/>.com Registration Request 
 													</xsl:if>
 													<xsl:if test = '@Brand="Saalfeld"' >
-															<xsl:value-of select="@Brand"/>redistribution.com Registration Request .
+															<xsl:value-of select="@Brand"/>redistribution.com Registration Request.
 													</xsl:if>
 													
 													</span>

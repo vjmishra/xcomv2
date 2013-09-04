@@ -442,7 +442,7 @@
 				</tr>
 				<tr>
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table  width="100%" >
+				<table  class="price" width="100%" >
 				<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
 								<thead>
 									<th  bgcolor="#003399" > </th>
