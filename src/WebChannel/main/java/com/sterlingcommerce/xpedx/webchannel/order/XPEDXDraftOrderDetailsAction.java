@@ -50,7 +50,6 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
-import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -480,7 +479,7 @@ public void resetOrganizationValuesForShipToCustomer(){
 		shipToCustomer.setShipToDivDeliveryCutOffTime(null);
 		//Added For Jira 3465
 		shipToCustomer.setShipToDivdeliveryInfo(null);
-		shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(null);
+		shipToCustomer.setShipToOrgExtnApplyMinOrderCharge(null);
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 }
 
@@ -610,7 +609,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
 					shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
 					shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
-					shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
+					shipToCustomer.setShipToOrgExtnApplyMinOrderCharge(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge"));
 					//Added For Jira 3465
 					shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
@@ -1120,7 +1119,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
 											//Added For Jira 3465
 											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
-											shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
+											shipToCustomer.setShipToOrgExtnApplyMinOrderCharge(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge"));
 											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 										} catch (CannotBuildInputException e) {
 											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);

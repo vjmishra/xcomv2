@@ -261,7 +261,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			float chargeAmount = 0;
 			Document shipToCustomerProfileDoc = null;
 			YFCElement customerListElem = null;			
-			String applyMinOrderBrands=null;
+			String applyMinOrderCharge=null;
 			
 			shipToCustomerProfileDoc = (Document) env.getTxnObject("ShipToCustomerProfile");
 			
@@ -306,11 +306,10 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				boolean isGetOrganizationListAPICalled=false;
 				
 				if("Y".equalsIgnoreCase(YFSSystem.getProperty("applyMinOrderCharge"))) {
-	            	// global settings is enabled
 					isGetOrganizationListAPICalled=true;
 					env.setApiTemplate("getOrganizationList",SCXmlUtil.createFromString(""
 							+" <OrganizationList><Organization OrganizationName=\"\">"														
-							+"<Extn ExtnMinOrderAmt=\"\" ExtnSmallOrderFee=\"\" ExtnApplyMinOrderBrands=\"\"/>"
+							+"<Extn ExtnMinOrderAmt=\"\" ExtnSmallOrderFee=\"\" ExtnApplyMinOrderCharge=\"\"/>"
 						    +"</Organization>"
 						    +"</OrganizationList>"));
 	
@@ -319,7 +318,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					env.clearApiTemplate("getOrganizationList");					
 				
 					if(!YFCCommon.isVoid(organizationListOutDoc)) {
-						applyMinOrderBrands = SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands");
+						applyMinOrderCharge = SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge");
 						
 					}
 				}
@@ -389,7 +388,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			}
 			custOrderAmountArray[0] = ""+minOrderAmount;
 			custOrderAmountArray[1] = ""+chargeAmount;
-			custOrderAmountArray[2] = (applyMinOrderBrands!=null ? applyMinOrderBrands : "");
+			custOrderAmountArray[2] = (applyMinOrderCharge!=null ? applyMinOrderCharge : "");
 			
 	} catch (Exception ex) {
 		log.error(ex.getMessage());
@@ -473,8 +472,8 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			}
 			String applyMinOrderCharge_GlobalLevel=YFSSystem.getProperty("applyMinOrderCharge");//Property read from customer_overrides.properties file and it indicates whether minimum order charge should be added from NG or MAX. 
 			if(log.isDebugEnabled()) {
-				log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of applyMinOrderBrands_GlobalLevel picked from customer_overrides property file is : ["+applyMinOrderCharge_GlobalLevel+"]");
-				log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of applyMinOrderCharge_DivisionLevel picked from 'EXTN_APPLY_MIN_ORDER_BRANDS' column of YFS_ORGANIZATION table is : ["+applyMinOrderCharge_DivisionLevel+"]");
+				log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of applyMinOrderCharge_GlobalLevel picked from customer_overrides property file is : ["+applyMinOrderCharge_GlobalLevel+"]");
+				log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of applyMinOrderCharge_DivisionLevel picked from 'EXTN_APPLY_MIN_ORDER_CHARGE' column of YFS_ORGANIZATION table is : ["+applyMinOrderCharge_DivisionLevel+"]");
 			}
 		
 			
@@ -548,7 +547,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		
 		String minOrderAmount = null;
 		String chargeAmount = null;
-		String applyMinOrderBrands=null;
+		String applyMinOrderCharge=null;
 		
 		if (env instanceof ClientVersionSupport) {
 			ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
@@ -557,13 +556,12 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				// Order Placed From Web. Ship To Customer Profile Has Been Set In Environment By WC Application.
 				minOrderAmount = (String) envVariablesmap.get("ExtnMinOrderAmount");
 				chargeAmount = (String) envVariablesmap.get("ExtnChargeAmount");
-				
-				applyMinOrderBrands = (String) envVariablesmap.get("ExtnApplyMinOrderBrands");
+				applyMinOrderCharge = (String) envVariablesmap.get("ExtnApplyMinOrderCharge");
 				
 				if (log.isDebugEnabled()) {
 					log.debug("MinOrderAmount:" + minOrderAmount);
 					log.debug("ChargeAmount:" + chargeAmount);
-					log.debug("applyMinOrderBrands_DivisionLevel:" + applyMinOrderBrands);
+					log.debug("applyMinOrderCharge_DivisionLevel:" + applyMinOrderCharge);
 				}
 			} 
 		}
@@ -571,7 +569,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		if (!YFCObject.isNull(minOrderAmount) && !YFCObject.isNull(chargeAmount)) {
 			custOrderAmountArray[0] = ""+minOrderAmount;
 			custOrderAmountArray[1] = ""+chargeAmount;
-			custOrderAmountArray[2] = (applyMinOrderBrands!=null ? applyMinOrderBrands : "");
+			custOrderAmountArray[2] = (applyMinOrderCharge!=null ? applyMinOrderCharge : "");
 		} else {
 			custOrderAmountArray = getCustOrderAmountList(env, buyerOrganizationCode, enterpriseCode);
 		}
