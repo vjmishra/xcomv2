@@ -870,11 +870,13 @@ public class XPEDXOrderListAction extends OrderListAction {
         YFCElement inpElement = apiElement.getChildElement("Input");
         YFCElement orderElem = inpElement.getChildElement(rootElementName);
         YFCElement complexQueryElement =null;
+        YFCElement complexQueryAndElement = null;
         /* Including only the logged in ship to Id as This is causing the performance Issue -- Jagadeesh
          * Including all the assigned ship to only if assignedShipToSize is less than or equal to 30 -- Discussed with pawan on call  */
         if(assignedShipToSize!=null && assignedShipToSize<=20 && SCUtil.isVoid(getShipToSearchFieldName())) {
         	complexQueryElement = orderElem.createChild("ComplexQuery");
-    		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+        	complexQueryAndElement = complexQueryElement.createChild("And");
+    		YFCElement complexQueryOrElement = complexQueryAndElement.createChild("Or");
     		Iterator<String> itr = shipToList.keySet().iterator();
     		while (itr.hasNext()) {
     			String key = (String) itr.next();
@@ -1007,7 +1009,6 @@ public class XPEDXOrderListAction extends OrderListAction {
         	if(complexQueryElement == null)
 			{
 				complexQueryElement = orderElem.createChild("ComplexQuery");
-			}
 				complexQueryElement.setAttribute("Operator", "AND");
 			 	YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");			 	
 			 	YFCElement expElementCustomerLinePONo = complexQueryOrElement.createChild("Exp");
@@ -1019,6 +1020,23 @@ public class XPEDXOrderListAction extends OrderListAction {
 			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
 			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
 			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerPONo);		
+				
+			}
+        	else{
+        		
+        		YFCElement complexQueryInsideAndElement = complexQueryAndElement.createChild("And");
+        		YFCElement complexQueryInsideOrElement = complexQueryInsideAndElement.createChild("Or");			 	
+			 	YFCElement expElementCustomerLinePONo = complexQueryInsideOrElement.createChild("Exp");
+			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
+			    expElementCustomerLinePONo.setAttribute("Value",searchFieldValue);
+			    complexQueryInsideOrElement.appendChild((YFCNode)expElementCustomerLinePONo);
+			    
+			    YFCElement expElementCustomerPONo = complexQueryInsideOrElement.createChild("Exp");
+			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
+			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
+			    complexQueryInsideOrElement.appendChild((YFCNode)expElementCustomerPONo);		
+        	}
+				
         	
         }
         

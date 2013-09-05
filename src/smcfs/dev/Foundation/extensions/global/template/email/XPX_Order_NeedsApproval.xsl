@@ -351,7 +351,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 							<xsl:if test = 'Order/@EnterpriseCode="xpedx"' >
-								<a href="{$storeFrontUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+								<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
 							</xsl:if>
 							<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
 								<a href="{$storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
@@ -579,7 +579,7 @@
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 			
-						<table  class="price" width="100%" >
+						<table class='price' width="100%" >
 						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
 										<thead>
 											<th  bgcolor="#003399" > </th>

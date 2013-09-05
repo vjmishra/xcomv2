@@ -3611,7 +3611,10 @@ function showSharedListForm(){
 				
 				
 				});
-		</script>  
+		</script> 
+		<s:if test="#altItemList.size() > 0">
+			 <input type="hidden" id="rListSize_<s:property value='key'/>" value=<s:property value='#altItemList.size()'/> />  
+		</s:if> 
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<s:if test="!#iStatus.last" >
 			<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
@@ -3645,15 +3648,10 @@ function showSharedListForm(){
 							<s:param name="unitOfMeasure" value="#ritemUomId" />
 						</s:url>
 						<!-- Checked in for JIRA XBT-335  -->
-						<s:if test="#iStatus.first" >
-                  			 <input name="relatedItems"
-								onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" checked="checked" />
-								<script>
-										Ext.onReady(function(){ 
-										selReplacementId='<s:property value="#uId" />';
-									});
-							  </script>
-						</s:if>
+						<s:if test="#altItemList.size() == 1">
+                                                <input name="relatedItems" type="radio" checked="true"/>
+                                                 <input type="hidden" id="hUId_<s:property value='key'/>" value='<s:property value="#uId" />' />                 
+                       </s:if>	
 						<s:else>
 						<input name="relatedItems" 
 								onclick="javascript:setUId('<s:property value="#uId" />');" type="radio" />
