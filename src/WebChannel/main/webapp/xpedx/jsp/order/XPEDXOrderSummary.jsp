@@ -271,7 +271,8 @@ function setTotalPrice(val){
 		}
 		else{
 			document.getElementById("requestedDateDiv").style.display = "none";
-			document.getElementById("OrderSummaryForm_requestDeliveryDate").value="";
+			document.getElementById("requestDeliveryDate").value="";
+			document.getElementById("requestDateString").value="";
 		}
 		
 	}
