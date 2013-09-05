@@ -1625,6 +1625,9 @@ var currentAadd2ItemList = new Object();
 		<s:if test="#altItemList.size() == 0">
 				<div class="error" style="margin-top:90px; margin-left:80px;">The replacement item is not available, please contact customer service.</div>
 		</s:if> 
+		<s:if test="#altItemList.size() > 0">
+			 <input type="hidden" id="rListSize_<s:property value='key'/>" value=<s:property value='#altItemList.size()'/> />  
+		</s:if>
 		<!--Fix End for Jira 1601 - Error Msg For Replacement Item  -->
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<div class="mil-wrap-condensed-container" style="width:100%;">
@@ -1660,8 +1663,19 @@ var currentAadd2ItemList = new Object();
 							<s:param name="sfId" value="#parameters.sfId" />
 							<s:param name="unitOfMeasure" value="#ritemUomId" />
 						</s:url>
-                   <input name="relatedItems"
-						onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" />
+                  <!--   <input name="relatedItems" onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" />  -->
+					<!-- eb-1131 -->
+					
+					 <s:if test="#altItemList.size() == 1">
+                                                <input name="relatedItems" type="radio" checked="true"/>
+                                                 <input type="hidden" id="hUId_<s:property value='key'/>" value='<s:property value="#uId" />' />                 
+                     </s:if>
+                     
+                    
+                      <s:else>               
+                                                <input name="relatedItems" onclick="javascript:setUId('<s:property value="#uId" />');"                type="radio" />
+                       </s:else>        	
+						
                     <div class="mil-question-mark"> 
                                <s:a href="javascript:processDetail('%{#altItem.getAttribute('ItemID')}', '%{#altItem.getAttribute('UnitOfMeasure')}')" >
                                      <img src="<s:property value='%{#pImg}'/>" width="150" height="150" alt="" />

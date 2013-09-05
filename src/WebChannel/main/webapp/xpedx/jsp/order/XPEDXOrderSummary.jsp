@@ -223,11 +223,11 @@ function setTotalPrice(val){
     	if(document.getElementById("requestDateString") != null){
     	var datetext = document.getElementById("requestDateString").value;
     	}
-    	if(document.getElementById("OrderSummaryForm_SpecialInstructions").value =="" || document.getElementById("OrderSummaryForm_SpecialInstructions").value== null){
-			document.getElementById("OrderSummaryForm_SpecialInstructions").value= "REQESTED DELIVERY DATE:" +datetext;
+    	if((document.getElementById("OrderSummaryForm_SpecialInstructions").value =="" || document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length == 0) && datetext != ""){
+			document.getElementById("OrderSummaryForm_SpecialInstructions").value= "REQUESTED DELIVERY DATE: " +datetext+".";
 		}
-		else{
-				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQESTED DELIVERY DATE:" +datetext;
+		else if(document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length > 0 && datetext != ""){
+				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQUESTED DELIVERY DATE: " +datetext+".";
 		}
     	//ENd of EB 1975
     	//Added for 3475

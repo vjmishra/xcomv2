@@ -39,8 +39,15 @@ function onChangeItemOrder(currentElem, currentSeqNo, newSeqNo) {
 	//Remove the focus from the select element
 	currentElem.blur();
 }
-
+<!-- eb 1131-->
 function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
+	var rsize=document.getElementById("rListSize_"+repItemID).value;
+  	if(rsize == "1"){
+  	  selReplacementId = document.getElementById("hUId_"+repItemID).value;
+  	}
+  	else{
+  	selReplacementId = "";
+  	}
 	var source 		= document.getElementById("replacement_" + repItemID);
     var destination = document.getElementById("replacementItemBody");
     
@@ -64,7 +71,7 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
 
 function replacementAddToList(uId) {
 	if (uId == ""){
-		Ext.Msg.alert('Error', 'Please select a replacement item.');
+		 alert("Please select a replacement item.");
 		return;
 	}
 	
@@ -97,7 +104,7 @@ function replacementAddToList(uId) {
 function replacementReplaceInList(uId) {
 	
 	if (uId == ""){
-		Ext.Msg.alert('Error', 'Please select a replacement item.');
+		alert("Please select a replacement item.");
 		return;
 	}
 	

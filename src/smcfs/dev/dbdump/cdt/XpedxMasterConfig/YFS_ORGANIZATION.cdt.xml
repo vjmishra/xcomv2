@@ -30,7 +30,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -61,7 +62,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -93,7 +95,8 @@
     RequiresVasCompliance=" " SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -123,7 +126,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="DEFAULT">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -152,7 +156,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="FEDX">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -181,7 +186,8 @@
     RequiresVasCompliance=" " SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="Purolator">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -212,7 +218,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -243,7 +250,8 @@
     RequiresVasCompliance=" " SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -272,7 +280,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="UPSA">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -301,7 +310,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="UPSC">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -330,7 +340,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="UPSE">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -359,7 +370,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="UPSL">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -388,7 +400,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="UPSN">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -417,7 +430,8 @@
     RequiresVasCompliance=" " SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode="USPS">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -448,7 +462,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -479,7 +494,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -510,7 +526,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" "
@@ -543,7 +560,8 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 <Organization AccountWithHub=" " ActivateFlag=" "
     AssignedColonyId="DEFAULT" AuthorityType=" " BillingAddressKey=" "
@@ -574,6 +592,7 @@
     SupplyKeptExternally="N" TaxExemptFlag=" "
     TaxExemptionCertificate=" " TaxJurisdiction=" " TaxpayerId=" "
     UCCPrefix="0000000" XrefAliasType=" " XrefOrganizationCode=" ">
-    <Extn ExtnMaxOrderAmt="0.00" ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
+    <Extn ExtnApplyMinOrderCharge="Y" ExtnMaxOrderAmt="0.00"
+        ExtnMinOrderAmt="0.00" ExtnPerson=" " ExtnSmallOrderFee="0.00"/>
 </Organization>
 </YFS_ORGANIZATIONList>
