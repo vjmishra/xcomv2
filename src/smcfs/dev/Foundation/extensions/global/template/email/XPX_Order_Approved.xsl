@@ -74,15 +74,11 @@
 			table.price td {
 				padding: 2px;
 				}
-				
-				table.price th{
-				background-color: #084823;
+			table.price th{
+				background-color: ##003399;
 				color: white;
 				padding: 10px;
-				padding-right: 2px;
-				font-size: 11px; 
-				margin:2px;
-
+				font-size: 11px;
 			}
 			
 			table.price tr.special-instructions td{
@@ -597,7 +593,7 @@
 				</tr>
 				<tr align="right">
 				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table  class="price" width="100%" >
+				<table  class='price' width="100%" >
 				<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
 								<thead>
 									<th  bgcolor="#003399" > </th>
