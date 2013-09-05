@@ -487,13 +487,13 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				StringBuilder instructions = new StringBuilder(SpecialInstructions);
 				if("Y".equals(getRushOrdrFlag())){
 					instructions.append(" "+RUSH_ORDER);
-					if("true".equals(getRushOrdrDateFlag())){
+					/*Commented for EB 1975 if("true".equals(getRushOrdrDateFlag())){
 						instructions.append(", "+REQUESTED_DELIVERY_DATE);
 					}
 				}else{
 					if("true".equals(getRushOrdrDateFlag())){
 						instructions.append(" "+REQUESTED_DELIVERY_DATE);
-					}
+					}*/
 				}
 				setSpecialInstructions(instructions.toString());
 			}
