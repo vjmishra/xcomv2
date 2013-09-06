@@ -437,8 +437,10 @@ ul.checkboxTree li
     </div>
     <!-- End Pricing -->
    
-  <!-- Footer Start --> <s:action name="xpedxFooter" executeResult="true"
-	namespace="/common" /> <!-- Footer End -->
+   
+  <!-- Footer Start --> <!-- EB-519 -->
+  <!--<s:action name="xpedxFooter" executeResult="true"	namespace="/common" /> -->
+  <!-- Footer End -->
 
 
 <div style="display: none;">
@@ -506,7 +508,9 @@ function changeTableCssClass(){
 	}
 }
 </script>
-
+  <!-- Footer Start --> <!-- EB-519 -->
+  <s:action name="xpedxFooter" executeResult="true"	namespace="/common" /> 
+  <!-- Footer End -->
     <!-- end main  -->
   
 <!-- end container  -->

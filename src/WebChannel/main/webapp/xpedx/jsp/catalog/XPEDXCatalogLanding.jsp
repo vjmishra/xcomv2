@@ -348,7 +348,8 @@
  
 <!-- end container  -->
 <!-- FOOTER GOES HERE -->
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+<!--EB-519
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
 
 
 
@@ -404,5 +405,7 @@
 	   }
 		
 </script>
+<!--EB-519-->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 </html>

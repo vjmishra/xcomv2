@@ -2313,7 +2313,6 @@ function SubmitActionWithValidation()
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- END footer -->
 
-
 <swc:dialogPanel title="Product Availability" isModal="true"
 	id="product_availability">
 	<div id="ajax-prodAvailability"></div>
@@ -2642,6 +2641,7 @@ function callPnAfromLink(requestedUom){
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
+
 </body>
 </s:else>
 </swc:html>

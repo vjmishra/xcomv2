@@ -1008,7 +1008,8 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<div class="clear"></div>
 	</div>
-	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+	<!--EB-519-->
+<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
 	</div>
 	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
 	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>	
@@ -1436,6 +1437,7 @@ function validationforDragToCompare()
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
-
+<!--EB-519-->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 </html>
