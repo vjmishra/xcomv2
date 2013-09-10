@@ -1,8 +1,10 @@
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the bgcolor to image*/
 body
 {
-	background: url(../images/1X700_background.png);
-	/*background: #e8e2d4;*/
+  background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
+    color: #000000
 }
+
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the color of the fields*/
 a, .commonHeader-subnav li, .commonHeader-subnav li a,
 .commonFooter a, #welcome-address-popup a { color: #006a3a; }
@@ -184,4 +186,8 @@ a.green-ui-btn:active span {
     color: #988344;
     text-align: center;
     width: 100%;
+}
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the rotation dot in promotions*/
+#home-image-rotation-nav a.activeSlide {
+    background: url("../images/button/rotation_dot_on.png") repeat scroll 0 0 transparent;
 }
