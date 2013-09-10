@@ -406,4 +406,4 @@
 </s:else>
 
 </table>
- <!-- s:include value="../../htmls/webtrends/webtrends.html"/ -->
+ <s:include value="../../htmls/webtrends/webtrends.html"/><!--EB-519-->

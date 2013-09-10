@@ -34,6 +34,6 @@
  
  </head>
  <body >
- 
+ <s:include value="../../htmls/webtrends/webtrends.html"/><!--EB-519-->
  </body>
 </html>
