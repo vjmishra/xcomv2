@@ -436,13 +436,6 @@ ul.checkboxTree li
     </div>
     </div>
     <!-- End Pricing -->
-   
-   
-  <!-- Footer Start --> <!-- EB-519 -->
-  <!--<s:action name="xpedxFooter" executeResult="true"	namespace="/common" /> -->
-  <!-- Footer End -->
-
-
 <div style="display: none;">
 <div title="Add New Quick Link" id="newQL"
 	style="width: 400px; height: 220px; overflow: auto;"

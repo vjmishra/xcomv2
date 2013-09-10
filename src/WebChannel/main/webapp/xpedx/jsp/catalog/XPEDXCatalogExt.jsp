@@ -1008,8 +1008,7 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<div class="clear"></div>
 	</div>
-	<!--EB-519-->
-<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
+	
 	</div>
 	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
 	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>	
