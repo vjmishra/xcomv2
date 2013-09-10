@@ -60,7 +60,7 @@ function setStockItemFlag()
 					 <s:if test='#subCatElem_count!=null'>
 					 	<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 						<div id="narrow_spb2" class="browseBox subPanelBox"> 
-						<div id="narrow_header2" class="header" style="background-color:#003399">
+						<div id="narrow_header2" class="header">
 						  <span class="float-right">
 						    <a href="#" class="expand-narrow-by" title="Show/Hide">
 						      <img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
@@ -177,7 +177,7 @@ function setStockItemFlag()
 					</s:iterator>
 					<s:if test='%{#hasMoreFacetList == "Y"}'>
 						
-							<a style="color: #EE6B03;font-size: 11px;" href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
+							<a class="narrowByViewAllLink" style="" href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
 					</s:if>
 				</div>
 				

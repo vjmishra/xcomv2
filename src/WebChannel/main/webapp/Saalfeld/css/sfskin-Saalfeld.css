@@ -77,6 +77,11 @@ table.mil-top-border .table-header-bar-right { width:143px; }
 	
 }
 
+.cat-view-all a {
+    color: #66cc33;
+    font-size: 11px;
+}
+
 /* Orange */
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - Change the button image*/
 a.orange-ui-btn {
@@ -156,6 +161,23 @@ a.green-ui-btn:active span {
 .white {
     color: #006a3a;
     margin-left: 4px;
+}
+
+/*EB-2355: override the color in xpedx-header.css */
+.promo-txt {
+	color:#006a3a;	
+}
+
+.subPanelBox .header {
+    background: url("../images/green_cell_slice_1x22.png") repeat-x scroll 0 0 #006a3a;
+}
+
+.browseBox ul li a {
+    color: #006a3a;
+}
+
+.narrowByViewAllLink {
+	color: #66cc33;
 }
 
 #footer-copyright {
