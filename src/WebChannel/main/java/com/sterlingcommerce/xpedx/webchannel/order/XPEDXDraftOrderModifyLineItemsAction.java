@@ -8,14 +8,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
  
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
  
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
  
+
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
@@ -30,6 +33,7 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
@@ -337,19 +341,19 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         }
         if(isEditOrder.contains("true"))
         {
-            String applyMinOrderCharge_GlobalLevel=YFSSystem.getProperty("applyMinOrderCharge");
-            if("Y".equalsIgnoreCase(applyMinOrderCharge_GlobalLevel))
+            if("Y".equalsIgnoreCase(YFSSystem.getProperty("applyMinOrderCharge")))
             {
+            	// global settings is enabled
                 XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
                 if(shipToCustomer!=null)
                 {
-                    String applyMinOrderCharge_DivisionLevel=shipToCustomer.getShipToOrgExtnApplyMinOrderCharge();
-                    if(applyMinOrderCharge_DivisionLevel==null)
+                    String applyMinOrderBrands_DivisionLevel=shipToCustomer.getShipToOrgExtnApplyMinOrderBrands();
+                    if(applyMinOrderBrands_DivisionLevel==null)
                     {                        
-                        applyMinOrderCharge_DivisionLevel=getExtnApplyMinOrderCharge(shipToCustomer.getExtnEnvironmentCode(), shipToCustomer.getExtnShipFromBranch());                    
+                        applyMinOrderBrands_DivisionLevel=getExtnApplyMinOrderBrands(shipToCustomer.getExtnEnvironmentCode(), shipToCustomer.getExtnShipFromBranch());                    
                     }
                      
-                    if("Y".equalsIgnoreCase(applyMinOrderCharge_DivisionLevel))
+                    if (XPXUtils.isApplyMinimumOrderChargeForBrand(applyMinOrderBrands_DivisionLevel, getWCContext().getStorefrontId()))
                     {
                         processSpecialCharge(outputDocument, chngOrderOutputAvailable);
                     }
@@ -826,8 +830,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 		this.maxOrderAmount = maxOrderAmount;
 	}
 	
-    private String getExtnApplyMinOrderCharge(String envCode, String shipFromBranch) {
-        String extnApplyMinOrderCharge=null;
+    private String getExtnApplyMinOrderBrands(String envCode, String shipFromBranch) {
+        String extnApplyMinOrderBrands=null;
         if (shipFromBranch != null && shipFromBranch.trim().length() > 0)
         {
                  
@@ -843,19 +847,19 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             YFCDocument organizationListInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORGANIZATION);
             organizationListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, shipFromBranch);
              
-            env.setApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API, SCXmlUtil.createFromString("<OrganizationList><Organization OrganizationName=\"\"><Extn ExtnApplyMinOrderCharge=\"\"/></Organization></OrganizationList>"));
+            env.setApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API, SCXmlUtil.createFromString("<OrganizationList><Organization OrganizationName=\"\"><Extn ExtnApplyMinOrderBrands=\"\"/></Organization></OrganizationList>"));
             try
             {            
                 Document organizationListOutDoc = YIFClientFactory.getInstance().getApi().invoke(env, XPXLiterals.GET_ORGANIZATION_LIST_API, organizationListInputDoc.getDocument());
                 env.clearApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API);
                 if(organizationListOutDoc!=null)
                 {
-                    extnApplyMinOrderCharge=SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderCharge");
+                    extnApplyMinOrderBrands=SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands");
                      
                 }
             }catch(Exception ex)
             {
-                LOG.debug("Exception, inside getExtnApplyMinOrderCharge method of XPEDXDraftOrderModifyLineItemsAction class, while retrieving the value of ExtnApplyMinOrderCharge from yfs_organization table. Exception is : "+ ex);
+                LOG.debug("Exception, inside getExtnApplyMinOrderBrands method of XPEDXDraftOrderModifyLineItemsAction class, while retrieving the value of ExtnApplyMinOrderBrands from yfs_organization table. Exception is : "+ ex);
              
             }finally
             {
@@ -865,7 +869,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                 env = null;
             }            
         }
-        return extnApplyMinOrderCharge;
+        return extnApplyMinOrderBrands;
          
     }
     
