@@ -2544,7 +2544,15 @@ public class XPXUtils implements YIFCustomApi {
 				if(requestID!=null && !requestID.equalsIgnoreCase(""))
 				{
 					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
-					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";				
+					
+					if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+						emailSubject=" Password Reset Request Notification ";
+					} else{
+						
+					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";
+					}
+					
+					
 				}
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
 			    {
