@@ -69,9 +69,16 @@
 <h2 class="no-border"  style="float:left;" ><s:text name='MSG.SWC.SHIPTO.CHANGESHIPTO.GENERIC.DLGTITLE' /></h2>
 </div>
 <br /><br /><br /><br />
+ <s:set name='storefrontId' value="wCContext.storefrontId" />
+<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+	<s:set name="ebusinessEmailAddress" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_EBUSINESS_EMAIL_ADDRESS"/>
+</s:if>
+<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+	<s:set name="ebusinessEmailAddress" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_EBUSINESS_EMAIL_ADDRESS"/>
+</s:if>
 <div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.CONTACTADMIN" /> </div> <br /><br />
-<div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.HELPDESK" /> </div> 
-<a class="green-ui-btn" style="position:relative;margin-top:295px;margin-right: 15px;float:right;" href="/swc/home/logout.action?sfId=xpedx&amp;scFlag=Y"><span>Sign Out</span></a>
+<div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.HELPDESK" />&nbsp;<s:property value="ebusinessEmailAddress" /></div> 
+<a class="green-ui-btn" style="position:relative;margin-top:295px;margin-right: 15px;float:right;" href="/swc/home/logout.action?sfId=<s:property value="storefrontId" />&amp;scFlag=Y"><span>Sign Out</span></a>
 </s:if>
 <s:else>
  <!-- modal window container -->

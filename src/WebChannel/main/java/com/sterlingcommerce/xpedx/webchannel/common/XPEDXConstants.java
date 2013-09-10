@@ -181,4 +181,7 @@ public class XPEDXConstants {
 		if(SHIP_TO_CUSTOMER_SUFFIX_TYPE == null)
 			SHIP_TO_CUSTOMER_SUFFIX_TYPE = "S";
 	}
+	
+	public static final String SAALFELD_EBUSINESS_EMAIL_ADDRESS="ebusiness@saalfeldredistribution.com";
+	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@xpedx.com";
 }
