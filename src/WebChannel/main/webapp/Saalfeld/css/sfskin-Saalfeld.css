@@ -1,10 +1,11 @@
 body
 {
-	background: #e8e2d4;
+	background: url(../images/1X700_background.png);
+	/*background: #e8e2d4;*/
 }
-
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the color of the fields*/
 a, .commonHeader-subnav li, .commonHeader-subnav li a,
-.commonFooter a, #welcome-address-popup a { color: #107555; }
+.commonFooter a, #welcome-address-popup a { color: #006a3a; }
 #mil-list tr a { color: #107555 !important; }
 
 .commonHeader { background: transparent url(../images/998x107_saalfeld_header.jpg) no-repeat; }
@@ -38,7 +39,7 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 #main-nav li.active { background: url(../images/current_saalfeld.png) top center repeat-x; }
 #main-navigation ul li.lighter { background: url(../images/order_msg_saalfeld.png) repeat-x; }
 
-#homepage-table h2 { background: #084823; }
+#homepage-table h2 { background: #d1e1c7;  color: #006a3a; }
 
 .mini-cart-header,.table-header-bar
 {
@@ -77,8 +78,9 @@ table.mil-top-border .table-header-bar-right { width:143px; }
 }
 
 /* Orange */
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - Change the button image*/
 a.orange-ui-btn {
-	background: transparent url('../images/buttons/orange-bg-btn-a.png') no-repeat scroll top right;
+	background: transparent url('../images/buttons/green-bg-btn-a.png') no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
 	float: left;
@@ -89,7 +91,7 @@ a.orange-ui-btn {
 	text-decoration: none;
 }
 a.orange-ui-btn span {
-	background: transparent url('../images/buttons/orange-bg-btn-span.png') no-repeat;
+	background: transparent url('../images/buttons/green-bg-btn-span.png') no-repeat;
 	display: block;
 	line-height: 12px;
 	padding: 5px 0 4px 18px;
@@ -150,3 +152,14 @@ a.green-ui-btn:active span {
 /*EB-1689*/
 .underlines a:link{text-decoration:none;color: #107555;}
 .underlines a:hover{text-decoration:underline;color: #107555;}
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
+.white {
+    color: #006a3a;
+    margin-left: 4px;
+}
+
+#footer-copyright {
+    color: #988344;
+    text-align: center;
+    width: 100%;
+}
