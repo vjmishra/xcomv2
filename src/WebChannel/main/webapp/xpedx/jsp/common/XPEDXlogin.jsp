@@ -90,7 +90,7 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					<div class="button-row">
 					<!-- added for JIRA 3936 -->
 						<a href="javascript:signIn()" 
-							class="green-ui-btn"><span>Sign In</span></a> 
+							class="orange-ui-btn"><span>Sign In</span></a> 
 							<a href="javascript:(function(){document.homePageNewUserRegistration.submit();})();" class="underlink">Register</a>
 					</div>
 
