@@ -3482,6 +3482,12 @@ var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
 
 function resetPassword()
 {
+  var usrStatus = $('input[name=status]:checked', '#myAccount').val();
+  var dbUsrStatus= '<s:property value="%{getContactStatus()}" />';	
+  if(usrStatus == "30" || dbUsrStatus == "30") {
+	 alert("Cannot reset password for suspended users");
+  }
+  else {
 	if(confirm('Do you really want to reset this password?')) {
 		var url = '<s:property value="#ResetPasswordURL" />';
 		url = ReplaceAll(url,"&amp;",'&');
@@ -3500,7 +3506,8 @@ function resetPassword()
 	   			alert("Error sending reset password notification email!");
 	         }
 	    });
-	}     
+	}
+  }
 }
 function validatePassword(){
 	var url = '<s:property value="#ValidatePasswordURL" />';
