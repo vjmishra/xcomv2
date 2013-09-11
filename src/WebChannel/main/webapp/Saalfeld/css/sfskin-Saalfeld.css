@@ -43,7 +43,7 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 
 .mini-cart-header,.table-header-bar
 {
-	background-color: #084823;
+	background-color: #336633;
 }
 .mil-top-border
 {
@@ -163,7 +163,6 @@ a.green-ui-btn:active span {
     margin-left: 4px;
 }
 
-/*EB-2355: override the color in xpedx-header.css */
 .promo-txt {
 	color:#006a3a;	
 }
@@ -178,6 +177,27 @@ a.green-ui-btn:active span {
 
 .narrowByViewAllLink {
 	color: #66cc33;
+}
+
+.drag-to-compare, .drag-to-compare a
+{
+	color: #006a3a;
+}
+
+.papergrid-view  {
+	color:#000;
+}
+
+#breadcrumbs-list-name a,#breadcumbs-list-name a {
+	color: #006a3a;
+}
+
+#catalog-header-breadcrumbs #breadcrumbs-list-name a {
+	color: #006a3a;
+}
+
+#catalog-header-breadcrumbs #breadcrumbs-list-name .breadcrumbs-inner {
+    color: #006a3a;
 }
 
 #footer-copyright {
