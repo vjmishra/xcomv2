@@ -34,7 +34,7 @@
 	   <img height="20" width="20" align="left" title="Active cart" alt="active cart" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_blue_cart_on.png" style="margin-right: 4px; margin-top:4px;">
 	   </s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
-				<img height="20" width="20" align="left" title="Active cart" alt="active cart" src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_blue_cart_on.png" style="margin-right: 4px; margin-top:4px;">
+				<img height="20" width="20" align="left" title="Active cart" alt="active cart" src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_green_cart_on.png" style="margin-right: 4px; margin-top:4px;">
 				</s:elseif> 
 	<!-- EB-2395 END -->
 <!-- 	  &nbsp;&nbsp; -->
