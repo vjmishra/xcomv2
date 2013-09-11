@@ -153,19 +153,14 @@
 		<p>Dear <xsl:value-of select="/User/ContactPersonInfo/@EMailID"/>,</p>
 		<xsl:if test="/User/User/@RequestId">
 		<p>
-		You are receiving this notification because we recently received a password reset request for your account. <br/>
-		To reset your password, click on the following link: <br/>
-			<a>			
-			<xsl:attribute name="href"> Click here
-			<!-- <xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
-			 -->
-			 </xsl:attribute>
+		<!--  EB 2447  Saalfeld Password Reset Request -->
+		You are receiving this notification because we recently received a password reset request for your account. <br/><br/>
+		To reset your password,
+			<a><xsl:attribute name="href">
+			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
+			</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
-			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" />
-			</a><br/>
-				
-			
-			When you click on the link.
+			clcik here.</a> you will be prompted to create a new password.
 		</p>
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">

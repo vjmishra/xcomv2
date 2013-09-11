@@ -2531,8 +2531,13 @@ public class XPXUtils implements YIFCustomApi {
 				}
 				else
 				sb.append(userName).append("@").append(storeFrontId).append(suffix);
-				
-				String resetSubString = storeFrontId + ".com" + " Password Reset Request Notification ";
+				// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
+				String resetSubString =null;
+				if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+					resetSubString= storeFrontId + "redistribution.com" + " Password Reset Request Notification ";
+				}else{
+					resetSubString= storeFrontId + ".com" + " Password Reset Request Notification ";
+					}
 				Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 				"ResetPwdEmailSubject");
 					resetSubject.setAttribute("Subject", resetSubString);				
@@ -2544,20 +2549,18 @@ public class XPXUtils implements YIFCustomApi {
 				if(requestID!=null && !requestID.equalsIgnoreCase(""))
 				{
 					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
-					
+					// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
 					if("Saalfeld".equalsIgnoreCase(storeFrontId)){
-						emailSubject=" Password Reset Request Notification ";
+						emailSubject=storeFrontId + "redistribution.com" +" Password Reset Request Notification ";
 					} else{
 						
 					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";
 					}
-					
-					
 				}
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
 			    {
 					emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
-					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding 
+					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding... 
 					if("xpedx".equalsIgnoreCase(storeFrontId)){
 					emailSubject = storeFrontId + ".com" + " User Creation Notification";
 					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){
