@@ -186,6 +186,10 @@ a.green-ui-btn:active span {
 	color: #006a3a;
 }
 
+#comnum {
+	color: #006a3a;
+}
+
 .papergrid-view  {
 	color:#000;
 }
@@ -199,6 +203,10 @@ a.green-ui-btn:active span {
 }
 
 #catalog-header-breadcrumbs #breadcrumbs-list-name .breadcrumbs-inner {
+    color: #006a3a;
+}
+
+.submitBtnBg1 {
     color: #006a3a;
 }
 

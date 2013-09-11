@@ -782,6 +782,9 @@ ul
     height: 23px;
     width: 88px!important;
 }
+.addtocart-btn {
+	width: 102px;
+}
 
 .papergrid-view .addtocart a {
     color: #FFFFFF;
@@ -879,6 +882,10 @@ ul
 	text-align: left!important;
 }
 .mini-view .addtocart
+{
+	margin: 5px auto 0;
+}
+.mini-view .addtocart-btn
 {
 	margin: 5px auto 0;
 }
@@ -981,6 +988,12 @@ ul
 	float:right;
 	margin-top:5px;
 }
+.normal-view .addtocart-btn,
+.condensed-view .addtocart-btn {
+	float: right;
+	margin-top:5px;
+}
+
 /* .mill-mfg
 {
 	margin-top: 10px;
