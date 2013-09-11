@@ -267,6 +267,7 @@ span.underlink:hover {
      				var tag = "WT.ti,DCSext.w_x_cart_em";
 					var content = "Create New Cart,1";
      			</script>
+     			<!-- Added for EB-2395 As a Saalfeld user,want to view the Saalfeld cart page with the Saalfeld stylesheet so that I view the correct Saalfeld branding  Starts -->
      			<s:set name='storefrontId' value="wCContext.storefrontId" />
      			     <span class="float-left">
      			    <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
@@ -277,6 +278,7 @@ span.underlink:hover {
 					<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" 
      			     		src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_green_cart_on.png"  > 
 					</s:elseif>
+					<!-- EB-2395 END -->
      			     		<!-- is your active cart. --> 
      			     		<s:text name='MSG.SWC.CART.CARTLIST.INFO.ACTIVECART' />
      			     </span> 

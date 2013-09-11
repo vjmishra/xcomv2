@@ -28,7 +28,15 @@
 </s:if>
 <s:else>
 	<s:a href="%{draftOrderDetailsURL}" cssClass="underlink">
-	   <img height="20" width="20" align="left" title="Active cart" alt="active cart" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_blue_cart_on.png" style="margin-right: 4px; margin-top:4px;"> 
+	<!-- Added for EB-2395 As a Saalfeld user,want to view the Saalfeld cart page with the Saalfeld stylesheet so that I view the correct Saalfeld branding  Starts -->
+	<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+	   <img height="20" width="20" align="left" title="Active cart" alt="active cart" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_blue_cart_on.png" style="margin-right: 4px; margin-top:4px;">
+	   </s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
+				<img height="20" width="20" align="left" title="Active cart" alt="active cart" src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_blue_cart_on.png" style="margin-right: 4px; margin-top:4px;">
+				</s:elseif> 
+	<!-- EB-2395 END -->
 <!-- 	  &nbsp;&nbsp; -->
       <s:property value='%{value}'/> (<s:property  value="%{row.getAttribute('TotalNumberOfItems')}"/>)
     </s:a>
