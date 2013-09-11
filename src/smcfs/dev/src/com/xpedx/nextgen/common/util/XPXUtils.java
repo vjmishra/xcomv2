@@ -2552,9 +2552,8 @@ public class XPXUtils implements YIFCustomApi {
 					// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
 					if("Saalfeld".equalsIgnoreCase(storeFrontId)){
 						emailSubject=storeFrontId + "redistribution.com" +" Password Reset Request Notification ";
-					} else{
-						
-					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";
+					} else{						
+						emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";
 					}
 				}
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
@@ -2563,15 +2562,21 @@ public class XPXUtils implements YIFCustomApi {
 					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding... 
 					if("xpedx".equalsIgnoreCase(storeFrontId)){
 					emailSubject = storeFrontId + ".com" + " User Creation Notification";
-					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){
-						
+					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){						
 						emailSubject = storeFrontId + "redistribution.com" + " User Creation Notification";
 					}
 				}
 				else if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
 				{
 					emailType=XPXEmailUtil.USER_CHANGE_PASSWORD_EMAIL_TYPE;
-					emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
+					//emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
+					//EB-2445 As a Saalfeld product owner, I want to view the Saalfeld User Password Change email with correct Saalfeld branding.. 
+					if("xpedx".equalsIgnoreCase(storeFrontId)){						
+						emailSubject = storeFrontId + ".com" + " User Password Change Notification";
+						}
+						else if("Saalfeld".equalsIgnoreCase(storeFrontId)){											
+						emailSubject = storeFrontId + "redistribution.com" + " User Password Change Notification";
+						}
 				}
 				Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 					"NotificationPwdEmailSubject");
