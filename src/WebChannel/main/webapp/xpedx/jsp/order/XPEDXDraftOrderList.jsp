@@ -27,6 +27,7 @@
 
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+ <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <!--[if IE]>
@@ -266,10 +267,16 @@ span.underlink:hover {
      				var tag = "WT.ti,DCSext.w_x_cart_em";
 					var content = "Create New Cart,1";
      			</script>
-     			
+     			<s:set name='storefrontId' value="wCContext.storefrontId" />
      			     <span class="float-left">
+     			    <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
      			     	<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" 
      			     		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_blue_cart_on.png"  > 
+     			    </s:if>
+     			    <s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
+					<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" 
+     			     		src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_green_cart_on.png"  > 
+					</s:elseif>
      			     		<!-- is your active cart. --> 
      			     		<s:text name='MSG.SWC.CART.CARTLIST.INFO.ACTIVECART' />
      			     </span> 
