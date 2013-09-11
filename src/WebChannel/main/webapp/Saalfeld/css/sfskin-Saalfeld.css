@@ -223,6 +223,7 @@ a.green-ui-btn:active span {
 .quick-add-aux-links a {
     color: #66cc33;
 }
+#tq-quick-add-overlay a.grey-ui-btn span p{ display: inline; color: #006a3a; margin-right:5px; font-size: 14px;font-weight: bold; }
 .createdby-lastmod {
     color: #006a3a;
     text-align: center;
@@ -236,7 +237,15 @@ a.green-ui-btn:active span {
     max-height: 200px;
     text-decoration: none !important;
 }
-
+#tq-quick-add-overlay .quick-add-to-cart-form th
+{
+	background: #336633;
+	color:white;
+	border-right: 1px solid #ccc;
+	height: 29px;
+	padding: 0px 3px 0px 10px;
+	vertical-align: middle;
+}
 span.underlink:hover, p.underlink:hover {
     color: #006a3a;
     text-decoration: underline;
