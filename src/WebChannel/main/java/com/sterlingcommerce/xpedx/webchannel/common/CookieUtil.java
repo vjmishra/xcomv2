@@ -15,6 +15,8 @@ public class CookieUtil {
 	private static YFCLogCategory log = YFCLogCategory.instance(CookieUtil.class);
 	
 	public static final String STOREFRONT_ID = "StorefrontId";
+	public static final String SALESREP="salesrep";
+	
 
 	/**
 	 * @param req
@@ -29,9 +31,10 @@ public class CookieUtil {
 		Cookie[] cookies = req.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				if (STOREFRONT_ID.equals(cookie.getName())) {
+				if (cookieId.equals(cookie.getName())) {
 					return cookie;
 				}
+				
 			}
 		}
 		return null;

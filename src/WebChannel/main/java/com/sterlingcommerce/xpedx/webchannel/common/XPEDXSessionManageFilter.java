@@ -23,12 +23,14 @@ public class XPEDXSessionManageFilter implements Filter {
 	
 	private String[] excludeActions;// --Actions to Exclude -- Read from Web.xml
 	private String timeoutUrlPattern; // use String.format(timeoutUrlPattern, sfId)
+	private String salesRepTimeoutUrlPattern; //
 	private String defaultSfId;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
+
 		this.excludeActions = config.getInitParameter("excludeActions").split(",");
 		//forming the redirect URL - /swc/home/home.action?sfId=xpedx
 		StringBuilder redirectURL=new StringBuilder(128);
@@ -41,6 +43,14 @@ public class XPEDXSessionManageFilter implements Filter {
 		timeoutUrlPattern = redirectURL.toString();
 		
 		defaultSfId = config.getServletContext().getInitParameter("defaultSfId");
+		
+		StringBuilder salesRepdirectURL=new StringBuilder(128);
+		salesRepdirectURL.append(config.getServletContext().getContextPath());
+		salesRepdirectURL.append(config.getServletContext().getInitParameter("xpedx_sales_rep_login_url"));
+		salesRepdirectURL.append("?&error=sessionExpired");
+		salesRepTimeoutUrlPattern=salesRepdirectURL.toString();
+	
+		
 	}
 
 	
@@ -71,7 +81,12 @@ public class XPEDXSessionManageFilter implements Filter {
 			return;
 		}
 		if (req.getSession().getAttribute("loggedInCustomerID") == null) {
+			String salesRepCookie = getCurrentSalesrep(req);
+			if(salesRepCookie!=null){
+				resp.sendRedirect(String.format(salesRepTimeoutUrlPattern, salesRepCookie));
+			}else{
 			resp.sendRedirect(String.format(timeoutUrlPattern, getCurrentStorefrontId(req)));
+			}
 			return;
 		}
 
@@ -125,5 +140,15 @@ public class XPEDXSessionManageFilter implements Filter {
 		}
 		return sfId;
 	}
+	
+	
+	private String getCurrentSalesrep(HttpServletRequest req) {
+			Cookie cookie = CookieUtil.getCookie(req, CookieUtil.SALESREP);
+			if (cookie == null) {
+				return null;
+			} else {
+				return cookie.getValue();
+			}
+		}
 
 }

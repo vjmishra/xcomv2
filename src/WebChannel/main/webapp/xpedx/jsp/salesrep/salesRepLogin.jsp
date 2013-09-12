@@ -231,12 +231,18 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</tr>
 	<tr>
 		<td style="text-align:left;">
-		 <a name="button" id="button" class="green-ui-btn" href="#" onclick="return validateForm();"> <span>Sign In</span></a><br /> 
-		
+		 <a name="button" id="button" class="green-ui-btn" href="#" onclick="return validateForm();"> <span>Sign In</span></a><br /><br /> 
+		 	<% if(null != request.getParameter("error")){ %>
+						<div style="display: inline;color:#ff0000; font-size: 1.1em; text-align: left;margin-right: 10px;">
+						<p>Your session has expired.</p>
+						</div>
+					<%}
+					%>	
 		<%-- <input name="button" type="image" id="button"  value="Submit" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/salesrep/signin.png" onClick="return validateForm();"/> <br /> --%>
 		 
 		</td>
 		<td>&nbsp;</td>
+		
 	</tr>
 	<tr>
 	<td colspan="2">
@@ -245,8 +251,12 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 		<s:text name="Please enter a valid Username and Password." />
 		</div>
 	</s:if>
+			
 	
 	<div id="errMsg"> </div>
+	
+	
+	
 	</td>
 	</tr>
 	 <tr>
