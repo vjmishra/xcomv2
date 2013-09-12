@@ -105,7 +105,12 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 
 		String termsofAccess = (String) wcContext
 				.getWCAttribute("isTOAaccepted");
-		if ((termsofAccess != null) && termsofAccess.equals("Y")) {
+		//EB-475 update last login Date only once
+		YFCDate loginDate = new YFCDate();
+		String lastLoginDate = loginDate.getString();
+		String isLastLoginDateUpdated=(String)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.LAST_LOGIN_DATE_UPDATED);
+		//EB-475 Ended here
+		if ((termsofAccess != null) && termsofAccess.equals("Y") && !"Y".equalsIgnoreCase(isLastLoginDateUpdated)) {
 			boolean createCCExtn = false;
 			Map<String, String> attributeMap = new HashMap<String, String>();
 			Element xpxCustContExtnEle = (Element) XPEDXWCUtils
@@ -130,6 +135,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 			Element outDoc = (Element) XPEDXWCUtils
 					.updateXPXCustomerContactExtn(wcContext, customerContactId,
 							createCCExtn, attributeMap);
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.LAST_LOGIN_DATE_UPDATED, "Y");//EB-475
 
 		}
 	}

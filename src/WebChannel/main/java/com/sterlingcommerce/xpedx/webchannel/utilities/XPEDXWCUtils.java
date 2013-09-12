@@ -4516,6 +4516,16 @@ public class XPEDXWCUtils {
 
 			custContactExtnEle = (Element) WCMashupHelper.invokeMashup(mashupId,
 					input1, wcContext.getSCUIContext());
+					
+			//EB-475, 1521 started here
+			if(attributeMap.get(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR) != null && XPEDXWCUtils
+					.getObjectFromCache("CustomerContExtnEle") == null && custContactExtnEle != null)
+			{
+				
+				XPEDXWCUtils.setObectInCache("CustomerContExtnEle", custContactExtnEle);
+				XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContactExtnEle.getAttribute("CustContRefKey"));
+			}
+			//EB-475, 1521 ended here
 			
 		} catch (CannotBuildInputException e) {
 			// TODO Auto-generated catch block
