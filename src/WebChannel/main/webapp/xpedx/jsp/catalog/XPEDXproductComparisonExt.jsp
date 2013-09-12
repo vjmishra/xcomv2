@@ -587,7 +587,7 @@ Ext.onReady(function(){
 			enableGroupingMenu: false,
 			showGroupName: false,
 			hideGroupedColumn: true,
-			groupTextTpl: '{[values.group.substring(5)]}'
+			groupTextTpl: '{[values.group.substring(5).replace(\'xpedx\', \'<s:property value="wCContext.storefrontId" />\')]}'
         }),
         frame: false,
         autoScroll : true,

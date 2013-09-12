@@ -121,7 +121,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		String[] sItmIds = new String[iTotItmList];
 		String[] sUoms = new String[iTotItmList];
 		String[] sArrListPrice = new String[iTotItmList];
-		String[] sAttrDesc = new String[] { "xpedx#", "BaseUom"/*, "Price",
+		String[] sAttrDesc = new String[] { "__BRAND__#", "BaseUom"/*, "Price",
 				"Availability", "Immediate", "NextDay", "TwoPlusDays" */};
 		String[] sTmp = null;
 		Double price = 0.0;
@@ -142,19 +142,23 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		/*processPandA(sItmIds, sUoms);*/
 
 		for (int k = 0; k < sAttrDesc.length; k++) {
-			if (sAttrDesc[k] == "xpedx#") {
+			String sThisAttrDesc = sAttrDesc[k];
+			if ("__BRAND__#".equals(sThisAttrDesc)) {
 				sTmp = sItmIds;
-			} else if (sAttrDesc[k] == "BaseUom") {
+				
+				// eb-2405: Display brand instead of hard-coded 'xpedx'
+				sThisAttrDesc = sThisAttrDesc.replace("__BRAND__", getWCContext().getStorefrontId());
+			} else if ("BaseUom".equals(sThisAttrDesc)) {
 				sTmp = sUoms;
-			} /*else if (sAttrDesc[k] == "Immediate") {
+			} /*else if (sThisAttrDesc == "Immediate") {
 				sTmp = sArrimmediate;
-			} else if (sAttrDesc[k] == "Price") {
+			} else if (sThisAttrDesc == "Price") {
 				sTmp = sArrListPrice;
-			} else if (sAttrDesc[k] == "NextDay") {
+			} else if (sThisAttrDesc == "NextDay") {
 				sTmp = sArrNextDay;
-			} else if (sAttrDesc[k] == "TwoPlusDays") {
+			} else if (sThisAttrDesc == "TwoPlusDays") {
 				sTmp = sArrTwoPlusDays;
-			} else if (sAttrDesc[k] == "Availability") {
+			} else if (sThisAttrDesc == "Availability") {
 				sTmp = sArrAvailability;
 			}*/
 
@@ -163,7 +167,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			inputItmAttrElement.setAttribute("AttributeDomainID", "");
 			inputItmAttrElement.setAttribute("IsKeyAttribute", "");
 			inputItmAttrElement.setAttribute("ItemAttributeDescription",
-					sAttrDesc[k]);
+					sThisAttrDesc);
 			inputItmAttrElement.setAttribute("ItemAttributeGroupKey", "");
 			inputItmAttrElement.setAttribute("ItemAttributeKey", "");
 			inputItmAttrElement.setAttribute("ItemAttributeName", "");
@@ -173,7 +177,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			inputAttributeElement = inputItemAttrDoc.createElement("Attribute");
 			inputAttributeElement.setAttribute("AttributeDomainID", "");
 			inputAttributeElement.setAttribute("AttributeGroupID", "");
-			inputAttributeElement.setAttribute("AttributeID", sAttrDesc[k]);
+			inputAttributeElement.setAttribute("AttributeID", sThisAttrDesc);
 			inputAttributeElement.setAttribute("AttributeKey", "");
 			inputAttributeElement.setAttribute("DataType", "TEXT");
 			inputAttributeElement.setAttribute("IsAllowedValueDefined", "");
