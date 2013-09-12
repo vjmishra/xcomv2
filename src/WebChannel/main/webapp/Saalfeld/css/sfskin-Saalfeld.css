@@ -160,10 +160,10 @@ a.green-ui-btn:active span {
 .underlines a:link{text-decoration:none;color: #107555;}
 .underlines a:hover{text-decoration:underline;color: #107555;}
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
-/*.white {
+.whitest {
     color: #006a3a;
     margin-left: 4px;
-}*/
+}
 
 .promo-txt {
 	color:#006a3a;	
@@ -267,9 +267,21 @@ span.underlink:hover, p.underlink:hover {
     text-align: right;
 }
 
-.standard-table thead td {
+/*.standard-table thead td {
     border-left: 1px solid #084823 !important;
     border-bottom: 0px solid
+}*/
+.midsection thead tr { background-color: #336633; color: #ffffff; }
+#checkout-table-header td {
+    background-color: #336633;
+    padding: 10px;
+    width: 100%;
 }
-
+.short-description_M {
+    color:#084823;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
 

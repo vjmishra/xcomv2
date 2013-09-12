@@ -1879,7 +1879,7 @@ function searchShipToAddress(divId,url) {
 		if(searchText==''|| searchText==null)
 */
 		/* JIRA 3331 if search text is blank then all ship tos should be shown
-		if(searchText==''|| searchText==null || searchText=='Search Ship-To�')
+		if(searchText==''|| searchText==null || searchText=='Search Ship-Toï¿½')
 		{
 			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
 			document.getElementById('errorText').setAttribute("class", "error");
@@ -2360,7 +2360,7 @@ function msgWait(){
 			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
 	                            ></button>
 		    <div id="tips-container">
-		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
+		    	 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
 		    </div>
 	    </s:form>
 	    <!-- END wctheme.form-close.ftl --> 
@@ -2377,7 +2377,7 @@ function msgWait(){
 		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
 	            style="top:-4px;margin-left: 3px;height: 20px;"></button>
 	     <div id="tips-container">
-		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
+		    	 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
 		</div> 
 	   </s:form>
 	 </div>
