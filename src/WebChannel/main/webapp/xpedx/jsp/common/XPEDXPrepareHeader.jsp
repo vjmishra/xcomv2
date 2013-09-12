@@ -2446,13 +2446,24 @@ function msgWait(){
 						<s:if test='%{#session.loggedInUserName != null}'>		
 							Welcome <s:property value='%{#session.loggedInUserName}'/><s:if test='{#welcomeUserShipToName != null}'>,<s:property value='welcomeUserShipToName'/>
 							</s:if>
-							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />						
+							<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />	
+							</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+				<img  src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/icons/12x12_green_down.png" alt="" />	
+				</s:elseif>					
 						</s:if>
 					</s:if>
 					<s:else>
 						Welcome <s:property value='welcomeUserFirstName'/> <s:property value='welcomeUserLastName'/><s:if test='{#welcomeUserShipToName != null}'>, <s:property value='welcomeUserShipToName'/>
 							</s:if>
-						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />	
+							</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+				<img  src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/icons/12x12_green_down.png" alt="" />	
+				</s:elseif>			
 					</s:else>										
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
