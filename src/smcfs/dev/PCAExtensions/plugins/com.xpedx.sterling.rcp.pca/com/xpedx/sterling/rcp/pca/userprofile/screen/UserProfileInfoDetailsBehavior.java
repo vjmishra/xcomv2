@@ -668,12 +668,18 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		Element ExistingoutPut= getTargetModel("XPXResultOut");
 		String loginID = ExistingoutPut.getAttribute("UserID");
 		userElement.setAttribute("Loginid", loginID);
-		
-		YRCApiContext context = new YRCApiContext();
-	    context.setApiName("requestPasswordReset");
-	    context.setFormId(getFormId());
-	    context.setInputXml(inputDoc);
-	    callApi(context);
+		String newUserStatus = ExistingoutPut.getAttribute("Status");
+		Element inputElement = getModel("XPXCustomerContactIn");		
+		String origUserStatus = YRCXmlUtils.getAttributeValue(inputElement, "/CustomerContact/@Status");
+		if((newUserStatus!=null && newUserStatus.equals("30")) || (origUserStatus!=null && origUserStatus.equals("30"))){
+			YRCPlatformUI.showError("Reset Password",YRCPlatformUI.getString("Reset_Password_For_Susp_User_Error"));
+		}else{
+			YRCApiContext context = new YRCApiContext();
+		    context.setApiName("requestPasswordReset");
+		    context.setFormId(getFormId());
+		    context.setInputXml(inputDoc);
+		    callApi(context);
+		}
 	}
 	public Element addNonBindedAttribute(){
 		Element ExistingoutPut= getTargetModel("XPXResultOut");
