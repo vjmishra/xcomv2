@@ -115,7 +115,7 @@ a.orange-ui-btn:active span {
 a.orange-ui-btn:hover, a.green-ui-btn:hover, a.grey-ui-btn:hover{ text-decoration: none; }
 /* Green */
 a.green-ui-btn {
-	background: transparent url('../images/buttons/gold-bg-btn-a.png') no-repeat scroll top right;
+	background: transparent url('../images/buttons/green-bg-btn-a.png') no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
 	float: left;
@@ -126,7 +126,7 @@ a.green-ui-btn {
 	text-decoration: none;
 }
 a.green-ui-btn span {
-	background: transparent url('../images/buttons/gold-bg-btn-span.png') no-repeat;
+	background: transparent url('../images/buttons/green-bg-btn-span.png') no-repeat;
 	display: block;
 	line-height: 12px;
 	padding: 5px 0 4px 18px;
@@ -219,3 +219,53 @@ a.green-ui-btn:active span {
 #home-image-rotation-nav a.activeSlide {
     background: url("../images/buttons/rotation_dot_on.png") repeat scroll 0 0 transparent;
 }
+.header#top-bar { background-color:#336633; }
+.quick-add-aux-links a {
+    color: #66cc33;
+}
+#tq-quick-add-overlay a.grey-ui-btn span p{ display: inline; color: #006a3a; margin-right:5px; font-size: 14px;font-weight: bold; }
+.createdby-lastmod {
+    color: #006a3a;
+    text-align: center;
+    width: 125px;
+}
+.short-description {
+    color: #006a3a;
+    cursor: pointer;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
+#tq-quick-add-overlay .quick-add-to-cart-form th
+{
+	background: #336633;
+	color:white;
+	border-right: 1px solid #ccc;
+	height: 29px;
+	padding: 0px 3px 0px 10px;
+	vertical-align: middle;
+}
+span.underlink:hover, p.underlink:hover {
+    color: #006a3a;
+    text-decoration: underline;
+}
+.search-pagination-top {
+    color: #333333;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 9px;
+    text-align: right;
+}
+.search-pagination-bottom {
+    color: #333333;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    text-align: right;
+}
+
+
+
