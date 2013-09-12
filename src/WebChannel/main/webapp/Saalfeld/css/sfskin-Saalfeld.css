@@ -206,6 +206,9 @@ a.green-ui-btn:active span {
     color: #006a3a;
 }
 
+breadcrumb-inactive {
+    color: #006a3a;
+}
 .submitBtnBg1 {
     color: #006a3a;
 }
@@ -218,6 +221,10 @@ a.green-ui-btn:active span {
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the rotation dot in promotions*/
 #home-image-rotation-nav a.activeSlide {
     background: url("../images/buttons/rotation_dot_on.png") repeat scroll 0 0 transparent;
+}
+#homepage-table ul.news-links {
+    color: #006a3a;
+    list-style: disc outside none;
 }
 .header#top-bar { background-color:#336633; }
 .quick-add-aux-links a {
@@ -283,5 +290,16 @@ span.underlink:hover, p.underlink:hover {
     height: auto;
     max-height: 200px;
     text-decoration: none !important;
+}
+.jcarousel-container a
+{
+	color: #006a3a;
+	float: left;
+	font-size: 12px;
+	margin-right: 21px;
+	padding-right: 10px;
+	border-right: 1px solid #ccc;
+	text-align: left!important;
+	width:242px;
 }
 
