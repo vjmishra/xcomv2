@@ -303,3 +303,8 @@ span.underlink:hover, p.underlink:hover {
 	width:242px;
 }
 
+.txt-lnk-sml-1 {
+    color: #084823;
+    font-size: 11px;
+    text-decoration: underline;
+}
