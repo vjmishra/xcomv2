@@ -160,7 +160,7 @@
 			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
 			</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
-			click here.</a> you will be prompted to create a new password.
+			click here.</a> You will be prompted to create a new password.
 		</p>
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">
