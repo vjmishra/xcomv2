@@ -83,6 +83,7 @@ function toggleCost(id)
 var myMask;
 
 
+/* eb-2005: we don't want to cycle the promo image, it's an animated gif
 $(document).ready(function() {
 	$('.slideshow').cycle({
 			fx: 'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
@@ -92,6 +93,7 @@ $(document).ready(function() {
 			next:   '#catalog-image-rotation-nav .img-navi-right'
 	});
 });
+*/
 function shareSelectAll(checked_status){
 	//var checked_status = this.checked;
 	var checkboxes = Ext.query('input[name*=customerPaths]');
