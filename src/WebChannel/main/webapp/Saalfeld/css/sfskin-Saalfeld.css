@@ -308,3 +308,13 @@ span.underlink:hover, p.underlink:hover {
     font-size: 11px;
     text-decoration: underline;
 }
+.inf {
+	background-color: #d1e1c7 ;
+	border: 1px solid #0055B5;
+	color: #66cc33;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	width: auto;
+}
