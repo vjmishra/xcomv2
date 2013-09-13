@@ -1477,7 +1477,7 @@ function SubmitActionWithValidation()
 					</p>					
 					<br/>
 					<div>
-						<s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' />
+						<b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' /></b>
 							<s:if test='certFlag=="Y"'>
 								<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" />
 							</s:if>
