@@ -4516,7 +4516,7 @@ public class XPEDXWCUtils {
 
 			custContactExtnEle = (Element) WCMashupHelper.invokeMashup(mashupId,
 					input1, wcContext.getSCUIContext());
-					
+
 			//EB-475, 1521 started here
 			if(attributeMap.get(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR) != null && XPEDXWCUtils
 					.getObjectFromCache("CustomerContExtnEle") == null && custContactExtnEle != null)
@@ -5331,9 +5331,10 @@ public class XPEDXWCUtils {
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		
 		String defaultShipToChanged = (String)getObjectFromCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE);
+		String isSapStillNeedToChange=(String)getObjectFromCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE);
 		try
 		{
-			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged)){
+			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged) || "Y".equalsIgnoreCase(isSapStillNeedToChange)){
 				// do this only when the default ship to is changed and when logging in for the first time.
 				Document SAPCustomerDoc = XPEDXOrderUtils.getSAPCustomerExtnFlagsDoc(wcContext);
 				LinkedHashMap customerFieldsMap = new LinkedHashMap();
@@ -5378,7 +5379,7 @@ public class XPEDXWCUtils {
 					setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP",customerFieldsRulesMap));
 					// reset the flag once used
 					setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"false");
-					
+					removeObectFromCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE);
 					//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
 			}
 		}
