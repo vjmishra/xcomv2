@@ -274,10 +274,10 @@ span.underlink:hover, p.underlink:hover {
     text-align: right;
 }
 
-/*.standard-table thead td {
-    border-left: 1px solid #084823 !important;
+.standard-table thead td {
+    border-left: 1px solid #006a3a !important;
     border-bottom: 0px solid
-}*/
+}
 .midsection thead tr { background-color: #336633; color: #ffffff; }
 #checkout-table-header td {
     background-color: #336633;
