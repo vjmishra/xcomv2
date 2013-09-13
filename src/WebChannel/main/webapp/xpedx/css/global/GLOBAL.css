@@ -2402,6 +2402,9 @@ a.blue-ui-btn:active span {
 .white {
     font-size: 11px;
 }
+.whitest {
+    font-size: 11px;
+}
 #order-filter td {
     background: none repeat scroll 0 0 transparent;
     border-left: 0 solid #CCCCCC;

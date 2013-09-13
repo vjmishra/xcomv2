@@ -302,6 +302,10 @@ span.underlink:hover, p.underlink:hover {
 	text-align: left!important;
 	width:242px;
 }
+.txt-small a:link {
+    color: #006a3a;
+    text-decoration: none;
+}
 
 .txt-lnk-sml-1 {
     color: #084823;
@@ -317,4 +321,18 @@ span.underlink:hover, p.underlink:hover {
 	line-height: 15px;
 	display: inline-block;
 	width: auto;
+}
+#main-navigation ul li.order-edit-bg {
+    background: none repeat scroll 0 0 #988344;
+    margin-top: 4px;
+    padding-top: 0;
+}
+#main-navigation ul li.lighter.order-edit a {
+    border: 1px solid #b7a980;
+    font-weight: normal;
+}
+#main-navigation ul li.lighter.order-edit {
+    background: none repeat scroll 0 0 #b7a980;
+    margin-top: 4px;
+    padding-top: 0;
 }
