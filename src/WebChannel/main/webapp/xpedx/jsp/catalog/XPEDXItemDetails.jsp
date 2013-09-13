@@ -99,7 +99,7 @@
 </s:if>
 <s:else>
 	<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOM)" />
-</s:else>	
+</s:else>
 </head>
 <!-- END swc:head -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -127,6 +127,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	if(conversionFactor!=null && conversionFactor!=undefined){
 		 uomConvFactor = document.getElementById("uomConvFactor").value;
 	}
+	var txtBoxQty=Qty;
 	if(Qty == null || Qty == "null" || Qty == "") {
 		reqUom = document.getElementById("selectedUOM").value;
 		if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
@@ -158,6 +159,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 			itemID 	: itemId,
 	       	requestedUOM : reqUom,
 	       	pnaRequestedQty	: Qty,
+	       	textBoxQty : txtBoxQty,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
@@ -177,7 +179,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	});
 }
 
-function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor,isOrderData){		
+function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor,isOrderData){
 	if(isOrderData == undefined || isOrderData == null)
 	{
 		isOrderData='false';
@@ -192,6 +194,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		reqUom = document.getElementById("selectedUOM").value;
 	}
 	var Qty=document.getElementById("qtyBox").value;
+	var txtBoxQty=Qty;
 	//Quantity validation
 	if(Qty =='')
 	{	
@@ -244,6 +247,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			itemID 	: itemId,
 	       	requestedUOM : reqUom,
 	       	pnaRequestedQty	: Qty,
+	       	textBoxQty : txtBoxQty,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
