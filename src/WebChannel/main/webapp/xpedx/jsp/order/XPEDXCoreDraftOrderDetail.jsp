@@ -676,7 +676,7 @@
 			    <div class="bottom-mil-info">
 			    	<div class="float-left brand-info">
 			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
-			    		<p><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' />
+			    		<p><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' /></b>
 				    		<s:if test='#certFlag=="Y"'>
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>

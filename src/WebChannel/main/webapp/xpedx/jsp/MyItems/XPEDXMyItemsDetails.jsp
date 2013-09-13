@@ -3061,7 +3061,7 @@ function showSharedListForm(){
 										<s:hidden name="descs" value="%{#desc}" />
                                 </ul>                                                 
 								<s:if test="%{#showItemType}">
-									<p ><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value="#itemId" />									
+									<p ><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value="#itemId" /></b>			
 										<s:if test='#certFlag=="Y"'>
 											<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" style="margin-left:0px; display: inline;">
 										</s:if>

@@ -518,9 +518,11 @@ public class XPEDXPriceandAvailabilityUtil {
 					if(WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode())){
 						item.setOrderMultipleErrorFromMax("true");
 					}
-					if(!"00".equals(item.getLineStatusCode()) && !WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode()))
+					if(!"00".equals(item.getLineStatusCode()) && !WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode())) {
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
 						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR);
+					}
+					
 				}
 			}
 		} catch (MalformedURLException e) {
@@ -702,7 +704,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			Double totalForImmediate = new Double(0);
 			Double totalForNextDay = new Double(0);
 			Double totalForTwoPlus = new Double(0);
-			Double toalAvailable = new Double(0);
+			Double totalAvailable = new Double(0);
 			for (Object wareHouse : wareHouseList) {
 				wareHouseItem = (XPEDXWarehouseLocation) wareHouse;
 				String availQtyStr = wareHouseItem.getAvailableQty();
@@ -737,7 +739,7 @@ public class XPEDXPriceandAvailabilityUtil {
 				}
 			}
 			// Prepare the JSON Object
-			toalAvailable = totalForImmediate + totalForNextDay
+			totalAvailable = totalForImmediate + totalForNextDay
 					+ totalForTwoPlus;
 			//Fix for JIRA issue 1306
 			//Availability For next day = Availability for today + Availability for next day
@@ -757,13 +759,33 @@ public class XPEDXPriceandAvailabilityUtil {
 				requestedQtyFloat = new Integer(0);
 			}
 			
-			if (requestedQtyFloat <= totalForImmediate) {
+			if (totalAvailable == 0) {
+				jsonData.put("AvailabilityMessage", "Not Available");
+				jsonData.put("AvailabilityMessageColor", "#FF0000");
+			
+			} else if (requestedQtyFloat <= totalForImmediate) {
 				jsonData.put("Availability", "Immediate");
+				jsonData.put("AvailabilityMessage", "Ready to Ship");
+				jsonData.put("AvailabilityMessageColor", "#008000");
+			
 			} else if (requestedQtyFloat <= totalForNextDay) {
 				jsonData.put("Availability", "Next Day");
+				jsonData.put("AvailabilityMessage", "Ready To Ship Next Day");
+				jsonData.put("AvailabilityMessageColor", "#008000");
+				
 			} else if (requestedQtyFloat <= totalForTwoPlus) {
 				jsonData.put("Availability", "2+ days");
-			}else if(toalAvailable > 0){
+				jsonData.put("AvailabilityMessage", "Ready to Ship Two Plus Days");
+				jsonData.put("AvailabilityMessageColor", "#FF0000");
+				
+			} else if (totalAvailable > 0 && requestedQtyFloat > totalAvailable) {
+				jsonData.put("Availability", "Availability");
+				jsonData.put("AvailabilityMessage", "Partial Quantity Available");
+				Double availableBalance= new Double(requestedQtyStr.trim()).doubleValue() - totalAvailable;
+				jsonData.put("AvailabilityBalance", availableBalance.toString());
+				jsonData.put("AvailabilityMessageColor", "#FF0000");
+			
+			} else if(totalAvailable > 0) {
 				jsonData.put("Availability", "Availability");
 			}
 
@@ -778,7 +800,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			if (totalForTwoPlus > 0) {
 				jsonData.put("TwoPlusDays", totalForTwoPlus.toString());
 			}
-			jsonData.put("Total", toalAvailable.toString());
+			jsonData.put("Total", totalAvailable.toString());
 
 			jsonData.put("PricingUOMUnitPrice", item.getUnitPricePerPricingUOM());			
 			jsonData.put("UnitPricePerRequestedUOM", item.getUnitPricePerRequestedUOM());			
