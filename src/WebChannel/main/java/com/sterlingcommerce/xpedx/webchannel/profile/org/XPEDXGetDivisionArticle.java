@@ -115,8 +115,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 			Map<String, String> attributeMap = new HashMap<String, String>();
 			Element xpxCustContExtnEle = (Element) XPEDXWCUtils
 					.getObjectFromCache("CustomerContExtnEle");
-			String lastLoginDate = (String) XPEDXWCUtils
-					.getObjectFromCache("LastLoginDate");
+		//	String lastLoginDate = (String) XPEDXWCUtils.getObjectFromCache("LastLoginDate");//removed as part of EB-475
 			String custContRefKey = (String) XPEDXWCUtils
 					.getObjectFromCache("CustomerContactRefKey");
 
