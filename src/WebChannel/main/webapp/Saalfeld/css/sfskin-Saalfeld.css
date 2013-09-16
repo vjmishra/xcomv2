@@ -356,5 +356,12 @@ padding-top: 4px;
        color: #d1e1c7;      
        padding-left: 10px;
 }
+.ship_banner
+{
+height:22px;
+background-color:#d1e1c7;
+padding: 0px 10px;
+font-size: 11px;
+}
 
 .ship_banner a:hover { text-decoration: underline; }
