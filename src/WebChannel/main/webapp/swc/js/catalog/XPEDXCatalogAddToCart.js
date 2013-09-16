@@ -214,6 +214,7 @@ var myMask;
 		}
 		else if(validateOM == true){
 			var qty = document.getElementById('Qty_'+itemId).value;
+			var txtBoxQty=qty;
 			var custUOM = document.getElementById('custUOM_'+itemId).value;
 			var uomList = document.getElementById('itemUomList_'+itemId);
 			if(uomList!=null && uomList.options.length>0)
@@ -235,6 +236,7 @@ var myMask;
 	            params: {
 					pnaItemId: itemId,
 					pnaRequestedQty: qty,
+					textBoxQty: txtBoxQty,
 					pnaRequestedUOM: selectedUom,
 					validateOM : validateOM,
 					pnaReqCustomerUOM : custUOM,

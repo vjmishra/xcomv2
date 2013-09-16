@@ -90,7 +90,7 @@
 			</tr>
 			
 			<tr>
-				<td class="table_center" width="163" align="left" style="padding-left:5px">Total Available:</td>
+				<td class="table_center" width="163" align="left" style="padding-left:28px">Total Available:</td>
 				<td class="table_right">
 				<s:if test='%{#jsonTotalQty == null}'>
 					<s:set name="jsonTotalQty" value="%{'0'}"></s:set>

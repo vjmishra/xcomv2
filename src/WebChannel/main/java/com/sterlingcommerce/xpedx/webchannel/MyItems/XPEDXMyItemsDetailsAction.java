@@ -170,7 +170,17 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
     protected HashMap useOrderMultipleMapFromSourcing;
 	private String customerItemFlag;
     private String mfgItemFlag;
-    public String getCustomerItemFlag() {
+    private String textBoxQty;
+    
+    public String getTextBoxQty() {
+		return textBoxQty;
+	}
+
+	public void setTextBoxQty(String textBoxQty) {
+		this.textBoxQty = textBoxQty;
+	}
+
+	public String getCustomerItemFlag() {
 		return customerItemFlag;
 	}
 
