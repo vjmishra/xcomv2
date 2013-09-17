@@ -175,7 +175,13 @@
             <div id="inline1" class="xpedx-light-box">
            <!-- <div style=" float:right; text-align:right; margin-top:-5px;" >User Search: <input name="textfield" type="text" class="x-input" style="width:120px; margin-bottom:15px;" id="textfield" />  <button type="submit" id="newSearch_0" value="Submit" class="searchButton"></button>     </div>  -->
 <h2><span style="margin:0px;">My Users</span></h2> 
+<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 <p class="less-margin">  <img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
+</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+				<p class="less-margin">  <img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/20x20_green_admin.png" /> Denotes an Admin User
+				</s:elseif>
    <!-- <div class="paginationContainer">-- pagination control -->
        <span style="float:right; margin-right:3px; margin-top: 5px;"> <span class="bold">Page&nbsp;
        <%--added for jira 3317 --%>
@@ -236,7 +242,13 @@
 							<div style="width:230px; word-wrap:break-word;">
 								<input type="radio" onchange="javascript:setSelectedUrl('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />');" name="selectRadio" id="selectRadio"/>
 															<s:if test="#_action.isAdminMap.get(#userList.getAttribute('CustomerContactID'))">
+									<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>						
 									<img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_admin.png" />
+									</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+				<img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/20x20_green_admin.png" />
+				</s:elseif>
 								</s:if>
 							&nbsp;<s:property value='%{#userList.getAttribute("CustomerContactID")}'/>
 

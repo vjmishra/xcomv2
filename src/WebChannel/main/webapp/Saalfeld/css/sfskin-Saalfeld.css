@@ -353,7 +353,7 @@ padding-top: 4px;
 
 .ship_banner a
 {
-       color: #d1e1c7;      
+       color: #006a3a;      
        padding-left: 10px;
 }
 .ship_banner
@@ -365,3 +365,17 @@ font-size: 11px;
 }
 
 .ship_banner a:hover { text-decoration: underline; }
+div.wc-table-header td {
+    background-color: #006a3a;
+    border: 0 none;
+    padding: 10px 5px;
+}
+.middle-section ul
+{
+ list-style-type:disc;	
+ color: #006a3a;
+ padding: 10px 0px 0px 15px;  
+ max-height: 73px;
+ overflow: hidden;
+}
+
