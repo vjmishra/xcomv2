@@ -1202,6 +1202,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 						.removeAttribute(
 								XPEDXWCUtils.XPEDX_SHIP_TO_ADDRESS_OVERIDDEN);
 			}
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE, "Y");
 			changeCurrentCartOwner();
 
 		}
