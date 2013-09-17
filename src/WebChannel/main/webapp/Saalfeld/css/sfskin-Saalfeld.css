@@ -71,11 +71,11 @@ table.mil-top-border .table-header-bar-right { width:143px; }
 
 .table-header-bar-left
 {
-	background-image: url(../images/items-list-bg-LEFT_green.gif);
+	background-image: url(../images/items-list-bg-LEFT_green2.gif);
 }
 .table-header-bar-right
 {
-	background-image: url(../images/items-list-bg-RIGHT_green.gif);
+	background-image: url(../images/items-list-bg-RIGHT_green2.gif);
 	
 }
 
@@ -314,7 +314,7 @@ span.underlink:hover, p.underlink:hover {
 }
 .inf {
 	background-color: #d1e1c7 ;
-	border: 1px solid #0055B5;
+	border: 1px solid #66cc33;
 	color: #66cc33;
 	padding-left: 5px;
 	padding-right: 5px;
@@ -355,6 +355,13 @@ padding-top: 4px;
 {
        color: #d1e1c7;      
        padding-left: 10px;
+}
+.ship_banner
+{
+height:22px;
+background-color:#d1e1c7;
+padding: 0px 10px;
+font-size: 11px;
 }
 
 .ship_banner a:hover { text-decoration: underline; }

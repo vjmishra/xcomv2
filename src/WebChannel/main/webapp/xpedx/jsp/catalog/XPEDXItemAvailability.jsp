@@ -61,7 +61,7 @@
 		
 		<s:if test='%{#txtBoxQty != null && #txtBoxQty != 0 && #jsonAvailabilityBalance != null}'>
 			<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
-			<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:12px;padding-left:10px"><strong><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not currently available</strong></p>
+			<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:12px;padding-left:10px"><strong><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
 		</s:if>
 		<tr class="my-headings" style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td colspan="3"><span><i>Availability</i></span></td>

@@ -1653,21 +1653,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		String shipFromDivision = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnShipFromBranch");
 		
-		if ("Y".equals(custPONoFlag)) {
-			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
-			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
-			//Fix for showing custom PONo label entered by the Customer for XB 769\ XB 434
-			String custLinePONoLbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLinePOLbl");
-			//getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
-			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
-			
-			if (custLinePONoLbl != null && custLinePONoLbl.trim().length() > 0) {
-				getCustomerFieldsMap().put("CustomerPONo", custLinePONoLbl);
-			} else {
-				getCustomerFieldsMap().put("CustomerPONo","Line PO #");
-			}
-			//End of XB 769\ XB 434
-		}
+		// JIRA EB-2542: Swapped the if condition blocks checking custLineNoFlag and custPONoFlag for export
 
 		if ("Y".equals(custLineNoFlag)) {
 			//Reverted back to the earlier logic to read the label from customer profile
@@ -1683,6 +1669,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
+		}
+		
+		if ("Y".equals(custPONoFlag)) {
+			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
+			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
+			//Fix for showing custom PONo label entered by the Customer for XB 769\ XB 434
+			String custLinePONoLbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLinePOLbl");
+			//getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
+			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
+			
+			if (custLinePONoLbl != null && custLinePONoLbl.trim().length() > 0) {
+				getCustomerFieldsMap().put("CustomerPONo", custLinePONoLbl);
+			} else {
+				getCustomerFieldsMap().put("CustomerPONo","Line PO #");
+			}
+			//End of XB 769\ XB 434
 		}
 		
 		if ("Y".equals(custField1Flag)) {

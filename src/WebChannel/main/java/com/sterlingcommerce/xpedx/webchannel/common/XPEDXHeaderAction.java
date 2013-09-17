@@ -672,7 +672,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		{
 			xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, customerContactId);
 			XPEDXWCUtils.setObectInCache("CustomerContExtnEle",xpxCustContExtnEle);
-			XPEDXWCUtils.setObectInCache("LastLoginDate",lastLoginDate);
+			//XPEDXWCUtils.setObectInCache("LastLoginDate",lastLoginDate);//EB-475 LastLoginDate is not used in session.
 		}
 		if(xpxCustContExtnEle != null)
 		{

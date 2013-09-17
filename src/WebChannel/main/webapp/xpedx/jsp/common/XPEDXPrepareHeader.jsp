@@ -2629,7 +2629,7 @@ function msgWait(){
 	            <s:else>
 						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
-							<s:param name="filterByMyListChk" value="%{true}" />
+							<s:param name="filterByMyListChk" value="%{false}" />
 							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
 						</s:url>		            	
 		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>

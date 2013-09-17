@@ -34,6 +34,9 @@ public class XPEDXTermsOfAccessAction extends WCMashupAction {
 			buyerOrdCode = getWCContext().getBuyerOrgCode();
 			
 			Element outputEl = prepareAndInvokeMashup("UpdateUserTOA");*/
+			//EB-475 update the last login date only once while logging in
+			YFCDate loginDate = new YFCDate();
+			String lastLoginDate = loginDate.getString();
 			
 			Map<String, String> attributeMap = new HashMap<String, String>();
 			String custContRefKey = null;
@@ -50,6 +53,8 @@ public class XPEDXTermsOfAccessAction extends WCMashupAction {
 			
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_FLAG_ATTR, toaChecked);
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR, toaAcceptedDate);
+			//EB-475 update the last login while accepting terms and conditions
+			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_LAST_LOGIN_DATE,lastLoginDate);
 			
 			Element outDoc = (Element)XPEDXWCUtils.updateXPXCustomerContactExtn(wcContext, customerContactId,createCCExtn, attributeMap);
 			wcContext.setWCAttribute("isTOAaccepted", toaChecked, WCAttributeScope.LOCAL_SESSION);
