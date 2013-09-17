@@ -35,6 +35,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.DraftOrderDetailsAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
@@ -217,7 +218,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			XPEDXWCUtils.changeOrderOwnerToSelectedCustomer(getWCContext(),orderHeaderKey);
 			There is no need to change the order owner
 			*/
-			getItemUOMs();
+			//getItemUOMs();
 			checkforEntitlement();
 			//Start of XB-689 - Adding a message , when there are duplicate items in the cart
 			if(allItemIDsWithDuplicates !=null && allItemIDsWithDuplicates.size()>0){
@@ -1243,7 +1244,9 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected void getAndProcessItemDetails() throws Exception {
 
 		//getRelatedItemsForDraftOrder();
+		
 		setXPEDXItemAssociation();
+		
 		//super.getAndProcessItemDetails();
 
 	}
@@ -1289,7 +1292,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		/*prepareXpedxItemAssociationMap(itemIDList);
 		prepareXpedxItemBranchItemAssociationMap(itemIDList);*/
 		ArrayList<String> youMightConsiderItemIDs = new ArrayList<String>();
-		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = XPEDXOrderUtils.getXpedxAssociationsForItems(itemIDList, wcContext, true);
+		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = getXpedxAssociationsForItems(itemIDList, wcContext, true);
 		if(allAssociatedItemsMap!=null && !allAssociatedItemsMap.isEmpty())
 		{
 			if(allAssociatedItemsMap.containsKey(XPEDXOrderUtils.REPLACEMENT_ITEMS_KEY))
@@ -1441,6 +1444,395 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 			
 		}
+	}
+	/*
+	 * Created this method same as xpedxorderutils to improve the performance of draft order details page
+	 * there were two consecutive call on this and wanted to the second call since the same call is happening afterwards so had to create the same method here
+	 */
+	private HashMap<String, HashMap<String,ArrayList<Element>>> getXpedxAssociationsForItems(ArrayList<String> itemIDList, 
+			IWCContext wcContext, boolean editMode) throws XPathExpressionException
+	{
+		
+		String custID = wcContext.getCustomerId();
+		String callingOrgCode = wcContext.getStorefrontId();
+		
+		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = new HashMap<String, HashMap<String,ArrayList<Element>>>(); 
+		
+		HashMap<String, ArrayList<Element>> replacementItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> alternateItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> complimentaryItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> upgradeItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> crosssellItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> upsellItemsMap = new HashMap<String, ArrayList<Element>>();
+		//XB-673 - Changes Starts
+		HashMap<String, ArrayList<Element>> alternateSBCItemsMap = new HashMap<String, ArrayList<Element>>();
+		//XB-673 - Changes End
+		HashMap<String, ArrayList<Element>> itemExtnElemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> itemListElemsMap = new HashMap<String, ArrayList<Element>>();
+		
+		ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
+		ArrayList<Element> itemElementList = new ArrayList<Element>();
+		
+		Document itemAssociationDoc = null;
+		//get the getXpedxAssociationlItemDetails
+		try {
+			itemAssociationDoc = XPEDXOrderUtils.getXpedxAssociationlItemDetails(itemIDList, custID, callingOrgCode, wcContext);
+		} catch (CannotBuildInputException e) {
+			LOG.error("Error getting National Level item association.",e);
+			return null;
+		}
+		if(null == itemAssociationDoc){
+			LOG.error("No national level item association could be found");
+			return null;
+		}
+		NodeList nItemList = itemAssociationDoc.getElementsByTagName("Item");
+		int itemNodeListLength = nItemList.getLength();
+		try
+		{
+			for (int i = 0; i < itemNodeListLength; i++) {
+				Element itemElement = (Element)nItemList.item(i);
+				itemElementList.add(itemElement);
+				String itemID = SCXmlUtil.getAttribute(itemElement, "ItemID");
+	
+				ArrayList<Element> crossSellItemsList =  new ArrayList<Element>();
+				ArrayList<Element> upSellItemsList =  new ArrayList<Element>();
+				//XB-673 Changes Starts
+				ArrayList<Element> alternateSBCItemList =  new ArrayList<Element>();
+				//XB-673 Changes End
+				LOG.debug("Preparing national level association for item Id "+itemID);
+				//ArrayList relatedItems = new ArrayList();
+				Element associationTypeListElem = null;
+				associationTypeListElem = XMLUtilities.getElement(itemElement, "AssociationTypeList");
+				if (associationTypeListElem != null) {
+					List<Element> crossSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='CrossSell']");
+					List<Element> upSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='UpSell']");
+					//XB-673 Changes Starts
+					List<Element> alternateSBCElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='Alternative.Y']");
+					//XB-673 Changes End
+					for (int j = 0; j < crossSellElements.size(); j++) {
+						Element associationTypeElem = crossSellElements.get(j);
+						Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+						List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+						if (associationList != null&& !associationList.isEmpty()) {
+							Iterator associationIter = associationList.iterator();
+							while (associationIter.hasNext()) {
+								Element association = (Element) associationIter.next();
+								Element associateditemEl = XMLUtilities.getElement(association, "Item");
+								/*relatedItems.add(associateditemEl);*/
+								crossSellItemsList.add(associateditemEl);
+								String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+								if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+									itemIDListForGetCompleteItemList.add(curritemid);
+								}
+							}
+						}
+					}//for cross sell
+					for (int k = 0; k < upSellElements.size(); k++) {
+						Element associationTypeElem = upSellElements.get(k);
+						Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+						List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+						if (associationList != null && !associationList.isEmpty()) {
+							Iterator associationIter = associationList.iterator();
+							while (associationIter.hasNext()) {
+								Element association = (Element) associationIter.next();
+								Element associateditemEl = XMLUtilities.getElement(association, "Item");
+								/*relatedItems.add(associateditemEl);*/
+								upSellItemsList.add(associateditemEl);
+								String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+								if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+									itemIDListForGetCompleteItemList.add(curritemid);
+								}
+							}
+						}
+					}//for upsell
+					//XB-673 Changes Start
+					for (int k = 0; k < alternateSBCElements.size(); k++) {
+						Element associationTypeElem = alternateSBCElements.get(k);
+						Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+						List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+						if (associationList != null && !associationList.isEmpty()) {
+							Iterator associationIter = associationList.iterator();
+							while (associationIter.hasNext()) {
+								Element association = (Element) associationIter.next();
+								Element associateditemEl = XMLUtilities.getElement(association, "Item");
+								/*relatedItems.add(associateditemEl);*/
+								alternateSBCItemList.add(associateditemEl);
+								String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+								if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+									itemIDListForGetCompleteItemList.add(curritemid);
+								}
+							}
+						}
+					}//for alternate
+					//XB-673 Changes End
+					crosssellItemsMap.put(itemID, crossSellItemsList);
+					upsellItemsMap.put(itemID, upSellItemsList);
+					//XB-673 Changes Start
+					alternateSBCItemsMap.put(itemID, alternateSBCItemList);
+					//XB-673 Changes End
+				}//if
+			}
+		}
+		catch(Exception e)
+		{
+			LOG.error("Error while getting the OOTB association list ::: "+e.getMessage());
+		}
+		allAssociatedItemsMap.put(XPEDXOrderUtils.CROSS_SELL_ITEMS_KEY, crosssellItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.UP_SELL_ITEMS_KEY, upsellItemsMap);
+		//XB-673 Changes Start
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ALTERNATE_SBC_ITEMS_KEY, alternateSBCItemsMap);
+		//XB-673 Changes End
+		
+		//calling getItemUOM before this so that we should have the Custom association list available.
+		try
+		{
+			getItemUOMs();
+		}
+		catch(Exception e)
+		{
+			LOG.error("Error while getting the UOMs for items ::: "+e.getMessage());
+		}
+		
+		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		/*String customerDivision = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
+		String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);*/
+		
+		String customerDivision =shipToCustomer.getExtnShipFromBranch();
+		String envCode = shipToCustomer.getExtnEnvironmentCode();
+		if(envCode==null || envCode.trim().length()==0)
+			envCode = XPEDXWCUtils.getEnvironmentCode(wcContext.getCustomerId());
+		Document itemBranchItemAssociationDoc = null;
+		try {
+			itemBranchItemAssociationDoc = XPEDXOrderUtils.getXpedxItemBranchItemAssociationDetails(itemIDList, custID, customerDivision, envCode, wcContext);			
+			
+		} catch (Exception e) {
+			LOG.error("Error getting item branch item association.",e);
+			return null;
+		}
+		if(null == itemBranchItemAssociationDoc){
+			LOG.error("No national level item association could be found");
+			return null;
+		}
+		
+		
+		
+		//loop through the itemIDList
+		for(int i=0;i<itemIDList.size();i++){
+			String itemID = itemIDList.get(i);
+			List<Element> xPXItemExtnList = XMLUtilities.getElements(itemBranchItemAssociationDoc.getDocumentElement(), "XPXItemExtn[@ItemID='"+itemIDList.get(i)+"']");
+			if(xPXItemExtnList == null || xPXItemExtnList.size() <= 0){
+				continue;
+			}
+			
+			ArrayList<Element> alternateAssItemIDList = null;
+			ArrayList<Element> complementaryAssItemIDList = null;
+			ArrayList<Element> upgradeAssItemIDList = null;
+			ArrayList<Element> replacementAssItemIDList = null;
+			
+			//but take only one, since we dont want duplicate elements
+			Element xPXItemExtnElement = xPXItemExtnList.get(0);
+			//Start - Add the ItemExtn Element to the Map of itemExtnElemsMap with ItemID as the Key and put them as ITEM_EXTN in the allAssociatedItemsMap
+			ArrayList<Element> itemExtnElemArray = new ArrayList<Element>();
+			itemExtnElemArray.add(xPXItemExtnElement);
+			itemExtnElemsMap.put(itemID, itemExtnElemArray);
+			//End - Add ItemExtn Element to the Map itemExtnElemsMap
+			Element xPXItemAssociationsListElement = SCXmlUtil.getChildElement(xPXItemExtnElement, "XPXItemAssociationsList");
+			if(xPXItemAssociationsListElement == null)
+				continue;
+			//only replacement items will go to the xpedxItemIDUOMToReplacementListMap. Other items will go to the xpedxItemIDUOMToRelatedItemsListMap.
+			List<Element> replacementList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='R']");
+			List<Element> alternateList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='A']");
+			List<Element> complementaryList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='C']");
+			List<Element> upgradeList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='U']");
+			
+			//prepare the map for replacement
+			if(null!=replacementList && replacementList.size() >=0){
+				replacementAssItemIDList = new ArrayList<Element>();
+				for(Element replacementItem:replacementList){
+					String associatedItemID = SCXmlUtil.getAttribute(replacementItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						replacementAssItemIDList.add(replacementItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(replacementAssItemIDList.size()>0){
+					replacementItemsMap.put(itemID, replacementAssItemIDList);
+				}
+			}
+			//prepare the map for alternate and complimentary
+			//ArrayList<String> relatedAssItemIDList = new ArrayList<String>();
+			//ArrayList<String> alternateAssItemIDList = new ArrayList<String>();
+			//get the alternateList
+			if(null!=alternateList && alternateList.size() >=0){
+				alternateAssItemIDList = new ArrayList<Element>();
+				for(Element alterItemItem:alternateList){
+					String associatedItemID = SCXmlUtil.getAttribute(alterItemItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						alternateAssItemIDList.add(alterItemItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(alternateAssItemIDList.size()>0){
+					alternateItemsMap.put(itemID, alternateAssItemIDList);
+				}
+			}			
+			//get the complementaryList
+			//ArrayList<String> complementaryAssItemIDList = new ArrayList<String>();
+			if(null!=complementaryList && complementaryList.size() >=0){
+				complementaryAssItemIDList = new ArrayList<Element>();
+				for(Element comItem:complementaryList){
+					String associatedItemID = SCXmlUtil.getAttribute(comItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						/*relatedAssItemIDList.add(associatedItemID);*/
+						complementaryAssItemIDList.add(comItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(complementaryAssItemIDList.size()>0){
+					complimentaryItemsMap.put(itemID, complementaryAssItemIDList);
+				}
+			}
+			
+			//get the upgraded items
+			//ArrayList<String> upgradeAssItemIDList = new ArrayList<String>();
+			if(null!=upgradeList && upgradeList.size() >=0){
+				upgradeAssItemIDList = new ArrayList<Element>();
+				for(Element upgradeItem:upgradeList){
+					String associatedItemID = SCXmlUtil.getAttribute(upgradeItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						/*relatedAssItemIDList.add(associatedItemID);*/
+						upgradeAssItemIDList.add(upgradeItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(upgradeAssItemIDList.size()>0){
+					upgradeItemsMap.put(itemID, upgradeAssItemIDList);
+				}
+			}
+			
+		}//End of for loop
+		if(null==itemIDListForGetCompleteItemList || itemIDListForGetCompleteItemList.size()<=0){
+			LOG.debug("No branch level associated items.");
+		}
+		//remove the duplicate items and call getCompleteItemList
+		HashSet hs = new HashSet();
+		hs.addAll(itemIDListForGetCompleteItemList);
+		itemIDListForGetCompleteItemList.clear();
+		itemIDListForGetCompleteItemList.addAll(hs);
+		//call getCompleteItemList
+		Document itemDetailsListDoc = null;
+		try {
+			// invoking a different function which will give onyl the entitiled items - 734
+			itemDetailsListDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(itemIDListForGetCompleteItemList, custID, wcContext.getStorefrontId(), wcContext);
+		} catch (Exception e) {
+			LOG.error("Exception while getting item details for associated items",e);
+			return null;
+		}
+		//prepare the xpedxItemIDUOMToReplacementListMap only when editMode is true
+		Set replacementMapKeySet = replacementItemsMap.keySet();
+		if(replacementMapKeySet!=null){
+		Iterator<String> replacementIterator = replacementMapKeySet.iterator();
+			while(replacementIterator.hasNext()){
+				ArrayList replacementItemsElementList = new ArrayList();
+				String itemID = replacementIterator.next();
+				ArrayList<Element> asscociatedItemIDList = replacementItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					replacementItemsElementList.add(itemDetailsList.get(0));
+				}
+				/*
+				 * Commented by Muthu for JIRA - 160
+				replacementItemsMap.put(itemID, replacementItemsElementList);
+				*/
+				
+				/*
+				 * Added by Muthu for JIRA - 160
+				 * If the List is empty then add null instead of empty List since the JSP is checking for null condition
+				 */
+				if(replacementItemsElementList.size() == 0){
+					replacementItemsMap.put(itemID, null);
+				}else{
+					replacementItemsMap.put(itemID, replacementItemsElementList);
+				}
+			}//end while loop
+		}
+		
+		Set alternateMapKeySet = alternateItemsMap.keySet();
+		if(alternateMapKeySet!=null && alternateMapKeySet.size()>0){
+		Iterator<String> alternateIterator = alternateMapKeySet.iterator();
+			while(alternateIterator.hasNext()){
+				ArrayList alternateItemsElementList = new ArrayList();
+				String itemID = alternateIterator.next();
+				ArrayList<Element> asscociatedItemIDList = alternateItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					alternateItemsElementList.add(itemDetailsList.get(0));
+				}
+				alternateItemsMap.put(itemID, alternateItemsElementList);
+			}//end while loop
+		}
+		
+		Set complimentaryMapKeySet = complimentaryItemsMap.keySet();
+		if(complimentaryMapKeySet!=null && complimentaryMapKeySet.size()>0){
+		Iterator<String> compIterator = complimentaryMapKeySet.iterator();
+			while(compIterator.hasNext()){
+				ArrayList compItemsElementList = new ArrayList();
+				String itemID = compIterator.next();
+				ArrayList<Element> asscociatedItemIDList = complimentaryItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					compItemsElementList.add(itemDetailsList.get(0));
+				}
+				complimentaryItemsMap.put(itemID, compItemsElementList);
+			}//end while loop
+		}
+		
+		Set upgradeMapKeySet = upgradeItemsMap.keySet();
+		if(upgradeMapKeySet!=null && upgradeMapKeySet.size()>0){
+		Iterator<String> upgradeIterator = upgradeMapKeySet.iterator();
+			while(upgradeIterator.hasNext()){
+				ArrayList upgradeItemsElementList = new ArrayList();
+				String itemID = upgradeIterator.next();
+				ArrayList<Element> asscociatedItemIDList = upgradeItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					upgradeItemsElementList.add(itemDetailsList.get(0));
+				}
+				upgradeItemsMap.put(itemID, upgradeItemsElementList);
+			}//end while loop
+		}
+		
+		if((upgradeMapKeySet!=null && upgradeMapKeySet.size()>0) || (complimentaryMapKeySet!=null && complimentaryMapKeySet.size()>0) 
+				|| (alternateMapKeySet!=null && alternateMapKeySet.size()>0)  || (replacementMapKeySet!=null && replacementMapKeySet.size()>0)) {
+			List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item");
+			itemElementList.addAll(itemDetailsList);
+		}
+		itemListElemsMap.put(XPEDXOrderUtils.ITEM_LIST_KEY, itemElementList);
+		
+		allAssociatedItemsMap.put(XPEDXOrderUtils.REPLACEMENT_ITEMS_KEY, replacementItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ALTERNATE_ITEMS_KEY, alternateItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.COMPLEMENTARY_ITEMS_KEY, complimentaryItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.UPGRADE_ITEMS_KEY, upgradeItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ITEM_EXTN_KEY, itemExtnElemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ITEM_LIST_KEY, itemListElemsMap);
+		
+		return allAssociatedItemsMap;
 	}
 	
 	/*protected void prepareXpedxItemBranchItemAssociationMap(ArrayList<String> itemIDList) throws CannotBuildInputException, XPathExpressionException{
@@ -1731,7 +2123,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		/*
 		 * getting all the items UOMs at the same time using a complex query
 		 */
-		itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
+		itemIdsUOMsDescMap = XPEDXWCUtils.getXpedxUOMListFromCustomService(allItemIds);//XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
 		itemIdsUOMsMap = (Map<String, Map<String, String>>)ServletActionContext.getRequest().getAttribute("ItemUomHashMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
 		ServletActionContext.getRequest().removeAttribute("ItemUomHashMap");
 		if(itemIdsUOMsMap == null)
@@ -1907,9 +2299,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 		}
 		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
-			Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
-			if(itemcustXrefDoc!=null) {
-				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
+			//Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+			Element itemCustXRefList=(Element)ServletActionContext.getRequest().getAttribute("XPXItemcustXrefList");
+			if(itemCustXRefList!=null) {
+				//Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
 				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
 				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
 					Iterator<Element> xrefIter = itemCustXrefElems.iterator();

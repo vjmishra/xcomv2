@@ -40,8 +40,11 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.crystaldecisions.proxy.remoteagent.RemoveObjectRequest;
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
@@ -70,6 +73,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInput
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
+import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrgNodeDetailsBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
@@ -4516,17 +4520,17 @@ public class XPEDXWCUtils {
 
 			custContactExtnEle = (Element) WCMashupHelper.invokeMashup(mashupId,
 					input1, wcContext.getSCUIContext());
-
-			//EB-475, 1521 started here
-			if(attributeMap.get(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR) != null && XPEDXWCUtils
-					.getObjectFromCache("CustomerContExtnEle") == null && custContactExtnEle != null)
-			{
-				
-				XPEDXWCUtils.setObectInCache("CustomerContExtnEle", custContactExtnEle);
-				XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContactExtnEle.getAttribute("CustContRefKey"));
-			}
-			//EB-475, 1521 ended here
 			
+            //EB-475, 1521 started here
+            if(attributeMap.get(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR) != null && XPEDXWCUtils
+                    .getObjectFromCache("CustomerContExtnEle") == null && custContactExtnEle != null)
+            {
+                
+                XPEDXWCUtils.setObectInCache("CustomerContExtnEle", custContactExtnEle);
+                XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContactExtnEle.getAttribute("CustContRefKey"));
+            }
+            //EB-475, 1521 ended here
+            
 		} catch (CannotBuildInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -5380,6 +5384,7 @@ public class XPEDXWCUtils {
 					// reset the flag once used
 					setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"false");
 					removeObectFromCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE);
+					
 					//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
 			}
 		}
@@ -6305,4 +6310,151 @@ public class XPEDXWCUtils {
 		setCurrentCustomerIntoContext(shipToBeforeEditOrder,wcContext);
 	}
 	//end for jira 4306
+	
+	private static Element getItemCustomExtnAndUOM(List<String> itemIds,IWCContext wcContext) throws Exception
+	{
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		Element allAPIOutputDoc=null; 
+		try {
+			if(shipToCustomer==null) {
+				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils.getCustomerDetails(wcContext.getCustomerId(),wcContext.getStorefrontId())
+						.getDocumentElement());
+				shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);	
+			}
+		}
+		catch (Exception e) {
+			log.error("Error fetching or creating the shipToCustomer object in to the session in getXpxItemCustXRefDoc() So returning back null");
+		}
+		
+		if(!(itemIds!=null && itemIds.size()>0))
+			return allAPIOutputDoc;
+		
+		if(shipToCustomer!=null) {
+			String envCode = shipToCustomer.getExtnEnvironmentCode();
+			String legacyCustomerNumber=shipToCustomer.getExtnLegacyCustNumber();
+			String custDivision = shipToCustomer.getExtnCustomerDivision();
+			String companyCode=shipToCustomer.getCompany();
+			HashMap<String,String> valueMap =  new HashMap<String, String>();
+			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
+			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
+			//valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId); Filled using Complex Query
+			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
+			
+			Element xrefInput =  null;
+			Element res =  null;
+			try {
+				xrefInput = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap,  wcContext.getSCUIContext());
+				Element complexQuery = xrefInput.getOwnerDocument().createElement("ComplexQuery");
+				xrefInput.appendChild(complexQuery);
+				Element Or = xrefInput.getOwnerDocument().createElement("Or");
+				complexQuery.appendChild(Or);
+				Iterator<String> itemIdIter = itemIds.iterator();
+				
+				String customerId = wcContext.getCustomerId();
+				
+				Element input = WCMashupHelper.getMashupInput("xpedxgetAllAPI",  wcContext
+						.getSCUIContext());
+				
+				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+				YFCElement documentElement = inputDocument.getDocumentElement();
+
+				documentElement.setAttribute("CustomerID", customerId);
+				documentElement.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+				
+				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+				YFCElement complexQueryOrElement = documentElement.createChild("Or");
+				
+				complexQueryElement.setAttribute("Operator", "AND");
+				complexQueryElement.appendChild(complexQueryOrElement);
+				Element customerDetails=SCXmlUtil.createChild(inputDocument.getDocument().getDocumentElement(), "CustomerDetails");
+				//EB 47 customerDetails.setAttribute("ExtnCompanyCode", shipToCustomer.getExtnCompanyCode());
+				customerDetails.setAttribute("ExtnEnvironmentCode", shipToCustomer.getExtnEnvironmentCode());
+				customerDetails.setAttribute("ExtnShipFromBranch", shipToCustomer.getExtnShipFromBranch());
+				customerDetails.setAttribute("ExtnCustomerDivision", shipToCustomer.getExtnCustomerDivision());
+				customerDetails.setAttribute("ExtnUseOrderMulUOMFlag", shipToCustomer.getExtnUseOrderMulUOMFlag());
+				
+				valueMap = new HashMap<String, String>();
+				valueMap.put("/XPXItemExtn/@XPXDivision", shipToCustomer.getExtnShipFromBranch());
+				valueMap.put("/XPXItemExtn/@EnvironmentID", envCode);
+				valueMap.put("/XPXItemExtn/@IsAssociationRequired", "Y");
+				Element xpxItemExtninputElem = WCMashupHelper.getMashupInput("xpedxXPXItemExtnList", valueMap,wcContext.getSCUIContext());
+				
+				Document inputDoc = xpxItemExtninputElem.getOwnerDocument();
+				NodeList inputNodeList = inputDoc.getElementsByTagName("Or");
+				Element inputNodeListElemt = (Element) inputNodeList.item(0);
+				itemIdIter = itemIds.iterator();
+				while(itemIdIter.hasNext()) {
+					//Complex query for XPXItemExtn input xml
+					Element expElement =SCXmlUtil.createChild(inputNodeListElemt, "Exp");
+					String itemid=itemIdIter.next();
+					expElement.setAttribute("Name", "ItemID");
+					expElement.setAttribute("Value",itemid );
+					
+					//Complex query for itemXef input xml
+					Element exp1Element = xrefInput.getOwnerDocument().createElement("Exp");
+					exp1Element.setAttribute("Name", "LegacyItemNumber");
+					exp1Element.setAttribute("QryType", "EQ");
+					exp1Element.setAttribute("Value", itemid);
+					SCXmlUtil.importElement(Or, exp1Element);
+					
+					//Complex query for PriceLineList input xml
+					Document expDoc = YFCDocument.createDocument("Exp").getDocument();
+					Element exp2Element = expDoc.getDocumentElement();
+					exp2Element.setAttribute("Name", "ItemID");
+					exp2Element.setAttribute("Value", itemid);
+					
+					//UOMList input XML
+					YFCElement exp3Element = documentElement.createChild("Exp");
+					exp3Element.setAttribute("Name", "ItemID");
+					exp3Element.setAttribute("Value", itemid);
+					complexQueryOrElement.appendChild((YFCNode)exp3Element);
+				}
+				input.appendChild(input.getOwnerDocument().importNode(xrefInput, true));
+				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
+				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
+				String inputXml = SCXmlUtil.getString(input);
+				
+				 allAPIOutputDoc=(Element)WCMashupHelper.invokeMashup(
+						"xpedxgetAllAPI", input, wcContext
+								.getSCUIContext());
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return allAPIOutputDoc;
+	}
+	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items) {
+		
+		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+				.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext
+				.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		if(items == null || items.size() ==0)
+			return itemUomHashMap;
+		try {
+			Element allAPIOutputDoc=getItemCustomExtnAndUOM(items,context);
+			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
+			ServletActionContext.getRequest().setAttribute("itemsUOMListElement", wElement);
+			ServletActionContext.getRequest().setAttribute("XPXItemExtnList", allAPIOutputDoc.getElementsByTagName("XPXItemExtnList").item(0));
+			ServletActionContext.getRequest().setAttribute("XPXItemcustXrefList",allAPIOutputDoc.getElementsByTagName("XPXItemcustXrefList").item(0));
+			
+			if(allAPIOutputDoc != null)
+			{
+				return XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items, context.getStorefrontId(),false);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return itemUomHashMap;
+
+	}
+
 }

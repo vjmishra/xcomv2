@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.catalog.api;
 
+import java.awt.ItemSelectable;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,12 +26,14 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.xpedx.nextgen.uom.api.XPXUOMListAPI;
+import com.yantra.custom.dbi.XPX_Item_Associations;
 import com.yantra.custom.dbi.XPX_Item_Extn;
 import com.yantra.custom.dbi.XPX_Itemcust_Xref;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.shared.dbclasses.XPX_Item_AssociationsDBHome;
 import com.yantra.shared.dbclasses.XPX_Item_ExtnDBHome;
 import com.yantra.shared.dbclasses.XPX_Itemcust_XrefDBHome;
 import com.yantra.shared.dbclasses.YFS_CustomerDBHome;
@@ -55,6 +58,7 @@ import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSConnectionHolder;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -78,7 +82,10 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 	private boolean complexQuery = false;
 	private Document itemsXrefDoc;
 	private Document itemExtnDoc;
-	
+	private String companyCode="";
+	private String customerDivision="" ;
+	private String customerItemNumber="";
+	private String customerNumber="";
 	static {
 		try {
 			log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -111,7 +118,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 	
 	private Element getCustXrefList(YFSEnvironment env,Document inputXML,Document outputDoc) throws SQLException
 	{
-		Element custXrefElement=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemcustXrefList");
+		Element custXrefElement=null;
+		if(itemsXrefDoc ==null)
+			custXrefElement=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemcustXrefList");
+		else
+			custXrefElement=(Element)outputDoc.getElementsByTagName("XPXItemcustXrefList").item(0);	
 		try
 		{
 		Element custXrefList=(Element)inputXML.getElementsByTagName("XPXItemcustXref").item(0);
@@ -127,11 +138,16 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			query.append("OR ( XPX_ITEMCUST_XREF.LEGACY_ITEM_NUMBER =  '"+legacyItemNumber+"'   )");
 		}
 		query.append(")");*/
+		companyCode=custXrefList.getAttribute("CompanyCode");
+		customerNumber=custXrefList.getAttribute("CustomerNumber");
+		customerDivision=custXrefList.getAttribute("CustomerDivision");
 		PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 		pltQryBuilder.setCurrentTable("XPX_ITEMCUST_XREF");
-		pltQryBuilder.appendString("CUSTOMER_NUMBER", "=", custXrefList.getAttribute("CustomerNumber"));
+		pltQryBuilder.appendString("CUSTOMER_NUMBER", "=", customerNumber);
 		pltQryBuilder.appendString(" AND ENVIRONMENT_CODE", "=", custXrefList.getAttribute("EnvironmentCode"));
-		pltQryBuilder.append("AND CUSTOMER_DIVISION ='"+custXrefList.getAttribute("CustomerDivision")+"'");
+		if(!YFCCommon.isVoid(companyCode))
+			pltQryBuilder.appendString(" AND COMPANY_CODE", "=", companyCode);
+		pltQryBuilder.append("AND CUSTOMER_DIVISION ='"+customerDivision+"'");
 		NodeList legacyItemNumberList=	custXrefList.getElementsByTagName("Exp");
 		if(legacyItemNumberList == null)
 			return custXrefElement;
@@ -206,11 +222,16 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		{
 			e.printStackTrace();
 		}
+		setItemXrefDoc(outputDoc);
 		return custXrefElement;
 	}
 	private Element getXPXItemExtnElement(YFSEnvironment env,Document inputXML,Document outputDoc) throws SQLException
 	{
-			Element xpxItemExtnList=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemExtnList");
+			Element xpxItemExtnList=null;
+			if(itemExtnDoc ==null)
+				xpxItemExtnList=SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemExtnList");
+			else
+				xpxItemExtnList=(Element)outputDoc.getElementsByTagName("XPXItemExtnList").item(0);
 			try
 			{
 				Element itemExtnElelement=(Element)inputXML.getElementsByTagName("XPXItemExtn").item(0);
@@ -236,6 +257,15 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				pltQryBuilder.setCurrentTable("XPX_ITEM_EXTN");
 				pltQryBuilder.appendString("ENVIRONMENT_ID", "=", itemExtnElelement.getAttribute("EnvironmentID"));
 				pltQryBuilder.append(" AND XPX_DIVISION ='"+ itemExtnElelement.getAttribute("XPXDivision") +"'");
+				//checking if association is required query xpx_item_association
+				String isAssociationRequired=itemExtnElelement.getAttribute("IsAssociationRequired");
+				PLTQueryBuilder itemAssociationpltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
+				if("Y".equals(isAssociationRequired))
+				{					
+					itemAssociationpltQryBuilder.setCurrentTable("XPX_ITEM_ASSOCIATIONS");
+					itemAssociationpltQryBuilder.append(" ITEM_EXTN_KEY IN(");
+				}
+				
 				NodeList itemIDList=	itemExtnElelement.getElementsByTagName("Exp");
 				/*pltQryBuilder.appendString("AND ( (ITEM_ID)", "=", ((Element)itemIDList.item(0)).getAttribute("Value"));
 				for(int i=1;i<itemIDList.getLength();i++)
@@ -256,10 +286,20 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				List<XPX_Item_Extn> xpxItemExtns=
 					XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
 				Iterator<XPX_Item_Extn> xpxItemExtnIter=xpxItemExtns.iterator();
+				boolean isFirstRecord=true;
 				while(xpxItemExtnIter.hasNext())
 				{
 					XPX_Item_Extn xpxItemExtn=xpxItemExtnIter.next();
 					Element itemXrefEleme=SCXmlUtil.createChild(xpxItemExtnList, "XPXItemExtn");
+					if(isFirstRecord && "Y".equals(isAssociationRequired))
+					{
+						itemAssociationpltQryBuilder.append("'").append(xpxItemExtn.getItemExtnKey()).append("'");
+						isFirstRecord=false;
+					}
+					else if("Y".equals(isAssociationRequired))
+					{
+						itemAssociationpltQryBuilder.append(",'").append(xpxItemExtn.getItemExtnKey()).append("'");
+					}
 					itemXrefEleme.setAttribute(XPX_Item_Extn.ITEM_KEY,xpxItemExtn.getItem_Key());
 					itemXrefEleme.setAttribute(XPX_Item_Extn.ITEMEXTNKEY,xpxItemExtn.getItemExtnKey());
 					itemXrefEleme.setAttribute(XPX_Item_Extn.ENVIRONMENTID,xpxItemExtn.getEnvironmentID() );
@@ -274,6 +314,78 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					itemXrefEleme.setAttribute(XPX_Item_Extn.CREATETS,""+xpxItemExtn.getCreatets());
 					itemXrefEleme.setAttribute(XPX_Item_Extn.MODIFYTS,""+xpxItemExtn.getModifyts());
 				}
+				//Adding XPX_ITEM_ASSOCIATION Element in Parent XPX_ITEM_EXTN
+				if(!isFirstRecord && "Y".equals(isAssociationRequired))
+				{		
+					itemAssociationpltQryBuilder.append(")");
+					List<XPX_Item_Associations> xpxItemAssociations=
+						XPX_Item_AssociationsDBHome.getInstance().listWithWhere((YFSContext)env, itemAssociationpltQryBuilder,5000);					
+					ArrayList<Element> _xpxItemExtnList=SCXmlUtil.getElements(xpxItemExtnList, "XPXItemExtn");
+					Map<String,List<XPX_Item_Associations>> associationMap=new HashMap<String,List<XPX_Item_Associations>>();
+					//creating input xml so that we can get xpx_item_extn and xpx_item_cust_xref 					
+					boolean isXPXItemExtnCall=false;
+					boolean isXPXItemCustXrefCall=false;
+					Document _xpxItemExtnDoc=SCXmlUtil.createDocument("XPXItemExtn");
+					Element _xpxItemExtnEle=_xpxItemExtnDoc.getDocumentElement();
+					_xpxItemExtnEle.setAttribute("EnvironmentID", itemExtnElelement.getAttribute("EnvironmentID"));
+					_xpxItemExtnEle.setAttribute("IsAssociationRequired", "N");
+					_xpxItemExtnEle.setAttribute("XPXDivision", itemExtnElelement.getAttribute("XPXDivision"));
+					Element xpxItemExtnComplexQuery=SCXmlUtil.createChild(_xpxItemExtnEle, "ComplexQuery");
+					Element xpxItemExtnOrElem=SCXmlUtil.createChild(xpxItemExtnComplexQuery, "Or");
+					
+										
+					Document _xpxItemCustXrefDoc=SCXmlUtil.createDocument("XPXItemcustXref");
+					Element _xpxItemCustXrefEle=_xpxItemCustXrefDoc.getDocumentElement();
+					_xpxItemCustXrefEle.setAttribute("CompanyCode", companyCode);
+					_xpxItemCustXrefEle.setAttribute("CustomerDivision",customerDivision);
+					_xpxItemCustXrefEle.setAttribute("CustomerItemNumber",customerItemNumber);
+					_xpxItemCustXrefEle.setAttribute("CustomerNumber", customerNumber);
+					_xpxItemCustXrefEle.setAttribute("EnvironmentCode", itemExtnElelement.getAttribute("EnvironmentID"));
+					Element xrefComplexQuery=SCXmlUtil.createChild(_xpxItemCustXrefEle, "ComplexQuery");
+					Element xrefOrElem=SCXmlUtil.createChild(xrefComplexQuery, "Or");
+					for(XPX_Item_Associations xpxItemAssociation:xpxItemAssociations)
+					{
+						List<XPX_Item_Associations> associationsList=new ArrayList<XPX_Item_Associations>();
+						if(associationMap.get(xpxItemAssociation.getItemExtnKey()) != null)
+							associationsList=associationMap.get(xpxItemAssociation.getItemExtnKey());
+						associationsList.add(xpxItemAssociation);
+						associationMap.put(xpxItemAssociation.getItemExtnKey(), associationsList);
+						if(!YFCCommon.isVoid(xpxItemAssociation.getAssociatedItemID()))
+						{
+							Element xreExpElem=SCXmlUtil.createChild(xrefOrElem, "Exp");
+							xreExpElem.setAttribute("Name", "LegacyItemNumber");
+							xreExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
+							xreExpElem.setAttribute("QryType", "EQ");
+							
+							Element xpxItemExtnExpElem=SCXmlUtil.createChild(xpxItemExtnOrElem, "Exp");
+							xpxItemExtnExpElem.setAttribute("Name", "ItemID");
+							xpxItemExtnExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
+							isXPXItemExtnCall=true;
+							isXPXItemCustXrefCall=true;
+						}
+					}
+					for(Element _xpxItemExtn:_xpxItemExtnList)
+					{
+
+						Element xpxItemAssocEleme=SCXmlUtil.createChild(_xpxItemExtn, "XPXItemAssociationsList");
+						for(XPX_Item_Associations xpxItemAssociation:associationMap.get(_xpxItemExtn.getAttribute(XPX_Item_Extn.ITEMEXTNKEY)))
+						{
+							Element xpxItemAssociationEleme=SCXmlUtil.createChild(xpxItemAssocEleme, "XPXItemAssociations");
+							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMEXTNKEY, xpxItemAssociation.getItemExtnKey());
+							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATIONTYPE, xpxItemAssociation.getAssociationType());
+							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATEDITEMID, xpxItemAssociation.getAssociatedItemID());
+							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMASSOCIATIONKEY, xpxItemAssociation.getItemAssociationKey());
+							
+						}
+					}
+					setItemExtnDoc(outputDoc);
+					if(isXPXItemExtnCall)
+						getXPXItemExtnElement(env,_xpxItemExtnDoc,outputDoc);
+					if(isXPXItemCustXrefCall)
+						getCustXrefList(env,_xpxItemCustXrefDoc,outputDoc);
+						
+				}
+				//recall xpx_item_extn and 
 				/*while(xpxItemExtnRs.next())
 				{
 					Element itemXrefEleme=SCXmlUtil.createChild(xpxItemExtnList, "XPXItemExtn");
