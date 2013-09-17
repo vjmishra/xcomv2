@@ -84,15 +84,6 @@ var myMask;
 
 
 $(document).ready(function() {
-	// eb-2005: remove all tags other than <img> in the slideshow. this is a workaround for IE bug, where an <HTMLUnknownTag> is detected by jQuery cycle (see JIRA for details)
-	var slides = $('.slideshow > *');
-	for (var i = slides.length - 1; i >= 0; i--) {
-		var slide = slides[i];
-		if (slide.tagName != 'IMG') {
-			$(slide).remove();
-		}
-	}
-	
 	$('.slideshow').cycle({
 			fx: 'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
 			pager: '#catalog-image-rotation-nav-inner',
