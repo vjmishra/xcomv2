@@ -2429,9 +2429,11 @@ function msgWait(){
   </s:if>
   <ul class="header-subnav commonHeader-subnav">
 	  	<s:if test="%{!#isProcurementUser}">
-			 <s:if test='#isGuestUser != true' >			 	
-				<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>
-				<li> | </li>
+			 <s:if test='#isGuestUser != true' >
+			 	<s:if test="wCContext.storefrontId == 'xpedx'">
+					<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>
+					<li> | </li>
+				</s:if>
 				<li><a
 					href="<s:url action="logout" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
 					tabindex="2006">Sign Out</a></li>									
