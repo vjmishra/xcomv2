@@ -84,16 +84,22 @@ var myMask;
 
 
 $(document).ready(function() {
-	if ($('.slideshow > *').length > 1) {
-		// eb-2005: do not cycle on a single graphic
-		$('.slideshow').cycle({
-				fx: 'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
-				pager: '#catalog-image-rotation-nav-inner',
-				timeout: 5000,
-				prev:   '#catalog-image-rotation-nav .img-navi-left', 
-				next:   '#catalog-image-rotation-nav .img-navi-right'
-		});
+	// eb-2005: remove all tags other than <img> in the slideshow. this is a workaround for IE bug, where an <HTMLUnknownTag> is detected by jQuery cycle (see JIRA for details)
+	var slides = $('.slideshow > *');
+	for (var i = slides.length - 1; i >= 0; i--) {
+		var slide = slides[i];
+		if (slide.tagName != 'IMG') {
+			$(slide).remove();
+		}
 	}
+	
+	$('.slideshow').cycle({
+			fx: 'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+			pager: '#catalog-image-rotation-nav-inner',
+			timeout: 5000,
+			prev:   '#catalog-image-rotation-nav .img-navi-left', 
+			next:   '#catalog-image-rotation-nav .img-navi-right'
+	});
 });
 function shareSelectAll(checked_status){
 	//var checked_status = this.checked;
