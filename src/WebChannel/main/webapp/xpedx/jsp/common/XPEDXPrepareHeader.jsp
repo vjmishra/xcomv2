@@ -2433,9 +2433,9 @@ function msgWait(){
 			 <s:set name='storefrontId' value="wCContext.storefrontId" />
 				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>			 	
 				<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>
-				<li> | </li>
 				</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'></s:elseif>
+				<li> | </li>
 				<li><a
 					href="<s:url action="logout" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
 					tabindex="2006">Sign Out</a></li>									
