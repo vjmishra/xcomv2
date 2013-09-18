@@ -399,3 +399,8 @@ div.wc-table-header td {
 #main-navigation ul li.lighter a, #main-navigation ul li.lighter span {
     color: #FFFFFF;
 }
+element.style {
+    color: #66cc33;
+    margin-right: 5px;
+    margin-top: 5px;
+}
