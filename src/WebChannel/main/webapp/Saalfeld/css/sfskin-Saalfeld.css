@@ -396,4 +396,6 @@ div.wc-table-header td {
     background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
 }
 
-
+#main-navigation ul li.lighter a, #main-navigation ul li.lighter span {
+    color: #FFFFFF;
+}
