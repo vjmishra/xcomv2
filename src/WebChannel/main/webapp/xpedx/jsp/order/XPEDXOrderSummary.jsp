@@ -165,6 +165,59 @@ function setTotalPrice(val){
 	}
 	
 	
+	function isChecked(){
+		if(document.getElementById("OrderSummaryForm_rushOrdrDateFlag").checked){
+			document.getElementById("requestedDateDiv").style.display = "inline";
+			document.getElementById("requestDeliveryDate").focus();//EB 2458
+		}
+		else{
+			document.getElementById("requestedDateDiv").style.display = "none";
+			document.getElementById("requestDeliveryDate").value="";
+			document.getElementById("requestDateString").value="";
+		}
+		
+	}
+		
+		function updateRequestDeliveryDate(inputDate){
+			document.getElementById("requestDateString").value = inputDate;
+		}
+//end of EB 1975	
+//Added for EB 2458 Request Delivery Date validation
+function isValidDate(dtStr)
+	{
+		var daysInMonth = DaysArray(12)
+		var pos1=dtStr.indexOf(dtCh)
+		var pos2=dtStr.indexOf(dtCh,pos1+1)
+		var strMonth=dtStr.substring(0,pos1)
+		var strDay=dtStr.substring(pos1+1,pos2)
+		var strYear=dtStr.substring(pos2+1)
+		strYr=strYear
+		if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+		if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+		for (var i = 1; i <= 3; i++) {
+			if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+		}
+		month=parseInt(strMonth)
+		day=parseInt(strDay)
+		year=parseInt(strYr)
+		if (pos1==-1 || pos2==-1){
+			return false
+		}
+		if (strMonth.length<1 || month<1 || month>12){
+			return false
+		}
+		if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+			return false
+		}
+		if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+			return false
+		}
+		if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+			return false
+		}
+	return true
+	}
+//EN of EB 2458
 	function validateFormSubmit(){
 		//Added For Jira 3232
 	    //Commented for 3475
@@ -231,6 +284,36 @@ function setTotalPrice(val){
 				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQUESTED DELIVERY DATE: " +datetext+".";
 		}
     	//ENd of EB 1975
+    	
+    	//Added for EB 2458 - RequestDate validation
+    	var requestDate = document.getElementById("requestDateString").value;
+    	var currDate = new Date();
+    	var errorMsg = document.getElementById("errorMsg");
+    	
+    	if(requestDate!=null && requestDate.length>0)
+		{ 
+    		var mon1   = parseInt(requestDate.substring(0,2),10);  
+			var dt1  = parseInt(requestDate.substring(3,5),10); 
+			var yr1   = parseInt(requestDate.substring(6,10),10);  
+			var requestDateStr = new Date(yr1, mon1-1, dt1); 
+			
+			if (!isValidDate(requestDate)){
+				errorMsg.innerHTML = "Please enter valid date";
+				errorMsg.style.display="inline";
+				document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
+				return;
+			}
+			
+			if(currDate > requestDateStr){
+				document.getElementById("errorMsg").innerHTML = "Please enter valid date";
+				errorMsg.style.display="inline";
+				document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
+				return; 
+			}
+		}
+		document.getElementById("errorMsg").innerHTML = '';
+    	//END for EB 2458 - RequestDate validation
+    	
     	//Added for 3475
     	Ext.Msg.wait("Processing...");
     	validateForm_OrderSummaryForm(),submitOrder()
@@ -251,7 +334,8 @@ function setTotalPrice(val){
 	 $(function() {
 			$(".datepicker").datepicker({
 				showOn: 'button',
-							numberOfMonths: 1,
+				numberOfMonths: 1,
+				minDate: 0,
 				buttonImage: '<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/calendar-icon.png',
 				buttonImageOnly: true,
 				buttonText: "Select Date",
@@ -265,19 +349,7 @@ function setTotalPrice(val){
 	/*$(function() {
 		$( "#datepicker" ).datepicker();
 		});*/
-	
-	function isChecked(){
-		if(document.getElementById("OrderSummaryForm_rushOrdrDateFlag").checked){
-			document.getElementById("requestedDateDiv").style.display = "inline";
-		}
-		else{
-			document.getElementById("requestedDateDiv").style.display = "none";
-			document.getElementById("requestDeliveryDate").value="";
-			document.getElementById("requestDateString").value="";
-		}
-		
-	}
-//end of EB 1975	 
+
 </script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRSUMMARY.GENERIC.TABTITLE" /></title>
 
@@ -795,13 +867,13 @@ from session . We have customer Contact Object in session .
 			
 				<tr>
 				<td>
-						<s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="javascript:isChecked(); if (this.checked) this.form.SpecialInstructions.focus()"
+						<s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="javascript:isChecked();"
 						disabled="%{! #_action.isDraftOrder()}" fieldValue="true"
 						value="" />
 						<s:if test='%{#_action.isDraftOrder()}'>
-						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.						
+						 Requested Delivery Date. <span class="bold">MUST</span> select a delivery date for deliveries outside your normal schedule.						
 						</s:if> <s:else>
-						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.
+						 Requested Delivery Date. <span class="bold">MUST</span> select a delivery date for deliveries outside your normal schedule.
 						</s:else>	  
 				</td>
 				</tr>	
@@ -809,7 +881,7 @@ from session . We have customer Contact Object in session .
 				<tr>
 					<td><s:hidden  id="requestDateString"  value="" name="" />
 					<div id="requestedDateDiv" style="display:none;">
-					<table><tr><td><span class="red">*</span>&nbsp;<s:textfield name='requestDeliveryDate' theme="simple" size="15"  id="requestDeliveryDate" cssClass='calendar-input-fields datepicker' value="%{#parameters.requestDeliveryDate}" />
+					<table><tr><td><span class="red">*</span>&nbsp;<s:textfield name='requestDeliveryDate' theme="simple" size="15"  id="requestDeliveryDate" cssClass='calendar-input-fields datepicker' value="" onchange="javascript:updateRequestDeliveryDate(this.value)" />
 					</td><td>&nbsp;(mm/dd/yyyy)</td></tr></table></div></td>
 					
 				</tr>

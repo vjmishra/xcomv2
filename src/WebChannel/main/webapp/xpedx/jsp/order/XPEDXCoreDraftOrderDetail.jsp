@@ -589,7 +589,9 @@
 					</s:else>
 					<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
 					<s:set name="jsonFmtTotal" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTotal )' />
-					
+					<s:set name="jsonAvailabilityMessage" value="#json.get('AvailabilityMessage')" />
+					<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
+					<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 					
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
 					
@@ -598,19 +600,26 @@
 				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config" style="font-size:12px">
 						    	<tbody>
+						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
+										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+										<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:2px"><strong><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
+									</s:if>
+									<tr>
+										<td align="left" style="color:${jsonAvailabilityMessageColor};font-size:13px;"><strong>${jsonAvailabilityMessage}</strong></td>
+									</tr>					    		
 						    		<tr>
-										<td><strong><p class="bold left" style="width:110px">Total Available: </p></strong></td>
-										<td class="text-right"><strong>${jsonFmtTotal} </strong></td>
-										<td class="text-left"><strong>&nbsp;${jsonUOMDesc}</strong></td>
+										<td><p class="left"><strong>Next Day: </strong></p></td>
+										<td class="text-right"><p> <strong>${jsonFmtNextDay}</strong> </p></td>
+										<td class="text-left">&nbsp;<strong>${jsonUOMDesc}</strong></td>									
 						    		</tr>
 						    		<tr>
-										<td><p class="availability-indent">Next Day: </p></td>
-										<td class="text-right"><p> ${jsonFmtNextDay} </p></td>
-										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>									
-						    		</tr>
-						    		<tr>
-										<td><p class="availability-indent">2+ Days: </p></td>
+										<td><p class="left">2+ Days: </p></td>
 										<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
+										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
+						    		</tr>
+						    		<tr>
+										<td><p class="left" style="width:110px">Total Available: </p></td>
+										<td class="text-right">${jsonFmtTotal} </td>
 										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
 						    		</tr>
 						    		<%-- <s:if test="(#divName != null)"> --%>
