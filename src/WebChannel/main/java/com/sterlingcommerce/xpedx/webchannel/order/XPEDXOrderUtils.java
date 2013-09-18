@@ -743,7 +743,10 @@ public class XPEDXOrderUtils {
 			LOG.error("Division is required to evaluate the xpedxItemBranchDetailsForItemAssociation mashup. Return back to the caller");
 			return outputDoc;
 		}
-
+		Element xpxItemExtnList=(Element)ServletActionContext.getRequest().getAttribute("XPXItemExtnList");	
+		Document xpxItemExtnListDoc=SCXmlUtil.createFromString(SCXmlUtil.getString(xpxItemExtnList));
+		if(xpxItemExtnListDoc != null)
+			return xpxItemExtnListDoc;
 		Map<String, String> valueMap = new HashMap<String, String>();
 		valueMap.put("/XPXItemExtn/@CustomerID", custID);
 		valueMap.put("/XPXItemExtn/@XPXDivision", division);
@@ -1024,30 +1027,34 @@ public class XPEDXOrderUtils {
 				.getTransactionContext(true);
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		try {
-			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
-			YFCElement documentElement = inputDocument.getDocumentElement();
-
-			documentElement.setAttribute("CustomerID", customerID);
-			documentElement.setAttribute("OrganizationCode", StoreFrontID);
-			
-			YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
-			YFCElement complexQueryOrElement = documentElement.createChild("Or");
-			for (int i = 0; i < ItemID.size(); i++) {
-				YFCElement expElement = documentElement.createChild("Exp");
-				expElement.setAttribute("Name", "ItemID");
-				expElement.setAttribute("Value", ItemID.get(i));
-				complexQueryOrElement.appendChild((YFCNode)expElement);
-			}
-			complexQueryElement.setAttribute("Operator", "AND");
-			complexQueryElement.appendChild(complexQueryOrElement);
-
-			YIFApi api = YIFClientFactory.getInstance().getApi();
-			env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
-					+ "<ItemList><Item><UOMList><UOM>" + "</UOM></UOMList></Item></ItemList>"));
-			Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
-					inputDocument.getDocument());//SCXmlUtil.getString(outputListDocument)
-			Element wElement = outputListDocument.getDocumentElement();
+			try {
+			  Element wElement=(Element)ServletActionContext.getRequest().getAttribute("itemsUOMListElement");
+			  if(wElement == null)
+			  {
+				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+				YFCElement documentElement = inputDocument.getDocumentElement();
+	
+				documentElement.setAttribute("CustomerID", customerID);
+				documentElement.setAttribute("OrganizationCode", StoreFrontID);
+				
+				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+				YFCElement complexQueryOrElement = documentElement.createChild("Or");
+				for (int i = 0; i < ItemID.size(); i++) {
+					YFCElement expElement = documentElement.createChild("Exp");
+					expElement.setAttribute("Name", "ItemID");
+					expElement.setAttribute("Value", ItemID.get(i));
+					complexQueryOrElement.appendChild((YFCNode)expElement);
+				}
+				complexQueryElement.setAttribute("Operator", "AND");
+				complexQueryElement.appendChild(complexQueryOrElement);
+	
+				YIFApi api = YIFClientFactory.getInstance().getApi();
+				env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
+						+ "<ItemList><Item><UOMList><UOM>" + "</UOM></UOMList></Item></ItemList>"));
+				Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
+						inputDocument.getDocument());//SCXmlUtil.getString(outputListDocument)
+				wElement = outputListDocument.getDocumentElement();
+			  }
 			NodeList wNodeList = wElement.getChildNodes();
 			if (wNodeList != null) {
 				int length = wNodeList.getLength();
@@ -2185,7 +2192,10 @@ public class XPEDXOrderUtils {
 		
 		return billToID;
 	}
-	
+	/*
+	 * This method is used for getting the association from bothe OOTB and custom tables.
+	 * If you make any changes to this please make the same changes to xpedxdraftorderdetailsaction as well.
+	 */
 	public static HashMap<String, HashMap<String,ArrayList<Element>>> getXpedxAssociationsForItems(ArrayList<String> itemIDList, 
 			IWCContext wcContext, boolean editMode) throws XPathExpressionException
 	{
