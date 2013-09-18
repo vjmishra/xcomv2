@@ -378,4 +378,22 @@ div.wc-table-header td {
  max-height: 73px;
  overflow: hidden;
 }
+#ext-gen5 {
+    background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
+}
+
+.swc-ext .x-window-mc {
+     background: none repeat scroll 0 0 #DFE8F6;
+    border: 1px solid #006A3A;
+    font: 1.1em Arial,Helvetica,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.swc-ext .x-window-ml {
+    padding-left: 6px;
+}
+#ext-gen5:hover {
+    background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
+}
+
 

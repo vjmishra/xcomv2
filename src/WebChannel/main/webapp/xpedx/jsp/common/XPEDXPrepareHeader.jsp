@@ -2429,9 +2429,11 @@ function msgWait(){
   </s:if>
   <ul class="header-subnav commonHeader-subnav">
 	  	<s:if test="%{!#isProcurementUser}">
-			 <s:if test='#isGuestUser != true' >
-			 	<s:if test="wCContext.storefrontId == 'xpedx'">
+			 <s:if test='#isGuestUser != true' >			 	
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>			 	
 					<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>
+				</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'></s:elseif>
 					<li> | </li>
 				</s:if>
 				<li><a
