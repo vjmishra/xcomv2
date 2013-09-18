@@ -2712,9 +2712,15 @@ function showSharedListForm(){
 									</s:if>
 									<li class="nomarginright">
 										<label>&nbsp;</label>
-										<input type="image"
-											src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
+										<s:set name='storefrontId' value="wCContext.storefrontId" />
+										<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+											<input type="image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
 											onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
+										</s:if>
+										<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+										<input type="image"	src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/buttons/addtoquicklist green.png"
+											onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
+										</s:elseif>
 									</li>
 
                                 </ul>
