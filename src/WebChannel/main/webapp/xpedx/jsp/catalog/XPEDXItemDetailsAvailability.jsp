@@ -72,7 +72,7 @@
 				<s:set name="jsonNextDay" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonNextDay)"/>
 				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonNextDay)" />			
 				</strong></td>
-				<td width="114">&nbsp;<strong><s:property value='%{#jsonUOMDesc}' /></strong></td>				
+				<td width="114"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 			</tr>	
 			
 			<tr>
@@ -86,7 +86,7 @@
 				<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
 				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />		
 				</td>
-				<td width="114">&nbsp;<%-- <s:property value='%{#jsonUOMDesc}' /> --%></td>				
+				<td width="114"><%-- <s:property value='%{#jsonUOMDesc}' /> --%></td>
 			</tr>
 			
 			<tr>
@@ -102,7 +102,7 @@
 				<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='#xpedxutil.formatQuantityForCommas(#jsonTotalQty)' />"></meta>
 				
 				</td>
-				<td width="114">&nbsp;<%--<s:property value='%{#jsonUOMDesc}' /> --%></td>
+				<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>
 			</tr>
 			
 		</table>

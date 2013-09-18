@@ -101,7 +101,7 @@
 				
 				
 					</td>
-					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
+					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 				</TR>
 				<TR>
 					<td class="my-timeframe">2+ Days:</td>
@@ -131,7 +131,7 @@
                           <!-- Web Trends tag End -->	
 						<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />-->
 					</td>
-					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
+					<td class="my-uom">&nbsp;<s:property value="#jsonUOMDesc" /></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-local-availability" colspan="3">

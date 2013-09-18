@@ -610,7 +610,7 @@
 						    		<tr>
 										<td><p class="left"><strong>Next Day: </strong></p></td>
 										<td class="text-right"><p> <strong>${jsonFmtNextDay}</strong> </p></td>
-										<td class="text-left">&nbsp;<strong>${jsonUOMDesc}</strong></td>									
+										<td class="text-left"><%-- ${jsonUOMDesc} --%></td>									
 						    		</tr>
 						    		<tr>
 										<td><p class="left">2+ Days: </p></td>
@@ -620,7 +620,7 @@
 						    		<tr>
 										<td><p class="left" style="width:110px">Total Available: </p></td>
 										<td class="text-right">${jsonFmtTotal} </td>
-										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
+										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
 						    		</tr>
 						    		<%-- <s:if test="(#divName != null)"> --%>
 						    		<tr>
