@@ -1527,7 +1527,11 @@ public class XPEDXOrderUtils {
 		
 			}
 
-			defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+			if (strCustomerUOM != null && strCustomerUOM.length() > 0) {
+				defaultShowUOMMap.put(strCustomerUOM, strCustomerUOM);
+			} else {
+				defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+			}
 			ServletActionContext.getRequest().setAttribute("defaultShowUOMMap", defaultShowUOMMap);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());

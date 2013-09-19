@@ -2947,6 +2947,14 @@ function showSharedListForm(){
 					<s:set name='showItemType' value='%{true}' />
 					<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
 					<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemId)' />
+					
+					<s:if test='%{#customerUOM!=null}'>
+						<s:set name='itemUomId' value='%{#customerUOM}' />
+					</s:if>
+					<s:else>
+						<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
+					</s:else>
+					
 					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 					<s:set name="itemBaseUom"  value='#baseUOMs.get(#itemId)' />
 					
@@ -3178,7 +3186,7 @@ function showSharedListForm(){
 													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms" list="#uomList"
 													listKey="key"
 													listValue="value" 
-													value="itemUomId" onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');" theme="simple"/>
+													value='itemUomId' onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');" theme="simple"/>
 													</s:if>
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}"/>
 											</s:if> <s:else>
