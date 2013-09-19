@@ -1672,7 +1672,8 @@ public class XPEDXCatalogAction extends CatalogAction {
             String defaultConvUOM = "";
             String defaultUOM = "";
             String orderMultiple = "";
-           
+            String customUom="";
+                   
             //End - Code added to fix XNGTP 2964
             defaultShowUOMMap = new HashMap<String,String>();
             if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
@@ -1688,14 +1689,17 @@ public class XPEDXCatalogAction extends CatalogAction {
                     highestUOM = "";
                     minUOMsDesc = "";
                     maxUOMsDesc = "";
-                    Map uomIsCustomermap = itemUomIsCustomerUomHashMap.get(strItemID);
+                    Map<String,String> uomIsCustomermap = itemUomIsCustomerUomHashMap.get(strItemID);
+                    customUom="";
                     for (Iterator it = displayUomMap.keySet().iterator(); it.hasNext();) {
                         try {
                             String uom = (String) it.next();
                             Object objConversionFactor = displayUomMap.get(uom);
                             String isCustomerUom = "N";
-                            if(uomIsCustomermap != null)
+                            if(uomIsCustomermap != null && uomIsCustomermap.get(uom)!=null){
                             	isCustomerUom =(String)uomIsCustomermap.get(uom);
+                            	customUom=uom;
+                            }
                             //Start- Code added to fix XNGTP 2964
                             orderMultiple = orderMultipleMap.get(strItemID);
                             if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(objConversionFactor)){
@@ -1755,6 +1759,9 @@ public class XPEDXCatalogAction extends CatalogAction {
                             e.printStackTrace();
                         }
                     }
+                    if(uomIsCustomermap != null && customUom.length()>0){
+                    	defaultUOM=customUom.substring(2, customUom.length());
+                    }else{
                         //Start- Code added to fix XNGTP 2964
                         if(minFractUOM == 1.0 && minFractUOM != 0.0){
                             defaultConvUOM = lowestUOM;
@@ -1769,6 +1776,7 @@ public class XPEDXCatalogAction extends CatalogAction {
                             defaultConvUOM = lowestUOM;
                             defaultUOM = minUOMsDesc;
                         }
+                    }
                         /*if(SCUtil.isVoid(orderMultiple) || Integer.valueOf(orderMultiple) == 0){
                             orderMultiple = "1";
                         }
@@ -1872,6 +1880,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 													conversion = Conversion.getTextContent();
 													if(CustomerUOmFlag!=null){
 														isCustomerUOMFlg = CustomerUOmFlag.getTextContent();
+														Map<String,String> uomIsCustomermap = new LinkedHashMap<String,String>();
+														uomIsCustomermap.put(UnitOfMeasure.getTextContent(), isCustomerUOMFlg);
+														itemUomIsCustomerUomHashMap.put(itemId.getTextContent(), uomIsCustomermap);
 													}
 													if(!YFCUtils.isVoid(conversion)){
 														long convFactor = Math.round(Double.parseDouble(conversion));
