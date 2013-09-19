@@ -773,7 +773,7 @@ public class XPEDXPriceandAvailabilityUtil {
 				jsonData.put("AvailabilityMessage", "Ready To Ship Next Day");
 				jsonData.put("AvailabilityMessageColor", "#008000");
 				
-			} else if (requestedQtyFloat <= totalForTwoPlus) {
+			} else if (requestedQtyFloat <= totalAvailable) {
 				jsonData.put("Availability", "2+ days");
 				jsonData.put("AvailabilityMessage", "Ready to Ship Two Plus Days");
 				jsonData.put("AvailabilityMessageColor", "#FF0000");
