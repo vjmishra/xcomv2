@@ -298,14 +298,14 @@ function isValidDate(dtStr)
 			var requestDateStr = new Date(yr1, mon1-1, dt1); 
 			
 			if (!isValidDate(requestDate)){
-				errorMsg.innerHTML = "Please enter valid date";
+				errorMsg.innerHTML = "Please enter valid date.";
 				errorMsg.style.display="inline";
 				document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
 				return;
 			}
 			
 			if(currDate > requestDateStr){
-				document.getElementById("errorMsg").innerHTML = "Please enter valid date";
+				document.getElementById("errorMsg").innerHTML = "The Requested date should be equal to or greater than current date.";
 				errorMsg.style.display="inline";
 				document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
 				return; 
