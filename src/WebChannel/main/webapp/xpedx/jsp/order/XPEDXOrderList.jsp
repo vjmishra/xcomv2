@@ -654,14 +654,14 @@ function printPOs(customerPos) {
 										</s:else>
 											<%-- Added Check For Jira 4109 --%>
 											<s:if test='%{#chainedOrderListSize==null || #chainedOrderListSize==0}'>	
-											<s:if test='#isPendingApproval && !#isOrderRejected'>
-												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+											<s:if test='#isPendingApproval && !#isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
+												<s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 												<br/>
 												<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 											 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
 											 	<s:set name='primaryApprover' value="%{#_action.getPrimaryApproverID()}"/>
 											 	<s:set name='proxyApprover' value="%{#_action.getProxyApproverID()}"/>
-											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser)}'>
+											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser) && #parentOrder.getAttribute("Status") != "Cancelled"}'>
 													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
 												</s:if><br/>
 											</s:if>

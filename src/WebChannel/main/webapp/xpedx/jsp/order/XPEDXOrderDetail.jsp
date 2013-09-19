@@ -499,7 +499,7 @@ function showSplitDiv(divId)
 		            </s:iterator>
 		            <s:a id='returnOrderListId' href='%{orderListReturnUrl}' cssClass="grey-ui-btn float-left top-gray-btn"><span>Return to Orders</span></s:a>
 	                
-	                <s:if test ="#_action.approvalAllowed()" >
+	                <s:if test ="#_action.approvalAllowed() && #status != 'Cancelled'" >
 		                <s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve /Reject Order</span></s:a>
 <%-- 						<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Reject Order</span></s:a> --%>
 		            </s:if>
@@ -1568,7 +1568,7 @@ function showSplitDiv(divId)
 					</s:else>
 			</s:if>
 						
-			<s:if test ="#_action.approvalAllowed()" >
+			<s:if test ="#_action.approvalAllowed() && #status != 'Cancelled'" >
 				<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve / Reject Order</span></s:a>
 <%-- 				<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Reject Order</span></s:a> --%>
 			</s:if>
