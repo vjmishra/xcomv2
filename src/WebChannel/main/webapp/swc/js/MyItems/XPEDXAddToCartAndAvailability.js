@@ -250,7 +250,7 @@
 	}
 	//-- Web Trends tag end --
 	var myMask;
-	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM,pnaRequestedCustomerUOM) {
+	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM,pnaRequestedCustomerUOM, qtyTextBox) {
 		//added for jira 3974
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -269,7 +269,8 @@
 					pnaRequestedUOM: uom,
 					myItemsKey:myItemsKey,
 					validateOM:validateOM,
-					pnaReqCustomerUOM:pnaRequestedCustomerUOM
+					pnaReqCustomerUOM:pnaRequestedCustomerUOM,
+					qtyTextBox : qtyTextBox
 	            },
 	            method: 'POST',
 	            success: function (response, request){

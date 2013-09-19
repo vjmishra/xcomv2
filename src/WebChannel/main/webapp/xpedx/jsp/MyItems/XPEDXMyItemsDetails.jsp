@@ -398,7 +398,7 @@ function showSharedListForm(){
     			}
     			var url = document.getElementById("checkAvailabilityURLHidden");
     			var qty = document.getElementById('QTY_'+myItemsKey).value;
-    		
+    		    var qtyTextBox = qty;
     		//XB 214 BR4
     			if(url != null && validateOM == true) {
     				if(qty == ""){
@@ -410,7 +410,8 @@ function showSharedListForm(){
         		 		var uom = document.getElementById('UOM_'+myItemsKey).value;
     				}
     				var customerUom = document.getElementById('custUOM_'+myItemsKey).value;
-    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM,customerUom);
+    	     		
+    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM,customerUom,qtyTextBox);
     			} 
     			else{
             		Ext.Msg.hide();

@@ -161,6 +161,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
 	private Map<String,String> itemCustomerUomMap=new HashMap<String,String>();		
 	private Map<String,String> catMap=new HashMap<String,String>();
+	Map<String, String> qtyTextBoxMap;
 	private String modifyts;
     private String createUserId;
     private String modifyUserid;
@@ -170,14 +171,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
     protected HashMap useOrderMultipleMapFromSourcing;
 	private String customerItemFlag;
     private String mfgItemFlag;
-    private String textBoxQty;
+    private String qtyTextBox;    
     
-    public String getTextBoxQty() {
-		return textBoxQty;
+	public String getQtyTextBox() {
+		return qtyTextBox;
 	}
 
-	public void setTextBoxQty(String textBoxQty) {
-		this.textBoxQty = textBoxQty;
+	public void setQtyTextBox(String qtyTextBox) {
+		this.qtyTextBox = qtyTextBox;
 	}
 
 	public String getCustomerItemFlag() {
@@ -1442,6 +1443,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			String conversion;
 			int totalQty;
 			int OM;
+			qtyTextBoxMap = new HashMap<String, String>();
+						
 			// Init some vars
 			ArrayList<XPEDXItem> inputItems = new ArrayList<XPEDXItem>();
 			
@@ -1456,6 +1459,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			for (int i = 0; i < listOfItemsFromsession.size(); i++) {
 				Element item = (Element) listOfItemsFromsession.get(i);
 				boolean isInvalidItem=false;
+				String tmpQtyTxtBox=null;
 				// Get some vars
 				String id = item.getAttribute("MyItemsKey");
 				String itemId = item.getAttribute("ItemId");
@@ -1466,7 +1470,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String orderMultiple = (String)orderMulMap.get(itemId);
 				String customerUOM = custUOM.get(i);
 				itemCustomerUomMap.put(itemId+":"+(i+1), customerUOM);
-				if(itemQty.trim().equals("")){
+				if(itemQty.trim().equals("")) {
+					tmpQtyTxtBox=itemQty.trim();
 					itemQty = orderMultiple;
 					itemUom = itemBaseUOM.get(i);
 				}
@@ -1510,6 +1515,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					tmpItem.setLineNumber(itemLineNum);
 					tmpItem.setRequestedQty(itemQty);
 					inputItems.add(tmpItem);
+					
+					if("".equals(tmpQtyTxtBox)) {
+						qtyTextBoxMap.put(id, tmpQtyTxtBox);
+					}
 					/*Added if loop for webtrends : creating a string of selected 
 					itemIds separated with semicolon*/
 					if(cntSel==0){
@@ -3710,5 +3719,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	}
 	//Added for JIRA 1402 End
 
+	public Map<String, String> getQtyTextBoxMap() {
+		return qtyTextBoxMap;
+	}
+
+	public void setQtyTextBoxMap(Map<String, String> qtyTextBoxMap) {
+		this.qtyTextBoxMap = qtyTextBoxMap;
+	}
 	
 }
