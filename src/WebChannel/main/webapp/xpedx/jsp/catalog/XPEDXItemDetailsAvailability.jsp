@@ -7,7 +7,7 @@
 <s:set name='scuicontext' value="uiContext" />
 <s:set name='showCurrencySymbol' value='true' />
 <s:set name="itemID" value='#_action.getItemID()' />
-<s:set name="txtBoxQty" value='#_action.getTextBoxQty()' />
+<s:set name="qtyTxtBox" value='#_action.getQtyTextBox()' />
 <s:set name="json" value='pnaHoverMap.get(#itemID)' /> 
 <s:set name="jsonUOM" value="#json.get('UOM')" /> 
 <s:set name="jsonImmediate" value="#json.get('Immediate')" /> 
@@ -48,14 +48,14 @@
 
 			   
 	<div id="jsonAvalabilityDiv">
-	<s:if test='%{#txtBoxQty != null && #txtBoxQty != 0 && #jsonAvailabilityBalance != null}'>
+	<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
 		<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
 		<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:10px"><strong><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
 	</s:if>
 	<br/>
 	<fieldset id="Item_fieldset"><legend style="font-weight: bold;">Availability</legend>
 		<table width="320" border="0" cellspacing="0" cellpadding="0" style="margin-left:-25px;">
-			<s:if test='%{#txtBoxQty != null && #txtBoxQty != 0}'>
+			<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0}'>
 				<tr>
 					<td width="150" align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:40px"><strong style="align:left;"><s:property value='%{#jsonAvailabilityMessage}' /></strong></td>
 				</tr>

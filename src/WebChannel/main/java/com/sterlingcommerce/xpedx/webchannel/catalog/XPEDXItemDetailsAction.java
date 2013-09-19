@@ -2256,7 +2256,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String ExtnIsCustUOMExcl = "";
 	private String pnaRequestedQty;
 	private String isOrderData ="false";
-	private String textBoxQty=null;
+	private String qtyTextBox;
 
 	//EB-225 - CustomerUOM if exist for a item in Item detail page, to set as hidden field in Item detail page
 	private String customerUOM ="";
@@ -2399,13 +2399,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	public void setProdMweight(String prodMweight) {
 		this.prodMweight = prodMweight;
-	}	
-
-	public String getTextBoxQty() {
-		return textBoxQty;
+	}
+	
+	public String getQtyTextBox() {
+		return qtyTextBox;
 	}
 
-	public void setTextBoxQty(String textBoxQty) {
-		this.textBoxQty = textBoxQty;
+	public void setQtyTextBox(String qtyTextBox) {
+		this.qtyTextBox = qtyTextBox;
 	}
+
 }

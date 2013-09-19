@@ -111,33 +111,34 @@
 					<s:set name="isQtyTextBoxEmpty" value="%{'true'}" />
 				</s:if>
 			</s:if>
-		</s:if>
-					
-					
-		<s:if test="%{pnaHoverMap != null}">
-			<s:if test="%{#jsonKey != ''}">
-				<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
-					<s:set name="json" value='pnaHoverMap.get(#jsonKey)' />
-					<s:set name="jsonUOM" value="#json.get('UOM')" />
-					<s:if test="%{#customerUom == #jsonUOM}">
-						<s:set name='customerUomWithoutM' value='%{#jsonUOM.substring(2, #jsonUOM.length())}' />
-						<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />
-					</s:if>
-					<s:else>
-						<s:set name="jsonUOMDesc"
-						value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
-					</s:else>
-					<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
-					<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
-					
-					<s:if test="%{#isQtyTextBoxEmpty == 'false' && #jsonAvailabilityBalance != null}">
-						<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
-						<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:2px"><b><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</b></p>
+		</s:if>					
+		
+		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
+			<s:if test="%{pnaHoverMap != null}">
+				<s:if test="%{#jsonKey != ''}">
+					<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
+						<s:set name="json" value='pnaHoverMap.get(#jsonKey)' />
+						<s:set name="jsonUOM" value="#json.get('UOM')" />
+						<s:if test="%{#customerUom == #jsonUOM}">
+							<s:set name='customerUomWithoutM' value='%{#jsonUOM.substring(2, #jsonUOM.length())}' />
+							<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />
+						</s:if>
+						<s:else>
+							<s:set name="jsonUOMDesc"
+							value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+						</s:else>
+						<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
+						<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
+						
+						<s:if test="%{#isQtyTextBoxEmpty == 'false' && #jsonAvailabilityBalance != null}">
+							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+							<tr>
+								<td colspan="5" width="100%" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:30px"><b><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</b></td>
+							</tr>
+						</s:if>
 					</s:if>
 				</s:if>
 			</s:if>
-		</s:if>
-		<tr style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td width="3%">&nbsp;</td>
 			<td colspan="3" width="33%"><i><span>Availability</i></span></td>
 			<td class="left" colspan="3" width="33%"><i>

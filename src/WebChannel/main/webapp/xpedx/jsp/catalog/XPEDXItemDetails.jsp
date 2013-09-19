@@ -127,7 +127,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	if(conversionFactor!=null && conversionFactor!=undefined){
 		 uomConvFactor = document.getElementById("uomConvFactor").value;
 	}
-	var txtBoxQty=Qty;
+	var qtyTextBox=Qty;
 	if(Qty == null || Qty == "null" || Qty == "") {
 		reqUom = document.getElementById("selectedUOM").value;
 		if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
@@ -159,7 +159,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 			itemID 	: itemId,
 	       	requestedUOM : reqUom,
 	       	pnaRequestedQty	: Qty,
-	       	textBoxQty : txtBoxQty,
+	       	qtyTextBox : qtyTextBox,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
@@ -194,7 +194,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		reqUom = document.getElementById("selectedUOM").value;
 	}
 	var Qty=document.getElementById("qtyBox").value;
-	var txtBoxQty=Qty;
+	var qtyTextBox=Qty;
 	//Quantity validation
 	if(Qty =='')
 	{	
@@ -247,7 +247,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			itemID 	: itemId,
 	       	requestedUOM : reqUom,
 	       	pnaRequestedQty	: Qty,
-	       	textBoxQty : txtBoxQty,
+	       	qtyTextBox : qtyTextBox,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,

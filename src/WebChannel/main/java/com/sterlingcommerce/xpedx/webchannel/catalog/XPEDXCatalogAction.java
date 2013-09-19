@@ -99,6 +99,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String searchString=null;
 	private String searchIndexInputXML;
 //XNGTP-4264 and XB 355 Escaping Below words from search criteria.
+	private String qtyTextBox=null;
 	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
 			 "for", "if", "in", "into", "is", "it",
 			 "no", "not", "of", "on", "or", "such",
@@ -106,7 +107,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			 "they", "this", "to", "was", "will", "with"
 };
 
-	
+	public String getQtyTextBox() {
+		return qtyTextBox;
+	}
+
+	public void setQtyTextBox(String qtyTextBox) {
+		this.qtyTextBox = qtyTextBox;
+	}
+
 	public String getSearchString() {
 		return searchString;
 	}

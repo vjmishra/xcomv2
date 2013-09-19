@@ -27,7 +27,7 @@
 
 <s:set name="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"></s:set>
 <s:hidden name="reqCustomerUOM" id="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"/>
-<s:set name="txtBoxQty" value="%{#_action.getTextBoxQty()}" />
+<s:set name="qtyTxtBox" value='#_action.getQtyTextBox()' />
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
 <s:if test="%{pnaHoverMap != null && #itemId != '' && pnaHoverMap.containsKey(#itemId)}">
@@ -59,7 +59,7 @@
 		<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
 		<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 		
-		<s:if test='%{#txtBoxQty != null && #txtBoxQty != 0 && #jsonAvailabilityBalance != null}'>
+		<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
 			<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
 			<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:12px;padding-left:10px"><strong><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
 		</s:if>
@@ -84,7 +84,7 @@
 		<tr>
 			<td colspan="3" width="36%" valign="top">
 				<TABLE cellpadding="0" cellspacing="0" border="0">
-				<s:if test='%{#txtBoxQty != null && #txtBoxQty != 0}'>
+				<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0}'>
 					<tr>
 						<td align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:12px;"><strong style="align:left;"><s:property value='%{#jsonAvailabilityMessage}' /></strong></td>
 					</tr>
