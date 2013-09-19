@@ -324,8 +324,10 @@ span.underlink:hover, p.underlink:hover {
 }
 #main-navigation ul li.order-edit-bg {
     background: none repeat scroll 0 0 #988344;
+    border: 1px solid #ffffff;
     margin-top: 4px;
     padding-top: 0;
+
 }
 #main-navigation ul li.lighter.order-edit a {
     border: 1px solid #b7a980;
@@ -333,6 +335,7 @@ span.underlink:hover, p.underlink:hover {
 }
 #main-navigation ul li.lighter.order-edit {
     background: none repeat scroll 0 0 #b7a980;
+    border: 1px solid #ffffff;
     margin-top: 4px;
     padding-top: 0;
 }
