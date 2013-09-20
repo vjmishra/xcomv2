@@ -6311,7 +6311,7 @@ public class XPEDXWCUtils {
 	}
 	//end for jira 4306
 	
-	private static Element getItemCustomExtnAndUOM(List<String> itemIds,IWCContext wcContext) throws Exception
+	private static Element getItemCustomExtnAndUOM(List<String> itemIds,IWCContext wcContext,YFSEnvironment env) throws Exception
 	{
 		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		Element allAPIOutputDoc=null; 
@@ -6334,16 +6334,12 @@ public class XPEDXWCUtils {
 			String legacyCustomerNumber=shipToCustomer.getExtnLegacyCustNumber();
 			String custDivision = shipToCustomer.getExtnCustomerDivision();
 			String companyCode=shipToCustomer.getCompany();
-			HashMap<String,String> valueMap =  new HashMap<String, String>();
-			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
-			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
-			//valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId); Filled using Complex Query
-			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
-			
-			Element xrefInput =  null;
+			Element xrefInput =  SCXmlUtil.createDocument("XPXItemcustXref").getDocumentElement();
 			Element res =  null;
 			try {
-				xrefInput = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap,  wcContext.getSCUIContext());
+				xrefInput.setAttribute("EnvironmentCode", envCode);
+				xrefInput.setAttribute("CustomerNumber", legacyCustomerNumber);
+				xrefInput.setAttribute("CustomerDivision", custDivision);
 				Element complexQuery = xrefInput.getOwnerDocument().createElement("ComplexQuery");
 				xrefInput.appendChild(complexQuery);
 				Element Or = xrefInput.getOwnerDocument().createElement("Or");
@@ -6352,8 +6348,7 @@ public class XPEDXWCUtils {
 				
 				String customerId = wcContext.getCustomerId();
 				
-				Element input = WCMashupHelper.getMashupInput("xpedxgetAllAPI",  wcContext
-						.getSCUIContext());
+				Element input = SCXmlUtil.createDocument("XPXCatalogAllAPIService").getDocumentElement();
 				
 				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
 				YFCElement documentElement = inputDocument.getDocumentElement();
@@ -6372,16 +6367,15 @@ public class XPEDXWCUtils {
 				customerDetails.setAttribute("ExtnShipFromBranch", shipToCustomer.getExtnShipFromBranch());
 				customerDetails.setAttribute("ExtnCustomerDivision", shipToCustomer.getExtnCustomerDivision());
 				customerDetails.setAttribute("ExtnUseOrderMulUOMFlag", shipToCustomer.getExtnUseOrderMulUOMFlag());
-				
-				valueMap = new HashMap<String, String>();
-				valueMap.put("/XPXItemExtn/@XPXDivision", shipToCustomer.getExtnShipFromBranch());
-				valueMap.put("/XPXItemExtn/@EnvironmentID", envCode);
-				valueMap.put("/XPXItemExtn/@IsAssociationRequired", "Y");
-				Element xpxItemExtninputElem = WCMashupHelper.getMashupInput("xpedxXPXItemExtnList", valueMap,wcContext.getSCUIContext());
-				
-				Document inputDoc = xpxItemExtninputElem.getOwnerDocument();
-				NodeList inputNodeList = inputDoc.getElementsByTagName("Or");
-				Element inputNodeListElemt = (Element) inputNodeList.item(0);
+
+				Element xpxItemExtninputElem = SCXmlUtil.createDocument("XPXItemExtn").getDocumentElement();;
+				xpxItemExtninputElem.setAttribute("XPXDivision", shipToCustomer.getExtnShipFromBranch());
+				xpxItemExtninputElem.setAttribute("EnvironmentID", envCode);
+				xpxItemExtninputElem.setAttribute("IsAssociationRequired", "Y");
+				Element itemExtComplexQuery = xpxItemExtninputElem.getOwnerDocument().createElement("ComplexQuery");
+				xpxItemExtninputElem.appendChild(itemExtComplexQuery);
+				Element inputNodeListElemt = xpxItemExtninputElem.getOwnerDocument().createElement("Or");
+				itemExtComplexQuery.appendChild(inputNodeListElemt);
 				itemIdIter = itemIds.iterator();
 				while(itemIdIter.hasNext()) {
 					//Complex query for XPXItemExtn input xml
@@ -6413,10 +6407,9 @@ public class XPEDXWCUtils {
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 				String inputXml = SCXmlUtil.getString(input);
-				
-				 allAPIOutputDoc=(Element)WCMashupHelper.invokeMashup(
-						"xpedxgetAllAPI", input, wcContext
-								.getSCUIContext());
+				YIFApi api = YIFClientFactory.getInstance().getApi();
+				allAPIOutputDoc = api.executeFlow(env, "XPXCatalogAllAPIService",
+						input.getOwnerDocument()).getDocumentElement();
 			}
 			catch(Exception e)
 			{
@@ -6425,7 +6418,7 @@ public class XPEDXWCUtils {
 		}
 		return allAPIOutputDoc;
 	}
-	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items) {
+	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items,boolean defaultShowUOMFlag) {
 		
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
@@ -6438,7 +6431,7 @@ public class XPEDXWCUtils {
 		if(items == null || items.size() ==0)
 			return itemUomHashMap;
 		try {
-			Element allAPIOutputDoc=getItemCustomExtnAndUOM(items,context);
+			Element allAPIOutputDoc=getItemCustomExtnAndUOM(items,context,env);
 			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
 			ServletActionContext.getRequest().setAttribute("itemsUOMListElement", wElement);
 			ServletActionContext.getRequest().setAttribute("XPXItemExtnList", allAPIOutputDoc.getElementsByTagName("XPXItemExtnList").item(0));
@@ -6446,12 +6439,24 @@ public class XPEDXWCUtils {
 			
 			if(allAPIOutputDoc != null)
 			{
-				return XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items, context.getStorefrontId(),false);
+				
+				if(items.size()== 1 && defaultShowUOMFlag == true)
+					itemUomHashMap.put(items.get(0), XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items.get(0), context.getStorefrontId()));
+				else					
+					return XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items, context.getStorefrontId(),false);
 			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally
+		{
+				scuiTransactionContext.end();
+				env.clearApiTemplate("XPXUOMListAPI");
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+				env = null;
 		}
 		return itemUomHashMap;
 

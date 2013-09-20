@@ -219,6 +219,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			There is no need to change the order owner
 			*/
 			//getItemUOMs();
+			setInventoryAndOrderMultipleMap();
 			checkforEntitlement();
 			//Start of XB-689 - Adding a message , when there are duplicate items in the cart
 			if(allItemIDsWithDuplicates !=null && allItemIDsWithDuplicates.size()>0){
@@ -2119,11 +2120,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		allItemIds.addAll(itemIdList);
 		
 		//This sets the inventory indicator map and also order multiple map 
-		setInventoryAndOrderMultipleMap();
 		/*
 		 * getting all the items UOMs at the same time using a complex query
 		 */
-		itemIdsUOMsDescMap = XPEDXWCUtils.getXpedxUOMListFromCustomService(allItemIds);//XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
+		itemIdsUOMsDescMap = XPEDXWCUtils.getXpedxUOMListFromCustomService(allItemIds,false);//XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
 		itemIdsUOMsMap = (Map<String, Map<String, String>>)ServletActionContext.getRequest().getAttribute("ItemUomHashMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
 		ServletActionContext.getRequest().removeAttribute("ItemUomHashMap");
 		if(itemIdsUOMsMap == null)

@@ -968,8 +968,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		//Changes End for JIRA 2964
 		
 		//Start of EB-164
-		defaultShowUOMMap = new HashMap<String,String>();		
-		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode);
+		defaultShowUOMMap = new HashMap<String,String>();	
+		/*
+		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode); //Commented for EB-1999 performance issue By Amar*/
+		ArrayList<String> items=new  ArrayList();
+		items.add(itemID);
+		displayItemUOMsMap = XPEDXWCUtils.getXpedxUOMListFromCustomService(items,true).get(itemID);
 		//defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();	
 		defaultShowUOMMap = (Map<String, String>)ServletActionContext.getRequest().getAttribute("defaultShowUOMMap");
 		ServletActionContext.getRequest().removeAttribute("defaultShowUOMMap");

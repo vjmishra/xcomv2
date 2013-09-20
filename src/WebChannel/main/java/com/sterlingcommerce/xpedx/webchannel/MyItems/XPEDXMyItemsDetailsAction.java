@@ -1034,9 +1034,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			 * getting all the items UOMs and description at the same time using a complex query
 			 */
 			//Changed for XB-687
-			itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(
-					wcContext.getCustomerId(), allItemIds,
-					wcContext.getStorefrontId(),false);
+			/*itemIdsUOMsDescMap = XPEDXOrderUtils.getXpedxUOMDescList(
+			wcContext.getCustomerId(), allItemIds,
+			wcContext.getStorefrontId());*/ // commented for performance issue as part of EB-1999 by Amar
+			itemIdsUOMsDescMap=XPEDXWCUtils.getXpedxUOMListFromCustomService(allItemIds,false);// commented for performance issue as part of EB-1999 by Amar
 			
 			itemIdConVUOMMap = (Map<String,Map<String,String>>)ServletActionContext.getRequest().getAttribute("ItemIdConVUOMMap");
 			ServletActionContext.getRequest().removeAttribute("ItemIdConVUOMMap");
