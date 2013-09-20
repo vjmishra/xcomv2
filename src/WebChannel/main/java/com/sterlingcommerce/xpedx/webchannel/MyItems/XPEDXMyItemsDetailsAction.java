@@ -1658,6 +1658,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
 		}
+		if ("N".equals(custLineNoFlag)) {			
+			getCustomerFieldsDBMap().put("CustLineAccNo","");			
+		}
 		
 		if ("Y".equals(custPONoFlag)) {
 			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
@@ -1673,6 +1676,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				getCustomerFieldsMap().put("CustomerPONo","Line PO #");
 			}
 			//End of XB 769\ XB 434
+		}
+		if ("N".equals(custPONoFlag)) {			
+			getCustomerFieldsDBMap().put("CustomerPONo","");			
 		}
 		
 		if ("Y".equals(custField1Flag)) {
