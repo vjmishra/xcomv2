@@ -273,18 +273,6 @@ function isValidDate(dtStr)
     	}
     else{
     	writewebtrendTagForQty();
-    	//Added for EB 1975
-    	if(document.getElementById("requestDateString") != null){
-    	var datetext = document.getElementById("requestDateString").value;
-    	}
-    	if((document.getElementById("OrderSummaryForm_SpecialInstructions").value =="" || document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length == 0) && datetext != ""){
-			document.getElementById("OrderSummaryForm_SpecialInstructions").value= "REQUESTED DELIVERY DATE: " +datetext+".";
-		}
-		else if(document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length > 0 && datetext != ""){
-				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQUESTED DELIVERY DATE: " +datetext+".";
-		}
-    	//ENd of EB 1975
-    	
     	//Added for EB 2458 - RequestDate validation
     	var requestDate = document.getElementById("requestDateString").value;
     	var currDate = new Date();
@@ -314,6 +302,17 @@ function isValidDate(dtStr)
 		document.getElementById("errorMsg").innerHTML = '';
     	//END for EB 2458 - RequestDate validation
     	
+    	//Added for EB 1975
+    	if(document.getElementById("requestDateString") != null){
+    	var datetext = document.getElementById("requestDateString").value;
+    	}
+    	if((document.getElementById("OrderSummaryForm_SpecialInstructions").value =="" || document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length == 0) && datetext != ""){
+			document.getElementById("OrderSummaryForm_SpecialInstructions").value= "REQUESTED DELIVERY DATE: " +datetext+".";
+		}
+		else if(document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length > 0 && datetext != ""){
+				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQUESTED DELIVERY DATE: " +datetext+".";
+		}
+    	//ENd of EB 1975
     	//Added for 3475
     	Ext.Msg.wait("Processing...");
     	validateForm_OrderSummaryForm(),submitOrder()
