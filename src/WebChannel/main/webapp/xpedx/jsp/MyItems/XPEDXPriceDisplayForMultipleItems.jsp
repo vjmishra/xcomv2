@@ -193,7 +193,7 @@
 					
 					<s:if test="%{#isQtyTextBoxEmpty == 'false'}">
 						<tr>
-							<td width="150" align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;"><b><s:property value='%{#jsonAvailabilityMessage}' /></b></td>
+							<td width="100%" align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;"><b><s:property value='%{#jsonAvailabilityMessage}' /></b></td>
 						</tr>
 					</s:if>		
 					<tr>
