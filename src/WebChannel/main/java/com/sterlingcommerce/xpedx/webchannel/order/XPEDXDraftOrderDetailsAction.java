@@ -2378,7 +2378,23 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			
 		}			
 	}
-
+	 protected void validateRestoredOrder()
+		 throws Exception
+	 {
+			//Updating AuthorizedClient to Web because validation will be failed 
+			//if AuthorizedClient is not Web. And chaging back to its actual value before exiting to this method.
+			 Element orderEl = getOrderElementFromOutputDocument();
+			 String authorizedClient="";
+			 if(orderEl != null)
+			 {
+				 authorizedClient=orderEl.getAttribute("AuthorizedClient");
+				 orderEl.setAttribute("AuthorizedClient", "Web");
+			 }
+			 super.validateRestoredOrder();
+			 if(!"".equals(authorizedClient))
+				 orderEl.setAttribute("AuthorizedClient", authorizedClient);
+				 
+	 }
 	private void processPandA(Vector items) {
 		Document orderDoc = getOutputDocument();
 		assert (orderDoc != null);
