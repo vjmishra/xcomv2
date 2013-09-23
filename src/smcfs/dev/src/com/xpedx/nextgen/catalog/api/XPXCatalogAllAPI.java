@@ -373,14 +373,17 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 							Element xpxItemAssocEleme=SCXmlUtil.createChild(_xpxItemExtn, "XPXItemAssociationsList");
 							if(associationMap != null )
 							{
-								for(XPX_Item_Associations xpxItemAssociation:associationMap.get(_xpxItemExtn.getAttribute(XPX_Item_Extn.ITEMEXTNKEY)))
+								List<XPX_Item_Associations>associationList=associationMap.get(_xpxItemExtn.getAttribute(XPX_Item_Extn.ITEMEXTNKEY));
+								if(associationList != null )
 								{
-									Element xpxItemAssociationEleme=SCXmlUtil.createChild(xpxItemAssocEleme, "XPXItemAssociations");
-									xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMEXTNKEY, xpxItemAssociation.getItemExtnKey());
-									xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATIONTYPE, xpxItemAssociation.getAssociationType());
-									xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATEDITEMID, xpxItemAssociation.getAssociatedItemID());
-									xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMASSOCIATIONKEY, xpxItemAssociation.getItemAssociationKey());
-									
+									for(XPX_Item_Associations xpxItemAssociation:associationList)
+									{
+										Element xpxItemAssociationEleme=SCXmlUtil.createChild(xpxItemAssocEleme, "XPXItemAssociations");
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMEXTNKEY, xpxItemAssociation.getItemExtnKey());
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATIONTYPE, xpxItemAssociation.getAssociationType());
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATEDITEMID, xpxItemAssociation.getAssociatedItemID());
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMASSOCIATIONKEY, xpxItemAssociation.getItemAssociationKey());									
+									}
 								}
 							}
 						}
