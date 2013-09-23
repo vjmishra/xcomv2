@@ -452,6 +452,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					pltQryBuilder1.setCurrentTable("YPM_PRICELIST_LINE");
 					Element itemElem=(Element)pricelistAssignmentElement.getElementsByTagName("Item").item(0);
 					pltQryBuilder1.append("PRICING_STATUS ='ACTIVE' ");
+					//Added List_Price for EB-2268
+					pltQryBuilder1.append("AND LIST_PRICE !=0 ");
 					if(priceListIter.hasNext())
 					{
 						
