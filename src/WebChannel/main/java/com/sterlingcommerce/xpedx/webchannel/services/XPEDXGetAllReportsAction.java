@@ -62,9 +62,6 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 		String DBUrl= YFSSystem.getProperty("datasource_url");
 		String DBName= YFSSystem.getProperty("datasource_name");
 		
-		System.out.println("+++++++ db url +++++ " + DBUrl);
-		System.out.println("+++++++ db name +++++ " + DBName);
-		
 		//String DBUrl= "t3://localhost:7002";
 		//String DBName= "SeptJNDI";
 		Connection connection = null;

@@ -464,7 +464,6 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			// Set the token in case you rerun with new prompts
 			ReportCriteria reportCriteria = new ReportCriteria();
 
-			System.out.println("........ Report id ........ " + getId());
 			reportCriteria.setReportId(Integer.parseInt(getId()));
 			reportCriteria.setReportPromptNameValue(reportPromptNameValueList);
 

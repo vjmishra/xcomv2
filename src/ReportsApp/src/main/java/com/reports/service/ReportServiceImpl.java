@@ -18,8 +18,6 @@ import com.businessobjects.rebean.wi.Prompt;
 import com.businessobjects.rebean.wi.Prompts;
 import com.businessobjects.rebean.wi.ReportEngine;
 import com.businessobjects.rebean.wi.ReportEngines;
-import com.businessobjects.rebean.wi.SQLDataProvider;
-import com.businessobjects.rebean.wi.SQLSelectStatement;
 import com.businessobjects.rebean.wi.Values;
 import com.crystaldecisions.sdk.exception.SDKException;
 import com.crystaldecisions.sdk.framework.IEnterpriseSession;
@@ -50,8 +48,7 @@ public class ReportServiceImpl implements ReportService {
 	String standardFolder = "";
 	String customFolder = "";
 
-	public ReportServiceImpl() {
-		
+	public ReportServiceImpl() {		
 		Properties properties = new Properties();
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream("reports_app.properties");
 		try {

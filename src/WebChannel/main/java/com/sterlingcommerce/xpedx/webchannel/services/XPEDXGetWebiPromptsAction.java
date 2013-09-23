@@ -419,14 +419,12 @@ LOG.debug("In Account, customerId++++++++++++"+ customerId);
 		Element eleExtn = SCXmlUtil.getChildElement(docElement, "Extn");
 
 
-		if (suffix.indexOf("Cust") == 0) {
-			System.out.println("+++++++++++ returning cust ++++++++++++ " + eleExtn.getAttribute("ExtnLegacyCustNumber"));
+		if (suffix.indexOf("Cust") == 0) {			
 			list.add(eleExtn.getAttribute("ExtnLegacyCustNumber"));			
 			return list;
 		} 
 		if (suffix.indexOf("xcomMasterCustomer") == 0) {
-			list.add(eleExtn.getAttribute("ExtnSAPParentAccNo"));
-			System.out.println("+++++++++++ returning xcomMasterCustomer ++++++++++++ " + eleExtn.getAttribute("ExtnSAPParentAccNo"));
+			list.add(eleExtn.getAttribute("ExtnSAPParentAccNo"));			
 			LOG.debug("XCOMMSAP ++++++++++++++++" + eleExtn.getAttribute("ExtnSAPParentAccNo"));
 			return list;
 		}			
