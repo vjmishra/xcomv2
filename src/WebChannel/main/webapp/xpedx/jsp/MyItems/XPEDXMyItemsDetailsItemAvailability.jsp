@@ -160,7 +160,7 @@
 				<table cellpadding="0" cellspacing="0" border="0" >				
 					<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0}'>			
 					<tr>
-						<td align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;"><b><s:property value="%{#jsonAvailabilityMessage}"/></b></td>
+						<td align="left" width="100%" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;"><b><s:property value="%{#jsonAvailabilityMessage}"/></b></td>
 					</tr>
 					</s:if>		
 					<tr>
