@@ -2674,8 +2674,13 @@ function showSharedListForm(){
                         <div class="clear">&nbsp;</div>
 						<s:hidden id="mandatoryFieldCheckFlag_quick-add" name="mandatoryFieldCheckFlag_quick-add" value="%{false}"></s:hidden>
                         <h2 style="float: left; margin-top:5px;">Quick Add</h2>
+                        <s:set name='storefrontId' value="wCContext.storefrontId" />
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
                         <p class="quick-add-aux-links underlink" style="color: orange;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
-
+						</s:if>
+						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<p class="quick-add-aux-links underlink" style="color:  #66cc33;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
+						</s:elseif>
                         <div class="clear">&nbsp;</div>
                         <div class="quick-add-form-top">&nbsp;</div>
                         <div class="quick-add-form quick-add-form-mil">

@@ -407,3 +407,17 @@ element.style {
     margin-right: 5px;
     margin-top: 5px;
 }
+#main-nav li span {
+    border-right: 1px solid #FFFFFF;
+    color: #EEEEEE;
+    display: block;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    height: 20px;
+    letter-spacing: normal;
+    padding: 6px 4px 0;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    z-index: 1;
+}
