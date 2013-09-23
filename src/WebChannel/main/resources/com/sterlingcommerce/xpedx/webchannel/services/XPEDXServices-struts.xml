@@ -17,8 +17,13 @@
 		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>
 				
 	</action>
-	<!-- End For Reporting -->
-	
+	<!--  End For Reporting -->
+	 	
+	<action name="myreports" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAllReportsAction">
+		<result name="success">/xpedx/jsp/services/XPEDXGetAllReports.jsp</result>
+		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>				
+	</action>
+		
 	<action name="XPEDXTools" class="com.sterlingcommerce.webchannel.core.WCAction">
 		<result name="success">/xpedx/jsp/tools/XPEDXTools.jsp</result>
 	</action>
@@ -73,6 +78,19 @@
 		</result>
 		 
 		</action>
+		
+	<action name="getprompts" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
+		<result name="WebiInputPrompt" type="redirectAction">
+		     <param name="actionName">getinputprompt</param>
+		     <param name="id">${id}</param>	    		     
+		</result>
+		 
+	</action>	
+	
+	<action name="getinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetWebiPromptsAction">		
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
+		<result name="success">/xpedx/jsp/services/XPEDXGetWebiPrompts.jsp</result>
+	</action>
 	<action name="getWebiInputPrompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXWebiInputPromptAction">		
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXWebiInputPrompt.jsp</result>
@@ -89,6 +107,14 @@
 		    <param name="storageToken">${strToken}</param>
 		    <param name="errorNames">${errorList}</param>
 		    	    
+		</result>
+	</action>
+	<action name="processinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXProcessPromptsAction">				
+		<result name="success" type="redirectAction">
+		     <param name="actionName">getinputprompt</param>
+		     <param name="id">${id}</param>
+		     <param name="renderReport">${rndrReport}</param>
+		     <param name="viewReportAs">${viewReportAs}</param>	   		          
 		</result>
 	</action>
 	
