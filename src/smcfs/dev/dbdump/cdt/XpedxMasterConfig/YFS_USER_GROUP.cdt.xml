@@ -82,6 +82,14 @@
     Modifyuserid="admin" OwnerKey="DEFAULT" OwnerType=" "
     TemplateGroup="N" UsergroupDescription="SYSTEM_RESTRICTED"
     UsergroupId="SYSTEM_RESTRICTED" UsergroupKey="201305241043022993747" UsergroupName="SYSTEM_RESTRICTED"/>
+<UserGroup Activateflag="" BusinessKey="" Createprogid=".YCPGroupAPI"
+    Createts="2013-09-20T12:57:33-04:00" Createuserid="admin"
+    GroupOwnerId="" GroupType="" Lockid="0" Modifyprogid=".YCPGroupAPI"
+    Modifyts="2013-09-20T12:57:33-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" OwnerType="" TemplateGroup=""
+    UsergroupDescription="Business Center Admin (BC only)"
+    UsergroupId="BusinessCenterAdmin"
+    UsergroupKey="201309201257333048783" UsergroupName="Business Center Admin"/>
 <UserGroup Activateflag=" " BusinessKey=" " Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:47-04:00" Createuserid="SYSTEM"
     GroupType="EXTERNAL" Lockid="0" Modifyprogid="XMLMigrator"
