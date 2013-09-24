@@ -91,7 +91,7 @@
 				</s:if>
 				<TR>
 					<td class="my-timeframe"><strong>Next Day:</strong></td>
-					<td class="my-number">
+					<td class="my-number" align="right">
 					<s:if test='%{#jsonNextDay == null}'>
 						<s:set name="jsonNextDay" value="%{'0'}" />
 					</s:if>
@@ -104,8 +104,8 @@
 					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 				</TR>
 				<TR>
-					<td class="my-timeframe">2+ Days:</td>
-					<td class="my-number">
+					<td class="my-timeframe" style="padding-left:13px;">2+ Days:</td>
+					<td class="my-number" align="right">
 					<s:if test='%{#jsonTwoPlus == null}'>
 						<s:set name="jsonTwoPlus" value="%{'0'}"></s:set>
 					</s:if>
@@ -117,8 +117,8 @@
 					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 				</TR>
 				<TR>
-					<td class="leftmost my-available">Total Available:</td>
-					<td class="my-number">
+					<td class="leftmost my-available" style="padding-left:13px;">Total Available:</td>
+					<td class="my-number" align="right">
 					<s:if test='%{#jsonTotal == null}'>
 						<s:set name="jsonTotal" value="%{'0'}" />
 					</s:if>

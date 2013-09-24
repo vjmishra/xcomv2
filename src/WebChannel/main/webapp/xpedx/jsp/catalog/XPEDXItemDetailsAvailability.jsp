@@ -57,13 +57,13 @@
 		<table width="320" border="0" cellspacing="0" cellpadding="0" style="margin-left:-25px;">
 			<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0}'>
 				<tr>
-					<td width="150" align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:40px"><strong style="align:left;"><s:property value='%{#jsonAvailabilityMessage}' /></strong></td>
+					<td width="150" align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:27px"><strong style="align:left;"><s:property value='%{#jsonAvailabilityMessage}' /></strong></td>
 				</tr>
 			</s:if>
 		</table>
 		<table class="avail-tbl" width="325" border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;margin-top: 2px;">			
 			<tr>
-				<td class="table_center"align="left" align="left"><strong>Next Day:</strong></td>
+				<td class="table_center" style="padding-right:25px;" align="left"><strong>Next Day:</strong></td>
 				<td class="table_right"><strong>
 				<s:if test='%{#jsonNextDay == null}'>
 					<s:set name="jsonNextDay" value="%{'0'}"></s:set>
