@@ -618,12 +618,12 @@
 										<td class="text-left"><%-- ${jsonUOMDesc} --%></td>									
 						    		</tr>
 						    		<tr>
-										<td><p class="left">2+ Days: </p></td>
+										<td><p class="left" style="padding-left:15px;">2+ Days: </p></td>
 										<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
 										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
 						    		</tr>
 						    		<tr>
-										<td><p class="left" style="width:110px">Total Available: </p></td>
+										<td><p class="left" style="width:110px;padding-left:15px;">Total Available: </p></td>
 										<td class="text-right">${jsonFmtTotal} </td>
 										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
 						    		</tr>

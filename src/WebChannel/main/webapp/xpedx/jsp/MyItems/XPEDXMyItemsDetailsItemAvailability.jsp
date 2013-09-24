@@ -179,7 +179,7 @@
 						<td class="left" ><%--<s:property value="#jsonUOMDesc" /></strong>--%></td>
 					</tr>
 					<tr>
-						<td>2+ Days: </td>
+						<td style="padding-left:17px;">2+ Days: </td>
 						<td class="right">
 						<s:if test='%{#jsonTwoPlus != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" />  -->
@@ -194,7 +194,7 @@
 						<td class="left" ><%--<s:property value="#jsonUOMDesc" />--%></td>
 					</tr>
 					<tr>
-						<td width="45%">Total Available:</td>
+						<td width="45%" style="padding-left:17px;">Total Available:</td>
 						<td width="20%" class="right">
 						<s:if test='%{#jsonTotal != null}'>
 						<!-- 	<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />  -->
