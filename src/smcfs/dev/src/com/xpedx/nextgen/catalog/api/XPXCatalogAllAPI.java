@@ -343,47 +343,57 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					_xpxItemCustXrefEle.setAttribute("EnvironmentCode", itemExtnElelement.getAttribute("EnvironmentID"));
 					Element xrefComplexQuery=SCXmlUtil.createChild(_xpxItemCustXrefEle, "ComplexQuery");
 					Element xrefOrElem=SCXmlUtil.createChild(xrefComplexQuery, "Or");
-					for(XPX_Item_Associations xpxItemAssociation:xpxItemAssociations)
+					
+					if(xpxItemAssociations != null && _xpxItemExtnList != null)
 					{
-						List<XPX_Item_Associations> associationsList=new ArrayList<XPX_Item_Associations>();
-						if(associationMap.get(xpxItemAssociation.getItemExtnKey()) != null)
-							associationsList=associationMap.get(xpxItemAssociation.getItemExtnKey());
-						associationsList.add(xpxItemAssociation);
-						associationMap.put(xpxItemAssociation.getItemExtnKey(), associationsList);
-						if(!YFCCommon.isVoid(xpxItemAssociation.getAssociatedItemID()))
+						for(XPX_Item_Associations xpxItemAssociation:xpxItemAssociations)
 						{
-							Element xreExpElem=SCXmlUtil.createChild(xrefOrElem, "Exp");
-							xreExpElem.setAttribute("Name", "LegacyItemNumber");
-							xreExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
-							xreExpElem.setAttribute("QryType", "EQ");
-							
-							Element xpxItemExtnExpElem=SCXmlUtil.createChild(xpxItemExtnOrElem, "Exp");
-							xpxItemExtnExpElem.setAttribute("Name", "ItemID");
-							xpxItemExtnExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
-							isXPXItemExtnCall=true;
-							isXPXItemCustXrefCall=true;
+							List<XPX_Item_Associations> associationsList=new ArrayList<XPX_Item_Associations>();
+							if(associationMap.get(xpxItemAssociation.getItemExtnKey()) != null)
+								associationsList=associationMap.get(xpxItemAssociation.getItemExtnKey());
+							associationsList.add(xpxItemAssociation);
+							associationMap.put(xpxItemAssociation.getItemExtnKey(), associationsList);
+							if(!YFCCommon.isVoid(xpxItemAssociation.getAssociatedItemID()))
+							{
+								Element xreExpElem=SCXmlUtil.createChild(xrefOrElem, "Exp");
+								xreExpElem.setAttribute("Name", "LegacyItemNumber");
+								xreExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
+								xreExpElem.setAttribute("QryType", "EQ");
+								
+								Element xpxItemExtnExpElem=SCXmlUtil.createChild(xpxItemExtnOrElem, "Exp");
+								xpxItemExtnExpElem.setAttribute("Name", "ItemID");
+								xpxItemExtnExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
+								isXPXItemExtnCall=true;
+								isXPXItemCustXrefCall=true;
+							}
 						}
-					}
-					for(Element _xpxItemExtn:_xpxItemExtnList)
-					{
-
-						Element xpxItemAssocEleme=SCXmlUtil.createChild(_xpxItemExtn, "XPXItemAssociationsList");
-						for(XPX_Item_Associations xpxItemAssociation:associationMap.get(_xpxItemExtn.getAttribute(XPX_Item_Extn.ITEMEXTNKEY)))
+						for(Element _xpxItemExtn:_xpxItemExtnList)
 						{
-							Element xpxItemAssociationEleme=SCXmlUtil.createChild(xpxItemAssocEleme, "XPXItemAssociations");
-							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMEXTNKEY, xpxItemAssociation.getItemExtnKey());
-							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATIONTYPE, xpxItemAssociation.getAssociationType());
-							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATEDITEMID, xpxItemAssociation.getAssociatedItemID());
-							xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMASSOCIATIONKEY, xpxItemAssociation.getItemAssociationKey());
-							
+	
+							Element xpxItemAssocEleme=SCXmlUtil.createChild(_xpxItemExtn, "XPXItemAssociationsList");
+							if(associationMap != null )
+							{
+								List<XPX_Item_Associations>associationList=associationMap.get(_xpxItemExtn.getAttribute(XPX_Item_Extn.ITEMEXTNKEY));
+								if(associationList != null )
+								{
+									for(XPX_Item_Associations xpxItemAssociation:associationList)
+									{
+										Element xpxItemAssociationEleme=SCXmlUtil.createChild(xpxItemAssocEleme, "XPXItemAssociations");
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMEXTNKEY, xpxItemAssociation.getItemExtnKey());
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATIONTYPE, xpxItemAssociation.getAssociationType());
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ASSOCIATEDITEMID, xpxItemAssociation.getAssociatedItemID());
+										xpxItemAssociationEleme.setAttribute(XPX_Item_Associations.ITEMASSOCIATIONKEY, xpxItemAssociation.getItemAssociationKey());									
+									}
+								}
+							}
 						}
+						setItemExtnDoc(outputDoc);
+						if(isXPXItemExtnCall)
+							getXPXItemExtnElement(env,_xpxItemExtnDoc,outputDoc);
+						if(isXPXItemCustXrefCall)
+							getCustXrefList(env,_xpxItemCustXrefDoc,outputDoc);
+							
 					}
-					setItemExtnDoc(outputDoc);
-					if(isXPXItemExtnCall)
-						getXPXItemExtnElement(env,_xpxItemExtnDoc,outputDoc);
-					if(isXPXItemCustXrefCall)
-						getCustXrefList(env,_xpxItemCustXrefDoc,outputDoc);
-						
 				}
 				//recall xpx_item_extn and 
 				/*while(xpxItemExtnRs.next())
@@ -442,6 +452,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					pltQryBuilder1.setCurrentTable("YPM_PRICELIST_LINE");
 					Element itemElem=(Element)pricelistAssignmentElement.getElementsByTagName("Item").item(0);
 					pltQryBuilder1.append("PRICING_STATUS ='ACTIVE' ");
+					//Added List_Price for EB-2268
+					pltQryBuilder1.append("AND LIST_PRICE !=0 ");
 					if(priceListIter.hasNext())
 					{
 						
