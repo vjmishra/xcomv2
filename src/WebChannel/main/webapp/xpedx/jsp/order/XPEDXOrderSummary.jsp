@@ -276,6 +276,7 @@ function isValidDate(dtStr)
     	//Added for EB 2458 - RequestDate validation
     	var requestDate = document.getElementById("requestDateString").value;
     	var currDate = new Date();
+    	currDate.setHours(0,0,0,0);
     	var errorMsg = document.getElementById("errorMsg");
     	
     	if(requestDate!=null && requestDate.length>0)
