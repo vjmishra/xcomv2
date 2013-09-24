@@ -324,24 +324,21 @@ span.underlink:hover, p.underlink:hover {
 }
 #main-navigation ul li.order-edit-bg {
     background: none repeat scroll 0 0 #988344;
-    border: 1px solid #ffffff;
     margin-top: 4px;
     padding-top: 0;
-
 }
 #main-navigation ul li.lighter.order-edit a {
-    border: 1px solid #b7a980;
+    border: 1px solid #ffffff;
     font-weight: normal;
 }
 #main-navigation ul li.lighter.order-edit {
     background: none repeat scroll 0 0 #b7a980;
-    border: 1px solid #ffffff;
     margin-top: 4px;
     padding-top: 0;
 }
 .ship-banner-container
 {
-       background-color:#084823;
+      /* background-color:#084823;*/
        height:24px;
        padding-top:1px;
        }
@@ -406,6 +403,10 @@ element.style {
     color: #66cc33;
     margin-right: 5px;
     margin-top: 5px;
+}
+a:hover
+{
+
 }
 #main-nav li span {
     border-right: 1px solid #FFFFFF;
