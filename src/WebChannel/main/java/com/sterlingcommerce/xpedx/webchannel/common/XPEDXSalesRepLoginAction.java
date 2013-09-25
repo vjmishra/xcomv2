@@ -197,14 +197,15 @@ public class XPEDXSalesRepLoginAction extends WCAction implements ServletRespons
 		String requestUserId = (String)request.getAttribute("loggedInUserId");
 		String requestSREmailID = (String)request.getAttribute("SRSalesRepEmailID");
 		
-		Cookie cookie = CookieUtil.getCookie(request, CookieUtil.SALESREP);
+		/*Cookie cookie = CookieUtil.getCookie(request, CookieUtil.SALESREP);
 		if (cookie == null) {
 			cookie = new Cookie(CookieUtil.SALESREP,"salesrep");
 			cookie.setMaxAge(-1); // until user closes browser
 		} else {
+			
 			cookie.setValue("salesrep");
 		}
-	response.addCookie(cookie);
+	response.addCookie(cookie);*/
 		
 		if (sessionUserName == null  && requestUserName == null){
 			request.getSession(false).setAttribute("IS_SALES_REP", "true");
