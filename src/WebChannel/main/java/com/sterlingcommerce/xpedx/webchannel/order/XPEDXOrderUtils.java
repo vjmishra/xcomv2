@@ -861,7 +861,7 @@ public class XPEDXOrderUtils {
 					}
 				}
 			//XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
-			
+			ServletActionContext.getRequest().setAttribute("UOMsMap", itemUomForSingleItemIsCustomerUomHashMap);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		} catch (Throwable t) {
@@ -963,6 +963,7 @@ public class XPEDXOrderUtils {
 														.getNamedItem("Conversion");
 												Node CustomerUOmFlag = uomAttributes
 												.getNamedItem("IsCustUOMFlag");
+												isCustomerUOMFlg = "";
 												if (UnitOfMeasure != null && Conversion != null) {
 													conversion = Conversion.getTextContent();
 													if(CustomerUOmFlag!=null){
@@ -1008,7 +1009,7 @@ public class XPEDXOrderUtils {
 			env = null;
 		}
 	}
-		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemCustomerUomHashMap);
+		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemUomIsCustomerUomHashMap);
 		ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
 		return itemUomHashMap;
 
