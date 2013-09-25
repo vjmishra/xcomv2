@@ -236,6 +236,19 @@ public class XPEDXOrderUtils {
 			List<String> items) throws YIFClientCreationException,
 			YFSException, RemoteException {
 		Map<String, String> hashMap = new HashMap<String, String>();
+		Element xpxItemExtnListElem=(Element)ServletActionContext.getRequest().getAttribute("XPXItemExtnList");
+		if(xpxItemExtnListElem != null)
+		{
+			ArrayList<Element> xpxItemExtnElems=SCXmlUtil.getElements(xpxItemExtnListElem, "XPXItemExtn");
+			for(int i=0;xpxItemExtnElems != null && i<xpxItemExtnElems.size();i++)
+			{
+				Element xpxItemExtnElem=xpxItemExtnElems.get(i);
+				String itemId=xpxItemExtnElem.getAttribute("ItemID");
+				String orderMultiple = xpxItemExtnElem.getAttribute("OrderMultiple");
+				hashMap.put(itemId, orderMultiple);
+			}
+			return hashMap;
+		}
 		if (items != null) {
 			for (String item : items) {
 				if(hashMap.containsKey(item))
@@ -848,7 +861,7 @@ public class XPEDXOrderUtils {
 					}
 				}
 			//XPEDXWCUtils.setObectInCache("UOMsMap",itemUomForSingleItemIsCustomerUomHashMap);
-			
+			ServletActionContext.getRequest().setAttribute("UOMsMap", itemUomForSingleItemIsCustomerUomHashMap);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		} catch (Throwable t) {
@@ -950,6 +963,7 @@ public class XPEDXOrderUtils {
 														.getNamedItem("Conversion");
 												Node CustomerUOmFlag = uomAttributes
 												.getNamedItem("IsCustUOMFlag");
+												isCustomerUOMFlg = "";
 												if (UnitOfMeasure != null && Conversion != null) {
 													conversion = Conversion.getTextContent();
 													if(CustomerUOmFlag!=null){
@@ -995,7 +1009,7 @@ public class XPEDXOrderUtils {
 			env = null;
 		}
 	}
-		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemCustomerUomHashMap);
+		ServletActionContext.getRequest().setAttribute("itemCustomerUomHashMap", itemUomIsCustomerUomHashMap);
 		ServletActionContext.getRequest().setAttribute("ItemUomHashMap", itemUomHashMap);
 		return itemUomHashMap;
 
@@ -1284,12 +1298,13 @@ public class XPEDXOrderUtils {
 				Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 				ArrayList<String> itemIdsList = new ArrayList<String>();
 				itemIdsList.addAll(itemUomHashMap.keySet());
+				Map<String,String> orderMultipleMap=getOrderMultipleForItems(itemIdsList);
 				Iterator<String> iterator = itemIdsList.iterator();
 				while (iterator.hasNext()) {
 					String itemIdForUom = iterator.next();
 					//Added orderMultiple to get OrderMutiple Jira 3481
 					String orderMultiple="";					
-					orderMultiple = getOrderMultipleForItem(itemIdForUom);
+					orderMultiple = orderMultipleMap.get(itemIdForUom);/*getOrderMultipleForItem(itemIdForUom); // Commented for EB-1999 performance issue by Amar*/
 					
 					Map uommap = itemUomHashMap.get(itemIdForUom);
 					Map uomIsCustomermap = itemUomIsCustomerUomHashMap.get(itemIdForUom);
@@ -1372,22 +1387,34 @@ public class XPEDXOrderUtils {
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 		LinkedHashMap<String, String> uomsAndConFactors = new LinkedHashMap<String, String>();
 		try {
-			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
-			YFCElement documentElement = inputDocument.getDocumentElement();
-
-			documentElement.setAttribute("ItemID", ItemID);
-			documentElement.setAttribute("CustomerID", customerID);
-			documentElement.setAttribute("OrganizationCode", StoreFrontID);
-
-			YIFApi api = YIFClientFactory.getInstance().getApi();
-			env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
-					+ "<UOMList><UOM>" + "</UOM></UOMList>"));
-			Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
-					inputDocument.getDocument());
-			Element wElement = outputListDocument.getDocumentElement();
-			
-			List<Element> listConv = SCXmlUtil.getChildrenList(wElement);
-			
+			Element wElement=(Element)ServletActionContext.getRequest().getAttribute("itemsUOMListElement");
+			List<Element> listConv = null;
+			if(wElement == null)
+			{
+				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+				YFCElement documentElement = inputDocument.getDocumentElement();
+	
+				documentElement.setAttribute("ItemID", ItemID);
+				documentElement.setAttribute("CustomerID", customerID);
+				documentElement.setAttribute("OrganizationCode", StoreFrontID);
+	
+				YIFApi api = YIFClientFactory.getInstance().getApi();
+				env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
+						+ "<UOMList><UOM>" + "</UOM></UOMList>"));
+				Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",
+						inputDocument.getDocument());
+				
+				wElement = outputListDocument.getDocumentElement();
+				listConv = SCXmlUtil.getChildrenList(wElement);
+			}
+			else
+			{
+				Element uomList=(Element)wElement.getElementsByTagName("UOMList").item(0);
+				if(uomList != null)
+				{
+					listConv = SCXmlUtil.getChildrenList(uomList);
+				}
+			}
 			String convStr;
 			LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
 			if (listConv != null) {
@@ -1432,8 +1459,9 @@ public class XPEDXOrderUtils {
 
 			//set UOM map with UOM code as key and flag as value which indicate whether the UOM is a customer UOM or not
 			//XPEDXWCUtils.setObectInCache("UOMsMap",wUOMsAndCustomerUOMFlag);
-
-			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(ItemID);
+			ArrayList<String> items=new ArrayList<String>();
+			items.add(ItemID);
+			String orderMultiple = XPEDXOrderUtils.getOrderMultipleForItems(items).get(ItemID);
 			//Added for Jira 4023
 			double minFractUOM = 0.00;
 	    	double maxFractUOM = 0.00;

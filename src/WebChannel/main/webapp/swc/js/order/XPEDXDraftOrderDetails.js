@@ -530,6 +530,7 @@ function addProductToQuickAddList(element)
     }
     
     var uomArray = new Array();
+    var CustomUomArray = new Array();
     var purchaseOrder = "";
     if(theForm.purchaseOrder != null){
     	purchaseOrder = theForm.purchaseOrder.value;
@@ -578,7 +579,8 @@ function addProductToQuickAddList(element)
             orderMultiple:"",
             itemUomAndConvString:"",
             //Added selectedUOM for Jira 3862
-            selectedUOM:""
+            selectedUOM:"",
+            customUOM:CustomUomArray
     }
 
     theForm.qaProductID.value = "";
@@ -749,6 +751,7 @@ function redrawQuickAddList()
 		        		
 		        	var uomValues = QuickAddElems[i].uomList;
 			        	var _uomCodes = QuickAddElems[i].uomCodes;
+			        	var customUomFlagValues=QuickAddElems[i].customUOM;
 			        	code += '<td class="col-item">'; 
 					    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
 					    var storeUOM = 0;
@@ -761,9 +764,13 @@ function redrawQuickAddList()
 				    	var _oUomDescription;
 				    	var firstIndex;
 				    	var lastIndex; 
+				    	var customUom;
 				    	var orderMultipleValue = QuickAddElems[i].orderMultiple;
 			        	 for(var oUomidx =0; oUomidx < uomValues.length; oUomidx++){
 				    		 _oUomCode = uomValues[oUomidx];  
+				    		 if(customUomFlagValues[oUomidx] == "Y"){
+				    			 customUom=_oUomCode;
+				    		 }
 							 _oUomDescription=convertToUOMDescription(_oUomCode);
 							 firstIndex = uomValues[oUomidx].indexOf('(');
 					    	 lastIndex = uomValues[oUomidx].indexOf(')');
@@ -794,6 +801,9 @@ function redrawQuickAddList()
 						     }
 					    	
 				    	}
+			           if(customUom!= null){
+			        	   defaultSelUOM = customUom;
+			           }else{
 				    	if(minFractUOM == 1){
 				    		 defaultSelUOM = minSelUOM;
 				    			
@@ -805,6 +815,7 @@ function redrawQuickAddList()
 				    		defaultSelUOM = minSelUOM;
 				    		
 				    	}
+			           }
 				    	
 			       			    			   
 		        	//Passing selUOM as selcted - Done For Jira 3841/3862
@@ -1366,14 +1377,21 @@ function validateItems()
 	        		var itemUOMConvArray = new Array();
 	        		var itemUomAndConvString = null;
 	        		var itemUOMCodeArray = new Array();
+	        		var itemCustomUOMArray = new Array();
 	        		if(itemEntitled == "true")
 	        		{
 		        		var itemUomList = trim(itemValidandUomList[1]).split("!");
 		        		for(var uomIndex = 0; uomIndex < itemUomList.length ; uomIndex++)
 		        		{
 		        			var itemUOMConvFactor = trim(itemUomList[uomIndex]).split(":");
-		        			var itemUOM = trim(itemUOMConvFactor[0]);
-		        			itemUOMCodeArray[uomIndex] = itemUOM;
+		        			var itemUOMAndCustomUomInfo = trim(itemUOMConvFactor[0]).split("-");
+		        			
+		        			var itemUOM = trim(itemUOMAndCustomUomInfo[0]);		        			
+		        			itemUOMCodeArray[uomIndex] = itemUOM;	
+		        			
+		        			var itemCustomUOM = trim(itemUOMAndCustomUomInfo[1]);		        			
+		        			itemCustomUOMArray[uomIndex] = itemCustomUOM;
+		        			
 		        			var itemUomConvfAndMultiple = itemUOMConvFactor[1].split("|");
 		        			var itemUomConvf = trim(itemUomConvfAndMultiple[0]);
 		        			var itemOrderMultiple = trim(itemUomConvfAndMultiple[1]);
@@ -1396,6 +1414,7 @@ function validateItems()
 	        		QuickAddElems[QAindex].uomCodes = itemUOMCodeArray;
 	        		QuickAddElems[QAindex].orderMultiple = itemOrderMultiple;
 	        		QuickAddElems[QAindex].itemUomAndConvString = itemUomAndConvString;
+	        		QuickAddElems[QAindex].customUOM=itemCustomUOMArray;
 	        		if(itemUOMArray.length > 0)
 	        		{
 	        			var firstIndex = itemUOMArray[0].indexOf('(');

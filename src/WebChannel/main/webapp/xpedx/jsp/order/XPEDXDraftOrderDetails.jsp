@@ -301,6 +301,7 @@ function quickAddCopyAndPaste(data){
 		    }
 		    
 		    var uomArray = new Array();
+		    var CustomUomArray = new Array();
 		    var purchaseOrder = "";
 		    if(theForm.purchaseOrder != null){
 		    	purchaseOrder = theForm.purchaseOrder.value;
@@ -349,7 +350,8 @@ function quickAddCopyAndPaste(data){
 		            orderMultiple:"",
 		            itemUomAndConvString:"",
 		            //Added selectedUOM for Jira 3862
-		            selectedUOM:""
+		            selectedUOM:"",
+		            customUOM:CustomUomArray
 		    }
 
 		    theForm.qaProductID.value = "";

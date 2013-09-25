@@ -291,13 +291,18 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 
 			StringTokenizer _items1StringToken = new StringTokenizer(items, "*");
 			Map<String,Map<String,String>> itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), productList, wcContext.getStorefrontId());
+			LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap  =  (LinkedHashMap<String, Map<String, String>>) ServletActionContext.getRequest().getAttribute("itemCustomerUomHashMap");
+			ServletActionContext.getRequest().removeAttribute("itemCustomerUomHashMap");
 			while(_items1StringToken.hasMoreTokens()) {
-				
+				Map <String, String> itemIdCustomUOMMap = new LinkedHashMap<String, String>();
 				String _productID=_items1StringToken.nextToken();
 				productID=productListMap.get(_productID);
 				if(productID != null && !"".equals(productID))
 				{
-					createItemForUI(sb, itemIdsUOMsMap, itemIdsOrderMultipleMap,productID);
+					if(itemUomIsCustomerUomHashMap!=null && !itemUomIsCustomerUomHashMap.isEmpty()){
+						itemIdCustomUOMMap	= (LinkedHashMap<String, String>) itemUomIsCustomerUomHashMap.get(productID);
+					}
+					createItemForUI(sb, itemIdsUOMsMap, itemIdsOrderMultipleMap,productID,itemIdCustomUOMMap);
 				}
 				else
 				{
@@ -323,7 +328,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		return "success";
 	}
 public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> itemIdsUOMsMap,
-		Map<String, String> itemIdsOrderMultipleMap,String productID)
+		Map<String, String> itemIdsOrderMultipleMap,String productID,Map<String, String> itemIdCustomUOMMap)
 {
 	sb.append(true);
 	Map<String,String> uomMap = itemIdsUOMsMap.get(productID);//getUOMlist(productID);
@@ -336,8 +341,22 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 //			String uomDesc = XPEDXWCUtils.getUOMDescription(uom);
 			String uomConvfactr = (String) uomMap.get(uom);
 			sb.append(uom);
+			sb.append("-");	
+			if (itemIdCustomUOMMap !=null && !itemIdCustomUOMMap.isEmpty()) {
+				String customUomFlag = (String) itemIdCustomUOMMap.get(uom);
+					if(customUomFlag!=null && customUomFlag.equalsIgnoreCase("Y")){
+						sb.append("Y");		
+					}else{
+						sb.append("N");	
+					}
+			}
+			else{
+				sb.append("N");	
+			}
 			sb.append(":");
 			sb.append(uomConvfactr);
+			
+			
 			if (keyIter.hasNext()) {
 				sb.append("!");
 			}
@@ -484,6 +503,8 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					if (result.isValid() /*&& validateItemEntitlement(productID)*/) {
 						sb.append(true);
 						Map uomMap = getUOMlist(productID);
+						LinkedHashMap<String, String> itemIdCustomUOMMap  =  (LinkedHashMap<String,String>) ServletActionContext.getRequest().getAttribute("UOMsMap");
+						ServletActionContext.getRequest().removeAttribute("UOMsMap");
 						if (!uomMap.isEmpty()) {
 							sb.append("*");
 							Set keys = uomMap.keySet();
@@ -493,6 +514,18 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 //								String uomDesc = XPEDXWCUtils.getUOMDescription(uom);
 								String uomConvfactr = (String) uomMap.get(uom);
 								sb.append(uom);
+								sb.append("-");	
+								if (itemIdCustomUOMMap !=null && !itemIdCustomUOMMap.isEmpty()) {
+									String customUomFlag = (String) itemIdCustomUOMMap.get(uom);
+										if(customUomFlag!=null && customUomFlag.equalsIgnoreCase("Y")){
+											sb.append("Y");		
+										}else{
+											sb.append("N");	
+										}
+								}
+								else{
+									sb.append("N");	
+								}
 								sb.append(":");
 								sb.append(uomConvfactr);
 								if (keyIter.hasNext()) {
