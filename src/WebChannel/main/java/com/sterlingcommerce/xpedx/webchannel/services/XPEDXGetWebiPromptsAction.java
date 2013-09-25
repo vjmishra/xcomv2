@@ -27,6 +27,7 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 	private String id; 
 	private String renderReport;
+	private String name;
 	private String viewReportAs;
 	private String storageToken;
 	private List<XPEDXShipToCustomer> assignedShipToList;
@@ -34,6 +35,14 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 	private List<String> errorNames = new ArrayList<String>();
 	private Boolean bool = false;
 	List<Report> allReportList;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getViewReportAs() {
 		return viewReportAs;

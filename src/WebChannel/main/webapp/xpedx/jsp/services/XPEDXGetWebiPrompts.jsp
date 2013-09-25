@@ -701,8 +701,8 @@ $(function() {
 	           		  	
 	           		  	<td valign="top">
 	           		  		<label>&nbsp;<input type="radio" class="margin-right" name="viewReportAs" value="pdf" checked="checked"/>PDF </label>  
-                      		<label class="margin-left7"><input type="radio"class="margin-right"  name="viewReportAs" value="xl" />Excel </label>
-                      		<label class="margin-left7"><input type="radio"class="margin-right"  name="viewReportAs" value="html" />HTML </label>
+                      		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="xl" />Excel </label>
+                      		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="html" />HTML </label>
 	           		  	
 	           		  	</td>
 	           		  </tr>  

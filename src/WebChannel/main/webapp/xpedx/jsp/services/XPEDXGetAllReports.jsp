@@ -137,6 +137,7 @@ p{margin-bottom:8px;}
 		action='getprompts'>
 		<s:param name='id' value='#rId.id' />
 		<s:param name='kind' value='#rId.kind' />
+		<s:param name='name' value='#rId.name' />
 	</s:url>
 
 		
@@ -155,6 +156,7 @@ p{margin-bottom:8px;}
 				action='getprompts'>
 				<s:param name='id' value='#cId.id' />
 				<s:param name='kind' value='#cId.kind' />
+				<s:param name='name' value='#cId.name' />
 			</s:url>
 	<p><h4><s:a href='%{#mycustomreporting}'><s:property value="%{#cId.name}" /></s:a></h4>
 <s:property value="%{#cId.description}" />

@@ -6,6 +6,15 @@ import com.sterlingcommerce.webchannel.core.WCMashupAction;
 public class XPEDXDivertReportFlowAction extends WCMashupAction {
 	private String id; 
 	private String kind;
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getId() {
 		return id;

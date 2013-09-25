@@ -82,7 +82,8 @@
 	<action name="getprompts" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
 		<result name="WebiInputPrompt" type="redirectAction">
 		     <param name="actionName">getinputprompt</param>
-		     <param name="id">${id}</param>	    		     
+		     <param name="id">${id}</param>	    
+		     <param name="name">${name}</param>		     
 		</result>
 		 
 	</action>	
@@ -113,6 +114,7 @@
 		<result name="success" type="redirectAction">
 		     <param name="actionName">getinputprompt</param>
 		     <param name="id">${id}</param>
+		     <param name="name">${name}</param>
 		     <param name="renderReport">${rndrReport}</param>
 		     <param name="viewReportAs">${viewReportAs}</param>	   		          
 		</result>

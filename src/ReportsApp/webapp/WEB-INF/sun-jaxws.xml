@@ -3,7 +3,7 @@
   xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
   version="2.0">
   <endpoint
-      name="ReportService"
+      name="ReportServiceImplService"
       implementation="com.reports.service.ReportServiceImpl"
       url-pattern="/ws/ReportService"/>
 </endpoints>
