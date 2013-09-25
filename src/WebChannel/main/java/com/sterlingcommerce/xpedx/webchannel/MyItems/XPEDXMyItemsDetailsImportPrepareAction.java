@@ -332,7 +332,8 @@ public String getSharePermissionLevel() {
 						String currentField = "";
 						if(getCustomerFieldsDBMap().keySet().contains("CustLineAccNo")){
 							currentField = (String)iterator.next();
-							currentValue = nextLine[counter+3+4];
+							//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
+							currentValue = nextLine[counter+3+5];
 							//added for EB -1658 / EB 642 to limit the CustLineAccNo character entry to DB from excel sheet while importing to MIL
 							String custLineAccNoString = nextLine[counter+3+4];
 							if(custLineAccNoString!=null && custLineAccNoString.length()>24)
@@ -344,7 +345,8 @@ public String getSharePermissionLevel() {
 						}
 						if(getCustomerFieldsDBMap().keySet().contains("CustomerPONo")){
 							currentField = (String)iterator.next();
-							currentValue = nextLine[counter+3+5];
+							//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
+							currentValue = nextLine[counter+3+4];
 							//added for EB -1658 / EB 642 to limit the CustomerPONo character entry to DB from excel sheet while importing to MIL
 							String cutPoNoString = nextLine[counter+3+5];
 							if(cutPoNoString!=null && cutPoNoString.length()>22)
