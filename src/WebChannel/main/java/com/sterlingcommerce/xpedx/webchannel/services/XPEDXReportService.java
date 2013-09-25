@@ -18,13 +18,18 @@ import com.reports.service.ReportPromptNameValue;
 import com.reports.service.ReportService;
 import com.reports.service.ReportServiceImplService;
 import com.reports.service.ReportTypeEnum;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfs.core.YFSSystem;
 
 
 public class XPEDXReportService {
 	public ReportService getReportService() {
+		String wcPropertiesFile = "xpedx_reporting.properties";
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
+		String wsdlUrl= YFSSystem.getProperty("wsdlurl");
 		URL url = null;
 		try {
-			url = new URL("http://localhost:9994/ws/ReportService?wsdl");
+			url = new URL(wsdlUrl);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

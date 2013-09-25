@@ -55,9 +55,7 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 
 	//Connection To DW Oracle Server
 	public void getConnection() throws SQLException
-	{
-		String wcPropertiesFile = "xpedx_reporting.properties";
-		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
+	{		
 		String XCOM_MST_CUST= getCustomerNo(getWCContext().getBuyerOrgCode());
 		String DBUrl= YFSSystem.getProperty("datasource_url");
 		String DBName= YFSSystem.getProperty("datasource_name");
