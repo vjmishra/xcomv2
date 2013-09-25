@@ -53,6 +53,6 @@ public class XPEDXWCContextInjectorInterceptor  extends WCContextInjectorInterce
         IWCContextAware action = (IWCContextAware) invocation.getAction();
         action.setWCContext((IWCContext) builder);
         XPEDXWCUtils.logExceptionIntoCent(ex);
-        response.sendRedirect("/swc/xpedx/jsp/common/XPEDXGeneralSystemError.jsp");
+        response.sendRedirect("/swc/xpedx/jsp/common/XPEDXGeneralSystemError.jsp?sfId="+builder.getStorefrontId());//added for EB 2398 - to fetch the SfID from the interceptor to display Color theme in the General System Error page
     }
 }

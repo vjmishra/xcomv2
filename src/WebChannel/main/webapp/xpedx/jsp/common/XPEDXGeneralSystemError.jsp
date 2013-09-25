@@ -10,25 +10,28 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="webapp-context" content="/swc" />
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
-
+<s:set name="storefrontID" value="wCContext.storefrontId" />
+<s:if test = '%{#storefrontID == null || #storefrontID == ""}'>
+	<s:set name="storefrontID" value="%{#parameters.sfId}" />
+</s:if>
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet"	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet"  href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet"  href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/theme-xpedx_v1.2<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="#storefrontID" />/css/sfskin-<s:property value="#storefrontID" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <script type="text/javascript">
 	
 	function getPreviousPageUrl(){	
 		window.location.href = "<s:property value='%{itemDtlBackPageURL.substring(itemDtlBackPageURL.indexOf(xpedxSwcContext))}' escape='false'/>";
 	}
 </script>
-<title><s:property value="wCContext.storefrontId" />System Error</title>
+
+<title><s:property value="#storefrontID" /> - System Error</title>
 <!-- Start of Webtrends -->
- <Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> - Order Confirmation: Error'>
+ <Meta name="WT.ti" Content='<s:property value="#storefrontID" /> - Order Confirmation: Error'>
 <!-- End of webtrends -->
 </head>
 <body class="ext-gecko ext-gecko3">
-
     <div id="main-container">
         <div id="main">
              <!--s:action name="xpedxHeader" executeResult="true" namespace="/common" /-->
