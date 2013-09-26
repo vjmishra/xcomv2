@@ -335,7 +335,7 @@ public String getSharePermissionLevel() {
 							//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
 							currentValue = nextLine[counter+3+5];
 							//added for EB -1658 / EB 642 to limit the CustLineAccNo character entry to DB from excel sheet while importing to MIL
-							String custLineAccNoString = nextLine[counter+3+4];
+							String custLineAccNoString = nextLine[counter+3+5];
 							if(custLineAccNoString!=null && custLineAccNoString.length()>24)
 							{
 								currentValue = custLineAccNoString.substring(0,24);
@@ -348,7 +348,7 @@ public String getSharePermissionLevel() {
 							//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
 							currentValue = nextLine[counter+3+4];
 							//added for EB -1658 / EB 642 to limit the CustomerPONo character entry to DB from excel sheet while importing to MIL
-							String cutPoNoString = nextLine[counter+3+5];
+							String cutPoNoString = nextLine[counter+3+4];
 							if(cutPoNoString!=null && cutPoNoString.length()>22)
 							{
 								currentValue = cutPoNoString.substring(0,22);
