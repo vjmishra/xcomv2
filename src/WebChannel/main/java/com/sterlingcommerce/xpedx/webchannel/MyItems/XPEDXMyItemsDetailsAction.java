@@ -530,7 +530,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			
 			
 			sbCSV.append("Description,Price,");
-			sbCSV.append("Price UOM,Line Acct #,Line PO #,Customer Field 1,Customer Field 2,Customer Field 3");
+			//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
+			sbCSV.append("Price UOM,Line PO #,Line Acct #,Customer Field 1,Customer Field 2,Customer Field 3");
 			
 			// START - Display the custom fields
 			/*for (Iterator iterator = getCustomerFieldsMap().keySet().iterator(); iterator.hasNext();) {
@@ -1663,26 +1664,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		String shipFromDivision = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnShipFromBranch");
 		
-		// JIRA EB-2542: Swapped the if condition blocks checking custLineNoFlag and custPONoFlag for export
+	//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
 
-		if ("Y".equals(custLineNoFlag)) {
-			//Reverted back to the earlier logic to read the label from customer profile
-			//If no label found, Line Account# is used
-			String custLineNoLbl = getXMLUtils().getAttribute(
-					customerOrganizationExtnEle, "ExtnCustLineAccLbl");
-			getCustomerFieldsDBMap().put("CustLineAccNo", "JobId");
-			if (custLineNoLbl != null && custLineNoLbl.trim().length() > 0) {
-				getCustomerFieldsMap().put("CustLineAccNo", custLineNoLbl);
-			} else {
-				getCustomerFieldsMap().put("CustLineAccNo",
-						"Line Account #");
-			}
-			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
-			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
-		}
-		if ("N".equals(custLineNoFlag)) {			
-			getCustomerFieldsDBMap().put("CustLineAccNo","");			
-		}
+		
 		
 		if ("Y".equals(custPONoFlag)) {
 			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
@@ -1701,6 +1685,24 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		if ("N".equals(custPONoFlag)) {			
 			getCustomerFieldsDBMap().put("CustomerPONo","");			
+		}
+		if ("Y".equals(custLineNoFlag)) {
+			//Reverted back to the earlier logic to read the label from customer profile
+			//If no label found, Line Account# is used
+			String custLineNoLbl = getXMLUtils().getAttribute(
+					customerOrganizationExtnEle, "ExtnCustLineAccLbl");
+			getCustomerFieldsDBMap().put("CustLineAccNo", "JobId");
+			if (custLineNoLbl != null && custLineNoLbl.trim().length() > 0) {
+				getCustomerFieldsMap().put("CustLineAccNo", custLineNoLbl);
+			} else {
+				getCustomerFieldsMap().put("CustLineAccNo",
+						"Line Account #");
+			}
+			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
+			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
+		}
+		if ("N".equals(custLineNoFlag)) {			
+			getCustomerFieldsDBMap().put("CustLineAccNo","");			
 		}
 		
 		if ("Y".equals(custField1Flag)) {
