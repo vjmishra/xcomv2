@@ -868,18 +868,28 @@ function redrawQuickAddList()
 					    }			  
 					  				  
 					  else{	
+						  var defaultSelUOM;
 						  if((msapExtnUseOrderMulUOMFlag!=null && msapExtnUseOrderMulUOMFlag == 'Y') )
 				        	{
 				        		defaultSelUOM=undefined;
 				        	}
 						  var uomValues = QuickAddElems[i].uomList;
-				        	var _uomCodes = QuickAddElems[i].uomCodes;
+				        	var _uomCodes = QuickAddElems[i].uomCodes;				        	
 				        	code += '<td class="col-item">'; 
 						    code += '<select name="enteredUOMsList" id="enteredUOMsList_' + i + '" onchange="javascript:updateQuickAddElement(\'UOMList\','+ i +')" >';
 						  //********
 						    //Passing selUOM as selcted - Done For Jira 3841/3862
 						    var selUOM= QuickAddElems[i].selectedUOM;
 						   // alert("selUOM="+selUOM);
+						    var customUomFlagValues=QuickAddElems[i].customUOM;
+						    var customUom;
+						    for(var oUomidx =0; oUomidx < uomValues.length; oUomidx++){
+					    		 _oUomCode = uomValues[oUomidx];  
+					    		 if(customUomFlagValues[oUomidx] == "Y"){
+					    			 customUom=_oUomCode;
+					    			 defaultSelUOM=_oUomCode;
+					    		 }
+						    }
 						    for(var uomidx =0; uomidx < uomValues.length; uomidx++)
 						    {
 						    	var _uomCode=encodeForHTML(uomValues[uomidx]);
@@ -907,7 +917,7 @@ function redrawQuickAddList()
 						    	//else we are doing defaulting of UOMs as it is.
 						    	
 						    	//*************
-						    	else if(_uomCodes[uomidx].trim() == QuickAddElems[i].uom.trim() && selUOM=='')
+						    	else if(defaultSelUOM!=undefined && _uomCodes[uomidx].trim() == defaultSelUOM.trim() && selUOM=='')
 						    	{
 						    		if(firstIndex!= -1) {				    			
 						    			code += '<option value="' + encodeForHTML(uomValues[uomidx].substring(0,firstIndex)) + '" selected="yes">' + _uomDescription + '</option>'
