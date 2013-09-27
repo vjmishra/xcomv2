@@ -270,7 +270,7 @@ href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.f
 			     <div id="mid-col-mil"><br />
 			      
 			      <s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>
+						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
 				  <s:url id='newArticleLink' namespace='/profile/user' action='XPEDXNewArticle'>
 				  </s:url>

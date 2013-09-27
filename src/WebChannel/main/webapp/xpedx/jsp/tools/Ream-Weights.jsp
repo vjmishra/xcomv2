@@ -83,7 +83,7 @@
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>
+						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				</s:url>
                 	<!-- a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="breadcrumb-inactive"><s:text name="tools.reamweight.title" /></span> Commented for jira 1538-->
                 </div>

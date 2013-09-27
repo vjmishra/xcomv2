@@ -225,7 +225,7 @@ margin-top:2px; }
 			     <div id="mid-col-mil"><br />
 			      
 			      <s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>
+						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
 				  <s:url id='toolsNewsMaintLink' namespace="/profile/user" action='xpedxNewsMaintenance'>					
 				  </s:url>

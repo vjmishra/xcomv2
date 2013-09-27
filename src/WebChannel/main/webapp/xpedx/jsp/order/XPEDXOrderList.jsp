@@ -106,7 +106,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -131,7 +131,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
     <s:param name="pageSetToken" value="#_action.getPageSetToken()"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -162,7 +162,7 @@ function printPOs(customerPos) {
     <s:param name="PurchaseOrderNumberValue" value="PurchaseOrderNumberSearchValue"/>
     <s:param name="statusSearchFieldName" value="StatusSearchFieldNameValue"/>
     <s:param name="holdSearchFieldName" value="HoldStatusSearch"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
 </s:url>
 <s:url id="returnUrl" action="orderList">
     <s:param name="orderByAttribute" value="orderByAttribute"/>
@@ -174,7 +174,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -239,7 +239,7 @@ function printPOs(customerPos) {
                 </div>
                 <!-- end breadcrumb -->
                 <!-- begin top section -->
-                <s:set name="selectedHeaderTab" value="#_action.getXpedxSelectedHeaderTab()"> </s:set>
+                <s:set name="selectedHeaderTab" value="#_action.getSelectedHeaderTab()"> </s:set>
                 <s:set name="blankValue" value="%{#selectedHeaderTab ==#blankValue}" />
 	     		<s:form id="orderListForm" name="orderListForm"  action="orderList"
                     namespace="/order" cssClass="myClass" method="post" validate="true">
@@ -247,7 +247,7 @@ function printPOs(customerPos) {
                 	<s:hidden name='#action.namespace' value='/order'/>
                 	<%-- start of Fix : JIRA - 3123 --%>
                 	<s:if test='!#blankValue'> 
-	                	<s:hidden name='xpedxSelectedHeaderTab' value="%{'AddToExistingOrder'}"/>
+	                	<s:hidden name='selectedHeaderTab' value="%{'AddToExistingOrder'}"/>
 	                	<s:set name='openOrder' value="%{'true'}"/>
 	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
@@ -338,7 +338,7 @@ function printPOs(customerPos) {
                 </fieldset><!-- end border content -->
                 <div id="search-view-links">
 					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:if test="%{#ViewReportsFlag}">
 						<%-- <s:a href='%{reportsLink}' cssClass="link"><span class="underlink">View Order History Reports</span> --%>
@@ -446,7 +446,7 @@ function printPOs(customerPos) {
 						<s:property value='#sourceTabVal'/>.
 						<s:set name='openOrder' value="%{'false'}"/>
 					</s:if>--%>
-					<s:if test='#_action.getXpedxSelectedHeaderTab()== "AddToExistingOrder" && #orderListExists != null && #orderListExists == "true"'>
+					<s:if test='#_action.getSelectedHeaderTab()== "AddToExistingOrder" && #orderListExists != null && #orderListExists == "true"'>
 						<s:set name='openOrder' value="%{'false'}"/>
 					</s:if>
 					

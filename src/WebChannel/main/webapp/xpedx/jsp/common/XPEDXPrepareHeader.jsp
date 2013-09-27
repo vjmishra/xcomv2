@@ -2319,7 +2319,7 @@ function msgWait(){
 <s:set name='isProcurementInspectMode'
 	value='#hUtil.isProcurementInspectMode(wCContext)' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
-<s:set name="xpedxSelectedHeaderTab" value="#_action.getXpedxSelectedHeaderTab()"/>
+<s:set name="selectedHeaderTab" value="#_action.getSelectedHeaderTab()"/>
 <s:set name='isThereAUser' value="wCContext.thereAUser" />
 <noscript>
 <div class="noScript"><s:text name='NoScriptWarning' /></div>
@@ -2579,10 +2579,10 @@ function msgWait(){
 	            	<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
 		      			<s:param name="displayAllCategories" value="%{true}" />
 						<s:param name='newOP' value='%{true}'/>
-						<s:param name="xpedxSelectedHeaderTab">CatalogTab</s:param>
+						<s:param name="selectedHeaderTab">CatalogTab</s:param>
 					</s:url>	
 					<s:set name="categoryPath" value='wCContext.getSCUIContext().getLocalSession().getAttribute("categoryCache")'/>
-	            	<s:if test='#xpedxSelectedHeaderTab=="CatalogTab"'>
+	            	<s:if test='#selectedHeaderTab=="CatalogTab"'>
 	            		<li class="active">
 	            		<s:if test="#categoryPath !=null">
 	            			<s:a href="%{allCatURL}"  cssClass="active">Catalog</s:a>
@@ -2611,9 +2611,9 @@ function msgWait(){
 						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{true}" />
-							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
+							<s:param name="selectedHeaderTab">MyItemTab</s:param>
 						</s:url>		            	
-		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>
+		            	<s:if test='#selectedHeaderTab=="MyItemTab"'>
 		            		<li class="active">
 		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">
 		            			<span class="left">&nbsp;</span><span class="right">My Items Lists</span>
@@ -2634,9 +2634,9 @@ function msgWait(){
 						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />
-							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
+							<s:param name="selectedHeaderTab">MyItemTab</s:param>
 						</s:url>		            	
-		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>
+		            	<s:if test='#selectedHeaderTab=="MyItemTab"'>
 		            		<li class="active">
 		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">My Items Lists</s:a>
 		            	</s:if>
@@ -2647,10 +2647,10 @@ function msgWait(){
 		            </li>
 	            </s:else>	            
 	            <s:url id ='quickAddLink' action='quickAddAction' namespace='/order'>
-	            	<s:param name="xpedxSelectedHeaderTab">QuickAdd</s:param>
+	            	<s:param name="selectedHeaderTab">QuickAdd</s:param>
 	       			<s:param name="quickAdd" value="%{true}" />
 	            </s:url>	            
-	            	<s:if test='#xpedxSelectedHeaderTab=="QuickAdd"'>
+	            	<s:if test='#selectedHeaderTab=="QuickAdd"'>
 	            		<li class="active">
 		            	<s:a href="%{quickAddLink}" cssClass="active">Quick Add</s:a>
 		            	 </li>
@@ -2662,7 +2662,7 @@ function msgWait(){
 	            	</s:else>		      	
 	            <s:if test="%{!#isProcurementUser}">
 				  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-					<s:if test='#xpedxSelectedHeaderTab=="OrderTab"'>            	
+					<s:if test='#selectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
 		            	 <!-- cssClass="active" -->
 		            	<s:a  href='%{catURL11}' cssClass="link" >Order Management</s:a>
@@ -2714,24 +2714,24 @@ function msgWait(){
 	          </s:if>   
 	            <s:if test="%{!#isProcurementUser}">	            
 	                <s:url id='emailSampleLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='RequestProdSampleLink' namespace='/xpedx/services' action='XPEDXServices'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='servicesHomeLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='estimatingFilesLink' namespace='/xpedx/services' action='XPEDXEstimatingFiles'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='reportsLink' namespace='/xpedx/services' action='myreports'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='newToolsLink' namespace='/xpedx/services' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>												
-					<s:if test='#xpedxSelectedHeaderTab=="ServicesTab" || #xpedxSelectedHeaderTab=="ToolsTab" '>
+					<s:if test='#selectedHeaderTab=="ServicesTab" || #selectedHeaderTab=="ToolsTab" '>
 		            	<li class="active">	
 		            	<s:a href="#" cssClass="active">Resources</s:a>
 		            </s:if>
@@ -2770,7 +2770,7 @@ function msgWait(){
 							</s:a>
 						</li>
 						<s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-							<s:param name="xpedxSelectedHeaderTab1">ServicesTab</s:param>
+							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
 						<s:set name='storeFrontId' value='wCContext.storefrontId'/>
 						<s:if test="#storeFrontId == 'xpedx'">
@@ -2785,9 +2785,9 @@ function msgWait(){
 	            </s:if>	          
 	            <s:if test="%{!#isProcurementUser}"> 	            
 					<s:url id='adminProfile' namespace='/profile/user' action='XPEDXAdminProfile'>						
-						<s:param name="xpedxSelectedHeaderTab">AdminTab</s:param>
+						<s:param name="selectedHeaderTab">AdminTab</s:param>
 					</s:url> 
-					<s:if test='#xpedxSelectedHeaderTab=="AdminTab"'>
+					<s:if test='#selectedHeaderTab=="AdminTab"'>
 						<li class="active admin_tab">
 		            	<s:a href="#" cssClass="active">Admin</s:a>
 	            	</s:if>
@@ -2849,10 +2849,10 @@ function msgWait(){
 		            <s:url id='homeLink' namespace='/order' action='orderList.action'>
 						<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
 						<s:param name='scFlag'>Y</s:param>
-						<s:param name="xpedxSelectedHeaderTab">AddToExistingOrder</s:param>						
+						<s:param name="selectedHeaderTab">AddToExistingOrder</s:param>						
 						<s:param name="sourceTab">Open</s:param>
 					</s:url>
-	            	<s:if test='#xpedxSelectedHeaderTab=="AddToExistingOrder"'>
+	            	<s:if test='#selectedHeaderTab=="AddToExistingOrder"'>
 	            		<li class="active lighter" >
 		            	<s:a href="%{homeLink}" cssClass="active">Add To Existing Order</s:a>
 	            	</s:if>

@@ -944,7 +944,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                             </tbody>
                           </table>
                           <s:url id='emailSampleLink' namespace='/xpedx/services'	action='XPEDXServicesHome'>
-							<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
                        <div id="table-bottom-bar" style="width:99%; clear:both;">
 							<div id="table-bottom-bar-L"></div>
@@ -1001,7 +1001,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                             </tbody>
                           </table>
                           <s:url id='emailSampleLink' namespace='/xpedx/services'	action='XPEDXServicesHome'>
-							<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
                        <div id="table-bottom-bar" style="width:100%; clear:both;">
 							<div id="table-bottom-bar-L"></div>

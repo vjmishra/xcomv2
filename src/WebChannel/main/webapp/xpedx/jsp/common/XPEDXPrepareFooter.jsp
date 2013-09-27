@@ -31,7 +31,7 @@
 							</s:elseif>					
 							<td>
 								<s:url id='contactUsLink' namespace="/common" action='xpedxContact'>
-								<!-- 	<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>  -->
+								<!-- 	<s:param name="selectedHeaderTab">ToolsTab</s:param>  -->
 								</s:url>
 								<s:a href="%{contactUsLink}">Contact Us</s:a>
 							</td>
