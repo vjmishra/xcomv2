@@ -505,10 +505,10 @@ function printPOs(customerPos) {
 							<s:if test='%{#status != "Cancelled"}'>
 								<s:property value="#status" />
 								
-									<s:if test='#isPendingApproval && !#isOrderRejected'>
+									<s:if test='#isPendingApproval && !#isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
 										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 									</s:if>
-									<s:elseif test='#isPendingApproval && #isOrderRejected'>
+									<s:elseif test='#isPendingApproval && #isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
 										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
 									</s:elseif>
 									<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
@@ -665,7 +665,7 @@ function printPOs(customerPos) {
 													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
 												</s:if><br/>
 											</s:if>
-											<s:elseif test='#isPendingApproval && #isOrderRejected'>
+											<s:elseif test='#isPendingApproval && #isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
 												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
 											</s:elseif>
 											<s:elseif test='#isOnCSRReviewHold && #isFOCSRReview'> 
