@@ -1331,16 +1331,16 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     if(document.getElementById("selectedTab")!=null){
                     	selectedTab = document.getElementById("selectedTab").value;
                     }
-                    if(pathname=="/swc/profile/user/xpedxUserProfile.action" && selectedTab=="1")
+                    if(pathname=="/swc/profile/user/MyUserProfile.action" && selectedTab=="1")
                     {
 	                    var storeFrontId = '<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>';
 	                    var customerContactId = document.getElementById("customerContactId").value;
 	                    var customerId = document.getElementById("customerId").value;
 	                    var selectedTab=document.getElementById("selectedTab").value;
 	                    var pathname=window.location.pathname;
-	                    window.location.href="/swc/profile/user/xpedxUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y";;
+	                    window.location.href="/swc/profile/user/MyUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y";;
                     }
-                    else if(pathname=="/swc/profile/user/xpedxUserProfile.action" && checkboxChecked == true)
+                    else if(pathname=="/swc/profile/user/MyUserProfile.action" && checkboxChecked == true)
                     {
                     	var storeFrontId = '<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>';
  	                    var customerContactId = document.getElementById("customerContactId").value;
@@ -1348,7 +1348,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
  	                    var selectedTab=document.getElementById("selectedTab").value;
  	                    var pathname=window.location.pathname;
  	                    var success = true;
- 	                    window.location.href="/swc/profile/user/xpedxUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y"+ "&success="+ success;;	
+ 	                    window.location.href="/swc/profile/user/MyUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y"+ "&success="+ success;;	
                     }
                     else
                     {
@@ -2796,7 +2796,7 @@ function msgWait(){
 	            		<s:a>Admin</s:a>
 	            	</s:else>
 	            	<ul class="sub_menu" style="visibility: hidden;" >
-				       	<s:url id='myProfile' namespace='/profile/user' action='xpedxUserProfile' >
+				       	<s:url id='myProfile' namespace='/profile/user' action='MyUserProfile' >
 				       		<s:param name="isUserProfile" value="%{true}" />
 				       	</s:url>
 			       		<s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
