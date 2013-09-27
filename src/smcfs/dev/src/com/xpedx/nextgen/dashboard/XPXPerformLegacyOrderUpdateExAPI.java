@@ -2437,6 +2437,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		String legacyCustNo = null;
 		String shipToSuffix = null;
+		String extnCustomerDivision = null;
 		YFCElement extnRootEle = rootEle.getChildElement("Extn");
 
 		YFCDocument getCustListInXML = YFCDocument.getDocumentFor("<Customer/>");
@@ -2474,11 +2475,23 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			throw new Exception("Attribute ExtnBillToSuffix Not Available in Incoming Legacy Message!");
 		}
 		
+		if (extnRootEle.hasAttribute("ExtnCustomerDivision")) {
+			extnCustomerDivision = extnRootEle.getAttribute("ExtnCustomerDivision").substring(0,2);
+			if (YFCObject.isNull(extnCustomerDivision) || YFCObject.isVoid(extnCustomerDivision)) {
+				throw new Exception("Attribute ExtnCustomerDivision Cannot be NULL or Void!");
+			}
+			extnCustInXMLEle.setAttribute("ExtnCustomerDivision", extnCustomerDivision);
+		} else {
+			throw new Exception("Attribute ExtnCustomerDivision Not Available in Incoming Legacy Message!");
+		}
+		
+		
 		extnCustInXMLEle.setAttribute("ExtnSuffixType", XPXLiterals.CHAR_S);
 		
 		if(log.isDebugEnabled()){
 			log.debug("XPXGetCustomerList-InXML:" + getCustListInXML.getString());
 		}
+		
 		
 		Document tempDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInXML.getDocument());
 		if (tempDoc == null || !tempDoc.getDocumentElement().hasChildNodes()) {
