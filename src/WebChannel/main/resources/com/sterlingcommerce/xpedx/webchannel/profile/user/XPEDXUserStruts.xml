@@ -280,7 +280,7 @@
 					<param name="actionName">xpedxNewsMaintenance</param>
 				</result>
 		</action>
-		<action name="xpedxViewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<action name="MyViewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/admin/XPEDXViewArticle.jsp</result>
 		</action>
 		

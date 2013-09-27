@@ -169,7 +169,7 @@
       					<span class="page-title">  <s:text name='MSG.SWC.NEWSARTL.EDIT.GENERIC.PGTITLE' /> </span> 
  				  </div> 
  				  <br/>
-		          <s:form name="newArticleForm" action="xpedxViewArticle" namespace="/profile/user" method="POST">
+		          <s:form name="newArticleForm" action="MyViewArticle" namespace="/profile/user" method="POST">
 				  <input type="hidden" name="nextActionName" value="xpedxUpdateArticle"/>
 				  <input type="hidden" name="backActionName" value="xpedxEditArticle"/>
 				  <input type="hidden" name="articleKey" value="<s:property value="#parameters['articleKey']"/>"/>
