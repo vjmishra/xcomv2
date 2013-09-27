@@ -30,7 +30,7 @@
 							      <td><a href="http://www.bulkleydunton.com/" target="_blank">About Us</a></td>
 							</s:elseif>					
 							<td>
-								<s:url id='contactUsLink' namespace="/common" action='xpedxContact'>
+								<s:url id='contactUsLink' namespace="/common" action='MyContact'>
 								<!-- 	<s:param name="selectedHeaderTab">ToolsTab</s:param>  -->
 								</s:url>
 								<s:a href="%{contactUsLink}">Contact Us</s:a>
