@@ -75,7 +75,7 @@
             <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXSendNewUserInfoToCSRBinding.xml</param>
               <result name="success"> /xpedx/jsp/common/XPEDXConfirmation.jsp</result>
         </action>
-        <action name="XPEDXRegisterUser" class="com.sterlingcommerce.webchannel.core.WCAction">            
+        <action name="MyRegisterUser" class="com.sterlingcommerce.webchannel.core.WCAction">            
             <result>/xpedx/jsp/profile/user/XPEDXNewUserRegistrationForm.jsp</result>
         </action>
         <action name="XPEDXAdminProfile" class="com.sterlingcommerce.webchannel.core.WCAction">

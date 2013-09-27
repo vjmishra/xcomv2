@@ -253,7 +253,7 @@
 	<div id="headerSignUpNowDiv" style="position: absolute; left: 250px;"><s:text
 		name="Get Your Personalized Account" /> <br />
 	<s:form name='newUserRegistration' namespace='/profile/user'
-		action='XPEDXRegisterUser'>
+		action='MyRegisterUser'>
 		<s:submit type="button" value="SignUp Now" align="right" />
 	</s:form></div>
 	<div id="headerTourImageDiv"

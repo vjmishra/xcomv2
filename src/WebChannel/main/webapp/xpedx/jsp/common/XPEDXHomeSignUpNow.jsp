@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
 	<!-- TODO Remove the hard coded name and get from the constants file -->
-	<s:form name='homePageNewUserRegistration' namespace='/profile/user' action='XPEDXRegisterUser'>
+	<s:form name='homePageNewUserRegistration' namespace='/profile/user' action='MyRegisterUser'>
 	     <div class="anon-home-top-left float-left">
 	         <h2>New to <s:property value="wCContext.storefrontId" />?</h2>
 	         <h3>Sign up to have an <s:property value="wCContext.storefrontId" /> sales representative work with you to create <br />your personalized B2B account and services.</h3>

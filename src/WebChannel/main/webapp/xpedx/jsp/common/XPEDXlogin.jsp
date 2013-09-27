@@ -166,7 +166,7 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		
 </table>
 
-<s:form name='homePageNewUserRegistration' namespace='/profile/user' action='XPEDXRegisterUser'>
+<s:form name='homePageNewUserRegistration' namespace='/profile/user' action='MyRegisterUser'>
 </s:form>
 <script>
 $(document).ready(function() {
