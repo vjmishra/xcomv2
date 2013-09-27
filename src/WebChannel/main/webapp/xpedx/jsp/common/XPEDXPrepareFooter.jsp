@@ -44,7 +44,7 @@
 								<s:a href="%{termsOfAccessLink}">Terms of Access</s:a>
 							</td>
 							<td class="last">
-								<s:url id='privacyPolicyLink'  action='xpedxPrivacyPolicy'>
+								<s:url id='privacyPolicyLink'  action='MyPrivacyPolicy'>
 								</s:url>
 								<s:a href="%{privacyPolicyLink}">Privacy Policy</s:a>
 							</td>

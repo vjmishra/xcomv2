@@ -174,7 +174,7 @@
 			</result>
 		</action>
 		<!-- JIRA 3487 Security Question Modal End -->
-		<action name="xpedxPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<action name="MyPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXPrivacyPolicy.jsp</result>
 		</action>
 		<action name="xpedxPrivacyPolicyModal" class="com.sterlingcommerce.webchannel.core.WCAction">

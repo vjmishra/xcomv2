@@ -67,7 +67,7 @@
             <result>/xpedx/jsp/home/XPEDXTermsOfAccess.jsp</result>
         </action>
         
-         <action name="xpedxPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
+         <action name="MyPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
             <result>/xpedx/jsp/home/XPEDXPrivacyPolicy.jsp</result>
         </action>
         

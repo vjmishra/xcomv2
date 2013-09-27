@@ -74,7 +74,7 @@ $(document).ready(function() {
 							<s:text name="MSG.SWC.MISC.TERMS.GENERIC.PGTITLE"/>
 						</div>
 					</div>
-					<s:url id='privacyPolicyLink'  action='xpedxPrivacyPolicy'>
+					<s:url id='privacyPolicyLink'  action='MyPrivacyPolicy'>
 								</s:url>
 					
 			<table class="full-widths" >
