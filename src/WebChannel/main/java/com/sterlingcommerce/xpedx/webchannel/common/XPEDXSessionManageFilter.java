@@ -13,6 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Nimesh K Bhate
  * To redirect user after session timeout to login page.
@@ -60,7 +61,7 @@ public class XPEDXSessionManageFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 
 		initStorefrontCookie(req, resp);
-
+		initSalesrepCookie(req, resp);
 		Enumeration enumeration = request.getParameterNames();
 		while (enumeration.hasMoreElements()) {
 			String parameterName = (String) enumeration.nextElement();
@@ -143,12 +144,28 @@ public class XPEDXSessionManageFilter implements Filter {
 	
 	
 	private String getCurrentSalesrep(HttpServletRequest req) {
-			Cookie cookie = CookieUtil.getCookie(req, CookieUtil.SALESREP);
+		Cookie cookie = CookieUtil.getCookie(req, CookieUtil.SALESREP);
 			if (cookie == null) {
 				return null;
 			} else {
 				return cookie.getValue();
+			}			
+	
+		}
+	
+	private void initSalesrepCookie(HttpServletRequest req, HttpServletResponse resp) {
+		if( req.getSession()!=null){		
+			if (req.getSession().getAttribute("IS_SALES_REP") != null) {
+					Cookie cookie = CookieUtil.getCookie(req, CookieUtil.SALESREP);
+				if (cookie == null) {
+					cookie = new Cookie(CookieUtil.SALESREP, "salesrep");
+					cookie.setMaxAge(-1); 
+				} else {
+					cookie.setValue("salesrep");
+				}
+				resp.addCookie(cookie);
 			}
 		}
+	}
 
 }

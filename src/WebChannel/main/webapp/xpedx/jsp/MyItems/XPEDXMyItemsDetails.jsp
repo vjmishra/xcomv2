@@ -2953,14 +2953,6 @@ function showSharedListForm(){
 					<s:set name='showItemType' value='%{true}' />
 					<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
 					<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemId)' />
-					
-					<s:if test='%{#customerUOM!=null}'>
-						<s:set name='itemUomId' value='%{#customerUOM}' />
-					</s:if>
-					<s:else>
-						<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
-					</s:else>
-					
 					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 					<s:set name="itemBaseUom"  value='#baseUOMs.get(#itemId)' />
 					

@@ -104,12 +104,7 @@
 		</s:else>	
 		<s:hidden name="minLineQuantity" id="minLineQuantity_%{#orderLineKey}" value="%{#_action.getMinimumLineQuantity(#orderLine)}" />
 		<s:hidden name="maxLineQuantity" id="maxLineQuantity_%{#orderLineKey}" value="%{#_action.getMaximumLineQuantity(#orderLine)}" />
-		<s:if test='%{#customerUOM!=null}'>
-			<s:set name='uom' value='%{#customerUOM}' />
-		</s:if>
-		<s:else>
-				<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
-		</s:else>
+			<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
 				<s:set name="MultiUom" value='%{#item.getAttribute("UnitOfMeasure")}' />
 				<s:set name="BaseUOMs" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)' /> 
 				<s:hidden name="BaseUOMs" id="BaseUOMs_%{#orderLineKey}" value='%{#BaseUOMs}' /> 
