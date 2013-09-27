@@ -39,7 +39,7 @@
 								<a href="http://www.msdsonfile.com/" target="_blank">MSDS</a>
 							</td>
 							<td>
-								<s:url id='termsOfAccessLink' namespace="/home" action='xpedxTermsOfAccess'>
+								<s:url id='termsOfAccessLink' namespace="/home" action='MyTermsOfAccess'>
 								</s:url>
 								<s:a href="%{termsOfAccessLink}">Terms of Access</s:a>
 							</td>

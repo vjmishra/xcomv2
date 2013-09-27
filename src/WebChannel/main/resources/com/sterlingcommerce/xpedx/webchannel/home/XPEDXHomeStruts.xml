@@ -63,7 +63,7 @@
             <result>/xpedx/jsp/home/XPEDXAnnouncements.jsp</result>
         </action>
         
-        <action name="xpedxTermsOfAccess" class="com.sterlingcommerce.webchannel.core.WCAction">
+        <action name="MyTermsOfAccess" class="com.sterlingcommerce.webchannel.core.WCAction">
             <result>/xpedx/jsp/home/XPEDXTermsOfAccess.jsp</result>
         </action>
         
