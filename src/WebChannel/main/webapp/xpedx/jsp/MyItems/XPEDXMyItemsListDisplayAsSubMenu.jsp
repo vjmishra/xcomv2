@@ -631,7 +631,7 @@
 		
 		<s:set name="uId" value="#id" />
 		
-		<s:form id="doAction_open_%{#uId}" action="XPEDXMyItemsDetails" method="get">
+		<s:form id="doAction_open_%{#uId}" action="MyItemsDetails" method="get">
 			<s:hidden name="listKey" value="%{#id}" />
 			<s:hidden name="listName" value="%{#name}" />
 			<s:hidden name="listDesc" value="%{#desc}" />

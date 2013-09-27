@@ -995,7 +995,7 @@
 				<s:param name="listKey" value="%{#id}" />
 			</s:url>
 
-			<s:form id="doAction_export_%{#uId}" action="XPEDXMyItemsDetails" method="post">
+			<s:form id="doAction_export_%{#uId}" action="MyItemsDetails" method="post">
 				<s:hidden name="listKey" value="%{#id}" />
 				<s:hidden name="listName" value="%{#name}" />
 				<s:hidden name="command" value="export_list" />
@@ -1003,7 +1003,7 @@
 				<s:hidden name="editMode" value="%{false}"></s:hidden>
 			</s:form>
 			
-			<s:form id="doAction_view_%{#uId}" action="XPEDXMyItemsDetails" method="get">
+			<s:form id="doAction_view_%{#uId}" action="MyItemsDetails" method="get">
 			<s:hidden name="listKey" value="%{#id}" />
 			<s:hidden name="listName" value="%{#name}" />
 			<s:hidden name="listDesc" value="%{#desc}" />

@@ -633,7 +633,7 @@ function showSharedListForm(){
 		//added for jira 3057
 		function cancelChanges(){
 			var formItemIds = document.getElementById("formItemIds");
-			<s:url id='cancelchange' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			<s:url id='cancelchange' action='MyItemsDetails' escapeAmp='false' >
 			</s:url>
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{cancelchange}' escape='false'/>";
@@ -1878,7 +1878,7 @@ function showSharedListForm(){
 			//document.getElementById('formItemIds').submit();
 			
 			var formItemIds = document.getElementById("formItemIds");
-			<s:url id='exportList' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			<s:url id='exportList' action='MyItemsDetails' escapeAmp='false' >
 			</s:url>
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{exportList}' escape='false'/>";
