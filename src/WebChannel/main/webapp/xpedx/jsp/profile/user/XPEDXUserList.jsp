@@ -332,7 +332,7 @@
 		    <div id="searchTable" >
 		    	<ul id="tool-bar" class="tool-bar-bottom" style="float:left">
 		            <li>
-		          	<a href="javascript:getNewContactInfo('<s:url value="/profile/user/xpedxNewUserCreate.action"/>');" class="grey-ui-btn">
+		          	<a href="javascript:getNewContactInfo('<s:url value="/profile/user/MyNewUserCreate.action"/>');" class="grey-ui-btn">
 		          		<span><s:text name='Add_User'/></span>
 		          	</a>
 		        </ul>

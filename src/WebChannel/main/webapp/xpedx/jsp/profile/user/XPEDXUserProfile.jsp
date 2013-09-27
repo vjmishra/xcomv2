@@ -1466,7 +1466,7 @@ a.underlink:hover {
 															<ul class="tool-bar-bottom" style="float: left">
 
 																<a
-																	href="javascript:getNewContactInfo1('<s:url value="/profile/user/xpedxNewUserCreate.action"/>');"
+																	href="javascript:getNewContactInfo1('<s:url value="/profile/user/MyNewUserCreate.action"/>');"
 																	class="grey-ui-btn"> <span><s:text
 																			name='Add_User' /></span>
 																</a>
