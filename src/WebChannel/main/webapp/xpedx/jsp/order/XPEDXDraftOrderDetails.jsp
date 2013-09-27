@@ -628,7 +628,7 @@ $(document).ready(function(){
 	action='PrintCartDetail.action' namespace='/order' />
 
 <s:url id="discardPendingChangesURL" includeParams="none"
-	action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+	action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
 	<s:param name="orderHeaderKey" value='%{#orderHeaderKey}' />
 </s:url>
 
@@ -1460,7 +1460,7 @@ var currentAadd2ItemList = new Object();
 </s:if>
 <s:else>
 	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 	</s:url>
 	<a id="cancel-btn" class="grey-ui-btn" href="<s:property value="#cancelEditOrderChanges"/>"><span>Cancel Changes</span></a>

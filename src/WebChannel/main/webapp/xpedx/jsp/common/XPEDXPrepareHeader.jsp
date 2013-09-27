@@ -2877,7 +2877,7 @@ function msgWait(){
 	            		<s:a href="%{viewEditOrderChanges}">View Changes</s:a>
 	            	</li>
 	            	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 					</s:url>
 	            	<li class="lighter order-edit">

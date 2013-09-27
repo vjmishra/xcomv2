@@ -567,7 +567,7 @@
 			</result>
 			<!-- <result name="failure">/xpedx/jsp/order/Failure.jsp</result>  XBT-109-->
 			<result name="failure" type="redirectAction">
-				<param name="actionName">XPEDXResetPendingOrder</param>
+				<param name="actionName">MyResetPendingOrder</param>
 				<param name="orderHeaderKey">${orderHeaderKey}</param>
 				<param name="resetWithError">Y</param>
 			</result>
@@ -836,7 +836,7 @@
             </result>
         </action>
         
-         <action name="XPEDXResetPendingOrder" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXResetPendingOrderAction">
+         <action name="MyResetPendingOrder" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXResetPendingOrderAction">
             <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/ResetPendingOrder_binding.xml</param>
             <param name="mashups">ResetPendingOrder</param>
             <param name="resourceId">/swc/order/authenticatedOrdering</param>
