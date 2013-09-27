@@ -2868,7 +2868,7 @@ function msgWait(){
 	           		 </li>		
 	           		 
 					<s:url id="viewEditOrderChanges" includeParams="none"
-							action='xpedxViewEditOrderChanges' namespace='/order' escapeAmp="false">
+							action='MyViewEditOrderChanges' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 							<s:param name="isEditOrder" value='true' />
 							<s:param name="isEditOrder" value='true' />

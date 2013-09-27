@@ -807,7 +807,7 @@
 			</result>
 		</action>
 		
-		<action name="xpedxViewEditOrderChanges"
+		<action name="MyViewEditOrderChanges"
 			class="com.sterlingcommerce.webchannel.core.WCAction">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXEditOrderActionBinding.xml</param>
 			<param name="mashups">xpedx_changepricelock</param>
