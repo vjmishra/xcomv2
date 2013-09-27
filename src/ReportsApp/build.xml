@@ -1,0 +1,47 @@
+<project name="ReportsApp" default="run">
+
+	<target name="build" description="Builds the ReportsApp war file">
+
+		<tstamp>
+			<format property="NOW" pattern="EEE, MMMM dd yyyy hh:mm aa z" />
+		</tstamp>
+
+		<path id="compile.classpath.ReportsApp.lib.ref">
+			<fileset dir="webapp/WEB-INF/lib" includes="*.jar" />
+		</path>
+
+		<delete dir="build" />
+		<mkdir dir="build" />
+
+		<javac classpathref="compile.classpath.ReportsApp.lib.ref" destdir="build" executable="${env.JAVA_HOME}/bin/javac" debug="on" debuglevel="lines,vars,source">
+			<src path="src">
+			</src>
+		</javac>
+
+		<copy overwrite="true" todir="build">
+			<fileset dir="src/main/resources">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+
+
+	</target>
+
+	<target name="run" description="Builds the ReportsApp war file" depends="build">
+
+		<path id="java">
+	        <pathelement location="build"/>
+	        <fileset dir="webapp/WEB-INF/lib">
+	            <include name="*.jar"/>
+	        </fileset>
+	    </path>
+
+		<java classname="main.ReportWebServicePublisher" fork="true" maxmemory="1024m">
+			<classpath refid="java"/>
+		</java>
+
+	</target>
+
+
+</project>
+
