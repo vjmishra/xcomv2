@@ -37,7 +37,7 @@
 		<s:set name="itemCount" value="%{listSizeMap.get(#listSizeId)}" />
 		<s:hidden name="itemCount_%{#listSizeId}" id="itemCount_%{#listSizeId}" value="%{#itemCount}" />
 	</s:iterator>
-	<s:url id="MIListPaginationURL" action="XPEDXMyItemsList">
+	<s:url id="MIListPaginationURL" action="MyItemsList">
     	 <s:param name="pageNumber" value="'{0}'"/>
     	 <s:param name="displayAsRadioButton" value="true"/>
  	</s:url>

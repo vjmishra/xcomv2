@@ -649,7 +649,7 @@ var isEstUser = <s:property value="#isEstUser"/>;
 
 		//Init vars
 	   
-	    <s:url id='getMyItemsList' includeParams="none" namespace="/xpedx/myItems" action='XPEDXMyItemsList'/> 
+	    <s:url id='getMyItemsList' includeParams="none" namespace="/xpedx/myItems" action='MyItemsList'/> 
 	    
 	    var url = '<s:property value="#getMyItemsList"/>'+'&ShareList=ShareList';
 	    url = ReplaceAll(url,"&amp;",'&');

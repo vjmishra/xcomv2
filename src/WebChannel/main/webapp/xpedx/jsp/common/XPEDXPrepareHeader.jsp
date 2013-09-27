@@ -1352,7 +1352,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     }
                     else
                     {
-	                    if(pathname=="/swc/xpedx/myItems/XPEDXMyItemsList.action"){                        
+	                    if(pathname=="/swc/xpedx/myItems/MyItemsList.action"){                        
                           var headerUrl='<s:property value="#refreshCustomerIntoContext" />';
                           window.location.href = headerUrl ;
                           
@@ -2608,7 +2608,7 @@ function msgWait(){
 			    </li>			    	            
 	            <s:if test="%{#isProcurementUser}">
 	            	<s:if test="%{procurementMyItemsLinkFlag}">	            		
-						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
+						<s:url id='myListsLink' namespace='/xpedx/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{true}" />
 							<s:param name="selectedHeaderTab">MyItemTab</s:param>
@@ -2631,7 +2631,7 @@ function msgWait(){
 	            	</s:if>
 	            </s:if>
 	            <s:else>
-						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
+						<s:url id='myListsLink' namespace='/xpedx/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />
 							<s:param name="selectedHeaderTab">MyItemTab</s:param>

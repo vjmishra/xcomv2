@@ -2,7 +2,7 @@
 <struts>
   <package name="xpedx.myItems" namespace='/xpedx/myItems' extends="wcDefault">
 	
-	<action name="XPEDXMyItemsList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListAction">
+	<action name="MyItemsList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListAction">
 		<param name="mashups">XPEDXMyItemsList</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsList_binding.xml</param>
@@ -19,7 +19,7 @@
 		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetails.jsp</result>
 		<result name="export">/xpedx/jsp/MyItems/XPEDXCopyListSuccess.jsp</result>
 		<result name="noListKey" type="redirectAction">
-			<param name="actionName">XPEDXMyItemsList</param>
+			<param name="actionName">MyItemsList</param>
 			<param name="namespace">/xpedx/myItems</param>
 		</result>
 	</action>
@@ -29,7 +29,7 @@
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListCreate_binding.xml</param>
 		<result name="success" type="redirectAction">
-			<param name="actionName">XPEDXMyItemsList</param>
+			<param name="actionName">MyItemsList</param>
 			<param name="namespace">/xpedx/myItems</param>
 		</result>
 	</action>
@@ -39,7 +39,7 @@
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListDelete_binding.xml</param>
 		<result name="success" type="redirectAction">
-			<param name="actionName">XPEDXMyItemsList</param>
+			<param name="actionName">MyItemsList</param>
 			<param name="namespace">/xpedx/myItems</param>
 			<param name="filterBySelectedListChk">${filterBySelectedListChk}</param>
 			<param name="filterByMyListChk">${filterByMyListChk}</param>
@@ -54,7 +54,7 @@
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListChange_binding.xml</param>
 		<result name="success" type="redirectAction">
-			<param name="actionName">XPEDXMyItemsList</param>
+			<param name="actionName">MyItemsList</param>
 			<param name="namespace">/xpedx/myItems</param>
 		</result>
 	</action>

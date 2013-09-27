@@ -2454,7 +2454,7 @@ function showSharedListForm(){
             <!-- breadcrumb -->
 			<s:url action='home.action' namespace='/home' id='urlHome'
 				includeParams='none' /> <s:url id='urlMIL' namespace='/xpedx/myItems'
-				action='XPEDXMyItemsList.action' includeParams="get" escapeAmp="false">
+				action='MyItemsList.action' includeParams="get" escapeAmp="false">
 				<s:param name="filterByAccChk" value="%{#_action.getFilterByAccChk()}" />
 				<s:param name="filterByShipToChk" value="%{#_action.getFilterByShipToChk()}" />
 				<s:param name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}" />

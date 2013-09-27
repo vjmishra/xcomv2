@@ -1207,7 +1207,7 @@ $(document).ready(function(){
 <li><s:url id='addItemsToListURLid' namespace='/order' action='xpedxAddItemsToList' includeParams="none" /> 
 <s:a id='addItemsToListURL' href='%{#addItemsToListURLid}' /> 
 
-<s:action name="XPEDXMyItemsList" executeResult="true" namespace="/xpedx/myItems">
+<s:action name="MyItemsList" executeResult="true" namespace="/xpedx/myItems">
 	<s:param name="filterByAccChk" value="%{true}" />
 	<s:param name="filterByMyListChk" value="%{true}" />
 	<s:param name="filterByShipToChk" value="%{true}" /><!-- changed with 1.82 version -->

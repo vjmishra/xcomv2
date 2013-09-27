@@ -160,7 +160,7 @@
 
 </head>
 <!-- END swc:head -->
- <s:url id="orderListPaginationURL" action="XPEDXMyItemsList">
+ <s:url id="orderListPaginationURL" action="MyItemsList">
     	 <s:param name="pageNumber" value="'{0}'"/>
     	 <s:param name="pageSetToken" value="%{pageSetToken}"/>
          <s:param name="orderByAttribute" value="orderByAttribute"/>
@@ -168,7 +168,7 @@
          <s:param name="customerIds" value="customerIds"/>
   		 <s:param name="customerPaths" value="customerPaths"/>
  </s:url>
- <s:url id="milListSortURL" action="XPEDXMyItemsList" >
+ <s:url id="milListSortURL" action="MyItemsList" >
   <s:param name="orderByAttribute" value="'{0}'"/>   
   <s:param name="pageNumber" value="%{pageNumber}"/>
   <s:param name="orderDesc" value="'{1}'"/>
@@ -699,7 +699,7 @@
 <div id="breadcumbs-list-name" class="page-title"><s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' /></div>
 
 <div id="mid-col-mil">
-<s:form id="filterByForm" action="XPEDXMyItemsList.action" method="post">
+<s:form id="filterByForm" action="MyItemsList.action" method="post">
 <div class="float-left" style="width:325px;"> 
 <table>
 <tr>
