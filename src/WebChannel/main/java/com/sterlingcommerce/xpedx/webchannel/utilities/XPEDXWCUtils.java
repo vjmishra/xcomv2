@@ -3990,8 +3990,7 @@ public class XPEDXWCUtils {
 					String division = xpxExtnElem.getAttribute("XPXDivision");
 					if(shipFromBranch.equalsIgnoreCase(division)) {
 						divisionFlag = true;
-						inventoryIndicator = xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") ||
-												xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") ?"Y":"N";	
+						inventoryIndicator = xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W")  ?"Y":"N";	
 						break;
 					}
 				}
