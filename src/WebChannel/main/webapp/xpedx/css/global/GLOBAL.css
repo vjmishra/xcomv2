@@ -4751,9 +4751,10 @@ div.last-modified-div {
 .margin-right-10 {
     margin-right: 10px;
 }
+/*EB-1924 web channel user want to view the forgot password title bar and buttons the same in all browser modes so that view does not change depending on my browser mode*/
 #second-navigation {
     background: url("../../images/theme/theme-1/navigation/unselected.png") repeat-x scroll 0 0 transparent;
-    width: 100%;
+    /*width: 100%;*/
 }
 #second-navigation #main-nav li.hover, #second-navigation#main-nav li:hover {
     background: url("../../images/theme/theme-1/navigation/unselected.png") repeat-x scroll 0 0 transparent;
