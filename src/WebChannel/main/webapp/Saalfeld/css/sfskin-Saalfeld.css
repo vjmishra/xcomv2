@@ -80,7 +80,7 @@ table.mil-top-border .table-header-bar-right { width:143px; }
 }
 
 .cat-view-all a {
-    color: #66cc33;
+    color: #006a3a;
     font-size: 11px;
 }
 
@@ -157,8 +157,9 @@ a.green-ui-btn:active span {
     padding-top: 4px;
 }
 /*EB-1689*/
-.underlines a:link{text-decoration:none;color: #107555;}
-.underlines a:hover{text-decoration:underline;color: #107555;}
+/*EB-2727*/
+.underlines a:link{text-decoration:none;color: #006a3a;}
+.underlines a:hover{text-decoration:underline;color: #006a3a;}
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
 .whitest {
     color: #006a3a;
@@ -178,7 +179,7 @@ a.green-ui-btn:active span {
 }
 
 .narrowByViewAllLink {
-	color: #66cc33;
+	color: #006a3a;
 }
 
 .drag-to-compare, .drag-to-compare a
@@ -228,7 +229,7 @@ a.green-ui-btn:active span {
 }
 .header#top-bar { background-color:#336633; }
 .quick-add-aux-links a {
-    color: #66cc33;
+    color: #006a3a;
 }
 #tq-quick-add-overlay a.grey-ui-btn span p{ display: inline; color: #006a3a; margin-right:5px; font-size: 14px;font-weight: bold; }
 .createdby-lastmod {
@@ -314,8 +315,8 @@ span.underlink:hover, p.underlink:hover {
 }
 .inf {
 	background-color: #d1e1c7 ;
-	border: 1px solid #66cc33;
-	color: #66cc33;
+	border: 1px solid #006a3a;
+	color: #006a3a;
 	padding-left: 5px;
 	padding-right: 5px;
 	line-height: 15px;
@@ -422,4 +423,13 @@ text-decoration:none;
     text-align: center;
     text-decoration: none;
     z-index: 1;
+}
+.addtocart {
+	text-align: center;
+    background-image: url("../images/buttons/add-to-cart-green.png");
+    background-repeat: no-repeat;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 23px;
+    width: 88px!important;
 }
