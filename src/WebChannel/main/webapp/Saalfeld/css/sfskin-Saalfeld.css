@@ -404,9 +404,10 @@ element.style {
     margin-right: 5px;
     margin-top: 5px;
 }
+/*EB-2721 Saalfeld web site user want to view the Saafeld logo without excess lines so that upon hovering over the banner user do not view misc lines*/
 a:hover
 {
-
+text-decoration:none;
 }
 #main-nav li span {
     border-right: 1px solid #FFFFFF;
