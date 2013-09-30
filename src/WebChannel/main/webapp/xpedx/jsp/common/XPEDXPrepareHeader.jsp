@@ -838,7 +838,7 @@ var selectedShipCustomer = null;
 	action='xpedxGetAssignedCustomersForReporting' />
 			
 <s:url id='xpedxManageOtherProfilesURL' namespace='/profile/user'
-	action='xpedxManageOtherProfiles' />
+	action='MyManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
 
@@ -1618,7 +1618,7 @@ function passwordUpdateModal()
 	}
 	function setSelectedUrl(contactId,customerId,storefrntId){
 		
-		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/xpedxManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
+		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/MyManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
 		url = ReplaceAll(url,"&amp;",'&');
 		url = url+"&customerContactId="+contactId+"&customerId="+customerId;
 		document.getElementById("seletedUrl").value=url;

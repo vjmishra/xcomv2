@@ -211,7 +211,7 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXNewUserGeneralInfo.jsp
 			</result>
 		</action>
-		<action name="xpedxManageOtherProfiles" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo">
+		<action name="MyManageOtherProfiles" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo">
 			<param name="mashups">getXpedxCustomerContactDetailsNew</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXUserGeneralInfoBindingNew.xml</param>
@@ -236,7 +236,7 @@
 			<param name="mashups">createCustomerQuickLink</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXCreateQL_binding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxManageOtherProfiles</param>
+				<param name="actionName">MyManageOtherProfiles</param>
 				<param name="namespace">/profile/user</param>
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>

@@ -100,10 +100,10 @@
 	        return temp;
 	}
 	function setSelectedUrl(contactId,customerId,storefrntId){
-		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/xpedxManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
+		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/MyManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
 		url = ReplaceAll(url,"&amp;",'&');
 		url = url+"&customerContactId="+contactId+"&customerId="+customerId;
-		//var url="/swc/profile/user/xpedxManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
+		//var url="/swc/profile/user/MyManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
 		document.getElementById("seletedUrl").value=url;
 	}
 	
@@ -130,7 +130,7 @@
     <s:set name='desc' value="#_action.getOrderDesc()"/>
     <s:set name='orderby' value="#_action.getOrderByAttribute()"/>
 	<s:url id='xpedxManageOtherProfilesURL' namespace='/profile/user'
-		action='xpedxManageOtherProfiles' />
+		action='MyManageOtherProfiles' />
     <s:url id="userListPaginationURL" action="xpedxGetUserList" namespace="/profile/user">
     	<s:param name="orderByAttribute" value="%{#orderby}"/>
     	<s:param name="customerID" value="%{#_action.getCustomerID()}"/>
@@ -227,7 +227,7 @@
 					<s:set name='customerElem' value='#xutil.getChildElement(#userList, "Customer")'/>
 					<s:set name="rowCount" value="%{rowStatus}"/>
 					<s:set name="tabIndexCounter" value='150' />
-					<s:url id="getUserInfo" action="xpedxManageOtherProfiles">  
+					<s:url id="getUserInfo" action="MyManageOtherProfiles">  
 					  <s:param name="customerContactId" value="%{#userList.getAttribute('CustomerContactID')}"/>
 					  <s:param name="customerId" value="%{#customerElem.getAttribute('CustomerID')}"/>
 					</s:url>
