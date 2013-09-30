@@ -2262,8 +2262,8 @@ public class XPXUtils implements YIFCustomApi {
 		String _subjectLine = null;
 		String imageUrl = "";
 		Element rootElem = inputDocument.getDocumentElement();
-
-		String brand = rootElem.getAttribute("SellerOrganizationCode");
+//EB- 2805 Call Center user when update a Saalfeld profile user want to trigger the Saalfeld user profile updated email template
+		String brand = rootElem.getAttribute("EnterpriseCode");
 		imageUrl = rootElem.getAttribute("ImageUrl");
 		
 		
@@ -2307,7 +2307,7 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		
 			
-		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
+		String emailOrgCode= (rootElem.getAttribute("EnterpriseCode")!=null?rootElem.getAttribute("EnterpriseCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
 		XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, _subjectLine, emailFrom, emailOrgCode,businessIdentifier);
 		return inputDocument;
