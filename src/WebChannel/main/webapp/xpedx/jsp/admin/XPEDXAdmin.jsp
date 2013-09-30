@@ -131,7 +131,7 @@
 </s:url>
 
 <s:url id='userProfile' namespace='/profile/user' action='MyUserProfile' />
-<s:url id='custProfile' namespace='/profile/org' action='xpedxGetCustomerInfo' />
+<s:url id='custProfile' namespace='/profile/org' action='MyGetCustomerInfo' />
 <s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
 <s:url id='billTo' namespace='/profile/org' action='xpedxGetBillToInfo' />
 

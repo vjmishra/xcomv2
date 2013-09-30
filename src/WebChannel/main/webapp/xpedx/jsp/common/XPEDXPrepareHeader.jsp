@@ -2808,7 +2808,7 @@ function msgWait(){
 						</li>						
 						<s:set name='loggedInUserCustomerID' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoggedInCustomerFromSession(wCContext)'/>
 						<s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>								       	
-						<s:url id='sapCustProfile' namespace='/profile/org' action='xpedxGetCustomerInfo'>
+						<s:url id='sapCustProfile' namespace='/profile/org' action='MyGetCustomerInfo'>
 							<s:param name="customerId" value="#sapCustomerId" />
 							<s:param name="organizationCode" value="#loggedInUserOrgCode" />
 						</s:url>
