@@ -171,7 +171,7 @@
  				  <br/>
 		          <s:form name="newArticleForm" action="MyViewArticle" namespace="/profile/user" method="POST">
 				  <input type="hidden" name="nextActionName" value="xpedxUpdateArticle"/>
-				  <input type="hidden" name="backActionName" value="xpedxEditArticle"/>
+				  <input type="hidden" name="backActionName" value="MyEditArticle"/>
 				  <input type="hidden" name="articleKey" value="<s:property value="#parameters['articleKey']"/>"/>
 				  
 		          <table  width="100%" class="form"  id="order-filter" >

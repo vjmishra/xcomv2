@@ -266,7 +266,7 @@
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
 		</action>
 
-		<action name="xpedxEditArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXViewArticle" >
+		<action name="MyEditArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXViewArticle" >
 				<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetArticleBinding.xml</param>
 				<param name="mashups">XPEDXGetArticle</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
