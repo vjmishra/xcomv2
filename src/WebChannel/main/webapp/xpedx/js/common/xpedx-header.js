@@ -17327,7 +17327,7 @@ Ext.onReady(function() {
 	$("#various99").fancybox();
 	$("#import-lightbox").fancybox();
 	$(".modal").fancybox();
-	$(document).pngFix();
+	//$(document).pngFix();
 //	$('.jq-shorten').shorten();
 	
 	//for div alt row zebra stripes
