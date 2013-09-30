@@ -2834,7 +2834,7 @@ function msgWait(){
 						</li>
 					</s:if>
 						<s:if test="%{#isUserAdmin && !#isSalesRep}">
-							<s:url id='newsMaintenanceLink' namespace="/profile/user" action='xpedxNewsMaintenance'>					
+							<s:url id='newsMaintenanceLink' namespace="/profile/user" action='MyNewsMaintenance'>					
 							</s:url>
 							<li>
 								<s:a href='%{newsMaintenanceLink}' cssClass="link">

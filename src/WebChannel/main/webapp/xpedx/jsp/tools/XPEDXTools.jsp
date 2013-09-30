@@ -103,7 +103,7 @@
             <ul class="tools-page">
 
             <!---->
-            	<s:url  id='newsMaintenanceLink' namespace="/profile/user" action='xpedxNewsMaintenance'></s:url>
+            	<s:url  id='newsMaintenanceLink' namespace="/profile/user" action='MyNewsMaintenance'></s:url>
 				<s:url id='calculator' namespace="/xpedx/tools" action='calculator' />	
 				<s:url id='ReamWeights' namespace="/xpedx/tools" action='Ream-Weights' />
 				<s:url id='MWeight' namespace="/xpedx/tools" action='M-Weight' />

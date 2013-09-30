@@ -245,7 +245,7 @@
 		<action name="XPEDXNewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/admin/XPEDXNewArticle.jsp</result>
 		</action>
-		<action name="xpedxNewsMaintenance" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle" >
+		<action name="MyNewsMaintenance" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle" >
 				<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXMaintainArticleList.xml</param>
 				<param name="mashups">XPEDXArticleList</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
@@ -256,7 +256,7 @@
 			<param name="mashups">XPEDXAddArticle</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<result name="success" type="redirectAction">
-				<param name="actionName">xpedxNewsMaintenance</param>
+				<param name="actionName">MyNewsMaintenance</param>
 			</result>
 		</action>
 		
@@ -277,7 +277,7 @@
 				<param name="mashups">XPEDXUpdateArticle</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
 				<result name="success" type="redirectAction">
-					<param name="actionName">xpedxNewsMaintenance</param>
+					<param name="actionName">MyNewsMaintenance</param>
 				</result>
 		</action>
 		<action name="MyViewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
