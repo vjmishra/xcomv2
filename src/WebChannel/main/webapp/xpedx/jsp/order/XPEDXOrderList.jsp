@@ -78,7 +78,14 @@ $(function() {
 			});
 	});
 	 
+	<%-- auto-expand splits that aren't completely invoiced - EB-1972 --%>
+	$(document).ready(function(){
+		$(".splitExpandInit").each(function(){
+			linkedRowToggle($(this).attr('orderHeaderKey'));
+		})
+	});
 </script>
+
 <script type="text/javascript">
 function printPOs(customerPos) {
     var customerPosArray = customerPos.split(";");
@@ -488,7 +495,7 @@ function printPOs(customerPos) {
 	            		<s:set name="chainedOrderListSize" value='#chainedOrderList.size()'/>
 	            		<s:if test='xpedxChainedOrderListMap.containsKey(#parentOrder.getAttribute("OrderHeaderKey")) && #chainedOrderListSize > 1'>
 							<a class="underlink" id="split-btn" onclick="linkedRowToggle('<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>');">Split</a>
-	            			 </td>
+           			</td>
 						<td></td>
 				    	<td></td>
 				    	<td></td>
@@ -502,6 +509,11 @@ function printPOs(customerPos) {
 							<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
 							
+							<%-- auto-expand splits that aren't completely invoiced - EB-1972 --%>
+							<s:if test='%{#status != "Invoiced"}'>
+								<div style="display:none;" class="splitExpandInit" orderHeaderKey="<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>"></div>
+							</s:if>
+
 							<s:if test='%{#status != "Cancelled"}'>
 								<s:property value="#status" />
 								
