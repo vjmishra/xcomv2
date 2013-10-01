@@ -50,7 +50,7 @@ public class XPXShowListOfShipToPanelBehavior extends XPXPaginationBehavior {
 		
 		if(null != elePageInput){
 
-			Document input = YRCXmlUtils.createFromString("<XPXCustomerAssignmentView UserId='' ShipToAddressString='' ShipToAddressStringQryType='LIKE'><OrderBy><Attribute Desc='N' Name='ShipToCustomerID' /></OrderBy></XPXCustomerAssignmentView>");
+			Document input = YRCXmlUtils.createFromString("<XPXCustomerAssignmentView UserId='' ShipToAddressString='' ShipToAddressStringQryType='LIKE' Status='30' StatusQryType='NE'><OrderBy><Attribute Desc='N' Name='ShipToCustomerID' /></OrderBy></XPXCustomerAssignmentView>");
 			/*Document input = YRCXmlUtils.createFromString("<XPXCustomerAssignmentView UserId='""' ShipToAddressString='""' ShipToAddressStringQryType='LIKE'>
 					<OrderBy><Attribute Desc='N' Name='ShipToCustomerID' /></OrderBy></XPXCustomerAssignmentView>");
 */			
