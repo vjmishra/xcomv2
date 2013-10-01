@@ -1816,7 +1816,7 @@ function showSplitDiv(divId)
 </div>
 <a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a>
 <s:if test ="#_action.approvalAllowed()" >
-	<swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 
+	<swc:dialogPanel  title="" isModal="true" id="approvalNotesPanel"> 
 			
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<h2>Approval / Rejection Comments</h2>

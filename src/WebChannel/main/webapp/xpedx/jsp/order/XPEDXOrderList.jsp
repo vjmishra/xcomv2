@@ -796,7 +796,7 @@ function printPOs(customerPos) {
 	<!-- // footer end -->
 	<%-- Add the Approval Panel --%>
 	
-		<swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 		
+		<swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
 			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			

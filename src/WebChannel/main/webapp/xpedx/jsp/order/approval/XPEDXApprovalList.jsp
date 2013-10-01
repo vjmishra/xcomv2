@@ -617,7 +617,7 @@
 	<!-- begin footer -->
    <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
-		 <swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 
+		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 
 		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<!-- <h2>Approval / Rejection Comments</h2>	 -->			    			
