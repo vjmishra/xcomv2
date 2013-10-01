@@ -977,12 +977,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		strEnterpriseCode = getModel("UserNameSpace").getAttribute("EnterpriseCode");
 		String entryType=XPXConstants.ENTRY_TYPE_EMAIL_UPDATE;
 		Document docLDAPSearchInputQry=YRCXmlUtils.createFromString("<UserUpdateEmail />");
-
-    	docLDAPSearchInputQry.getDocumentElement().setAttribute("BrandName", strEnterpriseCode);
+/* EB-2805 Call Center user updates Saalfeld profile and user want to trigger the Saalfeld user profile updated email template */
+    	docLDAPSearchInputQry.getDocumentElement().setAttribute("BrandName", orgCode);
     	docLDAPSearchInputQry.getDocumentElement().setAttribute("EntryType", entryType);
     	docLDAPSearchInputQry.getDocumentElement().setAttribute("OldEmailID", oldMailId);
     	docLDAPSearchInputQry.getDocumentElement().setAttribute("newEmailID", changedMailId);
-    	docLDAPSearchInputQry.getDocumentElement().setAttribute("SellerOrganizationCode", strEnterpriseCode);
+    	docLDAPSearchInputQry.getDocumentElement().setAttribute("SellerOrganizationCode", orgCode);
     	apinames = new String[]{"XPXSendUserUpdateEmailService"};
     	docInput = new Document[]{docLDAPSearchInputQry};
     	callApis(apinames, docInput);
