@@ -22,7 +22,7 @@
 						<div>
 							<span class="bold">PLEASE NOTE</span>: Our Privacy Policy has changed effective November 22, 2011. If you submitted personally identifiable information to us prior to the above effective date, and desire to opt out of having that previously submitted personally identifiable information from being treated under the new policy, please contact us at <a href="mailto:distribution.webmaster@ipaper.com" class="underlink" target="_blank">distribution.webmaster@ipaper.com</a>.<br/><br/>
 
-							<div align="center">
+							<div style='text-align:center'>
 							<span class="bold">PRIVACY POLICY</span><br/>
 							(<span style="font-style:italic">Effective and last revised November 22, 2011</span>)
 							</div><br/><br/>
