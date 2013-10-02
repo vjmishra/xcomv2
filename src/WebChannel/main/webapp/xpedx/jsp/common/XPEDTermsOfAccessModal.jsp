@@ -60,9 +60,7 @@ $(document).ready(function() {
 </head>
     <s:set name='_action' value='[0]' />
     
-    <s:form name="toaform" namespace="/common" action="XPEDXRegisterUserTOA" onsubmit="return false;">
-    <s:hidden name="toaChecked" id="toaChecked" value="Y" />
-    <body class="ext-gecko ext-gecko3">
+    <body class="ext-gecko ext-gecko3 toaModalBody" style="overflow:hidden;">
 		<div id="main-container">
 			<div id="main">
 			<div class="container">
@@ -73,16 +71,20 @@ $(document).ready(function() {
 						</div>
 					</div>
 					
-					<s:if test="wCContext.storefrontId == 'xpedx'">
-						<jsp:include page="../common/sharedTermsOfAccess_xpedx.jsp">
-							<jsp:param name="modal" value="true" />
-						</jsp:include>
-					</s:if>
-					<s:if test="wCContext.storefrontId == 'Saalfeld'">
-						<jsp:include page="../common/sharedTermsOfAccess_Saalfeld.jsp">
-							<jsp:param name="modal" value="true" />
-						</jsp:include>
-					</s:if>
+					<s:form name="toaform" namespace="/common" action="XPEDXRegisterUserTOA" onsubmit="return false;">
+					<s:hidden name="toaChecked" id="toaChecked" value="Y" />
+						<s:if test="wCContext.storefrontId == 'xpedx'">
+							<jsp:include page="../common/sharedTermsOfAccess_xpedx.jsp">
+								<jsp:param name="modal" value="true" />
+							</jsp:include>
+						</s:if>
+						<s:if test="wCContext.storefrontId == 'Saalfeld'">
+							<jsp:include page="../common/sharedTermsOfAccess_Saalfeld.jsp">
+								<jsp:param name="modal" value="true" />
+							</jsp:include>
+						</s:if>
+	
+					</s:form>
 					
 				</div>
 				<!-- End Pricing -->
@@ -93,5 +95,4 @@ $(document).ready(function() {
 		</div>
 		<!-- end container  -->  
 	</body>
-	</s:form>
 </html>
