@@ -167,10 +167,6 @@
 									<b>7.	LIMITATION OF LIABILITY -</b> Seller's liability on any claim of any kind, whether based on negligence, warranty or otherwise, for any loss or damage arising out of, connected with, or resulting from this contract, or from the performance or breach thereof, or from the manufacture, sale, delivery, resale or use of any material or provision of any services covered by or furnished pursuant to this document shall, in no case, exceed the price allocable to the material which gives rise to the claim.  In no event shall Seller be liable for special, incidental or consequential damages. Seller shall not be liable for delay or failure to perform due to causes beyond Seller's control.	<br/><br/>
 									<b>8.	COMPLIANCE WITH LAWS - </b>  The parties agree to comply with all applicable laws and regulations regarding employment and discrimination, including Executive Order 11246. The OFCCP affirmative action clauses set forth in 41 CFR §60-1.4, 60-250.4, 60-741.5(a) are hereby incorporated by reference.<br/><br/>	
 									<b>9.	TAXES -</b> Any tax, duty, or other governmental charge now or hereafter levied upon the production, sale, use or shipment of materials ordered or sold hereunder shall be for the Buyer's account.  Such governmental levies are not covered in the Seller's price, unless expressly so stated.<br/><br/>
-									
-									<c:if test="${param.modal == 'true'}">
-										You may enter the site only if you acknowledge acceptance of the Terms of Access, Privacy Policy and xpedx Conditions of Sale, by clicking &quot;Accept&quot; below:<br/><br/>
-									</c:if>
 								</td>
 							</tr>
 							<c:if test="${param.modal == 'true'}">
