@@ -4,7 +4,7 @@
 <struts>
 	<package name="xpedx.order" namespace='/order' extends="order">
 	 <global-results>
-	<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+	<result name="error">/xpedx/jsp/common/GeneralSystemError.jsp</result>
       </global-results>
 		<action name="xpedxDraftOrderDropDown"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDropDownAction">
@@ -196,7 +196,7 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderDetailBinding.xml</param>
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>
 			<result name="success">/xpedx/jsp/order/XPEDXOrderDetail.jsp</result>
-			<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="orderDetailError">/xpedx/jsp/common/GeneralSystemError.jsp</result>
 		</action>
 		<!-- END: OrderList page: RUgrani -->
 		
@@ -208,7 +208,7 @@
 			<param name="namespace">/order</param>
 			<param name="orderHeaderKey">${orderHeaderKey}</param>
 			<result name="success">/xpedx/jsp/order/PrintOrder.jsp</result>
-			<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="orderDetailError">/xpedx/jsp/common/GeneralSystemError.jsp</result>
 		</action>
 
 		<!-- BEGIN: ReOrder page: RUgrani -->
@@ -417,7 +417,7 @@
 			<param name="resourceId">/swc/order/guestShopping</param>
 			<result name="success">/swc/jsp/order/addToCartSuccess.jsp</result>
 			<result name="MaxError">/xpedx/jsp/catalog/XPEDXItemsDetailsAddtoCartError.jsp</result>
-			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="error">/xpedx/jsp/common/GeneralSystemError.jsp</result>
 			<result name="DraftError">/xpedx/jsp/common/XPEDXDraftOrderFlagError.jsp</result>
 			<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>			
 		</action>
@@ -567,7 +567,7 @@
 			</result>
 			<!-- <result name="failure">/xpedx/jsp/order/Failure.jsp</result>  XBT-109-->
 			<result name="failure" type="redirectAction">
-				<param name="actionName">XPEDXResetPendingOrder</param>
+				<param name="actionName">MyResetPendingOrder</param>
 				<param name="orderHeaderKey">${orderHeaderKey}</param>
 				<param name="resetWithError">Y</param>
 			</result>
@@ -699,7 +699,7 @@
 
         <!-- action to check for timeout for JIRA 1650-->
         <action name="checkSessionTimeoutForCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction" method="checkSessionTimeout">
-        <result name="timeout">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+        <result name="timeout">/xpedx/jsp/common/GeneralSystemError.jsp</result>
         </action>
 
 		<!-- action for draft order delete line item -->
@@ -807,7 +807,7 @@
 			</result>
 		</action>
 		
-		<action name="xpedxViewEditOrderChanges"
+		<action name="MyViewEditOrderChanges"
 			class="com.sterlingcommerce.webchannel.core.WCAction">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXEditOrderActionBinding.xml</param>
 			<param name="mashups">xpedx_changepricelock</param>
@@ -836,7 +836,7 @@
             </result>
         </action>
         
-         <action name="XPEDXResetPendingOrder" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXResetPendingOrderAction">
+         <action name="MyResetPendingOrder" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXResetPendingOrderAction">
             <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/ResetPendingOrder_binding.xml</param>
             <param name="mashups">ResetPendingOrder</param>
             <param name="resourceId">/swc/order/authenticatedOrdering</param>
@@ -905,7 +905,7 @@
                 <param name="actionName">draftOrderList</param>
                 <param name="deleteOrder">true</param>
             </result>
-            <result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+            <result name="error">/xpedx/jsp/common/GeneralSystemError.jsp</result>
             <result name="failure">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
 			</result>
         </action>

@@ -426,7 +426,7 @@ function showSplitDiv(divId)
 	<s:param name="draft" value='%{"N"}'></s:param>
 	<s:param name="resetDesc" value="%{'true'}" ></s:param>
 </s:url>
-<s:url id="urlResetOrderId"  includeParams="none"  action='XPEDXResetPendingOrder' namespace = '/order' ></s:url>
+<s:url id="urlResetOrderId"  includeParams="none"  action='MyResetPendingOrder' namespace = '/order' ></s:url>
 <s:set name="isOrderOnApprovalHold" value="%{#_action.isOrderOnApprovalHold()}"/>
 <s:set name="isOrderOnRejectionHold" value="%{#_action.isOrderOnRejctionHold()}"/>
 

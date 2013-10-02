@@ -29,7 +29,7 @@
 			<param name="categoryDepth">2</param>
 			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
-			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="error">/xpedx/jsp/common/GeneralSystemError.jsp</result>
 			<result name="retrySearch" type="redirectAction">
 				<param name="actionName">newSearch</param>
 				<param name="namespace">/catalog</param>			
@@ -59,7 +59,7 @@
 			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
 			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
 			<!-- result name="error">/swc/jsp/catalog/searchError.jsp</result-->
-			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="error">/xpedx/jsp/common/GeneralSystemError.jsp</result>
 			<result name="retrySearch" type="redirectAction">
 				<param name="actionName">newSearch</param>
 				<param name="namespace">/catalog</param>			

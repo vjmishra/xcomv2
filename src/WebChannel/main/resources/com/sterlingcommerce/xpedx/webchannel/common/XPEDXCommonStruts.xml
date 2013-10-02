@@ -99,7 +99,7 @@
 			<param name="mashups">xpedx-customer-getHeaderInformation</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
 			<result name="success" type="redirectAction">
-				<param name="actionName">XPEDXMyItemsList</param>		
+				<param name="actionName">MyItemsList</param>		
 				<param name="namespace">/xpedx/myItems</param>   		
 			</result>
 		</action>
@@ -128,7 +128,7 @@
 			<result name="error">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJsonFailure.jsp</result>			
 			<result name="success">/xpedx/jsp/common/promotions/XPEDXDynamicPromotions.jsp</result>
 		</action>
-		<action name="xpedxContact" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXContactAction">
+		<action name="MyContact" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXContactAction">
 			<result>/xpedx/jsp/admin/XPEDXContactUs.jsp</result>
 		</action>
 		<action name="xpedxContactUsSendMail" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXContactAction" 
@@ -174,7 +174,7 @@
 			</result>
 		</action>
 		<!-- JIRA 3487 Security Question Modal End -->
-		<action name="xpedxPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<action name="MyPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXPrivacyPolicy.jsp</result>
 		</action>
 		<action name="xpedxPrivacyPolicyModal" class="com.sterlingcommerce.webchannel.core.WCAction">

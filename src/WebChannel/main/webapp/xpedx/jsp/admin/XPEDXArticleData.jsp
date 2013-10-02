@@ -270,7 +270,7 @@ href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.f
 			     <div id="mid-col-mil"><br />
 			      
 			      <s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>
+						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
 				  <s:url id='newArticleLink' namespace='/profile/user' action='XPEDXNewArticle'>
 				  </s:url>
@@ -335,7 +335,7 @@ href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.f
 	                              <td class="c2 text-center " ><s:property value='%{#StartDate}'/></td>
 	                              <td class="c3 text-center " ><s:property value='%{#EndDate}'/></td>
 	                              <td class="c4" >
-	                              <a href="<s:url namespace='/profile/user' action='xpedxEditArticle'><s:param name="articleKey" value='#xutil.getAttribute(#articleLine,"ArticleKey")' /></s:url>">
+	                              <a href="<s:url namespace='/profile/user' action='MyEditArticle'><s:param name="articleKey" value='#xutil.getAttribute(#articleLine,"ArticleKey")' /></s:url>">
 	                              <s:property value='%{#ArticleName}'/></a></td>
 	                              <td class="c5 text-center" ><s:property value='%{#modifiedUserFormattedNames.get(#ModifiedUserId)}'/></td>
 	                        </tr>

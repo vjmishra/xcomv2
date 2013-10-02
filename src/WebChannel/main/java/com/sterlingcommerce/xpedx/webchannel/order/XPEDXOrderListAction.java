@@ -142,7 +142,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 
 		String result = "success";
-		if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder"))
+		if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder"))
         {
 			if("ProductIdValue".equals(getSearchFieldName()))
 	        {
@@ -172,7 +172,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		String messageType = getMessageType();
         if(messageType != null && messageType.equals("OrderListWidget"))
         {
-        	if (!(getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")))
+        	if (!(getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")))
             {    	        
         		setOrderByAttribute("Modifyts");
             }
@@ -180,7 +180,7 @@ public class XPEDXOrderListAction extends OrderListAction {
             setRecordPerPage(ORDER_WIDGET_RECORD_PER_PAGE);
         } else
         {
-        	if (!(getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")))
+        	if (!(getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")))
             {    	        
         		if(getOrderByAttribute() == null || getOrderByAttribute().trim().length()==0)
             		setOrderByAttribute("OrderDate");
@@ -226,7 +226,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         		getStatusList();
         	}  */     	
         	getStatusList();
-        	/*if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+        	/*if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")) {
         		if (getSourceTab() != null && getSourceTab().equals("Open")) {
         			//setStatusSearchFieldName("1100.5250");        			
         		}        		
@@ -275,7 +275,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 				//Prepare the Customer Order Document and create the customer info map
 				customerOrderDoc = populateCustomerOrderList(chainedOrderFromKeylist);
 			}*/
-			if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+			if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")) {
 				customerOrderDoc=orderList;
 			}
 			parseCustomerDoc(customerOrderDoc);
@@ -895,7 +895,7 @@ public class XPEDXOrderListAction extends OrderListAction {
             	orderElem.setAttribute("ShipToID", wcContext.getCustomerId());
         }
         //Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
-        if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+        if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")) {
         	
         	if(!SCUtil.isVoid(getShipToSearchFieldName()))//added for jira 4138
             	orderElem.setAttribute("ShipToID", getShipToSearchFieldName());
@@ -1135,7 +1135,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		HashMap<String, Element> customerorderMap=new HashMap<String,Element>(xpedxParentOrderListMap);
 		xpedxParentOrderListMap.clear();
 		NodeList orderElems=null;
-		if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder"))
+		if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder"))
 			orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("XPEDXOrderSearchListView");
 		else
 			orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName(rootElementName);
@@ -1418,7 +1418,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	protected String initialToDateString;
 	//public String sourceTab;	
 	protected String orderListExist;
-	protected String xpedxSelectedHeaderTab;
+	protected String selectedHeaderTab;
 	//added for jira 3484
 	protected String primaryApproverID;
 	protected String proxyApproverID;
@@ -1445,12 +1445,12 @@ public class XPEDXOrderListAction extends OrderListAction {
 		this.shipToSearchList = shipToSearchList;
 	}
 
-	public String getXpedxSelectedHeaderTab() {
-		return xpedxSelectedHeaderTab;
+	public String getSelectedHeaderTab() {
+		return selectedHeaderTab;
 	}
 
-	public void setXpedxSelectedHeaderTab(String xpedxSelectedHeaderTab) {
-		this.xpedxSelectedHeaderTab = xpedxSelectedHeaderTab;
+	public void setSelectedHeaderTab(String selectedHeaderTab) {
+		this.selectedHeaderTab = selectedHeaderTab;
 	}
 
 	public String getOrderListExist() {

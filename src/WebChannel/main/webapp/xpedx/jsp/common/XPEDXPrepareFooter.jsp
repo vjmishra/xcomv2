@@ -30,8 +30,8 @@
 							      <td><a href="http://www.bulkleydunton.com/" target="_blank">About Us</a></td>
 							</s:elseif>					
 							<td>
-								<s:url id='contactUsLink' namespace="/common" action='xpedxContact'>
-								<!-- 	<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>  -->
+								<s:url id='contactUsLink' namespace="/common" action='MyContact'>
+								<!-- 	<s:param name="selectedHeaderTab">ToolsTab</s:param>  -->
 								</s:url>
 								<s:a href="%{contactUsLink}">Contact Us</s:a>
 							</td>
@@ -39,12 +39,12 @@
 								<a href="http://www.msdsonfile.com/" target="_blank">MSDS</a>
 							</td>
 							<td>
-								<s:url id='termsOfAccessLink' namespace="/home" action='xpedxTermsOfAccess'>
+								<s:url id='termsOfAccessLink' namespace="/home" action='MyTermsOfAccess'>
 								</s:url>
 								<s:a href="%{termsOfAccessLink}">Terms of Access</s:a>
 							</td>
 							<td class="last">
-								<s:url id='privacyPolicyLink'  action='xpedxPrivacyPolicy'>
+								<s:url id='privacyPolicyLink'  action='MyPrivacyPolicy'>
 								</s:url>
 								<s:a href="%{privacyPolicyLink}">Privacy Policy</s:a>
 							</td>

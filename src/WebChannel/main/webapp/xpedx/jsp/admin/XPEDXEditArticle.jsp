@@ -156,9 +156,9 @@
 			     <div id="mid-col-mil">
 			      <br/>
 			      <s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>
+						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
-				  <s:url id='toolsNewsMaintLink' namespace="/profile/user" action='xpedxNewsMaintenance'>					
+				  <s:url id='toolsNewsMaintLink' namespace="/profile/user" action='MyNewsMaintenance'>					
 				  </s:url>
 <%-- 				  <div id="breadcumbs-list-name" class="page-title"><s:a href="%{toolsLink}">Tools</s:a> /  <s:a href="%{toolsNewsMaintLink}"> News Maintenance</s:a> /  <span class="breadcrumb-inactive">  New Article</span> <a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:property value='#util.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>     </div> --%>
 			     
@@ -169,9 +169,9 @@
       					<span class="page-title">  <s:text name='MSG.SWC.NEWSARTL.EDIT.GENERIC.PGTITLE' /> </span> 
  				  </div> 
  				  <br/>
-		          <s:form name="newArticleForm" action="xpedxViewArticle" namespace="/profile/user" method="POST">
+		          <s:form name="newArticleForm" action="MyViewArticle" namespace="/profile/user" method="POST">
 				  <input type="hidden" name="nextActionName" value="xpedxUpdateArticle"/>
-				  <input type="hidden" name="backActionName" value="xpedxEditArticle"/>
+				  <input type="hidden" name="backActionName" value="MyEditArticle"/>
 				  <input type="hidden" name="articleKey" value="<s:property value="#parameters['articleKey']"/>"/>
 				  
 		          <table  width="100%" class="form"  id="order-filter" >

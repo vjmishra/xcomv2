@@ -233,7 +233,7 @@ function mandatoryFieldValidationHL(){
 /**
  * writeMetaTag function. Does the following tasks:
  *  1. Takes Name of meta Tag and content as input parameters of type String 
- *  2. creates a iFrame and loads XPEDXWebtrends.jsp, after processing it, then delete the iFrame 
+ *  2. creates a iFrame and loads Webtrends.jsp, after processing it, then delete the iFrame 
  * 
  */
 function writeMetaTag(tag,content) { 
@@ -254,7 +254,7 @@ function writeMetaTag(tag,content) {
 		iframeElement.style.width = '0px' 
 		iframeElement.style.height ='0px' 
 		iframeElement.style.display = 'none'; 
-		var linkUrl="/swc/xpedx/jsp/common/XPEDXWebtrends.jsp?tag="+tag+"&content="+content;
+		var linkUrl="/swc/xpedx/jsp/common/Webtrends.jsp?tag="+tag+"&content="+content;
 		linkUrl=addCSRFToken(linkUrl, 'link');
 		iframeElement.src =  linkUrl;
 }
@@ -277,7 +277,7 @@ function writeMetaTag(tagList,contentList,cnt){
 	iframeElement.style.width = '0px' 
 	iframeElement.style.height ='0px' 
 	iframeElement.style.display = 'none'; 
-	var linkUrl= "/swc/xpedx/jsp/common/XPEDXWebtrends.jsp?tag="+tagList+"&content="+contentList+"&noOfTags="+cnt; 
+	var linkUrl= "/swc/xpedx/jsp/common/Webtrends.jsp?tag="+tagList+"&content="+contentList+"&noOfTags="+cnt; 
 	linkUrl=addCSRFToken(linkUrl, 'link');
 	iframeElement.src =linkUrl;
 }

@@ -778,21 +778,21 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		if (YFCCommon.isVoid(servletPath)) {
 			return;
 		} else if (servletPath.contains("/jsp/home/XPEDXhome")) {
-			setXpedxSelectedHeaderTab("HomeTab");
+			setSelectedHeaderTab("HomeTab");
 		} else if (servletPath.contains("/jsp/MyItems")) {
-			setXpedxSelectedHeaderTab("MyItemTab");
+			setSelectedHeaderTab("MyItemTab");
 		} else if (servletPath.contains("/jsp/catalog")) {
-			setXpedxSelectedHeaderTab("CatalogTab");
+			setSelectedHeaderTab("CatalogTab");
 		} else if (servletPath.contains("/jsp/home/XPEDXPortalHome")) {
-			setXpedxSelectedHeaderTab("OrderTab");
+			setSelectedHeaderTab("OrderTab");
 		} else if (servletPath.contains("/jsp/order")) {
-			setXpedxSelectedHeaderTab("OrderTab");
+			setSelectedHeaderTab("OrderTab");
 		} else if (servletPath.contains("/jsp/services")) {
-			setXpedxSelectedHeaderTab("ServicesTab");
+			setSelectedHeaderTab("ServicesTab");
 		} else if (servletPath.contains("/jsp/tools")) {
-			setXpedxSelectedHeaderTab("ToolsTab");
+			setSelectedHeaderTab("ToolsTab");
 		} else if (servletPath.contains("jsp/profile")||servletPath.contains("jsp/admin")) {
-			setXpedxSelectedHeaderTab("AdminTab");
+			setSelectedHeaderTab("AdminTab");
 		}
 	}
 
@@ -1323,18 +1323,18 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	}
 
 	/**
-	 * @return the xpedxSelectedHeaderTab
+	 * @return the selectedHeaderTab
 	 */
-	public String getXpedxSelectedHeaderTab() {
-		return xpedxSelectedHeaderTab;
+	public String getSelectedHeaderTab() {
+		return selectedHeaderTab;
 	}
 
 	/**
-	 * @param xpedxSelectedHeaderTab
-	 *            the xpedxSelectedHeaderTab to set
+	 * @param selectedHeaderTab
+	 *            the selectedHeaderTab to set
 	 */
-	public void setXpedxSelectedHeaderTab(String xpedxSelectedHeaderTab) {
-		this.xpedxSelectedHeaderTab = xpedxSelectedHeaderTab;
+	public void setSelectedHeaderTab(String selectedHeaderTab) {
+		this.selectedHeaderTab = selectedHeaderTab;
 	}
 
 	public Document getSapCustomerExtnDoc() {
@@ -1365,7 +1365,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	protected String welcomeUserLastName = "";
 	protected String welcomeUserShipToName = "";
 	protected String welcomeLocaleId = "";
-	private String xpedxSelectedHeaderTab = "";
+	private String selectedHeaderTab = "";
 	private Document sapCustomerExtnDoc;
 	private String pendingOrderRecords = "0";
 	private String custSuffix = "";

@@ -633,7 +633,7 @@ function showSharedListForm(){
 		//added for jira 3057
 		function cancelChanges(){
 			var formItemIds = document.getElementById("formItemIds");
-			<s:url id='cancelchange' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			<s:url id='cancelchange' action='MyItemsDetails' escapeAmp='false' >
 			</s:url>
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{cancelchange}' escape='false'/>";
@@ -1878,7 +1878,7 @@ function showSharedListForm(){
 			//document.getElementById('formItemIds').submit();
 			
 			var formItemIds = document.getElementById("formItemIds");
-			<s:url id='exportList' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			<s:url id='exportList' action='MyItemsDetails' escapeAmp='false' >
 			</s:url>
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{exportList}' escape='false'/>";
@@ -2454,7 +2454,7 @@ function showSharedListForm(){
             <!-- breadcrumb -->
 			<s:url action='home.action' namespace='/home' id='urlHome'
 				includeParams='none' /> <s:url id='urlMIL' namespace='/xpedx/myItems'
-				action='XPEDXMyItemsList.action' includeParams="get" escapeAmp="false">
+				action='MyItemsList.action' includeParams="get" escapeAmp="false">
 				<s:param name="filterByAccChk" value="%{#_action.getFilterByAccChk()}" />
 				<s:param name="filterByShipToChk" value="%{#_action.getFilterByShipToChk()}" />
 				<s:param name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}" />

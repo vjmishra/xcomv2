@@ -628,7 +628,7 @@ $(document).ready(function(){
 	action='PrintCartDetail.action' namespace='/order' />
 
 <s:url id="discardPendingChangesURL" includeParams="none"
-	action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+	action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
 	<s:param name="orderHeaderKey" value='%{#orderHeaderKey}' />
 </s:url>
 
@@ -1207,7 +1207,7 @@ $(document).ready(function(){
 <li><s:url id='addItemsToListURLid' namespace='/order' action='xpedxAddItemsToList' includeParams="none" /> 
 <s:a id='addItemsToListURL' href='%{#addItemsToListURLid}' /> 
 
-<s:action name="XPEDXMyItemsList" executeResult="true" namespace="/xpedx/myItems">
+<s:action name="MyItemsList" executeResult="true" namespace="/xpedx/myItems">
 	<s:param name="filterByAccChk" value="%{true}" />
 	<s:param name="filterByMyListChk" value="%{true}" />
 	<s:param name="filterByShipToChk" value="%{true}" /><!-- changed with 1.82 version -->
@@ -1460,7 +1460,7 @@ var currentAadd2ItemList = new Object();
 </s:if>
 <s:else>
 	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 	</s:url>
 	<a id="cancel-btn" class="grey-ui-btn" href="<s:property value="#cancelEditOrderChanges"/>"><span>Cancel Changes</span></a>

@@ -53,7 +53,7 @@
 					
 				 <div class="anon-home-top-left ">
 		         	<br />
-		         	<s:url id='contactUsLink' namespace="/common" action='xpedxContact'>					
+		         	<s:url id='contactUsLink' namespace="/common" action='MyContact'>					
 					</s:url>
 					<s:if test='#contactUsResponse != null'>
 			        	<s:property value='%{#contactUsResponse}'/>

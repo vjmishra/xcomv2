@@ -588,7 +588,7 @@
 --%>
 				<%--
 				<div style="display: none;">
-				<s:action name="XPEDXMyItemsList" executeResult="true" namespace="/xpedx/myItems">
+				<s:action name="MyItemsList" executeResult="true" namespace="/xpedx/myItems">
 					<s:param name="filterByAccChk" value="%{true}" />
 					<s:param name="filterByShipToChk" value="%{true}" />
 					<s:param name="filterByMyListChk" value="%{true}" />
