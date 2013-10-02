@@ -1,7 +1,14 @@
 ﻿<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 
-<s:url id='privacyPolicyLink' action='MyPrivacyPolicy' namespace='/common' />
+<c:choose>
+	<c:when test="${param.modal == 'true'}">
+		<s:url id='privacyPolicyLink' action='MyPrivacyPolicyModal' namespace='/common' />
+	</c:when>
+	<c:otherwise>
+		<s:url id='privacyPolicyLink' action='MyPrivacyPolicy' namespace='/common' />
+	</c:otherwise>
+</c:choose>
 
 					<table class="full-widths" >
 						<tbody>

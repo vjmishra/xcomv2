@@ -177,7 +177,7 @@
 		<action name="MyPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXPrivacyPolicy.jsp</result>
 		</action>
-		<action name="xpedxPrivacyPolicyModal" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<action name="MyPrivacyPolicyModal" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXPrivacyPolicyForModal.jsp</result>
 		</action>
 		<action name="xpedxPasswordHeader"	class="com.sterlingcommerce.webchannel.core.WCAction">	
