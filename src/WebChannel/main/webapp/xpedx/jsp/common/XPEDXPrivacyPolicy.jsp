@@ -61,7 +61,12 @@ $(document).ready(function() {
 				
 				<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
-				<jsp:include page="../common/sharedPrivacyPolicy_xpedx.jsp" />
+				<s:if test="wCContext.storefrontId == 'xpedx'">
+					<jsp:include page="../common/sharedPrivacyPolicy_xpedx.jsp" />
+				</s:if>
+				<s:if test="wCContext.storefrontId == 'Saalfeld'">
+					<jsp:include page="../common/sharedPrivacyPolicy_Saalfeld.jsp" />
+				</s:if>
 
 			<!-- end main  --> 
 			</div>
