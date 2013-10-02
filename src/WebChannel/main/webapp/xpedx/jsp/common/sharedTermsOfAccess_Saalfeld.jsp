@@ -1,3 +1,8 @@
+<%--
+	DRY TOA and privacy policy. This page contains this brand's TOA for re-use across multiple pages (XPEDXTermsOfAccess.jsp and XPEDTermsOfAccessModal.jsp).
+	This allows it to be shared by both modal and non-modal pages. Note the inclusion of pp_brand.jsp in middle of content so this brand's privacy policy is re-used.
+--%>
+
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 
@@ -97,7 +102,7 @@
 								</td>
 							</tr>
 							
-							<jsp:include page="../common/pp_Saalfeld.jsp" />
+							<jsp:include page="../common/sharedPrivacyPolicy_Saalfeld.jsp" />
 							
 							<tr>
 								<td style='text-align:center'>
