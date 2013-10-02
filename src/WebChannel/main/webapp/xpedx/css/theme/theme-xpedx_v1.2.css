@@ -6327,7 +6327,7 @@ div#termsOfAccess {
 
 div#termsOfAccess #ajax-termsOfAccessContent {
 	height: 100% !important;
-	width: 100% !important;
+	width: 95% !important;
 }
 /* jquery slideshow zindex fix */
 div#termsOfAccess #ext-gen6 {
