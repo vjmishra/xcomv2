@@ -1,12 +1,12 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 
-<s:url id='privacyPolicyLink' action='xpedxPrivacyPolicy' namespace='/common' />
+<s:url id='privacyPolicyLink' action='MyPrivacyPolicy' namespace='/common' />
 
 					<table class="full-widths">
 						<tbody>
 							<tr>
-								<td style= 'text-align:center'>
+								<td style='text-align:center'>
 									<span class="bold">TERMS OF ACCESS</span>
 									<br/>
 									(Effective & last revised November 22, 2011)<br/><br/>
@@ -150,7 +150,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td style= 'text-align:center'>
+								<td style='text-align:center'>
 									<span class="bold">Saalfeld Conditions of Sale &ndash; www.saalfeldredistribution.com</span>
 									<br/>
 									<br/>

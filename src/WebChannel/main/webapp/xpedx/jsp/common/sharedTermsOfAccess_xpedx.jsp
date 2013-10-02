@@ -1,7 +1,7 @@
 ﻿<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
 
-<s:url id='privacyPolicyLink' action='xpedxPrivacyPolicy' namespace='/common' />
+<s:url id='privacyPolicyLink' action='MyPrivacyPolicy' namespace='/common' />
 
 					<table class="full-widths" >
 						<tbody>
