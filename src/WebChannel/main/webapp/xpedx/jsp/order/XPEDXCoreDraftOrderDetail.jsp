@@ -767,10 +767,13 @@
 													
 												</s:else>
 												<%-- Show error message against each required customer field --%>
-												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
-													
-													<br/><br/><span class="error">Required fields missing. Please review and try again.</span> <br/><br/>
-	
+												<%--   EB 771 for I should not see extra  spacing between the entry fields & error messages, 
+														so that the page is more compact & easier to read.  --%>
+												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >													
+												<%-- <br/><br/><span class="error">Required fields missing. Please review and try again.</span> <br/><br/> --%>													
+													<div style="padding: 10px 0px 10px 0px;">		
+														<span class="error">Required fields missing. Please review and try again.</span>
+													</div>	
 												</s:if>
 												
 												<%-- --%>
