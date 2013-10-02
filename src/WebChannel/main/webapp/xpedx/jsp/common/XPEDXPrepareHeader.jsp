@@ -1863,10 +1863,14 @@ function searchShipToAddress(divId,url) {
     		url = '<s:property value="#shipToForOrderSearch"/>';
    		if(divId == 'shipToOrderSearchDiv' && searchText != '')                                  
    			url = '<s:property value="#shipToSearchForOrderList"/>';
-		if(divId == 'shipToUserProfile' && searchText == '')
+		if(divId == 'shipToUserProfile' && searchText == ''){
 		  	url = '<s:property value="#shipToForUserProfileSearch"/>';
-		if(divId == 'shipToUserProfile' && searchText != '')                                  
+		  	suspendedStatus= "30";
+		}
+		if(divId == 'shipToUserProfile' && searchText != ''){                                  
 		 	url = '<s:property value="#shipToSearchForUserProfile"/>';
+		 	suspendedStatus= "30";
+		}
 		if(divId == 'showShipToLocationsDiv' && searchText == '')
 			url = '<s:property value="#showLocationsDivForReportingSearch"/>'
 		if(divId == 'showShipToLocationsDiv' && searchText != '')                                  

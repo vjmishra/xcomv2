@@ -53,14 +53,22 @@
 }
 </style>
 <!-- <title>Choose a Ship To Address Modal</title> -->
-<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE"/> </title>
+<title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SHIPTO.SELECT.PREFERREDSHIPTO.GENERIC.DLGTITLE"/> </title>
 
 </head>
 <body>
 <%--	Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments --%>
 <s:if test="%{assignedShipToCount == 0 && comingFromSearch == 'false'}">
-<!-- <div align="center">There are no shipTo locations assigned for your profile, Please contact administrator..</div> -->
-<div align="center"> <s:text name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO" /> </div>
+ <div class="xpedx-light-box" id="select-ship-to">
+	<div class="ship-to-header">
+	<h2 class="no-border"  style="float:left;" ><s:text name="MSG.SWC.SHIPTO.SELECT.PREFERREDSHIPTO.GENERIC.DLGTITLE"/></h2>
+	</div><br /><br /><br /><br />
+	<div align="center" style="color:#ff0000;font-weight:normal;font-size:12px;"><s:text name="MSG.SWC.SHIPTO.NOSHIPTO.USER.INFO" /></div><br /><br />
+	<div class="float-right" >
+		<ul id="tool-bar" class="tool-bar-bottom" >
+			<a class="grey-ui-btn" href="#" style="" onclick="javascript:cancelShipToChanges();$.fancybox.close();"><span>Cancel</span></a>
+		</ul>	
+	</div>
 </s:if>
 <s:else>
  <!-- modal window container -->
@@ -69,7 +77,7 @@
 	<!-- START modal 'header' -->
 	<div class="ship-to-header">
 		<!-- <h2 class="no-border"  style="float:left;" >Change Ship-To</h2> -->
-		<h2 class="no-border"  style="float:left;" ><s:text name="MSG.SWC.SHIPTO.SELECTSHIPTO.GENERIC.DLGTITLE"/></h2>
+		<h2 class="no-border"  style="float:left;" ><s:text name="MSG.SWC.SHIPTO.SELECT.PREFERREDSHIPTO.GENERIC.DLGTITLE"/></h2>
 		<!-- <img id="magGlass"  class="searchButton" src="../../images/icons/22x22_white_search.png" onclick="javascript:searchShipToAddress();"/> -->
 		<span id="magGlass"  class="searchButton" onclick="javascript:searchShipToAddress('shipToUserProfile');">&nbsp;</span>		
 	<!-- XBT-343 --><s:textfield cssClass="input-details x-input"  name='searchTerm' id='Text1'  onclick="javascript:clearText();"  title="searchBox" value="SEARCH CRITERIA" theme="simple" onkeypress="javascript:shipToSearchSubmit(event,'shipToUserProfile');" />

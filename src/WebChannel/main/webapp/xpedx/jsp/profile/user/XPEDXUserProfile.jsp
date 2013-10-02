@@ -197,7 +197,8 @@ function showShipToForUserProfile(url)
 	Ext.Ajax.request({
         url :url,
         params: {
-                    customerContactId: selected_customerContactId
+                    customerContactId: selected_customerContactId,
+                    status: "30"
                  },
         method: 'POST',
         success: function (response, request){
@@ -2439,7 +2440,7 @@ a.underlink:hover {
 										<div>
 											<table width="100%" border="0" cellspacing="0"
 												cellpadding="0" class="tabs">
-												<s:if test="#shipTo != null">
+											
 													<tr>
 														<td valign="top" class="no-border-right-user paddingtop0">
 															<div class="question">
@@ -2461,6 +2462,7 @@ a.underlink:hover {
 																	class=" underlines">[Change]</a>
 															</div>
 														</td>
+													<s:if test="#shipTo != null">
 														<td width="81%" valign="top"
 															class="no-border-right-user paddingtop0"><s:property
 																value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#defaultShipToId)" /><br />
@@ -2476,40 +2478,17 @@ a.underlink:hover {
 																value="#shipTo.getState()" /> <s:property
 																value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#shipTo.getZipCode())}" />&nbsp;
 															<s:property value="#shipTo.getCountry()" /><br /> <!-- JIRA 1878 -->
-															<s:url id='targetURL' namespace='/common'
-																action='xpedxGetAssignedCustomersForDefaultShipTo' /></td>
+															</td>
+														</s:if>
+														<s:else>
+																<td valign="top" class="no-borders paddingtop0"><div
+																	class="float-right">																	
+																</div>
+																<s:text	name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO"></s:text><br />
+																</td>
+														</s:else>
 													</tr>
-												</s:if>
-												<s:else>
-													<tr>
-														<td valign="top" class="no-border-right-user padding0"><div
-																class="question">
-																<ul>
-																	<li>Preferred Ship-To:&nbsp;</li>
-																	<li><span
-																		class="float-right  padding-right4 margin-right"><a
-																			id="purposeofmails-al2" href="#"><img width="12"
-																				height="12" border="0"
-																				title="Preffered Authorized Location"
-																				alt="Preffered Authorized Location"
-																				style="margin-top: 2px;"
-																				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"></a></span>
-																	</li>
-																</ul>
-																</br> <a id='changeShipTo'
-																	href='#ajax-assignedShipToCustomers'
-																	class="txt-lnk-sml-1">[Change]</a>
-															</div></td>
-														<td valign="top" class="no-borders paddingtop0"><div
-																class="float-right">
-																
-															</div> <%-- <s:text name="No Preferred Ship-To is selected"></s:text><br/> --%>
-															<s:text
-																name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO"></s:text><br />
-															<s:url id='targetURL' namespace='/common'
-																action='xpedxGetAssignedCustomers' /></td>
-													</tr>
-												</s:else>
+												
 												<tr>
 		<td>
 		<div class="question">
