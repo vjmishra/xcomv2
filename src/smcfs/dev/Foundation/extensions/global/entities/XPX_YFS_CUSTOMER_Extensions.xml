@@ -258,13 +258,13 @@
 				XMLGroup="Extn" />
 				
 			<Attribute 
-				ColumnName="EXTN_DEFAULT_STOCKED_VIEW" 
+				ColumnName="EXTN_DEFAULT_STOCKED_ITEM_VIEW" 
 				DataType="Text-25" 
 				DefaultValue="ALL" 
 				Description="DEFAULT_ALL=Default View to All Items, DEFAULT_STOCKED=Default View to Normally Stocked Items, ONLY_STOCKED=Only View Normally Stocked Items" 
 				Nullable="true" 
 				Size="" 
-				XMLName="ExtnDefaultStockedView" 
+				XMLName="ExtnDefaultStockedItemView" 
 				XMLGroup="Extn" />
 				
 							<Attribute 
