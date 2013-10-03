@@ -257,6 +257,16 @@
 				XMLName="ExtnCustomerItemFlag" 
 				XMLGroup="Extn" />
 				
+			<Attribute 
+				ColumnName="EXTN_DEFAULT_STOCKED_VIEW" 
+				DataType="Text-25" 
+				DefaultValue="ALL" 
+				Description="DEFAULT_ALL=Default View to All Items, DEFAULT_STOCKED=Default View to Normally Stocked Items, ONLY_STOCKED=Only View Normally Stocked Items" 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnDefaultStockedView" 
+				XMLGroup="Extn" />
+				
 							<Attribute 
 				ColumnName="EXTN_CAN_ORDER_FLAG" 
 				DataType="Flag" 
