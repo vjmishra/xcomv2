@@ -168,7 +168,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	        }    	
         	
         }
-		
+		setOrderByAttribute("OrderDate");//added for EB 1971
 		String messageType = getMessageType();
         if(messageType != null && messageType.equals("OrderListWidget"))
         {

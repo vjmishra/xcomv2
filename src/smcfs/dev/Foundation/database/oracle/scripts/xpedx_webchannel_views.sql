@@ -372,7 +372,7 @@ AS
       OHT.RESOLVER_USER_ID,
       YCC.CODE_SHORT_DESCRIPTION,
       OH.extn_order_status_prefix
-    ORDER BY OH.MODIFYTS DESC;
+    ORDER BY OH.ORDER_DATE DESC;
 
 CREATE OR REPLACE FORCE VIEW  XPX_CUST_VIEW_CUST_PATH
                                   AS

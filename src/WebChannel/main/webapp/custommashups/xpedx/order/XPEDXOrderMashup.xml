@@ -682,7 +682,7 @@
                             <XPEDXOrderSearchListView  DraftOrderFlag="N" DocumentType="0001"
                                 EnterpriseCode="" >
                                 <OrderBy>
-                                    <Attribute Desc="N" Name="Modifyts" />
+                                    <Attribute Desc="Y" Name="OrderDate" />
                                 </OrderBy>
                             </XPEDXOrderSearchListView>
                         </Input>
