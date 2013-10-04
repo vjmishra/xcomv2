@@ -4,6 +4,7 @@
  */
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
+import java.awt.Panel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -510,6 +511,15 @@ IYRCComposite {
 	
 	private Button chkCustomerItemNo;
 	private Label lblCustomerItemNo;
+	
+	private Label lblCatalogView;
+	
+	private Label lblDefaultViewAllItems;
+	private Label lblDefaultViewStockedItems;
+	private Label lblOnlyViewStockedItems;
+	private Button radDefaultViewAllItems;
+	private Button radDefaultViewStockedItems;
+	private Button radOnlyViewStockedItems;
 
 	private Label lblOtherItemNumberDisplay;
 	
@@ -1022,8 +1032,8 @@ IYRCComposite {
 		GridData gridDataLbl1 = new GridData();
 		gridDataLbl1.horizontalAlignment = SWT.BEGINNING;
 		gridDataLbl1.grabExcessHorizontalSpace = true;
-		gridDataLbl1.verticalAlignment = SWT.CENTER;
-		gridDataLbl1.widthHint = 180;
+		gridDataLbl1.verticalAlignment = SWT.LEFT;
+		gridDataLbl1.widthHint = 225;
 		gridDataLbl1.horizontalSpan=1;
 		/* XB-759 Code Changes End */
 		
@@ -1210,6 +1220,51 @@ IYRCComposite {
 			lblCustomerItemNo.setLayoutData(gridDataLbl1);
 			lblCustomerItemNo.setData("name", "lblCustomerItemNo");
 			addTab(gridDataDummy,"dummyCustomerItemNo");
+			
+			
+			// eb-2287: new radio buttons for default stocked items view
+			addTab(gridData1,"dummyCatalogView");
+			lblCatalogView = new Label(pnlCustomerProfileInfo, SWT.NONE);
+			lblCatalogView.setText("Catalog View:");
+			lblCatalogView.setLayoutData(gridDataLbl);
+			lblCatalogView.setData("name", "lblCatalogView");
+			addTab(gridDataDummy,"dummyCatalogView1");
+			
+			radDefaultViewAllItems = new Button(pnlCustomerProfileInfo, SWT.RADIO);
+			radDefaultViewAllItems.setText("");
+			radDefaultViewAllItems.setVisible(true);
+			radDefaultViewAllItems.setData("yrc:customType", "Label");
+			radDefaultViewAllItems.setLayoutData(gridData11);
+			radDefaultViewAllItems.setData("name", "radDefaultViewAllItems");
+			lblDefaultViewAllItems = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblDefaultViewAllItems.setText("Default View to All Items");
+			lblDefaultViewAllItems.setLayoutData(gridDataLbl1);
+			lblDefaultViewAllItems.setData("name", "lblDefaultViewAllItems");
+			addTab(gridDataDummy,"dummyDefaultViewAllItems");
+			
+			radDefaultViewStockedItems = new Button(pnlCustomerProfileInfo, SWT.RADIO);
+			radDefaultViewStockedItems.setText("");
+			radDefaultViewStockedItems.setVisible(true);
+			radDefaultViewStockedItems.setData("yrc:customType", "Label");
+			radDefaultViewStockedItems.setLayoutData(gridData11);
+			radDefaultViewStockedItems.setData("name", "radDefaultViewStockedItems");
+			lblDefaultViewStockedItems = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblDefaultViewStockedItems.setText("Default View to Normally Stocked Items");
+			lblDefaultViewStockedItems.setLayoutData(gridDataLbl1);
+			lblDefaultViewStockedItems.setData("name", "lblDefaultViewStockedItems");
+			addTab(gridDataDummy,"dummyDefaultViewStockedItems");
+
+			radOnlyViewStockedItems = new Button(pnlCustomerProfileInfo, SWT.RADIO);
+			radOnlyViewStockedItems.setText("");
+			radOnlyViewStockedItems.setVisible(true);
+			radOnlyViewStockedItems.setData("yrc:customType", "Label");
+			radOnlyViewStockedItems.setLayoutData(gridData11);
+			radOnlyViewStockedItems.setData("name", "radOnlyViewStockedItems");
+			lblOnlyViewStockedItems = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblOnlyViewStockedItems.setText("Only View Normally Stocked Items");
+			lblOnlyViewStockedItems.setLayoutData(gridDataLbl1);
+			lblOnlyViewStockedItems.setData("name", "lblOnlyViewStockedItems");
+			addTab(gridDataDummy,"dummyOnlyViewStockedItems");
 		}
 		/* XB-759 Code Changes End */
 		chkViewPriceFlag = new Button(pnlCustomerProfileInfo, SWT.CHECK);
@@ -2372,6 +2427,27 @@ IYRCComposite {
 			tableBindingData.setName("orderConfirmList");
 			tableBindingData.setTblClmBindings(colBindings1);
 			orderConfirmList.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tableBindingData);
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("DEFAULT_ALL");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setName("radDefaultViewAllItems");
+			radDefaultViewAllItems.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("DEFAULT_STOCKED");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setName("radDefaultViewStockedItems");
+			radDefaultViewStockedItems.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("ONLY_STOCKED");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setName("radOnlyViewStockedItems");
+			radOnlyViewStockedItems.setData("YRCButtonBindingDefination",chkBoxBindingData);
 		}
 		/* XB-759 Code Changes End */
 		
