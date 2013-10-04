@@ -34,7 +34,6 @@ AS
   ON (yus1.extn_employee_id = SUBSTR(OHR.MODIFYUSERID, 0, INSTR(OHR.MODIFYUSERID, '@')-1))
   LEFT JOIN YFS_USER YUS2
   ON (TRIM(OHR.CREATEUSERID) = TRIM(YUS2.LOGINID))
-   WHERE OHR.buyer_organization_code='90-0002000128-000013-M-XX-S' and OHR.draft_order_flag='Y'
   GROUP BY OHR.ORDER_HEADER_KEY,
     yus.username,
     yus1.username ,
