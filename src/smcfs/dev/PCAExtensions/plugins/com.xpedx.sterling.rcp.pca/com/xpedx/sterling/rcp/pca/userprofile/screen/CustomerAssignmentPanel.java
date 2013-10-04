@@ -2,6 +2,8 @@ package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -18,6 +20,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import com.yantra.yfc.rcp.IYRCApiCallbackhandler;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
@@ -449,6 +452,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				String CustomerID="";
 				StringBuffer address= new StringBuffer();
 				TreeItem iiItem = new TreeItem (localiItem2, 1);
+
 				String orgName=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationName");
 				String orgId=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationCode");
 				
@@ -459,14 +463,14 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 				String zip = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 				
-				
-			
 				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
 				String legacyNo=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnLegacyCustNumber");
 				String billTosuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnBillToSuffix");
 				String shipToSuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipToSuffix");
 				String customerType=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnSuffixType");
-				
+
+				String status = YRCXmlUtils.getAttributeValue(eleCust, "Customer/@Status");
+
 				if("MC".equalsIgnoreCase(customerType)){
 					CustomerID=orgId;
 				}
@@ -479,7 +483,6 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				else if("S".equalsIgnoreCase(customerType)){
 						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
 				}
-				
 				
 				if(add1 !=null && add1.trim().length()>0)
 				{
@@ -507,8 +510,14 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 					address.append(" "+country);
 				}
 				
-				
-				iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
+				String displayString = orgName+" ("+CustomerID+")"+address.toString();
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))
+						&& "30".equals(status)){ // 30=Suspended (this should be a constant somewhere)
+					displayString = "(Suspended)" + displayString;
+					iiItem.setForeground(getDisplay().getSystemColor(SWT.COLOR_GRAY));
+					iiItem.setFont(JFaceResources.getFontRegistry().getItalic(""));
+				}
+				iiItem.setText(displayString);
 				
 				iiItem.setData("data",eleCust);
 				if(myBehavior.isThisCustomerAssigned(eleCust)){

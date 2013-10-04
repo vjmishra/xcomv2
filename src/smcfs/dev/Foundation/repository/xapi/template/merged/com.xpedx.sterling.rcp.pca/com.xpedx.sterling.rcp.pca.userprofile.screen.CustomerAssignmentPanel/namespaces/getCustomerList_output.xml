@@ -1,5 +1,5 @@
 <CustomerList>
-<Customer CustomerKey='' CustomerID='' OrganizationCode=''>
+<Customer CustomerKey='' CustomerID='' OrganizationCode='' Status=''>
 <Extn ExtnCustomerStoreNumber='' ExtnSuffixType='' ExtnShipFromBranch='' ExtnLegacyCustNumber='' ExtnBillToSuffix='' ExtnShipToSuffix=''/>
 <BuyerOrganization OrganizationCode='' OrganizationName=''/>
  <CustomerAdditionalAddressList>
