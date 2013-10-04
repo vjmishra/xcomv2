@@ -720,7 +720,7 @@ return new Ext.XTemplate(
   '</div>',
   '<table class="bottable">','<tr>','<td class="compare_check">',
 	// Do not delete this code. This will come as a CR. '<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
-  '</td>','<td class="item_number">','<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}','</td>',
+  '</td>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
   '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
   '</td>','</tr>',
   '<tr>','<td></td>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
