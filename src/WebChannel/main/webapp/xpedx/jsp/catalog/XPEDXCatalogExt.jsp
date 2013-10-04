@@ -396,7 +396,8 @@
                     	 </select>
                      
                     <s:if test="#isGuestUser == false">	
-                     <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>	
+                     <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
+                     <span class="checkboxtxt">View:&nbsp;</span>	
                      <select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
 							<option value="false">All Items</option>
 							<s:if test='#checkedval'>
