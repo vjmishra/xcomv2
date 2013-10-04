@@ -2679,7 +2679,7 @@ function showSharedListForm(){
                         <p class="quick-add-aux-links underlink" style="color: orange;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
 						</s:if>
 						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-						<p class="quick-add-aux-links underlink" style="color:  #66cc33;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
+						<p class="quick-add-aux-links underlink" style="color:  #006a3a;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
 						</s:elseif>
                         <div class="clear">&nbsp;</div>
                         <div class="quick-add-form-top">&nbsp;</div>
