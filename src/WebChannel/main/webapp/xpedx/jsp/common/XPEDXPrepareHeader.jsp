@@ -2729,7 +2729,7 @@ function msgWait(){
 					<s:url id='estimatingFilesLink' namespace='/xpedx/services' action='XPEDXEstimatingFiles'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='reportsLink' namespace='/xpedx/services' action='myreports'>
+					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='newToolsLink' namespace='/xpedx/services' action='XPEDXTools'>
