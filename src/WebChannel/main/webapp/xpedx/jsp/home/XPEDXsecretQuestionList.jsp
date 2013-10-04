@@ -161,7 +161,7 @@
 									</li>
 									<!-- <li class="float-right"><a href="javascript:secretQuestionSubmit();"
 										class="orange-ui-btn"><span>Submit</span> -->
-									 <li class="float-right"><a href="#" onclick="secretQuestionSubmit();" 
+									 <li class="float-left"><a href="#" onclick="secretQuestionSubmit();" 
                                         class="orange-ui-btn"><span>Submit</span>										
 									</a>
 									</li>
