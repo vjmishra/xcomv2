@@ -109,6 +109,9 @@
 	namespace="/profile/user" />
 
 <s:set name="selectedTab" value="#request.selectedTab" />
+<s:set name='_action' value='[0]' />
+<s:set name='estimator' value='#_action.getEstimator()' />
+	
 <link rel="stylesheet" type="text/css"
 	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css"
 	media="screen" />
@@ -1201,8 +1204,16 @@ function funDivOpenClose(val1)
 	        }
 	        return true;
 		}
-		
-
+		//Added for EB 1977
+		function isEstimatorChecked(){
+			if(document.getElementById("estimator").checked){
+				document.getElementById("estimatorMsg").style.display = "inline";
+			}
+			else{
+				document.getElementById("estimatorMsg").style.display = "none";
+			}
+		}
+		//End of EB 1977
 	</script>
 
 <style type="text/css">
@@ -1284,7 +1295,6 @@ a.underlink:hover {
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">
-	<s:set name='_action' value='[0]' />
 	<s:set name="isSalesRep"
 		value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}" />
 		<!-- Added for EB 633 -->
@@ -1307,7 +1317,6 @@ a.underlink:hover {
 	<s:set name='punchoutUser' value='#_action.getPunchoutUsers()' />
 	<s:set name='stockCheckWebservice'
 		value='#_action.getStockCheckWebservice()' />
-	<s:set name='estimator' value='#_action.getEstimator()' />
 	<s:set name='OrderApprovalFlag'
 		value='#_action.isOrderFlagForApproval()' />
 	<s:set name='customer' value='customerelement' />
@@ -2085,8 +2094,8 @@ a.underlink:hover {
 															</s:else> <s:if test='%{#estimator=="Y"}'>
 																<label
 																	title="Estimator views available inventory and pricing.">
-																	<s:checkbox tabindex="15" name='estimator'
-																		id='estimator' fieldValue="true" value="true"
+																<s:checkbox tabindex="15" name='estimator'
+																		id='estimator' fieldValue="true" value="true"  onclick="javascript:isEstimatorChecked();"
 																		disabled='%{#checkBoxDisable || #isDisabled}' />
 																	Estimator
 																</label>
@@ -2094,7 +2103,7 @@ a.underlink:hover {
 																<label
 																	title="Estimator views available inventory and pricing.">
 																	<s:checkbox tabindex="15" name='estimator'
-																		id='estimator' fieldValue="true" value="false"
+																		id='estimator' fieldValue="true" value="false" onclick="javascript:isEstimatorChecked();"
 																		disabled='%{#checkBoxDisable || #isDisabled}' />
 																	Estimator
 																</label>
@@ -2145,8 +2154,13 @@ a.underlink:hover {
 															</s:if></td>
 													</s:else>
 												</tr>
-
-
+												<tr>
+												<s:if test='%{#estimator=="Y"}'>
+													<td colspan="2" class=""></td><td colspan="2" class=""><div id="estimatorMsg" style="display:inline; align:center" class="notice">The Estimator Role cannot place orders</div></td>
+												</s:if>
+												<s:else>
+													<td colspan="2" class=""></td><td colspan="2" class=""><div id="estimatorMsg" style="display:none; align:center" class="notice">The Estimator Role cannot place orders</div></td>
+												</s:else></tr>
 												<tr style="display: none;">
 													<td class="boldText textAlignLeft"><s:text
 															name="RB_jobTitle" />:</td>
