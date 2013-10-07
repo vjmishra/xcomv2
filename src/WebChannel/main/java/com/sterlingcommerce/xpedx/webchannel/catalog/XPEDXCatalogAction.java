@@ -333,14 +333,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	
 	private void setStockedItemFromSession() {
-		if(getWCContext().getWCAttribute("StockedCheckbox",WCAttributeScope.SESSION)!=null) {
-			if(getWCContext().getWCAttribute("StockedCheckbox",WCAttributeScope.SESSION).toString().equalsIgnoreCase("true")){
-				isStockedItem=true;
-			}
-			else{
-				isStockedItem=false;
+		if (getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION) == null) {
+			// init session value from bill-to setting
+			shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			if (shipToCustomer != null) {
+				String defaultStockedItemView = shipToCustomer.getBillTo().getExtnDefaultStockedItemView();
+				setStockedCheckeboxSelected(defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_STOCKED) || defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED));
+				getWCContext().setWCAttribute("StockedCheckbox", isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 			}
 		}
+		
+		isStockedItem = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION).toString().equalsIgnoreCase("true");
 	}
 
 	/**

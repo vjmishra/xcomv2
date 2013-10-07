@@ -490,6 +490,15 @@ public String getShipToDivdeliveryInfo() {
 		this.extnPriceWareHouse = extnPricingWareHouse;
 	}
 	
+	// added for eb-2297
+	private String extnDefaultStockedItemView;
+	
+	public String getExtnDefaultStockedItemView() {
+		return extnDefaultStockedItemView;
+	}
+	public void setExtnDefaultStockedItemView(String extnDefaultStockedItemView) {
+		this.extnDefaultStockedItemView = extnDefaultStockedItemView;
+	}
 	
 	//added for jira 4306
 	public XPEDXShipToCustomer()
@@ -523,7 +532,8 @@ public String getShipToDivdeliveryInfo() {
 			String rootCustomerKey, String customerKey,
 			String buyerOrganizationCode,
 			XPEDXShipToCustomer defaultShipToCustomer,
-			String extnAllowDirectOrderFlag, String extnMaxOrderAmount, String shipToOrgExtnApplyMinOrderBrands) {
+			String extnAllowDirectOrderFlag, String extnMaxOrderAmount, String shipToOrgExtnApplyMinOrderBrands,
+			String defaultStockedItemView) {
 		FirstName = firstName;
 		MiddleName = middleName;
 		LastName = lastName;
@@ -583,6 +593,7 @@ public String getShipToDivdeliveryInfo() {
 		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 		this.extnMaxOrderAmount = extnMaxOrderAmount;
 		this.shipToOrgExtnApplyMinOrderBrands=shipToOrgExtnApplyMinOrderBrands;
+		this.extnDefaultStockedItemView = defaultStockedItemView;
 	}
 	
 	public Object clone() throws CloneNotSupportedException
@@ -614,7 +625,8 @@ public String getShipToDivdeliveryInfo() {
 				 rootCustomerKey,  customerKey,
 				 buyerOrganizationCode,
 				 defaultShipToCustomer,
-				extnAllowDirectOrderFlag,  extnMaxOrderAmount, shipToOrgExtnApplyMinOrderBrands);
+				extnAllowDirectOrderFlag,  extnMaxOrderAmount, shipToOrgExtnApplyMinOrderBrands,
+				extnDefaultStockedItemView);
 		
 		return shipToCustomer;
 	}

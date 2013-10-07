@@ -5557,6 +5557,12 @@ public class XPEDXWCUtils {
 					billToCustomer.setExtnECsr2EMailID(parentExtnElem.getAttribute("ExtnECsr2EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnMaxOrderAmount(parentExtnElem.getAttribute("ExtnMaxOrderAmount"));//JIRA 3488
 					billToCustomer.setExtnCustomerClass(parentExtnElem.getAttribute("ExtnCustomerClass"));//XBT-265
+					
+					billToCustomer.setExtnDefaultStockedItemView(parentExtnElem.getAttribute("ExtnDefaultStockedItemView")); //eb-2297
+					if (billToCustomer.getExtnDefaultStockedItemView() == null) {
+						billToCustomer.setExtnDefaultStockedItemView(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ALL);
+					}
+					
 					/* XB-763 Code Changes Start */
 					String extnMfgItemFlag = parentExtnElem.getAttribute("ExtnMfgItemFlag");
 					String extnCustomerItemFlag = parentExtnElem.getAttribute("ExtnCustomerItemFlag");

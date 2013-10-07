@@ -22,6 +22,8 @@
 <%-- <s:set name='errorQtyGreaterThanZero' value='<s:text name="MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO" />' scope='session'/> --%>
 <%--<s:bean name='com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils' id='xpedxSCXmlUtil' /> --%>
 
+<s:set name="currentShipTo" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")'/>
+
 <!-- begin styles. These should be the only three styles. -->
 <s:if test="#isGuestUser == false">
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -395,19 +397,24 @@
 							</s:iterator>
                     	 </select>
                      
-                    <s:if test="#isGuestUser == false">	
-                     <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-                     <span class="checkboxtxt">View:&nbsp;</span>	
-                     <select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
-							<option value="false">All Items</option>
-							<s:if test='#checkedval'>
-								<option value="true" selected="selected">Normally Stocked</option>
-							</s:if>							
+						<s:if test="#isGuestUser == false">	
+							<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
+								<s:hidden name="stockedItemChkBtm" value="true" />
+							</s:if>
 							<s:else>
-								<option value="true">Normally Stocked</option>
+								<s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
+								<span class="checkboxtxt">View:&nbsp;</span>	
+								<select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
+									<option value="false">All Items</option>
+									<s:if test='#checkedval'>
+										<option value="true" selected="selected">Normally Stocked</option>
+									</s:if>							
+									<s:else>
+										<option value="true">Normally Stocked</option>
+									</s:else>
+								</select> 
 							</s:else>
-                     </select> 
-                    </s:if>
+						</s:if>
                  </div>   
    <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
 	<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
@@ -975,19 +982,25 @@ var ct = Ext.get('item-box-inner');
 							</s:else>		
 							</s:iterator>
                     	 </select>
-                     <s:if test="#isGuestUser == false">	
-                     <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>	
-                     <span class="checkboxtxt">View:&nbsp;</span>
-                     <select id="stockedItemChk" name="stockedItemChk" onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
-							<option value="false">All Items</option>
-							<s:if test='#checkedval'>
-								<option value="true" selected="selected">Normally Stocked</option>
-							</s:if>							
+                     
+						<s:if test="#isGuestUser == false">	
+							<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
+								<s:hidden name="stockedItemChk" value="true" />
+							</s:if>
 							<s:else>
-								<option value="true">Normally Stocked</option>
+								<s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
+								<span class="checkboxtxt">View:&nbsp;</span>	
+								<select id="stockedItemChk" name="stockedItemChk"  onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
+									<option value="false">All Items</option>
+									<s:if test='#checkedval'>
+										<option value="true" selected="selected">Normally Stocked</option>
+									</s:if>							
+									<s:else>
+										<option value="true">Normally Stocked</option>
+									</s:else>
+								</select> 
 							</s:else>
-                     </select> 
-                    </s:if>                   	 
+						</s:if>
 	</div>
 	<%--Added hidden parameter searchTermString for JIRA #4195 --%>
 	<s:hidden id='searchTermString' name='searchTermString' value="%{searchString}" />

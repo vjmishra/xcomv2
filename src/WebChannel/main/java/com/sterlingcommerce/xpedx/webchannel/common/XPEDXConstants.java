@@ -155,6 +155,11 @@ public class XPEDXConstants {
 	public static final String LAST_LOGIN_DATE_UPDATED="LAST_LOGIN_DATE_UPDATED";//EB-475
 	public static final String IS_SAP_STILL_NEED_TO_CHANGE ="IS_SAP_STILL_NEED_TO_CHANGE";//EB-1320
 	public static final String UE_ERROR_CODE1="com.yantra.yfs.japi.YFSUserExitException";
+	
+	public static final String DEFAULT_STOCKED_ITEM_VIEW_ALL          = "DEFAULT_ALL"; // eb-2297
+	public static final String DEFAULT_STOCKED_ITEM_VIEW_STOCKED      = "DEFAULT_STOCKED"; // eb-2297
+	public static final String DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED = "ONLY_STOCKED"; // eb-2297
+	
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
  		  System.out.print ("\n"+msg);
