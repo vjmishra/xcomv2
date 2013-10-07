@@ -209,14 +209,13 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		Ext.Msg.hide();
 	    myMask.hide();
 	    return;*/
-		// added for  EB 2034 to get the PnA results based on the selected UOM on page load
+		// added for  EB 2034 to get the PnA results based on the selected UOM on click of PnA Link
 		var uomConvFactor;
 		var orderMul = document.getElementById("OrderMultiple");
 		var conversionFactor = document.getElementById("uomConvFactor");
 		if(conversionFactor!=null && conversionFactor!=undefined){
 			 uomConvFactor = document.getElementById("uomConvFactor").value;
 		}
-		var qtyTextBox=Qty;
 		if(Qty == null || Qty == "null" || Qty == "") {
 			reqUom = document.getElementById("selectedUOM").value;
 			if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
@@ -237,7 +236,8 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			}
 		}
 		//End of EB 2034
-	    /*Change made for XB 214 - Send Base UOM & OM Qty for PnA when Wty is blank
+		
+	    /*Change made for XB 214 - Send Base UOM & OM Qty for PnA when Qty is blank
 	    Qty = document.getElementById("OrderMultiple").value;
 	    reqUom = baseUom;*/
 	}	
