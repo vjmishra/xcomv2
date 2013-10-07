@@ -977,6 +977,7 @@ var ct = Ext.get('item-box-inner');
                     	 </select>
                      <s:if test="#isGuestUser == false">	
                      <s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>	
+                     <span class="checkboxtxt">View:&nbsp;</span>
                      <select id="stockedItemChk" name="stockedItemChk" onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
 							<option value="false">All Items</option>
 							<s:if test='#checkedval'>
