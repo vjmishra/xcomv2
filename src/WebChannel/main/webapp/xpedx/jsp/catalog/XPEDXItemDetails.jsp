@@ -209,9 +209,37 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		Ext.Msg.hide();
 	    myMask.hide();
 	    return;*/
-	    //Change made for XB 214 - Send Base UOM & OM Qty for PnA when Wty is blank
+		// added for  EB 2034 to get the PnA results based on the selected UOM on page load
+		var uomConvFactor;
+		var orderMul = document.getElementById("OrderMultiple");
+		var conversionFactor = document.getElementById("uomConvFactor");
+		if(conversionFactor!=null && conversionFactor!=undefined){
+			 uomConvFactor = document.getElementById("uomConvFactor").value;
+		}
+		var qtyTextBox=Qty;
+		if(Qty == null || Qty == "null" || Qty == "") {
+			reqUom = document.getElementById("selectedUOM").value;
+			if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
+				if(uomConvFactor == 1){
+					Qty = document.getElementById("OrderMultiple").value;
+				}
+				else if(uomConvFactor <= orderMul.value){
+					if((orderMul.value % uomConvFactor)==0){
+						Qty = orderMul.value / uomConvFactor;
+					}
+					else{
+						Qty = 1;
+					}
+				}
+			}
+			else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+				Qty=1;
+			}
+		}
+		//End of EB 2034
+	    /*Change made for XB 214 - Send Base UOM & OM Qty for PnA when Wty is blank
 	    Qty = document.getElementById("OrderMultiple").value;
-	    reqUom = baseUom;
+	    reqUom = baseUom;*/
 	}	
 	var itemAvailDiv = document.getElementById("tabs-1");
 	if(Qty=='0')
