@@ -621,7 +621,7 @@
 			</result>
 		</action>
 		
-		<action name="xpedxOrderCancel"
+		<action name="MyOrderCancel"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderCancelAction">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderCancel_binding.xml</param>
 			<param name="resourceId">/swc/order/authenticatedOrdering</param>

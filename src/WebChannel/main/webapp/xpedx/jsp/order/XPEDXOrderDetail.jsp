@@ -1785,7 +1785,7 @@ function showSplitDiv(divId)
 
 <!-- div for order cancel light box -->
 <swc:dialogPanel title='' isModal="true" id="cancelDialog">
-         <s:form id="CancelForm" name="CancelForm" action="xpedxOrderCancel">
+         <s:form id="CancelForm" name="CancelForm" action="MyOrderCancel">
          <s:hidden name="orderHeaderKey" value="%{dorderHeaderKey}" />
          <!--Changed for  Jira 2039  -->
          <input type="hidden" name="orderListReturnUrl" value="<s:property value='%{orderListReturnUrl}' />" />
