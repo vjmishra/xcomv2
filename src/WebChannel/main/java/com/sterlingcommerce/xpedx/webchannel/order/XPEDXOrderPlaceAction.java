@@ -143,16 +143,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public String draftOrderflagOrderSubmit;
 	public String draftErrorFlagOrderSummary = "draftErrorFlagOrderSummary";
 	public String draftErrorOrderSummary = "false";
-	private String approveOrderFlag="false";
 	public static final String APPROVEORDER_SESSION_OBJ="approveOrderXMLDocument";
-	
-	public String getApproveOrderFlag() {
-		return approveOrderFlag;
-	}
-
-	public void setApproveOrderFlag(String approveOrderFlag) {
-		this.approveOrderFlag = approveOrderFlag;
-	}
 
 	public String getDraftOrderflagOrderSubmit() {
 		return draftOrderflagOrderSubmit;
@@ -231,6 +222,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			orderPlaceDate = orderDate.getString();
 			Element isPendingApproval = null;
 			customerContactID=wcContext.getLoggedInUserId();
+			String approveOrderFlag="false";
 			//Commented this line as it is causing exception. Looks like the mashup is not defined.
 			if (isDraftOrder()) {
 //				prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
@@ -281,6 +273,11 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 
 		 		}
 				
+				Object approveOrderSessionVar=getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
+				getWCContext().getSCUIContext().getSession().removeAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
+				if(approveOrderSessionVar!=null) {
+					approveOrderFlag=approveOrderSessionVar.toString();
+				}
 				Document orderDetailDocument=null;
 				if("false".equals(approveOrderFlag)) {
 					orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
@@ -427,8 +424,16 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				
 				//the output required for the confirmation page; do the necessary getCompleteOrderDetails call.
 				confirmDraftOrderElem = prepareAndInvokeMashup(GET_CONFIRMATION_PAGE_DETAILS);
-				ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
-				parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey"); 
+				
+				String orderType = SCXmlUtil.getAttribute(confirmDraftOrderElem,"OrderType");
+				if(!"Customer".equals(orderType))
+				{
+					ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
+					parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey");
+				
+				} else {
+					parentOrderHeaderKeyForFO = getOrderHeaderKey();
+				}
 			}
 			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
 			chainedOrderFromKeylist.add(orderHeaderKey);

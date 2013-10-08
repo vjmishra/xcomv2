@@ -524,7 +524,7 @@ function showSplitDiv(divId)
 						<s:param name="isEditOrder" value="%{'true'}" ></s:param>
 						<s:param name="draft" value='%{"N"}'></s:param>
 						<s:param name="resetDesc" value="%{'true'}" ></s:param>
-						<s:param name="approveOrderFlag" value="#approvalAllowed"></s:param>												
+						<s:param name="approvalAllowedFlag" value="#approvalAllowed"></s:param>												
 					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
@@ -1598,7 +1598,7 @@ function showSplitDiv(divId)
 						<s:param name="isEditOrder" value="%{'true'}" ></s:param>
 						<s:param name="draft" value='%{"N"}'></s:param>
 						<s:param name="resetDesc" value="%{'true'}" ></s:param>
-						<s:param name="approveOrderFlag" value="#approvalAllowed"></s:param>												
+						<s:param name="approvalAllowedFlag" value="#approvalAllowed"></s:param>												
 					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>

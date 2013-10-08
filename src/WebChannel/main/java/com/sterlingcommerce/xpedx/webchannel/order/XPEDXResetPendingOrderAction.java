@@ -21,7 +21,8 @@ public class XPEDXResetPendingOrderAction extends ResetPendingOrderAction {
 	{
 		//added for jira 4306
 		XPEDXWCUtils.resetEditedOrderShipTo(wcContext);
-		wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);		
+		wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
+		wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
 		return super.execute();
 	}
 }

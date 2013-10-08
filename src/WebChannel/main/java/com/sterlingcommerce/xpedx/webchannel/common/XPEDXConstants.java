@@ -190,4 +190,6 @@ public class XPEDXConstants {
 	
 	public static final String SAALFELD_EBUSINESS_EMAIL_ADDRESS="ebusiness@Saalfeldredistribution.com";
 	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@xpedx.com";
+	
+	public static final String APPROVE_ORDER_FLAG="approveOrderFlag";
 }

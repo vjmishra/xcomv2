@@ -670,8 +670,7 @@
                 <param name="isMultiStepCheckoutObj">${isMultiStepCheckoutObj}</param>
                 <param name="draft">${draft}</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
-                <param name="draftOrderError">${draftOrderError}</param>
-                <param name="approveOrderFlag">${approveOrderFlag}</param>        
+                <param name="draftOrderError">${draftOrderError}</param>        
             </result>
             <result name="checkoutError" type="redirectAction">
                 <param name="actionName">draftOrderDetails</param>
@@ -683,7 +682,6 @@
                 <param name="draft">${draft}</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
                 <param name="draftOrderError">${draftOrderError}</param>
-                <param name="approveOrderFlag">${approveOrderFlag}</param>
             </result>
             <result name="OUErrorPage" type="redirectAction">
                 <param name="actionName">orderDetail</param>
@@ -691,7 +689,6 @@
                 <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
                 <param name="isErrorMessage">Y</param>
                 <param name="draft">${draft}</param>
-                <param name="approveOrderFlag">${approveOrderFlag}</param>
             </result>
             <result name="Required_CustFields_Error" type="redirectAction">
 				<param name="actionName">draftOrderDetails</param>
@@ -700,15 +697,13 @@
 				<param name="isEditOrder">${isEditOrder}</param>
 				<param name="draft">${draft}</param>
 				<param name="customerFieldsValidated">${customerFieldsValidated}</param>
-				<param name="approveOrderFlag">${approveOrderFlag}</param>
 			</result>
 			<result name="Order_Multiple_Error" type="redirectAction">
 				<param name="actionName">draftOrderDetails</param>
 				<param name="namespace">/order</param>
 				<param name="orderHeaderKey">${orderHeaderKey}</param>
 				<param name="isEditOrder">${isEditOrder}</param>
-				<param name="draft">${draft}</param>
-				<param name="approveOrderFlag">${approveOrderFlag}</param>			
+				<param name="draft">${draft}</param>			
 			</result>
         </action>
 
@@ -906,7 +901,6 @@
                 <param name="draft">${draft}</param>
                 <param name="fullBackURL">${#parameters.fullBackURL}</param>
                 <param name="draftOrderError">${draftOrderError}</param>
-                <param name="approveOrderFlag">${approveOrderFlag}</param>
             </result>
      		 <result name="draftOrderDetails" type="redirectAction">
                  <param name="actionName">draftOrderDetails</param>
