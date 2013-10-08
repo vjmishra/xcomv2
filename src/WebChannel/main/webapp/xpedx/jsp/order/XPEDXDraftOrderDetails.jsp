@@ -789,6 +789,8 @@ $(document).ready(function(){
 	<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
 		<s:param name='shipToBanner' value="%{'true'}" />
 	</s:action> 
+	<s:set name="shipToCustomer" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")' />
+	<s:set name="billToCustomer" value='#shipToCustomer.getBillTo()' />
 	<!-- // t1-header end --> <!-- begin t1-navigate -->
 
 
@@ -818,17 +820,17 @@ $(document).ready(function(){
 	</s:if>
 </div>
 <!-- EB-66 Suspended ShipTo -->
-	<s:if test="%{#_action.getBillToCustomerStatus() == '30'}">
+	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'}">
 	<br/><br/><br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	<s:else>
-		<s:if test="%{#_action.getCustStatus() == '30'}">
+		<s:if test="%{#shipToCustomer.getCustomerStatus() == '30'}">
 		<br/><br/><br/><h5 align="center"><b><font color="red">
 		This ship to location has been suspended, please select a new valid location.
 		</font></b></h5></s:if>
 	
-</s:else>
+	</s:else>
 	
 <!-- breadcrumb / 'print page' button -->
 <div class="breadcrumb-title" id="breadcumbs-list-name">
@@ -1485,7 +1487,7 @@ var currentAadd2ItemList = new Object();
 	--%>
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
-		<s:if test="%{#_action.getCustStatus() != '30' && #_action.getBillToCustomerStatus() != '30'}">
+	    <s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">
 		    <s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
 	    		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Approve and Submit Button</span></a>
 	    	</s:if>
@@ -1522,12 +1524,12 @@ var currentAadd2ItemList = new Object();
 </div>
 <!--Added for 3098  -->
 <!-- EB-66 -->
-	<s:if test="%{#_action.getBillToCustomerStatus() == '30'}">
+	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'}">
 	<br/><br/><br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	<s:else>
-		<s:if test="%{#_action.getCustStatus() == '30'}">
+		<s:if test="%{#shipToCustomer.getCustomerStatus() == '30'}">
 		<br/><br/><br/><h5 align="center"><b><font color="red">
 		This ship to location has been suspended, please select a new valid location.
 		</font></b></h5></s:if>
