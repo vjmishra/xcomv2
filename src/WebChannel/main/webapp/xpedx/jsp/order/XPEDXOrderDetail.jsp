@@ -420,12 +420,6 @@ function showSplitDiv(divId)
  </s:url>
 <s:url id="urlPrint"  includeParams="none" escapeAmp="false" action='PrintOrderDetail.action' namespace = '/order' ></s:url>
 <s:url id="urlOrderAgainId"  includeParams="none"  action='orderAgain' namespace = '/order' ></s:url>
-<s:url id="urlEditOrderId"    action='draftOrderDetails' namespace = '/order' >
-	<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
-	<s:param name="isEditOrder" value="%{'true'}" ></s:param>
-	<s:param name="draft" value='%{"N"}'></s:param>
-	<s:param name="resetDesc" value="%{'true'}" ></s:param>
-</s:url>
 <s:url id="urlResetOrderId"  includeParams="none"  action='MyResetPendingOrder' namespace = '/order' ></s:url>
 <s:set name="isOrderOnApprovalHold" value="%{#_action.isOrderOnApprovalHold()}"/>
 <s:set name="isOrderOnRejectionHold" value="%{#_action.isOrderOnRejctionHold()}"/>
@@ -521,6 +515,17 @@ function showSplitDiv(divId)
 				<s:set name="test11" value="%{#_action.isFOCreated()}"/>	
 				<s:hidden name="test1" value='%{#test11}'/>
 				<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
+					<s:set name="approvalAllowed" value="%{'false'}"/>
+					<s:if test="#_action.approvalAllowed()">
+						<s:set name="approvalAllowed" value="%{'true'}"/>
+					</s:if>
+					<s:url id="urlEditOrderId" action='draftOrderDetails' namespace = '/order' >
+						<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
+						<s:param name="isEditOrder" value="%{'true'}" ></s:param>
+						<s:param name="draft" value='%{"N"}'></s:param>
+						<s:param name="resetDesc" value="%{'true'}" ></s:param>
+						<s:param name="approveOrderFlag" value="#approvalAllowed"></s:param>												
+					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
@@ -531,7 +536,7 @@ function showSplitDiv(divId)
 							<a href="javascript:editOrder('${urlEditOrderId}');"  style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 						</s:if>					
 					</s:else>
-				</s:if>
+				 </s:if>
 				 <s:if test = "#_action.isOrderInPendingChageState()" >
 					 <a href="javascript:refreshOrder('${urlResetOrderId}');" style="float:right" class="grey-ui-btn" id='refreshButtonId'><span>Refresh</span></a>
                		<%--OOTB button for refreshing order -Amar 
@@ -1584,6 +1589,17 @@ function showSplitDiv(divId)
 				</s:if>
 			</s:if>
 			<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
+					<s:set name="approvalAllowed" value="%{'false'}"/>
+					<s:if test="#_action.approvalAllowed()">
+						<s:set name="approvalAllowed" value="%{'true'}"/>
+					</s:if>
+					<s:url id="urlEditOrderId" action='draftOrderDetails' namespace = '/order' >
+						<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
+						<s:param name="isEditOrder" value="%{'true'}" ></s:param>
+						<s:param name="draft" value='%{"N"}'></s:param>
+						<s:param name="resetDesc" value="%{'true'}" ></s:param>
+						<s:param name="approveOrderFlag" value="#approvalAllowed"></s:param>												
+					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>

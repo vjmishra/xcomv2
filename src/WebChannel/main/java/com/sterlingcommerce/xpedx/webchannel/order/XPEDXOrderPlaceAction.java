@@ -143,6 +143,17 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public String draftOrderflagOrderSubmit;
 	public String draftErrorFlagOrderSummary = "draftErrorFlagOrderSummary";
 	public String draftErrorOrderSummary = "false";
+	private String approveOrderFlag="false";
+	public static final String APPROVEORDER_SESSION_OBJ="approveOrderXMLDocument";
+	
+	public String getApproveOrderFlag() {
+		return approveOrderFlag;
+	}
+
+	public void setApproveOrderFlag(String approveOrderFlag) {
+		this.approveOrderFlag = approveOrderFlag;
+	}
+
 	public String getDraftOrderflagOrderSubmit() {
 		return draftOrderflagOrderSubmit;
 	}
@@ -270,10 +281,18 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 
 		 		}
 				
-				Document orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
-				if(isOrderUpdateDone(orderDetailDocument))
-					return "OUErrorPage";
-				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				Document orderDetailDocument=null;
+				if("false".equals(approveOrderFlag)) {
+					orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+					if(isOrderUpdateDone(orderDetailDocument))
+						return "OUErrorPage";
+					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				
+				} else {
+					orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(APPROVEORDER_SESSION_OBJ);
+					getWCContext().getSCUIContext().getSession().removeAttribute(APPROVEORDER_SESSION_OBJ);
+				}
+				
 				setOrderHeaderKey(SCXmlUtil.getAttribute(orderDetailDocument.getDocumentElement(), "OrderHeaderKey"));
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 				if(YFCCommon.isVoid(orderHeaderKey)){
@@ -282,7 +301,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					return retFail;
 				}
 				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
-				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
+				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")) && "false".equals(approveOrderFlag))
 				{
 					//setYFSEnvironmentVariables(getWCContext());
 					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
@@ -317,7 +336,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					
 				}*/
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
-				if(orderDetailDocument != null)
+				if(orderDetailDocument != null && "false".equals(approveOrderFlag))
 				{
 					// Updated for Jira 4304
 					orderDetailDocument.getDocumentElement().removeAttribute("OrderName");
@@ -329,7 +348,15 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				order changes to Customer Order and sends the new order to Legacy*/
 				try 
 				{
-					Object orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+					Object orderUpdateObj = null;
+					if("false".equals(approveOrderFlag))
+					{
+						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+					
+					} else
+					{						
+						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxCreateLegacyOrderOnApproval", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+					}					
 					
 					if(orderUpdateObj != null)
 					{
@@ -399,7 +426,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				}
 				
 				//the output required for the confirmation page; do the necessary getCompleteOrderDetails call.
-				confirmDraftOrderElem = prepareAndInvokeMashup(GET_CONFIRMATION_PAGE_DETAILS);				
+				confirmDraftOrderElem = prepareAndInvokeMashup(GET_CONFIRMATION_PAGE_DETAILS);
 				ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
 				parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey"); 
 			}
@@ -407,27 +434,30 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			chainedOrderFromKeylist.add(orderHeaderKey);
 			Document chainedOrderLineListDoc = getXpedxChainedOrderLineList(chainedOrderFromKeylist);
 			setXpedxChainedOrderMap(chainedOrderLineListDoc);
-			isOrderOnApprovalHoldStatus=isOrderOnApprovalHold();
-			//added for jira 3484 for display of approvers EMailID
-			if(isOrderOnApprovalHoldStatus)
+			if("false".equals(approveOrderFlag))
 			{
-				if(primaryApproverID != null){
-					resolverUserID = primaryApproverID;
-					if(primaryApproverID != null && proxyApproverID != null){
-						resolverUserID = primaryApproverID+","+proxyApproverID;
+				isOrderOnApprovalHoldStatus=isOrderOnApprovalHold();
+				//added for jira 3484 for display of approvers EMailID
+				if(isOrderOnApprovalHoldStatus)
+				{
+					if(primaryApproverID != null){
+						resolverUserID = primaryApproverID;
+						if(primaryApproverID != null && proxyApproverID != null){
+							resolverUserID = primaryApproverID+","+proxyApproverID;
+						}
 					}
+					else{
+						resolverUserID = proxyApproverID;
+					}
+					if(resolverUserID != null){
+						Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(resolverUserID, wcContext.getStorefrontId());
+						if(usersInfoMap.get(primaryApproverID) != null)
+							primaryApprovalEmailId=usersInfoMap.get(primaryApproverID).getAttribute("EmailID");
+						if(usersInfoMap.get(proxyApproverID) != null)
+							proxyApprovalEmailId=usersInfoMap.get(proxyApproverID).getAttribute("EmailID");
+					}
+	//end of jira 3484
 				}
-				else{
-					resolverUserID = proxyApproverID;
-				}
-				if(resolverUserID != null){
-					Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(resolverUserID, wcContext.getStorefrontId());
-					if(usersInfoMap.get(primaryApproverID) != null)
-						primaryApprovalEmailId=usersInfoMap.get(primaryApproverID).getAttribute("EmailID");
-					if(usersInfoMap.get(proxyApproverID) != null)
-						proxyApprovalEmailId=usersInfoMap.get(proxyApproverID).getAttribute("EmailID");
-				}
-//end of jira 3484
 			}
 			
 			return SUCCESS;
@@ -573,6 +603,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				clientVersionSupport.setClientProperties(map);
 			}
 	}
+	
 	private ArrayList<String> getMinAndChargeAmount()
 	{
 		float maxOrderAmountFloat=0;

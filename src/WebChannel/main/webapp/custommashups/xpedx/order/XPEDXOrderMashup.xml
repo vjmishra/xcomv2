@@ -2219,7 +2219,9 @@
             <Input>
                 <Order OrderHeaderKey="" />
             </Input>
-            <Template/>
+            <Template>
+            	<Order OrderHeaderKey="" ></Order>
+            </Template>
         </API>
     </mashup>
      
@@ -3298,5 +3300,115 @@
             </Template>
         </API>
     </mashup>
+    <mashup id='xpedx_orderApproval_changeOrderDetails' transactional='true'
+        mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Modify the draft order line item(s)">
+        <classInformation
+            name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+        <API Name="changeOrder">
+            <Input>
+                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" CustomerContactID="" >
+	                <Notes>
+			    		<Note NoteText="Adjudicated" ReasonCode="YCD_HOLD_INFO" VisibleToAll="W"/>
+				    </Notes>
+				    <OrderHoldTypes>
+			    		<OrderHoldType HoldType="ORDER_LIMIT_APPROVAL" ReasonText="Released on approving an order during Order Edit" Status="1300" ResolverUserId=""/>
+	                </OrderHoldTypes>
+                    <OrderLines>
+                        <OrderLine Action="MODIFY" OrderLineKey=""
+                            DeliveryMethod="" ReservationMandatory="N">
+                            <LinePriceInfo UnitPrice=""/>
+                            <Extn ExtnCustLineAccNo="" ExtnCustomerLinePONo=""
+                                ExtnCustomerPONo="" ExtnCustLineField1="" ExtnCustLineField2=""
+                                ExtnCustLineField3="" ExtnLineOrderedTotal=""
+                                ExtnReqUOMUnitPrice=""></Extn>
+                            <OrderLineTranQuantity TransactionalUOM=""
+                                OrderedQty="" />
+                        </OrderLine>
+                    </OrderLines>
+                    <Extn  ExtnOrderDesc="" />
+                    <PendingChanges ApplyPendingChanges="Y"/>                  
+                </Order>
+            </Input>
+            <Template>    
+                <Order OrderHeaderKey="" OrderNo="" OrderName="" CustomerPONo="" EntryType="" EnterpriseCode=""
+                    OptimizationType="" CarrierServiceCode="" Modifyts="" Createts=""
+                    DraftOrderFlag="" HasPendingChanges="" AuthorizedClient=""
+                    BuyerOrganizationCode="" ReqDeliveryDate="" OrderDate="" OrderType="" ShipToID=""  Modifyuserid="" Createuserid="">
+                    <PersonInfoSoldTo />
+                    <PersonInfoShipTo />
+                    <PersonInfoBillTo />                    
+                    <PriceInfo Currency="" />
+                    <HeaderCharges>
+                        <HeaderCharge ChargeName="" IsShippingCharge=""
+                            IsDiscount="" ChargeAmount="" IsManual="">
+                            <PricingRule Description="" />
+                        </HeaderCharge>
+                    </HeaderCharges>
+                    <OrderLines TotalNumberOfRecords="">
+                        <OrderLine OrderedQty="" ItemGroupCode=""
+                            ConfigurationKey="" DeliveryMethod="" OrderLineKey="" KitQty=""
+                            MaxLineStatus="" CarrierServiceCode="" ReqShipDate=""
+                            IsBundleParent="" OpenQty="" Status="" PrimeLineNo="" SubLineNo=""
+                            CustomerPONo="" CustomerLinePONo="" LineType="">                           
+                            <Item ItemID="" ItemShortDesc="" ItemDesc="" UnitOfMeasure="" />                            
+                            <LineCharges>
+                                <LineCharge ChargeName="" IsShippingCharge=""
+                                    IsDiscount="" ChargeAmount="" IsManual="">
+                                    <PricingRule Description="" />
+                                </LineCharge>
+                            </LineCharges>
+                            <ItemDetails ItemID="">
+                                <PrimaryInformation />
+                                <AlternateUOMList>
+                                    <AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""    UnitOfMeasure="" />
+                                </AlternateUOMList>
+                                <Extn>
+                                    <XPXItemExtnList>
+                                        <XPXItemExtn InventoryIndicator="" ItemID="" XPXDivision=""/>
+                                    </XPXItemExtnList>
+                                </Extn>
+                                <CategoryList>
+                                      <Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" />  
+                                </CategoryList>
+                            </ItemDetails>
+                            <KitLines NumberOfKitLines="">
+                                <KitLine />
+                            </KitLines>
+                            <PersonInfoShipTo />
+                            <OrderDates>
+                                <OrderDate DateTypeId="" CommittedDate="" />
+                            </OrderDates>
+                            <Shipnode Description="">
+                                <ShipNodePersonInfo />
+                            </Shipnode>                                                        
+                            <Extn />
+                            <Instructions>
+                                <Instruction InstructionText=""
+                                    InstructionDetailKey="" />
+                            </Instructions>
+                            <OrderLineTranQuantity TransactionalUOM=""
+                                OrderedQty="" />
+                        </OrderLine>
+                    </OrderLines>                    
+                    <Extn ExtnDeliveryHoldTime="" ExtnDeliveryHoldDate="" ExtnOrderDivision="" ExtnGenerationNo=""
+                        ExtnDeliveryHoldFlag="" ExtnRushOrderComments="" ExtnShipComplete=""
+                        ExtnWillCall="" ExtnAttentionName="" ExtnHeaderComments=""
+                        ExtnAddnlEmailAddr="" ExtnCustomerDivision="" ExtnOrderedByName=""  
+                        ExtnSourceType="" ExtnWebConfNum="" ExtnLegacyOrderNo=""
+                        ExtnRushOrderFlag="" ExtnWebHoldFlag="" ExtnOrderSubTotal="" ExtnOrderCouponDiscount=""
+                        ExtnOrderDiscount="" ExtnTotOrderAdjustments="" ExtnTotalOrderValue="" ExtnTotOrdValWithoutTaxes="" ExtnLegTotOrderAdjustments="">
+                        <XPXUeAdditionalAttrXmlList>
+                            <XPXUeAdditionalAttrXml/>
+                        </XPXUeAdditionalAttrXmlList>
+                    </Extn>
+                    <Instructions>
+                        <Instruction InstructionText=""
+                            InstructionDetailKey="" />
+                    </Instructions>
+                </Order>
+            </Template>
+    	</API>
+	</mashup>
+            
 </mashups>
 

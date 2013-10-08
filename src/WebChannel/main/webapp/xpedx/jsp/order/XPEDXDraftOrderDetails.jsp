@@ -664,6 +664,7 @@ $(document).ready(function(){
 		</s:else>
 	</s:else>
 </s:if>
+<s:set name="approveOrderFlag" value='%{#_action.getApproveOrderFlag()}' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 
 <body class="  ext-gecko ext-gecko3">
@@ -1483,12 +1484,17 @@ var currentAadd2ItemList = new Object();
 	--%>
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
-	   <s:if test="%{#_action.getCustStatus() != '30' && #_action.getBillToCustomerStatus() != '30'}">
-	    <a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>
+		<s:if test="%{#_action.getCustStatus() != '30' && #_action.getBillToCustomerStatus() != '30'}">
+		    <s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
+	    		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Approve and Submit Button</span></a>
+	    	</s:if>
+	    	<s:else>
+	    		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>
+	    	</s:else>
 		</s:if> 
-	     <s:if test='#hasPendingChanges == "Y"'>
-                   <a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
-          </s:if>
+	    <s:if test='#hasPendingChanges == "Y"'>
+        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
+        </s:if>
 	    <s:if test='#canAddLine'>
 			<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
 		</s:if>

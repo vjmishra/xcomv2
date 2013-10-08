@@ -2923,7 +2923,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private String draftOrderList;
 	public String draftOrderFail="false";
 	private boolean isOUErrorPage=false;
-	
+	private String approveOrderFlag="false";
+
 	protected HashMap useOrderMultipleMapFromSourcing;
 	public HashMap getUseOrderMultipleMapFromSourcing() {
 		return useOrderMultipleMapFromSourcing;
@@ -3226,7 +3227,15 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setDraftOrderList(String draftOrderList) {
 		this.draftOrderList = draftOrderList;
-	}	
+	}
+	
+	public String getApproveOrderFlag() {
+		return approveOrderFlag;
+	}
+
+	public void setApproveOrderFlag(String approveOrderFlag) {
+		this.approveOrderFlag = approveOrderFlag;
+	}
 	
 	private void addModificationRuleToOrderListElement(Element orderElement)
 	{
