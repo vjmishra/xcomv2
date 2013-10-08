@@ -217,19 +217,48 @@ var myMask;
 			var qtyTextBox=qty;
 			var custUOM = document.getElementById('custUOM_'+itemId).value;
 			var uomList = document.getElementById('itemUomList_'+itemId);
+			
 			if(uomList!=null && uomList.options.length>0)
 			{
 			var selectedUom = uomList.options[uomList.selectedIndex].value;
 			var url = document.getElementById('checkAvailabilityURLId').value;
-			/*Ext.Msg.wait("Getting Avalability for item "+itemId+"...Please wait!"); */
-			//Ext.Msg.wait("<s:text name='MSG.SWC.GENERIC.PROCESSING' />" ); 
-			//Added For Jira 2903
-			//Commented for 3475
-			//Ext.Msg.wait("Processing...");
+			// added for  EB 2034 to get the PnA results based on the selected UOM on click of PnA Link
+			var selectedUomConv;
+			var itemUomsString = getItemUoms(itemId);
+			var uomAndConv = itemUomsString.split("|");
+			if(uomAndConv.length>0) {
+				for(var i=1; i<uomAndConv.length; i++) {
+					var tmpUomAndConv = uomAndConv[i].split(":");
+					if(tmpUomAndConv[0] == selectedUom) {
+						selectedUomConv = tmpUomAndConv[1];
+					}
+				}
+			}
+			var orderMul = document.getElementById('orderMultiple_'+itemId);
 			//Added if block for jira 3922
 			if(qty == null || qty == "null" || qty == "") {
-				var qty = document.getElementById('orderMultiple_'+itemId).value;
-				var selectedUom = document.getElementById('baseUOMItem_'+itemId).value;
+				
+				if(orderMul != null && orderMul.value != 0 && selectedUomConv != 0 ){
+						if(selectedUomConv == 1){
+							qty = document.getElementById('orderMultiple_'+itemId).value;
+						}
+				else if(selectedUomConv <= orderMul.value){
+							if((orderMul.value % selectedUomConv) == 0){
+								qty = orderMul.value / selectedUomConv;
+							}
+							else{
+								qty = 1;
+							}
+						}
+				else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+						qty = 1;
+					}
+				}
+				//End of EB 2034
+				/*commented for EB 2034
+				 * var qty = document.getElementById('orderMultiple_'+itemId).value;
+				   var selectedUom = document.getElementById('baseUOMItem_'+itemId).value;
+				 */
 			}
 			Ext.Ajax.request({
 	            url: url,

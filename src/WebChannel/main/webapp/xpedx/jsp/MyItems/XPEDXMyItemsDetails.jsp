@@ -399,12 +399,34 @@ function showSharedListForm(){
     			var url = document.getElementById("checkAvailabilityURLHidden");
     			var qty = document.getElementById('QTY_'+myItemsKey).value;
     		    var qtyTextBox = qty;
-    		//XB 214 BR4
+    			//XB 214 BR4
     			if(url != null && validateOM == true) {
-    				if(qty == ""){
-    				 	qty = document.getElementById('orderLineOrderMultiple_'+myItemsKey).value;
-            	     			var uom = document.getElementById("baseUOMCode_"+myItemsKey).value;
-    				}
+    				//Added for EB 2034
+    			        var uomConvFactor;
+				var orderMul = document.getElementById("orderLineOrderMultiple_"+myItemsKey);
+				var conversionFactor = document.getElementById("UOMconversion_"+myItemsKey);
+				if(conversionFactor!=null && conversionFactor!=undefined){
+				 	uomConvFactor = document.getElementById("UOMconversion_"+myItemsKey).value;
+				}
+    				if(qty == "" || qty == null || qty == "null"){
+    					var uom = document.getElementById("enteredUOMs_"+myItemsKey).value;
+    					if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
+    						if(uomConvFactor == 1){
+    							qty = document.getElementById("orderLineOrderMultiple_"+myItemsKey).value;
+    						}
+    						else if(uomConvFactor <= orderMul.value){
+    								if((orderMul.value % uomConvFactor)==0){
+    									qty = orderMul.value / uomConvFactor;
+    								}
+    								else{
+    									qty = 1;
+    								}
+    					    }
+    						else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+        						qty = 1;
+        					}
+    					}
+    				}// End of EB 2034
     				else{
         		 		qty = document.getElementById('QTY_'+myItemsKey).value;
         		 		var uom = document.getElementById('UOM_'+myItemsKey).value;

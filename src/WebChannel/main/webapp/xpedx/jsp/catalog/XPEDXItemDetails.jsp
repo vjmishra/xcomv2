@@ -135,16 +135,16 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 				Qty = document.getElementById("OrderMultiple").value;
 			}
 			else if(uomConvFactor <= orderMul.value){
-				if((orderMul.value % uomConvFactor)==0){
-					Qty = orderMul.value / uomConvFactor;
-				}
-				else{
-					Qty = 1;
-				}
+					if((orderMul.value % uomConvFactor)==0){
+						Qty = orderMul.value / uomConvFactor;
+					}
+					else{
+						Qty = 1;
+					}
 			}
-		}
-		else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
-			Qty=1;
+			else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+				Qty=1;
+			}
 		}
 	}
 	//End of Jira 2101
@@ -230,9 +230,9 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 						Qty = 1;
 					}
 				}
-			}
-			else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
-				Qty=1;
+				else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+					Qty=1;
+				}
 			}
 		}
 		//End of EB 2034
