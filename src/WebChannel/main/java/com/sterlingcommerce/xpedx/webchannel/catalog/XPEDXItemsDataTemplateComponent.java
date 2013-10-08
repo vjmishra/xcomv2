@@ -181,7 +181,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append(priceList2);
 		}
 		
-		if(hasTier == false && !"".equals(formattedUnitprice)&& null != formattedUnitprice && !"0.00".equals(formattedUnitprice)) {
+		if(hasTier == false && !"".equals(formattedUnitprice)) {
 			sb.append(formattedUnitprice).append(" /");
 			try {
 				sb.append(TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getFormattedUOMCode(unitOfMeasure)));
