@@ -664,7 +664,7 @@ $(document).ready(function(){
 		</s:else>
 	</s:else>
 </s:if>
-<s:set name="approveOrderFlag" value='%{#_action.getApproveOrderFlag()}' />
+<s:set name="approveOrderFlag" value='%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@APPROVE_ORDER_FLAG)}' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 
 <body class="  ext-gecko ext-gecko3">
@@ -691,6 +691,7 @@ $(document).ready(function(){
 					<s:hidden name="isEditNewline" value="%{'N'}"/>
 				</s:else>	--%>	
 				<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
+				<s:hidden name="approveOrderFlag" value='%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@APPROVE_ORDER_FLAG)}' />
 				<ul class="hvv">
 					<li>
 						<label>Item Type:</label>

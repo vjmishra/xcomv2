@@ -96,6 +96,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 
 
 	public String execute() {
+		
+		if("true".equals(approvalAllowedFlag)) {
+			wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.APPROVE_ORDER_FLAG, "true");
+		}
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
@@ -2923,7 +2927,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	private String draftOrderList;
 	public String draftOrderFail="false";
 	private boolean isOUErrorPage=false;
-	private String approveOrderFlag="false";
+	private String approvalAllowedFlag="false";
 
 	protected HashMap useOrderMultipleMapFromSourcing;
 	public HashMap getUseOrderMultipleMapFromSourcing() {
@@ -3229,12 +3233,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.draftOrderList = draftOrderList;
 	}
 	
-	public String getApproveOrderFlag() {
-		return approveOrderFlag;
+	public String getApprovalAllowedFlag() {
+		return approvalAllowedFlag;
 	}
 
-	public void setApproveOrderFlag(String approveOrderFlag) {
-		this.approveOrderFlag = approveOrderFlag;
+	public void setApprovalAllowedFlag(String approvalAllowedFlag) {
+		this.approvalAllowedFlag = approvalAllowedFlag;
 	}
 	
 	private void addModificationRuleToOrderListElement(Element orderElement)

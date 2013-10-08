@@ -186,8 +186,11 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public String execute()
     {        
     	long startTime=System.currentTimeMillis();
-         
-        if(zeroOrderLines.equals("true")){
+    	Object approveOrderSessionVar=getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
+		if(approveOrderSessionVar!=null) {
+			setApproveOrderFlag(approveOrderSessionVar.toString());
+		}
+    	if(zeroOrderLines.equals("true")){
             mashUpId = "xpedx_me_changeOrderDetails";
         }
         else if ("true".equals(isComingFromCheckout)) {    //Removing changeOrder call for Performance improvement, while checkout
@@ -275,8 +278,29 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	                }
 	            }
 	        }    
-	             
-	        if("false".equals(isEditOrder) || "false".equals(approveOrderFlag))
+	        
+	       if("true".equals(isComingFromCheckout)) 
+	       {
+        		if ("false".equals(isEditOrder) || "false".equals(approveOrderFlag))
+        		{
+        			Map<String, Element> out = prepareAndInvokeMashups();
+    	            /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+    	            outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+    	            /*End - Changes made by Mitesh Parikh for JIRA#3595*/
+    	            retVal= SUCCESS;
+        		
+        		} else
+        		{	        	
+		        	/*Order Approval Process when editing an order begins here  */
+		        	Set<String> mashupList = new HashSet<String>();
+		        	mashupList.add(APPROVEORDER_MASHUP);
+		        	Map<String, Element> approveOrderInputObj = prepareMashupInputs(mashupList);
+		        	Document inputDocument = (Document)approveOrderInputObj.get(APPROVEORDER_MASHUP).getOwnerDocument();
+		        	outputDocument = invokeMashup(APPROVEORDER_MASHUP, inputDocument.getDocumentElement()).getOwnerDocument();
+					/*Order Approval Process when editing an order ends here  */ 
+        		}
+        	
+        	} else
 	        {
 		        Map<String, Element> out = prepareAndInvokeMashups();
 	            /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
@@ -284,17 +308,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	            /*End - Changes made by Mitesh Parikh for JIRA#3595*/
 	            retVal= SUCCESS;
 	            
-	        } else
-	        {	/*Order Approval Process when editing an order begins here  */
-	        	Set<String> mashupList = new HashSet<String>();
-	        	mashupList.add(APPROVEORDER_MASHUP);
-	        	Map<String, Element> approveOrderInputObj = prepareMashupInputs(mashupList);
-	        	Document inputDocument = (Document)approveOrderInputObj.get(APPROVEORDER_MASHUP).getOwnerDocument();
-	        	System.out.println("input document is : "+SCXmlUtil.getString(inputDocument));	        	
-				outputDocument = invokeMashup(APPROVEORDER_MASHUP, inputDocument.getDocumentElement()).getOwnerDocument();
-				System.out.println("output document is : "+SCXmlUtil.getString(outputDocument));
-				/*Order Approval Process when editing an order ends here  */ 
-	        }	        
+	        }        	        
            
             if("true".equals(isComingFromCheckout))
             {            	
@@ -346,13 +360,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
               }
               
         }
-         catch(Exception e)
-         {
-            LOG.error(e.getMessage(), e);
-            WCUtils.setErrorInContext(getWCContext(), e);
-             
-            retVal= ERROR;
-         }
+        catch(Exception e)
+        {
+        	LOG.error(e.getMessage(), e);
+        	WCUtils.setErrorInContext(getWCContext(), e);     
+        	retVal= ERROR;
+        }
+        
         if(!zeroOrderLines.equals("true"))
         {
             //Always validate customer fields after calling Update Cart
@@ -387,7 +401,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             }
         }         
         
-        if("true".equals(isEditOrder) && "true".equals(approveOrderFlag))
+        if("true".equals(isComingFromCheckout) && "true".equals(isEditOrder) && "true".equals(approveOrderFlag))
         {
         	getWCContext().getSCUIContext().getSession().setAttribute(APPROVEORDER_SESSION_OBJ, outputDocument);
         	
@@ -437,7 +451,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         	}
         	retVal="approveOrder";
         
-        }else if(outputDocument!=null && retVal.equals(SUCCESS))
+        } else if(outputDocument!=null && retVal.equals(SUCCESS))
         {
             if("true".equals(isComingFromCheckout))
             {
