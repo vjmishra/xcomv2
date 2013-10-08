@@ -80,7 +80,7 @@
             <div class="container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
-                <s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
+                <s:url id='toolsLink' namespace='/tools' action='MyTools'>
 						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				</s:url>
 				

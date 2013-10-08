@@ -104,18 +104,18 @@
 
             <!---->
             	<s:url  id='newsMaintenanceLink' namespace="/profile/user" action='MyNewsMaintenance'></s:url>
-				<s:url id='calculator' namespace="/xpedx/tools" action='calculator' />	
-				<s:url id='ReamWeights' namespace="/xpedx/tools" action='Ream-Weights' />
-				<s:url id='MWeight' namespace="/xpedx/tools" action='M-Weight' />
-				<s:url id='roolWeight' namespace="/xpedx/tools" action='rool-Weight' />	
-				<s:url id='LinearFootageCalculator' namespace="/xpedx/tools" action='Linear-Footage-Calculator' />	
-				<s:url id='basisWeightConversionChart' namespace="/xpedx/tools" action='basis-Weight-Conversion-Chart' />	
-				<s:url id='impositionCalculatorLink' namespace="/xpedx/tools" action='xpedxImpositionCalculator' />																		
-				<s:url id='GSMCalculator' namespace="/xpedx/tools" action='GSMCalculator' />	
-				<s:url id='PagesInchcalculator' namespace="/xpedx/tools" action='PagesInch-calculator' />	
-				<s:url id='Weightofoddnumofsheet' namespace="/xpedx/tools" action='Weight-of-odd-num-of-sheet' />	
-				<s:url id='SheetDensity' namespace="/xpedx/tools" action='SheetDensity' />	
-				<s:url id='Equivalentweight' namespace="/xpedx/tools" action='Equivalent-weight' />	
+				<s:url id='calculator' namespace="/tools" action='calculator' />	
+				<s:url id='ReamWeights' namespace="/tools" action='Ream-Weights' />
+				<s:url id='MWeight' namespace="/tools" action='M-Weight' />
+				<s:url id='roolWeight' namespace="/tools" action='rool-Weight' />	
+				<s:url id='LinearFootageCalculator' namespace="/tools" action='Linear-Footage-Calculator' />	
+				<s:url id='basisWeightConversionChart' namespace="/tools" action='basis-Weight-Conversion-Chart' />	
+				<s:url id='impositionCalculatorLink' namespace="/tools" action='MyImpCalculationPage' />																		
+				<s:url id='GSMCalculator' namespace="/tools" action='GSMCalculator' />	
+				<s:url id='PagesInchcalculator' namespace="/tools" action='PagesInch-calculator' />	
+				<s:url id='Weightofoddnumofsheet' namespace="/tools" action='Weight-of-odd-num-of-sheet' />	
+				<s:url id='SheetDensity' namespace="/tools" action='SheetDensity' />	
+				<s:url id='Equivalentweight' namespace="/tools" action='Equivalent-weight' />	
 				
 				<!---->
 						      

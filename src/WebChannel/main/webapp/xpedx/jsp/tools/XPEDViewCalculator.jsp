@@ -117,8 +117,8 @@
  
             
                       
-              <s:form id="impCalculatorForm" name="impCalculatorForm" namespace="/xpedx/tools"
-              method="post" action="xpedxViewImpCalculation">
+              <s:form id="impCalculatorForm" name="impCalculatorForm" namespace="/tools"
+              method="post" action="MyViewImpCalculation">
             
                <table style="width:600px;" class="form">
                     <tbody>

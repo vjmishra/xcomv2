@@ -377,7 +377,7 @@ var selectedShipCustomer = null;
         	   selectSavedCustomers = true;
            }
     	   showRoot = null;   	   
-           <s:url id='getShareList' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsGetShareList'></s:url> 
+           <s:url id='getShareList' namespace='/myItems' action='XPEDXMyItemsDetailsGetShareList'></s:url> 
            if (showRoot == null){ showRoot = false; }           
            var isCustomerSelected = false;
            //Replace all '-' with '_'
@@ -640,7 +640,7 @@ var selectedShipCustomer = null;
 		clearTheArrays();// clearing the arrays
         //Removed Submit the data via ajax       
         //Init vars
-        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />       
+        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/myItems" escapeAmp="false" />       
         var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
         url = ReplaceAll(url,"&amp;",'&');        
         //Execute the call
@@ -1352,7 +1352,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     }
                     else
                     {
-	                    if(pathname=="/swc/xpedx/myItems/MyItemsList.action"){                        
+	                    if(pathname=="/swc/myItems/MyItemsList.action"){                        
                           var headerUrl='<s:property value="#refreshCustomerIntoContext" />';
                           window.location.href = headerUrl ;
                           
@@ -2612,7 +2612,7 @@ function msgWait(){
 			    </li>			    	            
 	            <s:if test="%{#isProcurementUser}">
 	            	<s:if test="%{procurementMyItemsLinkFlag}">	            		
-						<s:url id='myListsLink' namespace='/xpedx/myItems' action='MyItemsList.action'>
+						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{true}" />
 							<s:param name="selectedHeaderTab">MyItemTab</s:param>
@@ -2635,7 +2635,7 @@ function msgWait(){
 	            	</s:if>
 	            </s:if>
 	            <s:else>
-						<s:url id='myListsLink' namespace='/xpedx/myItems' action='MyItemsList.action'>
+						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />
 							<s:param name="selectedHeaderTab">MyItemTab</s:param>
@@ -2717,22 +2717,22 @@ function msgWait(){
 	            </s:if> 
 	          </s:if>   
 	            <s:if test="%{!#isProcurementUser}">	            
-	                <s:url id='emailSampleLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
+	                <s:url id='emailSampleLink' namespace='/services' action='MyServicesHome'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='RequestProdSampleLink' namespace='/xpedx/services' action='XPEDXServices'>
+					<s:url id='RequestProdSampleLink' namespace='/services' action='MyServices'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='servicesHomeLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
+					<s:url id='servicesHomeLink' namespace='/services' action='MyServicesHome'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='estimatingFilesLink' namespace='/xpedx/services' action='XPEDXEstimatingFiles'>
+					<s:url id='estimatingFilesLink' namespace='/services' action='MyEstimatingFiles'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='newToolsLink' namespace='/xpedx/services' action='XPEDXTools'>
+					<s:url id='newToolsLink' namespace='/services' action='MyTools'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>												
 					<s:if test='#selectedHeaderTab=="ServicesTab" || #selectedHeaderTab=="ToolsTab" '>
@@ -2773,7 +2773,7 @@ function msgWait(){
 								<s:text name="Printable Catalogs"></s:text>
 							</s:a>
 						</li>
-						<s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
+						<s:url id='toolsLink' namespace='/tools' action='MyTools'>
 							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
 						<s:set name='storeFrontId' value='wCContext.storefrontId'/>

@@ -40,7 +40,7 @@ function restrictMaxLength(Object, maxLen){
 <s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 <s:form id="XPEDXMyItemsDetailsChangeShareListHL"
 	name="XPEDXMyItemsDetailsChangeShareListHL"
-	action="XPEDXMyItemsDetailsChangeShareList" namespace="/xpedx/myItems"
+	action="XPEDXMyItemsDetailsChangeShareList" namespace="/myItems"
 	method="post">
 
 <!-- 	<div class="error" id="errorMsgForMandatoryFieldsHL" style="display: none" /></div> -->

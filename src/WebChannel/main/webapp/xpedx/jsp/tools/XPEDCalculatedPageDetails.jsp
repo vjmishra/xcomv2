@@ -245,7 +245,7 @@ padding: 0px;
 				<br />
 				<br />
 				
-				<s:url id="viewCalculation" namespace="/xpedx/tools" action="xpedxViewImpCalculation">           			
+				<s:url id="viewCalculation" namespace="/tools" action="MyViewImpCalculation">           			
            			<s:param name="sheetSizeW" value="#shtSizeW"/>
            			<s:param name="sheetSizeH" value="#shtSizeH"/>
            			<s:param name="trimSizeW" value="#trmSizeW"/>

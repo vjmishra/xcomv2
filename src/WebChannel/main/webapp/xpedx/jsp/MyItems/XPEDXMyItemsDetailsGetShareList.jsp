@@ -168,7 +168,7 @@ $(document).ready(function() {
 				</s:iterator>
 				
 				<s:set name="billtosuffixtype" value='B' />
-				<s:url id="paginatedShipTo" action="XPEDXMyItemsDetailsGetShareList" namespace="/xpedx/myItems">
+				<s:url id="paginatedShipTo" action="XPEDXMyItemsDetailsGetShareList" namespace="/myItems">
 					<s:param name="pageNumber" value="'{0}'"/>
 					<s:param name="pageSetToken" value="%{pageSetToken}"/>
 					<s:param name="suffixtype" value="%{billtosuffixtype}"/>

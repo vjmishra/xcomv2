@@ -506,7 +506,7 @@
         //Submit the data via ajax
         
         //Init vars
-        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />
+        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/myItems" escapeAmp="false" />
         
         var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
         url = ReplaceAll(url,"&amp;",'&');

@@ -269,7 +269,7 @@ href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.f
 			      <!-- breadcrumb -->
 			     <div id="mid-col-mil"><br />
 			      
-			      <s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
+			      <s:url id='toolsLink' namespace='/tools' action='MyTools'>
 						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
 				  <s:url id='newArticleLink' namespace='/profile/user' action='XPEDXNewArticle'>

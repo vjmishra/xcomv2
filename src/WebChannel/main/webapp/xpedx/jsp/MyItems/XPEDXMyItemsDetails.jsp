@@ -574,7 +574,7 @@ function showSharedListForm(){
 						//Added for JIRA 3642
 						formItemIds.itemCount.value=itemCount; 
 						
-						formItemIds.action="/swc/xpedx/myItems/XPEDXMyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
+						formItemIds.action="/swc/myItems/XPEDXMyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
 						formItemIds.submit();
                         if(!isAdd2List && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent))
 
@@ -2366,10 +2366,10 @@ function showSharedListForm(){
 <s:a href="#addToCartDlg" id="addToCartFancybox" cssStyle="display: none;"></s:a>
 <s:a href="#Price_Grid" id="bracketPricing" cssStyle="display: none;"></s:a>
 <s:url id='availabilityURL' action='ajaxAvailabilityJson' namespace='/catalog' />
-<s:url id='checkAvailabilityURL' action='getItemAvailabilty' namespace="/xpedx/myItems" />
+<s:url id='checkAvailabilityURL' action='getItemAvailabilty' namespace="/myItems" />
 <input type="hidden" value="<s:property value='%{checkAvailabilityURL}'/>" id="checkAvailabilityURLHidden"/>
 <s:url id='addToCartURL' namespace='/order' action='addToCart' />
-<s:url id='addToCartURLId' namespace="/xpedx/myItems" action='addMyItemToCart' />
+<s:url id='addToCartURLId' namespace="/myItems" action='addMyItemToCart' />
 <s:hidden id='updatePandAURL' value='%{#addToCartURLId}' />
 <s:hidden id='currentCartInContextOHKVal' value='%{#currentCartInContextOHK}' />
 
@@ -2475,7 +2475,7 @@ function showSharedListForm(){
         <div class="container" style="min-height: 535px;">
             <!-- breadcrumb -->
 			<s:url action='home.action' namespace='/home' id='urlHome'
-				includeParams='none' /> <s:url id='urlMIL' namespace='/xpedx/myItems'
+				includeParams='none' /> <s:url id='urlMIL' namespace='/myItems'
 				action='MyItemsList.action' includeParams="get" escapeAmp="false">
 				<s:param name="filterByAccChk" value="%{#_action.getFilterByAccChk()}" />
 				<s:param name="filterByShipToChk" value="%{#_action.getFilterByShipToChk()}" />

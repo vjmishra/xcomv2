@@ -597,7 +597,7 @@ var isEstUser = <s:property value="#isEstUser"/>;
 	    //Submit the data via ajax
 	    
 	    //Init vars
-	    <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/xpedx/myItems" escapeAmp="false" />
+	    <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/myItems" escapeAmp="false" />
 
 		var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
 	    url = ReplaceAll(url,"&amp;",'&');
@@ -677,7 +677,7 @@ var isEstUser = <s:property value="#isEstUser"/>;
 
 		//Init vars
 	   
-	    <s:url id='getMyItemsList' includeParams="none" namespace="/xpedx/myItems" action='MyItemsList'/> 
+	    <s:url id='getMyItemsList' includeParams="none" namespace="/myItems" action='MyItemsList'/> 
 	    
 	    var url = '<s:property value="#getMyItemsList"/>'+'&ShareList=ShareList';
 	    url = ReplaceAll(url,"&amp;",'&');
@@ -2315,7 +2315,7 @@ function SubmitActionWithValidation()
 		 <!--</div>   end tabs -->
 	</s:if>
 	
-		<s:url id='addToItemListURLid' namespace='/xpedx/myItems'
+		<s:url id='addToItemListURLid' namespace='/myItems'
 			action='XPEDXMyItemsDetailsCreate' /> <s:a id='addToItemListURL'
 			href='%{#addToItemListURLid}' /> <s:hidden id="itemId" name="itemId"
 			value="%{#itemID}" /> <s:hidden id="itemType" name="itemType"

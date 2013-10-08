@@ -211,7 +211,7 @@
 				id="XPEDXMyItemsDetailsChangeShareList"
 				name="XPEDXMyItemsDetailsChangeShareList"
 				action="XPEDXMyItemsDetailsChangeShareList"
-				namespace="/xpedx/myItems" method="post">
+				namespace="/myItems" method="post">
 
 				<p><strong>List Name:</strong>&nbsp;&nbsp;
 				<input type="text" maxlength="255"

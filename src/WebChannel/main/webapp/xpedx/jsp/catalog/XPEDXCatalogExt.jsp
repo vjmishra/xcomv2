@@ -117,7 +117,7 @@
 <%-- <s:set name="orderMultipleMap" value ='%{#_action.getOrderMultipleMap()}'/> <!-- Code added to fix XNGTP 2964 --> --%>
 
 <%-- <s:set name="plLineMap" value ='%{#_action.getPLLineMap()}'/> --%>
-<s:url id='addToCartURLId' namespace="/xpedx/myItems" action='addMyItemToCart' />
+<s:url id='addToCartURLId' namespace="/myItems" action='addMyItemToCart' />
 <s:hidden id='addItemToCartURL' value='%{#addToCartURLId}' />
 <s:set name='currentCartInContextOHK' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("OrderHeaderInContext")'/>
 <%--
@@ -456,7 +456,7 @@
 		id="XPEDXMyItemsDetailsChangeShareList" 
 		name="XPEDXMyItemsDetailsChangeShareList"  
 		action="XPEDXMyItemsDetailsChangeShareList" 
-		namespace="/xpedx/myItems" method="post"
+		namespace="/myItems" method="post"
 	>
 	
 

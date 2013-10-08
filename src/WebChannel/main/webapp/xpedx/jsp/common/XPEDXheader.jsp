@@ -336,7 +336,7 @@
 	<s:if test='#isGuestUser != true'>
 
 		<!-- CODE_START -  Temp placeholder for 'My List' -PN -->
-		<s:url id='myListsLink' namespace='/xpedx/myItems' action='MyItemsList.action'>
+		<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 			<s:param name="filterByAllChk" value="%{true}" />
 			<s:param name="filterByMyListChk" value="%{true}" />
 		</s:url>
@@ -347,8 +347,8 @@
 		</li>
 		<!-- CODE_END -  Temp placeholder for 'My List' -PN -->
 
-		<s:url id='emailSampleLink' namespace='/xpedx/services'
-			action='XPEDXServicesHome'>
+		<s:url id='emailSampleLink' namespace='/services'
+			action='MyServicesHome'>
 		</s:url>
 		<li><s:a href='%{emailSampleLink}'>Services</s:a></li>
 	</s:if>

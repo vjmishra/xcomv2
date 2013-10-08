@@ -1,6 +1,6 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-  <package name="xpedx.myItems" namespace='/xpedx/myItems' extends="wcDefault">
+  <package name="xpedx.myItems" namespace='/myItems' extends="wcDefault">
 	
 	<action name="MyItemsList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListAction">
 		<param name="mashups">XPEDXMyItemsList</param>
@@ -20,7 +20,7 @@
 		<result name="export">/xpedx/jsp/MyItems/XPEDXCopyListSuccess.jsp</result>
 		<result name="noListKey" type="redirectAction">
 			<param name="actionName">MyItemsList</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 		</result>
 	</action>
 
@@ -30,7 +30,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListCreate_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsList</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 		</result>
 	</action>
 	
@@ -40,7 +40,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListDelete_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsList</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="filterBySelectedListChk">${filterBySelectedListChk}</param>
 			<param name="filterByMyListChk">${filterByMyListChk}</param>
 			<param name="customerIds">${customerIds}</param>
@@ -55,7 +55,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListChange_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsList</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 		</result>
 	</action>
 <!-- START Details-->
@@ -65,7 +65,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsCreate_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -73,7 +73,7 @@
 		</result>
 		<result name="error" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -88,7 +88,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsDelete_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -103,7 +103,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChange_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -112,7 +112,7 @@
 		</result>
 		<result name="error" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -127,7 +127,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsAddFromCatalog_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">XPEDXMyItemsDetailsCreate</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -147,7 +147,7 @@
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">XPEDXMyItemsDetailsImportCreate</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -155,7 +155,7 @@
 		</result>
 		<result name="failure" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -176,7 +176,7 @@
 		
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -184,7 +184,7 @@
 		</result>
 		<result name="failure" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
@@ -274,7 +274,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsQuickAdd_binding.xml</param>
 		<result name="success" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
-			<param name="namespace">/xpedx/myItems</param>
+			<param name="namespace">/myItems</param>
 			<param name="listKey">${listKey}</param>
 			<param name="listDesc">${listDesc}</param>
 			<param name="listName">${listName}</param>

@@ -1094,7 +1094,7 @@ $(document).ready(function(){
 		id="XPEDXMyItemsDetailsChangeShareList" 
 		name="XPEDXMyItemsDetailsChangeShareList"  
 		action="XPEDXMyItemsDetailsChangeShareList" 
-		namespace="/xpedx/myItems" method="post">
+		namespace="/myItems" method="post">
 	
 		<p><strong>List Name:</strong>&nbsp;&nbsp;<input type="text" name="listName" value="" maxlength="255"/></p>
 		<p><strong>Description:</strong>&nbsp;&nbsp;<input type="text" name="listDesc" value="" maxlength="255"/></p>

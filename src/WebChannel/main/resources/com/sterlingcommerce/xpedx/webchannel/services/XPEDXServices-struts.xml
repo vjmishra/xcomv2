@@ -1,12 +1,12 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-  <package name="xpedx.services" namespace='/xpedx/services' extends="wcDefault">
+  <package name="xpedx.services" namespace='/services' extends="wcDefault">
 	
-	<action name="XPEDXServicesHome" class="com.sterlingcommerce.webchannel.core.WCAction">
+	<action name="MyServicesHome" class="com.sterlingcommerce.webchannel.core.WCAction">
 		<result name="success">/xpedx/jsp/services/XPEDXServicesHome.jsp</result>
 	</action>
 	
-	<action name="XPEDXEstimatingFiles" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXEstimatingFilesAction">
+	<action name="MyEstimatingFiles" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXEstimatingFilesAction">
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXServices_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXEstimatingFiles.jsp</result>
 	</action>
@@ -24,11 +24,11 @@
 		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>				
 	</action>
 		
-	<action name="XPEDXTools" class="com.sterlingcommerce.webchannel.core.WCAction">
+	<action name="MyTools" class="com.sterlingcommerce.webchannel.core.WCAction">
 		<result name="success">/xpedx/jsp/tools/XPEDXTools.jsp</result>
 	</action>
 	
-	<action name="XPEDXServices" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXServicesAction">
+	<action name="MyServices" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXServicesAction">
 		<param name="mashups">getSampleService</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXServices_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXSampleService.jsp</result>
