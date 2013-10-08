@@ -343,7 +343,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}
 		
-		isStockedItem = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION).toString().equalsIgnoreCase("true");
+		Object sessionStockedCheckbox = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
+		if (sessionStockedCheckbox != null) {
+			isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
+		}
 	}
 
 	/**
