@@ -218,7 +218,7 @@
 						</s:if>
 						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 						<tr style="background-color: #006a3a;font-weight: bold">
-						<td align = "left">&nbsp;<font color="white">Benefits of Saalfeldredistribution.com</font></td>
+						<td align = "left">&nbsp;<font color="white">Benefits of saalfeldredistribution.com</font></td>
 						</s:elseif>
 						<td align = "center"><font color="white">Unregistered User</font></td>
 						<td align = "center"><font color="white">Registered User</font></td>
