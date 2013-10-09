@@ -204,7 +204,7 @@
     		</s:if>
 			<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 				<td><div class="float-left"><img border="0" alt="" width="505" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images//ster/register_main_saalfeld.jpg"></div></td>
-    		<td><div class="float-left"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="271" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_new_to_s.jpg"></a></div></td>
+    		<td><div class="float-left"><a href="http://saalfeldredistribution.com/ContactUs.aspx" target="_blank"><img border="0" alt="" width="271" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_new_to_s.jpg"></a></div></td>
 			</s:elseif>
 		</tr>
 		<tr>
@@ -263,7 +263,7 @@
     				<div class="float-left"><a id="selectVideoToPlay" href="#viewVideoDlg"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_video_thumb.jpg"></a></div></td>
     			</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-					<div class="float-left"><a id="selectVideoToPlay" href="#viewVideoDlg"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_video_thumb_saalfeld.jpg"></a></div></td>
+					<div class="float-left"><a id="selectVideoToPlay" href="#viewVideoDlg"><img border="0" title="" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_video_thumb_saalfeld.jpg"></a></div></td>
 				</s:elseif>
 		</tr> 
 	    </tbody>
@@ -271,7 +271,13 @@
 </div>
 <div style="display: none;">
 	<div id="viewVideoDlg" class="float-left">
-		<iframe title="vimeo video " width="700" height="394" scrolling="no" src="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" frameborder="0" allowfullscreen></iframe>
+	   <s:set name='storefrontId' value="wCContext.storefrontId" />
+		<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>  
+			<iframe title="vimeo video " width="700" height="394" scrolling="no" src="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" frameborder="0" allowfullscreen></iframe>
+		</s:if>
+		<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+					<iframe title="vimeo video " width="700" height="394" scrolling="no" src="http://saalfeldredistribution.com/ContactUs.aspx" frameborder="0" allowfullscreen></iframe>
+		</s:elseif>
 	</div>
 </div>
 <s:form name="registrationForm" namespace='/profile/user'
