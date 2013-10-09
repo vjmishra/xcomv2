@@ -598,9 +598,20 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		// Scroll Panel End
 	}
 	
-
+//EB-2690 As a call center user my name could change so I want admin users to have the option to update my name so that the correct name displays on changes made by me
 
 	private void createMiscPnl() {
+		refreshUserData = new Button(pnlRoot, 0);
+		GridData btnSearchlayoutData = new GridData();
+		btnSearchlayoutData.horizontalAlignment = 0;
+		btnSearchlayoutData.verticalAlignment = 2;
+		btnSearchlayoutData.heightHint = 27;
+		btnSearchlayoutData.widthHint = 100;
+		refreshUserData.setLayoutData(btnSearchlayoutData);
+		refreshUserData.setText("Refresh User Data");
+		//refreshUserData.setLayoutData(gridData16);
+		refreshUserData.setData("name", "refreshUserData");
+		
 		GridData gridData16 = new GridData();
 		gridData16.horizontalAlignment = 3;
 		gridData16.grabExcessHorizontalSpace = true;
@@ -608,6 +619,7 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		gridData16.horizontalIndent = 0;
 		gridData16.verticalAlignment = 2;
 
+		
 		btnUpdate = new Button(pnlRoot, 0);
 		btnUpdate.setText("Create");
 		btnUpdate.setLayoutData(gridData16);
