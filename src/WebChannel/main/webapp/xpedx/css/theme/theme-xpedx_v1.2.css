@@ -6497,7 +6497,7 @@ div.last-modified-div {
 #second-navigation {
 	background: url(../../images/theme/theme-1/navigation/unselected.png)
 		repeat-x;
-	width: 100%;
+	/*width: 100%;*/
 }
 
 #second-navigation #main-nav li.hover,#second-navigation#main-nav li:hover
