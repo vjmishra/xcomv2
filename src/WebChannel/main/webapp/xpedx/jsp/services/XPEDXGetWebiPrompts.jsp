@@ -703,7 +703,7 @@ $(function() {
 	           		  		<label>&nbsp;<input type="radio" class="margin-right" name="viewReportAs" value="pdf" checked="checked"/>PDF </label>  
                       		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="xl" />Excel </label>
                       		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="html" />HTML </label>
-	           		  	
+                      		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="opendocument" />Open Document </label>	           		  	
 	           		  	</td>
 	           		  </tr>  
 	           		  <tr> <td>&nbsp;</td></tr>        

@@ -3,6 +3,8 @@
 <%@ taglib prefix="swc" uri="swc"%>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
 <%@ page import="com.reports.service.ReportData"%>
+<%@ page import="com.reports.service.webi.ReportsUtil"%>
+<%@ page import="java.util.HashMap"%>
 
 
 <s:set name='_action' value='[0]' />
@@ -19,6 +21,17 @@ if (request.getParameter("viewReportAs").equals("pdf")) {
 	ReportData reportData = (ReportData)request.getSession().getAttribute("ReportData");
 	response.setContentType("application/pdf");
 	response.getOutputStream().write(reportData.getBinaryReport());
+}
+
+if (request.getParameter("viewReportAs").equals("opendocument")) {
+	
+	String rptId = "219528";
+	HashMap<String, String> paramVals = new HashMap<String, String>();
+	paramVals.put("hdn_xcomMasterCustomer:","0000578605");
+	
+	ReportsUtil ru = new ReportsUtil();
+	String finalURL = ru.logon(rptId, paramVals);
+	response.sendRedirect(finalURL);
 }
 
 %>

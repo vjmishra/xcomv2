@@ -8,6 +8,7 @@ import java.util.*;
 import com.reports.service.Report;
 import com.reports.service.ReportList;
 import com.reports.service.ReportService;
+import com.reports.service.webi.ReportUtils;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -19,7 +20,9 @@ import javax.naming.InitialContext;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import org.apache.http.HttpHost;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -30,6 +33,7 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 	List<Report> standardReportList;
 	List<Report> validCustomReportList;
 	List<Report> dataExchangeReportList;
+	Map<String,List<Report>> mapOfReports;
 	
 	public String getCustomerNo(String customerID) {
 		String[] custDetails = customerID.split("-");
@@ -37,12 +41,55 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 		return suffix;
 	}
 	
+	
+	
 	public String execute() {
-		XPEDXReportService reportService = new XPEDXReportService();
+		String wcPropertiesFile = "xpedx_reporting.properties";
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
+		
+		/*XPEDXReportService reportService = new XPEDXReportService();
 		ReportService intReportService = reportService.getReportService();
 		ReportList reportList = intReportService.getReports();
 		customReportList = reportList.getCustReportList();
-		standardReportList = reportList.getStdReportList();
+		standardReportList = reportList.getStdReportList();*/ 
+		
+		
+		ReportUtils ru = new ReportUtils();
+
+		// Retrieve the logon information
+		String username = YFSSystem.getProperty("username");
+		String password = YFSSystem.getProperty("password");
+		String cmsName = YFSSystem.getProperty("CMS");
+		String authType = YFSSystem.getProperty("authentication");
+		String standardFolder = YFSSystem.getProperty("standard_folder_id");
+		String customFolder = YFSSystem.getProperty("custom_folder_id");
+
+		HttpHost _target = ru.getHttpHost(cmsName);
+
+		ArrayList<String> logonTokens = null;
+		try {
+			logonTokens = ru.logonCMS(username, password, authType, _target);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Boolean isOK = true;
+		if (logonTokens.size() < 2) {
+			System.out.println("No Tokens Found");
+			isOK = false;
+		}
+		if (isOK) {			
+			try {
+				standardReportList = ru.getAllDocuments(_target, logonTokens.get(0), standardFolder);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				customReportList = ru.getAllDocuments(_target, logonTokens.get(0), customFolder);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		try {
 			getConnection();
 		} catch (SQLException e) {			

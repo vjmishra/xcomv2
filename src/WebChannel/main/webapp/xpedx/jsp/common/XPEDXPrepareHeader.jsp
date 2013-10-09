@@ -834,7 +834,7 @@ var selectedShipCustomer = null;
 	action='xpedxSearchAssignedCustomersForReporting' />	
 <s:url id='shipToSearchForUserProfile' namespace='/common'
 	action='xpedxSearchAssignedCustomersForUserProfile' />
-<s:url id='showLocationsDivForReportingSearch' namespace='/xpedx/services'
+<s:url id='showLocationsDivForReportingSearch' namespace='/services'
 	action='xpedxGetAssignedCustomersForReporting' />
 			
 <s:url id='xpedxManageOtherProfilesURL' namespace='/profile/user'
@@ -2729,7 +2729,7 @@ function msgWait(){
 					<s:url id='estimatingFilesLink' namespace='/services' action='MyEstimatingFiles'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
+					<s:url id='reportsLink' namespace='/services' action='XPEDXReports'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:url id='newToolsLink' namespace='/services' action='MyTools'>

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.http.HttpHost;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
@@ -16,12 +17,14 @@ import com.reports.service.Report;
 import com.reports.service.ReportList;
 import com.reports.service.ReportPrompt;
 import com.reports.service.ReportService;
+import com.reports.service.webi.ReportUtils;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
+import com.yantra.yfs.core.YFSSystem;
 
 @SuppressWarnings("serial")
 public class XPEDXGetWebiPromptsAction extends WCMashupAction {
@@ -151,6 +154,41 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 		reportEngine = reportEngines.getService(ReportEngines.ReportEngineType.WI_REPORT_ENGINE);
 		DocumentInstance document = reportEngine.openDocument(Integer.parseInt(getId()));
 		Prompts prompts = document.getPrompts(); */
+		
+		
+		ReportUtils ru = new ReportUtils();
+
+		// Retrieve the logon information
+		String username = YFSSystem.getProperty("username");
+		String password = YFSSystem.getProperty("password");
+		String cmsName = YFSSystem.getProperty("CMS");
+		String authType = YFSSystem.getProperty("authentication");
+		String standardFolder = YFSSystem.getProperty("standard_folder_id");
+		String customFolder = YFSSystem.getProperty("custom_folder_id");
+
+		HttpHost _target = ru.getHttpHost(cmsName);
+
+		ArrayList<String> logonTokens = null;
+		try {
+			logonTokens = ru.logonCMS(username, password, authType, _target);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Boolean isOK = true;
+		if (logonTokens.size() < 2) {
+			System.out.println("No Tokens Found");
+			isOK = false;
+		}
+		if (isOK) {
+			try {
+				ru.getPromptsAsString(getId(), _target, logonTokens.get(0));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 		
 		XPEDXReportService reportService = new XPEDXReportService();
 		ReportService intReportService = reportService.getReportService();
