@@ -432,8 +432,51 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 			Map<String,String> getUOMListMap = getUOMList(env);
 
-			ArrayList<Element> orderLinesElem= SCXmlUtil.getElements(orderElement, "OrderLines/OrderLine");
-			adduomDescription(orderLinesElem,getUOMListMap);
+			ArrayList<Element> orderLineElementList= SCXmlUtil.getElements(orderElement, "OrderLines/OrderLine");
+			if(orderLineElementList != null)
+			{
+				for(int i=0;i<orderLineElementList.size();i++)
+				{
+					Element orderLineElement=orderLineElementList.get(i);
+					if(orderLineElement!=null)
+					{
+						if("1300".equals(holdStatus) && ("Cancelled".equals(orderLineElement.getAttribute("Status")) || "Canceled".equals(orderLineElement.getAttribute("Status"))))
+						{
+							Element orderLinesElement=SCXmlUtil.getChildElement(orderElement, "OrderLines");
+							if(orderLinesElement!=null)
+							{
+								orderLinesElement.removeChild(orderLineElement);
+								continue;
+							}
+						}
+						
+						Element orderLineTranQty=(Element)orderLineElement.getElementsByTagName("OrderLineTranQuantity").item(0);
+						if(orderLineTranQty !=null )
+						{
+							String checkUOMDescription = getUOMListMap.get(orderLineTranQty.getAttribute("TransactionalUOM"));
+							if(checkUOMDescription!=null && !checkUOMDescription.equals("")){
+								orderLineTranQty.setAttribute("UOMDescription", getUOMListMap.get(orderLineTranQty.getAttribute("TransactionalUOM")));
+							}else{
+								orderLineTranQty.setAttribute("UOMDescription", orderLineTranQty.getAttribute("TransactionalUOM"));
+	
+							}
+						}
+						
+						Element orderLineExtnElem=(Element)orderLineElement.getElementsByTagName("Extn").item(0);
+						if(orderLineExtnElem !=null )
+						{
+							String checkUOMPriceDesc = getUOMListMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM"));
+							if(checkUOMPriceDesc!=null && !checkUOMPriceDesc.equals("")){
+								orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", getUOMListMap.get(orderLineExtnElem.getAttribute("ExtnPricingUOM")));
+	
+							}else{
+								orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", orderLineExtnElem.getAttribute("ExtnPricingUOM"));
+	
+							}	
+						}
+					}
+				}
+			}
 			String baseURL = null;
 			String toApproveOrderURL =null;
 			String approvedOrderURL = null;
