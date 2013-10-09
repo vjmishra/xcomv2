@@ -2609,6 +2609,11 @@ public class XPXUtils implements YIFCustomApi {
 				String imageName = getLogoImageName(env,storeFrontId);
 				String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 				
+				if ("Saalfeld".equals(storeFrontId)) {
+					// replace host name, since we don't have a brand-specific setting in customer overrides props
+					imagesRootFolder = imagesRootFolder.replace("xpedx.com", "saalfeldredistribution.com");
+				}
+				
 				/**
 				 * In case, value form the property file is not retrieve by any
 				 * chance or there is no entry in the customer_overrides.properties,
@@ -2640,6 +2645,10 @@ public class XPXUtils implements YIFCustomApi {
 			
 			String portno = YFSSystem.getProperty("portnumber");
 			String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
+			
+			if ("Saalfeld".equals(storeFrontId)) {
+				resetPasswordUrl = resetPasswordUrl.replace("xpedx.com", "saalfeldredistribution.com");
+			}
 			
 			if(!YFCUtils.isVoid(resetPasswordUrl)){
 				resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
