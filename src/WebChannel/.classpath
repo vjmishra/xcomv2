@@ -115,7 +115,8 @@
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/flash.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/freemarker-2.3.8.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/freessl201.jar"/>
-	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/httpcore-4.0.1.jar"/>
+	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/httpclient-4.2.5.jar"/>
+	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/httpcore-4.2.4.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/i18n4j.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/icu4j.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/imagebuilder-1.0.jar"/>
@@ -133,6 +134,7 @@
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/jsf-api.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/jsf-impl.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/json-lib-2.2.2-jdk13.jar"/>
+	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/jsonplugin-0.26.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/jstl-impl-1.2.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/jstl.jar"/>
@@ -254,6 +256,6 @@
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/ypmbe.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/yscpbe.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/yscwbe.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/smcfs"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/smcfs"/>		
 	<classpathentry kind="output" path="output"/>
 </classpath>
