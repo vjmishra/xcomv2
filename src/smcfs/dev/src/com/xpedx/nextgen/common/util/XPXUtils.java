@@ -2646,6 +2646,10 @@ public class XPXUtils implements YIFCustomApi {
 			String portno = YFSSystem.getProperty("portnumber");
 			String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
 			
+			if ("Saalfeld".equals(storeFrontId)) {
+				resetPasswordUrl = resetPasswordUrl.replace("xpedx.com", "saalfeldredistribution.com");
+			}
+			
 			if(!YFCUtils.isVoid(resetPasswordUrl)){
 				resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
 				Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
