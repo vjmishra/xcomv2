@@ -1475,7 +1475,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(itemQty.trim().equals("")) {
 					tmpQtyTxtBox=itemQty.trim();
 					itemQty = orderMultiple;
-					itemUom = itemBaseUOM.get(i);
+					itemUom =  enteredUOMs.get(i);//itemBaseUOM.get(i); added for EB 2034
 				}
 				
 				uoms = (Map) itemCon.get(itemId);
