@@ -12,6 +12,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.interceptor.ServletResponseAware;
 
+import org.apache.http.HttpHost;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -26,6 +27,7 @@ import com.reports.service.ReportList;
 import com.reports.service.ReportPrompt;
 import com.reports.service.ReportService;
 import com.reports.service.ReportTypeEnum;
+import com.reports.service.webi.ReportUtils;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.webchannel.core.IWCContext;
@@ -51,6 +53,15 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 	private ArrayList<String> shipToList = new ArrayList<String>();
 	List<Report> allReportList;
 	private String rndrReport;
+	private String finalURL;
+
+	public String getFinalURL() {
+		return finalURL;
+	}
+
+	public void setFinalURL(String finalURL) {
+		this.finalURL = finalURL;
+	}
 
 	public void setServletResponse(HttpServletResponse response) {
 		this.response = response;
@@ -219,7 +230,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 		 * document.refresh(); Prompts prompts = document.getPrompts();
 		 */
 
-		XPEDXReportService reportService = new XPEDXReportService();
+		/*XPEDXReportService reportService = new XPEDXReportService();
 		ReportService intReportService = reportService.getReportService();
 		ReportList reportList = intReportService.getReports();
 		allReportList = reportList.getCustReportList();
@@ -233,7 +244,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				allPrompts.addAll(report.getOptionalPrompts());
 				break;
 			}
-		}
+		}*/
 
 		// Ony when All is selected
 		String userId = wcContext.getLoggedInUserId();
@@ -287,14 +298,43 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			}
 
 		}
+		
+		Map<String, String> promptData = new HashMap<String, String>();
+		
+		ReportUtils ru = new ReportUtils();
+		List<String> promptsString = null;
 
-		List<ReportPromptNameValue> reportPromptNameValueList = new ArrayList<ReportPromptNameValue>();
+		HttpHost _target = ru.getHttpHost(ReportUtils.getCMSLogonDetails().get(
+				"CMS"));
 
-		for (int i = 0; i < allPrompts.size(); i++) {
+		ArrayList<String> logonTokens = null;
+		try {
+			logonTokens = ru.logonCMS(
+					ReportUtils.getCMSLogonDetails().get("username"),
+					ReportUtils.getCMSLogonDetails().get("password"),
+					ReportUtils.getCMSLogonDetails().get("authentication"),
+					_target);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Boolean isOK = true;
+		if (logonTokens.size() < 2) {
+			System.out.println("No Tokens Found");
+			isOK = false;
+		}
+		if (isOK) {			
+			try {
+				promptsString = ru.getPromptsAsString(getId(), _target,
+						logonTokens.get(0));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 
-			ReportPromptNameValue reportPromptNameValue = new ReportPromptNameValue();
-			ReportPrompt reportPrompt = allPrompts.get(i);
-			String promptName = reportPrompt.getPromptName();
+		for (int i = 0; i < promptsString.size(); i++) {
+			String promptName = promptsString.get(i);
 
 			String[] paramStringArray = (String[]) map.get(promptName);
 
@@ -328,22 +368,23 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 					String temp[] = new String[1];
 					temp[0] = getCustomerNo(strSapId[0]);
 					LOG.debug("****For Prompt " + promptName
-							+ ", Value Passed Is= " + temp[0]);
-					reportPromptNameValue.setPromptName(promptName);
-					reportPromptNameValue.setPromptValue(temp);										
-					reportPromptNameValueList.add(reportPromptNameValue);
+							+ ", Value Passed Is= " + temp[0]);					
+					promptData.put(promptName, temp[0]);
 
 				} else if (strLocType[0].equalsIgnoreCase("All")) {
 					String array[] = (String[]) accountList
 							.toArray(new String[accountList.size()]);
+					String arrayCSF = "";
 					for (int m = 0; m < array.length; m++) {
+						if (m == array.length - 1 )
+							arrayCSF = arrayCSF + array[m];
+						else 
+							arrayCSF = arrayCSF + array[m] + ","; 
 						LOG.debug("**** When All Authorized, For Prompt "
 								+ promptName + " Value Passed Is= " + array[m]);
 					}
 
-					reportPromptNameValue.setPromptName(promptName);
-					reportPromptNameValue.setPromptValue(array);									
-					reportPromptNameValueList.add(reportPromptNameValue);
+					promptData.put(promptName, arrayCSF);
 
 				} else {
 					LOG.debug("Entering null values for " + promptName);
@@ -362,20 +403,21 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 							+ getShipToSuffix(strSapId[0]);
 					LOG.debug("****For Prompt " + promptName
 							+ ", Value Passed Is= " + temp[0]);
-					reportPromptNameValue.setPromptName(promptName);
-					reportPromptNameValue.setPromptValue(temp);										
-					reportPromptNameValueList.add(reportPromptNameValue);
+					promptData.put(promptName, temp[0]);
 
 				} else if (strLocType[0].equalsIgnoreCase("All")) {
 					String array[] = (String[]) shipToList
 							.toArray(new String[shipToList.size()]);
+					String arrayCSF = "";
 					for (int m = 0; m < array.length; m++) {
+						if (m == array.length - 1 )
+							arrayCSF = arrayCSF + array[m];
+						else 
+							arrayCSF = arrayCSF + array[m] + ",";
 						LOG.debug("**** When All Authorized, For Prompt "
 								+ promptName + " Value Passed Is= " + array[m]);
 					}
-					reportPromptNameValue.setPromptName(promptName);
-					reportPromptNameValue.setPromptValue(array);										
-					reportPromptNameValueList.add(reportPromptNameValue);
+					promptData.put(promptName, arrayCSF);
 
 				} else {
 					LOG.debug("Entering null values for " + promptName);
@@ -397,21 +439,22 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 																// getShipToSuffix(strSapId[0]);
 					LOG.debug("****For Prompt " + promptName
 							+ ", Value Passed Is= " + temp[0]);
-					reportPromptNameValue.setPromptName(promptName);
-					reportPromptNameValue.setPromptValue(temp);										
-					reportPromptNameValueList.add(reportPromptNameValue);
+					promptData.put(promptName, temp[0]);
 
 				} else if (strLocType[0].equalsIgnoreCase("All")) {
 					String array[] = (String[]) billToList
 							.toArray(new String[billToList.size()]);
+					String arrayCSF = ""; 
 					for (int m = 0; m < array.length; m++) {
+						if (m == array.length - 1 )
+							arrayCSF = arrayCSF + array[m];
+						else 
+							arrayCSF = arrayCSF + array[m] + ",";
 						LOG.debug("**** When All Authorized, For Prompt "
 								+ promptName + " Value Passed Is= " + array[m]);
 					}
 
-					reportPromptNameValue.setPromptName(promptName);
-					reportPromptNameValue.setPromptValue(array);										
-					reportPromptNameValueList.add(reportPromptNameValue);
+					promptData.put(promptName, arrayCSF);
 
 				} else {
 					LOG.debug("Entering null values for " + promptName);
@@ -426,7 +469,6 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 						LOG.debug("****For Prompt " + promptName
 								+ ", Value Passed Is= " + paramStringArray[m]);
 					}
-					reportPromptNameValue.setPromptName(promptName);
 					
 					if ("caln".equals(prefix)) {
 						String dateValue = paramStringArray[0];
@@ -435,8 +477,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 					}
 					
 					
-					reportPromptNameValue.setPromptValue(paramStringArray);															
-					reportPromptNameValueList.add(reportPromptNameValue);
+					promptData.put(promptName, paramStringArray[0]);
 				} else {
 					if (!prefix.equalsIgnoreCase("ddls") && suffix != null) {
 						LOG.debug("Entering null values for " + promptName);
@@ -456,13 +497,38 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			}
 
 		} else {
+			
+			String params = "";
+			String openDocURL = "";
+			try {
+				openDocURL = ru.getOpenDoc(getId(), _target, logonTokens.get(0));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			if (!("").equals(openDocURL)) {
+				try {
+					params = ru.getParamString(getId(), _target, logonTokens.get(0), promptData);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+				setRndrReport("true");
+				
+				String encodedToken = logonTokens.get(1);
+				
+				finalURL= openDocURL + params + "&X-SAP-LogonToken=" + encodedToken;
+				
+			}
+			
 			// Set the prompts and rerun the report
 
-			LOG.debug("Setting report prompts ************************************");
+			//LOG.debug("Setting report prompts ************************************");
 			// document.setPrompts();
 
 			// Set the token in case you rerun with new prompts
-			ReportCriteria reportCriteria = new ReportCriteria();
+			/*ReportCriteria reportCriteria = new ReportCriteria();
 
 			reportCriteria.setReportId(Integer.parseInt(getId()));
 			reportCriteria.setReportPromptNameValue(reportPromptNameValueList);
@@ -479,12 +545,11 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				reportCriteria.setReportType(ReportTypeEnum.HTML);
 			}
 
-			reportData = intReportService.executeReport(reportCriteria);
+			//reportData = intReportService.executeReport(reportCriteria);
 
-			request.getSession().setAttribute("ReportData", reportData);
-			setRndrReport("true");
+			request.getSession().setAttribute("ReportData", reportData);*/			
 
-			ServletOutputStream outs = null;
+			/*ServletOutputStream outs = null;
 
 			if (reportData == null) {
 				System.out.println("========== report data is null =========");
@@ -506,7 +571,8 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 					}
 					return SUCCESS;
 				} 
-			}
+			}*/
+						
 		}
 
 		return SUCCESS;

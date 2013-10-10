@@ -56,19 +56,14 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 		
 		ReportUtils ru = new ReportUtils();
 
-		// Retrieve the logon information
-		String username = YFSSystem.getProperty("username");
-		String password = YFSSystem.getProperty("password");
-		String cmsName = YFSSystem.getProperty("CMS");
-		String authType = YFSSystem.getProperty("authentication");
-		String standardFolder = YFSSystem.getProperty("standard_folder_id");
-		String customFolder = YFSSystem.getProperty("custom_folder_id");
-
-		HttpHost _target = ru.getHttpHost(cmsName);
+		HttpHost _target = ru.getHttpHost(ReportUtils.getCMSLogonDetails().get("CMS"));
 
 		ArrayList<String> logonTokens = null;
 		try {
-			logonTokens = ru.logonCMS(username, password, authType, _target);
+			logonTokens = ru.logonCMS(
+					ReportUtils.getCMSLogonDetails().get("username"),
+					ReportUtils.getCMSLogonDetails().get("password"),
+					ReportUtils.getCMSLogonDetails().get("authentication"), _target);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,12 +74,12 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 		}
 		if (isOK) {			
 			try {
-				standardReportList = ru.getAllDocuments(_target, logonTokens.get(0), standardFolder);
+				standardReportList = ru.getAllDocuments(_target, logonTokens.get(0), ReportUtils.getCMSLogonDetails().get("standard_folder_id"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
-				customReportList = ru.getAllDocuments(_target, logonTokens.get(0), customFolder);
+				customReportList = ru.getAllDocuments(_target, logonTokens.get(0), ReportUtils.getCMSLogonDetails().get("custom_folder_id"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

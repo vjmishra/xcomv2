@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -21,10 +22,29 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.reports.service.Report;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfs.core.YFSSystem;
 
 public class ReportUtils {
 
 	String msgStr = "";
+	
+	public static Map<String, String> getCMSLogonDetails() {
+		Map<String, String> logonMap = new HashMap<String, String>();
+		
+		String wcPropertiesFile = "xpedx_reporting.properties";
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
+		// Retrieve the logon information
+		logonMap.put("username", YFSSystem.getProperty("username"));
+		logonMap.put("password", YFSSystem.getProperty("password"));
+		logonMap.put("CMS", YFSSystem.getProperty("CMS"));
+		logonMap.put("authentication", YFSSystem.getProperty("authentication"));
+		logonMap.put("standard_folder_id", YFSSystem.getProperty("standard_folder_id"));
+		logonMap.put("custom_folder_id", YFSSystem.getProperty("custom_folder_id"));
+		
+		return logonMap;
+		
+	}
 
 	public String loadInputStream(InputStream inputStream) throws Exception {
 		byte[] buffer = new byte[1024];
@@ -69,7 +89,7 @@ public class ReportUtils {
 		return reportList;
 	}
 
-	public String getParams(JSONObject obj, HashMap<String, String> paramVals)
+	public String getParams(JSONObject obj, Map<String, String> paramVals)
 			throws Exception {
 		String sResult = "";
 		JSONObject paramObj = (JSONObject) obj.get("parameters");
@@ -241,7 +261,7 @@ public class ReportUtils {
 	}
 
 	public String getParamString(String docID, HttpHost target, String token,
-			HashMap<String, String> paramVals) throws Exception {
+			Map<String, String> paramVals) throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
 		String sReturn = "";
 		try {
@@ -268,9 +288,9 @@ public class ReportUtils {
 		}
 		return sReturn;
 	}
-	
-	
-	public List<String> getPromptsAsString(String docID, HttpHost target, String token) throws Exception {
+
+	public List<String> getPromptsAsString(String docID, HttpHost target,
+			String token) throws Exception {
 		final DefaultHttpClient httpClient = new DefaultHttpClient();
 		List<String> promptList = null;
 		try {
@@ -297,26 +317,21 @@ public class ReportUtils {
 		}
 		return promptList;
 	}
-	
+
 	public List<String> getPrompts(JSONObject obj) {
 		List<String> promptList = new ArrayList<String>();
-		
+
 		JSONObject paramObj = (JSONObject) obj.get("parameters");
 		if (paramObj != null) {
 			JSONArray param = (JSONArray) paramObj.get("parameter");
 			Iterator<JSONObject> paramIterator = param.iterator();
 			while (paramIterator.hasNext()) {
 				paramObj = (JSONObject) paramIterator.next();
-				String paramName = (String) paramObj.get("name");
-				System.out.println("++++++++++ printing prompt Name ++++++++++++ " + paramName);
+				promptList.add((String) paramObj.get("name"));
 			}
-			
 		}
-		
 		return promptList;
 	}
-	
-	
 
 	public List<Report> getAllDocuments(HttpHost target, String token,
 			String folderId) throws Exception {

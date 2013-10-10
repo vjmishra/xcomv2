@@ -133,7 +133,7 @@ p{margin-bottom:8px;}
                <div class="x-input">
                  <div class=" padding-all2" style="padding: 10px 10px 10px 0;"> 
                  <s:iterator value="standardReportList" id='rId'>
-	<s:url id='myreporting' namespace='/xpedx/services'
+	<s:url id='myreporting' namespace='/services'
 		action='getprompts'>
 		<s:param name='id' value='#rId.id' />
 		<s:param name='kind' value='#rId.kind' />
@@ -152,7 +152,7 @@ p{margin-bottom:8px;}
 
 
 		<s:iterator value="validCustomReportList" id='cId'>
-	<s:url id='mycustomreporting' namespace='/xpedx/services'
+	<s:url id='mycustomreporting' namespace='/services'
 				action='getprompts'>
 				<s:param name='id' value='#cId.id' />
 				<s:param name='kind' value='#cId.kind' />

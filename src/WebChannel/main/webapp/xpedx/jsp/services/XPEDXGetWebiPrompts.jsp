@@ -586,7 +586,7 @@ $(function() {
 			</div>
           
           <s:form name="webiPromptForm" id="webiPromptForm" action="processinputprompt"
-                    namespace="/xpedx/services" method="post">
+                    namespace="/services" method="post">
                     <s:hidden name="id" value="%{#_action.getId()}"/>
                     <s:hidden name="cuid" value="%{#_action.getCuid()}"/>
                     <s:hidden name="kind" value="%{#_action.getKind()}"/>
@@ -603,7 +603,7 @@ $(function() {
             <s:url id='showLocationUrlId' action='xpedxShowLocationsForReporting' ></s:url>
 		    <s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
       			
-            <s:url id='showShipToLocationUrlId' action='xpedxGetAssignedCustomersForReporting' namespace='/xpedx/services' >
+            <s:url id='showShipToLocationUrlId' action='xpedxGetAssignedCustomersForReporting' namespace='/services' >
             </s:url>
 		    <s:hidden id="showShipToLocationUrl" name='showShipToLocationUrl' value='%{#showShipToLocationUrlId}' />
 		    <s:hidden id="selectedLocationType" name='selectedLocationType' value="All"/>
@@ -694,22 +694,10 @@ $(function() {
 	           		  </tr>  
 	           		  <tr> <td>&nbsp;</td></tr>         		  	        
 	           	 </s:if> 
-           </s:iterator>
-           
-         		  	<tr>
-	           		  	<td> View As : </td>
-	           		  	
-	           		  	<td valign="top">
-	           		  		<label>&nbsp;<input type="radio" class="margin-right" name="viewReportAs" value="pdf" checked="checked"/>PDF </label>  
-                      		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="xl" />Excel </label>
-                      		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="html" />HTML </label>
-                      		<label>&nbsp;<input type="radio"class="margin-right"  name="viewReportAs" value="opendocument" />Open Document </label>	           		  	
-	           		  	</td>
-	           		  </tr>  
-	           		  <tr> <td>&nbsp;</td></tr>        
+           </s:iterator>     
 		
           </table>
-          <s:url id='backLink' namespace='/xpedx/services' action='myreports'>
+          <s:url id='backLink' namespace='/services' action='myreports'>
 		</s:url>
 
 
@@ -774,9 +762,11 @@ $(function() {
 <script type="text/javascript">
 <s:if test="getRenderReport() == 'true'">
 
-var viewAs = '<s:property value="viewReportAs"/>'
+var strUrl = '<s:property value="finalURL"/>';
 
-var strUrl = "/swc/xpedx/jsp/services/XPEDXDisplayReport.jsp?viewReportAs="+viewAs;
+//var viewAs = '<s:property value="viewReportAs"/>'
+
+//var strUrl = "/swc/xpedx/jsp/services/XPEDXDisplayReport.jsp?viewReportAs="+viewAs;
 //strUrl += "&timeOutx=100&zoom=100&sNewDoc=false&sApplyFormat=&iDPIndex=&bValidateSQL=false&nAction=&advPrompts=yes&bCreateDefaultReportBody=false&defaultRepTitle=Report%2BTitle";
 //Added For Jira 2810
 //window.open(strUrl,'','toolbar=0');
