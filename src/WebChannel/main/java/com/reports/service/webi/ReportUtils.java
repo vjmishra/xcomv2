@@ -105,11 +105,17 @@ public class ReportUtils {
 			while (paramIterator.hasNext()) {
 				paramObj = (JSONObject) paramIterator.next();
 				paramName = (String) paramObj.get("name");
+				System.out.println("+++++++++ printing name ++++++++++++++ " + paramName);
 				optionalParam = (String) paramObj.get("@optional");
+				System.out.println("++++++++++ printing optional param ++++++++++ " + optionalParam);
 				answerObj = (JSONObject) paramObj.get("answer");
+				System.out.println("++++++++++++++++ printing answer ++++++++++++++ " + answerObj);
 				infoObj = (JSONObject) answerObj.get("info");
+				System.out.println("++++++++++++ printing info obj +++++++++++++ " + infoObj);
 				cardinality = (String) infoObj.get("@cardinality");
-				if (paramVals.containsKey(paramName)) {
+				System.out.println("++++++++++++ printing cardinality +++++++++++ " + cardinality);
+				
+				if (paramVals.containsKey(paramName)) {					
 					//
 					// set up the parameters that have a value
 					//

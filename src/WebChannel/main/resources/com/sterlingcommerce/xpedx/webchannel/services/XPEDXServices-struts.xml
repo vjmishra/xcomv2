@@ -115,7 +115,8 @@
 		     <param name="actionName">getinputprompt</param>
 		     <param name="id">${id}</param>
 		     <param name="name">${name}</param>
-		     <param name="renderReport">${rndrReport}</param>		       		         
+		     <param name="renderReport">${rndrReport}</param>
+		     <param name="finalURL">${finalURL}</param>		       		         
 		</result>
 	</action>
 	

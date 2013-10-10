@@ -501,7 +501,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			String params = "";
 			String openDocURL = "";
 			try {
-				openDocURL = ru.getOpenDoc(getId(), _target, logonTokens.get(0));
+				openDocURL = ru.getOpenDoc(getId(), _target, logonTokens.get(0));				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -510,15 +510,17 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			if (!("").equals(openDocURL)) {
 				try {
 					params = ru.getParamString(getId(), _target, logonTokens.get(0), promptData);
+					
+					System.out.println("++++++++++++ printing params +++++++++++++++ " + params);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
 				setRndrReport("true");
 				
-				String encodedToken = logonTokens.get(1);
+				String encodedToken = logonTokens.get(1);	
 				
-				finalURL= openDocURL + params + "&X-SAP-LogonToken=" + encodedToken;
+				finalURL= openDocURL + params + "&X-SAP-LogonToken=" + encodedToken;		
 				
 			}
 			

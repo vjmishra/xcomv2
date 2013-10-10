@@ -24,12 +24,21 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 	private String renderReport;
 	private String name;
 	private String viewReportAs;
+	private String finalURL;
 	private String storageToken;
 	private List<XPEDXShipToCustomer> assignedShipToList;
 	private XPEDXWebiPromptsBean webiPromptsBean[];
 	private List<String> errorNames = new ArrayList<String>();
 	private Boolean bool = false;
 	List<Report> allReportList;
+
+	public String getFinalURL() {
+		return finalURL;
+	}
+
+	public void setFinalURL(String finalURL) {
+		this.finalURL = finalURL;
+	}
 
 	public String getName() {
 		return name;
@@ -438,7 +447,7 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 			list.add(eleExtn.getAttribute("ExtnLegacyCustNumber"));
 			return list;
 		}
-		if (suffix.indexOf("xcomMasterCustomer") == 0) {
+		if (suffix.indexOf("xcomMasterReportID") == 0) {
 			list.add(eleExtn.getAttribute("ExtnSAPParentAccNo"));
 			LOG.debug("XCOMMSAP ++++++++++++++++"
 					+ eleExtn.getAttribute("ExtnSAPParentAccNo"));
