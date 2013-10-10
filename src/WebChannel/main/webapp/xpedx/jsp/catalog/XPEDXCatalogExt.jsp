@@ -455,7 +455,7 @@
 	<s:form 
 		id="XPEDXMyItemsDetailsChangeShareList" 
 		name="XPEDXMyItemsDetailsChangeShareList"  
-		action="XPEDXMyItemsDetailsChangeShareList" 
+		action="MyItemsDetailsChangeShareList" 
 		namespace="/myItems" method="post"
 	>
 	

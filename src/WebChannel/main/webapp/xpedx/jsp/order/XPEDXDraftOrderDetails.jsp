@@ -1086,7 +1086,7 @@ $(document).ready(function(){
 	<s:form 
 		id="XPEDXMyItemsDetailsChangeShareList" 
 		name="XPEDXMyItemsDetailsChangeShareList"  
-		action="XPEDXMyItemsDetailsChangeShareList" 
+		action="MyItemsDetailsChangeShareList" 
 		namespace="/myItems" method="post">
 	
 		<p><strong>List Name:</strong>&nbsp;&nbsp;<input type="text" name="listName" value="" maxlength="255"/></p>

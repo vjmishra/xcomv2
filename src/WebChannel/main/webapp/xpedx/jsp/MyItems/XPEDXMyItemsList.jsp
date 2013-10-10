@@ -507,7 +507,7 @@
 <h2 id="smilTitle">Share My Items List</h2>
 <br/>
 
-<!-- CODE_START MIL - PN --> <s:form id="XPEDXMyItemsDetailsChangeShareList" action="XPEDXMyItemsDetailsChangeShareList"
+<!-- CODE_START MIL - PN --> <s:form id="XPEDXMyItemsDetailsChangeShareList" action="MyItemsDetailsChangeShareList"
 	method="post" enctype="multipart/form-data">
 	<div class="error" id="errorMsgForMandatoryFields_dlgShareList" style="display : none"/></div>
 	
