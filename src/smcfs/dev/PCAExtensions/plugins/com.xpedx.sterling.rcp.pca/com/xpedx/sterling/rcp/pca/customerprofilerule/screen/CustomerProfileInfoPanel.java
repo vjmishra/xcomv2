@@ -1033,7 +1033,7 @@ IYRCComposite {
 		gridDataLbl1.horizontalAlignment = SWT.BEGINNING;
 		gridDataLbl1.grabExcessHorizontalSpace = true;
 		gridDataLbl1.verticalAlignment = SWT.LEFT;
-		gridDataLbl1.widthHint = 240;
+		gridDataLbl1.widthHint = 300;
 		gridDataLbl1.horizontalSpan=1;
 		/* XB-759 Code Changes End */
 		
