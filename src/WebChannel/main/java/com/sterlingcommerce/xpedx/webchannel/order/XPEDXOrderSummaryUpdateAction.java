@@ -20,7 +20,6 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderSummaryUpdateAction;
-import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
@@ -78,7 +77,49 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				if(customerHoldCheck != null && "true".equals(customerHoldCheck) ){
 					setExtnWebHoldFlag("Y");
 				}
-				outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
+				
+				String approveOrderFlag="false";
+				Object approveOrderSessionVar=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+				if(approveOrderSessionVar!=null) {
+					approveOrderFlag=approveOrderSessionVar.toString();
+				}
+				
+				if("true".equals(approveOrderFlag)) {					
+					Set<String> mashupId=new HashSet<String>();
+					mashupId.add(EDIT_ORDER_SUMMARY_MASHUP);
+					
+					Map<String, Element> changeOrderInputObj=prepareMashupInputs(mashupId);
+					Document changeOrderInputDoc = changeOrderInputObj.get(EDIT_ORDER_SUMMARY_MASHUP).getOwnerDocument();
+					Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
+					Element holdTypesElem = changeOrderInputDoc.createElement("OrderHoldTypes");
+					Element holdTypeElem = changeOrderInputDoc.createElement("OrderHoldType");
+					holdTypeElem.setAttribute("HoldType", "ORDER_LIMIT_APPROVAL");
+					holdTypeElem.setAttribute("Status", "1300");
+					holdTypeElem.setAttribute("ReasonText", "Released on approving an order during Order Edit");
+					holdTypeElem.setAttribute("ResolverUserId", getWCContext().getLoggedInUserId());
+					holdTypesElem.appendChild(holdTypeElem);		
+					changeOrderInputElem.appendChild(holdTypesElem);					
+					
+					Element pendingChangesElem = SCXmlUtil.getChildElement(changeOrderInputElem, "PendingChanges");
+					if(pendingChangesElem!=null) {
+						String recordPendingChangesAttr = SCXmlUtil.getAttribute(pendingChangesElem, "RecordPendingChanges");
+						if(recordPendingChangesAttr!=null) {
+							pendingChangesElem.removeAttribute("RecordPendingChanges");
+						}
+					
+					} else {
+						pendingChangesElem = changeOrderInputDoc.createElement("PendingChanges");
+					}
+					pendingChangesElem.setAttribute("ApplyPendingChanges","Y");
+					changeOrderInputElem.appendChild(pendingChangesElem);
+					
+					outElement = (Element) WCMashupHelper.invokeMashup(EDIT_ORDER_SUMMARY_MASHUP, changeOrderInputElem, wcContext.getSCUIContext());
+				
+				} else {
+					outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
+					
+				}				
+				
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				Document orderOutDoc = outElement.getOwnerDocument();
 				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ, orderOutDoc);

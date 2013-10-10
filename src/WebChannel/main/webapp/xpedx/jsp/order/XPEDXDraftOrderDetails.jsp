@@ -664,7 +664,6 @@ $(document).ready(function(){
 		</s:else>
 	</s:else>
 </s:if>
-<s:set name="approveOrderFlag" value='%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@APPROVE_ORDER_FLAG)}' />
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 
 <body class="  ext-gecko ext-gecko3">
@@ -691,7 +690,6 @@ $(document).ready(function(){
 					<s:hidden name="isEditNewline" value="%{'N'}"/>
 				</s:else>	--%>	
 				<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
-				<s:hidden name="approveOrderFlag" value='%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@APPROVE_ORDER_FLAG)}' />
 				<ul class="hvv">
 					<li>
 						<label>Item Type:</label>
@@ -1487,13 +1485,8 @@ var currentAadd2ItemList = new Object();
 	--%>
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
-	    <s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">
-		    <s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
-	    		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Approve and Submit Button</span></a>
-	    	</s:if>
-	    	<s:else>
-	    		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>
-	    	</s:else>
+		<s:if test="%{#_action.getCustStatus() != '30' && #_action.getBillToCustomerStatus() != '30'}">		    
+	    	<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>	    	
 		</s:if> 
 	    <s:if test='#hasPendingChanges == "Y"'>
         	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 

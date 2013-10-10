@@ -97,9 +97,10 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 
 	public String execute() {
 		
-		if("true".equals(approvalAllowedFlag)) {
-			wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.APPROVE_ORDER_FLAG, "true");
+		if("true".equals(getApprovalAllowedFlag())) {
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.APPROVE_ORDER_FLAG, "true");			
 		}
+				
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
@@ -290,7 +291,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				}
 				
 				//setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
-					setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
+				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
 				// END P&A Call: RUgrani
 				//processPandA(pna.getItems());
 				getCustomerDetails();

@@ -55,8 +55,6 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public static final String CHECKOUT_ORDER_MASHUP="xpedx_checkout_changeOrderLineDetails";
     public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
     public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
-    public static final String APPROVEORDER_MASHUP="xpedx_orderApproval_changeOrderDetails";
-    public static final String APPROVEORDER_SESSION_OBJ="approveOrderXMLDocument";
      
     public String mashUpId = null;  
      
@@ -186,10 +184,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public String execute()
     {        
     	long startTime=System.currentTimeMillis();
-    	Object approveOrderSessionVar=getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
-		if(approveOrderSessionVar!=null) {
-			setApproveOrderFlag(approveOrderSessionVar.toString());
-		}
+    	
     	if(zeroOrderLines.equals("true")){
             mashUpId = "xpedx_me_changeOrderDetails";
         }
@@ -277,38 +272,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	                    orderedQtyForCustUom.add("0");
 	                }
 	            }
-	        }    
-	        
-	       if("true".equals(isComingFromCheckout)) 
-	       {
-        		if ("false".equals(isEditOrder) || "false".equals(approveOrderFlag))
-        		{
-        			Map<String, Element> out = prepareAndInvokeMashups();
-    	            /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-    	            outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
-    	            /*End - Changes made by Mitesh Parikh for JIRA#3595*/
-    	            retVal= SUCCESS;
-        		
-        		} else
-        		{	        	
-		        	/*Order Approval Process when editing an order begins here  */
-		        	Set<String> mashupList = new HashSet<String>();
-		        	mashupList.add(APPROVEORDER_MASHUP);
-		        	Map<String, Element> approveOrderInputObj = prepareMashupInputs(mashupList);
-		        	Document inputDocument = (Document)approveOrderInputObj.get(APPROVEORDER_MASHUP).getOwnerDocument();
-		        	outputDocument = invokeMashup(APPROVEORDER_MASHUP, inputDocument.getDocumentElement()).getOwnerDocument();
-					/*Order Approval Process when editing an order ends here  */ 
-        		}
-        	
-        	} else
-	        {
-		        Map<String, Element> out = prepareAndInvokeMashups();
-	            /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-	            outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
-	            /*End - Changes made by Mitesh Parikh for JIRA#3595*/
-	            retVal= SUCCESS;
-	            
-	        }        	        
+	        }	        
+	       
+		    Map<String, Element> out = prepareAndInvokeMashups();
+	        /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
+	        outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+	        /*End - Changes made by Mitesh Parikh for JIRA#3595*/
+	        retVal= SUCCESS;	              	        
            
             if("true".equals(isComingFromCheckout))
             {            	
@@ -399,59 +369,9 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                     }
                 }
             }
-        }         
-        
-        if("true".equals(isComingFromCheckout) && "true".equals(isEditOrder) && "true".equals(approveOrderFlag))
-        {
-        	getWCContext().getSCUIContext().getSession().setAttribute(APPROVEORDER_SESSION_OBJ, outputDocument);
-        	
-        	try{
-	        	Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
-				if(rulesDoc == null){
-					rulesDoc = XPEDXOrderUtils.getValidationRulesForCustomer(outputDocument.getDocumentElement(), wcContext);
-					wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);	
-				}
-				XPEDXOrderUtils.validateCustomerFieldValues(outputDocument.getDocumentElement(),rulesDoc, wcContext);
-				
-				HttpSession session = getWCContext().getSCUIContext().getRequest().getSession();
-				HashMap<String, ArrayList<String>> requiredCustFields = (HashMap<String, ArrayList<String>>)session.getAttribute("requiredCustFieldsErrorMap");
-				if(requiredCustFields!=null && !requiredCustFields.isEmpty()){
-					setCustomerFieldsValidated("Y");
-					return "Required_CustFields_Error";
-				}
-				
-				pnALineErrorMessage=new HashMap<String,String>();
-				ArrayList<Element> ueAdditionalAttrElemList = SCXmlUtil.getElements(outputDocument.getDocumentElement(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
-				XPEDXPriceAndAvailability pna=new XPEDXPriceAndAvailability();
-				if(ueAdditionalAttrElemList!=null && ueAdditionalAttrElemList.size()>0)
-					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElemList.get(0));
-				
-				String ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;				
-				setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-				
-				XPEDXWCUtils xpedxWCUtils = new XPEDXWCUtils();
-				Document lineTpeMDoc=SCXmlUtil.createDocument("Items");
-				setPnaHoverForEditOrderLine(pna, outputDocument, lineTpeMDoc);
-				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
-				
-				orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),true);
-				useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
-				if(useOrderMultipleMapFromSourcing!=null && useOrderMultipleMapFromSourcing.size()>0)
-					return "Order_Multiple_Error";
-				
-				if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
-					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
-				}
-				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext, true, lineTpeMDoc.getDocumentElement(), true, outputDocument));
-				
-        	}catch (Exception e) {
-    			e.printStackTrace();
-    			XPEDXWCUtils.logExceptionIntoCent(e);
-        		
-        	}
-        	retVal="approveOrder";
-        
-        } else if(outputDocument!=null && retVal.equals(SUCCESS))
+        }  
+                
+        if(outputDocument!=null && retVal.equals(SUCCESS))
         {
             if("true".equals(isComingFromCheckout))
             {
@@ -682,94 +602,92 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     protected void manipulateMashupInputs(Map mashupInputs,String isOrderLine)
     throws com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException
     {
-        if("false".equals(approveOrderFlag))
+       
+    	Element inputXML = (Element)mashupInputs.get(mashUpId);
+        if(inputXML == null)
+            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("Cannot locate InputXML for xpedx_me_changeOrderLineDetails mashup for manipulation");
+         
+        if("true".equals(isOrderLine))
         {
-	    	Element inputXML = (Element)mashupInputs.get(mashUpId);
-	        if(inputXML == null)
-	            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("Cannot locate InputXML for xpedx_me_changeOrderLineDetails mashup for manipulation");
-	         
-	        if("true".equals(isOrderLine))
-	        {
-	            return;
-	        }
-	        if(selectedDeliveryMethods == null)
-	            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("No selectedDeliveryMethods were found.");
-	        if(originalDeliveryMethods == null)
-	            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("No originalDeliveryMethods were found.");
-	        try
-	        {
-	            for(int i = 0; i < originalDeliveryMethods.size(); i++)
-	            {
-	                String originalMethod = (String)originalDeliveryMethods.get(i);
-	                if("PICK".equals(originalMethod))
-	                {
-	                   String selectedMethod = (String)selectedDeliveryMethods.get(i);
-	                    if(!originalMethod.equals(selectedMethod))
-	                    {
-	                        String orderLineKey = (String)orderLineKeys.get(i);
-	                        Element orderLineEl = XMLUtilities.getElement(inputXML, (new StringBuilder()).append("/Order/OrderLines/OrderLine[@OrderLineKey='").append(orderLineKey).append("']").toString());
-	                        orderLineEl.setAttribute("ShipNode", "");
-	                        orderLineEl.setAttribute("ReqShipDate", "");
-	                    }
-	                }
-	            }
-	            NodeList inputNodeList = inputXML.getElementsByTagName("OrderLines");
-	            Element inputNodeListElemt = (Element)inputNodeList.item(0);
-	            SCXmlUtils util = SCXmlUtils.getInstance();
-	             
-	            NodeList orderLineElemList = inputNodeListElemt.getElementsByTagName("OrderLine");
-	            if(orderLineElemList!=null && orderLineElemList.getLength()>0)
-	            {
-	                for(int k =0;k<orderLineElemList.getLength();k++)
-	                {
-	                    Element orderLineElement = (Element)orderLineElemList.item(k);
-	                    String noteKey = (String)lineNotesKey.get(k);
-	                    String note = (String)orderLineNote.get(k);
-	                     
-	                    /*Element orderLineNotesElement = util.createChild(orderLineElement, "Instructions");
-	                    Element orderLineNoteElement = util.createChild(orderLineNotesElement, "Instruction");*/
-	                    HashMap<String, String> attrMap =  new HashMap<String, String>();
-	                    if(noteKey!=null && noteKey.trim().length() > 0)
-	                    {
-	                        //orderLineNoteElement.setAttribute("InstructionDetailKey", noteKey);
-	                        attrMap.put("InstructionDetailKey", noteKey);
-	                    }
-	                    if(note == null || note.trim().length() == 0)
-	                    {
-	                        if(noteKey!=null && noteKey.length()>0){
-	                            //orderLineNoteElement.setAttribute("Action", "REMOVE");
-	                            attrMap.put("Action", "REMOVE");
-	                        }
-	                    }
-	                    else
-	                    {
-	                        //orderLineNoteElement.setAttribute("InstructionText", note);
-	                        attrMap.put("InstructionText", note);
-	                    }
-	                    if(attrMap!=null && !attrMap.isEmpty())
-	                    {
-	                        Element orderLineNotesElement = util.createChild(orderLineElement, "Instructions");
-	                        Element orderLineNoteElement = util.createChild(orderLineNotesElement, "Instruction");
-	                        Iterator<String> attrIter = attrMap.keySet().iterator();
-	                        while(attrIter.hasNext())
-	                        {
-	                            String attribute = attrIter.next();
-	                            String attributeVal = attrMap.get(attribute);
-	                            orderLineNoteElement.setAttribute(attribute, attributeVal);
-	                        }
-	                        orderLineNoteElement.setAttribute("InstructionType", "LINE");
-	                    }
-	                     
-	                }
-	            }
-	            String inputXml = SCXmlUtil.getString(inputXML);
-	            log.debug("Input XML: " + inputXml);
-	        }
-	        catch(Exception e)
-	        {
-	            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("Error encountered manipulating InputXML", e);
-	        }
-	   }
+            return;
+        }
+        if(selectedDeliveryMethods == null)
+            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("No selectedDeliveryMethods were found.");
+        if(originalDeliveryMethods == null)
+            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("No originalDeliveryMethods were found.");
+        try
+        {
+            for(int i = 0; i < originalDeliveryMethods.size(); i++)
+            {
+                String originalMethod = (String)originalDeliveryMethods.get(i);
+                if("PICK".equals(originalMethod))
+                {
+                   String selectedMethod = (String)selectedDeliveryMethods.get(i);
+                    if(!originalMethod.equals(selectedMethod))
+                    {
+                        String orderLineKey = (String)orderLineKeys.get(i);
+                        Element orderLineEl = XMLUtilities.getElement(inputXML, (new StringBuilder()).append("/Order/OrderLines/OrderLine[@OrderLineKey='").append(orderLineKey).append("']").toString());
+                        orderLineEl.setAttribute("ShipNode", "");
+                        orderLineEl.setAttribute("ReqShipDate", "");
+                    }
+                }
+            }
+            NodeList inputNodeList = inputXML.getElementsByTagName("OrderLines");
+            Element inputNodeListElemt = (Element)inputNodeList.item(0);
+            SCXmlUtils util = SCXmlUtils.getInstance();
+             
+            NodeList orderLineElemList = inputNodeListElemt.getElementsByTagName("OrderLine");
+            if(orderLineElemList!=null && orderLineElemList.getLength()>0)
+            {
+                for(int k =0;k<orderLineElemList.getLength();k++)
+                {
+                    Element orderLineElement = (Element)orderLineElemList.item(k);
+                    String noteKey = (String)lineNotesKey.get(k);
+                    String note = (String)orderLineNote.get(k);
+                     
+                    /*Element orderLineNotesElement = util.createChild(orderLineElement, "Instructions");
+                    Element orderLineNoteElement = util.createChild(orderLineNotesElement, "Instruction");*/
+                    HashMap<String, String> attrMap =  new HashMap<String, String>();
+                    if(noteKey!=null && noteKey.trim().length() > 0)
+                    {
+                        //orderLineNoteElement.setAttribute("InstructionDetailKey", noteKey);
+                        attrMap.put("InstructionDetailKey", noteKey);
+                    }
+                    if(note == null || note.trim().length() == 0)
+                    {
+                        if(noteKey!=null && noteKey.length()>0){
+                            //orderLineNoteElement.setAttribute("Action", "REMOVE");
+                            attrMap.put("Action", "REMOVE");
+                        }
+                    }
+                    else
+                    {
+                        //orderLineNoteElement.setAttribute("InstructionText", note);
+                        attrMap.put("InstructionText", note);
+                    }
+                    if(attrMap!=null && !attrMap.isEmpty())
+                    {
+                        Element orderLineNotesElement = util.createChild(orderLineElement, "Instructions");
+                        Element orderLineNoteElement = util.createChild(orderLineNotesElement, "Instruction");
+                        Iterator<String> attrIter = attrMap.keySet().iterator();
+                        while(attrIter.hasNext())
+                        {
+                            String attribute = attrIter.next();
+                            String attributeVal = attrMap.get(attribute);
+                            orderLineNoteElement.setAttribute(attribute, attributeVal);
+                        }
+                        orderLineNoteElement.setAttribute("InstructionType", "LINE");
+                    }
+                     
+                }
+            }
+            String inputXml = SCXmlUtil.getString(inputXML);
+            log.debug("Input XML: " + inputXml);
+        }
+        catch(Exception e)
+        {
+            throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("Error encountered manipulating InputXML", e);
+        }
     }
      
     //This method is not being called owing to the latest changes in Draft Order Details jsp.
@@ -867,7 +785,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public void setOrderLineKeyForNote(String orderLineKeyForNote) {
         this.orderLineKeyForNote = orderLineKeyForNote;
     }
-     
+    
     protected List orderLineNote;
     protected List lineNotesKey;
     public String orderLineKeyForNote;
@@ -877,7 +795,6 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     protected String minOrderAmount;
     protected String chargeAmount;
     protected String maxOrderAmount;
-    private String approveOrderFlag="false";
     private String customerFieldsValidated;
     private String ajaxLineStatusCodeMsg = "";
     private Map<String,String> pnALineErrorMessage;
@@ -942,14 +859,6 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 
 	public void setCustomerFieldsValidated(String customerFieldsValidated) {
 		this.customerFieldsValidated = customerFieldsValidated;
-	}
-
-	public String getApproveOrderFlag() {
-		return approveOrderFlag;
-	}
-
-	public void setApproveOrderFlag(String approveOrderFlag) {
-		this.approveOrderFlag = approveOrderFlag;
 	}
 
 	public String getIsEditOrder() {

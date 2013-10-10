@@ -42,14 +42,7 @@ function checkOut()
 	}
     document.OrderDetailsForm.orderDesc.value = document.getElementById('cartDesc_new').value; 
     document.OrderDetailsForm.isComingFromCheckout.value = "true";
-    document.OrderDetailsForm.action = document.getElementById('checkoutURL');
-    var myMask;
-    if(document.getElementById('approveOrderFlag').value == "true")
-	{
-    	var waitMsg = Ext.Msg.wait("Processing...");
-    	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
-	}
+    document.OrderDetailsForm.action = document.getElementById('checkoutURL');    
     document.OrderDetailsForm.submit();
 }
 function validateQty(){

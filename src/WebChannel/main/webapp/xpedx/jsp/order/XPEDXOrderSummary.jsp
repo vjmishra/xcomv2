@@ -134,11 +134,8 @@ function setTotalPrice(val){
 			var newPoNumberObj=document.getElementById("newPoNumber");
 			newPoNumberObj.value = po_comboObj.value;
 			
-		}
-		
+		}		
 	}
-	
-
 	
 	function validateCustomerPO()
 	{
@@ -560,14 +557,15 @@ from session . We have customer Contact Object in session .
 	<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
 	<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 	<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
- <s:set name="editOrderFlag" value='%{#_action.getIsEditOrder()}' />
+<s:set name="editOrderFlag" value='%{#_action.getIsEditOrder()}' />
+<s:set name="approveOrderFlag" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@APPROVE_ORDER_FLAG)' />
 <s:url includeParams="none" id="orderNotesListURL"
 	action="orderNotesList.action">
 	<s:param name="OrderHeaderKey" value='#orderHeaderKey' />
 	<s:param name="draft" value="#draftOrderFlag" />
 </s:url>
 <s:if test='%{#editOrderFlag == "true"}'>
-		<s:set name="isEditOrder" value="%{'true'}" />
+	<s:set name="isEditOrder" value="%{'true'}" />
 </s:if>
 <s:else>
 	<s:set name="isEditOrder" value="%{'false'}" />
@@ -1791,15 +1789,27 @@ from session . We have customer Contact Object in session .
 		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 			<a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Cart</span></a>
 		</s:if>
-		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a></s:else>	
-			<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
-				<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>		
+		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a>
+		</s:else>	
+		
+		<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
+			<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
+			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
+				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Approve and Submit Button</span></a>
 			</s:if>
 			<s:else>
-<%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
-				     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
+				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>
 			</s:else>	
+		</s:if>
+		<s:else>
+<%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
+			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">				
+			     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Approve and Submit Button</span></a>
+			</s:if>
+			<s:else>
+				<a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
+			</s:else>    
+		</s:else>	
 			
 		</div><!--bottom button bar -->
 		</div>

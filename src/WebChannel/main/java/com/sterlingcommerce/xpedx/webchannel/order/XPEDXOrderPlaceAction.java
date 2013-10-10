@@ -143,7 +143,6 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public String draftOrderflagOrderSubmit;
 	public String draftErrorFlagOrderSummary = "draftErrorFlagOrderSummary";
 	public String draftErrorOrderSummary = "false";
-	public static final String APPROVEORDER_SESSION_OBJ="approveOrderXMLDocument";
 
 	public String getDraftOrderflagOrderSubmit() {
 		return draftOrderflagOrderSubmit;
@@ -268,27 +267,15 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			} else {//order update flow
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
-				if(YFCCommon.isVoid(editedOrderHeaderKey)){
+				if(YFCCommon.isVoid(editedOrderHeaderKey)) {
 					return draftErrorFlagOrderSummary;
 
 		 		}
 				
-				Object approveOrderSessionVar=getWCContext().getSCUIContext().getSession().getAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
-				getWCContext().getSCUIContext().getSession().removeAttribute(XPEDXConstants.APPROVE_ORDER_FLAG);
-				if(approveOrderSessionVar!=null) {
-					approveOrderFlag=approveOrderSessionVar.toString();
-				}
-				Document orderDetailDocument=null;
-				if("false".equals(approveOrderFlag)) {
-					orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
-					if(isOrderUpdateDone(orderDetailDocument))
-						return "OUErrorPage";
-					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
-				
-				} else {
-					orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(APPROVEORDER_SESSION_OBJ);
-					getWCContext().getSCUIContext().getSession().removeAttribute(APPROVEORDER_SESSION_OBJ);
-				}
+				Document orderDetailDocument=(Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				if(isOrderUpdateDone(orderDetailDocument))
+					return "OUErrorPage";
+				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);			
 				
 				setOrderHeaderKey(SCXmlUtil.getAttribute(orderDetailDocument.getDocumentElement(), "OrderHeaderKey"));
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
@@ -298,20 +285,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					return retFail;
 				}
 				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
-				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")) && "false".equals(approveOrderFlag))
+				
+				Object approveOrderSessionVar=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+				XPEDXWCUtils.removeObectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+				if(approveOrderSessionVar!=null)
 				{
-					//setYFSEnvironmentVariables(getWCContext());
-					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
-					if(isPendingApproval != null)
-					{
-						Element holdTypes = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
-						if(holdTypes != null)
-						{
-							orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdTypes, true));
-							
-						}
-					}
+					approveOrderFlag=approveOrderSessionVar.toString();
 				}
+				
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				//get the order details
 				/*Map<String, String> valueMap = new HashMap<String, String>();
@@ -332,60 +313,71 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					return FAILURE;
 					
 				}*/
-				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
-				if(orderDetailDocument != null && "false".equals(approveOrderFlag))
-				{
-					// Updated for Jira 4304
-					orderDetailDocument.getDocumentElement().removeAttribute("OrderName");
-					changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
-					//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
-				}
+				/*End - Changes made by Mitesh Parikh for JIRA#3594*/		
 				
 				/*call the customized service XPXUpdateChainedOrder with the order XML which propagates the Fulfillment 
 				order changes to Customer Order and sends the new order to Legacy*/
 				try 
 				{
 					Object orderUpdateObj = null;
+	
 					if("false".equals(approveOrderFlag))
 					{
-						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
-					
-					} else
-					{						
-						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxCreateLegacyOrderOnApproval", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
-					}					
-					
-					if(orderUpdateObj != null)
-					{
-						
-						Element orderUpdateElem=(Element)orderUpdateObj;
-						//Added for JIRA 4326 to get the FO holds because below getOrderLineList will be called for CO .and icase of FO editing there will not be any chained order so need to ge torder details
-						if(orderUpdateElem != null && !orderUpdateElem.getAttribute("OrderType").equals("Customer"))
+						if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
 						{
-							Map<String, String> valueMap1 = new HashMap<String, String>();
-							valueMap1.put("/Order/@OrderHeaderKey", orderUpdateElem.getAttribute("OrderHeaderKey"));
-							try {
-								Element input1 = WCMashupHelper.getMashupInput("xpedxOrderEditOrderList",
-										valueMap1, wcContext.getSCUIContext());
-
-								Object obj1 = WCMashupHelper.invokeMashup(
-										"xpedxOrderEditOrderList", input1,
-										wcContext.getSCUIContext());
-
-								Document outputDoc1 = ((Element) obj1).getOwnerDocument();
-								isFOCSRReview(outputDoc1.getDocumentElement());
-
-							} catch (CannotBuildInputException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+							isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
+							if(isPendingApproval != null)
+							{
+								Element holdTypes = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
+								if(holdTypes != null)
+								{
+									orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdTypes, true));
+									
+								}
 							}
 						}
-							
-						if(orderUpdateElem.hasAttribute("TransactionMessage"))
+						
+						if(orderDetailDocument != null)
 						{
-							String transactionMessage=orderUpdateElem.getAttribute("TransactionMessage");
-							if(!YFCCommon.isVoid(transactionMessage))
+							// Updated for Jira 4304
+							orderDetailDocument.getDocumentElement().removeAttribute("OrderName");
+							changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
+							//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
+						}
+						
+						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+
+						if(orderUpdateObj != null)
+						{
+							
+							Element orderUpdateElem=(Element)orderUpdateObj;
+							//Added for JIRA 4326 to get the FO holds because below getOrderLineList will be called for CO .and icase of FO editing there will not be any chained order so need to ge torder details
+							if(orderUpdateElem != null && !orderUpdateElem.getAttribute("OrderType").equals("Customer"))
 							{
+								Map<String, String> valueMap1 = new HashMap<String, String>();
+								valueMap1.put("/Order/@OrderHeaderKey", orderUpdateElem.getAttribute("OrderHeaderKey"));
+								try {
+									Element input1 = WCMashupHelper.getMashupInput("xpedxOrderEditOrderList",
+											valueMap1, wcContext.getSCUIContext());
+
+									Object obj1 = WCMashupHelper.invokeMashup(
+											"xpedxOrderEditOrderList", input1,
+											wcContext.getSCUIContext());
+
+									Document outputDoc1 = ((Element) obj1).getOwnerDocument();
+									isFOCSRReview(outputDoc1.getDocumentElement());
+
+								} catch (CannotBuildInputException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+								
+							if(orderUpdateElem.hasAttribute("TransactionMessage"))
+							{
+								String transactionMessage=orderUpdateElem.getAttribute("TransactionMessage");
+								if(!YFCCommon.isVoid(transactionMessage))
+								{
 									try
 									{
 										Document error=SCXmlUtil.createFromString(transactionMessage);
@@ -404,16 +396,29 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 										XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
 										return retFail;
 									}
+								}									
 							}
-								
 						}
-					}
+						
+					} else
+					{						
+						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxCreateLegacyOrderOnApproval", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+					}					
 					
 				} catch (Exception e) {
-					generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
-					log.error("Exception posting the order update to Legacy system..\n",e);
-					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
-					return retFail;
+					if("false".equals(approveOrderFlag))
+					{
+						generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
+						log.error("Exception posting the order update to Legacy system..\n",e);
+						XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+						return retFail;
+					
+					} else {
+						generatedErrorMessage = "Exception while approving an order and posting it to the Legacy system. Please contact system admin.";
+						log.error("Exception while approving an order and posting it to the Legacy system..\n",e);
+						XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+						return retFail;
+					}
 				}
 				XPEDXWCUtils.resetEditedOrderShipTo(wcContext); //added for jira 4306
 				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
@@ -435,6 +440,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					parentOrderHeaderKeyForFO = getOrderHeaderKey();
 				}
 			}
+			
 			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
 			chainedOrderFromKeylist.add(orderHeaderKey);
 			Document chainedOrderLineListDoc = getXpedxChainedOrderLineList(chainedOrderFromKeylist);
@@ -484,7 +490,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 		
 		catch (Exception ex) {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
-			generatedErrorMessage = "There was an error processing your last  request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
+			generatedErrorMessage = "There was an error processing your last request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
 			XPEDXWCUtils.logExceptionIntoCent(ex);   //JIRA 4289
 			return retFail;
 		}

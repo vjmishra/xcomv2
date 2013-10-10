@@ -15,7 +15,6 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -105,7 +104,7 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		// To Get orderHeaderKey
 		String orderHeaderKey = null;
 		if (inputElement != null) {
-			orderHeaderKey = inputElement.getAttribute("OrderHeaderKey");			
+			orderHeaderKey = inputElement.getAttribute("OrderHeaderKey");	
 		}		
 		
 		if(log.isDebugEnabled()){
@@ -127,6 +126,6 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		env.clearApiTemplate("getOrderList");
 		
 		return orderListDoc;
-	}
+	}	
 
 }
