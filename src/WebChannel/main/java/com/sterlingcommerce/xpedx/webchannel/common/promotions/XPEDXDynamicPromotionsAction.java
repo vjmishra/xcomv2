@@ -593,10 +593,8 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				massagedPromoHtml = generatePreLoginPromoFile(newCallerPageTag);
 				logMessage("EXECUTE METHOD CALLED (Pre Login page) : " + massagedPromoHtml);
 				log.debug("Promotions file Pre-Login : " + newCallerPageTag);
+				log.error("Promotions file Pre-Login : " + newCallerPageTag);
 				setInRequest(massagedPromoHtml);
-				int imageCount = getPromoImageCount(massagedPromoHtml);
-				
-				wcContext.setWCAttribute("imageCounter", imageCount, WCAttributeScope.REQUEST);
 				return SUCCESS;
 			}
 		else{
@@ -1107,12 +1105,12 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 		String promoHtml="";
 		boolean isFileExists;
 		promoHtml = constructPreLoginPromoPageName (callerPage );
-
+		log.error("XPEDXDynamicPromotionsActions : generatePreLoginPromoFile():promoHtml="+promoHtml);
 		//isFileExists = simpleFileCheck(promoHtmlWithMarketingPromoPath);
 		String promoHtmlWithMarketingPromoPath = XPEDX_MARKETING_PROMOTIONS_FILES_PATH + promoHtml;
 		isFileExists = XPEDXFileManager.checkFile(promoHtmlWithMarketingPromoPath, this.wcContext, false);
 		XPEDXConstants.logMessage ( "-DYN-PROMO--  FileName : " + promoHtmlWithMarketingPromoPath + " , isFileExists : " + isFileExists );
-		
+		log.error("-DYN-PROMO--  FileName : " + promoHtmlWithMarketingPromoPath + " , isFileExists : " + isFileExists);
 		String massagedPromoHtml = massagedFileName(promoHtmlWithMarketingPromoPath);
 		return massagedPromoHtml;
 	}
@@ -1192,6 +1190,7 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 			boolean isPreLoginFileBuild = setGeneratedFileName(buildFileNameForPreLoginPage );
 
 			XPEDXConstants.logMessage("buildFileNameForPreLoginPage : " + buildFileNameForPreLoginPage + " , for newCallerPageTag :" + callerPageTag);
+			log.error("buildFileNameForPreLoginPage : " + buildFileNameForPreLoginPage + " , for newCallerPageTag :" + callerPageTag);
 			return buildFileNameForPreLoginPage;
 			
 		} catch (Exception e) {
