@@ -34,7 +34,7 @@
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<s:form id="XPEDXMyItemsDetailsChangeShareList"
-			action="XPEDXMyItemsDetailsChangeShareList" method="post"
+			action="MyItemsDetailsChangeShareList" method="post"
 			enctype="multipart/form-data" >
     
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>

@@ -476,7 +476,7 @@ function showSharedListForm(){
 			if(isAnyItemSelected){
 				var formItemIds = document.getElementById("formItemIds");
 
-				<s:url id='deleteListLink' action='XPEDXMyItemsDetailsDelete.action' >
+				<s:url id='deleteListLink' action='MyItemsDetailsDelete.action' >
 				</s:url>
 				
 						
@@ -574,7 +574,7 @@ function showSharedListForm(){
 						//Added for JIRA 3642
 						formItemIds.itemCount.value=itemCount; 
 						
-						formItemIds.action="/swc/myItems/XPEDXMyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
+						formItemIds.action="/swc/myItems/MyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
 						formItemIds.submit();
                         if(!isAdd2List && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent))
 
@@ -635,7 +635,7 @@ function showSharedListForm(){
 			
 			var formItemIds = document.getElementById("formItemIds");
 			
-			<s:url id='saveAllLink' action='XPEDXMyItemsDetailsChange.action' escapeAmp='false' >
+			<s:url id='saveAllLink' action='MyItemsDetailsChange.action' escapeAmp='false' >
 			</s:url>
 			
 			if (formItemIds){
@@ -812,7 +812,7 @@ function showSharedListForm(){
 					
 		function qaValidateItem(divId, jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
 	           //Init vars
-	           <s:url id='qaAddItem' includeParams='none' action='XPEDXMyItemsDetailsQuickAdd' />
+	           <s:url id='qaAddItem' includeParams='none' action='MyItemsDetailsQuickAdd' />
 	           var flag = false;
 	           var jobIdFlag = false;
 	           var jobIdStr = "<s:property value='%{customerFieldsMap.get("CustLineAccNo")}'/>";
@@ -2427,7 +2427,7 @@ function showSharedListForm(){
 
 <div id="dlgEditForm" class="dlgForm">
 <h3>Edit Record</h3>
-<s:form id="formEdit" action="XPEDXMyItemsDetailsChange" method="post">
+<s:form id="formEdit" action="MyItemsDetailsChange" method="post">
 	<s:textfield label="Name" name="name"></s:textfield>
 	<s:textfield label="Desc" name="desc"></s:textfield>
 	<s:textfield label="Qty" name="qty"></s:textfield>
@@ -2755,7 +2755,7 @@ function showSharedListForm(){
                             </form>
 
 							<s:form id="formAdd2List" cssClass="form quick-add-to-cart-form" cssStyle="padding-right:21px;"
-								action="XPEDXMyItemsDetailsQuickAdd" method="post">
+								action="MyItemsDetailsQuickAdd" method="post">
 								<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 								<s:hidden name="listName" value=""></s:hidden>
 								<s:hidden name="listDesc" value=""></s:hidden>
@@ -3024,7 +3024,7 @@ function showSharedListForm(){
 						<s:set name='showItemType' value='%{false}' />
 					</s:elseif>
 
-					<s:url id='deleteListLink' action='XPEDXMyItemsDetailsDelete.action'>
+					<s:url id='deleteListLink' action='MyItemsDetailsDelete.action'>
 						<s:param name="key" value="#id" />
 						<s:param name="listKey" value="%{listKey}" />
 						<s:param name="listName" value="%{listName}" />
@@ -3786,7 +3786,7 @@ function showSharedListForm(){
 	<s:hidden name="itemType" value="1" />
 	<s:hidden name="uomId" value="" />
 	<s:hidden name="order" value="" />
-</s:form> <s:form id="formRIReplaceInList" action="XPEDXMyItemsDetailsChange"
+</s:form> <s:form id="formRIReplaceInList" action="MyItemsDetailsChange"
 	method="post">
 	<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 	<s:hidden name="listName" value="%{listName}"></s:hidden>

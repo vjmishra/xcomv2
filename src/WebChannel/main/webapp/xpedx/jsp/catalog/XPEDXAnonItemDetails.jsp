@@ -210,7 +210,7 @@
 			<br> <!-- CODE_START MIL - PN --> <s:form
 				id="XPEDXMyItemsDetailsChangeShareList"
 				name="XPEDXMyItemsDetailsChangeShareList"
-				action="XPEDXMyItemsDetailsChangeShareList"
+				action="MyItemsDetailsChangeShareList"
 				namespace="/myItems" method="post">
 
 				<p><strong>List Name:</strong>&nbsp;&nbsp;

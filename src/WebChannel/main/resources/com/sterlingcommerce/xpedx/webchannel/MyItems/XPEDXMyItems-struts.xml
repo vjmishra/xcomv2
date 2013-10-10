@@ -82,7 +82,7 @@
 		</result>
 	</action>
 	
-	<action name="XPEDXMyItemsDetailsDelete" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsDeleteAction">
+	<action name="MyItemsDetailsDelete" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsDeleteAction">
 		<param name="mashups">XPEDXMyItemsDetailsDelete</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsDelete_binding.xml</param>
@@ -97,7 +97,7 @@
 		</result>
 	</action>
 	
-	<action name="XPEDXMyItemsDetailsChange" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeAction">
+	<action name="MyItemsDetailsChange" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeAction">
 		<param name="mashups">XPEDXMyItemsDetailsChange</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChange_binding.xml</param>
@@ -142,7 +142,7 @@
 		</result>
 	</action>
 	
-	<action name="XPEDXMyItemsDetailsImportPrepare" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsImportPrepareAction">
+	<action name="MyItemsDetailsImportPrepare" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsImportPrepareAction">
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsCreate_binding.xml</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<result name="success" type="redirectAction">
@@ -226,7 +226,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
 	</action>	
 	
-	<action name="XPEDXMyItemsDetailsChangeShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
+	<action name="MyItemsDetailsChangeShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
 		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
@@ -268,7 +268,7 @@
         <result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsGetAvail.jsp</result>
 	</action>
 
-	<action name="XPEDXMyItemsDetailsQuickAdd" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsQuickAddAction">
+	<action name="MyItemsDetailsQuickAdd" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsQuickAddAction">
 		<param name="mashups">XPEDXMyItemsDetailsQuickAdd</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsQuickAdd_binding.xml</param>
