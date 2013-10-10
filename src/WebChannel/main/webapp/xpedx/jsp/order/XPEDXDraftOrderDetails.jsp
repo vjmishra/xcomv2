@@ -818,17 +818,10 @@ $(document).ready(function(){
 	</s:if>
 </div>
 <!-- EB-66 Suspended ShipTo -->
-	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'}">
+	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
 	<br/><br/><br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
-	<s:else>
-		<s:if test="%{#shipToCustomer.getCustomerStatus() == '30'}">
-		<br/><br/><br/><h5 align="center"><b><font color="red">
-		This ship to location has been suspended, please select a new valid location.
-		</font></b></h5></s:if>
-	
-	</s:else>
 	
 <!-- breadcrumb / 'print page' button -->
 <div class="breadcrumb-title" id="breadcumbs-list-name">
@@ -1516,17 +1509,12 @@ var currentAadd2ItemList = new Object();
 </s:else>
 </div>
 <!--Added for 3098  -->
-<!-- EB-66 -->
-	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'}">
+<!-- EB-66 Suspended ShipTo -->
+	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
 	<br/><br/><br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
-	<s:else>
-		<s:if test="%{#shipToCustomer.getCustomerStatus() == '30'}">
-		<br/><br/><br/><h5 align="center"><b><font color="red">
-		This ship to location has been suspended, please select a new valid location.
-		</font></b></h5></s:if>
-	</s:else>
+	
 <br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
 <br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:150px;color:red;display:inline" ></div></b>
 <br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
