@@ -82,7 +82,7 @@
 		</result>
 	</action>
 	
-	<action name="XPEDXMyItemsDetailsDelete" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsDeleteAction">
+	<action name="MyItemsDetailsDelete" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsDeleteAction">
 		<param name="mashups">XPEDXMyItemsDetailsDelete</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsDelete_binding.xml</param>

@@ -476,7 +476,7 @@ function showSharedListForm(){
 			if(isAnyItemSelected){
 				var formItemIds = document.getElementById("formItemIds");
 
-				<s:url id='deleteListLink' action='XPEDXMyItemsDetailsDelete.action' >
+				<s:url id='deleteListLink' action='MyItemsDetailsDelete.action' >
 				</s:url>
 				
 						
@@ -3024,7 +3024,7 @@ function showSharedListForm(){
 						<s:set name='showItemType' value='%{false}' />
 					</s:elseif>
 
-					<s:url id='deleteListLink' action='XPEDXMyItemsDetailsDelete.action'>
+					<s:url id='deleteListLink' action='MyItemsDetailsDelete.action'>
 						<s:param name="key" value="#id" />
 						<s:param name="listKey" value="%{listKey}" />
 						<s:param name="listName" value="%{listName}" />
