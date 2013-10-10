@@ -608,7 +608,7 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		btnRefreshUserlayoutData.verticalAlignment = 2;
 		btnRefreshUserlayoutData.heightHint = 27;
 		btnRefreshUserlayoutData.widthHint = 100;
-		refreshUserData.setLayoutData(btnSearchlayoutData);
+		refreshUserData.setLayoutData(btnRefreshUserlayoutData);
 		refreshUserData.setText("Refresh User Data");		
 		refreshUserData.setData("name", "refreshUserData");
 		
