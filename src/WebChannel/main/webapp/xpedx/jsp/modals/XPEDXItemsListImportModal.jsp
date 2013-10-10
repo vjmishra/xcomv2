@@ -23,7 +23,7 @@
 		<!-- <h2>Import My Items List</h2> -->
 		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
 	<div  id="importItems">
-		<s:form name="formImport" id="formImport" action="XPEDXMyItemsDetailsImportPrepare" method="post"
+		<s:form name="formImport" id="formImport" action="MyItemsDetailsImportPrepare" method="post"
 			enctype="multipart/form-data">
 		  
 		<div id="errorMsgForRequiredField" class="error" style="display: none;" >
