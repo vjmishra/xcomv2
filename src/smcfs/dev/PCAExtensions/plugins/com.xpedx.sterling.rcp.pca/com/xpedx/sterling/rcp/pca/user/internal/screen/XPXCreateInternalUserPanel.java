@@ -843,7 +843,17 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		});
 		
 		
-
+		YRCButtonBindingData rud = new YRCButtonBindingData();
+		rud.setName("refreshUserData");
+		refreshUserData.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, rud);
+		
+		refreshUserData.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.loadData();
+				
+							
+			}
+		});
 		
 
 				
