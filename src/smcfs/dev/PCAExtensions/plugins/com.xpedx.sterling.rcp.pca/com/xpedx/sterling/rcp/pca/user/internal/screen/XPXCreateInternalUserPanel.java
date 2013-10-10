@@ -47,6 +47,7 @@ public class XPXCreateInternalUserPanel extends Composite implements
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.user.internal.screen.XPXCreateInternalUserPanel";
 	
 	private Button btnUpdate;
+	private Button refreshUserData;
 	private Label lblNetworkId;
 	private Text txtNetworkId;
 	private Label lblEmployeeId;
@@ -602,14 +603,13 @@ public class XPXCreateInternalUserPanel extends Composite implements
 
 	private void createMiscPnl() {
 		refreshUserData = new Button(pnlRoot, 0);
-		GridData btnSearchlayoutData = new GridData();
-		btnSearchlayoutData.horizontalAlignment = 0;
-		btnSearchlayoutData.verticalAlignment = 2;
-		btnSearchlayoutData.heightHint = 27;
-		btnSearchlayoutData.widthHint = 100;
+		GridData btnRefreshUserlayoutData = new GridData();
+		btnRefreshUserlayoutData.horizontalAlignment = 0;
+		btnRefreshUserlayoutData.verticalAlignment = 2;
+		btnRefreshUserlayoutData.heightHint = 27;
+		btnRefreshUserlayoutData.widthHint = 100;
 		refreshUserData.setLayoutData(btnSearchlayoutData);
-		refreshUserData.setText("Refresh User Data");
-		//refreshUserData.setLayoutData(gridData16);
+		refreshUserData.setText("Refresh User Data");		
 		refreshUserData.setData("name", "refreshUserData");
 		
 		GridData gridData16 = new GridData();
