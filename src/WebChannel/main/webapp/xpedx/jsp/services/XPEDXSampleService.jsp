@@ -785,7 +785,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
           <span class="page-title">Request Sample</span>
           <br />
           <span class="smallfont"> * - Required Field </span>
-          <s:form id="serviceRequestForm" name="serviceRequestForm" namespace="/xpedx/services" method="post" action="saveServiceRequest">
+          <s:form id="serviceRequestForm" name="serviceRequestForm" namespace="/services" method="post" action="saveServiceRequest">
           <s:property value="%{#errorMesage}" />
           <div class="clearview"> &nbsp;</div>
       		<fieldset class="feild-service" >
