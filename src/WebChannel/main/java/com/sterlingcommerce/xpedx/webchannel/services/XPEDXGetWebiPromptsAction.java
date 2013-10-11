@@ -453,6 +453,12 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 					+ eleExtn.getAttribute("ExtnSAPParentAccNo"));
 			return list;
 		}
+		if (suffix.indexOf("xcomMasterCustomer") == 0) {
+			list.add(eleExtn.getAttribute("ExtnSAPParentAccNo"));
+			LOG.debug("XCOMMSAP ++++++++++++++++"
+					+ eleExtn.getAttribute("ExtnSAPParentAccNo"));
+			return list;
+		}
 
 		/*
 		 * if (suffix.indexOf("SAP") == 0) {

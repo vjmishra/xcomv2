@@ -28,10 +28,10 @@ import com.yantra.yfs.core.YFSSystem;
 public class ReportUtils {
 
 	String msgStr = "";
-	
+
 	public static Map<String, String> getCMSLogonDetails() {
 		Map<String, String> logonMap = new HashMap<String, String>();
-		
+
 		String wcPropertiesFile = "xpedx_reporting.properties";
 		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS(wcPropertiesFile);
 		// Retrieve the logon information
@@ -39,11 +39,13 @@ public class ReportUtils {
 		logonMap.put("password", YFSSystem.getProperty("password"));
 		logonMap.put("CMS", YFSSystem.getProperty("CMS"));
 		logonMap.put("authentication", YFSSystem.getProperty("authentication"));
-		logonMap.put("standard_folder_id", YFSSystem.getProperty("standard_folder_id"));
-		logonMap.put("custom_folder_id", YFSSystem.getProperty("custom_folder_id"));
-		
+		logonMap.put("standard_folder_id",
+				YFSSystem.getProperty("standard_folder_id"));
+		logonMap.put("custom_folder_id",
+				YFSSystem.getProperty("custom_folder_id"));
+
 		return logonMap;
-		
+
 	}
 
 	public String loadInputStream(InputStream inputStream) throws Exception {
@@ -105,17 +107,12 @@ public class ReportUtils {
 			while (paramIterator.hasNext()) {
 				paramObj = (JSONObject) paramIterator.next();
 				paramName = (String) paramObj.get("name");
-				System.out.println("+++++++++ printing name ++++++++++++++ " + paramName);
 				optionalParam = (String) paramObj.get("@optional");
-				System.out.println("++++++++++ printing optional param ++++++++++ " + optionalParam);
 				answerObj = (JSONObject) paramObj.get("answer");
-				System.out.println("++++++++++++++++ printing answer ++++++++++++++ " + answerObj);
 				infoObj = (JSONObject) answerObj.get("info");
-				System.out.println("++++++++++++ printing info obj +++++++++++++ " + infoObj);
 				cardinality = (String) infoObj.get("@cardinality");
-				System.out.println("++++++++++++ printing cardinality +++++++++++ " + cardinality);
-				
-				if (paramVals.containsKey(paramName)) {					
+
+				if (paramVals.containsKey(paramName)) {
 					//
 					// set up the parameters that have a value
 					//
@@ -126,27 +123,21 @@ public class ReportUtils {
 					// verify
 					// that the value is allowed.
 					//
-					if (cardinality.equals("Single")) {
-						tmp = "&lsS" + paramName + "="
-								+ paramVals.get(paramName);
-
-					} else if (cardinality.equals("Multiple")) {
-						tmp = "&lsM" + paramName + "="
-								+ paramVals.get(paramName);
+					if (cardinality.equals("single")) {
+						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
+							tmp = "&lsS" + paramName + "="
+									+ paramVals.get(paramName);
+						} 												
+					} else if (cardinality.equals("multiple")) {
+						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
+							tmp = "&lsM" + paramName + "="
+									+ paramVals.get(paramName);
+						}												
 					}
-				} else if (optionalParam.equals("true")) {
-					//
-					// handle optional params that have no value
-					//
-					if (cardinality.equals("Single")) {
-						tmp = "&lsS" + paramName + "=no_value";
-
-					} else if (cardinality.equals("Multiple")) {
-						tmp = "&lsM" + paramName + "=no_value";
-					}
-				}
+				} 
 				sResult += tmp;
 			}
+
 		}
 		return sResult;
 	}
