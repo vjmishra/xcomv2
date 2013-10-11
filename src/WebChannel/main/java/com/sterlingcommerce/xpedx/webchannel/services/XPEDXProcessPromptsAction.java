@@ -476,7 +476,6 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 						paramStringArray[0] = dateValue; 
 					}
 					
-					
 					promptData.put(promptName, paramStringArray[0]);
 				} else {
 					if (!prefix.equalsIgnoreCase("ddls") && suffix != null) {
@@ -509,9 +508,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 			
 			if (!("").equals(openDocURL)) {
 				try {
-					params = ru.getParamString(getId(), _target, logonTokens.get(0), promptData);
-					
-					System.out.println("++++++++++++ printing params +++++++++++++++ " + params);
+					params = ru.getParamString(getId(), _target, logonTokens.get(0), promptData);				
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -520,8 +517,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				
 				String encodedToken = logonTokens.get(1);	
 				
-				finalURL= openDocURL + params + "&X-SAP-LogonToken=" + encodedToken;		
-				
+				finalURL= openDocURL + params + "&X-SAP-LogonToken=" + encodedToken + "&sRefresh=Y";							
 			}
 			
 			// Set the prompts and rerun the report
