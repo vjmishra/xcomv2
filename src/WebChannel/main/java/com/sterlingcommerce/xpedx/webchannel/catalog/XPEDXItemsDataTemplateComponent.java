@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -127,6 +128,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
 			isConfigurableBundle = "Y";
 		*/
+		List<String> replacmentList = tag.getReplacmentItemsMap().get(itemID.trim());
+		replacmentList = replacmentList == null ? new ArrayList<String>() : replacmentList;
 		String itemCurrency = validate((String) findValue(tag.getCurrency()));
 		boolean isGuestUser = (Boolean)findValue("guestUser");
 		
@@ -293,6 +296,25 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append("<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>");
 		}
 		sb.append("\",");
+		if(replacmentList!=null && replacmentList.size()>0){
+		sb.append("repItem: \"");
+		sb.append("<b>This item will be replaced once inventory is depleted. Select item:</b>");	
+		for(int i=0;i<replacmentList.size();i++ )
+		{
+		if (i>0) sb.append(",");		
+		sb.append("<a class=\\\"submitBtnBg5 underlink\\\" href=\\\"javascript:processDetail('");
+		sb.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
+		sb.append("','");
+		sb.append(TextUtils.htmlEncode(unitOfMeasure));
+		sb.append("');\\\"");
+		sb.append("<span class=\\\"ddesc desc-hname\\\">");
+		sb.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
+		sb.append("</span></a>");		
+		}
+		sb.append("\"");
+		}
+		//sb = parseData(sb);
+		//sb = parseData(sb);
 		//sb = parseData(sb);
 		
 		try {

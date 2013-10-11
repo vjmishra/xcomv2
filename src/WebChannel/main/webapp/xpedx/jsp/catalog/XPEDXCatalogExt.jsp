@@ -726,12 +726,12 @@ return new Ext.XTemplate(
    '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>',
    '<div class="clearBoth">&nbsp;</div>',
   '</div>',
-  '<table class="bottable">','<tr>','<td class="compare_check">',
+  '<table class="bottable">','<tr>',
 	// Do not delete this code. This will come as a CR. '<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
-  '</td>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
+  '</td>','<td class="item_number" >','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
   '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
   '</td>','</tr>',
-  '<tr>','<td></td>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
+  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
   <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
 	  '</td>',
   '<td class="add_to_cart"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -741,12 +741,13 @@ return new Ext.XTemplate(
   </s:else>		
    '<div class="availablelink">',<s:if test='!#guestUser'>
 	'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
-	'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
+	'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:185px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
    '</div>',
   </s:if>
   '</td>','</tr>',
- <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'> '<tr>','<td></td>','<td class="item_number">{customerItemno}</td>','</tr>',</s:if>
-  '<tr>',<s:if test='!#guestUser'>'<td style="height:auto;"></td>','<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
+ <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'> '<tr>','<td class="item_number">{customerItemno}</td>','</tr>',</s:if>
+  '<tr>',<s:if test='!#guestUser'>'<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
+  '<tr>',<s:if test='!#guestUser'>'<td colspan="2" style="width:auto;" class="mill-mfg">{repItem}</td>',</s:if>'<tr>',
   <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
   '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
   '</table>',

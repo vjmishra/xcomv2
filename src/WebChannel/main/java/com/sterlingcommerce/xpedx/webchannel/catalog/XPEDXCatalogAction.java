@@ -28,6 +28,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.comergent.appservices.configuredItem.XMLUtils;
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
@@ -341,12 +342,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setStockedCheckeboxSelected(defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_STOCKED) || defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED));
 				getWCContext().setWCAttribute("StockedCheckbox", isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 			}
+			}
 		}
-		
-		Object sessionStockedCheckbox = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
-		if (sessionStockedCheckbox != null) {
-			isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
-		}
+	private Map<String,List<String>> replacmentItemsMap;
+
+	public Map<String, List<String>> getReplacmentItemsMap() {
+		return replacmentItemsMap;
+	}
+
+	public void setReplacmentItemsMap(Map<String, List<String>> replacmentItemsMap) {
+		this.replacmentItemsMap = replacmentItemsMap;
 	}
 
 	/**
@@ -1243,7 +1248,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if(shipToCustomer!=null) {
 			String envCode = shipToCustomer.getExtnEnvironmentCode();
 			String legacyCustomerNumber=shipToCustomer.getExtnLegacyCustNumber();
-			String custDivision = shipToCustomer.getExtnCustomerDivision();
+			String custDivision = shipToCustomer.getExtnShipFromBranch();
 			HashMap<String,String> valueMap =  new HashMap<String, String>();
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
@@ -1363,6 +1368,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 								.getSCUIContext());
 				 
 				 getOrderMultipleMapForItems();
+				 getReplacmentItemsMapForItems(envCode,custDivision);
+				 wcContext.setWCAttribute("replacmentItemsMap", replacmentItemsMap, WCAttributeScope.REQUEST);
 			}
 			catch(Exception e)
 			{
@@ -1827,6 +1834,107 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 			}
 		}
+	}
+	private void getReplacmentItemsMapForItems(String envCode,String shipFromDivision)
+	{
+		String custID = wcContext.getCustomerId();
+		replacmentItemsMap = new LinkedHashMap<String, List<String>>();
+		if(allAPIOutputDoc != null)
+		{
+			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
+			NodeList wNodeList = wElement.getChildNodes();
+			if (wNodeList != null) {
+				int length = wNodeList.getLength();
+				for (int i = 0; i < length; i++) {
+					Node wNode = wNodeList.item(i);
+					if (wNode != null) {
+						NamedNodeMap nodeAttributes = wNode.getAttributes();
+						if (nodeAttributes != null) {
+							Node itemId = nodeAttributes.getNamedItem("ItemID");
+							if(itemId!=null) {
+								try {
+									ArrayList<String> replacementAssociatedItems = new ArrayList<String>();
+									ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
+									Document XPXItemExtnListElement= null;
+									XPXItemExtnListElement = XPEDXOrderUtils.getXPEDXItemAssociation(custID, shipFromDivision, itemId.getTextContent(), getWCContext());
+
+									List<Element> xPXItemExtn = XMLUtilities.getElements(XPXItemExtnListElement.getDocumentElement(), "XPXItemExtn[@ItemID='"+itemId.getNodeValue()+"']");
+									if(xPXItemExtn != null && xPXItemExtn.size() > 0){
+										Iterator iterxPXItemExtn = xPXItemExtn.iterator();								
+					                    List<Element> replacementList = new ArrayList<Element>();
+										while(iterxPXItemExtn.hasNext()){
+											Element xPXItemExtnElement = (Element)iterxPXItemExtn.next();
+											//Check the ItemExtn for the current customer
+											String companyCode = xPXItemExtnElement.getAttribute("CompanyCode");
+											String environmentCode = xPXItemExtnElement.getAttribute("EnvironmentID");
+											String division = xPXItemExtnElement.getAttribute("XPXDivision");											
+											if (shipFromDivision!=null && envCode!=null &&
+													(!(shipFromDivision.equalsIgnoreCase(division) &&
+													envCode.equalsIgnoreCase(environmentCode)))){
+												continue;
+											}					
+					                        try{
+											Element xPXItemAssociationsListElement = SCXmlUtil.getChildElement(xPXItemExtnElement, "XPXItemAssociationsList");
+												//Add the Replacement Items
+												List<Element> replacementItemList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='R']");
+												if(replacementItemList != null && replacementItemList.size() > 0){
+													replacementList.addAll(replacementItemList);
+												}	
+											}// try block ends
+											catch(XPathExpressionException e){
+												
+											}
+										}
+					
+										ArrayList<String> repItemIds = new ArrayList<String>();		
+										//Get the replacement items
+										if(null!=replacementList && replacementList.size() >=0){
+											for(Element repItem:replacementList){
+												String associatedItemID = SCXmlUtil.getAttribute(repItem, "AssociatedItemID");
+												if(!YFCCommon.isVoid(associatedItemID) && !associatedItemID.equals("")){
+													if(!itemIDListForGetCompleteItemList.contains(associatedItemID)){
+														itemIDListForGetCompleteItemList.add(associatedItemID);
+														}
+													repItemIds.add(associatedItemID);
+												}
+											}
+										}	
+
+										//call getCompleteItemList
+										Document itemDetailsListDoc = null;
+										try {
+											// invoking a different function which will give onyl the entitiled items - 734
+											itemDetailsListDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(itemIDListForGetCompleteItemList, custID, wcContext.getStorefrontId(), wcContext);
+											//System.out.println("ItemListDoc "+SCXmlUtil.getString(itemDetailsListDoc));
+										} catch (Exception e) {
+											LOG.error("Exception while getting item details for associated items",e);
+											return;
+										}
+										if(itemDetailsListDoc!=null) {
+											NodeList itemDetailsList = itemDetailsListDoc.getElementsByTagName("Item");
+											for(int j = 0;j< itemDetailsList.getLength();j++){
+												Element curritem = (Element)itemDetailsList.item(j);
+												String curritemID = XMLUtils.getAttributeValue(curritem, "ItemID");
+										        if(repItemIds.contains(curritemID))
+										        {
+											        replacementAssociatedItems.add(curritemID);
+										        }
+											}
+										}
+									}								
+									replacmentItemsMap.put(itemId.getTextContent(), replacementAssociatedItems);
+								} catch (Exception e1) {
+									LOG.error("Error getting the Item Branch Information for Item id "+itemID);
+									e1.printStackTrace();
+								}
+							}
+						}
+					}
+				}
+			}
+	/*		*/
+		}
+
 	}
 	private Map<String, Map<String,String>> getXpedxUOMList() {
 		
