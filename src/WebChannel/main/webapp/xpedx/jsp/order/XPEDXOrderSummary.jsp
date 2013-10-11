@@ -1795,7 +1795,7 @@ from session . We have customer Contact Object in session .
 		<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
 			<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
 			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Approve and Submit Button</span></a>
+				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Approve and Submit Order</span></a>
 			</s:if>
 			<s:else>
 				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>
@@ -1804,7 +1804,7 @@ from session . We have customer Contact Object in session .
 		<s:else>
 <%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
 			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">				
-			     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Approve and Submit Button</span></a>
+			     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Approve and Submit Order</span></a>
 			</s:if>
 			<s:else>
 				<a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
