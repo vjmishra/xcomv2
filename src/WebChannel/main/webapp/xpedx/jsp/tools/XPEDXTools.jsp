@@ -110,7 +110,7 @@
 				<s:url id='roolWeight' namespace="/tools" action='rool-Weight' />	
 				<s:url id='LinearFootageCalculator' namespace="/tools" action='Linear-Footage-Calculator' />	
 				<s:url id='basisWeightConversionChart' namespace="/tools" action='basis-Weight-Conversion-Chart' />	
-				<s:url id='impositionCalculatorLink' namespace="/tools" action='MyImpCalculationPage' />																		
+				<s:url id='impositionCalculatorLink' namespace="/tools" action='MyImpositionCalculator' />																		
 				<s:url id='GSMCalculator' namespace="/tools" action='GSMCalculator' />	
 				<s:url id='PagesInchcalculator' namespace="/tools" action='PagesInch-calculator' />	
 				<s:url id='Weightofoddnumofsheet' namespace="/tools" action='Weight-of-odd-num-of-sheet' />	
