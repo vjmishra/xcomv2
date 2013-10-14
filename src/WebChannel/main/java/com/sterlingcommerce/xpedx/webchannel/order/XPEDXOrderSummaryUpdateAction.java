@@ -104,10 +104,13 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					List<String> approvedEmailAddressList = null;
 					if(addnlEmailAddrList!=null) {
 						List<String> editOrderAddnlEmailAddressList=getAddnlEmailAddrList();
-						if(getSelectedAddnlEmailAddrList()!=null) {					
+						if(getSelectedAddnlEmailAddrList()!=null) {
 							editOrderAddnlEmailAddressList.addAll(getSelectedAddnlEmailAddrList());
 							approvedEmailAddressList = new ArrayList<String>(new HashSet<String>(editOrderAddnlEmailAddressList));
-						}
+						
+						} else {
+							approvedEmailAddressList = new ArrayList<String>(editOrderAddnlEmailAddressList);
+						}						
 					
 					} else {
 						if(getSelectedAddnlEmailAddrList()!=null) {
