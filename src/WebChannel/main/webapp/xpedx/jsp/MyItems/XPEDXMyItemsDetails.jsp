@@ -1082,26 +1082,7 @@ function showSharedListForm(){
 			}
 			return errorflag;
 		}*/
-		//Added for XB 214 BR requirements.
-		function convertToUOMDescription(uomCode)
-{
-    var url=document.getElementById("uomDescriptionURL").value;
-    var req=null;
-    if (window.XMLHttpRequest){
-    	req = new XMLHttpRequest();
-    }else{
-    	req = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    url=url+'&uomCode='+uomCode;
-    req.open('POST', url, false);     
-    req.send(null);
-    if(req.status == 200){
-      return req.responseText;
-    }else{
-    	return uomCode;
-    }
-}
-		//End of BR XB 214
+
 		//// Function Start - Jira 3770
 		var isAddToCart=true;
 		function validateOrderMultipleFromAddQtyToCart(isOnlyOneItem,listId){
@@ -2011,7 +1992,8 @@ function showSharedListForm(){
 				} 
 				formItemIds = document.getElementById('formItemIds');
 			}
-		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
+
+			<s:url id='testData' action='getItemAvailabiltyForSelected.action'>
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
 		    // if(validateOMForMultipleItems == true){
@@ -2026,12 +2008,14 @@ function showSharedListForm(){
 		                   },
 	                   form: 'formItemIds',
 	                  method: 'POST',
+
 	                   success: function (response, request){
-		                   var responseText = response.responseText;
 		                   
-		                   var availabilityRow = document.getElementById('priceDiv');		                   
+			                var responseText = response.responseText;
+		                    var availabilityRow = document.getElementById('priceDiv');		                   
 		            		availabilityRow.innerHTML=responseText;
 		            		assignAvailablity();
+
 		            		var myitemskeys =document.getElementById("chkItemKeys").value;
 		            		var trimMyitemskeys = myitemskeys.trim();
 		            		var myitemskey=trimMyitemskeys.split(",");
@@ -2039,7 +2023,7 @@ function showSharedListForm(){
 		            		availabilityRow.innerHTML='';
 		            		availabilityRow.style.display = '';
 		            		//Added for XB 214 - BR requirements
-				             
+
 		            		// omArray = document.getElementsByName("orderMultipleQtyFromSrc");
 		            		var i,j,k=0;
 		            		 for(i=0;i<checkboxes.length;i++){
@@ -2059,7 +2043,7 @@ function showSharedListForm(){
 		            			 var _myItemKey=myitemskey[k].replace(/^\s+|\s+$/g,"");
 		            			 var orderMultipleQtyUom = omQtyUom.split("|");
 		            			 var orderMultipleQty = orderMultipleQtyUom[0];
-		            			 var orderMultipleUom = orderMultipleQtyUom[1];
+		            			 var orderMultipleUom = orderMultipleQtyUom[2]; // uom desc now in response
 		            			 var omError = document.getElementById("orderMulErrorCode_"+j).value;	
 		            			 var qty = document.getElementById("QTY_"+_myItemKey);
 		            			 var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+_myItemKey);
@@ -2077,7 +2061,7 @@ function showSharedListForm(){
 		            			    }
 		            			 else if(omError == 'true' && (qty.value > 0 || qty.value == ""))
 		            				{
-		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
@@ -2085,14 +2069,14 @@ function showSharedListForm(){
 		            				}
 		            			 else if(omError == 'true')
 		            				{
-		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "notice");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            				}
 		            				else if(orderMultipleQty != null && orderMultipleQty != 0)
 		            				{
-		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "notice");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="block";
@@ -2110,6 +2094,7 @@ function showSharedListForm(){
 			            writeWebtrendTag(responseText);
 			            //-- Web Trends tag end --
 	                   },
+
 	                   failure: function (response, request){						
 						  Ext.Msg.hide();
 				          	  myMask.hide();

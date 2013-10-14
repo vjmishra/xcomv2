@@ -11,9 +11,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
 import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
@@ -35,8 +37,8 @@ import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
@@ -565,9 +567,11 @@ public class XPEDXPriceandAvailabilityUtil {
 		for (XPEDXItem item : items) {	
 			boolean isMaxError = false;
 			int lineNumber=Integer.parseInt(item.getLineNumber());
+			String uom = item.getOrderMultipleUOM();
 			if(isLineNumberRequired){
 				if(item.getOrderMultipleQty()!= null  && !item.getOrderMultipleQty().equalsIgnoreCase("0") && isNumeric(item.getOrderMultipleQty())){
-					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleQty() + "|" + item.getOrderMultipleUOM());
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber,
+							item.getOrderMultipleQty() + "|" + uom + "|" + getUomDesc(uom));
 				}else
 					ordermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, null);
 			}
@@ -576,26 +580,23 @@ public class XPEDXPriceandAvailabilityUtil {
 					if(item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 						isMaxError = true;
 					}
-					try {
-						ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM())+"|"+isMaxError);
-					} catch (XPathExpressionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (XMLExceptionWrapper e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (CannotBuildInputException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + getUomDesc(uom)+"|"+isMaxError);
 				}else
 					ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), null);
 			}
 		}
 		return ordermultipleMapFromSourcing;
 	}
-	//End of XB 214 BR changes
-	
+
+	private static String getUomDesc(String uom) {
+		try {
+			return XPEDXWCUtils.getUOMDescription(uom);
+		} catch (Exception e) {
+			log.error("Exception while converting uom to description "+e.getMessage());
+			return uom;
+		}
+	}
+
 	public static HashMap useOrderMultipleErrorMapFromMax(
 			Vector<XPEDXItem> items) {
 		HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
@@ -1110,17 +1111,9 @@ public class XPEDXPriceandAvailabilityUtil {
 							BigDecimal priceForCWTUom = null;
 							BigDecimal priceForTHUom = null;
 							
-							String BaseUomDesc = null;
-							String RequestedQtyUOMDesc = null;
-							String PricingUOMDesc = null;
-							try {
-								BaseUomDesc = XPEDXWCUtils.getUOMDescription(baseUOM);
-								RequestedQtyUOMDesc = XPEDXWCUtils
-										.getUOMDescription(pandAItem.getRequestedQtyUOM());
-								PricingUOMDesc = XPEDXWCUtils.getUOMDescription(pricingUOM);
-							} catch (Exception e) {
-	
-							}
+							//BaseUomDesc = getUomDesc(baseUOM);
+							String RequestedQtyUOMDesc = getUomDesc(pandAItem.getRequestedQtyUOM());
+							String PricingUOMDesc = getUomDesc(pricingUOM);
 							
 							String cwtUOMDesc = null;
 							String thUOMDesc = null;
