@@ -788,6 +788,8 @@ return new Ext.XTemplate(
    '</tr>','<tr>','<tr>','</tr>','<td class="line_error" colspan="2" style="width:50px;">',
     <s:if test='!#guestUser'>'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/> {qtyGreaterThanZeroMsg} </div>',</s:if>
    '</td>','</tr>',
+   // EB-58 to see the replacement item information on CONDENSED VIEW screen!
+   '<tr>',<s:if test='!#guestUser'>'<td colspan="2" style="width:auto;" class="mill-mfg">{repItem}</td>',</s:if>'</tr>',
    '</table>',
    '<div class="clearBoth">&nbsp;</div>',				
  '</dd>','</tpl>','</dl>','</tpl><div style="clear:left"></div>',
