@@ -297,8 +297,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		sb.append("\",");
 		if(replacmentList!=null && replacmentList.size()>0){
+		StringBuffer repItemsForMiniView = new StringBuffer();
 		sb.append("repItem: \"");
-		sb.append("<b>This item will be replaced once inventory is depleted. Select item:</b>");	
+		sb.append("<b>This item will be replaced once inventory is depleted. Select item:</b>");
+		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		for(int i=0;i<replacmentList.size();i++ )
 		{
 		if (i>0) sb.append(",");		
@@ -309,9 +311,22 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("');\\\"");
 		sb.append("<span class=\\\"ddesc desc-hname\\\">");
 		sb.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
-		sb.append("</span></a>");		
+		sb.append("</span></a>");
+		
+		if (i>0) repItemsForMiniView.append(",");
+		if((i %2)!=0)repItemsForMiniView.append("<br/>");
+		repItemsForMiniView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+		repItemsForMiniView.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
+		repItemsForMiniView.append("','");
+		repItemsForMiniView.append(TextUtils.htmlEncode(unitOfMeasure));
+		repItemsForMiniView.append("');\\\">");
+		repItemsForMiniView.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
+		repItemsForMiniView.append("</a>");
 		}
 		sb.append("\"");
+		
+		repItemsForMiniView.append("\"");		
+		sb.append(repItemsForMiniView);
 		}
 		//sb = parseData(sb);
 		//sb = parseData(sb);

@@ -820,7 +820,7 @@ return new Ext.XTemplate(
    <s:if test='!#guestUser'>'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>','<br/>',</s:if>
   '</div>','<div class="line_error" >',
    <s:if test='!#guestUser'>'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',</s:if>
-  '</div>','</div>',
+  '</div>',<s:if test='!#guestUser'>'<div>{repItemsForMiniView}</div>',</s:if>'</div>',
   '<div class="clearBoth">&nbsp;</div>',																								
  '</dd>','</tpl>','</dl>','</tpl><div style="clear:left"></div>',
 '</div>'                        
