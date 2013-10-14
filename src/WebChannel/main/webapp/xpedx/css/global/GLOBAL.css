@@ -1878,6 +1878,7 @@ inStoreIcon {
     max-height: 12px;
     overflow: visible;
     padding: 0 5px;
+    text-align: right;
 }
 .commonHeader-subnav li a {
     font-family: Arial,Helvetica,sans-serif;
