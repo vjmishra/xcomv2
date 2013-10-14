@@ -3,19 +3,19 @@
 <properties>
     <comment>Binding entries for draft order summary information</comment>
     
-    <entry key="orderHeaderKey">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@OrderHeaderKey,me_dod_validateItemForOrdering:/Order/@OrderHeaderKey,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@OrderHeaderKey</entry>  
-    <entry key="deliveryHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldFlag</entry>
-    <entry key="deliveryHoldDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldDate,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldDate</entry>
-    <entry key="#parameters.DeliveryHoldTime">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldTime,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldTime</entry>
-    <entry key="draftShipComplete">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipComplete,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnShipComplete</entry>
+    <entry key="orderHeaderKey">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@OrderHeaderKey,me_dod_validateItemForOrdering:/Order/@OrderHeaderKey,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@OrderHeaderKey,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/@OrderHeaderKey</entry>  
+    <entry key="deliveryHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldFlag,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnDeliveryHoldFlag</entry>
+    <entry key="deliveryHoldDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldDate,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldDate,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnDeliveryHoldDate</entry>
+    <entry key="#parameters.DeliveryHoldTime">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldTime,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnDeliveryHoldTime,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnDeliveryHoldTime</entry>
+    <entry key="draftShipComplete">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipComplete,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnShipComplete,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnShipComplete</entry>
     <entry key="willCallFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWillCall,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnWillCall</entry>
     <entry key="orderedByName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnOrderedByName,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnOrderedByName</entry>
-    <entry key="customerContactId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerContactID,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerContactID</entry>    
+    <entry key="customerContactId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerContactID,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerContactID,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/@CustomerContactID</entry>    
             
     <entry key="#parameters.orderReqDeliveryDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ReqDeliveryDate,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@ReqDeliveryDate</entry>
     <entry key="#parameters.RushOrderNoteText">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderComments,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnRushOrderComments</entry>
     <entry key="rushOrdrFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnRushOrderFlag</entry>
- 	<entry key="extnWebHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag</entry>
+ 	<entry key="extnWebHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnWebHoldFlag</entry>
  
  	<entry key="emailAddresses">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr</entry>
  	 <!-- 
@@ -29,11 +29,11 @@
  	<entry key="#parameters.transactionalUOM">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM,XPEDXDraftOrderSummaryOnOrderPlace:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry> 
    -->
     <!-- Added entry for binding Customer PO Number  -->
-   	<entry key="customerPoNumber">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerPONo,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerPONo</entry>
+   	<entry key="customerPoNumber">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerPONo,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerPONo,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/@CustomerPONo</entry>
     
     <!-- Save cart summary information (same as draftOrderSummaryUpdate) on orderplace: RUgrani -->
     <entry key="extnEnvtId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnEnvtId,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnEnvtId</entry>
-    <entry key="#parameters.ShipToAttn">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAttentionName,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnAttentionName</entry>    
+    <entry key="#parameters.ShipToAttn">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAttentionName,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnAttentionName,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnAttentionName</entry>    
 	<entry key="extnCompanyId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnCompanyId,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnCompanyId</entry>
 	<entry key="extnOrderDivision">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnOrderDivision,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnOrderDivision</entry>
 	<entry key="extnShipFromDiv">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ShipNode,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@ShipNode</entry>

@@ -38,6 +38,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
 	private static final String SAVE_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryOnOrderPlace";
 	private static final String EDIT_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryUpdateOnOrderPlace";
+	private static final String APPROVE_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryUpdateOnApproveOrder";
 	private static final String RUSH_ORDER="RUSH ORDER";
 	private static final String REQUESTED_DELIVERY_DATE="REQUESTED DELIVERY DATE";
 	private boolean isDraftOrder=false;
@@ -84,36 +85,53 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					approveOrderFlag=approveOrderSessionVar.toString();
 				}
 				
-				if("true".equals(approveOrderFlag)) {					
+				if("true".equals(approveOrderFlag)) {
 					Set<String> mashupId=new HashSet<String>();
-					mashupId.add(EDIT_ORDER_SUMMARY_MASHUP);
+					mashupId.add(APPROVE_ORDER_SUMMARY_MASHUP);
 					
 					Map<String, Element> changeOrderInputObj=prepareMashupInputs(mashupId);
-					Document changeOrderInputDoc = changeOrderInputObj.get(EDIT_ORDER_SUMMARY_MASHUP).getOwnerDocument();
+					Document changeOrderInputDoc = changeOrderInputObj.get(APPROVE_ORDER_SUMMARY_MASHUP).getOwnerDocument();
 					Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
-					Element holdTypesElem = changeOrderInputDoc.createElement("OrderHoldTypes");
-					Element holdTypeElem = changeOrderInputDoc.createElement("OrderHoldType");
+					Element holdTypesElem = SCXmlUtil.getChildElement(changeOrderInputElem, "OrderHoldTypes");
+					Element holdTypeElem = SCXmlUtil.getChildElement(holdTypesElem, "OrderHoldType");
 					holdTypeElem.setAttribute("HoldType", "ORDER_LIMIT_APPROVAL");
 					holdTypeElem.setAttribute("Status", "1300");
 					holdTypeElem.setAttribute("ReasonText", "Released on approving an order during Order Edit");
 					holdTypeElem.setAttribute("ResolverUserId", getWCContext().getLoggedInUserId());
-					holdTypesElem.appendChild(holdTypeElem);		
-					changeOrderInputElem.appendChild(holdTypesElem);					
 					
-					Element pendingChangesElem = SCXmlUtil.getChildElement(changeOrderInputElem, "PendingChanges");
-					if(pendingChangesElem!=null) {
-						String recordPendingChangesAttr = SCXmlUtil.getAttribute(pendingChangesElem, "RecordPendingChanges");
-						if(recordPendingChangesAttr!=null) {
-							pendingChangesElem.removeAttribute("RecordPendingChanges");
+					Element changeOrderExtnElem = SCXmlUtil.getChildElement(changeOrderInputElem, "Extn");			
+					StringBuffer selectedAddnlEmailAddrBuf = new StringBuffer("");
+					List<String> approvedEmailAddressList = null;
+					if(addnlEmailAddrList!=null) {
+						List<String> editOrderAddnlEmailAddressList=getAddnlEmailAddrList();
+						if(getSelectedAddnlEmailAddrList()!=null) {					
+							editOrderAddnlEmailAddressList.addAll(getSelectedAddnlEmailAddrList());
+							approvedEmailAddressList = new ArrayList<String>(new HashSet<String>(editOrderAddnlEmailAddressList));
 						}
 					
 					} else {
-						pendingChangesElem = changeOrderInputDoc.createElement("PendingChanges");
+						if(getSelectedAddnlEmailAddrList()!=null) {
+							approvedEmailAddressList = new ArrayList<String>(new HashSet<String>(getSelectedAddnlEmailAddrList()));
+						}
 					}
-					pendingChangesElem.setAttribute("ApplyPendingChanges","Y");
-					changeOrderInputElem.appendChild(pendingChangesElem);
 					
-					outElement = (Element) WCMashupHelper.invokeMashup(EDIT_ORDER_SUMMARY_MASHUP, changeOrderInputElem, wcContext.getSCUIContext());
+					if(approvedEmailAddressList!=null && approvedEmailAddressList.size()>0) {
+						for(int i=0; i<approvedEmailAddressList.size();i++) {
+							String addnlEmailAddr = approvedEmailAddressList.get(i);
+							if(YFCCommon.isVoid(addnlEmailAddr)) {
+								continue;
+							}
+							
+							if(i!=(approvedEmailAddressList.size()-1)) {
+								selectedAddnlEmailAddrBuf.append(addnlEmailAddr).append(",");
+							} else {
+								selectedAddnlEmailAddrBuf.append(addnlEmailAddr);
+							}
+						}					
+					}
+					changeOrderExtnElem.setAttribute("ExtnAddnlEmailAddr",selectedAddnlEmailAddrBuf.toString());				
+					
+					outElement = (Element) WCMashupHelper.invokeMashup(APPROVE_ORDER_SUMMARY_MASHUP, changeOrderInputElem, wcContext.getSCUIContext());
 				
 				} else {
 					outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
@@ -905,7 +923,15 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private ArrayList<String> inventoryInds;
 	private String customerHoldCheck;
 	private String rushOrdrDateFlag = "false";
+	private List<String> selectedAddnlEmailAddrList;
 	
+	public List<String> getSelectedAddnlEmailAddrList() {
+		return selectedAddnlEmailAddrList;
+	}
+	public void setSelectedAddnlEmailAddrList(
+			List<String> selectedAddnlEmailAddrList) {
+		this.selectedAddnlEmailAddrList = selectedAddnlEmailAddrList;
+	}
 	public String getRushOrdrDateFlag() {
 		return rushOrdrDateFlag;
 	}

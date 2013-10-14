@@ -3299,5 +3299,61 @@
             </OrganizationList>
             </Template>
         </API>
-    </mashup>            
+    </mashup>
+    
+    <mashup description="Modify the order before placing:add xpedx fields"
+        endpoint="DRAFT_ORDER" id="XPEDXDraftOrderSummaryUpdateOnApproveOrder"
+        mashuptype="XAPI" transactional="true">
+        <classInformation
+            name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+        <API Name="changeOrder">
+            <Input>                
+                <Order OrderHeaderKey="" CustomerPONo="" Override="Y" CustomerContactID="">
+                	<OrderHoldTypes>
+                        <OrderHoldType HoldType="" ReasonText="" Status="" ResolverUserId=""/>
+                    </OrderHoldTypes>
+                    <Extn ExtnDeliveryHoldFlag=""
+                        ExtnShipComplete="" ExtnDeliveryHoldDate=""
+                        ExtnDeliveryHoldTime="" ExtnAttentionName="" 
+                        ExtnAddnlEmailAddr="" ExtnWebHoldFlag=""/>
+                    <PendingChanges ApplyPendingChanges="Y"/>                  
+                </Order>                
+            </Input>
+            <Template>
+                <Order OrderHeaderKey="" CustomerContactID="" OrderType="" ShipToID=""
+                    OrderNo="" EnterpriseCode="" OrderName="" DraftOrderFlag="" Status=""
+                    OrderDate="" MaxOrderStatus="" CustomerPONo="" HasPendingChanges=""  
+                    PendingChangesUserID="" ReqDeliveryDate="" SellerOrganizationCode="" Modifyts="">
+                    <Extn />
+                    <PriceInfo Currency=""/>
+                    <Instructions>
+                        <Instruction />
+                    </Instructions>
+                    <PersonInfoShipTo />
+                    <PersonInfoBillTo />
+                    <OrderLines>
+                        <OrderLine OrderLineKey="" SubLineNo="" PrimeLineNo="" OrderedQty="" LineType="" ShipNode="" StatusQuantity=""
+                        CustomerPONo="">  
+                            <Item ItemID="" UnitOfMeasure="" ItemShortDesc="" ItemDesc=""/>
+                            <LinePriceInfo UnitPrice="" LineTotal="" />
+                            <Extn />
+                            <Instructions>
+                                <Instruction />
+                            </Instructions>                            
+                            <OrderLineTranQuantity TransactionalUOM="" OrderedQty="" />
+                            <Notes>
+                                <Note />
+                            </Notes>
+                            <LineCharges>
+                                <LineCharge ChargeAmount=""/>
+                            </LineCharges>
+                            <Awards>
+                                <Award AwardId=""/>
+                            </Awards>
+                        </OrderLine>
+                    </OrderLines>
+                </Order>
+            </Template>
+        </API>
+    </mashup>          
 </mashups>

@@ -798,7 +798,7 @@ from session . We have customer Contact Object in session .
 						name='DeliveryHoldFlag' fieldValue="true" id="DeliveryHoldFlag"
 						value="%{#_action.isDeliveryHold()}" /> 
 						<%--Changes for JIRA 3413 --%>
-						<s:if test="%{deliveryCutOffTime!= null && deliveryCutOffTime!=''}">
+					<s:if test="%{deliveryCutOffTime!= null && deliveryCutOffTime!=''}">
 						Place Order on Hold, CSR will release at
 					&nbsp;<s:property value="deliveryCutOffTime"/>
 					</s:if>
@@ -988,14 +988,20 @@ from session . We have customer Contact Object in session .
 			</td>
 			
 			<td width="260px" valign="top" class="second-cell">
-						<label class="block-label bold " for="comments " >Email Confirmation</label>
-							<s:iterator value="addnlEmailAddrList" id="addtnEmailAddrs">
-								<s:set name="emailAddrs" value="key" />
-								<div class="float-left margin-top-five">
-									<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input> 
-									<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
-								</div>								
-							</s:iterator>
+				<label class="block-label bold " for="comments " >Email Confirmation</label>
+				<s:iterator value="addnlEmailAddrList" id="addtnEmailAddrs">
+					<s:set name="emailAddrs" value="key" />
+					<div class="float-left margin-top-five">
+						<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input> 
+						<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
+					</div>								
+				</s:iterator>
+				
+				<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
+					<s:iterator value="selectedAddnlEmailAddrList" id="selectedAddnlEmailAddrs" status="row">
+						<s:hidden name="selectedAddnlEmailAddrList[%{#row.index}]"/>														
+					</s:iterator>
+				</s:if>
 						
 			</td>
 			<td valign="top">
