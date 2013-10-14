@@ -298,8 +298,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		if(replacmentList!=null && replacmentList.size()>0){
 		StringBuffer repItemsForMiniView = new StringBuffer();
+		StringBuffer repItemsForCondensedView = new StringBuffer();
 		sb.append("repItem: \"");
 		sb.append("<b>This item will be replaced once inventory is depleted. Select item:</b>");
+		repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		for(int i=0;i<replacmentList.size();i++ )
 		{
@@ -312,6 +314,15 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("<span class=\\\"ddesc desc-hname\\\">");
 		sb.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
 		sb.append("</span></a>");
+		
+		if (i>0) repItemsForCondensedView.append(",");
+		repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+		repItemsForCondensedView.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
+		repItemsForCondensedView.append("','");
+		repItemsForCondensedView.append(TextUtils.htmlEncode(unitOfMeasure));
+		repItemsForCondensedView.append("');\\\">");
+		repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
+		repItemsForCondensedView.append("</a>");
 		
 		if (i>0) repItemsForMiniView.append(",");
 		if((i %2)!=0)repItemsForMiniView.append("<br/>");
@@ -327,6 +338,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		
 		repItemsForMiniView.append("\"");		
 		sb.append(repItemsForMiniView);
+		repItemsForCondensedView.append("\"");
+		sb.append(repItemsForCondensedView);
 		}
 		//sb = parseData(sb);
 		//sb = parseData(sb);
