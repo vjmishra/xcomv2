@@ -919,7 +919,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			String ConvFactor = ConvFactorNode.getTextContent();
 			String legacyConvFact=wUOMsToConversionFactors.get(
 					XpxItemcustXrefAttributes.getNamedItem("LegacyUom") != null ? XpxItemcustXrefAttributes.getNamedItem("LegacyUom").getTextContent() : "");
-			if(YFCCommon.isVoid(ConvFactor) && YFCCommon.isVoid(legacyConvFact) )
+			if(!(YFCCommon.isVoid(ConvFactor) && YFCCommon.isVoid(legacyConvFact)) )
 				ConvFactor = ""+(Float.parseFloat(ConvFactor) * Float.parseFloat(legacyConvFact));
 			//XB-687 - Start
 			if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
