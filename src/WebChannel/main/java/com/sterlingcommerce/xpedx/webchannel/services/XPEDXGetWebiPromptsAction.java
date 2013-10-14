@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.services;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import org.apache.http.HttpHost;
@@ -448,7 +449,18 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 			return list;
 		}
 		if (suffix.indexOf("xcomMasterReportID") == 0) {
-			list.add(eleExtn.getAttribute("ExtnSAPParentAccNo"));
+						
+			String custNum = eleExtn.getAttribute("ExtnSAPParentAccNo");
+			
+			int firstDigit = getRandomNumber(1,9); 
+			int secondDigit = custNum.length() - firstDigit;
+			int thirdDigit = getRandomNumber(6, 9);
+			int fourthDigit = getRandomNumber(1, 9);
+			int digitRandomNumber1 = getRandomNumberOnSize(thirdDigit-6);
+			int digitRandomNumber2 = getRandomNumberOnSize(fourthDigit-1);
+			int digitRandomNumber3 = getRandomNumberOnSize(getRandomNumber(1,4));
+			String finalReportID = "" + firstDigit + secondDigit + thirdDigit + fourthDigit + digitRandomNumber1 + custNum.substring(0, firstDigit) + digitRandomNumber2 + custNum.substring(firstDigit, custNum.length()) + digitRandomNumber3;			
+			list.add(finalReportID);
 			LOG.debug("XCOMMSAP ++++++++++++++++"
 					+ eleExtn.getAttribute("ExtnSAPParentAccNo"));
 			return list;
@@ -466,6 +478,18 @@ public class XPEDXGetWebiPromptsAction extends WCMashupAction {
 		 */
 
 		return list;
+	}
+	
+	public int getRandomNumber(int min, int max) {
+		int result = min + (int)(Math.random() * ((max - min) + 1));
+		return result;
+	}
+	
+	public int getRandomNumberOnSize(int number) {
+		int digit = (int) Math.pow(10.0, number);
+		Random random = new Random();
+		int digitRandomNumber = random.nextInt(digit * 9) + digit;
+		return digitRandomNumber;
 	}
 
 	/*
