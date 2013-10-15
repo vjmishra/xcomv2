@@ -344,13 +344,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 			}
 		}
-	private Map<String,List<String>> replacmentItemsMap;
+	private Map<String,List<Element>> replacmentItemsMap;
 
-	public Map<String, List<String>> getReplacmentItemsMap() {
+	public Map<String, List<Element>> getReplacmentItemsMap() {
 		return replacmentItemsMap;
 	}
 
-	public void setReplacmentItemsMap(Map<String, List<String>> replacmentItemsMap) {
+	public void setReplacmentItemsMap(Map<String, List<Element>> replacmentItemsMap) {
 		this.replacmentItemsMap = replacmentItemsMap;
 	}
 
@@ -1838,7 +1838,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private void getReplacmentItemsMapForItems(String envCode,String shipFromDivision)
 	{
 		String custID = wcContext.getCustomerId();
-		replacmentItemsMap = new LinkedHashMap<String, List<String>>();
+		replacmentItemsMap = new LinkedHashMap<String, List<Element>>();
 		if(allAPIOutputDoc != null)
 		{
 			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
@@ -1853,7 +1853,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 							Node itemId = nodeAttributes.getNamedItem("ItemID");
 							if(itemId!=null) {
 								try {
-									ArrayList<String> replacementAssociatedItems = new ArrayList<String>();
+									ArrayList<Element> replacementAssociatedItems = new ArrayList<Element>();
 									ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 									Document XPXItemExtnListElement= null;
 									XPXItemExtnListElement = XPEDXOrderUtils.getXPEDXItemAssociation(custID, shipFromDivision, itemId.getTextContent(), getWCContext());
@@ -1917,7 +1917,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 												String curritemID = XMLUtils.getAttributeValue(curritem, "ItemID");
 										        if(repItemIds.contains(curritemID))
 										        {
-											        replacementAssociatedItems.add(curritemID);
+											        replacementAssociatedItems.add(curritem);
 										        }
 											}
 										}

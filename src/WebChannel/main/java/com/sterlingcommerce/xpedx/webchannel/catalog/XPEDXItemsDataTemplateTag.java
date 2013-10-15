@@ -54,7 +54,7 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 		itemUomHashMap = itemUomHashMap == null ? new HashMap<String, HashMap<String, String>>() : itemUomHashMap;
 		PLLineMap = (HashMap<String, List<Element>>) wcContext.getWCAttribute("PLLineMap", WCAttributeScope.REQUEST);
 		PLLineMap = PLLineMap == null ? new HashMap<String, List<Element>>() : PLLineMap;
-		replacmentItemsMap = (HashMap<String,List <String>>) wcContext.getWCAttribute("replacmentItemsMap", WCAttributeScope.REQUEST);
+		replacmentItemsMap = (HashMap<String,List <Element>>) wcContext.getWCAttribute("replacmentItemsMap", WCAttributeScope.REQUEST);
 		this.component = new XPEDXItemsDataTemplateComponent(vstack, request, response, this);
 		return component;
 	}
@@ -165,11 +165,11 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 		this.itemCustomerUomMap = itemCustomerUomMap;
 	}
 	
-	public Map<String, List<String>> getReplacmentItemsMap() {
+	public Map<String, List<Element>> getReplacmentItemsMap() {
 		return replacmentItemsMap;
 	}
 
-	public void setReplacmentItemsMap(Map<String, List<String>> replacmentItemsMap) {
+	public void setReplacmentItemsMap(Map<String, List<Element>> replacmentItemsMap) {
 		this.replacmentItemsMap = replacmentItemsMap;
 	}
 	
@@ -187,6 +187,6 @@ public class XPEDXItemsDataTemplateTag extends ComponentTagSupport {
 	private HashMap <String, List<Element>> PLLineMap;
 	private String orderMultipleString = "Must be ordered in units of ";
 	private String qtyString = "Qty should be greater than 0.";
-	private Map<String,List<String>> replacmentItemsMap;
+	private Map<String,List<Element>> replacmentItemsMap;
 
 }

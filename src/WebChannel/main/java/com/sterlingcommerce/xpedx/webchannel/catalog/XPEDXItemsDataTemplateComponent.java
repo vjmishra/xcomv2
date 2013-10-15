@@ -128,13 +128,13 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
 			isConfigurableBundle = "Y";
 		*/
-		List<String> replacmentList =null;
+		List<Element> replacmentList =null;
 		boolean isGuestUser = (Boolean)findValue("guestUser");
 		if(tag.getReplacmentItemsMap()!=null && isGuestUser!=true)
 		{
 			replacmentList = tag.getReplacmentItemsMap().get(itemID.trim());
 		}
-		replacmentList = replacmentList == null ? new ArrayList<String>() : replacmentList;
+		replacmentList = replacmentList == null ? new ArrayList<Element>() : replacmentList;
 		String itemCurrency = validate((String) findValue(tag.getCurrency()));
 	
 		
@@ -301,7 +301,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append("<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>");
 		}
 		sb.append("\",");
-		if(replacmentList!=null && replacmentList.size()>0){
+		if(replacmentList!=null && replacmentList.size()>0){			
 		StringBuffer repItemsForMiniView = new StringBuffer();
 		StringBuffer repItemsForCondensedView = new StringBuffer();
 		sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");		
@@ -309,33 +309,36 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		for(int i=0;i<replacmentList.size();i++ )
 		{
+		Element replacementItemElement = (Element)replacmentList.get(i);
+		String replacementItem = validate(replacementItemElement.getAttribute("ItemID"));
+		String replacementItemUOM = validate(replacementItemElement.getAttribute("UnitOfMeasure"));
 		if (i>0) sb.append(",");
 		if (i==1) sb.append("<br/>");
 		sb.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
-		sb.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
+		sb.append(TextUtils.htmlEncode(replacementItem));
 		sb.append("','");
-		sb.append(TextUtils.htmlEncode(unitOfMeasure));
+		sb.append(TextUtils.htmlEncode(replacementItemUOM));
 		sb.append("');\\\">");		
-		sb.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
+		sb.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
 		sb.append("</a>");
 		
 		if (i>0) repItemsForCondensedView.append(",");
 		repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
-		repItemsForCondensedView.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
+		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItem));
 		repItemsForCondensedView.append("','");
-		repItemsForCondensedView.append(TextUtils.htmlEncode(unitOfMeasure));
+		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItemUOM));
 		repItemsForCondensedView.append("');\\\">");
-		repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
+		repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
 		repItemsForCondensedView.append("</a>");
 		
 		if (i>0) repItemsForMiniView.append(",");
 		if((i %2)!=0)repItemsForMiniView.append("<br/>");
 		repItemsForMiniView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
-		repItemsForMiniView.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
+		repItemsForMiniView.append(TextUtils.htmlEncode(replacementItem));
 		repItemsForMiniView.append("','");
-		repItemsForMiniView.append(TextUtils.htmlEncode(unitOfMeasure));
+		repItemsForMiniView.append(TextUtils.htmlEncode(replacementItemUOM));
 		repItemsForMiniView.append("');\\\">");
-		repItemsForMiniView.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
+		repItemsForMiniView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
 		repItemsForMiniView.append("</a>");
 		}
 		sb.append("\"");
