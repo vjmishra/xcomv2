@@ -124,12 +124,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 							if(YFCCommon.isVoid(addnlEmailAddr)) {
 								continue;
 							}
-							
-							if(i!=(approvedEmailAddressList.size()-1)) {
-								selectedAddnlEmailAddrBuf.append(addnlEmailAddr).append(",");
-							} else {
-								selectedAddnlEmailAddrBuf.append(addnlEmailAddr);
-							}
+							selectedAddnlEmailAddrBuf.append(addnlEmailAddr).append(";");							
 						}					
 					}
 					changeOrderExtnElem.setAttribute("ExtnAddnlEmailAddr",selectedAddnlEmailAddrBuf.toString());				
