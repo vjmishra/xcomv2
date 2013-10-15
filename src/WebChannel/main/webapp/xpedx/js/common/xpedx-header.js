@@ -277,7 +277,7 @@ function writeMetaTag(tagList,contentList,cnt){
 	iframeElement.style.width = '0px' 
 	iframeElement.style.height ='0px' 
 	iframeElement.style.display = 'none'; 
-	var linkUrl= "/swc/xpedx/jsp/common/Webtrends.jsp?tag="+tagList+"&content="+contentList+"&noOfTags="+cnt; 
+	var linkUrl= "/swc/webtrends/jsp/common/Webtrends.jsp?tag="+tagList+"&content="+contentList+"&noOfTags="+cnt; 
 	linkUrl=addCSRFToken(linkUrl, 'link');
 	iframeElement.src =linkUrl;
 }
