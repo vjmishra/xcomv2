@@ -128,10 +128,15 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
 			isConfigurableBundle = "Y";
 		*/
-		List<String> replacmentList = tag.getReplacmentItemsMap().get(itemID.trim());
+		List<String> replacmentList =null;
+		boolean isGuestUser = (Boolean)findValue("guestUser");
+		if(tag.getReplacmentItemsMap()!=null && isGuestUser!=true)
+		{
+			replacmentList = tag.getReplacmentItemsMap().get(itemID.trim());
+		}
 		replacmentList = replacmentList == null ? new ArrayList<String>() : replacmentList;
 		String itemCurrency = validate((String) findValue(tag.getCurrency()));
-		boolean isGuestUser = (Boolean)findValue("guestUser");
+	
 		
 		XPEDXUtilBean utilBean = new XPEDXUtilBean();
 		String formattedUnitprice = validate(utilBean.formatPriceWithCurrencySymbol(tag.getCtx(),itemCurrency,myPrice));
