@@ -714,49 +714,46 @@ true;"
 var itemWin;			
 var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{<xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
 function getNormalView() {
-return new Ext.XTemplate(
-'<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
-   '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
-    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
-   '</div>',
-   '<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
-  '<div class="contents">','<p class="pprice">{price}</p>','<div class="descriptions">','<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
-   '<p class="ddesc">{name}</p></a>',
-   '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>',
-   '<div class="clearBoth">&nbsp;</div>',
-  '</div>',
-  '<table class="bottable">','<tr>',
-	// Do not delete this code. This will come as a CR. '<input type="checkbox" name="compare_{itemkey}" id="compare_{itemkey}" />','<label for="compare_{itemkey}">Compare</label>',
-  '</td>','<td class="item_number" >','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
-  '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
-  '</td>','</tr>',
-  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
-  <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
-	  '</td>',
-  '<td class="add_to_cart"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
-  </s:if><s:else>
-   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
-  </s:else>		
-   '<div class="availablelink">',<s:if test='!#guestUser'>
-	'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
-	'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:185px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
-   '</div>',
-  </s:if>
-  '</td>','</tr>',
- <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'> '<tr>','<td class="item_number">{customerItemno}</td>','</tr>',</s:if>
-  '<tr>',<s:if test='!#guestUser'>'<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
-  '<tr>',<s:if test='!#guestUser'>'<td colspan="2" style="width:auto;" class="mill-mfg">{repItem}</td>',</s:if>'<tr>',
-  <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
-  '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
-  '</table>',
-  '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">','</div>','</div>',
- '</dd>','</tpl>',  '</dl>','</tpl><div style="clear:left"></div>',
-'</div>'	
-);
-}
-
+	return new Ext.XTemplate(
+	'<div id="item-ct">',
+	 '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
+	   '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
+	    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
+	   '</div>',
+	   '<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
+	  '<div class="contents">','<p class="pprice">{price}</p>','<div class="descriptions">','<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
+	   '<p class="ddesc">{name}</p></a>',
+	   '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>',
+	   '<div class="clearBoth">&nbsp;</div>',
+	  '</div>',
+	  '<table class="bottable">','<tr>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
+	  '<td class="quantity_box">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}',</s:if>
+	  '</td>','</tr>',
+	  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
+	  <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
+		  '</td>',
+	  '<td class="add_to_cart"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+	   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+	  </s:if><s:else>
+	   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
+	  </s:else>		
+	   '<div class="availablelink">',<s:if test='!#guestUser'>
+		'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
+		'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
+	   '</div>',
+	  </s:if>
+	  '</td>','</tr>',
+	 <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'> '<tr>','<td class="item_number">{customerItemno}</td>','</tr>',</s:if>
+	  '<tr>',<s:if test='!#guestUser'>'<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
+	  '<tr>',<s:if test='!#guestUser'>'<td  style="width:65%;">{repItem}</td>','<td></td>',</s:if>'</tr>',
+	  <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
+	  '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
+	  '</table>',
+	  '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">','</div>','</div>',
+	 '</dd>','</tpl>',  '</dl>','</tpl><div style="clear:left"></div>',
+	'</div>'	
+	);
+	}
 function getCondensedView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',

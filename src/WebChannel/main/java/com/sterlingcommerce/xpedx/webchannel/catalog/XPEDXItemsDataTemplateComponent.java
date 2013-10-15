@@ -299,21 +299,20 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if(replacmentList!=null && replacmentList.size()>0){
 		StringBuffer repItemsForMiniView = new StringBuffer();
 		StringBuffer repItemsForCondensedView = new StringBuffer();
-		sb.append("repItem: \"");
-		sb.append("<b>This item will be replaced once inventory is depleted. Select item:</b>");
+		sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");		
 		repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		for(int i=0;i<replacmentList.size();i++ )
 		{
-		if (i>0) sb.append(",");		
-		sb.append("<a class=\\\"submitBtnBg5 underlink\\\" href=\\\"javascript:processDetail('");
+		if (i>0) sb.append(",");
+		if (i==1) sb.append("<br/>");
+		sb.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
 		sb.append(TextUtils.htmlEncode(validate(replacmentList.get(i))));
 		sb.append("','");
 		sb.append(TextUtils.htmlEncode(unitOfMeasure));
-		sb.append("');\\\"");
-		sb.append("<span class=\\\"ddesc desc-hname\\\">");
+		sb.append("');\\\">");		
 		sb.append("<b>"+TextUtils.htmlEncode(validate(replacmentList.get(i)))+"</b>");
-		sb.append("</span></a>");
+		sb.append("</a>");
 		
 		if (i>0) repItemsForCondensedView.append(",");
 		repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
