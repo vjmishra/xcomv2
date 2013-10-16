@@ -1338,7 +1338,7 @@ a.underlink:hover {
 	<title><s:property value="wCContext.storefrontId" /> / User
 		Profile</title>
 	<!-- Web Trends tag start -->
-	<meta name="WT.ti" Content="xpedx / User Profile">
+	<meta name="WT.ti" Content="<s:property value='wCContext.storefrontId' /> / User Profile">
 	<!-- Web Trends tag stop -->
 	<s:set name='userelement' value="getUser()" />
 	<s:set name='user' value='#userelement' />
@@ -1910,13 +1910,13 @@ a.underlink:hover {
 							<s:else>
 								<ul class="TabbedPanelsTabGroup" style="margin-left: 5px;">
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /User information');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile /User information');"
 										tabindex="0">User Information</li>
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /Authorized Locations');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile /Authorized Locations');"
 										tabindex="0">Authorized Locations</li>
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 										tabindex="0">Site Preferences</li>
 
 									<%-- Added for Jira 3048 issue item 3 --%>
@@ -2472,7 +2472,7 @@ a.underlink:hover {
 																style="margin-left: 2px;">
 																<a id='changeShipToForUserProfile'
 																	href='#shipToUserProfile'
-																	onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');"
+																	onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 																	class=" underlines">[Change]</a>
 															</div>
 														</td>

@@ -285,7 +285,7 @@
 											<s:set name="multiUomDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)" />
 									</s:else>					 			
 						 			<s:if test='(useOrderMultipleMapFromSourcing.containsKey(#jsonKey))'>
-						 				<s:set id="OrderMultipleUom" name="OrderMultipleUom"  value="%{#OrderMultipleQtyFromSrc.substring(#OrderMultipleQtyFromSrc.indexOf('|')+1,#OrderMultipleQtyFromSrc.length())}"/>
+						 				<s:set id="OrderMultipleUom" name="OrderMultipleUom"  value="%{#OrderMultipleQtyFromSrc.substring(#OrderMultipleQtyFromSrc.indexOf('|')+1,#OrderMultipleQtyFromSrc.lastIndexOf('|'))}"/>
 						 				<s:if test='%{#customerUOM==#OrderMultipleUom}'>
 											<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
 											<s:set name="orderMultipleUomDesc" value="#customerUomWithoutM" />										
