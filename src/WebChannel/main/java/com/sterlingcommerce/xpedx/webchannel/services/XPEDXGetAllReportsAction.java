@@ -197,6 +197,7 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 	
 	
 	public void compareRpt() {
+		validCustomReportList = new ArrayList<Report>();
 		for (int i=0;i<customReportList.size();i++) {
 			for (int j=0;j<dataExchangeReportList.size(); j++) {
 				if(customReportList.get(i).getCuid().equals(dataExchangeReportList.get(j).getCuid())){
