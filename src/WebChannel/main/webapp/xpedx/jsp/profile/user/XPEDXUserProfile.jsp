@@ -1338,7 +1338,7 @@ a.underlink:hover {
 	<title><s:property value="wCContext.storefrontId" /> / User
 		Profile</title>
 	<!-- Web Trends tag start -->
-	<meta name="WT.ti" Content="xpedx / User Profile">
+	<meta name="WT.ti" Content="<s:property value='wCContext.storefrontId' /> / User Profile">
 	<!-- Web Trends tag stop -->
 	<s:set name='userelement' value="getUser()" />
 	<s:set name='user' value='#userelement' />
