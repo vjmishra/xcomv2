@@ -3992,7 +3992,7 @@ public class XPEDXWCUtils {
 						divisionFlag = true;
 						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") )
 							inventoryIndicator =  "Y" ;
-						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") )
+						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") )
 							inventoryIndicator =  "I" ;
 						else
 							inventoryIndicator =  "N" ;
