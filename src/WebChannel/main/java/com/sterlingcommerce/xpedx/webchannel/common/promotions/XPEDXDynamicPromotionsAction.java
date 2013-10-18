@@ -595,6 +595,15 @@ public class XPEDXDynamicPromotionsAction extends WCAction {
 				log.debug("Promotions file Pre-Login : " + newCallerPageTag);
 				log.error("Promotions file Pre-Login : " + newCallerPageTag);
 				setInRequest(massagedPromoHtml);
+				int imageCount = 0;
+				if(wcContext.getWCAttribute("imageCounter", WCAttributeScope.REQUEST)==null ){
+					imageCount = getPromoImageCount(massagedPromoHtml);				
+					wcContext.setWCAttribute("imageCounter", imageCount, WCAttributeScope.REQUEST);
+				}
+				else{
+					imageCount =(Integer)wcContext.getWCAttribute("imageCounter", WCAttributeScope.REQUEST);
+				}
+				 
 				return SUCCESS;
 			}
 		else{
