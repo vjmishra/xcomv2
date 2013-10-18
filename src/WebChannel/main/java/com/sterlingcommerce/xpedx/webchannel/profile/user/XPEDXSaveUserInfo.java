@@ -125,41 +125,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String userNotAdmin;
 	List<String> alFinalSelectedCustomers = new ArrayList<String>();
 	private boolean treeSelected;
-	//EB-2824 start only setter getter method
-
-	private String alternateApprover;
-
-	private String primaryApprover;
-	private String spendingLt;
-	public String getAlternateApprover() {
-		return alternateApprover;
-	}
-
-	public void setAlternateApprover(String alternateApprover) {
-		this.alternateApprover = alternateApprover;
-	}
-
-	public String getPrimaryApprover() {
-		return primaryApprover;
-	}
-
-	public void setPrimaryApprover(String primaryApprover) {
-		this.primaryApprover = primaryApprover;
-	}
-
 	
-	public String getSpendingLt() {
-		return spendingLt;
-	}
-
-	/**
-	 * @param spendingLimit
-	 *            the spendingLimit to set
-	 */
-	public void setSpendingLt(String spendingLt) {
-		this.spendingLt = spendingLt;
-	}
-	//EB-2824 end
 	
 	public boolean isTreeSelected() {
 		return treeSelected;
