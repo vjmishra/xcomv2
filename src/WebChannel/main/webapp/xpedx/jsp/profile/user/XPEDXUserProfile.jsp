@@ -2977,9 +2977,8 @@ a.underlink:hover {
 														test="#spendingLimit != null && #spendingLimit != ''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
-																id="spendingLtReadOnly" readonly="%{true}" name="spendingLtReadOnly"
+																id="spendingLt" readonly="%{true}" name="spendingLt"
 																maxlength="6" value="%{showSpendingLimit()}" disabled='%{true}'></s:textfield>
-															<s:hidden id="spendingLt" name="spendingLt" value="%{showSpendingLimit()}"/>	
 														</s:if>
 														<s:else>
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
@@ -3047,10 +3046,9 @@ a.underlink:hover {
 														test="#primaryApprover != null && #primaryApprover != ''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
-																id="primaryApproverReadOnly" readonly="%{true}"
-																name="primaryApproverReadOnly" maxlength="6"
+																id="primaryApprover" readonly="%{true}"
+																name="primaryApprover" maxlength="6"
 																value="%{#primaryApprover}" disabled='%{true}'></s:textfield>
-															<s:hidden id="primaryApprover" name="primaryApprover" value="%{#primaryApprover}"/>
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Approver -"
@@ -3081,10 +3079,9 @@ a.underlink:hover {
 														<s:if test="#disableSinceSelfApprover">
 															<span class="no-border-right-user padding0 "> <s:textfield
 																	cssClass="x-input" cssStyle="width:148px;"
-																	id="alternateApproverReadOnly" readonly="%{true}"
-																	name="alternateApproverReadOnly" maxlength="6"
+																	id="alternateApprover" readonly="%{true}"
+																	name="alternateApprover" maxlength="6"
 																	value="%{#alternateApprover}" disabled='%{true}'></s:textfield>
-																	<s:hidden id="alternateApprover" name="alternateApprover" value="%{#alternateApprover}"/>
 															</span>
 														</s:if>
 														<!-- EB-763 END -->
