@@ -1535,7 +1535,7 @@ function SubmitActionWithValidation()
     <!-- Web Trends tag start -->  
      <meta name="DCSext.w_x_item_repl_p" content="1" />
      <!-- Web Trends tag end -->  
-    			This item has been replaced. Select item: 
+    			This item will be replaced once inventory is depleted. Select item: 
 				<s:iterator value='replacementAssociatedItems' id='replacementItem'
 						status="count" >											
 				<s:set name="promoItemPrimInfoElem"
