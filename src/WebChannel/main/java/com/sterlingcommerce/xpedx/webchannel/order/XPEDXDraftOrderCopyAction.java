@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import com.sterlingcommerce.webchannel.order.DraftOrderCopyAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 
@@ -45,21 +46,38 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 	@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
-		Element input = mashupInputs.get(MASHUP_COPY_ORDER);
-		if(input != null )
+		Element orderElem = mashupInputs.get(MASHUP_COPY_ORDER);
+		if(orderElem != null )
 		{
 			String billToCustomerId = XPEDXWCUtils
 					.getLoggedInCustomerFromSession(wcContext);
 			String customerId = (billToCustomerId != null && billToCustomerId
 								.trim().length() > 0) ? billToCustomerId : wcContext.getCustomerId();
-			input.setAttribute("BillToID", customerId);
+			orderElem.setAttribute("BillToID", customerId);
 			if(copyCartName!=null && copyCartName.trim().length()>0){
-				input.setAttribute("OrderName",copyCartName);
+				orderElem.setAttribute("OrderName",copyCartName);
 			}
+			
+			Element extnOrderElem=null;
 			if(copyCartDescription!=null && copyCartDescription.trim().length()>0) {
-				Element Extn = input.getOwnerDocument().createElement("Extn");
-				Extn.setAttribute("ExtnOrderDesc", copyCartDescription);
-				input.appendChild(Extn);
+				extnOrderElem = orderElem.getOwnerDocument().createElement("Extn");
+				extnOrderElem.setAttribute("ExtnOrderDesc", copyCartDescription);				
+			}
+			
+			XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			if(shipToCustomer!=null) {				
+				if(extnOrderElem==null) {
+					extnOrderElem = orderElem.getOwnerDocument().createElement("Extn");
+				}
+				extnOrderElem.setAttribute("ExtnShipToName", shipToCustomer.getExtnCustomerName());
+				XPEDXShipToCustomer billToCustomer=shipToCustomer.getBillTo();
+				if(billToCustomer != null)	{
+					extnOrderElem.setAttribute("ExtnBillToName", billToCustomer.getExtnCustomerName());
+				}
+			}
+			
+			if(extnOrderElem!=null) {
+				orderElem.appendChild(extnOrderElem);
 			}
 		}
 		super.manipulateMashupInputs(mashupInputs);
