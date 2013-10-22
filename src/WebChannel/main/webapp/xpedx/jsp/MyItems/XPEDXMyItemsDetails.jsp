@@ -3787,11 +3787,12 @@ function showSharedListForm(){
 	<s:hidden name="listName" value="%{listName}"></s:hidden>
 	<s:hidden name="listDesc" value="%{listDesc}" />
 	<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
+	<s:hidden name="editMode" value="%{true}"></s:hidden>
 	<s:hidden name="sharePermissionLevel" value="%{sharePermissionLevel}"></s:hidden>
 	<s:hidden name="shareAdminOnly" value="%{shareAdminOnly}"></s:hidden>
 	<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>
 	<s:hidden name="listCustomerId" value="%{listCustomerId}"></s:hidden>
-
+	
 	<s:hidden name="itemId" value="" />
 	<s:hidden name="name" value="" />
 	<s:hidden name="desc" value="" />
@@ -3800,12 +3801,14 @@ function showSharedListForm(){
 	<s:hidden name="itemType" value="1" />
 	<s:hidden name="uomId" value="" />
 	<s:hidden name="order" value="" />
+	
 </s:form> <s:form id="formRIReplaceInList" action="MyItemsDetailsChange"
 	method="post">
 	<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 	<s:hidden name="listName" value="%{listName}"></s:hidden>
 	<s:hidden name="listDesc" value="%{listDesc}" />
 	<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
+	<s:hidden name="editMode" value="%{true}"></s:hidden> 
 	<s:hidden name="sharePermissionLevel" value="%{sharePermissionLevel}"></s:hidden>
 	<s:hidden name="shareAdminOnly" value="%{shareAdminOnly}"></s:hidden>
 	<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>

@@ -50,6 +50,7 @@
 			<p>Items are imported in the same order they are listed in the file, and added to the bottom of the My Items List.</p>
         	
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>
+			<s:hidden name="editMode" value="%{true}"></s:hidden>
 			<s:hidden name="listDesc" value="%{listDesc}"></s:hidden>
 			<s:set name="itemCount" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size'></s:set>
 			<s:hidden name="itemCount" value="%{#itemCount}"></s:hidden>
@@ -58,6 +59,7 @@
 			<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>
 			<s:hidden name="listCustomerId" value="%{listCustomerId}"></s:hidden>
 			<s:hidden name="listName" value="%{listName}"></s:hidden>
+			
 			
 			<script type="text/javascript">
 		

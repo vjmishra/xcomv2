@@ -69,6 +69,7 @@
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
 			<param name="itemCount">${itemCount}</param>
 		</result>
 		<result name="error" type="redirectAction">
@@ -78,6 +79,7 @@
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
 			<param name="itemCount">${itemCount}</param>
+			<param name="editMode">${editMode}</param>
 			<param name="errorMsg">${errorMsg}</param>
 		</result>
 	</action>
