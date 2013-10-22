@@ -3142,8 +3142,12 @@ function showSharedListForm(){
 									<s:else>
 										<p>Mill / Mfg. Item - Additional charges may apply</p>
 									</s:else>
-								</s:if>
-						
+								</s:if>					
+							
+							</div>
+							<%-- JIRA 356 Code Changes End --%>	
+				</div>
+				<div style="width:420px;padding-left:12px;padding-top:10px">
 							<s:if test='editMode == true'>
 							<%-- Show Replacement link only in Edit mode --%>
 									<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
@@ -3160,9 +3164,7 @@ function showSharedListForm(){
 									 </p>
 									</s:if>
 								</s:else>
-							</div>
-							<%-- JIRA 356 Code Changes End --%>	
-				</div>
+								</div>
 							<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 								<p class="mil-replaced"> <a class="modal red" href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>Complimentary</a></p>
 								<br />
@@ -3649,7 +3651,12 @@ function showSharedListForm(){
 
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box">
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2>
-         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;border: 1px solid #CCC; border-radius: 6px;">
+        <s:if test="#altItemList.size() > 1">
+	   <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;border: 1px solid #CCC; border-radius: 6px;">
+	  </s:if>
+	  <s:else>
+	   <!-- Light Box --><div style=" height:250px; width:580px; overflow:hidden;border: 1px solid #CCC; border-radius: 6px;">
+	  </s:else>
    		<script type="text/javascript">
 			Ext.onReady(function(){		
 	       
@@ -3670,7 +3677,7 @@ function showSharedListForm(){
 		<s:else>
 			<div class="mil-wrap-condensed-container last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
 		</s:else>
-            <div class="mil-wrap-condensed" style="min-height:200px;">
+            <div class="mil-wrap-condensed" style="min-height:220px;">
 		
 				<s:set name='uId' value='%{key + "_" +#altItem.getAttribute("ItemID")}' />
 	
@@ -3742,9 +3749,17 @@ function showSharedListForm(){
                         <p>Replacement Item #: <s:property value='rItemID' /></p> --%>
                         
 <%--                         <s:if test="%{#rItemID}"> --%>
-							 <p>xpedx Item #: <s:property value="#rItemID" /></p>
- 
-                             <p>Mfg. Item #: To be implemented </p>
+							 <p>xpedx Item #: <s:property value="#rItemID" /></p> 
+                            <s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p><s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p><s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+											</s:if>	
 <%-- 						</s:if> --%>
                         
                     </div>
