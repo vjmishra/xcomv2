@@ -1547,6 +1547,15 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 //		gridDataVal.verticalSpan = 2;
 		gridDataVal.widthHint = 100;
 		
+		// EB-1296 to enter up to 22 Characters in the PO# field and 24
+		// Characters in the Line Account #
+		GridData gridData16 = new GridData();
+		gridData16.horizontalAlignment = SWT.BEGINNING;
+		gridData16.verticalAlignment = SWT.CENTER;
+		gridData16.widthHint = 150;
+		// gridData16.verticalAlignment = 4;
+		gridData16.horizontalSpan = 1;
+		
 		GridData gridDatacustVal = new GridData();
 		gridDatacustVal.horizontalAlignment = SWT.BEGINNING;
 		gridDatacustVal.verticalAlignment = SWT.CENTER;
@@ -1694,9 +1703,9 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			lblCustLinePONo.setData("yrc:customType", "Label");
 			lblCustLinePONo.setData("name", "lblCustLinePONo");
 			txtCustLinePONo = new Text(pnlCustInfo, 2048);
-			txtCustLinePONo.setLayoutData(gridDataVal);
+			txtCustLinePONo.setLayoutData(gridData16);
 			txtCustLinePONo.setData("name", "txtCustLinePONo");
-			txtCustLinePONo.setTextLimit(18);
+			txtCustLinePONo.setTextLimit(22);
 		}
 
 		String customerLevelLineAccNoFlag = YRCXmlUtils.getAttributeValue(
@@ -1712,9 +1721,9 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			lblCustLineAccNo.setData("yrc:customType", "Label");
 			lblCustLineAccNo.setData("name", "lblCustLineAccNo");
 			txtCustLineAccNo = new Text(pnlCustInfo, 2048);
-			txtCustLineAccNo.setLayoutData(gridDataVal);
+			txtCustLineAccNo.setLayoutData(gridData16);
 			txtCustLineAccNo.setData("name", "txtCustLineAccNo");
-			txtCustLineAccNo.setTextLimit(20);
+			txtCustLineAccNo.setTextLimit(24);
 		}
 		
 		if(isB2BCustomerOrder()&& !isNewLine()){
@@ -2323,7 +2332,7 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 			this.myBehavior.setFieldValue("txtShipFromBranch", pnlOrderLines.getPageBehavior().getDefaultShipNode());
 			}
 		if(null != txtCustLinePONo && txtCustLinePONo.isDisposed()==false)
-			txtCustLinePONo.setTextLimit(18);
+			txtCustLinePONo.setTextLimit(22);
 	}
 
 	private void setControlsEnabled(Control[] controls, boolean enabled) { 
