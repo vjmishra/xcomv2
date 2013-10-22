@@ -47,6 +47,116 @@
 		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
+	
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	
+	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
+	<s:url id="navigateURL" action="navigate" namespace="/catalog" escapeAmp="false">
+		<s:param name="path">TOKEN_PATH</s:param>
+		<s:param name="cname">TOKEN_CNAME</s:param>
+		<s:param name="newOP">true</s:param>
+		<s:param name="selectedHeaderTab">CatalogTab</s:param>
+		<s:param name="punOnly">true</s:param>
+	</s:url>
+	<script type="text/javascript">
+		
+		$.widget("custom.catcomplete", $.ui.autocomplete, {
+			_renderMenu: function(ul, items) {
+				var self = this,
+				currentCategory = "";
+				$.each(items, function(index, item) {
+					if (item.group != currentCategory) {
+						ul.append("<li class='ui-autocomplete-group'>" + item.group + "</li>");
+						currentCategory = item.group;
+					}
+					self._renderItem(ul, item);
+				});
+			}
+		});
+		
+		// enable autocomplete for new search
+		$(document).ready(function() {
+			console.log('BEGIN doc-ready');
+			
+			var acSource = function(request, response) {
+				console.log('BEGIN acSource');
+				var searchData = {
+						searchTerm: request.term
+						,path: '/'
+				};
+				
+				console.log('searchData = ' , searchData);
+				
+				$.ajax({
+					type: 'POST'
+					,url: '<s:property value="#autocompleteURL" escape="false" />'
+					,dataType: 'json'
+					,data: searchData
+					,success: function(data) {
+						console.log('BEGIN success');
+						console.log('data = ' , data);
+						if (data.resultStatus == 'OK') {
+							response(data.autocompleteItems);
+						} else {
+							// eg, TOO_MANY_RESULTS
+							response();
+						}
+					}
+					,error: function(resp, textStatus, xhr) {
+						console.log('BEGIN error');
+						console.log('resp = ' , resp);
+						console.log('textStatus = ' , textStatus);
+						console.log('xhr = ' , xhr);
+						response({});
+					}
+					,complete: function() {
+						console.log('BEGIN complete');
+					}
+				});
+			};
+			
+			var acSelect = function(event, ui) {
+				console.log('BEGIN acSelect');
+				console.log('ui.item.name = ' , ui.item.name);
+				console.log('ui.item.path = ' , ui.item.path);
+				
+				var url = '<s:property value="#navigateURL" escape="false" />';
+				url = url.replace('TOKEN_PATH', encodeURIComponent(ui.item.path));
+				url = url.replace('TOKEN_CNAME', encodeURIComponent(ui.item.name));
+				
+				console.log('url = ' , url);
+				// window.location = url;
+			};
+			
+			var acOptions = {
+					minLength: 3
+					,source: acSource
+					,select: acSelect
+					,open: function() { $('.ui-autocomplete').width(500); }
+			};
+			
+			$('.ui-autocomplete-menu-item').live('mouseenter', function(event) { $(this).addClass('ui-state-hover'); });
+			$('.ui-autocomplete-menu-item').live('mouseleave', function(event) { $(this).removeClass('ui-state-hover'); });
+			
+			$('#newSearch_searchTerm').catcomplete(acOptions)
+			.data('catcomplete')._renderItem = function(ul, item) {
+				// console.log('----------');
+				var searchTerm = $('#newSearch_searchTerm').val();
+				// console.log('searchTerm = ' , searchTerm);
+				
+				var regexMatchHighlight = new RegExp(searchTerm, 'ig');
+				var text = item.path.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+				// console.log('text = ' , text);
+				
+				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
+				.data('item.autocomplete', item)
+				.append('<a class="ui-corner-all" tabindex="-1">' + text + '</a>')
+				.appendTo(ul);
+			}
+			;
+		});
+	</script>
+
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
@@ -2319,6 +2429,27 @@ function msgWait(){
 .share-modal { /*width:399px!important; height:37	0px;*/}         
 .indent-tree { margin-left:15px; }       
 .indent-tree-act { margin-left:25px; } 	
+
+.ui-autocomplete {
+	max-height: 250px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	border: 1px solid #333 !important;
+}
+.ui-autocomplete-group {
+	font-size: 16px;
+	font-weight: bold;
+	background-color: #FFF380;
+}
+.ui-autocomplete-menu-item {
+	background-color: white;
+}
+.ui-autocomplete-highlight-match {
+	color: black;
+	font-weight: bold;
+	font-size: 14px;
+}
 </style>
 <s:set name='isProcurementInspectMode'
 	value='#hUtil.isProcurementInspectMode(wCContext)' />
