@@ -2938,8 +2938,9 @@ a.underlink:hover {
 													class="no-border-right-user padding00"><s:if
 														test="#optedCurrency != null && #optedCurrency !=''">
 														<s:if test="#disableSinceSelfApprover">
+															<s:set name='spendingLtCurrencyDesc' value='currencyMap.get(#optedCurrency)' />															
 															<s:textfield id="spendingLtCurrencyReadonly"
-																name="spendingLtCurrencyReadonly" value="%{#optedCurrency}"
+																name="spendingLtCurrencyReadonly" value="%{#spendingLtCurrencyDesc}"
 																readonly="%{true}" disabled='%{true}' cssStyle="width: 148px;" />
 															<s:hidden id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}"/>	
 														</s:if>
