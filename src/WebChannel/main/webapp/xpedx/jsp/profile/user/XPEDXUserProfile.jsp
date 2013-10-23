@@ -2938,9 +2938,10 @@ a.underlink:hover {
 													class="no-border-right-user padding00"><s:if
 														test="#optedCurrency != null && #optedCurrency !=''">
 														<s:if test="#disableSinceSelfApprover">
-															<s:textfield id="spendingLtCurrency"
-																name="spendingLtCurrency" value="%{#optedCurrency}"
+															<s:textfield id="spendingLtCurrencyReadonly"
+																name="spendingLtCurrencyReadonly" value="%{#optedCurrency}"
 																readonly="%{true}" disabled='%{true}' cssStyle="width: 148px;" />
+															<s:hidden id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}"/>	
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Currency -"
@@ -2993,27 +2994,31 @@ a.underlink:hover {
 												<td valign="top" width="80%" align="left"
 													class="no-border-right-user padding00"><s:if
 														test="#disableSinceSelfApprover">
-														<s:if test='%{#OrderApprovalFlag=="Y"}'>
+														
+														<s:if test='%{#OrderApprovalFlag==true}'>
 															<s:hidden name="OrderApprovalFlag" value="true" />
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
-																value="%{#_action.isOrderFlagForApproval()}"
-																disabled='%{true}' />
+																fieldValue="%{#_action.isOrderFlagForApproval()}"
+																disabled='%{true}' value="true"/>
+															
 														</s:if>
 														<s:else>
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
-																value="%{#_action.isOrderFlagForApproval()}"
+																fieldValue="%{#_action.isOrderFlagForApproval()}"
 																disabled='%{true}' />
+																
 														</s:else>
 
 
 													</s:if> <s:else>
-														<s:if test='%{#OrderApprovalFlag=="Y"}'>
+														<s:if test='%{#OrderApprovalFlag==true}'>
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
 																value="%{#_action.isOrderFlagForApproval()}" />
 															<s:hidden name="OrderApprovalFlag" value="true" />
+															
 														</s:if>
 
 														<s:else>
