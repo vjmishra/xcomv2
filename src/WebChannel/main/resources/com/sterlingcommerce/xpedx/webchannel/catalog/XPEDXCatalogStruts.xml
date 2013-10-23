@@ -234,5 +234,9 @@
 			<result name="success">/xpedx/jsp/catalog/XPEDXNarrowBy.jsp</result>
 		</action>
 		
+		<action name="getPunItems" class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="punSearch">
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+		</action>
+		
 	</package>
 </struts>

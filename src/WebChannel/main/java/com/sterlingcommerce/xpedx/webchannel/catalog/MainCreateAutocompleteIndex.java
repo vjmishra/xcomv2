@@ -31,6 +31,7 @@ public class MainCreateAutocompleteIndex {
 
 			IndexWriter writer = new IndexWriter(FSDirectory.getDirectory(searchIndexRoot), new StandardAnalyzer(luceneEscapeWords), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
+			// TODO exclude puns that have no items (not in trey_item_pun table)
 			PreparedStatement stmt = conn.prepareStatement("select * from trey_pun_data order by pun_id");
 			ResultSet res = stmt.executeQuery();
 

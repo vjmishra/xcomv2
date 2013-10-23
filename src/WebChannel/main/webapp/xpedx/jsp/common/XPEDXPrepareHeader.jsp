@@ -58,6 +58,9 @@
 		<s:param name="selectedHeaderTab">CatalogTab</s:param>
 		<s:param name="punOnly">true</s:param>
 	</s:url>
+	<s:url id="punSearchURL" action="getPunItems" namespace="/catalog" escapeAmp="false">
+		<s:param name="punId">TOKEN_PUN_ID</s:param>
+	</s:url>
 	<script type="text/javascript">
 		
 		$.widget("custom.catcomplete", $.ui.autocomplete, {
@@ -76,16 +79,16 @@
 		
 		// enable autocomplete for new search
 		$(document).ready(function() {
-			console.log('BEGIN doc-ready');
+			// trey - console.log('BEGIN doc-ready');
 			
 			var acSource = function(request, response) {
-				console.log('BEGIN acSource');
+				// trey - console.log('BEGIN acSource');
 				var searchData = {
 						searchTerm: request.term
 						,path: '/'
 				};
 				
-				console.log('searchData = ' , searchData);
+				// trey - console.log('searchData = ' , searchData);
 				
 				$.ajax({
 					type: 'POST'
@@ -93,8 +96,8 @@
 					,dataType: 'json'
 					,data: searchData
 					,success: function(data) {
-						console.log('BEGIN success');
-						console.log('data = ' , data);
+						// trey - console.log('BEGIN success');
+						// trey - console.log('data = ' , data);
 						if (data.resultStatus == 'OK') {
 							response(data.autocompleteItems);
 						} else {
@@ -103,29 +106,27 @@
 						}
 					}
 					,error: function(resp, textStatus, xhr) {
-						console.log('BEGIN error');
-						console.log('resp = ' , resp);
-						console.log('textStatus = ' , textStatus);
-						console.log('xhr = ' , xhr);
+						// trey - console.log('BEGIN error');
+						// trey - console.log('resp = ' , resp);
+						// trey - console.log('textStatus = ' , textStatus);
+						// trey - console.log('xhr = ' , xhr);
 						response({});
 					}
 					,complete: function() {
-						console.log('BEGIN complete');
+						// trey - console.log('BEGIN complete');
 					}
 				});
 			};
 			
 			var acSelect = function(event, ui) {
-				console.log('BEGIN acSelect');
-				console.log('ui.item.name = ' , ui.item.name);
-				console.log('ui.item.path = ' , ui.item.path);
+				// trey - console.log('BEGIN acSelect');
+				// trey - console.log('ui.item.id = ' , ui.item.id);
 				
-				var url = '<s:property value="#navigateURL" escape="false" />';
-				url = url.replace('TOKEN_PATH', encodeURIComponent(ui.item.path));
-				url = url.replace('TOKEN_CNAME', encodeURIComponent(ui.item.name));
+				var url = '<s:property value="#punSearchURL" escape="false" />';
+				url = url.replace('TOKEN_PUN_ID', encodeURIComponent(ui.item.id));
 				
-				console.log('url = ' , url);
-				// window.location = url;
+				// trey - console.log('url = ' , url);
+				window.location = url;
 			};
 			
 			var acOptions = {

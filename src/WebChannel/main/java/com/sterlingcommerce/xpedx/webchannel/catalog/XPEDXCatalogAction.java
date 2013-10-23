@@ -1,6 +1,11 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -3828,5 +3833,65 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.facetListItemAttributeKey = facetListItemAttributeKey;
 	}
 	
+	// --- autocomplete code
+	
+	private Integer punId;
 
+	public Integer getPunId() {
+		return punId;
+	}
+
+	public void setPunId(Integer punId) {
+		this.punId = punId;
+	}
+
+	public String punSearch() throws Exception {
+		Connection conn = null;
+		try {
+			conn = createConnection();
+			
+			String sql = "select item.item_id, item.short_description"
+					+ " from yfs_item item"
+					+ " 	inner join trey_item_pun tip on tip.item_key = item.item_key"
+					+ " where tip.pun_id = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, punId);
+			
+			ResultSet res = stmt.executeQuery();
+			while (res.next()) {
+				// TODO build category xml?
+				String itemId = res.getString("item_id");
+				String itemName = res.getString("short_description");
+				System.out.println(String.format("Item %s: %s", itemId.trim(), itemName));
+			}
+			
+			res.close();
+			stmt.close();
+			
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+		
+		return SUCCESS;
+	}
+
+	private static Connection createConnection() throws ClassNotFoundException, SQLException {
+		Class.forName("oracle.jdbc.OracleDriver");
+		Connection connection = null;
+		connection = DriverManager.getConnection("jdbc:oracle:thin:@oratst08.ipaper.com:1521:ngd1", "NG", "NG1");
+		return connection;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		XPEDXCatalogAction action = new XPEDXCatalogAction();
+		action.punId = 123;
+		
+		action.punSearch();
+	}
 }
