@@ -14,6 +14,11 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.FSDirectory;
 
+/**
+ * Main class that builds the autocomplete index.
+ * 
+ * @author Trey Howard
+ */
 public class MainCreateAutocompleteIndex {
 
 	private static final String[] luceneEscapeWords = { "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on",
@@ -39,8 +44,9 @@ public class MainCreateAutocompleteIndex {
 				String name = res.getString("pun_name");
 
 				StringBuilder path = new StringBuilder(1024);
-				path.append(cat1);
-				path.append(EMPTY_CAT.equals(cat2) ? "" : " > " + cat2);
+				// path.append(cat1);
+				// path.append(EMPTY_CAT.equals(cat2) ? "" : " > " + cat2);
+				path.append(cat2);
 				path.append(EMPTY_CAT.equals(cat3) ? "" : " > " + cat3);
 				path.append(EMPTY_CAT.equals(cat4) ? "" : " > " + cat4);
 				path.append(" > " + name);
@@ -49,20 +55,11 @@ public class MainCreateAutocompleteIndex {
 
 				Document doc = new Document();
 				doc.add(new Field("pun_id", String.valueOf(id), Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("pun_name", name == null ? "" : name, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.add(new Field("pun_name", pathStr, Field.Store.YES, Field.Index.NOT_ANALYZED));
 				doc.add(new Field("pun_path", pathStr, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat1", cat1, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat2", cat2, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat3", cat3, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat4", cat4, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.add(new Field("cat1", cat1, Field.Store.YES, Field.Index.NOT_ANALYZED)); // required for sorting
 
-				// add lowercase versions to index for searchability
-				doc.add(new Field("pun_name_lower", name.toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("pun_path_lower", pathStr.toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat1_lower", cat1.toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat2_lower", cat2.toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat3_lower", cat3.toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("cat4_lower", cat4.toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED));
+				doc.add(new Field("pun_path_parsed", pathStr, Field.Store.NO, Field.Index.ANALYZED));
 
 				System.out.println(id + ":\t" + path);
 				writer.addDocument(doc);
@@ -95,7 +92,7 @@ public class MainCreateAutocompleteIndex {
 	}
 
 	public static void main(String[] args) throws Exception {
-		createIndex("C:/search/index/autocomplete");
+		createIndex("C:/search/index/autocomplete-analyzed");
 	}
 
 }

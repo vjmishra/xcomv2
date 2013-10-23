@@ -2,12 +2,16 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.TooManyClauses;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -17,13 +21,14 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
+import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteItem;
 
 /*
- * Created on Oct 9, 2013
+ * Created on Oct 21, 2013
  */
 
 /**
- * TODO some code was copy/pasted from XPEDXCatalogAction - refactor to share
+ * This action produces a JSON result for the autocomplete ajax call.
  * 
  * @author Trey Howard
  */
@@ -39,7 +44,7 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	private String searchTerm;
 
-	private List<AjaxAutocompleteAction.Item> autocompleteItems;
+	private List<AutocompleteItem> autocompleteItems;
 	private ResultStatus resultStatus = ResultStatus.OK;
 
 	/**
@@ -51,12 +56,8 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @see http://api.jqueryui.com/1.8/autocomplete/#option-source
 	 */
 	public String execute() throws CorruptIndexException, IOException {
-		// orderByAttribute = "Item.ExtnBestMatch";
-		// sortField = "Item.ExtnBestMatch--A";
-		// pageSize = "10";
-
 		// String searchIndexRoot = YFSSystem.getProperty("yfs.searchIndex.rootDirectory");
-		String searchIndexRoot = "C:/search/index/autocomplete";
+		String searchIndexRoot = "C:/search/index/autocomplete-analyzed";
 
 		// TODO search Item.Keywords with length > 2. can we exclude numeric-only? better yet, skip ajax call on client side for numeric-only
 
@@ -73,44 +74,21 @@ public class AjaxAutocompleteAction extends WCAction {
 
 		Searcher indexSearcher = new IndexSearcher(searchIndexRoot);
 
-		// BooleanQuery query = new BooleanQuery();
-		//
-		// Term tName = new Term("pun_name_lower", "*" + searchTerm.toLowerCase() + "*");
-		// query.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
-		//
-		// Term tPath = new Term("pun_path_lower", "*" + searchTerm.toLowerCase() + "*");
-		// query.add(new BooleanClause(new WildcardQuery(tPath), Occur.SHOULD));
-		//
-		// Term tCat1 = new Term("cat1_lower", "*" + searchTerm.toLowerCase() + "*");
-		// query.add(new BooleanClause(new WildcardQuery(tCat1), Occur.SHOULD));
-		//
-		// Term tCat2 = new Term("cat2_lower", "*" + searchTerm.toLowerCase() + "*");
-		// query.add(new BooleanClause(new WildcardQuery(tCat2), Occur.SHOULD));
-		//
-		// Term tCat3 = new Term("cat3_lower", "*" + searchTerm.toLowerCase() + "*");
-		// query.add(new BooleanClause(new WildcardQuery(tCat3), Occur.SHOULD));
-		//
-		// Term tCat4 = new Term("cat4_lower", "*" + searchTerm.toLowerCase() + "*");
-		// query.add(new BooleanClause(new WildcardQuery(tCat4), Occur.SHOULD));
-
-		Query query = new WildcardQuery(new Term("pun_path_lower", "*" + searchTerm.toLowerCase() + "*"));
-
 		try {
+			Query query = createQuery();
+
 			TopDocs topDocs = indexSearcher.search(query, 20);
 
-			System.out.println("scoreDocs.length = " + topDocs.scoreDocs.length);
-			autocompleteItems = new ArrayList<AjaxAutocompleteAction.Item>(topDocs.scoreDocs.length);
+			autocompleteItems = new ArrayList<AutocompleteItem>(topDocs.scoreDocs.length);
 
 			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
 				Document doc = indexSearcher.doc(scoreDoc.doc);
 				String id = doc.getField("pun_id").stringValue();
 				String name = doc.getField("pun_name").stringValue();
 				String path = doc.getField("pun_path").stringValue();
+				String group = doc.getField("cat1").stringValue();
 
-				String group = path.substring(0, path.indexOf('>') - 1);
-				path = path.substring(group.length() + 3);
-
-				AjaxAutocompleteAction.Item item = new AjaxAutocompleteAction.Item();
+				AutocompleteItem item = new AutocompleteItem();
 				item.setId(Integer.valueOf(id));
 				item.setGroup(group);
 				item.setName(name);
@@ -118,10 +96,32 @@ public class AjaxAutocompleteAction extends WCAction {
 				autocompleteItems.add(item);
 			}
 
+			// do NOT use lucene sorting: we want top hits independent of group. we only want to resort for the presentation layer (UI looks funky if they're not grouped together)
+			Collections.sort(autocompleteItems);
+
 		} catch (TooManyClauses e) {
 			// this happens if we have too many results
 			resultStatus = ResultStatus.TOO_MANY_RESULTS;
+			// TODO add logic to retry with different wildcards
 		}
+	}
+
+	/**
+	 * @return Returns a lucene Query object for searchTerm
+	 */
+	private Query createQuery() {
+		BooleanQuery query = new BooleanQuery();
+
+		// String safeTerm = searchTerm.replaceAll("\\D+", "");
+		String[] tokens = searchTerm.split("\\s+");
+		for (String token : tokens) {
+			Term tName = new Term("pun_path_parsed", "*" + token.toLowerCase() + "*");
+			query.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
+		}
+
+		// Query query = new WildcardQuery(new Term("pun_path_parsed", "*" + searchTerm.toLowerCase() + "*"));
+
+		return query;
 	}
 
 	public void setSearchTerm(String searchTerm) {
@@ -132,62 +132,23 @@ public class AjaxAutocompleteAction extends WCAction {
 		return resultStatus;
 	}
 
-	public List<AjaxAutocompleteAction.Item> getAutocompleteItems() {
+	public List<AutocompleteItem> getAutocompleteItems() {
 		return autocompleteItems;
 	}
 
-	public static class Item {
-		private int id;
-		private String group;
-		private String name;
-		private String path;
-
-		public int getId() {
-			return id;
-		}
-
-		public void setId(int id) {
-			this.id = id;
-		}
-
-		public String getGroup() {
-			return group;
-		}
-
-		public void setGroup(String group) {
-			this.group = group;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getPath() {
-			return path;
-		}
-
-		public void setPath(String path) {
-			this.path = path;
-		}
-
-		@Override
-		public String toString() {
-			return "Item [id=" + id + " | group=" + group + " | name=" + name + " | path=" + path + "]";
-		}
-	}
-
 	public static void main(String[] args) throws CorruptIndexException, IOException {
+		long start = System.currentTimeMillis();
 		AjaxAutocompleteAction action = new AjaxAutocompleteAction();
 		action.setSearchTerm("spring");
 		action.execute();
+		long stop = System.currentTimeMillis();
+
+		System.out.println(String.format("Search completed in {} milliseconds: ", stop - start));
 
 		System.out.println("resultStatus = " + action.getResultStatus());
 		if (action.getAutocompleteItems() != null) {
-			for (AjaxAutocompleteAction.Item item : action.getAutocompleteItems()) {
+			System.out.println("action.getAutocompleteItems().size = " + action.getAutocompleteItems().size());
+			for (AutocompleteItem item : action.getAutocompleteItems()) {
 				System.out.println(item);
 			}
 		}
