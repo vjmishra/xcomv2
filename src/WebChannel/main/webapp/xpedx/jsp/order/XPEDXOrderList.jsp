@@ -344,7 +344,7 @@ function printPOs(customerPos) {
                         </table> <!-- end content-holding table -->
                 </fieldset><!-- end border content -->
                 <div id="search-view-links">
-					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
+					<s:url id='reportsLink' namespace='/services' action='myreports'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:if test="%{#ViewReportsFlag}">

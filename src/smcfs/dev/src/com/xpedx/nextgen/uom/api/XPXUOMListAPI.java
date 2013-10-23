@@ -259,7 +259,7 @@ public class XPXUOMListAPI implements YIFCustomApi {
             /*EB 1851 Start , CUstomer UOM conversion Factor = Alternate UOM Quantity * xpxitemcust_xref.conver factor where alternate uom =xpxitemcust_xref.legacy_uom by Amar*/
             String legacyConvFact=wUOMsToConversionFactors.get(
 					XpxItemcustXrefAttributes.getNamedItem("LegacyUom") != null ? XpxItemcustXrefAttributes.getNamedItem("LegacyUom").getTextContent() : "");
-			if(!(YFCCommon.isVoid(ConvFactor) && YFCCommon.isVoid(legacyConvFact) ))
+            if((!YFCCommon.isVoid(ConvFactor)) && (!YFCCommon.isVoid(legacyConvFact)) )
 				ConvFactor = ""+(Float.parseFloat(ConvFactor) * Float.parseFloat(legacyConvFact));
 			/*EB 1851*/
 			//XB-687 - Start
