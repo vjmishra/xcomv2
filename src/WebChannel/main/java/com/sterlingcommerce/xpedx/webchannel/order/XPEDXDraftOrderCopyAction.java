@@ -4,8 +4,10 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.order.DraftOrderCopyAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -16,14 +18,20 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 	private String copyCartDescription;
 	private String newOrderHeaderKey;
 	public String draftFlagError="draftFlagError";
+	private String XPX_MASHUP_GET_ORDER_NAME = "xpedxDraftOrderCopyGetName";
+	private String extnBillToCustomerId;
 	public String execute(){
 		 try {
 
 				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
 				XPEDXWCUtils.removeObectFromCache("itemMap");
-	            Element orderOutput = prepareAndInvokeMashup(MASHUP_GET_ORDER_NAME);
-	            String copyOrderID = orderOutput.getAttribute("OrderNo");
-	            String draftOrderFlag = orderOutput.getAttribute("DraftOrderFlag");
+				
+				Element orderInputElem = WCMashupHelper.getMashupInput(XPX_MASHUP_GET_ORDER_NAME, this.wcContext);
+				orderInputElem.setAttribute("OrderHeaderKey", getSingleOrderHeaderKey());
+				Element orderOutputElem = (Element) WCMashupHelper.invokeMashup(XPX_MASHUP_GET_ORDER_NAME, orderInputElem, this.wcContext.getSCUIContext());
+	            
+				String copyOrderID = orderOutputElem.getAttribute("OrderNo");
+	            String draftOrderFlag = orderOutputElem.getAttribute("DraftOrderFlag");
 	            String copyText = getText("CopyOfPrefix");
 	            String[] newCartName = {copyText, copyOrderID};
 	            setOrderName(getText("CopyOfCartName", newCartName));
@@ -32,8 +40,13 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 					
 					return draftFlagError;	
 				}
-	            orderOutput = prepareAndInvokeMashup(MASHUP_COPY_ORDER);
-	            newOrderHeaderKey=orderOutput.getAttribute("OrderHeaderKey");
+				
+				Element orderExtnElem=SCXmlUtil.getChildElement(orderOutputElem, "Extn");
+				if(orderExtnElem!=null) {
+					extnBillToCustomerId=SCXmlUtil.getAttribute(orderExtnElem, "ExtnBillToCustomerID");
+				}
+				orderOutputElem = prepareAndInvokeMashup(MASHUP_COPY_ORDER);
+	            newOrderHeaderKey=orderOutputElem.getAttribute("OrderHeaderKey");
 	            CommerceContextHelper.flushCartInContextCache(getWCContext());
 
 	        }catch(Exception ex){
@@ -73,6 +86,10 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 				XPEDXShipToCustomer billToCustomer=shipToCustomer.getBillTo();
 				if(billToCustomer != null)	{
 					extnOrderElem.setAttribute("ExtnBillToName", billToCustomer.getExtnCustomerName());
+				}
+				
+				if(extnBillToCustomerId!=null && extnBillToCustomerId.trim().length()>0) {
+					extnOrderElem.setAttribute("ExtnBillToCustomerID", extnBillToCustomerId);
 				}
 			}
 			
