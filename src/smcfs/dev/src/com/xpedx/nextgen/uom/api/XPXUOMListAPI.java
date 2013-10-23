@@ -28,6 +28,7 @@ import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
  
@@ -255,7 +256,13 @@ public class XPXUOMListAPI implements YIFCustomApi {
             Node ConvFactorNode = XpxItemcustXrefAttributes
                     .getNamedItem("ConvFactor");
             String ConvFactor = ConvFactorNode.getTextContent();
-            //XB-687 - Start
+            /*EB 1851 Start , CUstomer UOM conversion Factor = Alternate UOM Quantity * xpxitemcust_xref.conver factor where alternate uom =xpxitemcust_xref.legacy_uom by Amar*/
+            String legacyConvFact=wUOMsToConversionFactors.get(
+					XpxItemcustXrefAttributes.getNamedItem("LegacyUom") != null ? XpxItemcustXrefAttributes.getNamedItem("LegacyUom").getTextContent() : "");
+            if((!YFCCommon.isVoid(ConvFactor)) && (!YFCCommon.isVoid(legacyConvFact)) )
+				ConvFactor = ""+(Float.parseFloat(ConvFactor) * Float.parseFloat(legacyConvFact));
+			/*EB 1851*/
+			//XB-687 - Start
             if (ExtnIsCustUOMExcl != null && ExtnIsCustUOMExcl.equals("Y")) {
                 wUOMsToConversionFactors.clear();
             }

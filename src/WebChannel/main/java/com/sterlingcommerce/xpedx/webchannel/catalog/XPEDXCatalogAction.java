@@ -342,6 +342,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setStockedCheckeboxSelected(defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_STOCKED) || defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED));
 				getWCContext().setWCAttribute("StockedCheckbox", isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 			}
+		}
+			Object sessionStockedCheckbox = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
+			if (sessionStockedCheckbox != null) {
+				isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
 			}
 		}
 	private Map<String,List<Element>> replacmentItemsMap;

@@ -125,6 +125,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String userNotAdmin;
 	List<String> alFinalSelectedCustomers = new ArrayList<String>();
 	private boolean treeSelected;
+	
 	//EB-2824 start only setter getter method
 
 	private String alternateApprover;
@@ -160,7 +161,6 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		this.spendingLt = spendingLt;
 	}
 	//EB-2824 end
-	
 	public boolean isTreeSelected() {
 		return treeSelected;
 	}

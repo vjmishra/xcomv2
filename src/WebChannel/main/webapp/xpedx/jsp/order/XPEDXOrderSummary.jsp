@@ -1426,7 +1426,10 @@ from session . We have customer Contact Object in session .
 										<s:if test='#item.getAttribute("ItemID") == #itemId'>	
 											<s:if test='%{#inventoryChk !="Y"}'>
 												<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
-												<s:hidden name="inventoryInds" id="inventoryInd_%{#orderLineKey}" value='%{#orderLineKey}' />
+												<s:if test='%{#inventoryChk !="I"}'>
+													<s:hidden name="inventoryInds" id="inventoryInd_%{#orderLineKey}" value='%{#orderLineKey}' />
+												</s:if>
+												
 											</s:if>
 										</s:if>	 
 									</s:iterator>

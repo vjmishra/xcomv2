@@ -1338,7 +1338,7 @@ a.underlink:hover {
 	<title><s:property value="wCContext.storefrontId" /> / User
 		Profile</title>
 	<!-- Web Trends tag start -->
-	<meta name="WT.ti" Content="xpedx / User Profile">
+	<meta name="WT.ti" Content="<s:property value='wCContext.storefrontId' /> / User Profile">
 	<!-- Web Trends tag stop -->
 	<s:set name='userelement' value="getUser()" />
 	<s:set name='user' value='#userelement' />
@@ -1910,13 +1910,13 @@ a.underlink:hover {
 							<s:else>
 								<ul class="TabbedPanelsTabGroup" style="margin-left: 5px;">
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /User information');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile /User information');"
 										tabindex="0">User Information</li>
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /Authorized Locations');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile /Authorized Locations');"
 										tabindex="0">Authorized Locations</li>
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 										tabindex="0">Site Preferences</li>
 
 									<%-- Added for Jira 3048 issue item 3 --%>
@@ -2472,7 +2472,7 @@ a.underlink:hover {
 																style="margin-left: 2px;">
 																<a id='changeShipToForUserProfile'
 																	href='#shipToUserProfile'
-																	onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');"
+																	onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 																	class=" underlines">[Change]</a>
 															</div>
 														</td>
@@ -2938,9 +2938,10 @@ a.underlink:hover {
 													class="no-border-right-user padding00"><s:if
 														test="#optedCurrency != null && #optedCurrency !=''">
 														<s:if test="#disableSinceSelfApprover">
-															<s:textfield id="spendingLtCurrency"
-																name="spendingLtCurrency" value="%{#optedCurrency}"
+															<s:textfield id="spendingLtCurrencyReadonly"
+																name="spendingLtCurrencyReadonly" value="%{#optedCurrency}"
 																readonly="%{true}" disabled='%{true}' cssStyle="width: 148px;" />
+															<s:hidden id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}"/>	
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Currency -"
@@ -2970,8 +2971,9 @@ a.underlink:hover {
 														test="#spendingLimit != null && #spendingLimit != ''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
-																id="spendingLt" readonly="%{true}" name="spendingLt"
+																id="spendingLtReadOnly" readonly="%{true}" name="spendingLtReadOnly"
 																maxlength="6" value="%{showSpendingLimit()}" disabled='%{true}'></s:textfield>
+															<s:hidden id="spendingLt" name="spendingLt" value="%{showSpendingLimit()}"/>	
 														</s:if>
 														<s:else>
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
@@ -2992,27 +2994,31 @@ a.underlink:hover {
 												<td valign="top" width="80%" align="left"
 													class="no-border-right-user padding00"><s:if
 														test="#disableSinceSelfApprover">
-														<s:if test='%{#OrderApprovalFlag=="Y"}'>
+														
+														<s:if test='%{#OrderApprovalFlag==true}'>
 															<s:hidden name="OrderApprovalFlag" value="true" />
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
-																value="%{#_action.isOrderFlagForApproval()}"
-																disabled='%{true}' />
+																fieldValue="%{#_action.isOrderFlagForApproval()}"
+																disabled='%{true}' value="true"/>
+															
 														</s:if>
 														<s:else>
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
-																value="%{#_action.isOrderFlagForApproval()}"
+																fieldValue="%{#_action.isOrderFlagForApproval()}"
 																disabled='%{true}' />
+																
 														</s:else>
 
 
 													</s:if> <s:else>
-														<s:if test='%{#OrderApprovalFlag=="Y"}'>
+														<s:if test='%{#OrderApprovalFlag==true}'>
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
 																value="%{#_action.isOrderFlagForApproval()}" />
 															<s:hidden name="OrderApprovalFlag" value="true" />
+															
 														</s:if>
 
 														<s:else>
@@ -3039,9 +3045,10 @@ a.underlink:hover {
 														test="#primaryApprover != null && #primaryApprover != ''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
-																id="primaryApprover" readonly="%{true}"
-																name="primaryApprover" maxlength="6"
+																id="primaryApproverReadOnly" readonly="%{true}"
+																name="primaryApproverReadOnly" maxlength="6"
 																value="%{#primaryApprover}" disabled='%{true}'></s:textfield>
+															<s:hidden id="primaryApprover" name="primaryApprover" value="%{#primaryApprover}"/>
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Approver -"
@@ -3072,9 +3079,10 @@ a.underlink:hover {
 														<s:if test="#disableSinceSelfApprover">
 															<span class="no-border-right-user padding0 "> <s:textfield
 																	cssClass="x-input" cssStyle="width:148px;"
-																	id="alternateApprover" readonly="%{true}"
-																	name="alternateApprover" maxlength="6"
+																	id="alternateApproverReadOnly" readonly="%{true}"
+																	name="alternateApproverReadOnly" maxlength="6"
 																	value="%{#alternateApprover}" disabled='%{true}'></s:textfield>
+																	<s:hidden id="alternateApprover" name="alternateApprover" value="%{#alternateApprover}"/>
 															</span>
 														</s:if>
 														<!-- EB-763 END -->
