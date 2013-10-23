@@ -18,7 +18,7 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 	private String copyCartDescription;
 	private String newOrderHeaderKey;
 	public String draftFlagError="draftFlagError";
-	private String XPX_MASHUP_GET_ORDER_NAME = "xpedxDraftOrderCopyGetName";
+	private String MY_MASHUP_GET_ORDER_NAME = "myDraftOrderCopyGetName";
 	private String extnBillToCustomerId;
 	public String execute(){
 		 try {
@@ -26,9 +26,9 @@ public class XPEDXDraftOrderCopyAction extends DraftOrderCopyAction {
 				//Remove itemMap from Session, when cart change in context,  For Minicart Jira 3481
 				XPEDXWCUtils.removeObectFromCache("itemMap");
 				
-				Element orderInputElem = WCMashupHelper.getMashupInput(XPX_MASHUP_GET_ORDER_NAME, this.wcContext);
+				Element orderInputElem = WCMashupHelper.getMashupInput(MY_MASHUP_GET_ORDER_NAME, this.wcContext);
 				orderInputElem.setAttribute("OrderHeaderKey", getSingleOrderHeaderKey());
-				Element orderOutputElem = (Element) WCMashupHelper.invokeMashup(XPX_MASHUP_GET_ORDER_NAME, orderInputElem, this.wcContext.getSCUIContext());
+				Element orderOutputElem = (Element) WCMashupHelper.invokeMashup(MY_MASHUP_GET_ORDER_NAME, orderInputElem, this.wcContext.getSCUIContext());
 	            
 				String copyOrderID = orderOutputElem.getAttribute("OrderNo");
 	            String draftOrderFlag = orderOutputElem.getAttribute("DraftOrderFlag");
