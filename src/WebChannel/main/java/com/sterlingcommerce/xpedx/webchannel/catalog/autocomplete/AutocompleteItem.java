@@ -64,7 +64,7 @@ public class AutocompleteItem implements Comparable<AutocompleteItem> {
 		int retval = Collator.getInstance().compare(this.getGroup(), that.getGroup());
 
 		if (retval == 0) {
-			retval = Collator.getInstance().compare(this.getName(), that.getName());
+			retval = Collator.getInstance().compare(this.getPath(), that.getPath());
 		}
 
 		return retval;
