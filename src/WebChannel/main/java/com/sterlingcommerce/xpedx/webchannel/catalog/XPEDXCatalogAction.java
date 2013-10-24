@@ -855,6 +855,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}	
 	
 		}					
+		
+		if (punId != null) {
+			valueMap.put("/SearchCatalogIndex/Terms/Term[0]/@IndexFieldName", "punId");
+			valueMap.put("/SearchCatalogIndex/Terms/Term[0]/@Value", String.valueOf(punId));
+			valueMap.put("/SearchCatalogIndex/Terms/Term[0]/@Condition", "MUST");
+		}
+		
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
 		ArrayList<Element> elements = SCXmlUtil.getElements(mashupInput,
 				"Terms");
@@ -3845,6 +3852,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.punId = punId;
 	}
 
+	/**
+	 * XXX this may be unnecessary. it looks like we can implement pun-specific search in populateMashupInput and use newSearch() method
+	 * @return
+	 * @throws Exception
+	 */
 	public String punSearch() throws Exception {
 		Connection conn = null;
 		try {

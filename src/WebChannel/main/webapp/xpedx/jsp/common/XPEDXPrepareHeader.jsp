@@ -51,12 +51,9 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
-	<s:url id="navigateURL" action="navigate" namespace="/catalog" escapeAmp="false">
-		<s:param name="path">TOKEN_PATH</s:param>
-		<s:param name="cname">TOKEN_CNAME</s:param>
+	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
 		<s:param name="newOP">true</s:param>
 		<s:param name="selectedHeaderTab">CatalogTab</s:param>
-		<s:param name="punOnly">true</s:param>
 	</s:url>
 	<s:url id="punSearchURL" action="getPunItems" namespace="/catalog" escapeAmp="false">
 		<s:param name="punId">TOKEN_PUN_ID</s:param>
@@ -79,16 +76,13 @@
 		
 		// enable autocomplete for new search
 		$(document).ready(function() {
-			// trey - console.log('BEGIN doc-ready');
+			console.log('BEGIN doc-ready');
 			
 			var acSource = function(request, response) {
-				// trey - console.log('BEGIN acSource');
+				console.log('BEGIN acSource');
 				var searchData = {
-						searchTerm: request.term
-						,path: '/'
+					searchTerm: request.term
 				};
-				
-				// trey - console.log('searchData = ' , searchData);
 				
 				$.ajax({
 					type: 'POST'
@@ -96,8 +90,8 @@
 					,dataType: 'json'
 					,data: searchData
 					,success: function(data) {
-						// trey - console.log('BEGIN success');
-						// trey - console.log('data = ' , data);
+						console.log('BEGIN success');
+						console.log('data = ' , data);
 						if (data.resultStatus == 'OK') {
 							response(data.autocompleteItems);
 						} else {
@@ -106,27 +100,30 @@
 						}
 					}
 					,error: function(resp, textStatus, xhr) {
-						// trey - console.log('BEGIN error');
-						// trey - console.log('resp = ' , resp);
-						// trey - console.log('textStatus = ' , textStatus);
-						// trey - console.log('xhr = ' , xhr);
+						console.log('BEGIN error');
+						console.log('resp = ' , resp);
+						console.log('textStatus = ' , textStatus);
+						console.log('xhr = ' , xhr);
 						response({});
 					}
 					,complete: function() {
-						// trey - console.log('BEGIN complete');
+						console.log('BEGIN complete');
 					}
 				});
 			};
 			
 			var acSelect = function(event, ui) {
-				// trey - console.log('BEGIN acSelect');
-				// trey - console.log('ui.item.id = ' , ui.item.id);
+				console.log('BEGIN acSelect');
+				console.log('ui.item = ' , ui.item);
 				
-				var url = '<s:property value="#punSearchURL" escape="false" />';
-				url = url.replace('TOKEN_PUN_ID', encodeURIComponent(ui.item.id));
+				var url = '<s:property value="#newSearchURL" escape="false" />';
+				url += '&punId=' + encodeURIComponent(ui.item.id);
+				url += '&cname=' + encodeURIComponent('name');
+				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
-				// trey - console.log('url = ' , url);
-				window.location = url;
+				console.log('posting to url = ' , url);
+				//post_to_url(url, {path: ui.item.name}, 'post');
+				post_to_url(url, {path: '/'}, 'post');
 			};
 			
 			var acOptions = {
@@ -145,8 +142,13 @@
 				var searchTerm = $('#newSearch_searchTerm').val();
 				// console.log('searchTerm = ' , searchTerm);
 				
-				var regexMatchHighlight = new RegExp(searchTerm, 'ig');
-				var text = item.path.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+				var tokens = searchTerm.split(/\s+/);
+				
+				var text = item.path;
+				for (var i = 0, len = tokens.length; i < len; i++) {
+					var regexMatchHighlight = new RegExp(tokens[i], 'ig');
+					text = text.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+				}
 				// console.log('text = ' , text);
 				
 				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
@@ -156,6 +158,30 @@
 			}
 			;
 		});
+		
+		function post_to_url(path, params, method) {
+		    method = method || "post"; // Set method to post by default if not specified.
+
+		    // The rest of this code assumes you are not using a library.
+		    // It can be made less wordy if you use one.
+		    var form = document.createElement("form");
+		    form.setAttribute("method", method);
+		    form.setAttribute("action", path);
+
+		    for (var key in params) {
+		        if (params.hasOwnProperty(key)) {
+		            var hiddenField = document.createElement("input");
+		            hiddenField.setAttribute("type", "hidden");
+		            hiddenField.setAttribute("name", key);
+		            hiddenField.setAttribute("value", params[key]);
+
+		            form.appendChild(hiddenField);
+		         }
+		    }
+
+		    document.body.appendChild(form);
+		    form.submit();
+		}
 	</script>
 
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	

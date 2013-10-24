@@ -139,7 +139,7 @@ public class AjaxAutocompleteAction extends WCAction {
 	public static void main(String[] args) throws CorruptIndexException, IOException {
 		long start = System.currentTimeMillis();
 		AjaxAutocompleteAction action = new AjaxAutocompleteAction();
-		action.setSearchTerm("spring");
+		action.setSearchTerm("strathmore square");
 		action.execute();
 		long stop = System.currentTimeMillis();
 
