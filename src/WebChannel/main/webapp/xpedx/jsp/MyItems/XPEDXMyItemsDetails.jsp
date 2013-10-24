@@ -2323,23 +2323,19 @@ function showSharedListForm(){
 				  //Added for EB 1150
 				  $(function () {
    					 var scroll_timer;
-    				 var displayed = false;
     				 var $message = $('#back-to-top a');
     				 var $window = $(window);
-    				 //var top = $(document.body).children(0).position().top;
 
     				/* react to scroll event on window */
    					 $window.scroll(function () {
        				 window.clearTimeout(scroll_timer);
        				 scroll_timer = window.setTimeout(function () {
-           			 if($window.scrollTop() <= 380)
+           			 if($window.scrollTop() <= 280)
            			 {
-                		displayed = false;
                 		$message.fadeOut(500);
            			 }
-           			 else if(displayed == false)
+           			 else 
             		 {
-               			 displayed = true;
                			 $message.stop(true, true).show().click(function () { $message.fadeOut(500); });
            			 }
        			 }, 100);
@@ -3618,7 +3614,8 @@ function showSharedListForm(){
 			</s:if>
         <!-- END carousel -->
 		 </s:if>
-		 <div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)">Back to top ↑</a></div>
+		 <%--Added for EB 1150 --%>
+		 <div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)"></a></div>
 		 
 		 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
          <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
@@ -3861,10 +3858,6 @@ function showSharedListForm(){
 		}
 		updateValidation();
 	</script>
-	
-	
-	
-
 
 <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
