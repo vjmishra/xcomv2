@@ -131,6 +131,18 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 		if (!YRCPlatformUI.isVoid(YRCXmlUtils.getAttribute(page.getPageInput(),"ArticleKey"))) {
 			eleInput.setAttribute("ArticleKey", YRCXmlUtils.getAttribute(page.getPageInput(), "ArticleKey"));
 		}
+		
+		//EB-1256 Article Name field to be mandatory validation
+		String articlelName = YRCXmlUtils.getAttribute(eleInput,"ArticleName");
+		if(YRCPlatformUI.isVoid(articlelName))
+		{
+			if(YRCPlatformUI.isVoid(YRCXmlUtils.getAttribute(eleInput,"ArticleKey")))
+				YRCPlatformUI.showError("Create Article:Mandatory Parameter", "Please Enter Article Name");
+			else
+				YRCPlatformUI.showError("Update Article:Mandatory Parameter", "Please Enter Article Name");
+			return ;
+		}
+		
 		String articlelType = YRCXmlUtils.getAttribute(eleInput,"ArticleType");		
 		
 		if(!YRCPlatformUI.isVoid(articlelType)&& "S".equals(articlelType))
@@ -304,7 +316,8 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 	 * and set the Create button Label as Update.
 	 */
 	private void setControlState() {
-		setControlEditable("txtArticleName", false);
+		//EB-1087 able to modify an article name while updating the Article
+		//setControlEditable("txtArticleName", false); 
 		setFieldValue("btnCreate", YRCPlatformUI.getString("Article_Update"));
 	}
 
