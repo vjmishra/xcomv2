@@ -56,7 +56,7 @@ public class MainCreateAutocompleteIndex {
 
 				Document doc = new Document();
 				doc.add(new Field("pun_id", String.valueOf(id), Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("pun_name", pathStr, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.add(new Field("pun_name", name, Field.Store.YES, Field.Index.NOT_ANALYZED));
 				doc.add(new Field("pun_path", pathStr, Field.Store.YES, Field.Index.NOT_ANALYZED));
 				doc.add(new Field("cat1", cat1, Field.Store.YES, Field.Index.NOT_ANALYZED)); // required for sorting
 
@@ -93,7 +93,10 @@ public class MainCreateAutocompleteIndex {
 	}
 
 	public static void main(String[] args) throws Exception {
+		long start = System.currentTimeMillis();
 		createIndex("C:/search/index/autocomplete-analyzed");
+		long stop = System.currentTimeMillis();
+		System.out.println(String.format("Total time (ms): {0}", stop - start));
 	}
 
 }
