@@ -1198,7 +1198,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" DraftOrderFlag="" CustomerContactID="">
+                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" DraftOrderFlag="" >
                     <OrderLines>
                         <OrderLine Action="MODIFY" OrderLineKey=""
                             DeliveryMethod="" ReservationMandatory="N">
@@ -1282,7 +1282,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="" OrderName="" CustomerContactID="">
+                <Order OrderHeaderKey="" OrderName="">
                     <Extn  ExtnOrderDesc="" />
                 </Order>
             </Input>
@@ -2931,16 +2931,14 @@
             </Template>
         </API>
     </mashup>
-    <mashup id='myDraftOrderCopyGetName' transactional='true' mashuptype='XAPI' endpoint='DRAFT_ORDER' description="Draft Order Copy Get Name">
+    <mashup id='draftOrderCopyGetName' transactional='true' mashuptype='XAPI' endpoint='DRAFT_ORDER' description="Draft Order Copy Get Name">
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
         <API Name="getOrderDetails">
             <Input>
                 <Order OrderHeaderKey=""/>
             </Input>
             <Template>
-                <Order OrderName="" OrderNo="" DraftOrderFlag="">
-                	<Extn ExtnBillToCustomerID=""/>
-                </Order>
+                <Order OrderName="" OrderNo="" DraftOrderFlag=""/>
             </Template>
         </API>
     </mashup>     
@@ -2950,7 +2948,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>
-                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y" CustomerContactID="" >
+                <Order OrderHeaderKey="" OrderName="" CarrierServiceCode="Standard Shipping" Override="Y">
                     <OrderLines>
                         <OrderLine Action="MODIFY" OrderLineKey=""
                             DeliveryMethod="" ReservationMandatory="N">

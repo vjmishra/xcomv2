@@ -273,11 +273,23 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	                }
 	            }
 	        }	        
-	       
-		    Map<String, Element> out = prepareAndInvokeMashups();
-	        /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
-	        outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
-	        /*End - Changes made by Mitesh Parikh for JIRA#3595*/
+	        
+	        if("false".equals(isEditOrder))
+    		{
+	        	Set<String> mashupIdSet = new HashSet<String>();
+    			mashupIdSet.add(mashUpId);
+    			Map<String, Element> changeOrderInputObj=prepareMashupInputs(mashupIdSet);
+				Document changeOrderInputDoc = changeOrderInputObj.get(mashUpId).getOwnerDocument();
+				Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
+				changeOrderInputElem.setAttribute(XPXLiterals.CUSTOMER_CONTACT_ID, getCustomerContactId());
+    			Element outputElement = (Element) WCMashupHelper.invokeMashup(mashUpId, changeOrderInputElem, wcContext.getSCUIContext());
+    			outputDocument=outputElement.getOwnerDocument();
+    		
+    		} else {    			
+    			Map<String, Element> out = prepareAndInvokeMashups();
+	        	outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+    		}
+		    
 	        retVal= SUCCESS;	              	        
            
             if("true".equals(isComingFromCheckout))
