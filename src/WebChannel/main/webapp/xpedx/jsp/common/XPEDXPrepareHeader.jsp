@@ -49,6 +49,7 @@
 	</s:else>
 	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
 	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
