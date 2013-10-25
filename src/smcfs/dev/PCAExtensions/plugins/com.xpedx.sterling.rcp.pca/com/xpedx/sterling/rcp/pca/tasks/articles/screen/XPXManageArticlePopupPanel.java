@@ -72,6 +72,7 @@ public class XPXManageArticlePopupPanel extends Composite implements
 	private Composite pnlButtonHolder;
 	private Button btnCreate;
 	private Button btnCancel;
+	private Button btnDelete;
 	private XPXManageArticlePopupPanelBehavior myBehavior;
 	private ArticlesSearchListPanel invokerPage;
 	private Element elePageInput;
@@ -542,12 +543,23 @@ public class XPXManageArticlePopupPanel extends Composite implements
 		gridData2.grabExcessHorizontalSpace = true;
 		gridData2.verticalAlignment = SWT.BEGINNING;
 		GridLayout gridLayout2 = new GridLayout();
-		gridLayout2.numColumns = 2;
+		gridLayout2.numColumns = 3;
 		pnlButtonHolder = new Composite(pnlRoot, 0);
 		pnlButtonHolder.setLayout(gridLayout2);
 		pnlButtonHolder.setLayoutData(gridData2);
 		pnlButtonHolder.setData("name", "pnlButtonHolder");
 		pnlButtonHolder.setData("yrc:customType", "TaskComposite");
+		//Delete button	 EB-1086 delete an existing article	
+		btnDelete = new Button(pnlButtonHolder, 0);
+		btnDelete.setText("Article_Delete");
+		btnDelete.setLayoutData(gridData10);
+		btnDelete.setData("name", "btnDelete");
+		btnDelete.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.delete();
+			}
+		});
+		btnDelete.setVisible(false);
 		
 		//Create Button, name of the button will be changed dynamically to Update in case of Article getting Created Successfully
 		btnCreate = new Button(pnlButtonHolder, 0);

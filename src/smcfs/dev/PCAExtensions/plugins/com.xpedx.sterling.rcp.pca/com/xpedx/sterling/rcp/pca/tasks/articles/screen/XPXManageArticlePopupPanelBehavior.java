@@ -279,6 +279,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 						if(null != page.getInvokerPage())
 							page.getInvokerPage().getMyBehavior().search();
 						YRCPlatformUI.showInformation("Success","Successfully_Saved_Article");
+						page.getParent().getShell().setText(YRCPlatformUI.getString("TITLE_UPDATE_ARTICLE"));
 					}
 					
 				} 
@@ -306,6 +307,13 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 						setModel("Divisions", eleOutput);
 					}
 				}	
+				else if("deleteXPXArticleService".equals(apiname)){ //EB-1086 delete an existing article
+					if(null != page.getInvokerPage()){
+						page.getInvokerPage().getMyBehavior().search();	
+					}
+					YRCPlatformUI.showInformation("Success","MSG_KEY_Deleted_Article_Successfully");
+					page.getParent().getShell().close();
+				}
 			}
 			this.storeFront = null;
 		}
@@ -319,6 +327,7 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 		//EB-1087 able to modify an article name while updating the Article
 		//setControlEditable("txtArticleName", false); 
 		setFieldValue("btnCreate", YRCPlatformUI.getString("Article_Update"));
+		getControl("btnDelete").setVisible(true);//EB-1086 delete an existing article
 	}
 
 	public void addSelectedDivisions(SelectionEvent e) {
@@ -396,4 +405,25 @@ public class XPXManageArticlePopupPanelBehavior extends YRCBehavior {
 
 			callApi(context);
 	   }
+	 //EB-1086 delete an existing article
+	 public void delete() {
+		 Element eleInput = getTargetModel("SaveArticle");
+		 String articlelName = YRCXmlUtils.getAttribute(eleInput,"ArticleName");
+		 if(YRCPlatformUI.getConfirmation("TITLE_KEY_Confirm_Delete", "MSG_KEY_Confirm_Article_Delete",articlelName )){			
+			if (!YRCPlatformUI.isVoid(YRCXmlUtils.getAttribute(page.getPageInput(),"ArticleKey"))) {
+				 eleInput.setAttribute("ArticleKey", YRCXmlUtils.getAttribute(page.getPageInput(), "ArticleKey"));				
+				 String[] apinames = null;
+				 Document[] docInput = null;
+				 apinames = new String[]{"deleteXPXArticleService"};
+				 docInput = new Document[]{
+					eleInput.getOwnerDocument()
+				};			
+				YRCApiContext context = new YRCApiContext();
+				context.setFormId("com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel");
+				context.setApiNames(apinames);
+				context.setInputXmls(docInput);
+				callApi(context);
+		  }
+	   }
+	 }
 }
