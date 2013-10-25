@@ -240,7 +240,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.erroMsg = erroMsg;
 	}
 
-	public String duplicateInfoMsg = "";
+	private String duplicateInfoMsg = "";
 	public String getDuplicateInfoMsg() {
 		return duplicateInfoMsg;
 	}
@@ -430,8 +430,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	//This includes only My items list items and not other alternate items etc.
 	protected ArrayList<String> allMyItemsListItemIds = new ArrayList<String>();
-	protected ArrayList<String> allItemIDsWithDups = new ArrayList<String>();
-	protected ArrayList<String> dupMILItemIds = new ArrayList<String>();
+	protected List<String> allItemIDsWithDups = new ArrayList<String>();
+	protected List<String> dupMILItemIds = new ArrayList<String>();
 	//Added	validItemIds for XB-224
 	protected ArrayList<String> validItemIds = new ArrayList<String>();
 	YFCDate lastModifiedDate = new YFCDate();
@@ -881,7 +881,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					for (int i = 0; i < getListOfItems().size(); i++) {
 						Document expDoc = YFCDocument.createDocument("Exp").getDocument();
 						Element expElement = expDoc.getDocumentElement();
-						Element item = (Element) getListOfItems().get(i);
+						Element item = getListOfItems().get(i);
 						expElement.setAttribute("Name", "ItemID");
 						expElement.setAttribute("Value", item.getAttribute("ItemId"));
 						inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
@@ -1155,12 +1155,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		return SUCCESS;
 	}
 
+	/**
+	 * Sets the duplicateInfoMsg to message that includes a list of dup items from the MIL.
+	 * If on Edit screen, then each item includes a list of the seq# of where it occurs in list.
+	 */
 	private void checkForDuplicateItemsinList() {
 		if(dupMILItemIds !=null && dupMILItemIds.size()>0){
 
 			// Group all items with their correspond sequence number(s)
 			// - need this so can display seq #s for dups on Edit MIL page
-			HashMap<String, ArrayList<String>> indexes = buildMapItemWithSeqs();
+			Map<String, ArrayList<String>> indexes = buildMapItemWithSeqs();
 
 			if(dupMILItemIds.size() == 1) {
 				// If only one item, wording is different
@@ -1177,21 +1181,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 					itemsString += itemId + listDupSeqNums(itemId, indexes);
 
-					if(i != dupMILItemIds.size()-1)
+					if(i != dupMILItemIds.size()-1) {
 						itemsString += ", ";
+					}
 				}
 				duplicateInfoMsg = "Please note that items " + itemsString +" have been added to this My Items List more than once.";
 			}
 		}
 	}
 
-	private String listDupSeqNums(String itemId, HashMap<String, ArrayList<String>> indexes) {
+	private String listDupSeqNums(String itemId, Map<String, ArrayList<String>> indexes) {
 		String ret = "";
 
 		// only on MIL edit are sequence #s visible
 		if (isEditMode()) {
 
-			ArrayList<String> list = indexes.get(itemId);
+			List<String> list = indexes.get(itemId);
 			ret = "(" +
 					StringUtils.join(list.toArray(), ",") +
 					")";
@@ -1199,19 +1204,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		return ret;
 	}
 
-	// Creates a map where each item has a list of the seq# of where it appears in list
-	// (For dup items, the list would have more than one entry)
-	private HashMap<String, ArrayList<String>> buildMapItemWithSeqs() {
-		HashMap<String,ArrayList<String>> itemsIndexes = new HashMap<String, ArrayList<String>>();
+	/**
+	 * Creates a map where each item has a list of the seq# of where it appears
+	 * in list (For dup items, the list would have more than one entry)
+	 *
+	 * @return map of items with seq# numbers of occurrences
+	 */
+	private Map<String, ArrayList<String>> buildMapItemWithSeqs() {
+		Map<String,ArrayList<String>> itemsIndexes = new HashMap<String, ArrayList<String>>();
 		int seq = 0;
 
 		for (String itemId : allItemIDsWithDups) {
 			seq++;
-			if (!itemsIndexes.containsKey(itemId)) {
-				itemsIndexes.put(itemId, new ArrayList<String>());
+			ArrayList<String> bucket = itemsIndexes.get(itemId);
+			if (bucket == null) {
+				bucket = new ArrayList<String>();
+				itemsIndexes.put(itemId, bucket);
 			}
 			// add the seq# for this dup to list for this item
-			itemsIndexes.get(itemId).add(String.valueOf(seq));
+			bucket.add(String.valueOf(seq));
 		}
 		return itemsIndexes;
 	}
@@ -1292,11 +1303,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	private void setAllMyItems() {
 		ArrayList<Element> items = getListOfItems();
-		int seq = 0;
 
-		for (Iterator iterator = items.iterator(); iterator.hasNext();) {
-			Element item = (Element) iterator.next();
-			seq++;
+		for (Iterator<Element> iterator = items.iterator(); iterator.hasNext();) {
+			Element item = iterator.next();
 
 			String itemId = item.getAttribute("ItemId");
 			setItemID(itemId);
@@ -1304,8 +1313,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			// To display dup items in MIL including seq#, need a couple lists
 			if(allMyItemsListItemIds.contains(id)) {
-				if (!dupMILItemIds.contains(id))
+				if (!dupMILItemIds.contains(id)) {
 					dupMILItemIds.add(id);
+				}
 			}
 			else {
 				allMyItemsListItemIds.add(id);
@@ -3291,7 +3301,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.listCustomerId = listCustomerId;
 	}
 
-	public ArrayList getListOfItems() {
+	public ArrayList<Element> getListOfItems() {
 		return listOfItems;
 	}
 
