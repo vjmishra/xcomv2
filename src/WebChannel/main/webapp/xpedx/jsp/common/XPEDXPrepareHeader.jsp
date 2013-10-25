@@ -55,9 +55,6 @@
 		<s:param name="newOP">true</s:param>
 		<s:param name="selectedHeaderTab">CatalogTab</s:param>
 	</s:url>
-	<s:url id="punSearchURL" action="getPunItems" namespace="/catalog" escapeAmp="false">
-		<s:param name="punId">TOKEN_PUN_ID</s:param>
-	</s:url>
 	<script type="text/javascript">
 		
 		$.widget("custom.catcomplete", $.ui.autocomplete, {
@@ -80,15 +77,12 @@
 			
 			var acSource = function(request, response) {
 				console.log('BEGIN acSource');
-				var searchData = {
-					searchTerm: request.term
-				};
 				
 				$.ajax({
 					type: 'POST'
 					,url: '<s:property value="#autocompleteURL" escape="false" />'
 					,dataType: 'json'
-					,data: searchData
+					,data: { searchTerm: request.term }
 					,success: function(data) {
 						console.log('BEGIN success');
 						console.log('data = ' , data);
@@ -2457,26 +2451,6 @@ function msgWait(){
 .indent-tree { margin-left:15px; }       
 .indent-tree-act { margin-left:25px; } 	
 
-.ui-autocomplete {
-	max-height: 250px;
-	overflow-y: auto;
-	/* prevent horizontal scrollbar */
-	overflow-x: hidden;
-	border: 1px solid #333 !important;
-}
-.ui-autocomplete-group {
-	font-size: 16px;
-	font-weight: bold;
-	background-color: #FFF380;
-}
-.ui-autocomplete-menu-item {
-	background-color: white;
-}
-.ui-autocomplete-highlight-match {
-	color: black;
-	font-weight: bold;
-	font-size: 14px;
-}
 </style>
 <s:set name='isProcurementInspectMode'
 	value='#hUtil.isProcurementInspectMode(wCContext)' />
