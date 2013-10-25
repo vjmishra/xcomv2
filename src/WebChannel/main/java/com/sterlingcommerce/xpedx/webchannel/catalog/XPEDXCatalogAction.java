@@ -856,9 +856,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 		}					
 		
-		if (punId != null) {
+		if (punKey != null) {
 			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@IndexFieldName", "punId");
-			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Value", String.valueOf(punId));
+			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Value", punKey);
 			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Condition", "MUST");
 		}
 		
@@ -3840,70 +3840,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.facetListItemAttributeKey = facetListItemAttributeKey;
 	}
 	
-	// --- autocomplete code
-	
-	private Integer punId;
+	private String punKey; // eb-2772: if non-null, then searches on items in the pun
 
-	public Integer getPunId() {
-		return punId;
+	public String getPunKey() {
+		return punKey;
 	}
 
-	public void setPunId(Integer punId) {
-		this.punId = punId;
+	public void setPunKey(String punKey) {
+		this.punKey = punKey;
 	}
 
-//	/**
-//	 * XXX this may be unnecessary. it looks like we can implement pun-specific search in populateMashupInput and use newSearch() method
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	public String punSearch() throws Exception {
-//		Connection conn = null;
-//		try {
-//			conn = createConnection();
-//			
-//			String sql = "select item.item_id, item.short_description"
-//					+ " from yfs_item item"
-//					+ " 	inner join trey_item_pun tip on tip.item_key = item.item_key"
-//					+ " where tip.pun_id = ?";
-//			
-//			PreparedStatement stmt = conn.prepareStatement(sql);
-//			stmt.setInt(1, punId);
-//			
-//			ResultSet res = stmt.executeQuery();
-//			while (res.next()) {
-//				// TODO build category xml?
-//				String itemId = res.getString("item_id");
-//				String itemName = res.getString("short_description");
-//				System.out.println(String.format("Item %s: %s", itemId.trim(), itemName));
-//			}
-//			
-//			res.close();
-//			stmt.close();
-//			
-//		} finally {
-//			if (conn != null) {
-//				try {
-//					conn.close();
-//				} catch (Exception ignore) {
-//				}
-//			}
-//		}
-//		
-//		return SUCCESS;
-//	}
-//
-//	private static Connection createConnection() throws ClassNotFoundException, SQLException {
-//		Class.forName("oracle.jdbc.OracleDriver");
-//		Connection connection = null;
-//		connection = DriverManager.getConnection("jdbc:oracle:thin:@oratst08.ipaper.com:1521:ngd1", "NG", "NG1");
-//		return connection;
-//	}
-//	
-//	public static void main(String[] args) throws Exception {
-//		XPEDXCatalogAction action = new XPEDXCatalogAction();
-//		action.punId = 123;
-//		
-//		action.punSearch();
-//	}
 }

@@ -87,8 +87,8 @@
 					,success: function(data) {
 						console.log('BEGIN success');
 						console.log('data = ' , data);
-						if (data.resultStatus == 'OK') {
-							response(data.autocompleteItems);
+						if (data && data.resultStatus && data.resultStatus == 'OK') {
+							response(data.autocompletePuns);
 						} else {
 							// eg, TOO_MANY_RESULTS
 							response();
@@ -112,7 +112,7 @@
 				console.log('ui.item = ' , ui.item);
 				
 				var url = '<s:property value="#newSearchURL" escape="false" />';
-				url += '&punId=' + encodeURIComponent(ui.item.id);
+				url += '&punKey=' + encodeURIComponent(ui.item.key);
 				url += '&cname=' + encodeURIComponent('name');
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				

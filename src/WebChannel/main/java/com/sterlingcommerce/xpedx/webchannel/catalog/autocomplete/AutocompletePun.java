@@ -1,33 +1,34 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete;
 
 import java.text.Collator;
-import java.util.Comparator;
 
 /*
  * Created on Oct 21, 2013
  */
 
 /**
+ * This reprents a PUN (Published Unit Name) in the autocomplete drop down.
+ * 
  * @author Trey Howard
  */
-public class AutocompleteItem implements Comparable<AutocompleteItem> {
+public class AutocompletePun implements Comparable<AutocompletePun> {
 
-	private int id;
+	private String key;
 	private String group;
 	private String name;
 	private String path;
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + " | group=" + group + " | name=" + name + " | path=" + path + "]";
+		return "Item [key=" + key + " | group=" + group + " | name=" + name + " | path=" + path + "]";
 	}
 
-	public int getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getGroup() {
@@ -60,7 +61,7 @@ public class AutocompleteItem implements Comparable<AutocompleteItem> {
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(AutocompleteItem that) {
+	public int compareTo(AutocompletePun that) {
 		int retval = Collator.getInstance().compare(this.getGroup(), that.getGroup());
 
 		if (retval == 0) {

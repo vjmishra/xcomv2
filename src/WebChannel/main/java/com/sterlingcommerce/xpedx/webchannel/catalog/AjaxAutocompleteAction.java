@@ -21,7 +21,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
-import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteItem;
+import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompletePun;
 
 /*
  * Created on Oct 21, 2013
@@ -44,7 +44,7 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	private String searchTerm;
 
-	private List<AutocompleteItem> autocompleteItems;
+	private List<AutocompletePun> autocompletePuns;
 	private ResultStatus resultStatus = ResultStatus.OK;
 
 	/**
@@ -59,14 +59,18 @@ public class AjaxAutocompleteAction extends WCAction {
 		// String searchIndexRoot = YFSSystem.getProperty("yfs.searchIndex.rootDirectory");
 		String searchIndexRoot = "C:/search/index/autocomplete-analyzed";
 
-		// TODO search Item.Keywords with length > 2. can we exclude numeric-only? better yet, skip ajax call on client side for numeric-only
-
-		// createIndex(searchIndexRoot);
 		searchIndex(searchIndexRoot);
 
 		return SUCCESS;
 	}
 
+	/**
+	 * Perform a lucene search against the PUN index. Populates the <code>autocompletePuns</code> field which is seralized as a JSON response.
+	 * 
+	 * @param searchIndexRoot
+	 * @throws CorruptIndexException
+	 * @throws IOException
+	 */
 	private void searchIndex(String searchIndexRoot) throws CorruptIndexException, IOException {
 		if (searchTerm == null) {
 			throw new IllegalArgumentException("searchTerm must not be null");
@@ -74,35 +78,50 @@ public class AjaxAutocompleteAction extends WCAction {
 
 		Searcher indexSearcher = new IndexSearcher(searchIndexRoot);
 
+		long start = 0;
+		long stop = 0;
+
+		if (log.isDebugEnabled()) {
+			start = System.currentTimeMillis();
+		}
+
 		try {
 			Query query = createQuery();
 
 			TopDocs topDocs = indexSearcher.search(query, 20);
 
-			autocompleteItems = new ArrayList<AutocompleteItem>(topDocs.scoreDocs.length);
+			autocompletePuns = new ArrayList<AutocompletePun>(topDocs.scoreDocs.length);
 
 			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
 				Document doc = indexSearcher.doc(scoreDoc.doc);
-				String id = doc.getField("pun_id").stringValue();
+				String key = doc.getField("pun_key").stringValue();
 				String name = doc.getField("pun_name").stringValue();
 				String path = doc.getField("pun_path").stringValue();
 				String group = doc.getField("cat1").stringValue();
 
-				AutocompleteItem item = new AutocompleteItem();
-				item.setId(Integer.valueOf(id));
+				AutocompletePun item = new AutocompletePun();
+				item.setKey(key);
 				item.setGroup(group);
 				item.setName(name);
 				item.setPath(path);
-				autocompleteItems.add(item);
+				autocompletePuns.add(item);
 			}
 
 			// do NOT use lucene sorting: we want top hits independent of group. we only want to resort for the presentation layer (UI looks funky if they're not grouped together)
-			Collections.sort(autocompleteItems);
+			Collections.sort(autocompletePuns);
 
 		} catch (TooManyClauses e) {
 			// this happens if we have too many results
 			resultStatus = ResultStatus.TOO_MANY_RESULTS;
 			// TODO add logic to retry with different wildcards
+		}
+
+		if (log.isDebugEnabled()) {
+			stop = System.currentTimeMillis();
+			log.debug(String.format("Autocomplete search for '%s' completed in %s milliseconds", searchTerm, stop - start));
+			if (ResultStatus.OK != resultStatus) {
+				log.debug("Autocomplete failed: resultStatus = " + resultStatus);
+			}
 		}
 	}
 
@@ -119,8 +138,6 @@ public class AjaxAutocompleteAction extends WCAction {
 			query.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
 		}
 
-		// Query query = new WildcardQuery(new Term("pun_path_parsed", "*" + searchTerm.toLowerCase() + "*"));
-
 		return query;
 	}
 
@@ -132,8 +149,8 @@ public class AjaxAutocompleteAction extends WCAction {
 		return resultStatus;
 	}
 
-	public List<AutocompleteItem> getAutocompleteItems() {
-		return autocompleteItems;
+	public List<AutocompletePun> getAutocompletePuns() {
+		return autocompletePuns;
 	}
 
 	public static void main(String[] args) throws CorruptIndexException, IOException {
@@ -146,9 +163,9 @@ public class AjaxAutocompleteAction extends WCAction {
 		System.out.println(String.format("Search completed in {} milliseconds: ", stop - start));
 
 		System.out.println("resultStatus = " + action.getResultStatus());
-		if (action.getAutocompleteItems() != null) {
-			System.out.println("action.getAutocompleteItems().size = " + action.getAutocompleteItems().size());
-			for (AutocompleteItem item : action.getAutocompleteItems()) {
+		if (action.getAutocompletePuns() != null) {
+			System.out.println("action.getAutocompleteItems().size = " + action.getAutocompletePuns().size());
+			for (AutocompletePun item : action.getAutocompletePuns()) {
 				System.out.println(item);
 			}
 		}
