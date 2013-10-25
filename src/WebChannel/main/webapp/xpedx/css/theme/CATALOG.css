@@ -1162,7 +1162,6 @@ img#youtube { margin-right: 9px; }
     /* link goes at the bottom of the page */
     top: 100%;
     margin-top: -105px; /* = height + preferred bottom margin */
-    background:url("../../images/global/back_to_top_button.png") no-repeat left -51px;
 	
     /* link is centered */
     left: 50%;

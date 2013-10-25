@@ -7,3 +7,8 @@
 	color: #EE6B03;
 	font-size: 11px;
 }
+    
+#back-to-top a
+{
+	background:url("../images/global/back_to_top_button.png") no-repeat left -51px;
+}

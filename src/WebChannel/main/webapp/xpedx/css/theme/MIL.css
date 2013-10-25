@@ -6189,8 +6189,6 @@ div#main.userProfile { min-height: 850px; }
     margin-left: 550px; 
     width: 51px;
     height: 51px;
-    background:url("../../images/global/back_to_top_button.png") no-repeat left -51px;
-
 }
 
 #back-to-top:focus {
