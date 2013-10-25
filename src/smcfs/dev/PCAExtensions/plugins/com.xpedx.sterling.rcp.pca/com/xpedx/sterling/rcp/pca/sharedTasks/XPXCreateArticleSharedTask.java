@@ -2,6 +2,7 @@ package com.xpedx.sterling.rcp.pca.sharedTasks;
 
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel;
 import com.yantra.yfc.rcp.YRCDialog;
