@@ -808,4 +808,5 @@ public class XPXLiterals {
 	public static final String PENDING_APPROVAL_RELEASE_DESC="Released during Order Edit";
 	
 	public static final String HOLD_RELEASE_DESC="ReasonText";
+	public static final String CUSTOMER_CONTACT_ID="CustomerContactID";
 }
