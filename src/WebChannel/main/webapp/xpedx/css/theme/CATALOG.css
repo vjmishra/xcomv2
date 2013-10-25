@@ -1148,3 +1148,33 @@ ul
 
 img#youtube { margin-right: 9px; }
 .container.catalog { min-height: 675px; }
+	
+/*Added for EB 1147 for back to top functionality*/
+#back-to-top a
+{
+    /* display: block before hiding */
+    display: block;
+    display: none;
+    opacity: 1;
+    /* link stays at same place on page */
+    position: fixed;
+
+    /* link goes at the bottom of the page */
+    top: 100%;
+    margin-top: -105px; /* = height + preferred bottom margin */
+    background:url("../../images/global/back_to_top_button.png") no-repeat left -51px;
+	
+    /* link is centered */
+    left: 50%;
+    margin-left: 550px; 
+    width: 51px;
+    height: 51px;
+}
+
+#back-to-top:focus 
+{
+	outline:none;
+}
+
+/*End for EB 1147 for back to top functionality*/
+	
