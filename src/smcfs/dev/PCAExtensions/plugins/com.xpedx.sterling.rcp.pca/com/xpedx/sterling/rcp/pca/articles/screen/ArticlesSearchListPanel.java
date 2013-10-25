@@ -31,6 +31,7 @@ import com.yantra.yfc.rcp.YRCTableBindingData;
 import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCTextBindingData;
 
+
 /**
  * @author sdodda
  *
@@ -136,13 +137,16 @@ public class ArticlesSearchListPanel extends Composite  implements IYRCComposite
 
 		TableColumn clmArticleType = new TableColumn(tblSearchResults, SWT.NONE);
 		clmArticleType.setText("Article_Type");
-		clmArticleType.setWidth(150);//TODO: set appropriate width
+		clmArticleType.setWidth(100);//TODO: set appropriate width		
 
 		
 		TableColumn clmArticleName = new TableColumn(tblSearchResults, SWT.NONE);
 		clmArticleName.setText("Article_Name");
 		clmArticleName.setWidth(150);//TODO: set appropriate width
 		
+		TableColumn clmCustomer = new TableColumn(tblSearchResults, SWT.NONE);
+		clmCustomer.setText("Customer");
+		clmCustomer.setWidth(250);
 		TableColumn clmStorefrontCode = new TableColumn(tblSearchResults, SWT.NONE);
 		clmStorefrontCode.setText("Storefront_Code");
 		clmStorefrontCode.setWidth(150);//TODO: set appropriate width
@@ -153,15 +157,15 @@ public class ArticlesSearchListPanel extends Composite  implements IYRCComposite
 		
 		TableColumn clmStartDate = new TableColumn(tblSearchResults, SWT.NONE);
 		clmStartDate.setText("Article_Start_Date");
-		clmStartDate.setWidth(150);//TODO: set appropriate width
+		clmStartDate.setWidth(100);//TODO: set appropriate width
 		
 		TableColumn clmEndDate = new TableColumn(tblSearchResults, SWT.NONE);
 		clmEndDate.setText("Article_End_Date");
-		clmEndDate.setWidth(150);//TODO: set appropriate width
+		clmEndDate.setWidth(100);//TODO: set appropriate width
 
 		TableColumn clmLastModifiedDate = new TableColumn(tblSearchResults, SWT.NONE);
 		clmLastModifiedDate.setText("Last_Modified_Date");
-		clmLastModifiedDate.setWidth(150);//TODO: set appropriate width
+		clmLastModifiedDate.setWidth(100);//TODO: set appropriate width
 
 		TableColumn clmModifiedBy = new TableColumn(tblSearchResults, SWT.NONE);
 		clmModifiedBy.setText("Modified_By_User");
@@ -324,7 +328,7 @@ public class ArticlesSearchListPanel extends Composite  implements IYRCComposite
     
     private void setBindingForSearchResults() {
         YRCTableBindingData bindingData = new YRCTableBindingData();
-        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[8];
+        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[9];
 
         
 
@@ -352,31 +356,47 @@ public class ArticlesSearchListPanel extends Composite  implements IYRCComposite
         colBindings[1].setAttributeBinding("ArticleName");
         colBindings[1].setColumnBinding("Article_Name");
         colBindings[1].setSortReqd(true);
+       //EB-1088 show the actual Customer Name and Account number
         colBindings[2] = new YRCTblClmBindingData();
-        colBindings[2].setAttributeBinding("OrganizationCode");
-        colBindings[2].setColumnBinding("Storefront_Code");
+        colBindings[2].setAttributeBinding("CustomerID");
+        colBindings[2].setColumnBinding("Customer");
+        colBindings[2].setLabelProvider(new IYRCTableColumnTextProvider(){
+        	// 	@Override
+			public String getColumnText(Element obj) {
+				Element eleTableItem = (Element)obj;
+				if(YRCPlatformUI.equals("C", eleTableItem.getAttribute("ArticleType"))){
+					String customerNameAndAcct = eleTableItem.getAttribute("CustomerID").split("-")[1];
+					return myBehavior.getCustomerName(eleTableItem.getAttribute("CustomerID"))+" ("+customerNameAndAcct+")";				
+				}
+				else return "";				
+			}
+        });
         colBindings[2].setSortReqd(true);
         colBindings[3] = new YRCTblClmBindingData();
-        colBindings[3].setAttributeBinding("XPXDivision");
-        colBindings[3].setColumnBinding("Divisions");
+        colBindings[3].setAttributeBinding("OrganizationCode");
+        colBindings[3].setColumnBinding("Storefront_Code");
         colBindings[3].setSortReqd(true);
         colBindings[4] = new YRCTblClmBindingData();
-        colBindings[4].setAttributeBinding("StartDate");
-        colBindings[4].setColumnBinding("Article_Start_Date");
-        colBindings[4].setDataType("Date");
-        colBindings[4].setSortReqd(true);   
+        colBindings[4].setAttributeBinding("XPXDivision");
+        colBindings[4].setColumnBinding("Divisions");
+        colBindings[4].setSortReqd(true);
         colBindings[5] = new YRCTblClmBindingData();
-        colBindings[5].setAttributeBinding("EndDate");
-        colBindings[5].setColumnBinding("Article_End_Date");
-        colBindings[5].setSortReqd(true);
+        colBindings[5].setAttributeBinding("StartDate");
+        colBindings[5].setColumnBinding("Article_Start_Date");
+        colBindings[5].setDataType("Date");
+        colBindings[5].setSortReqd(true);   
         colBindings[6] = new YRCTblClmBindingData();
-        colBindings[6].setAttributeBinding("Modifyts");
-        colBindings[6].setColumnBinding("Last_Modified_Date");
+        colBindings[6].setAttributeBinding("EndDate");
+        colBindings[6].setColumnBinding("Article_End_Date");
         colBindings[6].setSortReqd(true);
         colBindings[7] = new YRCTblClmBindingData();
-        colBindings[7].setAttributeBinding("Modifyuserid");
-        colBindings[7].setColumnBinding("Modified_By_User");
+        colBindings[7].setAttributeBinding("Modifyts");
+        colBindings[7].setColumnBinding("Last_Modified_Date");
         colBindings[7].setSortReqd(true);
+        colBindings[8] = new YRCTblClmBindingData();
+        colBindings[8].setAttributeBinding("Modifyuserid");
+        colBindings[8].setColumnBinding("Modified_By_User");
+        colBindings[8].setSortReqd(true);
         
         bindingData.setSortRequired(true);
         

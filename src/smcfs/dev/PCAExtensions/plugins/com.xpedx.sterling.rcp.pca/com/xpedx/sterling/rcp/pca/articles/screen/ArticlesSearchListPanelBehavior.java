@@ -5,11 +5,15 @@
 package com.xpedx.sterling.rcp.pca.articles.screen;
 
 
+import java.util.HashMap;
+
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import com.yantra.yfc.rcp.YRCDesktopUI;
 
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.yantra.yfc.rcp.YRCApiContext;
@@ -26,6 +30,8 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 public class ArticlesSearchListPanelBehavior extends YRCBehavior {
 	
 	private ArticlesSearchListPanel page ;
+	private Element searchResultsElement = null;
+	private  HashMap<String, String> customersMap = null;
 
 	public ArticlesSearchListPanelBehavior(Composite ownerComposite, String formId, Object inputObject) {
         super(ownerComposite, formId,inputObject);
@@ -50,6 +56,7 @@ public class ArticlesSearchListPanelBehavior extends YRCBehavior {
      * Invokes get Article List Service
      */
     public void search() {
+    	searchResultsElement = null;
         YRCApiContext context = new YRCApiContext();
 	    context.setApiName("getXPXArticleListService");
 	    context.setFormId(getFormId());
@@ -72,15 +79,40 @@ public class ArticlesSearchListPanelBehavior extends YRCBehavior {
     	}
     	else {
 	    	if ("getXPXArticleListService".equals(ctx.getApiName())) {
+	    		YRCDesktopUI.getCurrentPart().showBusy(true);
 	    		handleSearchApiCompletion(ctx);
+	    		YRCDesktopUI.getCurrentPart().showBusy(false);
+	    	}
+	    	if ("getCustomerList".equals(ctx.getApiName())) {	    		     		  
+	    		handleCustomerListApiCompletion(ctx);
 	    	}
     	}
     }
 
 	private void handleSearchApiCompletion(YRCApiContext ctx) {
-		setModel(ctx.getOutputXml().getDocumentElement());
+		//EB-1088 show the actual Customer Name and Account number
+		searchResultsElement = ctx.getOutputXml().getDocumentElement();
+		getCustomerListDetails(searchResultsElement);
 	}
 	
+	//EB-1088 show the actual Customer Name and Account number
+	private void handleCustomerListApiCompletion(YRCApiContext ctx) {
+		System.out.println(YRCXmlUtils.getString(ctx.getOutputXml()));
+		Element eleCustomerListOutput = ctx.getOutputXml().getDocumentElement();
+		NodeList nodeList	=	eleCustomerListOutput.getElementsByTagName("Customer");
+		customersMap = new HashMap<String, String>();
+		for(int i=0;i<nodeList.getLength();i++){
+			Element  eleCustomer=(Element) nodeList.item(i);
+			String customerID = eleCustomer.getAttribute("CustomerID");
+			NodeList buyerOrganization	=	eleCustomer.getElementsByTagName("BuyerOrganization");
+			String customerName = ((Element)buyerOrganization.item(0)).getAttribute("OrganizationName");			 
+			customersMap.put(customerID, customerName);
+		}
+		setModel(ctx.getOutputXml().getDocumentElement()); 
+		if(searchResultsElement!=null){
+			setModel(searchResultsElement);
+		}
+	}
     /**
      * Reset the Search Criteria.
      */
@@ -112,5 +144,44 @@ public class ArticlesSearchListPanelBehavior extends YRCBehavior {
 		eleCreateNew.setAttribute("OrganizationCode", (!YRCPlatformUI.equals("DEFAULT", getModel("UserNameSpace").getAttribute("EnterpriseCode"))?getModel("UserNameSpace").getAttribute("EnterpriseCode"):XPXConstants.DEFAULT_SFID));
 		YRCPlatformUI.launchSharedTask(page,"com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateArticleSharedTask", eleCreateNew);
 	}
+	//EB-1088 show the actual Customer Name and Account number
+	public void getCustomerListDetails(Element element) {
+		Element eleXPXArticleList = element;
+		if(eleXPXArticleList!=null){
+			YRCApiContext context = new YRCApiContext();
+			context.setApiName("getCustomerList");
+			context.setFormId(getFormId());	
+			YRCXmlUtils.getString(eleXPXArticleList.getOwnerDocument());			
+			Document docOutput = eleXPXArticleList.getOwnerDocument();
+			Element eleXPXArticleList_output = docOutput.getDocumentElement();
+			NodeList nodeList	=	eleXPXArticleList_output.getElementsByTagName("XPXArticle");
+			Document docCustomerList = YRCXmlUtils.createDocument("Customer");
+			Element eleCustomerListInput = docCustomerList.getDocumentElement();
+			Element eleCustomerComplexQuery =  YRCXmlUtils.createChild(eleCustomerListInput, "ComplexQuery");
+			eleCustomerComplexQuery.setAttribute("Operator", "OR");
+			Element eleCustomerComplexQueryOR =  YRCXmlUtils.createChild(eleCustomerComplexQuery, "Or");
+			for(int i=0;i<nodeList.getLength();i++){
+				Element  eleArticle=(Element) nodeList.item(i);
+				String customerID = eleArticle.getAttribute("CustomerID");				
+				if ((customerID!=null) && (!customerID.isEmpty()) && (!customerID.equalsIgnoreCase("N/A")) ){
+					Element eleExpCustomer =  YRCXmlUtils.createChild(eleCustomerComplexQueryOR, "Exp");
+					eleExpCustomer.setAttribute("Name", "CustomerID");
+					eleExpCustomer.setAttribute("Value", customerID);
+				}				
+			}
+			context.setInputXml(docCustomerList);
+			System.out.println(YRCXmlUtils.getString(context.getInputXml()));
 
+			callApi(context);			
+		}
+	}
+	//EB-1088 show the actual Customer Name and Account number
+	public String getCustomerName(String customerID)
+	{
+		if(customersMap!=null && customersMap!=null)
+			return customersMap.get(customerID);	
+
+		return "";	
+
+	}
 }

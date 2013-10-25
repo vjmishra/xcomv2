@@ -141,9 +141,11 @@
     <form Id="com.xpedx.sterling.rcp.pca.articles.screen.ArticlesSearchListPanel">
         <commands>
             <command APIName="GetXpedxArticleList" APIType="SERVICE" Name="getXPXArticleListService" OutputTemplateName="XPXArticlesList" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="" inputNamespace="" outputNamespace="getCustomerList_output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXArticlesList" templateName="XPXArticlesList" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel">
