@@ -816,6 +816,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 * 
 		 */
 
+		int termIndex = 1;
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
 				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
@@ -840,16 +841,15 @@ public class XPEDXCatalogAction extends CatalogAction {
 			//Changes made for XBT 251 special characters replace by Space while Search
 			//searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
-			int i = 1;
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
 			List<String> specialWords=Arrays.asList(luceneEscapeWords);
 			for (String searchStringToken : searchStringTokenList) {
 				if(!specialWords.contains(searchStringToken.trim().toLowerCase()))
 				{
 					if(!"".equals(searchStringToken.trim())) {
-						valueMap.put("/SearchCatalogIndex/Terms/Term[" + i + "]/@Value", searchStringToken.trim());
-					valueMap.put("/SearchCatalogIndex/Terms/Term["+ i + "]/@Condition", "MUST");
-					i++;
+						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
+					valueMap.put("/SearchCatalogIndex/Terms/Term["+ termIndex + "]/@Condition", "MUST");
+					termIndex++;
 					}
 				}
 			}	
@@ -857,9 +857,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}					
 		
 		if (punKey != null) {
-			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@IndexFieldName", "punId");
-			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Value", punKey);
-			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Condition", "MUST");
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@IndexFieldName", "punId");
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", punKey);
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
+			termIndex++;
 		}
 		
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
