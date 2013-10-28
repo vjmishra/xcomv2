@@ -86,12 +86,11 @@
 							XMLName="ExtendedDescription" DefaultWeight="1.0" Index="ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />
 						<Attribute IndexFieldName="Item.Keywords" 
-							XMLName="Keywords" DefaultWeight="1.0" Index="ANALYZED" 
+							XMLName="Keywords" DefaultWeight="1.0" Index="NOT_ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />	
-						<Attribute DefaultWeight="1.0"
-							GetExternalValue="Y" Index="ANALYZED" Store="Y"
-							IndexFieldName="Item.ExtnPunKey" Searchable="Y"
-							UseSynonyms="N" Sortable="N"/>
+						<Attribute IndexFieldName="Item.ExtnPunKey" 
+							XMLName="ExtnPunKey" DefaultWeight="1.0" Index="NOT_ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />	
 					</Attributes>					
 				</Entity>
 				<Entity Name="XPXCustItemCrossRef">
