@@ -23,7 +23,7 @@
 	.ajax_loader {background: url("../../xpedx/css/images/loading.gif") no-repeat center center transparent;width:100%;height:100%;}
 	
 	</style>
-	
+<!-- //.customClass1 {color:yellow;}	 -->
 <script type="text/javascript">
 	var url = "<s:property value='#AjaxDynamic'/>";
 		$(function() {
@@ -107,14 +107,21 @@
 												blazy =true;
 											}
 											
+											var isSuspened=false;
+											var susstring=childValue[0];
 											
+										 if(susstring.substring(0,11)=='(Suspended)')
+												{
+													isSuspened=true;
+												}  
 											
 											var childNode = currentNode
 													.addChild({
 														title : childValue[0],
 														key : childKey,
 														select : bSelected,
-														isLazy:blazy
+														isLazy:blazy,
+														addClass:Status=isSuspened? "dynatree-suspended" : ""
 													});
 
 										/*	if (childNode.getLevel() < 4) {

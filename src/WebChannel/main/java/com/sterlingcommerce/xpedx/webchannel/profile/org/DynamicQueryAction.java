@@ -130,7 +130,8 @@ public class DynamicQueryAction extends WCMashupAction {
 				&& assignedCustomerList.contains(MsapId)) {
 			grpVal = grpVal + "^^^" + "checked";
 		}
-		PrntChildComb = MsapId + "##" + grpVal;
+		String status="30";
+		PrntChildComb = MsapId + "##" + grpVal+"##"+status;
 		try {
 			getChildCustomers(wcContext, MsapId);
 		} catch (CannotBuildInputException e) {
@@ -189,8 +190,8 @@ public class DynamicQueryAction extends WCMashupAction {
 								&& assignedCustomerList.contains(EleCustID)) {
 							grpVal = grpVal + "^^^" + "checked";
 						}
-
-						String tempValue = EleCustID + "##" + grpVal;
+						String status="30";
+						String tempValue = EleCustID + "##" + grpVal+"##"+status;   
 						PrntChildComb = PrntChildComb + "|" + tempValue;
 
 					}
@@ -216,6 +217,7 @@ public class DynamicQueryAction extends WCMashupAction {
 		String state = null;
 		String zipcode = null;
 		String country = null;
+		String suspendedString = "";
 		valueMap.put("/Customer/@CustomerID", sCustID);
 		//valueMap.put("/Customer/@OrganizationCode", "xpedx");
 		valueMap.put("/Customer/@OrganizationCode", wcContext.getStorefrontId());
@@ -266,10 +268,12 @@ public class DynamicQueryAction extends WCMashupAction {
 						.getXpathAttribute(
 								outDoc.getDocumentElement(),
 								"//Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
+				
+				suspendedString = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status")=="30"?"(Suspended)":"";
 
 				OrgCode = XPEDXWCUtils.formatBillToShipToCustomer(OrgCode);
 
-				CmbString = OrgName + "(" + OrgCode + ")" + AddressLine1 + ","
+				CmbString = suspendedString+OrgName + "(" + OrgCode + ")" + AddressLine1 + ","
 						+ City + "," + state + "," + zipcode + "," + country;
 			} else {
 				CmbString = OrgName + "(" + OrgCode + ")";

@@ -7311,6 +7311,12 @@ margin-top: -195px;
 #search-view-links a { margin-right: 16px; }
 #search-view-links img { display: inline; }
 
+#infoMessage {
+    color: #828400;
+    margin: 0 20px 0 17px;
+    text-align: center;
+    font-weight: bold;
+}
 a.orange-ui-btn.float-right { float: right !important; }
 .search-legend { padding: 0px 6px; }
 .check-items-notice { color: #f00; margin: 10px 0px 0px 20px; }

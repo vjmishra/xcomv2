@@ -1,0 +1,6 @@
+<CustomerList>
+<Customer CustomerKey='' CustomerID='' OrganizationCode='' CustomerType='' RootCustomerKey=''>
+<Extn ExtnSuffixType='' ExtnShipFromBranch='' ExtnLegacyCustNumber='' ExtnBillToSuffix='' ExtnShipToSuffix='' ExtnCustomerDivision=''/>
+<BuyerOrganization OrganizationCode='' OrganizationName=''/>
+</Customer>
+</CustomerList>

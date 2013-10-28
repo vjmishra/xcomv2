@@ -220,6 +220,13 @@
           	XMLName="ExtnPackMethod"
          	XMLGroup="Extn" />
 	  
+	  		<Attribute ColumnName="EXTN_PUN_KEY" 
+          	DataType="Text-50"
+	  		Description="Extn field with the Publishing Unit Name key"  
+          	Nullable="true" 
+          	XMLName="ExtnPunKey"
+         	XMLGroup="Extn" />
+	  
         </Attributes>
         
         <Indices>

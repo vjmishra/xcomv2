@@ -812,9 +812,9 @@ $(document).ready(function(){
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
 	<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5><br/>
 </s:if>
-<div id="errorMsgDiv">
-	<s:if test='#duplicateInfoMsg !=null && duplicateInfoMsg != "" '>		
-		<h5 align="center"><b><font color="#828400"><s:property value="duplicateInfoMsg" /></font></b></h5><br/>
+<div id="infoMessage">
+	<s:if test=' "" != duplicateInfoMsg '>		
+		<s:property value="duplicateInfoMsg" />
 	</s:if>
 </div>
 <!-- EB-66 Suspended ShipTo -->

@@ -116,7 +116,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private boolean canDeleteItem = true;
 	private boolean canShare = false;
 	private boolean editMode = false;
-	private boolean itemDeleted = false; 
+	private boolean itemDeleted = false;
 	private String customerId = "";
 	private String itemID = "";
 	private String uom = "";
@@ -158,21 +158,21 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	//public boolean validateOrderMul = false;
 	public boolean pnaCall;
 	public ArrayList<String> itemOrder;
-	private Map<String,String> itemOrderMap=new HashMap<String,String>();	
-	private Map<String,String> itemCustomerUomMap=new HashMap<String,String>();		
+	private Map<String,String> itemOrderMap=new HashMap<String,String>();
+	private Map<String,String> itemCustomerUomMap=new HashMap<String,String>();
 	private Map<String,String> catMap=new HashMap<String,String>();
 	Map<String, String> qtyTextBoxMap;
 	private String modifyts;
     private String createUserId;
     private String modifyUserid;
-// added for XB 214   
+// added for XB 214
 	private Map<String,String>  sourcingOrderMultipleForItems =new HashMap<String,String>();
     protected String isOMError;
     protected HashMap useOrderMultipleMapFromSourcing;
 	private String customerItemFlag;
     private String mfgItemFlag;
-    private String qtyTextBox;    
-    
+    private String qtyTextBox;
+
 	public String getQtyTextBox() {
 		return qtyTextBox;
 	}
@@ -205,7 +205,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			HashMap useOrderMultipleMapFromSourcing) {
 		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
 	}
-    
+
     public String getIsOMError() {
 		return isOMError;
 	}
@@ -227,7 +227,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	//Added for JIRA 1402 Starts
 	private ArrayList<String> itemValue = new ArrayList<String>();
     //Added for JIRA 1402 Ends
-	
+
 	//Added for webtrends
 	protected Map<String,String>itemTypeMap=new HashMap<String,String>();
 	//Added	erroMsg for XB-224
@@ -239,7 +239,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setErroMsg(String erroMsg) {
 		this.erroMsg = erroMsg;
 	}
-    
+
+	private String duplicateInfoMsg = "";
+	public String getDuplicateInfoMsg() {
+		return duplicateInfoMsg;
+	}
+
 	public void setItemTypeMap(Map<String, String> itemTypeMap) {
 		this.itemTypeMap = itemTypeMap;
 	}
@@ -279,7 +284,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.catMap = catMap;
 	}
 	private Map<String,Boolean> validateCheck =new HashMap<String,Boolean>();
-	
+
 	public Map<String, Boolean> getValidateCheck() {
 		return validateCheck;
 	}
@@ -288,7 +293,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.validateCheck = validateCheck;
 	}
 	public String validateOMForMultipleItems;
-	
+
 	public String getValidateOMForMultipleItems() {
 		return validateOMForMultipleItems;
 	}
@@ -296,7 +301,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setValidateOMForMultipleItems(String validateOMForMultipleItems) {
 		this.validateOMForMultipleItems = validateOMForMultipleItems;
 	}
-	
+
 	public Map<String, String> getItemOrderMap() {
 		return itemOrderMap;
 	}
@@ -312,7 +317,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setItemOrder(ArrayList<String> itemOrder) {
 		this.itemOrder = itemOrder;
 	}
-	
+
 
 	public boolean isPnaCall() {
 		return pnaCall;
@@ -346,9 +351,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.validateOM = validateOM;
 	}
 	//added for jira 2885
-	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
-	
-	
+	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>();
+
+
 	public Map<String, String> getPnALineErrorMessage() {
 		return pnALineErrorMessage;
 	}
@@ -357,9 +362,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.pnALineErrorMessage = pnALineErrorMessage;
 	}
 	public Map<String,String> baseUOMmap =new HashMap<String,String>();
-	
 
-	
+
+
 	public Map<String, String> getBaseUOMmap() {
 		return baseUOMmap;
 	}
@@ -384,8 +389,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private boolean filterByMyListChk 	= false;
 	private boolean filterByAllChk 	= false;
 	private String sharePrivateField;
-	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();	
-	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();	
+	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
+	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	//This Map will contain item ids and customer UOM for that item if it exist
 	public static LinkedHashMap<String, String> itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
 	private String isPnaReqCustomerUOM;
@@ -414,17 +419,19 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LinkedHashMap<String, String> itemAndCustomerUomHashMap) {
 		XPEDXMyItemsDetailsAction.itemAndCustomerUomHashMap = itemAndCustomerUomHashMap;
 	}
-	
-	
+
+
 	//Start 2964
 	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	//End 2964
-	
+
 	protected HashMap<String, String> itemImagesMap = new HashMap<String, String>();
 	protected HashMap<String, String> itemDescMap = new HashMap<String, String>();
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	//This includes only My items list items and not other alternate items etc.
 	protected ArrayList<String> allMyItemsListItemIds = new ArrayList<String>();
+	protected List<String> allItemIDsWithDups = new ArrayList<String>();
+	protected List<String> dupMILItemIds = new ArrayList<String>();
 	//Added	validItemIds for XB-224
 	protected ArrayList<String> validItemIds = new ArrayList<String>();
 	YFCDate lastModifiedDate = new YFCDate();
@@ -434,16 +441,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	//Added to remember the filter selection in My items List page.
 
 	private String errorMsg = ""; // for the import class
-	
+
 	/*Added  for Webtrends :  to check if "Update Price and Availability button is hit */
 	private boolean updatePAMetaTag = false;
 	private String strItemIds = "";
-	
+
 	private Map<String,Element> descriptionMap=new HashMap<String,Element>();
 	private Map<String,Element> masterItemExtnMap=new HashMap<String,Element>();
-	
+
 	private String itemDtlBackPageURL="";
-	
+
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
 	}
@@ -451,7 +458,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
 		this.itemDtlBackPageURL = itemDtlBackPageURL;
 	}
-	
+
 	public Map<String, Element> getMasterItemExtnMap() {
 		return masterItemExtnMap;
 	}
@@ -527,12 +534,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 			//XB-56 - Modfied Label
 			sbCSV.append("Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,");
-			
-			
+
+
 			sbCSV.append("Description,Price,");
 			//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
 			sbCSV.append("Price UOM,Line PO #,Line Acct #,Customer Field 1,Customer Field 2,Customer Field 3");
-			
+
 			// START - Display the custom fields
 			/*for (Iterator iterator = getCustomerFieldsMap().keySet().iterator(); iterator.hasNext();) {
 				sbCSV.append(",");
@@ -549,7 +556,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 				String mfgItemNo = manufactureItemMap.get(item.getAttribute("ItemId"));
 				//XB-56 End
-					
+
 				//get the customer part number
 				if(itemcustXrefDoc == null)
 					itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allMyItemsListItemIds, getWCContext());
@@ -560,7 +567,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						customerPartNumber = itemXref.getAttribute("CustomerItemNumber");
 					//customerPartNumber = XPEDXMyItemsUtils.getCustomerPartNumber(tmpItemId);
 				}
-					
+
 				// XPEDXMyItemsUtils.encodeStringForCSV(data)
 				/*
 				sbCSV.append("\"").append(
@@ -572,11 +579,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						XPEDXMyItemsUtils.encodeStringForCSV(item
 								.getAttribute("ItemId"))).append("\"").append(
 						",");
-				
+
 				sbCSV.append("\"").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(customerPartNumber)
 				).append("\"").append(",");
-				
+
 				// XB- 56 - Start
 				if(null!=mfgItemNo && !mfgItemNo.isEmpty()){
 				sbCSV.append("\"").append(
@@ -588,7 +595,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							",");
 				}
 				//XB- 56 - End
-				
+
 				sbCSV.append("").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(item
 								.getAttribute("Qty"))).append("").append(",");
@@ -596,7 +603,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if (uomId.equals("0")) {
 					uomId = "";
 				}
-				
+
 				//Remove the UOM code
 				try {
 					//if(itemListEntitled.contains(tmpItemId)){ // commented for Jira 4162
@@ -604,23 +611,23 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					//}
 				} catch (Exception e) {
 				}
-				
+
 				sbCSV.append("\"").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(uomId)).append(
 						"\"").append(",");
-				
+
 				//XB-56 - Start - Modified Description by appending Long Description
 				if(item.getAttribute("Name").trim().length()>0)
 				{
-				String name = item.getAttribute("Name");	
-				name = buildDescription(name,item.getAttribute("ItemId"));	
+				String name = item.getAttribute("Name");
+				name = buildDescription(name,item.getAttribute("ItemId"));
 				sbCSV.append("\"").append(
 						XPEDXMyItemsUtils.encodeStringForCSV(name)).append("\"")
 						.append(",");
 				}
 				else
 				{
-					String desc = item.getAttribute("Desc");	
+					String desc = item.getAttribute("Desc");
 					desc = buildDescription(desc,item.getAttribute("ItemId"));
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(desc)).append("\"")
@@ -681,13 +688,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				{
 					sbCSV.append(",");// for price value
 					sbCSV.append(",");//for price uom value
-					
+
 				}
 				// START - Display the custom fields
 				for (Iterator iterator = getCustomerFieldsDBMap().keySet()
 						.iterator(); iterator.hasNext();) {
 					String customKey = (String) iterator.next();
-					
+
 					if(XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey))).length()>0)
 					{
 					sbCSV.append("\"").append("'"+XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey)))+"'").append("\"");
@@ -709,7 +716,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			attachment.append("attachment;filename=").append(fileName);
 			response.setContentType("text/csv");
-			response.setContentLength((int) exportData.length());
+			response.setContentLength(exportData.length());
 			response.setHeader("Content-disposition", attachment.toString());
 			PrintWriter os = response.getWriter();
 
@@ -721,9 +728,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
-	
+
  	//XB-224 Added to check for item entitlement for the logged in customer
-	
+
 	//XB-56 - Start
 	/**
 	 * buildDescription - This will build description with combination of short and long description
@@ -739,14 +746,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		longDescript =  StringUtils.replace(longDescription, "<ul><li>","").replace("</ul>", "<li>").split("</li><li>");
 		for(int i=0;i<longDescript.length;i++){
 			itemCompleteDescrip.append(",").append(longDescript[i]);
-		
+
 		  }
 		}
 		return itemCompleteDescrip.toString();
 	}
-   //XB-56 - End
+
+	//XB-56 - End
 	private void checkforEntitlement(){
-		
+
 		ArrayList<String> entlErrorList = new ArrayList<String>();
 		ArrayList<String> itemlist = new ArrayList<String>();
 		try {
@@ -755,14 +763,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(allMyItemsListItemIds  != null) {
 				itemlist  = allMyItemsListItemIds;
 			}
-		
-		if(itemlist.size() == 0){
+
+			if(itemlist.size() == 0){
 				for(int i=0; i<allMyItemsListItemIds.size();i++) {
 					entlErrorList.add(allMyItemsListItemIds.get(i));
-				}	
+				}
 				if(entlErrorList.size() == 0) {
 					erroMsg = "";
-					
+
 				} else {
 					if(entlErrorList.size()> 1){
 						Iterator itr = entlErrorList.iterator();
@@ -777,60 +785,56 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 					else{
 						erroMsg=entlErrorList.get(0);
-					}					
-				}
-		}
-		else if(itemlist.size() == 1){
-			
-			for(int i=0; i<allMyItemsListItemIds.size();i++) { 
-				if(validItemIds.size() > 0){
-				if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
-					entlErrorList.add(allMyItemsListItemIds .get(i));
-				}
-				}
-				else	
-						entlErrorList.add(allMyItemsListItemIds.get(i));
-			}
-			if(entlErrorList != null && entlErrorList.size() > 0){
-				erroMsg=entlErrorList.get(0);
-	
-			}
-		}
-		else{
-		
-			for(int i=0; i<allMyItemsListItemIds.size();i++) { 
-				
-				
-				if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
-					entlErrorList.add(allMyItemsListItemIds .get(i));
-				}
-			}
-				 if(entlErrorList != null && entlErrorList.size() > 0){
-				if(entlErrorList.size()> 1){
-					Iterator itr = entlErrorList.iterator();
-					while(itr.hasNext())
-					{
-						erroMsg+= itr.next().toString()+",";
-
 					}
-					int lastIndex = erroMsg.lastIndexOf(",");
-					erroMsg = erroMsg.substring(0,lastIndex);
-
 				}
-				else {
+			}
+			else if(itemlist.size() == 1){
+
+				for(int i=0; i<allMyItemsListItemIds.size();i++) {
+					if(validItemIds.size() > 0){
+						if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
+							entlErrorList.add(allMyItemsListItemIds .get(i));
+						}
+					}
+					else
+						entlErrorList.add(allMyItemsListItemIds.get(i));
+				}
+				if(entlErrorList != null && entlErrorList.size() > 0){
 					erroMsg=entlErrorList.get(0);
 				}
+			}
+			else{
+
+				for(int i=0; i<allMyItemsListItemIds.size();i++) {
+					if(!validItemIds.contains(allMyItemsListItemIds .get(i))){
+						entlErrorList.add(allMyItemsListItemIds .get(i));
+					}
 				}
-			
-		//}	End of while loop
-	}
-	}catch (Exception e) {
+
+				if(entlErrorList != null && entlErrorList.size() > 0){
+					if(entlErrorList.size()> 1){
+						Iterator itr = entlErrorList.iterator();
+						while(itr.hasNext())
+						{
+							erroMsg+= itr.next().toString()+",";
+						}
+						int lastIndex = erroMsg.lastIndexOf(",");
+						erroMsg = erroMsg.substring(0,lastIndex);
+
+					}
+					else {
+						erroMsg=entlErrorList.get(0);
+					}
+				}
+
+				//}	End of while loop
+			}
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
 	}
-	
-	}
-	
 	//End of XB-224
 
 	private void setItemDescription()
@@ -861,7 +865,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(getListOfItems().size()>0) {
 				String customerId = wcContext.getCustomerId();
 				String organizationCode = wcContext.getStorefrontId();
-				
+
 				Map<String, String> valueMap = new HashMap<String, String>();
 				valueMap.put("/Item/CustomerInformation/@CustomerID", customerId);
 				valueMap.put("/Item/@CallingOrganizationCode", organizationCode);
@@ -869,20 +873,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				{
 					Element input = WCMashupHelper.getMashupInput("xpedxMinimalItemDetails",
 							valueMap, wcContext.getSCUIContext());
-					
-					
+
+
 					Document inputDoc = input.getOwnerDocument();
 					NodeList inputNodeList = input.getElementsByTagName("Or");
 					Element inputNodeListElemt = (Element) inputNodeList.item(0);
 					for (int i = 0; i < getListOfItems().size(); i++) {
 						Document expDoc = YFCDocument.createDocument("Exp").getDocument();
 						Element expElement = expDoc.getDocumentElement();
-						Element item = (Element) getListOfItems().get(i);
+						Element item = getListOfItems().get(i);
 						expElement.setAttribute("Name", "ItemID");
 						expElement.setAttribute("Value", item.getAttribute("ItemId"));
 						inputNodeListElemt.appendChild(inputDoc.importNode(expElement, true));
 					}
-					
+
 					String inputXml = SCXmlUtil.getString(input);
 					LOG.debug("Input XML: " + inputXml);
 					Object obj = WCMashupHelper.invokeMashup("xpedxMinimalItemDetails", input,
@@ -898,7 +902,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								Element itemElem=(Element)itemNodeList.item(i);
 								String itemId=itemElem.getAttribute("ItemID");
 								Element primaryInfoElem=(Element)itemElem.getElementsByTagName("PrimaryInformation").item(0);
-								Element extnEle = (Element)itemElem.getElementsByTagName("Extn").item(0);	
+								Element extnEle = (Element)itemElem.getElementsByTagName("Extn").item(0);
 								masterItemExtnMap.put(itemId, extnEle);
 								descriptionMap.put(itemId,primaryInfoElem);
 							}
@@ -930,9 +934,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								   append("shareAdminOnly="+getShareAdminOnly()).append("&").append("filterBySelectedListChk="+isFilterBySelectedListChk()).append("&").
 								   append("filterByMyListChk="+isFilterByMyListChk()).append("&").append("filterByAllChk="+isFilterByAllChk()).append("&").
 								   append("sharePrivateField="+getSharePrivateField()).append("&").append("editMode="+isEditMode()));
-								   						
+
 				wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", editListURL.toString());
-				
+
 			}
 			if(YFCCommon.isVoid(getListKey()))
 			{
@@ -942,7 +946,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			Map<String, Element> out;
 
 			// Init vars
-			imageMap = new HashMap<String, String>();			
+			imageMap = new HashMap<String, String>();
 
 			setRbPermissionShared("");
 			setRbPermissionPrivate(" checked=\"checked\" ");
@@ -959,7 +963,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			{
 				out = prepareAndInvokeMashups();
 				if (out.values().iterator().next() != null) {
-					outDoc = (Document) out.values().iterator().next()
+					outDoc = out.values().iterator().next()
 							.getOwnerDocument();
 					setListOfItems(getXMLUtils().getElements(
 							outDoc.getDocumentElement(), "XPEDXMyItemsItems"));
@@ -980,7 +984,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			 * getCustomerFieldsDBMap());
 			 * request.getSession().setAttribute("customFields", tmpCF);
 			 */
-			
+
 
 			// Process the stock check, PnA calls
 			/*if (getCommand().equals(COMMAND_STOCK_CHECK_ALL)) {
@@ -988,20 +992,18 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			} else if (getCommand().equals(COMMAND_STOCK_CHECK_SEL)) {
 				processStockCheck(false);
 			}*/
-			
-			// Get the customer fields
+
 			getCustomerDisplayFields();
-			
-		
-			
+
 			// Get related items and their information
 			getRelatedItems();
-			
+
 			checkforEntitlement();//checks if the Items are entitled to the current customer - added for XB 224
 			setItemDescription();
 			getItemSKUMap();
 
-			
+			checkForDuplicateItemsinList();
+
 			if(editMode ==  true)
 			{
 				setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));
@@ -1032,7 +1034,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			// Process permissions
 			processPermissions();
-			
+
 			/* Removing for the changes being made for the performance
 			Set<String> itemIdList = new HashSet<String>();
 			for (int i = 0; i < getListOfItems().size(); i++) {
@@ -1041,7 +1043,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				itemIdList.add(itemId);
 			}
 			*/
-	
+
 			/*
 			 * getting all the items UOMs and description at the same time using a complex query
 			 */
@@ -1050,28 +1052,28 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			wcContext.getCustomerId(), allItemIds,
 			wcContext.getStorefrontId());*/ // commented for performance issue as part of EB-1999 by Amar
 			itemIdsUOMsDescMap=XPEDXWCUtils.getXpedxUOMListFromCustomService(allItemIds,false);// commented for performance issue as part of EB-1999 by Amar
-			
+
 			itemIdConVUOMMap = (Map<String,Map<String,String>>)ServletActionContext.getRequest().getAttribute("ItemIdConVUOMMap");
 			ServletActionContext.getRequest().removeAttribute("ItemIdConVUOMMap");
 			if(itemIdConVUOMMap == null)
 				itemIdConVUOMMap =  new HashMap<String,Map<String,String>>();
-			
+
 			itemIdsUOMsMap = (LinkedHashMap<String, Map<String,String>>)ServletActionContext.getRequest().getAttribute("ItemUomHashMap");
 			ServletActionContext.getRequest().removeAttribute("ItemUomHashMap");
 			if(itemIdsUOMsMap == null)
 				itemIdsUOMsMap =  new LinkedHashMap<String, Map<String,String>>();
-			
+
 			itemAndCustomerUomHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("itemCustomerUomHashMap");
 			ServletActionContext.getRequest().removeAttribute("itemCustomerUomHashMap");
 			if(itemAndCustomerUomHashMap == null)
 				itemAndCustomerUomHashMap =  new LinkedHashMap<String, String>();
-			
+
 			//itemIdsIsCustomerUOMsMap = XPEDXOrderUtils.getItemUomIsCustomerUomHashMap();
 			/*
 			if (itemIdsUOMsMap != null && itemIdsUOMsMap.keySet() != null) {
 				//Get The itemMap From Session For Minicart Jira 3481
 				HashMap<String,String> itemMapObj = (HashMap<String, String>) XPEDXWCUtils.getObjectFromCache("itemMap");
-				
+
 				ArrayList<String> itemIdsList = new ArrayList<String>();
 				itemIdsList.addAll(itemIdsUOMsMap.keySet());
 				Iterator<String> iterator = itemIdsList.iterator();
@@ -1083,7 +1085,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Map uomIsCustomermap = itemIdsIsCustomerUOMsMap.get(itemIdForUom);
 					Set<Entry<String, String>> set = uommap.entrySet();
 					Map<String, String> newUomMap = new HashMap(itemIdsUOMsMap.get(itemIdForUom));
-					
+
 					itemIdConVUOMMap.put(itemIdForUom, newUomMap);
 					for (Entry<String, String> entry : set) {
 						String uom = entry.getKey();
@@ -1091,7 +1093,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						String isCustomerUom = (String)uomIsCustomermap.get(entry.getKey());
 						long convFac = Math.round(Double
 								.parseDouble(convFactor));
-						
+
 						if(isCustomerUom.equalsIgnoreCase("Y")){
 							if(1 == convFac){
 								uommap.put(uom, uom.substring(2, uom.length()));
@@ -1099,7 +1101,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							else
 								uommap.put(uom, uom.substring(2, uom.length())
 										+ " (" + convFac + ")");
-							
+
 						}
 						else{
 							if(1 == convFac){
@@ -1112,7 +1114,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 										+ " (" + convFac + ")");
 							}
 						}
-						
+
 
 					}
 					if(itemMapObj !=null )
@@ -1136,9 +1138,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}*/
 			//itemIdsUOMsDescMap = itemIdsUOMsMap;
 			validateItemUOM();
-						
+
 			setLastModifiedListInfo();
-			
+
 			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
 			XPEDXWCUtils.setObectInCache("orderMultipleFromSession", getItemOrderMultipleMap());
 			//Added for JIRA 1402 Starts
@@ -1152,7 +1154,79 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		return SUCCESS;
 	}
-	
+
+	/**
+	 * Sets the duplicateInfoMsg to message that includes a list of dup items from the MIL.
+	 * If on Edit screen, then each item includes a list of the seq# of where it occurs in list.
+	 */
+	private void checkForDuplicateItemsinList() {
+		if(dupMILItemIds !=null && dupMILItemIds.size()>0){
+
+			// Group all items with their correspond sequence number(s)
+			// - need this so can display seq #s for dups on Edit MIL page
+			Map<String, ArrayList<String>> indexes = buildMapItemWithSeqs();
+
+			if(dupMILItemIds.size() == 1) {
+				// If only one item, wording is different
+				String itemId = dupMILItemIds.get(0);
+				String itemString = itemId + listDupSeqNums(itemId, indexes);
+				duplicateInfoMsg = "Please note that item " + itemString +" has been added to your cart more than once.";
+			}
+			else{
+				String itemsString = "";
+
+				// For each dup item, display where it appears in list (seq#)
+				for(int i =0; i<dupMILItemIds.size(); i++){
+					String itemId = dupMILItemIds.get(i);
+
+					itemsString += itemId + listDupSeqNums(itemId, indexes);
+
+					if(i != dupMILItemIds.size()-1) {
+						itemsString += ", ";
+					}
+				}
+				duplicateInfoMsg = "Please note that items " + itemsString +" have been added to this My Items List more than once.";
+			}
+		}
+	}
+
+	private String listDupSeqNums(String itemId, Map<String, ArrayList<String>> indexes) {
+		String ret = "";
+
+		// only on MIL edit are sequence #s visible
+		if (isEditMode()) {
+
+			List<String> list = indexes.get(itemId);
+			ret = "(" +
+					StringUtils.join(list.toArray(), ",") +
+					")";
+		}
+		return ret;
+	}
+
+	/**
+	 * Creates a map where each item has a list of the seq# of where it appears
+	 * in list (For dup items, the list would have more than one entry)
+	 *
+	 * @return map of items with seq# numbers of occurrences
+	 */
+	private Map<String, ArrayList<String>> buildMapItemWithSeqs() {
+		Map<String,ArrayList<String>> itemsIndexes = new HashMap<String, ArrayList<String>>();
+		int seq = 0;
+
+		for (String itemId : allItemIDsWithDups) {
+			seq++;
+			ArrayList<String> bucket = itemsIndexes.get(itemId);
+			if (bucket == null) {
+				bucket = new ArrayList<String>();
+				itemsIndexes.put(itemId, bucket);
+			}
+			// add the seq# for this dup to list for this item
+			bucket.add(String.valueOf(seq));
+		}
+		return itemsIndexes;
+	}
+
 	private void validateItemUOM()
 	{
 		NodeList items=outDoc.getElementsByTagName("XPEDXMyItemsItems");
@@ -1164,13 +1238,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(itemIdsUOMsDescMap != null)
 				{
 					Map<String,String> actualUOMList=itemIdsUOMsDescMap.get(item.getAttribute("ItemId"));
-					if(actualUOMList!=null) 
+					if(actualUOMList!=null)
 					{
 						Set<String> uomiDs=actualUOMList.keySet();
 						boolean isUOMAvaliable=false;
 						for(String uomId :uomiDs)
 						{
-							
+
 							if(uomId != null && uomId.contains(item.getAttribute("UomId")))
 							{
 								isUOMAvaliable=true;
@@ -1184,9 +1258,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 			}
 		}
-		
+
 	}
-	
+
 	public String pricecheck(){
 		try{
 			String invalidItems[]=null;
@@ -1226,25 +1300,30 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		return jsonTotal;
 	}
-	
+
 	private void setAllMyItems() {
 		ArrayList<Element> items = getListOfItems();
 
-		for (Iterator iterator = items.iterator(); iterator.hasNext();) {
-			Element item = (Element) iterator.next();
+		for (Iterator<Element> iterator = items.iterator(); iterator.hasNext();) {
+			Element item = iterator.next();
+
 			String itemId = item.getAttribute("ItemId");
 			setItemID(itemId);
-			
-			if(allMyItemsListItemIds.contains(itemId.trim())) {
-				continue;
+			String id = itemId.trim();
+
+			// To display dup items in MIL including seq#, need a couple lists
+			if(allMyItemsListItemIds.contains(id)) {
+				if (!dupMILItemIds.contains(id)) {
+					dupMILItemIds.add(id);
+				}
 			}
 			else {
-				allMyItemsListItemIds.add(itemId.trim());
+				allMyItemsListItemIds.add(id);
 			}
-			
+			allItemIDsWithDups.add(id);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private void setLastModifiedListInfo() throws CannotBuildInputException, XPathExpressionException, XMLExceptionWrapper {
 		String createUserIDStr = "";
@@ -1261,12 +1340,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			input.setAttribute("MyItemsListKey", getListKey());
 			Document inputDoc = input.getOwnerDocument();
 			Element inXML = inputDoc.getDocumentElement();
-			
+
 			Object obj = WCMashupHelper.invokeMashup(
 					"XPEDXMyItemsList_CreatedInfo", inXML, getWCContext()
 							.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
-		
+
 			Element xpedxMyItemsListElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "XPEDXMyItemsList");
 			if(xpedxMyItemsListElement!=null){
 				//modified to display lastModifiedBy
@@ -1304,7 +1383,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		jsonString = jsonObject.toString();
 		return jsonString;
 	}
-	
+
 	private void setMyItemsImages(Element itemElem) {
 		try {
 			XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
@@ -1343,7 +1422,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 		}
 	}
-	
+
 
 	private void setMyItemsImages() {
 		//int count = 0;
@@ -1388,7 +1467,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 		}
 	}
-	
+
 	public String getImagePath(Element primaryInfo) {
 		String imageUrl = "/xpedx/images/INF_150x150.jpg";
 		XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
@@ -1404,7 +1483,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		return imageUrl;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	// delete this.
 	private void getAlternativeItems() {
@@ -1446,10 +1525,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			int totalQty;
 			int OM;
 			qtyTextBoxMap = new HashMap<String, String>();
-						
+
 			// Init some vars
 			ArrayList<XPEDXItem> inputItems = new ArrayList<XPEDXItem>();
-			
+
 			//Added For Webtrends
 			int cntSel =0;
 			Map orderMulMap=(Map) XPEDXWCUtils.getObjectFromCache("orderMultipleFromSession");
@@ -1477,9 +1556,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					itemQty = orderMultiple;
 					itemUom =  enteredUOMs.get(i);//itemBaseUOM.get(i); added for EB 2034
 				}
-				
+
 				uoms = (Map) itemCon.get(itemId);
-				convFact = (String) uoms.get(itemUom);
+				convFact = uoms.get(itemUom);
 				if(itemUom==null || itemUom.equals(""))
 					itemUom = item.getAttribute("UomId");
 				//String itemSeqNum = item.getAttribute("ItemSeqNumber");
@@ -1490,7 +1569,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 				totalQty = (Integer.parseInt(convFact)) * (Integer.parseInt(itemQty));
 				OM = totalQty % (Integer.parseInt(orderMultiple));*/
-				
+
 				if(invalidItems != null && invalidItems.length > 0)
 				{
 					for(int j=0;j<invalidItems.length;j++){
@@ -1500,8 +1579,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							break;
 						}
 					}
-				}			
-				
+				}
+
 				boolean addThisItem = checkAllItems;
 				if (!checkAllItems) {
 					if (ArrayUtils.contains(getCheckItemKeys(), id)) {
@@ -1517,11 +1596,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					tmpItem.setLineNumber(itemLineNum);
 					tmpItem.setRequestedQty(itemQty);
 					inputItems.add(tmpItem);
-					
+
 					if("".equals(tmpQtyTxtBox)) {
 						qtyTextBoxMap.put(id, tmpQtyTxtBox);
 					}
-					/*Added if loop for webtrends : creating a string of selected 
+					/*Added if loop for webtrends : creating a string of selected
 					itemIds separated with semicolon*/
 					if(cntSel==0){
 						strItemIds = strItemIds + itemId;
@@ -1532,22 +1611,22 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 			}
 			}
-			
+
 			/*Added if loop for Webtrends : for setting a flag to check if "Update Preice and Availability button is hit */
 			if(strItemIds.isEmpty()==false){
 				updatePAMetaTag = true;
 			}
-				
+
 
 			// 2 - Make the call to get the stock data
 			if (inputItems.size() > 0) {
 				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil
 						.getPriceAndAvailability(inputItems);
 				setIsPnAAvailable("true");
-				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
+				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError
 				ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 				setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-				
+
 				if (null == pna || pna.getItems() == null || YFCCommon.isVoid(pna.getTransactionStatus()) ||  pna.getTransactionStatus().equalsIgnoreCase("F")) {
 					/*
 					 * If the PnA is failure, set the error msg and send success
@@ -1558,8 +1637,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					 * cart.
 					 */
 					LOG.error(ajaxDisplayStatusCodeMsg + "PnA failed(TransactionStatus Error");
-					
-					
+
+
 					setIsPnAAvailable("false");
 				} else if (pna.getHeaderStatusCode() != null && !pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
 					LOG.error(ajaxDisplayStatusCodeMsg + "  PnA failed(HeaderStatusCode Error) for ItemID");
@@ -1577,7 +1656,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					Document pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 					NodeList itemsNode=pricingInfoDoc.getDocumentElement().getElementsByTagName("Item");
 					for (int i = 0; i < itemsNode.getLength(); i++) {
-					
+
 						Element itemElem=(Element)itemsNode.item(i);
 						String itemID = itemElem.getAttribute("ItemID");
 						ArrayList<Element> catPath = SCXmlUtil.getElements(itemElem, "CategoryList/Category");
@@ -1585,9 +1664,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						Map<String,String> mainCats = XPEDXWCUtils.getMainCategories();
 						String pathElements[] = categoryPath.split("/");
 						String currentCategoryName="";
-						for(int j = 0; j <pathElements.length ; j++) {			
+						for(int j = 0; j <pathElements.length ; j++) {
 							if(mainCats !=null && mainCats.size() > 0 )
-								if( mainCats.containsKey(pathElements[j]) ){ 
+								if( mainCats.containsKey(pathElements[j]) ){
 									currentCategoryName = mainCats.get(pathElements[j]);
 									XPEDXConstants.logMessage("currentCategoryName : " + currentCategoryName );
 									currentCategoryName = currentCategoryName.replaceAll(" ", "");
@@ -1609,7 +1688,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 			} else {
 				LOG.warn("No items selected for PNA... bypassing the call.");
-			}		
+			}
 	}
 
 	private void processSharedList() {
@@ -1623,7 +1702,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
-	
+
 	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
@@ -1631,7 +1710,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
-	
+
 	protected Document getsapCustExtnFieldsFromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
@@ -1642,11 +1721,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	}
 
 	private void setCustomerDisplayFields(Element result) throws Exception{
-		
+
 		Element customerOrganizationExtnEle = XMLUtilities
 		.getChildElementByName(result, "Extn");
-		
-		
+
+
 		String custLineNoFlag = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnCustLineAccNoFlag");
 		String custPONoFlag = getXMLUtils().getAttribute(
@@ -1663,11 +1742,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 		String shipFromDivision = getXMLUtils().getAttribute(
 				customerOrganizationExtnEle, "ExtnShipFromBranch");
-		
+
 	//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
 
-		
-		
+
+
 		if ("Y".equals(custPONoFlag)) {
 			//Fix for showing label as Line PO # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustomerPONo", "Customer PO No");
@@ -1675,7 +1754,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			String custLinePONoLbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLinePOLbl");
 			//getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
 			getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
-			
+
 			if (custLinePONoLbl != null && custLinePONoLbl.trim().length() > 0) {
 				getCustomerFieldsMap().put("CustomerPONo", custLinePONoLbl);
 			} else {
@@ -1683,8 +1762,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 			//End of XB 769\ XB 434
 		}
-		if ("N".equals(custPONoFlag)) {			
-			getCustomerFieldsDBMap().put("CustomerPONo","");			
+		if ("N".equals(custPONoFlag)) {
+			getCustomerFieldsDBMap().put("CustomerPONo","");
 		}
 		if ("Y".equals(custLineNoFlag)) {
 			//Reverted back to the earlier logic to read the label from customer profile
@@ -1701,10 +1780,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			//Fix for showing label as Line Account # as per Pawan's mail dated 17/3/2011
 			//getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
 		}
-		if ("N".equals(custLineNoFlag)) {			
-			getCustomerFieldsDBMap().put("CustLineAccNo","");			
+		if ("N".equals(custLineNoFlag)) {
+			getCustomerFieldsDBMap().put("CustLineAccNo","");
 		}
-		
+
 		if ("Y".equals(custField1Flag)) {
 			String custField1Lbl = getXMLUtils().getAttribute(
 					customerOrganizationExtnEle, "ExtnCustLineField1Label");
@@ -1740,8 +1819,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				getCustomerFieldsMap().put("CustLineField3",
 						"Customer Field 3");
 		}
-		
-		
+
+
 		//Fix for not showing Seq Number as per Pawan's mail dated 17/3/2011
 		/*if ("Y".equals(custSeqNoFlag)) {
 			getCustomerFieldsMap().put("CustomerLinePONo",
@@ -1750,20 +1829,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					"ItemSeqNumber");
 		}*/
 	}
-	
+
 	private void getCustomerDisplayFields() {
 		try {
 			LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
-			
+
 	        if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
 	        	LOG.debug("Found customerFieldsMap in the session");
 
 			setCustomerFieldsMap(new LinkedHashMap());
 			setCustomerFieldsDBMap(new LinkedHashMap());
-			
+
 			//Getting from session attr Extn Attributes of sap customer
 			Element result = getsapCustExtnFieldsFromSession().getDocumentElement();
-			
+
 			//Sets the CustomerFieldsMap and CustomerFieldsDBMap with Extn Attr from SAP customer profile.
 			setCustomerDisplayFields(result);
 			}
@@ -1771,7 +1850,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void getItemSKUMap() {
 		//Fetch all the items in MIL and get their respective SKUs
@@ -1840,7 +1919,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	   }
 		// xb-805 code changes end
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void getRelatedItems() {
 		try {
@@ -1853,10 +1932,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			xpedxYouMightConsiderItemIds = new ArrayList<String>();
 			xpedxPopularAccessoriesItemIds = new ArrayList<String>();
 			xpedxItemIDToItemExtnMap = new HashMap();
-			
-			//ArrayList<String> itemIDList = new ArrayList<String>();			
+
+			//ArrayList<String> itemIDList = new ArrayList<String>();
 			prepareXPEDXItemAssociation(allMyItemsListItemIds);
-			
+
 			// Retrieving all item Information in One call
 			setItemDocAndInventoryMap();
 
@@ -1879,9 +1958,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void setItemDocAndInventoryMap() {
-		
+
 		//setting all the item Id lists
 		setAllItemIdsOfList();
 		ArrayList<Element> itemsElem = new ArrayList<Element>();
@@ -1894,7 +1973,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				envCode = XPEDXWCUtils.getEnvironmentCode(wcContext.getCustomerId());
 			Document itemXrefDoc = null;
 		 */
-		
+
 		// getting the primary information Doc for the related Items also here and setting the Inventory also here for those items
 		try {
 			allItemsDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext);
@@ -1931,7 +2010,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		//setInventoryCheckForItemsMap(xPEDXWCUtils.checkForInventory(itemXrefDoc,customerDivision,envCode,allItemIds));
 		setInventoryAndOrderMultipleMap();
 	}
-	
+
 	private void setInventoryAndOrderMultipleMap() {
 		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		//String customerDivision = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
@@ -1998,11 +2077,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private void setAllItemIdsOfList() {
 		//// Preparing the set to retrieve all the Items Information at once.
 		Set<String> totalItemIdsSet = new HashSet<String>();
-		
+
 		totalItemIdsSet.addAll(allMyItemsListItemIds);
 		totalItemIdsSet.addAll(xpedxPopularAccessoriesItemIds);
 		totalItemIdsSet.addAll(xpedxYouMightConsiderItemIds);
-		
+
 		if(xpedxItemIDUOMToReplacementListMap!=null && !xpedxItemIDUOMToReplacementListMap.isEmpty())
 		{
 			Set<String> itemIdKeys =  xpedxItemIDUOMToReplacementListMap.keySet();
@@ -2024,7 +2103,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		// Adding them to allitems array list
 		allItemIds.addAll(totalItemIdsSet);
 	}
-	
+
 	private void checkPnAForReplacementItems() {
 		try {
 			// Init some vars
@@ -2044,7 +2123,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					{
 						for(Element itemElement: replacementItems)
 						{
-							
+
 							String itemId = itemElement.getAttribute("ItemID");
 							Map<String, String> uomList = XPEDXOrderUtils.getXpedxUOMList(getWCContext().getCustomerId(), itemId, getWCContext().getStorefrontId());
 							Set<String> keySet =  uomList.keySet();
@@ -2057,30 +2136,30 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							String itemQty = "1";
 							int seqNumber = getListOfItems().size() + i+1;
 							String lineNumber = Integer.toString(seqNumber);
-							
+
 							XPEDXItem tmpItem = new XPEDXItem();
 							tmpItem.setLegacyProductCode(itemId);
 							tmpItem.setRequestedQtyUOM(itemUOM);
 							tmpItem.setLineNumber(lineNumber);
 							tmpItem.setRequestedQty(itemQty);
 							inputItems.add(tmpItem);
-							
+
 							i++;
 						}
 					}
 				}
-				
+
 			}
 			// 2 - Make the call to get the stock data
 			if (inputItems.size() > 0) {
 				XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil
 						.getPriceAndAvailability(inputItems);
-				
-				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
+
+				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError
 				ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 				setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-				
-				/*				
+
+				/*
  				if (inputItems != null && inputItems.size() > 0) {
 					if (null == pna || pna.getItems() == null
 							|| YFCCommon.isVoid(pna.getTransactionStatus())
@@ -2094,7 +2173,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 				}
 				*/
-				
+
 				if (pna != null && pna.getItems()!=null) {
 					Vector<XPEDXItem> items = pna.getItems();
 					setReplacementPnaHoverMap(XPEDXPriceandAvailabilityUtil
@@ -2108,11 +2187,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
-	
+
 	protected void prepareXPEDXItemAssociation(ArrayList<String> itemIDList) throws XPathExpressionException, CannotBuildInputException{
 		/*prepareXpedxItemAssociationMap(itemIDList);
 		prepareXpedxItemBranchItemAssociationMap(itemIDList);*/
-		
+
 		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = XPEDXOrderUtils.getXpedxAssociationsForItems(itemIDList, wcContext, editMode);
 		if(allAssociatedItemsMap!=null && !allAssociatedItemsMap.isEmpty())
 		{
@@ -2132,16 +2211,16 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemAltList = alternateListMap.get(key);
 						for(Element altItem: currentItemAltList)
 						{
-							String altItemID = XMLUtils.getAttributeValue(altItem, "ItemID");							
+							String altItemID = XMLUtils.getAttributeValue(altItem, "ItemID");
 							if(!SCUtil.isVoid(altItemID) && !xpedxYouMightConsiderItemIds.contains(altItemID)){
 								addToYouMightAlsoConsiderItemList(altItem);
 								xpedxYouMightConsiderItemIds.add(altItemID);
 							}
-							
+
 							//String currItemId = SCXmlUtil.getAttribute(altItem, "ItemID");
 							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
 							//	xpedxYouMightConsiderItemIds.add(currItemId);
-								
+
 						}
 					}
 				}
@@ -2158,7 +2237,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemUpgradeList = upgradeListMap.get(key);
 						for(Element upgradeItem: currentItemUpgradeList)
 						{
-							String upgradeItemID = XMLUtils.getAttributeValue(upgradeItem, "ItemID");							
+							String upgradeItemID = XMLUtils.getAttributeValue(upgradeItem, "ItemID");
 							if(!SCUtil.isVoid(upgradeItemID) && !xpedxYouMightConsiderItemIds.contains(upgradeItemID)){
 								addToYouMightAlsoConsiderItemList(upgradeItem);
 								xpedxYouMightConsiderItemIds.add(upgradeItemID);
@@ -2188,7 +2267,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								addToYouMightAlsoConsiderItemList(usItem);
 								xpedxYouMightConsiderItemIds.add(upSellItemId);
 							}
-							
+
 							//String currItemId = SCXmlUtil.getAttribute(usItem, "ItemID");
 							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
 							//	xpedxYouMightConsiderItemIds.add(currItemId);
@@ -2217,7 +2296,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								addToYouMightAlsoConsiderItemList(alternateSBCItem);
 								xpedxYouMightConsiderItemIds.add(alternateSBCItemId);
 							}
-							
+
 							//String currItemId = SCXmlUtil.getAttribute(usItem, "ItemID");
 							//if(!SCUtil.isVoid(currItemId) && !xpedxYouMightConsiderItemIds.contains(currItemId))
 							//	xpedxYouMightConsiderItemIds.add(currItemId);
@@ -2259,7 +2338,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						ArrayList<Element> currentItemCSList = crossSellListMap.get(key);
 						for(Element csItem: currentItemCSList)
 						{
-							//XB-673 - Changes Start - Changes related Cross-sell Items are not displayed on MIL 
+							//XB-673 - Changes Start - Changes related Cross-sell Items are not displayed on MIL
 							//if(!xpedxPopularAccessoriesItems.contains(csItem))
 							//	xpedxPopularAccessoriesItems.add(csItem);
 							String currItemId = SCXmlUtil.getAttribute(csItem, "ItemID");
@@ -2267,15 +2346,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								addToYouMightAlsoConsiderItemList(csItem);
 							    xpedxYouMightConsiderItemIds.add(currItemId);
 								//xpedxPopularAccessoriesItemIds.add(currItemId);
-							    
-							  //XB-673 - Changes End    
+
+							  //XB-673 - Changes End
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	/*@SuppressWarnings("unchecked")
 	protected void prepareXpedxItemBranchItemAssociationMap(ArrayList<String> itemIDList) throws CannotBuildInputException, XPathExpressionException{
 		XPEDXWCUtils xPEDXWCUtils = new XPEDXWCUtils();
@@ -2295,10 +2374,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error("No national level item association could be found");
 			return;
 		}
-		
-		// to check if the items are in stock. Then store it in a Map for display 
+
+		// to check if the items are in stock. Then store it in a Map for display
 		setInventoryCheckForItemsMap(xPEDXWCUtils.checkForInventory(itemBranchDoc,customerDivision,envCode,itemIDList));
-		
+
 		HashMap<String, ArrayList<String>> replacementMap =  new HashMap<String, ArrayList<String>>();
 		HashMap<String, ArrayList<String>> alternateMap =  new HashMap<String, ArrayList<String>>();
 		HashMap<String, ArrayList<String>> complimentaryMap =  new HashMap<String, ArrayList<String>>();
@@ -2320,7 +2399,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			List<Element> alternateList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='A']");
 			List<Element> complementaryList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='C']");
 			List<Element> upgradeList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='U']");
-			
+
 			//prepare the map for replacement
 			if(null!=replacementList && replacementList.size() >=0){
 				ArrayList<String> replacementAssItemIDList = new ArrayList<String>();
@@ -2351,7 +2430,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				if(alternateAssItemIDList.size()>0){
 					alternateMap.put(itemID, alternateAssItemIDList);
 				}
-			}			
+			}
 			//get the complementaryList
 			ArrayList<String> complementaryAssItemIDList = new ArrayList<String>();
 			if(null!=complementaryList && complementaryList.size() >=0){
@@ -2367,7 +2446,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					complimentaryMap.put(itemID, complementaryAssItemIDList);
 				}
 			}
-			
+
 			//get the upgraded items
 			ArrayList<String> upgradeAssItemIDList = new ArrayList<String>();
 			if(null!=upgradeList && upgradeList.size() >=0){
@@ -2387,7 +2466,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(relatedAssItemIDList.size()>0){
 				relatedMap.put(itemID, relatedAssItemIDList);
 			}
-			
+
 		}//End of for loop
 		if(null==itemIDListForGetCompleteItemList || itemIDListForGetCompleteItemList.size()<=0){
 			LOG.debug("No branch level associated items.");
@@ -2425,9 +2504,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				xpedxItemIDUOMToReplacementListMap.put(itemID, replacementItemsElementList);
 			}//end while loop
 		}
-		
-		
-		
+
+
+
 		//add the complementary and alternate items to the xpedxItemIDUOMToRelatedItemsListMap
 		Set relatedMapKeySet = relatedMap.keySet();
 		Iterator<String> relatedIterator = relatedMapKeySet.iterator();
@@ -2456,7 +2535,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						}
 					}
 				}
-				
+
 				ArrayList<String> complimentaryItemIDList = complimentaryMap.get(itemID);
 				if(complimentaryItemIDList!=null && complimentaryItemIDList.size()>0)
 				{
@@ -2474,10 +2553,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			xpedxItemIDUOMToRelatedItemsListMap.remove(itemID);
 			xpedxItemIDUOMToRelatedItemsListMap.put(itemID, relatedItemsValue);
 		}//end while loop
-		
-		
+
+
 	}*/
-	
+
 	/*@SuppressWarnings("unchecked")
 	protected void prepareXpedxItemAssociationMap(ArrayList<String> itemIDList) throws XPathExpressionException{
 		String custID = wcContext.getCustomerId();
@@ -2545,7 +2624,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			xpedxItemIDUOMToRelatedItemsListMap.put(itemID, relatedItems);
 		}
 	}*/
-	
+
 	@SuppressWarnings("unchecked")
 	public String preparePnAjaxData() {
 		String pnaItemId = getPnaItemId();
@@ -2574,25 +2653,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			Map<String,String> mainCats = XPEDXWCUtils.getMainCategories();
 			String pathElements[] = categoryPath.split("/");
 			String currentCategoryName="";
-			for(int j = 0; j <pathElements.length ; j++) {			
+			for(int j = 0; j <pathElements.length ; j++) {
 				if(mainCats !=null && mainCats.size() > 0 )
-					if( mainCats.containsKey(pathElements[j]) ){ 
+					if( mainCats.containsKey(pathElements[j]) ){
 						currentCategoryName = mainCats.get(pathElements[j]);
 						XPEDXConstants.logMessage("currentCategoryName : " + currentCategoryName );
 						currentCategoryName = currentCategoryName.replaceAll(" ", "");
 						continue;
 					}
 			}
-			catagory = currentCategoryName;	
+			catagory = currentCategoryName;
 			LOG.debug("Requested UOM: " + requestedUOM);
 			//modified for jira 3392
 			ArrayList<XPEDXItem> inputItems = getPnAInputDoc(getPnaItemId(),requestedUOM,"1");
 			XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(inputItems);
-			
-			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
+
+			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError
 			ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 			setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-			
+
 			// Check for Success/Failure and Error Conditions
 			if (null == pna || pna.getTransactionStatus().equalsIgnoreCase("F")) {
 				/*
@@ -2607,7 +2686,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						+ pnaItemId);
 				//setAjaxLineStatusCodeMsg(getAjaxLineStatusCodeMsg()
 				//		+ "-P12-Error getting pricing detail: Transaction Failed\n" + ajaxDisplayStatusCodeMsg);
-				
+
 				setIsPnAAvailable("false");
 			} else if (!pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
 				LOG.error(ajaxDisplayStatusCodeMsg + "  PnA failed(HeaderStatusCode Error) for ItemID: "
@@ -2638,27 +2717,27 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 				setIsOMError("false");
 				for (XPEDXItem pandAItem : items) {
-					if (pandAItem.getLegacyProductCode().equals(pnaItemId)) {					
+					if (pandAItem.getLegacyProductCode().equals(pnaItemId)) {
 						// set the line status erros mesages if any
 						String lineStatusErrorMsg = XPEDXPriceandAvailabilityUtil
 								.getPnALineErrorMessage(pandAItem);
-						//added for jira 2885 
+						//added for jira 2885
 						if (pna.getHeaderStatusCode().equalsIgnoreCase("00")) {
 							//Added for XB 214 BR
 							if(pandAItem.getLineStatusCode().equals(XPEDXPriceandAvailabilityUtil.WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 								setIsOMError("true");
-							}	
+							}
 							//end for XB 214 BR
 							pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 							if((lineStatusErrorMsg != "") && pnALineErrorMessage.size()>0){
 								setIsPnAAvailable("true"); //jira 4094 to display Availability and MyPrice and Extended Price
 							}
 						}
-						//end of jira 2885							
+						//end of jira 2885
 					}
 				}
 			}
-			
+
 		} catch (Exception e) {
 			LOG.error("Error Getting Item Details and PnA Details for"
 					+ pnaItemId, e);
@@ -2669,7 +2748,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 		return SUCCESS;
 	}
-	
+
 	/*private void preparePnAPricingInfo(Document itemDoc,
 			Vector<XPEDXItem> items, String itemId, String requestedUOM)
 			throws Exception {
@@ -2707,7 +2786,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				BigDecimal prodWeight = null;
 				BigDecimal priceForCWTUom = null;
 				BigDecimal priceForTHUom = null;
-				
+
 				if ("TH".equalsIgnoreCase(pricingUOM)) {
 					// hardcode for now.
 					displayUOMs.add("CWT");
@@ -2721,7 +2800,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							.divide(new BigDecimal(100)));
 				}
 				if ("CWT".equalsIgnoreCase(pricingUOM)) {
-					
+
 					if (prodMweight != null && prodMweight.trim().length() > 0)
 						prodWeight = new BigDecimal(prodMweight);
 					else
@@ -2733,7 +2812,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					priceForTHUom = pricingUOMPrice.multiply(prodWeight
 							.divide(new BigDecimal(100)));
 				}
-				
+
 				if (YFCCommon.isVoid(pricingUOMConvFactor)) {
 					pricingUOMConvFactor = "1";
 				}
@@ -2766,10 +2845,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					displayPriceForUoms.add(new XPEDXBracket(null, "CWT", utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode,priceForCWTUom.toString())));
 				if (priceForTHUom != null)
 					displayPriceForUoms.add(new XPEDXBracket(null, "TH", utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, priceForTHUom.toString())));
-				
+
 				displayPriceForUoms.add(new XPEDXBracket(null, RequestedQtyUOMDesc, utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, pandAItem.getUnitPricePerRequestedUOM())));
 				displayPriceForUoms.add(new XPEDXBracket(null, null, utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, pandAItem.getExtendedPrice())));
-				
+
 				// Vector bracketsPricingList = null;
 				bracketsPricingList = pandAItem.getBrackets();
 				setIsBracketPricing(XPEDXPriceandAvailabilityUtil
@@ -2778,8 +2857,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}
 		}
 	}*/
-	
-	
+
+
 	protected void getItemUOMs(String itemId) throws Exception {
 		String customerId = wcContext.getCustomerId();
 		String organizationCode = wcContext.getStorefrontId();
@@ -2810,7 +2889,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemId,
 				organizationCode);
 	}
-	
+
 	private ArrayList<XPEDXItem> getPnAInputDoc(String pnaItemId,
 			String requestedUOM, String lineNumber) {
 		ArrayList<XPEDXItem> pnaList = new ArrayList<XPEDXItem>();
@@ -2848,7 +2927,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String uomCode = (String) it.next();
 				String convFact = (String)uoms.get(uomCode);
 				long convFac = Math.round(Double.parseDouble(convFact));
-				
+
 				//Map containing UOMCode as key and Desc ( ConvFactor ) as value
 				if(convFac == 1)
 				{
@@ -2858,7 +2937,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)
 							+ " (" + convFac + ")");
 				}
-				
+
 			}*/
 			displayItemUOMsMap = new HashMap();
 			displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID,
@@ -2893,10 +2972,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			 * //Can the user edit the list if
 			 * (!getSharePermissionLevel().equals
 			 * (getWCContext().getLoggedInUserId())){ canShare = false; }
-			 * 
+			 *
 			 * if (getShareAdminOnly().equals("Y") && isCurrentUserAdmin()){
 			 * //canShare = true; canEditItem = true; }
-			 * 
+			 *
 			 * try { String createdUserId =
 			 * outDoc.getDocumentElement().getAttribute("Createuserid"); if
 			 * (createdUserId.equals(getWCContext().getLoggedInUserId())){
@@ -2938,8 +3017,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 	}
 
-	
-	
+
+
 	public Document getOutDoc() {
 		return outDoc;
 	}
@@ -3133,7 +3212,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setCustomerFieldsDBMap(HashMap customerFieldsDBMap) {
 		this.customerFieldsDBMap = customerFieldsDBMap;
 	}
-	
+
 	public String getCustomerSku() {
 		return customerSku;
 	}
@@ -3141,7 +3220,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setCustomerSku(String customerSku) {
 		this.customerSku = customerSku;
 	}
-	
+
 	public HashMap<String, String> getSkuTypeList() {
 		return skuTypeList;
 	}
@@ -3222,7 +3301,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		this.listCustomerId = listCustomerId;
 	}
 
-	public ArrayList getListOfItems() {
+	public ArrayList<Element> getListOfItems() {
 		return listOfItems;
 	}
 
@@ -3245,9 +3324,9 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setPnaHoverMap(HashMap<String, JSONObject> pnaHoverMap) {
 		this.pnaHoverMap = pnaHoverMap;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * @return the ajaxDisplayStatusCodeMsg
 	 */
@@ -3275,7 +3354,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setPriceHoverMap(HashMap<String, XPEDXItemPricingInfo> priceHoverMap) {
 		this.priceHoverMap = priceHoverMap;
 	}
-	
+
 
 	/**
 	 * @return the checkItemKeys
@@ -3290,8 +3369,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setCheckItemKeys(String[] checkItemKeys) {
 		this.checkItemKeys = checkItemKeys;
 	}
-	
-	
+
+
 
 	/**
 	 * @return the enteredUOMs
@@ -3306,7 +3385,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setEnteredUOMs(ArrayList<String> enteredUOMs) {
 		this.enteredUOMs = enteredUOMs;
 	}
-	
+
 	public ArrayList<String> getCustUOM() {
 		return custUOM;
 	}
@@ -3314,7 +3393,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setCustUOM(ArrayList<String> custUOM) {
 		this.custUOM = custUOM;
 	}
-	
+
 	public ArrayList<String> getItemBaseUOM() {
 		return itemBaseUOM;
 	}
@@ -3344,7 +3423,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			HashMap<String, JSONObject> replacementPnaHoverMap) {
 		this.replacementPnaHoverMap = replacementPnaHoverMap;
 	}
-	
+
 	public HashMap<String, XPEDXItemPricingInfo> getReplacementPriceHoverMap() {
 		return replacementPriceHoverMap;
 	}
@@ -3445,7 +3524,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setPnaItemId(String pnaItemId) {
 		this.pnaItemId = pnaItemId;
 	}
-	
+
 	//Fix for issue 2066
 
 	/**
@@ -3461,7 +3540,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setPnaRequestedQty(String pnaRequestedQty) {
 		this.pnaRequestedQty = pnaRequestedQty;
 	}
-	
+
 	public String getIsBracketPricing() {
 		return isBracketPricing;
 	}
@@ -3481,7 +3560,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public String getMyItemsKey() {
 		return myItemsKey;
 	}
-	
+
 		/**
 	 * @return the inventoryCheckForItemsMap
 	 */
@@ -3496,7 +3575,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			HashMap<String, String> inventoryCheckForItemsMap) {
 		this.inventoryCheckForItemsMap = inventoryCheckForItemsMap;
 	}
-	
+
 
 	public void setMyItemsKey(String myItemsKey) {
 		this.myItemsKey = myItemsKey;
@@ -3597,7 +3676,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setItemIdsUOMsMap(Map<String, Map<String, String>> itemIdsUOMsMap) {
 		this.itemIdsUOMsMap = itemIdsUOMsMap;
 	}
-	
+
 	public Map<String, Map<String, String>> getItemIdsUOMsDescMap() {
 		return itemIdsUOMsDescMap;
 	}
@@ -3614,7 +3693,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setItemImagesMap(HashMap<String, String> itemImagesMap) {
 		this.itemImagesMap = itemImagesMap;
 	}
-	
+
 	public HashMap<String, String> getItemDescMap() {
 		return itemDescMap;
 	}
@@ -3646,10 +3725,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setLastModifiedDateString(String lastModifiedDateString) {
 		this.lastModifiedDateString = lastModifiedDateString;
 	}
-	
+
 	public String getLastModifiedDateToDisplay() {
 		UtilBean utilBean = new UtilBean();
-		String dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "M/dd/yyyy");			
+		String dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "M/dd/yyyy");
 		return dateToDisplay;
 	}
 
@@ -3669,24 +3748,24 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			ArrayList<Element> xpedxYouMightConsiderItems) {
 		this.xpedxYouMightConsiderItems = xpedxYouMightConsiderItems;
 	}
-	
+
 	public void addToYouMightAlsoConsiderItemList(Element elm) {
 		String currItemId = SCXmlUtil.getAttribute(elm, "ItemID");
 		String unitOfMeasure = SCXmlUtil.getAttribute(elm, "UnitOfMeasure");
-		
+
 		try {
 			LOG.debug(" currItemId " + currItemId );
-			LOG.debug(" unitOfMeasure " + unitOfMeasure );		
-		
+			LOG.debug(" unitOfMeasure " + unitOfMeasure );
+
 			if( (currItemId != null &&  currItemId.length() > 0 ) && (unitOfMeasure != null &&  unitOfMeasure.length() > 0 ) )
 				this.xpedxYouMightConsiderItems.add(elm) ;
 			else
-				LOG.warn("ItemId or UOM missing for Carousel Display Items. Item not added to list\n Details : " + SCXmlUtils.getString(elm));			
+				LOG.warn("ItemId or UOM missing for Carousel Display Items. Item not added to list\n Details : " + SCXmlUtils.getString(elm));
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 	}
 
 	public ArrayList<Element> getXpedxPopularAccessoriesItems() {
@@ -3705,7 +3784,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setDescriptionMap(Map<String, Element> descriptionMap) {
 		this.descriptionMap = descriptionMap;
 	}
-	
+
 	//Added for JIRA 1402 Starts
 	/**
 	 * @return the itemValue
@@ -3729,5 +3808,5 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	public void setQtyTextBoxMap(Map<String, String> qtyTextBoxMap) {
 		this.qtyTextBoxMap = qtyTextBoxMap;
 	}
-	
+
 }
