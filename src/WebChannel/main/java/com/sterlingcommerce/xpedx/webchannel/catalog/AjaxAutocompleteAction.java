@@ -22,6 +22,7 @@ import org.apache.lucene.search.WildcardQuery;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompletePun;
+import com.yantra.yfs.core.YFSSystem;
 
 /*
  * Created on Oct 21, 2013
@@ -56,8 +57,7 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @see http://api.jqueryui.com/1.8/autocomplete/#option-source
 	 */
 	public String execute() throws CorruptIndexException, IOException {
-		// String searchIndexRoot = YFSSystem.getProperty("yfs.searchIndex.rootDirectory");
-		String searchIndexRoot = "C:/search/index/autocomplete-analyzed";
+		String searchIndexRoot = YFSSystem.getProperty("punIndex.rootDirectory");
 
 		searchIndex(searchIndexRoot);
 
@@ -160,7 +160,7 @@ public class AjaxAutocompleteAction extends WCAction {
 		action.execute();
 		long stop = System.currentTimeMillis();
 
-		System.out.println(String.format("Search completed in {} milliseconds: ", stop - start));
+		System.out.println(String.format("Search completed in %s milliseconds: ", stop - start));
 
 		System.out.println("resultStatus = " + action.getResultStatus());
 		if (action.getAutocompletePuns() != null) {

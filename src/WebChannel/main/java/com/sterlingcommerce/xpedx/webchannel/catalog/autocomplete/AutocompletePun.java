@@ -7,7 +7,7 @@ import java.text.Collator;
  */
 
 /**
- * This reprents a PUN (Published Unit Name) in the autocomplete drop down.
+ * This reprents a PUN (Publishing Unit Name) in the autocomplete drop down.
  * 
  * @author Trey Howard
  */
