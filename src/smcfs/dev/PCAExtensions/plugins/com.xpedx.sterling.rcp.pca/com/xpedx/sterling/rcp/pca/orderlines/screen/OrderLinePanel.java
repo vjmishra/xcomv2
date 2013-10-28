@@ -1545,10 +1545,9 @@ public class OrderLinePanel extends Composite implements IYRCComposite {
 		gridDataVal.grabExcessHorizontalSpace = true;
 		gridDataVal.horizontalSpan = 1;
 //		gridDataVal.verticalSpan = 2;
-		gridDataVal.widthHint = 100;
+		gridDataVal.widthHint = 100;		
 		
-		// EB-1296 to enter up to 22 Characters in the PO# field and 24
-		// Characters in the Line Account #
+		// EB-1296 to enter up to 22 Characters in the PO# field and 24  Characters in the Line Account #
 		GridData gridData16 = new GridData();
 		gridData16.horizontalAlignment = SWT.BEGINNING;
 		gridData16.verticalAlignment = SWT.CENTER;

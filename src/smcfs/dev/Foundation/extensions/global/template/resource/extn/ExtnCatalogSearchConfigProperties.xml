@@ -90,7 +90,7 @@
 							Store="N" UseSynonyms="N" Searchable="N" />	
 						<Attribute DefaultWeight="1.0"
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
-							IndexFieldName="punId" Searchable="Y"
+							IndexFieldName="Item.ExtnPunKey" Searchable="Y"
 							UseSynonyms="N" Sortable="N"/>
 					</Attributes>					
 				</Entity>

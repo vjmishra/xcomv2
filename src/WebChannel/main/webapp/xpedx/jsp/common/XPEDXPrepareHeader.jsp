@@ -47,6 +47,138 @@
 		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
+	
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	
+	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
+	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
+		<s:param name="newOP">true</s:param>
+		<s:param name="selectedHeaderTab">CatalogTab</s:param>
+	</s:url>
+	<script type="text/javascript">
+		
+		$.widget("custom.catcomplete", $.ui.autocomplete, {
+			_renderMenu: function(ul, items) {
+				var self = this,
+				currentCategory = "";
+				$.each(items, function(index, item) {
+					if (item.group != currentCategory) {
+						ul.append("<li class='ui-autocomplete-group'>" + item.group + "</li>");
+						currentCategory = item.group;
+					}
+					self._renderItem(ul, item);
+				});
+			}
+		});
+		
+		// enable autocomplete for new search
+		$(document).ready(function() {
+			console.log('BEGIN doc-ready');
+			
+			var acSource = function(request, response) {
+				console.log('BEGIN acSource');
+				
+				$.ajax({
+					type: 'POST'
+					,url: '<s:property value="#autocompleteURL" escape="false" />'
+					,dataType: 'json'
+					,data: { searchTerm: request.term }
+					,success: function(data) {
+						console.log('BEGIN success');
+						console.log('data = ' , data);
+						if (data && data.resultStatus && data.resultStatus == 'OK') {
+							response(data.autocompletePuns);
+						} else {
+							// eg, TOO_MANY_RESULTS
+							response();
+						}
+					}
+					,error: function(resp, textStatus, xhr) {
+						console.log('BEGIN error');
+						console.log('resp = ' , resp);
+						console.log('textStatus = ' , textStatus);
+						console.log('xhr = ' , xhr);
+						response({});
+					}
+					,complete: function() {
+						console.log('BEGIN complete');
+					}
+				});
+			};
+			
+			var acSelect = function(event, ui) {
+				console.log('BEGIN acSelect');
+				console.log('ui.item = ' , ui.item);
+				
+				var url = '<s:property value="#newSearchURL" escape="false" />';
+				url += '&punKey=' + encodeURIComponent(ui.item.key);
+				url += '&cname=' + encodeURIComponent('name');
+				// url += '&path=' + encodeURIComponent(ui.item.name);
+				
+				console.log('posting to url = ' , url);
+				//post_to_url(url, {path: ui.item.name}, 'post');
+				post_to_url(url, {path: '/'}, 'post');
+			};
+			
+			var acOptions = {
+					minLength: 3
+					,source: acSource
+					,select: acSelect
+					,open: function() { $('.ui-autocomplete').width(500); }
+			};
+			
+			$('.ui-autocomplete-menu-item').live('mouseenter', function(event) { $(this).addClass('ui-state-hover'); });
+			$('.ui-autocomplete-menu-item').live('mouseleave', function(event) { $(this).removeClass('ui-state-hover'); });
+			
+			$('#newSearch_searchTerm').catcomplete(acOptions)
+			.data('catcomplete')._renderItem = function(ul, item) {
+				// console.log('----------');
+				var searchTerm = $('#newSearch_searchTerm').val();
+				// console.log('searchTerm = ' , searchTerm);
+				
+				var tokens = searchTerm.split(/\s+/);
+				
+				var text = item.path;
+				for (var i = 0, len = tokens.length; i < len; i++) {
+					var regexMatchHighlight = new RegExp(tokens[i], 'ig');
+					text = text.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+				}
+				// console.log('text = ' , text);
+				
+				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
+				.data('item.autocomplete', item)
+				.append('<a class="ui-corner-all" tabindex="-1">' + text + '</a>')
+				.appendTo(ul);
+			}
+			;
+		});
+		
+		function post_to_url(path, params, method) {
+		    method = method || "post"; // Set method to post by default if not specified.
+
+		    // The rest of this code assumes you are not using a library.
+		    // It can be made less wordy if you use one.
+		    var form = document.createElement("form");
+		    form.setAttribute("method", method);
+		    form.setAttribute("action", path);
+
+		    for (var key in params) {
+		        if (params.hasOwnProperty(key)) {
+		            var hiddenField = document.createElement("input");
+		            hiddenField.setAttribute("type", "hidden");
+		            hiddenField.setAttribute("name", key);
+		            hiddenField.setAttribute("value", params[key]);
+
+		            form.appendChild(hiddenField);
+		         }
+		    }
+
+		    document.body.appendChild(form);
+		    form.submit();
+		}
+	</script>
+
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
@@ -2319,6 +2451,7 @@ function msgWait(){
 .share-modal { /*width:399px!important; height:37	0px;*/}         
 .indent-tree { margin-left:15px; }       
 .indent-tree-act { margin-left:25px; } 	
+
 </style>
 <s:set name='isProcurementInspectMode'
 	value='#hUtil.isProcurementInspectMode(wCContext)' />

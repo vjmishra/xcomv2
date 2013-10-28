@@ -5,6 +5,10 @@
 	<package name="xpedx.catalogFragment" namespace='/catalog'
 		extends="catalogFragment">
 
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+		
 		<action name="itemDetails"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemDetailsAction">
 			<param name="mashups">xpedxItemDetails</param>
@@ -79,6 +83,21 @@
 				<param name="unitOfMeasure">${unitOfMeasure}</param>
 			</result>
 		</action>
+		
+		<action name="ajaxAutocomplete" class="com.sterlingcommerce.xpedx.webchannel.catalog.AjaxAutocompleteAction">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result type="json">
+			<!--
+				<param name="includeProperties">
+					autocompleteItems,
+				</param>
+			-->
+			</result>
+		</action>
+		
 		<action name="prodCompare"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXProductComparisonAction">
 			<param name="mashups">ProductComparison</param>
@@ -213,6 +232,10 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
 			<param name="categoryDepth">2</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXNarrowBy.jsp</result>
+		</action>
+		
+		<action name="punSearch" class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="punSearch">
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
 		</action>
 		
 	</package>

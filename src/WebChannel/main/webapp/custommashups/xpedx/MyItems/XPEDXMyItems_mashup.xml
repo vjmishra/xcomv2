@@ -827,7 +827,7 @@
                   </Input>
                   <Template>
                         <CustomerList>
-                              <Customer CustomerID="" CustomerKey="" OrganizationCode="">
+                              <Customer CustomerID="" CustomerKey="" OrganizationCode="" Status="">
                                     <Extn ExtnBillToSuffix="" ExtnLegacyCustNumber=""
                                           ExtnShipFromBranch="" ExtnShipToSuffix="" ExtnSuffixType="" />
                                     <BuyerOrganization OrganizationCode=""

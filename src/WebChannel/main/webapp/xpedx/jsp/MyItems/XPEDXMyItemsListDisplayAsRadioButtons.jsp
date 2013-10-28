@@ -12,10 +12,17 @@
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	</script>	
 <%--Added condition for Jira 3195 --%>
+<%--- EB-1158--%>
 <div id="divAdd2ListRadio">
+
 <s:if test="listOfItems == null || listOfItems.size()==0">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" style="margin-top:60px;">No lists have been created. Please create a new list. </div>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <!--  <div class="error" style="margin-top:60px;">No lists have been created. Please create a new list. </div> -->
+<s:set name="listSize" value="0" />
 </s:if>
+<else>
+<s:set name="listSize" value="%{listOfItems.size()}" />
+</else>
 <table>
 
 <s:iterator id="listDetail" value="listOfItems" status="listIndex" >

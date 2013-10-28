@@ -1,6 +1,11 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -850,6 +855,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}	
 	
 		}					
+		
+		if (punKey != null) {
+			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@IndexFieldName", "punId");
+			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Value", punKey);
+			valueMap.put("/SearchCatalogIndex/Terms/Term[1]/@Condition", "MUST");
+		}
+		
 		super.populateMashupInput(mashupId, valueMap, mashupInput);
 		ArrayList<Element> elements = SCXmlUtil.getElements(mashupInput,
 				"Terms");
@@ -3828,5 +3840,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.facetListItemAttributeKey = facetListItemAttributeKey;
 	}
 	
+	private String punKey; // eb-2772: if non-null, then searches on items in the pun
+
+	public String getPunKey() {
+		return punKey;
+	}
+
+	public void setPunKey(String punKey) {
+		this.punKey = punKey;
+	}
 
 }

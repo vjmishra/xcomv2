@@ -2367,6 +2367,7 @@ function showSharedListForm(){
 <s:set name='fieldListElem'
 	value="searchableIndexFieldListOutPutElement" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:set name="duplicateInfoMsg" value="#_action.getDuplicateInfoMsg()"/>
 
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
@@ -2496,7 +2497,12 @@ function showSharedListForm(){
 			<h5 align="center"><b><font color="red"><s:property
 				value="ajaxLineStatusCodeMsg" /></font></b></h5>
 			</div>
-			<div id ="errorMessageDiv"> </div>
+			<br/>
+			<div id="infoMessage">
+				<s:if test=' "" != duplicateInfoMsg '>
+					<s:property value="duplicateInfoMsg" />
+				</s:if>
+			</div>
 
 			<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 			<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>

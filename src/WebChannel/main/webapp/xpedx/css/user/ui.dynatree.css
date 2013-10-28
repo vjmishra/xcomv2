@@ -315,6 +315,11 @@ span.dynatree-selected a
 	font-style: italic;
 }
 
+span.dynatree-suspended a {
+color: #707070;
+font-style: italic;
+}
+
 span.dynatree-active a
 {
 	background-color: #3169C6 !important;
