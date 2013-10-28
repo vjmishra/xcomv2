@@ -5,10 +5,9 @@
         <Attributes>
 				<Attribute ColumnName="MSAP_ID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="CustomerID"/>		
 				<Attribute ColumnName="SHIP_FROM" DataType="OrgCode" 	Description="EXTN_SHIP_FROM_BRANCH" Nullable="true" XMLName="ExtnCustomerDivision" />	
-				<Attribute ColumnName="SHIP_TO_ID"  DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="ShipToID"/>	
+				<Attribute ColumnName="SHIP_TO_ID"  DataType="Text-255" 	DefaultValue=" " Description="SHIP_TO_ID" Nullable="true" XMLName="ShipToID"/>	
 				<Attribute ColumnName="MSAP_NAME"  DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="MsapName"/>
         </Attributes>
-
     </Entity>
 </Entities>
 </DBSchema>
