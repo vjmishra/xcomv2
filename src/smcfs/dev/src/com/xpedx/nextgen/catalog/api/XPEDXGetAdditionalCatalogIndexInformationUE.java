@@ -22,28 +22,35 @@ import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 import com.yantra.yfs.japi.YFSUserExitException;
 
-public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditionalCatalogIndexInformationUE {
+public class XPEDXGetAdditionalCatalogIndexInformationUE implements
+		YCMGetAdditionalCatalogIndexInformationUE {
 	private static YIFApi api = null;
 	YFSEnvironment mEnvironment = null;
 	public static String stockStatus;
 	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
-
-	public Document getAdditionalCatalogIndexInformation(YFSEnvironment environment, Document inDocumentUE) throws YFSUserExitException {
+	public Document getAdditionalCatalogIndexInformation(
+			YFSEnvironment environment, Document inDocumentUE)
+			throws YFSUserExitException {
 		YFCDocument outDocument = null;
-		stockStatus = YFSSystem.getProperty("inventory_indicator_for_in_stock_status");
+		stockStatus = YFSSystem
+				.getProperty("inventory_indicator_for_in_stock_status");
 		if (stockStatus == null || stockStatus.trim().length() == 0) {
 			stockStatus = "W";
 		}
-		log.debug("XPEDXGetAdditionalCatalogIndexInformationUE_StockStatus : " + stockStatus);
+		log.debug("XPEDXGetAdditionalCatalogIndexInformationUE_StockStatus : "+stockStatus);
 		try {
 			mEnvironment = environment;
 			YFCDocument inDocument = YFCDocument.getDocumentFor(inDocumentUE);
 			YFCElement inElement = inDocument.getDocumentElement();
-			YFCIterable<YFCElement> searchFieldListIterator = inElement.getChildElement("SearchIndexFieldList").getChildren("SearchField");
-			YFCIterable<YFCElement> itemListIterator = inElement.getChildElement("ItemList").getChildren("Item");
+			YFCIterable<YFCElement> searchFieldListIterator = inElement
+					.getChildElement("SearchIndexFieldList").getChildren(
+							"SearchField");
+			YFCIterable<YFCElement> itemListIterator = inElement
+					.getChildElement("ItemList").getChildren("Item");
 			outDocument = YFCDocument.createDocument("ItemList");
 			if ("en_US".equals(inElement.getAttribute("LocaleCode"))) {
-				getDefaultLocaleOutputDoc(outDocument, searchFieldListIterator, itemListIterator);
+				getDefaultLocaleOutputDoc(outDocument, searchFieldListIterator,
+						itemListIterator);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -51,95 +58,121 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		return outDocument.getDocument();
 	}
 
-	private void getDefaultLocaleOutputDoc(YFCDocument outDoc, YFCIterable<YFCElement> searchFieldListIterator, YFCIterable<YFCElement> itemListIterator) throws YFSException,
+	private void getDefaultLocaleOutputDoc(YFCDocument outDoc,
+			YFCIterable<YFCElement> searchFieldListIterator,
+			YFCIterable<YFCElement> itemListIterator) throws YFSException,
 			RemoteException, YIFClientCreationException {
-		getLocaleDoc(outDoc, searchFieldListIterator, itemListIterator, " Ext English Desc");
+		getLocaleDoc(outDoc, searchFieldListIterator, itemListIterator,
+				" Ext English Desc");
 	}
 
-	private void getLocaleDoc(YFCDocument outDoc, YFCIterable<YFCElement> searchFieldListIterator, YFCIterable<YFCElement> itemListIterator, String appendValue)
+	private void getLocaleDoc(YFCDocument outDoc,
+			YFCIterable<YFCElement> searchFieldListIterator,
+			YFCIterable<YFCElement> itemListIterator, String appendValue)
 			throws YFSException, RemoteException, YIFClientCreationException {
 		YFCElement outElement = outDoc.getDocumentElement();
 		// taking one item at a time
 		for (YFCElement itemElement : itemListIterator) {
 			String itemID = itemElement.getAttribute("ItemID");
-			String organizationCode = itemElement.getAttribute("OrganizationCode");
-			String[] divisionsForStockedItem = getDivisionsForStockedItem(itemID, organizationCode);
-			log.debug("getLocaleDoc_divisionsForStockedItem : " + divisionsForStockedItem);
-			NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID, mEnvironment);
+			String organizationCode = itemElement
+					.getAttribute("OrganizationCode");
+			String[] divisionsForStockedItem = getDivisionsForStockedItem(
+					itemID, organizationCode);
+			log.debug("getLocaleDoc_divisionsForStockedItem : "+divisionsForStockedItem);
+			NodeList XpxItemcustXrefList = getItemCustomerXDetails(itemID,
+					mEnvironment);
 			int lengthC = XpxItemcustXrefList.getLength();
 			String customerNumberPlusPartNumber = "";
 			String RECORD_SEPARATOR = " ";
 			// getting all customers for an item
 			// appending all records by a record separator
 			for (int index = 0; index < lengthC; index++) {
-				if (customerNumberPlusPartNumber != null && customerNumberPlusPartNumber.trim().length() > 0) {
+				if (customerNumberPlusPartNumber != null
+						&& customerNumberPlusPartNumber.trim().length() > 0) {
 					customerNumberPlusPartNumber += RECORD_SEPARATOR;
 				}
 				Node XpxItemcustXref = XpxItemcustXrefList.item(index);
-				NamedNodeMap XpxItemcustXrefAttributes = XpxItemcustXref.getAttributes();
-				Node customerNumberN = XpxItemcustXrefAttributes.getNamedItem("CustomerNumber");
-				if (customerNumberN != null && customerNumberN.getTextContent().trim().length() > 0) {
-					customerNumberPlusPartNumber += customerNumberN.getTextContent();
+				NamedNodeMap XpxItemcustXrefAttributes = XpxItemcustXref
+						.getAttributes();
+				Node customerNumberN = XpxItemcustXrefAttributes
+						.getNamedItem("CustomerNumber");
+				if (customerNumberN != null
+						&& customerNumberN.getTextContent().trim().length() > 0) {
+					customerNumberPlusPartNumber += customerNumberN
+							.getTextContent();
 				}
-				Node customerPartNumberN = XpxItemcustXrefAttributes.getNamedItem("CustomerItemNumber");
-				if (customerPartNumberN != null && customerPartNumberN.getTextContent().trim().length() > 0) {
-					customerNumberPlusPartNumber += customerPartNumberN.getTextContent();
+				Node customerPartNumberN = XpxItemcustXrefAttributes
+						.getNamedItem("CustomerItemNumber");
+				if (customerPartNumberN != null
+						&& customerPartNumberN.getTextContent().trim().length() > 0) {
+					customerNumberPlusPartNumber += customerPartNumberN
+							.getTextContent();
 				}
 			}
 			// Now preparing the output
 			YFCElement child = outElement.createChild("Item");
 			child.setAttributes(itemElement.getAttributes());
-			YFCElement valueListElement = child.createChild("AdditionalCatalogIndexInformationList");
+			YFCElement valueListElement = child
+					.createChild("AdditionalCatalogIndexInformationList");
 			for (YFCElement searchFieldElement : searchFieldListIterator) {
-				YFCElement valueElement = valueListElement.createChild("AdditionalCatalogIndexInformation");
+				YFCElement valueElement = valueListElement
+						.createChild("AdditionalCatalogIndexInformation");
 				log.debug("getLocaleDoc_searchFieldElement:" + searchFieldElement);
-				valueElement.setAttribute("IndexFieldName", searchFieldElement.getAttribute("IndexFieldName"));
-				if (customerNumberPlusPartNumber != null && customerNumberPlusPartNumber.length() > 0) {
-					if ("customerNumberPlusPartNumber".equals(searchFieldElement.getAttribute("IndexFieldName"))) {
-						valueElement.setAttribute("Value", customerNumberPlusPartNumber);
+				valueElement.setAttribute("IndexFieldName", searchFieldElement
+						.getAttribute("IndexFieldName"));
+				if (customerNumberPlusPartNumber != null
+						&& customerNumberPlusPartNumber.length() > 0) {
+					if ("customerNumberPlusPartNumber"
+							.equals(searchFieldElement
+									.getAttribute("IndexFieldName"))) {
+						valueElement.setAttribute("Value",
+								customerNumberPlusPartNumber);
 					}
 				}
-				if (divisionsForStockedItem != null && divisionsForStockedItem.length > 0) {
-					log.debug("getLocaleDoc_divisionsForStockedItem=" + divisionsForStockedItem);
+				if (divisionsForStockedItem != null
+						&& divisionsForStockedItem.length > 0) {
+					log.debug("getLocaleDoc_divisionsForStockedItem="+divisionsForStockedItem);
 					String divisionForStockedItem = "";
 					for (String division : divisionsForStockedItem) {
 						if (division != null && division.trim().length() > 0) {
-							divisionForStockedItem += division + RECORD_SEPARATOR;
+							divisionForStockedItem += division
+									+ RECORD_SEPARATOR;
 						}
 					}
-					/*
-					 * if ("showNormallyStockedItems".equals(searchFieldElement .getAttribute("IndexFieldName"))) { log.debug("getLocaleDoc_showNormallyStockedItems=" + "W");
-					 * valueElement.setAttribute("Value", "W"); }
-					 */
-					if ("showStockedItems".equals(searchFieldElement.getAttribute("IndexFieldName"))) {
+					/*if ("showNormallyStockedItems".equals(searchFieldElement
+							.getAttribute("IndexFieldName"))) {
+						log.debug("getLocaleDoc_showNormallyStockedItems=" + "W");
+						valueElement.setAttribute("Value",
+								"W");
+					}*/
+					if ("showStockedItems".equals(searchFieldElement
+							.getAttribute("IndexFieldName"))) {
 						log.debug("getLocaleDoc_showStockedItems=" + divisionForStockedItem.trim());
-						valueElement.setAttribute("Value", divisionForStockedItem.trim());
+						valueElement.setAttribute("Value",
+								divisionForStockedItem.trim());
 					}
-				}
-
-				// eb-2772: add ExtnPunKey to the index
-				if ("Item.ExtnPunKey".equals(searchFieldElement.getAttribute("IndexFieldName"))) {
-					String attrExtnPunKey = itemElement.getAttribute("ExtnPunKey");
-					if (log.isDebugEnabled()) {
-						log.debug("Item with ItemID=" + itemID + " has ExtnPunKey=" + attrExtnPunKey);
-					}
-					valueElement.setAttribute("Value", attrExtnPunKey);
 				}
 			}
 		}
 	}
 
-	private String[] getDivisionsForStockedItem(String itemID, String organizationCode) throws YIFClientCreationException, YFSException, RemoteException {
+	private String[] getDivisionsForStockedItem(String itemID,
+			String organizationCode) throws YIFClientCreationException,
+			YFSException, RemoteException {
 		String[] divisions = null;
 		YFCDocument inputDocument = YFCDocument.createDocument("Item");
 		YFCElement documentElement = inputDocument.getDocumentElement();
 		documentElement.setAttribute("ItemID", itemID);
-		documentElement.setAttribute("CallingOrganizationCode", organizationCode);
-		String templateXML = "<ItemList><Item><Extn><XPXItemExtnList><XPXItemExtn " + "InventoryIndicator='' XPXDivision=''></XPXItemExtn>" + "</XPXItemExtnList></Extn></Item>"
-				+ "</ItemList>";
-		mEnvironment.setApiTemplate("getItemList", SCXmlUtil.createFromString(templateXML));
+		documentElement.setAttribute("CallingOrganizationCode",
+				organizationCode);
+		String templateXML = "<ItemList><Item><Extn><XPXItemExtnList><XPXItemExtn "
+				+ "InventoryIndicator='' XPXDivision=''></XPXItemExtn>"
+				+ "</XPXItemExtnList></Extn></Item>" + "</ItemList>";
+		mEnvironment.setApiTemplate("getItemList", SCXmlUtil
+				.createFromString(templateXML));
 		YIFApi api = YIFClientFactory.getInstance().getApi();
-		Document outputListDocument = api.invoke(mEnvironment, "getItemList", inputDocument.getDocument());
+		Document outputListDocument = api.invoke(mEnvironment,
+				"getItemList", inputDocument.getDocument());
 		Element outputElement = outputListDocument.getDocumentElement();
 		Node wItemNode = outputElement.getFirstChild();
 		if (wItemNode != null) {
@@ -147,19 +180,28 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			if (wExtnNode != null) {
 				Node XPXItemExtnListNode = wExtnNode.getFirstChild();
 				if (XPXItemExtnListNode != null) {
-					NodeList wXPXItemExtnNodeList = XPXItemExtnListNode.getChildNodes();
+					NodeList wXPXItemExtnNodeList = XPXItemExtnListNode
+							.getChildNodes();
 					if (wXPXItemExtnNodeList != null) {
 						int length = wXPXItemExtnNodeList.getLength();
 						divisions = new String[length];
 						for (int index = 0; index < length; index++) {
-							Node wXPXItemExtChildNode = wXPXItemExtnNodeList.item(index);
+							Node wXPXItemExtChildNode = wXPXItemExtnNodeList
+									.item(index);
 							if (wXPXItemExtChildNode != null) {
-								NamedNodeMap namedNodeMap = wXPXItemExtChildNode.getAttributes();
+								NamedNodeMap namedNodeMap = wXPXItemExtChildNode
+										.getAttributes();
 								if (namedNodeMap != null) {
-
-									String wInventoryIndicator = namedNodeMap.getNamedItem("InventoryIndicator").getTextContent();
-									if (wInventoryIndicator != null && wInventoryIndicator.equals(stockStatus)) {
-										String wXPXDivision = namedNodeMap.getNamedItem("XPXDivision").getTextContent();
+									
+									String wInventoryIndicator = namedNodeMap
+											.getNamedItem("InventoryIndicator")
+											.getTextContent();
+									if (wInventoryIndicator != null
+											&& wInventoryIndicator
+													.equals(stockStatus)) {
+										String wXPXDivision = namedNodeMap
+												.getNamedItem("XPXDivision")
+												.getTextContent();
 										divisions[index] = wXPXDivision;
 									}
 								}
@@ -173,13 +215,16 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 		return divisions;
 	}
 
-	private NodeList getItemCustomerXDetails(String itemID, YFSEnvironment env) throws YIFClientCreationException, YFSException, RemoteException {
+	private NodeList getItemCustomerXDetails(String itemID, YFSEnvironment env)
+			throws YIFClientCreationException, YFSException, RemoteException {
 		env.setDataAccessFilter(false);
-		YFCDocument inputDocument = YFCDocument.createDocument("XPXItemcustXref");
+		YFCDocument inputDocument = YFCDocument
+				.createDocument("XPXItemcustXref");
 		YFCElement inputElement = inputDocument.getDocumentElement();
 		inputElement.setAttribute("LegacyItemNumber", itemID);
 		api = YIFClientFactory.getInstance().getApi();
-		Document outputListDocument = api.executeFlow(env, "getXPXItemcustXrefList", inputDocument.getDocument());
+		Document outputListDocument = api.executeFlow(env,
+				"getXPXItemcustXrefList", inputDocument.getDocument());
 		Element outputListElement = outputListDocument.getDocumentElement();
 		if (outputListElement != null) {
 			return outputListElement.getChildNodes();
