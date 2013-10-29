@@ -220,11 +220,11 @@
           	XMLName="ExtnPackMethod"
          	XMLGroup="Extn" />
 	  
-	  		<Attribute ColumnName="EXTN_PUN_KEY" 
-          	DataType="Text-50"
-	  		Description="Extn field with the Publishing Unit Name key"  
+	  		<Attribute ColumnName="EXTN_MARKETING_GROUP_ID" 
+          	DataType="Number"
+	  		Description="Extn field with the Marketing Group ID (aka Publishing Unit Name)"  
           	Nullable="true" 
-          	XMLName="ExtnPunKey"
+          	XMLName="ExtnMarketingGroupId"
          	XMLGroup="Extn" />
 	  
         </Attributes>

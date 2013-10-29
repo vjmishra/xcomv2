@@ -88,8 +88,8 @@
 						<Attribute IndexFieldName="Item.Keywords" 
 							XMLName="Keywords" DefaultWeight="1.0" Index="NOT_ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />	
-						<Attribute IndexFieldName="Item.ExtnPunKey" 
-							XMLName="ExtnPunKey" DefaultWeight="1.0" Index="NOT_ANALYZED" 
+						<Attribute IndexFieldName="Item.ExtnMarketingGroupId" 
+							XMLName="ExtnMarketingGroupId" DefaultWeight="1.0" Index="NOT_ANALYZED" 
 							Store="N" UseSynonyms="N" Searchable="N" />	
 					</Attributes>					
 				</Entity>
