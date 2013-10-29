@@ -239,13 +239,18 @@ public class XPEDXOrderUtils {
 		Element xpxItemExtnListElem=(Element)ServletActionContext.getRequest().getAttribute("XPXItemExtnList");
 		if(xpxItemExtnListElem != null)
 		{
+			for (String item : items) {
+				if(hashMap.containsKey(item))
+					continue;
+				hashMap.put(item, "1");
+			}
 			ArrayList<Element> xpxItemExtnElems=SCXmlUtil.getElements(xpxItemExtnListElem, "XPXItemExtn");
 			for(int i=0;xpxItemExtnElems != null && i<xpxItemExtnElems.size();i++)
 			{
 				Element xpxItemExtnElem=xpxItemExtnElems.get(i);
 				String itemId=xpxItemExtnElem.getAttribute("ItemID");
 				String orderMultiple = xpxItemExtnElem.getAttribute("OrderMultiple");
-				hashMap.put(itemId, orderMultiple);
+				hashMap.put(itemId, !YFCCommon.isVoid(orderMultiple) ? orderMultiple : "1" );
 			}
 			return hashMap;
 		}
