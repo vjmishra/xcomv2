@@ -63,9 +63,9 @@
 				var self = this,
 				currentCategory = "";
 				$.each(items, function(index, item) {
-					if (item.group != currentCategory) {
-						ul.append("<li class='ui-autocomplete-group'>" + item.group + "</li>");
-						currentCategory = item.group;
+					if (item.cat1 != currentCategory) {
+						ul.append("<li class='ui-autocomplete-group'>" + item.cat1 + "</li>");
+						currentCategory = item.cat1;
 					}
 					self._renderItem(ul, item);
 				});
@@ -74,10 +74,10 @@
 		
 		// enable autocomplete for new search
 		$(document).ready(function() {
-			console.log('BEGIN doc-ready');
+			// autocomplete console.log('BEGIN doc-ready');
 			
 			var acSource = function(request, response) {
-				console.log('BEGIN acSource');
+				// autocomplete console.log('BEGIN acSource');
 				
 				$.ajax({
 					type: 'POST'
@@ -85,39 +85,38 @@
 					,dataType: 'json'
 					,data: { searchTerm: request.term }
 					,success: function(data) {
-						console.log('BEGIN success');
-						console.log('data = ' , data);
+						// autocomplete console.log('BEGIN success');
+						// autocomplete console.log('data = ' , data);
 						if (data && data.resultStatus && data.resultStatus == 'OK') {
-							response(data.autocompletePuns);
+							response(data.autocompleteMarketingGroups);
 						} else {
 							// eg, TOO_MANY_RESULTS
 							response();
 						}
 					}
 					,error: function(resp, textStatus, xhr) {
-						console.log('BEGIN error');
-						console.log('resp = ' , resp);
-						console.log('textStatus = ' , textStatus);
-						console.log('xhr = ' , xhr);
+						// autocomplete console.log('BEGIN error');
+						// autocomplete console.log('resp = ' , resp);
+						// autocomplete console.log('textStatus = ' , textStatus);
+						// autocomplete console.log('xhr = ' , xhr);
 						response({});
 					}
 					,complete: function() {
-						console.log('BEGIN complete');
+						// autocomplete console.log('BEGIN complete');
 					}
 				});
 			};
 			
 			var acSelect = function(event, ui) {
-				console.log('BEGIN acSelect');
-				console.log('ui.item = ' , ui.item);
+				// autocomplete console.log('BEGIN acSelect');
+				// autocomplete console.log('ui.item = ' , ui.item);
 				
 				var url = '<s:property value="#newSearchURL" escape="false" />';
-				url += '&punKey=' + encodeURIComponent(ui.item.key);
-				url += '&cname=' + encodeURIComponent('name');
+				url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
+				url += '&cname=' + encodeURIComponent(ui.item.name);
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
-				console.log('posting to url = ' , url);
-				//post_to_url(url, {path: ui.item.name}, 'post');
+				// autocomplete console.log('posting to url = ' , url);
 				post_to_url(url, {path: '/'}, 'post');
 			};
 			

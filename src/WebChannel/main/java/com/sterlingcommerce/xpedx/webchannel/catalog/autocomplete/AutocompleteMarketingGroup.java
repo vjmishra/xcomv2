@@ -11,16 +11,16 @@ import java.text.Collator;
  * 
  * @author Trey Howard
  */
-public class AutocompletePun implements Comparable<AutocompletePun> {
+public class AutocompleteMarketingGroup implements Comparable<AutocompleteMarketingGroup> {
 
 	private String key;
-	private String group;
+	private String cat1;
 	private String name;
 	private String path;
 
 	@Override
 	public String toString() {
-		return "Item [key=" + key + " | group=" + group + " | name=" + name + " | path=" + path + "]";
+		return "Item [key=" + key + " | cat1=" + cat1 + " | name=" + name + " | path=" + path + "]";
 	}
 
 	public String getKey() {
@@ -31,12 +31,12 @@ public class AutocompletePun implements Comparable<AutocompletePun> {
 		this.key = key;
 	}
 
-	public String getGroup() {
-		return group;
+	public String getCat1() {
+		return cat1;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setCat1(String cat1) {
+		this.cat1 = cat1;
 	}
 
 	public String getName() {
@@ -56,13 +56,13 @@ public class AutocompletePun implements Comparable<AutocompletePun> {
 	}
 
 	/*
-	 * Sorts by group, then by name.
+	 * Sorts by cat1, then by name.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(AutocompletePun that) {
-		int retval = Collator.getInstance().compare(this.getGroup(), that.getGroup());
+	public int compareTo(AutocompleteMarketingGroup that) {
+		int retval = Collator.getInstance().compare(this.getCat1(), that.getCat1());
 
 		if (retval == 0) {
 			retval = Collator.getInstance().compare(this.getPath(), that.getPath());

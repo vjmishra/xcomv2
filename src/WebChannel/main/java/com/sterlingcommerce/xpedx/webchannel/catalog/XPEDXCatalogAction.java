@@ -856,9 +856,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	
 		}					
 		
-		if (punKey != null) {
+		if (marketingGroupId != null) {
 			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@IndexFieldName", "punId");
-			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", punKey);
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", marketingGroupId);
 			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
 			termIndex++;
 		}
@@ -3841,14 +3841,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.facetListItemAttributeKey = facetListItemAttributeKey;
 	}
 	
-	private String punKey; // eb-2772: if non-null, then searches on items in the pun
+	private String marketingGroupId; // eb-2772: if non-null, then searches on items in this marketing group
 
-	public String getPunKey() {
-		return punKey;
+	public String getMarketingGroupId() {
+		return marketingGroupId;
 	}
 
-	public void setPunKey(String punKey) {
-		this.punKey = punKey;
+	public void setMarketingGroupId(String marketingGroupId) {
+		this.marketingGroupId = marketingGroupId;
 	}
 
 }

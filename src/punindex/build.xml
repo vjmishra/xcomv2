@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="punindex" basedir="." default="jar">
+<project name="marketinggroupindex" basedir="." default="jar">
 	<property name="source.dir" value="src" />
 	<property name="lib.dir" value="lib" />
 	<property name="class.dir" value="target" />
 	<property name="jar.dir" value="dist" />
 	<property name="jar.file" value="${jar.dir}/${ant.project.name}.jar" />
-	<property name="main-class" value="com.sterlingcommerce.xpedx.punindex.CreatePunIndex" />
+	<property name="main-class" value="com.sterlingcommerce.xpedx.marketinggroupindex.CreateMarketingGroupIndex" />
 
 	<path id="libraries.path">
 		<fileset dir="${lib.dir}">
@@ -35,12 +35,6 @@
 		<manifestclasspath property="manifest.classpath" jarfile="${jar.file}">
 			<classpath refid="libraries.path" />
 		</manifestclasspath>
-
-		<!--
-		<copy todir="${class.dir}">
-			<fileset dir="${source.dir}" includesfile="src/log4j.xml" />
-		</copy>
-		-->
 
 		<jar destfile="${jar.file}">
 			<fileset dir="${class.dir}" />
