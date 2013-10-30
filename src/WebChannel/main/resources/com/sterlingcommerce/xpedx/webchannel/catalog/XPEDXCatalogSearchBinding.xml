@@ -10,5 +10,5 @@
 	<entry key="pageSize">xpedxCatalogSearch:/SearchCatalogIndex/@PageSize,xpedxCatalogLandingSearch:/SearchCatalogIndex/@PageSize,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@PageSize</entry>
 	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">xpedxCatalogSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale,xpedxCatalogLandingSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale</entry>
 	<entry key="WCContext.customerId">xpedxCatalogSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID,xpedxNarrowByCatalogSearch:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID</entry>
-	<entry key="effectiveCurrency">xpedxCatalogSearch:/SearchCatalogIndex/Item/@Currency,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/@Currency:</entry>
+	<entry key="effectiveCurrency">xpedxCatalogSearch:/SearchCatalogIndex/Item/@Currency,xpedxCatalogLandingSearch:/SearchCatalogIndex/Item/@Currency</entry>
 </properties>
