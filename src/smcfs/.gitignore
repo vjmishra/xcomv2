@@ -1,2 +1,12 @@
 bin/
 .settings/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.lock
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.mylyn/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.core.resources/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.debug.ui/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.jdt.core/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.jdt.ui/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.pde.core/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.ui.ide/
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.ui.workbench/workbench.xml
+src/smcfs/dev/PCAExtensions/plugins/com.xpedx.sterling.rcp.pca/.metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
