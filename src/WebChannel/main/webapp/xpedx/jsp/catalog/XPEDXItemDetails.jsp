@@ -961,7 +961,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
              }
 	         else if(draftErr.indexOf(productID) !== -1){
 	        	 refreshMiniCartLink();
-	        	 myMessageDiv.innerHTML = enteredQty+" "+selectedUom+"has been added to your cart. Please review the cart to update the item with a valid quantity.";//"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
+	        	 myMessageDiv.innerHTML = enteredQty+" "+selectedUom+" has been added to your cart. Please review the cart to update the item with a valid quantity.";//"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
 	        	 myMessageDiv.setAttribute("class", "error");
 			 myMessageDiv.style.display = "inline-block"; 
 			 //Added for EB 40 - On successful addition to cart clear the Qty field & restore the default UOM 
