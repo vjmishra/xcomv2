@@ -293,6 +293,11 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("<input type='hidden' id='custUOM_");
 		sb.append(itemID).append("' value='");
 		sb.append(custUOM).append("'/>");
+		//Added for EB 41
+		sb.append("<input type='hidden' id='defaultUOM_");
+		sb.append(itemID).append("' value='");
+		sb.append(defaultUOM).append("'/>");
+		//End of EB 41
 		sb.append("<input type='hidden' id='orderMultiple_");
 		sb.append(itemID).append("' value='");
 		sb.append(orderMultiple).append("'/></div>\",");
