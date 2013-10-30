@@ -17,12 +17,13 @@
 
 <s:if test="listOfItems == null || listOfItems.size()==0">
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <!--  <div class="error" style="margin-top:60px;">No lists have been created. Please create a new list. </div> -->
+  <div style="margin-top:60px;text-align: center;font-size: 13px;">No lists have been created. Please create a new list. </div> 
 <s:set name="listSize" value="0" />
 </s:if>
-<else>
+ <!-- Just for else closed used Struts tag -->
+<s:else>
 <s:set name="listSize" value="%{listOfItems.size()}" />
-</else>
+</s:else>
 <table>
 
 <s:iterator id="listDetail" value="listOfItems" status="listIndex" >
