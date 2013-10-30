@@ -3680,7 +3680,7 @@ function showSharedListForm(){
 		<s:else>
 			<div class="mil-wrap-condensed-container last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
 		</s:else>
-            <div class="mil-wrap-condensed" style="min-height:220px;">
+            <div class="mil-wrap-condensed" style="min-height:240px;">
 		
 				<s:set name='uId' value='%{key + "_" +#altItem.getAttribute("ItemID")}' />
 	
@@ -3752,7 +3752,7 @@ function showSharedListForm(){
                         <p>Replacement Item #: <s:property value='rItemID' /></p> --%>
                         
 <%--                         <s:if test="%{#rItemID}"> --%>
-							 <p>xpedx Item #: <s:property value="#rItemID" /></p> 
+							 <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value="#rItemID" /></p> 
                             <s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
 										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>

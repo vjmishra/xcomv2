@@ -1722,12 +1722,18 @@ var currentAadd2ItemList = new Object();
                           <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p>  --%>
                         
-							 <p>xpedx Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
+							 <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
 								 <s:if test='#certFlagVal=="Y"'>
 								 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
 								 </s:if>
 								 
                              <p style="margin-top:0px;">Mfg. Item #: <s:property value="#extnVendorNo" /> </p>
+                             <s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
+                             <s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+                             <s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p style="margin-top:0px;">
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+							</s:if>
 						
                     </div>
                     
