@@ -322,12 +322,16 @@
 </div>
 
 
-
-
 <div class="float-right" >
 <ul id="tool-bar" class="tool-bar-bottom" >
 		<li>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
+			<%-- eb-1494: when admin sets pref ship-to for user then pass extra request parameter to trigger an update of pref catalog view and pref product category (site preferences tab options) --%>
+			<s:if test="adminMode && (#_action.getDefaultShipToCustomerId() == null || #_action.getDefaultShipToCustomerId() == '')">
+				<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>&initPrefs=true')" ><span>Select</span></a>
+			</s:if>
+			<s:else>
+				<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
+			</s:else>
 	</li>
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
