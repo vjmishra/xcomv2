@@ -221,7 +221,7 @@
          	XMLGroup="Extn" />
 	  
 	  		<Attribute ColumnName="EXTN_MARKETING_GROUP_ID" 
-          	DataType="Number"
+          	DataType="Text-100"
 	  		Description="Extn field with the Marketing Group ID (aka Publishing Unit Name)"  
           	Nullable="true" 
           	XMLName="ExtnMarketingGroupId"
