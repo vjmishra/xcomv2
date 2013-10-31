@@ -906,8 +906,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 						valueMap.put("/SearchCatalogIndex/Terms/Term["
 								+ termIndex + "]/@Value",
 								searchStringToken.trim());
-						valueMap.put("/SearchCatalogIndex/Terms/Term["
-								+ termIndex + "]/@Condition", "MUST");
+						if (searchStringTokenList.length == 1) {
+							valueMap.put("/SearchCatalogIndex/Terms/Term["
+									+ termIndex + "]/@Condition", "SHOULD");
+						} else {
+							valueMap.put("/SearchCatalogIndex/Terms/Term["
+									+ termIndex + "]/@Condition", "MUST");
+						}								
 						termIndex++;
 					}
 				}
