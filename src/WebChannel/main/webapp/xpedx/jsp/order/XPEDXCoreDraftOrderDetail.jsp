@@ -706,9 +706,7 @@
 											</s:if>		
 							</s:if>
 						
-						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
-			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This item will be replaced once inventory is depleted.</p></a>
-			    		</s:if>					    		
+											    		
 			    	</div>			    	
     
 			    	<div class="cust-defined-fields">
@@ -792,6 +790,11 @@
 					</div>				
 	
 					<div class="clearall">&nbsp; </div>
+					<div style="padding-left:25px;">
+						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
+			    			<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This item will be replaced once inventory is depleted.</p></a>
+			    		</s:if>
+			    	</div>	
 					<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 		    				<p style='MARGIN-LEFT: 25px;' class="line-spacing">Special Instructions:</p>
 				    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
