@@ -28,6 +28,7 @@
 				<Attribute ColumnName="ORGANIZATION_NAME"  	 	 	DataType="OrganizationName" 	DefaultValue=" " Description="" Nullable="true" XMLName="OrganizationName"/>
 				<Attribute ColumnName="TOTALITEMS"  	 	 		DataType="Integer" 	DefaultValue=" " Description="" Nullable="true" XMLName="TotalItems"/>
 				<Attribute ColumnName="MSAPNAME"  	 	 			DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="MsapName"/>
+				<Attribute ColumnName="MSAPCUSTOMERID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="MSAPCUSTOMERID"/>	
         </Attributes>
 		<PrimaryKey Name="XPEDX_MIL_LST_PK">
 			<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
