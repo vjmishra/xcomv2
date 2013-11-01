@@ -45,15 +45,20 @@ public class Main {
 		custOverrideProps.load(new FileReader(new File(sterlingFoundationDir, "properties/customer_overrides.properties")));
 
 		if ("database".equals(operation)) {
+			validateProperties(jdbcProps, "oraclePool.driver", "oraclePool.url", "oraclePool.user", "oraclePool.password");
+
 			Properties configSettings = new Properties();
-			configSettings.setProperty(CreateMarketingGroupIndex.JDBC_DRIVER, jdbcProps.getProperty("oraclePool.driver"));
-			configSettings.setProperty(CreateMarketingGroupIndex.JDBC_URL, jdbcProps.getProperty("oraclePool.url"));
-			configSettings.setProperty(CreateMarketingGroupIndex.JDBC_USER, jdbcProps.getProperty("oraclePool.user"));
-			configSettings.setProperty(CreateMarketingGroupIndex.JDBC_PASS, jdbcProps.getProperty("oraclePool.password"));
+			configSettings.setProperty(ProcessPunHierarchy.JDBC_DRIVER, jdbcProps.getProperty("oraclePool.driver"));
+			configSettings.setProperty(ProcessPunHierarchy.JDBC_URL, jdbcProps.getProperty("oraclePool.url"));
+			configSettings.setProperty(ProcessPunHierarchy.JDBC_USER, jdbcProps.getProperty("oraclePool.user"));
+			configSettings.setProperty(ProcessPunHierarchy.JDBC_PASS, jdbcProps.getProperty("oraclePool.password"));
 
 			ProcessPunHierarchy.doMain(configSettings);
 
 		} else if ("index".equals(operation)) {
+			validateProperties(jdbcProps, "oraclePool.driver", "oraclePool.url", "oraclePool.user", "oraclePool.password");
+			validateProperties(custOverrideProps, "yfs.marketingGroupIndex.rootDirectory");
+
 			Properties configSettings = new Properties();
 			configSettings.setProperty(CreateMarketingGroupIndex.JDBC_DRIVER, jdbcProps.getProperty("oraclePool.driver"));
 			configSettings.setProperty(CreateMarketingGroupIndex.JDBC_URL, jdbcProps.getProperty("oraclePool.url"));
@@ -64,6 +69,14 @@ public class Main {
 
 		} else {
 			throw new IllegalArgumentException("Unexpected operation");
+		}
+	}
+
+	private static void validateProperties(Properties props, String... keys) {
+		for (String key : keys) {
+			if (!props.containsKey(key)) {
+				throw new IllegalStateException("Missing required configuration: " + key);
+			}
 		}
 	}
 

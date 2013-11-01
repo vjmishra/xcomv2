@@ -72,6 +72,7 @@ public class CreateMarketingGroupIndex {
 			// rollback and re-throw exception
 			if (writer != null) {
 				try {
+					log.debug("Rolling back index transaction");
 					writer.rollback();
 				} catch (Exception ignore) {
 				}
@@ -201,30 +202,5 @@ public class CreateMarketingGroupIndex {
 
 		log.info(String.format("Indexed %s marketing groups. Total time (ms): %s", count, stop - start));
 	}
-
-	//	public static void main(String[] args) throws Exception {
-	//		if (args.length < 1) {
-	//			System.err.println("Usage: " + CreateMarketingGroupIndex.class.getSimpleName() + " <sterling foundation directory>");
-	//			System.exit(-1);
-	//			return;
-	//		}
-	//
-	//		File sterlingFoundationDir = new File(args[0]);
-	//
-	//		Properties jdbcProps = new Properties();
-	//		jdbcProps.load(new FileReader(new File(sterlingFoundationDir, "properties/jdbc.properties")));
-	//
-	//		Properties custOverrideProps = new Properties();
-	//		custOverrideProps.load(new FileReader(new File(sterlingFoundationDir, "properties/customer_overrides.properties")));
-	//
-	//		Properties configSettings = new Properties();
-	//		configSettings.setProperty(JDBC_DRIVER, jdbcProps.getProperty("oraclePool.driver"));
-	//		configSettings.setProperty(JDBC_URL, jdbcProps.getProperty("oraclePool.url"));
-	//		configSettings.setProperty(JDBC_USER, jdbcProps.getProperty("oraclePool.user"));
-	//		configSettings.setProperty(JDBC_PASS, jdbcProps.getProperty("oraclePool.password"));
-	//		configSettings.setProperty(LUCENE_INDEX_ROOT_DIR, custOverrideProps.getProperty("yfs.marketingGroupIndex.rootDirectory"));
-	//
-	//		doMain(configSettings);
-	//	}
 
 }

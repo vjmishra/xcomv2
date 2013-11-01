@@ -42,6 +42,7 @@ public class ProcessPunHierarchy {
 		} catch (Exception e) {
 			if (conn != null) {
 				try {
+					log.debug("Rolling back database transaction");
 					conn.rollback();
 				} catch (Exception ignore) {
 				}
