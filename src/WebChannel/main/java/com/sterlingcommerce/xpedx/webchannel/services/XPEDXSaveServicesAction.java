@@ -1110,7 +1110,8 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		 String primarySalesRepName = "";
 		 String salesRepemailId = "";
 		 HashMap<String,String> salesProfessionalplusEmailMap = new HashMap<String,String>();
-		 ArrayList<Element> salesRepInfo= SCXmlUtil.getElements(customerElement, "ParentCustomer/Extn/XPEDXSalesRepList");
+		 ArrayList<Element> salesRepInfo= SCXmlUtil.getElements(customerElement, "ParentCustomer/Extn/XPEDXSalesRepList/XPEDXSalesRep");		 
+		 
 		if(salesRepInfo != null){
 			//Start EB-3366
 			////If there is only one sales rep assigned to a customer
@@ -1125,7 +1126,7 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 				for(Element salesRepElement :salesRepInfo){
 					if(salesRepElement != null)
 					{
-						String isPrimarySalesRep = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/@PrimarySalesRepFlag");
+						String isPrimarySalesRep = SCXmlUtil.getAttribute(salesRepElement, "PrimarySalesRepFlag");
 						if(isPrimarySalesRep!=null && isPrimarySalesRep.equalsIgnoreCase("Y") && !primarySalesRepFound)
 						{   primarySalesRepFound = true;
 							salesProfessionalplusEmailMap = getSalesProMap(salesRepElement);						
@@ -1148,9 +1149,9 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		HashMap<String,String> salesProfessionalplusEmailMap = new HashMap<String,String>();
 		String primarySalesRepName = "";
 		String salesRepemailId = "";
-		String firstName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@FirstName");
-		String lastName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@LastName");
-		salesRepemailId = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@EMailID");
+		String firstName = SCXmlUtil.getXpathAttribute(salesRepElement, "YFSUser/ContactPersonInfo/@FirstName");
+		String lastName = SCXmlUtil.getXpathAttribute(salesRepElement, "YFSUser/ContactPersonInfo/@LastName");
+		salesRepemailId = SCXmlUtil.getXpathAttribute(salesRepElement, "YFSUser/ContactPersonInfo/@EMailID");
 			if(firstName !=null && firstName.trim().length() > 0 && lastName !=null && lastName.trim().length() > 0){
 				primarySalesRepName = firstName + " " + lastName ;
 			}else if(firstName !=null && firstName.trim().length() > 0){
