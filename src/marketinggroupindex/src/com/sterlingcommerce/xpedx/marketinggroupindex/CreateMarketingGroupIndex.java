@@ -2,7 +2,6 @@ package com.sterlingcommerce.xpedx.marketinggroupindex;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,18 +29,18 @@ public class CreateMarketingGroupIndex {
 	private static final String[] luceneEscapeWords = { "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on",
 		"or", "such", "that", "the", "their", "then", "there", "these", "they", "this", "to", "was", "will", "with" };
 
-	private static final String LUCENE_INDEX_ROOT_DIR = "lucene.indexRootDir";
-	private static final String JDBC_DRIVER = "jdbc.driver";
-	private static final String JDBC_URL = "jdbc.url";
-	private static final String JDBC_USER = "jdbc.user";
-	private static final String JDBC_PASS = "jdbc.pass";
+	public static final String JDBC_DRIVER = "jdbc.driver";
+	public static final String JDBC_URL = "jdbc.url";
+	public static final String JDBC_USER = "jdbc.user";
+	public static final String JDBC_PASS = "jdbc.pass";
+	public static final String LUCENE_INDEX_ROOT_DIR = "lucene.indexRootDir";
 
 	private static final Logger log = Logger.getLogger(CreateMarketingGroupIndex.class);
 
 	private static Properties config;
 
 	/**
-	 * Creates a Lucene index from the database from the pun_hierarchy table and updates the yfs_item.marketing_group_id values.
+	 * Creates a Lucene index from the database (marketing_group and marketing_group_item tables), and updates the yfs_item.marketing_group_id values.
 	 *
 	 * @return Returns the number of Lucene documents created.
 	 * @throws Exception
@@ -52,14 +51,7 @@ public class CreateMarketingGroupIndex {
 		IndexWriter writer = null;
 		try {
 			conn = createConnection();
-			conn.setAutoCommit(false);
-
-			// normalize pun_hierarchy into temp tables
-			insertMarketingGroupRecords(conn);
-			insertMarketingGroupItemRecords(conn);
-
-			// update yfs_item table from the temp tables
-			updateYfsItemRecords(conn);
+			conn.setAutoCommit(false); // we're not writing anything, but this is still good practice
 
 			// create index from the temp tables
 			File marketingGroupIndexRootDir = new File(config.getProperty(LUCENE_INDEX_ROOT_DIR));
@@ -71,9 +63,6 @@ public class CreateMarketingGroupIndex {
 
 			long numDocuments = writeIndex(writer, conn);
 
-			// failure point: it's important to commit database transaction before creating IndexWriter, which overwrites the existing Lucene index
-			conn.commit();
-
 			writer.commit();
 			writer.optimize();
 
@@ -81,12 +70,6 @@ public class CreateMarketingGroupIndex {
 
 		} catch (Exception e) {
 			// rollback and re-throw exception
-			if (conn != null) {
-				try {
-					conn.rollback();
-				} catch (Exception ignore) {
-				}
-			}
 			if (writer != null) {
 				try {
 					writer.rollback();
@@ -110,89 +93,6 @@ public class CreateMarketingGroupIndex {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Encapsulates the creation of the marketing_group records (temp table).
-	 * @param conn
-	 * @throws SQLException
-	 */
-	private static void insertMarketingGroupRecords(Connection conn) throws SQLException {
-		// note: marketing_group is a temp table
-		String sql = ""
-				+ " insert into marketing_group (marketing_group_name, cat1, cat2, cat3, cat4)"
-				+ " select distinct \"publishing_unit_name_automated\", \"category1\", \"category2\", \"category3\", \"category4\""
-				+ " from pun_hierarchy"
-				+ " where \"publishing_unit_name_automated\" is not null";
-
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Normalize pun hierarchy:\t%s", sql));
-		}
-
-		PreparedStatement stmt = conn.prepareStatement(sql);
-
-		int numAffected = stmt.executeUpdate();
-
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Inserted %s marketing_group records", numAffected));
-		}
-
-		stmt.close();
-	}
-
-	/**
-	 * Encapsulates the creation of the marketing_group_item records (temp table).
-	 * @param conn
-	 * @throws SQLException
-	 */
-	private static void insertMarketingGroupItemRecords(Connection conn) throws SQLException {
-		// note: marketing_group_item is a temp table
-		String sql = ""
-				+ " insert into marketing_group_item (marketing_group_id, item_id)"
-				+ " select mg.marketing_group_id, yi.item_id"
-				+ " from  pun_hierarchy ph"
-				+ "   join marketing_group mg on ph.\"category1\" = mg.cat1 and ph.\"category2\" = mg.cat2 and ph.\"category3\" = mg.cat3 and ph.\"category4\" = mg.cat4 and ph.\"publishing_unit_name_automated\" = mg.marketing_group_name"
-				+ "   join yfs_item yi on trim(ph.\"item_id\") = trim(yi.item_id)"
-				+ " where ph.\"publishing_unit_name_automated\" is not null";
-
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Normalize pun hierarchy:\t%s", sql));
-		}
-
-		PreparedStatement stmt = conn.prepareStatement(sql);
-
-		int numAffected = stmt.executeUpdate();
-
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Inserted %s marketing_group_item records", numAffected));
-		}
-
-		stmt.close();
-	}
-
-	/**
-	 * Encapsulates the updating of the yfs_item records (extn_marketing_group_id column).
-	 * @param conn
-	 * @throws SQLException
-	 */
-	private static void updateYfsItemRecords(Connection conn) throws SQLException {
-		String sql = ""
-				+ " update yfs_item yi set extn_marketing_group_id ="
-				+ " 	(select marketing_group_id from marketing_group_item mgi where yi.item_id = mgi.item_id)";
-
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Update items:\t%s", sql));
-		}
-
-		PreparedStatement stmt = conn.prepareStatement(sql);
-
-		int numAffected = stmt.executeUpdate();
-
-		if (log.isDebugEnabled()) {
-			log.debug(String.format("Updated %s yfs_item records", numAffected));
-		}
-
-		stmt.close();
 	}
 
 	/**
@@ -302,29 +202,29 @@ public class CreateMarketingGroupIndex {
 		log.info(String.format("Indexed %s marketing groups. Total time (ms): %s", count, stop - start));
 	}
 
-	public static void main(String[] args) throws Exception {
-		if (args.length < 1) {
-			System.err.println("Usage: " + CreateMarketingGroupIndex.class.getSimpleName() + " <sterling foundation directory>");
-			System.exit(-1);
-			return;
-		}
-
-		File sterlingFoundationDir = new File(args[0]);
-
-		Properties jdbcProps = new Properties();
-		jdbcProps.load(new FileReader(new File(sterlingFoundationDir, "properties/jdbc.properties")));
-
-		Properties custOverrideProps = new Properties();
-		custOverrideProps.load(new FileReader(new File(sterlingFoundationDir, "properties/customer_overrides.properties")));
-
-		Properties configSettings = new Properties();
-		configSettings.setProperty(JDBC_DRIVER, jdbcProps.getProperty("oraclePool.driver"));
-		configSettings.setProperty(JDBC_URL, jdbcProps.getProperty("oraclePool.url"));
-		configSettings.setProperty(JDBC_USER, jdbcProps.getProperty("oraclePool.user"));
-		configSettings.setProperty(JDBC_PASS, jdbcProps.getProperty("oraclePool.password"));
-		configSettings.setProperty(LUCENE_INDEX_ROOT_DIR, custOverrideProps.getProperty("yfs.marketingGroupIndex.rootDirectory"));
-
-		doMain(configSettings);
-	}
+	//	public static void main(String[] args) throws Exception {
+	//		if (args.length < 1) {
+	//			System.err.println("Usage: " + CreateMarketingGroupIndex.class.getSimpleName() + " <sterling foundation directory>");
+	//			System.exit(-1);
+	//			return;
+	//		}
+	//
+	//		File sterlingFoundationDir = new File(args[0]);
+	//
+	//		Properties jdbcProps = new Properties();
+	//		jdbcProps.load(new FileReader(new File(sterlingFoundationDir, "properties/jdbc.properties")));
+	//
+	//		Properties custOverrideProps = new Properties();
+	//		custOverrideProps.load(new FileReader(new File(sterlingFoundationDir, "properties/customer_overrides.properties")));
+	//
+	//		Properties configSettings = new Properties();
+	//		configSettings.setProperty(JDBC_DRIVER, jdbcProps.getProperty("oraclePool.driver"));
+	//		configSettings.setProperty(JDBC_URL, jdbcProps.getProperty("oraclePool.url"));
+	//		configSettings.setProperty(JDBC_USER, jdbcProps.getProperty("oraclePool.user"));
+	//		configSettings.setProperty(JDBC_PASS, jdbcProps.getProperty("oraclePool.password"));
+	//		configSettings.setProperty(LUCENE_INDEX_ROOT_DIR, custOverrideProps.getProperty("yfs.marketingGroupIndex.rootDirectory"));
+	//
+	//		doMain(configSettings);
+	//	}
 
 }
