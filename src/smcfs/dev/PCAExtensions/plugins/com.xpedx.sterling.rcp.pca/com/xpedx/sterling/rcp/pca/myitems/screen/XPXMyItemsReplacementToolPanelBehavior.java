@@ -349,7 +349,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 						Element eleMyItemsList =null;
 							if(generateReport!=null){
 								synchronized (getFormId()) {
-									sbCSV.append("MSAP ID,MSAP NAME");
+									sbCSV.append("MSAP ID,MSAP NAME , Contains MIL Item #");
 									sbCSV.append("\n");
 									for (int k = 0; k < XpedxMilBothLst.getLength(); k++) {
 										eleMyItemsList = (Element) XpedxMilBothLst
@@ -357,13 +357,16 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 									
 									
 										sbCSV.append("\"").append(eleMyItemsList.getAttribute("MSAPCUSTOMERID")).append("\"").append(",");	
-										sbCSV.append("\"").append(eleMyItemsList.getAttribute("MsapName")).append("\"").append(",");	
+										String msapname = eleMyItemsList.getAttribute("MsapName");										
+										sbCSV.append("\"").append(msapname.substring(0, msapname.indexOf('('))).append("\"").append(",");
+										sbCSV.append("\"").append(getFieldValue("txtLPC")).append("\"").append(",");	
+
 										sbCSV.append("\n");
 									
 								}
 							}
 								
-								String fileName = "Export_of_" + eleMyItemsList.getAttribute("Name").replace(" ", "_") + "_" + System.currentTimeMillis()+".csv";
+								String fileName = "Export_of_Cross_Div_Report" +  "_" + System.currentTimeMillis()+".csv";
 								org.eclipse.swt.widgets.FileDialog fileDialog = new FileDialog(YRCPlatformUI.getShell(), SWT.SAVE);
 								fileDialog.setFileName(fileName);
 								fileDialog.setText("Save");
@@ -751,12 +754,12 @@ public void getParentCustomers(String customerIdSelected, String customerValue, 
 			}
 		Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");
 		String strDivisionID = YRCXmlUtils.getAttributeValue(eleXPEDXMyItemsList, "XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/@DivisionID");
-		if(strDivisionID.length() < 1){
+		/*if(strDivisionID.length() < 1){
 			YRCPlatformUI.showError("Message", "Choose division(s) and try again.");
 			 //getControl("txtLPC").setFocus();
 				return;
 			
-			}
+			}*/
 		
 	}
 /*	if(BillToValue != null && BillToValue != "" ){
