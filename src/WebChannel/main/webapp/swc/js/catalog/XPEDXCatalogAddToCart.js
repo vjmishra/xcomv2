@@ -117,15 +117,19 @@ function addItemToCart(itemId) {
 								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your order. Please review the order to update the item with a valid quantity.";
 								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");	
 							}else{
-								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUom+" has been added to your cart. Please review the cart to update the item with a valid quantity.";
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUomText+" has been added to your cart. Please review the cart to update the item with a valid quantity.";
 								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 							}
 							document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
 					                document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");	
 					        	//Added for EB 41
 					        	document.getElementById('Qty_'+itemId).value = "";
-					        	if(defaultUom != null && defaultUom.value !='')
+					        	if(defaultUom != null && defaultUom.value !=''){
 					        		document.getElementById('itemUomList_'+itemId).value = defaultUom.value;
+					        	}
+					        	else{
+					        		document.getElementById('itemUomList_'+itemId).value = uomList.options[0].value;
+					        	}
 							//ENd of EB 41
 							Ext.Msg.hide();
 							myMask.hide();
@@ -155,7 +159,7 @@ function addItemToCart(itemId) {
 							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
 						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
 							else
-								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUom+" has been added to cart." ;
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUomText+" has been added to cart." ;
 						    /*End- Jira 3104 */
 						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
 					           	document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
@@ -163,9 +167,12 @@ function addItemToCart(itemId) {
 					           	document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
 					         	//Added for EB 41
 						        document.getElementById('Qty_'+itemId).value = "";
-						        if(defaultUom != null && defaultUom.value !='' )
+						        if(defaultUom != null && defaultUom.value !='' ){
 						        	document.getElementById('itemUomList_'+itemId).value = defaultUom.value;
-							//document.getElementById('Qty_'+itemId).value = "";
+						        }
+						        else {
+					        		document.getElementById('itemUomList_'+itemId).value = uomList.options[0].value;
+						        }
 							Ext.Msg.hide();
 							myMask.hide();
 							 //-- Web Trends tag start --
@@ -401,7 +408,6 @@ var myMask;
 			return false;
 		}
 		var uomList = document.getElementById('itemUomList_'+itemId);
-		var baseUOM = document.getElementById('baseUOMs_'+itemId).value;
 		var selectedUom = uomList.options[uomList.selectedIndex].value;
 		var qty = document.getElementById('Qty_'+itemId).value;
 		var selectedUomConv;

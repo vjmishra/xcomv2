@@ -903,8 +903,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
     if(document.getElementById("baseUnitOfMeasure")!=null
 			&&  document.getElementById("baseUnitOfMeasure")!=undefined){
     	baseUOM=document.getElementById("baseUnitOfMeasure").value; 
-	} 
-	
+	} 	
    	Ext.Ajax.request({
     	// for testing only
         url: url,
@@ -931,9 +930,18 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
 	         var draftErr = response.responseText;
 	         var myMessageDiv = document.getElementById("errorMsgForQty");
 	         var draftErrDiv = document.getElementById("errorMessageDiv");
-	         //Added for EB 40
-		 var enteredQty = document.getElementById("qtyBox").value;
-		 var selectedUom = document.getElementById("selectedUOM").value;
+	         
+	       //Added for EB 40
+	      	var enteredQty = document.getElementById("qtyBox").value;
+	      	//var selectedUom = document.getElementById("selectedUOM").value;
+	      	var uomList = document.getElementById('itemUOMsSelect');
+	      	var selectedUom = uomList.options[uomList.selectedIndex].value;
+	      	var selectedUomText = uomList.options[uomList.selectedIndex].text;
+	      	var index = selectedUomText.indexOf("(");
+	      	if(index > -1){
+	      		selectedUomText = selectedUomText.substring(0,index);
+	      	}
+	      	
 	         if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
              {
 	        	 refreshWithNextOrNewCartInContext();
@@ -961,17 +969,20 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
              }
 	         else if(draftErr.indexOf(productID) !== -1){
 	        	 refreshMiniCartLink();
-	        	 myMessageDiv.innerHTML = enteredQty+" "+selectedUom+" has been added to your cart. Please review the cart to update the item with a valid quantity.";//"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
+	        	 myMessageDiv.innerHTML = enteredQty+" "+selectedUomText+" has been added to your cart. Please review the cart to update the item with a valid quantity.";//"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
 	        	 myMessageDiv.setAttribute("class", "error");
 			 myMessageDiv.style.display = "inline-block"; 
 			 //Added for EB 40 - On successful addition to cart clear the Qty field & restore the default UOM 
 			 document.getElementById("qtyBox").value = "";
 	         	 var UOMelement =  document.getElementById("itemUOMsSelect");
-	         	 if(UOMelement != "" && UOMelement != null){
+	         	 if(UOMelement != "" && UOMelement != null && defaultUOM != ""){
 	         		 UOMelement.value = defaultUOM;
 	         	 }
+	         	 else{
+	         		UOMelement.value = uomList.options[0].value;
+	         	 }
 	         	 updateUOMFields();
-	         	//Added for EB 40 
+	         	//End for EB 40 
 			}
 	    	// document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 	    //	 setPandAData();
@@ -1020,23 +1031,23 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
            // DialogPanel.show('modalDialogPanel1');	            
            // svg_classhandlers_decoratePage();
            //Added for EB 40
-	   var enteredQty = document.getElementById("qtyBox").value;
-	   var selectedUom = document.getElementById("selectedUOM").value;
-            
              if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
             	 myMessageDiv.innerHTML = "Item has been added to order." ;
-	     else
-	         myMessageDiv.innerHTML = enteredQty+" "+selectedUom+" has been added to your cart." ;	 
+	     	else
+	         myMessageDiv.innerHTML = enteredQty+" "+selectedUomText+" has been added to your cart." ;	 
              
              myMessageDiv.style.display = "inline-block"; 
              myMessageDiv.setAttribute("class", "success");
              //On successful addition to cart clear the Qty field & restore the default UOM - EB 40
              document.getElementById("qtyBox").value="";
              var UOMelement =  document.getElementById("itemUOMsSelect");
-             if(UOMelement !="" && UOMelement != null){
+             if(UOMelement !="" && UOMelement != null && defaultUOM != ""){
                    UOMelement.value = defaultUOM;
              }
-	     updateUOMFields();
+             else{
+	           UOMelement.value = uomList.options[0].value;
+         	 }
+         	 updateUOMFields();
 	     //End for EB 40
 	     }
 	     Ext.Msg.hide();
