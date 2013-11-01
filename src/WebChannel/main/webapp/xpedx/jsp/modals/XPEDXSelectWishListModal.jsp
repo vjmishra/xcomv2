@@ -16,7 +16,8 @@
 					</div>
 				</s:form>
 			<ul id="tool-bar" class="line-spacing">
-			<s:if test='listSize != null && listSize !="0"'> 
+			<%--- EB-1158--%>
+			<s:if test="listSize > 0"> 
 				<li style="float: right;"><a class="green-ui-btn" href='javascript:addItemsToList();'><span>Apply</span></a></li>
 			</s:if>	
 				

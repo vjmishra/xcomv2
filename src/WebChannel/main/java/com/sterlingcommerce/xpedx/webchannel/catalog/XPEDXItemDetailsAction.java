@@ -65,7 +65,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
 			HttpSession localSession = httpRequest.getSession();
 		// End - Webtrends meta tag
-		
+			//  EB-1158--
+			try {
+                listSize = getAllItemList().size(); 
+			} catch (Exception ex) {
+                LOG.error("Exception while getting My Items List ", ex);
+			}
+
 		//Jira 2421
 		 if(request.getParameter("selectedView")!=null){
 	        	localSession.setAttribute("selView", request.getParameter("selectedView"));
@@ -636,23 +642,22 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		XPEDXWCUtils.setObectInCache("itemType",itemType);
 	}
 	
-	private void getAllItemList() throws Exception {
-		Document outputDoc = null;
-		itemListMap = new HashMap();
-		String customerId = wcContext.getCustomerId();
-		outputDoc = XPEDXWCUtils.getAllItemList(customerId);
-		Element outputEl = outputDoc.getDocumentElement();
+	
+	//EB-1158
+	private ArrayList<Element> getAllItemList() throws Exception {
+        Document outputDoc = null;
+        itemListMap = new HashMap();
+        String customerId = wcContext.getCustomerId();
+        outputDoc = XPEDXWCUtils.getAllItemList(customerId);
+        Element outputEl = outputDoc.getDocumentElement();
 
-		ArrayList<Element> listofWishLists = getXMLUtils().getElements(
-				outputEl, "XPEDXMyItemsList");
-		if (listofWishLists != null) {
-			for (Element list : listofWishLists) {
-				itemListMap.put(list.getAttribute("MyItemsListKey"), list
-						.getAttribute("Name"));
-			}
-		}
-		// itemListMap.put("key1", "First list");
-	}
+        ArrayList<Element> listofWishLists = getXMLUtils().getElements(
+                                        outputEl, "XPEDXMyItemsList");
+        return listofWishLists;
+}
+
+
+
 
 	public void getCustomerDetails() throws Exception {
 		Document outputDoc = null;
@@ -1474,7 +1479,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public String getItemCost() {
 		return itemCost;
 	}
+	// EB-1158
+    private int listSize = 0;
 
+    public void setListSize(int listSize) {
+		this.listSize = listSize;
+	}
+
+	public int getListSize() {
+                   return listSize;
+    }
+    
 
 	public void setItemCost(String itemCost) {
 		this.itemCost = itemCost;
