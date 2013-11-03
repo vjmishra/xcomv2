@@ -1628,7 +1628,13 @@ var currentAadd2ItemList = new Object();
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
 	  <%-- <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2> --%> <%-- key contains the original itemId --%>
 	  <h2><s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
+	         <s:if test="#altItemList.size() > 1">
 	         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;  border:1px solid #CCCCCC;">
+	         </s:if>
+	         <s:else>
+	   			<!-- Light Box --><div style=" height:202px; width:580px; overflow:hidden;border:1px solid #CCCCCC;">
+	  		 </s:else>
+	         
 		<!--Adding below if condn for Jira 1601 - Error Msg For Replacement Item  -->
 		<s:if test="#altItemList.size() == 0">
 				<div class="error" style="margin-top:90px; margin-left:80px;">The replacement item is not available, please contact customer service.</div>
