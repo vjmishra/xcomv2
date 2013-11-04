@@ -159,6 +159,13 @@ function showSharedListForm(){
 
 .xpedx-light-box p {
 }
+
+#errorMsgBottom {
+	margin: 20px 30px 20px 20px;
+}
+.error {
+	margin-top: 10px;
+}
 </style>
 <script type="text/javascript">
 	var availabilityURL = '<s:property value="#availabilityURL"/>';
@@ -447,16 +454,15 @@ function showSharedListForm(){
      }
 		
 		function displayImportErrorMessage(msgImportMyItemsError){
-			
-			
 			//Clears previous messages if any
 			clearPreviousDisplayMsg()
      		
-			document.getElementById("errorMsgTop").innerHTML = msgImportMyItemsError ;
-            document.getElementById("errorMsgTop").style.display = "inline"; 
+			$('#errorMsgTop,#errorMsgBottom').html(msgImportMyItemsError).show();
+			//document.getElementById("errorMsgTop").innerHTML = msgImportMyItemsError ;
+            //document.getElementById("errorMsgTop").style.display = "inline"; 
                         
-            document.getElementById("errorMsgBottom").innerHTML = msgImportMyItemsError ;
-            document.getElementById("errorMsgBottom").style.display = "inline"; 
+            //document.getElementById("errorMsgBottom").innerHTML = msgImportMyItemsError ;
+            //document.getElementById("errorMsgBottom").style.display = "inline"; 
 		}
 		
 		function deleteItems(){
@@ -3502,21 +3508,29 @@ function showSharedListForm(){
             </li>
 			</ul>
             <div class="clearall"></div>
-               
-            <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
-						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
-						<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
-						<%-- set rowNums for Jira 3197 - MIL Messaging, Added space in message--%>
-						<s:set name='rowNums' value='%{#rowNums.replace(",",", ")}' />
-						<br />
+            
+            <script type="text/javascript">
+            	var milFileImportMsg = [];
+            	
+	            <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
+					<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
+					<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
 					
-						<script type="text/javascript">
-						//Modified For Jira 3197 - milFileImportMsg
-						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import. The supplier part number(s) are not valid.";
-						//var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
-						displayImportErrorMessage(milFileImportMsg);
-						</script>
+					var msg = 'Row(s) <s:property value="#rowNums" /> failed to import. The supplier part number(s) are not valid.';
+					msg = msg.replace(/\-/g, ', ');
+					milFileImportMsg.push(msg);
 				</s:if>
+				<s:if test="%{#parameters.errorMsgRowsMissingItemId != null && #parameters.errorMsgRowsMissingItemId != ''}">
+					var msg = 'Row(s) <s:property value="%{#parameters.errorMsgRowsMissingItemId}" /> failed to import. The supplier part number(s) are missing.';
+					msg = msg.replace(/\-/g, ', ');
+					milFileImportMsg.push(msg);
+				</s:if>
+				
+				console.log('milFileImportMsg = ' , milFileImportMsg);
+            	if (milFileImportMsg.length > 0) {
+            		displayImportErrorMessage(milFileImportMsg.join('<br/><br/>'));
+            	}
+            </script>
 				
 				
 	<br/>

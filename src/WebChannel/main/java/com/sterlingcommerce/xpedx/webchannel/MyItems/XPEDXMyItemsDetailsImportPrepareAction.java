@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,6 +33,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 	private String listName		= ""; //For the listing page
 	private String listDesc		= "";
 	private String errorMsg		= "";
+	private String errorMsgRowsMissingItemId = "";
 	private File file;
     private String contentType;
     private String filename;
@@ -282,8 +285,8 @@ public String getSharePermissionLevel() {
 		int i = -1;
 
 		ArrayList<XPEDXCsvVO> tmp = new ArrayList<XPEDXCsvVO>();
-		int RegularFieldIndex = 0; // always equal to the last index that will be used
-		RegularFieldIndex = (getCustomerFieldsMap().size()) + 3;
+
+		List<String> errorRowsMissingItemId = new LinkedList<String>();
 
 		/* Let us call the getCompleteItemList in the import create action.
 		 * So that we can avoid extra calls
@@ -389,14 +392,21 @@ public String getSharePermissionLevel() {
 				//Add the item to the list
 				if (addVo){
 					tmp.add(vo);
+				} else {
+					errorRowsMissingItemId.add(String.valueOf(i));
 				}
 			}
 			LOG.debug("Record: " + nextLine);
-			}
+		}
 
 		itemCountInFile = tmp.size();
 
 		if((itemCountInFile+Integer.parseInt(itemCount))<=200){
+			if (errorRowsMissingItemId.size() > 0) {
+				// notify user of items not imported due to missing supplier/customer part number
+				setErrorMsgRowsMissingItemId(StringUtils.join(errorRowsMissingItemId.toArray(new String[0]), "-"));
+			}
+
 			//Add the items collected to the main object
 			dataList = tmp;
 
@@ -546,6 +556,14 @@ public String getSharePermissionLevel() {
 
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
+	}
+
+	public String getErrorMsgRowsMissingItemId() {
+		return errorMsgRowsMissingItemId;
+	}
+
+	public void setErrorMsgRowsMissingItemId(String errorMsgRowsMissingItemId) {
+		this.errorMsgRowsMissingItemId = errorMsgRowsMissingItemId;
 	}
 
 	public HashMap getCustomerFieldsMap() {
