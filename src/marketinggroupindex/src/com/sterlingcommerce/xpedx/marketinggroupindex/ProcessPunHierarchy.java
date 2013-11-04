@@ -73,7 +73,7 @@ public class ProcessPunHierarchy {
 		int numAffected = stmt.executeUpdate();
 
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("Inserted %s marketing_group records", numAffected));
+			log.debug(String.format("Deleted %s marketing_group records", numAffected));
 		}
 
 		stmt.close();
@@ -92,7 +92,7 @@ public class ProcessPunHierarchy {
 		int numAffected = stmt.executeUpdate();
 
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("Inserted %s marketing_group records", numAffected));
+			log.debug(String.format("Deleted %s marketing_group records", numAffected));
 		}
 
 		stmt.close();
