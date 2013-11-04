@@ -62,15 +62,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	public String execute() {
 		// Start - Webtrends meta tag
-			HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
-			HttpSession localSession = httpRequest.getSession();
+		HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
+		HttpSession localSession = httpRequest.getSession();
 		// End - Webtrends meta tag
-			//  EB-1158--
-			try {
-                listSize = getAllItemList().size(); 
-			} catch (Exception ex) {
-                LOG.error("Exception while getting My Items List ", ex);
-			}
+		//  EB-1158--
+		try {
+			myItemsListSize = getAllItemList().size(); 
+		} catch (Exception ex) {
+			LOG.error("Exception while getting My Items List ", ex);
+		}
 
 		//Jira 2421
 		 if(request.getParameter("selectedView")!=null){
@@ -94,11 +94,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				
 				getItemDetails();
 				getCustomerDetails(); // Template Trim Required
-//				getExtnItemDetails();//Extn Template should be trimmed
+				//getExtnItemDetails();//Extn Template should be trimmed
 				getCustomerPartNumber(); 
 				getCustomerLineDetails(); 
-
-//				getAllItemList(); // This is not being used at all in the item Details Page so removed it for performance
+				//getAllItemList(); // This is not being used at all in the item Details Page so removed it for performance
 				//call it after calling getCustomerDetails() as shipFromDivision
 				// would be available for logged in users.
 				try{
@@ -643,7 +642,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 	
 	
-	//EB-1158
+	//EB-1158   Using listofWishLists for checking the MIL lists.
 	private ArrayList<Element> getAllItemList() throws Exception {
         Document outputDoc = null;
         itemListMap = new HashMap();
@@ -1480,16 +1479,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		return itemCost;
 	}
 	// EB-1158
-    private int listSize = 0;
+    private int myItemsListSize = 0;
 
-    public void setListSize(int listSize) {
-		this.listSize = listSize;
+	public int getMyItemsListSize() {
+		return myItemsListSize;
 	}
 
-	public int getListSize() {
-                   return listSize;
-    }
-    
+	public void setMyItemsListSize(int myItemsListSize) {
+		this.myItemsListSize = myItemsListSize;
+	}
 
 	public void setItemCost(String itemCost) {
 		this.itemCost = itemCost;

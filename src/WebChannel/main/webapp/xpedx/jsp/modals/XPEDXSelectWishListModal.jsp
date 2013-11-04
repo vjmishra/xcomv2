@@ -16,8 +16,8 @@
 					</div>
 				</s:form>
 			<ul id="tool-bar" class="line-spacing">
-			<%--- EB-1158--%>
-			<s:if test="listSize > 0"> 
+			<%--- EB-1158  If no MIL lists, disable Apply button. --%>
+			<s:if test="myItemsListSize > 0"> 
 				<li style="float: right;"><a class="green-ui-btn" href='javascript:addItemsToList();'><span>Apply</span></a></li>
 			</s:if>	
 				
