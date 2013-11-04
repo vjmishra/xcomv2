@@ -3526,7 +3526,6 @@ function showSharedListForm(){
 					milFileImportMsg.push(msg);
 				</s:if>
 				
-				console.log('milFileImportMsg = ' , milFileImportMsg);
             	if (milFileImportMsg.length > 0) {
             		displayImportErrorMessage(milFileImportMsg.join('<br/><br/>'));
             	}
