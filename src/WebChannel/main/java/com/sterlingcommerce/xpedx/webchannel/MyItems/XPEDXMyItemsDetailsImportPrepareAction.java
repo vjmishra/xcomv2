@@ -24,9 +24,9 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 @SuppressWarnings("serial")
 public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
-	
+
 	private static final Logger LOG = Logger.getLogger(XPEDXMyItemsDetailsImportPrepareAction.class);
-	
+
 	private String listKey		= ""; //For the listing page
 	private String listName		= ""; //For the listing page
 	private String listDesc		= "";
@@ -34,7 +34,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 	private File file;
     private String contentType;
     private String filename;
-    
+
 	public String getFilename() {
 		return filename;
 	}
@@ -48,7 +48,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 	}
 
 	private List<XPEDXCsvVO> dataList;
-    
+
     private String[] itemsIds;
     private String[] itemsName;
 	private String[] itemsDesc;
@@ -60,12 +60,12 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
 	private String[] itemsJobId;
 	private String[] itemsOrder;
 	private HashMap<String, HashMap<String, String>> itemsCustomFields;
-	
+
 	private HashMap customerFieldsMap;
 	private HashMap customerFieldsDBMap;
-	
+
 	private String currentEnvCode = "";
-	
+
 	private String itemCount;
     private int itemCountInFile;
     private boolean editMode = false;
@@ -73,7 +73,7 @@ public class XPEDXMyItemsDetailsImportPrepareAction extends WCMashupAction {
     private String shareAdminOnly = "";
     private String listOwner = "";
     private String listCustomerId = "";
-	
+
 public String getSharePermissionLevel() {
 		return sharePermissionLevel;
 	}
@@ -107,7 +107,7 @@ public String getSharePermissionLevel() {
 	public void setListCustomerId(String listCustomerId) {
 		this.listCustomerId = listCustomerId;
 	}
-	
+
 	public String getItemCount() {
 		return itemCount;
 	}
@@ -117,7 +117,7 @@ public String getSharePermissionLevel() {
 	}
 
 
-		
+
 	public String getListDesc() {
 		return listDesc;
 	}
@@ -130,7 +130,7 @@ public String getSharePermissionLevel() {
 	public boolean isEditMode() {
 		return editMode;
 	}
-	
+
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
 	}
@@ -138,7 +138,7 @@ public String getSharePermissionLevel() {
     public String getUniqueId(){
     	return System.currentTimeMillis() + "";
     }
-    
+
     public void setUpload(File file) {
        this.file = file;
     }
@@ -170,7 +170,7 @@ public String getSharePermissionLevel() {
 	public void setListName(String listName) {
 		this.listName = listName;
 	}
-	
+
 	protected Document getsapCustExtnFieldsFromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
@@ -187,27 +187,27 @@ public String getSharePermissionLevel() {
 			//Element result = prepareAndInvokeMashup("draftOrderGetCustomerLineFields");
 			Element result = getsapCustExtnFieldsFromSession().getDocumentElement();//Getting from session attr Extn Attributes of sap customer
 			Element customerOrganizationExtnEle = XMLUtilities.getChildElementByName(result, "Extn");
-			
+
 			String custLineNoFlag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineAccNoFlag");
 			String custPONoFlag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLinePONoFlag");
 			String custSeqNoFlag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineSeqNoFlag");
 			String custField1Flag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField1Flag");
 			String custField2Flag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField2Flag");
 			String custField3Flag 	= getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField3Flag");
-			
-			
-			
+
+
+
 			XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-			
+
 			String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
-			
+
 			String envCode =  shipToCustomer.getExtnEnvironmentCode();
 			try {
 				setCurrentEnvCode(envCode);
 			} catch (Exception e) {
 				setCurrentEnvCode("");
 			}
-			
+
 			if ("Y".equals(custLineNoFlag)) {
 				String custLineNoLbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineAccLbl");
 				getCustomerFieldsDBMap().put("CustLineAccNo", "JobId");
@@ -218,7 +218,7 @@ public String getSharePermissionLevel() {
 					getCustomerFieldsMap().put("CustLineAccNo", "Line Account#");
 				}
 			}
-			
+
 			if ("Y".equals(custPONoFlag)) {
 				getCustomerFieldsMap().put("CustomerPONo", "Line PO #");
 				getCustomerFieldsDBMap().put("CustomerPONo", "ItemPoNumber");
@@ -228,7 +228,7 @@ public String getSharePermissionLevel() {
 				getCustomerFieldsMap().put("CustomerLinePONo", "Customer Seq No");
 				getCustomerFieldsDBMap().put("CustomerLinePONo", "ItemSeqNumber");
 			}*/
-			
+
 			if ("Y".equals(custField1Flag)) {
 				String custField1Lbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField1Label");
 				getCustomerFieldsDBMap().put("CustLineField1", "ItemCustomField1");
@@ -237,7 +237,7 @@ public String getSharePermissionLevel() {
 				else
 					getCustomerFieldsMap().put("CustLineField1", "Customer Field 1");
 			}
-			
+
 			if ("Y".equals(custField2Flag)) {
 				String custField2Lbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField2Label");
 				getCustomerFieldsDBMap().put("CustLineField2", "ItemCustomField2");
@@ -246,7 +246,7 @@ public String getSharePermissionLevel() {
 				else
 					getCustomerFieldsMap().put("CustLineField2", "Customer Field 2");
 			}
-			
+
 			if ("Y".equals(custField3Flag)) {
 				String custField3Lbl = getXMLUtils().getAttribute(customerOrganizationExtnEle, "ExtnCustLineField3Label");
 				getCustomerFieldsDBMap().put("CustLineField3", "ItemCustomField3");
@@ -255,14 +255,14 @@ public String getSharePermissionLevel() {
 				else
 					getCustomerFieldsMap().put("CustLineField3", "Customer Field 3");
 			}
-			
-			
-			
+
+
+
 		} catch (Exception e) {
 			LOG.error(e.toString());
 		}
 	}
-	
+
 	private ArrayList<String> getItemsFromFile()throws Exception{
 		ArrayList<String> itemStr=new ArrayList<String>();
 		CSVReader reader = new CSVReader(new FileReader(this.file));
@@ -280,14 +280,14 @@ public String getSharePermissionLevel() {
 		CSVReader reader = new CSVReader(new FileReader(this.file));
 		String [] nextLine;
 		int i = -1;
-		
+
 		ArrayList<XPEDXCsvVO> tmp = new ArrayList<XPEDXCsvVO>();
 		int RegularFieldIndex = 0; // always equal to the last index that will be used
 		RegularFieldIndex = (getCustomerFieldsMap().size()) + 3;
-		
-		/* Let us call the getCompleteItemList in the import create action. 
+
+		/* Let us call the getCompleteItemList in the import create action.
 		 * So that we can avoid extra calls
-		 * Document entitledItemsList=XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),getItemsFromFile()); 
+		 * Document entitledItemsList=XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),getItemsFromFile());
 		ArrayList<Element> itemList=com.sterlingcommerce.framework.utils.SCXmlUtils.getElements(entitledItemsList.getDocumentElement(), "/Item");
 		ArrayList<String> itemListEntitled = new ArrayList<String>();
 		for(Element elem : itemList){
@@ -303,13 +303,13 @@ public String getSharePermissionLevel() {
 				•	Supplier part # aka xpedx Part #
 				•	Quantity
 				•	Unit Of Measure
-				•	Customer defined fields [ 1 to 5] - They show up based on the customer profile selection. The labels for the fields are going to be shown. 
+				•	Customer defined fields [ 1 to 5] - They show up based on the customer profile selection. The labels for the fields are going to be shown.
 				•	Description – Product description, this will be used for special items or the items which we did not find in the catalog. For the ones we found in the catalog, the desc will be used from the catalog and will ignore this description.
 				 */
-				
+
 				vo.setCustomerPartNumber(nextLine[1]);
 				vo.setSupplierPartNumber(nextLine[0]);
-				// XB - 56 
+				// XB - 56
 				vo.setMfgItemNumber(nextLine[2]);
 				//XB - End
 				vo.setQty(nextLine[3]);
@@ -323,10 +323,10 @@ public String getSharePermissionLevel() {
 				}*/
 				vo.setUOM(nextLine[4]);
 				//vo.setLineLevelCode(nextLine[4]);
-				
+
 				int counter = 0;
 				vo.setDescription(nextLine[counter+4+1]);
-				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) { 
+				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) {
 						counter++;
 						String currentValue = "";
 						String currentField = "";
@@ -373,7 +373,7 @@ public String getSharePermissionLevel() {
 						}
 				}
 				//vo.setDescription(nextLine[counter+3+1]);
-				
+
 				//validate against the rules
 				boolean addVo = true;
 					//Discard if no customer part number
@@ -385,7 +385,7 @@ public String getSharePermissionLevel() {
 					if (addVo){
 						//vo.setDescription(vo.getDescription() + "\n\n" + vo.toString());
 					}
-				
+
 				//Add the item to the list
 				if (addVo){
 					tmp.add(vo);
@@ -393,13 +393,13 @@ public String getSharePermissionLevel() {
 			}
 			LOG.debug("Record: " + nextLine);
 			}
-		
+
 		itemCountInFile = tmp.size();
-		
+
 		if((itemCountInFile+Integer.parseInt(itemCount))<=200){
 			//Add the items collected to the main object
 			dataList = tmp;
-			
+
 			//Execute the import here
 			try {
 				//Prepare the data
@@ -414,7 +414,7 @@ public String getSharePermissionLevel() {
 				itemsJobId 	= new String[dataList.size()];
 				itemsOrder = new String[dataList.size()];
 				itemsCustomFields 	= new HashMap<String, HashMap<String,String>>();
-				
+
 				for (int j = 0; j < getDataList().size(); j++) {
 					XPEDXCsvVO vo 	= (XPEDXCsvVO)getDataList().get(j);
 					itemsIds[j] 	= vo.getSupplierPartNumber();
@@ -429,10 +429,10 @@ public String getSharePermissionLevel() {
 					itemsCustomFields.put(j+"", vo.getCustomFields());
 					itemsOrder[j] = Integer.parseInt(itemCount)+j+1+"";
 				}
-				
+
 			} catch (Exception e) {
 			}
-			
+
 			//Add the data to the request
 			request.getSession().setAttribute("itemsId", 	getItemsIds());
 			request.getSession().setAttribute("itemsName", 	getItemsName());
@@ -447,7 +447,7 @@ public String getSharePermissionLevel() {
 			request.getSession().setAttribute("itemsCustomFields", itemsCustomFields);
 		}
 	}
-		
+
 	@Override
 	@SuppressWarnings("unused")
 	public String execute() {
@@ -463,15 +463,15 @@ public String getSharePermissionLevel() {
 				return "failure";
 			}
 			getCustomerDisplayFields();
-			
+
 			//Read the file
 			parseFile();
-			
+
 		} catch (Exception e) {
 			LOG.error(e.toString());
-			setErrorMsg("Level 1: " + e.toString());
+			setErrorMsg("InvalidFormat");
 		}
-		
+
 		if((itemCountInFile+Integer.parseInt(itemCount))<=200){
 			BreadcrumbHelper.paramExclusionList.add("upload");
 			request.getSession().setAttribute("errorMsg", 	getErrorMsg());
@@ -597,8 +597,8 @@ public String getSharePermissionLevel() {
 		this.itemsOrder = itemsOrder;
 	}
 
-	
 
-	
-	
+
+
+
 }

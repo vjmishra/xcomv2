@@ -446,7 +446,7 @@ function showSharedListForm(){
      		}
      }
 		
-		function importItems(msgImportMyItemsError){
+		function displayImportErrorMessage(msgImportMyItemsError){
 			
 			
 			//Clears previous messages if any
@@ -2817,12 +2817,6 @@ function showSharedListForm(){
 
                     </div>
                     <div class="mil-edit-forms">
-<%-- 						<s:if test="%{errorMsg == 'ItemsOverLoad'}"> --%>
-<!-- 							<div style="color:red"><h3> -->
-<!-- 							Your list may contain a maximum of 200 items, Please delete some items and try again. -->
-<!-- 							</h3></div> -->
-<!-- 							<br /> -->
-<%-- 						</s:if> --%>
 
 						<s:set name='isPrivateList' value="%{#_action.isFilterByMyListChk()}"/>
 						<s:set name='isSelectedList' value="%{#_action.isFilterBySelectedListChk()}"/>
@@ -2920,23 +2914,6 @@ function showSharedListForm(){
 				<s:set name='itemDescMap' value="getItemDescMap()" />
 				<s:hidden name="xpedxTimer" id="xpedxTimer" value="0" />
 				
-				<!-- /*
-				<s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
-						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
-						<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
-						<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" ><h5 align="center"><b><font color="red">Row(s) <s:property value='#rowNums' /> failed to import.
-						</font></b></h5></div>
-						<br />
-					
-						<script type="text/javascript">
-							importItems( );
-						</script>
-				</s:if>
-				*/ -->
-				
-
-            
-         
                  
                <ul style="float:center;text-align: center; background-color:white !important;">
                  <li style="margin-bottom: 5px;">   
@@ -2955,11 +2932,17 @@ function showSharedListForm(){
 					</script>
 				</s:if>
 				<s:if test="%{errorMsg == 'ItemsOverLoad'}">
-							<div class="error">
-							      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
-							         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
-							</div>
-						</s:if>
+					<div class="error">
+					      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
+					         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
+					</div>
+				</s:if>
+				<s:if test="%{errorMsg == 'InvalidFormat'}">
+					<div class="error">
+					      <!--   An unexpected error occured (eg, a row had too few columns) -->
+					      The import file is not in the correct file layout. Download the sample file for an example of the correct layout and try again.
+					</div>
+				</s:if>
 					<br/>
                  </li> 
                </ul>
@@ -3531,7 +3514,7 @@ function showSharedListForm(){
 						//Modified For Jira 3197 - milFileImportMsg
 						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
 						//var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
-						importItems(milFileImportMsg);
+						displayImportErrorMessage(milFileImportMsg);
 						</script>
 				</s:if>
 				
