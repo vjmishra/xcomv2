@@ -3512,7 +3512,7 @@ function showSharedListForm(){
 					
 						<script type="text/javascript">
 						//Modified For Jira 3197 - milFileImportMsg
-						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
+						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import. The supplier part number(s) are not valid.";
 						//var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
 						displayImportErrorMessage(milFileImportMsg);
 						</script>
