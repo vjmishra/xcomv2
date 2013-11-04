@@ -19,13 +19,13 @@ function addItemToCart(itemId) {
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			document.getElementById('Qty_Check_Flag_'+itemId).value = true;
-			//document.getElementById('Qty_'+itemId).value = ""; commented for EB 41 - dont clear Qty on failure to add to cart
+			//document.getElementById('Qty_'+itemId).value = ""; commented for EB 41,42,43 - dont clear Qty on failure to add to cart
 			Ext.Msg.hide();
 			myMask.hide();
 			return false;
 		}
 		var uomList = document.getElementById('itemUomList_'+itemId);
-		var defaultUom = document.getElementById('defaultUOM_'+itemId);
+		var defaultUom = document.getElementById('defaultUOMCode_'+itemId);//Added for EB 41,42,43
 		var selectedUom = uomList.options[uomList.selectedIndex].value;
 		var selectedUomText = uomList.options[uomList.selectedIndex].text;
 		var index = selectedUomText.indexOf("(");
@@ -110,7 +110,7 @@ function addItemToCart(itemId) {
 				        	 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
 				        	 window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
 			             }
-						else if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
+						else if(responseText.indexOf("has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
 				        {
 							refreshMiniCartLink();
 							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!=''){
@@ -157,7 +157,7 @@ function addItemToCart(itemId) {
 							//Succesfully Added to Cart Info message
 							/*Start- Jira 3104 */
 							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
-						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
+						      		document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
 							else
 								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUomText+" has been added to cart." ;
 						    /*End- Jira 3104 */
@@ -266,7 +266,7 @@ var myMask;
 						}
 				else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
 						qty = 1;
-					}
+				    }
 				}
 				//End of EB 2034
 				/*commented for EB 2034

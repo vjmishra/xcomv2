@@ -55,6 +55,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		HashMap<String, String> itemUOMList = tag.getItemUomHashMap().get(itemID);
 		itemUOMList = itemUOMList == null ? new HashMap<String, String>() : itemUOMList;
 		String defaultUOM = validate(tag.getDefaultShowUOMMap().get(itemID));	
+		String defaultUomCode = ""; //Added for EB 41,42,43
 		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
 		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
 		
@@ -285,19 +286,21 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		for (Iterator<Map.Entry <String, String>> iterator = itemUOMList.entrySet().iterator(); iterator.hasNext();) {
 			Map.Entry  pair = (Map.Entry ) iterator.next();
 			sb.append("<option value='").append(pair.getKey()).append("'");
-			if(pair.getValue().toString().equals(defaultUOM))
+			if(pair.getValue().toString().equals(defaultUOM)){
 				sb.append(" selected='selected' ");
+				defaultUomCode = (String) pair.getKey();
+			}
 			sb.append(">").append(TextUtils.htmlEncode(pair.getValue().toString())).append("</option>");
 		}
 		sb.append("</select>");
 		sb.append("<input type='hidden' id='custUOM_");
 		sb.append(itemID).append("' value='");
 		sb.append(custUOM).append("'/>");
-		//Added for EB 41
-		sb.append("<input type='hidden' id='defaultUOM_");
+		//Added for EB 41,42,43
+		sb.append("<input type='hidden' id='defaultUOMCode_");
 		sb.append(itemID).append("' value='");
-		sb.append(defaultUOM).append("'/>");
-		//End of EB 41
+		sb.append(defaultUomCode).append("'/>");
+		//End of EB EB 41,42,43
 		sb.append("<input type='hidden' id='orderMultiple_");
 		sb.append(itemID).append("' value='");
 		sb.append(orderMultiple).append("'/></div>\",");
