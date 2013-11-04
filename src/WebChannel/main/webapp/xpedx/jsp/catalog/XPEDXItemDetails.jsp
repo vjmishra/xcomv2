@@ -1600,7 +1600,7 @@ function SubmitActionWithValidation()
 								<s:property
 									value='#xutil.getAttribute(#replacementItem,"UnitOfMeasure")' />
 							</s:param>
-					</s:url><s:if test='#count.index != 0'><font color="black">,&nbsp;</font></s:if><s:a href="%{detailURLFromPromoProd}" tabindex="%{#ipTabIndex}" ><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:a>
+					</s:url><s:if test='#count.index != 0'><font color="black">,</font></s:if><s:a href="%{detailURLFromPromoProd}" tabindex="%{#ipTabIndex}" ><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:a>
 						 
 	    	</s:iterator>
 		</s:if>
