@@ -2515,6 +2515,7 @@ function showSharedListForm(){
 			<h5 align="center"><b><font color="red"><s:property
 				value="ajaxLineStatusCodeMsg" /></font></b></h5>
 			</div>
+			<div id ="errorMessageDiv"> </div>
 			<br/>
 			<div id="infoMessage">
 				<s:if test=' "" != duplicateInfoMsg '>
