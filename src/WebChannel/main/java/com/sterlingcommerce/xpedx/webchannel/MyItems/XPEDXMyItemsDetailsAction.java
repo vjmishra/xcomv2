@@ -520,7 +520,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	private void exportList() {
 		try {
-
+			
 			// Get custom fields labels & data
 			// get the data in csv format
 			String exportData = "Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
@@ -1008,10 +1008,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			{
 				setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));
 			}
-			if (getCommand().equals(COMMAND_EXPORT_LIST)) {
-				exportList();
-				return "export";
-			}
+			
 
 			// Get the list of carts for this users
 			// Issue #1338 : To improve performance for a list of size 200
@@ -1137,8 +1134,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 			}*/
 			//itemIdsUOMsDescMap = itemIdsUOMsMap;
-			validateItemUOM();
-
+			validateItemUOM();			
+			
 			setLastModifiedListInfo();
 
 			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
@@ -1147,6 +1144,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			XPEDXWCUtils.setObectInCache("listOfItemsSize", getListOfItems().size());
 			//Added for JIRA 1402 End
 			XPEDXWCUtils.setObectInCache("itemConUOM", getItemIdConVUOMMap());
+			//EB-760 Moved the export functionality after calling the validate UOM
+			if (getCommand().equals(COMMAND_EXPORT_LIST)) {
+				exportList();
+				return "export";
+			}
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 			XPEDXWCUtils.logExceptionIntoCent(e);  //JIRA 4289
@@ -1260,7 +1262,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 
 	}
-
+	
 	public String pricecheck(){
 		try{
 			String invalidItems[]=null;
