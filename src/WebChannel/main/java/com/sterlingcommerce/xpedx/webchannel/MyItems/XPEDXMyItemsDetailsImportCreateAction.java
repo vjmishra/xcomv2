@@ -246,6 +246,7 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 			}
 			//Display the row number which was not imported
 			if(errorRowsInvalidItemId!=null && errorRowsInvalidItemId.size()>0){
+				errorRowsInvalidItemId = correctInvalidRows(errorMsgRowsMissingItemId, errorRowsInvalidItemId);
 				setErrorMsg("ROW_PROCESSING_ERROR@" + StringUtils.join(errorRowsInvalidItemId.toArray(new String[0]), "-"));
 				editMode = true;
 				return "failure";
@@ -256,6 +257,66 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 			setErrorMsg("Level 2: " + e.toString());
 		}
 		return res;
+	}
+
+	/**
+	 * The first action in this request cycle is MyItemsDetailsImportPrepare, which removes rows from the CSV that are missing an item id. This results in incorrect row numbers
+	 *
+	 * @param errorMsgRowsMissingItemId
+	 * @param errorRowsInvalidItemId
+	 * @return
+	 */
+	private static List<String> correctInvalidRows(String errorMsgRowsMissingItemId, List<String> errorRowsInvalidItemId) {
+		List<Integer> missingRows = convertToIntList(errorMsgRowsMissingItemId);
+
+		// convert errorRowsInvalidItemId into an ArrayList for better performance of index-based insertion
+		// initialize the capacity of this new list to support a union of the errorRowsInvalidItemId and missingRows lists
+		// the contents of this list are arbitrary: null indicates a missing-id row, non-null indicates an invalid-id row
+		List<Object> positionalList = new ArrayList<Object>(errorRowsInvalidItemId.size() + missingRows.size());
+		positionalList.addAll(errorRowsInvalidItemId);
+
+		for (Integer missingRow : missingRows) {
+			// add a null element to represent the placeholder for the missing-id row
+			positionalList.add(missingRow - 1, null);
+		}
+
+		List<String> correctedInvalidRows = new ArrayList<String>(errorRowsInvalidItemId.size());
+		int row = 1;
+		for (Object element : positionalList) {
+			if (element != null) {
+				// the original (wrong) row number is the element's value. the correct value is the element's position within the list.
+				correctedInvalidRows.add(String.valueOf(row));
+			}
+			row++;
+		}
+
+		return correctedInvalidRows;
+	}
+
+	/**
+	 * Parses the hyphen-delimited string into a list of integers. For example: "1-2-3" returns a List[1, 2, 3]
+	 *
+	 * @param hyphenated
+	 * @return
+	 */
+	private static List<Integer> convertToIntList(String hyphenated) {
+		if (hyphenated == null || hyphenated.indexOf("-") == -1) {
+			return new ArrayList<Integer>(0);
+		}
+
+		try {
+			String[] tokens = hyphenated.split("\\-");
+			List<Integer> list = new ArrayList<Integer>(tokens.length);
+			for (String token : tokens) {
+				list.add(Integer.valueOf(token));
+			}
+			return list;
+
+		} catch (NumberFormatException e) {
+			LOG.error("Expected numeric values in hyphenated list: " + e.getMessage());
+			LOG.debug("", e);
+			return new ArrayList<Integer>(0);
+		}
 	}
 
 	public String[] getItemsName() {
