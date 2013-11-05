@@ -172,6 +172,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	private String customerItemFlag;
     private String mfgItemFlag;
     private String qtyTextBox;
+    private String[] names;//EB-760 Moved the export functionality after calling the validate UOM
+
+	public String[] getNames() {
+		return names;
+	}
+
+	public void setNames(String[] names) {
+		this.names = names;
+	}
 
 	public String getQtyTextBox() {
 		return qtyTextBox;
@@ -520,7 +529,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 	private void exportList() {
 		try {
-			
+
 			// Get custom fields labels & data
 			// get the data in csv format
 			String exportData = "Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
@@ -548,6 +557,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			}*/
 			// END - Display the custom fields
 			sbCSV.append("\n");
+			int i = 0;
 			for (Element item : items) {
 				String id 		 = item.getAttribute("MyItemsKey");
 				String tmpItemId = item.getAttribute("ItemId");
@@ -627,7 +637,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 				else
 				{
-					String desc = item.getAttribute("Desc");
+					String desc;//EB-760 Moved the export functionality after calling the validate UOM
+					if(getNames()!=null &&  getNames().length>i){
+						desc = getNames()[i];
+					 }else{
+						 desc = item.getAttribute("Desc");
+					 }
 					desc = buildDescription(desc,item.getAttribute("ItemId"));
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(desc)).append("\"")
@@ -707,6 +722,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 				// END - Display the custom fields
 				sbCSV.append("\n");
+				i++;
 			}
 			exportData = sbCSV.toString();
 
@@ -1008,7 +1024,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			{
 				setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));
 			}
-			
+			/*if (getCommand().equals(COMMAND_EXPORT_LIST)) {
+				exportList();
+				return "export";
+			}*/
 
 			// Get the list of carts for this users
 			// Issue #1338 : To improve performance for a list of size 200
@@ -1134,8 +1153,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				}
 			}*/
 			//itemIdsUOMsDescMap = itemIdsUOMsMap;
-			validateItemUOM();			
-			
+			validateItemUOM();
+
 			setLastModifiedListInfo();
 
 			XPEDXWCUtils.setObectInCache("listOfItemsMap", getListOfItems());
@@ -1255,6 +1274,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						if(!isUOMAvaliable)
 						{
 							item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
+							
 						}
 					}
 				}
@@ -1262,7 +1282,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		}
 
 	}
-	
+
 	public String pricecheck(){
 		try{
 			String invalidItems[]=null;
