@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,9 +25,9 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 @SuppressWarnings("serial")
 public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCreateAction {
-	
+
 	private static final Logger LOG = Logger.getLogger(XPEDXMyItemsDetailsImportCreateAction.class);
-	
+
 	private String[] itemsIds;
 	private String[] itemsName;
 	private String[] itemsDesc;
@@ -33,17 +36,18 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 	private String[] itemsJobId;
 	private String[] itemsOrder;
 	private String errorMsg		= "";
-	private ArrayList<String> errorRows = new ArrayList<String>();
+	private String errorMsgRowsMissingItemId = ""; // passed in from MyItemsDetailsImportPrepare
+	private List<String> errorRowsInvalidItemId = new LinkedList<String>();
 	private boolean editMode = false;
 	private HashMap<String, HashMap<String, String>> itemsCustomFields;
 	private Document entitledItemsDoc;
-	
+
 	@Override
 	public String execute() {
 		String res = SUCCESS;
 		try {
 			//Get the data from the session
-			
+
 			setItemsIds((String[])request.getSession().getAttribute("itemsId"));
 			setItemsName((String[])request.getSession().getAttribute("itemsName"));
 			setItemsDesc((String[])request.getSession().getAttribute("itemsDesc"));
@@ -53,7 +57,7 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 			setItemsOrder((String[])request.getSession().getAttribute("itemsOrder"));
 			setErrorMsg((String)request.getSession().getAttribute("errorMsg"));
 			setItemsCustomFields( (HashMap<String, HashMap<String, String>>)request.getSession().getAttribute("itemsCustomFields") );
-			
+
 		} catch (Exception e) {
 		}
 		/*
@@ -88,33 +92,33 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 				entitledItemsDoc = XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),new ArrayList(itemIdset));
 			}
 		}
-		
-		
+
+
 		try {
 			/*
-			 * We will create all the elements at the same time. 
+			 * We will create all the elements at the same time.
 			 * This way we can reduce the iterated DB calls to create items in list
 			 */
 			Document myitemsList = SCXmlUtil.createDocument("XPEDXMyItemsList");
 			Element myItemsItemsList = myitemsList.createElement("XPEDXMyItemsItemsList");
 			myitemsList.getDocumentElement().appendChild(myItemsItemsList);
-			
+
 			XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			String envCode =  shipToCustomer.getExtnEnvironmentCode();
-			
+
 			if (itemsName != null && itemsName.length > 0 && getErrorMsg().trim().length() == 0){
 				for (int i = 0; i < itemsName.length; i++) {
 					//Populate the current data
 					setName(itemsName[i]);
 					setDesc(itemsDesc[i]);
 					setQty(itemsQty[i]);
-					setUomId(itemsUOM[i]); 
+					setUomId(itemsUOM[i]);
 					setJobId(itemsJobId[i]);
 					setItemType("99"); //Custom item
 					setItemId(itemsIds[i]);
 					setOrder(itemsOrder[i]);
-					
-					
+
+
 					//Load the item information from customer part number
 					try {
 						if (getItemId().equals("INVALID_ITEM") && getName().trim().length() > 0){
@@ -128,25 +132,25 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 					} catch (Exception e) {
 						LOG.error(e.toString());
 					}
-					
+
 					//Validate item
 					Element itemElement = SCXmlUtil.getElementByAttribute(entitledItemsDoc.getDocumentElement(), "Item", "ItemID", getItemId());
 					if (itemElement!=null){
 						setItemType("1");
-						
+
 						//Pulling the item information
 						try {
 							/* Item Element is already there above.
 							 * Element tmpRes = XPEDXMyItemsUtils.getItemDetails(
-								getItemId(), 
-								XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()), 
+								getItemId(),
+								XPEDXMyItemsUtils.getCurrentCustomerId(getWCContext()),
 								getWCContext().getStorefrontId(), getWCContext()
 							).getDocumentElement();*/
-							
+
 							if(itemElement!=null){
 								Element itemEle 		= getXMLUtils().getChildElement(itemElement, "Item");
 								Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-								
+
 								if (primaryInfoEle != null){
 									setName(primaryInfoEle.getAttribute("ShortDescription"));
 									setDesc(primaryInfoEle.getAttribute("Description"));
@@ -157,16 +161,16 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 						} catch (Exception e) {
 							LOG.error(e.toString());
 						}
-						
+
 					} else {
 						//It is an especial item
 						//Commenting the below code as non-catalog items cannot be added
 						//setName(getItemId());
 						//New code to skip adding the non-catalog items
-						errorRows.add(""+(i+1));
+						errorRowsInvalidItemId.add(""+(i+1));
 						continue;
 					}
-					
+
 					Element myItemItems = myitemsList.createElement("XPEDXMyItemsItems");
 					myItemItems.setAttribute("MyItemsListKey", getListKey());
 					myItemItems.setAttribute("Name", getName());
@@ -177,16 +181,16 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 					myItemItems.setAttribute("ItemType", getItemType());
 					myItemItems.setAttribute("UomId", getUomId());
 					myItemItems.setAttribute("ItemOrder", getOrder());
-					
+
 					HashMap<String, String> customFields = getItemsCustomFields().get(i+"");
 					for (Iterator iterator = customFields.keySet().iterator(); iterator.hasNext();) {
 						String key 		= (String) iterator.next();
 						String value	= (String) customFields.get(key);
 						myItemItems.setAttribute(key, value);
 					}
-					
+
 					myItemsItemsList.appendChild(myItemItems);
-										
+
 					/*
 					 * Creating all the items at the same time using change*My
 					 * Document outputDoc = null;
@@ -201,7 +205,7 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 					valueMap.put("/XPEDXMyItemsItems/@ItemType", 	getItemType());
 					valueMap.put("/XPEDXMyItemsItems/@UomId", 		getUomId());
 					valueMap.put("/XPEDXMyItemsItems/@ItemOrder", 	getOrder());
-					
+
 					HashMap<String, String> customFields = getItemsCustomFields().get(i+"");
 					for (Iterator iterator = customFields.keySet().iterator(); iterator.hasNext();) {
 						String key 		= (String) iterator.next();
@@ -214,19 +218,19 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 						input = WCMashupHelper.getMashupInput("XPEDXMyItemsDetailsCreate", valueMap, wcContext.getSCUIContext());
 						String inputXml = SCXmlUtil.getString(input);
 						Object obj = WCMashupHelper.invokeMashup("XPEDXMyItemsDetailsCreate", input, wcContext.getSCUIContext());
-						outputDoc = ((Element) obj).getOwnerDocument();						
+						outputDoc = ((Element) obj).getOwnerDocument();
 						if (null != outputDoc) {
-							res = SUCCESS; 
-							Web Trends tag start 
+							res = SUCCESS;
+							Web Trends tag start
 							request.getSession().setAttribute("metatagName","DCSext.w_x_importlist");
 							request.getSession().setAttribute("metatagValue","1");
-							Web Trends tag end 
+							Web Trends tag end
 						}
 					} catch (CannotBuildInputException e) {
 						LOG.error(e.toString());
 						setErrorMsg("Level 2.1: " + e.toString());
 					}*/
-					
+
 				}
 				myitemsList.getDocumentElement().setAttribute("MyItemsListKey",getListKey());
 				//added for jira 4134
@@ -235,29 +239,22 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 					String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
 					myitemsList.getDocumentElement().setAttribute("ModifyUserName",salesreploggedInUserName);
 				} else {
-					myitemsList.getDocumentElement().setAttribute("ModifyUserName",getWCContext().getLoggedInUserName());	
+					myitemsList.getDocumentElement().setAttribute("ModifyUserName",getWCContext().getLoggedInUserName());
 				}
 				//end of jira 4134
 				WCMashupHelper.invokeMashup("XPEDXMyItemsListChange", myitemsList.getDocumentElement(),getWCContext().getSCUIContext());
 			}
 			//Display the row number which was not imported
-			if(errorRows!=null && errorRows.size()>0){
-				StringBuffer sb =  new StringBuffer();
-				for(int k=0;k<errorRows.size();k++)
-				{
-					sb.append(errorRows.get(k));
-					if(k < (errorRows.size()-1))
-						sb.append(",");
-				}
-				setErrorMsg("ROW_PROCESSING_ERROR@"+sb.toString());
+			if(errorRowsInvalidItemId!=null && errorRowsInvalidItemId.size()>0){
+				setErrorMsg("ROW_PROCESSING_ERROR@" + StringUtils.join(errorRowsInvalidItemId.toArray(new String[0]), "-"));
 				editMode = true;
 				return "failure";
 			}
-			
+
 		} catch (Exception e) {
 			LOG.error(e.toString());
 			setErrorMsg("Level 2: " + e.toString());
-		}		
+		}
 		return res;
 	}
 
@@ -301,12 +298,22 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 		this.itemsJobId = itemsJobId;
 	}
 
+	@Override
 	public String getErrorMsg() {
 		return errorMsg;
 	}
 
+	@Override
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
+	}
+
+	public String getErrorMsgRowsMissingItemId() {
+		return errorMsgRowsMissingItemId;
+	}
+
+	public void setErrorMsgRowsMissingItemId(String errorMsgRowsMissingItemId) {
+		this.errorMsgRowsMissingItemId = errorMsgRowsMissingItemId;
 	}
 
 	public HashMap<String, HashMap<String, String>> getItemsCustomFields() {
@@ -334,12 +341,12 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 		this.itemsOrder = itemsOrder;
 	}
 
-	public ArrayList<String> getErrorRows() {
-		return errorRows;
+	public List<String> getErrorRowsInvalidItemId() {
+		return errorRowsInvalidItemId;
 	}
 
-	public void setErrorRows(ArrayList<String> errorRows) {
-		this.errorRows = errorRows;
+	public void setErrorRowsInvalidItemId(List<String> errorRows) {
+		this.errorRowsInvalidItemId = errorRows;
 	}
 
 	public boolean isEditMode() {
@@ -349,6 +356,6 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
 	}
-	
+
 
 }

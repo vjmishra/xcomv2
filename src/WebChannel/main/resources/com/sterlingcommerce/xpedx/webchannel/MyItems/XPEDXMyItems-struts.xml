@@ -153,7 +153,7 @@
 			<param name="listKey">${listKey}</param>
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
-			
+			<param name="errorMsgRowsMissingItemId">${errorMsgRowsMissingItemId}</param>
 		</result>
 		<result name="failure" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
@@ -183,6 +183,7 @@
 			<param name="listName">${listName}</param>
 			<param name="listDesc">${listDesc}</param>
 			<param name="errorMsg">${errorMsg}</param>
+			<param name="errorMsgRowsMissingItemId">${errorMsgRowsMissingItemId}</param>
 		</result>
 		<result name="failure" type="redirectAction">
 			<param name="actionName">MyItemsDetails</param>
@@ -192,6 +193,7 @@
 			<param name="listDesc">${listDesc}</param>
 			<param name="editMode">${editMode}</param>
 			<param name="errorMsg">${errorMsg}</param>
+			<param name="errorMsgRowsMissingItemId">${errorMsgRowsMissingItemId}</param>
 		</result>
 	</action>
 	
