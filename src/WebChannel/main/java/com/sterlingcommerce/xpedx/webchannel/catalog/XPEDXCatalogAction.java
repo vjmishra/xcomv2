@@ -68,7 +68,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 @SuppressWarnings("deprecation")
 public class XPEDXCatalogAction extends CatalogAction {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger
@@ -532,7 +532,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.sterlingcommerce.webchannel.catalog.CatalogAction#filter()
 	 */
 	@Override
@@ -544,7 +544,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 * String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
 		 * List<Breadcrumb> bclFilter =
 		 * BreadcrumbHelper.preprocessBreadcrumb(this .get_bcs_());
-		 * 
+		 *
 		 * for (int i = 0; i < bclFilter.size(); i++) { Breadcrumb bc =
 		 * bclFilter.get(i); Map<String, String> bcParams = bc.getParams();
 		 * String cnameValue = bcParams.get("cname"); if (cnameValue != null &&
@@ -706,7 +706,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/*
 	 * This method will do a API call getCategoryList based on given category ID
-	 * 
+	 *
 	 * @param categoryID return shortDescriotion
 	 */
 	private String getCategoryShortDescription(String categoryID) {
@@ -721,7 +721,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*
 		 * Input : <Category CategoryID="300131"
 		 * OrganizationCode="xpedx"></Category>
-		 * 
+		 *
 		 * Output : <CategoryList ><Category CategoryID="" CategoryKey=""
 		 * CategoryPath="" Description="" ShortDescription=""
 		 * ></Category></CategoryList>
@@ -845,6 +845,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 	}
 
+	@Override
 	protected void populateMashupInput(String mashupId,
 			Map<String, String> valueMap, Element mashupInput)
 			throws WCMashupHelper.CannotBuildInputException {
@@ -912,7 +913,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 						} else {
 							valueMap.put("/SearchCatalogIndex/Terms/Term["
 									+ termIndex + "]/@Condition", "MUST");
-						}								
+						}
 						termIndex++;
 					}
 				}
@@ -921,12 +922,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		if (marketingGroupId != null) {
-			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex
-					+ "]/@IndexFieldName", "punId");
-			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex
-					+ "]/@Value", marketingGroupId);
-			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex
-					+ "]/@Condition", "MUST");
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@IndexFieldName", "Item.ExtnMarketingGroupId");
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", marketingGroupId);
+			valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
 			termIndex++;
 		}
 
@@ -1604,6 +1602,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			List<Element> itemAttribute = SCXmlUtil.getElements(facetEle,
 					"AssignedValueList/AssignedValue");
 			Collections.sort(itemAttribute, new Comparator<Element>() {
+				@Override
 				public int compare(Element elem, Element elem1) {
 					String attrValue = elem.getAttribute("Value");
 					String attrValue1 = elem1.getAttribute("Value");
@@ -1639,6 +1638,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			List<Element> itemAttribute = SCXmlUtil.getElements(facetEle,
 					"AssignedValueList/AssignedValue");
 			Collections.sort(itemAttribute, new Comparator<Element>() {
+				@Override
 				public int compare(Element elem, Element elem1) {
 					String attrValue = elem.getAttribute("Value");
 					String attrValue1 = elem1.getAttribute("Value");
@@ -1661,7 +1661,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.sterlingcommerce.webchannel.catalog.CatalogAction#navigate()
 	 */
 	@SuppressWarnings("unchecked")
@@ -2545,7 +2545,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 * .get_bcs_()); Breadcrumb lastBc = bcl.get(bcl.size() - 1);
 		 * Map<String, String> params = lastBc.getParams(); String[] pathDepth =
 		 * StringUtils.split(path, "/"); path = params.get("path");
-		 * 
+		 *
 		 * if (bcl.size() > 1 || (!("true".equals(displayAllCategories)))) { if
 		 * (!YFCCommon.isVoid(pathDepth) && pathDepth.length == 2) { // for c1
 		 * categories-> show all the sub categories of C1 in the // landing page
@@ -2727,7 +2727,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 * bcParams = bc.getParams(); String cnameValue = bcParams.get("cname");
 		 * if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
 		 * orderByAttribute = "Item.ExtnBasis"; break; } }
-		 * 
+		 *
 		 * } else { Breadcrumb bc = bcl.get(bcl.size()-2); Map<String, String>
 		 * bcParams = bc.getParams(); String pathValue = bcParams.get("path");
 		 * String[] pathDepth = StringUtils.split(pathValue, "/"); if (pathDepth
@@ -2740,7 +2740,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 * cnameVal = bcParameter.get("cname"); if (cnameVal != null &&
 		 * cnameVal.equals("Paper") && i <=2) { orderByAttribute =
 		 * "Item.ExtnBasis"; break; } } } } }
-		 * 
+		 *
 		 * }
 		 */
 
@@ -2813,7 +2813,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		 * bcParams = bc.getParams(); String cnameValue = bcParams.get("cname");
 		 * if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
 		 * orderByAttribute = "Item.ExtnBasis"; break; } }
-		 * 
+		 *
 		 * } else { Breadcrumb bc = bcl.get(bcl.size()-2); Map<String, String>
 		 * bcParams = bc.getParams(); String pathValue = bcParams.get("path");
 		 * String[] pathDepth = StringUtils.split(pathValue, "/"); if (pathDepth
@@ -3517,7 +3517,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/**
 	 * Method to get the customer part number for an item
-	 * 
+	 *
 	 * @param itemID2
 	 * @param environmentID
 	 * @param customerShipFromBranch
@@ -3569,28 +3569,28 @@ public class XPEDXCatalogAction extends CatalogAction {
 		/*
 		 * String organizationCode = wcContext.getStorefrontId(); String
 		 * customerId = wcContext.getCustomerId();
-		 * 
+		 *
 		 * Map<String, String> valueMaps = new HashMap<String, String>();
 		 * valueMaps.put("/PricelistAssignment/@CustomerID", customerId);
-		 * 
+		 *
 		 * Element inputElement =
 		 * WCMashupHelper.getMashupInput("xpedxYpmPricelistAssignmentList",
 		 * valueMaps,getWCContext().getSCUIContext()); Element object =
 		 * (Element)
 		 * WCMashupHelper.invokeMashup("xpedxYpmPricelistAssignmentList",
 		 * inputElement,getWCContext().getSCUIContext());
-		 * 
+		 *
 		 * outputDocument = ((Element) object).getOwnerDocument(); Element objct
 		 * = getXMLUtils().getChildElement(object, "PricelistAssignment"); if
 		 * (objct!=null) { String priceListHeaderKey =
 		 * objct.getAttribute("PricelistHeaderKey");
-		 * 
+		 *
 		 * Map<String, String> valueMap = new HashMap<String, String>();
 		 * valueMap.put("/PricelistLine/Item/@OrganizationCode",
 		 * organizationCode);
 		 * valueMap.put("/PricelistLine/PricelistHeader/@PricelistHeaderKey",
 		 * priceListHeaderKey);
-		 * 
+		 *
 		 * Element input =
 		 * WCMashupHelper.getMashupInput("xpedxYpmPricelistLine",
 		 * valueMap,getWCContext().getSCUIContext()); Document inputDoc =
@@ -3777,7 +3777,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			 * BreadcrumbHelper.preprocessBreadcrumb(get_bcs_()); if((searchTerm
 			 * == null || searchTerm.trim().length() == 0) && bcl.size() > 0)
 			 * bcl.remove(bcl.size() - 1); }
-			 * 
+			 *
 			 * super.process(bcl); }
 			 */
 			setOutDoc(outputDoc);
@@ -3991,12 +3991,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/**** added for fix XNGTP-216 **** used to set the selected view **/
 
+	@Override
 	public void setSelectedView(String sSelectedView) {
 
 		this.selectedView = sSelectedView;
 	}
 
 	/**** added for fix XNGTP-216 **** used to get the selected view **/
+	@Override
 	public String getSelectedView() {
 
 		return selectedView;
@@ -4176,10 +4178,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.shipToCustomer = shipToCustomer;
 	}
 
+	@Override
 	public String getPath() {
 		return path;
 	}
 
+	@Override
 	public void setPath(String path) {
 		this.path = path;
 	}
@@ -4194,7 +4198,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/**
 	 * This operation will verfiy if Value is Integer isInteger
-	 * 
+	 *
 	 * @param i
 	 * @return
 	 */

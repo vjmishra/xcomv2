@@ -754,13 +754,12 @@ public void getParentCustomers(String customerIdSelected, String customerValue, 
 			}
 		Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");
 		String strDivisionID = YRCXmlUtils.getAttributeValue(eleXPEDXMyItemsList, "XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/@DivisionID");
-		/*if(strDivisionID.length() < 1){
+		if(strDivisionID.length() < 1){
 			YRCPlatformUI.showError("Message", "Choose division(s) and try again.");
 			 //getControl("txtLPC").setFocus();
 				return;
 			
-			}*/
-		
+			}	
 	}
 /*	if(BillToValue != null && BillToValue != "" ){
 		//Set Input XML for Final View
