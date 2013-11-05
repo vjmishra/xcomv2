@@ -279,6 +279,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	        	Set<String> mashupIdSet = new HashSet<String>();
     			mashupIdSet.add(mashUpId);
     			Map<String, Element> changeOrderInputObj=prepareMashupInputs(mashupIdSet);
+    			manipulateMashupInputs(changeOrderInputObj);//added for fetching the instructions element
 				Document changeOrderInputDoc = changeOrderInputObj.get(mashUpId).getOwnerDocument();
 				Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
 				changeOrderInputElem.setAttribute(XPXLiterals.CUSTOMER_CONTACT_ID, getCustomerContactId());

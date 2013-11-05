@@ -885,18 +885,30 @@ function showSharedListForm(){
     				for(var i = 0; i < addedItems.length; i++){
     					//alert("arrQty[i].value= "+ arrQty[i].value);
     					if(validAddtoCartItemsFlag[i]== true ){
-    					divId='errorDiv_'+ arrQty[i].id;
-    					var divVal=document.getElementById(divId);    					
+    					divId='errorDiv_'+ arrQty[i].id; 
+    					//EB-44
+    					 var uid = arrQty[i].id;
+    					uid = uid.substring(5);   
+    					var enteredQty = document.getElementById('QTY_'+uid).value;
+    					var selectedUomDesc = document.getElementById('UOM_desc_'+uid).value;
+    					document.getElementById('qtys_' + uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('QTY_'+uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('enteredQuantities_'+uid).value = document.getElementById('initialQTY_' + uid).value; 						    					
+ 						var divVal=document.getElementById(divId); 
+    					    					
     					if(response.responseText.indexOf(addedItems[i].value+"_"+arrQty[i].value+"_"+arrUOM[i].value) !== -1){
-    						divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
+    						divVal.innerHTML = enteredQty+" "+selectedUomDesc+" "+" has been added to your cart. Please review the cart to update the item with a valid quantity." ;
     						divVal.setAttribute("class", "error");
     					}
     					else{
-    						divVal.innerHTML = "Item has been added to cart." ;
+    						divVal.innerHTML =  enteredQty+" "+selectedUomDesc+" "+" has been added to cart." ;
+    						//divVal.innerHTML =  " It has been added to cart." ;
     						 divVal.setAttribute("class", "success");
     					}
 						  divVal.style.display = "inline-block"; 
 						  divVal.setAttribute("style", "margin-right:5px;float:right;");
+						  
+						  $('#uoms_'+ uid).val(document.getElementById('initialUOM_key_'+ uid).value).change();
 						 
     					
     				}
@@ -2503,6 +2515,7 @@ function showSharedListForm(){
 			<h5 align="center"><b><font color="red"><s:property
 				value="ajaxLineStatusCodeMsg" /></font></b></h5>
 			</div>
+			<div id ="errorMessageDiv"> </div>
 			<br/>
 			<div id="infoMessage">
 				<s:if test=' "" != duplicateInfoMsg '>
@@ -3199,6 +3212,7 @@ function showSharedListForm(){
 											name="itemQty" value="%{#qty}" /> <s:hidden
 											id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" /> 
 											<s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
+											<s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}'/>
 											<!-- UOM & Custom Fields -->
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
@@ -3208,11 +3222,14 @@ function showSharedListForm(){
 												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
 												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
 													<s:if test="#uomList!=null" >
-													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms" list="#uomList"
+													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms_%{#id}" id="uoms_%{#id}"  list="#uomList"
 													listKey="key"
 													listValue="value" 
 													value='itemUomId' onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');" theme="simple"/>
-													</s:if>
+													<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}'/>
+													<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
+													<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}' value="%{#itemUomIdDesc}"/>
+													</s:if>												
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}"/>
 											</s:if> <s:else>
 												<s:textfield
