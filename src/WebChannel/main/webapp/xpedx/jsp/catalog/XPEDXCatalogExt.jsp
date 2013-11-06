@@ -757,7 +757,7 @@ function getNormalView() {
 function getCondensedView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
- '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}"  class="itemdiv" style="height:auto;">',
+ '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}"  class="itemdiv" style="height:396px;">',
   '<div class="imgs">',
    '<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
