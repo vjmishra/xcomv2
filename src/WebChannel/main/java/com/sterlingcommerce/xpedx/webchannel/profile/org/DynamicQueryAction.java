@@ -285,7 +285,6 @@ public class DynamicQueryAction extends WCMashupAction {
 			}
 
 		}
-		System.out.println("CmbString "+CmbString);
 		return CmbString;
 
 	}
