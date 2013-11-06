@@ -1110,33 +1110,64 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 		 String primarySalesRepName = "";
 		 String salesRepemailId = "";
 		 HashMap<String,String> salesProfessionalplusEmailMap = new HashMap<String,String>();
-		 ArrayList<Element> salesRepInfo= SCXmlUtil.getElements(customerElement, "ParentCustomer/Extn/XPEDXSalesRepList");
-		if(salesRepInfo != null){	
-			if(salesRepInfo.size() > 0){
+		 ArrayList<Element> salesRepInfo= SCXmlUtil.getElements(customerElement, "ParentCustomer/Extn/XPEDXSalesRepList/XPEDXSalesRep");		 
+		 
+		if(salesRepInfo != null){
+			//Start EB-3366
+			////If there is only one sales rep assigned to a customer
+			if(salesRepInfo.size()==1){
 				Element salesRepElement=salesRepInfo.get(0);
-				String firstName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@FirstName");
-				String lastName = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@LastName");
-				salesRepemailId = SCXmlUtil.getXpathAttribute(salesRepElement, "XPEDXSalesRep/YFSUser/ContactPersonInfo/@EMailID");
-					if(firstName !=null && firstName.trim().length() > 0 && lastName !=null && lastName.trim().length() > 0){
-						primarySalesRepName = firstName + " " + lastName ;
-					}else if(firstName !=null && firstName.trim().length() > 0){
-						primarySalesRepName = firstName;
-					}else if(lastName !=null && lastName.trim().length() > 0){
-						primarySalesRepName = lastName ; 
-					}
-					if(salesRepemailId!=null && salesRepemailId.trim().length() > 0){
-						salesProfessionalplusEmailMap.put("salesRepemailId",salesRepemailId);
-					}
-					if(primarySalesRepName!=null && primarySalesRepName.trim().length() > 0){
-						salesProfessionalplusEmailMap.put("salesProfessional", primarySalesRepName);
-					}
+				salesProfessionalplusEmailMap = getSalesProMap(salesRepElement);
 					
 			}
-		}
-		 
-			
+			////If there is more than one sales rep assigned to a customer
+			else if(salesRepInfo.size() > 1){
+				boolean primarySalesRepFound = false;
+				for(Element salesRepElement :salesRepInfo){
+					if(salesRepElement != null)
+					{
+						String isPrimarySalesRep = SCXmlUtil.getAttribute(salesRepElement, "PrimarySalesRepFlag");
+						if(isPrimarySalesRep!=null && isPrimarySalesRep.equalsIgnoreCase("Y") && !primarySalesRepFound)
+						{   primarySalesRepFound = true;
+							salesProfessionalplusEmailMap = getSalesProMap(salesRepElement);						
+						}		
+					}			
+						
+				}
+				//If there is more than one sales rep assigned to a customer, and none of the sales rep is assigned as primary, then get the details of first sales rep(the existing coe)
+				if(!primarySalesRepFound){
+					Element salesRepElement=salesRepInfo.get(0);
+					salesProfessionalplusEmailMap = getSalesProMap(salesRepElement);
+				}
+
+			}
+		}		
 	 	return salesProfessionalplusEmailMap;
 	 	}
+	
+	private static HashMap<String, String>getSalesProMap(Element salesRepElement){
+		HashMap<String,String> salesProfessionalplusEmailMap = new HashMap<String,String>();
+		String primarySalesRepName = "";
+		String salesRepemailId = "";
+		String firstName = SCXmlUtil.getXpathAttribute(salesRepElement, "YFSUser/ContactPersonInfo/@FirstName");
+		String lastName = SCXmlUtil.getXpathAttribute(salesRepElement, "YFSUser/ContactPersonInfo/@LastName");
+		salesRepemailId = SCXmlUtil.getXpathAttribute(salesRepElement, "YFSUser/ContactPersonInfo/@EMailID");
+			if(firstName !=null && firstName.trim().length() > 0 && lastName !=null && lastName.trim().length() > 0){
+				primarySalesRepName = firstName + " " + lastName ;
+			}else if(firstName !=null && firstName.trim().length() > 0){
+				primarySalesRepName = firstName;
+			}else if(lastName !=null && lastName.trim().length() > 0){
+				primarySalesRepName = lastName ; 
+			}
+			if(salesRepemailId!=null && salesRepemailId.trim().length() > 0){
+				salesProfessionalplusEmailMap.put("salesRepemailId",salesRepemailId);
+			}
+			if(primarySalesRepName!=null && primarySalesRepName.trim().length() > 0){
+				salesProfessionalplusEmailMap.put("salesProfessional", primarySalesRepName);
+			}
+		return salesProfessionalplusEmailMap;
+	}
+////End EB-3366
 	private HashMap<String,String> getCSREmailID(Element customerElement) throws XPathExpressionException{
 		
 		Element csr1CustServEle = null;
