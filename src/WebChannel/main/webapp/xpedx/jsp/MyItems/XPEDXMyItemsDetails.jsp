@@ -3537,8 +3537,8 @@ function showSharedListForm(){
 					msg = msg.replace(/\-/g, ', ');
 					milFileImportMsg.push(msg);
 				</s:if>
-				<s:if test="%{#parameters.errorMsgRowsMissingItemId != null && #parameters.errorMsgRowsMissingItemId != ''}">
-					var msg = 'Row(s) <s:property value="%{#parameters.errorMsgRowsMissingItemId}" /> failed to import. The supplier part number(s) are missing.';
+				<s:if test='%{#parameters.errorMsgRowsMissingItemId != null && #parameters.errorMsgRowsMissingItemId.length == 1 && #parameters.errorMsgRowsMissingItemId[0] != ""}'>
+					var msg = 'Row(s) <s:property value="%{#parameters.errorMsgRowsMissingItemId[0]}" /> failed to import. The supplier part number(s) are missing.';
 					msg = msg.replace(/\-/g, ', ');
 					milFileImportMsg.push(msg);
 				</s:if>
