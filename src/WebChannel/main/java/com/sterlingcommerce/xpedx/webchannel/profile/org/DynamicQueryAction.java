@@ -269,7 +269,12 @@ public class DynamicQueryAction extends WCMashupAction {
 								outDoc.getDocumentElement(),
 								"//Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
 				
-				suspendedString = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status")=="30"?"(Suspended)":"";
+				//suspendedString = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status")=="30"?"(Suspended)":"";
+				String statusCode = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status");
+				if(statusCode!=null && statusCode.trim().length() > 0 && statusCode.trim().equals("30")){
+				suspendedString = "(Suspended)";
+				
+				}
 
 				OrgCode = XPEDXWCUtils.formatBillToShipToCustomer(OrgCode);
 
@@ -280,6 +285,7 @@ public class DynamicQueryAction extends WCMashupAction {
 			}
 
 		}
+		System.out.println("CmbString "+CmbString);
 		return CmbString;
 
 	}
