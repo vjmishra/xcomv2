@@ -3222,7 +3222,7 @@ function showSharedListForm(){
 												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
 												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
 													<s:if test="#uomList!=null" >
-													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms_%{#id}" id="uoms_%{#id}"  list="#uomList"
+													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"  list="#uomList"
 													listKey="key"
 													listValue="value" 
 													value='itemUomId' onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');" theme="simple"/>
