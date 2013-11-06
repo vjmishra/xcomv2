@@ -78,21 +78,22 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					<p class="login-lbl">Username</p>
 					<s:textfield id="DisplayUserID" name="DisplayUserID"
 						value="%{#wcCtx.getRememberedDisplayUserId()}" cssClass="x-input"
-						tabindex="1" onkeypress="javascript:loginSubmit(this,event)" />
+						tabindex="1" />
 				
 					<p class="login-lbl">Password</p>
 						<s:password id="Password" name="Password" cssClass="x-input"
-							tabindex="2" onkeypress="javascript:loginSubmit(this,event)" >
+							tabindex="2" >
 						</s:password>
 					
 					<p><a class="underlink" href="<s:url action="forgotPwd" namespace="/home" />"><s:text name="login.forgotPwd"/></a></p>
 					
 					<div class="button-row">
-					<!-- added for JIRA 3936 -->
-						<a href="javascript:signIn()" 
-							class="orange-ui-btn"><span>Sign In</span></a> 
-							<a href="javascript:(function(){document.homePageNewUserRegistration.submit();})();" class="underlink">Register</a>
+						<a href="#" id="loginFormSignInLink" class="orange-ui-btn"><span>Sign In</span></a> 
+						<a href="#" class="underlink">Register</a>
 					</div>
+					
+					<%-- eb-2749: in order for IE to remember the password, we must submit the form using a real button --%>
+					<input type="submit" id="loginFormSubmitButton" name="submitForm" value="Submit" style="position:absolute;left:-9999px" />
 
 					<s:if test='%{#RememberMeRule=="Y"}'>
 						<p> <input type="checkbox" id="remember.me" name="RememberMe"
@@ -168,18 +169,24 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 <s:form name='homePageNewUserRegistration' namespace='/profile/user' action='MyRegisterUser'>
 </s:form>
-<script>
-$(document).ready(function() {
 
-	
-var RememberMeUser="<s:property value='#wcCtx.getRememberedUserId()'/>";
-if(RememberMeUser==null || RememberMeUser=="")
-	{
-	$('[name="RememberMe"]').attr('checked', false);
-	}
-else
-	{
-	$('[name="RememberMe"]').attr('checked', true);
-	}
+<script>
+// sign in link submits the form. note that it's important to click the real submit button (hidden) rather than $(form).submit() - see eb-2749 for details
+$('#loginFormSignInLink').click(function(event) {
+	$('#loginFormSubmitButton').click();
+	event.stopPropagation();
+	return false;
 });
+
+$(document).ready(function() {
+	var RememberMeUser="<s:property value='#wcCtx.getRememberedUserId()'/>";
+	if(RememberMeUser==null || RememberMeUser=="")
+	{
+		$('[name="RememberMe"]').attr('checked', false);
+	}
+	else
+	{
+		$('[name="RememberMe"]').attr('checked', true);
+	}
+	});
 </script>

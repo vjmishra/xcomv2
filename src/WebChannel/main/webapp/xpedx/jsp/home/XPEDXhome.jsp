@@ -409,31 +409,6 @@ Ext.onReady(function(){
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
-<script type="text/javascript">
-
-	function loginSubmit(myfield,e)
-	{
-		var keycode;
-		if (window.event) keycode = window.event.keyCode;
-		else if (e) keycode = e.which;
-		else return true;
-
-		if (keycode == 13)
-	   	{
-			signIn();	//added for JIRA 3936
-	   	}
-		else{
-	   		return true;
-		}
-	}
-	function signIn()//added for JIRA 3936
-	{
-		document.singForm.DisplayUserID.value=document.singForm.DisplayUserID.value.toLowerCase();
-		document.singForm.submit();
-   		return false;
-	}
-    </script>
-
 </body>
 <!-- RUgrani END: Logged in User Home page -->
 <script>
