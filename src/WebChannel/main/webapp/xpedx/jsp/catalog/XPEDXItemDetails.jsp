@@ -1588,9 +1588,7 @@ function SubmitActionWithValidation()
 						<s:if test='%{#imageURL=="/"}'>
 							<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 						</s:if>
-						<!-- <img src="<s:url value='%{#imageURL}' includeParams='none' />"
-										alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" /> -->
-		        	</s:if>
+					</s:if>
 					<s:url id='detailURLFromPromoProd' namespace='/catalog'
 							action='itemDetails.action'>
 							<s:param name='itemID'>
