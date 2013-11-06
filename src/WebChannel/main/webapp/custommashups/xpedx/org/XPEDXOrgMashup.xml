@@ -973,7 +973,7 @@
 				<ParentCustomer CustomerID="" OrganizationCode="">
 					<Extn>
 						<XPEDXSalesRepList>
-							<XPEDXSalesRep PrimarySalesRepFlag="">
+							<XPEDXSalesRep>
 								<YFSUser Username="">
 									<ContactPersonInfo />
 								</YFSUser>
