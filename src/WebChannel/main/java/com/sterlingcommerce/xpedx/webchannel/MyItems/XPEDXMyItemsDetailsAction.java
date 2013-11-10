@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.Map.Entry;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -519,6 +517,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 		return res;
 	}
 
+	@Override
 	public void setServletResponse(HttpServletResponse response) {
 		this.response = response;
 	}
@@ -1186,16 +1185,18 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// Group all items with their correspond sequence number(s)
 			// - need this so can display seq #s for dups on Edit MIL page
 			Map<String, ArrayList<String>> indexes = buildMapItemWithSeqs();
+			String itemsString = "";
+			String wordForItem = "items";
+			String wordForHas  = "have";
 
 			if(dupMILItemIds.size() == 1) {
 				// If only one item, wording is different
 				String itemId = dupMILItemIds.get(0);
-				String itemString = itemId + listDupSeqNums(itemId, indexes);
-				duplicateInfoMsg = "Please note that item " + itemString +" has been added to your cart more than once.";
+				itemsString = itemId + listDupSeqNums(itemId, indexes);
+				wordForItem = "item";
+				wordForHas = "has";
 			}
 			else{
-				String itemsString = "";
-
 				// For each dup item, display where it appears in list (seq#)
 				for(int i =0; i<dupMILItemIds.size(); i++){
 					String itemId = dupMILItemIds.get(i);
@@ -1206,8 +1207,10 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						itemsString += ", ";
 					}
 				}
-				duplicateInfoMsg = "Please note that items " + itemsString +" have been added to this My Items List more than once.";
 			}
+
+			duplicateInfoMsg = "Please note that " +wordForItem+ " " +itemsString+ " " +wordForHas+
+					" been added to this My Items List more than once.";
 		}
 	}
 
@@ -1274,7 +1277,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						if(!isUOMAvaliable)
 						{
 							item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
-							
+
 						}
 					}
 				}

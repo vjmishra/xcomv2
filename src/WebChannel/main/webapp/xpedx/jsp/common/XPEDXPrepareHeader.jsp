@@ -117,7 +117,7 @@
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
 				// autocomplete console.log('posting to url = ' , url);
-				post_to_url(url, {path: '/'}, 'post');
+				post_to_url(url, {path: '/', searchTerm: ''}, 'post');
 			};
 			
 			var acOptions = {
