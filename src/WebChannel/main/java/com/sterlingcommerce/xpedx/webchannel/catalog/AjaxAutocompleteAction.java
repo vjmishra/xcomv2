@@ -1,5 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +31,7 @@ import com.yantra.yfs.core.YFSSystem;
 
 /**
  * This action produces a JSON result for the autocomplete ajax call.
- * 
+ *
  * @author Trey Howard
  */
 public class AjaxAutocompleteAction extends WCAction {
@@ -45,33 +46,49 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	private String searchTerm;
 
-	private List<AutocompleteMarketingGroup> autocompleteMarketingGroups;
+	private List<AutocompleteMarketingGroup> autocompleteMarketingGroups = new ArrayList<AutocompleteMarketingGroup>(0);
 	private ResultStatus resultStatus = ResultStatus.OK;
 
 	/**
 	 * This AJAX call is used as part of the jquery autocomplete plugin.
-	 * 
+	 *
 	 * @return
 	 * @throws IOException
 	 * @throws CorruptIndexException
 	 * @see http://api.jqueryui.com/1.8/autocomplete/#option-source
 	 */
+	@Override
 	public String execute() throws CorruptIndexException, IOException {
 		String searchIndexRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
+		if (searchIndexRoot == null) {
+			log.error("Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
+			return ERROR;
+		}
 
-		searchIndex(searchIndexRoot);
+		if (!new File(searchIndexRoot).canRead()) {
+			log.error("Missing Lucene index: " + searchIndexRoot);
+			return ERROR;
+		}
 
-		return SUCCESS;
+		try {
+			autocompleteMarketingGroups = searchIndex(searchIndexRoot);
+			return SUCCESS;
+
+		} catch (Exception e) {
+			log.error("Failed to query Marketing Group Index: " + e.getMessage());
+			log.debug("", e);
+			return ERROR;
+		}
 	}
 
 	/**
 	 * Perform a lucene search against the Marketing Group index. Populates the <code>autocompleteMarketingGroups</code> field which is seralized as a JSON response.
-	 * 
+	 *
 	 * @param searchIndexRoot
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	private void searchIndex(String searchIndexRoot) throws CorruptIndexException, IOException {
+	private List<AutocompleteMarketingGroup> searchIndex(String searchIndexRoot) throws CorruptIndexException, IOException {
 		if (searchTerm == null) {
 			throw new IllegalArgumentException("searchTerm must not be null");
 		}
@@ -85,12 +102,13 @@ public class AjaxAutocompleteAction extends WCAction {
 			start = System.currentTimeMillis();
 		}
 
+		List<AutocompleteMarketingGroup> marketingGroups = new ArrayList<AutocompleteMarketingGroup>(0);
 		try {
 			Query query = createQuery();
 
 			TopDocs topDocs = indexSearcher.search(query, 20);
 
-			autocompleteMarketingGroups = new ArrayList<AutocompleteMarketingGroup>(topDocs.scoreDocs.length);
+			marketingGroups = new ArrayList<AutocompleteMarketingGroup>(topDocs.scoreDocs.length);
 
 			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
 				Document doc = indexSearcher.doc(scoreDoc.doc);
@@ -104,11 +122,11 @@ public class AjaxAutocompleteAction extends WCAction {
 				item.setCat1(cat1);
 				item.setName(name);
 				item.setPath(path);
-				autocompleteMarketingGroups.add(item);
+				marketingGroups.add(item);
 			}
 
 			// do NOT use lucene sorting: we want top hits independent of group. we only want to resort for the presentation layer (UI looks funky if they're not grouped together)
-			Collections.sort(autocompleteMarketingGroups);
+			Collections.sort(marketingGroups);
 
 		} catch (TooManyClauses e) {
 			// this happens if we have too many results
@@ -118,11 +136,13 @@ public class AjaxAutocompleteAction extends WCAction {
 
 		if (log.isDebugEnabled()) {
 			stop = System.currentTimeMillis();
-			log.debug(String.format("Autocomplete search for '%s' completed in %s milliseconds", searchTerm, stop - start));
+			log.debug(String.format("Autocomplete search for '%s' returned %s results in %s milliseconds", searchTerm, marketingGroups.size(), stop - start));
 			if (ResultStatus.OK != resultStatus) {
 				log.debug("Autocomplete failed: resultStatus = " + resultStatus);
 			}
 		}
+
+		return marketingGroups;
 	}
 
 	/**
@@ -151,24 +171,6 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	public List<AutocompleteMarketingGroup> getAutocompleteMarketingGroups() {
 		return autocompleteMarketingGroups;
-	}
-
-	public static void main(String[] args) throws CorruptIndexException, IOException {
-		long start = System.currentTimeMillis();
-		AjaxAutocompleteAction action = new AjaxAutocompleteAction();
-		action.setSearchTerm("strathmore square");
-		action.execute();
-		long stop = System.currentTimeMillis();
-
-		System.out.println(String.format("Search completed in %s milliseconds: ", stop - start));
-
-		System.out.println("resultStatus = " + action.getResultStatus());
-		if (action.getAutocompleteMarketingGroups() != null) {
-			System.out.println("action.getAutocompleteItems().size = " + action.getAutocompleteMarketingGroups().size());
-			for (AutocompleteMarketingGroup item : action.getAutocompleteMarketingGroups()) {
-				System.out.println(item);
-			}
-		}
 	}
 
 }

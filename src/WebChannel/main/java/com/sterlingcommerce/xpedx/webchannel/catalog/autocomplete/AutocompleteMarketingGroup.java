@@ -7,8 +7,8 @@ import java.text.Collator;
  */
 
 /**
- * This reprents a PUN (Publishing Unit Name) in the autocomplete drop down.
- * 
+ * This reprents a Marketing Group in the autocomplete drop down. A Marketing Group is also known as a PUN (Publishing Unit Name).
+ *
  * @author Trey Howard
  */
 public class AutocompleteMarketingGroup implements Comparable<AutocompleteMarketingGroup> {
@@ -57,7 +57,7 @@ public class AutocompleteMarketingGroup implements Comparable<AutocompleteMarket
 
 	/*
 	 * Sorts by cat1, then by name.
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
