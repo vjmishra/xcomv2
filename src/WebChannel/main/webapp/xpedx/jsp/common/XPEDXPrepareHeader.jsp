@@ -83,7 +83,7 @@
 					type: 'POST'
 					,url: '<s:property value="#autocompleteURL" escape="false" />'
 					,dataType: 'json'
-					,data: { searchTerm: request.term }
+					,data: { searchTerm: request.term.trim() }
 					,success: function(data) {
 						// autocomplete console.log('BEGIN success');
 						// autocomplete console.log('data = ' , data);
@@ -91,7 +91,7 @@
 							response(data.autocompleteMarketingGroups);
 						} else {
 							// eg, TOO_MANY_RESULTS
-							response();
+							response({});
 						}
 					}
 					,error: function(resp, textStatus, xhr) {
@@ -132,9 +132,9 @@
 			
 			$('#newSearch_searchTerm').catcomplete(acOptions)
 			.data('catcomplete')._renderItem = function(ul, item) {
-				// console.log('----------');
-				var searchTerm = $('#newSearch_searchTerm').val();
-				// console.log('searchTerm = ' , searchTerm);
+				// autocomplete console.log('----------');
+				var searchTerm = $('#newSearch_searchTerm').val().trim();
+				// autocomplete console.log('searchTerm = ' , searchTerm);
 				
 				var tokens = searchTerm.split(/\s+/);
 				
@@ -143,7 +143,7 @@
 					var regexMatchHighlight = new RegExp(tokens[i], 'ig');
 					text = text.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
 				}
-				// console.log('text = ' , text);
+				// autocomplete console.log('text = ' , text);
 				
 				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
 				.data('item.autocomplete', item)
