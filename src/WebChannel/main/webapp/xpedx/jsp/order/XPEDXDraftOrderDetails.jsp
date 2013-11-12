@@ -868,7 +868,7 @@ $(document).ready(function(){
 			<!-- Added for EB-1714 Display a Saalfeld advertisement image on Cart Starts -->
 				<s:set name='storefrontId' value="wCContext.storefrontId" />
 				 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-				 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+				 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
 				<img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>

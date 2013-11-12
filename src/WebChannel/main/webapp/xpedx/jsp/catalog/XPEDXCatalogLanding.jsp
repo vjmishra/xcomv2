@@ -305,7 +305,7 @@
 						<s:set name='storefrontId' value="wCContext.storefrontId" />
 						 <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
 						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-						 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+						 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
 						 </s:if>
 						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 						<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
