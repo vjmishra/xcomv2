@@ -29,7 +29,9 @@
 		  <span id="errorMsgForRequiredField" style="display:none;"></span> 
 		  <%--  Don't delete this 'errorMsgForRequiredField' tag it needed while close button js --%>
 		<div>
-            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. A sample file is provided. Delete the item contents and enter your own data. </p>
+            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. </p>
+             <p>A sample file is provided. Delete the item contents and enter your own data.</p>
+            
             <%-- <p>Use the sample below as a template. Delete the contents and enter your own data.</p> --%>
             
             <ul id="tool-bar" class="tool-bar-bottom">
