@@ -53,6 +53,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	public static final String referenceType = "Extended Field";
 	private boolean isCustomerActive = false;
 	private ArrayList<String> arrChildCustomerIds = null;
+	//Added for EB-2821 - to reduce one call to getCustomerKey
+	private HashMap cutomerIdKeyMap = null;
 
 	/**** Start of  Modified Code for Jira 4132*****/
 
@@ -151,7 +153,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 			if(customerList.getLength()>0)
 			{
-
+			//EB-2821 - Initialize the map for getCustomerkey
+				cutomerIdKeyMap = new HashMap();
 				int customerListLength = customerList.getLength();
 				//for each customer
 				for(int customerNo = 0;customerNo<customerListLength;customerNo++)
@@ -387,7 +390,10 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
                                             boolean sapOrgNameUpdate = updateCustomerWithSAPAccountNumber(env,organizationCode,customerID,sapCustomerId,sapAccountNumber,strSAPName,"B", custElement);
                                             if(sapOrgNameUpdate){
                                             //Update My Item List for Bill-To if exist -- xpedx_my_items_list_share
-                                            updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);
+                                            updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);  
+                                            
+                                          //EB-2821 - When Sap or Msap changed, make Extn_default_ship_To as blank                                            
+                                            updateAlldefaultShipToWithBlank(env,organizationCode,customerID,custElement,masterSapCustomerId);
                                             //Update all Ship-to Records
                                             updateAllShipToWithSAPAccountNumber(env,organizationCode,customerID, sapAccountNumber,strSAPName,custElement,sapCustomerId,inXML);
                                             }
@@ -400,6 +406,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
                                                   if(sapOrgNameUpdate){
                                                   //Update My Item List for Bill-To if exist -- xpedx_my_items_list_share
                                                   updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);
+                                                //EB-2821 - When Sap or Msap changed, make Extn_default_ship_To as blank
+                                                  updateAlldefaultShipToWithBlank(env,organizationCode,customerID,custElement,masterSapCustomerId);
                                                   //Update all Ship-to Records
                                                   updateAllShipToWithSAPAccountNumber(env,organizationCode,customerID, sapAccountNumber,strSAPName,custElement,sapCustomerId,inXML);
                                                   }
@@ -446,6 +454,9 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 										if(isBuyerOrganization){
 										//Update My Item List for Bill-To if exist -- xpedx_my_items_list_share
 										updateXpedxMyItemList(null,customerID,sapCustomerId,masterSapCustomerId,env,inXML);
+										//EB-2821 - When Sap or Msap changed, make Extn_default_ship_To as blank
+                                        updateAlldefaultShipToWithBlank(env,organizationCode,customerID,custElement,masterSapCustomerId);
+										
 										}
 										//XBT -124 End - Modified Operation Call
 									} else {
@@ -454,6 +465,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 										if(isBuyerOrganization){
 											//Update My Item List for Bill-To if exist -- xpedx_my_items_list_share [Added as part of XBT -124
 											updateXpedxMyItemList(null,null,sapCustomerId,masterSapCustomerId,env,inXML);
+											//EB-2821 - When Sap or Msap changed, make Extn_default_ship_To as blank
+                                            updateAlldefaultShipToWithBlank(env,organizationCode,customerID,custElement,masterSapCustomerId);
 											}
 									}
 									
@@ -4174,7 +4187,8 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	//XBT -124 - Start
 	private void getShipToListSAPUpdate(YFSEnvironment env, String customerKey ,String organizationCode, String newSAPAccountNumber, String newSAPName,Element custElement, String customerID, String sapCustomerId, Document inXML) throws RemoteException 
 	{
-			
+		if(arrChildCustomerIds==null || arrChildCustomerIds.size()==0)
+		{
 			//get the shipto list
 			Document inputShipToDoc = YFCDocument.createDocument("Customer").getDocument();
 			Element inputShipToElement = inputShipToDoc.getDocumentElement();
@@ -4202,6 +4216,18 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 					
 				}				
 			}
+		}
+		else{
+			for(int sCounter = 0;sCounter<arrChildCustomerIds.size();sCounter++)
+			{
+				boolean shipToSAPupdate = updateCustomerWithSAPAccountNumber(env, organizationCode, arrChildCustomerIds.get(sCounter),"", newSAPAccountNumber, newSAPName, "S",custElement);
+				if(shipToSAPupdate){
+					updateXpedxMyItemList(arrChildCustomerIds.get(sCounter),customerID,sapCustomerId,masterSapCustomerId,env,inXML);
+				}
+			}
+			
+		}	
+			
 			
 	}
 	//XBT -124 - End
@@ -4211,11 +4237,147 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	private void updateAllShipToWithSAPAccountNumber(YFSEnvironment env, String organizationCode, String customerID, String newSAPAccountNumber, String newSAPName,Element custElement, String sapCustomerId, Document inXML) throws RemoteException
 	{
 		long updateBillShipsStartTime=System.currentTimeMillis();
-		String customerKey= getCustomerKey(env, customerID,false);
+		String customerKey;
+		if(cutomerIdKeyMap != null && cutomerIdKeyMap.size()==0){
+			 customerKey= getCustomerKey(env, customerID,false);
+			cutomerIdKeyMap.put(customerID, customerKey);
+		}
+		else if(cutomerIdKeyMap != null && cutomerIdKeyMap.get(customerID)!=null){
+			 customerKey = (String)cutomerIdKeyMap.get(customerID);
+		}
+		else{
+			 customerKey= getCustomerKey(env, customerID,false);
+			 cutomerIdKeyMap = new HashMap();
+			 cutomerIdKeyMap.put(customerID, customerKey);
+		}
 		getShipToListSAPUpdate(env, customerKey, organizationCode, newSAPAccountNumber, newSAPName,custElement,customerID,sapCustomerId,inXML);
 		long updateBillShipsEndTime=System.currentTimeMillis();
 		log.info("Extra Time taken to update ALL billTos and shipTos : ["+(updateBillShipsEndTime-updateBillShipsStartTime)+"]");
 	}
 	//XBT -124 - End
+	
+	//EB-2821  -Start
+	private void updateAlldefaultShipToWithBlank(YFSEnvironment env, String organizationCode, String customerID, Element custElement,  String masterSapCustomerId) throws RemoteException
+	{
+		long updateBillShipsStartTime=System.currentTimeMillis();
+		String customerKey;
+		if(cutomerIdKeyMap != null && cutomerIdKeyMap.size()==0){
+			 customerKey= getCustomerKey(env, customerID,false);
+			cutomerIdKeyMap.put(customerID, customerKey);
+		}
+		else if(cutomerIdKeyMap != null && cutomerIdKeyMap.get(customerID)!=null){
+			 customerKey = (String)cutomerIdKeyMap.get(customerID);
+		}
+		else{
+			 customerKey= getCustomerKey(env, customerID,false);
+			 cutomerIdKeyMap = new HashMap();
+			 cutomerIdKeyMap.put(customerID, customerKey);
+		}
+		getShipToListExtnDefaultShipToUpdate(env, customerKey, organizationCode, custElement,customerID, masterSapCustomerId);
+		long updateBillShipsEndTime=System.currentTimeMillis();
+		log.info("Extra Time taken to blank out extnDefaultSHiptos with ALL billTos and shipTos : ["+(updateBillShipsEndTime-updateBillShipsStartTime)+"]");
+	}
+	//EB-2821  -Start - Get the list of ship-tos for those, we need to blank out the extn_default_ship_to
+	private void getShipToListExtnDefaultShipToUpdate(YFSEnvironment env, String customerKey ,String organizationCode, Element custElement, String customerID,  String masterSapCustomerId) throws RemoteException 
+	{
+			
+			//get the shipto list
+			Document inputShipToDoc = YFCDocument.createDocument("Customer").getDocument();
+			Element inputShipToElement = inputShipToDoc.getDocumentElement();
+			inputShipToElement.setAttribute("ParentCustomerKey", customerKey);
+			Element extnShipElement = inputShipToDoc.createElement("Extn");
+			extnShipElement.setAttribute("ExtnSuffixTypeQryType", "LIKE");
+			extnShipElement.setAttribute("ExtnSuffixType", "S");
+			inputShipToElement.appendChild(extnShipElement);
+			Document shiptoListDoc = api.invoke(env, "getCustomerList", inputShipToDoc);
+			NodeList stNodeList = shiptoListDoc.getElementsByTagName("Customer");
+			int stLength = stNodeList.getLength();
+			if(stLength != 0)
+			{
+				for(int sCounter = 0;sCounter<stLength;sCounter++)
+				{
+					Element stElement = (Element)stNodeList.item(sCounter);
+					String shipToCustomerID =  stElement.getAttribute("CustomerID");
+					if(!arrChildCustomerIds.contains(shipToCustomerID)){
+						arrChildCustomerIds.add(shipToCustomerID);
+					}
+				}
+					ArrayList<String> arrCustomerContactIds = null;
+					arrCustomerContactIds = getCustomerContactIdsforDefaultShipTo(env, organizationCode, arrChildCustomerIds,custElement);
+					if(arrCustomerContactIds!=null){
+						boolean updateCustCont = updateCustomerContactDefaultShipToWithBlank(arrCustomerContactIds,organizationCode, masterSapCustomerId,env);
+					}
+					
+								
+			}
+			
+	}
+	private ArrayList<String> getCustomerContactIdsforDefaultShipTo(YFSEnvironment env, String organizationCode, ArrayList<String> customerIds, Element custElement) throws RemoteException
+	{
+		ArrayList<String> arrCustomerContactIdsWithDefaultShipTo = null;
+		YFCDocument inputCustomerContactDoc = YFCDocument.createDocument("CustomerContact");
+		YFCElement inputCustomerContactElement = inputCustomerContactDoc.getDocumentElement();
+		
+		
+		//Creating complex query for setting extn-default-shiptos in input
+		YFCElement eleComplexQuery = inputCustomerContactElement.createChild(XPXLiterals.E_COMPLEX_QUERY);
+		YFCElement eleOr = eleComplexQuery.createChild(XPXLiterals.E_Or);
+		
+		for (String qryCustomerId : customerIds) {
+			YFCElement eleExp = eleOr.createChild(XPXLiterals.E_EXP);			
+			eleExp.setAttribute(XPXLiterals.A_NAME, "Extn_ExtnDefaultShipTo");
+			eleExp.setAttribute(XPXLiterals.A_VALUE, qryCustomerId);			
+		}		
+		
+		Document customerContactListDoc = api.invoke(env, "getCustomerContactList", inputCustomerContactDoc.getDocument());
+		
+		NodeList stNodeList = customerContactListDoc.getElementsByTagName("CustomerContact");
+		int stLength = stNodeList.getLength();
+		if(stLength != 0)
+		{
+			arrCustomerContactIdsWithDefaultShipTo=new ArrayList<String>();
+			for(int sCounter = 0;sCounter<stLength;sCounter++)
+			{
+				Element stElement = (Element)stNodeList.item(sCounter);
+				String customerContactID =  stElement.getAttribute("CustomerContactID");				
+				arrCustomerContactIdsWithDefaultShipTo.add(customerContactID);				
+			}
+		}
+		return arrCustomerContactIdsWithDefaultShipTo;
+		
+	}
+	private boolean updateCustomerContactDefaultShipToWithBlank(ArrayList<String> arrCustomerContactIds, String organizationCode,String masterSapCustomerId, YFSEnvironment env)
+	{
+		boolean result = true;
+		YFCDocument updateCustomerContactInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER);		
+		updateCustomerContactInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_OPERATION,"Modify");
+		updateCustomerContactInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
+		updateCustomerContactInputDoc.getDocumentElement().setAttribute("CustomerID",masterSapCustomerId);
+		YFCElement custContactListElement = updateCustomerContactInputDoc.createElement("CustomerContactList");
+			
+			for (String qryCustomerContactId : arrCustomerContactIds) {
+				YFCElement custContactElement = custContactListElement.createChild("CustomerContact");				
+				custContactElement.setAttribute("CustomerContactID",qryCustomerContactId);				
+				YFCElement extnElement = custContactElement.createChild(XPXLiterals.E_EXTN);
+				extnElement.setAttribute("ExtnDefaultShipTo", "");
+			}			
+			
+			updateCustomerContactInputDoc.getDocumentElement().appendChild(custContactListElement);
+		
+		try {
+			api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_API,  updateCustomerContactInputDoc.getDocument());
 
+		} catch (YFSException e) {
+			System.out.println("Exception in Block ------------------------------------");
+			result = false;
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			System.out.println("Exception in Block 2 ------------------------------------");
+			// TODO Auto-generated catch block
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
+	}
+//EB-2821  -End
 }	

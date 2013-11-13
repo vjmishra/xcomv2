@@ -929,13 +929,24 @@ from session . We have customer Contact Object in session .
 			<div class="clearall">&nbsp;</div>
 
 			<s:if test="!#_action.isDraftOrder()">
-				<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#orderDetails.getAttribute("OrderDate"),wCContext)}'/>
+		<%-- 	EB-3311	<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#orderDetails.getAttribute("OrderDate"),wCContext)}'/>--%>
 				<s:set name="sourceType" value='%{#extnElem.getAttribute("ExtnSourceType")}'/>
 				<s:set name="sourceValue" value="%{'COM'}" />
 				<s:if test="#sourceType = 1">
 					<s:set name="sourceValue" value="%{'Web'}" />
 				</s:if>
-			 		<div class="order-placed-by full-width">Order placed by <s:property value='%{#extnElem.getAttribute("ExtnOrderedByName")}' /> on date <s:property value="orderDate" /> via <s:property value='#sourceValue'/>.</div>
+			
+				<%--EB-3311 Original order placement date & time are not displayed on the Edit Order Checkout page--%>
+				<s:set name="orderDate" value='%{#orderDetails.getAttribute("OrderDate")}'/>
+
+				<s:if test='%{#sourceValue == "Web"}'>
+					<s:set name='orderDate' value="#xpedxutil.formatDate(#orderDate, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'yyyy-MM-dd HH:mm:ss')" />
+				</s:if>
+				<s:else>
+					<s:set name='orderDate' value="#util.formatDate(#orderDate, #wcContext, null,'MM/dd/yyyy')" />
+				</s:else>
+				<%--EB-3311 --%>
+			 		<div class="order-placed-by full-width">Order placed by <s:property value='%{#extnElem.getAttribute("ExtnOrderedByName")}' /> on date <s:property value="orderDate" />  <s:if test='#sourceValue=="Web"'>CT </s:if> via <s:property value='#sourceValue'/>.</div>
 <%-- 			 		Order placed by <s:property value='#orderDetails.getAttribute("Modifyuserid")'/> on <s:property value='#orderDetails.getAttribute("Modifyts")'/> via <s:property value='#orderDetails.getAttribute("EntryType")'/> --%>
 			</s:if>
 			
