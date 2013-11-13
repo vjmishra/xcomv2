@@ -1148,6 +1148,9 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         x.innerHTML = "Loading data... please wait!";
     	Ext.Ajax.request({
             url :url,
+            params: {
+            	isRequestedPage:"XPEDXOrderListPage"
+            },
             method: 'POST',
             success: function (response, request){
 	        	document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
@@ -1821,8 +1824,8 @@ function passwordUpdateModal()
    				 clearShipToField();      				
    			},
 			'autoDimensions'	: false,
-			'width' 			: 751,
-	 		'height' 			: 350  
+			'width' 			: 800,
+	 		'height' 			: 400  
 		});   	
 		$('#cart-management-btn').click(function(){
 			$('#cart-management-popup').toggle();
@@ -1988,19 +1991,28 @@ function searchShipToAddress(divId,url) {
     // look for window.event in case event isn't passed in
     	var searchText = document.getElementById('Text1').value
     	var suspendedStatus ="";
+    	var requestedPage="";
     	if(divId == null)
 			divId = 'ajax-assignedShipToCustomers';
     	if(divId == 'shipToOrderSearchDiv' && searchText == '')
+    		{
     		url = '<s:property value="#shipToForOrderSearch"/>';
-   		if(divId == 'shipToOrderSearchDiv' && searchText != '')                                  
+    		requestedPage="XPEDXOrderListPage";
+    		}
+   		if(divId == 'shipToOrderSearchDiv' && searchText != '') 
+   			{
    			url = '<s:property value="#shipToSearchForOrderList"/>';
+   			requestedPage="XPEDXOrderListPage";
+   			}
 		if(divId == 'shipToUserProfile' && searchText == ''){
 		  	url = '<s:property value="#shipToForUserProfileSearch"/>';
 		  	suspendedStatus= "30";
+		  	requestedPage="XPEDXUserProfilePage";
 		}
 		if(divId == 'shipToUserProfile' && searchText != ''){                                  
 		 	url = '<s:property value="#shipToSearchForUserProfile"/>';
 		 	suspendedStatus= "30";
+		 	requestedPage="XPEDXUserProfilePage";
 		}
 		if(divId == 'showShipToLocationsDiv' && searchText == '')
 			url = '<s:property value="#showLocationsDivForReportingSearch"/>'
@@ -2009,6 +2021,7 @@ function searchShipToAddress(divId,url) {
 		if(url == null) {
 			url = '<s:property value="%{searchURL}"/>';
 			suspendedStatus= "30";
+			requestedPage="";
 		}
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
 		if(searchText==''|| searchText==null)
@@ -2028,7 +2041,8 @@ function searchShipToAddress(divId,url) {
 	                url: url,
 	                params: {
 						searchTerm : searchText,
-						status: suspendedStatus
+						status: suspendedStatus,
+						isRequestedPage:requestedPage
 			 		},
 		            method: 'POST',
 		            success: function (response, request){
