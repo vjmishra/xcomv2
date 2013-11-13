@@ -2000,7 +2000,6 @@ input, select {
 }
 .xpedx-light-box {
     height: auto;
-    overflow: auto;
     padding: 10px;
 }
 .xpedx-light-box h2 {
