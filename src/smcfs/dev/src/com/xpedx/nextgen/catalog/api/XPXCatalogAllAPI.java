@@ -362,7 +362,21 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 								
 								Element xpxItemExtnExpElem=SCXmlUtil.createChild(xpxItemExtnOrElem, "Exp");
 								xpxItemExtnExpElem.setAttribute("Name", "ItemID");
-								xpxItemExtnExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
+								xpxItemExtnExpElem.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());								
+								//Adding item to get association item UOM
+								Element uomList=(Element)inputXML.getElementsByTagName("UOMList").item(0);
+								
+								if(uomList != null)
+								{
+									Element uomOr=(Element)uomList.getElementsByTagName("Or").item(0);
+									if(uomOr != null)
+									{
+										Element uomExp=SCXmlUtil.createChild(uomOr, "Exp");
+										uomExp.setAttribute("Name", "ItemID");
+										uomExp.setAttribute("Value", xpxItemAssociation.getAssociatedItemID());
+									}
+								}
+								//adding for uom end
 								isXPXItemExtnCall=true;
 								isXPXItemCustXrefCall=true;
 							}

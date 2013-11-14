@@ -208,6 +208,19 @@ function showSharedListForm(){
 			}
 		});
 		
+		/* EB-783 */
+		$('.full-description-replacement-model').each(function() {
+			var html = $(this).html();
+			var shortHTML = html.substring(0, 175);
+			if( html.length > shortHTML.length )
+			{
+				$(this).html(shortHTML);
+				$(this).append('...');	
+				$(this).attr('title', html );
+			}
+		});
+		
+		
 		/* Begin long desc. shortener */
 		$('.prodlist ul li, #prodlist ul li').each(function() {
 			var html = $(this).html();
@@ -2590,7 +2603,7 @@ function showSharedListForm(){
 						<!-- Added for EB-1714 Display a Saalfeld advertisement image on MIL Starts -->
 							 <s:set name='storefrontId' value="wCContext.storefrontId" />
 							<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 							 </s:if>
 							<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
@@ -3749,10 +3762,11 @@ function showSharedListForm(){
 					<s:hidden id="replacement_%{uId}_uom" name="replacement_%{uId}_uom" value="%{#repItemUOM}" />
 
                 <!-- begin description  -->
+                <!--   EB 783 -->
                 <div class="mil-desc-wrap">
                     <div class="mil-wrap-condensed-desc replacement-items" style="height:auto; max-height:59px;"><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
-								<span class="short-description"><s:property value="#name" /></span>
+								<span class="full-description-replacement-model"><s:property value="#name" /></span>
 								</a>	
 							</s:if>
 							</div>

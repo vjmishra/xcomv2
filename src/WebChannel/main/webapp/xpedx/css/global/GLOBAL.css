@@ -2000,7 +2000,6 @@ input, select {
 }
 .xpedx-light-box {
     height: auto;
-    overflow: auto;
     padding: 10px;
 }
 .xpedx-light-box h2 {
@@ -4685,6 +4684,16 @@ div.catalog-search-container input#search_searchTerm {
     max-height: 200px;
     text-decoration: none !important;
 }
+.full-description-replacement-model {
+    color: #003399;
+    cursor: pointer;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
+
+
 .short-description_M {
     color: #003399;
     font-weight: bold;

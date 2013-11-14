@@ -83,7 +83,7 @@
 					type: 'POST'
 					,url: '<s:property value="#autocompleteURL" escape="false" />'
 					,dataType: 'json'
-					,data: { searchTerm: request.term }
+					,data: { searchTerm: request.term.trim() }
 					,success: function(data) {
 						// autocomplete console.log('BEGIN success');
 						// autocomplete console.log('data = ' , data);
@@ -91,7 +91,7 @@
 							response(data.autocompleteMarketingGroups);
 						} else {
 							// eg, TOO_MANY_RESULTS
-							response();
+							response({});
 						}
 					}
 					,error: function(resp, textStatus, xhr) {
@@ -132,9 +132,9 @@
 			
 			$('#newSearch_searchTerm').catcomplete(acOptions)
 			.data('catcomplete')._renderItem = function(ul, item) {
-				// console.log('----------');
-				var searchTerm = $('#newSearch_searchTerm').val();
-				// console.log('searchTerm = ' , searchTerm);
+				// autocomplete console.log('----------');
+				var searchTerm = $('#newSearch_searchTerm').val().trim();
+				// autocomplete console.log('searchTerm = ' , searchTerm);
 				
 				var tokens = searchTerm.split(/\s+/);
 				
@@ -143,7 +143,7 @@
 					var regexMatchHighlight = new RegExp(tokens[i], 'ig');
 					text = text.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
 				}
-				// console.log('text = ' , text);
+				// autocomplete console.log('text = ' , text);
 				
 				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
 				.data('item.autocomplete', item)
@@ -1148,6 +1148,9 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         x.innerHTML = "Loading data... please wait!";
     	Ext.Ajax.request({
             url :url,
+            params: {
+            	isRequestedPage:"XPEDXOrderListPage"
+            },
             method: 'POST',
             success: function (response, request){
 	        	document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
@@ -1821,8 +1824,8 @@ function passwordUpdateModal()
    				 clearShipToField();      				
    			},
 			'autoDimensions'	: false,
-			'width' 			: 751,
-	 		'height' 			: 350  
+			'width' 			: 800,
+	 		'height' 			: 400  
 		});   	
 		$('#cart-management-btn').click(function(){
 			$('#cart-management-popup').toggle();
@@ -1988,19 +1991,28 @@ function searchShipToAddress(divId,url) {
     // look for window.event in case event isn't passed in
     	var searchText = document.getElementById('Text1').value
     	var suspendedStatus ="";
+    	var requestedPage="";
     	if(divId == null)
 			divId = 'ajax-assignedShipToCustomers';
     	if(divId == 'shipToOrderSearchDiv' && searchText == '')
+    		{
     		url = '<s:property value="#shipToForOrderSearch"/>';
-   		if(divId == 'shipToOrderSearchDiv' && searchText != '')                                  
+    		requestedPage="XPEDXOrderListPage";
+    		}
+   		if(divId == 'shipToOrderSearchDiv' && searchText != '') 
+   			{
    			url = '<s:property value="#shipToSearchForOrderList"/>';
+   			requestedPage="XPEDXOrderListPage";
+   			}
 		if(divId == 'shipToUserProfile' && searchText == ''){
 		  	url = '<s:property value="#shipToForUserProfileSearch"/>';
 		  	suspendedStatus= "30";
+		  	requestedPage="XPEDXUserProfilePage";
 		}
 		if(divId == 'shipToUserProfile' && searchText != ''){                                  
 		 	url = '<s:property value="#shipToSearchForUserProfile"/>';
 		 	suspendedStatus= "30";
+		 	requestedPage="XPEDXUserProfilePage";
 		}
 		if(divId == 'showShipToLocationsDiv' && searchText == '')
 			url = '<s:property value="#showLocationsDivForReportingSearch"/>'
@@ -2009,6 +2021,7 @@ function searchShipToAddress(divId,url) {
 		if(url == null) {
 			url = '<s:property value="%{searchURL}"/>';
 			suspendedStatus= "30";
+			requestedPage="";
 		}
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
 		if(searchText==''|| searchText==null)
@@ -2028,7 +2041,8 @@ function searchShipToAddress(divId,url) {
 	                url: url,
 	                params: {
 						searchTerm : searchText,
-						status: suspendedStatus
+						status: suspendedStatus,
+						isRequestedPage:requestedPage
 			 		},
 		            method: 'POST',
 		            success: function (response, request){

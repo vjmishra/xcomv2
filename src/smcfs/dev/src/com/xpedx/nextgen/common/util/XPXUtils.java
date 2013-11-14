@@ -2173,7 +2173,7 @@ public class XPXUtils implements YIFCustomApi {
 	 * the email corresponding to various email scenarios
 	 */
 	public String stampOrderSubjectLine(YFSEnvironment env,
-			Document inputDocument) throws Exception {
+			Document inputDocument, String isEditOrderFlag) throws Exception {
 		
 		String brand = inputDocument.getDocumentElement().getAttribute(
 				"EnterpriseCode");
@@ -2182,10 +2182,18 @@ public class XPXUtils implements YIFCustomApi {
 		String orderNo = inputDocument.getDocumentElement().getAttribute(
 				"OrderNo");
 		StringBuilder _subjectLine = null;
+		String emailStr = null;
+		
+		if(!"true".equals(isEditOrderFlag)) {
+			emailStr="Order Submitted Notification";
+		} else {
+			emailStr="Order Edit Notification";
+		}
+		
 		if("Saalfeld".equalsIgnoreCase(brand)){
-			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat("Order Submitted Notification "));
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(emailStr).concat(" "));
 		}else{
-			_subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(emailStr).concat(" "));
 		}
 		
 		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);

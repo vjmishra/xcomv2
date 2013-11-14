@@ -105,7 +105,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 			int length= 40;
 			/*int length= 31; //getLengthForExtnBasis(env);
 			int endLength=8;*/ // commented because we are not promoting this to prod now
-			
+			int fixedLengthBeforeDecimal = 37;
+			int fixedLengthAfterDecimal = 2;
 			NodeList nlItems = eItemList.getElementsByTagName("Item");
 			for(int i=0; i< nlItems.getLength(); i++)
 			{
@@ -178,35 +179,41 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 								if(val != null && val.trim().length() > 0)
 								{
 									StringBuffer sb=new StringBuffer();
-									//Commenting since we do not need to promote to prod
-									/*String basisVal[]=val.split("\\.");
+									/* EB-829  To implement a Permanent Fix for Numeric Sort on item list page for the 'Basis' Column */
+									String basisVal[]=val.split("\\.");
 									if(basisVal != null)
 									{
-										String leadingZero=basisVal[0];
-										int vallength=leadingZero.length();
-										if(vallength < length)
-										{
-											
-										    int _length=length -vallength;
-											sb.append(String.format("%0"+(_length)+"d",0)).append(leadingZero);
-											
+										String basisBeforeDecimalVal=basisVal[0];
+										int basisBeforeDecimalValLength=basisBeforeDecimalVal.length();
+										if(basisBeforeDecimalValLength <= fixedLengthBeforeDecimal){					
+											int _length= fixedLengthBeforeDecimal - basisBeforeDecimalValLength;
+											if(_length!=0){
+												sb.append(String.format("%0"+(_length)+"d",0)).append(basisBeforeDecimalVal);
+											}else{
+												sb.append(basisBeforeDecimalVal);
+											}
+											if(basisVal.length==1){
+												sb.append(".").append(String.format("%0"+(2)+"d",0));	
+											}					
 										}
-										String endingZero=basisVal.length ==2 ? basisVal[1] : "";
-										if(endingZero != null)
-										{
-											int _endLength=endingZero.length();
-											int _length=endLength -_endLength;
-											sb.append(".").append(endingZero).append(String.format("%0"+(_length)+"d",0));
+										if(basisVal.length >=2){
+											String basisAfterDecimalVal=basisVal[1];
+											int basisAfterDecimalValLength=basisAfterDecimalVal.length();
+											sb.append(".");
+											if(basisAfterDecimalValLength <= fixedLengthAfterDecimal)
+											{
+												int _length= fixedLengthAfterDecimal - basisAfterDecimalValLength;
+												if(_length!=0){
+													sb.append(String.format("%0"+(_length)+"d",0)).append(basisAfterDecimalVal);
+												}else{
+													sb.append(basisAfterDecimalVal); 
+												}
+											}else{
+												sb.append(basisAfterDecimalVal.substring(0, 2));
+											}
 										}
-									}*/
-									int vallength=val.length();
-									if(vallength < length)
-									{
-										
-									    int _length=length -vallength;
-										sb.append(String.format("%0"+(_length)+"d",0)).append(val);
-										
 									}
+									/*EB-829 Changes End */
 									eExtnList.setAttribute("ExtnBasis",sb.toString());
 								}
 						

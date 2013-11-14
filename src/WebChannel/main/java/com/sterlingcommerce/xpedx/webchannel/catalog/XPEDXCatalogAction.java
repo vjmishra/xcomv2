@@ -1093,7 +1093,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 										"");
 								if (extnBasis != null && !"0".equals(extnBasis))
 									itemElement.setAttribute("ExtnBasis",
-											extnBasis);
+											extnBasis.replaceFirst("\\.0+$", "")); /* EB-829  To implement a Permanent Fix for Numeric Sort on item list page for the 'Basis' Column */
 								else
 									itemElement.setAttribute("ExtnBasis", "");
 							}

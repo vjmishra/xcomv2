@@ -127,15 +127,16 @@ public class ReportUtils {
 						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
 							tmp = "&lsS" + paramName + "="
 									+ paramVals.get(paramName);
+							sResult += tmp;
 						} 												
 					} else if (cardinality.equals("multiple")) {
 						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
 							tmp = "&lsM" + paramName + "="
 									+ paramVals.get(paramName);
+							sResult += tmp;
 						}												
 					}
-				} 
-				sResult += tmp;
+				} 				
 			}
 
 		}

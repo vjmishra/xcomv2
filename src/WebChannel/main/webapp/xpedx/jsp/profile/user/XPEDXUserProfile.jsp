@@ -201,7 +201,8 @@ function showShipToForUserProfile(url)
         url :url,
         params: {
                     customerContactId: selected_customerContactId,
-                    status: "30"
+                    status: "30",
+                    isRequestedPage:"XPEDXUserProfilePage"
                  },
         method: 'POST',
         success: function (response, request){
