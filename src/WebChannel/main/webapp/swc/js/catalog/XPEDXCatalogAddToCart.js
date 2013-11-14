@@ -231,7 +231,7 @@ var myMask;
 			var qtyTextBox=qty;
 			var custUOM = document.getElementById('custUOM_'+itemId).value;
 			var uomList = document.getElementById('itemUomList_'+itemId);
-			
+			var baseUOM = document.getElementById('baseUOMs_'+itemId).value;
 			if(uomList!=null && uomList.options.length>0)
 			{
 			var selectedUom = uomList.options[uomList.selectedIndex].value;
