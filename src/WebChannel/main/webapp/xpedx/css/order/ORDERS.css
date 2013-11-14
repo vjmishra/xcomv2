@@ -141,7 +141,7 @@ table.mil-my-price-availability td {
 }
 
 #replacementItemBody .mil-wrap-condensed-desc {
-	width:200px;
+	width:370px;
 }
 .mil-desc-attribute-list,
 .mil-desc-attribute-list ul,
@@ -291,7 +291,7 @@ input:focus, textarea:focus {
     width: 412px;
 }
 #replacementItemBody .mil-desc-wrap {
-    width: 206px;
+    width: 350px;
 }
 .mil-edit-field {
 	float: left;
