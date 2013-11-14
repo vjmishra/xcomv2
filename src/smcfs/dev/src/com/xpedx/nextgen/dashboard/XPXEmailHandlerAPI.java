@@ -236,7 +236,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         stampLegacyOrderNoOnCustomerOrderLine(env, customerDoc,orderListOutput);
  
         /******* Added by Arun Sekhar on 28-April-2011 *******/
-         orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc);
+        String isEditOrderFlag=inputElement.getAttribute("IsOrderEdit");
+        orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc, isEditOrderFlag);
         yfcLogCatalog.debug("inputDocument with SubjectLine: "
                 + SCXmlUtil.getString(customerDoc));
  
@@ -570,18 +571,11 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
         String emailFrom = null;
 
-        if((customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(customerDoc.getDocumentElement().getAttribute("EnterpriseCode")) ))// no need to check for seller organization code
-
-                        {
-
-                             emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
-
-		} else {
-
+        if((customerDoc.getDocumentElement().getAttribute("EnterpriseCode")!=null && "Saalfeld".equalsIgnoreCase(customerDoc.getDocumentElement().getAttribute("EnterpriseCode")))) {// no need to check for seller organization code        
+        	emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
+        } else {
 			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
-
 		}
-
 
         StringBuffer emailSubject = new StringBuffer(orderconfSubjectline);
        // emailSubject.append(XPXEmailUtil.ORDER_CONFIRMATION_EMAIL_SUBJECT);

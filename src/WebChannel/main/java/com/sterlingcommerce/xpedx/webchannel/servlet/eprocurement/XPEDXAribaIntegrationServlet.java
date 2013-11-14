@@ -54,19 +54,19 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
     		Document doc = (Document)req.getAttribute(IAribaConstants.ARIBA_CXML_REQUEST_ATTRIBUTE_KEY);
     		cXMLFields = new XPEDXCXMLMessageFields(doc);	
     		
-    		Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("xpedx_cxml_dummy","xpedx_cxml_dummy");
+    		/*Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("xpedx_cxml_dummy","xpedx_cxml_dummy");
     		securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
     		if(securityResponse.getReturnStatus())
     			log.info("<<<<<<<<<<Authentication Successful:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");
     		else
     			log.info("<<<<<<<<<<Authentication Failure:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");	
     		
-    		logInfo("<<<<<<<<<<Authentication of incomming request >>>>>>>>"); 
+    		logInfo("<<<<<<<<<<Authentication of incomming request >>>>>>>>");*/ 
     		
     		String custIdentity	= cXMLFields.getCustomerIdentity();
     		String AuthUserXPath = XPEDXWCUtils.getAuthUserXPathForCustomerIdentity(req, res, custIdentity);
     		
-    		loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(cXMLFields.getAuthUser(AuthUserXPath,custIdentity), cXMLFields.getAuthPassword());
+    		Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(cXMLFields.getAuthUser(AuthUserXPath,custIdentity), cXMLFields.getAuthPassword());
     		if (log.isDebugEnabled())
                 logDebug("Login Document:"+SCXmlUtils.getString(loginDoc));
             

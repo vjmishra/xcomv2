@@ -517,7 +517,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				
 				String encodedToken = logonTokens.get(1);	
 				
-				finalURL= openDocURL + params + "&X-SAP-LogonToken=" + encodedToken + "&sRefresh=Y";							
+				finalURL= openDocURL + params + "&token=" + encodedToken + "&sRefresh=Y";							
 			}
 			
 			// Set the prompts and rerun the report

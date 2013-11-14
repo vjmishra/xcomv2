@@ -392,6 +392,12 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 											throw new Exception("Order Update Failed in Sterling!");
 										}
 										((YFSContext)env).commit();
+										
+										/*Begin - Changes made for EB-532 [Sending an order confirmation when I edit an an order and resubmit] */
+										editOrdEle.setAttribute("IsOrderEdit", "true");
+										api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", editOrdEle.getOwnerDocument().getDocument());
+										/*End - Changes made for EB-532 [Sending an order confirmation when I edit an an order and resubmit] */
+										
 									} else {
 										throw new Exception("Element TransactionStatus Not Returned During Order Update!");
 									}

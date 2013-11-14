@@ -65,7 +65,7 @@
 			method="getPaginatedAssignedCustomers">
 			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
-			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomersForOrderList.jsp
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
 			</result>
 		</action>
 		
@@ -85,7 +85,7 @@
 			method="getPaginatedAssignedCustomersForDefaultShipTo">
 			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
-			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomersForUserProfile.jsp
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
 			</result>
 		</action>
 		
@@ -244,7 +244,7 @@
 			method="searchShipToAddress">
 			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
-			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomersForOrderList.jsp
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
 			</result>
 		</action>
 		<action name="xpedxSearchAssignedCustomersForReporting"
@@ -260,7 +260,7 @@
 			method="searchShipToAddress">
 			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
-			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomersForUserProfile.jsp
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
 			</result>
 		</action>
 		

@@ -61,7 +61,6 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private String comingFromSearch = "false";
 	private XPEDXOverriddenShipToAddress xOverriddenShipToAddress;
 	private Set<XPEDXShipToCustomer> addressSearchResult;
-	private boolean adminMode;
 	private String defaultShipToCustomerId;
 	private String searchTerm = "Search Criteria";
 	private boolean search = false;
@@ -87,6 +86,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private LinkedHashMap<String, String> availableLocationMap = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> authorizedLocationMap = new LinkedHashMap<String, String>();
 	private String status="";
+	private String isRequestedPage;
 	private boolean isDefaultShipToCustSuspended= false;
 
 	public boolean isDefaultShipToCustSuspended() {
@@ -286,6 +286,14 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 
 	public void setSelectedCurrentCustomer(String selectedCurrentCustomer) {
 		this.selectedCurrentCustomer = selectedCurrentCustomer;
+	}
+
+	public String getIsRequestedPage() {
+		return isRequestedPage;
+	}
+
+	public void setIsRequestedPage(String isRequestedPage) {
+		this.isRequestedPage = isRequestedPage;
 	}
 
 	/**
@@ -687,7 +695,6 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			if ((customerContactId != null && customerContactId.trim().length() > 0)
 					&& !customerContactId.equals(getWCContext()
 							.getCustomerContactId())) {
-				adminMode = true; // we are modifying another user's ship-to, which is an admin function
 				defaultShipToCustomerId = XPEDXWCUtils
 						.getDefaultShipTo(customerContactId);
 				if (defaultShipToCustomerId != null
@@ -781,7 +788,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * customerId : "");
 		 * if(customerId.trim().equalsIgnoreCase(wcContext.getCustomerId()))
 		 * currentCustomer = customerId;
-		 *
+		 * 
 		 * assignedShipToList.add(xPEDXShipToCustomer); } } }
 		 */}
 
@@ -793,18 +800,18 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				viewListElem, "XPXCustomerAssignmentView");
 		assignedShipToList = new ArrayList<XPEDXShipToCustomer>();
 		if (assignedCustElems.size() > 0) {
-
+			
 			shipToResult = false;
 				String status ="";
 			for (int i = 0; i < assignedCustElems.size(); i++) {
 				Element customer = assignedCustElems.get(i);
-
+				
 				XPEDXShipToCustomer defualtShipToAssigned = new XPEDXShipToCustomer();
 				defualtShipToAssigned.setCustomerID(SCXmlUtil.getAttribute(
 						customer, "ShipToCustomerID"));
 				log.debug(SCXmlUtil.getString(customer));
-
-
+				
+				
 				defualtShipToAssigned.setOrganizationName(SCXmlUtil
 						.getAttribute(customer, "ShipToCustomerName"));
 				Element element = customer;
@@ -861,17 +868,17 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 							.equals(wcContext.getCustomerId()) ? customerId
 							: "");
 				}
-
+				
 				assignedShipToList.add(defualtShipToAssigned);
 				}
 			}
 		}
-
+	
 
 	/**
 	 * <CustomerAssignment CustomerID="" OrganizationCode="" UserId=""
 	 * Operation="" />
-	 *
+	 * 
 	 * @return
 	 */
 	public String saveChanges() {
@@ -933,7 +940,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * >)XPEDXWCUtils.getObjectFromCache("newcustomersList"); for(String
 		 * customerId: newcustomersList) { existingList.remove(customerId); }
 		 * XPEDXWCUtils.setObectInCache("newcustomersList",existingList);
-		 *
+		 * 
 		 * Map<String, String> resultsMap1 = new HashMap<String, String>();
 		 */
 
@@ -941,7 +948,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * String removeFromavailable1 = removeFromavailable; String[]
 		 * removeFromavailableIds = removeFromavailable1.split(","); Map<String,
 		 * String> resultsMap2 = new HashMap<String, String>();
-		 *
+		 * 
 		 * if(addToavailable != null && addToavailable.trim().length() >0){ for
 		 * (int i=0; i<addToavailablearrayIds.length; i++) {
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
@@ -950,7 +957,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * block - removeFromavailable != null //else part -if
 		 * removeFromavailable is null else
 		 * resultsMap1.put(addToavailablearrayIds[i],"Delete" ); } }
-		 *
+		 * 
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
 		 * >0){ for (int i=0; i<removeFromavailableIds.length; i++) {
 		 * if(addToavailable != null && addToavailable.trim().length() >0 ){
@@ -958,11 +965,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * resultsMap1.put(removeFromavailableIds[i],"Create" ); }//End of If
 		 * block - addToavailable != null //else part -if addToavailable is null
 		 * else resultsMap1.put(removeFromavailableIds[i],"Create" ); } }
-		 *
+		 * 
 		 * saveChanges(resultsMap1);
-		 *
+		 * 
 		 * populateAvailableLocation();
-		 *
+		 * 
 		 * if(addToavailable != null && addToavailable.trim().length() >0){ for
 		 * (int i=0; i<addToavailablearrayIds.length; i++) {
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
@@ -971,7 +978,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * block - removeFromavailable != null //else part -if
 		 * removeFromavailable is null else
 		 * resultsMap2.put(addToavailablearrayIds[i],"Create" ); } }
-		 *
+		 * 
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
 		 * >0){ for (int i=0; i<removeFromavailableIds.length; i++) {
 		 * if(addToavailable != null && addToavailable.trim().length() >0 ){
@@ -984,7 +991,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * if(addToavailable != null && addToavailable.trim().length() >0){ for
 		 * (int i=0; i<addToavailablearrayIds.length; i++) {
 		 * resultsMap2.put(addToavailablearrayIds[i],"Create" ); } }
-		 *
+		 * 
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
 		 * >0){ for (int i=0; i<removeFromavailableIds.length; i++) {
 		 * resultsMap2.put(removeFromavailableIds[i],"Delete" ); } }
@@ -1139,7 +1146,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				}
 				inputXml += " /> " // close Extn tag
 						+ "</CustomerContact> " + "</CustomerContactList>" + "</Customer> ";
-
+				
 				Document document = getXMLUtils().createFromString(inputXml);
 				wSCUIContext = wcContext.getSCUIContext();
 				scuiTransactionContext = wSCUIContext
@@ -1476,14 +1483,6 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	}
 
 	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";
-
-	public boolean isAdminMode() {
-		return adminMode;
-	}
-
-	public void setAdminMode(boolean adminMode) {
-		this.adminMode = adminMode;
-	}
 
 	public String getDefaultShipToCustomerId() {
 		return defaultShipToCustomerId;
