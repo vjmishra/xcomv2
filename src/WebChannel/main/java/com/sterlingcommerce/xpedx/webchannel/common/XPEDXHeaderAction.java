@@ -657,7 +657,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String toaFlag = null;
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
-
+		String accetptTandCDate=null;
+        String exUserlastLoginDate=null;
 		/**XBT-621 code changes 
 		 * Below code is used to get the CustomerContact extn
 		 * and set them in cache.
@@ -677,6 +678,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		if(xpxCustContExtnEle != null)
 		{
 			toaFlag = xpxCustContExtnEle.getAttribute("AcceptTAndCFlag");
+			accetptTandCDate = xpxCustContExtnEle.getAttribute("TAndCAcceptedOn");
+			exUserlastLoginDate= xpxCustContExtnEle.getAttribute("LastLoginDate");
 			addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
 			addnlPOList = xpxCustContExtnEle.getAttribute("POList");
 			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
@@ -684,7 +687,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		// XBT-621 code changes end 
 
-		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N") ){
+		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N")  && ("".equalsIgnoreCase(exUserlastLoginDate) || exUserlastLoginDate==null )
+				 && ("".equalsIgnoreCase(accetptTandCDate) ||  ("".equalsIgnoreCase(accetptTandCDate)) )){
 			XPEDXWCUtils.setObectInCache("setPasswordUpdate",true);
 		}  
 
