@@ -5481,10 +5481,11 @@ width:auto;
     margin-left: 15px;
     margin-top: 10px;
     overflow: hidden;
-    /* width: 435px; */
+    /*width: 435px;*/
 }
+/*  for replacement modal text EB 783 */
 #replacementItemBody .mil-wrap-condensed-desc {
-    width: 200px;
+	width: 370px;
 }
 .mil-desc-attribute-list, .mil-desc-attribute-list ul, ul.prodlist {
     color: #003399;
@@ -5571,7 +5572,7 @@ input:focus, textarea:focus {
     width: 300px;
 }
 #replacementItemBody .mil-desc-wrap {
-    width: 206px;
+    width: 350px;
 }
 .mil-edit-field {
     border: 1px solid #CCCCCC;
