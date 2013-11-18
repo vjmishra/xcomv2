@@ -285,7 +285,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 								billToList.add(billto);
 							} else if (extSuffixType.equalsIgnoreCase("S") == true) {
 								String shipto = geteditedCustomerNo(strCustId)
-										+ " - " + getShipToSuffix(strCustId);
+										+ "-" + getShipToSuffix(strCustId);
 								shipToList.add(shipto);
 							}
 
