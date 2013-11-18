@@ -18,11 +18,14 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfs.core.YFSSystem;
 
 /*
@@ -151,14 +154,30 @@ public class AjaxAutocompleteAction extends WCAction {
 	private Query createQuery() {
 		BooleanQuery query = new BooleanQuery();
 
-		// String safeTerm = searchTerm.replaceAll("\\D+", "");
+		String anonymousBrand = getAnonymousBrand();
+		if (anonymousBrand != null) {
+			Term btTerm = new Term("entitled_anonymous", anonymousBrand.toLowerCase());
+			TermQuery btQuery = new TermQuery(btTerm);
+			query.add(new BooleanClause(btQuery, Occur.MUST));
+		}
+
 		String[] tokens = searchTerm.split("\\s+");
 		for (String token : tokens) {
 			Term tName = new Term("marketing_group_path_parsed", "*" + token.toLowerCase() + "*");
 			query.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
 		}
 
+		log.debug("Lucene query: " + query);
+
 		return query;
+	}
+
+	/**
+	 * @return If anonymous user, returns the storefront id (aka brand). Otherwise returns null.
+	 */
+	String getAnonymousBrand() {
+		boolean anonymous = XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER) == null;
+		return anonymous ? wcContext.getStorefrontId() : null;
 	}
 
 	public void setSearchTerm(String searchTerm) {
@@ -171,6 +190,22 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	public List<AutocompleteMarketingGroup> getAutocompleteMarketingGroups() {
 		return autocompleteMarketingGroups;
+	}
+
+	public static void main(String[] args) throws Exception {
+		AjaxAutocompleteAction action = new AjaxAutocompleteAction() {
+			@Override
+			String getAnonymousBrand() {
+				return "xpedx";
+			}
+		};
+
+		action.setSearchTerm("spring");
+		List<AutocompleteMarketingGroup> mgs = action.searchIndex("C:/Sterling/Foundation/marketinggroupindex");
+
+		for (AutocompleteMarketingGroup mg : mgs) {
+			System.out.println("mg:\t" + mg);
+		}
 	}
 
 }
