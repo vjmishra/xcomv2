@@ -858,10 +858,10 @@ return new Ext.XTemplate(
   '</tr>','</thead>',
   '<tpl for=".">','<tbody>',
   '<tpl for="items">',
-   '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
+   '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a class="item-lnk" href="#" data-itemid="{itemid}" data-uom="{uom}" tabindex="{tabidx}">',
 	  '<span class="ddesc desc-hname">{name}</span></a>','</td>',
       <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;text-align: center;">'+
-      '<a  id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
+      '<a class="item-lnk" href="#" data-itemid="{itemid}" data-uom="{uom}" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
       <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname">{size}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname">{color}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname">{basis}</td>',</s:if>
@@ -1471,6 +1471,30 @@ $(function () {
 --><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.cycle.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+ 
+<script type="text/javascript">
+$(document).ready( function() {
+	var itemLinks = $(".item-lnk");
+	for (var i=0, len=itemLinks.length; i<len;i++) {
+	 	var $itemLink = $(itemLinks[i]);
+		var selView = document.getElementById("selectedView").value; 
+		var storeFrontId = "<s:property value='wCContext.storefrontId' />";
+		var guest = "<s:property value='#guestUser' />";
+		var itemid = $itemLink.attr('data-itemid');
+		var uom = $itemLink.attr('data-uom'); 
+		var url; 
+		if(guest=="true") {
+			url = "/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&scGuestUser=Y" +"&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y" + "&itemID=" + itemid + "&unitOfMeasure=" + uom+"&selectedView="+selView;
+		}
+		else {
+			url = "/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3FsfId%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y" + "&itemID=" + itemid + "&unitOfMeasure=" + uom+"&selectedView="+selView;		
+		}
+
+		$itemLink.attr('href',url);
+  	}
+});
+</script> 
+
  <%--Added for EB 1150 --%>
  <div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)"></a></div>
 <!--EB-519-->
