@@ -408,6 +408,7 @@ var myMask;
 			return false;
 		}
 		var uomList = document.getElementById('itemUomList_'+itemId);
+		var baseUOM = document.getElementById('baseUOMs_'+itemId).value;
 		var selectedUom = uomList.options[uomList.selectedIndex].value;
 		var qty = document.getElementById('Qty_'+itemId).value;
 		var selectedUomConv;
