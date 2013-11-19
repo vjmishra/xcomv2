@@ -62,19 +62,19 @@ public class AjaxAutocompleteAction extends WCAction {
 	 */
 	@Override
 	public String execute() throws CorruptIndexException, IOException {
-		String searchIndexRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
-		if (searchIndexRoot == null) {
+		String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
+		if (mgiRoot == null) {
 			log.error("Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
 			return ERROR;
 		}
 
-		if (!new File(searchIndexRoot).canRead()) {
-			log.error("Missing Lucene index: " + searchIndexRoot);
+		if (!new File(mgiRoot).canRead()) {
+			log.error("Missing Lucene index: " + mgiRoot);
 			return ERROR;
 		}
 
 		try {
-			autocompleteMarketingGroups = searchIndex(searchIndexRoot);
+			autocompleteMarketingGroups = searchIndex(mgiRoot);
 			return SUCCESS;
 
 		} catch (Exception e) {
@@ -87,16 +87,16 @@ public class AjaxAutocompleteAction extends WCAction {
 	/**
 	 * Perform a lucene search against the Marketing Group index. Populates the <code>autocompleteMarketingGroups</code> field which is seralized as a JSON response.
 	 *
-	 * @param searchIndexRoot
+	 * @param mgiRoot
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	private List<AutocompleteMarketingGroup> searchIndex(String searchIndexRoot) throws CorruptIndexException, IOException {
+	private List<AutocompleteMarketingGroup> searchIndex(String mgiRoot) throws CorruptIndexException, IOException {
 		if (searchTerm == null) {
 			throw new IllegalArgumentException("searchTerm must not be null");
 		}
 
-		Searcher indexSearcher = new IndexSearcher(searchIndexRoot);
+		Searcher indexSearcher = new IndexSearcher(mgiRoot);
 
 		long start = 0;
 		long stop = 0;
