@@ -157,34 +157,40 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @return Returns a lucene Query object for searchTerm
 	 */
 	private Query createQuery() {
-		BooleanQuery query = new BooleanQuery();
+		BooleanQuery nestedEntitlementQuery = new BooleanQuery();
 
 		String anonymousBrand = getEntitlementAnonymousBrand();
 		if (anonymousBrand != null) {
 			Term btTerm = new Term("entitled_anonymous", anonymousBrand.toLowerCase());
 			TermQuery btQuery = new TermQuery(btTerm);
-			query.add(new BooleanClause(btQuery, Occur.MUST));
+			nestedEntitlementQuery.add(new BooleanClause(btQuery, Occur.SHOULD));
 		}
 
-//		String shipToDivision = getEntitlementDivisionAndBrand();
-//		if (shipToDivision != null) {
-//			Term btTerm = new Term("entitled_divisions", shipToDivision.toLowerCase());
-//			TermQuery btQuery = new TermQuery(btTerm);
-//			query.add(new BooleanClause(btQuery, Occur.MUST));
-//		}
+		String shipToDivision = getEntitlementDivisionAndBrand();
+		if (shipToDivision != null) {
+			Term btTerm = new Term("entitled_divisions", shipToDivision.toLowerCase());
+			TermQuery btQuery = new TermQuery(btTerm);
+			nestedEntitlementQuery.add(new BooleanClause(btQuery, Occur.SHOULD));
+		}
 
 		String companyCodeAndLegacyCustId = getEntitlementCompanyCodeAndLegacyCustomerId();
 		if (companyCodeAndLegacyCustId != null) {
 			Term btTerm = new Term("entitled_customers", companyCodeAndLegacyCustId.toLowerCase());
 			TermQuery btQuery = new TermQuery(btTerm);
-			query.add(new BooleanClause(btQuery, Occur.MUST));
+			nestedEntitlementQuery.add(new BooleanClause(btQuery, Occur.SHOULD));
 		}
 
+		BooleanQuery nestedSearchTermQuery = new BooleanQuery();
 		String[] tokens = searchTerm.split("\\s+");
 		for (String token : tokens) {
 			Term tName = new Term("marketing_group_path_parsed", "*" + token.toLowerCase() + "*");
-			query.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
+			nestedSearchTermQuery.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
 		}
+
+		// use nested boolean queries to get query: (anon OR div or cust) AND (searchTerm[0] or searchTerm[1] ...)
+		BooleanQuery query = new BooleanQuery();
+		query.add(new BooleanClause(nestedEntitlementQuery, Occur.MUST));
+		query.add(new BooleanClause(nestedSearchTermQuery, Occur.SHOULD));
 
 		log.debug("Lucene query: " + query);
 
@@ -199,16 +205,18 @@ public class AjaxAutocompleteAction extends WCAction {
 		return anonymous ? wcContext.getStorefrontId() : null;
 	}
 
-//	String getEntitlementDivisionAndBrand() {
-//		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-//		if (shipto == null) {
-//			return null;
-//		}
-//
-//		// TODO need to add customer_level db column
-////		if ("N".equals(shipto.getCustomerLevel()) { return null; }
-//		return shipto.getExtnCustomerDivision() + wcContext.getStorefrontId();
-//	}
+	String getEntitlementDivisionAndBrand() {
+		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if (shipto == null) {
+			return null;
+		}
+
+		if ("N".equals(shipto.getCustomerLevel())) {
+			// if customer level entitlement is disabled, then prevent from seeing division entitlements
+			return null; // need to use "" here?
+		}
+		return shipto.getExtnCustomerDivision() + wcContext.getStorefrontId();
+	}
 
 	String getEntitlementCompanyCodeAndLegacyCustomerId() {
 		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
@@ -235,18 +243,21 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	@SuppressWarnings("all")
 	public static void main(String[] args) throws Exception {
+		// tsudis ST   = 60-0006806597-000003-M-XX-S
+		//        div  = 60xpedx
+		//        cust = 600006806597
 		AjaxAutocompleteAction action = new AjaxAutocompleteAction() {
 			@Override
 			String getEntitlementAnonymousBrand() {
 				return null;
 			}
-//			@Override
-//			String getEntitlementDivisionAndBrand() {
-//				return "60xpedx";
-//			}
+			@Override
+			String getEntitlementDivisionAndBrand() {
+				return "60xpedx";
+			}
 			@Override
 			String getEntitlementCompanyCodeAndLegacyCustomerId() {
-				return "800008310316";
+				return "600006806597";
 			}
 		};
 
