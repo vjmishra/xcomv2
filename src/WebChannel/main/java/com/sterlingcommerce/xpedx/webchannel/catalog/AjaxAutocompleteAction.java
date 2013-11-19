@@ -25,6 +25,7 @@ import org.apache.lucene.search.WildcardQuery;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfs.core.YFSSystem;
 
@@ -33,7 +34,11 @@ import com.yantra.yfs.core.YFSSystem;
  */
 
 /**
+ * Searches the Marketing Group Index (MGI) to build search results. Entitlements are applied as appropriate based on the current user (anonymous, ship-to, etc).
+ * <br><br>
  * This action produces a JSON result for the autocomplete ajax call.
+ * <br><br>
+ * To see how the MGI is created, see the tools_utils repo, directory MarketingGroupIndexTool.
  *
  * @author Trey Howard
  */
@@ -152,20 +157,40 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @return Returns a lucene Query object for searchTerm
 	 */
 	private Query createQuery() {
-		BooleanQuery query = new BooleanQuery();
+		BooleanQuery nestedEntitlementQuery = new BooleanQuery();
 
-		String anonymousBrand = getAnonymousBrand();
+		String anonymousBrand = getEntitlementAnonymousBrand();
 		if (anonymousBrand != null) {
 			Term btTerm = new Term("entitled_anonymous", anonymousBrand.toLowerCase());
 			TermQuery btQuery = new TermQuery(btTerm);
-			query.add(new BooleanClause(btQuery, Occur.MUST));
+			nestedEntitlementQuery.add(new BooleanClause(btQuery, Occur.SHOULD));
 		}
 
+		String shipToDivision = getEntitlementDivisionAndBrand();
+		if (shipToDivision != null) {
+			Term btTerm = new Term("entitled_divisions", shipToDivision.toLowerCase());
+			TermQuery btQuery = new TermQuery(btTerm);
+			nestedEntitlementQuery.add(new BooleanClause(btQuery, Occur.SHOULD));
+		}
+
+		String companyCodeAndLegacyCustId = getEntitlementCompanyCodeAndLegacyCustomerId();
+		if (companyCodeAndLegacyCustId != null) {
+			Term btTerm = new Term("entitled_customers", companyCodeAndLegacyCustId.toLowerCase());
+			TermQuery btQuery = new TermQuery(btTerm);
+			nestedEntitlementQuery.add(new BooleanClause(btQuery, Occur.SHOULD));
+		}
+
+		BooleanQuery nestedSearchTermQuery = new BooleanQuery();
 		String[] tokens = searchTerm.split("\\s+");
 		for (String token : tokens) {
 			Term tName = new Term("marketing_group_path_parsed", "*" + token.toLowerCase() + "*");
-			query.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
+			nestedSearchTermQuery.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
 		}
+
+		// use nested boolean queries to get query: (anon OR div or cust) AND (searchTerm[0] or searchTerm[1] ...)
+		BooleanQuery query = new BooleanQuery();
+		query.add(new BooleanClause(nestedEntitlementQuery, Occur.MUST));
+		query.add(new BooleanClause(nestedSearchTermQuery, Occur.SHOULD));
 
 		log.debug("Lucene query: " + query);
 
@@ -175,9 +200,33 @@ public class AjaxAutocompleteAction extends WCAction {
 	/**
 	 * @return If anonymous user, returns the storefront id (aka brand). Otherwise returns null.
 	 */
-	String getAnonymousBrand() {
+	String getEntitlementAnonymousBrand() {
 		boolean anonymous = XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER) == null;
 		return anonymous ? wcContext.getStorefrontId() : null;
+	}
+
+	String getEntitlementDivisionAndBrand() {
+		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if (shipto == null) {
+			return null;
+		}
+
+		if ("N".equals(shipto.getCustomerLevel())) {
+			// if customer level entitlement is disabled, then prevent from seeing division entitlements
+			return null; // need to use "" here?
+		}
+		return shipto.getExtnCustomerDivision() + wcContext.getStorefrontId();
+	}
+
+	String getEntitlementCompanyCodeAndLegacyCustomerId() {
+		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if (shipto == null) {
+			return null;
+		}
+
+		String companyCode = shipto.getExtnCustomerDivision();
+		String legacyCustNum = shipto.getExtnLegacyCustNumber();
+		return companyCode + legacyCustNum;
 	}
 
 	public void setSearchTerm(String searchTerm) {
@@ -192,11 +241,23 @@ public class AjaxAutocompleteAction extends WCAction {
 		return autocompleteMarketingGroups;
 	}
 
+	@SuppressWarnings("all")
 	public static void main(String[] args) throws Exception {
+		// tsudis ST   = 60-0006806597-000003-M-XX-S
+		//        div  = 60xpedx
+		//        cust = 600006806597
 		AjaxAutocompleteAction action = new AjaxAutocompleteAction() {
 			@Override
-			String getAnonymousBrand() {
-				return "xpedx";
+			String getEntitlementAnonymousBrand() {
+				return null;
+			}
+			@Override
+			String getEntitlementDivisionAndBrand() {
+				return "60xpedx";
+			}
+			@Override
+			String getEntitlementCompanyCodeAndLegacyCustomerId() {
+				return "600006806597";
 			}
 		};
 

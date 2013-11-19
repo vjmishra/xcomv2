@@ -1,13 +1,16 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="1.0" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:emailformatters="com.yantra.pca.email.formatters"
     xmlns:java="java"
     exclude-result-prefixes="java emailformatters">
+    
+     <xsl:output media-type="text/xml;charset=utf-8"/>
+    
 
 <xsl:template name="applyStyle">
-	<xsl:comment>CONTENT_TYPE=text/html; charset=UTF-8</xsl:comment>
+<xsl:comment>CONTENT_TYPE=text/html; charset=UTF-8</xsl:comment>
 	<HEAD>
 	    <STYLE TYPE="text/css">
 
@@ -227,7 +230,7 @@
 			
 
 	    </STYLE>
-
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	</HEAD>
 </xsl:template>
 
