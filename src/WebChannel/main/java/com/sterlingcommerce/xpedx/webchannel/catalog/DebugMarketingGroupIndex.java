@@ -1,0 +1,207 @@
+package com.sterlingcommerce.xpedx.webchannel.catalog;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+
+import com.sterlingcommerce.webchannel.core.WCAction;
+import com.sterlingcommerce.woodstock.util.frame.Manager;
+import com.yantra.yfs.core.YFSSystem;
+
+/**
+ * A debug tool for retrieving some basic info on the marketing group index. This info is primarily intended to validate the integrity of the marketing group index:
+ * <ol>
+ *  <li>That there are marketing_group records</li>
+ *  <li>The Lucene index exists</li>
+ *  <li>All marketing_group.marketing_group_id values exist in the Lucene index</li>
+ * </ol>
+ *
+ * @author Trey Howard
+ */
+@SuppressWarnings("serial")
+public class DebugMarketingGroupIndex extends WCAction {
+
+	private static final Logger log = Logger.getLogger(DebugMarketingGroupIndex.class);
+
+	private Map<String, Object> debugInfo = new HashMap<String, Object>();
+
+	@Override
+	public String execute() throws Exception {
+		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
+		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
+		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
+		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
+
+		Connection conn = null;
+		try {
+			Class.forName(jdbcDriver);
+			conn = DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPassword);
+
+			MinMax mgIds = getMinMaxMarketingGroupIds(conn);
+
+			String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
+
+			analyze(mgIds, mgiRoot);
+
+		} catch (Exception e) {
+			log.error("Unexpected error: " + e.getMessage());
+			log.debug("", e);
+
+			debugInfo.put("error", true);
+			debugInfo.put("exception", e);
+			debugInfo.put("exception_message", e.getMessage());
+			debugInfo.put("exception_stacktrace", e.getStackTrace());
+
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+
+		return SUCCESS;
+	}
+
+	private void analyze(MinMax mgIds, String mgiRoot) throws CorruptIndexException, IOException {
+		if (mgiRoot == null) {
+			debugInfo.put("error", true);
+			debugInfo.put("error_lucene_folder", "Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
+
+		} else if (!new File(mgiRoot).canRead()) {
+			debugInfo.put("error", true);
+			debugInfo.put("error_lucene_index_missing", "Missing Lucene index: " + mgiRoot);
+		}
+
+		debugInfo.put("marketing_group.marketing_group_id", mgIds);
+
+		if (mgIds.getMin() == null || mgIds.getMax() == null) {
+			debugInfo.put("error", true);
+			debugInfo.put("error_null_mgIds", "No marketing_group records found");
+
+		}
+
+		if (!debugInfo.containsKey("error")) {
+			Searcher indexSearcher = new IndexSearcher(mgiRoot);
+
+			TopDocs minSearch = indexSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMin()))), 1);
+			if (minSearch.scoreDocs.length == 0) {
+				debugInfo.put("error", true);
+				debugInfo.put("error_search_none_min", true);
+			}
+
+			TopDocs maxSearch = indexSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMax()))), 1);
+			if (maxSearch.scoreDocs.length == 0) {
+				debugInfo.put("error", true);
+				debugInfo.put("error_search_none_max", true);
+			}
+		}
+	}
+
+	private MinMax getMinMaxMarketingGroupIds(Connection conn) throws SQLException {
+		String sql = ""
+				+ " select min(mg.marketing_group_id) as min, max(mg.marketing_group_id) as max"
+				+ " from marketing_group mg"
+				+ " where exists (select 1 from marketing_group_item mgi where mgi.marketing_group_id = mg.marketing_group_id)";
+
+		PreparedStatement stmt = null;
+		ResultSet res = null;
+		try {
+			stmt = conn.prepareStatement(sql);
+
+			res = stmt.executeQuery();
+
+			MinMax mm = new MinMax();
+			if (res.next()) {
+				mm.setMin(res.getLong("min"));
+				if (res.wasNull()) {
+					mm.setMin(null);
+				}
+
+				mm.setMax(res.getLong("max"));
+				if (res.wasNull()) {
+					mm.setMax(null);
+				}
+			}
+
+			return mm;
+
+		} finally {
+			if (res != null) {
+				try {
+					res.close();
+				} catch (Exception ignore) {
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+	}
+
+	public Map<String, Object> getDebugInfo() {
+		return debugInfo;
+	}
+
+	public static class MinMax {
+		private Long min;
+		private Long max;
+
+		public Long getMin() {
+			return min;
+		}
+
+		public void setMin(Long min) {
+			this.min = min;
+		}
+
+		public Long getMax() {
+			return max;
+		}
+
+		public void setMax(Long max) {
+			this.max = max;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("[%s, %s]", getMin(), getMax());
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		DebugMarketingGroupIndex action = new DebugMarketingGroupIndex();
+
+		MinMax mgIds = new MinMax();
+		mgIds.setMin(807280L);
+		mgIds.setMax(876634L);
+
+		String mgiRoot = "C:/Sterling/Foundation/marketinggroupindex";
+
+		action.analyze(mgIds, mgiRoot);
+
+		Map<String, Object> map = action.getDebugInfo();
+		for (String key : map.keySet()) {
+			System.out.println(key + ":\t" + map.get(key));
+		}
+	}
+
+}

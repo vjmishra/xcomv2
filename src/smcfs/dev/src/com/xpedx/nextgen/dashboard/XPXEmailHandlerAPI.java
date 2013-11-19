@@ -236,7 +236,7 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         stampLegacyOrderNoOnCustomerOrderLine(env, customerDoc,orderListOutput);
  
         /******* Added by Arun Sekhar on 28-April-2011 *******/
-        String isEditOrderFlag=inputElement.getAttribute("isOrderEdit");
+        String isEditOrderFlag=inputElement.getAttribute("IsOrderEdit");
         orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc, isEditOrderFlag);
         yfcLogCatalog.debug("inputDocument with SubjectLine: "
                 + SCXmlUtil.getString(customerDoc));

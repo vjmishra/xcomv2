@@ -4684,6 +4684,16 @@ div.catalog-search-container input#search_searchTerm {
     max-height: 200px;
     text-decoration: none !important;
 }
+.full-description-replacement-model {
+    color: #003399;
+    cursor: pointer;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
+
+
 .short-description_M {
     color: #003399;
     font-weight: bold;
@@ -10581,3 +10591,13 @@ input.error{
 .catalog-my-price-availability tr.my-headings {
     background: url("../../images/global/dot-gray.gif") repeat-x scroll left center transparent;
 }
+
+/* .item-lnk:link{ */
+/* 	color: green */
+/* } */
+.item-lnk:visited{
+	color: #609
+}
+/* .item-lnk:hover{ */
+/* 	color: black */
+/* } */
