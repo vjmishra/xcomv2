@@ -166,19 +166,19 @@ public class AjaxAutocompleteAction extends WCAction {
 			query.add(new BooleanClause(btQuery, Occur.MUST));
 		}
 
-		String shipToDivision = getEntitlementDivisionAndBrand();
-		if (shipToDivision != null) {
-			Term btTerm = new Term("entitled_divisions", shipToDivision.toLowerCase());
-			TermQuery btQuery = new TermQuery(btTerm);
-			query.add(new BooleanClause(btQuery, Occur.MUST));
-		}
-
-//		String companyCodeAndLegacyCustId = getEntitlementCompanyCodeAndLegacyCustomerId();
-//		if (companyCodeAndLegacyCustId != null) {
-//			Term btTerm = new Term("entitled_customers", companyCodeAndLegacyCustId.toLowerCase());
+//		String shipToDivision = getEntitlementDivisionAndBrand();
+//		if (shipToDivision != null) {
+//			Term btTerm = new Term("entitled_divisions", shipToDivision.toLowerCase());
 //			TermQuery btQuery = new TermQuery(btTerm);
 //			query.add(new BooleanClause(btQuery, Occur.MUST));
 //		}
+
+		String companyCodeAndLegacyCustId = getEntitlementCompanyCodeAndLegacyCustomerId();
+		if (companyCodeAndLegacyCustId != null) {
+			Term btTerm = new Term("entitled_customers", companyCodeAndLegacyCustId.toLowerCase());
+			TermQuery btQuery = new TermQuery(btTerm);
+			query.add(new BooleanClause(btQuery, Occur.MUST));
+		}
 
 		String[] tokens = searchTerm.split("\\s+");
 		for (String token : tokens) {
@@ -199,27 +199,27 @@ public class AjaxAutocompleteAction extends WCAction {
 		return anonymous ? wcContext.getStorefrontId() : null;
 	}
 
-	String getEntitlementDivisionAndBrand() {
-		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		if (shipto == null) {
-			return null;
-		}
-
-		// TODO need to add customer_level db column
-//		if ("N".equals(shipto.getCustomerLevel()) { return null; }
-		return shipto.getExtnCustomerDivision() + wcContext.getStorefrontId();
-	}
-
-//	String getEntitlementCompanyCodeAndLegacyCustomerId() {
+//	String getEntitlementDivisionAndBrand() {
 //		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 //		if (shipto == null) {
 //			return null;
 //		}
 //
-//		String companyCode = shipto.getExtnCustomerDivision();
-//		String legacyCustNum = shipto.getExtnLegacyCustNumber();
-//		return companyCode + legacyCustNum;
+//		// TODO need to add customer_level db column
+////		if ("N".equals(shipto.getCustomerLevel()) { return null; }
+//		return shipto.getExtnCustomerDivision() + wcContext.getStorefrontId();
 //	}
+
+	String getEntitlementCompanyCodeAndLegacyCustomerId() {
+		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if (shipto == null) {
+			return null;
+		}
+
+		String companyCode = shipto.getExtnCustomerDivision();
+		String legacyCustNum = shipto.getExtnLegacyCustNumber();
+		return companyCode + legacyCustNum;
+	}
 
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;
@@ -240,14 +240,14 @@ public class AjaxAutocompleteAction extends WCAction {
 			String getEntitlementAnonymousBrand() {
 				return null;
 			}
-			@Override
-			String getEntitlementDivisionAndBrand() {
-				return null;
-			}
 //			@Override
-//			String getEntitlementCompanyCodeAndLegacyCustomerId() {
-//				return "800008310316";
+//			String getEntitlementDivisionAndBrand() {
+//				return "60xpedx";
 //			}
+			@Override
+			String getEntitlementCompanyCodeAndLegacyCustomerId() {
+				return "800008310316";
+			}
 		};
 
 		action.setSearchTerm("spring");
