@@ -1091,7 +1091,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 								String extnBasis = itemElement.getAttribute(
 										"ExtnBasis").replaceFirst("^0+(?!$)",
 										"");
-								if (extnBasis != null && !"0".equals(extnBasis))
+								if (extnBasis != null && extnBasis.trim().length() > 0 && !"0".equals(extnBasis.trim()))
 									itemElement.setAttribute("ExtnBasis",
 											(Double.valueOf(extnBasis)+"").replaceFirst("\\.0+$", "")); /* EB-829  To implement a Permanent Fix for Numeric Sort on item list page for the 'Basis' Column */
 								else
