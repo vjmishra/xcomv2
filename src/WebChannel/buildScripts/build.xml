@@ -313,7 +313,7 @@
 		<echo message="building ear file" />
 		<exec executable="${runtime}/bin/${buildEarCommand}">
 			<arg value="-Dappserver=weblogic" />
-			<arg value="-Ddevmode=false" />
+			<arg value="-Ddevmode=true" />
 			<arg value="-Dwarfiles=swc" />
 			<arg value="-Dwarfiles=swc" />
 			<arg value="-Dearfile=swc.ear" />
