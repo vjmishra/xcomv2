@@ -471,8 +471,9 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 					}
 					
 					if ("caln".equals(prefix)) {
-						String dateValue = paramStringArray[0];
-						dateValue = dateValue + " 00:00:00";
+						String dateValue = paramStringArray[0];						
+						String dateSplitValue[] = dateValue.split("/");						
+						dateValue = "[DateTime("+ dateSplitValue[2] + ","+  dateSplitValue[0] +"," + dateSplitValue[1] + ",0,0,0)]";
 						paramStringArray[0] = dateValue; 
 					}
 					
@@ -517,7 +518,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				
 				String encodedToken = logonTokens.get(1);	
 				
-				finalURL= openDocURL + params + "&token=" + encodedToken + "&sRefresh=Y";							
+				finalURL= openDocURL + params + "&token=" + encodedToken + "&sRefresh=Y";		
 			}
 			
 			// Set the prompts and rerun the report
