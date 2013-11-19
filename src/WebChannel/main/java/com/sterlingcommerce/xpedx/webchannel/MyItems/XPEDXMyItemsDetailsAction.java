@@ -171,6 +171,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
     private String mfgItemFlag;
     private String qtyTextBox;
     private String[] names;//EB-760 Moved the export functionality after calling the validate UOM
+    public boolean updatebuttonClicked;
 
 	public String[] getNames() {
 		return names;
@@ -533,6 +534,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// get the data in csv format
 			String exportData = "Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,Line Level Code,Description\nDM560,428072,2,Carton,,abcdefght";
 			StringBuilder sbCSV = new StringBuilder();
+			HashMap exportMap = new HashMap();
 			@SuppressWarnings("unused")
 			ArrayList<Element> items = getXMLUtils().getElements(
 					getOutDoc().getDocumentElement(), "XPEDXMyItemsItems");
@@ -540,13 +542,26 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			if(items.size() > 0){
 				itemListEntitled=XPEDXMyItemsUtils.getEntitledItem(getWCContext(),items);
 			}
-			//XB-56 - Modfied Label
+			
+
+			
+			
+			for (Element item : items) {
+				String id 		 = item.getAttribute("MyItemsKey");
+				if (request.getParameter("avail_" + id) != null) {
+					this.updatebuttonClicked=true;
+				}
+			}
+			if(this.updatebuttonClicked==true){
+				processStockCheck(true);
+				exportMap = this.pnaHoverMap;
+			}
 			sbCSV.append("Supplier Part Number,Customer Part Number,Manufacturer Item Number,Quantity,Unit of Measure,");
 
 
 			sbCSV.append("Description,Price,");
 			//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
-			sbCSV.append("Price UOM,Line PO #,Line Acct #,Customer Field 1,Customer Field 2,Customer Field 3");
+			sbCSV.append("Price UOM,Line PO #,Line Acct #,Primary Available,Next Day Available,2+ Days Available,Availability UOM");
 
 			// START - Display the custom fields
 			/*for (Iterator iterator = getCustomerFieldsMap().keySet().iterator(); iterator.hasNext();) {
@@ -557,15 +572,44 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			// END - Display the custom fields
 			sbCSV.append("\n");
 			int i = 0;
+			JSONObject jdondata = new JSONObject();
 			for (Element item : items) {
 				String id 		 = item.getAttribute("MyItemsKey");
 				String tmpItemId = item.getAttribute("ItemId");
-				String customerPartNumber = "";
+				String customerPartNumber = ""; 
+				String lineNumber = item.getAttribute("ItemOrder");
 				//Added	this XB-56
 
 				String mfgItemNo = manufactureItemMap.get(item.getAttribute("ItemId"));
-				//XB-56 End
-
+				String immediate =null;
+				String nextDay = null;
+				String plus2Days = null;
+				String UOM = null;
+				//XB-56 Endif (totalForImmediate > 0) {
+				if(exportMap !=null && updatePAMetaTag== true){
+					if(lineNumber==null  && "".equalsIgnoreCase(lineNumber)){
+						jdondata = (JSONObject) exportMap.get(tmpItemId);
+					}else{
+						jdondata = (JSONObject) exportMap.get(tmpItemId+"_"+lineNumber);
+					}
+					//if(immediate !=null && "".equalsIgnoreCase(immediate)){
+						immediate = jdondata.get("Immediate").toString();
+					//}else{
+					//	immediate="";
+					//}
+					//if(nextDay !=null && "".equalsIgnoreCase(nextDay)){
+					nextDay= jdondata.get("NextDay").toString();
+					
+					//}else{
+					//	nextDay="";
+					//}
+					//if(plus2Days !=null && "".equalsIgnoreCase(plus2Days)){
+					//	plus2Days=jdondata.get("TwoPlusDays").toString();
+					//}else{
+						plus2Days="";
+						UOM = jdondata.get("UOM").toString();
+					//}
+				}
 				//get the customer part number
 				if(itemcustXrefDoc == null)
 					itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allMyItemsListItemIds, getWCContext());
@@ -709,6 +753,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						.iterator(); iterator.hasNext();) {
 					String customKey = (String) iterator.next();
 
+					if("CustomerPONo".equalsIgnoreCase(customKey) || "CustLineAccNo".equalsIgnoreCase(customKey)){
 					if(XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey))).length()>0)
 					{
 					sbCSV.append("\"").append("'"+XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey)))+"'").append("\"");
@@ -719,7 +764,30 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					}
 					sbCSV.append(",");
 				}
+				}
 				// END - Display the custom fields
+
+				if(immediate !=null && !"".equalsIgnoreCase(immediate)){
+					sbCSV.append("\"").append(
+							XPEDXMyItemsUtils.encodeStringForCSV(immediate)).append(
+									"\"").append(",");
+				}
+				if(nextDay !=null && !"".equalsIgnoreCase(nextDay)){
+					sbCSV.append("\"").append(
+							XPEDXMyItemsUtils.encodeStringForCSV(nextDay)).append(
+									"\"").append(",");
+				}
+				if(plus2Days !=null && !"".equalsIgnoreCase(plus2Days)){
+					sbCSV.append("\"").append(
+							XPEDXMyItemsUtils.encodeStringForCSV(plus2Days)).append(
+									"\"").append(",");
+				}
+                if(UOM !=null && ! "".equalsIgnoreCase(UOM)){
+                	sbCSV.append("\"").append(
+							XPEDXMyItemsUtils.encodeStringForCSV(UOM)).append(
+									"\"").append(",");
+                }
+				
 				sbCSV.append("\n");
 				i++;
 			}
@@ -743,6 +811,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			LOG.error(e.getStackTrace());
 		}
 	}
+
 
  	//XB-224 Added to check for item entitlement for the logged in customer
 
@@ -1536,6 +1605,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 	}
 	private void processStockCheck(boolean checkAllItems) throws Exception {
 		processStockCheck(checkAllItems,null);
+		this.updatebuttonClicked=true;
 	}
 
 	private void processStockCheck(boolean checkAllItems,String invalidItems[]) throws Exception {
@@ -1550,7 +1620,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			int totalQty;
 			int OM;
 			qtyTextBoxMap = new HashMap<String, String>();
-
+			this.updatebuttonClicked=true;
 			// Init some vars
 			ArrayList<XPEDXItem> inputItems = new ArrayList<XPEDXItem>();
 
@@ -2696,7 +2766,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 			//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError
 			ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 			setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-
+			this.updatebuttonClicked=true;
 			// Check for Success/Failure and Error Conditions
 			if (null == pna || pna.getTransactionStatus().equalsIgnoreCase("F")) {
 				/*
