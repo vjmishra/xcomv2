@@ -26,6 +26,7 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.util.YFCCommon;
 
 /**
  * @author vgovindan
@@ -216,7 +217,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		//modified for jira 3253 to format quantity of ordermultiple
 		if (isGuestUser == false) {
-			if (Integer.parseInt(orderMultiple) > 1) {
+			
+			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
 						.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
 						.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
