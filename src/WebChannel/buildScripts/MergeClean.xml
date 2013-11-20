@@ -15,7 +15,6 @@
 			<fileset dir="${swc_build_dir}">
 				<include name="${swc_custom_dir}/**" />
 				<include name="${custommashups}/**" />
-				<exclude name="**/Marketing/**" />
 			</fileset>
 		</delete>
 		<delete includeemptydirs="true">
