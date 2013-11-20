@@ -1003,7 +1003,12 @@ from session . We have customer Contact Object in session .
 				<s:iterator value="addnlEmailAddrList" id="addtnEmailAddrs">
 					<s:set name="emailAddrs" value="key" />
 					<div class="float-left margin-top-five">
-						<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input> 
+					    <s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag != 'true'}">
+							<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>" disabled="disabled"></input>
+						</s:if>
+						<s:else>
+							<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input>
+						</s:else>
 						<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
 					</div>								
 				</s:iterator>

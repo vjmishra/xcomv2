@@ -271,15 +271,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	                }
 	            }
 	        }	        
-	        
-	        Object approveOrderSessionVar=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
-			XPEDXWCUtils.removeObectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
-			String approveOrderFlag=null;
-			if(approveOrderSessionVar!=null)
-			{
-				approveOrderFlag=approveOrderSessionVar.toString();
-			}
-	        if("false".equals(approveOrderFlag))
+	       
+	        if("false".equals(isEditOrder))
     		{
 	        	Set<String> mashupIdSet = new HashSet<String>();
     			mashupIdSet.add(mashUpId);
