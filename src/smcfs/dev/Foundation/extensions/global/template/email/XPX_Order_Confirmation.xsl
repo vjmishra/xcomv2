@@ -5,9 +5,12 @@
     xmlns:emailformatters="com.yantra.pca.email.formatters"
     xmlns:java="java"
     exclude-result-prefixes="java emailformatters">
+    
+     <xsl:output media-type="text/xml;charset=utf-8"/>
+    
 
 <xsl:template name="applyStyle">
-	<xsl:comment>CONTENT_TYPE=text/html; charset=UTF-8</xsl:comment>
+<xsl:comment>CONTENT_TYPE=text/html; charset=UTF-8</xsl:comment>
 	<HEAD>
 	    <STYLE TYPE="text/css">
 
@@ -227,7 +230,7 @@
 			
 
 	    </STYLE>
-
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	</HEAD>
 </xsl:template>
 

@@ -18,7 +18,7 @@
 							</tr>
 							<tr>
 								<td>
-									<p>Welcome to <a href="http://www.xpedx.com" class="underlink" target="_blank">www.xpedx.com</a> ("Website"), an interactive online service operated by xpedx (&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;), a division of International Paper Company. Please read the following to learn more about our Privacy Policy, which includes compliance with California Privacy Rights (see also <a href="http://oag.ca.gov/privacy" class="underlink" target="_blank">http://www.privacyprotection.ca.gov</a>). </p>
+									<p>Welcome to <a href="http://www.xpedx.com" class="underlink" target="_blank">www.xpedx.com</a> ("Website"), an interactive online service operated by xpedx (&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;), a division of International Paper Company. Please read the following to learn more about our Privacy Policy, which includes compliance with California Privacy Rights (see also <a href="http://oag.ca.gov/privacy" class="underlink" target="_blank">http://oag.ca.gov/privacy</a>). </p>
 									<br/>
 									<p>We respect your privacy and are committed to protecting personally identifiable information you may provide us through our Website. We have adopted this Privacy Policy ("Privacy Policy") to explain what information may be collected on our Website, how we use this information, and under what circumstances we may disclose the information to third parties. This Privacy Policy applies only to information we collect through our Website and does not apply to our collection of information from other sources. </p>
 									<br/>

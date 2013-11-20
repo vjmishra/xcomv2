@@ -10,7 +10,7 @@
     <entry key="draftShipComplete">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnShipComplete,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnShipComplete,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnShipComplete</entry>
     <entry key="willCallFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWillCall,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnWillCall</entry>
     <entry key="orderedByName">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnOrderedByName,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnOrderedByName</entry>
-    <entry key="customerContactId">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@CustomerContactID,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerContactID</entry>    
+    <entry key="customerContactId">XPEDXDraftOrderSummaryOnOrderPlace:/Order/@CustomerContactID</entry>    
             
     <entry key="#parameters.orderReqDeliveryDate">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/@ReqDeliveryDate,XPEDXDraftOrderSummaryOnOrderPlace:/Order/@ReqDeliveryDate</entry>
     <entry key="#parameters.RushOrderNoteText">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderComments,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnRushOrderComments</entry>

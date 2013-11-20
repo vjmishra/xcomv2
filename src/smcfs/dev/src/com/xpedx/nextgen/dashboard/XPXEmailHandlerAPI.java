@@ -181,6 +181,15 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
                 for (int lineCount = 0; lineCount < orderLineLength; lineCount++) {
                     String shipLineTotal = null;
                     Element orderLineEle = (Element) orderLineList.item(lineCount);
+                    if("Cancelled".equals(orderLineEle.getAttribute("Status")) || "Canceled".equals(orderLineEle.getAttribute("Status")))
+					{
+						Element orderLinesEle=SCXmlUtil.getChildElement(orderElement, "OrderLines");
+						if(orderLinesEle!=null)
+						{
+							orderLinesEle.removeChild(orderLineEle);
+							continue;
+						}
+					}
                     String extnWebLineNumber = SCXmlUtil.getXpathAttribute(orderLineEle,"./Extn/@ExtnWebLineNumber");
                     if(!YFCObject.isNull(extnWebLineNumber)) {
                         shipLineTotal = getShipLinePriceForWebLineNo(extnWebLineNumber, orderList);

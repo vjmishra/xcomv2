@@ -92,6 +92,9 @@
 			<result type="json"></result>
 			<result type="json" name="error"></result>
 		</action>
+		<action name="debugmgi" class="com.sterlingcommerce.xpedx.webchannel.catalog.DebugMarketingGroupIndex">
+			<result type="json"></result>
+		</action>
 		
 		<action name="prodCompare"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXProductComparisonAction">

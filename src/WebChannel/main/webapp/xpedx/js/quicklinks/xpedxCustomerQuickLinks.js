@@ -32,6 +32,11 @@ function addRow() {
 	var link = document.getElementById("linkName").value;
 	var urlN = 	document.getElementById("url").value;
 	
+	if(urlN.indexOf("htt",0) < 0)
+	{
+		urlN = "http://" + urlN;
+	}
+	
 	$.fancybox.close();
 	var tbody = document.getElementById("tbl").getElementsByTagName("tbody")[0];
 	var rowCount = tbody.rows.length;
@@ -285,7 +290,10 @@ function selectAll(tableRef) {
 					
 			var link = document.getElementById("linkName").value;
 			var urlN = 	document.getElementById("url").value;
-				
+			if(urlN.indexOf("htt",0) < 0)
+			{
+				urlN = "http://" + urlN;
+			}	
 			var tbody = document.getElementById("tbl");
 			var rowCount = tbody.rows.length;
 			for(var i=rowCount; i>=1; i--) {
@@ -323,7 +331,10 @@ function selectAll(tableRef) {
 					
 		var linkValue = document.getElementById("linkName").value; 
 		var urlValue = document.getElementById("url").value;						
-       
+		if(urlN.indexOf("htt",0) < 0)
+		{
+			urlN = "http://" + urlN;
+		}
 
 		if(linkValue.trim().length <= 0 ){
             alert("Please enter the Link Name");

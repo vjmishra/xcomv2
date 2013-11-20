@@ -1615,7 +1615,7 @@
             name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="changeOrder">
             <Input>                
-                <Order OrderHeaderKey="" CustomerPONo="" ReqDeliveryDate="" Override="Y" CustomerContactID="">
+                <Order OrderHeaderKey="" CustomerPONo="" ReqDeliveryDate="" Override="Y">
                     <Extn ExtnDeliveryHoldFlag="" ExtnRushOrderComments=""
                         ExtnShipComplete="" ExtnWillCall="" ExtnDeliveryHoldDate=""
                         ExtnDeliveryHoldTime="" ExtnAttentionName="" ExtnHeaderComments=""

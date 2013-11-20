@@ -204,7 +204,8 @@ public class XPXLoadCatalog2 implements YIFCustomApi {
 											{
 												int _length= fixedLengthAfterDecimal - basisAfterDecimalValLength;
 												if(_length!=0){
-													sb.append(String.format("%0"+(_length)+"d",0)).append(basisAfterDecimalVal);
+													sb.append(basisAfterDecimalVal);
+													sb.append(String.format("%0"+(_length)+"d",0));
 												}else{
 													sb.append(basisAfterDecimalVal); 
 												}
