@@ -416,7 +416,9 @@
 
           XMLGroup="Extn" />
 
+		 <Attribute ColumnName="EXTN_DELIVERY_INFO_SAAL" DataType="varchar2-1000" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDeliveryInfoSaal" 
 
+          XMLGroup="Extn" />
           
 
         </Attributes>
