@@ -964,6 +964,15 @@
           XMLGroup="Extn" 
           />
           
+          <Attribute ColumnName="EXTN_SALESPRO_P_EMAIL_ENABLED" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to the primary Sales Professional"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesProPrimaryEmailEnabled"
+	          XMLGroup="Extn" 
+          />
+          
           <Attribute ColumnName="EXTN_SALESPRO_1_EMAIL_ENABLED" 
 	          DataType="char-1"
 	          DefaultValue="'N'" 
