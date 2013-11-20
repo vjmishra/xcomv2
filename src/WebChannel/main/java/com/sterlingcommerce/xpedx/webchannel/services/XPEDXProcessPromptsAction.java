@@ -285,7 +285,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 								billToList.add(billto);
 							} else if (extSuffixType.equalsIgnoreCase("S") == true) {
 								String shipto = geteditedCustomerNo(strCustId)
-										+ "-" + getShipToSuffix(strCustId);
+										+ " - " + getShipToSuffix(strCustId);
 								shipToList.add(shipto);
 							}
 
@@ -379,7 +379,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 						if (m == array.length - 1 )
 							arrayCSF = arrayCSF + array[m];
 						else 
-							arrayCSF = arrayCSF + array[m] + ","; 
+							arrayCSF = arrayCSF + array[m] + ";"; 
 						LOG.debug("**** When All Authorized, For Prompt "
 								+ promptName + " Value Passed Is= " + array[m]);
 					}
@@ -413,7 +413,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 						if (m == array.length - 1 )
 							arrayCSF = arrayCSF + array[m];
 						else 
-							arrayCSF = arrayCSF + array[m] + ",";
+							arrayCSF = arrayCSF + array[m] + ";";
 						LOG.debug("**** When All Authorized, For Prompt "
 								+ promptName + " Value Passed Is= " + array[m]);
 					}
@@ -449,7 +449,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 						if (m == array.length - 1 )
 							arrayCSF = arrayCSF + array[m];
 						else 
-							arrayCSF = arrayCSF + array[m] + ",";
+							arrayCSF = arrayCSF + array[m] + ";";
 						LOG.debug("**** When All Authorized, For Prompt "
 								+ promptName + " Value Passed Is= " + array[m]);
 					}
@@ -473,7 +473,7 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 					if ("caln".equals(prefix)) {
 						String dateValue = paramStringArray[0];						
 						String dateSplitValue[] = dateValue.split("/");						
-						dateValue = "[DateTime("+ dateSplitValue[2] + ","+  dateSplitValue[0] +"," + dateSplitValue[1] + ",0,0,0)]";
+						dateValue = "DateTime("+ dateSplitValue[2] + ","+  dateSplitValue[0] +"," + dateSplitValue[1] + ",0,0,0)";
 						paramStringArray[0] = dateValue; 
 					}
 					

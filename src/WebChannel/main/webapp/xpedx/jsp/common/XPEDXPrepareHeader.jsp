@@ -138,16 +138,15 @@
 				
 				var tokens = searchTerm.split(/\s+/);
 				
-				var text = item.path;
-				for (var i = 0, len = tokens.length; i < len; i++) {
-					var regexMatchHighlight = new RegExp(tokens[i], 'ig');
-					text = text.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
-				}
-				// autocomplete console.log('text = ' , text);
+				// it's important to replace all matches simultaneously, since each replacement modifies the label (adds markup)
+				var label = item.path;
+				var regexMatchHighlight = new RegExp('(' + tokens.join('|') + ')', 'ig');
+				label = label.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+				// autocomplete console.log('label = ' , label);
 				
 				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
 				.data('item.autocomplete', item)
-				.append('<a class="ui-corner-all" tabindex="-1">' + text + '</a>')
+				.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
 				.appendTo(ul);
 			}
 			;

@@ -963,6 +963,52 @@
           XMLName="ExtnLocationID"
           XMLGroup="Extn" 
           />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_P_EMAIL_ENABLED" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to the primary Sales Professional"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesProPrimaryEmailEnabled"
+	          XMLGroup="Extn" 
+          />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_1_EMAIL_ENABLED" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 1"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesPro1EmailEnabled"
+	          XMLGroup="Extn" 
+          />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_2_EMAIL_ENABLED" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 2"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesPro2EmailEnabled"
+	          XMLGroup="Extn" 
+          />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_3_EMAIL_ENABLED" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 3"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesPro3EmailEnabled"
+	          XMLGroup="Extn" 
+          />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_4_EMAIL_ENABLED" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 4"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesPro4EmailEnabled"
+	          XMLGroup="Extn" 
+          />
+          
         </Attributes>
         <!-- ENDS Fix for JIRA 1886 : adsouza-->
 		
