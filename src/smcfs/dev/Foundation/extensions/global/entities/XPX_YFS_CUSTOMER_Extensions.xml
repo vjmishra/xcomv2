@@ -966,7 +966,7 @@
           
           <Attribute ColumnName="EXTN_SALESPRO_1_EMAIL_ENABLED" 
 	          DataType="char-1"
-	          DefaultValue="' '" 
+	          DefaultValue="'N'" 
 	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 1"  
 	          Nullable="true" 
 	          XMLName="ExtnSalesPro1EmailEnabled"
@@ -975,7 +975,7 @@
           
           <Attribute ColumnName="EXTN_SALESPRO_2_EMAIL_ENABLED" 
 	          DataType="char-1"
-	          DefaultValue="' '" 
+	          DefaultValue="'N'" 
 	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 2"  
 	          Nullable="true" 
 	          XMLName="ExtnSalesPro2EmailEnabled"
@@ -984,7 +984,7 @@
           
           <Attribute ColumnName="EXTN_SALESPRO_3_EMAIL_ENABLED" 
 	          DataType="char-1"
-	          DefaultValue="' '" 
+	          DefaultValue="'N'" 
 	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 3"  
 	          Nullable="true" 
 	          XMLName="ExtnSalesPro3EmailEnabled"
@@ -993,7 +993,7 @@
           
           <Attribute ColumnName="EXTN_SALESPRO_4_EMAIL_ENABLED" 
 	          DataType="char-1"
-	          DefaultValue="' '" 
+	          DefaultValue="'N'" 
 	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 4"  
 	          Nullable="true" 
 	          XMLName="ExtnSalesPro4EmailEnabled"
