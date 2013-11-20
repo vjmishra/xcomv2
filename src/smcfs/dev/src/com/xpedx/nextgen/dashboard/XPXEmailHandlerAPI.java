@@ -176,14 +176,14 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
             strOrderType = orderElement.getAttribute("OrderType");
             if (!YFCObject.isNull(strOrderType) && strOrderType.equalsIgnoreCase("Customer")) {
                 // Customer Order.
-                NodeList orderLineList = orderElement.getElementsByTagName("OrderLine");
-                int orderLineLength = orderLineList.getLength();
+            	Element orderLinesEle=SCXmlUtil.getChildElement(orderElement, "OrderLines");
+                ArrayList<Element> orderLineList = SCXmlUtil.getChildren(orderLinesEle, "OrderLine");
+                int orderLineLength = orderLineList.size();
                 for (int lineCount = 0; lineCount < orderLineLength; lineCount++) {
                     String shipLineTotal = null;
-                    Element orderLineEle = (Element) orderLineList.item(lineCount);
+                    Element orderLineEle = (Element) orderLineList.get(lineCount);
                     if("Cancelled".equals(orderLineEle.getAttribute("Status")) || "Canceled".equals(orderLineEle.getAttribute("Status")))
 					{
-						Element orderLinesEle=SCXmlUtil.getChildElement(orderElement, "OrderLines");
 						if(orderLinesEle!=null)
 						{
 							orderLinesEle.removeChild(orderLineEle);
