@@ -81,9 +81,26 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public String draftErrorCatalog="false";
 	public String draftErrorFlagCatalog = "DraftErrorCat";
 	private String quantitydraftError="false";
-	
+	//Added for EB 3372
+	protected String requestedJobId;
+	protected String requestedCustomerLinePONo;
 
+	public String getRequestedJobId() {
+		return requestedJobId;
+	}
 
+	public void setRequestedJobId(String requestedJobId) {
+		this.requestedJobId = requestedJobId;
+	}
+
+	public String getRequestedCustomerLinePONo() {
+		return requestedCustomerLinePONo;
+	}
+
+	public void setRequestedCustomerLinePONo(String requestedCustomerLinePONo) {
+		this.requestedCustomerLinePONo = requestedCustomerLinePONo;
+	}
+	//ENd of EB 3372
 	//For Order multiple CR
 	protected HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
 	
@@ -605,6 +622,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		entereditemTypeList.add(requestedItemType);
 		enteredUOMs.add(requestedUOM);
 		orderHeaderKey = requestedOrderHeaderKey;
+		//added for eb 3372
+		ExtnCustLineAccNo =  requestedJobId;
+		ExtnCustomerPONo = requestedCustomerLinePONo;
+		//End of EB 3372
 		String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 		if(!YFCCommon.isVoid(editedOrderHeaderKey))
 		{

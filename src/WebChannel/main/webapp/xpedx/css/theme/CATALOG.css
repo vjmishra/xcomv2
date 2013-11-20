@@ -515,7 +515,7 @@ width:100%;
 
 .normal-view #item-ct dd .contents {
 	float:left;
-	width: 539px;
+	width: 500px;
 	padding: 10px 15px 10px 10px;
 }
 
@@ -908,10 +908,10 @@ ul
 
 .normal-view .compare_check { width: 135px; padding-left: 5px; }
 .bottable .compare_check input { margin-right: 6px; }
-.normal-view .item_number { width: 65%; }
+.normal-view .item_number { width: 40%; }
 .normal-view .quantity_box
 {
-	width: 19em;
+	width: 29em;
 	text-align: right;
 }
 .normal-view .add_to_cart { text-align: right; }
@@ -1164,8 +1164,7 @@ img#youtube { margin-right: 9px; }
     margin-top: -105px; /* = height + preferred bottom margin */
 	
     /* link is centered */
-    left: 50%;
-    margin-left: 550px; 
+    left: 85%;
     width: 51px;
     height: 51px;
 }

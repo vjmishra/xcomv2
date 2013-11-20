@@ -91,7 +91,44 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String indexField = "";
 	private String remSearchTerms = "";
 	private LinkedHashMap<String, Map<String, String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String, String>>();
+	//Added for EB 3372
+	protected String isCustomerPO="N";
+	protected String isCustomerLinAcc="N";
+	protected String customerPOLabel="";
+	protected String custLineAccNoLabel="";
 
+	public String getIsCustomerPO() {
+		return isCustomerPO;
+	}
+
+	public void setIsCustomerPO(String isCustomerPO) {
+		this.isCustomerPO = isCustomerPO;
+	}
+
+	public String getIsCustomerLinAcc() {
+		return isCustomerLinAcc;
+	}
+
+	public void setIsCustomerLinAcc(String isCustomerLinAcc) {
+		this.isCustomerLinAcc = isCustomerLinAcc;
+	}
+
+	public String getCustomerPOLabel() {
+		return customerPOLabel;
+	}
+
+	public void setCustomerPOLabel(String customerPOLabel) {
+		this.customerPOLabel = customerPOLabel;
+	}
+
+	public String getCustLineAccNoLabel() {
+		return custLineAccNoLabel;
+	}
+
+	public void setCustLineAccNoLabel(String custLineAccNoLabel) {
+		this.custLineAccNoLabel = custLineAccNoLabel;
+	}
+	//EB 3372 - added
 	// Added class variable for JIRA #4195 - OOB variable searchTerm doesn't
 	// have a getter method exposed
 	private String searchString = null;
@@ -476,6 +513,41 @@ public class XPEDXCatalogAction extends CatalogAction {
 			log.error("Error in Init Method", exception);
 		}
 	}
+	//Added for EB 3372
+	protected void getCustomerLineDetails() throws Exception {
+		//get the map from the session. if null query the DB
+		LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();		
+        if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
+        	LOG.debug("Found customerFieldsMap in the session");
+        }
+        if(customerFieldsSessionMap!=null)
+        {
+			for (String field : customerFieldsSessionMap.keySet())
+	    	{
+	    		if("CustomerPONo".equals(field))
+	    		{
+	    			isCustomerPO="Y";
+	    			customerPOLabel=customerFieldsSessionMap.get(field);
+	    		}
+	    		if("CustLineAccNo".equals(field))
+	    		{
+	    			isCustomerLinAcc="Y";
+	    			custLineAccNoLabel=customerFieldsSessionMap.get(field);
+	    		}
+	    	}
+        }
+    	
+	}
+	
+	protected LinkedHashMap getCustomerFieldsMapfromSession(){
+		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
+        HttpSession localSession = httpRequest.getSession();*/
+        XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
+        LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+        return customerFieldsSessionMap;
+	}
+	
+	//ENd of EB 3372
 
 	private void getSortFieldDocument() {
 		Map<String, String> fl = this.getSortFieldList();
@@ -1772,6 +1844,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setColumnListForUI();
 				// prepareMyItemListList();
 				getSortFieldDocument();
+				getCustomerLineDetails(); //added for EB 3372
 			}
 			getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),
 					path);
