@@ -620,6 +620,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
 					//Added For Jira 3465
 					shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+					shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 				}
 			}
@@ -1127,6 +1128,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
 											//Added For Jira 3465
 											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+											shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
 											shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
 											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 										} catch (CannotBuildInputException e) {

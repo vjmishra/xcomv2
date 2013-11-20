@@ -1662,18 +1662,38 @@ from session . We have customer Contact Object in session .
 				</fieldset>
 			</div>-->
 			<!--  Added div for Jira 3465 - Delivery Information on Checkout Screen -->
-			<s:set id="deliveryinformation" name="deliveryinformation" value="deliveryInfo" />
-			<s:if test='#deliveryinformation != null && #deliveryinformation!="" '>
-			<div align="center" >
-			<table align="left">
-  				<tr>
-    			<td class="second-cell" width="400px" style="text-align:left;display:block">
-    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
-				<s:property value="deliveryInfo"/></td>
-   				</tr>
-			</table> 
-			</div>
+			
+			<!--EB-3624 Display brand specific delivery info added  -->
+			<!-- wCContext.storefrontId value is from XPEDXPrepareHeader.jsp -->
+			<s:set id="deliveryinfobrand" name="deliveryinfobrand" value="wCContext.storefrontId" />
+			<s:if test='#deliveryinfobrand != null && #deliveryinfobrand!="" && #deliveryinfobrand=="xpedx" '>
+				<s:set id="deliveryinformation" name="deliveryinformation" value="deliveryInfo" />
+				<s:if test='#deliveryinformation != null && #deliveryinformation!="" '>
+				<div align="center" >
+				<table align="left">
+	  				<tr>
+	    			<td class="second-cell" width="400px" style="text-align:left;display:block">
+	    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
+					<s:property value="deliveryInfo"/></td>
+	   				</tr>
+				</table> 
+				</div>
+				</s:if>
 			</s:if>
+			<s:else>
+				<s:set id="deliveryinformationSaal" name="deliveryinformationSaal" value="deliveryInfoSaal" />
+				<s:if test='#deliveryinformationSaal != null && #deliveryinformationSaal!="" '>
+				<div align="center" >
+				<table align="left">
+	  				<tr>
+	    			<td class="second-cell" width="400px" style="text-align:left;display:block">
+	    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
+					<s:property value="deliveryinformationSaal"/></td>
+	   				</tr>
+				</table> 
+				</div>
+				</s:if>
+			</s:else>
 			<!--  Fix end for Jira 3465 - Delivery Information on Checkout Screen -->
 			<%-- 
 			 <div id="msgForCouponCode" style="display: block;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
