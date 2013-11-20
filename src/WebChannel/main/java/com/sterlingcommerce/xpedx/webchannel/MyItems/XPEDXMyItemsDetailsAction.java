@@ -586,29 +586,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String plus2Days = null;
 				String UOM = null;
 				//XB-56 Endif (totalForImmediate > 0) {
-				if(exportMap !=null && updatePAMetaTag== true){
+				if(exportMap !=null){
 					if(lineNumber==null  && "".equalsIgnoreCase(lineNumber)){
 						jdondata = (JSONObject) exportMap.get(tmpItemId);
 					}else{
 						jdondata = (JSONObject) exportMap.get(tmpItemId+"_"+lineNumber);
 					}
-					//if(immediate !=null && "".equalsIgnoreCase(immediate)){
-						immediate = jdondata.get("Immediate").toString();
-					//}else{
-					//	immediate="";
-					//}
-					//if(nextDay !=null && "".equalsIgnoreCase(nextDay)){
-					nextDay= jdondata.get("NextDay").toString();
 					
-					//}else{
-					//	nextDay="";
-					//}
-					//if(plus2Days !=null && "".equalsIgnoreCase(plus2Days)){
-					//	plus2Days=jdondata.get("TwoPlusDays").toString();
-					//}else{
-						plus2Days="";
+					if(jdondata !=null){	
+						immediate = jdondata.get("Immediate").toString();					
+						nextDay= jdondata.get("NextDay").toString();				
+						plus2Days=jdondata.get("TwoPlusDays").toString();
 						UOM = jdondata.get("UOM").toString();
-					//}
+					}
+				
 				}
 				//get the customer part number
 				if(itemcustXrefDoc == null)
@@ -771,21 +762,29 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(immediate)).append(
 									"\"").append(",");
+				}else{
+					sbCSV.append(",");
 				}
 				if(nextDay !=null && !"".equalsIgnoreCase(nextDay)){
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(nextDay)).append(
 									"\"").append(",");
+				}else{
+					sbCSV.append(",");
 				}
 				if(plus2Days !=null && !"".equalsIgnoreCase(plus2Days)){
 					sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(plus2Days)).append(
 									"\"").append(",");
+				}else{
+					sbCSV.append(",");
 				}
                 if(UOM !=null && ! "".equalsIgnoreCase(UOM)){
                 	sbCSV.append("\"").append(
 							XPEDXMyItemsUtils.encodeStringForCSV(UOM)).append(
 									"\"").append(",");
+                }else{
+                	sbCSV.append(",");
                 }
 				
 				sbCSV.append("\n");
