@@ -5562,6 +5562,12 @@ public class XPEDXWCUtils {
 						billToCustomer.setExtnDefaultStockedItemView(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ALL);
 					}
 
+					billToCustomer.setExtnSalesProPrimaryEmailEnabled(parentExtnElem.getAttribute("ExtnSalesProPrimaryEmailEnabled"));
+					billToCustomer.setExtnSalesPro1EmailEnabled(parentExtnElem.getAttribute("ExtnSalesPro1EmailEnabled"));
+					billToCustomer.setExtnSalesPro2EmailEnabled(parentExtnElem.getAttribute("ExtnSalesPro2EmailEnabled"));
+					billToCustomer.setExtnSalesPro3EmailEnabled(parentExtnElem.getAttribute("ExtnSalesPro3EmailEnabled"));
+					billToCustomer.setExtnSalesPro4EmailEnabled(parentExtnElem.getAttribute("ExtnSalesPro4EmailEnabled"));
+
 					/* XB-763 Code Changes Start */
 					String extnMfgItemFlag = parentExtnElem.getAttribute("ExtnMfgItemFlag");
 					String extnCustomerItemFlag = parentExtnElem.getAttribute("ExtnCustomerItemFlag");
