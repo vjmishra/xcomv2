@@ -181,11 +181,20 @@
 				<tr>	
 					<td style="padding-bottom:20px;">
 						<table width="720">
+							<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
 							<tr>								
+								<td align="left" style="padding-bottom:4px;">
+								<img src="{$brandLogo}" width="108" height="32" />
+								</td>
+							</tr>
+							</xsl:if>
+							 <xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+							 <tr>								
 								<td align="left" style="padding-bottom:4px;">
 								<img src="{$brandLogo}" width="216" height="64" />
 								</td>
 							</tr>
+							 </xsl:if>
 						</table> 
 					    
 				<table class="mainPanel" cellpadding="0"> 
