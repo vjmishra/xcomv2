@@ -593,11 +593,19 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						jdondata = (JSONObject) exportMap.get(tmpItemId+"_"+lineNumber);
 					}
 					
-					if(jdondata !=null){	
-						immediate = jdondata.get("Immediate").toString();					
+					if(jdondata !=null){
+						if(jdondata.get("Immediate") !=null && !"".equalsIgnoreCase(jdondata.get("Immediate").toString())){
+							immediate = jdondata.get("Immediate").toString();					
+						}
+						if(jdondata.get("NextDay") !=null && !"".equalsIgnoreCase(jdondata.get("NextDay").toString())){
 						nextDay= jdondata.get("NextDay").toString();				
+						}
+						if(jdondata.get("TwoPlusDays") !=null && !"".equalsIgnoreCase(jdondata.get("TwoPlusDays").toString())){
 						plus2Days=jdondata.get("TwoPlusDays").toString();
+						}
+						if(jdondata.get("UOM") !=null && !"".equalsIgnoreCase(jdondata.get("UOM").toString())){
 						UOM = jdondata.get("UOM").toString();
+						}
 					}
 				
 				}
