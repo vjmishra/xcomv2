@@ -53,6 +53,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		SCXmlUtils xmlUtils = XPEDXSCXmlUtils.getInstance();
 		Element info = xmlUtils.getChildElement(item, "PrimaryInformation");
 		String itemID = validate(item.getAttribute("ItemID"));
+		String itemDetailURL=validate(item.getAttribute("itemDetailURL"));
 		HashMap<String, String> itemUOMList = tag.getItemUomHashMap().get(itemID);
 		itemUOMList = itemUOMList == null ? new HashMap<String, String>() : itemUOMList;
 		String defaultUOM = validate(tag.getDefaultShowUOMMap().get(itemID));	
@@ -116,6 +117,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String b2cPly = validate(b2cItemExtn.getAttribute("ExtnPly"));
 		String b2cPackMethod = validate(b2cItemExtn.getAttribute("ExtnPackMethod")); //added for XBT 262 & 258
 		String b2cstockStatus = validate(itemBranchBean.getInventoryIndicator());
+		String storeFrontId=(String) tag.getWcContext().getStorefrontId();
 		//String isSuperseded = validate(item.getAttribute("IsItemSuperseded"));
 		//String isValid = validate(info.getAttribute("IsValid"));
 		//String isModelItem = validate(info.getAttribute("IsModelItem"));
@@ -148,8 +150,19 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("itemkey: \"").append(itemKey).append("\",");
 		sb.append("uom: \"").append(TextUtils.htmlEncode(unitOfMeasure)).append("\",");
 		sb.append("name: \"").append(XPEDXMyItemsUtils.formatEscapeCharactersHtml(shortDesc)).append("\",");
-		sb.append("listprice: \"");
+		
+		
+		if(isGuestUser)
+		{
+			itemDetailURL="/swc/catalog/itemDetails.action?sfId="+storeFrontId+"&scGuestUser=Y"+"&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3F"+storeFrontId+"%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"+"&itemID="+itemID+"&unitOfMeasure="+unitOfMeasure+"&selectedView=";
+		}else
+		{
 			
+			itemDetailURL="/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3F"+storeFrontId+"%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"+"&itemID="+itemID+"&unitOfMeasure="+unitOfMeasure+"&selectedView=";
+		}
+		
+		sb.append("itemDetailURL: \"").append(itemDetailURL).append("\",");
+		sb.append("listprice: \"");
 		String tierPrice = "";
 		List<Element> tierPriceList = tag.getPLLineMap().get(itemID);
 		if(tierPriceList != null) {

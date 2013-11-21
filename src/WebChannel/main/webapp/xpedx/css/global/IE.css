@@ -192,4 +192,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .ext-el-mask {
     background-color: #333333;
 }
+.item-lnk:visited{
+	color: #996633;
+}
 /*End of Progress Bar CSS classes*/

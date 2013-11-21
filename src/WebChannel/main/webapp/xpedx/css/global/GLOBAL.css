@@ -10591,13 +10591,6 @@ input.error{
 .catalog-my-price-availability tr.my-headings {
     background: url("../../images/global/dot-gray.gif") repeat-x scroll left center transparent;
 }
-
-/* .item-lnk:link{ */
-/* 	color: green */
-/* } */
 .item-lnk:visited{
-	color: #609
+	color: #996633;
 }
-/* .item-lnk:hover{ */
-/* 	color: black */
-/* } */
