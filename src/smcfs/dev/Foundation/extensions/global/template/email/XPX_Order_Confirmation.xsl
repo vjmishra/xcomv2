@@ -237,7 +237,7 @@
 			
 
 	    </STYLE>
-			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+			<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 	</HEAD>
 </xsl:template>
 
