@@ -1,6 +1,7 @@
 <CustomerList >
 <Customer CustomerKey='' CustomerID='' OrganizationCode='' ParentCustomerKey='' RootCustomerKey=''>
-<Extn  ExtnECSR1EmailConfirmFlag='' ExtnECsr1EMailID='' ExtnECSR2EmailConfirmFlag='' ExtnECsr2EMailID=''>
+<Extn  ExtnECSR1EmailConfirmFlag='' ExtnECsr1EMailID='' ExtnECSR2EmailConfirmFlag='' ExtnECsr2EMailID=''
+		ExtnSalesProPrimaryEmailEnabled="" ExtnSalesPro1EmailEnabled="" ExtnSalesPro2EmailEnabled="" ExtnSalesPro3EmailEnabled="" ExtnSalesPro4EmailEnabled="">
 	<XPXCustomerExtnListList>
 		<XPXCustomerExtnList/>
 	</XPXCustomerExtnListList>
