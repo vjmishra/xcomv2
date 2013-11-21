@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--  Added  for checking eb 3406   -->
+<!DOCTYPE stylesheet [
+<!ENTITY eacute 
+"<xsl:text disable-output-escaping='yes'>&amp;eacute;</xsl:text>">
+]>
+
+
 <xsl:stylesheet version="1.0" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:emailformatters="com.yantra.pca.email.formatters"
@@ -230,7 +237,7 @@
 			
 
 	    </STYLE>
-			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+			<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 	</HEAD>
 </xsl:template>
 
