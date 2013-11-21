@@ -34,6 +34,16 @@ function addItemToCart(itemId) {
 		//var selCart = document.getElementById("draftOrders");
 		var itemType = "" ;
 		var customerFields = "";
+		//Added for EB 3372
+		var Job="";
+		if(document.getElementById('Job_'+itemId)!=null)
+			 Job=document.getElementById('Job_'+itemId).value;
+		
+		var customerPONo = "";
+		if(document.getElementById('customerPONo_'+itemId)!=null &&  document.getElementById('customerPONo_'+itemId)!=undefined){
+			customerPONo=document.getElementById('customerPONo_'+itemId).value; 
+		}
+		//End of EB 3372
 		var draftOrder;
 		if(validateOrderMultiple(itemId) == false)
 		{
@@ -68,6 +78,8 @@ function addItemToCart(itemId) {
 						requestedUOM: selectedUom,
 						requestedItemType: itemType,
 						requestedCustomerFields: customerFields,
+						requestedJobId: Job,
+				    	        requestedCustomerLinePONo: customerPONo,
 						requestedOrderHeaderKey: selCart,
 						draft: draftOrder
 				    },
