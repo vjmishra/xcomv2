@@ -452,7 +452,7 @@
 				<CatalogSearch CategoryDepth="">
 					<CategoryList>
 						<Category CategoryID="" Description=""
-							ShortDescription="">
+							ShortDescription="" CategoryPath="">
 						</Category>
 					</CategoryList>
 				</CatalogSearch>
