@@ -187,10 +187,10 @@ public class AjaxAutocompleteAction extends WCAction {
 			nestedSearchTermQuery.add(new BooleanClause(new WildcardQuery(tName), Occur.SHOULD));
 		}
 
-		// use nested boolean queries to get query: (anon OR div or cust) AND (searchTerm[0] or searchTerm[1] ...)
+		// use nested boolean queries to get query: (anon OR div OR cust) AND (searchTerm[0] or searchTerm[1] ...)
 		BooleanQuery query = new BooleanQuery();
 		query.add(new BooleanClause(nestedEntitlementQuery, Occur.MUST));
-		query.add(new BooleanClause(nestedSearchTermQuery, Occur.SHOULD));
+		query.add(new BooleanClause(nestedSearchTermQuery, Occur.MUST));
 
 		log.debug("Lucene query: " + query);
 
@@ -246,7 +246,7 @@ public class AjaxAutocompleteAction extends WCAction {
 		// tsudis ST   = 60-0006806597-000003-M-XX-S
 		//        div  = 60xpedx
 		//        cust = 600006806597
-		AjaxAutocompleteAction action = new AjaxAutocompleteAction() {
+		AjaxAutocompleteAction tsudis = new AjaxAutocompleteAction() {
 			@Override
 			String getEntitlementAnonymousBrand() {
 				return null;
@@ -261,6 +261,25 @@ public class AjaxAutocompleteAction extends WCAction {
 			}
 		};
 
+		// linemark ST   = 90-0001018921-000001-M-XX-S
+		//          div  = 90xpedx
+		//          cust = 900001018921
+		AjaxAutocompleteAction linemark = new AjaxAutocompleteAction() {
+			@Override
+			String getEntitlementAnonymousBrand() {
+				return null;
+			}
+			@Override
+			String getEntitlementDivisionAndBrand() {
+				return "90xpedx";
+			}
+			@Override
+			String getEntitlementCompanyCodeAndLegacyCustomerId() {
+				return "900001018921";
+			}
+		};
+
+		AjaxAutocompleteAction action = linemark;
 		action.setSearchTerm("spring");
 		List<AutocompleteMarketingGroup> mgs = action.searchIndex("C:/Sterling/Foundation/marketinggroupindex");
 
