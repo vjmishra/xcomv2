@@ -554,25 +554,6 @@ IYRCComposite {
 	private Button btnRmv;
 	public Table orderConfirmList;
 	private TableColumn tblOrderConfirmListId;
-	private Button chkSalesRepFlag;
-
-	private Label lblSalesRepEmailConfirmationFlag4;
-
-	private Button chkSalesRepFlag4;
-
-	private Label lblSalesRepEmailConfirmationFlag3;
-
-	private Button chkSalesRepFlag3;
-
-	private Label lblSalesRepEmailConfirmationFlag2;
-
-	private Button chkSalesRepFlag2;
-
-	private Label lblSalesRepEmailConfirmationFlag1;
-
-	private Button chkSalesRepFlag1;
-
-	private Label lblSalesRepEmailConfirmationFlag0;
 	
 	public CustomerProfileInfoPanel(Composite parent, int style,
 			Object inputObject, CustomerProfileMaintenance parentObj) {
@@ -883,73 +864,6 @@ IYRCComposite {
 
 		addTab(gridDataDummy,"dummySalesRepEmailConfirmationFlag");
 
-		chkSalesRepFlag =  new Button(pnlCustomerProfileInfo,
-				SWT.CHECK);
-		chkSalesRepFlag.setText("");
-		chkSalesRepFlag.setVisible(true);
-		chkSalesRepFlag.setData("yrc:customType", "Label");
-		chkSalesRepFlag.setLayoutData(gridData1);
-		chkSalesRepFlag.setData("name","chkSalesRepFlag");
-		lblSalesRepEmailConfirmationFlag0 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag0.setText("Email Confirmation Flag - Primary Sales Professional");
-		lblSalesRepEmailConfirmationFlag0.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag0.setData("name", "lblSalesRepEmailConfirmationFlag0");
-		addTab(gridDataDummy,"dummyOrderUpdateFlag");
-		
-		chkSalesRepFlag1 =  new Button(pnlCustomerProfileInfo,
-				SWT.CHECK);
-		chkSalesRepFlag1.setText("");
-		chkSalesRepFlag1.setVisible(true);
-		chkSalesRepFlag1.setData("yrc:customType", "Label");
-		chkSalesRepFlag1.setLayoutData(gridData1);
-		chkSalesRepFlag1.setData("name","chkSalesRepFlag");
-		lblSalesRepEmailConfirmationFlag1 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag1.setText("Email Confirmation Flag - Primary Sales Professional 1");
-		lblSalesRepEmailConfirmationFlag1.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag1.setData("name", "lblSalesRepEmailConfirmationFlag1");
-		addTab(gridDataDummy,"dummyOrderUpdateFlag");
-
-		chkSalesRepFlag2 =  new Button(pnlCustomerProfileInfo,
-				SWT.CHECK);
-		chkSalesRepFlag2.setText("");
-		chkSalesRepFlag2.setVisible(true);
-		chkSalesRepFlag2.setData("yrc:customType", "Label");
-		chkSalesRepFlag2.setLayoutData(gridData1);
-		chkSalesRepFlag2.setData("name","chkSalesRepFlag");
-		lblSalesRepEmailConfirmationFlag2 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag2.setText("Email Confirmation Flag - Primary Sales Professional 2");
-		lblSalesRepEmailConfirmationFlag2.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag2.setData("name", "lblSalesRepEmailConfirmationFlag2");
-		addTab(gridDataDummy,"dummyOrderUpdateFlag");
-
-		chkSalesRepFlag3 =  new Button(pnlCustomerProfileInfo,
-				SWT.CHECK);
-		chkSalesRepFlag3.setText("");
-		chkSalesRepFlag3.setVisible(true);
-		chkSalesRepFlag3.setData("yrc:customType", "Label");
-		chkSalesRepFlag3.setLayoutData(gridData1);
-		chkSalesRepFlag3.setData("name","chkSalesRepFlag");
-		lblSalesRepEmailConfirmationFlag3 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag3.setText("Email Confirmation Flag - Primary Sales Professional 3");
-		lblSalesRepEmailConfirmationFlag3.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag3.setData("name", "lblSalesRepEmailConfirmationFlag3");
-		addTab(gridDataDummy,"dummyOrderUpdateFlag");
-
-		chkSalesRepFlag4 =  new Button(pnlCustomerProfileInfo,
-				SWT.CHECK);
-		chkSalesRepFlag4.setText("");
-		chkSalesRepFlag4.setVisible(true);
-		chkSalesRepFlag4.setData("yrc:customType", "Label");
-		chkSalesRepFlag4.setLayoutData(gridData1);
-		chkSalesRepFlag4.setData("name","chkSalesRepFlag");
-		lblSalesRepEmailConfirmationFlag4 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag4.setText("Email Confirmation Flag - Primary Sales Professional 4");
-		lblSalesRepEmailConfirmationFlag4.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag4.setData("name", "lblSalesRepEmailConfirmationFlag4");
-		addTab(gridDataDummy,"dummyOrderUpdateFlag");
-
-
-
 		GridData gridDataPriceControl = new GridData();
 		gridDataPriceControl.horizontalAlignment = SWT.BEGINNING;
 		gridDataPriceControl.grabExcessHorizontalSpace = false;
@@ -1118,8 +1032,8 @@ IYRCComposite {
 		GridData gridDataLbl1 = new GridData();
 		gridDataLbl1.horizontalAlignment = SWT.BEGINNING;
 		gridDataLbl1.grabExcessHorizontalSpace = true;
-		gridDataLbl1.verticalAlignment = SWT.CENTER;
-		gridDataLbl1.widthHint = 180;
+		gridDataLbl1.verticalAlignment = SWT.LEFT;
+		gridDataLbl1.widthHint = 300;
 		gridDataLbl1.horizontalSpan=1;
 		/* XB-759 Code Changes End */
 		
@@ -2147,63 +2061,6 @@ IYRCComposite {
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesPro1EmailEnabled");
-		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesPro1EmailEnabled");
-		chkBoxBindingData.setName("chkSalesRepFlag1");
-		chkSalesRepFlag1.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
-		
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesPro2EmailEnabled");
-		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesPro2EmailEnabled");
-		chkBoxBindingData.setName("chkSalesRepFlag2");
-		chkSalesRepFlag2.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
-
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesPro3EmailEnabled");
-		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesPro3EmailEnabled");
-		chkBoxBindingData.setName("chkSalesRepFlag3");
-		chkSalesRepFlag3.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
-		
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesPro4EmailEnabled");
-		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesPro4EmailEnabled");
-		chkBoxBindingData.setName("chkSalesRepFlag4");
-		chkSalesRepFlag4.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
-		
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesProPrimaryEmailEnabled");
-		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesProPrimaryEmailEnabled");
-		chkBoxBindingData.setName("chkSalesRepFlag");
-		chkSalesRepFlag.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
-
-		
-		
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
 		chkBoxBindingData
 		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
@@ -2762,8 +2619,6 @@ IYRCComposite {
 					lblServiceOptmizationCode, txtServiceOptmizationCode,fillerLabelMap.get("dummyServiceOptmizationCode"),
 					lblCustomerDivision, txtCustomerDivision,fillerLabelMap.get("dummyCustomerDivision"),
 					lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,txtCustomerLinePONumberMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
-					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag
-					,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 
@@ -2791,8 +2646,7 @@ IYRCComposite {
 					lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag"),
 					lblOrderUpdateFlag,chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag"),
 					lblCurrencyCode, txtCurrencyCode,fillerLabelMap.get("dummyCurrencyCode")
-					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag
-                    ,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
+
 			};
 			HideControlsList=Arrays.asList(elements);
 		}
@@ -2808,7 +2662,7 @@ IYRCComposite {
 					,chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
 					lblViewInventory,fillerLabelMap.get("dummyViewInventory"),fillerLabelMap.get("chkUseOrderMultiple"),lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple")
 					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
-					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
+
 			};
 			HideControlsList=Arrays.asList(elements);
 
