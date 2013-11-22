@@ -400,7 +400,6 @@ public String getShipToDivdeliveryInfo() {
 	private String shipToOrgExtnApplyMinOrderBrands;
 	private String customerLevel;
 
-
 	public String getShipToOrgExtnApplyMinOrderBrands() {
 		return shipToOrgExtnApplyMinOrderBrands;
 	}

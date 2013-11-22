@@ -720,13 +720,13 @@ function getNormalView() {
 	return new Ext.XTemplate(
 	'<div id="item-ct">',
 	 '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
-	   '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
+	   '<div class="imgs">','<a class="item-lnk" href="{itemDetailURL}normal-view">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
 	    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
 	   '</div>',
 	   '<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
-	  '<div class="contents">','<p class="pprice">{price}</p>','<div class="descriptions">','<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
+	  '<div class="contents">','<p class="pprice">{price}</p>','<div class="descriptions">','<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}normal-view" tabindex="{tabidx}">',
 	   '<p class="ddesc">{name}</p></a>',
-	   '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>',
+	   '<div class="buttons"><a class="item-lnk" href="{itemDetailURL}normal-view" >{buttons}</a></div></div>',
 	   '<div class="clearBoth">&nbsp;</div>',
 	  '</div>',
 	  '<table class="bottable">','<tr>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
@@ -734,11 +734,11 @@ function getNormalView() {
 	  '</td>','</tr>',
 	  <s:if test='#isCustomerPO == "Y"'>
 	  '<tr>','<td class="item_number">','</td>',
-	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="x-input bottom-mill-info-avail" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
+	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
 	  </s:if>
 	  <s:if test='#isCustomerLinAcc == "Y"'>
 	  '<tr>','<td class="item_number">','</td>',
-	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="x-input bottom-mill-info-avail" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
+	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
 	   </s:if>
 	  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
 	  <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
@@ -770,12 +770,12 @@ return new Ext.XTemplate(
 '<div id="item-ct">',
  '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}"  class="itemdiv" style="height:396px;">',
   '<div class="imgs">',
-   '<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
+   '<a class="item-lnk" href="{itemDetailURL}condensed-view">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
   '</div>','<div class="contents">',
    '<p class="pprice">{price}</p>','<div class="descriptions">',
-   '<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<p class="ddesc">{name}</p></a>',
-   '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>',
+   '<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}condensed-view" tabindex="{tabidx}">','<p class="ddesc">{name}</p></a>',
+   '<div class="buttons"><a class="item-lnk" href="{itemDetailURL}condensed-view" >{buttons}</a></div></div>',
    '<div class="clearBoth">&nbsp;</div>',
   '</div>',
   '<table class="bottable">','<tr>','<td class="compare_check">',
@@ -809,12 +809,12 @@ function getMiniView() {
 return new Ext.XTemplate(
 '<div id="item-ct">',
  '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv" >',
-  '<div class="imgs">','<a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
+  '<div class="imgs">','<a class="item-lnk" href="{itemDetailURL}mini-view">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
   '</div>','<div class="contents">',
    '<p class="pprice">{price}</p>','<div class="descriptions">',
-   '<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<p class="ddesc">{name}</p></a>',
-   '<div class="buttons"><a href="javascript:processDetail(\'{itemid}\',\'{uom}\');" >{buttons}</a></div></div>','<div class="clearBoth">&nbsp;</div>',
+   '<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}mini-view" tabindex="{tabidx}">','<p class="ddesc">{name}</p></a>',
+   '<div class="buttons"><a class="item-lnk" href="{itemDetailURL}mini-view">{buttons}</a></div></div>','<div class="clearBoth">&nbsp;</div>',
    '<div class="item_number" style="word-wrap: break-word;"><s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}<br />',
    <s:if test='#mfgItemFlag != null && #mfgItemFlag=="Y"'>'{partno}<br />',</s:if>
    <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
@@ -869,10 +869,10 @@ return new Ext.XTemplate(
   '</tr>','</thead>',
   '<tpl for=".">','<tbody>',
   '<tpl for="items">',
-   '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">',
+   '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}papergrid-view" tabindex="{tabidx}">',
 	  '<span class="ddesc desc-hname">{name}</span></a>','</td>',
       <s:if test='!#isReadOnly && !#guestUser'>'<td class="stock-status M-hname">{stocked}</td>',</s:if>'<td style="width:58px;text-align: center;">'+
-      '<a  id="item-detail-lnk" href="javascript:processDetail(\'{itemid}\',\'{uom}\');" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
+      '<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}papergrid-view" tabindex="{tabidx}">','<span class="ddesc desc-hname">{itemid}</span></a>','</td>',
       <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname">{size}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname">{color}</td>',</s:if>
       <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname">{basis}</td>',</s:if>

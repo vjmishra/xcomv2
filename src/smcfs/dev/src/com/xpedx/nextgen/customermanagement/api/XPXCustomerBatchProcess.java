@@ -500,13 +500,12 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									reportParentSAPChangeCustElement.setAttribute(XPXLiterals.A_SUFFIX_TYPE, suffixType);
 									reportParentSAPChangeCustElement.setAttribute(XPXLiterals.A_CUSTOMER_ID, customerID);
 									if(!masterSAPUnchanged){
-										reportParentSAPChangeCustElement = assignmentRemoval(reportParentSAPChangeDoc,reportParentSAPChangeCustElement,existingMSAPNumber,existingMSAPName,env,brandCode,strMSAPName,"PSAPName",masterSapAccountNumber);
+										reportParentSAPChangeCustElement = assignmentRemoval(reportParentSAPChangeDoc,reportParentSAPChangeCustElement,existingMSAPNumber, existingSAPNumber, existingMSAPName,env,brandCode,strMSAPName,"PSAPName",masterSapAccountNumber);
 									}
 									if(!sapUnchanged){
-										reportParentSAPChangeCustElement = assignmentRemoval(reportParentSAPChangeDoc,reportParentSAPChangeCustElement,existingSAPNumber,existingSAPName,env,brandCode,strSAPName,"SAPName",sapAccountNumber);
+										reportParentSAPChangeCustElement = assignmentRemoval(reportParentSAPChangeDoc,reportParentSAPChangeCustElement,existingMSAPNumber, existingSAPNumber, existingSAPName,env,brandCode,strSAPName,"SAPName",sapAccountNumber);
 									}
-									//System.out.println("Vlue of Report "+SCXmlUtil.getString(reportParentSAPChangeDoc.));
-									
+																		
 									//3740 - Modified for SalesRep in report End
 									api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());	
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/	
@@ -4029,152 +4028,210 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 	}
 	
 	
-	public YFCElement assignmentRemoval(YFCDocument reportParentSAPChangeDoc, YFCElement reportParentSAPChangeCustElement, String existingMSAPNumber, String existingMSAPName, YFSEnvironment env, String brandCode, String strMSAPName, String typeOfCustomer, String accountNumber){
+	public YFCElement assignmentRemoval(YFCDocument reportParentSAPChangeDoc, YFCElement reportParentSAPChangeCustElement, String existingMSAPNumber, String existingSAPNumber, String existingMSAPName, YFSEnvironment env, String brandCode, String strMSAPName, String typeOfCustomer, String accountNumber){
 		YFCElement reportParentSAPChangeUsersElement = null;
 		YFCElement reportParentSAPChangeChildUserElement = null;
 		YFCElement reportParentSAPChangeSalesUsersElement = null;
 		YFCElement reportParentSAPChangeChildSalesUserElement = null;
 		try{
-		if(typeOfCustomer.equalsIgnoreCase("PSAPName")){	
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_PARENT_ACCOUNT_NO, existingMSAPNumber);
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_PARENT_NAME, existingMSAPName);
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_PARENT_ACCOUNT_NO, accountNumber);
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_PARENT_NAME, strMSAPName);
-		reportParentSAPChangeUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_USERS);
-		reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS);
-		
-
-
-		}else{
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_ACCOUNT_NO, existingMSAPNumber);
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_NAME, existingMSAPName);
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_ACCOUNT_NO, accountNumber);
-		reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_NAME, strMSAPName);
-		reportParentSAPChangeUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_USERS_SAP);
-		reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS_SAP);
-		
-
+			if(typeOfCustomer.equalsIgnoreCase("PSAPName")){	
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_PARENT_ACCOUNT_NO, existingMSAPNumber);
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_PARENT_NAME, existingMSAPName);
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_PARENT_ACCOUNT_NO, accountNumber);
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_PARENT_NAME, strMSAPName);
+				reportParentSAPChangeUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_USERS);
+				reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS);		
+	
+	
+			}else{
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_ACCOUNT_NO, existingSAPNumber);
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.OLD_SAP_NAME, existingMSAPName);
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_ACCOUNT_NO, accountNumber);
+				reportParentSAPChangeCustElement.setAttribute(XPXLiterals.NEW_SAP_NAME, strMSAPName);
+				reportParentSAPChangeUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.A_USERS_SAP);
+				reportParentSAPChangeSalesUsersElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_REPS_SAP);	
+				
+			}
 			
-		}
-		
-		/*End - Changes made by Mitesh Parikh for JIRA 3002*/
-		
-		//3740 - Modified for SalesRep
-		
-		String existingId;
-		if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
-		existingId = "CD"+"-"+existingMSAPNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
-		}else{
-		existingId = "CD"+"-"+existingMSAPNumber+"-"+"S"+"-"+brandCode+"-"+"CC";	
-		}
-		//3740 - Modified for Report Changes Start
-		Document userList = getUserList(env, existingId);
-		Element userListElem = userList.getDocumentElement();
-		NodeList userChildList = userListElem.getChildNodes();
-		StringBuffer formattedUserName;
+			/*End - Changes made by Mitesh Parikh for JIRA 3002*/
+			
+			//3740 - Modified for SalesRep
+			
+			String existingId;
+			if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+			existingId = "CD"+"-"+existingMSAPNumber+"-"+"M"+"-"+brandCode+"-"+"CC";
+			}else{
+			existingId = "CD"+"-"+existingSAPNumber+"-"+"S"+"-"+brandCode+"-"+"CC";	
+			}
+			//3740 - Modified for Report Changes Start
+			Document userList = getUserList(env, existingId);
+			Element userListElem = userList.getDocumentElement();
+			NodeList userChildList = userListElem.getChildNodes();
+			StringBuffer formattedUserName;
 			for (int counter = 0; counter < userChildList.getLength(); counter++) {
 				formattedUserName = new StringBuffer();
 				Element userchildElem = (Element) userChildList.item(counter);
 				String userName = userchildElem.getAttribute("Username");
 				String LoginId = userchildElem.getAttribute("Loginid");
-				
-		/*	}
-			//3740 - Modified for Report Changes End
-			
-			
-		Document ccDoc = getCustomerContactList(env, existingMSAPId);
-		Element ccElem = ccDoc.getDocumentElement();
-		NodeList childList = ccElem.getChildNodes();																		
-		for(int counter = 0; counter < childList.getLength(); counter ++) {
-			Element childElem =(Element)childList.item(counter); 
-			String userId = childElem.getAttribute("UserID");
-			Begin - Changes made by Mitesh Parikh for JIRA 3002
-			reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
-			reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, userId);
-			reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
-			End - Changes made by Mitesh Parikh for JIRA 3002
-			//arrUserList.add(userId);
-*/			ArrayList<String> arrUserAssgnList = new ArrayList<String>();
-			
-			Document assgnDoc = getCustomerAssignmentList(env, LoginId);
-			Element custAssgnElem = assgnDoc.getDocumentElement();
-			NodeList assgnNodeList = custAssgnElem.getElementsByTagName("Customer");
-			for(int counter1=0; counter1 < assgnNodeList.getLength(); counter1++) {
-				Element custElem = (Element)assgnNodeList.item(counter1);
-				arrUserAssgnList.add(custElem.getAttribute("CustomerID") );
-			}
-			Collection retainAllCollection = CollectionUtils.retainAll(arrUserAssgnList, arrChildCustomerIds);
-			
-			if(!arrUserAssgnList.isEmpty() && !retainAllCollection.isEmpty()
-					&& retainAllCollection.size() <= arrUserAssgnList.size()) {
-				//Remove the assignments
-				
-				Collection intersection = CollectionUtils.intersection(arrUserAssgnList, arrChildCustomerIds);
-				Iterator iterCustId = intersection.iterator();
-				//Added for 3740 so that login id not added duplicate in report for multiple customer assignments
-				int counterVar = 0;
-				//End 3740
-				while(iterCustId.hasNext()){
-					String assgnCustId = (String) iterCustId.next();
-
-					YFCDocument manageCustomerAssgnInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
-					manageCustomerAssgnInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, assgnCustId);
-					manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("IgnoreOrdering","Y");
-					manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("Operation", "Delete");
-					manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("OrganizationCode", existingId);
-					manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", LoginId);
 					
-					api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());
-					//3740 - Start - Report will Show Only User which have assignment removed
-					if(counterVar == 0){
-					String[] salesID = LoginId.split("@");
-					if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
-						if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
-						reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
-						
-						}else{
-							reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_SAP);	
+			/*	}
+				//3740 - Modified for Report Changes End
+				
+				
+			Document ccDoc = getCustomerContactList(env, existingMSAPId);
+			Element ccElem = ccDoc.getDocumentElement();
+			NodeList childList = ccElem.getChildNodes();																		
+			for(int counter = 0; counter < childList.getLength(); counter ++) {
+				Element childElem =(Element)childList.item(counter); 
+				String userId = childElem.getAttribute("UserID");
+				Begin - Changes made by Mitesh Parikh for JIRA 3002
+				reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+				reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, userId);
+				reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
+				End - Changes made by Mitesh Parikh for JIRA 3002
+				//arrUserList.add(userId);
+	*/			ArrayList<String> arrUserAssgnList = new ArrayList<String>();
+				
+				Document assgnDoc = getCustomerAssignmentList(env, LoginId);
+				Element custAssgnElem = assgnDoc.getDocumentElement();
+				NodeList assgnNodeList = custAssgnElem.getElementsByTagName("Customer");
+				for(int counter1=0; counter1 < assgnNodeList.getLength(); counter1++) {
+					Element custElem = (Element)assgnNodeList.item(counter1);
+					String extnSuffixType=SCXmlUtil.getXpathAttribute(custElem, "./Extn/@ExtnSuffixType");
+					if("MC".equals(extnSuffixType)) {
+						String[] salesID = LoginId.split("@");
+						if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
+							if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+								reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
 							
-						}
-						reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
-						reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
-					}else{
-						if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
-							reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+							}else{
+								reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_SAP);
+								
+							}
+							reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
+							reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
 						}else{
-							reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER_SAP);
+							if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+								reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+								
+							}else{
+								reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER_SAP);
+							}
+							reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
+							reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
 						}
-						reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
-						reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
+						
+						continue;
+						
+					} else if ("C".equals(extnSuffixType)) {
+						String existingSapCustomerId="CD"+"-"+existingSAPNumber+"-"+"S"+"-"+brandCode+"-"+"CC";
+						String assignedCustomerId=SCXmlUtil.getXpathAttribute(custElem, "./CustomerAssignment/Customer/@CustomerID");
+						if(assignedCustomerId!=null && assignedCustomerId.equals(existingSapCustomerId)) {
+							String[] salesID = LoginId.split("@");
+							if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
+								if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+									reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);									
+								
+								}else{
+									reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_SAP);									
+									
+								}
+								reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
+								reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
+							}else{
+								if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+									reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+									
+								}else{
+									reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER_SAP);
+									
+								}
+								reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
+								reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
+							}
+							
+							continue;
+						}
+						
 					}
-				}	
 					
-				counterVar++;	
-					//3740 - End - 
-				}											
-			} 
-			
-			if(!arrUserAssgnList.isEmpty() && !retainAllCollection.isEmpty()
-					&& retainAllCollection.size() == arrUserAssgnList.size()) {
-				//Move the login
-				log.info("Following logins have no assignments ---");
-				log.info("Login ID ---" + LoginId);
-				log.info("Old MSAP hierarchy ---" + existingId);
-				log.info("New MSAP hierarchy ---" + masterSapCustomerId);
+					arrUserAssgnList.add(custElem.getAttribute("CustomerID") );
+				}
+				Collection retainAllCollection = CollectionUtils.retainAll(arrUserAssgnList, arrChildCustomerIds);
+				
+				if(!arrUserAssgnList.isEmpty() && !retainAllCollection.isEmpty()
+						&& retainAllCollection.size() <= arrUserAssgnList.size()) {
+					//Remove the assignments
+					
+					Collection intersection = CollectionUtils.intersection(arrUserAssgnList, arrChildCustomerIds);
+					Iterator iterCustId = intersection.iterator();
+					//Added for 3740 so that login id not added duplicate in report for multiple customer assignments
+					int counterVar = 0;
+					//End 3740
+					while(iterCustId.hasNext()) {
+						String assgnCustId = (String) iterCustId.next();
+	
+						YFCDocument manageCustomerAssgnInputDoc = YFCDocument.createDocument(XPXLiterals.E_CUSTOMER_ASSIGNMENT);
+						manageCustomerAssgnInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID, assgnCustId);
+						manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("IgnoreOrdering","Y");
+						manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("Operation", "Delete");
+						manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("OrganizationCode", existingId);
+						manageCustomerAssgnInputDoc.getDocumentElement().setAttribute("UserId", LoginId);
+						
+						api.invoke(env, XPXLiterals.MANAGE_CUSTOMER_ASSIGNMENT_API, manageCustomerAssgnInputDoc.getDocument());
+						//3740 - Start - Report will Show Only User which have assignment removed
+						if(counterVar == 0){
+							String[] salesID = LoginId.split("@");
+							if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
+								if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+									reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES);
+																
+								}else{
+									reportParentSAPChangeChildSalesUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_SALES_SAP);
+									
+									
+								}
+								reportParentSAPChangeChildSalesUserElement.setAttribute(XPXLiterals.A_SALES_ID, salesID[0]);
+								reportParentSAPChangeSalesUsersElement.appendChild(reportParentSAPChangeChildSalesUserElement);
+							}else{
+								if(typeOfCustomer.equalsIgnoreCase("PSAPName")){
+									reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER);
+									
+								}else{
+									reportParentSAPChangeChildUserElement = reportParentSAPChangeDoc.createElement(XPXLiterals.E_USER_SAP);
+									
+								}
+								reportParentSAPChangeChildUserElement.setAttribute(XPXLiterals.A_USER_ID, formattedUserName.append(userName).append(" -").append(" ").append(LoginId).toString());
+								reportParentSAPChangeUsersElement.appendChild(reportParentSAPChangeChildUserElement);
+							}
+						}	
+						
+						counterVar++;	
+						//3740 - End - 
+					}											
+				} 
+				
+				if(!arrUserAssgnList.isEmpty() && !retainAllCollection.isEmpty()
+						&& retainAllCollection.size() == arrUserAssgnList.size()) {
+					//Move the login
+					log.info("Following logins have no assignments ---");
+					log.info("Login ID ---" + LoginId);
+					log.info("Old MSAP hierarchy ---" + existingId);
+					log.info("New MSAP hierarchy ---" + masterSapCustomerId);
+				}
 			}
-		}
-		/*Begin - Changes made by Mitesh Parikh for JIRA 3002*/
-			if(reportParentSAPChangeUsersElement!=null){
-		      reportParentSAPChangeCustElement.appendChild(reportParentSAPChangeUsersElement);
+			/*Begin - Changes made by Mitesh Parikh for JIRA 3002*/
+				if(reportParentSAPChangeUsersElement!=null){
+			      reportParentSAPChangeCustElement.appendChild(reportParentSAPChangeUsersElement);
+				}
+			/* Making an asynchronous call to a new service to report Parent SAP changes. 
+			 * Below mentioned service just puts the xml in a Weblogic JMS which in turn forwards it to
+			 * 'XPXReportParentSAPChanges' service.
+			 */	
+			//3740 - Modified for SalesRep in report
+			if(reportParentSAPChangeSalesUsersElement!=null){
+				reportParentSAPChangeCustElement.appendChild(reportParentSAPChangeSalesUsersElement);	
 			}
-		/* Making an asynchronous call to a new service to report Parent SAP changes. 
-		 * Below mentioned service just puts the xml in a Weblogic JMS which in turn forwards it to
-		 * 'XPXReportParentSAPChanges' service.
-		 */	
-		//3740 - Modified for SalesRep in report
-		if(reportParentSAPChangeSalesUsersElement!=null){
-			reportParentSAPChangeCustElement.appendChild(reportParentSAPChangeSalesUsersElement);	
-		}
 		
 		}catch(Exception e){
 			e.printStackTrace();
