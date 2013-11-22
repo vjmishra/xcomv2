@@ -507,6 +507,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			setProductCompareBackPageURL(wcContext.getSCUIContext()
 					.getSession().getAttribute("itemDtlBackPageURL").toString());
 			/* End - Changes made for 2422 JIRA */
+			getCustomerLineDetails(); //added for EB 3372
 		} catch (Exception exception) {
 			// Not throwing any exception as it gives exception for JIRA 3705
 
@@ -1844,7 +1845,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setColumnListForUI();
 				// prepareMyItemListList();
 				getSortFieldDocument();
-				getCustomerLineDetails(); //added for EB 3372
+				
 			}
 			getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),
 					path);
