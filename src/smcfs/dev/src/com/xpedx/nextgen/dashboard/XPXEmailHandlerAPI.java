@@ -207,6 +207,12 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
  
         if (orderLength != 0) {
             Element orderElement = (Element) orderList.item(0);
+            
+            String maxOrderStatus=orderElement.getAttribute("MaxOrderStatus");
+            if("1310".equals(maxOrderStatus)) {
+            	orderElement.setAttribute("Status","Submitted (CSR Reviewing)");
+            }
+            
             String readEnv = YFSSystem.getProperty("environment");
             orderElement.setAttribute("EnvironmentID", readEnv);
             if(orderLength >2)
