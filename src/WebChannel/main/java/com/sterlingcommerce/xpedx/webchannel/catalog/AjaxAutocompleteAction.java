@@ -96,7 +96,7 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	private List<AutocompleteMarketingGroup> searchIndex(String mgiRoot) throws CorruptIndexException, IOException {
+	List<AutocompleteMarketingGroup> searchIndex(String mgiRoot) throws CorruptIndexException, IOException {
 		if (searchTerm == null) {
 			throw new IllegalArgumentException("searchTerm must not be null");
 		}
@@ -200,12 +200,12 @@ public class AjaxAutocompleteAction extends WCAction {
 	/**
 	 * @return If anonymous user, returns the storefront id (aka brand). Otherwise returns null.
 	 */
-	String getEntitlementAnonymousBrand() {
+	/*default*/ String getEntitlementAnonymousBrand() {
 		boolean anonymous = XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER) == null;
 		return anonymous ? wcContext.getStorefrontId() : null;
 	}
 
-	String getEntitlementDivisionAndBrand() {
+	/*default*/ String getEntitlementDivisionAndBrand() {
 		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (shipto == null) {
 			return null;
@@ -213,12 +213,12 @@ public class AjaxAutocompleteAction extends WCAction {
 
 		if ("N".equals(shipto.getCustomerLevel())) {
 			// if customer level entitlement is disabled, then prevent from seeing division entitlements
-			return null; // need to use "" here?
+			return null;
 		}
-		return shipto.getExtnCustomerDivision() + wcContext.getStorefrontId();
+		return shipto.getExtnShipFromBranch() + wcContext.getStorefrontId();
 	}
 
-	String getEntitlementCompanyCodeAndLegacyCustomerId() {
+	/*default*/ String getEntitlementCompanyCodeAndLegacyCustomerId() {
 		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (shipto == null) {
 			return null;
@@ -239,53 +239,6 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	public List<AutocompleteMarketingGroup> getAutocompleteMarketingGroups() {
 		return autocompleteMarketingGroups;
-	}
-
-	@SuppressWarnings("all")
-	public static void main(String[] args) throws Exception {
-		// tsudis ST   = 60-0006806597-000003-M-XX-S
-		//        div  = 60xpedx
-		//        cust = 600006806597
-		AjaxAutocompleteAction tsudis = new AjaxAutocompleteAction() {
-			@Override
-			String getEntitlementAnonymousBrand() {
-				return null;
-			}
-			@Override
-			String getEntitlementDivisionAndBrand() {
-				return "60xpedx";
-			}
-			@Override
-			String getEntitlementCompanyCodeAndLegacyCustomerId() {
-				return "600006806597";
-			}
-		};
-
-		// linemark ST   = 90-0001018921-000001-M-XX-S
-		//          div  = 90xpedx
-		//          cust = 900001018921
-		AjaxAutocompleteAction linemark = new AjaxAutocompleteAction() {
-			@Override
-			String getEntitlementAnonymousBrand() {
-				return null;
-			}
-			@Override
-			String getEntitlementDivisionAndBrand() {
-				return "90xpedx";
-			}
-			@Override
-			String getEntitlementCompanyCodeAndLegacyCustomerId() {
-				return "900001018921";
-			}
-		};
-
-		AjaxAutocompleteAction action = linemark;
-		action.setSearchTerm("spring");
-		List<AutocompleteMarketingGroup> mgs = action.searchIndex("C:/Sterling/Foundation/marketinggroupindex");
-
-		for (AutocompleteMarketingGroup mg : mgs) {
-			System.out.println("mg:\t" + mg);
-		}
 	}
 
 }
