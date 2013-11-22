@@ -604,7 +604,12 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						plus2Days=jdondata.get("TwoPlusDays").toString();
 						}
 						if(jdondata.get("UOM") !=null && !"".equalsIgnoreCase(jdondata.get("UOM").toString())){
-						UOM = jdondata.get("UOM").toString();
+							UOM = jdondata.get("UOM").toString();							
+							if(UOM.contains("M_")){
+								String a[] = UOM.split("_");
+								UOM = a[1];								
+							}
+							
 						}
 					}
 				
