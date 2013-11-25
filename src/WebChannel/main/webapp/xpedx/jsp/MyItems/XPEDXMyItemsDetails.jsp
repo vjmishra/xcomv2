@@ -3778,19 +3778,18 @@ function showSharedListForm(){
                        <%--  <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p> --%>
                         
-<%--                         <s:if test="%{#rItemID}"> --%>
 							 <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value="#rItemID" /></p> 
                             <s:if test='skuMap!=null && skuMap.size()>0'>
-										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
-										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+										<s:set name='rItemSkuMap' value='%{skuMap.get(#rItemID)}'/>
+										<s:set name='rMfgItemVal' value='%{#rItemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='rPartItemVal' value='%{#rItemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
 									</s:if>
 										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
-											<p><s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											<p><s:property value="#manufacturerItemLabel" />: <s:property value='#rMfgItemVal' /></p>
 											 </s:if>
 											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
-											<p><s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+											<p><s:property value="#customerItemLabel" />: <s:property value='#rPartItemVal' /></p>
 											</s:if>	
-<%-- 						</s:if> --%>
                         
                     </div>
                 </div>
