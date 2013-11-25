@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.RangeQuery;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
@@ -26,8 +27,10 @@ import com.yantra.yfs.core.YFSSystem;
  * A debug tool for retrieving some basic info on the marketing group index. This info is primarily intended to validate the integrity of the marketing group index:
  * <ol>
  *  <li>That there are marketing_group records</li>
- *  <li>The Lucene index exists</li>
- *  <li>All marketing_group.marketing_group_id values exist in the Lucene index</li>
+ *  <li>The Lucene Marketing Group Index (MGI) exists</li>
+ *  <li>All marketing_group.marketing_group_id values exist in the MGI</li>
+ *  <li>The Lucene Search Index (SI) exists</li>
+ *  <li>All marketing_group.marketing_group_id values exist in the SI</li>
  * </ol>
  *
  * @author Trey Howard
@@ -41,21 +44,16 @@ public class DebugMarketingGroupIndex extends WCAction {
 
 	@Override
 	public String execute() throws Exception {
-		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
-		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
-		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
-		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
-
 		Connection conn = null;
 		try {
-			Class.forName(jdbcDriver);
-			conn = DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPassword);
+			conn = getConnection();
 
 			MinMax mgIds = getMinMaxMarketingGroupIds(conn);
 
 			String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
+			String siRoot = YFSSystem.getProperty("searchIndex.rootDirectory");
 
-			analyze(mgIds, mgiRoot);
+			analyze(mgIds, mgiRoot, siRoot);
 
 		} catch (Exception e) {
 			log.error("Unexpected error: " + e.getMessage());
@@ -78,37 +76,51 @@ public class DebugMarketingGroupIndex extends WCAction {
 		return SUCCESS;
 	}
 
-	private void analyze(MinMax mgIds, String mgiRoot) throws CorruptIndexException, IOException {
+	private void analyze(MinMax mgIds, String mgiRoot, String siRoot) throws CorruptIndexException, IOException {
+		debugInfo.put("error", false); // only set to false if something is determined to be wrong
+
 		if (mgiRoot == null) {
 			debugInfo.put("error", true);
-			debugInfo.put("error_lucene_folder", "Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
+			debugInfo.put("error.lucene_folder", "Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
 
 		} else if (!new File(mgiRoot).canRead()) {
 			debugInfo.put("error", true);
-			debugInfo.put("error_lucene_index_missing", "Missing Lucene index: " + mgiRoot);
+			debugInfo.put("error.lucene_index_missing", "Missing Lucene index: " + mgiRoot);
 		}
 
 		debugInfo.put("marketing_group.marketing_group_id", mgIds);
 
 		if (mgIds.getMin() == null || mgIds.getMax() == null) {
 			debugInfo.put("error", true);
-			debugInfo.put("error_null_mgIds", "No marketing_group records found");
+			debugInfo.put("error.null_mgIds", "No marketing_group records found");
 
 		}
 
 		if (!debugInfo.containsKey("error")) {
-			Searcher indexSearcher = new IndexSearcher(mgiRoot);
+			// MGI search
+			Searcher mgiSearcher = new IndexSearcher(mgiRoot);
 
-			TopDocs minSearch = indexSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMin()))), 1);
-			if (minSearch.scoreDocs.length == 0) {
+			TopDocs mgiMinSearch = mgiSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMin()))), 1);
+			if (mgiMinSearch.scoreDocs.length == 0) {
 				debugInfo.put("error", true);
-				debugInfo.put("error_search_none_min", true);
+				debugInfo.put("error.mgi_search_none_min", true);
 			}
 
-			TopDocs maxSearch = indexSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMax()))), 1);
-			if (maxSearch.scoreDocs.length == 0) {
+			TopDocs mgiMaxSearch = mgiSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMax()))), 1);
+			if (mgiMaxSearch.scoreDocs.length == 0) {
 				debugInfo.put("error", true);
-				debugInfo.put("error_search_none_max", true);
+				debugInfo.put("error.mgi_search_none_max", true);
+			}
+
+			// SI search
+			Searcher siSearcher = new IndexSearcher(siRoot);
+
+			// do a generic search and grab a Item.ExtnMarketingGroupId value and see if its value is in range
+			TopDocs siSearch = siSearcher.search(new RangeQuery(new Term("Item.ExtnMarketingGroupId", String.valueOf(mgIds.getMin())), new Term("Item.ExtnMarketingGroupId", String.valueOf(mgIds.getMin() + 100)), true), 20);
+
+			if (siSearch.scoreDocs.length == 0) {
+				debugInfo.put("error", true);
+				debugInfo.put("error.si_search_empty", true);
 			}
 		}
 	}
@@ -187,6 +199,16 @@ public class DebugMarketingGroupIndex extends WCAction {
 		}
 	}
 
+	private static Connection getConnection() throws ClassNotFoundException, SQLException {
+		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
+		String jdbcDriver = Manager.getProperty("jdbcService", "oraclePool.driver");
+		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
+		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
+
+		Class.forName(jdbcDriver);
+		return DriverManager.getConnection(jdbcURL, jdbcUser, jdbcPassword);
+	}
+
 	public static void main(String[] args) throws Exception {
 		DebugMarketingGroupIndex action = new DebugMarketingGroupIndex();
 
@@ -195,8 +217,9 @@ public class DebugMarketingGroupIndex extends WCAction {
 		mgIds.setMax(876634L);
 
 		String mgiRoot = "C:/Sterling/Foundation/marketinggroupindex";
+		 String siRoot = "C:/Sterling/Foundation/searchindex/SearchIndex/xpedx/xpedx/MasterCatalog/CatalogIndex_201311192000213044/en_US";
 
-		action.analyze(mgIds, mgiRoot);
+		action.analyze(mgIds, mgiRoot, siRoot);
 
 		Map<String, Object> map = action.getDebugInfo();
 		for (String key : map.keySet()) {
