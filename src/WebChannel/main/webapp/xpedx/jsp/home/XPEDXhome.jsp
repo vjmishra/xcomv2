@@ -228,7 +228,7 @@ Ext.onReady(function(){
 			<!-- Added for EB-1549 Display a Saalfeld advertisement image on the Home page  Starts -->
 				<s:set name='storefrontId' value="wCContext.storefrontId" />
 				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/_thumb_25626<s:property value='#wcUtil.xpedxBuildKey' />.png"/>
+				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_300x250r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
 				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD3_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
