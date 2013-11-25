@@ -46,6 +46,8 @@
 		<s:param name="searchTerm" value="%{searchTerm}" />
 		<s:param name="pageSetToken" value="%{pageSetToken}"/>
 		<s:param name="isRequestedPage" value="%{'XPEDXUserProfilePage'}"/>
+		<s:param name="customerContactId" value="customerContactId"/>
+		<s:param name="adminMode" value="adminMode"/>
 	</s:url>
 </s:if>
 <s:else>
@@ -55,6 +57,8 @@
 		<s:param name="pageNumber" value="'{0}'"/>
 		<s:param name="pageSetToken" value="%{pageSetToken}"/>
 		<s:param name="isRequestedPage" value="%{'XPEDXUserProfilePage'}"/>
+		<s:param name="customerContactId" value="customerContactId"/>
+		<s:param name="adminMode" value="adminMode"/>
 	</s:url>
 </s:else>
 </s:if>	
@@ -67,6 +71,8 @@
 		<s:param name="searchTerm" value="%{searchTerm}" />
 		<s:param name="pageSetToken" value="%{pageSetToken}"/>
 		<s:param name="isRequestedPage" value="%{'XPEDXOrderListPage'}"/>
+		<s:param name="customerContactId" value="customerContactId"/>
+		<s:param name="adminMode" value="adminMode"/>
 	</s:url>
 </s:if>
 <s:else>
@@ -76,6 +82,8 @@
 		<s:param name="pageNumber" value="'{0}'"/>
 		<s:param name="pageSetToken" value="%{pageSetToken}"/>
 		<s:param name="isRequestedPage" value="%{'XPEDXOrderListPage'}"/>
+		<s:param name="customerContactId" value="customerContactId"/>
+		<s:param name="adminMode" value="adminMode"/>
 	</s:url>
 </s:else>
 </s:elseif>
@@ -87,6 +95,8 @@
 		<s:param name="pageNumber" value="'{0}'"/>
 		<s:param name="searchTerm" value="%{searchTerm}" />
 		<s:param name="pageSetToken" value="%{pageSetToken}"/>
+		<s:param name="customerContactId" value="customerContactId"/>
+		<s:param name="adminMode" value="adminMode"/>
 	</s:url>
 </s:if>
 <s:else>
@@ -95,6 +105,8 @@
 		<s:param name="orderByDesc" value="orderByDesc"/>
 		<s:param name="pageNumber" value="'{0}'"/>
 		<s:param name="pageSetToken" value="%{pageSetToken}"/>
+		<s:param name="customerContactId" value="customerContactId"/>
+		<s:param name="adminMode" value="adminMode"/>
 	</s:url>
 </s:else>
 </s:else>
@@ -471,7 +483,12 @@
 <div class="float-right" >
 <ul id="tool-bar" class="tool-bar-bottom" >
 		<li>
-			<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
+			<s:if test="adminMode && (#_action.getDefaultShipToCustomerId() == null || #_action.getDefaultShipToCustomerId() == '')">
+				<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>&initPrefs=true')" ><span>Select</span></a>
+			</s:if>
+			<s:else>
+				<a class="green-ui-btn" href="javascript:saveShipToChanges('<s:property value="%{targetURL}"/>')" ><span>Select</span></a>
+			</s:else>
 	</li>
 	<s:if test="#defaultShipTo!='' || #assgnCustomers.size()==0">
 		<li>
