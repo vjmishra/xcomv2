@@ -102,6 +102,7 @@ public class ReportUtils {
 			JSONObject infoObj;
 			String cardinality;
 			String paramName;
+			String paramNameModified = "";
 			String optionalParam;
 			String tmp = "";
 			while (paramIterator.hasNext()) {
@@ -125,17 +126,28 @@ public class ReportUtils {
 					//
 					if (cardinality.equals("single")) {
 						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
-							tmp = "&lsS" + paramName + "="
+							if (paramName.contains(" ")) {
+								paramNameModified = paramName.replace(" ", "+");
+							} else {
+								paramNameModified = paramName;
+							}
+							tmp = "&lsS" + paramNameModified + "="
 									+ paramVals.get(paramName);
+							sResult += tmp;
 						} 												
 					} else if (cardinality.equals("multiple")) {
 						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
-							tmp = "&lsM" + paramName + "="
+							if (paramName.contains(" ")) {
+								paramNameModified = paramName.replace(" ", "+");
+							}else {
+								paramNameModified = paramName;
+							}
+							tmp = "&lsM" + paramNameModified + "="
 									+ paramVals.get(paramName);
+							sResult += tmp;
 						}												
 					}
-				} 
-				sResult += tmp;
+				} 				
 			}
 
 		}

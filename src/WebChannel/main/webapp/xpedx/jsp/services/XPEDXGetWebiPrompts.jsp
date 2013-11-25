@@ -762,7 +762,7 @@ $(function() {
 <script type="text/javascript">
 <s:if test="getRenderReport() == 'true'">
 
-var strUrl = '<s:property value="finalURL"/>';
+var strUrl = '<s:property value="finalURL" escape="false"/>';
 
 //var viewAs = '<s:property value="viewReportAs"/>'
 
