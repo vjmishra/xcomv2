@@ -323,7 +323,8 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
         
 		emailMessage.setFrom(new InternetAddress(from));
 		emailMessage.setSubject(subject);
-		emailMessage.setContent(content,"text/html;charset=" + emltencoding);
+		emailMessage.setContent(content, "text/plain");
+		//emailMessage.setContent(content,"text/html;charset=" + emltencoding);
 		emailMessage.setSentDate(new java.util.Date());
 		//email logging issue
 		//emailSession.setDebug(true);

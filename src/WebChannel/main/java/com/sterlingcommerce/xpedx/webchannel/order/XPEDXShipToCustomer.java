@@ -400,12 +400,6 @@ public String getShipToDivdeliveryInfo() {
 	private String shipToOrgExtnApplyMinOrderBrands;
 	private String customerLevel;
 
-	private String extnSalesProPrimaryEmailEnabled; // bill-to only
-	private String extnSalesPro1EmailEnabled; // bill-to only
-	private String extnSalesPro2EmailEnabled; // bill-to only
-	private String extnSalesPro3EmailEnabled; // bill-to only
-	private String extnSalesPro4EmailEnabled; // bill-to only
-
 	public String getShipToOrgExtnApplyMinOrderBrands() {
 		return shipToOrgExtnApplyMinOrderBrands;
 	}
@@ -418,41 +412,6 @@ public String getShipToDivdeliveryInfo() {
 	}
 	public void setCustomerLevel(String customerLevel) {
 		this.customerLevel = customerLevel;
-	}
-
-	public String getExtnSalesProPrimaryEmailEnabled() {
-		return extnSalesProPrimaryEmailEnabled;
-	}
-	public void setExtnSalesProPrimaryEmailEnabled(String extnSalesProPrimaryEmailEnabled) {
-		this.extnSalesProPrimaryEmailEnabled = extnSalesProPrimaryEmailEnabled;
-	}
-
-	public String getExtnSalesPro1EmailEnabled() {
-		return extnSalesPro1EmailEnabled;
-	}
-	public void setExtnSalesPro1EmailEnabled(String extnSalesPro1EmailEnabled) {
-		this.extnSalesPro1EmailEnabled = extnSalesPro1EmailEnabled;
-	}
-
-	public String getExtnSalesPro2EmailEnabled() {
-		return extnSalesPro2EmailEnabled;
-	}
-	public void setExtnSalesPro2EmailEnabled(String extnSalesPro2EmailEnabled) {
-		this.extnSalesPro2EmailEnabled = extnSalesPro2EmailEnabled;
-	}
-
-	public String getExtnSalesPro3EmailEnabled() {
-		return extnSalesPro3EmailEnabled;
-	}
-	public void setExtnSalesPro3EmailEnabled(String extnSalesPro3EmailEnabled) {
-		this.extnSalesPro3EmailEnabled = extnSalesPro3EmailEnabled;
-	}
-
-	public String getExtnSalesPro4EmailEnabled() {
-		return extnSalesPro4EmailEnabled;
-	}
-	public void setExtnSalesPro4EmailEnabled(String extnSalesPro4EmailEnabled) {
-		this.extnSalesPro4EmailEnabled = extnSalesPro4EmailEnabled;
 	}
 
 	public String getExtnShipToSuffix() {

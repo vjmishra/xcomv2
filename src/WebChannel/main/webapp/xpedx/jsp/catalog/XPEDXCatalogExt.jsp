@@ -734,11 +734,11 @@ function getNormalView() {
 	  '</td>','</tr>',
 	  <s:if test='#isCustomerPO == "Y"'>
 	  '<tr>','<td class="item_number">','</td>',
-	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="x-input bottom-mill-info-avail" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
+	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
 	  </s:if>
 	  <s:if test='#isCustomerLinAcc == "Y"'>
 	  '<tr>','<td class="item_number">','</td>',
-	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="x-input bottom-mill-info-avail" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
+	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
 	   </s:if>
 	  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
 	  <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
