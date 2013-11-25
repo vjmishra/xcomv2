@@ -4125,7 +4125,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 						
 					} else if ("C".equals(extnSuffixType)) {
 						String existingSapCustomerId="CD"+"-"+existingSAPNumber+"-"+"S"+"-"+brandCode+"-"+"CC";
-						String assignedCustomerId=SCXmlUtil.getXpathAttribute(custElem, "./CustomerAssignment/Customer/@CustomerID");
+						String assignedCustomerId=SCXmlUtil.getAttribute(custElem, "CustomerID");
 						if(assignedCustomerId!=null && assignedCustomerId.equals(existingSapCustomerId)) {
 							String[] salesID = LoginId.split("@");
 							if(salesID[0]!=null && !salesID[0].isEmpty()&& isNumeric(salesID[0])){
