@@ -596,12 +596,18 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					if(jdondata !=null){
 						if(jdondata.get("Immediate") !=null && !"".equalsIgnoreCase(jdondata.get("Immediate").toString())){
 							immediate = jdondata.get("Immediate").toString();					
+						}else{
+							immediate="0";
 						}
 						if(jdondata.get("NextDay") !=null && !"".equalsIgnoreCase(jdondata.get("NextDay").toString())){
-						nextDay= jdondata.get("NextDay").toString();				
+							nextDay= jdondata.get("NextDay").toString();				
+						}else{
+							nextDay="0";
 						}
 						if(jdondata.get("TwoPlusDays") !=null && !"".equalsIgnoreCase(jdondata.get("TwoPlusDays").toString())){
-						plus2Days=jdondata.get("TwoPlusDays").toString();
+							plus2Days=jdondata.get("TwoPlusDays").toString();
+						}else{
+							plus2Days = "0";
 						}
 						if(jdondata.get("UOM") !=null && !"".equalsIgnoreCase(jdondata.get("UOM").toString())){
 							UOM = jdondata.get("UOM").toString();							
