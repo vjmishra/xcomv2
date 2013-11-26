@@ -37,7 +37,7 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 	private String[] itemsOrder;
 	private String errorMsg		= "";
 	private String errorMsgRowsMissingItemId = ""; // passed in from MyItemsDetailsImportPrepare
-	private List<String> errorRowsInvalidItemId = new LinkedList<String>();
+	private List<Integer> errorRowsInvalidItemId = new LinkedList<Integer>();
 	private boolean editMode = false;
 	private HashMap<String, HashMap<String, String>> itemsCustomFields;
 	private Document entitledItemsDoc;
@@ -167,7 +167,7 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 						//Commenting the below code as non-catalog items cannot be added
 						//setName(getItemId());
 						//New code to skip adding the non-catalog items
-						errorRowsInvalidItemId.add(""+(i+1));
+						errorRowsInvalidItemId.add(i + 1);
 						continue;
 					}
 
@@ -247,7 +247,7 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 			//Display the row number which was not imported
 			if(errorRowsInvalidItemId!=null && errorRowsInvalidItemId.size()>0){
 				errorRowsInvalidItemId = correctInvalidRows(errorMsgRowsMissingItemId, errorRowsInvalidItemId);
-				setErrorMsg("ROW_PROCESSING_ERROR@" + StringUtils.join(errorRowsInvalidItemId.toArray(new String[0]), "-"));
+				setErrorMsg("ROW_PROCESSING_ERROR@" + StringUtils.join(errorRowsInvalidItemId.toArray(new Integer[0]), "-"));
 				editMode = true;
 				return "failure";
 			}
@@ -260,34 +260,45 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 	}
 
 	/**
-	 * The first action in this request cycle is MyItemsDetailsImportPrepare, which removes rows from the CSV that are missing an item id. This results in incorrect row numbers
+	 * The first action in this request cycle is MyItemsDetailsImportPrepare, which removes rows from the CSV that are missing an item id. This results in incorrect row numbers.
+	 * This method corrects the row numbers calculated in this method by offsetting with the missing rows.
 	 *
 	 * @param errorMsgRowsMissingItemId
 	 * @param errorRowsInvalidItemId
 	 * @return
 	 */
-	private static List<String> correctInvalidRows(String errorMsgRowsMissingItemId, List<String> errorRowsInvalidItemId) {
-		List<Integer> missingRows = convertToIntList(errorMsgRowsMissingItemId);
-
-		// convert errorRowsInvalidItemId into an ArrayList for better performance of index-based insertion
-		// initialize the capacity of this new list to support a union of the errorRowsInvalidItemId and missingRows lists
-		// the contents of this list are arbitrary: null indicates a missing-id row, non-null indicates an invalid-id row
-		List<Object> positionalList = new ArrayList<Object>(errorRowsInvalidItemId.size() + missingRows.size());
-		positionalList.addAll(errorRowsInvalidItemId);
-
-		for (Integer missingRow : missingRows) {
-			// add a null element to represent the placeholder for the missing-id row
-			positionalList.add(missingRow - 1, null);
+	private static List<Integer> correctInvalidRows(String errorMsgRowsMissingItemId, List<Integer> errorRowsInvalidItemId) {
+		if (errorMsgRowsMissingItemId == null || errorMsgRowsMissingItemId.trim().length() == 0) {
+			// already have correct row numbers
+			return errorRowsInvalidItemId;
 		}
 
-		List<String> correctedInvalidRows = new ArrayList<String>(errorRowsInvalidItemId.size());
-		int row = 1;
-		for (Object element : positionalList) {
-			if (element != null) {
-				// the original (wrong) row number is the element's value. the correct value is the element's position within the list.
-				correctedInvalidRows.add(String.valueOf(row));
+		List<Integer> missingRows = convertToIntList(errorMsgRowsMissingItemId);
+
+		List<Holder> holders = new ArrayList<Holder>(errorRowsInvalidItemId.size());
+		for (Integer invalidRow : errorRowsInvalidItemId) {
+			holders.add(new Holder(invalidRow));
+		}
+
+		/*
+		 * Increment the invalid row for each preceding missing row.
+		 * For example:
+		 * invalid rows = 1 2 3
+		 * missing rows = 1 3
+		 * corrected invalid rows = 2 4 5
+		 * Think of it as "rebuilding" the original list of 1 2 3 4 5 and then removing the 1 and 3 that are mising
+		 */
+		for (Integer missingRow : missingRows) {
+			for (Holder holder : holders) {
+				if (missingRow <= holder.value) {
+					holder.value = holder.value + 1;
+				}
 			}
-			row++;
+		}
+
+		List<Integer> correctedInvalidRows = new ArrayList<Integer>(errorRowsInvalidItemId.size());
+		for (Holder holder : holders) {
+			correctedInvalidRows.add(holder.value);
 		}
 
 		return correctedInvalidRows;
@@ -402,11 +413,11 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 		this.itemsOrder = itemsOrder;
 	}
 
-	public List<String> getErrorRowsInvalidItemId() {
+	public List<Integer> getErrorRowsInvalidItemId() {
 		return errorRowsInvalidItemId;
 	}
 
-	public void setErrorRowsInvalidItemId(List<String> errorRows) {
+	public void setErrorRowsInvalidItemId(List<Integer> errorRows) {
 		this.errorRowsInvalidItemId = errorRows;
 	}
 
@@ -418,5 +429,18 @@ public class XPEDXMyItemsDetailsImportCreateAction extends XPEDXMyItemsDetailsCr
 		this.editMode = editMode;
 	}
 
+	private static class Holder {
+		public Integer value;
+
+		public Holder(Integer value) {
+			super();
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(value);
+		}
+	}
 
 }
