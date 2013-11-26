@@ -8,6 +8,8 @@
 <s:set name="RememberMeRule"
 	value="#wcCtx.getWCAttribute('RememberMeRule')" />
 <s:set name='sfid' value='wCContext.storefrontId'/>
+<s:url id="MyRegisterUserURL" namespace='/profile/user' action='MyRegisterUser' />
+
 <head>
 <!-- This needs to be at the top to ensure the 'Sign In' link is never seen. -->
 <script type="text/javascript">
@@ -89,7 +91,7 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					
 					<div class="button-row">
 						<a href="#" id="loginFormSignInLink" class="orange-ui-btn"><span>Sign In</span></a> 
-						<a href="#" class="underlink">Register</a>
+						<a href="<s:property value='MyRegisterUserURL' />" class="underlink">Register</a>
 					</div>
 					
 					<%-- eb-2749: in order for IE to remember the password, we must submit the form using a real button --%>
@@ -166,9 +168,6 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		<s:action name="xpedxMainCategoriesHomeAction" executeResult="true" namespace="/catalog" />
 		
 </table>
-
-<s:form name='homePageNewUserRegistration' namespace='/profile/user' action='MyRegisterUser'>
-</s:form>
 
 <script>
 // sign in link submits the form. note that it's important to click the real submit button (hidden) rather than $(form).submit() - see eb-2749 for details
