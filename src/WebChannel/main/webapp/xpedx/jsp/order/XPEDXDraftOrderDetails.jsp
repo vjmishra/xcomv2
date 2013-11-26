@@ -1678,6 +1678,8 @@ var currentAadd2ItemList = new Object();
 						 <s:set name='extnVendorNo' value='%{#extnTag.getAttribute("ExtnVendorNo")}' />
 						 <s:set name='certFlagVal' value='%{#extnTag.getAttribute("ExtnCert")}' />
 						<s:set name='rItemID' value='%{#altItem.getAttribute("ItemID")}' /> 
+						<s:set name='rMfgItemVal' value='%{#altItemPrimaryInfo.getAttribute("ManufacturerItem")}' />
+						<s:set name='rPartItemVal' value='%{#altItemPrimaryInfo.getAttribute("CustomerItemNumber")}' /> <%-- this is not element of item, is elem of xref --%>
 						<s:set name='rdesc' value='%{#altItemPrimaryInfo.getAttribute("Description")}' />
 						<s:url id='pImg' value='%{#_action.getImagePath(#altItemPrimaryInfo)}' />						
 						
@@ -1748,12 +1750,14 @@ var currentAadd2ItemList = new Object();
 								 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
 								 </s:if>
 								 
-                             <p style="margin-top:0px;">Mfg. Item #: <s:property value="#extnVendorNo" /> </p>
+                             <p style="margin-top:0px;">Mfg. Item #: <s:property value="#rMfgItemVal" /> </p>
+<%--
                              <s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
                              <s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+--%>
                              <s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
 											<p style="margin-top:0px;">
-												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+												<s:property value="#customerItemLabel" />: <s:property value='#rPartItemVal' /></p>
 							</s:if>
 						
                     </div>
