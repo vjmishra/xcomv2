@@ -579,47 +579,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				String customerPartNumber = ""; 
 				String lineNumber = item.getAttribute("ItemOrder");
 				//Added	this XB-56
-
-				String mfgItemNo = manufactureItemMap.get(item.getAttribute("ItemId"));
 				String immediate =null;
 				String nextDay = null;
 				String plus2Days = null;
 				String UOM = null;
-				//XB-56 Endif (totalForImmediate > 0) {
-				if(exportMap !=null){
-					if(lineNumber==null  && "".equalsIgnoreCase(lineNumber)){
-						jdondata = (JSONObject) exportMap.get(tmpItemId);
-					}else{
-						jdondata = (JSONObject) exportMap.get(tmpItemId+"_"+lineNumber);
-					}
-					
-					if(jdondata !=null){
-						if(jdondata.get("Immediate") !=null && !"".equalsIgnoreCase(jdondata.get("Immediate").toString())){
-							immediate = jdondata.get("Immediate").toString();					
-						}else{
-							immediate="0";
-						}
-						if(jdondata.get("NextDay") !=null && !"".equalsIgnoreCase(jdondata.get("NextDay").toString())){
-							nextDay= jdondata.get("NextDay").toString();				
-						}else{
-							nextDay="0";
-						}
-						if(jdondata.get("TwoPlusDays") !=null && !"".equalsIgnoreCase(jdondata.get("TwoPlusDays").toString())){
-							plus2Days=jdondata.get("TwoPlusDays").toString();
-						}else{
-							plus2Days = "0";
-						}
-						if(jdondata.get("UOM") !=null && !"".equalsIgnoreCase(jdondata.get("UOM").toString())){
-							UOM = jdondata.get("UOM").toString();							
-							if(UOM.contains("M_")){
-								String a[] = UOM.split("_");
-								UOM = a[1];								
-							}
-							
-						}
-					}
-				
-				}
+
+
+				String mfgItemNo = manufactureItemMap.get(item.getAttribute("ItemId"));
+
 				//get the customer part number
 				if(itemcustXrefDoc == null)
 					itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(allMyItemsListItemIds, getWCContext());
@@ -710,6 +677,46 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				try {
 					if (request.getParameter("avail_" + id) != null) {
 						avail = request.getParameter("avail_" + id);
+						
+						//EB-1065 - Export MIL
+						
+						//XB-56 Endif (totalForImmediate > 0) {
+						if(exportMap !=null){
+							if(lineNumber==null  && "".equalsIgnoreCase(lineNumber)){
+								jdondata = (JSONObject) exportMap.get(tmpItemId);
+							}else{
+								jdondata = (JSONObject) exportMap.get(tmpItemId+"_"+lineNumber);
+							}
+							
+							if(jdondata !=null){
+								if(jdondata.get("Immediate") !=null && !"".equalsIgnoreCase(jdondata.get("Immediate").toString())){
+									immediate = jdondata.get("Immediate").toString();					
+								}else{
+									immediate="0";
+								}
+								if(jdondata.get("NextDay") !=null && !"".equalsIgnoreCase(jdondata.get("NextDay").toString())){
+									nextDay= jdondata.get("NextDay").toString();				
+								}else{
+									nextDay="0";
+								}
+								if(jdondata.get("TwoPlusDays") !=null && !"".equalsIgnoreCase(jdondata.get("TwoPlusDays").toString())){
+									plus2Days=jdondata.get("TwoPlusDays").toString();
+								}else{
+									plus2Days = "0";
+								}
+								if(jdondata.get("UOM") !=null && !"".equalsIgnoreCase(jdondata.get("UOM").toString())){
+									UOM = jdondata.get("UOM").toString();							
+									if(UOM.contains("M_")){
+										String a[] = UOM.split("_");
+										UOM = a[1];								
+									}
+									
+								}
+							}
+						
+						}
+						
+						//ends
 					}
 					if (avail.trim().equals("null")) {
 						avail = "";
