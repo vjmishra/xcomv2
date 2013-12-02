@@ -24,6 +24,7 @@ import org.apache.lucene.search.WildcardQuery;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
+import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroupComparator;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -134,7 +135,8 @@ public class AjaxAutocompleteAction extends WCAction {
 			}
 
 			// do NOT use lucene sorting: we want top hits independent of group. we only want to resort for the presentation layer (UI looks funky if they're not grouped together)
-			Collections.sort(marketingGroups);
+			Collections.sort(marketingGroups, new AutocompleteMarketingGroupComparator(getBrand()) {
+			});
 
 		} catch (TooManyClauses e) {
 			// this happens if we have too many results
@@ -198,13 +200,23 @@ public class AjaxAutocompleteAction extends WCAction {
 	}
 
 	/**
+	 * @return Returns the storefront id (aka brand).
+	 */
+	/*default*/ String getBrand() {
+		return wcContext.getStorefrontId();
+	}
+
+	/**
 	 * @return If anonymous user, returns the storefront id (aka brand). Otherwise returns null.
 	 */
 	/*default*/ String getEntitlementAnonymousBrand() {
 		boolean anonymous = XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER) == null;
-		return anonymous ? wcContext.getStorefrontId() : null;
+		return anonymous ? getBrand() : null;
 	}
 
+	/**
+	 * @return If logged in user and the ship-to is configured to use division entitlements, returns the ship-to's division + brand. Otherwise returns null.
+	 */
 	/*default*/ String getEntitlementDivisionAndBrand() {
 		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (shipto == null) {
@@ -218,6 +230,9 @@ public class AjaxAutocompleteAction extends WCAction {
 		return shipto.getExtnShipFromBranch() + wcContext.getStorefrontId();
 	}
 
+	/**
+	 * @return If logged in user, then returns the ship-to's company code + legacy customer number
+	 */
 	/*default*/ String getEntitlementCompanyCodeAndLegacyCustomerId() {
 		XPEDXShipToCustomer shipto = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (shipto == null) {

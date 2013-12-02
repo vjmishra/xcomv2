@@ -14,6 +14,7 @@ import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMa
  *
  * @author Trey Howard
  */
+@SuppressWarnings("serial")
 public class TestAjaxAutocompleteAction extends WCAction {
 
 	private static AjaxAutocompleteAction createTsudis() {
@@ -21,6 +22,11 @@ public class TestAjaxAutocompleteAction extends WCAction {
 		// div = 68xpedx (ship from branch = 68_M Pittsburgh)
 		// cust = 600006806597
 		return new AjaxAutocompleteAction() {
+			@Override
+			String getBrand() {
+				return "xpedx";
+			}
+
 			@Override
 			String getEntitlementAnonymousBrand() {
 				return null;
@@ -45,6 +51,11 @@ public class TestAjaxAutocompleteAction extends WCAction {
 		// +(entitled_divisions:90xpedx entitled_customers:900001018921) (+marketing_group_path_parsed:*spring*)
 		return new AjaxAutocompleteAction() {
 			@Override
+			String getBrand() {
+				return "xpedx";
+			}
+
+			@Override
 			String getEntitlementAnonymousBrand() {
 				return null;
 			}
@@ -67,6 +78,11 @@ public class TestAjaxAutocompleteAction extends WCAction {
 		// cust = 970001274066
 		// +(entitled_divisions:90xpedx entitled_customers:900001018921) (+marketing_group_path_parsed:*spring*)
 		return new AjaxAutocompleteAction() {
+			@Override
+			String getBrand() {
+				return "xpedx";
+			}
+
 			@Override
 			String getEntitlementAnonymousBrand() {
 				return null;

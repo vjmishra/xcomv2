@@ -1,7 +1,5 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete;
 
-import java.text.Collator;
-
 /*
  * Created on Oct 21, 2013
  */
@@ -11,7 +9,7 @@ import java.text.Collator;
  *
  * @author Trey Howard
  */
-public class AutocompleteMarketingGroup implements Comparable<AutocompleteMarketingGroup> {
+public class AutocompleteMarketingGroup {
 
 	private String key;
 	private String cat1;
@@ -53,22 +51,6 @@ public class AutocompleteMarketingGroup implements Comparable<AutocompleteMarket
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	/*
-	 * Sorts by cat1, then by name.
-	 *
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(AutocompleteMarketingGroup that) {
-		int retval = Collator.getInstance().compare(this.getCat1(), that.getCat1());
-
-		if (retval == 0) {
-			retval = Collator.getInstance().compare(this.getPath(), that.getPath());
-		}
-
-		return retval;
 	}
 
 }
