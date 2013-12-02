@@ -112,12 +112,13 @@
 				// autocomplete console.log('ui.item = ' , ui.item);
 				
 				var url = '<s:property value="#newSearchURL" escape="false" />';
-				url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
+				url += '&searchTerm='; // necessary for bookmarkability of search result page
 				url += '&cname=' + encodeURIComponent(ui.item.name);
+				url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
 				// autocomplete console.log('posting to url = ' , url);
-				post_to_url(url, {path: '/', searchTerm: ''}, 'post');
+				post_to_url(url, {path: '/'}, 'post');
 			};
 			
 			var acOptions = {
