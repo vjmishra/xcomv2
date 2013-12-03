@@ -2991,7 +2991,7 @@ function msgWait(){
 							<s:param name="customerId" value="#sapCustomerId" />
 							<s:param name="organizationCode" value="#loggedInUserOrgCode" />
 						</s:url>
-					<s:if test="%{#isUserAdmin && !#isSalesRep}">
+					<s:if test="%{#isUserAdmin}">
 						<li>
 							<s:if test='#sapCustSize > 1' >
 								<s:a id="dlgSelectAccount" href="#dlgSelectAccountBox">
@@ -3005,14 +3005,14 @@ function msgWait(){
 							</s:elseif>
 						</li>
 					</s:if>
-					<s:if test="%{#isUserAdmin && !#isSalesRep}">
+					<s:if test="%{#isUserAdmin}">
 						<li>
 							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Users"></s:text>
 							</s:a>
 						</li>
 					</s:if>
-						<s:if test="%{#isUserAdmin && !#isSalesRep}">
+						<s:if test="%{#isUserAdmin}">
 							<s:url id='newsMaintenanceLink' namespace="/profile/user" action='MyNewsMaintenance'>					
 							</s:url>
 							<li>

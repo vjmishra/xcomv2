@@ -324,19 +324,22 @@
 	</div>		
 		<div id="catalog-header-breadcrumbs" >
 				<!--XBT-391 Removed submit event from Submit button and added to form  -->
-				<s:form name='narrowSearch' action='search' namespace='/catalog' onSubmit="javascript:setDefaultSearchText();">
-				<div class="searchbox-form1">
-					<div  class="catalog-search-container"> <!-- -FX1- tile="search tooptip"  -->
-						<!-- XBT - 391 Removed onkeydown event -->
-						<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
-						tabindex="1002" type="text" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
-						
-						<button type="submit" class="searchButton"  tabindex="1003" title="Search" ></button>
-						
-						<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-						<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
-					</div>	
-				</div>		
+				<s:url id='searchURL' action='search' namespace='/catalog' includeContext='false' escapeAmp='false'>
+					<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+				</s:url>
+				<s:form name='narrowSearch' action="%{searchURL}" onSubmit="javascript:setDefaultSearchText();">
+					<div class="searchbox-form1">
+						<div  class="catalog-search-container"> <!-- -FX1- tile="search tooptip"  -->
+							<!-- XBT - 391 Removed onkeydown event -->
+							<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
+							tabindex="1002" type="text" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
+							
+							<button type="submit" class="searchButton"  tabindex="1003" title="Search" ></button>
+							
+							<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
+							<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
+						</div>	
+					</div>		
 				</s:form>
 						
 				<div id="breadcrumbs-list-name">
@@ -438,6 +441,7 @@
                  		<s:param name="sortDirection" value="#sortDir"/>
 						<s:param name="theSpanNameValue" value="#sortName"/>
 						<s:param name="pageNumber" value="'{0}'" />
+						<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 					</s:url> <swc:pagectl currentPage='%{#pageNumber}'
 						lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
 						urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
@@ -1024,6 +1028,7 @@ var ct = Ext.get('item-box-inner');
 		<s:param name="sortDirection" value="#sortDir"/>
 		<s:param name="theSpanNameValue" value="#sortName"/>
 		<s:param name="pageNumber" value="'{0}'" />
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 	</s:url> 
 	<swc:pagectl currentPage='%{#pageNumber}'
 		lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
@@ -1037,8 +1042,12 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	
 	</div>
-	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
-	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>	
+	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog' escapeAmp="false">
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+	</s:url>
+	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog' escapeAmp="false">
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+	</s:url>	
 </swc:breadcrumbScope>
 <!-- // container end -->
 <!-- begin swc:dialogPanel -->

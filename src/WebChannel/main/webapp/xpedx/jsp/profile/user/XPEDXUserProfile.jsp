@@ -786,48 +786,50 @@ function funDivOpenClose(val1)
 			{
 				lboTo.options[i].selected = true;
 			}
-
-			var tbody = document.getElementById("tb1");
-			var rowCount = tbody.rows.length;
-			var comleteData = "";
-
-			for(var i=1; i<=rowCount; i++) {
-				var row = tbody.rows[i];
-				if (null != row) {
-	    			var cellsCount = row.cells.length;    			
-	    			for(var j=0; j<cellsCount; j++) {
-	    				var temp = "";        				 
-	        			if (j==3) {
-	        				temp = row.cells[j].childNodes[0].value;
-	        			} else {
-	        				if(j==2) {
-	            				var checkbox = row.cells[j].childNodes[0];
-	            				if(null != checkbox && true == checkbox.checked){
-	            					temp = "Y" ;
-	            				}
-	            				else
-	            					temp = "N" ;
-	            				
-	            			}
-	        				else if(j==0){
-	        					temp = row.cells[j].childNodes[1].value;
-	        				}
-	            			else {
-	            				temp = row.cells[j].childNodes[0].value;
-	            			}        				
-	        			}               		
-	        			
-	        			if(temp == "") {
-	            			temp = "*#?";
-	        			}        
-				
-	        			comleteData = comleteData + "||" + temp;                			                			
-	    			}
-				}
-				            		
-			} 
-			      
-			document.getElementById('bodyData').value = comleteData;
+			
+			if(!salesRep){
+				var tbody = document.getElementById("tb1");
+				var rowCount = tbody.rows.length;
+				var comleteData = "";
+	
+				for(var i=1; i<=rowCount; i++) {
+					var row = tbody.rows[i];
+					if (null != row) {
+		    			var cellsCount = row.cells.length;    			
+		    			for(var j=0; j<cellsCount; j++) {
+		    				var temp = "";        				 
+		        			if (j==3) {
+		        				temp = row.cells[j].childNodes[0].value;
+		        			} else {
+		        				if(j==2) {
+		            				var checkbox = row.cells[j].childNodes[0];
+		            				if(null != checkbox && true == checkbox.checked){
+		            					temp = "Y" ;
+		            				}
+		            				else
+		            					temp = "N" ;
+		            				
+		            			}
+		        				else if(j==0){
+		        					temp = row.cells[j].childNodes[1].value;
+		        				}
+		            			else {
+		            				temp = row.cells[j].childNodes[0].value;
+		            			}        				
+		        			}               		
+		        			
+		        			if(temp == "") {
+		            			temp = "*#?";
+		        			}        
+					
+		        			comleteData = comleteData + "||" + temp;                			                			
+		    			}
+					}
+					            		
+				} 
+				      
+				document.getElementById('bodyData').value = comleteData;				
+			}
 			
 			document.getElementById("myAccount").submit();
 		
@@ -1427,7 +1429,7 @@ a.underlink:hover {
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
 		</s:if> --%>
 							</tr>
-							<s:if test='%{#isCustomerNotAdmin == false && !#isSalesRep}'>
+							<s:if test='%{#isCustomerNotAdmin == false}'>
 								<tr>
 									<%--JIRA 3917 Start --%>
 									<td width="5%" class="padding-left0 no-border-right-user">
@@ -1852,7 +1854,7 @@ a.underlink:hover {
 			</div>
 			</td>
 			<td valign="top" class="no-border-right-user padding00">&nbsp;</td>
-		</tr> --%>
+		</tr> --%>						<s:if test="%{!#isSalesRep}">
 											<tr>
 												<td valign="top" colspan="2"
 													class="no-border-right-user padding00">
@@ -1890,6 +1892,8 @@ a.underlink:hover {
 													</table>
 												</td>
 											</tr>
+										</s:if>
+											
 											<s:set name='custContactAddtnlAddress'
 												value="#_action.getCustContactAddtnlAddress()" />
 											<s:set name='personInfo'
@@ -3248,7 +3252,10 @@ if (window.event && window.event.keyCode == 13) {
   saveClick();
 }
 }
-document.onkeypress = enterPressed;
+
+<s:if test="%{!#isSalesRep}">
+	document.onkeypress = enterPressed;
+</s:if>
 
   function setInLineChange()
   {
@@ -3470,7 +3477,9 @@ document.onkeypress = enterPressed;
 		
 	}
 
-	loadDataOnStart();
+	<s:if test="%{!#isSalesRep}">
+		loadDataOnStart();
+	</s:if>
 	
 </script>
 
