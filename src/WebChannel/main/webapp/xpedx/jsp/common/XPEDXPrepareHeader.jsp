@@ -37,6 +37,7 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+		
 		<!-- END JS -->
 	</s:if>
 	<s:else>
@@ -48,6 +49,7 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
 	
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
@@ -118,6 +120,9 @@
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
 				// autocomplete console.log('posting to url = ' , url);
+				var waitMsg = Ext.Msg.wait("Processing...");
+				myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+				myMask.show();
 				post_to_url(url, { path: '/', rememberNewSearchText: $('#newSearch_searchTerm').val() }, 'post');
 			};
 			
@@ -125,7 +130,16 @@
 					minLength: 3
 					,source: acSource
 					,select: acSelect
-					,open: function() { $('.ui-autocomplete').width(500); }
+					,open: function() {
+						//var $main = $('#main');
+						var width;
+						try {
+							width = $('#main').offset().left + $('#main').width() - $('#newSearch_searchTerm').offset().left - 5
+						} catch (error) {
+							width = 623;
+						}
+						$('.ui-autocomplete').width(width);
+					}
 			};
 			
 			$('.ui-autocomplete-menu-item').live('mouseenter', function(event) { $(this).addClass('ui-state-hover'); });

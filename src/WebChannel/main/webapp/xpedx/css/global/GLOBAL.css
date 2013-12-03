@@ -8127,7 +8127,7 @@ li.ship-to-list  {
 /*Add xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.autocomplete.css
 */
 .ui-autocomplete-loading {
-	background: transparent url('/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-anim_basic_16x16.gif') right center no-repeat;
+	background: #ffffff url('/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
 .ui-autocomplete {
 	position:absolute;
@@ -8140,12 +8140,14 @@ li.ship-to-list  {
 }
 * html .ui-autocomplete{width:1px;}
 .ui-autocomplete-group {
+	padding-left: 4px;
 	font-size: 16px;
 	font-weight: bold;
 	background-color: #FFF380;
 	cursor:default;
 }
 .ui-autocomplete-menu-item {
+	padding-left: 4px !important;
 	background-color: white;
 }
 .ui-autocomplete-highlight-match {
