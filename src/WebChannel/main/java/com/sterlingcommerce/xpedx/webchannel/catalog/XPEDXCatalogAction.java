@@ -417,8 +417,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 		// Setting default selected view with empty string, so that the b2bview
 		// can be loaded by default
 		this.selectedView = "";
-
 	}
+
+//	public void initSearchText() {
+//		setSearchTerm(getRememberSearchText());
+//	}
 
 	@Override
 	public String execute() {
@@ -517,7 +520,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	//Added for EB 3372
 	protected void getCustomerLineDetails() throws Exception {
 		//get the map from the session. if null query the DB
-		LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();		
+		LinkedHashMap<String,String> customerFieldsSessionMap = getCustomerFieldsMapfromSession();
         if(null != customerFieldsSessionMap && customerFieldsSessionMap.size() >= 0){
         	LOG.debug("Found customerFieldsMap in the session");
         }
@@ -537,9 +540,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	    		}
 	    	}
         }
-    	
+
 	}
-	
+
 	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();*/
@@ -547,7 +550,7 @@ public class XPEDXCatalogAction extends CatalogAction {
         LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
-	
+
 	//ENd of EB 3372
 
 	private void getSortFieldDocument() {
@@ -1845,7 +1848,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setColumnListForUI();
 				// prepareMyItemListList();
 				getSortFieldDocument();
-				
+
 			}
 			getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),
 					path);
@@ -4129,6 +4132,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String facetDivShortDescription;
 	private String facetListItemAttributeKey;
 
+	private String rememberNewSearchText;
+
 	public Map<String, String> getSortListMap() {
 		sortListMap.put("Item.ExtnBestMatch--A", "Best Match");
 		sortListMap.put("relevancy", "Relevancy");
@@ -4310,6 +4315,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setMarketingGroupId(String marketingGroupId) {
 		this.marketingGroupId = marketingGroupId;
+	}
+
+	public String getRememberNewSearchText() {
+		return rememberNewSearchText;
+	}
+
+	public void setRememberNewSearchText(String rememberNewSearchText) {
+		this.rememberNewSearchText = rememberNewSearchText;
 	}
 
 }
