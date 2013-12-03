@@ -438,6 +438,7 @@
                  		<s:param name="sortDirection" value="#sortDir"/>
 						<s:param name="theSpanNameValue" value="#sortName"/>
 						<s:param name="pageNumber" value="'{0}'" />
+						<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 					</s:url> <swc:pagectl currentPage='%{#pageNumber}'
 						lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
 						urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
@@ -1024,6 +1025,7 @@ var ct = Ext.get('item-box-inner');
 		<s:param name="sortDirection" value="#sortDir"/>
 		<s:param name="theSpanNameValue" value="#sortName"/>
 		<s:param name="pageNumber" value="'{0}'" />
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 	</s:url> 
 	<swc:pagectl currentPage='%{#pageNumber}'
 		lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
@@ -1037,8 +1039,12 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	
 	</div>
-	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog'/>
-	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog'/>	
+	<s:url id='sortFieldsURL' action='sortResultBy' namespace='/catalog' escapeAmp="false">
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+	</s:url>
+	<s:url id='pageSizeURL' action='selectPageSize' namespace='/catalog' escapeAmp="false">
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+	</s:url>	
 </swc:breadcrumbScope>
 <!-- // container end -->
 <!-- begin swc:dialogPanel -->
