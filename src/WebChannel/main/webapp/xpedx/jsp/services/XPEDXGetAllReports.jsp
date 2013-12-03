@@ -163,18 +163,22 @@ p{margin-bottom:8px;}
 
 </s:iterator>
                     </div>  </div> </div>
+                    
       <div class="clearview"> &nbsp;</div>
-      <div class="clearview"> &nbsp;</div>   
-      </div>
-      </div>
-
-			<div class="inf">
+      <!-- EB-650 As a web user I want the Adobe download link on the reports page to open in a new window so that I do not lose my place on the website while downloading Adobe -->
+      <div class="inf">
 				Reports can be saved and printed using Adobe PDF or Microsoft Excel.<br />
 				If you do not have Adobe Reader, click the link below and follow the
 				instructions to download and install this free software.
 			</div>
-			<br /> <a href="http://www.adobe.com/reader" class="underlink"> <img
+      <div class="clearview"> &nbsp;</div>   
+      <br /> <a href="http://www.adobe.com/reader" class="underlink" target="_blank"> <img
 				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/reader.png" /> </a>
+      </div>
+      </div>
+
+			
+			
           </div>
  
  
