@@ -120,6 +120,9 @@
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
 				// autocomplete console.log('posting to url = ' , url);
+				var waitMsg = Ext.Msg.wait("Processing...");
+				myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+				myMask.show();
 				post_to_url(url, { path: '/', rememberNewSearchText: $('#newSearch_searchTerm').val() }, 'post');
 			};
 			
