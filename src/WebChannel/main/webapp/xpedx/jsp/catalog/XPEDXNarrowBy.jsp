@@ -11,10 +11,10 @@
 <!-- Getting the cached xml doc for root catalog -->
 <s:set name='catDoc' value='%{outDoc.documentElement}' />
 <s:set name='tabStart' value='1001' />
-<s:url id="getFacetListURL" action="getFacetList">
+<s:url id="getFacetListURL" action="getFacetList" escapeAmp="false">
 	<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 </s:url>
-<s:url id="getNarrowByListURL" action="getNarrowByList">
+<s:url id="getNarrowByListURL" action="getNarrowByList" escapeAmp="false">
 	<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 </s:url>
 <s:bean
@@ -218,8 +218,7 @@ Ext.onReady(function(){
 	  });
 	var divID="narrowByDivList";
 	var div=document.getElementById(divID);
-	var url = '<s:property value ="#getNarrowByListURL" />';
-	url=replaceAll(url,'amp;','');
+	var url = '<s:property value ="#getNarrowByListURL" escape="false" />';
 		Ext.Ajax.request({
 			url: url,
 			params: {
@@ -257,8 +256,7 @@ function getFacetList(shortDescription,itemAttributeKey)
 	  });
 	var divID="narrowByDiv_"+shortDescription;
 	var div=document.getElementById(divID);
-	var url = '<s:property value ="#getFacetListURL" />';
-	url=replaceAll(url,'amp;','');
+	var url = '<s:property value ="#getFacetListURL" escape="false" />';
 	// if(currentDivIndex == null || currentDivIndex=="")
 	//	currentDivIndex="0"; 
 	//if(div != null && dev != undefined)

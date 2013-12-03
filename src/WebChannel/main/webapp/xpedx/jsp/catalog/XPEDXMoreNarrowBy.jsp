@@ -56,6 +56,7 @@
 							<s:param name='filterDesc' value='#ShortDescription1' />
 							<s:param name="categoryPath" value='#parameters.path'/>
 							<s:param name="path" value='#parameters.path'/>
+							<s:param name="marketingGroupId" value='#parameters.marketingGroupId'/>
 						</s:url>
 						
 						<li class="roll close"><s:a href="%{narrowURL}"
