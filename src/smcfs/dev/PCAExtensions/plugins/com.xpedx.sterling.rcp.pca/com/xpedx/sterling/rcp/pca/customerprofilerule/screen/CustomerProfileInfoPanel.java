@@ -869,16 +869,6 @@ IYRCComposite {
 		"lblCsr2EmailConfirmationFlag");
 		addTab(gridDataDummy,"dummyCsr2EmailConfirmationFlag");
 
-		chkSalesRepEmailConfirmationFlag = new Button(pnlCustomerProfileInfo,SWT.CHECK);
-		chkSalesRepEmailConfirmationFlag.setText("");
-		chkSalesRepEmailConfirmationFlag.setVisible(true);
-		chkSalesRepEmailConfirmationFlag.setData("yrc:customType", "Label");
-		chkSalesRepEmailConfirmationFlag.setLayoutData(gridData1);
-		chkSalesRepEmailConfirmationFlag.setData("name","chkSalesRepEmailConfirmationFlag");
-		lblSalesRepEmailConfirmationFlag = new Label(pnlCustomerProfileInfo,SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag.setText("Email_Confirmation_Flag_SalesRep");
-		lblSalesRepEmailConfirmationFlag.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag.setData("name","lblSalesRepEmailConfirmationFlag");
 
 		addTab(gridDataDummy,"dummySalesRepEmailConfirmationFlag");
 
@@ -2132,16 +2122,6 @@ IYRCComposite {
 
 		
 		
-		chkBoxBindingData = new YRCButtonBindingData();
-		chkBoxBindingData.setCheckedBinding("Y");
-		chkBoxBindingData.setUnCheckedBinding("N");
-		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
-		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
-		chkBoxBindingData.setName("chkSalesRepEmailConfirmationFlag");
-		chkSalesRepEmailConfirmationFlag.setData("YRCButtonBindingDefination",
-				chkBoxBindingData);
 
 		// eCSR to be done
 		cbd = new YRCComboBindingData();
