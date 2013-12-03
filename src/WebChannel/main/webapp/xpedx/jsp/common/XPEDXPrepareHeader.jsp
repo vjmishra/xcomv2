@@ -118,7 +118,7 @@
 				// url += '&path=' + encodeURIComponent(ui.item.name);
 				
 				// autocomplete console.log('posting to url = ' , url);
-				post_to_url(url, {path: '/'}, 'post');
+				post_to_url(url, { path: '/', rememberNewSearchText: $('#newSearch_searchTerm').val() }, 'post');
 			};
 			
 			var acOptions = {
@@ -1565,19 +1565,20 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 	// Added for removing the double quotes from an search term. Jira # 2415
 	
 	var myMask;
-  function validateVal(e){
-	//added for jira 3974
+	function newSearch_onsubmit(e){
+		//added for jira 3974
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 		myMask.show();
-	 	var searchText = document.getElementById("newSearch_searchTerm").value;
-	 	
-	 	/*while(searchText.indexOf("*")!= -1){
-    	 	searchText = searchText.replace("*", " ");    	  
-	 	}*/
+		var searchText = document.getElementById("newSearch_searchTerm").value;
+		document.getElementById('newSearch_rememberNewSearchText').value = searchText;
+
+		/*while(searchText.indexOf("*")!= -1){
+			searchText = searchText.replace("*", " ");
+		}*/
 		document.getElementById("goBackFlag").value = 'true';
-	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;	
-}
+		Ext.fly('newSearch_searchTerm').dom.value=searchText;
+	}
   // End of Jira # 2415 
 var toaWin = new Ext.Window({
         autoScroll: true,
@@ -2502,33 +2503,46 @@ function msgWait(){
 	  </s:url>
 	  <div  class="searchbox-1 auth">
 	  <!-- XBT-391 Removed submit event from Submit button and added to form -->
-	   <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
-	   		<s:hidden name='path' id='path' value="/" />
+		<s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+			<s:hidden name='path' id='path' value="/" />
+			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	   		<!-- XBT-391 removed the onkeydown event -->
-			<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	        	type="text" value="Search Catalog..." onclick="clearTxt();" >
-			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
-	                            ></button>
-		    <div id="tips-container">
-		    	 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
-		    </div>
-	    </s:form>
-	    <!-- END wctheme.form-close.ftl --> 
+	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value="Search Catalog..." onclick="clearTxt();" />
+	   		</s:if>
+	   		<s:else>
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value='<s:property value="rememberNewSearchText" />' />
+	   		</s:else>
+			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013"></button>
+			<div id="tips-container">
+				 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
+			</div>
+		</s:form>
+		<!-- END wctheme.form-close.ftl --> 
 	  </div>
  </s:if> 
  <s:if test='(#isGuestUser == true)'> 
 	<div  class="searchbox-1">
 	<!-- XBT-391 Removed submit event from Submit button and added to form -->
-	  <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
+	  <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
 	  		<s:hidden name='path' id='path' value="/" />
+	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	  		<!-- XBT-391 removed the onkeydown event -->
-		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	         type="text" value="Search Catalog..." onclick="clearTxt();" >
-		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	            style="top:-4px;margin-left: 3px;height: 20px;"></button>
-	     <div id="tips-container">
-		    	 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
-		</div> 
+	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value="Search Catalog..." onclick="clearTxt();" />
+	   		</s:if>
+	   		<s:else>
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value='<s:property value="rememberNewSearchText" />' />
+	   		</s:else>
+			<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
+					style="top:-4px; margin-left: 3px; height: 20px;"></button>
+			<div id="tips-container">
+				<a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
+			</div> 
 	   </s:form>
 	 </div>
  </s:if>   
