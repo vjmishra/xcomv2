@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import com.yantra.yfc.rcp.IYRCApiCallbackhandler;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
@@ -510,14 +509,18 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 					address.append(" "+country);
 				}
 				
-				String displayString = orgName+" ("+CustomerID+")"+address.toString();
-				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))
-						&& "30".equals(status)){ // 30=Suspended (this should be a constant somewhere)
-					displayString = "(Suspended)" + displayString;
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))){
+					iiItem.setText(CustomerID +", " +orgName+ ", " +address.toString());					
+					iiItem.setFont(JFaceResources.getFontRegistry().getBold(""));
+				}else{
+					iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
+				}
+				
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType))) && status!=null && status.equals("30")){
+					iiItem.setText("[Suspended] do not use " + CustomerID +", " +orgName+ address.toString());
 					iiItem.setForeground(getDisplay().getSystemColor(SWT.COLOR_GRAY));
 					iiItem.setFont(JFaceResources.getFontRegistry().getItalic(""));
 				}
-				iiItem.setText(displayString);
 				
 				iiItem.setData("data",eleCust);
 				if(myBehavior.isThisCustomerAssigned(eleCust)){
