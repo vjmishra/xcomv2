@@ -185,7 +185,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				 *  
 				 */
 				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnStockCheckWS"))){
-					roleList.add("StockCheck");
+					roleList.add("Stock Check Web Service User");
 				}	
 				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewInvoices"))){
 					roleList.add("ViewInvoices");

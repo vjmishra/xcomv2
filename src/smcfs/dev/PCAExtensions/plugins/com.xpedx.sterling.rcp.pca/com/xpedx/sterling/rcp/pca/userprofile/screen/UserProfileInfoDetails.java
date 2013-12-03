@@ -379,7 +379,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		GridData pnlGeneralInfoLayoutData = new GridData();
 		pnlGeneralInfoLayoutData.horizontalAlignment = 4;
 		pnlGeneralInfoLayoutData.grabExcessHorizontalSpace = true;
-//		pnlGeneralInfoLayoutData.grabExcessVerticalSpace = true;
+		pnlGeneralInfoLayoutData.grabExcessVerticalSpace = true;
 		pnlGeneralInfo.setLayoutData(pnlGeneralInfoLayoutData);
 		
 		GridData gridData2 = new GridData();
@@ -629,8 +629,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblUserType.setData("name", "lblUserType");
 		
 		GridData gridData4 = new GridData();
-        gridData4.horizontalAlignment = 4;
-        gridData4.widthHint = 200;
+        gridData4.horizontalAlignment = 5;
+        gridData4.widthHint = 900;
         gridData4.horizontalSpan = 2;
         gridData4.grabExcessVerticalSpace = true;
 		
@@ -654,7 +654,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkEstimator.setData("yrc:customType", "Label");
 		chkEstimator.setData("name", "chkEstimator");
 		chkStockCheckWS = new Button(pnlUserTypeChkButtons, SWT.CHECK);
-		chkStockCheckWS.setText("Stock_Check");
+		chkStockCheckWS.setText("Stock Check Web Service User");
 		chkStockCheckWS.setVisible(true);
 		chkStockCheckWS.setData("yrc:customType", "Label");
 		chkStockCheckWS.setData("name", "chkStockCheckWS");
@@ -680,7 +680,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		chkViewPrices.setData("yrc:customType", "Label");
 		chkViewPrices.setData("name", "chkViewPrices");
 		chkProcurementUser = new Button(pnlUserTypeChkButtons, SWT.CHECK);
-		chkProcurementUser.setText("Procurement_User");
+		chkProcurementUser.setText("Punch Out User");
 		chkProcurementUser.setVisible(true);
 		chkProcurementUser.setData("yrc:customType", "Label");
 		chkProcurementUser.setData("name", "chkProcurementUser");
@@ -693,15 +693,15 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 			 "Buyer:  Permission to use the site. Required for all users." + "\n"+
 			 "Approver:  Authorizes submission of orders."+"\n"+
 			 "Estimator:  Can view pricing and inventory availability. Cannot submit an order." + "\n"+
-			 "Stock Check:  Stock Check Web Service User for system integrations. (Does not" + "\n"+ "\t"+ 
-			 "      control inventory display for regular site user)." + "\n" +
+			 "Stock Check Web Service User:  Stock Check Web Service User for system integrations. (Does not" + 
+			 " control inventory display for regular site user)." + "\n" +
 			 "Admin:  Permission to create user profiles, assign roles and ship to locations within" + "\n"+ 
 			 "               the account." +"\n"+
 			 "View Invoices:  Can view invoices online." + "\n"	+
 			 "View Reports:  Can view reports. (Note: User should not view reports if cannot view" + "\n"+ "\t"+ 
 			 "        pricing)." + "\n"	+
 			 "View Prices:  Can view pricing." + "\n"+
-			 "Procurement User:  Punchout User (punchout integration customers only).";
+			 "Punch Out User:  Punchout User (punchout integration customers only).";
 		//Providing Help icon for User Roles while updating profile. XNGTP-1185 -Fixed
 		btnUsrRolesHelpInfo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

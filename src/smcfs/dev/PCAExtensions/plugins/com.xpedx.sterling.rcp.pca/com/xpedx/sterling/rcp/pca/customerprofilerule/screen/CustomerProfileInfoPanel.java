@@ -4,7 +4,6 @@
  */
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
-import java.awt.Panel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -554,6 +553,25 @@ IYRCComposite {
 	private Button btnRmv;
 	public Table orderConfirmList;
 	private TableColumn tblOrderConfirmListId;
+	private Button chkSalesRepFlag;
+
+	private Label lblSalesRepEmailConfirmationFlag4;
+
+	private Button chkSalesRepFlag4;
+
+	private Label lblSalesRepEmailConfirmationFlag3;
+
+	private Button chkSalesRepFlag3;
+
+	private Label lblSalesRepEmailConfirmationFlag2;
+
+	private Button chkSalesRepFlag2;
+
+	private Label lblSalesRepEmailConfirmationFlag1;
+
+	private Button chkSalesRepFlag1;
+
+	private Label lblSalesRepEmailConfirmationFlag0;
 	
 	public CustomerProfileInfoPanel(Composite parent, int style,
 			Object inputObject, CustomerProfileMaintenance parentObj) {
@@ -863,6 +881,36 @@ IYRCComposite {
 		lblSalesRepEmailConfirmationFlag.setData("name","lblSalesRepEmailConfirmationFlag");
 
 		addTab(gridDataDummy,"dummySalesRepEmailConfirmationFlag");
+
+		chkSalesRepFlag =  new Button(pnlCustomerProfileInfo,
+				SWT.CHECK);
+		chkSalesRepFlag.setText("");
+		chkSalesRepFlag.setVisible(true);
+		chkSalesRepFlag.setData("yrc:customType", "Label");
+		chkSalesRepFlag.setLayoutData(gridData1);
+		chkSalesRepFlag.setData("name","chkSalesRepFlag");
+		lblSalesRepEmailConfirmationFlag0 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+		lblSalesRepEmailConfirmationFlag0.setText("Email Confirmation Flag - Primary Sales Professional");
+		lblSalesRepEmailConfirmationFlag0.setLayoutData(gridData2);
+		lblSalesRepEmailConfirmationFlag0.setData("name", "lblSalesRepEmailConfirmationFlag0");
+		addTab(gridDataDummy,"dummyOrderUpdateFlag");
+		
+		chkSalesRepFlag1 =  new Button(pnlCustomerProfileInfo,
+				SWT.CHECK);
+		chkSalesRepFlag1.setText("");
+		chkSalesRepFlag1.setVisible(true);
+		chkSalesRepFlag1.setData("yrc:customType", "Label");
+		chkSalesRepFlag1.setLayoutData(gridData1);
+		chkSalesRepFlag1.setData("name","chkSalesRepFlag");
+		lblSalesRepEmailConfirmationFlag1 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+		lblSalesRepEmailConfirmationFlag1.setText("Email Confirmation Flag - Sales Professional 1 -4 ");
+		lblSalesRepEmailConfirmationFlag1.setLayoutData(gridData2);
+		lblSalesRepEmailConfirmationFlag1.setData("name", "lblSalesRepEmailConfirmationFlag1");
+		addTab(gridDataDummy,"dummyOrderUpdateFlag");
+
+		
+
+
 
 		GridData gridDataPriceControl = new GridData();
 		gridDataPriceControl.horizontalAlignment = SWT.BEGINNING;
@@ -1831,6 +1879,8 @@ IYRCComposite {
 		txtPrimarySalesRep.setLayoutData(gridData3);
 		txtPrimarySalesRep.setData("name", "txtPrimarySalesRep");
 		addTab(gridData1,"dummySalesRep1");
+		
+		
 		lblSalesRep1 = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblSalesRep1.setText("Sales_Rep1");
 		lblSalesRep1.setLayoutData(gridData2);
@@ -2057,6 +2107,31 @@ IYRCComposite {
 		chkCsr2EmailConfirmationFlag.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
 
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesProAllEmailFlag");
+		chkBoxBindingData
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesProAllEmailFlag");
+		chkBoxBindingData.setName("chkSalesRepFlag1");
+		chkSalesRepFlag1.setData("YRCButtonBindingDefination",
+				chkBoxBindingData);
+		
+			
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesProPrimaryEmailFlag");
+		chkBoxBindingData
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesProPrimaryEmailFlag");
+		chkBoxBindingData.setName("chkSalesRepFlag");
+		chkSalesRepFlag.setData("YRCButtonBindingDefination",
+				chkBoxBindingData);
+
+		
+		
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
@@ -2619,6 +2694,8 @@ IYRCComposite {
 					lblServiceOptmizationCode, txtServiceOptmizationCode,fillerLabelMap.get("dummyServiceOptmizationCode"),
 					lblCustomerDivision, txtCustomerDivision,fillerLabelMap.get("dummyCustomerDivision"),
 					lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,txtCustomerLinePONumberMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
+					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag
+					,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 
@@ -2646,7 +2723,8 @@ IYRCComposite {
 					lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag"),
 					lblOrderUpdateFlag,chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag"),
 					lblCurrencyCode, txtCurrencyCode,fillerLabelMap.get("dummyCurrencyCode")
-
+					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag
+                    ,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 		}
@@ -2662,7 +2740,7 @@ IYRCComposite {
 					,chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
 					lblViewInventory,fillerLabelMap.get("dummyViewInventory"),fillerLabelMap.get("chkUseOrderMultiple"),lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple")
 					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
-
+					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 
