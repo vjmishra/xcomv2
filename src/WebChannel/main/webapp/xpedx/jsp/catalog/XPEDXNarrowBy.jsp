@@ -11,8 +11,12 @@
 <!-- Getting the cached xml doc for root catalog -->
 <s:set name='catDoc' value='%{outDoc.documentElement}' />
 <s:set name='tabStart' value='1001' />
-<s:url id="getFacetListURL" action="getFacetList"></s:url>
-<s:url id="getNarrowByListURL" action="getNarrowByList"></s:url>
+<s:url id="getFacetListURL" action="getFacetList">
+	<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+</s:url>
+<s:url id="getNarrowByListURL" action="getNarrowByList">
+	<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+</s:url>
 <s:bean
 	name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils'
 	id='util' />
@@ -82,12 +86,13 @@ function setStockItemFlag()
 								<s:url id='catURL' namespace='/catalog' action='navigate.action'>
 									<s:param name='path' value='#cat.getAttribute("CategoryPath")' />
 									<s:param name='cname' value='#cat.getAttribute("ShortDescription")' />
+									<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 								</s:url>
 								<s:url id='cat3URL' namespace='/catalog' action='navigate.action'>
 									<s:param name='path' value='#cat.getAttribute("CategoryPath")' />
 									<s:param name='cname' value='#cat.getAttribute("ShortDescription")' />
 									<s:param name='categoryDepthNarrowBy' value='#categoryDepthNarrowBy' />
-									
+									<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 								</s:url>
 								<!-- s:if test='#subCatElem.size() > 0'-->
 									<s:set name='catCount' value='#cat.getAttribute("Count")' />
@@ -168,6 +173,7 @@ function setStockItemFlag()
 								<s:param name='filterDesc' value='#ShortDescription1' />
 								<s:param name="categoryPath" value='#parameters.path'/>
 								<s:param name="path" value='#parameters.path'/>
+								<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 							</s:url>
 							
 							<li class="roll close"><s:a href="%{narrowURL}"
