@@ -5,7 +5,7 @@
         CarrierServiceCode=""   EnterpriseCode="" MinOrderStatus="" MinOrderStatusDesc=""
         EntryType=""  HoldFlag="" OrderNo="" Status=""
         HoldReasonCode="" MaxOrderStatus="" MaxOrderStatusDesc="" OrderType=""
-		ReqDeliveryDate="" ShipToID=""  ShipNode="" OrderHeaderKey="" Division="" HeaderProcessCode=""  >
+		ReqDeliveryDate="" ShipToID=""  ShipNode="" OrderHeaderKey="" Division="" HeaderProcessCode="" CustomerContactID="">
 		<Extn/>
 		<OrderHoldTypes/>
 		<Instructions>

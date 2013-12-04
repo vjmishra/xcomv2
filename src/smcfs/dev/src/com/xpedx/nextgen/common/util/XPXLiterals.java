@@ -809,4 +809,5 @@ public class XPXLiterals {
 	
 	public static final String HOLD_RELEASE_DESC="ReasonText";
 	public static final String CUSTOMER_CONTACT_ID="CustomerContactID";
+	public static final String RESOLVER_USER_ID="ResolverUserId";
 }
