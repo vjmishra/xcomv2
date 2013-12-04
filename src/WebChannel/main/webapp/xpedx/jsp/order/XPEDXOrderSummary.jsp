@@ -946,7 +946,7 @@ from session . We have customer Contact Object in session .
 					<s:set name='orderDate' value="#util.formatDate(#orderDate, #wcContext, null,'MM/dd/yyyy')" />
 				</s:else>
 				<%--EB-3311 --%>
-			 		<div class="order-placed-by full-width">Order placed by <s:property value='%{#extnElem.getAttribute("ExtnOrderedByName")}' /> on date <s:property value="orderDate" />  <s:if test='#sourceValue=="Web"'>CT </s:if> via <s:property value='#sourceValue'/>.</div>
+			 		<div class="order-placed-by full-width">Order placed by <s:property value='%{#extnElem.getAttribute("ExtnOrderedByName")}' /> on <s:property value="orderDate" />  <s:if test='#sourceValue=="Web"'>CT </s:if> via <s:property value='#sourceValue'/>.</div>
 <%-- 			 		Order placed by <s:property value='#orderDetails.getAttribute("Modifyuserid")'/> on <s:property value='#orderDetails.getAttribute("Modifyts")'/> via <s:property value='#orderDetails.getAttribute("EntryType")'/> --%>
 			</s:if>
 			
