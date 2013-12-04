@@ -1,7 +1,7 @@
 <CustomerContactList>
 	<CustomerContact ApproverProxyUserId="" ApproverUserId="" Company="" CustomerContactID="" CustomerKey="">
 		<Customer CustomerID="" BuyerOrganizationCode="" OrganizationCode=""/>
-		<User DisplayUserID="" Username="">
+		<User DisplayUserID="" Username=""  Modifyuserid=""  Modifyts="" >
 		<UserGroupLists>
 			<UserGroupList UsergroupKey="" />
 		</UserGroupLists>
