@@ -1407,7 +1407,7 @@ a.underlink:hover {
 								<s:set name='SalesRepUserId'
 									value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('loggedInUserId')}" />
 								<td colspan="2" class="no-border-right-user"><s:if
-										test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false}">
+										test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false && isSelfAdmin()}">
 										<span class="page-title">Username:&nbsp;</span>
 										<s:property value="%{#SalesRepUserId}" />
 									</s:if> <s:else>
@@ -1538,7 +1538,7 @@ a.underlink:hover {
 						<s:hidden id="mandatoryFieldCheckFlag_myAccount"
 							name="mandatoryFieldCheckFlag_myAccount" value="%{false}" />
 						<div id="TabbedPanels1" class="TabbedPanels">
-							<s:if test="%{#isSalesRep}">
+							<s:if test="%{#isSalesRep && isSelfAdmin()}">
 								<ul class="TabbedPanelsTabGroup" style="margin-left: 5px;">
 									<li class="TabbedPanelsTab" tabindex="0">Site Preferences</li>
 								</ul>
