@@ -2843,44 +2843,45 @@ a.underlink:hover {
 			</div>
 			</td>
 			<td valign="top" class="no-border-right-user padding00">&nbsp;</td>
-		</tr> --%>
-											<tr>
-												<td valign="top" colspan="2"
-													class="no-border-right-user padding00">
-													<div class="question">
-
-														<ul class="padding-top3">
-															<li><strong>Quick Links&nbsp;</strong></li>
-															<li><a href="#"><img
-																	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
-																	style="margin-top: 2px;"
-																	alt="User defined bookmarked links which display on the homepage."
-																	title="User defined bookmarked links which display on the homepage."
-																	width="12" height="12" border="0" /></a></li>
-															<li><a class="underlink"
-																onclick="setInLineChange();" id="NewQL">[Add New]</a></li>
-														</ul>
-													</div>
-
-													<div class="txt-small clearview"></div>
-													<table width="100%" border="0" cellspacing="0"
-														cellpadding="0" id="tb1" class="standard-table">
-														<tbody>
-															<tr class="table-header-bar">
-																<td width="35%"
-																	class="no-border-left table-header-bar-left"><span
-																	class="white"> Name</span></td>
-																<td width="48%" align="left" class="  "><span
-																	class="white">URL</span></td>
-																<td width="8%" align="left"><span class="white">Show</span></td>
-																<td width="9%" align="left"
-																	class="no-border-right table-header-bar-right"><span
-																	class="white">Sequence</span></td>
-															</tr>
-														</tbody>
-													</table>
-												</td>
-											</tr>
+			</tr> --%>						<s:if test="%{!#isSalesRep}">	
+												<tr>
+													<td valign="top" colspan="2"
+														class="no-border-right-user padding00">
+														<div class="question">
+	
+															<ul class="padding-top3">
+																<li><strong>Quick Links&nbsp;</strong></li>
+																<li><a href="#"><img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
+																		style="margin-top: 2px;"
+																		alt="User defined bookmarked links which display on the homepage."
+																		title="User defined bookmarked links which display on the homepage."
+																		width="12" height="12" border="0" /></a></li>
+																<li><a class="underlink"
+																	onclick="setInLineChange();" id="NewQL">[Add New]</a></li>
+															</ul>
+														</div>
+	
+														<div class="txt-small clearview"></div>
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0" id="tb1" class="standard-table">
+															<tbody>
+																<tr class="table-header-bar">
+																	<td width="35%"
+																		class="no-border-left table-header-bar-left"><span
+																		class="white"> Name</span></td>
+																	<td width="48%" align="left" class="  "><span
+																		class="white">URL</span></td>
+																	<td width="8%" align="left"><span class="white">Show</span></td>
+																	<td width="9%" align="left"
+																		class="no-border-right table-header-bar-right"><span
+																		class="white">Sequence</span></td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</s:if>
 										</table>
 									</div>
 

@@ -125,6 +125,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String userNotAdmin;
 	List<String> alFinalSelectedCustomers = new ArrayList<String>();
 	private boolean treeSelected;
+	private boolean selfAdminId;
 	
 	//EB-2824 start only setter getter method
 
@@ -353,9 +354,17 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 			paper101Grade = "Y";
 	}
 
-	/* ENDS - Customer-User Profile Changes - adsouza */
+	/* ENDS - Customer-User Profile Changes - adsouza */	
 
 	private String estimator = "N";
+	public boolean isSelfAdminId() {
+		return selfAdminId;
+	}
+
+	public void setSelfAdminId(boolean selfAdminId) {
+		this.selfAdminId = selfAdminId;
+	}
+
 	private String stockCheckWebservice = "F";
 	private String punchoutUsers = "F";
 	private String viewInvoices = "N";
@@ -464,7 +473,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 				overrideContactAttributes();
 				setUserNameAttribute(getFirstName() + " " + getLastName());
 				prepareAndInvokeMashup(MANAGE_CONTACT_MASHUP);
-			} else if (isSalesRep != null && isSalesRep) {
+			} else if (isSalesRep != null && isSalesRep && isSelfAdminId()) {
 				overrideContactAttributes();
 				prepareAndInvokeMashup("ManageXpedxUserForSalesRep");
 			} else {
