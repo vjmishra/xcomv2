@@ -3506,9 +3506,11 @@ function showSharedListForm(){
 				
                 <div class="clearall"></div>
 				
-				<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility:hidden;">
-					Placeholder text
-				</div>
+				<s:if test="editMode">
+					<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility:hidden;">
+						Placeholder text
+					</div>
+				</s:if>
             <ul>
 			<li style="text-align: center;">
                             
