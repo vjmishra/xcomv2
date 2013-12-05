@@ -6196,3 +6196,11 @@ div#main.userProfile { min-height: 850px; }
 	}
 
 /*End for EB 1150 for back to top functionality*/
+
+.mil-count-selected-top {
+	margin-top: 20px;
+}
+.mil-count-selected-bottom {
+	margin-left: 20px;
+	margin-bottom: 20px;
+}

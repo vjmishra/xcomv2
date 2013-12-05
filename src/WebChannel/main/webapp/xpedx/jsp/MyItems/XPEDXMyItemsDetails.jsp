@@ -363,7 +363,6 @@ function showSharedListForm(){
 		});
 		*/	
 	});	
-	
 
      //<!--
      <%
@@ -1928,42 +1927,36 @@ function showSharedListForm(){
 			    xpedx_working_start();
                 setTimeout(xpedx_working_stop, 3000);
 		}
-
+		
+		// eb-3627: display number of checkboxes selected
 		$(document).ready(function() {
-			$("#selAll1").click(function() {
-				if($("#selAll1").attr('checked')) {
-					selectAll();
-					$("#selAll2").attr('checked', true);
-				} else {
-					deSelectAll();
-					$("#selAll2").attr('checked', false);
-				}
+			$('.toggleAllSelected').change(function(event) {
+				var checkAll = $(this).attr('checked');
+				$('.milCheckbox').attr('checked', checkAll);
+				$('.toggleAllSelected').attr('checked', checkAll);
+				// have to manually trigger change event for each checkbox, otherwise below binding won't trigger
+				$('.milCheckbox').attr('checked', checkAll).change();
 			});
-			$("#selAll2").click(function() {
-				if($("#selAll2").attr('checked')) {
-					selectAll();
-					$("#selAll1").attr('checked', true);
+			
+			$('.milCheckbox').change(function(event) {
+				var numSelectedCheckboxes = $('.milCheckbox:checked').length;
+				var totalCheckboxes = $('.milCheckbox').length;
+				if (numSelectedCheckboxes == 0) {
+					$('.mil-count-selected').css('visibility', 'hidden');
 				} else {
-					deSelectAll();
-					$("#selAll1").attr('checked', false);
+					$('.mil-count-selected').html('Items to be removed: ' + numSelectedCheckboxes + ' of ' + totalCheckboxes);
+					$('.mil-count-selected').css('visibility', 'visible');
 				}
+				
+				
+				
+				/*
+				if (numSelectedCheckboxes < totalCheckboxes) {
+					$('.toggleAllSelected').attr('checked', );
+				}
+				*/
 			});
-
 		});
-		
-		function selectAll(){
-			var checkboxes = Ext.query('input[id*=itemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = true;
-			});
-			
-			var checkboxes = Ext.query('input[id*=checkItemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = true;
-			});
-			
-		}
-		
 
 
 		function displayMsgHdrLevelForLineLevelError() {
@@ -2183,19 +2176,6 @@ function showSharedListForm(){
 					}
 				}
 			}
-		}
-
-		function deSelectAll(){
-			var checkboxes = Ext.query('input[id*=itemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = false;
-			});
-			
-			var checkboxes = Ext.query('input[id*=checkItemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = false;
-			});
-			
 		}
 		
 		function selectNone(){
@@ -2712,7 +2692,7 @@ function showSharedListForm(){
                 <div class="clear"></div>
                 <fieldset class="mil-non-edit-field">
                     <legend>For Selected Items:</legend>
-                    <input class="forselected-input" type="checkbox" id="selAll1"/>
+                    <input class="forselected-input toggleAllSelected" type="checkbox" id="selAll1"/>
                    <%--  <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
                     <a class="grey-ui-btn float-left" href="javascript:myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
                 </fieldset>
@@ -2890,6 +2870,11 @@ function showSharedListForm(){
 							<textarea class="x-input" id="listDesc" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,250);" style="width:220px; height: 92px; word-wrap:break-word; "><s:property
 							value="listDesc"  /></textarea>
 						</s:else>
+						
+						<div class="notice mil-count-selected mil-count-selected-top" style="visibility:hidden;">
+							Placeholder text
+						</div>
+						
                     </div>
                     <div class="clear">&nbsp;</div>
                 </div>
@@ -2903,7 +2888,7 @@ function showSharedListForm(){
 					<fieldset class="mil-edit-field">
 	                    <legend>For Selected Items:</legend>
 	
-	                    <input class="forselected-input-edit" type="checkbox" id="selAll1" />
+	                    <input class="forselected-input-edit toggleAllSelected" type="checkbox" id="selAll1" />
 						<s:if test="%{canDeleteItem}">
 							<a class="grey-ui-btn float-left" href="javascript:deleteItems();"><span>Remove Items</span></a>
 						</s:if>                    
@@ -3087,9 +3072,9 @@ function showSharedListForm(){
                         <!-- begin image / checkbox   -->
                         <div class="mil-checkbox-wrap">
 							<s:if test='editMode == true'>
-								<s:checkbox name="itemKeys" fieldValue="%{#id}" />
+								<s:checkbox name="itemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 							</s:if> <s:if test='editMode != true'>
-								<s:checkbox name="checkItemKeys" fieldValue="%{#id}" />
+								<s:checkbox name="checkItemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 							</s:if>
                             <!-- div class="mil-question-mark"> --> 
                             <a href='<s:property value="%{itemDetailsLink}" />'>
@@ -3463,7 +3448,7 @@ function showSharedListForm(){
 						
 						<fieldset class="mil-non-edit-field">
 							<legend>For Selected Items:</legend>
-							<input class="forselected-input" type="checkbox" id="selAll2"/>
+							<input class="forselected-input toggleAllSelected" type="checkbox" id="selAll2"/>
 							<%-- <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
 							<a class="grey-ui-btn float-left" href="javascript:javascript:writeMetaTag('DCSext.w_x_sc_itemtype','<s:property value="#webtrendsItemType"/>');myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
 						</fieldset>
@@ -3490,7 +3475,7 @@ function showSharedListForm(){
 							<fieldset class="mil-edit-field">
 								<legend>For Selected Items:</legend>
 	
-								<input class="forselected-input-edit" type="checkbox" id="selAll2" />
+								<input class="forselected-input-edit toggleAllSelected" type="checkbox" id="selAll2" />
 								<s:if test="%{canDeleteItem}">
 									<a class="grey-ui-btn float-left" href="javascript:deleteItems();"><span>Remove Items</span></a>
 								</s:if>                    
@@ -3518,7 +3503,12 @@ function showSharedListForm(){
 					</s:else>
 			
                 </div>
-                            <div class="clearall"></div>
+				
+                <div class="clearall"></div>
+				
+				<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility:hidden;">
+					Placeholder text
+				</div>
             <ul>
 			<li style="text-align: center;">
                             
