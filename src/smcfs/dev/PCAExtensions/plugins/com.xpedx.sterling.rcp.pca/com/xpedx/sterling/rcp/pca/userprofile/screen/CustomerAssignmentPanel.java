@@ -188,6 +188,8 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	    if (grayed) {
 
 	        checked = true;
+	        item.setChecked(true);
+	        item.setGrayed(true);
 
 	    } else {
 
@@ -198,22 +200,79 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	        while (index < items.length) {
 	        	
 	            TreeItem child = items[index];
+	            if(!child.getGrayed()){
+	            	item.setGrayed(child.getGrayed());
+	            }
+	            if(count ==1 && child.getChecked()){
+	            	i++;
+	            }else{
 	            if(child.getChecked()){
 	            	i++;
+	            }
 	            }
 	            index++;
 
 	        }
+	      
+	        if(i==0){
+	        	if(item.getText().contains("-M")){
+	        		 if(item.getGrayed()== true){
+				         checked=true;
+			       	  	 item.setChecked(checked);
+			           	 item.setGrayed(false);
+			           	 grayed=false;
+				        	}
+	        		 else{
+		            	 checked=false;            	
+		            	 item.setChecked(checked);
+		            	 item.setGrayed(true);
+		            	 grayed=false;
+		            }	 
+	        	}
+	        	else if(item.getText().contains("-S")){
+	        		 if(item.getGrayed()== true){
+				         checked=true;
+			       	  	 item.setChecked(checked);
+			           	 item.setGrayed(false);
+			           	 grayed=false;
+				        	}
+	        		 else{
+		            	 checked=false;            	
+		            	 item.setChecked(checked);
+		            	 item.setGrayed(true);
+		            	 grayed=false;
+		            }	 
+	        	}
+	        	 else if(count==i){
+	            	  	checked=true;
+	            	  	 item.setChecked(checked);
+	                	 item.setGrayed(false);
+	                	 grayed=false;
+	            }
+	            else{
+	            	 checked=false;            	
+	            	 item.setChecked(true);
+	            	 item.setGrayed(true);
+	            	 grayed=true;
+	            }
+	        }
 	        
-            if(count==i){
+	        else if(count==i){
             	  	checked=true;
+            	  	 item.setChecked(checked);
+                	 item.setGrayed(false);
+                	 grayed=false;
             }
-            else
-            	checked=false;
+            else{
+            	 checked=false;            	
+            	 item.setChecked(true);
+            	 item.setGrayed(true);
+            	 grayed=true;
+            }
 	    }
-    item.setChecked(checked);
-
-    grayed=false;
+  //  item.setChecked(checked);
+	    
+    
 	 checkPath(item.getParentItem(), checked, grayed);
 
     }
@@ -329,7 +388,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 					//XB-638 Changes
 					deleteCustIdList.add(strCustID);
 					
-				} else if(!treeItem.getData("OldValue").equals("true") && treeItem.getChecked()){
+				} else if(!treeItem.getData("OldValue").equals("true") && (treeItem.getChecked() && treeItem.getGrayed()==false)){
 					//myBehavior.createManageAssignmentInput(strCustID, true);   //---used to create an entry in  DB.
 					//XB-638 Changes
 					addCustIdList.add(strCustID);
