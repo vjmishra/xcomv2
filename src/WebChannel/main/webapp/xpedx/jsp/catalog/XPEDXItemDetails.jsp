@@ -356,7 +356,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 
 <script type="text/javascript">
 var isUserAdmin = <s:property value="#isUserAdmin"/>;
-//var isEstUser = <s:property value="#isEstUser"/>;
+var isEstUser = <s:property value="#isEstUser"/>;
 </script>
 
 <script type="text/javascript">
