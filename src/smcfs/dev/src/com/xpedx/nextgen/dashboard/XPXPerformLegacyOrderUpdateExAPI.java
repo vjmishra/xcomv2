@@ -540,7 +540,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								log.debug("Inside XPXPerformLegacyOrderUpdateExAPI class.");
 								log.debug("InputXML-XPXPutOrderChangesInOrderConfirmationEmailQueue service to send Order Confirmation Email: "+SCXmlUtil.getString(cOrderEle.getOwnerDocument().getDocument()));
 							}
-							api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderEle.getOwnerDocument().getDocument());
+							String cOrder=cOrderEle.getString();
+							Document cOrderDoc=SCXmlUtil.createFromString(cOrder);
+							api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderDoc);
 							
 							orderEmailConfirmationSentFlag="Y";
 							XPXUtils utilsObj = new XPXUtils();

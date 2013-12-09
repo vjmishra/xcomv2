@@ -2883,17 +2883,15 @@ public class XPXUtils implements YIFCustomApi {
 	}
 	
 	public YFCDocument createOrderApprovedEmailInputDoc(YFCElement cOrderEle) {
-		//<OrderHoldTypes>
 		//	<OrderHoldType FromStatus='' HoldType='' OrderHeaderKey='' ReasonText='' ResolverUserId='' Status='' TransactionId=''>
 		//		<Order BillToID='' CustomerContactID='' DocumentType='' EnterpriseCode='' OrderHeaderKey='' OrderNo=''/>
-		//	</OrderHoldType>
-		//</OrderHoldTypes>
-		
-		YFCDocument orderHoldTypesDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER_HOLD_TYPES);
-		YFCElement orderHoldTypeEle = orderHoldTypesDoc.getDocumentElement().createChild(XPXLiterals.E_ORDER_HOLD_TYPE);		
+		//	</OrderHoldType>		
 		
 		YFCElement cOrderHoldTypesElem = cOrderEle.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
-		YFCElement cOrderHoldTypeElem = cOrderHoldTypesElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPE);
+		YFCElement cOrderHoldTypeElem  = cOrderHoldTypesElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPE);
+		
+		YFCDocument orderHoldTypeDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER_HOLD_TYPE);
+		YFCElement orderHoldTypeEle = orderHoldTypeDoc.getDocumentElement();		
 		orderHoldTypeEle.setAttribute(XPXLiterals.A_HOLD_TYPE, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE));
 		orderHoldTypeEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));		
 		orderHoldTypeEle.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, cOrderHoldTypeElem.getAttribute(XPXLiterals.HOLD_RELEASE_DESC));
@@ -2909,7 +2907,7 @@ public class XPXUtils implements YIFCustomApi {
 		orderEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderEle.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
 		orderEle.setAttribute(XPXLiterals.A_ORDER_NO, cOrderEle.getAttribute(XPXLiterals.A_ORDER_NO));		
 		
-		return orderHoldTypesDoc;
+		return orderHoldTypeDoc;
 	}
 	
 	public void callChangeOrder(YFSEnvironment env, String cOrderHeaderKey, String orderConfirmationEmailSentFlag, String className) {
