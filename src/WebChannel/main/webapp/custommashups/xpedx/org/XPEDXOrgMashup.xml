@@ -99,7 +99,7 @@
 						</And>
 					</ComplexQuery>
 					<OrderBy>
-							<Attribute Desc="Y" Name="StartDate" />
+							<Attribute Desc="N" Name="StartDate" />
 					</OrderBy>
 				</XPXArticle>
 			</Input>
@@ -712,7 +712,7 @@
 						</Or>
 					</ComplexQuery>
 					<OrderBy>
-							<Attribute Desc="Y" Name="StartDate" />
+							<Attribute Desc="N" Name="StartDate" />
 					</OrderBy>
 				</XPXArticle>
 			</Input>
