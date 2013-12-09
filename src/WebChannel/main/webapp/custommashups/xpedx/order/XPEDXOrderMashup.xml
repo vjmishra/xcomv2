@@ -2821,6 +2821,7 @@
         <API Name="changeOrder">
             <Input>
                 <Order OrderHeaderKey="">
+                	<Extn ExtnLastOrderOperation="OrderApproved" ExtnOrderConfirmationEmailSentFlag="N"/>
                     <Notes>
                         <Note NoteText="Adjudicated" ReasonCode="YCD_HOLD_INFO" VisibleToAll="W"/>
                     </Notes>

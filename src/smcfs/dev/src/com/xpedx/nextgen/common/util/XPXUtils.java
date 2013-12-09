@@ -2173,7 +2173,7 @@ public class XPXUtils implements YIFCustomApi {
 	 * the email corresponding to various email scenarios
 	 */
 	public String stampOrderSubjectLine(YFSEnvironment env,
-			Document inputDocument, String isEditOrderFlag) throws Exception {
+			Document inputDocument, String orderOperation) throws Exception {
 		
 		String brand = inputDocument.getDocumentElement().getAttribute(
 				"EnterpriseCode");
@@ -2184,7 +2184,7 @@ public class XPXUtils implements YIFCustomApi {
 		StringBuilder _subjectLine = null;
 		String emailStr = null;
 		
-		if(!"true".equals(isEditOrderFlag)) {
+		if("OrderPlacement".equals(orderOperation)) {
 			emailStr="Order Submitted Notification";
 		} else {
 			emailStr="Order Edit Notification";
@@ -2881,4 +2881,59 @@ public class XPXUtils implements YIFCustomApi {
 		return _subjectLine.toString();
 		//log.debug("_subjectLine: " + _subjectLine);
 	}
+	
+	public YFCDocument createOrderApprovedEmailInputDoc(YFCElement cOrderEle) {
+		//<OrderHoldTypes>
+		//	<OrderHoldType FromStatus='' HoldType='' OrderHeaderKey='' ReasonText='' ResolverUserId='' Status='' TransactionId=''>
+		//		<Order BillToID='' CustomerContactID='' DocumentType='' EnterpriseCode='' OrderHeaderKey='' OrderNo=''/>
+		//	</OrderHoldType>
+		//</OrderHoldTypes>
+		
+		YFCDocument orderHoldTypesDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER_HOLD_TYPES);
+		YFCElement orderHoldTypeEle = orderHoldTypesDoc.getDocumentElement().createChild(XPXLiterals.E_ORDER_HOLD_TYPE);		
+		
+		YFCElement cOrderHoldTypesElem = cOrderEle.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
+		YFCElement cOrderHoldTypeElem = cOrderHoldTypesElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPE);
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_HOLD_TYPE, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE));
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));		
+		orderHoldTypeEle.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, cOrderHoldTypeElem.getAttribute(XPXLiterals.HOLD_RELEASE_DESC));
+		orderHoldTypeEle.setAttribute(XPXLiterals.RESOLVER_USER_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.RESOLVER_USER_ID));
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_STATUS, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS));
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_TRANSACTION_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_TRANSACTION_ID));		
+		
+		YFCElement orderEle = orderHoldTypeEle.createChild(XPXLiterals.E_ORDER);
+		orderEle.setAttribute(XPXLiterals.A_BILL_TO_ID, cOrderEle.getAttribute(XPXLiterals.A_BILL_TO_ID));
+		orderEle.setAttribute(XPXLiterals.CUSTOMER_CONTACT_ID, cOrderEle.getAttribute(XPXLiterals.CUSTOMER_CONTACT_ID));
+		orderEle.setAttribute(XPXLiterals.A_DOCUMENT_TYPE, cOrderEle.getAttribute(XPXLiterals.A_DOCUMENT_TYPE));
+		orderEle.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, cOrderEle.getAttribute(XPXLiterals.A_ENTERPRISE_CODE));
+		orderEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderEle.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
+		orderEle.setAttribute(XPXLiterals.A_ORDER_NO, cOrderEle.getAttribute(XPXLiterals.A_ORDER_NO));		
+		
+		return orderHoldTypesDoc;
+	}
+	
+	public void callChangeOrder(YFSEnvironment env, String cOrderHeaderKey, String orderConfirmationEmailSentFlag, String className) {
+		YFCDocument changeOrderInputDoc=null;
+		try {
+			changeOrderInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER);
+			changeOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHeaderKey);
+			
+			YFCElement extnOrderEle = changeOrderInputDoc.getDocumentElement().createChild("Extn");
+			extnOrderEle.setAttribute(XPXLiterals.ORDER_CONFIRMATION_EMAIL_SENT_FLAG, orderConfirmationEmailSentFlag);
+			
+			if(log.isDebugEnabled()){
+				log.debug("Inside callChangeOrder method of "+className+" class. changeOrder-InXML: " + changeOrderInputDoc.getString());
+			}
+			api.invoke(env, "changeOrder", changeOrderInputDoc.getDocument());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error("Inside callChangeOrder method of "+className+" class. changeOrder API call failed while updating ExtnOrderConfirmationEmailSentFlag value: ["
+						+ orderConfirmationEmailSentFlag+"] for order: ["+cOrderHeaderKey+"]");
+			
+			prepareErrorObject(e, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, changeOrderInputDoc.getDocument());
+	        
+		}		
+	}
+	
 }

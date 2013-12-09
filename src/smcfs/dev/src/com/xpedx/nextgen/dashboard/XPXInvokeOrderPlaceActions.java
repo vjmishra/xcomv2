@@ -687,6 +687,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	
 	private void setOPOrderDetailsFromEnv(YFSEnvironment env, YFCElement rootElem) {
 		
+		YFCElement orderExtnElem = rootElem.getChildElement("Extn");
 		HashMap orderDetailsMap = new HashMap();
 		if (env instanceof ClientVersionSupport) {
 			ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
@@ -752,6 +753,9 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 								rootElem.appendChild(rootElem.importNode(yfsOrderHoldTypesDoc.getDocumentElement()));
 							}
 						}
+					} else {
+						orderExtnElem.setAttribute("ExtnLastOrderOperation", "OrderPlacement");
+						orderExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "N");
 					}
 					// Order Instructions.
 					headerComments = (String) orderDetailsMap.get("ExtnHeaderComments");
@@ -769,7 +773,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					}
 					
 					// Order Extended Attributes.
-					YFCElement orderExtnElem = rootElem.getChildElement("Extn");
+					
 					if (orderExtnElem != null) {
 						
 						// Retrieve The Data From The Map.

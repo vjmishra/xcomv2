@@ -810,4 +810,7 @@ public class XPXLiterals {
 	public static final String HOLD_RELEASE_DESC="ReasonText";
 	public static final String CUSTOMER_CONTACT_ID="CustomerContactID";
 	public static final String RESOLVER_USER_ID="ResolverUserId";
+	public static final String ORDER_CONFIRMATION_EMAIL_SENT_FLAG="ExtnOrderConfirmationEmailSentFlag";
+	public static final String LAST_ORDER_OPERATION="ExtnLastOrderOperation";
+	
 }

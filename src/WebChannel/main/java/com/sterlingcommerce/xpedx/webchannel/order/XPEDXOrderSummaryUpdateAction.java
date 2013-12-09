@@ -96,7 +96,6 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					Element holdTypeElem = SCXmlUtil.getChildElement(holdTypesElem, "OrderHoldType");
 					holdTypeElem.setAttribute("HoldType", "ORDER_LIMIT_APPROVAL");
 					holdTypeElem.setAttribute("Status", "1300");
-					holdTypeElem.setAttribute("ReasonText", "Released on approving an order during Order Edit");
 					holdTypeElem.setAttribute("ResolverUserId", getWCContext().getLoggedInUserId());
 					
 					Element changeOrderExtnElem = SCXmlUtil.getChildElement(changeOrderInputElem, "Extn");			
@@ -127,8 +126,9 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 							selectedAddnlEmailAddrBuf.append(addnlEmailAddr).append(";");							
 						}					
 					}
-					changeOrderExtnElem.setAttribute("ExtnAddnlEmailAddr",selectedAddnlEmailAddrBuf.toString());				
-					
+					changeOrderExtnElem.setAttribute("ExtnAddnlEmailAddr",selectedAddnlEmailAddrBuf.toString());
+					changeOrderExtnElem.setAttribute("ExtnLastOrderOperation", "OrderApproved");
+					changeOrderExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "N");
 					outElement = (Element) WCMashupHelper.invokeMashup(APPROVE_ORDER_SUMMARY_MASHUP, changeOrderInputElem, wcContext.getSCUIContext());
 				
 				} else {

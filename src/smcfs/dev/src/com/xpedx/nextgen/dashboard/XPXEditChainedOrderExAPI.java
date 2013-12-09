@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
@@ -206,7 +207,20 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 			ex.printStackTrace();
 			((YFSContext)env).rollback();
 			prepareErrorObject(ex, "OrderEdit", XPXLiterals.E_ERROR_CLASS, env, inXML);
-			inXML.getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());			
+			inXML.getDocumentElement().setAttribute("TransactionMessage",ex.getMessage());	
+			try {
+				Document cOrderDoc = (Document)env.getTxnObject("CustomerOrderEditDetails");
+				Element cOrderInputExtnElem = SCXmlUtil.getChildElement(cOrderDoc.getDocumentElement(), XPXLiterals.E_EXTN);
+				cOrderInputExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "E");
+				if (log.isDebugEnabled()) {
+					log.debug("Inside exception block of XPXEditChainedOrderAPI class. changeOrder_InputXML: "+ SCXmlUtil.getString(cOrderDoc));
+				}
+				api.invoke(env, XPXLiterals.CHANGE_ORDER_API, cOrderDoc);
+			
+			} catch(Exception e) {
+				log.error("Inside exception block of XPXEditChainedOrderAPI class. Exception caught while trying to modify the value of ExtnOrderConfirmationEmailSentFlag by calling changeOrder API  : "+e.getMessage());
+				
+			}
 			return inXML;
 		}
 		return inXML;
@@ -427,6 +441,19 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 			
 			log.debug("Order Edit Transaction failure XML : "+SCXmlUtil.getString(editOrdEle.getOwnerDocument().getDocument()));			
 			/*End - Changes made by Mitesh Parikh for JIRA 3045*/
+			try {
+				Document cOrderDoc = (Document)env.getTxnObject("CustomerOrderEditDetails");
+				Element cOrderInputExtnElem = SCXmlUtil.getChildElement(cOrderDoc.getDocumentElement(), XPXLiterals.E_EXTN);
+				cOrderInputExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "E");
+				if (log.isDebugEnabled()) {
+					log.debug("Inside exception block of XPXEditChainedOrderAPI class. changeOrder_InputXML: "+ SCXmlUtil.getString(cOrderDoc));
+				}
+				api.invoke(env, XPXLiterals.CHANGE_ORDER_API, cOrderDoc);
+			
+			} catch(Exception e) {
+				log.error("Inside exception block of XPXEditChainedOrderAPI class. Exception caught while trying to modify the value of ExtnOrderConfirmationEmailSentFlag by calling changeOrder API  : "+e.getMessage());
+				
+			}
 			
 			return editOrdEle.getOwnerDocument().getDocument();
 		}

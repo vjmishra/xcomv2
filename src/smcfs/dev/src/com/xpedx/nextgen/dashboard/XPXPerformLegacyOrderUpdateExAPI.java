@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -95,8 +96,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		String fOrdHeaderKey = null;
 		String isOrderPlaceFlag = "";
 		String isOrderEditFlag = "";
-		
-		
+		String isOrderUpdateFlag = null;
+		String lastOrderOperation = null;
+		String orderEmailConfirmationSentFlag = null;
 
 		YFCDocument yfcDoc = YFCDocument.getDocumentFor(inXML);
 		
@@ -104,21 +106,17 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		YFCElement rootEle = yfcDoc.getDocumentElement();
 
 		try {
-			if(log.isDebugEnabled()){
+			if(log.isDebugEnabled()) {
 				log.debug("XPXPerformLegacyOrderUpdateAPI-InXML:" + YFCDocument.getDocumentFor(inXML).getString());
 			}
 			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(yfcDoc.getDocument().getDocumentElement(),"Extn");
-			if(orderExtnList != null )
-			{
+			if(orderExtnList != null ) {
 				Element orderextn=orderExtnList.get(0);
-				if(orderextn != null)
-				{
+				if(orderextn != null) {
 					String customerDivision=orderextn.getAttribute("ExtnCustomerDivision");			
-					if(customerDivision!=null && customerDivision.indexOf("_")!=-1){
+					if(customerDivision!=null && customerDivision.indexOf("_")!=-1) {
 						extnCustomerDivision=customerDivision.substring(0,customerDivision.indexOf("_"));;
-					}
-					else
-					{
+					} else {
 						extnCustomerDivision=rootEle.getAttribute("ExtnCustomerDivision");
 					}
 					
@@ -132,6 +130,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			isOrderEditFlag = (rootEle.getAttribute("IsOrderEdit")!=null && rootEle.getAttribute("IsOrderEdit")!="")?rootEle.getAttribute("IsOrderEdit"):"N";
 			if ("N".equals(isOrderPlaceFlag) && "N".equals(isOrderEditFlag)) {
 				rootEle.setAttribute("IsOrderUpdate", "Y");
+				isOrderUpdateFlag="Y";
 			}
 			 
 			// Retrieve the header process code from the input doc.
@@ -158,7 +157,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 			validateInXML(rootEle, headerProcessCode, isOrderPlaceFlag, isOrderEditFlag);
 
-			if(log.isDebugEnabled()){
+			if(log.isDebugEnabled()) {
 				log.debug("InXML After Validation:" + YFCDocument.getDocumentFor(inXML).getString());
 			}			
 			
@@ -317,6 +316,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				isAPISuccess = true;
 
 			} else if (headerProcessCode.equalsIgnoreCase("C")) {
+				
+				YFCElement extncOrderEle = cOrderEle.getChildElement("Extn");
+				if(extncOrderEle != null) {
+					lastOrderOperation = extncOrderEle.getAttribute("ExtnLastOrderOperation");
+					orderEmailConfirmationSentFlag = extncOrderEle.getAttribute("ExtnOrderConfirmationEmailSentFlag");
+					extncOrderEle=null;
+				}
 				
 				/* Start - Work Around Fix For IBM PMR 51483 005 000 */
 				boolean changeOrderTwiceFO = false;
@@ -516,6 +522,47 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			} else {
 				throw new Exception("Invalid HeaderProcessCode in the Incoming Legacy Message!");
 			}
+			
+			if(log.isDebugEnabled()) {
+				String webConfNum=SCXmlUtil.getXpathAttribute(inXML.getDocumentElement(), "./Extn/@ExtnWebConfNum");
+				log.debug("Values of criterias to send Order Confirmation Emails for Web Confirmation Number-["+webConfNum+"] are :- \n " +
+						  "i) IsOrderUpdateFlag - ["+isOrderUpdateFlag+"] \n ii) HeaderProcessCode - ["+headerProcessCode+"] \n " +
+						  "iii) OrderEmailConfirmationSentFlag - ["+orderEmailConfirmationSentFlag+"] \n iv) LastOrderOperation - ["+lastOrderOperation+"].");
+			}
+			if("Y".equals(isOrderUpdateFlag)) {
+				if(!"A".equals(headerProcessCode) && "N".equals(orderEmailConfirmationSentFlag)) {					
+					if(lastOrderOperation != null && lastOrderOperation.trim().length()>0) {
+						lastOrderOperation=lastOrderOperation.trim();
+						String cOrderHeaderKey=cOrderEle.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
+						if ("OrderPlacement".equals(lastOrderOperation) || "OrderEdit".equals(lastOrderOperation)) {
+							//createOrderEmailDocument();
+							if(log.isDebugEnabled()) {
+								log.debug("Inside XPXPerformLegacyOrderUpdateExAPI class.");
+								log.debug("InputXML-XPXPutOrderChangesInOrderConfirmationEmailQueue service to send Order Confirmation Email: "+SCXmlUtil.getString(cOrderEle.getOwnerDocument().getDocument()));
+							}
+							api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderEle.getOwnerDocument().getDocument());
+							
+							orderEmailConfirmationSentFlag="Y";
+							XPXUtils utilsObj = new XPXUtils();
+							utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
+						
+						} else if("OrderApproved".equals(lastOrderOperation)) {							
+							//Forming an input document to send Order Approved Email [Input for YCD_Order_Approval_Email_8.5 service]
+							XPXUtils utilsObj = new XPXUtils();
+							YFCDocument orderApprovedEmailInputDoc = utilsObj.createOrderApprovedEmailInputDoc(cOrderEle);
+							if(log.isDebugEnabled()) {
+								log.debug("Inside XPXPerformLegacyOrderUpdateExAPI class.");
+								log.debug("InputXML-YCD_Order_Approval_Email_8.5 service to send Order Approved Email: "+SCXmlUtil.getString(orderApprovedEmailInputDoc.getDocument()));
+							}
+							api.executeFlow(env, "YCD_Order_Approval_Email_8.5", orderApprovedEmailInputDoc.getDocument());
+							
+							orderEmailConfirmationSentFlag="Y";
+							utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
+						}
+					}
+				}
+			}
+			
 		} catch (Exception ex) {
 			
 			if(log.isDebugEnabled()){
@@ -1479,7 +1526,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if (chngcOrdStatusEle0.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(chngcOrdStatusEle0.getAttribute("OrderHeaderKey"))
 				&& !YFCObject.isVoid(chngcOrdStatusEle0.getAttribute("OrderHeaderKey"))) {
 			if(log.isDebugEnabled()){
-			log.debug("XPXChangeOrderStatus_CO-InXML:" + chngcOrdStatusEle0.getString());
+				log.debug("XPXChangeOrderStatus_CO-InXML:" + chngcOrdStatusEle0.getString());
 			}
 			tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle0.getOwnerDocument().getDocument());
 			if (tempDoc == null) {
@@ -1491,7 +1538,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			
 			filterAttributes(chngcOrderEle, true);
 			if(log.isDebugEnabled()){
-			log.debug("XPXChangeOrder_CO-InXML:" + chngcOrderEle.getString());
+				log.debug("XPXChangeOrder_CO-InXML:" + chngcOrderEle.getString());
 			}
 			YFCElement pendignElement=chngcOrderEle.createChild("PendingChanges");
 			pendignElement.setAttribute("IgnorePendingChanges", "Y");
@@ -6497,5 +6544,5 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		System.out.println("Inside getEnterpriseCode method - Enterpise code is : "+enterpriseCode);
 		return enterpriseCode;
 		
-	}
+	}	
 }

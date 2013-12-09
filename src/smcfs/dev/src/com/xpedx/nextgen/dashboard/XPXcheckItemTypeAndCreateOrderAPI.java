@@ -19,7 +19,6 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 
@@ -84,9 +83,9 @@ public class XPXcheckItemTypeAndCreateOrderAPI implements YIFCustomApi{
 		double thirPartyExtnOrderSubTotal = 0;
 		double directExtnOrderSubTotal = 0;
 		double stockExtnOrderSubTotal = 0;
-				
+		
+		env.setTxnObject("CustomerOrderData", inDoc);
 		orderElementContents = createOrderElementHashMap(inDoc);
-
 		Element rootElem = inDoc.getDocumentElement();
 		
 		shipToCustDoc = (Document) env.getTxnObject("ShipToCustomerProfile");

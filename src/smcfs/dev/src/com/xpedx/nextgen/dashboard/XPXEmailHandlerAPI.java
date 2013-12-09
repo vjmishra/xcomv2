@@ -165,6 +165,8 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         Document customerDoc= null;
         String strOrderType = null;
         String businessIdentifier="";
+        String cOrderOperation = null;
+       
         api = YIFClientFactory.getInstance().getApi();
 
         Element inputElement = inXML.getDocumentElement();
@@ -177,6 +179,9 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
             strOrderType = orderElement.getAttribute("OrderType");
             if (!YFCObject.isNull(strOrderType) && strOrderType.equalsIgnoreCase("Customer")) {
                 // Customer Order.
+            	Element orderExtnEle=SCXmlUtil.getChildElement(orderElement, "Extn");           	
+            	cOrderOperation = orderExtnEle.getAttribute("ExtnLastOrderOperation");
+                
             	Element orderLinesEle=SCXmlUtil.getChildElement(orderElement, "OrderLines");
                 ArrayList<Element> orderLineList = SCXmlUtil.getChildren(orderLinesEle, "OrderLine");
                 int orderLineLength = orderLineList.size();
@@ -253,7 +258,12 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
 
         /******* Added by Arun Sekhar on 28-April-2011 *******/
         String isEditOrderFlag=inputElement.getAttribute("IsOrderEdit");
-        orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc, isEditOrderFlag);
+        if("Y".equals(isEditOrderFlag)) {
+        	cOrderOperation="OrderEdit";
+        }
+        /*End- Code changes made by Mitesh for EB-2291. To be removed in subsequent JIRAs - EB-3696 and 3697 */
+        
+        orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc, cOrderOperation);
         yfcLogCatalog.debug("inputDocument with SubjectLine: "
                 + SCXmlUtil.getString(customerDoc));
 

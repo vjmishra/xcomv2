@@ -123,6 +123,12 @@
 					Description="The Bill to Customer ID" Nullable="true" XMLName="ExtnBillToCustomerID"  XMLGroup="Extn"/>
 		  <Attribute ColumnName="EXTN_ORDHDR_FAILED_RULE_IDS" DataType="Text-500"
 					Description="Failed Busines Rule IDS at order header level" Nullable="true" XMLName="ExtnOrdHdrLevelFailedRuleID"  XMLGroup="Extn"/>		
+       	  <Attribute ColumnName="EXTN_ORDEDIT_CUST_CONTACT_ID" DataType="Text-40"
+					Description="Customer Contact Id of a User who edits an order" Nullable="true" XMLName="ExtnOrderEditCustContactID"  XMLGroup="Extn"/>
+		  <Attribute ColumnName="EXTN_LAST_ORDER_OPERATION" DataType="varchar2-20"
+					Description="Last action/operation executed on the customer order" Nullable="true" XMLName="ExtnLastOrderOperation"  XMLGroup="Extn"/>
+		  <Attribute ColumnName="EXTN_ORDCONFIRM_EMAILSENT_FLAG" DataType="Text-1"
+					Description="Last action/operation executed on the customer order" Nullable="true" XMLName="ExtnOrderConfirmationEmailSentFlag"  XMLGroup="Extn"/>
        	
         </Attributes>
 		<!-- Begin : New index created for XBT-361 -->
