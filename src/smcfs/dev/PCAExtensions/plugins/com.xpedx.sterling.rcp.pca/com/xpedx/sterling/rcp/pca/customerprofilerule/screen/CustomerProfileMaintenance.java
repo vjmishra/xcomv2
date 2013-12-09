@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.w3c.dom.Element;
 
-import com.xpedx.sterling.rcp.pca.articles.screen.ArticlesSearchListPanel;
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
@@ -27,7 +26,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 	private Composite pnlRoot = null;
 	private CustomerProfileRulePanel pnlCustomerProfileRulesObj= null;
 	private CustomerProfileInfoPanel pnlGeneralInfoObj = null;
-	private DivisionEntitlementPanel pnlDivisionEntitlement = null;
+	private Composite pnlDivisionEntitlement = null;
 	private CustomerProfileMaintenanceBehavior myBehavior;
 	private YRCWizardBehavior wizBehavior;
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileMaintenance"; // @jve:decl-index=0:
@@ -52,7 +51,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 
 	public CustomerProfileMaintenance(Composite parent, int style, Object inputObject) {
 		super(parent, style);
-		
+
 		this.inputObject=inputObject;
 		pnlNo = 1;
 		initialize();
@@ -90,7 +89,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		GridLayout gridLayoutPnl = new GridLayout(1, false);
 		pnlRoot.setLayout(gridLayoutPnl);
 
-		//createTabFolder();  
+		//createTabFolder();
     }
 	public void createTabFolder(Element generalInfo)
     {
@@ -104,7 +103,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		tabFolder.setLayoutData(tabFolderlayoutData);
 		tabFolder.setData("yrc:customType", "TaskComposite");
 		tabFolder.setLayout(new GridLayout(1, false));
-		
+
 		tabFolder.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 		        if(isRefreshTabs())
@@ -120,20 +119,19 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		  });
 //			XPXUtils.paintPanel(tabFolder);
 		createPnlCustomerGeneralInfoData(generalInfo);
-		
+
 		if (this.isRulesAvailable()) {
 
 			createPnlCustomerProfileRules();
 		}
-		if (this.isShipToCustomer()) {
 
-			createDivisionEntitlement();
-		}
+		createDivisionEntitlement();
+
 		if (this.isMasterCustomer() && YRCPlatformUI.hasPermission(XPXConstants.RES_ID_MANAGE_CUSTOMER_OR_USER_INTEG_ATTR)) {
 
 			createPnlCustomerProfileMaintIntegData();
@@ -142,7 +140,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		createPnlCustomerETradingData();
 		pnlRoot.layout(true, true);
     }
-	
+
 	private boolean isMasterCustomer() {
 		Element eleExtn = YRCXmlUtils.getXPathElement(myBehavior.getCustomerDetails(),
 		"/CustomerList/Customer/Extn");
@@ -154,7 +152,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		}
 		return false;
 	}
-	
+
 	private boolean isShipToCustomer() {
 		Element eleExtn = YRCXmlUtils.getXPathElement(myBehavior.getCustomerDetails(),
 		"/CustomerList/Customer/Extn");
@@ -166,8 +164,8 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		}
 		return false;
 	}
-	
-	
+
+
 	private boolean isRulesAvailable() {
 		Element eleExtn = YRCXmlUtils.getXPathElement(myBehavior.getCustomerDetails(),
 		"/CustomerList/Customer/Extn");
@@ -179,49 +177,49 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 		}
 		return false;
 	}
-	
+
 	private void createPnlCustomerProfileMaintIntegData() {
-		
+
 		pnlMaintIntegDataObj =new CustomerProfileMaintIntegDataPanel(tabFolder, SWT.NONE, this.inputObject, this);
 		pnlMaintIntegDataObj.setData("name", "pnlMaintIntegDataPanel");
-		
+
 		TabItem itmPnlCustomerProfileRules = new TabItem(tabFolder, 0);
 		itmPnlCustomerProfileRules.setText(YRCPlatformUI.getString("Tab_Customer_Maintain_Integration_Data"));
 		itmPnlCustomerProfileRules.setControl(pnlMaintIntegDataObj);
 	}
-	
+
 	private void createPnlCustomerETradingData() {
-		
+
 		eTradingDataObj =new CustomerETradingIDMaintenancePanel(tabFolder, SWT.NONE, this.inputObject, this);
 		eTradingDataObj.setData("name", "pnlETradingDataPanel");
-		
+
 		TabItem itmPnlCustomerProfileInfo = new TabItem(tabFolder, 0);
 		itmPnlCustomerProfileInfo.setText(YRCPlatformUI.getString("Tab_eTrading_Maintainenance"));
 		itmPnlCustomerProfileInfo.setControl(eTradingDataObj);
 
-	}	
-	
+	}
+
 	private void createPnlCustomerProfileRules()
     {
 		pnlCustomerProfileRulesObj =new CustomerProfileRulePanel(tabFolder, SWT.NONE,this.inputObject, this);
-		pnlCustomerProfileRulesObj.setData("name", "pnlProfileRulesPanel");	
+		pnlCustomerProfileRulesObj.setData("name", "pnlProfileRulesPanel");
 		if(!isRefreshTabs())
 		{
 			itmPnlCustomerProfileRules = new TabItem(tabFolder, 0);
 			itmPnlCustomerProfileRules.setText(YRCPlatformUI.getString("Tab_Customer_Rules"));
-			itmPnlCustomerProfileRules.setControl(pnlCustomerProfileRulesObj);			
+			itmPnlCustomerProfileRules.setControl(pnlCustomerProfileRulesObj);
 		}
 		else
 		{
-			itmPnlCustomerProfileRules.setControl(pnlCustomerProfileRulesObj);			
-			
+			itmPnlCustomerProfileRules.setControl(pnlCustomerProfileRulesObj);
+
 		}
 
-       
+
     }
 	private void createPnlCustomerGeneralInfoData(Element generalInfo)
     {
-		
+
 		pnlGeneralInfoObj =new CustomerProfileInfoPanel(tabFolder, SWT.NONE,this.inputObject, this);
 		pnlGeneralInfoObj.setData("name", "pnlGeneralInfoPanel");
 
@@ -235,8 +233,12 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 
 	private void createDivisionEntitlement()
     {
-		
-		pnlDivisionEntitlement = new DivisionEntitlementPanel(tabFolder, SWT.NONE,this.inputObject, this);
+		if (isShipToCustomer()) {
+			pnlDivisionEntitlement = new DivisionEntitlementPanel(tabFolder, SWT.NONE,this.inputObject, this);
+		}
+		else {
+			pnlDivisionEntitlement = new DivisionEntitlementTreePanel(tabFolder, SWT.NONE,this.inputObject, this);
+		}
 		pnlDivisionEntitlement.setData("name", "pnlDivisionEntitlement");
 
 		TabItem itmPnlArticles = new TabItem(tabFolder, 0);
@@ -250,7 +252,7 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 	public Composite getRootPanel() {
 		return pnlRoot;
 	}
-		
+
 	public Object getInput() {
 		Object inObject = null;
 		org.eclipse.ui.part.WorkbenchPart currentPart = YRCDesktopUI.getCurrentPart();

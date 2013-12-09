@@ -603,6 +603,14 @@
             <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementTreePanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerList" URL="DEFAULT" inputNamespace="input_XPXGetCustomerList" outputNamespace="XPXGetCustomerList" version="ver77"/>
+         </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerList" templateName="XPXGetCustomerList" type="output"/>
+        </namespaces>
+    </form>
     <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfUsersPanel">
         <commands>
             <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetCustomerContactList_output" version="ver77"/>
