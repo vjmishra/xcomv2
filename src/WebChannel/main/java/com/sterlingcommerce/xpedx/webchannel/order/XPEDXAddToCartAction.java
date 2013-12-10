@@ -139,11 +139,15 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
 											YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
 											YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
-											YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
-																		
+											YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");//EB-3651
 											String legacyProductCode1 = itemIdElem.getNodeValue();
 											String requestedQty = requestedQtyElem.getNodeValue();
 											String requestedUom = requestedUomElem.getNodeValue();
+											if(this.reqProductUOM!= null && 
+													(this.reqProductUOM.equals("") || this.reqProductUOM.equals("M_"))){											
+												System.out.println("XPEDXAddToCartAction:requestedUom::::::"+requestedUom);//EB-3651
+												System.out.println("XPEDXAddToCartAction:this.reqProductUOM::::::"+this.reqProductUOM);//EB-3651
+											}
 											if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14") 
 													&& legacyProductCode1.equalsIgnoreCase(this.productID) && requestedQty.equalsIgnoreCase(this.reqProductQuantity) && requestedUom.equalsIgnoreCase(this.reqProductUOM)){								
 												orderMultipleErrorItems.add(legacyProductCode1);

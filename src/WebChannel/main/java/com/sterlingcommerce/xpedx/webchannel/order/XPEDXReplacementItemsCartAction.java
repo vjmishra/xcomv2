@@ -58,6 +58,10 @@ public class XPEDXReplacementItemsCartAction extends OrderSaveBaseAction{
 	         else {
 	                 draftOrderFlag="N";  
 	         }
+			 if(uomId!= null && 
+						(uomId.equals("") || uomId.equals("M_")))
+					System.out.println("XPEDXDraftOrderSummaryAction:uomId::::::"+uomId);//EB-3651
+				
 			if("true".equalsIgnoreCase(getAddToList())){// invoke only add mashup
 														// Add to cart
 				
