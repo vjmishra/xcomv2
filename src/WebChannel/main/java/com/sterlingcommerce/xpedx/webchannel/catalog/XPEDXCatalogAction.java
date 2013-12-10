@@ -980,15 +980,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 				if (!specialWords.contains(searchStringToken.trim()
 						.toLowerCase())) {
 					if (!"".equals(searchStringToken.trim())) {
-						valueMap.put("/SearchCatalogIndex/Terms/Term["
-								+ termIndex + "]/@Value",
-								searchStringToken.trim());
-						if (searchStringTokenList.length == 1) {
-							valueMap.put("/SearchCatalogIndex/Terms/Term["
-									+ termIndex + "]/@Condition", "SHOULD");
+						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
+						// eb-3685: marketing group search 'search within results' cannot use SHOULD
+						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null) {
+							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
 						} else {
-							valueMap.put("/SearchCatalogIndex/Terms/Term["
-									+ termIndex + "]/@Condition", "MUST");
+							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
 						}
 						termIndex++;
 					}
