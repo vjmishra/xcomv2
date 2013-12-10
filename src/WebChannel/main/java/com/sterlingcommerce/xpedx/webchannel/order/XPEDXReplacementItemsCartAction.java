@@ -58,9 +58,12 @@ public class XPEDXReplacementItemsCartAction extends OrderSaveBaseAction{
 	         else {
 	                 draftOrderFlag="N";  
 	         }
+			 if(uomId!= null && 
+						(uomId.equals("") || uomId.equals("M_")))
+					System.out.println("XPEDXDraftOrderSummaryAction:uomId::::::"+uomId);//EB-3651
+				
 			if("true".equalsIgnoreCase(getAddToList())){// invoke only add mashup
 														// Add to cart
-				
 				LOG.debug(" XPEDXReplacementItemsCartAction :: execute :: Adding the replacement item:  "+ getItemId() +" available to cart");
 				prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 			}else{ // Replace item in cart

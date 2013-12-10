@@ -1004,6 +1004,10 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 							item.setPricingUOM(extnElem.getAttribute("ExtnPricingUOM"));
 							item.setUnitPricePerPricingUOM(extnElem.getAttribute("ExtnUnitPrice"));
 							item.setRequestedQtyUOM(orderLineTran.getAttribute("TransactionalUOM"));
+							if(orderLineTran.getAttribute("TransactionalUOM")!= null && 
+									(orderLineTran.getAttribute("TransactionalUOM").equals("") || orderLineTran.getAttribute("TransactionalUOM").equals("M_")))
+									System.out.println("XPEDXDraftOrderModifyLineItemsAction:TransactionalUOM::::::"+orderLineTran.getAttribute("TransactionalUOM"));//EB-3651
+							
 							item.setUnitPricePerRequestedUOM(extnElem.getAttribute("ExtnReqUOMUnitPrice"));
 							item.setLineNumber(orderLineElem.getAttribute("PrimeLineNo"));
 							if("M".equals(lineType))
