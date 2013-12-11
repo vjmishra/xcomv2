@@ -89,7 +89,7 @@
                 PersonID="" PersonInfoKey="" State="" Suffix=""
                 TaxGeoCode="" Title="" ZipCode=""/>
             <OrderHoldTypes>
-                <OrderHoldType HoldType="" Status=""  ResolverUserId="" Modifyuserid="" Modifyts=""/>
+                <OrderHoldType HoldType="" Status=""  />
             </OrderHoldTypes>
             <PersonInfoShipTo/>
             <Instructions>
@@ -101,7 +101,7 @@
         </OrderLine>
     </OrderLines>
     <OrderHoldTypes>
-        <OrderHoldType HoldType="" Status=""/>
+        <OrderHoldType HoldType="" Status="" ResolverUserId="" Modifyuserid="" Modifyts=""/>
     </OrderHoldTypes>
     <OrderLineRelationships/>
     <OrderStatuses>
