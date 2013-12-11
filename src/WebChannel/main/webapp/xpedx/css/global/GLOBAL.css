@@ -10596,3 +10596,15 @@ input.error{
 .item-lnk:visited{
 	color: #996633;
 }
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+#approvalNotesPanel .x-window-ml {
+	padding-left: 0px;
+}
+#approvalNotesPanel .x-panel-nofooter {
+	display: none;
+}
+.swc-ext .x-window-mc{	
+    border: 0 solid #99BBE8;
+    margin: 0;
+    padding: 0
+}

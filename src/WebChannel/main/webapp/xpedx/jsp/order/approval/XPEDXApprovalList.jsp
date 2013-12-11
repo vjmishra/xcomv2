@@ -617,13 +617,13 @@
 	<!-- begin footer -->
    <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
-		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450" resizable="false"> 
 		
-		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
-			<!-- <h2>Approval / Rejection Comments</h2>	 -->			    			
+		<div  class="xpedx-light-box" id="" style="width:300px; height:150px;">	    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
-					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
+					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="4" theme="simple" cssStyle="overflow:hidden;" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
