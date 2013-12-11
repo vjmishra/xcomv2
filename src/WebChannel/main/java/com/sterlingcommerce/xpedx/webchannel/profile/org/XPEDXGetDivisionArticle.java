@@ -236,7 +236,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 					xpathToNoteElement, xapiOutput, XPathConstants.NODESET);
 			int length = articleLines.getLength();
 
-			for (int i = length - 1; i >= 0; i--) {
+			for (int i = 0; i <= length-1; i++) {
 				Element currNode = (Element) articleLines.item(i);
 				// TODO: add a filter here to see if this node should be added
 				// or not. Only few users will be able to see the artilces.
