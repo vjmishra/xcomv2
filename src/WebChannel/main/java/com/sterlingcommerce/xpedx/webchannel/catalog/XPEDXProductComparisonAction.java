@@ -10,13 +10,21 @@ import java.util.Set;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.catalog.ProductComparisonAction;
+import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
@@ -26,6 +34,16 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	// YFCDocument inputItemAttrDoc;
 	YFCDocument inputItemAttrDoc;
 	String sinputItmAttrDoc = "";
+	String certFlag = null;
+	String priceCurrencyCode = null;
+	String orderMultiple = null;
+	public String catagory;
+	String MPC = null;
+	String Manufacturer = null;
+	String ManufacturerPartNumber = null;
+	protected Element itemListElemt;
+	Document outputDoc  = null;
+	private Map<String, Map<String, String>> msdsItemLinkMap = new HashMap<String, Map<String, String>>();
 	/*String[] sAttrDesc;
 
 	String[] sArrimmediate;
@@ -33,19 +51,34 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	String[] sArrTwoPlusDays;
 	String[] sArrAvailability;*/
 	
+
+	public Map<String, Map<String, String>> getMsdsItemLinkMap() {	
+		return msdsItemLinkMap;
+	}
+
+
+
+
+	public void setMsdsItemLinkMap(Map<String, Map<String, String>> msdsItemLinkMap) {
+		this.msdsItemLinkMap = msdsItemLinkMap;
+	}
+
+
+
+
 	public String execute() {
 		String returnVal = null;
 		try {			
 			returnVal = super.execute();
+			
 			/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
 			setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
 			/* End - Changes made by Mitesh Parikh for 2422 JIRA */
-			
 			//PnA call removed as per Pawan's mail dated 9/4/2011
-			getProductComparisonOutputDetails();
+			getProductComparisonOutputDetails();			
 			/**** Code for adding of additional attributes ********/
 			String sProdComparisonDoc = SCXmlUtil
-					.getString(prodComparisonOutputDoc);
+					.getString(prodComparisonOutputDoc);			
 			String sItemAttributeE = "</ItemAttribute>";
 			int nodeLength = sItemAttributeE.length();
 			int lastIndex = sProdComparisonDoc.lastIndexOf(sItemAttributeE);
@@ -73,6 +106,90 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 
 		return returnVal;
 	}
+
+	
+	/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/	
+	
+	private void setMSDSUrls(Element outputItem) {
+		String msdsLink="";
+		String msdsLinkDesc="";
+		String assetLinkDesc="";	
+		HashMap<String, String> assetLinkMap = new HashMap<String, String>();
+		Map<String, String> msdsLinkMap = new HashMap<String, String>();
+		ArrayList<Element> specAssetList = new ArrayList<Element>();
+		if(outputItem!=null) {
+			NodeList outputItemList = outputItem.getElementsByTagName("Item");
+			for (int i = 0; i < outputItemList.getLength(); i++) {				
+				Element eleItmElement = (Element) outputItemList.item(i);				
+				String itemId = SCXmlUtil.getAttribute(eleItmElement, "ItemID");
+				NodeList list = SCXmlUtil.getXpathNodes(eleItmElement, "AssetList/Asset");
+				ArrayList<Element> assetList = new ArrayList<Element>();
+				XPEDXSCXmlUtils xpedxSCXmlUtils = new XPEDXSCXmlUtils();
+				Element reqNode;
+				for (int j = 0; j < list.getLength(); j++) {
+					reqNode = (Element) list.item(j);
+					assetList.add(reqNode);
+				}
+				boolean isMSDSLink=false;
+				String msdsAssetId = null;
+				String assetLink = null;
+				if(assetList!=null && assetList.size()>0) {					
+					Iterator<Element> assetIter = assetList.iterator();
+					while(assetIter.hasNext()) {
+						Element AssetElem = assetIter.next();
+						String assetType = xpedxSCXmlUtils.getAttribute(AssetElem, "Type");
+						String msdsLocation = xpedxSCXmlUtils.getAttribute(AssetElem, "ContentLocation");
+						String msdsContentId = xpedxSCXmlUtils.getAttribute(AssetElem, "ContentID");
+						//Adding .pdf to the file, as per requirement
+						if(!msdsContentId.contains(".") && !msdsContentId.endsWith(".pdf")){
+							msdsContentId = msdsContentId + ".pdf";
+						}
+						msdsAssetId = xpedxSCXmlUtils.getAttribute(AssetElem, "AssetID");
+						System.out.println("msdsAssetIdmsdsAssetIdmsdsAssetId"+msdsAssetId);
+						if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
+							assetLink = msdsLocation+msdsContentId;
+							assetLinkDesc = xpedxSCXmlUtils.getAttribute(AssetElem, "Description");
+						}else{
+							assetLink = msdsLocation+"/"+msdsContentId;
+							assetLinkDesc = xpedxSCXmlUtils.getAttribute(AssetElem, "Description");
+						}						
+						//Handling "/" if exist in msdsLocation, as an extra "/" was coming
+
+						if("ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
+							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
+							if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
+								msdsLink = msdsLocation+msdsContentId;							 
+							}else{
+								msdsLink = msdsLocation+"/"+msdsContentId;							
+							}
+							isMSDSLink=true;
+						}
+						if("URL".equalsIgnoreCase(assetType)){
+							msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;	
+							if(!SCUtil.isVoid(msdsLocation)){
+								msdsLink = msdsLocation;							 
+							}
+							isMSDSLink=true;
+						}if( msdsLinkMap.isEmpty())
+						{
+							msdsLinkMap = new HashMap<String, String>();						
+						}
+						if(isMSDSLink)
+							msdsLinkMap.put(msdsLinkDesc, msdsLink);
+
+						assetLinkMap.put(msdsAssetId, assetLink);
+
+					}
+
+				}
+				
+				msdsItemLinkMap.put(itemId, assetLinkMap);				
+			}
+
+		}				
+	}
+		
+	
 
 	private void checkEmptyAttributeElements() {
 		Document docProdCmpOputDocDetails = prodComparisonOutputDoc;
@@ -107,9 +224,10 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		Element eleOrder = docProdCmpOputDocDetails.getDocumentElement();
 		int iTotItmList = Integer.parseInt(SCXmlUtil.getAttribute(eleOrder,
 				"TotalItemList"));
+		System.out.println("iTotItmList"+iTotItmList);
 		NodeList nlItemDetails = docProdCmpOputDocDetails
 				.getElementsByTagName("Item");
-
+		System.out.println("nlItemDetailsnlItemDetails"+nlItemDetails.toString());
 		Element eleItemDetails;
 		// YFCDocument inputItemAttrDoc;
 		YFCElement inputItmAttrElement;
@@ -125,13 +243,19 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 				"Availability", "Immediate", "NextDay", "TwoPlusDays" */};
 		String[] sTmp = null;
 		Double price = 0.0;
+		
+		
 		for (int i = 0; i < iTotItmList; i++) {
 			eleItemDetails = (Element) nlItemDetails.item(i);
 			if(log.isDebugEnabled()){
 			log.debug(SCXmlUtil.getAttribute(eleItemDetails, "ItemID"));
+			System.out.println("VIJAYA11111111"+SCXmlUtil.getAttribute(eleItemDetails, "ItemID"));
 			}
 			sItmIds[i] = SCXmlUtil.getAttribute(eleItemDetails, "ItemID");
 			sUoms[i] = SCXmlUtil.getAttribute(eleItemDetails, "UnitOfMeasure");
+			System.out.println("VIJAYA11111111 sItmIdssItmIds"+sItmIds[i]);
+			
+						
 			/*String listPrice = SCXmlUtil.getXpathAttribute(eleItemDetails,
 					"./ComputedPrice/@ListPrice");
 			if (listPrice != null && listPrice.trim().length() > 0) {
@@ -139,8 +263,15 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			}
 			sArrListPrice[i] = price > 0 ? "$" + price : "";*/
 		}
-		/*processPandA(sItmIds, sUoms);*/
-
+		/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/	
+		Element outputItem = null;
+		try {
+			outputItem = getItemElement(sItmIds);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setMSDSUrls(outputItem);
 		for (int k = 0; k < sAttrDesc.length; k++) {
 			String sThisAttrDesc = sAttrDesc[k];
 			if ("__BRAND__#".equals(sThisAttrDesc)) {
@@ -184,7 +315,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			inputAttributeElement.setAttribute("LongDescription", "");
 			inputAttributeElement.setAttribute("SequenceNo", "");
 			inputAttributeElement.setAttribute("ShortDescription", "");
-
+			
 			inputItmAttrElement.appendChild(inputAttributeElement);
 			inputItmListElement = inputItemAttrDoc.createElement("ItemList");
 			inputItmAttrElement.appendChild(inputItmListElement);
@@ -357,6 +488,24 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	protected String baseUOM = null;
 	protected String prodMweight = null;
 	protected Element m_itemListElem;
+	//protected Map assetLinkMap = new HashMap<String, String>();
+	//protected Map msdsLinkMap = new HashMap<String, String>();
+	/*public Map getMsdsLinkMap() {
+		return msdsLinkMap;
+	}*/
+
+/*	public void setMsdsLinkMap(Map msdsLinkMap) {
+		this.msdsLinkMap = msdsLinkMap;
+	}*/
+
+/*	public Map getAssetLinkMap() {
+		return assetLinkMap;
+	}
+
+	public void setAssetLinkMap(Map assetLinkMap) {
+		this.assetLinkMap = assetLinkMap;
+	}*/
+
 	private static final Logger log = Logger
 			.getLogger(XPEDXProductComparisonAction.class);
 	private String itemListMapHTMLString;
@@ -380,5 +529,50 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
 		this.itemDtlBackPageURL = itemDtlBackPageURL;
 	}
-
+    /*private Element getItemElement(String itemId) throws Exception {
+    	Map<String, String> valueMap = new HashMap<String, String>();			
+		valueMap.put("/Item/@ItemID", itemId);
+		Element input = WCMashupHelper.getMashupInput("xpedxgetItemList", valueMap, wcContext.getSCUIContext());
+		String inputXml = SCXmlUtil.getString(input);
+		System.out.println("Input XML: " + inputXml);
+		Object obj = WCMashupHelper.invokeMashup("xpedxgetItemList", input,	wcContext.getSCUIContext());
+		Document outputDoc  = ((Element) obj).getOwnerDocument();
+		if (null != outputDoc) {
+			System.out.println("Output XML: " + SCXmlUtil.getString((Element) obj));
+			return null;
+		}
+		return null;
+    }*/
+	
+	/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/
+	
+	private Element getItemElement(String[] itemId) throws Exception {
+    	Map<String, String> valueMap = new HashMap<String, String>();	
+    	Element outputItem=null;
+    	try {
+    	IWCContext wcContext = WCContextHelper
+				.getWCContext(ServletActionContext.getRequest());
+		Element inputXpedxGetItemListElement = WCMashupHelper.getMashupInput("xpedxgetItemList", wcContext.getSCUIContext());
+		String inputXpedxGetItemListXml = SCXmlUtil.getString(inputXpedxGetItemListElement);
+		Element complexQuery = SCXmlUtil.getChildElement(inputXpedxGetItemListElement, "ComplexQuery");
+		Element OrElem = SCXmlUtil.getChildElement(complexQuery, "Or");
+		
+		for(String itemIdlist : itemId) {
+			Element exp = inputXpedxGetItemListElement.getOwnerDocument().createElement("Exp");
+			exp.setAttribute("Name", "ItemID");
+			exp.setAttribute("Value", itemIdlist);
+			SCXmlUtil.importElement(OrElem, exp);
+		}
+		Object obj = WCMashupHelper.invokeMashup("xpedxgetItemList", inputXpedxGetItemListElement,	wcContext.getSCUIContext());
+		Document outputDoc  = ((Element) obj).getOwnerDocument();
+		outputItem = outputDoc.getDocumentElement();
+		if (null != outputDoc) {
+			System.out.println("Output XML: " + SCXmlUtil.getString((Element) obj));
+			return outputItem;
+		}
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		}		
+		return outputItem;
+    }
 }
