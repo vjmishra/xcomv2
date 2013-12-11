@@ -215,7 +215,7 @@
         </WorkOrder>
     </WorkOrders>
     <OrderHoldTypes>
-        <OrderHoldType Status=""/>
+        <OrderHoldType Status="" ResolverUserId="" Modifyuserid="" Modifyts=""/>
     </OrderHoldTypes>
     <OrderLineRelationships/>
     <OrderStatuses>
