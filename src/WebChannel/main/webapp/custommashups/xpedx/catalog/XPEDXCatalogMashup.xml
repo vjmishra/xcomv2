@@ -1100,5 +1100,63 @@
 			</Template>
 		</API>
 	</mashup>
+	<!-- EB-694 xpedx catalog URL display for FSC, PEFC and SFI  -->
+	<mashup id='xpedxgetItemList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="getItemList API returns a list of Items">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getItemList">
+            <Input>
+			 <Item CallingOrganizationCode=''>
+                      <ComplexQuery Operator='AND'>
+                        <Or>                            
+                        </Or>
+                    </ComplexQuery>
+                    <CustomerInformation CustomerID=''/>
+                  </Item>
+  
+            </Input>
+            <Template>
+                <ItemList>
+                    <Item>                    
+					<ItemAttributeGroupTypeList>
+							<ItemAttributeGroupType
+								ClassificationPurposeCode="" Description=""
+								IsAdditionalAttributeAllowed="" IsSingleGroup=""
+								ItemAttributeGroupType="" ItemAttributeGroupTypeKey=""
+								IsValidForCategory="" IsValidForClassification="">
+								<ItemAttributeGroupList>
+									<ItemAttributeGroup CategoryKey=""
+										IsInherited="" AttributeGroupPath=""
+										ItemAttributeGroupDescription="" ItemAttributeGroupID=""
+										ItemAttributeGroupKey="" SequenceNo="">
+										<ItemAttributeList>
+											<ItemAttribute IsKeyAttribute=""
+												ItemAttributeDescription="" ItemAttributeGroupKey=""
+												ItemAttributeKey="" ItemAttributeName="" SequenceNo=""
+												IsInherited="" Value="">
+												<AssignedValueList>
+													<AssignedValue DoubleValue="" IntegerValue=""
+														Value="" />
+												</AssignedValueList>
+												<Attribute AllowMultipleValues=""
+													AllowedValueLength="" AttributeDomainID=""
+													AttributeGroupID="" AttributeID="" AttributeKey=""
+													AttributePostFix="" DataType="" IsAllowedValueDefined=""
+													IsValueMandatory="" LongDescription="" OrganizationCode=""
+													SequenceNo="" ShortDescription="" DerivedFromAttributeKey="" />
+											</ItemAttribute>
+										</ItemAttributeList>
+									</ItemAttributeGroup>
+								</ItemAttributeGroupList>
+							</ItemAttributeGroupType>
+						</ItemAttributeGroupTypeList>
+                    <AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</Item>
+                </ItemList>
+            </Template>    
+        </API>
+    </mashup>
 
 </mashups>       
