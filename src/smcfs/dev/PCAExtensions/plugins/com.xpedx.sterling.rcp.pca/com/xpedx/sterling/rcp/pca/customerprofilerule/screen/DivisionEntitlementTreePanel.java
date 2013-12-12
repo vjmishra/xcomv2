@@ -138,7 +138,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 		}
 		);
 
-		//---Selection Listener used to Check & uncheck the parent  & Vice versa basde on condition
+		// Selection Listener to check & uncheck the parent & vice versa based on condition
 		tree.addListener(SWT.Selection, new Listener() {
 	        public void handleEvent(Event event) {
 	            if (event.detail == SWT.CHECK) {
@@ -422,39 +422,77 @@ public class DivisionEntitlementTreePanel extends Composite implements
 			for (int i=0; i<custId.size(); i++)
 			{
 				Element eleCust = custId.get(i);
+				String CustomerID="";
 				StringBuffer address= new StringBuffer();
 				TreeItem iiItem = new TreeItem (localiItem2, 1);
 
 				String orgName=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationName");
 				String orgId=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationCode");
 
+				String add1 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
+				String add2 = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2");
+				String city = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City");
+				String country = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
+				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
+				String zip = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
+
+				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
+				String legacyNo=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnLegacyCustNumber");
+				String billTosuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnBillToSuffix");
+				String shipToSuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipToSuffix");
 				String customerType=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnSuffixType");
 
 				String status = YRCXmlUtils.getAttributeValue(eleCust, "Customer/@Status");
 
-				String CustomerID=orgId; //TODO need for display?
-//				if("MC".equalsIgnoreCase(customerType)){
-//					CustomerID=orgId;
-//				}
-//				else if("C".equalsIgnoreCase(customerType)){
-//					 CustomerID=orgId;
-//				}
-//				else if("B".equalsIgnoreCase(customerType)){
-//					CustomerID=shipFromBranch+"-"+legacyNo+"-"+billTosuffix;
-//				}
-//				else if("S".equalsIgnoreCase(customerType)){
-//						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
-//				}
+				// *** NOTE: this code was copied from CustomerAssignmentPanel for consistent display.
+				// Display changes made here should probably be made there and vice-versa.
 
-				String displayString = orgName+" ("+CustomerID+")"+address.toString();
-				//TODO want to indicated suspended like on Assignment page?
-				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))
-						&& "30".equals(status)){ // 30=Suspended (this should be a constant somewhere)
-					displayString = "(Suspended)" + displayString;
+				if("MC".equalsIgnoreCase(customerType)){
+					CustomerID=orgId;
+				}
+				else if("C".equalsIgnoreCase(customerType)){
+					 CustomerID=orgId;
+				}
+				else if("B".equalsIgnoreCase(customerType)){
+					CustomerID=shipFromBranch+"-"+legacyNo+"-"+billTosuffix;
+				}
+				else if("S".equalsIgnoreCase(customerType)){
+						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
+				}
+
+				if(add1 !=null && add1.trim().length()>0) {
+					address.append(" "+add1);
+				}
+				if(add2 !=null && add2.trim().length()>0) {
+					address.append(", "+add2);
+				}
+				if(city !=null && city.trim().length()>0) {
+					address.append(", "+city);
+				}
+				if(state !=null && state.trim().length()>0) {
+					address.append(", "+state);
+				}
+				if(zip !=null && zip.trim().length()>0) {
+					address.append(" "+zip);
+				}
+				if(country !=null && country.trim().length()>0) {
+					address.append(" "+country);
+				}
+
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))){
+					iiItem.setText(CustomerID +", " +orgName+ ", " +address.toString());
+					if ("S".equalsIgnoreCase(customerType)) {
+						iiItem.setFont(JFaceResources.getFontRegistry().getBold(""));
+					}
+				}else{
+					iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
+				}
+
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType))) && status!=null && status.equals("30")){
+					iiItem.setText("[Suspended] do not use " + CustomerID +", " +orgName+ address.toString());
 					iiItem.setForeground(getDisplay().getSystemColor(SWT.COLOR_GRAY));
 					iiItem.setFont(JFaceResources.getFontRegistry().getItalic(""));
 				}
-				iiItem.setText(displayString);
 
 				iiItem.setData("data",eleCust);
 				if(myBehavior.isThisEntitled(eleCust)){
@@ -469,6 +507,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				iiItem.setItemCount(1);
 			}
 
+			//TODO change to new "grayed" logic from assignments tab ?
 			if (custId.size()>0) {
 				boolean parentShouldBeChecked = hascheckedChild && !hasUncheckedChild;
 				localiItem2.setChecked(parentShouldBeChecked);
