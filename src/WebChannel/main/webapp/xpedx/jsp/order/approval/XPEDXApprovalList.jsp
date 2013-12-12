@@ -618,7 +618,7 @@
    <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
 <!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
-		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450" resizable="false"> 
+		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 
 		
 		<div  class="xpedx-light-box" id="" style="width:300px; height:150px;">	    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
