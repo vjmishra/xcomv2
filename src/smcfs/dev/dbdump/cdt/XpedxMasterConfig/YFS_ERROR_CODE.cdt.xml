@@ -18506,4 +18506,10 @@
     ErrorMessage="Invocation of the beforeAddContainerToManifest user exit failed."
     ErrorSeverity=" " Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-26T15:05:34-04:00" Modifyuserid="SYSTEM" SystemDefinedCode="Y"/>
+<ErrorCode Createprogid="XMLMigrator"
+    Createts="2013-11-19T02:26:00-05:00" Createuserid="SYSTEM"
+    ErrorCode="OMP80_0090" ErrorCodeKey="201311190226013054475"
+    ErrorMessage="Shipment line cannot be created for the canceled order line."
+    ErrorSeverity=" " Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2013-11-19T02:26:00-05:00" Modifyuserid="SYSTEM" SystemDefinedCode="Y"/>
 </YFS_ERROR_CODEList>

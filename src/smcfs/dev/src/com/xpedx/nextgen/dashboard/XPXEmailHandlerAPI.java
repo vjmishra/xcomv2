@@ -255,13 +255,13 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         // if(sendMail.equals("Y"))
         // {
         stampLegacyOrderNoOnCustomerOrderLine(env, customerDoc,orderListOutput);
-
-        /******* Added by Arun Sekhar on 28-April-2011 *******/
-        String isEditOrderFlag=inputElement.getAttribute("IsOrderEdit");
+ 
+        /*Begin- Code commented for EB-3696 and 3697 */
+        /* String isEditOrderFlag=inputElement.getAttribute("IsOrderEdit");
         if("Y".equals(isEditOrderFlag)) {
         	cOrderOperation="OrderEdit";
-        }
-        /*End- Code changes made by Mitesh for EB-2291. To be removed in subsequent JIRAs - EB-3696 and 3697 */
+        }*/
+        /*End- Code commented for EB-3696 and 3697 */
         
         orderconfSubjectline=utilObj.stampOrderSubjectLine(env, customerDoc, cOrderOperation);
         yfcLogCatalog.debug("inputDocument with SubjectLine: "

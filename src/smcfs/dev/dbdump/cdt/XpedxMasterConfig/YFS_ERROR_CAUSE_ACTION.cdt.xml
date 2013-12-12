@@ -21251,4 +21251,11 @@
     ErrorCodeKey="20110726150534165295" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-07-26T15:05:34-04:00"
     Modifyuserid="ngmc" SeqNo="1" SubSeqNo="0" TransactionKey=" "/>
+<ErrorCauseAction Action="Check order line details."
+    Cause="Shipment line cannot be created for the canceled order line."
+    Createprogid="XMLMigrator" Createts="2013-11-19T02:26:00-05:00"
+    Createuserid="SYSTEM" ErrorCauseActionKey="201311190226013054476"
+    ErrorCodeKey="201311190226013054475" Lockid="0"
+    Modifyprogid="XMLMigrator" Modifyts="2013-11-19T02:26:00-05:00"
+    Modifyuserid="SYSTEM" SeqNo="1" SubSeqNo="0" TransactionKey=" "/>
 </YFS_ERROR_CAUSE_ACTIONList>

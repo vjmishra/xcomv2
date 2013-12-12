@@ -4638,6 +4638,14 @@
     Modifyts="2011-07-14T14:37:40-04:00" Modifyuserid="SYSTEM"
     ShipnodeKey=" " TransactionKey="PAYMENT_COLLECTION.0006" Version=" "/>
 <Event ActionKey=" " ActiveFlag="N" Createprogid="XMLMigrator"
+    Createts="2013-11-19T02:25:43-05:00" Createuserid="SYSTEM"
+    EnterpriseKey="DEFAULT" EventKey="PCK_SHIPMNT_COMPLTE.0006"
+    EventName="On Success" Eventid="ON_SUCCESS"
+    ExceptionType="ON_SUCCESS" ExtendEnterpriseFlag=" "
+    ExtendSupplierFlag=" " Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2013-11-19T02:25:43-05:00" Modifyuserid="SYSTEM"
+    ShipnodeKey=" " TransactionKey="PACK_SHIP_COMPLT.0006" Version=" "/>
+<Event ActionKey=" " ActiveFlag="N" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:40-04:00" Createuserid="SYSTEM"
     EnterpriseKey="DEFAULT" EventKey="PENDING_CHANGE_E1"
     EventName="On Cancel" Eventid="ON_CANCEL" ExceptionType="ON_CANCEL"

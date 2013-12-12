@@ -4568,6 +4568,15 @@
     Modifyprogid=".YIFUIManager" Modifyts="2013-11-14T07:09:20-05:00"
     Modifyuserid="admin" OwnerKey="DEFAULT" ProcessTypeKey="GENERAL"
     SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-12-12T05:52:37-05:00" Createuserid="admin"
+    FlowGroupName="DefaultAgentGroup" FlowKey="201312120552373056057"
+    FlowName="REPROCESS_ORDCNFRM_EMAIL" FlowType="01"
+    GraphUIKey="AgentGraphUI" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="Y" Lockid="0" Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-12-12T05:52:37-05:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="ORDER_FULFILLMENT"
+    SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"

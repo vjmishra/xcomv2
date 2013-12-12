@@ -381,6 +381,13 @@
     Modifyuserid="admin" MonitorStartTime="1"
     ServerKey="201304160054582969134" ServerName="XPXPurgeAgent"
     ServerType="01" Terminate="N" TransportTypeKey="JMS" WaitTime="1"/>
+<Server Createprogid=".YEntityServlet"
+    Createts="2013-12-12T05:52:22-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2013-12-12T05:52:22-05:00"
+    Modifyuserid="admin" MonitorStartTime="1"
+    ServerKey="201312120552223056054"
+    ServerName="ReprocessOrderConfirmationEmailAgent" ServerType="01"
+    Terminate="N" TransportTypeKey="JMS" WaitTime="1"/>
 <Server Createprogid="XMLMigrator" Createts="2011-07-14T14:37:57-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:57-04:00" Modifyuserid="SYSTEM"

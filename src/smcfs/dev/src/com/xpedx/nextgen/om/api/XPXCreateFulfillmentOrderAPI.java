@@ -122,12 +122,13 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 								
 								try {
 									api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderEle.getOwnerDocument().getDocument());
+									orderEmailConfirmationSentFlag="Y";	
+									XPXUtils utilsObj = new XPXUtils();
+									utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
 								}catch(Exception ex) {
 									log.error("Exception occured on posting order confirmation email XML to  XPXPutOrderChangesInOrderConfirmationEmailQueue service "+ex.getMessage());
 								}								
-								orderEmailConfirmationSentFlag="Y";	
-								XPXUtils utilsObj = new XPXUtils();
-								utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
+								
 							
 							} else if("OrderApproved".equals(lastOrderOperation)) {							
 								//Forming an input document to send Order Approved Email [Input for YCD_Order_Approval_Email_8.5 service]
@@ -139,12 +140,12 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 								}
 								try {
 									api.executeFlow(env, "YCD_Order_Approval_Email_8.5", orderApprovedEmailInputDoc.getDocument());
+									orderEmailConfirmationSentFlag="Y";								
+									utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
 								}catch(Exception ex) {
-									log.error("Exception occured on posting order approved email XML to YCD_Order_Approval_Email_8.5 service "+ex.getMessage());
-								}
+									log.error("Exception occured on posting order approved email XML to YCD_Order_Approval_Email_8.5 service: "+ex.getMessage());
+								}								
 								
-								orderEmailConfirmationSentFlag="Y";								
-								utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
 							}
 						}
 					}

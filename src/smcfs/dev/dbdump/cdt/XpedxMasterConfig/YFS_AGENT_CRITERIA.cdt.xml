@@ -828,6 +828,15 @@
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2013-07-05T09:05:32-04:00" Modifyuserid="admin"
     ServerKey="201304160054582969134" TransactionKey="INBOXPRG"/>
+<AgentCriteria AgentCriteriaId="REPROCESS_ORDCNFRM_EMAIL"
+    AgentCriteriaKey="201312120552373056068"
+    Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-12-12T05:52:37-05:00" Createuserid="admin"
+    FlowKey="201312120552373056057" Lockid="2"
+    MessageXml="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;Attributes>&#xa;    &lt;Attribute DisplayName=&quot;Action&quot; Name=&quot;Action&quot; Value=&quot;Get&quot;/>&#xa;&lt;/Attributes>&#xa;"
+    Modifyprogid=".YCPWFRepositoryAPI"
+    Modifyts="2013-12-12T05:54:11-05:00" Modifyuserid="admin"
+    ServerKey="201312120552223056054" TransactionKey="201312120547013056047"/>
 <AgentCriteria AgentCriteriaId="ACCEPT_WAVE"
     AgentCriteriaKey="ACCEPT_WAVE" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:58-04:00" Createuserid="SYSTEM"
