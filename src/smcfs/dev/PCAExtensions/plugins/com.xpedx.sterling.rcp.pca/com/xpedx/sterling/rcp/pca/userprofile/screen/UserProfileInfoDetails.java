@@ -161,6 +161,14 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Text txtZip4;
 	private Composite pnlPOLIst;
 	private Button btnUsrRolesHelpInfo;
+
+	private Label lblLastModBy;
+
+	private Text txtLastModBy;
+
+	private Label lblLastModDate;
+
+	private Text txtLastModDate;
 	
 //	private Composite pnlRadioButtons;
 //	private Button radInternal;
@@ -437,6 +445,24 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
 		
+		lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
+		lblLastModBy.setText("Last Modified By");
+		lblLastModBy.setLayoutData(gridData2);
+		lblLastModBy.setData("name", "lblLastModBy");
+		txtLastModBy = new Text(pnlGeneralInfo, SWT.READ_ONLY);
+		txtLastModBy.setLayoutData(gridData3);
+		txtLastModBy.setData("name", "txtLastModBy");
+
+		lblLastModDate = new Label(pnlGeneralInfo, SWT.LEFT);
+		lblLastModDate.setText("Last Modified Date");
+		lblLastModDate.setLayoutData(gridData2);
+		lblLastModDate.setData("name", "lblLastModDate");
+		txtLastModDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
+		txtLastModDate.setLayoutData(gridData3);
+		txtLastModDate.setData("name", "txtLastModDate");
+		
+		
+		
 		this.addUserTypeControls(pnlGeneralInfo, pnlGeneralInfoLayout, gridData2);
 		
 		lblPassword = new Label(pnlGeneralInfo, SWT.NONE);
@@ -448,6 +474,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnPassword.setLayoutData(gridData3);
 		btnPassword.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
+				
 				resetCustomPassword();
 				
 			}
@@ -1442,6 +1469,22 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setDataType("Date");
 		tbd.setName("txtLastLoginDate");
 		txtLastLoginDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
+		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
+		//tbd.setDataType("Date");
+		tbd.setKey("username");
+		tbd.setName("txtLastModBy");
+		txtLastModBy.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@ContactModifiedDate");
+		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@ContactModifiedDate");
+		tbd.setDataType("Timestamp");
+		tbd.setName("txtLastModDate");
+		txtLastModDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
 		
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");

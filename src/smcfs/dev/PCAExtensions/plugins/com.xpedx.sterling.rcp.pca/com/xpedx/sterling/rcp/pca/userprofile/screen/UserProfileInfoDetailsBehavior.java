@@ -43,6 +43,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private String billToExtnCustomerClass;
 	private String b2bCatalogView;
 	private String extnDefaultShipTo;
+	private String modifyTs;
+	private String modifyUserId;
 	
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
@@ -128,10 +130,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		String strExtnDefaultShipTo = YRCXmlUtils.getAttributeValue(eleCustomerContactInfo, "/CustomerContact/Extn/@ExtnDefaultShipTo");
 		if(!YRCPlatformUI.isVoid(strExtnDefaultShipTo)){
 			
-			String[] apinames = {"getDefaultShipToList"};
+			String[] apinames = {"getDefaultShipToList" , "getUserList"};
 			Document[] docInput = {
 					
-					YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>")
+					YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
+					YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") , 
 			};
 			YRCApiContext ctx = new YRCApiContext();
 			ctx.setFormId(getFormId());
@@ -277,6 +280,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						setModel("XPXSearchCatalogIndex",outXml);
 						repopulateModel("XPXCustomerContactIn");
 					}
+					else if ("getUserList".equals(apiname)){
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();						
+						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);	
+						setModel("UserList" , outXml);
+					}
 					else if ("getCustomerDetails".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();						
 						Element customerContactElement = (Element)YRCXPathUtils.evaluate(outXml, "/Customer/CustomerContactList/CustomerContact[@CustomerContactID='"+customerContactID+"']", XPathConstants.NODE);
@@ -322,6 +330,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					else if ("getCustomerContactList".equals(ctx.getApiName())) {
 						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
 						adminCustomerContact(eleCustomerContactList);						
+						this.UpdateCustomer();
 						
 					}
 					else if ("getBilltoExtnCustomerClass".equals(ctx.getApiName())) {
@@ -376,12 +385,19 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						}
 						setBillToExtnCustomerClass(billToCustomerClass);
 					}
+					 else if("getUserList".equals(ctx.getApiName())){
+				        	setModel("UserList",ctx.getOutputXmls()[i].getDocumentElement());
+			        	    //handleSearchApiCompletion(ctx);
+			        	}
 				}
 				if (ctx.getApiName().equals("manageCustomer")) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
 					callUpdatePOListAPI();
 					this.reInitPage();
 					((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
+				}
+				if (ctx.getApiName().equals("getUserList")) {
+					setModel("UserList",ctx.getOutputXml().getDocumentElement());
 				}
 			}
 		}
@@ -410,6 +426,13 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		for(int i=0;i<nodCustContact.getLength();i++){
 			Element eleCust=(Element) nodCustContact.item(i);
 			String customerID = eleCust.getAttribute("CustomerContactID");
+			
+			if(this.customerContactID.equals(customerID)){
+			//	Modifyts="2013-12-05T13:58:34-05:00" Modifyuserid="dave@bh.com">
+				this.modifyTs = eleCust.getAttribute("Modifyts");
+				this.modifyUserId=eleCust.getAttribute("Modifyuserid");
+				
+			}
 				NodeList nodGroupLists=eleCust.getElementsByTagName("UserGroupLists");			
 				for(int j=0;j<nodGroupLists.getLength();j++){
 					Element eleGroup=(Element) nodGroupLists.item(j);
@@ -449,6 +472,24 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		}*/
 		setModel("CustomerContactDetails",adminCustomerList);
 	}
+	
+public void UpdateCustomer(){
+	Document inputDoc = YRCXmlUtils.createDocument("UserList");
+	System.out.println("here");
+	Element inputRestPasswordElement = inputDoc.getDocumentElement();
+	//inputRestPasswordElement.setAttribute("ResetType", "Email");
+	Element userElement = inputDoc.createElement("User");
+	inputRestPasswordElement.appendChild(userElement);
+	userElement.setAttribute("Loginid", this.modifyUserId);
+    YRCApiContext ctx = new YRCApiContext();
+    ctx.setApiName("getUserList");
+    ctx.setFormId(page.getFormId());
+    ctx.setInputXml(inputDoc);
+    if(!page.isDisposed()){
+    	callApi(ctx,page);
+    }
+	
+}
 
 	private void updateAdditionalAttributes(Element customerContactElement) {
 		Element eleUserGroupsList = (Element) YRCXPathUtils.evaluate(customerContactElement, "./User/UserGroupLists", XPathConstants.NODE);

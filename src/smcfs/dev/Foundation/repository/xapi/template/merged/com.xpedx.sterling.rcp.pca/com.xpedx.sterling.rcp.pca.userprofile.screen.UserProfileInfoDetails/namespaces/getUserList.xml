@@ -1,0 +1,28 @@
+<UserList>
+	<User Activateflag=" "  ContactaddressKey=" "
+    Createts=" " DataSecurityGroupId=" " DepartmentKey=" "
+    DisplayUserID=" " EnterpriseCode=" " Imagefile=" "
+    IsPasswordEncrypted=" " IsSupervisor=" " Localecode=" " 
+    Loginid=" "  MenuId=" " OrganizationKey=" " Password=" "
+    Theme=" " UserKey=" " UsergroupKey=" " Username=" " Usertype=" ">
+    <Extn ExtnEmployeeId=" " ExtnUserActive=" "/>
+	<ContactPersonInfo AddressLine1=" " AddressLine2=" "
+        AddressLine3=" " AddressLine4=" " AddressLine5=" "
+        AddressLine6=" " City=" " Company=" " Country=" " 
+        DayFaxNo=" " DayPhone=" " Department=" "
+        EMailID=" " ErrorTxt=" " EveningFaxNo=" " EveningPhone=" "
+        FirstName=" " JobTitle=" " LastName=" " Latitude=" "
+        MiddleName=" " MobilePhone=" " OtherPhone=" "
+        PersonID=" " PersonInfoKey=" " State=" " Suffix=" " ZipCode=" ">
+        <Extn ExtnZip4=" "/>
+    </ContactPersonInfo>
+	<UserGroupLists>
+        <UserGroupList  IsPrimary=" " UserGroupListKey=" " UserKey=" " UsergroupKey=" ">
+            <UserGroup Activateflag=" " BusinessKey=" " GroupType=" " 
+                UsergroupDescription=" " UsergroupId=" "
+                UsergroupKey=" " UsergroupName=" "/>
+        </UserGroupList>
+    </UserGroupLists>
+	</User>
+
+</UserList>
