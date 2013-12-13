@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -517,6 +518,12 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				setRndrReport("true");
 				
 				String encodedToken = logonTokens.get(1);	
+				String biurl = ReportUtils.getCMSLogonDetails().get("BIUrl");
+				if (biurl != null && !("").equals(biurl.trim())) {
+					StringTokenizer st = new StringTokenizer(openDocURL, "?");
+					st.nextToken();
+					openDocURL = biurl + "?" + st.nextToken();  					
+				}
 				
 				finalURL= openDocURL + params + "&token=" + encodedToken + "&sRefresh=Y";		
 			}
