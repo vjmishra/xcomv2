@@ -20,7 +20,20 @@
 
 ***********************************************************************************************************************
 **********************************************************************************************************************/
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+.swc-ext .x-window-ml {
+    padding-left: 0px;
+}
 
+#approvalNotesPanel .x-panel-nofooter {
+	display: none;
+}
+
+#approvalNotesPanel .x-window-mc{	
+    border: 0;
+    margin: 0;
+    padding: 0
+}
 .input-details-cart {
 	float: left;
 	width: 137px;
