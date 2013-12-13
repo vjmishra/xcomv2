@@ -3369,10 +3369,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 					Element itemAttributeElem=SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
 					itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
 				}
-				Object outputObj=WCMashupHelper.invokeMashup(
-						"xpedxNarrowByCatalogSearch", inputDocElemen, wcContext
-								.getSCUIContext());
-				Document outputDoc=((Element) outputObj).getOwnerDocument();
+				//EB-3738 Should not display systeme error message.  To catch the exception 'TooManyClauses'.
+				try{
+					Object outputObj = WCMashupHelper.invokeMashup(
+							"xpedxNarrowByCatalogSearch", inputDocElemen, wcContext
+									.getSCUIContext());
+					Document outputDoc=((Element) outputObj).getOwnerDocument();
 				/*if(!YFCCommon.isVoid(this.searchTerm)  ){
 					setCustomerNumber();
 					super.newSearch();
@@ -3391,6 +3393,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 		        }*/
 				setOutDoc(outputDoc);
 				setAttributeListForUIForNarrowBy();
+			}catch(Exception e){
+				log.error("Exception in XPEDXCatalogAction - getFacetList method while retrieving the search results"+e.getMessage());
+				return retVal;
+			}				
 		}
 		return retVal;
 	}
