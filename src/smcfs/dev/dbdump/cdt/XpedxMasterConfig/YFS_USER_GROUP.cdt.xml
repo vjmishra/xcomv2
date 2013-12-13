@@ -146,8 +146,8 @@
     GroupType="EXTERNAL" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:38:54-04:00" Modifyuserid="SYSTEM"
     OwnerKey="DEFAULT" OwnerType=" " TemplateGroup=" "
-    UsergroupDescription="Punch Out User"
-    UsergroupId="PROCUREMENT-USER" UsergroupKey="PROCUREMENT-USER" UsergroupName="Punch Out User"/>
+    UsergroupDescription="Procurement User"
+    UsergroupId="PROCUREMENT-USER" UsergroupKey="PROCUREMENT-USER" UsergroupName="Procurement User"/>
 <UserGroup Activateflag=" " BusinessKey="DEFAULT"
     Createprogid="XMLMigrator" Createts="2011-07-14T15:09:11-04:00"
     Createuserid="SYSTEM" GroupType=" " Lockid="0"

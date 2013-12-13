@@ -407,12 +407,6 @@ public class XPXEditChainedOrderExAPI implements YIFCustomApi {
 										}
 										((YFSContext)env).commit();
 										
-										/*Begin - Code commented as Order Edit Email will now be sent after receiving the 1st OU for the order edited [EB-2291]*/
-										/*Begin - Changes made for EB-532 [Sending an order confirmation when I edit an an order and resubmit] */
-										/*editOrdEle.setAttribute("IsOrderEdit", "true");
-										api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", editOrdEle.getOwnerDocument().getDocument());*/
-										/*End - Changes made for EB-532 [Sending an order confirmation when I edit an an order and resubmit] */
-										/*End - Code commented as Order Edit Email will now be sent after receiving the 1st OU for the order edited [EB-2291]*/
 									} else {
 										throw new Exception("Element TransactionStatus Not Returned During Order Update!");
 									}
