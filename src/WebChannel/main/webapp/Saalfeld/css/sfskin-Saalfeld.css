@@ -19,7 +19,9 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 	top: 16px;
 	width: 200px;
 }
-
+#approvalNotesPanel .x-window-ml {
+    padding-left: 0px;
+}
 .header-subnav li { border-right: 0px solid #107555; }
 
 #main-navigation { background: url(../images/unselected_saalfeld.png) repeat-x; }
