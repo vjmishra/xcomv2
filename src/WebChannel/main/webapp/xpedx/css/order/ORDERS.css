@@ -34,6 +34,9 @@
     margin: 0;
     padding: 0
 }
+.x-window-body {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
 .input-details-cart {
 	float: left;
 	width: 137px;
