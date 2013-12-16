@@ -6,5 +6,8 @@
 <Extn ExtnWebLineNumber='' ExtnLineStatusCode=''/>
 </OrderLine>
 </OrderLines>
+    <OrderHoldTypes>
+        <OrderHoldType HoldType="" Status="" ResolverUserId=""  Modifyuserid="" />
+    </OrderHoldTypes>
 </Order>
 </OrderList>
