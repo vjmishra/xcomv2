@@ -100,7 +100,7 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		
 	}
 	
-	private Document formInputForOrderApprovedEmail(YFSEnvironment env,Element inputElement) throws YFSException, RemoteException {
+	/*private Document formInputForOrderApprovedEmail(YFSEnvironment env,Element inputElement) throws YFSException, RemoteException {
 
 		log.debug("XPXOrderApprovalService_formInputForOrderApprovedEmail()_InXML :" + SCXmlUtil.getString(inputElement));
 		
@@ -132,6 +132,6 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		env.clearApiTemplate("getOrderList");
 		
 		return orderListDoc;
-	}	
+	}*/	
 
 }

@@ -127,7 +127,7 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 					XPXUtils utilsObj=new XPXUtils();
 					utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
 				}catch(Exception ex) {
-					log.error("Exception occured on posting order confirmation email XML to  XPXPutOrderChangesInOrderConfirmationEmailQueue service "+ex.getMessage());
+					log.error("Exception occured on posting order confirmation email XML to XPXPutOrderChangesInOrderConfirmationEmailQueue service "+ex.getMessage());
 				}			
 			
 			} else if("OrderApproved".equals(lastOrderOperation)) {
