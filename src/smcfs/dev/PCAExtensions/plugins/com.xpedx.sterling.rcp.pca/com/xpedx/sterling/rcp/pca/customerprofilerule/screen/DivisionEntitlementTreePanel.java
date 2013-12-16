@@ -1,7 +1,3 @@
-/*
- * Created on Apr 14,2010
- *
- */
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
 import java.util.ArrayList;
@@ -103,6 +99,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 								for (int i = 0; i < apinames.length; i++) {
 									String apiname = apinames[i];
+									System.out.println("handleApi called on Panel for " + apiname);
 
 									if ("XPXGetCustomerList".equals(apiname)) {
 										Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
@@ -132,6 +129,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 					ctx.setFormId(getFormId());
 					ctx.setShowError(false);
 					ctx.setUserData("isRefreshReqd", String.valueOf(false));
+					System.out.println("Panel in expand listener callApi for XPXGetCustomerList...");
 					YRCPlatformUI.callApi(ctx, handler);
 				}
 			}
@@ -274,90 +272,57 @@ public class DivisionEntitlementTreePanel extends Composite implements
 	}
 
 	public void getTargetModelForUpdateAssignments() {
-		TreeItem[] item = tree.getItems();
-		this.iterateThroughChilds(item,false);
+		TreeItem[] items = tree.getItems();
+		this.iterateThroughChildren(items);
 	}
 
-	// function to iterate through tree & find the function based on their qualification for Addition or deletion of node
-	private void iterateThroughChilds(TreeItem[] item, boolean isParentChecked) {
-		ArrayList<String> deleteCustIdList= new ArrayList<String>();
-		ArrayList<String> addCustIdList= new ArrayList<String>();
+	// function to iterate through tree & create updates for Entitlements on ShipTos
+	private void iterateThroughChildren(TreeItem[] item) {
 
+		YRCPlatformUI.trace("DivisionEntitlementTreePanel.iterateThroughChildren - size of tree:" +item.length);
 		for (TreeItem treeItem : item) {
-			Element eleCust = (Element)treeItem.getData("data");
-			String strCustID = eleCust.getAttribute("CustomerID");
-			TreeItem iiparent=null;
 
-			iiparent=treeItem.getParentItem();
-			if(iiparent!=null){
-				if(iiparent.getChecked()){
-					isParentChecked=true;
-				}
-				else
-					isParentChecked=false;
+			// only want to update entitlement on ShipTo's and only for those that have changed
+			boolean changed = treeItem.getData("OldValue").equals("true") != treeItem.getChecked();
+			if (treeItem.getData("isShipTo") != null && (Boolean)treeItem.getData("isShipTo"))
+
+			if (changed && (treeItem.getData("isShipTo") != null) && (Boolean)treeItem.getData("isShipTo") ){
+				Element eleCust = (Element)treeItem.getData("data");
+				String strCustKey = eleCust.getAttribute("CustomerKey");
+
+				boolean entitlementEnabled = treeItem.getChecked();
+
+				myBehavior.createManageCustomerInput(strCustKey, entitlementEnabled);
+
+				// For now, assuming update will be successful and changing OldValue here
+				// - change this to wait for response and only change if update was successful ?
+				String newVal = entitlementEnabled ? "true" : "false";
+				treeItem.setData("OldValue", newVal);
 			}
 
-			if(isParentChecked){
-				if(treeItem.getData("OldValue").equals("true")){
-					deleteCustIdList.add(strCustID);
-				}
-			}
-			else {
-				if(treeItem.getData("OldValue").equals("true") && !treeItem.getChecked() ){
-					deleteCustIdList.add(strCustID);
+//			targetRulesModel = this.getTargetModel("XPXCustomerOut");
+//			if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
+//				targetRulesModel.setAttribute("CustomerLevel", "N");
+//			}
+//			else if ("Y".equalsIgnoreCase(getFieldValue("divisionEntitlement"))) {
+//				targetRulesModel.setAttribute("CustomerLevel", "Y");
+//			}
+//			else{
+//				YRCPlatformUI.showInformation("TITLE_KEY_DIVISION_ENTITLEMENT","MANDATORY_APPLY_DIVISION_ENTITLEMENT");
+//			}
+//			targetRulesModel.setAttribute("CustomerKey", customerKey);
 
-				} else if(!treeItem.getData("OldValue").equals("true") && treeItem.getChecked()){
-					addCustIdList.add(strCustID);
-				}
-			}
-
+			// Recurse on the children
 			TreeItem[] childItem = treeItem.getItems();
 			if(childItem.length==1){
 				if(YRCPlatformUI.isVoid(childItem[0].getText())){
 					continue;
 				}
 			}
-
-			this.iterateThroughChilds(childItem, isParentChecked);
-		}
-
-		if(deleteCustIdList!= null && deleteCustIdList.size()>0){
-			myBehavior.createManageAssignmentInput(deleteCustIdList, false); //---used to delete an entry from DB.
-		}
-		if(addCustIdList!=null && addCustIdList.size()>0){
-			myBehavior.createManageAssignmentInput(addCustIdList,true);   //---used to create an entry in  DB.
+			this.iterateThroughChildren(childItem);
 		}
 	}
 
-	// function to update child values after update action
-	public void resetTreeAssignedValues(List assignedList) {
-		TreeItem[] item = tree.getItems();
-		resetselectedValue(item,assignedList);
-	}
-
-	private void resetselectedValue(TreeItem[] item, List assignedList) {
-
-		for (TreeItem treeItem : item) {
-
-			Element eleCust = (Element)treeItem.getData("data");
-			String strCustID = eleCust.getAttribute("CustomerID");
-
-			if(assignedList.contains(strCustID)){
-				treeItem.setData("OldValue", "true");
-			}
-			else{
-				treeItem.setData("OldValue", "false");
-			}
-
-			TreeItem[] childItem = treeItem.getItems();
-			if(childItem.length==1){
-				if(YRCPlatformUI.isVoid(childItem[0].getText())){
-					continue;
-				}
-			}
-			this.resetselectedValue(childItem, assignedList);
-		}
-	}
 
 	public String getFormId() {
 		return FORM_ID;
@@ -372,12 +337,12 @@ public class DivisionEntitlementTreePanel extends Composite implements
 	}
 
 	public IYRCPanelHolder getPanelHolder() {
-		// TODO Complete getPanelHolder
+		// Complete getPanelHolder ?
 		return null;
 	}
 
 	public String getHelpId() {
-		// TODO Complete getHelpId
+		// Complete getHelpId ?
 		return null;
 	}
 
@@ -398,7 +363,8 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 			iItem.setText(orgName+" ("+CustomerID+")");
 			iItem.setData("data", eleCust);
-			if(myBehavior.isThisEntitled(eleCust)){ //TODO base on children? (but haven't expanded/loaded yet?)
+			if(myBehavior.isThisEntitled(eleCust)){
+				//TODO instead somehow base on children? but haven't expanded/loaded yet! Auto-expand?
 				iItem.setChecked(true);
 				iItem.setData("OldValue", "true");
 			}
@@ -436,7 +402,8 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 				String zip = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 
-				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
+//				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
+				String custDivision=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnCustomerDivision");
 				String legacyNo=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnLegacyCustNumber");
 				String billTosuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnBillToSuffix");
 				String shipToSuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipToSuffix");
@@ -446,18 +413,19 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 				// *** NOTE: this code was copied from CustomerAssignmentPanel for consistent display.
 				// Display changes made here should probably be made there and vice-versa.
+				// (but decided that the orgId is likely preferable to ShipFromBranch, e.g. 60 vs. 68
 
 				if("MC".equalsIgnoreCase(customerType)){
 					CustomerID=orgId;
 				}
 				else if("C".equalsIgnoreCase(customerType)){
-					 CustomerID=orgId;
+					CustomerID=orgId;
 				}
 				else if("B".equalsIgnoreCase(customerType)){
-					CustomerID=shipFromBranch+"-"+legacyNo+"-"+billTosuffix;
+					CustomerID=custDivision+"-"+legacyNo+"-"+billTosuffix;
 				}
 				else if("S".equalsIgnoreCase(customerType)){
-						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
+					CustomerID=custDivision+"-"+legacyNo+"-"+shipToSuffix;
 				}
 
 				if(add1 !=null && add1.trim().length()>0) {
@@ -483,6 +451,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 					iiItem.setText(CustomerID +", " +orgName+ ", " +address.toString());
 					if ("S".equalsIgnoreCase(customerType)) {
 						iiItem.setFont(JFaceResources.getFontRegistry().getBold(""));
+						iiItem.setData("isShipTo", Boolean.TRUE);
 					}
 				}else{
 					iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
