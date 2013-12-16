@@ -218,8 +218,8 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	        	if(item.getText().contains("-M")){
 	        		 if(item.getGrayed()== true){
 				         checked=true;
-			       	  	 item.setChecked(checked);
-			           	 item.setGrayed(false);
+			       	  	 item.setChecked(grayed);
+			           	 item.setGrayed(grayed);
 			           	 grayed=false;
 				        	}
 	        		 else{
@@ -251,7 +251,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	            }
 	            else{
 	            	 checked=false;            	
-	            	 item.setChecked(true);
+	            	 item.setChecked(false);
 	            	 item.setGrayed(true);
 	            	 grayed=true;
 	            }
@@ -368,7 +368,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			
 			iiparent=treeItem.getParentItem();
 			if(iiparent!=null){
-				if(iiparent.getChecked()){
+				if((iiparent.getChecked() && iiparent.getGrayed()==false) && treeItem.getGrayed()==false){
 					isParentChecked=true;
 				}
 				else
@@ -376,11 +376,11 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			}
 				
 			if(isParentChecked){
-				if(treeItem.getData("OldValue").equals("true")){
+				//if(treeItem.getData("OldValue").equals("true")){
 					//myBehavior.createManageAssignmentInput(strCustID, false);
 					//XB-638 Changes
 					deleteCustIdList.add(strCustID);
-				}
+				//}
 			}
 			else {
 				if(treeItem.getData("OldValue").equals("true") && !treeItem.getChecked() ){
