@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-<%@ taglib prefix="swcCustom" tagdir="/WEB-INF/tags/customtags" %>
-<%@ taglib prefix="xpedx" uri="xpedx" %> 
-
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -627,7 +624,7 @@
    <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
 <!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
-		 <xpedx:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 		
+		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:150px;">	    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
@@ -646,7 +643,7 @@
 				</s:form>
 				</div>
 				
-		</xpedx:dialogPanel> 
+		</swc:dialogPanel> 
 	
     </div><!-- end container  -->
     

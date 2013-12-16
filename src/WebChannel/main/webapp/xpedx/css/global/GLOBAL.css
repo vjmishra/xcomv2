@@ -29,7 +29,10 @@
  				
 =================================================================================================
 */
-
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+.swc-ext .x-window-ml {
+    padding-left: 0px;
+}
 #searchTips h2 {
     border-bottom: 1px solid #CCCCCC;
     color: black;
