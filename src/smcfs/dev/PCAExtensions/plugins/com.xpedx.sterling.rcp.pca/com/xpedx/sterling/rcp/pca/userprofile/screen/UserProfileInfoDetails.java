@@ -1479,8 +1479,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastModBy.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@ContactModifiedDate");
-		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@ContactModifiedDate");
+		tbd.setSourceBinding("UserList:/UserList/@ContactModifiedDate");
+		tbd.setTargetBinding("UserList:/UserList/@ContactModifiedDate");
 		tbd.setDataType("Timestamp");
 		tbd.setName("txtLastModDate");
 		txtLastModDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
