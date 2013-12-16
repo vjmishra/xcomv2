@@ -62,6 +62,12 @@
 
 <!-- END head-calls.php -->
 <title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
+ <style type="text/css" media="print">
+ 			#headerContainer { display: none; }
+			#t1-footer { display: none; }
+}
+</style>
+
 <meta name="DCSext.w_x_sc_count" content="1"/>
 <meta name="DCSext.w_x_itemtype" content="<s:property value='%{#session.itemType}' />" />
 <s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>

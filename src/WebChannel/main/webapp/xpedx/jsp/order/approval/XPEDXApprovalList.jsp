@@ -76,6 +76,7 @@
 --><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/xpedx-custom-carousel.js"></script>
 
 <script type="text/javascript">
+
 	$(function() {
 		$(".datepicker").datepicker({
 			showOn: 'button',
@@ -234,9 +235,12 @@
 	    <s:param name="searchFieldName" value="%{searchFieldName}"/>
 	    <s:param name="searchFieldValue" value="%{searchFieldValue}"/>
 	 </s:url>
-	<script type="text/javascript">
+	<script type="text/javascript">	 
+	
+	
 	function openNotePanel(id, actionValue,orderHeaderKey){
 		document.forms["approval"].elements["ReasonText"].value = "";
+       
 		DialogPanel.show(id);
 		svg_classhandlers_decoratePage();
 		/* if(actionValue == "Accept")
@@ -245,6 +249,8 @@
 		     document.forms["approval"].elements["ApprovalAction"].value = "1200";*/
 		 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 		}
+	
+	
 	//added for XBT - 322
 	var myMask;
 	function openNotePanelSetAction(actionValue){
@@ -618,9 +624,8 @@
    <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
 <!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
-		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 
-		
-		<div  class="xpedx-light-box" id="" style="width:300px; height:150px;">	    			
+		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 		
+		<div  class="xpedx-light-box" id="" style="width:400px; height:150px;">	    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
 					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="4" theme="simple" cssStyle="overflow:hidden;" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
@@ -629,19 +634,21 @@
 					<s:hidden name="ApprovalAction" value=""/>
 					<s:hidden name="#action.namespace" value="/order"/>
 					<s:hidden id="actionName" name="#action.name" value="approval"/>
-					<ul id="tool-bar" class="tool-bar-bottom">
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
+					<ul id="tool-bar" class="tool-bar-bottom" style="float:right">
+						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel'); return false;"><span>Cancel</span></a></li>
 						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
 						<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>
 						
 					</ul>
 				</s:form>
 				</div>
+				
 		</swc:dialogPanel> 
 	
     </div><!-- end container  -->
     
     <script type="text/javascript">
+   
   //added for jira 3542 - Order Date validation	
 	function isValidDate(dtStr)
 	{

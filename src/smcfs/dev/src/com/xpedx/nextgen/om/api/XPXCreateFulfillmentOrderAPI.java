@@ -68,23 +68,7 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		}
 		if (orderExtnElem.hasAttribute("ExtnOrderConfirmationEmailSentFlag")) {
 			orderExtnElem.removeAttribute("ExtnOrderConfirmationEmailSentFlag");
-		}			
-		
-		Document cOrderDoc = (Document)env.getTxnObject("CustomerOrderData");
-		YFCDocument yfccOrderDoc = YFCDocument.getDocumentFor(cOrderDoc);
-		YFCElement cOrderEle = yfccOrderDoc.getDocumentElement();
-		String cOrderHeaderKey = cOrderEle.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY);
-		
-		YFCElement cOrderExtnEle = cOrderEle.getChildElement("Extn");
-		String lastOrderOperation = null;
-		String orderEmailConfirmationSentFlag = null;		
-		if (cOrderExtnEle.hasAttribute("ExtnLastOrderOperation")) {
-			lastOrderOperation = cOrderExtnEle.getAttribute("ExtnLastOrderOperation");
-			
-		}
-		if (cOrderExtnEle.hasAttribute("ExtnOrderConfirmationEmailSentFlag")) {
-			orderEmailConfirmationSentFlag = cOrderExtnEle.getAttribute("ExtnOrderConfirmationEmailSentFlag");			
-		}
+		}		
 		
 		// Set createOrder API Output Template
 		env.setApiTemplate(XPXLiterals.CREATE_ORDER_API, createOrderTemplate);
@@ -99,62 +83,15 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		// In case of failure ignore the Exception and proceed with next steps.
 		try {
 			api.executeFlow(env, XPXLiterals.SERVICE_POST_LEGACY_ORDER_CREATE, docCreateOrderOutput);
-		} catch (Exception e) {
-			
+		
+		} catch (Exception e) {			
 			log.error("XPXCreateFulfillmentOrderAPI - Exception occured on posting XML to Legacy");			
-			prepareErrorObject(e, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);
-			
-			if(e instanceof YFSException) {
-				YFSException yfe = (YFSException)e;
-				if(log.isDebugEnabled()) {
-					log.debug("XPXCreateFulfillmentOrderAPI - YFSException error code on posting XML to Legacy :["+yfe.getErrorCode()+"]");
-				}
-				if("javax.xml.ws.soap.SOAPFaultException".equals(yfe.getErrorCode())) {
-					if("N".equals(orderEmailConfirmationSentFlag)) {
-						if(lastOrderOperation != null && lastOrderOperation.trim().length()>0) {
-							lastOrderOperation=lastOrderOperation.trim();
-							if ("OrderPlacement".equals(lastOrderOperation) || "OrderEdit".equals(lastOrderOperation)) {
-								//createOrderEmailDocument();
-								if(log.isDebugEnabled()) {
-									log.debug("Inside XPXCreateFulfillmentOrderAPI class.");
-									log.debug("InputXML-XPXPutOrderChangesInOrderConfirmationEmailQueue service to send Order Confirmation Email: "+SCXmlUtil.getString(cOrderEle.getOwnerDocument().getDocument()));
-								}
-								
-								try {
-									api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderEle.getOwnerDocument().getDocument());
-									orderEmailConfirmationSentFlag="Y";	
-									XPXUtils utilsObj = new XPXUtils();
-									utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
-								}catch(Exception ex) {
-									log.error("Exception occured on posting order confirmation email XML to  XPXPutOrderChangesInOrderConfirmationEmailQueue service "+ex.getMessage());
-								}								
-								
-							
-							} else if("OrderApproved".equals(lastOrderOperation)) {							
-								//Forming an input document to send Order Approved Email [Input for YCD_Order_Approval_Email_8.5 service]
-								XPXUtils utilsObj = new XPXUtils();
-								YFCDocument orderApprovedEmailInputDoc = utilsObj.createOrderApprovedEmailInputDoc(cOrderEle);
-								if(log.isDebugEnabled()) {
-									log.debug("Inside XPXCreateFulfillmentOrderAPI class.");
-									log.debug("InputXML-YCD_Order_Approval_Email_8.5 service to send Order Approved Email: "+SCXmlUtil.getString(orderApprovedEmailInputDoc.getDocument()));
-								}
-								try {
-									api.executeFlow(env, "YCD_Order_Approval_Email_8.5", orderApprovedEmailInputDoc.getDocument());
-									orderEmailConfirmationSentFlag="Y";								
-									utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
-								}catch(Exception ex) {
-									log.error("Exception occured on posting order approved email XML to YCD_Order_Approval_Email_8.5 service: "+ex.getMessage());
-								}								
-								
-							}
-						}
-					}
-				}
-			}			
-            return inXML;
+			prepareErrorObject(e, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);			          
 		}
 		
-		log.info("XPXCreateFulfillmentOrderAPI-OutXML:" + SCXmlUtil.getString(inXML));
+		if (log.isDebugEnabled()) {
+			log.debug("XPXCreateFulfillmentOrderAPI-OutXML:" + SCXmlUtil.getString(inXML));
+		}
 		return  inXML;
 	}
 	

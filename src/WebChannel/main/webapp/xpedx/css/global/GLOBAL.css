@@ -1391,8 +1391,9 @@ h6 {
 }
 .swc-ext .x-window-ml {
   /*   background: url("../../../ext/resources/images/default/window/left-right.png") repeat-y scroll 0 0 transparent; */
-    padding-left: 6px;
+    padding-left: 0px;
 }
+
 .swc-ext .x-window-mr {
    /*  background: url("../../../ext/resources/images/default/window/left-right.png") repeat-y scroll right 0 transparent; */
     padding-right: 6px;
@@ -10596,15 +10597,12 @@ input.error{
 .item-lnk:visited{
 	color: #996633;
 }
+
 <!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
-#approvalNotesPanel .x-window-ml {
-	padding-left: 0px;
+.swc-ext .x-window-ml {
+    padding-left: 0px;
 }
-#approvalNotesPanel .x-panel-nofooter {
-	display: none;
-}
-.swc-ext .x-window-mc{	
-    border: 0 solid #99BBE8;
-    margin: 0;
-    padding: 0
-}
+
+
+
+
