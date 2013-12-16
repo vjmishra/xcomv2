@@ -29,10 +29,7 @@
  				
 =================================================================================================
 */
-<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
-.swc-ext .x-window-ml {
-    padding-left: 0px;
-}
+
 #searchTips h2 {
     border-bottom: 1px solid #CCCCCC;
     color: black;
@@ -1394,8 +1391,9 @@ h6 {
 }
 .swc-ext .x-window-ml {
   /*   background: url("../../../ext/resources/images/default/window/left-right.png") repeat-y scroll 0 0 transparent; */
-    padding-left: 6px;
+    padding-left: 0px;
 }
+
 .swc-ext .x-window-mr {
    /*  background: url("../../../ext/resources/images/default/window/left-right.png") repeat-y scroll right 0 transparent; */
     padding-right: 6px;
@@ -10600,7 +10598,10 @@ input.error{
 	color: #996633;
 }
 
-
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+.swc-ext .x-window-ml {
+    padding-left: 0px;
+}
 
 
 
