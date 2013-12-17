@@ -98,35 +98,8 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 					holdTypeElem.setAttribute("Status", "1300");
 					holdTypeElem.setAttribute("ResolverUserId", getWCContext().getLoggedInUserId());
 					
-					Element changeOrderExtnElem = SCXmlUtil.getChildElement(changeOrderInputElem, "Extn");			
-					StringBuffer selectedAddnlEmailAddrBuf = new StringBuffer("");
-					List<String> approvedEmailAddressList = null;
-					if(addnlEmailAddrList!=null) {
-						List<String> editOrderAddnlEmailAddressList=getAddnlEmailAddrList();
-						if(getSelectedAddnlEmailAddrList()!=null) {
-							editOrderAddnlEmailAddressList.addAll(getSelectedAddnlEmailAddrList());
-							approvedEmailAddressList = new ArrayList<String>(new HashSet<String>(editOrderAddnlEmailAddressList));
-						
-						} else {
-							approvedEmailAddressList = new ArrayList<String>(editOrderAddnlEmailAddressList);
-						}						
-					
-					} else {
-						if(getSelectedAddnlEmailAddrList()!=null) {
-							approvedEmailAddressList = new ArrayList<String>(new HashSet<String>(getSelectedAddnlEmailAddrList()));
-						}
-					}
-					
-					if(approvedEmailAddressList!=null && approvedEmailAddressList.size()>0) {
-						for(int i=0; i<approvedEmailAddressList.size();i++) {
-							String addnlEmailAddr = approvedEmailAddressList.get(i);
-							if(YFCCommon.isVoid(addnlEmailAddr)) {
-								continue;
-							}
-							selectedAddnlEmailAddrBuf.append(addnlEmailAddr).append(";");							
-						}					
-					}
-					changeOrderExtnElem.setAttribute("ExtnAddnlEmailAddr",selectedAddnlEmailAddrBuf.toString());
+					Element changeOrderExtnElem = SCXmlUtil.getChildElement(changeOrderInputElem, "Extn");
+					changeOrderExtnElem.setAttribute("ExtnOrderEditCustContactID", wcContext.getLoggedInUserId());
 					changeOrderExtnElem.setAttribute("ExtnLastOrderOperation", "OrderApproved");
 					changeOrderExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "N");
 					outElement = (Element) WCMashupHelper.invokeMashup(APPROVE_ORDER_SUMMARY_MASHUP, changeOrderInputElem, wcContext.getSCUIContext());
@@ -415,7 +388,9 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			for (String addr: addrs){
 				extnAddnlEmailAddrs.append(addr.trim() + ",");
 			}
+			
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR, extnAddnlEmailAddrs.toString());
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR, extnAddnlEmailAddrs.toString());
 			//valueMap.put("/Customer/CustomerContactList/CustomerContact/Extn/@ExtnAddnlEmailAddrs",extnAddnlEmailAddrs.toString());
 		}
 		if(custContRefKey!=null && custContRefKey.length()>0)

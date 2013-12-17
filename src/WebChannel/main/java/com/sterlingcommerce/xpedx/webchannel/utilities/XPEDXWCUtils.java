@@ -61,9 +61,9 @@ import com.sterlingcommerce.webchannel.utilities.CommonCodeUtil;
 import com.sterlingcommerce.webchannel.utilities.UserPreferenceUtil;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
@@ -5558,10 +5558,35 @@ public class XPEDXWCUtils {
 					billToCustomer.setExtnCustomerClass(parentExtnElem.getAttribute("ExtnCustomerClass"));//XBT-265
 
 					billToCustomer.setExtnDefaultStockedItemView(parentExtnElem.getAttribute("ExtnDefaultStockedItemView")); //eb-2297
-					if (billToCustomer.getExtnDefaultStockedItemView() == null) {
+					if (billToCustomer.getExtnDefaultStockedItemView() == null)
+					{
 						billToCustomer.setExtnDefaultStockedItemView(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ALL);
 					}
-
+					Element customerExtnListElem = SCXmlUtil.getChildElement(parentExtnElem, "XPXCustomerExtnListList");
+					if(customerExtnListElem!=null)
+					{
+						List<Element> billToCustExtnList = SCXmlUtil.getChildren(customerExtnListElem, "XPXCustomerExtnList");
+						if(billToCustExtnList!=null && billToCustExtnList.size()>0)
+						{
+							StringBuilder billToEmailAddrs=new StringBuilder();
+							String billToEmailAddr=null;
+							int listCnt=0;
+							for(Element billtoCustExtnElem:billToCustExtnList)
+							{
+								billToEmailAddr=billtoCustExtnElem.getAttribute("ExtnListValue");
+								if(!YFCCommon.isVoid(billToEmailAddr))
+								{
+									billToEmailAddrs.append(billToEmailAddr);
+									if(listCnt!=(billToCustExtnList.size()-1))
+									{
+										billToEmailAddrs.append(",");
+									}								
+								}
+								++listCnt;
+							}
+							billToCustomer.setBillToEmailAddrs(billToEmailAddrs.toString());
+						}
+					}
 					/* XB-763 Code Changes Start */
 					String extnMfgItemFlag = parentExtnElem.getAttribute("ExtnMfgItemFlag");
 					String extnCustomerItemFlag = parentExtnElem.getAttribute("ExtnCustomerItemFlag");
