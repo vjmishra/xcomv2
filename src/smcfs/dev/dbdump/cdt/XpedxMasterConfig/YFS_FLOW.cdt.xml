@@ -4577,6 +4577,14 @@
     Modifyts="2013-12-12T05:52:37-05:00" Modifyuserid="admin"
     OwnerKey="DEFAULT" ProcessTypeKey="ORDER_FULFILLMENT"
     SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI"
+    Createts="2013-12-17T13:58:09-05:00" Createuserid="admin"
+    FlowGroupName="XPXCustomerUtils" FlowKey="201312171358093057031"
+    FlowName="XPXManageCustomersAPIService" FlowType="00"
+    GraphUIKey="201312171358113057034" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2013-12-17T14:00:07-05:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 <Flow Createprogid="XMLMigrator" Createts="2011-07-14T14:41:43-04:00"
     Createuserid="SYSTEM" FlowGroupName="DefaultAgentGroup"
     FlowKey="ACCEPT_WAVE" FlowName="ACCEPT_WAVE" FlowType="01"
