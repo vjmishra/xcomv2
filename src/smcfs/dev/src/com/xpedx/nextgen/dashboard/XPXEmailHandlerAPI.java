@@ -276,21 +276,22 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
         // SCXmlUtil.getString(inputElement));
 
         // get the email ids to be sent in to and cc list
-        Document getCCListDoc = getCCList(env, inputElement);
+        String customerContactID_orderPlace=inputElement.getAttribute("CustomerContactID");
+        Document getCustomerContactListDoc = getCustomerContactList(env, customerContactID_orderPlace);
         // Changes made on 18/02/2011 to handle if Customer Contact List
         // Document is null.
-        if (getCCListDoc != null) {
+        if (getCustomerContactListDoc != null) {
             if(yfcLogCatalog.isDebugEnabled()){
-                yfcLogCatalog.debug("************sendEmail : getCCListDoc="+SCXmlUtil.getString(getCCListDoc));
+                yfcLogCatalog.debug("************sendEmail : getCustomerContactListDoc="+SCXmlUtil.getString(getCustomerContactListDoc));
             }
-            Element getCustomerContactElement = (Element) getCCListDoc
+            Element getCustomerContactElement = (Element) getCustomerContactListDoc
             .getElementsByTagName("CustomerContact").item(0);
             String strToEmailid = "";
 
             String isBuyerSalesRep = SCXmlUtil.getXpathAttribute(
                     getCustomerContactElement, "./Extn/@ExtnIsSalesRep");
         /*** Start of Code Modified for JIra 102 ,JIra 165 *******/
-            Element getCustomerElement = (Element) getCCListDoc
+            Element getCustomerElement = (Element) getCustomerContactListDoc
             .getElementsByTagName("Customer").item(0);
 
 
@@ -512,20 +513,44 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
             int length = extnElementList.getLength();
             if (length != 0) {
                 Element extnElement = (Element) extnElementList.item(0);
-                if(extnCustLinePOLbl!=null &&  !extnCustLinePOLbl.trim().equals(""))
-                {
-                	extnElement.setAttribute("ExtnCustLinePOLbl", extnCustLinePOLbl);
+                if(extnCustLinePOLbl!=null &&  !extnCustLinePOLbl.trim().equals("")) {
+                	extnElement.setAttribute("ExtnCustLinePOLbl", extnCustLinePOLbl); 
                 }
-                if(extnCustLineAccLbl!=null &&  !extnCustLineAccLbl.trim().equals(""))
-                {
-                	extnElement.setAttribute("ExtnCustLineAccLbl", extnCustLineAccLbl);
+                if(extnCustLineAccLbl!=null &&  !extnCustLineAccLbl.trim().equals("")) {
+                	extnElement.setAttribute("ExtnCustLineAccLbl", extnCustLineAccLbl); 
                 }
-                String addlnEmailAddresses = SCXmlUtil.getXpathAttribute(
-                        extnElement, "./@ExtnAddnlEmailAddr");
+                
+                String emailid_customerContactID_orderEdit=null;
+                if("OrderEdit".equals(cOrderOperation)) {                	
+                	String customerContactID_orderEdit=extnElement.getAttribute("ExtnOrderEditCustContactID");                	
+                	if(customerContactID_orderPlace!=null && customerContactID_orderPlace.length()>0 &&
+                	   customerContactID_orderEdit!=null && customerContactID_orderEdit.length()>0 && 
+                	   !customerContactID_orderPlace.equals(customerContactID_orderEdit)) {
+                		
+                		Document custContact_OrdEditOutDoc=getCustomerContactList(env, customerContactID_orderEdit);
+                		if(custContact_OrdEditOutDoc!=null) {
+                			String receiveOrderConfirmationFlag=SCXmlUtil.getXpathAttribute(custContact_OrdEditOutDoc.getDocumentElement(),"/CustomerContact/Extn/@ExtnOrderConfEmailFlag");
+                			if("Y".equalsIgnoreCase(receiveOrderConfirmationFlag)) {
+                				emailid_customerContactID_orderEdit=SCXmlUtil.getXpathAttribute(custContact_OrdEditOutDoc.getDocumentElement(), "./CustomerContact/@EmailID");
+                                
+                            }
+                		}                		
+                	}
+                }
+                
+                String addlnEmailAddresses = SCXmlUtil.getXpathAttribute(extnElement, "./@ExtnAddnlEmailAddr");
                 if (addlnEmailAddresses.indexOf(";") > -1) {
                     addlnEmailAddresses = addlnEmailAddresses.replace(";", ",");
-                    yfcLogCatalog.debug("addln email addresses ::"
-                            + addlnEmailAddresses);
+                    yfcLogCatalog.debug("addln email addresses ::"+ addlnEmailAddresses);
+                }               
+                
+                if(emailid_customerContactID_orderEdit!=null && emailid_customerContactID_orderEdit.trim().length()>0) {
+                	if(addlnEmailAddresses!=null && addlnEmailAddresses.trim().length()>0) {
+                		addlnEmailAddresses.concat(emailid_customerContactID_orderEdit).concat(",");
+                	} else {
+                		addlnEmailAddresses=emailid_customerContactID_orderEdit;
+                	}
+                	
                 }
                 extnElement.setAttribute("ExtnAddnlEmailAddr",
                         addlnEmailAddresses);
@@ -611,61 +636,30 @@ public class XPXEmailHandlerAPI implements YIFCustomApi {
      * @throws RemoteException
      * @throws YFSException
      */
-
-    private Document getCCList(YFSEnvironment env, Element inputElement)
-    throws ParserConfigurationException, FactoryConfigurationError,
-    YIFClientCreationException, YFSException, RemoteException {
-
-
-        // Prepare Input XML for API getCustomerContactList
-
+ 
+    private Document getCustomerContactList(YFSEnvironment env, String customerContactID) throws ParserConfigurationException, FactoryConfigurationError, YIFClientCreationException, YFSException, RemoteException {
+    	
+    	// Prepare Input XML for API getCustomerContactList 
         /**
          * <CustomerContact CustomerContactID="BillToB2BUser"> <Customer
          * CustomerID="" OrganizationCode=""/> </CustomerContact>
          */
         Document getCCListDoc = null;
-
-        Document docCustomerContact = SCXmlUtil.getDocumentBuilder()
-        .newDocument();
-
-        Element customerContact = docCustomerContact
-        .createElement("CustomerContact");
-
-
-        docCustomerContact.appendChild(customerContact);
-
-        String strCustomerContactID = inputElement.getAttribute("CustomerContactID"); //Changes for JIRA 3157
-
-        /*Changes done for order confirmation email - Issue Start*/
-
-        //String strCustomerContactID = SCXmlUtil.getXpathAttribute(
-        //inputElement, "./CustomerContact/@CustomerContactID");
-
-
-        /*Changes done for order confirmation email - Issue End*/
-
-
-
-        if (strCustomerContactID != null && strCustomerContactID.trim().length() > 0) {
-            customerContact.setAttribute("CustomerContactID",
-                    strCustomerContactID);
-
-            yfcLogCatalog.debug("input xml to getCustomerContactList api :: "
-                    + SCXmlUtil.getString(docCustomerContact));
-
-
+        Document customerContactDoc = SCXmlUtil.getDocumentBuilder().newDocument();
+        Element customerContactElement = customerContactDoc.createElement("CustomerContact"); 
+        customerContactDoc.appendChild(customerContactElement); 
+        
+        if (customerContactID != null && customerContactID.trim().length()>0) {
+        	customerContactElement.setAttribute("CustomerContactID", customerContactID);    
+ 
+            yfcLogCatalog.debug("Input xml to getCustomerContactList api :: "+ SCXmlUtil.getString(customerContactDoc)); 
             api = YIFClientFactory.getInstance().getApi();
-            env.setApiTemplate("getCustomerContactList",
-                    getCustomerContactListTemplate);
-
-            getCCListDoc = api.getCustomerContactList(env, docCustomerContact);
-
-            yfcLogCatalog.debug("getCCListDoc ::"
-                    + SCXmlUtil.getString(getCCListDoc));
-
-        }
-        // invoke getCustomerContactList with template
-
+            env.setApiTemplate("getCustomerContactList",getCustomerContactListTemplate); 
+            getCCListDoc = api.getCustomerContactList(env, customerContactDoc);
+            env.clearApiTemplate("getCustomerContactList");
+            yfcLogCatalog.debug("getCustomerContactListDoc ::"+ SCXmlUtil.getString(getCCListDoc));
+             
+        }        
         return getCCListDoc;
     }
 

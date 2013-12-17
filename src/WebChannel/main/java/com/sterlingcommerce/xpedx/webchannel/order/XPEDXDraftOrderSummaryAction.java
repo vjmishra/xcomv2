@@ -892,7 +892,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		
 		//addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
 		if(xpedxCustomerContactInfoBean.getAddEmailID()!=null && xpedxCustomerContactInfoBean.getAddEmailID().trim()!=""){
-		addnlEmailAddrs = xpedxCustomerContactInfoBean.getAddEmailID();
+			addnlEmailAddrs = xpedxCustomerContactInfoBean.getAddEmailID();
 		}else{
 			addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
 		}
@@ -935,6 +935,18 @@ END of JIRA 3382*/
 			for (int i = 0; i < emailListSplit.length; i++) {
 				addSelectedAddnlEmailAddrList(emailListSplit[i]);
 				addAddnlEmailAddrList(getSelectedAddnlEmailAddrList());
+			}
+		}
+		
+		shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		String billToEmailAddrs=shipToCustomer.getBillTo().getBillToEmailAddrs();
+		if (!YFCCommon.isVoid(billToEmailAddrs)){
+			String[] billToEmailAddrsSplit=billToEmailAddrs.split(",");
+			if(billToEmailAddrsSplit!=null && billToEmailAddrsSplit.length>0) {
+				billToEmailAddrsSet=new HashSet<String>();
+				for (int i = 0; i < billToEmailAddrsSplit.length; i++) {
+					billToEmailAddrsSet.add(billToEmailAddrsSplit[i]);
+				}
 			}
 		}
 		//Set addnlPoNumberList with empty ArrayList to avoid error on Select PO # dropdown
@@ -1370,7 +1382,7 @@ END of JIRA 3382*/
 	protected String deliveryCutOffTime = "";
 	//Added For Jira 3465
 	protected String deliveryInfo = "";
-	
+	private Set<String> billToEmailAddrsSet;
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
 	
@@ -1665,6 +1677,14 @@ END of JIRA 3382*/
 				return split[0];
 		}
 		return qty;
+	}
+	
+	public Set<String> getBillToEmailAddrsSet() {
+		return billToEmailAddrsSet;
+	}
+
+	public void setBillToEmailAddrsSet(Set<String> billToEmailAddrsSet) {
+		this.billToEmailAddrsSet = billToEmailAddrsSet;
 	}
 	
 	/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/

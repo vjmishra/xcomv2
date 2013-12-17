@@ -12,7 +12,11 @@
 		              OrganizationCode="" OwnerOrganizationCode=""  Status="" AggregateStatus="" RelationshipType="" CustomerLevel="" Vertical="">
 		              <ParentCustomer CustomerID="" CustomerKey="" OrganizationCode="" Status="" AggregateStatus="" ParentCustomerKey="">
 		              	<BuyerOrganization OrganizationName="" OrganizationKey=""/>
-	 	 	    	  	<Extn></Extn>
+	 	 	    	  	<Extn>
+	 	 	    	  		<XPXCustomerExtnListList>
+	 	 	    	  			<XPXCustomerExtnList CustomerExtnListKey="" CustomerKey="" ExtnListValue=""/>
+	 	 	    	  		</XPXCustomerExtnListList>
+	 	 	    	  	</Extn>
 		              </ParentCustomer>
 		              <BuyerOrganization  
 					   		OrganizationCode=""  OrganizationName="" OrganizationKey="" 

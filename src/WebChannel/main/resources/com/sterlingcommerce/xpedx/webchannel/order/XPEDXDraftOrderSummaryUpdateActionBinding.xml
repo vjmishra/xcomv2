@@ -17,7 +17,7 @@
     <entry key="rushOrdrFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnRushOrderFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnRushOrderFlag</entry>
  	<entry key="extnWebHoldFlag">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnWebHoldFlag,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnWebHoldFlag</entry>
  
- 	<entry key="emailAddresses">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr</entry>
+ 	<entry key="emailAddresses">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr,XPEDXDraftOrderSummaryOnOrderPlace:/Order/Extn/@ExtnAddnlEmailAddr,XPEDXDraftOrderSummaryUpdateOnApproveOrder:/Order/Extn/@ExtnAddnlEmailAddr</entry>
  	 <!-- 
  	<entry key="#parameters.extnPricingUOM">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Extn/@ExtnPricingUOM,XPEDXDraftOrderSummaryOnOrderPlace:/Order/OrderLines/OrderLine[]/Extn/@ExtnPricingUOM</entry>
     <entry key="#parameters.pricingUOMUnitPrice">XPEDXDraftOrderSummaryUpdateOnOrderPlace:/Order/OrderLines/OrderLine[]/Extn/@ExtnUnitPrice,XPEDXDraftOrderSummaryOnOrderPlace:/Order/OrderLines/OrderLine[]/Extn/@ExtnUnitPrice</entry>

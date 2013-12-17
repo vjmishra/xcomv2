@@ -72,7 +72,9 @@ public class UpdateEditOrderEmailAttribs implements YIFCustomApi {
 								Element changeOrderInputExtnElem = SCXmlUtil.createChild(changeOrderInputDoc.getDocumentElement(), XPXLiterals.E_EXTN);
 								changeOrderInputExtnElem.setAttribute("ExtnLastOrderOperation", "OrderEdit");
 								changeOrderInputExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "N");
-								env.setTxnObject("CustomerOrderEditDetails", changeOrderInputDoc);								
+								changeOrderInputExtnElem.setAttribute("ExtnAddnlEmailAddr",editOrderExtnInputElem.getAttribute("ExtnAddnlEmailAddr"));
+								changeOrderInputExtnElem.setAttribute("ExtnOrderEditCustContactID",editOrderExtnInputElem.getAttribute("ExtnOrderEditCustContactID"));
+								env.setTxnObject("CustomerOrderEditDetails", changeOrderInputDoc);							
 								if (log.isDebugEnabled()) {
 									log.debug("Inside updateEditOrderEmailAttributes method of UpdateEditOrderEmailAttribs class. changeOrder_InputXML: "+ SCXmlUtil.getString(changeOrderInputDoc));
 								}

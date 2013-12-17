@@ -399,7 +399,15 @@ public String getShipToDivdeliveryInfo() {
 	private String extnPriceWareHouse;
 	private String shipToOrgExtnApplyMinOrderBrands;
 	private String customerLevel;
-
+	private String billToEmailAddrs;
+	
+	public String getBillToEmailAddrs() {
+		return billToEmailAddrs;
+	}
+	public void setBillToEmailAddrs(String billToEmailAddrs) {
+		this.billToEmailAddrs = billToEmailAddrs;
+	}
+	
 	public String getShipToOrgExtnApplyMinOrderBrands() {
 		return shipToOrgExtnApplyMinOrderBrands;
 	}

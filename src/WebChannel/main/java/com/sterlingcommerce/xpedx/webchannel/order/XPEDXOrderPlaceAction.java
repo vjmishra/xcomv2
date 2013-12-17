@@ -222,9 +222,14 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			Element isPendingApproval = null;
 			customerContactID=wcContext.getLoggedInUserId();
 			String approveOrderFlag="false";
-			//Commented this line as it is causing exception. Looks like the mashup is not defined.
+			Object addnlEmailAddrs=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR);
+			if(addnlEmailAddrs!=null && addnlEmailAddrs.toString().trim().length()>0) {
+				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+				xpedxCustomerContactInfoBean.setAddEmailID(addnlEmailAddrs.toString());
+			}
+			XPEDXWCUtils.removeObectFromCache(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR);
 			if (isDraftOrder()) {
-//				prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
+				//prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
 				Document shipToCustomerDoc=createCustomerDocument();
 				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 				if(YFCCommon.isVoid(editedOrderHeaderKey)){
@@ -344,7 +349,11 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 							changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
 							//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
 						}
-						
+						Element orderExtnElement = SCXmlUtil.getChildElement(orderDetailDocument.getDocumentElement(), "Extn");
+						if(orderExtnElement!=null)
+						{
+							orderExtnElement.setAttribute("ExtnOrderEditCustContactID", wcContext.getLoggedInUserId());
+						}
 						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
 
 						if(orderUpdateObj != null)
