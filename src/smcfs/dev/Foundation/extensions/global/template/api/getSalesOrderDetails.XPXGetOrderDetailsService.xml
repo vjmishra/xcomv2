@@ -101,7 +101,7 @@
         </OrderLine>
     </OrderLines>
     <OrderHoldTypes>
-        <OrderHoldType HoldType="" Status="" ResolverUserId=""  Modifyuserid="" />
+        <OrderHoldType HoldType="" Status="" ResolverUserId=""  Modifyuserid="" Modifyts="" />
     </OrderHoldTypes>
     <OrderLineRelationships/>
     <OrderStatuses>
