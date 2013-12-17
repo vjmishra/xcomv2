@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -76,8 +77,16 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 	private void createTreeStructure(Composite composite) {
 
+		Label lblTreeTitle = new Label(composite, SWT.CENTER);
+		GridData lblGridData = new GridData();
+		lblGridData.verticalAlignment = 16777216;
+		lblGridData.grabExcessHorizontalSpace = true;
+		lblTreeTitle.setLayoutData(lblGridData);
+		lblTreeTitle.setText("This tree shows whether the Apply Division Entitlement field is true for each Ship-To of this customer.");
+
 		tree = new Tree (composite, SWT.CHECK|SWT.NONE);
-		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		tree.setLayoutData(gridData);
 
 		// Expand listener to add functionality on expanding the tree like Calling API & Setting data to Tree Items
 		tree.addListener(SWT.Expand, new Listener()
@@ -90,7 +99,6 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 					//--handleApiCompletion function used to call API & fetch the response from API
 					public void handleApiCompletion(YRCApiContext ctx) {
-						System.out.println("ctx:"+ctx);
 						if (ctx.getInvokeAPIStatus() > 0){
 							if (myBehavior.getOwnerForm().isDisposed()) {
 								YRCPlatformUI.trace("Page is Disposed");
@@ -99,7 +107,6 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 								for (int i = 0; i < apinames.length; i++) {
 									String apiname = apinames[i];
-									System.out.println("handleApi called on Panel for " + apiname);
 
 									if ("XPXGetCustomerList".equals(apiname)) {
 										Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
@@ -129,7 +136,6 @@ public class DivisionEntitlementTreePanel extends Composite implements
 					ctx.setFormId(getFormId());
 					ctx.setShowError(false);
 					ctx.setUserData("isRefreshReqd", String.valueOf(false));
-					System.out.println("Panel in expand listener callApi for XPXGetCustomerList...");
 					YRCPlatformUI.callApi(ctx, handler);
 				}
 			}
@@ -295,22 +301,11 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				myBehavior.createManageCustomerInput(strCustKey, entitlementEnabled);
 
 				// For now, assuming update will be successful and changing OldValue here
-				// - change this to wait for response and only change if update was successful ?
+				//  Change this to wait for response and only change if update was successful?
+				//  - this would require the new set-based API to return updated cust records
 				String newVal = entitlementEnabled ? "true" : "false";
 				treeItem.setData("OldValue", newVal);
 			}
-
-//			targetRulesModel = this.getTargetModel("XPXCustomerOut");
-//			if("N".equalsIgnoreCase(getFieldValue("divisionEntitlement"))){
-//				targetRulesModel.setAttribute("CustomerLevel", "N");
-//			}
-//			else if ("Y".equalsIgnoreCase(getFieldValue("divisionEntitlement"))) {
-//				targetRulesModel.setAttribute("CustomerLevel", "Y");
-//			}
-//			else{
-//				YRCPlatformUI.showInformation("TITLE_KEY_DIVISION_ENTITLEMENT","MANDATORY_APPLY_DIVISION_ENTITLEMENT");
-//			}
-//			targetRulesModel.setAttribute("CustomerKey", customerKey);
 
 			// Recurse on the children
 			TreeItem[] childItem = treeItem.getItems();

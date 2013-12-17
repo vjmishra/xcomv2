@@ -30,7 +30,7 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 		this.page = divisionEntitlementTreePanel;
 		this.inputElement=((YRCEditorInput) inputObject).getXml();
 
-		Element generalInfo= parentObj.getBehavior().getLocalModel("XPXCustomerIn"); //TODO what for? need?
+		Element generalInfo= parentObj.getBehavior().getLocalModel("XPXCustomerIn"); // need?
 		setModel("XPXCustomerIn",generalInfo);
 
 		customerKey = YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey");
@@ -43,7 +43,6 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 	}
 
 	private void getEntitlementsFromServer(String customerKey) {
-		System.out.println("Behavior callApi XPXGetCustomerList from getEntitlementsFromServer for customerKey: " + customerKey);
 		if(!YRCPlatformUI.isVoid(customerKey))
 		{
 			callApi("XPXGetCustomerList", YRCXmlUtils.createFromString("<Customer  CustomerKey='" + YRCXmlUtils.getAttribute(this.inputElement, "CustomerKey") + "' />"),null);
@@ -56,7 +55,6 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 		ctx.setApiName(apiName);
 		ctx.setInputXml(inputXml);
 		if (!page.isDisposed())
-			System.out.println("Behavior callApi for " +apiName+ "...");
 			callApi(ctx, page);
 	}
 
@@ -75,20 +73,18 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 
 				for (int i = 0; i < apinames.length; i++) {
 					String apiname = apinames[i];
-					System.out.println("handleApi called on Behavior for " + apiname);
+					//System.out.println("handleApi called on Behavior for " + apiname);
 
 					if ("XPXGetCustomerList".equals(apiname)) {
-						System.out.println("API XPXGetCustomerList called, invoke getChildList()...");
-
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXGetImmediateChildCustomerListService",outXml);
 						getChildList();    //--function used to set the values of child nodes in Tree structure
 
-					} else if ("manageCustomer".equals(apiname)) {
-						//[can't add to tree like when first opened page using  getEntitlementsFromServer(customerKey);
-						//TODO reset updated element's OldValue? Currently assuming update will work
+					} else if ("XPXManageCustomersAPIService".equals(apiname)) {
+						//TODO update element's OldValue? Currently assuming update will work
+						// (new set-based API doesn't return updated cust records - address?)
 
-						//((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false); need? NPE?
+						//YRCDesktopUI.getCurrentPart().showBusy(false);
 					} else {
 						YRCPlatformUI.showWarning("DivisionEntitlementTreePanel", "Unexpected API response - API:" + apiname);
 					}
@@ -124,28 +120,16 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 	}
 
 	public void createManageCustomerInput(String custKey, boolean enabled){
-		// Create single customer input record
-		Document docElement = YRCXmlUtils.createFromString("<Customer CustomerKey='" + custKey +
-				"' CustomerLevel=" + (enabled ? "'Y'" : "'N'") + "></Customer>");
 
-		//TODO for now, callApi for each!
-		// If/when switch to set-based API, have multiAPIDocElement build up CustomerList here,
-		//  remove this callApi and enable callApi on CustList in updateAction() below
-		multiAPIDocElement = docElement.getDocumentElement();
+		// Create outer tag if first Ship-To
+		if (multiAPIDocElement == null){
+			multiAPIDocElement = YRCXmlUtils.createDocument("CustomerList").getDocumentElement();
+		}
 
-//		if(multiAPIDocElement == null){
-//			multiAPIDocElement = YRCXmlUtils.createDocument("ManageCustomerAndAssignment").getDocumentElement();
-//		}
-//		multiAPIDocElement.setAttribute("IgnoreOrdering", "Y");
-//
-//		Element applyEntitlement=(Element)multiAPIDocElement.getElementsByTagName("CustomerAssignmentList").item(0);
-//		if(applyEntitlement == null)
-//		{
-//			applyEntitlement= YRCXmlUtils.createChild(multiAPIDocElement, "CustomerAssignmentList");
-//		}
-
-		System.out.println("XML for this shipTo : " + YRCXmlUtils.getString(multiAPIDocElement)); //TODO remove all printlns
-		callApi("manageCustomer", docElement, null);
+		Element customerElem=YRCXmlUtils.createChild(multiAPIDocElement, "Customer");
+		customerElem.setAttribute("CustomerKey", custKey);
+		customerElem.setAttribute("CustomerLevel", (enabled ? "Y" : "N"));
+		customerElem.setAttribute("Operation","Update");
 	}
 
 	public void updateAction(){
@@ -154,14 +138,14 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 			//(change to use local callApi method?)
 			YRCApiContext ctx = new YRCApiContext();
 			ctx.setFormId(page.getFormId());
-			ctx.setApiName("manageCustomer");
+			ctx.setApiName("XPXManageCustomersAPIService");
 			ctx.setInputXml(multiAPIDocElement.getOwnerDocument());
 			ctx.setShowError(false);
 			ctx.setUserData("isRefreshReqd", String.valueOf(false));
-			//TODO restore this callApi if calling set-based API rather than one at a time previously
-			//System.out.println("Behavior callApi from updateAction for manageCustomer: " + YRCXmlUtils.getString(multiAPIDocElement));
-			//callApi(ctx, page);
-			//((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(true); //TODO need? works?
+			//System.out.println("Input for API XPXManageCustomersAPIService: " + YRCXmlUtils.getString(multiAPIDocElement));
+			callApi(ctx, page);
+			multiAPIDocElement = null;
+			//YRCDesktopUI.getCurrentPart().showBusy(true); // need?
 		}
 	}
 
