@@ -1120,10 +1120,22 @@ public class XPEDXWCUtils {
 			for(Element customerContactElem : customerContactList) {
 				String userId = customerContactElem.getAttribute("UserID");
 				String modifyBy = customerContactElem.getAttribute("CustomerContactID");
+				Element extnElem = SCXmlUtil.getChildElement(customerContactElem, "Extn");			
+				String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 				if(!modifyBy.equals(userId))
 					continue;
-				String lastName = customerContactElem.getAttribute("LastName");
-				String firstName = customerContactElem.getAttribute("FirstName");
+				
+				String lastName = "";
+				String firstName = "";
+				if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
+					StringTokenizer token = new StringTokenizer(modifyBy, "@");
+					String networkId = token.nextToken();
+					firstName = getUserName(networkId);
+				} else {
+					lastName = customerContactElem.getAttribute("LastName");
+					firstName = customerContactElem.getAttribute("FirstName");
+
+				}
 				String name="";
 				if (!YFCCommon.isVoid(lastName)){
 					name = lastName;
@@ -1145,6 +1157,29 @@ public class XPEDXWCUtils {
 			log.error("Error while getting modify UserName for order!");
 		}
 		return modifyUserMap;
+	}
+	
+	public static String getUserName(String networkId) {
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());		
+		String userName = "";
+		Element userList = null;
+		try {
+			Element input = WCMashupHelper.getMashupInput("XPEDX-GetUserList", context);
+			Element extnElem = SCXmlUtil.getChildElement(input, "Extn");
+			extnElem.setAttribute("ExtnEmployeeId", networkId);
+			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());			
+		} catch (XMLExceptionWrapper e) {
+			log.error("Unable to get user list", e);
+		} catch (CannotBuildInputException e) {
+			log.error("Unable to get user list", e);
+		}
+		
+		if (userList != null) {
+			Element userEle = SCXmlUtil.getChildElement(userList, "User");
+			userName = userEle.getAttribute("Username");
+		}
+		
+		return userName;
 	}
 
 

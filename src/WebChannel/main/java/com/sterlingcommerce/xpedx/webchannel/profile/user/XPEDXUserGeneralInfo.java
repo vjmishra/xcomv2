@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -163,6 +164,15 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	private boolean success;
 	private boolean saveAddUser;
 	public String customerClass = "";
+	private String networkId;
+
+	public String getNetworkId() {
+		return networkId;
+	}
+
+	public void setNetworkId(String networkId) {
+		this.networkId = networkId;
+	}
 
 	public String getCustomerClass() {
 		return customerClass;
@@ -702,6 +712,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			estimator = extnElem.getAttribute("ExtnEstimator");
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
+			String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 		
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
@@ -737,6 +748,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
 						.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 				xpedxCustomerContactInfoBean.setAddEmailID(addnlEmailAddrs);
+				xpedxCustomerContactInfoBean.setExtnIsSalesRep(isSalesRep);
 				XPEDXWCUtils.setObectInCache(
 						XPEDXConstants.XPEDX_Customer_Contact_Info_Bean,
 						xpedxCustomerContactInfoBean);
@@ -949,6 +961,26 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			break;
 		}
 	}
+	
+	private String getUserName() {
+		String userName = "";
+		
+		Element userList = null;
+		try {
+			userList = prepareAndInvokeMashup("XPEDX-GetUserList");
+		} catch (XMLExceptionWrapper e) {
+			log.error("Unable to get user list", e);
+		} catch (CannotBuildInputException e) {
+			log.error("Unable to get user list", e);
+		}
+		
+		if (userList != null) {
+			Element userEle = SCXmlUtil.getChildElement(userList, "User");
+			userName = userEle.getAttribute("Username");
+		}
+		
+		return userName;
+	}
 
 	private void setLastModifiedUser() {
 		UtilBean utilBean = new UtilBean();
@@ -957,14 +989,29 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		String loginID = contactElement.getAttribute("CustomerContactID");
 		if (getWCContext().getCustomerContactId().equals(modifyUserIdBy)) {
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
-					.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
-
-			setContactFirstName(xpedxCustomerContactInfoBean.getFirstName());
-			setContactLastName(xpedxCustomerContactInfoBean.getLastName());
-		} else if (loginID != null && loginID.equals(modifyUserIdBy)) {
-			setContactFirstName(contactElement.getAttribute("FirstName"));
-			setContactLastName(contactElement.getAttribute("LastName"));
-		} else {
+					.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);			
+			if (xpedxCustomerContactInfoBean.getExtnIsSalesRep() != null && ("Y").equals(xpedxCustomerContactInfoBean.getExtnIsSalesRep())) {
+				StringTokenizer token = new StringTokenizer(modifyUserIdBy, "@");
+				String networkId = token.nextToken();
+				setNetworkId(networkId);	
+				setContactFirstName(getUserName());
+			} else {
+				setContactFirstName(xpedxCustomerContactInfoBean.getFirstName());
+				setContactLastName(xpedxCustomerContactInfoBean.getLastName());
+			}			
+		} else if (loginID != null && loginID.equals(modifyUserIdBy)) {			
+			Element extnElem = SCXmlUtil.getChildElement(contactElement, "Extn");			
+			String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
+			if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
+				StringTokenizer token = new StringTokenizer(modifyUserIdBy, "@");
+				String networkId = token.nextToken();
+				setNetworkId(networkId);	
+				setContactFirstName(getUserName());
+			} else {				
+				setContactFirstName(contactElement.getAttribute("FirstName"));
+				setContactLastName(contactElement.getAttribute("LastName"));
+			}			
+		} else {			
 			ArrayList<Element> customerContact = new ArrayList<Element>();
 			customerContact.add(contactElement);
 			Map<String, String> modifiedUserMap = XPEDXWCUtils

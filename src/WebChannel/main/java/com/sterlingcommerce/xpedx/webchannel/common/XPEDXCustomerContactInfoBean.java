@@ -30,7 +30,9 @@ public class XPEDXCustomerContactInfoBean {
     private String addEmailID;  //JIRA 3382
     private String spendingLimit;
     private String orderApproveFlag ; //added for XB 226
-  //JIRA 3488 Start
+    private String extnIsSalesRep;    
+
+	//JIRA 3488 Start
 	 private String extnmaxOrderAmount;
 	 public void setExtnmaxOrderAmount(String extnmaxOrderAmount) {
 		this.extnmaxOrderAmount = extnmaxOrderAmount;
@@ -93,6 +95,13 @@ public class XPEDXCustomerContactInfoBean {
 		this.spendingLimit=spendingLimit;
 		this.orderApproveFlag = orderApproveFlag;//XB 226
 	}
+      
+    public String getExtnIsSalesRep() {
+  		return extnIsSalesRep;
+  	}
+  	public void setExtnIsSalesRep(String extnIsSalesRep) {
+  		this.extnIsSalesRep = extnIsSalesRep;
+  	}  
 
 	public String getFirstName() {
 		return firstName;
