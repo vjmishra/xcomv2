@@ -1,0 +1,5 @@
+<CustomerList>
+<Customer CustomerKey ='' OrganizationCode = '' CustomerID= ''  >
+<Extn ExtnECSR1Key='' ExtnECSR2Key='' ExtnECsr1EMailID= '' ExtnECsr2EMailID= '' ExtnECSR= '' ExtnECSR2= '' />
+</Customer>
+</CustomerList>
