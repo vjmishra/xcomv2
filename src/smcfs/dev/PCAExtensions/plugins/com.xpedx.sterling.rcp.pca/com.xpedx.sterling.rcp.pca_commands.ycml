@@ -39,6 +39,7 @@
                 outputNamespace="getXPXItemBranchListService_output" version=""/>
             <command APIName="XPXSendCSREmailService" APIType="SERVICE" Name="XPXSendCSREmailService" URL="DEFAULT" inputNamespace="XPXSendCSREmailService_input"
                 outputNamespace="XPXSendCSREmailService_output" version=""/>
+			<command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>                
         </commands>
         <namespaces>
             <namespace name="getSalesOrderDetailsWithAddressesAndOrderLines" templateName="getSalesOrderDetailsWithAddressesAndOrderLines" type="output"/>
@@ -62,6 +63,7 @@
             <namespace name="getOrderList_output" templateName="getOrderList" type="output"/>
             <namespace name="getOrganizationList_input" templateName="getOrganizationList_input" type="input"/>
             <namespace name="getOrganizationList_output" templateName="getOrganizationList" type="output"/>
+             <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard"/>
