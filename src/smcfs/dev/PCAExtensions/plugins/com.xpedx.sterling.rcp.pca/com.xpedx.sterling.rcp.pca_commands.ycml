@@ -677,4 +677,15 @@
             <namespace name="getCompleteItemList" templateName="getCompleteItemList" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.csrmanagement.screen.XPXCSRMaintenancePanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" inputNamespace="" outputNamespace="getCustomerList_output" version="ver77"/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
+            <command APIName="XPXManageCustomersAPIService" APIType="SERVICE" Name="XPXManageCustomersAPIService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
+        </namespaces>
+    </form>
 </forms>

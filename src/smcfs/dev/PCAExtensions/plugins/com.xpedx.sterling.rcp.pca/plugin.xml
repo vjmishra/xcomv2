@@ -30,6 +30,10 @@
             icon=""
             id="com.xpedx.sterling.rcp.pca.articles.editor.XPXArticleMaintenanceEditor" name="com.xpedx.sterling.rcp.pca.articles.editor.XPXArticleMaintenanceEditor"/>
         <editor
+            class="com.xpedx.sterling.rcp.pca.csrmanagement.editor.XPXCSRMaintenanceEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.csrmanagement.editor.XPXCSRMaintenanceEditor" name="com.xpedx.sterling.rcp.pca.csrmanagement.editor.XPXCSRMaintenanceEditor"/>
+        <editor
             class="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor"
             icon=""
             id="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor" name="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor"/>
@@ -166,6 +170,15 @@
                 class="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceAction"
                 id="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceAction"
                 label="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceAction"
+                id="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceAction"
+                label="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceAction"
                 state="true" style="push"/>
         </actionSet>
         <actionSet
@@ -326,6 +339,7 @@
                     <task id="BusinessExchange"/>
                     <task id="Help"/>
                     <task id="Replacement Items"/>
+                    <task id="CSRMaintenance"/>
                 </tasks>
             </category>
             <category id="XPX_REPLACEMENT_ITEM">
@@ -422,6 +436,15 @@
                     <category id="XPX_GLOBAL"/>
                 </categories>
             </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="CSRMaintenance" isExtension="false"
+                name="CSR Maintenance" permissionId="ycdRCPXPX004">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                  <category id="XPX_GLOBAL"/>
+                </categories>
+             </task>
             <task
                 actionId="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
                 filterRequired="false" groupId="Search_Tasks"
@@ -523,6 +546,15 @@
                 class="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
                 id="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
                 label="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                id="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                label="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
                 state="true" style="push"/>
         </actionSet>
         <actionSet
