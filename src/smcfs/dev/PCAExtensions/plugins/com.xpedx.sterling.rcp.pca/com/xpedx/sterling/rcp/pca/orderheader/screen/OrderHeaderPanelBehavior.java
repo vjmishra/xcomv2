@@ -44,6 +44,7 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 //	private static final String COMMAND_GET_USER_LIST = "XPXGetUserList";
 	private Element outXml ;
 	private String invoiced;
+	private String resolverUserId;
 	
 	public OrderHeaderPanelBehavior(Composite ownerComposite, String formId, Object inputObject, Element eleOrderDetails) {
         super(ownerComposite, formId, inputObject);
@@ -123,7 +124,9 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	
 	private void getCustomerContactDetails() {
 		
-		String apinames = "getCustomerContactList";
+		/*String apinames = "getCustomerContactList";
+		Element referenceElement = getModel("OrderDetails");
+		String webconfNum = YRCXmlUtils.getAttributeValue(referenceElement,"/Order/Extn/@ExtnWebConfNum");
 		if(!YRCPlatformUI.isVoid(customerContactId)){
 			Document docInput = YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+customerContactId+"'/>");
 			YRCApiContext ctx = new YRCApiContext();
@@ -133,8 +136,41 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 			if (!page.isDisposed())
 				callApi(ctx, page);
 		}
+		*/
+		Element referenceElement = getModel("OrderDetails");
+		Element eleOrderHoldTypes = YRCXmlUtils.getChildElement(referenceElement, "OrderHoldTypes");
+		List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
+		//String resolverUserId =null;
+		boolean exitHold = false;
+		for (Object objOrderHold : listOrderHold) {
+			Element eleOrderHold = (Element) objOrderHold;
+				if("ORDER_LIMIT_APPROVAL".equals(eleOrderHold.getAttribute("HoldType"))){
+					//Condition added for JIRA XBT192
+				
+						//resolverUserId= YRCXmlUtils.getXPathElement(referenceElement, "/Order").getAttribute("Status") + " (Rejected)";		
+						resolverUserId = YRCXmlUtils.getAttribute(eleOrderHold, "ResolverUserId");
+				//Condition added for JIRA 4326
+				}
+			}
 		
+		String webconfNum = YRCXmlUtils.getAttributeValue(referenceElement,"/Order/Extn/@ExtnWebConfNum");
+	
+		
+		String[] apinames = {"getCustomerContactList" , "getOrderList","getCustomerContactList" };
+		Document[] docInput = {
+				
+				YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+customerContactId+"'/>"),
+				YRCXmlUtils.createFromString("<Order> <Extn  ExtnWebConfNum = '"+webconfNum+"'/> </Order>") , 
+				YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+ resolverUserId +"'/>") , 
+		};
+		YRCApiContext ctx = new YRCApiContext();
+		ctx.setFormId("com.xpedx.sterling.rcp.pca.orderheader.screen.OrderHeaderPanel");
+		ctx.setApiNames(apinames);
+		ctx.setInputXmls(docInput);
+		if (!page.isDisposed())
+			callApi(ctx, page);
 	}
+	
 	
 	public void createShipComplete(){
 			
@@ -253,12 +289,30 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 			for (int i = 0; i < apinames.length; i++) {
 				String apiname = apinames[i];
 				if ("getCustomerContactList".equals(apiname)) {
-					Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
+					Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+					Element eleCustomerContactList = ctx.getOutputXmls()[i].getDocumentElement();
 					Element eleCustomerContact = YRCXmlUtils.getXPathElement(eleCustomerContactList, "/CustomerContactList/CustomerContact");
 					setModel("CustomerContactDetails",eleCustomerContact);
-					setOrderedByName(eleCustomerContact);
+					//resolveId = mitesh2  // customerContactId=mitesh3
+					
+					if(i==0){
+						setOrderedByName(eleCustomerContact);
+					}else{
+						if("".equalsIgnoreCase(resolverUserId) && resolverUserId.equalsIgnoreCase(customerContactId)){
+							setApprovedByName(eleCustomerContact);
+							setOrderedByName(eleCustomerContact);
+						}else{
+							setApprovedByName(eleCustomerContact);
+						}
+					}
 					setLegacyOrderNo(eleCustomerContact);
-				}						
+				}	
+				   else if(YRCPlatformUI.equals(ctx.getApiName(), "getOrderList")){
+			        	Element outXml=ctx.getOutputXml().getDocumentElement(); 
+						
+						setModel("OrderListModel",outXml);
+		    		}
+				
 				/*if ("XPXGetUserList".equals(apiname)) {
 					Element eleUserListdetails = ctx.getOutputXml().getDocumentElement();
 					Element eleUserList = YRCXmlUtils.getXPathElement(eleUserListdetails, "/UserList/User");
@@ -280,6 +334,20 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 			sb.append(" ");
 			sb.append(eleCustomerContact.getAttribute("LastName"));
 			YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").setAttribute("ExtnOrderedByName",sb.toString());
+		}
+		setModel("OrderDetails",referenceElement);
+	}
+	
+	private void setApprovedByName(Element eleCustomerContact) {
+		Element referenceElement = getModel("OrderDetails");
+		if(YRCPlatformUI.isVoid(YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnApprovedBy"))||! YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnApprovedBy").contains(" ") )
+		{
+			StringBuffer sb= new StringBuffer();
+			sb.append(eleCustomerContact.getAttribute("FirstName"));
+			if(!YRCPlatformUI.isVoid(eleCustomerContact.getAttribute("FirstName")))
+			sb.append(" ");
+			sb.append(eleCustomerContact.getAttribute("LastName"));
+			YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").setAttribute("ExtnApprovedBy",sb.toString());
 		}
 		setModel("OrderDetails",referenceElement);
 	}
