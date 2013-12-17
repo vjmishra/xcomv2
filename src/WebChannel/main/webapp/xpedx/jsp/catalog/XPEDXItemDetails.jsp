@@ -44,7 +44,7 @@
 <!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header.css" />
-<link media="print" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/print.css" />
+<%-- <link media="print" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/print.css" /> --%>
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
 <link rel="stylesheet" type="text/css"
@@ -63,9 +63,11 @@
 <!-- END head-calls.php -->
 <title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
  <style type="text/css" media="print">
- 			#headerContainer { display: none; }
-			#t1-footer { display: none; }
-}
+ 	@page { size:A4;} 	
+    html { height:100%; }
+       body { height:100%; }
+ 	#headerContainer { display: none; }
+	#t1-footer { display: none; }
 </style>
 
 <meta name="DCSext.w_x_sc_count" content="1"/>
