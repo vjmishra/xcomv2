@@ -1001,14 +1001,18 @@ from session . We have customer Contact Object in session .
 			<td width="260px" valign="top" class="second-cell">
 				<label class="block-label bold " for="comments " >Email Confirmation</label>
 				
-					<s:iterator value="addnlEmailAddrList" id="addtnEmailAddrs">
+					<s:iterator value="addnlEmailAddrsMap" id="addtnEmailAddrs">
 						<s:set name="emailAddrs" value="key" />
+						<s:set name="previousEmailRecipient" value="value" />
 						<div class="float-left margin-top-five">
-						    <input id="input-prop" type="checkbox" name="addnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input>							
+							<s:if test='%{#editOrderFlag == "true" && #previousEmailRecipient == "Y"}'>
+								<input id="input-prop" type="checkbox" name="addnlEmailAddrList" value="<s:property value='#emailAddrs'/>" checked="checked"></input>
+						    </s:if>
+						    <s:else>
+						    	<input id="input-prop" type="checkbox" name="addnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input>
+						    </s:else>					
 							<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
 						</div>
-							<%-- <input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="mitesh.parikh@mphasis.com"></input> 
-							<p class="email-list-prop">mitesh.parikh@mphasis.com</p> --%>													
 					</s:iterator>
 					<s:iterator value="billToEmailAddrsSet" id="idBillToEmailAddrs">
 						<%-- <s:set name="billToEmailAddrs" value="key" /> --%>
@@ -1018,13 +1022,6 @@ from session . We have customer Contact Object in session .
 							<input type="hidden" name="addnlEmailAddrList" value="<s:property/>"/>
 						</div>																	
 					</s:iterator>
-				
-				<%-- <s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
-					<s:iterator value="selectedAddnlEmailAddrList" id="selectedAddnlEmailAddrs" status="row">
-						<s:hidden name="selectedAddnlEmailAddrList[%{#row.index}]"/>														
-					</s:iterator>
-				</s:if> --%>
-						
 			</td>
 			<td valign="top">
 				<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Separated Values)</div>

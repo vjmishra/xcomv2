@@ -914,27 +914,27 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		else
 			addnlEmailAddrs = addnlEmailAddrs.concat(userEmailId);// Concatenating the users email address too as a requirement for OP Task #68
 END of JIRA 3382*/
-		
+		String previousEmailRecipient="N";
 		if (!YFCCommon.isVoid(addnlEmailAddrs)){
 			String[] emailListSplit = addnlEmailAddrs.replace(" ","").split(",");
 			for (int i = 0; i < emailListSplit.length; i++) {
-				addAddnlEmailAddrList(emailListSplit[i]);
+				addAddnlEmailAddrs(emailListSplit[i], previousEmailRecipient);
 			}			
 		}
 		
-		
 		// fetch all the email id from the order 
-		//
 		Document orderOutDoc = getOutputDocument();
 		YFCDocument orderDoc = YFCDocument.getDocumentFor(orderOutDoc);
 		YFCElement orderEle = orderDoc.getDocumentElement();
 		YFCElement orderExtnElem = orderEle.getChildElement("Extn");
 		String addnlEmailAddr = orderExtnElem.getAttribute("ExtnAddnlEmailAddr");
 		if (!YFCCommon.isVoid(addnlEmailAddr)){
-			String[] 	emailListSplit = addnlEmailAddr.replace(" ","").split(";");
+			String[] emailListSplit = addnlEmailAddr.replace(" ","").split(";");
 			for (int i = 0; i < emailListSplit.length; i++) {
-				addSelectedAddnlEmailAddrList(emailListSplit[i]);
-				addAddnlEmailAddrList(getSelectedAddnlEmailAddrList());
+				if("true".equals(isEditOrder)) {
+					previousEmailRecipient="Y";
+				}
+				addAddnlEmailAddrs(emailListSplit[i], previousEmailRecipient);
 			}
 		}
 		
@@ -1189,54 +1189,20 @@ END of JIRA 3382*/
 	public void setOrgDetailsBean(XPEDXOrgNodeDetailsBean orgDetailsBean) {
 		this.orgDetailsBean = orgDetailsBean;
 	}
-
-	public Map<String, String> getAddnlEmailAddrList() {
-		Map<String, String> newMap = new HashMap<String, String>();
-		for(String email : this.addnlEmailAddrList){
-			newMap.put(email, email);
-		}
-		if (newMap.size() == 0){
-			newMap.put(" " , "  ");
-		}
-		return newMap;
-	}
-
-	public void setAddnlEmailAddrList(List<String> addnlEmailAddrList) {
-		this.addnlEmailAddrList = new HashSet<String>(addnlEmailAddrList);
+	
+	public Map<String, String> getAddnlEmailAddrsMap() {
+		if (this.addnlEmailAddrsMap==null) {
+			this.addnlEmailAddrsMap=new HashMap<String,String>();
+		}		
+		return addnlEmailAddrsMap;
 	}
 	
-	private void addAddnlEmailAddrList(String emailAddress){
-		if (YFCCommon.isVoid(this.addnlEmailAddrList)){
-			this.addnlEmailAddrList = new HashSet<String>();
+	private void addAddnlEmailAddrs(String emailAddress, String previousEmailRecipient){
+		if (this.addnlEmailAddrsMap==null) {
+			this.addnlEmailAddrsMap=new HashMap<String,String>();
 		}
-		if (!YFCCommon.isVoid(emailAddress)){
-			this.addnlEmailAddrList.add(emailAddress.trim());
-		}
-	}
-
-	private void addAddnlEmailAddrList(List<String> emailAddresses){
-		if (YFCCommon.isVoid(this.addnlEmailAddrList)){
-			this.addnlEmailAddrList = new HashSet<String>();
-		}
-		if (!YFCCommon.isVoid(emailAddresses)){
-			this.addnlEmailAddrList.addAll(emailAddresses);
-		}
-	}
-	
-	public List<String> getSelectedAddnlEmailAddrList() {
-		return new ArrayList<String>(selectedAddnlEmailAddrList);
-	}
-
-	public void setSelectedAddnlEmailAddrList(List<String> selectedAddnlEmailAddrList) {
-		this.selectedAddnlEmailAddrList = new HashSet<String>(selectedAddnlEmailAddrList);
-	}
-	
-	private void addSelectedAddnlEmailAddrList(String emailAddress){
-		if (YFCCommon.isVoid(this.selectedAddnlEmailAddrList)){
-			this.selectedAddnlEmailAddrList = new HashSet<String>();
-		}
-		if (!YFCCommon.isVoid(emailAddress)){
-			this.selectedAddnlEmailAddrList.add(emailAddress.trim());
+		if (!YFCCommon.isVoid(emailAddress)) {
+			this.addnlEmailAddrsMap.put(emailAddress, previousEmailRecipient);
 		}
 	}
 	
@@ -1361,8 +1327,7 @@ END of JIRA 3382*/
 	protected String shipComplete = "";
 	protected String shipCompleteOption;
 	protected XPEDXOrgNodeDetailsBean orgDetailsBean;
-	protected Set <String> addnlEmailAddrList;
-	protected Set <String> selectedAddnlEmailAddrList;
+	protected Map <String,String> addnlEmailAddrsMap;	
 	protected Document customerOutputDoc;
     protected Boolean isBOMValidationEnabled;
     private HashMap<String, JSONObject> pnaHoverMap;

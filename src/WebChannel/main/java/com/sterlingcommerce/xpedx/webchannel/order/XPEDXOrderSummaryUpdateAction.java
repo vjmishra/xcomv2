@@ -896,15 +896,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private ArrayList<String> inventoryInds;
 	private String customerHoldCheck;
 	private String rushOrdrDateFlag = "false";
-	private List<String> selectedAddnlEmailAddrList;
 	
-	public List<String> getSelectedAddnlEmailAddrList() {
-		return selectedAddnlEmailAddrList;
-	}
-	public void setSelectedAddnlEmailAddrList(
-			List<String> selectedAddnlEmailAddrList) {
-		this.selectedAddnlEmailAddrList = selectedAddnlEmailAddrList;
-	}
 	public String getRushOrdrDateFlag() {
 		return rushOrdrDateFlag;
 	}
