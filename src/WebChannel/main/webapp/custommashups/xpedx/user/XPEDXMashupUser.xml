@@ -909,13 +909,74 @@
 					</ComplexQuery>
 				</CustomerContact>
 			</Input>
-			<Template>
+			<Template>				
 				<CustomerContactList>
-					<CustomerContact Company="" CustomerContactID=""
-					DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
-					EveningPhone="" FirstName="" LastName="" MiddleName=""
-					MobilePhone="" Status="" Title="" UserID="" />
-				</CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID="" MiddleName=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone="" Title=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="">
+							<ContactPersonInfo EveningPhone=""
+								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
+								EMailID="" Title="" />
+							<UserGroupLists BuyerApprover="">
+								<UserGroupList UsergroupKey="" BuyerApprover="">
+								</UserGroupList>
+							</UserGroupLists>
+							<AuthQuestionList>
+								<AuthQuestion AuthQuestionKey=""
+									QuestionText="" />
+							</AuthQuestionList>
+						</User>
+						<CustomerAdditionalAddressList>
+							<CustomerAdditionalAddress
+								CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+								IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+								IsDefaultSoldTo="">
+								<PersonInfo IsCommercialAddress=""
+									TaxGeoCode="" IsAddressVerified="" AddressID="" AddressLine1=""
+									AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
+									AddressLine6="" AlternateEmailID="" Beeper="" Company=""
+									DayFaxNo="" DayPhone="" Department="" ErrorTxt=""
+									EveningFaxNo="" EveningPhone="" HttpUrl="" JobTitle=""
+									Latitude="" Longitude="" MiddleName="" MobilePhone=""
+									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
+									VerificationStatus="" City="" Country="" FirstName=""
+									LastName="" PersonID="" State="" Title="" ZipCode=""
+									EMailID="" />
+							</CustomerAdditionalAddress>
+						</CustomerAdditionalAddressList>
+						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""
+							AggregateStatus="" OrganizationCode="">
+							<BuyerOrganization OrganizationCode=""
+								OrganizationName="" />
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+									IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+									IsDefaultSoldTo="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnMyItemsLink="" ExtnUseCustSKU="" ExtnUseOrderMulUOMFlag=""/>
+						</Customer>
+						<Extn/>
+					</CustomerContact>
+				</CustomerContactList>				
 			</Template>
 		</API>
 	</mashup>
