@@ -3395,7 +3395,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setAttributeListForUIForNarrowBy();
 			}catch(Exception e){
 				log.error("Exception in XPEDXCatalogAction - getFacetList method while retrieving the search results"+e.getMessage());
-				log.error("Exception in XPEDXCatalogAction - getFacetList method while retrieving the search results"+e.getClause());
+				log.error("Exception in XPEDXCatalogAction - getFacetList method while retrieving the search results"+e.getCause());
 				return retVal;
 			}				
 		}
