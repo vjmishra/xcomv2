@@ -135,13 +135,25 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 		clmCheckBox.setResizable(false);
 		clmCheckBox.setMoveable(false);
 		
+		TableColumn clmCustomerName = new TableColumn(tblSearchResults, SWT.NONE);
+		clmCustomerName.setText("Customer Name");
+		clmCustomerName.setWidth(100);
+		
 		TableColumn clmCustomer = new TableColumn(tblSearchResults, SWT.NONE);
 		clmCustomer.setText("Customer");
 		clmCustomer.setWidth(100);
 		
-		TableColumn clmStorefrontCode = new TableColumn(tblSearchResults, SWT.NONE);
-		clmStorefrontCode.setText("CSR1");
-		clmStorefrontCode.setWidth(50);
+		TableColumn clmCSR1Name = new TableColumn(tblSearchResults, SWT.NONE);
+		clmCSR1Name.setText("CSR1 Name");
+		clmCSR1Name.setWidth(100);
+		
+		TableColumn clmCSR1LoginId = new TableColumn(tblSearchResults, SWT.NONE);
+		clmCSR1LoginId.setText("CSR1");
+		clmCSR1LoginId.setWidth(50);
+		
+		TableColumn clmCSR2Name = new TableColumn(tblSearchResults, SWT.NONE);
+		clmCSR2Name.setText("CSR2 Name");
+		clmCSR2Name.setWidth(100);
 		
 		TableColumn clmDivision = new TableColumn(tblSearchResults, SWT.NONE);
 		clmDivision.setText("CSR2");
@@ -239,7 +251,7 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 		
 		cmbCSRs = new Combo(grpSearchFields,SWT.READ_ONLY);
 		GridData cmbCSRsLayoutData = new GridData();
-		cmbCSRsLayoutData.widthHint = 170;
+		cmbCSRsLayoutData.widthHint = 350;
 		cmbCSRsLayoutData.grabExcessHorizontalSpace = true;
 		cmbCSRsLayoutData.horizontalAlignment = 2;
 		cmbCSRs.setLayoutData(cmbCSRsLayoutData);		
@@ -267,7 +279,7 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 		
 		cmbNewCSRs = new Combo(grpAssignmentUpdateFields,SWT.READ_ONLY);
 		GridData cmbNewCSRsLayoutData = new GridData();
-		cmbNewCSRsLayoutData.widthHint = 170;
+		cmbNewCSRsLayoutData.widthHint = 350;
 		cmbNewCSRsLayoutData.grabExcessHorizontalSpace = true;
 		cmbNewCSRsLayoutData.horizontalAlignment = 2;
 		cmbNewCSRs.setLayoutData(cmbNewCSRsLayoutData);	
@@ -372,7 +384,7 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
         
         cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("@Loginid");
+		cbd.setDescriptionBinding("ContactPersonInfo/@userNameAndLoginId");
 		cbd.setListBinding("XPXGetUserList:/UserList/User");
 		cbd.setSourceBinding("SearchCriteria:/XPXCSRS/@ExtnECSR1Key");
 		cbd.setTargetBinding("SearchCriteria:/XPXCSRS/@ExtnECSR1Key");		
@@ -381,7 +393,7 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 		
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("@Loginid");
+		cbd.setDescriptionBinding("ContactPersonInfo/@userNameAndLoginId");
 		cbd.setListBinding("XPXGetUserList:/UserList/User");
 		cbd.setSourceBinding("update:/XPXCSRS/@ExtnECSR2Key");
 		cbd.setTargetBinding("update:/XPXCSRS/@ExtnECSR2Key");
@@ -402,25 +414,35 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
     private void setBindingForSearchResults() {
     	YRCDesktopUI.getCurrentPart().showBusy(true);
     	YRCTableBindingData bindingData = new YRCTableBindingData();
-        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[4];
+        YRCTblClmBindingData colBindings[] = new YRCTblClmBindingData[7];
         bindingData.setTargetBinding("replace_input:/CustomerList");
         bindingData.setSourceBinding("CustomerList:/Customer");        
         bindingData.setName("tblSearchResults");   
        		
         colBindings[1] = new YRCTblClmBindingData();
-        colBindings[1].setAttributeBinding("@CustomerID");
-        
-        colBindings[1].setColumnBinding("Customer");
-  
+        colBindings[1].setAttributeBinding("BuyerOrganization@OrganizationName");        
+        colBindings[1].setColumnBinding("Customer Name");
         
         colBindings[2] = new YRCTblClmBindingData();
-        colBindings[2].setAttributeBinding("Extn/@ExtnECSR");
-        colBindings[2].setColumnBinding("CSR1");
+        colBindings[2].setAttributeBinding("@CustomerID");        
+        colBindings[2].setColumnBinding("Customer");
         
         
         colBindings[3] = new YRCTblClmBindingData();
-        colBindings[3].setAttributeBinding("Extn/@ExtnECSR2");
-        colBindings[3].setColumnBinding("CSR2");
+        colBindings[3].setAttributeBinding("Extn/@ExtnECSR1Name");
+        colBindings[3].setColumnBinding("CSR1 Name");
+        
+        colBindings[4] = new YRCTblClmBindingData();
+        colBindings[4].setAttributeBinding("Extn/@ExtnECSR");
+        colBindings[4].setColumnBinding("CSR1");
+        
+        colBindings[5] = new YRCTblClmBindingData();
+        colBindings[5].setAttributeBinding("Extn/@ExtnECSR2Name");
+        colBindings[5].setColumnBinding("CSR2 Name");
+        
+        colBindings[6] = new YRCTblClmBindingData();
+        colBindings[6].setAttributeBinding("Extn/@ExtnECSR2");
+        colBindings[6].setColumnBinding("CSR2");
 
         
 		colBindings[0] = new YRCTblClmBindingData();
