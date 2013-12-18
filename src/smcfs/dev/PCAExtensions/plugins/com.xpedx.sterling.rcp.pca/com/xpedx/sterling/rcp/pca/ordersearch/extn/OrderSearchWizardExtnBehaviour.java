@@ -369,10 +369,10 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			if(!YRCPlatformUI.isVoid(eleInput.getAttribute("FromStatus")) || !YRCPlatformUI.isVoid(eleInput.getAttribute("ToStatus"))){
 				eleInput.setAttribute("StatusQryType", "BETWEEN");
 			}
-			
+			Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
 //			If Needs Attention Check box is checked then create a OrderHoldType element with holdtype ='NEEDS_ATTENTION'
 			if("Y".equals(YRCXmlUtils.getAttributeValue(eleInput, "/Order/@NeedsAttentionFlag")) ||"Y".equals(YRCXmlUtils.getAttributeValue(eleInput, "/Order/@CsrReviewFlag")) ){
-				Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
+				//Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
 					eleOrderHoldType.setAttribute("Status", "1100");
 					Element eleComplexQry1 = YRCXmlUtils.createChild(eleOrderHoldType, "ComplexQuery");
 					Element eleOr1= YRCXmlUtils.createChild(eleComplexQry1, "Or");
@@ -392,7 +392,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 					}		
 			}
 		
-				
+			eleOrderHoldType.setAttribute("ResolverUserId", "");
 			
 //			Search by Order Type
 			if(!YRCPlatformUI.isVoid(getFieldValue("extn_comboDocType"))){
@@ -479,17 +479,41 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 //			doing this because on double click of order row by seeing this flag 
 //			Product is routing to AdvancedAddItems Screen(in case of Y) 
 //			and OrderSummary Screen(in case of N) respectively, here we always route to OrderSummary Screen.
+			HashMap map = new HashMap();
 			for (int i = 0; i < noOfOrders; i++) {
 				Element eleOrd =(Element)nl.item(i);
 				Element eleExtn = YRCXmlUtils.getChildElement(eleOrd, "Extn", true);
+				String webconNum = eleExtn.getAttribute("ExtnWebConfNum");
+				
 				eleOrd.setAttribute("BillToID",eleExtn.getAttribute("ExtnCustomerNo")) ;
 				if("Y".equals(eleOrd.getAttribute("DraftOrderFlag"))){
 					eleOrd.setAttribute("DraftOrderFlag", "N");
 				}
+				
+			//	String orderStatus=YRCXmlUtils.getXPathElement(eleTableItem, "/Order").getAttribute("Status");
+				List listOrderHold = YRCXmlUtils.getChildren(eleOrd, "OrderHoldTypes");
+				
+				String Status=null;
+				boolean isPendingApproval = false;
+				
+				for (Object objOrderHold : listOrderHold) {
+					Element eleOrderHold = (Element) objOrderHold;
+					Element eleExtn1 = YRCXmlUtils.getChildElement(eleOrderHold, "OrderHoldType", true);
+					String pendingApproval = eleExtn1.getAttribute("HoldType");
+					//Condition added for JIRA XBT192
+					if("ORDER_LIMIT_APPROVAL".equals(pendingApproval)){
+						
+				       String modifyTs = eleExtn1.getAttribute("Modifyts");
+						map.put(webconNum, modifyTs);
+					}
+					//Condition Added for JIRA 4326
+				
+				
 			}
 			apiContext.setOutputXml(doc); 
 			
 		 }
+			XPXUtils.setWebConfNumMap(map);
 //		if(apiContext.getApiName().equals("getOrderList")){
 //			 Document doc = apiContext.getOutputXml();
 //			 Element ele = doc.getDocumentElement();
@@ -530,11 +554,12 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 //				}
 //			}
 //			 apiContext.setOutputXml(doc);
-//		 }
+		 }
 		 super.postCommand(apiContext);
 	 }
+		 
 	 public void postSetModel(String arg0) {
-		System.out.println(arg0);
+		//System.out.println(arg0);
 		Element sourceModel = getModel("SearchCriteria"); 
 		
 		if(sourceModel != null){
