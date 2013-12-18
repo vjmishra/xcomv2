@@ -1027,8 +1027,7 @@ from session . We have customer Contact Object in session .
 				<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Separated Values)</div>
 				<s:textarea cssClass="font email-textarea" cols="16" rows="3"
 						cssStyle="margin-bottom: 5px;" name="newEmailAddr" id="newEmailAddr" onkeyup="restrictTextareaMaxLength(this,'500');" /> 
-				<input type="checkbox" class="checkbox" name="emailAddrSaveNeeded"
-						id="emailAddrSaveNeeded"> </input>Add to my email address list
+				<input type="checkbox" class="checkbox" name="EmailAddrSaveNeeded" id="emailAddrSaveNeeded"> </input>Add to my email address list
 			</td>
 			</tr>
 			</table>
