@@ -186,6 +186,7 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 	        	Element orderListXml=ctx.getOutputXml().getDocumentElement();
 	        	//Adding Status Column
 	        	NodeList listOrderList = orderListXml.getElementsByTagName("Order");
+	        	HashMap map = new HashMap();
 	        	for (int k = 0; k < listOrderList.getLength(); k++) {
 					Element eleOrderList = (Element) listOrderList.item(k);
 					Element extn = YRCXmlUtils.getChildElement(eleOrderList, "Extn");
@@ -216,9 +217,13 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 						//eleOrderList.setAttribute("Status", (String) statusList.get(extnOrderStatus));
 						Element eleOrderHoldTypes = YRCXmlUtils.getChildElement(eleOrderList, "OrderHoldTypes");
 						List listOrderHold = YRCXmlUtils.getChildren(eleOrderHoldTypes, "OrderHoldType");
+						
+						String webconNum = extn.getAttribute("ExtnWebConfNum");
 						boolean exitHold = false;
 						for (Object objOrderHold : listOrderHold) {
 								Element eleOrderHold = (Element) objOrderHold;
+								Element eleExtn1 = YRCXmlUtils.getChildElement(eleOrderHold, "OrderHoldType", true);
+								//String pendingApproval = eleExtn1.getAttribute("HoldType");
 								if("ORDER_LIMIT_APPROVAL".equals(eleOrderHold.getAttribute("HoldType"))){
 									//Condition added for JIRA XBT192
 									if("1200".equals(eleOrderHold.getAttribute("Status"))){
@@ -228,6 +233,8 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 									else{
 										String status = YRCXmlUtils.getXPathElement(eleOrderList, "/Order").getAttribute("Status") + " (Pending Approval)";				
 										YRCXmlUtils.getXPathElement(eleOrderList, "/Order").setAttribute("Status", status);
+										 String modifyTs = eleOrderHold.getAttribute("Modifyts");
+									     map.put(webconNum, modifyTs);
 									}
 										
 									}
@@ -252,6 +259,7 @@ public class XPXOrderHistoryPanelBehavior extends XPXPaginationBehavior {
 					}
 					handlePaginationOutput(orderListXml);
 				}
+	        	XPXUtils.setWebConfNumMap(map);
 	        	/*********************************************/
 	        	setModel("OrderListModel",orderListXml);
 	        }

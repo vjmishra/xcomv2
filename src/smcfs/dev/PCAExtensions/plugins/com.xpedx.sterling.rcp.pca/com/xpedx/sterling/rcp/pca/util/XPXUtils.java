@@ -47,6 +47,7 @@ public class XPXUtils {
 	public static String polbl;
 	public static String lineAcc;
 	public static ArrayList refDiv;
+	public static HashMap<String, String> webConfNumMap = new HashMap<String, String>(); // User from Order Search Page
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -693,4 +694,14 @@ public class XPXUtils {
 	public static void setRefDiv(ArrayList refDiv) {
 		XPXUtils.refDiv = refDiv;
 	}
+
+	public static HashMap<String, String> getWebConfNumMap() {
+		return webConfNumMap;
+	}
+
+	public static void setWebConfNumMap(HashMap<String, String> webConfNumMap) {
+		XPXUtils.webConfNumMap = webConfNumMap;
+	}
+	
+	
 }

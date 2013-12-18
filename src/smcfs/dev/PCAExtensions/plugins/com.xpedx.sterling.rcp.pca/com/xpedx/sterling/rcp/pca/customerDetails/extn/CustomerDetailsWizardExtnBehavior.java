@@ -214,6 +214,9 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 						role = "Approver";
 					if(role.contains("BUYER-USER"))
 						role = "Buyer";
+					if(role.contains("PROCUREMENT-USER"))
+						role = "Punch Out User";
+					
 					roleList.add(role);
 				}
 				for(int counter=0;counter<roleList.size();counter++)
