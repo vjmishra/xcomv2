@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -26,8 +25,6 @@ import com.yantra.yfc.rcp.IYRCApiCallbackhandler;
 import com.yantra.yfc.rcp.IYRCComposite;
 import com.yantra.yfc.rcp.IYRCPanelHolder;
 import com.yantra.yfc.rcp.YRCApiContext;
-import com.yantra.yfc.rcp.YRCDesktopUI;
-import com.yantra.yfc.rcp.YRCEditorPart;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
@@ -42,10 +39,9 @@ public class DivisionEntitlementTreePanel extends Composite implements
 	private Composite pnlProfileInfo;
 	private Composite compositeMiscPnl;
 	private Button btnUpdate;
-	private Button btnCancel;
 
-	Tree tree=null;
-	TreeItem localiItem=null;
+	Tree tree;
+	TreeItem localiItem;
 	ArrayList<String> customerarray = new ArrayList<String>();
 
 	public DivisionEntitlementTreePanel(Composite parent, int style,
@@ -150,7 +146,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 	                boolean checked = item.getChecked();
 
 	                if(checked){
-	                	customerarray.add(item.getText());
+	                	customerarray.add(item.getText()); //TODO how/is this referenced?
 	                }
 
 	                checkItems(item, checked);     //--function used to check child nodes if parent is checked
@@ -244,27 +240,14 @@ public class DivisionEntitlementTreePanel extends Composite implements
 		compositeMiscPnl.setData("name", "compositeMiscPnl");
 
 		btnUpdate = new Button(compositeMiscPnl, 0);
-		btnUpdate.setText("Update_Customer_Assignment");
-		btnUpdate.setLayoutData(gridData5);
+		btnUpdate.setText("Update_Profile");
+		btnUpdate.setLayoutData(gridData10);
 		btnUpdate.setData("name", "btnUpdate");
 		setTheme(btnUpdate, "Button");
 		btnUpdate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				myBehavior.updateAction();
-			}
-		});
-
-		// Cancel button
-		btnCancel = new Button(compositeMiscPnl, 0);
-		btnCancel.setText("Customer_Assignment_Close");
-		btnCancel.setLayoutData(gridData10);
-		btnCancel.setData("name", "btnCancel");
-		setTheme(btnCancel, "Button");
-		btnCancel.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
 			}
 		});
 	}
@@ -279,7 +262,16 @@ public class DivisionEntitlementTreePanel extends Composite implements
 
 	public void getTargetModelForUpdateAssignments() {
 		TreeItem[] items = tree.getItems();
-		this.iterateThroughChildren(items);
+		iterateThroughChildren(items);
+	}
+
+	public void allowEdit(boolean allowed) {
+		if (!allowed) {
+			YRCPlatformUI.trace("Entitlements: User not authorized to update Apply Division Entitlement fields");
+
+			btnUpdate.setEnabled(false);
+			//tree.setBackground(getDisplay().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+		}
 	}
 
 	// function to iterate through tree & create updates for Entitlements on ShipTos
@@ -359,7 +351,8 @@ public class DivisionEntitlementTreePanel extends Composite implements
 			iItem.setText(orgName+" ("+CustomerID+")");
 			iItem.setData("data", eleCust);
 			if(myBehavior.isThisEntitled(eleCust)){
-				//TODO instead somehow base on children? but haven't expanded/loaded yet! Auto-expand?
+				// Ideally, for master/customer/bill-to would be based on children,
+				//   but haven't expanded/loaded yet! Auto-expand?? (big performance hit)
 				iItem.setChecked(true);
 				iItem.setData("OldValue", "true");
 			}
@@ -471,7 +464,6 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				iiItem.setItemCount(1);
 			}
 
-			//TODO change to new "grayed" logic from assignments tab ?
 			if (custId.size()>0) {
 				boolean parentShouldBeChecked = hascheckedChild && !hasUncheckedChild;
 				localiItem2.setChecked(parentShouldBeChecked);

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -77,8 +78,9 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 
 					if ("XPXGetCustomerList".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						setModel("XPXGetImmediateChildCustomerListService",outXml);
+						setModel("XPXGetCustomerList",outXml);
 						getChildList();    //--function used to set the values of child nodes in Tree structure
+						checkSecurity();
 
 					} else if ("XPXManageCustomersAPIService".equals(apiname)) {
 						//TODO update element's OldValue? Currently assuming update will work
@@ -110,13 +112,30 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 		super.handleApiCompletion(ctx);
 	}
 
-	public void getChildList(){
-		Element childCustomerList = getModel("XPXGetImmediateChildCustomerListService");
+	private void getChildList(){
+		Element childCustomerList = getModel("XPXGetCustomerList");
 		Element customerElement = YRCXmlUtils.getChildElement(childCustomerList, "Customer");
 		ArrayList<Element> arrlst=new ArrayList<Element>();
 		arrlst.add(customerElement);
 
 		page.setTreeValues(null, arrlst); //--function used to set the values of child nodes in Tree structure
+	}
+
+	private void checkSecurity() {
+		Element userElem = YRCPlatformUI.getUserElement();
+		NodeList nodList=userElem.getElementsByTagName("UserGroupList");
+
+		ArrayList<String> groupIdList = new ArrayList<String>();
+		for(int i=0;i<nodList.getLength();i++){
+			Element eleCust=(Element) nodList.item(i);
+			Element userGroup = YRCXmlUtils.getXPathElement(eleCust, "/UserGroupList/UserGroup");
+			String groupId = userGroup.getAttribute("UsergroupId");
+			groupIdList.add(groupId);
+		}
+		System.out.println("groupId: " + groupIdList);
+
+		boolean allowed = groupIdList != null && groupIdList.contains("XPXEBusinessAdmin");
+		page.allowEdit(allowed);
 	}
 
 	public void createManageCustomerInput(String custKey, boolean enabled){
