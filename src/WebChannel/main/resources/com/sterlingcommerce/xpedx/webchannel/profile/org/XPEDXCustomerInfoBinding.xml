@@ -9,4 +9,5 @@
     
     <entry key="customerKey">XPEDXGetImmediateChildCustomers:/Customer/@ParentCustomerKey</entry>
     <entry key="WCContext.storefrontId">XPEDXGetImmediateChildCustomers:/Customer/@OrganizationCode</entry>
+    <entry key="custContactId">getCustomerContactDetailsForAll:/CustomerContact/@CustomerContactID</entry>
 </properties>
