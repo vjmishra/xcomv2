@@ -3793,4 +3793,46 @@
         <NewFields/>
         <ExistingFields/>
     </Form>
+    <Form extensionBehaviorName=""
+        id="com.xpedx.sterling.rcp.pca.csrmanagement.screen.XPXCSRMaintenancePanel" wizard="false">
+        <NewFields/>
+        <ExistingFields>
+            <ExistingField attachTo="" enabled="true" name="Enterprise"
+                type="Combo" visible="true">
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Top" vColSpan="1" widthHint="170"/>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="yrc:customType" value="Combo"/>
+            </ExistingField>
+            <ExistingField attachTo="" enabled="true" name="CSR"
+                type="Combo" visible="true">
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Top" vColSpan="1" widthHint="350"/>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="yrc:customType" value="Combo"/>
+            </ExistingField>
+            <ExistingField attachTo="" enabled="true" name="cmbNewCSRs"
+                type="Combo" visible="true">
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Top" vColSpan="1" widthHint="350"/>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="yrc:customType" value="Combo"/>
+            </ExistingField>
+            <ExistingField attachTo="" enabled="true"
+                name="comboShipComplete" type="Combo" visible="true">
+                <LayoutData grabExcessHSpace="false"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Top" vColSpan="1" widthHint="170"/>
+                <SetData name="isMandatory" value="false"/>
+                <SetData name="yrc:customType" value="Combo"/>
+            </ExistingField>
+        </ExistingFields>
+    </Form>
 </Forms>

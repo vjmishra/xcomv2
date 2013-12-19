@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
@@ -75,7 +76,8 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 			}
 			// added for 2769
 			String lastModifiedDateStr = outputDoc.getAttribute("Modifyts");
-			setCustContactId(outputDoc.getAttribute("Modifyuserid"));			
+			String modifyUserIdBy = outputDoc.getAttribute("Modifyuserid");
+			setCustContactId(modifyUserIdBy);			
 			Element custContactListEle = prepareAndInvokeMashup("getCustomerContactDetailsForAll");
 			
 			Element custContactEle = SCXmlUtil.getChildElement(custContactListEle, "CustomerContact");
@@ -85,8 +87,13 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 				setContactFirstName(firstName);
 				setContactLastName(lastName);
 			} else {
-				Element userEle = SCXmlUtil.getChildElement(custContactEle, "User");
-				setContactFirstName(userEle.getAttribute("Username"));
+				Element extnElem = SCXmlUtil.getChildElement(custContactEle, "Extn");
+				String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
+				if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
+					StringTokenizer token = new StringTokenizer(modifyUserIdBy, "@");
+					String networkId = token.nextToken();
+					setContactFirstName(XPEDXWCUtils.getUserName(networkId));		
+				}
 			}
 			
 			if (lastModifiedDateStr != null) {

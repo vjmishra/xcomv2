@@ -1,5 +1,5 @@
 <UserList>
 <User UserKey="" Loginid="" >
-	<ContactPersonInfo EMailID=""/>
+	<ContactPersonInfo EMailID="" FirstName="" LastName=""/>
 </User>
 </UserList>
