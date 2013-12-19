@@ -124,14 +124,13 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 	
 	private void createTblSearchResults() {
 		GridData tblSearchResultsGD = new org.eclipse.swt.layout.GridData();
-		tblSearchResults = new Table(pnlTableHolder,SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL);
+		tblSearchResults = new Table(pnlTableHolder,SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tblSearchResults.setData("name", "tblSearchResults");	
 		tblSearchResults.setEnabled(true);
 
 		
 		TableColumn clmCheckBox = new TableColumn(tblSearchResults, SWT.CHECK);
-		clmCheckBox.setToolTipText("Check_This");
-		clmCheckBox.setWidth(80);
+		clmCheckBox.setWidth(19);
 		clmCheckBox.setResizable(false);
 		clmCheckBox.setMoveable(false);
 		
@@ -447,8 +446,7 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
         
 		colBindings[0] = new YRCTblClmBindingData();
         colBindings[0].setName("clmCheckBox");
-        colBindings[0].setAttributeBinding("@Replace");
-        colBindings[0].setColumnBinding("Replace");
+        colBindings[0].setAttributeBinding("@Checked");
         colBindings[0].setCheckedBinding("Y");
         colBindings[0].setUnCheckedBinding("N");
         colBindings[0].setFilterReqd(false);
@@ -457,13 +455,13 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
         
         bindingData.setImageProvider(new IYRCTableImageProvider() {
 			public String getImageThemeForColumn(Object element, int columnIndex) {
-				Element orderline = (Element) element;
-				String sAlreadyChecked = orderline.getAttribute("Replace"); 
+				Element checked = (Element) element;
+				String sAlreadyChecked = checked.getAttribute("Checked"); 
 				if (columnIndex == 0) {
 					if (YRCPlatformUI.equals(sAlreadyChecked, "Y")) {
-						return "TableCheckboxCheckedImageLarge";
+						return "TableChecked";
 					} else if (YRCPlatformUI.equals(sAlreadyChecked, "N") || YRCPlatformUI.equals(sAlreadyChecked, "")) {
-						return "TableCheckboxUnCheckedImageLarge";
+						return "TableUnchecked";
 					}
 				}
 				return null;
