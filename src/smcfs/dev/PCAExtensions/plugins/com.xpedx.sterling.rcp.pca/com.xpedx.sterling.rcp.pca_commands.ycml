@@ -67,15 +67,19 @@
         </namespaces>
     </form>
     <form Id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard"/>
-    <form Id="com.xpedx.sterling.rcp.pca.orderheader.screen.OrderHeaderPanel">
+      <form Id="com.xpedx.sterling.rcp.pca.orderheader.screen.OrderHeaderPanel">
         <commands>
             <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" OutputTemplateName="" URL="DEFAULT" postCommand="" preCommand=""/>
             <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" outputNamespace="getCustomerContactList_output" version=""/>
             <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
+            <command APIName="getOrderList" APIType="API" Name="getOrderList" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
+            <command APIName="XPXGetOrderSearchListViewService" APIType="SERVICE" Name="XPXGetOrderSearchListViewService" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="getCustomerContactList_output" templateName="getCustomerContactList_output" type="output"/>
             <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
+            <namespace name="getOrderList_Output" templateName="getOrderList_Output" type="output"/>
+         
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileRulePanel">

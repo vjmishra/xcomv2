@@ -385,10 +385,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						}
 						setBillToExtnCustomerClass(billToCustomerClass);
 					}
-					 else if("getUserList".equals(ctx.getApiName())){
-				        	setModel("UserList",ctx.getOutputXmls()[i].getDocumentElement());
-			        	    //handleSearchApiCompletion(ctx);
-			        	}
+					
 				}
 				if (ctx.getApiName().equals("manageCustomer")) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
@@ -396,9 +393,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					this.reInitPage();
 					((XPXUserProfileEditor)YRCDesktopUI.getCurrentPart()).showBusy(false);
 				}
-				if (ctx.getApiName().equals("getUserList")) {
-					setModel("UserList",ctx.getOutputXml().getDocumentElement());
-				}
+				
 			}
 		}
 		//In case of Invoke API failure
