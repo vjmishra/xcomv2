@@ -519,7 +519,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		Document outputDoc  = ((Element) obj).getOwnerDocument();
 		outputItem = outputDoc.getDocumentElement();
 		if (null != outputDoc) {
-			System.out.println("Output XML: " + SCXmlUtil.getString((Element) obj));
+			log.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 			return outputItem;
 		}
 		} catch (Exception ex) {
