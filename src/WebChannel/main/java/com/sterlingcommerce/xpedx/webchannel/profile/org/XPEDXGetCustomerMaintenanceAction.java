@@ -75,6 +75,20 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 			}
 			// added for 2769
 			String lastModifiedDateStr = outputDoc.getAttribute("Modifyts");
+			setCustContactId(outputDoc.getAttribute("Modifyuserid"));			
+			Element custContactListEle = prepareAndInvokeMashup("getCustomerContactDetailsForAll");
+			
+			Element custContactEle = SCXmlUtil.getChildElement(custContactListEle, "CustomerContact");
+			String firstName = custContactEle.getAttribute("FirstName");
+			String lastName = custContactEle.getAttribute("LastName");		
+			if (firstName != null && !("").equals(firstName)) {				
+				setContactFirstName(firstName);
+				setContactLastName(lastName);
+			} else {
+				Element userEle = SCXmlUtil.getChildElement(custContactEle, "User");
+				setContactFirstName(userEle.getAttribute("Username"));
+			}
+			
 			if (lastModifiedDateStr != null) {
 				setLastModifiedDateString(lastModifiedDateStr);
 				setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
@@ -100,7 +114,7 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 		setCountryCodesList();
 
 		// empIDs = getEmpIDList();
-		setLastModifiedUser();
+		//setLastModifiedUser();
 		return "success";
 	}
 
@@ -411,6 +425,16 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	public List otherSalesRepList;
 	public List empNames;
 	private boolean success;
+	
+	private String custContactId;
+
+	public String getCustContactId() {
+		return custContactId;
+	}
+
+	public void setCustContactId(String custContactId) {
+		this.custContactId = custContactId;
+	}
 
 	public boolean isSuccess() {
 		return success;

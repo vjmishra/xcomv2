@@ -65,10 +65,8 @@
 <title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
  <style type="text/css" media="print">
  @page { 
- 		size:297mm 420mm; 
- 		 margin-top:2px margin-right: 73px margin-bottom: 9px margin-left: 73px; } 
- 	 html { height:100%; }
-     body { height:100%; }
+ 		size:A4; 
+ 		 margin-top:3px margin-right: 72px margin-bottom: 0px margin-left: 69px; } 
  	#headerContainer { display: none; }
 	#t1-footer { display: none; }
 </style>

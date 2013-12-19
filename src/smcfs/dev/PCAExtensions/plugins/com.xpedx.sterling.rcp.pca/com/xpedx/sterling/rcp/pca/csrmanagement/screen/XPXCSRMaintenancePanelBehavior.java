@@ -227,7 +227,8 @@ public class XPXCSRMaintenancePanelBehavior extends YRCBehavior {
 					if ("XPXGetUserList".equals(apiname)) {
 						YRCDesktopUI.getCurrentPart().showBusy(true);
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						setModel("XPXGetUserList",outXml);
+						//setModel("XPXGetUserList",outXml);
+						updateXPXGetUserList(outXml);
 						YRCDesktopUI.getCurrentPart().showBusy(false);
 					}
 					if ("getCustomerList".equals(apiname)) {
@@ -241,10 +242,22 @@ public class XPXCSRMaintenancePanelBehavior extends YRCBehavior {
 								Element  eleCustomer = (Element)nodeList.item(j);
 								NodeList extnNodeList =  eleCustomer.getElementsByTagName("Extn");
 								Element  eleExtn = (Element)extnNodeList.item(0);
-								if(eleExtn.getAttribute("ExtnECSR1Key")!=null)
-								eleExtn.setAttribute("ExtnECSR", getEcsrLoginId(eleExtn.getAttribute("ExtnECSR1Key")));
-								if(eleExtn.getAttribute("ExtnECSR2Key")!=null)
-									eleExtn.setAttribute("ExtnECSR2", getEcsrLoginId(eleExtn.getAttribute("ExtnECSR2Key")));
+								if(eleExtn.getAttribute("ExtnECSR1Key")!=null){
+									String[] csr1Info =	getEcsrLoginId(eleExtn.getAttribute("ExtnECSR1Key"));
+									if(csr1Info!=null){
+										eleExtn.setAttribute("ExtnECSR", csr1Info.length>0?csr1Info[0]:"");
+										eleExtn.setAttribute("ExtnECSR1Name", csr1Info.length>2?csr1Info[2]+","+csr1Info[1]:"" );
+									}
+									
+								}
+								if(eleExtn.getAttribute("ExtnECSR2Key")!=null){
+									String[] csr2Info =	getEcsrLoginId(eleExtn.getAttribute("ExtnECSR2Key"));
+									if(csr2Info!=null){
+										eleExtn.setAttribute("ExtnECSR2", csr2Info.length>0?csr2Info[0]:"");
+										eleExtn.setAttribute("ExtnECSR2Name", csr2Info.length>2?csr2Info[2]+","+csr2Info[1]:"" );
+									}
+									
+								}
 								YRCXmlUtils.importElement(customerListForCSR1AndCSR2, eleCustomer);
 							}
 							setModel("CustomerList",customerListForCSR1AndCSR2);
@@ -259,10 +272,22 @@ public class XPXCSRMaintenancePanelBehavior extends YRCBehavior {
 								Element  eleCustomer = (Element)nodeList.item(j);
 								NodeList extnNodeList =  eleCustomer.getElementsByTagName("Extn");
 								Element  eleExtn = (Element)extnNodeList.item(0);
-								if(eleExtn.getAttribute("ExtnECSR1Key")!=null)
-								eleExtn.setAttribute("ExtnECSR", getEcsrLoginId(eleExtn.getAttribute("ExtnECSR1Key")));
-								if(eleExtn.getAttribute("ExtnECSR2Key")!=null)
-									eleExtn.setAttribute("ExtnECSR2", getEcsrLoginId(eleExtn.getAttribute("ExtnECSR2Key")));
+								if(eleExtn.getAttribute("ExtnECSR1Key")!=null){
+									String[] csr1Info =	getEcsrLoginId(eleExtn.getAttribute("ExtnECSR1Key"));
+									if(csr1Info!=null){
+										eleExtn.setAttribute("ExtnECSR", csr1Info.length>0?csr1Info[0]:"");
+										eleExtn.setAttribute("ExtnECSR1Name", csr1Info.length>2?csr1Info[2]+","+csr1Info[1]:"" );
+									}
+								
+								}
+								if(eleExtn.getAttribute("ExtnECSR2Key")!=null){
+									String[] csr2Info =	getEcsrLoginId(eleExtn.getAttribute("ExtnECSR2Key"));
+									if(csr2Info!=null){
+										eleExtn.setAttribute("ExtnECSR2", csr2Info.length>0?csr2Info[0]:"");
+										eleExtn.setAttribute("ExtnECSR2Name", csr2Info.length>2?csr2Info[2]+","+csr2Info[1]:"" );
+									}
+								
+								}
 								YRCXmlUtils.importElement(docCustomerList.getDocumentElement(), eleCustomer);
 							}
 							searchResultsCSR1Element = docCustomerList.getDocumentElement();
@@ -320,14 +345,36 @@ public class XPXCSRMaintenancePanelBehavior extends YRCBehavior {
 		setModel("CSROptions",elemModel);
 
 	}
-	private String getEcsrLoginId(String usrKey){
+	private String[] getEcsrLoginId(String usrKey){
 		Element eleGetCSRList = getModel("XPXGetUserList");
 		String csrXPath="/UserList/User[@UserKey='"+usrKey+"']";
 		NodeList csrUsrList = (NodeList) YRCXPathUtils.evaluate(eleGetCSRList, csrXPath, XPathConstants.NODESET);
+		String[] usrInfo = new String[3];
 		if(csrUsrList!=null && csrUsrList.getLength()>0){
-		Element  eleOldCSR = (Element)csrUsrList.item(0);		
-		return eleOldCSR.getAttribute("Loginid");
+		Element  eleOldCSR = (Element)csrUsrList.item(0);
+		usrInfo[0]=eleOldCSR.getAttribute("Loginid");
+		NodeList contactPersonInfoNodeList =  eleOldCSR.getElementsByTagName("ContactPersonInfo");
+		Element  eleContactPersonInfo = (Element)contactPersonInfoNodeList.item(0);
+		usrInfo[1]=eleContactPersonInfo.getAttribute("FirstName");
+		usrInfo[2]=eleContactPersonInfo.getAttribute("LastName");		
+		return usrInfo;
 		}
-	   return "";
-	}	
+	   return null;
+	}
+	
+	private void updateXPXGetUserList(Element outXml){
+		Document usrDocument= outXml.getOwnerDocument();
+		NodeList nodeList	=	usrDocument.getElementsByTagName("User");
+		for(int j=0;j<nodeList.getLength();j++){	
+			Element  eleUser = (Element)nodeList.item(j);
+			String loginId=eleUser.getAttribute("Loginid");
+			NodeList contactPersonInfoNodeList =  eleUser.getElementsByTagName("ContactPersonInfo");
+			Element  eleContactPersonInfo = (Element)contactPersonInfoNodeList.item(0);
+			String usrName = eleContactPersonInfo.getAttribute("LastName")+","+eleContactPersonInfo.getAttribute("FirstName");
+			String 	usrNameWithLoginId = usrName+" ("+loginId+")";
+			eleContactPersonInfo.setAttribute("userName", usrName);
+			eleContactPersonInfo.setAttribute("userNameAndLoginId", usrNameWithLoginId);			
+	   }
+		setModel("XPXGetUserList",usrDocument.getDocumentElement());
+	}
 }

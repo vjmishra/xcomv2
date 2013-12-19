@@ -340,6 +340,12 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 	
 	private void setApprovedByName(Element eleCustomerContact) {
 		Element referenceElement = getModel("OrderDetails");
+		HashMap approverMap  = XPXUtils.getWebConfNumMap();
+		String webConFNum = YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnWebConfNum");
+		if(approverMap.get(webConFNum) != null){
+			YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").setAttribute("ExtnApprovedDate",approverMap.get(webConFNum).toString());
+		}
+		
 		if(YRCPlatformUI.isVoid(YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnApprovedBy"))||! YRCXmlUtils.getXPathElement(referenceElement, "/Order/Extn").getAttribute("ExtnApprovedBy").contains(" ") )
 		{
 			StringBuffer sb= new StringBuffer();

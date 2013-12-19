@@ -428,7 +428,7 @@
 					InheritFromParents="Y" />
 			</Input>
 			<Template>
-				<Customer CustomerID="" OrganizationCode="" CustomerKey="" Modifyts="">
+				<Customer CustomerID="" OrganizationCode="" CustomerKey="" Modifyts="" Modifyuserid="">
 					<CustomerAdditionalAddressList
 						TotalNumberOfRecords="">
 						<CustomerAdditionalAddress
@@ -612,6 +612,36 @@
 				<CustomerContactList>
 					<CustomerContact FirstName="" LastName="">
 						<Extn ExtnEmployeeID="" />
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	
+	
+	<mashup id='getCustomerContactDetailsForAll' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Buyer User General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="">					
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="" CustomerKey="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="">
+							<Extn/>
+						</User>						
+						<Extn/>						
 					</CustomerContact>
 				</CustomerContactList>
 			</Template>
