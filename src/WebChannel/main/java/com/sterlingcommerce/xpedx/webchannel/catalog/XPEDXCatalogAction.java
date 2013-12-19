@@ -3366,6 +3366,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 				if(!YFCCommon.isVoid(facetListItemAttributeKey))
 				{
 					Element allAssignedListElem=SCXmlUtil.createChild(inputDocElemen, "ShowAllAssignedValues");
+					//Added this attribute after Hot fix HF80 for EB-2810
+					allAssignedListElem.setAttribute("ConsiderOnlyAllAssignedValueAttributes", "Y");
 					Element itemAttributeElem=SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
 					itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
 				}
