@@ -132,7 +132,7 @@ public class DivisionEntitlementTreePanelBehavior extends YRCBehavior {
 			String groupId = userGroup.getAttribute("UsergroupId");
 			groupIdList.add(groupId);
 		}
-		System.out.println("groupId: " + groupIdList);
+		System.out.println("groupIdList: " + groupIdList);
 
 		boolean allowed = groupIdList != null && groupIdList.contains("XPXEBusinessAdmin");
 		page.allowEdit(allowed);

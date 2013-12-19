@@ -78,7 +78,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 		lblGridData.verticalAlignment = 16777216;
 		lblGridData.grabExcessHorizontalSpace = true;
 		lblTreeTitle.setLayoutData(lblGridData);
-		lblTreeTitle.setText("This tree shows whether the Apply Division Entitlement field is true for each Ship-To of this customer.");
+		lblTreeTitle.setText("Expand tree to show whether Division Entitlement field applies for each Ship-To of this customer.");
 
 		tree = new Tree (composite, SWT.CHECK|SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -376,7 +376,7 @@ public class DivisionEntitlementTreePanel extends Composite implements
 			for (int i=0; i<custId.size(); i++)
 			{
 				Element eleCust = custId.get(i);
-				String CustomerID="";
+				String customerID="";
 				StringBuffer address= new StringBuffer();
 				TreeItem iiItem = new TreeItem (localiItem2, 1);
 
@@ -390,8 +390,8 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 				String zip = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 
-//				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
-				String custDivision=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnCustomerDivision");
+				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
+//				String custDivision=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnCustomerDivision");
 				String legacyNo=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnLegacyCustNumber");
 				String billTosuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnBillToSuffix");
 				String shipToSuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipToSuffix");
@@ -404,16 +404,16 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				// (but decided that the orgId is likely preferable to ShipFromBranch, e.g. 60 vs. 68
 
 				if("MC".equalsIgnoreCase(customerType)){
-					CustomerID=orgId;
+					customerID=orgId;
 				}
 				else if("C".equalsIgnoreCase(customerType)){
-					CustomerID=orgId;
+					customerID=orgId;
 				}
 				else if("B".equalsIgnoreCase(customerType)){
-					CustomerID=custDivision+"-"+legacyNo+"-"+billTosuffix;
+					customerID=shipFromBranch+"-"+legacyNo+"-"+billTosuffix;
 				}
 				else if("S".equalsIgnoreCase(customerType)){
-					CustomerID=custDivision+"-"+legacyNo+"-"+shipToSuffix;
+					customerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
 				}
 
 				if(add1 !=null && add1.trim().length()>0) {
@@ -436,17 +436,17 @@ public class DivisionEntitlementTreePanel extends Composite implements
 				}
 
 				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))){
-					iiItem.setText(CustomerID +", " +orgName+ ", " +address.toString());
+					iiItem.setText(customerID +", " +orgName+ ", " +address.toString());
 					if ("S".equalsIgnoreCase(customerType)) {
 						iiItem.setFont(JFaceResources.getFontRegistry().getBold(""));
 						iiItem.setData("isShipTo", Boolean.TRUE);
 					}
 				}else{
-					iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
+					iiItem.setText(orgName+" ("+customerID+")"+address.toString());
 				}
 
 				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType))) && status!=null && status.equals("30")){
-					iiItem.setText("[Suspended] do not use " + CustomerID +", " +orgName+ address.toString());
+					iiItem.setText("[Suspended] do not use " + customerID +", " +orgName+ address.toString());
 					iiItem.setForeground(getDisplay().getSystemColor(SWT.COLOR_GRAY));
 					iiItem.setFont(JFaceResources.getFontRegistry().getItalic(""));
 				}

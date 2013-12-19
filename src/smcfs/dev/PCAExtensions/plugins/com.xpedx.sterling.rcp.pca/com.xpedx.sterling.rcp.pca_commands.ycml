@@ -610,13 +610,10 @@
     <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementTreePanel">
         <commands>
             <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerList" URL="DEFAULT" inputNamespace="input_XPXGetCustomerList" outputNamespace="XPXGetCustomerList" version="ver77"/>
-            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_small" version="ver77"/>
             <command APIName="XPXManageCustomersAPIService" APIType="SERVICE" Name="XPXManageCustomersAPIService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerList" templateName="XPXGetCustomerList" type="output"/>
-            <namespace name="XPXManageCustomer_small" templateName="XPXManageCustomer_small" type="output"/>
-            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="output"/>
         </namespaces>
     </form>
     <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfUsersPanel">

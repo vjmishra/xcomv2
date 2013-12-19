@@ -125,12 +125,12 @@ public class CustomerProfileMaintenance  extends Composite implements IYRCCompos
 //			XPXUtils.paintPanel(tabFolder);
 		createPnlCustomerGeneralInfoData(generalInfo);
 
+		createDivisionEntitlement();
+
 		if (this.isRulesAvailable()) {
 
 			createPnlCustomerProfileRules();
 		}
-
-		createDivisionEntitlement();
 
 		if (this.isMasterCustomer() && YRCPlatformUI.hasPermission(XPXConstants.RES_ID_MANAGE_CUSTOMER_OR_USER_INTEG_ATTR)) {
 
