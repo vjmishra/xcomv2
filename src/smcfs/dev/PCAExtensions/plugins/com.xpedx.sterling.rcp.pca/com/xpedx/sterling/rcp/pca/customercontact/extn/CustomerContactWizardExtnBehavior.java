@@ -135,7 +135,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				 "View Reports:  Can view reports. (Note: User should not view reports if cannot view" + "\n"+ "\t"+ 
 				 "        pricing)." + "\n"	+
 				 "View Prices:  Can view pricing." + "\n"+
-				 "Procurement User:  Punchout User (punchout integration customers only).";
+				 "Punch Out User:  Punchout User (punchout integration customers only).";
 			
 			YRCPlatformUI.showInformation("User Roles Description", usrRoleHelpInfo);
 			
