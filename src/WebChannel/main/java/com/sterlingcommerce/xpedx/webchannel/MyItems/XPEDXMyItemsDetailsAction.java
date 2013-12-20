@@ -1474,7 +1474,15 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 				itemCustomerUomMap.put(itemId+":"+(i+1), customerUOM);
 				if(itemQty.trim().equals("")) {
 					tmpQtyTxtBox=itemQty.trim();
-					itemQty = orderMultiple;
+					//Added for Jira EB-3649 - If selected UOM is same as Base UOM, then send the order multiple qty as default for PNA, else as 1 as default
+					String itemBaseUom = itemBaseUOM.get(i);
+					if(itemUom.equalsIgnoreCase(itemBaseUom)){
+						itemQty = orderMultiple;	
+					}
+					else
+					{
+						itemQty = "1";	
+					}
 					itemUom =  enteredUOMs.get(i);//itemBaseUOM.get(i); added for EB 2034
 				}
 				
