@@ -736,32 +736,28 @@ function getNormalView() {
 	  '<table class="bottable">','<tr>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
 	  '<td class="quantity_box" colspan="2">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}','</td>',</s:if>
 	  '</td>','</tr>',
-	  <s:if test='#isCustomerPO == "Y"'>
-	  '<tr>','<td class="item_number">','</td>',
-	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
+	  <s:if test='(#isCustomerPO == "Y" || (#mfgItemFlag != null && #mfgItemFlag == "Y"))'>
+	  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>'</td>',
+	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser && #isCustomerPO == "Y"'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
 	  </s:if>
-	  <s:if test='#isCustomerLinAcc == "Y"'>
-	  '<tr>','<td class="item_number">','</td>',
-	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
+	  <s:if test='(#isCustomerLinAcc == "Y" || (#customerItemFlag != null && #customerItemFlag=="Y"))'>
+	  '<tr>','<td class="item_number">',<s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'>'{customerItemno}',</s:if>'</td>',
+	  '<td style="text-align:right;width:40%">',<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
 	   </s:if>
-	  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
-	  <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>
-		  '</td>',
-	  '<td colspan="2" class="add_to_cart"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+	  '<tr>','<td style="width:50%" class="mill-mfg">',<s:if test='!#guestUser'>'{itemtypedesc}',</s:if>'</td>',
+	  '<td colspan="2" class="add_to_cart" style="width:auto"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
 	  </s:if><s:else>
 	   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
 	  </s:else>		
 	   '<div class="availablelink">',<s:if test='!#guestUser'>
 		'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
-		'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:12px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
+		'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
 	   '</div>',
 	  </s:if>
 	  '</td>','</tr>',
-	 <s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'> '<tr>','<td class="item_number">{customerItemno}</td>','</tr>',</s:if>
-	  '<tr>',<s:if test='!#guestUser'>'<td style="width:auto;" class="mill-mfg">{itemtypedesc}</td>',</s:if>'<tr>','<td colspan="3">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
-	  '<tr>',<s:if test='!#guestUser'>'<td  style="width:65%;">{repItem}</td>','<td></td>',</s:if>'</tr>',
-	  <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
+	  '<tr>','<td class=style="width:65%;">',<s:if test='!#guestUser'>'{repItem}',</s:if>'</td>','<td colspan="2">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
+	    <s:if test='!#guestUser'>//'<tr>','<td style="height:auto;"></td>','<td class="mill-mfg" colspan="2">{itemtypedesc}</td>','</tr>',//<!-- End mill/mfg -->
 	  '<tr class="line_error">','<td colspan="3">','<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>','</td>','</tr>',</s:if>
 	  '</table>',
 	  '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">','</div>','</div>',

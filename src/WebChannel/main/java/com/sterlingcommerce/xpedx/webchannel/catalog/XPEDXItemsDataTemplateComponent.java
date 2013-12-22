@@ -336,7 +336,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String replacementItem = validate(replacementItemElement.getAttribute("ItemID"));
 		String replacementItemUOM = validate(replacementItemElement.getAttribute("UnitOfMeasure"));
 		if (i>0) sb.append(",");
-		if (i==1) sb.append("<br/>");
+		//fixed for EB-4010
+		//if (i==1) sb.append("<br/>");
 		sb.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
 		sb.append(TextUtils.htmlEncode(replacementItem));
 		sb.append("','");
