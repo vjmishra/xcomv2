@@ -43,11 +43,26 @@
 }
 #searchTips {
 	width: 800px;
+    margin-top: 18px;
+    margin-left: 18px;
+    margin-right: 18px;
 }
 #tips-container {
 	width: 75px; 
 	float: left:10px;	
 	margin-top: 0px;
+}
+.searchTipslist{
+	list-style-type: disc;
+	height: 73px;
+    list-style-type: disc;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+#searchTips li, .searchTips li {
+    list-style-type: disc;
+    margin-left: 40px;
 }
 
 

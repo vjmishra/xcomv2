@@ -3157,15 +3157,42 @@ function msgWait(){
 <div style="display: none;">
 	<div id="searchTips">
 		<h2>Search Tips</h2>
-		<p>You can use special characters such as the asterisk (*) and ? when performing an advanced search.</p>
+		<ul class="padding-top2">
+		<strong>Advanced Search:</strong></ul>
+		<p>Utilize advanced search to search against the entire catalog.  Enter the search criteria, then click ‘enter’ or click the search icon.</p>
+		<p>You can use special characters such as the asterisk (*) and ? when performing an advanced search. The asterisk (*) can be used in search terms for any number of unknown alphanumeric characters.</p>
 		<ul>
 			<li>
-				<p>The asterisk (*) can be used in search terms for any number of unknown alphanumeric characters. For example, "Comput*" can be used to search for products containing words such as "computing systems", "computing power", "computational device", and so on.</p>
-				<p>Note: Using the asterisk (*) as the leading character when specifying a search term is not supported. For example, if you are looking for a product with ABC123 as the Product ID, you cannot provide *C123 as the search term. However, you can search for the product using AB* as the search term.</p>
+				<p>For example, "comput*" can be used to search for products containing terms such as "computing systems", "computing power" or "computational device". </p>
+			</li>
+		</ul>
+		<p>Using the asterisk (*) as the leading character when specifying a search term is not supported.</p>
+		<ul>
+			<li>
+				<p>For example, if you are looking for a product with ABC123 as the Product ID, you cannot provide *C123 as the search term. However, you can search for the product using AB* as the search term.</p>
+			</li>
+			</ul>
+			<p>The question mark (?) can be used in a search term as a substitute for exactly one unknown alphanumeric character. Using the question mark (?) as the leading character when specifying a search term is not supported.</p>
+			<ul>
+			<li>
+				<p>For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. However, you can search for the product using AB?D as the search term.</p>
+			</li>
+		</ul>
+		<p>The advanced search uses ‘and’ logic. Results will reflect items that contain all search terms.</p>
+		
+		<ul class="padding-top2">
+		<strong>Guided Search:</strong>
+		</ul>
+		
+		<p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the list of categories</p>
+		<ul>
+			<li>
+				<p>Terms that match the search criteria are bolded in black.</p>				
 			</li>
 			<li>
-				<p>The question mark (?) can be used in search terms as a substitute for exactly one unknown alphanumeric character. Note: Using the question mark (?) as the leading character when specifying a search term is not supported. For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. However, you can search for the product using AB?D as the search term.</p>
+			<p>The search criteria will remain in the search box until the page is refreshed so you can easily recreate the previous search.</p>
 			</li>
+			<p>The guided search uses ‘or’ logic. Results will reflect items that contain any search terms.</p>
 		</ul>
 	</div>
 </div>
