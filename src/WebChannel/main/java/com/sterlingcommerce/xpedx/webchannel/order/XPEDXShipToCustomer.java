@@ -143,6 +143,12 @@ public class XPEDXShipToCustomer implements Cloneable{
 
 
 
+	public String getRelationshipType() {
+		return relationshipType;
+	}
+	public void setRelationshipType(String relationshipType) {
+		this.relationshipType = relationshipType;
+	}
 	public String getParentCustomerID() {
 		return parentCustomerID;
 	}
@@ -358,6 +364,7 @@ public String getShipToDivdeliveryInfo() {
 	private String DayPhone;
 	private String ShipToName;
 	private String LocationID;
+	private String relationshipType; // division (by convention, always same as extnShipFromBranch)
 	private String parentCustomerID;
 	private String extnCustomerClass;
 	private String extnShipFromBranch;
@@ -400,14 +407,14 @@ public String getShipToDivdeliveryInfo() {
 	private String shipToOrgExtnApplyMinOrderBrands;
 	private String customerLevel;
 	private String billToEmailAddrs;
-	
+
 	public String getBillToEmailAddrs() {
 		return billToEmailAddrs;
 	}
 	public void setBillToEmailAddrs(String billToEmailAddrs) {
 		this.billToEmailAddrs = billToEmailAddrs;
 	}
-	
+
 	public String getShipToOrgExtnApplyMinOrderBrands() {
 		return shipToOrgExtnApplyMinOrderBrands;
 	}

@@ -1120,11 +1120,11 @@ public class XPEDXWCUtils {
 			for(Element customerContactElem : customerContactList) {
 				String userId = customerContactElem.getAttribute("UserID");
 				String modifyBy = customerContactElem.getAttribute("CustomerContactID");
-				Element extnElem = SCXmlUtil.getChildElement(customerContactElem, "Extn");			
+				Element extnElem = SCXmlUtil.getChildElement(customerContactElem, "Extn");
 				String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 				if(!modifyBy.equals(userId))
 					continue;
-				
+
 				String lastName = "";
 				String firstName = "";
 				if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
@@ -1158,27 +1158,27 @@ public class XPEDXWCUtils {
 		}
 		return modifyUserMap;
 	}
-	
+
 	public static String getUserName(String networkId) {
-		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());		
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		String userName = "";
 		Element userList = null;
 		try {
 			Element input = WCMashupHelper.getMashupInput("XPEDX-GetUserList", context);
 			Element extnElem = SCXmlUtil.getChildElement(input, "Extn");
 			extnElem.setAttribute("ExtnEmployeeId", networkId);
-			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());			
+			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());
 		} catch (XMLExceptionWrapper e) {
 			log.error("Unable to get user list", e);
 		} catch (CannotBuildInputException e) {
 			log.error("Unable to get user list", e);
 		}
-		
+
 		if (userList != null) {
 			Element userEle = SCXmlUtil.getChildElement(userList, "User");
 			userName = userEle.getAttribute("Username");
 		}
-		
+
 		return userName;
 	}
 
@@ -5518,6 +5518,7 @@ public class XPEDXWCUtils {
 				shipToCustomer.setCustomerKey(customerOrganizationEle.getAttribute("CustomerKey"));
 				shipToCustomer.setExtnAllowDirectOrderFlag(customerOrganizationEle.getAttribute("ExtnAllowDirectOrderFlag"));
 				shipToCustomer.setCustomerStatus(customerOrganizationEle.getAttribute("Status"));
+				shipToCustomer.setRelationshipType(customerOrganizationEle.getAttribute("RelationshipType"));
 				shipToCustomer.setExtnCustomerClass(extnElement.getAttribute("ExtnCustomerClass"));
 				shipToCustomer.setExtnShipFromBranch(extnElement.getAttribute("ExtnShipFromBranch"));
 				shipToCustomer.setExtnUseCustSKU(extnElement.getAttribute("ExtnUseCustSKU"));
@@ -5615,7 +5616,7 @@ public class XPEDXWCUtils {
 									if(listCnt!=(billToCustExtnList.size()-1))
 									{
 										billToEmailAddrs.append(",");
-									}								
+									}
 								}
 								++listCnt;
 							}

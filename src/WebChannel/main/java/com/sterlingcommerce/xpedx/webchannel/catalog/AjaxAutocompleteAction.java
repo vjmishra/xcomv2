@@ -227,7 +227,8 @@ public class AjaxAutocompleteAction extends WCAction {
 			// if customer level entitlement is disabled, then prevent from seeing division entitlements
 			return null;
 		}
-		return shipto.getExtnShipFromBranch() + wcContext.getStorefrontId();
+		// developer note: relationship_type is a division (by convention, always the same as extn_ship_from_branch)
+		return shipto.getRelationshipType() + wcContext.getStorefrontId();
 	}
 
 	/**
