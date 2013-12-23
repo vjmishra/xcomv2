@@ -64,6 +64,13 @@
 			_renderMenu: function(ul, items) {
 				var self = this,
 				currentCategory = "";
+				
+				// TODO render a special first item that submits the normal search form
+				var normalSearchItem = {
+						isNormalSearch: true
+				};
+				self._renderItem(ul, normalSearchItem);
+
 				$.each(items, function(index, item) {
 					if (item.cat1 != currentCategory) {
 						ul.append("<li class='ui-autocomplete-group'>" + item.cat1 + "</li>");
@@ -113,17 +120,22 @@
 				// autocomplete console.log('BEGIN acSelect');
 				// autocomplete console.log('ui.item = ' , ui.item);
 				
-				var url = '<s:property value="#newSearchURL" escape="false" />';
-				url += '&searchTerm='; // necessary for bookmarkability of search result page
-				url += '&cname=' + encodeURIComponent(ui.item.name);
-				url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
-				// url += '&path=' + encodeURIComponent(ui.item.name);
-				
-				// autocomplete console.log('posting to url = ' , url);
-				var waitMsg = Ext.Msg.wait("Processing...");
-				myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-				myMask.show();
-				post_to_url(url, { path: '/', rememberNewSearchText: $('#newSearch_searchTerm').val() }, 'post');
+				if (ui.item.isNormalSearch) {
+					$('#newSearch').submit();
+					
+				} else {
+					var url = '<s:property value="#newSearchURL" escape="false" />';
+					url += '&searchTerm='; // necessary for bookmarkability of search result page
+					url += '&cname=' + encodeURIComponent(ui.item.name);
+					url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
+					// url += '&path=' + encodeURIComponent(ui.item.name);
+					
+					// autocomplete console.log('posting to url = ' , url);
+					var waitMsg = Ext.Msg.wait("Processing...");
+					myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+					myMask.show();
+					post_to_url(url, { path: '/', rememberNewSearchText: $('#newSearch_searchTerm').val() }, 'post');
+				}
 			};
 			
 			var acOptions = {
@@ -151,18 +163,27 @@
 				var searchTerm = $('#newSearch_searchTerm').val().trim();
 				// autocomplete console.log('searchTerm = ' , searchTerm);
 				
-				var tokens = searchTerm.split(/\s+/);
-				
-				// it's important to replace all matches simultaneously, since each replacement modifies the label (adds markup)
-				var label = item.path;
-				var regexMatchHighlight = new RegExp('(' + tokens.join('|') + ')', 'ig');
-				label = label.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
-				// autocomplete console.log('label = ' , label);
-				
-				return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
-				.data('item.autocomplete', item)
-				.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
-				.appendTo(ul);
+				if (item.isNormalSearch) {
+					var label = 'Click here to search for <span class="ui-autocomplete-highlight-match">' + searchTerm + '</span>';
+					return $('<li class="ui-autocomplete-menu-item ui-autocomplete-normal-search-item" role="menuitem"></li>')
+					.data('item.autocomplete', item)
+					.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
+					.appendTo(ul);
+					
+				} else {
+					var tokens = searchTerm.split(/\s+/);
+					
+					// it's important to replace all matches simultaneously, since each replacement modifies the label (adds markup)
+					var label = item.path;
+					var regexMatchHighlight = new RegExp('(' + tokens.join('|') + ')', 'ig');
+					label = label.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+					// autocomplete console.log('label = ' , label);
+					
+					return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
+					.data('item.autocomplete', item)
+					.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
+					.appendTo(ul);
+				}
 			}
 			;
 		});

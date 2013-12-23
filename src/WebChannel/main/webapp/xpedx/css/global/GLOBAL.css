@@ -8151,6 +8151,10 @@ li.ship-to-list  {
 	padding-left: 4px !important;
 	background-color: white;
 }
+.ui-autocomplete-normal-search-item {
+	padding-left: 0 !important;
+	font-style: italic;
+}
 .ui-autocomplete-highlight-match {
 	color: black;
 	font-weight: bold;
