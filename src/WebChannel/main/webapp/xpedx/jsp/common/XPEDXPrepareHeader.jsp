@@ -164,7 +164,7 @@
 				// autocomplete console.log('searchTerm = ' , searchTerm);
 				
 				if (item.isNormalSearch) {
-					var label = 'Click here to search for <span class="ui-autocomplete-highlight-match">' + searchTerm + '</span>';
+					var label = 'Click here to search entire catalog for <span class="ui-autocomplete-highlight-match">' + searchTerm + '</span>';
 					return $('<li class="ui-autocomplete-menu-item ui-autocomplete-normal-search-item" role="menuitem"></li>')
 					.data('item.autocomplete', item)
 					.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
