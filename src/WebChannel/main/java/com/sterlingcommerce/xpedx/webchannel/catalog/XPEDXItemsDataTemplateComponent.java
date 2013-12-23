@@ -271,7 +271,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
 		sb.append("partno: \"");
-		
+		// Changed for EB 4010
 		//Added for EB 47
 		String extnMfgItemFlag = (String) tag.getWcContext().getWCAttribute("BILL_TO_CUST_MFG_ITEM_FLAG");
 		String extnCustomerItemFlag = (String) tag.getWcContext().getWCAttribute("BILL_TO_CUST_PART_ITEM_FLAG");
@@ -289,7 +289,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append("customerItemno: \"");
 		if(extnCustomerItemFlag!=null && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
-			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
+			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPC"))));
 		}
 		//End of EB 47
 		sb.append("\",");

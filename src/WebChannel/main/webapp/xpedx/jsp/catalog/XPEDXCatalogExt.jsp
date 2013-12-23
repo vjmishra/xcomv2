@@ -741,7 +741,7 @@ function getNormalView() {
 	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser && #isCustomerPO == "Y"'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
 	  </s:if>
 	  <s:if test='(#isCustomerLinAcc == "Y" || (#customerItemFlag != null && #customerItemFlag=="Y"))'>
-	  '<tr>','<td class="item_number">',<s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag == "Y"'>'{customerItemno}',</s:if>'</td>',
+	  '<tr>','<td class="item_number">',<s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>'</td>',
 	  '<td style="text-align:right;width:40%">',<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
 	   </s:if>
 	  '<tr>','<td style="width:50%" class="mill-mfg">',<s:if test='!#guestUser'>'{itemtypedesc}',</s:if>'</td>',
