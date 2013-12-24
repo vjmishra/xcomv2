@@ -2217,8 +2217,7 @@ a.underlink:hover {
 																onmouseover="javascript:testFieldValueCheck(this, 'myAccount');"
 																cssClass="x-input" cssStyle="width: 185px;"
 																value="%{#maskedPasswordString}" showPassword="true"
-																size="8" onchange="javaScript:validatePassword();"
-																maxlength="14" /></td>
+																size="8" onchange="javaScript:validatePassword();" /></td>
 														<td width="19%" class="no-border-right-user">
 															<div class="mandatory float-left">*</div> Confirm
 															Password:
@@ -2228,7 +2227,7 @@ a.underlink:hover {
 																id="confirmpassword" onkeyup="" cssClass="x-input"
 																cssStyle="width: 185px;"
 																value="%{#maskedPasswordString}" showPassword="true"
-																size="8" maxlength="14" /></td>
+																size="8"  /></td>
 													</tr>
 
 													<s:if test="#orgQuestionList!=null">
