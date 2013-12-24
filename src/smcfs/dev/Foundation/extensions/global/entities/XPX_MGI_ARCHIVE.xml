@@ -52,7 +52,7 @@
 				
 				<Attribute
 				ColumnName="ACTIVE_FLAG"
-				DataType="flag"
+				DataType="Flag"
 				DefaultValue="N"
 				Nullable="false" 
 				Description="Indicates the active archive. The application only interacts with the active record. Note that only one record is active at a time."
