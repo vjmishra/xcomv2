@@ -62,7 +62,7 @@ public class AjaxAutocompleteAction extends WCAction implements ServletContextAw
 	private static final Logger log = Logger.getLogger(AjaxAutocompleteAction.class);
 
 	public static enum ResultStatus {
-		OK, TOO_MANY_RESULTS;
+		OK, TOO_MANY_RESULTS, CONFIG_ERROR, SEARCH_ERROR;
 	}
 
 	private static Searcher sharedSearcher; // initialized on servlet context startup
@@ -89,7 +89,6 @@ public class AjaxAutocompleteAction extends WCAction implements ServletContextAw
 			return;
 		}
 
-		// TODO fetch active archive record from database
 		String indexPath = getActiveIndexPath();
 		if (indexPath == null) {
 			log.error("Failed to initialize sharedSearcher - No active xpx_mgi_archive record available");
@@ -206,6 +205,7 @@ public class AjaxAutocompleteAction extends WCAction implements ServletContextAw
 	public String execute() throws CorruptIndexException, IOException {
 		if (sharedSearcher == null) {
 			log.error("No Lucene Searcher available. Probably a configuration error, see earlier logs for details.");
+			resultStatus = ResultStatus.CONFIG_ERROR;
 			return ERROR;
 		}
 
@@ -216,6 +216,7 @@ public class AjaxAutocompleteAction extends WCAction implements ServletContextAw
 		} catch (Exception e) {
 			log.error("Failed to query Marketing Group Index: " + e.getMessage());
 			log.debug("", e);
+			resultStatus = ResultStatus.SEARCH_ERROR;
 			return ERROR;
 		}
 	}
