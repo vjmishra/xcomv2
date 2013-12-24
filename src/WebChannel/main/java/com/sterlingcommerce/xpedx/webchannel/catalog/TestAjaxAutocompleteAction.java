@@ -1,6 +1,12 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Searcher;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
@@ -103,13 +109,41 @@ public class TestAjaxAutocompleteAction extends WCAction {
 
 	@SuppressWarnings("all")
 	public static void main(String[] args) throws Exception {
+		if (args.length < 1) {
+			System.err.println("Usage: " + TestAjaxAutocompleteAction.class.getSimpleName() + " <mgi-root-folder>");
+			System.exit(1);
+			return;
+		}
+
+		// grab latest MarketingGroupIndex_ sub-directory
+		File newestMgiFolder = getNewestMgiFolder(args[0]);
+		System.out.println("newestMgiFolder = " + newestMgiFolder);
+
 		AjaxAutocompleteAction action = createLinemark();
 		action.setSearchTerm("packaging spring");
-		List<AutocompleteMarketingGroup> mgs = action.searchIndex("C:/Sterling/Foundation/marketinggroupindex");
+		Searcher searcher = new IndexSearcher(newestMgiFolder.getAbsolutePath());
+		List<AutocompleteMarketingGroup> mgs = action.searchIndex(searcher);
 
 		for (AutocompleteMarketingGroup mg : mgs) {
 			System.out.println("mg:\t" + mg);
 		}
+	}
+
+	private static File getNewestMgiFolder(String mgiRootStr) {
+		File mgiRoot = new File(mgiRootStr);
+		File[] folders = mgiRoot.listFiles(new FileFilter() {
+
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.getName().startsWith("MarketingGroupIndex_");
+			}
+		});
+
+		if (folders.length == 0) {
+			throw new IllegalStateException("No marketing group folder found");
+		}
+		Arrays.sort(folders);
+		return folders[folders.length - 1];
 	}
 
 }

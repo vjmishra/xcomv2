@@ -2,9 +2,17 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -21,14 +29,18 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
+import org.apache.struts2.util.ServletContextAware;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
+import com.sterlingcommerce.woodstock.util.frame.Manager;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroupComparator;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.yfs.core.YFSSystem;
+import com.yantra.yfs.japi.YFSException;
 
 /*
  * Created on Oct 21, 2013
@@ -43,7 +55,7 @@ import com.yantra.yfs.core.YFSSystem;
  *
  * @author Trey Howard
  */
-public class AjaxAutocompleteAction extends WCAction {
+public class AjaxAutocompleteAction extends WCAction implements ServletContextAware {
 
 	private static final long serialVersionUID = 1L;
 
@@ -53,10 +65,134 @@ public class AjaxAutocompleteAction extends WCAction {
 		OK, TOO_MANY_RESULTS;
 	}
 
+	private static Searcher sharedSearcher; // initialized on servlet context startup
+
 	private String searchTerm;
 
 	private List<AutocompleteMarketingGroup> autocompleteMarketingGroups = new ArrayList<AutocompleteMarketingGroup>(0);
 	private ResultStatus resultStatus = ResultStatus.OK;
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		initSharedSearcher();
+	}
+
+	/**
+	 * Initializes the static variable sharedSearcher. The old sharedSearcher is closed (if applicable).
+	 */
+	public static void initSharedSearcher() {
+		log.debug("Initializing the static sharedSearcher");
+
+		String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
+		if (mgiRoot == null) {
+			log.error("Failed to initialize sharedSearcher - Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
+			return;
+		}
+
+		// TODO fetch active archive record from database
+		String indexPath = getActiveIndexPath();
+		if (indexPath == null) {
+			log.error("Failed to initialize sharedSearcher - No active xpx_mgi_archive record available");
+			return;
+		}
+
+		File mgiPath = new File(mgiRoot, indexPath);
+
+		if (!mgiPath.canRead()) {
+			log.error("Failed to initialize sharedSearcher - Missing directory: " + mgiPath);
+			return;
+		}
+
+		try {
+			if (log.isDebugEnabled()) {
+				log.debug("Creating new sharedSearcher: " + mgiPath.getAbsolutePath());
+			}
+
+			Searcher oldSearcher = sharedSearcher; // so we can close after creating new one
+
+			sharedSearcher = new IndexSearcher(mgiPath.getAbsolutePath());
+
+			if (oldSearcher != null) {
+				log.debug("Closing old sharedSearcher");
+				try {
+					oldSearcher.close();
+				} catch (Exception ignore) {
+				}
+			}
+
+		} catch (Exception e) {
+			log.error("Failed to initialize sharedSearcher - Failed to create Lucene searcher: " + e.getMessage());
+			log.debug("", e);
+			return;
+		}
+	}
+
+	/**
+	 * @return Returns the index_path for the active xpx_mgi_archive record. Returns null if none found.
+	 * @throws SQLException
+	 * @throws YIFClientCreationException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws RemoteException
+	 * @throws YFSException
+	 */
+	private static String getActiveIndexPath() {
+		// TODO invoke API to get active indexPath - hard code direct db connection for now
+		//			YFSEnvironment env = (YFSEnvironment) getWCContext().getSCUIContext().getTransactionContext(true)
+		//					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		//
+		//			try {
+		//				YIFApi api = YIFClientFactory.getInstance().getApi();
+		//				String inputXml = "<MarketingGroupIndexDetails activeFlag=\"Y\" />";
+		//				org.w3c.dom.Document outputListDoc = api.invoke(env, "getMarketingGroupIndexDetails",
+		//						getXMLUtils().createFromString(inputXml));
+		//
+		//			} catch (Exception e) {
+		//				throw new RuntimeException(e);
+		//			}
+
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet res = null;
+		try {
+			String driver = Manager.getProperty("jdbcService", "oraclePool.driver");
+			String url = Manager.getProperty("jdbcService", "oraclePool.url");
+			String user = Manager.getProperty("jdbcService", "oraclePool.user");
+			String password = Manager.getProperty("jdbcService", "oraclePool.password");
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, user, password);
+			stmt = conn.prepareStatement("select index_path from xpx_mgi_archive where active_flag = 'Y'");
+			res = stmt.executeQuery();
+			if (res.next()) {
+				return res.getString("index_path");
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Unexpected error performing query: " + e.getMessage());
+			log.debug("", e);
+			return null;
+		} finally {
+			if (res != null) {
+				try {
+					res.close();
+				} catch (Exception ignore) {
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception ignore) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+	}
 
 	/**
 	 * This AJAX call is used as part of the jquery autocomplete plugin.
@@ -68,19 +204,13 @@ public class AjaxAutocompleteAction extends WCAction {
 	 */
 	@Override
 	public String execute() throws CorruptIndexException, IOException {
-		String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
-		if (mgiRoot == null) {
-			log.error("Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
-			return ERROR;
-		}
-
-		if (!new File(mgiRoot).canRead()) {
-			log.error("Missing Lucene index: " + mgiRoot);
+		if (sharedSearcher == null) {
+			log.error("No Lucene Searcher available. Probably a configuration error, see earlier logs for details.");
 			return ERROR;
 		}
 
 		try {
-			autocompleteMarketingGroups = searchIndex(mgiRoot);
+			autocompleteMarketingGroups = searchIndex(sharedSearcher);
 			return SUCCESS;
 
 		} catch (Exception e) {
@@ -91,18 +221,20 @@ public class AjaxAutocompleteAction extends WCAction {
 	}
 
 	/**
-	 * Perform a lucene search against the Marketing Group index. Populates the <code>autocompleteMarketingGroups</code> field which is seralized as a JSON response.
+	 * Perform a lucene search using the given Searcher.
 	 *
-	 * @param mgiRoot
+	 * @param searcher The Lucene Searcher used to perform the search.
+	 * @return Returns a list containing an AutocompleteMarketingGroup for each Lucene document found.
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	List<AutocompleteMarketingGroup> searchIndex(String mgiRoot) throws CorruptIndexException, IOException {
+	/*default*/ List<AutocompleteMarketingGroup> searchIndex(Searcher searcher) throws CorruptIndexException, IOException {
+		if (searcher == null) {
+			throw new IllegalArgumentException("searcher must not be null");
+		}
 		if (searchTerm == null) {
 			throw new IllegalArgumentException("searchTerm must not be null");
 		}
-
-		Searcher indexSearcher = new IndexSearcher(mgiRoot);
 
 		long start = 0;
 		long stop = 0;
@@ -115,12 +247,12 @@ public class AjaxAutocompleteAction extends WCAction {
 		try {
 			Query query = createQuery();
 
-			TopDocs topDocs = indexSearcher.search(query, 20);
+			TopDocs topDocs = searcher.search(query, 20);
 
 			marketingGroups = new ArrayList<AutocompleteMarketingGroup>(topDocs.scoreDocs.length);
 
 			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-				Document doc = indexSearcher.doc(scoreDoc.doc);
+				Document doc = searcher.doc(scoreDoc.doc);
 				String key = doc.getField("marketing_group_id").stringValue();
 				String name = doc.getField("marketing_group_name").stringValue();
 				String path = doc.getField("marketing_group_path").stringValue();
