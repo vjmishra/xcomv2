@@ -516,6 +516,11 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 								setSuccess(false);
 								setSaveAddUser(false);
 								// return REDIRECT;
+							}else if(newPassword.length() > 14){
+								strErrorMessage
+									.add("The password has a maximum length of 14 characters.");
+								setSuccess(false);
+								setSaveAddUser(false);
 							}
 							// else if(newPassword.length()>=8){
 							char[] newPwdChar = newPassword.toCharArray();
