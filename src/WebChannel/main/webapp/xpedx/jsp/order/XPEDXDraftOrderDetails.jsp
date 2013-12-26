@@ -1722,7 +1722,7 @@ var currentAadd2ItemList = new Object();
                           <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p>  --%>
                         
-							 <p>xpedx Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
+							 <p><s:property value="wCContext.storefrontId" />  Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
 								 <s:if test='#certFlagVal=="Y"'>
 								 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
 								 </s:if>
