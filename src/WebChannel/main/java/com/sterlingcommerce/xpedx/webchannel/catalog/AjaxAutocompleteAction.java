@@ -3,16 +3,10 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -29,17 +23,22 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
-import org.apache.struts2.util.ServletContextAware;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.WCAction;
-import com.sterlingcommerce.woodstock.util.frame.Manager;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroupComparator;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
+import com.yantra.interop.japi.YIFClientFactory;
+import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.core.YFSSystem;
+import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
 /*
@@ -55,7 +54,7 @@ import com.yantra.yfs.japi.YFSException;
  *
  * @author Trey Howard
  */
-public class AjaxAutocompleteAction extends WCAction implements ServletContextAware {
+public class AjaxAutocompleteAction extends WCAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,68 +65,59 @@ public class AjaxAutocompleteAction extends WCAction implements ServletContextAw
 	}
 
 	private static Searcher sharedSearcher; // initialized on servlet context startup
+	private static Object MUTEX = new Object();
 
 	private String searchTerm;
 
 	private List<AutocompleteMarketingGroup> autocompleteMarketingGroups = new ArrayList<AutocompleteMarketingGroup>(0);
 	private ResultStatus resultStatus = ResultStatus.OK;
 
-	@Override
-	public void setServletContext(ServletContext servletContext) {
-		initSharedSearcher();
-	}
-
 	/**
 	 * Initializes the static variable sharedSearcher. The old sharedSearcher is closed (if applicable).
+	 * @throws IllegalStateException If missing config. If missing active XPXMgiArchive. If missing the Lucene directory.
+	 * @throws YIFClientCreationException API error
+	 * @throws YFSException API error
+	 * @throws IOException Lucene error
+	 * @throws CorruptIndexException Lucene error
 	 */
-	public static void initSharedSearcher() {
+	public void initSharedSearcher() throws YFSException, YIFClientCreationException, CorruptIndexException, IOException {
 		log.debug("Initializing the static sharedSearcher");
 
 		String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
 		if (mgiRoot == null) {
-			log.error("Failed to initialize sharedSearcher - Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
-			return;
+			throw new IllegalStateException("Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
 		}
 
 		String indexPath = getActiveIndexPath();
 		if (indexPath == null) {
-			log.error("Failed to initialize sharedSearcher - No active xpx_mgi_archive record available");
-			return;
+			throw new IllegalStateException("No active XPXMgiArchive");
 		}
 
 		File mgiPath = new File(mgiRoot, indexPath);
 
 		if (!mgiPath.canRead()) {
-			log.error("Failed to initialize sharedSearcher - Missing directory: " + mgiPath);
-			return;
+			throw new IllegalStateException("Missing directory: " + mgiPath);
 		}
 
-		try {
-			if (log.isDebugEnabled()) {
-				log.debug("Creating new sharedSearcher: " + mgiPath.getAbsolutePath());
+		if (log.isDebugEnabled()) {
+			log.debug("Creating new sharedSearcher: " + mgiPath.getAbsolutePath());
+		}
+
+		Searcher oldSearcher = sharedSearcher; // so we can close after creating new one
+
+		sharedSearcher = new IndexSearcher(mgiPath.getAbsolutePath());
+
+		if (oldSearcher != null) {
+			log.debug("Closing old sharedSearcher");
+			try {
+				oldSearcher.close();
+			} catch (Exception ignore) {
 			}
-
-			Searcher oldSearcher = sharedSearcher; // so we can close after creating new one
-
-			sharedSearcher = new IndexSearcher(mgiPath.getAbsolutePath());
-
-			if (oldSearcher != null) {
-				log.debug("Closing old sharedSearcher");
-				try {
-					oldSearcher.close();
-				} catch (Exception ignore) {
-				}
-			}
-
-		} catch (Exception e) {
-			log.error("Failed to initialize sharedSearcher - Failed to create Lucene searcher: " + e.getMessage());
-			log.debug("", e);
-			return;
 		}
 	}
 
 	/**
-	 * @return Returns the index_path for the active xpx_mgi_archive record. Returns null if none found.
+	 * @return Returns the IndexPath for the active XPXMgiArchive. Returns null if none found.
 	 * @throws SQLException
 	 * @throws YIFClientCreationException
 	 * @throws IllegalAccessException
@@ -135,82 +125,69 @@ public class AjaxAutocompleteAction extends WCAction implements ServletContextAw
 	 * @throws RemoteException
 	 * @throws YFSException
 	 */
-	private static String getActiveIndexPath() {
-		// TODO invoke API to get active indexPath - hard code direct db connection for now
-		//			YFSEnvironment env = (YFSEnvironment) getWCContext().getSCUIContext().getTransactionContext(true)
-		//					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		//
-		//			try {
-		//				YIFApi api = YIFClientFactory.getInstance().getApi();
-		//				String inputXml = "<MarketingGroupIndexDetails activeFlag=\"Y\" />";
-		//				org.w3c.dom.Document outputListDoc = api.invoke(env, "getMarketingGroupIndexDetails",
-		//						getXMLUtils().createFromString(inputXml));
-		//
-		//			} catch (Exception e) {
-		//				throw new RuntimeException(e);
-		//			}
+	private String getActiveIndexPath() throws YIFClientCreationException, YFSException, RemoteException {
+		YIFApi api = YIFClientFactory.getInstance().getApi();
 
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet res = null;
-		try {
-			String driver = Manager.getProperty("jdbcService", "oraclePool.driver");
-			String url = Manager.getProperty("jdbcService", "oraclePool.url");
-			String user = Manager.getProperty("jdbcService", "oraclePool.user");
-			String password = Manager.getProperty("jdbcService", "oraclePool.password");
-			Class.forName(driver);
-			conn = DriverManager.getConnection(url, user, password);
-			stmt = conn.prepareStatement("select index_path from xpx_mgi_archive where active_flag = 'Y'");
-			res = stmt.executeQuery();
-			if (res.next()) {
-				return res.getString("index_path");
-			} else {
-				return null;
-			}
-		} catch (Exception e) {
-			log.error("Unexpected error performing query: " + e.getMessage());
-			log.debug("", e);
+		YFSEnvironment env  = (YFSEnvironment) getWCContext().getSCUIContext().getTransactionContext(true).getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+
+		org.w3c.dom.Document docInput = YFCDocument.createDocument().getDocument();
+		Element xpxMgiArchiveListElem = docInput.createElement("XPXMgiArchiveList"); // TODO per testing in api, any tag works here?
+		xpxMgiArchiveListElem.setAttribute("ActiveFlag", "Y");
+		docInput.appendChild(xpxMgiArchiveListElem);
+
+		org.w3c.dom.Document docOutput = api.executeFlow(env, "getXPXMgiArchiveList", docInput);
+		if (docOutput == null) {
+			log.warn("API returned null");
 			return null;
-		} finally {
-			if (res != null) {
+		}
+		NodeList activeMgiArchiveElems = docOutput.getElementsByTagName("XPXMgiArchive");
+		if (activeMgiArchiveElems == null || activeMgiArchiveElems.getLength() == 0) {
+			log.warn("API returned empty list");
+			return null;
+		}
+
+		return activeMgiArchiveElems.item(0).getAttributes().getNamedItem("IndexPath").getNodeValue();
+	}
+
+	/**
+	 * Lazy-loader for sharedSearcher.
+	 * @return
+	 * @throws IllegalStateException If fails to initialize (wraps exception)
+	 */
+	private Searcher getSharedSearcher() {
+		synchronized (MUTEX) {
+			if (sharedSearcher == null) {
 				try {
-					res.close();
-				} catch (Exception ignore) {
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (Exception ignore) {
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (Exception ignore) {
+					initSharedSearcher();
+				} catch (Exception e) {
+					throw new IllegalStateException("Failed to initialize sharedSearcher", e);
 				}
 			}
 		}
+		return sharedSearcher;
 	}
 
 	/**
 	 * This AJAX call is used as part of the jquery autocomplete plugin.
 	 *
 	 * @return
-	 * @throws IOException
-	 * @throws CorruptIndexException
+	 * @throws Exception
 	 * @see http://api.jqueryui.com/1.8/autocomplete/#option-source
 	 */
 	@Override
-	public String execute() throws CorruptIndexException, IOException {
-		if (sharedSearcher == null) {
-			log.error("No Lucene Searcher available. Probably a configuration error, see earlier logs for details.");
+	public String execute() {
+		Searcher searcher;
+		try {
+			searcher = getSharedSearcher();
+		} catch (Exception e) {
+			log.error("Failed to initialize sharedSearcher: " + e.getMessage());
+			log.debug("", e);
 			resultStatus = ResultStatus.CONFIG_ERROR;
 			return ERROR;
 		}
 
 		try {
-			autocompleteMarketingGroups = searchIndex(sharedSearcher);
+			autocompleteMarketingGroups = searchIndex(searcher);
 			return SUCCESS;
 
 		} catch (Exception e) {
