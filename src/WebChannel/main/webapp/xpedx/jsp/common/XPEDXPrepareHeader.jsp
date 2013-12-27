@@ -3184,7 +3184,7 @@ function msgWait(){
 		<strong>Guided Search:</strong>
 		</ul>
 		
-		<p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the list of categories</p>
+		<p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the list of categories.</p>
 		<ul>
 			<li>
 				<p>Terms that match the search criteria are bolded in black.</p>				
