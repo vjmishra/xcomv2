@@ -18,8 +18,6 @@ import org.apache.lucene.search.RangeQuery;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-
-import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.woodstock.util.frame.Manager;
 import com.yantra.yfs.core.YFSSystem;
 
@@ -36,14 +34,18 @@ import com.yantra.yfs.core.YFSSystem;
  * @author Trey Howard
  */
 @SuppressWarnings("serial")
-public class DebugMarketingGroupIndex extends WCAction {
+public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
 
 	private static final Logger log = Logger.getLogger(DebugMarketingGroupIndex.class);
 
 	private Map<String, Object> debugInfo = new HashMap<String, Object>();
 
+	{
+		debugInfo.put("error", false); // only set to false if something is determined to be wrong
+	}
+
 	@Override
-	public String execute() throws Exception {
+	public String execute() {
 		Connection conn = null;
 		try {
 			conn = getConnection();
@@ -53,7 +55,9 @@ public class DebugMarketingGroupIndex extends WCAction {
 			String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
 			String siRoot = YFSSystem.getProperty("searchIndex.rootDirectory");
 
-			analyze(mgIds, mgiRoot, siRoot);
+			String indexPath = getActiveIndexPath();
+
+			analyze(mgIds, mgiRoot, indexPath, siRoot, getSharedSearcher());
 
 		} catch (Exception e) {
 			log.error("Unexpected error: " + e.getMessage());
@@ -76,16 +80,24 @@ public class DebugMarketingGroupIndex extends WCAction {
 		return SUCCESS;
 	}
 
-	private void analyze(MinMax mgIds, String mgiRoot, String siRoot) throws CorruptIndexException, IOException {
-		debugInfo.put("error", false); // only set to false if something is determined to be wrong
+	private void analyze(MinMax mgIds, String mgiRoot, String indexPath, String siRoot, Searcher mgiSearcher) throws CorruptIndexException, IOException {
+		File mgiPath = null;
+		if (indexPath == null) {
+			debugInfo.put("error", true);
+			debugInfo.put("error.indexPath", "no active XPXMgiArchive");
+		} else {
+			debugInfo.put("XPXMgiArchive.IndexPath", indexPath);
+			mgiPath = new File(mgiRoot, indexPath);
+		}
 
 		if (mgiRoot == null) {
 			debugInfo.put("error", true);
 			debugInfo.put("error.lucene_folder", "Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
+		}
 
-		} else if (!new File(mgiRoot).canRead()) {
+		if (mgiPath == null || !mgiPath.canRead()) {
 			debugInfo.put("error", true);
-			debugInfo.put("error.lucene_index_missing", "Missing Lucene index: " + mgiRoot);
+			debugInfo.put("error.lucene_index_missing", "Missing Lucene index: " + mgiPath);
 		}
 
 		debugInfo.put("marketing_group.marketing_group_id", mgIds);
@@ -93,13 +105,15 @@ public class DebugMarketingGroupIndex extends WCAction {
 		if (mgIds.getMin() == null || mgIds.getMax() == null) {
 			debugInfo.put("error", true);
 			debugInfo.put("error.null_mgIds", "No marketing_group records found");
+		}
 
+		if (mgiSearcher == null) {
+			debugInfo.put("error", true);
+			debugInfo.put("error.sharedSearcher", "mgiSearcher is null");
 		}
 
 		if (!debugInfo.containsKey("error")) {
 			// MGI search
-			Searcher mgiSearcher = new IndexSearcher(mgiRoot);
-
 			TopDocs mgiMinSearch = mgiSearcher.search(new TermQuery(new Term("marketing_group_id", String.valueOf(mgIds.getMin()))), 1);
 			if (mgiMinSearch.scoreDocs.length == 0) {
 				debugInfo.put("error", true);
@@ -217,9 +231,12 @@ public class DebugMarketingGroupIndex extends WCAction {
 		mgIds.setMax(876634L);
 
 		String mgiRoot = "C:/Sterling/Foundation/marketinggroupindex";
-		 String siRoot = "C:/Sterling/Foundation/searchindex/SearchIndex/xpedx/xpedx/MasterCatalog/CatalogIndex_201311192000213044/en_US";
+		String indexPath = "/MarketingGroupIndex_20131224020348166";
+		String siRoot = "C:/Sterling/Foundation/searchindex/SearchIndex/xpedx/xpedx/MasterCatalog/CatalogIndex_201311192000213044/en_US";
 
-		action.analyze(mgIds, mgiRoot, siRoot);
+		Searcher mgiSearcher = new IndexSearcher(mgiRoot + indexPath);
+
+		action.analyze(mgIds, mgiRoot, indexPath, siRoot, mgiSearcher);
 
 		Map<String, Object> map = action.getDebugInfo();
 		for (String key : map.keySet()) {

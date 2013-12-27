@@ -125,7 +125,7 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @throws RemoteException
 	 * @throws YFSException
 	 */
-	private String getActiveIndexPath() throws YIFClientCreationException, YFSException, RemoteException {
+	protected String getActiveIndexPath() throws YIFClientCreationException, YFSException, RemoteException {
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 
 		YFSEnvironment env  = (YFSEnvironment) getWCContext().getSCUIContext().getTransactionContext(true).getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
@@ -154,13 +154,13 @@ public class AjaxAutocompleteAction extends WCAction {
 	 * @return
 	 * @throws IllegalStateException If fails to initialize (wraps exception)
 	 */
-	private Searcher getSharedSearcher() {
+	protected Searcher getSharedSearcher() {
 		synchronized (MUTEX) {
 			if (sharedSearcher == null) {
 				try {
 					initSharedSearcher();
 				} catch (Exception e) {
-					throw new IllegalStateException("Failed to initialize sharedSearcher", e);
+					throw new IllegalStateException(e);
 				}
 			}
 		}
@@ -180,8 +180,7 @@ public class AjaxAutocompleteAction extends WCAction {
 		try {
 			searcher = getSharedSearcher();
 		} catch (Exception e) {
-			log.error("Failed to initialize sharedSearcher: " + e.getMessage());
-			log.debug("", e);
+			log.error("Failed to initialize sharedSearcher", e);
 			resultStatus = ResultStatus.CONFIG_ERROR;
 			return ERROR;
 		}
@@ -191,8 +190,7 @@ public class AjaxAutocompleteAction extends WCAction {
 			return SUCCESS;
 
 		} catch (Exception e) {
-			log.error("Failed to query Marketing Group Index: " + e.getMessage());
-			log.debug("", e);
+			log.error("Failed to query Marketing Group Index", e);
 			resultStatus = ResultStatus.SEARCH_ERROR;
 			return ERROR;
 		}
@@ -304,7 +302,9 @@ public class AjaxAutocompleteAction extends WCAction {
 		query.add(new BooleanClause(nestedEntitlementQuery, Occur.MUST));
 		query.add(new BooleanClause(nestedSearchTermQuery, Occur.MUST));
 
-		log.debug("Lucene query: " + query);
+		if (log.isDebugEnabled()) {
+			log.debug("Lucene query: " + query);
+		}
 
 		return query;
 	}
