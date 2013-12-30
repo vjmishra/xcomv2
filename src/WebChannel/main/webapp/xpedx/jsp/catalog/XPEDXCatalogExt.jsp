@@ -736,12 +736,17 @@ function getNormalView() {
 	  '<table class="bottable">','<tr>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
 	  '<td class="quantity_box" colspan="2">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}','</td>',</s:if>
 	  '</td>','</tr>',
-	  <s:if test='(#isCustomerPO == "Y" || (#mfgItemFlag != null && #mfgItemFlag == "Y"))'>
-	  '<tr>','<td class="item_number">',<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>'</td>',
+	  <s:if test='(#isCustomerPO == "Y")'>
+	  '<tr>','<td class="item_number">',
+	  <s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>'{partno}',</s:if>
+	  <s:if test='#mfgItemFlag == null && #mfgItemFlag != "Y"'>'{partno}',</s:if>
+	  '</td>',
 	  '<td style="text-align:right;width:50%">',<s:if test='!#guestUser && #isCustomerPO == "Y"'>'<s:property value="customerPOLabel"/>: ','</td>','<td>','<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}"  maxlength="22" size="25"/>',</s:if>'</td>','</tr>',
 	  </s:if>
-	  <s:if test='(#isCustomerLinAcc == "Y" || (#customerItemFlag != null && #customerItemFlag=="Y"))'>
-	  '<tr>','<td class="item_number">',<s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>'{customerItemno}',</s:if>'</td>',
+	  <s:if test='(#isCustomerLinAcc == "Y")'>
+	  '<tr>','<td class="item_number">',
+	  <s:if test='#customerItemFlag != null && #customerItemFlag == "Y"'>'{customerItemno}',</s:if>
+	  <s:if test='#customerItemFlag == null && #customerItemFlag != "Y"'>'{customerItemno}',</s:if>'</td>',
 	  '<td style="text-align:right;width:40%">',<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
 	   </s:if>
 	  '<tr>','<td style="width:50%" class="mill-mfg">',<s:if test='!#guestUser'>'{itemtypedesc}',</s:if>'</td>',
