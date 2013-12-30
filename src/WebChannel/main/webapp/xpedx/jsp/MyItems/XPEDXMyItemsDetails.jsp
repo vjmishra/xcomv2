@@ -175,13 +175,12 @@ function showSharedListForm(){
 	var errorflag;
 	var addToCartFlag;
 	var validAddtoCartItemsFlag  = new Array();
+	// EB-3973 - the function below works for all browsers and  modified for browsers compatibility.
 	function hideSharedListFormIfPrivate() {
-		var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-		var div = document.getElementById("dynamiccontent");
-		if(radioBtns[0].checked) {
-			div.style.display = "none";
+		 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
+		  document.getElementById("dynamiccontent").style.display = "none";
+		 }
 		}
-	}
 </script>
 <script type="text/javascript">
 
@@ -232,10 +231,8 @@ function showSharedListForm(){
 				$(this).attr('title', html );
 			}
 		});
-		
-		
-		
-		$("#dlgShareListLink1").fancybox({
+			// EB-3973  Modified for #dlgShareListLink2 fancybox, Both are calling same fancybox. 
+		$("#dlgShareListLink1, #dlgShareListLink2").fancybox({
 			'onStart' 	: function(){
 			if (isUserAdmin || isEstUser){			
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
@@ -243,78 +240,47 @@ function showSharedListForm(){
 				hideSharedListFormIfPrivate();
 				}
 			},
-			'onClosed':function() {
-				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
-				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin &&  !isEstUser)
+			'onClosed':function() {				
+				//document.getElementById("XPEDXMyItemsDetailsChangeShareList").ShareAdminOnly.checked=false;
+				//var radioBtns = document.getElementById("XPEDXMyItemsDetailsChangeShareList").sharePermissionLevel;
+				// EB-3973 fixed the issue for browsers compatiability.
+				$("#XPEDXMyItemsDetailsChangeShareList #spShareAdminOnly").attr("checked",false);						
+				 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
+			  		document.getElementById("dynamiccontent").style.display = "none";
+				 }
+			
+				/* if(!isUserAdmin &&  !isEstUser)
 				{
 					//Check Private radio button
 					radioBtns[0].checked = true;
 					//Hide Ship To Locations
 					div.style.display = "none";
-				}
+				} */
 				else
 				{
 					// share private variable will be populated if it is a private list
 					//based on that, the private is selected in the pop up and the locations are not shown
 					if(sharePrivateVar!=null && sharePrivateVar != "") {
-						radioBtns[0].checked = true;
+						//radioBtns[0].checked = true;
 						//Hide Ship To Locations
-						div.style.display = "none";
+						//div.style.display = "none";
+						document.getElementById("dynamiccontent").style.display = "none";
+						 
 					}
 					else {							
 					//Check Shared radio button
-					radioBtns[1].checked = true;
+					//radioBtns[1].checked = true;
 					//Display Ship To Locations
-					div.style.display = "block";
+					//div.style.display = "block";
+						document.getElementById("dynamiccontent").style.display = "block";
+						 
 					}
 				}
 				shareSelectAll(false);
 			}
 			
 		});
-
-		$("#dlgShareListLink2").fancybox({
-			'onStart' 	: function(){
-			if (isUserAdmin || isEstUser){
-				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
-				showShareList('<s:property value="#CurrentCustomerId"/>', true);
-				hideSharedListFormIfPrivate();
-				}
-			},
-			'onClosed':function() {
-				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
-				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin && !isEstUser)
-				{
-					//Check Private radio button
-					radioBtns[0].checked = true;
-					//Hide Ship To Locations
-					div.style.display = "none";
-				}
-				else
-				{
-					// share private variable will be populated if it is a private list
-					//based on that, the private is selected in the pop up and the locations are not shown
-					if(sharePrivateVar!=null && sharePrivateVar != "") {
-						radioBtns[0].checked = true;
-						//Hide Ship To Locations
-						div.style.display = "none";
-					}
-					else {							
-					//Check Shared radio button
-					radioBtns[1].checked = true;
-					//Display Ship To Locations
-					div.style.display = "block";
-					}
-				}
-				shareSelectAll(false);
-			}
-			
-		});
-
+	
 		$("#various4").fancybox();
 		$("#various5,#various5_1").fancybox({
 			/*'autoDimensions'	: false,
@@ -3482,7 +3448,7 @@ function showSharedListForm(){
 							</fieldset>
 							<ul id="tool-bar" class="tool-bar-bottom" style="width:503px; float:left; padding-top:5px; margin-left:9px;">
 								<s:if test="%{canShare}">
-								<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
+								<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink1" ><span>Share List</span></a></li>
 								</s:if>
 								<s:else>																
 									<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>																			
