@@ -128,13 +128,15 @@
 					url += '&searchTerm='; // necessary for bookmarkability of search result page
 					url += '&cname=' + encodeURIComponent(ui.item.name);
 					url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
-					// url += '&path=' + encodeURIComponent(ui.item.name);
+					url += '&path=' + encodeURIComponent('/');
+					url += '&rememberNewSearchText=' + encodeURIComponent($('#newSearch_searchTerm').val());
 					
 					// autocomplete console.log('posting to url = ' , url);
 					var waitMsg = Ext.Msg.wait("Processing...");
 					myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 					myMask.show();
-					post_to_url(url, { path: '/', rememberNewSearchText: $('#newSearch_searchTerm').val() }, 'post');
+					
+					window.location.href = url;
 				}
 			};
 			
@@ -187,30 +189,6 @@
 			}
 			;
 		});
-		
-		function post_to_url(path, params, method) {
-		    method = method || "post"; // Set method to post by default if not specified.
-
-		    // The rest of this code assumes you are not using a library.
-		    // It can be made less wordy if you use one.
-		    var form = document.createElement("form");
-		    form.setAttribute("method", method);
-		    form.setAttribute("action", path);
-
-		    for (var key in params) {
-		        if (params.hasOwnProperty(key)) {
-		            var hiddenField = document.createElement("input");
-		            hiddenField.setAttribute("type", "hidden");
-		            hiddenField.setAttribute("name", key);
-		            hiddenField.setAttribute("value", params[key]);
-
-		            form.appendChild(hiddenField);
-		         }
-		    }
-
-		    document.body.appendChild(form);
-		    form.submit();
-		}
 	</script>
 
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
@@ -2538,7 +2516,9 @@ function msgWait(){
 	  </s:url>
 	  <div  class="searchbox-1 auth">
 	  <!-- XBT-391 Removed submit event from Submit button and added to form -->
-		<s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+		<s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+	  		<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
+	  		<s:hidden name='scFlag' id='scFlag' value="Y" />
 			<s:hidden name='path' id='path' value="/" />
 			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	   		<!-- XBT-391 removed the onkeydown event -->
@@ -2561,7 +2541,10 @@ function msgWait(){
  <s:if test='(#isGuestUser == true)'> 
 	<div  class="searchbox-1">
 	<!-- XBT-391 Removed submit event from Submit button and added to form -->
-	  <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+	  <s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+	  		<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
+	  		<s:hidden name='scFlag' id='scFlag' value="Y" />
+	  		<s:hidden name='scGuestUser' id='scGuestUser' value="Y" />
 	  		<s:hidden name='path' id='path' value="/" />
 	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	  		<!-- XBT-391 removed the onkeydown event -->
