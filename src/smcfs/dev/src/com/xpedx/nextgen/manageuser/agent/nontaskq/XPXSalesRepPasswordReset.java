@@ -51,7 +51,7 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 		Document docCustContacts = api.invoke(env, "getCustomerContactList", inputCustomerContactDoc);
 		log.debug("Customer Contact List  " + docCustContacts);
 		env.clearApiTemplate("getCustomerContactList");
-		
+		System.out.println("in get Jobs -----"+ docCustContacts );
 		if(docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact").getLength()>0)
 		{
 			NodeList custContactList = docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact");
@@ -81,6 +81,7 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 			docOrderNew.getDocumentElement().setAttribute("Password", applySaltPattern(listOfSalesRep.get(salesRep).toString(), "3@4@7@9@10@12@14"));
 			docOrderNew.getDocumentElement().setAttribute("GeneratePassword", "YES");
 			log.debug("Before Change Password ---  " + docOrderNew);
+			System.out.println("new change Oassword is ----" + docOrderNew);
 			//api.invoke(env, "ChangePassword", docOrderNew);
 			//log.debug("Change Password ---  " + docOrderNew);
 			listOfJobs.add(docOrderNew);
@@ -150,9 +151,9 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 
 		try {  
-			log.info("Start of Method executeJob in XPXInventoryAgent");
+			log.info("Start of Method executeJob in Sales Rep Change Password");
 			api.invoke(env,"ChangePassword",inputDoc);
-			log.info("End of Method executeJob in XPXInventoryAgent");
+			log.info("End of Method executeJob in Sales Rep Change Password");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
