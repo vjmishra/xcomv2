@@ -67,6 +67,8 @@ public class AjaxAutocompleteAction extends WCAction {
 	private static Searcher sharedSearcher; // initialized on servlet context startup
 	private static Object MUTEX = new Object();
 
+	private boolean refresh; // optional parameter, if true will re-initialize the sharedSearcher
+
 	private String searchTerm;
 
 	private List<AutocompleteMarketingGroup> autocompleteMarketingGroups = new ArrayList<AutocompleteMarketingGroup>(0);
@@ -156,7 +158,7 @@ public class AjaxAutocompleteAction extends WCAction {
 	 */
 	protected Searcher getSharedSearcher() {
 		synchronized (MUTEX) {
-			if (sharedSearcher == null) {
+			if (sharedSearcher == null || isRefresh()) {
 				try {
 					initSharedSearcher();
 				} catch (Exception e) {
@@ -176,6 +178,7 @@ public class AjaxAutocompleteAction extends WCAction {
 	 */
 	@Override
 	public String execute() {
+		// it's important that we assign the sharedSearcher to a local variable for thread-safety
 		Searcher searcher;
 		try {
 			searcher = getSharedSearcher();
@@ -353,6 +356,14 @@ public class AjaxAutocompleteAction extends WCAction {
 		String companyCode = shipto.getExtnCustomerDivision();
 		String legacyCustNum = shipto.getExtnLegacyCustNumber();
 		return companyCode + legacyCustNum;
+	}
+
+	public void setRefresh(boolean refresh) {
+		this.refresh = refresh;
+	}
+
+	public boolean isRefresh() {
+		return refresh;
 	}
 
 	public void setSearchTerm(String searchTerm) {
