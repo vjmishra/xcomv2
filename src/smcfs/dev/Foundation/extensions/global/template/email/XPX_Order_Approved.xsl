@@ -449,7 +449,7 @@
 										</xsl:choose>
 						
 									</td>
-									<xsl:if test = 'Order/Extn/@ExtnShipComplete!="" or Order/Extn/@ExtnWillCall!="" or Order/Extn/@ExtnRushOrderFlag!="" or Order/Extn/@ExtnWebHoldFlag!=""' >				
+									<xsl:if test ='Order/Extn/@ExtnShipComplete!=""  or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
 									<td valign="top"><span class="labelText">Shipping Options: </span></td>	</xsl:if>									
 									<td>								
 									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
@@ -524,6 +524,8 @@
 						</xsl:if>
 						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
 								<thead>
+								<xsl:choose>
+									 <xsl:when test = '($shipQty!="") and  ($IsOrderSplit ="N") ' >
 								<tr>
 									<th bgcolor="##084823" style="padding-right:0px;"></th>
 									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:4px;padding-right:10px;">Ordered<br/>Quantity</th>
@@ -532,7 +534,20 @@
 									<th class="align-center" bgcolor="##084823" valign="top">My<br/>Price&#160;(USD)</th>
 									<th class="align-center" bgcolor="##084823" valign="top">Shippable<br/>Price&#160;(USD)</th>
 									<th class="align-center" bgcolor="##084823" valign="top">Extended<br/>Price&#160;(USD)</th>
-								 </tr>
+									</tr>
+									 </xsl:when>
+									 <xsl:otherwise>
+									 <tr>
+									 <th bgcolor="##084823" style="padding-right:0px;"></th>
+									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:4px;padding-right:10px;">Ordered Quantity</th>
+									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:0px;padding-right:10px;"></th>
+									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:0px;padding-right:0px;"></th>
+									<th class="align-center" bgcolor="##084823" valign="top">My Price(USD)</th>
+									<th class="align-center" bgcolor="##084823" valign="top"></th>
+									<th class="align-center" bgcolor="##084823" valign="top">Extended Price(USD)</th>
+								 	</tr>
+								  </xsl:otherwise>
+								</xsl:choose>
 				                </thead>
 				      </xsl:if>
 				<tbody>	
@@ -559,7 +574,8 @@
 								<tr>
 								<xsl:choose>
 					<xsl:when test='@LineType!="M"'>
-					<td><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/>&#160;
+					<td><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/></td>
+					<td>
 					<xsl:choose>
 						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
 						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
@@ -595,7 +611,8 @@
 								 <tr>
 								 <xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
 									<td>
-										<xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;
+										<xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/></td>
+										<td>
 										<xsl:choose>
 										<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
 										<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
@@ -620,7 +637,8 @@
 								 <tr>
 								 <xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
 																
-									<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;
+									<td><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/></td>
+									<td>
 											<xsl:choose>
 												<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
 												<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
@@ -647,7 +665,7 @@
 							<table>
 								 <tr>
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;
+					<td><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>
 					<xsl:choose>
 						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
 						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
@@ -689,16 +707,17 @@
 						</td> 
 							</xsl:if>		
 							<xsl:if test='$viewPricesFlag ="Y"'>	
-							<td valign="top" align="left">
+							<td valign="top" align="right">
 							<table>	
 							<tr>
-							<xsl:if test='Extn/ExtnTotalOfShippableTotals!=""'>
-							<td class="left">	
+							<xsl:if test = '($shipQty!="") and  ($IsOrderSplit ="N") ' >
+							<td>	
 								<xsl:choose>
 									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
 									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
 									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,##0.00#")'/></xsl:otherwise>
+									<!-- <xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,##0.00#")'/></xsl:otherwise> -->
+									<xsl:otherwise>0.00</xsl:otherwise>
 								</xsl:choose>
 								</td>
 								</xsl:if>
@@ -707,7 +726,7 @@
 						</td> 
 							</xsl:if>
 							<xsl:if test='$viewPricesFlag ="Y"'>	
-							<td valign="top" align="left">
+							<td valign="top" align="right">
 							<table>	
 							<tr>
 							<td class="left">	
@@ -739,14 +758,9 @@
 								</td>
 								</xsl:otherwise>
 								
-							</xsl:choose>			
-									
-							
-						
-						
+							</xsl:choose>				
 					</tr>
-					<tr>
-						<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					<tr> 
 						<xsl:if test = '@LineType!="M"' >					
 						<td colspan="6" align="left" valign="top" style="padding-top:5px;padding-bottom:10px;">
 						 <table>
@@ -762,9 +776,7 @@
 						</xsl:if>
 						</tr>
 						<tr>	
-						<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >					
-						
-						<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+						<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >	 
 						<xsl:choose>
 						<xsl:when test="$custlineAcctLbl!=''">
 						<td class="right"  valign="top"> <xsl:value-of select='$custlineAcctLbl'/>:&#160;</td>
@@ -777,8 +789,7 @@
 						 </table>
 						</td>
 						</xsl:if>
-				</tr>
-					
+					</tr>					
 					<tr>
 					<td colspan="4" style="padding-bottom:10px;border-bottom:1px solid #cccccc;">
 						<table>
