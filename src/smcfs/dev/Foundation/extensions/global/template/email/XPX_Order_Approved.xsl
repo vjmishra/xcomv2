@@ -11,211 +11,94 @@
 	<HEAD>
 	    <STYLE TYPE="text/css">
 
-		.table  {
-		    padding:0;
-		    font-size: 12;
-		    font-family: Tahoma;
-		    font-weight: normal;
-		    color: #000000;
-		    width: 100%;
-		    border: 1;
-		}
-        
-        
-		.tablecolumn{
-		    padding-left:2px; 
-		    padding-right:2px; 
-		    padding-top: 0px;
-		    padding-bottom: 0px;
-		    font-size: 12;
-		    vertical-align: top;
-		    text-align: left;
-		}
-		.numerictablecolumn{
-		    padding-left:2px; 
-		    padding-right:2px; 
-		    padding-top: 0px;
-		    padding-bottom: 0px;
-		    vertical-align: top;
-		    text-align: right;
-		    font-size: 12;
-		}
-		.tablecolumnheader {
-		    border-left:1px solid buttonhighlight;
-		    border-right:1px solid buttonshadow;
-		    border-top:1px solid buttonhighlight;
-		    border-bottom:1px solid buttonshadow;
-		    PADDING-LEFT: 2px;
-		    PADDING-RIGHT: 2px;
-		    PADDING-top: 0px;
-		    PADDING-bottom: 0px;
-		    VERTICAL-ALIGN: middle;
-		    HORIZONTAL-ALIGN: center;
-		    BACKGROUND-COLOR: #e0e0e0;
-		    TEXT-ALIGN: left
-		}
-			html {
-				width: 7.5in;
-				font-family: Arial, Helvetica, Sans-serif;
-				font-size: 12px;
-			}
-			table {
-				
-				
-				font-size: 12px;
-				border-collapse: collapse;
-			}
-			table.price {
-				border: 1px solid #ccc;
-				border-radius: 5px;
-				border-collapse:0px;
-				
-			}
-			table.price td {
-				padding: 2px;
-				}
-			table.price th{
-				background-color: ##003399;
-				color: white;
-				padding: 10px;
-				font-size: 11px;
-			}
-			
-			table.price tr.special-instructions td{
-				border-top: 1px solid #ccc;
-				border-bottom: 1px solid #ccc;
-				
-			}
-			table.price th:first-of-type{
-				border-radius: 5px 0 0 0;
-			}
-			table.price th:last-of-type{
-				border-radius: 0 5px 0 0;
-			}
-			th {
-				text-align: left;
-			}
-			a {
-				color: #003399;
-				text-decoration: none;
-			}
-			a:hover {
-				color: #003399;
-				text-decoration: underline;
-			}
-			ul {
-				padding-left: 20px;
-				margin-top:-3px;
-				margin-bottom:-3px;
-			}
-			div {
-				border: 1px solid #ccc;
-				padding: 5px;
-				border-radius: 5px;
-			}
-			.bold {
-				font-weight: 700;
-			}
-			.logo {
-				margin-bottom: 10px;
-			}
-			.align-right {
-				text-align: right;
-			}
-			table.price td.right, table.price th.right{
-				padding-right: 2px;
-				text-align:right;
-			}
-			table.price td.right:last-of-type, table.price th.right:last-of-type{
-				padding-right: 5px;
-			}
-			table.price td.left{
-				padding-left: 0px;
-			}
-			table.order-total {
-				border: 1px solid #ccc;
-				width:25%;
-				border-radius: 8px;
-				
-			}
-			.tbd{
-				color: red;
-				font-weight: bold;
-			}
-			table.order-total td {
-				padding: 2px;
-			}
-			table.order-total tr.last td {
-				font-weight: bold;
-				background-color: #ccc;				
-			}
-			
-			table.order-total td.last{
-				text-align:right;			
-			}
-			
-			table.order-total tr td:last-of-type {
-				text-align:right;
-			}
-			p.bottom {
-				
-			}
-			p.short-desc {
-				width: 250px;
-				word-wrap: break-word;
-			}
-			ul.long-desc li {
-				width: 250px;
-				word-wrap: break-word;				
-			}
-			div.si-label {
-				border: 0px;
-				float: left;
-				width: 115px;
-				padding-right: 0px;
-				padding-left: 0px;
-			}
-			div.si-text {
-				border: 0px;
-				float: right;
-				word-wrap: break-word;
-				width: 573px; 
-				padding-left: 0px;
-			}
-			div.clearall {
-				clear: both;
-				height: 0px;
-				border: 0px; 
-			}
-			table.inner td{
-				border-top: 0px !important;
-				border-bottom: 0px !important;
-			}
-			table.inner td.first{
-				border-right: 1px solid #cccccc;
-				width: 115px;
-			}
-			table.inner td.last{
-				padding-left: 4px;
-			}
-			tr.specialcharges td {
-				border-top: 1px solid #cccccc;
-			}
-			.widthLeft {
-				width: 22%;
-			}
-			.widthRight {
-				width: 82%;
-			}
-			
-			.addWidth
-			{
-				width: 120px;
-			}
+		table {
+		font-size: 12px;
+		font-family: Tahoma, Arial, Geneva, sans-serif;
+		font-size:12px; 
+		color:#000000;
+		border-collapse: collapse;
+	}
+	table.mainPanel{
+		border:solid 1px #ccc;border-bottom:none;
+	}
+	table.price {
+		border-radius: 5px;
+		border-collapse:0px;
+	}
+	table.price td {
+		padding: 2px;
+	}
+	table.price th{		
+		color: white;
+		padding: 10px;
+		font-size: 11px; 
+		margin:2px;
+	}
+	table.price th:first-of-type{
+		border-radius: 5px 0 0 0;
+	}
+	table.price th:last-of-type{
+		border-radius: 0 5px 0 0;
+	}
+	th {
+		text-align: left;
+	}
+	a {
+		color: #003399;
+		text-decoration: none;
+	}
+	li {
+		margin-bottom: 0px;
+	}
+	ul {
+		margin-bottom: 0px;
+	}
+	a:hover {
+		color: #003399;
+		text-decoration: underline;
+	}
+	.align-right {
+		text-align: right;
+	}
+	.align-center {
+		text-align: center;
+	}
+	.align-left {
+		text-align: left;
+	}
+	table.order-total {
+		border: 1px solid #cccccc;
+		border-radius: 8px;
+	}
+	.tbd{
+		color: red;
+		font-weight: bold;
+	}
+	table.order-total td {
+		padding: 2px;
+		text-align:right;
+	}
+	table.order-total tr.last td {
+		font-weight: bold;
+		background-color: #cccccc;   		
+	}
+	tr.specialcharges td {
+		border-top: 1px solid #cccccc;
+	}
+	.footer {
+		font-size:11px; 
+	}
+	.labelText {
+		font-weight: bold;
+	}
+	table.order-total td.totalLabelText {
+		padding-right: 5px;	
+	}
+	
 			
 
 	    </STYLE>
-
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	</HEAD>
 </xsl:template>
 
@@ -232,6 +115,10 @@
 
 		<xsl:variable name="IsOrderSplit" >
 			<xsl:value-of select="Order/@IsOrderSplit" />
+		</xsl:variable>
+		
+		<xsl:variable name="shipQty" >
+			<xsl:value-of select="Order//Extn/@ExtnReqShipOrdQty" />
 		</xsl:variable>
 		
 		<xsl:variable name="maxDelim" select="'-M'"/>
@@ -285,352 +172,394 @@
 		
     <xsl:template match="/">
 		<HTML>
-			<xsl:call-template name="applyStyle"/>
-			<BODY topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma" align="left" >
-			
-			<table  width="80%" border="0" halign="left" cellpadding="0" cellspacing="0" style="margin:5px;">
-				<tr>	
-					<td >
-						<table width="100%" border="0" >
-							<tr>
-								<td >
-								</td>
-								<td width="100%">
-								<img src="{$brandLogo}" width="216" height="69" />
+			<xsl:call-template name="applyStyle"/>			
+			<body leftmargin="0" topmargin="0">			
+			<table style="margin-left:5px" width="720">
+			<tr>
+						<td style="padding-bottom:20px;">
+						<table width="720">
+							<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+							<tr>								
+								<td align="left" style="padding-bottom:4px;">
+								<img src="{$brandLogo}" width="108" height="32" />
 								</td>
 							</tr>
-						</table> 
-					    
-					</td>
-				</tr>
-				<tr>
-					<td>
-					&#160;
-					</td>
-					</tr>
+							</xsl:if>
+							 <xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+							 <tr>								
+								<td align="left" style="padding-bottom:4px;">
+								<img src="{$brandLogo}" width="216" height="64" />
+								</td>
+							</tr>
+							 </xsl:if>							
+						</table>
 					
-					
-				
-			<tr align="right">
-					<td colspan="1" rowspan="1" style="font-family: Arial, Geneva, sans-serif;font-size:0px; color:#000;" >
-					<table width="100%" border="0" cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-bottom:none;">
-					<tr>
-					
-					
-					<td width="100%">
-					Your order has been approved. 
-					<xsl:choose>
-						<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
-						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<a href="{$stgxpedxUrl}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
-						</xsl:if>
-						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-							<a href="{$stgSaalUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
-						</xsl:if>
-						 
-						</xsl:when>
-						<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
-						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<a href="{$devxpedxUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
-						</xsl:if>
-						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
-							<a href="{$devSaalUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
-						</xsl:if>
-					
-					 
-						</xsl:when>
-						<xsl:otherwise>
-						<xsl:if test = 'Order/@EnterpriseCode="xpedx"' >
-							<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
-						</xsl:if>
-						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
-							<a href="{$storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
-						</xsl:if>
-				
-						</xsl:otherwise>
-					</xsl:choose>
-					</td>
-					</tr>
-					<tr>
-					
-					<td colspan="2">
-					<xsl:if test = 'Order/Input/OrderHoldType/@ReasonText!="Empty"' >
-					<span class="bold">Approved Comments:&#160;</span><xsl:value-of select="Order/Input/OrderHoldType/@ReasonText"/>
-					</xsl:if>
-					</td>
-					</tr>
-					</table>
+					<table class="mainPanel" cellpadding="0"> 
+						  <tr>
+							  <td style="padding-left:8px;padding-top:8px;">
+								Your order has been approved. 
+									<xsl:choose>
+										<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
+										<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+											<a href="{$stgxpedxUrl}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+										</xsl:if>
+										<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+											<a href="{$stgSaalUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+										</xsl:if>
+										 
+										</xsl:when>
+										<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
+										<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+											<a href="{$devxpedxUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+										</xsl:if>
+										<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
+											<a href="{$devSaalUrl}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+										</xsl:if>
+									
+									 
+										</xsl:when>
+										<xsl:otherwise>
+										<xsl:if test = 'Order/@EnterpriseCode="xpedx"' >
+											<a href="{$storeFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+										</xsl:if>
+										<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
+											<a href="{$storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+										</xsl:if>
 								
-										
-			<table width="100%"  cellpadding="4" cellspacing="4" style="border:solid 1px #ccc;border-top:none;">														
-				<thead>
-					<tr>
-						<th colspan="2"> Order Information: </th>
-						<th colspan="2"> Bill To Detail: </th>
-						<th colspan="2"> Shipping Information: </th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td width="50%" colspan="2" style="vertical-align:top">	
-							<table>
-								<tr>
-									<td class="widthLeft">Web Confirmation: </td>
-									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnWebConfNum"/> </td>
-								</tr>
-								<tr>
-									<td class="widthLeft">Order #: </td>
-									<td class="widthRight"><xsl:value-of select="Order/@FormattedOrderNo"/></td>
-								</tr>
-								<tr>
-									<td class="widthLeft">Order Status: </td>
-									<td class="widthRight"><xsl:value-of select="Order/@Status"/> </td>
-								</tr>
-								<tr>
-									<td class="widthLeft">PO #: </td>
-									<td class="widthRight"><xsl:value-of select="Order/@CustomerPONo"/> </td>
-								</tr>
-								<tr>
-									<td class="widthLeft">Ordered By: </td>
-									<td class="widthRight"><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/> </td>
-								</tr>
-								<tr>
-									<td class="widthLeft">Ordered Date: </td>
-									<td class="widthRight"><xsl:value-of select="substring(Order/@OrderDate,6,2)"/>/<xsl:value-of select="substring(Order/@OrderDate,9,2)"/>/<xsl:value-of select="substring(Order/@OrderDate,1,4)"/></td>
-								</tr>	
-						 	</table>
-						 	
-						</td>	
-						<td width="25%" colspan="2" style="vertical-align:top">
-					
-						<xsl:choose>
-						<xsl:when test="(contains($billToID,$maxDelim))">
-						<xsl:value-of select="substring-before($billToID, $maxDelim)" />
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test="$billToName!=''">
-						<xsl:value-of select="$billToName" />
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test='Order/Extn/@ExtnAttnName!=""'>
-						<xsl:value-of select="Order/Extn/@ExtnAttnName"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine1!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine1"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine2"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine3"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:if test = 'Order/PersonInfoBillTo/@City!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@City"/>,&#160;
-						</xsl:if>
-						<xsl:if test = 'Order/PersonInfoBillTo/@State!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@State"/>&#160;
-						</xsl:if>
-						<xsl:if test = 'Order/PersonInfoBillTo/@ZipCode!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@ZipCode"/>&#160;
-						</xsl:if>
-						<xsl:if test = 'Order/PersonInfoBillTo/@Country!=""' >
-						<xsl:value-of select="Order/PersonInfoBillTo/@Country"/>
-						</xsl:if>
-					
-						</td>	
-						
-						<td width="40%" colspan="2" style="vertical-align:top">
-					
-						<xsl:choose>
-						<xsl:when test="(contains($shipToID,$maxDelim))">
-						<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test="$shipToName!=''">
-						<xsl:value-of select="$shipToName" />
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test='Order/Extn/@ExtnAttentionName!=""'>
-						<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-						<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
-						<BR/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-						<xsl:if test = 'Order/PersonInfoShipTo/@City!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@City"/>,&#160;
-						</xsl:if>
-						<xsl:if test = 'Order/PersonInfoShipTo/@State!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@State"/>&#160;
-						</xsl:if>
-						<xsl:if test = 'Order/PersonInfoShipTo/@ZipCode!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@ZipCode"/>&#160;
-						</xsl:if>
-						<xsl:if test = 'Order/PersonInfoShipTo/@Country!=""' >
-						<xsl:value-of select="Order/PersonInfoShipTo/@Country"/>
-						</xsl:if>
-					
-						</td>
-					</tr>
-				
-				<tr>
-					<td colspan="3"> <span class="bold"> Estimated Delivery Date: </span>
-					<xsl:choose>
-					<xsl:when test = 'Order/@ReqDeliveryDate!=""' >
-					<xsl:value-of select="substring(Order/@ReqDeliveryDate,6,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,9,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,1,4)"/>
-					</xsl:when>
-					<xsl:when test = 'Order/@ReqDeliveryDate = ""' >
-					To Be Determined
-					</xsl:when>
-					<xsl:otherwise>
-					To Be Determined
-					</xsl:otherwise>
-					</xsl:choose>
-						
-					</td></tr>	
-					<tr> <!-- This row is intentionally left blank for spacing. Do not alter this row. -->
-						<td></td>
-						<td></td>
-						<td> </td>
-
-					</tr><!-- End intentionally blank row. -->
-					<tr>
-						<td colspan="3"> <span class="bold"> Shipping Options: </span>
-						<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
-						Ship Order Complete
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
-					    ,
-					    </xsl:if>
-						</xsl:if>						
-						<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
-						Will Call
-					    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
-						,
-						</xsl:if>					    					
-						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
-						Rush Order
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
-						,
-						</xsl:if>
-						</xsl:if>
-						<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
-						Order Placed on Hold
-						</xsl:if>
-						
-						 </td>				
-						
+										</xsl:otherwise>
+									</xsl:choose>
+							</td>
 						</tr>
-					<tr> 
-
-						<td> </td>
-						<td> </td>
-						<td> </td>
-					</tr>
-					<tr> 
-
-						<td> </td>
-						<td> </td>
-						<td> </td>
-					</tr>
-					
+						<tr>					
+							<td style="padding-left:8px;padding-top:8px;">
+							<xsl:if test = 'Order/Input/OrderHoldType/@ReasonText!="Empty"' >
+							<span class="bold">Approved Comments:&#160;</span><xsl:value-of select="Order/Input/OrderHoldType/@ReasonText"/>
+							</xsl:if>
+							</td>
+						</tr>
 					<tr>
-					<td colspan="3"> <span class="bold"> Order Comments: </span>
-						<xsl:value-of select="Order/Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" />
+				<td>
+				  <table width="100%" cellpadding="4">
+					<tr>
+						<td>
+							<table width="100%" cellpadding="4">
+								<tr>
+									<td align="left" valign="top">
+										<table>
+											<thead>
+											  <tr>
+												<th>Order Information:</th>
+											 </tr>
+											</thead>
+											<tbody>
+													<tr>
+														<td valign="top">	
+															<table>
+																<tr>
+																	<td>Web&#160;Confirmation:</td>
+																	<td><xsl:value-of select="Order/Extn/@ExtnWebConfNum"/></td>
+																</tr>
+																<tr>
+																	<td>Order #:</td>
+																	<td><xsl:value-of select="Order/@OrderNo"/></td>
+																</tr>
+																<tr>
+																	<td>Order Status:</td>
+																	<td><xsl:value-of select="Order/@Status"/></td>
+																</tr>
+																<tr>
+																	<td>PO #:</td>
+																	<td><xsl:value-of select="Order/@CustomerPONo"/></td>
+																</tr>
+																<tr>
+																	<td>Ordered By:</td>
+																	<td><xsl:value-of select="Order/Extn/@ExtnOrderedByName"/></td>
+																</tr>	
+																<tr>
+																	<td>Ordered Date:</td>
+																	<td><xsl:value-of select="substring(Order/@OrderDate,6,2)"/>/<xsl:value-of select="substring(Order/@OrderDate,9,2)"/>/<xsl:value-of select="substring(Order/@OrderDate,1,4)"/></td>
+																</tr>
+						 									</table>						 	
+														</td>
+													</tr>		
+											</tbody>
+										</table>
+									</td>
+									<td align="right" valign="top">
+									<table>
+										<thead>
+											  <tr>
+												<th>Bill To Detail:</th>
+												<th>Shipping Information:</th>
+											  </tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td valign="top" style="padding-right:30px;">
+											<table>
+												<tr>
+												<td>
+													<xsl:choose>
+													<xsl:when test="(contains($billToID,$maxDelim))">
+													<xsl:value-of select="substring-before($billToID, $maxDelim)" />
+													<BR/>
+													</xsl:when>
+													<xsl:otherwise></xsl:otherwise>
+													</xsl:choose>
+													<xsl:choose>
+													<xsl:when test="$billToName!=''">
+													<xsl:value-of select="$billToName" />
+													<BR/>
+													</xsl:when>
+													<xsl:otherwise></xsl:otherwise>
+													</xsl:choose>
+													<xsl:choose>
+													<xsl:when test='Order/Extn/@ExtnAttnName!=""'>
+													<xsl:value-of select="Order/Extn/@ExtnAttnName"/>
+													<BR/>
+													</xsl:when>
+													<xsl:otherwise></xsl:otherwise>
+													</xsl:choose>
+													<xsl:choose>
+													<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine1!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine1"/>
+													<BR/>
+													</xsl:when>
+													<xsl:otherwise></xsl:otherwise>
+													</xsl:choose>
+													<xsl:choose>
+													<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine2!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine2"/>
+													<BR/>
+													</xsl:when>
+													<xsl:otherwise></xsl:otherwise>
+													</xsl:choose>
+													<xsl:choose>
+													<xsl:when test = 'Order/PersonInfoBillTo/@AddressLine3!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@AddressLine3"/>
+													<BR/>
+													</xsl:when>
+													<xsl:otherwise></xsl:otherwise>
+													</xsl:choose>
+													<xsl:if test = 'Order/PersonInfoBillTo/@City!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@City"/>,&#160;
+													</xsl:if>
+													<xsl:if test = 'Order/PersonInfoBillTo/@State!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@State"/>&#160;
+													</xsl:if>
+													<xsl:if test = 'Order/PersonInfoBillTo/@ZipCode!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@ZipCode"/>&#160;
+													</xsl:if>
+													<xsl:if test = 'Order/PersonInfoBillTo/@Country!=""' >
+													<xsl:value-of select="Order/PersonInfoBillTo/@Country"/>
+													</xsl:if>
+					
+										</td>	
+									</tr>
+							</table>
 						</td>
-
+				<td valign="top" style="padding-right:60px;">
+				<table>
+						<tr>
+							<td>
+							<xsl:choose>
+							<xsl:when test="(contains($shipToID,$maxDelim))">
+							<xsl:value-of select="substring-before($shipToID, $maxDelim)" />
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test="$shipToName!=''">
+							<xsl:value-of select="$shipToName" />
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test='Order/Extn/@ExtnAttentionName!=""'>
+							<xsl:value-of select="Order/Extn/@ExtnAttentionName"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine1!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine1"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine2!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine2"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:choose>
+							<xsl:when test = 'Order/PersonInfoShipTo/@AddressLine3!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@AddressLine3"/>
+							<BR/>
+							</xsl:when>
+							<xsl:otherwise></xsl:otherwise>
+							</xsl:choose>
+							<xsl:if test = 'Order/PersonInfoShipTo/@City!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@City"/>,&#160;
+							</xsl:if>
+							<xsl:if test = 'Order/PersonInfoShipTo/@State!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@State"/>&#160;
+							</xsl:if>
+							<xsl:if test = 'Order/PersonInfoShipTo/@ZipCode!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@ZipCode"/>&#160;
+							</xsl:if>
+							<xsl:if test = 'Order/PersonInfoShipTo/@Country!=""' >
+							<xsl:value-of select="Order/PersonInfoShipTo/@Country"/>
+							</xsl:if>
+						</td>
+															</tr>
+														</table>
+													</td>
+												</tr>	
+										
+										</tbody>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
 					</tr>
-				</tbody>
-		</table>
-					</td>
-				</tr>
-				<tr align="right">
-				<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-				<table  class='price' width="100%" >
-				<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-								<thead>
-									<th  bgcolor="#003399" > </th>
-									<th  bgcolor="#003399"> </th>
-									<th  bgcolor="#003399"> </th>
-									<th valign="top" class="right"  bgcolor="#003399" color="#fff"><font color="#fff"> My Price (USD) </font></th> <!-- The currency code on this line is dynamic.-->
-									<th    class="right"  bgcolor="#003399" color="#fff"><font color="#fff">Shippable Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
-									<th    class="right"  bgcolor="#003399" color="#fff"><font color="#fff"> Extended Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
-					                </thead>
+					<tr>
+						<td>
+							<table cellpadding="4">
+								<tr>
+								<xsl:if test = 'Order/@ReqDeliveryDate!=""'>
+									<td valign="top"><span class="labelText"> Estimated Delivery Date: </span></td></xsl:if>
+									<td valign="top" style="padding-right:30px;">
+										<xsl:choose>
+										<xsl:when test = 'Order/@ReqDeliveryDate!=""' >
+										<xsl:value-of select="substring(Order/@ReqDeliveryDate,6,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,9,2)"/>/<xsl:value-of select="substring(Order/@ReqDeliveryDate,1,4)"/>
+										</xsl:when>
+										<xsl:when test = 'Order/@ReqDeliveryDate = ""' >
+										To Be Determined
+										</xsl:when>
+										<xsl:otherwise>
+										To Be Determined
+										</xsl:otherwise>
+										</xsl:choose>
+						
+									</td>
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete!="" or Order/Extn/@ExtnWillCall!="" or Order/Extn/@ExtnRushOrderFlag!="" or Order/Extn/@ExtnWebHoldFlag!=""' >				
+									<td valign="top"><span class="labelText">Shipping Options: </span></td>	</xsl:if>									
+									<td>								
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
+									Ship Order Complete
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+								    ,
+								    </xsl:if>
+									</xsl:if>						
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+									Will Call
+								    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>					    					
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+									Rush Order
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									Order Placed on Hold
+									</xsl:if></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+					<td style="padding-bottom:15px;">
+							<table cellpadding="4">
+								<tr>
+									<td valign="top"><span class="labelText">Order Comments:</span></td>
+									<td valign="top"><xsl:value-of select="Order/Instructions/Instruction[@InstructionType='HEADER']/@InstructionText" /></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				  </table>
+				</td>
+			  </tr>				  		  
+			  <tr>
+				<td>
+				  <table width="100%" class="price">
+						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+								<thead>								
+					             <xsl:choose>
+									 <xsl:when test = '($shipQty!="") and  ($IsOrderSplit ="N") ' >
+									  <tr>
+									 <th bgcolor="#003399" style="padding-right:0px;"></th>
+									<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:4px;padding-right:10px;">Ordered<br/>Quantity</th>
+									<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
+									<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;">Backorder<br/>Quantity</th>
+									<th bgcolor="#003399" class="align-center" valign="top">My<br/>Price&#160;(USD)</th>
+									<th bgcolor="#003399" class="align-center" valign="top">Shippable<br/>Price&#160;(USD)</th>
+									<th bgcolor="#003399" class="align-center" valign="top">Extended<br/>Price&#160;(USD)</th>	
+									</tr>
+									 </xsl:when>
+									 <xsl:otherwise>
+									 <tr>
+									 <th bgcolor="#003399" style="padding-right:0px;"></th>
+									<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:4px;padding-right:10px;">Ordered Quantity</th>
+									<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;"></th>
+									<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;"></th>
+									 <th bgcolor="#003399" class="align-center" valign="top">My Price&#160;(USD)</th>
+									 <th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;"></th>																	 
+									<th bgcolor="#003399" class="align-center" valign="top">Extended Price&#160;(USD)</th>
+									 </tr>
+									 </xsl:otherwise>
+								</xsl:choose>
+								 
+					             </thead>
 						</xsl:if>
 						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-												<thead>
-								<th  bgcolor="##084823" > </th>
-								<th  bgcolor="##084823"> </th>
-								<th  bgcolor="##084823"> </th>
-								<th valign="top" class="right"  bgcolor="##084823" color="#fff"><font color="#fff"> My Price (USD) </font></th> <!-- The currency code on this line is dynamic.-->
-								<th    class="right"  bgcolor="##084823" color="#fff"><font color="#fff">Shippable Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
-								<th    class="right"  bgcolor="##084823" color="#fff"><font color="#fff"> Extended Price (USD)</font></th> <!-- The currency code on this line is dynamic.-->
+								<thead>
+								<tr>
+									<th bgcolor="##084823" style="padding-right:0px;"></th>
+									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:4px;padding-right:10px;">Ordered<br/>Quantity</th>
+									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
+									<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:0px;padding-right:0px;">Backorder<br/>Quantity</th>
+									<th class="align-center" bgcolor="##084823" valign="top">My<br/>Price&#160;(USD)</th>
+									<th class="align-center" bgcolor="##084823" valign="top">Shippable<br/>Price&#160;(USD)</th>
+									<th class="align-center" bgcolor="##084823" valign="top">Extended<br/>Price&#160;(USD)</th>
+								 </tr>
 				                </thead>
-				</xsl:if>			
-			<xsl:for-each select="Order/OrderLines/OrderLine">						  
-								<xsl:sort select="Extn/@ExtnLegacyLineNumber"/>
-													
-			<tbody>
-				<tr>
-					
-					<td rowspan="7" valign="top">
-					<xsl:value-of select="Item/@ItemShortDesc" disable-output-escaping="yes"/>
-					<xsl:if test = '@LineType!="M"' >					
-					<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
-					</xsl:if>
+				      </xsl:if>
+				<tbody>	
+				<xsl:for-each select="Order/OrderLines/OrderLine">
+					<xsl:sort select="Extn/@ExtnLegacyLineNumber"/>
+					<tr>
+					<td valign="top" align="left" width="280" rowspan="2">
+					 <table>
+						<tr>
+						 <td colspan="2" class="labelText"><xsl:value-of select="Item/@ItemShortDesc" disable-output-escaping="yes"/></td>
+						 </tr>
+						 <tr>
+						<td valign="top">
+						<xsl:if test = '@LineType!="M"' >					
+						<xsl:value-of select="Item/@ItemDesc" disable-output-escaping="yes"/>
+						</xsl:if>
+						 </td>							
+						</tr>
+					</table>
 					</td>
 					
-					<xsl:choose>
-					<xsl:when test='@LineType!="M"'> 															
-					<td width="20%" class="right"> Ordered Qty:&#160;</td>
-					<td class="left"><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/>&#160;
+					<td valign="top" align="left">
+						  <table>
+								<tr>
+								<xsl:choose>
+					<xsl:when test='@LineType!="M"'>
+					<td><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/>&#160;
 					<xsl:choose>
 						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
 						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
@@ -639,34 +568,10 @@
 						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
 						</xsl:otherwise>
 						</xsl:choose></td>
-						<td class="align-right">
-							<xsl:if test='$viewPricesFlag ="Y"'>						
-								<xsl:choose>
-									<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
-									<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
-									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,##0.00000")'/></xsl:otherwise>
-								</xsl:choose>
-							</xsl:if>		
-						</td>
-						<td class="align-right">
-						</td>
-						<td class="align-right">
-							<xsl:if test='$viewPricesFlag ="Y"'>		
-								<xsl:choose>
-									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
-									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,##0.00#")'/></xsl:otherwise>
-								</xsl:choose>
-							</xsl:if>	
-						</td>
+						
 					</xsl:when>
-					<xsl:otherwise>
-						<td class="right"> </td>
-						<td class="left"></td>
-						<td class="right"></td>
-						<td class="right"></td>
-						<td class="align-right">
+					<xsl:otherwise>						
+						<td >
 					 <xsl:if test='$viewPricesFlag ="Y"'>					
 						 <xsl:choose>
 							<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
@@ -678,70 +583,71 @@
 					
 					</xsl:otherwise>
 					</xsl:choose>
+								
+								</tr>
+						  </table>
+					</td>
 					
-				</tr>
-				<tr>
-
-					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					
 					<xsl:if test = '@LineType!="M"' >
-								
-						<xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >	
+						<td valign="top" align="left">
+							<table>
+								 <tr>
+								 <xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
+									<td>
+										<xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;
+										<xsl:choose>
+										<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
+										<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+										</xsl:when>
+										<xsl:otherwise>
+										<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
+										</xsl:otherwise>
+										</xsl:choose>										
+									</td>									
+									
+									
 					
-					<td class="right"> Shippable Qty:&#160;</td>
-					<td class="addWidth"><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/>&#160;
-					<xsl:choose>
-						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
-						</xsl:when>
-						<xsl:otherwise>
-						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
-						</xsl:otherwise>
-						</xsl:choose></td>
-						<td class="align-right"></td>
-					<td class="align-right">
-					<xsl:if test='$viewPricesFlag ="Y"'>					
-						<xsl:choose>
-						<xsl:when test='Extn/@ExtnUnitPrice =""'>
-						</xsl:when>
-						<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'>
-						</xsl:when>
-						<xsl:otherwise>per <xsl:value-of select='Extn/@ExtnPricingUOMDescription'/></xsl:otherwise>
-						</xsl:choose>
+					   			 </xsl:if>
+								 </tr>
+							</table>  
+						</td>   
 					</xsl:if>
-					</td>
-					<td class="right"></td>
-					    </xsl:if>
+					
+					<xsl:if test = '@LineType!="M"' >
+						<td valign="top" align="left">
+							<table>
+								 <tr>
+								 <xsl:if test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
+																
+									<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;
+											<xsl:choose>
+												<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
+												<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+												</xsl:when>
+												<xsl:otherwise>
+												<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
+												</xsl:otherwise>
+												</xsl:choose>
+									 </td>
+									
+					
+					   			 </xsl:if>
+								 </tr>
+							</table>  
+						</td>   
 					</xsl:if>
-				</tr>
-
-				<tr>
-					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+					
+					
+					
 					<xsl:if test = '@LineType!="M"' >					
-						<xsl:if test = 'Extn/@ExtnReqBackOrdQty!="" and  ($IsOrderSplit ="N")' >	
-					
-					<td class="right"> Backorder Qty:&#160; </td>
-					<td class="left"><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/>&#160;
-					<xsl:choose>
-						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
-						</xsl:when>
-						<xsl:otherwise>
-						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
-						</xsl:otherwise>
-						</xsl:choose></td>
-						<td class="align-right"></td>
-					<td class="right"></td>
-					<td class="right"></td>
-					</xsl:if>
-                     </xsl:if>
-				</tr>
-				<tr>
-				<xsl:if test = '@LineType!="M"' >					
 						
 				<xsl:if test = '@lineOrderNO!=""' >					
-					
+					<td valign="top" align="left">
+							<table>
+								 <tr>
 					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;
+					<td class="left"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/>&#160;
 					<xsl:choose>
 						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
 						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
@@ -750,119 +656,179 @@
 						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
 						</xsl:otherwise>
 						</xsl:choose></td>
-						<td class="align-right"></td>
-					<td class="left"></td>
-					<td class="right"></td>
-					<td class="right"></td>
-					</xsl:if>
-					</xsl:if>
-				</tr>
-				<tr>
-				<xsl:if test = '@LineType!="M"' >					
-						
-				<xsl:if test = '@lineOrderNO!=""' >					
 					
-					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<td class="right"><xsl:value-of select="@Status"/>  </td>
-					<td class="addWidth"></td>
-					<td class="right"></td>
-					<td class="right"></td>
-					</xsl:if>
-					</xsl:if>
-				</tr>
-				
-				<tr>
-					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<xsl:if test = '@LineType!="M"' >					
+					 </tr>
+							</table>  
+						</td> 
+						</xsl:if>
+					</xsl:if>  
 					
-					<xsl:if test = '@CustomerPONo!=""' >	
-					 <xsl:choose>
-					  <xsl:when test="$custlinePOLbl!=''">
-						<td class="right"> <xsl:value-of select='$custlinePOLbl'/>:&#160;</td>
-					  </xsl:when>
-					<xsl:otherwise><td class="right">Line PO#:&#160;</td></xsl:otherwise>
-					</xsl:choose>
-					<td class="addWidth"><xsl:value-of select="@CustomerPONo"/></td>
-					<td class="right"></td>
-					<td class="right"></td>
-					</xsl:if>
-					</xsl:if>
-				</tr>
-				<tr>
-				<xsl:if test = '@LineType!="M"' >					
-						
-				<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >					
-					
-					<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
-					<xsl:choose>
-					<xsl:when test="$custlineAcctLbl!=''">
-					<td class="right"  valign="top"> <xsl:value-of select='$custlineAcctLbl'/>:&#160;</td>
-					</xsl:when>
-					<xsl:otherwise><td class="right" valign="top">Line Account#:&#160;</td></xsl:otherwise>
-					</xsl:choose>
-					<td class="addWidth"  valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
-					<td class="right"></td>
-					<td class="right"></td>
-					</xsl:if>
-					</xsl:if>
-				</tr>
-
-				<tr>
-				<xsl:if test = 'Item/@ItemID!=""' >						
-						<td><span class="itemno"><xsl:value-of select='$storeFront' /> item #: <xsl:value-of select="Item/@ItemID"/></span> </td>	
-					
-					</xsl:if>
-					<xsl:if test = '@LineType!="M"' >					
-						
-					<xsl:if test = 'Item/@ManufacturerItem!=""' >					
-				
-					<td class="right"> Mfg. Item #:&#160;</td>
-					<td class="left"><xsl:value-of select="Item/@ManufacturerItem"/></td>
-					</xsl:if>
-					<xsl:if test = 'Item/@CustomerItem!=""' >					
-				
-					<td class="right">My Item #:&#160;</td>
-					<td class="addWidth"><xsl:value-of select="Item/@CustomerItem"/></td>
-                    </xsl:if>
-                    </xsl:if>
-				</tr>
-				<tr>
-				<td colspan="6" style="border-bottom:1px solid #ccc;" >
-				</td>
-				</tr>
-				
-				<!-- if (specialInstructions is not null) -->
-				<xsl:if test = 'Instructions/Instruction/@InstructionText!=""'>
-				<tr class="special-instructions"> 
-					<td colspan="6"> 
-						<table class="inner">
-							<tr>
-								
-								<td class="first" valign="top"> Special Instructions:</td>
-								<td class="last"><xsl:value-of select="Instructions/Instruction/@InstructionText"/></td>
 							
-							</tr>
-						</table>
-					 </td>
-				</tr>
-				</xsl:if>
-							</tbody>
-			</xsl:for-each>
-			</table>
-					</td>
+										
+							<xsl:choose>
+								<xsl:when test='@LineType!="M"'> 								
+								<xsl:if test='$viewPricesFlag ="Y"'>
+							<td valign="top" align="left">
+							<table>
+								 <tr>
+								 <td class="left">						
+								<xsl:choose>
+									<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'><span class="tbd">Call for price</span></xsl:when>
+									<xsl:when test='Extn/@ExtnUnitPrice =""'><span class="tbd">Call for price</span></xsl:when>
+									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnUnitPrice,"$#,###,###,##0.00000")'/></xsl:otherwise>
+								</xsl:choose><br/>
+								<xsl:choose>
+										<xsl:when test='Extn/@ExtnUnitPrice =""'>
+										</xsl:when>
+										<xsl:when test='Extn/@ExtnUnitPrice ="0.00"'>
+										</xsl:when>
+										<xsl:otherwise>per <xsl:value-of select='Extn/@ExtnPricingUOMDescription'/></xsl:otherwise>
+										</xsl:choose></td>
+								</tr>
+							</table>  
+						</td> 
+							</xsl:if>		
+							<xsl:if test='$viewPricesFlag ="Y"'>	
+							<td valign="top" align="left">
+							<table>	
+							<tr>
+							<xsl:if test='Extn/ExtnTotalOfShippableTotals!=""'>
+							<td class="left">	
+								<xsl:choose>
+									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,##0.00#")'/></xsl:otherwise>
+								</xsl:choose>
+								</td>
+								</xsl:if>
+								</tr>						 
+							</table>  
+						</td> 
+							</xsl:if>
+							<xsl:if test='$viewPricesFlag ="Y"'>	
+							<td valign="top" align="left">
+							<table>	
+							<tr>
+							<td class="left">	
+								<xsl:choose>
+									<xsl:when test='not(Extn/@ExtnExtendedPrice)'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,##0.00#")'/></xsl:otherwise>
+								</xsl:choose>
+								</td>
+							</tr>						 
+							</table>  
+						</td> 
+							</xsl:if>
+								
+								</xsl:when>
+							
+								<xsl:otherwise>
+								<td>
+								
+								<xsl:if test='$viewPricesFlag ="Y"'>					
+								 	<xsl:choose>
+										<xsl:when test='Extn/@ExtnExtendedPrice =""'><span class="tbd">To be determined</span></xsl:when>
+										<xsl:when test='Extn/@ExtnExtendedPrice ="0.00"'><span class="tbd">To be determined</span></xsl:when>
+										<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnExtendedPrice,"$#,###,###,##0.00")'/></xsl:otherwise>
+									</xsl:choose>
+				     			</xsl:if>
+					
+								</td>
+								</xsl:otherwise>
+								
+							</xsl:choose>			
+									
+							
+						
+						
 					</tr>
 					<tr>
-					<td>
-					&#160;
-					</td>
-					</tr>
-					<tr>
-					<td >
-					<xsl:if test='$viewPricesFlag ="Y"'>
-					<table class="order-total" align="right">
+						<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+						<xsl:if test = '@LineType!="M"' >					
+						<td colspan="6" align="left" valign="top" style="padding-top:5px;padding-bottom:10px;">
+						 <table>
 						<tr>
-
-				<td>Subtotal:</td>
+						<xsl:if test = '@CustomerPONo!=""' >	
+						 <xsl:choose>
+						  <xsl:when test="$custlinePOLbl!=''">
+							<td class="right"> <xsl:value-of select='$custlinePOLbl'/>:&#160;</td>
+						  </xsl:when>
+						<xsl:otherwise><td>Line PO#:&#160;</td></xsl:otherwise>
+						</xsl:choose>
+						<td class="addWidth"><xsl:value-of select="@CustomerPONo"/></td>
+						</xsl:if>
+						</tr>
+						<tr>	
+						<xsl:if test = 'Extn/@ExtnCustLineAccNo!=""' >					
+						
+						<!-- <td> This cell is occupied via the rowspan property in the first row. Do not change. </td> --> 
+						<xsl:choose>
+						<xsl:when test="$custlineAcctLbl!=''">
+						<td class="right"  valign="top"> <xsl:value-of select='$custlineAcctLbl'/>:&#160;</td>
+						</xsl:when>
+						<xsl:otherwise><td>Line Account#:&#160;</td></xsl:otherwise>
+						</xsl:choose>
+						<td class="addWidth"  valign="top"><xsl:value-of select="Extn/@ExtnCustLineAccNo"/></td>
+						</xsl:if>
+						</tr>
+						 </table>
+						</td>
+						</xsl:if>
+				</tr>
+					
+					<tr>
+					<td colspan="4" style="padding-bottom:10px;border-bottom:1px solid #cccccc;">
+						<table>
+					<tr>
+					<xsl:if test = 'Item/@ItemID!=""' >					
+							<td style="padding-right:30px;"><xsl:value-of select='$storeFront' />  item #: <xsl:value-of select="Item/@ItemID"/></td>
+						</xsl:if>
+						<xsl:if test = '@LineType!="M"' >	
+						<xsl:if test = 'Item/@ManufacturerItem!=""' >					
+						<td style="padding-right:30px;">Mfg. Item #: <xsl:value-of select="Item/@ManufacturerItem"/></td>
+						</xsl:if>
+						<xsl:if test = 'Item/@CustomerItem!=""' >					
+						<td>My Item #: <xsl:value-of select="Item/@CustomerItem"/></td>
+	                    </xsl:if>
+	                    </xsl:if>
+	                    </tr>
+					</table>
+					</td>
+					<td colspan="3" style="padding-bottom:10px;border-bottom:1px solid #cccccc;"></td>				
+				</tr>
+					<!-- if (specialInstructions is not null) -->
+				<xsl:if test = 'Instructions/Instruction/@InstructionText!=""'>
+				<tr>				         
+					<td colspan="7" style="padding:0px; border-bottom:1px solid #cccccc;" >
+						<table>
+								<tr>
+									<td valign="top" style="border-right:1px solid #cccccc; padding:5px;">Special Instructions:</td>
+									<td valign="top" style="padding:5px;"><xsl:value-of select="Instructions/Instruction/@InstructionText"/></td>
+								</tr>
+						</table>
+					</td>					         
+				</tr>
+				
+				</xsl:if>
+				</xsl:for-each>
+				</tbody>
+					  </table>
+					 
+			</td>
+			</tr>
+				</table>
+					</td>
+					</tr>
+					
+					<xsl:if test='$viewPricesFlag ="Y"'>
+						<tr>
+					<td align="right" style="padding-bottom:25px;">
+					<table class="order-total">
+				<tr>
+							<td class="totalLabelText">Subtotal:</td>
 				<td>
 				<td class="align-right"><xsl:choose>
 						<xsl:when test='not(Order/Extn/@ExtnOrderSubTotal)'>$0.00</xsl:when>
@@ -874,7 +840,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td> Order Total Adjustments:</td>
+				<td class="totalLabelText">Order Total Adjustments:</td>
 				<td>
 				<td class="align-right"><xsl:choose>
 						<xsl:when test='not(Order/Extn/@ExtnTotOrderAdjustments)'>$0.00</xsl:when>
@@ -897,71 +863,63 @@
 					</xsl:choose></td>
 				 </td>
 			 </tr>
-			<tr>
-				<td>Tax:</td>
-				<xsl:choose>
-	              	<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
-	              		<td>
-		              	<td class="align-right">$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></td>	
-		              	</td>						
-					</xsl:when>
-					<xsl:otherwise>
-						<td>
-						<td class="align-right"><span class="tbd">To be determined</span></td>
-						</td>
-					</xsl:otherwise>
-				</xsl:choose>
-			</tr>
-			<tr>
-				<td> Shipping and Handling:</td>
-				<xsl:choose>
-					<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
-						<td>												
-						<td class="align-right">$<xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></td>
-						</td>
-					</xsl:when>
-				<xsl:otherwise>
-					<td>
-					<td class="align-right"><span class="tbd">To be determined</span></td>
-					</td>
-				</xsl:otherwise></xsl:choose>
-			</tr>
+					<tr>
+						<td>Tax:</td>
+						<xsl:choose>
+			              	<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
+			              		<td>
+				              	<td class="align-right">$<xsl:value-of select="Order/Extn/@ExtnOrderTax"/></td>	
+				              	</td>						
+							</xsl:when>
+							<xsl:otherwise>
+								<td>
+								<td class="align-right"><span class="tbd">To be determined</span></td>
+								</td>
+							</xsl:otherwise>
+						</xsl:choose>
+					</tr>
+					<tr>
+					<td class="totalLabelText">Shipping and Handling:</td>
+						<xsl:choose>
+							<xsl:when test='Order/@MaxOrderStatus="1100.5700" or Order/@MaxOrderStatus="1100.5950" or Order/@MaxOrderStatus="1100.5750"' >
+								<td>												
+								<td class="admin">$<xsl:value-of select="Order/Extn/@ExtnTotalOrderFreight"/></td>
+								</td>
+							</xsl:when>
+						<xsl:otherwise>
+							<td>
+							<td class="align-right"><span class="tbd">To be determined</span></td>
+							</td>
+						</xsl:otherwise></xsl:choose>
+					</tr>
 
-			<tr class="last">
-				<td> Order Total (USD):</td>
-				<td>
-				 <td class="align-right"><xsl:choose>
-						<xsl:when test='not(Order/Extn/@ExtnTotalOrderValue)'>$0.00</xsl:when>
-						<xsl:when test='Order/Extn/@ExtnTotalOrderValue =""'>$0.00</xsl:when>
-						<xsl:when test='Order/Extn/@ExtnTotalOrderValue ="0.00"'>$0.00</xsl:when>
-						<xsl:otherwise><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$#,###,###,##0.00")'></xsl:value-of>
-						</xsl:otherwise>
-					</xsl:choose></td>
-				 </td>
-			
-				 </tr>
+					<tr class="last">
+							<td class="totalLabelText">Order Total (USD):</td>						
+								<xsl:choose>								
+										<xsl:when test='not(Order/Extn/@ExtnTotalOrderValue)'>$0.00</xsl:when>
+										<xsl:when test='Order/Extn/@ExtnTotalOrderValue =""'>$0.00</xsl:when>
+										<xsl:when test='Order/Extn/@ExtnTotalOrderValue ="0.00"'>$0.00</xsl:when>								
+									<xsl:otherwise>
+									<td>
+										<td class="align-right">
+											<span class="tbd"><xsl:value-of select='format-number(Order/Extn/@ExtnTotalOrderValue,"$#,###,###,##0.00")'></xsl:value-of></span>
+										</td>
+									</td>
+									</xsl:otherwise>
+								</xsl:choose>	
+					 </tr>
                 
-						</table>
-						<tr>
-					<td>
-					&#160;
+					</table>
 					</td>
 					</tr>
-						</xsl:if>
-						</td></tr>
-					<tr align="right"><td>
-					<table width="100%" border="0" align="" cellpadding="1" cellspacing="1" style="margin-left:5px;border-collapse:inherit;text-align:left;" >
+						</xsl:if>					
 					<tr>
-					<td style="text-wrap:7.5in;width:720px;">
-					This document merely confirms your order, it is not an acceptance of your order. Additional fees may apply to accepted orders. 
-					</td>
-				</tr>
-			</table></td></tr>
-			
-	</table>
-						
-			</BODY>
-		</HTML>
-		
+						<td style="text-wrap:7.5in;width:720px;">
+							This document merely confirms your order, it is not an acceptance of your order. Additional fees may apply to accepted orders. 
+						</td>
+					</tr>
+    			</table>			
+			</body>
+		</HTML>		
 	</xsl:template>
 </xsl:stylesheet>
