@@ -28,29 +28,18 @@ import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.interop.japi.YIFCustomApi;
 
-public class XPXSalesRepPasswordReset implements YIFCustomApi {
+public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static Set<String> customerContactKeys = new HashSet<String>();
 	private Properties _properties = null;
 	private static YIFApi api = null;
 	
-	static {
-
-		try {
-			api = YIFClientFactory.getInstance().getApi();
-
-		} catch (YIFClientCreationException e) {
-			
-			e.printStackTrace();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public void invokeModifyPassword(YFSEnvironment env, Document inXML) throws Exception
-	{
+	
+	public List getJobs(YFSEnvironment env, Document criteria,
+			Document lastMessageCreated) throws Exception {
 		List listOfSalesRep = new ArrayList();
-		
+		List listOfJobs = new ArrayList();
 		Document inputCustomerContactDoc = SCXmlUtil.createFromString("<CustomerContact><OrderBy><Attribute Name='CustomerContactKey' Desc='N' /></OrderBy></CustomerContact>");
 		Element inputCustomerContactElement = inputCustomerContactDoc.getDocumentElement();
 
@@ -92,12 +81,18 @@ public class XPXSalesRepPasswordReset implements YIFCustomApi {
 			docOrderNew.getDocumentElement().setAttribute("Password", applySaltPattern(listOfSalesRep.get(salesRep).toString(), "3@4@7@9@10@12@14"));
 			docOrderNew.getDocumentElement().setAttribute("GeneratePassword", "YES");
 			log.debug("Before Change Password ---  " + docOrderNew);
-			api.invoke(env, "ChangePassword", docOrderNew);
-			log.debug("Change Password ---  " + docOrderNew);	
+			//api.invoke(env, "ChangePassword", docOrderNew);
+			//log.debug("Change Password ---  " + docOrderNew);
+			listOfJobs.add(docOrderNew);
 		}
 		
-
-
+      return listOfJobs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void invokeModifyPassword(YFSEnvironment env, Document inXML) throws Exception
+	{
+  //Code removed since it is Agent ...
 	}	
 	
 	public static  String applySaltPattern(String word,String salt) { 
@@ -146,10 +141,25 @@ public class XPXSalesRepPasswordReset implements YIFCustomApi {
 		return list;
 	}
 
+	
 	@Override
-	public void setProperties(Properties arg0) throws Exception {
+	public void executeJob(YFSEnvironment env, Document inputDoc) throws Exception {
+
+
 		// TODO Auto-generated method stub
-		
+		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
+
+		try {  
+			log.info("Start of Method executeJob in XPXInventoryAgent");
+			api.invoke(env,"ChangePassword",inputDoc);
+			log.info("End of Method executeJob in XPXInventoryAgent");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
 	}
 
 	
