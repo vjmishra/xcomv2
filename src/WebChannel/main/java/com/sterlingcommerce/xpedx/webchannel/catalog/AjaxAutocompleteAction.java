@@ -1,9 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
-import java.io.File;
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,30 +13,19 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.TooManyClauses;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.WCAction;
+import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteCacheUtil;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroupComparator;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.interop.japi.YIFApi;
-import com.yantra.interop.japi.YIFClientCreationException;
-import com.yantra.interop.japi.YIFClientFactory;
-import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfs.core.YFSSystem;
-import com.yantra.yfs.japi.YFSEnvironment;
-import com.yantra.yfs.japi.YFSException;
 
 /*
  * Created on Oct 21, 2013
@@ -64,8 +50,7 @@ public class AjaxAutocompleteAction extends WCAction {
 		OK, TOO_MANY_RESULTS, CONFIG_ERROR, SEARCH_ERROR;
 	}
 
-	private static Searcher sharedSearcher; // initialized on servlet context startup
-	private static Object MUTEX = new Object();
+	public static final AutocompleteCacheUtil CACHE_UTIL = new AutocompleteCacheUtil();
 
 	private boolean refresh; // optional parameter, if true will re-initialize the sharedSearcher
 
@@ -73,101 +58,6 @@ public class AjaxAutocompleteAction extends WCAction {
 
 	private List<AutocompleteMarketingGroup> autocompleteMarketingGroups = new ArrayList<AutocompleteMarketingGroup>(0);
 	private ResultStatus resultStatus = ResultStatus.OK;
-
-	/**
-	 * Initializes the static variable sharedSearcher. The old sharedSearcher is closed (if applicable).
-	 * @throws IllegalStateException If missing config. If missing active XPXMgiArchive. If missing the Lucene directory.
-	 * @throws YIFClientCreationException API error
-	 * @throws YFSException API error
-	 * @throws IOException Lucene error
-	 * @throws CorruptIndexException Lucene error
-	 */
-	public void initSharedSearcher() throws YFSException, YIFClientCreationException, CorruptIndexException, IOException {
-		log.debug("Initializing the static sharedSearcher");
-
-		String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
-		if (mgiRoot == null) {
-			throw new IllegalStateException("Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
-		}
-
-		String indexPath = getActiveIndexPath();
-		if (indexPath == null) {
-			throw new IllegalStateException("No active XPXMgiArchive");
-		}
-
-		File mgiPath = new File(mgiRoot, indexPath);
-
-		if (!mgiPath.canRead()) {
-			throw new IllegalStateException("Missing directory: " + mgiPath);
-		}
-
-		if (log.isDebugEnabled()) {
-			log.debug("Creating new sharedSearcher: " + mgiPath.getAbsolutePath());
-		}
-
-		Searcher oldSearcher = sharedSearcher; // so we can close after creating new one
-
-		sharedSearcher = new IndexSearcher(mgiPath.getAbsolutePath());
-
-		if (oldSearcher != null) {
-			log.debug("Closing old sharedSearcher");
-			try {
-				oldSearcher.close();
-			} catch (Exception ignore) {
-			}
-		}
-	}
-
-	/**
-	 * @return Returns the IndexPath for the active XPXMgiArchive. Returns null if none found.
-	 * @throws SQLException
-	 * @throws YIFClientCreationException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws RemoteException
-	 * @throws YFSException
-	 */
-	protected String getActiveIndexPath() throws YIFClientCreationException, YFSException, RemoteException {
-		YIFApi api = YIFClientFactory.getInstance().getApi();
-
-		YFSEnvironment env  = (YFSEnvironment) getWCContext().getSCUIContext().getTransactionContext(true).getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-
-		org.w3c.dom.Document docInput = YFCDocument.createDocument().getDocument();
-		Element xpxMgiArchiveListElem = docInput.createElement("XPXMgiArchiveList"); // TODO per testing in api, any tag works here?
-		xpxMgiArchiveListElem.setAttribute("ActiveFlag", "Y");
-		docInput.appendChild(xpxMgiArchiveListElem);
-
-		org.w3c.dom.Document docOutput = api.executeFlow(env, "getXPXMgiArchiveList", docInput);
-		if (docOutput == null) {
-			log.warn("API returned null");
-			return null;
-		}
-		NodeList activeMgiArchiveElems = docOutput.getElementsByTagName("XPXMgiArchive");
-		if (activeMgiArchiveElems == null || activeMgiArchiveElems.getLength() == 0) {
-			log.warn("API returned empty list");
-			return null;
-		}
-
-		return activeMgiArchiveElems.item(0).getAttributes().getNamedItem("IndexPath").getNodeValue();
-	}
-
-	/**
-	 * Lazy-loader for sharedSearcher.
-	 * @return
-	 * @throws IllegalStateException If fails to initialize (wraps exception)
-	 */
-	protected Searcher getSharedSearcher() {
-		synchronized (MUTEX) {
-			if (sharedSearcher == null || isRefresh()) {
-				try {
-					initSharedSearcher();
-				} catch (Exception e) {
-					throw new IllegalStateException(e);
-				}
-			}
-		}
-		return sharedSearcher;
-	}
 
 	/**
 	 * This AJAX call is used as part of the jquery autocomplete plugin.
@@ -181,7 +71,7 @@ public class AjaxAutocompleteAction extends WCAction {
 		// it's important that we assign the sharedSearcher to a local variable for thread-safety
 		Searcher searcher;
 		try {
-			searcher = getSharedSearcher();
+			searcher = CACHE_UTIL.getSearcher(refresh);
 		} catch (Exception e) {
 			log.error("Failed to initialize sharedSearcher", e);
 			resultStatus = ResultStatus.CONFIG_ERROR;
@@ -200,18 +90,18 @@ public class AjaxAutocompleteAction extends WCAction {
 	}
 
 	/**
-	 * Perform a lucene search using the given Searcher.
+	 * Performs a lucene search using the given Searcher.
 	 *
 	 * @param searcher The Lucene Searcher used to perform the search.
 	 * @return Returns a list containing an AutocompleteMarketingGroup for each Lucene document found.
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	/*default*/ List<AutocompleteMarketingGroup> searchIndex(Searcher searcher) throws CorruptIndexException, IOException {
+	protected List<AutocompleteMarketingGroup> searchIndex(Searcher searcher) throws CorruptIndexException, IOException {
 		if (searcher == null) {
 			throw new IllegalArgumentException("searcher must not be null");
 		}
-		if (searchTerm == null) {
+		if (getSearchTerm() == null) {
 			throw new IllegalArgumentException("searchTerm must not be null");
 		}
 
@@ -246,8 +136,7 @@ public class AjaxAutocompleteAction extends WCAction {
 			}
 
 			// do NOT use lucene sorting: we want top hits independent of group. we only want to resort for the presentation layer (UI looks funky if they're not grouped together)
-			Collections.sort(marketingGroups, new AutocompleteMarketingGroupComparator(getBrand()) {
-			});
+			Collections.sort(marketingGroups, new AutocompleteMarketingGroupComparator(getBrand()));
 
 		} catch (TooManyClauses e) {
 			// this happens if we have too many results
@@ -362,8 +251,8 @@ public class AjaxAutocompleteAction extends WCAction {
 		this.refresh = refresh;
 	}
 
-	public boolean isRefresh() {
-		return refresh;
+	public String getSearchTerm() {
+		return searchTerm;
 	}
 
 	public void setSearchTerm(String searchTerm) {

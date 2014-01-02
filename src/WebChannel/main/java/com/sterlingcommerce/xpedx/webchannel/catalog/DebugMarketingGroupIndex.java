@@ -18,6 +18,7 @@ import org.apache.lucene.search.RangeQuery;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+
 import com.sterlingcommerce.woodstock.util.frame.Manager;
 import com.yantra.yfs.core.YFSSystem;
 
@@ -40,12 +41,10 @@ public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
 
 	private Map<String, Object> debugInfo = new HashMap<String, Object>();
 
-	{
-		debugInfo.put("error", false); // only set to false if something is determined to be wrong
-	}
-
 	@Override
 	public String execute() {
+		debugInfo.put("error", false); // only set to false if something is determined to be wrong
+
 		Connection conn = null;
 		try {
 			conn = getConnection();
@@ -55,9 +54,9 @@ public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
 			String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
 			String siRoot = YFSSystem.getProperty("searchIndex.rootDirectory");
 
-			String indexPath = getActiveIndexPath();
+			String indexPath = CACHE_UTIL.getActiveIndexPath();
 
-			analyze(mgIds, mgiRoot, indexPath, siRoot, getSharedSearcher());
+			analyze(mgIds, mgiRoot, indexPath, siRoot, CACHE_UTIL.getSearcher(false));
 
 		} catch (Exception e) {
 			log.error("Unexpected error: " + e.getMessage());
@@ -231,7 +230,7 @@ public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
 		mgIds.setMax(876634L);
 
 		String mgiRoot = "C:/Sterling/Foundation/marketinggroupindex";
-		String indexPath = "/MarketingGroupIndex_20131224020348166";
+		String indexPath = "/" + TestAjaxAutocompleteAction.getNewestMgiFolder(mgiRoot).getName();
 		String siRoot = "C:/Sterling/Foundation/searchindex/SearchIndex/xpedx/xpedx/MasterCatalog/CatalogIndex_201311192000213044/en_US";
 
 		Searcher mgiSearcher = new IndexSearcher(mgiRoot + indexPath);

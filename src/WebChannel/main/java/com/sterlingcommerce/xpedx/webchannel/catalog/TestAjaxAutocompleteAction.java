@@ -129,7 +129,7 @@ public class TestAjaxAutocompleteAction extends WCAction {
 		}
 	}
 
-	private static File getNewestMgiFolder(String mgiRootStr) {
+	static File getNewestMgiFolder(String mgiRootStr) {
 		File mgiRoot = new File(mgiRootStr);
 		File[] folders = mgiRoot.listFiles(new FileFilter() {
 
