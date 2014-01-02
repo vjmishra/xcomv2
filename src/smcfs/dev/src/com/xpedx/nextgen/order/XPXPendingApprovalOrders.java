@@ -371,25 +371,8 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			/*JIRA 4256 Start
 			 * 
 			 */
-			String priceFlag = getViewPricesFlag(env,orderElement);
+			String priceFlag = getViewPricesFlag(env,orderElement);			
 			
-			//EB-74-start
-			System.out.println("orderElement Vijaya1********************"+orderElement.toString());
-			NodeList orderList = orderElement
-					.getElementsByTagName("Order");
-			int orderLength = orderList.getLength();
-			System.out.println("orderLength Vijaya********************"+orderLength);
-			 if (orderLength != 0) {		           
-
-		            String readEnv = YFSSystem.getProperty("environment");
-		            orderElement.setAttribute("EnvironmentID", readEnv);
-		            if(orderLength >2)
-		                orderElement.setAttribute("IsOrderSplit", "Y");
-		            else
-		                orderElement.setAttribute("IsOrderSplit", "N");
-		            
-		        }
-			//EB-74-END
 			 
 			orderElement.setAttribute("viewPricesFlag",priceFlag);
 			/*
