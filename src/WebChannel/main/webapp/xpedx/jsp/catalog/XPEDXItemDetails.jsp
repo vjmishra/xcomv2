@@ -363,6 +363,9 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+<s:if test = '%{#isEstUser == null || #isEstUser == ""}'>
+	<s:set name="isEstUser" value="false"/>
+</s:if>
 
 <script type="text/javascript">
 var isUserAdmin = <s:property value="#isUserAdmin"/>;
