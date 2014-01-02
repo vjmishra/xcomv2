@@ -247,6 +247,10 @@ public class AjaxAutocompleteAction extends WCAction {
 		return companyCode + legacyCustNum;
 	}
 
+	public boolean isRefresh() {
+		return refresh;
+	}
+
 	public void setRefresh(boolean refresh) {
 		this.refresh = refresh;
 	}

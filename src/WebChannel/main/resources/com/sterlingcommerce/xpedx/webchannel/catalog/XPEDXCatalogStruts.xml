@@ -92,7 +92,7 @@
 			<result type="json"></result>
 			<result type="json" name="error"></result>
 		</action>
-		<action name="debugmgi" class="com.sterlingcommerce.xpedx.webchannel.catalog.DebugMarketingGroupIndex">
+		<action name="debugmgi" class="com.sterlingcommerce.xpedx.webchannel.catalog.DebugMarketingGroupIndexAction">
 			<result type="json"></result>
 		</action>
 		

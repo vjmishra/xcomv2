@@ -35,9 +35,9 @@ import com.yantra.yfs.core.YFSSystem;
  * @author Trey Howard
  */
 @SuppressWarnings("serial")
-public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
+public class DebugMarketingGroupIndexAction extends AjaxAutocompleteAction {
 
-	private static final Logger log = Logger.getLogger(DebugMarketingGroupIndex.class);
+	private static final Logger log = Logger.getLogger(DebugMarketingGroupIndexAction.class);
 
 	private Map<String, Object> debugInfo = new HashMap<String, Object>();
 
@@ -56,7 +56,7 @@ public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
 
 			String indexPath = CACHE_UTIL.getActiveIndexPath();
 
-			analyze(mgIds, mgiRoot, indexPath, siRoot, CACHE_UTIL.getSearcher(false));
+			analyze(mgIds, mgiRoot, indexPath, siRoot, CACHE_UTIL.getSearcher(isRefresh()));
 
 		} catch (Exception e) {
 			log.error("Unexpected error: " + e.getMessage());
@@ -223,7 +223,7 @@ public class DebugMarketingGroupIndex extends AjaxAutocompleteAction {
 	}
 
 	public static void main(String[] args) throws Exception {
-		DebugMarketingGroupIndex action = new DebugMarketingGroupIndex();
+		DebugMarketingGroupIndexAction action = new DebugMarketingGroupIndexAction();
 
 		MinMax mgIds = new MinMax();
 		mgIds.setMin(807280L);
