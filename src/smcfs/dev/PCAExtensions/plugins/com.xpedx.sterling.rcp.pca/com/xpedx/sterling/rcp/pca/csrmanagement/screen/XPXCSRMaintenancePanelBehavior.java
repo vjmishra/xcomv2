@@ -1,6 +1,10 @@
 package com.xpedx.sterling.rcp.pca.csrmanagement.screen;
 
 
+import java.util.Comparator;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
 import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.swt.widgets.Composite;
@@ -363,7 +367,13 @@ public class XPXCSRMaintenancePanelBehavior extends YRCBehavior {
 	}
 	
 	private void updateXPXGetUserList(Element outXml){
+		Element elemUsrList = YRCXmlUtils.createDocument("UserList").getDocumentElement();
 		Document usrDocument= outXml.getOwnerDocument();
+		TreeMap<String,String> usrTreeMap = new TreeMap<String,String>(new Comparator<String>(){
+			public int compare(String str1, String str2) {
+		        return str1.toLowerCase().compareTo(str2.toLowerCase());
+		    }
+		});
 		NodeList nodeList	=	usrDocument.getElementsByTagName("User");
 		for(int j=0;j<nodeList.getLength();j++){	
 			Element  eleUser = (Element)nodeList.item(j);
@@ -373,8 +383,25 @@ public class XPXCSRMaintenancePanelBehavior extends YRCBehavior {
 			String usrName = eleContactPersonInfo.getAttribute("LastName")+","+eleContactPersonInfo.getAttribute("FirstName");
 			String 	usrNameWithLoginId = usrName+" ("+loginId+")";
 			eleContactPersonInfo.setAttribute("userName", usrName);
-			eleContactPersonInfo.setAttribute("userNameAndLoginId", usrNameWithLoginId);			
+			eleUser.setAttribute("userNameAndLoginId", usrNameWithLoginId);	
+			usrTreeMap.put(usrNameWithLoginId, eleUser.getAttribute("UserKey"));
 	   }
+		for(Entry<String,String> entry:usrTreeMap.entrySet()){
+			Element eleUser = YRCXmlUtils.createChild(elemUsrList, "User");
+			eleUser.setAttribute("UserKey", entry.getValue());
+			eleUser.setAttribute("userNameAndLoginId", entry.getKey());
+		}	
 		setModel("XPXGetUserList",usrDocument.getDocumentElement());
+		setModel("XPXGetUserSortedList",elemUsrList);
+	}
+	
+	public void selectOrUnselect(String  allCheckOrUncheck){
+		Element eleCustomers = getModel("CustomerList");
+    	NodeList customerList = eleCustomers.getElementsByTagName("Customer");
+    	for(int j=0;j<customerList.getLength();j++){	
+    		Element  eleCustomer = (Element)customerList.item(j);
+    		eleCustomer.setAttribute("Checked", allCheckOrUncheck);
+    	}
+    	setModel("CustomerList",eleCustomers);
 	}
 }

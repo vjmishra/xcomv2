@@ -54,6 +54,8 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 	private Group grpAssignmentUpdateFields = null;
 	public Combo cmbCSROptions;
 	private Label lblCSROptions;
+	private Button btnSelectAll = null;
+	private Button btnUnSelectAll = null;
 
 
 	public XPXCSRMaintenancePanel(Composite parent, int style, Object inputObject) {
@@ -195,9 +197,11 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 		pnlTitleHolderGL.horizontalSpacing = 5;
 		pnlTitleHolderGL.verticalSpacing = 0;
 		pnlTitleHolderGL.marginWidth = 0;
-		pnlTitleHolderGL.marginHeight = 0;
+		pnlTitleHolderGL.marginHeight=1;
+		pnlTitleHolderGL.marginBottom=1;
 		
 		XPXUtils.addGradientPanelHeader(pnlTitleHolder, "CSR_CUSTOMER_LIST", true);
+		createSelectUnSelectButtonComposite();
 	}
 		
 	private void createSearchFieldsGroup() {
@@ -383,8 +387,8 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
         
         cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("ContactPersonInfo/@userNameAndLoginId");
-		cbd.setListBinding("XPXGetUserList:/UserList/User");
+		cbd.setDescriptionBinding("@userNameAndLoginId");
+		cbd.setListBinding("XPXGetUserSortedList:/UserList/User");
 		cbd.setSourceBinding("SearchCriteria:/XPXCSRS/@ExtnECSR1Key");
 		cbd.setTargetBinding("SearchCriteria:/XPXCSRS/@ExtnECSR1Key");		
 		cbd.setName("CSR");
@@ -392,8 +396,8 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 		
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("ContactPersonInfo/@userNameAndLoginId");
-		cbd.setListBinding("XPXGetUserList:/UserList/User");
+		cbd.setDescriptionBinding("@userNameAndLoginId");
+		cbd.setListBinding("XPXGetUserSortedList:/UserList/User");
 		cbd.setSourceBinding("update:/XPXCSRS/@ExtnECSR2Key");
 		cbd.setTargetBinding("update:/XPXCSRS/@ExtnECSR2Key");
 		cbd.setName("cmbNewCSRs");
@@ -495,5 +499,33 @@ public class XPXCSRMaintenancePanel  extends Composite  implements IYRCComposite
 	public XPXCSRMaintenancePanelBehavior getMyBehavior() {
 		return myBehavior;
 	}
+	
+	private void createSelectUnSelectButtonComposite() {
+		GridLayout btnPanelLayout = new GridLayout();
+		GridData btnPanelLayoutData = new GridData();
+		pnlButtons = new Composite(pnlTitleHolder, SWT.NONE);		   
+		btnPanelLayoutData.grabExcessHorizontalSpace = true;
+		btnPanelLayoutData.horizontalAlignment = org.eclipse.swt.layout.GridData.BEGINNING;
+		btnPanelLayoutData.horizontalSpan = 2;
+		pnlButtons.setLayoutData(btnPanelLayoutData);
+		pnlButtons.setLayout(btnPanelLayout);
+		btnPanelLayout.numColumns = 2;
+		// button creation
+		btnSelectAll = new Button(pnlButtons, SWT.NONE);
+		btnSelectAll.setText("Select All");
+		btnSelectAll.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.selectOrUnselect("Y");
+			}
+		});
+		
+		btnUnSelectAll = new Button(pnlButtons, SWT.NONE);
+		btnUnSelectAll.setText("Un Select All");
+		btnUnSelectAll.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.selectOrUnselect("N");			
+			}
+		});
 
+	}
 }
