@@ -26,8 +26,7 @@ public class AutocompleteCacheUtil {
 
 	private static final Logger log = Logger.getLogger(AutocompleteCacheUtil.class);
 
-	//	private static final long CACHE_EXPIRATION = 60 * 60 * 1000; // 1 hour
-	private static final long CACHE_EXPIRATION = 10000; // XXX JUST FOR TESTING
+	private static final long CACHE_EXPIRATION = 60 * 60 * 1000; // 1 hour
 
 	private Searcher cachedSearcher;
 	private long cacheLastUpdated;
