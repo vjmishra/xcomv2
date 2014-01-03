@@ -40,18 +40,25 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 			Document lastMessageCreated) throws Exception {
 		List listOfSalesRep = new ArrayList();
 		List listOfJobs = new ArrayList();
+		Document docOrderNew = null;
+		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		Document inputCustomerContactDoc = SCXmlUtil.createFromString("<CustomerContact><OrderBy><Attribute Name='CustomerContactKey' Desc='N' /></OrderBy></CustomerContact>");
 		Element inputCustomerContactElement = inputCustomerContactDoc.getDocumentElement();
-
+        log.debug("In Get Job SalesREp");
 	//	String totalNumberOfRecords = getCriteriaParamValue(criteria,"NumRecordsToBuffer");
 		inputCustomerContactElement.setAttribute("MaximumRecords","10");
 		
 		Document customerContactListTemplateDoc = SCXmlUtil.createFromString("<CustomerContactList><CustomerContact><User/></CustomerContact></CustomerContactList>");
 		env.setApiTemplate("getCustomerContactList",customerContactListTemplateDoc);
+		System.out.println("in get Jobs -----"+ customerContactListTemplateDoc );
+		
 		Document docCustContacts = api.invoke(env, "getCustomerContactList", inputCustomerContactDoc);
 		log.debug("Customer Contact List  " + docCustContacts);
+		
 		env.clearApiTemplate("getCustomerContactList");
+		
 		System.out.println("in get Jobs -----"+ docCustContacts );
+		
 		if(docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact").getLength()>0)
 		{
 			NodeList custContactList = docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact");
@@ -67,10 +74,11 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 		
 		Element eleContact = null;
 		//List contacts = SCXmlUtil.getChildrenList(docCustContacts.getDocumentElement());
+		System.out.println("in get Jobs -----"+ listOfSalesRep );
 		
 		for (int salesRep = 0; salesRep < listOfSalesRep.size(); salesRep++)
 		{
-			Document docOrderNew = SCXmlUtil.createDocument("User");
+			docOrderNew = SCXmlUtil.createDocument("User");
 			//eleContact = (Element) contacts.get(salesRep);
 			
 			//Element userElement = (Element) eleContact.getElementsByTagName(XPXLiterals.E_USER).item(0);
@@ -86,7 +94,7 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 			//log.debug("Change Password ---  " + docOrderNew);
 			listOfJobs.add(docOrderNew);
 		}
-		
+		log.debug("The input document to requestResetPassword is: "+SCXmlUtil.getString(docOrderNew));
       return listOfJobs;
 	}
 	
@@ -152,6 +160,7 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 
 		try {  
 			log.info("Start of Method executeJob in Sales Rep Change Password");
+			log.debug("The input document to requestResetPassword is: "+SCXmlUtil.getString(inputDoc));
 			api.invoke(env,"ChangePassword",inputDoc);
 			log.info("End of Method executeJob in Sales Rep Change Password");
 
