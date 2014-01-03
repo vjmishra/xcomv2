@@ -175,7 +175,7 @@ function showSharedListForm(){
 	var errorflag;
 	var addToCartFlag;
 	var validAddtoCartItemsFlag  = new Array();
-	// EB-3973 - the function below works for all browsers and  modified for browsers compatibility.
+	// EB-3973 share private list is not displayed and  the locations are not shown if private list is checked.
 	function hideSharedListFormIfPrivate() {
 		 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
 		  document.getElementById("dynamiccontent").style.display = "none";
@@ -231,7 +231,7 @@ function showSharedListForm(){
 				$(this).attr('title', html );
 			}
 		});
-			// EB-3973  Modified for #dlgShareListLink2 fancybox, Both are calling same fancybox. 
+			// EB-3973  . 
 		$("#dlgShareListLink1, #dlgShareListLink2").fancybox({
 			'onStart' 	: function(){
 			if (isUserAdmin || isEstUser){			
@@ -241,39 +241,20 @@ function showSharedListForm(){
 				}
 			},
 			'onClosed':function() {				
-				//document.getElementById("XPEDXMyItemsDetailsChangeShareList").ShareAdminOnly.checked=false;
-				//var radioBtns = document.getElementById("XPEDXMyItemsDetailsChangeShareList").sharePermissionLevel;
-				// EB-3973 fixed the issue for browsers compatiability.
+				
 				$("#XPEDXMyItemsDetailsChangeShareList #spShareAdminOnly").attr("checked",false);						
 				 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
 			  		document.getElementById("dynamiccontent").style.display = "none";
 				 }
-			
-				/* if(!isUserAdmin &&  !isEstUser)
-				{
-					//Check Private radio button
-					radioBtns[0].checked = true;
-					//Hide Ship To Locations
-					div.style.display = "none";
-				} */
 				else
 				{
 					// share private variable will be populated if it is a private list
 					//based on that, the private is selected in the pop up and the locations are not shown
 					if(sharePrivateVar!=null && sharePrivateVar != "") {
-						//radioBtns[0].checked = true;
-						//Hide Ship To Locations
-						//div.style.display = "none";
 						document.getElementById("dynamiccontent").style.display = "none";
-						 
 					}
 					else {							
-					//Check Shared radio button
-					//radioBtns[1].checked = true;
-					//Display Ship To Locations
-					//div.style.display = "block";
 						document.getElementById("dynamiccontent").style.display = "block";
-						 
 					}
 				}
 				shareSelectAll(false);
