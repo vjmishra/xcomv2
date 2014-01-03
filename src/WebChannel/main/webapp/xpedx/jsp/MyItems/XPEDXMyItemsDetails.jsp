@@ -169,10 +169,13 @@ function showSharedListForm(){
 	var addToCartFlag;
 	var validAddtoCartItemsFlag  = new Array();
 	function hideSharedListFormIfPrivate() {
-		var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-		var div = document.getElementById("dynamiccontent");
-		if(radioBtns[0].checked) {
-			div.style.display = "none";
+		var theForm=document.getElementById("XPEDXMyItemsDetailsChangeShareList");
+		if(theForm!=null){
+			var radioBtns = theForm.sharePermissionLevel;
+			var div = document.getElementById("dynamiccontent");
+			if(radioBtns[0].checked) {
+				div.style.display = "none";
+			}
 		}
 	}
 </script>
