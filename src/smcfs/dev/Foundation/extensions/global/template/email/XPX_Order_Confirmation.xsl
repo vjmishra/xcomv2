@@ -133,6 +133,11 @@
 			<xsl:value-of select="Order/Extn/@ExtnCustLineAccLbl" />
 		</xsl:variable>
 		
+		<xsl:variable name="Approver" select="'Approved'"/>
+		<xsl:variable name="Subject" >
+			<xsl:value-of select="Order/@Subject" />
+		</xsl:variable>		
+		
 		<xsl:variable name="custlinePOLbl" >
 			<xsl:value-of select="Order/Extn/@ExtnCustLinePOLbl" />
 		</xsl:variable>
@@ -198,7 +203,11 @@
 				<table class="mainPanel" cellpadding="0"> 
 			  <tr>
 			  <td style="padding-left:8px;padding-top:8px;">
-					
+											
+			  		<xsl:if test="(contains($Subject,$Approver))">
+					Your order has been approved.
+					</xsl:if>
+															
 					<xsl:choose>
 					<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
 						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
@@ -232,6 +241,8 @@
 					</td>
 					</tr>
 					<tr>
+					<xsl:if test="not(contains($Subject,$Approver))">
+					
 					<td style="padding-left:8px;padding-top:8px;">This is a courtesy notification that an order has been placed or changed at 					
 					<xsl:choose>
 					<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
@@ -261,6 +272,14 @@
 					</xsl:choose>
 					Thank you for your business!
 					</td>
+					</xsl:if>
+					</tr>
+					<tr>					
+					<td style="padding-left:8px;padding-top:8px;">
+					<xsl:if test = 'Order/Input/OrderHoldType/@ReasonText!="Empty"' >
+					<span class="bold">Approved Comments:&#160;</span><xsl:value-of select="Order/Input/OrderHoldType/@ReasonText"/>
+					</xsl:if>
+					</td>
 					</tr>
 					<tr>
 				<td>
@@ -286,7 +305,14 @@
 																</tr>
 																<tr>
 																	<td>Order #:</td>
+																	<xsl:choose>
+																	<xsl:when test="(contains($Subject,$Approver))">
+																	<td><xsl:value-of select="Order/@FormattedOrderNo"/></td>
+																	</xsl:when>
+																	<xsl:otherwise>
 																	<td><xsl:value-of select="Order/@OrderNo"/></td>
+																	</xsl:otherwise>
+																	</xsl:choose>
 																</tr>
 																<tr>
 																	<td>Order Status:</td>
@@ -506,10 +532,29 @@
 					  <tr>
 						<th bgcolor="#003399" style="padding-right:0px;"></th>
 						<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:4px;padding-right:10px;">Ordered<br/>Quantity</th>
-						<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
+						 <xsl:choose>
+						 <xsl:when test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
+						 <th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
 						<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;">Backorder<br/>Quantity</th>
+						 </xsl:when>
+						 <xsl:otherwise>
+						 <th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;"></th>
+						<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;"></th>
+						 </xsl:otherwise>
+						 </xsl:choose>
+						
 						<th bgcolor="#003399" class="align-center" valign="top">My<br/>Price&#160;(USD)</th>
-						<th bgcolor="#003399" class="align-center" valign="top">Shippable<br/>Price&#160;(USD)</th>
+						 <xsl:choose>
+						 <xsl:when test = '(Extn/@ExtnTotalOfShippableTotals!="") ' > 
+						 
+						 <th bgcolor="#003399" class="align-center" valign="top">Shippable<br/>Price&#160;(USD)</th></xsl:when>
+						 <xsl:otherwise>
+						 <th bgcolor="#003399" class="align-center" valign="top"></th>
+						 </xsl:otherwise>
+						 
+						 </xsl:choose>
+						
+						
 						<th bgcolor="#003399" class="align-center" valign="top">Extended<br/>Price&#160;(USD)</th>
 					  </tr>
 					</thead>
@@ -660,7 +705,11 @@
 									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00"'><span>$0.00</span></xsl:when>
 									<xsl:when test='Extn/@ExtnTotalOfShippableTotals ="0.00000"'><span>$0.00</span></xsl:when>
 									<xsl:when test='Extn/@ExtnTotalOfShippableTotals =""'><span>$0.00</span></xsl:when>
-									<xsl:otherwise><xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,##0.00#")'/></xsl:otherwise>
+									<xsl:otherwise>
+									<xsl:if test = '(Extn/@ExtnTotalOfShippableTotals!="") ' >
+									<xsl:value-of select='format-number(Extn/@ExtnTotalOfShippableTotals,"$#,###,###,##0.00#")'/>
+									</xsl:if>
+									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:if>
 							
