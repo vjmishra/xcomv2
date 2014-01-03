@@ -39,7 +39,6 @@ import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXAlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
@@ -53,14 +52,14 @@ import com.yantra.yfc.util.YFCCommon;
 
 /**
  * @author vsriram
- * 
+ *
  */
 public class XPEDXUserGeneralInfo extends WCMashupAction
 
 {
 
 	/**
-     * 
+     *
      */
 	private static final long serialVersionUID = 7756731378709035664L;
 
@@ -245,7 +244,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.opensymphony.xwork2.ActionSupport#execute()
 	 */
 
@@ -673,7 +672,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	/**
 	 * Gets the Buyer User General Information, Buyer user Addresses, Buyer User
 	 * Phonebook, Buyer User Admin List
-	 * 
+	 *
 	 * @return the action restult
 	 */
 	public String getUserDetails() {
@@ -713,7 +712,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
 			String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
-		
+
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
 				// Fetch the Additional Email Addresses and PO list from
@@ -961,10 +960,10 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			break;
 		}
 	}
-	
+
 	private String getUserName() {
 		String userName = "";
-		
+
 		Element userList = null;
 		try {
 			userList = prepareAndInvokeMashup("XPEDX-GetUserList");
@@ -973,12 +972,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		} catch (CannotBuildInputException e) {
 			log.error("Unable to get user list", e);
 		}
-		
+
 		if (userList != null) {
 			Element userEle = SCXmlUtil.getChildElement(userList, "User");
 			userName = userEle.getAttribute("Username");
 		}
-		
+
 		return userName;
 	}
 
@@ -989,42 +988,41 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		String loginID = contactElement.getAttribute("CustomerContactID");
 		if (getWCContext().getCustomerContactId().equals(modifyUserIdBy)) {
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
-					.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);			
+					.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 			if (xpedxCustomerContactInfoBean.getExtnIsSalesRep() != null && ("Y").equals(xpedxCustomerContactInfoBean.getExtnIsSalesRep())) {
 				StringTokenizer token = new StringTokenizer(modifyUserIdBy, "@");
 				String networkId = token.nextToken();
-				setNetworkId(networkId);	
+				setNetworkId(networkId);
 				setContactFirstName(getUserName());
 			} else {
 				setContactFirstName(xpedxCustomerContactInfoBean.getFirstName());
 				setContactLastName(xpedxCustomerContactInfoBean.getLastName());
-			}			
-		} else if (loginID != null && loginID.equals(modifyUserIdBy)) {			
-			Element extnElem = SCXmlUtil.getChildElement(contactElement, "Extn");			
+			}
+		} else if (loginID != null && loginID.equals(modifyUserIdBy)) {
+			Element extnElem = SCXmlUtil.getChildElement(contactElement, "Extn");
 			String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 			if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
 				StringTokenizer token = new StringTokenizer(modifyUserIdBy, "@");
 				String networkId = token.nextToken();
-				setNetworkId(networkId);	
+				setNetworkId(networkId);
 				setContactFirstName(getUserName());
-			} else {				
+			} else {
 				setContactFirstName(contactElement.getAttribute("FirstName"));
 				setContactLastName(contactElement.getAttribute("LastName"));
-			}			
-		} else {			
+			}
+		} else {
 			ArrayList<Element> customerContact = new ArrayList<Element>();
 			customerContact.add(contactElement);
-			Map<String, String> modifiedUserMap = XPEDXWCUtils
-					.createModifyUserNameMap(customerContact);
+			Map<String, String> modifiedUserMap = XPEDXWCUtils.createModifyUserNameMap(customerContact);
 			String modifyFirstLastName = modifiedUserMap.get(modifyUserIdBy);
 			if (modifyFirstLastName != null) {
 				String name[] = modifyFirstLastName.split(", ");
-				if (modifyFirstLastName != null
-						&& modifyFirstLastName.length() > 1)
+				if (modifyFirstLastName != null && name.length > 1) {
 					setContactFirstName(name[1]);
-				if (modifyFirstLastName != null
-						&& modifyFirstLastName.length() > 1)
+				}
+				if (modifyFirstLastName != null && name.length > 0) {
 					setContactLastName(name[0]);
+				}
 			}
 		}
 
@@ -1111,7 +1109,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * This method fetches all the available currencies
-	 * 
+	 *
 	 * @param spendingCurrency
 	 */
 	// private void addAvailbleCurrencies(String spendingCurrency) {
@@ -1183,7 +1181,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Secret Question List of the Current Org/Enterprise
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1218,7 +1216,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Secret Question of the user
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1238,7 +1236,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Address IDs
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1265,7 +1263,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Address IDs
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1301,7 +1299,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to get element for single Customer Contact
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1349,7 +1347,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * This method sets the effective default/other address list
-	 * 
+	 *
 	 */
 	private void setEffectiveContactDefaultAddress() {
 
@@ -1538,7 +1536,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Returns the Customer member variable
-	 * 
+	 *
 	 * @return customer element
 	 */
 	public Element getCustomer() {
@@ -1547,7 +1545,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the customer element
-	 * 
+	 *
 	 * @param contact
 	 */
 	public void setCustomer(Element contact) {
@@ -1563,7 +1561,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the user element
-	 * 
+	 *
 	 * @param user
 	 */
 	public void setUser(Element user) {
@@ -1579,7 +1577,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the user password to the member variable
-	 * 
+	 *
 	 * @param userPassword
 	 */
 	public void setUserPassword(String userPassword) {
@@ -1595,7 +1593,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the Confirm Password field to the member variable
-	 * 
+	 *
 	 * @param confirmPassword
 	 */
 	public void setConfirmPassword(String confirmPassword) {
@@ -1603,7 +1601,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the locale member variable
 	 */
 	public Element getLoc() {
@@ -1612,7 +1610,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the locale value to the member variable
-	 * 
+	 *
 	 * @param locale
 	 */
 	public void setLoc(Element locale) {
@@ -1628,7 +1626,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the UserID
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void setUserId(String userId) {
@@ -1659,7 +1657,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the Organization code
-	 * 
+	 *
 	 * @param organizationCode
 	 */
 	public void setOrganizationCode(String orgCode) {
@@ -1675,7 +1673,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the Customer Admin Parameter
-	 * 
+	 *
 	 * @param customerAdmin
 	 */
 	public void setCustomerAdmin(Element customerAdmin) {
@@ -2133,31 +2131,31 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/*
 	 * public Map getAddnlEmailAddrList() {
-	 * 
+	 *
 	 * Element ccElem = XMLUtilities.getChildElementByName( customerContactList,
 	 * "CustomerContact"); Element extnElem =
 	 * XMLUtilities.getChildElementByName(ccElem, "Extn"); String emailList =
 	 * SCXmlUtils.getAttribute(extnElem, "ExtnAddnlEmailAddrs");
-	 * 
+	 *
 	 * String[] emailListSplit = emailList.split(","); for (int i = 0; i <
 	 * emailListSplit.length; i++) { if(emailListSplit[i]!= null &&
 	 * emailListSplit[i].trim().length()>0)
 	 * AddnlEmailAddrList.put(emailListSplit[i], emailListSplit[i]); }
-	 * 
+	 *
 	 * return AddnlEmailAddrList; }
-	 * 
+	 *
 	 * public Map getPOList() {
-	 * 
+	 *
 	 * Element ccElem = XMLUtilities.getChildElementByName( customerContactList,
 	 * "CustomerContact"); Element extnElem =
 	 * XMLUtilities.getChildElementByName(ccElem, "Extn"); String poList =
 	 * SCXmlUtils.getAttribute(extnElem, "ExtnPOList");
-	 * 
+	 *
 	 * String[] poListSplit = poList.split(","); for (int i = 0; i <
 	 * poListSplit.length; i++) { if(poListSplit[i]!= null &&
 	 * poListSplit[i].trim().length()>0) POList.put(poListSplit[i],
 	 * poListSplit[i]); }
-	 * 
+	 *
 	 * return POList; }
 	 */
 
@@ -2352,7 +2350,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 				defaultB2bCatalogView = Integer
 				.toString(XPEDXConstants.XPEDX_B2B_FULL_VIEW);
 			}
-				
+
 		}
 		else{
 			defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,"ExtnB2BCatalogView");
