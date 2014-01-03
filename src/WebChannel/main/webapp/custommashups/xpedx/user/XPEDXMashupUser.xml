@@ -257,7 +257,7 @@
 						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="" CustomerKey="">
 						<User Activateflag="" Loginid="" 
 							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
-							Localecode="" Username="">
+							Localecode="" Username="" Modifyuserid="" Modifyts="" Createts="">
 							<ContactPersonInfo EveningPhone=""
 								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
 								EMailID="" Title="" />

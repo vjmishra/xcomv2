@@ -969,24 +969,32 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	private void setLastModifiedUser() throws YFSException, RemoteException, YIFClientCreationException {
 		Element contactElem = getContact();
+		Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 
-		Element loginElem = SCXmlUtil.getChildElement(contactElem, "User");
-
-		String modLoginId = contactElem.getAttribute("Modifyuserid");
-		if (loginElem != null && modLoginId.equals(loginElem.getAttribute("Loginid"))) {
-			// user was last edited by self: modified by info is already in response
-			setLastModifiedBy(loginElem.getAttribute("Username"));
+		// in web channel we're editing both contact and user, so we must show the newer of the two timestamps
+		String newestModifyuserid;
+		String newestModifyts;
+		if (contactElem.getAttribute("Modifyts").compareTo(userElem.getAttribute("Modifyts")) >= 0) {
+			newestModifyuserid = contactElem.getAttribute("Modifyuserid");
+			newestModifyts = contactElem.getAttribute("Modifyts");
 		} else {
-			setLastModifiedBy(getUsernameForLoginid(modLoginId));
+			newestModifyuserid = userElem.getAttribute("Modifyuserid");
+			newestModifyts = userElem.getAttribute("Modifyts");
+		}
+
+		if (userElem != null && newestModifyuserid.equals(userElem.getAttribute("Loginid"))) {
+			// user was last edited by self: modified by info is already in response
+			setLastModifiedBy(userElem.getAttribute("Username"));
+		} else {
+			setLastModifiedBy(getUsernameForLoginid(newestModifyuserid));
 		}
 
 		UtilBean utilBean = new UtilBean();
 
-		lastModifiedDate = contactElem.getAttribute("Modifyts");
-		setLastModifiedDate(utilBean.formatDate(lastModifiedDate, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
+		setLastModifiedDate(utilBean.formatDate(newestModifyts, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
 
-		userCreatedDate = contactElem.getAttribute("Createts");
-		setUserCreatedDate(utilBean.formatDate(userCreatedDate, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
+		// note that we always use the created date from the contact
+		setUserCreatedDate(utilBean.formatDate(contactElem.getAttribute("Createts"), wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
 	}
 
 	/**
