@@ -3228,8 +3228,7 @@ a.underlink:hover {
 
 	<div class="clearview textAlignCenter">
 		<br>Last modified by
-		<s:property value="%{getContactFirstName()}" />
-		<s:property value="%{getContactLastName()}" />
+		<s:property value="%{getLastModifiedBy()}" />
 		on
 		<s:property value="%{getLastModifiedDate()}" />
 	</div>
