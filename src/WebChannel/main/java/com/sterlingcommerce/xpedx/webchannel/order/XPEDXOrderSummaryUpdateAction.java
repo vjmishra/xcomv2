@@ -370,7 +370,14 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 		}
 		if (YFCCommon.isVoid(addnlEmailAddrs)){
 			addnlEmailAddrs = "";
-		}	
+		}
+		else{
+			addnlEmailAddrs = addnlEmailAddrs.trim();
+			char  lastChar = addnlEmailAddrs.charAt(addnlEmailAddrs.length()-1);
+			if(lastChar != ','){
+				addnlEmailAddrs = addnlEmailAddrs+",";
+			}
+		}
 		if (YFCCommon.isVoid(addnlPoList)){
 			addnlPoList = "";
 		}
