@@ -1,12 +1,14 @@
 package com.xpedx.nextgen.manageuser.agent.nontaskq;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.collections.map.MultiValueMap;
@@ -18,46 +20,66 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.yantra.interop.japi.YIFApi;
-import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.ycp.japi.util.YCPBaseAgent;
 import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.japi.YFSEnvironment;
-import com.yantra.interop.japi.YIFCustomApi;
 
 public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static Set<String> customerContactKeys = new HashSet<String>();
-	private Properties _properties = null;
-	private static YIFApi api = null;
 	
+	private static HashMap customerContactUserContactKeys = new HashMap();
+	private static MultiValueMap customerContactDetailsForAlertCreation = new MultiValueMap();
+	private static String saltKey = null;
+
 	
-	public List getJobs(YFSEnvironment env, Document criteria,
-			Document lastMessageCreated) throws Exception {
-		List listOfSalesRep = new ArrayList();
+	@Override
+	public List getJobs(YFSEnvironment env, Document criteria, Document lastMessageCreated) throws Exception {
 		List listOfJobs = new ArrayList();
-		Document docOrderNew = null;
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
-		Document inputCustomerContactDoc = SCXmlUtil.createFromString("<CustomerContact><OrderBy><Attribute Name='CustomerContactKey' Desc='N' /></OrderBy></CustomerContact>");
+		
+		int waitTimeInMins = -2440;
+		DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		Calendar cal=Calendar.getInstance();
+		cal.add(Calendar.MINUTE, waitTimeInMins);
+		String sysDateTime=dateFormat.format(cal.getTime());
+		Document inputCustomerContactDoc = SCXmlUtil.createFromString("<CustomerContact><Extn ExtnIsSalesRep='Y' /><OrderBy><Attribute Name='CustomerContactKey' Desc='N' /></OrderBy></CustomerContact>");
 		Element inputCustomerContactElement = inputCustomerContactDoc.getDocumentElement();
-        log.debug("In Get Job SalesREp");
-	//	String totalNumberOfRecords = getCriteriaParamValue(criteria,"NumRecordsToBuffer");
-		inputCustomerContactElement.setAttribute("MaximumRecords","10");
+
+		//String totalNumberOfRecords = getCriteriaParamValue(criteria,"NumRecordsToBuffer");
+			inputCustomerContactElement.setAttribute("MaximumRecords","10");
 		
-		Document customerContactListTemplateDoc = SCXmlUtil.createFromString("<CustomerContactList><CustomerContact><User/></CustomerContact></CustomerContactList>");
+		log.debug("lastMessageCreated doc is: " + SCXmlUtil.getString(lastMessageCreated));
+		if (lastMessageCreated != null) 
+		{
+			// get the CustomerContact which have failed
+			//this.formInputToContactListWithLastMessageCreated(lastMessageCreated, inputCustomerContactDoc, inputCustomerContactElement);
+			
+			String customerContactKeyInLastCreatedMessage = "";
+			Element lastCCElement = null;
+			NodeList ccNodeList = lastMessageCreated.getElementsByTagName("ChangePassword");
+			int ccLength = ccNodeList.getLength();
+			if(ccLength != 0)
+			{
+				lastCCElement = (Element)ccNodeList.item(ccLength-1);
+			
+			String userKey = lastCCElement.getAttribute("UserKey");
+			
+			customerContactKeyInLastCreatedMessage=(String) customerContactUserContactKeys.get(userKey);
+			inputCustomerContactDoc.getDocumentElement().setAttribute("CustomerContactKey", customerContactKeyInLastCreatedMessage);
+			inputCustomerContactDoc.getDocumentElement().setAttribute("CustomerContactKeyQryType", "GT");
+			}
+		}
+		log.debug("inputCustomerDoc"+ SCXmlUtil.getString(inputCustomerContactDoc));
+		// template for customer contact list
+		Document customerContactListTemplateDoc = SCXmlUtil.createFromString("<CustomerContactList><CustomerContact><User><Extn/></User></CustomerContact></CustomerContactList>");
 		env.setApiTemplate("getCustomerContactList",customerContactListTemplateDoc);
-		System.out.println("in get Jobs -----"+ customerContactListTemplateDoc );
-		
 		Document docCustContacts = api.invoke(env, "getCustomerContactList", inputCustomerContactDoc);
-		log.debug("Customer Contact List  " + docCustContacts);
-		
 		env.clearApiTemplate("getCustomerContactList");
-		
-		System.out.println("in get Jobs -----"+ docCustContacts );
 		
 		if(docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact").getLength()>0)
 		{
@@ -66,44 +88,128 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 			for(int i=0; i<custContactList.getLength(); i++)
 			{
 				Element customerContactElement = (Element) custContactList.item(i);
-					
-				listOfSalesRep.add(customerContactElement.getAttribute("CustomerContactID"));
+				
+				Element userElement = (Element) customerContactElement.getElementsByTagName("User").item(0);
+				
+				Element extn = (Element) customerContactElement.getElementsByTagName("User").item(0);
+				saltKey =  extn.getAttribute("ExtnSaltKey");
+				customerContactUserContactKeys.put(userElement.getAttribute("UserKey"), customerContactElement.getAttribute("CustomerContactKey"));
+				
+				
+				customerContactDetailsForAlertCreation.put(userElement.getAttribute("UserKey"), customerContactElement.getAttribute("CustomerContactID"));
+				customerContactDetailsForAlertCreation.put(userElement.getAttribute("UserKey"), userElement.getAttribute("EnterpriseCode"));
+				customerContactDetailsForAlertCreation.put(userElement.getAttribute("UserKey"), userElement.getAttribute("OrganizationKey"));
 				
 			}
 		}
 		
-		Element eleContact = null;
-		//List contacts = SCXmlUtil.getChildrenList(docCustContacts.getDocumentElement());
-		System.out.println("in get Jobs -----"+ listOfSalesRep );
+		this.updateListOfJobs(criteria, listOfJobs, docCustContacts);
 		
-		for (int salesRep = 0; salesRep < listOfSalesRep.size(); salesRep++)
-		{
-			docOrderNew = SCXmlUtil.createDocument("User");
-			//eleContact = (Element) contacts.get(salesRep);
-			
-			//Element userElement = (Element) eleContact.getElementsByTagName(XPXLiterals.E_USER).item(0);
-			
-			log.debug("Customer Contact List  " + listOfSalesRep.get(salesRep).toString());
-			docOrderNew.getDocumentElement().setAttribute("ExistingPassword", listOfSalesRep.get(salesRep).toString());
-			docOrderNew.getDocumentElement().setAttribute("Loginid", listOfSalesRep.get(salesRep).toString());
-			docOrderNew.getDocumentElement().setAttribute("Password", applySaltPattern(listOfSalesRep.get(salesRep).toString(), "3@4@7@9@10@12@14"));
-			docOrderNew.getDocumentElement().setAttribute("GeneratePassword", "YES");
-			log.debug("Before Change Password ---  " + docOrderNew);
-			System.out.println("new change Oassword is ----" + docOrderNew);
-			//api.invoke(env, "ChangePassword", docOrderNew);
-			//log.debug("Change Password ---  " + docOrderNew);
-			listOfJobs.add(docOrderNew);
+		return listOfJobs;
+	}
+
+	/**
+	 * @param criteria
+	 * @param parameterName 
+	 * @return
+	 */
+	private String getCriteriaParamValue(Document criteria, String parameterName) {
+		String parameterValue = criteria.getDocumentElement().getAttribute(parameterName);
+		if("NumRecordsToBuffer".equals(parameterName)){
+			try{
+				Integer.parseInt(parameterValue);
+			} catch (Exception e) {
+				YFCException ex = new YFCException(e);
+				ex.setErrorDescription("Invalid Number! NumRecordsToBuffer");
+				ex.setAttribute(parameterName, parameterValue);
+			}
 		}
-		log.debug("The input document to requestResetPassword is: "+SCXmlUtil.getString(docOrderNew));
-      return listOfJobs;
+		return parameterValue;
+	}
+	private void formInputToContactListWithLastMessageCreated(Document lastMessageCreated, Document inputCustomerContactDoc, Element inputCustomerElement) {
+		Element complexQueryElement = inputCustomerContactDoc.createElement("ComplexQuery");
+		/*inputCustomerElement.appendChild(complexQueryElement);
+		Element orElement = inputCustomerContactDoc.createElement("or");*/
+		/*for (String customerContactKey : customerContactKeys)
+		{
+			complexQueryElement.appendChild(orElement);
+			Element expElement = inputCustomerContactDoc.createElement("Exp");
+			expElement.setAttribute("Name", "CustomerContactKey");
+			expElement.setAttribute("Value", customerContactKey);
+
+			orElement.appendChild(expElement);
+		}*/
+
+		String customerContactKeyInLastCreatedMessage = "";
+		Element lastCCElement = null;
+		NodeList ccNodeList = lastMessageCreated.getElementsByTagName("ChangePassword");
+		int ccLength = ccNodeList.getLength();
+		if(ccLength != 0)
+		{
+			lastCCElement = (Element)ccNodeList.item(ccLength-1);
+		
+		String userKey = lastCCElement.getAttribute("UserKey");
+		
+		customerContactKeyInLastCreatedMessage=(String) customerContactUserContactKeys.get(userKey);
+		
+		log.debug("customerKeyInLastCreatedMessage"+ customerContactKeyInLastCreatedMessage);
+		Element expNextElement = inputCustomerContactDoc.createElement("Exp");
+		expNextElement.setAttribute("Name", "CustomerContactKey");
+		expNextElement.setAttribute("Value",customerContactKeyInLastCreatedMessage);
+		expNextElement.setAttribute("QryType", "GT");
+		complexQueryElement.appendChild(expNextElement);
+		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void invokeModifyPassword(YFSEnvironment env, Document inXML) throws Exception
-	{
-  //Code removed since it is Agent ...
-	}	
-	
+	private void updateListOfJobs(Document criteria, List listOfJobs,
+			Document docCustContacts) {
+		
+		Element eleContact = null;
+		List contacts = SCXmlUtil.getChildrenList(docCustContacts.getDocumentElement());
+		List listOfSalesRep = new ArrayList();
+		
+		if(docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact").getLength()>0)
+        {
+               NodeList custContactList = docCustContacts.getDocumentElement().getElementsByTagName("CustomerContact");
+               
+               for(int i=0; i<custContactList.getLength(); i++)
+               {
+                      Element customerContactElement = (Element) custContactList.item(i);
+                            
+                      listOfSalesRep.add(customerContactElement.getAttribute("CustomerContactID"));
+                      
+               }
+        }
+         
+       // Element eleContact = null;
+		Document docOrderNew = null;
+        //List contacts = SCXmlUtil.getChildrenList(docCustContacts.getDocumentElement());
+        log.debug("in get Jobs -----"+ listOfSalesRep );
+        
+        for (int salesRep = 0; salesRep < listOfSalesRep.size(); salesRep++)
+        {
+               docOrderNew = SCXmlUtil.createDocument("User");
+               //eleContact = (Element) contacts.get(salesRep);
+               
+               //Element userElement = (Element) eleContact.getElementsByTagName(XPXLiterals.E_USER).item(0);
+               
+               log.debug("Customer Contact List  " + listOfSalesRep.get(salesRep).toString());
+               docOrderNew.getDocumentElement().setAttribute("ExistingPassword", listOfSalesRep.get(salesRep).toString());
+               docOrderNew.getDocumentElement().setAttribute("Loginid", listOfSalesRep.get(salesRep).toString());
+   			   docOrderNew.getDocumentElement().setAttribute("Password", applySaltPattern(listOfSalesRep.get(salesRep).toString(), saltKey));
+               docOrderNew.getDocumentElement().setAttribute("GeneratePassword", "YES");
+               log.debug("Before Change Password ---  " + docOrderNew);
+               log.debug("new change Oassword is ----" + docOrderNew);
+               //api.invoke(env, "ChangePassword", docOrderNew);
+               //log.debug("Change Password ---  " + docOrderNew);
+               listOfJobs.add(docOrderNew);
+        }
+        log.debug("The input document to requestResetPassword is: "+SCXmlUtil.getString(docOrderNew));
+
+
+		return ;
+	}
+
 	public static  String applySaltPattern(String word,String salt) { 
 		ArrayList<Character> one = new ArrayList<Character>();    
 		String [] saltpattern = salt.split("@") ; 
@@ -150,28 +256,17 @@ public class XPXSalesRepPasswordReset extends YCPBaseAgent {
 		return list;
 	}
 
-	
 	@Override
 	public void executeJob(YFSEnvironment env, Document inputDoc) throws Exception {
-
-
-		// TODO Auto-generated method stub
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
-
-		try {  
-			log.info("Start of Method executeJob in Sales Rep Change Password");
+		try {
 			log.debug("The input document to requestResetPassword is: "+SCXmlUtil.getString(inputDoc));
-			api.invoke(env,"ChangePassword",inputDoc);
-			log.info("End of Method executeJob in Sales Rep Change Password");
-
+			api.invoke(env, "changePassword", inputDoc);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-
+			//customerContactKeys.add(customerContactKey);
 		}
 
 	}
-
-	
 
 }

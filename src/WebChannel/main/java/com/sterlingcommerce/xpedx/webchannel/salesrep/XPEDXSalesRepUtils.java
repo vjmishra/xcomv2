@@ -255,6 +255,9 @@ public class XPEDXSalesRepUtils {
 		if(!YFCUtils.isVoid(customerId)){
 			loginId = employeeId+"@"+customerId+".com";
 			request.setAttribute("dum_username", loginId.trim());
+			if(request.getAttribute("SRsaltKey") !=null){
+				System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
+			}
 			request.setAttribute("dum_password", loginId.trim());// the password remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
 			//SRSalesRepEmailID added for jira 3438

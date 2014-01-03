@@ -300,7 +300,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String password = getPassword(request);
 		
 		String isSWCReq = request.getParameter("isSWCReq");
-		
+		String saltKey=null;
 		String contextPath = request.getContextPath();
 		
 		String jdbcURL = Manager.getProperty("jdbcService", "oraclePool.url");
@@ -308,7 +308,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 		String jdbcUser = Manager.getProperty("jdbcService", "oraclePool.user");
 		String jdbcPassword = Manager.getProperty("jdbcService", "oraclePool.password");
 		//Added USERNAME in the query to fetch USERNAME column data for Jira 2367
-		String queryString = "SELECT EXTN_USER_TYPE , USERNAME FROM yfs_user WHERE DISPLAY_USER_ID = ?";
+		String queryString = "SELECT EXTN_USER_TYPE , USERNAME,EXTN_SALT_KEY FROM yfs_user WHERE DISPLAY_USER_ID = ?";
 				
 		
         Connection con = null;
@@ -323,6 +323,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
             rs =  stmt.executeQuery();
             while(rs!= null && rs.next()){
             	userType = rs.getString("EXTN_USER_TYPE");
+            	saltKey =  rs.getString("EXTN_SALT_KEY");
             	}
             
             userName = (String)request.getSession().getAttribute("loggedInUserName");
@@ -369,6 +370,8 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 				request.setAttribute("loggedInUserName", userName);
 				request.setAttribute("loggedInUserId", loggedInUser);
 				request.setAttribute("SRSalesRepEmailID", SRemailID);
+				request.setAttribute("SRsaltKey", saltKey);
+				
 				LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
 				}
 			isInternal = true;
@@ -388,6 +391,7 @@ public class XPEDXSSOAuthenticationImplementation implements YCPSSOManager,
 					request.setAttribute("loggedInUserName", userName);
 					request.setAttribute("loggedInUserId", loggedInUser);
 					request.setAttribute("SRSalesRepEmailID", SRemailID);
+					request.setAttribute("SRsaltKey", saltKey);
 					LOG.debug("XPEDXSSOAuthenticationImplementation:isInternal: userName " + userName );
 					}
 				isInternal = true;
