@@ -227,8 +227,9 @@ function showSharedListForm(){
 				}
 			},
 			'onClosed':function() {
-				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
-				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
+				var theForm=document.getElementById("XPEDXMyItemsDetailsChangeShareList");
+				theForm.shareAdminOnly.checked=false;
+				var radioBtns = theForm.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontent");
 				if(!isUserAdmin &&  !isEstUser)
 				{
@@ -267,8 +268,9 @@ function showSharedListForm(){
 				}
 			},
 			'onClosed':function() {
-				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
-				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
+				var theForm=document.getElementById("XPEDXMyItemsDetailsChangeShareList");
+				theForm.shareAdminOnly.checked=false;
+				var radioBtns = theForm.sharePermissionLevel;
 				var div = document.getElementById("dynamiccontent");
 				if(!isUserAdmin && !isEstUser)
 				{
