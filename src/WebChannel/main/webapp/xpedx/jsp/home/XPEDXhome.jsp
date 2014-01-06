@@ -127,61 +127,70 @@
 		  	}); 	
 
 		function browserSupport(){
-			
+
+		// Supported browser versions (minimum)
+		var VER_IE = 8;
+		var VER_FIREFOX = 11;
+		var VER_SAFARI = 5;   // may be x.y
+		var VER_CHROME = 10;  // may be x.y.z
+
+		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
+		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
 		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
 		   var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
-			 if (ieversion < 8)
+			 if (ieversion < VER_IE)
 			 {
-				 if(document.documentMode != 8)
+				 // need? checking compatibility mode?
+				 if(document.documentMode < VER_IE)
 				 {
-					 document.getElementById("browser-not-supported").style.display = "block";
-					 browserNotSupportedWin.show();
+					 warnBrowserVersion();
 				 }
 			 }
-			  //alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html");
 				 
 		}
 
-		if (/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		    var NavigatorVersion=new Number(RegExp.$1);		    
-		//         alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
-		    	document.getElementById("browser-not-supported").style.display = "block";
-				browserNotSupportedWin.show();
-		}
-
-		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x (ignoring remaining digits);
-		    var ffversion=new Number(RegExp.$1);
-			 if(ffversion < 3.7)
-			 {
-				document.getElementById("browser-not-supported").style.display = "block";
-				browserNotSupportedWin.show();
-			 }
-		 	  //  alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
-		 }
-
-		if (/Safari[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Safari x.x (ignoring remaining digits);
-		var useragent = navigator.userAgent;
-		var version = new Number(useragent.substr(useragent.lastIndexOf('Safari/') + 7, 6));
-			if(version < 534)
+		// Firefox: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0"
+		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x
+			var ffversion=new Number(RegExp.$1);
+			if(ffversion < VER_FIREFOX)
 			{
-				document.getElementById("browser-not-supported").style.display = "block";
-				browserNotSupportedWin.show();
+				 warnBrowserVersion();
 			}
-		  	   
+		 }
+
+		// Safari: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
+		// win:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
+		else if (/Version\/(\d+\.\d+).*Safari/.test(navigator.userAgent)){
+			var safariversion = new Number(RegExp.$1);// new Number(useragent.substr(useragent.lastIndexOf('Safari/') + 7, 6));
+			if(safariversion < VER_SAFARI)
+			{
+				 warnBrowserVersion();
+			}
 		 }
 		
-		/* Commented For Jira 3646 
-		if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-		      alert("The application does not support this browser or this browser version. For a list of supported browsers please visit: https://content.ipaper.com/storefront/xpedx_help.html"); 
-		} */
-		
-		if (/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Netscape navigator x.x (ignoring remaining digits);
-			document.getElementById("browser-not-supported").style.display = "block";
-			browserNotSupportedWin.show(); 
+		// Chrome is not supported but allowed to be used
+		// ex: "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.41 Safari/537.36"
+		else if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){
+			var chromeversion=new Number(RegExp.$1);
+			if(chromeversion < VER_CHROME)
+			{
+				 warnBrowserVersion();
+			}
+		}
+
+		// Unsupported browsers
+		else if ((/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)) ||
+			(/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)))
+		{
+			 warnBrowserVersion();
 		}
 
 		}
 		
+		function warnBrowserVersion() {
+			 document.getElementById("browser-not-supported").style.display = "block";
+			 browserNotSupportedWin.show();
+		}
 		
 		</script>
 <script type="text/javascript">
