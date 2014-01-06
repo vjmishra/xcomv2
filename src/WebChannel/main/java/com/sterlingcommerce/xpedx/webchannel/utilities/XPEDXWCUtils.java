@@ -6541,4 +6541,18 @@ public class XPEDXWCUtils {
 
 	}
 
+	public static String getBrowserVersion(String browserPropertyName) {
+
+		String versionString = YFSSystem.getProperty(browserPropertyName);
+
+		if(versionString == null) {
+			log.warn("getBrowserVersion failed: unable to get property " + browserPropertyName);
+			versionString="";
+		}
+		else {
+			versionString = versionString.trim();
+		}
+
+		return versionString;
+	}
 }

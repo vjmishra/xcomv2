@@ -129,9 +129,9 @@
 		function browserSupport(){
 
 		// Supported browser versions
-		var VER_IE = 8;
-		var VER_FIREFOX = 17;
-		var VER_SAFARI = 5;   // may be x.y
+		var VER_IE = "<s:property value='%{#wcUtil.getBrowserVersion("version.ie")}'/>";
+		var VER_FIREFOX = "<s:property value='%{#wcUtil.getBrowserVersion("version.firefox")}'/>";
+		var VER_SAFARI = "<s:property value='%{#wcUtil.getBrowserVersion("version.safari")}'/>";   // may be x.y
 		//var VER_CHROME = 10;  // may be x.y.z
 
 		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
