@@ -316,9 +316,7 @@ public class XPEDXSalesRepUtils {
 
 			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());
 		} catch (XMLExceptionWrapper e) {
-			log.error("Unable to get user list", e);
-		} catch (CannotBuildInputException e) {
-			log.error("Unable to get user list", e);
+			LOG.error("Unable to get user list", e);
 		}
 
 		if (userList != null) {
