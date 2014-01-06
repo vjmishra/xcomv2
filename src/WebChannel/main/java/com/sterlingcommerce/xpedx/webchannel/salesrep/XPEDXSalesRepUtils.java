@@ -257,7 +257,11 @@ public class XPEDXSalesRepUtils {
 			request.setAttribute("dum_username", loginId.trim());
 			if(request.getAttribute("SRsaltKey") !=null){
 				System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
+				String newPassword  = applySaltPattern( loginId, request.getAttribute("SRsaltKey"));
+				
+				System.out.println("New Password after Salt Pattern is : --- " + newPassword);
 			}
+			System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
 			request.setAttribute("dum_password", loginId.trim());// the password remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
 			//SRSalesRepEmailID added for jira 3438
@@ -295,5 +299,51 @@ public class XPEDXSalesRepUtils {
 		}
 		// TODO Auto-generated method stub
 		return salesRepEmployeeId;
+	}
+	
+	public   String applySaltPattern(String word,String salt) { 
+		ArrayList<Character> one = new ArrayList<Character>();    
+		String [] saltpattern = salt.split("@") ; 
+		ArrayList swapArrayList = new ArrayList();
+	
+		int l=0;
+		for(int j =0; j < saltpattern.length ;j++){
+			
+			int k = Integer.parseInt(saltpattern[j]);
+		for (int i = 0; i < word.length()-1; i++) {
+			
+			if(i==k){			
+			    swapArrayList.add(word.substring(l,k));
+               l = i;				
+			}else{
+				continue;
+			}
+			
+			break;
+		}
+		}
+	    
+	    swapArrayList.add(word.substring(l,word.length()));		
+			
+		return swapListValues(swapArrayList).toString().replace("[", "").trim().replace(","," ").trim().replace("]", "").trim().replace("-", "").trim().replace(".", "").trim().replace(" ", "");
+		    
+		}   
+	
+	public  List swapListValues(ArrayList swapArrayList){
+		List<String> list = new ArrayList<String>();
+		//Change Position in List with 1-3, 2-4,3-5
+		for(int i=0;i< swapArrayList.size();i++){
+			if(i < swapArrayList.size() - 1){
+				list.add((String) swapArrayList.get(i+1).toString().replace("@", "C").trim().replace("-", " "));
+				list.add((String) swapArrayList.get(i).toString().replace("@", "C").trim().replace("-", " "));
+				i++;
+			}
+			
+		}
+		if(list.size() < swapArrayList.size()){
+			list.addAll(swapArrayList.subList(list.size(), swapArrayList.size()));
+		}
+		
+		return list;
 	}
 }
