@@ -821,6 +821,25 @@
 					 </Template>
 				</API>
 			</mashup>	
+			
+<mashup id='XPEDX-GetUserList' transactional='true'
+		mashuptype='XAPI' endpoint='USER'
+		description="Get the user name">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getUserList">
+			<Input>
+				<User>
+					<Extn ExtnEmployeeId="" />	
+				</User>
+			</Input>
+			<Template>
+				<User Username="">
+				<Extn ExtnSaltKey="" />
+				</User>
+			</Template>
+		</API>
+	</mashup>
 	
 </mashups>	
 

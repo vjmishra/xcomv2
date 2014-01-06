@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -16,6 +17,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
@@ -231,7 +233,8 @@ public class XPEDXSalesRepUtils {
 		LOG.debug(" Selected Customer is:: " + selectedCustomer);
 		
 		String networkId = (String)wcContext.getSCUIContext().getRequest().getSession().getAttribute("DisplayUserID");
-		
+		String saltKey = getSaltKey(networkId);
+		System.out.println("Salt Key here it is :=---"+ saltKey);
 		// fetch the employee id for the logged in user to construct the dummyuser id
 		//String employeeId = getEmployeeId(networkId, wcContext);
 		String employeeId = (String)wcContext.getWCAttribute(SR_SALESREP_ID, WCAttributeScope.SESSION);
@@ -299,6 +302,33 @@ public class XPEDXSalesRepUtils {
 		}
 		// TODO Auto-generated method stub
 		return salesRepEmployeeId;
+	}
+	
+	public static String getSaltKey(String networkId) {
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		String userName = "";
+		Element userList = null;
+		try {
+			Element input = SCXmlUtil.createDocument("User").getDocumentElement();
+			Element extnElem = SCXmlUtil.getChildElement(input, "Extn");
+			extnElem.setAttribute("ExtnEmployeeId", networkId);
+			
+
+			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());
+		} catch (XMLExceptionWrapper e) {
+			log.error("Unable to get user list", e);
+		} catch (CannotBuildInputException e) {
+			log.error("Unable to get user list", e);
+		}
+
+		if (userList != null) {
+			Element userEle = SCXmlUtil.getChildElement(userList, "User");
+			userName = userEle.getAttribute("Username");
+			Element extnElem = SCXmlUtil.getChildElement(userEle, "Extn");
+			System.out.println("Saltkey is------ " + extnElem.getAttribute("ExtnSaltKey"));
+		}
+
+		return userName;
 	}
 	
 	public String applySaltPattern(String word,String salt) { 
