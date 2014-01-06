@@ -128,11 +128,11 @@
 
 		function browserSupport(){
 
-		// Supported browser versions (minimum)
+		// Supported browser versions
 		var VER_IE = 8;
-		var VER_FIREFOX = 11;
+		var VER_FIREFOX = 17;
 		var VER_SAFARI = 5;   // may be x.y
-		var VER_CHROME = 10;  // may be x.y.z
+		//var VER_CHROME = 10;  // may be x.y.z
 
 		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
 		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
@@ -168,15 +168,15 @@
 			}
 		 }
 		
-		// Chrome is not supported but allowed to be used
+		// Chrome is kind of supported and autoupdates to latest version so don't check
 		// ex: "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.41 Safari/537.36"
-		else if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){
-			var chromeversion=new Number(RegExp.$1);
-			if(chromeversion < VER_CHROME)
-			{
-				 warnBrowserVersion();
-			}
-		}
+// 		else if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){
+// 			var chromeversion=new Number(RegExp.$1);
+// 			if(chromeversion < VER_CHROME)
+// 			{
+// 				 warnBrowserVersion();
+// 			}
+// 		}
 
 		// Unsupported browsers
 		else if ((/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)) ||
