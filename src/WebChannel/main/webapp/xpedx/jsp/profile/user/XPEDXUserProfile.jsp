@@ -393,7 +393,15 @@ function funDivOpenClose(val1)
 
 		function addEmailToList(){
 			var newEmail = document.getElementById("confEmailText").value;
-			document.getElementById("AddnlEmailAddrText").value = document.getElementById("AddnlEmailAddrText").value+newEmail+",";
+			var additionalEmails=document.getElementById("AddnlEmailAddrText").value;			
+			if(additionalEmails!=null && additionalEmails !=""){
+				additionalEmails= additionalEmails.replace(/^\s+|\s+$/g, '');
+				var lastChar = additionalEmails.charAt(additionalEmails.length-1);
+				if(lastChar!=","){
+					additionalEmails =additionalEmails+",";
+				}
+			}
+			document.getElementById("AddnlEmailAddrText").value = additionalEmails+newEmail+",";
 		}
 		
 		function confirmEmail() {
