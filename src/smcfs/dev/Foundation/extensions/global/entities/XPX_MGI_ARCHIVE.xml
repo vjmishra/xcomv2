@@ -62,7 +62,7 @@
 				<Attribute
 				ColumnName="CREATETS"
 				DataType="TimeStamp"
-				DefaultValue="systimestamp"
+				DefaultValue="sysdate"
 				Description="Timestamp when the record was created."
 				Name="Createts"
 				/>
@@ -70,7 +70,7 @@
 				<Attribute
 				ColumnName="MODIFYTS"
 				DataType="TimeStamp"
-				DefaultValue="systimestamp"
+				DefaultValue="sysdate"
 				Description="Timestamp when the record was last updated."
 				Name="Modifyts"
 				/>
