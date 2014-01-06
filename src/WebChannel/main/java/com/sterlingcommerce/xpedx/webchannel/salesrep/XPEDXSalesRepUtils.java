@@ -257,7 +257,7 @@ public class XPEDXSalesRepUtils {
 			request.setAttribute("dum_username", loginId.trim());
 			if(request.getAttribute("SRsaltKey") !=null){
 				System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
-				String newPassword  = applySaltPattern( loginId, request.getAttribute("SRsaltKey"));
+				String newPassword  = applySaltPattern( loginId, request.getAttribute("SRsaltKey").toString());
 				
 				System.out.println("New Password after Salt Pattern is : --- " + newPassword);
 			}
@@ -301,7 +301,7 @@ public class XPEDXSalesRepUtils {
 		return salesRepEmployeeId;
 	}
 	
-	public   String applySaltPattern(String word,String salt) { 
+	public String applySaltPattern(String word,String salt) { 
 		ArrayList<Character> one = new ArrayList<Character>();    
 		String [] saltpattern = salt.split("@") ; 
 		ArrayList swapArrayList = new ArrayList();
@@ -329,7 +329,7 @@ public class XPEDXSalesRepUtils {
 		    
 		}   
 	
-	public  List swapListValues(ArrayList swapArrayList){
+	public List swapListValues(ArrayList swapArrayList){
 		List<String> list = new ArrayList<String>();
 		//Change Position in List with 1-3, 2-4,3-5
 		for(int i=0;i< swapArrayList.size();i++){
