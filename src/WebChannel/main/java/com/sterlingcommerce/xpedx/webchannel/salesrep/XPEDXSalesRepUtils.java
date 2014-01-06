@@ -310,10 +310,10 @@ public class XPEDXSalesRepUtils {
 		Element userList = null;
 		try {
 			Element input = SCXmlUtil.createDocument("User").getDocumentElement();
-			Element extnElem = SCXmlUtil.getChildElement(input, "Extn");
+			Element extnElem = SCXmlUtil.createChild(input, "Extn");
 			extnElem.setAttribute("ExtnEmployeeId", networkId);
 			
-
+			
 			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());
 		} catch (XMLExceptionWrapper e) {
 			LOG.error("Unable to get user list", e);
