@@ -501,7 +501,51 @@
 									<td valign="top">
 										<xsl:value-of select="Order/Extn/@ShippingOptions"/>
 									</td>
+									</xsl:if>									
+									<xsl:if test="(contains($Subject,$Approver))">
+									<xsl:choose>
+									<xsl:when  test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"'>
+									
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									<td colspan="3"> <span class="bold"> Shipping Options: </span></td>
+									
 									</xsl:if>
+									<td>
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
+									Ship Order Complete
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+								    ,
+								    </xsl:if>
+									</xsl:if>						
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+									Will Call
+								    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>					    					
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+									Rush Order
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									Order Placed on Hold
+									</xsl:if>
+						
+						 			</td>	
+									
+									</xsl:when>
+									<xsl:otherwise>
+									
+									
+									</xsl:otherwise>
+									</xsl:choose>
+												
+						
+						
+									</xsl:if>
+									
 								</tr>
 							</table>
 						</td>
@@ -533,7 +577,7 @@
 						<th bgcolor="#003399" style="padding-right:0px;"></th>
 						<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:4px;padding-right:10px;">Ordered<br/>Quantity</th>
 						 <xsl:choose>
-						 <xsl:when test = '(Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
+						 <xsl:when test = '(Order/OrderLines/OrderLine/Extn/@ExtnReqShipOrdQty!="") and  ($IsOrderSplit ="N") ' >
 						 <th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
 						<th bgcolor="#003399" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;">Backorder<br/>Quantity</th>
 						 </xsl:when>
@@ -545,7 +589,7 @@
 						
 						<th bgcolor="#003399" class="align-center" valign="top">My<br/>Price&#160;(USD)</th>
 						 <xsl:choose>
-						 <xsl:when test = '(Extn/@ExtnTotalOfShippableTotals!="") ' > 
+						 <xsl:when test = '(Order/OrderLines/OrderLine/Extn/@ExtnTotalOfShippableTotals!="") ' > 
 						 
 						 <th bgcolor="#003399" class="align-center" valign="top">Shippable<br/>Price&#160;(USD)</th></xsl:when>
 						 <xsl:otherwise>
@@ -564,10 +608,27 @@
 						  <tr>
 							<th bgcolor="##084823" style="padding-right:0px;"></th>
 							<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:4px;padding-right:10px;">Ordered<br/>Quantity</th>
-							<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
-							<th class="align-left" bgcolor="##084823" valign="top" style="padding-left:0px;padding-right:0px;">Backorder<br/>Quantity</th>
+							<xsl:choose>
+						 <xsl:when test = '(Order/OrderLines/OrderLine/Extn/@ExtnReqShipOrdQty!="") and  (Order/@IsOrderSplit ="N") ' >
+						 <th bgcolor="##084823" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;">Shippable<br/>Quantity</th>
+						<th bgcolor="##084823" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;">Backorder<br/>Quantity</th>
+						 </xsl:when>
+						 <xsl:otherwise>
+						 <th bgcolor="##084823" class="align-left" valign="top" style="padding-left:0px;padding-right:10px;"></th>
+						<th bgcolor="##084823" class="align-left" valign="top" style="padding-left:0px;padding-right:0px;"></th>
+						 </xsl:otherwise>
+						 </xsl:choose>
+							
 							<th class="align-center" bgcolor="##084823" valign="top">My<br/>Price&#160;(USD)</th>
-							<th class="align-center" bgcolor="##084823" valign="top">Shippable<br/>Price&#160;(USD)</th>
+							<xsl:choose>
+						 <xsl:when test = '(Order/OrderLines/OrderLine/Extn/@ExtnTotalOfShippableTotals!="") ' > 
+						 
+						 <th bgcolor="##084823" class="align-center" valign="top">Shippable<br/>Price&#160;(USD)</th></xsl:when>
+						 <xsl:otherwise>
+						 <th bgcolor="##084823" class="align-center" valign="top"></th>
+						 </xsl:otherwise>
+						 
+						 </xsl:choose>
 							<th class="align-center" bgcolor="##084823" valign="top">Extended<br/>Price&#160;(USD)</th>
 						  </tr>
 						</thead>						

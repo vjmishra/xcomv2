@@ -285,7 +285,7 @@
 									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
 									VerificationStatus="" City="" Country="" FirstName=""
 									LastName="" PersonID="" State="" Title="" ZipCode=""
-									EMailID="" />
+									EMailID="" Modifyuserid="" Modifyts="" />
 							</CustomerAdditionalAddress>
 						</CustomerAdditionalAddressList>
 						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""

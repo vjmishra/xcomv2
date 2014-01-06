@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -967,34 +968,58 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		}
 	}
 
+	/**
+	 * Populates the properties lastModifiedBy, lastModifiedDate, and userCreatedDate.
+	 *
+	 * @throws YFSException
+	 * @throws RemoteException
+	 * @throws YIFClientCreationException
+	 */
 	private void setLastModifiedUser() throws YFSException, RemoteException, YIFClientCreationException {
 		Element contactElem = getContact();
 		Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 
-		// in web channel we're editing both contact and user, so we must show the newer of the two timestamps
-		String newestModifyuserid;
-		String newestModifyts;
-		if (contactElem.getAttribute("Modifyts").compareTo(userElem.getAttribute("Modifyts")) >= 0) {
-			newestModifyuserid = contactElem.getAttribute("Modifyuserid");
-			newestModifyts = contactElem.getAttribute("Modifyts");
-		} else {
-			newestModifyuserid = userElem.getAttribute("Modifyuserid");
-			newestModifyts = userElem.getAttribute("Modifyts");
-		}
+		LastModifiedInfo lmi = getMostRecentlyEditedElement();
 
-		if (userElem != null && newestModifyuserid.equals(userElem.getAttribute("Loginid"))) {
-			// user was last edited by self: modified by info is already in response
+		if (lmi.getLoginid().equals(userElem.getAttribute("Loginid"))) {
+			// we already have this user's name in the response (avoids an extra API call)
 			setLastModifiedBy(userElem.getAttribute("Username"));
 		} else {
-			setLastModifiedBy(getUsernameForLoginid(newestModifyuserid));
+			setLastModifiedBy(getUsernameForLoginid(lmi.getLoginid()));
 		}
 
 		UtilBean utilBean = new UtilBean();
 
-		setLastModifiedDate(utilBean.formatDate(newestModifyts, wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
+		setLastModifiedDate(utilBean.formatDate(lmi.getDate(), wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
 
 		// note that we always use the created date from the contact
 		setUserCreatedDate(utilBean.formatDate(contactElem.getAttribute("Createts"), wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
+	}
+
+	/**
+	 * The UI is editing multiple elements at a time, so we must check all relevant Modifyts values in the CustomerContact element:
+	 * <ul>
+	 *  <li>&lt;CustomerContact Modifyts Modifyuserid&gt; (/CustomerContact)</li>
+	 *  <li>&lt;User Modifyts Modifyuserid&gt; (/CustomerContact/User)</li>
+	 *  <li>&lt;PersonInfo Modifyts Modifyuserid&gt; (/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo)</li>
+	 * </ul>
+	 *
+	 * @return Returns the most recent timestamp
+	 */
+	private LastModifiedInfo getMostRecentlyEditedElement() {
+		Element contactElem = getContact();
+		Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
+		NodeList personInfoElems = contactElem.getElementsByTagName("PersonInfo"); // path to these elements: CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo
+
+		List<LastModifiedInfo> timestamps = new ArrayList<LastModifiedInfo>();
+		timestamps.add(new LastModifiedInfo(contactElem.getAttribute("Modifyuserid"), contactElem.getAttribute("Modifyts")));
+		timestamps.add(new LastModifiedInfo(userElem.getAttribute("Modifyuserid"), userElem.getAttribute("Modifyts")));
+		for (int i = 0; i < personInfoElems.getLength(); i++) {
+			Element personInfoElem = (Element) personInfoElems.item(i);
+			timestamps.add(new LastModifiedInfo(personInfoElem.getAttribute("Modifyuserid"), personInfoElem.getAttribute("Modifyts")));
+		}
+
+		return Collections.max(timestamps);
 	}
 
 	/**
@@ -2660,4 +2685,25 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		this.orderFlagForApproval = orderFlagForApproval;
 	}
 	/** end of Code for XB 226 **/
+
+	private static class LastModifiedInfo implements Comparable<LastModifiedInfo> {
+		private final String loginid;
+		private final String date;
+		public LastModifiedInfo(String loginid, String date) {
+			super();
+			this.loginid = loginid;
+			this.date = date;
+		}
+		public String getLoginid() {
+			return loginid;
+		}
+		public String getDate() {
+			return date;
+		}
+		@Override
+		public int compareTo(LastModifiedInfo that) {
+			return this.getDate().compareTo(that.getDate());
+		}
+	}
+
 }
