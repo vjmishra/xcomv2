@@ -331,7 +331,7 @@ public class XPXMyItemsSearchListScreenBehavior extends XPXPaginationBehavior {
 		String sharedSelect = getFieldValue("radIsShared");
 		String bothSelect = getFieldValue("radIsBoth");
 		String personalSelect = getFieldValue("radIsPersonal");
-		BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"' RootCustomerKeyQryType='FLIKE'/>");
+		BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
 		if(count==1){
 			bothSelect = "B";
 			//BothList  = YRCXmlUtils.createFromString("<XpedxMilBothLst RootCustomerKey='"+strRootCustomerKey+"'/>");
