@@ -216,27 +216,27 @@
 			<div class="ad-float smallBody" style="float: none;"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
 			<!-- Added for EB-1714 Display a Saalfeld advertisement image on Catalog pages  Starts -->
 					<s:set name='storefrontId' value="wCContext.storefrontId" />
-					 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+					<%--  <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 					 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 					</s:if>
 					<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 					<img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-					</s:elseif>
+					</s:elseif> --%>
 			<!-- EB-1714 END -->
-				<%--<!-- Ad Juggler Tag Starts -->
+				<!-- Ad Juggler Tag Starts -->
 				<s:set name='ad_keyword' value='' />
 				<s:set name='firstItem1' value='%{firstItem}' />
 				<s:set name='catPath' value='%{categoryPath}' />
 				<%-- Commented for Performance Fix
 				<s:set name="cat2Val" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCatTwoDescFromItemIdForpath(#firstItem1,#storefrontId,#catPath)" />
-				 --%>
+				
 				<%--<s:set name="cat2Val" value='%{categoryShortDescription}' />
 				<s:if test="#cat2Val != null" >
 					<s:set name='ad_keyword' value='#cat2Val' />
 				</s:if>
 
 		<%-- aj_server: https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ --%>		
-		<%--<s:if test="#ad_keyword != null" >
+		<s:if test="#ad_keyword != null" >
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
@@ -312,7 +312,7 @@
 		</s:else>
 		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 		
-		<!-- Ad Juggler Tag Ends --> --%>	
+		<!-- Ad Juggler Tag Ends --> 
 			
 			
 			</div>
