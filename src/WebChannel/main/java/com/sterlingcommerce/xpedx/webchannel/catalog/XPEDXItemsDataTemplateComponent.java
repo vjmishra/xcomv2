@@ -281,11 +281,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 				.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
 		
 		}	
-		//  Added for EB 4010
-		else {
-			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MANUFACTURER_ITEM_LABEL)
-			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN "))));
-		}
+		
 			sb.append("\",");
 			/* else if("3".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MPC_ITEM_LABEL)
@@ -294,11 +290,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append("customerItemno: \"");
 		if(extnCustomerItemFlag!=null && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
-			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPC"))));
-		}		
-		else {	sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
-		}
+		}		
 		
 		//End of EB 47
 		sb.append("\",");
