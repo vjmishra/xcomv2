@@ -248,7 +248,7 @@
 				</Input>
 				<Template>
 					<XPEDXSalesRepList>
-					 	<XPEDXSalesRep SalesRepId=""/>
+					 	<XPEDXSalesRep SalesRepId="" SaltKey=""/>
 					</XPEDXSalesRepList>
 				</Template>
 			</API>
@@ -822,7 +822,7 @@
 				</API>
 			</mashup>	
 			
-<mashup id='XPEDX-GetUserList' transactional='true'
+<mashup id='XPEDX-GetUserList-SalesRep' transactional='true'
 		mashuptype='XAPI' endpoint='USER'
 		description="Get the user name">
 		<classInformation

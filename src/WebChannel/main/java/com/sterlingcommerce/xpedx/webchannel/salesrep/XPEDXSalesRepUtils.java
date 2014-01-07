@@ -308,13 +308,14 @@ public class XPEDXSalesRepUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		String userName = "";
 		Element userList = null;
+		String saltKey = "";
 		try {
 			Element input = SCXmlUtil.createDocument("User").getDocumentElement();
 			Element extnElem = SCXmlUtil.createChild(input, "Extn");
 			extnElem.setAttribute("ExtnEmployeeId", networkId);
 			
 			
-			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());
+			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList-SalesRep", input, context.getSCUIContext());
 		} catch (XMLExceptionWrapper e) {
 			LOG.error("Unable to get user list", e);
 		}
@@ -324,6 +325,7 @@ public class XPEDXSalesRepUtils {
 			userName = userEle.getAttribute("Username");
 			Element extnElem = SCXmlUtil.getChildElement(userEle, "Extn");
 			System.out.println("Saltkey is------ " + extnElem.getAttribute("ExtnSaltKey"));
+			saltKey = extnElem.getAttribute("ExtnSaltKey");
 		}
 
 		return userName;
