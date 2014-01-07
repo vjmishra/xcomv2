@@ -335,7 +335,7 @@ public class XPEDXSalesRepUtils {
 			saltKey = extnElem.getAttribute("ExtnSaltKey");
 		}
 
-		return userName;
+		return saltKey;
 	}
 	
 	public String applySaltPattern(String word,String salt) { 
