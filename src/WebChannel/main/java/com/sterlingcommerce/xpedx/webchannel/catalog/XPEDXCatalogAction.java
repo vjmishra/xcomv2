@@ -1104,7 +1104,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setShipToCustomer((XPEDXShipToCustomer) XPEDXWCUtils
 						.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER));
 			}
-			String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+			//EB-4010
+			//String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+			String shipFromDivision = shipToCustomer.getExtnCustomerDivision();
+			
 			if (shipFromDivision != null
 					&& shipFromDivision.trim().length() > 0) {
 				Element terms = null;
@@ -1464,7 +1467,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 			String envCode = shipToCustomer.getExtnEnvironmentCode();
 			String legacyCustomerNumber = shipToCustomer
 					.getExtnLegacyCustNumber();
-			String custDivision = shipToCustomer.getExtnShipFromBranch();
+			//String custDivision = shipToCustomer.getExtnShipFromBranch();
+			String custDivision = shipToCustomer.getExtnCustomerDivision();
 			HashMap<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerNumber",
@@ -3416,8 +3420,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setShipToCustomer((XPEDXShipToCustomer) XPEDXWCUtils
 						.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER));
 			}
-
-			customerShipFromBranch = shipToCustomer.getExtnShipFromBranch();
+			//customerShipFromBranch = shipToCustomer.getExtnShipFromBranch();
+			customerShipFromBranch = shipToCustomer.getExtnCustomerDivision(); 
 			if (YFCCommon.isVoid(customerShipFromBranch)) {
 				// oops... DB is messed up.
 				log.error("customer ship from branch from the DB for Customer "
@@ -3513,7 +3517,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		}
 
 		for (int i = 0; i < itemNodeList.getLength(); i++) {
-			// get the item node
+			// get the item nodei
 			Node itemNode = itemNodeList.item(i);
 			Element itemElement = (Element) itemNode;
 			String itemID = SCXmlUtil.getAttribute(itemElement, "ItemID");
@@ -3528,7 +3532,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 						itemElement, "PrimaryInformation");
 				manufacturerPartNo = primaryInformation
 						.getAttribute("ManufacturerItem");
-				customerPartNumber = itemToCustPartNoMap.get(itemID);
+				customerPartNumber =  (String) itemToCustPartNoMap.get(itemID);
 				HashMap<String, String> skuMap = new HashMap<String, String>();
 				skuMap.put("MPN", manufacturerPartNo);
 				skuMap.put("MPC", extnMpc);
