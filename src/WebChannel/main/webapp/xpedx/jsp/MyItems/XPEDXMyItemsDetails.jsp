@@ -3869,5 +3869,14 @@ function showSharedListForm(){
 -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numberformatter-1.1.0<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+		var id1Left= $('#main').width()		
+		backToTopLeft = parseInt(id1Left+5) + 'px';
+		$('#back-to-top').css('padding-left',backToTopLeft);
+		$('#back-to-top a').css('padding-left',backToTopLeft);
+
+} );
+</script>
 </body>
 </html>
