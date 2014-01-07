@@ -259,14 +259,17 @@ public class XPEDXSalesRepUtils {
 			loginId = employeeId+"@"+customerId+".com";
 			request.setAttribute("dum_username", loginId.trim());
 			String saltKey = getSaltKey(loginId);
-			if(request.getAttribute("SRsaltKey") !=null){
-				System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
-				String newPassword  = applySaltPattern( loginId, request.getAttribute("SRsaltKey").toString());
+			if(!"".equalsIgnoreCase(saltKey) && saltKey !=null){
+				System.out.println("Salt key is " + saltKey );
+				String newPassword  = applySaltPattern( loginId, saltKey);
 				
 				System.out.println("New Password after Salt Pattern is : --- " + newPassword);
+				request.setAttribute("dum_password", newPassword);
+			}else{
+				request.setAttribute("dum_password", loginId.trim());
 			}
-			System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
-			request.setAttribute("dum_password", loginId.trim());// the password remains the same as loginid - ASSUMPTION
+			System.out.println("Salt key is " + saltKey );
+		//	request.setAttribute("dum_password", loginId.trim());// the saltKeypassword remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
 			//SRSalesRepEmailID added for jira 3438
 			request.setAttribute("SRSalesRepEmailID",SREmailID);
@@ -309,7 +312,7 @@ public class XPEDXSalesRepUtils {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		String userName = "";
 		Element userList = null;
-		String saltKey = "";
+		String saltKey = null;
 		try {
 			Element input = SCXmlUtil.createDocument("User").getDocumentElement();
 			
