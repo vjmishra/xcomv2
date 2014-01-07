@@ -504,9 +504,9 @@
 									</xsl:if>									
 									<xsl:if test="(contains($Subject,$Approver))">
 									<xsl:choose>
-									<xsl:when  test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"'>
+									<xsl:when  test = 'Order/Extn/@ExtnShipComplete="C" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"'>
 									
-									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 									<td colspan="3"> <span class="bold"> Shipping Options: </span></td>
 									
 									</xsl:if>
