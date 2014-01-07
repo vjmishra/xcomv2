@@ -233,8 +233,8 @@ public class XPEDXSalesRepUtils {
 		LOG.debug(" Selected Customer is:: " + selectedCustomer);
 		
 		String networkId = (String)wcContext.getSCUIContext().getRequest().getSession().getAttribute("DisplayUserID");
-		String saltKey = getSaltKey(networkId);
-		System.out.println("Salt Key here it is :=---"+ saltKey);
+		
+	
 		// fetch the employee id for the logged in user to construct the dummyuser id
 		//String employeeId = getEmployeeId(networkId, wcContext);
 		String employeeId = (String)wcContext.getWCAttribute(SR_SALESREP_ID, WCAttributeScope.SESSION);
@@ -258,6 +258,7 @@ public class XPEDXSalesRepUtils {
 		if(!YFCUtils.isVoid(customerId)){
 			loginId = employeeId+"@"+customerId+".com";
 			request.setAttribute("dum_username", loginId.trim());
+			String saltKey = getSaltKey(loginId);
 			if(request.getAttribute("SRsaltKey") !=null){
 				System.out.println("Salt key is " + request.getAttribute("SRsaltKey") );
 				String newPassword  = applySaltPattern( loginId, request.getAttribute("SRsaltKey").toString());
@@ -311,8 +312,11 @@ public class XPEDXSalesRepUtils {
 		String saltKey = "";
 		try {
 			Element input = SCXmlUtil.createDocument("User").getDocumentElement();
-			Element extnElem = SCXmlUtil.createChild(input, "Extn");
-			extnElem.setAttribute("ExtnEmployeeId", networkId);
+			
+			input.setAttribute("Loginid", networkId);// customers for the logged in sales rep
+			
+			String inputXml = SCXmlUtil.getString(input);
+			
 			
 			
 			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList-SalesRep", input, context.getSCUIContext());

@@ -829,9 +829,7 @@
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="getUserList">
 			<Input>
-				<User>
-					<Extn ExtnEmployeeId="" />	
-				</User>
+				<User  Loginid="" />
 			</Input>
 			<Template>
 				<User Username="">
