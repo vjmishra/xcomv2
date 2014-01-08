@@ -334,7 +334,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					else if ("getCustomerContactList".equals(ctx.getApiName())) {
 						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
 						adminCustomerContact(eleCustomerContactList);						
-						this.UpdateCustomer();
+						//this.UpdateCustomer();
 						
 					}
 					else if ("getBilltoExtnCustomerClass".equals(ctx.getApiName())) {
