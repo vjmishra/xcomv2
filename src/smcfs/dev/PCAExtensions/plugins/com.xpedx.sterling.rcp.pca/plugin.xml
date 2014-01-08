@@ -440,7 +440,7 @@
                 actionId="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
                 filterRequired="false" groupId="Other_Tasks"
                 id="CSRMaintenance" isExtension="false"
-                name="CSR Maintenance" permissionId="ycdRCPXPX004">
+                name="CSR Maintenance" permissionId="ycdRCPXPXCSR0001">
                 <categories id="com.xpedx.sterling.rcp.pca.categories1">
                   <category id="XPX_GLOBAL"/>
                 </categories>
