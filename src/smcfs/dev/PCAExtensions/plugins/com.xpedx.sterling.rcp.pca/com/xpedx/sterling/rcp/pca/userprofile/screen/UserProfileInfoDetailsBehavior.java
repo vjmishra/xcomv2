@@ -281,8 +281,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						repopulateModel("XPXCustomerContactIn");
 					}
 					else if ("getUserList".equals(apiname)){
-						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();						
-						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);	
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						String firstName = YRCXmlUtils.getAttributeValue(outXml,"/UserList/User/ContactPersonInfo/@FirstName" );
+						//(Element) YRCXPathUtils.evaluate(ctx.getOutputXmls()[i].getDocumentElement(), "UserList/User/ContactPersonInfo",XPathConstants.NODE);
+						String lastName =  YRCXmlUtils.getAttributeValue(outXml, "/UserList/User/ContactPersonInfo/@LastName");
+						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);						
+						//System.out.println(YRCXmlUtils.getString(outXml));
 						setModel("UserList" , outXml);
 					}
 					else if ("getCustomerDetails".equals(apiname)) {
@@ -385,7 +389,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						}
 						setBillToExtnCustomerClass(billToCustomerClass);
 					}
-					
+					 
 				}
 				if (ctx.getApiName().equals("manageCustomer")) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
@@ -421,7 +425,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		for(int i=0;i<nodCustContact.getLength();i++){
 			Element eleCust=(Element) nodCustContact.item(i);
 			String customerID = eleCust.getAttribute("CustomerContactID");
-			
+			System.out.println(customerID);
 			if(this.customerContactID.equals(customerID)){
 			//	Modifyts="2013-12-05T13:58:34-05:00" Modifyuserid="dave@bh.com">
 				this.modifyTs = eleCust.getAttribute("Modifyts");
