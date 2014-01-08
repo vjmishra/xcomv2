@@ -2529,16 +2529,16 @@ function showSharedListForm(){
 						<img style="margin-top:5px; padding-right:5px;display: inline;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
 						<!-- Added for EB-1714 Display a Saalfeld advertisement image on MIL Starts -->
 							 <s:set name='storefrontId' value="wCContext.storefrontId" />
-							<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+						<%--<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 							 </s:if>
 							<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-	                        </s:elseif>
-                   		<!-- EB-1714 END -->     
+	                        </s:elseif> --%> 
+                  		<!-- EB-1714 END -->     
                         <div class="clear"></div>
                         <!-- Ad Juggler Tag Starts -->
-                     <%--    <s:set name='ad_keyword' value='' />						
+                 <s:set name='ad_keyword' value='' />						
 				<s:iterator status="status" id="item" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 					<s:if test="%{#status.index == 0}">
 							<s:set name='itemId1' value='#item.getAttribute("ItemId")+"" ' />
@@ -2628,7 +2628,7 @@ function showSharedListForm(){
 				</script>
 			</s:else>			
 		</s:else>
-			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script> --%>
+			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script> 
 			<!-- Ad Juggler Tag Ends -->
 </div>
 </s:if>
@@ -3869,5 +3869,14 @@ function showSharedListForm(){
 -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numberformatter-1.1.0<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+		var id1Left= $('#main').width()		
+		backToTopLeft = parseInt(id1Left+5) + 'px';
+		$('#back-to-top').css('padding-left',backToTopLeft);
+		$('#back-to-top a').css('padding-left',backToTopLeft);
+
+} );
+</script>
 </body>
 </html>

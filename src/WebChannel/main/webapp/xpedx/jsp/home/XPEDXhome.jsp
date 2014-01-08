@@ -235,19 +235,19 @@ Ext.onReady(function(){
 		<div id="homepage-ad-area">
 			<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
 			<!-- Added for EB-1549 Display a Saalfeld advertisement image on the Home page  Starts -->
-				<s:set name='storefrontId' value="wCContext.storefrontId" />
+			<%-- 	<s:set name='storefrontId' value="wCContext.storefrontId" />
 				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_300x250r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
 				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD3_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:elseif>
+				</s:elseif> --%>
 			<!-- EB-1549 END -->
 		
-			</div>
+			
 			<!-- Ad Juggler Tag Starts -->
 			
-			<%--<s:set name='storefrontId' value="wCContext.storefrontId" />
+		<s:set name='storefrontId' value="wCContext.storefrontId" />
 
 			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
@@ -287,8 +287,8 @@ Ext.onReady(function(){
 				</script>
 			</s:else>			
 			<!-- Ad Juggler Tag Ends -->
-			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>  --%>
-		
+			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>  
+		</div>
 		
 		<div class="clearall">&nbsp;</div>
     

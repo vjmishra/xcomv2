@@ -2674,7 +2674,7 @@ input.xpedx_select_sm, xpedx_select_sm {
 .advertisement, #right-col-int a img {
 }
 #right-col-int.cat-landing a img {
-    float: right;
+    float: none;
 }
 .promotxt {
     color: #000000;
@@ -2772,7 +2772,7 @@ td .inner {
 #right-col-int {
    position:absolute;
    top:1;
-   right:0
+   right:2;
 }
 #multi-view {
     float: right;
