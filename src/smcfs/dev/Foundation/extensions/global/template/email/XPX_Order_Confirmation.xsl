@@ -136,7 +136,11 @@
 		<xsl:variable name="Approver" select="'Approved'"/>
 		<xsl:variable name="Subject" >
 			<xsl:value-of select="Order/@Subject" />
-		</xsl:variable>		
+		</xsl:variable>	
+		<xsl:variable name="OrderStatus" >
+			<xsl:value-of select="Order/Extn/@ExtnOrderStatus" />
+		</xsl:variable>	
+		<xsl:variable name="custHold" select="'5350'"/>	
 		
 		<xsl:variable name="custlinePOLbl" >
 			<xsl:value-of select="Order/Extn/@ExtnCustLinePOLbl" />
@@ -503,8 +507,7 @@
 									</td>
 									</xsl:if>									
 									<xsl:if test="(contains($Subject,$Approver))">
-									<xsl:choose>
-									<xsl:when  test = 'Order/Extn/@ExtnShipComplete="C" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"'>
+																
 									
 									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
 									<td colspan="3"> <span class="labelText"> Shipping Options: </span></td>
@@ -527,20 +530,27 @@
 									Rush Order
 									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
 									,
+									</xsl:if>	
 									</xsl:if>
-									</xsl:if>
-									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+						 				
+									<xsl:choose>
+									<xsl:when test='Order/Extn/@ExtnWebHoldFlag!="N"'>
 									Order Placed on Hold
-									</xsl:if>
-						
-						 			</td>	
-									
 									</xsl:when>
 									<xsl:otherwise>
+									 <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnShipComplete="C"' >
+									,
+									</xsl:if>
+																		
+									<xsl:if test="(contains($OrderStatus,$custHold))">
+									Customer Hold
+									</xsl:if>
 									
 									
 									</xsl:otherwise>
 									</xsl:choose>
+												
+									</td>
 												
 						
 						

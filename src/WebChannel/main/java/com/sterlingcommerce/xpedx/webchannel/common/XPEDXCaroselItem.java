@@ -10,7 +10,7 @@ public class XPEDXCaroselItem {
 	//Sample Image File : https://content.ipaper.com/ProductImages/I2130545_small.jpg
 	
 	//CONSTANTS
-	public static final String CONTENT_SERVER  = "https://content.ipaper.com";
+	public static final String CONTENT_SERVER  = "https://xcontent.ipaper.com";
 	public static final String CONTENT_LOCATION = CONTENT_SERVER + "/ProductImages/";
 	public static final String IMAGE_NOTON_FILE  = "/swc/xpedx/images/INF_150x150.jpg";
 	private static final Logger log = Logger.getLogger(XPEDXCaroselItem.class);

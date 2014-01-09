@@ -235,29 +235,29 @@ Ext.onReady(function(){
 		<div id="homepage-ad-area">
 			<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
 			<!-- Added for EB-1549 Display a Saalfeld advertisement image on the Home page  Starts -->
-			<%-- 	<s:set name='storefrontId' value="wCContext.storefrontId" />
-				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+				<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<%-- <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_300x250r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:if>
-				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
+				</s:if> --%>
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
 				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD3_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:elseif> --%>
+				</s:if> 
 			<!-- EB-1549 END -->
-		
+				<s:set name='storefrontId' value="wCContext.storefrontId" />
 			
 			<!-- Ad Juggler Tag Starts -->
 			
-		<s:set name='storefrontId' value="wCContext.storefrontId" />
+		
 
 			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
-			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
+			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118161'; aj_page = '0'; aj_dim ='114889'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
-			</s:if>
+			</s:if> 
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
 								<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';

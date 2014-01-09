@@ -2388,7 +2388,7 @@ function callAjaxForSorting(url,divId)
   		 //-- Web Trends tag start --
 		writeMetaTag('WT.ti','Help');
 		//-- Web Trends tag End --
-  		var load = window.open('https://content.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
+  		var load = window.open('https://xcontent.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
   		}
 	function getCategorySubMenu()
 	{		
