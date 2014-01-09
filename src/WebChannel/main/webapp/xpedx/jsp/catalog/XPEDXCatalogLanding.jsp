@@ -296,8 +296,8 @@
 			<!-- end mid column -->
 			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
-				<div id="right-col-int" class="cat-landing" style="margin-top:0px;"> 
-				 <div align="left" style="padding-right: 62px;padding-bottom:2px">
+				<div id="right-col-int" class="cat-landing" style="margin-top:0px;right:10px;">
+				 <div align="left" style="padding-right: 60px;margin-bottom:2px">
 				<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
 				
 			</div>
@@ -306,10 +306,10 @@
 						 <%-- <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
 						 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 						 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
-						 </s:if>
-						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						 </s:if>--%>
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
 						<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
-						</s:elseif> --%>
+						</s:if> 
 				<!-- EB-1549 END -->
 				
 				<!-- Ad Juggler Tag Starts  -->
@@ -317,7 +317,7 @@
 				<s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
 				<s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
 				<s:if test="#categoryDepth==1">
-					<script type="text/javascript" language="JavaScript">
+				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />'; aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw='<s:property value="%{#prependTestString}" /><s:property value="%{#sanitizedCategoryName}" />';
 				aj_pv = true; aj_click = ''; </script>
