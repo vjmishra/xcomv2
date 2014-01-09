@@ -130,7 +130,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		String strExtnDefaultShipTo = YRCXmlUtils.getAttributeValue(eleCustomerContactInfo, "/CustomerContact/Extn/@ExtnDefaultShipTo");
 		if(!YRCPlatformUI.isVoid(strExtnDefaultShipTo)){
 			
-			String[] apinames = {"getDefaultShipToList" , "getUserList"};
+			String[] apinames = {"getDefaultShipToList","getUserList"};
 			Document[] docInput = {
 					
 					YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
@@ -285,6 +285,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						String firstName = YRCXmlUtils.getAttributeValue(outXml,"/UserList/User/ContactPersonInfo/@FirstName" );
 						//(Element) YRCXPathUtils.evaluate(ctx.getOutputXmls()[i].getDocumentElement(), "UserList/User/ContactPersonInfo",XPathConstants.NODE);
 						String lastName =  YRCXmlUtils.getAttributeValue(outXml, "/UserList/User/ContactPersonInfo/@LastName");
+						
 						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);						
 						//System.out.println(YRCXmlUtils.getString(outXml));
 						setModel("UserList" , outXml);
@@ -319,8 +320,9 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					}					
 					else if ("getXPXCustContExtn".equals(apiname)) {
 						this.docPOList=ctx.getOutputXmls()[i];
+						Element outXml =null;
 						if(!YRCPlatformUI.isVoid(docPOList)){
-							Element outXml=docPOList.getDocumentElement();
+							outXml=docPOList.getDocumentElement();
 							setModel("XPXCustomercontactExtn",outXml);
 						
 						}
@@ -328,13 +330,16 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							Element outXMElement=YRCXmlUtils.createFromString("<XPXCustomercontactExtn/>").getDocumentElement();
 							setModel("XPXCustomercontactExtn",outXMElement);
 						}
+						
+						modifyUserId=YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyuserid");
+						modifyTs = YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyts");
 						this.createModelForPOList();
 						this.createModelForAdditionalEmails();
 					}
 					else if ("getCustomerContactList".equals(ctx.getApiName())) {
 						Element eleCustomerContactList = ctx.getOutputXml().getDocumentElement();
 						adminCustomerContact(eleCustomerContactList);						
-						//this.UpdateCustomer();
+					//	this.UpdateCustomer();
 						
 					}
 					else if ("getBilltoExtnCustomerClass".equals(ctx.getApiName())) {
@@ -429,7 +434,10 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			if(this.customerContactID.equals(customerID)){
 			//	Modifyts="2013-12-05T13:58:34-05:00" Modifyuserid="dave@bh.com">
 				this.modifyTs = eleCust.getAttribute("Modifyts");
-				this.modifyUserId=eleCust.getAttribute("Modifyuserid");
+				if(!"admin".equalsIgnoreCase(eleCust.getAttribute("Modifyuserid"))){
+					this.modifyUserId=eleCust.getAttribute("Modifyuserid");
+				}
+				
 				
 			}
 				NodeList nodGroupLists=eleCust.getElementsByTagName("UserGroupLists");			
