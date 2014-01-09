@@ -136,7 +136,11 @@
 		<xsl:variable name="Approver" select="'Approved'"/>
 		<xsl:variable name="Subject" >
 			<xsl:value-of select="Order/@Subject" />
-		</xsl:variable>		
+		</xsl:variable>	
+		<xsl:variable name="OrderStatus" >
+			<xsl:value-of select="Order/Extn/@ExtnOrderStatus" />
+		</xsl:variable>	
+		<xsl:variable name="custHold" select="'5350'"/>	
 		
 		<xsl:variable name="custlinePOLbl" >
 			<xsl:value-of select="Order/Extn/@ExtnCustLinePOLbl" />
@@ -537,7 +541,14 @@
 									
 									</xsl:when>
 									<xsl:otherwise>
-									
+									<xsl:if test = 'Order/Extn/@ExtnOrderStatus!=""'>
+									<td colspan="3"> <span class="labelText"> Shipping Options: </span></td>
+									</xsl:if>
+									<td>
+									<xsl:if test="(contains($OrderStatus,$custHold))">
+									Customer Hold
+									</xsl:if>
+									</td>
 									
 									</xsl:otherwise>
 									</xsl:choose>
