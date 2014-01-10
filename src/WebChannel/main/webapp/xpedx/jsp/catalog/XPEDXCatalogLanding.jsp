@@ -198,7 +198,7 @@
 		</fieldset>
 			</div>
 			<!-- Ad Juggler Tag Starts - Cat1 Landing Page -->		
-			<%-- <s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
+			 <s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
 			
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115162" />
@@ -214,7 +214,7 @@
 			</s:elseif>
 			<s:else>
 					<s:set name="aj_adspot" value="115712" />
-			</s:else> --%>
+			</s:else> 
 			<!-- Ad Juggler Tag Ends -->
 			 </s:if>
 			 <s:else>
