@@ -56,6 +56,15 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <!-- end carousel scripts js   -->
+<script type="text/javascript">
+$(document).ready(function() {
+		var id1Left= $('#main').width()		
+		backToTopLeft = parseInt(id1Left+5) + 'px';
+		$('#back-to-top').css('padding-left',backToTopLeft);
+		$('#back-to-top a').css('padding-left',backToTopLeft);
+
+} );
+</script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' /></title>
 
 	
@@ -1036,6 +1045,8 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<!-- old narrow by include -->
 	</div>
+	 <%--Added for EB 1150 --%>
+	<div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)"></a></div>
 	<div class="clear"></div>
 	</div>
 	
@@ -1489,8 +1500,6 @@ $(function () {
 --><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.cycle.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/sorttable<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
- <%--Added for EB 1150 --%>
- <div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)"></a></div>
 <!--EB-519-->
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
