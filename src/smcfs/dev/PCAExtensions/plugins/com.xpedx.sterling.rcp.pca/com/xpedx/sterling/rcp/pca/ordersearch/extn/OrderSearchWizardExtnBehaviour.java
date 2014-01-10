@@ -369,10 +369,10 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			if(!YRCPlatformUI.isVoid(eleInput.getAttribute("FromStatus")) || !YRCPlatformUI.isVoid(eleInput.getAttribute("ToStatus"))){
 				eleInput.setAttribute("StatusQryType", "BETWEEN");
 			}
-			Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
+			//Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
 //			If Needs Attention Check box is checked then create a OrderHoldType element with holdtype ='NEEDS_ATTENTION'
 			if("Y".equals(YRCXmlUtils.getAttributeValue(eleInput, "/Order/@NeedsAttentionFlag")) ||"Y".equals(YRCXmlUtils.getAttributeValue(eleInput, "/Order/@CsrReviewFlag")) ){
-				//Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
+				Element eleOrderHoldType = YRCXmlUtils.createChild(eleInput, "OrderHoldType");
 					eleOrderHoldType.setAttribute("Status", "1100");
 					Element eleComplexQry1 = YRCXmlUtils.createChild(eleOrderHoldType, "ComplexQuery");
 					Element eleOr1= YRCXmlUtils.createChild(eleComplexQry1, "Or");
@@ -392,7 +392,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 					}		
 			}
 		
-			eleOrderHoldType.setAttribute("ResolverUserId", "");
+			
 			
 //			Search by Order Type
 			if(!YRCPlatformUI.isVoid(getFieldValue("extn_comboDocType"))){
