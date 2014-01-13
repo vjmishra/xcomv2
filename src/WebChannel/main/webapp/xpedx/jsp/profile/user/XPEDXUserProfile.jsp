@@ -3520,7 +3520,13 @@ function resetPassword()
 	        success: function (response, request){
 	        	//alert('User password will be sent to your registered email address!');
 	        	//Added for Jira XNGTP-3196
-			document.getElementById("msgFor_resetpassword").style.display = "inline";
+				 var responseText = response.responseText;		           
+	             if(responseText.indexOf("error")>-1){
+						alert("Error sending reset password notification email!");
+				}else{
+		                document.getElementById("msgFor_resetpassword").style.display = "inline";
+		        }
+			
 	   		},
 	   		failure: function (response, request){
 	   			alert("Error sending reset password notification email!");
