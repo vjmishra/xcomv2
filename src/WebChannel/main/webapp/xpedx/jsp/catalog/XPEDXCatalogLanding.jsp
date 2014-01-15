@@ -208,9 +208,12 @@
 			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118193" />
-			</s:elseif >
-			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true)}' >
-					<s:set name="aj_adspot" value="250649" />
+			</s:elseif >			
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true) && (#categoryDepth!=1)}' >
+					<s:set name="aj_adspot" value="250649" /> 
+			</s:elseif>
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true) && (#categoryDepth==1)}' >
+					<s:set name="aj_adspot" value="147682" />
 			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115712" />
