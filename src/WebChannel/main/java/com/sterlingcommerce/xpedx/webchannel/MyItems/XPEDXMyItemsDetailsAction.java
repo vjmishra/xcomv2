@@ -1360,17 +1360,25 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					{
 						Set<String> uomiDs=actualUOMList.keySet();
 						boolean isUOMAvaliable=false;
+						//EB-3991 to select the valid assigned UOM
+						int index=0;
+						String firstUOM="";
 						for(String uomId :uomiDs)
 						{
-
+							
+							if(index == 0)
+								firstUOM=uomId;
 							if(uomId != null && uomId.contains(item.getAttribute("UomId")))
 							{
 								isUOMAvaliable=true;
 							}
+							index=index+1;
 						}
 						if(!isUOMAvaliable)
 						{
-							item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
+						//existing code will not work for Custom UOM incase of isCusExclFlay is Y
+						//	item.setAttribute("UomId", getBaseUOMmap().get(item.getAttribute("ItemId")));
+									item.setAttribute("UomId", firstUOM);
 
 						}
 					}
