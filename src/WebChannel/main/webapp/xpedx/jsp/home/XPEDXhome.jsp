@@ -73,10 +73,7 @@
 		
 		<div id="browser-not-supported" style=" display:none">
 		<br/>
-				&nbsp;&nbsp;xpedx.com is designed to work in the latest versions of Internet Explorer,<br/>
-				&nbsp;&nbsp;Firefox, Safari. For more information please review the help document. <br/>
-				&nbsp;&nbsp;Upgrading your browser is quick and easy, click here to get the latest versions <br/>
-				&nbsp;&nbsp;(note: Safari can be upgraded via the Apple App Store): <br/><br/><br/><br/>
+				<div id="browser-warning-text" style="padding:10px;"></div>
 				<table width="100%">
 					<tr>
 						<td valign="top" style="line-height: 20px;" width="45%">
@@ -104,6 +101,7 @@
 					</tr>
 				</table>
 		</div>
+
 		<script type="text/javascript">
 		var browserNotSupportedWin = new Ext.Window({
 			autoScroll: false,
@@ -114,7 +112,7 @@
 		    id: 'browser-not-supportedBox',
 		    modal: true,
 		    width: 450,
-		    height: 250,
+		    height: 400,
 		    resizable   : false,
 		    draggable   : false,
 		    closable    : false,
@@ -137,16 +135,19 @@
 		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
 		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
 		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
-		   var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
-			 if (ieversion < VER_IE)
-			 {
-				 // need? checking compatibility mode?
-				 if(document.documentMode < VER_IE)
-				 {
-					 warnBrowserVersion();
-				 }
-			 }
-				 
+		 	var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
+			if (ieversion < VER_IE)
+			{
+				// need? checking compatibility mode?
+				if(document.documentMode < VER_IE)
+				{
+					warnBrowserVersion();
+				}
+			}
+			else if (ieversion == 8)
+			{
+				warnIE8();
+			}
 		}
 
 		// Firefox: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0"
@@ -188,20 +189,53 @@
 		}
 		
 		function warnBrowserVersion() {
-			 document.getElementById("browser-not-supported").style.display = "block";
+			var html = [];
+			html.push('xpedx.com is designed to work in the latest versions of Internet Explorer,<br/>');
+			html.push('Firefox, Safari. For more information please review the help document. <br/>');
+			html.push('Upgrading your browser is quick and easy, click here to get the latest versions <br/>');
+			html.push('(note: Safari can be upgraded via the Apple App Store):"');
+			$('#browser-warning-text').html(html.join(''));
+
+			 $('#browser-not-supported').show();
 			 browserNotSupportedWin.show();
+		}
+
+		// This is a temporary warning about IE8 going away
+		// TODO remove once IE9 is the minimal version
+		function warnIE8() {
+			var html = [];
+			html.push('xpedx continues to improve xpedx.com/order to provide you with the best <br/>');
+			html.push('possible on line experience. This includes making the site compatible <br/>');
+			html.push('with the most current versions of the supported browsers. <br/>');
+			html.push('<br/>');
+			html.push('Beginning in June, future xpedx.com/order upgrades will no longer be <br/>');
+			html.push('certified for, tested, or supported on Internet Explorer 8. By removing <br/>');
+			html.push('Internet Explorer 8 support, we can focus our efforts on providing the <br/>');
+			html.push('best user experience, accelerating our pace of innovation, and utilizing <br/>');
+			html.push('modern browser technologies. <br/>');
+			html.push('<br/>');
+			html.push('IE8 users will still have access to the site and there will be no <br/>');
+			html.push('noticeable difference for some time. Eventually, IE8 users may <br/>');
+			html.push('experience sub-optimal performance. We are providing this announcement <br/>');
+			html.push('as early as possible in order to minimize the impact on the way that <br/>');
+			html.push('your organization uses xpedx.com/order. <br/>');
+			html.push('<br/>');
+			$('#browser-warning-text').html(html.join(''));
+
+			$('#browser-not-supported').show();
+			browserNotSupportedWin.show();
 		}
 		
 		</script>
 <script type="text/javascript">
 Ext.onReady(function(){		
-		browserSupport();
+	browserSupport();
 });
-		</script>	
+</script>	
 </s:if>
+
 <!-- RUgrani BEGIN: Logged in User Home page -->
 <s:else>
-	
 	<div id="main-container">
 	<div id="main">
 
