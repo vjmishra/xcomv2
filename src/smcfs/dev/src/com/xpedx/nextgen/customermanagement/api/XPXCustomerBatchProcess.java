@@ -835,8 +835,14 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 													//boolean userExists = checkUserExists(env,salesRep);
 													ArrayList<String> userDetails = checkUserExists(env,salesRep);
 													String userExists = userDetails.get(0);
-													String firstName = userDetails.get(3);
-													String lastName = userDetails.get(4);
+													String firstName = null;
+													if (userDetails.size() > 3) {
+														firstName = userDetails.get(3);
+													}
+													String lastName = null;
+													if (userDetails.size() > 4) {
+														lastName = userDetails.get(4);
+													}
 
 													/********User Exists check commented out by Prasanth Kumar M. as per review comments on 02/08/2011**********/
 													//if(userExists.equals("true"))
