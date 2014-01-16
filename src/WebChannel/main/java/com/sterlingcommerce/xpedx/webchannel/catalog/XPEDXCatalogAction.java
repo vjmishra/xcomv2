@@ -43,8 +43,8 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
@@ -129,16 +129,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.custLineAccNoLabel = custLineAccNoLabel;
 	}
 	//EB 3372 - added
-	// Added class variable for JIRA #4195 - OOB variable searchTerm doesn't
-	// have a getter method exposed
+	//Added class variable for JIRA #4195 - OOB variable searchTerm doesn't have a getter method exposed
 	private String searchString = null;
 	private String searchIndexInputXML;
 	// XNGTP-4264 and XB 355 Escaping Below words from search criteria.
 	private String qtyTextBox = null;
-	private String luceneEscapeWords[] = { "a", "an", "and", "are", "as", "at",
-			"be", "but", "by", "for", "if", "in", "into", "is", "it", "no",
-			"not", "of", "on", "or", "such", "that", "the", "their", "then",
-			"there", "these", "they", "this", "to", "was", "will", "with" };
+	private String luceneEscapeWords[]={"a", "an", "and", "are", "as", "at", "be", "but", "by",
+			 "for", "if", "in", "into", "is", "it",
+			 "no", "not", "of", "on", "or", "such",
+			  "that", "the", "their", "then", "there", "these",
+			 "they", "this", "to", "was", "will", "with"
+};
 
 	public String getQtyTextBox() {
 		return qtyTextBox;
@@ -320,8 +321,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public void setPLLineMap(Map<String, List<Element>> pLLineMap) {
 		PLLineMap = pLLineMap;
-		wcContext.setWCAttribute("PLLineMap", PLLineMap,
-				WCAttributeScope.REQUEST);
+		wcContext.setWCAttribute("PLLineMap", PLLineMap, WCAttributeScope.REQUEST);
 	}
 
 	public String getCatalogLandingMashupID() {
@@ -372,38 +372,27 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 
 	private void setStockedItemFromSession() {
-		if (getWCContext().getWCAttribute("StockedCheckbox",
-				WCAttributeScope.SESSION) == null) {
+		if (getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION) == null) {
 			// init session value from bill-to setting
-			shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils
-					.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			if (shipToCustomer != null) {
-				String defaultStockedItemView = shipToCustomer.getBillTo()
-						.getExtnDefaultStockedItemView();
-				setStockedCheckeboxSelected(defaultStockedItemView
-						.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_STOCKED)
-						|| defaultStockedItemView
-								.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED));
-				getWCContext().setWCAttribute("StockedCheckbox",
-						isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
+				String defaultStockedItemView = shipToCustomer.getBillTo().getExtnDefaultStockedItemView();
+				setStockedCheckeboxSelected(defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_STOCKED) || defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED));
+				getWCContext().setWCAttribute("StockedCheckbox", isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 			}
 		}
-		Object sessionStockedCheckbox = getWCContext().getWCAttribute(
-				"StockedCheckbox", WCAttributeScope.SESSION);
-		if (sessionStockedCheckbox != null) {
-			isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase(
-					"true");
+			Object sessionStockedCheckbox = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
+			if (sessionStockedCheckbox != null) {
+				isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
+			}
 		}
-	}
-
-	private Map<String, List<Element>> replacmentItemsMap;
+	private Map<String,List<Element>> replacmentItemsMap;
 
 	public Map<String, List<Element>> getReplacmentItemsMap() {
 		return replacmentItemsMap;
 	}
 
-	public void setReplacmentItemsMap(
-			Map<String, List<Element>> replacmentItemsMap) {
+	public void setReplacmentItemsMap(Map<String, List<Element>> replacmentItemsMap) {
 		this.replacmentItemsMap = replacmentItemsMap;
 	}
 
@@ -414,8 +403,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public XPEDXCatalogAction() {
 		super();
 		setPageSize("20");
-		// Setting default selected view with empty string, so that the b2bview
-		// can be loaded by default
+		//Setting default selected view with empty string, so that the b2bview can be loaded by default
 		this.selectedView = "";
 	}
 
@@ -442,78 +430,54 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private void init() {
 		try {
 			req.setAttribute("Tag_WCContext", wcContext);
-			req.setAttribute("Tag_orderMultipleString",
-					getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
-			req.setAttribute("Tag_qtyString",
-					getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
-			/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
-
-			/*
-			 * Begin Changes made for Jira 3464 - Replacing double quotes with
-			 * unicode character
-			 */
-			// searchTerm="11\" W x 20\" L x 31\" H";
-			// Changes JIRA #4195
-			if (searchString != null && !searchString.trim().equals("")) {
-				searchTerm = searchString;
+		req.setAttribute("Tag_orderMultipleString", getText("MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES"));
+		req.setAttribute("Tag_qtyString", getText("MSG.SWC.CART.ADDTOCART.ERROR.QTYGTZERO"));
+		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
+		
+		/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
+		//searchTerm="11\" W x 20\" L x 31\" H";
+		//Changes JIRA #4195 
+		if(searchString!=null&& !searchString.trim().equals("")){
+			searchTerm=	searchString;
+		}
+		//End of Changes JIRA #4195 
+		/*if(searchTerm!=null && searchTerm.contains("\"")){
+			searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
+		}*/
+		
+		/*End of changes made for Jira 3464*/
+		if(searchTerm != null && !searchTerm.trim().equals(""))
+		{   //Changes made for XBT 251 special characters replace by Space while Search
+			//searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
+			//Start Jira XBT-319
+			searchTerm = processSpecialCharacters(searchTerm);
+			//End Jira XBT-319
+			
+			//Start JIRA XBT-263
+			searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
+			//End JIRA XBT-263
+			setSearchString(searchTerm);//Added JIRA #4195 
+			//String appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
+			String appendStr="&searchTerm="+searchTerm;
+			XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
+			if(searchTerm.trim().length() == 1 && (searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0)) {
+				searchTerm = "";
 			}
-			// End of Changes JIRA #4195
-			/*
-			 * if(searchTerm!=null && searchTerm.contains("\"")){ searchTerm=
-			 * searchTerm.replaceAll("\"", "\\\\u0022"); }
-			 */
-
-			/* End of changes made for Jira 3464 */
-			if (searchTerm != null && !searchTerm.trim().equals("")) { // Changes
-																		// made
-																		// for
-																		// XBT
-																		// 251
-																		// special
-																		// characters
-																		// replace
-																		// by
-																		// Space
-																		// while
-																		// Search
-																		// searchTerm=searchTerm.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-																		// Start
-																		// Jira
-																		// XBT-319
-				searchTerm = processSpecialCharacters(searchTerm);
-				// End Jira XBT-319
-
-				// Start JIRA XBT-263
-				searchTerm = XPXCatalogDataProcessor
-						.preprocessSearchQuery(searchTerm);
-				// End JIRA XBT-263
-				setSearchString(searchTerm);// Added JIRA #4195
-				// String
-				// appendStr="%12%2Fcatalog%12search%12%12searchTerm%3D"+searchTerm+"%12catalog%12search%12"+searchTerm+"%11"+"&searchTerm="+searchTerm;
-				String appendStr = "&searchTerm=" + searchTerm;
-				XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
-				if (searchTerm.trim().length() == 1
-						&& (searchTerm.indexOf("*") == 0 || searchTerm
-								.indexOf("?") == 0)) {
-					searchTerm = "";
-				}
-				if (searchTerm.indexOf("*") == 0
-						|| searchTerm.indexOf("?") == 0)
-					searchTerm = searchTerm.substring(1, searchTerm.length());
-			} else {
-				XPEDXWCUtils.setItemDetailBackPageURLinSession();
-			}
-			setItemDtlBackPageURL(wcContext.getSCUIContext().getSession()
-					.getAttribute("itemDtlBackPageURL").toString());
-			// setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
-			// setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
-			setProductCompareBackPageURL(wcContext.getSCUIContext()
-					.getSession().getAttribute("itemDtlBackPageURL").toString());
-			/* End - Changes made for 2422 JIRA */
-			getCustomerLineDetails(); //added for EB 3372
-		} catch (Exception exception) {
-			// Not throwing any exception as it gives exception for JIRA 3705
-
+			if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) 
+				searchTerm = searchTerm.substring(1, searchTerm.length());
+		}
+		else
+		{
+			XPEDXWCUtils.setItemDetailBackPageURLinSession();
+		}
+		setItemDtlBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
+		//setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		//setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
+		setProductCompareBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
+	   /* End - Changes made for 2422 JIRA */
+		}catch(Exception exception){
+			//Not throwing any exception as it gives exception for JIRA 3705
+			
 			log.error("Error in Init Method", exception);
 		}
 	}
@@ -553,44 +517,41 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	//ENd of EB 3372
 
-	private void getSortFieldDocument() {
-		Map<String, String> fl = this.getSortFieldList();
-		Map<String, String> fieldMap = new LinkedHashMap<String, String>();
-		List<String> keyValues = new ArrayList(fl.keySet());
+	private void getSortFieldDocument(){
+		Map<String, String>  fl = this.getSortFieldList();
+		Map<String, String> fieldMap=new LinkedHashMap<String, String>();
+		List<String> keyValues=new ArrayList(fl.keySet());
 		fieldMap.put("relevancy", getText("relevancy"));
-		for (String keyValue : keyValues) {
-			String field = fl.get(keyValue);
-			String dispText = "";
-			for (String value : columnList) {
-				if (field.contains(value)) {
-					fieldMap.put(keyValue, field);
-					break;
-				} else {
-					if (value.equals("Sku")) {
-						value = "SKU";
-					}
-					if (value.equals("Desc")) {
-						value = "Name";
-					}
-					if (field.contains(value) || field.contains("Env")
-							|| field.contains("Stock")) {
-						if (field.contains("Env")
-								&& field.contains("ascending"))
-							field = field.replaceAll("ascending", "descending");
-						else if (field.contains("Env")
-								&& field.contains("descending"))
-							field = field.replaceAll("descending", "ascending");
-						fieldMap.put(keyValue, field);
-						break;
-					}
-				}
-			}
-		}
-		getSortFieldList().clear();
-		getSortFieldList().putAll(fieldMap);
-
+        for(String keyValue:keyValues){                   
+        	String field = fl.get(keyValue);
+        	String dispText="";
+        	for(String value:columnList){
+        		if(field.contains(value)){
+        			fieldMap.put(keyValue,field);
+        			 break;
+        		}
+        		else{
+	        		if(value.equals("Sku")){
+	        			value="SKU";
+	        		}if(value.equals("Desc")){
+	        			value="Name";
+	        		}
+	        		if(field.contains(value) || field.contains("Env") || field.contains("Stock")){
+	        			if(field.contains("Env") && field.contains("ascending"))
+	        				field = field.replaceAll("ascending", "descending");
+	        			else if(field.contains("Env") && field.contains("descending"))
+	        				field = field.replaceAll("descending", "ascending");
+	        			fieldMap.put(keyValue,field);
+	    	            break;
+	        		}
+        		}
+        	}
+        }
+	    getSortFieldList().clear();
+	    getSortFieldList().putAll(fieldMap);
+	            
+		 
 	}
-
 	private void setCustomerNumber() {
 		try {
 			String customerId = getWCContext().getCustomerId();
@@ -608,237 +569,222 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.sterlingcommerce.webchannel.catalog.CatalogAction#filter()
 	 */
 	@Override
 	public String filter() {
-		init();
-
-		/*
-		 * Map<String, String> topCategoryMap = (Map<String,
-		 * String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
-		 * List<Breadcrumb> bclFilter =
-		 * BreadcrumbHelper.preprocessBreadcrumb(this .get_bcs_());
-		 *
-		 * for (int i = 0; i < bclFilter.size(); i++) { Breadcrumb bc =
-		 * bclFilter.get(i); Map<String, String> bcParams = bc.getParams();
-		 * String cnameValue = bcParams.get("cname"); if (cnameValue != null &&
-		 * cnameValue.equals("Paper") && i <=2) { orderByAttribute =
-		 * "Item.ExtnBasis"; break; } }
-		 */
-
-		if (("").equals(super.sortField)
-				&& (super.session.get("sortField") == null || ("")
-						.equals(super.session.get("sortField")))) {
+		init();		
+		
+		/*Map<String, String> topCategoryMap = (Map<String, String>)XPEDXWCUtils.getObjectFromCache("TopCategoryMap");
+		List<Breadcrumb> bclFilter = BreadcrumbHelper.preprocessBreadcrumb(this
+				.get_bcs_());
+		
+		for (int i = 0; i < bclFilter.size(); i++) {
+			Breadcrumb bc = bclFilter.get(i);
+			Map<String, String> bcParams = bc.getParams();
+			String cnameValue = bcParams.get("cname");
+			if (cnameValue != null && cnameValue.equals("Paper") && i <=2) {
+				orderByAttribute = "Item.ExtnBasis";
+				break;
+			}			
+		} */						
+		
+		if(("").equals(super.sortField) && (super.session.get("sortField") == null || ("").equals(super.session.get("sortField")))) {			
 			orderByAttribute = "Item.ExtnBestMatch";
 			sortField = "Item.ExtnBestMatch--A";
 		}
-
+		
 		String returnString = super.filter();
-		// XBT-260
-		changeBasis();
-		// getting the customer bean object from session.
-		/***** Start of Code changed for Promotions Jira 2599 ********/
+		//XBT-260
+		changeBasis();	
+		//getting the customer bean object from session.
+		/***** Start of  Code changed for Promotions Jira 2599 ********/ 
 		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this
 				.get_bcs_());
 		log.debug("CatalogAction : filter(): start");
-
-		Breadcrumb lastBc = bcl.get(bcl.size() - 1);
+		
+		Breadcrumb lastBc = bcl.get(bcl.size() - 1);    
 		Map<String, String> params = lastBc.getParams();
 		String[] pathDepth = StringUtils.split(path, "/");
-		path = params.get("path");
+		path = params.get("path");       
 
 		// Added for debugging Breadcrumb parameters
 		for (int i = 0; i < bcl.size(); i++) {
 			Breadcrumb bc = bcl.get(i);
 			Map<String, String> bcParams = bc.getParams();
 			String cnameValue = bcParams.get("cname");
-			log.debug("CatalogAction : filter(): Breadcrumb : cnameValue="
-					+ cnameValue);
+			log.debug("CatalogAction : filter(): Breadcrumb : cnameValue=" + cnameValue); 
 		} // end of debugging code
 
-		/**** End of Code Changed for Promotions JIra 2599 *******/
+		/****End of Code Changed for Promotions JIra 2599 *******/
 
-		shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils
-				.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+
+		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 
 		if (ERROR.equals(returnString)) {
 			return returnString;
 		} else {
-			try {
+			try
+			{
 				getAllAPIOutput();
-			} catch (Exception e) {
+			}
+			catch(Exception e)
+			{
 				e.printStackTrace();
 			}
 			setItemsUomsMap();
 			setAttributeListForUI();
 			prepareItemBranchInfoBean();
 			setColumnListForUI();
-
-			/**** Start of Code Changed for Promotions JIra 2599 *******/
-			if ((path == null || path.equals("/"))
-					&& getFirstItem().trim() != "") {
+		
+	   		/****Start of Code Changed for Promotions JIra 2599 *******/
+			if((path==null||path.equals("/")) && getFirstItem().trim()!=""){
 				/* start of performance code */
 				YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc())
-						.getDocumentElement().getChildElement("ItemList")
-						.getFirstChild();
-				YFCIterable<? extends YFCNode> YFCIterables = yfcNode
-						.getChildren();
-				while (YFCIterables.hasNext()) {
+				.getDocumentElement().getChildElement("ItemList")
+				.getFirstChild();
+				YFCIterable<? extends YFCNode> YFCIterables = yfcNode.getChildren();
+				while(YFCIterables.hasNext()){
 					YFCNode node = YFCIterables.next();
-					if (node != null
-							&& node.getNodeName().equalsIgnoreCase(
-									"CategoryList")) {
-						path = node.getFirstChild().getAttributes()
-								.get("CategoryPath");
+					if(node!=null && node.getNodeName().equalsIgnoreCase("CategoryList")){
+						path = node.getFirstChild().getAttributes().get("CategoryPath");
 						categoryPath = path;
 					}
 				}
-				/* end of performance code */
-				// path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(),
-				// wcContext.getStorefrontId());
+				/*end of performance code*/
+				//path=XPEDXWCUtils.getCategoryPathPromo(getFirstItem(), wcContext.getStorefrontId());
 			}
-			/**** End of Code Changed for Promotions JIra 2599 *******/
-			getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),
-					categoryPath);
+			/****End of Code Changed for Promotions JIra 2599 *******/
+		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(),categoryPath);
 
 		}
 		return SUCCESS;
 	}
 
-	/* Added for performance issue */
-	public void getCatTwoDescFromItemIdForpath(Element categoryList, String path) {
-		categoryPath = path;
-		StringBuilder cat = new StringBuilder();
-		String adjugglerKeywordPrefix = XPEDXWCUtils
-				.getAdJugglerKeywordPrefix();
-		String categoryID = "";
-		// getting exact cat2 path and category id from the actual path
-		if (path != null && path.trim().length() > 0 && categoryList != null) {
-			StringTokenizer st = new StringTokenizer(path, "/");
-			if (st.hasMoreTokens()) {
-				cat.append("/").append(st.nextToken());
-				if (st.hasMoreTokens()) {
-					cat.append("/").append(st.nextToken());
-					if (st.hasMoreTokens()) {
-						categoryID = st.nextToken();
-						cat.append("/").append(categoryID);
-					}
-				}
-			}
-			try {
-				// checking if the cat2 path is already there in cache if yes
-				// then get it from there
-				ArrayList<Element> categoryElements = SCXmlUtil.getElements(
-						categoryList, "/CategoryList/Category");
-				if (categoryElements != null)
-					categoryElements
-							.addAll(SCXmlUtil
-									.getElements(categoryList,
-											"/CategoryList/Category/ChildCategoryList/Category"));
-				else
-					categoryElements = SCXmlUtil
-							.getElements(categoryList,
-									"/CategoryList/Category/ChildCategoryList/Category");
-				for (Element catgegory : categoryElements) {
-					String shortDescription = catgegory
-							.getAttribute("ShortDescription");
-					String categoryPath = catgegory
-							.getAttribute("CategoryPath");
-					if (categoryPath != null
-							&& categoryPath.equals(cat.toString())) {
-						categoryShortDescription = shortDescription;
-						break;
-					}
-				}
-			} catch (Exception e) {
-				log.error("Error while getting ShortDescreption for Adjuggler "
-						+ e.getMessage());
-			}
-		}
-		// Added For XBT-253
-		// if category id is not there in caceh then check whether the item is
-		// there on cat2 level if yes then get it from there
-		if (categoryShortDescription == null
-				|| categoryShortDescription.equals("")) {
-			if (firstItemCategoryShortDescription != null
-					&& firstItemCategoryShortDescription.length() > 0) {
-				categoryShortDescription = firstItemCategoryShortDescription;
-			} else {
-				// if category id is not there in cacche and first item is also
-				// not at cat2 level , do the api call for getCategoryList which
-				// will give shortdescription
-				categoryShortDescription = getCategoryShortDescription(categoryID);
-				if (categoryShortDescription == null)
-					categoryShortDescription = (String) XPEDXWCUtils
-							.getObjectFromCache("defaultCategoryDesc");
-			}
-		}
-		categoryShortDescription = XPEDXWCUtils
-				.sanitizeAJKeywords(adjugglerKeywordPrefix
-						+ categoryShortDescription);
-	}
+/*Added for performance issue */
+	public  void getCatTwoDescFromItemIdForpath(Element categoryList,String path) {
+            categoryPath=path;
+            StringBuilder cat = new StringBuilder();
+            String adjugglerKeywordPrefix = XPEDXWCUtils.getAdJugglerKeywordPrefix();
+            String categoryID="";
+            //getting exact cat2 path and category id  from the actual path
+            if(path != null && path.trim().length()>0 && categoryList != null  )
+            {
+                  StringTokenizer st = new StringTokenizer(path, "/");
+                  if(st.hasMoreTokens())
+                  {
+                        cat.append("/").append(st.nextToken());
+                        if(st.hasMoreTokens())
+                        {
+                              cat.append("/").append(st.nextToken());
+                              if(st.hasMoreTokens())
+                              {
+                                    categoryID=st.nextToken();
+                                    cat.append("/").append(categoryID);
+                              }
+                        }
+                  }
+                  try
+                  {
+                        //checking if the cat2 path is already there in cache if yes then get it from there 
+                        ArrayList<Element> categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category");
+                        if(categoryElements != null)
+                        categoryElements.addAll(SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category"));
+                        else
+                              categoryElements=SCXmlUtil.getElements(categoryList, "/CategoryList/Category/ChildCategoryList/Category");
+                        for(Element catgegory: categoryElements)
+                        {
+                              String shortDescription=catgegory.getAttribute("ShortDescription");
+                              String categoryPath=catgegory.getAttribute("CategoryPath");
+                              if(categoryPath != null && categoryPath.equals(cat.toString()))
+                              {
+                                    categoryShortDescription = shortDescription;
+                                    break;
+                              }
+                        }
+                  }
+                  catch(Exception e)
+                  {
+                        log.error("Error while getting ShortDescreption for Adjuggler "+e.getMessage());
+                  }
+            }
+            // Added For XBT-253
+            //if category id is not there in caceh then check whether the item is there on cat2 level if yes then get it from there
+            if(categoryShortDescription == null || categoryShortDescription.equals("")){
+                  if(firstItemCategoryShortDescription !=null && firstItemCategoryShortDescription.length() >0)
+                  {
+                        categoryShortDescription= firstItemCategoryShortDescription;
+                  }
+                  else
+                  {
+                        //if category id is not there in cacche and first item is also not at cat2 level , do the api call for getCategoryList which will give shortdescription
+                        categoryShortDescription =getCategoryShortDescription(categoryID);
+                        if(categoryShortDescription == null)
+                              categoryShortDescription=(String)XPEDXWCUtils.getObjectFromCache("defaultCategoryDesc");
+                  }
+            }
+            categoryShortDescription= XPEDXWCUtils.sanitizeAJKeywords(adjugglerKeywordPrefix+categoryShortDescription);
+      }
 
-	/*
-	 * This method will do a API call getCategoryList based on given category ID
-	 *
-	 * @param categoryID return shortDescriotion
-	 */
-	private String getCategoryShortDescription(String categoryID) {
-		YFCDocument getCategoryListInXML = YFCDocument
-				.createDocument("Category");
+      /*
+      * This method will do a API call getCategoryList based on given category ID
+      * @param categoryID
+      * return shortDescriotion 
+       */
+      private String getCategoryShortDescription(String categoryID)
+      {
+            YFCDocument getCategoryListInXML = YFCDocument
+            .createDocument("Category");
+            
+            YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
+            categoryLstEle.setAttribute("CategoryID", categoryID);
+            categoryLstEle.setAttribute("OrganizationCode", wcContext.getStorefrontId());
 
-		YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
-		categoryLstEle.setAttribute("CategoryID", categoryID);
-		categoryLstEle.setAttribute("OrganizationCode",
-				wcContext.getStorefrontId());
+            
+            /*Input : <Category CategoryID="300131"  OrganizationCode="xpedx"></Category>
+            * 
+             * Output : <CategoryList ><Category CategoryID="" CategoryKey="" CategoryPath="" Description="" ShortDescription="" ></Category></CategoryList>
+            */
+            YFCDocument template2 = YFCDocument
+            .getDocumentFor("<CategoryList ><Category /></CategoryList>");
+            ISCUITransactionContext scuiTransactionContext = null;
+            SCUIContext wSCUIContext = null;
+            YFCElement categoryListElement = null;
+                                  
+            try {
+            	IWCContext context = WCContextHelper
+    					.getWCContext(ServletActionContext.getRequest());
+                wSCUIContext = context.getSCUIContext();
+    			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+                
 
-		/*
-		 * Input : <Category CategoryID="300131"
-		 * OrganizationCode="xpedx"></Category>
-		 *
-		 * Output : <CategoryList ><Category CategoryID="" CategoryKey=""
-		 * CategoryPath="" Description="" ShortDescription=""
-		 * ></Category></CategoryList>
-		 */
-		YFCDocument template2 = YFCDocument
-				.getDocumentFor("<CategoryList ><Category /></CategoryList>");
-		ISCUITransactionContext scuiTransactionContext = null;
-		SCUIContext wSCUIContext = null;
-		YFCElement categoryListElement = null;
-
-		try {
-			IWCContext context = WCContextHelper
-					.getWCContext(ServletActionContext.getRequest());
-			wSCUIContext = context.getSCUIContext();
-			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-
-			categoryListElement = SCUIPlatformUtils.invokeXAPI(
-					"getCategoryList", categoryLstEle,
-					template2.getDocumentElement(), wcContext.getSCUIContext());
-
-		} catch (Exception ex) {
-			log.error(ex.getMessage());
-			scuiTransactionContext.rollback();
-		} finally {
-			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
-			}
-		}
-
-		if (categoryListElement == null) {
-			return null;
-		}
-
-		YFCElement catEle = categoryListElement.getFirstChildElement();
-		if (catEle != null) {
-			return catEle.getAttribute("ShortDescription");
-		}
-
-		return null;
-	}
+                categoryListElement = SCUIPlatformUtils.invokeXAPI("getCategoryList",
+                            categoryLstEle, template2.getDocumentElement(), wcContext.getSCUIContext());
+            	
+            } catch (Exception ex) {
+    			log.error(ex.getMessage());
+    			scuiTransactionContext.rollback();
+    		} finally {
+    			if (scuiTransactionContext != null) {
+    				SCUITransactionContextHelper.releaseTransactionContext(
+    						scuiTransactionContext, wSCUIContext);
+    			}
+    		}
+            
+            if(categoryListElement == null )
+            {
+                  return null;
+            }
+            
+            YFCElement catEle = categoryListElement.getFirstChildElement();
+            if(catEle != null )
+            {
+                  return catEle.getAttribute("ShortDescription");
+            }
+            
+            return null;
+      }
 
 	/*
 	 * This method sets the instance varaible "columList" by getting all the
@@ -859,36 +805,33 @@ public class XPEDXCatalogAction extends CatalogAction {
 			while (iter.hasNext()) {
 				Breadcrumb bc = iter.next();
 				if (bc.getAction() != null && bc.getAction().equals("filter")) {
-					// String indexField = (String) bc.getParams().get(
-					// "indexField");
-					String filterDesc = (String) bc.getParams().get(
-							"filterDesc");
-					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : indexField="
-							+ indexField);
-					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : filterDesc="
-							+ filterDesc);
-					/*
-					 * String attributeName = null; if
-					 * (!YFCCommon.isVoid(filterDesc) && filterDesc
-					 * .contains(XPEDXCatalogAction
-					 * .XPEDX_PRODUCT_LINE_INDEX_FIELD)) {
-					 * attributeName=filterDesc; }
-					 */
+					//String indexField = (String) bc.getParams().get(
+					//		"indexField");										
+					String filterDesc = (String) bc.getParams().get("filterDesc");
+					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : indexField=" + indexField);
+					log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : filterDesc=" + filterDesc);
+					/*String attributeName = null;
+					if (!YFCCommon.isVoid(filterDesc)
+							&& filterDesc
+									.contains(XPEDXCatalogAction.XPEDX_PRODUCT_LINE_INDEX_FIELD)) {
+						attributeName=filterDesc;
+					}*/
 					// indexField is the Attribute ID. We need to get the
 					// Attribute Name(Short Description) to compare to
 					// XPEDX_PRODUCT_TYPE_NARROW_BY
-					/*
-					 * Fetching the description from the param itself. This is
-					 * set in the jsp while setting the URL
-					 * if(YFCCommon.isStringVoid(attributeName)) { String[]
-					 * indexFieldSplit = StringUtils.split(indexField, "."); //
-					 * String[] indexFieldSplit = indexField.split("."); String
-					 * attDomainID = indexFieldSplit[0]; String attGrpID =
-					 * indexFieldSplit[1]; String attributeID =
-					 * indexFieldSplit[2]; attributeName =
-					 * XPEDXWCUtils.getAttributeName( attributeID,
-					 * wcContext.getStorefrontId(), attDomainID, attGrpID); }
-					 */
+					/*Fetching the description from the param itself.
+					 * This is set in the jsp while setting the URL
+					 * if(YFCCommon.isStringVoid(attributeName)) {
+						String[] indexFieldSplit = StringUtils.split(indexField,
+								".");
+						// String[] indexFieldSplit = indexField.split(".");
+						String attDomainID = indexFieldSplit[0];
+						String attGrpID = indexFieldSplit[1];
+						String attributeID = indexFieldSplit[2];
+						attributeName = XPEDXWCUtils.getAttributeName(
+								attributeID, wcContext.getStorefrontId(),
+								attDomainID, attGrpID);
+					}*/
 					if (!YFCCommon.isVoid(indexField)
 							&& indexField
 									.contains(XPEDXCatalogAction.XPEDX_PRODUCT_LINE_INDEX_FIELD)) {
@@ -945,40 +888,31 @@ public class XPEDXCatalogAction extends CatalogAction {
 		int termIndex = 1;
 		if (null != searchStringValue && !"".equals(searchStringValue.trim())) {
 			searchStringValue = searchStringValue.trim();
-			/*
-			 * Begin Changes made for Jira 3464 - Replacing double quotes with
-			 * unicode character
-			 */
-			/*
-			 * if(searchStringValue.contains("\"")){ searchStringValue=
-			 * searchStringValue.replaceAll("\"", "\\\\u0022"); }
-			 */
-
-			/* End of changes 3464 */
-			if (searchStringValue.indexOf("*") == 0
-					|| searchStringValue.indexOf("?") == 0)
-				searchStringValue = searchStringValue.substring(1,
-						searchStringValue.length());
-
-			// Start JIRA XBT-263
-			searchStringValue = XPXCatalogDataProcessor
-					.preprocessSearchQuery(searchStringValue);
-			// End JIRA XBT-263
+				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
+			/*if(searchStringValue.contains("\"")){
+				searchStringValue= searchStringValue.replaceAll("\"", "\\\\u0022");
+			}*/
+			
+			/*End of changes 3464*/
+			if(searchStringValue.indexOf("*") == 0 || searchStringValue.indexOf("?") == 0) 
+				searchStringValue = searchStringValue.substring(1, searchStringValue.length());  
+			
+			//Start JIRA XBT-263
+			searchStringValue = XPXCatalogDataProcessor.preprocessSearchQuery(searchStringValue);
+			//End JIRA XBT-263
 
 			// Start Jira XBT-319
 			searchStringValue = processSpecialCharacters(searchStringValue);
 			// End Jira XBT-319
 
-			// Changes made for XBT 251 special characters replace by Space
-			// while Search
+			//Changes made for XBT 251 special characters replace by Space while Search
 			// searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
-			// JIRA - 4264 There are few lucene words , which are ignored for
-			// search criteria
-			List<String> specialWords = Arrays.asList(luceneEscapeWords);
+			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
+			List<String> specialWords=Arrays.asList(luceneEscapeWords);
 			for (String searchStringToken : searchStringTokenList) {
-				if (!specialWords.contains(searchStringToken.trim()
-						.toLowerCase())) {
+				if(!specialWords.contains(searchStringToken.trim().toLowerCase()))
+				{
 					if (!"".equals(searchStringToken.trim())) {
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
@@ -1017,42 +951,35 @@ public class XPEDXCatalogAction extends CatalogAction {
 				 * flag is lateron checked in code and it removes the complete
 				 * Terms from mashupinput
 				 */
-				if (termValue.trim().length() == 1
-						&& (termValue.indexOf("*") == 0 || termValue
-								.indexOf("?") == 0) && termListEle != null
-						&& termListEle.size() == 1) {
+				if(termValue.trim().length() == 1 && (termValue.indexOf("*") == 0 || termValue.indexOf("?") == 0) && termListEle != null && termListEle.size() == 1) {
 					flag = true;
 				}
 				/*
-				 * Following line of code checks if there are multiple terms and
-				 * one of the search term is only * then it removes only term
+				 * Following line of code checks if there are multiple terms
+				 * and one of the search term is only * then it removes only term 
 				 * which contains * attribute
 				 */
-				if (termValue.trim().length() == 1
-						&& (termValue.indexOf("*") == 0 || termValue
-								.indexOf("?") == 0) && termListEle != null
-						&& termListEle.size() > 1) {
+				if (termValue.trim().length() == 1 && (termValue.indexOf("*") == 0 || termValue.indexOf("?") == 0) && termListEle != null && termListEle.size() > 1) {
 					termListEle.remove(termEle);
 				}
 				/*
 				 * Following code replaces all the * in leading to blank
+				 * 
+				 * 
 				 */
 				if (termValue.indexOf("*") == 0 || termValue.indexOf("?") == 0) {
 					termValue = termValue.substring(1, termValue.length());
 					termEle.setAttribute("Value", termValue);
 				}
-				/*
-				 * Begin Changes made for Jira 3464 - Replacing double quotes
-				 * with unicode character if(termValue!=null &&
-				 * termValue.contains("\"")){ termValue=
-				 * termValue.replaceAll("\"", "\\\\u0022");
-				 * termEle.setAttribute("Value", termValue); } End of changes
-				 * 3464
-				 */
-
+				/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character	
+				if(termValue!=null && termValue.contains("\"")){
+					termValue= termValue.replaceAll("\"", "\\\\u0022");
+					termEle.setAttribute("Value", termValue);
+				}
+				End of changes 3464*/	
+				
 				// Start JIRA XBT-263
-				termValue = XPXCatalogDataProcessor
-						.preprocessSearchQuery(termValue);
+				termValue = XPXCatalogDataProcessor.preprocessSearchQuery(termValue);
 				// End JIRA XBT-263
 
 				termEle.setAttribute("Value", termValue);
@@ -1061,31 +988,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 			if (customerNumber != null && customerNumber.trim().length() > 0) {
 				Element term = SCXmlUtil.createChild(terms, "Term");
 				term.setAttribute("Condition", "SHOULD");
-				term.setAttribute("IndexFieldName",
-						"customerNumberPlusPartNumber");
-				if (null != searchTerm && !("").equals(searchTerm)) {
+				term.setAttribute("IndexFieldName", "customerNumberPlusPartNumber");
+				if(null != searchTerm && !("").equals(searchTerm)) {
 					searchTerm = searchTerm.trim();
-					if (searchTerm.indexOf("*") == 0
-							|| searchTerm.indexOf("?") == 0) {
-						searchTerm = searchTerm.substring(1,
-								searchTerm.length());
-					}
+					if(searchTerm.indexOf("*") == 0 || searchTerm.indexOf("?") == 0) {
+						searchTerm = searchTerm.substring(1, searchTerm.length());
+					}								
 				}
-				/*
-				 * Begin Changes made for Jira 3464 - Replacing double quotes
-				 * with unicode character
-				 */
-				/*
-				 * if(searchTerm!=null && searchTerm.contains("\"")){
-				 * searchTerm= searchTerm.replaceAll("\"", "\\\\u0022"); }
-				 */
-				/* end of 3464 */
-
-				// Start JIRA XBT-263
-				searchTerm = XPXCatalogDataProcessor
-						.preprocessSearchQuery(searchTerm);
-				// End JIRA XBT-263
-
+					/*Begin Changes made for Jira 3464 - Replacing double quotes with unicode character*/
+				/*if(searchTerm!=null && searchTerm.contains("\"")){
+				searchTerm= searchTerm.replaceAll("\"", "\\\\u0022");
+				}*/	
+				/*end of 3464*/			
+				
+				//Start JIRA XBT-263
+				searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
+				//End JIRA XBT-263
+				
 				term.setAttribute("Value", customerNumber + searchTerm);
 			}
 		}
@@ -1093,16 +1012,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 			SCXmlUtil.removeNode(elements.get(0));
 		}
 		setStockedItemFromSession();
-		shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils
-				.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (isStockedItem) {
 			if (shipToCustomer == null) {
 				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
 						.getCustomerDetails(getWCContext().getCustomerId(),
 								getWCContext().getStorefrontId())
 						.getDocumentElement());
-				setShipToCustomer((XPEDXShipToCustomer) XPEDXWCUtils
-						.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER));
+				setShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER));
 			}
 			//EB-4010
 			//String shipFromDivision = shipToCustomer.getExtnShipFromBranch();

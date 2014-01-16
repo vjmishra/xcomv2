@@ -313,13 +313,14 @@
 		<echo message="building ear file" />
 		<exec executable="${runtime}/bin/${buildEarCommand}">
 			<arg value="-Dappserver=weblogic" />
-			<arg value="-Ddevmode=false" />
+			<arg value="-Ddevmode=true" />
+			<arg value="-Dwarfiles=swc" />
 			<arg value="-Dwarfiles=swc" />
 			<arg value="-Dearfile=swc.ear" />
-			<arg value="create-ear" />
-			<arg value="-Dnowebservice=true" />
 			<arg value="-Dnodocear=true" />
-			<arg value="-Dnoejb=true" />
+			<!--<arg value="-Dnowebservice=true" /> -->			
+			<!-- <arg value="-Dnoejb=true" /> -->
+			<arg value="create-ear" />			
 		</exec>
 
 	</target>

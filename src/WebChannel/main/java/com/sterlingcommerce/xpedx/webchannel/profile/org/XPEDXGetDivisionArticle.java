@@ -191,6 +191,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 					"XPEDXDivisionArticleList", wcContext);
 			input.setAttribute("StartDate", startTodayDate);
 			input.setAttribute("EndDate", endTodayDate);
+			input.setAttribute("OrganizationCode", orgCode);
 			Element xpxArticle = (Element) input.getElementsByTagName(
 					"XPXArticle").item(0);
 			Element complexQuery = SCXmlUtil.getChildElement(input,
@@ -210,8 +211,6 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 			Element and1Element = SCXmlUtil.createChild(orElement, "And");
 			orElement.appendChild(and1Element);
 			Element expElem = SCXmlUtil.createChild(and1Element, "Exp");
-			expElem.setAttribute("Name", "OrganizationCode");
-			expElem.setAttribute("Value", orgCode);
 			Element expElem1 = SCXmlUtil.createChild(and1Element, "Exp");
 			expElem1.setAttribute("Name", "ArticleType");
 			expElem1.setAttribute("Value", "S");

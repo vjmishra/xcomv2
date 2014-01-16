@@ -160,13 +160,13 @@
 						<td width="7%" class="underlines no-border-right-user"><s:text name="newPassword"/></td>
 						<td colspan="2" class="underlines no-border-right-user">
 						<span
-							class=" noBorder-left"><s:password id="newPassword" name="newPassword" showPassword="true" cssClass="x-input width-250px" maxlength="14" title="New Password" onchange="javaScript:clearErrorDiv();" /></span>
+							class=" noBorder-left"><s:password id="newPassword" name="newPassword" showPassword="true" cssClass="x-input width-250px"  title="New Password" onchange="javaScript:clearErrorDiv();" /></span>
 						</td>
 					</tr>
 					<tr>
 						<td width="7%" class="underlines no-border-right-user"><s:text name="retypenewPassword"/></td>
 						<td colspan="2" class="underlines no-border-right-user"><span
-							class=" noBorder-left"><s:password id="confirmNewPassword" name="confirmNewPassword" showPassword="true" cssClass="x-input width-250px" maxlength="14" title="Confirm New Password" onchange="javaScript:clearErrorDiv();" /></span>
+							class=" noBorder-left"><s:password id="confirmNewPassword" name="confirmNewPassword" showPassword="true" cssClass="x-input width-250px"  title="Confirm New Password" onchange="javaScript:clearErrorDiv();" /></span>
 						</td>
 					</tr>
 					<tr>

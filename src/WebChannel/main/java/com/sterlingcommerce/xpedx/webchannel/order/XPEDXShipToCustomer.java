@@ -342,8 +342,17 @@ public String getShipToDivdeliveryInfo() {
 	public void setShipToDivdeliveryInfo(String shipToDivdeliveryInfo) {
 		this.shipToDivdeliveryInfo = shipToDivdeliveryInfo;
 	}
-
-
+	
+	//EB-3624
+	public String getShipToDivdeliveryInfoSaal() {
+		return shipToDivdeliveryInfoSaal;
+	}
+	public void setShipToDivdeliveryInfoSaal(String shipToDivdeliveryInfoSaal) {
+		this.shipToDivdeliveryInfoSaal = shipToDivdeliveryInfoSaal;
+	}
+	//EB3624
+	
+	
 	private String FirstName;
 	private String MiddleName;
 	private String LastName;
@@ -389,6 +398,7 @@ public String getShipToDivdeliveryInfo() {
 	private String shipToOrgCorporatePersonInfoState;
 	private String shipToDivDeliveryCutOffTime;
 	private String shipToDivdeliveryInfo;
+	private String shipToDivdeliveryInfoSaal;//EB-3624
 	private XPEDXShipToCustomer billTo;
 	private XPEDXOrgNodeDetailsBean organization;
 	private String customerStatus;

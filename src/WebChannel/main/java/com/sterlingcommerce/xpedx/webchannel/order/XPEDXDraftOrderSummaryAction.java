@@ -577,7 +577,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		deliveryCutOffTime=shipToCustomer.getShipToDivDeliveryCutOffTime();
 		//Added For Jira 3465
 		deliveryInfo=shipToCustomer.getShipToDivdeliveryInfo();
-		
+		deliveryInfoSaal= shipToCustomer.getShipToDivdeliveryInfoSaal();//EB-3624
 		if(deliveryCutOffTime==null)
 		{
 			try {
@@ -614,6 +614,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				deliveryCutOffTime = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime");
 				//Added For Jira 3465
 				deliveryInfo = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo");
+				deliveryInfoSaal = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal");//EB-3624
+				shipToCustomer.setShipToDivdeliveryInfoSaal(deliveryInfoSaal);//EB-3624
 				shipToCustomer.setShipToDivDeliveryCutOffTime(deliveryCutOffTime);
 				//Added For Jira 3465
 				shipToCustomer.setShipToDivdeliveryInfo(deliveryInfo);
@@ -1347,7 +1349,12 @@ END of JIRA 3382*/
 	protected String deliveryCutOffTime = "";
 	//Added For Jira 3465
 	protected String deliveryInfo = "";
+<<<<<<< HEAD
 	private Set<String> billToEmailAddrsSet;
+=======
+	protected String deliveryInfoSaal = "";//EB-3624
+	
+>>>>>>> v2.0.11.05
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
 	
@@ -1393,6 +1400,15 @@ END of JIRA 3382*/
 	public void setDeliveryInfo(String deliveryInfo) {
 		this.deliveryInfo = deliveryInfo;
 	}
+	//EB-3624
+	public String getDeliveryInfoSaal() {
+		return deliveryInfoSaal;
+	}
+
+	public void setDeliveryInfoSaal(String deliveryInfoSaal) {
+		this.deliveryInfoSaal = deliveryInfoSaal;
+	}
+	
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
 	}

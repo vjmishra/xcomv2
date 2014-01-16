@@ -101,6 +101,11 @@ public class DivisionMaintainancePanel extends Composite implements IYRCComposit
 	private Button btnCancel;
 	private StyledText stxtCurrencyCode;
 	private FocusAdapter focusListener;
+	
+	//EB-3624
+	private Label lblDeliveryInformationSaal;
+	private Text txtDeliveryInformationSaal;
+	
 
 	public DivisionMaintainancePanel(Composite parent, int style, Object inputObject) {
 		super(parent, style);
@@ -313,6 +318,14 @@ public class DivisionMaintainancePanel extends Composite implements IYRCComposit
 		tbd.setTargetBinding("SaveOrganization:/Organization/Extn/@ExtnDeliveryInfo");
 		tbd.setName("txtDeliveryInformation");
 		txtDeliveryInformation.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
+		//EB-3624
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("Organization:/Organization/Extn/@ExtnDeliveryInfoSaal");
+		tbd.setTargetBinding("SaveOrganization:/Organization/Extn/@ExtnDeliveryInfoSaal");
+		tbd.setName("txtDeliveryInformationSaal");
+		txtDeliveryInformationSaal.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		//EB-3624
 		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("Organization:/Organization/Extn/@ExtnDivEmailPaper");
@@ -733,11 +746,21 @@ public class DivisionMaintainancePanel extends Composite implements IYRCComposit
 		
 		lblDeliveryInformation = new Label(DataPnl,SWT.None);
 		lblDeliveryInformation.setData("name", "lblDeliveryInformation");
-		lblDeliveryInformation.setText("Delivery_Information");
+		lblDeliveryInformation.setText("Delivery_Information_Xpedx");
 		txtDeliveryInformation = new Text(DataPnl,2048 | SWT.WRAP);
 		txtDeliveryInformation.setData("name","txtDeliveryInformation");
 		txtDeliveryInformation.setTextLimit(1000);
 		this.setLayoutDateForControl(txtDeliveryInformation, 270, 100);
+		
+		//EB-3624
+		lblDeliveryInformationSaal = new Label(DataPnl,SWT.None);
+		lblDeliveryInformationSaal.setData("name", "lblDeliveryInformationSaal");
+		lblDeliveryInformationSaal.setText("Delivery_Information_Saal");
+		txtDeliveryInformationSaal = new Text(DataPnl,2048 | SWT.WRAP);
+		txtDeliveryInformationSaal.setData("name","txtDeliveryInformationSaal");
+		txtDeliveryInformationSaal.setTextLimit(1000);
+		this.setLayoutDateForControl(txtDeliveryInformationSaal, 270, 100);
+		//EB-3624		
 		
 		lblDeliveryCutoffTime = new Label(DataPnl,SWT.None);
 		lblDeliveryCutoffTime.setData("name", "lblDeliveryCutoffTime");
@@ -847,7 +870,7 @@ public class DivisionMaintainancePanel extends Composite implements IYRCComposit
 				txtDivisionEmailID, txtMaxOrderAmount, txtMinOrderAmount,
 				txtSmallOrderFee, txtSmapleRoomEmailId, txtWillCallInformation,
 				txtDeliveryCutoffTime, txtNextDayCutoffTime,
-				txtDeliveryInformation,txtDivEmailForPaper,txtDivEmailForNonPaper};
+				txtDeliveryInformation,txtDeliveryInformationSaal,txtDivEmailForPaper,txtDivEmailForNonPaper};
 	}
 	public void adjustScrollPnl(ScrolledComposite scrPnl, Composite scrChild,
 			Composite scrParent, boolean isHScrollReqd, boolean isVScrollReqd) {
