@@ -79,12 +79,6 @@
     ServerKey="2010051820261222987" ServerName="CustomerBatchFeedLoad"
     ServerType="00" Terminate="Y" TransportTypeKey="FILE" WaitTime="1"/>
 <Server Createprogid=".YEntityServlet"
-    Createts="2010-07-08T16:28:03-04:00" Createuserid="admin" Lockid="0"
-    Modifyprogid="YDKConfigDeploy" Modifyts="2010-07-08T16:28:03-04:00"
-    Modifyuserid="ng" MonitorStartTime="1"
-    ServerKey="2010070816280336506" ServerName="XPEDXAgentServer"
-    ServerType="01" Terminate="N" TransportTypeKey="JMS" WaitTime="1"/>
-<Server Createprogid=".YEntityServlet"
     Createts="2010-08-03T18:29:11-04:00" Createuserid="admin" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-08-03T18:29:11-04:00"
     Modifyuserid="ng" MonitorStartTime="1"
@@ -388,6 +382,13 @@
     ServerKey="201312120552223056054"
     ServerName="ReprocessOrderConfirmationEmailAgent" ServerType="01"
     Terminate="N" TransportTypeKey="JMS" WaitTime="1"/>
+<Server Createprogid=".YEntityServlet"
+    Createts="2014-01-15T08:43:42-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid=".YEntityServlet" Modifyts="2014-01-15T08:43:42-05:00"
+    Modifyuserid="admin" MonitorStartTime="1"
+    ServerKey="2014011508434264692"
+    ServerName="XpedxOrderReprocessAgent" ServerType="01" Terminate="N"
+    TransportTypeKey="JMS" WaitTime="1"/>
 <Server Createprogid="XMLMigrator" Createts="2011-07-14T14:37:57-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:57-04:00" Modifyuserid="SYSTEM"
