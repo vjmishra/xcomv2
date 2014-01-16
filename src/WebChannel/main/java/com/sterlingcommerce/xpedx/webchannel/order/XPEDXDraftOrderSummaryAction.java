@@ -1349,12 +1349,8 @@ END of JIRA 3382*/
 	protected String deliveryCutOffTime = "";
 	//Added For Jira 3465
 	protected String deliveryInfo = "";
-<<<<<<< HEAD
 	private Set<String> billToEmailAddrsSet;
-=======
 	protected String deliveryInfoSaal = "";//EB-3624
-	
->>>>>>> v2.0.11.05
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
 	
