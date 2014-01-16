@@ -199,7 +199,7 @@
 			</div>
 			<!-- Ad Juggler Tag Starts - Cat1 Landing Page -->		
 			 <s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
-			
+			<s:set name='isGuestUser' value="wCContext.guestUser" />
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115162" />
 			</s:if>
@@ -208,7 +208,13 @@
 			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118193" />
-			</s:elseif >
+			</s:elseif >			
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true) && (#categoryDepth!=1)}' >
+					<s:set name="aj_adspot" value="250649" /> 
+			</s:elseif>
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true) && (#categoryDepth==1)}' >
+					<s:set name="aj_adspot" value="147682" />
+			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115712" />
 			</s:elseif>
@@ -281,6 +287,9 @@
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118192" />
 			</s:elseif >
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true)}' >
+					<s:set name="aj_adspot" value="250649" />
+			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115722" />
 			</s:elseif>

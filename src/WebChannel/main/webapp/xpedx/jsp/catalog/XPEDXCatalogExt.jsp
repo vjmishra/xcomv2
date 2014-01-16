@@ -237,9 +237,9 @@ $(document).ready(function() {
 				<s:set name='firstItem1' value='%{firstItem}' />
 				<s:set name='catPath' value='%{categoryPath}' />
 				<%-- Commented for Performance Fix
-				<s:set name="cat2Val" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCatTwoDescFromItemIdForpath(#firstItem1,#storefrontId,#catPath)" />
+				<s:set name="cat2Val" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getCatTwoDescFromItemIdForpath(#firstItem1,#storefrontId,#catPath)" />--%>		
 				
-				<%--<s:set name="cat2Val" value='%{categoryShortDescription}' />
+				<s:set name="cat2Val" value='%{categoryShortDescription}' />
 				<s:if test="#cat2Val != null" >
 					<s:set name='ad_keyword' value='#cat2Val' />
 				</s:if>
@@ -267,6 +267,13 @@ $(document).ready(function() {
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:elseif >
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true)}' >
+				 <script type="text/javascript" language="JavaScript">
+				 aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
+				aj_zone = 'ipaper'; aj_adspot = '147684'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
+				aj_pv = true; aj_click = '';
+				</script>
+			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
