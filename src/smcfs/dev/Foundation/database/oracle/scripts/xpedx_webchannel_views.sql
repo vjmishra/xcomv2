@@ -560,7 +560,8 @@ CREATE OR REPLACE VIEW XPX_SALES_REP_CUSTOMERS AS
     YU.EXTN_EMPLOYEE_ID                      AS SALES_REP_ID,
     YPI.FIRST_NAME                           AS SR_FIRST_NAME,
     YPI.LAST_NAME                            AS SR_LAST_NAME,
-    YPI.EMAILID                              AS SR_EMAILID
+    YPI.EMAILID                              AS SR_EMAILID,
+    YU.EXTN_SALT_KEY			     AS EXTN_SALT_KEY
   FROM XPEDX_SALES_REP SR
   INNER JOIN YFS_CUSTOMER YC1
   ON trim(YC1.CUSTOMER_key) = trim(SR.SALES_CUSTOMER_KEY)
