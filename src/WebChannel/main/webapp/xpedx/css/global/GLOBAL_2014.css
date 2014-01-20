@@ -1,0 +1,39 @@
+
+/*EB-1130--------NEW STYLES 2014-------*/
+
+.ui-addTrPad table tr td {
+	padding-bottom: 4px;
+	}
+.legend {
+	width: 360px;
+	padding: 0px 0px 5px 0px;
+	height: 20px;
+	margin-top: -10px;
+	}
+.personal {
+	float: right;
+	clear: none;
+	width: 65px;
+	background: url(https://staticcontent.ipaper.com/swc/xpedx/images/mil/20x20_personal_list.png) no-repeat left top;
+	padding-left: 21px;
+	padding-top: 3px;
+	height: 22px;
+	}
+.shared {
+	float: right;
+	clear: none;
+	width: 55px;
+	background: url(https://staticcontent.ipaper.com/swc/xpedx/images/theme/theme-1/20x20_shared_list.png) no-repeat top left;
+	padding-left: 21px;
+	padding-top: 3px;
+	height: 22px;	
+	}	
+
+.ui-addTrPad h2 {
+    border-bottom: none;
+}
+
+.ui-addTrPad-head{
+	font-size: 16px;
+	padding-bottom:8px;
+}
