@@ -52,10 +52,13 @@
 					</table>
 					<div id="footer-copyright">&copy; International Paper Company. All rights reserved.</div>
 				</td>
-
+					<!-- EB-1848 As a web channel user I would like to see updated and new social media icons on the footer page of xpedx.com so that the site reflects the new branding standards -->
+					
 					<td id="social-networking-footer" class="footer-right" style="border-style: none">
-						 <s:if test="%{#theStoreFront=='xpedx'}">
-							<a target="_blank" href="http://youtube.com/xpedxdistribution "><img id="youtube" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/you_tube_36x36.png" alt="" /></a>
+						 <s:if test="%{#theStoreFront=='xpedx'}">						 	
+						 	<a target="_blank" href="http://www.linkedin.com/company/xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/linkedin_36x36.png" alt="" /></a>
+						 	<a target="_blank" href="http://blog.xpedx.com/blog/xpedx/rss"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/blog_36x36.png" alt="" /></a>	
+						 	<a target="_blank" href="http://youtube.com/xpedxdistribution"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/you_tube_36x36.png" alt="" /></a>						
 							<a target="_blank" href="http://twitter.com/xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/twitter_36x36.png" alt="" /></a>
 							<a target="_blank" href="http://facebook.com/xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/facebook_36x36.png" alt="" /></a>
 						</s:if>

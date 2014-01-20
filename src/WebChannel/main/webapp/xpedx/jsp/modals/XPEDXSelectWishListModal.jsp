@@ -4,10 +4,13 @@
 <%@ taglib prefix="swc" uri="swc"%>
 
 	<div style="display: none;">
-	<a id="dlgAddToListLink" href="#dlgAddToList">Select a WishList</a>
-		
-		<div id="dlgAddToList" class="xpedx-light-box" style="width:360px; height:242px;">
-				<h2>Select My Items List</h2>				
+	<a id="dlgAddToListLink" href="#dlgAddToList">Select a WishList</a>		
+		<div id="dlgAddToList" class="xpedx-light-box ui-addTrPad" style="width:360px; height:242px;overflow:hidden;">
+				<div class="ui-addTrPad-head">Select My Items List</div>
+				<div class="legend">
+				  <div class="personal">Personal</div>
+				  <div class="shared">Shared</div>
+				</div>				
 				<s:form id="addItemToList" name="addItemToList">
 					<div style="height:157px; border:solid 1px #ccc; width:350px; padding:4px; overflow:auto;">
 						<s:div id="divMainPrivateList">
