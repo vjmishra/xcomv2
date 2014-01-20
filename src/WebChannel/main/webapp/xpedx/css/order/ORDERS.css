@@ -735,7 +735,7 @@ border-collapse: separate;
 }
 a:hover
 {
-text-decoration:underline;	
+text-decoration:none;	
 }
 
 .mil-list-item-description
