@@ -134,6 +134,12 @@
 		</xsl:variable>
 		
 		<xsl:variable name="Approver" select="'Approved'"/>
+		<xsl:variable name="Pending" select="'Pending'"/>
+		<xsl:variable name="Reject" select="'Rejected'"/>
+		<xsl:variable name="Submit" select="'Submitted'"/>
+		
+		
+		 
 		<xsl:variable name="Subject" >
 			<xsl:value-of select="Order/@Subject" />
 		</xsl:variable>	
@@ -184,7 +190,7 @@
 			<xsl:call-template name="applyStyle"/>
 			<body leftmargin="0" topmargin="0">
 			
-			<table style="margin-left:5px" width="720">
+			<table style="margin-left:5px" width="815">
 				<tr>	
 					<td style="padding-bottom:20px;">
 						<table width="720">
@@ -211,14 +217,20 @@
 			  		<xsl:if test="(contains($Subject,$Approver))">
 					Your order has been approved.
 					</xsl:if>
-															
+					<xsl:if test="(contains($Subject,$Reject))">
+					Your order has been rejected. If you have any questions, please contact your order approver.					
+					</xsl:if>
+					<xsl:if test="(contains($Subject,$Pending))">
+					The following order requires your attention.					
+					</xsl:if>	
+					<xsl:if test="(contains($Subject,$Submit))">This is a courtesy notification that an order has been placed or changed at</xsl:if>											
 					<xsl:choose>
 					<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
 						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<a href="{$stgxpedxUrl}/order" >Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+							<a href="{$stgxpedxUrl}/order" >Click here</a> to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>&#160;.com/order.
 						</xsl:if>
 						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-							<a href="{$stgSaalUrl}/order" color="084823">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+							<a href="{$stgSaalUrl}/order" color="084823">Click here</a>  to review this order on  <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 						</xsl:if>
 					 
 					</xsl:when>
@@ -242,47 +254,22 @@
 			
 					</xsl:otherwise>
 					</xsl:choose>
+					<xsl:if test="(contains($Subject,$Submit))">Thank you for your business!</xsl:if>
 					</td>
-					</tr>
-					<tr>
-					<xsl:if test="not(contains($Subject,$Approver))">
-					
-					<td style="padding-left:8px;padding-top:8px;">This is a courtesy notification that an order has been placed or changed at 					
-					<xsl:choose>
-					<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
-						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
-						</xsl:if>
-						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-							<xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
-						</xsl:if>					 
-					</xsl:when>
-					<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
-						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
-						</xsl:if>
-						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-							<xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
-						</xsl:if>
-						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-							<xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
-						</xsl:if>			
-					</xsl:otherwise>
-					</xsl:choose>
-					Thank you for your business!
-					</td>
-					</xsl:if>
-					</tr>
+					</tr>					
 					<tr>					
 					<td style="padding-left:8px;padding-top:8px;">
+					<xsl:if test="(contains($Subject,$Approver))">
 					<xsl:if test = 'Order/Input/OrderHoldType/@ReasonText!="Empty"' >
 					<span class="bold">Approved Comments:&#160;</span><xsl:value-of select="Order/Input/OrderHoldType/@ReasonText"/>
 					</xsl:if>
+					</xsl:if>
+					<xsl:if test="(contains($Subject,$Reject))">
+					<xsl:if test = 'Order/Input/OrderHoldType/@ReasonText!="Empty"' >
+					<span class="bold">Rejected Comments:&#160;</span><xsl:value-of select="Order/Input/OrderHoldType/@ReasonText"/>
+					</xsl:if>
+					</xsl:if>
+					
 					</td>
 					</tr>
 					<tr>
@@ -551,9 +538,30 @@
 									</xsl:choose>
 												
 									</td>
-												
-						
-						
+									</xsl:if>
+									
+									<xsl:if test="(contains($Subject,$Pending))"> 
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
+									Ship Order Complete
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+								    ,
+								    </xsl:if>
+									</xsl:if>						
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+									Will Call
+								    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>					    					
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+									Rush Order
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									Order Placed on Hold
+									</xsl:if>
 									</xsl:if>
 									
 								</tr>
