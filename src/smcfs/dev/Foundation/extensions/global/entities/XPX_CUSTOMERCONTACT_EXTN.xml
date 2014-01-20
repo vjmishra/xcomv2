@@ -19,7 +19,7 @@
 					DefaultValue="' '" Description="Refers to the column in the YFS_CUSTOMER_CONTACT table." Name="CustomerContactID"
 					Nullable="false" XMLName="CustomerContactID" />
 				
-				<Attribute ColumnName="ADDNL_EMAIL_ADDRS" DataType="Text-500"
+				<Attribute ColumnName="ADDNL_EMAIL_ADDRS" DataType="varchar2-2600"
 					DefaultValue="' '" Description="Additional Email Addresses for the Contact" Nullable="true" Size=""
 					XMLName="AddnlEmailAddrs" />
 
