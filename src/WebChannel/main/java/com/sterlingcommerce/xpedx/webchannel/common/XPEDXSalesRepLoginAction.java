@@ -308,6 +308,10 @@ public Document getPaginatedSalesRepCustomersSearch(IWCContext context, HttpServ
 	
 	String customerContactId = context.getLoggedInUserId();
 	String salesRepCustomerSearchString = request.getParameter("searchText");
+	if (salesRepCustomerSearchString != null && !("").equals(salesRepCustomerSearchString)) {
+		salesRepCustomerSearchString = salesRepCustomerSearchString.toUpperCase();
+	}
+	
 	String pageNo = getPageNumber().toString();
 	String pageSize = getPageSize().toString();
 	Document outputElemDoc;
