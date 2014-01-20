@@ -13,7 +13,7 @@
 	</script>	
 <%--Added condition for Jira 3195 --%>
 <%--- EB-1158--%>
-<div id="divAdd2ListRadio">
+<div id="divAdd2ListRadio" class="ui-addTrPad">
 
 <s:if test="listOfItems == null || listOfItems.size()==0">
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
