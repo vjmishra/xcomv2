@@ -16795,8 +16795,11 @@ Ext.onReady(function () {
 
 Ext.BLANK_IMAGE_URL = "<s:url value='/ext/resources/images/default/s.gif'/>";
 
-
-Ext.onReady(function() {
+function rebindClickForNarrowByExpandCollapse() {
+	// eb-2296: remove any existing click bindings before re-adding.
+	//    this is important since the 'Product Categories' binding happens on page load,
+	//     unlike the rest of the narrow-by's that are created asynchronously after page load
+	$(".browseBox .header").unbind('click');
 	
 	$(".browseBox .header").click(function () {
 		var x = $(this).parents(".browseBox").find(".narrowbyattributes");
@@ -16812,32 +16815,36 @@ Ext.onReady(function() {
 		}
 		return false;
 	});
-
-if( Ext.get("pageSize") != null ){
-	Ext.get("pageSize").on("change", function(e, el, o){
-
-		var size = document.getElementById("pageSize");
-
-		var url = document.getElementById("pageSizeURL").href;
-
-		location.href=url + "&pageSize=" + size.value;
-
-	}, this, { preventDefault: true } );
 }
 
-
-
-if( Ext.get("sortField") != null){
-	Ext.get("sortField").on("change", function(e, el, o){
-
-		var field = document.getElementById("sortField");
-
-		var url = document.getElementById("sortFieldsURL").href;
-
-		location.href=url + "&sortField=" + field.value;
-
-	}, this, { preventDefault: true } );
-}
+Ext.onReady(function() {
+	rebindClickForNarrowByExpandCollapse();
+	
+	if( Ext.get("pageSize") != null ){
+		Ext.get("pageSize").on("change", function(e, el, o){
+	
+			var size = document.getElementById("pageSize");
+	
+			var url = document.getElementById("pageSizeURL").href;
+	
+			location.href=url + "&pageSize=" + size.value;
+	
+		}, this, { preventDefault: true } );
+	}
+	
+	
+	
+	if( Ext.get("sortField") != null){
+		Ext.get("sortField").on("change", function(e, el, o){
+	
+			var field = document.getElementById("sortField");
+	
+			var url = document.getElementById("sortFieldsURL").href;
+	
+			location.href=url + "&sortField=" + field.value;
+	
+		}, this, { preventDefault: true } );
+	}
 
 });
 
