@@ -26,6 +26,6 @@ webservices must start with a lower case letter.
 		<Service ServiceName="CopySearchIndexFilesService" ExposedName="copySearchIndexFiles"/>
 	</Services>
 	<Apis>
-	<Api ApiName="getCompleteItemList" ExposedName="getCompleteItemList"/>
+	<Api Name="getCompleteItemList" ExposedName="getCompleteItemList"/>
 	</Apis>
 </WebServices>
