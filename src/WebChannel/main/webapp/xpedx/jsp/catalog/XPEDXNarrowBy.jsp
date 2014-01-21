@@ -204,14 +204,15 @@ function setStockItemFlag()
 
 <script>
 function replaceAll(Source,stringToFind,stringToReplace){
-	  var temp = Source;
-	    var index = temp.indexOf(stringToFind);
-	        while(index != -1){
-	            temp = temp.replace(stringToFind,stringToReplace);
-	            index = temp.indexOf(stringToFind);
-			}
-	        return temp;
+	var temp = Source;
+	var index = temp.indexOf(stringToFind);
+	while(index != -1){
+		temp = temp.replace(stringToFind,stringToReplace);
+		index = temp.indexOf(stringToFind);
 	}
+	return temp;
+}
+
 Ext.onReady(function(){		
 	var inutXML='<s:property value ="searchIndexInputXML" />'.replace(/&(lt|gt|quot);/g, function (m, p) { 
 	    return (p == "lt")? "<" : (p == "gt") ? ">" : "'";
@@ -227,6 +228,11 @@ Ext.onReady(function(){
 			method: 'POST',
 			success: function (response, request){
 				div.innerHTML=response.responseText;
+				
+				// eb-2296: we must bind click events for these new dom elements
+				//    note that this function is also called on page load (see xpedx-header.js)
+				//     since the 'Product Categories' narrow-by is loaded separately (at page load)
+				rebindClickForNarrowByExpandCollapse();
 			},
 			failure:function (response, request){
 				
