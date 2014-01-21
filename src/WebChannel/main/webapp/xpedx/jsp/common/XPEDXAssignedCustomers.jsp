@@ -404,13 +404,27 @@
 		</s:else>
 			<tr>
 				<td>&nbsp;</td>
-				<td><s:radio list="#{customerID:customerID}" 
+				
+				<td>
+				<s:if test="%{#_action.getIsRequestedPage() == 'XPEDXOrderListPage'}">
+				<s:radio list="#{customerID:customerID}" 
+					name="selectedShipTo" id="selectedShipTo" 
+					listKey="key" 
+					listValue="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(key)"
+					onclick="setSelectedValue(this)"
+					value="#hTMLValue" theme="simple">
+				</s:radio>				
+				</s:if>
+				<s:else>
+				<s:radio list="#{customerID:customerID}" 
 					name="selectedShipTo" id="selectedShipTo" 
 					listKey="key" 
 					listValue="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(key)"
 					onclick="updateCurrentCustomer('%{#targetURL}',this)"
 					value="#hTMLValue" theme="simple">
-				</s:radio></td>
+				</s:radio>
+				</s:else>
+				</td>
 
 			</tr>
 			<s:if test="#firstName!='' || #middleName!='' || #lastName!=''">
