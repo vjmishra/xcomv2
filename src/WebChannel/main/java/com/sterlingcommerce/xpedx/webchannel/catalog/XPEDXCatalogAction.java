@@ -475,6 +475,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		//setProductCompareBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
 		setProductCompareBackPageURL(wcContext.getSCUIContext().getSession().getAttribute("itemDtlBackPageURL").toString());
 	   /* End - Changes made for 2422 JIRA */
+		getCustomerLineDetails(); //added for EB 3372 ( merge issue fixed EB-4442)
 		}catch(Exception exception){
 			//Not throwing any exception as it gives exception for JIRA 3705
 			
