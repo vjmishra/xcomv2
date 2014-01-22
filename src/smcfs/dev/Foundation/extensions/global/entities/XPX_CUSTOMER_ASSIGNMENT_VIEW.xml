@@ -57,7 +57,11 @@
 				<Attribute ColumnName="SHIP_TO_ADDRESS_STRING" DataType="Text-1500"
 					Description="The Ship To Customer Address String" Nullable="true" XMLName="ShipToAddressString" />
 				<Attribute ColumnName="STATUS" DataType="char-2" DefaultValue="' '" Description="Status of the customer"  
-          			Nullable="true" XMLName="Status" />	
+          			Nullable="true" XMLName="Status" />
+				<Attribute ColumnName="SHIP_TO_DIVISION_ID" DataType="OrgCode"
+					Description="SHIP_TO_DIVISION_ID" Nullable="true" XMLName="ExtnCustomerDivisionID" />
+				<Attribute ColumnName="ORGANIZATION_NAME" DataType="varchar2-100" Description="Division Name"  
+          			Nullable="true" XMLName="DivisionName" />
 			</Attributes>
 			<PrimaryKey Name="XPX_CUST_H_PK">
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" />

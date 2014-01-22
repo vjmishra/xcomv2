@@ -8,6 +8,8 @@
 			<Attributes>
 				<Attribute ColumnName="EXTN_SHIP_FROM_BRANCH" DataType="OrgCode"
 					Description="EXTN_SHIP_FROM_BRANCH" Nullable="true" XMLName="ExtnCustomerDivision" />
+				<Attribute ColumnName="SHIP_TO_DIVISION_ID" DataType="OrgCode"
+					Description="SHIP_TO_DIVISION_ID" Nullable="true" XMLName="ExtnCustomerDivisionID" />
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" DataType="CustomerId"
 					Description="The Ship to Customer ID" Nullable="false" XMLName="ShipToCustomerID" />
 				<Attribute ColumnName="SHIP_TO_CUSTOMER_NAME" DataType="Text-240"
