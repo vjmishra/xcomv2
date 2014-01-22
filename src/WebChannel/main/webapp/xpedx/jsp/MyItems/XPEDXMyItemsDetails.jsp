@@ -1876,32 +1876,41 @@ function showSharedListForm(){
 		}
 		
 		// eb-3627: display number of checkboxes selected
+		//    also eb-4446, which optimized the solution to address scalability issues on IE8
+		<s:if test="editMode">
+			function updateMilCountSelected() {
+				// var numSelectedCheckboxes = $('.milCheckbox:checked').length;
+				var numSelectedCheckboxes = $('.milCheckbox:checked').length;
+				
+				var $milCountPanel = $('.mil-count-selected');
+				if (numSelectedCheckboxes == 0) {
+					$milCountPanel.css('visibility', 'hidden');
+				} else {
+					var totalCheckboxes = $('.milCheckbox').length;
+					$milCountPanel.html('Items to be removed: ' + numSelectedCheckboxes + ' of ' + totalCheckboxes);
+					$milCountPanel.css('visibility', 'visible');
+				}
+			}
+		</s:if>
+		
 		$(document).ready(function() {
 			$('.toggleAllSelected').change(function(event) {
 				var checkAll = $(this).attr('checked');
-				$('.milCheckbox').attr('checked', checkAll);
-				$('.toggleAllSelected').attr('checked', checkAll);
-				// have to manually trigger change event for each checkbox, otherwise below binding won't trigger
-				$('.milCheckbox').attr('checked', checkAll).change();
+				
+				var checkboxes = $('.milCheckbox, .toggleAllSelected');
+				for (var i = 0, len = checkboxes.length; i < len; i++) {
+					checkboxes[i].checked = checkAll;
+				}
+				
+				if (typeof(updateMilCountSelected) === 'function') {
+					setTimeout(updateMilCountSelected, 0);
+				}
 			});
 			
 			$('.milCheckbox').change(function(event) {
-				var numSelectedCheckboxes = $('.milCheckbox:checked').length;
-				var totalCheckboxes = $('.milCheckbox').length;
-				if (numSelectedCheckboxes == 0) {
-					$('.mil-count-selected').css('visibility', 'hidden');
-				} else {
-					$('.mil-count-selected').html('Items to be removed: ' + numSelectedCheckboxes + ' of ' + totalCheckboxes);
-					$('.mil-count-selected').css('visibility', 'visible');
+				if (typeof(updateMilCountSelected) === 'function') {
+					setTimeout(updateMilCountSelected, 0);
 				}
-				
-				
-				
-				/*
-				if (numSelectedCheckboxes < totalCheckboxes) {
-					$('.toggleAllSelected').attr('checked', );
-				}
-				*/
 			});
 		});
 
