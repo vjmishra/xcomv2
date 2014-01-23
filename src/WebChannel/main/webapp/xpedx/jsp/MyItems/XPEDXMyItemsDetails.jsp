@@ -2651,6 +2651,7 @@ function showSharedListForm(){
 					</s:if>
                     <!--     <li><a class="modal grey-ui-btn" href="../modals/new-copy-edit-cart-details-redesign.html"><span>New List</span></a></li>-->
                 </ul>
+                <s:if test='itemCount > 0'> 
                 <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; margin-right:5px;">
                     <li><a class="orange-ui-btn" href="javascript:addToCart();">
                     <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -2662,6 +2663,7 @@ function showSharedListForm(){
                     </a></li>
 
                 </ul>
+                </s:if>
 			</s:if>
 			<s:else>
 				<div id="mil-edit" class="mil-edit" style="width:100%">
@@ -3407,6 +3409,7 @@ function showSharedListForm(){
 							</s:if>
 							<!--     <li><a class="modal grey-ui-btn" href="../modals/new-copy-edit-cart-details-redesign.html"><span>New List</span></a></li>-->
 						</ul>
+						 <s:if test='itemCount > 0'>
 						<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; margin-right:5px;">
 							<li><a class="orange-ui-btn" href="javascript:addToCart();">
 							<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -3416,6 +3419,7 @@ function showSharedListForm(){
 							</a></li>
 
 						</ul>
+						</s:if>
 					</s:if>    
 					<s:else>
 						<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
