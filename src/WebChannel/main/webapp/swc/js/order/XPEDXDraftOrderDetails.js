@@ -50,10 +50,13 @@ function validateQty(){
 	var retVal=true;
 	if(orderLinesCount==1){
 		var arrQty ;		
-		var arrItemID ;		
+		var arrItemID ;	
+		var itemSelUom ;//EB-3840
+		var conv;//EB-3840
 		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
 		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
-		
+		itemSelUom = document.getElementById("OrderDetailsForm").elements["itemUOMsSelect"];//EB-3840
+	
 		var divId='errorDiv_'+ arrQty.id;
 		var divIdError=document.getElementById(divId);
 		var qtyElement = document.getElementById(arrQty.id);
@@ -66,13 +69,44 @@ function validateQty(){
 			}
 			retVal=false; 
 		}
+		
+		//EB-3840 Ordered quantity is greater than 7 digits validation.
+		var DisplayUomItem =document.getElementsByName("DisplayUomItem_"+arrItemID.value);
+		
+		for(var j = 0; j < DisplayUomItem.length; j++)
+		{
+		if(itemSelUom.value == DisplayUomItem[j].id){
+		 conv = DisplayUomItem[j].value;
+		 break;
+		}
+		}
+		if(conv != ''){
+			var part = conv.split("(");
+			if(part.length >1)
+				{
+			var convFac = part[1].split(")");
+			var totalQty = arrQty.value * convFac[0];
+					if(totalQty.toString().length > 7) 
+						{
+						if(divIdError != null){
+							divIdError.innerHTML='Order QTY too large, please enter a valid QTY.';
+							divIdError.setAttribute("class", "error");
+						}
+					retVal=false;
+						}
+				}
+			}
+		//EB-3840 ends here
+		
+		
 	}else{//if more than one item
 		var arrQty = new Array();		
 		var arrItemID = new Array();
-		
+		var itemSelUom = new Array();//EB-3840
 		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
 		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
-		
+		itemSelUom = document.getElementById("OrderDetailsForm").elements["itemUOMsSelect"];		//EB-3840
+	
 		for(var i = 0; i < arrItemID.length; i++)
 		{			
 			var divId='errorDiv_'+ arrQty[i].id;
@@ -89,6 +123,35 @@ function validateQty(){
 			{
 				qtyElement.style.borderColor = "";
 			} 
+			//EB-3840 Ordered quantity is greater than 7 digits validation.
+		var DisplayUomItem =document.getElementsByName("DisplayUomItem_"+arrItemID[i].value);
+		var conv ;
+		
+		for(var j = 0; j < DisplayUomItem.length; j++)
+		{
+		if(itemSelUom[i].value == DisplayUomItem[j].id){
+		 conv = DisplayUomItem[j].value;
+		 break;
+		}
+		}
+		if(conv != ''){
+			var part = conv.split("(");
+			if(part.length >1)
+				{
+			var convFac = part[1].split(")");
+			var totalQty = arrQty[i].value * convFac[0];
+					if(totalQty.toString().length > 7) 
+						{
+						if(divIdError != null){
+							divIdError.innerHTML='Order QTY too large, please enter a valid QTY.';
+							divIdError.setAttribute("class", "error");
+						}
+					retVal=false;
+						}
+				}
+			}
+			
+			//EB-3840 ends here
 		}
 	}//end of else
 	return retVal;
