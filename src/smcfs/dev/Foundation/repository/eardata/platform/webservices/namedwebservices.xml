@@ -27,5 +27,6 @@ webservices must start with a lower case letter.
 	</Services>
 	<Apis>
 	<Api Name="getCompleteItemList" ExposedName="getCompleteItemList"/>
+	<Api Name="getCategoryList" ExposedName="getCategoryList"/>
 	</Apis>
 </WebServices>
