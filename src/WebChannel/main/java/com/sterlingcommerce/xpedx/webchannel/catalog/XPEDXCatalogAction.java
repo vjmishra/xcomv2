@@ -1554,7 +1554,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 						"xpedxgetAllAPI", input, wcContext.getSCUIContext());
 
 				getOrderMultipleMapForItems();
-				getReplacmentItemsMapForItems(envCode, custDivision);
+				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
+				getReplacmentItemsMapForItems(envCode, shipFromBranch);
 				wcContext.setWCAttribute("replacmentItemsMap",
 						replacmentItemsMap, WCAttributeScope.REQUEST);
 			} catch (Exception e) {
