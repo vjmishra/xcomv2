@@ -5571,6 +5571,16 @@
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
     Modifyprogid="YDKConfigDeploy" Modifyts="2013-08-14T09:47:11-04:00"
     Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+<CommonCode CodeLength="0" CodeLongDescription="79" CodeName="79"
+    CodeShortDescription="79" CodeSymbol="" CodeType="RELATIONSHIP_TYPE"
+    CodeValue="79" CommonCodeKey="2014012405392165067"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-01-24T05:39:20-05:00" Createuserid="admin"
+    DocumentType="" DocumentTypeSpecific="" Lockid="0"
+    MeantForEnterprise="" MeantForInternal="" MeantForSupplier=""
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-01-24T05:39:20-05:00" Modifyuserid="admin"
+    OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="20" CodeLongDescription="Commercial Address"
     CodeName=" " CodeShortDescription="Commercial" CodeSymbol=" "
     CodeType="ADDR_DELIVERY_TYPE" CodeValue="COMMERCIAL"
