@@ -1730,7 +1730,7 @@ var currentAadd2ItemList = new Object();
                 <!-- begin description  -->
                 <!--   for EB 783  -->
                 
-                <div class="mil-desc-wrap">
+                 <div class="mil-desc-wrap">
                     <div class="mil-wrap-condensed-desc item-short-desc" ><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
 									<span class="full-description-replacement-model"><s:property value="#name" /></span>
@@ -1746,11 +1746,7 @@ var currentAadd2ItemList = new Object();
                           <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p>  --%>
                         
-<<<<<<< HEAD
 							 <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
-=======
-							 <p><s:property value="wCContext.storefrontId" />  Item #: <s:property value="#rItemID" /> </p> <!--  Since this is replacement Screen replacement Item is nothig but 'Xpedx Item#' -->
->>>>>>> v2.0.11.05
 								 <s:if test='#certFlagVal=="Y"'>
 								 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;" />
 								 </s:if>
