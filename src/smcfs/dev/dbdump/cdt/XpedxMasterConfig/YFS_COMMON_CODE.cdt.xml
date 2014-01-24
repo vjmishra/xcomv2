@@ -1231,10 +1231,10 @@
     CodeValue="RequiredCustomerLinePO"
     CommonCodeKey="2010061623574431545" Createprogid=".YEntityServlet"
     Createts="2010-06-16T23:57:44-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-02-07T02:05:50-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Line level field with the specified name is not present in the incoming order."
     CodeName=" " CodeShortDescription="Require Customer Line Field1"
@@ -1391,10 +1391,10 @@
     CodeType="XPXRuleID" CodeValue="RequiredCustomerLineAccountNo"
     CommonCodeKey="2010071317104937314" Createprogid=".YEntityServlet"
     Createts="2010-07-13T17:10:49-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-02-07T02:04:35-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Required Customer Line Sequence Number"
     CodeName=" "
@@ -1721,110 +1721,110 @@
     CodeType="XPXCatBrowseCol" CodeValue="XPXDefault"
     CommonCodeKey="2010091520012257243" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:01:22-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-30T01:16:21-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Absorbents" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Absorbents"
     CommonCodeKey="2010091520020457246" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:02:03-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T06:48:52-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Batteries" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Batteries"
     CommonCodeKey="2010091520034257255" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:03:42-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T06:53:12-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Bindery Supplies" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Bindery Supplies"
     CommonCodeKey="2010091520042157258" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:04:21-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="5"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:13:49-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Boxes" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Boxes"
     CommonCodeKey="2010091520044657261" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:04:46-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="4"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-10T04:57:38-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Carbonless" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Carbonless"
     CommonCodeKey="2010091520051957312" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:05:19-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:02:31-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Chemicals" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Chemicals"
     CommonCodeKey="2010091520055057315" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:05:50-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:12:46-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Chipboard" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Chipboard"
     CommonCodeKey="2010091520061857318" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:06:17-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:03:30-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Cleaning Tools" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Cleaning Tools"
     CommonCodeKey="2010091520064657321" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:06:46-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:14:36-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Closures" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Closures"
     CommonCodeKey="2010091520071357324" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:07:13-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:03:57-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Corrugated" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Corrugated"
     CommonCodeKey="2010091520073657327" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:07:35-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="4"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-10T05:02:29-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Cushioning Materials"
@@ -1832,9 +1832,9 @@
     CodeValue="Cushioning Materials" CommonCodeKey="2010091520085457333"
     Createprogid=".YEntityServlet" Createts="2010-09-15T20:08:54-04:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
-    Lockid="4" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2012-09-10T05:03:41-04:00" Modifyuserid="admin"
+    Lockid="0" MeantForEnterprise="Y" MeantForInternal="N"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:43-05:00" Modifyuserid="ngmc"
     OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
@@ -1843,10 +1843,10 @@
     CodeValue="Cutlery &amp; Utensils"
     CommonCodeKey="2010091520092757336" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:09:27-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:24:05-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Data Storage Media"
@@ -1854,9 +1854,9 @@
     CodeValue="Data Storage Media" CommonCodeKey="2010091520095557339"
     Createprogid=".YEntityServlet" Createts="2010-09-15T20:09:55-04:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
-    Lockid="3" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2012-04-01T05:15:28-04:00" Modifyuserid="admin"
+    Lockid="0" MeantForEnterprise="Y" MeantForInternal="N"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:43-05:00" Modifyuserid="ngmc"
     OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
@@ -1864,30 +1864,30 @@
     CodeType="XPXCatBrowseCol" CodeValue="Dispensers"
     CommonCodeKey="2010091520102357342" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:10:23-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:04:15-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Edge Protectors" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Edge Protectors"
     CommonCodeKey="2010091520104657345" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:10:46-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:04:50-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,List Price"
     CodeName=" " CodeShortDescription="Envelopes" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Envelopes"
     CommonCodeKey="2010091520110757348" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:11:07-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:05:46-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Equipment &amp; Parts"
@@ -1895,20 +1895,20 @@
     CodeValue="Equipment &amp; Parts"
     CommonCodeKey="2010091520113357351" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:11:33-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:07:40-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Floor Mats" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Floor Mats"
     CommonCodeKey="2010091520120357354" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:12:03-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:09:12-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Sku,Desc,Size,Environment,StockStatus"
     CodeName=" " CodeShortDescription="Food Service" CodeSymbol=" "
@@ -1925,20 +1925,20 @@
     CodeType="XPXCatBrowseCol" CodeValue="Furniture"
     CommonCodeKey="2010091520124657360" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:12:46-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:07:18-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Gift Wrap" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Gift Wrap"
     CommonCodeKey="2010091520131057363" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:13:09-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:28:33-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Sku,Desc,Size,Environment,StockStatus"
     CodeName=" " CodeShortDescription="Ink Jet Supplies" CodeSymbol=" "
@@ -1956,40 +1956,40 @@
     CodeValue="Lighting &amp; Electrical"
     CommonCodeKey="2010091520135557369" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:13:55-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:16:33-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,List Price"
     CodeName=" " CodeShortDescription="Medical Supplies" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Medical Supplies"
     CommonCodeKey="2010091520142557372" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:14:25-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:20:32-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Office Supplies" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Office Supplies"
     CommonCodeKey="2010091520144657375" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:14:46-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:26:55-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Other Products" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Other Products"
     CommonCodeKey="2010091520151157382" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:15:10-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:08:47-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Sku,Desc,Size,Color,Gauge,Environment,StockStatus"
     CodeName=" " CodeShortDescription="Packaging" CodeSymbol=" "
@@ -2006,30 +2006,30 @@
     CodeType="XPXCatBrowseCol" CodeValue="Paper"
     CommonCodeKey="2010091520155957388" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:15:59-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:09:21-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Party Supplies" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Party Supplies"
     CommonCodeKey="2010091520162157391" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:16:21-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:19:02-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Personal Hygiene" CodeSymbol=" "
     CodeType="XPXCatBrowseCol" CodeValue="Personal Hygiene"
     CommonCodeKey="2010091520164657394" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:16:46-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:20:28-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Sku,Desc,Size,Color,Material,Form,Environment,StockStatus"
     CodeName=" " CodeShortDescription="Plates &amp; Bowls"
@@ -2058,10 +2058,10 @@
     CodeValue="Pressure Sensitive Paper"
     CommonCodeKey="2010091520180457403" Createprogid=".YEntityServlet"
     Createts="2010-09-15T20:18:04-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-09T02:12:58-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Sku,Desc,Size,Environment,StockStatus"
     CodeName=" " CodeShortDescription="Tape" CodeSymbol=" "
@@ -2079,9 +2079,9 @@
     CodeValue="Towels &amp; Tissue" CommonCodeKey="2010091520191557409"
     Createprogid=".YEntityServlet" Createts="2010-09-15T20:19:15-04:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
-    Lockid="2" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2011-11-23T07:33:32-05:00" Modifyuserid="admin"
+    Lockid="0" MeantForEnterprise="Y" MeantForInternal="N"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:43-05:00" Modifyuserid="ngmc"
     OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Sku,Desc,Size,Environment,StockStatus"
@@ -2345,109 +2345,109 @@
     CodeType="XpedxWCStatus" CodeValue="1100.0100"
     CommonCodeKey="20110527164340140068" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:43:40-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:35:29-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Open" CodeSymbol=" " CodeType="XpedxWCStatus"
     CodeValue="1100.5250" CommonCodeKey="20110527164427140077"
     Createprogid=".YEntityServlet" Createts="2011-05-27T16:44:27-04:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
-    Lockid="1" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2011-12-22T05:08:17-05:00" Modifyuserid="admin"
+    Lockid="0" MeantForEnterprise="Y" MeantForInternal="N"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:43-05:00" Modifyuserid="ngmc"
     OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Customer Hold" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5350"
     CommonCodeKey="20110527164444140080" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:44:44-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:50:40-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="System Hold" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5400"
     CommonCodeKey="20110527164506140083" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:45:05-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:51:02-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Web Hold" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5450"
     CommonCodeKey="20110527164525140086" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:45:25-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:51:32-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Invoiced" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5700"
     CommonCodeKey="20110527164606140095" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:46:06-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:52:41-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Backorder" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5100"
     CommonCodeKey="20110527164621140098" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:46:21-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:38:14-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Cancelled" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="9000"
     CommonCodeKey="20110527164639140101" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:46:38-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:45:02-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Direct from Manufacturer" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5300"
     CommonCodeKey="20110527164649140104" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:46:49-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:50:22-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Return" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5750"
     CommonCodeKey="20110527164702140107" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:47:02-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:53:01-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Quote" CodeSymbol=" " CodeType="XpedxWCStatus"
     CodeValue="1100.5900" CommonCodeKey="20110527164716140110"
     Createprogid=".YEntityServlet" Createts="2011-05-27T16:47:16-04:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
-    Lockid="1" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2011-12-15T07:47:11-05:00" Modifyuserid="admin"
+    Lockid="0" MeantForEnterprise="Y" MeantForInternal="N"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:43-05:00" Modifyuserid="ngmc"
     OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Invoice Only" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5950"
     CommonCodeKey="20110527164732140113" Createprogid=".YEntityServlet"
     Createts="2011-05-27T16:47:31-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:46:10-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="Blanket" CodeName=" "
     CodeShortDescription="Blanket" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.6000"
@@ -2462,19 +2462,19 @@
     CodeType="XpedxWCStatus" CodeValue="1100.5500"
     CommonCodeKey="20110704154807153187" Createprogid=".YEntityServlet"
     Createts="2011-07-04T15:48:06-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:51:52-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Shipped" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.5550"
     CommonCodeKey="20110704155216153196" Createprogid=".YEntityServlet"
     Createts="2011-07-04T15:52:15-04:00" Createuserid="admin"
-    DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
+    DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:52:13-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:43-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="01" CodeName=" "
     CodeShortDescription="01" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="01"
@@ -5026,8 +5026,8 @@
     Createts="2011-11-17T04:12:57-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:08:53-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Floor Pads" CodeSymbol=" "
@@ -5036,8 +5036,8 @@
     Createts="2011-11-17T04:30:56-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:10:04-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Food &amp; Beverage"
@@ -5046,8 +5046,8 @@
     Createprogid=".YEntityServlet" Createts="2011-11-18T00:50:38-05:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
     Lockid="1" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2011-11-23T07:11:32-05:00" Modifyuserid="admin"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:42-05:00" Modifyuserid="ngmc"
     OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
@@ -5057,8 +5057,8 @@
     Createts="2011-11-18T00:56:27-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-10T04:59:42-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Masking Materials" CodeSymbol=" "
@@ -5067,8 +5067,8 @@
     Createts="2011-11-18T00:57:35-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:08:15-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Material Handling" CodeSymbol=" "
@@ -5077,8 +5077,8 @@
     Createts="2011-11-18T01:00:13-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:19:21-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Parts" CodeSymbol=" "
@@ -5087,8 +5087,8 @@
     Createts="2011-11-18T01:18:58-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:23:14-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Printing Plates" CodeSymbol=" "
@@ -5097,8 +5097,8 @@
     Createts="2011-11-18T01:20:22-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:10:58-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" "
@@ -5109,8 +5109,8 @@
     Createts="2011-11-18T01:33:36-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:25:11-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Pressroom Sundries"
@@ -5119,8 +5119,8 @@
     Createprogid=".YEntityServlet" Createts="2011-11-18T01:37:03-05:00"
     Createuserid="admin" DocumentType=" " DocumentTypeSpecific=" "
     Lockid="2" MeantForEnterprise="Y" MeantForInternal="N"
-    MeantForSupplier="N" Modifyprogid=".YEntityServlet"
-    Modifyts="2012-11-29T08:10:30-05:00" Modifyuserid="admin"
+    MeantForSupplier="N" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2014-01-14T14:17:42-05:00" Modifyuserid="ngmc"
     OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
@@ -5130,8 +5130,8 @@
     Createts="2011-11-18T01:39:11-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T07:29:52-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" "
@@ -5142,8 +5142,8 @@
     Createts="2011-11-18T01:40:49-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:21:46-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Utility Tools &amp; Hardware"
@@ -5153,8 +5153,8 @@
     Createts="2011-11-18T01:52:28-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:11:37-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Electronics &amp; Appliances"
@@ -5164,8 +5164,8 @@
     Createts="2011-11-18T02:08:36-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:05:17-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Vendor,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Labels" CodeSymbol=" "
@@ -5174,8 +5174,8 @@
     Createts="2011-11-18T02:22:02-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="4"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-09T02:07:33-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Films" CodeSymbol=" "
@@ -5184,8 +5184,8 @@
     Createts="2011-11-18T04:26:56-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-10T05:05:00-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Forms" CodeSymbol=" "
@@ -5194,8 +5194,8 @@
     Createts="2011-11-18T04:32:56-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:06:50-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Food Prep &amp; Storage"
@@ -5205,8 +5205,8 @@
     Createts="2011-11-18T04:35:24-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:27:43-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Ink Jet Media" CodeSymbol=" "
@@ -5215,8 +5215,8 @@
     Createts="2011-11-18T04:46:13-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-08-14T04:50:36-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Inks &amp; Toners" CodeSymbol=" "
@@ -5225,8 +5225,8 @@
     Createts="2011-11-18T04:47:31-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:29:23-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Signage" CodeSymbol=" "
@@ -5235,8 +5235,8 @@
     Createts="2011-11-18T04:51:14-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-04-01T05:30:12-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Strapping" CodeSymbol=" "
@@ -5245,8 +5245,8 @@
     Createts="2011-11-18T04:52:12-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-10T05:06:25-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Dining Room Supplies"
@@ -5256,8 +5256,8 @@
     Createts="2011-11-18T04:55:49-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-06-08T02:35:27-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Thickness,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Tape &amp; Adhesives"
@@ -5267,8 +5267,8 @@
     Createts="2011-11-18T04:57:58-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="3"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-10T05:07:28-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Basis,Mwt,Thickness,Package,ListPrice"
     CodeName=" " CodeShortDescription="Gummed Paper" CodeSymbol=" "
@@ -5277,8 +5277,8 @@
     Createts="2011-11-18T04:59:54-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="2"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-11-29T08:07:47-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Capacity,Environment,List Price"
     CodeName=" " CodeShortDescription="Bags &amp; Can Liners"
@@ -5288,8 +5288,8 @@
     Createts="2011-11-23T08:08:01-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T08:08:01-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-11-23T08:08:01-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,List Price"
     CodeName=" " CodeShortDescription="Apparel &amp; PPE" CodeSymbol=" "
@@ -5298,8 +5298,8 @@
     Createts="2011-11-23T08:14:13-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-11-23T08:14:13-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-11-23T08:14:13-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="FSC Certification"
     CodeName=" " CodeShortDescription="FSC Certification" CodeSymbol=" "
     CodeType="ASSET_TYPE" CodeValue="Cert_FSC"
@@ -5307,8 +5307,8 @@
     Createts="2011-12-07T03:47:05-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-07T03:47:05-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-07T03:47:05-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="PEFC Certification"
     CodeName=" " CodeShortDescription="PEFC Certification"
     CodeSymbol=" " CodeType="ASSET_TYPE" CodeValue="Cert_PEFC"
@@ -5316,8 +5316,8 @@
     Createts="2011-12-07T03:47:56-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-07T03:47:56-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-07T03:47:56-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="SFI Certification"
     CodeName=" " CodeShortDescription="SFI Certification" CodeSymbol=" "
     CodeType="ASSET_TYPE" CodeValue="Cert_SFI"
@@ -5325,68 +5325,68 @@
     Createts="2011-12-07T03:48:33-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-07T03:48:33-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-07T03:48:33-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="CONTENT_SERVER"
     CodeName=" " CodeShortDescription="CONTENT_SERVER" CodeSymbol=" "
     CodeType="CONTENT_LOCATION"
-    CodeValue="https://content.ipaper.com/ProductImages/"
+    CodeValue="https://xcontent.ipaper.com/ProductImages/"
     CommonCodeKey="20111215054115115153" Createprogid=".YEntityServlet"
     Createts="2011-12-15T05:41:15-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T05:52:06-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="CONTENT_SERVER_FSC"
     CodeName=" " CodeShortDescription="CONTENT_SERVER_FSC"
     CodeSymbol=" " CodeType="CONTENT_LOCATION"
-    CodeValue="https://content.ipaper.com/ProductImages/FSC/"
+    CodeValue="https://xcontent.ipaper.com/ProductImages/FSC/"
     CommonCodeKey="20111215054253115156" Createprogid=".YEntityServlet"
     Createts="2011-12-15T05:42:53-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T05:42:53-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T05:42:53-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="CONTENT_SERVER_PEFC"
     CodeName=" " CodeShortDescription="CONTENT_SERVER_PEFC"
     CodeSymbol=" " CodeType="CONTENT_LOCATION"
-    CodeValue="https://content.ipaper.com/ProductImages/PEFC/"
+    CodeValue="https://xcontent.ipaper.com/ProductImages/PEFC/"
     CommonCodeKey="20111215054610115159" Createprogid=".YEntityServlet"
     Createts="2011-12-15T05:46:10-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T05:46:10-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T05:46:10-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="CONTENT_SERVER_SFI"
     CodeName=" " CodeShortDescription="CONTENT_SERVER_SFI"
     CodeSymbol=" " CodeType="CONTENT_LOCATION"
-    CodeValue="https://content.ipaper.com/ProductImages/SFI/"
+    CodeValue="https://xcontent.ipaper.com/ProductImages/SFI/"
     CommonCodeKey="20111215054728115162" Createprogid=".YEntityServlet"
     Createts="2011-12-15T05:47:28-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T05:47:28-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T05:47:28-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="CONTENT_SERVER_MSDS"
     CodeName=" " CodeShortDescription="CONTENT_SERVER_MSDS"
     CodeSymbol=" " CodeType="CONTENT_LOCATION"
-    CodeValue="https://content.ipaper.com/ProductImages/MSDS/"
+    CodeValue="https://xcontent.ipaper.com/ProductImages/MSDS/"
     CommonCodeKey="20111215054848115165" Createprogid=".YEntityServlet"
     Createts="2011-12-15T05:48:48-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T05:48:48-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T05:48:48-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="IMAGE_SERVER"
     CodeName=" " CodeShortDescription="IMAGE_SERVER" CodeSymbol=" "
     CodeType="CONTENT_LOCATION"
-    CodeValue="https://content.ipaper.com/productimages/"
+    CodeValue="https://xcontent.ipaper.com/productimages/"
     CommonCodeKey="20111215055122115169" Createprogid=".YEntityServlet"
     Createts="2011-12-15T05:51:22-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T05:51:22-05:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T05:51:22-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="SWC" CodeName=" "
     CodeShortDescription="Submitted (Pending Approval)" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.0100_Approval"
@@ -5394,8 +5394,8 @@
     Createts="2011-12-15T07:40:53-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:40:53-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T07:40:53-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="SWC" CodeName=" "
     CodeShortDescription="Submitted (Rejected)" CodeSymbol=" "
     CodeType="XpedxWCStatus" CodeValue="1100.0100_Rejected"
@@ -5403,8 +5403,8 @@
     Createts="2011-12-15T07:43:32-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-15T07:43:32-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-15T07:43:32-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Place Orders on Web (WB) Hold" CodeName=" "
     CodeShortDescription="Place Orders on Web (WB) Hold" CodeSymbol=" "
@@ -5413,8 +5413,8 @@
     Createts="2011-12-20T02:54:40-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-02-07T01:54:40-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="FO" CodeName=" "
     CodeShortDescription="FO" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="FO"
@@ -5422,8 +5422,8 @@
     Createts="2011-12-26T05:50:46-05:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2011-12-26T05:50:46-05:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2011-12-26T05:50:46-05:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Material,Form,Environment,List Price"
     CodeName=" " CodeShortDescription="Cups, Lids, Straws, Stirrers"
@@ -5433,8 +5433,8 @@
     Createts="2012-06-11T02:47:06-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-06-11T02:47:06-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2012-06-11T02:47:06-04:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0"
     CodeLongDescription="Description,M,Item#,Size,Color,Model,Environment,ListPrice"
     CodeName=" " CodeShortDescription="Equipment" CodeSymbol=" "
@@ -5443,8 +5443,8 @@
     Createts="2012-06-11T02:51:16-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="1"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-06-11T02:53:45-04:00"
-    Modifyuserid="admin" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2014-01-14T14:17:42-05:00"
+    Modifyuserid="ngmc" OrganizationCode="DEFAULT" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=" "
     CodeShortDescription="Awaiting Ship Order Creation" CodeSymbol=" "
     CodeType="XpedxStatus" CodeValue="1310"
@@ -5452,8 +5452,8 @@
     Createts="2012-09-14T02:03:54-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
-    Modifyprogid=".YEntityServlet" Modifyts="2012-09-14T02:03:54-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2012-09-14T02:03:54-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="MW" CodeName=" "
     CodeShortDescription="MW" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="MW"
@@ -5461,8 +5461,8 @@
     Createts="2012-10-30T13:33:03-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2012-10-30T13:33:03-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2012-10-30T13:33:03-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="SG" CodeName=" "
     CodeShortDescription="SG" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="SG"
@@ -5470,8 +5470,8 @@
     Createts="2013-03-19T15:33:16-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-03-19T15:33:16-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-03-19T15:33:16-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="NH" CodeName=" "
     CodeShortDescription="NH" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="NH"
@@ -5479,8 +5479,8 @@
     Createts="2013-04-03T15:42:43-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-04-03T15:42:43-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-04-03T15:42:43-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="6G" CodeName=" "
     CodeShortDescription="6G" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="6G"
@@ -5488,8 +5488,8 @@
     Createts="2013-05-24T11:15:09-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:15:09-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:15:09-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="6J" CodeName=" "
     CodeShortDescription="6J" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="6J"
@@ -5497,8 +5497,8 @@
     Createts="2013-05-24T11:15:44-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:15:44-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:15:44-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="6N" CodeName=" "
     CodeShortDescription="6N" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="6N"
@@ -5506,8 +5506,8 @@
     Createts="2013-05-24T11:16:00-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:16:00-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:16:00-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="6U" CodeName=" "
     CodeShortDescription="6U" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="6U"
@@ -5515,8 +5515,8 @@
     Createts="2013-05-24T11:16:09-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:16:09-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:16:09-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="6V" CodeName=" "
     CodeShortDescription="6V" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="6V"
@@ -5524,8 +5524,8 @@
     Createts="2013-05-24T11:16:34-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:16:34-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:16:34-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="7S" CodeName=" "
     CodeShortDescription="7S" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="7S"
@@ -5533,8 +5533,8 @@
     Createts="2013-05-24T11:16:51-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:16:51-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:16:51-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="7T" CodeName=" "
     CodeShortDescription="7T" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="7T"
@@ -5542,8 +5542,8 @@
     Createts="2013-05-24T11:17:11-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:17:11-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:17:11-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="MS" CodeName=" "
     CodeShortDescription="MS" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="MS"
@@ -5551,8 +5551,8 @@
     Createts="2013-05-24T11:17:25-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:17:25-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:17:25-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="MV" CodeName=" "
     CodeShortDescription="MV" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="MV"
@@ -5560,8 +5560,8 @@
     Createts="2013-05-24T11:17:35-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-05-24T11:17:35-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-05-24T11:17:35-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="0" CodeLongDescription="MM" CodeName=" "
     CodeShortDescription="MM" CodeSymbol=" "
     CodeType="RELATIONSHIP_TYPE" CodeValue="MM"
@@ -5569,8 +5569,8 @@
     Createts="2013-08-14T09:47:11-04:00" Createuserid="admin"
     DocumentType=" " DocumentTypeSpecific=" " Lockid="0"
     MeantForEnterprise=" " MeantForInternal=" " MeantForSupplier=" "
-    Modifyprogid=".YEntityServlet" Modifyts="2013-08-14T09:47:11-04:00"
-    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
+    Modifyprogid="YDKConfigDeploy" Modifyts="2013-08-14T09:47:11-04:00"
+    Modifyuserid="ngmc" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="20" CodeLongDescription="Commercial Address"
     CodeName=" " CodeShortDescription="Commercial" CodeSymbol=" "
     CodeType="ADDR_DELIVERY_TYPE" CodeValue="COMMERCIAL"
