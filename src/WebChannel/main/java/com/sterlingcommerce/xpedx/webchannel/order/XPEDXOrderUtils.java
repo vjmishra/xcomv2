@@ -1411,10 +1411,18 @@ public class XPEDXOrderUtils {
 			}
 			else
 			{
-				Element uomList=(Element)wElement.getElementsByTagName("UOMList").item(0);
-				if(uomList != null)
+				ArrayList<Element> itemListElems=SCXmlUtil.getElements(wElement, "Item");
+				for(Element itemListElem:itemListElems)
 				{
-					listConv = SCXmlUtil.getChildrenList(uomList);
+					String itemId=itemListElem.getAttribute("ItemID");
+					if(ItemID.equals(itemId))
+					{
+						Element uomList=(Element)itemListElem.getElementsByTagName("UOMList").item(0);
+						if(uomList != null)
+						{
+							listConv = SCXmlUtil.getChildrenList(uomList);
+						}
+					}
 				}
 			}
 			String convStr;

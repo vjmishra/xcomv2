@@ -260,9 +260,47 @@
 	}	
 
 	function submitReportForm() {
-		document.webiPromptForm.submit();
+	
+		var dateTextList=document.getElementsByName("caln_date_field");
+		var i=0;
+		var retVal=true;
+		for(;i<dateTextList.length;i++)
+		{
+			if(dateTextList[i] != null && dateTextList[i] != undefined)
+			{
+				var dateText=dateTextList[i].value;
+				var divid="error_"+dateTextList[i].id;
+				var divObje=document.getElementById(divid);
+				divObje.style.display = "none";
+				if(dateText != "" && !validateDate(dateText))
+				{
+					divObje.style.display = "block";
+					retVal=false;
+				}
+			}
+		}
+		if(retVal ==false)
+		{
+			return false;
+		}
+		else
+		{	
+			document.webiPromptForm.submit();
+		}
 
 	}	
+	function validateDate(date)
+{
+    var matches = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/.exec(date);
+    if (matches == null) return false;
+    var d = matches[2];
+    var m = matches[1] - 1;
+    var y = matches[3];
+    var composedDate = new Date(y, m, d);
+    return composedDate.getDate() == d &&
+            composedDate.getMonth() == m &&
+            composedDate.getFullYear() == y;
+}
 
 	function showLightBox() {
 		
@@ -635,7 +673,8 @@ $(function() {
 		   </td>	
           	
            </tr>
-           <tr> <td>&nbsp;</td></tr>   
+           <tr> <td>&nbsp;</td></tr> 
+            <s:set name="dateFieldCount" value="%{1}" />   
            <s:iterator value="webiPromptsBean" status="webiPromptsBeanStatus" id="beanId">
            		<s:set name='promptList' value='#beanId.promptValues' />
            		 <s:set name='sufxList' value='#beanId.suffixList' /> 
@@ -675,8 +714,11 @@ $(function() {
 	           		  		<td valign="top" style="padding-right: 5px"><s:property value="suffix"/> </td>
 	           		  	
 	           		 <td>												   				
-	           		  		<s:textfield  theme="simple" size="15" name="%{#beanId.prmtName}" cssClass='calendar-input-fields datepicker' />      		  	 
-	           		     		  	
+	           		  		<s:textfield  id="%{#dateFieldCount}" theme="simple" size="15" name="caln_date_field" cssClass='calendar-input-fields datepicker' />    
+	           		  		<div id="error_<s:property value='%{#dateFieldCount}' />" style="display:none;">
+	           		  			<h5><font color="red">Please enter date in MM/DD/YYYY format</font></h5>
+	           		  		</div>  		  	 
+	           		     	<s:set name="dateFieldCount" value="%{#dateFieldCount + 1}" /> 	  	
 	           		  		&nbsp;<span style="padding-left: 1.5em;"></span>
 	           		  	</td> 
 	           		  	
