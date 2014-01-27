@@ -770,7 +770,28 @@
 			</Input>
 			<Template>
 				<Customer CustomerID="">
-					<Extn ExtnCXmlUserXPath="">
+					<Extn ExtnSharedSecret="" ExtnStartPageURL="" ExtnCXmlUserXPath="">
+					</Extn>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='xpedx-customer-getCXMLFields'
+		transactional='true' mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Customer Organization mashup to fetch fields for Punchout cXML">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerList">
+			<Input>
+				<Customer>
+					<Extn ExtnCustIdentity="">
+					</Extn>
+				</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="">
+					<Extn ExtnSharedSecret="" ExtnStartPageURL="" ExtnCXmlUserXPath="">
 					</Extn>
 				</Customer>
 			</Template>
@@ -795,8 +816,8 @@
 			</Template>
 		</API>
 	</mashup>	
-	
 	<!-- ENDS - Procurement- adsouza -->
+
 	<mashup id='XPXGetImmediateChildCustomerListService'
 		transactional='true' mashuptype='XAPI' endpoint='CONFIRMED_ORDER'
 		description="XPXGetImmediateChildCustomerListService">

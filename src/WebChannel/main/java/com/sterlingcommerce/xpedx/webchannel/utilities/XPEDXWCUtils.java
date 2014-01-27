@@ -302,8 +302,8 @@ public class XPEDXWCUtils {
 	            input = WCMashupHelper.getMashupInput("getLoggedInCustomer" , valueMapinput, wcContext);
 	            loggedinCustomer = (Element)WCMashupHelper.invokeMashup("getLoggedInCustomer", input, wcContext.getSCUIContext());
 	            Element custList = null;
-	            String rootCustomerKey = SCXmlUtils.getAttribute((Element)loggedinCustomer,"RootCustomerKey");
-	            String customerKey = SCXmlUtils.getAttribute((Element)loggedinCustomer,"CustomerKey");
+	            String rootCustomerKey = SCXmlUtils.getAttribute(loggedinCustomer,"RootCustomerKey");
+	            String customerKey = SCXmlUtils.getAttribute(loggedinCustomer,"CustomerKey");
 	            valueMapinput = new HashMap<String,String>();
 	            valueMapinput.put("/Customer/@RootCustomerKey", rootCustomerKey);
 	            valueMapinput.put("/Customer/@OrganizationCode", wcContext.getCustomerMstrOrg());
@@ -1217,7 +1217,7 @@ public class XPEDXWCUtils {
 
 		Iterator<Element> bIter = bList.iterator();
 		while (bIter.hasNext()) {
-			Element orgElement = (Element) bIter.next();
+			Element orgElement = bIter.next();
 			String billToID = orgElement.getAttribute("CustomerID").trim();
 			// Check of the BillTo is assigned to the user, and then add
 			if (null != assignedCustomerList
@@ -1227,7 +1227,7 @@ public class XPEDXWCUtils {
 		}
 		Iterator<Element> sIter = sList.iterator();
 		while (sIter.hasNext()) {
-			Element orgElement = (Element) sIter.next();
+			Element orgElement = sIter.next();
 			String shipToID = orgElement.getAttribute("CustomerID").trim();
 			// Check of the ShipTo is assigned to the user, and then add
 			if (null != assignedCustomerList
@@ -1237,7 +1237,7 @@ public class XPEDXWCUtils {
 		}
 		Iterator<Element> cIter = cList.iterator();
 		while (cIter.hasNext()) {
-			Element orgElement = (Element) cIter.next();
+			Element orgElement = cIter.next();
 			String sapID = orgElement.getAttribute("CustomerID").trim();
 			// Check of the ShipTo is assigned to the user, and then add
 			if (null != assignedCustomerList
@@ -1289,7 +1289,7 @@ public class XPEDXWCUtils {
 
 		Iterator<Element> bIter = bList.iterator();
 		while (bIter.hasNext()) {
-			Element orgElement = (Element) bIter.next();
+			Element orgElement = bIter.next();
 			String billToID = orgElement.getAttribute("CustomerID").trim();
 			// Check of the BillTo is assigned to the user, and then add
 			if (null != assignedCustomerList
@@ -1299,7 +1299,7 @@ public class XPEDXWCUtils {
 		}
 		Iterator<Element> sIter = sList.iterator();
 		while (sIter.hasNext()) {
-			Element orgElement = (Element) sIter.next();
+			Element orgElement = sIter.next();
 			String shipToID = orgElement.getAttribute("CustomerID").trim();
 			String billToID = orgElement.getAttribute("ParentCustomerID")
 					.trim();
@@ -1354,7 +1354,7 @@ public class XPEDXWCUtils {
 
 		Iterator<Element> bIter = bList.iterator();
 		while (bIter.hasNext()) {
-			Element orgElement = (Element) bIter.next();
+			Element orgElement = bIter.next();
 			String billToID = orgElement.getAttribute("CustomerID").trim();
 			// Check of the BillTo is assigned to the user, and then add
 			if (null != assignedCustomerList
@@ -1364,7 +1364,7 @@ public class XPEDXWCUtils {
 		}
 		Iterator<Element> sIter = sList.iterator();
 		while (sIter.hasNext()) {
-			Element orgElement = (Element) sIter.next();
+			Element orgElement = sIter.next();
 			String shipToID = orgElement.getAttribute("CustomerID").trim();
 			String billToID = orgElement.getAttribute("ParentCustomerID")
 					.trim();
@@ -1882,7 +1882,7 @@ public class XPEDXWCUtils {
 		String userTokenId = (String) uiContext.getSession().getAttribute(
 				"UserToken");
 		if (SCUIUtils.isVoid(userTokenId)) {
-			YFSEnvironment yfsEnv = (YFSEnvironment) env;
+			YFSEnvironment yfsEnv = env;
 			yfsEnv.setTokenID(userTokenId);
 		}
 	}
@@ -2634,7 +2634,7 @@ public class XPEDXWCUtils {
 	 * Method returns the XPATH in the CXML. This XPATH points to user-name that
 	 * is then used to login
 	 */
-
+//TODO remove?
 	public static String getAuthUserXPathForCustomerIdentity(
 			HttpServletRequest req, HttpServletResponse res, String custIdentity) {
 		String userXPath = null;
@@ -2655,7 +2655,7 @@ public class XPEDXWCUtils {
 			String inputXml = SCXmlUtil.getString(input);
 			log.debug("Input XML: " + inputXml);
 
-			Object obj = WCMashupHelper.invokeMashup(
+			Object obj = WCMashupHelper.invokeMashup(    //TODO throws exception if not logged in ?
 					"xpedx-customer-getUserXPath", input, wcContext
 							.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
@@ -2677,9 +2677,44 @@ public class XPEDXWCUtils {
 			log.debug("*********User XPath for Customer: ***************="
 					+ userXPath);
 		} catch (Exception ex) {
-			log.error(ex.getMessage());
+			log.error(ex.getMessage(),ex);
 		}
 		return userXPath;
+	}
+
+	/**
+	 * returns Element containing Extn fields for customer with specified Identity
+	 */
+	public static Element getPunchoutConfigForCustomerIdentity(
+			HttpServletRequest req, HttpServletResponse res, String custIdentity) {
+		Element wElement = null;
+
+		try {
+			if (null == custIdentity || custIdentity.length() <= 0) {
+				log.error("getAuthUserXPathForCustomerIdentity: Customer Identity missing.");
+				return null;
+			}
+			IWCContext wcContext = WCContextHelper.getWCContext(req);
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/Customer/Extn/@ExtnCustIdentity", custIdentity);
+
+			Element input = WCMashupHelper.getMashupInput(
+					"xpedx-customer-getUserXPath", valueMap, wcContext.getSCUIContext());
+			log.debug("Input XML: " + SCXmlUtil.getString(input));
+
+			Object obj = WCMashupHelper.invokeMashup(    // throws exception if not logged in
+					"xpedx-customer-getUserXPath", input, wcContext.getSCUIContext());
+
+			Document outputDoc = ((Element) obj).getOwnerDocument();
+			log.debug("Output XML: " + SCXmlUtil.getString(outputDoc));
+			wElement = outputDoc.getDocumentElement();
+			wElement = SCXmlUtil.getChildElement(wElement, "Customer");
+			wElement = SCXmlUtil.getChildElement(wElement, "Extn");
+		}
+		catch (Exception ex) {
+			log.error(ex.getMessage(),ex);
+		}
+		return wElement;
 	}
 
 	/*
@@ -3024,7 +3059,7 @@ public class XPEDXWCUtils {
 						YFCElement expElement = documentElement.createChild("Exp");
 						expElement.setAttribute("Name", "CustomerID");
 						expElement.setAttribute("Value", currentCustomerID);
-						complexQueryOrElement.appendChild((YFCNode)expElement);
+						complexQueryOrElement.appendChild(expElement);
 					}
 				}
 				complexQueryElement.setAttribute("Operator", "AND");
@@ -3672,7 +3707,7 @@ public class XPEDXWCUtils {
 		Element itemEle 		= SCXmlUtil.getChildElement(res, "XPXItemcustXref");
 
 		if (itemEle != null){
-			if(itemId.equals((String)itemEle.getAttribute("LegacyItemNumber")))
+			if(itemId.equals(itemEle.getAttribute("LegacyItemNumber")))
 			{
 				String customerPartNumber = itemEle.getAttribute("CustomerItemNumber");
 				if(customerPartNumber!=null && customerPartNumber.length()>0)
@@ -4139,7 +4174,7 @@ public class XPEDXWCUtils {
 				YFCElement expElement = documentElement.createChild("Exp");
 				expElement.setAttribute("Name", "CustomerID");
 				expElement.setAttribute("Value", customerIds.get(i));
-				complexQueryOrElement.appendChild((YFCNode) expElement);
+				complexQueryOrElement.appendChild(expElement);
 			}
 			complexQueryElement.setAttribute("Operator", "AND");
 			complexQueryElement.appendChild(complexQueryOrElement);
@@ -5408,7 +5443,7 @@ public class XPEDXWCUtils {
 						if(!customerFieldsMap.containsKey("CustLineAccNo"))
 						customerFieldsMap.put("CustLineAccNo", "Line Account #");
 					}
-					customerFieldsMap.putAll((LinkedHashMap) XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement()));
+					customerFieldsMap.putAll(XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement()));
 
 					setObectInCache("customerFieldsSessionMap", customerFieldsMap);
 
@@ -6043,7 +6078,7 @@ public class XPEDXWCUtils {
 				Element OrElem = SCXmlUtil.getChildElement(complexQueryElem, "Or");
 				Iterator<String> itr = salesRepUserKeysList.iterator();
 				while(itr.hasNext()) {
-					String userKey = (String)itr.next();
+					String userKey = itr.next();
 					if(userKey!=null && !userKey.equals("")){
 						Element exp = inputElem.getOwnerDocument().createElement("Exp");
 						exp.setAttribute("Name", "UserKey");
@@ -6480,7 +6515,7 @@ public class XPEDXWCUtils {
 					YFCElement exp3Element = documentElement.createChild("Exp");
 					exp3Element.setAttribute("Name", "ItemID");
 					exp3Element.setAttribute("Value", itemid);
-					complexQueryOrElement.appendChild((YFCNode)exp3Element);
+					complexQueryOrElement.appendChild(exp3Element);
 				}
 				input.appendChild(input.getOwnerDocument().importNode(xrefInput, true));
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
