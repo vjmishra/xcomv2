@@ -14,7 +14,7 @@
 	float: right;
 	clear: none;
 	width: 65px;
-	background: url(https://staticcontent.ipaper.com/swc/xpedx/images/mil/20x20_personal_list.png) no-repeat left top;
+	background: url(../../images/mil/20x20_personal_list.png) no-repeat left top;
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;
@@ -23,7 +23,7 @@
 	float: right;
 	clear: none;
 	width: 55px;
-	background: url(https://staticcontent.ipaper.com/swc/xpedx/images/theme/theme-1/20x20_shared_list.png) no-repeat top left;
+	background: url(../../images/theme/theme-1/20x20_shared_list.png) no-repeat top left;
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;	
