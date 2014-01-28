@@ -465,6 +465,10 @@
         <param-value>/interop/cxml</param-value>
     </context-param>    
     <context-param>
+        <param-name>bypass.uri.wc.5</param-name>
+        <param-value>/interop/xcxml</param-value>
+    </context-param>    
+    <context-param>
         <param-name>bypass.uri.endswith.wc.1</param-name>
         <param-value>.css</param-value>
     </context-param>
@@ -639,6 +643,10 @@
     <filter-mapping>
     <filter-name>Ariba Integration Filter</filter-name>
         <url-pattern>/interop/cxml</url-pattern>
+    </filter-mapping>    
+    <filter-mapping>
+    <filter-name>Ariba Integration Filter</filter-name>
+        <url-pattern>/interop/xcxml</url-pattern>
     </filter-mapping>    
     <filter-mapping>
         <filter-name>OCI Integration Filter</filter-name>
@@ -1051,13 +1059,19 @@
         <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.XPEDXServletInitializer</servlet-class>
         <load-on-startup>600</load-on-startup>
     </servlet> 
-        <servlet id="Servlet_45">
+    <servlet id="Servlet_45">
         <description>XPEDXAribaIntegrationServlet</description>
         <display-name>XPEDXAribaIntegrationServlet</display-name>
         <servlet-name>XPEDXAribaIntegrationServlet</servlet-name>
         <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXAribaIntegrationServlet</servlet-class>
     </servlet> 
-    <servlet id = "Servlet_46">
+    <servlet id="Servlet_46">
+        <description>XPEDXPunchoutServlet</description>
+        <display-name>XPEDXPunchoutServlet</display-name>
+        <servlet-name>XPEDXPunchoutServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutServlet</servlet-class>
+    </servlet> 
+    <servlet id = "Servlet_47">
 		<servlet-name>SalesRepLogin</servlet-name>
         <jsp-file>/xpedx/jsp/salesrep/salesRepLogin.jsp</jsp-file>
 	</servlet>	
@@ -1222,6 +1236,10 @@
         <url-pattern>/interop/cxml</url-pattern>
     </servlet-mapping>
     <servlet-mapping id="ServletMapping_41">
+        <servlet-name>XPEDXPunchoutServlet</servlet-name>
+        <url-pattern>/interop/xcxml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_42">
 			<servlet-name>SalesRepLogin</servlet-name>
 			<url-pattern>/salesRepLoginPage</url-pattern>
 	</servlet-mapping>
