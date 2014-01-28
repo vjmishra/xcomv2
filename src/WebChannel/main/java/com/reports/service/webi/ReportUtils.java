@@ -43,8 +43,7 @@ public class ReportUtils {
 				YFSSystem.getProperty("standard_folder_id"));
 		logonMap.put("custom_folder_id",
 				YFSSystem.getProperty("custom_folder_id"));
-		logonMap.put("BIUrl",
-				YFSSystem.getProperty("BIUrl"));
+
 
 		return logonMap;
 
