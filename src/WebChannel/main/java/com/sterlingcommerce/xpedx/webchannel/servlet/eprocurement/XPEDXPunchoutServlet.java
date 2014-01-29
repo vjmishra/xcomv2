@@ -35,6 +35,8 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
+	private static final String PARAMNAME_PASSWORD = "p=";
+	private static final String PARAMNAME_USERID = "?u=";
 	XPEDXCXMLMessageFields cXMLFields = null;
 	WCIntegrationResponse wcResponse = null;
 
@@ -87,7 +89,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
 			//TODO do we need to login actual user here ?
     		String userid = obtainUserid(dbStartPage);
-			String passwd = dbStartPage.substring( dbStartPage.indexOf("pwd=")+4 );
+			String passwd = obtainPassword(dbStartPage);
 
 			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(userid, passwd);
     		securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
@@ -102,7 +104,11 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
     		//TODO if userid specified in cXML, update URL with it
 
-    		startPageURL = dbStartPage;
+    		//TODO add params to URL: for now hardcoding but these come from incoming cXML
+    		// and other compututation
+    		String moreParams = "&payLoadID=val&operation=1&orderHeaderKey=val&returnURL=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val&buyerCookie=val&fromIdentity=val&toIdentity=val&payloadId=val&sfId=xpedx";
+
+    		startPageURL = dbStartPage + moreParams;
     	}
     	catch(Exception e){
     		logError("Exception during authentication: "+e.getMessage(),e);
@@ -110,16 +116,26 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     	}
 
     	//TODO securityResponse.getForwardURL() has jsessionid - any use?
-    	System.out.println("------> Our start url to return: " + startPageURL); //TODO remove println's
-    	System.out.println("------> securityResponse.getForwardURL(): " + securityResponse.getForwardURL());
+    	System.out.println("------> Custom start URL to return: " + startPageURL); //TODO remove println's
+    	System.out.println("unused securityResponse.getForwardURL(): " + securityResponse.getForwardURL());
 		cXMLFields.setStartPageURL(startPageURL );
 
     	return securityResponse;
  	}
 
+	// Extract user/pwd from DB configured start URL: "http://XXX?u=advance@punchout.com&p=punchout123"
 	private String obtainUserid(String dbStartPage) {
-		// Extract user/pwd from DB configured start URL: "http://XXX?id=advance@punchout.com&pwd=punchout123"
-		return dbStartPage.substring( dbStartPage.indexOf("?id=")+4, dbStartPage.indexOf("&") );
+		int userStart = dbStartPage.indexOf(PARAMNAME_USERID);
+		int userEnd   = dbStartPage.indexOf("&");
+		return dbStartPage.substring(userStart+PARAMNAME_USERID.length(), userEnd);
+	}
+	private String obtainPassword(String dbStartPage) {
+		// look for '&' to end pwd string in case they add more params to URL in DB
+		int pwdStart = dbStartPage.indexOf(PARAMNAME_PASSWORD);
+		int pwdAmp   = dbStartPage.indexOf("&", pwdStart);
+		int pwdEnd = (pwdAmp != -1) ? pwdAmp : dbStartPage.length();
+
+		return dbStartPage.substring(pwdStart+PARAMNAME_PASSWORD.length(), pwdEnd);
 	}
 
 
@@ -162,7 +178,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     				// Shouldn't need this since we're now defining our own URL
     				// Note that it gives wrong server port - assumes 8001 regardless if running on 7002!
     				String aribaStartPageURL = WCIntegrationHelper.getAribaStartPageURL(cXMLFields, wcContext);
-    		    	System.out.println("------> WCIntegrationHelper.getAribaStartPageURL: " + aribaStartPageURL);
+    		    	System.out.println("unused WCIntegrationHelper.getAribaStartPageURL: " + aribaStartPageURL);
 
     				//TODO "&" getting turned into "&amp;" - matter?
     		    	String startPageURL = cXMLFields.getStartPageURL(); // our custom URL from authenticateRequest
@@ -170,7 +186,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
        				if(!YFCCommon.isVoid(startPageURL)) {
        		    		log.info("Start page URL being returned:" + startPageURL);
 
-       		    		//cXMLFields.setStartPageURL(startPageURL);
+       		    		//cXMLFields.setStartPageURL(startPageURL); we've already set this earlier
 
        		    		wcResponse = sendSuccessResponse("Request for Auth setup is success");
        				}
