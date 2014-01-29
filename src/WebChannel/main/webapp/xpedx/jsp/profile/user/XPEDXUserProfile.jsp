@@ -1079,11 +1079,11 @@ function funDivOpenClose(val1)
 				}
 			}
 			totallength = totallength+emailText.length;
-			if(totallength > 500){
+			/* if(totallength > 500){
 				alert('Length exceeds the maximum allowed value of 500.');
 				emailTextElement.focus();
 				invalidEmail = true;
-			}
+			} */
 			if(emailText == null || emailText == ''){
 				alert('Please enter a valid email address.');
 				emailTextElement.focus();
