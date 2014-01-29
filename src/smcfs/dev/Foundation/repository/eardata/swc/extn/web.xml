@@ -510,7 +510,7 @@
 	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXSessionManageFilter</filter-class>
 		<init-param>
 	<param-name>excludeActions</param-name>
-	<param-value>ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,salesRepCustomerLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action</param-value>
+	<param-value>ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,salesRepCustomerLogin.action,pLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action</param-value>
     </init-param>
 	</filter>
 	<filter-mapping>

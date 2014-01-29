@@ -1653,7 +1653,8 @@ var isGuestuser = "<s:property value='%{wCContext.guestUser}'/>";
 var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>';
 var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecretQuestion')}"/>';
 var passwordUpdateFlag = '<s:property value="%{wCContext.getWCAttribute('setPasswordUpdate')}"/>';
-if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
+var isPunchoutUser = '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
+if((isGuestuser!="true" && isPunchoutUser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
 	loadTermsOfAccess();
 	}
 
@@ -1875,11 +1876,12 @@ function passwordUpdateModal()
         var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
+		var isPunchoutUser = '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
 			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
-			if((!isSalesRep) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
+			if((!isSalesRep) && (!isPunchoutUser) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
 				var myMask
 				var waitMsg = Ext.Msg.wait("");
 				 myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -1936,7 +1938,7 @@ function passwordUpdateModal()
 			 		'height' 		: 530  
 				}).trigger('click');
 			} 
-			else if((!isSalesRep) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+			else if((!isSalesRep && !isPunchoutUser) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		

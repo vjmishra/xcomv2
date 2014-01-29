@@ -1483,7 +1483,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		}
 		return value;
 	}
-
+	
+	public String setCurrentCustomerIntoContextFromPunchout() throws CannotBuildInputException{
+		setCurrentCustomerIntoContext();
+		return SUCCESS;
+	}
 	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";
 
 	public boolean isAdminMode() {

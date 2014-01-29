@@ -9,6 +9,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Punchout Landing Page</title>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/punchout/po-xpedx.css"/>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 </head>
 
 <body>
@@ -29,11 +34,82 @@
     <div class="ui-po-errormsg">Error message can go here.</div>
     <div class="clearfix" ></div>
     <div class="ul-po-results">Search Results for ""</div>
-    <ul class="ui-po-list">
-      <li><a href="#">Search Result 1</a></li>
-      <li><a href="#">Search Result 2</a></li>
-    </ul>
+   							<div>
+						  		<s:form  id="ChangeShipToForm" name="ChangeShipToForm" action="setCurrentCustomerIntoContext-punchout" namespace="/common" method="post" >
+									<s:hidden id="setSelectedAsDefault" value="true" name="setSelectedAsDefault"/>
+									<s:hidden id="initPrefs" value="true" name="initPrefs"/>
+									<s:hidden id="selectedCurrentCustomer" value="" name="selectedCurrentCustomer"/>									
+								</s:form>
+							</div>
+					      
+					     <div id="wrapper" class="location-list">    
+   			 				<div class="expand-links"><a href="javascript:void(0)" class="expand">Expand All</a> | <a href="javascript:void(0)" class="collapse">Collapse All</a></div>
+   			 				 <s:iterator id="entry" value="divisionWithShipTo.entrySet()">					     
+						        <s:set name='divisionName' value='%{divisonDetails.get(#entry.getKey())}'/>
+	   			 				<div class="question"><s:property value="#divisionName" /></div>
+	    					    <div style="display: none;" class="answer">
+							  		<ul>	   	  
+							    	  	<s:iterator status="status" id="shipToCustomer" value='#entry.getValue()'>					    	  	
+								    	  <s:set name='id' value='#shipToCustomer.getAttribute("ShipToCustomerID")' />
+										  <s:set name='ShipToCustomerID' value='#shipToCustomer.getAttribute("ShipToCustomerID")' />
+										  <s:set name='shipToDisplayString' value='#shipToCustomer.getAttribute("ShipToDisplayString")' />
+										  <s:url id ='homeLink' action='setCurrentCustomerIntoContext-punchout' namespace='/common'>
+					    						<s:param name="selectedCurrentCustomer" value="#ShipToCustomerID"/>
+   						 						<s:param name="setSelectedAsDefault" value="true"/>
+   						 						<s:param name="initPrefs" value="true"/>					    
+											</s:url>								 
+										   <li><s:a href="javascript:changeShipTo('%{#ShipToCustomerID}');"><s:property value="#shipToDisplayString" /></s:a></li>						 
+							    	   </s:iterator>					    	   
+							   	  </ul>
+						   	   </div> 
+					  		</s:iterator>   
+				  </div>
   </div>
 </div>
+
+
+
+<script>
+
+	function changeShipTo(customerId){
+		document.getElementById("selectedCurrentCustomer").value=customerId; 
+		document.ChangeShipToForm.submit();
+	}
+	
+$(document).ready(function() { 
+
+  $('.question').click(function() {
+ 
+  if($(this).next().is(':hidden') != true) {
+                $(this).removeClass('active'); 
+    $(this).next().slideUp("normal");
+  } else {
+    $('.question').removeClass('active');  
+     $('.answer').slideUp('normal');
+    if($(this).next().is(':hidden') == true) {
+    $(this).addClass('active');
+    $(this).next().slideDown('normal');
+     }   
+  }
+   });
+ 
+  
+  $('.question').next().slideDown('normal');
+  {$('.question').addClass('active');}
+ 
+  $('.expand').click(function(event)
+    {$('.question').next().slideDown('normal');
+        {$('.question').addClass('active');}
+    }
+  );
+ 
+  $('.collapse').click(function(event)
+    {$('.question').next().slideUp('normal');
+        {$('.question').removeClass('active');}
+    }
+  );
+});
+</script>  
+
 </body>
 </html>

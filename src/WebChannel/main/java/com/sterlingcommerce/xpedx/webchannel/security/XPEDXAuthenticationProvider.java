@@ -31,6 +31,25 @@ public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
   	  	        }
     		}
     	}
+		String aribaFlag = (String) scuiCtx.getRequest().getParameter("amiProcurementUser");
+		
+		if (aribaFlag!= null && aribaFlag.equals("Y")) {
+			scuiCtx.getSession(false).setAttribute("payLoadID", scuiCtx.getRequest().getParameter("payLoadID"));
+			scuiCtx.getSession(false).setAttribute("operation", scuiCtx.getRequest().getParameter("operation"));
+			scuiCtx.getSession(false).setAttribute("orderHeaderKey", scuiCtx.getRequest().getParameter("orderHeaderKey"));
+			scuiCtx.getSession(false).setAttribute("returnURL", scuiCtx.getRequest().getParameter("returnURL"));
+			scuiCtx.getSession(false).setAttribute("selectedCategory", scuiCtx.getRequest().getParameter("selectedCategory"));
+			scuiCtx.getSession(false).setAttribute("selectedItem", scuiCtx.getRequest().getParameter("selectedItem"));
+			scuiCtx.getSession(false).setAttribute("selectedItemUOM", scuiCtx.getRequest().getParameter("selectedItemUOM"));
+			scuiCtx.getSession(false).setAttribute("buyerCookie", scuiCtx.getRequest().getParameter("buyerCookie"));
+			scuiCtx.getSession(false).setAttribute("fromIdentity", scuiCtx.getRequest().getParameter("fromIdentity"));
+			scuiCtx.getSession(false).setAttribute("toIdentity", scuiCtx.getRequest().getParameter("toIdentity"));
+			scuiCtx.getSession(false).setAttribute("preferredShipTo", scuiCtx.getRequest().getParameter("preferredShipTo"));
+			scuiCtx.getSession(false).setAttribute("aribaFlag", scuiCtx.getRequest().getParameter("amiProcurementUser"));
+			scuiCtx.getSession(false).setAttribute("EnterpriseCode", scuiCtx.getRequest().getParameter("EnterpriseCode"));
+			
+			
+		}
 		return response;
 	}
 	

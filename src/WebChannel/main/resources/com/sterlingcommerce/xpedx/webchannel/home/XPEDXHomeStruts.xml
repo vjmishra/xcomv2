@@ -3,9 +3,11 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 	<package name="xpedx.home" namespace="/home" extends="home">
-		<action name="home" class="com.sterlingcommerce.webchannel.core.WCAction">
+		
+		<action name="home" class="com.sterlingcommerce.xpedx.webchannel.home.CustomHomeAction">
 			<param name="resourceId">/swc/home</param>
-			<result>/xpedx/jsp/home/XPEDXhome.jsp</result>
+			<result name="main" >/xpedx/jsp/home/XPEDXhome.jsp</result>
+			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
 		</action>
 		
 		<action name="logout" class="com.sterlingcommerce.xpedx.webchannel.home.XPEDXLogoutAction">			

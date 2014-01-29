@@ -838,6 +838,22 @@
 			</Template>
 		</API>
 	</mashup>
+	<mashup id='XPEDXGetAllShipToList-Punchout' transactional='true' mashuptype='XAPI'
+              endpoint='CUSTOMER' description="Order List">
+              <classInformation
+                     name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+              <API FlowName="XPXCustomerAssignmentViewService">
+                     <Input>
+                           <XPXCustomerAssignmentView UserId="" Status="30"  StatusQryType="NE"/>
+                     </Input>
+                     <Template>
+                           <XPXCustomerAssignmentViewList>
+                                  <XPXCustomerAssignmentView>                                          
+                                  </XPXCustomerAssignmentView>
+                           </XPXCustomerAssignmentViewList>
+                     </Template>
+              </API>
+       </mashup>
 	
 </mashups>	
 

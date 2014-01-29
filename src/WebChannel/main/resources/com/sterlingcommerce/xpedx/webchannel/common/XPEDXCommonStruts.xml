@@ -93,6 +93,14 @@
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
 			method="setCurrentCustomerIntoContext">
 		</action>
+		<action name="setCurrentCustomerIntoContext-punchout" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"	method="setCurrentCustomerIntoContextFromPunchout">
+				<result name="success" type="redirectAction">
+					<param name="actionName">home</param>
+					<param name="postCustomerSelectionFlag">Y</param>
+					<param name="namespace">/home</param>
+					<param name="parse">true</param>
+				</result>
+		</action>
 		<action name="refreshCustomerIntoContextForMIL"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
 			<param name="categoryDepth">2</param>
@@ -224,6 +232,16 @@
 			<result name="error">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 		</action>
 		
+		<action name="pLogin"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+			<result name="success">/xpedx/jsp/punchout/punchoutlogin.jsp</result>				
+		</action>
+		
+		
+	<!--<action name="punchoutCustomerLogin"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+			<result name="success">/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+		</action>-->
 		<action name="searchCustomer"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
 			method="getCustomersForSalesRep">
