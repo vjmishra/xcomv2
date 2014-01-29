@@ -86,7 +86,7 @@ $(document).ready(function () {
 		'transitionOut' : 'none',
 		//added for clearing the copycart name and copycartdescription fields							
 	});
-	  window.onload = validateQty();//EB-3840
+	  validateQty();//EB-3840
 });
 
 

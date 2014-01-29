@@ -48,6 +48,9 @@ function checkOut()
 function validateQty(){
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
 	var retVal=true;
+	if(orderLinesCount== 0 || orderLinesCount =='' || orderLinesCount == undefined){
+			return retVal; 
+		}
 	if(orderLinesCount==1){
 		var arrQty ;		
 		var arrItemID ;	
