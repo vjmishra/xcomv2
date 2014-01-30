@@ -574,6 +574,36 @@
 									</xsl:if>
 									</td>
 									</xsl:if>
+									<xsl:if test="(contains($Subject,$Reject))"> 
+									
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C" or Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									<td colspan="3"> <span class="labelText"> Shipping Options: </span></td>
+									
+									</xsl:if>
+									<td>
+									<xsl:if test = 'Order/Extn/@ExtnShipComplete="C"' >	
+									Ship Order Complete
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N" or Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >	
+								    ,
+								    </xsl:if>
+									</xsl:if>						
+									<xsl:if test = 'Order/Extn/@ExtnWillCall!="N"' >	
+									Will Call
+								    <xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N" or Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>					    					
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnRushOrderFlag!="N"' >					
+									Rush Order
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >					
+									,
+									</xsl:if>
+									</xsl:if>
+									<xsl:if test = 'Order/Extn/@ExtnWebHoldFlag!="N"' >	
+									Customer Hold
+									</xsl:if>
+									</td>
+									</xsl:if>
 									
 								</tr>
 							</table>
