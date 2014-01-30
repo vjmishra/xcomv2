@@ -85,7 +85,7 @@
 		  	XMLName="ExtnDeliveryHoldTime" XMLGroup="Extn" />
 			<Attribute ColumnName="EXTN_RUSH_ORDER_COMMENTS" DataType="Text-2000" DefaultValue="' '" Description=" " Nullable="true" Size="" 
 			XMLName="ExtnRushOrderComments" XMLGroup="Extn" />
-			<Attribute ColumnName="EXTN_ADDNL_EMAIL_ADDR" DataType="Text-500" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+			<Attribute ColumnName="EXTN_ADDNL_EMAIL_ADDR" DataType="varchar2-2600" DefaultValue="' '" Description=" " Nullable="true" Size="" 
 			XMLName="ExtnAddnlEmailAddr" XMLGroup="Extn" />
 			<Attribute ColumnName="EXTN_SOURCE_TYPE" DataType="Text-40" Description="" DefaultValue="' '" Nullable="true" Size="" 
 			XMLName="ExtnSourceType" XMLGroup="Extn" />	
