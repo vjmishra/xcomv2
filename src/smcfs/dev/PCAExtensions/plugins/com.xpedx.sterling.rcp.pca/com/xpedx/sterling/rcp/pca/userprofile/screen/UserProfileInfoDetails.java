@@ -447,8 +447,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		
 		
 		
-		//Hiding last modified by 
-		/*lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
+		
+		lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
 		lblLastModBy.setData("name", "lblLastModBy");
@@ -462,7 +462,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblLastModDate.setData("name", "lblLastModDate");
 		txtLastModDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtLastModDate.setLayoutData(gridData3);
-		txtLastModDate.setData("name", "txtLastModDate");*/
+		txtLastModDate.setData("name", "txtLastModDate");
 		
 		
 		
@@ -1473,22 +1473,20 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setName("txtLastLoginDate");
 		txtLastLoginDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		//Hiding Last modified by
-		/*tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
-		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
-		//tbd.setDataType("Date");
-		tbd.setKey("username");
+		
+		tbd = new YRCTextBindingData();
+		tbd.setSourceBinding("UserList:/UserList/@Name");
+		tbd.setTargetBinding("UserList:/UserList/@Name");
 		tbd.setName("txtLastModBy");
 		txtLastModBy.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
 		tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("UserList:/UserList/@ContactModifiedDate");
-		tbd.setTargetBinding("UserList:/UserList/@ContactModifiedDate");
+		tbd.setSourceBinding("XPXCustomercontactExtn:/XPXCustomercontactExtn/@Modifyts");
+		tbd.setTargetBinding("XPXResultOut:/CustomerContact/Extn/@Modifyts");
 		tbd.setDataType("Timestamp");
 		tbd.setName("txtLastModDate");
 		txtLastModDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-*/
+
 		
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
