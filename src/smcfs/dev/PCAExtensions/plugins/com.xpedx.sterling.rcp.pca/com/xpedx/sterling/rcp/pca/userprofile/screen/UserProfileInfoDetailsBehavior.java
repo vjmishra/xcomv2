@@ -49,6 +49,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private String modifyUserId;
 	private boolean isSalesRep=false;
 	
+	
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
 			Object inputObject,Element customerContactEle) {
@@ -340,8 +341,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						//(Element) YRCXPathUtils.evaluate(ctx.getOutputXmls()[i].getDocumentElement(), "UserList/User/ContactPersonInfo",XPathConstants.NODE);
 						String lastName =  YRCXmlUtils.getAttributeValue(outXml, "/UserList/User/ContactPersonInfo/@LastName");
 						
+						String name = firstName + " " + lastName;
+						
+						YRCXmlUtils.setAttribute(outXml, "Name", name);		
+						
 						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);						
-						//System.out.println(YRCXmlUtils.getString(outXml));
+						
 						setModel("UserList" , outXml);
 					}
 					else if ("getCustomerDetails".equals(apiname)) {
@@ -492,12 +497,9 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			String customerID = eleCust.getAttribute("CustomerContactID");
 			System.out.println(customerID);
 			if(this.customerContactID.equals(customerID)){
-			//	Modifyts="2013-12-05T13:58:34-05:00" Modifyuserid="dave@bh.com">
+			
 				this.modifyTs = eleCust.getAttribute("Modifyts");
-				if(!"admin".equalsIgnoreCase(eleCust.getAttribute("Modifyuserid"))){
-					this.modifyUserId=eleCust.getAttribute("Modifyuserid");
-				}
-				
+						
 				if(modifyUserId.contains("@CD-")){
 					List<String> words = Arrays.asList(this.modifyUserId.split("@"));
 					System.out.println("here " + words);
@@ -517,6 +519,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							CustomerContactIdList.add(customerID);
 							k = nodGroupList.getLength();
 						}
+						
 					}
 					
 				}
