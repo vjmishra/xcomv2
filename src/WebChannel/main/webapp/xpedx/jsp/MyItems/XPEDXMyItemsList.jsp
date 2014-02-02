@@ -995,6 +995,14 @@
 				<s:param name="listKey" value="%{#id}" />
 			</s:url>
 
+			<s:form id="doAction_edit_%{#uId}" action="MyItemsDetails" method="post">
+				<s:hidden name="listKey" value="%{#id}" />
+				<s:hidden name="listName" value="%{#name}" />
+				<s:hidden name="command" value="edit_list" />
+				<s:hidden name="itemCount" value="%{#numOfItems}"></s:hidden>
+				<s:hidden name="editMode" value="%{true}"></s:hidden>
+			</s:form>
+			
 			<s:form id="doAction_export_%{#uId}" action="MyItemsDetails" method="post">
 				<s:hidden name="listKey" value="%{#id}" />
 				<s:hidden name="listName" value="%{#name}" />
@@ -1004,22 +1012,22 @@
 			</s:form>
 			
 			<s:form id="doAction_view_%{#uId}" action="MyItemsDetails" method="get">
-			<s:hidden name="listKey" value="%{#id}" />
-			<s:hidden name="listName" value="%{#name}" />
-			<s:hidden name="listDesc" value="%{#desc}" />
-			<s:hidden name="itemCount" value="%{#numOfItems}" />
-			<s:hidden name="shareAdminOnly" value="%{#spShareAdminOnly}"></s:hidden>
-			
-			<s:hidden name="modifyts" value="%{#_action.getModifyts()}"></s:hidden>
-			<s:hidden name="modifyUserid" value="%{#_action.getModifyUserid()}"></s:hidden>
-			<s:hidden name="createUserId" value="%{#_action.getCreateUserId()}"></s:hidden>
-			
-			<s:hidden name="filterBySelectedListChk" value="%{#_action.getFilterBySelectedListChk()}"/>
-			<s:hidden name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}"/>
-			<s:hidden name="filterByAllChk" value="%{#_action.getFilterByAllChk()}"/>
-			<s:hidden name="filterBySharedLocations" value="%{#_action.getFilterBySharedLocations()}"/>
-			<s:hidden name='sharePrivateField' value='%{#spLevels}' />
-		</s:form>
+				<s:hidden name="listKey" value="%{#id}" />
+				<s:hidden name="listName" value="%{#name}" />
+				<s:hidden name="listDesc" value="%{#desc}" />
+				<s:hidden name="itemCount" value="%{#numOfItems}" />
+				<s:hidden name="shareAdminOnly" value="%{#spShareAdminOnly}"></s:hidden>
+				
+				<s:hidden name="modifyts" value="%{#_action.getModifyts()}"></s:hidden>
+				<s:hidden name="modifyUserid" value="%{#_action.getModifyUserid()}"></s:hidden>
+				<s:hidden name="createUserId" value="%{#_action.getCreateUserId()}"></s:hidden>
+				
+				<s:hidden name="filterBySelectedListChk" value="%{#_action.getFilterBySelectedListChk()}"/>
+				<s:hidden name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}"/>
+				<s:hidden name="filterByAllChk" value="%{#_action.getFilterByAllChk()}"/>
+				<s:hidden name="filterBySharedLocations" value="%{#_action.getFilterBySharedLocations()}"/>
+				<s:hidden name='sharePrivateField' value='%{#spLevels}' />
+			</s:form>
 		
 
 			<s:form id="doAction_general_%{#uId}">
@@ -1064,34 +1072,36 @@
 				<%--Fix End For jira 4134 - sales rep Last Modified By display--%>
 				<td class="createdby-lastmod"><s:property value='%{#util.formatDate(#lastMod, #wcContext, null, "MM/dd/yyyy")}' /></td>
 				<s:if test="%{#spShareAdminOnly != ''}">
-				<s:if test='%{#isUserAdmin == false && #spShareAdminOnly == "Y"}'>
-					<td class="actions right-cell">
-						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
-							<option value="select" selected="selected">- Select Action -</option>
-							<option value="view">Open List</option>
-							<option value="export">Export List</option>
-							<option value="copy">Copy List</option>
-						</select>
-					</td>
+					<s:if test='%{#isUserAdmin == false && #spShareAdminOnly == "Y"}'>
+						<td class="actions right-cell">
+							<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
+								<option value="select" selected="selected">- Select Action -</option>
+								<option value="view">Open List</option>
+								<option value="export">Export List</option>
+								<option value="copy">Copy List</option>
+							</select>
+						</td>
+					</s:if>
+					<s:else>
+						<td class="actions right-cell">
+							<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
+								<option value="select" selected="selected">- Select Action -</option>
+								<option value="view">Open List</option>
+								<option value="edit">Edit List</option>
+								<option value="export">Export List</option>
+								<option value="import">Import New Items</option>
+								<option value="copy">Copy List</option>
+								<option value="delete">Delete List</option>
+							</select>
+						</td>
+					</s:else>
 				</s:if>
 				<s:else>
 					<td class="actions right-cell">
 						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
 							<option value="select" selected="selected">- Select Action -</option>
 							<option value="view">Open List</option>
-							<option value="export">Export List</option>
-							<option value="import">Import New Items</option>
-							<option value="copy">Copy List</option>
-							<option value="delete">Delete List</option>
-						</select>
-					</td>
-				</s:else>
-				</s:if>
-				<s:else>
-					<td class="actions right-cell">
-						<select class="xpedx_select_sm" onchange="doAction(this.value, '<s:property value="#uId"/>', '<s:property value="#id"/>', '<s:property value="#name2"/>', '<s:property value="#numOfItems"/>'); this.selectedIndex = 0;">
-							<option value="select" selected="selected">- Select Action -</option>
-							<option value="view">Open List</option>
+							<option value="edit">Edit List</option>
 							<option value="export">Export List</option>
 							<option value="import">Import New Items</option>
 							<option value="copy">Copy List</option>

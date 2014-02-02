@@ -356,72 +356,75 @@ var selectedShipCustomer = null;
 		function updateShareListChild(){
 		}		
 		var callShareList  = true;		
-		function doAction(action, idx, listKey, listName, numOfItems){			
+		function doAction(action, idx, listKey, listName, numOfItems){
 			//Declare some vars
 			var showWait = true;			
 			//Init the form
 			var form = Ext.get("doAction_" + action + "_" + idx);			
 			switch(action) {
-				case 'open':
-					form.dom.submit();
-				  break;
-				case 'view':
-				  	form.dom.submit();
-				  	break;
-				case 'export':
-					//Wait for 5 sec and them take the dialog off 
-					var task = new Ext.util.DelayedTask(function(){
-					    Ext.MessageBox.hide();
-					});
-					task.delay(5000);
-					form.dom.submit();
-				  break;
-				case 'import':
-					document.formImport.listKey.value  = listKey;
-					document.formImport.listName.value = listName;
-					document.formImport.itemCount.value = numOfItems;
-					if(numOfItems<200){
-						document.getElementById("importWarning").innerHTML = "";
-						$("#dlgImportItemsLink").trigger('click');						
-					}
-					else{
-						  alert("Maximum number of element in a list can only be 200..\n Please try again with removing some items or create a new list.");
-					}					
-				  break;				  
-				case 'copy':
-					callShareList = false;					
-					var elemsToValidateHL = document.getElementsByTagName('input');
-					var invalidMandatoryFieldCountHL = 0;
-					for(var i=0; i< elemsToValidateHL.length; i++)
-					{			
-							elemsToValidateHL[i].style.borderColor="";
-							
-					} 										
-					document.getElementById("errorMsgForMandatoryFieldsHL").style.display = "none";
-					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.clFromListId.value=listKey;
-					$("#various3").trigger('click');
-					form = Ext.get("doAction_general_" + idx);
-					showShareListHL(form.dom.customerId.value, false, form.dom.listKey.value);
-					var clFrom = Ext.get("XPEDXMyItemsDetailsChangeShareList");
-					clFrom.dom.clFromListIdTemp.value=form.dom.listKey.value;
-					Ext.get("smilTitleHL").dom.innerHTML = "Copy My Items List";
-					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.listNameHL.value="";
-					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.listDesc.value="";
-					Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.clAjax.value=true;
-					showWait = false;
-				  break;				  
-				case 'delete':		
-					$.fancybox(
-						Ext.get("delete_my_item_list").dom.innerHTML,{
-						'autoDimensions'	: true  
-					});
-					var form = Ext.get("doAction_delete_item_list");
-					form.dom.listKey.value=listKey;
-				  break;				  
-				case 'share':
-				  break;				  
-				default:
-					showWait = false; 
+			case 'open':
+				form.dom.submit();
+				break;
+			case 'edit':
+				form.dom.submit();
+				break;
+			case 'view':
+				form.dom.submit();
+				break;
+			case 'export':
+				//Wait for 5 sec and them take the dialog off 
+				var task = new Ext.util.DelayedTask(function(){
+						Ext.MessageBox.hide();
+				});
+				task.delay(5000);
+				form.dom.submit();
+				break;
+			case 'import':
+				document.formImport.listKey.value	= listKey;
+				document.formImport.listName.value = listName;
+				document.formImport.itemCount.value = numOfItems;
+				if(numOfItems<200){
+					document.getElementById("importWarning").innerHTML = "";
+					$("#dlgImportItemsLink").trigger('click');						
+				}
+				else{
+						alert("Maximum number of element in a list can only be 200..\n Please try again with removing some items or create a new list.");
+				}					
+				break;
+			case 'copy':
+				callShareList = false;					
+				var elemsToValidateHL = document.getElementsByTagName('input');
+				var invalidMandatoryFieldCountHL = 0;
+				for(var i=0; i< elemsToValidateHL.length; i++)
+				{			
+						elemsToValidateHL[i].style.borderColor="";
+						
+				} 										
+				document.getElementById("errorMsgForMandatoryFieldsHL").style.display = "none";
+				Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.clFromListId.value=listKey;
+				$("#various3").trigger('click');
+				form = Ext.get("doAction_general_" + idx);
+				showShareListHL(form.dom.customerId.value, false, form.dom.listKey.value);
+				var clFrom = Ext.get("XPEDXMyItemsDetailsChangeShareList");
+				clFrom.dom.clFromListIdTemp.value=form.dom.listKey.value;
+				Ext.get("smilTitleHL").dom.innerHTML = "Copy My Items List";
+				Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.listNameHL.value="";
+				Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.listDesc.value="";
+				Ext.get("XPEDXMyItemsDetailsChangeShareListHL").dom.clAjax.value=true;
+				showWait = false;
+				break;
+			case 'delete':		
+				$.fancybox(
+					Ext.get("delete_my_item_list").dom.innerHTML,{
+					'autoDimensions'	: true
+				});
+				var form = Ext.get("doAction_delete_item_list");
+				form.dom.listKey.value=listKey;
+				break;
+			case 'share':
+				break;
+			default:
+				showWait = false; 
 			}		
 			if (showWait){
 				//Ext.Msg.wait('Executing your request...Please wait.');
