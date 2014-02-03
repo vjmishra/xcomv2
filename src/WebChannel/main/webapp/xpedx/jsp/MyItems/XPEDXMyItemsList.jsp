@@ -925,14 +925,6 @@
  <div id="tool-bar-bottom" class="float-bottom">
   
  		</div>
- 
-  <!-- 2774 CR Start -->
- <s:else>
-   <div id="tool-bar-bottom" class="float-right">
-  <!--<a class="orange-ui-btn modal"   id="various3" href="#dlgShareList" onclick="javascript:resetclFromListId();"><span>Create New List</span></a>   -->
-  <a class=""   id="" name="" href="">  
-  <div id="Layer1" style="FONT-WEIGHT: bold; WIDTH: 239px; COLOR: #ff0000; HEIGHT: 19px"></div></a></div>
- </s:else><!-- 2774 CR End --> 
 	
 <div class="clearview">&nbsp;</div>
 
