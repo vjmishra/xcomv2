@@ -366,6 +366,15 @@ public class XPEDXHeaderAction extends WCMashupAction {
 					setTermsOfAccessInRequest(doc);
 				}
 			}//end of jira 4285
+			else { 
+				Object isTermsOfAccessCheckReqForPunchoutUser = wcContext.getWCAttribute("isTACheckReqForPunchoutUser", WCAttributeScope.LOCAL_SESSION);
+				if (!getWCContext().isGuestUser()
+					&& XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext()) && defaultAssignedShipTo!= null 
+					&& isTermsOfAccessCheckReqForPunchoutUser!=null && "Y".equalsIgnoreCase((String)isTermsOfAccessCheckReqForPunchoutUser)) {
+					setTermsOfAccessInRequest(doc);
+					wcContext.removeWCAttribute("isTACheckReqForPunchoutUser",WCAttributeScope.LOCAL_SESSION);
+				}
+			}
 		}
 	}
 

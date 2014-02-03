@@ -10,16 +10,12 @@ import javax.servlet.http.Cookie;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
-import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 
@@ -53,14 +49,20 @@ public class CustomHomeAction extends WCAction {
 					&& divisionsWithShipToInfo.size() == 2) {
 				divisonDetails = divisionsWithShipToInfo.get(0);
 				divisionWithShipTo = divisionsWithShipToInfo.get(1);
-				
+				if(divisonDetails!=null && divisionWithShipTo!=null ){
 				Set keySet = divisionWithShipTo.keySet();
 				ArrayList<Element> customers = divisionWithShipTo.get(keySet.iterator().next());
 				Element customer = customers.get(0);
 				String selectedCustomer = customer.getAttribute("MSAPCustomerID");	
 				XPEDXWCUtils.setCurrentCustomerIntoContext(selectedCustomer,wcContext);
 				wcContext.setWCAttribute("isPunchoutUser", "true",WCAttributeScope.LOCAL_SESSION);
-		
+					wcContext.setWCAttribute("isTACheckReqForPunchoutUser", "Y",WCAttributeScope.LOCAL_SESSION);
+					if(divisonDetails.size()==1 && customers!=null && customers.size()==1 ){
+						wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
+						prefferedShipToCustomer=customer.getAttribute("ShipToCustomerID");						
+						return "changePreferredShip";
+					}
+				}
 			} 
 			
 			
@@ -178,5 +180,13 @@ public class CustomHomeAction extends WCAction {
 			Map<String, ArrayList<Element>> divisionWithShipTo) {
 		this.divisionWithShipTo = divisionWithShipTo;
 	}
+	private String prefferedShipToCustomer;
 
+	public String getPrefferedShipToCustomer() {
+		return prefferedShipToCustomer;
+	}
+
+	public void setPrefferedShipToCustomer(String prefferedShipToCustomer) {
+		this.prefferedShipToCustomer = prefferedShipToCustomer;
+	}
 }

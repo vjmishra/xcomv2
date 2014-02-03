@@ -8,6 +8,13 @@
 			<param name="resourceId">/swc/home</param>
 			<result name="main" >/xpedx/jsp/home/XPEDXhome.jsp</result>
 			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+			<result name="changePreferredShip" type="redirectAction">
+				<param name="actionName">setCurrentCustomerIntoContext-punchout</param>
+				<param name="namespace">/common</param>
+				<param name="setSelectedAsDefault">true</param>
+				<param name="initPrefs">true</param>
+				<param name="selectedCurrentCustomer">${prefferedShipToCustomer}</param>				
+			</result>			
 		</action>
 		
 		<action name="logout" class="com.sterlingcommerce.xpedx.webchannel.home.XPEDXLogoutAction">			

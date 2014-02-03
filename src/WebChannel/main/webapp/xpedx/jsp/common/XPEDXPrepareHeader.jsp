@@ -1657,7 +1657,7 @@ var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepte
 var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecretQuestion')}"/>';
 var passwordUpdateFlag = '<s:property value="%{wCContext.getWCAttribute('setPasswordUpdate')}"/>';
 var isPunchoutUser = '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
-if((isGuestuser!="true" && isPunchoutUser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
+if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
 	loadTermsOfAccess();
 	}
 
