@@ -826,6 +826,7 @@ public void UpdateCustomer(){
 		Document outputDocument = formNewInput(ExistingoutPut);
 		Element outPut = outputDocument.getDocumentElement();
 		Element elePOList = getModel("XPXPOList");
+		if(elePOList != null){
 		NodeList nl= elePOList.getElementsByTagName("PO");
 		String strPOList="";
 		String strPO="";
@@ -869,6 +870,7 @@ public void UpdateCustomer(){
 	//	YRCXmlUtils.setAttributeValue(outPut, "/CustomerContact/Extn/@ExtnPOList",strPOList);
 	//	YRCXmlUtils.setAttributeValue(outPut, "/CustomerContact/Extn/@ExtnAddnlEmailAddrs",strEmailList);
 		YRCXmlUtils.setAttributeValue(outPut, "/CustomerContact/Extn/@ExtnInvoiceEMailID",strInvoiceEmailList);
+		}
 		return outPut;
 		
 	}
@@ -1069,6 +1071,7 @@ public void UpdateCustomer(){
 		String strPOList="";
 		String strPO = "";
 		Element elePOList = getModel("XPXPOList");
+		if(elePOList != null){
 		NodeList nl= elePOList.getElementsByTagName("PO");
 		for(int counter=0;counter < nl.getLength(); counter ++){
 			Element POElement = (Element)nl.item(counter);
@@ -1107,6 +1110,7 @@ public void UpdateCustomer(){
     	
     	docInput = new Document[]{docPOListInput};
     	callApis(apinames, docInput);
+		}
 		
 	}
 	/** --function to call API for mailId change-- **/
