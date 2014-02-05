@@ -909,6 +909,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			// searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
 			String searchStringTokenList[] = searchStringValue.split(" ");
 			//JIRA - 4264 There are few lucene words , which are ignored for search criteria
+			setStockedItemFromSession();
 			List<String> specialWords=Arrays.asList(luceneEscapeWords);
 			for (String searchStringToken : searchStringTokenList) {
 				if(!specialWords.contains(searchStringToken.trim().toLowerCase()))
@@ -916,7 +917,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 					if (!"".equals(searchStringToken.trim())) {
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
-						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null) {
+						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem) {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
 						} else {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
@@ -1011,7 +1012,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (flag) {
 			SCXmlUtil.removeNode(elements.get(0));
 		}
-		setStockedItemFromSession();
+		//setStockedItemFromSession();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (isStockedItem) {
 			if (shipToCustomer == null) {
@@ -1022,8 +1023,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setShipToCustomer((XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER));
 			}
 			//EB-4010
-			//String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
-			String shipFromDivision = shipToCustomer.getExtnCustomerDivision();
+			String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+			//Commented for P2 - USD # 7835674  
+			//String shipFromDivision = shipToCustomer.getExtnCustomerDivision();
 			
 			if (shipFromDivision != null
 					&& shipFromDivision.trim().length() > 0) {
