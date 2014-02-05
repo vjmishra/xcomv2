@@ -16,14 +16,12 @@
 					</div>
 				</s:form>
 			<ul id="tool-bar" class="line-spacing">
-			<%--- EB-1158  If no MIL lists, disable Apply button. --%>
-			<s:if test="myItemsListSize > 0"> 
+			<div id="addItemListButton" style="display:none;" >
 				<li style="float: right;"><a class="green-ui-btn" href='javascript:addItemsToList();'><span>Apply</span></a></li>
-			</s:if>	
-				
+			</div>
 				<li style="float:right; margin-right:5px;" ><a class="grey-ui-btn" href="javascript:$.fancybox.close()" 
 					onclick="$('#fancybox-close').click();return false;"><span>Cancel</span></a></li>
-				<li style="margin-left:1px;" ><a class="modal" id="dlgShareListLinkHL1" href="#dlgShareListHL" >Create New List </a></li>					
+				<li style="margin-left:1px;" ><a class="modal" id="dlgShareListLinkHL1" href="#dlgShareListHL" >Create New List</a></li>					
 			</ul>
 		</div>
 		

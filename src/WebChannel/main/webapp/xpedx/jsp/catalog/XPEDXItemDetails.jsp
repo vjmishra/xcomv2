@@ -711,6 +711,15 @@ var isEstUser = <s:property value="#isEstUser"/>;
 	            method: 'POST',
 	            success: function (response, request){
 	            	//Added for EB 560
+					if(response.responseText.indexOf('List Img') != -1)
+					{
+						var addItemListButtonVar = document.getElementById("addItemListButton");
+						if(addItemListButtonVar != null && addItemListButtonVar != undefined)
+						{
+							addItemListButtonVar.style.display="block";
+						}
+					 }
+
 	    	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
 	    	   			window.location.reload(true);
 	    	   			Ext.Msg.hide();
