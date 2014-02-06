@@ -14,7 +14,7 @@
 
 	<s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta content='IE=8' http-equiv='X-UA-Compatible' />       
+	<meta content='IE=8' http-equiv='X-UA-Compatible' />
 	<%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
@@ -73,10 +73,7 @@
 		
 		<div id="browser-not-supported" style=" display:none">
 		<br/>
-				&nbsp;&nbsp;xpedx.com is designed to work in the latest versions of Internet Explorer,<br/>
-				&nbsp;&nbsp;Firefox, Safari. For more information please review the help document. <br/>
-				&nbsp;&nbsp;Upgrading your browser is quick and easy, click here to get the latest versions <br/>
-				&nbsp;&nbsp;(note: Safari can be upgraded via the Apple App Store): <br/><br/><br/><br/>
+				<div id="browser-warning-text" style="padding:10px;"></div>
 				<table width="100%">
 					<tr>
 						<td valign="top" style="line-height: 20px;" width="45%">
@@ -104,6 +101,7 @@
 					</tr>
 				</table>
 		</div>
+
 		<script type="text/javascript">
 		var browserNotSupportedWin = new Ext.Window({
 			autoScroll: false,
@@ -114,7 +112,7 @@
 		    id: 'browser-not-supportedBox',
 		    modal: true,
 		    width: 450,
-		    height: 250,
+		    height: 400,
 		    resizable   : false,
 		    draggable   : false,
 		    closable    : false,
@@ -133,24 +131,38 @@
 		var VER_FIREFOX = "<s:property value='%{#wcUtil.getBrowserVersion("version.firefox")}'/>";
 		var VER_SAFARI = "<s:property value='%{#wcUtil.getBrowserVersion("version.safari")}'/>";   // may be x.y
 		//var VER_CHROME = 10;  // may be x.y.z
+		var userAgent = navigator.userAgent;
 
 		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
 		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
-		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
-		   var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
-			 if (ieversion < VER_IE)
-			 {
-				 // need? checking compatibility mode?
-				 if(document.documentMode < VER_IE)
-				 {
-					 warnBrowserVersion();
-				 }
-			 }
-				 
+		if (/MSIE (\d+\.\d+);/.test(userAgent)){ //test for MSIE x.x;
+		 	var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
+			if (ieversion < VER_IE)
+			{
+				// need? checking compatibility mode?
+				if(document.documentMode < VER_IE)
+				{
+					warnBrowserVersion();
+				}
+			}
+			else // if (ieversion == 8)
+			{
+				// with IE=8 compatibility on, most checks for IE8 match IE9+ too
+				// so check for Trident - in IE8, agent string contains "Trident/4.0"
+				var rex = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");    
+				if (rex.exec(userAgent) != null) 
+				{        
+					var rv = parseFloat(RegExp.$1);
+					if (rv == 4)
+					{
+						warnIE8();
+					}
+				}    
+			}
 		}
 
 		// Firefox: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0"
-		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x
+		else if (/Firefox[\/\s](\d+\.\d+)/.test(userAgent)){ //test for Firefox/x.x or Firefox x.x
 			var ffversion=new Number(RegExp.$1);
 			if(ffversion < VER_FIREFOX)
 			{
@@ -160,7 +172,7 @@
 
 		// Safari: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
 		// win:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
-		else if (/Version\/(\d+\.\d+).*Safari/.test(navigator.userAgent)){
+		else if (/Version\/(\d+\.\d+).*Safari/.test(userAgent)){
 			var safariversion = new Number(RegExp.$1);// new Number(useragent.substr(useragent.lastIndexOf('Safari/') + 7, 6));
 			if(safariversion < VER_SAFARI)
 			{
@@ -170,7 +182,7 @@
 		
 		// Chrome is kind of supported and autoupdates to latest version so don't check
 		// ex: "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.41 Safari/537.36"
-// 		else if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){
+// 		else if (/Chrome[\/\s](\d+\.\d+)/.test(userAgent)){
 // 			var chromeversion=new Number(RegExp.$1);
 // 			if(chromeversion < VER_CHROME)
 // 			{
@@ -179,8 +191,8 @@
 // 		}
 
 		// Unsupported browsers
-		else if ((/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)) ||
-			(/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)))
+		else if ((/Netscape[\/\s](\d+\.\d+)/.test(userAgent)) ||
+			(/Opera[\/\s](\d+\.\d+)/.test(userAgent)))
 		{
 			 warnBrowserVersion();
 		}
@@ -188,20 +200,53 @@
 		}
 		
 		function warnBrowserVersion() {
-			 document.getElementById("browser-not-supported").style.display = "block";
+			var html = [];
+			html.push('xpedx.com is designed to work in the latest versions of Internet Explorer,<br/>');
+			html.push('Firefox, Safari. For more information please review the help document. <br/>');
+			html.push('Upgrading your browser is quick and easy, click here to get the latest versions <br/>');
+			html.push('(note: Safari can be upgraded via the Apple App Store):"');
+			$('#browser-warning-text').html(html.join(''));
+
+			 $('#browser-not-supported').show();
 			 browserNotSupportedWin.show();
+		}
+
+		// This is a temporary warning about IE8 going away
+		// TODO remove once IE9 is the minimal version
+		function warnIE8() {
+			var html = [];
+			html.push('xpedx continues to improve xpedx.com/order to provide you with the best <br/>');
+			html.push('possible on line experience. This includes making the site compatible <br/>');
+			html.push('with the most current versions of the supported browsers. <br/>');
+			html.push('<br/>');
+			html.push('Beginning in June, future xpedx.com/order upgrades will no longer be <br/>');
+			html.push('certified for, tested, or supported on Internet Explorer 8. By removing <br/>');
+			html.push('Internet Explorer 8 support, we can focus our efforts on providing the <br/>');
+			html.push('best user experience, accelerating our pace of innovation, and utilizing <br/>');
+			html.push('modern browser technologies. <br/>');
+			html.push('<br/>');
+			html.push('IE8 users will still have access to the site and there will be no <br/>');
+			html.push('noticeable difference for some time. Eventually, IE8 users may <br/>');
+			html.push('experience sub-optimal performance. We are providing this announcement <br/>');
+			html.push('as early as possible in order to minimize the impact on the way that <br/>');
+			html.push('your organization uses xpedx.com/order. <br/>');
+			html.push('<br/>');
+			$('#browser-warning-text').html(html.join(''));
+
+			$('#browser-not-supported').show();
+			browserNotSupportedWin.show();
 		}
 		
 		</script>
 <script type="text/javascript">
 Ext.onReady(function(){		
-		browserSupport();
+	browserSupport();
 });
-		</script>	
+</script>	
 </s:if>
+
 <!-- RUgrani BEGIN: Logged in User Home page -->
 <s:else>
-	
 	<div id="main-container">
 	<div id="main">
 
