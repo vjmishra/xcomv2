@@ -137,13 +137,9 @@
 		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
 		if (/MSIE (\d+\.\d+);/.test(userAgent)){ //test for MSIE x.x;
 		 	var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
-			if (ieversion < VER_IE)
+			if ((ieversion < VER_IE) && (document.documentMode < VER_IE))
 			{
-				// need? checking compatibility mode?
-				if(document.documentMode < VER_IE)
-				{
-					warnBrowserVersion();
-				}
+				warnBrowserVersion();
 			}
 			else // if (ieversion == 8)
 			{
@@ -157,7 +153,7 @@
 					{
 						warnIE8();
 					}
-				}    
+				}
 			}
 		}
 
