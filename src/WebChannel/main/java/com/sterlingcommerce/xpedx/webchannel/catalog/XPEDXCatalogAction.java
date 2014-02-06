@@ -1012,7 +1012,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (flag) {
 			SCXmlUtil.removeNode(elements.get(0));
 		}
-		//setStockedItemFromSession();
+		setStockedItemFromSession();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		if (isStockedItem) {
 			if (shipToCustomer == null) {
