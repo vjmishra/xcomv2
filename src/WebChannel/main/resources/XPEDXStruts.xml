@@ -10,5 +10,6 @@
     <include file="com/sterlingcommerce/xpedx/webchannel/services/XPEDXServices-struts.xml" />
     <include file="com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItems-struts.xml" />
     <include file="com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogStruts.xml"/> 
-    <include file="com/sterlingcommerce/xpedx/webchannel/tools/XPEDXTools-struts.xml"/>   
+    <include file="com/sterlingcommerce/xpedx/webchannel/tools/XPEDXTools-struts.xml"/>  
+    <include file="com/sterlingcommerce/xpedx/webchannel/punchout/XPEDXPunchoutStruts.xml"/> 
 </struts>

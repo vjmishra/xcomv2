@@ -1,9 +1,9 @@
 package com.sterlingcommerce.xpedx.webchannel.home;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
@@ -11,13 +11,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
+import com.sterlingcommerce.xpedx.webchannel.punchout.DivisionBean;
+import com.sterlingcommerce.xpedx.webchannel.punchout.ShipToCustomerBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.util.YFCUtils;
 
 public class CustomHomeAction extends WCAction {
 	
@@ -42,32 +42,32 @@ public class CustomHomeAction extends WCAction {
 			wcContext.getSCUIContext().getResponse().addCookie(cookie);
 		}
 		
-		if (aribaFlag!=null && aribaFlag.equals("Y") ) 
-		{
-			ArrayList<Map> divisionsWithShipToInfo = getAllAssignedShiptosWithDivisionsForAUser(wcContext.getLoggedInUserId(), wcContext);
-			if (divisionsWithShipToInfo != null
-					&& divisionsWithShipToInfo.size() == 2) {
-				divisonDetails = divisionsWithShipToInfo.get(0);
-				divisionWithShipTo = divisionsWithShipToInfo.get(1);
-				if(divisonDetails!=null && divisionWithShipTo!=null ){
-				Set keySet = divisionWithShipTo.keySet();
-				ArrayList<Element> customers = divisionWithShipTo.get(keySet.iterator().next());
-				Element customer = customers.get(0);
-				String selectedCustomer = customer.getAttribute("MSAPCustomerID");	
-				XPEDXWCUtils.setCurrentCustomerIntoContext(selectedCustomer,wcContext);
-				wcContext.setWCAttribute("isPunchoutUser", "true",WCAttributeScope.LOCAL_SESSION);
+		if (aribaFlag!=null && aribaFlag.equals("Y")) 
+		{   
+		
+			getAllAssignedShiptosWithDivisionsForAUser();				
+			if (divisionBeanList != null && divisionBeanList.size() >0) {				
+				DivisionBean divisionBean = divisionBeanList.get(0);
+				ArrayList<ShipToCustomerBean>  shipToCustomers = divisionBean.getShipToCustomrs();
+		
+				if(shipToCustomers!=null && shipToCustomers.size()>0){
+					ShipToCustomerBean shipToCustomerBean = shipToCustomers.get(0);				
+					XPEDXWCUtils.setCurrentCustomerIntoContext(shipToCustomerBean.getMSAPCustomerID(),wcContext);
+					wcContext.setWCAttribute("isPunchoutUser", "true",WCAttributeScope.LOCAL_SESSION);
 					wcContext.setWCAttribute("isTACheckReqForPunchoutUser", "Y",WCAttributeScope.LOCAL_SESSION);
-					if(divisonDetails.size()==1 && customers!=null && customers.size()==1 ){
-						wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
-						prefferedShipToCustomer=customer.getAttribute("ShipToCustomerID");						
-						return "changePreferredShip";
-					}
+						if(divisionBeanList.size()==1 && shipToCustomers.size()==1 ){
+							wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
+							prefferedShipToCustomer=shipToCustomerBean.getShipToCustomerID();						
+							return "changePreferredShip";
+						}
 				}
 			} 
 			
 			
 			
 			wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
+			
+			// Remove data from session also
 			return "punchout";
 			
 		} else {
@@ -75,110 +75,54 @@ public class CustomHomeAction extends WCAction {
 		}
 	}
 	
-	public static ArrayList<Map> getAllAssignedShiptosWithDivisionsForAUser(
-			String UserId, IWCContext context) {
-
-		Map<String, ArrayList<Element>> divisionWithShipTo = new HashMap<String, ArrayList<Element>>();
-		Map<String, String> divisonDetails = new HashMap<String, String>();
-		ArrayList<Map> divisionsWithShipToInfo = new ArrayList<Map>();
-		if (YFCUtils.isVoid(UserId)) {
-			return divisionsWithShipToInfo;
-		}
-
-		if (context == null) {
-			return divisionsWithShipToInfo;
-		}
-
-		Document inputDoc = SCXmlUtil
-				.createDocument("XPXCustomerAssignmentView");
-		inputDoc.getDocumentElement().setAttribute("UserId", UserId);
-		try {
-			Object obj = WCMashupHelper.invokeMashup("XPEDXGetAllShipToList-Punchout",inputDoc.getDocumentElement(), context.getSCUIContext());
+	private void getAllAssignedShiptosWithDivisionsForAUser() {
+		
+		Map<String, DivisionBean> divisionBeanMap = new HashMap<String, DivisionBean>();	
+		Document inputDoc = SCXmlUtil.createDocument("XPXCustomerAssignmentView");
+		inputDoc.getDocumentElement().setAttribute("UserId", wcContext.getLoggedInUserId());
+	
+			Object obj = WCMashupHelper.invokeMashup("XPEDXGetAllShipToList-Punchout",inputDoc.getDocumentElement(), wcContext.getSCUIContext());
 			Element custAssignedEle = (Element) obj;
-			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXCustomerAssignmentView");
-			ArrayList<Element> assignedShipTosForDivision;
-
+			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXCustomerAssignmentView");		
+			ArrayList<ShipToCustomerBean> assignedShipToCustomersBean;
+			DivisionBean divisionBean;
 			if (assignedCustElems.size() > 0) {
 				for (int i = 0; i < assignedCustElems.size(); i++) {
-					Element customer = assignedCustElems.get(i);
-					String division_id = SCXmlUtil.getAttribute(customer,
-							"ExtnCustomerDivisionID");
-					String division_Name = SCXmlUtil.getAttribute(customer,
-							"DivisionName");
-					String shipToCustomerID = SCXmlUtil.getAttribute(customer,
-							"ShipToCustomerID");
-					String shipToCustomer = shipToCustomerID.substring(0,
-							shipToCustomerID.lastIndexOf("-M-XX-S"));
-					String shipToCustomerName = SCXmlUtil.getAttribute(
-							customer, "ShipToCustomerName");
-					String addressLine1 = SCXmlUtil.getAttribute(customer,
-							"AddressLine1");
-					String city = SCXmlUtil.getAttribute(customer, "City");
-					String state = SCXmlUtil.getAttribute(customer, "State");
-					String zipcode = SCXmlUtil
-							.getAttribute(customer, "ZipCode");
-					String country = SCXmlUtil
-							.getAttribute(customer, "Country");
-					System.out.println(SCXmlUtil.getString(customer));
-					System.out.println("division_id:" + division_id
-							+ " DivisionName:" + division_Name);
-					String ShipToDisplayString = shipToCustomerName + "("
-							+ shipToCustomer + ")" + addressLine1 + "," + city
-							+ "," + state + "," + zipcode + "," + country;
-					customer.setAttribute("ShipToDisplayString",
-							ShipToDisplayString);
-					assignedShipTosForDivision = divisionWithShipTo
-							.get(division_id);
-					if (assignedShipTosForDivision == null) {
-						assignedShipTosForDivision = new ArrayList<Element>();
+					Element customer = assignedCustElems.get(i);		
+					String division_id = SCXmlUtil.getAttribute(customer,"ExtnCustomerDivisionID");
+					divisionBean = divisionBeanMap.get(division_id);					
+					if (divisionBean == null) {
+						divisionBean = new DivisionBean();
+						divisionBean.setDivisionId(SCXmlUtil.getAttribute(customer,"ExtnCustomerDivisionID"));
+						divisionBean.setDivisionName(SCXmlUtil.getAttribute(customer,"DivisionName"));
 					}
-					assignedShipTosForDivision.add(customer);
-					divisonDetails.put(division_id, division_Name);
-					divisionWithShipTo.put(division_id,
-							assignedShipTosForDivision);
-				}
-				divisionsWithShipToInfo.add(divisonDetails);
-				divisionsWithShipToInfo.add(divisionWithShipTo);
+					assignedShipToCustomersBean = divisionBean.getShipToCustomrs();
+					if (assignedShipToCustomersBean == null) {
+							assignedShipToCustomersBean = new ArrayList<ShipToCustomerBean>();
+						}	
+						assignedShipToCustomersBean.add(setShipToCustomer(customer));
+						Collections.sort(assignedShipToCustomersBean);
+						divisionBean.setShipToCustomrs(assignedShipToCustomersBean);
+						divisionBeanMap.put(division_id, divisionBean);						
+				}				
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return divisionsWithShipToInfo;
+		
+		if(divisionBeanMap!=null){
+			divisionBeanList = new ArrayList<DivisionBean>(divisionBeanMap.values());
+			Collections.sort(divisionBeanList);
+			XPEDXWCUtils.setObectInCache("divisionBeanList",divisionBeanList);
 		}
-
-		return divisionsWithShipToInfo;
+		
 	}
 
-	private ArrayList<Map> divisionsWithShipToInfo = new ArrayList<Map>();
-
-	public ArrayList<Map> getDivisionsWithShipToInfo() {
-		return divisionsWithShipToInfo;
+	private ArrayList<DivisionBean> divisionBeanList;
+	
+	public ArrayList<DivisionBean> getDivisionBeanList() {
+		return divisionBeanList;
 	}
 
-	public void setDivisionsWithShipToInfo(
-			ArrayList<Map> divisionsWithShipToInfo) {
-		this.divisionsWithShipToInfo = divisionsWithShipToInfo;
-	}
-
-	private Map<String, String> divisonDetails = new HashMap<String, String>();
-
-	public Map<String, String> getDivisonDetails() {
-		return divisonDetails;
-	}
-
-	public void setDivisonDetails(Map<String, String> divisonDetails) {
-		this.divisonDetails = divisonDetails;
-	}
-
-	private Map<String, ArrayList<Element>> divisionWithShipTo = new HashMap<String, ArrayList<Element>>();
-
-	public Map<String, ArrayList<Element>> getDivisionWithShipTo() {
-		return divisionWithShipTo;
-	}
-
-	public void setDivisionWithShipTo(
-			Map<String, ArrayList<Element>> divisionWithShipTo) {
-		this.divisionWithShipTo = divisionWithShipTo;
+	public void setDivisionBeanList(ArrayList<DivisionBean> divisionBeanList) {
+		this.divisionBeanList = divisionBeanList;
 	}
 	private String prefferedShipToCustomer;
 
@@ -189,4 +133,39 @@ public class CustomHomeAction extends WCAction {
 	public void setPrefferedShipToCustomer(String prefferedShipToCustomer) {
 		this.prefferedShipToCustomer = prefferedShipToCustomer;
 	}
+	
+	private ShipToCustomerBean setShipToCustomer(Element customer){
+		
+		ShipToCustomerBean shipToCustomerBean = new ShipToCustomerBean();
+		shipToCustomerBean.setUserId(SCXmlUtil.getAttribute(customer,"UserId"));
+		shipToCustomerBean.setShipToCustomerID(SCXmlUtil.getAttribute(customer,"ShipToCustomerID"));
+		shipToCustomerBean.setEnterpriseCode(SCXmlUtil.getAttribute(customer,"EnterpriseCode"));
+		shipToCustomerBean.setFirstName(SCXmlUtil.getAttribute(customer,"FirstName"));
+		shipToCustomerBean.setLastName(SCXmlUtil.getAttribute(customer,"LastName"));
+		shipToCustomerBean.setBillToCustomerID(SCXmlUtil.getAttribute(customer,"BillToCustomerID"));
+		shipToCustomerBean.setSAPCustomerID(SCXmlUtil.getAttribute(customer,"SAPCustomerID"));
+		shipToCustomerBean.setMSAPCustomerID(SCXmlUtil.getAttribute(customer,"MSAPCustomerID"));
+		shipToCustomerBean.setShipToExtnCustStoreNo(SCXmlUtil.getAttribute(customer,"ShipToExtnCustStoreNo"));
+		shipToCustomerBean.setAddressLine1(SCXmlUtil.getAttribute(customer,"AddressLine1"));
+		shipToCustomerBean.setAddressLine2(SCXmlUtil.getAttribute(customer,"AddressLine2"));
+		shipToCustomerBean.setAddressLine3(SCXmlUtil.getAttribute(customer,"AddressLine3"));
+		shipToCustomerBean.setCity(SCXmlUtil.getAttribute(customer,"City"));
+		shipToCustomerBean.setState(SCXmlUtil.getAttribute(customer,"State"));
+		shipToCustomerBean.setCountry(SCXmlUtil.getAttribute(customer,"Country"));
+		shipToCustomerBean.setZipCode(SCXmlUtil.getAttribute(customer,"ZipCode"));
+		shipToCustomerBean.setEmailID(SCXmlUtil.getAttribute(customer,"EMailID"));
+		shipToCustomerBean.setShipToCustomerName(SCXmlUtil.getAttribute(customer,"ShipToCustomerName"));
+		shipToCustomerBean.setBillToCustomerName(SCXmlUtil.getAttribute(customer,"BillToCustomerName"));
+		shipToCustomerBean.setShipToAddressString(SCXmlUtil.getAttribute(customer,"ShipToAddressString"));
+		shipToCustomerBean.setStatus(SCXmlUtil.getAttribute(customer,"Status"));
+		
+		String shipToCustomerID = shipToCustomerBean.getShipToCustomerID();
+		String shipToCustomer = shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S"));
+		
+		String ShipToDisplayString = shipToCustomerBean.getShipToCustomerName() + "("+ shipToCustomer + ")" + shipToCustomerBean.getAddressLine1() + "," + shipToCustomerBean.getCity()+ "," + shipToCustomerBean.getState() + "," + shipToCustomerBean.getZipCode() + "," + shipToCustomerBean.getCountry();
+		
+		shipToCustomerBean.setShipToDisplayString(ShipToDisplayString);
+		return shipToCustomerBean;
+	}
 }
+
