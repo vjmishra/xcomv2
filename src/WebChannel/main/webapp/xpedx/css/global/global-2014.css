@@ -1,15 +1,14 @@
-
 /*EB-1130--------NEW STYLES 2014-------*/
 
 .ui-addTrPad table tr td {
 	padding-bottom: 4px;
-	}
+}
 .legend {
 	width: 360px;
 	padding: 0px 0px 5px 0px;
 	height: 20px;
 	margin-top: -10px;
-	}
+}
 .personal {
 	float: right;
 	clear: none;
@@ -18,7 +17,7 @@
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;
-	}
+}
 .shared {
 	float: right;
 	clear: none;
@@ -27,7 +26,7 @@
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;	
-	}	
+}	
 
 .ui-addTrPad h2 {
     border-bottom: none;
