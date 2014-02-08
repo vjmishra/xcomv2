@@ -17,7 +17,7 @@
 					MobilePhone="" OtherPhone="" PersonID=""
 					PersonInfoKey="" PreferredShipAddress=""
 					State="" Suffix="" Title="" UseCount=""
-					VerificationStatus="" ZipCode="">
+					VerificationStatus="" ZipCode="" Modifyuserid=""  Modifyts="">
 					<Extn/>
 				</PersonInfo>
 			</CustomerAdditionalAddress>
