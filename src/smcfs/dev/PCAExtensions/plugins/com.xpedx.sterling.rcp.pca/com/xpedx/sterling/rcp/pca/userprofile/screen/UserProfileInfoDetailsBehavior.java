@@ -384,6 +384,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 								
 					else if ("getPersonInfoList".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						setModel("PersonInfoDetails",outXml);
 						System.out.println("OutXMl" + YRCXmlUtils.getString(outXml));
 						String personInfoModifiedTs = YRCXmlUtils.getAttributeValue(outXml,"/PersonInfoList/PersonInfo/Modifyts");	
 						String personInfoModifiedUser = YRCXmlUtils.getAttributeValue(outXml,"/PersonInfoList/PersonInfo/Modifyuserid");
