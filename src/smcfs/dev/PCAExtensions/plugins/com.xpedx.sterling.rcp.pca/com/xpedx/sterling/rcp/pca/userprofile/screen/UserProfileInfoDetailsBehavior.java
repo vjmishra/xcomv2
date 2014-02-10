@@ -3,11 +3,9 @@ package com.xpedx.sterling.rcp.pca.userprofile.screen;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
-
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -50,15 +48,6 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private String modifyTs;
 	private String modifyUserId;
 	private boolean isSalesRep=false;
-	private String modifyTsFromXPXCustomerContact;
-	private String modifyUserIdFromXPXCustomerContact;
-	private String modifyTsFromPersonInfo;
-	private String modifyUserIdFromPersonInfo;
-	private String modifyTsFromYfsCustomerContact;
-	private String modifyUserIdYfsCustomerContact;
-	String compareTsOne = null;
-	private NodeList groupListsNode;
-	
 	
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
@@ -131,10 +120,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			YRCXmlUtils.setAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnViewInvoices","Y");
 		}
 		setModel("XPXCustomerContactIn", customerContactElement);
-		setSpendingLmtTextBoxBehaviorOnLoad(YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnOrderApprovalFlag"));
-		Element personInfo = YRCXmlUtils.getXPathElement(customerContactElement, "/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo");	
-		String personInfoKey = personInfo.getAttribute("PersonInfoKey");
-		getTSPersonInfo(personInfoKey);
+		setSpendingLmtTextBoxBehaviorOnLoad(YRCXmlUtils.getAttributeValue(customerContactElement, "/CustomerContact/Extn/@ExtnOrderApprovalFlag"));		
 		defaultShipTo = getFieldValue("txtCustomerID");
 		this.createModelForInvoiceEmails();
 		this.getDefaultShipToAddress();
@@ -338,6 +324,11 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				String[] apinames = ctx.getApiNames();
 				for (int i = 0; i < apinames.length; i++) {
 					String apiname = apinames[i];
+					/*if ("getCustomerAssignmentList".equals(apiname)) {
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+						setModel("XPXCustomerAssignmentList",outXml);						
+						
+					}*/
 					if ("searchCatalogIndex".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXSearchCatalogIndex",outXml);
@@ -349,12 +340,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						//(Element) YRCXPathUtils.evaluate(ctx.getOutputXmls()[i].getDocumentElement(), "UserList/User/ContactPersonInfo",XPathConstants.NODE);
 						String lastName =  YRCXmlUtils.getAttributeValue(outXml, "/UserList/User/ContactPersonInfo/@LastName");
 						
-						String name = firstName + " " + lastName;
-						
-						YRCXmlUtils.setAttribute(outXml, "Name", name);		
-						
 						YRCXmlUtils.setAttribute(outXml, "ContactModifiedDate", this.modifyTs);						
-						
+						//System.out.println(YRCXmlUtils.getString(outXml));
 						setModel("UserList" , outXml);
 					}
 					else if ("getCustomerDetails".equals(apiname)) {
@@ -381,20 +368,10 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						
 					}
-								
-					else if ("getPersonInfoList".equals(apiname)) {
+					else if ("changeXPXCustContExtn".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						setModel("PersonInfoDetails",outXml);
-						System.out.println("OutXMl" + YRCXmlUtils.getString(outXml));
-						String personInfoModifiedTs = YRCXmlUtils.getAttributeValue(outXml,"/PersonInfoList/PersonInfo/Modifyts");	
-						String personInfoModifiedUser = YRCXmlUtils.getAttributeValue(outXml,"/PersonInfoList/PersonInfo/Modifyuserid");
-						if(personInfoModifiedTs != null){
-							this.modifyTsFromPersonInfo = personInfoModifiedTs;
-						}
-						if(personInfoModifiedUser != null){
-							this.modifyUserIdFromPersonInfo = personInfoModifiedUser;
-						}
-					}
+						
+					}					
 					else if ("getXPXCustContExtn".equals(apiname)) {
 						this.docPOList=ctx.getOutputXmls()[i];
 						Element outXml =null;
@@ -408,8 +385,14 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							setModel("XPXCustomercontactExtn",outXMElement);
 						}
 						
-						modifyUserIdFromXPXCustomerContact=YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyuserid");
-						modifyTsFromXPXCustomerContact = YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyts");
+						modifyUserId=YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyuserid");
+						if(modifyUserId.contains("@CD-")){
+							List<String> words = Arrays.asList(this.modifyUserId.split("@"));
+							System.out.println(words);
+							isSalesRep = true;
+							this.modifyUserId = words.get(0);
+						}
+						modifyTs = YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyts");
 						this.createModelForPOList();
 						this.createModelForAdditionalEmails();
 					}
@@ -473,7 +456,6 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					}
 					 
 				}
-				
 				if (ctx.getApiName().equals("manageCustomer")) {
 					Element outXml = ctx.getOutputXml().getDocumentElement();
 					callUpdatePOListAPI();
@@ -510,10 +492,13 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			String customerID = eleCust.getAttribute("CustomerContactID");
 			System.out.println(customerID);
 			if(this.customerContactID.equals(customerID)){
-			
-				this.modifyTs = getModifiedTs();
-				this.modifyUserId = getmodifyUserId();
-				if(this.modifyUserId.contains("@CD-")){
+			//	Modifyts="2013-12-05T13:58:34-05:00" Modifyuserid="dave@bh.com">
+				this.modifyTs = eleCust.getAttribute("Modifyts");
+				if(!"admin".equalsIgnoreCase(eleCust.getAttribute("Modifyuserid"))){
+					this.modifyUserId=eleCust.getAttribute("Modifyuserid");
+				}
+				
+				if(modifyUserId.contains("@CD-")){
 					List<String> words = Arrays.asList(this.modifyUserId.split("@"));
 					System.out.println("here " + words);
 					this.modifyUserId = words.get(0);
@@ -532,7 +517,6 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							CustomerContactIdList.add(customerID);
 							k = nodGroupList.getLength();
 						}
-						
 					}
 					
 				}
@@ -1213,82 +1197,6 @@ public void UpdateCustomer(){
 	}
 	public void setExtnDefaultShipTo(String extnDefaultShipTo) {
 		this.extnDefaultShipTo = extnDefaultShipTo;
-	}
-	
-	
-	private String getmodifyUserId() {
-		// TODO Auto-generated method stub
-		String compareUserIdOne = null;
-		if (this.modifyTsFromPersonInfo.compareTo(this.modifyUserIdFromXPXCustomerContact) <=0){
-	    compareUserIdOne = modifyUserIdFromXPXCustomerContact;
-	    
-		}
-		else
-		{
-		compareUserIdOne = modifyUserIdFromPersonInfo;
-		}
-		System.out.println("userid  " + modifyTsFromYfsCustomerContact + compareUserIdOne);
-		if (compareTsOne.compareTo(this.modifyTsFromYfsCustomerContact) <=0){
-			return modifyUserIdYfsCustomerContact;
-			}
-			else
-			{
-			 return compareUserIdOne;
-			}
-		
-	}
-	private String getModifiedTs() {
-		// TODO Auto-generated method stub
-		Element customerContactElement = getModel("XPXCustomerContactIn");
-		Element eleUserGroupLists = YRCXmlUtils.getXPathElement(customerContactElement, "/CustomerContact/User/UserGroupLists");
-		groupListsNode=eleUserGroupLists.getElementsByTagName("UserGroupList");
-		ArrayList<String> arrlst=new ArrayList<String>();
-		for(int i=0;i<groupListsNode.getLength();i++){
-		Element eleUserGroup=(Element) groupListsNode.item(i);
-		String modifyTs = eleUserGroup.getAttribute("Modifyts");
-		arrlst.add(modifyTs);
-		}
-		String maxDate = Collections.max(arrlst).toString();
-		
-		for(int i=0;i<groupListsNode.getLength();i++){
-			Element eleUserGroup=(Element) groupListsNode.item(i);
-			String modifyTs = eleUserGroup.getAttribute("Modifyts");
-		    if(modifyTs.equalsIgnoreCase(maxDate)){
-		    this.modifyTsFromYfsCustomerContact = eleUserGroup.getAttribute("Modifyts");
-		    this.modifyTsFromYfsCustomerContact = eleUserGroup.getAttribute("Modifyuserid");
-		    }
-		}
-		
-		if (this.modifyTsFromPersonInfo.compareTo(this.modifyTsFromXPXCustomerContact) <=0){
-		compareTsOne = modifyTsFromXPXCustomerContact;
-		}
-		else
-		{
-		compareTsOne = modifyTsFromPersonInfo;
-		}
-	   
-	    
-		 System.out.println("TimeSpent " + compareTsOne + modifyTsFromYfsCustomerContact);
-	    if (compareTsOne.compareTo(this.modifyTsFromYfsCustomerContact) <=0 ){
-			return modifyTsFromYfsCustomerContact;
-			}
-			else
-			{
-			 return compareTsOne;
-			}
-	}
-	
-	
-	private void getTSPersonInfo(String personInfoKey) {
-		String apiname = "getPersonInfoList";
-		Document docInput = YRCXmlUtils.createFromString("<PersonInfo PersonInfoKey='"+personInfoKey+"' />");
-		YRCApiContext ctx = new YRCApiContext();
-		ctx.setFormId(getFormId());
-		ctx.setApiName(apiname);
-		ctx.setInputXml(docInput);
-		System.out.println("docInput" + YRCXmlUtils.getString(docInput));
-		if (!page.isDisposed())
-			callApi(ctx, page);				
 	}
 
 }
