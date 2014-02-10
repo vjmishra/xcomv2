@@ -134,35 +134,74 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		
 		if(!YRCPlatformUI.isVoid(strExtnDefaultShipTo)){
 			
-			String[] apinames = {"getDefaultShipToList","getUserList"};
+			
 			if(isSalesRep){
-				Document[] docInput = {
-						
-						YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
-						YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") , 
-				};
+				 if(!"".equalsIgnoreCase(this.modifyUserId.trim()))
+				 {
+					 String[] apinames = {"getDefaultShipToList","getUserList"};
+					 Document[] docInput = {
+								
+								YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
+								YRCXmlUtils.createFromString("<User><Extn ExtnEmployeeId ='"+ this.modifyUserId +"'/></User>") , 
+						}; 
+					 YRCApiContext ctx = new YRCApiContext();
+						ctx.setFormId(getFormId());
+						ctx.setApiNames(apinames);
+						ctx.setInputXmls(docInput);
+						if (!page.isDisposed())
+							callApi(ctx, page);
+				 }
+				 else
+				 {		
+					 String[] apinames = {"getDefaultShipToList"};
+					Document[] docInput = {
+							
+							YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>"), 
+					};
+					YRCApiContext ctx = new YRCApiContext();
+					ctx.setFormId(getFormId());
+					ctx.setApiNames(apinames);
+					ctx.setInputXmls(docInput);
+					if (!page.isDisposed())
+						callApi(ctx, page);
+				 }
 				
-				YRCApiContext ctx = new YRCApiContext();
-				ctx.setFormId(getFormId());
-				ctx.setApiNames(apinames);
-				ctx.setInputXmls(docInput);
-				if (!page.isDisposed())
-					callApi(ctx, page);
+				
 				
 			}else{
-			Document[] docInput = {
+				 if("".equalsIgnoreCase(this.modifyUserId.trim()))
+				 {	
+					 String[] apinames = {"getDefaultShipToList"};
+					Document[] docInput = {
+							
+							YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>")
+					};
 					
-					YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
-					YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") , 
-			};
+					YRCApiContext ctx = new YRCApiContext();
+					ctx.setFormId(getFormId());
+					ctx.setApiNames(apinames);
+					ctx.setInputXmls(docInput);
+					if (!page.isDisposed())
+						callApi(ctx, page);
+				 }
+				 else
+				 {
+					 String[] apinames = {"getDefaultShipToList","getUserList"};
+					 Document[] docInput = {
+								
+								YRCXmlUtils.createFromString("<Customer CustomerID='"+ strExtnDefaultShipTo +"'/>") , 
+								YRCXmlUtils.createFromString("<User Loginid='"+ this.modifyUserId +"'/>") , 
+						};
+						
+						YRCApiContext ctx = new YRCApiContext();
+						ctx.setFormId(getFormId());
+						ctx.setApiNames(apinames);
+						ctx.setInputXmls(docInput);
+						if (!page.isDisposed())
+							callApi(ctx, page);
+						}
+				 }
 			
-			YRCApiContext ctx = new YRCApiContext();
-			ctx.setFormId(getFormId());
-			ctx.setApiNames(apinames);
-			ctx.setInputXmls(docInput);
-			if (!page.isDisposed())
-				callApi(ctx, page);
-			}
 			
 			
 		}else{
@@ -179,7 +218,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 				ctx.setFormId(getFormId());
 				ctx.setApiNames(apinames);
 				ctx.setInputXmls(docInput);
-				if (!page.isDisposed())
+				if (!page.isDisposed() && "".equalsIgnoreCase(this.modifyUserId.trim()))
 					callApi(ctx, page);
 				
 			}else{
@@ -193,13 +232,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 			ctx.setFormId(getFormId());
 			ctx.setApiNames(apinames);
 			ctx.setInputXmls(docInput);
-			if (!page.isDisposed())
+			if (!page.isDisposed() && "".equalsIgnoreCase(this.modifyUserId.trim()))
 				callApi(ctx, page);
 			}
 		}
 		
 	}
-
 	@Override
 	public void init() {
 		
@@ -384,7 +422,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							Element outXMElement=YRCXmlUtils.createFromString("<XPXCustomercontactExtn/>").getDocumentElement();
 							setModel("XPXCustomercontactExtn",outXMElement);
 						}
-						
+						if(outXml !=null){
 						modifyUserId=YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyuserid");
 						if(modifyUserId.contains("@CD-")){
 							List<String> words = Arrays.asList(this.modifyUserId.split("@"));
@@ -392,7 +430,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 							isSalesRep = true;
 							this.modifyUserId = words.get(0);
 						}
-						modifyTs = YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyts");
+							modifyTs = YRCXmlUtils.getAttributeValue(outXml,"/XPXCustomercontactExtn/@Modifyts");
+						}
 						this.createModelForPOList();
 						this.createModelForAdditionalEmails();
 					}
@@ -567,7 +606,7 @@ public void UpdateCustomer(){
 		ctx.setFormId(getFormId());
 		ctx.setApiNames(apinames);
 		ctx.setInputXmls(docInput);
-		if (!page.isDisposed())
+		if (!page.isDisposed() && "".equalsIgnoreCase(this.modifyUserId.trim()))
 			callApi(ctx, page);
 		
 	}else{
@@ -581,7 +620,7 @@ public void UpdateCustomer(){
 	ctx.setFormId(getFormId());
 	ctx.setApiNames(apinames);
 	ctx.setInputXmls(docInput);
-	if (!page.isDisposed())
+	if (!page.isDisposed() && "".equalsIgnoreCase(this.modifyUserId.trim()))
 		callApi(ctx, page);
 	}
 }

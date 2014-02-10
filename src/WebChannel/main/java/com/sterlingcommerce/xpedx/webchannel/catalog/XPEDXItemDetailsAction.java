@@ -66,11 +66,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		HttpSession localSession = httpRequest.getSession();
 		// End - Webtrends meta tag
 		//  EB-1158--
-		try {
+		//commented for Performance issue
+		/*try {
 			myItemsListSize = getAllItemList().size(); 
 		} catch (Exception ex) {
 			LOG.error("Exception while getting My Items List ", ex);
-		}
+		}*/
 
 		//Jira 2421
 		 if(request.getParameter("selectedView")!=null){
