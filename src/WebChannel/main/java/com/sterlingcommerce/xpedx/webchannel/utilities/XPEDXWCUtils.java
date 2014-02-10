@@ -2720,49 +2720,42 @@ public class XPEDXWCUtils {
 	/*
 	 * Method returns the OCI Fields for a given Customer.
 	 */
-
-	public static String[] getOCIFieldsForCustomer(
-			HttpServletRequest req, HttpServletResponse res, String customerID, String storefrontID) {
+	public static String[] getOCIFieldsForCustomer(HttpServletRequest req, HttpServletResponse res,
+			String customerID, String storefrontID) {
 		String[] ociFields = new String[4];
-		Document outputDoc = null;
+
 		try {
 			if (null == customerID || customerID.length() <= 0) {
-				log
-						.error("getOCIFieldsForCustomer: Customer Identity is null.");
+				log.error("getOCIFieldsForCustomer: Customer Identity is null.");
 				return null;
 			}
 
-
-				//outputDoc = XPEDXWCUtils.getCustomerDetails(
-					//	customerID, storefrontID, getOCIFieldsMashup);
-
-			IWCContext wcContext = WCContextHelper.getWCContext(req);
 			Map<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/Customer/@CustomerID", customerID);
 			valueMap.put("/Customer/@OrganizationCode", storefrontID);
 
+			IWCContext wcContext = WCContextHelper.getWCContext(req);
 			Element input = WCMashupHelper.getMashupInput(
-					"xpedx-customer-getOCIFields", valueMap, wcContext
-							.getSCUIContext());
+					"xpedx-customer-getOCIFields", valueMap, wcContext.getSCUIContext());
+
 			String inputXml = SCXmlUtil.getString(input);
 			log.debug("Input XML: " + inputXml);
 
 			Object obj = WCMashupHelper.invokeMashup(
-					"xpedx-customer-getOCIFields", input, wcContext
-							.getSCUIContext());
-			outputDoc = ((Element) obj).getOwnerDocument();
+					"xpedx-customer-getOCIFields", input, wcContext.getSCUIContext());
 
-					Element outputElem = outputDoc.getDocumentElement();
-					ociFields[0] = SCXmlUtil.getXpathAttribute(outputElem,
-							"//Customer/Extn/@ExtnUseOCInSAPParamFlag");
-					ociFields[1] = SCXmlUtil.getXpathAttribute(outputElem,
-						"//Customer/Extn/@ExtnUsernameParam");
-					ociFields[2] = SCXmlUtil.getXpathAttribute(outputElem,
-						"//Customer/Extn/@ExtnUserPwdParam");
-					ociFields[3] = SCXmlUtil.getXpathAttribute(outputElem,
-						"//Customer/Extn/@ExtnUserEmailTemplate");
-
-		} catch (Exception ex) {
+			Document outputDoc = ((Element) obj).getOwnerDocument();
+			Element outputElem = outputDoc.getDocumentElement();
+			ociFields[0] = SCXmlUtil.getXpathAttribute(outputElem,
+					"//Customer/Extn/@ExtnUseOCInSAPParamFlag");
+			ociFields[1] = SCXmlUtil.getXpathAttribute(outputElem,
+					"//Customer/Extn/@ExtnUsernameParam");
+			ociFields[2] = SCXmlUtil.getXpathAttribute(outputElem,
+					"//Customer/Extn/@ExtnUserPwdParam");
+			ociFields[3] = SCXmlUtil.getXpathAttribute(outputElem,
+					"//Customer/Extn/@ExtnUserEmailTemplate");
+		}
+		catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
 		return ociFields;
