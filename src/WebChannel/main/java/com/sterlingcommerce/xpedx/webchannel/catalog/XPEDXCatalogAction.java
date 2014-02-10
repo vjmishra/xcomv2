@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.math.BigDecimal;
@@ -8598,4 +8598,4 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 
 }
->>>>>>> v2.0.12.01
+
