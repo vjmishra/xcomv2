@@ -239,7 +239,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	        		 else{
 		            	 checked=false;            	
 		            	 item.setChecked(checked);
-		            	 item.setGrayed(true);
+		            	 item.setGrayed(false);
 		            	 grayed=false;
 		            }	 
 	        	}
@@ -252,8 +252,8 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	            else{
 	            	 checked=false;            	
 	            	 item.setChecked(false);
-	            	 item.setGrayed(true);
-	            	 grayed=true;
+	            	 item.setGrayed(false);
+	            	 grayed=false;
 	            }
 	        }
 	        
@@ -265,12 +265,12 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
             }
             else{
             	 checked=false;            	
-            	 item.setChecked(true);
-            	 item.setGrayed(true);
-            	 grayed=true;
+            	 item.setChecked(checked);
+            	 item.setGrayed(false);
+            	 grayed=false;
             }
 	    }
-  //  item.setChecked(checked);
+    //item.setChecked(checked);
 	    
     
 	 checkPath(item.getParentItem(), checked, grayed);
