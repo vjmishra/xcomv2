@@ -5372,9 +5372,15 @@ input label {
 }
 
 .mil-wrap-condensed-container {
-    float: left;
-    height: auto;
-    width: 950px;
+	float: none;
+	height: auto;
+	width: 940px;
+	padding: 0px 10px 10px 0px;
+	border-top: none;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	clear: both;
 }
 #replacementItemBody .mil-wrap-condensed-container {
     border-bottom: 1px solid #CCCCCC;
@@ -5418,18 +5424,10 @@ input label {
     height: 270px;
 }
 .mil-wrap-condensed-mid {
-/*     -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: -moz-use-text-color #CCCCCC #CCCCCC;
-    border-right: 1px solid #CCCCCC;
-    border-style: none solid solid;
-    border-width: 0 1px 1px; */
-    border: 1px solid #cccccc;
-    border-top: 0px;
-    height: 270px;
+	border: 1px solid #cccccc;
+	border-top: 0px;
+	height: auto;
+	clear: both;
 }
 .slidingDiv2 {
     height: auto;
@@ -5471,9 +5469,10 @@ float:right;
 width:auto;
 }
 .mil-checkbox-wrap {
-    float: left;
-    margin: 8px;
-    width: 173px;
+	float: left;
+	margin: 8px;
+	padding-top: 3px;
+	width: 5px;
 }
 .mil-wrap-condensed-desc {
     float: left;
@@ -5489,11 +5488,15 @@ width:auto;
 }
 .mil-desc-attribute-list, .mil-desc-attribute-list ul, ul.prodlist {
     color: #003399;
-    height: 73px;
+    height: auto;
     list-style-type: disc;
     margin-bottom: 10px;
     margin-top: 10px;
-    overflow: hidden;
+    overflow: visible;
+}
+.fields-padding {
+	padding-top: 0px;
+	padding-bottom: 4px;
 }
 div#replacementItemBody ul.mil-desc-attribute-list {
     height: auto;
@@ -5506,9 +5509,22 @@ div#replacementItemBody .mil-wrap-condensed {
     width: 198px;
 }
 .mil-action-list-wrap {
-    float: left;
-    padding-top: 10px;
-    width: 450px;
+	float: right;
+	padding-top: 10px;
+	width: 250px;
+	position: relative;
+}
+.mil-wrap-condensed-container img.showimages {
+	width: 150px;
+	float: left;
+	display: block;
+	clear: none;	
+}
+.mil-wrap-condensed-container img.hideimages {
+	width: 0px;
+	float: none;
+	display: none;
+	clear: none;	
 }
 .mil-replace-condensed a {
     color: #FF0000 !important;
@@ -5541,12 +5557,7 @@ input:focus, textarea:focus {
 }
 
 .ad-float {
-    color: #666666;
-    float: right;
-    font-family: Arial,Helvetica,sans-serif;
-    font-size: 10px;
-    letter-spacing: 2.9px;
-    margin-top: -25px;
+	display: none;
 }
 .left {
     text-align: left;
@@ -5567,9 +5578,9 @@ input:focus, textarea:focus {
     width: 50px;
 }
 .mil-desc-wrap {
-    float: left;
-    height: auto;
-    width: 300px;
+	float: left;
+	height: auto;
+	clear: none;
 }
 #replacementItemBody .mil-desc-wrap {
     width: 350px;
@@ -5624,7 +5635,7 @@ select.xpedx_select_sm {
     height: 24px;
     margin-bottom: 6px;
     padding: 2px 2px 16px;
-    width: 225px;
+    width: 245px;
 }
 .forselected-input {
     display: inline;
@@ -5713,7 +5724,14 @@ select.xpedx_select_sm {
     border-right: 1px solid #CCCCCC;
 }
 .show-hide-wrap div:first-child {
-    border-bottom: 1px solid #CCCCCC;	
+	border-bottom: 0px;
+}
+.mil-only .mil-wrap-condensed {
+	border: 0px;
+	clear: both;
+}
+#mil-list td, #mil-carts-list td {
+	padding: 8px;
 }
 .catalog-my-price-availability {
     font-size: 10px;
@@ -6203,4 +6221,212 @@ div#main.userProfile { min-height: 850px; }
 .mil-count-selected-bottom {
 	margin-left: 20px;
 	margin-bottom: 20px;
+}
+
+
+/*
+=================================================================================================
+BEGIN 2014 styles
+=================================================================================================
+*/
+.clearview {
+	clear: both;
+	height: 5px;
+}
+.standard-table {
+	width: 950px;
+	margin: 0px 0px 0px 20px;
+}
+
+.graybar {
+	width: 947px;
+	height: 25px;
+	background-color: #e9e9e9;
+	padding: 3px;
+}
+.graybar div {
+	padding: 4px 0px 0px 3px;
+	float: left;
+	clear: none;
+}
+.tool-bar-group {
+	width: 100%;
+}
+.tool-bar-group li {
+	display: inline;
+	float: right;
+}
+
+.clearfix {
+	clear: both;
+	height: 1px;
+	width: 100%;
+}
+.clearboth {
+	clear: both;
+	}
+.action-list-buttons {
+	margin-top: 6px;
+	float: right;
+	width: 280px;
+	display: inline-block;
+	text-alighn: left;	
+}
+.mil-pa-wrap {
+	display: block;
+	width: 100%;
+	clear: both;	
+	}
+.mil-pa-avail {
+	width: 308px;	
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	min-height: 115px;
+	margin-right: 2px;
+	min-height: 125px;
+	}
+.mil-pa-bracket {
+	width: 308px;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	min-height: 125px;
+	margin-right: 2px;
+	
+	}
+.mil-pa-price {
+	width: 308px;
+	float: right;
+	clear: none;
+	min-height: 125px;
+	
+	}
+.mil-pa-wrap h4 {
+	display: block;
+	background:#e1e1e1;
+	padding: 2px;
+	margin-bottom: 10px;
+	padding-left: 20px;
+	font-family: Arial, Helvetica, sans-serif;	
+	font-size:11px;
+	font-style:italic;
+	}
+.mil-lists-legend {
+	width: 500px;
+	padding:25px 0px 0px 50px;
+	height: 20px;
+	float: left;
+	clear: none;
+	}
+.mil-lists-personal {
+	float: left;
+	clear: none;
+	width: 62px;
+/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
+	background: url(20x20_personal_list.png) no-repeat left top;
+	padding-left: 21px;
+	padding-top: 3px;
+	height: 22px;
+	}
+.mil-lists-shared {
+	float: left;
+	clear: none;
+	width: 55px;
+/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
+	background: url(20x20_shared_list.png) no-repeat top left;
+	padding-left: 21px;
+	padding-top: 3px;
+	height: 22px;	
+	}	
+.mil-manage-lists {
+	float: left;
+	padding: 3px 0px 0px 12px;
+	}
+.mil-lists-toolbar {
+	width: 200px;
+	float: right;
+	clear: none;
+	text-align: right;
+	padding: 0px 30px 0px 0px;
+	}
+
+.mil-list-icon {
+	float: left;
+	clear: none;
+	width: 26px;
+	margin-top: -5px;
+	}
+#mil-list td, #mil-carts-list td .left-cell p  {
+
+    word-wrap: break-word;
+	}
+.cart-btn-wrap {
+	width: 250px;
+	height: 26px;
+	padding: 3px 0px 3px 0px;
+	clear: both;
+	}
+.mil-avail-link {
+	width: 145px;
+	float: left;
+	clear: none;
+	padding-top: 7px;
+	}
+.mil-addcart-btn {
+	width: 100px;
+	float: left;
+	clear: none;
+	}
+.list-of-lists-header {
+	background: #003399;
+	color: #ffffff;
+	font-size:11px;
+	text-align: center;
+	}
+.fixwidth200 {
+	width: 200px;
+	}
+#mil-list.standard-table td.left-rounded-corner {
+/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
+	background: url(theme-1/mil/items-list-bg-LEFT.gif) top left no-repeat;
+	background-color: #003399;
+	color: #ffffff;
+	font-size:11px;
+	border-left: none;
+}
+
+#mil-list.standard-table td.right-rounded-corner {
+/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
+	background: url(theme-1/mil/items-list-bg-RIGHT.gif) top right no-repeat;
+	background-color: #003399;
+	color: #ffffff;
+	font-size:11px;
+	border-right: none;
+	text-align: center;
+}
+.imagewrap {
+	float: left;
+	clear: none;
+	height: 150px;
+	width: 150px;
+	margin: -15px 0px 0px 20px;
+}
+.mil-checkbox-wrap {
+	display: block;
+	float: left;
+	clear: none;
+	height: 100px;
+	width: 16px;
+}	
+	
+.desc-showimages {
+	width: 350px;
+	margin-left: 160px;
+	height: auto;
+}
+.desc-hideimages {
+	width: 500px;
+	margin-left: 0px;
+	height: auto;
 }

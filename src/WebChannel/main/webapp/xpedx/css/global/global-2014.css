@@ -36,3 +36,109 @@
 	font-size: 16px;
 	padding-bottom:8px;
 }
+
+.button-container {
+	width: 600px;
+	float: right;
+	clear: none;
+	text-align: right;
+	padding-bottom: 8px;
+	}
+/*--------------basic layout adjustments-------------*/
+
+.addpadbottom20 {
+	padding-bottom: 20px;	
+	}
+.addpadleft20{
+	padding-left: 20px;
+	}
+.addpadright20{
+	padding-right: 20px;
+	}
+.addpad3 {
+	padding: 3px;
+	}
+.addpadtop5 {
+	padding-top: 5px;
+	}
+.addpadtop10 {
+	padding-top: 10px;
+}
+.addpadtop2 {
+	padding-top: 2px;
+}
+
+.marginleft10 {
+	margin-left: 10px;
+	}
+.indent20px {
+	padding-left: 20px;
+}
+.boldtype {
+	font-weight: 600;
+	}
+.lesspadbottom10 {
+	margin-bottom: -10px;
+	}
+.lesspadtop10 {
+	margin-top: -10px;
+	}
+.lesspadtop3 {
+	margin-top: -3px;
+	}
+.addmarginright10 {
+	margin-right: 10px;
+	}
+.addmarginleft10 {
+	margin-left: 10px;
+	}
+.addmargintop10 {
+	margin-top: 10px;
+	}
+.addmargintop20 {
+	margin-top: 20px;
+	}
+.floatright {
+	float: right;
+	}
+/*------------view hide buttons---------------*/
+.view-hide-images  {
+	width: 120px;
+	height: 25px;
+	float: left;
+	clear: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+}
+.viewbtn {
+	display: block;
+	width: 100px;
+	height: 21px;
+	background: url(../../images/mil/show-hide-btn.png) 1px 5px no-repeat;
+	border: none;
+}
+.hidebtn {
+	width: 100px;
+	height: 21px;
+	background: url(../../images/mil/show-hide-btn.png) 0px -22px no-repeat;
+	border: none;
+}
+.form input.btn-gradient.floatright{
+    display: inline;
+    float: right;
+	cursor: pointer;
+}
+
+.form input.btn-gradient.floatright.addmarginleft10{
+    display: inline;
+    float: right;
+	cursor: pointer;
+	margin-left: 10px;
+}
+.form input.btn-neutral.floatright.addmarginleft10{
+    display: inline;
+    float: right;
+	cursor: pointer;
+	margin-left: 10px;
+}
