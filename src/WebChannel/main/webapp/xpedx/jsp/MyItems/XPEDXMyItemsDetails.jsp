@@ -74,12 +74,13 @@
 <script type="text/javascript">
 	// toggle thumbnails on/off
 	$(document).ready(function() {
-		// TODO refactor to have single DOM change: parent tag has 'foo' and then css class '.foo imagewrap img { display:none; }'
 		var showHideImages = function(visible) {
 			if (visible) {
-				$('.imagewrap img').removeClass('hideimages');
+				$('#main').removeClass('hide-item-thumbnails');
+// 				$('.imagewrap img').removeClass('hideimages');
 			} else {
-				$('.imagewrap img').addClass('hideimages');
+				$('#main').addClass('hide-item-thumbnails');
+// 				$('.imagewrap img').addClass('hideimages');
 			}
 		};
 		
@@ -100,6 +101,11 @@
 		$('.paaLink').click(function() {
 			myUpdateSelectedPAA();
 			return false;
+		});
+		
+		// add items with qty to cart button
+		$('.btn-add-items-qty-to-cart').click(function() {
+			addToCart();
 		});
 	});
 </script>
@@ -128,32 +134,28 @@ function showSharedListForm(){
 }
 </script>
 <s:if test='editMode == true'>
-	<title><s:property value="wCContext.storefrontId" /> - <s:text
-			name="MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE" /> / <s:text
-			name="myitemsdetails.editable.title" /></title>
+	<title>
+		<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE" /> / <s:text name="myitemsdetails.editable.title" />
+	</title>
 	<meta name="DCSext.w_x_list_edit" content="1" />
 </s:if>
 <s:else>
-	<title><s:property value="wCContext.storefrontId" /> - <s:text
-			name="MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE" /> / <s:text
-			name="myitemsdetails.noneditable.title" /></title>
+	<title>
+		<s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MIL.MYITEMLISTS.GENERIC.TABTITLE" /> / <s:text name="myitemsdetails.noneditable.title" />
+	</title>
 </s:else>
 
 <!-- Web Trends tag start -->
 
 <s:if test="%{updatePAMetaTag}">
 	<meta name="DCSext.w_x_sc" content="1" />
-	<meta name="DCSext.w_x_scr"
-		content="<s:property value='%{strItemIds}'/>" />
+	<meta name="DCSext.w_x_scr" content="<s:property value='%{strItemIds}'/>" />
 </s:if>
 
 <s:if test='%{#session.metatagName != null}'>
-	<meta name="<s:property value='%{#session.metatagName}' />"
-		content="<s:property value='%{#session.metatagValue}' />" />
-	<s:set name="metatagName" value="<s:property value=null />"
-		scope="session" />
-	<s:set name="metatagValue" value="<s:property value=null />"
-		scope="session" />
+	<meta name="<s:property value='%{#session.metatagName}' />" content="<s:property value='%{#session.metatagValue}' />" />
+	<s:set name="metatagName" value="<s:property value=null />" scope="session" />
+	<s:set name="metatagValue" value="<s:property value=null />" scope="session" />
 </s:if>
 <!-- Web Trends tag end -->
 
@@ -217,10 +219,10 @@ function showSharedListForm(){
 	var validAddtoCartItemsFlag  = new Array();
 	// EB-3973 share private list is not displayed and  the locations are not shown if private list is checked.
 	function hideSharedListFormIfPrivate() {
-		 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
-		  document.getElementById("dynamiccontent").style.display = "none";
-		 }
+		if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
+			document.getElementById("dynamiccontent").style.display = "none";
 		}
+	}
 </script>
 <script type="text/javascript">
 
@@ -866,10 +868,8 @@ function showSharedListForm(){
 					
 			 }
 			var formItemIds 	= document.getElementById("formItemIds");
-			//var selCart 		= document.getElementById("draftOrders");
 			
 			try{
-			//selCart = selCart.options[selCart.selectedIndex].value;
 			var selCart = '<s:property value="#currentCartInContextOHK" />';
 			}catch(ee){
 				selCart = "_CREATE_NEW_";
@@ -881,17 +881,10 @@ function showSharedListForm(){
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{addToCartLink}' escape='false'/>";
 				formItemIds.orderHeaderKey.value = selCart;
-				//formItemIds.submit();
 				//START - Submit the form via ajax
-	            //Added For Jira 2903
-	            //Commented for 3475
-				//Ext.Msg.wait("Processing...");      
-				//Ext.Msg.wait("Adding items to cart...Please wait!");
-	                     //xpedx_working_start();
-                         //setTimeout(xpedx_working_stop, 3000);
-                         var URL = "<s:property value='%{addToCartLink}' escape='false'/>" + "&validItemFlagArray=" +validAddtoCartItemsFlag;
-                       if( isAddToCart == true)
-                    	   {
+                var URL = "<s:property value='%{addToCartLink}' escape='false'/>" + "&validItemFlagArray=" +validAddtoCartItemsFlag;
+                if( isAddToCart == true)
+                {
 	                 Ext.Ajax.request({
 	                   url: URL,
 	                   form: 'formItemIds',
@@ -2164,7 +2157,7 @@ function showSharedListForm(){
 			<s:hidden name="editMode" value="%{true}"></s:hidden>
 		</s:form>
 
-		<div id="main">
+		<div id="main" class="hide-item-thumbnails">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
 			<s:if test='!#guestUser'>
@@ -2174,20 +2167,13 @@ function showSharedListForm(){
 
 			<div class="container" style="min-height: 535px;">
 				<!-- breadcrumb -->
-				<s:url action='home.action' namespace='/home' id='urlHome'
-					includeParams='none' />
-				<s:url id='urlMIL' namespace='/myItems' action='MyItemsList.action'
-					includeParams="get" escapeAmp="false">
-					<s:param name="filterByAccChk"
-						value="%{#_action.getFilterByAccChk()}" />
-					<s:param name="filterByShipToChk"
-						value="%{#_action.getFilterByShipToChk()}" />
-					<s:param name="filterByMyListChk"
-						value="%{#_action.getFilterByMyListChk()}" />
-					<s:param name="filterByAccSel"
-						value="%{#_action.getFilterByAccSel()}" />
-					<s:param name="filterByShipToSel"
-						value="%{#_action.getFilterByShipToSel()}" />
+				<s:url action='home.action' namespace='/home' id='urlHome' includeParams='none' />
+				<s:url id='urlMIL' namespace='/myItems' action='MyItemsList.action' includeParams="get" escapeAmp="false">
+					<s:param name="filterByAccChk" value="%{#_action.getFilterByAccChk()}" />
+					<s:param name="filterByShipToChk" value="%{#_action.getFilterByShipToChk()}" />
+					<s:param name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}" />
+					<s:param name="filterByAccSel" value="%{#_action.getFilterByAccSel()}" />
+					<s:param name="filterByShipToSel" value="%{#_action.getFilterByShipToSel()}" />
 				</s:url>
 
 				<div id="mid-col-mil">
@@ -2204,17 +2190,12 @@ function showSharedListForm(){
 					</s:if>
 				</div>
 
-				<s:set name="xpedxItemLabel"
-					value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL" />
-				<s:set name="customerItemLabel"
-					value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL" />
-				<s:set name="manufacturerItemLabel"
-					value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL" />
-				<s:set name="mpcItemLabel"
-					value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL" />
+				<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL" />
+				<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL" />
+				<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL" />
+				<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL" />
 
-				<s:hidden id="mandatoryFieldCheckFlag_mil-edit"
-					name="mandatoryFieldCheckFlag_mil-edit" value="%{false}"></s:hidden>
+				<s:hidden id="mandatoryFieldCheckFlag_mil-edit" name="mandatoryFieldCheckFlag_mil-edit" value="%{false}"></s:hidden>
 
 
 				<div id="breadcumbs-list-name">
@@ -2285,13 +2266,13 @@ function showSharedListForm(){
 								<s:if
 									test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 									<input name="button" type="button"
-										class="btn-gradient floatright addmarginleft10"
-										value="Add Items with Qty to Cart" />
+											class="btn-gradient floatright addmarginleft10 btn-add-items-qty-to-cart"
+											value="Add Items with Qty to Cart" />
 								</s:if>
 								<s:else>
 									<input name="button" type="button"
-										class="btn-gradient floatright addmarginleft10"
-										value="Add Items with Qty to Order" />
+											class="btn-gradient floatright addmarginleft10"
+											value="Add Items with Qty to Order" />
 								</s:else>
 
 								<!-- 	                <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; margin-right:5px;"> -->
@@ -2611,12 +2592,13 @@ function showSharedListForm(){
 									document.getElementById("errorMsgTop").style.display = "inline"; 
 								</script>
 							</s:if>
-							 <s:if test="%{errorMsg == 'ItemsOverLoad'}">
+							<s:if test="%{errorMsg == 'ItemsOverLoad'}">
 								<div class="error">
 									<!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
 									<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
 								</div>
-							</s:if> <s:if test="%{errorMsg == 'InvalidFormat'}">
+							</s:if>
+							<s:if test="%{errorMsg == 'InvalidFormat'}">
 								<div class="error">
 									<!--   An unexpected error occured (eg, a row had too few columns) -->
 									The import file is not in the correct file layout. Download the
@@ -2634,13 +2616,11 @@ function showSharedListForm(){
 					</div>
 
 					<s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
-					<s:set name="itemIdCustomerUomMap"
-						value="#_action.getItemAndCustomerUomHashMap()" />
+					<s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />
 
 					<s:set name="webtrendsItemTypeMap"
 						value="%{#_action.getItemTypeMap()}" />
-					<s:iterator status="status" id="item"
-						value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
+					<s:iterator status="status" id="item" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 						<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 						<s:set name='name' value='#item.getAttribute("Name")' />
 
@@ -2661,13 +2641,11 @@ function showSharedListForm(){
 						<s:set name="itemBaseUom" value='#baseUOMs.get(#itemId)' />
 
 						<s:if test='%{#customerUOM==#itemBaseUom}'>
-							<s:set name='customerUomWithoutM'
-								value='%{#customerUOM.substring(2, #customerUOM.length())}' />
+							<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />
 							<s:set name="baseUOMDesc" value="#customerUomWithoutM" />
 						</s:if>
 						<s:else>
-							<s:set name="baseUOMDesc"
-								value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemBaseUom)" />
+							<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemBaseUom)" />
 						</s:else>
 
 						<s:set name="YFSItmePrimaryInfo" value='descriptionMap.get(#item.getAttribute("ItemId"))' />
@@ -2707,9 +2685,7 @@ function showSharedListForm(){
 						</s:url>
 						<s:set name='uomList' value='itemIdsUOMsDescMap.get(#itemId1)' />
 
-						<s:url id='itemDetailsLink' namespace="/catalog"
-							action='itemDetails.action' includeParams='none'
-							escapeAmp="false">
+						<s:url id='itemDetailsLink' namespace="/catalog" action='itemDetails.action' includeParams='none' escapeAmp="false">
 							<s:param name="itemID" value="#itemId" />
 							<s:param name="sfId" value="#parameters.sfId" />
 							<s:param name="unitOfMeasure" value="#itemBaseUom" />
@@ -2718,13 +2694,13 @@ function showSharedListForm(){
 
 						<s:if test="#status.last">
 							<div class="mil-wrap-condensed-container mil-only last"
-								onmouseover="$(this).addClass('green-background');"
-								onmouseleave="$(this).removeClass('green-background');">
+									onmouseover="$(this).addClass('green-background');"
+									onmouseleave="$(this).removeClass('green-background');">
 						</s:if>
 						<s:else>
 							<div class="mil-wrap-condensed-container mil-only"
-								onmouseover="$(this).addClass('green-background');"
-								onmouseleave="$(this).removeClass('green-background');">
+									onmouseover="$(this).addClass('green-background');"
+									onmouseleave="$(this).removeClass('green-background');">
 						</s:else>
 
 						<div
@@ -2735,20 +2711,18 @@ function showSharedListForm(){
 							<!-- begin image / checkbox   -->
 							<div class="mil-checkbox-wrap">
 								<s:if test='editMode == true'>
-									<s:checkbox name="itemKeys" fieldValue="%{#id}"
-										cssClass="milCheckbox" />
+									<s:checkbox name="itemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 								</s:if>
-								<s:if test='editMode != true'>
-									<s:checkbox name="checkItemKeys" fieldValue="%{#id}"
-										cssClass="milCheckbox" />
-								</s:if>
-
+								<s:else>
+									<s:checkbox name="checkItemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
+								</s:else>
+								
 								<a href='<s:property value="%{itemDetailsLink}" />'>
 									<div class="imagewrap">
 										<%-- TODO: ideally find a way to omit these images until toggled on to avoid loading images in the background --%>
-										<img class="hideimages"
-											src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
-											width="150" height="150" alt="" />
+										<img class="item-thumbnail"
+												src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
+												width="150" height="150" alt="" />
 									</div>
 								</a>
 								<s:hidden name="keys" value="%{#id}" />
@@ -2758,8 +2732,7 @@ function showSharedListForm(){
 							<!-- begin description  -->
 							<s:hidden name="itemsName" value="%{#name}" />
 							<s:hidden name="names" value="%{#name}" />
-							<s:hidden name="enteredProductIDs" id="enteredProductIDs_%{#id}"
-								value="%{#itemId}" />
+							<s:hidden name="enteredProductIDs" id="enteredProductIDs_%{#id}" value="%{#itemId}" />
 							<s:hidden name="itemIds" value="%{#itemId}" />
 
 							<div class="mil-desc-wrap">

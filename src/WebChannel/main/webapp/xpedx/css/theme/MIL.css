@@ -5514,13 +5514,13 @@ div#replacementItemBody .mil-wrap-condensed {
 	width: 250px;
 	position: relative;
 }
-.mil-wrap-condensed-container img.showimages {
+.mil-wrap-condensed-container .item-thumbnail {
 	width: 150px;
 	float: left;
 	display: block;
 	clear: none;	
 }
-.mil-wrap-condensed-container img.hideimages {
+.hide-item-thumbnails .mil-wrap-condensed-container .item-thumbnail {
 	width: 0px;
 	float: none;
 	display: none;
