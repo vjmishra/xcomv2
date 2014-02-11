@@ -2736,7 +2736,7 @@ function showSharedListForm(){
 							<s:hidden name="itemIds" value="%{#itemId}" />
 
 							<div class="mil-desc-wrap">
-								<div class="mil-wrap-condensed-desc desc-hideimages"
+								<div class="mil-wrap-condensed-desc"
 									style="height: auto;">
 									<s:if test="%{#itemType != 99}">
 										<a class="short-description"

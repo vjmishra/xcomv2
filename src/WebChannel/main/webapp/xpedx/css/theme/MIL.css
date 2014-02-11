@@ -6419,13 +6419,13 @@ BEGIN 2014 styles
 	height: 100px;
 	width: 16px;
 }	
-	
-.desc-showimages {
+
+.mil-wrap-condensed-desc {
 	width: 350px;
 	margin-left: 160px;
 	height: auto;
 }
-.desc-hideimages {
+.hide-item-thumbnails .mil-wrap-condensed-desc {
 	width: 500px;
 	margin-left: 0px;
 	height: auto;
