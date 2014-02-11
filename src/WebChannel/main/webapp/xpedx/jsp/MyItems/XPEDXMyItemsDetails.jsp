@@ -77,10 +77,8 @@
 		var showHideImages = function(visible) {
 			if (visible) {
 				$('#main').removeClass('hide-item-thumbnails');
-// 				$('.imagewrap img').removeClass('hideimages');
 			} else {
 				$('#main').addClass('hide-item-thumbnails');
-// 				$('.imagewrap img').addClass('hideimages');
 			}
 		};
 		
@@ -2069,8 +2067,7 @@ function showSharedListForm(){
 					<br />
 					<s:submit value="Create New Item" align="center"></s:submit>
 					&nbsp;&nbsp;
-					<input type="button" value="Cancel"
-						onclick="hideForm('NewForm')" />
+					<input type="button" value="Cancel" onclick="hideForm('NewForm')" />
 				</s:form>
 			</div>
 
@@ -2255,12 +2252,6 @@ function showSharedListForm(){
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
 
-						<!--                 <fieldset class="mil-non-edit-field"> -->
-						<!--                     <legend>For Selected Items:</legend> -->
-						<!--                     <input class="forselected-input toggleAllSelected" type="checkbox" id="selAll1"/> -->
-						<%--                     <a class="grey-ui-btn float-left" href="javascript:myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
-						<!--                 </fieldset> -->
-
 						<div class="button-container">
 							<s:if test='itemCount > 0'>
 								<s:if
@@ -2274,17 +2265,6 @@ function showSharedListForm(){
 											class="btn-gradient floatright addmarginleft10"
 											value="Add Items with Qty to Order" />
 								</s:else>
-
-								<!-- 	                <ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; margin-right:5px;"> -->
-								<!-- 	                    <li><a class="orange-ui-btn" href="javascript:addToCart();"> -->
-								<%-- 	                    <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' "> --%>
-								<%-- 	                    <span>Add Items with Qty to Cart</span> --%>
-								<%-- 	                    </s:if> --%>
-								<%-- 	                    <s:else> --%>
-								<%-- 	                     <span>Add Items with Qty to Order</span> --%>
-								<%-- 	                    </s:else> --%>
-								<!-- 	                    </a></li> -->
-								<!-- 	                </ul> -->
 							</s:if>
 
 							<s:if test="%{canEditItem}">
@@ -2297,12 +2277,6 @@ function showSharedListForm(){
 							<input name="button" type="button"
 								class="btn-neutral floatright addmarginleft10"
 								value="Export This List" onclick="exportList(); return false;" />
-							<!-- 	                <ul id="tool-bar" class="tool-bar-bottom" style="width:403px; float:left; padding-top:5px; margin-left:9px;"> -->
-							<%-- 	                    <li><a class=" grey-ui-btn" href="javascript:exportList(); "><span>Export List</span></a></li> --%>
-							<%-- 						<s:if test="%{canEditItem}"> --%>
-							<%-- 							<li><a class="grey-ui-btn" href="javascript:document.getElementById('formEditMode').submit();"><span>Edit This List</span></a></li> --%>
-							<%-- 						</s:if> --%>
-							<!-- 	                </ul> -->
 						</div>
 						<!-- / button-container -->
 
