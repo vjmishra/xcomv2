@@ -36,7 +36,7 @@ public class XPEDXOciServlet extends IntegrationServlet {
 	protected IWCContext wcContext = null;
 	private String id="";
 	private String pwd="";
-	private String startPageEncodedURL = "";
+	private String landingURL = "";
 
 
 	@Override
@@ -46,37 +46,35 @@ public class XPEDXOciServlet extends IntegrationServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		startPageEncodedURL = "/error"; //need to clear these class-wide vars - TODO change this?
-		wcContext = null;
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		WCIntegrationResponse wcIntegrationRes = null;
+
+		landingURL = "/error"; //need to clear/set these class-wide vars
 		wcContext = WCContextHelper.getWCContext(request);
 
+		// Auth/login the user/pass
 		SCUISecurityResponse securityResponse = authenticateRequest(request, response);
 
 		if (YFCCommon.equals(SCUISecurityResponse.SUCCESS, securityResponse.getReturnStatus())) {
 
-			wcIntegrationRes = processRequest(request, response); // sets startPageEncodedURL which is returned by getResponseDoc
+			wcIntegrationRes = processRequest(request, response); // sets landingURL which is returned by getResponseDoc
 
 			if (wcIntegrationRes.getReturnStatus()) {
-				// *** Redirect to catalog/site
+				// *** Success - redirect to catalog/site via pLogin.action
 				response.sendRedirect(getResponseDoc(wcIntegrationRes.getErrorObj(),
 						wcIntegrationRes.getReturnStatus(), wcContext));
 				return;
 			}
 		}
-//		else {
-			errorMessage = "OCI Authentication/setup failed";
-			errorCode = new Long(IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
-			logError("Error Code:" + errorCode + "& ErrorDesc:"+ errorMessage);
-			//TODO is this best way to return this error?
+
+		//TODO is this best way to return errors?
+		errorMessage = "OCI Authentication/setup failed";
+		errorCode = new Long(IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
+		logError("Error Code:" + errorCode + "& ErrorDesc:"+ errorMessage);
 //			wcIntegrationRes = new WCIntegrationResponse(WCIntegrationResponse.FAILURE,
 //					new Error(errorCode, errorMessage));
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, errorMessage);
-//		}
+		response.sendError(HttpServletResponse.SC_FORBIDDEN, errorMessage);
 	}
 
 	@Override
@@ -86,59 +84,22 @@ public class XPEDXOciServlet extends IntegrationServlet {
 		String errorMessage = null;
 
 		try {
+			// Need to pass along the URL of the procurement system for later checkout
+			// [does hook that includes params pass through ok to this servlet and from here to pLogin.action ?]
 			String hookUrl = wcContext.getSCUIContext().getRequest().getParameter("hook_url");
 
-
-			//TODO ********* remove all this stuff???
-//			populateOCIContext(wcContext, hookUrl ); //stores url in context - need?
-//
-//			try {
-//				CommerceContextHelper.processProcurementPunchIn(wcContext); // What does this do? need?
-//			}
-//			catch (Exception e) {
-//				// Send failure response
-//				errorMessage = "Failed to process the commerce context";
-//				errorCode = new Long(IWCIntegrationStatusCodes.COMMERCE_CONTEXT_FAILED);
-//				logError("Error Code:" + errorCode + "& ErrorDesc:" + errorMessage + "Exception:" + e.getMessage(),
-//						e);
-//				return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,
-//						new Error(errorCode, errorMessage));
-//			}
-//
-//			String startPageAction = WCIntegrationHelper
-//					.checkAndAppendJSessionId(
-//							IAribaConstants.START_PAGE_URL_DEFAULT_SEARCH,
-//								wcContext);  // -> "/catalog/navigate.action;jsessionid=..."
-//
-//			String sfId = wcContext.getStorefrontId();
-//			String startPageURL = startPageAction + "?sfId=" + sfId; // -> "/catalog/navigate.action;jsessionid=...?sfId=xpedx"
-//			//FIXME Bad - always adds ":8001"
-//			startPageEncodedURL = WCIntegrationHelper.constructStartPageURL(startPageURL, wcContext);// -> "http://localhost:8001/swc/catalog/navigate.action;jsessionid=...?sfId=xpedx"
-
-
 			// Create custom URL and redirect to that
-			String landingPage = "/swc/common/pLogin.action";
+			// -> reusing the login action from cXML
+			String loginAction = "/swc/common/pLogin.action";
 			String auth = "u=" + id + "&p=" + pwd;
 			String sfId = wcContext.getStorefrontId();
 
-			//TODO does hook that includes params pass through ok to this servlet and from here to pLogin.action ?
-			startPageEncodedURL = landingPage +"?"+ auth + "&sfId=" + sfId + "&hook_url=" + hookUrl;
+			landingURL = loginAction +"?"+ auth + "&sfId=" + sfId + "&hook_url=" + hookUrl;
 
-//			if (!YFCCommon.isVoid(startPageEncodedURL)) { // change/need this?
-//				errorMessage = ">>>>>>>>>>Request for Auth setup is success>>>>>>>>>>>>>.";
-				errorCode = new Long(IWCIntegrationStatusCodes.SUCCESS);
-				logInfo(">>>>>>>>>>>>>>>>Start page URL: " + startPageEncodedURL);
-				wcResponse = new WCIntegrationResponse(WCIntegrationResponse.SUCCESS,
-						new Error(errorCode, errorMessage));
-//			}
-//			else {
-//				// Send failure response
-//				errorMessage = "cannot form start page url:";
-//				errorCode = new Long(IWCIntegrationStatusCodes.COMMERCE_CONTEXT_FAILED);
-//				logError("Error Code:" + errorCode + "& ErrorDesc:"+ errorMessage);
-//				return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,
-//						new Error(errorCode, errorMessage));
-//			}
+			errorCode = new Long(IWCIntegrationStatusCodes.SUCCESS);
+			logInfo("OCI login page URL: " + landingURL);
+			wcResponse = new WCIntegrationResponse(WCIntegrationResponse.SUCCESS,
+					new Error(errorCode, errorMessage));
 		}
 		catch (Exception e) {
 			// not sure if this would happen normally
@@ -152,11 +113,11 @@ public class XPEDXOciServlet extends IntegrationServlet {
 		return wcResponse;
 	}
 
-	// this is apparently called by parent on failure (called directly from this doPost)
+	// called directly from doPost above, and apparently called by parent on failure
 	@Override
 	public String getResponseDoc(Error errObj, boolean resStatus, IWCContext ctx) {
 
-		return startPageEncodedURL;
+		return landingURL;
 	}
 
 	// not sure if/when this gets called by parent (called directly from this doPost)
@@ -168,11 +129,7 @@ public class XPEDXOciServlet extends IntegrationServlet {
 		pwd = req.getParameter("pwd");
 
 		try {
-			// Authenticate specified user/pass (is this login best way to authenticate?)
-			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(id, pwd);
-
-			scuiSecurityResponse = SCUIPlatformUtils.login(loginDoc,
-					SCUIContextHelper.getUIContext(req, res));
+			scuiSecurityResponse = authenticateUser(req, res);
 
 			// Need to support this in v2 ?
 			//scuiSecurityResponse = loginAlternateUser(req, res);
@@ -188,6 +145,15 @@ public class XPEDXOciServlet extends IntegrationServlet {
 			throw new WCException("Problem authenticating specified OCI user", e);
 		}
 
+		return scuiSecurityResponse;
+	}
+
+	private SCUISecurityResponse authenticateUser(HttpServletRequest req, HttpServletResponse res) {
+
+		// is this login best way to authenticate specified user/pass? (cXML does same)
+		Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(id, pwd);
+		SCUISecurityResponse scuiSecurityResponse = SCUIPlatformUtils.login(loginDoc,
+				SCUIContextHelper.getUIContext(req, res));
 		return scuiSecurityResponse;
 	}
 
@@ -225,12 +191,20 @@ public class XPEDXOciServlet extends IntegrationServlet {
 		return scuiSecurityResponse;
 	}
 
+	// not sure if/when this gets called by parent (called directly from this doPost)
 	@Override
 	protected boolean isValidRequest(HttpServletRequest request, HttpServletResponse response)
 			throws WCException{
     	return true;
  	}
 
+	// not sure if/when this gets called by parent (called directly from this doPost)
+	@Override
+	public Error getErrorObject(Long errorCode, String errorMsg) {
+		return new Error(errorCode, errorMsg);
+	}
+
+	// Leftover from 2010 Sterling impl, assume don't need
 //	private void populateOCIContext(IWCContext wcContext, String redirectURL) {
 //		OciContextImpl ociContext = OciContextImpl.getInstance();
 //		ociContext.setOciOperation("CREATE");
@@ -256,11 +230,6 @@ public class XPEDXOciServlet extends IntegrationServlet {
 
 	public static void logDebug(String s) {
 		log.debug("OCI Integration Servlet:" + s);
-	}
-
-	@Override
-	public Error getErrorObject(Long errorCode, String errorMsg) {
-		return new Error(errorCode, errorMsg);
 	}
 
 }
