@@ -14,7 +14,7 @@
 
 	<s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta content='IE=8' http-equiv='X-UA-Compatible' />       
+	<meta content='IE=8' http-equiv='X-UA-Compatible' />
 	<%
   		request.setAttribute("isMergedCSSJS","true");
   	  %>
@@ -131,27 +131,34 @@
 		var VER_FIREFOX = "<s:property value='%{#wcUtil.getBrowserVersion("version.firefox")}'/>";
 		var VER_SAFARI = "<s:property value='%{#wcUtil.getBrowserVersion("version.safari")}'/>";   // may be x.y
 		//var VER_CHROME = 10;  // may be x.y.z
+		var userAgent = navigator.userAgent;
 
 		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
 		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
-		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
+		if (/MSIE (\d+\.\d+);/.test(userAgent)){ //test for MSIE x.x;
 		 	var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
-			if (ieversion < VER_IE)
+			if ((ieversion < VER_IE) && (document.documentMode < VER_IE))
 			{
-				// need? checking compatibility mode?
-				if(document.documentMode < VER_IE)
-				{
-					warnBrowserVersion();
-				}
+				warnBrowserVersion();
 			}
-			else if (ieversion == 8)
+			else // if (ieversion == 8)
 			{
-				warnIE8();
+				// with IE=8 compatibility on, most checks for IE8 match IE9+ too
+				// so check for Trident - in IE8, agent string contains "Trident/4.0"
+				var rex = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");    
+				if (rex.exec(userAgent) != null) 
+				{        
+					var rv = parseFloat(RegExp.$1);
+					if (rv == 4)
+					{
+						warnIE8();
+					}
+				}
 			}
 		}
 
 		// Firefox: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0"
-		else if (/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)){ //test for Firefox/x.x or Firefox x.x
+		else if (/Firefox[\/\s](\d+\.\d+)/.test(userAgent)){ //test for Firefox/x.x or Firefox x.x
 			var ffversion=new Number(RegExp.$1);
 			if(ffversion < VER_FIREFOX)
 			{
@@ -161,7 +168,7 @@
 
 		// Safari: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
 		// win:"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
-		else if (/Version\/(\d+\.\d+).*Safari/.test(navigator.userAgent)){
+		else if (/Version\/(\d+\.\d+).*Safari/.test(userAgent)){
 			var safariversion = new Number(RegExp.$1);// new Number(useragent.substr(useragent.lastIndexOf('Safari/') + 7, 6));
 			if(safariversion < VER_SAFARI)
 			{
@@ -171,7 +178,7 @@
 		
 		// Chrome is kind of supported and autoupdates to latest version so don't check
 		// ex: "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.41 Safari/537.36"
-// 		else if (/Chrome[\/\s](\d+\.\d+)/.test(navigator.userAgent)){
+// 		else if (/Chrome[\/\s](\d+\.\d+)/.test(userAgent)){
 // 			var chromeversion=new Number(RegExp.$1);
 // 			if(chromeversion < VER_CHROME)
 // 			{
@@ -180,8 +187,8 @@
 // 		}
 
 		// Unsupported browsers
-		else if ((/Netscape[\/\s](\d+\.\d+)/.test(navigator.userAgent)) ||
-			(/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)))
+		else if ((/Netscape[\/\s](\d+\.\d+)/.test(userAgent)) ||
+			(/Opera[\/\s](\d+\.\d+)/.test(userAgent)))
 		{
 			 warnBrowserVersion();
 		}
