@@ -1,6 +1,7 @@
 package com.sterlingcommerce.xpedx.webchannel.punchout.servlet;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -68,7 +69,7 @@ public class XPEDXOciServlet extends IntegrationServlet {
 			}
 		}
 
-		//TODO is this best way to return errors?
+		// is this best way to return errors?
 		errorMessage = "OCI Authentication/setup failed";
 		errorCode = new Long(IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
 		logError("Error Code:" + errorCode + "& ErrorDesc:"+ errorMessage);
@@ -87,6 +88,7 @@ public class XPEDXOciServlet extends IntegrationServlet {
 			// Need to pass along the URL of the procurement system for later checkout
 			// [does hook that includes params pass through ok to this servlet and from here to pLogin.action ?]
 			String hookUrl = wcContext.getSCUIContext().getRequest().getParameter("hook_url");
+			String encodedHookUrl = URLEncoder.encode(hookUrl,"UTF-8");
 
 			// Create custom URL and redirect to that
 			// -> reusing the login action from cXML
@@ -94,7 +96,7 @@ public class XPEDXOciServlet extends IntegrationServlet {
 			String auth = "u=" + id + "&p=" + pwd;
 			String sfId = wcContext.getStorefrontId();
 
-			landingURL = loginAction +"?"+ auth + "&sfId=" + sfId + "&hook_url=" + hookUrl;
+			landingURL = loginAction +"?"+ auth + "&sfId=" + sfId + "&returnURL=" + encodedHookUrl;
 
 			errorCode = new Long(IWCIntegrationStatusCodes.SUCCESS);
 			logInfo("OCI login page URL: " + landingURL);
