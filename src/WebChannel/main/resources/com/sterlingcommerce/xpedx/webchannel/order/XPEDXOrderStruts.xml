@@ -797,13 +797,14 @@
                 <param name="draftOrderError">${draftOrderError}</param>
              </result>
         </action>
+        <!-- NEW Page for Quick Add EB 4367  replacing XPEDXDraftOrderDetails.jsp -->
         
         <action name="quickAddAction"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDetailsActionBinding.xml</param>
 			<param name="mashups">xpedx_me_draftOrderDetails</param>
 			<param name="resourceId">/swc/order/guestShopping</param>
-			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp
+			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetailsQuickAdd.jsp
 			</result>
 			<result name="input">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp
 			</result>

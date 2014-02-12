@@ -1522,3 +1522,298 @@ div.orders-page table#print-Preview-section {
 }
 table#print-Preview-section td.printField{width:15%;}
 table#print-Preview-section td.printValue{width:20%;}
+
+
+/*
+=================================================================================================
+BEGIN 2014 styles
+=================================================================================================
+*/
+
+/*EB-4367--------NEW STYLES 2014-------*/
+
+
+
+.ui-addTrPad table tr td {
+	padding-bottom: 4px;
+}
+.legend {
+	width: 360px;
+	padding: 0px 0px 5px 0px;
+	height: 20px;
+	margin-top: -10px;
+}
+.personal {
+	float: right;
+	clear: none;
+	width: 65px;
+	background: url(../../images/mil/20x20_personal_list.png) no-repeat left top;
+	padding-left: 21px;
+	padding-top: 3px;
+	height: 22px;
+}
+.shared {
+	float: right;
+	clear: none;
+	width: 55px;
+	background: url(../../images/theme/theme-1/20x20_shared_list.png) no-repeat top left;
+	padding-left: 21px;
+	padding-top: 3px;
+	height: 22px;	
+}	
+
+.ui-addTrPad h2 {
+    border-bottom: none;
+}
+
+.ui-addTrPad-head{
+	font-size: 16px;
+	padding-bottom:8px;
+}
+
+.button-container {
+	width: 600px;
+	float: right;
+	clear: none;
+	text-align: right;
+	padding-bottom: 8px;
+	}
+/*--------------basic layout adjustments-------------*/
+
+.addpadbottom20 {
+	padding-bottom: 20px;	
+	}
+.addpadleft20{
+	padding-left: 20px;
+	}
+.addpadright20{
+	padding-right: 20px;
+	}
+.addpad3 {
+	padding: 3px;
+	}
+.addpadtop5 {
+	padding-top: 5px;
+	}
+.addpadtop10 {
+	padding-top: 10px;
+}
+.addpadtop2 {
+	padding-top: 2px;
+}
+
+.marginleft10 {
+	margin-left: 10px;
+	}
+.indent20px {
+	padding-left: 20px;
+}
+.boldtype {
+	font-weight: 600;
+	}
+.lesspadbottom10 {
+	margin-bottom: -10px;
+	}
+.lesspadtop10 {
+	margin-top: -10px;
+	}
+.lesspadtop3 {
+	margin-top: -3px;
+	}
+.addmarginright10 {
+	margin-right: 10px;
+	}
+.addmarginleft10 {
+	margin-left: 10px;
+	}
+.addmargintop10 {
+	margin-top: 10px;
+	}
+.addmargintop20 {
+	margin-top: 20px;
+	}
+.floatright {
+	float: right;
+	}
+/*------------view hide buttons---------------*/
+.view-hide-images  {
+	width: 120px;
+	height: 25px;
+	float: left;
+	clear: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+}
+.viewbtn {
+	display: block;
+	width: 100px;
+	height: 21px;
+	background: url(../../images/mil/show-hide-btn.png) 1px 5px no-repeat;
+	border: none;
+}
+.hidebtn {
+	width: 100px;
+	height: 21px;
+	background: url(../../images/mil/show-hide-btn.png) 0px -22px no-repeat;
+	border: none;
+}
+.form input.btn-gradient.floatright{
+    display: inline;
+    float: right;
+	cursor: pointer;
+}
+
+.form input.btn-gradient.floatright.addmarginleft10{
+    display: inline;
+    float: right;
+	cursor: pointer;
+	margin-left: 10px;
+}
+.form input.btn-neutral.floatright.addmarginleft10{
+    display: inline;
+    float: right;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+/*--------NEW STYLES------------*/
+/*--------NEW STYLES for EB-4367 ----*/
+.qa-subhead  {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+.addmarginbottom15 {
+	margin: 0px 0px 15px 0px;
+}
+
+.qa-rightcol {
+	float: left;
+	width: 100px;
+}
+.qa-rightcol p {
+	margin: 5px 0px 0px 0px;
+}
+
+.clearfix {
+	height: 1px;
+	clear: both;
+}
+.pushleft {
+	margin: 0px 0px 20px 120px;
+	width: 830px;
+}
+
+.hidden {
+	display: none;
+	}
+.qa-copywrap {
+	display: block;
+	float: left;
+	clear: none;
+	width: 400px;
+	}
+.qa-copypaste {
+	width: 400px;
+	}	
+.qa-copypaste textarea {
+	 width: 400px;
+ 	clear: both;
+	}	
+.qa-itemlimit {
+	font-size: 11px;
+	color: #666666;
+	font-style: italic;
+	margin-bottom: -5px;
+	}
+.qa-listrow {
+	clear: both;
+	padding-top:5px;
+	}
+.inputfloat {
+	display: inline;
+	float: left;
+	clear: none;
+	padding: 3px;
+	padding-bottom: 5px;
+	}
+.qa-listrow label {
+	float: left;
+	clear: none;
+	margin-right: 12px;
+	}
+.qa-listrow label div{
+	width: auto;
+	color: #666666;
+	font-size:11px;
+	margin-bottom: 4px;
+	}
+qa-row-wrap {
+	float: left;
+	clear: none;
+	width: 600px;
+	}
+.clearboth {
+	clear: both;
+	}
+	
+.qa-copy-instructions {
+	float: right;
+	clear: none;
+	width: 310px;
+	margin-right: 90px;
+}
+
+.qa-psmall {
+	font-size: 11px;
+	color: #666666;
+	font-style: italic;
+}
+
+.qa-plarge {
+	font-size: 14px;
+	color: #666666;
+	line-height: 18px;
+}
+
+.addmargintop12 {
+	margin-top: 12px;
+}
+
+.qa-listrow label div.error {
+	color: #B50007;
+	float:left;
+	clear:none;
+	margin: 2px 0px 0px 10px;
+}
+
+input.error {
+	border: 1px solid #B50007;
+	background: #FFF;
+}
+
+.qa-copy-instructions {
+	float: right;
+	clear: none;
+	width: 310px;
+	margin-right: 90px;
+}
+
+.qa-psmall {
+	font-size: 11px;
+	color: #666666;
+	font-style: italic;
+}
+
+.qa-plarge {
+	font-size: 14px;
+	color: #666666;
+	line-height: 18px;
+}
+
+.addmargintop12 {
+	margin-top: 12px;
+}
+
