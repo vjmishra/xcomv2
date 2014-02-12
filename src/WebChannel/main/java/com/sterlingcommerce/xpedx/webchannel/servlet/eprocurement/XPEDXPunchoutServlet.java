@@ -68,6 +68,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 			String buyerCookie	= cXMLFields.getBuyerCookie();
 			String returnUrl   = cXMLFields.getReturnURL();
 			String toIdentity	= cXMLFields.getToIdentity();
+			String payLoadID	= cXMLFields.getPayLoadId();
 
 			// Extract credentials from incoming cXML to compare to customer in DB
     		Element custExtnElement = XPEDXWCUtils.getPunchoutConfigForCustomerIdentity(req, res, custIdentity);
@@ -110,7 +111,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
     		//TODO add params to URL: for now hardcoding but these come from incoming cXML
     		// and other compututation
-    		String moreParams = "&payLoadID=val&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
+    		String moreParams = "&payLoadID="+payLoadID+"&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
     							"&buyerCookie="+buyerCookie+"&fromIdentity="+toIdentity+"&toIdentity="+custIdentity+"&sfId=xpedx" +
     							"&returnURL="+URLEncoder.encode(returnUrl,"UTF-8");
 
