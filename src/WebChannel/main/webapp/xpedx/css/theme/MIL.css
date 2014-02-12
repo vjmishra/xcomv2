@@ -5720,8 +5720,6 @@ select.xpedx_select_sm {
 **********************************************************************************************************************/
 
 .show-hide-wrap {
-    border-left: 1px solid #CCCCCC;
-    border-right: 1px solid #CCCCCC;
 }
 .show-hide-wrap div:first-child {
 	border-bottom: 0px;
@@ -6211,7 +6209,7 @@ div#main.userProfile { min-height: 850px; }
 
 #back-to-top:focus {
 	outline:none;
-	}
+}
 
 /*End for EB 1150 for back to top functionality*/
 
@@ -6264,7 +6262,7 @@ BEGIN 2014 styles
 }
 .clearboth {
 	clear: both;
-	}
+}
 .action-list-buttons {
 	margin-top: 6px;
 	float: right;
@@ -6276,32 +6274,29 @@ BEGIN 2014 styles
 	display: block;
 	width: 100%;
 	clear: both;	
-	}
+}
 .mil-pa-avail {
 	width: 308px;	
 	float: left;
 	clear: none;
 	border-right: #e1e1e1 1px solid;
-	min-height: 115px;
 	margin-right: 2px;
-	min-height: 125px;
-	}
+	min-height: 115px;
+}
 .mil-pa-bracket {
 	width: 308px;
 	float: left;
 	clear: none;
 	border-right: #e1e1e1 1px solid;
-	min-height: 125px;
+	min-height: 115px;
 	margin-right: 2px;
-	
-	}
+}
 .mil-pa-price {
 	width: 308px;
 	float: right;
 	clear: none;
-	min-height: 125px;
-	
-	}
+	min-height: 115px;
+}
 .mil-pa-wrap h4 {
 	display: block;
 	background:#e1e1e1;
@@ -6311,14 +6306,14 @@ BEGIN 2014 styles
 	font-family: Arial, Helvetica, sans-serif;	
 	font-size:11px;
 	font-style:italic;
-	}
+}
 .mil-lists-legend {
 	width: 500px;
 	padding:25px 0px 0px 50px;
 	height: 20px;
 	float: left;
 	clear: none;
-	}
+}
 .mil-lists-personal {
 	float: left;
 	clear: none;
@@ -6328,7 +6323,7 @@ BEGIN 2014 styles
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;
-	}
+}
 .mil-lists-shared {
 	float: left;
 	clear: none;
@@ -6338,55 +6333,55 @@ BEGIN 2014 styles
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;	
-	}	
+}	
 .mil-manage-lists {
 	float: left;
 	padding: 3px 0px 0px 12px;
-	}
+}
 .mil-lists-toolbar {
 	width: 200px;
 	float: right;
 	clear: none;
 	text-align: right;
 	padding: 0px 30px 0px 0px;
-	}
+}
 
 .mil-list-icon {
 	float: left;
 	clear: none;
 	width: 26px;
 	margin-top: -5px;
-	}
+}
 #mil-list td, #mil-carts-list td .left-cell p  {
 
     word-wrap: break-word;
-	}
+}
 .cart-btn-wrap {
 	width: 250px;
 	height: 26px;
 	padding: 3px 0px 3px 0px;
 	clear: both;
-	}
+}
 .mil-avail-link {
 	width: 145px;
 	float: left;
 	clear: none;
 	padding-top: 7px;
-	}
+}
 .mil-addcart-btn {
 	width: 100px;
 	float: left;
 	clear: none;
-	}
+}
 .list-of-lists-header {
 	background: #003399;
 	color: #ffffff;
 	font-size:11px;
 	text-align: center;
-	}
+}
 .fixwidth200 {
 	width: 200px;
-	}
+}
 #mil-list.standard-table td.left-rounded-corner {
 /*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
 	background: url(theme-1/mil/items-list-bg-LEFT.gif) top left no-repeat;
@@ -6429,4 +6424,18 @@ BEGIN 2014 styles
 	width: 500px;
 	margin-left: 0px;
 	height: auto;
+}
+
+.mil-pa-avail-2col {
+	width: 619px;     
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	min-height: 115px;
+	margin-right: 2px;
+	min-height: 115px;
+}
+
+.mil-action-list-wrap .notice {
+	border: none;
 }

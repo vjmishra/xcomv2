@@ -1728,7 +1728,6 @@ function showSharedListForm(){
 	                  method: 'POST',
 
 	                   success: function (response, request){
-		                   
 			                var responseText = response.responseText;
 		                    var availabilityRow = document.getElementById('priceDiv');		                   
 		            		availabilityRow.innerHTML=responseText;
@@ -2995,7 +2994,7 @@ function showSharedListForm(){
 									<div class="cart-btn-wrap">
 										<div class="mil-avail-link">
 											<a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')">
-												Show  Price &amp; Availability
+												Show Price &amp; Availability
 											</a>
 										</div>
 										<div class="mil-addcart-btn">
@@ -3012,27 +3011,6 @@ function showSharedListForm(){
       
 									<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
 									<ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
-<!-- 										<li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"> -->
-<%-- 											<a id="PAAClick_<s:property value="#id"/>" --%>
-<%-- 													href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" --%>
-<%-- 													style="margin-left: 25px;"> <span class="mil-mpna"> --%>
-<%-- 												Show Price &amp; Availability&nbsp;&nbsp;</span> --%>
-<!-- 											</a> -->
-<!-- 										</li> -->
-<%-- 										<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' "> --%>
-<!-- 											<li style="margin-left: 170px;"> -->
-<%-- 												<a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"> --%>
-<%-- 													<span>Add to Cart</span> --%>
-<!-- 												</a> -->
-<!-- 											</li> -->
-<%-- 										</s:if> --%>
-<%-- 										<s:else> --%>
-<!-- 											<li style="margin-left: 165px;"> -->
-<%-- 												<a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"> --%>
-<%-- 													<span>Add to Order</span> --%>
-<!-- 												</a> -->
-<!-- 											</li> -->
-<%-- 										</s:else> --%>
 										<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
 											<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
 												<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
@@ -3073,14 +3051,12 @@ function showSharedListForm(){
 								</s:if>
 								<s:else>
 									<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-										<li
-											style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
+										<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
 											<div class="notice"
-												id="errorDiv_qtys_<s:property value='%{#id}' />"
-												style="display: inline; float: right;">
+													id="errorDiv_qtys_<s:property value='%{#id}' />"
+													style="display: inline; float: right;">
 												<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
-												<s:property
-													value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
+												<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
 												&nbsp;
 												<s:property value="#baseUOMDesc"></s:property>
 											</div>
@@ -3092,7 +3068,7 @@ function showSharedListForm(){
 							<!-- / mil-action-list-wrap -->
 						</div>
 						<!-- / mil-wrap-XXX -->
-
+						
 						<div
 							<s:if test='%{#status.count == 1}'>class="show-hide-wrap"</s:if>
 							<s:else>class="show-hide-wrap"  style="background-color:#fafafa;"</s:else>>
@@ -3105,13 +3081,10 @@ function showSharedListForm(){
 							<s:else>
 								<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
 							</s:else>
-							<div id="availabilityRow_<s:property value='#id'/>"
-								<s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if>
-								<s:else>style="display:block; background-color:#fafafa;"</s:else>>
+							<div id="availabilityRow_<s:property value='#id'/>">
 								<!-- end prefs  -->
 								<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
-									<s:include
-										value="../MyItems/XPEDXMyItemsDetailsItemAvailability.jsp"></s:include>
+									<s:include value="../MyItems/XPEDXMyItemsDetailsItemAvailability.jsp"></s:include>
 								</s:if>
 							</div>
 						</div>
