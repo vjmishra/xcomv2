@@ -2553,7 +2553,7 @@ function showSharedListForm(){
 
 
 					<ul style="float: center; text-align: center; background-color: white !important;">
-						<li style="margin-bottom: 5px;">
+						<li>
 							<div class="clearall"></div>
 
 							<div class="error" id="errorMsgForMandatoryFields_mil-edit" style="display: none;"></div>
@@ -2577,7 +2577,7 @@ function showSharedListForm(){
 									The import file is not in the correct file layout. Download the
 									sample file for an example of the correct layout and try again.
 								</div>
-							</s:if> <br />
+							</s:if>
 						</li>
 					</ul>
 
