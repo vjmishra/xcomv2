@@ -7,6 +7,7 @@ import com.sterlingcommerce.ui.web.framework.security.SCUISecurityResponse;
 import com.sterlingcommerce.ui.web.framework.utils.SCUIUtils;
 import com.sterlingcommerce.webchannel.core.wcaas.WCAuthenticationProvider;
 import com.sterlingcommerce.webchannel.utilities.WCConstants;
+import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutRequest;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
@@ -34,22 +35,26 @@ public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
 		String aribaFlag = (String) scuiCtx.getRequest().getParameter("amiProcurementUser");
 		
 		if (aribaFlag!= null && aribaFlag.equals("Y")) {
-			scuiCtx.getSession(false).setAttribute("payLoadID", scuiCtx.getRequest().getParameter("payLoadID"));
-			scuiCtx.getSession(false).setAttribute("operation", scuiCtx.getRequest().getParameter("operation"));
-			scuiCtx.getSession(false).setAttribute("orderHeaderKey", scuiCtx.getRequest().getParameter("orderHeaderKey"));
-			scuiCtx.getSession(false).setAttribute("returnURL", scuiCtx.getRequest().getParameter("returnURL"));
-			scuiCtx.getSession(false).setAttribute("selectedCategory", scuiCtx.getRequest().getParameter("selectedCategory"));
-			scuiCtx.getSession(false).setAttribute("selectedItem", scuiCtx.getRequest().getParameter("selectedItem"));
-			scuiCtx.getSession(false).setAttribute("selectedItemUOM", scuiCtx.getRequest().getParameter("selectedItemUOM"));
-			scuiCtx.getSession(false).setAttribute("buyerCookie", scuiCtx.getRequest().getParameter("buyerCookie"));
-			scuiCtx.getSession(false).setAttribute("fromIdentity", scuiCtx.getRequest().getParameter("fromIdentity"));
-			scuiCtx.getSession(false).setAttribute("toIdentity", scuiCtx.getRequest().getParameter("toIdentity"));
-			scuiCtx.getSession(false).setAttribute("preferredShipTo", scuiCtx.getRequest().getParameter("preferredShipTo"));
-			scuiCtx.getSession(false).setAttribute("aribaFlag", scuiCtx.getRequest().getParameter("amiProcurementUser"));
+			scuiCtx.getSession(false).setAttribute("aribaFlag", scuiCtx.getRequest().getParameter("amiProcurementUser")); 
 			scuiCtx.getSession(false).setAttribute("EnterpriseCode", scuiCtx.getRequest().getParameter("EnterpriseCode"));
 			
+			PunchoutRequest punchoutRequest = new PunchoutRequest();
+			punchoutRequest.setLoginID((String)scuiCtx.getRequest().getParameter("DisplayUserID"));
+			punchoutRequest.setSfId((String)scuiCtx.getRequest().getParameter("EnterpriseCode"));
+			punchoutRequest.setPayLoadID((String)scuiCtx.getRequest().getParameter("payLoadID"));
+			punchoutRequest.setOperation((String)scuiCtx.getRequest().getParameter("operation"));
+			punchoutRequest.setOrderHeaderKey((String)scuiCtx.getRequest().getParameter("orderHeaderKey"));
+			punchoutRequest.setReturnURL((String)scuiCtx.getRequest().getParameter("returnURL"));
+			punchoutRequest.setSelectedCategory((String)scuiCtx.getRequest().getParameter("selectedCategory"));
+			punchoutRequest.setSelectedItem((String)scuiCtx.getRequest().getParameter("selectedItem"));
+			punchoutRequest.setSelectedItemUOM((String)scuiCtx.getRequest().getParameter("selectedItemUOM"));
+			punchoutRequest.setBuyerCookie((String)scuiCtx.getRequest().getParameter("buyerCookie"));
+			punchoutRequest.setFromIdentity((String)scuiCtx.getRequest().getParameter("fromIdentity"));
+			punchoutRequest.setToIdentity((String)scuiCtx.getRequest().getParameter("toIdentity"));	
+			punchoutRequest.setIsProcurementUser((String)scuiCtx.getRequest().getParameter("amiProcurementUser"));
 			
-		}
+			scuiCtx.getSession().setAttribute("PunchoutRequest", punchoutRequest);
+			}
 		return response;
 	}
 	

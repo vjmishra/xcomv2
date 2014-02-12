@@ -11,9 +11,8 @@ public class XPEDXPunchoutCustomerLoginAction extends WCAction {
 
 	private String _loginID;
 	private String _password;
-	private String _sfId;
-	
-	private String _payloadID;
+	private String _sfId;	
+	private String _payLoadID;
 	private String _operation;
 	private String _orderHeaderKey;
 	private String _returnURL;
@@ -23,15 +22,14 @@ public class XPEDXPunchoutCustomerLoginAction extends WCAction {
 	private String _buyerCookie;
 	private String _fromIdentity;
 	private String _toIdentity;
-	private String _preferredShipTo;
+
 
 	public String getCustomersForPunchout() {
 
 		_loginID = (String) request.getParameter("u");
 		_password = (String) request.getParameter("p");
-		_sfId = request.getParameter("sfId");
-		
-		_payloadID = (String) request.getParameter("payLoadID");
+		_sfId = request.getParameter("sfId");		
+		_payLoadID = (String) request.getParameter("payLoadID");
 		_operation = (String) request.getParameter("operation");
 		_orderHeaderKey = (String) request.getParameter("orderHeaderKey");
 		_returnURL = (String) request.getParameter("returnURL");
@@ -41,24 +39,23 @@ public class XPEDXPunchoutCustomerLoginAction extends WCAction {
 		_buyerCookie = (String) request.getParameter("buyerCookie");
 		_fromIdentity = (String) request.getParameter("fromIdentity");
 		_toIdentity = (String) request.getParameter("toIdentity");
-		_preferredShipTo = (String) request.getParameter("preferredShipTo");
+
 
 		request.setAttribute("dum_username", _loginID);
 		request.setAttribute("dum_password", _password);
-		request.setAttribute("selected_storefrontId", _sfId);
-		
-		request.setAttribute("_payloadID", _payloadID);
-		request.setAttribute("_operation", _operation);
-		request.setAttribute("_orderHeaderKey", _orderHeaderKey);
-		request.setAttribute("_returnURL", _returnURL);
-		request.setAttribute("_selectedCategory", _selectedCategory);
-		request.setAttribute("_selectedItem", _selectedItem);
-		request.setAttribute("_selectedItemUOM", _selectedItemUOM);
-		request.setAttribute("_buyerCookie", _buyerCookie);
-		request.setAttribute("_fromIdentity", _fromIdentity);
-		request.setAttribute("_toIdentity", _toIdentity);
-		request.setAttribute("_isProcurementUser", "Y");
-		request.setAttribute("_preferredShipTo", _preferredShipTo);
+		request.setAttribute("selected_storefrontId", _sfId);		
+		request.setAttribute("payLoadID", _payLoadID);
+		request.setAttribute("operation", _operation);
+		request.setAttribute("orderHeaderKey", _orderHeaderKey);
+		request.setAttribute("returnURL", _returnURL);
+		request.setAttribute("selectedCategory", _selectedCategory);
+		request.setAttribute("selectedItem", _selectedItem);
+		request.setAttribute("selectedItemUOM", _selectedItemUOM);
+		request.setAttribute("buyerCookie", _buyerCookie);
+		request.setAttribute("fromIdentity", _fromIdentity);
+		request.setAttribute("toIdentity", _toIdentity);
+		request.setAttribute("isProcurementUser", "Y");
+
 
 		
 		return WCAction.SUCCESS;

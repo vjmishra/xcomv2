@@ -4,6 +4,7 @@
 package com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,9 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
     		String custIdentity	= cXMLFields.getCustomerIdentity();
 			String cxmlSecret   = cXMLFields.getAuthPassword();
+			String buyerCookie	= cXMLFields.getBuyerCookie();
+			String returnUrl   = cXMLFields.getReturnURL();
+			String toIdentity	= cXMLFields.getToIdentity();
 
 			// Extract credentials from incoming cXML to compare to customer in DB
     		Element custExtnElement = XPEDXWCUtils.getPunchoutConfigForCustomerIdentity(req, res, custIdentity);
@@ -106,7 +110,9 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
     		//TODO add params to URL: for now hardcoding but these come from incoming cXML
     		// and other compututation
-    		String moreParams = "&payLoadID=val&operation=1&orderHeaderKey=val&returnURL=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val&buyerCookie=val&fromIdentity=val&toIdentity=val&payloadId=val&sfId=xpedx";
+    		String moreParams = "&payLoadID=val&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
+    							"&buyerCookie="+buyerCookie+"&fromIdentity="+toIdentity+"&toIdentity="+custIdentity+"&sfId=xpedx" +
+    							"&returnURL="+URLEncoder.encode(returnUrl,"UTF-8");
 
     		startPageURL = dbStartPage + moreParams;
     	}

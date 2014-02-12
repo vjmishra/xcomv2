@@ -16,7 +16,6 @@
 
 <script type="text/javascript">
 Ext.onReady(function() {    
-	//Added For Jira 2903
 	Ext.Msg.wait("Processing..."); 
    });
 </script> 
@@ -25,29 +24,19 @@ Ext.onReady(function() {
   		<s:form action="login" namespace="/common" method="post" name="singForm" id="singForm" cssStyle="margin: 15px 0 0 50px;">
 			<s:hidden name="DisplayUserID" value="%{#request.dum_username}"/>
 			<s:hidden name="Password" value="%{#request.dum_password}"/>
-			
-	
-			
-			<s:hidden name="_payloadID" value="%{#request._payloadID}"/>
-			<s:hidden name="_operation" value="%{#request._operation}"/>
-			<s:hidden name="_returnURL" value="%{#request._returnURL}"/>
-			<s:hidden name="_selectedCategory" value="%{#request._selectedCategory}"/>			
-			<s:hidden name="_selectedCategory" value="%{#request._selectedCategory}"/>
-			<s:hidden name="_selectedItem" value="%{#request._selectedItem}"/>
-			<s:hidden name="_selectedItemUOM" value="%{#request._selectedItemUOM}"/>
-			<s:hidden name="_buyerCookie" value="%{#request._buyerCookie}"/>
-			<s:hidden name="_fromIdentity" value="%{#request._fromIdentity}"/>
-			<s:hidden name="_toIdentity" value="%{#request._toIdentity}"/>
-			<s:hidden name="amiProcurementUser" value="Y"/>
-			
-			
+			<s:hidden name="payLoadID" value="%{#request.payLoadID}"/>
+			<s:hidden name="operation" value="%{#request.operation}"/>
+			<s:hidden name="returnURL" value="%{#request.returnURL}"/>
+			<s:hidden name="orderHeaderKey" value="%{#request.orderHeaderKey}"/>			
+			<s:hidden name="selectedCategory" value="%{#request.selectedCategory}"/>
+			<s:hidden name="selectedItem" value="%{#request.selectedItem}"/>
+			<s:hidden name="selectedItemUOM" value="%{#request.selectedItemUOM}"/>
+			<s:hidden name="buyerCookie" value="%{#request.buyerCookie}"/>
+			<s:hidden name="fromIdentity" value="%{#request.fromIdentity}"/>
+			<s:hidden name="toIdentity" value="%{#request.toIdentity}"/>
+			<s:hidden name="amiProcurementUser" value="%{#request.isProcurementUser}"/>
 			<s:hidden name="EnterpriseCode" value="%{#request.selected_storefrontId}"/>
-			
-			
-		
-			
-			
-			<!--  Add these parameters into this page -->
+
 			<a href="javascript:(function(){document.singForm.submit();})();"><span></span></a>
 		</s:form>
 	</div>
