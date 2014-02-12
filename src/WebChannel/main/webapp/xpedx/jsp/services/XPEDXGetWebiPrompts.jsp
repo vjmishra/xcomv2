@@ -261,6 +261,7 @@
 
 	function submitReportForm() {
 	
+<<<<<<< HEAD
 		
 		
 		var i=1;
@@ -276,6 +277,17 @@
 			{
 				var dateText=dateTextList.value;
 				var divid="error_"+dateTextList.id;
+=======
+		var dateTextList=document.getElementsByName("caln_date_field");
+		var i=0;
+		var retVal=true;
+		for(;i<dateTextList.length;i++)
+		{
+			if(dateTextList[i] != null && dateTextList[i] != undefined)
+			{
+				var dateText=dateTextList[i].value;
+				var divid="error_"+dateTextList[i].id;
+>>>>>>> v2.0.12.00
 				var divObje=document.getElementById(divid);
 				divObje.style.display = "none";
 				if(dateText != "" && !validateDate(dateText))
@@ -720,7 +732,11 @@ $(function() {
 	           		  		<td valign="top" style="padding-right: 5px"><s:property value="suffix"/> </td>
 	           		  	
 	           		 <td>												   				
+<<<<<<< HEAD
 	           		  		<s:textfield  id="%{#dateFieldCount}" theme="simple" size="15" cssClass='calendar-input-fields datepicker' name="%{#beanId.prmtName}"/>    
+=======
+	           		  		<s:textfield  id="%{#dateFieldCount}" theme="simple" size="15" name="caln_date_field" cssClass='calendar-input-fields datepicker' />    
+>>>>>>> v2.0.12.00
 	           		  		<div id="error_<s:property value='%{#dateFieldCount}' />" style="display:none;">
 	           		  			<h5><font color="red">Please enter date in MM/DD/YYYY format</font></h5>
 	           		  		</div>  		  	 

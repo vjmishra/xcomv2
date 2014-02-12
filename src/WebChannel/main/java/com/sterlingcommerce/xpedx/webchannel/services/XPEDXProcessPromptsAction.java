@@ -518,12 +518,6 @@ public class XPEDXProcessPromptsAction extends WCMashupAction implements
 				setRndrReport("true");
 				
 				String encodedToken = logonTokens.get(1);	
-				String biurl = ReportUtils.getCMSLogonDetails().get("BIUrl");
-				if (biurl != null && !("").equals(biurl.trim())) {
-					StringTokenizer st = new StringTokenizer(openDocURL, "?");
-					st.nextToken();
-					openDocURL = biurl + "?" + st.nextToken();  					
-				}
 				
 				finalURL= openDocURL + params + "&token=" + encodedToken + "&sRefresh=Y";		
 			}

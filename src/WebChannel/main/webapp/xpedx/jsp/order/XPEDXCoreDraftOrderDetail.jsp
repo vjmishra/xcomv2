@@ -131,6 +131,16 @@
 		 
 		<s:set name="itemuomMap" value='itemIdConVUOMMap[#itemIDVal]' />
 		<s:set name="displayUomMap" value='itemIdsUOMsDescMap[#itemIDVal]' />
+		<%--EB-3840 --%>
+		<s:set name="displayUomMapconv" value='itemIdsUOMsDescMap[#itemIDVal]' />
+		<s:iterator value="displayUomMapconv" id="displayUomMapconv" >
+			<s:set name="disValue" value="value" />
+			<s:set name="disUom" value="key" />
+			<s:set name="disItemIDVal" value="#itemIDVal" />
+			<s:hidden name='DisplayUomItem_%{#disItemIDVal}' value="%{#disValue}"  id='%{#disUom}' /> 
+		</s:iterator>	
+		<%--EB-3840 --%>	 
+		
 		<s:hidden name="itemUOMs" id="itemUOMs_%{#orderLineKey}" value='%{#uom}' /> 
 		<s:set name="convF" value='#itemuomMap[#uom]' />
 		<s:hidden name="UOMconversion" id="UOMconversion_%{#orderLineKey}" value="%{#convF}" />

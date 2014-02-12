@@ -266,195 +266,230 @@ public String getSharePermissionLevel() {
 		}
 	}
 
-	private ArrayList<String> getItemsFromFile()throws Exception{
-		ArrayList<String> itemStr=new ArrayList<String>();
-		CSVReader reader = new CSVReader(new FileReader(this.file));
-		int i = -1;
-		String [] nextLine;
-		while ((nextLine = reader.readNext()) != null) {
-			i++;
-			if (i > 0){
-				itemStr.add(nextLine[1]);
-			}
+	/**
+	 * Verifies that the header row contains the mandatory fields in the correct order:
+	 * <ol>
+	 *  <li>Supplier Part Number</li>
+	 *  <li>Customer Part Number</li>
+	 *  <li>Manufacturer Item Number</li>
+	 *  <li>Quantity</li>
+	 *  <li>Unit of Measure</li>
+	 * </ol>
+	 * @param headers
+	 * @return Returns null if headers are valid. Otherwise returns an error message.
+	 */
+	private String validateHeaders(String[] headers) {
+		if (headers == null) {
+			return "No headers found";
 		}
-		return itemStr;
+		if (headers.length <= 0 || !headers[0].trim().equalsIgnoreCase("Supplier Part Number")) {
+			return "Expected 1st column header: Supplier Part Number";
+		}
+		if (headers.length <= 1 || !headers[1].trim().equalsIgnoreCase("Customer Part Number")) {
+			return "Expected 2nd column header: Customer Part Number";
+		}
+		if (headers.length <= 2 || !headers[2].trim().equalsIgnoreCase("Manufacturer Item Number")) {
+			return "Expected 3rd column header: Manufacturer Item Number";
+		}
+		if (headers.length <= 3 || !headers[3].trim().equalsIgnoreCase("Quantity")) {
+			return "Expected 4th column header: Quantity";
+		}
+		if (headers.length <= 4 || !headers[4].trim().equalsIgnoreCase("Unit of Measure")) {
+			return "Expected 5th column header: Unit of Measure";
+		}
+		return null;
 	}
+
 	private void parseFile() throws Exception{
-		CSVReader reader = new CSVReader(new FileReader(this.file));
-		String [] nextLine;
-		int i = -1;
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new FileReader(this.file));
 
-		ArrayList<XPEDXCsvVO> tmp = new ArrayList<XPEDXCsvVO>();
+			ArrayList<XPEDXCsvVO> tmp = new ArrayList<XPEDXCsvVO>();
 
-		List<String> errorRowsMissingItemId = new LinkedList<String>();
+			List<String> errorRowsMissingItemId = new LinkedList<String>();
 
-		/* Let us call the getCompleteItemList in the import create action.
-		 * So that we can avoid extra calls
-		 * Document entitledItemsList=XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),getItemsFromFile());
-		ArrayList<Element> itemList=com.sterlingcommerce.framework.utils.SCXmlUtils.getElements(entitledItemsList.getDocumentElement(), "/Item");
-		ArrayList<String> itemListEntitled = new ArrayList<String>();
-		for(Element elem : itemList){
-			itemListEntitled.add(elem.getAttribute("ItemID"));
-		}*/
-		while ((nextLine = reader.readNext()) != null) {
-			i++;
-			if (i > 0){
+			String headerError = validateHeaders(reader.readNext());
+			if (headerError != null) {
+				throw new IllegalArgumentException(headerError);
+			}
+
+			/* Let us call the getCompleteItemList in the import create action.
+			 * So that we can avoid extra calls
+			 * Document entitledItemsList=XPEDXMyItemsUtils.getEntitledItemsDocument(getWCContext(),getItemsFromFile());
+			ArrayList<Element> itemList=com.sterlingcommerce.framework.utils.SCXmlUtils.getElements(entitledItemsList.getDocumentElement(), "/Item");
+			ArrayList<String> itemListEntitled = new ArrayList<String>();
+			for(Element elem : itemList){
+				itemListEntitled.add(elem.getAttribute("ItemID"));
+			}*/
+			String[] line;
+			int row = 0;
+			while ((line = reader.readNext()) != null) {
+				row++;
 				//Populate the object
 				XPEDXCsvVO vo = new XPEDXCsvVO();
 				/*
-				•	Customer Part # - customer specific sku
-				•	Supplier part # aka xpedx Part #
-				•	Quantity
-				•	Unit Of Measure
-				•	Customer defined fields [ 1 to 5] - They show up based on the customer profile selection. The labels for the fields are going to be shown.
-				•	Description – Product description, this will be used for special items or the items which we did not find in the catalog. For the ones we found in the catalog, the desc will be used from the catalog and will ignore this description.
+					•	Customer Part # - customer specific sku
+					•	Supplier part # aka xpedx Part #
+					•	Quantity
+					•	Unit Of Measure
+					•	Customer defined fields [ 1 to 5] - They show up based on the customer profile selection. The labels for the fields are going to be shown.
+					•	Description – Product description, this will be used for special items or the items which we did not find in the catalog. For the ones we found in the catalog, the desc will be used from the catalog and will ignore this description.
 				 */
 
-				vo.setCustomerPartNumber(nextLine[1]);
-				vo.setSupplierPartNumber(nextLine[0]);
+				vo.setCustomerPartNumber(line[1]);
+				vo.setSupplierPartNumber(line[0]);
 				// XB - 56
-				vo.setMfgItemNumber(nextLine[2]);
+				vo.setMfgItemNumber(line[2]);
 				//XB - End
-				vo.setQty(nextLine[3]);
+				vo.setQty(line[3]);
 				/* Append the Uom Id in the import create action.
 				 * This way we can avoid the getComplteteItemList call in this class
-				 * if(itemListEntitled.contains(nextLine[1])){
-					vo.setUOM(getCurrentEnvCode() + "_" + nextLine[3]);
-				}
-				else{
-					vo.setUOM(nextLine[3]);
-				}*/
-				vo.setUOM(nextLine[4]);
-				//vo.setLineLevelCode(nextLine[4]);
+				 * if(itemListEntitled.contains(line[1])){
+						vo.setUOM(getCurrentEnvCode() + "_" + line[3]);
+					}
+					else{
+						vo.setUOM(line[3]);
+					}*/
+				vo.setUOM(line[4]);
+				//vo.setLineLevelCode(line[4]);
 
 				int counter = 0;
-				vo.setDescription(nextLine[counter+4+1]);
+				vo.setDescription(line[counter+4+1]);
 				for (Iterator iterator = getCustomerFieldsDBMap().values().iterator(); iterator.hasNext();) {
-						counter++;
-						String currentValue = "";
-						String currentField = "";
-						if(getCustomerFieldsDBMap().keySet().contains("CustLineAccNo")){
-							currentField = (String)iterator.next();
-							//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
-							currentValue = nextLine[counter+3+5];
-							//added for EB -1658 / EB 642 to limit the CustLineAccNo character entry to DB from excel sheet while importing to MIL
-							String custLineAccNoString = nextLine[counter+3+5];
-							if(custLineAccNoString!=null && custLineAccNoString.length()>24)
-							{
-								currentValue = custLineAccNoString.substring(0,24);
-							}
-							//End of code for EB 1658 / EB 642
-							vo.getCustomFields().put(currentField, currentValue);
+					counter++;
+					String currentValue = "";
+					String currentField = "";
+					if(getCustomerFieldsDBMap().keySet().contains("CustLineAccNo")){
+						currentField = (String)iterator.next();
+						//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
+						currentValue = line[counter+3+5];
+						//added for EB -1658 / EB 642 to limit the CustLineAccNo character entry to DB from excel sheet while importing to MIL
+						String custLineAccNoString = line[counter+3+5];
+						if(custLineAccNoString!=null && custLineAccNoString.length()>24)
+						{
+							currentValue = custLineAccNoString.substring(0,24);
 						}
-						if(getCustomerFieldsDBMap().keySet().contains("CustomerPONo")){
-							currentField = (String)iterator.next();
-							//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
-							currentValue = nextLine[counter+3+4];
-							//added for EB -1658 / EB 642 to limit the CustomerPONo character entry to DB from excel sheet while importing to MIL
-							String cutPoNoString = nextLine[counter+3+4];
-							if(cutPoNoString!=null && cutPoNoString.length()>22)
-							{
-								currentValue = cutPoNoString.substring(0,22);
-							}
-							//End of code for EB 1658 / EB 642
-							vo.getCustomFields().put(currentField, currentValue);
+						//End of code for EB 1658 / EB 642
+						vo.getCustomFields().put(currentField, currentValue);
+					}
+					if(getCustomerFieldsDBMap().keySet().contains("CustomerPONo")){
+						currentField = (String)iterator.next();
+						//EB-2542 - Reversing the sequence of Lineacct# and linePO# in import
+						currentValue = line[counter+3+4];
+						//added for EB -1658 / EB 642 to limit the CustomerPONo character entry to DB from excel sheet while importing to MIL
+						String cutPoNoString = line[counter+3+4];
+						if(cutPoNoString!=null && cutPoNoString.length()>22)
+						{
+							currentValue = cutPoNoString.substring(0,22);
 						}
-						if(getCustomerFieldsDBMap().keySet().contains("CustLineField1")){
-							currentField = (String)iterator.next();
-							currentValue = nextLine[counter+3+6];
-							vo.getCustomFields().put(currentField, currentValue);
-						}
-						if(getCustomerFieldsDBMap().keySet().contains("CustLineField2")){
-							currentField = (String)iterator.next();
-							currentValue = nextLine[counter+3+7];
-							vo.getCustomFields().put(currentField, currentValue);
-						}
-						if(getCustomerFieldsDBMap().keySet().contains("CustLineField3")){
-							currentField = (String)iterator.next();
-							currentValue = nextLine[counter+3+8];
-							vo.getCustomFields().put(currentField, currentValue);
-						}
+						//End of code for EB 1658 / EB 642
+						vo.getCustomFields().put(currentField, currentValue);
+					}
+					if(getCustomerFieldsDBMap().keySet().contains("CustLineField1")){
+						currentField = (String)iterator.next();
+						currentValue = line[counter+3+6];
+						vo.getCustomFields().put(currentField, currentValue);
+					}
+					if(getCustomerFieldsDBMap().keySet().contains("CustLineField2")){
+						currentField = (String)iterator.next();
+						currentValue = line[counter+3+7];
+						vo.getCustomFields().put(currentField, currentValue);
+					}
+					if(getCustomerFieldsDBMap().keySet().contains("CustLineField3")){
+						currentField = (String)iterator.next();
+						currentValue = line[counter+3+8];
+						vo.getCustomFields().put(currentField, currentValue);
+					}
 				}
-				//vo.setDescription(nextLine[counter+3+1]);
+				//vo.setDescription(line[counter+3+1]);
 
 				//validate against the rules
 				boolean addVo = true;
-					//Discard if no customer part number
-					if (
-							vo.getSupplierPartNumber().trim().length() == 0 &&
-							vo.getCustomerPartNumber().trim().length() == 0
+				//Discard if no customer part number
+				if (
+						vo.getSupplierPartNumber().trim().length() == 0 &&
+						vo.getCustomerPartNumber().trim().length() == 0
 						) { addVo = false; }
-					//Aggregate all the data in the description for future reference
-					if (addVo){
-						//vo.setDescription(vo.getDescription() + "\n\n" + vo.toString());
-					}
+				//Aggregate all the data in the description for future reference
+				if (addVo){
+					//vo.setDescription(vo.getDescription() + "\n\n" + vo.toString());
+				}
 
 				//Add the item to the list
 				if (addVo){
 					tmp.add(vo);
 				} else {
-					errorRowsMissingItemId.add(String.valueOf(i));
+					errorRowsMissingItemId.add(String.valueOf(row));
 				}
-			}
-			LOG.debug("Record: " + nextLine);
-		}
-
-		itemCountInFile = tmp.size();
-
-		if((itemCountInFile+Integer.parseInt(itemCount))<=200){
-			if (errorRowsMissingItemId.size() > 0) {
-				// notify user of items not imported due to missing supplier/customer part number
-				setErrorMsgRowsMissingItemId(StringUtils.join(errorRowsMissingItemId.toArray(new String[0]), "-"));
+				LOG.debug("Record: " + StringUtils.join(line, ", "));
 			}
 
-			//Add the items collected to the main object
-			dataList = tmp;
+			itemCountInFile = tmp.size();
 
-			//Execute the import here
-			try {
-				//Prepare the data
-				itemsIds 	= new String[dataList.size()];
-				itemsName 	= new String[dataList.size()];
-				itemsDesc 	= new String[dataList.size()];
-				//XB- 56
-				MfgItemsNumber = new String[dataList.size()];
-				//XB- 56 End
-				itemsQty 	= new String[dataList.size()];
-				itemsUOM 	= new String[dataList.size()];
-				itemsJobId 	= new String[dataList.size()];
-				itemsOrder = new String[dataList.size()];
-				itemsCustomFields 	= new HashMap<String, HashMap<String,String>>();
+			if((itemCountInFile+Integer.parseInt(itemCount))<=200){
+				if (errorRowsMissingItemId.size() > 0) {
+					// notify user of items not imported due to missing supplier/customer part number
+					setErrorMsgRowsMissingItemId(StringUtils.join(errorRowsMissingItemId.toArray(new String[0]), "-"));
+				}
 
-				for (int j = 0; j < getDataList().size(); j++) {
-					XPEDXCsvVO vo 	= (XPEDXCsvVO)getDataList().get(j);
-					itemsIds[j] 	= vo.getSupplierPartNumber();
-					itemsName[j] 	= vo.getCustomerPartNumber();
+				//Add the items collected to the main object
+				dataList = tmp;
+
+				//Execute the import here
+				try {
+					//Prepare the data
+					itemsIds 	= new String[dataList.size()];
+					itemsName 	= new String[dataList.size()];
+					itemsDesc 	= new String[dataList.size()];
 					//XB- 56
-					MfgItemsNumber[j] = vo.getMfgItemNumber();
-					//XB-56 End
-					itemsDesc[j] 	= vo.getDescription();
-					itemsQty[j] 	= vo.getQty();
-					itemsUOM[j] 	= vo.getUOM();
-					itemsJobId[j] 	= " ";
-					itemsCustomFields.put(j+"", vo.getCustomFields());
-					itemsOrder[j] = Integer.parseInt(itemCount)+j+1+"";
+					MfgItemsNumber = new String[dataList.size()];
+					//XB- 56 End
+					itemsQty 	= new String[dataList.size()];
+					itemsUOM 	= new String[dataList.size()];
+					itemsJobId 	= new String[dataList.size()];
+					itemsOrder = new String[dataList.size()];
+					itemsCustomFields 	= new HashMap<String, HashMap<String,String>>();
+
+					for (int j = 0; j < getDataList().size(); j++) {
+						XPEDXCsvVO vo 	= (XPEDXCsvVO)getDataList().get(j);
+						itemsIds[j] 	= vo.getSupplierPartNumber();
+						itemsName[j] 	= vo.getCustomerPartNumber();
+						//XB- 56
+						MfgItemsNumber[j] = vo.getMfgItemNumber();
+						//XB-56 End
+						itemsDesc[j] 	= vo.getDescription();
+						itemsQty[j] 	= vo.getQty();
+						itemsUOM[j] 	= vo.getUOM();
+						itemsJobId[j] 	= " ";
+						itemsCustomFields.put(j+"", vo.getCustomFields());
+						itemsOrder[j] = Integer.parseInt(itemCount)+j+1+"";
+					}
+
+				} catch (Exception e) {
 				}
 
-			} catch (Exception e) {
+				//Add the data to the request
+				request.getSession().setAttribute("itemsId", 	getItemsIds());
+				request.getSession().setAttribute("itemsName", 	getItemsName());
+				request.getSession().setAttribute("itemsDesc", 	getItemsDesc());
+				request.getSession().setAttribute("itemsQty", 	getItemsQty());
+				//XB-56 - Start
+				request.getSession().setAttribute("MfgItemsNumber", getMfgItemsNumber());
+				//XB-56 - End
+				request.getSession().setAttribute("itemsUOM", 	getItemsUOM());
+				request.getSession().setAttribute("itemsJobId", getItemsJobId());
+				request.getSession().setAttribute("itemsOrder", getItemsOrder());
+				request.getSession().setAttribute("itemsCustomFields", itemsCustomFields);
 			}
 
-			//Add the data to the request
-			request.getSession().setAttribute("itemsId", 	getItemsIds());
-			request.getSession().setAttribute("itemsName", 	getItemsName());
-			request.getSession().setAttribute("itemsDesc", 	getItemsDesc());
-			request.getSession().setAttribute("itemsQty", 	getItemsQty());
-			//XB-56 - Start
-			request.getSession().setAttribute("MfgItemsNumber", getMfgItemsNumber());
-			//XB-56 - End
-			request.getSession().setAttribute("itemsUOM", 	getItemsUOM());
-			request.getSession().setAttribute("itemsJobId", getItemsJobId());
-			request.getSession().setAttribute("itemsOrder", getItemsOrder());
-			request.getSession().setAttribute("itemsCustomFields", itemsCustomFields);
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+				}
+			}
 		}
 	}
 
@@ -614,9 +649,5 @@ public String getSharePermissionLevel() {
 	public void setItemsOrder(String[] itemsOrder) {
 		this.itemsOrder = itemsOrder;
 	}
-
-
-
-
 
 }

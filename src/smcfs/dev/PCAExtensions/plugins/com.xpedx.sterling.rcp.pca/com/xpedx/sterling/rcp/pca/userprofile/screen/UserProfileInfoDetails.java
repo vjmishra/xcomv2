@@ -445,7 +445,10 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
 		
-		lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
+		
+		
+		//Hiding last modified by 
+		/*lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
 		lblLastModBy.setData("name", "lblLastModBy");
@@ -459,7 +462,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblLastModDate.setData("name", "lblLastModDate");
 		txtLastModDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtLastModDate.setLayoutData(gridData3);
-		txtLastModDate.setData("name", "txtLastModDate");
+		txtLastModDate.setData("name", "txtLastModDate");*/
 		
 		
 		
@@ -1470,7 +1473,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setName("txtLastLoginDate");
 		txtLastLoginDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		tbd = new YRCTextBindingData();
+		//Hiding Last modified by
+		/*tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		//tbd.setDataType("Date");
@@ -1484,7 +1488,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setDataType("Timestamp");
 		tbd.setName("txtLastModDate");
 		txtLastModDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-
+*/
 		
 		chkBoxBindingData = new YRCButtonBindingData();
 		chkBoxBindingData.setCheckedBinding("Y");
