@@ -2276,8 +2276,7 @@ function showSharedListForm(){
 							<input name="button" type="button"
 								class="btn-neutral floatright addmarginleft10"
 								value="Export This List" onclick="exportList(); return false;" />
-						</div>
-						<!-- / button-container -->
+						</div> <!-- / button-container -->
 
 					</s:if>
 					<s:else>
@@ -2591,8 +2590,7 @@ function showSharedListForm(){
 					<s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
 					<s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />
 
-					<s:set name="webtrendsItemTypeMap"
-						value="%{#_action.getItemTypeMap()}" />
+					<s:set name="webtrendsItemTypeMap" value="%{#_action.getItemTypeMap()}" />
 					<s:iterator status="status" id="item" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 						<s:set name='id' value='#item.getAttribute("MyItemsKey")' />
 						<s:set name='name' value='#item.getAttribute("Name")' />
@@ -2772,16 +2770,13 @@ function showSharedListForm(){
 												<p>Mill / Mfg. Item - Additional charges may apply</p>
 											</s:else>
 										</s:if>
-
 									</div>
 								</div>
 
-								<%-- TREY 4385 THIS DIV DOES NOT APPEAR IN GLENNA'S CODE --%>
 								<div style="width: 420px; padding-left: 12px; padding-top: 10px">
 									<s:if test='editMode == true'>
 										<%-- Show Replacement link only in Edit mode --%>
-										<s:if
-											test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+										<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
 											<p class="replacementtext">
 												<a href="#linkToReplacement" class="modal red"
 													onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This
@@ -2790,8 +2785,7 @@ function showSharedListForm(){
 										</s:if>
 									</s:if>
 									<s:else>
-										<s:if
-											test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+										<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
 											<p class="replacementtext">
 												This item will be replaced once inventory is depleted.&nbsp;<img
 													alt="To replace or add item, click the Edit This List button."
@@ -2804,8 +2798,7 @@ function showSharedListForm(){
 									</s:else>
 								</div>
 
-								<s:if
-									test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
+								<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 									<p class="mil-replaced">
 										<a class="modal red"
 											href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>Complimentary</a>
@@ -2820,8 +2813,7 @@ function showSharedListForm(){
 									</p>
 									<br />
 								</s:if>
-							</div>
-							<!-- / mil-desc-wrap -->
+							</div> <!-- / mil-desc-wrap -->
 
 
 							<div class="mil-action-list-wrap">
@@ -2829,66 +2821,63 @@ function showSharedListForm(){
 									<s:if test='editMode == true'>
 										<tr>
 											<td align="right"></td>
-											<td align="right"><label style="text-align: right;">Sequence:
-											</label> <s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
-													name="orders" list="itemValue" value='%{itemOrder2}'
-													onfocus="populate(this.id);"
-													onchange="populateValue(this,this.id);"
-													id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}'
-													headerValue='%{itemOrder2}' emptyOption="false"
-													theme="simple" /></td>
+											<td align="right">
+												<label style="text-align: right;">Sequence:</label>
+												<s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
+														name="orders" list="itemValue" value='%{itemOrder2}'
+														onfocus="populate(this.id);"
+														onchange="populateValue(this,this.id);"
+														id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}'
+														headerValue='%{itemOrder2}' emptyOption="false"
+														theme="simple" />
+											</td>
 										</tr>
 									</s:if>
 									<tr>
-										<td align="right" width="112"><label
-											style="text-align: right;">Qty:</label></td>
+										<td align="right" width="112">
+											<label style="text-align: right;">Qty:</label>
+										</td>
 										<td width="142" align="left">
-											<!-- Qty --> <s:hidden name="itemQty" value="%{#qty}" /> <s:hidden
-												id="enteredQuantities_%{#id}" name="enteredQuantities"
-												value="%{#qty}" /> <s:hidden id="custUOM_%{#id}"
-												name="custUOM" value="%{#customerUOM}" /> <s:hidden
-												name='initialQTY_%{#id}' id='initialQTY_%{#id}'
-												value='%{#qty}' /> <!-- UOM & Custom Fields --> <s:if
-												test="%{#itemType != '99.00'}">
+											<!-- Qty -->
+											<s:hidden name="itemQty" value="%{#qty}" />
+											 <s:hidden id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" />
+											 <s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
+											 <s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}' />
+											 
+											 <!-- UOM & Custom Fields -->
+											 <s:if test="%{#itemType != '99.00'}">
 												<s:textfield title="QTY" cssClass="x-input"
-													cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
-													maxlength="7" tabindex="1" value="%{#qty}"
-													onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);"
-													theme="simple">
-												</s:textfield>
-												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
-												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs"
-													value="%{#itemUomId}" />
-												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM"
-													value="%{#itemBaseUom}" />
-												<s:if test="#uomList!=null">
-													<s:select cssClass="xpedx_select_sm"
-														cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"
-														list="#uomList" listKey="key" listValue="value"
-														value='itemUomId'
-														onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
+														cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
+														maxlength="7" tabindex="1" value="%{#qty}"
+														onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);"
 														theme="simple" />
-													<s:hidden name='initialUOM_key_%{#id}'
-														id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
-													<s:set name="itemUomIdDesc"
-														value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
-													<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}'
-														value="%{#itemUomIdDesc}" />
+												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
+												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
+												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
+												<s:if test="#uomList != null">
+													<s:select cssClass="xpedx_select_sm"
+															cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"
+															list="#uomList" listKey="key" listValue="value"
+															value='itemUomId'
+															onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
+															theme="simple" />
+													<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
+													<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
+													<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}' value="%{#itemUomIdDesc}" />
 												</s:if>
-												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}'
-													value="%{#itemUomId}" />
-											</s:if> <s:else>
+												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
+											</s:if>
+											<s:else>
 												<s:textfield title="QTY" cssClass="x-input"
-													cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
-													tabindex="1" value="%{#qty}"
-													onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
-													theme="simple" readonly="true">
-												</s:textfield>
+														cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
+														tabindex="1" value="%{#qty}"
+														onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
+														theme="simple" readonly="true" />
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
 												<s:textfield cssClass="x-input" cssStyle="width:140px;"
-													name="uoms" value="%{#itemUomId}"
-													onchange="javascript:updateHidden(this,'%{#id}');"
-													theme="simple" readonly="true" />
+														name="uoms" value="%{#itemUomId}"
+														onchange="javascript:updateHidden(this,'%{#id}');"
+														theme="simple" readonly="true" />
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
 											</s:else>
 										</td>
@@ -2897,43 +2886,34 @@ function showSharedListForm(){
 
 									<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
 									<s:set name="erroMsg" value='%{erroMsg}' />
-									<s:set name="itemIdUOMsMap"
-										value='itemIdConVUOMMap.get(#itemId1)' />
+									<s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
 									<s:iterator value='itemIdUOMsMap'>
 										<s:set name='currentUomConvFact' value='value' />
-										<s:hidden name='convF_%{#currentUomId}'
-											id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
+										<s:hidden name='convF_%{#currentUomId}' id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
 									</s:iterator>
 
-									<s:set name="defaultConvF"
-										value='#itemIdUOMsMap.get(#itemUomId)' />
-									<s:hidden name="orderLineOrderMultiple"
-										id="orderLineOrderMultiple_%{#id}" value="%{#mulVal}" />
-									<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#id}"
-										value='%{#itemId}' />
-									<s:hidden name="UOMconversion" id="UOMconversion_%{#id}"
-										value="%{#defaultConvF}" />
+									<s:set name="defaultConvF" value='#itemIdUOMsMap.get(#itemUomId)' />
+									<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#id}" value="%{#mulVal}" />
+									<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#id}" value='%{#itemId}' />
+									<s:hidden name="UOMconversion" id="UOMconversion_%{#id}" value="%{#defaultConvF}" />
 
-									<s:hidden name='customerFieldsSize_%{#id}'
-										id='customerFieldsSize_%{#id}'
-										value='%{#_action.getCustomerFieldsMap().size()}' />
+									<s:hidden name='customerFieldsSize_%{#id}' id='customerFieldsSize_%{#id}' value='%{#_action.getCustomerFieldsMap().size()}' />
 									<s:iterator value='customerFieldsMap' status='custFieldStatus'>
 										<s:set name='FieldLabel' value='key' />
 										<s:set name='FieldValue' value='value' />
 
-										<s:set name='customKey'
-											value='%{customerFieldsDBMap.get(#FieldLabel)}' />
+										<s:set name='customKey' value='%{customerFieldsDBMap.get(#FieldLabel)}' />
 										<s:set name='CustomFieldValue' value="%{' '}" />
 
-										<s:if
-											test="%{#item.getAttribute(#customKey)!=null && #item.getAttribute(#customKey)!=''}">
-											<s:set name='CustomFieldValue'
-												value='%{#item.getAttribute(#customKey)}' />
+										<s:if test="%{#item.getAttribute(#customKey)!=null && #item.getAttribute(#customKey)!=''}">
+											<s:set name='CustomFieldValue' value='%{#item.getAttribute(#customKey)}' />
 										</s:if>
 										<tr>
-											<td align="right" width="169"><label
-												style="text-align: right;"><s:property
-														value="%{#FieldValue}" />:</label></td>
+											<td align="right" width="169">
+												<label style="text-align: right;">
+													<s:property value="%{#FieldValue}" />:
+												</label>
+											</td>
 											<td>
 												<%-- Creating text field with name as the Customer field name --%>
 
@@ -2951,7 +2931,8 @@ function showSharedListForm(){
 														value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
 													<s:hidden id="entered%{#FieldLabel}_%{#id}"
 														name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-												</s:if> <s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
+												</s:if>
+												<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
 													<s:textfield cssStyle="width:198px;" cssClass="x-input"
 														maxlength="22" name='customField%{#FieldLabel}s'
 														id="customField%{#FieldLabel}s" size='10'
@@ -2964,7 +2945,8 @@ function showSharedListForm(){
 														value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
 													<s:hidden id="entered%{#FieldLabel}_%{#id}"
 														name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-												</s:elseif> <s:else>
+												</s:elseif>
+												<s:else>
 													<s:textfield cssStyle="width:198px;" cssClass="x-input"
 														maxlength="25" name='customField%{#FieldLabel}s'
 														id="customField%{#FieldLabel}s" size='10'
@@ -2987,7 +2969,6 @@ function showSharedListForm(){
 								<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}" />
 								<s:set name="baseUOMCode" value="#baseUOMs.get(#itemId)"></s:set>
 								<s:hidden name="baseUOMCode" id="baseUOMCode_%{#id}" value="%{#baseUOMCode}" />
-<!-- 								<div class="clear"></div> -->
 								
 								
 								<s:if test='editMode != true'>
@@ -3064,10 +3045,8 @@ function showSharedListForm(){
 									</s:if>
 								</s:else>
 
-							</div>
-							<!-- / mil-action-list-wrap -->
-						</div>
-						<!-- / mil-wrap-XXX -->
+							</div> <!-- / mil-action-list-wrap -->
+						</div> <!-- / mil-wrap-condensed or mil-wrap-condensed-mid or mil-wrap-condensed-bot -->
 						
 						<div
 							<s:if test='%{#status.count == 1}'>class="show-hide-wrap"</s:if>
@@ -3165,8 +3144,7 @@ function showSharedListForm(){
 					<input name="button" type="button"
 						class="btn-neutral floatright addmarginleft10"
 						value="Export This List" onclick="exportList(); return false;" />
-				</div>
-				<!-- / button-container -->
+				</div> <!-- / button-container -->
 			</s:if>
 			<s:else>
 				<s:if
