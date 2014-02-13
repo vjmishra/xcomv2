@@ -57,7 +57,7 @@
 			<td class="no-border-right-user">
 			Security Question:</td>
 			<td class="no-border-right-user"><s:select headerKey="" headerValue="- Security Question -"
-				tabindex="20" name="secretQuestion" id="secretQuestion"
+				tabindex="1" name="secretQuestion" id="secretQuestion"
 				list="#orgQuestionList" cssClass="x-input" cssStyle="width: 102%;"
 				onchange="javascript:document.secrectQuestionForm.secretAnswer.value='';javascript:document.secrectQuestionForm.confirmAnswer.value='';" />			</td>
 		    <td class="no-border-right-user">&nbsp;</td>
@@ -73,7 +73,7 @@
 		<tr>
 			<td class="no-border-right-user">
 			Security Answer:</td>
-			<td  class="no-border-right-user"><s:password tabindex="25"
+			<td  class="no-border-right-user"><s:password tabindex="2"
 				name='secretAnswer' id="secretAnswer" 
 			    cssClass="x-input"
 				cssStyle="width: 100%;" 
@@ -89,7 +89,7 @@
 		<tr>
 			<td class="no-border-right-user">
 			Confirm Answer:</td>
-			<td class="no-border-right-user"><s:password tabindex="30"
+			<td class="no-border-right-user"><s:password tabindex="3"
 				name='confirmAnswer' id="confirmAnswer" 
 			    cssClass="x-input"
 				cssStyle="width: 100%;" 
@@ -112,8 +112,8 @@
 			<div>
 			<ul class="float-right">
 			<li >
-			<a href="javascript:saveAnswer();"  class="orange-ui-btn"><span>Submit</span>					
-			</a>
+			<input type="button" onclick="javascript:saveAnswer();" tabindex="4"  class="btn-gradient floatright" value="Submit">					
+			</input>
 			</li>
 			</ul>
 			</div></td>
