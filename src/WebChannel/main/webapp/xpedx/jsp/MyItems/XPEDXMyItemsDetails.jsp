@@ -3,9 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-<s:bean
-	name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils"
-	id="wcUtil" />
+<s:bean id="wcUtil" name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" />
 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -101,11 +99,19 @@
 			return false;
 		});
 		
+		// remove item links
+		$('.removeItemsLink').click(function() {
+			deleteItems();
+			return false;
+		});
+		
 		// add items with qty to cart button
 		$('.btn-add-items-qty-to-cart').click(function() {
 			addToCart();
+			return false;
 		});
 	});
+		
 </script>
 
 <script type="text/javascript">
@@ -271,8 +277,12 @@ function showSharedListForm(){
 				$(this).attr('title', html );
 			}
 		});
-			// EB-3973  . 
-		$("#dlgShareListLink1, #dlgShareListLink2").fancybox({
+		
+		<%-- fancybox workaround: fancybox only works with 'a' tag so programatically click it when the button is clicked --%>
+		$('.btn-share-list').click(function() {
+			$('#dlgShareListLink').click();
+		});
+		$("#dlgShareListLink").fancybox({
 			'onStart' 	: function(){
 			if (isUserAdmin || isEstUser){			
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
@@ -299,14 +309,13 @@ function showSharedListForm(){
 				}
 				shareSelectAll(false);
 			}
-			
 		});
 	
-		$("#various4").fancybox();
-		$("#various5,#various5_1").fancybox({
-			/*'autoDimensions'	: false,
-			'width'				: 640,
-			'height'			: 458*/
+		<%-- fancybox workaround: fancybox only works with 'a' tag so programatically click it when the button is clicked --%>
+		$('.btn-import-items').click(function() {
+			$("#dlgImportFormLink").click();
+		});
+		$("#dlgImportFormLink").fancybox({
 			'onClosed' : function(){
 			document.getElementById("errorMsgForBrowsePath").style.display = "none";
 			document.getElementById("errorMsgForRequiredField").innerHTML = "";
@@ -327,6 +336,7 @@ function showSharedListForm(){
 			'width' 			: 760,
 			'height' 			: 405  
 		});
+		
 		$("#addToCartFancybox").fancybox({
 			'onStart' 	: function(){			
 				populateAddToCartDlg('<s:property value="#availabilityURL" escape="false"/>');
@@ -338,6 +348,7 @@ function showSharedListForm(){
 			'width' 			: 700,
 			'height' 			: 600  
 		});
+		
 		$("#bracketPricing").fancybox({
 			'autoDimensions'	: false,
 			'width' 			: '100',
@@ -2023,6 +2034,10 @@ function showSharedListForm(){
 <!-- Hemantha -->
 <body class="  ext-gecko ext-gecko3">
 
+	<%-- fancybox workaround: fancybox only works with 'a' tag so programatically click it when the button is clicked --%>
+	<a style="display: none;" id="dlgImportFormLink" href="#dlgImportForm" />
+	<a style="display: none;" id="dlgShareListLink" href="#dlgShareList" />
+	
 	<!--  Shopping for banner -->
 	<div id="main-container">
 		<%--This is to setup reference to the action object so we can make calls to action methods explicitly in JSPs?. 
@@ -2206,7 +2221,7 @@ function showSharedListForm(){
 				</div>
 
 				<s:if test='editMode != true'>
-					<s:if test="%{errorMsg!=null && errorMsg!= ''">
+					<s:if test="%{errorMsg != null && errorMsg != ''">
 						<s:if test="%{errorMsg == 'ITEM_REPLACE_ERROR'}">
 							<h5 align="center">
 								<b><font color="red"> The selected replacement item
@@ -2242,7 +2257,6 @@ function showSharedListForm(){
 								<s:property value="listDesc" />
 							</span>
 						</div>
-						<!-- Close mil-edit -->
 						<div class="clear"></div>
 
 						<div class="view-hide-images">
@@ -2277,9 +2291,68 @@ function showSharedListForm(){
 						</div> <%-- / button-container --%>
 					</div>
 				</s:if>
-				<s:else>
+				<s:else> <%-- editMode --%>
 					<div id="mid-col-mil">
 						<div id="mil-edit" class="mil-edit" style="width: 100%">
+							<div class="mil-edit-forms">
+								<s:set name='isPrivateList' value="%{#_action.isFilterByMyListChk()}" />
+								<s:set name='isSelectedList' value="%{#_action.isFilterBySelectedListChk()}" />
+								<s:set name='isFilterByAll' value="%{#_action.isFilterByAllChk()}" />
+								<s:set name='sharePrivate' value="%{#_action.getSharePrivateField()}" />
+								<s:if test="(#isPrivateList)||(#isUserAdmin && #isSelectedList)">
+									<s:set name='disableListNameAndDesc' value="%{false}" />
+								</s:if>
+								<s:else>
+									<s:set name='disableListNameAndDesc' value="%{true}" />
+								</s:else>
+								<s:if test="#sharePrivate != '' && #sharePrivate != null">
+									<s:set name='disableListNameAndDesc' value="%{false}" />
+								</s:if>
+								<s:else>
+									<s:if test="#isUserAdmin">
+										<s:set name='disableListNameAndDesc' value="%{false}" />
+									</s:if>
+									<s:else>
+										<s:set name='disableListNameAndDesc' value="%{true}" />
+									</s:else>
+								</s:else>
+								
+								<p>Name</p>
+								<s:if test="%{#disableListNameAndDesc == true}">
+									<input style="width: 201px;" class="x-input text" id="listName"
+											title="Name" maxlength="35" disabled="disabled"
+											onkeyup="javascript:listNameCheck(this, 'mil-edit');"
+											onmouseover="javascript:listNameCheck(this, 'mil-edit');"
+											value="<s:property value="listName"/>" />
+								</s:if>
+								<s:else>
+									<input style="width: 201px;" class="x-input text" id="listName"
+											title="Name" maxlength="35"
+											onkeyup="javascript:listNameCheck(this, 'mil-edit');"
+											onmouseover="javascript:listNameCheck(this, 'mil-edit');"
+											value="<s:property value="listName"/>" />
+								</s:else>
+								<br /> <br />
+								<p>Description</p>
+								<s:if test="%{#disableListNameAndDesc == true}">
+									<textarea class="x-input" id="listDesc" disabled="disabled"
+											title="Description" rows="2"
+											onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+											style="width: 220px; height: 92px; word-wrap: break-word;"><s:property value="listDesc" /></textarea>
+								</s:if>
+								<s:else>
+									<textarea class="x-input" id="listDesc"
+											title="Description" rows="2"
+											onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+											style="width: 220px; height: 92px; word-wrap: break-word;"><s:property value="listDesc" /></textarea>
+								</s:else>
+	
+								<div class="notice mil-count-selected mil-count-selected-top" style="visibility: hidden;">
+									Placeholder text
+								</div>
+	
+							</div> <%-- / mil-edit-forms --%>
+
 							<div id="quick-add" class="quick-add float-right ">
 								<div class="clear">&nbsp;</div>
 								<s:hidden id="mandatoryFieldCheckFlag_quick-add"
@@ -2417,68 +2490,6 @@ function showSharedListForm(){
 							</div> <%-- / quick-add --%>
 						</div> <%-- / mil-edit --%>
 						
-						<div class="mil-edit-forms">
-							<s:set name='isPrivateList' value="%{#_action.isFilterByMyListChk()}" />
-							<s:set name='isSelectedList' value="%{#_action.isFilterBySelectedListChk()}" />
-							<s:set name='isFilterByAll' value="%{#_action.isFilterByAllChk()}" />
-							<s:set name='sharePrivate' value="%{#_action.getSharePrivateField()}" />
-							<s:if test="(#isPrivateList)||(#isUserAdmin && #isSelectedList)">
-								<s:set name='disableListNameAndDesc' value="%{false}" />
-							</s:if>
-							<s:else>
-								<s:set name='disableListNameAndDesc' value="%{true}" />
-							</s:else>
-							<s:if test="#sharePrivate != '' && #sharePrivate != null">
-								<s:set name='disableListNameAndDesc' value="%{false}" />
-							</s:if>
-							<s:else>
-								<s:if test="#isUserAdmin">
-									<s:set name='disableListNameAndDesc' value="%{false}" />
-								</s:if>
-								<s:else>
-									<s:set name='disableListNameAndDesc' value="%{true}" />
-								</s:else>
-							</s:else>
-							
-							<p>Name</p>
-							<s:if test="%{#disableListNameAndDesc == true}">
-								<input style="width: 201px;" class="x-input text" id="listName"
-										title="Name" maxlength="35" disabled="disabled"
-										onkeyup="javascript:listNameCheck(this, 'mil-edit');"
-										onmouseover="javascript:listNameCheck(this, 'mil-edit');"
-										value="<s:property value="listName"/>" />
-							</s:if>
-							<s:else>
-								<input style="width: 201px;" class="x-input text" id="listName"
-										title="Name" maxlength="35"
-										onkeyup="javascript:listNameCheck(this, 'mil-edit');"
-										onmouseover="javascript:listNameCheck(this, 'mil-edit');"
-										value="<s:property value="listName"/>" />
-							</s:else>
-							<br /> <br />
-							<p>Description</p>
-							<s:if test="%{#disableListNameAndDesc == true}">
-								<textarea class="x-input" id="listDesc" disabled="disabled"
-										title="Description" rows="2"
-										onkeyup="javascript:restrictTextareaMaxLength(this,250);"
-										style="width: 220px; height: 92px; word-wrap: break-word;">
-									<s:property value="listDesc" />
-								</textarea>
-							</s:if>
-							<s:else>
-								<textarea class="x-input" id="listDesc"
-										title="Description" rows="2"
-										onkeyup="javascript:restrictTextareaMaxLength(this,250);"
-										style="width: 220px; height: 92px; word-wrap: break-word;">
-									<s:property value="listDesc" />
-								</textarea>
-							</s:else>
-
-							<div class="notice mil-count-selected mil-count-selected-top" style="visibility: hidden;">
-								Placeholder text
-							</div>
-
-						</div> <%-- / mil-edit-forms --%>
 						<div class="clear">&nbsp;</div>
 						
 					</div> <%-- / mid-col-mil --%>
@@ -2487,57 +2498,28 @@ function showSharedListForm(){
 					<br />
 					<s:set name="shareAdminOnlyFlg" value="%{#_action.getShareAdminOnly()}" />
 					
-					<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
-						<fieldset class="mil-edit-field">
-							<legend>For Selected Items:</legend>
-	
-							<input class="forselected-input-edit toggleAllSelected" type="checkbox" id="selAll1" />
-							<s:if test="%{canDeleteItem}">
-								<a class="grey-ui-btn float-left" href="javascript:deleteItems();"><span>Remove Items</span></a>
-							</s:if>
-						</fieldset>
-					</s:if>
+					<div class="view-hide-images addpadtop10">
+						<a id="toggleview" class="viewbtn"></a>
+					</div>
 					
-					<ul id="tool-bar" class="tool-bar-bottom"
-						style="width: 503px; float: left; padding-top: 5px; margin-left: 9px;">
+					<div class="button-container addpadtop10">
+						<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+						<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+						
+						<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
+						
 						<s:if test="%{canShare}">
-							<li>
-								<a class="grey-ui-btn " id="dlgShareListLink1" href="#dlgShareList">
-									<span>Share List</span>
-								</a>
-							</li>
+							<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
 						</s:if>
 						<s:else>
-							<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>
-								<s:if test="#isEstUser">
-									<li>
-										<a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2">
-											<span>Share List</span>
-										</a>
-									</li>
-								</s:if>
+							<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
+								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
 							</s:if>
 						</s:else>
-						<li>
-							<a href="#dlgImportForm" id="various5" class="grey-ui-btn">
-								<span>Import Items</span>
-							</a>
-						</li>
-					</ul>
-	
-					<ul id="tool-bar float-right" class="tool-bar-bottom" style="float: right; padding-top: 5px; width: 152px;">
-						<li>
-							<a style="margin-left: 5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);">
-								<span>Save</span>
-							</a>
-						</li>
-						<li>
-							<a class="grey-ui-btn float-right-imp" href="javascript:cancelChanges();">
-								<span>Cancel</span>
-							</a>
-						</li>
-					</ul>
-
+						<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
+						</s:if>
+					</div>
+					
 				</s:else> <%-- end if-else editMode --%>
 
 				<s:form id="formItemIds" method="post">
@@ -2586,11 +2568,18 @@ function showSharedListForm(){
 
 					<div class="graybar">
 						<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
-						<div>
-							Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
-						</div>
+						<s:if test="editMode != true">
+							<div>
+								Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
+							</div>
+						</s:if>
+						<s:else> <%-- editMode --%>
+							<div>
+								Select All<a href="#" class="indent20px removeItemsLink">Remove Selected Items</a>
+							</div>
+						</s:else>
 					</div>
-
+					
 					<s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
 					<s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />
 
@@ -2681,6 +2670,7 @@ function showSharedListForm(){
 										<s:checkbox name="checkItemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 									</s:else>
 									
+									<%-- TODO: add escape=false to this s:property (href's query string is messed up without it) --%>
 									<a href='<s:property value="%{itemDetailsLink}" />'>
 										<div class="imagewrap">
 											<%-- TODO: ideally find a way to omit these images until toggled on to avoid loading images in the background --%>
@@ -2700,18 +2690,16 @@ function showSharedListForm(){
 								<s:hidden name="itemIds" value="%{#itemId}" />
 
 								<div class="mil-desc-wrap">
-									<div class="mil-wrap-condensed-desc"
-										style="height: auto;">
+									<div class="mil-wrap-condensed-desc desc-hide-images" style="height: auto;">
 										<s:if test="%{#itemType != 99}">
-											<a class="short-description"
-												href='<s:property value="%{itemDetailsLink}" />'> <s:property
-													value="#name" />
+											<a class="short-description" href='<s:property value="%{itemDetailsLink}" />'>
+												<s:property value="#name" />
 											</a>
 										</s:if>
 										<ul class="prodlist">
 											<s:if test="%{#itemType != 99}">
-												<a href='<s:property value="%{itemDetailsLink}" />'> <s:property
-														value="#desc" escape="false" />
+												<a href='<s:property value="%{itemDetailsLink}" />'>
+													<s:property value="#desc" escape="false" />
 												</a>
 											</s:if>
 											<s:hidden name="itemsDesc" value="%{#desc}" />
@@ -2719,33 +2707,30 @@ function showSharedListForm(){
 										</ul>
 										<s:if test="%{#showItemType}">
 											<p>
-												<b><s:property value="wCContext.storefrontId" /> <s:property
-														value="#xpedxItemLabel" />: <s:property value="#itemId" /></b>
+												<b>
+													<s:property value="wCContext.storefrontId" />
+													<s:property value="#xpedxItemLabel" />:
+													<s:property value="#itemId" />
+												</b>
 												<s:if test='#certFlag=="Y"'>
-													<img
-														src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png"
-														style="margin-left: 0px; display: inline;" />
+													<img class="green-e-logo" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" />
 												</s:if>
 											</p>
 
-											<s:if test='skuMap!=null && skuMap.size()>0'>
+											<s:if test='skuMap != null && skuMap.size() > 0'>
 												<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}' />
-												<s:set name='mfgItemVal'
-													value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}' />
-												<s:set name='partItemVal'
-													value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}' />
+												<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}' />
+												<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}' />
 											</s:if>
 											<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'>
 												<p class="fields-padding">
-													<s:property value="#manufacturerItemLabel" />
-													:
+													<s:property value="#manufacturerItemLabel" />:
 													<s:property value='#mfgItemVal' />
 												</p>
 											</s:if>
 											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
 												<p class="fields-padding">
-													<s:property value="#customerItemLabel" />
-													:
+													<s:property value="#customerItemLabel" />:
 													<s:property value='#partItemVal' />
 												</p>
 											</s:if>
@@ -2795,7 +2780,7 @@ function showSharedListForm(){
 									<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 										<p class="mil-replaced">
 											<a class='modal red'
-												href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>
+													href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>
 												Complimentary
 											</a>
 										</p>
@@ -2817,8 +2802,8 @@ function showSharedListForm(){
 									<table class="mil-config" width="380" border="0" cellspacing="0" cellpadding="0">
 										<s:if test='editMode == true'>
 											<tr>
-												<td align="right"></td>
-												<td align="right">
+												<td width="182" align="right"></td>
+												<td width="53" align="right">
 													<label style="text-align: right;">Sequence:</label>
 													<s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
 															name="orders" list="itemValue" value='%{itemOrder2}'
@@ -3142,42 +3127,27 @@ function showSharedListForm(){
 				</s:if>
 				<s:else> <%-- editMode --%>
 					<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
-						<fieldset class="mil-edit-field">
-							<legend>For Selected Items:</legend>
-
-							<input class="forselected-input-edit toggleAllSelected"
-								type="checkbox" id="selAll2" />
-							<s:if test="%{canDeleteItem}">
-								<a class="grey-ui-btn float-left"
-									href="javascript:deleteItems();"><span>Remove Items</span></a>
-							</s:if>
-						</fieldset>
-						<ul id="tool-bar" class="tool-bar-bottom"
-							style="width: 503px; float: left; padding-top: 5px; margin-left: 9px;">
+						<div class="view-hide-images addpadtop10">
+							<a id="toggleview" class="viewbtn"></a>
+						</div>
+						
+						<div class="button-container addpadtop10">
+							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+							
+							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
+							
 							<s:if test="%{canShare}">
-								<li><a class="grey-ui-btn " href="#dlgShareList"
-									id="dlgShareListLink1"><span>Share List</span></a></li>
+								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
 							</s:if>
 							<s:else>
-								<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>
-									<s:if test="#isEstUser">
-										<li><a class="grey-ui-btn " href="#dlgShareList"
-											id="dlgShareListLink2"><span>Share List</span></a></li>
-									</s:if>
+								<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
+									<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
 								</s:if>
 							</s:else>
-							<li><a href="#dlgImportForm" id="various5"
-								class="grey-ui-btn"><span>Import Items</span></a></li>
-						</ul>
-
-						<ul id="tool-bar float-right" class="tool-bar-bottom"
-							style="float: right; padding-top: 5px; width: 152px;">
-							<li><a style="margin-left: 5px;"
-								class="green-ui-btn float-right-imp"
-								href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
-							<li><a class="grey-ui-btn float-right-imp"
-								href="javascript:cancelChanges();"><span>Cancel</span></a></li>
-						</ul>
+							<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
+							</s:if>
+						</div>
 					</s:if>
 				</s:else>
 
@@ -3318,7 +3288,6 @@ function showSharedListForm(){
 					</s:if>
 					<!-- END carousel -->
 				</s:if>
-				<%--Added for EB 1150 --%>
 				<div id="back-to-top">
 					<a href="javascript:onclick = window.scrollTo(0,0)"></a>
 				</div>
@@ -3581,10 +3550,10 @@ function showSharedListForm(){
 		);
 		
 		$(document).ready(function() {
-			var id1Left= $('#main').width()		
-			backToTopLeft = parseInt(id1Left+5) + 'px';
-			$('#back-to-top').css('padding-left',backToTopLeft);
-			$('#back-to-top a').css('padding-left',backToTopLeft);
+			var id1Left= $('#main').width();
+			backToTopLeft = parseInt(id1Left + 5) + 'px';
+			$('#back-to-top').css('padding-left', backToTopLeft);
+			$('#back-to-top a').css('padding-left', backToTopLeft);
 		});
 	</script>
 </body>

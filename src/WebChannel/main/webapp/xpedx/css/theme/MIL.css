@@ -6428,3 +6428,13 @@ BEGIN 2014 styles
 .mil-action-list-wrap .notice {
 	border: none;
 }
+
+.mil-edit-forms {
+	width: 225px;
+	float: left;
+	clear: none;
+}
+
+.green-e-logo {
+	display: inline;
+}
