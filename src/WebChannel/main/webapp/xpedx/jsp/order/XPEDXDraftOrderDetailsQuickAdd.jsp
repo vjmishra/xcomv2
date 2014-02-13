@@ -89,8 +89,8 @@
 					</div>
 					<form>
 						<select name="itemtype">
-							<option value="">xpedx item #</option>
-							<option value="">customer item #</option>
+							<option value="">My Item #</option>
+							<option value="">xpedx Item #</option>
 						</select>
 					</form>
 					<div class="clearfix"></div>
