@@ -2174,8 +2174,7 @@ function showSharedListForm(){
 
 				<div id="mid-col-mil">
 					<h5 align="center">
-						<b><font color="red"><s:property
-									value="ajaxLineStatusCodeMsg" /></font></b>
+						<b><font color="red"><s:property value="ajaxLineStatusCodeMsg" /></font></b>
 					</h5>
 				</div>
 				<div id="errorMessageDiv"></div>
@@ -2236,12 +2235,11 @@ function showSharedListForm(){
 					</s:if>
 				</s:if>
 
-				<div id="mid-col-mil">
-					<s:if test='editMode != true'>
+				<s:if test='editMode != true'>
+					<div id="mid-col-mil">
 						<div>
-							<span class="grey"
-									style="width: 421px; word-wrap: break-word; float: left;">
-									<s:property value="listDesc" />
+							<span class="grey" style="width: 421px; word-wrap: break-word; float: left;">
+								<s:property value="listDesc" />
 							</span>
 						</div>
 						<!-- Close mil-edit -->
@@ -2274,12 +2272,13 @@ function showSharedListForm(){
 							</s:if>
 
 							<input name="button" type="button"
-								class="btn-neutral floatright addmarginleft10"
-								value="Export This List" onclick="exportList(); return false;" />
-						</div> <!-- / button-container -->
-
-					</s:if>
-					<s:else>
+									class="btn-neutral floatright addmarginleft10"
+									value="Export This List" onclick="exportList(); return false;" />
+						</div> <%-- / button-container --%>
+					</div>
+				</s:if>
+				<s:else>
+					<div id="mid-col-mil">
 						<div id="mil-edit" class="mil-edit" style="width: 100%">
 							<div id="quick-add" class="quick-add float-right ">
 								<div class="clear">&nbsp;</div>
@@ -2313,89 +2312,84 @@ function showSharedListForm(){
 										<br />
 
 										<ul class="hvv">
-											<li><label>Item Type</label> <s:select name="itemType"
-													cssStyle="width:100px; margin-left: 0px;" headerKey="1"
-													list="skuTypeList" listKey="key" listValue="value" /></li>
-											<li><label>Item #</label>
+											<li>
+												<label>Item Type</label>
+												<s:select name="itemType" cssStyle="width:100px; margin-left: 0px;" headerKey="1"
+														list="skuTypeList" listKey="key" listValue="value" />
+											</li>
+											<li>
+												<label>Item #</label>
 												<p class="p-word-wrap">
 													<s:textfield maxlength="27" cssStyle="width:50px;"
 														cssClass="text x-input" name="prodId"
 														onkeyup="javascript:listNameCheck(this, 'quick-add');"
-														onmouseover="javascript:listNameCheck(this, 'quick-add');"></s:textfield>
-												</p></li>
-											<li><label>Qty</label> <s:textfield maxlength="7"
-													cssStyle="width:63px;" cssClass="qty-field text x-input"
-													name="qty" value=""
-													onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"></s:textfield>
+														onmouseover="javascript:listNameCheck(this, 'quick-add');" />
+												</p>
+											</li>
+											<li>
+												<label>Qty</label>
+												<s:textfield maxlength="7" cssStyle="width:63px;" cssClass="qty-field text x-input"
+														name="qty" value="" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" />
 											</li>
 											<!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
-											<s:if
-												test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-												<li><label><s:property value="#custPONo" />:</label> <!--Blank space removed 3693  -->
+											<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+												<li>
+													<label><s:property value="#custPONo" />:</label>
 													<s:textfield maxlength="22" cssStyle="width:154px;"
-														cssClass="text x-input" name="purchaseOrder" value=""></s:textfield>
+															cssClass="text x-input" name="purchaseOrder" value="" />
 												</li>
 											</s:if>
 											<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 												<li>
-													<!-- label>Job Number:</label>  --> <label><s:property
-															value="#jobIdFlag" />:</label> <!--Blank space removed 3693  -->
+													<label><s:property value="#jobIdFlag" />:</label>
 													<s:textfield maxlength="24" cssStyle="width:154px;"
-														cssClass="text x-input" name="jobId" value=""></s:textfield>
+															cssClass="text x-input" name="jobId" value="" />
 												</li>
 											</s:if>
-											<li class="nomarginright"><label>&nbsp;</label> <s:set
-													name='storefrontId' value="wCContext.storefrontId" /> <s:if
-													test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-													<input type="image"
-														src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
-														onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
-												</s:if> <s:elseif
-													test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-													<input type="image"
-														src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/buttons/addtoquicklist green.png"
-														onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
-												</s:elseif></li>
-
+											<li class="nomarginright">
+												<label>&nbsp;</label>
+												<s:set name='storefrontId' value="wCContext.storefrontId" />
+												<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+													<input type="image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
+															onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
+												</s:if>
+												<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+													<input type="image" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/buttons/addtoquicklist green.png"
+															onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
+												</s:elseif>
+											</li>
 										</ul>
 									</form>
 
-									<s:form id="formAdd2List"
+									<s:form id="formAdd2List" action="MyItemsDetailsQuickAdd" method="post"
 											cssClass="form quick-add-to-cart-form"
-											cssStyle="padding-right:21px;" action="MyItemsDetailsQuickAdd"
-											method="post">
+											cssStyle="padding-right:21px;">
 										<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 										<s:hidden name="listName" value=""></s:hidden>
 										<s:hidden name="listDesc" value=""></s:hidden>
 										<s:hidden name="itemCount" value="%{#parameters.itemCount}"></s:hidden>
 										<s:hidden name="editMode" value="%{editMode}"></s:hidden>
-
+										
 										<table id="qaTableOld" cellspacing="0" cellpadding="0"
 											<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>width="694"</s:if>
 											<s:else>width="524"</s:else>>
 											<thead>
 												<tr>
 													<th class="del-col">&nbsp;</th>
-													<th class="first-col-header col-header type-col">Item
-														Type</th>
-
+													<th class="first-col-header col-header type-col">Item Type</th>
 													<th class="col-header item-col">Item #</th>
 													<th class="col-header qty-col">Qty</th>
 													<th class="col-header uom-col">UOM</th>
-													<s:if
-														test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-														<th class="col-header col-header job-col"><s:property
-																value="#custPONo" /></th>
+													<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+														<th class="col-header col-header job-col"><s:property value="#custPONo" /></th>
 													</s:if>
-													<s:if
-														test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+													<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 														<th class="last-col-header col-header po-col">
 															<!-- Job Number  -->
 															<s:property value="#jobIdFlag" />
 														</th>
 													</s:if>
 												</tr>
-
 											</thead>
 											<tbody>
 											</tbody>
@@ -2405,31 +2399,25 @@ function showSharedListForm(){
 											<s:else>width="524"</s:else>>
 										</table>
 										<div class="fFVVEM_wrap">
-											<div style="display: none;" class="error"
-												id="errorMsgForMandatoryFields_quick-add"></div>
+											<div style="display: none;" class="error" id="errorMsgForMandatoryFields_quick-add"></div>
 										</div>
-										<!-- <input id="btnQLAdd2Cart" type="image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtolist.png" 
-								class="add-to-cart-btn" onclick="add2List();return false;" /> -->
-										<a href="#" id="btnQLAdd2Cart"
-											class="orange-ui-btn add-to-cart-btn"
-											onclick="add2List();return false;"><span>Add to My
-												Items List</span></a>
+										<a href="#" id="btnQLAdd2Cart" class="orange-ui-btn add-to-cart-btn" onclick="add2List();return false;">
+											<span>Add to My Items List</span>
+										</a>
 									</s:form>
 
 									<div class="clear">&nbsp;</div>
 									<div class="quick-add-form-bot">
 										<center>
 											<div class="error" id="errorMsgFor_QL" style="display: none"></div>
-											Click the Add to Quick List button once you have entered an
-											item number.
+											Click the Add to Quick List button once you have entered an item number.
 										</center>
 									</div>
-								</div>
-							</div>
-
-						</div>
+								</div> <%-- / quick-add-form quick-add-form-mil --%>
+							</div> <%-- / quick-add --%>
+						</div> <%-- / mil-edit --%>
+						
 						<div class="mil-edit-forms">
-
 							<s:set name='isPrivateList' value="%{#_action.isFilterByMyListChk()}" />
 							<s:set name='isSelectedList' value="%{#_action.isFilterBySelectedListChk()}" />
 							<s:set name='isFilterByAll' value="%{#_action.isFilterByAllChk()}" />
@@ -2451,52 +2439,55 @@ function showSharedListForm(){
 									<s:set name='disableListNameAndDesc' value="%{true}" />
 								</s:else>
 							</s:else>
-
+							
 							<p>Name</p>
 							<s:if test="%{#disableListNameAndDesc == true}">
 								<input style="width: 201px;" class="x-input text" id="listName"
-									title="Name" maxlength="35" disabled="disabled"
-									onkeyup="javascript:listNameCheck(this, 'mil-edit');"
-									onmouseover="javascript:listNameCheck(this, 'mil-edit');"
-									value="<s:property value="listName"/>" />
+										title="Name" maxlength="35" disabled="disabled"
+										onkeyup="javascript:listNameCheck(this, 'mil-edit');"
+										onmouseover="javascript:listNameCheck(this, 'mil-edit');"
+										value="<s:property value="listName"/>" />
 							</s:if>
 							<s:else>
 								<input style="width: 201px;" class="x-input text" id="listName"
-									title="Name" maxlength="35"
-									onkeyup="javascript:listNameCheck(this, 'mil-edit');"
-									onmouseover="javascript:listNameCheck(this, 'mil-edit');"
-									value="<s:property value="listName"/>" />
+										title="Name" maxlength="35"
+										onkeyup="javascript:listNameCheck(this, 'mil-edit');"
+										onmouseover="javascript:listNameCheck(this, 'mil-edit');"
+										value="<s:property value="listName"/>" />
 							</s:else>
 							<br /> <br />
 							<p>Description</p>
 							<s:if test="%{#disableListNameAndDesc == true}">
 								<textarea class="x-input" id="listDesc" disabled="disabled"
-									title="Description" rows="2"
-									onkeyup="javascript:restrictTextareaMaxLength(this,250);"
-									style="width: 220px; height: 92px; word-wrap: break-word;"><s:property
-										value="listDesc" /></textarea>
+										title="Description" rows="2"
+										onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+										style="width: 220px; height: 92px; word-wrap: break-word;">
+									<s:property value="listDesc" />
+								</textarea>
 							</s:if>
 							<s:else>
-								<textarea class="x-input" id="listDesc" title="Description"
-									rows="2"
-									onkeyup="javascript:restrictTextareaMaxLength(this,250);"
-									style="width: 220px; height: 92px; word-wrap: break-word;"><s:property
-										value="listDesc" /></textarea>
+								<textarea class="x-input" id="listDesc"
+										title="Description" rows="2"
+										onkeyup="javascript:restrictTextareaMaxLength(this,250);"
+										style="width: 220px; height: 92px; word-wrap: break-word;">
+									<s:property value="listDesc" />
+								</textarea>
 							</s:else>
 
-							<div class="notice mil-count-selected mil-count-selected-top"
-								style="visibility: hidden;">Placeholder text</div>
+							<div class="notice mil-count-selected mil-count-selected-top" style="visibility: hidden;">
+								Placeholder text
+							</div>
 
-						</div>
+						</div> <%-- / mil-edit-forms --%>
 						<div class="clear">&nbsp;</div>
-					</div>
+						
+					</div> <%-- / mid-col-mil --%>
 	
-					<!-- Close mil-edit -->
 					<div class="clear"></div>
 					<br />
 					<s:set name="shareAdminOnlyFlg" value="%{#_action.getShareAdminOnly()}" />
+					
 					<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
-	
 						<fieldset class="mil-edit-field">
 							<legend>For Selected Items:</legend>
 	
@@ -2506,34 +2497,48 @@ function showSharedListForm(){
 							</s:if>
 						</fieldset>
 					</s:if>
+					
 					<ul id="tool-bar" class="tool-bar-bottom"
 						style="width: 503px; float: left; padding-top: 5px; margin-left: 9px;">
 						<s:if test="%{canShare}">
-							<li><a class="grey-ui-btn " id="dlgShareListLink1"
-								href="#dlgShareList"><span>Share List</span></a></li>
+							<li>
+								<a class="grey-ui-btn " id="dlgShareListLink1" href="#dlgShareList">
+									<span>Share List</span>
+								</a>
+							</li>
 						</s:if>
 						<s:else>
 							<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>
 								<s:if test="#isEstUser">
-									<li><a class="grey-ui-btn " href="#dlgShareList"
-										id="dlgShareListLink2"><span>Share List</span></a></li>
+									<li>
+										<a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2">
+											<span>Share List</span>
+										</a>
+									</li>
 								</s:if>
 							</s:if>
 						</s:else>
-						<li><a href="#dlgImportForm" id="various5" class="grey-ui-btn"><span>Import
-									Items</span></a></li>
+						<li>
+							<a href="#dlgImportForm" id="various5" class="grey-ui-btn">
+								<span>Import Items</span>
+							</a>
+						</li>
 					</ul>
 	
-					<ul id="tool-bar float-right" class="tool-bar-bottom"
-						style="float: right; padding-top: 5px; width: 152px;">
+					<ul id="tool-bar float-right" class="tool-bar-bottom" style="float: right; padding-top: 5px; width: 152px;">
 						<li>
-							<a style="margin-left: 5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a>
+							<a style="margin-left: 5px;" class="green-ui-btn float-right-imp" href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);">
+								<span>Save</span>
+							</a>
 						</li>
-						<li><a class="grey-ui-btn float-right-imp"
-							href="javascript:cancelChanges();"><span>Cancel</span></a></li>
+						<li>
+							<a class="grey-ui-btn float-right-imp" href="javascript:cancelChanges();">
+								<span>Cancel</span>
+							</a>
+						</li>
 					</ul>
 
-				</s:else>
+				</s:else> <%-- end if-else editMode --%>
 
 				<s:form id="formItemIds" method="post">
 					<s:hidden name="listKey" value="%{#parameters.listKey}" />
@@ -2549,7 +2554,6 @@ function showSharedListForm(){
 					<s:set name='itemImagesMap' value="getItemImagesMap()" />
 					<s:set name='itemDescMap' value="getItemDescMap()" />
 					<s:hidden name="xpedxTimer" id="xpedxTimer" value="0" />
-
 
 					<ul style="float: center; text-align: center; background-color: white !important;">
 						<li>
@@ -2662,707 +2666,678 @@ function showSharedListForm(){
 							<s:param name="unitOfMeasure" value="#itemBaseUom" />
 						</s:url>
 
+						<s:div cssClass="mil-wrap-condensed-container mil-only %{#status.last ? 'last' : ''}">
+							<div
+								<s:if test='%{#status.count == 1}'>class="mil-wrap-condensed"</s:if>
+								<s:elseif test="!#status.last" >class="mil-wrap-condensed-mid"</s:elseif>
+								<s:else>class="mil-wrap-condensed-bot"</s:else>>
 
-						<s:if test="#status.last">
-							<div class="mil-wrap-condensed-container mil-only last"
-									onmouseover="$(this).addClass('green-background');"
-									onmouseleave="$(this).removeClass('green-background');">
-						</s:if>
-						<s:else>
-							<div class="mil-wrap-condensed-container mil-only"
-									onmouseover="$(this).addClass('green-background');"
-									onmouseleave="$(this).removeClass('green-background');">
-						</s:else>
-
-						<div
-							<s:if test='%{#status.count == 1}'>class="mil-wrap-condensed"</s:if>
-							<s:elseif test="!#status.last" >class="mil-wrap-condensed-mid"</s:elseif>
-							<s:else>class="mil-wrap-condensed-bot"</s:else>>
-
-							<!-- begin image / checkbox   -->
-							<div class="mil-checkbox-wrap">
-								<s:if test='editMode == true'>
-									<s:checkbox name="itemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
-								</s:if>
-								<s:else>
-									<s:checkbox name="checkItemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
-								</s:else>
-								
-								<a href='<s:property value="%{itemDetailsLink}" />'>
-									<div class="imagewrap">
-										<%-- TODO: ideally find a way to omit these images until toggled on to avoid loading images in the background --%>
-										<img class="item-thumbnail"
-												src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
-												width="150" height="150" alt="" />
-									</div>
-								</a>
-								<s:hidden name="keys" value="%{#id}" />
-							</div>
-							<!-- end image / checkbox   -->
-
-							<!-- begin description  -->
-							<s:hidden name="itemsName" value="%{#name}" />
-							<s:hidden name="names" value="%{#name}" />
-							<s:hidden name="enteredProductIDs" id="enteredProductIDs_%{#id}" value="%{#itemId}" />
-							<s:hidden name="itemIds" value="%{#itemId}" />
-
-							<div class="mil-desc-wrap">
-								<div class="mil-wrap-condensed-desc"
-									style="height: auto;">
-									<s:if test="%{#itemType != 99}">
-										<a class="short-description"
-											href='<s:property value="%{itemDetailsLink}" />'> <s:property
-												value="#name" />
-										</a>
-									</s:if>
-									<ul class="prodlist">
-										<s:if test="%{#itemType != 99}">
-											<a href='<s:property value="%{itemDetailsLink}" />'> <s:property
-													value="#desc" escape="false" />
-											</a>
-										</s:if>
-										<s:hidden name="itemsDesc" value="%{#desc}" />
-										<s:hidden name="descs" value="%{#desc}" />
-									</ul>
-									<s:if test="%{#showItemType}">
-										<p>
-											<b><s:property value="wCContext.storefrontId" /> <s:property
-													value="#xpedxItemLabel" />: <s:property value="#itemId" /></b>
-											<s:if test='#certFlag=="Y"'>
-												<img
-													src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png"
-													style="margin-left: 0px; display: inline;" />
-											</s:if>
-										</p>
-
-										<s:if test='skuMap!=null && skuMap.size()>0'>
-											<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}' />
-											<s:set name='mfgItemVal'
-												value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}' />
-											<s:set name='partItemVal'
-												value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}' />
-										</s:if>
-										<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'>
-											<p class="fields-padding">
-												<s:property value="#manufacturerItemLabel" />
-												:
-												<s:property value='#mfgItemVal' />
-											</p>
-										</s:if>
-										<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
-											<p class="fields-padding">
-												<s:property value="#customerItemLabel" />
-												:
-												<s:property value='#partItemVal' />
-											</p>
-										</s:if>
-									</s:if>
-									<div class="red fields-padding">
-										<s:if test="%{#itemType != '99.00'}">
-											<s:set name="isStocked"
-												value="inventoryCheckForItemsMap.get(#itemId)"></s:set>
-											<s:if test="#isStocked !=null">
-												<s:if test='%{#isStocked !="Y"}'>
-													<p>Mill / Mfg. Item - Additional charges may apply</p>
-												</s:if>
-											</s:if>
-											<s:else>
-												<p>Mill / Mfg. Item - Additional charges may apply</p>
-											</s:else>
-										</s:if>
-									</div>
-								</div>
-
-								<div style="width: 420px; padding-left: 12px; padding-top: 10px">
+								<!-- begin image / checkbox   -->
+								<div class="mil-checkbox-wrap">
 									<s:if test='editMode == true'>
-										<%-- Show Replacement link only in Edit mode --%>
-										<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-											<p class="replacementtext">
-												<a href="#linkToReplacement" class="modal red"
-														onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
-													This item will be replaced once inventory is depleted.
-												</a>
-											</p>
-										</s:if>
+										<s:checkbox name="itemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 									</s:if>
 									<s:else>
-										<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-											<p class="replacementtext">
-												This item will be replaced once inventory is depleted.&nbsp;<img
-													alt="To replace or add item, click the Edit This List button."
-													title="To replace or add item, click the Edit This List button."
-													height="12" border="0" width="12"
-													src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
-													style="margin-top: 2px; float: right;" />
-											</p>
-										</s:if>
+										<s:checkbox name="checkItemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 									</s:else>
-								</div>
-
-								<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
-									<p class="mil-replaced">
-										<a class="modal red"
-											href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>Complimentary</a>
-									</p>
-									<br />
-								</s:if>
-								<s:if
-									test='(xpedxItemIDUOMToAlternativeListMap.containsKey(#itemIDUOM))'>
-									<p class="mil-replaced">
-										<a class="modal red"
-											href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'>Alternate</a>
-									</p>
-									<br />
-								</s:if>
-							</div> <!-- / mil-desc-wrap -->
-
-
-							<div class="mil-action-list-wrap">
-								<table class="mil-config" width="380" border="0" cellspacing="0" cellpadding="0">
-									<s:if test='editMode == true'>
-										<tr>
-											<td align="right"></td>
-											<td align="right">
-												<label style="text-align: right;">Sequence:</label>
-												<s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
-														name="orders" list="itemValue" value='%{itemOrder2}'
-														onfocus="populate(this.id);"
-														onchange="populateValue(this,this.id);"
-														id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}'
-														headerValue='%{itemOrder2}' emptyOption="false"
-														theme="simple" />
-											</td>
-										</tr>
-									</s:if>
-									<tr>
-										<td align="right" width="112">
-											<label style="text-align: right;">Qty:</label>
-										</td>
-										<td width="142" align="left">
-											<!-- Qty -->
-											<s:hidden name="itemQty" value="%{#qty}" />
-											 <s:hidden id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" />
-											 <s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
-											 <s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}' />
-											 
-											 <!-- UOM & Custom Fields -->
-											 <s:if test="%{#itemType != '99.00'}">
-												<s:textfield title="QTY" cssClass="x-input"
-														cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
-														maxlength="7" tabindex="1" value="%{#qty}"
-														onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);"
-														theme="simple" />
-												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
-												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
-												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
-												<s:if test="#uomList != null">
-													<s:select cssClass="xpedx_select_sm"
-															cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"
-															list="#uomList" listKey="key" listValue="value"
-															value='itemUomId'
-															onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
-															theme="simple" />
-													<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
-													<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
-													<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}' value="%{#itemUomIdDesc}" />
-												</s:if>
-												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
-											</s:if>
-											<s:else>
-												<s:textfield title="QTY" cssClass="x-input"
-														cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
-														tabindex="1" value="%{#qty}"
-														onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
-														theme="simple" readonly="true" />
-												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
-												<s:textfield cssClass="x-input" cssStyle="width:140px;"
-														name="uoms" value="%{#itemUomId}"
-														onchange="javascript:updateHidden(this,'%{#id}');"
-														theme="simple" readonly="true" />
-												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
-											</s:else>
-										</td>
-										<td></td>
-									</tr>
-
-									<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
-									<s:set name="erroMsg" value='%{erroMsg}' />
-									<s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
-									<s:iterator value='itemIdUOMsMap'>
-										<s:set name='currentUomConvFact' value='value' />
-										<s:hidden name='convF_%{#currentUomId}' id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
-									</s:iterator>
-
-									<s:set name="defaultConvF" value='#itemIdUOMsMap.get(#itemUomId)' />
-									<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#id}" value="%{#mulVal}" />
-									<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#id}" value='%{#itemId}' />
-									<s:hidden name="UOMconversion" id="UOMconversion_%{#id}" value="%{#defaultConvF}" />
-
-									<s:hidden name='customerFieldsSize_%{#id}' id='customerFieldsSize_%{#id}' value='%{#_action.getCustomerFieldsMap().size()}' />
-									<s:iterator value='customerFieldsMap' status='custFieldStatus'>
-										<s:set name='FieldLabel' value='key' />
-										<s:set name='FieldValue' value='value' />
-
-										<s:set name='customKey' value='%{customerFieldsDBMap.get(#FieldLabel)}' />
-										<s:set name='CustomFieldValue' value="%{' '}" />
-
-										<s:if test="%{#item.getAttribute(#customKey)!=null && #item.getAttribute(#customKey)!=''}">
-											<s:set name='CustomFieldValue' value='%{#item.getAttribute(#customKey)}' />
-										</s:if>
-										<tr>
-											<td align="right" width="169">
-												<label style="text-align: right;">
-													<s:property value="%{#FieldValue}" />:
-												</label>
-											</td>
-											<td>
-												<%-- Creating text field with name as the Customer field name --%>
-
-												<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
-												<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
-													<s:textfield cssStyle="width:198px;" cssClass="x-input"
-														maxlength="24" name='customField%{#FieldLabel}s'
-														id="customField%{#FieldLabel}s" size='10'
-														value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
-														title="%{#FieldValue}"
-														onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
-													<s:hidden
-														name='customerField_%{#custFieldStatus.count}_%{#id}'
-														id='customerField_%{#custFieldStatus.count}_%{#id}'
-														value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
-													<s:hidden id="entered%{#FieldLabel}_%{#id}"
-														name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-												</s:if>
-												<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
-													<s:textfield cssStyle="width:198px;" cssClass="x-input"
-														maxlength="22" name='customField%{#FieldLabel}s'
-														id="customField%{#FieldLabel}s" size='10'
-														value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
-														title="%{#FieldValue}"
-														onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
-													<s:hidden
-														name='customerField_%{#custFieldStatus.count}_%{#id}'
-														id='customerField_%{#custFieldStatus.count}_%{#id}'
-														value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
-													<s:hidden id="entered%{#FieldLabel}_%{#id}"
-														name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-												</s:elseif>
-												<s:else>
-													<s:textfield cssStyle="width:198px;" cssClass="x-input"
-														maxlength="25" name='customField%{#FieldLabel}s'
-														id="customField%{#FieldLabel}s" size='10'
-														value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
-														title="%{#FieldValue}"
-														onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
-													<s:hidden
-														name='customerField_%{#custFieldStatus.count}_%{#id}'
-														id='customerField_%{#custFieldStatus.count}_%{#id}'
-														value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
-													<s:hidden id="entered%{#FieldLabel}_%{#id}"
-														name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
-												</s:else>
-											</td>
-										</tr>
-									</s:iterator>
-
-								</table>
-								<s:set name="baseUOM" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:set>
-								<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}" />
-								<s:set name="baseUOMCode" value="#baseUOMs.get(#itemId)"></s:set>
-								<s:hidden name="baseUOMCode" id="baseUOMCode_%{#id}" value="%{#baseUOMCode}" />
-								
-								
-								<s:if test='editMode != true'>
-									<div class="cart-btn-wrap">
-										<div class="mil-avail-link">
-											<a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')">
-												Show Price &amp; Availability
-											</a>
+									
+									<a href='<s:property value="%{itemDetailsLink}" />'>
+										<div class="imagewrap">
+											<%-- TODO: ideally find a way to omit these images until toggled on to avoid loading images in the background --%>
+											<img class="item-thumbnail"
+													src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
+													width="150" height="150" alt="" />
 										</div>
-										<div class="mil-addcart-btn">
-											<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-												 <input name="button" type="button"  class="btn-gradient floatright" value="Add to Cart"
-												 		onclick="myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')" />
+									</a>
+									<s:hidden name="keys" value="%{#id}" />
+								</div>
+								<!-- end image / checkbox   -->
+
+								<!-- begin description  -->
+								<s:hidden name="itemsName" value="%{#name}" />
+								<s:hidden name="names" value="%{#name}" />
+								<s:hidden name="enteredProductIDs" id="enteredProductIDs_%{#id}" value="%{#itemId}" />
+								<s:hidden name="itemIds" value="%{#itemId}" />
+
+								<div class="mil-desc-wrap">
+									<div class="mil-wrap-condensed-desc"
+										style="height: auto;">
+										<s:if test="%{#itemType != 99}">
+											<a class="short-description"
+												href='<s:property value="%{itemDetailsLink}" />'> <s:property
+													value="#name" />
+											</a>
+										</s:if>
+										<ul class="prodlist">
+											<s:if test="%{#itemType != 99}">
+												<a href='<s:property value="%{itemDetailsLink}" />'> <s:property
+														value="#desc" escape="false" />
+												</a>
 											</s:if>
-											<s:else>
-												<input name="button" type="button"  class="btn-gradient floatright" value="Add to Order"
-														onclick="myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')" />
-											</s:else>
+											<s:hidden name="itemsDesc" value="%{#desc}" />
+											<s:hidden name="descs" value="%{#desc}" />
+										</ul>
+										<s:if test="%{#showItemType}">
+											<p>
+												<b><s:property value="wCContext.storefrontId" /> <s:property
+														value="#xpedxItemLabel" />: <s:property value="#itemId" /></b>
+												<s:if test='#certFlag=="Y"'>
+													<img
+														src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png"
+														style="margin-left: 0px; display: inline;" />
+												</s:if>
+											</p>
+
+											<s:if test='skuMap!=null && skuMap.size()>0'>
+												<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}' />
+												<s:set name='mfgItemVal'
+													value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}' />
+												<s:set name='partItemVal'
+													value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}' />
+											</s:if>
+											<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'>
+												<p class="fields-padding">
+													<s:property value="#manufacturerItemLabel" />
+													:
+													<s:property value='#mfgItemVal' />
+												</p>
+											</s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+												<p class="fields-padding">
+													<s:property value="#customerItemLabel" />
+													:
+													<s:property value='#partItemVal' />
+												</p>
+											</s:if>
+										</s:if>
+										<div class="red fields-padding">
+											<s:if test="%{#itemType != '99.00'}">
+												<s:set name="isStocked"
+													value="inventoryCheckForItemsMap.get(#itemId)"></s:set>
+												<s:if test="#isStocked !=null">
+													<s:if test='%{#isStocked !="Y"}'>
+														<p>Mill / Mfg. Item - Additional charges may apply</p>
+													</s:if>
+												</s:if>
+												<s:else>
+													<p>Mill / Mfg. Item - Additional charges may apply</p>
+												</s:else>
+											</s:if>
 										</div>
 									</div>
-      
-									<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
-									<ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
+
+									<div style="width: 420px; padding-left: 12px; padding-top: 10px">
+										<s:if test='editMode == true'>
+											<%-- Show Replacement link only in Edit mode --%>
+											<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+												<p class="replacementtext">
+													<a href="#linkToReplacement" class="modal red"
+															onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
+														This item will be replaced once inventory is depleted.
+													</a>
+												</p>
+											</s:if>
+										</s:if>
+										<s:else>
+											<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+												<p class="replacementtext">
+													This item will be replaced once inventory is depleted.&nbsp;<img
+														alt="To replace or add item, click the Edit This List button."
+														title="To replace or add item, click the Edit This List button."
+														height="12" border="0" width="12"
+														src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
+														style="margin-top: 2px; float: right;" />
+												</p>
+											</s:if>
+										</s:else>
+									</div>
+
+									<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
+										<p class="mil-replaced">
+											<a class='modal red'
+												href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>
+												Complimentary
+											</a>
+										</p>
+										<br />
+									</s:if>
+									<s:if test='(xpedxItemIDUOMToAlternativeListMap.containsKey(#itemIDUOM))'>
+										<p class="mil-replaced">
+											<a class='modal red'
+													href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>
+												Alternate
+											</a>
+										</p>
+										<br />
+									</s:if>
+								</div> <%-- / mil-desc-wrap --%>
+
+
+								<div class="mil-action-list-wrap">
+									<table class="mil-config" width="380" border="0" cellspacing="0" cellpadding="0">
+										<s:if test='editMode == true'>
+											<tr>
+												<td align="right"></td>
+												<td align="right">
+													<label style="text-align: right;">Sequence:</label>
+													<s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
+															name="orders" list="itemValue" value='%{itemOrder2}'
+															onfocus="populate(this.id);"
+															onchange="populateValue(this,this.id);"
+															id="itemOrder_%{#itemOrder2}" headerKey='%{itemOrder2}'
+															headerValue='%{itemOrder2}' emptyOption="false"
+															theme="simple" />
+												</td>
+											</tr>
+										</s:if>
+										<tr>
+											<td align="right" width="112">
+												<label style="text-align: right;">Qty:</label>
+											</td>
+											<td width="142" align="left">
+												<!-- Qty -->
+												<s:hidden name="itemQty" value="%{#qty}" />
+												 <s:hidden id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" />
+												 <s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
+												 <s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}' />
+												 
+												 <!-- UOM & Custom Fields -->
+												 <s:if test="%{#itemType != '99.00'}">
+													<s:textfield title="QTY" cssClass="x-input"
+															cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
+															maxlength="7" tabindex="1" value="%{#qty}"
+															onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);"
+															theme="simple" />
+													<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
+													<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
+													<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
+													<s:if test="#uomList != null">
+														<s:select cssClass="xpedx_select_sm"
+																cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"
+																list="#uomList" listKey="key" listValue="value"
+																value='itemUomId'
+																onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
+																theme="simple" />
+														<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
+														<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
+														<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}' value="%{#itemUomIdDesc}" />
+													</s:if>
+													<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
+												</s:if>
+												<s:else>
+													<s:textfield title="QTY" cssClass="x-input"
+															cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
+															tabindex="1" value="%{#qty}"
+															onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
+															theme="simple" readonly="true" />
+													<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
+													<s:textfield cssClass="x-input" cssStyle="width:140px;"
+															name="uoms" value="%{#itemUomId}"
+															onchange="javascript:updateHidden(this,'%{#id}');"
+															theme="simple" readonly="true" />
+													<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
+												</s:else>
+											</td>
+											<td></td>
+										</tr>
+
+										<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
+										<s:set name="erroMsg" value='%{erroMsg}' />
+										<s:set name="itemIdUOMsMap" value='itemIdConVUOMMap.get(#itemId1)' />
+										<s:iterator value='itemIdUOMsMap'>
+											<s:set name='currentUomConvFact' value='value' />
+											<s:hidden name='convF_%{#currentUomId}' id="convF_%{#currentUomId}" value="%{#currentUomConvFact}" />
+										</s:iterator>
+
+										<s:set name="defaultConvF" value='#itemIdUOMsMap.get(#itemUomId)' />
+										<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#id}" value="%{#mulVal}" />
+										<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#id}" value='%{#itemId}' />
+										<s:hidden name="UOMconversion" id="UOMconversion_%{#id}" value="%{#defaultConvF}" />
+
+										<s:hidden name='customerFieldsSize_%{#id}' id='customerFieldsSize_%{#id}' value='%{#_action.getCustomerFieldsMap().size()}' />
+										<s:iterator value='customerFieldsMap' status='custFieldStatus'>
+											<s:set name='FieldLabel' value='key' />
+											<s:set name='FieldValue' value='value' />
+
+											<s:set name='customKey' value='%{customerFieldsDBMap.get(#FieldLabel)}' />
+											<s:set name='CustomFieldValue' value="%{' '}" />
+
+											<s:if test="%{#item.getAttribute(#customKey)!=null && #item.getAttribute(#customKey)!=''}">
+												<s:set name='CustomFieldValue' value='%{#item.getAttribute(#customKey)}' />
+											</s:if>
+											<tr>
+												<td align="right" width="169">
+													<label style="text-align: right;">
+														<s:property value="%{#FieldValue}" />:
+													</label>
+												</td>
+												<td>
+													<%-- Creating text field with name as the Customer field name --%>
+
+													<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
+													<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
+														<s:textfield cssStyle="width:198px;" cssClass="x-input"
+															maxlength="24" name='customField%{#FieldLabel}s'
+															id="customField%{#FieldLabel}s" size='10'
+															value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+															title="%{#FieldValue}"
+															onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+														<s:hidden
+															name='customerField_%{#custFieldStatus.count}_%{#id}'
+															id='customerField_%{#custFieldStatus.count}_%{#id}'
+															value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
+														<s:hidden id="entered%{#FieldLabel}_%{#id}"
+															name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
+													</s:if>
+													<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
+														<s:textfield cssStyle="width:198px;" cssClass="x-input"
+															maxlength="22" name='customField%{#FieldLabel}s'
+															id="customField%{#FieldLabel}s" size='10'
+															value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+															title="%{#FieldValue}"
+															onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+														<s:hidden
+															name='customerField_%{#custFieldStatus.count}_%{#id}'
+															id='customerField_%{#custFieldStatus.count}_%{#id}'
+															value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
+														<s:hidden id="entered%{#FieldLabel}_%{#id}"
+															name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
+													</s:elseif>
+													<s:else>
+														<s:textfield cssStyle="width:198px;" cssClass="x-input"
+															maxlength="25" name='customField%{#FieldLabel}s'
+															id="customField%{#FieldLabel}s" size='10'
+															value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
+															title="%{#FieldValue}"
+															onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+														<s:hidden
+															name='customerField_%{#custFieldStatus.count}_%{#id}'
+															id='customerField_%{#custFieldStatus.count}_%{#id}'
+															value='%{"Extn"+#FieldLabel+"@"+#CustomFieldValue}' />
+														<s:hidden id="entered%{#FieldLabel}_%{#id}"
+															name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
+													</s:else>
+												</td>
+											</tr>
+										</s:iterator>
+
+									</table>
+									<s:set name="baseUOM" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:set>
+									<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}" />
+									<s:set name="baseUOMCode" value="#baseUOMs.get(#itemId)"></s:set>
+									<s:hidden name="baseUOMCode" id="baseUOMCode_%{#id}" value="%{#baseUOMCode}" />
+									
+									
+									<s:if test='editMode != true'>
+										<div class="cart-btn-wrap">
+											<div class="mil-avail-link">
+												<a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')">
+													Show Price &amp; Availability
+												</a>
+											</div>
+											<div class="mil-addcart-btn">
+												<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+													 <input name="button" type="button"  class="btn-gradient floatright" value="Add to Cart"
+															onclick="myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')" />
+												</s:if>
+												<s:else>
+													<input name="button" type="button"  class="btn-gradient floatright" value="Add to Order"
+															onclick="myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')" />
+												</s:else>
+											</div>
+										</div>
+		  
+										<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
+										<ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
+											<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
+												<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
+													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
+														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
+														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
+														&nbsp;
+														<s:property value="#baseUOMDesc"></s:property>
+													</div>
+													<s:hidden name="hiddenUOMOrdMul_%{#id}"
+															id="hiddenUOMOrdMul_%{#id}"
+															value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
+													<s:hidden name="hiddenQuantityOrdMul_%{#id}"
+															id="hiddenQuantityOrdMul_%{#id}"
+															value='%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}'></s:hidden>
+													<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
+												</li>
+											</s:if>
+											<s:else>
+												<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
+													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;"></div>
+												</li>
+											</s:else>
+											<s:if test='%{#erroMsg !=null && #erroMsg !=""}'>
+												<li style="float: right; display: block; margin-right: 10px; width: 550px; margin-top: 5px;">
+													<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
+												</li>
+											</s:if>
+											<s:else>
+												<li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
+													<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
+												</li>
+											</s:else>
+											<br />
+
+										</ul>
+										<div class="clearall">&nbsp;</div>
+
+									</s:if>
+									<s:else>
 										<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
 											<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
-												<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
+												<div class="notice"
+														id="errorDiv_qtys_<s:property value='%{#id}' />"
+														style="display: inline; float: right;">
 													<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
 													<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
 													&nbsp;
 													<s:property value="#baseUOMDesc"></s:property>
 												</div>
-												<s:hidden name="hiddenUOMOrdMul_%{#id}"
-														id="hiddenUOMOrdMul_%{#id}"
-														value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
-												<s:hidden name="hiddenQuantityOrdMul_%{#id}"
-														id="hiddenQuantityOrdMul_%{#id}"
-														value='%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}'></s:hidden>
-												<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
 											</li>
 										</s:if>
-										<s:else>
-											<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
-												<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;"></div>
-											</li>
-										</s:else>
-										<s:if test='%{#erroMsg !=null && #erroMsg !=""}'>
-											<li style="float: right; display: block; margin-right: 10px; width: 550px; margin-top: 5px;">
-												<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
-											</li>
-										</s:if>
-										<s:else>
-											<li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
-												<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
-											</li>
-										</s:else>
-										<br />
+									</s:else>
 
-									</ul>
-									<div class="clearall">&nbsp;</div>
-
+								</div> <%-- / mil-action-list-wrap --%>
+							</div> <%-- / mil-wrap-condensed or mil-wrap-condensed-mid or mil-wrap-condensed-bot --%>
+							
+							<div
+								<s:if test='%{#status.count == 1}'>class="show-hide-wrap"</s:if>
+								<s:else>class="show-hide-wrap"  style="background-color:#fafafa;"</s:else>>
+								<%-- Do not remove the following variables as it is used in the included jsp--%>
+								<s:set name="itemID" value='#itemId' />
+								<s:set name="itemKEY" value='#id' />
+								<s:if test='#itemOrder == null'>
+									<s:set name="jsonKey" value='%{#itemId}' />
 								</s:if>
 								<s:else>
-									<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-										<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
-											<div class="notice"
-													id="errorDiv_qtys_<s:property value='%{#id}' />"
-													style="display: inline; float: right;">
-												<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
-												<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
-												&nbsp;
-												<s:property value="#baseUOMDesc"></s:property>
-											</div>
-										</li>
-									</s:if>
+									<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
 								</s:else>
+								<div id="availabilityRow_<s:property value='#id'/>">
+									<!-- end prefs  -->
+									<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
+										<s:include value="../MyItems/XPEDXMyItemsDetailsItemAvailability.jsp"></s:include>
+									</s:if>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</s:div> <%-- / mil-wrap-condensed-container --%>
+					</s:iterator>
 
-							</div> <!-- / mil-action-list-wrap -->
-						</div> <!-- / mil-wrap-condensed or mil-wrap-condensed-mid or mil-wrap-condensed-bot -->
-						
-						<div
-							<s:if test='%{#status.count == 1}'>class="show-hide-wrap"</s:if>
-							<s:else>class="show-hide-wrap"  style="background-color:#fafafa;"</s:else>>
-							<%-- Do not remove the following variables as it is used in the included jsp--%>
-							<s:set name="itemID" value='#itemId' />
-							<s:set name="itemKEY" value='#id' />
-							<s:if test='#itemOrder == null'>
-								<s:set name="jsonKey" value='%{#itemId}' />
+					<div id="priceDiv" style="display: none;"></div>
+				</s:form>
+
+				<div id="addToCartDlgWrapper" style="display: none;">
+					<div title="Check Item Availability or Add to Cart" id="addToCartDlg">
+						<s:form action="xxx" name="addToCart" id="addToCartForm"
+							namespace="/xxx" method="POST">
+							<table id="tableUOM">
+								<tr>
+									<td>
+										<div id="add-to-cart-grid"></div>
+									</td>
+								</tr>
+								<tr>
+									<td><s:text name="Availability"></s:text></td>
+								</tr>
+							</table>
+							<div id="availibility-grid"></div>
+							<ul id="tool-bar" class="tool-bar-bottom">
+								<li><a class="grey-ui-btn"
+									href="javascript:checkUpdateAvailability();"> <span>Update
+											Availability</span>
+								</a></li>
+							</ul>
+							<s:hidden name='#action.name' id='xx' value='xx' />
+							<s:hidden name='#action.namespace' value='/xx' />
+						</s:form>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+				<br />
+				<s:if test='editMode != true'>
+
+					<div class="graybar">
+						<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
+						<div>
+							Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
+						</div>
+					</div>
+
+					<div class="view-hide-images">
+						<a id="toggleview" class="viewbtn"></a>
+					</div>
+					
+					<div class="button-container addpadtop10">
+						<s:if test='itemCount > 0'>
+							<s:if
+								test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+								<input name="button" type="button"
+									class="btn-gradient floatright addmarginleft10"
+									value="Add Items with Qty to Cart" />
 							</s:if>
 							<s:else>
-								<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
+								<input name="button" type="button"
+									class="btn-gradient floatright addmarginleft10"
+									value="Add Items with Qty to Order" />
 							</s:else>
-							<div id="availabilityRow_<s:property value='#id'/>">
-								<!-- end prefs  -->
-								<s:if test="%{pnaHoverMap.containsKey(#jsonKey)}">
-									<s:include value="../MyItems/XPEDXMyItemsDetailsItemAvailability.jsp"></s:include>
-								</s:if>
-							</div>
-						</div>
-				<div class="clearfix"></div>
-			</div>
-			<!-- / container -->
-			</s:iterator>
-
-			<div id="priceDiv" style="display: none;"></div>
-			</s:form>
-
-			<!-- This piece of code should be evaluated  start -->
-			<div id="addToCartDlgWrapper" style="display: none;">
-				<div title="Check Item Availability or Add to Cart" id="addToCartDlg">
-					<s:form action="xxx" name="addToCart" id="addToCartForm"
-						namespace="/xxx" method="POST">
-						<table id="tableUOM">
-							<tr>
-								<td>
-									<div id="add-to-cart-grid"></div>
-								</td>
-							</tr>
-							<tr>
-								<td><s:text name="Availability"></s:text></td>
-							</tr>
-						</table>
-						<div id="availibility-grid"></div>
-						<ul id="tool-bar" class="tool-bar-bottom">
-							<li><a class="grey-ui-btn"
-								href="javascript:checkUpdateAvailability();"> <span>Update
-										Availability</span>
-							</a></li>
-						</ul>
-						<s:hidden name='#action.name' id='xx' value='xx' />
-						<s:hidden name='#action.namespace' value='/xx' />
-					</s:form>
-				</div>
-			</div>
-
-			<!-- This piece of code should be evaluated  end -->
-			<div class="clear"></div>
-			<br />
-			<s:if test='editMode != true'>
-
-				<div class="graybar">
-					<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
-					<div>
-						Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
-					</div>
-				</div>
-
-				<div class="view-hide-images">
-					<a id="toggleview" class="viewbtn"></a>
-				</div>
-				
-				<div class="button-container addpadtop10">
-					<s:if test='itemCount > 0'>
-						<s:if
-							test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-							<input name="button" type="button"
-								class="btn-gradient floatright addmarginleft10"
-								value="Add Items with Qty to Cart" />
 						</s:if>
-						<s:else>
-							<input name="button" type="button"
-								class="btn-gradient floatright addmarginleft10"
-								value="Add Items with Qty to Order" />
-						</s:else>
-					</s:if>
 
-					<s:if test="%{canEditItem}">
+						<s:if test="%{canEditItem}">
+							<input name="button" type="button"
+								class="btn-neutral floatright addmarginleft10"
+								value="Edit This List"
+								onclick="document.getElementById('formEditMode').submit(); return false;" />
+						</s:if>
+
 						<input name="button" type="button"
 							class="btn-neutral floatright addmarginleft10"
-							value="Edit This List"
-							onclick="document.getElementById('formEditMode').submit(); return false;" />
-					</s:if>
+							value="Export This List" onclick="exportList(); return false;" />
+					</div> <%-- / button-container --%>
+				</s:if>
+				<s:else> <%-- editMode --%>
+					<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
+						<fieldset class="mil-edit-field">
+							<legend>For Selected Items:</legend>
 
-					<input name="button" type="button"
-						class="btn-neutral floatright addmarginleft10"
-						value="Export This List" onclick="exportList(); return false;" />
-				</div> <!-- / button-container -->
-			</s:if>
-			<s:else>
-				<s:if
-					test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
-					<fieldset class="mil-edit-field">
-						<legend>For Selected Items:</legend>
-
-						<input class="forselected-input-edit toggleAllSelected"
-							type="checkbox" id="selAll2" />
-						<s:if test="%{canDeleteItem}">
-							<a class="grey-ui-btn float-left"
-								href="javascript:deleteItems();"><span>Remove Items</span></a>
-						</s:if>
-					</fieldset>
-					<ul id="tool-bar" class="tool-bar-bottom"
-						style="width: 503px; float: left; padding-top: 5px; margin-left: 9px;">
-						<s:if test="%{canShare}">
-							<li><a class="grey-ui-btn " href="#dlgShareList"
-								id="dlgShareListLink1"><span>Share List</span></a></li>
-						</s:if>
-						<s:else>
-							<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>
-								<s:if test="#isEstUser">
-									<li><a class="grey-ui-btn " href="#dlgShareList"
-										id="dlgShareListLink2"><span>Share List</span></a></li>
+							<input class="forselected-input-edit toggleAllSelected"
+								type="checkbox" id="selAll2" />
+							<s:if test="%{canDeleteItem}">
+								<a class="grey-ui-btn float-left"
+									href="javascript:deleteItems();"><span>Remove Items</span></a>
+							</s:if>
+						</fieldset>
+						<ul id="tool-bar" class="tool-bar-bottom"
+							style="width: 503px; float: left; padding-top: 5px; margin-left: 9px;">
+							<s:if test="%{canShare}">
+								<li><a class="grey-ui-btn " href="#dlgShareList"
+									id="dlgShareListLink1"><span>Share List</span></a></li>
+							</s:if>
+							<s:else>
+								<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>
+									<s:if test="#isEstUser">
+										<li><a class="grey-ui-btn " href="#dlgShareList"
+											id="dlgShareListLink2"><span>Share List</span></a></li>
+									</s:if>
 								</s:if>
-							</s:if>
-						</s:else>
-						<li><a href="#dlgImportForm" id="various5"
-							class="grey-ui-btn"><span>Import Items</span></a></li>
-					</ul>
+							</s:else>
+							<li><a href="#dlgImportForm" id="various5"
+								class="grey-ui-btn"><span>Import Items</span></a></li>
+						</ul>
 
-					<ul id="tool-bar float-right" class="tool-bar-bottom"
-						style="float: right; padding-top: 5px; width: 152px;">
-						<li><a style="margin-left: 5px;"
-							class="green-ui-btn float-right-imp"
-							href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
-						<li><a class="grey-ui-btn float-right-imp"
-							href="javascript:cancelChanges();"><span>Cancel</span></a></li>
-					</ul>
+						<ul id="tool-bar float-right" class="tool-bar-bottom"
+							style="float: right; padding-top: 5px; width: 152px;">
+							<li><a style="margin-left: 5px;"
+								class="green-ui-btn float-right-imp"
+								href="javascript:saveAllItemsNew('mil-edit', ['quick-add']);"><span>Save</span></a></li>
+							<li><a class="grey-ui-btn float-right-imp"
+								href="javascript:cancelChanges();"><span>Cancel</span></a></li>
+						</ul>
+					</s:if>
+				</s:else>
+
+				<div class="clearall"></div>
+
+				<s:if test="editMode">
+					<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility: hidden;">Placeholder text</div>
 				</s:if>
-			</s:else>
-		</div>
+				<ul>
+					<li style="text-align: center;">
 
-		<div class="clearall"></div>
+						<div class="error" id="errorMsgBottom" style="display: none;"></div>
 
-		<s:if test="editMode">
-			<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility: hidden;">Placeholder text</div>
-		</s:if>
-		<ul>
-			<li style="text-align: center;">
+						<s:if
+							test="%{errorMsg == 'InvalidImport'}">
 
-				<div class="error" id="errorMsgBottom" style="display: none;"></div>
+							<script type="text/javascript">
+								document.getElementById("errorMsgBottom").innerHTML = "The import file must be in .csv format." ;
+								document.getElementById("errorMsgBottom").style.display = "inline"; 
+							</script>
+						</s:if>
+					</li>
+				</ul>
+				<div class="clearall"></div>
 
-				<s:if
-					test="%{errorMsg == 'InvalidImport'}">
+				<script type="text/javascript">
+					var milFileImportMsg = [];
+					
+					<s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
+						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
+						<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
 
-					<script type="text/javascript">
-						document.getElementById("errorMsgBottom").innerHTML = "The import file must be in .csv format." ;
-			            document.getElementById("errorMsgBottom").style.display = "inline"; 
-					</script>
-				</s:if>
-			</li>
-		</ul>
-		<div class="clearall"></div>
+						var msg = 'Row(s) <s:property value="#rowNums" /> failed to import. The supplier part number(s) are not valid.';
+						msg = msg.replace(/\-/g, ', ');
+						milFileImportMsg.push(msg);
+					</s:if>
+					<s:if test='%{#parameters.errorMsgRowsMissingItemId != null && #parameters.errorMsgRowsMissingItemId.length == 1 && #parameters.errorMsgRowsMissingItemId[0] != ""}'>
+						var msg = 'Row(s) <s:property value="%{#parameters.errorMsgRowsMissingItemId[0]}" /> failed to import. The supplier part number(s) are missing.';
+						msg = msg.replace(/\-/g, ', ');
+						milFileImportMsg.push(msg);
+					</s:if>
+				
+					if (milFileImportMsg.length > 0) {
+						displayImportErrorMessage(milFileImportMsg.join('<br/><br/>'));
+					}
+				</script>
 
-		<script type="text/javascript">
-          	var milFileImportMsg = [];
-          	
-           <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
-			<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
-			<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
-			
-			var msg = 'Row(s) <s:property value="#rowNums" /> failed to import. The supplier part number(s) are not valid.';
-			msg = msg.replace(/\-/g, ', ');
-			milFileImportMsg.push(msg);
-		</s:if>
-		<s:if test='%{#parameters.errorMsgRowsMissingItemId != null && #parameters.errorMsgRowsMissingItemId.length == 1 && #parameters.errorMsgRowsMissingItemId[0] != ""}'>
-			var msg = 'Row(s) <s:property value="%{#parameters.errorMsgRowsMissingItemId[0]}" /> failed to import. The supplier part number(s) are missing.';
-			msg = msg.replace(/\-/g, ', ');
-			milFileImportMsg.push(msg);
-		</s:if>
-		
-          	if (milFileImportMsg.length > 0) {
-          		displayImportErrorMessage(milFileImportMsg.join('<br/><br/>'));
-          	}
-          </script>
+				<br />
+				<s:if test='editMode != true'>
+					<!-- START Carousel -->
 
-
-		<br />
-		<s:if test='editMode != true'>
-			<!-- START Carousel -->
-
-			<s:if test='xpedxYouMightConsiderItems.size() > 0'>
-				<div class="mil-cart-bg mil" style="margin-top: 0px;">
-					<div id="cross-sell" class="float-left">
-						<span class="consider-text"> You might also consider...</span>
-						<ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
-							<!-- Begin - Changes made by Mitesh for JIRA 3186 -->
-							<s:if test='xpedxYouMightConsiderItems.size() < 4'>
-								<div disabled="disabled"
-									class="jcarousel-prev jcarousel-prev-hide-horizontal"></div>
-								<div disabled="disabled"
-									class="jcarousel-next jcarousel-next-hide-horizontal"></div>
-
-							</s:if>
-							<!-- End - Added by Mitesh Parikh for JIRA#3186  -->
-							<s:if test='xpedxYouMightConsiderItems.size() > 0'>
-								<s:iterator value='xpedxYouMightConsiderItems' id='reltItem'
-									status='iStatus'>
-
-									<s:set name="itemAssetList"
-										value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
-									<s:if
-										test='#itemAssetList != null && #itemAssetList.size() > 0 '>
-										<s:set name="itemAsset" value='#itemAssetList[0]' />
-										<s:set name='imageLocation'
-											value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
-										<s:set name='imageId'
-											value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
-										<s:set name='imageLabel'
-											value="#xutil.getAttribute(#itemAsset, 'Label')" />
-										<s:set name='imageURL'
-											value="#imageLocation + '/' + #imageId " />
-										<s:if test='%{#imageURL=="/"}'>
-											<s:set name='imageURL'
-												value='%{"/xpedx/images/INF_150x150.jpg"}' />
-										</s:if>
-
-										<s:set name='primaryInfo'
-											value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")' />
-										<s:set name='shortDesc'
-											value='#primaryInfo.getAttribute("ShortDescription")' />
-										<li><s:a
-												href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')">
-												<img
-													src="<s:url value='%{#imageURL}' includeParams='none' />"
-													title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>'
-													width="91" height="94"
-													alt="<s:text name='%{#imageMainLabel}'/>" />
-												<!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> -->
-												<br />
-												<!-- Added span for Jira 3931 -->
-												<span class="short-description"> <s:property
-														value="%{#shortDesc}" />
-												</span>
-												<br />
-												<br />
-												<br />
-											</s:a></li>
+					<s:if test='xpedxYouMightConsiderItems.size() > 0'>
+						<div class="mil-cart-bg mil" style="margin-top: 0px;">
+							<div id="cross-sell" class="float-left">
+								<span class="consider-text"> You might also consider...</span>
+								<ul id="footer-carousel-left" class="jcarousel-skin-xpedx">
+									<!-- Begin - Changes made by Mitesh for JIRA 3186 -->
+									<s:if test='xpedxYouMightConsiderItems.size() < 4'>
+										<div disabled="disabled"
+											class="jcarousel-prev jcarousel-prev-hide-horizontal"></div>
+										<div disabled="disabled"
+											class="jcarousel-next jcarousel-next-hide-horizontal"></div>
 
 									</s:if>
-									<s:else>
-										<s:set name='imageIdBlank'
-											value='%{"/xpedx/images/INF_150x150.jpg"}' />
-										<s:set name='primaryInfo'
-											value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")' />
-										<s:set name='shortDesc'
-											value='#primaryInfo.getAttribute("ShortDescription")' />
-										<li><s:a
-												href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')">
-												<img src="<s:url value='%{#imageIdBlank}'/>"
-													title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>'
-													width="91" height="94" alt="" />
-												<!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> -->
-												<br />
-												<!-- Added span for Jira 3931 -->
-												<span class="short-description"> <s:property
-														value="%{#shortDesc}" />
-												</span>
-												<br />
-												<br />
-												<br />
-											</s:a></li>
-									</s:else>
-								</s:iterator>
-							</s:if>
-							<!-- End - Changes made by Mitesh for JIRA 3186 -->
-							<!-- I will leave this piece of sampe html for reference -->
-							<!-- li> <a href="#"> <img src="/swc/xpedx/images/catalog/carousel-demo-1.jpg" width="91" height="94" alt="" /> <b>Rubbermaid Ridget Can Liners</b><br />
-	                            <br />
-	                            Seemless lightweight and easy to clean.<br />
-	                            <br />
-	
-	                            </a> </li -->
-						</ul>
-					</div>
+									<s:if test='xpedxYouMightConsiderItems.size() > 0'>
+										<s:iterator value='xpedxYouMightConsiderItems' id='reltItem'
+											status='iStatus'>
 
+											<s:set name="itemAssetList"
+												value='#xutil.getElementsByAttribute(#reltItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+											<s:if
+												test='#itemAssetList != null && #itemAssetList.size() > 0 '>
+												<s:set name="itemAsset" value='#itemAssetList[0]' />
+												<s:set name='imageLocation'
+													value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
+												<s:set name='imageId'
+													value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
+												<s:set name='imageLabel'
+													value="#xutil.getAttribute(#itemAsset, 'Label')" />
+												<s:set name='imageURL'
+													value="#imageLocation + '/' + #imageId " />
+												<s:if test='%{#imageURL=="/"}'>
+													<s:set name='imageURL'
+														value='%{"/xpedx/images/INF_150x150.jpg"}' />
+												</s:if>
+
+												<s:set name='primaryInfo'
+													value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")' />
+												<s:set name='shortDesc'
+													value='#primaryInfo.getAttribute("ShortDescription")' />
+												<li><s:a
+														href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')">
+														<img
+															src="<s:url value='%{#imageURL}' includeParams='none' />"
+															title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>'
+															width="91" height="94"
+															alt="<s:text name='%{#imageMainLabel}'/>" />
+														<!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> -->
+														<br />
+														<!-- Added span for Jira 3931 -->
+														<span class="short-description"> <s:property
+																value="%{#shortDesc}" />
+														</span>
+														<br />
+														<br />
+														<br />
+													</s:a></li>
+
+											</s:if>
+											<s:else>
+												<s:set name='imageIdBlank'
+													value='%{"/xpedx/images/INF_150x150.jpg"}' />
+												<s:set name='primaryInfo'
+													value='XMLUtils.getChildElement(#reltItem, "PrimaryInformation")' />
+												<s:set name='shortDesc'
+													value='#primaryInfo.getAttribute("ShortDescription")' />
+												<li><s:a
+														href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')">
+														<img src="<s:url value='%{#imageIdBlank}'/>"
+															title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>'
+															width="91" height="94" alt="" />
+														<!-- <b><s:property value="%{#reltItem.getAttribute('ItemID')}"/></b> -->
+														<br />
+														<!-- Added span for Jira 3931 -->
+														<span class="short-description"> <s:property
+																value="%{#shortDesc}" />
+														</span>
+														<br />
+														<br />
+														<br />
+													</s:a></li>
+											</s:else>
+										</s:iterator>
+									</s:if>
+								</ul>
+							</div> <%-- / cross-sell --%>
+						</div>
+					</s:if>
+					<!-- END carousel -->
+				</s:if>
+				<%--Added for EB 1150 --%>
+				<div id="back-to-top">
+					<a href="javascript:onclick = window.scrollTo(0,0)"></a>
 				</div>
-			</s:if>
-			<!-- END carousel -->
-		</s:if>
-		<%--Added for EB 1150 --%>
-		<div id="back-to-top">
-			<a href="javascript:onclick = window.scrollTo(0,0)"></a>
-		</div>
 
-		<s:set name='lastModifiedDateString'
-			value="getLastModifiedDateToDisplay()" />
-		<s:set name='lastModifiedUserId' value="lastModifiedUserId" />
-		<s:set name='modifiedBy'
-			value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
-		<div class="last-modified-div">
-			Last modified by
-			<s:property value="%{#_action.getLastModifiedUserId()}" />
-			on
-			<s:property value="#lastModifiedDateString" />
-		</div>
-	</div>
-	</div>
-	<!-- end main  -->
+				<s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
+				<s:set name='lastModifiedUserId' value="lastModifiedUserId" />
+				<s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
+				<div class="last-modified-div">
+					Last modified by
+					<s:property value="%{#_action.getLastModifiedUserId()}" />
+					on
+					<s:property value="#lastModifiedDateString" />
+				</div>
+			</div> <%-- / container --%>
+		</div> <%-- / main  --%>
 
-	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
-	</div>
-	<!-- end container  -->
-
+	</div> <%-- / main-container --%>
 
 	<div style="display: none;">
 
@@ -3389,9 +3364,7 @@ function showSharedListForm(){
 								<input type="hidden" id="rListSize_<s:property value='key'/>" value="<s:property value='#altItemList.size()'/>" />
 							</s:if>
 							<s:iterator value='#altItemList' id='altItem' status='iStatus'>
-								<s:div cssClass="mil-wrap-condensed-container %{#iStatus.last ? 'last' : ''}"
-										onmouseover="$(this).addClass('green-background');"
-										onmouseout="$(this).removeClass('green-background');">
+								<s:div cssClass="mil-wrap-condensed-container %{#iStatus.last ? 'last' : ''}">
 									<div class="mil-wrap-condensed" style="min-height: 240px;">
 		
 										<s:set name='uId' value='%{key + "_" +#altItem.getAttribute("ItemID")}' />
@@ -3491,19 +3464,19 @@ function showSharedListForm(){
 													</p>
 												</s:if>
 		
-											</div>
-										</div>
-									</div>
-								</s:div>
+											</div> <%-- / mil-attr-wrap --%>
+										</div> <%-- / mil-desc-wrap --%>
+									</div> <%-- / mil-wrap-condensed --%>
+								</s:div> <%-- / mil-wrap-condensed-container --%>
 							</s:iterator>
-						</s:div>
-					</div>
+						</s:div> <%-- / wrapper for lightbox --%>
+					</div> <%-- / replacement_ --%>
 				</s:iterator>
 			</s:if>
-		</div>
-		<s:form action="addComplementaryItemToCart"
-			name="addReplacementItemToCartForm" id="addReplacementItemToCartForm"
-			namespace="/order" method="POST">
+		</div> <%-- / wrapper for lightbox --%>
+		
+		<s:form action="addComplementaryItemToCart" namespace="/order" method="POST"
+				name="addReplacementItemToCartForm" id="addReplacementItemToCartForm">
 			<div id="replacementItems" style="height: 380px; display: none;">
 	
 				<s:hidden name='#action.name' id='validationActionName'
@@ -3526,8 +3499,8 @@ function showSharedListForm(){
 					href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
 			</ul>
 		</s:form>
-		<s:form id="formRIAddToList" action="XPEDXMyItemsDetailsCreate"
-			method="post">
+		
+		<s:form id="formRIAddToList" action="XPEDXMyItemsDetailsCreate" method="post">
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 			<s:hidden name="listName" value="%{listName}"></s:hidden>
 			<s:hidden name="listDesc" value="%{listDesc}" />
@@ -3546,10 +3519,9 @@ function showSharedListForm(){
 			<s:hidden name="itemType" value="1" />
 			<s:hidden name="uomId" value="" />
 			<s:hidden name="order" value="" />
-	
 		</s:form>
-		<s:form id="formRIReplaceInList" action="MyItemsDetailsChange"
-			method="post">
+		
+		<s:form id="formRIReplaceInList" action="MyItemsDetailsChange" method="post">
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 			<s:hidden name="listName" value="%{listName}"></s:hidden>
 			<s:hidden name="listDesc" value="%{listDesc}" />
@@ -3569,7 +3541,7 @@ function showSharedListForm(){
 			<s:hidden name="itemType" value="1" />
 			<s:hidden name="uom" value="" />
 		</s:form>
-	</div>
+	</div> <%-- / wrapper for lightbox --%>
 
 	<div class="hp-ad">
 	</div>
@@ -3584,16 +3556,16 @@ function showSharedListForm(){
 	<!-- Web Trends tag start -->
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<!-- Web Trends tag end  -->
+	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/jquery.form<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-	<!-- script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/quick-add/quick-add.js"></script -->
 
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<!-- Lightbox/Modal Window -->
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>-->
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 	
 	<!-- page specific JS includes -->
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/MyItems/XPEDXMyItemsDetails<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -3603,6 +3575,11 @@ function showSharedListForm(){
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 	<script type="text/javascript">
+		$('.mil-wrap-condensed-container').hover(
+			function() { $(this).addClass('green-background'); }, 
+			function() { $(this).removeClass('green-background'); }
+		);
+		
 		$(document).ready(function() {
 			var id1Left= $('#main').width()		
 			backToTopLeft = parseInt(id1Left+5) + 'px';
