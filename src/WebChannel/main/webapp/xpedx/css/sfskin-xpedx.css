@@ -104,3 +104,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8933e', end
 	background: linear-gradient(to bottom,  #f7f7f7 25%,#b5b5b5 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#b5b5b5',GradientType=0 ); /* IE6-8 */
 }
+
+
+.btn-gradient:focus { 
+
+padding: 3px 13px;
+
+border: 2px #53b1f9 solid;
+
+}
