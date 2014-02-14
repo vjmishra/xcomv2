@@ -92,7 +92,7 @@
 					<s:set name="showPaBracket" value="%{#_action.getValidateOM() == 'true' && #_action.getCatagory() == 'Paper' && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == 'Y' && #isBracketPricing == 'true'}" />
 					
 					<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
-						<s:div cssClass="addpadleft32" cssStyle="color:%{#jsonAvailabilityMessageColor};">
+						<s:div cssStyle="color:%{#jsonAvailabilityMessageColor}; font-size:13px; padding-left:30px; line-height:22px;">
 							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
 							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available
 						</s:div>
