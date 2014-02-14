@@ -5581,6 +5581,15 @@
     Modifyprogid="SterlingHttpTester"
     Modifyts="2014-01-24T05:39:20-05:00" Modifyuserid="admin"
     OrganizationCode="xpedx" SystemDefinedCode="N"/>
+<CommonCode CodeLength="0" CodeLongDescription="GEN" CodeName=""
+    CodeShortDescription="Awaiting Ship Order Creation" CodeSymbol=""
+    CodeType="XpedxWCStatus" CodeValue="1310"
+    CommonCodeKey="2014012808253165697" Createprogid=".YEntityServlet"
+    Createts="2014-01-28T08:25:31-05:00" Createuserid="admin"
+    DocumentType="" DocumentTypeSpecific="" Lockid="0"
+    MeantForEnterprise="Y" MeantForInternal="N" MeantForSupplier="N"
+    Modifyprogid=".YEntityServlet" Modifyts="2014-01-28T08:25:31-05:00"
+    Modifyuserid="admin" OrganizationCode="xpedx" SystemDefinedCode="N"/>
 <CommonCode CodeLength="20" CodeLongDescription="Commercial Address"
     CodeName=" " CodeShortDescription="Commercial" CodeSymbol=" "
     CodeType="ADDR_DELIVERY_TYPE" CodeValue="COMMERCIAL"
