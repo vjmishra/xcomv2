@@ -2716,19 +2716,19 @@ function showSharedListForm(){
 													<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}' />
 												</s:if>
 												<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'>
-													<p class="fields-padding">
+													<p>
 														<s:property value="#manufacturerItemLabel" />:
 														<s:property value='#mfgItemVal' />
 													</p>
 												</s:if>
 												<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
-													<p class="fields-padding">
+													<p>
 														<s:property value="#customerItemLabel" />:
 														<s:property value='#partItemVal' />
 													</p>
 												</s:if>
 											</s:if>
-											<div class="red fields-padding">
+											<div class="red">
 												<s:if test="%{#itemType != '99.00'}">
 													<s:set name="isStocked"
 														value="inventoryCheckForItemsMap.get(#itemId)"></s:set>
