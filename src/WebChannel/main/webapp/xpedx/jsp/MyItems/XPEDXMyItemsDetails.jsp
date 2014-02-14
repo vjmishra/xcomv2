@@ -2267,12 +2267,12 @@ function showSharedListForm(){
 								<s:if
 									test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 									<input name="button" type="button"
-											class="btn-gradient floatright addmarginleft10 btn-add-items-qty-to-cart"
+											class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
 											value="Add Items with Qty to Cart" />
 								</s:if>
 								<s:else>
 									<input name="button" type="button"
-											class="btn-gradient floatright addmarginleft10"
+											class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
 											value="Add Items with Qty to Order" />
 								</s:else>
 							</s:if>
@@ -2970,8 +2970,7 @@ function showSharedListForm(){
 												<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
 													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
 														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
-														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
-														&nbsp;
+														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}" />
 														<s:property value="#baseUOMDesc"></s:property>
 													</div>
 													<s:hidden name="hiddenUOMOrdMul_%{#id}"
@@ -3095,12 +3094,12 @@ function showSharedListForm(){
 							<s:if
 								test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 								<input name="button" type="button"
-									class="btn-gradient floatright addmarginleft10"
+									class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
 									value="Add Items with Qty to Cart" />
 							</s:if>
 							<s:else>
 								<input name="button" type="button"
-									class="btn-gradient floatright addmarginleft10"
+									class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
 									value="Add Items with Qty to Order" />
 							</s:else>
 						</s:if>

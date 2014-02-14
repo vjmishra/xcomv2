@@ -210,8 +210,8 @@
 									</tbody>
 								</table>
 							</s:if>
-						</s:div> <!-- / availability_ -->
-					</s:div> <!-- / mil-pa-avail -->
+						</s:div> <%-- / availability_ --%>
+					</s:div> <%-- / mil-pa-avail --%>
 					
 					<s:if test='%{#showPaBracket}'>
 						<div class="mil-pa-bracket">
@@ -265,9 +265,9 @@
 											</s:if>
 										</tbody>
 									</table>
-								</s:div> <!-- / bracketPricing_ -->
+								</s:div> <%-- / bracketPricing_ --%>
 							</s:if>
-						</div> <!-- / mil-pa-bracket -->
+						</div> <%-- / mil-pa-bracket --%>
 					</s:if>
 					
 					<div class="mil-pa-price">
@@ -337,9 +337,9 @@
 								</tbody>
 							</table>
 						</s:div>
-					</div> <!-- / mil-pa-price -->
+					</div> <%-- / mil-pa-price --%>
 				</s:if>
-			</div> <!-- / mil-pa-wrap -->
+			</div> <%-- / mil-pa-wrap --%>
 		</s:if>
 		<s:elseif test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 			<div class="mil-pa-wrap">
