@@ -2967,56 +2967,45 @@ function showSharedListForm(){
 										</div>
 		  
 										<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
-										<ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
-											<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-												<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
-													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
-														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
-														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}" />
-														<s:property value="#baseUOMDesc"></s:property>
-													</div>
-													<s:hidden name="hiddenUOMOrdMul_%{#id}"
-															id="hiddenUOMOrdMul_%{#id}"
-															value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
-													<s:hidden name="hiddenQuantityOrdMul_%{#id}"
-															id="hiddenQuantityOrdMul_%{#id}"
-															value='%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}'></s:hidden>
-													<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
-												</li>
-											</s:if>
-											<s:else>
-												<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
-													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;"></div>
-												</li>
-											</s:else>
-											<s:if test='%{#erroMsg !=null && #erroMsg !=""}'>
-												<li style="float: right; display: block; margin-right: 10px; width: 550px; margin-top: 5px;">
-													<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
-												</li>
-											</s:if>
-											<s:else>
-												<li style="float: right; display: block; margin-right: 10px; width: 200px; margin-top: 5px;">
-													<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
-												</li>
-											</s:else>
-											<br />
+										
+										<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
+											<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
+												<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
+												<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}" />
+												<s:property value="#baseUOMDesc"></s:property>
+											</div>
+											<s:hidden name="hiddenUOMOrdMul_%{#id}"
+													id="hiddenUOMOrdMul_%{#id}"
+													value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
+											<s:hidden name="hiddenQuantityOrdMul_%{#id}"
+													id="hiddenQuantityOrdMul_%{#id}"
+													value='%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}'></s:hidden>
+											<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
+										</s:if>
+										<s:else>
+											<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;"></div>
+										</s:else>
+										
+										<s:if test='%{#erroMsg !=null && #erroMsg !=""}'>
+											<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
+										</s:if>
+										<s:else>
+											<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
+										</s:else>
+										<br />
 
-										</ul>
 										<div class="clearall">&nbsp;</div>
 
 									</s:if>
-									<s:else>
+									<s:else> <%-- end editMode --%>
 										<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-											<li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;">
-												<div class="notice"
-														id="errorDiv_qtys_<s:property value='%{#id}' />"
-														style="display: inline; float: right;">
-													<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
-													<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
-													&nbsp;
-													<s:property value="#baseUOMDesc"></s:property>
-												</div>
-											</li>
+											<div class="notice"
+													id="errorDiv_qtys_<s:property value='%{#id}' />"
+													style="display: inline; float: right;">
+												<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
+												<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
+												<s:property value="#baseUOMDesc"></s:property>
+											</div>
 										</s:if>
 									</s:else>
 
