@@ -2744,19 +2744,8 @@ function showSharedListForm(){
 											</div>
 										</div>
 	
-										<div style="width: 420px; padding-left: 12px; padding-top: 10px">
-											<s:if test='editMode == true'>
-												<%-- Show Replacement link only in Edit mode --%>
-												<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-													<p class="replacementtext">
-														<a href="#linkToReplacement" class="modal red"
-																onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
-															This item will be replaced once inventory is depleted.
-														</a>
-													</p>
-												</s:if>
-											</s:if>
-											<s:else>
+										<div style="width: 420px; padding-top: 10px">
+											<s:if test='editMode != true'>
 												<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
 													<p class="replacementtext">
 														This item will be replaced once inventory is depleted.&nbsp;<img
@@ -2765,6 +2754,17 @@ function showSharedListForm(){
 															height="12" border="0" width="12"
 															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
 															style="margin-top: 2px; float: right;" />
+													</p>
+												</s:if>
+											</s:if>
+											<s:else> <%-- editMode --%>
+												<%-- Show Replacement link only in Edit mode --%>
+												<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+													<p class="replacementtext">
+														<a href="#linkToReplacement" class="modal red"
+																onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
+															This item will be replaced once inventory is depleted.
+														</a>
 													</p>
 												</s:if>
 											</s:else>
