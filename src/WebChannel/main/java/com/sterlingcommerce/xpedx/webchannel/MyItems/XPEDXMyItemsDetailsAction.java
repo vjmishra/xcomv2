@@ -1368,7 +1368,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 							
 							if(index == 0)
 								firstUOM=uomId;
-							if(uomId != null && item.getAttribute("UomId") && item.getAttribute("UomId") != null && uomId.trim().equals(item.getAttribute("UomId").trim()))
+							if(uomId != null && item.getAttribute("UomId") != null && item.getAttribute("UomId") != null && uomId.trim().equals(item.getAttribute("UomId").trim()))
 							{
 								isUOMAvaliable=true;
 							}
