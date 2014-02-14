@@ -2288,7 +2288,7 @@ function showSharedListForm(){
 									class="btn-neutral floatright addmarginleft10"
 									value="Export This List" onclick="exportList(); return false;" />
 						</div> <%-- / button-container --%>
-					</div>
+					</div> <%-- / mid-col-mil --%>
 				</s:if>
 				<s:else> <%-- editMode --%>
 					<div id="mid-col-mil">
@@ -2497,20 +2497,22 @@ function showSharedListForm(){
 					<br />
 					<s:set name="shareAdminOnlyFlg" value="%{#_action.getShareAdminOnly()}" />
 					
-					<div class="view-hide-images addpadtop10">
-						<a id="toggleview" class="viewbtn"></a>
-					</div>
-					
-					<div class="button-container addpadtop10">
-						<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
-						<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+					<div class="mid-altwrap">
+						<div class="view-hide-images addpadtop10">
+							<a id="toggleview" class="viewbtn"></a>
+						</div>
 						
-						<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
-						
-						<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
-							<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-						</s:if>
-					</div>
+						<div class="button-container addpadtop10">
+							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+							
+							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
+							
+							<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
+								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
+							</s:if>
+						</div>
+					</div> <%-- / mid-altwrap --%>
 					
 				</s:else> <%-- end if-else editMode --%>
 
@@ -2544,13 +2546,13 @@ function showSharedListForm(){
 							</s:if>
 							<s:if test="%{errorMsg == 'ItemsOverLoad'}">
 								<div class="error">
-									<!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
+									<%--   Your list may contain a maximum of 200 items. Please delete some items and try again. --%>
 									<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
 								</div>
 							</s:if>
 							<s:if test="%{errorMsg == 'InvalidFormat'}">
 								<div class="error">
-									<!--   An unexpected error occured (eg, a row had too few columns) -->
+									<%--   An unexpected error occured (eg, a row had too few columns) --%>
 									The import file is not in the correct file layout. Download the
 									sample file for an example of the correct layout and try again.
 								</div>
@@ -3076,85 +3078,87 @@ function showSharedListForm(){
 
 				<div class="clear"></div>
 				<br />
-				<s:if test='editMode != true'>
-
-					<div class="graybar">
-						<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
-						<div>
-							Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
+				
+				<div class="mid-altwrap">
+					<s:if test='editMode != true'>
+						<div class="graybar">
+							<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
+							<div>
+								Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
+							</div>
 						</div>
-					</div>
-
-					<div class="view-hide-images">
-						<a id="toggleview" class="viewbtn"></a>
-					</div>
-					
-					<div class="button-container addpadtop10">
-						<s:if test='itemCount > 0'>
-							<s:if
-								test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-								<input name="button" type="button"
-									class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
-									value="Add Items with Qty to Cart" />
-							</s:if>
-							<s:else>
-								<input name="button" type="button"
-									class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
-									value="Add Items with Qty to Order" />
-							</s:else>
-						</s:if>
-
-						<s:if test="%{canEditItem}">
-							<input name="button" type="button"
-								class="btn-neutral floatright addmarginleft10"
-								value="Edit This List"
-								onclick="document.getElementById('formEditMode').submit(); return false;" />
-						</s:if>
-
-						<input name="button" type="button"
-							class="btn-neutral floatright addmarginleft10"
-							value="Export This List" onclick="exportList(); return false;" />
-					</div> <%-- / button-container --%>
-				</s:if>
-				<s:else> <%-- editMode --%>
-					<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
-						<div class="view-hide-images addpadtop10">
+	
+						<div class="view-hide-images">
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
 						
 						<div class="button-container addpadtop10">
-							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
-							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
-							
-							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
-							
-							<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
-								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
+							<s:if test='itemCount > 0'>
+								<s:if
+									test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+									<input name="button" type="button"
+											class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
+											value="Add Items with Qty to Cart" />
+								</s:if>
+								<s:else>
+									<input name="button" type="button"
+											class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
+											value="Add Items with Qty to Order" />
+								</s:else>
 							</s:if>
-						</div>
+	
+							<s:if test="%{canEditItem}">
+								<input name="button" type="button"
+										class="btn-neutral floatright addmarginleft10"
+										value="Edit This List"
+										onclick="document.getElementById('formEditMode').submit(); return false;" />
+							</s:if>
+	
+							<input name="button" type="button"
+									class="btn-neutral floatright addmarginleft10"
+									value="Export This List" onclick="exportList(); return false;" />
+						</div> <%-- / button-container --%>
 					</s:if>
-				</s:else>
-
-				<div class="clearall"></div>
-
-				<s:if test="editMode">
-					<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility: hidden;">Placeholder text</div>
-				</s:if>
-				<ul>
-					<li style="text-align: center;">
-
-						<div class="error" id="errorMsgBottom" style="display: none;"></div>
-
-						<s:if
-							test="%{errorMsg == 'InvalidImport'}">
-
-							<script type="text/javascript">
-								document.getElementById("errorMsgBottom").innerHTML = "The import file must be in .csv format." ;
-								document.getElementById("errorMsgBottom").style.display = "inline"; 
-							</script>
+					<s:else> <%-- editMode --%>
+						<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
+							<div class="view-hide-images addpadtop10">
+								<a id="toggleview" class="viewbtn"></a>
+							</div>
+							
+							<div class="button-container addpadtop10">
+								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+								<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+								
+								<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
+								
+								<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
+									<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
+								</s:if>
+							</div>
 						</s:if>
-					</li>
-				</ul>
+					</s:else>
+	
+					<div class="clearall"></div>
+	
+					<s:if test="editMode">
+						<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility: hidden;">Placeholder text</div>
+					</s:if>
+					<ul>
+						<li style="text-align: center;">
+	
+							<div class="error" id="errorMsgBottom" style="display: none;"></div>
+	
+							<s:if
+								test="%{errorMsg == 'InvalidImport'}">
+	
+								<script type="text/javascript">
+									document.getElementById("errorMsgBottom").innerHTML = "The import file must be in .csv format." ;
+									document.getElementById("errorMsgBottom").style.display = "inline"; 
+								</script>
+							</s:if>
+						</li>
+					</ul>
+				</div> <%-- / mid-altwrap --%>
 				<div class="clearall"></div>
 
 				<script type="text/javascript">
