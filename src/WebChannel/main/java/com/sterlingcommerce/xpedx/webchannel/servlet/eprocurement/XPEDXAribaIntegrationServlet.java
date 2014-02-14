@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement;
 
@@ -42,66 +42,66 @@ import com.sterlingcommerce.webchannel.common.integration.Error;
 public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
 	XPEDXCXMLMessageFields cXMLFields = null;
 	WCIntegrationResponse wcResponse = null;
-	
-	
+
+
 	protected SCUISecurityResponse authenticateRequest(HttpServletRequest req,
     		HttpServletResponse res)
-    throws ServletException, IOException{    	
+    throws ServletException, IOException{
 		//SCUISecurityResponse securityResponse = super.authenticateRequest(req, res);
     	SCUISecurityResponse securityResponse =  null;
     	try
-    	{   
+    	{
     		Document doc = (Document)req.getAttribute(IAribaConstants.ARIBA_CXML_REQUEST_ATTRIBUTE_KEY);
-    		cXMLFields = new XPEDXCXMLMessageFields(doc);	
-    		
-    		/*Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("xpedx_cxml_dummy","xpedx_cxml_dummy");
+    		cXMLFields = new XPEDXCXMLMessageFields(doc);
+
+    		Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("dave@perrigo.com","Password1");
     		securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
     		if(securityResponse.getReturnStatus())
     			log.info("<<<<<<<<<<Authentication Successful:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");
     		else
-    			log.info("<<<<<<<<<<Authentication Failure:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");	
-    		
-    		logInfo("<<<<<<<<<<Authentication of incomming request >>>>>>>>");*/ 
-    		
+    			log.info("<<<<<<<<<<Authentication Failure:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");
+
+    		logInfo("<<<<<<<<<<Authentication of incomming request >>>>>>>>");
+
     		String custIdentity	= cXMLFields.getCustomerIdentity();
     		String AuthUserXPath = XPEDXWCUtils.getAuthUserXPathForCustomerIdentity(req, res, custIdentity);
-    		
-    		Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(cXMLFields.getAuthUser(AuthUserXPath,custIdentity), cXMLFields.getAuthPassword());
+
+    		loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(cXMLFields.getAuthUser(AuthUserXPath,custIdentity), cXMLFields.getAuthPassword());
     		if (log.isDebugEnabled())
                 logDebug("Login Document:"+SCXmlUtils.getString(loginDoc));
-            
+
     		securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
-    		//TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return 
+    		//TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return
     		if(securityResponse.getReturnStatus())
     			logInfo("<<<<<<<<<<Authentication Successful:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");
     		else
-    			logInfo("<<<<<<<<<<Authentication Failure:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");		
-		
+    			logInfo("<<<<<<<<<<Authentication Failure:PayLoadID:"+cXMLFields.getPayLoadId()+" >>>>>>>>");
+
     	}
     	catch(Exception e){
     		logError("Exception during authentication:"+e.getMessage(),e);
     		throw new WCException("Exception", e);
     	}
-		
+
     	return securityResponse;
- 	} 
-	
-	
-	
-	
+ 	}
+
+
+
+
 	protected WCIntegrationResponse processRequest (HttpServletRequest req,
     		HttpServletResponse res)
-    throws ServletException, IOException{    	
+    throws ServletException, IOException{
     	try
-    	{   
+    	{
     		logInfo("<<<<<<<<<<Post Authentication process start >>>>>>>>");
-    		
+
     		SCUISecurityResponse securityResponse = postAuthenticateUser(req, res);
     		if(YFCCommon.equals(SCUISecurityResponse.SUCCESS,securityResponse.getReturnStatus()))
-    		{    			
-    			if(!YFCCommon.isVoid(cXMLFields) && 
+    		{
+    			if(!YFCCommon.isVoid(cXMLFields) &&
        					YFCCommon.equals(IAribaConstants.CXML_REQUEST_SETUP_TAG,cXMLFields.getCXMLRequestType()))
-    			{       				
+    			{
     				logInfo("<<<<<<<<<<Post Authentication Successful >>>>>>>>");
     				populateAribaContext(wcContext);
        				if(YFCCommon.equals(IAribaConstants.ARIBA_OPERATION_EDIT_STRING, cXMLFields.getOperation(), true)||
@@ -115,7 +115,7 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
            		    		logError("Error Code:"+errorCode + "& ErrorDesc:"+ errorMessage);
            		    		return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,new Error(errorCode,errorMessage));
        					}
-       				}       				
+       				}
     				try
        				{
        					CommerceContextHelper.processProcurementPunchIn(wcContext);
@@ -148,11 +148,11 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
        		    		return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,new Error(errorCode,errorMessage));
        				}
        			}
-       			else if(!YFCCommon.isVoid(cXMLFields) && 
+       			else if(!YFCCommon.isVoid(cXMLFields) &&
        					YFCCommon.equals(IAribaConstants.CXML_REQUEST_ORDER_TAG,cXMLFields.getCXMLRequestType()))
        			{
        				//Invoke the helper class which will call the service.
-       				wcResponse = WCIntegrationHelper.processAribaOrderRequest(cXMLFields.getRequestDoc(), wcContext); 
+       				wcResponse = WCIntegrationHelper.processAribaOrderRequest(cXMLFields.getRequestDoc(), wcContext);
        				if(wcResponse.getReturnStatus())
        				{
        					//TODO Send success response
@@ -160,9 +160,9 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
        				   //Send success response
        					errorMessage = "Order request processed successfully";
        		    		errorCode = new Long(IWCIntegrationStatusCodes.SUCCESS);
-       		    		logInfo(">>>>>>>>>>>>>Order request processed successfully>>>>>>>>>>>>>>"); 
+       		    		logInfo(">>>>>>>>>>>>>Order request processed successfully>>>>>>>>>>>>>>");
        		    		wcResponse = new WCIntegrationResponse(WCIntegrationResponse.SUCCESS,new Error(errorCode,errorMessage));
-       		    		      		    		
+
        				}
        				else
        				{
@@ -173,7 +173,7 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
        		    		logError("Error Code:"+errorCode + "& ErrorDesc:"+ errorMessage);
        		    		return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,new Error(errorCode,errorMessage));
        				}
-       			}       			
+       			}
     		}
     		else
     		{
@@ -181,8 +181,8 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
     			errorMessage = "Post Authentication failed";
         		errorCode = new Long(IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
         		logError("Error Code:"+errorCode + "& ErrorDesc:"+ errorMessage);
-        		return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,new Error(errorCode,errorMessage));        		
-    		}    		
+        		return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,new Error(errorCode,errorMessage));
+    		}
     	}
     	catch(Exception e)
     	{
@@ -194,17 +194,17 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
     	}
     	logInfo("<<<<<<<<<<Post Authentication process End >>>>>>>>");
     	return wcResponse;
- 	
+
     }
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	   private void populateAribaContext(IWCContext wcContext)
-	    {   	
+	    {
 				AribaContextImpl aribaContext = AribaContextImpl.getInstance();
 				aribaContext.setAribaOperation(cXMLFields.getOperation());
 				aribaContext.setOrderHeaderKey(cXMLFields.getOrderHeaderKey());
@@ -223,19 +223,19 @@ public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
 	                logDebug("IAribaContext.getFromIdentity:"+cXMLFields.getFromIdentity());
 	                logDebug("IAribaContext.getToIdentity:"+cXMLFields.getToIdentity());
 	                logDebug("IAribaContext.getToIdentity:"+cXMLFields.getPayLoadId());
-	                               
-				}		
+
+				}
 	    }
-	    
+
 		public String getResponseDoc(Error errObj,boolean resStatus, IWCContext ctx)    {
 			if(resStatus)
 				wcResponse = new WCIntegrationResponse(WCIntegrationResponse.SUCCESS,errObj);
 			else
 				wcResponse = new WCIntegrationResponse(WCIntegrationResponse.FAILURE,errObj);
-			String docString = WCIntegrationXMLUtils.prepareAribaResponseDoc(cXMLFields, wcResponse, ctx);		
-			return docString;		
+			String docString = WCIntegrationXMLUtils.prepareAribaResponseDoc(cXMLFields, wcResponse, ctx);
+			return docString;
 		}
-	
+
 	private static final Logger log = Logger.getLogger(XPEDXAribaIntegrationServlet.class);
 
 }
