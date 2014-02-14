@@ -2796,7 +2796,7 @@ function showSharedListForm(){
 											<s:if test='editMode == true'>
 												<tr>
 													<td width="182" align="right"></td>
-													<td width="53" align="right">
+													<td width="53" align="right" colspan="2">
 														<label style="text-align: right;">Sequence:</label>
 														<s:select cssClass="xpedx_select_sm" cssStyle="width: 50px;"
 																name="orders" list="itemValue" value='%{itemOrder2}'
@@ -2809,18 +2809,18 @@ function showSharedListForm(){
 												</tr>
 											</s:if>
 											<tr>
-												<td align="right" width="112">
-													<label style="text-align: right;">Qty:</label>
+												<td width="182" align="right">
+													<span style="text-align:right;">Qty:</span>
 												</td>
-												<td width="142" align="left">
-													<!-- Qty -->
+												<td width="53">
+													<%-- Qty --%>
 													<s:hidden name="itemQty" value="%{#qty}" />
-													 <s:hidden id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" />
-													 <s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
-													 <s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}' />
-													 
-													 <!-- UOM & Custom Fields -->
-													 <s:if test="%{#itemType != '99.00'}">
+													<s:hidden id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" />
+													<s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
+													<s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}' />
+													
+													<%-- UOM & Custom Fields --%>
+													<s:if test="%{#itemType != '99.00'}">
 														<s:textfield title="QTY" cssClass="x-input"
 																cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
 																maxlength="7" tabindex="1" value="%{#qty}"
@@ -2829,6 +2829,20 @@ function showSharedListForm(){
 														<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
 														<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
 														<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
+														<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
+													</s:if>
+													<s:else> <%-- itemType == '99.00' --%>
+														<s:textfield title="QTY" cssClass="x-input"
+																cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
+																tabindex="1" value="%{#qty}"
+																onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
+																theme="simple" readonly="true" />
+														<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
+													</s:else>
+												</td>
+												<td width="145">
+													<%-- UOM & Custom Fields --%>
+													<s:if test="%{#itemType != '99.00'}">
 														<s:if test="#uomList != null">
 															<s:select cssClass="xpedx_select_sm"
 																	cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"
@@ -2842,13 +2856,7 @@ function showSharedListForm(){
 														</s:if>
 														<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}" />
 													</s:if>
-													<s:else>
-														<s:textfield title="QTY" cssClass="x-input"
-																cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
-																tabindex="1" value="%{#qty}"
-																onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
-																theme="simple" readonly="true" />
-														<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
+													<s:else> <%-- itemType == '99.00' --%>
 														<s:textfield cssClass="x-input" cssStyle="width:140px;"
 																name="uoms" value="%{#itemUomId}"
 																onchange="javascript:updateHidden(this,'%{#id}');"
@@ -2856,7 +2864,6 @@ function showSharedListForm(){
 														<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
 													</s:else>
 												</td>
-												<td></td>
 											</tr>
 	
 											<s:set name="mulVal" value='itemOrderMultipleMap.get(#itemId1)' />
@@ -2884,17 +2891,17 @@ function showSharedListForm(){
 													<s:set name='CustomFieldValue' value='%{#item.getAttribute(#customKey)}' />
 												</s:if>
 												<tr>
-													<td align="right" width="169">
+													<td align="right">
 														<label style="text-align: right;">
 															<s:property value="%{#FieldValue}" />:
 														</label>
 													</td>
-													<td>
+													<td colspan="2">
 														<%-- Creating text field with name as the Customer field name --%>
 	
 														<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
 														<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
-															<s:textfield cssStyle="width:198px;" cssClass="x-input"
+															<s:textfield cssStyle="width:202px;" cssClass="x-input"
 																maxlength="24" name='customField%{#FieldLabel}s'
 																id="customField%{#FieldLabel}s" size='10'
 																value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
@@ -2908,7 +2915,7 @@ function showSharedListForm(){
 																name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
 														</s:if>
 														<s:elseif test="%{#FieldLabel == 'CustomerPONo'}">
-															<s:textfield cssStyle="width:198px;" cssClass="x-input"
+															<s:textfield cssStyle="width:202px;" cssClass="x-input"
 																maxlength="22" name='customField%{#FieldLabel}s'
 																id="customField%{#FieldLabel}s" size='10'
 																value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
@@ -2922,7 +2929,7 @@ function showSharedListForm(){
 																name="entered%{#FieldLabel}" value="%{#CustomFieldValue}" />
 														</s:elseif>
 														<s:else>
-															<s:textfield cssStyle="width:198px;" cssClass="x-input"
+															<s:textfield cssStyle="width:202px;" cssClass="x-input"
 																maxlength="25" name='customField%{#FieldLabel}s'
 																id="customField%{#FieldLabel}s" size='10'
 																value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
@@ -2955,7 +2962,7 @@ function showSharedListForm(){
 												</div>
 												<div class="mil-addcart-btn">
 													<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-														 <input name="button" type="button"  class="btn-gradient floatright" value="Add to Cart"
+														<input name="button" type="button"  class="btn-gradient floatright" value="Add to Cart"
 																onclick="myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')" />
 													</s:if>
 													<s:else>
@@ -2964,7 +2971,7 @@ function showSharedListForm(){
 													</s:else>
 												</div>
 											</div>
-			  
+
 											<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
 											
 											<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
@@ -3215,8 +3222,7 @@ function showSharedListForm(){
 													value='#primaryInfo.getAttribute("ShortDescription")' />
 												<li><s:a
 														href="javascript:processDetail('%{#reltItem.getAttribute('ItemID')}', '%{#reltItem.getAttribute('UnitOfMeasure')}')">
-														<img
-															src="<s:url value='%{#imageURL}' includeParams='none' />"
+														<img src="<s:url value='%{#imageURL}' includeParams='none' />"
 															title='<s:property value="%{#reltItem.getAttribute('ItemID')}"/>'
 															width="91" height="94"
 															alt="<s:text name='%{#imageMainLabel}'/>" />
