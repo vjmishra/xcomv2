@@ -83,7 +83,7 @@
 			<div class="container">
 				<div id="mid-col-mil">
 					<!--*************SELECT ITEM TYPE***************-->
-					<div class="page-title addmarginbottom15">Quick Add</div>
+					<div class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 					<div class="qa-rightcol">
 						<p>Select Item Type</p>
 					</div>
