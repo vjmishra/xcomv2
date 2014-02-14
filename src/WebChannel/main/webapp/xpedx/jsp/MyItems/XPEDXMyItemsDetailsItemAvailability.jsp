@@ -91,15 +91,15 @@
 				<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
 					<s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}
 								&& %{#_action.getValidateOM() == "true"} && %{#_action.getCatagory() == "Paper"}' />
-						
+					
+					<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
+						<div class="addpadleft20">
+							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available
+						</div>
+					</s:if>
+					
 					<s:div cssClass="mil-pa-avail marginleft10 %{showPaBracket ? '' : 'mil-pa-avail-2col'}">
-						<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
-							<div class="addpadleft20">
-								<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
-								<s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available
-							</div>
-						</s:if>
-						
 						<h4>Availability</h4>
 						<s:div id="availability_%{#id}" cssClass="addpadleft20">
 							<s:if test="%{pnaHoverMap != null && #jsonKey != '' && pnaHoverMap.containsKey(#jsonKey)}">
