@@ -294,7 +294,7 @@
 								</s:if>
 							</h4>
 							<s:div id="myPrice_%{#id}" cssClass="addpadleft20">
-								<table class="mil-priceDiv-visibility addpad3" width="auto" cellspacing="0" cellpadding="0" border="0">
+								<table class="mil-priceDiv-visibility" width="auto" cellspacing="0" cellpadding="0" border="0">
 									<tbody>
 										<s:set name="break" value="false"></s:set>
 										<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
@@ -312,7 +312,7 @@
 											<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 											<s:if test="#disUOMStatus.last">
 												<tr>
-													<td width="auto" class="addpadtop5"><strong>Extended Price: </strong></td>
+													<td width="auto" class="addpadtop5 addpadright5"><strong>Extended Price: </strong></td>
 													<td class="left addpadtop5" width="auto">
 														<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
 															<s:set name="isMyPriceZero" value="%{'true'}" />
@@ -329,7 +329,7 @@
 											</s:if>
 											<s:elseif test="%{#break == false}">
 												<tr>
-													<td width="auto">
+													<td width="auto" class="addpadright5">
 														<s:if test="#disUOMStatus.first">
 															<strong>My Price: </strong>
 														</s:if>
