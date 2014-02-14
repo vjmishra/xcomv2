@@ -2508,15 +2508,8 @@ function showSharedListForm(){
 						
 						<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
 						
-						<s:if test="%{canShare}">
+						<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
 							<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-						</s:if>
-						<s:else>
-							<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
-								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-							</s:if>
-						</s:else>
-						<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
 						</s:if>
 					</div>
 					
@@ -3137,15 +3130,8 @@ function showSharedListForm(){
 							
 							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
 							
-							<s:if test="%{canShare}">
+							<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
 								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-							</s:if>
-							<s:else>
-								<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
-									<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-								</s:if>
-							</s:else>
-							<s:if test='#isEstUser && (#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N")'>
 							</s:if>
 						</div>
 					</s:if>
