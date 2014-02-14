@@ -2172,8 +2172,7 @@ function showSharedListForm(){
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
 			<s:if test='!#guestUser'>
-				<s:action name="xpedxShiptoHeader" executeResult="true"
-					namespace="/common" />
+				<s:action name="xpedxShiptoHeader" executeResult="true" namespace="/common" />
 			</s:if>
 
 			<div class="container" style="min-height: 535px;">
@@ -2211,43 +2210,43 @@ function showSharedListForm(){
 				<div id="breadcumbs-list-name">
 					<span class="page-title"> <s:text
 							name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:
-					</span> &nbsp; <span><s:property value="listName" /> </span> <a
-						href="javascript:window.print()"><span
-						class="print-ico-xpedx underlink"
-						style="font-weight: normal; font-size: 12px;"> <img
-							src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
-							width="16" height="15" alt="Print Page" />Print Page
-					</span> </a>
+					</span>
+					&nbsp;
+					<span>
+						<s:property value="listName" />
+					</span>
+					<a href="javascript:window.print()">
+						<span class="print-ico-xpedx underlink" style="font-weight: normal; font-size: 12px;">
+							<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
+									width="16" height="15" alt="Print Page" />
+							Print Page
+						</span>
+					</a>
 				</div>
 
-				<s:if test='editMode != true'>
-					<s:if test="%{errorMsg != null && errorMsg != ''">
-						<s:if test="%{errorMsg == 'ITEM_REPLACE_ERROR'}">
-							<h5 align="center">
-								<b><font color="red"> The selected replacement item
-										could not be replaced in the list. </font></b>
-							</h5>
-							<br />
-						</s:if>
-						<s:elseif test="%{errorMsg == 'ITEM_ADD_ERROR'}">
-							<h5 align="center">
-								<b><font color="red">The selected replacement item
-										could not be added to the list</font></b>
-							</h5>
-							<br />
-						</s:elseif>
-						<s:elseif test="%{errorMsg == 'ITEM_SAVE_ERROR'}">
-							<h5 align="center">
-								<b><font color="red">The changes could not be saved</font></b>
-							</h5>
-							<br />
-						</s:elseif>
-						<s:else>
-							<h3>The import must be in csv format, please try another
-								import file.</h3>
-							<br />
-						</s:else>
+				<s:if test="%{editMode != true && errorMsg != null && errorMsg != ''}">
+					<s:if test="%{errorMsg == 'ITEM_REPLACE_ERROR'}">
+						<h5 align="center">
+							<b><font color="red">The selected replacement item could not be replaced in the list.</font></b>
+						</h5>
+						<br />
 					</s:if>
+					<s:elseif test="%{errorMsg == 'ITEM_ADD_ERROR'}">
+						<h5 align="center">
+							<b><font color="red">The selected replacement item could not be added to the list.</font></b>
+						</h5>
+						<br />
+					</s:elseif>
+					<s:elseif test="%{errorMsg == 'ITEM_SAVE_ERROR'}">
+						<h5 align="center">
+							<b><font color="red">The changes could not be saved.</font></b>
+						</h5>
+						<br />
+					</s:elseif>
+					<s:else>
+						<h3>The import must be in csv format, please try another import file.</h3>
+						<br />
+					</s:else>
 				</s:if>
 
 				<s:if test='editMode != true'>
