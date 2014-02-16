@@ -30,6 +30,7 @@ import com.sterlingcommerce.webchannel.common.eprocurement.IAribaContext;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
+import com.sterlingcommerce.webchannel.order.utilities.CommerceContext;
 import com.sterlingcommerce.webchannel.utilities.SWCProperties;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
@@ -64,31 +65,34 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 	protected Element sourceOrderForAribaPunchout = null;
 	protected String msap = null;
+	protected String orderHeaderKey = null;
 	XPEDXCXMLMessageFields cXMLFields = null;
 	private PunchoutRequest punchoutRequest = null;
 
 	private static final Logger LOG = Logger
-			.getLogger(XPEDXProcurementPunchOutAction.class);
+			.getLogger(CustomPunchoutOrderAction.class);
 
 	public String execute() {
 		String toReturn = SUCCESS;
 		try {
 
 			punchoutRequest = (PunchoutRequest) XPEDXWCUtils.getObjectFromCache("PunchoutRequest");
+			CommerceContext cc = (CommerceContext) getWCContext()
+					.getWCAttribute("CommerceContextObject");
 			
 			AribaContextImpl aribaContext = AribaContextImpl.getInstance();
 
 			if (punchoutRequest == null) throw new Exception("No procurement punch in context information found.");
 			
-			String cicOrderHeaderKey = (String) XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
+			//String cicOrderHeaderKey = (String) XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 
-			String cxml = populatePunchOutOrderMessage(cicOrderHeaderKey, aribaContext);
+			String cxml = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
 			
 			request.setAttribute("requestUrl", punchoutRequest.getReturnURL());
 			
 			request.setAttribute("cxml", cxml);
 
-			deleteCart(aribaContext.getOrderHeaderKey());
+		//	deleteCart(cc.getOrderHeaderKey());
 
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -108,7 +112,22 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	 * @throws Exception
 	 */
 	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
-		prepareAndInvokeMashup(DRAFT_ORDER_DELETE_MASHUP);
+		 IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+					.getRequest());
+			SCUIContext wSCUIContext = context.getSCUIContext();
+			ISCUITransactionContext scuiTransactionContext = wSCUIContext
+					.getTransactionContext(true);
+			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+
+		 Document deleteOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
+		 deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, deleteOrderHeaderKey);
+		 deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ACTION,"DELETE");
+		 System.out.println("The delete Order input doc is:"+SCXmlUtil.getString(deleteOrderInputDoc));
+		 api.invoke(env, "deleteOrder", deleteOrderInputDoc);
+		
+		//prepareAndInvokeMashup(DRAFT_ORDER_DELETE_MASHUP);
 	}
 
 	/*
@@ -118,6 +137,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			IAribaContext aribaContext) throws Exception {
 
 		if (orderHeaderKey != null) {
+			this.orderHeaderKey = orderHeaderKey;
 			sourceOrderForAribaPunchout = prepareAndInvokeMashup(GET_SOURCE_ORDER_FOR_ARIBA_PUNCHOUT_MASHUP);
 		}
 
@@ -198,9 +218,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	private String invokePunchOut(Document inXML, String xsltFileName)
 			throws Exception {
 		File xslStream = new File(
-				(new StringBuilder()
-						.append("D:\\GitWorkspace\\xcomv2\\src\\smcfs\\dev\\Foundation\\extensions\\global\\template\\xsl\\punchout\\")
-						.append(xsltFileName).toString()));
+				(new StringBuilder().append("/global/template/xsl/punchout/").append(xsltFileName).toString()));
 		// XSL Conversion Starts here
 		TransformerFactory tranFactory = TransformerFactory.newInstance();
 		javax.xml.transform.URIResolver resolver = YFSSystem
@@ -255,6 +273,14 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			}
 		}
 		return doc;
+	}
+
+	public String getOrderHeaderKey() {
+		return orderHeaderKey;
+	}
+
+	public void setOrderHeaderKey(String orderHeaderKey) {
+		this.orderHeaderKey = orderHeaderKey;
 	}
 
 }
