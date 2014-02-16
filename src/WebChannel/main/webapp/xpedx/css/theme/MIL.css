@@ -6438,3 +6438,11 @@ BEGIN 2014 styles
 .green-e-logo {
 	display: inline;
 }
+
+.mid-altwrap {
+	height: auto;
+	margin-left:20px;
+	margin-top:0;
+	width:950px;
+	clear: both;
+}

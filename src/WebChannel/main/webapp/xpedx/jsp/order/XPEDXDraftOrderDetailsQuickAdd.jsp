@@ -83,14 +83,14 @@
 			<div class="container">
 				<div id="mid-col-mil">
 					<!--*************SELECT ITEM TYPE***************-->
-					<div class="page-title addmarginbottom15">Quick Add</div>
+					<div class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 					<div class="qa-rightcol">
 						<p>Select Item Type</p>
 					</div>
 					<form>
 						<select name="itemtype">
-							<option value="">My Item #</option>
 							<option value="">xpedx Item #</option>
+							<option value="">My Item #</option>
 						</select>
 					</form>
 					<div class="clearfix"></div>

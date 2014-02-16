@@ -1531,7 +1531,7 @@ var currentAadd2ItemList = new Object();
 	</font></b></h5></s:if>
 	
 <br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
-<br/><b><div  id="entitleErrorMessageBottom" style="position:relative;left:150px;color:red;display:inline" ></div></b>
+<br/><b><div  id="entitleErrorMessageBottom" style="position:relative;color:red;display:inline" ></div></b>
 <br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
 <br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
 
