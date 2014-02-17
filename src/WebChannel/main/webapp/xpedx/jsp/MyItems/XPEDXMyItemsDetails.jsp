@@ -2251,6 +2251,37 @@ function showSharedListForm(){
 
 				<div class="mid-altwrap">
 					<s:if test='editMode != true'>
+						<div class="view-hide-images">
+							<a id="toggleview" class="viewbtn"></a>
+						</div>
+
+						<div class="button-container">
+							<s:if test='itemCount > 0'>
+								<s:if
+									test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+									<input name="button" type="button"
+											class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
+											value="Add Items with Qty to Cart" />
+								</s:if>
+								<s:else>
+									<input name="button" type="button"
+											class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
+											value="Add Items with Qty to Order" />
+								</s:else>
+							</s:if>
+
+							<s:if test="%{canEditItem}">
+								<input name="button" type="button"
+									class="btn-neutral floatright addmarginleft10"
+									value="Edit This List"
+									onclick="document.getElementById('formEditMode').submit(); return false;" />
+							</s:if>
+
+							<input name="button" type="button"
+									class="btn-neutral floatright addmarginleft10"
+									value="Export This List" onclick="exportList(); return false;" />
+						</div> <%-- / button-container --%>
+						
 						<div id="mid-col-mil">
 							<div>
 								<span class="grey" style="width: 421px; word-wrap: break-word; float: left;">
@@ -2258,37 +2289,6 @@ function showSharedListForm(){
 								</span>
 							</div>
 							<div class="clear"></div>
-	
-							<div class="view-hide-images">
-								<a id="toggleview" class="viewbtn"></a>
-							</div>
-	
-							<div class="button-container">
-								<s:if test='itemCount > 0'>
-									<s:if
-										test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-										<input name="button" type="button"
-												class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
-												value="Add Items with Qty to Cart" />
-									</s:if>
-									<s:else>
-										<input name="button" type="button"
-												class="btn-add-items-qty-to-cart btn-gradient floatright addmarginleft10"
-												value="Add Items with Qty to Order" />
-									</s:else>
-								</s:if>
-	
-								<s:if test="%{canEditItem}">
-									<input name="button" type="button"
-										class="btn-neutral floatright addmarginleft10"
-										value="Edit This List"
-										onclick="document.getElementById('formEditMode').submit(); return false;" />
-								</s:if>
-	
-								<input name="button" type="button"
-										class="btn-neutral floatright addmarginleft10"
-										value="Export This List" onclick="exportList(); return false;" />
-							</div> <%-- / button-container --%>
 						</div> <%-- / mid-col-mil --%>
 					</s:if>
 					<s:else> <%-- editMode --%>
