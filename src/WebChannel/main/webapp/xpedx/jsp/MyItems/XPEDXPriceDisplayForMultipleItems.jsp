@@ -4,6 +4,11 @@
 <%@ taglib prefix="swc" uri="swc"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
+<%--
+	***** REMINDER TO DEVELOPER ABOUT DUPLICATE CODE *****
+	When making changes to this page you will likely need to make changes to XPEDXMyItemsDetailsItemAvailability.
+	This is because the MIL page calls separate actions for single vs multiple Price and Availability (see EB-4767 for details).
+--%>
 
 <s:set name='_action' value='[0]' />
 <s:set name="lineNumber" value="%{1}" />
@@ -111,7 +116,8 @@
 			<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
 				<div class="mil-pa-wrap">
 					<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
-						<s:set name="showPaBracket" value="%{#_action.getValidateOM() == 'true' && #_action.getCatagory() == 'Paper' && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == 'Y' && #isBracketPricing == 'true'}" />
+						<s:set name="showPaBracket" value='%{#_action.getValidateOM() == "true" && #_action.getCatagory() == "Paper" && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #isBracketPricing == "true"}' />
+						<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
 						
 						<s:if test="%{#isQtyTextBoxEmpty == 'false' && #jsonAvailabilityBalance != null}">
 							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
@@ -121,7 +127,16 @@
 							</s:div>
 						</s:if>
 						
-						<s:div cssClass="mil-pa-avail marginleft10 %{#showPaBracket ? '' : 'mil-pa-avail-2col'}">
+						<s:if test="%{#showPaBracket && #showPaPrices}">
+							<s:set name="availCssClass" value="%{'mil-pa-avail'}" />
+						</s:if>
+						<s:elseif test="%{#showPaBracket || #showPaPrices}">
+							<s:set name="availCssClass" value="%{'mil-pa-avail-2col'}" />
+						</s:elseif>
+						<s:else>
+							<s:set name="availCssClass" value="%{'mil-pa-avail-full'}" />
+						</s:else>
+						<s:div cssClass="%{#availCssClass} marginleft10">
 							<h4>Availability</h4>
 							<s:div id="availability_%{#id}" cssClass="addpadleft20">
 								<s:if test="%{pnaHoverMap != null && #jsonKey != '' && pnaHoverMap.containsKey(#jsonKey)}">
@@ -231,7 +246,7 @@
 						</s:div> <!-- / mil-pa-avail -->
 						
 						<s:if test='%{#showPaBracket}'>
-							<div class="mil-pa-bracket">
+							<s:div cssClass="mil-pa-bracket %{#showPaPricing ? '' : 'mil-pa-bracket-2col'}">
 								<s:if test="%{#showPaBracket}">
 									<h4>
 										My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)
@@ -284,77 +299,77 @@
 										</table>
 									</s:div> <!-- / bracketPricing_ -->
 								</s:if>
-							</div> <!-- / mil-pa-bracket -->
+							</s:div> <!-- / mil-pa-bracket -->
 						</s:if>
 						
-						<div class="mil-pa-price">
-							<h4>
-								<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-									Price (USD)
-								</s:if>
-							</h4>
-							<s:div id="myPrice_%{#id}" cssClass="addpadleft20">
-								<table class="mil-priceDiv-visibility" width="auto" cellspacing="0" cellpadding="0" border="0">
-									<tbody>
-										<s:set name="break" value="false"></s:set>
-										<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
-											<s:set name="bracketPriceForUOM" value="bracketPrice" />
-											<s:set name="temp" value="bracketUOM" />
-											<s:set name="reqCustomerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#reqCustomerUOM)"/>
-											<s:if test='%{#reqCustomerUOMDesc==#temp}'>
-												<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />
-												<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
-											</s:if>
-											<s:else>
-												<s:set name="bracketUOMDesc" value="bracketUOM" />
-											</s:else>
-											<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
-											<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
-											<s:if test="#disUOMStatus.last">
-												<tr>
-													<td width="auto" class="addpadtop5 addpadright5"><strong>Extended Price: </strong></td>
-													<td class="left addpadtop5" width="auto">
-														<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
-															<s:set name="isMyPriceZero" value="%{'true'}" />
-															<span class="red bold">
-																<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
-															</span>
-														</s:if>
-														<s:else>
-															<s:property value="#bracketPriceForUOM" />
-														</s:else>
-													</td>
-													<td></td>
-												</tr>
-											</s:if>
-											<s:elseif test="%{#break == false}">
-												<tr>
-													<td width="auto" class="addpadright5">
-														<s:if test="#disUOMStatus.first">
-															<strong>My Price: </strong>
-														</s:if>
-													</td>
-													<td class="left" width="auto">
-														<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
-															<s:set name="isMyPriceZero" value="%{'true'}" />
-															<span class="red bold">
-																<s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' />
-															</span>
-															<s:set name="break" value="true"></s:set>
-														</s:if>
-														<s:else>
-															<s:property value="#bracketPriceForUOM" />
-															/ 
-															<s:property value="#bracketUOMDesc" />
-														</s:else>
-													</td>
-												</tr>
-											</s:elseif>
-										</s:iterator>
-									</tbody>
-								</table>
-							</s:div>
-						</div> <!-- / mil-pa-price -->
+						<s:if test='%{#showPaPrices}'>
+							<div class="mil-pa-price">
+								<h4>
+									Price (<s:property value='%{priceCurrencyCode}'/>)
+								</h4>
+								<s:div id="myPrice_%{#id}" cssClass="addpadleft20">
+									<table class="mil-priceDiv-visibility" width="auto" cellspacing="0" cellpadding="0" border="0">
+										<tbody>
+											<s:set name="break" value="false"></s:set>
+											<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
+												<s:set name="bracketPriceForUOM" value="bracketPrice" />
+												<s:set name="temp" value="bracketUOM" />
+												<s:set name="reqCustomerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#reqCustomerUOM)"/>
+												<s:if test='%{#reqCustomerUOMDesc==#temp}'>
+													<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />
+													<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+												</s:if>
+												<s:else>
+													<s:set name="bracketUOMDesc" value="bracketUOM" />
+												</s:else>
+												<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
+												<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
+												<s:if test="#disUOMStatus.last">
+													<tr>
+														<td width="auto" class="addpadtop5 addpadright5"><strong>Extended Price: </strong></td>
+														<td class="left addpadtop5" width="auto">
+															<s:if test="%{#bracketPriceForUOM==#priceWithCurrencyTemp}">
+																<s:set name="isMyPriceZero" value="%{'true'}" />
+																<span class="red bold">
+																	<s:text name='MSG.SWC.ORDR.OM.INFO.TBD' />
+																</span>
+															</s:if>
+															<s:else>
+																<s:property value="#bracketPriceForUOM" />
+															</s:else>
+														</td>
+														<td></td>
+													</tr>
+												</s:if>
+												<s:elseif test="%{#break == false}">
+													<tr>
+														<td width="auto" class="addpadright5">
+															<s:if test="#disUOMStatus.first">
+																<strong>My Price: </strong>
+															</s:if>
+														</td>
+														<td class="left" width="auto">
+															<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
+																<s:set name="isMyPriceZero" value="%{'true'}" />
+																<span class="red bold">
+																	<s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' />
+																</span>
+																<s:set name="break" value="true"></s:set>
+															</s:if>
+															<s:else>
+																<s:property value="#bracketPriceForUOM" />
+																/ 
+																<s:property value="#bracketUOMDesc" />
+															</s:else>
+														</td>
+													</tr>
+												</s:elseif>
+											</s:iterator>
+										</tbody>
+									</table>
+								</s:div>
+							</div> <!-- / mil-pa-price -->
+						</s:if>
 					</s:if>
 					
 				</div> <!-- / mil-pa-wrap -->

@@ -5469,7 +5469,7 @@ width:auto;
     margin-left: 15px;
     margin-top: 10px;
     overflow: hidden;
-    /*width: 435px;*/
+    margin-bottom: 15px;
 }
 /*  for replacement modal text EB 783 */
 #replacementItemBody .mil-wrap-condensed-desc {
@@ -6280,6 +6280,9 @@ BEGIN 2014 styles
 	min-height: 115px;
 	margin-right: 2px;
 }
+.mil-pa-bracket-2col {
+	width: 305px;
+}
 .mil-pa-price {
 	width: 308px;
 	float: right;
@@ -6423,6 +6426,15 @@ BEGIN 2014 styles
 	min-height: 115px;
 	margin-right: 2px;
 	min-height: 115px;
+}
+.mil-pa-avail-full {
+	width: 927px;
+	float: left;
+	clear: none;
+	border-right: none;
+	margin-right: 2px;
+	min-height: 115px;
+	padding-right: 10px;
 }
 
 .mil-action-list-wrap .notice {
