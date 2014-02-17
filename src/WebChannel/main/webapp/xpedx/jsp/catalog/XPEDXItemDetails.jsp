@@ -1214,7 +1214,7 @@ function SubmitActionWithValidation()
 
 <!-- copied javascript from old page ends.. -->
 
-<body class="ext-gecko ext-gecko3">
+<body onload="document.productDetailForm.qtyBox.focus();" class="ext-gecko ext-gecko3">
 
 <s:if test='%{#_action.getWCContext().isGuestUser() == true}'>
 	<s:include value='XPEDXAnonItemDetails.jsp' />
@@ -1327,13 +1327,13 @@ function SubmitActionWithValidation()
 							<s:set name='isValid' value='#primaryInfoElem.getAttribute("IsValid")' />
 						</s:if>
 		        <li>
-		          <s:a cssClass="printIcon" href="javascript:openPrintItemPage()" tabindex="101">
+		          <s:a cssClass="printIcon" href="javascript:openPrintItemPage()" >
 							  <s:text name="Print.page" />
 						  </s:a>
 		        </li>
 		        <s:url id='itemEmailURL' includeParams="none" escapeAmp="false" namespace='/catalog' value='emailItemDetails.action?itemID=%{#itemID}&unitOfMeasure=%{#unitOfMeasure}&messageType=ComposeMail'/>
 		        <li>
-						  <s:a cssClass="emailIcon" href="javascript:openItemEmailLightBox('%{#itemEmailURL}');" tabindex="103">
+						  <s:a cssClass="emailIcon" href="javascript:openItemEmailLightBox('%{#itemEmailURL}');" >
 							  <s:text name="Email.page" />
 						  </s:a>
 		        </li>
@@ -1621,7 +1621,7 @@ function SubmitActionWithValidation()
 								<s:property
 									value='#xutil.getAttribute(#replacementItem,"UnitOfMeasure")' />
 							</s:param>
-					</s:url><s:if test='#count.index != 0'><font color="black">,&nbsp;</font></s:if><s:a href="%{detailURLFromPromoProd}" tabindex="%{#ipTabIndex}" ><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:a>
+					</s:url><s:if test='#count.index != 0'><font color="black">,&nbsp;</font></s:if><s:a href="%{detailURLFromPromoProd}"  ><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:a>
 						 
 	    	</s:iterator>
 		</s:if>
@@ -1700,11 +1700,11 @@ function SubmitActionWithValidation()
 				<s:hidden name="requestedQty" id="requestedQty"
 					value="%{#util.formatQuantity(wCContext, #dispMinQty)}" />
 				<s:set name="requestedQty"  value="%{#_action.getRequestedQty()}" />
-				<s:textfield name='qtyBox' id="qtyBox"
+				<s:textfield name='qtyBox' id="qtyBox" tabindex = "1"
 					cssClass="input-label x-input" size="7" maxlength="7"
 					value="%{#_action.getRequestedQty()}"
 					disabled='%{(#addToCartDisabled == "disabled")?"true":"false"}'
-					tabindex="260" theme="simple" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"
+					 theme="simple" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"
 					onchange="javascript:isValidQuantity(this); javascript:qtyInputCheck(this);" onmouseover="javascript:qtyInputCheck(this);">
 				</s:textfield>
 
@@ -1723,7 +1723,7 @@ function SubmitActionWithValidation()
 						list="itemuomMap" listKey="key"
 						listValue="value"
 						value='%{#_action.getRequestedDefaultUOM()}' disabled="%{#isReadOnly}" 
-						tabindex="%{#tabIndex}" theme="simple" />
+						 theme="simple" />
 					<s:hidden name="requestedUOM" id="requestedUOM" value="" />
 					<s:hidden name="uomId" id="uomId" value="" />
 					<s:set name="requestedUOM"  value="%{#_action.getRequestedUOM()}" />
@@ -1752,9 +1752,9 @@ function SubmitActionWithValidation()
 				<s:if test=' (isCustomerPO == "Y") '>
 				<div class="linePO line-spacing">
 					<s:property value='customerPOLabel' />:
-					<s:textfield name='customerPONo' theme="simple"
+					<s:textfield name='customerPONo' theme="simple" tabindex="2"
 						cssClass="x-input bottom-mill-info-avail" id="customerPONo" value="" title="CustomerNumber"
-						tabindex="%{#tabIndex}" maxlength="22"/>					
+						maxlength="22"/>					
 					
 				</div>
 				</s:if>
@@ -1765,11 +1765,11 @@ function SubmitActionWithValidation()
 					<!-- class="x-input bottom-mill-info-avail for 24 Characters. It relates to EB 449 -->
 					<div class="jobNum line-spacing">
 						<label class="left35"><s:property value='custLineAccNoLabel' />:</label>
-						<input name="Job" class="x-input bottom-mill-info-avail"  id="Job" tabindex="12" title="JobNumber" maxlength="24"/>
+						<input name="Job" tabindex="3" class="x-input bottom-mill-info-avail"  id="Job"  title="JobNumber" maxlength="24"/>
 					</div>
 				</s:if>
 				<input type="hidden" name="Customer" class="input-details x-input" id="Customer"
-					tabindex="12" title="CustomerNumber" />
+					 title="CustomerNumber" />
 
 			
 					
@@ -1796,37 +1796,26 @@ function SubmitActionWithValidation()
 
 				</s:if>
 			</s:if>
-				<div class="orderbtns">
+				<div class="button-wrap">				
 					<a href="javascript:updatePandAfromLink()">My Price & Availability</a>
 				<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>	
 				<s:if test='%{#isFlowInContext == true}'>
-					<s:a
-						href="javascript:itemDetailAddToCart('%{#itemID}', '%{#unitOfMeasure}', '%{#appFlowContext.key}','%{#appFlowContext.returnURL}','%{#appFlowContext.type}','%{#appFlowContext.currency}');"
-						cssClass="orange-ui-btn" id="addToOrder" tabindex="261"
-						theme="simple">
-						<span> <s:text name='Add_to_order' /></span>
-					</s:a>
+				<input name="button" type="button" class="btn-gradient float-right addmarginleft5"   onclick="javascript:itemDetailAddToCart('%{#itemID}', '%{#unitOfMeasure}', '%{#appFlowContext.key}','%{#appFlowContext.returnURL}','%{#appFlowContext.type}','%{#appFlowContext.currency}');" class="btn-gradient float-right addmarginleft5" value="Add to Order"/>
 				</s:if>
 				<s:else>
 					<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-						<s:a href="javascript:addItemToCart();" theme="simple"
-							cssClass="orange-ui-btn" id="addToCart" tabindex="261">
-							<span><s:text name='Add_to_cart' /></span>
-						</s:a>
+						<input name="button" type="button" tabindex="4"  onclick="javascript:addItemToCart();" class="btn-gradient float-right addmarginleft5" value="Add to Cart"/>
 					</s:if>
 					<s:else>
-						<s:a href="javascript:addItemToCart();" theme="simple"
-							cssClass="orange-ui-btn" id="addToCart" tabindex="261">
-							<span><s:text name='Add_to_order' /></span>
-						</s:a>
+						<input name="button" type="button" tabindex="4"  onclick="javascript:addItemToCart();" class="btn-gradient float-right addmarginleft5" value="Add to Order"/>
 					</s:else>
 				</s:else>
-					<br/><br/>
-					<div class="rebel_btn">
-						<a class="grey-ui-btn" href="javascript:addItemToWishList();"><span>Add to My Items</span></a>
-					</div>
-
 					
+					
+					<input name="button" type="button" onclick="javascript:addItemToWishList();" class="btn-neutral" value="Add to My Items"/>
+				
+
+					 <div style="clear:both;"></div>
 				</div>
 				
 				<!--  DEFINE DIV TAG FOR MESSAGES -->		

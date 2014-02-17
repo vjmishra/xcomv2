@@ -146,3 +146,18 @@
 	cursor: pointer;
 	margin-left: 10px;
 }
+
+
+.prod-config .button-wrap {
+                width: 100%;
+                padding: 10px 0px 0px 0px;
+                }
+.prod-config .pa-link {
+                right: 0px;
+                float: left;
+                }
+.addmarginleft5 {
+                margin-left: 5px;
+                }
+
+
