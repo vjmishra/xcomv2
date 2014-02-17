@@ -124,7 +124,7 @@
 .hidebtn {
 	width: 100px;
 	height: 21px;
-	background: url(../../images/mil/show-hide-btn.png) 0px -21px no-repeat;
+	background: url(../../images/mil/show-hide-btn.png) 1px -21px no-repeat;
 	border: none;
 }
 .form input.btn-gradient.floatright{
