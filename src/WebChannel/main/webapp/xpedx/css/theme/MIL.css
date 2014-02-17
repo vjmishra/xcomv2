@@ -5469,7 +5469,7 @@ width:auto;
     margin-left: 15px;
     margin-top: 10px;
     overflow: hidden;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 /*  for replacement modal text EB 783 */
 #replacementItemBody .mil-wrap-condensed-desc {
@@ -5479,7 +5479,7 @@ width:auto;
     color: #003399;
     height: auto;
     list-style-type: disc;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     margin-top: 10px;
     overflow: visible;
 }
@@ -6259,36 +6259,13 @@ BEGIN 2014 styles
 	display: inline-block;
 	text-alighn: left;	
 }
+
 .mil-pa-wrap {
 	display: block;
 	width: 100%;
-	clear: both;	
-}
-.mil-pa-avail {
-	width: 308px;	
-	float: left;
-	clear: none;
-	border-right: #e1e1e1 1px solid;
-	margin-right: 2px;
-	min-height: 115px;
-}
-.mil-pa-bracket {
-	width: 308px;
-	float: left;
-	clear: none;
-	border-right: #e1e1e1 1px solid;
-	min-height: 115px;
-	margin-right: 2px;
-}
-.mil-pa-bracket-2col {
-	width: 305px;
-}
-.mil-pa-price {
-	width: 308px;
-	float: right;
-	clear: none;
-	min-height: 115px;
-}
+	clear: both;         
+	padding: 10px;
+}              
 .mil-pa-wrap h4 {
 	display: block;
 	background:#e1e1e1;
@@ -6299,6 +6276,59 @@ BEGIN 2014 styles
 	font-size:11px;
 	font-style:italic;
 }
+
+.one-col .mil-pa-avail {
+	width: 930px;
+	float: left;
+	clear: none;
+	min-height: 115px;
+}
+.two-col .mil-pa-avail {
+	width: 615px;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	min-height: 115px;
+}
+.three-col .mil-pa-avail {
+	width: 318px;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	min-height: 115px;
+	margin-right: 2px;
+}              
+
+.two-col .mil-pa-bracket {
+	width: 312px;
+	margin-right: 10px;
+	float: right;
+	clear: none;
+	min-height: 115px;          
+}
+.three-col .mil-pa-bracket {
+	width: 308px;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	min-height: 115px;
+}
+
+.two-col .mil-pa-price {
+	width: 312px;
+	margin-right: 10px;
+	float: right;
+	clear: none;
+	min-height: 115px;          
+}
+.three-col .mil-pa-price {
+	width: 298px;
+	margin-right: 10px;
+	float: right;
+	clear: none;
+	min-height: 115px;          
+}
+
 .mil-lists-legend {
 	width: 500px;
 	padding:25px 0px 0px 50px;
@@ -6416,25 +6446,6 @@ BEGIN 2014 styles
 	width: 500px;
 	margin-left: 0px;
 	height: auto;
-}
-
-.mil-pa-avail-2col {
-	width: 619px;     
-	float: left;
-	clear: none;
-	border-right: #e1e1e1 1px solid;
-	min-height: 115px;
-	margin-right: 2px;
-	min-height: 115px;
-}
-.mil-pa-avail-full {
-	width: 927px;
-	float: left;
-	clear: none;
-	border-right: none;
-	margin-right: 2px;
-	min-height: 115px;
-	padding-right: 10px;
 }
 
 .mil-action-list-wrap .notice {

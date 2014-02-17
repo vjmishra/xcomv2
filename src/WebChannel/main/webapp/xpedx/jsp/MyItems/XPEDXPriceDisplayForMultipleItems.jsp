@@ -114,11 +114,21 @@
 			<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 			
 			<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
-				<div class="mil-pa-wrap">
+				<s:set name="showPaBracket" value='%{#_action.getValidateOM() == "true" && #_action.getCatagory() == "Paper" && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #isBracketPricing == "true"}' />
+				<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
+				
+				<%-- since the availability/bracket/pricing columns may be hidden, we indicate whether the P&A section is 1, 2, or 3 columns. this allows css specificity to customize layout --%>
+				<s:if test="%{#showPaBracket && #showPaPrices}">
+					<s:set name="milPaWrapClass" value="%{'three-col'}" />
+				</s:if>
+				<s:elseif test="%{#showPaBracket || #showPaPrices}">
+					<s:set name="milPaWrapClass" value="%{'two-col'}" />
+				</s:elseif>
+				<s:else>
+					<s:set name="milPaWrapClass" value="%{'one-col'}" />
+				</s:else>
+				<s:div cssClass="mil-pa-wrap %{#milPaWrapClass}">
 					<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
-						<s:set name="showPaBracket" value='%{#_action.getValidateOM() == "true" && #_action.getCatagory() == "Paper" && #xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #isBracketPricing == "true"}' />
-						<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
-						
 						<s:if test="%{#isQtyTextBoxEmpty == 'false' && #jsonAvailabilityBalance != null}">
 							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
 							<s:div cssStyle="color:%{#jsonAvailabilityMessageColor}; font-size:13px; padding-left:30px; line-height:22px;">
@@ -127,16 +137,7 @@
 							</s:div>
 						</s:if>
 						
-						<s:if test="%{#showPaBracket && #showPaPrices}">
-							<s:set name="availCssClass" value="%{'mil-pa-avail'}" />
-						</s:if>
-						<s:elseif test="%{#showPaBracket || #showPaPrices}">
-							<s:set name="availCssClass" value="%{'mil-pa-avail-2col'}" />
-						</s:elseif>
-						<s:else>
-							<s:set name="availCssClass" value="%{'mil-pa-avail-full'}" />
-						</s:else>
-						<s:div cssClass="%{#availCssClass} marginleft10">
+						<div class="mil-pa-avail">
 							<h4>Availability</h4>
 							<s:div id="availability_%{#id}" cssClass="addpadleft20">
 								<s:if test="%{pnaHoverMap != null && #jsonKey != '' && pnaHoverMap.containsKey(#jsonKey)}">
@@ -243,10 +244,10 @@
 									</table>
 								</s:if>
 							</s:div> <!-- / availability_ -->
-						</s:div> <!-- / mil-pa-avail -->
+						</div> <!-- / mil-pa-avail -->
 						
 						<s:if test='%{#showPaBracket}'>
-							<s:div cssClass="mil-pa-bracket %{#showPaPricing ? '' : 'mil-pa-bracket-2col'}">
+							<div class="mil-pa-bracket">
 								<s:if test="%{#showPaBracket}">
 									<h4>
 										My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)
@@ -299,7 +300,7 @@
 										</table>
 									</s:div> <!-- / bracketPricing_ -->
 								</s:if>
-							</s:div> <!-- / mil-pa-bracket -->
+							</div> <!-- / mil-pa-bracket -->
 						</s:if>
 						
 						<s:if test='%{#showPaPrices}'>
@@ -372,7 +373,7 @@
 						</s:if>
 					</s:if>
 					
-				</div> <!-- / mil-pa-wrap -->
+				</s:div> <!-- / mil-pa-wrap -->
 			</s:if>
 		</s:if>
 
