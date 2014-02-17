@@ -3113,6 +3113,20 @@ function showSharedListForm(){
 						</div> <%-- / button-container --%>
 					</s:if>
 					<s:else> <%-- editMode --%>
+						<div class="graybar">
+							<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
+							<s:if test="editMode != true">
+								<div>
+									Select All<a href="#" class="indent20px paaLink">Show Price &amp; Availablity for Selected Items</a>
+								</div>
+							</s:if>
+							<s:else> <%-- editMode --%>
+								<div>
+									Select All<a href="#" class="indent20px removeItemsLink">Remove Selected Items</a>
+								</div>
+							</s:else>
+						</div>
+						
 						<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
 							<div class="view-hide-images addpadtop10">
 								<a id="toggleview" class="viewbtn"></a>
