@@ -558,7 +558,6 @@ function showSharedListForm(){
 						document.getElementById("errorMsgFor_QL").style.display = "inline";
 						return false;
 					}
-					//Code Fix For Jira 3197
 					var formItemIds = document.getElementById("formAdd2List");
 					if (formItemIds){
 						//form already submitted.
@@ -586,7 +585,6 @@ function showSharedListForm(){
 					}
 				}
 				else{
-					//alert("Your list may contain a maximum of 200 items. Please delete some items and try again.");
 					alert( "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' /> ");
 				}
 			}
@@ -2474,9 +2472,7 @@ function showSharedListForm(){
 											<div class="fFVVEM_wrap">
 												<div style="display: none;" class="error" id="errorMsgForMandatoryFields_quick-add"></div>
 											</div>
-											<a href="#" id="btnQLAdd2Cart" class="orange-ui-btn add-to-cart-btn" onclick="add2List();return false;">
-												<span>Add to My Items List</span>
-											</a>
+											<input id="btnQLAdd2Cart" name="button" type="button" class="btn-gradient floatright addmargintop20" value="Add to My Items List" onclick="add2List(); return false;" />
 										</s:form>
 	
 										<div class="clear">&nbsp;</div>
