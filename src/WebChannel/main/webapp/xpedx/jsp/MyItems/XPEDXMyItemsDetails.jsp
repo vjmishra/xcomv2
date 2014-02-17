@@ -3072,7 +3072,6 @@ function showSharedListForm(){
 					</div>
 	
 					<div class="clear"></div>
-					<br />
 				
 					<s:if test='editMode != true'>
 						<div class="graybar">
