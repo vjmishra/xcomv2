@@ -5,7 +5,9 @@ SMCFSBUILDHOME=/xpedx/sci_build/smcfs
 DATE=`date +%Y-%m-%d`
 
 #location of the zip files used for the build is specified below.
-LOGFILE=/xpedx/sci_build/smcfs/COM_Build-`date +"%Y%m%d-%H%M"`.log
+mkdir /xpedx/sci_build/WebChannel/logs/
+chmod 774 /xpedx/sci_build/smcfs/logs/
+LOGFILE=/xpedx/sci_build/smcfs/logs/COM_Build-`date +"%Y%m%d-%H%M"`.log
 
 #Check which server, set customer overrides for mortals
 HOST_NAME="$(hostname)"
@@ -14,7 +16,8 @@ echo $HOST_NAME
 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
-  zxpappd02) ENVIRONMENT=dev;;
+  zxpappd02) ENVIRONMENT=sandbox1;;
+  zxpappint01) ENVIRONMENT=integration;;
  zxpappt01) ENVIRONMENT=staging;; 
  zxpapps01) ENVIRONMENT=prodsupport;; 
  zxpagnt01) ENVIRONMENT=prod;; 

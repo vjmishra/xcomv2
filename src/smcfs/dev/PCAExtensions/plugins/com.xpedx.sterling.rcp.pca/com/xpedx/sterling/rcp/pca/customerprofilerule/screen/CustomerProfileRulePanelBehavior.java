@@ -7,11 +7,13 @@ package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.xpedx.sterling.rcp.pca.customerprofilerule.editor.XPXCustomerProfileRuleEditor;
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
@@ -34,8 +36,11 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 	private Element inputElement;
 	private String customerKey;	
 	private String extSuffixType;
+	private String extnLinePOLbl;
+	private String extnLineAccLbl;	
 	private List HideRulesList=null;
 	private List ShowRulesList=null;
+	private Composite pnlDynamicLineParent;
 
 	/**
 	 * Constructor for the behavior class.
@@ -192,7 +197,9 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 		targetRulesModel = null;
 		page.getTargetModelAndCallUpdateApi(true);		
 	}
+	//XB-519 Modified Input XML
 	public void createRuleXML() {
+		targetRulesModel =null;
 		if (null == targetRulesModel){
 			targetRulesModel = YRCXmlUtils.createDocument("Customer").getDocumentElement();
 			targetRulesModel.setAttribute("CustomerKey", customerKey);
@@ -201,6 +208,8 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 			ruleLinesElem.setAttribute("Reset", "true");
 		}
 	}
+	
+	
 	public void appendRuleLine(Element ruleLineElem) {
 		Element ruleLinesElem = null;
 		Element extn = YRCXmlUtils.getChildElement(targetRulesModel, "Extn");
@@ -223,5 +232,15 @@ public class CustomerProfileRulePanelBehavior extends YRCBehavior {
 			callApi(ctx, page);
 			((XPXCustomerProfileRuleEditor)YRCDesktopUI.getCurrentPart()).showBusy(true);
 		}
+	}
+	public void setUpdatedValues(Element ruleLineElem,String lineAcc,String linePO) {
+		// TODO Auto-generated method stub
+		Element ruleLinesElem = null;
+		Element extn = YRCXmlUtils.getChildElement(targetRulesModel, "Extn");
+		ruleLinesElem = YRCXmlUtils.getChildElement(extn,
+		"XPXCustomerRulesProfileList");
+		extn.setAttribute("ExtnCustLinePOLbl", linePO);
+		extn.setAttribute("ExtnCustLineAccLbl", lineAcc);	
+		ruleLinesElem.setAttribute("Reset", "true");
 	}	
 }

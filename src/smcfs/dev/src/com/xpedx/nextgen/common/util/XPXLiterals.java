@@ -33,6 +33,7 @@ public class XPXLiterals {
 	public static final String PB_B_TRANS_TYPE = "PB-B";
 	public static final String UOM_B_TRANS_TYPE = "UOM-B";
 	public static final String ITEM_DIV_B_TRANS_TYPE = "ItemDiv-B";
+	public static final String CUSTOMER_TRANS_TYPE="Customer Maintenance";
 	public static final String YFE_ERROR_VALUE_TOO_LARGE_CLASS = "Column Value Too Large";
 	public static final String YFE_ERROR_INVALID_PRODUCT_CODE_CLASS = "Invalid Legacy Product Number";
 	public static final String IOBE_ERROR_CLASS = "Unexpected / Invalid";
@@ -800,4 +801,16 @@ public class XPXLiterals {
 	public static final String NFE_M0020 = "M0020";
 	public static final String NFE_M0036 = "M0036";
 	public static final String NFE_M0041 = "M0041";
+	
+	public static final String PENDING_APPROVAL_HOLD = "ORDER_LIMIT_APPROVAL";
+	public static final String PENDING_APPROVAL_ACTIVE_STATUS_ID = "1100";
+	public static final String PENDING_APPROVAL_RELEASE_STATUS_ID = "1300";
+	public static final String PENDING_APPROVAL_RELEASE_DESC="Released during Order Edit";
+	
+	public static final String HOLD_RELEASE_DESC="ReasonText";
+	public static final String CUSTOMER_CONTACT_ID="CustomerContactID";
+	public static final String RESOLVER_USER_ID="ResolverUserId";
+	public static final String ORDER_CONFIRMATION_EMAIL_SENT_FLAG="ExtnOrderConfirmationEmailSentFlag";
+	public static final String LAST_ORDER_OPERATION="ExtnLastOrderOperation";
+	
 }

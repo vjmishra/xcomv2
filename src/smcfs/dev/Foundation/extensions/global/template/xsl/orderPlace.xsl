@@ -188,7 +188,7 @@
          </HeaderComments>
 
          <OrderedByName> 
-            <xsl:value-of select="Order/Extn/@ExtnOrderedByName" /> 
+            <xsl:value-of select="substring(Order/Extn/@ExtnOrderedByName,0,49)" /> 
          </OrderedByName> 
 
          <OrderCreateDate>
@@ -400,9 +400,27 @@
 
                  
 
-                  <OrderedQtyInBase>
-                     <!--<xsl:value-of select="Extn/@ExtnBaseOrderedQty" />-->
-                     <xsl:value-of select="@OrderedQty"/>
+                 <OrderedQtyInBase> 
+                  	  <xsl:choose>
+                       	<xsl:when test="Extn/@ExtnBaseOrderedQty = '0'">                        	                      	      
+                       	    <xsl:value-of select="@OrderedQty"/>                       	  
+                       	</xsl:when>
+                       	<xsl:when test="Extn/@ExtnBaseOrderedQty = '0.0'">                        	                      	      
+                       	    <xsl:value-of select="@OrderedQty"/>                       	  
+                       	</xsl:when>
+                       	<xsl:when test="Extn/@ExtnBaseOrderedQty = '0.00'">                        	                      	      
+                       	    <xsl:value-of select="@OrderedQty"/>                       	  
+                       	</xsl:when>
+                       	<xsl:when test="Extn/@ExtnBaseOrderedQty = ''">                        	                      	      
+                       	    <xsl:value-of select="@OrderedQty"/>                       	  
+                       	</xsl:when>
+                       	<xsl:when test="Extn/@ExtnBaseOrderedQty = 'null'">                        	                      	      
+                       	    <xsl:value-of select="@OrderedQty"/>                       	  
+                       	</xsl:when>                         	
+                       	<xsl:otherwise>                       	    
+                       	     <xsl:value-of select="Extn/@ExtnBaseOrderedQty"/>                       	  
+                       	</xsl:otherwise>
+                 	 </xsl:choose>                   
                   </OrderedQtyInBase>
 
                   <PriceUnitOfMeasure>

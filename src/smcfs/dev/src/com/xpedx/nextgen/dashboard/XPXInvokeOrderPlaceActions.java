@@ -78,13 +78,11 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		   
 		   // To Retrieve ShipTo Customer Information.
 		   if (webOrder) {
-			   setOPOrderDetailsFromEnv(env,rootElem);
-			   removeSpecialCharacters(env,rootElem);
+			   setOPOrderDetailsFromEnv(env,rootElem);			   
 			   // Commenting the code as extn Atrributes needs to be analyzed before picking it up from txn object.
 			   // getCustomerProfileDetailsDoc = getCustomerProfileDocFromEnv(env);
-		   } else {
-			   removeSpecialCharacters(env,rootElem);
-		   }  
+		   } 
+		   removeSpecialCharacters(env,rootElem);
 		   
 		   if (getCustomerProfileDetailsDoc == null) {
 			   // To Pull ShipToProfile From DB For COM Or If WC Application Didn't Set It In Transaction.
@@ -149,8 +147,13 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	        	String instructionType = instructionElement.getAttribute("InstructionType");           
 	        	if(!YFCObject.isNull(instructionType) && (instructionType.equalsIgnoreCase("HEADER") || instructionType.equalsIgnoreCase("LINE"))) {
 	        		String comments = instructionElement.getAttribute("InstructionText");
-	        		if(comments != null && (comments.indexOf("\n") != -1 || comments.indexOf("\r\n") != -1)) {
-	        			comments = comments.replaceAll("\n|\r\n", " ");
+	        		if(comments != null) {
+	        			if((comments.indexOf("\n") != -1 || comments.indexOf("\r\n") != -1))
+	        			{
+	        				comments = comments.replaceAll("\n|\r\n", " ");
+	        			}
+	        			comments = comments.replaceAll("[^\\x00-\\x7f]",""); // Replaces All Non Ascii Characters (EB-343)
+	        			log.info("comments when placing the order"+comments);
 	        			instructionElement.setAttribute("InstructionText", comments);
 	        		}
 	        	}
@@ -177,7 +180,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		String orderHeaderKey = null;
 		String enterpriseCode = null;
 		String envtCode = null;
-		String[] custOrderAmountArray = new String[2];
+		String[] custOrderAmountArray = new String[3];
 		
 		if (log.isDebugEnabled()) {
 			log.debug("XPXInvokeOrderPlaceActions_prepareChangeOrderDoc()-InXML:" + rootElem.getString());
@@ -207,7 +210,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			custOrderAmountArray = getCustOrderAmountList(env, buyerOrganizationCode, enterpriseCode);
 		}
 		
-		updatePriceInformation(env, webConfirmationNumber, envtCode, rootElem, custOrderAmountArray, entryType);
+		updatePriceInformation(env, webConfirmationNumber, envtCode, rootElem, custOrderAmountArray, entryType, enterpriseCode);
 	}
 	
 	public String generateWebConfirmationNumber(String orderHeaderKey, String envtCode, String entryType) {
@@ -258,6 +261,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			float chargeAmount = 0;
 			Document shipToCustomerProfileDoc = null;
 			YFCElement customerListElem = null;			
+			String applyMinOrderBrands=null;
 			
 			shipToCustomerProfileDoc = (Document) env.getTxnObject("ShipToCustomerProfile");
 			
@@ -272,10 +276,12 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				//Form The Template
 				YFCDocument customerListTemplate = YFCDocument.createDocument("CustomerList");
 				YFCElement customerListTemplateElement = customerListTemplate.getDocumentElement();
+				
 				YFCElement customerTemplateElement = customerListTemplate.createElement("Customer");
 				customerListTemplateElement.appendChild(customerTemplateElement);			
 				YFCElement extnTemplateElement = customerListTemplate.createElement("Extn");			
 				customerTemplateElement.appendChild(extnTemplateElement);
+				
 				YFCElement parentCustomerTemplateElement = customerListTemplate.createElement("ParentCustomer");
 				YFCElement parentCustomerExtnTemplateElement = customerListTemplate.createElement("Extn");
 				parentCustomerTemplateElement.appendChild(parentCustomerExtnTemplateElement);
@@ -295,6 +301,28 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				String chargeAmountStr=extnElement.getAttribute("ExtnMinChargeAmount");
 				String shipFromDivision =extnElement.getAttribute("ExtnShipFromBranch");
 				String envCode =extnElement.getAttribute("ExtnEnvironmentCode");
+				Document getOrganizationListInDoc=null;
+				Document organizationListOutDoc=null;
+				boolean isGetOrganizationListAPICalled=false;
+				
+				String applyMinOrderCharge_GlobalLevel=YFSSystem.getProperty("applyMinOrderCharge");//Property read from customer_overrides.properties file and it indicates whether minimum order charge should be added from NG or MAX.
+				if("Y".equalsIgnoreCase(applyMinOrderCharge_GlobalLevel)) {
+					isGetOrganizationListAPICalled=true;
+					env.setApiTemplate("getOrganizationList",SCXmlUtil.createFromString(""
+							+" <OrganizationList><Organization OrganizationName=\"\">"														
+							+"<Extn ExtnMinOrderAmt=\"\" ExtnSmallOrderFee=\"\" ExtnApplyMinOrderBrands=\"\"/>"
+						    +"</Organization>"
+						    +"</OrganizationList>"));
+	
+					getOrganizationListInDoc = SCXmlUtil.createFromString(""+ "<Organization OrganizationCode=\""+shipFromDivision+"_"+envCode +"\"/> ");
+					organizationListOutDoc = api.invoke(env, "getOrganizationList", getOrganizationListInDoc);				
+					env.clearApiTemplate("getOrganizationList");					
+				
+					if(!YFCCommon.isVoid(organizationListOutDoc)) {
+						applyMinOrderBrands = SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands");
+						
+					}
+				}
 				
 				if(minOrderAmountStr != null && !"".equals(minOrderAmountStr)  && !"0".equals(minOrderAmountStr) && !"0.00".equals(minOrderAmountStr)) {
 					minOrderAmount = Float.parseFloat(minOrderAmountStr);	
@@ -325,25 +353,26 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 							}
 														
 							try {
-								
-								env.setApiTemplate("getOrganizationList",SCXmlUtil.createFromString(""
+								if(!isGetOrganizationListAPICalled) {
+									env.setApiTemplate("getOrganizationList",SCXmlUtil.createFromString(""
 														+" <OrganizationList><Organization OrganizationName=\"\">"														
 														+"<Extn ExtnMinOrderAmt=\"\" ExtnSmallOrderFee=\"\"/>"
 													    +"</Organization>"
 													    +"</OrganizationList>"));
 								
-								Document getOrganizationListInDoc = SCXmlUtil.createFromString(""+ "<Organization OrganizationCode=\""+shipFromDivision+"_"+envCode +"\"/> ");
-								Document organizationListDoc = api.invoke(env, "getOrganizationList", getOrganizationListInDoc);
+									getOrganizationListInDoc = SCXmlUtil.createFromString(""+ "<Organization OrganizationCode=\""+shipFromDivision+"_"+envCode +"\"/> ");
+									organizationListOutDoc = api.invoke(env, "getOrganizationList", getOrganizationListInDoc);	
+									env.clearApiTemplate("getOrganizationList");
+								}
 								
-								env.clearApiTemplate("getOrganizationList");
-								
-								if(YFCCommon.isVoid(organizationListDoc)){
+								if(YFCCommon.isVoid(organizationListOutDoc)){
 									log.error("Organization Details Doesn't Exist For Node: "+ shipFromDivision+"_"+envCode+". ");
 									return custOrderAmountArray;
 								}
 								
-								minOrderAmountStr = SCXmlUtil.getXpathAttribute(organizationListDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt");
-								chargeAmountStr = SCXmlUtil.getXpathAttribute(organizationListDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee");
+								minOrderAmountStr = SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt");
+								chargeAmountStr = SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee");								
+								
 								if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) && (!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) )) {
 									minOrderAmount = Float.parseFloat(minOrderAmountStr);				
 									if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr))) {
@@ -360,6 +389,8 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 			}
 			custOrderAmountArray[0] = ""+minOrderAmount;
 			custOrderAmountArray[1] = ""+chargeAmount;
+			custOrderAmountArray[2] = (applyMinOrderBrands!=null ? applyMinOrderBrands : "");
+			
 	} catch (Exception ex) {
 		log.error(ex.getMessage());
 	}
@@ -367,7 +398,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	}
 	
 	private void updatePriceInformation(YFSEnvironment env, String webConfirmationNumber, String envtCode, 
-			YFCElement rootElem, String[] custOrderAmountArray, String entryType) {
+			YFCElement rootElem, String[] custOrderAmountArray, String entryType, String enterpriseCode) {
 		
 		if (log.isDebugEnabled()) {
 			log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation()-InXML:" + rootElem.getString());
@@ -376,13 +407,19 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		String webLineNumber = null;
 		String minOrderTotalStr = null;
 		String chargeAmountStr = null;
+		String applyMinOrderBrands_DivisionLevel = null;
 		float minOrderTotal = 0;
 		float chargeAmount = 0;
 		float totalAmount = 0;
 		XPXUtils utilObj = null;
 		
 		minOrderTotalStr = custOrderAmountArray[0];
-		chargeAmountStr = custOrderAmountArray[1];	
+		chargeAmountStr = custOrderAmountArray[1];
+		applyMinOrderBrands_DivisionLevel = custOrderAmountArray[2];
+		
+		if (log.isDebugEnabled()) {
+			log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of minOrderTotalStr, chargeAmountStr & applyMinOrderBrands_DivisionLevel are : ["+minOrderTotalStr+"], ["+ chargeAmountStr+"] and ["+applyMinOrderBrands_DivisionLevel+ "]");
+		}
 		
 		if (!YFCObject.isNull(minOrderTotalStr) && !YFCObject.isVoid(minOrderTotalStr)) {
 		     minOrderTotal = Float.parseFloat(minOrderTotalStr);
@@ -392,7 +429,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		}
 		
 		// To Set Order Level Attributes.
-		rootElem.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
+		//rootElem.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, XPXLiterals.A_ORGANIZATIONCODE_VALUE);
 		rootElem.setAttribute(XPXLiterals.A_DOCUMENT_TYPE, "0001");
 		rootElem.setAttribute(XPXLiterals.A_OVERRIDE, XPXLiterals.BOOLEAN_FLAG_Y);
 		rootElem.setAttribute(XPXLiterals.A_ACTION, XPXLiterals.MODIFY);
@@ -434,59 +471,68 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					totalAmount = Float.parseFloat(orderTotal);
 				}
 			}
-						    
+			String applyMinOrderCharge_GlobalLevel=YFSSystem.getProperty("applyMinOrderCharge");//Property read from customer_overrides.properties file and it indicates whether minimum order charge should be added from NG or MAX. 
+			if(log.isDebugEnabled()) {
+				log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of applyMinOrderCharge_GlobalLevel picked from customer_overrides property file is : ["+applyMinOrderCharge_GlobalLevel+"]");
+				log.debug("XPXInvokeOrderPlaceActions_updatePriceInformation() - Value of applyMinOrderBrands_DivisionLevel picked from 'EXTN_APPLY_MIN_ORDER_BRANDS' column of YFS_ORGANIZATION table is : ["+applyMinOrderBrands_DivisionLevel+"]");
+			}
+		
+			
 			if (totalAmount < minOrderTotal) {
-				
-				float extnSubtotal =0;
-				utilObj = new XPXUtils();				
-
-				double reTotalAmount = totalAmount + new Float(chargeAmount);
-				extnOrderElem.setAttribute("ExtnTotOrdValWithoutTaxes", "" + reTotalAmount);
-				extnOrderElem.setAttribute("ExtnTotalOrderValue", ""+reTotalAmount);
-				
-				String extnOrderSubTotal = extnOrderElem.getAttribute("ExtnOrderSubTotal");
-				if(extnOrderSubTotal != null && !"".equals(extnOrderSubTotal)) {
-					extnSubtotal = Float.parseFloat(extnOrderSubTotal)+ new Float(chargeAmount);
-				}			
-				extnOrderElem.setAttribute("ExtnOrderSubTotal", ""+extnSubtotal);
-				
-				// To Create A Special Charge Line.
-				YFCElement specialLineElem = orderLinesElem.createChild("OrderLine");
-				specialLineElem.setAttribute("OrderedQty", "1");
-				specialLineElem.setAttribute("ValidateItem", "N");
-				specialLineElem.setAttribute("LineType", "M");
-				YFCElement itemElement = specialLineElem.createChild("Item");
-				String itemID = arg0.getProperty("ItemID");
-				if (YFCObject.isNull(itemID) || YFCObject.isVoid(itemID)) {
-					itemID = "/05";
+				if("Y".equalsIgnoreCase(applyMinOrderCharge_GlobalLevel)) {
+					if(XPXUtils.isApplyMinimumOrderChargeForBrand(applyMinOrderBrands_DivisionLevel, enterpriseCode)) {						
+						float extnSubtotal =0;
+						utilObj = new XPXUtils();				
+		
+						double reTotalAmount = totalAmount + new Float(chargeAmount);
+						extnOrderElem.setAttribute("ExtnTotOrdValWithoutTaxes", "" + reTotalAmount);
+						extnOrderElem.setAttribute("ExtnTotalOrderValue", ""+reTotalAmount);
+						
+						String extnOrderSubTotal = extnOrderElem.getAttribute("ExtnOrderSubTotal");
+						if(extnOrderSubTotal != null && !"".equals(extnOrderSubTotal)) {
+							extnSubtotal = Float.parseFloat(extnOrderSubTotal)+ new Float(chargeAmount);
+						}			
+						extnOrderElem.setAttribute("ExtnOrderSubTotal", ""+extnSubtotal);
+						
+						// To Create A Special Charge Line.
+						YFCElement specialLineElem = orderLinesElem.createChild("OrderLine");
+						specialLineElem.setAttribute("OrderedQty", "1");
+						specialLineElem.setAttribute("ValidateItem", "N");
+						specialLineElem.setAttribute("LineType", "M");
+						YFCElement itemElement = specialLineElem.createChild("Item");
+						String itemID = arg0.getProperty("ItemID");
+						if (YFCObject.isNull(itemID) || YFCObject.isVoid(itemID)) {
+							itemID = "/05";
+						}
+						itemElement.setAttribute("ItemID", itemID);
+						
+						// Special Line Instruction Is Required Only When Order Has A Hold. In Other Case MAX Will Be Updating It Through OU Updates.
+						if (utilObj.checkIfOrderOnPendingHold(rootDoc)) {
+							if(YFSSystem.getProperty("ItemShortDesc") != null)
+								itemElement.setAttribute("ItemShortDesc", YFSSystem.getProperty("ItemShortDesc"));			
+						}
+						
+						YFCElement specialLineExtnElem = specialLineElem.createChild("Extn");					
+						specialLineExtnElem.setAttribute("ExtnLineOrderedTotal", new Float(chargeAmount).toString());
+						specialLineExtnElem.setAttribute("ExtnReqUOMUnitPrice",new Float(chargeAmount).toString());
+						specialLineExtnElem.setAttribute("ExtnUnitPriceDiscount", "0");
+						specialLineExtnElem.setAttribute("ExtnUnitPrice", new Float(chargeAmount).toString());
+						specialLineExtnElem.setAttribute("ExtnExtendedPrice", new Float(chargeAmount).toString());
+						specialLineExtnElem.setAttribute("ExtnAdjUOMUnitPrice", new Float(chargeAmount).toString());
+						specialLineExtnElem.setAttribute("ExtnAdjUnitPrice", new Float(chargeAmount).toString());		
+						specialLineExtnElem.setAttribute("ExtnPriceOverrideFlag", "Y"); 
+						specialLineExtnElem.setAttribute("ExtnLineType", "STOCK");
+						long uniqueSequenceNo = CallDBSequence.getNextDBSequenceNo(env, XPXLiterals.WEB_LINE_SEQUENCE);
+						webLineNumber = generateWebLineNumberForSpecialCharge(entryType, uniqueSequenceNo,envtCode);
+						specialLineExtnElem.setAttribute(XPXLiterals.A_WEB_LINE_NUMBER, webLineNumber);
+						
+						YFCElement linePriceInfoElem = specialLineElem.createChild("LinePriceInfo");
+						linePriceInfoElem.setAttribute("UnitPrice", new Float(chargeAmount).toString());
+						linePriceInfoElem.setAttribute("IsPriceLocked", "Y");
+		
+						setProgressYFSEnvironmentVariables(env);			
+					}
 				}
-				itemElement.setAttribute("ItemID", itemID);
-				
-				// Special Line Instruction Is Required Only When Order Has A Hold. In Other Case MAX Will Be Updating It Through OU Updates.
-				if (utilObj.checkIfOrderOnPendingHold(rootDoc)) {
-					if(YFSSystem.getProperty("ItemShortDesc") != null)
-						itemElement.setAttribute("ItemShortDesc", YFSSystem.getProperty("ItemShortDesc"));			
-				}
-				
-				YFCElement specialLineExtnElem = specialLineElem.createChild("Extn");					
-				specialLineExtnElem.setAttribute("ExtnLineOrderedTotal", new Float(chargeAmount).toString());
-				specialLineExtnElem.setAttribute("ExtnReqUOMUnitPrice",new Float(chargeAmount).toString());
-				specialLineExtnElem.setAttribute("ExtnUnitPriceDiscount", "0");
-				specialLineExtnElem.setAttribute("ExtnUnitPrice", new Float(chargeAmount).toString());
-				specialLineExtnElem.setAttribute("ExtnExtendedPrice", new Float(chargeAmount).toString());
-				specialLineExtnElem.setAttribute("ExtnAdjUOMUnitPrice", new Float(chargeAmount).toString());
-				specialLineExtnElem.setAttribute("ExtnAdjUnitPrice", new Float(chargeAmount).toString());		
-				specialLineExtnElem.setAttribute("ExtnPriceOverrideFlag", "Y"); 
-				specialLineExtnElem.setAttribute("ExtnLineType", "STOCK");
-				long uniqueSequenceNo = CallDBSequence.getNextDBSequenceNo(env, XPXLiterals.WEB_LINE_SEQUENCE);
-				webLineNumber = generateWebLineNumberForSpecialCharge(entryType, uniqueSequenceNo,envtCode);
-				specialLineExtnElem.setAttribute(XPXLiterals.A_WEB_LINE_NUMBER, webLineNumber);
-				
-				YFCElement linePriceInfoElem = specialLineElem.createChild("LinePriceInfo");
-				linePriceInfoElem.setAttribute("UnitPrice", new Float(chargeAmount).toString());
-				linePriceInfoElem.setAttribute("IsPriceLocked", "Y");
-
-				setProgressYFSEnvironmentVariables(env);			
 			}
 		}
 		if (log.isDebugEnabled()) {
@@ -502,6 +548,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		
 		String minOrderAmount = null;
 		String chargeAmount = null;
+		String applyMinOrderBrands=null;
 		
 		if (env instanceof ClientVersionSupport) {
 			ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
@@ -510,9 +557,13 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 				// Order Placed From Web. Ship To Customer Profile Has Been Set In Environment By WC Application.
 				minOrderAmount = (String) envVariablesmap.get("ExtnMinOrderAmount");
 				chargeAmount = (String) envVariablesmap.get("ExtnChargeAmount");
+				
+				applyMinOrderBrands = (String) envVariablesmap.get("ExtnApplyMinOrderBrands");
+				
 				if (log.isDebugEnabled()) {
 					log.debug("MinOrderAmount:" + minOrderAmount);
 					log.debug("ChargeAmount:" + chargeAmount);
+					log.debug("applyMinOrderBrands_DivisionLevel:" + applyMinOrderBrands);
 				}
 			} 
 		}
@@ -520,6 +571,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 		if (!YFCObject.isNull(minOrderAmount) && !YFCObject.isNull(chargeAmount)) {
 			custOrderAmountArray[0] = ""+minOrderAmount;
 			custOrderAmountArray[1] = ""+chargeAmount;
+			custOrderAmountArray[2] = (applyMinOrderBrands!=null ? applyMinOrderBrands : "");
 		} else {
 			custOrderAmountArray = getCustOrderAmountList(env, buyerOrganizationCode, enterpriseCode);
 		}
@@ -635,6 +687,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 	
 	private void setOPOrderDetailsFromEnv(YFSEnvironment env, YFCElement rootElem) {
 		
+		YFCElement orderExtnElem = rootElem.getChildElement("Extn");
 		HashMap orderDetailsMap = new HashMap();
 		if (env instanceof ClientVersionSupport) {
 			ClientVersionSupport clientVersionSupport = (ClientVersionSupport) env;
@@ -700,6 +753,9 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 								rootElem.appendChild(rootElem.importNode(yfsOrderHoldTypesDoc.getDocumentElement()));
 							}
 						}
+					} else {
+						orderExtnElem.setAttribute("ExtnLastOrderOperation", "OrderPlacement");
+						orderExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "N");
 					}
 					// Order Instructions.
 					headerComments = (String) orderDetailsMap.get("ExtnHeaderComments");
@@ -717,7 +773,7 @@ public class XPXInvokeOrderPlaceActions implements YIFCustomApi {
 					}
 					
 					// Order Extended Attributes.
-					YFCElement orderExtnElem = rootElem.getChildElement("Extn");
+					
 					if (orderExtnElem != null) {
 						
 						// Retrieve The Data From The Map.

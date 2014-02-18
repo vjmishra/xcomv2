@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -182,28 +183,21 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		try {
 			//Added for Jira 4023
 			//Map containing UOMCode as key and ConvFactor as value
+			/* Commented for XB-687
 			String msapOrderMultipleFlag = "";
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 			if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
 				msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
 				}
+			
+			
+			
 			uoms = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID, organizationCode);
 			//displayItemUOMsMap = new HashMap();
 			itemUOMsMap = uoms;
 			displayItemUOMsMap = uoms;
 			orderMultiple = XPEDXOrderUtils.getOrderMultipleForItem(itemID);
-			/*for (Iterator it = uoms.keySet().iterator(); it.hasNext();){
-				String uomDesc = (String) it.next();
-				Object o = uoms.get(uomDesc);
-				if("1".equals(o))
-				{
-					displayItemUOMsMap.put(XPEDXWCUtils.getUOMDescription(uomDesc), uomDesc);
-				}
-				else{
-					displayItemUOMsMap.put(XPEDXWCUtils.getUOMDescription(uomDesc) + " (" + o + ")", uomDesc);
-				}
-				
-			}*/
+			
 			
 			//Added for Jira 4023
 			double minFractUOM = 0.00;
@@ -218,7 +212,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 			//String orderMultiple = "";
 			defaultShowUOMMap = new HashMap<String,String>();
 	    	
-			if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
+				if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
 				
 				Iterator<String> iterator = itemUOMsMap.keySet().iterator();
 				while(iterator.hasNext()) {
@@ -265,6 +259,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 							displayItemUOMsMap.put(uomCode, XPEDXWCUtils.getUOMDescription(uomCode)+" ("+convFac+")" );
 						}
 				}
+				
 				if(minFractUOM == 1.0 && minFractUOM != 0.0){
 					defaultConvUOM = lowestUOM;
 					defaultUOM = minUOMsDesc;
@@ -284,7 +279,16 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 				
 			}
 			defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+			*/
 			
+			//Start of XB-687
+			displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode);
+			defaultShowUOMMap = (Map<String, String>)ServletActionContext.getRequest().getAttribute("defaultShowUOMMap");
+			ServletActionContext.getRequest().removeAttribute("defaultShowUOMMap");
+			if(defaultShowUOMMap == null)
+				defaultShowUOMMap =  new HashMap<String, String>();
+			//defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();
+			//End of XB-687
 			if(requestedDefaultUOM == null && defaultShowUOMMap!=null && !defaultShowUOMMap.isEmpty()){
 				requestedDefaultUOM = (String)defaultShowUOMMap.keySet().iterator().next();
 			}
@@ -316,7 +320,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		} catch (Exception e) {
 			LOG.error(e.getStackTrace());
 		}
-		return uoms;
+		return displayItemUOMsMap;
 	}
 	
 	//Added for Jira 4023
@@ -368,53 +372,7 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void validateItemForManufacture() {
-		try {
-			//Populate all the fields
-			setItemManufacturerId(getItemId());
-			setItemId("");
-			
-			Element res = prepareAndInvokeMashup("XPEDXMyItemsDetailsAddFromCatalog");
-			ArrayList<Element> itemEle = getXMLUtils().getElements(res, "Item");
-			//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-			//itemEle will be null if item is not entitled
-			if (itemEle != null){
-				for(Iterator<Element> iterator1 = itemEle.iterator(); iterator1.hasNext();){
-					Element itemList = (Element)iterator1.next();
-					Element primaryInfoEle 	= getXMLUtils().getChildElement(itemList, "PrimaryInformation");
-				/* 
-				 * Arun 3/29
-				 * setDesc changed to setDescMil to facilitate the li tags
-				 * that are in the description information . If its changed
-				 * back to setDesc the MIl edit - quick add will break
-				 */
-				if (primaryInfoEle != null){
-					setName(primaryInfoEle.getAttribute("DisplayItemDescription"));
-					//setDesc(primaryInfoEle.getAttribute("Description"));
-					setDescMil(primaryInfoEle.getAttribute("Description"));
-					}
-				setUomId( itemList.getAttribute("UnitOfMeasure") );
-				setItemId(itemList.getAttribute("ItemID"));
-				//setIsItemValid(true);
-				//Validate the item passing the legacy item id
-				if ( validateItemEntitlement(getItemId()) ){
-					setIsItemValid(true);
-					break;
-				} else {
-					setItemId(getItemManufacturerId());
-				}
-			}
-			}
-			else {
-				setItemId(getItemManufacturerId());
-			}
-			
-				
-		} catch (Exception e) {
-			LOG.error(e.getStackTrace());
-		}
-	}
+	
 
 	private void validateItemForCustomerPart() {
 		try {
@@ -512,52 +470,9 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void validateItemForMpcCode() {
-		try {
-			//Populate all the fields
-			setItemMpcId(getItemId());
-			setItemId("");
-			
-			Element res = prepareAndInvokeMashup("XPEDXMyItemsDetailsAddFromCatalog");
-			//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-			//itemEle will be null if item is not entitled
-			ArrayList<Element> itemElement = getXMLUtils().getElements(res, "Item");
-			//Element primaryInfoEle 	= getXMLUtils().getChildElement(itemEle, "PrimaryInformation");
-			//itemEle will be null if item is not entitled
-			if (itemElement != null){
-				for(Iterator<Element> iterator1 = itemElement.iterator(); iterator1.hasNext();){
-					Element itemListMpc = (Element)iterator1.next();
-					Element primaryInfoEle 	= getXMLUtils().getChildElement(itemListMpc, "PrimaryInformation");
-				/* 
-				 * Arun 3/29
-				 * setDesc changed to setDescMil to facilitate the li tags
-				 * that are in the description information . If its changed
-				 * back to setDesc the MIl edit - quick add will break
-				 */
-				if (primaryInfoEle != null){
-					setName(primaryInfoEle.getAttribute("DisplayItemDescription"));
-					//setDesc(primaryInfoEle.getAttribute("Description"));
-					setDescMil(primaryInfoEle.getAttribute("Description"));
-					}
-				setUomId( itemListMpc.getAttribute("UnitOfMeasure") );
-				setItemId(itemListMpc.getAttribute("ItemID"));
-				//setIsItemValid(true);
-				//Validate the item passing the legacy item id
-				if ( validateItemEntitlement(getItemId()) ){
-					setIsItemValid(true);
-					break;
-				}
-				}
-			} else {
-				setItemId(getItemMpcId());
-			}
-			
-		} catch (Exception e) {
-			LOG.error(e.getStackTrace());
-		}
-	}
-
+	/**
+	 * EB-466 Changes. Removed the logic for MPC and Manufacturing Item validation code.
+	 */
 	private void validateItem() {
 		try {
 			int it = Integer.parseInt(getItemType());
@@ -568,15 +483,9 @@ public class XPEDXMyItemsDetailsQuickAddAction extends WCMashupAction {
 				validateItemForXPEDX();
 				break;
 			case 2:
-				validateItemForManufacture();
-				break;
-			case 3:
 				validateItemForCustomerPart();
 				break;
-			case 4:
-				validateItemForMpcCode();
-				break;
-
+			
 			default:
 				break;
 			}

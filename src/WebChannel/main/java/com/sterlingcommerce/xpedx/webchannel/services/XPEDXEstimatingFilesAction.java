@@ -14,13 +14,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.yfc.dom.YFCDocument;
 
 @SuppressWarnings("serial")
 
@@ -34,6 +32,14 @@ public class XPEDXEstimatingFilesAction extends WCMashupAction {
 		
 		Document outputDoc = null;
 		try {
+			String brandCode="";
+			String storeFront = wcContext.getStorefrontId();
+			if(storeFront.equalsIgnoreCase("xpedx")){
+				brandCode="XPED";
+			}
+			else if(storeFront.equalsIgnoreCase("Saalfeld")){
+				brandCode="SAAL";
+			}
 			outputDoc=XPEDXWCUtils.getCustomerDetails(getWCContext().getCustomerId(), getWCContext().getStorefrontId());
 			String environmentCode = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/Customer/Extn/@ExtnEnvironmentCode");
 			/*Start code for Jira 4315*/
@@ -50,12 +56,13 @@ public class XPEDXEstimatingFilesAction extends WCMashupAction {
 			
 			if(environmentCode!=null && !environmentCode.isEmpty() && pricingWareHouse!=null && !pricingWareHouse.isEmpty()) {
 				Map<String, String> valueMap = new HashMap<String, String>();
-				valueMap.put("/Organization/@OrganizationCode", (pricingWareHouse + "_" + environmentCode));
+				valueMap.put("/XPXCatalogExp/@OrganizationKey", (pricingWareHouse + "_" + environmentCode));
+				valueMap.put("/XPXCatalogExp/@BrandCode", brandCode);
 
 				Element input = WCMashupHelper.getMashupInput("XPEDXCatalogExport", valueMap, getWCContext());
 				
 				Element outputE2 = (Element)WCMashupHelper.invokeMashup("XPEDXCatalogExport", input, wcContext.getSCUIContext());
-				organizationName = SCXmlUtil.getXpathAttribute(outputE2, "/OrganizationList/Organization/@OrganizationName");
+				//organizationName = SCXmlUtil.getXpathAttribute(outputE2, "/OrganizationList/Organization/@OrganizationName");
 				Element custXrefEle = XMLUtilities.getElement(outputE2,"XPXCatalogExp");				
 				NodeList CatalogExpList = outputE2.getElementsByTagName("XPXCatalogExp");		
 					for(int LegacyUomCounter = 0;LegacyUomCounter<CatalogExpList.getLength();LegacyUomCounter++)

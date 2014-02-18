@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -16,6 +17,7 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
@@ -232,6 +234,7 @@ public class XPEDXSalesRepUtils {
 		
 		String networkId = (String)wcContext.getSCUIContext().getRequest().getSession().getAttribute("DisplayUserID");
 		
+	
 		// fetch the employee id for the logged in user to construct the dummyuser id
 		//String employeeId = getEmployeeId(networkId, wcContext);
 		String employeeId = (String)wcContext.getWCAttribute(SR_SALESREP_ID, WCAttributeScope.SESSION);
@@ -255,7 +258,18 @@ public class XPEDXSalesRepUtils {
 		if(!YFCUtils.isVoid(customerId)){
 			loginId = employeeId+"@"+customerId+".com";
 			request.setAttribute("dum_username", loginId.trim());
-			request.setAttribute("dum_password", loginId.trim());// the password remains the same as loginid - ASSUMPTION
+			String saltKey = getSaltKey(loginId);
+			if(!"".equalsIgnoreCase(saltKey) && saltKey !=null){
+				System.out.println("Salt key is " + saltKey );
+				String newPassword  = applySaltPattern( loginId, saltKey);
+				
+				System.out.println("New Password after Salt Pattern is : --- " + newPassword);
+				request.setAttribute("dum_password", newPassword);
+			}else{
+				request.setAttribute("dum_password", loginId.trim());
+			}
+			System.out.println("Salt key is " + saltKey );
+		//	request.setAttribute("dum_password", loginId.trim());// the saltKeypassword remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
 			//SRSalesRepEmailID added for jira 3438
 			request.setAttribute("SRSalesRepEmailID",SREmailID);
@@ -292,5 +306,81 @@ public class XPEDXSalesRepUtils {
 		}
 		// TODO Auto-generated method stub
 		return salesRepEmployeeId;
+	}
+	
+	public static String getSaltKey(String networkId) {
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		String userName = "";
+		Element userList = null;
+		String saltKey = null;
+		try {
+			Element input = SCXmlUtil.createDocument("User").getDocumentElement();
+			
+			input.setAttribute("Loginid", networkId);// customers for the logged in sales rep
+			
+			String inputXml = SCXmlUtil.getString(input);
+			
+			
+			
+			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList-SalesRep", input, context.getSCUIContext());
+		} catch (XMLExceptionWrapper e) {
+			LOG.error("Unable to get user list", e);
+		}
+
+		if (userList != null) {
+			Element userEle = SCXmlUtil.getChildElement(userList, "User");
+			userName = userEle.getAttribute("Username");
+			Element extnElem = SCXmlUtil.getChildElement(userEle, "Extn");
+			System.out.println("Saltkey is------ " + extnElem.getAttribute("ExtnSaltKey"));
+			saltKey = extnElem.getAttribute("ExtnSaltKey");
+		}
+
+		return saltKey;
+	}
+	
+	public String applySaltPattern(String word,String salt) { 
+		ArrayList<Character> one = new ArrayList<Character>();    
+		String [] saltpattern = salt.split("@") ; 
+		ArrayList swapArrayList = new ArrayList();
+	
+		int l=0;
+		for(int j =0; j < saltpattern.length ;j++){
+			
+			int k = Integer.parseInt(saltpattern[j]);
+		for (int i = 0; i < word.length()-1; i++) {
+			
+			if(i==k){			
+			    swapArrayList.add(word.substring(l,k));
+               l = i;				
+			}else{
+				continue;
+			}
+			
+			break;
+		}
+		}
+	    
+	    swapArrayList.add(word.substring(l,word.length()));		
+			
+		return swapListValues(swapArrayList).toString().replace("[", "").trim().replace(","," ").trim().replace("]", "").trim().replace("-", "").trim().replace(".", "").trim().replace(" ", "");
+		    
+		}   
+	
+	public List swapListValues(ArrayList swapArrayList){
+		List<String> list = new ArrayList<String>();
+		//Change Position in List with 1-3, 2-4,3-5
+		for(int i=0;i< swapArrayList.size();i++){
+			if(i < swapArrayList.size() - 1){
+				list.add((String) swapArrayList.get(i+1).toString().replace("@", "C").trim().replace("-", " "));
+				list.add((String) swapArrayList.get(i).toString().replace("@", "C").trim().replace("-", " "));
+				i++;
+			}
+			
+		}
+		if(list.size() < swapArrayList.size()){
+			list.addAll(swapArrayList.subList(list.size(), swapArrayList.size()));
+		}
+		
+		return list;
 	}
 }

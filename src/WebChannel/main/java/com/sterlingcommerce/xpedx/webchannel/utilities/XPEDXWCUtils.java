@@ -8,17 +8,14 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -64,9 +61,9 @@ import com.sterlingcommerce.webchannel.utilities.CommonCodeUtil;
 import com.sterlingcommerce.webchannel.utilities.UserPreferenceUtil;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
-import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
@@ -95,7 +92,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 /**
  * @author rugrani
  * @author mvummadi
- * 
+ *
  */
 public class XPEDXWCUtils {
 	public static String LOGGED_IN_CUSTOMER_ID = "loggedInCustomerID";
@@ -117,15 +114,15 @@ public class XPEDXWCUtils {
 	private static final String extnFieldsInformationMashUp = "xpedx-customer-getCustomExtnFieldsInformation";
 	public static Map<String, String> uomDescMap = new HashMap<String, String>();
 	public static String LOGGED_IN_FORMATTED_CUSTOMER_ID_MAP = "loggedInFormattedCustomerIDMap";
-	
+
 	/**
 	 * Following parameters are used for encryption / decryption purposes
 	 */
 	private static String svString = "b2bxp3dx";
 	private static String skString = "b2b1nt3rnat1onal";
 	private static byte[] sharedvector = svString.getBytes();
-	private static byte[] sharedkey = skString.getBytes();	
-	private static SecretKey sk = getSecretKey(sharedkey);	
+	private static byte[] sharedkey = skString.getBytes();
+	private static SecretKey sk = getSecretKey(sharedkey);
 	private static byte[] sharedkeyfinal = sk.getEncoded();
 	private static String staticFileLocation = null;
 	private static String xpedxBuildKey =null;
@@ -136,7 +133,7 @@ public class XPEDXWCUtils {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
 		staticFileLocation = staticFileLocation != null ? staticFileLocation.trim() : "/swc";
 	}
-	
+
 	static {
 		xpedxBuildKey = YFSSystem.getProperty("xpedxBuildKey");
 		xpedxBuildKey = xpedxBuildKey != null ? xpedxBuildKey.trim() : "";
@@ -154,18 +151,18 @@ public class XPEDXWCUtils {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * This is wrt JIRA 243
 	 * The following method has been modified to accommodate mash up information coming in during the call.
 	 * If there is no mashup information, the default - xpedx-customer-getGeneralInformation is invoked.
-	 * 
+	 *
 	 * @param customerId
 	 * @param orgCode
 	 * @return
 	 * @throws CannotBuildInputException
 	 */
-	
+
 	public static Document getCustomerDocument(String customerID, String storeFrontID) {
 		Document outputDoc1 = null;
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
@@ -189,12 +186,12 @@ public class XPEDXWCUtils {
 
 		return outputDoc1;
 	}
-	
+
 	public static Document getCustomerDetails(String customerId, String orgCode)
 	throws CannotBuildInputException {
 		return getCustomerDetails(customerId, orgCode, null );
 	}
-	
+
 	/**
 	 * This method was written for JIRA 243.
 	 * If the mashup information is not coming then we use the
@@ -220,7 +217,7 @@ public class XPEDXWCUtils {
 					.debug("getCustomerDetails: orgCode is a required field. Returning an empty document");
 			return outputDoc;
 		}
-		
+
 		IWCContext wcContext = WCContextHelper
 				.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> valueMap = new HashMap<String, String>();
@@ -231,9 +228,9 @@ public class XPEDXWCUtils {
 				mashupId, valueMap, wcContext
 						.getSCUIContext());
 		String inputXml = SCXmlUtil.getString(input);
-		
+
 		log.debug("Input XML: " + inputXml);
-		
+
 		Object obj = WCMashupHelper.invokeMashup(
 				mashupId, input, wcContext
 						.getSCUIContext());
@@ -280,18 +277,18 @@ public class XPEDXWCUtils {
 	        if(log.isDebugEnabled())
 	        {
 	            log.debug("Class:GetCustomerOrganizationAction Method:setCustomerAccess STARTS");
-	        } 
-	        
+	        }
+
 	            String wCCustomerId=getLoggedInCustomerFromSession(wcContext);
-	            
+
 	            if(wCCustomerId == null) {
 	            	wCCustomerId = wcContext.getCustomerId();
 	            }
-	        
+
 	            String wCOrganizationCode=wcContext.getCustomerMstrOrg();
-	            
+
 	            isChildCustomer = "FALSE";
-	        
+
 	        try {
 	            if(currentCustomerID.equals(wCCustomerId)){
 	                isChildCustomer = "TRUE";
@@ -320,33 +317,33 @@ public class XPEDXWCUtils {
 	        } catch (XMLExceptionWrapper mashupEx) {//TODO handle exception
 	            wcContext.getSCUIContext().replaceAttribute(SCUIConstants.EXCEPTION_ATTR_NAME, mashupEx);
 	            mashupEx.printStackTrace();
-	             
+
 	        } catch (CannotBuildInputException mashupEx) {
 	            wcContext.getSCUIContext().replaceAttribute(SCUIConstants.EXCEPTION_ATTR_NAME, mashupEx);
 	            mashupEx.printStackTrace();
-	             
+
 	        } catch (Exception mashupEx) {
 	            wcContext.getSCUIContext().replaceAttribute(SCUIConstants.EXCEPTION_ATTR_NAME, mashupEx);
 	            mashupEx.printStackTrace();
-	             
-	        } 
+
+	        }
 	        if(log.isDebugEnabled())
 	        {
 	                log.debug("Class:GetCustomerOrganizationAction Method:setCustomerAccess ENDS");
 	        }
-	        
+
 	        return isChildCustomer;
-	    }  
-	   
+	    }
+
 	   private static void populateChildrenList(Element customerElemList, List chidren, IWCContext wcContext, String parentCustomerKey){
 	        try {
 	            List<Element> customerList=SCXmlUtils.getElementsByAttribute(customerElemList, "/Customer", "ParentCustomerKey", parentCustomerKey);
-	             
+
 	            if( null != customerList && customerList.size() > 0)
 	            {
 	               Iterator itr = customerList.iterator();
 	               while(itr.hasNext()) {
-	                
+
 	                   Element childCust=(Element)itr.next();
 	                   chidren.add(childCust.getAttribute("CustomerID"));
 	                   String parentCustomerKeyForChild = childCust.getAttribute("CustomerKey");
@@ -384,14 +381,14 @@ public class XPEDXWCUtils {
 
 		return outputDoc;
 	}
-	
+
 	public static Document AddItemsToList(String listKey, List<String> itemIds,
 			List<String> itemNames, List<String> itemDescs, List itemQtys,
 			List itemUOMs, List itemJobIds, List itemTypes,  List itemOrders,String modifiedDate) throws Exception {
 		return AddItemsToList(listKey,itemIds,
 				itemNames,itemDescs,itemQtys,
 				itemUOMs,itemJobIds,itemTypes,itemOrders, modifiedDate);
-		
+
 	}
 
 	public static Document AddItemsToList(String listKey, List<String> itemIds,
@@ -527,8 +524,8 @@ public class XPEDXWCUtils {
 		}
 		return listOfAssignedCustomers;
 	}
-	
-	
+
+
 
 	//method added: Catalog price to display flag and reports display flag
 	public static void setShowAddToCartAvaiablityAndReportsFlag(IWCContext wcContext) {
@@ -543,7 +540,7 @@ public class XPEDXWCUtils {
 			String loggedInCustomerID = XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext);
 			if(!(loggedInCustomerID!=null && loggedInCustomerID.trim().length()>0))
 				loggedInCustomerID = wcContext.getCustomerId();
-			try { 
+			try {
 				ArrayList<Element> contacts = SCXmlUtil.getElementsByAttribute(contactDoc.getDocumentElement(), "/CustomerContact","CustomerContactID", wcContext.getCustomerContactId());
 				for(int i=0;i<contacts.size();i++) {
 					Element contactElem = contacts.get(i);
@@ -595,10 +592,10 @@ public class XPEDXWCUtils {
 			if (getMSACustomerKeyFromSession(wcContext) == null  && getCustomerSKUFromSession(wcContext) == null)
 			{
 				HashMap<String, String> valueMap = new HashMap<String, String>();
-				
+
 				valueMap.put("/Customer/@CustomerID", wcContext.getCustomerId());
 				valueMap.put("/Customer/@OrganizationCode", wcContext.getStorefrontId());
-	
+
 				Element input;
 				try {
 					input = WCMashupHelper.getMashupInput(
@@ -611,16 +608,11 @@ public class XPEDXWCUtils {
 						"getMasterCustomerFields", input, wcContext
 								.getSCUIContext());
 				Document allMasterCustFields = ((Element) obj).getOwnerDocument();
-				
+
 				Element msapCustElem = allMasterCustFields.getDocumentElement();
 				String masterCustKey = SCXmlUtil.getAttribute(msapCustElem, "CustomerKey");
 				//Setting the MSAP Customer Key in session
 				wcContext.setWCAttribute(LOGGED_IN_CUSTOMER_KEY,masterCustKey,WCAttributeScope.LOCAL_SESSION);
-				
-				Element msapExtnElem = SCXmlUtil.getChildElement(msapCustElem, "Extn");
-				String customerUseSKU = msapExtnElem.getAttribute("ExtnUseCustSKU");
-				//Setting customer Sku flag in session
-				wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,customerUseSKU,WCAttributeScope.LOCAL_SESSION);
 			}
 		}
 	}
@@ -629,7 +621,7 @@ public class XPEDXWCUtils {
 	 * JIRA 243
 	 * Modified getCustomerDetails method to consider the mashup to be invoked
 	 * so that, we get only the required information - here ParentCustomer fields only.
-	 * 
+	 *
 	 * @param selectedCustomer
 	 * @param wcContext
 	 * @return
@@ -639,7 +631,7 @@ public class XPEDXWCUtils {
 		String billToID = null;
 		if (selectedCustomer != null && selectedCustomer.trim().length() > 0) {
 			try {
-				
+
 				Document outputDoc = XPEDXWCUtils.getCustomerDetails(
 						selectedCustomer, wcContext.getStorefrontId(), parentCustomerInformationMashUp);
 				Element outputElem = outputDoc.getDocumentElement();
@@ -664,7 +656,7 @@ public class XPEDXWCUtils {
 		}
 		return null;
 	}
-	
+
 	public static String getMSACustomerKeyFromSession(IWCContext wcContext) {
 		Object loogedInCustomerIDObject = wcContext.getWCAttribute(LOGGED_IN_CUSTOMER_KEY);
 		if (loogedInCustomerIDObject != null) {
@@ -722,7 +714,7 @@ public class XPEDXWCUtils {
 			obj = WCMashupHelper.invokeMashup(
 					"getXpedxCustomerContactDetails", input, wcContext
 							.getSCUIContext());
-			
+
 			if(!YFCCommon.isVoid(obj)){
 				output = ((Element) obj).getOwnerDocument();
 			}
@@ -731,7 +723,7 @@ public class XPEDXWCUtils {
 		}
 		return output;
 	}
-	
+
 	public static String getDefaultShipTo() {
 		String defaultAssignedShipTo = null;
 		Document outputDoc = null;
@@ -773,7 +765,7 @@ public class XPEDXWCUtils {
 		}
 		return defaultAssignedShipTo;
 	}
-	
+
 	public static void setSampleRequestFlag(String billToCustomerId, IWCContext wcContext ) throws CannotBuildInputException
 	{
 		Document output = XPEDXWCUtils.
@@ -787,12 +779,12 @@ public class XPEDXWCUtils {
 	public static void setSampleRequestFlag(String custShowSampleRequestFlag, String ExtnServiceOptCode, IWCContext wcContext ) throws CannotBuildInputException
 	{
 
-		if (null != custShowSampleRequestFlag && (custShowSampleRequestFlag.equalsIgnoreCase("T") 
-				|| custShowSampleRequestFlag.equalsIgnoreCase("Y"))) 
+		if (null != custShowSampleRequestFlag && (custShowSampleRequestFlag.equalsIgnoreCase("T")
+				|| custShowSampleRequestFlag.equalsIgnoreCase("Y")))
 		{
 			wcContext.getSCUIContext().getSession().setAttribute("showSampleRequest","Y");
 		}
-		else if (custShowSampleRequestFlag == null || custShowSampleRequestFlag.trim().length() == 0 || "".equals(custShowSampleRequestFlag.trim())) 
+		else if (custShowSampleRequestFlag == null || custShowSampleRequestFlag.trim().length() == 0 || "".equals(custShowSampleRequestFlag.trim()))
 		{
 			if (ExtnServiceOptCode != null
 					&& !ExtnServiceOptCode.trim().equals("")) {
@@ -815,13 +807,13 @@ public class XPEDXWCUtils {
 		}
 	}
 
-	
+
 	public static String getDefaultShipTo(String customerContactId) {
 		if(customerContactId!= null && customerContactId.trim().length()>0) {
 			String defaultAssignedShipTo = null;
 			Document outputDoc = null;
 			try {
-	
+
 				IWCContext wcContext = WCContextHelper
 						.getWCContext(ServletActionContext.getRequest());
 				Map<String, String> valueMap = new HashMap<String, String>();
@@ -863,7 +855,7 @@ public class XPEDXWCUtils {
 		try {
 			IWCContext wcContext = WCContextHelper
 					.getWCContext(ServletActionContext.getRequest());
-			if(wcContext.isGuestUser()){				
+			if(wcContext.isGuestUser()){
 				return "normal-view";
 			}
 			Map<String, String> valueMap = new HashMap<String, String>();
@@ -874,7 +866,7 @@ public class XPEDXWCUtils {
 			String masterCustomer =  (String)wcContext.getSCUIContext()
 			.getSession().getAttribute(LOGGED_IN_CUSTOMER_ID);
 			valueMap.put("/CustomerContact/Customer/@CustomerID", masterCustomer);
-			
+
 			Element input = WCMashupHelper.getMashupInput(
 					"getXpedxCustomerContactDetails", valueMap, wcContext
 							.getSCUIContext());
@@ -913,7 +905,7 @@ public class XPEDXWCUtils {
 	/**
 	 * JIRA: 243
 	 * Separate mash up was written to get only the CustomerAdditionalAddressList
-	 * of the the customer. 
+	 * of the the customer.
 	 * Prior to the fix, entire customer details was being fetched.
 	 *
 	 */
@@ -964,7 +956,7 @@ public class XPEDXWCUtils {
 		"DayPhone"));
 		defualtShipToAssigned.setLocationID(SCXmlUtil.getAttribute(extnElem,
 		"ExtnCustomerStoreNumber"));
-		
+
 		List<String> addressList = new ArrayList<String>();
 		for (int index = 0; index < 6; index++) {
 			if (SCXmlUtil.getAttribute(element, "AddressLine" + index) != null
@@ -1082,16 +1074,16 @@ public class XPEDXWCUtils {
 		for(int i=0;i<customerContactList.getLength();i++)
 		{
 			Element _customerContactElem=(Element)customerContactList.item(i);
-			String customerContactId=_customerContactElem.getAttribute("CustomerContactID");	
+			String customerContactId=_customerContactElem.getAttribute("CustomerContactID");
 			Element _customerContactElemTemp=customerContactMap.get(customerContactId);
 			if(_customerContactElemTemp==null)
 				customerContactMap.put(customerContactId, _customerContactElem);
 			else
-			{	
+			{
 				if(_customerContactElem != null && (_customerContactElem.getAttribute("EmailID") !=null && !_customerContactElem.getAttribute("EmailID").equals(""))
 						&& (_customerContactElemTemp.getAttribute("EmailID"))==null ||  _customerContactElemTemp.getAttribute("EmailID").equals(""))
 					customerContactMap.put(customerContactId, _customerContactElem);
-			}	
+			}
 		}
 	}
 	//end of jira 3484
@@ -1103,7 +1095,7 @@ public class XPEDXWCUtils {
 	 * of BillTo Id's(Recursive) and SHIP_TO contains arraylist of all ShipTo
 	 * Id's(Recursive)
 	 */
-	
+
 	public static Map<String,String> createModifyUserNameMap(List<Element> articleLines)
 	{
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
@@ -1122,16 +1114,28 @@ public class XPEDXWCUtils {
 				SCXmlUtil.importElement(OrElem, exp);
 			}
 			Element output =(Element) WCMashupHelper.invokeMashup("xpedxGetContactUserName", input, context.getSCUIContext());
-			
-			
+
+
 			List<Element> customerContactList = utilBean.getElements(output, "//CustomerContactList/CustomerContact");
 			for(Element customerContactElem : customerContactList) {
 				String userId = customerContactElem.getAttribute("UserID");
 				String modifyBy = customerContactElem.getAttribute("CustomerContactID");
+				Element extnElem = SCXmlUtil.getChildElement(customerContactElem, "Extn");
+				String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 				if(!modifyBy.equals(userId))
 					continue;
-				String lastName = customerContactElem.getAttribute("LastName");
-				String firstName = customerContactElem.getAttribute("FirstName");
+
+				String lastName = "";
+				String firstName = "";
+				if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
+					StringTokenizer token = new StringTokenizer(modifyBy, "@");
+					String networkId = token.nextToken();
+					firstName = getUserName(networkId);
+				} else {
+					lastName = customerContactElem.getAttribute("LastName");
+					firstName = customerContactElem.getAttribute("FirstName");
+
+				}
 				String name="";
 				if (!YFCCommon.isVoid(lastName)){
 					name = lastName;
@@ -1146,7 +1150,7 @@ public class XPEDXWCUtils {
 				}
 				modifyUserMap.put(modifyBy, name);
 			}
-			
+
 		}
 		catch(Exception e)
 		{
@@ -1155,7 +1159,30 @@ public class XPEDXWCUtils {
 		return modifyUserMap;
 	}
 
-	
+	public static String getUserName(String networkId) {
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		String userName = "";
+		Element userList = null;
+		try {
+			Element input = WCMashupHelper.getMashupInput("XPEDX-GetUserList", context);
+			Element extnElem = SCXmlUtil.getChildElement(input, "Extn");
+			extnElem.setAttribute("ExtnEmployeeId", networkId);
+			userList =(Element) WCMashupHelper.invokeMashup("XPEDX-GetUserList", input, context.getSCUIContext());
+		} catch (XMLExceptionWrapper e) {
+			log.error("Unable to get user list", e);
+		} catch (CannotBuildInputException e) {
+			log.error("Unable to get user list", e);
+		}
+
+		if (userList != null) {
+			Element userEle = SCXmlUtil.getChildElement(userList, "User");
+			userName = userEle.getAttribute("Username");
+		}
+
+		return userName;
+	}
+
+
 	public static HashMap<String, ArrayList<String>> getAssignedCustomersMap(
 			String customerID, String userId) throws CannotBuildInputException {
 		HashMap<String, ArrayList<String>> childCustomerMap = new HashMap<String, ArrayList<String>>();
@@ -1228,7 +1255,7 @@ public class XPEDXWCUtils {
 		childCustomerMap.put(XPEDX_ASSIGNED_CUSTOMER, assignedCustomerList);
 		return childCustomerMap;
 	}
-	
+
 	/*
 	 * It returns a hashmap with the following format
 	 * {billto1=[shipto1,shipto2], billto2=[shipto5,shipto33]}
@@ -1288,12 +1315,12 @@ public class XPEDXWCUtils {
 					ArrayList<String> listShipTos = childCustomerMap.get(billToID);
 					listShipTos.add(shipToID);
 				}
-				
+
 			}
 		}
 		return childCustomerMap;
 	}
-	
+
 	/*
 	 * It returns a hashmap with the following format
 	 * {billto1=[shipto1OrgElement,shipto2OrgElement], billto2=[shipto4OrgElement,shipto44OrgElement]}
@@ -1353,7 +1380,7 @@ public class XPEDXWCUtils {
 					ArrayList<Element> listShipTos = childCustomerMap.get(billToID);
 					listShipTos.add(orgElement);
 				}
-				
+
 			}
 		}
 		return childCustomerMap;
@@ -1396,7 +1423,7 @@ public class XPEDXWCUtils {
 		}
 		return allAssignedCustomerDoc;
 	}
-	
+
 	public static Document getAllChildCustomersDocByView(String customerID) throws CannotBuildInputException {
 		Document allAssignedCustomerDoc = null;
 		if(customerID == null || customerID.trim().length()<=0) {
@@ -1479,7 +1506,7 @@ public class XPEDXWCUtils {
 
 		return allShipTos;
 	}
-	
+
 	public static ArrayList<String> getAllShipTos(String customerID) throws CannotBuildInputException {
 		ArrayList<String> arrayList = new ArrayList<String>();
 		ArrayList<Element> customerList = new ArrayList<Element>();
@@ -1506,7 +1533,7 @@ public class XPEDXWCUtils {
 		}
 		return arrayList;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static List<String> getAllAssignedShipToList(String userId, IWCContext context) {
 		ArrayList<String> shipTos = new ArrayList<String>();
@@ -1550,7 +1577,7 @@ public class XPEDXWCUtils {
 				log.error("Error Getting the Assigned Ship to For the User " + userId);
 				e.printStackTrace();
 				return shipTos;
-			}			
+			}
 		}
 	}
 
@@ -1602,7 +1629,7 @@ public class XPEDXWCUtils {
 		}
 		return true;
 	}
-	
+
 	public static LinkedHashMap getCustomerFieldsMapfromSession(IWCContext wcContext){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
@@ -1629,7 +1656,7 @@ public class XPEDXWCUtils {
 			wSCUIContext = context.getSCUIContext();
 			 String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
              if(YFCCommon.isVoid(editedOrderHeaderKey)){
-            	 documentElement.setAttribute("DraftOrderFlag", "Y");     
+            	 documentElement.setAttribute("DraftOrderFlag", "Y");
              }
 
 
@@ -1660,10 +1687,17 @@ public class XPEDXWCUtils {
 			shipToCustomer.setExtnCustomerDivision(customerDivision);
 			shipToCustomer.setExtnCurrencyCode(currencyCode);
 			shipToCustomer.setExtnIndustry(industry);
-			 //Added for JIRA 4306
+			//Added for EB 289 - to set the ShipTo & BillTo Customer status when the ShipTo is changed in the cart page
+			String customerStatus = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/@Status");
+			shipToCustomer.setCustomerStatus(customerStatus);
+			String billToCustomerStatus = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/ParentCustomer/@Status");
+			shipToCustomer.getBillTo().setCustomerStatus(billToCustomerStatus);
+			//End of EB 289
+
+			//Added for JIRA 4306
 			shipToCustomer.setOrganizationName(SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(),"//Customer/BuyerOrganization/@OrganizationName"));
 			//Ended for JIRA 4306
-			
+
 			/*wcContext.setWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,shipFromDivision,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,customerDivision,WCAttributeScope.LOCAL_SESSION);
 			wcContext.setWCAttribute(XPEDXConstants.INDUSTRY,industry,WCAttributeScope.LOCAL_SESSION);
@@ -1710,7 +1744,7 @@ public class XPEDXWCUtils {
 					if(shipToKey!=null && shipToKey.trim().length()>0)
 						documentElement.setAttribute("ShipToKey", shipToKey);
 				}
-			}	
+			}
 			documentElement.appendChild(extnDocumentElem);
 			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 			env = (YFSEnvironment) scuiTransactionContext
@@ -1723,19 +1757,18 @@ public class XPEDXWCUtils {
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		} finally {
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
+			releaseEnv(wcContext);
 			scuiTransactionContext = null;
 			env = null;
 		}
 	}
 /*This provides input to the change order with the overridden ship to address */
 	private static void setOverridenShipToAddress(YFCElement inputDocument, IWCContext wcContext ,Document shipToCustDetails) {
-			
+
 			if(XPEDXWCUtils.isShipToAddressOveridden(wcContext)) {
 				YFCElement eleElement = inputDocument.getOwnerDocument().createElement("PersonInfoShipTo");
 				XPEDXOverriddenShipToAddress shipToAddress = XPEDXWCUtils.getShipToOveriddenAddress(wcContext);
-				
+
 				Element element = SCXmlUtil.getChildElement(shipToCustDetails.getDocumentElement(), "CustomerAdditionalAddressList");
 				element = SCXmlUtil.getChildElement(element,"CustomerAdditionalAddress");
 				element = SCXmlUtil.getChildElement(element, "PersonInfo");
@@ -1831,7 +1864,7 @@ public class XPEDXWCUtils {
 		if (iSCUITransactionContext != null)
 			SCUITransactionContextHelper.releaseTransactionContext(iSCUITransactionContext, uictx);
 	}
-	
+
 	public static String getUOMReplacement(YFSEnvironment Env, String masterCust, String UOM) {
 		//String replacedUOM = "ReplacedUOM" + UOM;
 		String replacedUOM = XPXTranslationUtilsAPI.getCustomerUom(Env, masterCust, UOM);
@@ -1941,7 +1974,7 @@ public class XPEDXWCUtils {
 	/**
 	 * It first checks whether location is there is in session, if yes, It will
 	 * try to get it else It will fetch from database.
-	 * 
+	 *
 	 * @return image location
 	 */
 	public static String getServerLocation(String codeDescription) {
@@ -2003,6 +2036,12 @@ public class XPEDXWCUtils {
 		String UOMDesc;
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> UOMDescMapFromCache = getUOMDescMapFromCache(wcContext);
+		// XB-687 - start
+	    LinkedHashMap<String, String> IsCustomerUomHashMap = (LinkedHashMap<String,String>)XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    if(IsCustomerUomHashMap == null){
+	    	IsCustomerUomHashMap =  new LinkedHashMap<String,String>();//(LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("UOMsMap");
+	    }
+		// XB-687 - End
 		if (null == UOMDescMapFromCache || UOMDescMapFromCache.size() <=0) {
 			log.debug("Did not get the UOM description map in the cache. Calling the DB");
 			// true to use the locale from the userpreferences
@@ -2015,13 +2054,21 @@ public class XPEDXWCUtils {
 			log.debug("Got the UOM description map in the cache");
 			uomDescMap = UOMDescMapFromCache;
 		}
-		UOMDesc = uomDescMap.get(UOMCode);
+		if(IsCustomerUomHashMap.get(UOMCode)!=null && IsCustomerUomHashMap.get(UOMCode).equalsIgnoreCase("Y")){
+			UOMDesc = UOMCode;
+		}else{
+			UOMDesc = uomDescMap.get(UOMCode);
+		}
 		if (UOMDesc == null || UOMDesc.trim().length() == 0) {
+			if(UOMCode.contains("M_"));
+				UOMCode=UOMCode.replaceFirst("M_", "");
 			return UOMCode;
 		}
+		if(UOMDesc.contains("M_"));
+			UOMDesc=UOMDesc.replaceFirst("M_", "");
 		return UOMDesc;
 	}
-	
+
 	public static String getFormattedUOMCode(String UOMCode) throws XPathExpressionException, XMLExceptionWrapper,CannotBuildInputException {
 		String UOMDesc;
 		String [] theCodeParts;
@@ -2035,8 +2082,8 @@ public class XPEDXWCUtils {
 	    }
 
 		return UOMCode;
-	}	
-	
+	}
+
 	public static Map<String,String> getUOMDescMapFromCache(IWCContext wcContext)
     {
         HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
@@ -2074,11 +2121,11 @@ public class XPEDXWCUtils {
 				"CustomerContact");
 		String customerContactId = SCXmlUtils
 		.getAttribute(CustomerContact, "CustomerContactID");
-		
+
 		// Added for JIRA 2643
 		if(customerContactId == null ){
 			return "";
-		} 
+		}
 		String FirstName = SCXmlUtils
 				.getAttribute(CustomerContact, "FirstName");
 		String LastName = SCXmlUtils.getAttribute(CustomerContact, "LastName");
@@ -2097,7 +2144,7 @@ public class XPEDXWCUtils {
 		}
 		return UserName;
 	}
-*/	
+*/
 	public static String getLoginUserName(String UserID,boolean formatLastfirst)
 			throws XPathExpressionException, XMLExceptionWrapper,
 			CannotBuildInputException {
@@ -2108,7 +2155,7 @@ public class XPEDXWCUtils {
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 		String FirstName;
 		String LastName;
-		
+
 		if (UserID.equals(xpedxCustomerContactInfoBean.getCustomerContactID())) {
 			FirstName = xpedxCustomerContactInfoBean.getFirstName();
 			LastName = xpedxCustomerContactInfoBean.getLastName();
@@ -2128,15 +2175,15 @@ public class XPEDXWCUtils {
 			Element outputE2 = outputDoc1.getDocumentElement();
 			Element CustomerContact = XMLUtilities.getElement(outputE2,	"CustomerContact");
 			String customerContactId = SCXmlUtil.getAttribute(CustomerContact, "CustomerContactID");
-			
+
 			// Added for JIRA 2643
 			if(customerContactId == null ){
 				return "";
-			} 
+			}
 			FirstName = SCXmlUtil.getAttribute(CustomerContact, "FirstName");
 			LastName = SCXmlUtil.getAttribute(CustomerContact, "LastName");
 		}
-		
+
 		try {
 			if(FirstName!=null || LastName!=null)
 			{
@@ -2154,7 +2201,7 @@ public class XPEDXWCUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param billToId
 	 * @return
 	 * @throws CannotBuildInputException
@@ -2198,7 +2245,7 @@ public class XPEDXWCUtils {
 		}
 		return arrayList;
 	}
-	
+
 	public static Document getItemCustXrefDoc(IWCContext wcContext,String attributeToQuery, ArrayList<String> attributeValues) {
 		HashMap<String,String> custPartnItemIdsMap = new LinkedHashMap<String, String>();
 		HashMap<String, String> valueMap = new HashMap<String, String>();
@@ -2211,7 +2258,7 @@ public class XPEDXWCUtils {
 			envCode = shipCustomer.getExtnEnvironmentCode();
 			custDivision = shipCustomer.getExtnCustomerDivision();
 			custNumber = shipCustomer.getExtnLegacyCustNumber();
-			
+
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", custNumber);
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
@@ -2260,9 +2307,9 @@ public class XPEDXWCUtils {
         customerLegNo = (String) wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);
         custShipFromBranch = (String) wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
         String custDivision = (String) wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,WCAttributeScope.LOCAL_SESSION);*/
-        
+
         XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		
+
 		/*String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
 		//String companyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.COMPANY_CODE);
 		String legacyCustomerNumber = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.LEGACY_CUST_NUMBER);
@@ -2272,7 +2319,7 @@ public class XPEDXWCUtils {
 		customerLegNo = shipToCustomer.getExtnLegacyCustNumber();
 		custShipFromBranch =shipToCustomer.getExtnShipFromBranch();
 		String custDivision =shipToCustomer.getExtnCustomerDivision();
-        
+
         if(envCode==null || /*companyCode==null || */customerLegNo ==null || custShipFromBranch==null)
         {
 			//Fetch customer extn fields
@@ -2283,7 +2330,7 @@ public class XPEDXWCUtils {
 			Element customerData = (Element)WCMashupHelper.invokeMashup("xpedx-customer-getExtnFieldsForCustomerPart", input,
 					wcContext.getSCUIContext());
 			Element extnElement = SCXmlUtil.getChildElement(customerData, "Extn");
-			
+
 			if(extnElement!=null)
 			{
 				customerLegNo = extnElement.getAttribute("ExtnLegacyCustNumber");
@@ -2336,16 +2383,16 @@ public class XPEDXWCUtils {
 			//Commented for performance issue - itemdetail.action - removing extra call to getCustomerDetails
 			//String envCode = getEnvironmentCode(customerID);
 			String storeFrontId = context.getStorefrontId();
-			
+
 			 XPEDXShipToCustomer shipToCustomer =(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache("shipToCustomer");
 			 if(shipToCustomer!=null && shipToCustomer.getExtnEnvironmentCode()!=null && shipToCustomer.getExtnEnvironmentCode().length()>0){
 				  envCode = shipToCustomer.getExtnEnvironmentCode();
-			 }else{			
+			 }else{
 				  envCode = getEnvironmentCode(customerID);
 			 }
 			 if(shipToCustomer!=null && shipToCustomer.getExtnShipFromBranch()!=null && shipToCustomer.getExtnShipFromBranch().length()>0){
 				  ShipFromBranch = shipToCustomer.getExtnShipFromBranch();
-			 }else{			
+			 }else{
 				  ShipFromBranch = getCustomerShipFromDivision(customerID,
 					storeFrontId);
 			 }
@@ -2364,9 +2411,9 @@ public class XPEDXWCUtils {
 		}
 		return OrganizationName;
 	}
-	
+
 	//return state
-	
+
 	public static String getState() throws CannotBuildInputException {
 		String state = null;
 		try {
@@ -2392,8 +2439,8 @@ public class XPEDXWCUtils {
 		}
 		return state;
 	}
-	
-	
+
+
 	/**
 	 * JIRA: 566
 	 * This is used to fetch the ShipFrom address from the division information
@@ -2411,7 +2458,7 @@ public class XPEDXWCUtils {
 			//String storeFrontId = context.getStorefrontId();
 			String ShipFromBranch = shipToCustomer.getExtnShipFromBranch();//getCustomerShipFromDivision(customerID,
 					//storeFrontId);
-			
+
 			if (envCode != null && envCode.trim().length() > 0) {
 				organizationDetails = getOrganizationList(ShipFromBranch
 						+ "_" + envCode);
@@ -2461,8 +2508,8 @@ public class XPEDXWCUtils {
 
 	/**
 	 * JIRA: 243
-	 * Separate mash up was written to get only the Extn field - ExtnShipFromBranch 
-	 * of the the customer. 
+	 * Separate mash up was written to get only the Extn field - ExtnShipFromBranch
+	 * of the the customer.
 	 * Prior to the fix, entire customer details was being fetched.
 	 * @param customerID
 	 * @param storeFrontID
@@ -2504,8 +2551,8 @@ public class XPEDXWCUtils {
 	/**
 	 * getting whether this customer can request for samples
 	 * JIRA: 243
-	 * Separate mash up was written to get few of the Extn fields - ExtnSampleRequestFlag 
-	 * of the the customer. 
+	 * Separate mash up was written to get few of the Extn fields - ExtnSampleRequestFlag
+	 * of the the customer.
 	 * Prior to the fix, entire customer details was being fetched.
 	 *
 	 */
@@ -2548,7 +2595,7 @@ public class XPEDXWCUtils {
 				+ canRequestSample);
 		return canRequestSample;
 	}
-	
+
 	public static String getCustomerExtnSuffixType(String customerID,
 			String storeFrontID) throws CannotBuildInputException {
 		String customerSuffixType = "";
@@ -2634,7 +2681,7 @@ public class XPEDXWCUtils {
 		}
 		return userXPath;
 	}
-	
+
 	/*
 	 * Method returns the OCI Fields for a given Customer.
 	 */
@@ -2648,12 +2695,12 @@ public class XPEDXWCUtils {
 				log
 						.error("getOCIFieldsForCustomer: Customer Identity is null.");
 				return null;
-			}		
-			
-			
+			}
+
+
 				//outputDoc = XPEDXWCUtils.getCustomerDetails(
 					//	customerID, storefrontID, getOCIFieldsMashup);
-			
+
 			IWCContext wcContext = WCContextHelper.getWCContext(req);
 			Map<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/Customer/@CustomerID", customerID);
@@ -2669,7 +2716,7 @@ public class XPEDXWCUtils {
 					"xpedx-customer-getOCIFields", input, wcContext
 							.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
-			
+
 					Element outputElem = outputDoc.getDocumentElement();
 					ociFields[0] = SCXmlUtil.getXpathAttribute(outputElem,
 							"//Customer/Extn/@ExtnUseOCInSAPParamFlag");
@@ -2679,16 +2726,16 @@ public class XPEDXWCUtils {
 						"//Customer/Extn/@ExtnUserPwdParam");
 					ociFields[3] = SCXmlUtil.getXpathAttribute(outputElem,
 						"//Customer/Extn/@ExtnUserEmailTemplate");
-					
+
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
 		return ociFields;
 	}
-	
+
 	/* END - PunchOut Changes - adsouza */
 	public static XPEDXShipToCustomer getShipToAddressOfCustomer(Element CustomerDetails) {
-		
+
 		return getShipToAddressOfCustomer(CustomerDetails,null);
 	}
 	public static XPEDXShipToCustomer getShipToAddressOfCustomer(Element CustomerDetails,XPEDXShipToCustomer defualtShipToAssigned) {
@@ -2710,7 +2757,7 @@ public class XPEDXWCUtils {
 				log.debug("No default ship to address found in the customer additional addresses so retunring the first address in the customer additional address list");
 				}
 			 	NodeList customerAddtnlAddressList = SCXmlUtil.getXpathNodes(CustomerDetails, "CustomerAdditionalAddressList/CustomerAdditionalAddress");
-			 	if(customerAddtnlAddressList.getLength()>0) {				 	
+			 	if(customerAddtnlAddressList.getLength()>0) {
 				 	element= (Element) customerAddtnlAddressList.item(0);
 			 	}
 			 	else {
@@ -2721,7 +2768,7 @@ public class XPEDXWCUtils {
 			 	}
 			}
 			else {
-				element = customerDefaultShipToAddressElem;				
+				element = customerDefaultShipToAddressElem;
 			}
 			if(element!=null) {
 				element = SCXmlUtil.getChildElement(element, "PersonInfo");
@@ -2751,10 +2798,10 @@ public class XPEDXWCUtils {
 				"DayPhone"));
 				defualtShipToAssigned.setCustomerID(SCXmlUtil.getAttribute(CustomerDetails,
 				"CustomerID"));
-				Element ExtnElem = SCXmlUtil.getChildElement(CustomerDetails, "Extn");				
+				Element ExtnElem = SCXmlUtil.getChildElement(CustomerDetails, "Extn");
 				defualtShipToAssigned.setShipToName(SCXmlUtil.getAttribute(ExtnElem, "ExtnCustomerName"));
 				defualtShipToAssigned.setLocationID(SCXmlUtil.getAttribute(ExtnElem, "ExtnCustomerStoreNumber"));
-				
+
 				List<String> addressList = new ArrayList<String>();
 				for (int index = 0; index < 6; index++) {
 					if (SCXmlUtil.getAttribute(element, "AddressLine" + index) != null
@@ -2777,7 +2824,7 @@ public class XPEDXWCUtils {
 		if(YFCCommon.isVoid(customerId)){
 			log.error("Cannot get EnvironmentCode for empty CustomerID.");
 			return custEnvCode;
-			
+
 		}
 		//xpedx-customer-getEnvironmentCode
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
@@ -2802,7 +2849,7 @@ public class XPEDXWCUtils {
 		log.debug("EnvironmentCode for customer "+customerId+" is "+custEnvCode);
 		return custEnvCode;
 	}
-	
+
 	public static HashMap<String,String> getHashMapFromList(List<String> list)
 	{
 		HashMap<String,String> map = new LinkedHashMap<String,String>();
@@ -2817,7 +2864,7 @@ public class XPEDXWCUtils {
 		}
 		return map;
 	}
-	
+
 	//customized the method from ship to List From DB for Order List UI Labeled List
 	public static HashMap<String,String> getHashMapFromListWithLabel(List<String> list)
 	{
@@ -2851,7 +2898,7 @@ public class XPEDXWCUtils {
 			else
 			{
 						sb.append(division).append("-").append(suffix).append(" - "); //Modified code for jira 3307
-				
+
 			}
 			return sb.toString();
 		}
@@ -2859,7 +2906,7 @@ public class XPEDXWCUtils {
 		return customerId;
 	}
 	//reopen 3244 due to dependency 3307 above created new methods below
-	
+
 	public static String shareFormatSuffixShipToCustomer(String custDisplayId){
 		//method calling fro Jire 3244 reopen
 		String[] custDetails = custDisplayId.split("-");
@@ -2868,7 +2915,7 @@ public class XPEDXWCUtils {
 		if(custDetails!=null)
 		{
 					StringBuffer sb = new StringBuffer();
-						
+
 			if(custDetails.length==3 && strShipto!=0 && strBillTo!=0)
 			{
 				String division = custDetails[0];
@@ -2881,13 +2928,13 @@ public class XPEDXWCUtils {
 			else{
 				custDisplayId = custDisplayId;
 			}
-			
+
 		}
 		return custDisplayId;
 	}
-	//end methods reopen 3244 due to dependency 3307 above created new methods above 
-	
-	
+	//end methods reopen 3244 due to dependency 3307 above created new methods above
+
+
 	public static String formatBillToShipToCustomer(String customerId){
 		String[] custDetails = customerId.split("-");
 		if(custDetails!=null && custDetails.length>3)
@@ -2902,7 +2949,7 @@ public class XPEDXWCUtils {
 		//If the string cannot be properly split, return the customerId
 		return customerId;
 		}
-	
+
 	public static String formatCustomer(String customerId, IWCContext wcContext){
 		if(MY_SELF.equals(customerId))
 		{
@@ -2934,7 +2981,7 @@ public class XPEDXWCUtils {
 				else
 					return  map.get("SAPNumber");
 			}
-		}		
+		}
 			return customerId;
 	}
 
@@ -2962,9 +3009,9 @@ public class XPEDXWCUtils {
 				wSCUIContext = context.getSCUIContext();
 				scuiTransactionContext = wSCUIContext
 						.getTransactionContext(true);
-				
+
 				documentElement.setAttribute("OrganizationCode", StoreFrontID);
-				
+
 				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
 				YFCElement complexQueryOrElement = documentElement.createChild("Or");
 				for (int i = 0; i < CustomerId.size(); i++) {
@@ -2990,17 +3037,17 @@ public class XPEDXWCUtils {
 										"<Extn ExtnSuffixType=\"\" ExtnCustomerStoreNumber=\"\" />" +
 										"<CustomerAdditionalAddressList>" +
 											"<CustomerAdditionalAddress CustomerAdditionalAddressKey=\"\">" +
-												"<PersonInfo AddressLine1=\"\" AddressLine2=\"\" AddressLine3=\"\" AddressLine4=\"\" AddressLine5=\"\" AddressLine6=\"\" City=\"\" State=\"\" Country=\"\" ZipCode=\"\"/>" + 
+												"<PersonInfo AddressLine1=\"\" AddressLine2=\"\" AddressLine3=\"\" AddressLine4=\"\" AddressLine5=\"\" AddressLine6=\"\" City=\"\" State=\"\" Country=\"\" ZipCode=\"\"/>" +
 											"</CustomerAdditionalAddress>" +
 										"</CustomerAdditionalAddressList>" +
 									"</Customer>" +
 								"</CustomerList>");
-				
+
 				YFCElement yfcElement = SCUIPlatformUtils.invokeXAPI(
 						"getCustomerList", inputDocument
 								.getDocumentElement(), template
 								.getDocumentElement(), wSCUIContext);
-				
+
 				YFCNodeList<YFCElement> nodelist = yfcElement.getElementsByTagName("Customer");
 				YFCElement custElement = null;
 				for(int i=0; i<CustomerId.size();i++)
@@ -3014,14 +3061,14 @@ public class XPEDXWCUtils {
 							if(customerID.equals(testid))
 							{
 								String custFullAddr = "";
-								
-								String tempCustDisplayId= null;//for keeping only name and ID jira 3244  
+
+								String tempCustDisplayId= null;//for keeping only name and ID jira 3244
 								String custSuffixType = custElement.getChildElement("Extn").getAttribute("ExtnSuffixType");
 									String custDisplayId = customerID;
 									String loggedInCustomerID = null;
 									String MSapCustId = null;
-									String SapCustId = null;									
-									
+									String SapCustId = null;
+
 									if(isCustomerSelectedIntoConext(context))
 										loggedInCustomerID = getLoggedInCustomerFromSession(context);
 									else
@@ -3088,13 +3135,13 @@ public class XPEDXWCUtils {
 												//Changing the name to Customer - Account - 4146 - Kubra
 											}
 										}
-									}		
+									}
 									//added so that the condition occurs only when format billtoship
 									if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && !formatBilltoShipto)
 									{
 										YFCElement element = custElement.getChildElement("BuyerOrganization");
-										if (element.getAttribute("OrganizationName") != null 
-												&& element.getAttribute("OrganizationName").trim().length() > 0) 
+										if (element.getAttribute("OrganizationName") != null
+												&& element.getAttribute("OrganizationName").trim().length() > 0)
 											custFullAddr += element.getAttribute("OrganizationName")+" ";
 										custFullAddr += "("+ custDisplayId +")";
 									}
@@ -3109,7 +3156,7 @@ public class XPEDXWCUtils {
 											addrElement = addrElement.getChildElement("PersonInfo");
 
 										custFullAddr += custDisplayId+" ";
-										
+
 										if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0){
 											custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//added by balkhi to change ' ,' to ',' jira 3244
 										tempCustDisplayId = custFullAddr;
@@ -3119,38 +3166,38 @@ public class XPEDXWCUtils {
 										if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
 											 custFullAddr = shareFormatSuffixShipToCustomer(custFullAddr);
 											  // this above method for Jira 3244 reopen
-											
-											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null 
-													&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0){ 
+
+											if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null
+													&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0){
 												custFullAddr += ""+extnElement.getAttribute("ExtnCustomerStoreNumber");// change ' ,' to ',' jira 3244 and Local ID
-											   
+
 											}
 										}
-										
+
 										if(addrElement!=null) {
 											for (int index = 0; index < 6; index++) {
-												if (addrElement.getAttribute("AddressLine"+index) != null && addrElement.getAttribute("AddressLine"+index).trim().length() > 0) 
+												if (addrElement.getAttribute("AddressLine"+index) != null && addrElement.getAttribute("AddressLine"+index).trim().length() > 0)
 													custFullAddr += ", "+addrElement.getAttribute("AddressLine"+index);
 											}
-											if (addrElement.getAttribute("City") != null && addrElement.getAttribute("City").trim().length() > 0) 
+											if (addrElement.getAttribute("City") != null && addrElement.getAttribute("City").trim().length() > 0)
 												custFullAddr += ", "+addrElement.getAttribute("City");
-											if (addrElement.getAttribute("State") != null && addrElement.getAttribute("State").trim().length() > 0) 
+											if (addrElement.getAttribute("State") != null && addrElement.getAttribute("State").trim().length() > 0)
 												custFullAddr += ", "+addrElement.getAttribute("State");
-											if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0) 
+											if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0)
 												custFullAddr += " "+getFormattedZipCode(addrElement.getAttribute("ZipCode"));
-											if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0) 
+											if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0)
 												custFullAddr += " "+addrElement.getAttribute("Country");//removed , for 3244
-											
+
 										}
 										if(custFullAddr.indexOf("Account:")!=-1 && tempCustDisplayId!=null){
 													custFullAddr = userProfileAuthorizeLocationAccount(tempCustDisplayId);// for 3244 name and ID on user profile authorize location
-								
+
 											}
 									}
 								customerHashMap.put(customerID, custFullAddr);
 									break;
 							}
-								
+
 							}
 							}
 						}
@@ -3167,19 +3214,19 @@ public class XPEDXWCUtils {
 		}
 		return customerHashMap;
 	}
-	
+
 	public static Map<String, String> custFullAddresses(Document CustomerListDoc) {
 		return custFullAddresses(CustomerListDoc,false,false);
 
 	}
-	
+
 	public static Map<String, String> custFullAddresses(Document CustomerListDoc,boolean formatBilltoShipto, boolean appendBillToShipTo){
 		LinkedHashMap<String, String> customerHashMap = new LinkedHashMap<String, String>();
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		if(CustomerListDoc!=null) {
 			YFCDocument yfcDoc = YFCDocument.getDocumentFor(CustomerListDoc);
 			YFCElement yfcElement = yfcDoc.getDocumentElement();
-			
+
 			YFCIterable<YFCElement> iteartor = yfcElement.getChildren();
 			YFCElement custElement = null;
 			int countCustWithoutNumber = 0;//jira 3244 variable
@@ -3188,7 +3235,7 @@ public class XPEDXWCUtils {
 				if (custElement != null) {
 					String customerID = custElement.getAttribute("CustomerID");
 						if(customerID!=null) {
-							
+
 							String custFullAddr = "";
 							String custSuffixType = custElement.getChildElement("Extn").getAttribute("ExtnSuffixType");
 								String custDisplayId = customerID;
@@ -3255,12 +3302,12 @@ public class XPEDXWCUtils {
 												custDisplayId = "Account: "+custDisplayId; //SAP removed for Jira 3244 reopen
 											}
 									}
-								}		
+								}
 								//added so that the condition occurs only when format billtoship
 								if(custDisplayId!=null && custDisplayId.indexOf("-")==-1 && !formatBilltoShipto)
 								{
 									YFCElement element = custElement.getChildElement("BuyerOrganization");
-									if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0) 
+									if (element.getAttribute("OrganizationName") != null && element.getAttribute("OrganizationName").trim().length() > 0)
 										custFullAddr += element.getAttribute("OrganizationName")+" ";
 									if(countCustWithoutNumber==0){
 										custFullAddr = custFullAddr;
@@ -3274,43 +3321,43 @@ public class XPEDXWCUtils {
 									YFCElement buyerOrgElement = custElement.getChildElement("BuyerOrganization");
 									YFCElement addrElement = custElement.getChildElement("CustomerAdditionalAddressList");
 									YFCElement extnElement = custElement.getChildElement("Extn");
-									
+
 									if(addrElement!=null)
 										addrElement = addrElement.getChildElement("CustomerAdditionalAddress");
 									if(addrElement!=null)
 										addrElement = addrElement.getChildElement("PersonInfo");
 
 									custFullAddr += custDisplayId+" ";
-									
-									if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0) 
+
+									if (buyerOrgElement.getAttribute("OrganizationName") != null && buyerOrgElement.getAttribute("OrganizationName").trim().length() > 0)
 										custFullAddr += buyerOrgElement.getAttribute("OrganizationName");//removed by balkhi for 3244 jira
-									
+
 									/*added for 2769*/
 									if(custSuffixType!=null && (custSuffixType.equalsIgnoreCase(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE))){
-										
+
 										custFullAddr = shareFormatSuffixShipToCustomer(custFullAddr);
 										// this above method for Jira 3244 reopen
-										
-										if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null 
+
+										if (extnElement.getAttribute("ExtnCustomerStoreNumber") != null
 												&& extnElement.getAttribute("ExtnCustomerStoreNumber").trim().length() > 0) {
 											custFullAddr += ""+extnElement.getAttribute("ExtnCustomerStoreNumber")+" ";//3244 reopen removed Local ID
 										}
 									}
-									
+
 									if(addrElement!=null) {
 										for (int index = 0; index < 6; index++) {
-											if (addrElement.getAttribute("AddressLine"+index) != null && addrElement.getAttribute("AddressLine"+index).trim().length() > 0) 
+											if (addrElement.getAttribute("AddressLine"+index) != null && addrElement.getAttribute("AddressLine"+index).trim().length() > 0)
 												custFullAddr += ", "+addrElement.getAttribute("AddressLine"+index);
 										}
-										if (addrElement.getAttribute("City") != null && addrElement.getAttribute("City").trim().length() > 0) 
+										if (addrElement.getAttribute("City") != null && addrElement.getAttribute("City").trim().length() > 0)
 											custFullAddr += ", "+addrElement.getAttribute("City");
-										if (addrElement.getAttribute("State") != null && addrElement.getAttribute("State").trim().length() > 0) 
+										if (addrElement.getAttribute("State") != null && addrElement.getAttribute("State").trim().length() > 0)
 											custFullAddr += ", "+addrElement.getAttribute("State");
-										if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0) 
+										if (addrElement.getAttribute("ZipCode") != null && addrElement.getAttribute("ZipCode").trim().length() > 0)
 											custFullAddr += " "+getFormattedZipCode(addrElement.getAttribute("ZipCode"));
-										if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0) 
+										if (addrElement.getAttribute("Country") != null && addrElement.getAttribute("Country").trim().length() > 0)
 											custFullAddr += " "+addrElement.getAttribute("Country");//removed by balkhi for 3244 jira
-										
+
 									}
 								}
 							customerHashMap.put(customerID, custFullAddr);
@@ -3319,13 +3366,13 @@ public class XPEDXWCUtils {
 				countCustWithoutNumber++;//jira 3244 variable
 				}
 		}
-		
+
 		return customerHashMap;
 	}
-	
-	public static String getFormattedZipCode(String zipCode){		
+
+	public static String getFormattedZipCode(String zipCode){
 		try
-		{		
+		{
 			if (zipCode != null && zipCode.length() > 0) {
 				String zipCode1 = "";
 				if (zipCode.indexOf("-") > -1) {
@@ -3335,8 +3382,8 @@ public class XPEDXWCUtils {
 				}
 				long zipCode2 = Long.parseLong(zipCode1);
 				String zipCode3 = String.valueOf(zipCode2);
-				if(zipCode3.length() > 5) {					
-					java.text.MessageFormat phoneMsgFmt=new java.text.MessageFormat("{0}-{1}"); 
+				if(zipCode3.length() > 5) {
+					java.text.MessageFormat phoneMsgFmt=new java.text.MessageFormat("{0}-{1}");
 					String[] numArr = {zipCode3.substring(0, 5), zipCode3.substring(5, zipCode3.length())};
 					return phoneMsgFmt.format(numArr);
 				} else {
@@ -3351,16 +3398,16 @@ public class XPEDXWCUtils {
 			return zipCode;
 		}
 	}
-	
-	
+
+
 	public static HashMap<String, HashMap<String, String>> getFormattedMasterCustomer(String MsapCustomerId, String sfId){
-		
+
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> valueMap = new HashMap<String, String>();
 		HashMap<String, HashMap<String, String>> custInfoMap = new HashMap<String, HashMap<String, String>>();
 		HashMap<String, String> formattedMasterCustomerMap = new HashMap<String, String>();
 		if(MsapCustomerId!=null && MsapCustomerId.trim().length()>0 && sfId!=null && sfId.trim().length()>0) {
-			
+
 			valueMap.put("/XPXCustomerSAPNumberView/@MSAPCustomerID", MsapCustomerId);
 			Element input;
 			try {
@@ -3375,9 +3422,9 @@ public class XPEDXWCUtils {
 					"xpedxGetSAPDetails", input, wcContext
 							.getSCUIContext());
 			Document allSAPCustDoc = ((Element) obj).getOwnerDocument();
-			
+
 			NodeList sapList = allSAPCustDoc.getElementsByTagName("XPXCustomerSAPNumberView");
-			
+
 			if(sapList!=null && sapList.getLength()>0) {
 				int size = sapList.getLength();
 				for(int i=0;i<size;i++)
@@ -3393,11 +3440,11 @@ public class XPEDXWCUtils {
 							sapCustomerID = "SAPNumber";
 						if(sapNumber!=null && sapNumber.trim().length()>0)
 							formattedMasterCustomerMap.put(sapCustomerID, sapNumber);
-						
+
 					}
 				}
 			}
-	
+
 			/*Element allChildCustomerList = prepareAndInvokeMashup(MID_GET_CUSTOMER_ASSIGNMENT);
 			Document allChildDoc = allChildCustomerList.getOwnerDocument();
 			--- Removing this as this is causing a performance issue if the number of ship tos are large
@@ -3439,9 +3486,9 @@ public class XPEDXWCUtils {
 		}
 		wcContext.getSCUIContext().getSession().setAttribute(LOGGED_IN_FORMATTED_CUSTOMER_ID_MAP, custInfoMap);
 		return custInfoMap;
-		
+
 	}
-	
+
 	public static Integer getLeadTimeOfDivision(String shipFromDivision) {
 		if(!YFCCommon.isStringVoid(shipFromDivision)) {
 			Integer leadTime = null;
@@ -3475,58 +3522,34 @@ public class XPEDXWCUtils {
 		}
 		return 0;
 	}
-	
-	public static HashMap<String, String> getSkuTypesForQuickAdd_prev(IWCContext wcContext)
-	{
-		HashMap<String, String> skuTypeList = new LinkedHashMap<String, String>();
-		String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
-		skuTypeList.put("1", wcContext.getStorefrontId()+XPEDXConstants.XPEDX_ITEM_LABEL);
-		if(useCustSku!=null && useCustSku.length()>0)
-		{
-			//The keys in this Hashmap are being read for validating the quick-add section.
-			if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM))
-				skuTypeList.put("2", XPEDXConstants.MANUFACTURER_ITEM_LABEL);
-			else if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM))
-				skuTypeList.put("3", XPEDXConstants.CUSTOMER_ITEM_LABEL);
-			else if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM))
-				skuTypeList.put("4", XPEDXConstants.MPC_ITEM_LABEL);
-		}
-		return skuTypeList;
-	}
-	
+
 	/*
-	 * Bulk UI changes: 
+	 * Bulk UI changes:
 	 * Manufacturing Item number is no longer deemed as unique so removed that for search in QuickAdd.
 	 * Biz decision taken and modifications done accordingly.
+	 * EB-466 Changes. Removed the logic for MPC and Manufacturing Item code.
 	 */
 	public static HashMap<String, String> getSkuTypesForQuickAdd(IWCContext wcContext)
 	{
 		HashMap<String, String> skuTypeList = new LinkedHashMap<String, String>();
-		String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
+		String customerItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+
 		skuTypeList.put("1", wcContext.getStorefrontId()+XPEDXConstants.XPEDX_ITEM_LABEL);
-		if(useCustSku!=null && useCustSku.length()>0)
-		{
-			//The keys in this Hashmap are being read for validating the quick-add section.
-			/*if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM))
-				skuTypeList.put("2", XPEDXConstants.MANUFACTURER_ITEM_LABEL);
-			else */
-			if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_CUSTOMER_ITEM))
-				skuTypeList.put("3", XPEDXConstants.CUSTOMER_ITEM_LABEL);
-			else if(useCustSku.equalsIgnoreCase(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM))
-				skuTypeList.put("4", XPEDXConstants.MPC_ITEM_LABEL);
+		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+			skuTypeList.put("2", XPEDXConstants.CUSTOMER_ITEM_LABEL);
 		}
 		return skuTypeList;
 	}
-	
+
 	//added for jira 3201
 	public static String getDecimalQty(String quantity){
 		String formattedDecimalQty = "";
 		Double doubleQty = Double.parseDouble(quantity);
 		NumberFormat formatter = new DecimalFormat("#0.#####");
 		formattedDecimalQty=formatter.format(doubleQty).toString();
-		return formattedDecimalQty;	
+		return formattedDecimalQty;
 	}
-	
+
 	public static String getFormattedQty(String quantity)
 	{
 		/* TODO: -FXD1-5 change format for Qty- 41 : c8 e.g 1,000,000 */
@@ -3549,38 +3572,38 @@ public class XPEDXWCUtils {
 	}
 
 	private static String commaSeparatedStringFmt (String strOriginal ) {
-		
-		
+
+
 		 char data[] = new char[2*strOriginal.length()]; //Needs some extra spaces for commas
 			for(int k = 0; k < data.length; k++ )
 				data[k]=' ';
-			
-	     
+
+
 		for(int i = strOriginal.length()-1,j=0 ; i >= 0; i-- )
 		{
 			data[j++] = (strOriginal.charAt(i)) ;
 			if( (j+1)%4 == 0 && i>1 )
 				data[j++] = ',' ;
 		}
-		
+
 		String commaFmtString =  new StringBuffer(new String(data)).reverse().toString();
 		return commaFmtString.trim() ;
 	}
-	
+
 	/**
 	 * This method fetches all the Countries - Code, Short Description and Long Description for a default organization
 	 * @return
 	 */
 	public static Map<String, String> getCountryCodeList(){
-		
-		Map<String, String> countryCodesMap = new LinkedHashMap<String, String>(); 
+
+		Map<String, String> countryCodesMap = new LinkedHashMap<String, String>();
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		@SuppressWarnings("unchecked")
 		Map<String, String> countryCodesContextMap = (Map<String, String>)wcContext.getSCUIContext().getServletContext().getAttribute("COUNTRY_CODES");
-		if(null != countryCodesContextMap && countryCodesContextMap.size() > 0 ) { 			
-			return countryCodesContextMap;		
+		if(null != countryCodesContextMap && countryCodesContextMap.size() > 0 ) {
+			return countryCodesContextMap;
 		}
-		
+
 		Element input;
 		String countryCode = "";
 		String countryDesc = "";
@@ -3592,8 +3615,8 @@ public class XPEDXWCUtils {
 		}
 		Object obj = WCMashupHelper.invokeMashup("xpedxCountryCodeList", input, wcContext.getSCUIContext());
 		Document countriesListDoc = ((Element) obj).getOwnerDocument();
-		
-		
+
+
 		NodeList countryCodeElemsList = countriesListDoc.getElementsByTagName("CommonCode");
 		Element countryElem;
 		for(int i=0; countryCodeElemsList!=null && i<countryCodeElemsList.getLength(); i++){
@@ -3602,11 +3625,11 @@ public class XPEDXWCUtils {
 			countryDesc = countryElem.getAttribute("CodeShortDescription");
 			countryCodesMap.put(countryCode, countryDesc);
 		}
-		
+
 		wcContext.getSCUIContext().getServletContext().setAttribute("COUNTRY_CODES", countryCodesMap);
 		return countryCodesMap;
 	}
-	
+
 	/**
 	 * This method fetches all the SKUs(Customer Part #, Manufacturer #, MPC #) for a particular xpedx itemId
 	 * @param wcContext
@@ -3618,11 +3641,11 @@ public class XPEDXWCUtils {
 	public static HashMap<String, String> getAllSkusForItem(IWCContext wcContext,String itemId) throws CannotBuildInputException, XPathExpressionException
 	{
 		HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
-		
+
 		if(itemId ==null || itemId.trim().length() ==0 || wcContext.getStorefrontId()==null || wcContext.getCustomerId()==null)
 			return itemSkuMap;
 		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		
+
 		/*String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
 		//String companyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.COMPANY_CODE);
 		String legacyCustomerNumber = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.LEGACY_CUST_NUMBER);
@@ -3640,14 +3663,14 @@ public class XPEDXWCUtils {
 		valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
 		valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId);
 		valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
-		
+
 		Element input =  null;
 		Element res =  null;
 		input = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap, wcContext.getSCUIContext());
-		
+
 		res = (Element)WCMashupHelper.invokeMashup("XPEDXMyItemsListGetCustomersPart",input , wcContext.getSCUIContext());
 		Element itemEle 		= SCXmlUtil.getChildElement(res, "XPXItemcustXref");
-		
+
 		if (itemEle != null){
 			if(itemId.equals((String)itemEle.getAttribute("LegacyItemNumber")))
 			{
@@ -3664,9 +3687,9 @@ public class XPEDXWCUtils {
 		valueMap.put("/Item/@ItemID", itemId);
 		valueMap.put("/Item/@CallingOrganizationCode",wcContext.getStorefrontId());
 		valueMap.put("/Item/CustomerInformation/@CustomerID",wcContext.getCustomerId());
-		
+
 		input = WCMashupHelper.getMashupInput("XPEDXGetItemSKUs", valueMap, wcContext.getSCUIContext());
-	
+
 		res = (Element)WCMashupHelper.invokeMashup("XPEDXGetItemSKUs",input , wcContext.getSCUIContext());
 		Element itemEle2 		= SCXmlUtil.getChildElement(res, "Item");
 		if(itemEle2!=null)
@@ -3700,9 +3723,9 @@ public class XPEDXWCUtils {
 		String useCustSku = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.CUSTOMER_USE_SKU);
 		if(!SCUtil.isVoid(useCustSku) && (XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM.equalsIgnoreCase(useCustSku.trim())
 				|| XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM.equalsIgnoreCase(useCustSku.trim()))   && isItemDetailsCall == true) {
-			
+
 			Document itemDoc = XPEDXOrderUtils.getXpedxMinimalItemDetails(itemIds, wcContext.getCustomerId(),wcContext.getStorefrontId(), wcContext);
-			
+
 			if(itemDoc!=null) {
 				Element itemList = itemDoc.getDocumentElement();
 				Iterator<Element> itemIter = SCXmlUtil.getChildren(itemList);
@@ -3739,7 +3762,7 @@ public class XPEDXWCUtils {
 			String legacyCustomerNumber = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.LEGACY_CUST_NUMBER);
 			String shipFromBranch = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
 			String custDivision = (String) wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,WCAttributeScope.LOCAL_SESSION);*/
-			
+
 			Iterator<String> itemIdIterator = itemIds.iterator();
 			Document xpxItemXRefDoc = getXpxItemCustXRefDoc(itemIds, wcContext);
 			while(itemIdIterator.hasNext()) {
@@ -3751,11 +3774,11 @@ public class XPEDXWCUtils {
 				valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
 				valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId);
 				valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
-				
+
 				Element input =  null;
 				Element res =  null;
 				input = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap, wcContext.getSCUIContext());
-				
+
 				res = (Element)WCMashupHelper.invokeMashup("XPEDXMyItemsListGetCustomersPart",input , wcContext.getSCUIContext());
 				Element itemCustEle 		= SCXmlUtil.getChildElement(res, "XPXItemcustXref");*/
 				if(xpxItemXRefDoc!=null) {
@@ -3782,7 +3805,7 @@ public class XPEDXWCUtils {
 		}
 		return itemSkuMap;
 	}
-	
+
 	public static Document getXpxItemCustXRefDoc(ArrayList<String> itemIds, IWCContext context) {
 		/*String envCode = (String)context.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
 		String companyCode = (String)context.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.COMPANY_CODE);
@@ -3790,24 +3813,24 @@ public class XPEDXWCUtils {
 		String custDivision = (String) context.getWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,WCAttributeScope.LOCAL_SESSION);
 		Removed this as the session variables are not set now. Instead getting the customer info from the customer bean
 		*/
-		
+
 		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-		
+
 		try {
 			if(shipToCustomer==null) {
 				setCustomerObjectInCache(getCustomerDetails(context.getCustomerId(),context.getStorefrontId())
 						.getDocumentElement());
-				shipToCustomer = (XPEDXShipToCustomer)getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);	
+				shipToCustomer = (XPEDXShipToCustomer)getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			}
 		}
 		catch (Exception e) {
 			log.error("Error fetching or creating the shipToCustomer object in to the session in getXpxItemCustXRefDoc() So returning back null");
 			return null;
 		}
-		
+
 		if(!(itemIds!=null && itemIds.size()>0))
 			return null;
-		
+
 		if(shipToCustomer!=null) {
 			String envCode = shipToCustomer.getExtnEnvironmentCode();
 			String legacyCustomerNumber=shipToCustomer.getExtnLegacyCustNumber();
@@ -3817,12 +3840,12 @@ public class XPEDXWCUtils {
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
 			//valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId); Filled using Complex Query
 			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
-			
+
 			Element input =  null;
 			Element res =  null;
 			try {
 				// Commented for Jira 2796. Calling the XPEDXMyItemsListGetCustomersPart to compare customer number and the customerpartnumber.
-				//input = WCMashupHelper.getMashupInput("xpedxGetItemCustXRef", valueMap, context.getSCUIContext()); 
+				//input = WCMashupHelper.getMashupInput("xpedxGetItemCustXRef", valueMap, context.getSCUIContext());
 				 input = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap,  context.getSCUIContext());
 				Element complexQuery = input.getOwnerDocument().createElement("ComplexQuery");
 				input.appendChild(complexQuery);
@@ -3848,7 +3871,7 @@ public class XPEDXWCUtils {
 		else
 			return null;
 	}
-	
+
 	public static Document getXPXItemExtnList(ArrayList<String> itemIDList, IWCContext wcContext) throws Exception {
 		Document outputDoc = null;
 		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
@@ -3856,7 +3879,7 @@ public class XPEDXWCUtils {
 			if(shipToCustomer==null) {
 				setCustomerObjectInCache(getCustomerDetails(wcContext.getCustomerId(),wcContext.getStorefrontId())
 						.getDocumentElement());
-				shipToCustomer = (XPEDXShipToCustomer)getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);	
+				shipToCustomer = (XPEDXShipToCustomer)getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			}
 		}
 		catch (Exception e) {
@@ -3867,7 +3890,7 @@ public class XPEDXWCUtils {
 		String division =shipToCustomer.getExtnShipFromBranch();
 		/*String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
 		String division = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH);*/
-		
+
 		if (YFCCommon.isVoid(itemIDList) || itemIDList.size() <=0) {
 			log.error("Atleast one ItemID is required to evaluate the xpedxXPXItemExtnList mashup. Return back to the caller");
 			return outputDoc;
@@ -3913,10 +3936,10 @@ public class XPEDXWCUtils {
 		} catch (Exception e) {
 			log.error(e.toString());
 		}
-		
+
 		return res;
 	}
-	
+
 	public HashMap<String, String> checkForInventory(
 			Document itemBranchItemAssociationDoc, String customerDivision,
 			String envCode, ArrayList<String> ItemIds) {
@@ -3955,7 +3978,7 @@ public class XPEDXWCUtils {
 
 	public HashMap<String, String> getInventoryCheckMap(Document outputDoc, String shipFromBranch, IWCContext wcContext) {
 		HashMap<String, String> inventoryCheckForItemsMap = new HashMap<String, String>();
-		
+
 		if(null == shipFromBranch || shipFromBranch.equals("")) {
 			try {
 				shipFromBranch = getCustomerShipFromDivision(wcContext.getCustomerId(), wcContext.getStorefrontId());
@@ -3963,40 +3986,44 @@ public class XPEDXWCUtils {
 				log.error("Unable to get Ship From Branch : " + e.getMessage());
 			}
 		}
-		
-		
+
+
 		NodeList orderLineList = outputDoc.getElementsByTagName("OrderLine");
 		Element orderLineElem;
 		Element itemDetailsElem;
 		Element xpxExtnElem;
 		for(int i=0; i<orderLineList.getLength(); i++){
-			orderLineElem = (Element)orderLineList.item(i);			
-			itemDetailsElem = SCXmlUtil.getChildElement(orderLineElem, "ItemDetails");			
+			orderLineElem = (Element)orderLineList.item(i);
+			itemDetailsElem = SCXmlUtil.getChildElement(orderLineElem, "ItemDetails");
 			if(itemDetailsElem !=null)
 			{
 				String itemId = itemDetailsElem.getAttribute("ItemID");
 				Element itemExtnEle = SCXmlUtil.getChildElement(itemDetailsElem, "Extn");
-				
+
 				Element itemXPXExtnListEle = null;
 				NodeList xpxItemExtnList = null;
 				try {
-					itemXPXExtnListEle = XMLUtilities.getElement(itemExtnEle, "XPXItemExtnList");					
+					itemXPXExtnListEle = XMLUtilities.getElement(itemExtnEle, "XPXItemExtnList");
 					xpxItemExtnList = itemXPXExtnListEle.getElementsByTagName("XPXItemExtn");
-					
+
 				} catch (XPathExpressionException e) {
 					log.error("Unable to get XPXItemExtnList : " + e.getMessage());
-				}				
-				
+				}
+
 				boolean divisionFlag = false;
 				String inventoryIndicator = "N";
 				for (int j = 0; xpxItemExtnList != null && j < xpxItemExtnList.getLength(); j++){
-					xpxExtnElem = (Element) xpxItemExtnList.item(j);									
-					// map 
+					xpxExtnElem = (Element) xpxItemExtnList.item(j);
+					// map
 					String division = xpxExtnElem.getAttribute("XPXDivision");
 					if(shipFromBranch.equalsIgnoreCase(division)) {
 						divisionFlag = true;
-						inventoryIndicator = xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") ||
-												xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") ?"Y":"N";	
+						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") )
+							inventoryIndicator =  "Y" ;
+						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") )
+							inventoryIndicator =  "I" ;
+						else
+							inventoryIndicator =  "N" ;
 						break;
 					}
 				}
@@ -4017,7 +4044,7 @@ public class XPEDXWCUtils {
 		}
 		return inventoryCheckForItemsMap;
 	}
-	
+
 	public static Element getMSAPCustomerContactFromContacts(Document  custOutDoc,IWCContext wcContext)
 	{
 		NodeList custContList=custOutDoc.getDocumentElement().getChildNodes();
@@ -4040,13 +4067,9 @@ public class XPEDXWCUtils {
 					if(msapId.equals(customerId))
 					{
 						String msapKey = custElem.getAttribute("CustomerKey");
-						Element msapExtnElem = SCXmlUtil.getChildElement(custElem, "Extn");
-						String customerUseSKU = msapExtnElem.getAttribute("ExtnUseCustSKU");
-						//Setting customer Sku flag in session
+
 						if(!(((String)wcContext.getWCAttribute(LOGGED_IN_CUSTOMER_KEY)!=null) && ((String)wcContext.getWCAttribute(LOGGED_IN_CUSTOMER_KEY)).trim().length()>0))
 							wcContext.setWCAttribute(LOGGED_IN_CUSTOMER_KEY,msapKey,WCAttributeScope.LOCAL_SESSION);
-						if(!(((String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU)!=null) && ((String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU)).trim().length()>0))
-							wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,customerUseSKU,WCAttributeScope.LOCAL_SESSION);
 						custContactListEle=custContElem;
 						break;
 					}
@@ -4056,21 +4079,21 @@ public class XPEDXWCUtils {
 		return custContactListEle;
 	}
 
-	public static void setYFSEnvironmentVariables(IWCContext wcContext) 
+	public static void setYFSEnvironmentVariables(IWCContext wcContext)
 	{
-		
+
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("isPnACall", "true");
 			map.put("isDiscountCalculate", "true");
 			setYFSEnvironmentVariables(wcContext, map);
 	}
-	
+
 	/*
 	 * Creating a new method which set environments variable for discount calculate only
 	 */
-	public static void setYFSEnvironmentVariablesForDiscounts(IWCContext wcContext) 
+	public static void setYFSEnvironmentVariablesForDiscounts(IWCContext wcContext)
 	{
-		
+
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("isDiscountCalculate", "true");
 			setYFSEnvironmentVariables(wcContext, map);
@@ -4081,18 +4104,18 @@ public class XPEDXWCUtils {
 		{
 		StringBuffer st = new StringBuffer(attributeName);
 		st=st.insert(3, " ");
-		st=st.insert(7, "-");		
+		st=st.insert(7, "-");
 		attributeName=st.toString();
 		}
 		return attributeName;
-	
+
 	}
-	
+
 	public static Document getCustomerDetails(List<String> customerIds,
 			String orgCode, String mashupId) throws CannotBuildInputException {
-			
+
 		Document outputDoc = null;
-		
+
 			if (YFCCommon.isStringVoid(mashupId)) {
 				mashupId = customerGeneralInformationMashUp;// this one fetches all the customer details
 			}
@@ -4107,9 +4130,9 @@ public class XPEDXWCUtils {
 			YFCElement documentElement = inputDocument.getDocumentElement();
 
 			IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-			
+
 			documentElement.setAttribute("OrganizationCode", orgCode);
-			
+
 			YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
 			YFCElement complexQueryOrElement = documentElement.createChild("Or");
 			for (int i = 0; i < customerIds.size(); i++) {
@@ -4125,71 +4148,71 @@ public class XPEDXWCUtils {
 			if (null != outputDoc) {
 				log.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
 			}
-			return outputDoc;	
+			return outputDoc;
 	}
-	
+
 	public static List<String> getAllAssignedShiptoForAUser(String UserId, IWCContext context) {
 
 		List<String> assignedShipTos = new ArrayList<String>();
-		
+
 		if(YFCUtils.isVoid(UserId)) {
 			log.error("User ID is required to get the customer Assignements. Returning Empty list");
 			return assignedShipTos;
 		}
-		
+
 		if(context==null) {
 			log.error("Context is required to get the customer Assignements for the user ID" +UserId+". Returning Empty list");
 			return assignedShipTos;
 		}
-		
+
 		Document inputDoc = SCXmlUtil.createDocument("XPXCustomerAssignmentView");
 		inputDoc.getDocumentElement().setAttribute("UserId", UserId);
 		try {
 			Object obj = WCMashupHelper.invokeMashup("XPEDXGetAllShipToList", inputDoc.getDocumentElement(), context.getSCUIContext());
 			Element custAssignedEle = (Element) obj;
 			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXCustomerAssignmentView");
-			
+
 			if(assignedCustElems.size()>0) {
 				for(int i=0;i<assignedCustElems.size();i++) {
-					Element customer = assignedCustElems.get(i);					
+					Element customer = assignedCustElems.get(i);
 					assignedShipTos.add(SCXmlUtil.getAttribute(customer, "ShipToCustomerID"));
 				}
 			}
-								
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("Error getting the Assigned Ship to for the User "+UserId);
 			return assignedShipTos;
-		}		
-		
+		}
+
 		return assignedShipTos;
 	}
-	
+
 	public static List<String> getAllAssignedShiptoCustomerIdsForAUser(String UserId, IWCContext context) {
-		
+
 		List<String> assignedShipTos = new ArrayList<String>();
 		List<String> BillToCustomers = new ArrayList<String>();
 		List<String> SAPCustomers = new ArrayList<String>();
 		List<String> MSAPCustomers = new ArrayList<String>();
 		Set<String> ShipToCustomers = new HashSet<String>();
-		
+
 		if(YFCUtils.isVoid(UserId)) {
 			log.error("User ID is required to get the customer Assignements. Returning Empty list");
 			return assignedShipTos;
 		}
-		
+
 		if(context==null) {
 			log.error("Context is required to get the customer Assignements for the user ID" +UserId+". Returning Empty list");
 			return assignedShipTos;
 		}
-		
+
 		try {
 			Document inputDoc = SCXmlUtil.createDocument("CustomerAssignment");
 			inputDoc.getDocumentElement().setAttribute("UserId", UserId);
-			
+
 			Object obj = WCMashupHelper.invokeMashup("xpedx-getCustomerAssignments", inputDoc.getDocumentElement(), context.getSCUIContext());
 			Element custAssignedDoc = (Element) obj;
-			
+
 			NodeList assignedCustomers = custAssignedDoc.getElementsByTagName("Customer");
 			//Adding the customers to the appropriate list based on the suffix type.
 			for(int i=0;i<assignedCustomers.getLength();i++) {
@@ -4214,7 +4237,7 @@ public class XPEDXWCUtils {
 			List<String> shipTos1 = getShipTos(BillToCustomers, XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE, context);
 			List<String> shipTos2 = getShipTos(SAPCustomers, XPEDXConstants.SAP_CUSTOMER_SUFFIX_TYPE, context);
 			List<String> shipTos3 = getShipTos(MSAPCustomers, XPEDXConstants.MASTER_CUSTOMER_SUFFIX_TYPE, context);
-			
+
 			ShipToCustomers.addAll(shipTos1);
 			ShipToCustomers.addAll(shipTos2);
 			ShipToCustomers.addAll(shipTos3);
@@ -4225,9 +4248,9 @@ public class XPEDXWCUtils {
 			return assignedShipTos;
 		}
 		return assignedShipTos;
-		
+
 	}
-	
+
 	public static List<String> getShipTos(List<String> customerIds, String CustomerSuffixType, IWCContext wcContext) {
 		List<String> assignedShipTos = new ArrayList<String>();
 		Set<String> shipTos = new HashSet<String>();
@@ -4244,7 +4267,7 @@ public class XPEDXWCUtils {
 			return assignedShipTos;
 		}
 		String AttributeToQry = "SAPCustomerID";
-		
+
 		if(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE.equalsIgnoreCase(CustomerSuffixType))
 			AttributeToQry = "BillToCustomerID";
 		else if(XPEDXConstants.SAP_CUSTOMER_SUFFIX_TYPE.equalsIgnoreCase(CustomerSuffixType))
@@ -4253,57 +4276,57 @@ public class XPEDXWCUtils {
 			AttributeToQry = "MSAPCustomerID";
 		else if(XPEDXConstants.SHIP_TO_CUSTOMER_SUFFIX_TYPE.equalsIgnoreCase(CustomerSuffixType))
 			AttributeToQry = "ShipToCustomerID";
-		
+
 		for(int i=0; i<customerIds.size();i++) {
 			Document inputDoc = SCXmlUtil.createDocument("XPXCustHierachyView");
-			inputDoc.getDocumentElement().setAttribute(AttributeToQry, customerIds.get(i));		
-			
+			inputDoc.getDocumentElement().setAttribute(AttributeToQry, customerIds.get(i));
+
 			Object obj = WCMashupHelper.invokeMashup("xpedx-getAssignedShipTos-View", inputDoc.getDocumentElement(), wcContext.getSCUIContext());
-			
+
 			Element outputElement = ((Element)obj);
-			
+
 			NodeList customerHierView = outputElement.getElementsByTagName("XPXCustHierarchyView");
 			for(int j=0;j<customerHierView.getLength();j++) {
 				Element customerHierViewElem = (Element)customerHierView.item(j);
 				String shipToCustomerID = customerHierViewElem.getAttribute("ShipToCustomerID");
 				shipTos.add(shipToCustomerID);
-			}			
+			}
 		}
 		assignedShipTos.addAll(shipTos);
 		return assignedShipTos;
 	}
-	
+
 	public static String getSAPCustomerId(String shipToCustomerId, IWCContext wcContext) {
 		String sapCustomerId = "";
 		if(YFCCommon.isVoid(shipToCustomerId)) {
 			shipToCustomerId = wcContext.getCustomerId();
 		}
-		
+
 		if(wcContext == null) {
 			log.error("Context Cannot be Null or Empty. Returning Empty String");
 			return sapCustomerId;
 		}
-		
+
 		Document inputDoc = SCXmlUtil.createDocument("XPXCustHierachyView");
 		inputDoc.getDocumentElement().setAttribute("ShipToCustomerID", shipToCustomerId);
-		
+
 		Object obj = WCMashupHelper.invokeMashup("xpedx-getAssignedShipTos-View", inputDoc.getDocumentElement(), wcContext.getSCUIContext());
-		
+
 		Element outputElement = ((Element)obj);
-		
+
 		NodeList customerHierView = outputElement.getElementsByTagName("XPXCustHierarchyView");
 		for(int j=0;j<customerHierView.getLength();j++) {
 			Element customerHierViewElem = (Element)customerHierView.item(j);
-			sapCustomerId = customerHierViewElem.getAttribute("SAPCustomerID");			
+			sapCustomerId = customerHierViewElem.getAttribute("SAPCustomerID");
 		}
-		
+
 		return sapCustomerId;
 	}
-	
+
 	public static Document getCustomerExtensions(String customerId, String orgCode) {
-		
+
 		Document outputDoc = null;
-		
+
 		if (null == customerId || customerId.length() <= 0) {
 			log.debug("getCustomerExtensions: customerId is a required field. Returning an empty document");
 			return outputDoc;
@@ -4311,16 +4334,16 @@ public class XPEDXWCUtils {
 			log.debug("getCustomerExtensions: orgCode is a required field. Returning an empty document");
 			return outputDoc;
 		}
-		
+
 		try {
 			outputDoc = getCustomerDetails(customerId, orgCode, extnFieldsInformationMashUp);
 		} catch (CannotBuildInputException e) {
 			log.error("Unable to get Customer Details. " + e.getMessage());
 		}
-		
+
 		return outputDoc;
 	}
-	
+
 	public static Document getPaginatedShipTosForMIL(String CustomerID, String customerSuffixType, String pageNumber, String pageSize, String pageSetToken, IWCContext wcContext) {
 		Document outDoc = null;
 		//if page number and page size are not passed we take the default, pagenumber=1 and pageSize =25
@@ -4349,7 +4372,7 @@ public class XPEDXWCUtils {
 			}
 		}
 		String AttributeToQry = "BillToCustomerID";
-		
+
 		if(XPEDXConstants.BILL_TO_CUSTOMER_SUFFIX_TYPE.equalsIgnoreCase(customerSuffixType))
 			AttributeToQry = "BillToCustomerID";
 		else if(XPEDXConstants.SAP_CUSTOMER_SUFFIX_TYPE.equalsIgnoreCase(customerSuffixType))
@@ -4376,25 +4399,25 @@ public class XPEDXWCUtils {
 			return outDoc;
 		}
 		return outDoc;
-		
+
 	}
-	
+
 //New function - to be used
-	public static void setYFSEnvironmentVariables(IWCContext wcContext,ArrayList<Element> assignedCustomers,ArrayList<Element> availableCustomers) 
+	public static void setYFSEnvironmentVariables(IWCContext wcContext,ArrayList<Element> assignedCustomers,ArrayList<Element> availableCustomers)
 	{
-		
+
 			HashMap<String, ArrayList<Element>> map = new HashMap<String, ArrayList<Element>>();
 			map.put("assignedCustomers", assignedCustomers);
 			map.put("availableCustomers", availableCustomers);
 			XPEDXWCUtils.setYFSEnvironmentVariables(wcContext, map);
 	}
-	
+
 	public static Document getPaginatedCustomers(String rootCustomerKey,String userID, String pageNumber, String pageSize, String pageSetToken, IWCContext wcContext,
 			ArrayList<Element> assignedCustomers,ArrayList<Element> availableCustomers) {
 		Document outDoc = null;
 		Object obj = null;
 		//if page number and page size are not passed we take the default, pagenumber=1 and pageSize =25
-	
+
 		HashMap<String,String> valueMap = new HashMap<String, String>();
 		valueMap.put("/Page/@PageNumber", pageNumber);
 		valueMap.put("/Page/@PageSize", pageSize);
@@ -4409,7 +4432,7 @@ public class XPEDXWCUtils {
 			//Kubra-28Aug - Jira 4146
 			/*if(newcustomersListFomSession!=null && newcustomersListFomSession.size()>0 ){
 				//System.out.println("newcustomersListFomSession********************"+newcustomersListFomSession.size());
-				
+
 				Element custViewElement=(Element)input.getElementsByTagName("XPXCustView").item(0);
 				if(custViewElement != null)
 				{
@@ -4423,7 +4446,7 @@ public class XPEDXWCUtils {
 						OrElem.appendChild(exp);
 					}
 				}
-		        
+
 			}*/
 			Element input = WCMashupHelper.getMashupInput("xpedx-getPaginatedAvailableLocations", valueMap, wcContext);
 			/*List<String> newcustomersListFomSession= (List<String>)XPEDXWCUtils.getObjectFromCache("newcustomersList");
@@ -4434,7 +4457,7 @@ public class XPEDXWCUtils {
 			//Element ele1=(Element)outDoc.getElementsByTagName("XPXCustView").item(0);
 			if(obj!= null)
 				outDoc = ((Element)obj).getOwnerDocument();
-			
+
 			/*Element ele2= (Element) outDoc.getDocumentElement();
 			ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(ele2, "/Output/XPXCustViewList/XPXCustView");
 			if(assignedCustElems!= null && assignedCustElems.size()>0) {
@@ -4446,8 +4469,8 @@ public class XPEDXWCUtils {
 						//ele2.removeChild(customer);
 				}
 			}*/
-			
-			
+
+
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -4455,11 +4478,11 @@ public class XPEDXWCUtils {
 			return outDoc;
 		}
 		return outDoc;
-		
+
 	}
-	
-	
-	
+
+
+
 	public static Element getXPXCustomerContactExtn(IWCContext wcContext, String customerContactId)
 	{
 		String msapCustomerKey = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_KEY);
@@ -4467,14 +4490,14 @@ public class XPEDXWCUtils {
 			log.error("MSAP Customer Key is not in session");
 			return null;
 		}
-		
+
 		if(customerContactId == null){
 			log.error("Customer Contact ID is null..");
 			return null;
 		}
-			
+
 		Element custContactListEle =  null;
-		
+
 		Map<String, String> valueMap = new HashMap<String, String>();
 		valueMap.put("/XPXCustomercontactExtn/@CustomerKey", msapCustomerKey);
 		valueMap.put("/XPXCustomercontactExtn/@CustomerContactID", customerContactId);
@@ -4486,7 +4509,7 @@ public class XPEDXWCUtils {
 
 			custContactExtnEle = (Element) WCMashupHelper.invokeMashup("getXPXCustomerContactExtn",
 					input1, wcContext.getSCUIContext());
-			
+
 		} catch (CannotBuildInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4494,7 +4517,7 @@ public class XPEDXWCUtils {
 
 		return custContactExtnEle;
 	}
-	
+
 	public static Element updateXPXCustomerContactExtn(IWCContext wcContext,String customerContactId, boolean create, Map<String, String> attributeMap)
 	{
 		String msapCustomerKey = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_KEY);
@@ -4504,13 +4527,13 @@ public class XPEDXWCUtils {
 		}
 		if(attributeMap == null || attributeMap.isEmpty())
 			return null;
-			
+
 		Element custContactListEle =  null;
-		
+
 		Map<String, String> valueMap = new HashMap<String, String>();
 		valueMap.put("/XPXCustomercontactExtn/@CustomerKey", msapCustomerKey);
 		valueMap.put("/XPXCustomercontactExtn/@CustomerContactID", customerContactId);
-		
+
 		Set keySet =  attributeMap.keySet();
 		Iterator<String> attrIter = keySet.iterator();
 		while(attrIter.hasNext())
@@ -4529,7 +4552,17 @@ public class XPEDXWCUtils {
 
 			custContactExtnEle = (Element) WCMashupHelper.invokeMashup(mashupId,
 					input1, wcContext.getSCUIContext());
-			
+
+            //EB-475, 1521 started here
+            if(attributeMap.get(XPEDXConstants.XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR) != null && XPEDXWCUtils
+                    .getObjectFromCache("CustomerContExtnEle") == null && custContactExtnEle != null)
+            {
+
+                XPEDXWCUtils.setObectInCache("CustomerContExtnEle", custContactExtnEle);
+                XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContactExtnEle.getAttribute("CustContRefKey"));
+            }
+            //EB-475, 1521 ended here
+
 		} catch (CannotBuildInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4537,9 +4570,9 @@ public class XPEDXWCUtils {
 
 		return custContactExtnEle;
 	}
-	
+
 	public static Document getPaginatedAssignedCustomersDocument(IWCContext context) {
-		
+
 		String customerContactId = context.getLoggedInUserId();
 		Map<String,String> valueMap = new HashMap<String,String>();
 		valueMap.put("/Page/API/Input/XPXCustomerAssignmentView/@UserId", customerContactId);
@@ -4575,15 +4608,15 @@ public class XPEDXWCUtils {
 			return null;
 		}
 		return outputElem.getOwnerDocument();
-		
+
 	}
-	
+
 	public static List<String> getPaginatedAssignedCustomers(IWCContext context) {
-		
+
 		if(context.isGuestUser()){
 			return null;
 		}
-		
+
 		String customerContactId = context.getLoggedInUserId();
 		Map<String,String> valueMap = new HashMap<String,String>();
 		valueMap.put("/Page/API/Input/XPXCustomerAssignmentView/@UserId", customerContactId);
@@ -4612,9 +4645,9 @@ public class XPEDXWCUtils {
 			e.printStackTrace();
 		}
 		return assignedShipToList;
-		
+
 	}
-	
+
 	public static List<String> parseForShipToCustomers(Element customerAssignmentViewElem) {
 		Element viewListElem = SCXmlUtil.getChildElement(customerAssignmentViewElem, "XPXCustomerAssignmentViewList");
 		ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(viewListElem, "XPXCustomerAssignmentView");
@@ -4628,7 +4661,7 @@ public class XPEDXWCUtils {
 			}
 		}
 		return assignedShipToList;
-		
+
 	}
 
 	public static Document getOrderList() {
@@ -4657,10 +4690,10 @@ public class XPEDXWCUtils {
 
 
 	/**
-	 * 
-	 * HISTORY : ritesh : Method added for ad juggler (aj_server, aj_keyword).. 
+	 *
+	 * HISTORY : ritesh : Method added for ad juggler (aj_server, aj_keyword)..
 	 * 			 preddy : Updated to add prefix for the ad juggler keyword(s).
-	 * 
+	 *
 	 * @param itemId
 	 * @param org
 	 * @return
@@ -4674,23 +4707,23 @@ public class XPEDXWCUtils {
 		ISCUITransactionContext scuiTransactionContext = null;
 		IWCContext context = null;
 		SCUIContext wSCUIContext = null;
-		
-    		
-    	
-		
-		
+
+
+
+
+
 		log.debug(" getCatTwoDescFromItemId  - Item Id " + itemId  + " org " + org );
-		try 
+		try
 		{
 			adjugglerKeywordPrefix = getAdJugglerKeywordPrefix();
-			
+
 			context = WCContextHelper.getWCContext(ServletActionContext
 					.getRequest());
 			wSCUIContext = context.getSCUIContext();
 
 		YFCDocument getItemListInXML = YFCDocument
 		.createDocument("Item");
-		
+
 		YFCElement itemListEle = getItemListInXML.getDocumentElement();
 		itemListEle.setAttribute("ItemID", itemId);
 		itemListEle.setAttribute("OrganizationCode", org);
@@ -4708,7 +4741,7 @@ public class XPEDXWCUtils {
 		scuiTransactionContext = wSCUIContext
 	.getTransactionContext(true);
 		//itemDoc = api.executeFlow(env, "XPXGetItemList", getItemListInXML.getDocument());
-		
+
 		YFCElement yfcElement = SCUIPlatformUtils.invokeXAPI("getItemList",
 				getItemListInXML.getDocumentElement(),
 				template.getDocumentElement(), wSCUIContext);
@@ -4740,34 +4773,34 @@ public class XPEDXWCUtils {
 						cat = st.nextToken();
 				}
 			}
-			
+
 			if(null != cat)
 			{
 				YFCDocument getCategoryListInXML = YFCDocument
 				.createDocument("Category");
-				
+
 				YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
 				categoryLstEle.setAttribute("CategoryID", cat);
 				categoryLstEle.setAttribute("OrganizationCode", org);
-	
-				
+
+
 				/*Input : <Category CategoryID="300131"  OrganizationCode="xpedx"></Category>
-				 * 
+				 *
 				 * Output : <CategoryList ><Category CategoryID="" CategoryKey="" CategoryPath="" Description="" ShortDescription="" ></Category></CategoryList>
 				 */
 				YFCDocument template2 = YFCDocument
 				.getDocumentFor("<CategoryList ><Category /></CategoryList>");
-	
+
 				YFCElement yfcElement2 = SCUIPlatformUtils.invokeXAPI("getCategoryList",
 						categoryLstEle, template2.getDocumentElement(), wSCUIContext);
-	
+
 				YFCElement catEle = yfcElement2.getFirstChildElement();
 				result = catEle.getAttribute("ShortDescription");
-				
-				//JIRA-2890 
+
+				//JIRA-2890
 				result = adjugglerKeywordPrefix + result;
 			}
-			
+
 			log.debug(" getCatTwoDescFromItemId  - result " + result);
 		}catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -4777,10 +4810,10 @@ public class XPEDXWCUtils {
 				SCUITransactionContextHelper.releaseTransactionContext(
 						scuiTransactionContext, wSCUIContext);
 			}
-		}	
-		
+		}
+
 			result = sanitizeAJKeywords(result);
-			
+
 			return result;
 	}
 
@@ -4794,20 +4827,20 @@ public class XPEDXWCUtils {
 		ISCUITransactionContext scuiTransactionContext = null;
 		IWCContext context = null;
 		SCUIContext wSCUIContext = null;
-		
+
 		log.debug(" getCatTwoDescFromItemId  - Item Id " + itemId  + " org " + org );
-		try 
+		try
 		{
 			adjugglerKeywordPrefix = getAdJugglerKeywordPrefix();
-			
+
 				context = WCContextHelper.getWCContext(ServletActionContext
 					.getRequest());
 			wSCUIContext = context.getSCUIContext();
 	   if(path==null || (path!=null && path.trim().equalsIgnoreCase(""))) {
-			 
+
 		   YFCDocument getItemListInXML = YFCDocument
 		   .createDocument("Item");
-		
+
 		   YFCElement itemListEle = getItemListInXML.getDocumentElement();
 		   itemListEle.setAttribute("ItemID", itemId);
 		   itemListEle.setAttribute("OrganizationCode", org);
@@ -4825,7 +4858,7 @@ public class XPEDXWCUtils {
 		   scuiTransactionContext = wSCUIContext
 		   .getTransactionContext(true);
 		   //itemDoc = api.executeFlow(env, "XPXGetItemList", getItemListInXML.getDocument());
-		
+
 		   YFCElement yfcElement = SCUIPlatformUtils.invokeXAPI("getItemList",
 				getItemListInXML.getDocumentElement(),
 				template.getDocumentElement(), wSCUIContext);
@@ -4836,7 +4869,7 @@ public class XPEDXWCUtils {
 		   categoryId = categoryEle.getAttribute("CategoryPath");
 		   path=categoryId;
 	   }
-	   else	
+	   else
 		   categoryId = path;
 	}// end of try
 	finally {
@@ -4845,7 +4878,7 @@ public class XPEDXWCUtils {
 						scuiTransactionContext, wSCUIContext);
 			}
 	}
-			
+
 	try{
 			context = WCContextHelper.getWCContext(ServletActionContext
 					.getRequest());
@@ -4863,7 +4896,7 @@ public class XPEDXWCUtils {
 						cat = st.nextToken();
 				}
 			}
-			
+
 			if(null != cat)
 			{
 				/*Added for performance filter.action - getting the category desc on basis of category id*/
@@ -4872,43 +4905,43 @@ public class XPEDXWCUtils {
 					Element outXml = catObjFromCache.getDocumentElement();
 					Element categoryList = XMLUtilities
 					.getChildElementByName(outXml, "CategoryList");
-				
+
 					if(categoryList != null)
 					{
 						Map<String,String> catMap = getCategoryMap(categoryList);
 						result = getCategoryShortDesc(catMap,cat);
-						
+
 					}
-				} 
+				}
 				if(result==null || (result!=null && result.trim().equalsIgnoreCase(""))){
 				/*End of performance*/
-					
+
 					YFCDocument getCategoryListInXML = YFCDocument
 					.createDocument("Category");
-				
+
 				YFCElement categoryLstEle = getCategoryListInXML.getDocumentElement();
 				categoryLstEle.setAttribute("CategoryID", cat);
 				categoryLstEle.setAttribute("OrganizationCode", org);
-	
-				
+
+
 				/*Input : <Category CategoryID="300131"  OrganizationCode="xpedx"></Category>
-				 * 
+				 *
 				 * Output : <CategoryList ><Category CategoryID="" CategoryKey="" CategoryPath="" Description="" ShortDescription="" ></Category></CategoryList>
 				 */
 				YFCDocument template2 = YFCDocument
 				.getDocumentFor("<CategoryList ><Category /></CategoryList>");
-	
+
 				YFCElement yfcElement2 = SCUIPlatformUtils.invokeXAPI("getCategoryList",
 						categoryLstEle, template2.getDocumentElement(), wSCUIContext);
-	
+
 				YFCElement catEle = yfcElement2.getFirstChildElement();
 				result = catEle.getAttribute("ShortDescription");
-				
-				//JIRA-2890 
+
+				//JIRA-2890
 				}
 				result = adjugglerKeywordPrefix + result;
 			}
-			
+
 			log.debug(" getCatTwoDescFromItemId  - result " + result);
 		}catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -4918,10 +4951,10 @@ public class XPEDXWCUtils {
 				SCUITransactionContextHelper.releaseTransactionContext(
 						scuiTransactionContext, wSCUIContext);
 			}
-		}	
-		
+		}
+
 			result = sanitizeAJKeywords(result);
-			
+
 			return result;
 	}
 
@@ -4936,7 +4969,7 @@ public class XPEDXWCUtils {
 		String catID;
 		String sDesc;
 		//SCXmlUtils.getString(categoryList);
-		
+
 		if (outCatListElem == null) {
 			return Categories;
 		}
@@ -4961,30 +4994,30 @@ public class XPEDXWCUtils {
 		}
 		return Categories;
 	}
-	
+
 	public static String getCategoryShortDesc(Map<String,String> Categories, String catId){
 		String categoryShortDesc="";
 		if(Categories != null){
 			categoryShortDesc = Categories.get(catId);
 		}
 		return categoryShortDesc;
-		
+
 	}
 	/*End of Performance - filter.action*/
-	
-	
+
+
 	/**
 	 * preddy: This methods sanitized ad_Jugler keywords before sending.
-	 * It replaces space, comma, / , & 
+	 * It replaces space, comma, / , &
 	 * This is done for all keywords all environments before sending to AJ_Server.
-	 * 
+	 *
 	 * @param ajkeyword
 	 * @return
 	 */
 	public static String sanitizeAJKeywords(String ajkeyword) {
-		
+
 		log.debug("Ad_Jugler Keword Before sanitize: " + ajkeyword  );
-		
+
 		if(ajkeyword !=null && ajkeyword.length() > 0 ) {
 		//Replace Comma, Space,/, &, '
 		ajkeyword = ajkeyword.replaceAll(",", "");
@@ -4994,14 +5027,14 @@ public class XPEDXWCUtils {
 		ajkeyword = ajkeyword.replaceAll("'", "");
 		//ajkeyword = ajkeyword.replaceAll("\"", "");
 		}
-		
+
 		log.debug("Ad_Jugler Keword After sanitize: " + ajkeyword  );
-		
+
 		return ajkeyword;
 	}
 
 	/**
-	 * 
+	 *
 	 *  HISTORY : JIRA - 2890 :  preddy - Updated to add prefix for the adJuggler keyword.
 	 *  		  All AdJuggler keywords for PROD should send as is, For all other environments need to prefix with TEST.
 	 * jira 2890 - made this method public so that it can return value to XPEDXCalatolLanding.jsp
@@ -5010,28 +5043,28 @@ public class XPEDXWCUtils {
 	public static String getAdJugglerKeywordPrefix() {
 		String keywordPrefix = "";
 		try{
-			
+
 			keywordPrefix = YFSSystem.getProperty(XPEDXConstants.AD_JUGGLER_KEYWORD_PREFIX_PROP);
 	    	if(keywordPrefix == null){
 	    		keywordPrefix="";
 	    	}
 			else
 			{
-			   	keywordPrefix = keywordPrefix.trim();	    		
+			   	keywordPrefix = keywordPrefix.trim();
 			}
-	    	
-	    	
+
+
 		}catch(Exception e){
     		log.debug("AD_JUGGLER Failed to get Prefix : (Property : yfs.xpedx.adjuggler.keyword.attribute.prefix) , Message : " + e.getMessage() );
     	}
-		
-		
-		
+
+
+
 		return keywordPrefix;
 	}
 
 	public static boolean getReportsFlagForLoggedInUser(IWCContext wcContext){
-		
+
 		boolean viewReports = false;
 		//String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
@@ -5040,10 +5073,10 @@ public class XPEDXWCUtils {
 		if("Y".equalsIgnoreCase(viewReportsFlag)) {
 			viewReports = Boolean.TRUE;
 		}
-		
+
 		return viewReports;
 	}
-	
+
 	public static boolean getInvoiceFlagForLoggedInUser(IWCContext wcContext)
 	{
 		boolean viewInvoice=false;
@@ -5054,7 +5087,7 @@ public class XPEDXWCUtils {
 		{
 			Document doc = XPEDXWCUtils.getCustomerContactDetails();
 			Element contactElem = XPEDXWCUtils.getMSAPCustomerContactFromContacts(doc, wcContext);
-			if(contactElem!=null) {			
+			if(contactElem!=null) {
 				Element extnElem = SCXmlUtil.getChildElement(contactElem, "Extn");
 				viewInvoiceFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewInvoices");
 				custContBean.setExtnViewInvoices(viewInvoiceFlag);
@@ -5068,7 +5101,7 @@ public class XPEDXWCUtils {
 		}
 		return viewInvoice;
 	}
-	
+
 	/*public static Map<String,Map<String,Element>> getOrderLineFromChangeOrderXML(IWCContext wcContext,String orderHeaderKey)
 	{
 		Map<String,Map<String,Element>> orderMap=new HashMap<String,Map<String,Element>>();
@@ -5099,7 +5132,7 @@ public class XPEDXWCUtils {
 				Document changeOrderDoc=SCXmlUtil.createFromString(changeOrderXML);
 				Element changeOrderElem=changeOrderDoc.getDocumentElement();
 				Element orderExtn=util.getElements(changeOrderElem, "Extn").get(0);
-				
+
 				Document orderDoc=SCXmlUtil.createDocument("Order");
 				Element orderElement=orderDoc.getDocumentElement();
 				orderElement.setAttribute("OrderHeaderKey", changeOrderElem.getAttribute("OrderHeaderKey"));
@@ -5111,10 +5144,10 @@ public class XPEDXWCUtils {
 				orderExtnElem.setAttribute("ExtnTotOrderAdjustments", orderExtn.getAttribute("ExtnTotOrderAdjustments"));
 				orderExtnElem.setAttribute("ExtnTotalOrderValue", orderExtn.getAttribute("ExtnTotalOrderValue"));
 				orderElement.appendChild(orderExtnElem);
-				
+
 				orderHeaderMap.put(orderHeaderKey, orderElement);
 				List<Element> orderLines=SCXmlUtil.getElements(changeOrderElem, "OrderLines/OrderLine");
-				
+
 				if(orderLines.size()>0)
 				{
 					for(Element orderLineEle : orderLines)
@@ -5141,11 +5174,11 @@ public class XPEDXWCUtils {
 			wcContext.getSCUIContext()
 				.getSession().setAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY, OrderHeaderKey);
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	public static String getEditedOrderHeaderKeyFromSession(IWCContext wcContext) {
 		Object editedOrderheaderKey = wcContext.getSCUIContext()
 				.getSession().getAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
@@ -5154,10 +5187,10 @@ public class XPEDXWCUtils {
 		}
 		return null;
 	}
-	
+
 	public static void resetPendingChanges(String orderHeaderKey,IWCContext wcContext)
 	{
-		
+
 		try
 		{
 			Map<String,Element> orderLineMap=new HashMap<String,Element>();
@@ -5193,21 +5226,21 @@ public class XPEDXWCUtils {
 		}
 		return emailAddress;
 	}
-	
+
 	public static String getInvoiceNoWithoutDate(String invoiceNo) {
 		return invoiceNo.substring(9, invoiceNo.length());
 	}
-	
+
 	public static String getDateFromInvoiceNo(String invoiceNo) {
 		return invoiceNo.substring(0, 8);
 	}
-	
+
 	public static String getUnformattedDate(String inputFormat, String date) {
 		String outputFormat = "yyyyMMdd";
 		YDate yDate = new YDate(date, inputFormat, true);
 		return yDate.getString(outputFormat);
 	}
-	
+
 	public static String encrypt(String plaintext) throws Exception {
 		Cipher c = Cipher.getInstance("DESede/CBC/PKCS5Padding");
 		c.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(sharedkeyfinal, "DESede"),
@@ -5229,10 +5262,10 @@ public class XPEDXWCUtils {
 		if (encryptionKey == null)
 			return null;
 
-		byte[] keyValue = new byte[24]; // final 3DES key  
+		byte[] keyValue = new byte[24]; // final 3DES key
 
 		if (encryptionKey.length == 16) {
-			// Create the third key from the first 8 bytes  
+			// Create the third key from the first 8 bytes
 			System.arraycopy(encryptionKey, 0, keyValue, 0, 16);
 			System.arraycopy(encryptionKey, 0, keyValue, 16, 8);
 
@@ -5254,7 +5287,7 @@ public class XPEDXWCUtils {
 		}
 		return secretKey;
 	}
-	
+
 	/*
 	 * Small test case for CommaSeparated Quantity Format
 	 */
@@ -5263,20 +5296,20 @@ public class XPEDXWCUtils {
 		/* String originalQty1 = "1234567890" ;
 		 String originalQty = "ABCefgHIJklmNOPqrsTUVwxy" ;
 		 String commaFmtQty =  commaSeparatedStringFmt( originalQty );
-		 
-		 */
-		
 
-		 
-		 
-	}	
-	
+		 */
+
+
+
+
+	}
+
 	public static Object getObjectFromCache(String attributeName)
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		return wcContext.getSCUIContext().getRequest().getSession().getAttribute(attributeName);
 	}
-	
+
 	public static Object getObjectFromCache(String attributeName,boolean getUsingMashup,String mashupId,HashMap<String, String> valueMap)
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
@@ -5285,7 +5318,7 @@ public class XPEDXWCUtils {
 		{
 			try
 			{
-			
+
 				Element input=null;
 					input = WCMashupHelper.getMashupInput(
 							mashupId, valueMap, wcContext
@@ -5293,7 +5326,7 @@ public class XPEDXWCUtils {
 				obj=WCMashupHelper.invokeMashup(
 						mashupId, input, wcContext
 								.getSCUIContext());
-			
+
 			}
 			catch (CannotBuildInputException e)
 			{
@@ -5311,32 +5344,33 @@ public class XPEDXWCUtils {
 		}
 		return obj;
 	}
-	
+
 	public static void removeObectFromCache(String attributeName)
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		wcContext.getSCUIContext().getRequest().getSession().removeAttribute(attributeName);
 	}
-	
+
 	public static void setObectInCache(String attributeName,Object value)
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		wcContext.getSCUIContext().getRequest().getSession().setAttribute(attributeName, value);
 	}
-	
+
 	public static void setSAPCustomerExtnFieldsInCache()
 	{
 		setSAPCustomerExtnFieldsInCache(null);
 	}
-	
+
 	public static void setSAPCustomerExtnFieldsInCache(Element orderElement)
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-		
+
 		String defaultShipToChanged = (String)getObjectFromCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE);
+		String isSapStillNeedToChange=(String)getObjectFromCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE);
 		try
 		{
-			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged)){
+			if(YFCUtils.isVoid(defaultShipToChanged) || "true".endsWith(defaultShipToChanged) || "Y".equalsIgnoreCase(isSapStillNeedToChange)){
 				// do this only when the default ship to is changed and when logging in for the first time.
 				Document SAPCustomerDoc = XPEDXOrderUtils.getSAPCustomerExtnFlagsDoc(wcContext);
 				LinkedHashMap customerFieldsMap = new LinkedHashMap();
@@ -5349,11 +5383,11 @@ public class XPEDXWCUtils {
 				Element orderLineEle=SCXmlUtil.createChild(orderEle, "OrderLines");
 				SCXmlUtil.createChild(orderLineEle, "OrderLine");
 				ArrayList<String> customerFieldsRulesMap =null;
-				
+
 					if(rulesDoc == null)
 					{
 						rulesDoc = XPEDXOrderUtils.getValidationRulesForCustomer(orderEle, wcContext);
-						wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);	
+						wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);
 					}
 					if(orderElement == null)
 					{
@@ -5363,25 +5397,26 @@ public class XPEDXWCUtils {
 					{
 						customerFieldsRulesMap = XPEDXOrderUtils.getRequiredCustomerFieldMap(orderElement,rulesDoc, wcContext);
 					}
-					
-					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("CustomerPONo")) 
+
+					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("CustomerPONo"))
 					{
 						if(!customerFieldsMap.containsKey("CustomerPONo"))
 						customerFieldsMap.put("CustomerPONo", "Line PO #");
 					}
-					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) 
+					if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo"))
 					{
 						if(!customerFieldsMap.containsKey("CustLineAccNo"))
 						customerFieldsMap.put("CustLineAccNo", "Line Account #");
 					}
 					customerFieldsMap.putAll((LinkedHashMap) XPEDXOrderUtils.getSAPCustomerLineFieldMap(SAPCustomerDoc.getDocumentElement()));
-					
+
 					setObectInCache("customerFieldsSessionMap", customerFieldsMap);
-					
+
 					setObectInCache("sapCustExtnFields", createSAPCustomerDoc(SAPCustomerDoc.getDocumentElement(),"SAP",customerFieldsRulesMap));
 					// reset the flag once used
 					setObectInCache(XPEDXConstants.CUSTOM_FIELD_FLAG_CHANGE,"false");
-					
+					removeObectFromCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE);
+
 					//wcContext.setWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED,"false",WCAttributeScope.LOCAL_SESSION);
 			}
 		}
@@ -5390,18 +5425,18 @@ public class XPEDXWCUtils {
 			log.error("Error while setting SAP Custom fields in Cache :: "+e.getMessage());
 		}
 	}
-	
+
 	public static Document createSAPCustomerDoc(Element sapCustomerElement,String prefix,ArrayList<String> customerFieldsRulesMap)
 	{
 		Document sapCustomerDocument=SCXmlUtil.createDocument("Customer");
 		try
 		{
-			
+
 			Element outputsapCustomerElement=sapCustomerDocument.getDocumentElement();
 			Element sapCustomerExtnElem=SCXmlUtil.createChild(outputsapCustomerElement, "Extn");
 			Element customerOrganizationExtnEle=(Element)(sapCustomerElement.getElementsByTagName("XPXCustHierarchyView")).item(0);
 			outputsapCustomerElement.setAttribute("CustomerID", customerOrganizationExtnEle.getAttribute("SAPCustomerID"));
-			if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo")) 
+			if (customerFieldsRulesMap != null && customerFieldsRulesMap.contains("ExtnCustLineAccNo"))
 			{
 				sapCustomerExtnElem.setAttribute("ExtnCustLineAccNoFlag", "Y");
 			}
@@ -5414,7 +5449,7 @@ public class XPEDXWCUtils {
 				sapCustomerExtnElem.setAttribute("ExtnCustLinePONoFlag","Y");
 			}
 			else
-			{			
+			{
 				sapCustomerExtnElem.setAttribute("ExtnCustLinePONoFlag",SCXmlUtil.getAttribute(
 						customerOrganizationExtnEle, prefix+"ExtnCustLinePONoFlag"));
 			}
@@ -5429,6 +5464,7 @@ public class XPEDXWCUtils {
 					customerOrganizationExtnEle, prefix+"ExtnCustLineField3Flag"));
 			sapCustomerExtnElem.setAttribute("ExtnCustLineAccLbl",SCXmlUtil.getAttribute(
 						customerOrganizationExtnEle, prefix+"ExtnCustLineAccLbl"));
+			sapCustomerExtnElem.setAttribute("ExtnCustLinePOLbl",SCXmlUtil.getAttribute(customerOrganizationExtnEle, prefix+"ExtnCustLinePOLbl"));//XB 769 \ XB 434
 			sapCustomerExtnElem.setAttribute("ExtnCustLineField1Label",SCXmlUtil.getAttribute(
 						customerOrganizationExtnEle, prefix+"ExtnCustLineField1Label"));
 			sapCustomerExtnElem.setAttribute("ExtnCustLineField2Label",SCXmlUtil.getAttribute(
@@ -5442,7 +5478,7 @@ public class XPEDXWCUtils {
 		}
 		return sapCustomerDocument;
 	}
-	
+
 	public static XPEDXShipToCustomer setCustomerObjectInCache(Element customerOrganizationEle) {
 		XPEDXShipToCustomer shipToCustomer=new XPEDXShipToCustomer();
 		try {
@@ -5464,6 +5500,7 @@ public class XPEDXWCUtils {
 			if (customerId != null && organizationCode != null) {
 				// set the logged in users Customer Name(Buyer Org's). This is
 				// displayed in the Header - RUgrani
+				shipToCustomer.setCustomerLevel(customerOrganizationEle.getAttribute("CustomerLevel"));
 				Element sBuyerOrg = SCXmlUtil.getChildElement(
 						customerOrganizationEle, "BuyerOrganization");
 				shipToCustomer.setOrganizationName(sBuyerOrg
@@ -5481,6 +5518,7 @@ public class XPEDXWCUtils {
 				shipToCustomer.setCustomerKey(customerOrganizationEle.getAttribute("CustomerKey"));
 				shipToCustomer.setExtnAllowDirectOrderFlag(customerOrganizationEle.getAttribute("ExtnAllowDirectOrderFlag"));
 				shipToCustomer.setCustomerStatus(customerOrganizationEle.getAttribute("Status"));
+				shipToCustomer.setRelationshipType(customerOrganizationEle.getAttribute("RelationshipType"));
 				shipToCustomer.setExtnCustomerClass(extnElement.getAttribute("ExtnCustomerClass"));
 				shipToCustomer.setExtnShipFromBranch(extnElement.getAttribute("ExtnShipFromBranch"));
 				shipToCustomer.setExtnUseCustSKU(extnElement.getAttribute("ExtnUseCustSKU"));
@@ -5511,33 +5549,35 @@ public class XPEDXWCUtils {
 				shipToCustomer.setCity(personInfoElement.getAttribute("City"));
 				shipToCustomer.setState(personInfoElement.getAttribute("State"));
 				shipToCustomer.setCompany(personInfoElement.getAttribute("Company"));
+				shipToCustomer.setExtnPriceWareHouse(extnElement.getAttribute("ExtnPriceWarehouse"));
 				List<String> arrAddress = new ArrayList<String>();
 				String sAddr = "AddressLine";
-				
+
 					for (int i = 1; i <= 6; i++) {
 						if(personInfoElement.getAttribute(sAddr + i).equalsIgnoreCase(""))
 							arrAddress.add(" ");
 						else
-							arrAddress.add(personInfoElement.getAttribute(sAddr + i));								
+							arrAddress.add(personInfoElement.getAttribute(sAddr + i));
 					}
-				shipToCustomer.setAddressList(arrAddress);				
+				shipToCustomer.setAddressList(arrAddress);
 				shipToCustomer.setZipCode(personInfoElement.getAttribute("ZipCode"));
-				
+
 				if(Integer.parseInt(customerPaymentInfoElement.getAttribute("TotalNumberOfRecords")) > 0) {
-					NodeList payNodes = customerPaymentInfoElement.getElementsByTagName("CustomerPaymentMethod");				
+					NodeList payNodes = customerPaymentInfoElement.getElementsByTagName("CustomerPaymentMethod");
 					if (payNodes != null && payNodes.getLength() > 0) {
-						Element payMethod = (Element) payNodes.item(0);					
+						Element payMethod = (Element) payNodes.item(0);
 						shipToCustomer.setAccountNumber(payMethod.getAttribute("DisplayCustomerAccountNo"));
-					}	
+					}
 				}
-				
-				
+
+
 				// end of performance for itemdetail.action
 				if(!YFCCommon.isVoid(parentElem))
 				{
 					billToCustomer.setParentCustomerKey(parentElem.getAttribute("ParentCustomerKey")); //Jira 3162 done Changes
 					billToCustomer.setBuyerOrganizationCode(parentElem.getAttribute("BuyerOrganizationCode"));
 					shipToCustomer.setParentCustomerKey(parentElem.getAttribute("CustomerKey"));
+					billToCustomer.setCustomerStatus(parentElem.getAttribute("Status"));//Added for EB 289
 					Element parentExtnElem = SCXmlUtil.getChildElement(parentElem, "Extn");
 					billToCustomer.setExtnCurrencyCode(parentExtnElem.getAttribute("ExtnCurrencyCode"));
 					billToCustomer.setExtnCustomerDivision(parentExtnElem.getAttribute("ExtnCustomerDivision"));
@@ -5546,12 +5586,58 @@ public class XPEDXWCUtils {
 					billToCustomer.setExtnServiceOptCode(parentExtnElem.getAttribute("ExtnServiceOptCode"));
 					billToCustomer.setExtnMinOrderAmount(parentExtnElem.getAttribute("ExtnMinOrderAmount"));
 					billToCustomer.setExtnMinChargeAmount(parentExtnElem.getAttribute("ExtnMinChargeAmount"));
-					billToCustomer.setCustomerID(parentElem.getAttribute("CustomerID"));					
+					billToCustomer.setCustomerID(parentElem.getAttribute("CustomerID"));
 					billToCustomer.setOrganizationName(SCXmlUtil.getChildElement(parentElem, "BuyerOrganization").getAttribute("OrganizationName"));
 					billToCustomer.setExtnECsr1EMailID(parentExtnElem.getAttribute("ExtnECsr1EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnECsr2EMailID(parentExtnElem.getAttribute("ExtnECsr2EMailID")); //Jira 3162 done Changes
 					billToCustomer.setExtnMaxOrderAmount(parentExtnElem.getAttribute("ExtnMaxOrderAmount"));//JIRA 3488
 					billToCustomer.setExtnCustomerClass(parentExtnElem.getAttribute("ExtnCustomerClass"));//XBT-265
+
+					billToCustomer.setExtnDefaultStockedItemView(parentExtnElem.getAttribute("ExtnDefaultStockedItemView")); //eb-2297
+					if (billToCustomer.getExtnDefaultStockedItemView() == null)
+					{
+						billToCustomer.setExtnDefaultStockedItemView(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ALL);
+					}
+					Element customerExtnListElem = SCXmlUtil.getChildElement(parentExtnElem, "XPXCustomerExtnListList");
+					if(customerExtnListElem!=null)
+					{
+						List<Element> billToCustExtnList = SCXmlUtil.getChildren(customerExtnListElem, "XPXCustomerExtnList");
+						if(billToCustExtnList!=null && billToCustExtnList.size()>0)
+						{
+							StringBuilder billToEmailAddrs=new StringBuilder();
+							String billToEmailAddr=null;
+							int listCnt=0;
+							for(Element billtoCustExtnElem:billToCustExtnList)
+							{
+								billToEmailAddr=billtoCustExtnElem.getAttribute("ExtnListValue");
+								if(!YFCCommon.isVoid(billToEmailAddr))
+								{
+									billToEmailAddrs.append(billToEmailAddr);
+									if(listCnt!=(billToCustExtnList.size()-1))
+									{
+										billToEmailAddrs.append(",");
+									}
+								}
+								++listCnt;
+							}
+							billToCustomer.setBillToEmailAddrs(billToEmailAddrs.toString());
+						}
+					}
+					/* XB-763 Code Changes Start */
+					String extnMfgItemFlag = parentExtnElem.getAttribute("ExtnMfgItemFlag");
+					String extnCustomerItemFlag = parentExtnElem.getAttribute("ExtnCustomerItemFlag");
+					/* xb-758 Code Changes start */
+					wcContext.removeWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG, WCAttributeScope.LOCAL_SESSION);
+					wcContext.removeWCAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG, WCAttributeScope.LOCAL_SESSION);
+					/* xb-758 Code Changes end */
+					if(!YFCCommon.isVoid(extnMfgItemFlag) && extnMfgItemFlag.equalsIgnoreCase("Y") ){
+						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG,extnMfgItemFlag,WCAttributeScope.LOCAL_SESSION);
+					}
+
+					if(!YFCCommon.isVoid(extnCustomerItemFlag) && extnCustomerItemFlag.equalsIgnoreCase("Y")){
+						wcContext.setWCAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG,extnCustomerItemFlag,WCAttributeScope.LOCAL_SESSION);
+					}
+				      /* XB-763 Code Changes End */
 				}
 				shipToCustomer.setBillTo(billToCustomer);
 				setObectInCache("shipToCustomer", shipToCustomer);
@@ -5559,10 +5645,10 @@ public class XPEDXWCUtils {
 				{
 					shipToCustomer.setDefaultShipToCustomer((XPEDXShipToCustomer) shipToCustomer.clone()); //added for jira 4306
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED, "false");
-					
+
 				}
 				else
-				{	
+				{
 					// Changes started for preferred ship-to location issue JIRA 4306
 					if(XPEDXWCUtils.getObjectFromCache("DEFAULT_SHIP_TO_OBJECT") != null)
 					{
@@ -5578,17 +5664,17 @@ public class XPEDXWCUtils {
 		}
 		return shipToCustomer;
 	}
-	
-		
+
+
 	public static void checkMultiStepCheckout() {
-			
+
 	    	// read the value: SWC_CHECKOUT_TYPE from session
 	    	// if null, then fetch it from database else return the same
 		    try
 		    {
 			IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 			String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
-			
+
 			// if the checkout type in multi_step change it to single_step.
 			if (definitionFromSession==null && isMultiStepCheckout(wcContext)){
 				// since the value is being set as valueMap.put("/UserUiState/@Definition", "Single_Step");
@@ -5626,7 +5712,7 @@ public class XPEDXWCUtils {
 		public static XPEDXCustomerContactInfoBean setXPEDXCustomerContactInfoBean(Document customerContactDocument, IWCContext wcContext){
 			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = new XPEDXCustomerContactInfoBean();
 			Element contactElem = XPEDXWCUtils.getMSAPCustomerContactFromContacts(customerContactDocument, wcContext);
-			
+
 			if(contactElem!=null) {
 				String welcomeUserFirstName = SCXmlUtil.getAttribute(contactElem, "FirstName");
 				String welcomeUserLastName = SCXmlUtil.getAttribute(contactElem, "LastName");
@@ -5639,10 +5725,10 @@ public class XPEDXWCUtils {
 				String estimatorFlag = SCXmlUtil.getAttribute(extnElem, "ExtnEstimator");
 				String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
 				String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
-				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");				
+				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
 				String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
 				String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
-				
+
 				if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
 					b2bViewFromDB = b2bViewFromDB.trim();
 					int _b2bViewFromDB = Integer.parseInt(b2bViewFromDB);
@@ -5660,20 +5746,20 @@ public class XPEDXWCUtils {
 				}
 				boolean usergroupKeyListActive = false;
 				boolean isEstimator = false;
-				
+
 				Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 				Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
-				
+
 				List<Element> userGroupList = SCXmlUtil.getElements(userElem,"/UserGroupLists/UserGroupList");
-				ArrayList<String> newusergroupkey = new ArrayList<String>(); 
+				ArrayList<String> newusergroupkey = new ArrayList<String>();
 				if (userGroupList != null) {
 					for (Element userGroup : userGroupList) {
-						String userGroupKey = userGroup.getAttribute("UsergroupKey");										
+						String userGroupKey = userGroup.getAttribute("UsergroupKey");
 						newusergroupkey.add(userGroupKey);
-					}		
+					}
 					usergroupKeyListActive = true;
-				}		
-				
+				}
+
 				String isApprover = "N";
 				if(approverElem!=null) {
 					isApprover = "Y";
@@ -5681,13 +5767,13 @@ public class XPEDXWCUtils {
 				if(estimatorFlag.equals("Y")) {
 					isEstimator = true;
 				}
-				
+
 				Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
 				Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
 				String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
-				//Start- Code added to fix XNGTP 2964	
+				//Start- Code added to fix XNGTP 2964
 				 String extnUseOrderMulUOMFlag = SCXmlUtil.getAttribute(customerExtnElem, "ExtnUseOrderMulUOMFlag");
-				//End- Code added to fix XNGTP 2964	
+				//End- Code added to fix XNGTP 2964
 				 String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
 				if (defaultShipTo != null
 						&& defaultShipTo.trim().length() == 0) {
@@ -5702,7 +5788,7 @@ public class XPEDXWCUtils {
 					Element customerAdditionalAddressListElem=SCXmlUtils.getChildElement(contactElem, "CustomerAdditionalAddressList");
 					Element customerAdditionalAddressElem=SCXmlUtils.getChildElement(customerAdditionalAddressListElem, "CustomerAdditionalAddress");
 					Element personInfoElem=SCXmlUtils.getChildElement(customerAdditionalAddressElem, "PersonInfo");
-					
+
 					if(personInfoElem !=null)
 					{
 						personInfoElement=SCXmlUtil.getAttribute(personInfoElem,"EMailID");
@@ -5712,8 +5798,8 @@ public class XPEDXWCUtils {
 				{
 					log.error("Error while getting Additional address .");
 				}
-				
-				xpedxCustomerContactInfoBean = 
+
+				xpedxCustomerContactInfoBean =
 					new XPEDXCustomerContactInfoBean(welcomeUserFirstName, welcomeUserLastName, customerContactID, msapEmailID,
 							welcomeLocaleId, viewInvoiceFlag, isEstimator,
 							viewReportFlag, viewPricesFlag,
@@ -5724,11 +5810,11 @@ public class XPEDXWCUtils {
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 			return xpedxCustomerContactInfoBean;
 		}
-		
+
 	public static Element setMiniCartDataInToCache(Element orderElement, IWCContext wcContext)
 	{
 		/*List<String> itemAndTotalList=new ArrayList<String>();
-		String OrderTotal= SCXmlUtil.getXpathAttribute(orderElement, "/Order/Extn/@ExtnTotalOrderValue");    
+		String OrderTotal= SCXmlUtil.getXpathAttribute(orderElement, "/Order/Extn/@ExtnTotalOrderValue");
     	 ArrayList<Element> orderLineList= SCXmlUtil.getElements(orderElement,"OrderLines/OrderLine");
     	 itemAndTotalList.add(OrderTotal);
     	 if(!YFCCommon.isVoid(orderLineList))
@@ -5743,15 +5829,15 @@ public class XPEDXWCUtils {
 		XPEDXOrderUtils.refreshMiniCart(wcContext,orderElement,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 		return orderElement;
 	}
-	
+
 	public static XPEDXOrgNodeDetailsBean getShipFromNodeDetails(String orgCode,IWCContext wcContext,Document organizationDoc) {
-		
+
 		XPEDXOrgNodeDetailsBean orgDetailsBean = new XPEDXOrgNodeDetailsBean();
 		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		Document outputDoc = null;
-		try 
+		try
 		{
-			
+
 			Map<String, String> valueMap = new HashMap<String, String>();
 			String customerId=wcContext.getCustomerId();
 			String envCode=shipToCustomer.getExtnEnvironmentCode();
@@ -5826,7 +5912,7 @@ public class XPEDXWCUtils {
 		}
 		return orgDetailsBean;
 	}
-	
+
 	 public static Element getCustomerListDetalis(List<String> customerIdList ,IWCContext wcContext) throws Exception
 	    {
 	        String wCCustomerId;
@@ -5850,7 +5936,7 @@ public class XPEDXWCUtils {
 				exp.setAttribute("Value", customerIdList.get(i));
 				SCXmlUtil.importElement(OrElem, exp);
 			}
-	        
+
 	        loggedinCustomer = (Element)WCMashupHelper.invokeMashup("xpedxgetLoggedInCustomer", input, wcContext.getSCUIContext());
 	        return loggedinCustomer;
 	        /*valueMapinput = new HashMap();
@@ -5877,7 +5963,7 @@ public class XPEDXWCUtils {
 	        mashupEx.printStackTrace();
 	        return false;*/
 	    }
-	 
+
 	 /*
 	  * Trim the bullet points that are more than five.
 	  */
@@ -5889,12 +5975,12 @@ public class XPEDXWCUtils {
 			 while ((startIndex = desc.indexOf("<li>", fromIndex)) >= 0) {
 				 if (counter == 5) { counter++; break;}
 				 fromIndex = desc.indexOf("</li>", startIndex);
-				 counter++; 
-				
+				 counter++;
+
 			}
-			 if(counter > 5) 
+			 if(counter > 5)
 				 return (desc.substring(0, (fromIndex)) + desc.substring(desc.lastIndexOf("</li>"), desc.length()));
-			 else 
+			 else
 				 return desc;
 		 }
 		 return  desc;
@@ -5905,7 +5991,7 @@ public class XPEDXWCUtils {
 	  * @param strExtnECsr2EMailID
 	  * @return
 	  */
-	 public static String setCSREmails(String strExtnECsr1EMailID,String strExtnECsr2EMailID) 
+	 public static String setCSREmails(String strExtnECsr1EMailID,String strExtnECsr2EMailID)
 	    {
 			String strExtnECsrEMailID = "";
 		   if((strExtnECsr1EMailID != null && !strExtnECsr1EMailID.equalsIgnoreCase("")) && (strExtnECsr2EMailID != null && !strExtnECsr2EMailID.equalsIgnoreCase(""))){
@@ -5916,30 +6002,30 @@ public class XPEDXWCUtils {
 			else if(strExtnECsr2EMailID != null && !strExtnECsr2EMailID.equalsIgnoreCase("")){
 				strExtnECsrEMailID  = strExtnECsr2EMailID;
 			}
-			
-		 
+
+
 		  return strExtnECsrEMailID;
-		 
+
 		}
 	 public static String getSalesRepEmail(String sapCustomerKey,IWCContext wcContext) {
-	 		
+
 		 String totalSalesRepEmail = "";
-		 
+
 	 	 if (sapCustomerKey != null && !sapCustomerKey.equalsIgnoreCase("")) {
-	 		 
+
 	 		Element xpedxSalesRep = SCXmlUtil.createDocument("XPEDXSalesRep").getDocumentElement();
-	 		xpedxSalesRep.setAttribute("SalesCustomerKey", sapCustomerKey);  
-	 		
+	 		xpedxSalesRep.setAttribute("SalesCustomerKey", sapCustomerKey);
+
 	 		Document outputDoc;
-			
+
 	 		Object obj = WCMashupHelper.invokeMashup("getXpedxSalesRepList", xpedxSalesRep, wcContext.getSCUIContext());
 			outputDoc = ((Element) obj).getOwnerDocument();
-	        
-	 		
-	 		NodeList nodeList  = outputDoc.getElementsByTagName("XPEDXSalesRep");  
+
+
+	 		NodeList nodeList  = outputDoc.getElementsByTagName("XPEDXSalesRep");
 			int salesRepLength = nodeList.getLength();
 			List<String> salesRepUserKeysList = new ArrayList<String>();
-			
+
 			for (int counter = 0; counter < salesRepLength ; counter++) {
 				Element salesRepElem = (Element) nodeList.item(counter);
 				String salesUserKey = "";
@@ -5949,7 +6035,7 @@ public class XPEDXWCUtils {
 				if(salesUserKey !=null && salesUserKey.trim().length() > 0)
 					salesRepUserKeysList.add(salesUserKey);
 			}
-			
+
 			if(salesRepUserKeysList.size() > 0){
 				try {
 				Element inputElem = WCMashupHelper.getMashupInput("getUserListWithContactPersonInfo", wcContext);
@@ -5965,13 +6051,13 @@ public class XPEDXWCUtils {
 						SCXmlUtil.importElement(OrElem, exp);
 					}
 				}
-				 
+
 				outputDoc =((Element) WCMashupHelper.invokeMashup("getUserListWithContactPersonInfo", inputElem, wcContext.getSCUIContext())).getOwnerDocument();
 				}
 				catch (Exception e) {
 					e.printStackTrace();
 				}
-				 
+
 				NodeList personInfoList = outputDoc.getElementsByTagName("ContactPersonInfo");
 		 		int contactPersonInfoLength = personInfoList.getLength();
 	 			for (int counter = 0; counter < contactPersonInfoLength ; counter++) {
@@ -5983,12 +6069,12 @@ public class XPEDXWCUtils {
 	 					}
 	 				}
 	 			}
-		 		
-		    }	
+
+		    }
 	 	}
 	 	return totalSalesRepEmail;
 	 	}
-	 
+
 	 public static String getLogoName(String sellerOrgCode)
 		{
 			String _imageName = "";
@@ -6012,14 +6098,28 @@ public class XPEDXWCUtils {
 				_imageName = "/Zellerbach_r_rgb_lo.jpg";
 			} else if (XPEDXConstants.XPEDXCANADA_LOGO.equalsIgnoreCase(sellerOrgCode)) {
 				_imageName = "/xpedx_r_rgb_lo.jpg";
-			} 
+			}
 			return _imageName;
 		}
        /**
         JIRA 3160 END
         */
 
+	/**
+	 * Determines the base url using the request url. This is necessary because YFSSystem.getProperty("ImagesRootFolder") does not support multiple brands.
+	 * @param req
+	 * @return Returns the images root folder. For example: https://stg.xpedx.com/swc/commonImages
+	 */
+	public static String getImagesRootFolder(HttpServletRequest req) {
+		String url = req.getRequestURL().toString();
 
+		// get the beginning of the url up to and including the port. for example:
+		//		https://stg.xpedx.com/swc/xpedx/services/XPEDXServices.action -> https://stg.xpedx.com
+		//		http://localhost:8001/swc/xpedx/services/XPEDXServices.action -> http://localhost:8001
+		String baseUrl = url.substring(0, url.indexOf("/", "https://".length() + 1));
+
+		return baseUrl + "/swc/commonImages";
+	}
 
 
 
@@ -6035,7 +6135,7 @@ public class XPEDXWCUtils {
 
 		context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		wSCUIContext = context.getSCUIContext();
-		
+
 		ISCUITransactionContext scuiTransactionContext = null;
 		String sCategoryPath="";
 
@@ -6046,7 +6146,7 @@ public class XPEDXWCUtils {
 		itemListEle.setAttribute("ItemID", itemId);
 		itemListEle.setAttribute("OrganizationCode", org);
 
-		
+
 		YFCDocument template = YFCDocument.getDocumentFor("<ItemList>" + "<Item>" + "<CategoryList>"+"<Category/>"+ "</CategoryList>" + "</Item>" + "</ItemList>");
 
 		scuiTransactionContext = wSCUIContext.getTransactionContext(true);
@@ -6076,21 +6176,21 @@ public class XPEDXWCUtils {
 	{
 		setItemDetailBackPageURLinSession("");
 	}
-   
+
 	public static void setItemDetailBackPageURLinSession(String append)
 	{
 		IWCContext wcContext =WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		String backPageURL=(wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString();
-		
+
 		if(append!=null && append.contains("#")){
 			append= append.replaceAll("#","%23");
 		}
-		
+
 		if(append != null && !"".equals(append))
 		{
-			//String splited[]=backPageURL.split("&scFlag=Y");				
+			//String splited[]=backPageURL.split("&scFlag=Y");
 			if(backPageURL != null)		{
-				String splited=backPageURL.replaceAll("&scFlag=Y", "");	
+				String splited=backPageURL.replaceAll("&scFlag=Y", "");
 				wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", splited+append+"&scFlag=Y");
 			}
 		}
@@ -6099,7 +6199,7 @@ public class XPEDXWCUtils {
 			wcContext.getSCUIContext().getSession().setAttribute("itemDtlBackPageURL", backPageURL);
 		}
 	}
-	
+
 	 public static void logExceptionIntoCent(Throwable ex)
 	 {
 		 String statckTrace=getStackTrace(ex);
@@ -6116,10 +6216,10 @@ public class XPEDXWCUtils {
 	{
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		Map<String, String> valueMap1 = new HashMap<String, String>();
-		valueMap1.put("/Exception/@StackTrace", ExceptionMsg);		
+		valueMap1.put("/Exception/@StackTrace", ExceptionMsg);
 		Element input1;
-		try {		
-			
+		try {
+
 				input1 = WCMashupHelper.getMashupInput("XpedxSwcCentLog",valueMap1, wcContext.getSCUIContext());
 				Object obj1 = WCMashupHelper.invokeMashup("XpedxSwcCentLog",input1, wcContext.getSCUIContext());
 				Document outputDoc1 = ((Element) obj1).getOwnerDocument();
@@ -6128,8 +6228,8 @@ public class XPEDXWCUtils {
 			e.toString();
 			e.toString();
 			e.printStackTrace();
-		} 
-		
+		}
+
 	}
 	//Jira 3244 reopen method
 	public static String userProfileAuthorizeLocationAccount(String custDisplayId){
@@ -6143,7 +6243,7 @@ public class XPEDXWCUtils {
 		}
 		return custDisplayId;
 	}
-	
+
 	/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
    /**
 	 * This method fetches all the SKUs(Customer Part #, Manufacturer #, MPC #) for a particular xpedx itemId
@@ -6159,6 +6259,8 @@ public class XPEDXWCUtils {
 		HashMap<String, String> skuMap = new LinkedHashMap<String, String>();
 		HashMap<String, HashMap<String,String>> itemSkuMap = new HashMap<String, HashMap<String,String>>();
 		Document xpxItemXRefDoc = getXpxItemCustXRefDoc(itemIdList, wcContext);
+		// EB-64 - Setting the ItemCustXREF doc in cache so that can retrieve the customerUOM flag for item and UOM for order detail page and Web Conf page
+		XPEDXWCUtils.setObectInCache("xpxItemXRefDoc",xpxItemXRefDoc);
 		Iterator<String> itemIdIterator = itemIdList.iterator();
 		while(itemIdIterator.hasNext()) {
 			String itemId = itemIdIterator.next();
@@ -6180,24 +6282,24 @@ public class XPEDXWCUtils {
 					}
 					itemSkuMap.put(itemId, (HashMap<String, String>)skuMap.clone());
 					skuMap.clear();//clearing the sku map for the other Item ids
-				
+
 				} else {
 					itemSkuMap=tmpItemSkuMap;
-					
+
 				}
 			}
-			
+
 		}
 		return itemSkuMap;
 	}
 	/*End - Changes made by Mitesh Parikh for JIRA 3581*/
 
-	public static String getStaticFileLocation() {		
+	public static String getStaticFileLocation() {
 		return staticFileLocation;
 	}
-	
-	
-	
+
+
+
 	public static String getXpedxBuildKey() {
 		return xpedxBuildKey;
 	}
@@ -6208,11 +6310,11 @@ public class XPEDXWCUtils {
 
 	/**
 	 * extracts catalog main categories...
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
-	
+
 	public static Map<String,String> getMainCategories() throws Exception {
 		Map<String, String> MainCategories = new LinkedHashMap<String, String>();
 
@@ -6225,8 +6327,8 @@ public class XPEDXWCUtils {
 		SCUILocalSession localSession = wcContext.getSCUIContext().getLocalSession();
 		outDoc  = (Document) localSession.getAttribute("categoryCache");
 		//SCXmlUtil.getString(outDoc);
-	if(outDoc == null || (outDoc!=null && outDoc.getDocumentElement() ==null)) 
-	{	
+	if(outDoc == null || (outDoc!=null && outDoc.getDocumentElement() ==null))
+	{
 		Map<String, String> valueMap = new HashMap<String, String>();
 		String orgCode = wcContext.getStorefrontId();
 		String customerId = wcContext.getCustomerId();
@@ -6235,10 +6337,10 @@ public class XPEDXWCUtils {
 
 		Element input = WCMashupHelper.getMashupInput("xpedx-PreferredCatalogOptions", valueMap, wcContext
 						.getSCUIContext());
-		
+
 		String inputXml = SCXmlUtil.getString(input);
 		log.debug("Input XML: " + inputXml);
-		
+
 		el1 = (Element) WCMashupHelper.invokeMashup(
 				"xpedx-PreferredCatalogOptions", input, wcContext
 						.getSCUIContext());
@@ -6250,11 +6352,11 @@ public class XPEDXWCUtils {
 		if (null != outputXML) {
 			log.debug("Output XML: " + SCXmlUtil.getString(el1));
 		}
-		
+
 	}else{
 		outputXML= outDoc.getDocumentElement();
-	}	
-	
+	}
+
 		Element categoryList = XMLUtilities
 				.getChildElementByName(outputXML, "CategoryList");
 		if (categoryList == null) {
@@ -6268,7 +6370,7 @@ public class XPEDXWCUtils {
 			String sDesc = catElem.getAttribute("ShortDescription");
 			MainCategories.put(catID, sDesc);
 		}
-		
+
 		XPEDXConstants.logMessage("MainCategories List : " + MainCategories );
 
 		return MainCategories;
@@ -6287,4 +6389,170 @@ public class XPEDXWCUtils {
 		setCurrentCustomerIntoContext(shipToBeforeEditOrder,wcContext);
 	}
 	//end for jira 4306
+
+	private static Element getItemCustomExtnAndUOM(List<String> itemIds,IWCContext wcContext,YFSEnvironment env) throws Exception
+	{
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		Element allAPIOutputDoc=null;
+		try {
+			if(shipToCustomer==null) {
+				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils.getCustomerDetails(wcContext.getCustomerId(),wcContext.getStorefrontId())
+						.getDocumentElement());
+				shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+			}
+		}
+		catch (Exception e) {
+			log.error("Error fetching or creating the shipToCustomer object in to the session in getXpxItemCustXRefDoc() So returning back null");
+		}
+
+		if(!(itemIds!=null && itemIds.size()>0))
+			return allAPIOutputDoc;
+
+		if(shipToCustomer!=null) {
+			String envCode = shipToCustomer.getExtnEnvironmentCode();
+			String legacyCustomerNumber=shipToCustomer.getExtnLegacyCustNumber();
+			String custDivision = shipToCustomer.getExtnCustomerDivision();
+			String companyCode=shipToCustomer.getCompany();
+			Element xrefInput =  SCXmlUtil.createDocument("XPXItemcustXref").getDocumentElement();
+			Element res =  null;
+			try {
+				xrefInput.setAttribute("EnvironmentCode", envCode);
+				xrefInput.setAttribute("CustomerNumber", legacyCustomerNumber);
+				xrefInput.setAttribute("CustomerDivision", custDivision);
+				Element complexQuery = xrefInput.getOwnerDocument().createElement("ComplexQuery");
+				xrefInput.appendChild(complexQuery);
+				Element Or = xrefInput.getOwnerDocument().createElement("Or");
+				complexQuery.appendChild(Or);
+				Iterator<String> itemIdIter = itemIds.iterator();
+
+				String customerId = wcContext.getCustomerId();
+
+				Element input = SCXmlUtil.createDocument("XPXCatalogAllAPIService").getDocumentElement();
+
+				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+				YFCElement documentElement = inputDocument.getDocumentElement();
+
+				documentElement.setAttribute("CustomerID", customerId);
+				documentElement.setAttribute("OrganizationCode", wcContext.getStorefrontId());
+
+				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+				YFCElement complexQueryOrElement = documentElement.createChild("Or");
+
+				complexQueryElement.setAttribute("Operator", "AND");
+				complexQueryElement.appendChild(complexQueryOrElement);
+				Element customerDetails=SCXmlUtil.createChild(inputDocument.getDocument().getDocumentElement(), "CustomerDetails");
+				//EB 47 customerDetails.setAttribute("ExtnCompanyCode", shipToCustomer.getExtnCompanyCode());
+				customerDetails.setAttribute("ExtnEnvironmentCode", shipToCustomer.getExtnEnvironmentCode());
+				customerDetails.setAttribute("ExtnShipFromBranch", shipToCustomer.getExtnShipFromBranch());
+				customerDetails.setAttribute("ExtnCustomerDivision", shipToCustomer.getExtnCustomerDivision());
+				customerDetails.setAttribute("ExtnUseOrderMulUOMFlag", shipToCustomer.getExtnUseOrderMulUOMFlag());
+
+				Element xpxItemExtninputElem = SCXmlUtil.createDocument("XPXItemExtn").getDocumentElement();;
+				xpxItemExtninputElem.setAttribute("XPXDivision", shipToCustomer.getExtnShipFromBranch());
+				xpxItemExtninputElem.setAttribute("EnvironmentID", envCode);
+				xpxItemExtninputElem.setAttribute("IsAssociationRequired", "Y");
+				Element itemExtComplexQuery = xpxItemExtninputElem.getOwnerDocument().createElement("ComplexQuery");
+				xpxItemExtninputElem.appendChild(itemExtComplexQuery);
+				Element inputNodeListElemt = xpxItemExtninputElem.getOwnerDocument().createElement("Or");
+				itemExtComplexQuery.appendChild(inputNodeListElemt);
+				itemIdIter = itemIds.iterator();
+				while(itemIdIter.hasNext()) {
+					//Complex query for XPXItemExtn input xml
+					Element expElement =SCXmlUtil.createChild(inputNodeListElemt, "Exp");
+					String itemid=itemIdIter.next();
+					expElement.setAttribute("Name", "ItemID");
+					expElement.setAttribute("Value",itemid );
+
+					//Complex query for itemXef input xml
+					Element exp1Element = xrefInput.getOwnerDocument().createElement("Exp");
+					exp1Element.setAttribute("Name", "LegacyItemNumber");
+					exp1Element.setAttribute("QryType", "EQ");
+					exp1Element.setAttribute("Value", itemid);
+					SCXmlUtil.importElement(Or, exp1Element);
+
+					//Complex query for PriceLineList input xml
+					Document expDoc = YFCDocument.createDocument("Exp").getDocument();
+					Element exp2Element = expDoc.getDocumentElement();
+					exp2Element.setAttribute("Name", "ItemID");
+					exp2Element.setAttribute("Value", itemid);
+
+					//UOMList input XML
+					YFCElement exp3Element = documentElement.createChild("Exp");
+					exp3Element.setAttribute("Name", "ItemID");
+					exp3Element.setAttribute("Value", itemid);
+					complexQueryOrElement.appendChild((YFCNode)exp3Element);
+				}
+				input.appendChild(input.getOwnerDocument().importNode(xrefInput, true));
+				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
+				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
+				String inputXml = SCXmlUtil.getString(input);
+				YIFApi api = YIFClientFactory.getInstance().getApi();
+				allAPIOutputDoc = api.executeFlow(env, "XPXCatalogAllAPIService",
+						input.getOwnerDocument()).getDocumentElement();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return allAPIOutputDoc;
+	}
+	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items,boolean defaultShowUOMFlag) {
+
+		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+				.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext
+				.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		if(items == null || items.size() ==0)
+			return itemUomHashMap;
+		try {
+			Element allAPIOutputDoc=getItemCustomExtnAndUOM(items,context,env);
+			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
+			ServletActionContext.getRequest().setAttribute("itemsUOMListElement", wElement);
+			ServletActionContext.getRequest().setAttribute("XPXItemExtnList", allAPIOutputDoc.getElementsByTagName("XPXItemExtnList").item(0));
+			ServletActionContext.getRequest().setAttribute("XPXItemcustXrefList",allAPIOutputDoc.getElementsByTagName("XPXItemcustXrefList").item(0));
+
+			if(allAPIOutputDoc != null)
+			{
+
+				if(items.size()== 1 && defaultShowUOMFlag == true)
+					itemUomHashMap.put(items.get(0), XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items.get(0), context.getStorefrontId()));
+				else
+					return XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items, context.getStorefrontId(),false);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+				scuiTransactionContext.end();
+				env.clearApiTemplate("XPXUOMListAPI");
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+				env = null;
+		}
+		return itemUomHashMap;
+
+	}
+
+	public static String getBrowserVersion(String browserPropertyName) {
+
+		String versionString = YFSSystem.getProperty(browserPropertyName);
+
+		if(versionString == null) {
+			log.warn("getBrowserVersion failed: unable to get property " + browserPropertyName);
+			versionString="";
+		}
+		else {
+			versionString = versionString.trim();
+		}
+
+		return versionString;
+	}
 }

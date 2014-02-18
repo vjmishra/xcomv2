@@ -25,7 +25,7 @@
 					<s:set name="ArticleKey" value='#xutil.getAttribute(#articleLine,"ArticleKey")' />
 					
 					<li>
-						<a href="<s:url namespace='/profile/user' action='xpedxReadArticle'><s:param name="articleKey" 
+						<a href="<s:url namespace='/profile/user' action='MyReadArticle'><s:param name="articleKey" 
                 			value='%{#ArticleKey}' /></s:url>" class="underlink">
 							<s:property value='%{#ArticleName}'/>
 						</a>

@@ -74,7 +74,14 @@
           Nullable="true" 
           XMLName="EmailID" />   
            
-           
+           <Attribute ColumnName="EXTN_SALT_KEY" 
+           DataType="Text-20"
+           DefaultValue="' '"
+           Description="Indicates the user salt key"
+           Nullable="true" 
+           Size="" 
+           XMLName="SaltKey" />
+            
         </Attributes>
          <PrimaryKey Name="XPEDX_SALES_REP_PK">
 		      <Attribute ColumnName="CUSTOMER_ID" XMLName="CustomerID"/>

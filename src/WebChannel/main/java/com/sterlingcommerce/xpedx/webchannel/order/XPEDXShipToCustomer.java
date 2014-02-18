@@ -31,7 +31,7 @@ public class XPEDXShipToCustomer implements Cloneable{
 		FirstName = firstName;
 	}
 	public String getMiddleName() {
-		
+
 		return MiddleName;
 	}
 	public void setMiddleName(String middleName) {
@@ -115,7 +115,7 @@ public class XPEDXShipToCustomer implements Cloneable{
 	public void setLocationID(String locationID) {
 		LocationID = locationID;
 	}
-	
+
 	public String getCityCode() {
 		if(CityCode!= null && CityCode.length() > 20){
 			CityCode = CityCode.substring(0,20);
@@ -126,6 +126,7 @@ public class XPEDXShipToCustomer implements Cloneable{
 		CityCode = cityCode;
 	}
 
+	@Override
 	public String toString() {
 		String name = this.getFirstName()+","+this.getMiddleName()+","+this.getLastName();
 		String Address = null;
@@ -139,9 +140,15 @@ public class XPEDXShipToCustomer implements Cloneable{
 		String toString = this.getCustomerID()+","+this.getCompany()+","+name+","+Address;
 		return toString;
 	}
-	
-	
 
+
+
+	public String getRelationshipType() {
+		return relationshipType;
+	}
+	public void setRelationshipType(String relationshipType) {
+		this.relationshipType = relationshipType;
+	}
 	public String getParentCustomerID() {
 		return parentCustomerID;
 	}
@@ -202,7 +209,7 @@ public class XPEDXShipToCustomer implements Cloneable{
 	public void setExtnLegacyCustNumber(String extnLegacyCustNumber) {
 		this.extnLegacyCustNumber = extnLegacyCustNumber;
 	}
-	
+
 	public XPEDXShipToCustomer getBillTo() {
 		return billTo;
 	}
@@ -282,7 +289,7 @@ public class XPEDXShipToCustomer implements Cloneable{
 	public void setShipToDivDeliveryCutOffTime(String shipToDivDeliveryCutOffTime) {
 		this.shipToDivDeliveryCutOffTime = shipToDivDeliveryCutOffTime;
 	}
-	
+
 	public String getExtnShipComplete() {
 		return extnShipComplete;
 	}
@@ -321,7 +328,7 @@ public class XPEDXShipToCustomer implements Cloneable{
 	public void setParentCustomerKey(String parentCustomerKey) {
 		this.parentCustomerKey = parentCustomerKey;
 	}
-	
+
 	public String getCustomerStatus() {
 		return customerStatus;
 	}
@@ -335,6 +342,15 @@ public String getShipToDivdeliveryInfo() {
 	public void setShipToDivdeliveryInfo(String shipToDivdeliveryInfo) {
 		this.shipToDivdeliveryInfo = shipToDivdeliveryInfo;
 	}
+	
+	//EB-3624
+	public String getShipToDivdeliveryInfoSaal() {
+		return shipToDivdeliveryInfoSaal;
+	}
+	public void setShipToDivdeliveryInfoSaal(String shipToDivdeliveryInfoSaal) {
+		this.shipToDivdeliveryInfoSaal = shipToDivdeliveryInfoSaal;
+	}
+	//EB3624
 	
 	
 	private String FirstName;
@@ -357,6 +373,7 @@ public String getShipToDivdeliveryInfo() {
 	private String DayPhone;
 	private String ShipToName;
 	private String LocationID;
+	private String relationshipType; // division (by convention, always same as extnShipFromBranch)
 	private String parentCustomerID;
 	private String extnCustomerClass;
 	private String extnShipFromBranch;
@@ -381,6 +398,7 @@ public String getShipToDivdeliveryInfo() {
 	private String shipToOrgCorporatePersonInfoState;
 	private String shipToDivDeliveryCutOffTime;
 	private String shipToDivdeliveryInfo;
+	private String shipToDivdeliveryInfoSaal;//EB-3624
 	private XPEDXShipToCustomer billTo;
 	private XPEDXOrgNodeDetailsBean organization;
 	private String customerStatus;
@@ -395,7 +413,32 @@ public String getShipToDivdeliveryInfo() {
 	private String buyerOrganizationCode;
 	private XPEDXShipToCustomer defaultShipToCustomer;
 	private String extnAllowDirectOrderFlag;
-	
+	private String extnPriceWareHouse;
+	private String shipToOrgExtnApplyMinOrderBrands;
+	private String customerLevel;
+	private String billToEmailAddrs;
+
+	public String getBillToEmailAddrs() {
+		return billToEmailAddrs;
+	}
+	public void setBillToEmailAddrs(String billToEmailAddrs) {
+		this.billToEmailAddrs = billToEmailAddrs;
+	}
+
+	public String getShipToOrgExtnApplyMinOrderBrands() {
+		return shipToOrgExtnApplyMinOrderBrands;
+	}
+	public void setShipToOrgExtnApplyMinOrderBrands(String shipToOrgExtnApplyMinOrderBrands) {
+		this.shipToOrgExtnApplyMinOrderBrands = shipToOrgExtnApplyMinOrderBrands;
+	}
+
+	public String getCustomerLevel() {
+		return customerLevel;
+	}
+	public void setCustomerLevel(String customerLevel) {
+		this.customerLevel = customerLevel;
+	}
+
 	public String getExtnShipToSuffix() {
 		return ExtnShipToSuffix;
 	}
@@ -472,11 +515,28 @@ public String getShipToDivdeliveryInfo() {
 		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 	}
 	//JIRA 3488 end
-	
+
+	public String getExtnPriceWareHouse() {
+		return extnPriceWareHouse;
+	}
+	public void setExtnPriceWareHouse(String extnPricingWareHouse) {
+		this.extnPriceWareHouse = extnPricingWareHouse;
+	}
+
+	// added for eb-2297
+	private String extnDefaultStockedItemView;
+
+	public String getExtnDefaultStockedItemView() {
+		return extnDefaultStockedItemView;
+	}
+	public void setExtnDefaultStockedItemView(String extnDefaultStockedItemView) {
+		this.extnDefaultStockedItemView = extnDefaultStockedItemView;
+	}
+
 	//added for jira 4306
 	public XPEDXShipToCustomer()
 	{
-		
+
 	}
 	public XPEDXShipToCustomer(String firstName, String middleName,
 			String lastName, String organizationName, String eMailID,
@@ -505,7 +565,8 @@ public String getShipToDivdeliveryInfo() {
 			String rootCustomerKey, String customerKey,
 			String buyerOrganizationCode,
 			XPEDXShipToCustomer defaultShipToCustomer,
-			String extnAllowDirectOrderFlag, String extnMaxOrderAmount) {
+			String extnAllowDirectOrderFlag, String extnMaxOrderAmount, String shipToOrgExtnApplyMinOrderBrands,
+			String defaultStockedItemView) {
 		FirstName = firstName;
 		MiddleName = middleName;
 		LastName = lastName;
@@ -564,8 +625,11 @@ public String getShipToDivdeliveryInfo() {
 		this.defaultShipToCustomer = defaultShipToCustomer;
 		this.extnAllowDirectOrderFlag = extnAllowDirectOrderFlag;
 		this.extnMaxOrderAmount = extnMaxOrderAmount;
+		this.shipToOrgExtnApplyMinOrderBrands=shipToOrgExtnApplyMinOrderBrands;
+		this.extnDefaultStockedItemView = defaultStockedItemView;
 	}
-	
+
+	@Override
 	public Object clone() throws CloneNotSupportedException
 	{
 		XPEDXShipToCustomer shipToCustomer=new XPEDXShipToCustomer(FirstName, MiddleName,
@@ -595,8 +659,9 @@ public String getShipToDivdeliveryInfo() {
 				 rootCustomerKey,  customerKey,
 				 buyerOrganizationCode,
 				 defaultShipToCustomer,
-				extnAllowDirectOrderFlag,  extnMaxOrderAmount);
-		
+				extnAllowDirectOrderFlag,  extnMaxOrderAmount, shipToOrgExtnApplyMinOrderBrands,
+				extnDefaultStockedItemView);
+
 		return shipToCustomer;
 	}
 	//end for jira 4306

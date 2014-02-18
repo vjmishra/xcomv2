@@ -2,6 +2,8 @@ package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -186,6 +188,8 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	    if (grayed) {
 
 	        checked = true;
+	        item.setChecked(true);
+	        item.setGrayed(true);
 
 	    } else {
 
@@ -196,22 +200,79 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	        while (index < items.length) {
 	        	
 	            TreeItem child = items[index];
+	            if(!child.getGrayed()){
+	            	item.setGrayed(child.getGrayed());
+	            }
+	            if(count ==1 && child.getChecked()){
+	            	i++;
+	            }else{
 	            if(child.getChecked()){
 	            	i++;
+	            }
 	            }
 	            index++;
 
 	        }
+	      
+	        if(i==0){
+	        	if(item.getText().contains("-M")){
+	        		 if(item.getGrayed()== true){
+				         checked=true;
+			       	  	 item.setChecked(grayed);
+			           	 item.setGrayed(grayed);
+			           	 grayed=false;
+				        	}
+	        		 else{
+		            	 checked=false;            	
+		            	 item.setChecked(checked);
+		            	 item.setGrayed(true);
+		            	 grayed=false;
+		            }	 
+	        	}
+	        	else if(item.getText().contains("-S")){
+	        		 if(item.getGrayed()== true){
+				         checked=true;
+			       	  	 item.setChecked(checked);
+			           	 item.setGrayed(false);
+			           	 grayed=false;
+				        	}
+	        		 else{
+		            	 checked=false;            	
+		            	 item.setChecked(checked);
+		            	 item.setGrayed(false);
+		            	 grayed=false;
+		            }	 
+	        	}
+	        	 else if(count==i){
+	            	  	checked=true;
+	            	  	 item.setChecked(checked);
+	                	 item.setGrayed(false);
+	                	 grayed=false;
+	            }
+	            else{
+	            	 checked=false;            	
+	            	 item.setChecked(false);
+	            	 item.setGrayed(false);
+	            	 grayed=false;
+	            }
+	        }
 	        
-            if(count==i){
+	        else if(count==i){
             	  	checked=true;
+            	  	 item.setChecked(checked);
+                	 item.setGrayed(false);
+                	 grayed=false;
             }
-            else
-            	checked=false;
+            else{
+            	 checked=false;            	
+            	 item.setChecked(checked);
+            	 item.setGrayed(false);
+            	 grayed=false;
+            }
 	    }
-    item.setChecked(checked);
-
-    grayed=false;
+    //item.setChecked(checked);
+	    
+    
 	 checkPath(item.getParentItem(), checked, grayed);
 
     }
@@ -307,7 +368,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			
 			iiparent=treeItem.getParentItem();
 			if(iiparent!=null){
-				if(iiparent.getChecked()){
+				if((iiparent.getChecked() && iiparent.getGrayed()==false) && treeItem.getGrayed()==false){
 					isParentChecked=true;
 				}
 				else
@@ -315,11 +376,11 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 			}
 				
 			if(isParentChecked){
-				if(treeItem.getData("OldValue").equals("true")){
+				//if(treeItem.getData("OldValue").equals("true")){
 					//myBehavior.createManageAssignmentInput(strCustID, false);
 					//XB-638 Changes
 					deleteCustIdList.add(strCustID);
-				}
+				//}
 			}
 			else {
 				if(treeItem.getData("OldValue").equals("true") && !treeItem.getChecked() ){
@@ -327,7 +388,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 					//XB-638 Changes
 					deleteCustIdList.add(strCustID);
 					
-				} else if(!treeItem.getData("OldValue").equals("true") && treeItem.getChecked()){
+				} else if(!treeItem.getData("OldValue").equals("true") && (treeItem.getChecked() && treeItem.getGrayed()==false)){
 					//myBehavior.createManageAssignmentInput(strCustID, true);   //---used to create an entry in  DB.
 					//XB-638 Changes
 					addCustIdList.add(strCustID);
@@ -449,6 +510,7 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				String CustomerID="";
 				StringBuffer address= new StringBuffer();
 				TreeItem iiItem = new TreeItem (localiItem2, 1);
+
 				String orgName=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationName");
 				String orgId=YRCXmlUtils.getAttributeValue(eleCust, "Customer/BuyerOrganization/@OrganizationCode");
 				
@@ -459,14 +521,14 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				String state = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State");
 				String zip = YRCXmlUtils.getAttributeValue(eleCust, "Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode");
 				
-				
-			
 				String shipFromBranch=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipFromBranch");
 				String legacyNo=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnLegacyCustNumber");
 				String billTosuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnBillToSuffix");
 				String shipToSuffix=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnShipToSuffix");
 				String customerType=YRCXmlUtils.getAttributeValue(eleCust, "Customer/Extn/@ExtnSuffixType");
-				
+
+				String status = YRCXmlUtils.getAttributeValue(eleCust, "Customer/@Status");
+
 				if("MC".equalsIgnoreCase(customerType)){
 					CustomerID=orgId;
 				}
@@ -479,7 +541,6 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 				else if("S".equalsIgnoreCase(customerType)){
 						CustomerID=shipFromBranch+"-"+legacyNo+"-"+shipToSuffix;
 				}
-				
 				
 				if(add1 !=null && add1.trim().length()>0)
 				{
@@ -507,8 +568,18 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 					address.append(" "+country);
 				}
 				
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType)))){
+					iiItem.setText(CustomerID +", " +orgName+ ", " +address.toString());					
+					iiItem.setFont(JFaceResources.getFontRegistry().getBold(""));
+				}else{
+					iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
+				}
 				
-				iiItem.setText(orgName+" ("+CustomerID+")"+address.toString());
+				if (("B".equalsIgnoreCase(customerType)|| ("S".equalsIgnoreCase(customerType))) && status!=null && status.equals("30")){
+					iiItem.setText("[Suspended] do not use " + CustomerID +", " +orgName+ address.toString());
+					iiItem.setForeground(getDisplay().getSystemColor(SWT.COLOR_GRAY));
+					iiItem.setFont(JFaceResources.getFontRegistry().getItalic(""));
+				}
 				
 				iiItem.setData("data",eleCust);
 				if(myBehavior.isThisCustomerAssigned(eleCust)){

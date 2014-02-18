@@ -25,7 +25,7 @@ function viewAccountDetails()
 	<h2 style="margin-bottom:10px; color:#000;"><span>Select Account</span></h2>
 	
 	<div class="form-service-light"> 
-	<s:form id="selectAccountForm" name="selectAccountForm" namespace='/profile/org' action='xpedxGetCustomerInfo'>
+	<s:form id="selectAccountForm" name="selectAccountForm" namespace='/profile/org' action='MyGetCustomerInfo'>
 	
 		<s:hidden name="organizationCode" id="organizationCode" value='%{wCContext.storefrontId}' />
 		

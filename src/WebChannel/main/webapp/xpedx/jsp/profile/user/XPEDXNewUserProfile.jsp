@@ -167,7 +167,16 @@
 		    	    }
 		    	}
 		    }
-		    
+			//Added for EB 1977
+			function isEstimatorChecked(){
+				if(document.getElementById("estimator").checked){
+					document.getElementById("estimatorMsg").style.display = "inline";
+				}
+				else{
+					document.getElementById("estimatorMsg").style.display = "none";
+				}
+			}
+			//End of EB 1977  
 	</script>
 			
 <script type="text/javascript" 
@@ -256,7 +265,7 @@
 							                      	Buyer
 							                    </label> 
 							                    <label id="purposeofmails-u6" title="Estimator views available inventory and pricing.">
-							                    	<s:checkbox tabindex="75" name='estimator' id='estimator'/>
+							                    	<s:checkbox tabindex="75" name='estimator' id='estimator' onclick="javascript:isEstimatorChecked();" />
 							                      	Estimator
 							                    </label>
 							                    <label id="purposeofmails-u7" title="Permitted to view invoices online.">
@@ -273,6 +282,9 @@
 							                    </label>
 											</td>
 			                  			</tr>
+			                  			<tr>
+											<td colspan="2" class=""></td><td colspan="2" class=""><div id="estimatorMsg" style="display:none; align:center" class="notice">The Estimator Role cannot place orders</div></td>
+										</tr>
 			                  			<tr>
 			                    			<td class="no-border-right-user"><div class="mandatory float-left">*</div> First Name:</td>
 			                    			<td width="31%" class="no-border-right-user">

@@ -2,6 +2,7 @@ package com.xpedx.nextgen.dataload.api;
 
 import java.sql.Connection;
 import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -61,6 +62,15 @@ public class XPXInventoryIndicatorUpdate {
 			log.error("Exception: " + e.getStackTrace());
 //			prepareErrorObject(e, "Item_Branch", XPXLiterals.E_ERROR_CLASS, env,inputXML);	
 
+		}
+		finally
+		{
+			try {
+				m_Conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return m_Conn;

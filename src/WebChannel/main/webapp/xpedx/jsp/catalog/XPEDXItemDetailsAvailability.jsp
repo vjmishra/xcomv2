@@ -7,6 +7,7 @@
 <s:set name='scuicontext' value="uiContext" />
 <s:set name='showCurrencySymbol' value='true' />
 <s:set name="itemID" value='#_action.getItemID()' />
+<s:set name="qtyTxtBox" value='#_action.getQtyTextBox()' />
 <s:set name="json" value='pnaHoverMap.get(#itemID)' /> 
 <s:set name="jsonUOM" value="#json.get('UOM')" /> 
 <s:set name="jsonImmediate" value="#json.get('Immediate')" /> 
@@ -14,11 +15,24 @@
 <s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" /> 
 <s:set name="jsonAvailability" value="#json.get('Availability')" /> 
 <s:set name="jsonTotalQty" value="#json.get('Total')" />
+<s:set name="jsonAvailabilityMessage" value="#json.get('AvailabilityMessage')" />
+<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
+<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
+
 <s:set name="orderMul" value="#_action.getValidateOrderMul()" />
 <s:hidden name="orderMul" value="#_action.getValidateOrderMul()" />
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <s:hidden name="pnaErrorStatusMsg" id="pnaErrorStatusMsg" value="%{#pnaErrorStatusMsg}"/>
-<s:set name="jsonUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+
+<s:set name="reqCustomerUOM" value="%{#_action.getPnaRequestedCustomerUOM()}"></s:set>
+<s:if test='%{#reqCustomerUOM==#jsonUOM}'>
+	<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+	<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />										
+</s:if>
+<s:else>
+	<s:set name="jsonUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+</s:else>		
+
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
@@ -34,48 +48,63 @@
 
 			   
 	<div id="jsonAvalabilityDiv">
-		<table class="avail-tbl" width="325"  border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;"> 
-					
+	<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
+		<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+		<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:10px"><strong><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
+	</s:if>
+	<br/>
+	<fieldset id="Item_fieldset"><legend style="font-weight: bold;">Availability</legend>
+		<table width="320" border="0" cellspacing="0" cellpadding="0" style="margin-left:-25px;">
+			<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0}'>
+				<tr>
+					<td width="150" align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:27px"><strong style="align:left;"><s:property value='%{#jsonAvailabilityMessage}' /></strong></td>
+				</tr>
+			</s:if>
+		</table>
+		<table class="avail-tbl" width="325" border="0" cellspacing="0" cellpadding="0" style="margin-left:-47px;margin-top: 2px;">			
 			<tr>
-				<td class="table_center" width="163"><strong>Total Available:</strong></td>
+				<td class="table_center" style="padding-right:25px;" align="left"><strong>Next Day:</strong></td>
 				<td class="table_right"><strong>
-			<s:if test='%{#jsonTotalQty == null}'>
-				<s:set name="jsonTotalQty" value="%{'0'}"></s:set>
-			</s:if>
-			<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />-->
-				<s:set name="jsonTotalQty" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotalQty)"/>	
-				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotalQty)" />
-				
-			<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='#xpedxutil.formatQuantityForCommas(#jsonTotalQty)' />"></meta>
-			
-			</strong></td>
-				<td width="114">&nbsp;<strong><s:property value='%{#jsonUOMDesc}' /></strong></td>
-			</tr>
-			<tr>
-				<td class="table_center">Next Day:</td>
-				<td class="table_right">
-			<s:if test='%{#jsonNextDay == null}'>
-				<s:set name="jsonNextDay" value="%{'0'}"></s:set>
-			</s:if>
-			<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />-->
+				<s:if test='%{#jsonNextDay == null}'>
+					<s:set name="jsonNextDay" value="%{'0'}"></s:set>
+				</s:if>
+				<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonNextDay)" />-->
 				<s:set name="jsonNextDay" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonNextDay)"/>
 				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonNextDay)" />			
-				</td>
-				<td width="114">&nbsp;<%--<s:property value='%{#jsonUOMDesc}' /> --%></td>				
-			</tr>
+				</strong></td>
+				<td width="114"><%--<s:property value="#jsonUOMDesc" /> --%></td>
+			</tr>	
+			
 			<tr>
-				<td class="table_center">2+ Days:</td>
+				<td class="table_center" align="left">2+ Days:</td>
 				<td class="table_right">
-			<s:if test='%{#jsonTwoPlus == null}'>
-				<s:set name="jsonTwoPlus" value="%{'0'}"></s:set>
-			</s:if>
-			<!-- 
-			<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" /> -->
-			<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
-			<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />		
-			</td>
-			<td width="114">&nbsp;<%-- <s:property value='%{#jsonUOMDesc}' /> --%></td>				
+				<s:if test='%{#jsonTwoPlus == null}'>
+					<s:set name="jsonTwoPlus" value="%{'0'}"></s:set>
+				</s:if>
+				<!-- 
+				<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTwoPlus)" /> -->
+				<s:set name="jsonTwoPlus" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTwoPlus)"/>
+				<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />		
+				</td>
+				<td width="114"><%-- <s:property value='%{#jsonUOMDesc}' /> --%></td>
 			</tr>
+			
+			<tr>
+				<td class="table_center" width="163" align="left" style="padding-left:28px">Total Available:</td>
+				<td class="table_right">
+				<s:if test='%{#jsonTotalQty == null}'>
+					<s:set name="jsonTotalQty" value="%{'0'}"></s:set>
+				</s:if>
+				<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotalQty)" />-->
+					<s:set name="jsonTotalQty" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotalQty)"/>	
+					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotalQty)" />
+					
+				<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='#xpedxutil.formatQuantityForCommas(#jsonTotalQty)' />"></meta>
+				
+				</td>
+				<td width="114">&nbsp;<s:property value='%{#jsonUOMDesc}' /></td>
+			</tr>
+			
 		</table>
 		<br/>
 		<p id="avail_today"><i>
@@ -87,6 +116,7 @@
 			<s:property value="#xpedxutil.formatQuantityForCommas(#jsonImmediate)" />
 			<s:property value='%{#jsonUOMDesc}' /> 
 			available today at <s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDivisionName()" /></i></p>
+			</fieldset>
 	</div>
 	<div id="pricesDiv">
 	<s:if test="%{#orderMultiple}">
@@ -101,6 +131,15 @@
 							<s:set name='formattedUnitpriceForUom'	value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#unitPriceForUOM,#showCurrencySymbol)' />
 							<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 							<s:if test='%{#disUOM !=" "}'>
+								<s:set name="temp" value="#disUOM" />
+								<s:set name="customerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#reqCustomerUOM)"/>
+								<s:if test='%{#customerUOMDesc==#temp}'>	
+									<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />
+									<s:set name="disUOMDesc" value="#customerUomWithoutM" />
+								</s:if>
+								<s:else>
+									<s:set name="disUOMDesc" value="#disUOM" />
+								</s:else>			
 							<s:if test="#disUOMStatus.first">
 							<tr>
 										<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
@@ -109,7 +148,7 @@
 														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>  
 										    </s:if>
 										    <s:else>
-										 				<s:property value='%{#formattedUnitpriceForUom}' /> / <s:property value="#disUOM" />
+										 				<s:property value='%{#formattedUnitpriceForUom}' /> / <s:property value="#disUOMDesc" />
 										 	</s:else>
 										</td>
 							</tr>
@@ -122,7 +161,7 @@
 										 <td></td>
 										 </s:if>
 										 <s:else>
-														<s:property value='%{#formattedUnitpriceForUom}' /> / <s:property value="#disUOM" />
+														<s:property value='%{#formattedUnitpriceForUom}' /> / <s:property value="#disUOMDesc" />
 										 </s:else>
 										</td>
 								</tr>
@@ -200,8 +239,23 @@
 											<s:set name="bracketPriceForUOM" value="bracketPrice" />
 											<s:set name='formattedBracketpriceForUom' value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#bracketPriceForUOM,#showCurrencySymbol)' />
 											<s:set name="bracketUOMDesc" value="bracketUOM" />
-											<s:set name='formattedbracketUOM'
-													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+											<s:if test='%{#reqCustomerUOM==#bracketUOMDesc}'>
+												<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+												<s:set name="formattedbracketUOM" value="#customerUomWithoutM" />										
+											</s:if>
+											<s:else>
+												<s:set name='formattedbracketUOM' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+											</s:else>	
+											
+											<s:set name="pricingUOM" value="%{#_action.getPricingUOM()}" />
+											<s:if test='%{#reqCustomerUOM==#pricingUOM}'>
+												<s:set name='pCustomerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+												<s:set name="pricingUOMDesc" value="#pCustomerUomWithoutM" />										
+											</s:if>
+											<s:else>
+												<s:set name="pricingUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#pricingUOM)" />
+											</s:else>		
+											
 											<s:if test="#bracketStatus.first">
 												<s:set name="isMyPriceZero" value="%{'true'}" />
 												<s:if test="%{#_action.getCategory() == 'Paper'}">
@@ -211,7 +265,7 @@
 														- 
 														<s:property value='%{#formattedBracketpriceForUom}' />
 														/
-														<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
+														<s:property value='%{#pricingUOMDesc}' />
 													</td>
 													</s:if>
 												</tr>											
@@ -226,7 +280,7 @@
 														- 
 														<s:property value='%{#formattedBracketpriceForUom}' />
 														/
-														<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getPricingUOM())' />
+														<s:property value='%{#pricingUOMDesc}' />
 													</td>
 													</s:if>
 												</tr>

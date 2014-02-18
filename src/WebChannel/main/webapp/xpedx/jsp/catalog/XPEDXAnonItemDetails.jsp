@@ -7,7 +7,7 @@
 
 
 <div id="main-container">
-<meta name="WT.ti" content="Anon xpedx Product Details" /> 
+<meta name="WT.ti" content="Anon <s:property value='wCContext.storefrontId' /> Product Details" /> 
 	<div id="main" class="anon-pages">
 		<!-- Header Start  -->
 		
@@ -210,8 +210,8 @@
 			<br> <!-- CODE_START MIL - PN --> <s:form
 				id="XPEDXMyItemsDetailsChangeShareList"
 				name="XPEDXMyItemsDetailsChangeShareList"
-				action="XPEDXMyItemsDetailsChangeShareList"
-				namespace="/xpedx/myItems" method="post">
+				action="MyItemsDetailsChangeShareList"
+				namespace="/myItems" method="post">
 
 				<p><strong>List Name:</strong>&nbsp;&nbsp;
 				<input type="text" maxlength="255"
@@ -545,32 +545,23 @@
 			<!-- END prod-config -->
 		<!-- TABS -->
 		<div class="avail-grid">
-			<div id="tabs" >
-				<ul>
-					<li><a href="#tabs-2">Specifications</a></li>
-				</ul>
-				
-				<p class="tablinks">&nbsp;
-				<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
-					<s:set name="link" value="value" />
-					<s:set name="desc" value="key" />	
-					<a class="slightly_left" href="<s:property value='#link'/>" target="_blank"><s:property value="#desc"/></a>
-				</s:iterator>
-				</p>
-				<!-- tab1 -->
-				<!-- end tab1 -->
-                                    
+	                            
 				<!-- tab2 -->
-		<div id="tabs-2" ><s:set name="certImage"
+		<div id="tabs-2" >
+		<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
+						<s:set name="link" value="value" />
+						<s:set name="desc" value="key" />	
+						<a id="msds_link" href="<s:property value='#link'/>" target="_blank"><s:property value="#desc"/></a>
+			</s:iterator>
+		<fieldset id="Item_fieldset"><legend style="font-weight: bold;">Specifications</legend>
+		<s:set name="certImage"
 			value="#_action.getCertImagePath()" /> <s:if
 			test="%{null != #certImage}">
 			<img src="#certImage" class="green-e-prod" align="right" />
 		</s:if> <s:set name="itemAttributeGroupTypeList"
 			value='#xutil.getChildElement(#itemElem,"ItemAttributeGroupTypeList")' />		
-		<div id="tabs-2" class="ie_tabsfix" >	
-		<br/>
 		<table id="prod-details-tbl" border="0" cellspacing="0"
-			cellpadding="0" style="top=24px;" >
+			cellpadding="0" style="overflow: auto;margin-top: 2px;">
 			<tr class="detail-head-prod-bg">
 				<td class="tblhead-white int-deets2">Specification</td>
 				<td class="tblhead-white">Details</td>
@@ -713,13 +704,13 @@
 				</s:if>
 			</s:iterator>
 		</table>
-		</div>
+	</fieldset>
 
 				<!-- end tab2 -->
 			</div>
 			
 			<div class="clearall">&nbsp;</div>
-		</div>
+
 	</div>
 	
         </div>

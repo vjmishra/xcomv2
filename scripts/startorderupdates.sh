@@ -15,6 +15,7 @@ case "$HOST_NAME" in
  zxpappd02) ENVIRONMENT=dev-fake;;
  zxpappt01) ENVIRONMENT=stg;; 
  zxpapps01) ENVIRONMENT=stg-fake;; 
+ zxpappint01) ENVIRONMENT=integration;;
  zxpagnt01) ENVIRONMENT=prod;; 
  zxpagnt02) ENVIRONMENT=prod;; 
  zxpapp01) ENVIRONMENT=prod;; 

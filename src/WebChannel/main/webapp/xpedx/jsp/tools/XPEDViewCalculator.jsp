@@ -91,7 +91,8 @@
 <!-- Webtrend tag stops --> 
 </head>
 <!-- Web trend tag start -->
-<s:include value="../../htmls/webtrends/webtrends.html"/>
+<!-- Commenting out WT tag temporarily -->
+<!-- s:include value="../../htmls/webtrends/webtrends.html"/ -->
 <!-- Web trend tag end -->
 
 <s:set name='_action' value='[0]' />
@@ -116,8 +117,8 @@
  
             
                       
-              <s:form id="impCalculatorForm" name="impCalculatorForm" namespace="/xpedx/tools"
-              method="post" action="xpedxViewImpCalculation">
+              <s:form id="impCalculatorForm" name="impCalculatorForm" namespace="/tools"
+              method="post" action="MyViewImpCalculation">
             
                <table style="width:600px;" class="form">
                     <tbody>

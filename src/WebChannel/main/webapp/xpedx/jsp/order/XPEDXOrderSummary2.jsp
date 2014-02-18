@@ -908,8 +908,8 @@ font-size:11.7px;
 	id="OrderDetailsForm" namespace="/order" method="POST" validate="true">
 </s:form>
 
-
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+<!-- EB-519 -->
+<!--<s:action name="xpedxFooter" executeResult="true" namespace="/common" />-->
 <s:include value='payment/OrderPaymentCommon.jsp' />
 <s:url id='updateNotesURLid' namespace='/order'
 	action='xpedxOrderSummaryModifyLineNotes' />
@@ -924,6 +924,8 @@ font-size:11.7px;
 	id='submitOrderURL' href='%{#submitOrderURLid}' /> <s:url
 	id='updateURLid' namespace='/order' action='draftOrderSummaryUpdate' />
 <s:a id='updateURL' href='%{#updateURLid}' /></div>
+<!-- EB-519 -->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 <script>
 setTotalPrice('<s:property value="#totalPrice" />');

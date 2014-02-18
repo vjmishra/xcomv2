@@ -127,15 +127,15 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				 "Buyer:  Permission to use the site. Required for all users." + "\n"+
 				 "Approver:  Authorizes submission of orders."+"\n"+
 				 "Estimator:  Can view pricing and inventory availability. Cannot submit an order." + "\n"+
-				 "Stock Check:  Stock Check Web Service User for system integrations. (Does not" + "\n"+ "\t"+ 
-				 "      control inventory display for regular site user)." + "\n" +
+				 "Stock Check Web Service User:  Stock Check Web Service User for system integrations. (Does not" + 
+				 "  control inventory display for regular site user)." + "\n" +
 				 "Admin:  Permission to create user profiles, assign roles and ship to locations within" + "\n"+ 
 				 "               the account." +"\n"+
 				 "View Invoices:  Can view invoices online." + "\n"	+
 				 "View Reports:  Can view reports. (Note: User should not view reports if cannot view" + "\n"+ "\t"+ 
 				 "        pricing)." + "\n"	+
 				 "View Prices:  Can view pricing." + "\n"+
-				 "Procurement User:  Punchout User (punchout integration customers only).";
+				 "Punch Out User:  Punchout User (punchout integration customers only).";
 			
 			YRCPlatformUI.showInformation("User Roles Description", usrRoleHelpInfo);
 			
@@ -515,7 +515,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			 }
 			 Element eleExtnFlags=null;
 
-			 Element stockChkElement = YRCXmlUtils.createFromString("<UserGroup UsergroupId='STOCK-CHECK'  UsergroupKey='STOCK-CHECK' UsergroupName='Stock Check'/>").getDocumentElement();
+			 Element stockChkElement = YRCXmlUtils.createFromString("<UserGroup UsergroupId='STOCK-CHECK'  UsergroupKey='STOCK-CHECK' UsergroupName='Stock Check Web Service User'/>").getDocumentElement();
 			 Element viewInvoiceElement = YRCXmlUtils.createFromString("<UserGroup UsergroupId='VIEW-INVOICES'  UsergroupKey='VIEW-INVOICES' UsergroupName='View Invoices'/>").getDocumentElement();
 			 Element viewReportElement = YRCXmlUtils.createFromString("<UserGroup UsergroupId='VIEW-REPORTS'  UsergroupKey='VIEW-REPORTS' UsergroupName='View Reports'/>").getDocumentElement();
 			 Element viewPricesElement = YRCXmlUtils.createFromString("<UserGroup UsergroupId='VIEW-PRICES'  UsergroupKey='VIEW-PRICES' UsergroupName='View Prices'/>").getDocumentElement();

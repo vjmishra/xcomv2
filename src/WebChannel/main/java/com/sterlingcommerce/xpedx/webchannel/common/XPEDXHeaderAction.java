@@ -67,6 +67,14 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	private XPEDXShipToCustomer shipToAddress;
 	private String userTypeForWebtrend;
 	private String isFromWhichPage;
+	private boolean isDefaultShipToSuspended= false;
+	public boolean isDefaultShipToSuspended() {
+		return isDefaultShipToSuspended;
+	}
+
+	public void setDefaultShipToSuspended(boolean isDefaultShipToSuspended) {
+		this.isDefaultShipToSuspended = isDefaultShipToSuspended;
+	}
 	//Commenting since this is not required
 	//could not get key directly on jsp so added the code.
 	/*private String orderHeaderKey1 = null;
@@ -649,7 +657,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String toaFlag = null;
 		String addnlEmailAddrs = null;
 		String addnlPOList = null;
-
+		String accetptTandCDate=null;
+        String exUserlastLoginDate=null;
 		/**XBT-621 code changes 
 		 * Below code is used to get the CustomerContact extn
 		 * and set them in cache.
@@ -664,11 +673,13 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		{
 			xpxCustContExtnEle= XPEDXWCUtils.getXPXCustomerContactExtn(wcContext, customerContactId);
 			XPEDXWCUtils.setObectInCache("CustomerContExtnEle",xpxCustContExtnEle);
-			XPEDXWCUtils.setObectInCache("LastLoginDate",lastLoginDate);
+			//XPEDXWCUtils.setObectInCache("LastLoginDate",lastLoginDate);//EB-475 LastLoginDate is not used in session.
 		}
 		if(xpxCustContExtnEle != null)
 		{
 			toaFlag = xpxCustContExtnEle.getAttribute("AcceptTAndCFlag");
+			accetptTandCDate = xpxCustContExtnEle.getAttribute("TAndCAcceptedOn");
+			exUserlastLoginDate= xpxCustContExtnEle.getAttribute("LastLoginDate");
 			addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
 			addnlPOList = xpxCustContExtnEle.getAttribute("POList");
 			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
@@ -676,7 +687,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		// XBT-621 code changes end 
 
-		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N") ){
+		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N")  && ("".equalsIgnoreCase(exUserlastLoginDate) || exUserlastLoginDate==null )
+				 && ("".equalsIgnoreCase(accetptTandCDate) ||  ("".equalsIgnoreCase(accetptTandCDate)) )){
 			XPEDXWCUtils.setObectInCache("setPasswordUpdate",true);
 		}  
 
@@ -770,21 +782,21 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		if (YFCCommon.isVoid(servletPath)) {
 			return;
 		} else if (servletPath.contains("/jsp/home/XPEDXhome")) {
-			setXpedxSelectedHeaderTab("HomeTab");
+			setSelectedHeaderTab("HomeTab");
 		} else if (servletPath.contains("/jsp/MyItems")) {
-			setXpedxSelectedHeaderTab("MyItemTab");
+			setSelectedHeaderTab("MyItemTab");
 		} else if (servletPath.contains("/jsp/catalog")) {
-			setXpedxSelectedHeaderTab("CatalogTab");
+			setSelectedHeaderTab("CatalogTab");
 		} else if (servletPath.contains("/jsp/home/XPEDXPortalHome")) {
-			setXpedxSelectedHeaderTab("OrderTab");
+			setSelectedHeaderTab("OrderTab");
 		} else if (servletPath.contains("/jsp/order")) {
-			setXpedxSelectedHeaderTab("OrderTab");
+			setSelectedHeaderTab("OrderTab");
 		} else if (servletPath.contains("/jsp/services")) {
-			setXpedxSelectedHeaderTab("ServicesTab");
+			setSelectedHeaderTab("ServicesTab");
 		} else if (servletPath.contains("/jsp/tools")) {
-			setXpedxSelectedHeaderTab("ToolsTab");
+			setSelectedHeaderTab("ToolsTab");
 		} else if (servletPath.contains("jsp/profile")||servletPath.contains("jsp/admin")) {
-			setXpedxSelectedHeaderTab("AdminTab");
+			setSelectedHeaderTab("AdminTab");
 		}
 	}
 
@@ -955,6 +967,16 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				if(shipToCustomer.getOrganizationName()!=null) {
 					XPEDXConstants.USER_CUSTOMER_NAME = shipToCustomer.getOrganizationName();
 				}
+				/*EB-76 Start Changes */
+				if(shipToCustomer!=null && shipToCustomer.getDefaultShipToCustomer()!=null){
+					XPEDXShipToCustomer defaultShipToCustomer= shipToCustomer.getDefaultShipToCustomer();
+					if(defaultShipToCustomer.getCustomerStatus()!=null & defaultShipToCustomer.getCustomerStatus().trim().equals("30")){							
+							isDefaultShipToSuspended = true;
+							XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
+							xpedxCustomerContactInfoBean.setExtnDefaultShipTo(null);							
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean,xpedxCustomerContactInfoBean);					
+					}
+				} /*EB-76 End Changes */
 			}
 		} catch (Exception ex) {
 			log.error("Unable to get logged in users Customer Profile. "
@@ -1305,18 +1327,18 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	}
 
 	/**
-	 * @return the xpedxSelectedHeaderTab
+	 * @return the selectedHeaderTab
 	 */
-	public String getXpedxSelectedHeaderTab() {
-		return xpedxSelectedHeaderTab;
+	public String getSelectedHeaderTab() {
+		return selectedHeaderTab;
 	}
 
 	/**
-	 * @param xpedxSelectedHeaderTab
-	 *            the xpedxSelectedHeaderTab to set
+	 * @param selectedHeaderTab
+	 *            the selectedHeaderTab to set
 	 */
-	public void setXpedxSelectedHeaderTab(String xpedxSelectedHeaderTab) {
-		this.xpedxSelectedHeaderTab = xpedxSelectedHeaderTab;
+	public void setSelectedHeaderTab(String selectedHeaderTab) {
+		this.selectedHeaderTab = selectedHeaderTab;
 	}
 
 	public Document getSapCustomerExtnDoc() {
@@ -1347,7 +1369,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	protected String welcomeUserLastName = "";
 	protected String welcomeUserShipToName = "";
 	protected String welcomeLocaleId = "";
-	private String xpedxSelectedHeaderTab = "";
+	private String selectedHeaderTab = "";
 	private Document sapCustomerExtnDoc;
 	private String pendingOrderRecords = "0";
 	private String custSuffix = "";

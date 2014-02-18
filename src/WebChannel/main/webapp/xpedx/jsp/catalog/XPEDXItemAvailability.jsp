@@ -25,12 +25,44 @@
 <s:set name="orderMultipleQtyFromSrc" value='sourcingOrderMultipleForItems.get(#itemId)' />
 <s:hidden name="orderMultipleQtyFromSrc" id="orderMultipleQtyFromSrc_%{#itemId}" value="%{#orderMultipleQtyFromSrc}"/>
 
+<s:set name="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"></s:set>
+<s:hidden name="reqCustomerUOM" id="reqCustomerUOM" value="%{#_action.getPnaReqCustomerUOM()}"/>
+<s:set name="qtyTxtBox" value='#_action.getQtyTextBox()' />
 <s:property value="#addToCartError"/>
 <s:if test="isPnAAvailable == 'true'">
-<s:if test="%{pnaHoverMap.containsKey(#itemId)}">
+<s:if test="%{pnaHoverMap != null && #itemId != '' && pnaHoverMap.containsKey(#itemId)}">
 
 <s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
 	<tbody>
+		<s:set name="json" value='pnaHoverMap.get(#itemId)' />
+		<s:set name="jsonUOM" value="#json.get('UOM')" />
+		<s:if test='%{#reqCustomerUOM==#jsonUOM}'>
+			<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+			<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />										
+		</s:if>
+		<s:else>
+			<s:set name="jsonUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
+		</s:else>
+		<s:set name="jsonImmediate" value="#json.get('Immediate')" />
+		<s:set name="jsonNextDay" value="#json.get('NextDay')" />
+		<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
+		<s:set name="jsonAvailability" value="#json.get('Availability')" />
+		<s:set name="jsonTotal" value="#json.get('Total')" />
+		<s:set name="jsonMyPrice"
+			value="#json.get('PricingUOMUnitPrice')" />
+		<s:set name="jsonMyPriceExtended"
+			value="#json.get('ExtendedPrice')" />
+		<s:set name="currencyCode" value="#json.get('currencyCode')" />
+		<s:set name="jsonPricingUOM"
+			value="#json.get('PricingUOM')" />
+		<s:set name="jsonAvailabilityMessage" value="#json.get('AvailabilityMessage')" />
+		<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
+		<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
+		
+		<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
+			<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+			<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:12px;padding-left:10px"><strong><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
+		</s:if>
 		<tr class="my-headings" style="border-top: 0px none; background:url('<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/dot-gray<s:property value='#wcUtil.xpedxBuildKey' />.gif') repeat-x scroll left center;">
 			<td colspan="3"><span><i>Availability</i></span></td>
 			<s:if test="%{#_action.getValidateOM() == 'true'}">
@@ -51,48 +83,15 @@
 		</tr>
 		<tr>
 			<td colspan="3" width="36%" valign="top">
-
-			<s:if test="%{pnaHoverMap != null}">
-					<s:if test="%{#itemId != ''}">
-						<s:if test="%{pnaHoverMap.containsKey(#itemId)}">
-							<s:set name="json" value='pnaHoverMap.get(#itemId)' />
-							<s:set name="jsonUOM" value="#json.get('UOM')" />
-							<s:set name="jsonUOMDesc"
-								value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonUOM)" />
-							<s:set name="jsonImmediate" value="#json.get('Immediate')" />
-							<s:set name="jsonNextDay" value="#json.get('NextDay')" />
-							<s:set name="jsonTwoPlus" value="#json.get('TwoPlusDays')" />
-							<s:set name="jsonAvailability" value="#json.get('Availability')" />
-							<s:set name="jsonTotal" value="#json.get('Total')" />
-							<s:set name="jsonMyPrice"
-								value="#json.get('PricingUOMUnitPrice')" />
-							<s:set name="jsonMyPriceExtended"
-								value="#json.get('ExtendedPrice')" />
-							<s:set name="currencyCode" value="#json.get('currencyCode')" />
-							<s:set name="jsonPricingUOM"
-								value="#json.get('PricingUOM')" />
-
 				<TABLE cellpadding="0" cellspacing="0" border="0">
+				<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0}'>
+					<tr>
+						<td align="left" style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:12px;"><strong style="align:left;"><s:property value='%{#jsonAvailabilityMessage}' /></strong></td>
+					</tr>
+				</s:if>
 				<TR>
-					<td class="leftmost my-available"><strong>Total Available:</strong></td>
-					<td class="my-number">
-					<s:if test='%{#jsonTotal == null}'>
-						<s:set name="jsonTotal" value="%{'0'}" />
-					</s:if>
-					<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
-					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotal)" />
-					
-					<!-- Web Trends tag start -->  
-						<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)' />"></meta>                          	
-                            	                          	
-                          <!-- Web Trends tag End -->	
-						<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />-->
-					</td>
-					<td class="my-uom"><s:property value="#jsonUOMDesc" /></td>
-				</TR>
-				<TR>
-					<td class="my-timeframe">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Next Day:</td>
-					<td class="my-number">
+					<td class="my-timeframe"><strong>Next Day:</strong></td>
+					<td class="my-number" align="right">
 					<s:if test='%{#jsonNextDay == null}'>
 						<s:set name="jsonNextDay" value="%{'0'}" />
 					</s:if>
@@ -105,8 +104,8 @@
 					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
 				</TR>
 				<TR>
-					<td class="my-timeframe">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2+ Days:</td>
-					<td class="my-number">
+					<td class="my-timeframe" style="padding-left:13px;">2+ Days:</td>
+					<td class="my-number" align="right">
 					<s:if test='%{#jsonTwoPlus == null}'>
 						<s:set name="jsonTwoPlus" value="%{'0'}"></s:set>
 					</s:if>
@@ -116,6 +115,23 @@
 					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTwoPlus)" />
 					</td>
 					<td class="my-uom"><%--<s:property value="#jsonUOMDesc" /> --%></td>
+				</TR>
+				<TR>
+					<td class="leftmost my-available" style="padding-left:13px;">Total Available:</td>
+					<td class="my-number" align="right">
+					<s:if test='%{#jsonTotal == null}'>
+						<s:set name="jsonTotal" value="%{'0'}" />
+					</s:if>
+					<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
+					<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotal)" />
+					
+					<!-- Web Trends tag start -->  
+						<meta name="DCSext.w_x_sc" content="1"></meta><meta name="DCSext.w_x_scr" content="<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)' />"></meta>                          	
+                            	                          	
+                          <!-- Web Trends tag End -->	
+						<!--<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />-->
+					</td>
+					<td class="my-uom">&nbsp;<s:property value="#jsonUOMDesc" /></td>
 				</TR>
 				<TR>
 					<td class="leftmost my-local-availability" colspan="3">
@@ -129,11 +145,6 @@
 					
 				</TR>
 				</TABLE>
-
-						</s:if>
-					</s:if>
-				</s:if>
-
 			</td>
 			<s:if test="%{#_action.getValidateOM() == 'true'}">
 			<s:if test="%{#_action.getCatagory() == 'Paper'}">
@@ -158,10 +169,23 @@
 												<s:set name='formattedBracketpriceForUom'
 													value='#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(#scuicontext,#currency,#bracketPriceForUOM,#showCurrencySymbol)' />
 												<s:set name="bracketUOMDesc" value="bracketUOM" />
-												<s:set name='formattedbracketUOM'
-													value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
-												<s:set name='formattedPricingUOM'
-														value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
+												
+												<s:if test='%{#reqCustomerUOM==#bracketUOMDesc}'>
+													<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+													<s:set name="formattedbracketUOM" value="#customerUomWithoutM" />										
+												</s:if>
+												<s:else>
+													<s:set name='formattedbracketUOM' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#bracketUOMDesc)' />
+												</s:else>
+												
+												<s:if test='%{#reqCustomerUOM==#jsonPricingUOM}'>
+													<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />				
+													<s:set name="formattedPricingUOM" value="#customerUomWithoutM" />										
+												</s:if>
+												<s:else>
+													<s:set name='formattedPricingUOM' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#jsonPricingUOM)' />
+												</s:else>													
+												
 									<TR>
 										<td style="text-align:left; width='35%'; "><s:property value="bracketQTY" /> <s:property value="%{#formattedbracketUOM}" /> - <s:property value='%{#formattedBracketpriceForUom}' />
 											/ <s:property value="%{#formattedPricingUOM}" />
@@ -193,7 +217,18 @@
 			
 				<s:iterator value='displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-				<s:set name="bracketUOMDesc" value="bracketUOM" />
+				
+				<s:set name="temp" value="bracketUOM" />
+				<s:set name="customerUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#reqCustomerUOM)"/>
+				<s:if test='%{#customerUOMDesc==#temp}'>	
+					<s:set name='customerUomWithoutM' value='%{#reqCustomerUOM.substring(2, #reqCustomerUOM.length())}' />
+					<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+				</s:if>
+				<s:else>
+					<s:set name="bracketUOMDesc" value="bracketUOM" />
+				</s:else>			
+								
+				
 				<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
 				<s:if test="#disUOMStatus.last">	

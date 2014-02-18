@@ -4,17 +4,19 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.woodstock.util.frame.log.base.ISCILogger;
 import com.xpedx.nextgen.common.cent.ErrorLogger;
 import com.xpedx.nextgen.common.util.XPXLiterals;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
-import com.yantra.yfc.log.YFCLogCategoryFactory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
@@ -59,6 +61,15 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		if (log.isDebugEnabled()) {
 			log.debug("XPXCreateFulfillmentOrderAPI-InXML" + SCXmlUtil.getString(inXML));
 		}
+		
+		Element orderExtnElem = SCXmlUtil.getChildElement(inXML.getDocumentElement(), "Extn");
+		if (orderExtnElem.hasAttribute("ExtnLastOrderOperation")) {
+			orderExtnElem.removeAttribute("ExtnLastOrderOperation");
+		}
+		if (orderExtnElem.hasAttribute("ExtnOrderConfirmationEmailSentFlag")) {
+			orderExtnElem.removeAttribute("ExtnOrderConfirmationEmailSentFlag");
+		}		
+		
 		// Set createOrder API Output Template
 		env.setApiTemplate(XPXLiterals.CREATE_ORDER_API, createOrderTemplate);
 		
@@ -72,13 +83,15 @@ public class XPXCreateFulfillmentOrderAPI implements YIFCustomApi {
 		// In case of failure ignore the Exception and proceed with next steps.
 		try {
 			api.executeFlow(env, XPXLiterals.SERVICE_POST_LEGACY_ORDER_CREATE, docCreateOrderOutput);
-		} catch (Exception e) {
-			log.info("XPXCreateFulfillmentOrderAPI - Exception occured on posting XML to Legacy");
-			prepareErrorObject(e, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);
-            return inXML;
+		
+		} catch (Exception e) {			
+			log.error("XPXCreateFulfillmentOrderAPI - Exception occured on posting XML to Legacy");			
+			prepareErrorObject(e, XPXLiterals.OP_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, inXML);			          
 		}
 		
-		log.info("XPXCreateFulfillmentOrderAPI-OutXML:" + SCXmlUtil.getString(inXML));
+		if (log.isDebugEnabled()) {
+			log.debug("XPXCreateFulfillmentOrderAPI-OutXML:" + SCXmlUtil.getString(inXML));
+		}
 		return  inXML;
 	}
 	

@@ -14,10 +14,10 @@
 <!--s:set name='sDoc' value='#attr["RootCatalogDoc"].documentElement' / -->
 <s:set name='catDoc' value="#_action.getMainCatsDoc()" />
 <s:set name='sfid' value='wCContext.storefrontId'/>
-<s:set name='imageURL_facility' value="'https://content.ipaper.com/storefront/' + #sfid + '_SignInPage_FacilitySupplies.png'" />
-<s:set name='imageURL_graphics' value="'https://content.ipaper.com/storefront/' + #sfid + '_SignInPage_Graphics.png'" />
-<s:set name='imageURL_paper' value="'https://content.ipaper.com/storefront/' + #sfid + '_SignInPage_Paper.png'" />
-<s:set name='imageURL_packaging' value="'https://content.ipaper.com/storefront/' + #sfid + '_SignInPage_Packaging.png'" />
+<s:set name='imageURL_facility' value="'https://xcontent.ipaper.com/storefront/' + #sfid + '_SignInPage_FacilitySupplies.png'" />
+<s:set name='imageURL_graphics' value="'https://xcontent.ipaper.com/storefront/' + #sfid + '_SignInPage_Graphics.png'" />
+<s:set name='imageURL_paper' value="'https://xcontent.ipaper.com/storefront/' + #sfid + '_SignInPage_Paper.png'" />
+<s:set name='imageURL_packaging' value="'https://xcontent.ipaper.com/storefront/' + #sfid + '_SignInPage_Packaging.png'" />
 
 		    <tr>
 		    	

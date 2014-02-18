@@ -142,7 +142,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		}
 
 		String result = "success";
-		if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder"))
+		if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder"))
         {
 			if("ProductIdValue".equals(getSearchFieldName()))
 	        {
@@ -160,7 +160,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	        }
         
         } else {
-        	if("ProductIdValue".equals(getSearchFieldName()))
+        	if("ProductIdValue".equals(getSearchFieldName()) || "PurchaseOrderNumberValue".equalsIgnoreCase(getSearchFieldName()))
 	        {
 				rootElementName="XPEDXOrderSearchLineListView";
 				MASHUP_NAME="XPEDXOrderLineList";
@@ -168,11 +168,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 	        }    	
         	
         }
-		
+		setOrderByAttribute("OrderDate");//added for EB 1971
 		String messageType = getMessageType();
         if(messageType != null && messageType.equals("OrderListWidget"))
         {
-        	if (!(getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")))
+        	if (!(getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")))
             {    	        
         		setOrderByAttribute("Modifyts");
             }
@@ -180,7 +180,7 @@ public class XPEDXOrderListAction extends OrderListAction {
             setRecordPerPage(ORDER_WIDGET_RECORD_PER_PAGE);
         } else
         {
-        	if (!(getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")))
+        	if (!(getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")))
             {    	        
         		if(getOrderByAttribute() == null || getOrderByAttribute().trim().length()==0)
             		setOrderByAttribute("OrderDate");
@@ -226,7 +226,7 @@ public class XPEDXOrderListAction extends OrderListAction {
         		getStatusList();
         	}  */     	
         	getStatusList();
-        	/*if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+        	/*if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")) {
         		if (getSourceTab() != null && getSourceTab().equals("Open")) {
         			//setStatusSearchFieldName("1100.5250");        			
         		}        		
@@ -275,7 +275,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 				//Prepare the Customer Order Document and create the customer info map
 				customerOrderDoc = populateCustomerOrderList(chainedOrderFromKeylist);
 			}*/
-			if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+			if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")) {
 				customerOrderDoc=orderList;
 			}
 			parseCustomerDoc(customerOrderDoc);
@@ -335,7 +335,11 @@ public class XPEDXOrderListAction extends OrderListAction {
 	private void getStatusList() throws Exception
 	{
 		Map<String, String> valueMap = new HashMap<String, String>();
-		valueMap.put("/CommonCode/@CallingOrganizationCode", wcContext.getCustomerMstrOrg());
+		
+		/* Begin - Code commented for EB-1697. Statuses are being maintained, in YFS_COMMON_CODE, at the xpedx level and they will be the same for all the customers [be it xpedx or Saalfeld or others].
+		 * CallinOrganizationCode is hardcoded to xpedx in XPEDXOrderMashup.xml for mashup - XPEDXgetStatusList*/
+		//valueMap.put("/CommonCode/@CallingOrganizationCode", wcContext.getCustomerMstrOrg());		
+		/*End - Code commented for EB-1697.*/
 		
 		Element input = WCMashupHelper.getMashupInput("XPEDXgetStatusList", valueMap,
 				wcContext.getSCUIContext());
@@ -866,11 +870,13 @@ public class XPEDXOrderListAction extends OrderListAction {
         YFCElement inpElement = apiElement.getChildElement("Input");
         YFCElement orderElem = inpElement.getChildElement(rootElementName);
         YFCElement complexQueryElement =null;
+        YFCElement complexQueryAndElement = null;
         /* Including only the logged in ship to Id as This is causing the performance Issue -- Jagadeesh
          * Including all the assigned ship to only if assignedShipToSize is less than or equal to 30 -- Discussed with pawan on call  */
         if(assignedShipToSize!=null && assignedShipToSize<=20 && SCUtil.isVoid(getShipToSearchFieldName())) {
         	complexQueryElement = orderElem.createChild("ComplexQuery");
-    		YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");
+        	complexQueryAndElement = complexQueryElement.createChild("And");
+    		YFCElement complexQueryOrElement = complexQueryAndElement.createChild("Or");
     		Iterator<String> itr = shipToList.keySet().iterator();
     		while (itr.hasNext()) {
     			String key = (String) itr.next();
@@ -889,7 +895,7 @@ public class XPEDXOrderListAction extends OrderListAction {
             	orderElem.setAttribute("ShipToID", wcContext.getCustomerId());
         }
         //Added condition Complex query if tab is addtoexistingorder get the all order which we can edit.
-        if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder")) {
+        if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder")) {
         	
         	if(!SCUtil.isVoid(getShipToSearchFieldName()))//added for jira 4138
             	orderElem.setAttribute("ShipToID", getShipToSearchFieldName());
@@ -998,7 +1004,43 @@ public class XPEDXOrderListAction extends OrderListAction {
         		//complexQueryElement.setAttribute("Operator", "AND");			
 				
     		//}   
-        } else {
+        } else if("PurchaseOrderNumberValue".equalsIgnoreCase(getSearchFieldName()))
+        {
+        	if(complexQueryElement == null)
+			{
+				complexQueryElement = orderElem.createChild("ComplexQuery");
+				complexQueryElement.setAttribute("Operator", "AND");
+			 	YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");			 	
+			 	YFCElement expElementCustomerLinePONo = complexQueryOrElement.createChild("Exp");
+			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
+			    expElementCustomerLinePONo.setAttribute("Value",searchFieldValue);
+			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerLinePONo);
+			    
+			    YFCElement expElementCustomerPONo = complexQueryOrElement.createChild("Exp");
+			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
+			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
+			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerPONo);		
+				
+			}
+        	else{
+        		
+        		YFCElement complexQueryInsideAndElement = complexQueryAndElement.createChild("And");
+        		YFCElement complexQueryInsideOrElement = complexQueryInsideAndElement.createChild("Or");			 	
+			 	YFCElement expElementCustomerLinePONo = complexQueryInsideOrElement.createChild("Exp");
+			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
+			    expElementCustomerLinePONo.setAttribute("Value",searchFieldValue);
+			    complexQueryInsideOrElement.appendChild((YFCNode)expElementCustomerLinePONo);
+			    
+			    YFCElement expElementCustomerPONo = complexQueryInsideOrElement.createChild("Exp");
+			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
+			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
+			    complexQueryInsideOrElement.appendChild((YFCNode)expElementCustomerPONo);		
+        	}
+				
+        	
+        }
+        
+        else {
 	        if(isPendingApprovalOrdersSearch || isCSRReviewingOrdersSearch || isRejectedOrdersSearch) {
 	        	String holdTypeToSearch = null;
 	        	if(isPendingApprovalOrdersSearch)
@@ -1093,7 +1135,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 		HashMap<String, Element> customerorderMap=new HashMap<String,Element>(xpedxParentOrderListMap);
 		xpedxParentOrderListMap.clear();
 		NodeList orderElems=null;
-		if (getXpedxSelectedHeaderTab() != null && getXpedxSelectedHeaderTab().equals("AddToExistingOrder"))
+		if (getSelectedHeaderTab() != null && getSelectedHeaderTab().equals("AddToExistingOrder"))
 			orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName("XPEDXOrderSearchListView");
 		else
 			orderElems = customerOrderDoc.getDocumentElement().getElementsByTagName(rootElementName);
@@ -1376,7 +1418,7 @@ public class XPEDXOrderListAction extends OrderListAction {
 	protected String initialToDateString;
 	//public String sourceTab;	
 	protected String orderListExist;
-	protected String xpedxSelectedHeaderTab;
+	protected String selectedHeaderTab;
 	//added for jira 3484
 	protected String primaryApproverID;
 	protected String proxyApproverID;
@@ -1403,12 +1445,12 @@ public class XPEDXOrderListAction extends OrderListAction {
 		this.shipToSearchList = shipToSearchList;
 	}
 
-	public String getXpedxSelectedHeaderTab() {
-		return xpedxSelectedHeaderTab;
+	public String getSelectedHeaderTab() {
+		return selectedHeaderTab;
 	}
 
-	public void setXpedxSelectedHeaderTab(String xpedxSelectedHeaderTab) {
-		this.xpedxSelectedHeaderTab = xpedxSelectedHeaderTab;
+	public void setSelectedHeaderTab(String selectedHeaderTab) {
+		this.selectedHeaderTab = selectedHeaderTab;
 	}
 
 	public String getOrderListExist() {

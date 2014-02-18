@@ -103,10 +103,17 @@
 				<xsl:text>Your password has been changed.&#160;</xsl:text>
 		</xsl:if>
 	If we may be of further assistance, please contact us via e-mail at 
-	<xsl:element name="a">
-		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>.com</xsl:attribute>
-		ebusiness@<xsl:value-of select="$Brand"/>.com
+	<!-- EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding  -->
+	<xsl:if test = '$Brand="xpedx"'>
+	<xsl:element name="a">	
+		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>.com</xsl:attribute>ebusiness@<xsl:value-of select="$Brand"/>.com
 	</xsl:element>
+	</xsl:if>
+	<xsl:if test = '$Brand="Saalfeld"'>
+	<xsl:element name="a">	
+		<xsl:attribute name="href">mailto:ebusiness@<xsl:value-of select="$Brand"/>redistribution.com</xsl:attribute>ebusiness@<xsl:value-of select="$Brand"/>redistribution.com
+	</xsl:element>
+	</xsl:if>
 	or by calling <xsl:value-of select="$BrandPhoneNumber"/>. 
 	<xsl:copy-of select="$AdditionalClosing" />
 </xsl:template>
@@ -123,7 +130,7 @@
 	<table width="600" border="0"  cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 	<tr>
 	<td height="44">
-	<img src="{$imageURL}"	width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" />
+	<img src="{$imageURL}"	width="216" height="69" />
 	</td></tr></table>
 		<HTML>
 			<xsl:call-template name="applyStyle"/>
@@ -140,21 +147,27 @@
 		<p>Dear <xsl:value-of select="/User/ContactPersonInfo/@EMailID"/>,</p>
 		<xsl:if test="/User/User/@RequestId">
 		<p>
+		<!--  EB 2447  Saalfeld Password Reset Request -->
 		You are receiving this notification because we recently received a password reset request for your account. <br/><br/>
-		To reset your password, click on the following link: <br/>
+		To reset your password,
 			<a><xsl:attribute name="href">
 			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /> 
 			</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
-			<xsl:value-of select="/User/URLInfo/@URL" />sfId=<xsl:value-of select="$Brand"/>&amp;requestId=<xsl:value-of select="/User/User/@RequestId" />&amp;userID=<xsl:value-of select="/User/User/@Loginid" /></a><br/><br/>
-			When you click on the link, you will be prompted to create a new password.
+			click here.</a> You will be prompted to create a new password.
 		</p>
 		</xsl:if>
 		<xsl:if test="/User/User/@GeneratedPassword">
 		<p>
+			<xsl:if test = '$Brand="xpedx"'>
 			Your username ID was recently created for <a><xsl:attribute name="href"><xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</xsl:attribute>
 			<xsl:attribute name="target">_blank</xsl:attribute>
-			<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</a>.<xsl:text>&#160;&#160;You will be prompted to change your password during your initial login.</xsl:text>
+			<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>.com/order</a>.</xsl:if>
+			<xsl:if test = '$Brand="Saalfeld"'>
+			Your username ID was recently created for <a><xsl:attribute name="href"><xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>redistribution.com/order</xsl:attribute>
+			<xsl:attribute name="target">_blank</xsl:attribute>
+			<xsl:value-of select="$envName"/><xsl:value-of select="$Brand"/>redistribution.com/order</a>.</xsl:if>
+			<xsl:text>&#160;&#160;You will be prompted to change your password during your initial login.</xsl:text>
 		</p>
 		<p>Your username is: <b><xsl:value-of select="@DisplayUserID" /></b></p>
 		<p>Your initial password is: <b><xsl:value-of select="/User/User/@GeneratedPassword" /></b></p>
@@ -166,10 +179,7 @@
 		<p>
 		Thank you for your business!
 		</p>
-		<p>
-		Please do not reply to this email.<xsl:text>&#160;&#160;This mailbox is not monitored and you will not receive a response.</xsl:text>
-    	</p>
-			<p/>
+		<p/>
 		</td></tr></table>
 	</xsl:template>
 

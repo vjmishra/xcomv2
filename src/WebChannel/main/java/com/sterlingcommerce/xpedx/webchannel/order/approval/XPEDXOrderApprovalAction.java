@@ -151,7 +151,7 @@ public class XPEDXOrderApprovalAction extends OrderListAction{
 		Document outDoc = null;
 		//
 		if(mashupIds.contains(APPROVAL_LIST_MASHUP_ID)||mashupIds.contains(APPROVAL_LIST_WIDGET_MASHUP_ID)){
-			oUserList.add(wcContext.getCustomerContactId());
+			oUserList.add(wcContext.getCustomerContactId()+",");//Added for EB 70
 			nameExp.add(OrderConstants.RESOLVER_USER_ID);
 			if(mashupIds.contains("orderApprovalList")){
 			outDoc = null;
@@ -525,6 +525,12 @@ private boolean checkUserAllowedForSearch(List<String> list) {
 			Element holdTypes = SCXmlUtil.getChildElement(orderApprovalElem, "OrderHoldTypes");
 			Element holdType = SCXmlUtil.getChildElement(holdTypes, "OrderHoldType");
 			holdType.setAttribute("HoldType", XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL);
+			String status = holdType.getAttribute("Status");
+            if("1200".equals(status)){
+                   Element extnElment = SCXmlUtil.getChildElement(orderApprovalElem, "Extn");
+                  extnElment.setAttribute("ExtnOrderConfirmationEmailSentFlag", "Y");
+            }                  
+
 		}
 		// TODO Auto-generated method stub
 		super.manipulateMashupInputs(mashupInputs);

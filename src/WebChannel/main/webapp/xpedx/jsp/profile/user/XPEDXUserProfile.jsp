@@ -24,11 +24,17 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jQuery.js"	type="text/javascript"></script>
+		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.custom.js"	type="text/javascript"></script>
+		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.cookie.js"	type="text/javascript"></script>
+		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dynatree-1.2.4.js"	type="text/javascript"></script>
+	
 <!-- styles -->
 
 <!-- begin styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree.css"	rel="stylesheet" type="text/css" id="skinSheet">
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
@@ -103,6 +109,9 @@
 	namespace="/profile/user" />
 
 <s:set name="selectedTab" value="#request.selectedTab" />
+<s:set name='_action' value='[0]' />
+<s:set name='estimator' value='#_action.getEstimator()' />
+	
 <link rel="stylesheet" type="text/css"
 	href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css"
 	media="screen" />
@@ -191,7 +200,9 @@ function showShipToForUserProfile(url)
 	Ext.Ajax.request({
         url :url,
         params: {
-                    customerContactId: selected_customerContactId
+                    customerContactId: selected_customerContactId,
+                    status: "30",
+                    isRequestedPage:"XPEDXUserProfilePage"
                  },
         method: 'POST',
         success: function (response, request){
@@ -382,7 +393,15 @@ function funDivOpenClose(val1)
 
 		function addEmailToList(){
 			var newEmail = document.getElementById("confEmailText").value;
-			document.getElementById("AddnlEmailAddrText").value = document.getElementById("AddnlEmailAddrText").value+newEmail+",";
+			var additionalEmails=document.getElementById("AddnlEmailAddrText").value;			
+			if(additionalEmails!=null && additionalEmails !=""){
+				additionalEmails= additionalEmails.replace(/^\s+|\s+$/g, '');
+				var lastChar = additionalEmails.charAt(additionalEmails.length-1);
+				if(lastChar!=","){
+					additionalEmails =additionalEmails+",";
+				}
+			}
+			document.getElementById("AddnlEmailAddrText").value = additionalEmails+newEmail+",";
 		}
 		
 		function confirmEmail() {
@@ -542,7 +561,8 @@ function funDivOpenClose(val1)
 		var myMask;
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();
-			
+
+					
 			try{
 				if (mandatoryFieldValidation(docDivId, ignoreDivIds) != "")
 				{
@@ -660,11 +680,13 @@ function funDivOpenClose(val1)
 		    }
 		}
 
-		//Added for XB 226
-		var spendingLimit="";
-		var primaryApprover="";
-		var OrderApprovalFlag;
-			
+		//Added for EB 633
+		var salesRep = document.getElementById("salesRepFlg").value; 
+		if(!salesRep){
+			//Added for XB 226
+			var spendingLimit="";
+			var primaryApprover="";
+			var OrderApprovalFlag;			
 			if(document.getElementById("spendingLt") != null){
 				spendingLimit = document.getElementById("spendingLt").value;
 			}
@@ -675,8 +697,8 @@ function funDivOpenClose(val1)
 			
 			if(document.getElementById("OrderApprovalFlag")!=null){
 			submitOrderChkValue = document.getElementById("OrderApprovalFlag").checked;
-			}
-			
+			}			
+
 			
 			if(submitOrderChkValue){
 				if((spendingLimit.length > 0)){
@@ -702,7 +724,7 @@ function funDivOpenClose(val1)
 				
 				
 				
-			}
+			}}
 			else{ 
 			
 			// Added AND condition for jira 2055
@@ -732,7 +754,7 @@ function funDivOpenClose(val1)
 				}
 			}
 
-			}	
+			}		
 		
 		//start for XBT 298
 		var waitMsg = Ext.Msg.wait("Processing...");
@@ -772,48 +794,50 @@ function funDivOpenClose(val1)
 			{
 				lboTo.options[i].selected = true;
 			}
-
-			var tbody = document.getElementById("tb1");
-			var rowCount = tbody.rows.length;
-			var comleteData = "";
-
-			for(var i=1; i<=rowCount; i++) {
-				var row = tbody.rows[i];
-				if (null != row) {
-	    			var cellsCount = row.cells.length;    			
-	    			for(var j=0; j<cellsCount; j++) {
-	    				var temp = "";        				 
-	        			if (j==3) {
-	        				temp = row.cells[j].childNodes[0].value;
-	        			} else {
-	        				if(j==2) {
-	            				var checkbox = row.cells[j].childNodes[0];
-	            				if(null != checkbox && true == checkbox.checked){
-	            					temp = "Y" ;
-	            				}
-	            				else
-	            					temp = "N" ;
-	            				
-	            			}
-	        				else if(j==0){
-	        					temp = row.cells[j].childNodes[1].value;
-	        				}
-	            			else {
-	            				temp = row.cells[j].childNodes[0].value;
-	            			}        				
-	        			}               		
-	        			
-	        			if(temp == "") {
-	            			temp = "*#?";
-	        			}        
-				
-	        			comleteData = comleteData + "||" + temp;                			                			
-	    			}
-				}
-				            		
-			} 
-			      
-			document.getElementById('bodyData').value = comleteData;
+			
+			if(!salesRep){
+				var tbody = document.getElementById("tb1");
+				var rowCount = tbody.rows.length;
+				var comleteData = "";
+	
+				for(var i=1; i<=rowCount; i++) {
+					var row = tbody.rows[i];
+					if (null != row) {
+		    			var cellsCount = row.cells.length;    			
+		    			for(var j=0; j<cellsCount; j++) {
+		    				var temp = "";        				 
+		        			if (j==3) {
+		        				temp = row.cells[j].childNodes[0].value;
+		        			} else {
+		        				if(j==2) {
+		            				var checkbox = row.cells[j].childNodes[0];
+		            				if(null != checkbox && true == checkbox.checked){
+		            					temp = "Y" ;
+		            				}
+		            				else
+		            					temp = "N" ;
+		            				
+		            			}
+		        				else if(j==0){
+		        					temp = row.cells[j].childNodes[1].value;
+		        				}
+		            			else {
+		            				temp = row.cells[j].childNodes[0].value;
+		            			}        				
+		        			}               		
+		        			
+		        			if(temp == "") {
+		            			temp = "*#?";
+		        			}        
+					
+		        			comleteData = comleteData + "||" + temp;                			                			
+		    			}
+					}
+					            		
+				} 
+				      
+				document.getElementById('bodyData').value = comleteData;				
+			}
 			
 			document.getElementById("myAccount").submit();
 		
@@ -912,9 +936,11 @@ function funDivOpenClose(val1)
 			var poText = poTextElement.value;
 			var selectElement = document.getElementById('selectPOName');
 			var invalidPO = false;
-			
+			var poTextLength=selectElement.options.length;
 			for(var i=0;i<selectElement.options.length;i++)
-			{
+			{  
+				poTextLength=poTextLength+selectElement.options[i].value.length;
+			
 				if ((selectElement.options[i].value == poText ) )
 				{
 					alert('Please enter a unique Purchase order.');
@@ -922,7 +948,13 @@ function funDivOpenClose(val1)
 					invalidPO = true;
 				}
 			}
-			
+			poTextLength=poTextLength+poText.length;
+			if(poTextLength>499)
+				{
+						alert("PO List Cannot exceed 500 Characters");
+						poTextElement.focus();
+						invalidPO = true;
+				}
 			if(poText == null || poText == ''){
 				alert('Please give a name for the Purchase order.');
 				poTextElement.focus();
@@ -1183,7 +1215,16 @@ function funDivOpenClose(val1)
 	        }
 	        return true;
 		}
-		
+		//Added for EB 1977
+		function isEstimatorChecked(){
+			if(document.getElementById("estimator").checked){
+				document.getElementById("estimatorMsg").style.display = "inline";
+			}
+			else{
+				document.getElementById("estimatorMsg").style.display = "none";
+			}
+		}
+		//End of EB 1977
 	</script>
 
 <style type="text/css">
@@ -1265,9 +1306,10 @@ a.underlink:hover {
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">
-	<s:set name='_action' value='[0]' />
 	<s:set name="isSalesRep"
 		value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}" />
+		<!-- Added for EB 633 -->
+		<s:hidden name='salesRepFlg' id="salesRepFlg" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 	<s:set name="AddressInformationTitle" scope="page"
 		value="getText('Address_Information_Title')" />
 	<s:set name="confirmAddressDeleteMessage" scope="page"
@@ -1286,7 +1328,6 @@ a.underlink:hover {
 	<s:set name='punchoutUser' value='#_action.getPunchoutUsers()' />
 	<s:set name='stockCheckWebservice'
 		value='#_action.getStockCheckWebservice()' />
-	<s:set name='estimator' value='#_action.getEstimator()' />
 	<s:set name='OrderApprovalFlag'
 		value='#_action.isOrderFlagForApproval()' />
 	<s:set name='customer' value='customerelement' />
@@ -1308,7 +1349,7 @@ a.underlink:hover {
 	<title><s:property value="wCContext.storefrontId" /> / User
 		Profile</title>
 	<!-- Web Trends tag start -->
-	<meta name="WT.ti" Content="xpedx / User Profile">
+	<meta name="WT.ti" Content="<s:property value='wCContext.storefrontId' /> / User Profile">
 	<!-- Web Trends tag stop -->
 	<s:set name='userelement' value="getUser()" />
 	<s:set name='user' value='#userelement' />
@@ -1374,7 +1415,7 @@ a.underlink:hover {
 								<s:set name='SalesRepUserId'
 									value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('loggedInUserId')}" />
 								<td colspan="2" class="no-border-right-user"><s:if
-										test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false}">
+										test="%{#isSalesRep && #SalesRepUserId != null && #SalesRepUserId.isEmpty()==false && isSelfAdmin()}">
 										<span class="page-title">Username:&nbsp;</span>
 										<s:property value="%{#SalesRepUserId}" />
 									</s:if> <s:else>
@@ -1396,7 +1437,7 @@ a.underlink:hover {
 		<s:set name="errorNote" value="<s:property value=null />" scope="session"/>
 		</s:if> --%>
 							</tr>
-							<s:if test='%{#isCustomerNotAdmin == false && !#isSalesRep}'>
+							<s:if test='%{#isCustomerNotAdmin == false}'>
 								<tr>
 									<%--JIRA 3917 Start --%>
 									<td width="5%" class="padding-left0 no-border-right-user">
@@ -1446,7 +1487,7 @@ a.underlink:hover {
 															<ul class="tool-bar-bottom" style="float: left">
 
 																<a
-																	href="javascript:getNewContactInfo1('<s:url value="/profile/user/xpedxNewUserCreate.action"/>');"
+																	href="javascript:getNewContactInfo1('<s:url value="/profile/user/MyNewUserCreate.action"/>');"
 																	class="grey-ui-btn"> <span><s:text
 																			name='Add_User' /></span>
 																</a>
@@ -1484,7 +1525,7 @@ a.underlink:hover {
 							value="%{isSelfAdmin()}" />
 						<s:hidden name="preferredLocale"
 							id="saveNewUserInfo_preferredLocale" value="%{'en_US_EST'}" />
-
+ 						<s:hidden name='saveAddUser' id="saveAddUser" value="%{#_action.isSaveAddUser()}" />
 						<s:if test='#punchoutUser == "Y"'>
 							<s:hidden name='punchoutUsers' value='%{true}' />
 						</s:if>
@@ -1505,7 +1546,7 @@ a.underlink:hover {
 						<s:hidden id="mandatoryFieldCheckFlag_myAccount"
 							name="mandatoryFieldCheckFlag_myAccount" value="%{false}" />
 						<div id="TabbedPanels1" class="TabbedPanels">
-							<s:if test="%{#isSalesRep}">
+							<s:if test="%{#isSalesRep && isSelfAdmin()}">
 								<ul class="TabbedPanelsTabGroup" style="margin-left: 5px;">
 									<li class="TabbedPanelsTab" tabindex="0">Site Preferences</li>
 								</ul>
@@ -1821,7 +1862,7 @@ a.underlink:hover {
 			</div>
 			</td>
 			<td valign="top" class="no-border-right-user padding00">&nbsp;</td>
-		</tr> --%>
+		</tr> --%>						<s:if test="%{!#isSalesRep}">
 											<tr>
 												<td valign="top" colspan="2"
 													class="no-border-right-user padding00">
@@ -1859,6 +1900,8 @@ a.underlink:hover {
 													</table>
 												</td>
 											</tr>
+										</s:if>
+											
 											<s:set name='custContactAddtnlAddress'
 												value="#_action.getCustContactAddtnlAddress()" />
 											<s:set name='personInfo'
@@ -1880,13 +1923,13 @@ a.underlink:hover {
 							<s:else>
 								<ul class="TabbedPanelsTabGroup" style="margin-left: 5px;">
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /User information');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile /User information');"
 										tabindex="0">User Information</li>
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile /Authorized Locations');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile /Authorized Locations');"
 										tabindex="0">Authorized Locations</li>
 									<li class="TabbedPanelsTab"
-										onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');"
+										onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 										tabindex="0">Site Preferences</li>
 
 									<%-- Added for Jira 3048 issue item 3 --%>
@@ -2064,8 +2107,8 @@ a.underlink:hover {
 															</s:else> <s:if test='%{#estimator=="Y"}'>
 																<label
 																	title="Estimator views available inventory and pricing.">
-																	<s:checkbox tabindex="15" name='estimator'
-																		id='estimator' fieldValue="true" value="true"
+																<s:checkbox tabindex="15" name='estimator'
+																		id='estimator' fieldValue="true" value="true"  onclick="javascript:isEstimatorChecked();"
 																		disabled='%{#checkBoxDisable || #isDisabled}' />
 																	Estimator
 																</label>
@@ -2073,7 +2116,7 @@ a.underlink:hover {
 																<label
 																	title="Estimator views available inventory and pricing.">
 																	<s:checkbox tabindex="15" name='estimator'
-																		id='estimator' fieldValue="true" value="false"
+																		id='estimator' fieldValue="true" value="false" onclick="javascript:isEstimatorChecked();"
 																		disabled='%{#checkBoxDisable || #isDisabled}' />
 																	Estimator
 																</label>
@@ -2104,28 +2147,33 @@ a.underlink:hover {
 													</s:if>
 													<s:else>
 														<td colspan="3" class="no-border-right-user"><s:if
-																test='%{isInUserGroup("BUYER-USER")}'>Buyer </s:if> <s:if
+																test='%{isInUserGroup("BUYER-USER")}'>Buyer</s:if> <s:if
 																test='%{isInUserGroup("BUYER-APPROVER")}'>
-			Approver 
+			, Approver
 			<s:hidden name="buyerApprover" id='buyerApprover'
 																	value='%{isInUserGroup("BUYER-APPROVER")}'></s:hidden>
 															</s:if> <s:if test='%{#estimator=="Y"}'>
-			Estimator 
+			, Estimator
 			<s:hidden name='estimator' value='%{true}' />
 															</s:if> <s:if test='%{#viewInvoices=="Y"}'>
-			View Invoices 
+			, View Invoices			
 			<s:hidden name='viewInvoices' value='%{true}' />
 															</s:if> <s:if test='%{isViewPrices()}'> 
-			View Prices 
+			, View Prices
 			<s:hidden name='viewPrices' value='%{true}' />
 															</s:if> <s:if test='%{isViewReports()}'>
-			View Reports 
+			, View Reports
 			<s:hidden name='viewReports' value='%{true}' />
 															</s:if></td>
 													</s:else>
 												</tr>
-
-
+												<tr>
+												<s:if test='%{#estimator=="Y"}'>
+													<td colspan="2" class=""></td><td colspan="2" class=""><div id="estimatorMsg" style="display:inline; align:center" class="notice">The Estimator Role cannot place orders</div></td>
+												</s:if>
+												<s:else>
+													<td colspan="2" class=""></td><td colspan="2" class=""><div id="estimatorMsg" style="display:none; align:center" class="notice">The Estimator Role cannot place orders</div></td>
+												</s:else></tr>
 												<tr style="display: none;">
 													<td class="boldText textAlignLeft"><s:text
 															name="RB_jobTitle" />:</td>
@@ -2182,8 +2230,7 @@ a.underlink:hover {
 																onmouseover="javascript:testFieldValueCheck(this, 'myAccount');"
 																cssClass="x-input" cssStyle="width: 185px;"
 																value="%{#maskedPasswordString}" showPassword="true"
-																size="8" onchange="javaScript:validatePassword();"
-																maxlength="14" /></td>
+																size="8" onchange="javaScript:validatePassword();" /></td>
 														<td width="19%" class="no-border-right-user">
 															<div class="mandatory float-left">*</div> Confirm
 															Password:
@@ -2193,7 +2240,7 @@ a.underlink:hover {
 																id="confirmpassword" onkeyup="" cssClass="x-input"
 																cssStyle="width: 185px;"
 																value="%{#maskedPasswordString}" showPassword="true"
-																size="8" maxlength="14" /></td>
+																size="8"  /></td>
 													</tr>
 
 													<s:if test="#orgQuestionList!=null">
@@ -2419,7 +2466,7 @@ a.underlink:hover {
 										<div>
 											<table width="100%" border="0" cellspacing="0"
 												cellpadding="0" class="tabs">
-												<s:if test="#shipTo != null">
+											
 													<tr>
 														<td valign="top" class="no-border-right-user paddingtop0">
 															<div class="question">
@@ -2437,10 +2484,11 @@ a.underlink:hover {
 																style="margin-left: 2px;">
 																<a id='changeShipToForUserProfile'
 																	href='#shipToUserProfile'
-																	onclick="javascript: writeMetaTag('WT.ti', 'xpedx / User Profile');"
+																	onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 																	class=" underlines">[Change]</a>
 															</div>
 														</td>
+													<s:if test="#shipTo != null">
 														<td width="81%" valign="top"
 															class="no-border-right-user paddingtop0"><s:property
 																value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(#defaultShipToId)" /><br />
@@ -2456,47 +2504,37 @@ a.underlink:hover {
 																value="#shipTo.getState()" /> <s:property
 																value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#shipTo.getZipCode())}" />&nbsp;
 															<s:property value="#shipTo.getCountry()" /><br /> <!-- JIRA 1878 -->
-															<s:url id='targetURL' namespace='/common'
-																action='xpedxGetAssignedCustomersForDefaultShipTo' /></td>
+															</td>
+														</s:if>
+														<s:else>
+																<td valign="top" class="no-borders paddingtop0"><div
+																	class="float-right">																	
+																</div>
+																<s:text	name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO"></s:text><br />
+																</td>
+														</s:else>
 													</tr>
-												</s:if>
-												<s:else>
-													<tr>
-														<td valign="top" class="no-border-right-user padding0"><div
-																class="question">
-																<ul>
-																	<li>Preferred Ship-To:&nbsp;</li>
-																	<li><span
-																		class="float-right  padding-right4 margin-right"><a
-																			id="purposeofmails-al2" href="#"><img width="12"
-																				height="12" border="0"
-																				title="Preffered Authorized Location"
-																				alt="Preffered Authorized Location"
-																				style="margin-top: 2px;"
-																				src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"></a></span>
-																	</li>
-																</ul>
-																</br> <a id='changeShipTo'
-																	href='#ajax-assignedShipToCustomers'
-																	class="txt-lnk-sml-1">[Change]</a>
-															</div></td>
-														<td valign="top" class="no-borders paddingtop0"><div
-																class="float-right">
-																<img height="12" border="0" width="12" alt="help"
-																	src="<s:url value='/xpedx/images/icons/12x12_grey_help.png'/>" />
-															</div> <%-- <s:text name="No Preferred Ship-To is selected"></s:text><br/> --%>
-															<s:text
-																name="MSG.SWC.SHIPTO.NOSHIPTO.INFO.NOPREFERREDSHIPTO"></s:text><br />
-															<s:url id='targetURL' namespace='/common'
-																action='xpedxGetAssignedCustomers' /></td>
-													</tr>
-												</s:else>
-												<s:action name="paginatedAuthorizeCustomerAssignment"
-													namespace="/profile/user" executeResult="true" />
+												
+												<tr>
+		<td>
+		<div class="question">
+				<ul>
+					<li> Authorized Locations:&nbsp;</li>
+					<li><span class="float-left"><a href="#"><img
+						src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"  style="margin-top:2px;"
+						alt="Select the location(s) from the available locations to allow access."
+						title="Select the location(s) from the available locations to allow access." width="12" height="12"
+						border="0" /></a></span></li>
+				</ul>
+				</div>
+				</td>
+		<s:action name="DynamicQuery" namespace="/profile/user" executeResult="true" />
+		</tr>
 												<tr>
 													<td valign="top" class="no-border-right-user ">&nbsp;</td>
 													<td valign="top" class="no-border-right-user ">&nbsp;</td>
 												</tr>
+												<s:hidden name ='userNotAdmin' id='userNotAdmin' value='%{#isCustomerNotAdmin}'></s:hidden>
 											</table>
 										</div>
 									</div>
@@ -2812,44 +2850,45 @@ a.underlink:hover {
 			</div>
 			</td>
 			<td valign="top" class="no-border-right-user padding00">&nbsp;</td>
-		</tr> --%>
-											<tr>
-												<td valign="top" colspan="2"
-													class="no-border-right-user padding00">
-													<div class="question">
-
-														<ul class="padding-top3">
-															<li><strong>Quick Links&nbsp;</strong></li>
-															<li><a href="#"><img
-																	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
-																	style="margin-top: 2px;"
-																	alt="User defined bookmarked links which display on the homepage."
-																	title="User defined bookmarked links which display on the homepage."
-																	width="12" height="12" border="0" /></a></li>
-															<li><a class="underlink"
-																onclick="setInLineChange();" id="NewQL">[Add New]</a></li>
-														</ul>
-													</div>
-
-													<div class="txt-small clearview"></div>
-													<table width="100%" border="0" cellspacing="0"
-														cellpadding="0" id="tb1" class="standard-table">
-														<tbody>
-															<tr class="table-header-bar">
-																<td width="35%"
-																	class="no-border-left table-header-bar-left"><span
-																	class="white"> Name</span></td>
-																<td width="48%" align="left" class="  "><span
-																	class="white">URL</span></td>
-																<td width="8%" align="left"><span class="white">Show</span></td>
-																<td width="9%" align="left"
-																	class="no-border-right table-header-bar-right"><span
-																	class="white">Sequence</span></td>
-															</tr>
-														</tbody>
-													</table>
-												</td>
-											</tr>
+			</tr> --%>						<s:if test="%{!#isSalesRep}">	
+												<tr>
+													<td valign="top" colspan="2"
+														class="no-border-right-user padding00">
+														<div class="question">
+	
+															<ul class="padding-top3">
+																<li><strong>Quick Links&nbsp;</strong></li>
+																<li><a href="#"><img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
+																		style="margin-top: 2px;"
+																		alt="User defined bookmarked links which display on the homepage."
+																		title="User defined bookmarked links which display on the homepage."
+																		width="12" height="12" border="0" /></a></li>
+																<li><a class="underlink"
+																	onclick="setInLineChange();" id="NewQL">[Add New]</a></li>
+															</ul>
+														</div>
+	
+														<div class="txt-small clearview"></div>
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0" id="tb1" class="standard-table">
+															<tbody>
+																<tr class="table-header-bar">
+																	<td width="35%"
+																		class="no-border-left table-header-bar-left"><span
+																		class="white"> Name</span></td>
+																	<td width="48%" align="left" class="  "><span
+																		class="white">URL</span></td>
+																	<td width="8%" align="left"><span class="white">Show</span></td>
+																	<td width="9%" align="left"
+																		class="no-border-right table-header-bar-right"><span
+																		class="white">Sequence</span></td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</s:if>
 										</table>
 									</div>
 
@@ -2907,13 +2946,16 @@ a.underlink:hover {
 											<tr>
 												<td width="16%" valign="top"
 													class="no-border-right-user padding00">Currency Type:</td>
+											<!-- Added for EB-763 user want to see all fields as grey unclickable boxes on the Spending Limits and Approvers tab  Starts -->
 												<td valign="top" width="84%"
 													class="no-border-right-user padding00"><s:if
 														test="#optedCurrency != null && #optedCurrency !=''">
 														<s:if test="#disableSinceSelfApprover">
-															<s:textfield id="spendingLtCurrency"
-																name="spendingLtCurrency" value="%{#optedCurrency}"
-																readonly="%{true}" cssStyle="width: 148px;" />
+															<s:set name='spendingLtCurrencyDesc' value='currencyMap.get(#optedCurrency)' />															
+															<s:textfield id="spendingLtCurrencyReadonly"
+																name="spendingLtCurrencyReadonly" value="%{#spendingLtCurrencyDesc}"
+																readonly="%{true}" disabled='%{true}' cssStyle="width: 148px;" />
+															<s:hidden id="spendingLtCurrency" name="spendingLtCurrency" value="%{#optedCurrency}"/>	
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Currency -"
@@ -2943,8 +2985,9 @@ a.underlink:hover {
 														test="#spendingLimit != null && #spendingLimit != ''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
-																id="spendingLt" readonly="%{true}" name="spendingLt"
-																maxlength="6" value="%{showSpendingLimit()}"></s:textfield>
+																id="spendingLtReadOnly" readonly="%{true}" name="spendingLtReadOnly"
+																maxlength="6" value="%{showSpendingLimit()}" disabled='%{true}'></s:textfield>
+															<s:hidden id="spendingLt" name="spendingLt" value="%{showSpendingLimit()}"/>	
 														</s:if>
 														<s:else>
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
@@ -2965,27 +3008,31 @@ a.underlink:hover {
 												<td valign="top" width="80%" align="left"
 													class="no-border-right-user padding00"><s:if
 														test="#disableSinceSelfApprover">
-														<s:if test='%{#OrderApprovalFlag=="Y"}'>
+														
+														<s:if test='%{#OrderApprovalFlag==true}'>
 															<s:hidden name="OrderApprovalFlag" value="true" />
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
-																value="%{#_action.isOrderFlagForApproval()}"
-																disabled='%{true}' />
+																fieldValue="%{#_action.isOrderFlagForApproval()}"
+																disabled='%{true}' value="true"/>
+															
 														</s:if>
 														<s:else>
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
-																value="%{#_action.isOrderFlagForApproval()}"
+																fieldValue="%{#_action.isOrderFlagForApproval()}"
 																disabled='%{true}' />
+																
 														</s:else>
 
 
 													</s:if> <s:else>
-														<s:if test='%{#OrderApprovalFlag=="Y"}'>
+														<s:if test='%{#OrderApprovalFlag==true}'>
 															<s:checkbox tabindex="15" name='OrderApprovalFlag'
 																id='OrderApprovalFlag' fieldValue="true"
 																value="%{#_action.isOrderFlagForApproval()}" />
 															<s:hidden name="OrderApprovalFlag" value="true" />
+															
 														</s:if>
 
 														<s:else>
@@ -3012,9 +3059,10 @@ a.underlink:hover {
 														test="#primaryApprover != null && #primaryApprover != ''">
 														<s:if test="#disableSinceSelfApprover">
 															<s:textfield cssClass="x-input" cssStyle="width:148px;"
-																id="primaryApprover" readonly="%{true}"
-																name="primaryApprover" maxlength="6"
-																value="%{#primaryApprover}"></s:textfield>
+																id="primaryApproverReadOnly" readonly="%{true}"
+																name="primaryApproverReadOnly" maxlength="6"
+																value="%{#primaryApprover}" disabled='%{true}'></s:textfield>
+															<s:hidden id="primaryApprover" name="primaryApprover" value="%{#primaryApprover}"/>
 														</s:if>
 														<s:else>
 															<s:select headerKey="" headerValue="- Select Approver -"
@@ -3045,11 +3093,13 @@ a.underlink:hover {
 														<s:if test="#disableSinceSelfApprover">
 															<span class="no-border-right-user padding0 "> <s:textfield
 																	cssClass="x-input" cssStyle="width:148px;"
-																	id="alternateApprover" readonly="%{true}"
-																	name="alternateApprover" maxlength="6"
-																	value="%{#alternateApprover}"></s:textfield>
+																	id="alternateApproverReadOnly" readonly="%{true}"
+																	name="alternateApproverReadOnly" maxlength="6"
+																	value="%{#alternateApprover}" disabled='%{true}'></s:textfield>
+																	<s:hidden id="alternateApprover" name="alternateApprover" value="%{#alternateApprover}"/>
 															</span>
 														</s:if>
+														<!-- EB-763 END -->
 														<s:else>
 															<span class="no-border-right-user padding0 "> <s:select
 																	headerKey="" headerValue="- Select Approver -"
@@ -3185,8 +3235,7 @@ a.underlink:hover {
 
 	<div class="clearview textAlignCenter">
 		<br>Last modified by
-		<s:property value="%{getContactFirstName()}" />
-		<s:property value="%{getContactLastName()}" />
+		<s:property value="%{getLastModifiedBy()}" />
 		on
 		<s:property value="%{getLastModifiedDate()}" />
 	</div>
@@ -3210,7 +3259,10 @@ if (window.event && window.event.keyCode == 13) {
   saveClick();
 }
 }
-document.onkeypress = enterPressed;
+
+<s:if test="%{!#isSalesRep}">
+	document.onkeypress = enterPressed;
+</s:if>
 
   function setInLineChange()
   {
@@ -3432,7 +3484,9 @@ document.onkeypress = enterPressed;
 		
 	}
 
-	loadDataOnStart();
+	<s:if test="%{!#isSalesRep}">
+		loadDataOnStart();
+	</s:if>
 	
 </script>
 
@@ -3447,6 +3501,12 @@ var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
 
 function resetPassword()
 {
+  var usrStatus = $('input[name=status]:checked', '#myAccount').val();
+  var dbUsrStatus= '<s:property value="%{getContactStatus()}" />';	
+  if(usrStatus == "30" || dbUsrStatus == "30") {
+	 alert("Cannot reset password for suspended users");
+  }
+  else {
 	if(confirm('Do you really want to reset this password?')) {
 		var url = '<s:property value="#ResetPasswordURL" />';
 		url = ReplaceAll(url,"&amp;",'&');
@@ -3459,13 +3519,20 @@ function resetPassword()
 	        success: function (response, request){
 	        	//alert('User password will be sent to your registered email address!');
 	        	//Added for Jira XNGTP-3196
-			document.getElementById("msgFor_resetpassword").style.display = "inline";
+				 var responseText = response.responseText;		           
+	             if(responseText.indexOf("error")>-1){
+						alert("Error sending reset password notification email!");
+				}else{
+		                document.getElementById("msgFor_resetpassword").style.display = "inline";
+		        }
+			
 	   		},
 	   		failure: function (response, request){
 	   			alert("Error sending reset password notification email!");
 	         }
 	    });
-	}     
+	}
+  }
 }
 function validatePassword(){
 	var url = '<s:property value="#ValidatePasswordURL" />';

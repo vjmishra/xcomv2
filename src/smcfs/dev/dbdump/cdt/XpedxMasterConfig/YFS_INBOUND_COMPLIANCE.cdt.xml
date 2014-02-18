@@ -7,15 +7,15 @@
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T21:41:14-04:00"
     Modifyuserid="ng" OrganizationCode="BulkleyDunton"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T22:24:26-04:00" Createuserid="admin"
     InboundComplianceKey="2010090122242645405" IsAppointmentReqd="N"
-    IsEspMaintained="N" IsRoutingGuideMaintained="" Lockid="0"
+    IsEspMaintained="N" IsRoutingGuideMaintained=" " Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:24:26-04:00"
     Modifyuserid="ng" OrganizationCode="CentralLewmar"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd=""/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd=" "/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T22:44:11-04:00" Createuserid="admin"
@@ -23,15 +23,15 @@
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:44:11-04:00"
     Modifyuserid="ng" OrganizationCode="CentralMarquardt"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:08:33-04:00" Createuserid="admin"
     InboundComplianceKey="2010090123083347808" IsAppointmentReqd="N"
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:08:33-04:00"
-    Modifyuserid="ng" OrganizationCode="Saalfeld" ReadUomFromBuyer=""
-    SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    Modifyuserid="ng" OrganizationCode="Saalfeld" ReadUomFromBuyer=" "
+    SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:27:25-04:00" Createuserid="admin"
@@ -39,7 +39,7 @@
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:27:25-04:00"
     Modifyuserid="ng" OrganizationCode="StrategicPaper"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:39:34-04:00" Createuserid="admin"
@@ -47,7 +47,7 @@
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:39:34-04:00"
     Modifyuserid="ng" OrganizationCode="WesternPaper"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-01T23:51:00-04:00" Createuserid="admin"
@@ -55,15 +55,15 @@
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:51:00-04:00"
     Modifyuserid="ng" OrganizationCode="WhitemanTower"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-09-02T00:01:47-04:00" Createuserid="admin"
     InboundComplianceKey="2010090200014852685" IsAppointmentReqd="N"
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-02T00:01:47-04:00"
-    Modifyuserid="ng" OrganizationCode="Zellerbach" ReadUomFromBuyer=""
-    SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    Modifyuserid="ng" OrganizationCode="Zellerbach" ReadUomFromBuyer=" "
+    SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 <InboundCompliance CaptureSerialWhileShipping="Y"
     CaptureTagWhileShipping="Y" Createprogid=".YCPOrgDetailsAPI"
     Createts="2011-06-09T14:23:15-04:00" Createuserid="admin"
@@ -71,5 +71,5 @@
     IsEspMaintained="N" IsRoutingGuideMaintained="03" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-06-09T14:23:15-04:00"
     Modifyuserid="ngmc" OrganizationCode="xpedxCanada"
-    ReadUomFromBuyer="" SCMLabelLevel="" SCMLabelReqd="NOT_REQUIRED"/>
+    ReadUomFromBuyer=" " SCMLabelLevel=" " SCMLabelReqd="NOT_REQUIRED"/>
 </YFS_INBOUND_COMPLIANCEList>

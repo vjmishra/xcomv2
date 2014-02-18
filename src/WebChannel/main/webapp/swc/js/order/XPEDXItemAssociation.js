@@ -190,8 +190,16 @@ function getCheckedValue(radioObj) {
 	}
 	return "";
 }
-
+<!-- eb 1131-->
 function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
+	
+  	var rsize=document.getElementById("rListSize_"+repItemID).value;
+  	if(rsize == "1"){
+  	  selReplacementId = document.getElementById("hUId_"+repItemID).value;
+  	}
+  	else{
+  	selReplacementId = "";
+  	}
 	var source 		= document.getElementById("replacement_" + repItemID);
     var destination = document.getElementById("replacementItemBody");
     
@@ -201,7 +209,7 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
   	//Add the key into the change form
   	var form = Ext.get("formRIReplaceInList");
   	form.dom.key.value = orderLineKey;
-    
+  	
   	//Display the facy box
 	$.fancybox(
 		Ext.get("replacementItems").dom.innerHTML,
@@ -244,7 +252,7 @@ function replacementAddToList(uId) {
 }
 
 function replacementReplaceInList(uId) {
-	
+
 	if (uId == ""){
 		alert("Please select an item first."); /*Modified code For Jira 2922*/
 		//Ext.Msg.alert('Error', 'Please select an item first.');

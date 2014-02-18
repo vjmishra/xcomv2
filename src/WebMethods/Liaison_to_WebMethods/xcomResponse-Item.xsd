@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<!-- Contains at least 1 ItemResult -->
+    <xsd:element name="ItemResultList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="ItemResult" maxOccurs="unbounded" minOccurs="1" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+    
+    <!-- Holds the value for the Results -->
+    <xsd:element name="ItemResult">
+    	<xsd:complexType>
+    		<!-- List containing errors. (not required) -->
+    		<xsd:sequence>
+    			<xsd:element ref="ErrorList" minOccurs="0" maxOccurs="1" />
+    		</xsd:sequence>
+    		
+    		<!-- Results of the transaction. Either Y or N -->
+    		<xsd:attribute name="transactionSuccessful" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Y" />
+    					<xsd:enumeration value="N" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		
+    		<!-- The itemID from the request -->
+    		<xsd:attribute name="ItemIdentifier" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:maxLength value="40" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+
+    		<!-- The unique identifier for the record -->
+    		<xsd:attribute name="RecordNumber" type="xsd:string" use="required" />
+    	</xsd:complexType>
+    </xsd:element>
+    
+    <!-- If exists, contains at least one error -->
+    <xsd:element name="ErrorList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="Error" maxOccurs="unbounded" minOccurs="1" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+    
+    <!-- The error element -->
+    <xsd:element name="Error">
+    	<xsd:simpleType>
+    		<xsd:restriction base="xsd:string">
+    			<xsd:minLength value="1" />
+    		</xsd:restriction>
+    	</xsd:simpleType>
+    </xsd:element>
+
+    <!-- Root element of the schema. -->
+    <xsd:element name="xcomg2ItemResponse">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="ItemResultList" />
+    		</xsd:sequence>
+    		<xsd:attribute name="messageId" type="xsd:string" use="required" />
+    	</xsd:complexType>
+    </xsd:element>
+</xsd:schema>

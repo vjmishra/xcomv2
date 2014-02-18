@@ -148,12 +148,15 @@ td p{margin-bottom: 0px; }
     margin-top: 50px;
     padding-top: 0;
 }
+
 .error {
-	background-color: #F9E5E6;
-	border: 1px solid #E8AAAD;
-	color: #B50007;
-	padding-left: 5px;
-	padding-right: 5px;
+    background-color: #F9E5E6;
+    border: 1px solid #B50007;
+    color: #B50007;
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: auto;
 }
 
 span.forgot.underlink a:link{
@@ -231,12 +234,18 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 	</tr>
 	<tr>
 		<td style="text-align:left;">
-		 <a name="button" id="button" class="green-ui-btn" href="#" onclick="return validateForm();"> <span>Sign In</span></a><br /> 
-		
-		<%-- <input name="button" type="image" id="button"  value="Submit" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/salesrep/signin.png" onClick="return validateForm();"/> <br /> --%>
+		 <a name="button" id="signId" class="green-ui-btn" href="#" onclick="return validateForm();"> <span>Sign In</span></a><br /><br /> <%
+ 		if(null != request.getParameter("error")) {
+ 		%> <div
+			style="color:#ff0000; margin-top: 5px; display: inline; float: left; margin-right: 245px;"
+			class="error"> Your session has expired. </div>
+	</br> <%
+ 	} %>
+ <%-- <input name="button" type="image" id="button"  value="Submit" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/salesrep/signin.png" onClick="return validateForm();"/> <br /> --%>
 		 
 		</td>
 		<td>&nbsp;</td>
+		
 	</tr>
 	<tr>
 	<td colspan="2">
@@ -245,8 +254,12 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 		<s:text name="Please enter a valid Username and Password." />
 		</div>
 	</s:if>
+			
 	
 	<div id="errMsg"> </div>
+	
+	
+	
 	</td>
 	</tr>
 	 <tr>

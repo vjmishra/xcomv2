@@ -17,7 +17,7 @@
 			<body>
 				<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
 					<tr>
-						<td><img src="{$imageURL}" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
+						<td><img src="{$imageURL}" width="216" height="69" /></td>
 					</tr>
 					<tr>
 					<!-- <xsl:if test = 'Emails/Email/@RequestType ="SampleServiceRequest"'>
@@ -294,9 +294,7 @@
 											</xsl:if>
 											</table></td></tr>
 												 <tr>
-											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
-												<div align="left">            Please do not reply  to this email. This mailbox is not monitored and you will not receive a response. </div>                </td>
-									    </tr>
+											</tr>
 									    <tr>
 											<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">&#160;</td>
 									    </tr>

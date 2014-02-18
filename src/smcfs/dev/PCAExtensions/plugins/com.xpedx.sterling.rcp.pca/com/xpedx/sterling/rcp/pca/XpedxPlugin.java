@@ -43,6 +43,7 @@ public class XpedxPlugin extends AbstractUIPlugin {
 			YRCPlatformUI.registerTheme("com.xpedx.sterling.rcp.pca_sapphire", ID);
 			YRCPlatformUI.registerExtensions("com.xpedx.sterling.rcp.pca_extn.yuix", ID);
 			YRCPlatformUI.registerWizardExtensions("com.xpedx.sterling.rcp.pca_wizardextn", ID);
+			YRCPlatformUI.registerAboutPluginProperties("xpedx_about",ID);
 		} catch (MissingResourceException x) {
             x.printStackTrace();
 		}

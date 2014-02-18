@@ -2228,6 +2228,23 @@ a{
 width:340px;
 }
 
+#Item_fieldset {
+    border: 1px solid #D6D6D6;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 12px;
+    padding: 8px;
+}
+
+#msds_link {
+	 position: relative;
+	 top: -2px; 
+	 left: 285px;
+	 padding-bottom: 0px;
+	 padding-left:6px;
+	 padding-right:6px;
+	 padding-top:0px;
+}
+
 .slightly_left
 {
  padding-right:3px;
@@ -2254,7 +2271,7 @@ width:350px;
 
 table#prod-details-tbl {
 	width:325px;
-	margin-left:-14px;
+	margin-left:-1px;
 }
 
 input.input-label {
@@ -2301,7 +2318,7 @@ border-left:1px solid #CCCCCC;
 
 p#avail_today
 {
-margin-left:-9px;
+margin-left:10px;
 }
 
 .prod-config .orange-ui-btn

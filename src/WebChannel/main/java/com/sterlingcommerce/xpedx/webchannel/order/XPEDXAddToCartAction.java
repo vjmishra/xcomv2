@@ -19,6 +19,7 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.AddToCartAction;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
@@ -138,11 +139,15 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 											YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
 											YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
 											YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
-											YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
-																		
+											YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");//EB-3651
 											String legacyProductCode1 = itemIdElem.getNodeValue();
 											String requestedQty = requestedQtyElem.getNodeValue();
 											String requestedUom = requestedUomElem.getNodeValue();
+											if(this.reqProductUOM!= null && 
+													(this.reqProductUOM.equals("") || this.reqProductUOM.equals("M_"))){											
+												System.out.println("XPEDXAddToCartAction:requestedUom::::::"+requestedUom);//EB-3651
+												System.out.println("XPEDXAddToCartAction:this.reqProductUOM::::::"+this.reqProductUOM);//EB-3651
+											}
 											if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14") 
 													&& legacyProductCode1.equalsIgnoreCase(this.productID) && requestedQty.equalsIgnoreCase(this.reqProductQuantity) && requestedUom.equalsIgnoreCase(this.reqProductUOM)){								
 												orderMultipleErrorItems.add(legacyProductCode1);
@@ -236,6 +241,26 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 					 }
 				 }
 			 }
+			 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
+			 {
+				 quantitydraftError = "true";
+			 }
+			 YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+			boolean isOUErrorPage=false;
+ 			for(YFCElement errorEle:errorNodeList)
+ 			{
+ 				String errorCode=errorEle.getAttribute("ErrorCode");
+ 				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+ 				{
+ 					isOUErrorPage=true;
+ 					break;
+ 				}
+ 			}
+ 			if(isOUErrorPage)
+ 			{
+ 				ouErrorMessage=XPEDXConstants.UE_ERROR_CODE;
+ 				return "OUErrorPage"; 
+ 			}
 			 return draftErrorFlag;
 		 }
 	     catch (Exception e)
@@ -424,6 +449,19 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 	public String draftOrderflag;
 	public String draftErrorFlag="DraftError";
 	private String draftError= "false";
+	private String quantitydraftError="false";
+
+	public void setQuantitydraftError(String quantitydraftError) {
+		this.quantitydraftError = quantitydraftError;
+	}
+	
+	public String getQuantitydraftError() {
+		return quantitydraftError;
+	}
+
+
+	private String ouErrorMessage;
+
 
 	public String getDraftError() {
 		return draftError;
@@ -431,6 +469,14 @@ public class XPEDXAddToCartAction extends AddToCartAction {
 
 	public void setDraftError(String draftError) {
 		this.draftError = draftError;
+	}
+
+	public String getOuErrorMessage() {
+		return ouErrorMessage;
+	}
+
+	public void setOuErrorMessage(String ouErrorMessage) {
+		this.ouErrorMessage = ouErrorMessage;
 	}
 
 	

@@ -53,23 +53,28 @@ private static YFCLogCategory log;
 		return null;
 		
 	}
-	private List<YFS_Customer> getCustomer(YFSEnvironment env,NodeList customerAssignmentNodeList)
-	{
-		List<YFS_Customer> yfsCustomerList=new ArrayList<YFS_Customer>();
+	private void getCustomer(YFSEnvironment env,NodeList customerAssignmentNodeList,int counter,List<YFS_Customer> yfsCustomerList)
+	{	
+		//Modified For EB-340
+		if(counter == (customerAssignmentNodeList.getLength()) )
+			return;
 		PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 		pltQryBuilder.setCurrentTable("YFS_CUSTOMER");
-		if(customerAssignmentNodeList != null && customerAssignmentNodeList.getLength() >0)
-			pltQryBuilder.append(" CUSTOMER_ID IN ('"+((Element)customerAssignmentNodeList.item(0)).getAttribute("CustomerID")+"'");
-		for(int i=1;i<customerAssignmentNodeList.getLength();i++)
-		{
-			Element customerAssignmentElement=(Element)customerAssignmentNodeList.item(i);
-			pltQryBuilder.append(", '"+customerAssignmentElement.getAttribute("CustomerID")+"'");
-			
-		}
-		pltQryBuilder.append(")");
-		yfsCustomerList=YFS_CustomerDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
-		return yfsCustomerList;
+		if(customerAssignmentNodeList != null && customerAssignmentNodeList.getLength()  >0)
+			pltQryBuilder.append(" CUSTOMER_ID IN ('"+((Element)customerAssignmentNodeList.item(counter)).getAttribute("CustomerID")+"'");
+			counter=counter+1;
 		
+			for(int i=1;i<1000 && counter <customerAssignmentNodeList.getLength() ;i++ ,counter++)
+			{
+				Element customerAssignmentElement=(Element)customerAssignmentNodeList.item(counter);
+				pltQryBuilder.append(", '"+customerAssignmentElement.getAttribute("CustomerID")+"'");
+			}
+			
+		pltQryBuilder.append(")");
+		yfsCustomerList.addAll(YFS_CustomerDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000));
+		//Calling getCustomer() in order to split the query EB-340
+		getCustomer(env,customerAssignmentNodeList,counter,yfsCustomerList);
+
 	}
 	public Document manageCustomerAssignment(YFSEnvironment env,Document inputXML) throws Exception
 	{
@@ -83,7 +88,9 @@ private static YFCLogCategory log;
 	
 	
 		NodeList customerAssignmentNodeList=inputXML.getElementsByTagName("CustomerAssignment");
-		List<YFS_Customer> customerList=getCustomer(env,customerAssignmentNodeList);
+		//Modified For EB-340
+		List<YFS_Customer> customerList=new ArrayList<YFS_Customer>();
+		getCustomer(env,customerAssignmentNodeList,0,customerList);
 		String userId="";
 		String organizationCode="";
 		Map<String,YFS_Customer> customerIDMap=new HashMap<String,YFS_Customer>();
@@ -91,7 +98,7 @@ private static YFCLogCategory log;
 		{
 			customerIDMap.put(customers.getCustomer_ID(), customers);
 		}
-		Map<String,String>  assignmentKeyMap=null;
+		Map<String,String>  assignmentKeyMap=new HashMap<String,String>();
 		for(int i=0;i<customerAssignmentNodeList.getLength();i++)
 		{
 			try
@@ -116,8 +123,10 @@ private static YFCLogCategory log;
 				}
 				else if("Delete".equals(operation))
 				{
-					if(assignmentKeyMap == null)
-						assignmentKeyMap=getCustomerAssignment(env, customerAssignmentElem.getAttribute("UserId"), customerAssignmentElem.getAttribute("OrganizationCode"), customerList);
+					//Modified For EB-340
+					int counter=0;
+					if(assignmentKeyMap.size() ==0)
+						getCustomerAssignment(env, customerAssignmentElem.getAttribute("UserId"), customerAssignmentElem.getAttribute("OrganizationCode"), customerList,counter,assignmentKeyMap);
 					String assignmentKey=assignmentKeyMap.get(customer.getCustomer_Key());
 					if(assignmentKey != null && assignmentKey.trim().length() >0)
 					{ 
@@ -141,28 +150,31 @@ private static YFCLogCategory log;
 		return  null;
 		
 	}
-	private Map<String,String>  getCustomerAssignment(YFSEnvironment env,String userId,String organizationCode,List<YFS_Customer> customerList)
+	private void  getCustomerAssignment(YFSEnvironment env,String userId,String organizationCode,List<YFS_Customer> customerList,int counter,Map<String,String> asignmentKeyMap)
 	{
-		Map<String,String> asignmentKeyMap=new HashMap<String,String>();
+		//EB-340 - Start 
+		if(counter == (customerList.size()) )
+			return ;
 		PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 		pltQryBuilder.setCurrentTable("YFS_CUSTOMER_ASSIGNMENT");
-		if(customerList != null && customerList.size() >0)
-			pltQryBuilder.append(" CUSTOMER_KEY IN ('"+customerList.get(0).getCustomer_Key()+"'");
-		for(int i=1;i<customerList.size();i++)
+		if(customerList != null && customerList.size()  >0)
+			pltQryBuilder.append(" CUSTOMER_KEY IN ('"+customerList.get(counter).getCustomer_Key()+"'");
+		counter=counter+1;
+		for(int i=1;i<1000 && counter <customerList.size() ;i++ ,counter++)
 		{
-			pltQryBuilder.append(", '"+customerList.get(i).getCustomer_Key()+"'");
-			
+				pltQryBuilder.append(", '"+customerList.get(counter).getCustomer_Key()+"'");
 		}
+			
 		pltQryBuilder.append(")");
-		pltQryBuilder.append("AND USER_ID ='"+userId+"' AND ORGANIZATION_CODE ='"+organizationCode+"'"); 
+		pltQryBuilder.append("AND USER_ID ='"+userId+"' AND ORGANIZATION_CODE ='"+organizationCode+"'");
 		
-		
-		List<YFS_Customer_Assignment> yfsCustomerAssinedList=YFS_Customer_AssignmentDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
+		List<YFS_Customer_Assignment> yfsCustomerAssinedList=YFS_Customer_AssignmentDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);		
 		for( YFS_Customer_Assignment custAssingment : yfsCustomerAssinedList)
 		{
 			asignmentKeyMap.put(custAssingment.getCustomer_Key(), custAssingment.getCustomer_Assignment_Key());
 		}
-		return asignmentKeyMap;
+		getCustomerAssignment(env,userId,organizationCode,customerList,counter,asignmentKeyMap);
+		//EB-340 - End
 		
 	}
 /*	public Document manageCustomerAssignment(YFSEnvironment env,Document inputXML) throws Exception

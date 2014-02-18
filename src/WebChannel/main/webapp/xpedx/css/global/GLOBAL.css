@@ -43,11 +43,26 @@
 }
 #searchTips {
 	width: 800px;
+    margin-top: 18px;
+    margin-left: 18px;
+    margin-right: 18px;
 }
 #tips-container {
 	width: 75px; 
 	float: left:10px;	
 	margin-top: 0px;
+}
+.searchTipslist{
+	list-style-type: disc;
+	height: 73px;
+    list-style-type: disc;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+#searchTips li, .searchTips li {
+    list-style-type: disc;
+    margin-left: 40px;
 }
 
 
@@ -1391,8 +1406,9 @@ h6 {
 }
 .swc-ext .x-window-ml {
   /*   background: url("../../../ext/resources/images/default/window/left-right.png") repeat-y scroll 0 0 transparent; */
-    padding-left: 6px;
+    padding-left: 0px;
 }
+
 .swc-ext .x-window-mr {
    /*  background: url("../../../ext/resources/images/default/window/left-right.png") repeat-y scroll right 0 transparent; */
     padding-right: 6px;
@@ -1744,6 +1760,10 @@ inStoreIcon {
     color: #FFFFFF;
     margin-left: 4px;
 }
+.whitest {
+    color: #FFFFFF;
+    margin-left: 4px;
+}
 #breadcumbs-list-name h2 {
     color: #003399;
     font-family: Arial,Helvetica,sans-serif;
@@ -1874,6 +1894,7 @@ inStoreIcon {
     max-height: 12px;
     overflow: visible;
     padding: 0 5px;
+    text-align: right;
 }
 .commonHeader-subnav li a {
     font-family: Arial,Helvetica,sans-serif;
@@ -1995,7 +2016,6 @@ input, select {
 }
 .xpedx-light-box {
     height: auto;
-    overflow: auto;
     padding: 10px;
 }
 .xpedx-light-box h2 {
@@ -2396,6 +2416,9 @@ a.blue-ui-btn:active span {
     padding: 0;
 }
 .white {
+    font-size: 11px;
+}
+.whitest {
     font-size: 11px;
 }
 #order-filter td {
@@ -2952,10 +2975,6 @@ td .inner {
 #listTableHeader {
   /*   background-image: url("../../images/shape.svg_png?shape=rect&stylesheet=&cssClass=&shapeRendering=geometricPrecision&width=531&height=44&curveX=8&curveY=8&fillColor=%23003399&fillOpacityPct=&fillGradientType=&fillGradientTargetColor=&fillGradientTargetOpacityPct=&borderColor=%2300255c&borderWidth=&shadingStyle=none&shadingLevelPct=&shadingColor=&shadingStartPct=&shadingEndPct=&dropShadowOffsetX=&dropShadowOffsetY=&dropShadowColor=&dropShadowOpacityPct=&margin=&clipX1=&clipX2=&clipY1=&clipY2=32&outsideColor=&outsideOpacityPct="); */
     background-repeat: no-repeat;
-}
-.white {
-    color: #FFFFFF;
-    margin-left: 4px;
 }
 #listTableHeaderMil {
     /* background-image: url("../../images/shape.svg_png?shape=rect&stylesheet=&cssClass=&shapeRendering=geometricPrecision&width=951&height=44&curveX=8&curveY=8&fillColor=%23003399&fillOpacityPct=&fillGradientType=&fillGradientTargetColor=&fillGradientTargetOpacityPct=&borderColor=%2300255c&borderWidth=&shadingStyle=none&shadingLevelPct=&shadingColor=&shadingStartPct=&shadingEndPct=&dropShadowOffsetX=&dropShadowOffsetY=&dropShadowColor=&dropShadowOpacityPct=&margin=&clipX1=&clipX2=&clipY1=&clipY2=32&outsideColor=&outsideOpacityPct="); */
@@ -3849,7 +3868,7 @@ padding-top:10px;
     width: 212px;
 }
 .narrowbyattributes {
-    max-height: 12.2em;
+    max-height: 15em;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -4284,7 +4303,7 @@ table.catalog-row-five td img {
 #signon-table td.form-cell .button-row {
     margin: 10px 0 5px;
 }
-#signon-table td.form-cell .button-row .green-ui-btn {
+#signon-table td.form-cell .button-row .orange-ui-btn {
     display: inline-block;
     float: none;
     margin-right: 10px;
@@ -4681,6 +4700,16 @@ div.catalog-search-container input#search_searchTerm {
     max-height: 200px;
     text-decoration: none !important;
 }
+.full-description-replacement-model {
+    color: #003399;
+    cursor: pointer;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
+
+
 .short-description_M {
     color: #003399;
     font-weight: bold;
@@ -4698,7 +4727,7 @@ td.stores-cell img {
     padding-top: 10px;
 }
 .mil-only .mil-wrap-condensed, .mil-only .mil-wrap-condensed-mid, .mil-only .mil-wrap-condensed-bot {
-    height: 225px;
+    height: 266px;
 }
 .mil-only .mil-wrap-condensed {
     border-bottom: 1px solid #CCCCCC;
@@ -4748,9 +4777,10 @@ div.last-modified-div {
 .margin-right-10 {
     margin-right: 10px;
 }
+/*EB-1924 web channel user want to view the forgot password title bar and buttons the same in all browser modes so that view does not change depending on my browser mode*/
 #second-navigation {
     background: url("../../images/theme/theme-1/navigation/unselected.png") repeat-x scroll 0 0 transparent;
-    width: 100%;
+    /*width: 100%;*/
 }
 #second-navigation #main-nav li.hover, #second-navigation#main-nav li:hover {
     background: url("../../images/theme/theme-1/navigation/unselected.png") repeat-x scroll 0 0 transparent;
@@ -5176,6 +5206,12 @@ tr.last td.right-cell {
 }
 .normal-view table.bottable td, .condensed-view table.bottable td {
     height: 30px;
+    vertical-align: middle;
+}
+
+.condensed-view table.bottable td {
+    height: 30px;
+    width : 60%;
     vertical-align: middle;
 }
 .normal-view .show-hide-wrap {
@@ -5657,12 +5693,13 @@ input.xpedx_select_sm{/* background:url("../xpedx/css/global/imagebuilderwebapp/
 .boldText{font-weight:bold;}
 .inlineText{display:inline;}
 .order-place-nav{text-align:right;}
-.submitBtnBg1, .submitBtnBg2, .submitBtnBg3, .submitBtnBg4, .submitBtnCheckout{overflow:visible;}
-.submitBtnBg1:hover, .submitBtnBg2:hover, .submitBtnBg3:hover, .submitBtnBg4:hover{text-decoration:none;}
+.submitBtnBg1, .submitBtnBg2, .submitBtnBg3, .submitBtnBg4, .submitBtnBg5, .submitBtnCheckout{overflow:visible;}
+.submitBtnBg1:hover, .submitBtnBg2:hover, .submitBtnBg3:hover, .submitBtnBg4 ,.submitBtnBg5:hover{text-decoration:none;}
 .submitBtnBg1{padding:5px;border:none;text-decoration:none;background-position:center center;margin-right:10px;}
 .submitBtnBg2{padding:5px;border:none;text-decoration:none;margin-right:10px;}
 .submitBtnBg3{padding:5px;margin-right:10px;text-decoration:none;border:none;background-position:center center;}
 .submitBtnBg4{padding:5px;border:none;margin-right:10px;text-decoration:none;}
+.submitBtnBg5{padding:2px;border:none;text-decoration:none;background-position:center center;margin-right:0px;}
 .submitBtnCheckout{padding:5px;background-repeat:no-repeat;border:none;margin-right:10px;text-decoration:none;}
 .order-place-nav .submitBtnBg2{padding-left:1em;padding-right:1em;font-size:medium;font-weight:bold;vertical-align:middle;}
 .order-place-nav a.submitBtnBg1{padding-left:1em;padding-right:1em;font-size:medium;font-weight:bold;vertical-align:middle;}
@@ -7299,6 +7336,12 @@ margin-top: -195px;
 #search-view-links a { margin-right: 16px; }
 #search-view-links img { display: inline; }
 
+#infoMessage {
+    color: #828400;
+    margin: 0 20px 0 17px;
+    text-align: center;
+    font-weight: bold;
+}
 a.orange-ui-btn.float-right { float: right !important; }
 .search-legend { padding: 0px 6px; }
 .check-items-notice { color: #f00; margin: 10px 0px 0px 20px; }
@@ -8099,9 +8142,39 @@ li.ship-to-list  {
 
 /*Add xpedx\js\jquery-ui-1\development-bundle\themes\base\jquery.ui.autocomplete.css
 */
-.ui-autocomplete{position:absolute;cursor:default;}
-.ui-autocomplete-loading{background:white url('/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-anim_basic_16x16.gif') right center no-repeat;}
+.ui-autocomplete-loading {
+	background: #ffffff url('/swc/xpedx/js/jquery-ui-1/development-bundle/themes/base/images/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+.ui-autocomplete {
+	position:absolute;
+	max-height: 250px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	border: 1px solid #333 !important;
+	cursor:pointer;
+}
 * html .ui-autocomplete{width:1px;}
+.ui-autocomplete-group {
+	padding-left: 4px;
+	font-size: 16px;
+	font-weight: bold;
+	background-color: #FFF380;
+	cursor:default;
+}
+.ui-autocomplete-menu-item {
+	padding-left: 4px !important;
+	background-color: white;
+}
+.ui-autocomplete-normal-search-item {
+	padding-left: 0 !important;
+	font-style: italic;
+}
+.ui-autocomplete-highlight-match {
+	color: black;
+	font-weight: bold;
+	font-size: 14px;
+}
 .ui-menu{list-style:none;padding:2px;margin:0;display:block;}
 .ui-menu .ui-menu{margin-top:-3px;}
 .ui-menu .ui-menu-item{margin:0;padding:0;zoom:1;float:left;clear:left;width:100%;}
@@ -10540,3 +10613,15 @@ input.error{
 .catalog-my-price-availability tr.my-headings {
     background: url("../../images/global/dot-gray.gif") repeat-x scroll left center transparent;
 }
+.item-lnk:visited{
+	color: #996633;
+}
+
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+.swc-ext .x-window-ml {
+    padding-left: 0px;
+}
+
+
+
+

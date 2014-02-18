@@ -611,7 +611,7 @@ $(function() {
 			</div>
           
           <s:form name="webiPromptForm" id="webiPromptForm" action="processWebiInputPrompt"
-                    namespace="/xpedx/services" method="post">
+                    namespace="/services" method="post">
                     <s:hidden name="id" value="%{#_action.getId()}"/>
                     <s:hidden name="cuid" value="%{#_action.getCuid()}"/>
                     <s:hidden name="kind" value="%{#_action.getKind()}"/>
@@ -628,7 +628,7 @@ $(function() {
             <s:url id='showLocationUrlId' action='xpedxShowLocationsForReporting' ></s:url>
 		    <s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
       			
-            <s:url id='showShipToLocationUrlId' action='xpedxGetAssignedCustomersForReporting' namespace='/xpedx/services' >
+            <s:url id='showShipToLocationUrlId' action='xpedxGetAssignedCustomersForReporting' namespace='/services' >
             </s:url>
 		    <s:hidden id="showShipToLocationUrl" name='showShipToLocationUrl' value='%{#showShipToLocationUrlId}' />
 		    <s:hidden id="selectedLocationType" name='selectedLocationType' value="All"/>
@@ -722,7 +722,7 @@ $(function() {
            </s:iterator>
 		
           </table>
-          <s:url id='backLink' namespace='/xpedx/services' action='XPEDXReports'>
+          <s:url id='backLink' namespace='/services' action='XPEDXReports'>
 		</s:url>
 
 

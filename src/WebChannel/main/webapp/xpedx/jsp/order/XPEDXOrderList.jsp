@@ -11,6 +11,7 @@
 <%--Added meta tag for Navigation Tab Issue- Jira 3886/3872 --%>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <!--[if IE]>
@@ -77,7 +78,14 @@ $(function() {
 			});
 	});
 	 
+	<%-- auto-expand splits that aren't completely invoiced - EB-1972 --%>
+	$(document).ready(function(){
+		$(".splitExpandInit").each(function(){
+			linkedRowToggle($(this).attr('orderHeaderKey'));
+		})
+	});
 </script>
+
 <script type="text/javascript">
 function printPOs(customerPos) {
     var customerPosArray = customerPos.split(";");
@@ -105,7 +113,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -130,7 +138,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
     <s:param name="pageSetToken" value="#_action.getPageSetToken()"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -161,7 +169,7 @@ function printPOs(customerPos) {
     <s:param name="PurchaseOrderNumberValue" value="PurchaseOrderNumberSearchValue"/>
     <s:param name="statusSearchFieldName" value="StatusSearchFieldNameValue"/>
     <s:param name="holdSearchFieldName" value="HoldStatusSearch"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
 </s:url>
 <s:url id="returnUrl" action="orderList">
     <s:param name="orderByAttribute" value="orderByAttribute"/>
@@ -173,7 +181,7 @@ function printPOs(customerPos) {
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
-    <s:param name='xpedxSelectedHeaderTab' value="#_action.getXpedxSelectedHeaderTab()"/>
+    <s:param name='selectedHeaderTab' value="#_action.getSelectedHeaderTab()"/>
     <!-- 
     <s:param name="OrderNameValue" value="OrderNameSearchValue"/>
     <s:param name="ProductIdValue" value="ProductIdSearchValue"/>
@@ -238,7 +246,7 @@ function printPOs(customerPos) {
                 </div>
                 <!-- end breadcrumb -->
                 <!-- begin top section -->
-                <s:set name="selectedHeaderTab" value="#_action.getXpedxSelectedHeaderTab()"> </s:set>
+                <s:set name="selectedHeaderTab" value="#_action.getSelectedHeaderTab()"> </s:set>
                 <s:set name="blankValue" value="%{#selectedHeaderTab ==#blankValue}" />
 	     		<s:form id="orderListForm" name="orderListForm"  action="orderList"
                     namespace="/order" cssClass="myClass" method="post" validate="true">
@@ -246,7 +254,7 @@ function printPOs(customerPos) {
                 	<s:hidden name='#action.namespace' value='/order'/>
                 	<%-- start of Fix : JIRA - 3123 --%>
                 	<s:if test='!#blankValue'> 
-	                	<s:hidden name='xpedxSelectedHeaderTab' value="%{'AddToExistingOrder'}"/>
+	                	<s:hidden name='selectedHeaderTab' value="%{'AddToExistingOrder'}"/>
 	                	<s:set name='openOrder' value="%{'true'}"/>
 	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
@@ -336,8 +344,8 @@ function printPOs(customerPos) {
                         </table> <!-- end content-holding table -->
                 </fieldset><!-- end border content -->
                 <div id="search-view-links">
-					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+					<s:url id='reportsLink' namespace='/services' action='myreports'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
 					<s:if test="%{#ViewReportsFlag}">
 						<%-- <s:a href='%{reportsLink}' cssClass="link"><span class="underlink">View Order History Reports</span> --%>
@@ -445,7 +453,7 @@ function printPOs(customerPos) {
 						<s:property value='#sourceTabVal'/>.
 						<s:set name='openOrder' value="%{'false'}"/>
 					</s:if>--%>
-					<s:if test='#_action.getXpedxSelectedHeaderTab()== "AddToExistingOrder" && #orderListExists != null && #orderListExists == "true"'>
+					<s:if test='#_action.getSelectedHeaderTab()== "AddToExistingOrder" && #orderListExists != null && #orderListExists == "true"'>
 						<s:set name='openOrder' value="%{'false'}"/>
 					</s:if>
 					
@@ -487,7 +495,7 @@ function printPOs(customerPos) {
 	            		<s:set name="chainedOrderListSize" value='#chainedOrderList.size()'/>
 	            		<s:if test='xpedxChainedOrderListMap.containsKey(#parentOrder.getAttribute("OrderHeaderKey")) && #chainedOrderListSize > 1'>
 							<a class="underlink" id="split-btn" onclick="linkedRowToggle('<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>');">Split</a>
-	            			 </td>
+           			</td>
 						<td></td>
 				    	<td></td>
 				    	<td></td>
@@ -501,13 +509,18 @@ function printPOs(customerPos) {
 							<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 							<s:set name="status" value="#parentOrder.getAttribute('Status')" />
 							
+							<%-- auto-expand splits that aren't completely invoiced - EB-1972 --%>
+							<s:if test='%{#status != "Invoiced"}'>
+								<div style="display:none;" class="splitExpandInit" orderHeaderKey="<s:property value='#parentOrder.getAttribute("OrderHeaderKey")'/>"></div>
+							</s:if>
+
 							<s:if test='%{#status != "Cancelled"}'>
 								<s:property value="#status" />
 								
-									<s:if test='#isPendingApproval && !#isOrderRejected'>
+									<s:if test='#isPendingApproval && !#isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
 										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 									</s:if>
-									<s:elseif test='#isPendingApproval && #isOrderRejected'>
+									<s:elseif test='#isPendingApproval && #isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
 										 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
 									</s:elseif>
 									<s:elseif test='#isOrderNeedsAttention || #isOrderLegacyCnclOrd || #isOrderException'>
@@ -616,7 +629,12 @@ function printPOs(customerPos) {
 								<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 									<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 									<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+									<s:if test="%{#chainedOrder.getAttribute('Status') == 'Invoiced'  || #chainedOrder.getAttribute('Status') == 'Invoice Only'}">
+											(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
+										</s:if>
+										<s:else>
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+										</s:else>  
 		                    		</s:if>
 		                            <s:else>
 										(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
@@ -632,7 +650,7 @@ function printPOs(customerPos) {
 								<s:set name="isFOOnCSRReviewHold" value="%{#_action.isFOCSRReviewHold(#chainedOrder)}" />
 								<s:set name="isOrderRejected" value="%{#_action.isOrderOnRejectHold(#parentOrder)}" />
 								<s:set name="Orderstatus" value="#parentOrder.getAttribute('Status')" />
-								<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation" || #parentOrder.getAttribute("Status") == "Awaiting FO Creation"  || 
+								<s:if test='%{#chainedOrder.getAttribute("MaxOrderStatus") == "1310" || #parentOrder.getAttribute("MaxOrderStatus") == "1310"  || 
 												#chainedOrder.getAttribute("isCSRReview") == "Y" }'>
 												Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 								</s:if>
@@ -648,18 +666,18 @@ function printPOs(customerPos) {
 										</s:else>
 											<%-- Added Check For Jira 4109 --%>
 											<s:if test='%{#chainedOrderListSize==null || #chainedOrderListSize==0}'>	
-											<s:if test='#isPendingApproval && !#isOrderRejected'>
-												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
+											<s:if test='#isPendingApproval && !#isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
+												<s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.PENDAPPROVAL' />
 												<br/>
 												<s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 											 	<s:set name='resolverId' value="%{#_action.getResolverUserId(#parentOrder,'ORDER_LIMIT_APPROVAL')}"/>
 											 	<s:set name='primaryApprover' value="%{#_action.getPrimaryApproverID()}"/>
 											 	<s:set name='proxyApprover' value="%{#_action.getProxyApproverID()}"/>
-											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser)}'>
+											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser) && #parentOrder.getAttribute("Status") != "Cancelled"}'>
 													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
 												</s:if><br/>
 											</s:if>
-											<s:elseif test='#isPendingApproval && #isOrderRejected'>
+											<s:elseif test='#isPendingApproval && #isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
 												 <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.REJECTED' />
 											</s:elseif>
 											<s:elseif test='#isOnCSRReviewHold && #isFOCSRReview'> 
@@ -734,7 +752,12 @@ function printPOs(customerPos) {
 				            		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 					            		<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 											<s:if test="%{#priceWithCurrency == #priceWithCurrencyTemp}">
-												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+											<s:if test="%{#chainedOrder.getAttribute('Status') == 'Invoiced' || #chainedOrder.getAttribute('Status') == 'Invoice Only'}">
+													(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' />
+												</s:if>
+												<s:else>
+												<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+												</s:else>
 				                    		</s:if>
 				                            <s:else>
 												(<s:property value='#currencyCode' />) <s:property value='#priceWithCurrency' /> 
@@ -743,7 +766,7 @@ function printPOs(customerPos) {
 				            	</td>
 				            	
 				            	<td class="right-cell">
-					            	<s:if test='%{#chainedOrder.getAttribute("Status") == "Awaiting FO Creation"'>
+					            	<s:if test='%{#chainedOrder.getAttribute("MaxOrderStatus") == "1310"'>
 													Submitted <s:text name='MSG.SWC.ORDR.NEEDSATTENTION.GENERIC.STATUSPENDING.CSRREVIEW' />
 									</s:if>
 									<s:else>
@@ -785,7 +808,7 @@ function printPOs(customerPos) {
 	<!-- // footer end -->
 	<%-- Add the Approval Panel --%>
 	
-		<swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 		
+		<swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
 			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			

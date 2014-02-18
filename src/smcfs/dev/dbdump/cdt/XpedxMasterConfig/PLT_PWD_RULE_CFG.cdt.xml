@@ -158,7 +158,7 @@
     Createts="2012-05-17T15:09:31-04:00" Createuserid="admin" Lockid="0"
     Modifyprogid=".YEntityServlet" Modifyts="2012-05-17T15:09:31-04:00"
     Modifyuserid="admin"
-    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;NumDaysValid&quot; Value=&quot;600&quot;/>&#xa;&lt;/ParamList>&#xa;"
+    Params="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;ParamList>&#xa;    &lt;Param Name=&quot;NumDaysValid&quot; Value=&quot;999&quot;/>&#xa;&lt;/ParamList>&#xa;"
     PasswordPolicyKey="20120517150035505539"
     PasswordRuleCfgKey="20120517150931505684" PasswordRuleDefnKey="20110420182845130851"/>
 <PasswordRuleCfg Createprogid=".YEntityServlet"

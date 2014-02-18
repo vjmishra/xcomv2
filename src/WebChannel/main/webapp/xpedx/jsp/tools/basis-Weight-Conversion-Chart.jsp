@@ -64,7 +64,8 @@
 <!-- Web trend tag end -->
 </head>
 <!-- Web trend tag start -->
-<s:include value="../../htmls/webtrends/webtrends.html"/>
+<!-- commenting out WT temporarily-->
+<!--s:include value="../../htmls/webtrends/webtrends.html"/-->
 <!-- Web trend tag end -->
 
 <body class="ext-gecko ext-gecko3">
@@ -75,8 +76,8 @@
             <div class="container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
-                	<s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ToolsTab</s:param>
+                	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
+						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 		</s:url>
           <!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="breadcrumb-inactive"><s:text name="tools.basiswtconvchart.title" /></span> Commented for jira 1538-->
                 </div>

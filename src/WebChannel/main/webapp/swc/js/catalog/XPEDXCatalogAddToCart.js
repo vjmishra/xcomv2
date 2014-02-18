@@ -19,12 +19,13 @@ function addItemToCart(itemId) {
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 			document.getElementById('Qty_Check_Flag_'+itemId).value = true;
-			document.getElementById('Qty_'+itemId).value = "";
+			//document.getElementById('Qty_'+itemId).value = ""; commented for EB 41,42,43 - dont clear Qty on failure to add to cart
 			Ext.Msg.hide();
 			myMask.hide();
 			return false;
 		}
 		var uomList = document.getElementById('itemUomList_'+itemId);
+		var defaultUom = document.getElementById('defaultUOMCode_'+itemId);//Added for EB 41,42,43
 		var selectedUom = uomList.options[uomList.selectedIndex].value;
 		var selectedUomText = uomList.options[uomList.selectedIndex].text;
 		var index = selectedUomText.indexOf("(");
@@ -33,6 +34,16 @@ function addItemToCart(itemId) {
 		//var selCart = document.getElementById("draftOrders");
 		var itemType = "" ;
 		var customerFields = "";
+		//Added for EB 3372
+		var Job="";
+		if(document.getElementById('Job_'+itemId)!=null)
+			 Job=document.getElementById('Job_'+itemId).value;
+		
+		var customerPONo = "";
+		if(document.getElementById('customerPONo_'+itemId)!=null &&  document.getElementById('customerPONo_'+itemId)!=undefined){
+			customerPONo=document.getElementById('customerPONo_'+itemId).value; 
+		}
+		//End of EB 3372
 		var draftOrder;
 		if(validateOrderMultiple(itemId) == false)
 		{
@@ -67,12 +78,22 @@ function addItemToCart(itemId) {
 						requestedUOM: selectedUom,
 						requestedItemType: itemType,
 						requestedCustomerFields: customerFields,
+						requestedJobId: Job,
+				    	        requestedCustomerLinePONo: customerPONo,
 						requestedOrderHeaderKey: selCart,
 						draft: draftOrder
 				    },
 				    method: 'POST',
 					success: function (response, request){
 						var responseText = response.responseText;
+						//Added for EB 560
+		    	   			if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+		    	   				window.location.reload(true);
+		    	   				Ext.Msg.hide();
+		    					myMask.hide();
+		    					return;
+		    	   			}
+		    				//End of EB 560
 						if(responseText.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1){
 							refreshWithNextOrNewCartInContext();
 							Ext.Msg.hide();
@@ -80,19 +101,48 @@ function addItemToCart(itemId) {
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
 							return false;
 						}	
-						else if(responseText.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
+						 else if(responseText.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+							 {
+							   	document.getElementById('Qty_'+itemId).style.borderColor="#FF0000";
+								document.getElementById('Qty_'+itemId).focus();
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Please enter a valid quantity and try again." ;
+								document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
+								document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
+								document.getElementById('Qty_Check_Flag_'+itemId).value = true;
+								//document.getElementById('Qty_'+itemId).value = ""; Commented for EB 41
+								Ext.Msg.hide();
+								myMask.hide();
+								return false;
+							 }
+						 else if(responseText.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+			             {
+							 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+				        	 var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+				        	 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+				        	 window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+			             }
+						else if(responseText.indexOf("has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
 				        {
 							refreshMiniCartLink();
 							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!=''){
 								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your order. Please review the order to update the item with a valid quantity.";
 								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");	
 							}else{
-								document.getElementById('errorMsgForQty_'+itemId).innerHTML ="Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUomText+" has been added to your cart. Please review the cart to update the item with a valid quantity.";
 								document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 							}
 							document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
-					        document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");						
-							
+					                document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");	
+					        	//Added for EB 41
+					        	document.getElementById('Qty_'+itemId).value = "";
+					        	if(defaultUom != null && defaultUom.value !=''){
+					        		document.getElementById('itemUomList_'+itemId).value = defaultUom.value;
+					        	}
+					        	else{
+					        		document.getElementById('itemUomList_'+itemId).value = uomList.options[0].value;
+					        	}
+							//ENd of EB 41
 							Ext.Msg.hide();
 							myMask.hide();
 							return true;
@@ -119,17 +169,22 @@ function addItemToCart(itemId) {
 							//Succesfully Added to Cart Info message
 							/*Start- Jira 3104 */
 							if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
-						      document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
+						      		document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to order." ;
 							else
-								document.getElementById('errorMsgForQty_'+itemId).innerHTML = "Item has been added to cart." ;
+								document.getElementById('errorMsgForQty_'+itemId).innerHTML = qty+" "+selectedUomText+" has been added to cart." ;
 						    /*End- Jira 3104 */
 						      		//"<s:text name='MSG.SWC.CART.ADDTOCART.SUCCESS.ITEMADDEDINFO' />" ;
-					           document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
-					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
-					           document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
-						
-							
-							//document.getElementById('Qty_'+itemId).value = "";
+					           	document.getElementById('errorMsgForQty_'+itemId).style.display = "inline"; 
+					           	document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
+					           	document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "success");
+					         	//Added for EB 41
+						        document.getElementById('Qty_'+itemId).value = "";
+						        if(defaultUom != null && defaultUom.value !='' ){
+						        	document.getElementById('itemUomList_'+itemId).value = defaultUom.value;
+						        }
+						        else {
+					        		document.getElementById('itemUomList_'+itemId).value = uomList.options[0].value;
+						        }
 							Ext.Msg.hide();
 							myMask.hide();
 							 //-- Web Trends tag start --
@@ -185,32 +240,73 @@ var myMask;
 		}
 		else if(validateOM == true){
 			var qty = document.getElementById('Qty_'+itemId).value;
+			var qtyTextBox=qty;
+			var custUOM = document.getElementById('custUOM_'+itemId).value;
 			var uomList = document.getElementById('itemUomList_'+itemId);
+			var baseUOM = document.getElementById('baseUOMs_'+itemId).value;
 			if(uomList!=null && uomList.options.length>0)
 			{
 			var selectedUom = uomList.options[uomList.selectedIndex].value;
 			var url = document.getElementById('checkAvailabilityURLId').value;
-			/*Ext.Msg.wait("Getting Avalability for item "+itemId+"...Please wait!"); */
-			//Ext.Msg.wait("<s:text name='MSG.SWC.GENERIC.PROCESSING' />" ); 
-			//Added For Jira 2903
-			//Commented for 3475
-			//Ext.Msg.wait("Processing...");
+			// added for  EB 2034 to get the PnA results based on the selected UOM on click of PnA Link
+			var selectedUomConv;
+			var itemUomsString = getItemUoms(itemId);
+			var uomAndConv = itemUomsString.split("|");
+			if(uomAndConv.length>0) {
+				for(var i=1; i<uomAndConv.length; i++) {
+					var tmpUomAndConv = uomAndConv[i].split(":");
+					if(tmpUomAndConv[0] == selectedUom) {
+						selectedUomConv = tmpUomAndConv[1];
+					}
+				}
+			}
+			var orderMul = document.getElementById('orderMultiple_'+itemId);
 			//Added if block for jira 3922
 			if(qty == null || qty == "null" || qty == "") {
-				var qty = document.getElementById('orderMultiple_'+itemId).value;
-				var selectedUom = document.getElementById('baseUOMItem_'+itemId).value;
+				
+				if(orderMul != null && orderMul.value != 0 && selectedUomConv != 0 ){
+						if(selectedUomConv == 1){
+							qty = document.getElementById('orderMultiple_'+itemId).value;
+						}
+				else if(selectedUomConv <= orderMul.value){
+							if((orderMul.value % selectedUomConv) == 0){
+								qty = orderMul.value / selectedUomConv;
+							}
+							else{
+								qty = 1;
+							}
+						}
+				else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+						qty = 1;
+				    }
+				}
+				//End of EB 2034
+				/*commented for EB 2034
+				 * var qty = document.getElementById('orderMultiple_'+itemId).value;
+				   var selectedUom = document.getElementById('baseUOMItem_'+itemId).value;
+				 */
 			}
 			Ext.Ajax.request({
 	            url: url,
 	            params: {
 					pnaItemId: itemId,
 					pnaRequestedQty: qty,
+					qtyTextBox: qtyTextBox,
 					pnaRequestedUOM: selectedUom,
 					validateOM : validateOM,
+					pnaReqCustomerUOM : custUOM,
 	            },
 	            method: 'GET',
 	            success: function (response, request){
 	            	var responseText = response.responseText;
+	            	//Added for EB 560
+	    	   	if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	    	   		window.location.reload(true);
+	    	   		Ext.Msg.hide();
+	    			myMask.hide();
+	    			return;
+	    	   	}
+	    		//End of EB 560
 	            	if(responseText.indexOf("Unable to get Price and Availability.Please contact system admin")>-1)
 	            	{
 						document.getElementById('availabilty_'+itemId).innerHTML='';
@@ -238,13 +334,24 @@ var myMask;
 		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
 		            	var orderMultipleQty = orderMultipleQtyUom[0];
 		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	
+		            	
+		            	//Added for EB-439 - start
+		            	var customerUOM = document.getElementById("reqCustomerUOM");
+		            	if(customerUOM!=null && customerUOM!=undefined ){
+		            		var custuom = customerUOM.value;
+		            		if(custuom!=null && custuom == orderMultipleUom){
+		            			orderMultipleUom = custuom.substr(2);
+		            		}
+		            	}//Added for EB-439 - start
 		            	var omError = orderMultipleQtyUom[2];		            			
-		            	if(omError == 'true' && qty.value >0 ){
+		            	if(omError == 'true' && (qty.value >0 || qty.value == "") ){
 				            sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 				            sourceOrderMulError.style.display = "inline"; 
 				            sourceOrderMulError.setAttribute("class", "error");
 				            availabilityRow.style.display = "none"; 
-				            qty.style.borderColor="";			            
+				            qty.style.borderColor="#FF0000";
+				    		qty.focus();		            
 				        }
 		            	else if(omError == 'true')
 		            	{	

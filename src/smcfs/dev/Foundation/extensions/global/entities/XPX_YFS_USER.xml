@@ -7,6 +7,8 @@
         <Attributes>
         <Attribute ColumnName="EXTN_EMPLOYEE_ID" DataType="UserId-40" DefaultValue="' '" Description="Indicates the employeeId" Nullable="true" Size="" XMLName="ExtnEmployeeId" XMLGroup="Extn" />
         <Attribute ColumnName="EXTN_USER_TYPE" DataType="Text-15" DefaultValue="' '" Description="Indicates the user type as EXTERNAL or INTERNAL" Nullable="true" Size="" XMLName="ExtnUserType" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_SALT_KEY" DataType="Text-20" DefaultValue="' '" Description="Indicates the user salt key" Nullable="true" Size="" XMLName="ExtnSaltKey" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_SALT_MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." XMLName="ExtnSaltModifyTs" XMLGroup="Extn"/>
 		</Attributes>		
       </Entity>
       <Entity TableName="YFS_USER_ACTIVITY" >

@@ -80,7 +80,7 @@ public class XPXCatalogDataProcessor {
 		String[] searches11 = {" 45.5\"x .55\" "};
 		String[] searches12 = {" 45\" x .55\" x .65\" "};
 		String[] searches13 = {" 1743# 35.5\"45 (3)" };
-		String[] searches14 = {" .45\" x .55\" x .65\" .173#"};
+		String[] searches14 = {" .45\" x .55\" x .65\" .173# 1234"};
 		String[] searches15 = {"Labelblank White Electronic Imaging Labels-Butt Cut, White, 87 Bright, Smooth, Permanent, 1 x 2.83"};
 		String[] searches16 = {"Absorbent 95% absorb capacity .75# weight"};
 		String[] searches17 = {"<ul><li>UTOPIA TWO DULL COVER WEB 80# 35\"x 45\"x 42' dia WHT 1743lb</li><li>35-1/2\" 45 (3)</li><li>80lb</li><li>Blue White</li><li>91 Bright</li><li>Dull</li></ul>"};
@@ -91,7 +91,7 @@ public class XPXCatalogDataProcessor {
 		//String[] searches = {"3M Scotch 7 x 11 3M Company 3MCompany 02120087399 2120087399 02120087399 2120087399 1048485 P1011877 Scotch ATG Adhesive Transfer Tape 969 Double-Coated Tapes Adhesive Transfer Tapes Transfer Tape Scotch ATG Adhesive Transfer Tape 969, 976, 1.5\" .24\" 1/4\" W x 36 yd L, Clear, Roll, Thickness: 5 Mil (36/Pkg, 144/Ctn) 0.25\" W x 36 yd L 1/4\" W x 36 yd L 0.25\"Wx36ydL 1/4\"Wx36ydL 78 lb Polycoated Kraft Paper"};
 		//String[] searches = {"45\"x 55\" 200lb C FLUTE BRN RSC CORR BOX (25/Bdl) 14.875\" x 9.875\" x 8.75\" H 14-7/8\"x 9-7/8\"x 8-3/4\" H 14.875\"Lx9.875\"Wx8.75\"H 14-7/8\"Lx9-7/8\"Wx8-3/4\"H   abcd"};
 		
-		for (String rawSearch : searches17) {
+		for (String rawSearch : searches14) {
         	// TODO: insert the following where we receive the user's search query
         	// don't search on the user's raw query, preprocess it first
 			String search = preprocessCatalogData(rawSearch);
@@ -100,7 +100,7 @@ public class XPXCatalogDataProcessor {
         	
         	System.out.println(rawSearch+"====>"+search);
 		}
-	}*/
+	} */
 	
 	public static String preprocessSearchQuery(String rawSearch) {
 		String search = rawSearch;
@@ -350,6 +350,7 @@ public class XPXCatalogDataProcessor {
 		final static HashMap<String,String> toCanonical = buildCanonicalMap();
 		final static Pattern unitNamePattern = buildUnitNamePattern();
 		final static Pattern unitSymbolPattern = buildUnitSymbolPattern();
+		final static Pattern unitPrefixSymbolPattern = buildPrefixUnitSymbolPattern();
 		
 		private UnitInfo(String symbol, String canonical, String ... synonyms) {
 			this.symbol = symbol;
@@ -369,6 +370,7 @@ public class XPXCatalogDataProcessor {
 		 */
 		public static String preprocess(String search) {
 			search = UnitInfo.preprocessSymbolPatterns(search);
+			search = UnitInfo.preprocessHashSymbolPatterns(search);
 			search = UnitInfo.preprocessNamePatterns(search);
 			return search;
 		}
@@ -397,6 +399,31 @@ public class XPXCatalogDataProcessor {
 			return sb.toString();
 		}
 		
+		// replaces the unit symbol patterns with their canonical forms
+		private static String preprocessHashSymbolPatterns(String rawText) {
+			Matcher matcher = unitPrefixSymbolPattern.matcher(rawText);
+			StringBuffer sb = new StringBuffer();
+			while (matcher.find()) {
+				String matchString = matcher.group(2);						
+				int index = rawText.indexOf(matchString);
+				index = index-1;
+				if(index > -1){
+					char quotesValue = rawText.charAt(index);
+					if(quotesValue == '"'){
+						matcher.appendTail(sb);
+						return sb.toString();
+					}
+				}
+				matcher.appendReplacement(sb, toCanonical.get(matcher.group(1)) + matcher.group(2));
+				// handle cases where "x" imediately follows symbol such as in: 2.75"x 8.5"
+				/*if (matcher.group(4).length() > 0)
+					sb.append(' ').append(matcher.group(4));*/
+			}
+			matcher.appendTail(sb);
+			return sb.toString();
+		}
+			
+		
 		// replaces the unit name patterns with the unit's canonical form
 		private static String preprocessNamePatterns(String rawText) {
 			Matcher matcher = unitNamePattern.matcher(rawText);
@@ -416,6 +443,15 @@ public class XPXCatalogDataProcessor {
 				symbols.append(Pattern.quote(unitInfo.symbol));
 			}
 			return Pattern.compile("([0-9]+(\\.[0-9]+)?)([" + symbols.toString() + "])");
+		}
+		
+		// builds a pattern that can recognize unit symbol usages
+		private static Pattern buildPrefixUnitSymbolPattern() {
+			StringBuilder symbols = new StringBuilder();
+			for (UnitInfo unitInfo : UnitInfo.all) {
+				symbols.append(Pattern.quote(unitInfo.symbol));
+			}
+			return Pattern.compile("([" + symbols.toString() + "])([0-9]+(\\.[0-9]+)?)");
 		}
 		
 		// build the pattern that recognizes unit name usages

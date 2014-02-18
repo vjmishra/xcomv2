@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="xcomg2AttributeResponse">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="AttributeResultList" maxOccurs="1" minOccurs="1" />
+    		</xsd:sequence>
+    		<xsd:attribute name="messageId" type="xsd:string"
+    			use="required">
+    		</xsd:attribute>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="AttributeResultList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="AttributeResult" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="AttributeResult">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="ErrorList" maxOccurs="1" minOccurs="0" />
+    		</xsd:sequence>
+    		<xsd:attribute name="AttributeIdentifier" type="xsd:string"
+    			use="required">
+    		</xsd:attribute>
+    		<xsd:attribute name="RecordNumber" type="xsd:string"
+    			use="required">
+    		</xsd:attribute>
+    		<xsd:attribute name="transactionSuccessful"
+    			use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Y" />
+    					<xsd:enumeration value="N" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ErrorList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="Error" maxOccurs="unbounded" minOccurs="1" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Error">
+    	<xsd:simpleType>
+    		<xsd:restriction base="xsd:string">
+    			<xsd:minLength value="1" />
+    		</xsd:restriction>
+    	</xsd:simpleType>
+    </xsd:element>
+</xsd:schema>

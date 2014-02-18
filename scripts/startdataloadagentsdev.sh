@@ -10,7 +10,6 @@ echo $HOST_NAME
 
 if [[ "$HOST_NAME" = "zxpappd01" ]];then
 	chmod +x ./xpedxStartIntegrationServer.sh
-
 	#Integration MQ Feed Server:
 	# Commented out on 11/11/2011 to allow the prodsupport box consume the attributes/items from the production queues. Need to re-enable once we go live.
 	nohup ./xpedxStartIntegrationServer.sh port=1690 xpedxMaxUOMFeedServer> /xpedx/sterling/Foundation/logs/MaxUOM_`date +"%Y%m%d_%H%M"`.log 2>&1 &

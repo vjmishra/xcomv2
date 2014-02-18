@@ -89,6 +89,13 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+			<xs:attribute name="ExtnBestMatch" use="optional">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="200"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
 			<xs:attribute name="ExtnPackMethod" use="optional">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">

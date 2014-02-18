@@ -59,6 +59,10 @@ public class XPEDXConstants {
 	public static final String CUSTOMER_DIVISION="CUSTOMER_DIVISION";
 	public static final String BILL_TO_CUSTOMER="BILL_TO_CUSTOMER";
 	public static final String CUSTOMER_USE_SKU="customerUseSKU";
+	public static final String BILL_TO_CUST_MFG_ITEM_FLAG="BILL_TO_CUST_MFG_ITEM_FLAG"; //Added for xb-763,805
+	public static final String BILL_TO_CUST_PART_ITEM_FLAG="BILL_TO_CUST_PART_ITEM_FLAG"; //Added for xb-763,805
+	public static final String MFG_ITEM_NUMBER="MFG_ITEM_NUMBER"; //Added for xb-763,805
+	public static final String CUST_PART_NUMBER="CUST_PART_ITEM_NUMBER"; //Added for xb-763,805
 	public static final String ENVIRONMENT_CODE="ENVIRONMENT_CODE";
 	public static final String COMPANY_CODE="COMPANY_CODE";
 	public static final String LEGACY_CUST_NUMBER="LEGACY_CUST_NUMBER";
@@ -147,6 +151,15 @@ public class XPEDXConstants {
 	public static final String SHEET_A = "A_SHT";
 	public static final String DO_NOT_DISPLAY_REQUESTED_UOMS[]={"M_ENV","A_ENV","M_SHT","A_SHT"};
 	public static final String CUSTOM_FIELD_FLAG_CHANGE="CUSTOM_FIELD_FLAG";
+	public static final String UE_ERROR_CODE="Exception While Applying cheanges .Order Update was finished before you update";
+	public static final String LAST_LOGIN_DATE_UPDATED="LAST_LOGIN_DATE_UPDATED";//EB-475
+	public static final String IS_SAP_STILL_NEED_TO_CHANGE ="IS_SAP_STILL_NEED_TO_CHANGE";//EB-1320
+	public static final String UE_ERROR_CODE1="com.yantra.yfs.japi.YFSUserExitException";
+	
+	public static final String DEFAULT_STOCKED_ITEM_VIEW_ALL          = "DEFAULT_ALL"; // eb-2297
+	public static final String DEFAULT_STOCKED_ITEM_VIEW_STOCKED      = "DEFAULT_STOCKED"; // eb-2297
+	public static final String DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED = "ONLY_STOCKED"; // eb-2297
+	
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
  		  System.out.print ("\n"+msg);
@@ -174,4 +187,9 @@ public class XPEDXConstants {
 		if(SHIP_TO_CUSTOMER_SUFFIX_TYPE == null)
 			SHIP_TO_CUSTOMER_SUFFIX_TYPE = "S";
 	}
+	
+	public static final String SAALFELD_EBUSINESS_EMAIL_ADDRESS="ebusiness@Saalfeldredistribution.com";
+	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@xpedx.com";
+	
+	public static final String APPROVE_ORDER_FLAG="approveOrderFlag";
 }

@@ -1,15 +1,14 @@
 package com.xpedx.nextgen.common.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -2118,10 +2117,10 @@ public class XPXUtils implements YIFCustomApi {
 				log.debug("imagesRootFolder: " + imagesRootFolder);
 			}
 		
-			String sellerOrgCode = inputDocument.getDocumentElement().getAttribute("SellerOrganizationCode");
+			String orgCode = inputDocument.getDocumentElement().getAttribute("EnterpriseCode");
 
-			if (null != sellerOrgCode && null != imagesRootFolder) {
-				_imageName = getLogoImageName(env, sellerOrgCode);
+			if (null != orgCode && null != imagesRootFolder) {
+				_imageName = getLogoImageName(env, orgCode);
 				brandLogo = imagesRootFolder.concat(_imageName);
 				if (log.isDebugEnabled()) {
 					log.debug("brandLogo: " + brandLogo);
@@ -2174,16 +2173,28 @@ public class XPXUtils implements YIFCustomApi {
 	 * the email corresponding to various email scenarios
 	 */
 	public String stampOrderSubjectLine(YFSEnvironment env,
-			Document inputDocument) throws Exception {
+			Document inputDocument, String orderOperation) throws Exception {
 		
 		String brand = inputDocument.getDocumentElement().getAttribute(
-				"SellerOrganizationCode");
+				"EnterpriseCode");
 		String customerPO = inputDocument.getDocumentElement().getAttribute(
 				"CustomerPONo");
 		String orderNo = inputDocument.getDocumentElement().getAttribute(
 				"OrderNo");
+		StringBuilder _subjectLine = null;
+		String emailStr = null;
 		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat("Order Submitted Notification "));		
+		if("OrderPlacement".equals(orderOperation)) {
+			emailStr="Order Submitted Notification";
+		} else {
+			emailStr="Order Edit Notification";
+		}
+		
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(emailStr).concat(" "));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(emailStr).concat(" "));
+		}
 		
 		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);
 		YFCElement orderElem = inDoc.getDocumentElement();
@@ -2224,11 +2235,15 @@ public class XPXUtils implements YIFCustomApi {
 	public void stampOrderChangeStatusSubjectLine(YFSEnvironment env,
 			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
 		
-		String brand = orderElement.getAttribute("SellerOrganizationCode");
+		String brand = orderElement.getAttribute("EnterpriseCode");
 		String customerPO = orderElement.getAttribute("CustomerPONo");		
 		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
-		
-		StringBuilder _subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(orderStatusSubjectLine));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		}
 		
 		if(!YFCObject.isVoid(customerPO))
 		{
@@ -2258,7 +2273,16 @@ public class XPXUtils implements YIFCustomApi {
 
 		String brand = rootElem.getAttribute("SellerOrganizationCode");
 		imageUrl = rootElem.getAttribute("ImageUrl");
-		_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
+		
+		
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = brand.concat("redistribution.com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
+		}else{
+			_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
+		}
+		
+		
+		//_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
 		
 		log.debug("brand:" + brand);
 		log.debug("imageUrl:" + imageUrl);
@@ -2267,7 +2291,12 @@ public class XPXUtils implements YIFCustomApi {
 		if( !YFCObject.isNull(brand) && !YFCObject.isVoid(brand) 
 				&& (YFCObject.isNull(imageUrl) || YFCObject.isVoid(imageUrl)) ) {	
 				String imageName = getLogoImageName(env, brand);
-				String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
+				String imagesRootFolder = null;
+				if("Saalfeld".equalsIgnoreCase(brand)){
+					imagesRootFolder=YFSSystem.getProperty("SaalfeldImagesRootFolder");	
+				}else{
+					imagesRootFolder=YFSSystem.getProperty("ImagesRootFolder");
+				}
 				if( !YFCObject.isNull(imagesRootFolder) && !YFCObject.isVoid(imagesRootFolder)
 						&& !YFCObject.isNull(imageName) && !YFCObject.isVoid(imageName)){
 					imageUrl = imagesRootFolder + imageName;
@@ -2281,8 +2310,16 @@ public class XPXUtils implements YIFCustomApi {
 			log.debug("stampSubjectLine_UserProfChange()_OutXML: "+ SCXmlUtil.getString(inputDocument));
 		}
 		String inputXML=SCXmlUtil.getString(inputDocument);
-		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;
-		String emailFrom=YFSSystem.getProperty("EMailFromAddresses");
+		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;		
+		String emailFrom = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
+
+		} else {
+			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
+		}
+		
+			
 		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
 		XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, _subjectLine, emailFrom, emailOrgCode,businessIdentifier);
@@ -2501,9 +2538,19 @@ public class XPXUtils implements YIFCustomApi {
 			{
 				String userName = YFSSystem.getProperty("fromAddress.username");
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
+				//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding 
+				if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+				}
+				else
 				sb.append(userName).append("@").append(storeFrontId).append(suffix);
-				
-				String resetSubString = storeFrontId + ".com" + " Password Reset Request Notification ";
+				// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
+				String resetSubString =null;
+				if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+					resetSubString= storeFrontId + "redistribution.com" + " Password Reset Request Notification ";
+				}else{
+					resetSubString= storeFrontId + ".com" + " Password Reset Request Notification ";
+					}
 				Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 				"ResetPwdEmailSubject");
 					resetSubject.setAttribute("Subject", resetSubString);				
@@ -2515,17 +2562,34 @@ public class XPXUtils implements YIFCustomApi {
 				if(requestID!=null && !requestID.equalsIgnoreCase(""))
 				{
 					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
-					emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";				
+					// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
+					if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+						emailSubject=storeFrontId + "redistribution.com" +" Password Reset Request Notification ";
+					} else{						
+						emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";
+					}
 				}
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
 			    {
 					emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
-					emailSubject = storeFrontId + ".com" + " User Creation Notification";		    	
+					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding... 
+					if("xpedx".equalsIgnoreCase(storeFrontId)){
+					emailSubject = storeFrontId + ".com" + " User Creation Notification";
+					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){						
+						emailSubject = storeFrontId + "redistribution.com" + " User Creation Notification";
+					}
 				}
 				else if((null==requestID || requestID.equalsIgnoreCase("")) && (genPwd == null || genPwd.equalsIgnoreCase("")))
 				{
 					emailType=XPXEmailUtil.USER_CHANGE_PASSWORD_EMAIL_TYPE;
-					emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
+					//emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
+					//EB-2445 As a Saalfeld product owner, I want to view the Saalfeld User Password Change email with correct Saalfeld branding.. 
+					if("xpedx".equalsIgnoreCase(storeFrontId)){						
+						emailSubject = storeFrontId + ".com" + " User Password Change Notification";
+						}
+						else if("Saalfeld".equalsIgnoreCase(storeFrontId)){											
+						emailSubject = storeFrontId + "redistribution.com" + " User Password Change Notification";
+						}
 				}
 				Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
 					"NotificationPwdEmailSubject");
@@ -2553,6 +2617,11 @@ public class XPXUtils implements YIFCustomApi {
 				String imageName = getLogoImageName(env,storeFrontId);
 				String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
 				
+				if ("Saalfeld".equals(storeFrontId)) {
+					// replace host name, since we don't have a brand-specific setting in customer overrides props
+					imagesRootFolder = imagesRootFolder.replace("xpedx.com", "saalfeldredistribution.com");
+				}
+				
 				/**
 				 * In case, value form the property file is not retrieve by any
 				 * chance or there is no entry in the customer_overrides.properties,
@@ -2579,8 +2648,15 @@ public class XPXUtils implements YIFCustomApi {
 			// fetching the server and port details for the email template.
 			String url = null;
 			String ipaddress = YFSSystem.getProperty("ipaddress");
+			
+			
+			
 			String portno = YFSSystem.getProperty("portnumber");
 			String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
+			
+			if ("Saalfeld".equals(storeFrontId)) {
+				resetPasswordUrl = resetPasswordUrl.replace("xpedx.com", "saalfeldredistribution.com");
+			}
 			
 			if(!YFCUtils.isVoid(resetPasswordUrl)){
 				resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
@@ -2755,4 +2831,107 @@ public class XPXUtils implements YIFCustomApi {
         bfr.close();
         return(map);
     }
+	
+	/**
+	 * @param applyMinimumOrderBrands The comma-delimited list of brands that apply minimum order charge.
+	 * @param storefrontId
+	 * @return Returns true if minimum order charge should be applied; false otherwise.
+	 */
+	public static boolean isApplyMinimumOrderChargeForBrand(String applyMinimumOrderBrands, String storefrontId) {
+		if (applyMinimumOrderBrands == null || storefrontId == null) {
+			return false;
+		}
+		
+		// database stores storefrontId as uppercase and truncated at 4 characters (eg, "XPED,SAAL")
+		//		so we can uppercase and truncate the storefrontId
+		String searchKey = storefrontId.length() > 4 ? storefrontId.substring(0, 4) : storefrontId;
+		searchKey = searchKey.toUpperCase();
+		return applyMinimumOrderBrands.contains(searchKey);
+	}
+	
+	
+	public String getOrderStatusSubjectLine(YFSEnvironment env,
+			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
+		
+		String brand = orderElement.getAttribute("EnterpriseCode");
+		String customerPO = orderElement.getAttribute("CustomerPONo");		
+		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
+		StringBuilder _subjectLine = null;
+		if("Saalfeld".equalsIgnoreCase(brand)){
+			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(orderStatusSubjectLine));
+		}else{
+			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
+		}
+		
+		if(!YFCObject.isVoid(customerPO))
+		{
+			_subjectLine.append(" - PO # ").append(customerPO);
+		}
+		if ("1300".equalsIgnoreCase(holdStatus) && (!YFCObject.isVoid(formattedOrderNo)))
+		{
+			if(!YFCObject.isVoid(customerPO))
+			{
+				_subjectLine.append(", Order # ").append(formattedOrderNo);
+			
+			}else {
+				_subjectLine.append("- Order # ").append(formattedOrderNo);
+			}
+		}
+		//orderElement.setAttribute("Subject", _subjectLine.toString());
+		return _subjectLine.toString();
+		//log.debug("_subjectLine: " + _subjectLine);
+	}
+	
+	public YFCDocument createOrderApprovedEmailInputDoc(YFCElement cOrderEle) {
+		//	<OrderHoldType FromStatus='' HoldType='' OrderHeaderKey='' ReasonText='' ResolverUserId='' Status='' TransactionId=''>
+		//		<Order BillToID='' CustomerContactID='' DocumentType='' EnterpriseCode='' OrderHeaderKey='' OrderNo=''/>
+		//	</OrderHoldType>		
+		
+		YFCElement cOrderHoldTypesElem = cOrderEle.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
+		YFCElement cOrderHoldTypeElem  = cOrderHoldTypesElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPE);
+		
+		YFCDocument orderHoldTypeDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER_HOLD_TYPE);
+		YFCElement orderHoldTypeEle = orderHoldTypeDoc.getDocumentElement();		
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_HOLD_TYPE, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE));
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));		
+		orderHoldTypeEle.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, cOrderHoldTypeElem.getAttribute(XPXLiterals.HOLD_RELEASE_DESC));
+		orderHoldTypeEle.setAttribute(XPXLiterals.RESOLVER_USER_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.RESOLVER_USER_ID));
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_STATUS, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS));
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_TRANSACTION_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_TRANSACTION_ID));		
+		
+		YFCElement orderEle = orderHoldTypeEle.createChild(XPXLiterals.E_ORDER);
+		orderEle.setAttribute(XPXLiterals.A_BILL_TO_ID, cOrderEle.getAttribute(XPXLiterals.A_BILL_TO_ID));
+		orderEle.setAttribute(XPXLiterals.CUSTOMER_CONTACT_ID, cOrderEle.getAttribute(XPXLiterals.CUSTOMER_CONTACT_ID));
+		orderEle.setAttribute(XPXLiterals.A_DOCUMENT_TYPE, cOrderEle.getAttribute(XPXLiterals.A_DOCUMENT_TYPE));
+		orderEle.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, cOrderEle.getAttribute(XPXLiterals.A_ENTERPRISE_CODE));
+		orderEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderEle.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
+		orderEle.setAttribute(XPXLiterals.A_ORDER_NO, cOrderEle.getAttribute(XPXLiterals.A_ORDER_NO));		
+		
+		return orderHoldTypeDoc;
+	}
+	
+	public void callChangeOrder(YFSEnvironment env, String cOrderHeaderKey, String orderConfirmationEmailSentFlag, String className) {
+		YFCDocument changeOrderInputDoc=null;
+		try {
+			changeOrderInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER);
+			changeOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHeaderKey);
+			
+			YFCElement extnOrderEle = changeOrderInputDoc.getDocumentElement().createChild("Extn");
+			extnOrderEle.setAttribute(XPXLiterals.ORDER_CONFIRMATION_EMAIL_SENT_FLAG, orderConfirmationEmailSentFlag);
+			
+			if(log.isDebugEnabled()){
+				log.debug("Inside callChangeOrder method of "+className+" class. changeOrder-InXML: " + changeOrderInputDoc.getString());
+			}
+			api.invoke(env, "changeOrder", changeOrderInputDoc.getDocument());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error("Inside callChangeOrder method of "+className+" class. changeOrder API call failed while updating ExtnOrderConfirmationEmailSentFlag value: ["
+						+ orderConfirmationEmailSentFlag+"] for order: ["+cOrderHeaderKey+"]");
+			
+			prepareErrorObject(e, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, changeOrderInputDoc.getDocument());
+	        
+		}		
+	}
+	
 }

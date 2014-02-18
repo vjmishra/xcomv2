@@ -99,7 +99,7 @@
 						</And>
 					</ComplexQuery>
 					<OrderBy>
-							<Attribute Desc="Y" Name="EndDate" />
+							<Attribute Desc="N" Name="StartDate" />
 					</OrderBy>
 				</XPXArticle>
 			</Input>
@@ -428,7 +428,7 @@
 					InheritFromParents="Y" />
 			</Input>
 			<Template>
-				<Customer CustomerID="" OrganizationCode="" CustomerKey="" Modifyts="">
+				<Customer CustomerID="" OrganizationCode="" CustomerKey="" Modifyts="" Modifyuserid="">
 					<CustomerAdditionalAddressList
 						TotalNumberOfRecords="">
 						<CustomerAdditionalAddress
@@ -465,7 +465,7 @@
 						ExtnCustomerName="" ExtnBillToSuffix="" ExtnShipToSuffix=""
 						ExtnECSR="" ExtnECSR2="" ExtnCustLineAccNoFlag=""
 						ExtnCustLineAccLbl="" ExtnCustLineSeqNoFlag=""
-						ExtnCustLinePONoFlag="" ExtnCustLineField1Flag=""
+						ExtnCustLinePONoFlag="" ExtnCustLinePOLbl=""  ExtnCustLineField1Flag=""
 						ExtnCustLineField1Label="" ExtnCustLineField2Flag=""
 						ExtnCustLineField2Label="" ExtnCustLineField3Flag=""
 						ExtnCustLineField3Label="" ExtnAttnName="" ExtnShipToOverrideFlag=""
@@ -505,7 +505,7 @@
 						ExtnSampleRequest="" ExtnEmailViewInvoicesFlag=""
 						ExtnPreviewInvoicesFlag="" ExtnAcceptBackOrdersFlag=""
 						ExtnAcceptShipToOvrdFlag="" ExtnLineItemLabel="" ExtnETradingID=""
-						ExtnCustLineAccLbl="" ExtnCustLineField1Label=""
+						ExtnCustLineAccLbl="" ExtnCustLineField1Label="" ExtnCustLinePOLbl=""
 						ExtnInvoiceEMailID="" ExtnCustLineField2Label=""
 						ExtnCustLineField3Label="" ExtnAttnName="" ExtnCustEmailAddress=""
 						ExtnPhone2="" ExtnFax2="" />
@@ -617,6 +617,36 @@
 			</Template>
 		</API>
 	</mashup>
+	
+	
+	<mashup id='getCustomerContactDetailsForAll' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Buyer User General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="">					
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="" CustomerKey="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="">
+							<Extn/>
+						</User>						
+						<Extn/>						
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
 
 	<mashup id='xpedx-save-shipToInfo' transactional='true'
 		mashuptype='XAPI' endpoint='CUSTOMER' description="xpedx ship to">
@@ -712,7 +742,7 @@
 						</Or>
 					</ComplexQuery>
 					<OrderBy>
-							<Attribute Desc="Y" Name="EndDate" />
+							<Attribute Desc="N" Name="StartDate" />
 					</OrderBy>
 				</XPXArticle>
 			</Input>
@@ -973,7 +1003,7 @@
 				<ParentCustomer CustomerID="" OrganizationCode="">
 					<Extn>
 						<XPEDXSalesRepList>
-							<XPEDXSalesRep>
+							<XPEDXSalesRep PrimarySalesRepFlag="">
 								<YFSUser Username="">
 									<ContactPersonInfo />
 								</YFSUser>

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
@@ -75,6 +76,26 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 			}
 			// added for 2769
 			String lastModifiedDateStr = outputDoc.getAttribute("Modifyts");
+			String modifyUserIdBy = outputDoc.getAttribute("Modifyuserid");
+			setCustContactId(modifyUserIdBy);			
+			Element custContactListEle = prepareAndInvokeMashup("getCustomerContactDetailsForAll");
+			
+			Element custContactEle = SCXmlUtil.getChildElement(custContactListEle, "CustomerContact");
+			String firstName = custContactEle.getAttribute("FirstName");
+			String lastName = custContactEle.getAttribute("LastName");		
+			if (firstName != null && !("").equals(firstName)) {				
+				setContactFirstName(firstName);
+				setContactLastName(lastName);
+			} else {
+				Element extnElem = SCXmlUtil.getChildElement(custContactEle, "Extn");
+				String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
+				if(isSalesRep !=null && ("Y").equals(isSalesRep)) {
+					StringTokenizer token = new StringTokenizer(modifyUserIdBy, "@");
+					String networkId = token.nextToken();
+					setContactFirstName(XPEDXWCUtils.getUserName(networkId));		
+				}
+			}
+			
 			if (lastModifiedDateStr != null) {
 				setLastModifiedDateString(lastModifiedDateStr);
 				setLastModifiedDate(YFCDate.getYFCDate(lastModifiedDateStr));
@@ -100,7 +121,7 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 		setCountryCodesList();
 
 		// empIDs = getEmpIDList();
-		setLastModifiedUser();
+		//setLastModifiedUser();
 		return "success";
 	}
 
@@ -411,6 +432,16 @@ public class XPEDXGetCustomerMaintenanceAction extends WCMashupAction {
 	public List otherSalesRepList;
 	public List empNames;
 	private boolean success;
+	
+	private String custContactId;
+
+	public String getCustContactId() {
+		return custContactId;
+	}
+
+	public void setCustContactId(String custContactId) {
+		this.custContactId = custContactId;
+	}
 
 	public boolean isSuccess() {
 		return success;

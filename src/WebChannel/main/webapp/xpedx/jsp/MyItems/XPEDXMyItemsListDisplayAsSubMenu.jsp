@@ -506,7 +506,7 @@
         //Submit the data via ajax
         
         //Init vars
-        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />
+        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='MyItemsDetailsChangeShareList' namespace="/myItems" escapeAmp="false" />
         
         var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
         url = ReplaceAll(url,"&amp;",'&');
@@ -631,7 +631,7 @@
 		
 		<s:set name="uId" value="#id" />
 		
-		<s:form id="doAction_open_%{#uId}" action="XPEDXMyItemsDetails" method="get">
+		<s:form id="doAction_open_%{#uId}" action="MyItemsDetails" method="get">
 			<s:hidden name="listKey" value="%{#id}" />
 			<s:hidden name="listName" value="%{#name}" />
 			<s:hidden name="listDesc" value="%{#desc}" />

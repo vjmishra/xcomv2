@@ -115,13 +115,13 @@ $("#various5").fancybox();
 					<s:set name="Createts" value='%{#util.formatDate(#xutil.getAttribute(#articleLine,"Createts"),wCContext)}' />
 				<tr>
                 <td  class="underlines no-border-right-user">
-                <a href="<s:url namespace='/profile/user' action='xpedxReadArticle'><s:param name="articleKey" 
+                <a href="<s:url namespace='/profile/user' action='MyReadArticle'><s:param name="articleKey" 
                 	value='%{#ArticleKey}' /></s:url>" class="underlines" >
                 		<strong><s:property value='%{#ArticleName}'/></strong></a><br />
                 		<s:property value='%{#Createts}'/><br />
                 		<s:property escape='false' value='%{#Article}'/><br />
                 	<div class=" padding-bottom4clearview"> </div>
-                		<a href="<s:url namespace='/profile/user' action='xpedxReadArticle'><s:param name="articleKey" 
+                		<a href="<s:url namespace='/profile/user' action='MyReadArticle'><s:param name="articleKey" 
                 			value='%{#ArticleKey}' /></s:url>" class="underlines">
                 				Read More </a>
                 	</td>

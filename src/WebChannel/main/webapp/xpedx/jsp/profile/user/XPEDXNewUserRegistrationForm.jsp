@@ -25,6 +25,7 @@
 
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -195,21 +196,36 @@
 	   <table >
 	   <tbody>
 		<tr>
+		<!-- EB-1554 As a Saalfeld user, user want to view a Saalfeld specific Registration graphic on the Register Page so that user see Saalfeld specific branding -->
+		<s:set name='storefrontId' value="wCContext.storefrontId" />
+		<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>				
     		<td><div class="float-left"><img border="0" alt="" width="505" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_main.jpg"></div></td>
     		<td><div class="float-left"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="271" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_new_to_x.jpg"></a></div></td>
+    		</s:if>
+			<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+				<td><div class="float-left"><img border="0" alt="" width="505" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images//ster/register_main_saalfeld.jpg"></div></td>
+    		<td><div class="float-left"><a href="http://saalfeldredistribution.com/ContactUs.aspx" target="_blank"><img border="0" alt="" width="271" height="229" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_new_to_s.jpg"></a></div></td>
+			</s:elseif>
 		</tr>
 		<tr>
     		<td><div class="float-left">
 			<table align = "center" border="0" cellpadding="0" cellspacing="0" width="505" height="193">
-				<tbody>
-					<tr style="background-color: #002f75;font-weight: bold">
+				<tbody>					
+						<s:set name='storefrontId' value="wCContext.storefrontId" />						
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+						<tr style="background-color: #002f75;font-weight: bold">
 						<td align = "left">&nbsp;<font color="white">Benefits of xpedx.com</font></td>
+						</s:if>
+						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<tr style="background-color: #006a3a;font-weight: bold">
+						<td align = "left">&nbsp;<font color="white">Benefits of saalfeldredistribution.com</font></td>
+						</s:elseif>
 						<td align = "center"><font color="white">Unregistered User</font></td>
 						<td align = "center"><font color="white">Registered User</font></td>
 					</tr>
 					<tr>
 						<td style="color:#4c4c4c">Robust catalog search and navigation</td>
-						<td style="text-align:center"><a onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" href="/swc/catalog/navigate.action?sfId=xpedx&amp;scFlag=Y&amp;scGuestUser=Y&amp;_bcs_=_nb_">Browse limited catalogs</a></td>
+						<td style="text-align:center"><a onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" href="/swc/catalog/navigate.action?sfId=<s:property value="wCContext.storefrontId" />&amp;scFlag=Y&amp;scGuestUser=Y&amp;_bcs_=_nb_">Browse limited catalogs</a></td>
 						<td align="center"><img border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
 					</tr>
 					<tr>
@@ -241,14 +257,24 @@
 			</table>
 			</div>
 		</td>
-    		<td><div class="float-left"><a id="selectVideoToPlay" href="#viewVideoDlg"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_video_thumb.jpg"></a></div></td>
+    		<td>
+    		<s:set name='storefrontId' value="wCContext.storefrontId" />
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+    				<div class="float-left"><a id="selectVideoToPlay" href="#viewVideoDlg"><img border="0" title="xpedx.com overview video" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_video_thumb.jpg"></a></div></td>
+    			</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+					<div class="float-left"><a href="http://saalfeldredistribution.com/ContactUs.aspx" target="_blank"><img border="0" title="" width="271" height="193" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_video_thumb_saalfeld.jpg"></a></div></td>
+				</s:elseif>
 		</tr> 
 	    </tbody>
 	 </table>
 </div>
 <div style="display: none;">
 	<div id="viewVideoDlg" class="float-left">
-		<iframe title="vimeo video " width="700" height="394" scrolling="no" src="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" frameborder="0" allowfullscreen></iframe>
+	   <s:set name='storefrontId' value="wCContext.storefrontId" />
+		<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>  
+			<iframe title="vimeo video " width="700" height="394" scrolling="no" src="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0" frameborder="0" allowfullscreen></iframe>
+		</s:if>		
 	</div>
 </div>
 <s:form name="registrationForm" namespace='/profile/user'
@@ -266,7 +292,13 @@
 
 <div>
     <br/>
-	<div class="padding-top3 black page-title"><img style="align:center" border="0" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_form_header.jpg"></div>
+    <s:set name='storefrontId' value="wCContext.storefrontId" />
+		<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+			<div class="padding-top3 black page-title"><img style="align:center" border="0" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_form_header.jpg"></div>
+		</s:if>
+		<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+			<div class="padding-top3 black page-title"><img style="align:center" border="0" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_form_header_saalfeld.jpg"></div>	
+		</s:elseif>
 </div>
 <div class=" padding-bottom clearview"> </div>
     <!-- <p> Please fill out the information below and a customer service representative will follow up with you to get your ID set up. </p>  -->

@@ -33,6 +33,7 @@
 <!-- begin styles. These should be the only three styles. -->
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+ <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -41,10 +42,9 @@
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
 
 <script type="text/javascript">
 
@@ -134,17 +134,18 @@ function setTotalPrice(val){
 			var newPoNumberObj=document.getElementById("newPoNumber");
 			newPoNumberObj.value = po_comboObj.value;
 			
-		}
-		
+		}		
 	}
-	
-
 	
 	function validateCustomerPO()
 	{
 		
 		var errordiv=document.getElementById("requiredCustomerPOErrorDiv");
+		var errorMsg = document.getElementById("errorMsg");
 		errordiv.style.display="none";
+		errorMsg.style.display="none";
+		var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
+		splInstructionsField.style.borderColor="";
 		var po_comboObj=document.getElementById("po_combo_input");
 		if(po_comboObj.value.trim().length == 0)
 		{			
@@ -161,6 +162,59 @@ function setTotalPrice(val){
 	}
 	
 	
+	function isChecked(){
+		if(document.getElementById("OrderSummaryForm_rushOrdrDateFlag").checked){
+			document.getElementById("requestedDateDiv").style.display = "inline";
+			document.getElementById("requestDeliveryDate").focus();//EB 2458
+		}
+		else{
+			document.getElementById("requestedDateDiv").style.display = "none";
+			document.getElementById("requestDeliveryDate").value="";
+			document.getElementById("requestDateString").value="";
+		}
+		
+	}
+		
+		function updateRequestDeliveryDate(inputDate){
+			document.getElementById("requestDateString").value = inputDate;
+		}
+//end of EB 1975	
+//Added for EB 2458 Request Delivery Date validation
+function isValidDate(dtStr)
+	{
+		var daysInMonth = DaysArray(12)
+		var pos1=dtStr.indexOf(dtCh)
+		var pos2=dtStr.indexOf(dtCh,pos1+1)
+		var strMonth=dtStr.substring(0,pos1)
+		var strDay=dtStr.substring(pos1+1,pos2)
+		var strYear=dtStr.substring(pos2+1)
+		strYr=strYear
+		if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+		if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+		for (var i = 1; i <= 3; i++) {
+			if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+		}
+		month=parseInt(strMonth)
+		day=parseInt(strDay)
+		year=parseInt(strYr)
+		if (pos1==-1 || pos2==-1){
+			return false
+		}
+		if (strMonth.length<1 || month<1 || month>12){
+			return false
+		}
+		if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+			return false
+		}
+		if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+			return false
+		}
+		if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+			return false
+		}
+	return true
+	}
+//EN of EB 2458
 	function validateFormSubmit(){
 		//Added For Jira 3232
 	    //Commented for 3475
@@ -168,8 +222,14 @@ function setTotalPrice(val){
 		
 		setCustomerPONumber();
 	var deliveryHoldCheck = '<s:property value="%{#_action.isDeliveryHold()}"/>';
+	var poListlength = '<s:property value="%{#_action.getAddnlPoListlength()}"/>';
+	var poboxinputlength=document.getElementById("po_combo_input").value.length;
+	var totalPOLength= Number(poListlength)+Number(poboxinputlength);
+	//var pobox_inout_length=document.getElementById("po_combo_input").value.trim().length;
 	var deliveryHoldFlag = document.getElementById("DeliveryHoldFlag");
-    var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
+        var OrderSummaryForm_rushOrdrDateFlagField =   document.getElementById("OrderSummaryForm_rushOrdrDateFlag");
+        var OrderSummaryForm_requestDeliveryDate = document.getElementById("requestDeliveryDate");//added for EB 1975
+        var PoNumberSaveNeededFlag =   document.getElementById("PoNumberSaveNeeded");
 	//Special Instructions field validation
 	var OrderSummaryForm_rushOrdrFlagField =   document.getElementById("OrderSummaryForm_rushOrdrFlag"); 	
 	var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
@@ -184,26 +244,73 @@ function setTotalPrice(val){
     errorDiv.innerHTML = "";
     splInstructionsField.style.borderColor="";
     errorDiv.style.display = "none";
-
-    
-    
-    if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
+   if(splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrFlagField.checked == true) )
     {
     	errorDiv.innerHTML = "Rush Order delivery information is required. Please enter in the Comments field.";
         splInstructionsField.style.borderColor="#FF0000";
         errorDiv.style.display = 'inline';
         return returnval;
     }
-    else if (splInstructionsField.value.trim().length == 0 && (OrderSummaryForm_rushOrdrDateFlagField.checked  == true ) )
-       {
-    	
-    	errorDiv.innerHTML = "Requested delivery date information is required. Please enter in the Comments field.";
-        splInstructionsField.style.borderColor="#FF0000";
-        errorDiv.style.display = 'inline';
-        return returnval;	
-       }
+   else if (OrderSummaryForm_rushOrdrDateFlagField.checked  == true && OrderSummaryForm_requestDeliveryDate.value.trim().length == 0)
+	       {
+	    	
+	    	errorDiv.innerHTML = "Requested delivery date information is required. Please select the requested date.";
+	    	document.getElementById("requestDeliveryDate").focus();
+	        document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
+	        errorDiv.style.display = 'inline';
+	        return returnval;	
+	       }
+    else if ((PoNumberSaveNeededFlag.checked==true && totalPOLength>=500) && (poboxinputlength!= 0))
+    	{
+     	 errorDiv.innerHTML = "The maximum number of saved POs has been exceeded. Uncheck the “Add to My PO List” box <br>"+"on current order or delete previously saved POs by going to Admin/My Profile/Site Preferences.";
+         document.getElementById("po_combo_input").focus();
+         document.getElementById("po_combo_input").style.borderColor="#FF0000";
+         errorDiv.style.display = 'inline';
+         return returnval;
+    	}
     else{
     	writewebtrendTagForQty();
+    	//Added for EB 2458 - RequestDate validation
+    	var requestDate = document.getElementById("requestDateString").value;
+    	var currDate = new Date();
+    	currDate.setHours(0,0,0,0);
+    	var errorMsg = document.getElementById("errorMsg");
+    	
+    	if(requestDate!=null && requestDate.length>0)
+		{ 
+    		var mon1   = parseInt(requestDate.substring(0,2),10);  
+			var dt1  = parseInt(requestDate.substring(3,5),10); 
+			var yr1   = parseInt(requestDate.substring(6,10),10);  
+			var requestDateStr = new Date(yr1, mon1-1, dt1); 
+			
+			if (!isValidDate(requestDate)){
+				errorMsg.innerHTML = "Please enter valid date.";
+				errorMsg.style.display="inline";
+				document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
+				return;
+			}
+			
+			if(currDate > requestDateStr){
+				document.getElementById("errorMsg").innerHTML = "The Requested date should be equal to or greater than current date.";
+				errorMsg.style.display="inline";
+				document.getElementById("requestDeliveryDate").style.borderColor="#FF0000";
+				return; 
+			}
+		}
+		document.getElementById("errorMsg").innerHTML = '';
+    	//END for EB 2458 - RequestDate validation
+    	
+    	//Added for EB 1975
+    	if(document.getElementById("requestDateString") != null){
+    	var datetext = document.getElementById("requestDateString").value;
+    	}
+    	if((document.getElementById("OrderSummaryForm_SpecialInstructions").value =="" || document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length == 0) && datetext != ""){
+			document.getElementById("OrderSummaryForm_SpecialInstructions").value= "REQUESTED DELIVERY DATE: " +datetext+".";
+		}
+		else if(document.getElementById("OrderSummaryForm_SpecialInstructions").value.trim().length > 0 && datetext != ""){
+				document.getElementById("OrderSummaryForm_SpecialInstructions").value=document.getElementById("OrderSummaryForm_SpecialInstructions").value+ " REQUESTED DELIVERY DATE: " +datetext+".";
+		}
+    	//ENd of EB 1975
     	//Added for 3475
     	Ext.Msg.wait("Processing...");
     	validateForm_OrderSummaryForm(),submitOrder()
@@ -218,6 +325,28 @@ function setTotalPrice(val){
 		writeMetaTag("WT.tx_u",val);
 
 	}
+</script>
+<script type="text/javascript">
+//start of EB 1975	
+	 $(function() {
+			$(".datepicker").datepicker({
+				showOn: 'button',
+				numberOfMonths: 1,
+				minDate: 0,
+				buttonImage: '<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/calendar-icon.png',
+				buttonImageOnly: true,
+				buttonText: "Select Date",
+				onSelect: function(datetext){
+					document.getElementById("requestDateString").value = datetext;
+					}
+			}); 
+			$('#requestDeliveryDate').next( $('#requestDeliveryDate').next('img') );
+		});
+	
+	/*$(function() {
+		$( "#datepicker" ).datepicker();
+		});*/
+
 </script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.ORDR.ORDRSUMMARY.GENERIC.TABTITLE" /></title>
 
@@ -324,6 +453,14 @@ $('#po_combo_input').attr("value","<s:property value='custmerPONumber' escape='f
 		
 
 </script>
+<style type="text/css">
+.ui-datepicker-trigger {
+margin-left: 94px;
+margin-top: -21px;
+align : center;
+hight : 10px;
+}
+</style>
 
 <swc:extDateFieldComponentSetup />
 </head>
@@ -420,14 +557,15 @@ from session . We have customer Contact Object in session .
 	<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
 	<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 	<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
- <s:set name="editOrderFlag" value='%{#_action.getIsEditOrder()}' />
+<s:set name="editOrderFlag" value='%{#_action.getIsEditOrder()}' />
+<s:set name="approveOrderFlag" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@APPROVE_ORDER_FLAG)' />
 <s:url includeParams="none" id="orderNotesListURL"
 	action="orderNotesList.action">
 	<s:param name="OrderHeaderKey" value='#orderHeaderKey' />
 	<s:param name="draft" value="#draftOrderFlag" />
 </s:url>
 <s:if test='%{#editOrderFlag == "true"}'>
-		<s:set name="isEditOrder" value="%{'true'}" />
+	<s:set name="isEditOrder" value="%{'true'}" />
 </s:if>
 <s:else>
 	<s:set name="isEditOrder" value="%{'false'}" />
@@ -660,7 +798,7 @@ from session . We have customer Contact Object in session .
 						name='DeliveryHoldFlag' fieldValue="true" id="DeliveryHoldFlag"
 						value="%{#_action.isDeliveryHold()}" /> 
 						<%--Changes for JIRA 3413 --%>
-						<s:if test="%{deliveryCutOffTime!= null && deliveryCutOffTime!=''}">
+					<s:if test="%{deliveryCutOffTime!= null && deliveryCutOffTime!=''}">
 						Place Order on Hold, CSR will release at
 					&nbsp;<s:property value="deliveryCutOffTime"/>
 					</s:if>
@@ -725,16 +863,27 @@ from session . We have customer Contact Object in session .
 <!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
 				</td></tr>
 			
-				<tr><td><s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="if (this.checked) this.form.SpecialInstructions.focus()"
+				<tr>
+				<td>
+						<s:checkbox name='rushOrdrDateFlag' cssClass="checkbox" onclick="javascript:isChecked();"
 						disabled="%{! #_action.isDraftOrder()}" fieldValue="true"
-						value="" /><s:if
-						test='%{#_action.isDraftOrder()}'>
-						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.						
-					</s:if> <s:else>
-						 Requested Delivery Date. <span class="bold">MUST</span> add delivery date in Comments for deliveries outside your normal schedule.
-					</s:else>	  
-<!-- 						  Have to confirm and remove the logic for draft order , see if the wording has to be changed -->
-				</td></tr>			
+						value="" />
+						<s:if test='%{#_action.isDraftOrder()}'>
+						 Requested Delivery Date. <span class="bold">MUST</span> select a delivery date for deliveries outside your normal schedule.						
+						</s:if> <s:else>
+						 Requested Delivery Date. <span class="bold">MUST</span> select a delivery date for deliveries outside your normal schedule.
+						</s:else>	  
+				</td>
+				</tr>	
+				
+				<tr>
+					<td><s:hidden  id="requestDateString"  value="" name="" />
+					<div id="requestedDateDiv" style="display:none;">
+					<table><tr><td><span class="red">*</span>&nbsp;<s:textfield name='requestDeliveryDate' theme="simple" size="15"  id="requestDeliveryDate" cssClass='calendar-input-fields datepicker' value="" onchange="javascript:updateRequestDeliveryDate(this.value)" />
+					</td><td>&nbsp;(mm/dd/yyyy)</td></tr></table></div></td>
+					
+				</tr>
+				
 				<tr>
 					<td>
 						<s:set name='renderPersonInfo' value='#shipFrom' />
@@ -744,6 +893,8 @@ from session . We have customer Contact Object in session .
 						value="/xpedx/jsp/order/XpedxReadOnlyAddress.jsp" /></div>
 					</td>
 				</tr>
+				
+				
 						</table>
 						
 						<!-- bb1 -->
@@ -778,13 +929,24 @@ from session . We have customer Contact Object in session .
 			<div class="clearall">&nbsp;</div>
 
 			<s:if test="!#_action.isDraftOrder()">
-				<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#orderDetails.getAttribute("OrderDate"),wCContext)}'/>
+		<%-- 	EB-3311	<s:set name="orderDate" value='%{#dateUtilBean.formatDate(#orderDetails.getAttribute("OrderDate"),wCContext)}'/>--%>
 				<s:set name="sourceType" value='%{#extnElem.getAttribute("ExtnSourceType")}'/>
 				<s:set name="sourceValue" value="%{'COM'}" />
 				<s:if test="#sourceType = 1">
 					<s:set name="sourceValue" value="%{'Web'}" />
 				</s:if>
-			 		<div class="order-placed-by full-width">Order placed by <s:property value='%{#extnElem.getAttribute("ExtnOrderedByName")}' /> on date <s:property value="orderDate" /> via <s:property value='#sourceValue'/>.</div>
+			
+				<%--EB-3311 Original order placement date & time are not displayed on the Edit Order Checkout page--%>
+				<s:set name="orderDate" value='%{#orderDetails.getAttribute("OrderDate")}'/>
+
+				<s:if test='%{#sourceValue == "Web"}'>
+					<s:set name='orderDate' value="#xpedxutil.formatDate(#orderDate, #wcContext,'yyyy-MM-dd\'T\'HH:mm:ss', 'yyyy-MM-dd HH:mm:ss')" />
+				</s:if>
+				<s:else>
+					<s:set name='orderDate' value="#util.formatDate(#orderDate, #wcContext, null,'MM/dd/yyyy')" />
+				</s:else>
+				<%--EB-3311 --%>
+			 		<div class="order-placed-by full-width">Order placed by <s:property value='%{#extnElem.getAttribute("ExtnOrderedByName")}' /> on <s:property value="orderDate" />  <s:if test='#sourceValue=="Web"'>CT </s:if> via <s:property value='#sourceValue'/>.</div>
 <%-- 			 		Order placed by <s:property value='#orderDetails.getAttribute("Modifyuserid")'/> on <s:property value='#orderDetails.getAttribute("Modifyts")'/> via <s:property value='#orderDetails.getAttribute("EntryType")'/> --%>
 			</s:if>
 			
@@ -837,22 +999,35 @@ from session . We have customer Contact Object in session .
 			</td>
 			
 			<td width="260px" valign="top" class="second-cell">
-						<label class="block-label bold " for="comments " >Email Confirmation</label>
-							<s:iterator value="addnlEmailAddrList" id="addtnEmailAddrs">
-								<s:set name="emailAddrs" value="key" />
-								<div class="float-left margin-top-five">
-									<input id="input-prop" type="checkbox" name="AddnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input> 
-									<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
-								</div>								
-							</s:iterator>
-						
+				<label class="block-label bold " for="comments " >Email Confirmation</label>
+				
+					<s:iterator value="addnlEmailAddrsMap" id="addtnEmailAddrs">
+						<s:set name="emailAddrs" value="key" />
+						<s:set name="previousEmailRecipient" value="value" />
+						<div class="float-left margin-top-five">
+							<s:if test='%{#editOrderFlag == "true" && #previousEmailRecipient == "Y"}'>
+								<input id="input-prop" type="checkbox" name="addnlEmailAddrList" value="<s:property value='#emailAddrs'/>" checked="checked"></input>
+						    </s:if>
+						    <s:else>
+						    	<input id="input-prop" type="checkbox" name="addnlEmailAddrList" value="<s:property value='#emailAddrs'/>"></input>
+						    </s:else>					
+							<p class="email-list-prop"><s:property value="#emailAddrs"/></p>
+						</div>
+					</s:iterator>
+					<s:iterator value="billToEmailAddrsSet" id="idBillToEmailAddrs">
+						<%-- <s:set name="billToEmailAddrs" value="key" /> --%>
+						<div class="float-left margin-top-five">											
+						    <input id="input-prop" type="checkbox" name="addnlEmailAddrList" value="<s:property/>" checked="checked" disabled="disabled" ></input>							
+							<p class="email-list-prop"><s:property/></p>
+							<input type="hidden" name="addnlEmailAddrList" value="<s:property/>"/>
+						</div>																	
+					</s:iterator>
 			</td>
 			<td valign="top">
-							<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Separated Values)</div>
-							<s:textarea cssClass="font email-textarea" cols="16" rows="3"
-									cssStyle="margin-bottom: 5px;" name="newEmailAddr" id="newEmailAddr" readonly="%{! #_action.isDraftOrder()}" onkeyup="restrictTextareaMaxLength(this,'500');" /> 
-							<input type="checkbox" class="checkbox" name="EmailAddrSaveNeeded"
-									id="emailAddrSaveNeeded"> </input>Add to my email address list
+				<div class="email-confirm-right-legend text-left"><label class="bold " for="comments " >Additional Email Addresses</label> (Comma Separated Values)</div>
+				<s:textarea cssClass="font email-textarea" cols="16" rows="3"
+						cssStyle="margin-bottom: 5px;" name="newEmailAddr" id="newEmailAddr" onkeyup="restrictTextareaMaxLength(this,'500');" /> 
+				<input type="checkbox" class="checkbox" name="EmailAddrSaveNeeded" id="emailAddrSaveNeeded"> </input>Add to my email address list
 			</td>
 			</tr>
 			</table>
@@ -899,6 +1074,7 @@ from session . We have customer Contact Object in session .
 					value='#util.getElement(#orderLine, "KitLines")' />
 				<s:set name='itemIDUOM'
 					value='#_action.getIDUOM(#item.getAttribute("ItemID"), #item.getAttribute("UnitOfMeasure"))' />
+				<s:set name="customerUom" value='%{#_action.getCustomerUOMMap().get(#item.getAttribute("ItemID"))}' />
 				<s:set name='lineNotes'
 					value='#util.getElement(#orderLine, "Instructions/Instruction")' />
 				<s:set name='imageLocation'
@@ -1067,11 +1243,26 @@ from session . We have customer Contact Object in session .
 				 	<table	 width="600" cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config">
 	                	<tbody>
 	                		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
+	                		<s:if test="%{#customerUom == #uom}">
+									<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+									<s:set name='uomDesc' value="#customerUomWithoutM"/>
+							</s:if>
+							<s:else>
+									<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+							</s:else>
 	                		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
 					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-									<s:set name="bracketUOMDesc" value="bracketUOM" />
-									
+									<s:set name="temp" value="bracketUOM" />
+									<s:set name="customerUOMDesc" value="#wcUtil.getUOMDescription(#customerUom)"/>
+									<s:if test='%{#customerUOMDesc==#temp}'>	
+										<s:set name='customerUomWithoutM' value='%{#customerUom.substring(2, #customerUom.length())}' />
+										<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+									</s:if>
+									<s:else>
+										<s:set name="bracketUOMDesc" value="bracketUOM" />
+									</s:else>		
+																		
 					 				<s:if test='#webtrend_orderqty == null' >
 										<s:set name='webtrend_orderqty' value=''/>
 										<s:set name='webtrend_orderqty' value='%{#lineTran.getAttribute("OrderedQty")}' />
@@ -1094,7 +1285,7 @@ from session . We have customer Contact Object in session .
 											<s:set name='orderdqty' value='%{#_action.replaceString(#orderqty, ".00", "")}' />	
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 												&nbsp;<s:property value='#xpedxUtilBean.formatQuantityForCommas( #orderdqty )' />&nbsp;
-												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
+												<s:property value='#uomDesc'/>
 											</s:if>
 											</td>
 			                         		
@@ -1224,7 +1415,7 @@ from session . We have customer Contact Object in session .
 											<td width="157">
 											<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>	
 												&nbsp;<s:property value='#xpedxUtilBean.formatQuantityForCommas(#lineTran.getAttribute("OrderedQty"))' />&nbsp;
-												<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#uom)' />
+												<s:property value='#uomDesc'/>
 											</s:if>
 											</td>
 											<td class="text-right" width="147">
@@ -1253,7 +1444,10 @@ from session . We have customer Contact Object in session .
 										<s:if test='#item.getAttribute("ItemID") == #itemId'>	
 											<s:if test='%{#inventoryChk !="Y"}'>
 												<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
-												<s:hidden name="inventoryInds" id="inventoryInd_%{#orderLineKey}" value='%{#orderLineKey}' />
+												<s:if test='%{#inventoryChk !="I"}'>
+													<s:hidden name="inventoryInds" id="inventoryInd_%{#orderLineKey}" value='%{#orderLineKey}' />
+												</s:if>
+												
 											</s:if>
 										</s:if>	 
 									</s:iterator>
@@ -1328,32 +1522,26 @@ from session . We have customer Contact Object in session .
 			    			<s:if test='#certFlag=="Y"'>
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
-			    		</p>			    		
-			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
-			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M"'>	
-				    		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
-								<s:set name='itemSkuMap' value='%{skuMap.get(#itemID)}'/>
-								<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-								
-								<p>
-									<s:if test='%{customerSku == "1"}' >
-										<s:property value="#customerItemLabel" />:
+			    		</p>
+			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>			    		
+			    	    	<s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
 									</s:if>
-									<s:elseif test='%{customerSku == "2"}'>
-										<s:property value="#manufacturerItemLabel" />:
-									</s:elseif>
-									<s:else>
-										<s:property value="#mpcItemLabel" />:
-									</s:else>
-									<s:property value='#itemSkuVal' />
-								</p>
-								
-							</s:if>
-						</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p class="fields-padding">
+												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p class="fields-padding">
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+											</s:if>	
+							</s:if>		
 			    	</div>			    	
 			    	<div class="clearall">&nbsp; </div>
 
-			    		<table width="44%" style="FONT-SIZE: 12px; MARGIN-LEFT: 366px; MARGIN-TOP: -60px;" border=0>
+			    		<table width="330" style="FONT-SIZE: 12px; MARGIN-LEFT: 336px; MARGIN-TOP: -60px;" border=0>
 			    			<tbody>
 				    			<s:set name='tabIndex' value='%{#tabIndex + 1}' />
 								<s:iterator value='customerFieldsMap'>
@@ -1365,7 +1553,7 @@ from session . We have customer Contact Object in session .
                                 	<s:if test='(#orderLine.getAttribute("LineType") =="P" || #orderLine.getAttribute("LineType") =="S")'>
 		                                <s:if test=' (#FieldLabel == "CustomerPONo") || (#FieldLabel == "CustomerLinePONo") '>
 											<s:if test="%{#orderLine.getAttribute(#FieldLabel) != null && #orderLine.getAttribute(#FieldLabel) != ''}">
-												<td width="90px" align="right">
+												<td align="right" width="160">
 												<s:property value="%{#FieldValue}" />:&nbsp;	
 												</td>
 												<td align="left">				
@@ -1376,7 +1564,7 @@ from session . We have customer Contact Object in session .
 										</s:if>
 										<s:else>
 											<s:if test="%{#lineExtn.getAttribute(#customLbl) != null && #lineExtn.getAttribute(#customLbl) != ''}">
-												<td width="90px" align="right">
+												<td align="right" width="160">
 													<s:property value="%{#FieldValue}" />:&nbsp;
 												</td>
 												<td align="left">													
@@ -1481,18 +1669,38 @@ from session . We have customer Contact Object in session .
 				</fieldset>
 			</div>-->
 			<!--  Added div for Jira 3465 - Delivery Information on Checkout Screen -->
-			<s:set id="deliveryinformation" name="deliveryinformation" value="deliveryInfo" />
-			<s:if test='#deliveryinformation != null && #deliveryinformation!="" '>
-			<div align="center" >
-			<table align="left">
-  				<tr>
-    			<td class="second-cell" width="400px" style="text-align:left;display:block">
-    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
-				<s:property value="deliveryInfo"/></td>
-   				</tr>
-			</table> 
-			</div>
+			
+			<!--EB-3624 Display brand specific delivery info added  -->
+			<!-- wCContext.storefrontId value is from XPEDXPrepareHeader.jsp -->
+			<s:set id="deliveryinfobrand" name="deliveryinfobrand" value="wCContext.storefrontId" />
+			<s:if test='#deliveryinfobrand != null && #deliveryinfobrand!="" && #deliveryinfobrand=="xpedx" '>
+				<s:set id="deliveryinformation" name="deliveryinformation" value="deliveryInfo" />
+				<s:if test='#deliveryinformation != null && #deliveryinformation!="" '>
+				<div align="center" >
+				<table align="left">
+	  				<tr>
+	    			<td class="second-cell" width="400px" style="text-align:left;display:block">
+	    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
+					<s:property value="deliveryInfo"/></td>
+	   				</tr>
+				</table> 
+				</div>
+				</s:if>
 			</s:if>
+			<s:else>
+				<s:set id="deliveryinformationSaal" name="deliveryinformationSaal" value="deliveryInfoSaal" />
+				<s:if test='#deliveryinformationSaal != null && #deliveryinformationSaal!="" '>
+				<div align="center" >
+				<table align="left">
+	  				<tr>
+	    			<td class="second-cell" width="400px" style="text-align:left;display:block">
+	    			<label  class="block-label bold " for="comments ">Delivery Information:</label>
+					<s:property value="deliveryinformationSaal"/></td>
+	   				</tr>
+				</table> 
+				</div>
+				</s:if>
+			</s:else>
 			<!--  Fix end for Jira 3465 - Delivery Information on Checkout Screen -->
 			<%-- 
 			 <div id="msgForCouponCode" style="display: block;  float: left; margin-right: 28px; margin-top: 5px;" class="error" > <s:property value="couponOperationError" /> </div>
@@ -1628,15 +1836,27 @@ from session . We have customer Contact Object in session .
 		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 			<a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Cart</span></a>
 		</s:if>
-		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a></s:else>	
-			<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
-				<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>		
+		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a>
+		</s:else>	
+		
+		<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
+			<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
+			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
+				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Approve and Submit Order</span></a>
 			</s:if>
 			<s:else>
-<%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
-				     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
+				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>
 			</s:else>	
+		</s:if>
+		<s:else>
+<%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
+			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">				
+			     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Approve and Submit Order</span></a>
+			</s:if>
+			<s:else>
+				<a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
+			</s:else>    
+		</s:else>	
 			
 		</div><!--bottom button bar -->
 		</div>
@@ -1646,9 +1866,10 @@ from session . We have customer Contact Object in session .
 		<!-- <div class="mandatory" id="requiredCustomerPOErrorDiv" style="display:none;">PO #: is required field</div> -->
 		<div id="requiredCustomerPOErrorDiv" style="display: none;  float: right; margin-right: 28px; margin-top: 5px;" class="error" >PO #: is required field</div>
 		<!--Added for 3098  -->
-		<div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div><br/>
+		<div class="error"  style="float:right; margin-right: 28px;display:none;margin-top: 5px;" id="errorMsg" ></div><br/>
 		<s:if test="%{#isSalesRep}">
-			<div class="salesProNotice" style="width:65%; float: right;"> Please ensure the correct Ship-To has been selected for this order prior to submitting the order. To change the Ship-To click on the 'Change' link next to the Ship-To address.</div>
+		<!--Added for EB-941  -->
+			<div class="salesProNotice" style="width:65%; float: right;"> Please ensure the correct Ship-To has been selected for this order prior to submitting the order. To change Ship-To, click on Edit Cart at the bottom of the Checkout page to return to Cart. Click on the ‘Change’ link at the end of the ‘Shopping for’ banner at the top of the page.</div>
 		</s:if>
   
 <!-- class="container" -->

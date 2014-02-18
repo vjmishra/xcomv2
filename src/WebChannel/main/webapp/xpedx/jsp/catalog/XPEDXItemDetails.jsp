@@ -44,6 +44,7 @@
 <!-- begin styles. These should be the only three styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header.css" />
+<%-- <link media="print" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/print.css" /> --%>
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
 <link rel="stylesheet" type="text/css"
@@ -60,7 +61,16 @@
 <!-- Page Calls -->
 
 <!-- END head-calls.php -->
+<!--  Added for EB3674 Single page print -->
 <title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
+ <style type="text/css" media="print">
+ @page { 
+ 		size:A4; 
+ 		 margin-top:3px margin-right: 72px margin-bottom: 0px margin-left: 69px; } 
+ 	#headerContainer { display: none; }
+	#t1-footer { display: none; }
+</style>
+
 <meta name="DCSext.w_x_sc_count" content="1"/>
 <meta name="DCSext.w_x_itemtype" content="<s:property value='%{#session.itemType}' />" />
 <s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>
@@ -89,7 +99,17 @@
 	value='#util.isProcurementInspectMode(wCContext)' />
 <s:set name='isReadOnly' value='#isProcurementInspectMode' />
 <s:hidden name="catagory" id="catagory" value="%{#_action.getCatagory()}" />
+<s:hidden id="custUOM" name="custUOM" value="%{#_action.getCustomerUOM()}" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:set name="baseUOM"  value="%{#_action.getBaseUOM()}" />
+<s:set name="customerUOM"  value="%{#_action.getCustomerUOM()}" />
+<s:if test='%{#customerUOM==#baseUOM}'>
+	<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+	<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
+</s:if>
+<s:else>
+	<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOM)" />
+</s:else>
 </head>
 <!-- END swc:head -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header.js"></script>
@@ -110,13 +130,37 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	if(reqUom == null || reqUom == "null" || reqUom == "") {
 		reqUom = document.getElementById("selectedUOM").value;
 	}
+	// added for  Jira 2101 to get the PnA results based on the selected UOM on page load
+	var uomConvFactor;
+	var orderMul = document.getElementById("OrderMultiple");
+	var conversionFactor = document.getElementById("uomConvFactor");
+	if(conversionFactor!=null && conversionFactor!=undefined){
+		 uomConvFactor = document.getElementById("uomConvFactor").value;
+	}
+	var qtyTextBox=Qty;
 	if(Qty == null || Qty == "null" || Qty == "") {
-		
-		//Modifying for jira 3922
-		Qty = document.getElementById("OrderMultiple").value;
+		reqUom = document.getElementById("selectedUOM").value;
+		if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
+			if(uomConvFactor == 1){
+				Qty = document.getElementById("OrderMultiple").value;
+			}
+			else if(uomConvFactor <= orderMul.value){
+					if((orderMul.value % uomConvFactor)==0){
+						Qty = orderMul.value / uomConvFactor;
+					}
+					else{
+						Qty = 1;
+					}
+			}
+			else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+				Qty=1;
+			}
 		}
+	}
+	//End of Jira 2101
 	priceCheck = true;
 	var Category = document.getElementById("catagory").value;
+	var customerUom = document.getElementById("custUOM").value;
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
 	var validationSuccess = validateOrderMultiple();
 	Ext.Ajax.request({
@@ -125,11 +169,13 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 			itemID 	: itemId,
 	       	requestedUOM : reqUom,
 	       	pnaRequestedQty	: Qty,
+	       	qtyTextBox : qtyTextBox,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
 	       	validateOrderMul : validationSuccess,
-	       	Category : Category
+	       	Category : Category,
+	       	customerUOM : customerUom
 		},      	
 	   	success: function (response, request){
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
@@ -143,7 +189,7 @@ function pandaByAjax(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor)
 	});
 }
 
-function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor,isOrderData){		
+function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMConvFactor,isOrderData){
 	if(isOrderData == undefined || isOrderData == null)
 	{
 		isOrderData='false';
@@ -158,9 +204,10 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		reqUom = document.getElementById("selectedUOM").value;
 	}
 	var Qty=document.getElementById("qtyBox").value;
+	var qtyTextBox=Qty;
 	//Quantity validation
-	if(Qty =='' || Qty=='0')
-	{
+	if(Qty =='')
+	{	
 		/* Commented for XB 214 BR2 - to remove blank Qty validation to display PnA on click of PnA LINK
 		document.getElementById("qtyBox").style.borderColor="#FF0000";
 		document.getElementById("qtyBox").focus();
@@ -172,9 +219,37 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 		Ext.Msg.hide();
 	    myMask.hide();
 	    return;*/
-	    //Change made for XB 214 - Send Base UOM & OM Qty for PnA when Wty is blank
+		// added for  EB 2034 to get the PnA results based on the selected UOM on click of PnA Link
+		var uomConvFactor;
+		var orderMul = document.getElementById("OrderMultiple");
+		var conversionFactor = document.getElementById("uomConvFactor");
+		if(conversionFactor!=null && conversionFactor!=undefined){
+			 uomConvFactor = document.getElementById("uomConvFactor").value;
+		}
+		if(Qty == null || Qty == "null" || Qty == "") {
+			reqUom = document.getElementById("selectedUOM").value;
+			if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
+				if(uomConvFactor == 1){
+					Qty = document.getElementById("OrderMultiple").value;
+				}
+				else if(uomConvFactor <= orderMul.value){
+					if((orderMul.value % uomConvFactor)==0){
+						Qty = orderMul.value / uomConvFactor;
+					}
+					else{
+						Qty = 1;
+					}
+				}
+				else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+					Qty=1;
+				}
+			}
+		}
+		//End of EB 2034
+		
+	    /*Change made for XB 214 - Send Base UOM & OM Qty for PnA when Qty is blank
 	    Qty = document.getElementById("OrderMultiple").value;
-	    reqUom = baseUom;
+	    reqUom = baseUom;*/
 	}	
 	var itemAvailDiv = document.getElementById("tabs-1");
 	if(Qty=='0')
@@ -194,6 +269,7 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 	}	
 	priceCheck = true;
 	var Category = document.getElementById("catagory").value;
+	var customerUom = document.getElementById("custUOM").value;
 	var url = '<s:property value="#xpedxItemDetailsPandA"/>';
 	var validationSuccess = validateOrderMultiple();
 	if(validationSuccess==false){
@@ -209,14 +285,24 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			itemID 	: itemId,
 	       	requestedUOM : reqUom,
 	       	pnaRequestedQty	: Qty,
+	       	qtyTextBox : qtyTextBox,
 	       	baseUOM	: baseUom,
 	       	prodMweight : prodMweight,
 	       	pricingUOMConvFactor : pricingUOMConvFactor,
 	       	validateOrderMul : validationSuccess,
 	       	Category : Category,
-	       	isOrderData :isOrderData
+	       	isOrderData :isOrderData,
+	       	customerUOM : customerUom
 		},      	
 	   	success: function (response, request){
+	   		//Added for EB 560
+	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	   			window.location.reload(true);
+	   			Ext.Msg.hide();
+				myMask.hide();
+				return;
+	   		}
+			//End of EB 560
 			document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 			setPandAData();
 			Ext.Msg.hide();
@@ -225,17 +311,21 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			var responseText = response.responseText;
 			writeWebtrendTag(responseText);
 			//-- Web Trends tag end --
-		}
+		},
+		failure: function (response, request){
+			Ext.Msg.hide();
+			myMask.hide(); 
+			var errorMessageDiv = document.getElementById("errorMessageDiv");
+			if(errorMessageDiv != null && errorMessageDiv != undefined)
+				errorMessageDiv.innerHTML='<h5 align="center"><b><font color="red">Could not get the pricing details for this Particular Item at the moment. Please try again Later</font></b></h5>';
+        }
+		
 	});
 }
 }
 </script>
 <script type="text/javascript">
 	$(function() {
-		// Activate the tabs
-		$("#tabs").tabs({
-			collapsible: false
-		});
 		
 		// Truncate the sell text if needed
 		var sellText = $('#sell-full').text().trim();
@@ -261,8 +351,6 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 			$('#sell-expand').show();
 		}
 		
-		// Select availability tab on MP&A click
-		$('#my-price-link').click(function(){ $('a[href=#tabs-1]').click(); return false;});
 		
 		// Truncate promo text
 		$('.promo-txt p').each(function(){
@@ -275,6 +363,9 @@ function pandaByAjaxFromLink(itemId,reqUom,Qty,baseUom,prodMweight,pricingUOMCon
 <s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 <s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
 <s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+<s:if test = '%{#isEstUser == null || #isEstUser == ""}'>
+	<s:set name="isEstUser" value="false"/>
+</s:if>
 
 <script type="text/javascript">
 var isUserAdmin = <s:property value="#isUserAdmin"/>;
@@ -356,13 +447,18 @@ var isEstUser = <s:property value="#isEstUser"/>;
 			'height' 			: 500  
 		});	
 	});
-	
-	$(function() {
-		$("#tabs").tabs({
-			collapsible: false
-		});
-	});
-
+	 /* xb-677 Code Changes */
+	  $(document).ready(function() {
+			var rightColInt= $(document.getElementById('right-col-int'));
+			if(rightColInt != undefined || clFromListId != null){
+				var rightColIntHeight =	$(document.getElementById('right-col-int')).height();
+				var id1Height= $(document.getElementById('containerId')).height();
+				if(id1Height < rightColIntHeight ){
+					rightColIntHeight = parseInt(rightColIntHeight+200) + 'px';
+			    	$("#containerId").css('height',rightColIntHeight);
+				}
+			}
+		} );
 
 	function showShareList(customerId, showRoot, clFromListId){
 		//Populate fields
@@ -514,7 +610,7 @@ var isEstUser = <s:property value="#isEstUser"/>;
 	    //Submit the data via ajax
 	    
 	    //Init vars
-	    <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/xpedx/myItems" escapeAmp="false" />
+	    <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/myItems" escapeAmp="false" />
 
 		var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
 	    url = ReplaceAll(url,"&amp;",'&');
@@ -594,7 +690,7 @@ var isEstUser = <s:property value="#isEstUser"/>;
 
 		//Init vars
 	   
-	    <s:url id='getMyItemsList' includeParams="none" namespace="/xpedx/myItems" action='XPEDXMyItemsList'/> 
+	    <s:url id='getMyItemsList' includeParams="none" namespace="/myItems" action='MyItemsList'/> 
 	    
 	    var url = '<s:property value="#getMyItemsList"/>'+'&ShareList=ShareList';
 	    url = ReplaceAll(url,"&amp;",'&');
@@ -614,6 +710,23 @@ var isEstUser = <s:property value="#isEstUser"/>;
 	            },
 	            method: 'POST',
 	            success: function (response, request){
+	            	//Added for EB 560
+					if(response.responseText.indexOf('List Img') != -1)
+					{
+						var addItemListButtonVar = document.getElementById("addItemListButton");
+						if(addItemListButtonVar != null && addItemListButtonVar != undefined)
+						{
+							addItemListButtonVar.style.display="block";
+						}
+					 }
+
+	    	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	    	   			window.location.reload(true);
+	    	   			Ext.Msg.hide();
+	    				myMask.hide();
+	    				return;
+	    	   		}
+	    			//End of EB 560
 	                document.body.style.cursor = 'default';
 	                setAndExecute(divId, response.responseText);
 	            },
@@ -683,9 +796,9 @@ function addItemToCart(data)
 		document.getElementById("qtyBox").focus();
 		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
   		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
-  		 document.getElementById("errorMsgForQty").setAttribute("class", "error");
+  		document.getElementById("errorMsgForQty").setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
-		document.getElementById("qtyBox").value = "";
+		//document.getElementById("qtyBox").value = ""; - failed to add to cart hence Qty not cleared for EB 40
 		Ext.Msg.hide();
 	    	myMask.hide();
 	    return;
@@ -787,7 +900,7 @@ function validateOrderMultiple() {
 		
 		if (OrdMultiple.value > 1){
 			if (priceCheck == true){
-			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+			      myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='#baseUOMDesc'></s:property>";	            
          		      myMessageDiv.style.display ="inline-block";
           		      myMessageDiv.setAttribute("class", "notice");
 			}
@@ -812,8 +925,7 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
     if(document.getElementById("baseUnitOfMeasure")!=null
 			&&  document.getElementById("baseUnitOfMeasure")!=undefined){
     	baseUOM=document.getElementById("baseUnitOfMeasure").value; 
-	} 
-	
+	} 	
    	Ext.Ajax.request({
     	// for testing only
         url: url,
@@ -829,28 +941,78 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
         // end testing
         method: 'GET',
         success: function (response, request){
+        	//Added for EB 560
+	   		if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+	   			window.location.reload(true);
+	   			Ext.Msg.hide();
+				myMask.hide();
+				return;
+	   		}
+			//End of EB 560
 	         var draftErr = response.responseText;
 	         var myMessageDiv = document.getElementById("errorMsgForQty");
 	         var draftErrDiv = document.getElementById("errorMessageDiv");
-
+	         
+	       //Added for EB 40
+	      	var enteredQty = document.getElementById("qtyBox").value;
+	      	//var selectedUom = document.getElementById("selectedUOM").value;
+	      	var uomList = document.getElementById('itemUOMsSelect');
+	      	var selectedUom = uomList.options[uomList.selectedIndex].value;
+	      	var selectedUomText = uomList.options[uomList.selectedIndex].text;
+	      	var index = selectedUomText.indexOf("(");
+	      	if(index > -1){
+	      		selectedUomText = selectedUomText.substring(0,index);
+	      	}
+	      	
 	         if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
              {
 	        	 refreshWithNextOrNewCartInContext();
 	        	 draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
              }
+	         else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+             {
+	        	document.getElementById("qtyBox").style.borderColor="#FF0000";
+	     		document.getElementById("qtyBox").focus();
+	     		document.getElementById("errorMsgForQty").innerHTML  = "Please enter a valid quantity and try again.";
+	       		document.getElementById("errorMsgForQty").style.display = "inline-block"; 
+	       		document.getElementById("errorMsgForQty").setAttribute("class", "error");
+	     		document.getElementById("Qty_Check_Flag").value = true;
+	     		//document.getElementById("qtyBox").value = "";
+	     		Ext.Msg.hide();
+	     	        myMask.hide();
+	     	        return;
+             }
+	         else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+             {
+	        	 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+	        	 var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+	        	 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+	        	 window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+             }
 	         else if(draftErr.indexOf(productID) !== -1){
 	        	 refreshMiniCartLink();
-	        	 myMessageDiv.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
+	        	 myMessageDiv.innerHTML = enteredQty+" "+selectedUomText+" has been added to your cart. Please review the cart to update the item with a valid quantity.";//"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
 	        	 myMessageDiv.setAttribute("class", "error");
-					myMessageDiv.style.display = "inline-block"; 
-		             
-				}
+			 myMessageDiv.style.display = "inline-block"; 
+			 //Added for EB 40 - On successful addition to cart clear the Qty field & restore the default UOM 
+			 document.getElementById("qtyBox").value = "";
+	         	 var UOMelement =  document.getElementById("itemUOMsSelect");
+	         	 if(UOMelement != "" && UOMelement != null && defaultUOM != ""){
+	         		 UOMelement.value = defaultUOM;
+	         	 }
+	         	 else{
+	         		UOMelement.value = uomList.options[0].value;
+	         	 }
+	         	 updateUOMFields();
+	         	//End for EB 40 
+			}
 	    	// document.getElementById("priceAndAvailabilityAjax").innerHTML = response.responseText;
 	    //	 setPandAData();
 	    else
 		    {
 	    	var pricingUOMConvFactor = '<s:property value="#_action.getPricingUOMConvFactor()" />';
-	 		pandaByAjaxFromLink(productID,UOM,quantity,baseUOM,'',pricingUOMConvFactor,'true');
+	    	var prodMweight = '<s:property value="#_action.getProdMweight()" />';
+	 		pandaByAjaxFromLink(productID,UOM,quantity,baseUOM,prodMweight,pricingUOMConvFactor,'true');
               
            // DialogPanel.toggleDialogVisibility('addToCart');	  
          //-- WebTrends tag start --
@@ -890,16 +1052,27 @@ function listAddToCartItem(url, productID, UOM, quantity,Job,customer,customerPO
             //myDiv.innerHTML = 'The product has been successfully added to the cart';	            
            // DialogPanel.show('modalDialogPanel1');	            
            // svg_classhandlers_decoratePage();
-			
-            
+           //Added for EB 40
              if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
             	 myMessageDiv.innerHTML = "Item has been added to order." ;
-			 else
-				 myMessageDiv.innerHTML = "Item has been added to cart." ;	            
+	     	else
+	         myMessageDiv.innerHTML = enteredQty+" "+selectedUomText+" has been added to your cart." ;	 
+             
              myMessageDiv.style.display = "inline-block"; 
              myMessageDiv.setAttribute("class", "success");
-		    }
-	         Ext.Msg.hide();
+             //On successful addition to cart clear the Qty field & restore the default UOM - EB 40
+             document.getElementById("qtyBox").value="";
+             var UOMelement =  document.getElementById("itemUOMsSelect");
+             if(UOMelement !="" && UOMelement != null && defaultUOM != ""){
+                   UOMelement.value = defaultUOM;
+             }
+             else{
+	           UOMelement.value = uomList.options[0].value;
+         	 }
+         	 updateUOMFields();
+	     //End for EB 40
+	     }
+	     Ext.Msg.hide();
              myMask.hide();	
         },
         failure: function (response, request){
@@ -1054,8 +1227,7 @@ function SubmitActionWithValidation()
 	</s:action> 
 <!-- // header end -->
    <s:set name="promoheight" value='%{promoheight}'></s:set>     
-		<div class="container" 
-			<s:if test='%{#promoheight!= null }'>style="height:<s:property value="%{#promoheight}"/>"</s:if>>
+		<div class="container" id="containerId"> 
 		<s:set name="emailDialogTitle" scope="page"
 			value="#_action.getText('Email_Title')" />
 
@@ -1390,32 +1562,33 @@ function SubmitActionWithValidation()
 					</p>					
 					<br/>
 					<div>
-						<s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' />
+						<b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' /></b>
 							<s:if test='certFlag=="Y"'>
 								<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" />
 							</s:if>
 					</div>					
-			<s:if test='custSKU!= ""'>
-				<p style="margin-top:8px;">
-					<s:if test='%{custSKU == "1"}' >
-						<s:property value="#customerItemLabel" />: <s:property value='custPartNumber' />
-					</s:if>
-					<s:elseif test='%{custSKU == "2" }'>
+				<%--Added for Eb 47 display of Mfg & CustomerItem# based on the Flag values set in CC --%>
+				<div>
+				<s:if test= '%{#_action.getExtnMfgItemFlag()== "Y"}'>
+					<p style="margin-top:8px;">
 						<s:property value="#manufacturerItemLabel" />: <s:property value='ManufacturerPartNumber' />
-					</s:elseif>
-					<s:elseif test='%{custSKU == "3" }'>
-						<s:property value="#mpcItemLabel" />: <s:property value='MPC' />
-					</s:elseif>
-				</p>				
-			</s:if>
-			
+					</p>
+				</s:if>
+				
+				<s:if test= '%{#_action.getExtnCustomerItemFlag() == "Y"}'>
+					<p style="margin-top:8px;">
+						<s:property value="#customerItemLabel" />: <s:property value='custPartNumber' />
+					</p>
+				</s:if>
+				</div>
+				<%--End for Eb 47 display of Mfg & CustomerItem# based on the Flag values set in CC --%>
 			<br/>
 					<div class="red bold"> 
     <s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
     <!-- Web Trends tag start -->  
      <meta name="DCSext.w_x_item_repl_p" content="1" />
      <!-- Web Trends tag end -->  
-    			This item has been replaced. Select item: 
+    			This item will be replaced once inventory is depleted. Select item: 
 				<s:iterator value='replacementAssociatedItems' id='replacementItem'
 						status="count" >											
 				<s:set name="promoItemPrimInfoElem"
@@ -1437,9 +1610,7 @@ function SubmitActionWithValidation()
 						<s:if test='%{#imageURL=="/"}'>
 							<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 						</s:if>
-						<!-- <img src="<s:url value='%{#imageURL}' includeParams='none' />"
-										alt="<s:text name='%{#imageLabel}'/>" width="52" height="50" align="left" /> -->
-		        	</s:if>
+					</s:if>
 					<s:url id='detailURLFromPromoProd' namespace='/catalog'
 							action='itemDetails.action'>
 							<s:param name='itemID'>
@@ -1581,7 +1752,7 @@ function SubmitActionWithValidation()
 				<div class="linePO line-spacing">
 					<s:property value='customerPOLabel' />:
 					<s:textfield name='customerPONo' theme="simple"
-						cssClass="input-details x-input" id="customerPONo" value="" title="CustomerNumber"
+						cssClass="x-input bottom-mill-info-avail" id="customerPONo" value="" title="CustomerNumber"
 						tabindex="%{#tabIndex}" maxlength="22"/>					
 					
 				</div>
@@ -1590,9 +1761,10 @@ function SubmitActionWithValidation()
 				
 				<s:if test=' (isCustomerLinAcc == "Y") '>
 					<!-- Job Number represents Customer Line Account # -->
+					<!-- class="x-input bottom-mill-info-avail for 24 Characters. It relates to EB 449 -->
 					<div class="jobNum line-spacing">
 						<label class="left35"><s:property value='custLineAccNoLabel' />:</label>
-						<input name="Job" class="input-details x-input"  id="Job" tabindex="12" title="JobNumber" maxlength="24"/>
+						<input name="Job" class="x-input bottom-mill-info-avail"  id="Job" tabindex="12" title="JobNumber" maxlength="24"/>
 					</div>
 				</s:if>
 				<input type="hidden" name="Customer" class="input-details x-input" id="Customer"
@@ -1677,7 +1849,7 @@ function SubmitActionWithValidation()
 				
 				<script>
 					var myMessageDiv = document.getElementById("errorMsgForQty");	            
-		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#xpedxutil.formatQuantityForCommas(#mulVal)}'></s:property> <s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())'></s:property>";	            
+		            myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value='%{#xpedxutil.formatQuantityForCommas(#mulVal)}'></s:property> <s:property value='#baseUOMDesc'></s:property>";	            
 		            myMessageDiv.style.display = "inline-block"; 
 		            myMessageDiv.setAttribute("class", "notice");
 				</script>
@@ -2031,33 +2203,21 @@ function SubmitActionWithValidation()
 			<!-- END prod-config -->
 		<!-- TABS -->
 		<div class="avail-grid">
-			<div id="tabs"class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-				<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-					<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="#tabs-1">Availability</a></li>
-					<li class="ui-state-default ui-corner-top"><a href="#tabs-2" onclick="javascript:blockDiv();">Specifications</a></li>
-				</ul>
-				
-				<p class="tablinks">&nbsp;
-			 	<%-- Commented for JIRA 3288	--%>	 	
-			 	<%-- <s:set name="canRequestProductSample" value="#session.showSampleRequest" />  --%>
-		  	 	<%-- <s:if test='#canRequestProductSample=="Y"'> --%>
- 			 		<%-- 	<a id="areqsample" href="#RequestSampleDiv" onclick="javascript: writeMetaTag('WT.ti', '	');">  	
-					<s:text name='Request Sample' /> </a>&nbsp;&nbsp; --%>
-		   		<%-- </s:if>  --%>
-				<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
-					<s:set name="link" value="value" />
-					<s:set name="desc" value="key" />	
-					<a class="slightly_left" href="<s:property value='#link'/>" target="_blank">MSDS</a>
-				</p>
-				</s:iterator>
-				<!-- tab1 -->
-				<div id="tabs-1" class="ie_floatleft">
+		<!-- tab1 -->
+				<div id="tabs-1">
 					<%-- This will be filled by ajax as the P and A call happens on page load as Ajax --%>
 				</div>
 				<!-- end tab1 -->
                                     
 				<!-- tab2 -->
-		<div id="tabs-2" style="display: none" ><s:set name="certImage"
+		<div id="tabs-2">
+		<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
+						<s:set name="link" value="value" />
+						<s:set name="desc" value="key" />	
+						<a id="msds_link" href="<s:property value='#link'/>" target="_blank">MSDS</a>
+			</s:iterator>
+		<fieldset id="Item_fieldset"><legend style="font-weight: bold;">Specifications</legend>
+		<s:set name="certImage"
 			value="#_action.getCertImagePath()" /> 
 		<s:if
 			test="%{null != #certImage}">
@@ -2066,7 +2226,7 @@ function SubmitActionWithValidation()
 			value='#xutil.getChildElement(#itemElem,"ItemAttributeGroupTypeList")' />		
 		<!-- <div id="tabs-2" class="ie_tabsfix" >	 -->
 		<table id="prod-details-tbl" border="0" cellspacing="0"
-			cellpadding="0" style="overflow: auto;">
+			cellpadding="0" style="overflow: auto;margin-top: 2px;">
 			<tr class="detail-head-prod-bg ui-corner-all">
 				<td class="tblhead-white int-deets2" style="border-top-left-radius: 5px;border-top-right-radius: 0;">Specification</td>
 				<td class="tblhead-white" style="border-top-left-radius: 0px;border-top-right-radius: 5px;">Details</td>
@@ -2198,15 +2358,15 @@ function SubmitActionWithValidation()
 				</s:if>
 			</s:iterator>
 		</table>
+		</fieldset>
 		</div><!-- end tab2 
 			</div>-->
 			
 			<div class="clearall">&nbsp;</div>
 		 <!--</div>   end tabs -->
-	</div>
 	</s:if>
 	
-		<s:url id='addToItemListURLid' namespace='/xpedx/myItems'
+		<s:url id='addToItemListURLid' namespace='/myItems'
 			action='XPEDXMyItemsDetailsCreate' /> <s:a id='addToItemListURL'
 			href='%{#addToItemListURLid}' /> <s:hidden id="itemId" name="itemId"
 			value="%{#itemID}" /> <s:hidden id="itemType" name="itemType"
@@ -2235,7 +2395,6 @@ function SubmitActionWithValidation()
 <!-- BEGIN footer -->
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- END footer -->
-
 
 <swc:dialogPanel title="Product Availability" isModal="true"
 	id="product_availability">
@@ -2477,12 +2636,15 @@ Ext.onReady(function(){
 </s:if>
 
 <script type="text/javascript">
+var defaultUOM;
 	$(document).ready(function() {
 		//added for jira 3253
 		updateUOMFields();
 		var requestedUom = document.getElementById("selectedUOM").value;
 		//Added For Jira 3922- baseUom that we will pass on initial load
 		var baseUom = '<s:property value="#unitOfMeasure" />';
+		defaultUOM = document.getElementById("selectedUOM").value;
+
 		callPnA(baseUom);
 	});
 
@@ -2504,11 +2666,7 @@ function callPnAfromLink(requestedUom){
 	pandaByAjaxFromLink(itemId,requestedUom,Quantity, baseUom, prodMweight, pricingUOMConvFactor);
 }
 
-function blockDiv()
-{
-	var divId=document.getElementById("tabs-2");
-	divId.style.display="block";
-}
+
 </script>
 <!-- added for jira 2971 --> 
 <div style="display: none;">
@@ -2569,6 +2727,7 @@ function blockDiv()
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag.js"></script>
 <!-- Web Trends tag end  -->
+
 </body>
 </s:else>
 </swc:html>

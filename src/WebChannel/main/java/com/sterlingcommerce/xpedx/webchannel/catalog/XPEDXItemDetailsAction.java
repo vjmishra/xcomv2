@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -61,10 +62,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	public String execute() {
 		// Start - Webtrends meta tag
-			HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
-			HttpSession localSession = httpRequest.getSession();
+		HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
+		HttpSession localSession = httpRequest.getSession();
 		// End - Webtrends meta tag
-		
+		//  EB-1158--
+		//commented for Performance issue
+		/*try {
+			myItemsListSize = getAllItemList().size(); 
+		} catch (Exception ex) {
+			LOG.error("Exception while getting My Items List ", ex);
+		}*/
+
 		//Jira 2421
 		 if(request.getParameter("selectedView")!=null){
 	        	localSession.setAttribute("selView", request.getParameter("selectedView"));
@@ -87,11 +95,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				
 				getItemDetails();
 				getCustomerDetails(); // Template Trim Required
-//				getExtnItemDetails();//Extn Template should be trimmed
+				//getExtnItemDetails();//Extn Template should be trimmed
 				getCustomerPartNumber(); 
 				getCustomerLineDetails(); 
-
-//				getAllItemList(); // This is not being used at all in the item Details Page so removed it for performance
+				//getAllItemList(); // This is not being used at all in the item Details Page so removed it for performance
 				//call it after calling getCustomerDetails() as shipFromDivision
 				// would be available for logged in users.
 				try{
@@ -146,6 +153,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		inputItems.add(item);
 		XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(inputItems,isOrderData);
 		
+		//EB-225 - getCustomerUOM of the item, so that in price section of item details page, only display the UOM code without M_		
+		if(getCustomerUOM()!=null){
+			pnaRequestedCustomerUOM = getCustomerUOM();
+		}
 		//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
 		ajaxDisplayStatusCodeMsg  =   XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 		setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
@@ -626,28 +637,27 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		//Set itemMap MAP again in session
 		XPEDXWCUtils.setObectInCache("itemMap",itemMapObj);
 		//set a itemsUOMMap in Session for ConvFactor
-		XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemID, wcContext.getStorefrontId()));
+		//XPEDXWCUtils.setObectInCache("itemsUOMMap",XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), itemID, wcContext.getStorefrontId()));
 		//Added for webtrends -XBT-35
 		XPEDXWCUtils.setObectInCache("itemType",itemType);
 	}
 	
-	private void getAllItemList() throws Exception {
-		Document outputDoc = null;
-		itemListMap = new HashMap();
-		String customerId = wcContext.getCustomerId();
-		outputDoc = XPEDXWCUtils.getAllItemList(customerId);
-		Element outputEl = outputDoc.getDocumentElement();
+	
+	//EB-1158   Using listofWishLists for checking the MIL lists.
+	private ArrayList<Element> getAllItemList() throws Exception {
+        Document outputDoc = null;
+        itemListMap = new HashMap();
+        String customerId = wcContext.getCustomerId();
+        outputDoc = XPEDXWCUtils.getAllItemList(customerId);
+        Element outputEl = outputDoc.getDocumentElement();
 
-		ArrayList<Element> listofWishLists = getXMLUtils().getElements(
-				outputEl, "XPEDXMyItemsList");
-		if (listofWishLists != null) {
-			for (Element list : listofWishLists) {
-				itemListMap.put(list.getAttribute("MyItemsListKey"), list
-						.getAttribute("Name"));
-			}
-		}
-		// itemListMap.put("key1", "First list");
-	}
+        ArrayList<Element> listofWishLists = getXMLUtils().getElements(
+                                        outputEl, "XPEDXMyItemsList");
+        return listofWishLists;
+}
+
+
+
 
 	public void getCustomerDetails() throws Exception {
 		Document outputDoc = null;
@@ -679,7 +689,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		shipFromDivision = shipToCustomer.getExtnShipFromBranch();
 		//Fetching and setting the other customer profile settings here to use in getCustomerPartNumber
 		envCode = shipToCustomer.getExtnEnvironmentCode();
-		customerCode = shipToCustomer.getExtnCompanyCode();
+		//Commented for EB 47 customerCode = shipToCustomer.getExtnCompanyCode();
 		customerLegNo = shipToCustomer.getExtnLegacyCustNumber();
 		useOrderMulUOMFlag = shipToCustomer.getExtnUseOrderMulUOMFlag();
 		customerBranch = shipFromDivision;
@@ -709,7 +719,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		ZipRequest = shipToCustomer.getZipCode();
 		AccountNumber = shipToCustomer.getAccountNumber();
 		// End of performance issue - itemdetail.action
-		
+		//Added for EB 47
+		extnMfgItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		extnCustomerItemFlag = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		//End of EB 47
 		
 		/*Element customerOrganizationExtnEle = XMLUtilities.getElement(outputEl,"Extn");
 		shipFromDivision = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnShipFromBranch");
@@ -769,12 +782,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	protected void getItemUOMs() throws Exception {
-		/*String customerId = wcContext.getCustomerId();
+		String customerId = wcContext.getCustomerId();
 		String organizationCode = wcContext.getStorefrontId();
 
-		itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID,
-				organizationCode);*/
-		LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
+		/*itemUOMsMap = XPEDXOrderUtils.getXpedxUOMList(customerId, itemID,
+			organizationCode);
+		/*LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, String> uomListMap = new LinkedHashMap<String, String>();
 		if(getItemListElem() != null) {
 			Element itemElement = SCXmlUtil.getChildElement(m_itemListElem,"Item");
@@ -846,12 +859,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		}
 		uomListMap.putAll(wUOMsToConversionFactors);
 		
+		
+		itemUOMsMap = uomListMap;*/
 		//2964 start
 		//displayItemUOMsMap = new HashMap();
-		displayItemUOMsMap = uomListMap;
+		//displayItemUOMsMap = itemUOMsMap;
 		//2964 end
 		
-		itemUOMsMap = uomListMap;
+		
 		/*for (Iterator it = itemUOMsMap.keySet().iterator(); it.hasNext();) {
 			String uomDesc = (String) it.next();
 			Object o = itemUOMsMap.get(uomDesc);
@@ -866,6 +881,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			
 		}*/
 		//Changes start for JIRA 2964
+	/*
 		double minFractUOM = 0.00;
     	double maxFractUOM = 0.00;
     	String lowestUOM = "";
@@ -877,6 +893,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		String defaultUOMCode = "";
 		//String orderMultiple = "";
 		defaultShowUOMMap = new HashMap<String,String>();
+		//Start - Code added to fix XNGTP 2964
+		String msapOrderMultipleFlag = "";
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+		if(xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+			msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();	
+		}
+		//End - Code added to fix XNGTP 2964
     	
 		if(itemUOMsMap!=null && itemUOMsMap.keySet()!=null) {
 			
@@ -946,8 +969,29 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			}
 			
 		}
-		defaultShowUOMMap.put(defaultUOMCode, defaultUOM);
+		defaultShowUOMMap.put(defaultUOMCode, defaultUOM);*/
 		//Changes End for JIRA 2964
+		
+		//Start of EB-164
+		defaultShowUOMMap = new HashMap<String,String>();	
+		/*
+		displayItemUOMsMap = XPEDXOrderUtils.getXpedxUOMDescList(customerId, itemID, organizationCode); //Commented for EB-1999 performance issue By Amar*/
+		ArrayList<String> items=new  ArrayList();
+		items.add(itemID);
+		displayItemUOMsMap = XPEDXWCUtils.getXpedxUOMListFromCustomService(items,true).get(itemID);
+		//defaultShowUOMMap = XPEDXOrderUtils.getDefaultShowUOMMap();	
+		defaultShowUOMMap = (Map<String, String>)ServletActionContext.getRequest().getAttribute("defaultShowUOMMap");
+		ServletActionContext.getRequest().removeAttribute("defaultShowUOMMap");
+		if(defaultShowUOMMap == null)
+			defaultShowUOMMap =  new HashMap<String, String>();
+		//itemIdConVUOMMap = XPEDXOrderUtils.getUomsAndConFactors();	
+		itemIdConVUOMMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("uomsAndConFactors");
+		ServletActionContext.getRequest().removeAttribute("uomsAndConFactors");
+		if(itemIdConVUOMMap == null)
+			itemIdConVUOMMap =  new LinkedHashMap<String, String>();
+		//End of EB-164
+		//EB-225 - Getting the customer UOM if exist for a item
+		customerUOM = XPEDXOrderUtils.getStrCustomerUOM();
 		
 	}
 	
@@ -1048,7 +1092,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			Map<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerDivision",DivisionNumber);
-			valueMap.put("/XPXItemcustXref/@CompanyCode",customerCode);
+			//Commented for EB 47 valueMap.put("/XPXItemcustXref/@CompanyCode",customerCode);
 			valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemID);
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", customerLegNo);
 			Element input;
@@ -1086,6 +1130,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		upSellAssociatedItems = new ArrayList();
 		crossSellAssociatedItems = new ArrayList();
         replacementAssociatedItems = new ArrayList();
+        //XB-673 - Changes Start
+        alternateSBCAssociatedItems = new ArrayList();
+        //XB-673 - Changes End
 		prepareXpedxItemAssociationMap();
 	}
 	
@@ -1099,12 +1146,17 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 		ArrayList<String> crossSellItemIDs = new ArrayList<String>();
 		ArrayList<String> upSellItemIDs = new ArrayList<String>();
+		//XB-673- Changes Start
+		ArrayList<String> alternateSBCItemIDs = new ArrayList<String>();
+		//XB-673 Changes End
 		try {
-			if(getItemListElem()== null)
+			if(getItemListElem()== null){
+				//System.out.println(SCXmlUtil.getString(getItemListElem()));
 				relatedItemListElem = prepareAndInvokeMashup("xpedxRelatedItemDetails");
-			else
+			}else
 				relatedItemListElem = getItemListElem();
 			itemAssociationDoc = relatedItemListElem.getOwnerDocument();
+			//System.out.println(SCXmlUtil.getString(itemAssociationDoc));
 			//itemAssociationDoc = XPEDXOrderUtils.getXpedxAssociationlItemDetails(itemList, custID, callingOrgCode, wcContext);
 		} catch (CannotBuildInputException e) {
 			LOG.error("Error getting National Level item association.",e);
@@ -1124,6 +1176,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		if (associationTypeListElem != null) {
 			List<Element> crossSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='CrossSell']");
 			List<Element> upSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='UpSell']");
+			//XB-673 - Changes Start
+			List<Element> alternateSBCElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='Alternative.Y']");
+			//XB-673 - Changes End
 			//Cross sell items
 			for (int j = 0; j < crossSellElements.size(); j++) {
 				Element associationTypeElem = crossSellElements.get(j);
@@ -1165,6 +1220,28 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					}
 				}
 			}//for upsell
+			//For ALternative items
+			//XB-673 - Changes Start
+			for (int k = 0; k < alternateSBCElements.size(); k++) {
+				Element associationTypeElem = alternateSBCElements.get(k);
+				Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+				List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+				if (associationList != null && !associationList.isEmpty()) {
+					Iterator associationIter = associationList.iterator();
+					while (associationIter.hasNext()) {
+						Element association = (Element) associationIter.next();
+						Element associateditemEl = XMLUtilities.getElement(association, "Item");
+						String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+						if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+							itemIDListForGetCompleteItemList.add(curritemid);
+						}
+						if(!alternateSBCItemIDs.contains(curritemid)){
+							alternateSBCItemIDs.add(curritemid);
+						}
+					}
+				}
+			}//for Alternative
+			//XB-673 - Changes End
 		}//if
 
 		//Adding Alternate and Complimentary Items
@@ -1284,6 +1361,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					try {
 						// invoking a different function which will give onyl the entitiled items - 734
 						itemDetailsListDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(itemIDListForGetCompleteItemList, custID, wcContext.getStorefrontId(), wcContext);
+						//System.out.println("ItemListDoc "+SCXmlUtil.getString(itemDetailsListDoc));
 					} catch (Exception e) {
 						LOG.error("Exception while getting item details for associated items",e);
 						return;
@@ -1295,24 +1373,53 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							String curritemID = XMLUtils.getAttributeValue(curritem, "ItemID");
 							if(altItemIds.contains(curritemID)){
 								alternateAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(compItemIds.contains(curritemID)){
 								complimentAssociatedItems.add(curritem);
+								if(upSellItemIDs.contains(curritemID) || altItemIds.contains(curritemID) || upItemIds.contains(curritemID) || alternateSBCItemIDs.contains(curritemID)){
+									upSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(upItemIds.contains(curritemID)){
 								upgradeAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(crossSellItemIDs.contains(curritemID)){
 								crossSellAssociatedItems.add(curritem);
+								if(upSellItemIDs.contains(curritemID) || altItemIds.contains(curritemID) || upItemIds.contains(curritemID) || alternateSBCItemIDs.contains(curritemID)){
+									upSellAssociatedItems.add(curritem);
+								}
 								continue;
 							}
 							if(upSellItemIDs.contains(curritemID)){
 								upSellAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}	
 								continue;
 							}
+							//XB-673 - Changes Start - 
+							/**
+							 * As it need to display under you might also consider section, we need to add under same upSellAssociated 
+							 * items list
+							 */
+							if(alternateSBCItemIDs.contains(curritemID)){
+								upSellAssociatedItems.add(curritem);
+								if(crossSellItemIDs.contains(curritemID)||compItemIds.contains(curritemID)){
+									crossSellAssociatedItems.add(curritem);
+								}
+								continue;
+							}
+							//XB-673 - Changes End -
+							
 					        if(repItemIds.contains(curritemID))
 					        {
 						        replacementAssociatedItems.add(curritem);
@@ -1372,7 +1479,16 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public String getItemCost() {
 		return itemCost;
 	}
+	// EB-1158
+    private int myItemsListSize = 0;
 
+	public int getMyItemsListSize() {
+		return myItemsListSize;
+	}
+
+	public void setMyItemsListSize(int myItemsListSize) {
+		this.myItemsListSize = myItemsListSize;
+	}
 
 	public void setItemCost(String itemCost) {
 		this.itemCost = itemCost;
@@ -1921,12 +2037,16 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	List replacementAssociatedItems = null;
 	ArrayList upSellAssociatedItems = null;
 	ArrayList crossSellAssociatedItems = null;
+	//XB-673 - Changes Start
+	ArrayList alternateSBCAssociatedItems = null;
+	//XB-673 - Changes End
 	List displayUOMs = new ArrayList();
 	List displayPriceForUoms = new ArrayList();
 	List bracketsPricingList = null;
 	boolean showSampleRequest = false;
-	protected Map itemUOMsMap;
-	protected Map displayItemUOMsMap;
+	protected Map<String, String> itemUOMsMap;
+	
+	protected Map <String, String> displayItemUOMsMap;
 	protected Map itemOrderMultipleMap;
 	String customerBranch = null;
 	String customerLegNo = null;
@@ -1936,6 +2056,27 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	String custPartNumber = null;
 	String requestedUOM = null;
 	String requestedDefaultUOM = null;
+	//added for EB 47
+	private String extnMfgItemFlag;
+	private String extnCustomerItemFlag;
+	public String getExtnMfgItemFlag() {
+		return extnMfgItemFlag;
+	}
+
+	public void setExtnMfgItemFlag(String extnMfgItemFlag) {
+		this.extnMfgItemFlag = extnMfgItemFlag;
+	}
+
+	public String getExtnCustomerItemFlag() {
+		return extnCustomerItemFlag;
+	}
+
+	public void setExtnCustomerItemFlag(String extnCustomerItemFlag) {
+		this.extnCustomerItemFlag = extnCustomerItemFlag;
+	}
+	//End of EB 47
+
+
 	//added for jira 2422
 	private String goBackFlag;
 
@@ -2028,7 +2169,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		alternateAssociatedItems.add("ghi");
 		crossSellAssociatedItems.add("kkk");
 		complimentAssociatedItems.add("zzz");*/
-		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) || (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0)){
+		//XB-673 Changes Start
+		if((upSellAssociatedItems != null && upSellAssociatedItems.size() > 0) || (upgradeAssociatedItems != null && upgradeAssociatedItems.size() > 0) 
+				|| (alternateAssociatedItems != null && alternateAssociatedItems.size() > 0) || (alternateSBCAssociatedItems != null && alternateSBCAssociatedItems.size() > 0)){
+			//XB-673 Changes End
 			uMightFlag=true;
 			if(upgradeAssociatedItems.size() > 0){
 				intpromoheight = Integer.valueOf(promoheight);
@@ -2045,6 +2189,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 				intpromoheight = intpromoheight+alternateAssociatedItems.size();
 				promoheight=String.valueOf(intpromoheight);
 			}
+			//XB-673 Changes Start
+			if(alternateSBCAssociatedItems.size() > 0){
+				intpromoheight = Integer.valueOf(promoheight);
+				intpromoheight = intpromoheight+alternateSBCAssociatedItems.size();
+				promoheight=String.valueOf(intpromoheight);
+			}
+			//XB-673 Changes End
 		}
 		if((crossSellAssociatedItems != null && crossSellAssociatedItems.size() > 0) || (complimentAssociatedItems != null && complimentAssociatedItems.size() > 0)){
 			populareAccFlag=true;
@@ -2123,6 +2274,29 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	private String ExtnIsCustUOMExcl = "";
 	private String pnaRequestedQty;
 	private String isOrderData ="false";
+	private String qtyTextBox;
+
+	//EB-225 - CustomerUOM if exist for a item in Item detail page, to set as hidden field in Item detail page
+	private String customerUOM ="";
+	//EB-225 - if requestedUOM is same as customer UOM for pna of a item in Item detail page, this field will have the value, else it will be empty
+	private String pnaRequestedCustomerUOM = "";
+	
+	public String getPnaRequestedCustomerUOM() {
+		return pnaRequestedCustomerUOM;
+	}
+
+	public void setPnaRequestedCustomerUOM(String pnaRequestedCustomerUOM) {
+		this.pnaRequestedCustomerUOM = pnaRequestedCustomerUOM;
+	}
+
+	public String getCustomerUOM() {
+		return customerUOM;
+	}
+
+	public void setCustomerUOM(String customerUOM) {
+		this.customerUOM = customerUOM;
+	}
+
 	public String getIsOrderData() {
 		return isOrderData;
 	}
@@ -2244,4 +2418,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	public void setProdMweight(String prodMweight) {
 		this.prodMweight = prodMweight;
 	}
+	
+	public String getQtyTextBox() {
+		return qtyTextBox;
+	}
+
+	public void setQtyTextBox(String qtyTextBox) {
+		this.qtyTextBox = qtyTextBox;
+	}
+
 }

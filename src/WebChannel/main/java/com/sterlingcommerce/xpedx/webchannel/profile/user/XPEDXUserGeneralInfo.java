@@ -4,10 +4,12 @@
 
 package com.sterlingcommerce.xpedx.webchannel.profile.user;
 
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -25,6 +27,7 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.wcaas.ResourceAccessAuthorizer;
@@ -40,25 +43,30 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXAlphanumericSorting;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientCreationException;
+import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.ui.backend.util.Util;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 
 /* ENDS - Customer-User Profile Changes - adsouza */
 
 /**
  * @author vsriram
- * 
+ *
  */
 public class XPEDXUserGeneralInfo extends WCMashupAction
 
 {
 
 	/**
-     * 
+     *
      */
 	private static final long serialVersionUID = 7756731378709035664L;
 
@@ -153,14 +161,31 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	protected String alternateApprover = "";
 	protected List<String> availableApproversList = new ArrayList<String>();
 	protected String lastModifyUserId = "";
+	private String lastModifiedBy = "";
 	protected String lastModifiedDate = "";
 	protected String userCreatedDate = "";
-	protected String contactFirstName = "";
-	protected String contactLastName = "";
 	protected Map<String, String> countriesMap = new HashMap<String, String>();
 	private String currentSelTab;
 	private boolean success;
 	private boolean saveAddUser;
+	public String customerClass = "";
+	private String networkId;
+
+	public String getNetworkId() {
+		return networkId;
+	}
+
+	public void setNetworkId(String networkId) {
+		this.networkId = networkId;
+	}
+
+	public String getCustomerClass() {
+		return customerClass;
+	}
+
+	public void setCustomerClass(String customerClass) {
+		this.customerClass = customerClass;
+	}
 
 	public boolean isSaveAddUser() {
 		return saveAddUser;
@@ -225,7 +250,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.opensymphony.xwork2.ActionSupport#execute()
 	 */
 
@@ -336,7 +361,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		try {
 			putAllAvailableAndAuthorizeLocationTOCache(wcContext);
 		} catch (Exception e) {
-			log.error("Exception while Setting Authorized and available location in to cache");
+			log.error("Exception while Setting Authorized and available location in to cache", e);
 			// XPEDXWCUtils.logExceptionIntoCent(e);
 		}
 		// setQuickLinksForUser(); Performance Fix - Removed a mashup call for
@@ -653,7 +678,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	/**
 	 * Gets the Buyer User General Information, Buyer user Addresses, Buyer User
 	 * Phonebook, Buyer User Admin List
-	 * 
+	 *
 	 * @return the action restult
 	 */
 	public String getUserDetails() {
@@ -692,6 +717,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			estimator = extnElem.getAttribute("ExtnEstimator");
 			punchoutUsers = extnElem.getAttribute("ExtnPunchOutUser");
 			prefCategory = extnElem.getAttribute("ExtnPrefCatalog");
+			String isSalesRep = extnElem.getAttribute("ExtnIsSalesRep");
 
 			if (!customerContactId
 					.equals(getWCContext().getCustomerContactId())) {
@@ -727,6 +753,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
 						.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 				xpedxCustomerContactInfoBean.setAddEmailID(addnlEmailAddrs);
+				xpedxCustomerContactInfoBean.setExtnIsSalesRep(isSalesRep);
 				XPEDXWCUtils.setObectInCache(
 						XPEDXConstants.XPEDX_Customer_Contact_Info_Bean,
 						xpedxCustomerContactInfoBean);
@@ -787,8 +814,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 					.getAttribute("AggregateStatus")));
 			setBuyerOrgCode(this.customer.getAttribute("BuyerOrganizationCode"));
 			if (YFCCommon.isVoid(this.buyerOrgCode)) {
-				log.error("No buyer organization information associated with customer-contact : "
-						+ customerContactId);
+				log.error("No buyer organization information associated with customer-contact : " + customerContactId);
 				return ERROR;
 			}
 			if (!(YFCCommon.isVoid(buyerOrgCode))) {
@@ -857,8 +883,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			 * (XPEDXWCUtils.getHashMapFromList(assignedCustomers)); }
 			 */
 		} catch (Exception e) {
-			log.error("Error in getting Buyer User information for Customer Contact : "
-					+ customerContactId + "," + e.getMessage() + e.getCause());
+			log.error("Error in getting Buyer User information for Customer Contact : " + customerContactId, e);
 		}
 		setUserFlags();
 		setCustContactAddtnlAddressToDisplay();
@@ -892,8 +917,11 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * @param customerContact
+	 * @throws YIFClientCreationException
+	 * @throws RemoteException
+	 * @throws YFSException
 	 */
-	private void setSpendingLimitAndApproversForUser(NodeList customerContact) {
+	private void setSpendingLimitAndApproversForUser(NodeList customerContact) throws YFSException, RemoteException, YIFClientCreationException {
 		/**
 		 * 2. get the ApproverProxyUserId = This is the user who can
 		 * approve/reject hold when the user is unavailable 3. get the
@@ -940,44 +968,90 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		}
 	}
 
-	private void setLastModifiedUser() {
-		UtilBean utilBean = new UtilBean();
-		Element contactElement = getContact();
-		String modifyUserIdBy = contactElement.getAttribute("Modifyuserid");
-		String loginID = contactElement.getAttribute("CustomerContactID");
-		if (getWCContext().getCustomerContactId().equals(modifyUserIdBy)) {
-			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils
-					.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+	/**
+	 * Populates the properties lastModifiedBy, lastModifiedDate, and userCreatedDate.
+	 *
+	 * @throws YFSException
+	 * @throws RemoteException
+	 * @throws YIFClientCreationException
+	 */
+	private void setLastModifiedUser() throws YFSException, RemoteException, YIFClientCreationException {
+		Element contactElem = getContact();
+		Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 
-			setContactFirstName(xpedxCustomerContactInfoBean.getFirstName());
-			setContactLastName(xpedxCustomerContactInfoBean.getLastName());
-		} else if (loginID != null && loginID.equals(modifyUserIdBy)) {
-			setContactFirstName(contactElement.getAttribute("FirstName"));
-			setContactLastName(contactElement.getAttribute("LastName"));
+		LastModifiedInfo lmi = getMostRecentlyEditedElement();
+
+		if (lmi.getLoginid().equals(userElem.getAttribute("Loginid"))) {
+			// we already have this user's name in the response (avoids an extra API call)
+			setLastModifiedBy(userElem.getAttribute("Username"));
 		} else {
-			ArrayList<Element> customerContact = new ArrayList<Element>();
-			customerContact.add(contactElement);
-			Map<String, String> modifiedUserMap = XPEDXWCUtils
-					.createModifyUserNameMap(customerContact);
-			String modifyFirstLastName = modifiedUserMap.get(modifyUserIdBy);
-			if (modifyFirstLastName != null) {
-				String name[] = modifyFirstLastName.split(", ");
-				if (modifyFirstLastName != null
-						&& modifyFirstLastName.length() > 1)
-					setContactFirstName(name[1]);
-				if (modifyFirstLastName != null
-						&& modifyFirstLastName.length() > 1)
-					setContactLastName(name[0]);
-			}
+			setLastModifiedBy(getUsernameForLoginid(lmi.getLoginid()));
 		}
 
-		lastModifiedDate = contactElement.getAttribute("Modifyts");
-		setLastModifiedDate(utilBean.formatDate(lastModifiedDate, wcContext,
-				null, DATE_FORMAT_ON_USER_PROFILE));
+		UtilBean utilBean = new UtilBean();
 
-		userCreatedDate = contactElement.getAttribute("Createts");
-		setUserCreatedDate(utilBean.formatDate(userCreatedDate, wcContext,
-				null, DATE_FORMAT_ON_USER_PROFILE));
+		setLastModifiedDate(utilBean.formatDate(lmi.getDate(), wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
+
+		// note that we always use the created date from the contact
+		setUserCreatedDate(utilBean.formatDate(contactElem.getAttribute("Createts"), wcContext, null, DATE_FORMAT_ON_USER_PROFILE));
+	}
+
+	/**
+	 * The UI is editing multiple elements at a time, so we must check all relevant Modifyts values in the CustomerContact element:
+	 * <ul>
+	 *  <li>&lt;CustomerContact Modifyts Modifyuserid&gt; (/CustomerContact)</li>
+	 *  <li>&lt;User Modifyts Modifyuserid&gt; (/CustomerContact/User)</li>
+	 *  <li>&lt;PersonInfo Modifyts Modifyuserid&gt; (/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo)</li>
+	 * </ul>
+	 *
+	 * @return Returns the most recent timestamp
+	 */
+	private LastModifiedInfo getMostRecentlyEditedElement() {
+		Element contactElem = getContact();
+		Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
+		NodeList personInfoElems = contactElem.getElementsByTagName("PersonInfo"); // path to these elements: CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo
+
+		List<LastModifiedInfo> timestamps = new ArrayList<LastModifiedInfo>();
+		timestamps.add(new LastModifiedInfo(contactElem.getAttribute("Modifyuserid"), contactElem.getAttribute("Modifyts")));
+		timestamps.add(new LastModifiedInfo(userElem.getAttribute("Modifyuserid"), userElem.getAttribute("Modifyts")));
+		for (int i = 0; i < personInfoElems.getLength(); i++) {
+			Element personInfoElem = (Element) personInfoElems.item(i);
+			timestamps.add(new LastModifiedInfo(personInfoElem.getAttribute("Modifyuserid"), personInfoElem.getAttribute("Modifyts")));
+		}
+
+		return Collections.max(timestamps);
+	}
+
+	/**
+	 * Performs getUserList API call for the given loginid.
+	 *
+	 * @param loginid The &lt;User Loginid&gt; attribute.
+	 * @return Returns The &lt;User Username&gt; attribute. Or null if not found.
+	 * @throws YIFClientCreationException
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private String getUsernameForLoginid(String loginid) throws YIFClientCreationException, YFSException, RemoteException {
+		if (loginid == null) {
+			// must prevent call to getUserList without this attribute, which would fetch all users
+			return null;
+		}
+
+		YFSEnvironment env = (YFSEnvironment) getWCContext().getSCUIContext().getTransactionContext(true).getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+
+		Element inputGetUserList = SCXmlUtil.createDocument("User").getDocumentElement();
+		inputGetUserList.setAttribute("Loginid", loginid);
+
+		Document outputGetUserList = api.invoke(env, "getUserList", inputGetUserList.getOwnerDocument());
+
+		NodeList userElems = outputGetUserList.getElementsByTagName("User");
+		if (userElems == null || userElems.getLength() == 0) {
+			return null;
+		}
+
+		Element userElem = (Element) userElems.item(0);
+		return userElem.getAttribute("Username");
 	}
 
 	/**
@@ -1054,7 +1128,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * This method fetches all the available currencies
-	 * 
+	 *
 	 * @param spendingCurrency
 	 */
 	// private void addAvailbleCurrencies(String spendingCurrency) {
@@ -1126,7 +1200,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Secret Question List of the Current Org/Enterprise
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1161,7 +1235,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Secret Question of the user
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1181,7 +1255,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Address IDs
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1208,7 +1282,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to set the Address IDs
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1244,7 +1318,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Method to get element for single Customer Contact
-	 * 
+	 *
 	 * @param
 	 * @return
 	 */
@@ -1265,7 +1339,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 					contact = contactElem;
 			}
 		} catch (Exception e) {
-			log.error("Error in getting Single contact : ", e.getCause());
+			log.error("Error in getting Single contact", e);
 		}
 		return contact;
 	}
@@ -1292,7 +1366,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * This method sets the effective default/other address list
-	 * 
+	 *
 	 */
 	private void setEffectiveContactDefaultAddress() {
 
@@ -1373,7 +1447,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			}
 
 		} catch (Exception e) {
-			log.error("Error in setting address List : ", e.getCause());
+			log.error("Error in setting address List", e);
 		}
 		defaultAddressList.addAll(defaultContactAddressList);
 		defaultAddressList.addAll(defaultCustomerAddressList);
@@ -1425,7 +1499,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			}
 
 		} catch (Exception e) {
-			log.error("Error in getting address list : ", e.getCause());
+			log.error("Error in getting address list", e);
 		}
 		otherAddressList.addAll(otherContactAddressList);
 		otherAddressList.addAll(otherCustomerAddressList);
@@ -1481,7 +1555,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Returns the Customer member variable
-	 * 
+	 *
 	 * @return customer element
 	 */
 	public Element getCustomer() {
@@ -1490,7 +1564,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the customer element
-	 * 
+	 *
 	 * @param contact
 	 */
 	public void setCustomer(Element contact) {
@@ -1506,7 +1580,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the user element
-	 * 
+	 *
 	 * @param user
 	 */
 	public void setUser(Element user) {
@@ -1522,7 +1596,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the user password to the member variable
-	 * 
+	 *
 	 * @param userPassword
 	 */
 	public void setUserPassword(String userPassword) {
@@ -1538,7 +1612,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the Confirm Password field to the member variable
-	 * 
+	 *
 	 * @param confirmPassword
 	 */
 	public void setConfirmPassword(String confirmPassword) {
@@ -1546,7 +1620,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the locale member variable
 	 */
 	public Element getLoc() {
@@ -1555,7 +1629,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the locale value to the member variable
-	 * 
+	 *
 	 * @param locale
 	 */
 	public void setLoc(Element locale) {
@@ -1571,7 +1645,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the UserID
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void setUserId(String userId) {
@@ -1602,7 +1676,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the Organization code
-	 * 
+	 *
 	 * @param organizationCode
 	 */
 	public void setOrganizationCode(String orgCode) {
@@ -1618,7 +1692,7 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/**
 	 * Sets the Customer Admin Parameter
-	 * 
+	 *
 	 * @param customerAdmin
 	 */
 	public void setCustomerAdmin(Element customerAdmin) {
@@ -2076,31 +2150,31 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 
 	/*
 	 * public Map getAddnlEmailAddrList() {
-	 * 
+	 *
 	 * Element ccElem = XMLUtilities.getChildElementByName( customerContactList,
 	 * "CustomerContact"); Element extnElem =
 	 * XMLUtilities.getChildElementByName(ccElem, "Extn"); String emailList =
 	 * SCXmlUtils.getAttribute(extnElem, "ExtnAddnlEmailAddrs");
-	 * 
+	 *
 	 * String[] emailListSplit = emailList.split(","); for (int i = 0; i <
 	 * emailListSplit.length; i++) { if(emailListSplit[i]!= null &&
 	 * emailListSplit[i].trim().length()>0)
 	 * AddnlEmailAddrList.put(emailListSplit[i], emailListSplit[i]); }
-	 * 
+	 *
 	 * return AddnlEmailAddrList; }
-	 * 
+	 *
 	 * public Map getPOList() {
-	 * 
+	 *
 	 * Element ccElem = XMLUtilities.getChildElementByName( customerContactList,
 	 * "CustomerContact"); Element extnElem =
 	 * XMLUtilities.getChildElementByName(ccElem, "Extn"); String poList =
 	 * SCXmlUtils.getAttribute(extnElem, "ExtnPOList");
-	 * 
+	 *
 	 * String[] poListSplit = poList.split(","); for (int i = 0; i <
 	 * poListSplit.length; i++) { if(poListSplit[i]!= null &&
 	 * poListSplit[i].trim().length()>0) POList.put(poListSplit[i],
 	 * poListSplit[i]); }
-	 * 
+	 *
 	 * return POList; }
 	 */
 
@@ -2283,8 +2357,23 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		Element ccElem = XMLUtilities.getChildElementByName(
 				customerContactList, "CustomerContact");
 		Element extnElem = XMLUtilities.getChildElementByName(ccElem, "Extn");
-		String defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,
-				"ExtnB2BCatalogView");
+		//String defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,"ExtnB2BCatalogView");
+		String defaultB2bCatalogView="";
+		customerClass = (String) wcContext.getSCUIContext().getSession().getAttribute(XPEDXConstants.CUST_PREF_CATEGORY);
+		if(isSaveAddUser()){
+			if(customerClass.equalsIgnoreCase("CA")){
+				defaultB2bCatalogView = Integer
+				.toString(XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW);
+			}
+			else{
+				defaultB2bCatalogView = Integer
+				.toString(XPEDXConstants.XPEDX_B2B_FULL_VIEW);
+			}
+
+		}
+		else{
+			defaultB2bCatalogView = SCXmlUtil.getAttribute(extnElem,"ExtnB2BCatalogView");
+		}
 		if (YFCCommon.isVoid(defaultB2bCatalogView.trim())) {
 			defaultB2bCatalogView = Integer
 					.toString(XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW);
@@ -2483,34 +2572,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		this.countriesMap = countriesMap;
 	}
 
-	/**
-	 * @return the contactFirstName
-	 */
-	public String getContactFirstName() {
-		return contactFirstName;
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
 	}
 
-	/**
-	 * @param contactFirstName
-	 *            the contactFirstName to set
-	 */
-	public void setContactFirstName(String contactFirstName) {
-		this.contactFirstName = contactFirstName;
-	}
-
-	/**
-	 * @return the contactLastName
-	 */
-	public String getContactLastName() {
-		return contactLastName;
-	}
-
-	/**
-	 * @param contactLastName
-	 *            the contactLastName to set
-	 */
-	public void setContactLastName(String contactLastName) {
-		this.contactLastName = contactLastName;
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
 	}
 
 	/**
@@ -2618,4 +2685,25 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		this.orderFlagForApproval = orderFlagForApproval;
 	}
 	/** end of Code for XB 226 **/
+
+	private static class LastModifiedInfo implements Comparable<LastModifiedInfo> {
+		private final String loginid;
+		private final String date;
+		public LastModifiedInfo(String loginid, String date) {
+			super();
+			this.loginid = loginid;
+			this.date = date;
+		}
+		public String getLoginid() {
+			return loginid;
+		}
+		public String getDate() {
+			return date;
+		}
+		@Override
+		public int compareTo(LastModifiedInfo that) {
+			return this.getDate().compareTo(that.getDate());
+		}
+	}
+
 }

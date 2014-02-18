@@ -1,1 +1,11 @@
-<Customer BuyerOrganizationCode='' CanConsumeSupplementalCapacity='' CustomerID='' CustomerKey='' CustomerType='' OrganizationCode='' SlotPreferenceType='' CustomerLevel='' RelationshipType='' />
+<CustomerList>
+<Customer CustomerKey='' CustomerID='' OrganizationCode='' Status='' CustomerLevel=''>
+<Extn ExtnCustomerStoreNumber='' ExtnSuffixType='' ExtnShipFromBranch='' ExtnCustomerDivision='' ExtnLegacyCustNumber='' ExtnBillToSuffix='' ExtnShipToSuffix=''/>
+<BuyerOrganization OrganizationCode='' OrganizationName=''/>
+ <CustomerAdditionalAddressList>
+ <CustomerAdditionalAddress CustomerAdditionalAddressKey=''>
+	 <PersonInfo AddressLine1='' AddressLine2='' AddressLine3='' AddressLine4='' AddressLine5='' AddressLine6='' City='' Country='' State='' ZipCode=''/>
+ </CustomerAdditionalAddress>
+ </CustomerAdditionalAddressList>
+</Customer>
+</CustomerList>

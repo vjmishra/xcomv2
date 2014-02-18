@@ -5,12 +5,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.xpedx.nextgen.common.util.XPXEmailUtil;
 import com.yantra.yfs.core.YFSSystem;
@@ -67,7 +72,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		if (storeFrontId != null && storeFrontId.length() > 0) {
 			String userName = YFSSystem.getProperty("fromAddress.username");
 			String suffix = YFSSystem.getProperty("fromAddress.suffix");
-			sb.append(userName).append("@").append(storeFrontId).append(suffix);
+			if("Saalfeld".equalsIgnoreCase(storeFrontId)){
+					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+			}else{
+				sb.append(userName).append("@").append(storeFrontId).append(suffix);
+			}
+			
 			// String marketingCC = "marketing";
 			// suffix = YFSSystem.getProperty("fromAddress.suffix");
 			// sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
@@ -105,6 +115,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		setMailSubject(XPXEmailUtil.REGISTRATION_REQUEST_NOTIFICATION);
 		// setMailSubject(storeFrontId+".com Registration Request Notification");
 		setTemplatePath("/global/template/email/newUser_email_CSR.xsl");
+		ISCUITransactionContext scuiTransactionContext = null;
+		SCUIContext wSCUIContext = null;
 		try {
 			// JIRA 3261 Start-Code Commentd as per JIRA Requirement
 			/*
@@ -128,7 +140,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			/* XBT-73 : Begin - Sending email through Java Mail API now */
 			Set mashupId = new HashSet();
 			mashupId.add("XPEDXSendNewUserInfoToCSR");
-
+			IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+            wSCUIContext = context.getSCUIContext();
 			Map mashupInputs = prepareMashupInputs(mashupId);
 			Element inputXmlFromMashup = (Element) mashupInputs
 					.get("XPEDXSendNewUserInfoToCSR");
@@ -139,13 +152,21 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			String emailXML = SCXmlUtil.getString(newUserElement);
 			String emailType = XPXEmailUtil.NEW_USER_REGISTRATION_EMAIL_TYPE;
 			String emailFrom = getMailFromAddress();
-			ISCUITransactionContext scuiTransactionContext = getWCContext()
+			scuiTransactionContext = getWCContext()
 					.getSCUIContext().getTransactionContext(true);
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			String brand=newUserElement.getAttribute("Brand");
+			// EB- 2048-As a Saalfeld product owner, I want to view the Saalfeld Registration Email with correct Saalfeld branding
+			if("Saalfeld".equalsIgnoreCase(brand)){
+				emailFrom = "ebusiness@Saalfeldredistribution.com";
+				_subjectLine=brand.concat("redistribution.com").concat(" ").concat(getMailSubject());
+			}else{
+				_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
+			}
+				
 			//StringBuffer emailSubject = new StringBuffer(brand.concat(" ").concat(getMailSubject().toString()));
-			_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
+			
 			String businessIdentifier=newUserElement.getAttribute("ToEmailId");
 			    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
 			    		_subjectLine, emailFrom, storeFrontId,businessIdentifier);
@@ -156,6 +177,12 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			return ERROR;
 			// TODO: handle exception
 		}
+		finally {
+			if (scuiTransactionContext != null) {
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+		}
+	}
 		return SUCCESS;
 	}
 

@@ -13,6 +13,11 @@
   	  
   	<s:if test="(#isMergedCSSJS == null && #isMergedCSSJS != 'true')"> 
 		<!-- BEGIN Styles -->
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		<!--[if IE]>
+			<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		<![endif]-->
+		
 		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/change-ship-to<s:property value='#wcUtil.xpedxBuildKey' />.css" />
  		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 		<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/cluetip/jquery.cluetip<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
@@ -32,11 +37,160 @@
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/swc<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+		
 		<!-- END JS -->
 	</s:if>
 	<s:else>
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		<!--[if IE]>
+			<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		<![endif]-->
+		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
+	
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	
+	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
+	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
+		<s:param name="newOP">true</s:param>
+		<s:param name="selectedHeaderTab">CatalogTab</s:param>
+	</s:url>
+	<script type="text/javascript">
+		
+		$.widget("custom.catcomplete", $.ui.autocomplete, {
+			_renderMenu: function(ul, items) {
+				var self = this,
+				currentCategory = "";
+				
+				// TODO render a special first item that submits the normal search form
+				var normalSearchItem = {
+						isNormalSearch: true
+				};
+				self._renderItem(ul, normalSearchItem);
+
+				$.each(items, function(index, item) {
+					if (item.cat1 != currentCategory) {
+						ul.append("<li class='ui-autocomplete-group'>" + item.cat1 + "</li>");
+						currentCategory = item.cat1;
+					}
+					self._renderItem(ul, item);
+				});
+			}
+		});
+		
+		// enable autocomplete for new search
+		$(document).ready(function() {
+			// autocomplete console.log('BEGIN doc-ready');
+			
+			var acSource = function(request, response) {
+				// autocomplete console.log('BEGIN acSource');
+				
+				$.ajax({
+					type: 'POST'
+					,url: '<s:property value="#autocompleteURL" escape="false" />'
+					,dataType: 'json'
+					,data: { searchTerm: request.term.trim() }
+					,success: function(data) {
+						// autocomplete console.log('BEGIN success');
+						// autocomplete console.log('data = ' , data);
+						if (data && data.resultStatus && data.resultStatus == 'OK') {
+							response(data.autocompleteMarketingGroups);
+						} else {
+							// eg, TOO_MANY_RESULTS
+							response({});
+						}
+					}
+					,error: function(resp, textStatus, xhr) {
+						// autocomplete console.log('BEGIN error');
+						// autocomplete console.log('resp = ' , resp);
+						// autocomplete console.log('textStatus = ' , textStatus);
+						// autocomplete console.log('xhr = ' , xhr);
+						response({});
+					}
+					,complete: function() {
+						// autocomplete console.log('BEGIN complete');
+					}
+				});
+			};
+			
+			var acSelect = function(event, ui) {
+				// autocomplete console.log('BEGIN acSelect');
+				// autocomplete console.log('ui.item = ' , ui.item);
+				
+				if (ui.item.isNormalSearch) {
+					$('#newSearch').submit();
+					
+				} else {
+					var url = '<s:property value="#newSearchURL" escape="false" />';
+					url += '&searchTerm='; // necessary for bookmarkability of search result page
+					url += '&cname=' + encodeURIComponent(ui.item.name);
+					url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
+					url += '&path=' + encodeURIComponent('/');
+					url += '&rememberNewSearchText=' + encodeURIComponent($('#newSearch_searchTerm').val());
+					
+					// autocomplete console.log('posting to url = ' , url);
+					var waitMsg = Ext.Msg.wait("Processing...");
+					myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+					myMask.show();
+					
+					window.location.href = url;
+				}
+			};
+			
+			var acOptions = {
+					minLength: 3
+					,source: acSource
+					,select: acSelect
+					,open: function() {
+						//var $main = $('#main');
+						var width;
+						try {
+							width = $('#main').offset().left + $('#main').width() - $('#newSearch_searchTerm').offset().left - 5
+						} catch (error) {
+							width = 623;
+						}
+						$('.ui-autocomplete').width(width);
+					}
+			};
+			
+			$('.ui-autocomplete-menu-item').live('mouseenter', function(event) { $(this).addClass('ui-state-hover'); });
+			$('.ui-autocomplete-menu-item').live('mouseleave', function(event) { $(this).removeClass('ui-state-hover'); });
+			
+			$('#newSearch_searchTerm').catcomplete(acOptions)
+			.data('catcomplete')._renderItem = function(ul, item) {
+				// autocomplete console.log('----------');
+				var searchTerm = $('#newSearch_searchTerm').val().trim();
+				// autocomplete console.log('searchTerm = ' , searchTerm);
+				
+				if (item.isNormalSearch) {
+					var label = 'Click here to search entire catalog for <span class="ui-autocomplete-highlight-match">' + searchTerm + '</span>';
+					return $('<li class="ui-autocomplete-menu-item ui-autocomplete-normal-search-item" role="menuitem"></li>')
+					.data('item.autocomplete', item)
+					.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
+					.appendTo(ul);
+					
+				} else {
+					var tokens = searchTerm.split(/\s+/);
+					
+					// it's important to replace all matches simultaneously, since each replacement modifies the label (adds markup)
+					var label = item.path;
+					var regexMatchHighlight = new RegExp('(' + tokens.join('|') + ')', 'ig');
+					label = label.replace(regexMatchHighlight, '<span class="ui-autocomplete-highlight-match">$&</span>');
+					// autocomplete console.log('label = ' , label);
+					
+					return $('<li class="ui-autocomplete-menu-item" role="menuitem"></li>')
+					.data('item.autocomplete', item)
+					.append('<a class="ui-corner-all" tabindex="-1">' + label + '</a>')
+					.appendTo(ul);
+				}
+			}
+			;
+		});
+	</script>
+
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
 	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
@@ -47,7 +201,9 @@
 <s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
 </s:url>
 	<s:url id="ValidatePasswordURL" action="xpedxPasswordValidation"/>
-	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>	
+	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>
+	<s:url id="orderdetailsURL" namespace="/order" action="orderDetail"/>
+	<s:hidden id='orderdetailsURLId' value='%{#orderdetailsURL}' />	
 <script type="text/javascript">
 
 function savePassword(){
@@ -365,7 +521,7 @@ var selectedShipCustomer = null;
         	   selectSavedCustomers = true;
            }
     	   showRoot = null;   	   
-           <s:url id='getShareList' namespace='/xpedx/myItems' action='XPEDXMyItemsDetailsGetShareList'></s:url> 
+           <s:url id='getShareList' namespace='/myItems' action='XPEDXMyItemsDetailsGetShareList'></s:url> 
            if (showRoot == null){ showRoot = false; }           
            var isCustomerSelected = false;
            //Replace all '-' with '_'
@@ -628,7 +784,7 @@ var selectedShipCustomer = null;
 		clearTheArrays();// clearing the arrays
         //Removed Submit the data via ajax       
         //Init vars
-        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareList' namespace="/xpedx/myItems" escapeAmp="false" />       
+        <s:url id='XPEDXMyItemsDetailsChangeShareListURL' includeParams='none' action='MyItemsDetailsChangeShareList' namespace="/myItems" escapeAmp="false" />       
         var url = "<s:property value='#XPEDXMyItemsDetailsChangeShareListURL'/>";
         url = ReplaceAll(url,"&amp;",'&');        
         //Execute the call
@@ -784,6 +940,8 @@ var selectedShipCustomer = null;
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='xpedxutil' />    
 <s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 <s:set name='_action' value='[0]' />
+<s:set name="editOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:hidden id='editOrderHeaderKey' value='%{#editOrderHeaderKey}' />
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 <s:set name="xutil" value="#_action.getXMLUtils()"/>
@@ -801,6 +959,8 @@ var selectedShipCustomer = null;
 <s:url id="userListURL" action="xpedxGetUserList" namespace="/profile/user" />
 <s:url id='targetURL' namespace='/common'
 	action='xpedxGetAssignedCustomers' />
+<s:set name="isDefaultShipToSuspended" value="#_action.isDefaultShipToSuspended()"/>
+<s:url id='targetURLForDefault' namespace='/common' action='xpedxGetAssignedCustomersForDefaultShipTo' />
 <s:url id='xpedxHeaderUrl' action='xpedxHeader' namespace="/common" >
         <s:param name='shipToBanner' value="%{'true'}" />
 </s:url>
@@ -818,11 +978,11 @@ var selectedShipCustomer = null;
 	action='xpedxSearchAssignedCustomersForReporting' />	
 <s:url id='shipToSearchForUserProfile' namespace='/common'
 	action='xpedxSearchAssignedCustomersForUserProfile' />
-<s:url id='showLocationsDivForReportingSearch' namespace='/xpedx/services'
+<s:url id='showLocationsDivForReportingSearch' namespace='/services'
 	action='xpedxGetAssignedCustomersForReporting' />
 			
 <s:url id='xpedxManageOtherProfilesURL' namespace='/profile/user'
-	action='xpedxManageOtherProfiles' />
+	action='MyManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
 
@@ -972,6 +1132,9 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
     	Ext.Ajax.request({
             url :url,
+            params: {
+            	status: "30"
+            },
             method: 'POST',
             success: function (response, request){
 			if(response.responseText.indexOf('Search Catalog...')!=-1 || response.responseText.indexOf('undefined')!=-1 || response.responseText == undefined){
@@ -998,6 +1161,9 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         x.innerHTML = "Loading data... please wait!";
     	Ext.Ajax.request({
             url :url,
+            params: {
+            	isRequestedPage:"XPEDXOrderListPage"
+            },
             method: 'POST',
             success: function (response, request){
 	        	document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
@@ -1312,16 +1478,16 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
                     if(document.getElementById("selectedTab")!=null){
                     	selectedTab = document.getElementById("selectedTab").value;
                     }
-                    if(pathname=="/swc/profile/user/xpedxUserProfile.action" && selectedTab=="1")
+                    if(pathname=="/swc/profile/user/MyUserProfile.action" && selectedTab=="1")
                     {
 	                    var storeFrontId = '<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>';
 	                    var customerContactId = document.getElementById("customerContactId").value;
 	                    var customerId = document.getElementById("customerId").value;
 	                    var selectedTab=document.getElementById("selectedTab").value;
 	                    var pathname=window.location.pathname;
-	                    window.location.href="/swc/profile/user/xpedxUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y";;
+	                    window.location.href="/swc/profile/user/MyUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y";;
                     }
-                    else if(pathname=="/swc/profile/user/xpedxUserProfile.action" && checkboxChecked == true)
+                    else if(pathname=="/swc/profile/user/MyUserProfile.action" && checkboxChecked == true)
                     {
                     	var storeFrontId = '<s:property value="%{#_action.getWCContext().getStorefrontId()}"/>';
  	                    var customerContactId = document.getElementById("customerContactId").value;
@@ -1329,11 +1495,11 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
  	                    var selectedTab=document.getElementById("selectedTab").value;
  	                    var pathname=window.location.pathname;
  	                    var success = true;
- 	                    window.location.href="/swc/profile/user/xpedxUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y"+ "&success="+ success;;	
+ 	                    window.location.href="/swc/profile/user/MyUserProfile.action?sfId=" + storeFrontId + "&customerContactId="+ customerContactId +"&customerId=" + customerId +"&selectedTab="+ selectedTab +"&scFlag=Y"+ "&success="+ success;;	
                     }
                     else
                     {
-	                    if(pathname=="/swc/xpedx/myItems/XPEDXMyItemsList.action"){                        
+	                    if(pathname=="/swc/myItems/MyItemsList.action"){                        
                           var headerUrl='<s:property value="#refreshCustomerIntoContext" />';
                           window.location.href = headerUrl ;
                           
@@ -1412,19 +1578,20 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 	// Added for removing the double quotes from an search term. Jira # 2415
 	
 	var myMask;
-  function validateVal(e){
-	//added for jira 3974
+	function newSearch_onsubmit(e){
+		//added for jira 3974
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 		myMask.show();
-	 	var searchText = document.getElementById("newSearch_searchTerm").value;
-	 	
-	 	/*while(searchText.indexOf("*")!= -1){
-    	 	searchText = searchText.replace("*", " ");    	  
-	 	}*/
+		var searchText = document.getElementById("newSearch_searchTerm").value;
+		document.getElementById('newSearch_rememberNewSearchText').value = searchText;
+
+		/*while(searchText.indexOf("*")!= -1){
+			searchText = searchText.replace("*", " ");
+		}*/
 		document.getElementById("goBackFlag").value = 'true';
-	 	Ext.fly('newSearch_searchTerm').dom.value=searchText;	
-}
+		Ext.fly('newSearch_searchTerm').dom.value=searchText;
+	}
   // End of Jira # 2415 
 var toaWin = new Ext.Window({
         autoScroll: true,
@@ -1599,7 +1766,7 @@ function passwordUpdateModal()
 	}
 	function setSelectedUrl(contactId,customerId,storefrntId){
 		
-		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/xpedxManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
+		var url='<s:property value="#xpedxManageOtherProfilesURL"/>';//"/swc/profile/user/MyManageOtherProfiles.action?sfId="+storefrntId+"&customerContactId="+contactId+"&customerId="+customerId;
 		url = ReplaceAll(url,"&amp;",'&');
 		url = url+"&customerContactId="+contactId+"&customerId="+customerId;
 		document.getElementById("seletedUrl").value=url;
@@ -1671,8 +1838,8 @@ function passwordUpdateModal()
    				 clearShipToField();      				
    			},
 			'autoDimensions'	: false,
-			'width' 			: 751,
-	 		'height' 			: 350  
+			'width' 			: 800,
+	 		'height' 			: 400  
 		});   	
 		$('#cart-management-btn').click(function(){
 			$('#cart-management-popup').toggle();
@@ -1711,6 +1878,7 @@ function passwordUpdateModal()
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
+			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
 			if((!isSalesRep) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
 				var myMask
 				var waitMsg = Ext.Msg.wait("");
@@ -1718,7 +1886,29 @@ function passwordUpdateModal()
 				 myMask.show();
 				passwordUpdateModal();
 				Ext.Msg.hide();
-			}
+			} /* EB-76 Code Changes start  */
+			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext =="true" && isDefaultShipToSuspended=="true" ){	
+				//Please select an active ship-to as your default
+				$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
+					'onStart' 	: function(){			    	  	        
+			          	if(isguestuser!="true"){			               
+			            	showAssignedShipTo('<s:property value="#targetURLForDefault"/>');
+			 	        }
+			 		},
+			 		'onClosed'	: function(){			 			
+			 			if(isguestuser!="true"){			 			
+			 				 showAssignedShipTo('<s:property value="#targetURLForDefault"/>');
+			 			}
+			 		},
+			 		'hideOnOverlayClick': false,
+			 		'showCloseButton'	: false,
+			 		'enableEscapeButton': false,
+			 		'autoDimensions'	: false,
+			 		'scrolling'   		: 'no',
+			 		'width' 		: 750,
+			 		'height' 		: 530  
+				}).trigger('click');
+			} /* EB-76 Code Changes End */
 			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
 					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
 					'onStart' 	: function(){
@@ -1814,39 +2004,59 @@ function passwordUpdateModal()
 function searchShipToAddress(divId,url) {
     // look for window.event in case event isn't passed in
     	var searchText = document.getElementById('Text1').value
+    	var suspendedStatus ="";
+    	var requestedPage="";
     	if(divId == null)
 			divId = 'ajax-assignedShipToCustomers';
     	if(divId == 'shipToOrderSearchDiv' && searchText == '')
+    		{
     		url = '<s:property value="#shipToForOrderSearch"/>';
-   		if(divId == 'shipToOrderSearchDiv' && searchText != '')                                  
+    		requestedPage="XPEDXOrderListPage";
+    		}
+   		if(divId == 'shipToOrderSearchDiv' && searchText != '') 
+   			{
    			url = '<s:property value="#shipToSearchForOrderList"/>';
-		if(divId == 'shipToUserProfile' && searchText == '')
+   			requestedPage="XPEDXOrderListPage";
+   			}
+		if(divId == 'shipToUserProfile' && searchText == ''){
 		  	url = '<s:property value="#shipToForUserProfileSearch"/>';
-		if(divId == 'shipToUserProfile' && searchText != '')                                  
+		  	suspendedStatus= "30";
+		  	requestedPage="XPEDXUserProfilePage";
+		}
+		if(divId == 'shipToUserProfile' && searchText != ''){                                  
 		 	url = '<s:property value="#shipToSearchForUserProfile"/>';
+		 	suspendedStatus= "30";
+		 	requestedPage="XPEDXUserProfilePage";
+		}
 		if(divId == 'showShipToLocationsDiv' && searchText == '')
 			url = '<s:property value="#showLocationsDivForReportingSearch"/>'
 		if(divId == 'showShipToLocationsDiv' && searchText != '')                                  
    			url = '<s:property value="#shipToSearchForReporting"/>';
-		if(url == null)
+		if(url == null) {
 			url = '<s:property value="%{searchURL}"/>';
+			suspendedStatus= "30";
+			requestedPage="";
+		}
 /* 		Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
 		if(searchText==''|| searchText==null)
 */
 		/* JIRA 3331 if search text is blank then all ship tos should be shown
-		if(searchText==''|| searchText==null || searchText=='Search Ship-To�')
+		if(searchText==''|| searchText==null || searchText=='Search Ship-Toï¿½')
 		{
 			document.getElementById('errorText').innerHTML= "Please enter search criteria.";
 			document.getElementById('errorText').setAttribute("class", "error");
 		}		
 		else
 		{*/
+			
 			var x = document.getElementById('address-list');
 	         x.innerHTML = "Loading data... please wait!";
 			 Ext.Ajax.request({
 	                url: url,
 	                params: {
-						searchTerm : searchText
+						searchTerm : searchText,
+						status: suspendedStatus,
+						isRequestedPage:requestedPage
 			 		},
 		            method: 'POST',
 		            success: function (response, request){
@@ -2178,7 +2388,7 @@ function callAjaxForSorting(url,divId)
   		 //-- Web Trends tag start --
 		writeMetaTag('WT.ti','Help');
 		//-- Web Trends tag End --
-  		var load = window.open('https://content.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
+  		var load = window.open('https://xcontent.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
   		}
 	function getCategorySubMenu()
 	{		
@@ -2268,11 +2478,12 @@ function msgWait(){
 .share-modal { /*width:399px!important; height:37	0px;*/}         
 .indent-tree { margin-left:15px; }       
 .indent-tree-act { margin-left:25px; } 	
+
 </style>
 <s:set name='isProcurementInspectMode'
 	value='#hUtil.isProcurementInspectMode(wCContext)' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
-<s:set name="xpedxSelectedHeaderTab" value="#_action.getXpedxSelectedHeaderTab()"/>
+<s:set name="selectedHeaderTab" value="#_action.getSelectedHeaderTab()"/>
 <s:set name='isThereAUser' value="wCContext.thereAUser" />
 <noscript>
 <div class="noScript"><s:text name='NoScriptWarning' /></div>
@@ -2305,33 +2516,51 @@ function msgWait(){
 	  </s:url>
 	  <div  class="searchbox-1 auth">
 	  <!-- XBT-391 Removed submit event from Submit button and added to form -->
-	   <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
-	   		<s:hidden name='path' id='path' value="/" />
+		<s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+	  		<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
+	  		<s:hidden name='scFlag' id='scFlag' value="Y" />
+			<s:hidden name='path' id='path' value="/" />
+			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	   		<!-- XBT-391 removed the onkeydown event -->
-			<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	        	type="text" value="Search Catalog..." onclick="clearTxt();" >
-			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013" 
-	                            ></button>
-		    <div id="tips-container">
-		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
-		    </div>
-	    </s:form>
-	    <!-- END wctheme.form-close.ftl --> 
+	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value="Search Catalog..." onclick="clearTxt();" />
+	   		</s:if>
+	   		<s:else>
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value='<s:property value="rememberNewSearchText" />' />
+	   		</s:else>
+			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013"></button>
+			<div id="tips-container">
+				 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
+			</div>
+		</s:form>
+		<!-- END wctheme.form-close.ftl --> 
 	  </div>
  </s:if> 
  <s:if test='(#isGuestUser == true)'> 
 	<div  class="searchbox-1">
 	<!-- XBT-391 Removed submit event from Submit button and added to form -->
-	  <s:form name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();validateVal(event);return;">
+	  <s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+	  		<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
+	  		<s:hidden name='scFlag' id='scFlag' value="Y" />
+	  		<s:hidden name='scGuestUser' id='scGuestUser' value="Y" />
 	  		<s:hidden name='path' id='path' value="/" />
+	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	  		<!-- XBT-391 removed the onkeydown event -->
-		<input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-	         type="text" value="Search Catalog..." onclick="clearTxt();" >
-		<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-	            style="top:-4px;margin-left: 3px;height: 20px;"></button>
-	     <div id="tips-container">
-		    	 <a class="white underlink" id="inline" href="#searchTips"> Search Tips </a>
-		</div> 
+	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value="Search Catalog..." onclick="clearTxt();" />
+	   		</s:if>
+	   		<s:else>
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+						value='<s:property value="rememberNewSearchText" />' />
+	   		</s:else>
+			<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
+					style="top:-4px; margin-left: 3px; height: 20px;"></button>
+			<div id="tips-container">
+				<a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
+			</div> 
 	   </s:form>
 	 </div>
  </s:if>   
@@ -2382,8 +2611,9 @@ function msgWait(){
   </s:if>
   <ul class="header-subnav commonHeader-subnav">
 	  	<s:if test="%{!#isProcurementUser}">
-			 <s:if test='#isGuestUser != true' >			 	
-				<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>
+			 <s:if test='#isGuestUser != true' >
+			 <s:set name='storefrontId' value="wCContext.storefrontId" />							 	
+				<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>				
 				<li> | </li>
 				<li><a
 					href="<s:url action="logout" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
@@ -2399,13 +2629,24 @@ function msgWait(){
 						<s:if test='%{#session.loggedInUserName != null}'>		
 							Welcome <s:property value='%{#session.loggedInUserName}'/><s:if test='{#welcomeUserShipToName != null}'>,<s:property value='welcomeUserShipToName'/>
 							</s:if>
-							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />						
+							
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storeFrontId)}'>
+							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />	
+							</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storeFrontId)}'>
+				<img  src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/12x12_green_down.png" alt="" />	
+				</s:elseif>					
 						</s:if>
 					</s:if>
 					<s:else>
 						Welcome <s:property value='welcomeUserFirstName'/> <s:property value='welcomeUserLastName'/><s:if test='{#welcomeUserShipToName != null}'>, <s:property value='welcomeUserShipToName'/>
 							</s:if>
-						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storeFrontId)}'>
+							<img  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_white_down.png" alt="" />	
+							</s:if>
+				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storeFrontId)}'>
+				<img  src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/12x12_green_down.png" alt="" />	
+				</s:elseif>			
 					</s:else>										
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
@@ -2463,10 +2704,15 @@ function msgWait(){
 				<li><a
 					href="<s:url action="loginFullPage" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
 					tabindex="2006" id="signIn"><span style="font-size: 12px">Sign In</span></a>
-				</li>	
+				</li>
+				<s:set name='storeFront' value='wCContext.storefrontId'/>
+				<s:if test="#storeFront == 'xpedx'">
+					
 					<div id="signId"></div>
 				
-				<div class="float-right" style="margin-top:25px;margin-right:-60px"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="120" height="40" top="15" position="absolute" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/888xpedx76.png"></a></div>
+				<%-- eb-3067: note the use of '*' on margin-right property. this is an IE7 hack: http://net.tutsplus.com/tutorials/html-css-techniques/quick-tip-how-to-target-ie6-ie7-and-ie8-uniquely-with-4-characters/ --%>
+				<div class="float-right" style="margin-top:25px;margin-right:-60px; *margin-right:-20px;"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="120" height="40" top="15" position="absolute" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/888xpedx76.png"></a></div>
+				</s:if>
 			</s:else>
 	   	</s:if>
 	   	<s:else>
@@ -2513,10 +2759,10 @@ function msgWait(){
 	            	<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
 		      			<s:param name="displayAllCategories" value="%{true}" />
 						<s:param name='newOP' value='%{true}'/>
-						<s:param name="xpedxSelectedHeaderTab">CatalogTab</s:param>
+						<s:param name="selectedHeaderTab">CatalogTab</s:param>
 					</s:url>	
 					<s:set name="categoryPath" value='wCContext.getSCUIContext().getLocalSession().getAttribute("categoryCache")'/>
-	            	<s:if test='#xpedxSelectedHeaderTab=="CatalogTab"'>
+	            	<s:if test='#selectedHeaderTab=="CatalogTab"'>
 	            		<li class="active">
 	            		<s:if test="#categoryPath !=null">
 	            			<s:a href="%{allCatURL}"  cssClass="active">Catalog</s:a>
@@ -2542,12 +2788,12 @@ function msgWait(){
 			    </li>			    	            
 	            <s:if test="%{#isProcurementUser}">
 	            	<s:if test="%{procurementMyItemsLinkFlag}">	            		
-						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
+						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{true}" />
-							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
+							<s:param name="selectedHeaderTab">MyItemTab</s:param>
 						</s:url>		            	
-		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>
+		            	<s:if test='#selectedHeaderTab=="MyItemTab"'>
 		            		<li class="active">
 		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">
 		            			<span class="left">&nbsp;</span><span class="right">My Items Lists</span>
@@ -2565,12 +2811,12 @@ function msgWait(){
 	            	</s:if>
 	            </s:if>
 	            <s:else>
-						<s:url id='myListsLink' namespace='/xpedx/myItems' action='XPEDXMyItemsList.action'>
+						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
-							<s:param name="filterByMyListChk" value="%{true}" />
-							<s:param name="xpedxSelectedHeaderTab">MyItemTab</s:param>
+							<s:param name="filterByMyListChk" value="%{false}" />
+							<s:param name="selectedHeaderTab">MyItemTab</s:param>
 						</s:url>		            	
-		            	<s:if test='#xpedxSelectedHeaderTab=="MyItemTab"'>
+		            	<s:if test='#selectedHeaderTab=="MyItemTab"'>
 		            		<li class="active">
 		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">My Items Lists</s:a>
 		            	</s:if>
@@ -2581,10 +2827,10 @@ function msgWait(){
 		            </li>
 	            </s:else>	            
 	            <s:url id ='quickAddLink' action='quickAddAction' namespace='/order'>
-	            	<s:param name="xpedxSelectedHeaderTab">QuickAdd</s:param>
+	            	<s:param name="selectedHeaderTab">QuickAdd</s:param>
 	       			<s:param name="quickAdd" value="%{true}" />
 	            </s:url>	            
-	            	<s:if test='#xpedxSelectedHeaderTab=="QuickAdd"'>
+	            	<s:if test='#selectedHeaderTab=="QuickAdd"'>
 	            		<li class="active">
 		            	<s:a href="%{quickAddLink}" cssClass="active">Quick Add</s:a>
 		            	 </li>
@@ -2596,7 +2842,7 @@ function msgWait(){
 	            	</s:else>		      	
 	            <s:if test="%{!#isProcurementUser}">
 				  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-					<s:if test='#xpedxSelectedHeaderTab=="OrderTab"'>            	
+					<s:if test='#selectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
 		            	 <!-- cssClass="active" -->
 		            	<s:a  href='%{catURL11}' cssClass="link" >Order Management</s:a>
@@ -2647,25 +2893,25 @@ function msgWait(){
 	            </s:if> 
 	          </s:if>   
 	            <s:if test="%{!#isProcurementUser}">	            
-	                <s:url id='emailSampleLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+	                <s:url id='emailSampleLink' namespace='/services' action='MyServicesHome'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='RequestProdSampleLink' namespace='/xpedx/services' action='XPEDXServices'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+					<s:url id='RequestProdSampleLink' namespace='/services' action='MyServices'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='servicesHomeLink' namespace='/xpedx/services' action='XPEDXServicesHome'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+					<s:url id='servicesHomeLink' namespace='/services' action='MyServicesHome'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='estimatingFilesLink' namespace='/xpedx/services' action='XPEDXEstimatingFiles'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+					<s:url id='estimatingFilesLink' namespace='/services' action='MyEstimatingFiles'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='reportsLink' namespace='/xpedx/services' action='XPEDXReports'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+					<s:url id='reportsLink' namespace='/services' action='myreports'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
-					<s:url id='newToolsLink' namespace='/xpedx/services' action='XPEDXTools'>
-						<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+					<s:url id='newToolsLink' namespace='/services' action='MyTools'>
+						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>												
-					<s:if test='#xpedxSelectedHeaderTab=="ServicesTab" || #xpedxSelectedHeaderTab=="ToolsTab" '>
+					<s:if test='#selectedHeaderTab=="ServicesTab" || #selectedHeaderTab=="ToolsTab" '>
 		            	<li class="active">	
 		            	<s:a href="#" cssClass="active">Resources</s:a>
 		            </s:if>
@@ -2681,39 +2927,47 @@ function msgWait(){
 							</s:a>
 						</li>
 						</s:if>					 
-					  <%-- <s:if test='#canRequestProductSample == "Y"'> --%>
-						<li>
-							<s:a href='%{RequestProdSampleLink}' cssClass="link">
-								<s:text name="Request Sample"></s:text>
-							</s:a>
-						</li>
-					<%-- </s:if>  --%>
+					    <s:if test='#canRequestProductSample == "Y"'>
+							<li>
+								<s:a href='%{RequestProdSampleLink}' cssClass="link">
+									<s:text name="Request Sample"></s:text>
+								</s:a>
+							</li>
+					    </s:if>
+					     <!-- Added for EB-1641 Remove any associations to estimating files Starts -->
+					    <s:set name='storefrontId' value="wCContext.storefrontId" />
+					   <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 						<li>
 							<s:a href='%{estimatingFilesLink}' cssClass="link">
 								<s:text name="Estimating Files"></s:text>
 							</s:a>
 						</li>
+						 </s:if>
+					<!--  EB-1641 End -->
 						<li>
 							<s:a href='%{estimatingFilesLink}' cssClass="link">
 								<s:text name="Printable Catalogs"></s:text>
 							</s:a>
 						</li>
-						<s:url id='toolsLink' namespace='/xpedx/tools' action='XPEDXTools'>
-							<s:param name="xpedxSelectedHeaderTab1">ServicesTab</s:param>
+						<s:url id='toolsLink' namespace='/tools' action='MyTools'>
+							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
-						<li>
-							<s:a href='%{newToolsLink}' cssClass="link">
-								<s:text name="Tools"></s:text>
-							</s:a>
-						</li>
+						<s:set name='storeFrontId' value='wCContext.storefrontId'/>
+						<s:if test="#storeFrontId == 'xpedx'">
+							<li>
+								<s:a href='%{newToolsLink}' cssClass="link">
+									<s:text name="Tools"></s:text>
+								</s:a>
+							</li>
+						</s:if>
 		            </ul>
 	            </li>
 	            </s:if>	          
 	            <s:if test="%{!#isProcurementUser}"> 	            
 					<s:url id='adminProfile' namespace='/profile/user' action='XPEDXAdminProfile'>						
-						<s:param name="xpedxSelectedHeaderTab">AdminTab</s:param>
+						<s:param name="selectedHeaderTab">AdminTab</s:param>
 					</s:url> 
-					<s:if test='#xpedxSelectedHeaderTab=="AdminTab"'>
+					<s:if test='#selectedHeaderTab=="AdminTab"'>
 						<li class="active admin_tab">
 		            	<s:a href="#" cssClass="active">Admin</s:a>
 	            	</s:if>
@@ -2722,7 +2976,7 @@ function msgWait(){
 	            		<s:a>Admin</s:a>
 	            	</s:else>
 	            	<ul class="sub_menu" style="visibility: hidden;" >
-				       	<s:url id='myProfile' namespace='/profile/user' action='xpedxUserProfile' >
+				       	<s:url id='myProfile' namespace='/profile/user' action='MyUserProfile' >
 				       		<s:param name="isUserProfile" value="%{true}" />
 				       	</s:url>
 			       		<s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
@@ -2734,11 +2988,11 @@ function msgWait(){
 						</li>						
 						<s:set name='loggedInUserCustomerID' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoggedInCustomerFromSession(wCContext)'/>
 						<s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>								       	
-						<s:url id='sapCustProfile' namespace='/profile/org' action='xpedxGetCustomerInfo'>
+						<s:url id='sapCustProfile' namespace='/profile/org' action='MyGetCustomerInfo'>
 							<s:param name="customerId" value="#sapCustomerId" />
 							<s:param name="organizationCode" value="#loggedInUserOrgCode" />
 						</s:url>
-					<s:if test="%{#isUserAdmin && !#isSalesRep}">
+					<s:if test="%{#isUserAdmin}">
 						<li>
 							<s:if test='#sapCustSize > 1' >
 								<s:a id="dlgSelectAccount" href="#dlgSelectAccountBox">
@@ -2752,15 +3006,15 @@ function msgWait(){
 							</s:elseif>
 						</li>
 					</s:if>
-					<s:if test="%{#isUserAdmin && !#isSalesRep}">
+					<s:if test="%{#isUserAdmin}">
 						<li>
 							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Users"></s:text>
 							</s:a>
 						</li>
 					</s:if>
-						<s:if test="%{#isUserAdmin && !#isSalesRep}">
-							<s:url id='newsMaintenanceLink' namespace="/profile/user" action='xpedxNewsMaintenance'>					
+						<s:if test="%{#isUserAdmin}">
+							<s:url id='newsMaintenanceLink' namespace="/profile/user" action='MyNewsMaintenance'>					
 							</s:url>
 							<li>
 								<s:a href='%{newsMaintenanceLink}' cssClass="link">
@@ -2775,10 +3029,10 @@ function msgWait(){
 		            <s:url id='homeLink' namespace='/order' action='orderList.action'>
 						<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
 						<s:param name='scFlag'>Y</s:param>
-						<s:param name="xpedxSelectedHeaderTab">AddToExistingOrder</s:param>						
+						<s:param name="selectedHeaderTab">AddToExistingOrder</s:param>						
 						<s:param name="sourceTab">Open</s:param>
 					</s:url>
-	            	<s:if test='#xpedxSelectedHeaderTab=="AddToExistingOrder"'>
+	            	<s:if test='#selectedHeaderTab=="AddToExistingOrder"'>
 	            		<li class="active lighter" >
 		            	<s:a href="%{homeLink}" cssClass="active">Add To Existing Order</s:a>
 	            	</s:if>
@@ -2794,7 +3048,7 @@ function msgWait(){
 	           		 </li>		
 	           		 
 					<s:url id="viewEditOrderChanges" includeParams="none"
-							action='xpedxViewEditOrderChanges' namespace='/order' escapeAmp="false">
+							action='MyViewEditOrderChanges' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 							<s:param name="isEditOrder" value='true' />
 							<s:param name="isEditOrder" value='true' />
@@ -2803,7 +3057,7 @@ function msgWait(){
 	            		<s:a href="%{viewEditOrderChanges}">View Changes</s:a>
 	            	</li>
 	            	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='XPEDXResetPendingOrder' namespace='/order' escapeAmp="false">
+							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
 							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
 					</s:url>
 	            	<li class="lighter order-edit">
@@ -2883,15 +3137,42 @@ function msgWait(){
 <div style="display: none;">
 	<div id="searchTips">
 		<h2>Search Tips</h2>
-		<p>You can use special characters such as the asterisk (*) and ? when performing an advanced search.</p>
+		<ul class="padding-top2">
+		<strong>Advanced Search:</strong></ul>
+		<p>Utilize advanced search to search against the entire catalog.  Enter the search criteria, then click ‘enter’ or click the search icon.</p>
+		<p>You can use special characters such as the asterisk (*) and ? when performing an advanced search. The asterisk (*) can be used in search terms for any number of unknown alphanumeric characters.</p>
 		<ul>
 			<li>
-				<p>The asterisk (*) can be used in search terms for any number of unknown alphanumeric characters. For example, "Comput*" can be used to search for products containing words such as "computing systems", "computing power", "computational device", and so on.</p>
-				<p>Note: Using the asterisk (*) as the leading character when specifying a search term is not supported. For example, if you are looking for a product with ABC123 as the Product ID, you cannot provide *C123 as the search term. However, you can search for the product using AB* as the search term.</p>
+				<p>For example, "comput*" can be used to search for products containing terms such as "computing systems", "computing power" or "computational device". </p>
+			</li>
+		</ul>
+		<p>Using the asterisk (*) as the leading character when specifying a search term is not supported.</p>
+		<ul>
+			<li>
+				<p>For example, if you are looking for a product with ABC123 as the Product ID, you cannot provide *C123 as the search term. However, you can search for the product using AB* as the search term.</p>
+			</li>
+			</ul>
+			<p>The question mark (?) can be used in a search term as a substitute for exactly one unknown alphanumeric character. Using the question mark (?) as the leading character when specifying a search term is not supported.</p>
+			<ul>
+			<li>
+				<p>For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. However, you can search for the product using AB?D as the search term.</p>
+			</li>
+		</ul>
+		<p>The advanced search uses ‘and’ logic. Results will reflect items that contain all search terms.</p>
+		
+		<ul class="padding-top2">
+		<strong>Guided Search:</strong>
+		</ul>
+		
+		<p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the list of categories.</p>
+		<ul>
+			<li>
+				<p>Terms that match the search criteria are bolded in black.</p>				
 			</li>
 			<li>
-				<p>The question mark (?) can be used in search terms as a substitute for exactly one unknown alphanumeric character. Note: Using the question mark (?) as the leading character when specifying a search term is not supported. For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. However, you can search for the product using AB?D as the search term.</p>
+			<p>The search criteria will remain in the search box until the page is refreshed so you can easily recreate the previous search.</p>
 			</li>
+			<p>The guided search uses ‘or’ logic. Results will reflect items that contain any search terms.</p>
 		</ul>
 	</div>
 </div>

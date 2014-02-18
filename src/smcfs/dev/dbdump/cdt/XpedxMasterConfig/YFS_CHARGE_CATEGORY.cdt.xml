@@ -162,7 +162,7 @@
 <ChargeCategory ChargeCategory="Discount"
     ChargeCategoryKey="2010090123355249696" ConsiderForProfitMargin="N"
     Createprogid=".YEntityServlet" Createts="2010-09-01T23:35:51-04:00"
-    Createuserid="admin" Description="" DocumentType="0001"
+    Createuserid="admin" Description=" " DocumentType="0001"
     IsBillable="Y" IsDiscount="Y" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T23:35:51-04:00"
     Modifyuserid="ng" OrganizationCode="StrategicPaper"/>

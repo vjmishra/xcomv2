@@ -12,7 +12,11 @@
 		              OrganizationCode="" OwnerOrganizationCode=""  Status="" AggregateStatus="" RelationshipType="" CustomerLevel="" Vertical="">
 		              <ParentCustomer CustomerID="" CustomerKey="" OrganizationCode="" Status="" AggregateStatus="" ParentCustomerKey="">
 		              	<BuyerOrganization OrganizationName="" OrganizationKey=""/>
-	 	 	    	  	<Extn></Extn>
+	 	 	    	  	<Extn>
+	 	 	    	  		<XPXCustomerExtnListList>
+	 	 	    	  			<XPXCustomerExtnList CustomerExtnListKey="" CustomerKey="" ExtnListValue=""/>
+	 	 	    	  		</XPXCustomerExtnListList>
+	 	 	    	  	</Extn>
 		              </ParentCustomer>
 		              <BuyerOrganization  
 					   		OrganizationCode=""  OrganizationName="" OrganizationKey="" 
@@ -54,7 +58,7 @@
 									ExtnCustLineAccLbl="" ExtnCustLineField1Label=""
 									ExtnCustLineField2Label="" ExtnCustLineField3Label="" ExtnMinOrderAmount="" ExtnMinChargeAmount=""
 									ExtnCurrencyCode="" ExtnUseCustSKU="" ExtnEnvironmentCode="" ExtnCompanyCode="" ExtnLegacyCustNumber="" ExtnCustomerStoreNumber="" ExtnShipComplete="" ExtnOrigEnvironmentCode="" ExtnCustOrderBranch="" ExtnCustomerName=""
-									ExtnCustomerDivision="" ExtnPrimarySalesRep="" >
+									ExtnCustomerDivision="" ExtnPrimarySalesRep="" ExtnPriceWarehouse="" ExtnMfgItemFlag="" ExtnCustomerItemFlag="">
 					  </Extn>
 				</Customer>
 			 </Template>
@@ -244,7 +248,7 @@
 				</Input>
 				<Template>
 					<XPEDXSalesRepList>
-					 	<XPEDXSalesRep SalesRepId=""/>
+					 	<XPEDXSalesRep SalesRepId="" SaltKey=""/>
 					</XPEDXSalesRepList>
 				</Template>
 			</API>
@@ -386,9 +390,10 @@
 	</mashup>
 	<mashup id ='XPEDXCatalogExport' transactional='true' mashuptype='XAPI' endpoint=''>
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
-		<API Name="getOrganizationList">
+		<API FlowName="XPXGetCatalogExportListService">
 			<Input>
-				<Organization OrganizationCode=""/>
+				<XPXCatalogExp BrandCode='' OrganizationKey=''>
+				</XPXCatalogExp>
 			</Input>			
 			<Template>				
 					<OrganizationList>
@@ -586,6 +591,48 @@
 	</mashup>
 <!-- Mashup End For Kubra jira 4146 -->
 		
+	
+	
+	<!-- <mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Order List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getPage">
+			<Input>
+				<Page PageNumber="" PageSize="" PaginationStrategy="GENERIC" 
+					PageSetToken="" Refresh="N">
+					<PreviousPage PageNumber="" />
+					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
+						<Input>
+							<XPXCustomerAssignmentView UserId="" Status="30"  StatusQryType="NE" >
+								<OrderBy>
+									<Attribute Desc="N" Name="" />
+								</OrderBy>
+							</XPXCustomerAssignmentView>
+						</Input>
+						<Template>
+							<XPXCustomerAssignmentViewList TotalNumberOfRecords="">
+								<XPXCustomerAssignmentView>	
+									<OrderBy>
+										<Attribute Desc="N" Name="" />
+									</OrderBy>
+								</XPXCustomerAssignmentView>
+							</XPXCustomerAssignmentViewList>
+						</Template>
+					</API>
+				</Page>
+			</Input>
+			<Template>
+				<Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+					IsValidPage="Y" PageNumber="" PageSetToken="" TotalNumberOfPages="">
+					<Output />
+				</Page>
+			</Template>
+		</API>
+	</mashup>
+	 -->
+	
+	
 	<mashup id='XPEDXGetPaginatedCustomerAssignments' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Order List">
 		<classInformation
@@ -597,7 +644,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
 						<Input>
-							<XPXCustomerAssignmentView UserId="">
+							<XPXCustomerAssignmentView UserId="" Status=""  StatusQryType="NE" >
 								<OrderBy>
 									<Attribute Desc="N" Name="" />
 								</OrderBy>
@@ -624,6 +671,9 @@
 		</API>
 	</mashup>
 	
+	
+	
+	
 	<mashup id='XPEDXSearchCustomerAssignmentsPaginated' transactional='true' mashuptype='XAPI'
 		endpoint='CUSTOMER' description="Order List">
 		<classInformation
@@ -635,7 +685,7 @@
 					<PreviousPage PageNumber="" />
 					<API Name="XPXCustomerAssignmentViewService" IsFlow="Y">
 						<Input>
-							<XPXCustomerAssignmentView UserId="" ShipToAddressString="" ShipToAddressStringQryType="LIKE">
+							<XPXCustomerAssignmentView UserId="" ShipToAddressString="" ShipToAddressStringQryType="LIKE" Status=""  StatusQryType="NE">
 								<OrderBy>
 									<Attribute Desc="N" Name="" />
 								</OrderBy>
@@ -771,6 +821,23 @@
 					 </Template>
 				</API>
 			</mashup>	
+			
+<mashup id='XPEDX-GetUserList-SalesRep' transactional='true'
+		mashuptype='XAPI' endpoint='USER'
+		description="Get the user name">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getUserList">
+			<Input>
+				<User  Loginid="" />
+			</Input>
+			<Template>
+				<User Username="">
+				<Extn ExtnSaltKey="" />
+				</User>
+			</Template>
+		</API>
+	</mashup>
 	
 </mashups>	
 

@@ -47,6 +47,7 @@ public class XPXCreateInternalUserPanel extends Composite implements
 	public static final String FORM_ID = "com.xpedx.sterling.rcp.pca.user.internal.screen.XPXCreateInternalUserPanel";
 	
 	private Button btnUpdate;
+	private Button refreshUserData;
 	private Label lblNetworkId;
 	private Text txtNetworkId;
 	private Label lblEmployeeId;
@@ -598,9 +599,19 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		// Scroll Panel End
 	}
 	
-
+//EB-2690 As a call center user my name could change so I want admin users to have the option to update my name so that the correct name displays on changes made by me
 
 	private void createMiscPnl() {
+		refreshUserData = new Button(pnlRoot, 0);
+		GridData btnRefreshUserlayoutData = new GridData();
+		btnRefreshUserlayoutData.horizontalAlignment = 0;
+		btnRefreshUserlayoutData.verticalAlignment = 2;
+		btnRefreshUserlayoutData.heightHint = 27;
+		btnRefreshUserlayoutData.widthHint = 100;
+		refreshUserData.setLayoutData(btnRefreshUserlayoutData);
+		refreshUserData.setText("Refresh User Data");		
+		refreshUserData.setData("name", "refreshUserData");
+		
 		GridData gridData16 = new GridData();
 		gridData16.horizontalAlignment = 3;
 		gridData16.grabExcessHorizontalSpace = true;
@@ -608,6 +619,7 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		gridData16.horizontalIndent = 0;
 		gridData16.verticalAlignment = 2;
 
+		
 		btnUpdate = new Button(pnlRoot, 0);
 		btnUpdate.setText("Create");
 		btnUpdate.setLayoutData(gridData16);
@@ -831,7 +843,17 @@ public class XPXCreateInternalUserPanel extends Composite implements
 		});
 		
 		
-
+		YRCButtonBindingData rud = new YRCButtonBindingData();
+		rud.setName("refreshUserData");
+		refreshUserData.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, rud);
+		
+		refreshUserData.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
+				myBehavior.loadData();
+				
+							
+			}
+		});
 		
 
 				

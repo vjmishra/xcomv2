@@ -515,7 +515,7 @@ width:100%;
 
 .normal-view #item-ct dd .contents {
 	float:left;
-	width: 539px;
+	width: 500px;
 	padding: 10px 15px 10px 10px;
 }
 
@@ -625,7 +625,7 @@ ul
 {
 	float: left;
 	text-align: center;
-	height: 400px;
+	height: 465px;
 	padding: 0px 6px;
 	width: 166px;
 	position: relative;
@@ -782,6 +782,9 @@ ul
     height: 23px;
     width: 88px!important;
 }
+.addtocart-btn {
+	width: 110px;
+}
 
 .papergrid-view .addtocart a {
     color: #FFFFFF;
@@ -882,6 +885,10 @@ ul
 {
 	margin: 5px auto 0;
 }
+.mini-view .addtocart-btn
+{
+	margin: 5px auto 0;
+}
 .normal-view .availablelink { /*float: left; */ }
 .condensed-view .availablelink { float: right; }
 .normal-view .quantity_box .qty, .normal-view .quantity_box .uom-select
@@ -904,7 +911,7 @@ ul
 .normal-view .item_number { width: 40%; }
 .normal-view .quantity_box
 {
-	width: 19em;
+	width: 29em;
 	text-align: right;
 }
 .normal-view .add_to_cart { text-align: right; }
@@ -981,6 +988,12 @@ ul
 	float:right;
 	margin-top:5px;
 }
+.normal-view .addtocart-btn,
+.condensed-view .addtocart-btn {
+	float: right;
+	margin-top:5px;
+}
+
 /* .mill-mfg
 {
 	margin-top: 10px;
@@ -1135,3 +1148,36 @@ ul
 
 img#youtube { margin-right: 9px; }
 .container.catalog { min-height: 675px; }
+	
+/*Added for EB 1147 for back to top functionality*/
+#back-to-top a
+{
+    /* display: block before hiding */
+    display: block;
+    display: none;
+    opacity: 1;
+    /* link stays at same place on page */
+    position: fixed;
+
+    /* link goes at the bottom of the page */
+    top: 100%;
+    margin-top: -105px; /* = height + preferred bottom margin */
+	
+    /* link is centered */
+
+    width: 51px;
+    height: 51px;
+}
+
+#back-to-top:focus 
+{
+	outline:none;
+}
+
+/*End for EB 1147 for back to top functionality*/
+
+.catalog_line_input {
+	padding: 3px;
+	margin-left:5px;
+    width: 173px;
+}

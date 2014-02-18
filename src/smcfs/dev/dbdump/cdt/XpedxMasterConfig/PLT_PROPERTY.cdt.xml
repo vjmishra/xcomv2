@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PLT_PROPERTYList TableName="PLT_PROPERTY">
-<Property BasePropertyName="YCDAddtnlHlpMsgsIcons" Category=""
+<Property BasePropertyName="YCDAddtnlHlpMsgsIcons" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDAddtnlHlpMsgsIcons" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="Y"/>
-<Property BasePropertyName="YCDAlertNotification" Category=""
+    PropertyOverrideName=" " PropertyValue="Y"/>
+<Property BasePropertyName="YCDAlertNotification" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDAlertNotification" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="Y"/>
-<Property BasePropertyName="YCDCustomerCSRMessages" Category=""
+    PropertyOverrideName=" " PropertyValue="Y"/>
+<Property BasePropertyName="YCDCustomerCSRMessages" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDCustomerCSRMessages" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="N"/>
-<Property BasePropertyName="YCDCustomrCSRMsgPnlPsn" Category=""
+    PropertyOverrideName=" " PropertyValue="N"/>
+<Property BasePropertyName="YCDCustomrCSRMsgPnlPsn" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDCustomrCSRMsgPnlPsn" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="TOP"/>
-<Property BasePropertyName="YCDRelatedTaskPosition" Category=""
+    PropertyOverrideName=" " PropertyValue="TOP"/>
+<Property BasePropertyName="YCDRelatedTaskPosition" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDRelatedTaskPosition" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="LEFT"/>
-<Property BasePropertyName="YCDRelatedTaskShortcut" Category=""
+    PropertyOverrideName=" " PropertyValue="LEFT"/>
+<Property BasePropertyName="YCDRelatedTaskShortcut" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDRelatedTaskShortcut" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="Y"/>
-<Property BasePropertyName="YCDSavePaginationSort" Category=""
+    PropertyOverrideName=" " PropertyValue="Y"/>
+<Property BasePropertyName="YCDSavePaginationSort" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDSavePaginationSort" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="N"/>
-<Property BasePropertyName="YCDScratchPadView" Category=""
+    PropertyOverrideName=" " PropertyValue="N"/>
+<Property BasePropertyName="YCDScratchPadView" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDScratchPadView" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="RELATED_TASK"/>
-<Property BasePropertyName="YCDShowScratchPad" Category=""
+    PropertyOverrideName=" " PropertyValue="RELATED_TASK"/>
+<Property BasePropertyName="YCDShowScratchPad" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:24:32-04:00" Modifyuserid="SYSTEM"
     PropertyKey="YCDShowScratchPad" PropertyOverride="BASE"
-    PropertyOverrideName="" PropertyValue="Y"/>
+    PropertyOverrideName=" " PropertyValue="Y"/>
 </PLT_PROPERTYList>

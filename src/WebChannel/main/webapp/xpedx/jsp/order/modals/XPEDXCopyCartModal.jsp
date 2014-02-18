@@ -24,7 +24,7 @@
      </br>
      <div class="clear"></div>
      
-     <ul id="tool-bar" class="tool-bar-bottom-right">
+     <ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
      	<li><a class="grey-ui-btn" href="#" onclick="$('#fancybox-close').click();return false;"><span>Cancel</span></a></li>
      	<li><a class="green-ui-btn button-margin" href="javascript:copyNewCart();"><span>Save</span></a></li>
       </ul>

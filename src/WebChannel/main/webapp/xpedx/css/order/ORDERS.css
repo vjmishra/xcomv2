@@ -20,7 +20,23 @@
 
 ***********************************************************************************************************************
 **********************************************************************************************************************/
+<!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
+.swc-ext .x-window-ml {
+    padding-left: 0px;
+}
 
+#approvalNotesPanel .x-panel-nofooter {
+	display: none;
+}
+
+#approvalNotesPanel .x-window-mc{	
+    border: 0;
+    margin: 0;
+    padding: 0
+}
+.x-window-body {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
 .input-details-cart {
 	float: left;
 	width: 137px;
@@ -141,7 +157,7 @@ table.mil-my-price-availability td {
 }
 
 #replacementItemBody .mil-wrap-condensed-desc {
-	width:200px;
+	width:370px;
 }
 .mil-desc-attribute-list,
 .mil-desc-attribute-list ul,
@@ -291,7 +307,7 @@ input:focus, textarea:focus {
     width: 412px;
 }
 #replacementItemBody .mil-desc-wrap {
-    width: 206px;
+    width: 350px;
 }
 .mil-edit-field {
 	float: left;
@@ -1419,7 +1435,7 @@ table#checkout-po-tbl td.first-cell-second-row span { margin-bottom: 3px; }
 div.checkout div.short-description { margin-left: 15px; }
 table#checkout-table-header { width:100%; }
 div.checkout #checkout-table-header td { width: auto; padding-top: 10px 0px;}
-div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:30px; float: left; margin-top: -25px;}
+div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:18px; float: left; margin-top: -25px;}
 div.checkout .cart-summary { padding-right:0px; }
 div.checkout #po_combo_ctr { margin-left: 38px; }
 div.checkout #po_combo_ctr div {margin:0px; border-color:#cccccc;}

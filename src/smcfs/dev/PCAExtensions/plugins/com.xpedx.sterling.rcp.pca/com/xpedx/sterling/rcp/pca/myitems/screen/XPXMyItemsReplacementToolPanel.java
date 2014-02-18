@@ -618,13 +618,13 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 		pnlBottomButtonHolder.setLayoutData(pnlBottomButtonHolderGD1);
 		pnlBottomButtonHolder.setLayout(pnlBottomButtonHolderRL1);
 		pnlBottomButtonHolderGD1.horizontalAlignment =SWT.END;
-		btnReplaceItemList.setText("Replace");
+		btnReplaceItemList.setText("Cross Division Report");
 		pnlBottomButtonHolderRL1.marginTop = 0;
 		pnlBottomButtonHolderRL1.marginBottom = 5;
 		btnReplaceItemList.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() { 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {    
 //				if(tblSearchResults.getSelectionIndex() >-1) 
-				    myBehavior.replaceItems();
+				myBehavior.getParentCustomers(myBehavior.getFieldValue("MasterCustomerId"), "" , "generateReport");
 			}
 		});
 		
@@ -671,7 +671,7 @@ public class XPXMyItemsReplacementToolPanel extends XPXPaginationComposite  impl
 				//myBehavior.search();
 				//Fetches the first page of search results
 				
-				myBehavior.getParentCustomers(myBehavior.getFieldValue("MasterCustomerId"), "");
+				myBehavior.getParentCustomers(myBehavior.getFieldValue("MasterCustomerId"), "",null);
 				//myBehavior.getFirstPage();
 				tblSearchResults.setFocus();
 			}

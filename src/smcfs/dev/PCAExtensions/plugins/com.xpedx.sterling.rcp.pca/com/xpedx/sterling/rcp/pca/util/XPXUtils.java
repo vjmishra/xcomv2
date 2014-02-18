@@ -43,6 +43,11 @@ public class XPXUtils {
 	public static String CustomerName;
 	public static String customerKey;
 	public static Element elemModel;
+	// XB-519
+	public static String polbl;
+	public static String lineAcc;
+	public static ArrayList refDiv;
+	public static HashMap<String, String> webConfNumMap = new HashMap<String, String>(); // User from Order Search Page
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -667,4 +672,36 @@ public class XPXUtils {
 	public static void setCustomerKey(String customerKey) {
 		XPXUtils.customerKey = customerKey;
 	}
+	//XB-519
+	public static void setPoLbl(String polbl){
+		XPXUtils.polbl = polbl;
+	}
+	public static String getPoLbl() {
+		return polbl;
+	}
+	
+	public static void setLineAcc(String polbl){
+		XPXUtils.lineAcc = polbl;
+	}
+	public static String getLineAcc() {
+		return lineAcc;
+	}
+
+	public static ArrayList getRefDiv() {
+		return refDiv;
+	}
+
+	public static void setRefDiv(ArrayList refDiv) {
+		XPXUtils.refDiv = refDiv;
+	}
+
+	public static HashMap<String, String> getWebConfNumMap() {
+		return webConfNumMap;
+	}
+
+	public static void setWebConfNumMap(HashMap<String, String> webConfNumMap) {
+		XPXUtils.webConfNumMap = webConfNumMap;
+	}
+	
+	
 }

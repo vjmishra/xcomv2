@@ -174,7 +174,7 @@
 			<result name="success">/xpedx/jsp/profile/org/XPEDXOrderBusinessRules.jsp</result>				
 		</action>
 		
-		<action name="xpedxGetCustomerInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerMaintenanceAction">
+		<action name="MyGetCustomerInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerMaintenanceAction">
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>   
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXCustomerInfoBinding.xml</param>
 			<param name="mashups">xpedx_getCustMaintenance,xpedx-cust-GetEmployeeNames</param>
@@ -228,7 +228,7 @@
 			<param name="mashups">xpedx-saveCustomerQuickLinks</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXCreateCustQuickLinks_binding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxGetCustomerInfo</param>
+				<param name="actionName">MyGetCustomerInfo</param>
 				<param name="namespace">/profile/org</param>
 				<param name="customerId">${customerId}</param>
                 <param name="organizationCode">${organizationCode}</param>
@@ -240,7 +240,7 @@
 			<result name="shipToInfo">/xpedx/jsp/profile/org/XPEDXShipTo.jsp</result>
 			<result name="billToInfo">/xpedx/jsp/profile/org/XPEDXBillTo.jsp</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">xpedxGetCustomerInfo</param>
+				<param name="actionName">MyGetCustomerInfo</param>
 				<param name="namespace">/profile/org</param>
 				<param name="customerId">${customerId}</param>
                 <param name="organizationCode">${orgCode}</param>

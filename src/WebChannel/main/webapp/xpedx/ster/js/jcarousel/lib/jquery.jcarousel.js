@@ -196,10 +196,10 @@
         if (this.options.initCallback != null)
             this.options.initCallback(this, 'init');
 
-        if ($.browser.safari) {
+      /*  if ($.browser.safari) {
             this.buttons(false, false);
             $(window).bind('load.jcarousel', function() { self.setup(); });
-        } else
+        } else*/
             this.setup();
     };
 
@@ -871,7 +871,7 @@
 
             var el = e.jquery != undefined ? e[0] : e;
 
-            if (p == 'marginRight' && $.browser.safari) {
+           /* if (p == 'marginRight' && $.browser.safari) {
                 var old = {'display': 'block', 'float': 'none', 'width': 'auto'}, oWidth, oWidth2;
 
                 $.swap(el, old, function() { oWidth = el.offsetWidth; });
@@ -881,7 +881,7 @@
 
                 return oWidth2 - oWidth;
             }
-
+            */
             return $jc.intval($.css(el, p));
         },
 

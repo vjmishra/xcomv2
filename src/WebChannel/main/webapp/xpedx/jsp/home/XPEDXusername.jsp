@@ -188,7 +188,7 @@ function usernameSubmit(){
 								<li class="float-left margin-10">
 									<s:a href='%{homePage}' cssClass="grey-ui-btn"><span>Cancel</span></s:a>
 								</li>
-								<li class="float-right">
+								<li class="float-left">
 									<s:a href="#" onclick="usernameSubmit();" cssClass="orange-ui-btn oub-fix"><span>Submit</span></s:a>
 								</li>
 							</ul>

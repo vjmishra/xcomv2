@@ -22,7 +22,8 @@
 				<Attribute ColumnName="SHARE_ADMIN_ONLY"  	DataType="Flag"  		DefaultValue="N" Description="" Nullable="False" XMLName="ShareAdminOnly"/>
 				<Attribute ColumnName="SHARE_PRIVATE"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="SharePrivate"/>
 				<Attribute ColumnName="MODIFYUSERNAME" DataType="Text-60" 	DefaultValue="' '" Description="Modifying User Name" XMLName="ModifyUserName"/>
-
+				<Attribute ColumnName="CREATETS" 	 DataType="TimeStamp" 	DefaultValue="sysdate" Description="create TimeStamp"/>
+				
 			</Attributes>
 				
 			

@@ -15,7 +15,6 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -48,11 +47,13 @@ public class XPXOrderApprovalService implements YIFCustomApi
 			String orderHeaderKey = rootElem.getAttribute("OrderHeaderKey");
 			if(!YFCObject.isNull(orderHeaderKey) && !YFCObject.isVoid(orderHeaderKey)) {
 			   Document rulesEngineInputDoc = YFCDocument.createDocument("Order").getDocument();
-			   rulesEngineInputDoc.getDocumentElement().setAttribute("OrderHeaderKey", orderHeaderKey);			
+			   rulesEngineInputDoc.getDocumentElement().setAttribute("OrderHeaderKey", orderHeaderKey);
 			   api.executeFlow(env, "XPXInvokeRulesEngineAndLegacyOrderCreationService", rulesEngineInputDoc);
 			}			
+			
+			/*Begin - Code commented as Order Approved Email will now be sent after receiving the 1st OU for the order placed [EB-2291]*/			
 			//Forming an input document to send an Order Approved Email [Input for YCD_Order_Approval_Email_8.5 service]
-			Document orderListOutDoc=formInputForOrderApprovedEmail(env, inputXML.getDocumentElement());			
+			/*Document orderListOutDoc=formInputForOrderApprovedEmail(env, inputXML.getDocumentElement());			
 			NodeList orderHoldTypesNode = orderListOutDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_ORDER_HOLD_TYPES);	        
 			Document inputForOrderApprovedEmail = null;	
 			
@@ -76,7 +77,8 @@ public class XPXOrderApprovalService implements YIFCustomApi
 			if (log.isDebugEnabled()) {
 				log.debug("XPXOrderApprovalService-OutXML: "+SCXmlUtil.getString(inputForOrderApprovedEmail));
 			}
-			return inputForOrderApprovedEmail;
+			return inputForOrderApprovedEmail;*/			
+			/*End - Code commented as Order Approved Email will now be sent after receiving the 1st OU for the order placed[EB-2291]*/
 			
 		} catch (YFSException ye) {
 			// TODO Auto-generated catch block
@@ -84,6 +86,9 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		} catch (RemoteException re) {
 			// TODO Auto-generated catch block
 			re.printStackTrace();
+		}
+		if (log.isDebugEnabled()) {
+			log.debug("XPXOrderApprovalService-OutXML: "+SCXmlUtil.getString(inputXML));
 		}
 		return inputXML;
 		
@@ -95,7 +100,7 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		
 	}
 	
-	private Document formInputForOrderApprovedEmail(YFSEnvironment env,Element inputElement) throws YFSException, RemoteException {
+	/*private Document formInputForOrderApprovedEmail(YFSEnvironment env,Element inputElement) throws YFSException, RemoteException {
 
 		log.debug("XPXOrderApprovalService_formInputForOrderApprovedEmail()_InXML :" + SCXmlUtil.getString(inputElement));
 		
@@ -105,7 +110,7 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		// To Get orderHeaderKey
 		String orderHeaderKey = null;
 		if (inputElement != null) {
-			orderHeaderKey = inputElement.getAttribute("OrderHeaderKey");			
+			orderHeaderKey = inputElement.getAttribute("OrderHeaderKey");	
 		}		
 		
 		if(log.isDebugEnabled()){
@@ -127,6 +132,6 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		env.clearApiTemplate("getOrderList");
 		
 		return orderListDoc;
-	}
+	}*/	
 
 }

@@ -257,7 +257,7 @@
 						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="" CustomerKey="">
 						<User Activateflag="" Loginid="" 
 							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
-							Localecode="" Username="">
+							Localecode="" Username="" Modifyuserid="" Modifyts="" Createts="">
 							<ContactPersonInfo EveningPhone=""
 								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
 								EMailID="" Title="" />
@@ -285,7 +285,7 @@
 									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
 									VerificationStatus="" City="" Country="" FirstName=""
 									LastName="" PersonID="" State="" Title="" ZipCode=""
-									EMailID="" />
+									EMailID="" Modifyuserid="" Modifyts="" />
 							</CustomerAdditionalAddress>
 						</CustomerAdditionalAddressList>
 						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""
@@ -452,7 +452,7 @@
 				<CatalogSearch CategoryDepth="">
 					<CategoryList>
 						<Category CategoryID="" Description=""
-							ShortDescription="">
+							ShortDescription="" CategoryPath="">
 						</Category>
 					</CategoryList>
 				</CatalogSearch>
@@ -478,6 +478,23 @@
 						<Extn ExtnPrefCatalog="" />
 					</CustomerContact>
 				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='XPEDX-GetUserList' transactional='true'
+		mashuptype='XAPI' endpoint='USER'
+		description="Get the user name">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getUserList">
+			<Input>
+				<User>
+					<Extn ExtnEmployeeId="" ExtnUserType="INTERNAL"/>	
+				</User>
+			</Input>
+			<Template>
+				<User Username=""/>										
 			</Template>
 		</API>
 	</mashup>
@@ -660,10 +677,25 @@
 		</API>
 	</mashup>
 	
+	<mashup id ='xpedx-getSAPCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXCustomerAssignmentViewService">
+			<Input>
+				<XPXCustomerAssignmentView UserId="" />
+			</Input>
+	        <Template>
+	        	<XPXCustomerAssignmentViewList TotalNumberOfRecords="">
+					<XPXCustomerAssignmentView>	
+					</XPXCustomerAssignmentView>
+				</XPXCustomerAssignmentViewList>	        				
+			</Template>
+		</API>
+	</mashup>
 	<mashup id ='xpedx-getCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
-		<API Name="getCustomerAssignmentList">
+			<API Name="getCustomerAssignmentList">
 			<Input>
 				<CustomerAssignment UserId="" />
 			</Input>
@@ -678,7 +710,6 @@
 			</Template>
 		</API>
 	</mashup>
-	
 	<mashup id ='xpedx-getAssignedShipTos-View' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
@@ -878,13 +909,74 @@
 					</ComplexQuery>
 				</CustomerContact>
 			</Input>
-			<Template>
+			<Template>				
 				<CustomerContactList>
-					<CustomerContact Company="" CustomerContactID=""
-					DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
-					EveningPhone="" FirstName="" LastName="" MiddleName=""
-					MobilePhone="" Status="" Title="" UserID="" />
-				</CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID="" MiddleName=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone="" Title=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="">
+							<ContactPersonInfo EveningPhone=""
+								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
+								EMailID="" Title="" />
+							<UserGroupLists BuyerApprover="">
+								<UserGroupList UsergroupKey="" BuyerApprover="">
+								</UserGroupList>
+							</UserGroupLists>
+							<AuthQuestionList>
+								<AuthQuestion AuthQuestionKey=""
+									QuestionText="" />
+							</AuthQuestionList>
+						</User>
+						<CustomerAdditionalAddressList>
+							<CustomerAdditionalAddress
+								CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+								IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+								IsDefaultSoldTo="">
+								<PersonInfo IsCommercialAddress=""
+									TaxGeoCode="" IsAddressVerified="" AddressID="" AddressLine1=""
+									AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
+									AddressLine6="" AlternateEmailID="" Beeper="" Company=""
+									DayFaxNo="" DayPhone="" Department="" ErrorTxt=""
+									EveningFaxNo="" EveningPhone="" HttpUrl="" JobTitle=""
+									Latitude="" Longitude="" MiddleName="" MobilePhone=""
+									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
+									VerificationStatus="" City="" Country="" FirstName=""
+									LastName="" PersonID="" State="" Title="" ZipCode=""
+									EMailID="" />
+							</CustomerAdditionalAddress>
+						</CustomerAdditionalAddressList>
+						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""
+							AggregateStatus="" OrganizationCode="">
+							<BuyerOrganization OrganizationCode=""
+								OrganizationName="" />
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+									IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+									IsDefaultSoldTo="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnMyItemsLink="" ExtnUseCustSKU="" ExtnUseOrderMulUOMFlag=""/>
+						</Customer>
+						<Extn/>
+					</CustomerContact>
+				</CustomerContactList>				
 			</Template>
 		</API>
 	</mashup>

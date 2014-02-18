@@ -1,7 +1,11 @@
 package com.xpedx.sterling.rcp.pca.customerprofilerule.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.xpath.XPathConstants;
 
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
@@ -12,6 +16,7 @@ import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
 public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
@@ -19,6 +24,8 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	private Element inputElement;
 	private CustomerProfileMaintenance page;
 	private Element customerDetails;
+	private List<String> existingEmailList;
+	private Map <String, String> emailMap;
 	public CustomerProfileMaintenanceBehavior(
 			CustomerProfileMaintenance customerProfileMaintenance,
 			Object inputObject) {
@@ -80,7 +87,12 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXCustomerIn",outXml);
 						prepareSalesRepModel(outXml);
-						//setModel("Vikas",outXml);
+						String suffixType = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer/Extn"), "ExtnSuffixType");
+						if ("B".equals(suffixType)) {
+							Element emailListEle=createModelForAdditionalEmails(outXml);
+							setModel("XPXBillToLevelEmailList", emailListEle);
+						}
+						
 					}
 					if ("XPXGetParentCustomerListService".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
@@ -217,7 +229,42 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	}
 	public void setCustomerDetails(Element customerDetails) {
 		this.customerDetails = customerDetails;
-	}	
+	}
 	
+	public Element createModelForAdditionalEmails(Element outXml) {
+		
+		Element emailListEle = YRCXmlUtils.createFromString("<EmailList/>").getDocumentElement();
+		Element extnCustListParentEle = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer/Extn/XPXCustomerExtnListList/");
+		List extnCustListChildList  = YRCXmlUtils.getChildren(extnCustListParentEle, "XPXCustomerExtnList");
+		if(extnCustListChildList!=null) {
+			existingEmailList = new ArrayList<String>();
+			emailMap = new HashMap<String, String>();
+			for (int i = 0; i < extnCustListChildList.size(); i++) {
+				Element extnCustListChildEle = (Element)extnCustListChildList.get(i);
+				String emailAddress =(String)YRCXPathUtils.evaluate(extnCustListChildEle, "./@ExtnListValue", XPathConstants.STRING);
+				String extnCustExtnListKey=(String)YRCXPathUtils.evaluate(extnCustListChildEle, "./@CustomerExtnListKey", XPathConstants.STRING);
+				if(!YRCPlatformUI.isVoid(emailAddress)) {
+					existingEmailList.add(emailAddress);
+					Element optionEle = YRCXmlUtils.createChild(emailListEle, "Email");
+					optionEle.setAttribute("emailAddress", emailAddress);
+					emailMap.put(emailAddress, extnCustExtnListKey);
+				}
+			}
+		}
+		return emailListEle;		
+		
+	}
+	public List<String> getExistingEmailList() {
+		return existingEmailList;
+	}
+	public void setExistingEmailList(List<String> existingEmailList) {
+		this.existingEmailList = existingEmailList;
+	}
+	public Map<String, String> getEmailMap() {
+		return emailMap;
+	}
+	public void setEmailMap(Map<String, String> emailMap) {
+		this.emailMap = emailMap;
+	}
 	
 }

@@ -361,7 +361,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
         priceListLineElement.setAttribute(XPXLiterals.A_PRICING_STATUS, XPXLiterals.ACTIVE);
         priceListLineElement.setAttribute(XPXLiterals.A_START_DATE_ACTIVE, activeDate.getString());
         priceListLineElement.setAttribute(XPXLiterals.A_END_DATE_ACTIVE, activeDate.HIGH_DATE.getString());
-        priceListLineElement.setAttribute(XPXLiterals.A_LIST_PRICE, firstListPrice);
+       priceListLineElement.setAttribute(XPXLiterals.A_LIST_PRICE, firstListPrice);
         priceListLineElement.setAttribute(XPXLiterals.A_UNIT_OF_MEASURE, inventoryUOM);
         //priceListLineElement.setAttribute(XPXLiterals.A_UNIT_OF_MEASURE, pricingUOM);
         
@@ -395,7 +395,7 @@ public class XPXLoadPriceListAPI implements YIFCustomApi
             // END - Fix for Jira# 1469
             */
             /*XB - 562 - skip the first item since it is already added*/
-            if (fromQty != null && listPrice != null && tierUOM != null && fromQty.equals(firstQuantity) && listPrice.equals(firstListPrice) && tierUOM.equals(firstTierUOM)){
+          if (fromQty != null && listPrice != null && tierUOM != null && fromQty.equals(firstQuantity) && listPrice.equals(firstListPrice) && tierUOM.equals(firstTierUOM)){
             	continue;
             }
             /*XB - 562 */

@@ -20,7 +20,6 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderSummaryUpdateAction;
-import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
@@ -39,6 +38,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private static final String CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ = "changeOrderAPIOutputForOU";
 	private static final String SAVE_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryOnOrderPlace";
 	private static final String EDIT_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryUpdateOnOrderPlace";
+	private static final String APPROVE_ORDER_SUMMARY_MASHUP = "XPEDXDraftOrderSummaryUpdateOnApproveOrder";
 	private static final String RUSH_ORDER="RUSH ORDER";
 	private static final String REQUESTED_DELIVERY_DATE="REQUESTED DELIVERY DATE";
 	private boolean isDraftOrder=false;
@@ -78,7 +78,37 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				if(customerHoldCheck != null && "true".equals(customerHoldCheck) ){
 					setExtnWebHoldFlag("Y");
 				}
-				outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
+				
+				String approveOrderFlag="false";
+				Object approveOrderSessionVar=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+				if(approveOrderSessionVar!=null) {
+					approveOrderFlag=approveOrderSessionVar.toString();
+				}
+				
+				if("true".equals(approveOrderFlag)) {
+					Set<String> mashupId=new HashSet<String>();
+					mashupId.add(APPROVE_ORDER_SUMMARY_MASHUP);
+					
+					Map<String, Element> changeOrderInputObj=prepareMashupInputs(mashupId);
+					Document changeOrderInputDoc = changeOrderInputObj.get(APPROVE_ORDER_SUMMARY_MASHUP).getOwnerDocument();
+					Element changeOrderInputElem = changeOrderInputDoc.getDocumentElement();
+					Element holdTypesElem = SCXmlUtil.getChildElement(changeOrderInputElem, "OrderHoldTypes");
+					Element holdTypeElem = SCXmlUtil.getChildElement(holdTypesElem, "OrderHoldType");
+					holdTypeElem.setAttribute("HoldType", "ORDER_LIMIT_APPROVAL");
+					holdTypeElem.setAttribute("Status", "1300");
+					holdTypeElem.setAttribute("ResolverUserId", getWCContext().getLoggedInUserId());
+					
+					Element changeOrderExtnElem = SCXmlUtil.getChildElement(changeOrderInputElem, "Extn");
+					changeOrderExtnElem.setAttribute("ExtnOrderEditCustContactID", wcContext.getLoggedInUserId());
+					changeOrderExtnElem.setAttribute("ExtnLastOrderOperation", "OrderApproved");
+					changeOrderExtnElem.setAttribute("ExtnOrderConfirmationEmailSentFlag", "N");
+					outElement = (Element) WCMashupHelper.invokeMashup(APPROVE_ORDER_SUMMARY_MASHUP, changeOrderInputElem, wcContext.getSCUIContext());
+				
+				} else {
+					outElement = prepareAndInvokeMashup(EDIT_ORDER_SUMMARY_MASHUP);
+					
+				}				
+				
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				Document orderOutDoc = outElement.getOwnerDocument();
 				getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ, orderOutDoc);
@@ -340,7 +370,14 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 		}
 		if (YFCCommon.isVoid(addnlEmailAddrs)){
 			addnlEmailAddrs = "";
-		}	
+		}
+		else{
+			addnlEmailAddrs = addnlEmailAddrs.trim();
+			char  lastChar = addnlEmailAddrs.charAt(addnlEmailAddrs.length()-1);
+			if(lastChar != ','){
+				addnlEmailAddrs = addnlEmailAddrs+",";
+			}
+		}
 		if (YFCCommon.isVoid(addnlPoList)){
 			addnlPoList = "";
 		}
@@ -358,7 +395,9 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 			for (String addr: addrs){
 				extnAddnlEmailAddrs.append(addr.trim() + ",");
 			}
+			
 			attributeMap.put(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR, extnAddnlEmailAddrs.toString());
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR, extnAddnlEmailAddrs.toString());
 			//valueMap.put("/Customer/CustomerContactList/CustomerContact/Extn/@ExtnAddnlEmailAddrs",extnAddnlEmailAddrs.toString());
 		}
 		if(custContRefKey!=null && custContRefKey.length()>0)
@@ -487,13 +526,13 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 				StringBuilder instructions = new StringBuilder(SpecialInstructions);
 				if("Y".equals(getRushOrdrFlag())){
 					instructions.append(" "+RUSH_ORDER);
-					if("true".equals(getRushOrdrDateFlag())){
+					/*Commented for EB 1975 if("true".equals(getRushOrdrDateFlag())){
 						instructions.append(", "+REQUESTED_DELIVERY_DATE);
 					}
 				}else{
 					if("true".equals(getRushOrdrDateFlag())){
 						instructions.append(" "+REQUESTED_DELIVERY_DATE);
-					}
+					}*/
 				}
 				setSpecialInstructions(instructions.toString());
 			}

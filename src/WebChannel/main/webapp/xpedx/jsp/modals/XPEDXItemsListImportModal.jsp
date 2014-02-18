@@ -23,14 +23,15 @@
 		<!-- <h2>Import My Items List</h2> -->
 		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
 	<div  id="importItems">
-		<s:form name="formImport" id="formImport" action="XPEDXMyItemsDetailsImportPrepare" method="post"
+		<s:form name="formImport" id="formImport" action="MyItemsDetailsImportPrepare" method="post"
 			enctype="multipart/form-data">
 		  
 		<div id="errorMsgForRequiredField" class="error" style="display: none;" >
 		</div> 
 		
 		<div>
-            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. A sample file is provided. Delete the item contents and enter your own data. </p>
+            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file.</p>
+            <p>A sample file is provided. Delete the item contents and enter your own data.</p>
             <ul id="tool-bar" class="tool-bar-bottom">
                 <li><a class="grey-ui-btn" href="../sample/SampleImport.csv"><span>Download Sample</span></a></li>
 
@@ -52,6 +53,7 @@
 			<p>Items are imported in the same order they are listed in the file, and added to the bottom of the My Items List.</p>
         	
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>
+			<s:hidden name="editMode" value="%{true}"></s:hidden>
 			<s:hidden name="listDesc" value="%{listDesc}"></s:hidden>
 			<s:set name="itemCount" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size'></s:set>
 			<s:hidden name="itemCount" value="%{#itemCount}"></s:hidden>
@@ -60,7 +62,6 @@
 			<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>
 			<s:hidden name="listCustomerId" value="%{listCustomerId}"></s:hidden>
 			<s:hidden name="listName" value="%{listName}"></s:hidden>
-			
 			<script type="text/javascript">
 		
 			function submitImport() {

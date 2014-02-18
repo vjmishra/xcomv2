@@ -133,7 +133,7 @@ p{margin-bottom:8px;}
                <div class="x-input">
                  <div class=" padding-all2" style="padding: 10px 10px 10px 0;"> 
                  <s:iterator value="stdreportlist" id='rId'>
-	<s:url id='myreporting' namespace='/xpedx/services'
+	<s:url id='myreporting' namespace='/services'
 		action='promptInput'>
 		<s:param name='id' value='#rId.id' />
 		<s:param name='cuid' value='#rId.cuid' />
@@ -153,7 +153,7 @@ p{margin-bottom:8px;}
 
 
 		<s:iterator value="vallist" id='cId'>
-	<s:url id='mycustomreporting' namespace='/xpedx/services'
+	<s:url id='mycustomreporting' namespace='/services'
 				action='promptInput'>
 				<s:param name='id' value='#cId.id' />
 				<s:param name='cuid' value='#cId.cuid' />

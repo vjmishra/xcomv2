@@ -6,7 +6,9 @@ SMCFSBUILDHOME=/xpedx/sci_build/smcfs
 DATE=`date +%Y-%m-%d`
 #location of the zip files used for the build is specified below.
 ZIPFILEHOME=/home/share/xpadmin/buildsource
-LOGFILE=/xpedx/sci_build/smcfs/smcfsBuild-`date +"%Y%m%d-%H%M"`.log
+mkdir /xpedx/sci_build/smcfs/logs/
+chmod 774 /xpedx/sci_build/smcfs/logs/
+LOGFILE=/xpedx/sci_build/smcfs/logs/smcfsBuild-`date +"%Y%m%d-%H%M"`.log
 
 #Check which server, set customer overrides for mortals
 HOST_NAME="$(hostname)"
@@ -20,7 +22,8 @@ echo "Build Start TimeStamp: " `date` >> $LOGFILE
 #zxpaappmc01) ENVIRONMENT=dev;; 
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
- zxpappd02) ENVIRONMENT=dev;;
+ zxpappd02) ENVIRONMENT=sandbox1;;
+ zxpappint01) ENVIRONMENT=integration;;
  zxpappt01) ENVIRONMENT=staging;; 
  zxpapps01) ENVIRONMENT=prodsupport;; 
  zxpagnt01) ENVIRONMENT=prod;; 

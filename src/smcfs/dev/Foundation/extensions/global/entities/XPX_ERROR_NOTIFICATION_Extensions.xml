@@ -31,6 +31,8 @@
 					 Description="The i/p xml"
 					Nullable="true" XMLName="XmlFile" />
 				<Attribute ColumnName="EXCEPTION_ID" DataType="Text-254" DefaultValue="" Description="Exception ID to use as reference" Nullable="true" XMLName="ExceptionID" />
+				<!--System_name for Jira EB-517-->
+				<Attribute ColumnName="HOST_NAME" DataType="Text-60" DefaultValue="" Description="server name to use as reference" Nullable="true" XMLName="Host_Name" />
 								
 			</Attributes>
 			<PrimaryKey Name="ERROR_NOTIFY_PK">

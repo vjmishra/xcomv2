@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PLT_PROPERTY_METADATAList TableName="PLT_PROPERTY_METADATA">
-<PropertyMetadata BasePropertyName="YCDAddtnlHlpMsgsIcons" Category=""
+<PropertyMetadata BasePropertyName="YCDAddtnlHlpMsgsIcons" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -9,7 +9,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;Y&quot;/> &lt;value name=&quot;N&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDAddtnlHlpMsgsIconsMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDAlertNotification" Category=""
+<PropertyMetadata BasePropertyName="YCDAlertNotification" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -18,7 +18,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;Y&quot;/> &lt;value name=&quot;N&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDAlertNotificationMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDCustomerCSRMessages" Category=""
+<PropertyMetadata BasePropertyName="YCDCustomerCSRMessages" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -27,7 +27,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;Y&quot;/> &lt;value name=&quot;N&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDCustomerCSRMessagesMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDCustomrCSRMsgPnlPsn" Category=""
+<PropertyMetadata BasePropertyName="YCDCustomrCSRMsgPnlPsn" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -36,7 +36,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;TOP&quot;/> &lt;value name=&quot;BOTTOM&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDCustomrCSRMsgPnlPsnMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDRelatedTaskPosition" Category=""
+<PropertyMetadata BasePropertyName="YCDRelatedTaskPosition" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -45,7 +45,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;LEFT&quot;/> &lt;value name=&quot;RIGHT&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDRelatedTaskPositionMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDRelatedTaskShortcut" Category=""
+<PropertyMetadata BasePropertyName="YCDRelatedTaskShortcut" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -54,7 +54,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;Y&quot;/> &lt;value name=&quot;N&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDRelatedTaskShortcutMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDSavePaginationSort" Category=""
+<PropertyMetadata BasePropertyName="YCDSavePaginationSort" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -63,7 +63,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;Y&quot;/> &lt;value name=&quot;N&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDSavePaginationSortMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDScratchPadView" Category=""
+<PropertyMetadata BasePropertyName="YCDScratchPadView" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"
@@ -72,7 +72,7 @@
     PermissibleValues="&lt;values> &lt;value name=&quot;RELATED_TASK&quot;/> &lt;value name=&quot;POPUP&quot;/> &lt;/values>"
     PropertyMetadataKey="YCDScratchPadViewMD" PropertyType="SYSTEM"
     Scope="GLOBAL" ServerOverride="N" UserOverride="Y"/>
-<PropertyMetadata BasePropertyName="YCDShowScratchPad" Category=""
+<PropertyMetadata BasePropertyName="YCDShowScratchPad" Category=" "
     Createprogid="XMLMigrator" Createts="2011-07-14T15:24:32-04:00"
     Createuserid="SYSTEM" DataType="String" Group="SERVER"
     JvmType="APPSERVER" Lockid="0" Modifiable="Y"

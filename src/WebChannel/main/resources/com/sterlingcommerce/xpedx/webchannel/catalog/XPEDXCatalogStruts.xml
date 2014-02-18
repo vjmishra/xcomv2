@@ -5,6 +5,10 @@
 	<package name="xpedx.catalogFragment" namespace='/catalog'
 		extends="catalogFragment">
 
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+		
 		<action name="itemDetails"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemDetailsAction">
 			<param name="mashups">xpedxItemDetails</param>
@@ -29,12 +33,23 @@
 			<param name="categoryDepth">2</param>
 			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
-			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+			<result name="retrySearch" type="redirectAction">
+				<param name="actionName">newSearch</param>
+				<param name="namespace">/catalog</param>			
+				<param name="tryAgain">true</param>
+				<param name="searchTerm">${searchTerm}</param>
+				<param name="remSearchTerms">${remSearchTerms}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>				
+			</result>
 			<result name="singleItem" type="redirectAction">
 				<param name="actionName">itemDetails</param>
 				<param name="namespace">/catalog</param>
 				<param name="parse">true</param>
 				<param name="itemID">${itemID}</param>
+				<!-- Added goBackFlag for Back button issues for JIRA #828 -->
+				<param name="goBackFlag">true</param>
 				<param name="scFlag">Y</param>
 				<param name="unitOfMeasure">${unitOfMeasure}</param>
 			</result>
@@ -48,7 +63,16 @@
 			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
 			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
 			<!-- result name="error">/swc/jsp/catalog/searchError.jsp</result-->
-			<result name="error">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+			<result name="retrySearch" type="redirectAction">
+				<param name="actionName">newSearch</param>
+				<param name="namespace">/catalog</param>			
+				<param name="tryAgain">true</param>
+				<param name="searchTerm">${searchTerm}</param>
+				<param name="remSearchTerms">${remSearchTerms}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>				
+			</result>
 			<result name="singleItem" type="redirectAction">
 				<param name="actionName">itemDetails</param>
 				<param name="namespace">/catalog</param>
@@ -59,6 +83,19 @@
 				<param name="unitOfMeasure">${unitOfMeasure}</param>
 			</result>
 		</action>
+		
+		<action name="ajaxAutocomplete" class="com.sterlingcommerce.xpedx.webchannel.catalog.AjaxAutocompleteAction">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result type="json"></result>
+			<result type="json" name="error"></result>
+		</action>
+		<action name="debugmgi" class="com.sterlingcommerce.xpedx.webchannel.catalog.DebugMarketingGroupIndexAction">
+			<result type="json"></result>
+		</action>
+		
 		<action name="prodCompare"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXProductComparisonAction">
 			<param name="mashups">ProductComparison</param>
@@ -178,5 +215,22 @@
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="setNormallyStockedCheckbox">
 			<result>/xpedx/jsp/home/XPEDXMainCategories.jsp</result>
 		</action>
+
+<!-- Added for JIRA EB-1731 to getAllFacetList for narrowBy -->
+		<action name="getFacetList"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="getFacetList">
+			<param name="mashupID">xpedxNarrowByCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXMoreNarrowBy.jsp</result>
+		</action>
+		<action name="getNarrowByList"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="getFacetList">
+			<param name="mashupID">xpedxNarrowByCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXNarrowBy.jsp</result>
+		</action>
+		
 	</package>
 </struts>

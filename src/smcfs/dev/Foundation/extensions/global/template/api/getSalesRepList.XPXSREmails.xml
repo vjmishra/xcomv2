@@ -1,6 +1,6 @@
 <CustomerList >
 <Customer >
-<Extn ExtnSuffixType="">
+<Extn ExtnSuffixType="" ExtnSalesProPrimaryEmailFlag="" ExtnSalesProAllEmailFlag="">
 <XPEDXSalesRepList>
 <XPEDXSalesRep>
 </XPEDXSalesRep>

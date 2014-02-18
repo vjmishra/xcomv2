@@ -37,7 +37,7 @@
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:38:00-04:00"
     Modifyuserid="SYSTEM" OwnerKey="DEFAULT"
     ProcessTypeKey="200307081424521056" RequestedFlag="Y" SystemDefined="Y"/>
-<DateType ActualFlag="Y" CommittedFlag="" Createprogid="XMLMigrator"
+<DateType ActualFlag="Y" CommittedFlag=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:01-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_COMPLETELY_SHIPPED_OR_CANCELLED"
     DateTypeKey="201004210001018058"
@@ -46,7 +46,7 @@
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-21T00:01:01-04:00"
     Modifyuserid="ng" OwnerKey="DEFAULT"
     ProcessTypeKey="ORDER_FULFILLMENT" RequestedFlag="N" SystemDefined="N"/>
-<DateType ActualFlag="Y" CommittedFlag="" Createprogid="XMLMigrator"
+<DateType ActualFlag="Y" CommittedFlag=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:01-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_UNREACHABLE" DateTypeKey="201004210001018059"
     Description="YCD Unreachable Milestone" ExpectedFlag="N"
@@ -54,7 +54,7 @@
     Modifyts="2010-04-21T00:01:01-04:00" Modifyuserid="ng"
     OwnerKey="DEFAULT" ProcessTypeKey="ORDER_FULFILLMENT"
     RequestedFlag="N" SystemDefined="N"/>
-<DateType ActualFlag="Y" CommittedFlag="" Createprogid="XMLMigrator"
+<DateType ActualFlag="Y" CommittedFlag=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:01-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_FTC_NEXT_PROMISE_DATE"
     DateTypeKey="201004210001018060" Description="Next FTC Promise Date"
@@ -62,7 +62,7 @@
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-21T00:01:01-04:00"
     Modifyuserid="ng" OwnerKey="DEFAULT"
     ProcessTypeKey="ORDER_FULFILLMENT" RequestedFlag="N" SystemDefined="N"/>
-<DateType ActualFlag="Y" CommittedFlag="" Createprogid="XMLMigrator"
+<DateType ActualFlag="Y" CommittedFlag=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:01-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_FTC_CANCEL_DATE" DateTypeKey="201004210001018061"
     Description="YCD_FTC_CANCEL_DATE" ExpectedFlag="N" IsMilestone="N"

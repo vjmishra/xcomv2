@@ -237,6 +237,36 @@
 				Size="" 
 				XMLName="ExtnViewPricesFlag" 
 				XMLGroup="Extn" />
+			<Attribute 
+				ColumnName="EXTN_MFG_ITEM_FLAG" 
+				DataType="Flag" 
+				DefaultValue=" " 
+				Description=" " 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnMfgItemFlag" 
+				XMLGroup="Extn" />
+				
+			<Attribute 
+				ColumnName="EXTN_CUSTOMER_ITEM_FLAG" 
+				DataType="Flag" 
+				DefaultValue=" " 
+				Description=" " 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnCustomerItemFlag" 
+				XMLGroup="Extn" />
+				
+			<Attribute 
+				ColumnName="EXTN_DEFAULT_STOCKED_ITEM_VIEW" 
+				DataType="Text-25" 
+				DefaultValue="DEFAULT_ALL" 
+				Description="DEFAULT_ALL=Default View to All Items, DEFAULT_STOCKED=Default View to Normally Stocked Items, ONLY_STOCKED=Only View Normally Stocked Items" 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnDefaultStockedItemView" 
+				XMLGroup="Extn" />
+				
 							<Attribute 
 				ColumnName="EXTN_CAN_ORDER_FLAG" 
 				DataType="Flag" 
@@ -575,7 +605,15 @@
 				Size="" 
 				XMLName="ExtnCustLinePONoFlag" 
 				XMLGroup="Extn" />
-
+				<Attribute 
+				ColumnName="EXTN_CUST_LINE_PO_LBL" 
+				DataType="Text-25" 
+				DefaultValue="' '" 
+				Description=" " 
+				Nullable="true" 
+				Size="" 
+				XMLName="ExtnCustLinePOLbl" 
+				XMLGroup="Extn" />
 
 				<Attribute 
 				ColumnName="EXTN_CUST_LINE_FIELD1_FLAG" 
@@ -925,6 +963,27 @@
           XMLName="ExtnLocationID"
           XMLGroup="Extn" 
           />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_P_EMAIL_FLAG" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to the primary Sales Professional"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesProPrimaryEmailFlag"
+	          XMLGroup="Extn" 
+          />
+          
+          <Attribute ColumnName="EXTN_SALESPRO_All_EMAIL_FLAG" 
+	          DataType="char-1"
+	          DefaultValue="'N'" 
+	          Description="Flag on bill-to indicating whether or not to send email to Sales Professional 1 to 4"  
+	          Nullable="true" 
+	          XMLName="ExtnSalesProAllEmailFlag"
+	          XMLGroup="Extn" 
+          />
+          
+       
+          
         </Attributes>
         <!-- ENDS Fix for JIRA 1886 : adsouza-->
 		
@@ -1055,6 +1114,16 @@
           <Parent ParentTableName="YFS_CUSTOMER" XMLName="YFSCustomer">
                 <Attribute ColumnName="SALES_CUSTOMER_KEY" ParentColumnName="CUSTOMER_KEY"/>
           </Parent>
+
+		  <Indices>
+           
+			<Index Name="XPX_XPEDX_SALES_REP_I0" Unique="False">
+               <Column Name="SALES_CUSTOMER_KEY"/>           
+            </Index>
+			<!-- End : New index created for XBT-361 -->			
+        </Indices> 
+		 
+
       </Entity>
     
       <Entity TableName="YFS_USER" >

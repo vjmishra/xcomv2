@@ -61,10 +61,10 @@ public class XPEDXAlphanumericSorting implements Comparator {
 	            int result;
 	 
 	            if (Character.isDigit(space1[0]) && Character.isDigit(space2[0])) {
-	                Integer firstNumberToCompare = new Integer(Integer
-	                        .parseInt(str1.trim()));
-	                Integer secondNumberToCompare = new Integer(Integer
-	                        .parseInt(str2.trim()));
+	                Double firstNumberToCompare = new Double(Double
+	                        .parseDouble(str1.trim()));
+	                Double secondNumberToCompare = new Double(Double
+	                        .parseDouble(str2.trim()));
 	                result = firstNumberToCompare.compareTo(secondNumberToCompare);
 	            } else {
 	                result = str1.compareTo(str2);

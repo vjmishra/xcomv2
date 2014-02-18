@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <YFS_HOLD_TYPEList TableName="YFS_HOLD_TYPE">
-<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+<HoldType ApplyConditionKey=" " ApplyOnResolveOfHoldTypeKey=" "
     BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
     CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
     Createprogid=".YEntityServlet" Createts="2010-05-06T20:13:42-04:00"
@@ -8,8 +8,8 @@
     HoldType="NEEDS_ATTENTION" HoldTypeDescription="Needs Attention"
     HoldTypeKey="2010050620134217218" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-05-06T20:13:42-04:00"
-    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId="" RejectTransactionId=""/>
-<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId=" " RejectTransactionId=" "/>
+<HoldType ApplyConditionKey=" " ApplyOnResolveOfHoldTypeKey=" "
     BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
     CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
     Createprogid=".YEntityServlet" Createts="2010-05-07T18:40:56-04:00"
@@ -18,8 +18,8 @@
     HoldTypeDescription="Order Limit Approval"
     HoldTypeKey="2010050718405617298" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-05-07T18:40:56-04:00"
-    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId="" RejectTransactionId=""/>
-<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId=" " RejectTransactionId=" "/>
+<HoldType ApplyConditionKey=" " ApplyOnResolveOfHoldTypeKey=" "
     BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
     CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
     Createprogid=".YEntityServlet" Createts="2011-02-28T12:19:36-05:00"
@@ -28,8 +28,8 @@
     HoldTypeDescription="Legacy Cancel Order Hold"
     HoldTypeKey="20110228121937100869" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-02-28T12:19:36-05:00"
-    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId="" RejectTransactionId=""/>
-<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId=" " RejectTransactionId=" "/>
+<HoldType ApplyConditionKey=" " ApplyOnResolveOfHoldTypeKey=" "
     BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
     CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
     Createprogid=".YEntityServlet" Createts="2011-02-28T12:22:37-05:00"
@@ -38,8 +38,8 @@
     HoldTypeDescription="Legacy Cancel Line Hold"
     HoldTypeKey="20110228122238101149" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-02-28T12:22:37-05:00"
-    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId="" RejectTransactionId=""/>
-<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+    Modifyuserid="ng" OrganizationCode="xpedx" ProcessTransactionId=" " RejectTransactionId=" "/>
+<HoldType ApplyConditionKey=" " ApplyOnResolveOfHoldTypeKey=" "
     BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
     CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
     Createprogid=".YEntityServlet" Createts="2011-08-18T17:48:56-04:00"
@@ -48,8 +48,9 @@
     HoldTypeDescription="Order Exception Hold"
     HoldTypeKey="20110818174857172447" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2011-08-18T17:48:56-04:00"
-    Modifyuserid="ngmc" OrganizationCode="xpedx" ProcessTransactionId="" RejectTransactionId=""/>
-<HoldType ApplyConditionKey="" ApplyOnResolveOfHoldTypeKey=""
+    Modifyuserid="ngmc" OrganizationCode="xpedx"
+    ProcessTransactionId=" " RejectTransactionId=" "/>
+<HoldType ApplyConditionKey=" " ApplyOnResolveOfHoldTypeKey=" "
     BaseProcessTypeKey="ORDER_FULFILLMENT" CanAllUsersCreateHoldType="Y"
     CanAllUsersResolveHoldType="Y" CanResolveOnCancel="N"
     Createprogid=".YEntityServlet" Createts="2012-10-10T02:51:03-04:00"
@@ -59,5 +60,5 @@
     HoldTypeKey="201210100251032449532" Lockid="0"
     Modifyprogid=".YEntityServlet" Modifyts="2012-10-10T02:51:03-04:00"
     Modifyuserid="admin" OrganizationCode="xpedx"
-    ProcessTransactionId="" RejectTransactionId=""/>
+    ProcessTransactionId=" " RejectTransactionId=" "/>
 </YFS_HOLD_TYPEList>

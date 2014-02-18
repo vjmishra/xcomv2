@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Element;
-
 import com.xpedx.sterling.rcp.pca.util.XPXConstants;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.IYRCComposite;
@@ -51,6 +50,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	private Composite pnlParam2;
 	private Composite pnlParam3;
 	private Text txtParam1;
+	private Text txtParamRule; //Added by VJ
 	private Text txtParam2;
 	private Text txtParam3;
 //	private Label lblRuleDesc;
@@ -61,7 +61,8 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	private Element eleRuleLine;
 	private String ruleId;
 	private boolean showParam1=false;
-	private boolean enablechk=false;
+	private boolean showtext=false;
+	boolean enablechk=false;
 	private boolean showParam2=false;
 	private boolean showParam3=false;
 	private StyledText stxtRuleDesc;
@@ -92,15 +93,37 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 			}
 			showParam1= true;
 		}
-
+		//XB-519 showtext added for manage rule tab text field
+		//EB-270 Editing the RuleLongDesc
+		if("RequiredCustomerLinePO".equals(ruleId))
+		{
+			eleRuleLine.setAttribute("RuleLongDesc" , "Require Line PO #");
+			showtext= true;
+			
+		}
+		if("RequiredCustomerLineAccountNo".equals(ruleId))
+		{
+			eleRuleLine.setAttribute("RuleLongDesc" , "Require Line Account #");
+			showtext= true;
+		}
+		
+		//Element eleCustomer = this.pnlRuleLines.parentObj.getBehavior().getLocalModel("XPXCustomerIn");
+		//Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+		//txtCustomerLinePONumberMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+		//txtCustLineAcctMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+		
+		//System.out.println("Testing Line 106 ****: "+ YRCXmlUtils.getString(eleCustomer));
 		initialize();
 		setBindingForComponents();
 		myBehavior = new CustomerProfileRuleLineBehavior(this, FORM_ID, inputObject, eleRuleLine);
+		
 		populateCustomerLineFields(this.pnlRuleLines.parentObj);
 	}
 	
 	private void populateCustomerLineFields(CustomerProfileMaintenance maintenance) {
 		Element customerDetailsEle = maintenance.getBehavior().getCustomerDetails();
+		//Added billTo XB-519
+		String lineData = null ;
 		if(!YRCPlatformUI.isVoid(customerDetailsEle))
 		{
 			if("RequireCustomerLineField1".equals(ruleId))
@@ -117,7 +140,38 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 			{
 				Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
 				txtParam1.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineField3Label"));
-			}	
+			}
+			//XB-519 Added RequiredCustomerLinePO, RequiredCustomerLineAccountNo for displaying text 
+			if("RequiredCustomerLinePO".equals(ruleId))
+			{
+				Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+				//txtParam1.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+				//billTo = YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl");
+				//billTo = XPXUtils.poLbl;
+				lineData = XPXUtils.getPoLbl();
+				if(lineData != null && (! "".equalsIgnoreCase(lineData))){
+					txtParamRule.setText(lineData);
+				}else{
+					txtParamRule.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+				}
+				
+				
+			}
+			if("RequiredCustomerLineAccountNo".equals(ruleId))
+			{
+				Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+				//txtParam1.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+				txtParamRule.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+				//billTo = XPXUtils.lineAcc;
+				lineData = XPXUtils.getLineAcc();
+				if(lineData != null && (! "".equalsIgnoreCase(lineData))){
+					txtParamRule.setText(lineData);
+				}else{
+					txtParamRule.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+				}
+					
+
+			}
 			Element extnEle = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
 			String suffixType=extnEle.getAttribute("ExtnSuffixType");
 			if("B".equals(suffixType)){
@@ -136,11 +190,55 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 						txtParam1.setText(YRCXmlUtils.getAttribute(parentExtnElement, "ExtnCustLineField3Label"));
 					}	
 				}
+				//XB- 519 Added RequiredCustomerLinePO, RequiredCustomerLineAccountNo for displaying text 
+				if("RequiredCustomerLinePO".equals(ruleId))
+				{
+					Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/ParentCustomer/Extn");
+					//txtParam1.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+					txtParamRule.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+					txtParamRule.setEditable(false);
+					//txtParam1.setEditable(false);
+					//billTo = XPXUtils.poLbl;
+					lineData = XPXUtils.getPoLbl();
+					if(lineData != null && (! "".equalsIgnoreCase(lineData))){
+						txtParamRule.setText(lineData);
+					}else{
+						txtParamRule.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+					}
+				}
+				
+				if("RequiredCustomerLineAccountNo".equals(ruleId))
+				{
+					Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/ParentCustomer/Extn");
+					//txtParam1.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+					//txtParam1.setEditable(false);
+					//billTo = XPXUtils.lineAcc;
+					lineData = XPXUtils.getLineAcc();
+					if(lineData != null && (! "".equalsIgnoreCase(lineData))){
+						txtParamRule.setText(lineData);
+					}else{
+						txtParamRule.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+					}
+				}
+				// XB-519 Added below code to disable the fields at Billto Rules Tab
+				setControlsEnabled(readOnlyforSAPChilds(), false);
 			}
 		}
 	}
+	private void setControlsEnabled(Control[] controls, boolean enabled) {
+		for (Control control : controls) {
+			if (null != control && !control.isDisposed())
+				control.setEnabled(enabled);
+		}
+	}
+	private Control[] readOnlyforSAPChilds(){
+		return new Control[] {
+				txtParamRule	
+		}; 
+	}
 	private void setBindingForComponents() {
 		YRCButtonBindingData chkBoxBindingData = new YRCButtonBindingData();
+		
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData.setSourceBinding("Source:/XPXRuleDefn/@Selected");
@@ -153,6 +251,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		stbd.setName("stxtRuleDesc");
 		stxtRuleDesc.setData(YRCConstants.YRC_STYLED_TEXT_BINDING_DEFINATION, stbd);
 		YRCTextBindingData tbd =null;
+		
 		if (showParam1) {
 			tbd = new YRCTextBindingData();
 			tbd.setSourceBinding("Source:/XPXRuleDefn/@Param1");
@@ -289,7 +388,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		gridDataPnl.grabExcessHorizontalSpace = true;
 		gridDataPnl.grabExcessVerticalSpace = true;
 		// gridDataPnl.verticalSpan = 2;
-		gridDataPnl.widthHint = 500;
+		gridDataPnl.widthHint = 300;//Modified for Eb-269
 		gridDataPnl.verticalAlignment = 4;
 		pnlRuleDesc = new Composite(LinePnl, 0);
 		pnlRuleDesc.setLayout(gridLayout1);
@@ -311,22 +410,34 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	}
 	private void createParam1Composite() {
 
-		GridLayout gridLayout1 = new GridLayout();
-		gridLayout1.horizontalSpacing = 0;
-		gridLayout1.verticalSpacing = 0;
+		//XB-519 Modified For UI
+		GridLayout gridLayout1 = new GridLayout(6, true);
+		gridLayout1.horizontalSpacing = 2;
+		gridLayout1.verticalSpacing = 2;
 		//gridLayout1.numColumns = 1;
-		gridLayout1.numColumns = 2;
-		gridLayout1.marginWidth = 0;
-		gridLayout1.marginHeight = 5;
-
-		GridData gridDataVal = new GridData();
-		gridDataVal.horizontalAlignment = SWT.CENTER;
-		gridDataVal.verticalAlignment = SWT.CENTER;
-		gridDataVal.grabExcessVerticalSpace = false;
+		gridLayout1.numColumns = 6;
+		gridLayout1.marginWidth = 2;
+		gridLayout1.marginHeight = 2;
+		
+		//XB-519 Modified for UI
+		/*GridData gridDataVal = new GridData();
+		gridDataVal.horizontalAlignment = SWT.BEGINNING;
+		gridDataVal.verticalAlignment = 2;
+		//gridDataVal.grabExcessVerticalSpace = false;
 		gridDataVal.grabExcessHorizontalSpace = true;
-		gridDataVal.horizontalSpan = 1;
-		gridDataVal.verticalSpan = 1;
-		gridDataVal.widthHint = 60;
+		gridDataVal.horizontalSpan = 3;
+		//gridDataVal.verticalSpan = 1;
+		gridDataVal.widthHint = 300;*/
+        GridData gridDataVal = new GridData();
+        gridDataVal.horizontalAlignment = SWT.CENTER;
+        gridDataVal.verticalAlignment = 1;
+        gridDataVal.grabExcessVerticalSpace = false;
+        gridDataVal.grabExcessHorizontalSpace = true;
+        gridDataVal.horizontalSpan = 1;
+        gridDataVal.verticalSpan = 1;
+        gridDataVal.widthHint = 300; // this changes the text field width
+
+
 		
 		GridData gridDataVal2 = new GridData();
 		gridDataVal2.horizontalAlignment = SWT.CENTER;
@@ -343,7 +454,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		gridDataPnl.grabExcessVerticalSpace = true;
 		// gridDataPnl.verticalSpan = 2;
 		//gridDataPnl.widthHint = 100;
-		gridDataPnl.widthHint = 160;
+		gridDataPnl.widthHint = 400; ////Modified for Eb-269
 		gridDataPnl.verticalAlignment = 4;
 		pnlParam1 = new Composite(LinePnl, 0);
 		pnlParam1.setLayout(gridLayout1);
@@ -363,21 +474,11 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 			ruleLabel.setVisible(false);
 		}
 
-		txtParam1 = new Text(pnlParam1, 2048|SWT.READ_ONLY);
+		txtParam1 = new Text(pnlParam1, 2048|SWT.LEFT);
 		txtParam1.setLayoutData(gridDataVal);
 		txtParam1.setText("");
 		txtParam1.setData("name", "txtParam1");
-		if(showParam1){
-			txtParam1.setVisible(true);
-		}else{
-			txtParam1.setVisible(false);
-		}
-		if(enablechk){
-			txtParam1.setEditable(true);
-		}
-		else{
-			txtParam1.setEditable(false);
-		}
+	
 //		if(isIntegAdmin()){
 //			txtParam1.setEditable(false);
 //		}
@@ -421,7 +522,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		}else{
 			txtParam2.setVisible(false);
 		}
-
+		
 	}
 	private void createParam3Composite() {
 
@@ -432,6 +533,16 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 		gridLayout1.marginWidth = 0;
 		gridLayout1.marginHeight = 5;
 
+		//XB-519 Modified For UI Kubra
+		GridData gridData3 = new GridData();
+		gridData3.horizontalAlignment = SWT.BEGINNING;
+		gridData3.grabExcessHorizontalSpace = true;
+		gridData3.verticalAlignment = 6;
+		gridData3.widthHint = 600;
+		gridData3.horizontalSpan=4;
+		
+		
+		//XB-519 - TextField UI On Rules TAB
 		GridData gridDataVal = new GridData();
 		gridDataVal.horizontalAlignment = SWT.BEGINNING;
 		gridDataVal.verticalAlignment = SWT.CENTER;
@@ -462,6 +573,34 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 			txtParam3.setVisible(true);
 		}else{
 			txtParam3.setVisible(false);
+		}
+		
+		//XB-519 VJ Changes
+		txtParamRule = new Text(pnlParam1, 2048);
+		txtParamRule.setLayoutData(gridData3);
+		txtParamRule.setTextLimit(22);
+		txtParamRule.setData("name", "txtParamRule");
+		
+		if(showtext){
+			txtParamRule.setVisible(true);
+			txtParamRule.setEditable(true);
+			
+			
+		}else{
+			txtParamRule.setVisible(false);
+			txtParamRule.setEditable(false);
+			
+		}
+		if(showParam1){
+			txtParam1.setVisible(true);
+		}else{
+			txtParam1.setVisible(false);
+		}
+		if(enablechk){
+			txtParam1.setEditable(true);
+		}
+		else{
+			txtParam1.setEditable(false);
 		}
 	}
 	
@@ -569,6 +708,7 @@ public class CustomerProfileRuleLinePanel extends Composite implements IYRCCompo
 	public boolean isCustomerFieldChecked(String ruleId) {
 		Element customerDetailsEle = this.pnlRuleLines.parentObj.getBehavior().getCustomerDetails();
 		String custLineField="";
+		String billto;
 		if(!YRCPlatformUI.isVoid(customerDetailsEle))
 		{
 			Element extnEle = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");

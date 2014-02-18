@@ -102,11 +102,11 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 							.getTextContent();
 				}
 				Node customerPartNumberN = XpxItemcustXrefAttributes
-						.getNamedItem("CustomerPartNumber");
+						.getNamedItem("CustomerItemNumber");
 				if (customerPartNumberN != null
 						&& customerPartNumberN.getTextContent().trim().length() > 0) {
-					customerNumberPlusPartNumber += "|"
-							+ customerPartNumberN.getTextContent();
+					customerNumberPlusPartNumber += customerPartNumberN
+							.getTextContent();
 				}
 			}
 			// Now preparing the output
@@ -139,12 +139,12 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements
 									+ RECORD_SEPARATOR;
 						}
 					}
-					if ("showNormallyStockedItems".equals(searchFieldElement
+					/*if ("showNormallyStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
-						log.debug("getLocaleDoc_showNormallyStockedItems=" + divisionForStockedItem.trim());
+						log.debug("getLocaleDoc_showNormallyStockedItems=" + "W");
 						valueElement.setAttribute("Value",
-								divisionForStockedItem.trim());
-					}
+								"W");
+					}*/
 					if ("showStockedItems".equals(searchFieldElement
 							.getAttribute("IndexFieldName"))) {
 						log.debug("getLocaleDoc_showStockedItems=" + divisionForStockedItem.trim());

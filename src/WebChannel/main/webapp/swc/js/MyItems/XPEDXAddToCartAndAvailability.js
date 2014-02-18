@@ -37,6 +37,12 @@
 			document.getElementById('UOM_'+uid).value=value;
 			document.getElementById('enteredUOMs_'+uid).value=value;
 			document.getElementById('UOMconversion_'+uid).value=conversionFactor;
+			var uomDesc = component.options[component.selectedIndex].text;
+			var index = uomDesc.indexOf("(");
+	      	if(index > -1){
+	      		uomDesc = uomDesc.substring(0,index);
+	      	}
+			document.getElementById('UOM_desc_'+uid).value=uomDesc;
 		}
 		if(name.indexOf('customField')>-1)
 		{
@@ -63,9 +69,11 @@
 			return;
 		 }
 		var qty = document.getElementById('QTY_'+uid).value;
-		var uom = document.getElementById('UOM_'+uid).value;
+		var uom = document.getElementById('UOM_'+uid).value;		
+		var enteredQty = document.getElementById('QTY_'+uid).value;
+		var selectedUomDesc = document.getElementById('UOM_desc_'+uid).value;
 		var itemType = document.getElementById('entereditemTypeList_'+uid).value;
-		var customerFieldSize = document.getElementById('customerFieldsSize_'+uid).value
+		var customerFieldSize = document.getElementById('customerFieldsSize_'+uid).value;
 		var customerFields="";
 		//var selCart = document.getElementById("draftOrders");
 		var draftOrder;
@@ -110,21 +118,52 @@
 		        	var draftErr = response.responseText;
 		            var draftErrDiv = document.getElementById("errorMessageDiv");
 		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-		        {			refreshWithNextOrNewCartInContext();
+		            {		refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
 		                    Ext.Msg.hide();
 		                	myMask.hide();
-		        }
+		        	}
+		            else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+		             {
+		            	var qty = document.getElementById('qtys_'+uid);
+		            	var errorDiv = document.getElementById('errorDiv_qtys_'+uid); 
+		            	qty.style.borderColor="#FF0000";
+		            	qty.value = "";
+		            	qty.focus();
+		            	errorDiv.innerHTML = "Please enter a valid quantity and try again." ;
+		            	errorDiv.style.display ="inline"; 
+		            	errorDiv.setAttribute("class", "error");
+		            	errorDiv.setAttribute("style", "margin-right:5px;float:right;");
+		            	errorDiv.value = true;						
+						Ext.Msg.hide();
+						myMask.hide();
+						return false;
+		           }
+		            else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+		             {
+						 var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+			        	 var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+			        	 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+			        	 window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+		             }
 		            else if(draftErr.indexOf("Item has been added to your cart. Please review the cart to update the item with a valid quantity.") >-1)
 			        {
 		            	refreshMiniCartLink();
-		            	var divVal=document.getElementById('errorDiv_qtys_'+uid);        
-		            	divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
+		            	var divVal=document.getElementById('errorDiv_qtys_'+uid);
+		            	//  EB-44
+		            	document.getElementById('qtys_' + uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('QTY_'+uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('enteredQuantities_'+uid).value = document.getElementById('initialQTY_' + uid).value;
+		            	
+		            	divVal.innerHTML = enteredQty + " " +selectedUomDesc +" "+"has been added to your cart. Please review the cart to update the item with a valid quantity.";
+		            	//divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity.";
 		            	divVal.style.display = "inline-block"; 
 						divVal.setAttribute("style", "margin-right:5px;float:right;");
 						divVal.setAttribute("class", "error");
 			                    Ext.Msg.hide();
-			                	myMask.hide();
+			                	myMask.hide();	
+			                	//EB-44
+								$('#uoms_'+ uid).val(document.getElementById('initialUOM_key_'+ uid).value).change();
 			        }
 					else if(responseText.indexOf("Error")>-1)
 					{
@@ -139,14 +178,18 @@
 						//Succesfully Added to Cart Info message for jira 3253
 						var divId = 'errorDiv_qtys_'+uid;
 						var divVal=document.getElementById('errorDiv_qtys_'+uid);
+						document.getElementById('qtys_' + uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('QTY_'+uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('enteredQuantities_'+uid).value = document.getElementById('initialQTY_' + uid).value;
+				
 						//Start- fix for 3105
 						if(document.getElementById('isEditOrder')!=null && document.getElementById('isEditOrder').value!=null && document.getElementById('isEditOrder').value!='')
 						{
 								divVal.innerHTML = "Item has been added to order." ;
 						}
 						else
-						{
-							divVal.innerHTML = "Item has been added to cart." ;
+						{ 	//Added for EB-44
+							divVal.innerHTML = enteredQty + " " +selectedUomDesc +" "+"has been added to cart." ;
 						}
 
 						// commented for 3105
@@ -173,10 +216,12 @@
 						//Ext.MessageBox.hide(); 
 						//alert("Successfully added item "+itemId+" with quantity "+qty+" to the cart");
 						//-- Web Trends tag start --
+						$('#uoms_'+ uid).val(document.getElementById('initialUOM_key_'+ uid).value).change();	
 						var tag = "WT.si_n,WT.tx_cartid,WT.si_x,DCSext.w_x_ord_ac";
 						var content = "ShoppingCart," + selCart + ",2,1";
 						writeMetaTag(tag,content,4);
 						//-- Web Trends tag end --
+						
 					}	
 				},
 				failure: function (response, request){
@@ -227,7 +272,7 @@
 	}
 	//-- Web Trends tag end --
 	var myMask;
-	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM) {
+	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM,pnaRequestedCustomerUOM, qtyTextBox) {
 		//added for jira 3974
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -245,7 +290,9 @@
 					pnaRequestedQty: qty,
 					pnaRequestedUOM: uom,
 					myItemsKey:myItemsKey,
-					validateOM:validateOM
+					validateOM:validateOM,
+					pnaReqCustomerUOM:pnaRequestedCustomerUOM,
+					qtyTextBox : qtyTextBox
 	            },
 	            method: 'POST',
 	            success: function (response, request){
@@ -265,6 +312,7 @@
 	            		availabilityRow.innerHTML='';
 	            		availabilityRow.innerHTML=responseText;
 	            		availabilityRow.style.display = '';
+	            		
 	            		// start of XB 214 BR1
 	            		var qty = document.getElementById("qtys_"+myItemsKey);
 		            	var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+myItemsKey);
@@ -275,14 +323,22 @@
 		            	var orderMultipleQtyUom = orderMultipleQtyFromSrc1.split("|");
 		            	var orderMultipleQty = orderMultipleQtyUom[0];
 		            	var orderMultipleUom = orderMultipleQtyUom[1];
+		            	
+		            	//Added for EB-439 - start	
+		            	if(pnaRequestedCustomerUOM!=null && pnaRequestedCustomerUOM == orderMultipleUom){
+		            		orderMultipleUom = pnaRequestedCustomerUOM.substr(2);
+		            	}//Added for EB-439 - start
 		            	var omError = orderMultipleQtyUom[2];
 		            	
-		            	if(omError == 'true' && qty.value > 0) //(omError == 'true' && qty.value > 0)
+		            	if(omError == 'true' && (qty.value > 0 || qty.value == "")) //(omError == 'true' && qty.value > 0)
 		            	{
 		            		sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "error");
 		            		availabilityRow.style.display = 'none';
+		            		qty.style.borderColor="#FF0000";
+		            		qty.focus();
+				    		  
 		            	}
 		            	else if(omError == 'true')
 		            	{	
@@ -290,6 +346,7 @@
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = 'none';
+		            		qty.style.borderColor="";
 		            	}
 		            	else if(orderMultipleQty != null && orderMultipleQty != 0)
 		            	{	
@@ -297,9 +354,11 @@
 		            		sourceOrderMulError.style.display = "inline"; 
 		            		sourceOrderMulError.setAttribute("class", "notice");
 		            		availabilityRow.style.display = 'block';
+		            		qty.style.borderColor="";
 		            	}
 		            	else{
 		            		availabilityRow.style.display = 'block';
+		            		qty.style.borderColor="";
 		            	}
 		            	}
 		            	//End of BR1 XB 214

@@ -769,8 +769,8 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 <div id="main"><s:action name="xpedxHeader" executeResult="true"
 	namespace="/common" />
 <div class="container"><!-- breadcrumb --> <s:url
-	id='servicesLink' namespace="/xpedx/services"
-	action='XPEDXServicesHome'>
+	id='servicesLink' namespace="/services"
+	action='MyServicesHome'>
 </s:url>
 <div class="clearview">&nbsp;</div>
 <div id="mid-col-mil">
@@ -785,7 +785,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
           <span class="page-title">Request Sample</span>
           <br />
           <span class="smallfont"> * - Required Field </span>
-          <s:form id="serviceRequestForm" name="serviceRequestForm" namespace="/xpedx/services" method="post" action="saveServiceRequest">
+          <s:form id="serviceRequestForm" name="serviceRequestForm" namespace="/services" method="post" action="saveServiceRequest">
           <s:property value="%{#errorMesage}" />
           <div class="clearview"> &nbsp;</div>
       		<fieldset class="feild-service" >
@@ -943,8 +943,8 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
              
                             </tbody>
                           </table>
-                          <s:url id='emailSampleLink' namespace='/xpedx/services'	action='XPEDXServicesHome'>
-							<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+                          <s:url id='emailSampleLink' namespace='/services'	action='MyServicesHome'>
+							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
                        <div id="table-bottom-bar" style="width:99%; clear:both;">
 							<div id="table-bottom-bar-L"></div>
@@ -965,9 +965,9 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                <!-- <td class="no-border-right table-header-bar-right"> </td>  --> 
                               </tr>
                               <tr>
-	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='mil' name='mil'  cssClass="x-input width-120px"	tabindex="" value='' size="10" />
+	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='mfg' name='mfg'  cssClass="x-input width-120px"	tabindex="" value='' size="10" />
 	                                </td>
-	                                <td class="padding8 border-left-gray"><s:textfield id='mfg' name='mfg' maxlength="10" cssClass="x-input width-100px"	tabindex="" value='' size="10" />
+	                                <td class="padding8 border-left-gray"><s:textfield id='mil' name='mil' maxlength="10" cssClass="x-input width-100px"	tabindex="" value='' size="10" />
 	                                 </td>
 	                                <td class="padding8 border-left-gray"><s:textfield id='mfgsku' name='mfgsku' cssClass="x-input width-120px" tabindex="" value='' maxlength="8" size="10" />  
 	                                         </td>
@@ -1000,8 +1000,8 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                               </tr>
                             </tbody>
                           </table>
-                          <s:url id='emailSampleLink' namespace='/xpedx/services'	action='XPEDXServicesHome'>
-							<s:param name="xpedxSelectedHeaderTab">ServicesTab</s:param>
+                          <s:url id='emailSampleLink' namespace='/services'	action='MyServicesHome'>
+							<s:param name="selectedHeaderTab">ServicesTab</s:param>
 						</s:url>
                        <div id="table-bottom-bar" style="width:100%; clear:both;">
 							<div id="table-bottom-bar-L"></div>
@@ -1030,8 +1030,8 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                 <td>&nbsp;</td>
                 <td>  <div id="cart-actions" >
             <ul id="cart-actions" class="float-right">
-            <s:url id='RequestProdSampleLink' namespace='/xpedx/services'
-					action='XPEDXServices'></s:url>
+            <s:url id='RequestProdSampleLink' namespace='/services'
+					action='MyServices'></s:url>
            
               <li class="float-left"><s:a href="%{RequestProdSampleLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
               <li ><a class="orange-ui-btn" href="#" onclick="return submitForm('tbl_data_facilitySupplies','tbl_data_paperSupplies');">             

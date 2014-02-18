@@ -21,6 +21,7 @@
 <swc:breadcrumb rootURL='#myUrl' group='catalog' displayGroup='compare' />
 <s:if test="#isGuestUser == false">
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 </s:if>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/product-comparisonExt.css" />
 
@@ -33,6 +34,7 @@
 <s:if test="#isGuestUser == true">
 	
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 </s:if>
 	
 	<!-- styles -->
@@ -587,7 +589,7 @@ Ext.onReady(function(){
 			enableGroupingMenu: false,
 			showGroupName: false,
 			hideGroupedColumn: true,
-			groupTextTpl: '{[values.group.substring(5)]}'
+			groupTextTpl: '{[values.group.substring(5).replace(\'xpedx\', \'<s:property value="wCContext.storefrontId" />\')]}'
         }),
         frame: false,
         autoScroll : true,
@@ -648,6 +650,7 @@ var prodCompData = [
 	    <s:set name='unitOfMeasure' value='#xutil.getAttribute(#item,"UnitOfMeasure")'/>
 	    '<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>'
 		<s:if test="#iterStatus.last == false ">,</s:if>
+		<s:set name='assestLinkMap' value='%{#_action.getMsdsItemLinkMap().get(#item_id)}'/>			
 	</s:iterator>
 	]
 	<s:set name='itemAttributeGroupTypeList' value="#xutil.getChildElement(#prodCompElement, 'ItemAttributeGroupTypeList')" />
@@ -733,6 +736,7 @@ var prodCompData = [
 				<s:else>
 					<s:set name='itemList' value='#xutil.getChildElement(#itemAttribute,"ItemList")' />
 					<s:iterator value='#xutil.getChildren(#itemList, "Item")' id='item' status='assignItemCount1'>
+						<s:set name='item_id' value='#xutil.getAttribute(#item,"ItemID")'/>
 						<s:set name='assignedValueList' value='#xutil.getChildElement(#item,"AssignedValueList")' />
 						<s:if test="%{null == #assignedValueList || null == #xutil.getChildElement(#assignedValueList, 'AssignedValue')}">
 						''
@@ -744,11 +748,11 @@ var prodCompData = [
 							<s:if test='%{"BaseUom" == #attrName}'>
 								<s:set name='attrValue' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#xutil.getAttribute(#attributeValue,"Value"))'/>
 								<s:set name='attrValueWithPostFix' value='%{#attrValue + " " + #postFix}'/>
-							</s:if>
-							<s:elseif test='%{"" != #derivedFrom}'>
+							</s:if>	
+							<s:elseif test='%{"" != #derivedFrom}'>							
     							<s:set name='attrValue' value='#xutil.getAttribute(#attributeValue,"Value")'/>
     							<s:set name='attrValueWithPostFix' value='%{#attrValue + " " + #postFix}'/>
-                            </s:elseif> 
+                            </s:elseif>                             
 							<s:elseif test="%{#dataType=='INTEGER'}">
 							    <s:if test='%{(#valueDefined == "Y" && allowMultiVals == "Y") || (#derivedFrom != null && #derivedFrom.length() > 0)}'>
 								   <s:set name='attrValue' value='#xutil.getAttribute(#attributeValue,"Value")'/>
@@ -776,9 +780,10 @@ var prodCompData = [
 								</s:else>	
                                 <s:set name='attrValueWithPostFix' value='%{#attrValue + " " + #postFix}'/>
 							</s:elseif>
-							<s:else >
+							 
+							<s:else >							
     							<s:set name='attrValue' value='#xutil.getAttribute(#attributeValue,"Value")'/>
-    							<s:set name='attrValueWithPostFix' value='%{#attrValue + " " + #postFix}'/>
+    							<s:set name='attrValueWithPostFix' value='%{#attrValue + " " + #postFix}'/>    							
 							</s:else>
 
 							<s:set name='attrValuesString' value='%{#attrValuesString.replaceAll("\'","") + #attrValueWithPostFix.replaceAll("\'","")}'/>
@@ -788,7 +793,17 @@ var prodCompData = [
 							</s:if>
 							<s:if test="#attrValueCount.last == true "></s:if>
 						</s:iterator>
-						'<s:property escape='false' value="#attrValuesString"/>'
+						<!-- EB-694 xpedx catalog URL display for FSC, PEFC and SFI  -->
+						<s:set name='assestLinkMap' value='%{#_action.getMsdsItemLinkMap().get(#item_id)}'/>
+						<s:iterator value="assestLinkMap" id="assetMap" status="status" >
+						<s:set name="link" value="value" />
+						<s:set name="assetId" value="key" />
+						<s:set name='Value' value='#xutil.getAttribute(#attributeValue,"Value")'/>
+						<s:if test='%{#assetId == #Value}'>
+							<s:set name='attrValuesString' value='%{"<a href=\"" + #link + "\" target=\"_blank\">" + #Value + "</a>"}' />
+							</s:if>
+						</s:iterator>
+						'<s:property escape='false' value="#attrValuesString"/>'                        
 						</s:else>
 						<s:if test="#assignItemCount1.last == false ">,</s:if>
 					</s:iterator>
@@ -969,8 +984,10 @@ var prodData = {
 		executeResult="true" namespace="/common" /></div>
 </div>   -->
 <!-- added for jira  3222 -->
+<!--EB-519-->
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-<!-- // footer end --> <swc:dialogPanel title='Add To Cart Result'
+<!-- // footer end --> 
+<swc:dialogPanel title='Add To Cart Result'
 	isModal="true" id="addToCartFailure">
 	<div class="x-hidden dialog-body " id="modalDialogPanel1Content">
 	<div class="dialog-body" id="ajax-body-1"></div>
@@ -1036,7 +1053,6 @@ var prodData = {
 
 </swc:dialogPanel>
 <!-- for jira 2422 killing the session in item details --> <%--s:set name='ItemDetailLastPageUrl' value='<s:property value=null />' scope='session'/> --%>
-
 <!-- // main end -->
 </body>
 </html>

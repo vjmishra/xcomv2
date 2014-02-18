@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Extn Fields for Customer"
+			HasHistory="False" Prefix="XPX" TableName="XPX_CUSTOMER_EXTN_LIST">
+			<Attributes>
+			
+				<Attribute ColumnName="CUSTOMER_EXTN_LIST_KEY" DataType="Key" 
+					DefaultValue="' '" Description="Primary key of this table"
+					Nullable="false" XMLName="CustomerExtnListKey" />
+					
+				<Attribute ColumnName="CUSTOMER_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Foreign key of this table and it refers to the primary key of the YFS_CUSTOMER table." 
+					Nullable="false" XMLName="CustomerKey" />
+					
+				<Attribute ColumnName="EXTN_LIST_TYPE" DataType="varchar2-60"
+					DefaultValue="' '" Description="List Type" 
+					Nullable="true" XMLName="ExtnListType" />
+					
+				<Attribute ColumnName="EXTN_LIST_VALUE" DataType="varchar2-255"
+					DefaultValue="' '" Description="List Value" 
+					Nullable="true" XMLName="ExtnListValue" />
+				
+				<Attribute ColumnName="SORT_ORDER" DataType="NUMBER-3"
+					Description="Sorting Order" Nullable="true" 
+					XMLName="SortOrder" />
+				 
+				<!-- Mandatory Attributes -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was created."
+					Name="Createts" />
+
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was last modified."
+					Name="Modifyts" />
+
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Creating User ID" />
+
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Modifying User ID" />
+
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Creating Program ID" />
+
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Modifying Program ID" />
+				<Attribute ColumnName="LOCKID" DataType="Lockid"
+					DefaultValue="0"
+					Description="An integer used to track and prevent concurrent modifications." />
+			</Attributes>
+
+			<PrimaryKey Name="CUST_EXTN_LST_PK">
+                <Attribute ColumnName="CUSTOMER_EXTN_LIST_KEY"/>
+            </PrimaryKey>
+                       
+			<Parent ParentTableName="YFS_CUSTOMER">
+				<Attribute ColumnName="CUSTOMER_KEY" ParentColumnName="CUSTOMER_KEY" />
+	 		</Parent>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

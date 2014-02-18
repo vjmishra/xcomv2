@@ -12,10 +12,18 @@
 		var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	</script>	
 <%--Added condition for Jira 3195 --%>
+<%--- EB-1158--%>
 <div id="divAdd2ListRadio">
+
 <s:if test="listOfItems == null || listOfItems.size()==0">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" style="margin-top:60px;">No lists have been created. Please create a new list. </div>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <div style="margin-top:60px;text-align: center;font-size: 13px;">No lists have been created. Please create a new list. </div> 
+<s:set name="listSize" value="0" />
 </s:if>
+ <!-- Just for else closed used Struts tag -->
+<s:else>
+<s:set name="listSize" value="%{listOfItems.size()}" />
+</s:else>
 <table>
 
 <s:iterator id="listDetail" value="listOfItems" status="listIndex" >
@@ -37,7 +45,7 @@
 		<s:set name="itemCount" value="%{listSizeMap.get(#listSizeId)}" />
 		<s:hidden name="itemCount_%{#listSizeId}" id="itemCount_%{#listSizeId}" value="%{#itemCount}" />
 	</s:iterator>
-	<s:url id="MIListPaginationURL" action="XPEDXMyItemsList">
+	<s:url id="MIListPaginationURL" action="MyItemsList">
     	 <s:param name="pageNumber" value="'{0}'"/>
     	 <s:param name="displayAsRadioButton" value="true"/>
  	</s:url>

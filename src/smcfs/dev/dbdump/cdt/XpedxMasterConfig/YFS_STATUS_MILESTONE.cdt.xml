@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <YFS_STATUS_MILESTONEList TableName="YFS_STATUS_MILESTONE">
-<StatusMilestone Action="" Createprogid="XMLMigrator"
+<StatusMilestone Action=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:00-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_COMPLETELY_SHIPPED_OR_CANCELLED" Lockid="0"
     MilestoneLevel="02" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2010-04-21T00:01:00-04:00" Modifyuserid="ng" OwnerKey=""
+    Modifyts="2010-04-21T00:01:00-04:00" Modifyuserid="ng" OwnerKey=" "
     ProcessTypeKey="ORDER_FULFILLMENT" QuantityType="02" Status="3700" StatusMilestoneKey="201004210001018055"/>
-<StatusMilestone Action="" Createprogid="XMLMigrator"
+<StatusMilestone Action=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:00-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_COMPLETELY_SHIPPED_OR_CANCELLED" Lockid="0"
     MilestoneLevel="02" Modifyprogid="YDKConfigDeploy"
-    Modifyts="2010-04-21T00:01:00-04:00" Modifyuserid="ng" OwnerKey=""
+    Modifyts="2010-04-21T00:01:00-04:00" Modifyuserid="ng" OwnerKey=" "
     ProcessTypeKey="ORDER_FULFILLMENT" QuantityType="02" Status="9000" StatusMilestoneKey="201004210001018056"/>
-<StatusMilestone Action="" Createprogid="XMLMigrator"
+<StatusMilestone Action=" " Createprogid="XMLMigrator"
     Createts="2010-04-21T00:01:00-04:00" Createuserid="SYSTEM"
     DateTypeId="YCD_UNREACHABLE" Lockid="0" MilestoneLevel="01"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-21T00:01:00-04:00"
-    Modifyuserid="ng" OwnerKey="" ProcessTypeKey="ORDER_FULFILLMENT"
+    Modifyuserid="ng" OwnerKey=" " ProcessTypeKey="ORDER_FULFILLMENT"
     QuantityType="02" Status="3700.7777" StatusMilestoneKey="201004210001018057"/>
 </YFS_STATUS_MILESTONEList>

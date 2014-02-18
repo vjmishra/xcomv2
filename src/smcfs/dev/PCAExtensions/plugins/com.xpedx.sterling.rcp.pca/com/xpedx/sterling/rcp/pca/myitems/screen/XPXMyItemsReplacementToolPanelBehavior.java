@@ -4,15 +4,20 @@
  */
 package com.xpedx.sterling.rcp.pca.myitems.screen;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.internal.win32.DOCINFO;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
@@ -24,6 +29,7 @@ import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.util.XPXCacheManager;
 import com.xpedx.sterling.rcp.pca.util.XPXPaginationBehavior;
+import com.xpedx.sterling.rcp.pca.util.XPXPaginationComposite;
 import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
@@ -52,6 +58,7 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 	public int numberOfCustomer;
 	public Element elemreplaceModel;
 	public String myItemsListKey;
+	public String generateReport;	
 	public XPXMyItemsReplacementToolPanelBehavior(Composite ownerComposite, String formId) {
         super(ownerComposite, formId);
         this.page=(XPXMyItemsReplacementToolPanel) ownerComposite;
@@ -284,9 +291,15 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 								}
 								prepareInputXML(myItemListKey) ;
 					}
-						else{
+					/*BEGIN - Code added for XB-84*/
+					else{
+							setModel("XpedxMilBothLstList",eleOutput);
+							((XPXPaginationComposite)getOwnerForm()).getLnkPrevious().setVisible(false);
+							((XPXPaginationComposite)getOwnerForm()).getLnkNext().setVisible(false);
 							//YRCPlatformUI.showInformation("Information", "There is no list containing the above item");
 						}
+					/*END - Code added for XB-84*/
+					
 					//prepareInputXML(myItemListKey) ;
 			    //	handleSearchApiCompletion(ctx.getOutputXmls()[i].getDocumentElement());
 			     	}
@@ -322,10 +335,54 @@ public class XPXMyItemsReplacementToolPanelBehavior extends XPXPaginationBehavio
 								else{
 									eleMyItemsList.setAttribute("ListType", "Shared");
 								}
+								
+								//Export calling 
+								
+								
 							}
 						}
-						//This is an inherited method which sets/replaces the model used to display the Paginated results.
-						handlePaginationOutput(eleOutput);
+						
+						StringBuilder sbCSV = new StringBuilder();
+						
+						
+							
+						Element eleMyItemsList =null;
+							if(generateReport!=null){
+								synchronized (getFormId()) {
+									sbCSV.append("MSAP ID,MSAP NAME , Contains MIL Item #");
+									sbCSV.append("\n");
+									for (int k = 0; k < XpedxMilBothLst.getLength(); k++) {
+										eleMyItemsList = (Element) XpedxMilBothLst
+												.item(k);
+									
+									
+										sbCSV.append("\"").append(eleMyItemsList.getAttribute("MSAPCUSTOMERID")).append("\"").append(",");	
+										String msapname = eleMyItemsList.getAttribute("MsapName");										
+										sbCSV.append("\"").append(msapname.substring(0, msapname.indexOf('('))).append("\"").append(",");
+										sbCSV.append("\"").append(getFieldValue("txtLPC")).append("\"").append(",");	
+
+										sbCSV.append("\n");
+									
+								}
+							}
+								
+								String fileName = "Export_of_Cross_Div_Report" +  "_" + System.currentTimeMillis()+".csv";
+								org.eclipse.swt.widgets.FileDialog fileDialog = new FileDialog(YRCPlatformUI.getShell(), SWT.SAVE);
+								fileDialog.setFileName(fileName);
+								fileDialog.setText("Save");
+								String filePath = fileDialog.open();
+								
+								// Save file
+								if(!YRCPlatformUI.isVoid(filePath))
+									saveFile(filePath,sbCSV);
+
+							//This is an inherited method which sets/replaces the model used to display the Paginated results.
+							
+						}else{
+							handlePaginationOutput(eleOutput);
+						}
+							generateReport = null;
+							
 					}
         		}
 		    	else if( YRCPlatformUI.equals(apiname, "XPXItemReplacementToolForMyItemsService")) {
@@ -679,14 +736,31 @@ private void updateModelWithParentInfo(Element outXml) {
 }
 
 
-public void getParentCustomers(String customerIdSelected, String customerValue) {
+public void getParentCustomers(String customerIdSelected, String customerValue, String generateReport) {
 /*	String BillToValue = getFieldValue("BillToId");
 	String ShipToValue = getFieldValue("ShipToId");
 	String SAPIdValue = getFieldValue("SAPId");*/
 	String MasterCustomerValue = getFieldValue("MasterCustomerId");
 	//String MasterCustomerValue = customerIdSelected;
 	String enterPriseKey=getEnterPriseKey();
+	this.generateReport = generateReport;
 	
+	if(generateReport !=null){
+		if(YRCPlatformUI.isVoid(getFieldValue("txtLPC"))){
+			YRCPlatformUI.showError("Message", "Enter Current Legacy Product Code and try again.");
+			getControl("txtLPC").setFocus();
+			return;
+			
+			}
+		Element eleXPEDXMyItemsList = getTargetModel("XPEDXMyItemsList");
+		String strDivisionID = YRCXmlUtils.getAttributeValue(eleXPEDXMyItemsList, "XPEDXMyItemsList/XPEDXMyItemsListShareList/XPEDXMyItemsListShare/@DivisionID");
+		if(strDivisionID.length() < 1){
+			YRCPlatformUI.showError("Message", "Choose division(s) and try again.");
+			 //getControl("txtLPC").setFocus();
+				return;
+			
+			}	
+	}
 /*	if(BillToValue != null && BillToValue != "" ){
 		//Set Input XML for Final View
 		if("B".equalsIgnoreCase(customerValue)){
@@ -969,7 +1043,7 @@ public void searchCustomer(){
 		if(customerNameSelected != null){
 			setFieldValue("MasterCustomerId",customerNameSelected);
 		}
-		getParentCustomers(customerIdSelected,"MC");
+		getParentCustomers(customerIdSelected,"MC",null);
 	}
 	
 }
@@ -1038,4 +1112,24 @@ public void CallPersonalListService(Element eleOutput){
 			callApi("getListOfXPEDXMyItemsLists",elemModel.getOwnerDocument());		
 		
 	}
+
+
+private void saveFile(String filePath, StringBuilder output) {
+
+	// Handle in case of NULL file path.
+	if(YRCPlatformUI.isVoid(filePath))
+		return;
+
+	//Save the buffer into file specified in the File Path.
+	try {
+
+		BufferedWriter out = new BufferedWriter(new FileWriter(filePath));  
+		String outText = output.toString();
+		out.write(outText);
+		out.close();
+		return ;
+	} catch (IOException e){
+		e.printStackTrace();
+	}
+}
 }

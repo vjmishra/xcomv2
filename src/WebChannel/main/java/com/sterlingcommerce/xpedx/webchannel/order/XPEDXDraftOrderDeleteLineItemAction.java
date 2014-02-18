@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.order.CartInContextRefreshingWCMashupAction;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNodeList;
@@ -93,7 +94,20 @@ public class XPEDXDraftOrderDeleteLineItemAction extends CartInContextRefreshing
                               }
                         }
                   }
-                  returnValue= SUCCESS; 
+                  boolean isOUErrorPage=false;
+                  YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+  	  			 for(YFCElement errorEle:errorNodeList)
+  	  			 {
+  	  				String errorCode=errorEle.getAttribute("ErrorCode");
+  	  				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+  	  				{
+  	  					isOUErrorPage=true;
+  	  					break;
+  	  				}
+  	  			 }
+  	  			if(isOUErrorPage)
+  	 				return "OUErrorPage"; 
+                returnValue= SUCCESS; 
             }
 			// end of XBT -252 & 248
              catch(Throwable t) {

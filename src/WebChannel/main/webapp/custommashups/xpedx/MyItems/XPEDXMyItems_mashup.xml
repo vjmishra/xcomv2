@@ -373,7 +373,9 @@
 			<Template>
 				<ItemList>
 					<Item  GlobalItemID="" ItemID="" ItemKey="" MaxModifyTS="" OrganizationCode="Required" UnitOfMeasure="">
-						<PrimaryInformation Description="" ShortDescription="" /> 
+						 <!-- Added ManufacturerItem for XB-56 -->
+						<PrimaryInformation Description="" ManufacturerItem="" ShortDescription="" /> 
+						<!-- Added ManufacturerItem for XB-56 -->
 					</Item>					
 				</ItemList>			
 			</Template>
@@ -798,5 +800,46 @@
 			        		</XPXCustViewList>	        				
 						</Template>
 				</API>
-	</mashup>  		
+	</mashup> 
+	<!-- Added for XB-287-->  
+	<mashup id='XPXCustomerInfo' transactional='true' mashuptype='XAPI'
+            endpoint='CUSTOMER' description="Available Customers">
+            <classInformation
+                  name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+            <API Name="getCustomerList">
+                  <Input>
+                        <CustomerContact CustomerKey="" />
+                  </Input>
+                  <Template>
+                        <CustomerContact />
+                  </Template>
+            </API>
+      </mashup>
+      
+      <mashup id='XPEDXGetCustomerInfo' transactional='true'
+            mashuptype='XAPI' endpoint='CONFIRMED_ORDER' description="Get Customer Info">
+            <classInformation
+                  name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+            <API Name='getCustomerList'>
+
+                  <Input>
+                        <Customer CustomerID=" " OrganizationCode=" " />
+                  </Input>
+                  <Template>
+                        <CustomerList>
+                              <Customer CustomerID="" CustomerKey="" OrganizationCode="" Status="">
+                                    <Extn ExtnBillToSuffix="" ExtnLegacyCustNumber=""
+                                          ExtnShipFromBranch="" ExtnShipToSuffix="" ExtnSuffixType="" />
+                                    <BuyerOrganization OrganizationCode=""
+                                          OrganizationName="" />
+                                     <CustomerAdditionalAddressList>
+                              <CustomerAdditionalAddress><PersonInfo></PersonInfo></CustomerAdditionalAddress >
+                              </CustomerAdditionalAddressList>
+                              </Customer>
+                        </CustomerList>
+                  </Template>
+            </API>
+      </mashup>
+      
+	 		
 </mashups>

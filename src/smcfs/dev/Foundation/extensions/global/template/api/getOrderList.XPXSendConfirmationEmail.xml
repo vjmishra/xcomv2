@@ -1,9 +1,45 @@
 <OrderList>
 	<Order OrderNo="" OrderDate="" Status="" CustomerPONo="" Createuserid="" BuyerOrganizationCode="" SellerOrganizationCode="" ShipToID=""          
-	       EntryType="" BillToID="" MaxOrderStatus="" ReqDeliveryDate="" OrderType="" >
+	       EntryType="" BillToID="" MaxOrderStatus="" ReqDeliveryDate="" OrderType="" EnterpriseCode="" >
 		<Extn />
 		<OrderLines>
-			<OrderLine> 
+			<OrderLine Action="" AllocationDate="" AllocationLeadTime=""
+				ApptStatus="" ApptWarning="" AvailableQtyForStopDelivery=""
+				AwaitingDeliveryRequest="" BackorderNotificationQty=""
+				BuyerMarkForNodeId="" BuyerReceivingNodeId="" CanAddServiceLines=""
+				CarrierAccountNo="" CarrierServiceCode="" ChainedFromOrderHeaderKey=""
+				ChainedFromOrderLineKey="" CommittedQuantity="" ConditionVariable1=""
+				ConditionVariable2="" ConfigurationKey="" CustomerLinePONo=""
+				CustomerPONo="" DeliveryCode="" DeliveryMethod="" DepartmentCode=""
+				DependencyShippingRule="" DependentOnLineKey=""
+				DerivedFromOrderHeaderKey="" DerivedFromOrderLineKey=""
+				DerivedFromOrderReleaseKey="" DispositionCode="" DistributionRuleId=""
+				FillQuantity="" FirstIterationSeqNo="" FreightTerms=""
+				FulfillmentType="" FutureAvailabilityDate="" GiftFlag="" GiftWrap=""
+				HasChainedLines="" HasDeliveryLines="" HasDerivedChild=""
+				HasServiceLines="" HoldFlag="" HoldReasonCode=""
+				ImportLicenseExpDate="" ImportLicenseNo="" IntentionalBackorder=""
+				InvoicedExtendedPrice="" InvoicedQty="" InvoicedQuantity=""
+				IsBundleParent="" IsConfigured="N" IsFirmPredefinedNode=""
+				IsPickUpNow="" IsPriceMatched="" ItemGroupCode="" ItemIsInHand=""
+				KitCode="" KitQty="" LastIterationSeqNo="" LevelOfService=""
+				LineSeqNo="" LineType="" MaxLineStatus="" MaxLineStatusDesc=""
+				MergeNode="" MinLineStatus="" MinLineStatusDesc="" MinShipByDate=""
+				MultipleStatusesExist="" OpenQty="" OrderHeaderKey="" OrderLineKey=""
+				OrderedQty="" OrigOrderLineKey="" OriginalOrderedQty=""
+				OtherCharges="" PackListType="" ParentOfDependentGroup=""
+				PersonalizeCode="" PersonalizeFlag="" PickableFlag="" PipelineKey=""
+				PrimeLineNo="" ProcureFromNode="" PromisedApptEndDate=""
+				PromisedApptStartDate="" Purpose="" ReceivingNode="" RemainingQty=""
+				ReqCancelDate="" ReqDeliveryDate="" ReqShipDate="" ReservationID=""
+				ReservationMandatory="" ReservationPool="" ReturnReason=""
+				ReturnReasonLongDesc="" ReturnReasonShortDesc="" SCAC=""
+				ScacAndService="" ScacAndServiceKey="" SchedFailureReasonCode=""
+				Segment="" SegmentType="" SerialNo="" ShipNode="" ShipToID=""
+				ShipToKey="" ShipTogetherNo="" ShipmentConsolidationGroupId=""
+				SourceFromOrganization="" SplitQty="" Status="" StatusQuantity=""
+				SubLineNo="" SubstituteItemID="" SubstituteItemUOM="" Timezone=""
+				TranDiscrepancyQty="" isHistory="">
 				<Extn />
 				<Item />				
 				<OrderLineTranQuantity OrderedQty="" TransactionalUOM="" />				
@@ -15,6 +51,7 @@
 		<PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" City="" State="" Country="" ZipCode="">
 			<Extn ExtnZip4=""/>
 		</PersonInfoShipTo>
+		<PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3="" City="" Country="" State="" ZipCode=""/>	
 		<Instructions>
 			</Instructions>
 	</Order>

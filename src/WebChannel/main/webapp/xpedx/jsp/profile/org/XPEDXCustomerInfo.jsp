@@ -342,33 +342,29 @@ ul.checkboxTree li
       <table id="customerFieldsTable" style="width:100%" class="standard-table">
         <tbody>
           <tr class="table-header-bar no-border">
-          	<td class="no-border table-header-bar-left"width="201"><span class="white txt-small white">Field Name</span></td>
+          	<td class="table-header-bar-left"width="209"><span class="white txt-small white">Field Name</span></td>
           	<td width="357" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small white">Site Label</span></td>
           </tr>
           <s:if test="(#_action.IsCustLinePONoFlag())">
             <tr class="odd" >
               <td >Line PO #: </td>
-              <td valign="top">
-              	<s:text name="Line PO #"/>
-              </td>
+              	<td valign="top">
+              		<s:textfield id='CustLinePONoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 180px;" name='CustLinePONoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLinePOLbl")}'/>
+              	</td>
             </tr>
-            </s:if>
+          </s:if>
+           <s:else>
+            	<s:hidden name='CustLinePONoLabel' value='%{#extnElem.getAttribute("ExtnCustLinePOLbl")}'/>
+            </s:else>
           <s:if test="(#_action.IsCustLineAccNoFlag())">  
           <tr>
             <td>Line Account #: </td>
-            <s:if test='%{#extnElem.getAttribute("ExtnCustLineAccLbl") != null && #extnElem.getAttribute("ExtnCustLineAccLbl") != ""}'>
-            <td valign="top" >
-            <s:hidden id='CustLineAccNoLabel' name='CustLineAccNoLabel' value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
-            	<s:property value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
+            <td valign="top">
+              		<s:textfield id='CustLineAccNoLabel'  cssClass="input-details-cart  x-input" maxlength="22" cssStyle="width: 180px;" name='CustLineAccNoLabel' size="22" tabindex="" value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </td>
-            </s:if>
-            <s:else>
-            <td valign="top" >
-            <s:text name="Line Account #"/>
-            </s:else>
-          </tr>
-          </s:if>
-            <s:else>
+           </tr>
+	   </s:if>
+	   <s:else>
             	<s:hidden name='CustLineAccNoLabel' value='%{#extnElem.getAttribute("ExtnCustLineAccLbl")}'/>
             </s:else>
             <s:if test="(#_action.IsCustLineField1Flag())">
@@ -440,11 +436,6 @@ ul.checkboxTree li
     </div>
     </div>
     <!-- End Pricing -->
-   
-  <!-- Footer Start --> <s:action name="xpedxFooter" executeResult="true"
-	namespace="/common" /> <!-- Footer End -->
-
-
 <div style="display: none;">
 <div title="Add New Quick Link" id="newQL"
 	style="width: 400px; height: 220px; overflow: auto;"
@@ -510,7 +501,9 @@ function changeTableCssClass(){
 	}
 }
 </script>
-
+  <!-- Footer Start --> <!-- EB-519 -->
+  <s:action name="xpedxFooter" executeResult="true"	namespace="/common" /> 
+  <!-- Footer End -->
     <!-- end main  -->
   
 <!-- end container  -->

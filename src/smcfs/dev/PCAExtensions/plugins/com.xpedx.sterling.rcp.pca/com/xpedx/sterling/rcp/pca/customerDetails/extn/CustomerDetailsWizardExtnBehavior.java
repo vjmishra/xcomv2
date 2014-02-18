@@ -185,7 +185,7 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 				 *  
 				 */
 				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnStockCheckWS"))){
-					roleList.add("StockCheck");
+					roleList.add("Stock Check Web Service User");
 				}	
 				if(YRCPlatformUI.equals("Y", extnElement.getAttribute("ExtnViewInvoices"))){
 					roleList.add("ViewInvoices");
@@ -214,6 +214,9 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 						role = "Approver";
 					if(role.contains("BUYER-USER"))
 						role = "Buyer";
+					if(role.contains("PROCUREMENT-USER"))
+						role = "Punch Out User";
+					
 					roleList.add(role);
 				}
 				for(int counter=0;counter<roleList.size();counter++)

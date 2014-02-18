@@ -22,6 +22,8 @@ public class XPEDXMyItemsDetailsCreateAction extends WCMashupAction {
 	private String name 		= "";
 	private String desc 		= "";
 	private String qty			= "";
+	private String mfgItemNo	= "";
+	
 	private String order		= "-1";
 	private String itemCount	= "-1";
 	private String jobId		= "";
@@ -31,7 +33,10 @@ public class XPEDXMyItemsDetailsCreateAction extends WCMashupAction {
 	private String itemType		= "";
 	private String uomId		= "";
 	private String errorMsg		= "";
+	private String editMode		= "";
 	
+	
+
 	@Override
 	public String execute() {
 		try {
@@ -193,6 +198,13 @@ public class XPEDXMyItemsDetailsCreateAction extends WCMashupAction {
 	public void setQty(String qty) {
 		this.qty = qty;
 	}
+	public String getMfgItemNo() {
+		return mfgItemNo;
+	}
+
+	public void setMfgItemNo(String mfgItemNo) {
+		this.mfgItemNo = mfgItemNo;
+	}
 
 	public String getUomId() {
 		return uomId;
@@ -216,6 +228,14 @@ public class XPEDXMyItemsDetailsCreateAction extends WCMashupAction {
 
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
+	}
+	
+	public String getEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(String editMode) {
+		this.editMode = editMode;
 	}
 	
 }

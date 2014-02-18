@@ -19,7 +19,7 @@
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="HubData" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:28-04:00" Modifyuserid="SYSTEM"
-    RuleName="EMAIL_SERVER_NAME" RuleSetValue=""/>
+    RuleName="EMAIL_SERVER_NAME" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200302261545401213" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="HubData" Lockid="0" Modifyprogid="XMLMigrator"
@@ -59,7 +59,7 @@
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="Inventory" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:28-04:00" Modifyuserid="SYSTEM"
-    RuleName="ATP_RULE" RuleSetValue=""/>
+    RuleName="ATP_RULE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200302261545401221" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="Inventory" Lockid="0" Modifyprogid="XMLMigrator"
@@ -124,7 +124,7 @@
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="Logistics" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:28-04:00" Modifyuserid="SYSTEM"
-    RuleName="DEFAULT_DISTANCE_UOM" RuleSetValue=""/>
+    RuleName="DEFAULT_DISTANCE_UOM" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200302261545401234" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="Logistics" Lockid="0" Modifyprogid="XMLMigrator"
@@ -139,7 +139,7 @@
     Createts="2011-07-14T14:37:28-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:28-04:00" Modifyuserid="SYSTEM"
-    RuleName="DEFAULT_PRICE_PROGRAM" RuleSetValue=""/>
+    RuleName="DEFAULT_PRICE_PROGRAM" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200302261545401237" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -159,7 +159,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="SAFE_DAYS_PERIOD_FOR_EXPIRATION" RuleSetValue=""/>
+    RuleName="SAFE_DAYS_PERIOD_FOR_EXPIRATION" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200302261545401244" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -259,7 +259,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Logistics" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="DEFAULT_CARRIER_SERVICE_FOR_TRANSFER" RuleSetValue=""/>
+    RuleName="DEFAULT_CARRIER_SERVICE_FOR_TRANSFER" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200403091545401221" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -354,7 +354,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Inventory" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="DISTR_RULE_FOR_NODE_MONITOR" RuleSetValue=""/>
+    RuleName="DISTR_RULE_FOR_NODE_MONITOR" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200501240947401223" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -364,7 +364,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Customer" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="SLOT_GROUP_FOR_CUST_PREF" RuleSetValue=""/>
+    RuleName="SLOT_GROUP_FOR_CUST_PREF" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200502141545401211" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -424,7 +424,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:08:44-04:00" Modifyuserid="SYSTEM"
-    RuleName="YCD_PRICE_MATCH_CHARGE_NAME" RuleSetValue=""/>
+    RuleName="YCD_PRICE_MATCH_CHARGE_NAME" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200603071545401222" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -504,7 +504,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:08:44-04:00" Modifyuserid="SYSTEM"
-    RuleName="YCD_ITEM_ALIAS" RuleSetValue=""/>
+    RuleName="YCD_ITEM_ALIAS" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200607021545401213" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -569,7 +569,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:08:44-04:00" Modifyuserid="SYSTEM"
-    RuleName="YCD_OPENBOX_TAG_ATTR" RuleSetValue=""/>
+    RuleName="YCD_OPENBOX_TAG_ATTR" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200610051504401184" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -599,7 +599,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_STATE_DROP_DOWN_REGION_SCHEMA" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_STATE_DROP_DOWN_REGION_SCHEMA" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200611211504401179" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -699,7 +699,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_CALENDAR_WEEK_WINDOW" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_CALENDAR_WEEK_WINDOW" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20070310334301001" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -719,7 +719,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:08:44-04:00" Modifyuserid="SYSTEM"
-    RuleName="YCD_SERVICE_RELATIONSHIP" RuleSetValue=""/>
+    RuleName="YCD_SERVICE_RELATIONSHIP" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20070404134532389" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -729,7 +729,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_CAPACITY_MAX_DAYS" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_CAPACITY_MAX_DAYS" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20070511192432556" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -749,7 +749,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_FTC_CANCEL_REASON_CODE" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_FTC_CANCEL_REASON_CODE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20070910334301176" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -850,7 +850,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_BLIND_RETURN_ITEM_ID" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_BLIND_RETURN_ITEM_ID" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20080113133111555" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -875,7 +875,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="STORE_LOC_DOCK" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="STORE_LOC_DOCK" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20080806134732558" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="Customer" Lockid="0" Modifyprogid="XMLMigrator"
@@ -885,12 +885,12 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_ZIP_CODE_REGION_SCHEMA" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_ZIP_CODE_REGION_SCHEMA" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200809111126201234" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_ITEM_ASSET_URL" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_ITEM_ASSET_URL" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="20080912089195600" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -940,17 +940,17 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="ORDER_PEND_CHANGE_EXPIRATION_HRS" RuleSetValue=""/>
+    RuleName="ORDER_PEND_CHANGE_EXPIRATION_HRS" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200901300956210001" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="ORDER_HOLD_DUE_PENDING_CHANGES" RuleSetValue=""/>
+    RuleName="ORDER_HOLD_DUE_PENDING_CHANGES" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200903251134450001" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="PasswordPolicy" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="PWD_RST_EMAIL_CONF_RQD" RuleSetValue=""/>
+    RuleName="PWD_RST_EMAIL_CONF_RQD" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200904061535210101" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -975,7 +975,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_DISTRIBUTION_RULE_ID_VALUE" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_DISTRIBUTION_RULE_ID_VALUE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="200910061506401215" Createprogid="XMLMigrator"
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -990,7 +990,7 @@
     Createts="2011-07-14T15:08:44-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" HasQualifiedTag="Y" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_SHIPMENT_OPTIMIZATION_RULE" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_SHIPMENT_OPTIMIZATION_RULE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="201004202106107033" Createprogid="XMLMigrator"
     Createts="2010-04-20T21:06:10-04:00" Createuserid="SYSTEM"
     GroupName="ItemMaster" Lockid="0" Modifyprogid="YDKConfigDeploy"
@@ -1000,12 +1000,12 @@
     Createts="2010-04-21T00:00:54-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-21T00:00:54-04:00"
-    Modifyuserid="ng" RuleName="YCD_STORE_SEARCH" RuleSetValue=""/>
+    Modifyuserid="ng" RuleName="YCD_STORE_SEARCH" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="201004210000557799" Createprogid="XMLMigrator"
     Createts="2010-04-21T00:00:54-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-21T00:00:54-04:00"
-    Modifyuserid="ng" RuleName="YCD_MORE_STORE_SEARCH" RuleSetValue=""/>
+    Modifyuserid="ng" RuleName="YCD_MORE_STORE_SEARCH" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="201004210000557800" Createprogid="XMLMigrator"
     Createts="2010-04-21T00:00:54-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -1050,7 +1050,7 @@
     Createts="2010-04-21T00:00:55-04:00" Createuserid="SYSTEM"
     GroupName="Customer" Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-04-21T00:00:55-04:00" Modifyuserid="ng"
-    RuleName="YCD_DEFAULT_CONSUMER_USER_ROLE" RuleSetValue=""/>
+    RuleName="YCD_DEFAULT_CONSUMER_USER_ROLE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="201004210000557809" Createprogid="XMLMigrator"
     Createts="2010-04-21T00:00:55-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -1065,7 +1065,7 @@
     Createts="2010-04-21T00:00:55-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-21T00:00:55-04:00"
-    Modifyuserid="ng" RuleName="YCD_WEB_CHANNEL_VERSION" RuleSetValue=""/>
+    Modifyuserid="ng" RuleName="YCD_WEB_CHANNEL_VERSION" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="201004210000587939" Createprogid="XMLMigrator"
     Createts="2010-04-21T00:00:58-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="YDKConfigDeploy"
@@ -1120,7 +1120,7 @@
     Createts="2010-04-21T00:00:58-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="YDKConfigDeploy"
     Modifyts="2010-04-21T00:00:58-04:00" Modifyuserid="ng"
-    RuleName="SWC_DEFAULT_CARRIER_SERVICE_FOR_NEW_DRAFT_ORDERS" RuleSetValue=""/>
+    RuleName="SWC_DEFAULT_CARRIER_SERVICE_FOR_NEW_DRAFT_ORDERS" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="201004210000597950" Createprogid="XMLMigrator"
     Createts="2010-04-21T00:00:58-04:00" Createuserid="SYSTEM"
     GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -1171,25 +1171,25 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_COMBINATION_TYPE" RuleSetValue=""/>
+    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_COMBINATION_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="COUP_DISC_CHG_ITEM_QTY"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_ITEM_QUANTITY_TYPE" RuleSetValue=""/>
+    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_ITEM_QUANTITY_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="COUP_DISC_CHG_ORD_TOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_ORDER_TOTAL_TYPE" RuleSetValue=""/>
+    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_ORDER_TOTAL_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="COUP_DISC_CHG_SHP_ORDTOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_SHIP_ORDER_TOTAL_TYPE" RuleSetValue=""/>
+    RuleName="COUPON_DISCOUNT_CHARGE_CATEGORY_FOR_SHIP_ORDER_TOTAL_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="CR_CH_ORD_SYNCH_80" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="HubData" Lockid="0" Modifyprogid="XMLMigrator"
@@ -1250,7 +1250,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="USE_HOLD_TYPE_CUSTOMER_ACCOUNT" RuleSetValue=""/>
+    RuleName="USE_HOLD_TYPE_CUSTOMER_ACCOUNT" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="IGNORE_PRERESERVED" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Capacity" Lockid="0" Modifyprogid="XMLMigrator"
@@ -1298,7 +1298,7 @@
     Createuserid="SYSTEM" GroupName="DocSpecific" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="ORDER_LINE_TYPE_FOR_RECOMMENDED_ITEMS" RuleSetValue=""/>
+    RuleName="ORDER_LINE_TYPE_FOR_RECOMMENDED_ITEMS" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="LIST_PRICE_EDIT" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
@@ -1318,7 +1318,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="HOLD_TO_BE_APPLIED_FOR_ORDER_APPROVAL" RuleSetValue=""/>
+    RuleName="HOLD_TO_BE_APPLIED_FOR_ORDER_APPROVAL" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="OMP80_RCPT_OVRDE_ITEM"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="DocSpecific" Lockid="0"
@@ -1333,22 +1333,22 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="HubData" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="ON_APP_SERVER_DOWN" RuleSetValue=""/>
+    RuleName="ON_APP_SERVER_DOWN" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="ON_SERVER_UNAVAILABLE"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="HubData" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
-    Modifyuserid="SYSTEM" RuleName="ON_SERVER_UNAVAILABLE" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="ON_SERVER_UNAVAILABLE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="ON_THRESHOLD_REACHED"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="HubData" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
-    Modifyuserid="SYSTEM" RuleName="ON_THRESHOLD_REACHED" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="ON_THRESHOLD_REACHED" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="ORD_HOLD_DUE_CUST_STATUS"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="DocSpecific" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
-    Modifyuserid="SYSTEM" RuleName="ORDER_HOLD_DUE_CUSTOMER_STATUS" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="ORDER_HOLD_DUE_CUSTOMER_STATUS" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PERCENT_ADJ_COL" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
@@ -1358,58 +1358,58 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_COMBINATION_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_COMBINATION_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_DISC_CHG_ITEM_QTY"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_ITEM_QUANTITY_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_ITEM_QUANTITY_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_DISC_CHG_ORD_TOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_ORDER_TOTAL_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_ORDER_TOTAL_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_DISC_CHG_SHP" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_SHIPPING_SURCHARGE_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_SHIPPING_SURCHARGE_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_DISC_SHP_ORD_TOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_SHIP_ORDER_TOTAL_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_DISCOUNT_CHARGE_CATEGORY_FOR_SHIP_ORDER_TOTAL_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_SUR_CHG_COMB" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_COMBINATION_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_COMBINATION_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_SUR_CHG_ITEM_QTY"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_ITEM_QUANTITY_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_ITEM_QUANTITY_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_SUR_CHG_ORD_TOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_ORDER_TOTAL_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_ORDER_TOTAL_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_SUR_CHG_SHP" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Pricing" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_SHIPPING_SURCHARGE_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_SHIPPING_SURCHARGE_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCG_SUR_SHP_ORD_TOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_SHIP_ORDER_TOTAL_TYPE" RuleSetValue=""/>
+    RuleName="PRICING_RULE_SURCHARGE_CHARGE_CATEGORY_FOR_SHIP_ORDER_TOTAL_TYPE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="PRCNG_PRECISION_FOR_TOT"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="Pricing" Lockid="0"
@@ -1459,7 +1459,7 @@
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T14:37:29-04:00" Modifyuserid="SYSTEM"
-    RuleName="CHARGE_NAME_FOR_SHIPPING" RuleSetValue=""/>
+    RuleName="CHARGE_NAME_FOR_SHIPPING" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="SLOT_SPAN_ALLOWED" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="Capacity" Lockid="0" Modifyprogid="XMLMigrator"
@@ -1502,7 +1502,7 @@
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="DocSpecific" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
-    Modifyuserid="SYSTEM" RuleName="TRAN_DEPENDENCY_DEFAULT_GROUP" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="TRAN_DEPENDENCY_DEFAULT_GROUP" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="UPDATE_ORDER_DATE" Createprogid="XMLMigrator"
     Createts="2011-07-14T14:37:29-04:00" Createuserid="SYSTEM"
     GroupName="DocSpecific" Lockid="0" Modifyprogid="XMLMigrator"
@@ -1538,12 +1538,12 @@
     Createuserid="SYSTEM" GroupName="DocSpecific" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
     Modifyuserid="SYSTEM"
-    RuleName="PRE_CALL_PENDING_IF_APPT_X_UNITS_IN_FUTURE" RuleSetValue=""/>
+    RuleName="PRE_CALL_PENDING_IF_APPT_X_UNITS_IN_FUTURE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="WO_PRE_CALL_REQD_BRULE"
     Createprogid="XMLMigrator" Createts="2011-07-14T14:37:29-04:00"
     Createuserid="SYSTEM" GroupName="DocSpecific" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:29-04:00"
-    Modifyuserid="SYSTEM" RuleName="PRE_CALL_REQUIRED_FOR_SERVICE" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="PRE_CALL_REQUIRED_FOR_SERVICE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="YCD_ALLOW_COUNTRY_ENTRY"
     Createprogid="XMLMigrator" Createts="2011-07-14T15:08:44-04:00"
     Createuserid="SYSTEM" GroupName="YCDEnterpriseConfig" Lockid="0"
@@ -1553,7 +1553,7 @@
     Createprogid="XMLMigrator" Createts="2011-07-14T15:08:44-04:00"
     Createuserid="SYSTEM" GroupName="YCDEnterpriseConfig" Lockid="0"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T15:08:44-04:00"
-    Modifyuserid="SYSTEM" RuleName="YCD_DEFAULT_SHIP_CHARGE" RuleSetValue=""/>
+    Modifyuserid="SYSTEM" RuleName="YCD_DEFAULT_SHIP_CHARGE" RuleSetValue=" "/>
 <BaseRules BaseRulesKey="YCD_SERVICE_TO_LOG_NOTES"
     Createprogid="XMLMigrator" Createts="2011-07-14T15:08:44-04:00"
     Createuserid="SYSTEM" GroupName="YCDEnterpriseConfig" Lockid="0"

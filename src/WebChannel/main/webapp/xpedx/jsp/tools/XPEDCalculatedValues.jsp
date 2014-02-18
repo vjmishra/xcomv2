@@ -128,7 +128,7 @@
                       
                       <s:iterator status="stat" value="numoutWasteList" id="numWastMap">
                       	<s:if test="#stat.index == 0">
-                      		<s:url id="option1" namespace="/xpedx/tools" action="xpedxImpCalculationPage">
+                      		<s:url id="option1" namespace="/tools" action="MyImpCalculationPage">
                       			<s:param name="option" value="1"/>
                       			<s:param name="sheetSizeW" value="#shtSizeW"/>
                       			<s:param name="sheetSizeH" value="#shtSizeH"/>
@@ -148,7 +148,7 @@
                             </tr>
                         </s:if>
                         <s:if test="#stat.index == 1">
-                        	<s:url id="option2" namespace="/xpedx/tools" action="xpedxImpCalculationPage">
+                        	<s:url id="option2" namespace="/tools" action="MyImpCalculationPage">
                       			<s:param name="option" value="2"/>
                       			<s:param name="sheetSizeW" value="#shtSizeW"/>
                       			<s:param name="sheetSizeH" value="#shtSizeH"/>
@@ -168,7 +168,7 @@
                             </tr>
                         </s:if>
                         <s:if test="#stat.index == 2">
-                        	<s:url id="option3" namespace="/xpedx/tools" action="xpedxImpCalculationPage">
+                        	<s:url id="option3" namespace="/tools" action="MyImpCalculationPage">
                       			<s:param name="option" value="3"/>
                       			<s:param name="sheetSizeW" value="#shtSizeW"/>
                       			<s:param name="sheetSizeH" value="#shtSizeH"/>
@@ -188,7 +188,7 @@
                             </tr>
                         </s:if>
                         <s:if test="#stat.index == 3">
-                        	<s:url id="option4" namespace="/xpedx/tools" action="xpedxImpCalculationPage">
+                        	<s:url id="option4" namespace="/tools" action="MyImpCalculationPage">
                       			<s:param name="option" value="4"/>
                       			<s:param name="sheetSizeW" value="#shtSizeW"/>
                       			<s:param name="sheetSizeH" value="#shtSizeH"/>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <YFS_NEGOTIATION_RULEList TableName="YFS_NEGOTIATION_RULE">
-<NegotiationRule AllowMultipleLineOptions="" AllowOverage=""
+<NegotiationRule AllowMultipleLineOptions=" " AllowOverage=" "
     Createprogid="system" Createts="2011-07-14T14:38:09-04:00"
     Createuserid="system" Lockid="0" Modifyprogid="system"
     Modifyts="2011-07-14T14:38:09-04:00" Modifyuserid="system"
     NegotiationRuleId="DEFAULT" NegotiationRuleKey="DEFAULT"/>
-<NegotiationRule AllowMultipleLineOptions="" AllowOverage=""
+<NegotiationRule AllowMultipleLineOptions=" " AllowOverage=" "
     Createprogid="system" Createts="2011-07-14T14:38:09-04:00"
     Createuserid="system" Lockid="0" Modifyprogid="system"
     Modifyts="2011-07-14T14:38:09-04:00" Modifyuserid="system"

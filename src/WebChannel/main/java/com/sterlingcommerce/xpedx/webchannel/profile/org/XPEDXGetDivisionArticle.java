@@ -105,13 +105,17 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 
 		String termsofAccess = (String) wcContext
 				.getWCAttribute("isTOAaccepted");
-		if ((termsofAccess != null) && termsofAccess.equals("Y")) {
+		//EB-475 update last login Date only once
+		YFCDate loginDate = new YFCDate();
+		String lastLoginDate = loginDate.getString();
+		String isLastLoginDateUpdated=(String)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.LAST_LOGIN_DATE_UPDATED);
+		//EB-475 Ended here
+		if ((termsofAccess != null) && termsofAccess.equals("Y") && !"Y".equalsIgnoreCase(isLastLoginDateUpdated)) {
 			boolean createCCExtn = false;
 			Map<String, String> attributeMap = new HashMap<String, String>();
 			Element xpxCustContExtnEle = (Element) XPEDXWCUtils
 					.getObjectFromCache("CustomerContExtnEle");
-			String lastLoginDate = (String) XPEDXWCUtils
-					.getObjectFromCache("LastLoginDate");
+		//	String lastLoginDate = (String) XPEDXWCUtils.getObjectFromCache("LastLoginDate");//removed as part of EB-475
 			String custContRefKey = (String) XPEDXWCUtils
 					.getObjectFromCache("CustomerContactRefKey");
 
@@ -130,6 +134,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 			Element outDoc = (Element) XPEDXWCUtils
 					.updateXPXCustomerContactExtn(wcContext, customerContactId,
 							createCCExtn, attributeMap);
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.LAST_LOGIN_DATE_UPDATED, "Y");//EB-475
 
 		}
 	}
@@ -186,6 +191,7 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 					"XPEDXDivisionArticleList", wcContext);
 			input.setAttribute("StartDate", startTodayDate);
 			input.setAttribute("EndDate", endTodayDate);
+			input.setAttribute("OrganizationCode", orgCode);
 			Element xpxArticle = (Element) input.getElementsByTagName(
 					"XPXArticle").item(0);
 			Element complexQuery = SCXmlUtil.getChildElement(input,
@@ -205,8 +211,6 @@ public class XPEDXGetDivisionArticle extends WCMashupAction {
 			Element and1Element = SCXmlUtil.createChild(orElement, "And");
 			orElement.appendChild(and1Element);
 			Element expElem = SCXmlUtil.createChild(and1Element, "Exp");
-			expElem.setAttribute("Name", "OrganizationCode");
-			expElem.setAttribute("Value", orgCode);
 			Element expElem1 = SCXmlUtil.createChild(and1Element, "Exp");
 			expElem1.setAttribute("Name", "ArticleType");
 			expElem1.setAttribute("Value", "S");

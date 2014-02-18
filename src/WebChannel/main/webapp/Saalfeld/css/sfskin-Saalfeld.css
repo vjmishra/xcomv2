@@ -1,10 +1,13 @@
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the bgcolor to image*/
 body
 {
-	background: #e8e2d4;
+  background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
+    color: #000000
 }
 
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the color of the fields*/
 a, .commonHeader-subnav li, .commonHeader-subnav li a,
-.commonFooter a, #welcome-address-popup a { color: #107555; }
+.commonFooter a, #welcome-address-popup a { color: #006a3a; }
 #mil-list tr a { color: #107555 !important; }
 
 .commonHeader { background: transparent url(../images/998x107_saalfeld_header.jpg) no-repeat; }
@@ -16,8 +19,10 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 	top: 16px;
 	width: 200px;
 }
-
-.header-subnav li { border-right: 1px solid #107555; }
+#approvalNotesPanel .x-window-ml {
+    padding-left: 0px;
+}
+.header-subnav li { border-right: 0px solid #107555; }
 
 #main-navigation { background: url(../images/unselected_saalfeld.png) repeat-x; }
 #main-navigation ul li { background: url("../images/unselected_saalfeld.png") repeat-x; }
@@ -38,13 +43,29 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 #main-nav li.active { background: url(../images/current_saalfeld.png) top center repeat-x; }
 #main-navigation ul li.lighter { background: url(../images/order_msg_saalfeld.png) repeat-x; }
 
-#homepage-table h2 { background: #084823; }
+#homepage-table h2 { background: #d1e1c7;  color: #006a3a; }
 
-.mini-cart-header, .mil-top-border, .table-header-bar
+.mini-cart-header,.table-header-bar
 {
-	background-color: #084823 !important;
+	background-color: #336633;
 }
-
+.mil-top-border
+{
+/* background-color:#084823;*/
+ /* width:100%; */
+ height: 20px;
+ padding:4px 1px 1px 1px;
+ 
+ /* 
+-moz-border-radius:5px;  
+border-radius: 5px;  
+-webkit-border-radius: 5px;
+border-collapse: separate;
+width:100%; */
+}
+table.mil-top-border { width:100%; }
+table.mil-top-border td { padding: 10px 2px 10px 0; }
+table.mil-top-border .table-header-bar-right { width:143px; }
 .mil-desc-attribute-list, .mil-desc-attribute-list ul, ul.prodlist
 {
 	color: #107555 !important;
@@ -52,16 +73,23 @@ a, .commonHeader-subnav li, .commonHeader-subnav li a,
 
 .table-header-bar-left
 {
-	background-image: url(../images/items-list-bg-LEFT.gif);
+	background-image: url(../images/items-list-bg-LEFT_green2.gif);
 }
 .table-header-bar-right
 {
-	background-image: url(../images/items-list-bg-LEFT.gif);
+	background-image: url(../images/items-list-bg-RIGHT_green2.gif);
+	
+}
+
+.cat-view-all a {
+    color: #006a3a;
+    font-size: 11px;
 }
 
 /* Orange */
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - Change the button image*/
 a.orange-ui-btn {
-	background: transparent url('../images/buttons/orange-bg-btn-a.png') no-repeat scroll top right;
+	background: transparent url('../images/buttons/green-bg-btn-a.png') no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
 	float: left;
@@ -72,7 +100,7 @@ a.orange-ui-btn {
 	text-decoration: none;
 }
 a.orange-ui-btn span {
-	background: transparent url('../images/buttons/orange-bg-btn-span.png') no-repeat;
+	background: transparent url('../images/buttons/green-bg-btn-span.png') no-repeat;
 	display: block;
 	line-height: 12px;
 	padding: 5px 0 4px 18px;
@@ -89,7 +117,7 @@ a.orange-ui-btn:active span {
 a.orange-ui-btn:hover, a.green-ui-btn:hover, a.grey-ui-btn:hover{ text-decoration: none; }
 /* Green */
 a.green-ui-btn {
-	background: transparent url('../images/buttons/gold-bg-btn-a.png') no-repeat scroll top right;
+	background: transparent url('../images/buttons/green-bg-btn-a.png') no-repeat scroll top right;
 	color: #FFFFFF;
 	display: block;
 	float: left;
@@ -100,7 +128,7 @@ a.green-ui-btn {
 	text-decoration: none;
 }
 a.green-ui-btn span {
-	background: transparent url('../images/buttons/gold-bg-btn-span.png') no-repeat;
+	background: transparent url('../images/buttons/green-bg-btn-span.png') no-repeat;
 	display: block;
 	line-height: 12px;
 	padding: 5px 0 4px 18px;
@@ -114,4 +142,301 @@ a.green-ui-btn:active span {
 	background-position: bottom left;
 	padding: 5px 0 4px 18px;
 }
+/* Added to see the Forgot Password function pages with green header boxes  for EB #1334 */
+#second-navigation #main-nav li.hover, #second-navigation#main-nav li:hover {
+    background: url("../images/unselected_saalfeld.png") repeat-x scroll 0 0 transparent;
+}
+#second-navigation #main-nav li.active.hover, #second-navigation #main-nav li.active:hover {
+    background: url("../images/current_saalfeld.png") repeat-x scroll center top transparent;
+}
+#second-navigation ul li {
+    background: url("../images/unselected_saalfeld.png") repeat-x scroll 0 0 transparent;
+    display: block;
+    float: left;
+    height: 25px;
+    min-width: 111px;
+    overflow: visible;
+    padding-top: 4px;
+}
+/*EB-1689*/
+/*EB-2727*/
+.underlines a:link{text-decoration:none;color: #006a3a;}
+.underlines a:hover{text-decoration:underline;color: #006a3a;}
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
+.whitest {
+    color: #006a3a;
+    margin-left: 4px;
+}
 
+.promo-txt {
+	color:#006a3a;	
+}
+
+.subPanelBox .header {
+    background: url("../images/green_cell_slice_1x22.png") repeat-x scroll 0 0 #006a3a;
+}
+
+.browseBox ul li a {
+    color: #006a3a;
+}
+
+.narrowByViewAllLink {
+	color: #006a3a;
+}
+
+.drag-to-compare, .drag-to-compare a
+{
+	color: #006a3a;
+}
+
+#comnum {
+	color: #006a3a;
+}
+
+.papergrid-view  {
+	color:#000;
+}
+
+#breadcrumbs-list-name a,#breadcumbs-list-name a {
+	color: #006a3a;
+}
+
+#catalog-header-breadcrumbs #breadcrumbs-list-name a {
+	color: #006a3a;
+}
+
+#catalog-header-breadcrumbs #breadcrumbs-list-name .breadcrumbs-inner {
+    color: #006a3a;
+}
+
+.breadcrumb-inactive {
+    color: #006a3a;
+}
+.submitBtnBg1 {
+    color: #006a3a;
+}
+
+#footer-copyright {
+    color: #988344;
+    text-align: center;
+    width: 100%;
+}
+/*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the rotation dot in promotions*/
+#home-image-rotation-nav a.activeSlide {
+    background: url("../images/buttons/rotation_dot_on.png") repeat scroll 0 0 transparent;
+}
+#homepage-table ul.news-links {
+    color: #006a3a;
+    list-style: disc outside none;
+}
+.header#top-bar { background-color:#336633; }
+.quick-add-aux-links a {
+    color: #006a3a;
+}
+#tq-quick-add-overlay a.grey-ui-btn span p{ display: inline; color: #006a3a; margin-right:5px; font-size: 14px;font-weight: bold; }
+.createdby-lastmod {
+    color: #006a3a;
+    text-align: center;
+    width: 125px;
+}
+.short-description {
+    color: #006a3a;
+    cursor: pointer;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
+#tq-quick-add-overlay .quick-add-to-cart-form th
+{
+	background: #336633;
+	color:white;
+	border-right: 1px solid #ccc;
+	height: 29px;
+	padding: 0px 3px 0px 10px;
+	vertical-align: middle;
+}
+span.underlink:hover, p.underlink:hover {
+    color: #006a3a;
+    text-decoration: underline;
+}
+.search-pagination-top {
+    color: #333333;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 9px;
+    text-align: right;
+}
+.search-pagination-bottom {
+    color: #333333;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.standard-table thead td {
+    border-left: 1px solid #006a3a !important;
+    border-bottom: 0px solid
+}
+.midsection thead tr { background-color: #336633; color: #ffffff; }
+#checkout-table-header td {
+    background-color: #336633;
+    padding: 10px;
+    width: 100%;
+}
+.short-description_M {
+    color:#084823;
+    font-weight: bold;
+    height: auto;
+    max-height: 200px;
+    text-decoration: none !important;
+}
+.jcarousel-container a
+{
+	color: #006a3a;
+	float: left;
+	font-size: 12px;
+	margin-right: 21px;
+	padding-right: 10px;
+	border-right: 1px solid #ccc;
+	text-align: left!important;
+	width:242px;
+}
+.txt-small a:link {
+    color: #006a3a;
+    text-decoration: none;
+}
+
+.txt-lnk-sml-1 {
+    color: #084823;
+    font-size: 11px;
+    text-decoration: underline;
+}
+.inf {
+	background-color: #d1e1c7 ;
+	border: 1px solid #006a3a;
+	color: #006a3a;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 15px;
+	display: inline-block;
+	width: auto;
+}
+#main-navigation ul li.order-edit-bg {
+    background: none repeat scroll 0 0 #988344;
+    margin-top: 4px;
+    padding-top: 0;
+}
+#main-navigation ul li.lighter.order-edit a {
+    border: 1px solid #ffffff;
+    font-weight: normal;
+}
+#main-navigation ul li.lighter.order-edit {
+    background: none repeat scroll 0 0 #b7a980;
+    margin-top: 4px;
+    padding-top: 0;
+}
+.ship-banner-container
+{
+      /* background-color:#084823;*/
+       height:24px;
+       padding-top:1px;
+       }
+
+.ship_banner p
+{
+color: #000;
+font-family:Arial, Helvetica, sans-serif;
+text-align: left;
+padding-top: 4px;
+}
+
+.ship_banner a
+{
+       color: #006a3a;      
+       padding-left: 10px;
+}
+.ship_banner
+{
+height:22px;
+background-color:#d1e1c7;
+padding: 0px 10px;
+font-size: 11px;
+}
+
+.ship_banner a:hover { text-decoration: underline; }
+div.wc-table-header td {
+    background-color: #006a3a;
+    border: 0 none;
+    padding: 10px 5px;
+}
+.middle-section ul
+{
+ list-style-type:disc;	
+ color: #006a3a;
+ padding: 10px 0px 0px 15px;  
+ max-height: 73px;
+ overflow: hidden;
+}
+#ext-gen5 {
+    background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
+}
+
+.swc-ext .x-window-mc {
+     background: none repeat scroll 0 0 #DFE8F6;
+    border: 1px solid #006A3A;
+    font: 1.1em Arial,Helvetica,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.swc-ext .x-window-ml {
+    padding-left: 6px;
+}
+#ext-gen5:hover {
+    background: url("../images/1x700_background.png") repeat-x scroll center top #FFFFFF;
+}
+
+#main-navigation ul li.lighter a, #main-navigation ul li.lighter span {
+    color: #006a3a;
+}
+element.style {
+    color: #66cc33;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+/*EB-2721 Saalfeld web site user want to view the Saafeld logo without excess lines so that upon hovering over the banner user do not view misc lines*/
+a:hover
+{
+text-decoration:none;
+}
+#main-nav li span {
+    border-right: 1px solid #FFFFFF;
+    color: #EEEEEE;
+    display: block;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    height: 20px;
+    letter-spacing: normal;
+    padding: 6px 4px 0;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    z-index: 1;
+}
+.addtocart {
+	text-align: center;
+    background-image: url("../images/buttons/add-to-cart-green.png");
+    background-repeat: no-repeat;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 23px;
+    width: 88px!important;
+}
+/*Added for EB 1150 & EB 1147 - back to top functionality */
+#back-to-top a
+{
+	background:url("../images/global/back_to_top_button.png") no-repeat left -51px;
+}

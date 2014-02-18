@@ -19,6 +19,7 @@ import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.interop.japi.YIFCustomApi;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -95,6 +96,9 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			log.debug("---------------------------------------------\n");
 			log.debug(SCXmlUtil.getString(inXML)+"\n");
 			log.debug("---------------------------------------------\n");
+			
+			Element pendignElement=SCXmlUtil.createChild(rootElement, "PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
 			outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", inXML); 
 		}
 		else{
@@ -110,6 +114,9 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 			log.debug("---------------------------------------------\n");
 			log.debug(SCXmlUtil.getString(changeOrderDoc)+"\n");
 			log.debug("---------------------------------------------\n");
+			Element pendignElement=SCXmlUtil.createChild(changeOrderElement, "PendingChanges");
+			pendignElement.setAttribute("IgnorePendingChanges", "Y");
+
 			outDoc = api.executeFlow(env, "XPXUpdateExOrderStatus", changeOrderDoc);
 		}
 		if(outDoc!=null)
@@ -176,6 +183,8 @@ public class XPXUpdateExtnOrderStatus implements YIFCustomApi{
 				log.debug("---------------------------------------------\n");
 				log.debug(SCXmlUtil.getString(changeCustOrderDoc)+"\n");
 				log.debug("---------------------------------------------\n");
+				Element pendignElement=SCXmlUtil.createChild(changeCustOrderElement, "PendingChanges");
+				pendignElement.setAttribute("IgnorePendingChanges", "Y");
 				outDoc = api.executeFlow(env,"XPXUpdateExOrderStatus", changeCustOrderDoc);
 			}
 		}

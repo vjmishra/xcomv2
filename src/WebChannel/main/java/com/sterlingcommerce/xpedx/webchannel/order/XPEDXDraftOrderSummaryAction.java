@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import com.sterlingcommerce.baseutil.SCUtil;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
@@ -22,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -65,6 +67,25 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
     private ArrayList<String> entitledItems = new ArrayList<String>();
     private boolean isItemEntitlmentsChanged = false;
     private Document shipToCusotmerDocument;
+	private String customerItemFlag;
+	private String mfgItemFlag;
+    public String getCustomerItemFlag() {
+		return customerItemFlag;
+	}
+
+	public void setCustomerItemFlag(String customerItemFlag) {
+		this.customerItemFlag = customerItemFlag;
+	}
+
+	public String getMfgItemFlag() {
+		return mfgItemFlag;
+	}
+
+	public void setMfgItemFlag(String mfgItemFlag) {
+		this.mfgItemFlag = mfgItemFlag;
+	}
+
+	
     protected HashMap<String, String> inventoryIndicatorMap = new HashMap<String, String>();
     protected String orderBillToID = "";
 	protected String orderShipToID = "";
@@ -77,6 +98,9 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	protected String isCustomerPOMandatory="false";
 	public String draftOrderFlagOrderSummary;
 	public String draftFlagError = "draftFlagError";
+	protected int addnlPoListlength =0;
+	
+
 	public String getDraftOrderFlagOrderSummary() {
 		return draftOrderFlagOrderSummary;
 	}
@@ -140,6 +164,15 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 
 	public void setAjaxLineStatusCodeMsg(String ajaxLineStatusCodeMsg) {
 		this.ajaxLineStatusCodeMsg = ajaxLineStatusCodeMsg;
+	}
+	//EB-64 - customerUOMMap will contain itemId and its customerUOM, if exist
+	private HashMap<String, String> customerUOMMap;
+	public HashMap<String, String> getCustomerUOMMap() {
+		return customerUOMMap;
+	}
+
+	public void setCustomerUOMMap(HashMap<String, String> customerUOMMap) {
+		this.customerUOMMap = customerUOMMap;
 	}
 	
 	public String execute() {
@@ -211,6 +244,14 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			setInventoryIndicatorMap(xpedxwcUtils.getInventoryCheckMap(getOutputDocument(), shipFromBranch, getWCContext()));
 			getEmailAddrs();
 			getAllItemSKUs();
+			//Start of EB-64 - getting the item id and customer UOM of that item, if it exist
+			Document xpxItemXRefDoc = (Document) XPEDXWCUtils.getObjectFromCache("xpxItemXRefDoc");
+			if(xpxItemXRefDoc!=null){
+				customerUOMMap =  new HashMap<String, String>(); 
+				customerUOMMap = getItemIdCustomerUOM(xpxItemXRefDoc);
+			}
+			//End of EB-64
+			
 			//getCustomerPONumbers();
 			// Get the customer fields
 			getCustomerDisplayFields();
@@ -319,6 +360,36 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	
 	}
 	
+//	Added for EB-64 - getting the item id and customer Uoms
+	private HashMap<String, String> getItemIdCustomerUOM(Document xpxItemXRefDoc){
+		HashMap<String, String> custUomMap;
+		custUomMap = new HashMap<String, String>(); 
+		Element wElement = xpxItemXRefDoc.getDocumentElement();
+		NodeList wNodeList = wElement.getChildNodes();
+		if (wNodeList != null) {
+			int length = wNodeList.getLength();
+			
+			for (int i = 0; i < length; i++) {
+				Node wNode = wNodeList.item(i);
+				if (wNode != null) {
+					NamedNodeMap nodeAttributes = wNode.getAttributes();
+					if (nodeAttributes != null) {
+						Node itemId = nodeAttributes
+								.getNamedItem("LegacyItemNumber");
+						Node customerUOM = nodeAttributes
+						.getNamedItem("CustomerUom");
+						if(itemId!=null && customerUOM!=null){
+							custUomMap.put(itemId.getTextContent(), customerUOM.getTextContent());
+						}
+						
+						
+					}
+				}
+			}
+		}
+		return custUomMap;
+	}
+	
 	private void setPnaHoverForEditOrderLine(XPEDXPriceAndAvailability pna,Document lineTpeMDoc)
 	{
 		try
@@ -393,16 +464,14 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 	}*/
 	private void getAllItemSKUs() throws CannotBuildInputException, XPathExpressionException
 	{
-		//Fetch all the extn fields from customer
 		
-		String useCustSku = (String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,WCAttributeScope.LOCAL_SESSION);
-		/*String envCode = (String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-		String companyCode = (String)wcContext.getWCAttribute(XPEDXConstants.COMPANY_CODE,WCAttributeScope.LOCAL_SESSION);
-		String legacyCustomerNumber = (String)wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);*/
-		//String useCustSku = shipToCustomer.getExtnUseCustSKU();
+		mfgItemFlag =(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		customerItemFlag =(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		String envCode = shipToCustomer.getExtnEnvironmentCode();
 		String companyCode = shipToCustomer.getExtnCompanyCode();
 		String legacyCustomerNumber = shipToCustomer.getExtnLegacyCustNumber();
+		
 		if(envCode == null || companyCode==null || legacyCustomerNumber == null)
 		{
 			Set mashupSet = buildSetFromDelmitedList("draftOrderGetCustomerLineFields");
@@ -410,25 +479,18 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			Element outputEl = (Element) outputMap.get("draftOrderGetCustomerLineFields");
 			Element customerOrganizationExtnEle = XMLUtilities.getChildElementByName(outputEl, "Extn");
 			envCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnEnvironmentCode");
-			useCustSku = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnUseCustSKU");
 			companyCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnCompanyCode");
 			legacyCustomerNumber = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnLegacyCustNumber");
-			//set this in the session
-			//wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,useCustSku,WCAttributeScope.LOCAL_SESSION);
-			/*wcContext.setWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,envCode,WCAttributeScope.LOCAL_SESSION);
-			wcContext.setWCAttribute(XPEDXConstants.COMPANY_CODE,companyCode,WCAttributeScope.LOCAL_SESSION);
-			wcContext.setWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,legacyCustomerNumber,WCAttributeScope.LOCAL_SESSION);*/
-			shipToCustomer.setExtnUseCustSKU(useCustSku);
 			shipToCustomer.setExtnEnvironmentCode(envCode);
 			shipToCustomer.setExtnCompanyCode(companyCode);
 			shipToCustomer.setExtnLegacyCustNumber(legacyCustomerNumber);
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 		}
 		
-		if(useCustSku!=null && useCustSku.length()>0)
+		/*if(useCustSku!=null && useCustSku.length()>0)
 		{
 			setCustomerSku(useCustSku);
-		}
+		}*/
 		
 		//Fetch all the items in Cart and get their respective SKUs
 		Document orderDoc = getOutputDocument();
@@ -437,59 +499,74 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
 		if(orderLineElemList==null || orderLineElemList.size()==0)
 			return;
-		
+		HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
+		ArrayList<String> itemIdList = new ArrayList<String>();	
 		
-		ArrayList<String> itemIdList = new ArrayList<String>();		
-		HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
-		
-		//Get the customer extn fields
-		for (int i = 0; i < orderLineElemList.size(); i++) {
-			HashMap<String, String> primaryInfoSKUItemsMap = new HashMap<String, String>();
-			Element orderLineElement = (Element)orderLineElemList.get(i);
-			String lineType=orderLineElement.getAttribute("LineType");
-			if("C".equalsIgnoreCase(lineType) && "M".equalsIgnoreCase(lineType)) {
-				continue;
-			}
-			
-			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
-					"Item");
-			String itemId = itemElement.getAttribute("ItemID");// orderline/item
-			
-			if(skuMap.containsKey(itemId))
-				continue;
-			
-			/*Begin - Changes made by Mitesh Parikh for JIRA 3595*/
-			Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
-			if(itemDetailsElement!=null)
-			{
+		if(!SCUtil.isVoid(mfgItemFlag) && mfgItemFlag.equalsIgnoreCase("Y")) {				
+			HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
+			for (int i = 0; i < orderLineElemList.size(); i++) {
+				Element orderLineElement = (Element)orderLineElemList.get(i);
+				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+				String itemId = itemElement.getAttribute("ItemID");
+
+				if(skuMap.containsKey(itemId))
+					continue;
+				/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+				Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
 				Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
 				if(primeInfoElem!=null)
 				{
 					String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
 					if(manufactureItem!=null && manufactureItem.length()>0)
-						primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM, manufactureItem);
+						itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
 				}
-				Element extnElem = XMLUtilities.getElement(itemDetailsElement, "Extn");
-				if(extnElem!=null)
-				{
-					String mpcCode = extnElem.getAttribute("ExtnMpc");
-					if(mpcCode!=null && mpcCode.length()>0)
-						primaryInfoSKUItemsMap.put(XPEDXConstants.CUST_SKU_FLAG_FOR_MPC_ITEM, mpcCode);
-				}
-				itemIdList.add(itemId);
-				itemsSkuMap.put(itemId, primaryInfoSKUItemsMap);
-				
+
+				//itemIdList.add(itemId);   commenting this line , since, below populating all the itemds in the list
+				skuMap.put(itemId, (HashMap<String, String>)itemSkuMap.clone());
+				itemSkuMap.clear();
 			}
-			
-			//HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-			//skuMap.put(itemId, itemSkuMap);
+
 		}
+		// EB-64 - Getting the item id list
+		for (int i = 0; i < orderLineElemList.size(); i++) {
+			Element orderLineElement = (Element)orderLineElemList.get(i);
+			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+			String itemId = itemElement.getAttribute("ItemID");
+			itemIdList.add(itemId);
+		}
+		// EB-64 - Moving the XPXItemCustXref code from bottom to top for getting the customer UOM irrespective of customerItemFlag
+		Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+		XPEDXWCUtils.setObectInCache("xpxItemXRefDoc",itemcustXrefDoc); 
 		
-		if(itemIdList.size()>0){
-			skuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemIdList, itemsSkuMap);
-		}
-		/*End - Changes made by Mitesh Parikh for JIRA 3595*/
+		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+			
+			if(itemcustXrefDoc!=null) {
+				Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
+				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
+				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
+					Iterator<Element> xrefIter = itemCustXrefElems.iterator();
+					while(xrefIter.hasNext()) {
+						Element xref = xrefIter.next();
+						String legacyItemNum = xref.getAttribute("LegacyItemNumber");
+						if(itemIdList.contains(legacyItemNum.trim())) {
+							String customerPartNumber = xref.getAttribute("CustomerItemNumber");
+							if(customerPartNumber!=null && customerPartNumber.length()>0)
+							{
+								HashMap<String, String> tmpSkuMap = skuMap.get(legacyItemNum);
+								if(SCUtil.isVoid(tmpSkuMap))
+									itemSkuMap = new HashMap<String, String>();
+								else
+									itemSkuMap = tmpSkuMap;
+							itemSkuMap.put(XPEDXConstants.CUST_PART_NUMBER, customerPartNumber);
+							skuMap.put(legacyItemNum, (HashMap<String, String>)itemSkuMap.clone());
+							itemSkuMap.clear();
+							}
+						}
+					}
+				}
+			}
+	   }
 	}
 	protected void setOrderCutOffDate(){
 		String customerID = wcContext.getCustomerId();
@@ -500,7 +577,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		deliveryCutOffTime=shipToCustomer.getShipToDivDeliveryCutOffTime();
 		//Added For Jira 3465
 		deliveryInfo=shipToCustomer.getShipToDivdeliveryInfo();
-		
+		deliveryInfoSaal= shipToCustomer.getShipToDivdeliveryInfoSaal();//EB-3624
 		if(deliveryCutOffTime==null)
 		{
 			try {
@@ -537,6 +614,8 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 				deliveryCutOffTime = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime");
 				//Added For Jira 3465
 				deliveryInfo = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo");
+				deliveryInfoSaal = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal");//EB-3624
+				shipToCustomer.setShipToDivdeliveryInfoSaal(deliveryInfoSaal);//EB-3624
 				shipToCustomer.setShipToDivDeliveryCutOffTime(deliveryCutOffTime);
 				//Added For Jira 3465
 				shipToCustomer.setShipToDivdeliveryInfo(deliveryInfo);
@@ -815,7 +894,7 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		
 		//addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
 		if(xpedxCustomerContactInfoBean.getAddEmailID()!=null && xpedxCustomerContactInfoBean.getAddEmailID().trim()!=""){
-		addnlEmailAddrs = xpedxCustomerContactInfoBean.getAddEmailID();
+			addnlEmailAddrs = xpedxCustomerContactInfoBean.getAddEmailID();
 		}else{
 			addnlEmailAddrs = (String) wcContext.getWCAttribute("addnlEmailAddrs");
 		}
@@ -826,34 +905,50 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 			addnlEmailAddrs = xpxCustContExtnEle.getAttribute("AddnlEmailAddrs");
 		}*/
 		addnlPOList = (String) wcContext.getWCAttribute("addnlPOList");;
-		
+		if(addnlPOList!=null && addnlPOList.length()!=0)
+		{
+			setAddnlPoListlength(addnlPOList.length());
+		}
+	
 /* JIRA 3382 removed userprofile email address from addition email address list*/
 	/*	if(YFCCommon.isVoid(addnlEmailAddrs))
 			addnlEmailAddrs = userEmailId;
 		else
 			addnlEmailAddrs = addnlEmailAddrs.concat(userEmailId);// Concatenating the users email address too as a requirement for OP Task #68
 END of JIRA 3382*/
-		
+		String previousEmailRecipient="N";
 		if (!YFCCommon.isVoid(addnlEmailAddrs)){
 			String[] emailListSplit = addnlEmailAddrs.replace(" ","").split(",");
 			for (int i = 0; i < emailListSplit.length; i++) {
-				addAddnlEmailAddrList(emailListSplit[i]);
+				addAddnlEmailAddrs(emailListSplit[i], previousEmailRecipient);
 			}			
 		}
 		
-		
 		// fetch all the email id from the order 
-		//
 		Document orderOutDoc = getOutputDocument();
 		YFCDocument orderDoc = YFCDocument.getDocumentFor(orderOutDoc);
 		YFCElement orderEle = orderDoc.getDocumentElement();
 		YFCElement orderExtnElem = orderEle.getChildElement("Extn");
 		String addnlEmailAddr = orderExtnElem.getAttribute("ExtnAddnlEmailAddr");
 		if (!YFCCommon.isVoid(addnlEmailAddr)){
-			String[] 	emailListSplit = addnlEmailAddr.replace(" ","").split(";");
+			String[] emailListSplit = addnlEmailAddr.replace(" ","").split(";");
 			for (int i = 0; i < emailListSplit.length; i++) {
-				addSelectedAddnlEmailAddrList(emailListSplit[i]);
-				addAddnlEmailAddrList(getSelectedAddnlEmailAddrList());
+				if("true".equals(isEditOrder)) {
+					previousEmailRecipient="Y";
+				}
+				addAddnlEmailAddrs(emailListSplit[i], previousEmailRecipient);
+			}
+		}
+		
+		shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		String billToEmailAddrs=shipToCustomer.getBillTo().getBillToEmailAddrs();
+		if (!YFCCommon.isVoid(billToEmailAddrs)){
+			String[] billToEmailAddrsSplit=billToEmailAddrs.split(",");
+			if(billToEmailAddrsSplit!=null && billToEmailAddrsSplit.length>0) {
+				billToEmailAddrsSet=new HashSet<String>();
+				for (int i = 0; i < billToEmailAddrsSplit.length; i++) {
+					billToEmailAddrsSet.add(billToEmailAddrsSplit[i]);
+				}
 			}
 		}
 		//Set addnlPoNumberList with empty ArrayList to avoid error on Select PO # dropdown
@@ -1096,54 +1191,20 @@ END of JIRA 3382*/
 	public void setOrgDetailsBean(XPEDXOrgNodeDetailsBean orgDetailsBean) {
 		this.orgDetailsBean = orgDetailsBean;
 	}
-
-	public Map<String, String> getAddnlEmailAddrList() {
-		Map<String, String> newMap = new HashMap<String, String>();
-		for(String email : this.addnlEmailAddrList){
-			newMap.put(email, email);
-		}
-		if (newMap.size() == 0){
-			newMap.put(" " , "  ");
-		}
-		return newMap;
-	}
-
-	public void setAddnlEmailAddrList(List<String> addnlEmailAddrList) {
-		this.addnlEmailAddrList = new HashSet<String>(addnlEmailAddrList);
+	
+	public Map<String, String> getAddnlEmailAddrsMap() {
+		if (this.addnlEmailAddrsMap==null) {
+			this.addnlEmailAddrsMap=new HashMap<String,String>();
+		}		
+		return addnlEmailAddrsMap;
 	}
 	
-	private void addAddnlEmailAddrList(String emailAddress){
-		if (YFCCommon.isVoid(this.addnlEmailAddrList)){
-			this.addnlEmailAddrList = new HashSet<String>();
+	private void addAddnlEmailAddrs(String emailAddress, String previousEmailRecipient){
+		if (this.addnlEmailAddrsMap==null) {
+			this.addnlEmailAddrsMap=new HashMap<String,String>();
 		}
-		if (!YFCCommon.isVoid(emailAddress)){
-			this.addnlEmailAddrList.add(emailAddress.trim());
-		}
-	}
-
-	private void addAddnlEmailAddrList(List<String> emailAddresses){
-		if (YFCCommon.isVoid(this.addnlEmailAddrList)){
-			this.addnlEmailAddrList = new HashSet<String>();
-		}
-		if (!YFCCommon.isVoid(emailAddresses)){
-			this.addnlEmailAddrList.addAll(emailAddresses);
-		}
-	}
-	
-	public List<String> getSelectedAddnlEmailAddrList() {
-		return new ArrayList<String>(selectedAddnlEmailAddrList);
-	}
-
-	public void setSelectedAddnlEmailAddrList(List<String> selectedAddnlEmailAddrList) {
-		this.selectedAddnlEmailAddrList = new HashSet<String>(selectedAddnlEmailAddrList);
-	}
-	
-	private void addSelectedAddnlEmailAddrList(String emailAddress){
-		if (YFCCommon.isVoid(this.selectedAddnlEmailAddrList)){
-			this.selectedAddnlEmailAddrList = new HashSet<String>();
-		}
-		if (!YFCCommon.isVoid(emailAddress)){
-			this.selectedAddnlEmailAddrList.add(emailAddress.trim());
+		if (!YFCCommon.isVoid(emailAddress)) {
+			this.addnlEmailAddrsMap.put(emailAddress, previousEmailRecipient);
 		}
 	}
 	
@@ -1268,8 +1329,7 @@ END of JIRA 3382*/
 	protected String shipComplete = "";
 	protected String shipCompleteOption;
 	protected XPEDXOrgNodeDetailsBean orgDetailsBean;
-	protected Set <String> addnlEmailAddrList;
-	protected Set <String> selectedAddnlEmailAddrList;
+	protected Map <String,String> addnlEmailAddrsMap;	
 	protected Document customerOutputDoc;
     protected Boolean isBOMValidationEnabled;
     private HashMap<String, JSONObject> pnaHoverMap;
@@ -1289,7 +1349,8 @@ END of JIRA 3382*/
 	protected String deliveryCutOffTime = "";
 	//Added For Jira 3465
 	protected String deliveryInfo = "";
-	
+	private Set<String> billToEmailAddrsSet;
+	protected String deliveryInfoSaal = "";//EB-3624
 	protected Map<String,Element> editOrderOrderMap = new HashMap<String,Element>();
 	protected Map<String,Element> editOrderOrderLineMap = new HashMap<String,Element>();
 	
@@ -1335,6 +1396,15 @@ END of JIRA 3382*/
 	public void setDeliveryInfo(String deliveryInfo) {
 		this.deliveryInfo = deliveryInfo;
 	}
+	//EB-3624
+	public String getDeliveryInfoSaal() {
+		return deliveryInfoSaal;
+	}
+
+	public void setDeliveryInfoSaal(String deliveryInfoSaal) {
+		this.deliveryInfoSaal = deliveryInfoSaal;
+	}
+	
 	public String getItemDtlBackPageURL() {
 		return itemDtlBackPageURL;
 	}
@@ -1567,6 +1637,14 @@ END of JIRA 3382*/
 		return dateToDisplay;
 	}
 	
+	public int getAddnlPoListlength() {
+		return addnlPoListlength;
+	}
+
+	public void setAddnlPoListlength(int addnlPoListlength) {
+		this.addnlPoListlength = addnlPoListlength;
+	}
+	
 	public String replaceString(String qty,String replaceStr,String withString){
 		String split[]=qty.split("\\.");
 		if(split != null && split.length >1)
@@ -1576,6 +1654,14 @@ END of JIRA 3382*/
 				return split[0];
 		}
 		return qty;
+	}
+	
+	public Set<String> getBillToEmailAddrsSet() {
+		return billToEmailAddrsSet;
+	}
+
+	public void setBillToEmailAddrsSet(Set<String> billToEmailAddrsSet) {
+		this.billToEmailAddrsSet = billToEmailAddrsSet;
 	}
 	
 	/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/

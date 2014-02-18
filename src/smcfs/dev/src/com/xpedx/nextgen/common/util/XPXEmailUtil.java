@@ -47,7 +47,6 @@ public class XPXEmailUtil {
 		emailDetail.setAttribute("EmailSubject", emailSubject);
 		emailDetail.setAttribute("EmailXML", emailXML);
 		emailDetail.setAttribute("EmailOrgCode", emailOrgCode);
-		emailDetail.setAttribute("EmailFrom", emailFrom);		
 		emailDetail.setAttribute("EmailFrom", emailFrom);	
 		emailDetail.setAttribute("BusinessIdentifier", businessIdentifier);
 		

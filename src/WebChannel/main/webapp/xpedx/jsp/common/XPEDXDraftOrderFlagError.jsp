@@ -10,6 +10,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-This cart has already been submitted, please refer to the Order Management page to review the order.
+<s:if test='%{#_action.getQuantitydraftError() == "true"}'>
+We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.
+</s:if>
+<s:else>
+This cart has already been submitted, please refer to the Order Management page to review the order.   
+</s:else>
 </body>
 </html>

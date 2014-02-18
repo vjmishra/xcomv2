@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +26,7 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.util.YFCCommon;
 
 /**
  * @author vgovindan
@@ -51,9 +53,14 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		SCXmlUtils xmlUtils = XPEDXSCXmlUtils.getInstance();
 		Element info = xmlUtils.getChildElement(item, "PrimaryInformation");
 		String itemID = validate(item.getAttribute("ItemID"));
+		String itemDetailURL=validate(item.getAttribute("itemDetailURL"));
 		HashMap<String, String> itemUOMList = tag.getItemUomHashMap().get(itemID);
 		itemUOMList = itemUOMList == null ? new HashMap<String, String>() : itemUOMList;
 		String defaultUOM = validate(tag.getDefaultShowUOMMap().get(itemID));	
+		String defaultUomCode = ""; //Added for EB 41,42,43
+		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
+		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
+		
 		String shortDesc = validate(info.getAttribute("ShortDescription"));
 		String desc = validate(info.getAttribute("Description"));
 		String itemKey = validate(item.getAttribute("ItemKey"));
@@ -88,6 +95,14 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		Element b2cItemExtn = xmlUtils.getChildElement(item, "Extn");
 		String b2cSize = validate(b2cItemExtn.getAttribute("ExtnSize"));
 		String b2cColor = validate(b2cItemExtn.getAttribute("ExtnColor"));
+		
+		// start-- EB-78 Catalog color Grid View
+		
+		if (b2cColor.contains("/"))
+			b2cColor = b2cColor.replace("/", " / ");
+		
+		// END-- EB-78 Catalog color Grid View
+		
 		String b2cMwt = validate(b2cItemExtn.getAttribute("ExtnMwt"));
 		String b2cBasis = validate(b2cItemExtn.getAttribute("ExtnBasis"));
 		String b2cCert = validate(b2cItemExtn.getAttribute("ExtnCert"));
@@ -102,6 +117,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String b2cPly = validate(b2cItemExtn.getAttribute("ExtnPly"));
 		String b2cPackMethod = validate(b2cItemExtn.getAttribute("ExtnPackMethod")); //added for XBT 262 & 258
 		String b2cstockStatus = validate(itemBranchBean.getInventoryIndicator());
+		String storeFrontId=(String) tag.getWcContext().getStorefrontId();
 		//String isSuperseded = validate(item.getAttribute("IsItemSuperseded"));
 		//String isValid = validate(info.getAttribute("IsValid"));
 		//String isModelItem = validate(info.getAttribute("IsModelItem"));
@@ -116,8 +132,15 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
 			isConfigurableBundle = "Y";
 		*/
-		String itemCurrency = validate((String) findValue(tag.getCurrency()));
+		List<Element> replacmentList =null;
 		boolean isGuestUser = (Boolean)findValue("guestUser");
+		if(tag.getReplacmentItemsMap()!=null && isGuestUser!=true)
+		{
+			replacmentList = tag.getReplacmentItemsMap().get(itemID.trim());
+		}
+		replacmentList = replacmentList == null ? new ArrayList<Element>() : replacmentList;
+		String itemCurrency = validate((String) findValue(tag.getCurrency()));
+	
 		
 		XPEDXUtilBean utilBean = new XPEDXUtilBean();
 		String formattedUnitprice = validate(utilBean.formatPriceWithCurrencySymbol(tag.getCtx(),itemCurrency,myPrice));
@@ -127,8 +150,19 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("itemkey: \"").append(itemKey).append("\",");
 		sb.append("uom: \"").append(TextUtils.htmlEncode(unitOfMeasure)).append("\",");
 		sb.append("name: \"").append(XPEDXMyItemsUtils.formatEscapeCharactersHtml(shortDesc)).append("\",");
-		sb.append("listprice: \"");
+		
+		
+		if(isGuestUser)
+		{
+			itemDetailURL="/swc/catalog/itemDetails.action?sfId="+storeFrontId+"&scGuestUser=Y"+"&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3F"+storeFrontId+"%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"+"&itemID="+itemID+"&unitOfMeasure="+unitOfMeasure+"&selectedView=";
+		}else
+		{
 			
+			itemDetailURL="/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3F"+storeFrontId+"%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"+"&itemID="+itemID+"&unitOfMeasure="+unitOfMeasure+"&selectedView=";
+		}
+		
+		sb.append("itemDetailURL: \"").append(itemDetailURL).append("\",");
+		sb.append("listprice: \"");
 		String tierPrice = "";
 		List<Element> tierPriceList = tag.getPLLineMap().get(itemID);
 		if(tierPriceList != null) {
@@ -185,14 +219,19 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		
 		String uomDesc = "";
 		try {
-			uomDesc = TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getUOMDescription(unitOfMeasure));
+			if(custUOM!=null && custUOM.equalsIgnoreCase(unitOfMeasure)){
+				uomDesc = custUOM.substring(2);
+			}else{
+				uomDesc = TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getUOMDescription(unitOfMeasure));
+			}
 			sb.append("uomDesc: \"").append(uomDesc).append("\",");
 		} catch (Exception e) {
 			sb.append("uomDesc: \"\",");
 		}
 		//modified for jira 3253 to format quantity of ordermultiple
 		if (isGuestUser == false) {
-			if (Integer.parseInt(orderMultiple) > 1) {
+			
+			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
 						.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
 						.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
@@ -232,18 +271,29 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
 		sb.append("partno: \"");
-		
-		String custUserSKU = (String)tag.getWcContext().getWCAttribute("customerUseSKU");
-		if("2".equals(custUserSKU)) {
+		// Changed for EB 4010
+		//Added for EB 47
+		String extnMfgItemFlag = (String) tag.getWcContext().getWCAttribute("BILL_TO_CUST_MFG_ITEM_FLAG");
+		String extnCustomerItemFlag = (String) tag.getWcContext().getWCAttribute("BILL_TO_CUST_PART_ITEM_FLAG");
+		//Commented for EB 47 String custUserSKU = (String)tag.getWcContext().getWCAttribute("customerUseSKU");
+		if(extnMfgItemFlag != null && extnMfgItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MANUFACTURER_ITEM_LABEL)
 				.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
-		} else if("3".equals(custUserSKU)) {
+		
+		}	
+		
+			sb.append("\",");
+			/* else if("3".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MPC_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPC"))));
-		} else if("1".equals(custUserSKU)) {
+		} else if("1".equals(custUserSKU)) {*/
+			sb.append("customerItemno: \"");
+		if(extnCustomerItemFlag!=null && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
-		}
+		}		
+		
+		//End of EB 47
 		sb.append("\",");
 		
 		sb.append("uomdisplay: \"<div class=\'uom-select\'><select name='itemUomList' ").append("onmousedown=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class',''); ")
@@ -253,11 +303,22 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		for (Iterator<Map.Entry <String, String>> iterator = itemUOMList.entrySet().iterator(); iterator.hasNext();) {
 			Map.Entry  pair = (Map.Entry ) iterator.next();
 			sb.append("<option value='").append(pair.getKey()).append("'");
-			if(pair.getValue().toString().equals(defaultUOM))
+			if(pair.getValue().toString().equals(defaultUOM)){
 				sb.append(" selected='selected' ");
+				defaultUomCode = (String) pair.getKey();
+			}
 			sb.append(">").append(TextUtils.htmlEncode(pair.getValue().toString())).append("</option>");
 		}
-		sb.append("</select><input type='hidden' id='orderMultiple_");
+		sb.append("</select>");
+		sb.append("<input type='hidden' id='custUOM_");
+		sb.append(itemID).append("' value='");
+		sb.append(custUOM).append("'/>");
+		//Added for EB 41,42,43
+		sb.append("<input type='hidden' id='defaultUOMCode_");
+		sb.append(itemID).append("' value='");
+		sb.append(defaultUomCode).append("'/>");
+		//End of EB EB 41,42,43
+		sb.append("<input type='hidden' id='orderMultiple_");
 		sb.append(itemID).append("' value='");
 		sb.append(orderMultiple).append("'/></div>\",");
 		sb.append("itemtypedesc: \"");
@@ -265,6 +326,56 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			sb.append("<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>");
 		}
 		sb.append("\",");
+		if(replacmentList!=null && replacmentList.size()>0){			
+		StringBuffer repItemsForMiniView = new StringBuffer();
+		StringBuffer repItemsForCondensedView = new StringBuffer();
+		sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");		
+		repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
+		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
+		for(int i=0;i<replacmentList.size();i++ )
+		{
+		Element replacementItemElement = (Element)replacmentList.get(i);
+		String replacementItem = validate(replacementItemElement.getAttribute("ItemID"));
+		String replacementItemUOM = validate(replacementItemElement.getAttribute("UnitOfMeasure"));
+		if (i>0) sb.append(",");
+		//fixed for EB-4010
+		//if (i==1) sb.append("<br/>");
+		sb.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+		sb.append(TextUtils.htmlEncode(replacementItem));
+		sb.append("','");
+		sb.append(TextUtils.htmlEncode(replacementItemUOM));
+		sb.append("');\\\">");		
+		sb.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
+		sb.append("</a>");
+		
+		if (i>0) repItemsForCondensedView.append(",");
+		repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItem));
+		repItemsForCondensedView.append("','");
+		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItemUOM));
+		repItemsForCondensedView.append("');\\\">");
+		repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
+		repItemsForCondensedView.append("</a>");
+		
+		if (i>0) repItemsForMiniView.append(",");
+		if((i %2)!=0)repItemsForMiniView.append("<br/>");
+		repItemsForMiniView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+		repItemsForMiniView.append(TextUtils.htmlEncode(replacementItem));
+		repItemsForMiniView.append("','");
+		repItemsForMiniView.append(TextUtils.htmlEncode(replacementItemUOM));
+		repItemsForMiniView.append("');\\\">");
+		repItemsForMiniView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
+		repItemsForMiniView.append("</a>");
+		}
+		sb.append("\"");
+		
+		repItemsForMiniView.append("\"");		
+		sb.append(repItemsForMiniView);
+		repItemsForCondensedView.append("\"");
+		sb.append(repItemsForCondensedView);
+		}
+		//sb = parseData(sb);
+		//sb = parseData(sb);
 		//sb = parseData(sb);
 		
 		try {

@@ -61,6 +61,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private String comingFromSearch = "false";
 	private XPEDXOverriddenShipToAddress xOverriddenShipToAddress;
 	private Set<XPEDXShipToCustomer> addressSearchResult;
+	private boolean adminMode;
 	private String defaultShipToCustomerId;
 	private String searchTerm = "Search Criteria";
 	private boolean search = false;
@@ -85,6 +86,24 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	private String removeFromavailable = "";
 	private LinkedHashMap<String, String> availableLocationMap = new LinkedHashMap<String, String>();
 	private LinkedHashMap<String, String> authorizedLocationMap = new LinkedHashMap<String, String>();
+	private String status="";
+	private String isRequestedPage;
+	private boolean isDefaultShipToCustSuspended= false;
+
+	public boolean isDefaultShipToCustSuspended() {
+		return isDefaultShipToCustSuspended;
+	}
+
+	public void setDefaultShipToCustSuspended(boolean isDefaultShipToCustSuspended) {
+		this.isDefaultShipToCustSuspended = isDefaultShipToCustSuspended;
+	}
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public int getAuthListSize() {
 
@@ -268,6 +287,14 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 
 	public void setSelectedCurrentCustomer(String selectedCurrentCustomer) {
 		this.selectedCurrentCustomer = selectedCurrentCustomer;
+	}
+
+	public String getIsRequestedPage() {
+		return isRequestedPage;
+	}
+
+	public void setIsRequestedPage(String isRequestedPage) {
+		this.isRequestedPage = isRequestedPage;
 	}
 
 	/**
@@ -597,8 +624,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		try {
 			outputMap = prepareAndInvokeMashups();
 			setDefaultShipTo();
-			Element outputElem = outputMap
-					.get("XPEDXGetPaginatedCustomerAssignments");
+			Element outputElem = outputMap.get("XPEDXGetPaginatedCustomerAssignments");
 			Element customerAssignment = SCXmlUtil.getChildElement(outputElem,
 					"Output");
 			// Performance Fix - Removal of the mashup call of -
@@ -643,6 +669,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 					.getAttribute("TotalNumberOfRecords"));
 			parsePageInfo(outputElem, true);
 			parseForShipToAddress(customerAssignment, true);
+			/*EB-76 Start Changes */
+			if(defualtShipToAddress!=null && defualtShipToAddress.getCustomerStatus()!=null && defualtShipToAddress.getCustomerStatus().trim().equals("30")){
+				isDefaultShipToCustSuspended = true;
+			}
+			/*EB-76 End Changes */
 		} catch (XMLExceptionWrapper e) {
 			log.error("Error getting the Customer Assignments");
 			e.printStackTrace();
@@ -665,6 +696,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 			if ((customerContactId != null && customerContactId.trim().length() > 0)
 					&& !customerContactId.equals(getWCContext()
 							.getCustomerContactId())) {
+				adminMode = true; // we are modifying another user's ship-to, which is an admin function
 				defaultShipToCustomerId = XPEDXWCUtils
 						.getDefaultShipTo(customerContactId);
 				if (defaultShipToCustomerId != null
@@ -758,10 +790,9 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * customerId : "");
 		 * if(customerId.trim().equalsIgnoreCase(wcContext.getCustomerId()))
 		 * currentCustomer = customerId;
-		 * 
+		 *
 		 * assignedShipToList.add(xPEDXShipToCustomer); } } }
-		 */
-	}
+		 */}
 
 	private void parseForShipToAddress(Element customerAssignmentViewElem,
 			boolean isForDefaultShipto) {
@@ -771,13 +802,18 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				viewListElem, "XPXCustomerAssignmentView");
 		assignedShipToList = new ArrayList<XPEDXShipToCustomer>();
 		if (assignedCustElems.size() > 0) {
+
 			shipToResult = false;
+				String status ="";
 			for (int i = 0; i < assignedCustElems.size(); i++) {
 				Element customer = assignedCustElems.get(i);
+
 				XPEDXShipToCustomer defualtShipToAssigned = new XPEDXShipToCustomer();
 				defualtShipToAssigned.setCustomerID(SCXmlUtil.getAttribute(
 						customer, "ShipToCustomerID"));
 				log.debug(SCXmlUtil.getString(customer));
+
+
 				defualtShipToAssigned.setOrganizationName(SCXmlUtil
 						.getAttribute(customer, "ShipToCustomerName"));
 				Element element = customer;
@@ -834,15 +870,17 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 							.equals(wcContext.getCustomerId()) ? customerId
 							: "");
 				}
+
 				assignedShipToList.add(defualtShipToAssigned);
+				}
 			}
 		}
-	}
+
 
 	/**
 	 * <CustomerAssignment CustomerID="" OrganizationCode="" UserId=""
 	 * Operation="" />
-	 * 
+	 *
 	 * @return
 	 */
 	public String saveChanges() {
@@ -904,7 +942,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * >)XPEDXWCUtils.getObjectFromCache("newcustomersList"); for(String
 		 * customerId: newcustomersList) { existingList.remove(customerId); }
 		 * XPEDXWCUtils.setObectInCache("newcustomersList",existingList);
-		 * 
+		 *
 		 * Map<String, String> resultsMap1 = new HashMap<String, String>();
 		 */
 
@@ -912,7 +950,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * String removeFromavailable1 = removeFromavailable; String[]
 		 * removeFromavailableIds = removeFromavailable1.split(","); Map<String,
 		 * String> resultsMap2 = new HashMap<String, String>();
-		 * 
+		 *
 		 * if(addToavailable != null && addToavailable.trim().length() >0){ for
 		 * (int i=0; i<addToavailablearrayIds.length; i++) {
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
@@ -921,7 +959,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * block - removeFromavailable != null //else part -if
 		 * removeFromavailable is null else
 		 * resultsMap1.put(addToavailablearrayIds[i],"Delete" ); } }
-		 * 
+		 *
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
 		 * >0){ for (int i=0; i<removeFromavailableIds.length; i++) {
 		 * if(addToavailable != null && addToavailable.trim().length() >0 ){
@@ -929,11 +967,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * resultsMap1.put(removeFromavailableIds[i],"Create" ); }//End of If
 		 * block - addToavailable != null //else part -if addToavailable is null
 		 * else resultsMap1.put(removeFromavailableIds[i],"Create" ); } }
-		 * 
+		 *
 		 * saveChanges(resultsMap1);
-		 * 
+		 *
 		 * populateAvailableLocation();
-		 * 
+		 *
 		 * if(addToavailable != null && addToavailable.trim().length() >0){ for
 		 * (int i=0; i<addToavailablearrayIds.length; i++) {
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
@@ -942,7 +980,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * block - removeFromavailable != null //else part -if
 		 * removeFromavailable is null else
 		 * resultsMap2.put(addToavailablearrayIds[i],"Create" ); } }
-		 * 
+		 *
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
 		 * >0){ for (int i=0; i<removeFromavailableIds.length; i++) {
 		 * if(addToavailable != null && addToavailable.trim().length() >0 ){
@@ -955,7 +993,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		 * if(addToavailable != null && addToavailable.trim().length() >0){ for
 		 * (int i=0; i<addToavailablearrayIds.length; i++) {
 		 * resultsMap2.put(addToavailablearrayIds[i],"Create" ); } }
-		 * 
+		 *
 		 * if(removeFromavailable != null && removeFromavailable.trim().length()
 		 * >0){ for (int i=0; i<removeFromavailableIds.length; i++) {
 		 * resultsMap2.put(removeFromavailableIds[i],"Delete" ); } }
@@ -1062,17 +1100,55 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 					selectedCustomerID = wcContext.getCustomerId();
 				}
 
-				String inputXml = "<Customer CustomerID='"
-						+ XPEDXWCUtils
-								.getLoggedInCustomerFromSession(wcContext)
-						+ "' " + "OrganizationCode='"
-						+ wcContext.getStorefrontId() + "'> "
+				// for JIRA 1494: when assigning a preferred ship-to for a new user, set the preferred category and category view based on the class/segment on the associated bill-to
+				String initPrefCategory = null;
+				Integer initPrefCategoryView = null;
+				if ("true".equals(request.getParameter("initPrefs"))) {
+					try {
+						XPEDXShipToCustomer shipToCustomer = XPEDXWCUtils.getShipToAdress(selectedCustomerID, getWCContext().getStorefrontId());
+
+						String billToId = XPEDXWCUtils.getParentCustomer(shipToCustomer.getCustomerID(), getWCContext());
+						Document billToDetails = XPEDXWCUtils.getCustomerDetails(billToId, getWCContext().getStorefrontId());
+						String billToClass = SCXmlUtil.getChildElement(billToDetails.getDocumentElement(), "Extn").getAttribute("ExtnCustomerClass");
+
+						if (billToClass.equalsIgnoreCase("CJ")) {
+							// facility supplies
+							initPrefCategory = "300000";
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_FULL_VIEW;
+						} else if (billToClass.equalsIgnoreCase("CG")) {
+							// graphics
+							initPrefCategory = "300001";
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_FULL_VIEW;
+						} else if (billToClass.equalsIgnoreCase("CU")) {
+							// packaging
+							initPrefCategory = "300002";
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_FULL_VIEW;
+						} else if (billToClass.equalsIgnoreCase("CA")) {
+							// paper
+							initPrefCategory = "300057";
+							initPrefCategoryView = XPEDXConstants.XPEDX_B2B_PAPER_GRID_VIEW;
+						}
+					} catch (Exception e) {
+						log.error("Failed to determine preferred category and preferred category view. Error message: " + e.getMessage());
+						log.debug("", e);
+					}
+				}
+
+				String inputXml = "<Customer "
+						+ "CustomerID='" + XPEDXWCUtils.getLoggedInCustomerFromSession(wcContext) + "' "
+						+ "OrganizationCode='" + wcContext.getStorefrontId() + "'> "
 						+ "<CustomerContactList>"
-						+ "<CustomerContact CustomerContactID='"
-						+ selectedCustomerContactId + "'> "
-						+ "<Extn ExtnDefaultShipTo='" + selectedCustomerID
-						+ "' /> " + "</CustomerContact> "
-						+ "</CustomerContactList>" + "</Customer> ";
+						+ "<CustomerContact CustomerContactID='" + selectedCustomerContactId + "'> "
+						+ "<Extn ExtnDefaultShipTo='" + selectedCustomerID + "'";
+				if (initPrefCategory != null) {
+					inputXml += " ExtnPrefCatalog='" + initPrefCategory + "'";
+				}
+				if (initPrefCategoryView != null) {
+					inputXml += " ExtnB2BCatalogView='" + initPrefCategoryView + "'";
+				}
+				inputXml += " /> " // close Extn tag
+						+ "</CustomerContact> " + "</CustomerContactList>" + "</Customer> ";
+
 				Document document = getXMLUtils().createFromString(inputXml);
 				wSCUIContext = wcContext.getSCUIContext();
 				scuiTransactionContext = wSCUIContext
@@ -1137,6 +1213,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 						.removeAttribute(
 								XPEDXWCUtils.XPEDX_SHIP_TO_ADDRESS_OVERIDDEN);
 			}
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.IS_SAP_STILL_NEED_TO_CHANGE, "Y");
 			changeCurrentCartOwner();
 
 		}
@@ -1408,6 +1485,14 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	}
 
 	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";
+
+	public boolean isAdminMode() {
+		return adminMode;
+	}
+
+	public void setAdminMode(boolean adminMode) {
+		this.adminMode = adminMode;
+	}
 
 	public String getDefaultShipToCustomerId() {
 		return defaultShipToCustomerId;

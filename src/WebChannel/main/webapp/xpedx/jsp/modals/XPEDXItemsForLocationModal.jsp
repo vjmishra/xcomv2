@@ -27,7 +27,7 @@
 <div class="clear"></div>
 
 
-<s:form id="XPEDXMyItemsSelectedList" name="XPEDXMyItemsSelectedList" action="XPEDXMyItemsList.action"
+<s:form id="XPEDXMyItemsSelectedList" name="XPEDXMyItemsSelectedList" action="MyItemsList.action"
 	method="post" enctype="multipart/form-data">
 
 	<s:hidden name="itemCount" value="%{0}"></s:hidden>

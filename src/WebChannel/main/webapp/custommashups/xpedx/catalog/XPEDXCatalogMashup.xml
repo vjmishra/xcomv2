@@ -14,6 +14,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start - Fetching alternative items from business Center -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -129,6 +132,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -205,6 +211,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -256,6 +265,9 @@
 					<ItemAssociationTypeList>
 						<ItemAssociationType Type="CrossSell" />
 						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ItemAttributeGroupTypeList>
 						<ItemAttributeGroupType
@@ -368,18 +380,16 @@
 		endpoint='CATALOG' description="Item customer X reference Details">
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
-		<API FlowName="getXPXItemcustXrefList">
-			<Input>
-				<XPXItemcustXref LegacyItemNumber="" MPC=""
-					CustomerItemNumber="" CustomerDivision="" CustomerNumber=""
-					CompanyCode="" EnvironmentCode="" />
-			</Input>
-			<Template>
-				<XPXItemcustXrefList >
-					<XPXItemcustXref></XPXItemcustXref>
-				</XPXItemcustXrefList>
-			</Template>
-		</API>
+		 <API FlowName="getXPXItemcustXrefList">
+            <Input>
+  				<XPXItemcustXref EnvironmentCode=""  CustomerNumber="" LegacyItemNumber="" CustomerDivision="" />
+            </Input>
+            <Template>
+			<XPXItemcustXrefList>
+			    <XPXItemcustXref />
+			</XPXItemcustXrefList>
+            </Template>
+        </API>
 	</mashup>
 
 	<mashup id='xpedxCatalogSearch' transactional='true' mashuptype='XAPI'
@@ -397,8 +407,8 @@
 						<AdditionalCatalogIndexInformationList>
 							<AdditionalCatalogIndexInformation
 								IndexFieldName="customerNumberPlusPartNumber" />
-							<AdditionalCatalogIndexInformation
-								IndexFieldName="showNormallyStockedItems" />							
+							<!--  <AdditionalCatalogIndexInformation
+								IndexFieldName="showNormallyStockedItems" />  -->							
 						</AdditionalCatalogIndexInformationList>
 					</Item>
 				</SearchCatalogIndex>
@@ -422,12 +432,13 @@
 							</ChildCategoryList>
 						</Category>
 					</CategoryList>
+					<!--  commented since this will be part of ajax call EB-1731
 					<FacetList>
 						<ItemAttribute IndexFieldName="" ItemAttributeName=""
-							IsProvidedFilter="">
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
-								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" SequenceNo="" 
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
 								ShortDescription="" /> 
  
 							<AssignedValueList>
@@ -435,6 +446,7 @@
 							</AssignedValueList>
 						</ItemAttribute>
 					</FacetList>
+					 -->
 					<ItemList Currency="">
 						<Item IsItemSuperseded="" ItemID="" ItemKey="" UnitOfMeasure="">
 							<Extn/>
@@ -716,6 +728,9 @@
 					<ItemAssociationTypeList>
 						  <ItemAssociationType Type="CrossSell"/>
 						  <ItemAssociationType Type="UpSell"/>
+						  <!-- XB-673 Changes Start -->
+						  <ItemAssociationType Type="Alternative.Y"/>
+						  <!-- XB-673 Changes End -->
 					</ItemAssociationTypeList>
 					<ComplexQuery>
 						<Or>
@@ -923,8 +938,9 @@
 						</Category>
 					</CategoryList>
 					<CurrentCategory CategoryPath="" Count="" ShortDescription=""/>
+					<!--  commented since this will be part of ajax call EB-1731
 					<FacetList>
-						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="">
+						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="" ItemAttributeKey="">
 							<Attribute AllowMultipleValues="" AttributeDomainID="" AttributeGroupID="" 
 								AttributeID="" AttributeKey="" IsAllowedValueDefined="" LongDescription="" OrganizationCode="" SequenceNo="" 
 								ShortDescription="" /> 
@@ -934,6 +950,7 @@
 							</AssignedValueList>
 						</ItemAttribute>
 					</FacetList>
+					-->
 				</CatalogSearch>
 			</Template>
 		</API>
@@ -1047,4 +1064,67 @@
 			</Template>
 		</API>
 	</mashup>
+
+	<mashup id='xpedxNarrowByCatalogSearch' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Search and Navigation in Catalog">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" SortField=""
+					SortDescending="" PageSize="" PageNumber="" CategoryPath="">
+					<Item GetAvailabilityFromCache='Y' Currency=""
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="" />						
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" PageNumber=""
+					PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">					
+					<FacetList>
+						<ItemAttribute IndexFieldName="" ItemAttributeName=""
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="" >
+							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
+								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
+								ShortDescription="" /> 
+							<AssignedValueList HasMoreAssignedValues="">
+								<AssignedValue Count="" Value="" IsProvidedFilter="" />
+							</AssignedValueList>
+						</ItemAttribute>
+					</FacetList>					
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	<!-- EB-694 xpedx catalog URL display for FSC, PEFC and SFI  -->
+	<mashup id='xpedxgetItemList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="getItemList API returns a list of Items">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getItemList">
+            <Input>
+			 <Item CallingOrganizationCode=''>
+                      <ComplexQuery Operator='AND'>
+                        <Or>                            
+                        </Or>
+                    </ComplexQuery>
+                    <CustomerInformation CustomerID=''/>
+                  </Item>
+  
+            </Input>
+            <Template>
+                <ItemList>
+                    <Item> 
+                    <AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</Item>
+                </ItemList>
+            </Template>    
+        </API>
+    </mashup>
+
 </mashups>       

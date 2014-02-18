@@ -43,9 +43,6 @@
 				<Attribute ColumnName="EMAIL_DETAILS_KEY" />
 			</PrimaryKey>
 			
-			<Parent ParentTableName="XPX_EMAIL_DEFN" >
-				<Attribute ColumnName="EMAIL_TYPE" ParentColumnName="EMAIL_TYPE" />
-	 		</Parent>
 			<Indices>
 				<Index Name="EMAIL_TYPE_IDX1" Unique="False">
 					<Column Name="EMAIL_TYPE" />

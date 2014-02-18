@@ -58,7 +58,7 @@ $("#various4").fancybox();
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.MISC.REPT.GENERIC.TABTITLE" /> </title> 
 <!-- Webtrends tag starts -->
-<Meta name="WT.ti" Content='xpedx : <s:text name="Resources" /> /  Reporting'>
+<Meta name="WT.ti" Content='<s:property value="wCContext.storefrontId" /> : <s:text name="Resources" /> /  Reporting'>
 <!-- Webtrends tag stops -->
 
 </head>

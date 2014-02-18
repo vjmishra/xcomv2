@@ -12,4 +12,5 @@
         getAdminList:/CustomerContact/Customer/@CustomerID</entry>
     <entry key="b2bCatalogView">getXpedxCustomerContactDetailsNew:/CustomerContactList/CustomerContact/Extn/@ExtnB2BCatalogView</entry>
 	<entry key="AdminLoginidList">getAdminList:/CustomerContact/ComplexQuery/Or/Exp[]/@Value</entry>
+	<entry key="networkId">XPEDX-GetUserList:/User/Extn/@ExtnEmployeeId</entry>
 </properties>

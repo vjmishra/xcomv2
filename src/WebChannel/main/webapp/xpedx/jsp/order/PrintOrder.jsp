@@ -204,7 +204,7 @@
 	<tr>
 		<td class="printField"><span style="float:right;">Order Status:&nbsp;</span></td>
 		<td class="printValue">
-		<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType == "Customer" && #isCSRReview)}'>
+		<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType == "Customer" && #isCSRReview)}'>
                         				Submitted (CSR Reviewing) 
                         			</s:if>
                         			<s:else>

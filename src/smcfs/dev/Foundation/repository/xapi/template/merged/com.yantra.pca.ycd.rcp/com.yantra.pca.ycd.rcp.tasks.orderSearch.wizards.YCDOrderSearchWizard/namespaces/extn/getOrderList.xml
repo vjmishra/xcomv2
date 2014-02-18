@@ -5,7 +5,7 @@
         <PriceInfo Currency="" TotalAmount=""/>
         <PersonInfoBillTo AddressLine1=""/>
 		<OrderHoldTypes>
-			<OrderHoldType HoldType="" Status="" StatusDescription=""/>
+			<OrderHoldType HoldType="" Status="" StatusDescription="" ResolverUserId="" Modifyuserid="" Modifyts="" />
 		</OrderHoldTypes>
     </Order>
 </OrderList>

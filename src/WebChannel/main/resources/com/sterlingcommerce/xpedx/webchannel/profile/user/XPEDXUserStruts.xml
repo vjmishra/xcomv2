@@ -13,7 +13,7 @@
 			<param name="validationClass">com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXSaveNewUserInfoValidation</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXSaveUserInfoBinding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxUserProfile</param>
+				<param name="actionName">MyUserProfile</param>
 				<param name="namespace">/profile/user</param>
 				<param name="parse">true</param>
 				<param name="customerContactId">${customerContactId}</param>
@@ -28,7 +28,7 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXNewUserGeneralInfo.jsp
 			</result>
 		</action>
-		<action name="xpedxNewUserCreate"
+		<action name="MyNewUserCreate"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo"
 			method="createUser">
 			<param name="resourceId">/swc/profile/ManageUserList</param>
@@ -75,7 +75,7 @@
             <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXSendNewUserInfoToCSRBinding.xml</param>
               <result name="success"> /xpedx/jsp/common/XPEDXConfirmation.jsp</result>
         </action>
-        <action name="XPEDXRegisterUser" class="com.sterlingcommerce.webchannel.core.WCAction">            
+        <action name="MyRegisterUser" class="com.sterlingcommerce.webchannel.core.WCAction">            
             <result>/xpedx/jsp/profile/user/XPEDXNewUserRegistrationForm.jsp</result>
         </action>
         <action name="XPEDXAdminProfile" class="com.sterlingcommerce.webchannel.core.WCAction">
@@ -100,14 +100,13 @@
 			<param name="mashups">createCustomerQuickLink</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXCreateQL_binding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxUserProfile</param>
+				<param name="actionName">MyUserProfile</param>
 				<param name="namespace">/profile/user</param>
 				<param name="parse">true</param>
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>
 				<param name="selectedTab">${selectedTab}</param>
-				<param name="success">${success}</param>
-				</result>
+				<param name="success">${success}</param>				</result>
 		</action>
 		<action name="xpedxAnonymousQuickLink" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXAnonymousQuickLinkAction">
 			<param name="mashups">xpedxGetCustomCommonCodesForQuickLinks</param>
@@ -122,7 +121,7 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXUserProfile.jsp</result>
 			<result name="ADMIN">/xpedx/jsp/profile/user/XPEDXEditUser.jsp</result>
 		</action>
-		<action name="xpedxUserProfile" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo">
+		<action name="MyUserProfile" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo">
 			<param name="mashups">getXpedxCustomerContactDetailsNew</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXUserGeneralInfoBindingNew.xml</param>
@@ -137,14 +136,35 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp
 			</result>
 		</action>
+		<action name="DynamicQuery"	class="com.sterlingcommerce.xpedx.webchannel.profile.org.DynamicQueryAction">
+			<param name="mashups">xpedxCustomerAssignment</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXDynaTree.jsp
+			</result>
+		</action>
+	
+	<!-- AjaxDynamic  -->
+	
+		<action name="AjaxDynamic"	class="com.sterlingcommerce.xpedx.webchannel.profile.org.AjaxDynamic">
+			<param name="mashups">xpedxCustomerAssignment</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXDynaTree.jsp
+			</result>
+		</action>
+	
+		
+		
 		<action name="paginatedAuthorizeCustomerAssignment" method="getPaginatedCustomersInHierarchy"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
 			<param name="mashups">xpedxCustomerAssignment</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
-			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp
-			</result>
-		</action>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXAuthorizeCustomerAssignment.jsp</result>
+		</action>	
+		
+		
 		<!-- Start Added For Jira 4146 - On Add we call this action -->
 		<action name="addCustomersToAuthorize" method="getCustomersForAuthorize"
 			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
@@ -168,7 +188,7 @@
 			<param name="validationClass">com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXSaveUserInfoValidation</param>			
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXSaveUserInfoBinding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxUserProfile</param>
+				<param name="actionName">MyUserProfile</param>
 				<param name="namespace">/profile/user</param>
 				<param name="parse">true</param>
 				<param name="customerContactId">${customerContactId}</param>
@@ -191,7 +211,7 @@
 			<result name="success">/xpedx/jsp/profile/user/XPEDXNewUserGeneralInfo.jsp
 			</result>
 		</action>
-		<action name="xpedxManageOtherProfiles" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo">
+		<action name="MyManageOtherProfiles" class="com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo">
 			<param name="mashups">getXpedxCustomerContactDetailsNew</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXUserGeneralInfoBindingNew.xml</param>
@@ -216,7 +236,7 @@
 			<param name="mashups">createCustomerQuickLink</param>
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/user/XPEDXCreateQL_binding.xml</param>
 			<result name="redirect" type="redirectAction">
-				<param name="actionName">xpedxManageOtherProfiles</param>
+				<param name="actionName">MyManageOtherProfiles</param>
 				<param name="namespace">/profile/user</param>
 				<param name="customerContactId">${customerContactId}</param>
 				<param name="customerId">${customerId}</param>
@@ -225,7 +245,7 @@
 		<action name="XPEDXNewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/admin/XPEDXNewArticle.jsp</result>
 		</action>
-		<action name="xpedxNewsMaintenance" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle" >
+		<action name="MyNewsMaintenance" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle" >
 				<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXMaintainArticleList.xml</param>
 				<param name="mashups">XPEDXArticleList</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
@@ -236,7 +256,7 @@
 			<param name="mashups">XPEDXAddArticle</param>
 			<param name="resourceId">/swc/profile/ManageUserProfile</param>
 			<result name="success" type="redirectAction">
-				<param name="actionName">xpedxNewsMaintenance</param>
+				<param name="actionName">MyNewsMaintenance</param>
 			</result>
 		</action>
 		
@@ -246,7 +266,7 @@
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
 		</action>
 
-		<action name="xpedxEditArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXViewArticle" >
+		<action name="MyEditArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXViewArticle" >
 				<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetArticleBinding.xml</param>
 				<param name="mashups">XPEDXGetArticle</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
@@ -257,14 +277,14 @@
 				<param name="mashups">XPEDXUpdateArticle</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>
 				<result name="success" type="redirectAction">
-					<param name="actionName">xpedxNewsMaintenance</param>
+					<param name="actionName">MyNewsMaintenance</param>
 				</result>
 		</action>
-		<action name="xpedxViewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<action name="MyViewArticle" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/admin/XPEDXViewArticle.jsp</result>
 		</action>
 		
-		<action name="xpedxReadArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXViewArticle" >
+		<action name="MyReadArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXViewArticle" >
 				<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetArticleBinding.xml</param>
 				<param name="mashups">XPEDXGetArticle</param>
 				<param name="resourceId">/swc/profile/ManageUserProfile</param>

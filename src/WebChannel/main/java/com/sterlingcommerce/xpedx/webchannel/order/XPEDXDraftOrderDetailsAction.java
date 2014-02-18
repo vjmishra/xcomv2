@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
 
@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +35,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.DraftOrderDetailsAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
@@ -49,17 +51,21 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
+import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
+import com.yantra.yfs.japi.YFSUserExitException;
 /**
  * @author rugrani/Manohar/Manoj
  */
@@ -67,58 +73,89 @@ import com.yantra.yfs.japi.YFSException;
 public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXShipToCustomer shipToCustomer;
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
+	private String customerItemFlag;
+	private String mfgItemFlag;
+	public String getCustomerItemFlag() {
+		return customerItemFlag;
+	}
+
+
+	public void setCustomerItemFlag(String customerItemFlag) {
+		this.customerItemFlag = customerItemFlag;
+	}
+
+
+	public String getMfgItemFlag() {
+		return mfgItemFlag;
+	}
+
+
+	public void setMfgItemFlag(String mfgItemFlag) {
+		this.mfgItemFlag = mfgItemFlag;
+	}
+
+
 	public String execute() {
+
+		if("true".equals(getApprovalAllowedFlag())) {
+			XPEDXWCUtils.setObectInCache(XPEDXConstants.APPROVE_ORDER_FLAG, "true");
+		}
+
 		/* Begin - Changes made by Mitesh Parikh for 2422 JIRA */
-		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());			
+		setItemDtlBackPageURL((wcContext.getSCUIContext().getRequest().getRequestURL().append("?").append(wcContext.getSCUIContext().getRequest().getQueryString())).toString());
 		/* End - Changes made by Mitesh Parikh for 2422 JIRA */
 		XPEDXWCUtils.checkMultiStepCheckout();
 		shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 		String ajaxDisplayStatusCodeMsg = "";
 		String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
-		
+
 		if(draftOrderError != null && "true".equalsIgnoreCase(draftOrderError)){
 			return draftFlagError;
 		}
 		boolean isChangeOrderCalled=false;
 		try {
-			
+
 			setDefaultShipToIntoContext();
 			getCustomerLineDetails();
-			
+
 			if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
 			{
 				callChangeOrder();
 				if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
 					return draftFlagError;
 				}
-				
-			} else {				
+				if(isOUErrorPage == true)
+				{
+					return "OUErrorPage";
+				}
+
+			} else {
 				changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
 				if(changeOrderOutputDoc!=null)
 				{
 					setOutputDocument(changeOrderOutputDoc);
 					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
-				
-				}				
-			}			
-			
+
+				}
+			}
+
 			//DOMDocFromXMLString doc = new DOMDocFromXMLString();
 			//Document orderOutputDocument=doc.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile.xml");
 			//setOutputDocument(orderOutputDocument);
 			super.execute();
 			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
-			
+
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
 			{
 				XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, orderHeaderKey);
 				editedOrderHeaderKey=orderHeaderKey;
 				String newDefaultShipToForEditOrder  = getOrderElementFromOutputDocument().getAttribute("BuyerOrganizationCode");
 				setCurrentCustomerIntoContext(newDefaultShipToForEditOrder);
-				
+
 			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey))
-			{			
+			{
 				if(getDraftOrderList() !=null && getDraftOrderList().equals("Y"))
 						XPEDXCommerceContextHelper.createNewCartInContext(getWCContext(),getOrderElementFromOutputDocument(),orderHeaderKey);
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
@@ -126,25 +163,25 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			else if(!YFCCommon.isVoid(editedOrderHeaderKey)&& !editedOrderHeaderKey.equals(orderHeaderKey) )
 				XPEDXWCUtils.setMiniCartDataInToCache(getOrderElementFromOutputDocument(), wcContext);
 			//BEGIN: sort the orderlines based on legacy line number - RUgrani
-			//if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){			
+			//if(null != isEditOrder && isEditOrder.equalsIgnoreCase("true")){
 				ArrayList<Element> tempMajorLines = getMajorLineElements();
 				Collections.sort(tempMajorLines, new XpedxLineSeqNoComparator());
-				
+
 			//}
 			//END: sort the orderlines based on legacy line number - RUgrani
-			
+
 			//Get the field validateCustomerFields. It will be set to Y when cart is updated
 			if(getValidateCustomerFields()!=null && getValidateCustomerFields().equals("Y"))
 			{
 				Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
 				if(rulesDoc == null){
 					rulesDoc = XPEDXOrderUtils.getValidationRulesForCustomer(getOrderElementFromOutputDocument(), wcContext);
-					wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);	
+					wcContext.setWCAttribute("rulesDoc", rulesDoc, WCAttributeScope.LOCAL_SESSION);
 				}
 				XPEDXOrderUtils.validateCustomerFieldValues(getOrderElementFromOutputDocument(),rulesDoc, wcContext);
 				setCustomerFieldsValidated("Y");
 			}
-			
+
 			//Read the result of customer fields validation from session
 			if(getCustomerFieldsValidated()!=null && getCustomerFieldsValidated().equals("Y")) {
 				HttpSession session = getWCContext().getSCUIContext().getRequest().getSession();
@@ -165,7 +202,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			String createUserIDStr = "";
 			String modifyUserIdStr = "";
 			String lastModifiedDateStr = "";
-			
+
 			//added for XBT-146
 			String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
 			if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
@@ -187,8 +224,24 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			XPEDXWCUtils.changeOrderOwnerToSelectedCustomer(getWCContext(),orderHeaderKey);
 			There is no need to change the order owner
 			*/
-			getItemUOMs();
+			//getItemUOMs();
+			setInventoryAndOrderMultipleMap();
 			checkforEntitlement();
+			//Start of XB-689 - Adding a message , when there are duplicate items in the cart
+			if(allItemIDsWithDuplicates !=null && allItemIDsWithDuplicates.size()>0){
+				if(allItemIDsWithDuplicates.size() == 1)
+					duplicateInfoMsg = "Please note that item " + allItemIDsWithDuplicates.get(0) +" has been added to your cart more than once.";
+				else{
+					String temp = "";
+					for(int i =0; i<allItemIDsWithDuplicates.size(); i++){
+						if(i == allItemIDsWithDuplicates.size()-1)
+							temp = temp + allItemIDsWithDuplicates.get(i);
+						else
+							temp = temp + allItemIDsWithDuplicates.get(i) + ", ";
+					}
+					duplicateInfoMsg = "Please note that items " + temp +" have been added to your cart more than once.";
+				}
+			}//End of XB-689
 			getAllItemSKUs();
 //			getAllItemList();
 			// BEGIN P&A Call: RUgrani
@@ -196,21 +249,25 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			if(getMajorLineElements().size()>0){
 				ArrayList<Element> ueAdditionalAttrElem = SCXmlUtil.getElements(getOrderElementFromOutputDocument(), "Extn/XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
 				XPEDXPriceAndAvailability pna=new XPEDXPriceAndAvailability();
-				if(ueAdditionalAttrElem!=null && ueAdditionalAttrElem.size()>0)
-					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem.get(0));			
-				
-				//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);			
-				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError 
+				if(ueAdditionalAttrElem!=null && ueAdditionalAttrElem.size()>0){
+					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,ueAdditionalAttrElem.get(0));
+				}
+				else {
+					pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,null);
+				}//Added else block for EB 812 for null pass
+
+				//XPEDXPriceAndAvailability pna = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(wcContext,orderHeaderKey);
+				//This takes care of displaying message to Users based on ServiceDown, Transmission Error, HeaderLevelError, LineItemError
 				Document lineTpeMDoc=SCXmlUtil.createDocument("Items");
-				
+
 				isChangeOrderCalled=setPnaHoverForEditOrderLine(pna,lineTpeMDoc);
 				/*if(!isChangeOrderCalled)
 					isChangeOrderCalled=isNewLine(getMajorLineElements());*/
 				ajaxDisplayStatusCodeMsg = XPEDXPriceandAvailabilityUtil.getAjaxDisplayStatusCodeMsg(pna) ;
 				//if(isChangeOrderCalled)
 					setAjaxLineStatusCodeMsg(ajaxDisplayStatusCodeMsg);
-		
-				/*			
+
+				/*
 				if (inputItems != null && inputItems.size() > 0) {
 					if (null == pna || pna.getItems() == null
 						|| YFCCommon.isVoid(pna.getTransactionStatus())
@@ -223,18 +280,18 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 					}
 				}
 				 */
-				
+
 				pnaHoverMap = XPEDXPriceandAvailabilityUtil.getPnAHoverMap(pna.getItems(),true);
 				orderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.getOrderMultipleMapFromSourcing(pna.getItems(),true);
 				useOrderMultipleMapFromSourcing = XPEDXPriceandAvailabilityUtil.useOrderMultipleErrorMapFromMax(pna.getItems());
 				//Setting the price hover map
-				//added for jira 2885 
+				//added for jira 2885
 				if(pna.getHeaderStatusCode() != null && pna.getHeaderStatusCode().equalsIgnoreCase("00")){
 					pnALineErrorMessage=XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(pna.getItems());
 				}
-				
+
 				//setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement()));
-					setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
+				setPriceHoverMap(XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(pna.getItems(), wcContext,true,lineTpeMDoc.getDocumentElement(),true, getOutputDocument()));
 				// END P&A Call: RUgrani
 				//processPandA(pna.getItems());
 				getCustomerDetails();
@@ -249,16 +306,17 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
 			custStatus = shipToCustomer.getCustomerStatus();
 			String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
+			billToCustomerStatus = shipToCustomer.getBillTo().getCustomerStatus(); //Added for EB 289 checks Bill-To for suspended Status
 			String envCode =shipToCustomer.getExtnEnvironmentCode();
 			setDivsionAndState(shipFromBranch,envCode);
 			setInventoryMap(xPEDXWCUtils.getInventoryCheckMap(getOutputDocument(), shipFromBranch, getWCContext()));
 			//added for Jira 1624
-			setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));			
+			setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));
 			/*if("true".equals(isEditOrder))
 			{
 				setEditOrdersMap(orderHeaderKey);
 			}*/
-			
+
 			XPEDXWCUtils.releaseEnv(wcContext);
 		} catch (Exception ex) {
 			if (ex != null && ex.toString() != null
@@ -270,8 +328,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		}
 		return SUCCESS;
 	}
-	
-	
+
+
 	private void checkforEntitlement(){
 		//Added for JIRA 3523
 		String item = "";
@@ -280,11 +338,11 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		try {
 			// Removing call to getXpedxEntitledItemDetails for performance fix. JIRA 4020
 			//entitledItemsDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(allItemIds, wcContext.getCustomerId(), wcContext.getStorefrontId(), wcContext,"xpedxEntitledCheckOnly");
-		
+
 		Iterator productIDIter = allItemIds.iterator();
-		ArrayList<Element> itemlist = new ArrayList<Element>(); 
+		ArrayList<Element> itemlist = new ArrayList<Element>();
 		allItemID = new ArrayList<String>();
-		
+		allItemIDsWithDuplicates = new ArrayList<String>();
 		Iterator<Element> it=getMajorLineElements().iterator();
 		int lineCount = 0;
 		String firstItem = "";
@@ -292,41 +350,45 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		String OrganizationCodeForFirstItem = "";
 		while(it.hasNext())
 		{
-			lineCount++;
-			Element orderLineElem=it.next();			
+
+			Element orderLineElem=it.next();
 			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
 			Element itemDetailEle = SCXmlUtil.getChildElement(orderLineElem, "ItemDetails");
 			String itemId = itemElement.getAttribute("ItemID");
-			if ( lineCount == 1) {
+			if ( lineCount == 0 && itemDetailEle != null ) {
 				Element catlistEle = SCXmlUtil.getChildElement(itemDetailEle, "CategoryList");
-				Element catElement = (Element)catlistEle.getElementsByTagName("Category").item(0);			
+				Element catElement = (Element)catlistEle.getElementsByTagName("Category").item(0);
 				firstItemCategoryPath = catElement.getAttribute("CategoryPath");
 				OrganizationCodeForFirstItem = catElement.getAttribute("OrganizationCode");
 				firstItem = itemId;
+				lineCount++;
 			}
 			String lineType=orderLineElem.getAttribute("LineType");
 			if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemID.contains(itemId))
 			{
-				
+
 				allItemID.add(itemId);
-			}
+			}// Added for XB-689
+			else if(!"M".equals(lineType) &&  !"C".equals(lineType) && !allItemIDsWithDuplicates.contains(itemId)){
+				allItemIDsWithDuplicates.add(itemId);
+			}//End of XB-689
 		}
 		if(!("").equals(firstItem) && !("").equals(OrganizationCodeForFirstItem) && !("").equals(firstItemCategoryPath)) {
 			setAdjCatTwoShortDesc(XPEDXWCUtils.getCatTwoDescFromItemIdForpath(firstItem, OrganizationCodeForFirstItem, firstItemCategoryPath));
 		}
-		
+
 		if(entitledItemEleList != null) {
 			 //itemlist  = getXMLUtils().getElements(entitledItemsDoc.getDocumentElement(), "//Item");
 			 itemlist  = entitledItemEleList;
 		}
-		
+
 		if(itemlist.size() == 0){
 				for(int i=0; i<allItemID.size();i++) {
 					entlErrorList.add(allItemID.get(i));
-				}	
+				}
 				if(entlErrorList.size() == 0) {
 					erroMsg = "";
-					
+
 				} else {
 					if(entlErrorList.size()> 1){
 						Iterator itr = entlErrorList.iterator();
@@ -342,16 +404,16 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 					}
 					else{
 						erroMsg=entlErrorList.get(0);
-					}					
+					}
 				}
 		}
 		else{
-		for(int i=0;i<itemlist.size();i++){	
+		for(int i=0;i<itemlist.size();i++){
 			HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
 			Element itemElem=itemlist.get(i);
 			String itemId = itemlist.get(i).getAttribute("ItemID");
 			itemList.add(itemId);
-			//Added for performance issue 
+			//Added for performance issue
 			if(itemElem!=null)
 			{
 				Element primeInfoElem = XMLUtilities.getElement(itemElem, "PrimaryInformation");
@@ -371,9 +433,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			}
 			skuMap.put(itemId, itemSkuMap);
 			//
-		}	
+		}
 			for(int i=0; i<allItemID.size();i++) {
-				
+
 				if(!itemList.contains(allItemID.get(i))){
 					entlErrorList.add(allItemID.get(i));
 				}
@@ -395,16 +457,16 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 					erroMsg=entlErrorList.get(0);
 				}
 				}
-			
-		}	
+
+		}
 	} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 	}
 	//End of JIRA 3523
 	}
-	
-	
+
+
 	private void changeCurrentCartOwner() {
 		String orderHeaderKey = XPEDXCommerceContextHelper
 				.getCartInContextOrderHeaderKey(getWCContext());
@@ -425,11 +487,12 @@ public void resetOrganizationValuesForShipToCustomer(){
 		shipToCustomer.setShipToDivDeliveryCutOffTime(null);
 		//Added For Jira 3465
 		shipToCustomer.setShipToDivdeliveryInfo(null);
+		shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(null);
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 }
 
 public void setCurrentCustomerIntoContext(String ordersBuyerOrganizationCode) throws CannotBuildInputException {
-		//added for jira 4306	
+		//added for jira 4306
 		XPEDXWCUtils.setObectInCache("SHIPTO_BEFORE_EDIT_ORDER",getWCContext().getCustomerId() );
 		XPEDXWCUtils.setObectInCache("CUSTOMER_CONTACT_ID_BEFORE_EDIT_ORDER",wcContext.getCustomerContactId());
 		//end for jira 4306
@@ -437,31 +500,31 @@ public void setCurrentCustomerIntoContext(String ordersBuyerOrganizationCode) th
 		if(SCUtil.isVoid(selectedCustomerContactId))
 			selectedCustomerContactId = wcContext.getCustomerContactId();
 		String  contaxtCustomerContactID = wcContext.getCustomerContactId();
-		
+
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "true");
         resetOrganizationValuesForShipToCustomer();
 		if(contaxtCustomerContactID.equals(selectedCustomerContactId) ){
-			
+
 			XPEDXWCUtils.setCurrentCustomerIntoContext(
 					ordersBuyerOrganizationCode, getWCContext());
-			
+
 				getWCContext().getSCUIContext().getSession().removeAttribute(
 						XPEDXWCUtils.XPEDX_SHIP_TO_ADDRESS_OVERIDDEN);
 			//added for jira 4306
 			if(!"true".equals(isEditOrder))
 				changeCurrentCartOwner();
-			
+
 		}
-		
-			/* commented for jira 4306 
+
+			/* commented for jira 4306
 			try {
 				setSelectedShipToAsDefault(ordersBuyerOrganizationCode);
 			} catch (Exception e) {
 				LOG.error("Cannot set the customer as default. please try again later");
 				e.printStackTrace();
 			}*/
-		
-			
+
+
 	}
 
 public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotBuildInputException,
@@ -473,19 +536,19 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	String selectedCustomerContactId = "";
 	try {
 	if (XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext)) {
-		
-		
+
+
 		selectedCustomerContactId = wcContext.getSCUIContext().getRequest().getParameter("selectedCustomerContactId");
 		if(!(selectedCustomerContactId != null && selectedCustomerContactId.trim().length()>0)){
 			selectedCustomerContactId = wcContext.getCustomerContactId();
 		}
-			
-		
+
+
 		if(SCUtil.isVoid(selectedCustomerID))
 		{
 			selectedCustomerID=wcContext.getCustomerId();
 		}
-		
+
 		String inputXml = "<Customer CustomerID='"
 				+ XPEDXWCUtils
 						.getLoggedInCustomerFromSession(wcContext)
@@ -520,12 +583,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	env = null;
 	}
 	}
-	
+
 	private void setDivsionAndState(String shipFromBranch, String envCode) {
-		
+
 		if(shipToCustomer== null){
 			LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
-			
+
 			try {
 				XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
 						.getCustomerDetails(getWCContext().getCustomerId(),
@@ -537,7 +600,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 			shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		}
-		
+
 		try {
 			if(shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() ==  null &&
 				shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null){
@@ -554,8 +617,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
 					shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
 					shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+					shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
 					//Added For Jira 3465
 					shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+					shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(organizationDetails.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
 					XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 				}
 			}
@@ -567,7 +632,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			e.printStackTrace();
 		}
 	}
-	
+
 /*	private void setDivsionAndState(String shipFromBranch, String envCode) {
 		String divisionName;
 		String state;
@@ -609,21 +674,21 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				break;
 			}
 		}
-		return newLine; 
+		return newLine;
 	}*/
 	private boolean setPnaHoverForEditOrderLine(XPEDXPriceAndAvailability pna,Document lineTpeMDoc)
 	{
 		boolean newLine=false;
 		try
 		{
-			
+
 			/*if("true".equals(isEditOrder))
 			{*/
 				XPEDXItem item=null;
 				Element orderLeme=(Element)getOrderElementFromOutputDocument().getElementsByTagName("PriceInfo").item(0);
 				String currencyCode=orderLeme.getAttribute("Currency");
 				Iterator<Element> it=getMajorLineElements().iterator();
-				
+
 				 Element lineTypeElem=lineTpeMDoc.getDocumentElement();
 				while(it.hasNext())
 				{
@@ -643,8 +708,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						item.setRequestedQtyUOM(orderLineTran.getAttribute("TransactionalUOM"));
 						item.setUnitPricePerRequestedUOM(extnElem.getAttribute("ExtnReqUOMUnitPrice"));
 						item.setLineNumber(orderLineElem.getAttribute("PrimeLineNo"));
-						
-						
+
+
 							Element lineTypeMElem=SCXmlUtil.createChild(lineTypeElem, "Item");
 							lineTypeMElem.setAttribute("ItemID", itemElem.getAttribute("ItemID"));
 							lineTypeMElem.setAttribute("UnitOfMeasure", extnElem.getAttribute("ExtnPricingUOM"));
@@ -675,7 +740,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			editOrderOrderLineMap=orderMap.get("OrderLines");
 		}
 	}*/
-	
+
 	private void callChangeOrder()
 	{
 		try
@@ -685,12 +750,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			{
 				XPEDXWCUtils.setEditedOrderHeaderKeyInSession(wcContext, orderHeaderKey);
 				editedOrderHeaderKey=orderHeaderKey;
-			}			
+			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey)){
-				draftOrderFlag="Y";	
+				draftOrderFlag="Y";
 			}
 			else {
-				draftOrderFlag="N";	
+				draftOrderFlag="N";
 			}
 			LOG.debug("Calling Change Order");
 			Map<String, String> valueMap1 = new HashMap<String, String>();
@@ -701,27 +766,27 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			} else {
 				valueMap1.put("/Order/PendingChanges/@RecordPendingChanges", "N");
 			}
-			
+
 			Element input1;
 			Element orderElem = null;
-			
+
 			setYFSEnvironmentVariables();
 			input1 = WCMashupHelper.getMashupInput("XPEDXCallChangeOrder",
 					valueMap1, wcContext.getSCUIContext());
 			Object obj1 = WCMashupHelper.invokeMashup("XPEDXCallChangeOrder",
 						input1, wcContext.getSCUIContext());
-			
+
 			setOutputDocument(((Element)obj1).getOwnerDocument());
 
 			//orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
-			
+
 			/*if("true".equals(isEditOrder))
 			{
 				input1 = WCMashupHelper.getMashupInput("xpedx_get_completeorderList",
 						valueMap1, wcContext.getSCUIContext());
 				Object obj1 = WCMashupHelper.invokeMashup("xpedx_get_completeorderList",
 							input1, wcContext.getSCUIContext());
-	
+
 				orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 			}
 			else
@@ -730,7 +795,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						valueMap1, wcContext.getSCUIContext());
 				Object obj1 = WCMashupHelper.invokeMashup("xpedx_get_orderList",
 							input1, wcContext.getSCUIContext());
-	
+
 				Element orderListElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
 				if(orderListElem != null)
 				{
@@ -741,7 +806,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			Document inputDocument =SCXmlUtil.createDocument("Order");
 			Element orderChangeElem=inputDocument.getDocumentElement();
 			Element orderExtn=util.getElement(orderElem, "Extn");
-			
+
 			orderChangeElem.setAttribute("OrderHeaderKey", orderElem.getAttribute("OrderHeaderKey"));
 			if(!YFCCommon.isVoid(orderElem.getAttribute("OrderName")))
 			{
@@ -760,17 +825,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				orderPendingChangeElem.setAttribute("RecordPendingChanges", "Y");
 			}
 			List<Element> orderLines=SCXmlUtil.getElements(orderElem, "/OrderLines/OrderLine");
-			
+
 			if(orderLines.size()>0)
 			{
 				for(Element orderLineEle : orderLines)
 				{
-					
+
 					Element orderLineChanegElem=SCXmlUtil.createChild(orderLinesChanegElem, "OrderLine");
 					orderLineChanegElem.setAttribute("Action", "MODIFY");
 					orderLineChanegElem.setAttribute("OrderLineKey", orderLineEle.getAttribute("OrderLineKey"));
 					orderLineChanegElem.setAttribute("OrderedQty", orderLineEle.getAttribute("OrderedQty"));
-					
+
 					Element orderLineExtnChange=SCXmlUtil.createChild(orderLineChanegElem, "Extn");
 					Element orderLineExtn=util.getElement(orderLineEle, "Extn");
 					orderLineExtnChange.setAttribute("ExtnCustLineAccNo", orderLineExtn.getAttribute("ExtnCustLineAccNo"));
@@ -782,12 +847,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					orderLineExtnChange.setAttribute("ExtnLineOrderedTotal", orderLineExtn.getAttribute("ExtnLineOrderedTotal"));
 					orderLineExtnChange.setAttribute("ExtnReqUOMUnitPrice", orderLineExtn.getAttribute("ExtnReqUOMUnitPrice"));
 					orderLineExtnChange.setAttribute("ExtnUnitPrice", orderLineExtn.getAttribute("ExtnUnitPrice"));
-					
+
 					Element orderLineTranChange=SCXmlUtil.createChild(orderLineChanegElem, "OrderLineTranQuantity");
 					Element orderLineTran=util.getElement(orderLineEle, "OrderLineTranQuantity");
 					orderLineTranChange.setAttribute("OrderedQty", orderLineTran.getAttribute("OrderedQty"));
 					orderLineTranChange.setAttribute("TransactionalUOM",  orderLineTran.getAttribute("TransactionalUOM"));
-					
+
 				}
 				LOG.debug("Input XML = "+SCXmlUtil.getString(inputDocument) );
 				setYFSEnvironmentVariables();
@@ -797,7 +862,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		catch(XMLExceptionWrapper e)
         {
               YFCElement errorXML=e.getXML();
-              YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+              YFCElement errorElement=errorXML.getElementsByTagName("Error").item(0);
               String errorDeasc=errorElement.getAttribute("ErrorDescription");
               if(errorDeasc.contains("Key Fields cannot be modified."))
               {
@@ -813,7 +878,31 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
                           }
                     }
               }
+              YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+    			for(YFCElement errorEle:errorNodeList)
+    			{
+    				String errorCode=errorEle.getAttribute("ErrorCode");
+    				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+    				{
+    					isOUErrorPage=true;
+    					break;
+    				}
+    			}
         }
+		catch(YFCException e)
+		{
+			YFCElement errorXML=e.getXML().getDocumentElement();
+			YFCNodeList<YFCElement> errorNodeList=errorXML.getElementsByTagName("Error");
+			for(YFCElement errorEle:errorNodeList)
+			{
+				String errorCode=errorEle.getAttribute("ErrorCode");
+				if(XPEDXConstants.UE_ERROR_CODE.equalsIgnoreCase(errorCode) || XPEDXConstants.UE_ERROR_CODE1.equalsIgnoreCase(errorCode))
+				{
+					isOUErrorPage=true;
+					break;
+				}
+			}
+		}
 		catch(Exception e)
 		{
 			LOG.error("Error while calling change order to Update the price from PNA");
@@ -827,7 +916,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		{
 			//Form the input
 			if(wcContext.getCustomerId()!=null) {
-/*				
+/*
 				YFCDocument inputCustomerDoc = YFCDocument.createDocument("Customer");
 				YFCElement inputCustomerElement = inputCustomerDoc.getDocumentElement();
 				inputCustomerElement.setAttribute("CustomerID", wcContext.getCustomerId());
@@ -835,13 +924,13 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				YFCDocument customerListTemplate = YFCDocument.createDocument("CustomerList");
 				YFCElement customerListTemplateElement = customerListTemplate.getDocumentElement();
 				YFCElement customerTemplateElement = customerListTemplate.createElement("Customer");
-				customerListTemplateElement.appendChild(customerTemplateElement);			
-				YFCElement extnTemplateElement = customerListTemplate.createElement("Extn");			
+				customerListTemplateElement.appendChild(customerTemplateElement);
+				YFCElement extnTemplateElement = customerListTemplate.createElement("Extn");
 				customerTemplateElement.appendChild(extnTemplateElement);
 				YFCElement parentCustomerTemplateElement = customerListTemplate.createElement("ParentCustomer");
 				YFCElement parentCustomerExtnTemplateElement = customerListTemplate.createElement("Extn");
 				parentCustomerTemplateElement.appendChild(parentCustomerExtnTemplateElement);
-				
+
 				customerTemplateElement.appendChild(parentCustomerTemplateElement);
 				//invoke a getCustomerList
 				//env.setApiTemplate("getCustomerList", customerListTemplate);
@@ -851,7 +940,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						"getCustomerList", inputCustomerDoc.getDocumentElement(), customerListTemplate
 								.getDocumentElement(), wcContext.getSCUIContext());
 				//Document customerList = api.invoke(env, "getCustomerList", inputCustomerDoc);
-				
+
 				//env.clearApiTemplate("getCustomerList");
 				if(customerList!=null){
 					YFCNodeList customerNodeList = customerList.getElementsByTagName("Customer");
@@ -865,7 +954,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
 								(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 						{
-							minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+							minOrderAmount = Float.parseFloat(minOrderAmountStr);
 							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
 								chargeAmount = Float.parseFloat(chargeAmountStr);
@@ -886,7 +975,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 								if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 										(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 								{
-									minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+									minOrderAmount = Float.parseFloat(minOrderAmountStr);
 									if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 									{
 											chargeAmount = Float.parseFloat(chargeAmountStr);
@@ -913,24 +1002,24 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 										Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
 										Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
 										Document outputDoc = ((Element) obj).getOwnerDocument();
-										
+
 										if(YFCCommon.isVoid(outputDoc)){
 											LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
 											return;
 										}
-										
+
 										minOrderAmountStr = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt");
 										chargeAmountStr= SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee");
 										if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 												(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 										{
-											minOrderAmount = Float.parseFloat(minOrderAmountStr);				
+											minOrderAmount = Float.parseFloat(minOrderAmountStr);
 											if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 											{
 													chargeAmount = Float.parseFloat(chargeAmountStr);
 											}
 										}
-										
+
 									} catch (CannotBuildInputException e) {
 										LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
 										return;
@@ -941,15 +1030,15 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}//if customerList is not null
 */
-				
-				
+
+
 				//JIRA 3488 start
 				String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
 				if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr)))  &&
 						Float.parseFloat(maxOrderAmountStr)>0)
 				{
-					setMaxOrderAmount(Float.parseFloat(maxOrderAmountStr));	
-				
+					setMaxOrderAmount(Float.parseFloat(maxOrderAmountStr));
+
 				}
 				else {
 					XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
@@ -959,14 +1048,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr))) &&
 								Float.parseFloat(maxOrderAmountStr)>0)
 						{
-							setMaxOrderAmount(Float.parseFloat(maxOrderAmountStr));	
+							setMaxOrderAmount(Float.parseFloat(maxOrderAmountStr));
 				}
 					}
 				}
 				//JIRA 3488 end
 						if(shipToCustomer== null){
 							LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
-							
+
 							XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
 									.getCustomerDetails(getWCContext().getCustomerId(),
 											getWCContext().getStorefrontId())
@@ -978,7 +1067,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
 								(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 						{
-							minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+							minOrderAmount = Float.parseFloat(minOrderAmountStr);
 							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
 								chargeAmount = Float.parseFloat(chargeAmountStr);
@@ -998,7 +1087,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 								if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 										(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 								{
-									minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+									minOrderAmount = Float.parseFloat(minOrderAmountStr);
 									if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 									{
 											chargeAmount = Float.parseFloat(chargeAmountStr);
@@ -1027,7 +1116,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
 											Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
 											Document outputDoc = ((Element) obj).getOwnerDocument();
-											
+
 											if(YFCCommon.isVoid(outputDoc)){
 												LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
 												return;
@@ -1039,6 +1128,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
 											//Added For Jira 3465
 											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+											shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
+											shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
 											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 										} catch (CannotBuildInputException e) {
 											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
@@ -1050,7 +1141,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 									if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 											(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 									{
-										minOrderAmount = Float.parseFloat(minOrderAmountStr);				
+										minOrderAmount = Float.parseFloat(minOrderAmountStr);
 										if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 										{
 												chargeAmount = Float.parseFloat(chargeAmountStr);
@@ -1061,7 +1152,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				}
 			}// if customerId is not null
 
-			
+
 	} catch (Exception ex) {
 		//log.error(ex.getMessage());
 		scuiTransactionContext.rollback();
@@ -1071,9 +1162,9 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					scuiTransactionContext, wcContext.getSCUIContext());
 		}
 	}
-			
+
 	}
-	
+
 	public String getAjaxLineStatusCodeMsg() {
 		return ajaxLineStatusCodeMsg;
 	}
@@ -1114,7 +1205,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setPnaHoverMap(HashMap<String, JSONObject> pnaHoverMap) {
 		this.pnaHoverMap = pnaHoverMap;
 	}
-	
+
 	// END
 
 	public HashMap<String, XPEDXItemPricingInfo> getPriceHoverMap() {
@@ -1123,7 +1214,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setPriceHoverMap(HashMap<String, XPEDXItemPricingInfo> priceHoverMap) {
 		this.priceHoverMap = priceHoverMap;
 	}
-	
+
 	public XPEDXDraftOrderDetailsAction() {
 		super();
 		xpedxItemIDUOMToReplacementListMap = new HashMap<String,ArrayList<Element>>();
@@ -1162,14 +1253,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected void getAndProcessItemDetails() throws Exception {
 
 		//getRelatedItemsForDraftOrder();
+
 		setXPEDXItemAssociation();
+
 		//super.getAndProcessItemDetails();
 
 	}
 @Override
 	protected void deriveAssocToCountMaps() throws Exception
     {
-	
+
     }
 @Override
 	 protected void getAndProcessOrderValidationDoc() throws Exception
@@ -1203,12 +1296,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 		prepareXPEDXItemAssociation(itemIDList);
 	}
-	
+
 	protected void prepareXPEDXItemAssociation(ArrayList<String> itemIDList) throws XPathExpressionException, CannotBuildInputException{
 		/*prepareXpedxItemAssociationMap(itemIDList);
 		prepareXpedxItemBranchItemAssociationMap(itemIDList);*/
 		ArrayList<String> youMightConsiderItemIDs = new ArrayList<String>();
-		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = XPEDXOrderUtils.getXpedxAssociationsForItems(itemIDList, wcContext, true);
+		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = getXpedxAssociationsForItems(itemIDList, wcContext, true);
 		if(allAssociatedItemsMap!=null && !allAssociatedItemsMap.isEmpty())
 		{
 			if(allAssociatedItemsMap.containsKey(XPEDXOrderUtils.REPLACEMENT_ITEMS_KEY))
@@ -1227,7 +1320,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						ArrayList<Element> currentItemAltList = alternateListMap.get(key);
 						for(Element altItem: currentItemAltList)
 						{
-							String altItemID = XMLUtils.getAttributeValue(altItem, "ItemID");							
+							String altItemID = XMLUtils.getAttributeValue(altItem, "ItemID");
 							if(!SCUtil.isVoid(altItemID) && !youMightConsiderItemIDs.contains(altItemID))
 							{
 								addToYouMightAlsoConsiderItemList(altItem);
@@ -1249,7 +1342,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						ArrayList<Element> currentItemUpgradeList = upgradeListMap.get(key);
 						for(Element upgradeItem: currentItemUpgradeList)
 						{
-							String upgradeItemID = XMLUtils.getAttributeValue(upgradeItem, "ItemID");							
+							String upgradeItemID = XMLUtils.getAttributeValue(upgradeItem, "ItemID");
 							if(!SCUtil.isVoid(upgradeItemID) && !youMightConsiderItemIDs.contains(upgradeItemID))
 							{
 								addToYouMightAlsoConsiderItemList(upgradeItem);
@@ -1271,7 +1364,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						ArrayList<Element> currentItemUSList = upSellListMap.get(key);
 						for(Element usItem: currentItemUSList)
 						{
-							String upSellItemID = XMLUtils.getAttributeValue(usItem, "ItemID");							
+							String upSellItemID = XMLUtils.getAttributeValue(usItem, "ItemID");
 							if(!SCUtil.isVoid(upSellItemID) && !youMightConsiderItemIDs.contains(upSellItemID))
 							{
 								addToYouMightAlsoConsiderItemList(usItem);
@@ -1281,6 +1374,30 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}
 			}
+			//XB-673 Changes Start - This changes will be on Shopping Cart screen
+			HashMap<String,ArrayList<Element>> alternateSBCListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.ALTERNATE_SBC_ITEMS_KEY);
+			if(alternateSBCListMap!=null && !alternateSBCListMap.isEmpty())
+			{
+				Set upSellItemKeys = alternateSBCListMap.keySet();
+				if(upSellItemKeys!=null){
+					Iterator<String> alternateSBCKeyIter = upSellItemKeys.iterator();
+					while(alternateSBCKeyIter.hasNext())
+					{
+						String key = alternateSBCKeyIter.next();
+						ArrayList<Element> currentItemUSList = alternateSBCListMap.get(key);
+						for(Element alternateSBCItem: currentItemUSList)
+						{
+							String alternateSBCItemID = XMLUtils.getAttributeValue(alternateSBCItem, "ItemID");
+							if(!SCUtil.isVoid(alternateSBCItemID) && !youMightConsiderItemIDs.contains(alternateSBCItemID))
+							{
+								addToYouMightAlsoConsiderItemList(alternateSBCItem);
+								youMightConsiderItemIDs.add(alternateSBCItemID);
+							}
+						}
+					}
+				}
+			}
+			//XB-673 Changes End
 			HashMap<String,ArrayList<Element>> compListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.COMPLEMENTARY_ITEMS_KEY);
 			if(compListMap!=null && !compListMap.isEmpty())
 			{
@@ -1301,18 +1418,30 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 			HashMap<String,ArrayList<Element>> crossSellListMap = allAssociatedItemsMap.get(XPEDXOrderUtils.CROSS_SELL_ITEMS_KEY);
 			if(crossSellListMap!=null && !crossSellListMap.isEmpty())
-			{
+        {
 				Set crossSellItemKeys = crossSellListMap.keySet();
-				if(crossSellItemKeys!=null){
-					Iterator<String> crossSellKeyIter = crossSellItemKeys.iterator();
-					while(crossSellKeyIter.hasNext())
-					{
+				if (crossSellItemKeys != null) {
+					Iterator<String> crossSellKeyIter = crossSellItemKeys
+							.iterator();
+					while (crossSellKeyIter.hasNext()) {
 						String key = crossSellKeyIter.next();
-						ArrayList<Element> currentItemCSList = crossSellListMap.get(key);
-						for(Element csItem: currentItemCSList)
-						{
-							if(!xpedxPopularAccessoriesItems.contains(csItem))
-								xpedxPopularAccessoriesItems.add(csItem);
+						ArrayList<Element> currentItemCSList = crossSellListMap
+								.get(key);
+						//XB-673 Changes Start - Cross Sell needs to be displayed on Shopping Cart Screen
+						for (Element csItem : currentItemCSList) {
+							String crossSellItemID = XMLUtils
+									.getAttributeValue(csItem, "ItemID");
+							if (!SCUtil.isVoid(crossSellItemID)
+									&& !youMightConsiderItemIDs
+											.contains(crossSellItemID)) {
+								addToYouMightAlsoConsiderItemList(csItem);
+								youMightConsiderItemIDs.add(crossSellItemID);
+							}
+						//XB-673 Changes End - Cross Sell needs to be displayed on Shopping Cart Screen
+							/*
+							 * if(!xpedxPopularAccessoriesItems.contains(csItem))
+							 * xpedxPopularAccessoriesItems.add(csItem);
+							 */
 						}
 					}
 				}
@@ -1322,10 +1451,399 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				ArrayList<Element> itemEleList = itemEleListMap.get(XPEDXOrderUtils.ITEM_LIST_KEY);
 				setEntitledItemEleList (itemEleList);
 			}
-			
+
 		}
 	}
-	
+	/*
+	 * Created this method same as xpedxorderutils to improve the performance of draft order details page
+	 * there were two consecutive call on this and wanted to the second call since the same call is happening afterwards so had to create the same method here
+	 */
+	private HashMap<String, HashMap<String,ArrayList<Element>>> getXpedxAssociationsForItems(ArrayList<String> itemIDList,
+			IWCContext wcContext, boolean editMode) throws XPathExpressionException
+	{
+
+		String custID = wcContext.getCustomerId();
+		String callingOrgCode = wcContext.getStorefrontId();
+
+		HashMap<String, HashMap<String,ArrayList<Element>>> allAssociatedItemsMap = new HashMap<String, HashMap<String,ArrayList<Element>>>();
+
+		HashMap<String, ArrayList<Element>> replacementItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> alternateItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> complimentaryItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> upgradeItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> crosssellItemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> upsellItemsMap = new HashMap<String, ArrayList<Element>>();
+		//XB-673 - Changes Starts
+		HashMap<String, ArrayList<Element>> alternateSBCItemsMap = new HashMap<String, ArrayList<Element>>();
+		//XB-673 - Changes End
+		HashMap<String, ArrayList<Element>> itemExtnElemsMap = new HashMap<String, ArrayList<Element>>();
+		HashMap<String, ArrayList<Element>> itemListElemsMap = new HashMap<String, ArrayList<Element>>();
+
+		ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
+		ArrayList<Element> itemElementList = new ArrayList<Element>();
+
+		Document itemAssociationDoc = null;
+		//get the getXpedxAssociationlItemDetails
+		try {
+			itemAssociationDoc = XPEDXOrderUtils.getXpedxAssociationlItemDetails(itemIDList, custID, callingOrgCode, wcContext);
+		} catch (CannotBuildInputException e) {
+			LOG.error("Error getting National Level item association.",e);
+			return null;
+		}
+		if(null == itemAssociationDoc){
+			LOG.error("No national level item association could be found");
+			return null;
+		}
+		NodeList nItemList = itemAssociationDoc.getElementsByTagName("Item");
+		int itemNodeListLength = nItemList.getLength();
+		try
+		{
+			for (int i = 0; i < itemNodeListLength; i++) {
+				Element itemElement = (Element)nItemList.item(i);
+				itemElementList.add(itemElement);
+				String itemID = SCXmlUtil.getAttribute(itemElement, "ItemID");
+
+				ArrayList<Element> crossSellItemsList =  new ArrayList<Element>();
+				ArrayList<Element> upSellItemsList =  new ArrayList<Element>();
+				//XB-673 Changes Starts
+				ArrayList<Element> alternateSBCItemList =  new ArrayList<Element>();
+				//XB-673 Changes End
+				LOG.debug("Preparing national level association for item Id "+itemID);
+				//ArrayList relatedItems = new ArrayList();
+				Element associationTypeListElem = null;
+				associationTypeListElem = XMLUtilities.getElement(itemElement, "AssociationTypeList");
+				if (associationTypeListElem != null) {
+					List<Element> crossSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='CrossSell']");
+					List<Element> upSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='UpSell']");
+					//XB-673 Changes Starts
+					List<Element> alternateSBCElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='Alternative.Y']");
+					//XB-673 Changes End
+					for (int j = 0; j < crossSellElements.size(); j++) {
+						Element associationTypeElem = crossSellElements.get(j);
+						Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+						List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+						if (associationList != null&& !associationList.isEmpty()) {
+							Iterator associationIter = associationList.iterator();
+							while (associationIter.hasNext()) {
+								Element association = (Element) associationIter.next();
+								Element associateditemEl = XMLUtilities.getElement(association, "Item");
+								/*relatedItems.add(associateditemEl);*/
+								crossSellItemsList.add(associateditemEl);
+								String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+								if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+									itemIDListForGetCompleteItemList.add(curritemid);
+								}
+							}
+						}
+					}//for cross sell
+					for (int k = 0; k < upSellElements.size(); k++) {
+						Element associationTypeElem = upSellElements.get(k);
+						Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+						List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+						if (associationList != null && !associationList.isEmpty()) {
+							Iterator associationIter = associationList.iterator();
+							while (associationIter.hasNext()) {
+								Element association = (Element) associationIter.next();
+								Element associateditemEl = XMLUtilities.getElement(association, "Item");
+								/*relatedItems.add(associateditemEl);*/
+								upSellItemsList.add(associateditemEl);
+								String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+								if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+									itemIDListForGetCompleteItemList.add(curritemid);
+								}
+							}
+						}
+					}//for upsell
+					//XB-673 Changes Start
+					for (int k = 0; k < alternateSBCElements.size(); k++) {
+						Element associationTypeElem = alternateSBCElements.get(k);
+						Element associationListElem = XMLUtilities.getElement(associationTypeElem, "AssociationList");
+						List associationList = XMLUtilities.getChildElements(associationListElem, "Association");
+						if (associationList != null && !associationList.isEmpty()) {
+							Iterator associationIter = associationList.iterator();
+							while (associationIter.hasNext()) {
+								Element association = (Element) associationIter.next();
+								Element associateditemEl = XMLUtilities.getElement(association, "Item");
+								/*relatedItems.add(associateditemEl);*/
+								alternateSBCItemList.add(associateditemEl);
+								String curritemid = XMLUtils.getAttributeValue(associateditemEl, "ItemID");
+								if(!itemIDListForGetCompleteItemList.contains(curritemid)){
+									itemIDListForGetCompleteItemList.add(curritemid);
+								}
+							}
+						}
+					}//for alternate
+					//XB-673 Changes End
+					crosssellItemsMap.put(itemID, crossSellItemsList);
+					upsellItemsMap.put(itemID, upSellItemsList);
+					//XB-673 Changes Start
+					alternateSBCItemsMap.put(itemID, alternateSBCItemList);
+					//XB-673 Changes End
+				}//if
+			}
+		}
+		catch(Exception e)
+		{
+			LOG.error("Error while getting the OOTB association list ::: "+e.getMessage());
+		}
+		allAssociatedItemsMap.put(XPEDXOrderUtils.CROSS_SELL_ITEMS_KEY, crosssellItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.UP_SELL_ITEMS_KEY, upsellItemsMap);
+		//XB-673 Changes Start
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ALTERNATE_SBC_ITEMS_KEY, alternateSBCItemsMap);
+		//XB-673 Changes End
+
+		//calling getItemUOM before this so that we should have the Custom association list available.
+		try
+		{
+			getItemUOMs();
+		}
+		catch(Exception e)
+		{
+			LOG.error("Error while getting the UOMs for items ::: "+e.getMessage());
+		}
+
+		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		/*String customerDivision = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
+		String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);*/
+
+		String customerDivision =shipToCustomer.getExtnShipFromBranch();
+		String envCode = shipToCustomer.getExtnEnvironmentCode();
+		if(envCode==null || envCode.trim().length()==0)
+			envCode = XPEDXWCUtils.getEnvironmentCode(wcContext.getCustomerId());
+		Document itemBranchItemAssociationDoc = null;
+		try {
+			itemBranchItemAssociationDoc = XPEDXOrderUtils.getXpedxItemBranchItemAssociationDetails(itemIDList, custID, customerDivision, envCode, wcContext);
+
+		} catch (Exception e) {
+			LOG.error("Error getting item branch item association.",e);
+			return null;
+		}
+		if(null == itemBranchItemAssociationDoc){
+			LOG.error("No national level item association could be found");
+			return null;
+		}
+
+
+
+		//loop through the itemIDList
+		for(int i=0;i<itemIDList.size();i++){
+			String itemID = itemIDList.get(i);
+			List<Element> xPXItemExtnList = XMLUtilities.getElements(itemBranchItemAssociationDoc.getDocumentElement(), "XPXItemExtn[@ItemID='"+itemIDList.get(i)+"']");
+			if(xPXItemExtnList == null || xPXItemExtnList.size() <= 0){
+				continue;
+			}
+
+			ArrayList<Element> alternateAssItemIDList = null;
+			ArrayList<Element> complementaryAssItemIDList = null;
+			ArrayList<Element> upgradeAssItemIDList = null;
+			ArrayList<Element> replacementAssItemIDList = null;
+
+			//but take only one, since we dont want duplicate elements
+			Element xPXItemExtnElement = xPXItemExtnList.get(0);
+			//Start - Add the ItemExtn Element to the Map of itemExtnElemsMap with ItemID as the Key and put them as ITEM_EXTN in the allAssociatedItemsMap
+			ArrayList<Element> itemExtnElemArray = new ArrayList<Element>();
+			itemExtnElemArray.add(xPXItemExtnElement);
+			itemExtnElemsMap.put(itemID, itemExtnElemArray);
+			//End - Add ItemExtn Element to the Map itemExtnElemsMap
+			Element xPXItemAssociationsListElement = SCXmlUtil.getChildElement(xPXItemExtnElement, "XPXItemAssociationsList");
+			if(xPXItemAssociationsListElement == null)
+				continue;
+			//only replacement items will go to the xpedxItemIDUOMToReplacementListMap. Other items will go to the xpedxItemIDUOMToRelatedItemsListMap.
+			List<Element> replacementList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='R']");
+			List<Element> alternateList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='A']");
+			List<Element> complementaryList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='C']");
+			List<Element> upgradeList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='U']");
+
+			//prepare the map for replacement
+			if(null!=replacementList && replacementList.size() >=0){
+				replacementAssItemIDList = new ArrayList<Element>();
+				for(Element replacementItem:replacementList){
+					String associatedItemID = SCXmlUtil.getAttribute(replacementItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						replacementAssItemIDList.add(replacementItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(replacementAssItemIDList.size()>0){
+					replacementItemsMap.put(itemID, replacementAssItemIDList);
+				}
+			}
+			//prepare the map for alternate and complimentary
+			//ArrayList<String> relatedAssItemIDList = new ArrayList<String>();
+			//ArrayList<String> alternateAssItemIDList = new ArrayList<String>();
+			//get the alternateList
+			if(null!=alternateList && alternateList.size() >=0){
+				alternateAssItemIDList = new ArrayList<Element>();
+				for(Element alterItemItem:alternateList){
+					String associatedItemID = SCXmlUtil.getAttribute(alterItemItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						alternateAssItemIDList.add(alterItemItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(alternateAssItemIDList.size()>0){
+					alternateItemsMap.put(itemID, alternateAssItemIDList);
+				}
+			}
+			//get the complementaryList
+			//ArrayList<String> complementaryAssItemIDList = new ArrayList<String>();
+			if(null!=complementaryList && complementaryList.size() >=0){
+				complementaryAssItemIDList = new ArrayList<Element>();
+				for(Element comItem:complementaryList){
+					String associatedItemID = SCXmlUtil.getAttribute(comItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						/*relatedAssItemIDList.add(associatedItemID);*/
+						complementaryAssItemIDList.add(comItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(complementaryAssItemIDList.size()>0){
+					complimentaryItemsMap.put(itemID, complementaryAssItemIDList);
+				}
+			}
+
+			//get the upgraded items
+			//ArrayList<String> upgradeAssItemIDList = new ArrayList<String>();
+			if(null!=upgradeList && upgradeList.size() >=0){
+				upgradeAssItemIDList = new ArrayList<Element>();
+				for(Element upgradeItem:upgradeList){
+					String associatedItemID = SCXmlUtil.getAttribute(upgradeItem, "AssociatedItemID");
+					if(!YFCCommon.isVoid(associatedItemID)){
+						/*relatedAssItemIDList.add(associatedItemID);*/
+						upgradeAssItemIDList.add(upgradeItem);
+						if(!itemIDListForGetCompleteItemList.contains(associatedItemID))
+							itemIDListForGetCompleteItemList.add(associatedItemID);
+					}
+				}
+				if(upgradeAssItemIDList.size()>0){
+					upgradeItemsMap.put(itemID, upgradeAssItemIDList);
+				}
+			}
+
+		}//End of for loop
+		if(null==itemIDListForGetCompleteItemList || itemIDListForGetCompleteItemList.size()<=0){
+			LOG.debug("No branch level associated items.");
+		}
+		//remove the duplicate items and call getCompleteItemList
+		HashSet hs = new HashSet();
+		hs.addAll(itemIDListForGetCompleteItemList);
+		itemIDListForGetCompleteItemList.clear();
+		itemIDListForGetCompleteItemList.addAll(hs);
+		//call getCompleteItemList
+		Document itemDetailsListDoc = null;
+		try {
+			// invoking a different function which will give onyl the entitiled items - 734
+			itemDetailsListDoc = XPEDXOrderUtils.getXpedxEntitledItemDetails(itemIDListForGetCompleteItemList, custID, wcContext.getStorefrontId(), wcContext);
+		} catch (Exception e) {
+			LOG.error("Exception while getting item details for associated items",e);
+			return null;
+		}
+		//prepare the xpedxItemIDUOMToReplacementListMap only when editMode is true
+		Set replacementMapKeySet = replacementItemsMap.keySet();
+		if(replacementMapKeySet!=null){
+		Iterator<String> replacementIterator = replacementMapKeySet.iterator();
+			while(replacementIterator.hasNext()){
+				ArrayList replacementItemsElementList = new ArrayList();
+				String itemID = replacementIterator.next();
+				ArrayList<Element> asscociatedItemIDList = replacementItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					replacementItemsElementList.add(itemDetailsList.get(0));
+				}
+				/*
+				 * Commented by Muthu for JIRA - 160
+				replacementItemsMap.put(itemID, replacementItemsElementList);
+				*/
+
+				/*
+				 * Added by Muthu for JIRA - 160
+				 * If the List is empty then add null instead of empty List since the JSP is checking for null condition
+				 */
+				if(replacementItemsElementList.size() == 0){
+					replacementItemsMap.put(itemID, null);
+				}else{
+					replacementItemsMap.put(itemID, replacementItemsElementList);
+				}
+			}//end while loop
+		}
+
+		Set alternateMapKeySet = alternateItemsMap.keySet();
+		if(alternateMapKeySet!=null && alternateMapKeySet.size()>0){
+		Iterator<String> alternateIterator = alternateMapKeySet.iterator();
+			while(alternateIterator.hasNext()){
+				ArrayList alternateItemsElementList = new ArrayList();
+				String itemID = alternateIterator.next();
+				ArrayList<Element> asscociatedItemIDList = alternateItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					alternateItemsElementList.add(itemDetailsList.get(0));
+				}
+				alternateItemsMap.put(itemID, alternateItemsElementList);
+			}//end while loop
+		}
+
+		Set complimentaryMapKeySet = complimentaryItemsMap.keySet();
+		if(complimentaryMapKeySet!=null && complimentaryMapKeySet.size()>0){
+		Iterator<String> compIterator = complimentaryMapKeySet.iterator();
+			while(compIterator.hasNext()){
+				ArrayList compItemsElementList = new ArrayList();
+				String itemID = compIterator.next();
+				ArrayList<Element> asscociatedItemIDList = complimentaryItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					compItemsElementList.add(itemDetailsList.get(0));
+				}
+				complimentaryItemsMap.put(itemID, compItemsElementList);
+			}//end while loop
+		}
+
+		Set upgradeMapKeySet = upgradeItemsMap.keySet();
+		if(upgradeMapKeySet!=null && upgradeMapKeySet.size()>0){
+		Iterator<String> upgradeIterator = upgradeMapKeySet.iterator();
+			while(upgradeIterator.hasNext()){
+				ArrayList upgradeItemsElementList = new ArrayList();
+				String itemID = upgradeIterator.next();
+				ArrayList<Element> asscociatedItemIDList = upgradeItemsMap.get(itemID);
+				for(Element assItem:asscociatedItemIDList){
+					String assID = assItem.getAttribute("AssociatedItemID");
+					List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item[@ItemID='"+assID+"']");
+					if(null==itemDetailsList || itemDetailsList.size()<=0)
+						continue;
+					upgradeItemsElementList.add(itemDetailsList.get(0));
+				}
+				upgradeItemsMap.put(itemID, upgradeItemsElementList);
+			}//end while loop
+		}
+
+		if((upgradeMapKeySet!=null && upgradeMapKeySet.size()>0) || (complimentaryMapKeySet!=null && complimentaryMapKeySet.size()>0)
+				|| (alternateMapKeySet!=null && alternateMapKeySet.size()>0)  || (replacementMapKeySet!=null && replacementMapKeySet.size()>0)) {
+			List<Element> itemDetailsList = XMLUtilities.getElements(itemDetailsListDoc.getDocumentElement(),"Item");
+			itemElementList.addAll(itemDetailsList);
+		}
+		itemListElemsMap.put(XPEDXOrderUtils.ITEM_LIST_KEY, itemElementList);
+
+		allAssociatedItemsMap.put(XPEDXOrderUtils.REPLACEMENT_ITEMS_KEY, replacementItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ALTERNATE_ITEMS_KEY, alternateItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.COMPLEMENTARY_ITEMS_KEY, complimentaryItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.UPGRADE_ITEMS_KEY, upgradeItemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ITEM_EXTN_KEY, itemExtnElemsMap);
+		allAssociatedItemsMap.put(XPEDXOrderUtils.ITEM_LIST_KEY, itemListElemsMap);
+
+		return allAssociatedItemsMap;
+	}
+
 	/*protected void prepareXpedxItemBranchItemAssociationMap(ArrayList<String> itemIDList) throws CannotBuildInputException, XPathExpressionException{
 		String custID = wcContext.getCustomerId();
 		String customerDivision;
@@ -1353,7 +1871,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		HashMap<String, ArrayList<String>> alternateMap =  new HashMap<String, ArrayList<String>>();
 		HashMap<String, ArrayList<String>> complimentaryMap =  new HashMap<String, ArrayList<String>>();
 		HashMap<String, ArrayList<String>> upgradeMap =  new HashMap<String, ArrayList<String>>();
-		
+
 		ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 		//loop through the itemIDList
 		for(int i=0;i<itemIDList.size();i++){
@@ -1370,7 +1888,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			List<Element> alternateList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='A']");
 			List<Element> complementaryList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='C']");
 			List<Element> upgradeList = XMLUtilities.getElements(xPXItemAssociationsListElement,"XPXItemAssociations[@AssociationType='U']");
-			
+
 			//prepare the map for replacement
 			if(null!=replacementList && replacementList.size() >=0){
 				ArrayList<String> replacementAssItemIDList = new ArrayList<String>();
@@ -1407,7 +1925,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}
 			}
-			
+
 			//get the upgraded items
 			ArrayList<String> upgradeAssItemIDList = new ArrayList<String>();
 			if(null!=upgradeList && upgradeList.size() >=0){
@@ -1426,7 +1944,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			if(relatedAssItemIDList.size()>0){
 				relatedMap.put(itemID, relatedAssItemIDList);
 			}
-			
+
 		}//End of for loop
 		if(null==itemIDListForGetCompleteItemList || itemIDListForGetCompleteItemList.size()<=0){
 			LOG.debug("No branch level associated items.");
@@ -1462,9 +1980,9 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 			xpedxItemIDUOMToReplacementListMap.put(itemID, replacementItemsElementList);
 		}//end while loop
-		
-		
-		
+
+
+
 		//add the complementary and alternate items to the xpedxItemIDUOMToRelatedItemsListMap
 		Set relatedMapKeySet = relatedMap.keySet();
 		Iterator<String> relatedIterator = relatedMapKeySet.iterator();
@@ -1482,10 +2000,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			xpedxItemIDUOMToRelatedItemsListMap.remove(itemID);
 			xpedxItemIDUOMToRelatedItemsListMap.put(itemID, relatedItemsValue);
 		}//end while loop
-		
-		
+
+
 	}*/
-	
+
 	/*protected void prepareXpedxItemAssociationMap(ArrayList<String> itemIDList) throws XPathExpressionException{
 		String custID = wcContext.getCustomerId();
 		String callingOrgCode = wcContext.getStorefrontId();
@@ -1553,7 +2071,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 	}
 	*/
-	
+
 
 	// override to read the new mashup id : Manoj Kodagali
 	protected String getOrderDetailsMashupName() {
@@ -1579,15 +2097,15 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			unitOfMeasure = itemIDUOM.substring(delimIndex + ":_:".length());
 			itemIDToItemIDUOMMap.put(itemID, itemIDUOM);
 		}
-		
+
 		//Fetching the uoms for main and replacement items
 		Set<String> itemIdList = new HashSet<String>();
-		
+
 		for (int i = 0; i < items.size(); i++) {
 			String itemId =  (String)items.get(i);
 			itemIdList.add(itemId);
 		}
-		
+
 		if(xpedxItemIDUOMToReplacementListMap!=null && !xpedxItemIDUOMToReplacementListMap.isEmpty())
 		{
 			Set<String> itemIdKeys =  xpedxItemIDUOMToReplacementListMap.keySet();
@@ -1605,18 +2123,29 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 					}
 				}
 			}
-			
+
 		}
 		allItemIds.addAll(itemIdList);
-		
-		//This sets the inventory indicator map and also order multiple map 
-		setInventoryAndOrderMultipleMap();
+
+		//This sets the inventory indicator map and also order multiple map
 		/*
 		 * getting all the items UOMs at the same time using a complex query
 		 */
-		itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
-		
-		if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
+		itemIdsUOMsDescMap = XPEDXWCUtils.getXpedxUOMListFromCustomService(allItemIds,false);//XPEDXOrderUtils.getXpedxUOMDescList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId(),false);
+		itemIdsUOMsMap = (Map<String, Map<String, String>>)ServletActionContext.getRequest().getAttribute("ItemUomHashMap");//XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), allItemIds, wcContext.getStorefrontId());
+		ServletActionContext.getRequest().removeAttribute("ItemUomHashMap");
+		if(itemIdsUOMsMap == null)
+			itemIdsUOMsMap = new HashMap<String, Map<String, String>>();
+		itemAndCustomerUomHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("itemCustomerUomHashMap");
+		if(itemAndCustomerUomHashMap == null)
+			itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
+		ServletActionContext.getRequest().removeAttribute("itemCustomerUomHashMap");
+		itemAndCustomerUomWithConvHashMap = (LinkedHashMap<String, String>)ServletActionContext.getRequest().getAttribute("ItemCustomerUomConvFactHashMap");
+		if(itemAndCustomerUomWithConvHashMap == null)
+			itemAndCustomerUomWithConvHashMap = new LinkedHashMap<String, String>();
+		ServletActionContext.getRequest().removeAttribute("ItemCustomerUomConvFactHashMap");
+		//XPEDXWCUtils.setObectInCache("ItemCustomerUomWithConvFactors", itemAndCustomerUomWithConvHashMap);
+		/*if(itemIdsUOMsMap!=null && itemIdsUOMsMap.keySet()!=null) {
 			ArrayList<String> itemIdsList = new ArrayList<String>();
 			itemIdsList.addAll(itemIdsUOMsMap.keySet());
 			Iterator<String> iterator = itemIdsList.iterator();
@@ -1640,10 +2169,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						uommap.put(uom, XPEDXWCUtils.getUOMDescription(uom)+" ("+convFac+")" );
 					}
 				}
-				
+
 				itemIdsUOMsDescMap.put(itemIdForUom, uommap);
 			}
-		}
+		}*/
 		for (int i = 0; i < items.size(); i++) {
 			String newItemID = (String)items.get(i);
 			String itemIDUOM = (String)itemIDToItemIDUOMMap.get(newItemID);
@@ -1666,15 +2195,15 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 				else{
 					displayuomsMap.put(uomDesc,XPEDXWCUtils.getUOMDescription(uomDesc)+ " (" + o + ")");
 				}
-				
+
 			}
 
 			displayItemUOMsMap.put(itemIDUOM, displayuomsMap);
 		}
 
 	}
-	
-	
+
+
 	public String getJsonStringForMap(HashMap map){
 		String jsonString = "";
 		JSONObject jsonObject = JSONObject.fromObject( map );
@@ -1703,20 +2232,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		//set this in the session
 		localSession.setAttribute("customerFieldsSessionMap", customerFieldsMap); */
 	}
-	
-	private void getAllItemSKUs() throws Exception
+
+	private void getAllItemSKUs() throws CannotBuildInputException, XPathExpressionException
 	{
-		//Fetch all the extn fields from customer
-		
-		String useCustSku = (String)wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,WCAttributeScope.LOCAL_SESSION);
-		/*String envCode = (String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-		String companyCode = (String)wcContext.getWCAttribute(XPEDXConstants.COMPANY_CODE,WCAttributeScope.LOCAL_SESSION);
-		String legacyCustomerNumber = (String)wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);*/
-		
-		//String useCustSku = shipToCustomer.getExtnUseCustSKU();
+
+		mfgItemFlag =(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
+		customerItemFlag =(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
+		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		String envCode = shipToCustomer.getExtnEnvironmentCode();
 		String companyCode = shipToCustomer.getExtnCompanyCode();
 		String legacyCustomerNumber = shipToCustomer.getExtnLegacyCustNumber();
+
 		if(envCode == null || companyCode==null || legacyCustomerNumber == null)
 		{
 			Set mashupSet = buildSetFromDelmitedList("draftOrderGetCustomerLineFields");
@@ -1724,69 +2250,92 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			Element outputEl = (Element) outputMap.get("draftOrderGetCustomerLineFields");
 			Element customerOrganizationExtnEle = XMLUtilities.getChildElementByName(outputEl, "Extn");
 			envCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnEnvironmentCode");
-			useCustSku = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnUseCustSKU");
 			companyCode = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnCompanyCode");
 			legacyCustomerNumber = SCXmlUtil.getAttribute(customerOrganizationExtnEle,"ExtnLegacyCustNumber");
-			//set this in the session
-			//wcContext.setWCAttribute(XPEDXConstants.CUSTOMER_USE_SKU,useCustSku,WCAttributeScope.LOCAL_SESSION);
-			/*wcContext.setWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,envCode,WCAttributeScope.LOCAL_SESSION);
-			wcContext.setWCAttribute(XPEDXConstants.COMPANY_CODE,companyCode,WCAttributeScope.LOCAL_SESSION);
-			wcContext.setWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,legacyCustomerNumber,WCAttributeScope.LOCAL_SESSION);*/
-			shipToCustomer.setExtnUseCustSKU(useCustSku);
 			shipToCustomer.setExtnEnvironmentCode(envCode);
 			shipToCustomer.setExtnCompanyCode(companyCode);
 			shipToCustomer.setExtnLegacyCustNumber(legacyCustomerNumber);
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 		}
-		
-		if(useCustSku!=null && useCustSku.length()>0)
+
+		/*if(useCustSku!=null && useCustSku.length()>0)
 		{
 			setCustomerSku(useCustSku);
-		}
-		
-		
-		
-		try {
-			HashMap<String, HashMap<String, String>> _skuMap = XPEDXWCUtils.getAllSkusForItemsList(getWCContext(), allItemIds,false);
-		
-		
-			//Fetch all the items in Cart and get their respective SKUs
-			Document orderDoc = getOutputDocument();
-			Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
-					.getDocumentElement(), "OrderLines");
-			ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
-			if(orderLineElemList==null || orderLineElemList.size()==0)
-				return;
-			//Get the customer extn fields
+		}*/
+
+		//Fetch all the items in Cart and get their respective SKUs
+		Document orderDoc = getOutputDocument();
+		Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
+				.getDocumentElement(), "OrderLines");
+		ArrayList<Element> orderLineElemList = SCXmlUtil.getElements(orderLinesElement, "OrderLine");
+		if(orderLineElemList==null || orderLineElemList.size()==0)
+			return;
+		HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
+		setSkuMap(new HashMap<String, HashMap<String,String>>());
+		ArrayList<String> itemIdList = new ArrayList<String>();
+
+		if(!SCUtil.isVoid(mfgItemFlag) && mfgItemFlag.equalsIgnoreCase("Y")) {
+			HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
 			for (int i = 0; i < orderLineElemList.size(); i++) {
-				Element orderLineElement = (Element)orderLineElemList.get(i);
-				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,
-						"Item");
-				String itemId = "";
-				if(itemElement!=null){
-					itemId = itemElement.getAttribute("ItemID");// orderline/item
-				
-					if(skuMap.containsKey(itemId))
-					{
-						HashMap<String,String> map=skuMap.get(itemId);
-						if(map != null && _skuMap.get(itemId) != null)
-							map.putAll(_skuMap.get(itemId));
-					}
-					else
-					{
-						skuMap.put(itemId,  _skuMap.get(itemId));
-						/*					
-						HashMap<String, String> itemSkuMap = XPEDXWCUtils.getAllSkusForItem(wcContext, itemId);
-						skuMap.put(itemId, itemSkuMap);*/
+				Element orderLineElement = orderLineElemList.get(i);
+				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+				String itemId = itemElement.getAttribute("ItemID");
+
+				if(skuMap.containsKey(itemId))
+					continue;
+				/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
+				Element itemDetailsElement = SCXmlUtil.getChildElement(orderLineElement, "ItemDetails");
+				Element primeInfoElem = XMLUtilities.getElement(itemDetailsElement, "PrimaryInformation");
+				if(primeInfoElem!=null)
+				{
+					String manufactureItem = primeInfoElem.getAttribute("ManufacturerItem");
+					if(manufactureItem!=null && manufactureItem.length()>0)
+						itemSkuMap.put(XPEDXConstants.MFG_ITEM_NUMBER, manufactureItem);
+				}
+
+				itemIdList.add(itemId);
+				skuMap.put(itemId, (HashMap<String, String>)itemSkuMap.clone());
+				itemSkuMap.clear();
+			}
+
+		}else{
+				for (int i = 0; i < orderLineElemList.size(); i++) {
+				Element orderLineElement = orderLineElemList.get(i);
+				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
+				String itemId = itemElement.getAttribute("ItemID");
+				itemIdList.add(itemId);
+			}
+		}
+		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
+			//Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
+			Element itemCustXRefList=(Element)ServletActionContext.getRequest().getAttribute("XPXItemcustXrefList");
+			if(itemCustXRefList!=null) {
+				//Element itemCustXRefList = itemcustXrefDoc.getDocumentElement();
+				ArrayList<Element> itemCustXrefElems = SCXmlUtil.getElements(itemCustXRefList, "XPXItemcustXref");
+				if(itemCustXrefElems!=null && itemCustXrefElems.size()>0) {
+					Iterator<Element> xrefIter = itemCustXrefElems.iterator();
+					while(xrefIter.hasNext()) {
+						Element xref = xrefIter.next();
+						String legacyItemNum = xref.getAttribute("LegacyItemNumber");
+						if(itemIdList.contains(legacyItemNum.trim())) {
+							String customerPartNumber = xref.getAttribute("CustomerItemNumber");
+							if(customerPartNumber!=null && customerPartNumber.length()>0)
+							{
+								HashMap<String, String> tmpSkuMap = skuMap.get(legacyItemNum);
+								if(SCUtil.isVoid(tmpSkuMap))
+									itemSkuMap = new HashMap<String, String>();
+								else
+									itemSkuMap = tmpSkuMap;
+							itemSkuMap.put(XPEDXConstants.CUST_PART_NUMBER, customerPartNumber);
+							skuMap.put(legacyItemNum, (HashMap<String, String>)itemSkuMap.clone());
+							itemSkuMap.clear();
+							}
+						}
 					}
 				}
 			}
-		}
-		catch (Exception ex){
-			LOG.debug(ex.getMessage());
-		}
+	   }
 	}
-	
 	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
@@ -1830,14 +2379,30 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		if(getOutputDocument()==null)
 		{
 			super.getCompleteOrderDetailsDoc();
-		
+
 		} else {
 			validateRestoredOrder();
-			addModificationRuleToOrderListElement(getOrderElementFromOutputDocument()); 
-			
-		}			
-	}
+			addModificationRuleToOrderListElement(getOrderElementFromOutputDocument());
 
+		}
+	}
+	 protected void validateRestoredOrder()
+		 throws Exception
+	 {
+			//Updating AuthorizedClient to Web because validation will be failed
+			//if AuthorizedClient is not Web. And chaging back to its actual value before exiting to this method.
+			 Element orderEl = getOrderElementFromOutputDocument();
+			 String authorizedClient="";
+			 if(orderEl != null)
+			 {
+				 authorizedClient=orderEl.getAttribute("AuthorizedClient");
+				 orderEl.setAttribute("AuthorizedClient", "Web");
+			 }
+			 super.validateRestoredOrder();
+			 if(!"".equals(authorizedClient))
+				 orderEl.setAttribute("AuthorizedClient", authorizedClient);
+
+	 }
 	private void processPandA(Vector items) {
 		Document orderDoc = getOutputDocument();
 		assert (orderDoc != null);
@@ -1866,7 +2431,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 		return divisionNumber;
 	}
-	
+
 	/*protected String getDivisionName() throws CannotBuildInputException {
 		if(null == divisionName){
 			divisionName = XPEDXWCUtils.getDivisionName();
@@ -1876,7 +2441,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 		return divisionName;
 	}*/
-	
+
 	protected void setDivisionName(String divisionName) throws CannotBuildInputException {
 		this.divisionName = divisionName;
 	}
@@ -1902,12 +2467,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public HashMap getXpedxItemIDUOMToReplacementListMap() {
 		return xpedxItemIDUOMToReplacementListMap;
 	}
-	
+
 	public void setXpedxItemIDUOMToReplacementListMap(
 			HashMap xpedxItemIDUOMToReplacementListMap) {
 		this.xpedxItemIDUOMToReplacementListMap = xpedxItemIDUOMToReplacementListMap;
 	}
-	
+
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
 		super.manipulateMashupInputs(mashupInputs);
@@ -1978,7 +2543,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setItemListMap(Map itemListMap) {
 		this.itemListMap = itemListMap;
 	}
-	
+
 	/*
 	 * This will check if there is a cart in the context, if present opens the cart and opens the Quick add Link in the Draft Order details page
 	 * else Creates a new cart and then opens it and opens the quick add.
@@ -2004,7 +2569,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			 //orderHeaderKey =getWCContext().getWCAttribute("CommerceContextObject")
 			 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 			 //orderHeaderKey=XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
-			 
+
 		}
 		/*else if((orderHeaderKey!=null && orderHeaderKey.trim().length()>0)  ) {
 			if(!isDraftSet)
@@ -2012,17 +2577,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			returnVal = execute();
 		}*/
 		/*else {
-			
+
 			returnVal = execute();
 		}*/
-		
+
 		/*Changes done for JIRA 3024 - End*/
-		
+
 		if(!isDraftSet)
 			setDraft("Y");
 		returnVal = execute();
 		return returnVal;
-			
+
 	}
 	/*
 	 * Prepares a Arraylist of XPEDXItem, after looping through the orderlines
@@ -2081,7 +2646,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						String legacyProductCode = replacementItemElem.getAttribute("ItemID");
 						String requestedQtyUOM = SCXmlUtil.getChildElement(replacementItemElem, "PrimaryInformation").getAttribute("PricingUOM");
 						String requestedQty= "1";
-						
+
 						XPEDXItem item = new XPEDXItem();
 						item.setLegacyProductCode(legacyProductCode);
 						item.setRequestedQty(requestedQty);
@@ -2098,13 +2663,13 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 		return pnaList;
 	}
-	
+
 	/*
 	 * Parses the XpxItemExtn Document and then sets the ordermultiple and also the inventory maps accordingly
 	 */
-	
+
 	private void setInventoryAndOrderMultipleMap() {
-		
+
 		//String customerDivision = (String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH);
 		//String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
 		String customerDivision = shipToCustomer.getExtnShipFromBranch();
@@ -2168,8 +2733,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.displayItemUOMsMap = displayItemUOMsMap;
 	}
 
-	
-	
+
+
 	public float getMinOrderAmount() {
 		return minOrderAmount;
 	}
@@ -2221,7 +2786,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected String divisionNumber = null;
 	protected String divisionName = null;
 	protected String state = null;
-	private String 	uniqueId = ""; 
+	private String 	uniqueId = "";
 	private float minOrderAmount;
 	private float chargeAmount;
 	public String draftFlagError = "draftFlagError";
@@ -2244,7 +2809,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 
 	public ArrayList<String> itemList = new ArrayList<String>();
-	
+
 
 	public ArrayList<String> getItemMap() {
 		return itemList;
@@ -2258,7 +2823,34 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public ArrayList<String> allItemID;
 
-	
+// Start for XB-689
+	public ArrayList<String> allItemIDsWithDuplicates;
+
+
+	public ArrayList<String> getAllItemIDsWithDuplicates() {
+		return allItemIDsWithDuplicates;
+	}
+
+	public String duplicateInfoMsg;
+
+
+	public String getDuplicateInfoMsg() {
+		return duplicateInfoMsg;
+	}
+
+
+	public void setDuplicateInfoMsg(String duplicateInfoMsg) {
+		this.duplicateInfoMsg = duplicateInfoMsg;
+	}
+
+
+	public void setAllItemIDsWithDuplicates(
+			ArrayList<String> allItemIDsWithDuplicates) {
+		this.allItemIDsWithDuplicates = allItemIDsWithDuplicates;
+	}
+// end for XB-689
+
+
 	public ArrayList<String> getAllItemID() {
 		return allItemID;
 	}
@@ -2271,6 +2863,33 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected ArrayList<String> allItemIds = new ArrayList<String>();
 	protected Map<String,Map<String,String>> itemIdsUOMsMap=new HashMap<String,Map<String,String>>();
+
+	//Added for EB-64 - This map contains item ids and their customer UOM , if exist.
+	protected LinkedHashMap<String, String> itemAndCustomerUomHashMap = new LinkedHashMap<String, String>();
+	//Added for EB-64 - This map contains item ids and their customer UOM with conversion factor with pipe separated , if exist. eg : 2001020, PC|2
+	protected LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap = new LinkedHashMap<String, String>();
+	public LinkedHashMap<String, String> getItemAndCustomerUomWithConvHashMap() {
+		return itemAndCustomerUomWithConvHashMap;
+	}
+
+
+	public void setItemAndCustomerUomWithConvHashMap(
+			LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap) {
+		this.itemAndCustomerUomWithConvHashMap = itemAndCustomerUomWithConvHashMap;
+	}
+
+
+	public LinkedHashMap<String, String> getItemAndCustomerUomHashMap() {
+		return itemAndCustomerUomHashMap;
+	}
+
+
+	public void setItemAndCustomerUomHashMap(
+			LinkedHashMap<String, String> itemAndCustomerUomHashMap) {
+		this.itemAndCustomerUomHashMap = itemAndCustomerUomHashMap;
+	}
+
+
 	public Map<String, Map<String, String>> getItemIdConVUOMMap() {
 		return itemIdConVUOMMap;
 	}
@@ -2292,7 +2911,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected Map<String,Map<String,String>> itemIdConVUOMMap=new HashMap<String,Map<String,String>>();
 	protected ArrayList<Element> entitledItemEleList = new ArrayList<Element>();
-	
+
 	protected Map<String,Map<String,String>> itemIdsUOMsDescMap=new HashMap<String,Map<String,String>>();
 	String lastModifiedDateString = "";
 	String lastModifiedUserId = "";
@@ -2307,10 +2926,12 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected String validateCustomerFields = "N";
 	protected HashMap xpedxItemIDToItemExtnMap;
 	//added for jira 2885
-	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
+	private  Map<String,String> pnALineErrorMessage=new HashMap<String,String>();
 	private String draftOrderList;
 	public String draftOrderFail="false";
-	
+	private boolean isOUErrorPage=false;
+	private String approvalAllowedFlag="false";
+
 	protected HashMap useOrderMultipleMapFromSourcing;
 	public HashMap getUseOrderMultipleMapFromSourcing() {
 		return useOrderMultipleMapFromSourcing;
@@ -2320,7 +2941,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			HashMap useOrderMultipleMapFromSourcing) {
 		this.useOrderMultipleMapFromSourcing = useOrderMultipleMapFromSourcing;
 	}
-	
+
 	public String getDraftOrderFail() {
 		return draftOrderFail;
 	}
@@ -2332,14 +2953,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 
 
-	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;	
+	protected HashMap<String, ArrayList<String>> requiredCustFieldsErrorMap;
 	private String itemDtlBackPageURL="";
 	private String salesreploggedInUserName; //added for XBT-146
 	//XBT - 248 & 252
 	public String draftOrderError;
-	
+
 	public String draftOrderFlag;
-	
+
 	public String getDraftOrderError() {
 		return draftOrderError;
 	}
@@ -2348,7 +2969,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.draftOrderError = draftOrderError;
 	}
 	//End of XBT 248 & 252
-	
+
 	public String getSalesreploggedInUserName() {
 		return salesreploggedInUserName;
 	}
@@ -2358,6 +2979,17 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 
 	public String custStatus;
+	//Added for EB 289
+	public String billToCustomerStatus;
+	public String getBillToCustomerStatus() {
+		return billToCustomerStatus;
+	}
+
+
+	public void setBillToCustomerStatus(String billToCustomerStatus) {
+		this.billToCustomerStatus = billToCustomerStatus;
+	}
+	//End of EB 289
 	public String getCustStatus() {
 		return custStatus;
 	}
@@ -2365,7 +2997,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setCustStatus(String custStatus) {
 		this.custStatus = custStatus;
 	}
-	
+
 	public ArrayList<Element> getEntitledItemEleList() {
 		return entitledItemEleList;
 	}
@@ -2378,7 +3010,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	protected Document changeOrderOutputDoc=null;
 	protected String isDeleteOrder="false";
 	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
-	
+
 	public Document getChangeOrderOutputDoc() {
 		return changeOrderOutputDoc;
 	}
@@ -2413,7 +3045,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setUniqueId(String uniqueId) {
 		this.uniqueId = uniqueId;
 	}
-	
+
 	public Map<String, Map<String, String>> getItemIdsUOMsMap() {
 		return itemIdsUOMsMap;
 	}
@@ -2429,7 +3061,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 
 	private HashMap<String, String> skuTypeList = new HashMap<String, String>();
-	
+
 
 	public HashMap<String, String> getSkuTypeList() {
 		return skuTypeList;
@@ -2452,7 +3084,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	 */
 	public void setCustomerFieldsValidated(String customerFieldsValidated) {
 		this.customerFieldsValidated = customerFieldsValidated;
-	}	
+	}
 
 	/**
 	 * @return the validateCustomerFields
@@ -2489,27 +3121,27 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			ArrayList<Element> xpedxYouMightConsiderItems) {
 		this.xpedxYouMightConsiderItems = xpedxYouMightConsiderItems;
 	}
-	
+
 	public void addToYouMightAlsoConsiderItemList(Element elm) {
 		String currItemId = SCXmlUtil.getAttribute(elm, "ItemID");
 		String unitOfMeasure = SCXmlUtil.getAttribute(elm, "UnitOfMeasure");
-		
+
 		try {
 			LOG.debug(" currItemId " + currItemId );
 			LOG.debug(" unitOfMeasure " + unitOfMeasure );
-		
+
 		if( (currItemId != null &&  currItemId.length() > 0 ) && (unitOfMeasure != null &&  unitOfMeasure.length() > 0 ) )
 			this.xpedxYouMightConsiderItems.add(elm) ;
 		else
 			LOG.warn("ItemId or UOM missing for Carousel Display Items. Item not added to list\n Details : " + SCXmlUtils.getString(elm) );
-		
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 	}
-	
+
 	public ArrayList<Element> getXpedxPopularAccessoriesItems() {
 		return xpedxPopularAccessoriesItems;
 	}
@@ -2525,7 +3157,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 	public String getLastModifiedDateToDisplay() {
 		UtilBean utilBean = new UtilBean();
-		String dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "M/d/yyyy");	
+		String dateToDisplay = utilBean.formatDate(lastModifiedDateString, wcContext, null, "M/d/yyyy");
 		return dateToDisplay;
 	}
 	public String getLastModifiedUserId() {
@@ -2570,7 +3202,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setEditOrderOrderLineMap(Map<String, Element> editOrderOrderLineMap) {
 		this.editOrderOrderLineMap = editOrderOrderLineMap;
 	}
-	
+
 	/**
 	 * @return the requiredCustFieldsErrorMap
 	 */
@@ -2602,46 +3234,54 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setDraftOrderList(String draftOrderList) {
 		this.draftOrderList = draftOrderList;
-	}	
-	
+	}
+
+	public String getApprovalAllowedFlag() {
+		return approvalAllowedFlag;
+	}
+
+	public void setApprovalAllowedFlag(String approvalAllowedFlag) {
+		this.approvalAllowedFlag = approvalAllowedFlag;
+	}
+
 	private void addModificationRuleToOrderListElement(Element orderElement)
 	{
 		ArrayList<Element> orderLineList=SCXmlUtil.getElements(orderElement, "/OrderLines/OrderLine");
 		if(orderLineList!= null && orderLineList.size()>0) {
 			for(int i=0;i<orderLineList.size();i++)
 			{
-				Element orderLineElement=orderLineList.get(i);		
+				Element orderLineElement=orderLineList.get(i);
 				Element modificationsElem=SCXmlUtil.createChild(orderLineElement, "Modifications");
 				Element modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "DELIVERY_CODE");
 				modificationElem.setAttribute("ModificationAllowed", "N");
 				modificationsElem.appendChild(modificationElem);
-				
+
 				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "SHIP_NODE");
 				modificationElem.setAttribute("ModificationAllowed", "Y");
-				modificationsElem.appendChild(modificationElem);				
-				
+				modificationsElem.appendChild(modificationElem);
+
 				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "CHANGE_ORDER_DATE");
 				modificationElem.setAttribute("ModificationAllowed", "N");
 				modificationsElem.appendChild(modificationElem);
-				
+
 				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "REQ_SHIP_DATE");
 				modificationElem.setAttribute("ModificationAllowed", "Y");
 				modificationsElem.appendChild(modificationElem);
-				
+
 				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "ADD_QUANTITY");
 				modificationElem.setAttribute("ModificationAllowed", "Y");
 				modificationsElem.appendChild(modificationElem);
-				
+
 				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "CANCEL");
 				modificationElem.setAttribute("ModificationAllowed", "Y");
 				modificationsElem.appendChild(modificationElem);
-				
+
 				modificationElem=SCXmlUtil.createChild(modificationsElem, "Modification");
 				modificationElem.setAttribute("ModificationType", "CHANGE_BUNDLE_DEFINITION");
 				modificationElem.setAttribute("ModificationAllowed", "N");
@@ -2649,7 +3289,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 			}
 		}
 	}
-	
+
 	public String getImagePath(Element primaryInfo) {
 		String imageUrl = "/xpedx/images/INF_150x150.jpg";
 		XPEDXSCXmlUtils xpedxScxmlUtil = new XPEDXSCXmlUtils();
@@ -2665,5 +3305,5 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 		return imageUrl;
 	}
-	
+
 }

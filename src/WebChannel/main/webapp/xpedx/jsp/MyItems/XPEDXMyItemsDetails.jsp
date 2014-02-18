@@ -50,6 +50,7 @@
 
 <s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 <s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
+<s:set name="custPONo" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
 
 <!-- begin styles. These should be the only three styles. -->
 
@@ -68,6 +69,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MIL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <script type="text/javascript">
@@ -157,6 +159,13 @@ function showSharedListForm(){
 
 .xpedx-light-box p {
 }
+
+#errorMsgBottom {
+	margin: 20px 30px 20px 20px;
+}
+.error {
+	margin-top: 10px;
+}
 </style>
 <script type="text/javascript">
 	var availabilityURL = '<s:property value="#availabilityURL"/>';
@@ -166,13 +175,12 @@ function showSharedListForm(){
 	var errorflag;
 	var addToCartFlag;
 	var validAddtoCartItemsFlag  = new Array();
+	// EB-3973 share private list is not displayed and  the locations are not shown if private list is checked.
 	function hideSharedListFormIfPrivate() {
-		var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-		var div = document.getElementById("dynamiccontent");
-		if(radioBtns[0].checked) {
-			div.style.display = "none";
+		 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
+		  document.getElementById("dynamiccontent").style.display = "none";
+		 }
 		}
-	}
 </script>
 <script type="text/javascript">
 
@@ -199,6 +207,19 @@ function showSharedListForm(){
 			}
 		});
 		
+		/* EB-783 */
+		$('.full-description-replacement-model').each(function() {
+			var html = $(this).html();
+			var shortHTML = html.substring(0, 175);
+			if( html.length > shortHTML.length )
+			{
+				$(this).html(shortHTML);
+				$(this).append('...');	
+				$(this).attr('title', html );
+			}
+		});
+		
+		
 		/* Begin long desc. shortener */
 		$('.prodlist ul li, #prodlist ul li').each(function() {
 			var html = $(this).html();
@@ -210,10 +231,8 @@ function showSharedListForm(){
 				$(this).attr('title', html );
 			}
 		});
-		
-		
-		
-		$("#dlgShareListLink1").fancybox({
+			// EB-3973  . 
+		$("#dlgShareListLink1, #dlgShareListLink2").fancybox({
 			'onStart' 	: function(){
 			if (isUserAdmin || isEstUser){			
 				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
@@ -221,78 +240,28 @@ function showSharedListForm(){
 				hideSharedListFormIfPrivate();
 				}
 			},
-			'onClosed':function() {
-				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
-				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin &&  !isEstUser)
-				{
-					//Check Private radio button
-					radioBtns[0].checked = true;
-					//Hide Ship To Locations
-					div.style.display = "none";
-				}
+			'onClosed':function() {				
+				
+				$("#XPEDXMyItemsDetailsChangeShareList #spShareAdminOnly").attr("checked",false);						
+				 if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
+			  		document.getElementById("dynamiccontent").style.display = "none";
+				 }
 				else
 				{
 					// share private variable will be populated if it is a private list
 					//based on that, the private is selected in the pop up and the locations are not shown
 					if(sharePrivateVar!=null && sharePrivateVar != "") {
-						radioBtns[0].checked = true;
-						//Hide Ship To Locations
-						div.style.display = "none";
+						document.getElementById("dynamiccontent").style.display = "none";
 					}
 					else {							
-					//Check Shared radio button
-					radioBtns[1].checked = true;
-					//Display Ship To Locations
-					div.style.display = "block";
+						document.getElementById("dynamiccontent").style.display = "block";
 					}
 				}
 				shareSelectAll(false);
 			}
 			
 		});
-
-		$("#dlgShareListLink2").fancybox({
-			'onStart' 	: function(){
-			if (isUserAdmin || isEstUser){
-				//Calling AJAX function to fetch 'Ship-To' locations only when user is an Admin
-				showShareList('<s:property value="#CurrentCustomerId"/>', true);
-				hideSharedListFormIfPrivate();
-				}
-			},
-			'onClosed':function() {
-				document.XPEDXMyItemsDetailsChangeShareList.shareAdminOnly.checked=false;
-				var radioBtns = document.XPEDXMyItemsDetailsChangeShareList.sharePermissionLevel;
-				var div = document.getElementById("dynamiccontent");
-				if(!isUserAdmin && !isEstUser)
-				{
-					//Check Private radio button
-					radioBtns[0].checked = true;
-					//Hide Ship To Locations
-					div.style.display = "none";
-				}
-				else
-				{
-					// share private variable will be populated if it is a private list
-					//based on that, the private is selected in the pop up and the locations are not shown
-					if(sharePrivateVar!=null && sharePrivateVar != "") {
-						radioBtns[0].checked = true;
-						//Hide Ship To Locations
-						div.style.display = "none";
-					}
-					else {							
-					//Check Shared radio button
-					radioBtns[1].checked = true;
-					//Display Ship To Locations
-					div.style.display = "block";
-					}
-				}
-				shareSelectAll(false);
-			}
-			
-		});
-
+	
 		$("#various4").fancybox();
 		$("#various5,#various5_1").fancybox({
 			/*'autoDimensions'	: false,
@@ -341,7 +310,6 @@ function showSharedListForm(){
 		});
 		*/	
 	});	
-	
 
      //<!--
      <%
@@ -396,18 +364,42 @@ function showSharedListForm(){
     			}
     			var url = document.getElementById("checkAvailabilityURLHidden");
     			var qty = document.getElementById('QTY_'+myItemsKey).value;
-    		
-    		//XB 214 BR4
+    		    var qtyTextBox = qty;
+    			//XB 214 BR4
     			if(url != null && validateOM == true) {
-    				if(qty == ""){
-    				 	qty = document.getElementById('orderLineOrderMultiple_'+myItemsKey).value;
-            	     			var uom = document.getElementById("baseUOMCode_"+myItemsKey).value;
-    				}
+    				//Added for EB 2034
+    			        var uomConvFactor;
+				var orderMul = document.getElementById("orderLineOrderMultiple_"+myItemsKey);
+				var conversionFactor = document.getElementById("UOMconversion_"+myItemsKey);
+				if(conversionFactor!=null && conversionFactor!=undefined){
+				 	uomConvFactor = document.getElementById("UOMconversion_"+myItemsKey).value;
+				}
+    				if(qty == "" || qty == null || qty == "null"){
+    					var uom = document.getElementById("enteredUOMs_"+myItemsKey).value;
+    					if(orderMul != null && orderMul.value != 0 && uomConvFactor != 0 && conversionFactor != null ){
+    						if(uomConvFactor == 1){
+    							qty = document.getElementById("orderLineOrderMultiple_"+myItemsKey).value;
+    						}
+    						else if(uomConvFactor <= orderMul.value){
+    								if((orderMul.value % uomConvFactor)==0){
+    									qty = orderMul.value / uomConvFactor;
+    								}
+    								else{
+    									qty = 1;
+    								}
+    					    }
+    						else{//if conversionFactor is greater than OrderMul irrespective of the moduloOf(conversionFactor,OrderMul) is a whole number / decimal result we set the Qty to 1
+        						qty = 1;
+        					}
+    					}
+    				}// End of EB 2034
     				else{
         		 		qty = document.getElementById('QTY_'+myItemsKey).value;
         		 		var uom = document.getElementById('UOM_'+myItemsKey).value;
     				}
-    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM);
+    				var customerUom = document.getElementById('custUOM_'+myItemsKey).value;
+    	     		
+    				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM,customerUom,qtyTextBox);
     			} 
     			else{
             		Ext.Msg.hide();
@@ -420,17 +412,16 @@ function showSharedListForm(){
      		}
      }
 		
-		function importItems(msgImportMyItemsError){
-			
-			
+		function displayImportErrorMessage(msgImportMyItemsError){
 			//Clears previous messages if any
 			clearPreviousDisplayMsg()
      		
-			document.getElementById("errorMsgTop").innerHTML = msgImportMyItemsError ;
-            document.getElementById("errorMsgTop").style.display = "inline"; 
+			$('#errorMsgTop,#errorMsgBottom').html(msgImportMyItemsError).show();
+			//document.getElementById("errorMsgTop").innerHTML = msgImportMyItemsError ;
+            //document.getElementById("errorMsgTop").style.display = "inline"; 
                         
-            document.getElementById("errorMsgBottom").innerHTML = msgImportMyItemsError ;
-            document.getElementById("errorMsgBottom").style.display = "inline"; 
+            //document.getElementById("errorMsgBottom").innerHTML = msgImportMyItemsError ;
+            //document.getElementById("errorMsgBottom").style.display = "inline"; 
 		}
 		
 		function deleteItems(){
@@ -450,7 +441,7 @@ function showSharedListForm(){
 			if(isAnyItemSelected){
 				var formItemIds = document.getElementById("formItemIds");
 
-				<s:url id='deleteListLink' action='XPEDXMyItemsDetailsDelete.action' >
+				<s:url id='deleteListLink' action='MyItemsDetailsDelete.action' >
 				</s:url>
 				
 						
@@ -548,7 +539,7 @@ function showSharedListForm(){
 						//Added for JIRA 3642
 						formItemIds.itemCount.value=itemCount; 
 						
-						formItemIds.action="/swc/xpedx/myItems/XPEDXMyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
+						formItemIds.action="/swc/myItems/MyItemsDetailsQuickAdd.action?sfId="+storeFront+"&scFlag=Y";
 						formItemIds.submit();
                         if(!isAdd2List && /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent))
 
@@ -609,7 +600,7 @@ function showSharedListForm(){
 			
 			var formItemIds = document.getElementById("formItemIds");
 			
-			<s:url id='saveAllLink' action='XPEDXMyItemsDetailsChange.action' escapeAmp='false' >
+			<s:url id='saveAllLink' action='MyItemsDetailsChange.action' escapeAmp='false' >
 			</s:url>
 			
 			if (formItemIds){
@@ -629,7 +620,7 @@ function showSharedListForm(){
 		//added for jira 3057
 		function cancelChanges(){
 			var formItemIds = document.getElementById("formItemIds");
-			<s:url id='cancelchange' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			<s:url id='cancelchange' action='MyItemsDetails' escapeAmp='false' >
 			</s:url>
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{cancelchange}' escape='false'/>";
@@ -786,15 +777,14 @@ function showSharedListForm(){
 					
 		function qaValidateItem(divId, jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
 	           //Init vars
-	           <s:url id='qaAddItem' includeParams='none' action='XPEDXMyItemsDetailsQuickAdd' />
+	           <s:url id='qaAddItem' includeParams='none' action='MyItemsDetailsQuickAdd' />
 	           var flag = false;
 	           var jobIdFlag = false;
 	           var jobIdStr = "<s:property value='%{customerFieldsMap.get("CustLineAccNo")}'/>";
 	           if(jobIdStr != null && jobIdStr != "")
 		           jobIdFlag = true;
 	           var customPOFlagstr = "<s:property value='%{customerFieldsMap.get("CustomerPONo")}'/>";
-	           
-	           if(customPOFlagstr != null && customPOFlagstr == "Line PO #")
+	           if(customPOFlagstr != null && customPOFlagstr != "")
 	           	flag = true;
 	           var url = "<s:property value='#qaAddItem'/>";
 	           url = ReplaceAll(url,"&amp;",'&');
@@ -854,18 +844,30 @@ function showSharedListForm(){
     				for(var i = 0; i < addedItems.length; i++){
     					//alert("arrQty[i].value= "+ arrQty[i].value);
     					if(validAddtoCartItemsFlag[i]== true ){
-    					divId='errorDiv_'+ arrQty[i].id;
-    					var divVal=document.getElementById(divId);    					
+    					divId='errorDiv_'+ arrQty[i].id; 
+    					//EB-44
+    					 var uid = arrQty[i].id;
+    					uid = uid.substring(5);   
+    					var enteredQty = document.getElementById('QTY_'+uid).value;
+    					var selectedUomDesc = document.getElementById('UOM_desc_'+uid).value;
+    					document.getElementById('qtys_' + uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('QTY_'+uid).value = document.getElementById('initialQTY_' + uid).value;
+						document.getElementById('enteredQuantities_'+uid).value = document.getElementById('initialQTY_' + uid).value; 						    					
+ 						var divVal=document.getElementById(divId); 
+    					    					
     					if(response.responseText.indexOf(addedItems[i].value+"_"+arrQty[i].value+"_"+arrUOM[i].value) !== -1){
-    						divVal.innerHTML = "Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;
+    						divVal.innerHTML = enteredQty+" "+selectedUomDesc+" "+" has been added to your cart. Please review the cart to update the item with a valid quantity." ;
     						divVal.setAttribute("class", "error");
     					}
     					else{
-    						divVal.innerHTML = "Item has been added to cart." ;
+    						divVal.innerHTML =  enteredQty+" "+selectedUomDesc+" "+" has been added to cart." ;
+    						//divVal.innerHTML =  " It has been added to cart." ;
     						 divVal.setAttribute("class", "success");
     					}
 						  divVal.style.display = "inline-block"; 
 						  divVal.setAttribute("style", "margin-right:5px;float:right;");
+						  
+						  $('#uoms_'+ uid).val(document.getElementById('initialUOM_key_'+ uid).value).change();
 						 
     					
     				}
@@ -931,13 +933,29 @@ function showSharedListForm(){
 	   		        	var draftErr = response.responseText;
 	   		            var draftErrDiv = document.getElementById("errorMessageDiv");
 	   		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
-	   		        {			refreshWithNextOrNewCartInContext();
-	   		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
-	   		                    Ext.Msg.hide();
-	   		                	myMask.hide();
-	   		        }
+	   		      		  {			
+		            	    refreshWithNextOrNewCartInContext();
+		                    draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+		                    Ext.Msg.hide();
+		                	myMask.hide();
+		       			 }
+	  		     	    else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
+	   		     		 {			
+		            	    refreshWithNextOrNewCartInContext();
+		                    draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+		                    Ext.Msg.hide();
+		                	myMask.hide();
+		       			 }
+	   		         	else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
+		             	{
+						 	var orderHeaderKey=document.getElementById("editOrderHeaderKey").value;
+			        	 	var orderdetailsURL=document.getElementById('orderdetailsURLId').value+'&isErrorMessage=Y&orderHeaderKey='+orderHeaderKey;				        	 
+			        		 orderdetailsURL = ReplaceAll(orderdetailsURL,"&amp;",'&');
+			        	 	window.location=orderdetailsURL;//"orderDetail.action?sfId=<s:property value="wCContext.storefrontId" />&orderHeaderKey=<s:property value="#orderHeaderKey" />&scFlag=Y";
+		            	 }
 	   		            else{
 	                	   setMsgOnAddItemsWithQtyToCart(response);  
+	                	   draftErrDiv.innerHTML="";
 	                	    Ext.Msg.hide();
 				    		myMask.hide();
 	   		         	}
@@ -1041,26 +1059,7 @@ function showSharedListForm(){
 			}
 			return errorflag;
 		}*/
-		//Added for XB 214 BR requirements.
-		function convertToUOMDescription(uomCode)
-{
-    var url=document.getElementById("uomDescriptionURL").value;
-    var req=null;
-    if (window.XMLHttpRequest){
-    	req = new XMLHttpRequest();
-    }else{
-    	req = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    url=url+'&uomCode='+uomCode;
-    req.open('POST', url, false);     
-    req.send(null);
-    if(req.status == 200){
-      return req.responseText;
-    }else{
-    	return uomCode;
-    }
-}
-		//End of BR XB 214
+
 		//// Function Start - Jira 3770
 		var isAddToCart=true;
 		function validateOrderMultipleFromAddQtyToCart(isOnlyOneItem,listId){
@@ -1825,7 +1824,16 @@ function showSharedListForm(){
 				
 				document.getElementById("prodId").value= itemSku;
 				document.getElementById("qty").value= itemQty;
-				qaAddItem(jobId, itemQty, itemSku, '1','', 'xpedx #' ); 
+				
+				var itemType = document.getElementById("itemType").value;
+	            var itemTypeText = itemType;
+                var itemTypeSelElem = document.getElementById("itemType");
+                if(itemTypeSelElem!=null){
+                    itemType = itemTypeSelElem.options[itemTypeSelElem.selectedIndex].value;
+                    itemTypeText = itemTypeSelElem.options[itemTypeSelElem.selectedIndex].text;
+                }
+				
+				qaAddItem(jobId, itemQty, itemSku, itemType,'', itemTypeText); 
 			}
 					if(flagTestCloseWindow == "true"){ 
 						$.fancybox.close();
@@ -1850,7 +1858,7 @@ function showSharedListForm(){
 			//document.getElementById('formItemIds').submit();
 			
 			var formItemIds = document.getElementById("formItemIds");
-			<s:url id='exportList' action='XPEDXMyItemsDetails' escapeAmp='false' >
+			<s:url id='exportList' action='MyItemsDetails' escapeAmp='false' >
 			</s:url>
 			if (formItemIds){
 				formItemIds.action = "<s:property value='%{exportList}' escape='false'/>";
@@ -1866,42 +1874,45 @@ function showSharedListForm(){
 			    xpedx_working_start();
                 setTimeout(xpedx_working_stop, 3000);
 		}
-
+		
+		// eb-3627: display number of checkboxes selected
+		//    also eb-4446, which optimized the solution to address scalability issues on IE8
+		<s:if test="editMode">
+			function updateMilCountSelected() {
+				// var numSelectedCheckboxes = $('.milCheckbox:checked').length;
+				var numSelectedCheckboxes = $('.milCheckbox:checked').length;
+				
+				var $milCountPanel = $('.mil-count-selected');
+				if (numSelectedCheckboxes == 0) {
+					$milCountPanel.css('visibility', 'hidden');
+				} else {
+					var totalCheckboxes = $('.milCheckbox').length;
+					$milCountPanel.html('Items to be removed: ' + numSelectedCheckboxes + ' of ' + totalCheckboxes);
+					$milCountPanel.css('visibility', 'visible');
+				}
+			}
+		</s:if>
+		
 		$(document).ready(function() {
-			$("#selAll1").click(function() {
-				if($("#selAll1").attr('checked')) {
-					selectAll();
-					$("#selAll2").attr('checked', true);
-				} else {
-					deSelectAll();
-					$("#selAll2").attr('checked', false);
+			$('.toggleAllSelected').change(function(event) {
+				var checkAll = $(this).attr('checked');
+				
+				var checkboxes = $('.milCheckbox, .toggleAllSelected');
+				for (var i = 0, len = checkboxes.length; i < len; i++) {
+					checkboxes[i].checked = checkAll;
+				}
+				
+				if (typeof(updateMilCountSelected) === 'function') {
+					setTimeout(updateMilCountSelected, 0);
 				}
 			});
-			$("#selAll2").click(function() {
-				if($("#selAll2").attr('checked')) {
-					selectAll();
-					$("#selAll1").attr('checked', true);
-				} else {
-					deSelectAll();
-					$("#selAll1").attr('checked', false);
+			
+			$('.milCheckbox').change(function(event) {
+				if (typeof(updateMilCountSelected) === 'function') {
+					setTimeout(updateMilCountSelected, 0);
 				}
 			});
-
 		});
-		
-		function selectAll(){
-			var checkboxes = Ext.query('input[id*=itemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = true;
-			});
-			
-			var checkboxes = Ext.query('input[id*=checkItemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = true;
-			});
-			
-		}
-		
 
 
 		function displayMsgHdrLevelForLineLevelError() {
@@ -1961,7 +1972,8 @@ function showSharedListForm(){
 				} 
 				formItemIds = document.getElementById('formItemIds');
 			}
-		    <s:url id='testData' action='getItemAvailabiltyForSelected.action'>
+
+			<s:url id='testData' action='getItemAvailabiltyForSelected.action'>
 		    </s:url>
 		    writeMetaTag("DCSext.w_x_sc_count",cnt);
 		    // if(validateOMForMultipleItems == true){
@@ -1976,12 +1988,14 @@ function showSharedListForm(){
 		                   },
 	                   form: 'formItemIds',
 	                  method: 'POST',
+
 	                   success: function (response, request){
-		                   var responseText = response.responseText;
 		                   
-		                   var availabilityRow = document.getElementById('priceDiv');		                   
+			                var responseText = response.responseText;
+		                    var availabilityRow = document.getElementById('priceDiv');		                   
 		            		availabilityRow.innerHTML=responseText;
 		            		assignAvailablity();
+
 		            		var myitemskeys =document.getElementById("chkItemKeys").value;
 		            		var trimMyitemskeys = myitemskeys.trim();
 		            		var myitemskey=trimMyitemskeys.split(",");
@@ -1989,7 +2003,7 @@ function showSharedListForm(){
 		            		availabilityRow.innerHTML='';
 		            		availabilityRow.style.display = '';
 		            		//Added for XB 214 - BR requirements
-				             
+
 		            		// omArray = document.getElementsByName("orderMultipleQtyFromSrc");
 		            		var i,j,k=0;
 		            		 for(i=0;i<checkboxes.length;i++){
@@ -2009,11 +2023,12 @@ function showSharedListForm(){
 		            			 var _myItemKey=myitemskey[k].replace(/^\s+|\s+$/g,"");
 		            			 var orderMultipleQtyUom = omQtyUom.split("|");
 		            			 var orderMultipleQty = orderMultipleQtyUom[0];
-		            			 var orderMultipleUom = orderMultipleQtyUom[1];
+		            			 var orderMultipleUom = orderMultipleQtyUom[2]; // uom desc now in response
 		            			 var omError = document.getElementById("orderMulErrorCode_"+j).value;	
 		            			 var qty = document.getElementById("QTY_"+_myItemKey);
 		            			 var sourceOrderMulError = document.getElementById("errorDiv_qtys_"+_myItemKey);
 		            			 var sourceOrderMulErrorInnerHTML = sourceOrderMulError.innerHTML;
+		            			 document.getElementById("qtys_"+_myItemKey).style.borderColor="";
 		            			 if(qty.value == '0' )
 		            				{
 		            					sourceOrderMulError.innerHTML = "Please enter a valid quantity and try again.";
@@ -2024,23 +2039,24 @@ function showSharedListForm(){
 		            			 else if(sourceOrderMulErrorInnerHTML.indexOf("is currently not valid. Please delete it from your list and contact Customer Service") > -1){
 		            					 document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            			    }
-		            			 else if(omError == 'true' && qty.value > 0)
+		            			 else if(omError == 'true' && (qty.value > 0 || qty.value == ""))
 		            				{
-		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "error");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
+		            					document.getElementById("qtys_"+_myItemKey).style.borderColor="#FF0000";
 		            				}
 		            			 else if(omError == 'true')
 		            				{
-		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "notice");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="none";
 		            				}
 		            				else if(orderMultipleQty != null && orderMultipleQty != 0)
 		            				{
-		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+convertToUOMDescription(orderMultipleUom);
+		            					sourceOrderMulError.innerHTML = "Must be ordered in units of " + addComma(orderMultipleQty) +" "+orderMultipleUom;
 		            					sourceOrderMulError.style.display = "inline-block"; 
 		            					sourceOrderMulError.setAttribute("class", "notice");
 		            					document.getElementById("availabilityRow_"+_myItemKey).style.display ="block";
@@ -2058,6 +2074,7 @@ function showSharedListForm(){
 			            writeWebtrendTag(responseText);
 			            //-- Web Trends tag end --
 	                   },
+
 	                   failure: function (response, request){						
 						  Ext.Msg.hide();
 				          	  myMask.hide();
@@ -2115,19 +2132,6 @@ function showSharedListForm(){
 					}
 				}
 			}
-		}
-
-		function deSelectAll(){
-			var checkboxes = Ext.query('input[id*=itemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = false;
-			});
-			
-			var checkboxes = Ext.query('input[id*=checkItemKeys]');
-			Ext.each(checkboxes, function(obj_item){
-				obj_item.checked = false;
-			});
-			
 		}
 		
 		function selectNone(){
@@ -2282,6 +2286,29 @@ function showSharedListForm(){
 							}
                                      
                  }
+				  
+				  //Added for EB 1150
+				  $(function () {
+   					 var scroll_timer;
+    				 var $message = $('#back-to-top a');
+    				 var $window = $(window);
+
+    				/* react to scroll event on window */
+   					 $window.scroll(function () {
+       				 window.clearTimeout(scroll_timer);
+       				 scroll_timer = window.setTimeout(function () {
+           			 if($window.scrollTop() <= 280)
+           			 {
+                		$message.fadeOut(500);
+           			 }
+           			 else 
+            		 {
+               			 $message.stop(true, true).show().click(function () { $message.fadeOut(500); });
+           			 }
+       			 }, 100);
+   			 });
+		});
+				  //Added for EB 1150 - display back to top button on scroll down
     </script>
     <!-- Added for JIRA 1402 Ends--> 
 
@@ -2307,6 +2334,7 @@ function showSharedListForm(){
 <s:set name='fieldListElem'
 	value="searchableIndexFieldListOutPutElement" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:set name="duplicateInfoMsg" value="#_action.getDuplicateInfoMsg()"/>
 
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
@@ -2314,10 +2342,10 @@ function showSharedListForm(){
 <s:a href="#addToCartDlg" id="addToCartFancybox" cssStyle="display: none;"></s:a>
 <s:a href="#Price_Grid" id="bracketPricing" cssStyle="display: none;"></s:a>
 <s:url id='availabilityURL' action='ajaxAvailabilityJson' namespace='/catalog' />
-<s:url id='checkAvailabilityURL' action='getItemAvailabilty' namespace="/xpedx/myItems" />
+<s:url id='checkAvailabilityURL' action='getItemAvailabilty' namespace="/myItems" />
 <input type="hidden" value="<s:property value='%{checkAvailabilityURL}'/>" id="checkAvailabilityURLHidden"/>
 <s:url id='addToCartURL' namespace='/order' action='addToCart' />
-<s:url id='addToCartURLId' namespace="/xpedx/myItems" action='addMyItemToCart' />
+<s:url id='addToCartURLId' namespace="/myItems" action='addMyItemToCart' />
 <s:hidden id='updatePandAURL' value='%{#addToCartURLId}' />
 <s:hidden id='currentCartInContextOHKVal' value='%{#currentCartInContextOHK}' />
 
@@ -2355,7 +2383,7 @@ function showSharedListForm(){
 <%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
 <!-- Enter one item per line:<br /> -->
 <!-- Qty. [Tab or Comma] Item#</p> -->
-<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
+<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers or customer item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
 <p>To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).<br/> Example: ,5002121  <br />
 </p>
 <br />
@@ -2375,7 +2403,7 @@ function showSharedListForm(){
 
 <div id="dlgEditForm" class="dlgForm">
 <h3>Edit Record</h3>
-<s:form id="formEdit" action="XPEDXMyItemsDetailsChange" method="post">
+<s:form id="formEdit" action="MyItemsDetailsChange" method="post">
 	<s:textfield label="Name" name="name"></s:textfield>
 	<s:textfield label="Desc" name="desc"></s:textfield>
 	<s:textfield label="Qty" name="qty"></s:textfield>
@@ -2423,8 +2451,8 @@ function showSharedListForm(){
         <div class="container" style="min-height: 535px;">
             <!-- breadcrumb -->
 			<s:url action='home.action' namespace='/home' id='urlHome'
-				includeParams='none' /> <s:url id='urlMIL' namespace='/xpedx/myItems'
-				action='XPEDXMyItemsList.action' includeParams="get" escapeAmp="false">
+				includeParams='none' /> <s:url id='urlMIL' namespace='/myItems'
+				action='MyItemsList.action' includeParams="get" escapeAmp="false">
 				<s:param name="filterByAccChk" value="%{#_action.getFilterByAccChk()}" />
 				<s:param name="filterByShipToChk" value="%{#_action.getFilterByShipToChk()}" />
 				<s:param name="filterByMyListChk" value="%{#_action.getFilterByMyListChk()}" />
@@ -2437,6 +2465,12 @@ function showSharedListForm(){
 				value="ajaxLineStatusCodeMsg" /></font></b></h5>
 			</div>
 			<div id ="errorMessageDiv"> </div>
+			<br/>
+			<div id="infoMessage">
+				<s:if test=' "" != duplicateInfoMsg '>
+					<s:property value="duplicateInfoMsg" />
+				</s:if>
+			</div>
 
 			<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 			<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
@@ -2499,13 +2533,21 @@ function showSharedListForm(){
             <div id="mid-col-mil">
            		 	<s:if test='editMode != true'> 
                         <div class="ad-float">
-                        <div class="float-left smallBody">
+                        <div class="smallBody">
 						
-						<img class="float-left" style="margin-top:5px; padding-right:5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
-						
+						<img style="margin-top:5px; padding-right:5px;display: inline;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="7" height="4" alt="" />advertisement</div>
+						<!-- Added for EB-1714 Display a Saalfeld advertisement image on MIL Starts -->
+							 <s:set name='storefrontId' value="wCContext.storefrontId" />
+						<%--<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+							 </s:if>--%> 
+							<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+							 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+	                        </s:if> 
+                  		<!-- EB-1714 END -->     
                         <div class="clear"></div>
                         <!-- Ad Juggler Tag Starts -->
-                        <s:set name='ad_keyword' value='' />						
+                 <s:set name='ad_keyword' value='' />						
 				<s:iterator status="status" id="item" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
 					<s:if test="%{#status.index == 0}">
 							<s:set name='itemId1' value='#item.getAttribute("ItemId")+"" ' />
@@ -2522,13 +2564,13 @@ function showSharedListForm(){
 				<!--aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/  -->
 				
 		<s:if test='%{#ad_keyword != null}' >
-			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
+			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118165'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
-			</s:if>
+			</s:if> 
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
 								<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
@@ -2559,13 +2601,13 @@ function showSharedListForm(){
 			</s:else>			
 		</s:if>	
 		<s:else>
-			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
+			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '118165'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
-			</s:if>
+			</s:if> 
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
 								<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
@@ -2595,7 +2637,7 @@ function showSharedListForm(){
 				</script>
 			</s:else>			
 		</s:else>
-			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
+			<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script> 
 			<!-- Ad Juggler Tag Ends -->
 </div>
 </s:if>
@@ -2606,7 +2648,7 @@ function showSharedListForm(){
                 <div class="clear"></div>
                 <fieldset class="mil-non-edit-field">
                     <legend>For Selected Items:</legend>
-                    <input class="forselected-input" type="checkbox" id="selAll1"/>
+                    <input class="forselected-input toggleAllSelected" type="checkbox" id="selAll1"/>
                    <%--  <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
                     <a class="grey-ui-btn float-left" href="javascript:myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
                 </fieldset>
@@ -2636,8 +2678,13 @@ function showSharedListForm(){
                         <div class="clear">&nbsp;</div>
 						<s:hidden id="mandatoryFieldCheckFlag_quick-add" name="mandatoryFieldCheckFlag_quick-add" value="%{false}"></s:hidden>
                         <h2 style="float: left; margin-top:5px;">Quick Add</h2>
+                        <s:set name='storefrontId' value="wCContext.storefrontId" />
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
                         <p class="quick-add-aux-links underlink" style="color: orange;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
-
+						</s:if>
+						<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<p class="quick-add-aux-links underlink" style="color:  #006a3a;margin-top:5px; margin-right:5px;"> <a id="various2" class="modal" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy and Paste</a></p>
+						</s:elseif>
                         <div class="clear">&nbsp;</div>
                         <div class="quick-add-form-top">&nbsp;</div>
                         <div class="quick-add-form quick-add-form-mil">
@@ -2660,7 +2707,7 @@ function showSharedListForm(){
                                     <!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
 									<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 										<li>
-											<label>Line PO #</label>
+											 <label><s:property value="#custPONo" />:</label>
 											 <!--Blank space removed 3693  -->
 											<s:textfield maxlength="22"  cssStyle="width:154px;" cssClass="text x-input" name="purchaseOrder" value=""></s:textfield>
 										</li>
@@ -2675,16 +2722,22 @@ function showSharedListForm(){
 									</s:if>
 									<li class="nomarginright">
 										<label>&nbsp;</label>
-										<input type="image"
-											src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
+										<s:set name='storefrontId' value="wCContext.storefrontId" />
+										<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+											<input type="image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
 											onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
+										</s:if>
+										<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+										<input type="image"	src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/buttons/addtoquicklist green.png"
+											onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
+										</s:elseif>
 									</li>
 
                                 </ul>
                             </form>
 
 							<s:form id="formAdd2List" cssClass="form quick-add-to-cart-form" cssStyle="padding-right:21px;"
-								action="XPEDXMyItemsDetailsQuickAdd" method="post">
+								action="MyItemsDetailsQuickAdd" method="post">
 								<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 								<s:hidden name="listName" value=""></s:hidden>
 								<s:hidden name="listDesc" value=""></s:hidden>
@@ -2702,7 +2755,7 @@ function showSharedListForm(){
                                             <th class="col-header qty-col">Qty</th>
                                             <th class="col-header uom-col">UOM</th>
                                             <s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-                                            	<th class="col-header col-header job-col">Line PO #</th>
+                                            	<th class="col-header col-header job-col"><s:property value="#custPONo" /></th>
                                             </s:if>
 											<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 												<th class="last-col-header col-header po-col"><!-- Job Number  --><s:property value="#jobIdFlag" /></th>
@@ -2732,12 +2785,6 @@ function showSharedListForm(){
 
                     </div>
                     <div class="mil-edit-forms">
-<%-- 						<s:if test="%{errorMsg == 'ItemsOverLoad'}"> --%>
-<!-- 							<div style="color:red"><h3> -->
-<!-- 							Your list may contain a maximum of 200 items, Please delete some items and try again. -->
-<!-- 							</h3></div> -->
-<!-- 							<br /> -->
-<%-- 						</s:if> --%>
 
 						<s:set name='isPrivateList' value="%{#_action.isFilterByMyListChk()}"/>
 						<s:set name='isSelectedList' value="%{#_action.isFilterBySelectedListChk()}"/>
@@ -2779,6 +2826,11 @@ function showSharedListForm(){
 							<textarea class="x-input" id="listDesc" title="Description" rows="2" onkeyup="javascript:restrictTextareaMaxLength(this,250);" style="width:220px; height: 92px; word-wrap:break-word; "><s:property
 							value="listDesc"  /></textarea>
 						</s:else>
+						
+						<div class="notice mil-count-selected mil-count-selected-top" style="visibility:hidden;">
+							Placeholder text
+						</div>
+						
                     </div>
                     <div class="clear">&nbsp;</div>
                 </div>
@@ -2792,7 +2844,7 @@ function showSharedListForm(){
 					<fieldset class="mil-edit-field">
 	                    <legend>For Selected Items:</legend>
 	
-	                    <input class="forselected-input-edit" type="checkbox" id="selAll1" />
+	                    <input class="forselected-input-edit toggleAllSelected" type="checkbox" id="selAll1" />
 						<s:if test="%{canDeleteItem}">
 							<a class="grey-ui-btn float-left" href="javascript:deleteItems();"><span>Remove Items</span></a>
 						</s:if>                    
@@ -2835,23 +2887,6 @@ function showSharedListForm(){
 				<s:set name='itemDescMap' value="getItemDescMap()" />
 				<s:hidden name="xpedxTimer" id="xpedxTimer" value="0" />
 				
-				<!-- /*
-				<s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
-						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
-						<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
-						<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" ><h5 align="center"><b><font color="red">Row(s) <s:property value='#rowNums' /> failed to import.
-						</font></b></h5></div>
-						<br />
-					
-						<script type="text/javascript">
-							importItems( );
-						</script>
-				</s:if>
-				*/ -->
-				
-
-            
-         
                  
                <ul style="float:center;text-align: center; background-color:white !important;">
                  <li style="margin-bottom: 5px;">   
@@ -2870,11 +2905,17 @@ function showSharedListForm(){
 					</script>
 				</s:if>
 				<s:if test="%{errorMsg == 'ItemsOverLoad'}">
-							<div class="error">
-							      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
-							         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
-							</div>
-						</s:if>
+					<div class="error">
+					      <!--   Your list may contain a maximum of 200 items. Please delete some items and try again. -->
+					         <s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT200' />
+					</div>
+				</s:if>
+				<s:if test="%{errorMsg == 'InvalidFormat'}">
+					<div class="error">
+					      <!--   An unexpected error occured (eg, a row had too few columns) -->
+					      The import file is not in the correct file layout. Download the sample file for an example of the correct layout and try again.
+					</div>
+				</s:if>
 					<br/>
                  </li> 
                </ul>
@@ -2883,6 +2924,8 @@ function showSharedListForm(){
                
                
                <s:set name="baseUOMs" value="#_action.getBaseUOMmap()" />
+               <s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />
+               
              	<s:set name="webtrendsItemTypeMap" value="%{#_action.getItemTypeMap()}" />
 				<s:iterator status="status" id="item"
 					value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems")'>
@@ -2901,9 +2944,19 @@ function showSharedListForm(){
 					<s:set name='itemTypeLabel' value="%{#xpedxItemLabel + '+:'}" />
 					<s:set name='showItemType' value='%{true}' />
 					<s:set name='itemUomId' value='#item.getAttribute("UomId")' />
-					
+					<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemId)' />
 					<s:set name="itemUOMsMap" value='itemIdConVUOMMap.get(#itemId)' />
 					<s:set name="itemBaseUom"  value='#baseUOMs.get(#itemId)' />
+					
+					<s:if test='%{#customerUOM==#itemBaseUom}'>
+						<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+						<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
+					</s:if>
+					<s:else>
+						<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemBaseUom)" />
+					</s:else>
+
+					
 					<s:set name="YFSItmePrimaryInfo" value='descriptionMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name="YFSItmeExtn" value='masterItemExtnMap.get(#item.getAttribute("ItemId"))' />
 					<s:set name='certFlag' value='#YFSItmeExtn.getAttribute("ExtnCert")' />					
@@ -2941,7 +2994,7 @@ function showSharedListForm(){
 						<s:set name='showItemType' value='%{false}' />
 					</s:elseif>
 
-					<s:url id='deleteListLink' action='XPEDXMyItemsDetailsDelete.action'>
+					<s:url id='deleteListLink' action='MyItemsDetailsDelete.action'>
 						<s:param name="key" value="#id" />
 						<s:param name="listKey" value="%{listKey}" />
 						<s:param name="listName" value="%{listName}" />
@@ -2959,10 +3012,10 @@ function showSharedListForm(){
 
 
     				<s:if test="#status.last" >
-                   		<div class="mil-wrap-condensed-container mil-only last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >    
+                   		<div class="mil-wrap-condensed-container mil-only last"  onmouseover="$(this).addClass('green-background');" onmouseleave="$(this).removeClass('green-background');" >    
            			</s:if>
            			<s:else>
-           				<div class="mil-wrap-condensed-container mil-only"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >  
+           				<div class="mil-wrap-condensed-container mil-only"  onmouseover="$(this).addClass('green-background');" onmouseleave="$(this).removeClass('green-background');" >  
            			</s:else>
            
     
@@ -2975,9 +3028,9 @@ function showSharedListForm(){
                         <!-- begin image / checkbox   -->
                         <div class="mil-checkbox-wrap">
 							<s:if test='editMode == true'>
-								<s:checkbox name="itemKeys" fieldValue="%{#id}" />
+								<s:checkbox name="itemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 							</s:if> <s:if test='editMode != true'>
-								<s:checkbox name="checkItemKeys" fieldValue="%{#id}" />
+								<s:checkbox name="checkItemKeys" fieldValue="%{#id}" cssClass="milCheckbox" />
 							</s:if>
                             <!-- div class="mil-question-mark"> --> 
                             <a href='<s:property value="%{itemDetailsLink}" />'>
@@ -3012,30 +3065,27 @@ function showSharedListForm(){
 										<s:hidden name="descs" value="%{#desc}" />
                                 </ul>                                                 
 								<s:if test="%{#showItemType}">
-									<p ><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value="#itemId" />									
+									<p ><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value="#itemId" /></b>			
 										<s:if test='#certFlag=="Y"'>
 											<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" style="margin-left:0px; display: inline;">
 										</s:if>
 									</p>
 									
-																
-									<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
+										<%-- JIRA xb-805 & xb-840 Code Changes Begin --%>								
+									<s:if test='skuMap!=null && skuMap.size()>0'>
 										<s:set name='itemSkuMap' value='%{skuMap.get(#itemId)}'/>
-										<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-										
-											<p class="fields-padding"><s:if test='%{customerSku == "1"}' >
-												<s:property value="#customerItemLabel" />:
-											</s:if>
-											<s:elseif test='%{customerSku == "2"}'>
-												<s:property value="#manufacturerItemLabel" />:
-											</s:elseif>
-											<s:else>
-												<s:property value="#mpcItemLabel" />:
-											</s:else>
-											
-											<s:property value='#itemSkuVal' /></p>
-										
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
 									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p class="fields-padding">
+												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p class="fields-padding">
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+											</s:if>			
+									<%-- JIRA xb-805 & xb-840 Code Changes End --%>	
 					
 								</s:if>
 							<%-- JIRA 356 Code Changes Begin --%>	
@@ -3050,17 +3100,21 @@ function showSharedListForm(){
 									<s:else>
 										<p>Mill / Mfg. Item - Additional charges may apply</p>
 									</s:else>
-								</s:if>
-						
+								</s:if>					
+							
+							</div>
+							<%-- JIRA 356 Code Changes End --%>	
+				</div>
+				<div style="width:420px;padding-left:12px;padding-top:10px">
 							<s:if test='editMode == true'>
 							<%-- Show Replacement link only in Edit mode --%>
 									<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-										<p class="replacementtext"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This Item has been replaced.</a></p>
+										<p class="replacementtext"><a href="#linkToReplacement" class="modal red" onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>This item will be replaced once inventory is depleted.</a></p>
 									</s:if>
 								</s:if>
 								<s:else>
 								  <s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-									<p class="replacementtext">This item has been replaced.&nbsp;<img
+									<p class="replacementtext">This item will be replaced once inventory is depleted.&nbsp;<img
 					alt="To replace or add item, click the Edit This List button."
 					title="To replace or add item, click the Edit This List button."
 					height="12" border="0" width="12"
@@ -3068,9 +3122,7 @@ function showSharedListForm(){
 									 </p>
 									</s:if>
 								</s:else>
-							</div>
-							<%-- JIRA 356 Code Changes End --%>	
-				</div>
+								</div>
 							<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 								<p class="mil-replaced"> <a class="modal red" href='javascript:showXPEDXComplimentaryItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property  value="#orderLine.getAttribute('OrderedQty')"/>");'>Complimentary</a></p>
 								<br />
@@ -3086,7 +3138,7 @@ function showSharedListForm(){
 
 						<div class="mil-action-list-wrap">
 
-                            <table class="mil-config" width="330" border="0" cellspacing="0" cellpadding="0">
+                            <table class="mil-config" width="380" border="0" cellspacing="0" cellpadding="0">
                                 <s:if test='editMode == true'>
 									<tr>
 
@@ -3109,29 +3161,33 @@ function showSharedListForm(){
 								</s:if>
 								<tr>
                                     <td align="right" width="112"><label style="text-align:right;">Qty:</label></td>
-                                    <td width="142" colspan="2">                                    
+                                    <td width="142" colspan="2" align="left">                                    
 										<!-- Qty --> <s:hidden
 											name="itemQty" value="%{#qty}" /> <s:hidden
 											id="enteredQuantities_%{#id}" name="enteredQuantities" value="%{#qty}" /> 
-
+											<s:hidden id="custUOM_%{#id}" name="custUOM" value="%{#customerUOM}" />
+											<s:hidden name='initialQTY_%{#id}' id='initialQTY_%{#id}' value='%{#qty}'/>
 											<!-- UOM & Custom Fields -->
 											<s:if test="%{#itemType != '99.00'}">
 												<s:textfield
-												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}"  maxlength="7" tabindex="1"
+												title="QTY" cssClass="x-input" cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"  maxlength="7" tabindex="1"
 												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);" theme="simple"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
 												<s:hidden id="itemBaseUOM_%{#id}" name="itemBaseUOM" value="%{#itemBaseUom}" />
 													<s:if test="#uomList!=null" >
-													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms" list="#uomList"
+													<s:select cssClass="xpedx_select_sm" cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"  list="#uomList"
 													listKey="key"
 													listValue="value" 
-													value="itemUomId" onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');" theme="simple"/>
-													</s:if>
+													value='itemUomId' onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');" theme="simple"/>
+													<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}'/>
+													<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
+													<s:hidden name='UOM_desc_%{#id}' id='UOM_desc_%{#id}' value="%{#itemUomIdDesc}"/>
+													</s:if>												
 												<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value="%{#itemUomId}"/>
 											</s:if> <s:else>
 												<s:textfield
-												title="QTY" cssClass="x-input" cssStyle="width:55px;" name="qtys" id="qtys_%{#id}" tabindex="1"
+												title="QTY" cssClass="x-input" cssStyle="width:51px;" name="qtys" id="qtys_%{#id}" tabindex="1"
 												value="%{#qty}" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);" theme="simple" readonly="true"></s:textfield>
 												<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}'/>
 												<s:textfield cssClass="x-input" cssStyle="width:140px;" name="uoms" value="%{#itemUomId}" onchange="javascript:updateHidden(this,'%{#id}');" theme="simple" readonly="true"/>
@@ -3171,12 +3227,13 @@ function showSharedListForm(){
 											value='%{#item.getAttribute(#customKey)}' />
 										</s:if>
 										<tr>
-											<td align="right"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
+											<td align="right" width="169"><label style="text-align:right;"><s:property value="%{#FieldValue}" />:</label></td>
 											<td>
 												<%-- Creating text field with name as the Customer field name --%>
 												
 												<%-- BB: Need to add an if statement here, to determine which cdf this is. one has a max of 22, the other 24. --%>
 												<%--Start JIRA 3693  --%>
+												<%--Start JIRA 449  --%>
 												<s:if test="%{#FieldLabel == 'CustLineAccNo'}">
 												<s:textfield cssStyle="width:198px;" cssClass="x-input" maxlength="24"
 													name='customField%{#FieldLabel}s' id="customField%{#FieldLabel}s"
@@ -3214,11 +3271,11 @@ function showSharedListForm(){
 							<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}"/>
 							    <ul style="float: right; width: 281px;" class="tool-bar-bottom" id="tool-bar">
                                 <li style="float: left; display: block; position: absolute; right: 127px; margin-right: 8px;"><a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" 
-                                onclick="javascript:checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')" style="margin-left: 25px;"> 
+                                 style="margin-left: 25px;"> 
 								<span class="mil-mpna">My Price &amp; Availability&nbsp;&nbsp;</span></a></li>
                                 <%-- <li style="margin-left: 72px;"><a class="orange-ui-btn" href="javascript:addItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li> --%>
                                 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-                                	<li style="margin-left: 180px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
+                                	<li style="margin-left: 170px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Cart</span></a></li>
                                 </s:if>
                                 <s:else>
                                 	<li style="margin-left: 165px;"><a class="orange-ui-btn" href="javascript:myAddItemToCart('<s:property value="#itemId"/>','<s:property value="#id"/>')"><span>Add to Order</span></a></li>
@@ -3227,7 +3284,7 @@ function showSharedListForm(){
 	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
 	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
 	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
-	                               		<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))"></s:property>
+	                               		<s:property value="#baseUOMDesc"></s:property>
 	                               	</div>
 	                               	<%--Added below hiddens for Jira 3197- MIL Messaging --%>
 	                               	<s:hidden name="hiddenUOMOrdMul_%{#id}"  id="hiddenUOMOrdMul_%{#id}" value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#baseUOMs.get(#itemId))}"></s:hidden>
@@ -3258,6 +3315,17 @@ function showSharedListForm(){
 
                             
 							</s:if>
+							<s:else>
+							<s:if test='%{#mulVal >"1" && #mulVal !=null}'> 
+	                               <li style="float: right; display: block; margin-right: 2px; margin-top: 3px; width: 275px;"> 
+	                               <div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display : inline; float: right;">
+	                               		<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp; 
+	                               		<s:property value="#baseUOMDesc"></s:property>
+	                               	</div>                               	
+	                              	
+	                               </li>
+                                </s:if>
+							</s:else>
 							 
                         </div>
                     </div>    
@@ -3336,7 +3404,7 @@ function showSharedListForm(){
 						
 						<fieldset class="mil-non-edit-field">
 							<legend>For Selected Items:</legend>
-							<input class="forselected-input" type="checkbox" id="selAll2"/>
+							<input class="forselected-input toggleAllSelected" type="checkbox" id="selAll2"/>
 							<%-- <a class="grey-ui-btn float-left" href="javascript:updateSelectedPAA()"><span>Update My Price &amp; Availability</span></a> --%>
 							<a class="grey-ui-btn float-left" href="javascript:javascript:writeMetaTag('DCSext.w_x_sc_itemtype','<s:property value="#webtrendsItemType"/>');myUpdateSelectedPAA()"><span>Update My Price &amp; Availability</span></a>
 						</fieldset>
@@ -3363,14 +3431,14 @@ function showSharedListForm(){
 							<fieldset class="mil-edit-field">
 								<legend>For Selected Items:</legend>
 	
-								<input class="forselected-input-edit" type="checkbox" id="selAll2" />
+								<input class="forselected-input-edit toggleAllSelected" type="checkbox" id="selAll2" />
 								<s:if test="%{canDeleteItem}">
 									<a class="grey-ui-btn float-left" href="javascript:deleteItems();"><span>Remove Items</span></a>
 								</s:if>                    
 							</fieldset>
 							<ul id="tool-bar" class="tool-bar-bottom" style="width:503px; float:left; padding-top:5px; margin-left:9px;">
 								<s:if test="%{canShare}">
-								<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink2" ><span>Share List</span></a></li>
+								<li><a class="grey-ui-btn " href="#dlgShareList" id="dlgShareListLink1" ><span>Share List</span></a></li>
 								</s:if>
 								<s:else>																
 									<s:if test='#shareAdminOnlyFlg=="" || #shareAdminOnlyFlg=="N"'>																			
@@ -3391,7 +3459,14 @@ function showSharedListForm(){
 					</s:else>
 			
                 </div>
-                            <div class="clearall"></div>
+				
+                <div class="clearall"></div>
+				
+				<s:if test="editMode">
+					<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility:hidden;">
+						Placeholder text
+					</div>
+				</s:if>
             <ul>
 			<li style="text-align: center;">
                             
@@ -3411,21 +3486,28 @@ function showSharedListForm(){
             </li>
 			</ul>
             <div class="clearall"></div>
-               
-            <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
-						<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
-						<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
-						<%-- set rowNums for Jira 3197 - MIL Messaging, Added space in message--%>
-						<s:set name='rowNums' value='%{#rowNums.replace(",",", ")}' />
-						<br />
+            
+            <script type="text/javascript">
+            	var milFileImportMsg = [];
+            	
+	            <s:if test="%{errorMsg!=null && errorMsg!= '' && errorMsg.indexOf('ROW_PROCESSING_ERROR')>-1}">
+					<s:set name='errIndex' value='%{errorMsg.indexOf("@")}' />
+					<s:set name='rowNums' value='%{errorMsg.substring(#errIndex +1, errorMsg.length())}' />
 					
-						<script type="text/javascript">
-						//Modified For Jira 3197 - milFileImportMsg
-						var milFileImportMsg = "Row(s) "+ '<s:property value="#rowNums" />' + " failed to import.";
-						//var milFileImportMsg = "<s:text name='MSG.SWC.ITEM.LISTIMPORT.ERROR.NUMROWSFAILED' /> " + '<s:property value="#rowNums" />' ;
-						importItems(milFileImportMsg);
-						</script>
+					var msg = 'Row(s) <s:property value="#rowNums" /> failed to import. The supplier part number(s) are not valid.';
+					msg = msg.replace(/\-/g, ', ');
+					milFileImportMsg.push(msg);
 				</s:if>
+				<s:if test='%{#parameters.errorMsgRowsMissingItemId != null && #parameters.errorMsgRowsMissingItemId.length == 1 && #parameters.errorMsgRowsMissingItemId[0] != ""}'>
+					var msg = 'Row(s) <s:property value="%{#parameters.errorMsgRowsMissingItemId[0]}" /> failed to import. The supplier part number(s) are missing.';
+					msg = msg.replace(/\-/g, ', ');
+					milFileImportMsg.push(msg);
+				</s:if>
+				
+            	if (milFileImportMsg.length > 0) {
+            		displayImportErrorMessage(milFileImportMsg.join('<br/><br/>'));
+            	}
+            </script>
 				
 				
 	<br/>
@@ -3512,6 +3594,9 @@ function showSharedListForm(){
 			</s:if>
         <!-- END carousel -->
 		 </s:if>
+		 <%--Added for EB 1150 --%>
+		 <div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)"></a></div>
+		 
 		 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
          <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
          <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
@@ -3543,7 +3628,12 @@ function showSharedListForm(){
 
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box">
 	  <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2>
-         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;border: 1px solid #CCC; border-radius: 6px;">
+        <s:if test="#altItemList.size() > 1">
+	   <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;border: 1px solid #CCC; border-radius: 6px;">
+	  </s:if>
+	  <s:else>
+	   <!-- Light Box --><div style=" height:250px; width:580px; overflow:hidden;border: 1px solid #CCC; border-radius: 6px;">
+	  </s:else>
    		<script type="text/javascript">
 			Ext.onReady(function(){		
 	       
@@ -3553,7 +3643,10 @@ function showSharedListForm(){
 				
 				
 				});
-		</script>  
+		</script> 
+		<s:if test="#altItemList.size() > 0">
+			 <input type="hidden" id="rListSize_<s:property value='key'/>" value=<s:property value='#altItemList.size()'/> />  
+		</s:if> 
 		<s:iterator value='#altItemList' id='altItem' status='iStatus'>
 		<s:if test="!#iStatus.last" >
 			<div class="mil-wrap-condensed-container"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
@@ -3561,7 +3654,7 @@ function showSharedListForm(){
 		<s:else>
 			<div class="mil-wrap-condensed-container last"  onmouseover="$(this).addClass('green-background');" onmouseout="$(this).removeClass('green-background');" >
 		</s:else>
-            <div class="mil-wrap-condensed" style="min-height:200px;">
+            <div class="mil-wrap-condensed" style="min-height:240px;">
 		
 				<s:set name='uId' value='%{key + "_" +#altItem.getAttribute("ItemID")}' />
 	
@@ -3587,15 +3680,10 @@ function showSharedListForm(){
 							<s:param name="unitOfMeasure" value="#ritemUomId" />
 						</s:url>
 						<!-- Checked in for JIRA XBT-335  -->
-						<s:if test="#iStatus.first" >
-                  			 <input name="relatedItems"
-								onclick="javascript:setUId('<s:property value="#uId" />');"	type="radio" checked="checked" />
-								<script>
-										Ext.onReady(function(){ 
-										selReplacementId='<s:property value="#uId" />';
-									});
-							  </script>
-						</s:if>
+						<s:if test="#altItemList.size() == 1">
+                                                <input name="relatedItems" type="radio" checked="true"/>
+                                                 <input type="hidden" id="hUId_<s:property value='key'/>" value='<s:property value="#uId" />' />                 
+                       </s:if>	
 						<s:else>
 						<input name="relatedItems" 
 								onclick="javascript:setUId('<s:property value="#uId" />');" type="radio" />
@@ -3622,10 +3710,11 @@ function showSharedListForm(){
 					<s:hidden id="replacement_%{uId}_uom" name="replacement_%{uId}_uom" value="%{#repItemUOM}" />
 
                 <!-- begin description  -->
+                <!--   EB 783 -->
                 <div class="mil-desc-wrap">
                     <div class="mil-wrap-condensed-desc replacement-items" style="height:auto; max-height:59px;"><s:if test="%{#ritemType != 99}">
 								<a href='<s:property value="%{ritemDetailsLink}" />'>
-								<span class="short-description"><s:property value="#name" /></span>
+								<span class="full-description-replacement-model"><s:property value="#name" /></span>
 								</a>	
 							</s:if>
 							</div>
@@ -3637,11 +3726,18 @@ function showSharedListForm(){
                        <%--  <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/></p>
                         <p>Replacement Item #: <s:property value='rItemID' /></p> --%>
                         
-<%--                         <s:if test="%{#rItemID}"> --%>
-							 <p>xpedx Item #: <s:property value="#rItemID" /></p>
- 
-                             <p>Mfg. Item #: To be implemented </p>
-<%-- 						</s:if> --%>
+							 <p><s:property value="wCContext.storefrontId" /> Item #: <s:property value="#rItemID" /></p> 
+                            <s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='rItemSkuMap' value='%{skuMap.get(#rItemID)}'/>
+										<s:set name='rMfgItemVal' value='%{#rItemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='rPartItemVal' value='%{#rItemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p><s:property value="#manufacturerItemLabel" />: <s:property value='#rMfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p><s:property value="#customerItemLabel" />: <s:property value='#rPartItemVal' /></p>
+											</s:if>	
                         
                     </div>
                 </div>
@@ -3683,11 +3779,12 @@ function showSharedListForm(){
 	<s:hidden name="listName" value="%{listName}"></s:hidden>
 	<s:hidden name="listDesc" value="%{listDesc}" />
 	<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
+	<s:hidden name="editMode" value="%{true}"></s:hidden>
 	<s:hidden name="sharePermissionLevel" value="%{sharePermissionLevel}"></s:hidden>
 	<s:hidden name="shareAdminOnly" value="%{shareAdminOnly}"></s:hidden>
 	<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>
 	<s:hidden name="listCustomerId" value="%{listCustomerId}"></s:hidden>
-
+	
 	<s:hidden name="itemId" value="" />
 	<s:hidden name="name" value="" />
 	<s:hidden name="desc" value="" />
@@ -3696,12 +3793,14 @@ function showSharedListForm(){
 	<s:hidden name="itemType" value="1" />
 	<s:hidden name="uomId" value="" />
 	<s:hidden name="order" value="" />
-</s:form> <s:form id="formRIReplaceInList" action="XPEDXMyItemsDetailsChange"
+	
+</s:form> <s:form id="formRIReplaceInList" action="MyItemsDetailsChange"
 	method="post">
 	<s:hidden name="listKey" value="%{listKey}"></s:hidden>
 	<s:hidden name="listName" value="%{listName}"></s:hidden>
 	<s:hidden name="listDesc" value="%{listDesc}" />
 	<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
+	<s:hidden name="editMode" value="%{true}"></s:hidden> 
 	<s:hidden name="sharePermissionLevel" value="%{sharePermissionLevel}"></s:hidden>
 	<s:hidden name="shareAdminOnly" value="%{shareAdminOnly}"></s:hidden>
 	<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>
@@ -3739,10 +3838,6 @@ function showSharedListForm(){
 		}
 		updateValidation();
 	</script>
-	
-	
-	
-
 
 <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
@@ -3756,7 +3851,7 @@ function showSharedListForm(){
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <!-- Web Trends tag end  -->
-
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <!--<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/lib/jquery.jcarousel.min.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain.js"></script>
@@ -3783,5 +3878,14 @@ function showSharedListForm(){
 -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numberformatter-1.1.0<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.blockUI<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+		var id1Left= $('#main').width()		
+		backToTopLeft = parseInt(id1Left+5) + 'px';
+		$('#back-to-top').css('padding-left',backToTopLeft);
+		$('#back-to-top a').css('padding-left',backToTopLeft);
+
+} );
+</script>
 </body>
 </html>

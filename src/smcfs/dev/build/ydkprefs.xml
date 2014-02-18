@@ -5,32 +5,74 @@
             <AuditDeployment ValidateLockid="N" ValidateOldValues="Y" ValidateRecordExistsBeforeDelete="Y"/>
         </Settings>
         <SourceDatabases>
-            <Database Name="MC" className="oracle.jdbc.OracleDriver"
-                dbType="oracle" folder=""
-                jdbcURL="jdbc:oracle:thin:@10.11.24.180:1522:yantra"
-                schema="xpedx_mconfig" user="xpedx_mconfig"/>
 			<Database Name="MC_XML_IMP" className="" dbType="xml"
-                folder="/data/cdt/import"
+                folder="/xpedx/sci_build/CDT/import"
                 httpurl=""
                 httpuser="" jdbcURL="" schema="" user=""/>
+            <Database Name="MC" className="oracle.jdbc.OracleDriver"
+                dbType="oracle" folder="" httpurl=""
+                jdbcURL="jdbc:oracle:thin:@164.103.185.68:1521:NGD1"
+                schema="NG" user="ng"/>
         </SourceDatabases>
         <TargetDatabases>
-            <Database Name="MC_XML_EXP" className="" dbType="xml"
-                folder="/data/cdt/export"
-                httpurl="http://10.11.26.205:9005/context-root/interop/InteropHttpServlet"
+			<!-- Target DB - DEV -->
+			<Database Name="DEV" className="oracle.jdbc.OracleDriver"
+                dbType="oracle" folder="" httpurl="http://xpappd01:8003/smcfs/interop/InteropHttpServlet"
+                jdbcURL="jdbc:oracle:thin:@oratst08:1521:NGD1"
+                schema="ng" user="ng"/>
+
+			<!-- Target DB - INTEG -->
+			<Database Name="INTEGRATION" className="oracle.jdbc.OracleDriver"
+                dbType="oracle" folder="" httpurl="http://xpappint01:8003/smcfs/interop/InteropHttpServlet"
+                jdbcURL="jdbc:oracle:thin:@oratst08:1521:NGD1"
+                schema="INT1" user="int1"/>
+			
+			<!-- Target DB - STAGE -->
+            <Database Name="STAGE" className="oracle.jdbc.OracleDriver"
+                dbType="oracle" folder="" httpurl="http://xpappt01:8003/smcfs/interop/InteropHttpServlet"
+                jdbcURL="jdbc:oracle:thin:@oratst08:1521:NGT1"
+                schema="NG" user="ng"/>
+			
+			<!-- Target DB - PROD -->
+            <!-- <Database Name="PROD" className="oracle.jdbc.OracleDriver"
+                dbType="oracle" folder="" httpurl=""
+                jdbcURL="jdbc:oracle:thin:@oraprd08:1521:NGP1"
+                schema="NG" user="ng1"/> -->
+
+			<Database Name="MC_XML_EXP" className="" dbType="xml"
+                folder="/xpedx/sci_build/CDT/export"
+                httpurl=""
                 httpuser="" jdbcURL="" schema="" user=""/>
-            <Database Name="DEV" className="oracle.jdbc.OracleDriver"
-                dbType="oracle" folder="" httpurl="http://10.11.26.205:9005/context-root/interop/InteropHttpServlet"
-                jdbcURL="jdbc:oracle:thin:@10.11.24.180:1522:yantra"
-                schema="xpedx_dev" user="xpedx_dev"/>
         </TargetDatabases>
         <SourceTargetPrefs>
             <SourceTargetPrefs>
 				<SourceTargetPair SourceDatabase="MC" TargetDatabase="MC_XML_EXP">
                     <Ignore>
+                        <Table Name="YFS_CUSTOMER"/>
+                        <Table Name="YFS_ITEM"/>
+                        <Table Name="YFS_CATEGORY"/>
+                        <Table Name="YFS_ENTITLEMENT_RULE_HDR"/>
+                        <Table Name="YFS_ENTITLEMENT_RULE_DTL"/>
+                        <Table Name="YFS_RESOURCE_PERMISSION"/>
+                        <Table Name="YFS_CUSTOMER_ASSIGNMENT"/>
+                    </Ignore>
+                    <Transformations/>
+                    <AppendOnly>
+                        <Table Name="YFS_PIPELINE"/>
+                        <Table Name="YFS_PERSON_INFO"/>
+                        <Table Name="YFS_SHIP_NODE"/>
+                        <Table Name="YFS_USER"/>
+                        <Table Name="YFS_ORGANIZATION"/>
+                        <Table Name="YFS_ORG_ENTERPRISE"/>
+                        <Table Name="YPM_PRICELIST_HDR"/>
+                        <Table Name="YPM_PRICELIST_LINE"/>
+                    </AppendOnly>
+                </SourceTargetPair>
+                <SourceTargetPair SourceDatabase="MC_XML_IMP" TargetDatabase="DEV">
+                    <Ignore>
                         <Table Name="YFS_ZIP_CODE_LOCATION"/>
-                        <!--Commenting as per request from Onsite-->
-                        <!--<Table Name="YFS_RESOURCE_PERMISSION"/>-->
+						<!-- Removing YFS_RESOURCE_PERMISSION from ignore list -->
+						<!-- <Table Name="YFS_RESOURCE_PERMISSION"/> -->
                         <Table Name="YFS_ATTRIBUTE"/>
                         <Table Name="YFS_ATTRIBUTE_GROUP"/>
                         <Table Name="YFS_ATTR_ALLOWED_VALUE"/>
@@ -40,7 +82,6 @@
                         <Table Name="YFS_DATA_SECURITY_NODES"/>
                         <Table Name="YFS_HEARTBEAT"/>
                         <Table Name="YFS_SNAPSHOT"/>
-						<!-- Adding as per request from Onsite -->
 						<Table Name="PLT_DB_POOL"/>
 					</Ignore>
                     <Transformations/>
@@ -58,11 +99,11 @@
 						<Table Name="YFS_COMMON_CODE"/> -->
 					</AppendOnly>
                 </SourceTargetPair>
-                <SourceTargetPair SourceDatabase="MC_XML_IMP" TargetDatabase="DEV">
+				<SourceTargetPair SourceDatabase="MC_XML_IMP" TargetDatabase="INTEGRATION">
                     <Ignore>
                         <Table Name="YFS_ZIP_CODE_LOCATION"/>
-                        <!--Commenting as per request from Onsite-->
-                        <!--<Table Name="YFS_RESOURCE_PERMISSION"/>-->
+						<!-- Removing YFS_RESOURCE_PERMISSION from ignore list -->
+						<!-- <Table Name="YFS_RESOURCE_PERMISSION"/> -->
                         <Table Name="YFS_ATTRIBUTE"/>
                         <Table Name="YFS_ATTRIBUTE_GROUP"/>
                         <Table Name="YFS_ATTR_ALLOWED_VALUE"/>
@@ -72,7 +113,68 @@
                         <Table Name="YFS_DATA_SECURITY_NODES"/>
                         <Table Name="YFS_HEARTBEAT"/>
                         <Table Name="YFS_SNAPSHOT"/>
-						<!-- Adding as per request from Onsite -->
+						<Table Name="PLT_DB_POOL"/>
+					</Ignore>
+                    <Transformations/>
+                    <AppendOnly>
+                        <Table Name="YFS_PERSON_INFO"/>
+                        <Table Name="YFS_USER"/>
+                        <Table Name="YFS_ORGANIZATION"/>
+                        <Table Name="YFS_ORG_ENTERPRISE"/>
+                        <Table Name="YFS_SHIP_NODE"/>
+                        <Table Name="PLT_PROPERTY"/>
+                        <Table Name="YFS_ITEM_UOM_MASTER"/>
+                        <Table Name="YFS_UOM"/>
+                        <!-- Data should go into MC. So removing it from the list
+						<Table Name="PLT_AUTH_QUESTION"/>
+						<Table Name="YFS_COMMON_CODE"/> -->
+					</AppendOnly>
+                </SourceTargetPair>
+                <SourceTargetPair SourceDatabase="MC_XML_IMP" TargetDatabase="STAGE">
+                    <Ignore>
+                        <Table Name="YFS_ZIP_CODE_LOCATION"/>
+						<!-- Removing YFS_RESOURCE_PERMISSION from ignore list -->
+						<!-- <Table Name="YFS_RESOURCE_PERMISSION"/> -->
+                        <Table Name="YFS_ATTRIBUTE"/>
+                        <Table Name="YFS_ATTRIBUTE_GROUP"/>
+                        <Table Name="YFS_ATTR_ALLOWED_VALUE"/>
+                        <Table Name="YFS_BASE_CONFIG_TASK_STATUS"/>
+                        <Table Name="YFS_DATA_SECURITY_ENTERPRISE"/>
+                        <Table Name="YFS_DATA_SECURITY_GROUP"/>
+                        <Table Name="YFS_DATA_SECURITY_NODES"/>
+                        <Table Name="YFS_HEARTBEAT"/>
+                        <Table Name="YFS_SNAPSHOT"/>
+						<Table Name="PLT_DB_POOL"/>
+					</Ignore>
+                    <Transformations/>
+                    <AppendOnly>
+                        <Table Name="YFS_PERSON_INFO"/>
+                        <Table Name="YFS_USER"/>
+                        <Table Name="YFS_ORGANIZATION"/>
+                        <Table Name="YFS_ORG_ENTERPRISE"/>
+                        <Table Name="YFS_SHIP_NODE"/>
+                        <Table Name="PLT_PROPERTY"/>
+                        <Table Name="YFS_ITEM_UOM_MASTER"/>
+                        <Table Name="YFS_UOM"/>
+                        <!-- Data should go into MC. So removing it from the list
+						<Table Name="PLT_AUTH_QUESTION"/>
+						<Table Name="YFS_COMMON_CODE"/> -->
+					</AppendOnly>
+                </SourceTargetPair>
+                <SourceTargetPair SourceDatabase="MC_XML_IMP" TargetDatabase="PROD">
+                    <Ignore>
+                        <Table Name="YFS_ZIP_CODE_LOCATION"/>
+						<!-- Removing YFS_RESOURCE_PERMISSION from ignore list -->
+						<!-- <Table Name="YFS_RESOURCE_PERMISSION"/> -->
+                        <Table Name="YFS_ATTRIBUTE"/>
+                        <Table Name="YFS_ATTRIBUTE_GROUP"/>
+                        <Table Name="YFS_ATTR_ALLOWED_VALUE"/>
+                        <Table Name="YFS_BASE_CONFIG_TASK_STATUS"/>
+                        <Table Name="YFS_DATA_SECURITY_ENTERPRISE"/>
+                        <Table Name="YFS_DATA_SECURITY_GROUP"/>
+                        <Table Name="YFS_DATA_SECURITY_NODES"/>
+                        <Table Name="YFS_HEARTBEAT"/>
+                        <Table Name="YFS_SNAPSHOT"/>
 						<Table Name="PLT_DB_POOL"/>
 					</Ignore>
                     <Transformations/>

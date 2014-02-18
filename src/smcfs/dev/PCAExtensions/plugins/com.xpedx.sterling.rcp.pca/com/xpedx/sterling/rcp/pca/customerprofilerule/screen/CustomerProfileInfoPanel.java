@@ -14,6 +14,8 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -23,6 +25,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Element;
@@ -41,6 +45,8 @@ import com.yantra.yfc.rcp.YRCLinkBindingData;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCScrolledCompositeListener;
 import com.yantra.yfc.rcp.YRCStyledTextBindingData;
+import com.yantra.yfc.rcp.YRCTableBindingData;
+import com.yantra.yfc.rcp.YRCTblClmBindingData;
 import com.yantra.yfc.rcp.YRCTextBindingData;
 import com.yantra.yfc.rcp.YRCWizardBehavior;
 import com.yantra.yfc.rcp.YRCXmlUtils;
@@ -497,11 +503,25 @@ IYRCComposite {
 	private Label lblLocationId;
 
 	private Text txtLocationId;
+	
+	
+	private Button chkManufacturerItemNo;	
+	private Label lblManufacturerItemNo;
+	
+	private Button chkCustomerItemNo;
+	private Label lblCustomerItemNo;
+	
+	private Label lblCatalogView;
+	
+	private Label lblDefaultViewAllItems;
+	private Label lblDefaultViewStockedItems;
+	private Label lblOnlyViewStockedItems;
+	private Button radDefaultViewAllItems;
+	private Button radDefaultViewStockedItems;
+	private Button radOnlyViewStockedItems;
 
-	private Label lblSecondItemDisplay;
-
-	private Combo comboSecondItemDisplay;
-
+	private Label lblOtherItemNumberDisplay;
+	
 	StyledText stxtMinOrderCurrency;
 	StyledText stxtSmallOrderCurrency;
 	StyledText stxtMaxOrderCurrency;
@@ -514,7 +534,7 @@ IYRCComposite {
 	private List<Control> HideControlsList=null;
 	Element eleCustomer =null; 
 	String  suffixType =null; 
-
+	private String ruleId;
 
 	private Text txtZip;
 
@@ -523,6 +543,36 @@ IYRCComposite {
 	private Text txtCustLineAcctMsg;
 	private Text txtCustomerLinePONumberMsg;
 	private Label lblCustomerFieldMsg;
+	
+	private Label lblOrderConfirmationAddressList;
+	private Composite pnlOrderConfirmList;
+	private Text txtOrderConfirmationList;	
+	private Composite pnlOrderConfirmListButtons;
+	private Composite pnlOrderConfirmListHolder;	
+	private Button btnAdd;
+	private Button btnRmv;
+	public Table orderConfirmList;
+	private TableColumn tblOrderConfirmListId;
+	private Button chkSalesRepFlag;
+
+	private Label lblSalesRepEmailConfirmationFlag4;
+
+	private Button chkSalesRepFlag4;
+
+	private Label lblSalesRepEmailConfirmationFlag3;
+
+	private Button chkSalesRepFlag3;
+
+	private Label lblSalesRepEmailConfirmationFlag2;
+
+	private Button chkSalesRepFlag2;
+
+	private Label lblSalesRepEmailConfirmationFlag1;
+
+	private Button chkSalesRepFlag1;
+
+	private Label lblSalesRepEmailConfirmationFlag0;
+	
 	public CustomerProfileInfoPanel(Composite parent, int style,
 			Object inputObject, CustomerProfileMaintenance parentObj) {
 		super(parent, style);
@@ -819,18 +869,38 @@ IYRCComposite {
 		"lblCsr2EmailConfirmationFlag");
 		addTab(gridDataDummy,"dummyCsr2EmailConfirmationFlag");
 
-		chkSalesRepEmailConfirmationFlag = new Button(pnlCustomerProfileInfo,SWT.CHECK);
-		chkSalesRepEmailConfirmationFlag.setText("");
-		chkSalesRepEmailConfirmationFlag.setVisible(true);
-		chkSalesRepEmailConfirmationFlag.setData("yrc:customType", "Label");
-		chkSalesRepEmailConfirmationFlag.setLayoutData(gridData1);
-		chkSalesRepEmailConfirmationFlag.setData("name","chkSalesRepEmailConfirmationFlag");
-		lblSalesRepEmailConfirmationFlag = new Label(pnlCustomerProfileInfo,SWT.LEFT);
-		lblSalesRepEmailConfirmationFlag.setText("Email_Confirmation_Flag_SalesRep");
-		lblSalesRepEmailConfirmationFlag.setLayoutData(gridData2);
-		lblSalesRepEmailConfirmationFlag.setData("name","lblSalesRepEmailConfirmationFlag");
 
 		addTab(gridDataDummy,"dummySalesRepEmailConfirmationFlag");
+
+		chkSalesRepFlag =  new Button(pnlCustomerProfileInfo,
+				SWT.CHECK);
+		chkSalesRepFlag.setText("");
+		chkSalesRepFlag.setVisible(true);
+		chkSalesRepFlag.setData("yrc:customType", "Label");
+		chkSalesRepFlag.setLayoutData(gridData1);
+		chkSalesRepFlag.setData("name","chkSalesRepFlag");
+		lblSalesRepEmailConfirmationFlag0 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+		lblSalesRepEmailConfirmationFlag0.setText("Email Confirmation Flag - Primary Sales Professional");
+		lblSalesRepEmailConfirmationFlag0.setLayoutData(gridData2);
+		lblSalesRepEmailConfirmationFlag0.setData("name", "lblSalesRepEmailConfirmationFlag0");
+		addTab(gridDataDummy,"dummyOrderUpdateFlag");
+		
+		chkSalesRepFlag1 =  new Button(pnlCustomerProfileInfo,
+				SWT.CHECK);
+		chkSalesRepFlag1.setText("");
+		chkSalesRepFlag1.setVisible(true);
+		chkSalesRepFlag1.setData("yrc:customType", "Label");
+		chkSalesRepFlag1.setLayoutData(gridData1);
+		chkSalesRepFlag1.setData("name","chkSalesRepFlag");
+		lblSalesRepEmailConfirmationFlag1 = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+		lblSalesRepEmailConfirmationFlag1.setText("Email Confirmation Flag - Sales Professional 1 -4 ");
+		lblSalesRepEmailConfirmationFlag1.setLayoutData(gridData2);
+		lblSalesRepEmailConfirmationFlag1.setData("name", "lblSalesRepEmailConfirmationFlag1");
+		addTab(gridDataDummy,"dummyOrderUpdateFlag");
+
+		
+
+
 
 		GridData gridDataPriceControl = new GridData();
 		gridDataPriceControl.horizontalAlignment = SWT.BEGINNING;
@@ -932,7 +1002,6 @@ IYRCComposite {
 		lblShipToOverrideFlag.setData("name", "lblShipToOverrideFlag");
 		addTab(gridDataDummy,"dummyShipToOverrideFlag");
 
-
 		addTab(gridData1,"dummyCurrencyCode");
 		lblCurrencyCode = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblCurrencyCode.setText("Currency_Code");
@@ -941,7 +1010,45 @@ IYRCComposite {
 		txtCurrencyCode = new Text(pnlCustomerProfileInfo, 2048);
 		txtCurrencyCode.setText("");
 		txtCurrencyCode.setLayoutData(gridData3);
-		txtCurrencyCode.setData("name", "txtCurrencyCode");		
+		txtCurrencyCode.setData("name", "txtCurrencyCode");
+		
+		if("B".equals(suffixType)) 
+		{
+			addTab(gridData1,"dummyOrderConfirmationAddressList");
+			lblOrderConfirmationAddressList = new Label(pnlCustomerProfileInfo, SWT.NONE);
+			lblOrderConfirmationAddressList.setText("Order_Confirmation_Address_List");
+			lblOrderConfirmationAddressList.setLayoutData(gridData2);
+			lblOrderConfirmationAddressList.setData("name", "lblOrderConfirmationAddressList");
+			
+			GridLayout gridLayoutOrdCfrm = new GridLayout(3,false);
+			gridLayoutOrdCfrm.horizontalSpacing = 1;
+			gridLayoutOrdCfrm.verticalSpacing = 5;
+			gridLayoutOrdCfrm.marginHeight = 2;
+			gridLayoutOrdCfrm.marginWidth = 2;
+			
+			GridData gridDataOrdCfrm = new GridData();
+			gridDataOrdCfrm.horizontalAlignment = SWT.BEGINNING;
+			gridDataOrdCfrm.horizontalSpan = 2;
+			gridDataOrdCfrm.verticalIndent = 10;
+			
+			GridData gridData8 = new GridData();
+			gridData8.horizontalAlignment = SWT.BEGINNING;
+			
+			pnlOrderConfirmList = new Composite(pnlCustomerProfileInfo, SWT.NONE);
+			pnlOrderConfirmList.setLayout(gridLayoutOrdCfrm);
+			pnlOrderConfirmList.setLayoutData(gridDataOrdCfrm);
+			pnlOrderConfirmList.setData("name", "pnlOrderConfirmList");
+			
+			txtOrderConfirmationList = new Text(pnlOrderConfirmList, SWT.BORDER);
+			txtOrderConfirmationList.setText("");
+			txtOrderConfirmationList.setLayoutData(gridData8);
+			txtOrderConfirmationList.setTextLimit(500);
+			txtOrderConfirmationList.setData("name", "txtOrderConfirmationList");
+			
+			createPnlOrderConfirmListButtons();
+			createPnlOrderConfirmListHolder();
+			
+		}
 	}
 
 	private void createSiteManagementComposite() {
@@ -951,8 +1058,23 @@ IYRCComposite {
 		//gridData1.horizontalIndent = 30;
 		gridData1.verticalAlignment = SWT.CENTER;
 		gridData1.widthHint = 30;
-		gridData1.horizontalSpan=1;		
-
+		gridData1.horizontalSpan=1;	
+		
+		/* XB-759 Code Changes Start */
+		GridData gridData11 = new GridData();
+		gridData11.horizontalAlignment = SWT.END;
+		gridData11.verticalAlignment = SWT.CENTER;
+		gridData11.widthHint = 30;
+		gridData11.horizontalSpan=2;	
+		
+		GridData gridDataLbl1 = new GridData();
+		gridDataLbl1.horizontalAlignment = SWT.BEGINNING;
+		gridDataLbl1.grabExcessHorizontalSpace = true;
+		gridDataLbl1.verticalAlignment = SWT.LEFT;
+		gridDataLbl1.widthHint = 300;
+		gridDataLbl1.horizontalSpan=1;
+		/* XB-759 Code Changes End */
+		
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = SWT.BEGINNING;
 		gridData2.grabExcessHorizontalSpace = true;
@@ -960,6 +1082,14 @@ IYRCComposite {
 		gridData2.verticalAlignment = SWT.CENTER;
 		gridData2.widthHint = 300;
 		gridData2.horizontalSpan=3;
+		
+		//XB-519 Modified For UI
+		GridData gridData3 = new GridData();
+		gridData3.horizontalAlignment = SWT.BEGINNING;
+		gridData3.grabExcessHorizontalSpace = true;
+		gridData3.verticalAlignment = 2;
+		gridData3.widthHint = 300;
+		gridData3.horizontalSpan=3;
 
 		GridData gridDataLbl = new GridData();
 		gridDataLbl.horizontalAlignment = SWT.BEGINNING;
@@ -984,6 +1114,25 @@ IYRCComposite {
 		gridDataLblMsg.widthHint = 330;
 		gridDataLblMsg.horizontalSpan=3;
 
+		
+		chkCustomerLinePONumber = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+		chkCustomerLinePONumber.setText("");
+		chkCustomerLinePONumber.setVisible(true);
+		chkCustomerLinePONumber.setData("yrc:customType", "Label");
+		chkCustomerLinePONumber.setLayoutData(gridData1);
+		chkCustomerLinePONumber.setData("name", "chkCustomerLinePONumber");
+		lblCustomerLinePONumber = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+		lblCustomerLinePONumber.setText("Line PO#");
+		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
+		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
+		//XB-519 -UI Modified
+		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,2048);
+		txtCustomerLinePONumberMsg.setText("");
+		txtCustomerLinePONumberMsg.setLayoutData(gridData3);
+		txtCustomerLinePONumberMsg.setTextLimit(22);
+		txtCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
+		txtCustomerLinePONumberMsg.setVisible(true);
+		
 		chkCustLineAcct = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkCustLineAcct.setText("");
 		chkCustLineAcct.setVisible(true);
@@ -992,14 +1141,16 @@ IYRCComposite {
 		chkCustLineAcct.setData("name", "chkCustLineAcct");
 
 		lblCustLineAcct = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustLineAcct.setText("Cust Line Acct#:");
+		lblCustLineAcct.setText("Line Account#:");
 		lblCustLineAcct.setLayoutData(gridDataLbl);
 		lblCustLineAcct.setData("name", "lblCustLineAcct");
-		txtCustLineAcctMsg = new Text(pnlCustomerProfileInfo,SWT.NONE);
+		txtCustLineAcctMsg = new Text(pnlCustomerProfileInfo,2048);
 		txtCustLineAcctMsg.setText("");
-		txtCustLineAcctMsg.setLayoutData(gridData2);
+		//XB-519 Modified
+		txtCustLineAcctMsg.setLayoutData(gridData3);
+		txtCustLineAcctMsg.setTextLimit(22);
 		txtCustLineAcctMsg.setData("name", "txtCustLineAcct");
-		txtCustLineAcctMsg.setVisible(false);
+		txtCustLineAcctMsg.setVisible(true);
 
 		if(!("C".equals(suffixType))){
 			chkCustLineField1 = new Button(pnlCustomerProfileInfo, SWT.CHECK);
@@ -1050,21 +1201,8 @@ IYRCComposite {
 			txtCustLineField3.setTextLimit(500);
 			txtCustLineField3.setData("name", "txtCustLineField3");	
 		}
-		chkCustomerLinePONumber = new Button(pnlCustomerProfileInfo, SWT.CHECK);
-		chkCustomerLinePONumber.setText("");
-		chkCustomerLinePONumber.setVisible(true);
-		chkCustomerLinePONumber.setData("yrc:customType", "Label");
-		chkCustomerLinePONumber.setLayoutData(gridData1);
-		chkCustomerLinePONumber.setData("name", "chkCustomerLinePONumber");
-		lblCustomerLinePONumber = new Label(pnlCustomerProfileInfo, SWT.LEFT);
-		lblCustomerLinePONumber.setText("Customer Line PO#");
-		lblCustomerLinePONumber.setLayoutData(gridDataLbl);
-		lblCustomerLinePONumber.setData("name", "lblCustomerLinePONumber");
-		txtCustomerLinePONumberMsg = new Text(pnlCustomerProfileInfo,SWT.NONE);
-		txtCustomerLinePONumberMsg.setText("");
-		txtCustomerLinePONumberMsg.setLayoutData(gridDataLbl);
-		txtCustomerLinePONumberMsg.setData("name", "txtCustLineAcct");
-		txtCustomerLinePONumberMsg.setVisible(false);
+		
+		
 		addTab(gridDataDummy,"dummyCustomerLinePONumber");
 		lblCustomerFieldMsg = new Label(pnlCustomerProfileInfo, SWT.WRAP);
 		lblCustomerFieldMsg.setText("If checked, the customer fields on this tab display but " +
@@ -1087,6 +1225,86 @@ IYRCComposite {
 		lblCanRequestSample.setData("name", "lblCanRequestSample");
 		addTab(gridDataDummy,"dummyCanRequestSample");
 
+		/* XB-759 Code Changes Start */
+		if(("B".equals(suffixType))){
+			
+			addTab(gridData1,"dummyOtherItemNumberDisplay");
+			lblOtherItemNumberDisplay = new Label(pnlCustomerProfileInfo, SWT.NONE);
+			lblOtherItemNumberDisplay.setText("Other Item Number Display:");
+			lblOtherItemNumberDisplay.setLayoutData(gridDataLbl);
+			lblOtherItemNumberDisplay.setData("name", "lblOtherItemNumberDisplay");
+			addTab(gridDataDummy,"dummyOtherItemNumberDisplay1");
+			
+			chkManufacturerItemNo = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkManufacturerItemNo.setText("");
+			chkManufacturerItemNo.setVisible(true);
+			chkManufacturerItemNo.setData("yrc:customType", "Label");
+			chkManufacturerItemNo.setLayoutData(gridData11);
+			chkManufacturerItemNo.setData("name", "chkManufacturerItemNo");
+			lblManufacturerItemNo = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblManufacturerItemNo.setText("Manufacturer_Item_No");
+			lblManufacturerItemNo.setLayoutData(gridDataLbl1);
+			lblManufacturerItemNo.setData("name", "lblManufacturerItemNo");
+			addTab(gridDataDummy,"dummyManufacturerItemNo");
+			
+			chkCustomerItemNo = new Button(pnlCustomerProfileInfo, SWT.CHECK);
+			chkCustomerItemNo.setText("");
+			chkCustomerItemNo.setVisible(true);
+			chkCustomerItemNo.setData("yrc:customType", "Label");
+			chkCustomerItemNo.setLayoutData(gridData11);
+			chkCustomerItemNo.setData("name", "chkCustomerItemNo");
+			lblCustomerItemNo = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblCustomerItemNo.setText("Customer_Item_No");
+			lblCustomerItemNo.setLayoutData(gridDataLbl1);
+			lblCustomerItemNo.setData("name", "lblCustomerItemNo");
+			addTab(gridDataDummy,"dummyCustomerItemNo");
+			
+			
+			// eb-2287: new radio buttons for default stocked items view
+			addTab(gridData1,"dummyCatalogView");
+			lblCatalogView = new Label(pnlCustomerProfileInfo, SWT.NONE);
+			lblCatalogView.setText("Catalog View:");
+			lblCatalogView.setLayoutData(gridDataLbl);
+			lblCatalogView.setData("name", "lblCatalogView");
+			addTab(gridDataDummy,"dummyCatalogView1");
+			
+			radDefaultViewAllItems = new Button(pnlCustomerProfileInfo, SWT.RADIO);
+			radDefaultViewAllItems.setText("");
+			radDefaultViewAllItems.setVisible(true);
+			radDefaultViewAllItems.setData("yrc:customType", "Label");
+			radDefaultViewAllItems.setLayoutData(gridData11);
+			radDefaultViewAllItems.setData("name", "radDefaultViewAllItems");
+			lblDefaultViewAllItems = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblDefaultViewAllItems.setText("Default View to All Items");
+			lblDefaultViewAllItems.setLayoutData(gridDataLbl1);
+			lblDefaultViewAllItems.setData("name", "lblDefaultViewAllItems");
+			addTab(gridDataDummy,"dummyDefaultViewAllItems");
+			
+			radDefaultViewStockedItems = new Button(pnlCustomerProfileInfo, SWT.RADIO);
+			radDefaultViewStockedItems.setText("");
+			radDefaultViewStockedItems.setVisible(true);
+			radDefaultViewStockedItems.setData("yrc:customType", "Label");
+			radDefaultViewStockedItems.setLayoutData(gridData11);
+			radDefaultViewStockedItems.setData("name", "radDefaultViewStockedItems");
+			lblDefaultViewStockedItems = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblDefaultViewStockedItems.setText("Default View to Normally Stocked Items");
+			lblDefaultViewStockedItems.setLayoutData(gridDataLbl1);
+			lblDefaultViewStockedItems.setData("name", "lblDefaultViewStockedItems");
+			addTab(gridDataDummy,"dummyDefaultViewStockedItems");
+
+			radOnlyViewStockedItems = new Button(pnlCustomerProfileInfo, SWT.RADIO);
+			radOnlyViewStockedItems.setText("");
+			radOnlyViewStockedItems.setVisible(true);
+			radOnlyViewStockedItems.setData("yrc:customType", "Label");
+			radOnlyViewStockedItems.setLayoutData(gridData11);
+			radOnlyViewStockedItems.setData("name", "radOnlyViewStockedItems");
+			lblOnlyViewStockedItems = new Label(pnlCustomerProfileInfo, SWT.LEFT);
+			lblOnlyViewStockedItems.setText("Only View Normally Stocked Items");
+			lblOnlyViewStockedItems.setLayoutData(gridDataLbl1);
+			lblOnlyViewStockedItems.setData("name", "lblOnlyViewStockedItems");
+			addTab(gridDataDummy,"dummyOnlyViewStockedItems");
+		}
+		/* XB-759 Code Changes End */
 		chkViewPriceFlag = new Button(pnlCustomerProfileInfo, SWT.CHECK);
 		chkViewPriceFlag.setText("");
 		chkViewPriceFlag.setVisible(true);
@@ -1154,16 +1372,6 @@ IYRCComposite {
 		gridDataDummy1.verticalAlignment = SWT.CENTER;
 		gridDataDummy1.widthHint = 30;
 		gridDataDummy1.horizontalSpan=1;			
-
-		addTab(gridDataDummy1,"dummySecondItemDisplay");
-		lblSecondItemDisplay = new Label(pnlCustomerProfileInfo, SWT.NONE);
-		lblSecondItemDisplay.setText("Second Item# Display:");
-		lblSecondItemDisplay.setLayoutData(gridDataLbl);
-		lblSecondItemDisplay.setData("name", "lblSecondItemDisplay");
-		comboSecondItemDisplay = new Combo(pnlCustomerProfileInfo, 8);
-		comboSecondItemDisplay.setLayoutData(gridDataDummy);
-		comboSecondItemDisplay.setTextLimit(50);
-		comboSecondItemDisplay.setData("name", "comboSecondItemDisplay");
 	}
 
 	private void createCentralContactComposite() {
@@ -1661,6 +1869,8 @@ IYRCComposite {
 		txtPrimarySalesRep.setLayoutData(gridData3);
 		txtPrimarySalesRep.setData("name", "txtPrimarySalesRep");
 		addTab(gridData1,"dummySalesRep1");
+		
+		
 		lblSalesRep1 = new Label(pnlCustomerProfileInfo, SWT.NONE);
 		lblSalesRep1.setText("Sales_Rep1");
 		lblSalesRep1.setLayoutData(gridData2);
@@ -1806,6 +2016,17 @@ IYRCComposite {
 		tbd.setName("txtLocationId");
 		txtLocationId.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
+		// XB-519 - Adding in binding - txtCustLineAcctMsg for ExtnCustLineAccLbl
+		tbd = new YRCTextBindingData();
+		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLineAccLbl");
+		tbd.setName("txtCustLineAcctMsg");
+		txtCustLineAcctMsg.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		// XB-519 - Adding in binding- txtCustomerLinePONumberMsg for ExtnCustLinePOLbl
+		tbd = new YRCTextBindingData();
+		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustLinePOLbl");
+		tbd.setName("txtCustomerLinePONumberMsg");
+		txtCustomerLinePONumberMsg.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+		
 		tbd = new YRCTextBindingData();
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1");
 		tbd.setName("txtAddressLine1");
@@ -1880,12 +2101,27 @@ IYRCComposite {
 		chkBoxBindingData.setCheckedBinding("Y");
 		chkBoxBindingData.setUnCheckedBinding("N");
 		chkBoxBindingData
-		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesProAllEmailFlag");
 		chkBoxBindingData
-		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesRepEmailConfirmFlag");
-		chkBoxBindingData.setName("chkSalesRepEmailConfirmationFlag");
-		chkSalesRepEmailConfirmationFlag.setData("YRCButtonBindingDefination",
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesProAllEmailFlag");
+		chkBoxBindingData.setName("chkSalesRepFlag1");
+		chkSalesRepFlag1.setData("YRCButtonBindingDefination",
 				chkBoxBindingData);
+		
+			
+		chkBoxBindingData = new YRCButtonBindingData();
+		chkBoxBindingData.setCheckedBinding("Y");
+		chkBoxBindingData.setUnCheckedBinding("N");
+		chkBoxBindingData
+		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSalesProPrimaryEmailFlag");
+		chkBoxBindingData
+		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnSalesProPrimaryEmailFlag");
+		chkBoxBindingData.setName("chkSalesRepFlag");
+		chkSalesRepFlag.setData("YRCButtonBindingDefination",
+				chkBoxBindingData);
+
+		
+		
 
 		// eCSR to be done
 		cbd = new YRCComboBindingData();
@@ -1912,11 +2148,7 @@ IYRCComposite {
 		cbd.setCodeBinding("@Code");
 		cbd.setDescriptionBinding("@Description");
 		cbd.setListBinding("XPXUseSKUList:/UseSKUList/UseSKU");
-		cbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseCustSKU");
-		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseCustSKU");
-		cbd.setName("comboSecondItemDisplay");
-		comboSecondItemDisplay.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
-
+		
 		tbd = new YRCTextBindingData();
 		tbd
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMaxOrderAmount");
@@ -2220,7 +2452,60 @@ IYRCComposite {
 		bbd
 		.setActionId("com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction");
 		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
+		/* XB-759 Code Changes Start */
+		if(("B".equals(suffixType))){
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMfgItemFlag");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMfgItemFlag");
+			chkBoxBindingData.setName("chkManufacturerItemNo");
+			chkManufacturerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("Y");
+			chkBoxBindingData.setUnCheckedBinding("N");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCustomerItemFlag");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCustomerItemFlag");
+			chkBoxBindingData.setName("chkCustomerItemNo");
+			chkCustomerItemNo.setData("YRCButtonBindingDefination",chkBoxBindingData);			
 
+			YRCTableBindingData tableBindingData = new YRCTableBindingData();
+			YRCTblClmBindingData colBindings1[] = new YRCTblClmBindingData[1];
+			colBindings1[0] = new YRCTblClmBindingData();
+			colBindings1[0].setAttributeBinding("emailAddress");
+			colBindings1[0].setColumnBinding("Email_Address");
+			colBindings1[0].setSortReqd(true);
+			tableBindingData.setSortRequired(true);
+			tableBindingData.setSourceBinding("XPXBillToLevelEmailList:/EmailList/Email");
+			tableBindingData.setName("orderConfirmList");
+			tableBindingData.setTblClmBindings(colBindings1);
+			orderConfirmList.setData(YRCConstants.YRC_TABLE_BINDING_DEFINATION, tableBindingData);
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("DEFAULT_ALL");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setName("radDefaultViewAllItems");
+			radDefaultViewAllItems.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("DEFAULT_STOCKED");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setName("radDefaultViewStockedItems");
+			radDefaultViewStockedItems.setData("YRCButtonBindingDefination",chkBoxBindingData);
+			
+			chkBoxBindingData = new YRCButtonBindingData();
+			chkBoxBindingData.setCheckedBinding("ONLY_STOCKED");
+			chkBoxBindingData.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnDefaultStockedItemView");
+			chkBoxBindingData.setName("radOnlyViewStockedItems");
+			radOnlyViewStockedItems.setData("YRCButtonBindingDefination",chkBoxBindingData);
+		}
+		/* XB-759 Code Changes End */
+		
 	}
 
 
@@ -2389,6 +2674,8 @@ IYRCComposite {
 					lblServiceOptmizationCode, txtServiceOptmizationCode,fillerLabelMap.get("dummyServiceOptmizationCode"),
 					lblCustomerDivision, txtCustomerDivision,fillerLabelMap.get("dummyCustomerDivision"),
 					lblPrimarySalesRep,txtPrimarySalesRep,fillerLabelMap.get("dummyPrimarySalesRep"),lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,txtCustomerLinePONumberMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
+					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag
+					,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 
@@ -2403,7 +2690,6 @@ IYRCComposite {
 					,fillerLabelMap.get("NAICSName"),fillerLabelMap.get("dummyNAICSCode"),lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId")
 					,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample"),chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),
 					chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),
-					fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay,
 					chkCsr1EmailConfirmationFlag,lblCsr1EmailConfirmationFlag,chkCsr2EmailConfirmationFlag,lblCsr2EmailConfirmationFlag,
 					fillerLabelMap.get("dummyCsr1EmailConfirmationFlag"),fillerLabelMap.get("dummyCsr2EmailConfirmationFlag"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag"),
 					fillerLabelMap.get("dummyMaxOrderAmount"),lblMaxOrderAmount,stxtMaxOrderCurrency,txtMaxOrderAmount,fillerLabelMap.get("dummyMinOrderAmount"),lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,txtSmallOrderFee,stxtSmallOrderCurrency,fillerLabelMap.get("dummySmallOrderFee")
@@ -2417,14 +2703,14 @@ IYRCComposite {
 					lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag"),
 					lblOrderUpdateFlag,chkOrderUpdateFlag,fillerLabelMap.get("dummyOrderUpdateFlag"),
 					lblCurrencyCode, txtCurrencyCode,fillerLabelMap.get("dummyCurrencyCode")
-
+					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag
+                    ,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 		}
 		else if("S".equalsIgnoreCase(suffixType)){
 			Control[]elements= {
-					fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
-					,chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustomerLinePONumber,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
+					chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustomerLinePONumber,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,lblECSR,comboECSR,lblECSR2,comboECSR2,
 					fillerLabelMap.get("dummyECSR"),fillerLabelMap.get("dummyECSR2"),lblInvoiceDistMethod,txtInvoiceDistMethod,fillerLabelMap.get("dummyInvoiceDistMethod")
 					,chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
@@ -2434,7 +2720,7 @@ IYRCComposite {
 					,chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
 					lblViewInventory,fillerLabelMap.get("dummyViewInventory"),fillerLabelMap.get("chkUseOrderMultiple"),lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple")
 					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
-
+					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
 			};
 			HideControlsList=Arrays.asList(elements);
 
@@ -2443,7 +2729,7 @@ IYRCComposite {
 			Control[]elements= {chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 					chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
-					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay,
+					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),
 					lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag")
 					,lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
 			};
@@ -2468,7 +2754,7 @@ IYRCComposite {
 				chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,lblCustomerFieldMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 				chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
 				chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
-				chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),fillerLabelMap.get("dummySecondItemDisplay"),lblSecondItemDisplay,comboSecondItemDisplay
+				chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices")
 				,lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),lblShipToOverrideFlag,chkShipToOverrideFlag,fillerLabelMap.get("dummyShipToOverrideFlag")
 				,chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
 				,lblCustomerLinePONumber,chkCustomerLinePONumber,lblCustomerFieldMsg,fillerLabelMap.get("dummyCustomerLinePONumber")
@@ -2539,6 +2825,27 @@ IYRCComposite {
 	private void updateCustomerAddressFields(CustomerProfileMaintenance parentObj)
 	{
 		ArrayList<Element> customerAdditionalAddressList = YRCXmlUtils.getChildren(YRCXmlUtils.getXPathElement(parentObj.getBehavior().getLocalModel("XPXCustomerIn"), "/CustomerList/Customer/CustomerAdditionalAddressList"),"CustomerAdditionalAddress");
+		//XB-519
+		Element customerDetailsEle = parentObj.getBehavior().getCustomerDetails();
+		if(!YRCPlatformUI.isVoid(customerDetailsEle))
+		{
+			/*Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+			if (XPXUtils.poLbl!= null){
+				txtCustomerLinePONumberMsg.setText(XPXUtils.poLbl);
+			}
+			else 
+				txtCustomerLinePONumberMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+			if(XPXUtils.lineAcc!= null){
+				txtCustLineAcctMsg.setText(XPXUtils.lineAcc);
+			}
+			else
+				txtCustLineAcctMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));*/
+			//2 MAY 
+			Element extnElement = YRCXmlUtils.getXPathElement(customerDetailsEle,"/CustomerList/Customer/Extn");
+			txtCustomerLinePONumberMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLinePOLbl"));
+			txtCustLineAcctMsg.setText(YRCXmlUtils.getAttribute(extnElement, "ExtnCustLineAccLbl"));
+			
+		}
 		if(!YRCPlatformUI.isVoid(customerAdditionalAddressList))
 		{
 			for(int i=0;i<customerAdditionalAddressList.size();i++)
@@ -2610,5 +2917,76 @@ IYRCComposite {
 			setControlsEnabled(enableFieldsForMSAP(), true);
 		}
 
+	}
+	
+	private void createPnlOrderConfirmListButtons() {
+		pnlOrderConfirmListButtons = new Composite(pnlOrderConfirmList, 0);
+		pnlOrderConfirmListButtons.setBackgroundMode(0);
+		pnlOrderConfirmListButtons.setData("name", "pnlOrderConfirmListButtons");
+		GridData pnlOrderConfirmListButtonslayoutData = new GridData();
+		pnlOrderConfirmListButtonslayoutData.horizontalAlignment = 4;
+		pnlOrderConfirmListButtons.setLayoutData(pnlOrderConfirmListButtonslayoutData);
+		GridLayout pnlOrderConfirmListButtonslayout = new GridLayout(1, false);
+		pnlOrderConfirmListButtonslayout.marginHeight = 0;
+		pnlOrderConfirmListButtonslayout.marginWidth = 0;
+		pnlOrderConfirmListButtons.setLayout(pnlOrderConfirmListButtonslayout);
+		btnAdd = new Button(pnlOrderConfirmListButtons, 8);
+		GridData btnOrderConfirmationListlayoutData = new GridData();
+		btnOrderConfirmationListlayoutData.horizontalAlignment = SWT.BEGINNING;
+		btnOrderConfirmationListlayoutData.grabExcessHorizontalSpace = true;
+		btnAdd.setLayoutData(btnOrderConfirmationListlayoutData);
+		btnAdd.setText("Btn_Add");
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.addEmail();
+				txtOrderConfirmationList.setFocus();
+			}
+		});
+		btnRmv = new Button(pnlOrderConfirmListButtons, 8);
+		GridData btnRemovelayoutData = new GridData();
+		btnRemovelayoutData.horizontalAlignment = SWT.BEGINNING;
+		btnRmv.setLayoutData(btnRemovelayoutData);
+		btnRmv.setText("Btn_Remove");
+		btnRmv.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.removeEmails();
+			}
+		});
+	}
+	
+	private void createPnlOrderConfirmListHolder() {
+		pnlOrderConfirmListHolder = new Composite(pnlOrderConfirmList, 0);
+		pnlOrderConfirmListHolder.setBackgroundMode(0);
+		pnlOrderConfirmListHolder.setData("name", "pnlOrderConfirmListHolder");
+		GridData pnlOrderConfirmListHolderlayoutData = new GridData();
+		pnlOrderConfirmListHolderlayoutData.horizontalAlignment = 3;
+		pnlOrderConfirmListHolderlayoutData.verticalAlignment = 1;
+		pnlOrderConfirmListHolderlayoutData.grabExcessHorizontalSpace = true;
+		pnlOrderConfirmListHolderlayoutData.widthHint = 300;
+		pnlOrderConfirmListHolderlayoutData.heightHint = 150;
+		pnlOrderConfirmListHolder.setLayoutData(pnlOrderConfirmListHolderlayoutData);
+		GridLayout pnlOrderConfirmListHolderlayout = new GridLayout(1, false);
+		pnlOrderConfirmListHolderlayout.verticalSpacing = 1;
+		pnlOrderConfirmListHolderlayout.marginHeight = 1;
+		pnlOrderConfirmListHolderlayout.marginWidth = 1;
+		pnlOrderConfirmListHolder.setLayout(pnlOrderConfirmListHolderlayout);
+		createOrderConfirmList();
+	}
+	
+	private void createOrderConfirmList() {
+		orderConfirmList = new Table(pnlOrderConfirmListHolder, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		orderConfirmList.setHeaderVisible(true);
+		orderConfirmList.setLinesVisible(true);
+		orderConfirmList.setData("name", "orderConfirmList");
+		GridData orderConfirmListlayoutData = new GridData();
+		orderConfirmListlayoutData.horizontalAlignment = 4;
+		orderConfirmListlayoutData.verticalAlignment = 4;
+		orderConfirmListlayoutData.grabExcessHorizontalSpace = true;
+		orderConfirmListlayoutData.grabExcessVerticalSpace = true;
+		orderConfirmList.setLayoutData(orderConfirmListlayoutData);
+		tblOrderConfirmListId = new TableColumn(orderConfirmList, SWT.NONE);
+		tblOrderConfirmListId.setWidth(300);
+		tblOrderConfirmListId.setResizable(true);
+		tblOrderConfirmListId.setMoveable(true);
 	}
 }

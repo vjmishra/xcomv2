@@ -5481,10 +5481,11 @@ width:auto;
     margin-left: 15px;
     margin-top: 10px;
     overflow: hidden;
-    /* width: 435px; */
+    /*width: 435px;*/
 }
+/*  for replacement modal text EB 783 */
 #replacementItemBody .mil-wrap-condensed-desc {
-    width: 200px;
+	width: 370px;
 }
 .mil-desc-attribute-list, .mil-desc-attribute-list ul, ul.prodlist {
     color: #003399;
@@ -5571,7 +5572,7 @@ input:focus, textarea:focus {
     width: 300px;
 }
 #replacementItemBody .mil-desc-wrap {
-    width: 206px;
+    width: 350px;
 }
 .mil-edit-field {
     border: 1px solid #CCCCCC;
@@ -6169,3 +6170,37 @@ div#main.userProfile { min-height: 850px; }
 	width: 879px;
 }
 /* End - Changes made by Mitesh Parikh for JIRA#3186 */
+
+/*Added for EB 1150 for back to top functionality*/
+#back-to-top a
+{
+    /* display: block before hiding */
+    display: block;
+    display: none;
+    opacity: 1;
+    /* link stays at same place on page */
+    position: fixed;
+
+    /* link goes at the bottom of the page */
+    top: 100%;
+    margin-top: -105px; /* = height + preferred bottom margin */
+
+    /* link is centered */
+    
+    width: 51px;
+    height: 51px;
+}
+
+#back-to-top:focus {
+	outline:none;
+	}
+
+/*End for EB 1150 for back to top functionality*/
+
+.mil-count-selected-top {
+	margin-top: 20px;
+}
+.mil-count-selected-bottom {
+	margin-left: 20px;
+	margin-bottom: 20px;
+}

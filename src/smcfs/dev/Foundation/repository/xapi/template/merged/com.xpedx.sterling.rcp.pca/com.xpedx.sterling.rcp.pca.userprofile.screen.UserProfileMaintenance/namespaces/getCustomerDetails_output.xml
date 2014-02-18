@@ -3,7 +3,7 @@
     <BuyerOrganization OrganizationCode="" OrganizationName=""/>
     <CustomerContactList>
         <CustomerContact ApproverProxyUserId="" ApproverUserId="" CustomerContactID="" DateOfBirth="" DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo="" EveningPhone="" FirstName=""
-            JobTitle="" LastName="" MiddleName="" MobilePhone="" SpendingLimit="" SpendingLimitCurrency="" SpouseDateOfBirth="" Status="" Title="" UserID="" WeddingAnniversaryDate="">
+            JobTitle="" LastName="" MiddleName="" MobilePhone="" SpendingLimit="" SpendingLimitCurrency="" SpouseDateOfBirth="" Status="" Title="" UserID="" WeddingAnniversaryDate="" Modifyuserid=""  Modifyts="">
 		<Extn/>
 		</CustomerContact>	
     </CustomerContactList>

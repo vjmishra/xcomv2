@@ -17,6 +17,7 @@
 
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css"
                href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
@@ -419,13 +420,7 @@ function showSplitDiv(divId)
  </s:url>
 <s:url id="urlPrint"  includeParams="none" escapeAmp="false" action='PrintOrderDetail.action' namespace = '/order' ></s:url>
 <s:url id="urlOrderAgainId"  includeParams="none"  action='orderAgain' namespace = '/order' ></s:url>
-<s:url id="urlEditOrderId"    action='draftOrderDetails' namespace = '/order' >
-	<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
-	<s:param name="isEditOrder" value="%{'true'}" ></s:param>
-	<s:param name="draft" value='%{"N"}'></s:param>
-	<s:param name="resetDesc" value="%{'true'}" ></s:param>
-</s:url>
-<s:url id="urlResetOrderId"  includeParams="none"  action='XPEDXResetPendingOrder' namespace = '/order' ></s:url>
+<s:url id="urlResetOrderId"  includeParams="none"  action='MyResetPendingOrder' namespace = '/order' ></s:url>
 <s:set name="isOrderOnApprovalHold" value="%{#_action.isOrderOnApprovalHold()}"/>
 <s:set name="isOrderOnRejectionHold" value="%{#_action.isOrderOnRejctionHold()}"/>
 
@@ -478,6 +473,10 @@ function showSplitDiv(divId)
                  <s:if test='#_action.getResetWithError() == "Y"'>
                 	<h5 align="center"><b><font color="red">Unable to apply changes to your order. Please try again later or contact customer service.</font></b></h5>
                 </s:if>
+                <s:if test='%{isErrorMessage == "Y"}'>
+                	<h5 align="center"><b><font color="red">Your order has been updated by xpedx. Please review the order detail and then make your changes.</font></b></h5>
+                </s:if>
+                
                 <!-- begin top section -->
                 <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
                 <s:form namespace="/order" method="post"  id= "postOrderForm" name='postOrderForm'>
@@ -494,7 +493,7 @@ function showSplitDiv(divId)
 		            </s:iterator>
 		            <s:a id='returnOrderListId' href='%{orderListReturnUrl}' cssClass="grey-ui-btn float-left top-gray-btn"><span>Return to Orders</span></s:a>
 	                
-	                <s:if test ="#_action.approvalAllowed()" >
+	                <s:if test ="#_action.approvalAllowed() && #status != 'Cancelled'" >
 		                <s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve /Reject Order</span></s:a>
 <%-- 						<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Reject Order</span></s:a> --%>
 		            </s:if>
@@ -515,7 +514,18 @@ function showSplitDiv(divId)
 				</s:if>
 				<s:set name="test11" value="%{#_action.isFOCreated()}"/>	
 				<s:hidden name="test1" value='%{#test11}'/>
-				<s:if test="!#isEstimator">
+				<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
+					<s:set name="approvalAllowed" value="%{'false'}"/>
+					<s:if test="#_action.approvalAllowed()">
+						<s:set name="approvalAllowed" value="%{'true'}"/>
+					</s:if>
+					<s:url id="urlEditOrderId" action='draftOrderDetails' namespace = '/order' >
+						<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
+						<s:param name="isEditOrder" value="%{'true'}" ></s:param>
+						<s:param name="draft" value='%{"N"}'></s:param>
+						<s:param name="resetDesc" value="%{'true'}" ></s:param>
+						<s:param name="approvalAllowedFlag" value="#approvalAllowed"></s:param>												
+					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
@@ -526,7 +536,7 @@ function showSplitDiv(divId)
 							<a href="javascript:editOrder('${urlEditOrderId}');"  style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
 						</s:if>					
 					</s:else>
-				</s:if>
+				 </s:if>
 				 <s:if test = "#_action.isOrderInPendingChageState()" >
 					 <a href="javascript:refreshOrder('${urlResetOrderId}');" style="float:right" class="grey-ui-btn" id='refreshButtonId'><span>Refresh</span></a>
                		<%--OOTB button for refreshing order -Amar 
@@ -665,7 +675,7 @@ function showSplitDiv(divId)
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> 
-                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType == "Customer" && #isCSRReview)}'>
+                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType == "Customer" && #isCSRReview)}'>
                         				Submitted (CSR Reviewing) 
                         			</s:if>
                         			<s:else>
@@ -817,6 +827,8 @@ function showSplitDiv(divId)
 				<s:set name='priceInfo' value='#xutil.getChildElement(#orderLine, "LinePriceInfo")'/>
 				<s:set name='lineTotals' value='#xutil.getChildElement(#orderLine, "LineOverallTotals")'/>
 				<s:set name='item' value='#xutil.getChildElement(#orderLine, "Item")'/>
+				<s:set name='itemID' value='#item.getAttribute("ItemID")'/>
+				<s:set name="customerUom" value='%{#_action.getCustomerUOMMap().get(#itemID)}' />
 				<s:set name='itemDetails' value='#xutil.getChildElement(#orderLine, "ItemDetails")'/>
 				<s:set name='primaryInfo' value='#xutil.getChildElement(#itemDetails, "PrimaryInformation")'/>
 				<s:set name='itemExtnEle' value='#xutil.getChildElement(#itemDetails, "Extn")' />
@@ -910,26 +922,21 @@ function showSplitDiv(divId)
 							 	<img border="none"  src="/swc/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>	
 					    </p>
-					    <s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
-			    			 
-			    			<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/>
-			    			<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-			    			
-							<p class="OD-bottom-margin line-spacing">
-								<s:if test='%{customerSku == "1"}' >
-									<s:property value="#customerItemLabel" />:
-								</s:if>
-								<s:elseif test='%{customerSku == "2"}'>
-									<s:property value="#manufacturerItemLabel" />:
-								</s:elseif>
-								<s:else>
-									<s:property value="#mpcItemLabel" />:
-								</s:else>
-								<s:property value='#itemSkuVal' />
-							</p>
-	
-						</s:if>
-
+					       <s:if test='#orderLine.getAttribute("LineType") != "M"'>
+								<s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p class="fields-padding">
+												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p class="fields-padding">
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+								 			</s:if>			
+                               </s:if>
 					    </div>
 			    	    <!--end left section -->
 			    	    </td>
@@ -958,9 +965,16 @@ function showSplitDiv(divId)
 					    			<s:set name='orderqty' value='#_action.getCalculatedOrderedQuantityWithoutDecimal(#orderLine)' />
 									<%--<s:set name='orderdqty' value='%{#strUtil.replace(#orderqty, ".0", "")}' /> --%> 
 									<s:set name='orderdqty' value="#xpedxUtilBean.formatQuantityForCommas(#orderdqty)"/>
+									<s:if test="%{#customerUom == #uom}">
+										<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+										<s:set name='uomDesc' value="#customerUomWithoutM"/>
+									</s:if>
+									<s:else>
+										<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+									</s:else>
 					    			<td class="text-left"  width="175">	
 						    			 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
-						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			 </s:if>
 					    			</td>
 					    			<td class="text-right" width="95">						    		
@@ -969,8 +983,13 @@ function showSplitDiv(divId)
 						    			    <s:if test="%{#theMyPrice==#priceWithCurrencyTemp1}">						    			     
 						    			     <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>	
 						    			     	<s:set name="isMyPriceZero" value="%{'true'}" />
-						    			     	<s:set name="myPriceValue" value="%{'true'}" />					    			        
-											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
+						    			     	<s:set name="myPriceValue" value="%{'true'}" />	
+						    			     	<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">	
+						    			     		<s:property value='#theMyPrice'/>			    			        
+												</s:if>
+												<s:else>
+													<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>
+												</s:else>
 											 </s:if> 
                                             </s:if>
                                             <s:else>
@@ -989,7 +1008,12 @@ function showSplitDiv(divId)
 						    						<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext,#currencyCode, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
 						    					</s:if>
 						    					<s:else>
-						    						<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+						    						<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">	
+														<s:property value='#xpedxutil.formatPriceWithCurrencySymbol(wCContext,#currencyCode, #orderLineExtnElem.getAttribute("ExtnLineShippableTotal"))'/>
+						    						</s:if>
+						    						<s:else>
+						    							<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+						    						</s:else>
 						    					</s:else>
 						    				  </s:if>
 						    				</s:if>
@@ -1000,7 +1024,12 @@ function showSplitDiv(divId)
 						    			    <s:set name="theExtendedPrice" value='#util.formatPriceWithCurrencySymbol(wCContext, #currencyCode, #extendedPrice)'/>
 						    			    <s:if test="%{#myPriceValue == 'true'}">
 						    			       <s:if test='(#orderLine.getAttribute("LineType") != "C")'>
-											    <span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> 
+						    			       		<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">	
+						    			       		<s:property value='#theExtendedPrice'/>
+											</s:if>
+											<s:else>
+											    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> 
+											</s:else>
 											    <s:set name="isOrderTBD" value="%{#isOrderTBD+1}" /> 
 											   </s:if>
                                             </s:if>
@@ -1022,9 +1051,16 @@ function showSplitDiv(divId)
 					    				<s:set name='shipqty' value='#orderLineExtnElem.getAttribute("ExtnReqShipOrdQty")' />
 										<s:set name='shipqty' value='%{#strUtil.replace(#shipqty, ".00", "")}' />
 										<s:set name='shipqty' value="#xpedxUtilBean.formatQuantityForCommas(#shipqty)"/>
+										<s:if test="%{#customerUom == #uom}">
+											<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+											<s:set name='uomDesc' value="#customerUomWithoutM"/>
+										</s:if>
+										<s:else>
+											<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+										</s:else>
 						    			<td class="text-left">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-						    			    <s:property value='%{#shipqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			    <s:property value='%{#shipqty}'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			  </s:if>
 						    			</td>
 					    			</s:if>
@@ -1036,7 +1072,15 @@ function showSplitDiv(divId)
 						    		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
 						    			  <s:if test="%{#myPriceValue == 'false'}">
                                               <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-					    						per <s:property value='#wcUtil.getUOMDescription(#orderLineExtnElem.getAttribute("ExtnPricingUOM"))'/>
+                                              		<s:if test="%{#customerUom == (#orderLineExtnElem.getAttribute('ExtnPricingUOM'))}">
+														<s:set name='temp' value="#orderLineExtnElem.getAttribute('ExtnPricingUOM')"/>
+														<s:set name='customerUomWithoutM' value='%{#temp.substring(2, #temp.length())}' />
+														<s:set name='uomDesc' value="#customerUomWithoutM"/>
+													</s:if>
+													<s:else>
+														<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#orderLineExtnElem.getAttribute('ExtnPricingUOM'))"/>
+													</s:else>
+					    						per <s:property value="#uomDesc"/>
 					    					  </s:if>
 					    				  </s:if>
 					    			</s:if>
@@ -1053,9 +1097,16 @@ function showSplitDiv(divId)
 						    			<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
 										<s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />
 										<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
+										<s:if test="%{#customerUom == #uom}">											
+											<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+											<s:set name='uomDesc' value="#customerUomWithoutM"/>
+										</s:if>
+										<s:else>
+											<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+										</s:else>
 						    			<td class="text-left">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
-						    			   <s:property value='%{#backqty}'/>&nbsp;<s:property value='#wcUtil.getUOMDescription(#uom)'/> 
+						    			   <s:property value='%{#backqty}'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			  </s:if>
 						    		    </td>
 					    			</s:if>
@@ -1109,11 +1160,18 @@ function showSplitDiv(divId)
 												<s:set name='splitqty' value='#splitOrderAttributes.get(2)' />
 												<s:set name='splitqty' value='%{#strUtil.replace(#splitqty, ".00", "")}' />
 												<s:set name='splitqty' value="#xpedxUtilBean.formatQuantityForCommas(#splitqty)"/>
-												<s:if test='%{#xutil.getAttribute(#orderDetail,"Status") == "Awaiting FO Creation" || (#orderType != "Customer") || #isFOCSRReview}'>
-												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
+												<s:if test="%{#customerUom == #uom}">											
+													<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+													<s:set name='uomDesc' value="#customerUomWithoutM"/>
 												</s:if>
 												<s:else>
-												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
+													<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+												</s:else>
+												<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType != "Customer") || #isFOCSRReview}'>
+												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#uomDesc'/>
+												</s:if>
+												<s:else>
+												<s:property value='%{#splitOrderAttributes.get(3)}'/>:<s:property value="#splitqty"/> <s:property value='#uomDesc'/>
 												</s:else>
 																		    					
 									    		<s:if test="%{#ViewInvoicesFlag}">	
@@ -1198,11 +1256,18 @@ function showSplitDiv(divId)
 																<s:set name='splitqty' value='#splitOrder.getAttribute("Quantity")' />
 																<s:set name='splitqty' value='%{#strUtil.replace(#splitqty, ".00", "")}' />
 																<s:set name='splitqty' value="#xpedxUtilBean.formatQuantityForCommas(#splitqty)"/>
+																<s:if test="%{#customerUom == #uom}">											
+																	<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
+																	<s:set name='uomDesc' value="#customerUomWithoutM"/>
+																</s:if>
+																<s:else>
+																	<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
+																</s:else>
 																<s:url id="legacyOrderDetailsURL" action="orderDetail" escapeAmp="false" >
 																		<s:param name="orderHeaderKey" value='#splitOrder.getAttribute("OrderHeaderKey")'/>  
 																		<s:param name="orderListReturnUrl" value="%{orderListReturnUrl}"/>
 																</s:url>
-																Order #:<s:if test='%{#splitOrder.getAttribute("FormattedLegacyOrderNumber") == "In progress"}'><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:if><s:else> <s:a href="%{legacyOrderDetailsURL}"><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:a></s:else> <s:property value='#splitOrder.getAttribute("Status")'/>: <s:property value='%{#splitqty}'/> <s:property value='#wcUtil.getUOMDescription(#uom)'/>
+																Order #:<s:if test='%{#splitOrder.getAttribute("FormattedLegacyOrderNumber") == "In progress"}'><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:if><s:else> <s:a href="%{legacyOrderDetailsURL}"><s:property value='#splitOrder.getAttribute("FormattedLegacyOrderNumber")'/></s:a></s:else> <s:property value='#splitOrder.getAttribute("Status")'/>: <s:property value='%{#splitqty}'/> <s:property value='#uomDesc'/>
 																<br/>
 															</s:iterator>				
 														</td>
@@ -1330,8 +1395,13 @@ function showSplitDiv(divId)
 						<th>Subtotal:</th>
 						<td> 	    			    
 					    	<s:set name='extnOrderSubTotal' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnOrderSubTotal"))' />
- 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp || #setTBD == true}">	
-								<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+ 			  		 			<s:if test="%{#extnOrderSubTotal == #priceWithCurrencyTemp || #setTBD == true}">
+ 			  		 			<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">
+ 			  		 				&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
+ 			  		 			</s:if>
+ 			  		 			<s:else>	
+									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+								</s:else>
 	                       	</s:if>
 	                       	<s:else>
 	                		   		 &nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderSubTotal"))' />
@@ -1353,7 +1423,12 @@ function showSplitDiv(divId)
 						<td>
 								<s:set name='extnTotOrdValWithoutTaxes' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
 	 			  				<s:if test="%{#extnTotOrdValWithoutTaxes == #priceWithCurrencyTemp || #setTBD == true}">
-							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+	 			  				<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">
+	 			  					&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
+	 			  				</s:if>
+	 			  				<s:else>
+							    		<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+							        </s:else>
 	                       		</s:if>
 	                      		<s:else>
 	                		    		&nbsp;<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotOrdValWithoutTaxes"))' />
@@ -1396,8 +1471,13 @@ function showSplitDiv(divId)
 										</s:else>
 									</s:else>							
 								</s:if>
-								<s:else>								
-									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+								<s:else>
+									<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">
+										<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnOrderTax"))' />
+									</s:if>
+									<s:else>								
+										<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+									</s:else>
 								</s:else>
 							</s:if>
 							<s:else>
@@ -1434,8 +1514,13 @@ function showSplitDiv(divId)
 										</s:else>
 									</s:else>							
 								</s:if>
+								<s:else>
+								<s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">
+									<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderFreight"))' />
+								</s:if>
 								<s:else>								
 									<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>
+								</s:else>
 								</s:else>
 							</s:if>
 							<s:else>
@@ -1448,7 +1533,12 @@ function showSplitDiv(divId)
 						<td>
 							<s:set name='extnTotalOrderValue'	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderExtn.getAttribute("ExtnTotalOrderValue"))'/>
 		 			  			 <s:if test="%{#extnTotalOrderValue == #priceWithCurrencyTemp || #setTBD == true}">
-							    	<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span>  
+		 			  			  <s:if test="%{#status == 'Invoiced' || #status == 'Invoice Only'}">
+		 			  			  	<s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
+							    	</s:if>
+							    	<s:else>
+							    		<span class="red bold"> <s:text name='MSG.SWC.ORDR.OM.INFO.TBD' /> </span> 
+							    	</s:else> 
 	                     	</s:if>
 	                        <s:else> 
 	                        	 <s:property value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#OrderExtn.getAttribute("ExtnTotalOrderValue"))' />
@@ -1483,7 +1573,7 @@ function showSplitDiv(divId)
 					</s:else>
 			</s:if>
 						
-			<s:if test ="#_action.approvalAllowed()" >
+			<s:if test ="#_action.approvalAllowed() && #status != 'Cancelled'" >
 				<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve / Reject Order</span></s:a>
 <%-- 				<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Reject Order</span></s:a> --%>
 			</s:if>
@@ -1498,7 +1588,18 @@ function showSplitDiv(divId)
 				</s:if>
 				</s:if>
 			</s:if>
-			<s:if test="!#isEstimator">
+			<s:if test="!#isEstimator && !#_action.isOrderInPendingChageState()">
+					<s:set name="approvalAllowed" value="%{'false'}"/>
+					<s:if test="#_action.approvalAllowed()">
+						<s:set name="approvalAllowed" value="%{'true'}"/>
+					</s:if>
+					<s:url id="urlEditOrderId" action='draftOrderDetails' namespace = '/order' >
+						<s:param name='orderHeaderKey' value='#xutil.getAttribute(#orderDetail,"OrderHeaderKey")'/>
+						<s:param name="isEditOrder" value="%{'true'}" ></s:param>
+						<s:param name="draft" value='%{"N"}'></s:param>
+						<s:param name="resetDesc" value="%{'true'}" ></s:param>
+						<s:param name="approvalAllowedFlag" value="#approvalAllowed"></s:param>												
+					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
 								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
@@ -1684,7 +1785,7 @@ function showSplitDiv(divId)
 
 <!-- div for order cancel light box -->
 <swc:dialogPanel title='' isModal="true" id="cancelDialog">
-         <s:form id="CancelForm" name="CancelForm" action="xpedxOrderCancel">
+         <s:form id="CancelForm" name="CancelForm" action="MyOrderCancel">
          <s:hidden name="orderHeaderKey" value="%{dorderHeaderKey}" />
          <!--Changed for  Jira 2039  -->
          <input type="hidden" name="orderListReturnUrl" value="<s:property value='%{orderListReturnUrl}' />" />
@@ -1731,7 +1832,7 @@ function showSplitDiv(divId)
 </div>
 <a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a>
 <s:if test ="#_action.approvalAllowed()" >
-	<swc:dialogPanel title="Approval/Rejection Notes" isModal="true" id="approvalNotesPanel"> 
+	<swc:dialogPanel  title="" isModal="true" id="approvalNotesPanel"> 
 			
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<h2>Approval / Rejection Comments</h2>

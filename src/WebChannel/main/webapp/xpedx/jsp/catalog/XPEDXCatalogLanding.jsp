@@ -22,6 +22,7 @@
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 <s:if test="#isGuestUser != true">
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+ <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <!--[if IE]>
@@ -197,8 +198,8 @@
 		</fieldset>
 			</div>
 			<!-- Ad Juggler Tag Starts - Cat1 Landing Page -->		
-			<s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
-			
+			 <s:set name='ad_keyword' value='#currentCat.getAttribute("ShortDescription")' />
+			<s:set name='isGuestUser' value="wCContext.guestUser" />
 			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115162" />
 			</s:if>
@@ -207,13 +208,19 @@
 			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118193" />
-			</s:elseif >
+			</s:elseif >			
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true) && (#categoryDepth!=1)}' >
+					<s:set name="aj_adspot" value="250649" /> 
+			</s:elseif>
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true) && (#categoryDepth==1)}' >
+					<s:set name="aj_adspot" value="147682" />
+			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115712" />
 			</s:elseif>
 			<s:else>
 					<s:set name="aj_adspot" value="115712" />
-			</s:else>
+			</s:else> 
 			<!-- Ad Juggler Tag Ends -->
 			 </s:if>
 			 <s:else>
@@ -271,7 +278,7 @@
 					</s:iterator>
 					</div>
 			<!-- Ad Juggler Tag Start - Catalog Landing Page 160X600 -->		
-			<s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
+			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118185" />
 			</s:if>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
@@ -280,6 +287,9 @@
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="118192" />
 			</s:elseif >
+			<s:elseif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true)}' >
+					<s:set name="aj_adspot" value="250649" />
+			</s:elseif>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 					<s:set name="aj_adspot" value="115722" />
 			</s:elseif>
@@ -295,20 +305,28 @@
 			<!-- end mid column -->
 			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
-				 <div id="right-col-int" class="cat-landing" style="margin-top:0px;">
-				 <div align="left" style="padding-right: 72px;">
+				<div id="right-col-int" class="cat-landing" style="margin-top:0px;right:10px;">
+				 <div align="left" style="padding-right: 60px;margin-bottom:2px">
 				<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
-				</div>
+				
 			</div>
-			
-				 <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
-				 </br>
+				<!-- Added for EB-1712 Display a Saalfeld advertisement image on Catalog Home page  Starts -->
+						<s:set name='storefrontId' value="wCContext.storefrontId" />
+						 <%-- <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
+						 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+						 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+						 </s:if>--%>
+						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+						<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+						</s:if> 
+				<!-- EB-1549 END -->
+				
 				<!-- Ad Juggler Tag Starts  -->
 				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->
 				<s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
 				<s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
 				<s:if test="#categoryDepth==1">
-					<script type="text/javascript" language="JavaScript">
+				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />'; aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw='<s:property value="%{#prependTestString}" /><s:property value="%{#sanitizedCategoryName}" />';
 				aj_pv = true; aj_click = ''; </script>
@@ -322,8 +340,7 @@
 				</script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:else>
-				<!-- Ad Juggler Tag Ends -->
-	 
+				<!-- Ad Juggler Tag Ends -->  
 			</div>
 			
 			
@@ -340,8 +357,6 @@
  
 <!-- end container  -->
 <!-- FOOTER GOES HERE -->
-<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-
 
 
 <!--<script type="text/javascript" src="../xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -372,6 +387,8 @@
 -->
 <!--<script type="text/javascript" src="../xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 -->
+<!--EB-519-->
+<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -396,5 +413,6 @@
 	   }
 		
 </script>
+
 </body>
 </html>

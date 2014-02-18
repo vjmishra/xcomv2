@@ -28,6 +28,12 @@
           Nullable="true" 
           XMLName="ExtnColor"
           XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_BEST_MATCH" 
+          DataType="Text-200"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnBestMatch"
+          XMLGroup="Extn" />
 		  <Attribute ColumnName="EXTN_BASIS" 
           DataType="Text-40"
 		  Description=" "  
@@ -214,6 +220,13 @@
           	XMLName="ExtnPackMethod"
          	XMLGroup="Extn" />
 	  
+	  		<Attribute ColumnName="EXTN_MARKETING_GROUP_ID" 
+          	DataType="Text-100"
+	  		Description="Extn field with the Marketing Group ID (aka Publishing Unit Name)"  
+          	Nullable="true" 
+          	XMLName="ExtnMarketingGroupId"
+         	XMLGroup="Extn" />
+	  
         </Attributes>
         
         <Indices>
@@ -250,6 +263,10 @@
 				<Index Name="EXTN_ITEM_I7" Unique="False">
 					<Column Name="ITEM_GROUP_CODE" />
 					<Column Name="STATUS" />
+				</Index>
+				
+				<Index Name="EXTN_ITEM_I8" Unique="False">
+					<Column Name="EXTN_BEST_MATCH" />
 				</Index>
 		
          </Indices>

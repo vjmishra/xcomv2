@@ -3897,7 +3897,7 @@ td .inner {
 }
 
 .input-details {
-	width: 111px;
+	width: 155px;
 }
 
 .input-details-cart {
@@ -6213,7 +6213,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .avail-grid {
 	margin-left: 20px;
 	margin-top: 33px;
-	width: 350px;
+	width: 340px;
 	float: left;
 	height: auto;
 }
@@ -6327,7 +6327,7 @@ div#termsOfAccess {
 
 div#termsOfAccess #ajax-termsOfAccessContent {
 	height: 100% !important;
-	width: 100% !important;
+	width: 95% !important;
 }
 /* jquery slideshow zindex fix */
 div#termsOfAccess #ext-gen6 {
@@ -6497,7 +6497,7 @@ div.last-modified-div {
 #second-navigation {
 	background: url(../../images/theme/theme-1/navigation/unselected.png)
 		repeat-x;
-	width: 100%;
+	/*width: 100%;*/
 }
 
 #second-navigation #main-nav li.hover,#second-navigation#main-nav li:hover

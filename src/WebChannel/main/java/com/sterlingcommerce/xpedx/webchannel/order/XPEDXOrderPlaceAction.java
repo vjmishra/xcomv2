@@ -5,13 +5,17 @@
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,6 +27,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
+import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContextHelper;
@@ -138,6 +143,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public String draftOrderflagOrderSubmit;
 	public String draftErrorFlagOrderSummary = "draftErrorFlagOrderSummary";
 	public String draftErrorOrderSummary = "false";
+
 	public String getDraftOrderflagOrderSubmit() {
 		return draftOrderflagOrderSubmit;
 	}
@@ -209,19 +215,29 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	}
 
 	public String execute() {
-		try {
+		String retFail=FAILURE;
+		try {			
 			YFCDate orderDate = new YFCDate();
 			orderPlaceDate = orderDate.getString();
 			Element isPendingApproval = null;
 			customerContactID=wcContext.getLoggedInUserId();
-			//Commented this line as it is causing exception. Looks like the mashup is not defined.
+			String approveOrderFlag="false";
+			
+			Object addnlEmailAddrs=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR);
+			if(addnlEmailAddrs!=null && addnlEmailAddrs.toString().trim().length()>0) {
+				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+				xpedxCustomerContactInfoBean.setAddEmailID(addnlEmailAddrs.toString());
+				XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
+			}			
+			XPEDXWCUtils.removeObectFromCache(XPEDXConstants.XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR);
+			
 			if (isDraftOrder()) {
-//				prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
+				//prepareAndInvokeMashup(CHANGE_ORDER_DATE_MASHUP_ID);
 				Document shipToCustomerDoc=createCustomerDocument();
 				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 				if(YFCCommon.isVoid(editedOrderHeaderKey)){
 		 			draftOrderflagOrderSubmit="Y";
-
+		 			retFail="error";
 		 		}
 		 		else{
 		 			draftOrderflagOrderSubmit="N";
@@ -259,35 +275,32 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			} else {//order update flow
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
-				if(YFCCommon.isVoid(editedOrderHeaderKey)){
+				if(YFCCommon.isVoid(editedOrderHeaderKey)) {
 					return draftErrorFlagOrderSummary;
 
 		 		}
 				
-				Document orderDetailDocument = (Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
-				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				Document orderDetailDocument=(Document)getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);
+				if(isOrderUpdateDone(orderDetailDocument))
+					return "OUErrorPage";
+				getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_ORDER_UPDATE_SESSION_OBJ);			
+				
 				setOrderHeaderKey(SCXmlUtil.getAttribute(orderDetailDocument.getDocumentElement(), "OrderHeaderKey"));
 				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
 				if(YFCCommon.isVoid(orderHeaderKey)){
 					generatedErrorMessage = "Could not process the order with no header key.Please contact system admin.";
 					log.error("OrderHeaderKey is empty. Cannot process OrderChange.");
-					return FAILURE;
+					return retFail;
 				}
 				setOrderType(orderDetailDocument.getDocumentElement().getAttribute("OrderType"));
-				if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
+				
+				Object approveOrderSessionVar=XPEDXWCUtils.getObjectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+				XPEDXWCUtils.removeObectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+				if(approveOrderSessionVar!=null)
 				{
-					//setYFSEnvironmentVariables(getWCContext());
-					isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
-					if(isPendingApproval != null)
-					{
-						Element holdTypes = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
-						if(holdTypes != null)
-						{
-							orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdTypes, true));
-							
-						}
-					}
+					approveOrderFlag=approveOrderSessionVar.toString();
 				}
+				
 				/*Begin - Changes made by Mitesh Parikh for JIRA#3594*/
 				//get the order details
 				/*Map<String, String> valueMap = new HashMap<String, String>();
@@ -308,80 +321,116 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 					return FAILURE;
 					
 				}*/
-				/*End - Changes made by Mitesh Parikh for JIRA#3594*/
-				if(orderDetailDocument != null)
-				{
-					// Updated for Jira 4304
-					orderDetailDocument.getDocumentElement().removeAttribute("OrderName");
-					changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
-					//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
-				}
+				/*End - Changes made by Mitesh Parikh for JIRA#3594*/		
 				
 				/*call the customized service XPXUpdateChainedOrder with the order XML which propagates the Fulfillment 
 				order changes to Customer Order and sends the new order to Legacy*/
 				try 
 				{
-					Object orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
-					
-					if(orderUpdateObj != null)
+					Object orderUpdateObj = null;
+	
+					if("false".equals(approveOrderFlag))
 					{
-						
-						Element orderUpdateElem=(Element)orderUpdateObj;
-						//Added for JIRA 4326 to get the FO holds because below getOrderLineList will be called for CO .and icase of FO editing there will not be any chained order so need to ge torder details
-						if(orderUpdateElem != null && !orderUpdateElem.getAttribute("OrderType").equals("Customer"))
+						if("Customer".equals(orderDetailDocument.getDocumentElement().getAttribute("OrderType")))
 						{
-							Map<String, String> valueMap1 = new HashMap<String, String>();
-							valueMap1.put("/Order/@OrderHeaderKey", orderUpdateElem.getAttribute("OrderHeaderKey"));
-							try {
-								Element input1 = WCMashupHelper.getMashupInput("xpedxOrderEditOrderList",
-										valueMap1, wcContext.getSCUIContext());
-
-								Object obj1 = WCMashupHelper.invokeMashup(
-										"xpedxOrderEditOrderList", input1,
-										wcContext.getSCUIContext());
-
-								Document outputDoc1 = ((Element) obj1).getOwnerDocument();
-								isFOCSRReview(outputDoc1.getDocumentElement());
-
-							} catch (CannotBuildInputException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+							isPendingApproval = (Element) prepareAndInvokeMashup("XPXIsPendingApprovalOrder");
+							if(isPendingApproval != null)
+							{
+								Element holdTypes = SCXmlUtil.getChildElement(isPendingApproval, "OrderHoldTypes");
+								if(holdTypes != null)
+								{
+									orderDetailDocument.getDocumentElement().appendChild(orderDetailDocument.importNode(holdTypes, true));
+									
+								}
 							}
 						}
-							
-						if(orderUpdateElem.hasAttribute("TransactionMessage"))
+						
+						if(orderDetailDocument != null)
 						{
-							String transactionMessage=orderUpdateElem.getAttribute("TransactionMessage");
-							if(!YFCCommon.isVoid(transactionMessage))
+							// Updated for Jira 4304
+							orderDetailDocument.getDocumentElement().removeAttribute("OrderName");
+							changeOutputDocToOrderUpdateDoc(orderDetailDocument.getDocumentElement());
+							//LOG.debug("Order Input to xpedxOrderUpdateToLegacyFlow : "+SCXmlUtil.getString(orderDetailDocument));
+						}
+						Element orderExtnElement = SCXmlUtil.getChildElement(orderDetailDocument.getDocumentElement(), "Extn");
+						if(orderExtnElement!=null)
+						{
+							orderExtnElement.setAttribute("ExtnOrderEditCustContactID", wcContext.getLoggedInUserId());
+						}
+						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+
+						if(orderUpdateObj != null)
+						{
+							
+							Element orderUpdateElem=(Element)orderUpdateObj;
+							//Added for JIRA 4326 to get the FO holds because below getOrderLineList will be called for CO .and icase of FO editing there will not be any chained order so need to ge torder details
+							if(orderUpdateElem != null && !orderUpdateElem.getAttribute("OrderType").equals("Customer"))
 							{
+								Map<String, String> valueMap1 = new HashMap<String, String>();
+								valueMap1.put("/Order/@OrderHeaderKey", orderUpdateElem.getAttribute("OrderHeaderKey"));
+								try {
+									Element input1 = WCMashupHelper.getMashupInput("xpedxOrderEditOrderList",
+											valueMap1, wcContext.getSCUIContext());
+
+									Object obj1 = WCMashupHelper.invokeMashup(
+											"xpedxOrderEditOrderList", input1,
+											wcContext.getSCUIContext());
+
+									Document outputDoc1 = ((Element) obj1).getOwnerDocument();
+									isFOCSRReview(outputDoc1.getDocumentElement());
+
+								} catch (CannotBuildInputException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+								
+							if(orderUpdateElem.hasAttribute("TransactionMessage"))
+							{
+								String transactionMessage=orderUpdateElem.getAttribute("TransactionMessage");
+								if(!YFCCommon.isVoid(transactionMessage))
+								{
 									try
 									{
 										Document error=SCXmlUtil.createFromString(transactionMessage);
 										if(error == null)
 										{
 											generatedErrorMessage = transactionMessage;
-											return FAILURE;
+											return retFail;
 										}
 										generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
 										log.error("Exception posting the order update to Legacy system..\n");
-										return FAILURE;
+										return retFail;
 									}
 									catch(Exception e)
 									{
 										generatedErrorMessage = transactionMessage;
 										XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
-										return FAILURE;
+										return retFail;
 									}
+								}									
 							}
-								
 						}
-					}
+						
+					} else
+					{						
+						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxCreateLegacyOrderOnApproval", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
+					}					
 					
 				} catch (Exception e) {
-					generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
-					log.error("Exception posting the order update to Legacy system..\n",e);
-					XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
-					return FAILURE;
+					if("false".equals(approveOrderFlag))
+					{
+						generatedErrorMessage = "Error posting the order update to Legacy system.Please contact system admin.";
+						log.error("Exception posting the order update to Legacy system..\n",e);
+						XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+						return retFail;
+					
+					} else {
+						generatedErrorMessage = "Exception while approving an order and posting it to the Legacy system. Please contact system admin.";
+						log.error("Exception while approving an order and posting it to the Legacy system..\n",e);
+						XPEDXWCUtils.logExceptionIntoCent(e.getMessage());
+						return retFail;
+					}
 				}
 				XPEDXWCUtils.resetEditedOrderShipTo(wcContext); //added for jira 4306
 				// CR 2997 - Updated for Removing the EditOrderHeaderKey from session after placing an order(Success/Failure) in Edit Order Flow
@@ -391,35 +440,47 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				}
 				
 				//the output required for the confirmation page; do the necessary getCompleteOrderDetails call.
-				confirmDraftOrderElem = prepareAndInvokeMashup(GET_CONFIRMATION_PAGE_DETAILS);				
-				ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
-				parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey"); 
+				confirmDraftOrderElem = prepareAndInvokeMashup(GET_CONFIRMATION_PAGE_DETAILS);
+				
+				String orderType = SCXmlUtil.getAttribute(confirmDraftOrderElem,"OrderType");
+				if(!"Customer".equals(orderType))
+				{
+					ArrayList<Element> orderLineNodeList=SCXmlUtil.getElements(confirmDraftOrderElem,"OrderLines/OrderLine");
+					parentOrderHeaderKeyForFO = orderLineNodeList.get(0).getAttribute("ChainedFromOrderHeaderKey");
+				
+				} else {
+					parentOrderHeaderKeyForFO = getOrderHeaderKey();
+				}
 			}
+			
 			ArrayList<String> chainedOrderFromKeylist = new ArrayList<String>();
 			chainedOrderFromKeylist.add(orderHeaderKey);
 			Document chainedOrderLineListDoc = getXpedxChainedOrderLineList(chainedOrderFromKeylist);
 			setXpedxChainedOrderMap(chainedOrderLineListDoc);
-			isOrderOnApprovalHoldStatus=isOrderOnApprovalHold();
-			//added for jira 3484 for display of approvers EMailID
-			if(isOrderOnApprovalHoldStatus)
+			if("false".equals(approveOrderFlag))
 			{
-				if(primaryApproverID != null){
-					resolverUserID = primaryApproverID;
-					if(primaryApproverID != null && proxyApproverID != null){
-						resolverUserID = primaryApproverID+","+proxyApproverID;
+				isOrderOnApprovalHoldStatus=isOrderOnApprovalHold();
+				//added for jira 3484 for display of approvers EMailID
+				if(isOrderOnApprovalHoldStatus)
+				{
+					if(primaryApproverID != null){
+						resolverUserID = primaryApproverID;
+						if(primaryApproverID != null && proxyApproverID != null){
+							resolverUserID = primaryApproverID+","+proxyApproverID;
+						}
 					}
+					else{
+						resolverUserID = proxyApproverID;
+					}
+					if(resolverUserID != null){
+						Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(resolverUserID, wcContext.getStorefrontId());
+						if(usersInfoMap.get(primaryApproverID) != null)
+							primaryApprovalEmailId=usersInfoMap.get(primaryApproverID).getAttribute("EmailID");
+						if(usersInfoMap.get(proxyApproverID) != null)
+							proxyApprovalEmailId=usersInfoMap.get(proxyApproverID).getAttribute("EmailID");
+					}
+	//end of jira 3484
 				}
-				else{
-					resolverUserID = proxyApproverID;
-				}
-				if(resolverUserID != null){
-					Map<String,Element> usersInfoMap=XPEDXWCUtils.getUsersInfoMap(resolverUserID, wcContext.getStorefrontId());
-					if(usersInfoMap.get(primaryApproverID) != null)
-						primaryApprovalEmailId=usersInfoMap.get(primaryApproverID).getAttribute("EmailID");
-					if(usersInfoMap.get(proxyApproverID) != null)
-						proxyApprovalEmailId=usersInfoMap.get(proxyApproverID).getAttribute("EmailID");
-				}
-//end of jira 3484
 			}
 			
 			return SUCCESS;
@@ -428,23 +489,59 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			 YFCElement errorXML=e.getXML();
 			 YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
 			 String errorDeasc=errorElement.getAttribute("ErrorDescription");
+			 XPEDXWCUtils.logExceptionIntoCent(e);
 			 if(errorDeasc.contains("Order is not Draft Order"))
 			 {
 				 
 				 return draftErrorFlagOrderSummary;
 			 }
 			 else{
-				 return FAILURE;
+				 return retFail;
 			 }
 		 } 
 		
 		catch (Exception ex) {
 			log.error("Unexpected error while placing the order. "+ex.getMessage(), ex);
-			generatedErrorMessage = "There was an error processing your last  request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
+			generatedErrorMessage = "There was an error processing your last request. Please contact the Customer Support desk at 877 269-1784, eBusiness@ipaper.com";//Message changed - JIRA 3221
 			XPEDXWCUtils.logExceptionIntoCent(ex);   //JIRA 4289
-			return FAILURE;
+			return retFail;
 		}
 	}
+	
+	private boolean isOrderUpdateDone( Document outputDoc) 
+	{
+		try
+		{
+			Element _orderElement=outputDoc.getDocumentElement();
+			String orderHeaderKey=_orderElement.getAttribute("OrderHeaderKey");
+			YFCDocument inputDocument = YFCDocument.createDocument("Order");
+			YFCElement inputElement = inputDocument.getDocumentElement();
+			inputElement.setAttribute("OrderHeaderKey", orderHeaderKey);
+			Date changedDate=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(outputDoc.getDocumentElement().getAttribute("Modifyts"));
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+			ISCUITransactionContext scuiTransactionContext = wcContext.getSCUIContext().getTransactionContext(true);
+			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+			.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			env.setApiTemplate(
+							"getOrderList",
+							SCXmlUtil
+							.createFromString(""+"<OrderList>"
+									+ "<Order  SellerOrganizationCode='' BuyerOrganizationCode='' DraftOrderFlag='' ShipToID='' OrderedQty='' Modifyts ='' >"
+									+ "</Order></OrderList>"));
+					Document orderListDocument = api.invoke(env, "getOrderList",
+							inputDocument.getDocument());
+					Element orderElementWithoutPending=(Element)orderListDocument.getDocumentElement().getElementsByTagName("Order").item(0);
+					Date dbDate=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(orderElementWithoutPending.getAttribute("Modifyts"));
+					
+				 
+					return dbDate.after(changedDate);
+		}
+		catch(Exception e)
+		{
+			log.error("Error while getting OrderList and order Document for pendign changes");
+		}
+		return false;
+		}
 	private Document createCustomerDocument()
 	{
 		shipToCustomer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
@@ -487,7 +584,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 	public void setOrderPlaceYFSEnvironmentVariables(IWCContext wcContext,Document customerListDoc, Element orderHoldTypeElement ) 
 	{
 			Document rulesDoc = (Document) wcContext.getWCAttribute("rulesDoc");
-			HashMap map = new HashMap<String, String>();
+			HashMap<String, Object> map = new HashMap<String, Object>();
 			if(orderHoldTypeElement!=null){
 				map.put("ApplyHoldonOrderDoc",orderHoldTypeElement);
 				
@@ -517,6 +614,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				map.put("ExtnMaxOrderAmount",minAmount.get(0));
 				map.put("ExtnMinOrderAmount",minAmount.get(1));
 				map.put("ExtnChargeAmount",minAmount.get(2));
+				map.put("ExtnApplyMinOrderBrands", minAmount.get(3));
 			}
 			XPEDXWCUtils.removeObectFromCache("ORDER_PLACE_CHNAGE_ORDER_DOC_MAP");
 			XPEDXWCUtils.removeObectFromCache("INVENTORY_INDICATOR_MAP");
@@ -528,147 +626,166 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				clientVersionSupport.setClientProperties(map);
 			}
 	}
+	
 	private ArrayList<String> getMinAndChargeAmount()
 	{
 		float maxOrderAmountFloat=0;
 		float minOrderAmount=0;
 		float chargeAmount=0;
 		String shipFromDivision="";
+		String applyMinOrderBrands=null;
+		
 		ArrayList<String> retVal=new ArrayList<String>();
-		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if(shipToCustomer!=null)
+		{
+			applyMinOrderBrands=shipToCustomer.getShipToOrgExtnApplyMinOrderBrands();
+		}
+		
 		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean=(XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
-			try
-			{
-				//Form the input
-				if(wcContext.getCustomerId()!=null) {
-	
-					String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
-					if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr)))  &&
-							Float.parseFloat(maxOrderAmountStr)>0)
+		
+		try
+		{
+			//Form the input
+			if(wcContext.getCustomerId()!=null) {
+
+				String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
+				if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr)))  &&
+						Float.parseFloat(maxOrderAmountStr)>0)
+				{
+					maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
+				
+				}
+				else {
+					XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
+					if(billToElement != null )
 					{
-						maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
-					
-					}
-					else {
-						XPEDXShipToCustomer billToElement = shipToCustomer.getBillTo();
-						if(billToElement != null )
+						maxOrderAmountStr=billToElement.getExtnMaxOrderAmount();
+						if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr))) &&
+								Float.parseFloat(maxOrderAmountStr)>0)
 						{
-							maxOrderAmountStr=billToElement.getExtnMaxOrderAmount();
-							if(maxOrderAmountStr != null && (!("".equals(maxOrderAmountStr))) &&
-									Float.parseFloat(maxOrderAmountStr)>0)
-							{
-								maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
+							maxOrderAmountFloat=Float.parseFloat(maxOrderAmountStr);	
+				}
 					}
+				}
+				//JIRA 3488 end
+						if(shipToCustomer== null){
+							LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
+							
+							XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
+									.getCustomerDetails(getWCContext().getCustomerId(),
+											getWCContext().getStorefrontId())
+									.getDocumentElement());
+							shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 						}
-					}
-					//JIRA 3488 end
-							if(shipToCustomer== null){
-								LOG.error("shipToCustomer object from session is null... Creating the Object and Putting it in the session");
-								
-								XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils
-										.getCustomerDetails(getWCContext().getCustomerId(),
-												getWCContext().getStorefrontId())
-										.getDocumentElement());
-								shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-							}
-					String minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
-					String chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();;
-							if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
-									(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
+						
+						String minOrderAmountStr=shipToCustomer.getExtnMinOrderAmount();
+						String chargeAmountStr=shipToCustomer.getExtnMinChargeAmount();;
+						
+						if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr)))  &&
+								(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
+						{
+							minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
-								minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-								if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
-								{
-									chargeAmount = Float.parseFloat(chargeAmountStr);
-								}
+								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
-							else
+						}
+						else
+						{
+							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
-								if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+								chargeAmount = Float.parseFloat(chargeAmountStr);
+							}
+							XPEDXShipToCustomer parentElement = shipToCustomer.getBillTo();
+							if(parentElement != null )
+							{
+								minOrderAmountStr=parentElement.getExtnMinOrderAmount();
+								chargeAmountStr=parentElement.getExtnMinChargeAmount();
+								if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
+										(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 								{
-									chargeAmount = Float.parseFloat(chargeAmountStr);
+									minOrderAmount = Float.parseFloat(minOrderAmountStr);	
+									if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+									{
+											chargeAmount = Float.parseFloat(chargeAmountStr);
+									}
 								}
-								XPEDXShipToCustomer parentElement = shipToCustomer.getBillTo();
-								if(parentElement != null )
+								else
 								{
-									minOrderAmountStr=parentElement.getExtnMinOrderAmount();
-									chargeAmountStr=parentElement.getExtnMinChargeAmount();
+									if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
+									{
+										chargeAmount = Float.parseFloat(chargeAmountStr);
+									}
+									//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
+									//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
+									if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
+											shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null)
+									{
+										shipFromDivision = shipToCustomer.getExtnShipFromBranch();
+										String envCode =shipToCustomer.getExtnEnvironmentCode();
+										Map<String, String> valueMap = new HashMap<String, String>();
+										if(envCode!=null && envCode.trim().length()>0){
+											valueMap.put("/Organization/@OrganizationCode", shipFromDivision+"_"+envCode);
+										}else{
+											LOG.error("EnvCode is NULL. Returning back to the caller.");
+											return retVal;
+										}
+										try {
+											Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
+											Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
+											Document outputDoc = ((Element) obj).getOwnerDocument();
+											
+											if(YFCCommon.isVoid(outputDoc)){
+												LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
+												return retVal;
+											}
+											shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
+											shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
+											shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
+											shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
+											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
+											//Added For Jira 3465
+											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
+											shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
+											shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
+											XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
+										} catch (CannotBuildInputException e) {
+											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
+											return retVal;
+										}
+									}
+									minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
+									chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
 									if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 											(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
 									{
-										minOrderAmount = Float.parseFloat(minOrderAmountStr);	
-										if(chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+										minOrderAmount = Float.parseFloat(minOrderAmountStr);				
+										if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 										{
 												chargeAmount = Float.parseFloat(chargeAmountStr);
 										}
 									}
-									else
-									{
-										if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
-										{
-											chargeAmount = Float.parseFloat(chargeAmountStr);
-										}
-										//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
-										//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-										if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
-												shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null)
-										{
-											shipFromDivision = shipToCustomer.getExtnShipFromBranch();
-											String envCode =shipToCustomer.getExtnEnvironmentCode();
-											Map<String, String> valueMap = new HashMap<String, String>();
-											if(envCode!=null && envCode.trim().length()>0){
-												valueMap.put("/Organization/@OrganizationCode", shipFromDivision+"_"+envCode);
-											}else{
-												LOG.error("EnvCode is NULL. Returning back to the caller.");
-												return retVal;
-											}
-											try {
-												Element input = WCMashupHelper.getMashupInput("XPEDXGetShipOrgNodeDetails", valueMap, getWCContext().getSCUIContext());
-												Object obj = WCMashupHelper.invokeMashup("XPEDXGetShipOrgNodeDetails", input, getWCContext().getSCUIContext());
-												Document outputDoc = ((Element) obj).getOwnerDocument();
-												
-												if(YFCCommon.isVoid(outputDoc)){
-													LOG.error("No DB record exist for Node "+ shipFromDivision+"_"+envCode+". ");
-													return retVal;
-												}
-												shipToCustomer.setShipToOrgExtnMinOrderAmt(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnMinOrderAmt"));
-												shipToCustomer.setShipToOrgExtnSmallOrderFee(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnSmallOrderFee"));
-												shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
-												shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
-												shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
-												//Added For Jira 3465
-												shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
-												XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
-											} catch (CannotBuildInputException e) {
-												LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
-												return retVal;
-											}
-										}
-										minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
-										chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
-										if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
-												(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
-										{
-											minOrderAmount = Float.parseFloat(minOrderAmountStr);				
-											if( chargeAmount <=0 && chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
-											{
-													chargeAmount = Float.parseFloat(chargeAmountStr);
-											}
-										}
-								}
+									applyMinOrderBrands=(applyMinOrderBrands!=null && applyMinOrderBrands.trim().length()>0 ? applyMinOrderBrands : shipToCustomer.getShipToOrgExtnApplyMinOrderBrands());
+									
 							}
-					}
-				}// if customerId is not null
+						}
+				}
+			}// if customerId is not null
 
-			}
-			catch(Exception e)
-			{
-				log.error("Error While getting Min Order amount");
-			}
-			retVal.add(""+maxOrderAmountFloat);
-			retVal.add(""+minOrderAmount);
-			retVal.add(""+chargeAmount);
-			return retVal;
+		}
+		catch(Exception e)
+		{
+			log.error("Error While getting Min Order amount");
+		}
+		retVal.add(""+maxOrderAmountFloat);
+		retVal.add(""+minOrderAmount);
+		retVal.add(""+chargeAmount);
+		retVal.add(applyMinOrderBrands!=null?applyMinOrderBrands:"");
+		
+		return retVal;
+		
 	}
 	/*public static void setYFSEnvironmentVariables(IWCContext wcContext) 
 	{
@@ -740,7 +857,13 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 			Element orderLine=outputIt.next();
 			Element orderLineExtn=(Element)orderLine.getElementsByTagName("Extn").item(0);
 			String editOrderflag=orderLineExtn.getAttribute("ExtnEditOrderFlag");
-			if("Y".equals(editOrderflag))
+			if(("0".equals(orderLine.getAttribute("OrderedQty")) || "0.0".equals(orderLine.getAttribute("OrderedQty")) || "0.00".equals(orderLine.getAttribute("OrderedQty")))
+					&& "Y".equals(editOrderflag))
+			{
+				Element orderLines=(Element)outputDoc.getElementsByTagName("OrderLines").item(0);
+				orderLines.removeChild(orderLine);
+			}
+			else if("Y".equals(editOrderflag))
 			{
 				orderLine.setAttribute("Action", "CREATE");
 				orderLine.setAttribute("OrderLineKey", "");

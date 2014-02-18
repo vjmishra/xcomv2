@@ -1,12 +1,12 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-  <package name="xpedx.services" namespace='/xpedx/services' extends="wcDefault">
+  <package name="xpedx.services" namespace='/services' extends="wcDefault">
 	
-	<action name="XPEDXServicesHome" class="com.sterlingcommerce.webchannel.core.WCAction">
+	<action name="MyServicesHome" class="com.sterlingcommerce.webchannel.core.WCAction">
 		<result name="success">/xpedx/jsp/services/XPEDXServicesHome.jsp</result>
 	</action>
 	
-	<action name="XPEDXEstimatingFiles" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXEstimatingFilesAction">
+	<action name="MyEstimatingFiles" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXEstimatingFilesAction">
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXServices_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXEstimatingFiles.jsp</result>
 	</action>
@@ -17,13 +17,18 @@
 		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>
 				
 	</action>
-	<!-- End For Reporting -->
-	
-	<action name="XPEDXTools" class="com.sterlingcommerce.webchannel.core.WCAction">
+	<!--  End For Reporting -->
+	 	
+	<action name="myreports" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAllReportsAction">
+		<result name="success">/xpedx/jsp/services/XPEDXGetAllReports.jsp</result>
+		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>				
+	</action>
+		
+	<action name="MyTools" class="com.sterlingcommerce.webchannel.core.WCAction">
 		<result name="success">/xpedx/jsp/tools/XPEDXTools.jsp</result>
 	</action>
 	
-	<action name="XPEDXServices" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXServicesAction">
+	<action name="MyServices" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXServicesAction">
 		<param name="mashups">getSampleService</param>
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXServices_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXSampleService.jsp</result>
@@ -41,7 +46,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXReturnItems_binding.xml</param>
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
 		<result name="success">/xpedx/jsp/services/XPEDXReturnItemsRequest.jsp</result>
-		<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+		<result name="orderDetailError">/error/jsp/common/GeneralSystemError.jsp</result>
 	</action>
 	
 	<action name="returnItemsSendMailRequest" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXReturnItemsRequestAction" method="sendMailToCSR">
@@ -50,7 +55,7 @@
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
 		<result name="success"> /xpedx/jsp/common/XPEDXConfirmation.jsp</result>
 		<!-- <result name="success">/xpedx/jsp/services/XPEDXReturnItemsRequest.jsp</result> jira 3128 -->
-		<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+		<result name="orderDetailError">/error/jsp/common/GeneralSystemError.jsp</result>
 	</action>
 	
 	<action name="returnItemsComplaintRequest" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXReturnItemsRequestAction" method="returnItemComplaintRequest">
@@ -58,7 +63,7 @@
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXReturnItems_binding.xml</param>
 		<param name="resourceId">/swc/order/authenticatedOrdering</param>
 		<result name="success">/xpedx/jsp/services/XPEDXServicesHome.jsp</result>
-		<result name="orderDetailError">/xpedx/jsp/common/XPEDXGeneralSystemError.jsp</result>
+		<result name="orderDetailError">/error/jsp/common/GeneralSystemError.jsp</result>
 	</action>
 	<!-- Start For Reporting  -->
 	<action name="promptInput" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
@@ -73,6 +78,20 @@
 		</result>
 		 
 		</action>
+		
+	<action name="getprompts" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
+		<result name="WebiInputPrompt" type="redirectAction">
+		     <param name="actionName">getinputprompt</param>
+		     <param name="id">${id}</param>	    
+		     <param name="name">${name}</param>		     
+		</result>
+		 
+	</action>	
+	
+	<action name="getinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetWebiPromptsAction">		
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
+		<result name="success">/xpedx/jsp/services/XPEDXGetWebiPrompts.jsp</result>
+	</action>
 	<action name="getWebiInputPrompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXWebiInputPromptAction">		
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXWebiInputPrompt.jsp</result>
@@ -89,6 +108,15 @@
 		    <param name="storageToken">${strToken}</param>
 		    <param name="errorNames">${errorList}</param>
 		    	    
+		</result>
+	</action>
+	<action name="processinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXProcessPromptsAction">				
+		<result name="success" type="redirectAction">
+		     <param name="actionName">getinputprompt</param>
+		     <param name="id">${id}</param>
+		     <param name="name">${name}</param>
+		     <param name="renderReport">${rndrReport}</param>
+		     <param name="finalURL">${finalURL}</param>		       		         
 		</result>
 	</action>
 	

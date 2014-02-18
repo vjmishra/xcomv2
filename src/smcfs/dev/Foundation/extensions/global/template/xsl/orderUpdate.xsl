@@ -32,10 +32,10 @@
             <xsl:value-of select="normalize-space(//NoBoSplit)" />
          </xsl:attribute>
 
-         <xsl:attribute name="EnterpriseCode">
+         <!-- <xsl:attribute name="EnterpriseCode">
             <xsl:value-of select="'xpedx'" />
-         </xsl:attribute>
-
+         </xsl:attribute> -->
+   
          <xsl:if test="(normalize-space(//ShipFromDivision) !='')">
             <xsl:attribute name="ShipNode">
                <xsl:value-of select='concat(normalize-space(//ShipFromDivision),"_",//EnvironmentId)' />

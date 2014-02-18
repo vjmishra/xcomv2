@@ -1,5 +1,5 @@
 #!/bin/ksh
-# This script starts the order updates coming from MAX/WM
+# This script stopss the order updates coming from MAX/WM
 # created on 9/28/2012 by mahmoud L.
 
 #cd
@@ -14,6 +14,7 @@ echo "Stopping order updates for the selected environment"
 case "$HOST_NAME" in
  zxpappd01) ENVIRONMENT=dev;;
  zxpappd02) ENVIRONMENT=dev-fake;;
+ zxpappint01) ENVIRONMENT=integration-not-configured;;
  zxpappt01) ENVIRONMENT=stg;; 
  zxpapps01) ENVIRONMENT=stg-fake;; 
  zxpagnt01) ENVIRONMENT=prod;; 
@@ -25,7 +26,7 @@ case "$HOST_NAME" in
  *);;
 esac
 
-echo "calling startorderupdates$ENVIRONMENT.sh"
+echo "calling stoporderupdates$ENVIRONMENT.sh"
 cd /home/share/xpadmin/scripts/orderupdateserver/
 ksh -x oustop$ENVIRONMENT.ftp
 echo "The order update stop signal/file has been ftp'd to the remote server. It may take up to 15minutes for the file to be picked up 

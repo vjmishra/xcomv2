@@ -256,12 +256,12 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 
 
 	public  void deletePriceListLine(YFSEnvironment env)throws Exception{
-
+		Connection m_Conn = null;
 		try{
 
 			String sDel ="Delete from ypm_pricelist_line where modifyts <current_date-1";
 			YFSConnectionHolder connHolder  = (YFSConnectionHolder)env;
-			Connection m_Conn= connHolder.getDBConnection();
+			m_Conn= connHolder.getDBConnection();
 			Statement stmt =m_Conn.createStatement();
 			stmt.execute(sDel);
 			m_Conn.commit();
@@ -270,6 +270,10 @@ public class XPXUtilsCacheEnableDisable implements YIFCustomApi {
 		catch(Exception e){
 			log.error("Exception: " + e.getStackTrace());
 
+		}
+		finally
+		{
+		m_Conn.close();	
 		}
 
 

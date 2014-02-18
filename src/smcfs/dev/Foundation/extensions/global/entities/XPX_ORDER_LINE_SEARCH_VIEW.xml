@@ -52,6 +52,9 @@
 				<Attribute ColumnName="CUSTOMER_PO_NO" DataType="Text-100"
 					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
 					Nullable="true" XMLName="CustomerPONo" />
+				<Attribute ColumnName="CUSTOMER_LINE_PO_NO" DataType="Text-100"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_LINE table." 
+					Nullable="true" XMLName="CustomerLinePONo" />
 				 <Attribute ColumnName="ORDER_DATE" DataType="TimeStamp"
                     DefaultValue="sysdate "
                     Description="The date on which the order was taken. If not passed during order creation, it is defaulted to current system date."

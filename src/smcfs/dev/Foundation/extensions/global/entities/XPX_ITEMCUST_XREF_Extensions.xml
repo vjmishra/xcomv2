@@ -4,7 +4,7 @@
 	<Entities>
 		<!--  <Entity TableName="XPX_ITEMCUST_XREF" > -->
 		<Entity ApiNeeded="Y" AuditRequired="N" Description="Sales Rep"
-			HasHistory="true" Prefix="XPX" TableName="XPX_ITEMCUST_XREF">
+			HasHistory="true" Prefix="XPX" TableName="XPX_ITEMCUST_XREF" Name="XPXCustItemCrossRef">
 			<Attributes>
 				<Attribute ColumnName="ITEMCUST_REF_KEY" DataType="Key"
 					DefaultValue="' '" Description="Primary key of this table" Name="ItemcustRefKey"

@@ -23,6 +23,10 @@
 <s:if test="#isGuestUser == false">
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 </s:if>
+<!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--EB-1689 END -->
+ 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MISC<s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 
 <!--[if IE]>
@@ -177,7 +181,7 @@
 				<s:set name="orgCity" value='#xutil.getAttribute(#orgCorpInfoEle,"City")' />
 				<s:set name="orgState" value='#xutil.getAttribute(#orgCorpInfoEle,"State")' />
 				<s:set name="orgZip" value='#xutil.getAttribute(#orgCorpInfoEle,"ZipCode")' />
-				<s:set name="orgZip" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(orgZip)' />
+				<s:set name="fmtorgZip" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#orgZip)'/>
 				<s:set name="orgCountry" value='#xutil.getAttribute(#orgCorpInfoEle,"Country")' />
 				
  				<s:set name="orgPhone" value='#xutil.getAttribute(#orgCorpInfoEle,"DayPhone")' /> 
@@ -380,7 +384,7 @@
                                		<s:property value='%{#orgAddress3}'/><br/>
                                 </s:if>
                                 <s:property value='%{#orgCity}'/>,&nbsp;<s:property value='%{#orgState}'/>
-                                 <s:property value='%{#orgZip}'/>&nbsp;<s:property value='%{#orgCountry}'/><br/>
+                                 <s:property value='%{#fmtorgZip}'/>&nbsp;<s:property value='%{#orgCountry}'/><br/>
                                 <s:property value='%{#fmtOrgPhone}'/> <br/>
                                 <s:if test='%{#orgEmail != ""}'>
                                 	<a href="mailto:<s:property value='%{#orgEmail}'/>"><s:property value='%{#orgEmail}'/></a><br/>
@@ -394,15 +398,14 @@
 	                              	<td valign="top" class="underlines no-border-right-user"> <s:property value='%{#orgCutOffTime}'/></td>
 	                              </s:if>
                               </tr>
-				
-														
-               	  </tbody>
+                             
+							</tbody>
                	  </table>
-
                 
 
                  </s:if>
-                 
+                 <!--   For EB-1129 For all anonymous users, the contact us page  -->
+                 <s:set name='storefrontId' value="wCContext.storefrontId" />
                   <s:if test="#isGuestUser == true">
                      <table class="full-width">
 			          <tbody>
@@ -411,10 +414,24 @@
 			                   Technical Support: <s:property value='%{#fmtEBusinessPhoneNo}'/>, <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br>
 			                   </td>
           		 		 </tr>
-          		 		 </tbody>
+          		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+								<tr>
+									<td><a href="https://www.xpedx.com/locate-us.aspx" target="_blank"><b>Locate Us</b></a></td>
+								</tr>
+							</s:if>
+         		 		</tbody>
           		 	  </table>
 	  				
   				  </s:if>
+  				   <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->          		 		 
+          		 		 <br/>
+          		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+								<tr>
+									<td><a href="http://www.saalfeldredistribution.com/ContactUs.aspx" target="_blank"><b>Locate Us</b></a></td>
+								</tr>
+							</s:if>					
+						<!-- EB-1689 End -->
+					
   				
                  
    </div> 

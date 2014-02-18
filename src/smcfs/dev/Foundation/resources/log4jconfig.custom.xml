@@ -122,13 +122,12 @@
 
     <category  name="requestlogger" class="com.yantra.yfc.log.YFCLogCategory" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
-        <appender-ref ref="REQUEST_LOG_APPENDER" />
+         <appender-ref ref="REQUEST_LOG_APPENDER" />
     </category>
 
     <category  name="com.yantra.tools.property" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="PROPERTY_MANAGER" /> 	 
         <appender-ref ref="CONSOLE" /> 	 
     </category>
@@ -136,66 +135,66 @@
 
     <category  name="com.yantra" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
     <category  name="com.yantra.ycm.business.search.YCMSearchIndexCacheTimerTask" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="CONSOLE" />
     </category>
 	<category  name="com.yantra.ycp.core.YCPSystem" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-        <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
-        <appender-ref ref="SOCKET" />
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
         <appender-ref ref="CONSOLE" />
     </category>
 
     <category  name="com.sterlingcommerce" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-        <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
-        <appender-ref ref="SOCKET" />
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
     <category  name="org.apache.struts2" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 	
     <category  name="net.sf.ehcache" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-         <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
-         <appender-ref ref="SOCKET" />
+         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+         
          <appender-ref ref="CONSOLE" />
          <!-- <appender-ref ref="ALL" /> -->
      </category>
 
      <category  name="com.opensymphony.xwork2" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
    <category  name="com.stercomm.SecurityLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  /> 
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="SECURITY_LOG_APPENDER" />
     </category>
 
     <category  name="api.security" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="CONSOLE" /> 
         <!-- <appender-ref ref="ALL" /> -->
     </category>
 
     <category  name="com.yantra.integration.adapter" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
-        <priority class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
-        <appender-ref ref="SOCKET" />
+        <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
         <appender-ref ref="CONSOLE" /> 
         <appender-ref ref="AGENT_LOG_APPENDER" />
     </category>
@@ -203,7 +202,7 @@
 
    <category  name="com.yantra.yfs.ui.backend.YFSLoginIPLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
        <priority class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  /> 
-       <appender-ref ref="SOCKET" />
+       
        <appender-ref ref="CONSOLE" />
        <!-- <appender-ref ref="ALL" /> -->
        <appender-ref ref="LOGIN_CLIENT_IP_DETAILS" />
@@ -211,14 +210,14 @@
 
    <category  name="DataValidationLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
-        <appender-ref ref="SOCKET" />
+        
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="ALL" /> -->
     </category>
     
     <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
-       <level class="com.yantra.yfc.log.YFCLogLevel" value="VERBOSE"  />
-       <appender-ref ref="SOCKET" />
+       <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+       
 	   <appender-ref ref="CONSOLE" />		 
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
@@ -228,5 +227,13 @@
 	   <appender-ref ref="CENT_APPENDER" />
 	   <!-- <appender-ref ref="ALL" /> -->
     </category>
+	
+	<!-- PMR 73002,442,000 - Help Fix STUCK Threads issue and reduce logging for webchannel to stdout.-->
+	<category  name="com.sterlingcommerce.webchannel" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >          
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />                                          
+        <appender-ref ref="CONSOLE" />                                  
+        <!-- <appender-ref ref="ALL" /> -->                             
+    </category>
+
 	
 </log4j:configuration>

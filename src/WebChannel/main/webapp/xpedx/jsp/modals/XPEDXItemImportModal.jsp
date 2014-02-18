@@ -23,13 +23,15 @@
 		<%-- <h2>Import My Items List</h2> --%>
 		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
 		
-		<s:form name="formImport" id="formImport" action="XPEDXMyItemsDetailsImportPrepare" method="post"
+		<s:form name="formImport" id="formImport" action="MyItemsDetailsImportPrepare" method="post"
 			enctype="multipart/form-data">
 			
 		  <span id="errorMsgForRequiredField" style="display:none;"></span> 
 		  <%--  Don't delete this 'errorMsgForRequiredField' tag it needed while close button js --%>
 		<div>
-            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. A sample file is provided. Delete the item contents and enter your own data. </p>
+            <p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. </p>
+             <p>A sample file is provided. Delete the item contents and enter your own data.</p>
+            
             <%-- <p>Use the sample below as a template. Delete the contents and enter your own data.</p> --%>
             
             <ul id="tool-bar" class="tool-bar-bottom">
@@ -50,6 +52,7 @@
 			<p>Items are imported in the same order they are listed in the file, and added to the bottom of the My Items List.</p>
         	
 			<s:hidden name="listKey" value="%{listKey}"></s:hidden>
+			<s:hidden name="editMode" value="%{true}"></s:hidden>
 			<s:hidden name="listDesc" value="%{listDesc}"></s:hidden>
 			<s:set name="itemCount" value='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size'></s:set>
 			<s:hidden name="itemCount" value="%{#itemCount}"></s:hidden>
@@ -58,6 +61,7 @@
 			<s:hidden name="listOwner" value="%{listOwner}"></s:hidden>
 			<s:hidden name="listCustomerId" value="%{listCustomerId}"></s:hidden>
 			<s:hidden name="listName" value="%{listName}"></s:hidden>
+			
 			
 			<script type="text/javascript">
 		

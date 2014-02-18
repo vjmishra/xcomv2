@@ -4,7 +4,12 @@
    <Entities>        
     
       <Entity TableName="YFS_ENTITLE_RULE_ASSIGNMENT" AuditRequired="N">
-		
+		<Indices>
+            <Index Name="ENTITLE_1" Unique="False">
+               <Column Name="CUSTOMER_ID"/>
+			   <Column Name="ORGANIZATION_CODE"/>
+            </Index>
+		</Indices>
       </Entity>
 </Entities>
 </DBSchema> 

@@ -183,8 +183,8 @@
 
 			<s:if
 				test='#canRequestProductSample == "Y" || #canRequestProductSample == "y" '>
-				<s:url id='RequestProdSampleLink' namespace='/xpedx/services'
-					action='XPEDXServices'></s:url>
+				<s:url id='RequestProdSampleLink' namespace='/services'
+					action='MyServices'></s:url>
 				<s:a href="%{RequestProdSampleLink}">Request Product Sample</s:a>
 			</s:if></td>
 			<td class="reg-no-border-left"></td>

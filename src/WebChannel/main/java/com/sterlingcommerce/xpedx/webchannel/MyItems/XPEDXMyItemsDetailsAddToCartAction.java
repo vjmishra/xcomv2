@@ -80,6 +80,27 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 	public String draftOrderflag;
 	public String draftErrorCatalog="false";
 	public String draftErrorFlagCatalog = "DraftErrorCat";
+	private String quantitydraftError="false";
+	//Added for EB 3372
+	protected String requestedJobId;
+	protected String requestedCustomerLinePONo;
+
+	public String getRequestedJobId() {
+		return requestedJobId;
+	}
+
+	public void setRequestedJobId(String requestedJobId) {
+		this.requestedJobId = requestedJobId;
+	}
+
+	public String getRequestedCustomerLinePONo() {
+		return requestedCustomerLinePONo;
+	}
+
+	public void setRequestedCustomerLinePONo(String requestedCustomerLinePONo) {
+		this.requestedCustomerLinePONo = requestedCustomerLinePONo;
+	}
+	//ENd of EB 3372
 	//For Order multiple CR
 	protected HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
 	
@@ -154,9 +175,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					//end of XBT 252 & 248   
 					try {
 						XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
-						long changeOrderStartTime=System.currentTimeMillis();					
+						long changeOrderStartTime=System.currentTimeMillis();
 						changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
 						long changeOrderEndTime=System.currentTimeMillis();
+						
 						System.out.println("Time taken in milliseconds in XPEDXMyItemsDetailsAddToCartAction for ChangeOrder : "+(changeOrderEndTime-changeOrderStartTime));
 						
 					} 
@@ -177,6 +199,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 									 draftErrorCatalog = "true";
 								 }
 							 }
+						 }
+						 
+						 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
+						 {
+							 quantitydraftError = "true";
 						 }
 						 return draftErrorFlagCatalog;
 					 }catch (Exception dle) {
@@ -217,6 +244,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 						 draftErrorCatalog = "true";
 					 }
 				 }
+			 }
+			 if(errorDeasc.contains("value larger than specified precision allowed for this column"))
+			 {
+				 quantitydraftError = "true";
 			 }
 		 }
 		catch (Exception dle) {
@@ -382,13 +413,13 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 			}
 			String enteredUOMStr = (String)this.enteredUOMs.get(i);
 			String itemType=entereditemTypeList.get(i);
-			if("99.00".equals(itemType) || "99".equals(itemType) || "0.00".equals(itemType) || "0".equals(itemType))
+			/*if("99.00".equals(itemType) || "99".equals(itemType) || "0.00".equals(itemType) || "0".equals(itemType))
 			{
 				orderedLineTypeList.add("C");
 			}
-			else{
+			else{*/
 				orderedLineTypeList.add("P");
-			}
+			//}
 			
 			// Fix the Long to integer problem. -PN
 			enteredQtyStr = StringUtils.replace(enteredQtyStr, ".00", "");
@@ -443,12 +474,18 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					if(enteredUOMStr!=null && enteredUOMStr.trim().length()>0)
 					{
 						
-						transactionalUOMs.add(enteredUOMStr);
+						transactionalUOMs.add(enteredUOMStr);//EB-3651
+						if(enteredUOMStr!= null && 
+								(enteredUOMStr.equals("") || enteredUOMStr.equals("M_")))
+								System.out.println("XPEDXMyItemsDetailsAddToCartAction:enteredUOMStr::::::"+enteredUOMStr);//EB-3651
 					
 					}
 					else
 					{
-						transactionalUOMs.add(result.getUOM());
+						transactionalUOMs.add(result.getUOM());//EB-3651
+						if(result.getUOM()!= null && 
+								(result.getUOM().equals("") || result.getUOM().equals("M_")))
+						System.out.println("XPEDXMyItemsDetailsAddToCartAction:result.getUOM()::::::"+result.getUOM());//EB-3651
 					}
 					orderedProductClasses.add(result.getDefaultProductClass());
 					setCustomerFieldsForOrderedItems(i);
@@ -591,6 +628,10 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		entereditemTypeList.add(requestedItemType);
 		enteredUOMs.add(requestedUOM);
 		orderHeaderKey = requestedOrderHeaderKey;
+		//added for eb 3372
+		ExtnCustLineAccNo =  requestedJobId;
+		ExtnCustomerPONo = requestedCustomerLinePONo;
+		//End of EB 3372
 		String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 		if(!YFCCommon.isVoid(editedOrderHeaderKey))
 		{
@@ -1005,6 +1046,14 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 		this.isEditNewline = isEditNewline;
 	}
 	
+	public String getQuantitydraftError() {
+		return quantitydraftError;
+	}
+
+
+	public void setQuantitydraftError(String quantitydraftError) {
+		this.quantitydraftError = quantitydraftError;
+	}
 	
 
 }

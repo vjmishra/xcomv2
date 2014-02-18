@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <YFS_PERSON_INFOList TableName="YFS_PERSON_INFO">
-<PersonInfo AddressLine1="" AddressLine2="" AddressLine3=""
-    AddressLine4="" AddressLine5="" AddressLine6="" AlternateEmailID=""
-    Beeper="" City="" Company="" Country="US"
+<PersonInfo AddressLine1=" " AddressLine2=" " AddressLine3=" "
+    AddressLine4=" " AddressLine5=" " AddressLine6=" "
+    AlternateEmailID=" " Beeper=" " City=" " Company=" " Country="US"
     Createprogid=".YCPOrgDetailsAPI"
     Createts="2010-04-29T21:59:33-04:00" Createuserid="admin"
-    DayFaxNo="" DayPhone="" Department="" EMailID="" ErrorTxt=""
-    EveningFaxNo="" EveningPhone="" FirstName="" HttpUrl="" JobTitle=""
-    LastName="" Lockid="0" MiddleName="" MobilePhone=""
+    DayFaxNo=" " DayPhone=" " Department=" " EMailID=" " ErrorTxt=" "
+    EveningFaxNo=" " EveningPhone=" " FirstName=" " HttpUrl=" "
+    JobTitle=" " LastName=" " Lockid="0" MiddleName=" " MobilePhone=" "
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-29T21:59:33-04:00"
-    Modifyuserid="ng" OtherPhone="" PersonID=""
-    PersonInfoKey="2010042921593314297" PreferredShipAddress="" State=""
-    Suffix="" Title="" UseCount="0" VerificationStatus="" ZipCode="" isHistory="N">
-    <Extn ExtnZip4=""/>
+    Modifyuserid="ng" OtherPhone=" " PersonID=" "
+    PersonInfoKey="2010042921593314297" PreferredShipAddress=" "
+    State=" " Suffix=" " Title=" " UseCount="0" VerificationStatus=" "
+    ZipCode=" " isHistory="N">
+    <Extn/>
 </PersonInfo>
 </YFS_PERSON_INFOList>

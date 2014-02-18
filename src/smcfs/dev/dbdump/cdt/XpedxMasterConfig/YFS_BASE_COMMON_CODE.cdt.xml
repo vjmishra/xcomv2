@@ -29,7 +29,8 @@
     Modifyprogid="YDKConfigDeploy" Modifyts="2010-05-20T19:53:14-04:00"
     Modifyuserid="ng" SystemDefinedCode="N"/>
 <BaseCommonCode BaseCommonCodeKey="2010080223202840136" CodeLength="100"
-    CodeLongDescription="" CodeShortDescription="Catalog Browse Columns"
+    CodeLongDescription=" "
+    CodeShortDescription="Catalog Browse Columns"
     CodeType="XPXCatBrowseCol" Createprogid=".YEntityServlet"
     Createts="2010-08-02T23:20:27-04:00" Createuserid="admin"
     GroupName="CustomCommonCode" Lockid="0"

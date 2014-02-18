@@ -85,7 +85,7 @@ div#fancybox-content
 				<li>
 					<input type="button" class="icon-minus" style="vertical-align:middle;" onclick="getChildCustomerList(this,'<s:property value="shownCustomerId"/>','C', 'sapCustomerDiv') " />
 					<input type="radio" id="Tree" name="customerId" value="<s:property value='shownCustomerId' />" checked="checked" /> 
-					<label>Account</strong>:</label><s:property value="sapCustomerDisplay"/>
+					<label>Account: </label><s:property value="sapCustomerDisplay"/>
 					<div  id="sapCustomerDiv">
 					
 						<s:include value="/xpedx/jsp/profile/org/XPEDXShowLocationsList.jsp"/>

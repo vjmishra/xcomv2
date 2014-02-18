@@ -28,6 +28,7 @@
 	<s:hidden id="modifyOrderLines" name="modifyOrderLines" value='false' />
 	<input type="hidden" value='<s:property value="%{chargeAmount}" />' name="chargeAmount" />
 	<input type="hidden" value='<s:property value="%{minOrderAmount}" />' name="minOrderAmount" />
+	<input type="hidden" value='<s:property value="%{maxOrderAmount}" />' name="maxOrderAmount" />
 	<%-- 
 	I don't see this variable used in this jsp so removing it . In case if any one wants to use getUOMDescriptions method please use
 	XPEDXWCUtils.getUOMDescription .
@@ -50,7 +51,8 @@
 	<%--<s:set name="subTotal" value='%{0.00}' /> --%>
 	<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
 	<%--jira 3788 --%>  
-	<s:set name="isOrderTBD" value="%{0}" />        
+	<s:set name="isOrderTBD" value="%{0}" />  
+	<s:set name="itemIdCustomerUomMap" value="#_action.getItemAndCustomerUomHashMap()" />      
 	<s:iterator value='majorLineElements' id='orderLine' status="rowStatus"  >
 		<s:set name='lineTotals' value='#util.getElement(#orderLine, "LineOverallTotals")' />
 		<s:set name='item' value='#util.getElement(#orderLine, "Item")' />
@@ -84,13 +86,16 @@
 		</s:if>
 		<s:include value='XPEDXOrderLineTotalAdjustments.jsp' />
 		<s:hidden name="orderLineKeys" id="orderLineKeys_%{#orderLineKey}" value="%{#orderLineKey}" />
+		<s:set name="customerUOM" value="#_action.getItemAndCustomerUomWithConvHashMap().get(#item.getAttribute('ItemID'))" />
+		<s:hidden name="customerUOMConvFactors" id="customerUOMConvFactor_%{#orderLineKey}" value="%{#customerUOM}" />
 		<s:hidden name="orderLineItemIDs" id="orderLineItemIDs_%{#orderLineKey}" value='%{#item.getAttribute("ItemID")}' />
 		<s:hidden name="orderLineItemNames" id="orderLineItemNames_%{#orderLineKey}" value='%{#item.getAttribute("ItemShortDesc")}' />
 		<s:hidden name="orderLineItemDesc" id="orderLineItemDesc_%{#orderLineKey}" value='%{#item.getAttribute("ItemDesc")}' />
 		<s:set name='catalogItem' value='#item' />
 		<s:include value="XPEDXCatalogDetailURL.jsp" />
 		<s:set name='itemIDVal' value='%{#item.getAttribute("ItemID")}' />
-		<s:set name="mulVal" value='itemOrderMultipleMap[#itemIDVal]' />
+		<s:set name='customerUOM' value='#itemIdCustomerUomMap.get(#itemIDVal)' />
+		<s:set name="mulVal" value='itemOrderMultipleMap[#itemIDVal]' />		
 		<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>	
 			<s:hidden name="orderLineOrderMultiple" id="orderLineOrderMultiple_%{#orderLineKey}" value="%{#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|'))}" />
 		</s:if>
@@ -99,7 +104,7 @@
 		</s:else>	
 		<s:hidden name="minLineQuantity" id="minLineQuantity_%{#orderLineKey}" value="%{#_action.getMinimumLineQuantity(#orderLine)}" />
 		<s:hidden name="maxLineQuantity" id="maxLineQuantity_%{#orderLineKey}" value="%{#_action.getMaximumLineQuantity(#orderLine)}" />
-		<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
+			<s:set name="uom" value='%{#lineTran.getAttribute("TransactionalUOM")}' /> 
 				<s:set name="MultiUom" value='%{#item.getAttribute("UnitOfMeasure")}' />
 				<s:set name="BaseUOMs" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)' /> 
 				<s:hidden name="BaseUOMs" id="BaseUOMs_%{#orderLineKey}" value='%{#BaseUOMs}' /> 
@@ -126,6 +131,16 @@
 		 
 		<s:set name="itemuomMap" value='itemIdConVUOMMap[#itemIDVal]' />
 		<s:set name="displayUomMap" value='itemIdsUOMsDescMap[#itemIDVal]' />
+		<%--EB-3840 --%>
+		<s:set name="displayUomMapconv" value='itemIdsUOMsDescMap[#itemIDVal]' />
+		<s:iterator value="displayUomMapconv" id="displayUomMapconv" >
+			<s:set name="disValue" value="value" />
+			<s:set name="disUom" value="key" />
+			<s:set name="disItemIDVal" value="#itemIDVal" />
+			<s:hidden name='DisplayUomItem_%{#disItemIDVal}' value="%{#disValue}"  id='%{#disUom}' /> 
+		</s:iterator>	
+		<%--EB-3840 --%>	 
+		
 		<s:hidden name="itemUOMs" id="itemUOMs_%{#orderLineKey}" value='%{#uom}' /> 
 		<s:set name="convF" value='#itemuomMap[#uom]' />
 		<s:hidden name="UOMconversion" id="UOMconversion_%{#orderLineKey}" value="%{#convF}" />
@@ -144,10 +159,10 @@
 		
 		<!-- begin iterator -->       
 		<s:if test="#rowStatus.last == true ">
-	    	<div class="mil-wrap last" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	<div class="mil-wrap last" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
 	    </s:if>
 	    <s:else>
-	    	 <div class="mil-wrap" onmouseout="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
+	    	 <div class="mil-wrap" onmouseleave="$(this).removeClass('green-background');" onmouseover="$(this).addClass('green-background');">
 	    </s:else>
          	<div class="mil-container" >
                 <!--checkbox   -->
@@ -260,6 +275,8 @@
 											cssClass="xpedx_select_sm mil-action-list-wrap-select" onchange="javascript:setUOMValue(this.id,'%{#_action.getJsonStringForMap(#itemuomMap)}')" 
 											list="#displayUomMap" listKey="key" listValue='value'
 											disabled="#isUOMAndInstructions" value='%{#uom}' tabindex="%{#tabIndex}" theme="simple"/>
+											<s:hidden id="custUOM_%{#orderLineKey}" name="custUOM" value="%{#customerUOM}" />
+											 
 									</s:if>
 									<s:if test='#isUOMAndInstructions'>
 										<s:hidden name="itemUOMsSelect" id="itemUOMsSelect_%{#orderLineKey}" value='%{#uom}' />
@@ -270,22 +287,36 @@
 						 		<td>
 						 		<br/>
 						 						 		
-						 						 			
+						 			<s:if test='%{#customerUOM==#MultiUom}'>
+											<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+											<s:set name="multiUomDesc" value="#customerUomWithoutM" />										
+									</s:if>
+									<s:else>
+											<s:set name="multiUomDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)" />
+									</s:else>					 			
 						 			<s:if test='(useOrderMultipleMapFromSourcing.containsKey(#jsonKey))'>
-						 				<s:set id="OrderMultipleUom" name="OrderMultipleUom"  value="%{#OrderMultipleQtyFromSrc.substring(#OrderMultipleQtyFromSrc.indexOf('|')+1,#OrderMultipleQtyFromSrc.length())}"/>						 				
+						 				<s:set id="OrderMultipleUom" name="OrderMultipleUom"  value="%{#OrderMultipleQtyFromSrc.substring(#OrderMultipleQtyFromSrc.indexOf('|')+1,#OrderMultipleQtyFromSrc.lastIndexOf('|'))}"/>
+						 				<s:if test='%{#customerUOM==#OrderMultipleUom}'>
+											<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+											<s:set name="orderMultipleUomDesc" value="#customerUomWithoutM" />										
+										</s:if>
+										<s:else>
+											<s:set name="orderMultipleUomDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#OrderMultipleUom)" />
+										</s:else>
+															 				
                 						<s:if test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}'>						 			
-						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#OrderMultipleUom)'></s:property><br/>
+						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#orderMultipleUomDesc"></s:property><br/>
 						 				</s:if>
 						 				<s:else>
-						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+						 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="error" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/>
 						 				</s:else>
                 					</s:if>
                 					<s:elseif test='%{#OrderMultipleQtyFromSrc !=null && #OrderMultipleQtyFromSrc !=""}' >
-                						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/>
+                						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#OrderMultipleQtyFromSrc.substring(0,#OrderMultipleQtyFromSrc.indexOf('|')))}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/>
                 					</s:elseif>
                 					<s:else>
 						 		<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#MultiUom)'></s:property><br/></div>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="notice" id="errorDiv_orderLineQuantities_<s:property value='%{#orderLineKey}' />" style="display : inline;position:absolute;font-size:12px;"><s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> <s:property value="%{#xpedxutil.formatQuantityForCommas(#mulVal)}"></s:property>&nbsp;<s:property value="#multiUomDesc"></s:property><br/></div>
 						 		</s:if>
 						 			</s:else>
 						 		
@@ -374,7 +405,17 @@
 					 		<s:if test="#displayPriceForUoms!=null && #displayPriceForUoms.size()>0" >
 					 			<s:iterator value='#displayPriceForUoms' id='disUOM' status='disUOMStatus'>
 					 				<s:set name="bracketPriceForUOM" value="bracketPrice" />
-									<s:set name="bracketUOMDesc" value="bracketUOM" />
+					 				
+					 				<s:set name="temp" value="bracketUOM" />
+									<s:set name="customerUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#customerUOM)"/>
+									<s:if test='%{#customerUOMDesc==#temp}'>	
+										<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />
+										<s:set name="bracketUOMDesc" value="#customerUomWithoutM" />
+									</s:if>
+									<s:else>
+										<s:set name="bracketUOMDesc" value="bracketUOM" />
+									</s:else>		
+									
 									
 									<s:if test='%{!#disUOMStatus.last}' >
 										<s:if test='%{#disUOMStatus.first}' >
@@ -529,7 +570,14 @@
 					<s:set name="jsonFmtTwoPlus" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTwoPlus )' />
 					
 					<s:set name="jsonUOM" value="#json.get('UOM')" />
-					<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)"/>
+					<s:if test='%{#customerUOM==#jsonUOM}'>
+						<s:set name='customerUomWithoutM' value='%{#customerUOM.substring(2, #customerUOM.length())}' />				
+						<s:set name="jsonUOMDesc" value="#customerUomWithoutM" />										
+					</s:if>
+					<s:else>
+						<s:set name="jsonUOMDesc" value="#XPEDXWCUtils.getUOMDescription(#jsonUOM)" />
+					</s:else>	
+					
 					<s:set name="jsonAvailability" value="#json.get('Availability')" />
 					<s:set name="jsonTotal" value="#json.get('Total')" />
 					<s:set name="jsonImage1" value="#XPEDXWCUtils.getImage('Immediate')" />
@@ -551,7 +599,9 @@
 					</s:else>
 					<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
 					<s:set name="jsonFmtTotal" value='#xpedxUtilBean.formatQuantityForCommas( #jsonTotal )' />
-					
+					<s:set name="jsonAvailabilityMessage" value="#json.get('AvailabilityMessage')" />
+					<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
+					<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 					
 					<%-- <s:if test="(#jsonTotal != null)"> --%>
 					
@@ -560,20 +610,27 @@
 				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config" style="font-size:12px">
 						    	<tbody>
+						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
+										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+										<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:2px"><strong><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
+									</s:if>
+									<tr>
+										<td align="left" style="color:${jsonAvailabilityMessageColor};font-size:13px;"><strong>${jsonAvailabilityMessage}</strong></td>
+									</tr>					    		
 						    		<tr>
-										<td><strong><p class="bold left" style="width:110px">Total Available: </p></strong></td>
-										<td class="text-right"><strong>${jsonFmtTotal} </strong></td>
-										<td class="text-left"><strong>&nbsp;${jsonUOMDesc}</strong></td>
+										<td><p class="left"><strong>Next Day: </strong></p></td>
+										<td class="text-right"><p> <strong>${jsonFmtNextDay}</strong> </p></td>
+										<td class="text-left"><%-- ${jsonUOMDesc} --%></td>									
 						    		</tr>
 						    		<tr>
-										<td><p class="availability-indent">Next Day: </p></td>
-										<td class="text-right"><p> ${jsonFmtNextDay} </p></td>
-										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>									
-						    		</tr>
-						    		<tr>
-										<td><p class="availability-indent">2+ Days: </p></td>
+										<td><p class="left" style="padding-left:15px;">2+ Days: </p></td>
 										<td class="text-right"><p> ${jsonFmtTwoPlus} </p></td>
 										<td class="text-left">&nbsp;<%-- ${jsonUOMDesc} --%></td>
+						    		</tr>
+						    		<tr>
+										<td><p class="left" style="width:110px;padding-left:15px;">Total Available: </p></td>
+										<td class="text-right">${jsonFmtTotal} </td>
+										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
 						    		</tr>
 						    		<%-- <s:if test="(#divName != null)"> --%>
 						    		<tr>
@@ -595,7 +652,7 @@
 						<a href='javascript:showXPEDXAlternateItems("<s:property value="#itemIDUOM"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
 							tabindex="100"> Alternate </a>
 					</s:if>
-					<%-- Commenting the Replacement link as 'This Item has been replaced' is the link to replacement items.
+					<%-- Commenting the Replacement link as 'This item has been replaced' is the link to replacement items.
 					<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID).size()>0)'>
 						<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");'
 							tabindex="100"> Replacement </a>
@@ -638,33 +695,28 @@
 			    <div class="bottom-mil-info">
 			    	<div class="float-left brand-info">
 			    		<s:set name="itemID" value='#item.getAttribute("ItemID")' />
-			    		<p><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' />
+			    		<p><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='#item.getAttribute("ItemID")' /></b>
 				    		<s:if test='#certFlag=="Y"'>
 							 	<img border="none"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" style="margin-left:0px; display: inline;"/>
 							 </s:if>
 			    		</p>
-			    		<s:if test='skuMap!=null && skuMap.size()>0 && customerSku!=null && customerSku!=""'>
-			    			<s:set name='itemSkuMap' value='%{skuMap.get(#itemID)}'/>
-			    			<s:set name='itemSkuVal' value='%{#itemSkuMap.get(customerSku)}'/>
-							
-							<p class="line-spacing">
-								<s:if test='%{customerSku == "1"}' >
-									<s:property value="#customerItemLabel" />:
-								</s:if>
-								<s:elseif test='%{customerSku == "2"}'>
-									<s:property value="#manufacturerItemLabel" />:
-								</s:elseif>
-								<s:else>
-									<s:property value="#mpcItemLabel" />:
-								</s:else>
-								<s:property value='#itemSkuVal' />
-							</p>
-							
-						</s:if>
+			    		<s:if test='#orderLine.getAttribute("LineType") != "M"'>
+						<s:if test='skuMap!=null && skuMap.size()>0'>
+										<s:set name='itemSkuMap' value='%{skuMap.get(#item.getAttribute("ItemID"))}'/> 
+										<s:set name='mfgItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MFG_ITEM_NUMBER)}'/>
+										<s:set name='partItemVal' value='%{#itemSkuMap.get(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUST_PART_NUMBER)}'/>
+									</s:if>
+										 	<s:if test='mfgItemFlag != null && mfgItemFlag=="Y"'> 
+											<p class="fields-padding">
+												<s:property value="#manufacturerItemLabel" />: <s:property value='#mfgItemVal' /></p>
+											 </s:if>
+											<s:if test='customerItemFlag != null && customerItemFlag=="Y"'>
+											<p class="fields-padding">
+												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
+											</s:if>		
+							</s:if>
 						
-						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
-			    		<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This Item has been replaced<img class="replacement-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_i.png" title="View Replacement Item"/></p></a>
-			    		</s:if>					    		
+											    		
 			    	</div>			    	
     
 			    	<div class="cust-defined-fields">
@@ -703,6 +755,8 @@
 												</s:if>
 												<s:else>
 												<%--Added if-else condn for giving border-color when Line Acc# and PO# are blank - Jira 3966 --%>
+												<%-- For 24 Characters EB -449 --%>
+												
 													<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
 														<s:textfield name='orderLine%{#FieldLabel}' theme="simple"
 														cssClass="x-input bottom-mill-info-avail"
@@ -721,10 +775,13 @@
 													
 												</s:else>
 												<%-- Show error message against each required customer field --%>
-												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >
-													
-													<br/><br/><span class="error">Required fields missing. Please review and try again.</span> <br/><br/>
-	
+												<%--   EB 771 for I should not see extra  spacing between the entry fields & error messages, 
+														so that the page is more compact & easier to read.  --%>
+												<s:if test="%{#requiredFieldsForOLK!=null && #requiredFieldsForOLK.contains(#FieldLabel)}" >													
+												<%-- <br/><br/><span class="error">Required fields missing. Please review and try again.</span> <br/><br/> --%>													
+													<div style="padding: 10px 0px 10px 0px;">		
+														<span class="error">Required fields missing. Please review and try again.</span>
+													</div>	
 												</s:if>
 												
 												<%-- --%>
@@ -743,6 +800,11 @@
 					</div>				
 	
 					<div class="clearall">&nbsp; </div>
+					<div style="padding-left:25px;">
+						<s:if test='(xpedxItemIDUOMToReplacementListMap.containsKey(#itemID) && xpedxItemIDUOMToReplacementListMap.get(#itemID) != null)'>
+			    			<a href='javascript:showXPEDXReplacementItems("<s:property value="#itemID"/>", "<s:property value="#orderLineKey"/>", "<s:property value="#orderLine.getAttribute('OrderedQty')"/>");' ><p class="cart-replaced red line-spacing">This item will be replaced once inventory is depleted.</p></a>
+			    		</s:if>
+			    	</div>	
 					<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 		    				<p style='MARGIN-LEFT: 25px;' class="line-spacing">Special Instructions:</p>
 				    		<s:set name='lineNoteText' value='#lineNotes.getAttribute("InstructionText")' />
