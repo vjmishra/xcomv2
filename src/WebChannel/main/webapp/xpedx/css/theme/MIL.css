@@ -5833,12 +5833,7 @@ div table.mil-my-price-availability {
 
  #mil-list td,
 #mil-carts-list td {
-	padding:15px;
-	/*border-color:#ccc;
-	border-style:solid;
-	border-width:1px;
-	border-top:none;
-	border-bottom:none;*/
+	padding: 7px;
 } 
 
 #cart-mgmt td { 	
@@ -6467,4 +6462,8 @@ BEGIN 2014 styles
 .mil-list-empty-message {
 	font-weight: bold;
 	font-size: 16px;
+}
+
+.mil-list-row-icon {
+	margin-top: -2px !important;
 }
