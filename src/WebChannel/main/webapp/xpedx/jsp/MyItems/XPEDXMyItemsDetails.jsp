@@ -3409,7 +3409,7 @@ function showSharedListForm(){
 													</a>
 												</ul>
 		
-												<p>
+												<p class="mil-attr-storefront-item-id">
 													<s:property value="wCContext.storefrontId" />
 													Item #:
 													<s:property value="#rItemID" />
@@ -3453,7 +3453,6 @@ function showSharedListForm(){
 				<s:hidden name='#action.namespace' value='/order' />
 	
 				<div id="replacementItemBody" class="xpedx-light-box" />
-	
 			</div>
 			
 			<div class="button-container addpadtop15"> <%-- replacement modal --%>
