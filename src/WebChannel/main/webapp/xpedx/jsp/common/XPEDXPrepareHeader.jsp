@@ -434,7 +434,7 @@ var selectedShipCustomer = null;
 		
 
 			
-		$("#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
+		$("#dlgShareListLink,#dlgShareListLinkHL,#dlgShareListLinkHL1,#dlgShareListLinkHL2,#dlgShareListLinkHL3").fancybox({
 			'onStart' 	: function(){
 				if (isUserAdmin || isEstUser){
 				//Call AJAX function to fetch Ship-To locations only when user is an Admin
