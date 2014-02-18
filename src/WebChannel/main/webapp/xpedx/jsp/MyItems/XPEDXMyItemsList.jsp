@@ -383,7 +383,6 @@
 				Ext.get("XPEDXMyItemsSelectedList").dom.customerIds.value='<s:property value="#SelectedCustomerId"/>';
             	Ext.get("XPEDXMyItemsSelectedList").dom.submit();
 			}
-			return false;
 		}
 	
 		function orderByLastModified(){
@@ -573,8 +572,8 @@
 						<br />
 						<br />
 						
-						<a href="javascript:shareSelectAll(true)" >Select All</a>
-						<a href="javascript:shareSelectAll(false)" >Deselect All</a>
+						<a href="javascript:shareSelectAll(true)">Select All</a>
+						<a href="javascript:shareSelectAll(false)">Deselect All</a>
 						
 						<s:div id="divMainShareList" cssClass="grey-msg x-corners">
 						</s:div>
@@ -590,9 +589,16 @@
 				<br/>
 				<br/>
 				<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; margin-right:5px;">
-					<li><a class="grey-ui-btn" href="javascript:$.fancybox.close(); resetclFromListId() ;"><span>Cancel</span></a></li>
-					<li style="float: right;"><a href="javascript:submitSL('dlgShareList', []);" > <img
-						src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="49" height="23" alt="Save" title="Save" /> </a></li>
+					<li>
+						<a class="grey-ui-btn" href="javascript:$.fancybox.close(); resetclFromListId() ;">
+							<span>Cancel</span>
+						</a>
+					</li>
+					<li style="float: right;">
+						<a href="javascript:submitSL('dlgShareList', []);" >
+							<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="49" height="23" alt="Save" title="Save" />
+						</a>
+					</li>
 				</ul>
 			
 			</s:form>
