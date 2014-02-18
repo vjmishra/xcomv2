@@ -1764,7 +1764,7 @@ function SubmitActionWithValidation()
 					<!-- Job Number represents Customer Line Account # -->
 					<!-- class="x-input bottom-mill-info-avail for 24 Characters. It relates to EB 449 -->
 					<div class="jobNum line-spacing">
-						<label class="left35"><s:property value='custLineAccNoLabel' />:</label>
+						<s:property value='custLineAccNoLabel' />:
 						<input name="Job" tabindex="3" class="x-input bottom-mill-info-avail"  id="Job"  title="JobNumber" maxlength="24"/>
 					</div>
 				</s:if>
