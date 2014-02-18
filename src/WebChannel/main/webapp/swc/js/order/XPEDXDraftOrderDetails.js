@@ -83,7 +83,7 @@ function validateQty(){
 		 break;
 		}
 		}
-		if(conv != ''){
+		if(conv != '' && conv != undefined){//EB-3651
 			var part = conv.split("(");
 			if(part.length >1)
 				{
@@ -137,7 +137,7 @@ function validateQty(){
 		 break;
 		}
 		}
-		if(conv != ''){
+		if(conv != '' && conv != undefined){//EB-3651
 			var part = conv.split("(");
 			if(part.length >1)
 				{
