@@ -5383,24 +5383,14 @@ input label {
 }
 #replacementItemBody .mil-wrap-condensed-container {
     border-bottom: 1px solid #CCCCCC;
+    border-right: none;
     float: left;
     height: auto;
-    width: 100%;
 }
 #replacementItemBody .mil-wrap-condensed-container.last {
     border-bottom: 0 none;
 }
 .mil-wrap-condensed {
-/*     -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: #CCCCCC #CCCCCC -moz-use-text-color;
-    
-    border-style: solid solid none;
-    border-width: 1px 1px 0; */
-    
     border-radius: 6px 6px 0 0;
     border: 1px solid #cccccc;
     height: 270px;
@@ -5473,6 +5463,10 @@ width:auto;
 /*  for replacement modal text EB 783 */
 #replacementItemBody .mil-wrap-condensed-desc {
 	width: 370px;
+	margin-left: 160px;
+}
+#replacementItemBody .mil-attr-wrap {
+	margin-left: 160px;
 }
 .mil-desc-attribute-list, .mil-desc-attribute-list ul, ul.prodlist {
     color: #003399;

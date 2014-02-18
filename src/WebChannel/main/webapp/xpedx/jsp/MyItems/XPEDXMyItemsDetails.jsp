@@ -3445,8 +3445,7 @@ function showSharedListForm(){
 			</s:if>
 		</div> <%-- / wrapper for lightbox --%>
 		
-		<s:form action="addComplementaryItemToCart" namespace="/order" method="POST"
-				name="addReplacementItemToCartForm" id="addReplacementItemToCartForm">
+		<s:form action="addComplementaryItemToCart" namespace="/order" method="POST" name="addReplacementItemToCartForm" id="addReplacementItemToCartForm">
 			<div id="replacementItems" style="height: 380px; display: none;">
 	
 				<s:hidden name='#action.name' id='validationActionName'
@@ -3456,18 +3455,12 @@ function showSharedListForm(){
 				<div id="replacementItemBody" class="xpedx-light-box" />
 	
 			</div>
-	
-			<ul class="tool-bar-bottom" id="tool-bar"
-				style="margin-right: 30px; float: right;">
-				<li style="float: right;"><a
-					href="javascript:replacementReplaceInList(selReplacementId);"
-					class="orange-ui-btn modal"><span>Replace</span></a></li>
-				<li style="float: right; margin-right: 5px;"><a
-					href="javascript:replacementAddToList(selReplacementId);"
-					class="grey-ui-btn"><span>Add</span></a></li>
-				<li style="float: right;"><a
-					href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
-			</ul>
+			
+			<div class="button-container addpadtop15"> <%-- replacement modal --%>
+				<input class="btn-gradient floatright addmarginright10" type="submit" value="Replace" onclick="replacementReplaceInList(selReplacementId);" />
+				<input class="btn-gradient floatright addmarginright10" type="submit" value="Add" onclick="replacementAddToList(selReplacementId);" />
+				<input class="btn-neutral floatright addmarginright10" type="submit" value="Close" onclick="$.fancybox.close();" />
+			</div>
 		</s:form>
 		
 		<s:form id="formRIAddToList" action="XPEDXMyItemsDetailsCreate" method="post">
