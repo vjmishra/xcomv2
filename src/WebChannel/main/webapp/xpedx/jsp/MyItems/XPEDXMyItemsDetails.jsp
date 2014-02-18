@@ -3130,22 +3130,20 @@ function showSharedListForm(){
 						</div>
 						<div class="clearfix"></div>
 						
-						<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
-							<div class="view-hide-images addpadtop10">
-								<a id="toggleview" class="viewbtn"></a>
-							</div>
+						<div class="view-hide-images addpadtop10">
+							<a id="toggleview" class="viewbtn"></a>
+						</div>
+						
+						<div class="button-container addpadtop10"> <%-- edit mode bottom --%>
+							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
 							
-							<div class="button-container addpadtop10"> <%-- edit mode bottom --%>
-								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
-								<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
-								
-								<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
-								
-								<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
-									<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-								</s:if>
-							</div>
-						</s:if>
+							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
+							
+							<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
+								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
+							</s:if>
+						</div>
 					</s:else>
 	
 					<div class="clearall"></div>
