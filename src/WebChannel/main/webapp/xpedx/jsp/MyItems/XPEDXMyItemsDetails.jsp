@@ -2743,9 +2743,7 @@ function showSharedListForm(){
 														</s:else>
 													</s:if>
 												</div>
-											</div>
-		
-											<div style="width: 420px; padding-top: 10px">
+												
 												<s:if test='editMode != true'>
 													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
 														<p class="replacementtext">
@@ -2770,7 +2768,7 @@ function showSharedListForm(){
 													</s:if>
 												</s:else>
 											</div>
-		
+											
 											<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
 												<p class="mil-replaced">
 													<a class='modal red'
