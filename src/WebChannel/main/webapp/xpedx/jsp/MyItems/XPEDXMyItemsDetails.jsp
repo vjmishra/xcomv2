@@ -73,10 +73,24 @@
 	// toggle thumbnails on/off
 	$(document).ready(function() {
 		var showHideImages = function(visible) {
+			$main = $('#main');
 			if (visible) {
-				$('#main').removeClass('hide-item-thumbnails');
+				$main.removeClass('hide-item-thumbnails');
+				
+				// the first time we show the images we need to load the images
+				if ($main.hasClass('lazy-load-thumbnails')) {
+					$main.removeClass('lazy-load-thumbnails');
+					
+					setTimeout(function() {
+						var lazyLoadImages = $('.item-thumbnail');
+						for (var i = 0, len = lazyLoadImages.length; i < len; i++) {
+							lazyLoadImages[i].src = lazyLoadImages[i].getAttribute('data-src');
+						}
+					}, 0);
+				}
+				
 			} else {
-				$('#main').addClass('hide-item-thumbnails');
+				$main.addClass('hide-item-thumbnails');
 			}
 		};
 		
@@ -2166,7 +2180,7 @@ function showSharedListForm(){
 			<s:hidden name="editMode" value="%{true}"></s:hidden>
 		</s:form>
 
-		<div id="main" class="hide-item-thumbnails">
+		<div id="main" class="hide-item-thumbnails lazy-load-thumbnails">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
 			<s:if test='!#guestUser'>
@@ -2667,7 +2681,7 @@ function showSharedListForm(){
 												<div class="imagewrap">
 													<%-- TODO: ideally find a way to omit these images until toggled on to avoid loading images in the background --%>
 													<img class="item-thumbnail"
-															src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
+															data-src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
 															width="150" height="150" alt="" />
 												</div>
 											</a>
