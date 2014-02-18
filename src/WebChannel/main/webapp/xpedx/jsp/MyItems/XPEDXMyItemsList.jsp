@@ -383,7 +383,6 @@
 				Ext.get("XPEDXMyItemsSelectedList").dom.customerIds.value='<s:property value="#SelectedCustomerId"/>';
             	Ext.get("XPEDXMyItemsSelectedList").dom.submit();
 			}
-			return false;
 		}
 	
 		function orderByLastModified(){
@@ -573,8 +572,8 @@
 						<br />
 						<br />
 						
-						<a href="javascript:shareSelectAll(true)" >Select All</a>
-						<a href="javascript:shareSelectAll(false)" >Deselect All</a>
+						<a href="javascript:shareSelectAll(true)">Select All</a>
+						<a href="javascript:shareSelectAll(false)">Deselect All</a>
 						
 						<s:div id="divMainShareList" cssClass="grey-msg x-corners">
 						</s:div>
@@ -590,9 +589,16 @@
 				<br/>
 				<br/>
 				<ul id="tool-bar float-right" class="tool-bar-bottom" style="float:right; padding-top:5px; width:152px; margin-right:5px;">
-					<li><a class="grey-ui-btn" href="javascript:$.fancybox.close(); resetclFromListId() ;"><span>Cancel</span></a></li>
-					<li style="float: right;"><a href="javascript:submitSL('dlgShareList', []);" > <img
-						src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="49" height="23" alt="Save" title="Save" /> </a></li>
+					<li>
+						<a class="grey-ui-btn" href="javascript:$.fancybox.close(); resetclFromListId() ;">
+							<span>Cancel</span>
+						</a>
+					</li>
+					<li style="float: right;">
+						<a href="javascript:submitSL('dlgShareList', []);" >
+							<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/ui-buttons/ui-btn-save<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="49" height="23" alt="Save" title="Save" />
+						</a>
+					</li>
 				</ul>
 			
 			</s:form>
@@ -779,16 +785,16 @@
 								<tr class="<s:if test="%{!#status.isOdd()}">odd</s:if>
 									<s:if test="#status.last" > last</s:if>">
 									<td class="left-cell">
+										<s:if test='%{#sharePrivateFlag.trim() != ""}'>
+											<img id="whitecart" class="mil-list-row-icon" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_personal_list.png"/>
+										</s:if>
+										<s:else>
+											<img id="whitecart" class="mil-list-row-icon" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_shared_list.png"/>
+										</s:else>
 										<s:a  href="javascript:doAction('view', '%{#uId}'); ">
 											<s:property value="#name" /> (<s:property value="#numOfItems" />)
 										</s:a>
-										<s:if test='%{#sharePrivateFlag.trim() != ""}'>
-											<img id="whitecart" style="display:block;" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_personal_list.png"/>
-										</s:if>
-										<s:else>
-											<img id="whitecart" style="display:block;" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_shared_list.png"/>
-										</s:else>
-										<p class="grey-mil" style="width:440px; word-wrap:break-word;"><s:property value="#desc" /></p>
+										<p class="grey-mil"><s:property value="#desc" /></p>
 									</td> 
 									<td class="createdby-lastmod">
 										<s:property value="#modifiedBy" />
