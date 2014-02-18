@@ -130,7 +130,7 @@ public class DynamicQueryAction extends WCMashupAction {
 				&& assignedCustomerList.contains(MsapId)) {
 			grpVal = grpVal + "^^^" + "checked";
 		}
-		String status="30"
+		String status="30";
 		//EB 4152 : replacing single quote, since its giving javascript error for displaying authorized locations
 		if(grpVal!=null){
 			grpVal.replace("'", "\\'");
