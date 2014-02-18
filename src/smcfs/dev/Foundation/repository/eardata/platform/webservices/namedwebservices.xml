@@ -25,8 +25,4 @@ webservices must start with a lower case letter.
 		<Service ServiceName="XPXPriceListCreationService" ExposedName="priceListCreation"/>
 		<Service ServiceName="CopySearchIndexFilesService" ExposedName="copySearchIndexFiles"/>
 	</Services>
-	<Apis>
-	<Api Name="getCompleteItemList" ExposedName="getCompleteItemList"/>
-	<Api Name="getCategoryList" ExposedName="getCategoryList"/>
-	</Apis>
 </WebServices>
