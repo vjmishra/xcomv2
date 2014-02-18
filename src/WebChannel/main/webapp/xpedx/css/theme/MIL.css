@@ -6201,13 +6201,18 @@ div#main.userProfile { min-height: 850px; }
 
 /*End for EB 1150 for back to top functionality*/
 
-.mil-count-selected-top {
-	margin-top: 20px;
+.mil-count-selected {
+	float: left;
+	clear: none;
+	margin: 5px 0px
 }
-.mil-count-selected-bottom {
-	margin-left: 20px;
-	margin-bottom: 20px;
-}
+/* .mil-count-selected-top { */
+/* 	margin-top: 20px; */
+/* } */
+/* .mil-count-selected-bottom { */
+/* 	margin-left: 20px; */
+/* 	margin-bottom: 20px; */
+/* } */
 
 
 /*
@@ -6338,8 +6343,7 @@ BEGIN 2014 styles
 	float: left;
 	clear: none;
 	width: 62px;
-/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
-	background: url(20x20_personal_list.png) no-repeat left top;
+	background: url(../../images/mil/20x20_personal_list.png) no-repeat left top;
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;
@@ -6348,8 +6352,7 @@ BEGIN 2014 styles
 	float: left;
 	clear: none;
 	width: 55px;
-/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
-	background: url(20x20_shared_list.png) no-repeat top left;
+	background: url(../../images/mil/20x20_shared_list.png) no-repeat top left;
 	padding-left: 21px;
 	padding-top: 3px;
 	height: 22px;	
@@ -6466,4 +6469,9 @@ BEGIN 2014 styles
 	margin-top:0;
 	width:950px;
 	clear: both;
+}
+
+.mil-list-empty-message {
+	font-weight: bold;
+	font-size: 16px;
 }

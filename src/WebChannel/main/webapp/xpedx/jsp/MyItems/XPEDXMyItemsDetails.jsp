@@ -1635,11 +1635,11 @@ function showSharedListForm(){
 				
 				var $milCountPanel = $('.mil-count-selected');
 				if (numSelectedCheckboxes == 0) {
-					$milCountPanel.css('visibility', 'hidden');
+					$milCountPanel.hide();
 				} else {
 					var totalCheckboxes = $('.milCheckbox').length;
 					$milCountPanel.html('Items to be removed: ' + numSelectedCheckboxes + ' of ' + totalCheckboxes);
-					$milCountPanel.css('visibility', 'visible');
+					$milCountPanel.show();
 				}
 			}
 		</s:if>
@@ -2253,7 +2253,7 @@ function showSharedListForm(){
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
 
-						<div class="button-container">
+						<div class="button-container"> <%-- read-only top --%>
 							<s:if test='itemCount > 0'>
 								<s:if
 									test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -2344,15 +2344,10 @@ function showSharedListForm(){
 												onkeyup="javascript:restrictTextareaMaxLength(this,250);"
 												style="width: 220px; height: 92px; word-wrap: break-word;"><s:property value="listDesc" /></textarea>
 									</s:else>
-		
-									<div class="notice mil-count-selected mil-count-selected-top" style="visibility: hidden;">
-										Placeholder text
-									</div>
-		
 								</div> <%-- / mil-edit-forms --%>
 	
 								<div id="quick-add" class="quick-add float-right ">
-									<div class="clear">&nbsp;</div>
+									<div class="clearfix"></div>
 									<s:hidden id="mandatoryFieldCheckFlag_quick-add"
 										name="mandatoryFieldCheckFlag_quick-add" value="%{false}"></s:hidden>
 									<h2 style="float: left; margin-top: 5px;">Quick Add</h2>
@@ -2375,7 +2370,7 @@ function showSharedListForm(){
 												and Paste</a>
 										</p>
 									</s:elseif>
-									<div class="clear">&nbsp;</div>
+									<div class="clearfix"></div>
 									<div class="quick-add-form-top">&nbsp;</div>
 									<div class="quick-add-form quick-add-form-mil">
 										<form class="form selector" id="quick-add-selector"
@@ -2475,7 +2470,7 @@ function showSharedListForm(){
 											<input id="btnQLAdd2Cart" name="button" type="button" class="btn-gradient floatright addmargintop20" value="Add to My Items List" onclick="add2List(); return false;" />
 										</s:form>
 	
-										<div class="clear">&nbsp;</div>
+										<div class="clearfix"></div>
 										<div class="quick-add-form-bot">
 											<center>
 												<div class="error" id="errorMsgFor_QL" style="display: none"></div>
@@ -2486,7 +2481,7 @@ function showSharedListForm(){
 								</div> <%-- / quick-add --%>
 							</div> <%-- / mil-edit --%>
 							
-							<div class="clear">&nbsp;</div>
+							<div class="clearfix"></div>
 							
 						</div> <%-- / mid-col-mil --%>
 		
@@ -2498,7 +2493,7 @@ function showSharedListForm(){
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
 						
-						<div class="button-container addpadtop10">
+						<div class="button-container addpadtop15"> <%-- edit mode top --%>
 							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
 							
@@ -2554,7 +2549,14 @@ function showSharedListForm(){
 								</s:if>
 							</li>
 						</ul>
-	
+						
+						<s:if test="editMode">
+							<div class="notice mil-count-selected mil-count-selected-top" style="display:none;">
+								Placeholder text
+							</div>
+							<div class="clearfix"></div>
+						</s:if>
+						
 						<div class="graybar">
 							<input id="selAll1" class="forselected-input toggleAllSelected" type="checkbox" />
 							<s:if test="editMode != true">
@@ -3088,7 +3090,7 @@ function showSharedListForm(){
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
 						
-						<div class="button-container addpadtop10">
+						<div class="button-container addpadtop10"> <%-- read-only bottom --%>
 							<s:if test='itemCount > 0'>
 								<s:if
 									test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -3130,12 +3132,17 @@ function showSharedListForm(){
 							</s:else>
 						</div>
 						
+						<div class="notice mil-count-selected mil-count-selected-bottom" style="display:none;">
+							Placeholder text
+						</div>
+						<div class="clearfix"></div>
+						
 						<s:if test='XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size() > 0'>
 							<div class="view-hide-images addpadtop10">
 								<a id="toggleview" class="viewbtn"></a>
 							</div>
 							
-							<div class="button-container addpadtop10">
+							<div class="button-container addpadtop10"> <%-- edit mode bottom --%>
 								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 								<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
 								
@@ -3150,9 +3157,6 @@ function showSharedListForm(){
 	
 					<div class="clearall"></div>
 	
-					<s:if test="editMode">
-						<div class="notice mil-count-selected mil-count-selected-bottom" style="visibility: hidden;">Placeholder text</div>
-					</s:if>
 					<ul>
 						<li style="text-align: center;">
 	

@@ -64,11 +64,17 @@
 .addpadtop10 {
 	padding-top: 10px;
 }
+.addpadtop15 {
+	padding-top: 15px;
+}
 .addpadtop2 {
 	padding-top: 2px;
 }
 .addpadright5 {
 	padding-right: 5px;
+}
+.addpad20 {
+	padding: 20px;
 }
 
 .marginleft10 {
