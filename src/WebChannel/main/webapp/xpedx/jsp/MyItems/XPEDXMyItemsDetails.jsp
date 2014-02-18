@@ -2221,6 +2221,13 @@ function showSharedListForm(){
 						</span>
 					</a>
 				</div>
+				
+				<div class="addpadleft20 addmargintop-10">
+					<span class="grey" style="width: 421px; word-wrap: break-word; float: left;">
+						<s:property value="listDesc" />
+					</span>
+				</div>
+				<div class="clear"></div>
 
 				<s:if test="%{editMode != true && errorMsg != null && errorMsg != ''}">
 					<s:if test="%{errorMsg == 'ITEM_REPLACE_ERROR'}">
@@ -2279,15 +2286,6 @@ function showSharedListForm(){
 									class="btn-neutral floatright addmarginleft10"
 									value="Export This List" onclick="exportList(); return false;" />
 						</div> <%-- / button-container --%>
-						
-						<div id="mid-col-mil">
-							<div>
-								<span class="grey" style="width: 421px; word-wrap: break-word; float: left;">
-									<s:property value="listDesc" />
-								</span>
-							</div>
-							<div class="clear"></div>
-						</div> <%-- / mid-col-mil --%>
 					</s:if>
 					<s:else> <%-- editMode --%>
 						<div id="mil-edit" class="mil-edit" style="width: 100%">

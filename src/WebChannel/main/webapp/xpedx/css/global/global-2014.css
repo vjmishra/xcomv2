@@ -80,6 +80,9 @@
 .marginleft10 {
 	margin-left: 10px;
 }
+.addmargintop-10 {
+	margin-top: -10px;
+}
 
 .indent20px {
 	padding-left: 20px;
