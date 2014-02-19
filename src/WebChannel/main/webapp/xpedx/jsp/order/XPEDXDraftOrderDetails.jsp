@@ -547,12 +547,12 @@ $(document).ready(function(){
 <s:set name='isOwnerOfNonCartInContextDraftOrder'
 	value='#_action.isOwnerOfNonCartInContextDraftOrder()' />
 <s:set name='isProcurementInspectMode'
-	value='#util.isProcurementInspectMode(wCContext)' />
+	value="true" />
 <s:set name='isReadOnly'
 	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' />
 <s:set name='tempIsReadOnly'
 	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' />
-<s:set name='isProcurementUser' value='wCContext.isProcurementUser()' />
+<s:set name='isPunchoutUser' value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>
 <s:set name='hasPendingChanges'
 	value='#orderDetails.getAttribute("HasPendingChanges")' />
 	
@@ -647,15 +647,15 @@ $(document).ready(function(){
 </s:url>
 
 <s:url id='checkoutURLid' namespace='/order' action='xpedxsaveCartDetails' />
-<s:if test='#isProcurementUser'>
-	<s:if test='#isProcurementInspectMode'>
+<s:if test='#isPunchoutUser'>
+	<s:if test='#!isProcurementInspectMode'>
 		<s:set name='checkoutButtonText'
 			value='%{#_action.getText("ProcurementCancelAndReturn")}' />
 		<s:url id='procurementInspectModeCheckoutURLid' namespace='/order'
-			action='procurementPunchOut' />
+			action='customPunchoutOrder' />
 		<s:set name='mode' value='"cancel"' />
 		<s:url id='procurementImmediatePunchOutURL' namespace='/order'
-			action='procurementPunchOut' escapeAmp='false'>
+			action='customPunchoutOrder' escapeAmp='false'>
 			<s:param name='mode' value='"cancel"' />
 		</s:url>
 		<s:set name='procurementCheckoutDisabled' value='' />
@@ -663,19 +663,19 @@ $(document).ready(function(){
 	<s:else>
 		<s:set name='checkoutButtonText'
 			value='%{#_action.getText("ProcurementSaveAndReturn")}' />
-		<s:url id='procurementCheckoutURLid' namespace='/order'
-			action='procurementSaveAndReturn' />
+		<s:url id='procurementInspectModeCheckoutURLid' namespace='/order'
+			action='customPunchoutOrder' />
 		<s:set name='mode' value='"save"' />
 		<s:url id='procurementImmediatePunchOutURL' namespace='/order'
-			action='procurementPunchOut' escapeAmp='false'>
+			action='customPunchoutOrder' escapeAmp='false'>
 			<s:param name='mode' value='"save"' />
 		</s:url>
 		<s:if test='invalidOrderLinesMap.size() == 0'>
 			<s:set name='procurementCheckoutDisabled' value='' />
 		</s:if>
-		<s:else>
-			<s:set name='procurementCheckoutDisabled' value='"disabled"' />
-		</s:else>
+		<%-- <s:else>
+			<s:set name='procurementCheckoutDisabled' value='' />
+		</s:else> --%>
 	</s:else>
 </s:if>
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
@@ -1492,7 +1492,7 @@ var currentAadd2ItemList = new Object();
 	<s:set name="isEstimator" value="%{#wcContext.getWCAttribute('isEstimator')}" />
 	--%>
 	<s:if test="!#isEstimator">
-	<s:if test='majorLineElements.size() > 0'>
+	<s:if test='majorLineElements.size() > 0 && !#isPunchoutUser'>
 		<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">		    
 	    	<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>	    	
 		</s:if> 
@@ -1504,7 +1504,7 @@ var currentAadd2ItemList = new Object();
 		</s:if>
 		   				   
 	</s:if>
-	<s:elseif test='#isProcurementUser'>
+	<s:elseif test='#isPunchoutUser'>
 		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>SaveAndReturn</span></a>
 		<s:if test='#canAddLine'>
 			<a id="cont-shopping" class="grey-ui-btn cont-shopping-margin"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
@@ -1911,7 +1911,7 @@ var currentAadd2ItemList = new Object();
 </div>
 <a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a> 
 
-<div class="hidden-data"><s:if test='!#isProcurementUser'>
+<div class="hidden-data"><s:if test='!#isPunchoutUser'>
 	<s:a id='checkoutURL' href='%{#checkoutURLid}' />
 </s:if> <s:else>
 	<s:if test='#isProcurementInspectMode'>
@@ -2008,8 +2008,8 @@ function validateOrder()
 		$(".numeric").numeric();	
 	}
 	updateValidation();
-	var isProcurementUser = <s:property value="#wcContext.isProcurementUser()"/>;
-	if(!isProcurementUser) {
+	var isPunchoutUser =  '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
+	if(!isPunchoutUser) {
 		validateOrder();
 	}
 

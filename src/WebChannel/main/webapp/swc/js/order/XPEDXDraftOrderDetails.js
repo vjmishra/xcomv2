@@ -52,7 +52,7 @@ function validateQty(){
 		var arrQty ;		
 		var arrItemID ;	
 		var itemSelUom ;//EB-3840
-		var conv;//EB-3840
+		var conv = '';//EB-3840
 		arrQty = document.getElementById("OrderDetailsForm").elements["orderLineQuantities"];		
 		arrItemID = document.getElementById("OrderDetailsForm").elements["orderLineItemIDs"];
 		itemSelUom = document.getElementById("OrderDetailsForm").elements["itemUOMsSelect"];//EB-3840

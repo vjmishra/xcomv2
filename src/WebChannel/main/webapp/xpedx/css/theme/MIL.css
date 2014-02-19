@@ -5563,6 +5563,7 @@ input:focus, textarea:focus {
 	float: left;
 	height: auto;
 	clear: none;
+	min-height: 150px;
 }
 #replacementItemBody .mil-desc-wrap {
     width: 350px;
