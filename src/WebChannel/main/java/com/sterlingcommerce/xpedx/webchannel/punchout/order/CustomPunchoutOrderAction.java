@@ -99,23 +99,14 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			//String cicOrderHeaderKey = (String) XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 
 			String cxml = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
-			
-	
-			
+					
 			if(punchoutRequest.getReturnURL()!=null){punchoutURL=punchoutRequest.getReturnURL().replaceAll(" ","%20");}
-			
-		
-			System.out.println("Puncout URL"+punchoutURL);
-			
+					
 			request.setAttribute("requestUrl",punchoutURL);
-			
-		 
-			
-			//postPunchOutOrderMessage(cxml,punchoutURL);
 			
 			request.setAttribute("cxml", cxml);
 
-		//	deleteCart(cc.getOrderHeaderKey());
+			deleteCart(cc.getOrderHeaderKey());
 
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -238,32 +229,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		return WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
 	}
 	
-	public void postPunchOutOrderMessage(String cxmlData,String url) throws Exception
-	{
-		 Map<String,String> reqestparams = new LinkedHashMap<String, String>();
-		 reqestparams.put("cxml-urlencoded", cxmlData);
-		 StringBuilder postData = new StringBuilder();
-	        for (Map.Entry<String,String> param : reqestparams.entrySet()) {
-	            if (postData.length() != 0) postData.append('&');
-	            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-	            postData.append('=');
-	            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-	        }
-	        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-
-	        HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
-	        conn.setRequestMethod("POST");
-	        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-	        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-	        conn.setDoOutput(true);
-	        conn.getOutputStream().write(postDataBytes);
-
-	        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-	        for (int c; (c = in.read()) >= 0; System.out.print((char)c));
-	    }
 	
-		
-
 	private String invokePunchOut(Document inXML, String xsltFileName)
 			throws Exception {
 		InputStream xslStream = XPXPunchOutOrder.class.getResourceAsStream(new StringBuilder().append("/global/template/xsl/punchout/").append(xsltFileName).toString());
