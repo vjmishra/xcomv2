@@ -548,10 +548,10 @@ $(document).ready(function(){
 	value='#_action.isOwnerOfNonCartInContextDraftOrder()' />
 <s:set name='isProcurementInspectMode'
 	value="true" />
-<s:set name='isReadOnly'
+<%-- <s:set name='isReadOnly'
 	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' />
 <s:set name='tempIsReadOnly'
-	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' />
+	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' /> --%>
 <s:set name='isPunchoutUser' value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>
 <s:set name='hasPendingChanges'
 	value='#orderDetails.getAttribute("HasPendingChanges")' />
@@ -648,7 +648,7 @@ $(document).ready(function(){
 
 <s:url id='checkoutURLid' namespace='/order' action='xpedxsaveCartDetails' />
 <s:if test='#isPunchoutUser'>
-	<s:if test='#!isProcurementInspectMode'>
+ <s:if test='#!isProcurementInspectMode'>
 		<s:set name='checkoutButtonText'
 			value='%{#_action.getText("ProcurementCancelAndReturn")}' />
 		<s:url id='procurementInspectModeCheckoutURLid' namespace='/order'
@@ -658,7 +658,7 @@ $(document).ready(function(){
 			action='customPunchoutOrder' escapeAmp='false'>
 			<s:param name='mode' value='"cancel"' />
 		</s:url>
-		<s:set name='procurementCheckoutDisabled' value='' />
+		<s:set name='procurementCheckoutDisabled' value='false' />
 	</s:if>
 	<s:else>
 		<s:set name='checkoutButtonText'
@@ -671,12 +671,12 @@ $(document).ready(function(){
 			<s:param name='mode' value='"save"' />
 		</s:url>
 		<s:if test='invalidOrderLinesMap.size() == 0'>
-			<s:set name='procurementCheckoutDisabled' value='' />
+			<s:set name='procurementCheckoutDisabled' value='false' />
 		</s:if>
 		<%-- <s:else>
 			<s:set name='procurementCheckoutDisabled' value='' />
 		</s:else> --%>
-	</s:else>
+ </s:else>
 </s:if>
 <s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 
