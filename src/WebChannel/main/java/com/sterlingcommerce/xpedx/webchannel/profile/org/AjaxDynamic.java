@@ -39,6 +39,10 @@ public class AjaxDynamic extends WCMashupAction {
 
 			//DaQueryAction.getAuthorizedLocation(wcContext);
 			PrntChildComb =	DaQueryAction.getChildCustomers(wcContext,sParentCustomerId);
+			//EB-4152 - Single quote giving javascript error, so not displaying locations in profile page
+			if(PrntChildComb!=null){
+				PrntChildComb = PrntChildComb.replace("\\'","\'");
+			}
 			out = response.getWriter();
 			out.println(PrntChildComb);
 			//out.println(json.toString());
