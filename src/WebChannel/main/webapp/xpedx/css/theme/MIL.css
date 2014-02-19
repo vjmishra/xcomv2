@@ -6461,3 +6461,7 @@ BEGIN 2014 styles
 .mil-list-row-icon {
 	margin-top: -2px !important;
 }
+
+#mil-list .right-cell select {
+	width: 125px;
+}
