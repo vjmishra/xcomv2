@@ -2482,11 +2482,9 @@ function showSharedListForm(){
 									</s:form>
 
 									<div class="clearfix"></div>
-									<div class="quick-add-form-bot">
-										<center>
-											<div class="error" id="errorMsgFor_QL" style="display: none"></div>
-											Click the Add to Quick List button once you have entered an item number.
-										</center>
+									<div class="quick-add-form-bot addpadleft20">
+										<div class="error" id="errorMsgFor_QL" style="display: none"></div>
+										Click the Add to Quick List button once you have entered an item number.
 									</div>
 								</div> <%-- / quick-add-form quick-add-form-mil --%>
 							</div> <%-- / quick-add --%>
@@ -2502,7 +2500,7 @@ function showSharedListForm(){
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
 						
-						<div class="button-container addpadtop15"> <%-- edit mode top --%>
+						<div class="button-container"> <%-- edit mode top --%>
 							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
 							

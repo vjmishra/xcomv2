@@ -6065,7 +6065,6 @@ div#main.userProfile { min-height: 850px; }
 .quick-add-form-bot {
     background: url("../../images/theme/theme-1/quick-add/quick-add-bg-bot-PO.gif") no-repeat scroll 0 0 #FFFFFF!important;
     height: 37px;
-    position: absolute;
     width: 710px!important;
 }
 
