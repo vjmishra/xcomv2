@@ -18,7 +18,7 @@
 </head>
 <body onload="PostData();">
    		<form method="post"  action=<%=request.getAttribute("requestUrl")%> id="Form1" name="Form1" enctype="application/x-www-form-urlencoded"> 
-		<input type="hidden" name="cxml-urlencoded" value=<%=request.getAttribute("cxml")%>/>
+		<input type="hidden" name="cxml-urlencoded" value='<%=request.getAttribute("cxml")%>/>'
 		</form>
 </body>
 </html>
