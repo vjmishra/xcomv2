@@ -165,7 +165,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
     private String modifyUserid;
 // added for XB 214
 	private Map<String,String>  sourcingOrderMultipleForItems =new HashMap<String,String>();
-    protected String isOMError;
+    protected String isOMError="false";
     protected HashMap useOrderMultipleMapFromSourcing;
 	private String customerItemFlag;
     private String mfgItemFlag;
@@ -1733,8 +1733,8 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					tmpItem.setRequestedQty(itemQty);
 					inputItems.add(tmpItem);
 
-					if("".equals(tmpQtyTxtBox)) {
-						qtyTextBoxMap.put(id, tmpQtyTxtBox);
+					if(!"".equals(itemQty.trim())) {
+						qtyTextBoxMap.put(id, itemQty.trim());
 					}
 					/*Added if loop for webtrends : creating a string of selected
 					itemIds separated with semicolon*/

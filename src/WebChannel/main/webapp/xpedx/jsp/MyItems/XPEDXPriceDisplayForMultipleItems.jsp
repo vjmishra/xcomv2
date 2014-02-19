@@ -52,6 +52,7 @@
 		<s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 		<s:set name='showCurrencySymbol' value='true' />
 		<s:set name='id' value='myItemsKey' />
+		<s:set name="qtyTxtBox" value='#_action.getQtyTextBoxMap()' />
 		<s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 		<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemId)"></s:set>
 		<s:hidden name="lineStatusCodeMsg" id="lineStatusCodeMsg_%{#itemOrder}" value="%{#lineStatusCodeMsg}"/>
@@ -129,7 +130,7 @@
 				</s:else>
 				<s:div cssClass="mil-pa-wrap %{#milPaWrapClass}">
 					<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
-						<s:if test="%{#isQtyTextBoxEmpty == 'false' && #jsonAvailabilityBalance != null}">
+						<s:if test="%{#qtyTxtBox.get(#id) != null && #qtyTxtBox.get(#id)  != 0  && #jsonAvailabilityBalance != null}">
 							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
 							<s:div cssStyle="color:%{#jsonAvailabilityMessageColor}; font-size:13px; padding-left:30px; line-height:22px;">
 								<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
