@@ -130,6 +130,10 @@ public class DynamicQueryAction extends WCMashupAction {
 				&& assignedCustomerList.contains(MsapId)) {
 			grpVal = grpVal + "^^^" + "checked";
 		}
+		//Added for EB-4152 - Fixed the issue For single quote in Account name, throwing javascript error and not showing any locations in Profile page
+		if(grpVal!=null){
+			grpVal.replace("'", "\\'");
+		}
 		String status="30";
 		PrntChildComb = MsapId + "##" + grpVal+"##"+status;
 		try {
@@ -189,6 +193,11 @@ public class DynamicQueryAction extends WCMashupAction {
 						if (assignedCustomerList != null
 								&& assignedCustomerList.contains(EleCustID)) {
 							grpVal = grpVal + "^^^" + "checked";
+						}
+						//EB 4152 : replacing single quote, since its giving javascript error for displaying authorized locations
+						if(grpVal!=null)
+						{
+							grpVal =grpVal.replace("'", "\\'");
 						}
 						String status="30";
 						String tempValue = EleCustID + "##" + grpVal+"##"+status;   
