@@ -92,9 +92,8 @@
 		<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 		
 		<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
-			<s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #_action.getCatagory() == "Paper" && #_action.getValidateOM() == "true"}' />
+			 <s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #_action.getCatagory().trim().equals("Paper") && #_action.getValidateOM() == "true"}' />
 			<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
-			
 			<%-- since the availability/bracket/pricing columns may be hidden, we indicate whether the P&A section is 1, 2, or 3 columns. this allows css specificity to customize layout --%>
 			<s:if test="%{#showPaBracket && #showPaPrices}">
 				<s:set name="milPaWrapClass" value="%{'three-col'}" />
@@ -230,7 +229,6 @@
 					
 					<s:if test='%{#showPaBracket}'>
 						<div class="mil-pa-bracket">
-							<s:if test="%{#showPaBracket}">
 								<h4>
 									Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)
 								</h4>
@@ -281,7 +279,6 @@
 										</tbody>
 									</table>
 								</s:div> <%-- / bracketPricing_ --%>
-							</s:if>
 						</div> <%-- / mil-pa-bracket --%>
 					</s:if>
 					

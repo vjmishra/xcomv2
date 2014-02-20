@@ -5883,15 +5883,6 @@ tr:hover {
 
 
 
-#mil-list {
-	/*background-image:url("../../images/shape.svg_png?shape=rect&stylesheet=&cssClass=&shapeRendering=geometricPrecision&width=951&height=44&curveX=8&curveY=8&fillColor=%23003399&fillOpacityPct=&fillGradientType=&fillGradientTargetColor=&fillGradientTargetOpacityPct=&borderColor=%2300255c&borderWidth=&shadingStyle=none&shadingLevelPct=&shadingColor=&shadingStartPct=&shadingEndPct=&dropShadowOffsetX=&dropShadowOffsetY=&dropShadowColor=&dropShadowOpacityPct=&margin=&clipX1=&clipX2=&clipY1=&clipY2=32&outsideColor=&outsideOpacityPct=");  */ 
-	/*
-	background-image:url("../../images/theme/theme-1/mil/items-list-bg.gif"); 
-	background-repeat:no-repeat; width:950px; 
-	*/
-
-}
-
 .table-header-bar {
 	background-color: #003399;	
 }
@@ -6388,18 +6379,12 @@ BEGIN 2014 styles
 	width: 200px;
 }
 #mil-list.standard-table td.left-rounded-corner {
-/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
-	background: url(theme-1/mil/items-list-bg-LEFT.gif) top left no-repeat;
-	background-color: #003399;
 	color: #ffffff;
 	font-size:11px;
 	border-left: none;
 }
 
 #mil-list.standard-table td.right-rounded-corner {
-/*	**************ALL IMAGES NEED ABSOLUTE PATHS*******************/
-	background: url(theme-1/mil/items-list-bg-RIGHT.gif) top right no-repeat;
-	background-color: #003399;
 	color: #ffffff;
 	font-size:11px;
 	border-right: none;

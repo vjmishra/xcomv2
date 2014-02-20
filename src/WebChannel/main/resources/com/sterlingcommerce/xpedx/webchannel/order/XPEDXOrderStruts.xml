@@ -812,8 +812,8 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDetailsActionBinding.xml</param>
 			<param name="mashups">xpedx_me_draftOrderDetails</param>
 			<param name="resourceId">/swc/order/guestShopping</param>
-			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetailsQuickAdd.jsp
-			</result>
+			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp</result>
+		<!--<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetailsQuickAdd.jsp</result>-->
 			<result name="input">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp
 			</result>
 			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
