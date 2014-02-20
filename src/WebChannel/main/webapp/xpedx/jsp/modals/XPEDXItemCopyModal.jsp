@@ -108,13 +108,16 @@
 			<s:if test="#isUserAdmin || #isEstUser">
 				<p>
 					List Type: 
-				<input onclick="hideSharedListHLForm()" id="rbPermissionPrivate" <s:property value="#rbPermissionPrivate"/> type="radio"
-						name="sharePermissionLevel" value="<s:property value="wCContext.loggedInUserId"/>" />&nbsp;Personal (only you will be able to view and edit this list)</p>
+					<input onclick="hideSharedListHLForm()" id="rbPermissionPrivate" <s:property value="#rbPermissionPrivate"/> type="radio"
+							name="sharePermissionLevel" value="<s:property value="wCContext.loggedInUserId"/>"
+							/>&nbsp;Personal (only you will be able to view and edit this list)
+				</p>
 				
 				<input style="margin-left: 54px; margin-top: 5px; margin-bottom: 10px;"
 						onclick="showSharedListHLForm()" 
 						id="rbPermissionShared" <s:property value="#rbPermissionShared"/>
-						type="radio" name="sharePermissionLevel" value=" " />&nbsp;Shared &nbsp;&nbsp;&nbsp;
+						type="radio" name="sharePermissionLevel" value=" "
+						/>&nbsp;Shared &nbsp;&nbsp;&nbsp;
 			</s:if>
 			
 			<s:set name="displayStyle" value="%{''}" />
@@ -137,24 +140,20 @@
 				</span>
 			</s:else>
 			
-			<s:div cssStyle=%{#displayStyle}" id="dynamiccontentHL">
+			<s:div cssStyle="%{#displayStyle}" id="dynamiccontentHL">
 				<s:div id="dlgShareListShared">
 					<script type="text/javascript">
 						function shareSelectAll(checked_status) {
-							//var checked_status = this.checked;
 							var checkboxes = Ext.query('input[name*=customerPaths]');
 							Ext.each(checkboxes, function(obj_item) {
 								obj_item.checked = !checked_status;
 								obj_item.click();
-								//obj_item.fireEvent('click');
 							});
 						}
 					</script>
-					<!-- START - BODY OF SHARE FORM -->
 					<s:div id="divMainShareListHL" cssClass="grey-msg x-corners" cssStyle="height:110px; width:740px; overflow:auto;">
 						<!-- CONTENT WILL GO HERE -->
 					</s:div>
-					<!-- END - BODY OF SHARE FORM -->
 				
 				</s:div>
 			</s:div> <%-- / dynamiccontentHL --%>
