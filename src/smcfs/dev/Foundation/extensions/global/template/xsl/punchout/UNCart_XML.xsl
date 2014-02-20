@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:output method="xml" encoding="ISO-8859-1" />
+	<xsl:output method="xml" encoding="UTF-8" />
 	<xsl:template match="/">
 		<xsl:apply-templates select="Order" />
 	</xsl:template>
@@ -32,14 +32,11 @@
 					<BrowserFormPost><URL>@@replaceURL@@</URL></BrowserFormPost>
 					<PunchOutOrderMessageHeader operationAllowed="edit">
 							<Total>
-							<Money currency="USD">
-								<xsl:choose>
-									<xsl:when test="Order/OverallTotals/@GrandTotal &gt; 0">
-										<xsl:value-of select="Order/OverallTotals/@GrandTotal" />
+							<Money currency="USD"><xsl:choose>
+									<xsl:when test="Extn/@ExtnTotalOrderValue &gt; 0">
+										<xsl:value-of select="Extn/@ExtnTotalOrderValue" />
 									</xsl:when>
-									<xsl:otherwise>
-										0.00
-									</xsl:otherwise>
+									<xsl:otherwise>0.00</xsl:otherwise>
 								</xsl:choose>
 							</Money>
 						</Total>
@@ -56,7 +53,7 @@
 
 	<xsl:template match="OrderLine">
 		<ItemIn>
-			<xsl:attribute name="quantity"><xsl:value-of select="@OrderedQty" /></xsl:attribute>
+			<xsl:attribute name="quantity"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty" /></xsl:attribute>
 			<xsl:attribute name="lineNumber"><xsl:value-of select="@PrimeLineNo" /></xsl:attribute>
 			<ItemID>
 				<SupplierPartID>
@@ -70,27 +67,16 @@
 				<UnitPrice>
 					<Money currency="USD">
 						<xsl:choose>
-							<xsl:when test="LineOverallTotals/@UnitPrice &gt; 0">
-								<xsl:value-of select="LineOverallTotals/@UnitPrice" />
+							<xsl:when test="Extn/@ExtnExtendedPrice &gt; 0">
+								<xsl:value-of select="Extn/@ExtnExtendedPrice" />
 							</xsl:when>
-							<xsl:otherwise>
-								0.00
-							</xsl:otherwise>
+							<xsl:otherwise>0.00</xsl:otherwise>
 						</xsl:choose>
 					</Money>
 				</UnitPrice>
-				<Description xml:lang="en-US">
-					<xsl:value-of select="Item/@ItemShortDesc" />
-				</Description>
+				<Description xml:lang="en-US"><xsl:value-of select="Item/@ItemShortDesc" /></Description>
 				<UnitOfMeasure>
-					<xsl:choose>
-						<xsl:when test="UOM">
-							<xsl:value-of select="Item/@UnitOfMeasure" />
-						</xsl:when>
-						<xsl:otherwise>
-							EA
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM" />
 				</UnitOfMeasure>
 				<Classification domain="UNSPSC">
 					<xsl:value-of select="ItemDetails/Extn/@ExtnUNSPSC" />
