@@ -105,7 +105,8 @@
 				<s:hidden name="sslValues" value="%{#customerPath}" />
 			</s:iterator>
 			
-			<s:if test="#isUserAdmin || #isEstUser">
+			<%-- hide the list type / share options for users without authorization --%>
+			<s:div cssStyle="%{#isUserAdmin || #isEstUser ? '' : 'display:none;'}">
 				<p>
 					List Type: 
 					<input onclick="hideSharedListHLForm()" id="rbPermissionPrivate" <s:property value="#rbPermissionPrivate"/> type="radio"
@@ -118,7 +119,7 @@
 						id="rbPermissionShared" <s:property value="#rbPermissionShared"/>
 						type="radio" name="sharePermissionLevel" value=" "
 						/>&nbsp;Shared &nbsp;&nbsp;&nbsp;
-			</s:if>
+			</s:div>
 			
 			<s:set name="displayStyle" value="%{''}" />
 			<s:if test="%{!#isUserAdmin }">

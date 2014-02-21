@@ -8,7 +8,7 @@
 
 <script>
 	function PostData() {
-		document.getElementById("Form1").submit();
+		document.getElementById("Form1").submit()
 	}
 </script>
 </head>
@@ -22,7 +22,6 @@
 	response.setHeader("Cache-Control","no-cache,no-store,must-revalidate");
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader( "Expires", 0 );
-	session.removeValue("domineName");
 	session.invalidate();%>
 	
 </body>
