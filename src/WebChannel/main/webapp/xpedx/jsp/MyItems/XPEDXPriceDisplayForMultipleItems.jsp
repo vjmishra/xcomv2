@@ -36,7 +36,7 @@
 	<s:set name="itemOrder" value='%{#_action.getItemOrderMap().get(#itemId+":"+#itemOrderSeq)}' />	
 	<s:set name="customerUom" value='%{#_action.getItemCustomerUomMap().get(#itemId+":"+#itemOrderSeq)}' />	
 	<s:set name="validateOrderMul111" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
-	<s:set name="category" value="%{#_action.getCatMap().get(#itemId+':'+#itemOrderSeq)}" />
+	<s:set name="category" value="%{#_action.getCatMap().get(#itemId)}" />
 	<s:hidden id="validateOrderMul111" name="validateOrderMul" value="%{#_action.getValidateCheck().get(#itemId+':'+#itemOrderSeq)}" />
 	<s:set name="jsonKey" value='%{#itemId+"_"+#itemOrder}' />
 	<div id="availabilityRow_<s:property value='#id'/>"  <s:if test='%{pnaHoverMap.containsKey(#jsonKey)}'></s:if><s:else>style="display:none; background-color:#fafafa;"</s:else> >   

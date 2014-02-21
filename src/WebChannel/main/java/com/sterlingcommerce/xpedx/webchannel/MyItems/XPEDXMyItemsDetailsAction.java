@@ -1810,7 +1810,7 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 								}
 						}
 						catagory = currentCategoryName;
-						catMap.put(itemID+":"+(i+1),catagory);
+						catMap.put(itemID,catagory);
 					}
 					priceHoverMap = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(items, wcContext, true,null,false,null);
 					//added for jira 2885 \ 4094
