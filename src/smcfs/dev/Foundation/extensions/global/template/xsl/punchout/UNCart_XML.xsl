@@ -29,7 +29,6 @@
 			<Message>
 				<PunchOutOrderMessage>
 					<BuyerCookie>@@replaceBuyerCookie@@</BuyerCookie>
-					<BrowserFormPost><URL>@@replaceURL@@</URL></BrowserFormPost>
 					<PunchOutOrderMessageHeader operationAllowed="edit">
 							<Total>
 							<Money currency="USD"><xsl:choose>
@@ -53,7 +52,7 @@
 
 	<xsl:template match="OrderLine">
 		<ItemIn>
-			<xsl:attribute name="quantity"><xsl:value-of select="OrderLineTranQuantity/@OrderedQty" /></xsl:attribute>
+			<xsl:attribute name="quantity"><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/></xsl:attribute>
 			<xsl:attribute name="lineNumber"><xsl:value-of select="@PrimeLineNo" /></xsl:attribute>
 			<ItemID>
 				<SupplierPartID>
@@ -76,7 +75,14 @@
 				</UnitPrice>
 				<Description xml:lang="en-US"><xsl:value-of select="Item/@ItemShortDesc" /></Description>
 				<UnitOfMeasure>
-					<xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM" />
+					<xsl:choose>
+					<xsl:when test='contains(OrderLineTranQuantity/@TransactionalUOM,"_" )'>
+						<xsl:value-of select="substring-after(OrderLineTranQuantity/@TransactionalUOM,'_')"/>
+					 </xsl:when>
+					 <xsl:otherwise>
+					<xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM"/>
+					</xsl:otherwise>
+					</xsl:choose>
 				</UnitOfMeasure>
 				<Classification domain="UNSPSC">
 					<xsl:value-of select="ItemDetails/Extn/@ExtnUNSPSC" />

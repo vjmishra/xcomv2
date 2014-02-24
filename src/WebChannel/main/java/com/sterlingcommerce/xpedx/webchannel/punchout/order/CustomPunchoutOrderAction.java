@@ -226,8 +226,6 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		updateheaderElementValue(orderOutputDoc, "To", "Identity", punchoutRequest.getToIdentity());
 		updateheaderElementValue(orderOutputDoc, "Sender", "Identity", punchoutRequest.getToIdentity());
 		updateheaderElementValue(orderOutputDoc, "PunchOutOrderMessage", "BuyerCookie", punchoutRequest.getBuyerCookie());
-		updateheaderElementValue(orderOutputDoc, "BrowserFormPost", "URL",URLEncoder.encode(punchoutRequest.getReturnURL(), "UTF-8"));
-
 		return WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
 	}
 	
