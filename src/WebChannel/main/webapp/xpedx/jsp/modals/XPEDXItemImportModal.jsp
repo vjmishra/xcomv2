@@ -34,10 +34,8 @@
             
             <%-- <p>Use the sample below as a template. Delete the contents and enter your own data.</p> --%>
             
-            <ul id="tool-bar" class="tool-bar-bottom">
-                <li><a class="grey-ui-btn" href="../sample/SampleImport.csv"><span>Download Sample</span></a></li>
+            <input class="btn-neutral floatleft addmargintop10" type="submit" value="Download Sample" onclick="window.location.href='../sample/SampleImport.csv'; return false;" />
 
-            </ul>
             <p>Please note that an individual My Items List cannot exceed 200 items. </p>
             <p>To import the file, locate the file on your hard drive by using the 'Browse' button or by typing the file path in the box below. After the file is located, click 'Open' and then click the 'Import' button. </p>
             <br />
@@ -72,10 +70,10 @@
 			
 	
 	
-		   <ul id="tool-bar" class="tool-bar-bottom">
-           		<li style="float: right;"><a href="javascript:submitImport();" class="green-ui-btn"><span>Import</span></a></li>
-        		<li style="float: right; margin-right:5px;"><a href="javascript:$.fancybox.close()" class="grey-ui-btn"><span>Cancel</span></a></li>
-        	</ul>
+			<div class="button-container addpadtop15">
+				<input class="btn-gradient floatright addmarginright10" type="submit" value="Import" onclick="submitImport(); return false;" />
+				<input class="btn-neutral floatright addmarginright10" type="submit" value="Cancel" onclick="$.fancybox.close(); return false;" />
+			</div>
 		
 		
 		</div>
