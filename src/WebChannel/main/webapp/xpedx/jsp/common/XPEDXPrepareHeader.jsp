@@ -950,7 +950,7 @@ var selectedShipCustomer = null;
 <s:set name="xutil" value="#_action.getXMLUtils()"/>
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
-<s:set name="isProcurementUser" value="%{#_action.getWCContext().isProcurementUser()}"/>
+<s:set name="isPunchoutUser" value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
@@ -1656,7 +1656,6 @@ var isGuestuser = "<s:property value='%{wCContext.guestUser}'/>";
 var isTOAaccepted = '<s:property value="%{wCContext.getWCAttribute('isTOAaccepted')}"/>';
 var secrectQuestionSet = '<s:property value="%{wCContext.getWCAttribute('setSecretQuestion')}"/>';
 var passwordUpdateFlag = '<s:property value="%{wCContext.getWCAttribute('setPasswordUpdate')}"/>';
-var isPunchoutUser = '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
 if((isGuestuser!="true")&& (isTOAaccepted == null || isTOAaccepted == "" || isTOAaccepted== "N")){
 	loadTermsOfAccess();
 	}
@@ -2615,7 +2614,7 @@ function msgWait(){
 </s:if>
   </s:if>
   <ul class="header-subnav commonHeader-subnav">
-	  	<s:if test="%{!#isProcurementUser}">
+<%-- 	  	<s:if test="%{!false}"> --%>        <!-- TODO disable some but not all for isPunchoutUser -->
 			 <s:if test='#isGuestUser != true' >
 			 <s:set name='storefrontId' value="wCContext.storefrontId" />							 	
 				<li style="border-right: none;"><a href="javascript:void(0);" tabindex="2000" onClick="javascript:openHelp();">Help</a></li>				
@@ -2719,13 +2718,13 @@ function msgWait(){
 				<div class="float-right" style="margin-top:25px;margin-right:-60px; *margin-right:-20px;"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="120" height="40" top="15" position="absolute" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/888xpedx76.png"></a></div>
 				</s:if>
 			</s:else>
-	   	</s:if>
+<%-- 	   	</s:if>
 	   	<s:else>
 	   		<li><a href="<s:url action="getUserInfo" namespace="/profile/user" includeParams='none'/>"
 					tabindex="2004">My Account</a></li>
 			<li><a id="cancelShoppingLink" href="#cancelShopping"
 					tabindex="2006">Cancel Shopping</a></li>
-	   	</s:else>   
+	   	</s:else>    --%>
   </ul>
   <s:set name='loggedInUserCustomerID' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoggedInCustomerFromSession(wCContext)'/>
   <s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>						
@@ -2790,8 +2789,10 @@ function msgWait(){
 	            			<s:include value="/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp"></s:include>
 	            		</s:if>
 	            	</ul>
-			    </li>			    	            
-	            <s:if test="%{#isProcurementUser}">
+			    </li>
+
+			    <!-- TODO remove this if MIL is not optional for punchout cust/user -->
+<%-- 	            <s:if test="%{#isPunchoutUser}">
 	            	<s:if test="%{procurementMyItemsLinkFlag}">	            		
 						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
@@ -2814,8 +2815,8 @@ function msgWait(){
 						</div>
 		            </li>
 	            	</s:if>
-	            </s:if>
-	            <s:else>
+	            </s:if> --%>
+<%-- 	            <s:else> --%>
 						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />
@@ -2830,7 +2831,8 @@ function msgWait(){
 		            		<s:a href="%{myListsLink}" cssClass="ieNavhack">My Items Lists</s:a>
 		            	</s:else>
 		            </li>
-	            </s:else>	            
+<%-- 	            </s:else>	             --%>
+
 	            <s:url id ='quickAddLink' action='quickAddAction' namespace='/order'>
 	            	<s:param name="selectedHeaderTab">QuickAdd</s:param>
 	       			<s:param name="quickAdd" value="%{true}" />
@@ -2845,7 +2847,7 @@ function msgWait(){
 	            		<s:a href="%{quickAddLink}">Quick Add</s:a>
 	            		 </li>
 	            	</s:else>		      	
-	            <s:if test="%{!#isProcurementUser}">
+
 				  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 					<s:if test='#selectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
@@ -2862,6 +2864,7 @@ function msgWait(){
 									<s:param name="pageNumber">1</s:param>
 									<s:param name='scFlag'>Y</s:param>
 						</s:url>
+	                  <s:if test="%{!#isPunchoutUser}">
 						<s:if test="%{isApprover()}">
 							<li>
 								<s:a href='%{catURL10}' cssClass="link">
@@ -2890,14 +2893,15 @@ function msgWait(){
 								Return Requests
 							</s:a>
 						</li> -->
+					  </s:if>
 						<li>
 							<a cssClass="link" href="<s:url action="draftOrderList" namespace="/order" />"  tabindex="2003">My Carts</a>
 						</li>
 			        </ul>
 	            </li>
-	            </s:if> 
+
 	          </s:if>   
-	            <s:if test="%{!#isProcurementUser}">	            
+	            <s:if test="%{!#isPunchoutUser}">	            
 	                <s:url id='emailSampleLink' namespace='/services' action='MyServicesHome'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
 					</s:url>
@@ -2968,7 +2972,8 @@ function msgWait(){
 		            </ul>
 	            </li>
 	            </s:if>	          
-	            <s:if test="%{!#isProcurementUser}"> 	            
+
+	            <s:if test="%{!#isPunchoutUser}"> 	            
 					<s:url id='adminProfile' namespace='/profile/user' action='XPEDXAdminProfile'>						
 						<s:param name="selectedHeaderTab">AdminTab</s:param>
 					</s:url> 
@@ -3029,7 +3034,6 @@ function msgWait(){
 						</s:if>
 			        </ul>
 	            </li>
-	           </s:if>
 	            <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 		            <s:url id='homeLink' namespace='/order' action='orderList.action'>
 						<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
@@ -3069,6 +3073,7 @@ function msgWait(){
 	            		<s:a href="%{cancelEditOrderChanges}">Cancel Changes</s:a>
 	            	</li>		            
 	            </s:else>
+	            </s:if>
 	        </ul>
 		</div>
 	</s:if>
