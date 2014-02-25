@@ -2728,6 +2728,7 @@ IYRCComposite {
 		else if("B".equalsIgnoreCase(suffixType)){
 			Control[]elements= {chkCustLineAcct,lblCustLineAcct,txtCustLineAcctMsg,txtCustomerLinePONumberMsg,chkCustLineField1,lblCustLineField1,txtCustLineField1,
 					chkCustLineField2,lblCustLineField2,txtCustLineField2,chkCustLineField3,lblCustLineField3,txtCustLineField3,
+					lblSmallOrderFee,txtSmallOrderFee,stxtSmallOrderCurrency,fillerLabelMap.get("dummySmallOrderFee"),fillerLabelMap.get("dummyMinOrderAmount"),lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,
 					chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,chkViewInventory,lblViewInventory,fillerLabelMap.get("dummyViewInventory"),
 					chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),
 					lblLocationId,txtLocationId,fillerLabelMap.get("dummyLocationId"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag")
