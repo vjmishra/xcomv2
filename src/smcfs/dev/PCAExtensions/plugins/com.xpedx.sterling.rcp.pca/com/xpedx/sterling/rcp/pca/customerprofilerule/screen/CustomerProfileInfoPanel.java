@@ -2716,8 +2716,8 @@ IYRCComposite {
 					,chkUseOrderMultiple,lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple"),chkCanRequestSample,lblCanRequestSample,fillerLabelMap.get("dummyCanRequestSample")
 					,chkCsr1EmailConfirmationFlag,lblCsr1EmailConfirmationFlag,chkCsr2EmailConfirmationFlag,lblCsr2EmailConfirmationFlag,
 					fillerLabelMap.get("dummyCsr1EmailConfirmationFlag"),fillerLabelMap.get("dummyCsr2EmailConfirmationFlag"),chkSalesRepEmailConfirmationFlag,lblSalesRepEmailConfirmationFlag,fillerLabelMap.get("dummySalesRepEmailConfirmationFlag"),
-					fillerLabelMap.get("dummyMaxOrderAmount"),lblMaxOrderAmount,txtMaxOrderAmount,stxtMaxOrderCurrency,fillerLabelMap.get("dummyMinOrderAmount"),lblMinOrderAmount,txtMinOrderAmount,stxtMinOrderCurrency,lblSmallOrderFee,txtSmallOrderFee,stxtSmallOrderCurrency,fillerLabelMap.get("dummySmallOrderFee")
-					,chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
+					fillerLabelMap.get("dummyMaxOrderAmount"),lblMaxOrderAmount,txtMaxOrderAmount,stxtMaxOrderCurrency,
+					chkViewPriceFlag,lblViewPriceFlag,fillerLabelMap.get("dummyViewPriceFlag"),chkCanOrder,lblCanOrder,fillerLabelMap.get("dummyCanOrder"),chkViewInventory,
 					lblViewInventory,fillerLabelMap.get("dummyViewInventory"),fillerLabelMap.get("chkUseOrderMultiple"),lblUseOrderMultiple,fillerLabelMap.get("dummyUseOrderMultiple")
 					,chkViewInvoices,lblViewInvoices,fillerLabelMap.get("dummyViewInvoices"),lblCustomerLinePONumber,fillerLabelMap.get("dummyCustomerLinePONumber")
 					,chkSalesRepFlag4,chkSalesRepFlag3,chkSalesRepFlag2,chkSalesRepFlag1,chkSalesRepFlag,lblSalesRepEmailConfirmationFlag0,lblSalesRepEmailConfirmationFlag1,lblSalesRepEmailConfirmationFlag2,lblSalesRepEmailConfirmationFlag3,lblSalesRepEmailConfirmationFlag4
