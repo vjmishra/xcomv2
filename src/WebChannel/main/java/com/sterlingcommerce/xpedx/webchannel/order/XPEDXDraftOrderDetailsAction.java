@@ -94,10 +94,6 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 
 	@Override
 	public String execute() {
-		return doDraftOrderDetails(false);
-	}
-
-	private String doDraftOrderDetails(boolean isQuickAdd) { // TODO add javadocs
 		if("true".equals(getApprovalAllowedFlag())) {
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.APPROVE_ORDER_FLAG, "true");
 		}
@@ -120,7 +116,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			setDefaultShipToIntoContext();
 			getCustomerLineDetails();
 
-			if (!isQuickAdd)
+			if (!isQuickAdd())
 			{
 				// eb-1999: skip price and availability altogether for quick add page
 				if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
@@ -148,7 +144,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//DOMDocFromXMLString doc = new DOMDocFromXMLString();
 			//Document orderOutputDocument=doc.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile.xml");
 			//setOutputDocument(orderOutputDocument);
-			super.execute();
+			if (!isQuickAdd()) {
+				super.execute();
+			}
 			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
 
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
@@ -2581,7 +2579,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		if(!isDraftSet)
 			setDraft("Y");
 //		returnVal = execute();
-		doDraftOrderDetails(true);
+		returnVal = execute();
 		return returnVal;
 
 	}
