@@ -233,6 +233,16 @@ function quickAddCopyAndPaste(data){
 			document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
 	        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
 		}
+		
+		/*
+		itemSku = Ext.util.Format.trim(itemSku);
+		itemQty = Ext.util.Format.trim(itemQty);
+		
+		document.getElementById("qaProductID").value= itemSku;
+		document.getElementById("qaQuantity").value= itemQty;
+		//call metods for quick add 3349 by balkhi
+		  addProductToQuickAddList(document.getElementById('quickAddButton'));
+		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' );  */
 	}
 	if(itemLineFlag == "false")
 	{
@@ -266,7 +276,10 @@ function quickAddCopyAndPaste(data){
 				
 			document.getElementById("qaProductID").value= itemSku;
 			document.getElementById("qaQuantity").value= itemQty;
+			//call metods for quick add 3349 by balkhi
+		  	//addProductToQuickAddList(document.getElementById('quickAddButton'));
 			
+		  //alert("-LP11- Shopping Cart addProductToQuickAddList ");
 			var theForm = document.getElementById('quickAddButton').form;
 		    var otherForm = document.OrderDetailsForm;
 		    clearErrorMessages(otherForm);
@@ -378,6 +391,19 @@ function quickAddCopyAndPaste(data){
 
 <script type="text/javascript">
 $(document).ready(function(){
+/* 		$('ul.mil-desc-attribute-list li').each(function(){
+            $(this).shorten({noblock: true, width:($(this).width() - 20)});
+		}); */
+		
+
+		/* FIX FOR : CART, WC, EDIT ORDER PAGES */
+		/* To ensure that the long/short desc. gets shortened each time the view changes.
+		 * Added per Jira 3318. (Looks like substring is ignoring the spaces.)
+		 */
+			/* Begin Short desc. shortener */
+			//mil-wrap-condensed-desc item-short-desc
+			// $('.mil-desc-wrap mil-wrap-condensed-desc item-short-desc short-description').each(function() { 
+
 		$('.short-description').each(function() { 
 				var html = $(this).html();
 				var shortHTML = html.substring(0, 70);
@@ -444,6 +470,30 @@ $(document).ready(function(){
 						
 					<!-- Web Trends tag end -->		
 </head>
+
+<div style="display:none;">
+<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px;">
+<h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <small>Limit is 20 items per copy/paste</small> </h2>
+<%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
+<!-- Enter one item per line:<br /> -->
+<!-- Qty. [Tab or Comma] Item#</p> -->
+<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers or customer item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
+<p>To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).<br/> Example: ,5002121  <br />
+</p>
+<br />
+<form id="form1" name="form1" method="post" action=""><textarea
+	name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
+<ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
+	<li><a class="grey-ui-btn" href="javascript:$.fancybox.close();"
+		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';Ext.get('errorMsgCopyBottom').dom.innerHTML='';Ext.get('errorMsgCopyBottom').dom.style.display='none'"><span>Cancel</span></a></li>
+	<li style="float: right;"><a href="javascript: quickAddCopyAndPaste( document.form1.dlgCopyAndPasteText.value);" class="green-ui-btn" style="margin-left:5px;"><span>Add to Quick List</span></a></li>
+	
+	
+</ul>
+</form>
+</br></br></br><div class="error" id="errorMsgCopyBottom" style="display:none;position:relative;left:100px" ></div>
+</div>
+</div>
 
 <s:set name='_action' value='[0]' />
 <s:bean
@@ -622,6 +672,118 @@ $(document).ready(function(){
 
 <body class="  ext-gecko ext-gecko3">
 
+<div id="tq-quick-add-overlay" class="quick-add float-right" style="display: none;">
+	<div class="tq-quick-add-form">
+		<span class="page-title">Quick Add</span>
+		<p class="quick-add-aux-links" style="margin-top:5px; margin-right:5px;"> 
+			<a class="modal underlink" "tabindex=-1" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');" id="copyPaste" >Copy and Paste</a>
+			<img class="pointers" alt="[close]" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_x.png" id="quick-add-close" title="Close">
+		</p>
+		<div class="clear">&nbsp;</div>
+			<form name="QuickAddForm" class="form selector quick-add-to-cart-form" id="QuickAddForm">
+				<s:hidden name='#action.name' id='validationActionNameQA' value='draftOrderDetails' />
+				<s:hidden name='#action.namespace' value='/order' />
+				<s:hidden name="orderHeaderKey"	value='%{#orderHeaderKey}' />
+				<s:hidden name="draft" value="%{#draftOrderFlag}" />
+				<s:hidden name='Currency' value='%{#currencyCode}' />
+				<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
+				<%--<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
+					<s:hidden name="isEditNewline" value="%{'Y'}"/>
+				</s:if>
+				<s:else>
+					<s:hidden name="isEditNewline" value="%{'N'}"/>
+				</s:else>	--%>	
+				<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />"/>
+				<ul class="hvv">
+					<li>
+						<label>Item Type:</label>
+						<s:select  tabindex="3403" id="qaItemType"  name="qaItemType" cssStyle="width:135px;"
+										headerKey="1"
+										list="skuTypeList" listKey="key" listValue="value"/>
+						
+						<s:hidden name="#qaItemType.type" value="ItemID" />
+					</li>
+					<li>
+						<label>Item #:</label>
+						<input tabindex="3404" maxlength="27" style="width:70px;" type="text" id="qaProductID" name="qaProductID" class="text x-input" />
+						<s:hidden name="#qaProductID.type" value="ItemID" />
+						<s:hidden name='localizedMissingProductIDMessage'value='%{#_action.getText("QAMissingProductID")}' />
+					</li>
+					<li>
+						<label>Qty:</label>						
+						<input tabindex="3405" maxlength="7" style="width:70px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
+						<s:hidden name="#qaQuantity.type" value="OrderedQty" />
+					</li>
+					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}'></s:set>
+					<s:set name="chargeAmount" value='%{chargeAmount}'></s:set>
+					<%--JIRA 3547 start--%>
+					<s:set name="fmtdchargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)'/>
+					<s:set name="minOrderAmount" value='%{minOrderAmount}'></s:set>
+					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)'/>
+					<s:set name="erroMsg" value='%{erroMsg}'></s:set>
+					<%--JIRA 3547 end--%>
+					<%--JIRA 3488 start--%>
+					<s:set name="maxOrderAmount" value='%{maxOrderAmount}'></s:set>
+					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)'/>
+					<%--JIRA 3488 end--%>
+					<%--JIRA 3853 start--%>
+					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}'></s:set>
+					<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+					<li>
+						<label><s:property value='#customerPONoFlag' />:</label>
+						 <s:hidden name='customerPONoValue' value='%{#customerPONoFlag}' />
+						<input tabindex="3407" maxlength="22" style="width:154px;" type="text" name="purchaseOrder" value="" class="text x-input"></input>
+					</li>
+					</s:if>
+					<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+					<li>
+						<label><s:property value='#jobIdFlag' />:</label>
+						 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
+						<input tabindex="3408" maxlength="24" style="width:154px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
+						<s:hidden name="#qaJobID.type" value="" />
+					</li>
+					</s:if>
+					<s:else>
+						<s:hidden id="qaJobID" name="qaJobID" value="" />
+						<s:hidden name="#qaJobID.type" value="" />
+					</s:else>
+						<%--JIRA 3853 end--%>
+					<li>
+						<label>&nbsp;</label>
+						<input id="quickAddButton" type="hidden"/>
+						<a id="addToQuickListId" class="grey-ui-btn" tabindex="3409" onkeydown="javascript: addToQuickListnextFocus(event);" onclick="javascript:addProductToQuickAddList(document.getElementById('quickAddButton')); return false;" href="#" class="noborder">
+							<%-- <img src="<s:url value='/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png'/>" /> --%>
+							<span><p>+</p>Add to Quick List</span>
+							</a>
+						<s:hidden name='localizedDeleteLabel' value='%{#_action.getText("localizedDeleteLabel")}' />
+						<s:hidden name='localizedAddToCartLabel' value='%{#_action.getText("AddQAListToCart")}' />
+					</li>
+				</ul>
+				<s:url id='productValidateURLid' namespace='/order' action='validateProduct' />
+				<s:url id='productListValidateURLid' namespace='/order' action='validateProductList' />
+				<s:a id='productValidateURL' href='%{#productValidateURLid}' tabindex="-1" />
+				<s:a id='productListValidateURL' href='%{#productListValidateURLid}' />
+				<div id="QuickAddList" style="display: block;"></div>
+				<div class="error" id="errorMsgItemBottom" style="display:none;position:relative;left:340px" ></div>
+				
+			</form>
+			<!-- Start 2964 -->
+			<s:hidden name="msapOrderMulUOMFlag" id="msapOrderMulUOMFlag" value="%{#msapExtnUseOrderMulUOMFlag}" />
+			
+			<div class="clear">&nbsp;</div>
+			<div id="addProdsToOrder" class="close-btn" style="display: none;">
+				<%-- <a href="#" id="quick-add-close" class="grey-ui-btn"><span>Close</span></a> --%>
+				<a href="#" class="orange-ui-btn" onclick="javascript:addProductsToOrder(); return false;" tabindex="210"  name="addProdsToOrder">
+					<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+						<span>Add to Cart</span>
+					</s:if>
+					<s:else>
+						<span>Add to Order</span>
+					</s:else>
+				</a>
+			</div>
+	</div>
+</div><!-- id="tq-quick-add-overlay" -->
 
 <div id="main-container">
 
@@ -1716,6 +1878,25 @@ var currentAadd2ItemList = new Object();
 </swc:dialogPanel>
 <s:include value="modals/XPEDXDeleteCartModal.jsp" />
 
+<%-- <swc:dialogPanel title="Copy And Paste Quick Add" isModal="true"
+	id="copyPasteDialog" cssClass="xpedx-light-box"
+	contentID="copyPasteContent">
+</swc:dialogPanel> --%>
+
+<%-- 	<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px; display:none;">
+	<h2>Copy and Paste Quick Add</h2>
+	<p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file.
+		Or enter manually with quantity and item #, separated by a comma, per line. Example:12,5002121 -bb2-<br />
+	</p>
+	<br />
+	<form id="form1" name="form1" method="post" action=""><textarea
+		name="items" id="items" cols="69" rows="5"></textarea></form>
+	<ul id="tool-bar" class="tool-bar-bottom">
+		<li><a class="grey-ui-btn"
+			href="javascript:closeCopyPasteDialog()"><span>Cancel</span></a></li>
+			<li style="float: right;"><a href="#" onclick="javascript:addItemsToQuickAddList(); return false;" class="green-ui-btn" style="margin-left:5px;"><span>bb1Add to Quick List</span></a></li>
+	</ul>
+	</div> --%>
 <s:include value="modals/XPEDXCopyCartModal.jsp" />
 
 <div style="display: none;">
@@ -1839,6 +2020,26 @@ function validateOrder()
 			document.delOrder.OrderHeaderKey.value='<s:property value='#ohk' />';
 			$('#xpedxDeleteCartDialog1').trigger('click');
 		}
+	}
+	function openQuickAdd() {
+		var isQuickAdd = <s:property value="isQuickAdd()" />;
+		if(isQuickAdd) {
+				 var offset = $(document.getElementById('quick-add-button')).offset();
+				 $('#tq-quick-add-overlay').css({ top: offset.top+35 });
+				 $('#tq-quick-add-overlay').toggle();
+				 return false;
+				}
+		}
+	function addToQuickListnextFocus(evt)
+	{
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		var addList=document.getElementById('QuickAddList');
+	    if (charCode == 9 ) {
+	    	document.getElementById('qaProductID').focus();
+	    }
+	    
+		
+		
 	}
 </script>
 
