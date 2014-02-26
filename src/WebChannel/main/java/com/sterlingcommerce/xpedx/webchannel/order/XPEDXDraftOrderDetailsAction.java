@@ -144,9 +144,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			//DOMDocFromXMLString doc = new DOMDocFromXMLString();
 			//Document orderOutputDocument=doc.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile.xml");
 			//setOutputDocument(orderOutputDocument);
-			if (!isQuickAdd()) {
-				super.execute();
-			}
+			super.execute();
 			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
 
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
