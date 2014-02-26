@@ -783,7 +783,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 							buyerOrgElement.appendChild(contactAddressElement);
 
 						}
-
+						
 						log.debug("the input doc for manageCustomer formed is: "+ SCXmlUtil.getString(inputCustomerDoc.getDocument()));
 						//invoke manageCustomer
 
@@ -3293,16 +3293,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		extnElement.setAttribute("ExtnBillToDunsNo", custElement.getAttribute("DUNSNumber"));
 		
-		if("S".equalsIgnoreCase(custElement.getAttribute("SuffixType")))
-		{
-			if(custElement.hasAttribute("MinOrderAmount")){
-				extnElement.setAttribute("ExtnMinOrderAmount", custElement.getAttribute("MinOrderAmount"));
-			}
-			if(custElement.hasAttribute("MinChargeAmount")){
-				extnElement.setAttribute("ExtnMinChargeAmount", custElement.getAttribute("MinChargeAmount"));
-			}
-			
-		}
+		
 
 		//Added for CR 968
 
@@ -3318,6 +3309,17 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 		String processCode = custElement.getAttribute(XPXLiterals.A_PROCESS_CODE);
 		String suffixType = custElement.getAttribute(XPXLiterals.E_SUFFIX_TYPE);
+		
+		if(suffixType.equalsIgnoreCase(XPXLiterals.CHAR_S) ||  suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B))
+				{
+					if(custElement.hasAttribute("MinOrderAmount")){
+						extnElement.setAttribute("ExtnMinOrderAmount", custElement.getAttribute("MinOrderAmount"));
+					}
+					if(custElement.hasAttribute("MinChargeAmount")){
+						extnElement.setAttribute("ExtnMinChargeAmount", custElement.getAttribute("MinChargeAmount"));
+					}
+					
+		}
 		String customerType = custElement.getAttribute("CustomerClass");
 		if (processCode.equalsIgnoreCase("A") && suffixType.equalsIgnoreCase(XPXLiterals.CHAR_B)) {
 
