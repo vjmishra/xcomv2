@@ -3292,6 +3292,17 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 		//Added by Prasanth Kumar M as fix for JIRA defect ---> 630
 
 		extnElement.setAttribute("ExtnBillToDunsNo", custElement.getAttribute("DUNSNumber"));
+		
+		if("S".equalsIgnoreCase(custElement.getAttribute("SuffixType")))
+		{
+			if(custElement.hasAttribute("MinOrderAmount")){
+				extnElement.setAttribute("ExtnMinOrderAmount", custElement.getAttribute("MinOrderAmount"));
+			}
+			if(custElement.hasAttribute("MinChargeAmount")){
+				extnElement.setAttribute("ExtnMinChargeAmount", custElement.getAttribute("MinChargeAmount"));
+			}
+			
+		}
 
 		//Added for CR 968
 
