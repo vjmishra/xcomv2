@@ -257,6 +257,11 @@
 				<param name="draft">${draft}</param>
 				<param name="draftOrderError">${draftOrderError}</param>
 			</result>
+			<result name="quickAddSuccess" type="redirectAction">
+				<param name="actionName">quickAddAction</param>
+				<param name="namespace">/order</param>
+				<param name="addedToCart">true</param>
+			</result>
 			<result name="OUErrorPage" type="redirectAction">
                 <param name="actionName">orderDetail</param>
                 <param name="namespace">/order</param>
@@ -812,12 +817,9 @@
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDetailsActionBinding.xml</param>
 			<param name="mashups">xpedx_me_draftOrderDetails</param>
 			<param name="resourceId">/swc/order/guestShopping</param>
-			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp</result>
-		<!--<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetailsQuickAdd.jsp</result>-->
-			<result name="input">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp
-			</result>
-			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
-			</result>
+			<result name="success">/xpedx/jsp/order/QuickAdd.jsp</result>
+			<result name="input">/xpedx/jsp/order/QuickAdd.jsp</result>
+			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp</result>
 			<result name="OUErrorPage" type="redirectAction">
                 <param name="actionName">orderDetail</param>
                 <param name="namespace">/order</param>

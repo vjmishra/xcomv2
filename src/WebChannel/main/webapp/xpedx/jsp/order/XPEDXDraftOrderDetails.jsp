@@ -391,16 +391,6 @@ function quickAddCopyAndPaste(data){
 
 <script type="text/javascript">
 $(document).ready(function(){
-		$('#quick-add-button').click(function(){
-				var offset = $(this).offset();
-				$('#tq-quick-add-overlay').css({ top: offset.top+35 });         
-				$('#tq-quick-add-overlay').toggle();
-				return false;
-		});
-		$('#quick-add-close').click(function(){
-				$('#tq-quick-add-overlay').toggle();
-				return false;
-		});
 /* 		$('ul.mil-desc-attribute-list li').each(function(){
             $(this).shorten({noblock: true, width:($(this).width() - 20)});
 		}); */
@@ -1058,7 +1048,12 @@ $(document).ready(function(){
 		<ul class="float-right tool-bar-bottom sc-btn-list">
 	</s:else>
 	
-	<li class="float-right"><a tabindex="3403" id="quick-add-button" class="grey-ui-btn" href="#"><span>Quick Add</span></a></li>
+	<li class="float-right">
+		<s:url id='quickAddURL' namespace="/order" action='quickAddAction' />
+		<a tabindex="3403" id="quick-add-button" class="grey-ui-btn" href="<s:property value='%{#quickAddURL}'/>">
+			<span>Go to Quick Add</span>
+		</a>
+	</li>
     <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
     	<li><a href="#" tabindex="3402" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
     </s:if>	
@@ -2046,7 +2041,6 @@ function validateOrder()
 		
 		
 	}
-	openQuickAdd();
 </script>
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx.swc.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>

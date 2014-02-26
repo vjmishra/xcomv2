@@ -51,21 +51,18 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPED
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItemPricingInfo;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
-import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
-import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
-import com.yantra.yfs.japi.YFSUserExitException;
 /**
  * @author rugrani/Manohar/Manoj
  */
@@ -95,8 +92,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	}
 
 
+	@Override
 	public String execute() {
-
 		if("true".equals(getApprovalAllowedFlag())) {
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.APPROVE_ORDER_FLAG, "true");
 		}
@@ -113,37 +110,43 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		if(draftOrderError != null && "true".equalsIgnoreCase(draftOrderError)){
 			return draftFlagError;
 		}
+
 		boolean isChangeOrderCalled=false;
 		try {
-
 			setDefaultShipToIntoContext();
 			getCustomerLineDetails();
 
-			if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
+			if (!isQuickAdd())
 			{
-				callChangeOrder();
-				if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
-					return draftFlagError;
-				}
-				if(isOUErrorPage == true)
+				// eb-1999: skip price and availability altogether for quick add page
+				if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
 				{
-					return "OUErrorPage";
-				}
+					callChangeOrder();
+					if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
+						return draftFlagError;
+					}
+					if(isOUErrorPage == true)
+					{
+						return "OUErrorPage";
+					}
 
-			} else {
-				changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
-				if(changeOrderOutputDoc!=null)
-				{
-					setOutputDocument(changeOrderOutputDoc);
-					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				} else {
+					changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+					if(changeOrderOutputDoc!=null)
+					{
+						setOutputDocument(changeOrderOutputDoc);
+						getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
 
+					}
 				}
 			}
 
 			//DOMDocFromXMLString doc = new DOMDocFromXMLString();
 			//Document orderOutputDocument=doc.createDomDocFromXMLString("C:\\xpedx\\NextGen\\src\\WebChannel\\main\\resources\\NewFile.xml");
 			//setOutputDocument(orderOutputDocument);
-			super.execute();
+			if (!isQuickAdd()) {
+				super.execute();
+			}
 			LOG.debug("CHANGE ORDER API OUTPUT IN DRAFT ORDER DETAILS ACTION CLASS : "+SCXmlUtil.getString(getOutputDocument()));
 
 			if("true".equals(isEditOrder) && YFCCommon.isVoid(editedOrderHeaderKey))
@@ -328,7 +331,6 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 		}
 		return SUCCESS;
 	}
-
 
 	private void checkforEntitlement(){
 		//Added for JIRA 3523
@@ -1194,6 +1196,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		return pnaHoverMap;
 	}
 
+	@Override
 	public boolean isOwnerOfNonCartInContextDraftOrder() throws Exception {
 		return false;
 	}
@@ -2074,6 +2077,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 
 	// override to read the new mashup id : Manoj Kodagali
+	@Override
 	protected String getOrderDetailsMashupName() {
 		return "xpedx_me_draftOrderDetails";
 	}
@@ -2374,6 +2378,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 	}
 
+	@Override
 	protected void getCompleteOrderDetailsDoc() throws Exception {
 		//XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 		if(getOutputDocument()==null)
@@ -2386,7 +2391,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 		}
 	}
-	 protected void validateRestoredOrder()
+	 @Override
+	protected void validateRestoredOrder()
 		 throws Exception
 	 {
 			//Updating AuthorizedClient to Web because validation will be failed
@@ -2473,6 +2479,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.xpedxItemIDUOMToReplacementListMap = xpedxItemIDUOMToReplacementListMap;
 	}
 
+	@Override
 	protected void manipulateMashupInputs(Map<String, Element> mashupInputs)
 			throws CannotBuildInputException {
 		super.manipulateMashupInputs(mashupInputs);
@@ -2549,6 +2556,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	 * else Creates a new cart and then opens it and opens the quick add.
 	 */
 	public String openQuickAdd() {
+		// TODO need to remove any unnecessary logic from this action? need to move to another action to avoid base class behavior?
 		String returnVal = SUCCESS;
 		String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 		boolean isDraftSet=false;
@@ -2563,28 +2571,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		{
 			orderHeaderKey = (String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(wcContext);
 		}
-		/*Changes done for JIRA 3024 - Start*/
 		if((orderHeaderKey==null || orderHeaderKey.equals("") || orderHeaderKey.equals("_CREATE_NEW_")) && XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
 			 XPEDXOrderUtils.createNewCartInContext(getWCContext());
-			 //orderHeaderKey =getWCContext().getWCAttribute("CommerceContextObject")
 			 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
-			 //orderHeaderKey=XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext());
-
 		}
-		/*else if((orderHeaderKey!=null && orderHeaderKey.trim().length()>0)  ) {
-			if(!isDraftSet)
-				setDraft("Y");
-			returnVal = execute();
-		}*/
-		/*else {
-
-			returnVal = execute();
-		}*/
-
-		/*Changes done for JIRA 3024 - End*/
 
 		if(!isDraftSet)
 			setDraft("Y");
+//		returnVal = execute();
 		returnVal = execute();
 		return returnVal;
 
