@@ -1487,37 +1487,32 @@ var currentAadd2ItemList = new Object();
 	<s:set name="isEstimator" value="%{#wcContext.getWCAttribute('isEstimator')}" />
 	--%>
 	<s:if test="!#isEstimator">
-	<s:if test='majorLineElements.size() > 0 && !#isPunchoutUser'>
-		<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">		    
-	    	<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>	    	
-		</s:if> 
-	    <s:if test='#hasPendingChanges == "Y"'>
-        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
-        </s:if>
-	    <s:if test='#canAddLine'>
-			<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
+	<s:if test='majorLineElements.size() > 0'>
+		<s:if test='!#isPunchoutUser'>
+			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">		    
+		    	<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>	    	
+			</s:if> 
+		    <s:if test='#hasPendingChanges == "Y"'>
+	        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
+	        </s:if>
 		</s:if>
-		   				   
+		<s:else>
+			<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Submit Cart</span></a>
+		</s:else>
 	</s:if>
-	<s:elseif test='#isPunchoutUser'>
-		<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>SaveAndReturn</span></a>
-		<s:if test='#canAddLine'>
-			<a id="cont-shopping" class="grey-ui-btn cont-shopping-margin"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
-		</s:if>
-	</s:elseif>
+	<s:if test='#canAddLine'>
+		<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
+	</s:if>
+	</s:if>
+
+	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a>
+	</s:if>
 	<s:else>
-		<s:if test='#canAddLine'>
-			<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
-		</s:if>
+		<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
 	</s:else>
-	</s:if>
-<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a>
-</s:if>
-<s:else>
-	<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
-</s:else>
 </div>
+
 <!--Added for 3098  -->
 <!-- EB-66 Suspended ShipTo -->
 	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
