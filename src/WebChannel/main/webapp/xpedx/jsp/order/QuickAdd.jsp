@@ -622,7 +622,8 @@
 				
 				<div id="infoMessage">
 					<s:if test='%{#parameters.addedToCart[0] == "true"}'>
-						Items successfully added to cart.
+						Items successfully added to
+						<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "cart" : "order"}' />.
 					</s:if>
 				</div>
 				
