@@ -59,25 +59,29 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 		quickAddErrorListSessionKey = null;
 	}
 
+	@Override
 	public String execute() {
+		// allow parameter to force redirection back to quick add page
+		String resultSuccess = isFromQuickAdd() ? "quickAddSuccess" : "success";
+
 		try {
 			if (currency == null)
 				currency = getWCContext().getEffectiveCurrency();
-			
+
 			boolean detailsOfProds = getProductInformationForEnteredProducts();
 			isEditNewline.clear();
 			if (detailsOfProds) {
 				XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext());
 				organizeProductInformationResults();
-				
+
 				if (orderedProductIDs.size() > 0) {
 					//start of XBT 252 & 248
 					String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 					if(YFCCommon.isVoid(editedOrderHeaderKey)){
-						draftOrderFlag="Y";	
+						draftOrderFlag="Y";
 					}
 					else {
-						draftOrderFlag="N";	
+						draftOrderFlag="N";
 					}
 					//end of XBT 252 & 248
 					Element changeOrderOutput = prepareAndInvokeMashup(MASHUP_DO_ADD_ORDER_LINES);
@@ -90,7 +94,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					//refreshCartInContext(orderHeaderKey);
 				}
 			}
-		} 
+		}
 		//start of XBT 252 & 248
 		catch(XMLExceptionWrapper e)
         {
@@ -132,7 +136,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					&& databaseLockException.toString().contains("YFC0101")) {
 				LOG.debug("Databse is locked, hence continuing to "
 						+ "call draft order details............");
-				return "success";
+				return resultSuccess;
 			}
 			LOG.debug(databaseLockException);
 			XPEDXWCUtils.releaseEnv(wcContext);
@@ -142,7 +146,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			getWCContext().setWCAttribute(getQuickAddErrorListSessionKey(),
 					quickAddErrorList, WCAttributeScope.SESSION);
 		XPEDXWCUtils.releaseEnv(wcContext);
-		return "success";
+		return resultSuccess;
 	}
 	/**
 	 * EB-466 code changes, removed Manufacturing Item, MPC code
@@ -170,12 +174,12 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			Map<String,String> xrefMap=new HashMap<String,String>();
 			String itemType=null;
 			while (itemsStringToken.hasMoreTokens()) {
-				
+
 				productID = itemsStringToken.nextToken();
 				if(itemType== null)
 					itemType = itemTypeStringToken.nextToken();
-				
-				if ("1".equals(itemType)) { //"1 = xpedx Item #" 
+
+				if ("1".equals(itemType)) { //"1 = xpedx Item #"
 					if(itemType1InputElem == null)
 					{
 						Map<String, String> valueMap = new HashMap<String, String>();
@@ -184,7 +188,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 						valueMap.put("/Item/CustomerInformation/@CustomerID", wcContext.getCustomerId());
 						valueMap.put("/Item/@Currency", currency);
 						Element input = WCMashupHelper.getMashupInput("addToCartGetCompleteItemList",valueMap,wcContext);
-						
+
 						Element complexQuery =SCXmlUtil.createChild(input, "ComplexQuery");// input.getOwnerDocument().createElement("ComplexQuery");
 						itemType1InputElem = SCXmlUtil.createChild(complexQuery, "Or");
 							Element exp = input.getOwnerDocument().createElement("Exp");
@@ -205,11 +209,11 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 						legacyItems =new ArrayList<String>();
 					legacyItems.add(customerPartNo);
 
-					
-				} 
+
+				}
 
 			}
-			if(itemType1InputElem != null)//"1 = xpedx Item #" 
+			if(itemType1InputElem != null)//"1 = xpedx Item #"
 			{
 
 				productInfoDoc = getDocFromOutput((Element)WCMashupHelper.invokeMashup("addToCartGetCompleteItemList", itemType1InputElem.getOwnerDocument().getDocumentElement(), wcContext.getSCUIContext()));
@@ -221,14 +225,14 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				Element itemCustXrefEle = getItemCustXrefInfo(legacyItems);
 				if(itemCustXrefEle != null)
 				{
-					
+
 					//Element custXrefEle = XMLUtilities.getElement(itemCustXrefEle,"XPXItemcustXref");
 					Map<String, String> valueMap = new HashMap<String, String>();
 					valueMap.put("/Item/@CallingOrganizationCode", wcContext.getStorefrontId());
 					valueMap.put("/Item/ItemAssociationTypeList/ItemAssociationType/@Type", "Substitutions");
 					valueMap.put("/Item/CustomerInformation/@CustomerID", wcContext.getCustomerId());
 					valueMap.put("/Item/@Currency", currency);
-					Element input = WCMashupHelper.getMashupInput("addToCartGetCompleteItemList",valueMap,wcContext);				
+					Element input = WCMashupHelper.getMashupInput("addToCartGetCompleteItemList",valueMap,wcContext);
 					Element complexQuery = SCXmlUtil.createChild(input, "ComplexQuery");
 					itemType1InputElem = SCXmlUtil.createChild(complexQuery, "Or");
 					ArrayList<Element> custXrefEleList=SCXmlUtil.getElements(itemCustXrefEle, "XPXItemcustXref");
@@ -260,10 +264,10 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				while(_itemsStringToken.hasMoreElements())
 				{
 					String _productID=_itemsStringToken.nextToken();
-					
+
 					for(Element itemElem:itemsList)
 					{
-						
+
 						String itemId=itemElem.getAttribute("ItemID");
 						productList.add(itemId);
 						if("1".equals(itemType) && _productID.equals(itemId))
@@ -278,7 +282,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 							isItemEntitle=true;
 							break;
 						}
-						
+
 					}
 					if(!isItemEntitle)
 					{
@@ -287,7 +291,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 				}
 				itemIdsOrderMultipleMap = XPEDXOrderUtils.getOrderMultipleForItems(productList);
 			}
-			
+
 
 			StringTokenizer _items1StringToken = new StringTokenizer(items, "*");
 			Map<String,Map<String,String>> itemIdsUOMsMap = XPEDXOrderUtils.getXpedxUOMList(wcContext.getCustomerId(), productList, wcContext.getStorefrontId());
@@ -309,7 +313,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					sb.append(false);
 					sb.append(",");
 				}
-				
+
 			}
 			int index = sb.lastIndexOf(",");
 			if (index != -1) {
@@ -321,10 +325,10 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			LOG
 					.error("Unable to retrieve information about the entered products");
 		}
-		
-		
-		
-		
+
+
+
+
 		return "success";
 	}
 public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> itemIdsUOMsMap,
@@ -341,22 +345,22 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 //			String uomDesc = XPEDXWCUtils.getUOMDescription(uom);
 			String uomConvfactr = (String) uomMap.get(uom);
 			sb.append(uom);
-			sb.append("-");	
+			sb.append("-");
 			if (itemIdCustomUOMMap !=null && !itemIdCustomUOMMap.isEmpty()) {
 				String customUomFlag = (String) itemIdCustomUOMMap.get(uom);
 					if(customUomFlag!=null && customUomFlag.equalsIgnoreCase("Y")){
-						sb.append("Y");		
+						sb.append("Y");
 					}else{
-						sb.append("N");	
+						sb.append("N");
 					}
 			}
 			else{
-				sb.append("N");	
+				sb.append("N");
 			}
 			sb.append(":");
 			sb.append(uomConvfactr);
-			
-			
+
+
 			if (keyIter.hasNext()) {
 				sb.append("!");
 			}
@@ -367,14 +371,14 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 	sb.append(",");
 }
 	public  Element getItemCustXrefInfo(List<String> items)
-	throws CannotBuildInputException 
+	throws CannotBuildInputException
 	{
 			IWCContext wcContext = WCContextHelper
 					.getWCContext(ServletActionContext.getRequest());
-			
+
 			Map<String, String> valueMap = new HashMap<String, String>();
 			Map<String, String> getExtnValueMap = new HashMap<String, String>();
-			
+
 			/*String MPC = (String) itemAttributes.get("MPC");
 			String CustomerPartNumber = (String) itemAttributes
 					.get("CustomerItemNumber");*/
@@ -384,15 +388,15 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			String envCode = null;
 			String customerId = wcContext.getCustomerId();
 			String custShipFromBranch = null;
-			
+
 			/*envCode = (String) wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
 			//companyCode = (String) wcContext.getWCAttribute(XPEDXConstants.COMPANY_CODE,WCAttributeScope.LOCAL_SESSION);
 			customerLegNo = (String) wcContext.getWCAttribute(XPEDXConstants.LEGACY_CUST_NUMBER,WCAttributeScope.LOCAL_SESSION);
 			custShipFromBranch = (String) wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
 			String custDivision = (String) wcContext.getWCAttribute(XPEDXConstants.CUSTOMER_DIVISION,WCAttributeScope.LOCAL_SESSION);*/
-			
+
 			XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
-			
+
 			/*String envCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
 			//String companyCode = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.COMPANY_CODE);
 			String legacyCustomerNumber = (String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.LEGACY_CUST_NUMBER);
@@ -402,7 +406,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			customerLegNo = shipToCustomer.getExtnLegacyCustNumber();
 			custShipFromBranch =shipToCustomer.getExtnShipFromBranch();
 			String custDivision =shipToCustomer.getExtnCustomerDivision();
-			
+
 			/*
 			StringTokenizer str = new StringTokenizer(customerId, "-");
 			if (str.hasMoreTokens())
@@ -416,14 +420,14 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			if (str.hasMoreTokens())
 				envCode = str.nextToken();
 			*/
-		
-			
-			
+
+
+
 			valueMap.put("/XPXItemcustXref/@CustomerNumber", customerLegNo);
 			//valueMap.put("/XPXItemcustXref/@CompanyCode", companyCode);
 			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
 			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
-			
+
 			Element input1 = WCMashupHelper.getMashupInput("xpedxItemCustXRef",
 					valueMap, wcContext.getSCUIContext());
 			Element complexQuery = SCXmlUtil.createChild(input1,"ComplexQuery");
@@ -463,9 +467,9 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 				String bufferProductID = productID;
 				String itemType = itemTypeStringToken.nextToken();
 				Document productInfoDoc = null;
-				if ("1".equals(itemType)) { //"1 = xpedx Item #" 
+				if ("1".equals(itemType)) { //"1 = xpedx Item #"
 					Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
-					productInfoDoc = getDocFromOutput(productInfoOutput); 
+					productInfoDoc = getDocFromOutput(productInfoOutput);
 				} else if("2".equals(itemType)) //Customer Part #
 				{
 					String customerPartNo = productID;
@@ -484,7 +488,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 						}
 					}
 				}
-				
+
 				Element itemListEl = null;
 				Element itemEl = null;
 				if(productInfoDoc!=null)
@@ -492,7 +496,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					itemListEl = productInfoDoc.getDocumentElement();
 					itemEl = XMLUtilities.getElement(itemListEl, "Item");
 				}
-				
+
 
 				if (itemEl != null) {
 					OrderItemValidationBaseAction.ItemValidationResult result = processGetCompleteItemListResult(
@@ -514,17 +518,17 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 //								String uomDesc = XPEDXWCUtils.getUOMDescription(uom);
 								String uomConvfactr = (String) uomMap.get(uom);
 								sb.append(uom);
-								sb.append("-");	
+								sb.append("-");
 								if (itemIdCustomUOMMap !=null && !itemIdCustomUOMMap.isEmpty()) {
 									String customUomFlag = (String) itemIdCustomUOMMap.get(uom);
 										if(customUomFlag!=null && customUomFlag.equalsIgnoreCase("Y")){
-											sb.append("Y");		
+											sb.append("Y");
 										}else{
-											sb.append("N");	
+											sb.append("N");
 										}
 								}
 								else{
-									sb.append("N");	
+									sb.append("N");
 								}
 								sb.append(":");
 								sb.append(uomConvfactr);
@@ -559,7 +563,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 		}
 		return "success";
 	}
-	
+
 	/**
 	 *  EB-466 code changes, removed Manufacturing Item, MPC code
 	 * @return
@@ -625,7 +629,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 						}
 					}
 				}
-				
+
 			} while (true);
 		} catch (Exception e) {
 			LOG
@@ -762,7 +766,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			catch (Exception e) {
 				LOG.debug(e.getMessage());
 			}
-			
+
 		}
 		if(UOMDescMap != null)
 			return UOMDescMap;
@@ -772,7 +776,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 	/*
 	 * protected ItemValidationResult processGetCompleteItemListResult(String
 	 * itemID, Element itemListEl) throws XPathExpressionException {
-	 * 
+	 *
 	 * if(itemListEl == null) { ItemValidationResult result = new
 	 * ItemValidationResult(); result.setItemID(itemID); result.setValid(true);
 	 * } return super.processGetCompleteItemListResult(itemID, itemListEl); }
@@ -799,7 +803,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 		}
 		return null;
 	}
-	
+
 	private boolean validateItemEntitlement(String itemId) {
 		boolean res = false;
 		try {
@@ -808,16 +812,16 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 				return res;
 			Element tmpRes 	= prepareAndInvokeMashup("XPEDXValidateItemEntitlement");
 			Element itemEle = getXMLUtils().getChildElement(tmpRes, "Item");
-			
+
 			if (itemEle!=null && itemEle.getAttribute("ItemID")!=null && itemEle.getAttribute("ItemID").equals(itemId)){
 				res = true;
 			}
-			
+
 		} catch (Exception e) {
 			res = false;
 			LOG.error(e.getStackTrace());
 		}
-		
+
 		return res;
 	}
 
@@ -832,11 +836,12 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(), map);
 		}
 	}*/
-	
+
 	public String getOrderHeaderKey() {
 		return orderHeaderKey;
 	}
 
+	@Override
 	public void setOrderHeaderKey(String orderHeaderKey) {
 		this.orderHeaderKey = orderHeaderKey;
 	}
@@ -860,7 +865,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 	public String getProductID() {
 		return productID;
 	}
-	
+
 	public String getMpcId() {
 		return mpcId;
 	}
@@ -1012,7 +1017,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 	public void setEnteredUOMs(ArrayList enteredUOMs) {
 		this.enteredUOMs = enteredUOMs;
 	}
-	
+
 	public ArrayList getOrderedPONos() {
 		return orderedPONos;
 	}
@@ -1081,14 +1086,14 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 	protected String isEditOrder="false";
 	protected ArrayList isEditNewline;
 	public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
-	
+
 	//Adding ArrayList quickAddOrderMultiple FOr Jira 3481
 	protected ArrayList quickAddOrderMultiple;
-	
+
 	//XBT 282 & 252
 	public String draftOrderFlag;
 	public String draftOrderError;
-	
+
 	public String getDraftOrderError() {
 		return draftOrderError;
 	}
@@ -1132,5 +1137,15 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 	private String mpcId;
 	private String manufacturerId;
 	private static String associationTypesOfInterest[] = { "Substitutions" };
-	
+
+	private boolean fromQuickAdd;
+
+	public boolean isFromQuickAdd() {
+		return fromQuickAdd;
+	}
+
+	public void setFromQuickAdd(boolean fromQuickAdd) {
+		this.fromQuickAdd = fromQuickAdd;
+	}
+
 }
