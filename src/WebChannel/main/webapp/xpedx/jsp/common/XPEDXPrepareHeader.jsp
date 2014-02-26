@@ -950,7 +950,7 @@ var selectedShipCustomer = null;
 <s:set name="xutil" value="#_action.getXMLUtils()"/>
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
-<s:set name="isPunchoutUser" value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
@@ -1878,7 +1878,7 @@ function passwordUpdateModal()
         var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
-		var isPunchoutUser = '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
+		var isPunchoutUser = '<s:property value="#isPunchoutUser"/>';
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
@@ -2848,6 +2848,7 @@ function msgWait(){
 	            		 </li>
 	            	</s:else>		      	
 
+                <s:if test="%{!#isPunchoutUser}">
 				  <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 					<s:if test='#selectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
@@ -2864,7 +2865,6 @@ function msgWait(){
 									<s:param name="pageNumber">1</s:param>
 									<s:param name='scFlag'>Y</s:param>
 						</s:url>
-	                  <s:if test="%{!#isPunchoutUser}">
 						<s:if test="%{isApprover()}">
 							<li>
 								<s:a href='%{catURL10}' cssClass="link">
@@ -2893,14 +2893,27 @@ function msgWait(){
 								Return Requests
 							</s:a>
 						</li> -->
-					  </s:if>
 						<li>
 							<a cssClass="link" href="<s:url action="draftOrderList" namespace="/order" />"  tabindex="2003">My Carts</a>
 						</li>
 			        </ul>
-	            </li>
+	              </s:if>
+	            </s:if>
+	            <s:else> <!-- Punchout user only gets My Carts so make top-level -->
+						<s:url id='myCartsLink' namespace='/order' action='draftOrderList'>
+						</s:url>		            	
+		            	<s:if test='#selectedHeaderTab=="OrderTab"'>
+		            		<li class="active">
+		            		<s:a href="%{myCartsLink}"  cssClass="active ieNavhack">My Carts</s:a>
+		            		</li>
+		            	</s:if>
+		            	<s:else>
+		            		<li>
+		            		<s:a href="%{myCartsLink}" cssClass="ieNavhack">My Carts</s:a>
+				            </li>
+		            	</s:else>
+	            </s:else>
 
-	          </s:if>   
 	            <s:if test="%{!#isPunchoutUser}">	            
 	                <s:url id='emailSampleLink' namespace='/services' action='MyServicesHome'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>

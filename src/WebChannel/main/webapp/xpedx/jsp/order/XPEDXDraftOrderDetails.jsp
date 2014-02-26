@@ -542,7 +542,7 @@ $(document).ready(function(){
 	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' />
 <s:set name='tempIsReadOnly'
 	value='#isOwnerOfNonCartInContextDraftOrder || #isProcurementInspectMode' /> --%>
-<s:set name='isPunchoutUser' value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>
+<s:set name='isPunchoutUser' value="#wcUtil.isPunchoutUser(wCContext)"/>
 <s:set name='hasPendingChanges'
 	value='#orderDetails.getAttribute("HasPendingChanges")' />
 	
@@ -2003,7 +2003,7 @@ function validateOrder()
 		$(".numeric").numeric();	
 	}
 	updateValidation();
-	var isPunchoutUser =  '<s:property value="%{wCContext.getWCAttribute('isPunchoutUser')}"/>';
+	var isPunchoutUser =  '<s:property value="#isPunchoutUser"/>';
 	if(!isPunchoutUser) {
 		validateOrder();
 	}

@@ -1887,6 +1887,11 @@ public class XPEDXWCUtils {
 		}
 	}
 
+	public static boolean isPunchoutUser(IWCContext wcContext) {
+		Object isPunchoutUser = wcContext.getWCAttribute("isPunchoutUser");
+		return Boolean.parseBoolean((String) isPunchoutUser);
+	}
+
 	public static boolean isShipToAddressOveridden(IWCContext wcContext) {
 		if (wcContext.getSCUIContext().getSession().getAttribute(
 				XPEDXWCUtils.XPEDX_SHIP_TO_ADDRESS_OVERIDDEN) != null) {
@@ -2634,7 +2639,7 @@ public class XPEDXWCUtils {
 	 * Method returns the XPATH in the CXML. This XPATH points to user-name that
 	 * is then used to login
 	 */
-//TODO remove?
+	//TODO remove since replaced with method below ?
 	public static String getAuthUserXPathForCustomerIdentity(
 			HttpServletRequest req, HttpServletResponse res, String custIdentity) {
 		String userXPath = null;
@@ -2761,7 +2766,7 @@ public class XPEDXWCUtils {
 		return ociFields;
 	}
 
-	/* END - PunchOut Changes - adsouza */
+
 	public static XPEDXShipToCustomer getShipToAddressOfCustomer(Element CustomerDetails) {
 
 		return getShipToAddressOfCustomer(CustomerDetails,null);
