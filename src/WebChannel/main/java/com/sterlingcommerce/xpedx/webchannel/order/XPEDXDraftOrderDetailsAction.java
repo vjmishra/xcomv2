@@ -1073,9 +1073,11 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
 						}
-						else
-						{
-							if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
+						
+						//Commented as part of the issue 2311 to pick the minorderamount and chargeamount from shipto level
+						//else
+						//{
+							/*if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)))
 							{
 								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
@@ -1093,15 +1095,15 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											chargeAmount = Float.parseFloat(chargeAmountStr);
 									}
 								}
-								else
-								{
-									if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
+								*/
+								//else
+								//{
+									/*if(chargeAmountStr !=null && (!"".equals(chargeAmountStr)) && chargeAmount <=0)
 									{
 										chargeAmount = Float.parseFloat(chargeAmountStr);
-									}
-									//String shipFromDivision =(String)wcContext.getWCAttribute(XPEDXConstants.SHIP_FROM_BRANCH,WCAttributeScope.LOCAL_SESSION);
-									//String envCode =(String)wcContext.getWCAttribute(XPEDXConstants.ENVIRONMENT_CODE,WCAttributeScope.LOCAL_SESSION);
-									if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
+									}*/
+									
+									/*if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
 											shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null){
 										shipFromDivision = shipToCustomer.getExtnShipFromBranch();
 										String envCode =shipToCustomer.getExtnEnvironmentCode();
@@ -1126,7 +1128,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											shipToCustomer.setShipToOrgOrganizationName(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName"));
 											shipToCustomer.setShipToOrgCorporatePersonInfoState(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/CorporatePersonInfo/@State"));
 											shipToCustomer.setShipToDivDeliveryCutOffTime(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryCutOffTime"));
-											//Added For Jira 3465
 											shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
 											shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
 											shipToCustomer.setShipToOrgExtnApplyMinOrderBrands(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands"));
@@ -1135,8 +1136,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 											LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision+"_"+envCode+". ",e);
 											return;
 										}
-									}
-									minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
+									}*/
+									/*minOrderAmountStr = shipToCustomer.getShipToOrgExtnMinOrderAmt();
 									chargeAmountStr= shipToCustomer.getShipToOrgExtnSmallOrderFee();
 									if(minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) &&
 											(!"0".equals(minOrderAmountStr) ) && (!"0.00".equals(minOrderAmountStr) ))
@@ -1146,10 +1147,10 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 										{
 												chargeAmount = Float.parseFloat(chargeAmountStr);
 									}
-								}
-							}
-						}
-				}
+								}*/
+							//}
+						//}
+				//}
 			}// if customerId is not null
 
 
