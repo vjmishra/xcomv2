@@ -278,7 +278,7 @@
 							</div>
 						</div>
 						
-						<div class="error" id="errorMsgItemBottom" style="display:none;position:relative;left:340px"></div>
+						<span class="error" id="errorMsgItemBottom" style="display:none;position:relative;left:340px"></span>
 					</form>
 					
 					<s:hidden name="msapOrderMulUOMFlag" id="msapOrderMulUOMFlag" value="%{#msapExtnUseOrderMulUOMFlag}" />
@@ -290,7 +290,7 @@
 	</div> <%-- / main-container --%>
 	
 	<div style="display:none;">
-		<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 570px;">
+		<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 450px; height: 600px;">
 			<h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <small>Limit is 20 items per copy/paste</small></h2>
 			<p>
 				Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" /> item numbers or customer item numbers from your file in the following format:
