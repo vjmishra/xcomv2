@@ -868,94 +868,37 @@ $(document).ready(function(){
 	<!-- promotion -->
 	<div class="ad-margin">
 		<!-- ad placeholder, per the mockup. Ad Juggler Starts -->
-		<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="advertisement" />advertisement</div>
-		 <s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
-		 <!-- Added for EB-1714 Display a Saalfeld advertisement image on Cart Starts -->
-			 <s:set name='storefrontId' value="wCContext.storefrontId" />
-					<%-- <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-				 <img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_468x60r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:if> --%>
-				
-				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
+		<s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
+		 <s:set name='storefrontId' value="wCContext.storefrontId" />
+		<s:if test="%{!#isPunchoutUser}">
+			<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="advertisement" />advertisement</div>
+		</s:if>
+		 	<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
 				<img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if>
-			<!-- EB-1714 END -->   
-				<s:set name='storefrontId' value="wCContext.storefrontId" />
-		<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/  -->
-		
-		<s:if test="#ad_keyword != null" >
-			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118169'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:if>
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
-								<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118204'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif>
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
-									<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118191'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif >
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif>
-			<s:else >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:else>
-		</s:if>	
+				<s:elseif test="%{#isPunchoutUser}">
+				<s:if test="%{#punchoutImagepath!=''}">
+					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src="<s:property value='punchoutImagepath'/>/Punchout_MyCart_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+				 </s:if>
+				</s:elseif>
+	
 		<s:else>
-			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
+		<s:if test="#ad_keyword != null" >
+			<s:if  test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118169'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
+				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
 			</s:if>
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
-								<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118204'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif>
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
-									<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118191'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif >
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif>
+		</s:if>	
 			<s:else>
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
 				aj_pv = true; aj_click = '';
 				</script>
-			</s:else>			
+			</s:else>
 		</s:else>
 		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>  
 		<!-- Ad Juggler Tag Ends -->

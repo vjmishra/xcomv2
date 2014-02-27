@@ -125,8 +125,9 @@ public class XPEDXWCUtils {
 	private static SecretKey sk = getSecretKey(sharedkey);
 	private static byte[] sharedkeyfinal = sk.getEncoded();
 	private static String staticFileLocation = null;
+	private static String punchoutImageLocation=null;
 	private static String xpedxBuildKey =null;
-
+	
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
 
 	static {
@@ -6331,14 +6332,20 @@ public class XPEDXWCUtils {
 		return staticFileLocation;
 	}
 
-
-
 	public static String getXpedxBuildKey() {
 		return xpedxBuildKey;
 	}
 
 	public static void setXpedxBuildKey(String xpedxBuildKey) {
 		XPEDXWCUtils.xpedxBuildKey = xpedxBuildKey;
+	}
+	
+	public static String getPunchoutImageLocation() {
+		return punchoutImageLocation;
+	}
+
+	public static void setPunchoutImageLocation(String punchoutImageLocation) {
+		XPEDXWCUtils.punchoutImageLocation = punchoutImageLocation;
 	}
 
 	/**
@@ -6587,5 +6594,14 @@ public class XPEDXWCUtils {
 		}
 
 		return versionString;
+	}
+	
+	public static String getpuchoutImagelocation()
+	{
+		if(staticFileLocation!=null)
+		{
+			punchoutImageLocation=staticFileLocation+"/xpedx/images/punchout/";
+		}
+		return punchoutImageLocation;
 	}
 }

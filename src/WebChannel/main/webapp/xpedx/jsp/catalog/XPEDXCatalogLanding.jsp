@@ -5,7 +5,8 @@
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld"%>
 <%@ taglib prefix="xpedx" uri="/WEB-INF/xpedx.tld"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
-
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
+<s:set name="punchoutImagepath" value="#wcUtil.getpuchoutImagelocation()" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -67,6 +68,7 @@
 <s:set name='appFlowContext' value='#session.FlowContext'/>
 <s:set name='isFlowInContext' value='#util.isFlowInContext(#appFlowContext)'/>
 <s:set name='guestUser' value="#_action.getWCContext().isGuestUser()" />
+<s:set name='isGuestUser' value="wCContext.guestUser" />
 <swc:breadcrumb rootURL='#myUrl' group='catalog' displayGroup='search' displayParam='#myParam'/> 
 <s:url id='punchOutURLOrderChange' namespace='/order' action='configPunchOut'>
    <s:param name='orderHeaderKey' value='%{#appFlowContext.key}'/>
@@ -299,34 +301,27 @@
 					<s:set name="aj_adspot" value="115722" />
 			</s:else >			
 			<!-- Ad Juggler Tag Ends -->
-
-					
-			</s:else>
-			</div>
-
-			<!-- end mid column -->
-			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
 			
+			</s:else>
+			<s:set name='storefrontId' value="wCContext.storefrontId" />
+			 <s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
+			 <s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
+			</div>
 				<div id="right-col-int" class="cat-landing" style="margin-top:0px;right:10px;">
 				 <div align="left" style="padding-right: 60px;margin-bottom:2px">
-				<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
-				
+				 <s:if test="%{!#isPunchoutUser}">
+					<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
+				</s:if>
 			</div>
-				<!-- Added for EB-1712 Display a Saalfeld advertisement image on Catalog Home page  Starts -->
-						<s:set name='storefrontId' value="wCContext.storefrontId" />
-						 <%-- <div align="center" style="padding-right: 15px;padding-top: 5.3px;">
-						 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-						 <img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_160x600r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
-						 </s:if>--%>
-						<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-						<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
-						</s:if> 
-				<!-- EB-1549 END -->
-				
-				<!-- Ad Juggler Tag Starts  -->
-				<!-- jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging -->
-				<s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
-				<s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+					<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
+				</s:if> 
+					<s:elseif test="%{#isPunchoutUser}">
+						<s:if test="%{#punchoutImagepath!=''}">
+						<img width="160" height="600" border="0" alt="" style="margin-top:10px;padding-right:5px;" src="<s:property value='punchoutImagepath'/>/Punchout_Catalog_Landing_160_600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+				 	</s:if>
+					</s:elseif>
+				<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 				<s:if test="#categoryDepth==1">
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
@@ -334,11 +329,12 @@
 				aj_pv = true; aj_click = ''; </script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:if>
+				</s:elseif>
 				<s:else>
 				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />';  aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
+					aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
+					aj_zone = 'ipaper'; aj_adspot='<s:property value="%{#aj_adspot}" />';  aj_page = '0'; aj_dim ='114897'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
+					aj_pv = true; aj_click = '';
 				</script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:else>

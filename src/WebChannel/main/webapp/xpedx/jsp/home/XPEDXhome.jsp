@@ -4,9 +4,14 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="swc" uri="swc" %>
 <%@ taglib prefix="c" uri="/WEB-INF/c.tld" %>
-<s:set name='isGuestUser' value="wCContext.guestUser" />
+
 <s:set name='_action' value='[0]' />
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
+
+<s:set name='isGuestUser' value="wCContext.guestUser" />
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
+<s:set name="punchoutImagepath" value="#wcUtil.getpuchoutImagelocation()" />
+<s:set name='storefrontId' value="wCContext.storefrontId" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -275,52 +280,24 @@ Ext.onReady(function(){
 		</div>
 		
 		<div id="homepage-ad-area">
-			<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
-			<!-- Added for EB-1549 Display a Saalfeld advertisement image on the Home page  Starts -->
-				<s:set name='storefrontId' value="wCContext.storefrontId" />
-				<%-- <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/ad_placeholders/xpedx_300x250r<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:if> --%>
-				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
-				<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD3_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+			<s:if test="%{!#isPunchoutUser}">
+				<div class="ad-label"><img height="4" width="7" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" />advertisement</div>
+			</s:if>
+				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+					<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD3_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if> 
-			<!-- EB-1549 END -->
-				<s:set name='storefrontId' value="wCContext.storefrontId" />
-			
-			<!-- Ad Juggler Tag Starts -->
-			
-		
-
-			<!-- aj_server : https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/ -->
-			
-			 <s:if test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118161'; aj_page = '0'; aj_dim ='114889'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:if> 
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CANADA_STORE_FRONT}' >
-								<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118200'; aj_page = '0'; aj_dim ='114889'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif>
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@BULKLEY_DUNTON_STORE_FRONT}' >
-									<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '118188'; aj_page = '0'; aj_dim ='114889'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif >
-			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115702'; aj_page = '0'; aj_dim ='114889'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:elseif>
+				<s:elseif test="%{#isPunchoutUser}">
+				<s:if test="%{#punchoutImagepath!=''}">
+					<img width="300" height="250" border="0" alt="" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='punchoutImagepath'/>/Punchout_Home_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+				 </s:if>
+				</s:elseif>
+				<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
+					<script type="text/javascript" language="JavaScript">
+					aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
+					aj_zone = 'ipaper'; aj_adspot = '115702'; aj_page = '0'; aj_dim ='114889'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
+					aj_pv = true; aj_click = '';
+					</script>
+				</s:elseif>
 			<s:else >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
