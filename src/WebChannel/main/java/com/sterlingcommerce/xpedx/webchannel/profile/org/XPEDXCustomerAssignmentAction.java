@@ -31,6 +31,7 @@ import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.interop.japi.YIFApi;
@@ -1486,6 +1487,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 	
 	public String setCurrentCustomerIntoContextFromPunchout() throws CannotBuildInputException{
 		setCurrentCustomerIntoContext();
+		XPEDXOrderUtils.createNewCartInContext(getWCContext());
 		XPEDXWCUtils.removeObectFromCache("divisionBeanList");
 		return SUCCESS;
 	}
