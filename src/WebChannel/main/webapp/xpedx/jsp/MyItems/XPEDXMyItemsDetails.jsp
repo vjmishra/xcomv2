@@ -255,7 +255,7 @@ function showSharedListForm(){
 			'height' 			: 340  
 		});
 		
-		/* Begin Short desc. shortener */
+		/* Begin Short desc. shortener 
 		$('.short-description').each(function() {
 			var html = $(this).html();
 			var shortHTML = html.substring(0, 90);
@@ -265,7 +265,7 @@ function showSharedListForm(){
 				$(this).append('...');	
 				$(this).attr('title', html );
 			}
-		});
+		}); */
 		
 		/* EB-783 */
 		$('.full-description-replacement-model').each(function() {
@@ -280,7 +280,7 @@ function showSharedListForm(){
 		});
 		
 		
-		/* Begin long desc. shortener */
+		/* Begin long desc. shortener 
 		$('.prodlist ul li, #prodlist ul li').each(function() {
 			var html = $(this).html();
 			var shortHTML = html.substring(0, 30);
@@ -290,7 +290,7 @@ function showSharedListForm(){
 				$(this).append('...');	
 				$(this).attr('title', html );
 			}
-		});
+		}); */
 		
 		<%-- fancybox workaround: fancybox only works with 'a' tag so programatically click it when the button is clicked --%>
 		$('.btn-share-list').click(function() {
