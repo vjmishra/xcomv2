@@ -1073,7 +1073,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 								chargeAmount = Float.parseFloat(chargeAmountStr);
 							}
 						}
-						
+
 						//Commented as part of the issue 2311 to pick the minorderamount and chargeamount from shipto level
 						//else
 						//{
@@ -1102,7 +1102,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 									{
 										chargeAmount = Float.parseFloat(chargeAmountStr);
 									}*/
-									
+
 									/*if(shipToCustomer.getShipToOrgExtnMinOrderAmt() == null && shipToCustomer.getShipToOrgExtnSmallOrderFee() == null &&
 											shipToCustomer.getShipToOrgOrganizationName() == null && shipToCustomer.getShipToOrgCorporatePersonInfoState() == null){
 										shipFromDivision = shipToCustomer.getExtnShipFromBranch();
@@ -2577,7 +2577,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 		if(!isDraftSet)
 			setDraft("Y");
-//		returnVal = execute();
 		returnVal = execute();
 		return returnVal;
 
