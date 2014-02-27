@@ -992,7 +992,10 @@ $(document).ready(function(){
 	</s:else>
 	
 	<li class="float-right">
-		<s:url id='quickAddURL' namespace="/order" action='quickAddAction' />
+		<s:url id='quickAddURL' namespace="/order" action='quickAddAction' escapeAmp="false">
+			<s:param name="selectedHeaderTab">QuickAdd</s:param>
+			<s:param name="quickAdd" value="%{true}" />
+		</s:url>
 		<a tabindex="3403" id="quick-add-button" class="grey-ui-btn" href="<s:property value='%{#quickAddURL}'/>">
 			<span>Go to Quick Add</span>
 		</a>
