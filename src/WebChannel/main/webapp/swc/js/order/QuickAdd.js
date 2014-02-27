@@ -30,12 +30,10 @@ function quickAdd_addProductToQuickAddList(element) {
 		custPOFlag = true;
 	}
 	if (sku == "") {
-		document.getElementById("errorMsgItemBottom").innerHTML = "Please enter a valid Item #.";
-		document.getElementById("errorMsgItemBottom").style.display = "inline";
+		setErrorMessage('Please enter a valid Item #.')
 		return;
 	} else {
-		document.getElementById("errorMsgItemBottom").innerHTML = "";
-		document.getElementById("errorMsgItemBottom").style.display = "none";
+		setErrorMessage();
 	}
 	if (quantity == "") {
 		quantity = 1;
@@ -716,12 +714,10 @@ function quickAddCopyAndPaste(data) {
 					custPOFlag = true;
 				}
 				if (sku == "") {
-					document.getElementById("errorMsgItemBottom").innerHTML = "Please enter a valid Item #.";
-					document.getElementById("errorMsgItemBottom").style.display = "inline";
+					setErrorMessage('Please enter a valid Item #.');
 					return;
 				} else {
-					document.getElementById("errorMsgItemBottom").innerHTML = "";
-					document.getElementById("errorMsgItemBottom").style.display = "none";
+					setErrorMessage();
 				}
 				if (quantity == "") {
 					quantity = 1;
@@ -781,6 +777,17 @@ function quickAddCopyAndPaste(data) {
 	document.getElementById('productValidateURL').href = prodcutValidateUrl;
 } // end function quickAddCopyAndPaste
 
+
+function setErrorMessage(message) {
+	var $errorMsgItemBottom = $('#errorMsgItemBottom');
+	if (message) {
+		$errorMsgItemBottom.html(message);
+		$errorMsgItemBottom.show();
+	} else {
+		$errorMsgItemBottom.hide();
+		$errorMsgItemBottom.html('');
+	}
+}
 
 
 $(document).ready(function() {
