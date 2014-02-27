@@ -1,20 +1,15 @@
 package com.sterlingcommerce.xpedx.webchannel.punchout.order;
 
 import java.io.CharArrayReader;
-import java.io.File;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.BufferedReader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.sql.Timestamp;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -79,7 +74,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	protected String orderHeaderKey = null;
 	XPEDXCXMLMessageFields cXMLFields = null;
 	private PunchoutRequest punchoutRequest = null;
-	private String punchoutURL=null;
+	private URL punchoutURL=null;
 
 	private static final Logger LOG = Logger
 			.getLogger(CustomPunchoutOrderAction.class);
@@ -100,9 +95,9 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 			String cxml = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
 					
-			if(punchoutRequest.getReturnURL()!=null){punchoutURL=punchoutRequest.getReturnURL().replaceAll(" ","%20");}
+			if(punchoutRequest.getReturnURL()!=null){punchoutURL=getencodePunchoutURL(punchoutRequest.getReturnURL());}
 					
-			request.setAttribute("requestUrl",punchoutURL);
+			request.setAttribute("requestUrl",punchoutURL.toString());
 			
 			request.setAttribute("cxml", cxml);
 
@@ -138,7 +133,6 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		 Document deleteOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
 		 deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, deleteOrderHeaderKey);
 		 deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ACTION,"DELETE");
-		 System.out.println("The delete Order input doc is:"+SCXmlUtil.getString(deleteOrderInputDoc));
 		 api.invoke(env, "deleteOrder", deleteOrderInputDoc);
 		
 		//prepareAndInvokeMashup(DRAFT_ORDER_DELETE_MASHUP);
@@ -181,30 +175,13 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		Element inputOrderElement = inputOrderDoc.getDocumentElement();
 		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
 
-		Document orderOutputTemplate = SCXmlUtil.createFromString(" <Order OrderHeaderKey='' OrderNo='' OrderName='' CustomerPONo='' EntryType='' EnterpriseCode='' "
-						+ " OptimizationType='' CarrierServiceCode='' Modifyts='' Createts='' "
-						+ " DraftOrderFlag='' HasPendingChanges='' AuthorizedClient='' "
-						+ " BuyerOrganizationCode='' ReqDeliveryDate='' OrderDate='' OrderType='' ShipToID='' Createuserid='' Modifyuserid=''> "
+		Document orderOutputTemplate = SCXmlUtil.createFromString(" <Order OrderHeaderKey='' > "
 						+ " <PriceInfo Currency='' /> "
-						+ "	<Extn ExtnDeliveryHoldTime='' ExtnDeliveryHoldDate='' ExtnOrderDivision='' ExtnGenerationNo='' "
-						+ "       ExtnDeliveryHoldFlag='' ExtnRushOrderComments='' ExtnShipComplete='' "
-						+ "       ExtnWillCall='' ExtnAttentionName='' ExtnHeaderComments='' ExtnCustomerNo='' ExtnBillToSuffix='' "
-						+ "       ExtnAddnlEmailAddr='' ExtnCustomerDivision='' ExtnOrderedByName=''  "
-						+ "       ExtnSourceType='' ExtnWebConfNum='' ExtnLegacyOrderNo='' ExtnBillToCustomerID='' "
-						+ "       ExtnRushOrderFlag='' ExtnWebHoldFlag='' ExtnOrderSubTotal='' ExtnOrderCouponDiscount='' "
-						+ "       ExtnOrderDiscount='' ExtnTotOrderAdjustments='' ExtnTotalOrderValue='' ExtnTotOrdValWithoutTaxes='' ExtnLegTotOrderAdjustments=''> "
+						+ "	<Extn ExtnTotalOrderValue=''> "
 						+ "	</Extn>	 "
 						+ "   <OrderLines TotalNumberOfRecords=''> "
-						+ "       <OrderLine OrderedQty='' ItemGroupCode='' "
-						+ "           ConfigurationKey='' DeliveryMethod='' OrderLineKey='' KitQty='' "
-						+ "           MaxLineStatus='' CarrierServiceCode='' ReqShipDate='' "
-						+ "           IsBundleParent='' OpenQty='' Status='' PrimeLineNo='' SubLineNo='' "
-						+ "           CustomerPONo='' CustomerLinePONo='' LineType=''> "
+						+ "       <OrderLine OrderedQty='' PrimeLineNo=''> "
 						+ "           <Item ItemID='' ItemShortDesc=''/> "
-						+ "           <LineOverallTotals UnitPrice='' "
-						+ "               DisplayUnitPrice='' KitUnitPrice='' LineAdjustments='' "
-						+ "               DisplayLineAdjustments='' LineTotalWithoutTaxes='' "
-						+ "               DisplayLineTotalWithoutTaxes='' />       "
 						+ "			  <OrderLineTranQuantity OrderedQty='' TransactionalUOM=''/> "
 						+ "           <Extn ExtnExtendedPrice=''></Extn>		   "		
 						+ "           <ItemDetails ItemID=''><Extn ExtnUNSPSC=''></Extn></ItemDetails>"
@@ -229,6 +206,15 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		return WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
 	}
 	
+	
+	private URL getencodePunchoutURL(String puncouturl) throws Exception
+	{
+			String decodedURL;
+			decodedURL = URLDecoder.decode(puncouturl, "UTF-8");
+			URL url = new URL(decodedURL);
+			URI uri = new URI(url.getProtocol(), url.getHost(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getQuery()); 
+			return uri.toURL();		
+	}
 	
 	private String invokePunchOut(Document inXML, String xsltFileName)
 			throws Exception {
@@ -257,12 +243,13 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 	private Document updatetimeStampValue(Document doc) {
 		java.util.Date date = new java.util.Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
+		 DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS-z");
+		 df.setTimeZone(TimeZone.getTimeZone("CST"));
 		NodeList cXML = doc.getElementsByTagName("cXML");
 		Element timestampelement = null;
 		for (int i = 0; i < cXML.getLength(); i++) {
 			timestampelement = (Element) cXML.item(i);
-			timestampelement.setAttribute("timestamp", timestamp.toString());
+			timestampelement.setAttribute("timestamp", df.format(date).toString());
 		}
 
 		return doc;
