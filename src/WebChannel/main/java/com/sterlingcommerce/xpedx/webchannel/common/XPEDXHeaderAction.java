@@ -19,11 +19,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.SCUILocalSession;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
-import com.sterlingcommerce.webchannel.catalog.helper.CatalogContextHelper;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.IWCContextBuilder;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
@@ -31,12 +29,9 @@ import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.BusinessRuleUtil;
 import com.sterlingcommerce.webchannel.utilities.SSLSwitchingHelper;
-import com.sterlingcommerce.webchannel.utilities.UserPreferenceUtil;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
@@ -158,7 +153,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		return sapCustomer;
 	}
 	 */
-	public String execute() {		
+	@Override
+	public String execute() {
 		try {
 			//Removing  from AUTHORIZED_LOCATIONS and AVAILABLE_LOCATIONS session -Jira 4146
 			Boolean sessionForUserProfile=  (Boolean) XPEDXWCUtils.getObjectFromCache("SessionForUserProfile");
@@ -169,7 +165,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			if(getWCContext().getWCAttribute("firstTimeFlag")!=null){
 				getWCContext().removeWCAttribute("firstTimeFlag",WCAttributeScope.LOCAL_SESSION);
 			}
-			/*End of webtrend tags*/	
+			/*End of webtrend tags*/
 			if(sessionForUserProfile == null || sessionForUserProfile != true)
 			{
 				XPEDXWCUtils.removeObectFromCache("AUTHORIZED_LOCATIONS");
@@ -177,11 +173,11 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				XPEDXWCUtils.removeObectFromCache("CUSTOMER2");
 
 			}
-			if(getWCContext().isGuestUser() && getWCContext().getCustomerId() != null && !("").equals(getWCContext().getCustomerId())) {				
-				//get the builder object            
+			if(getWCContext().isGuestUser() && getWCContext().getCustomerId() != null && !("").equals(getWCContext().getCustomerId())) {
+				//get the builder object
 				IWCContextBuilder builder = WCContextHelper.getBuilder(wcContext.getSCUIContext().getRequest(), wcContext.getSCUIContext().getResponse());
 				builder.setCustomerId(null);
-			}	
+			}
 
 			if (!getWCContext().isGuestUser()){
 				handleChangeInContextForDefaultShipTo();
@@ -194,7 +190,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			if (!getWCContext().isGuestUser()){
 				prepareHeaderNavigationHighlight(servletPath);
 			}
-			if (!getWCContext().isGuestUser()){	
+			if (!getWCContext().isGuestUser()){
 				//checkMultiStepCheckout();
 				if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext))
 					setSampleRequestFlagInSession();
@@ -341,8 +337,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			}
 
 			String myItemsLink = xpedxCustomerContactInfoBean.getExtnMyItemsLink();
-			if("Y".equalsIgnoreCase(myItemsLink)) 
-				setProcurementMyItemsLinkFlag(true);		
+			if("Y".equalsIgnoreCase(myItemsLink))
+				setProcurementMyItemsLinkFlag(true);
 
 			defaultAssignedShipTo = getDefaultShipTo(xpedxCustomerContactInfoBean);
 		}
@@ -366,10 +362,10 @@ public class XPEDXHeaderAction extends WCMashupAction {
 					setTermsOfAccessInRequest(doc);
 				}
 			}//end of jira 4285
-			else { 
+			else {
 				Object isTermsOfAccessCheckReqForPunchoutUser = wcContext.getWCAttribute("isTACheckReqForPunchoutUser", WCAttributeScope.LOCAL_SESSION);
 				if (!getWCContext().isGuestUser()
-					&& XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext()) && defaultAssignedShipTo!= null 
+					&& XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext()) && defaultAssignedShipTo!= null
 					&& isTermsOfAccessCheckReqForPunchoutUser!=null && "Y".equalsIgnoreCase((String)isTermsOfAccessCheckReqForPunchoutUser)) {
 					setTermsOfAccessInRequest(doc);
 					wcContext.removeWCAttribute("isTACheckReqForPunchoutUser",WCAttributeScope.LOCAL_SESSION);
@@ -431,16 +427,16 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			//Webtrends Tag starts
 			if(wcContext.getSCUIContext().getSession().getAttribute("UsergroupKeyList") == null){
 				List<Element> userGroupList = SCXmlUtil.getElements(userElem,"/UserGroupLists/UserGroupList");
-				ArrayList newusergroupkey = new ArrayList(); 
+				ArrayList newusergroupkey = new ArrayList();
 				if (userGroupList != null) {
 					for (Element userGroup : userGroupList) {
-						String userGroupKey = userGroup.getAttribute("UsergroupKey");										
+						String userGroupKey = userGroup.getAttribute("UsergroupKey");
 						newusergroupkey.add(userGroupKey);
-					}				
+					}
 					wcContext.getSCUIContext().getSession().setAttribute("UsergroupKeyList", newusergroupkey);
 					wcContext.getSCUIContext().getSession().setAttribute("UsergroupKeyListActive", true);
-				}	
-			}		
+				}
+			}
 			else {
 				wcContext.getSCUIContext().getSession().setAttribute("UsergroupKeyListActive", false);
 			}
@@ -455,8 +451,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
 			Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
 			String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
-			if("Y".equalsIgnoreCase(myItemsLink)) 
-				setProcurementMyItemsLinkFlag(true);				
+			if("Y".equalsIgnoreCase(myItemsLink))
+				setProcurementMyItemsLinkFlag(true);
 		}
 		/* -- Removing this adding the getting the ohk in Line 118 in This class - Jagadeesh july 20th
 		String isDefaultSet = (String) getWCContext().getWCAttribute(XPEDXConstants.IS_DEFAULT_CART_SET);
@@ -497,7 +493,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}*/
 		List<String> userList = getApproverUserList();
 		Document outputDoc;
-		if(wcContext.getCustomerId()!=null && wcContext.getLoggedInUserId() != null) 
+		if(wcContext.getCustomerId()!=null && wcContext.getLoggedInUserId() != null)
 		{
 			Map<String, String> valueMap = new HashMap<String, String>();
 			//valueMap.put("/Order/@BuyerOrganizationCode", wcContext.getCustomerId());
@@ -509,15 +505,15 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				customerId = XPEDXWCUtils.getLoggedInCustomerFromSession(getWCContext());
 			valueMap.put("/Order/@BillToID", customerId);
 			if(userList!=null && userList.size()>=0)
-				userList.add(this.wcContext.getCustomerContactId());			
+				userList.add(this.wcContext.getCustomerContactId());
 			for(int i=0; i<userList.size();i++) {
 				int expIndexVal = i+1;
 				valueMap.put("/Order/OrderHoldType/ComplexQuery/Or/Exp["+expIndexVal+"]/@Name","ResolverUserId");
-				valueMap.put("/Order/OrderHoldType/ComplexQuery/Or/Exp["+expIndexVal+"]/@Value",userList.get(i));			
+				valueMap.put("/Order/OrderHoldType/ComplexQuery/Or/Exp["+expIndexVal+"]/@Value",userList.get(i));
 			}
 
 			Element input;
-			try 
+			try
 			{
 				input = WCMashupHelper.getMashupInput(
 						"XPEDXPendingApprovalOrders", valueMap, wcContext
@@ -575,7 +571,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		catch (CannotBuildInputException e) {
 			LOG.error("Error while fetching the user list to get the approval orders using mashup id 'userListForApproval'");
-		}		
+		}
 		return userList;
 	}
 
@@ -648,7 +644,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 	}*/
 
 	/**
-	 * Set the terms of access in the request. 
+	 * Set the terms of access in the request.
 	 * This is done to avoid an extra call of a mashup
 	 * to fetch the same details
 	 * @param wElement
@@ -668,7 +664,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String addnlPOList = null;
 		String accetptTandCDate=null;
         String exUserlastLoginDate=null;
-		/**XBT-621 code changes 
+		/**XBT-621 code changes
 		 * Below code is used to get the CustomerContact extn
 		 * and set them in cache.
 		 */
@@ -694,12 +690,12 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			custContRefKey = xpxCustContExtnEle.getAttribute("CustContRefKey");
 			XPEDXWCUtils.setObectInCache("CustomerContactRefKey",custContRefKey);
 		}
-		// XBT-621 code changes end 
+		// XBT-621 code changes end
 
 		if(("".equalsIgnoreCase(toaFlag) || toaFlag == null) || toaFlag.equalsIgnoreCase("N")  && ("".equalsIgnoreCase(exUserlastLoginDate) || exUserlastLoginDate==null )
 				 && ("".equalsIgnoreCase(accetptTandCDate) ||  ("".equalsIgnoreCase(accetptTandCDate)) )){
 			XPEDXWCUtils.setObectInCache("setPasswordUpdate",true);
-		}  
+		}
 
 		if (toaFlag == null || (toaFlag != null && toaFlag.trim().length() == 0)) {
 			toaFlag = "";
@@ -723,12 +719,12 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			{
 				Element _customerContactElem=(Element)customerContactList.item(i);
 				String contactId=_customerContactElem.getAttribute("CustomerContactID");
-				if(contactId!=null&&contactId.trim().equalsIgnoreCase(wcContext.getCustomerContactId())){						
+				if(contactId!=null&&contactId.trim().equalsIgnoreCase(wcContext.getCustomerContactId())){
 					String authQuestion=SCXmlUtil.getXpathAttribute(_customerContactElem, "//CustomerContact/User/AuthQuestionList/AuthQuestion/@AuthQuestionKey");
 
 					if (authQuestion != null && authQuestion.trim().length() >0) {
 						isSecuityQuestionset="Y";
-					}				
+					}
 				}
 
 			}
@@ -799,7 +795,11 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		} else if (servletPath.contains("/jsp/home/XPEDXPortalHome")) {
 			setSelectedHeaderTab("OrderTab");
 		} else if (servletPath.contains("/jsp/order")) {
-			setSelectedHeaderTab("OrderTab");
+			if (servletPath.contains("QuickAdd")) {
+				setSelectedHeaderTab("QuickAdd");
+			} else {
+				setSelectedHeaderTab("OrderTab");
+			}
 		} else if (servletPath.contains("/jsp/services")) {
 			setSelectedHeaderTab("ServicesTab");
 		} else if (servletPath.contains("/jsp/tools")) {
@@ -853,15 +853,15 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			}
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
-		}		
+		}
 		return listOfAssignedCustomers;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	/**
-	 * 
+	 *
 	 */
 	protected String prepareLoggerInUsersCustomerName() {
 		try {
@@ -916,7 +916,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				wcContext.setWCAttribute("BillToForOrderSummaryPage",billToCustomer.getOrganizationName(), WCAttributeScope.LOCAL_SESSION);*/
 
 				//customerFieldsMap = XPEDXOrderUtils.getCustomerLineFieldMap(customerOrganizationEle.getOwnerDocument());
-				//Changed here : Fetching doc from getCustomerExtnFlagsDoc instead 
+				//Changed here : Fetching doc from getCustomerExtnFlagsDoc instead
 
 				//String defaultShipToChanged = (String) wcContext.getWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED);
 
@@ -956,7 +956,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 					request.setAttribute("custPrefCategory", custPrefcategory);
 					wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY,custPrefcategory);
 					if(custPrefcategory.equalsIgnoreCase("CJ"))
-					{	
+					{
 						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC, keywordPrefix + "FacilitySupplies");
 					} else if (custPrefcategory.equals("CG"))
 					{
@@ -979,11 +979,11 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				/*EB-76 Start Changes */
 				if(shipToCustomer!=null && shipToCustomer.getDefaultShipToCustomer()!=null){
 					XPEDXShipToCustomer defaultShipToCustomer= shipToCustomer.getDefaultShipToCustomer();
-					if(defaultShipToCustomer.getCustomerStatus()!=null & defaultShipToCustomer.getCustomerStatus().trim().equals("30")){							
+					if(defaultShipToCustomer.getCustomerStatus()!=null & defaultShipToCustomer.getCustomerStatus().trim().equals("30")){
 							isDefaultShipToSuspended = true;
 							XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
-							xpedxCustomerContactInfoBean.setExtnDefaultShipTo(null);							
-							XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean,xpedxCustomerContactInfoBean);					
+							xpedxCustomerContactInfoBean.setExtnDefaultShipTo(null);
+							XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean,xpedxCustomerContactInfoBean);
 					}
 				} /*EB-76 End Changes */
 			}
@@ -1040,7 +1040,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				wcContext.setWCAttribute("BillToForOrderSummaryPage",SCXmlUtil.getChildElement(parentElem, "BuyerOrganization").getAttribute("OrganizationName"), WCAttributeScope.LOCAL_SESSION);
 
 				//customerFieldsMap = XPEDXOrderUtils.getCustomerLineFieldMap(customerOrganizationEle.getOwnerDocument());
-				//Changed here : Fetching doc from getCustomerExtnFlagsDoc instead 
+				//Changed here : Fetching doc from getCustomerExtnFlagsDoc instead
 
 				//String defaultShipToChanged = (String) wcContext.getWCAttribute(XPEDXConstants.DEFAULT_SHIP_TO_CHANGED);
 
@@ -1064,7 +1064,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 					request.setAttribute("custPrefCategory", custPrefcategory);
 					wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY,custPrefcategory);
 					if(custPrefcategory.equalsIgnoreCase("CJ"))
-					{	
+					{
 						wcContext.getSCUIContext().getSession().setAttribute(XPEDXConstants.CUST_PREF_CATEGORY_DESC,"Facility Supplies");
 					} else if (custPrefcategory.equals("CG"))
 					{
@@ -1107,6 +1107,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 				"loginFullPage", null);
 	}
 
+	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
@@ -1405,7 +1406,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		 * XPEDXConstants
 		 * .logMessage("adJugglerSuffix : yfs.xpedx.adjuggler.suffix= " +
 		 * adJugglerSuffix );
-		 * 
+		 *
 		 * if(adJugglerSuffix != null ) this.adJuglerServerURL = adJugURL +
 		 * adJugglerSuffix.trim(); else this.adJuglerServerURL = adJugURL;
 		 */
