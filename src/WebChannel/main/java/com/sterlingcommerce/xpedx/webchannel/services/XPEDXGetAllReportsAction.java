@@ -198,6 +198,7 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 	
 	public void compareRpt() {
 		validCustomReportList = new ArrayList<Report>();
+		if(customReportList!=null){
 		for (int i=0;i<customReportList.size();i++) {
 			for (int j=0;j<dataExchangeReportList.size(); j++) {
 				if(customReportList.get(i).getCuid().equals(dataExchangeReportList.get(j).getCuid())){
@@ -208,6 +209,7 @@ public class XPEDXGetAllReportsAction extends WCMashupAction {
 					valReport.setKind(customReportList.get(i).getKind());
 					valReport.setName(customReportList.get(i).getName());
 					validCustomReportList.add(valReport);
+				}
 				}
 			}
 		}		

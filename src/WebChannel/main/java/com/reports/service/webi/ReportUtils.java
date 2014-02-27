@@ -125,7 +125,7 @@ public class ReportUtils {
 					// verify
 					// that the value is allowed.
 					//
-					if (cardinality.equals("single")) {
+					if ("single".equalsIgnoreCase(cardinality)) {
 						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
 							if (paramName.contains(" ")) {
 								paramNameModified = paramName.replace(" ", "+");
@@ -136,7 +136,7 @@ public class ReportUtils {
 									+ paramVals.get(paramName);
 							sResult += tmp;
 						} 												
-					} else if (cardinality.equals("multiple")) {
+					} else if ("multiple".equalsIgnoreCase(cardinality)) {
 						if (paramVals.get(paramName) != null && !("").equals(paramVals.get(paramName))) {
 							if (paramName.contains(" ")) {
 								paramNameModified = paramName.replace(" ", "+");
