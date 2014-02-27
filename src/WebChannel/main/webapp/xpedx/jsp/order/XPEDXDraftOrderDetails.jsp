@@ -1944,10 +1944,10 @@ function validateOrder()
 		$(".numeric").numeric();	
 	}
 	updateValidation();
-	var isPunchoutUser =  '<s:property value="#isPunchoutUser"/>';
-	if(!isPunchoutUser) {
-		validateOrder();
-	}
+
+	// seems like we do want to do this on punchout too
+	//isPunchoutUser = '<s:property value="#isPunchoutUser"/>';
+	validateOrder();
 
 	function actionOnList(oKey){
 		if(oKey=="Copy"){
