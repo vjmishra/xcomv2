@@ -184,7 +184,7 @@
 				<div id="breadcumbs-list-name" class="page-title">Quick Add</div>  
 				
 				<div class="qa-standalone-copy">
-					<a class="modal underlink" tabindex="-1" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');" id="copyPaste">
+					<a id="copyPaste" class="underlink" tabindex="-1" href="#dlgCopyAndPaste" onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">
 						Copy and Paste
 					</a>
 				</div>
@@ -290,7 +290,7 @@
 	</div> <%-- / main-container --%>
 	
 	<div style="display:none;">
-		<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 350px;">
+		<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 570px;">
 			<h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <small>Limit is 20 items per copy/paste</small></h2>
 			<p>
 				Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" /> item numbers or customer item numbers from your file in the following format:
@@ -306,11 +306,11 @@
 			</p>
 			<br/>
 			<form id="form1" name="form1" method="post" action="">
-				<textarea name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
+				<textarea name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="20"></textarea>
 				
 				<div class="button-container addpadtop15">
 					<input class="btn-gradient floatright addmarginright10" type="submit" value="Add to Quick List" onclick="quickAddCopyAndPaste($('#dlgCopyAndPasteText').val()); return false;" />
-					<input class="btn-neutral floatright addmarginright10" type="submit" value="Cancel" onclick="$.fancybox.close(); closeCopyAndPaste(); return false;" />
+					<input class="btn-neutral floatright addmarginright10" type="submit" value="Cancel" onclick="$.fancybox.close(); return false;" />
 				</div>
 			</form>
 			<br/>
