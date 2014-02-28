@@ -1,18 +1,21 @@
 package com.sterlingcommerce.xpedx.webchannel.punchout.order;
 
 import java.io.CharArrayReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -25,6 +28,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
@@ -36,8 +40,8 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContext;
-import com.sterlingcommerce.webchannel.utilities.SWCProperties;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.eprocurement.XPEDXCXMLMessageFields;
 import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutRequest;
@@ -46,60 +50,55 @@ import com.xpedx.nextgen.common.util.XPXLiterals;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.xpedx.nextgen.order.XPXPunchOutOrder;
 import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 
 /**
- * This class is the main action handler for dealing with punch-out (i.e. return
- * to) an e-procurement system. The initial version only supports Ariba
- * e-procurement systems.
+ * Action handler for performing submit order for punchout users
+ * (and return to) an e-procurement system.
  */
 public class CustomPunchoutOrderAction extends WCMashupAction {
+	private static final String GET_PUNCHOUT_ORDER_DETAILS_MASHUP = "XPEDXGetPunchoutOrderDetails";
+	private static final String PUNCHOUT_XSL_LOCATION = "/global/template/xsl/punchout/";
 	public static final String MODE_SAVE = "save";
 	public static final String MODE_CANCEL = "cancel";
 
 	public static final String DRAFT_ORDER_DELETE_MASHUP = "draftOrderDelete";
-	public static final String GET_SOURCE_ORDER_FOR_ARIBA_PUNCHOUT_MASHUP = "getSourceOrderForAribaPunchOut";
 	public static final String GET_PUNCH_OUT_ORDER_MESSAGE_CXML_MASHUP = "XPEDXGetPunchOutOrderMessageCXML";
-	private static final String customerExtnInfoMashUp = "xpedx-customer-getCustomExtnInformation";
 
 	public static final String USER_AGENT_PROPERTY_KEY = "swc.ariba.userAgent";
 
 	public String mashUpId = null;
 
-	protected Element sourceOrderForAribaPunchout = null;
 	protected String msap = null;
 	protected String orderHeaderKey = null;
 	XPEDXCXMLMessageFields cXMLFields = null;
 	private PunchoutRequest punchoutRequest = null;
-	private URL punchoutURL=null;
 
-	private static final Logger LOG = Logger
-			.getLogger(CustomPunchoutOrderAction.class);
+	private static final Logger LOG = Logger.getLogger(CustomPunchoutOrderAction.class);
 
+	@Override
 	public String execute() {
 		String toReturn = SUCCESS;
 		try {
-
 			punchoutRequest = (PunchoutRequest) XPEDXWCUtils.getObjectFromCache("PunchoutRequest");
-			CommerceContext cc = (CommerceContext) getWCContext()
-					.getWCAttribute("CommerceContextObject");
-			
+			CommerceContext cc = (CommerceContext) getWCContext().getWCAttribute("CommerceContextObject");
+
 			AribaContextImpl aribaContext = AribaContextImpl.getInstance();
 
-			if (punchoutRequest == null) throw new Exception("No procurement punch in context information found.");
-			
-			//String cicOrderHeaderKey = (String) XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
+			if (punchoutRequest == null)
+				throw new Exception("No procurement punch in context information found.");
 
-			String cxml = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
-					
-			if(punchoutRequest.getReturnURL()!=null){punchoutURL=getencodePunchoutURL(punchoutRequest.getReturnURL());}
-					
-			request.setAttribute("requestUrl",punchoutURL.toString());
-			
-			request.setAttribute("cxml", cxml);
+			setReturnUrlOnRequest();
+
+			String outputData = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
+
+			// TODO OCI - how determine which? Is Type=cXML on the session/params?  part of requestUrl?
+
+			cXmlFormat(outputData);
 
 			deleteCart(cc.getOrderHeaderKey());
 
@@ -113,49 +112,12 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		return toReturn;
 	}
 
-	/**
-	 * Deletes the order matching the given deleteOrderHeaderKey.
-	 * 
-	 * @param deleteOrderHeaderKey
-	 *            the order header key of the order to delete.
-	 * @throws Exception
-	 */
-	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
-		 IWCContext context = WCContextHelper.getWCContext(ServletActionContext
-					.getRequest());
-			SCUIContext wSCUIContext = context.getSCUIContext();
-			ISCUITransactionContext scuiTransactionContext = wSCUIContext
-					.getTransactionContext(true);
-			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-					.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-			YIFApi api = YIFClientFactory.getInstance().getApi();
-
-		 Document deleteOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
-		 deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, deleteOrderHeaderKey);
-		 deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ACTION,"DELETE");
-		 api.invoke(env, "deleteOrder", deleteOrderInputDoc);
-		
-		//prepareAndInvokeMashup(DRAFT_ORDER_DELETE_MASHUP);
-	}
-
-	/*
-	 * 
-	 */
 	private String populatePunchOutOrderMessage(String orderHeaderKey,
 			IAribaContext aribaContext) throws Exception {
 
-		if (orderHeaderKey != null) {
-			this.orderHeaderKey = orderHeaderKey;
-			sourceOrderForAribaPunchout = prepareAndInvokeMashup(GET_SOURCE_ORDER_FOR_ARIBA_PUNCHOUT_MASHUP);
-		}
-
-		String userAgent = SWCProperties.getProperty(USER_AGENT_PROPERTY_KEY);
-
-		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
-				.getRequest());
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 
@@ -163,92 +125,109 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		String storeFrontId = context.getStorefrontId();
 		msap = XPXTranslationUtilsAPI.getMsap(env, customerID, storeFrontId);
 
+		// replaceChars not supported (later?). Is xslt version being set/used??
 		Document CustDetails = XPEDXWCUtils.getCustomerDetails(msap, storeFrontId);
 		String xsltVersion = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(),"/Customer/Extn/@ExtnXSLTVer");
 		String xsltFileName = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
 		String replaceChars = SCXmlUtil.getXpathAttribute( CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
 
-		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);  System.out.println("JOE: orderOutputDoc: " + WCIntegrationXMLUtils.AttachDocType(orderOutputDoc)); //TODO remove
 
-		Document inputOrderDoc = YFCDocument.createDocument("Order").getDocument();
+		return transformUsingXslt(orderOutputDoc, xsltFileName);
+	}
 
-		Element inputOrderElement = inputOrderDoc.getDocumentElement();
-		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
-
-		Document orderOutputTemplate = SCXmlUtil.createFromString(" <Order OrderHeaderKey='' > "
-						+ " <PriceInfo Currency='' /> "
-						+ "	<Extn ExtnTotalOrderValue=''> "
-						+ "	</Extn>	 "
-						+ "   <OrderLines TotalNumberOfRecords=''> "
-						+ "       <OrderLine OrderedQty='' PrimeLineNo=''> "
-						+ "           <Item ItemID='' ItemShortDesc=''/> "
-						+ "			  <OrderLineTranQuantity OrderedQty='' TransactionalUOM=''/> "
-						+ "           <Extn ExtnExtendedPrice=''></Extn>		   "		
-						+ "           <ItemDetails ItemID=''><Extn ExtnUNSPSC=''></Extn></ItemDetails>"
-						+ "        </OrderLine> "
-						+ "   </OrderLines> "
-						+ " </Order> ");
-
-		env.setApiTemplate("getCompleteOrderDetails", orderOutputTemplate);
-
-		Document orderOutputDoc = api.invoke(env, "getCompleteOrderDetails", inputOrderDoc);
-
-		String xmlString = invokePunchOut(orderOutputDoc, xsltFileName);
+	private void cXmlFormat(String outputData)
+			throws ParserConfigurationException, SAXException, IOException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		orderOutputDoc = builder.parse(new InputSource(new StringReader(xmlString)));
+		Document orderOutputDoc = builder.parse(new InputSource(new StringReader(outputData)));
 		updatetimeStampValue(orderOutputDoc);
 		updateheaderElementValue(orderOutputDoc, "From", "Identity", punchoutRequest.getFromIdentity());
 		updateheaderElementValue(orderOutputDoc, "To", "Identity", punchoutRequest.getToIdentity());
 		updateheaderElementValue(orderOutputDoc, "Sender", "Identity", punchoutRequest.getToIdentity());
 		updateheaderElementValue(orderOutputDoc, "PunchOutOrderMessage", "BuyerCookie", punchoutRequest.getBuyerCookie());
-		return WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
+
+		// For cXML, this will get added to form as one param, cxml-urlencoded
+		String cxml = WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
+		request.setAttribute("cxml", cxml);
 	}
-	
-	
-	private URL getencodePunchoutURL(String puncouturl) throws Exception
+
+	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+
+		Document deleteOrderInputDoc = YFCDocument.createDocument("Order").getDocument();
+		deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, deleteOrderHeaderKey);
+		deleteOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ACTION,"DELETE");
+		api.invoke(env, "deleteOrder", deleteOrderInputDoc);
+
+		//prepareAndInvokeMashup(DRAFT_ORDER_DELETE_MASHUP);
+	}
+
+	private Document getOrderDetails(String orderHeaderKey, YFSEnvironment env)
+			throws YIFClientCreationException, RemoteException {
+
+		Document inputOrderDoc = YFCDocument.createDocument("Order").getDocument();
+		Element inputOrderElement = inputOrderDoc.getDocumentElement();
+		inputOrderElement.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, orderHeaderKey);
+
+		Element orderElement = (Element)WCMashupHelper.invokeMashup(
+				GET_PUNCHOUT_ORDER_DETAILS_MASHUP,inputOrderElement, wcContext.getSCUIContext());
+
+		return orderElement.getOwnerDocument();
+	}
+
+	private void setReturnUrlOnRequest() throws Exception {
+		String punchoutURL = null;
+		if (punchoutRequest.getReturnURL() != null) {
+			punchoutURL = formatUrl(punchoutRequest.getReturnURL()).toString();
+		}
+		request.setAttribute("requestUrl", punchoutURL);
+	}
+
+	private URL formatUrl(String punchoutUrl) throws Exception
 	{
-			String decodedURL;
-			decodedURL = URLDecoder.decode(puncouturl, "UTF-8");
-			URL url = new URL(decodedURL);
-			URI uri = new URI(url.getProtocol(), url.getHost(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getQuery()); 
-			return uri.toURL();		
+		String decodedURL;
+		decodedURL = URLDecoder.decode(punchoutUrl, "UTF-8");
+		URL url = new URL(decodedURL);
+		URI uri = new URI(url.getProtocol(), url.getHost(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getQuery());
+		return uri.toURL();
 	}
-	
-	private String invokePunchOut(Document inXML, String xsltFileName)
+
+	private String transformUsingXslt(Document inXML, String xsltFileName)
 			throws Exception {
-		InputStream xslStream = XPXPunchOutOrder.class.getResourceAsStream(new StringBuilder().append("/global/template/xsl/punchout/").append(xsltFileName).toString());
-		// XSL Conversion Starts here
+		InputStream xslStream = XPXPunchOutOrder.class.getResourceAsStream(
+				new StringBuilder().append(PUNCHOUT_XSL_LOCATION).append(xsltFileName).toString());
 		TransformerFactory tranFactory = TransformerFactory.newInstance();
-		javax.xml.transform.URIResolver resolver = YFSSystem
-				.getXSLURIResolver();
+		javax.xml.transform.URIResolver resolver = YFSSystem.getXSLURIResolver();
 		if (resolver != null) {
 			tranFactory.setURIResolver(resolver);
 		}
 
-		Transformer transformer = tranFactory.newTransformer(new StreamSource(
-				xslStream));
-		StringWriter stw = new StringWriter();
-		StreamResult result = new StreamResult(stw);
 		StreamSource source = new StreamSource(new CharArrayReader(SCXmlUtil
 				.getString(inXML).toCharArray()));
+		StreamResult result = new StreamResult(new StringWriter());
+		Transformer transformer = tranFactory.newTransformer(new StreamSource(xslStream));
 		transformer.transform(source, result);
-		StringWriter out = (StringWriter) result.getWriter();
-		StringBuffer sb = out.getBuffer();
-		String finalstring = sb.toString();
-		return finalstring;
 
+		StringWriter out = (StringWriter) result.getWriter();
+		return out.getBuffer().toString();
 	}
 
 	private Document updatetimeStampValue(Document doc) {
-		java.util.Date date = new java.util.Date();
-		 DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS-z");
-		 df.setTimeZone(TimeZone.getTimeZone("CST"));
 		NodeList cXML = doc.getElementsByTagName("cXML");
-		Element timestampelement = null;
+
+		java.util.Date date = new java.util.Date();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS-z");
+		df.setTimeZone(TimeZone.getTimeZone("CST"));
+
 		for (int i = 0; i < cXML.getLength(); i++) {
-			timestampelement = (Element) cXML.item(i);
+			Element timestampelement = (Element) cXML.item(i);
 			timestampelement.setAttribute("timestamp", df.format(date).toString());
 		}
 
@@ -259,7 +238,6 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			String ChildTag, String headerValue) {
 		NodeList headerParentTag = doc.getElementsByTagName(parentTag);
 		Element childTagname = null;
-		// loop for each employee
 		for (int i = 0; i < headerParentTag.getLength(); i++) {
 			try {
 				childTagname = (Element) headerParentTag.item(i);

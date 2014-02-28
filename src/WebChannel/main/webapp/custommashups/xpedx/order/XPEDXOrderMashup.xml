@@ -1832,6 +1832,35 @@
         </API>
     </mashup>
     <!-- END: procurement Order Punchout: adsouza -->
+    <mashup id='XPEDXGetPunchoutOrderDetails' transactional='true'
+        description="Gets details for the confirmation page; template should be identical to the confirmDraftOrder mashup"
+        mashuptype='XAPI' endpoint='CONFIRMED_ORDER'>
+        <classInformation
+            name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+        <API Name="getCompleteOrderDetails">
+            <Input>
+                <Order OrderHeaderKey="" />
+            </Input>
+            <Template>
+			 <Order OrderHeaderKey='' >
+				<PriceInfo Currency='' />
+				<Extn ExtnTotalOrderValue=''>
+				</Extn>	
+				<OrderLines TotalNumberOfRecords=''>
+					<OrderLine OrderedQty='' PrimeLineNo=''>
+						<Item ItemID='' ItemShortDesc='' ItemDesc='' UnitOfMeasure='' ManufacturerItem=''/>
+						<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''/>
+						<Extn ExtnExtendedPrice=''/>		  
+						<ItemDetails ItemID=''>
+							<Extn ExtnUNSPSC=''/>
+						</ItemDetails>"
+					</OrderLine>
+				</OrderLines>
+			</Order>
+            </Template>
+        </API>
+    </mashup>
+				 
     <mashup id='XPEDXGetConfirmationPageDetails' transactional='true'
         description="Gets details for the confirmation page; template should be identical to the confirmDraftOrder mashup"
         mashuptype='XAPI' endpoint='CONFIRMED_ORDER'>

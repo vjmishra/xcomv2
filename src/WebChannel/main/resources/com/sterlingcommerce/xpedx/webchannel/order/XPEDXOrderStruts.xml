@@ -547,9 +547,6 @@
 		
 		<action name="customPunchoutOrder"
 			class="com.sterlingcommerce.xpedx.webchannel.punchout.order.CustomPunchoutOrderAction">
-			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/punchout/order/XPEDXProcurementPunchOut_binding.xml</param>
-			<param name="mashups">XPEDXGetPunchOutOrderMessageCXML</param>
-			<param name="resourceId">/swc/procurement/activity</param>
 			<result name="success">/xpedx/jsp/order/punchoutpost.jsp</result>
 		</action>
 
