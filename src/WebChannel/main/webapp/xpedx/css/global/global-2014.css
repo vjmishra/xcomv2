@@ -111,6 +111,9 @@
 .addmargintop20 {
 	margin-top: 20px;
 	}
+.addmarginright30 {
+	margin-right: 30px;
+	}
 .floatright {
 	float: right;
 	}
@@ -168,5 +171,67 @@
 .addmarginleft5 {
                 margin-left: 5px;
                 }
+                
+     /*------------Reset Password---------------*/
+
+.reset-wrap {
+	width: 800px;
+	padding: 20px;
+	margin-left: 20px;
+	background-color: #f1f2f3;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	}
+.reset-wrap h3 {
+	font-size: 13px;
+	padding-bottom: 18px;
+	}
+.reset-left-col	{
+	width: 500px;
+	float: left;
+	clear: none;
+	}
+.reset-label {
+	margin-bottom: 6px;
+	display: block;
+	}
+.reset-label span {
+	width: 250px;
+	text-align:right;
+	float: left;
+	padding: 2px 2px 0px 0px;	
+	margin-right: 10px;
+	}
+.reset-input {
+	width: 202px;
+	}
+.password-policy {
+	width: 240px;
+	float: right;
+	clear: none;
+	border-left: #dadada 1px solid;
+	padding-left: 26px;
+	}
+.password-policy h4 {
+	padding-bottom: 5px;
+	}
+.password-policy ul{
+	line-height: 18px;
+	}
+.password-policy ul li{
+	list-style: disc;
+	margin-left: 12px;
+	}	
+.clearfix {
+	clear: both;
+	}
+.reset-questions {
+	display: block;
+	clear: both;
+	padding-top: 20px;
+	color: #555555;
+	font-style:italic;
+	}                
 
 

@@ -138,6 +138,8 @@
       		<%}%>
 			</div>
 			<div class=" padding-bottom clearview"> </div>
+			<div class="reset-wrap"> <h3>Enter a new password</h3>
+			 <div class="reset-left-col">
 			
 			<s:form id="forgotPwdSubmitForm" name="forgotPwdSubmitForm" action="changePwdForgotPwd" validate="true" namespace="/home" method="POST">
 	        <s:hidden name="#action.namespace" value="/home"/>
@@ -148,62 +150,46 @@
 		
 		 	<!-- <s:url id='homePage' namespace='/home' action='home' /> --> 
 
-			<table class="full-width">
-				<tbody>
-					<tr>
-              			<td colspan="3" class="underlines no-border-right-user"><s:text name='password.enter'/></td>
-            		</tr>
-            		
-            		<!-- <div class="error" id="errorMsgForPassword" style="display : none"></div> -->
-            		
-            		
-					<tr>
-						<td width="7%" class="underlines no-border-right-user"><s:text name="newPassword"/></td>
-						<td colspan="2" class="underlines no-border-right-user">
-						<span
-							class=" noBorder-left"><s:password id="newPassword" name="newPassword" showPassword="true" cssClass="x-input width-250px"  title="New Password" onchange="javaScript:clearErrorDiv();" /></span>
-						</td>
-					</tr>
-					<tr>
-						<td width="7%" class="underlines no-border-right-user"><s:text name="retypenewPassword"/></td>
-						<td colspan="2" class="underlines no-border-right-user"><span
-							class=" noBorder-left"><s:password id="confirmNewPassword" name="confirmNewPassword" showPassword="true" cssClass="x-input width-250px"  title="Confirm New Password" onchange="javaScript:clearErrorDiv();" /></span>
-						</td>
-					</tr>
-					<tr>
-						<td class="grey  no-border-right-user">&nbsp;</td>
-						<td width="38%" class="grey  no-border-right-user">
-							<div class="fp-btn-container">
-								<ul class="float-left  padding-left3">
-									<li class="float-left margin-10"><a href="javascript:cancelForgotPasswordFlow();"
-										class="grey-ui-btn"><span>Cancel</span>
-									</a>
-									</li>
-									<s:url id="ValidatePasswordURL" action="validateResetPassword" namespace="/profile/user"/>
-									<li class="float-right"><a href="javascript:validateResetPassword();"
-										class="orange-ui-btn"><span>Submit</span>
-									</a>
-									</li>
-								</ul>
-							</div>
-						</td>
-						<td width="55%" class="grey  no-border-right-user">&nbsp;</td>
-					</tr>
-					
-					<tr><td colspan="2">
-					    <div class="error"  style="float:left; margin-right: 12px;display:none;" id="errorMsgForPassword" ></div>
-					</td></tr>
-					<tr><td colspan="3">
-					    <div class="error"  style="float:left; margin-right: 12px;" id="pwdErrorDiv" ></div>
-					</td></tr>
-					
-					<tr>
-              			<td colspan="3" class="grey  no-border-right-user"><s:text name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT"/></td>
-            		</tr>
-				</tbody>
-			</table>
+			 <label class="reset-label"><span>New Password:</span>
+             <input class="reset-input" id="newPassword" type="password"
+		             name="newPassword" onchange="javaScript:clearErrorDiv();" tabindex=1 />
+             </label>
 
-			</s:form>
+
+	         <label class="reset-label"> <span>Confirm New Password:</span> 
+	         <input class="reset-input" id="confirmNewPassword" type="password"
+		            name="confirmNewPassword" onchange="javaScript:clearErrorDiv();"tabindex=2 /> 
+		     </label>
+
+	        <s:url id="ValidatePasswordURL" action="validateResetPassword"
+		           namespace="/profile/user" />
+
+	        <input type="button" class="btn-gradient floatright addmarginleft10 addmargintop10 addmarginright30"
+		           value="Submit" onclick="javascript:validateResetPassword();" tabindex=4 />
+
+	        <input type="button" class="btn-neutral floatright addmargintop10" 
+	               value="Cancel" onclick="javascript:cancelForgotPasswordFlow();" tabindex=3 />
+
+
+            <div class="error"  style="float: left; margin-right: 12px; display:none; "
+		         id="errorMsgForPassword"></div>
+
+	        <div class="error addmargintop10" style="float:left; margin-right: 12px; display:none;" 
+	             id="pwdErrorDiv"></div>
+
+	        <p class="reset-questions"> <s:text
+		       name="MSG.SWC.MISC.HELPDESK.GENERIC.CONTACT" /> </p>
+		       
+		    </s:form> 
+			</div> 
+			<div class="password-policy"> <h4>Password Policy:</h4> 
+			<ul>
+            <li>8-14 characters required</li> <li>2 alpha characters minimum</li> <li>1 uppercase required</li> <li>1 number required</li> 
+            <li>2 character max in consective repeat</li> <li>Cannot use the following: $ ? !</li> </ul> 
+            </div> 
+            <div class="clearfix">
+            </div> 
+            </div>
 			
 			<s:form id="cancelforgotPwdForm" name="cancelforgotPwdForm" action="cancelForgotPassword" namespace="/home" method="POST">
         	</s:form>
@@ -266,6 +252,7 @@ function validateResetPassword(){
 	                    errorDiv.innerHTML = response.responseText;
 	                    errorDiv.style.border = 'none';
 	                    errorDiv.style.background = 'none';
+	                    errorDiv.style.display = 'inline';
                		}
                		else {
                			errorDiv.innerHTML ="";
@@ -293,6 +280,7 @@ function clearErrorDiv(){
 	    var confirmNewPwd = document.forgotPwdSubmitForm.confirmNewPassword;
 	    newPwd.style.borderColor="";
 	    confirmNewPwd.style.borderColor="";
+	    errorDiv.style.display = "none";
   }
 </script>
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
