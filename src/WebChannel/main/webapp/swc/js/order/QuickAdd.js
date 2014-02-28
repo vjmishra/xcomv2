@@ -33,7 +33,7 @@ function quickAdd_addProductToQuickAddList(element) {
 		setErrorMessage('Please enter a valid Item #.')
 		return;
 	} else {
-		setErrorMessage();
+		clearErrorMessage();
 	}
 	if (quantity == "") {
 		quantity = 1;
@@ -86,11 +86,115 @@ function quickAdd_addProductToQuickAddList(element) {
 		addStringFromForm = theForm.localizedAddToCartLabel.value;
 	}
 	quickAdd_redrawQuickAddList(element);
-	validateItems();
+	quickAdd_validateItems();
 	theForm.qaProductID.focus();
 
 	return false;
 } // end function quickAdd_addProductToQuickAddList
+
+
+/*
+ * This method is a copy of XPEDXDraftOrderDetails.js/validateItems with quick hacks for eb-1999, which was a quick hack for performance.
+ * I did NOT remove that function since it may have broken other pages.
+ * When this page is fully rewritten as part of the larger epic (eb-4366) then this should be cleaned up.
+ */
+function quickAdd_validateItems() {
+	var url = document.getElementById('productValidateURL');
+	var itemsString = "";
+	var itemTypesString = "";
+	var itemsValidationIndex = new Array();
+	var len = QuickAddElems.length;
+	for (var index = 0; index < len; index++) {
+		var itemId = QuickAddElems[index].sku;
+		var itemType = QuickAddElems[index].itemType;
+		var isItemValidated = QuickAddElems[index].isValidated;
+
+		if (isItemValidated == "false") {
+			itemsString = itemsString + itemId + "*";
+			itemTypesString = itemTypesString + itemType + "*";
+			itemsValidationIndex.push(index);
+		}
+	}
+
+	if (itemsString != "") {
+		itemsString = itemsString.substr(0, (itemsString.length - 1));
+		itemTypesString = itemTypesString.substr(0, (itemTypesString.length - 1));
+
+		Ext.Ajax.request({
+			url: url,
+			params: {
+				itemList: itemsString,
+				itemTypeList: itemTypesString
+			}, 
+			success: function (response, request) {
+				var res = response.responseText;
+				var itemValid = res.split(",");
+				var noOfItems = itemsValidationIndex.length;
+				for (var index = 0; index < noOfItems; index++) {
+					var itemValidandUomList = trim(itemValid[index]).split("*");
+					var itemEntitled = trim(itemValidandUomList[0]);
+					var itemUOMArray = new Array();
+					var itemUOMConvArray = new Array();
+					var itemUomAndConvString = null;
+					var itemUOMCodeArray = new Array();
+					var itemCustomUOMArray = new Array();
+					if (itemEntitled == "true") {
+						var itemUomList = trim(itemValidandUomList[1]).split("!");
+						for (var uomIndex = 0; uomIndex < itemUomList.length; uomIndex++) {
+							var itemUOMConvFactor = trim(itemUomList[uomIndex]).split(":");
+							var itemUOMAndCustomUomInfo = trim(itemUOMConvFactor[0]).split("-");
+
+							var itemUOM = trim(itemUOMAndCustomUomInfo[0]);
+							itemUOMCodeArray[uomIndex] = itemUOM;
+
+							var itemCustomUOM = trim(itemUOMAndCustomUomInfo[1]);
+							itemCustomUOMArray[uomIndex] = itemCustomUOM;
+
+							var itemUomConvfAndMultiple = itemUOMConvFactor[1].split("|");
+							var itemUomConvf = trim(itemUomConvfAndMultiple[0]);
+							var itemOrderMultiple = trim(itemUomConvfAndMultiple[1]);
+							itemUomAndConvString = itemUomAndConvString + "|" + itemUOM + "-" + itemUomConvf;
+							if (itemUomConvf == "1") {
+								itemUOMArray = itemUOMArray.concat(itemUOM);
+							} else {
+								itemUOMArray = itemUOMArray.concat(itemUOM + " (" + itemUomConvf + ")");
+							}
+							itemUOMConvArray = itemUOMConvArray.concat(itemUomConvf);
+						}
+					}
+					var QAindex = itemsValidationIndex[index];
+					var entitled = itemEntitled;
+					QuickAddElems[QAindex].isEntitled = entitled;
+					QuickAddElems[QAindex].isValidated = "true";
+					QuickAddElems[QAindex].uomList = itemUOMArray;
+					QuickAddElems[QAindex].uomCodes = itemUOMCodeArray;
+					QuickAddElems[QAindex].orderMultiple = itemOrderMultiple;
+					QuickAddElems[QAindex].itemUomAndConvString = itemUomAndConvString;
+					QuickAddElems[QAindex].customUOM = itemCustomUOMArray;
+					if (itemUOMArray.length > 0) {
+						var firstIndex = itemUOMArray[0].indexOf('(');
+						if (firstIndex != -1) {
+							QuickAddElems[QAindex].uom = itemUOMArray[0].substring(0, firstIndex);
+						} else {
+							QuickAddElems[QAindex].uom = itemUOMArray[0];
+						}
+					}
+				}
+				quickAdd_redrawQuickAddList();
+			},
+			failure: function (response, request) {
+				var noOfItems = QuickAddElems.length;
+				for (var index = 0; index < noOfItems; index++) {
+					var isItemValidated = QuickAddElems[index].isValidated;
+					if (isItemValidated == "false") {
+						alert('Failed to validate item ' + QuickAddElems[index].sku + '. Please try again later.');
+						removeProductFromQuickAddList(index);
+					}
+				}
+			}
+		});
+	}
+}
 
 
 /*
@@ -144,10 +248,10 @@ function quickAdd_addProductsToOrder() {
 					}
 				}
 				enteredQuants = ReplaceAll(enteredQuants, ",", "");
+				
 				var divId = "errorQty_" + entereditems + i;
-				var divIdError = document.getElementById(divId);
+				var divError = document.getElementById(divId);
 				if (selectedUomConvFac != undefined && selectedUomConvFac != null) {
-
 					if (orderMultiple == undefined || orderMultiple.replace(/^\s*|\s*$/g, "") == '' || orderMultiple == null || orderMultiple == 0) {
 						orderMultiple = 1;
 					}
@@ -155,21 +259,19 @@ function quickAdd_addProductsToOrder() {
 					var ordMul = totalQty % orderMultiple;
 
 					if (enteredQuants == '' || enteredQuants == '0') {
-						//3098
-						document.getElementById(divId).innerHTML = 'Please enter a valid quantity and try again.';
-						//3098
-						document.getElementById(divId).style.display = "inline-block";
-						document.getElementById(divId).style.marginLeft = "20px";
-						document.getElementById(divId).setAttribute("class", "error");
-						document.getElementById(divId).setAttribute("align", "center");
+						divError.innerHTML = 'Please enter a valid quantity and try again.';
+						divError.style.display = "inline-block";
+						divError.style.marginLeft = "20px";
+						divError.setAttribute("class", "error");
+						divError.setAttribute("align", "center");
 						isError = true;
 						noError = false;
 					}
 					if (orderMultiple > 1 && noError == true) {
-						document.getElementById(divId).innerHTML = "Must be ordered in units of " + orderMultiple + " " + baseUOM[i].value;
-						document.getElementById(divId).style.display = "inline-block";
-						document.getElementById(divId).setAttribute("class", "notice qa-standalone-notice");
-						document.getElementById(divId).setAttribute("align", "center");
+						divError.innerHTML = "Must be ordered in units of " + orderMultiple + " " + baseUOM[i].value;
+						divError.style.display = "inline-block";
+						divError.setAttribute("class", "notice qa-standalone-notice");
+						divError.setAttribute("align", "center");
 					}
 				}
 			} else {
@@ -276,7 +378,7 @@ function quickAdd_redrawQuickAddList() {
 			code += '</td>';
 			
 			code += '<td class="col-item">';
-			code += '<input type="hidden" name="quickAddBaseUOMs" value=' + convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom)) + ' />';
+			code += '<input type="hidden" name="quickAddBaseUOMs" value=' + quickAdd_convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom)) + ' />';
 			if (QuickAddElems[i].itemTypeText == "Special Item") {
 				code += '<input type="text" disabled="disabled" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onchange="javascript:isValidQuantity(this);" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onblur="javascript:updateQuickAddElement(\'Qty\',' + i + ');"  />';
 				code += '<input type="hidden" value="1" name="enteredQuantities" id="enteredQuantities_' + i + '" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onchange="javascript:isValidQuantity(this);" onblur="javascript:updateQuickAddElement(\'Qty\',' + i + ');"  />';
@@ -321,7 +423,7 @@ function quickAdd_redrawQuickAddList() {
 						if (customUomFlagValues[oUomidx] == "Y") {
 							customUom = _oUomCode;
 						}
-						_oUomDescription = convertToUOMDescription(_oUomCode);
+						_oUomDescription = quickAdd_convertToUOMDescription(_oUomCode);
 						firstIndex = uomValues[oUomidx].indexOf('(');
 						lastIndex = uomValues[oUomidx].indexOf(')');
 						var convFactor;
@@ -374,9 +476,9 @@ function quickAdd_redrawQuickAddList() {
 						lastIndex = uomValues[uomidx].indexOf(')');
 						var _uomDescription;
 						if (firstIndex != -1 && lastIndex != -1 && lastIndex > firstIndex) {
-							_uomDescription = convertToUOMDescription(_uomCode.substring(0, firstIndex)) + uomValues[uomidx].substring(firstIndex, lastIndex) + ')';
+							_uomDescription = quickAdd_convertToUOMDescription(_uomCode.substring(0, firstIndex)) + uomValues[uomidx].substring(firstIndex, lastIndex) + ')';
 						} else {
-							_uomDescription = convertToUOMDescription(_uomCode);
+							_uomDescription = quickAdd_convertToUOMDescription(_uomCode);
 						}
 						//Condn added to check if selected UOM is equal to any alernate UOMs - Done for Jira 3841
 						if (selUOM != '' && selUOM == fvar) {
@@ -429,11 +531,11 @@ function quickAdd_redrawQuickAddList() {
 						testArray = customizeUOM.split("(");
 						//fvar is the final var storing customize UOM- Done for Jira 3841
 						var fvar = testArray[0];
-						var _uomDescription = convertToUOMDescription(_uomCode);
+						var _uomDescription = quickAdd_convertToUOMDescription(_uomCode);
 						var firstIndex = uomValues[uomidx].indexOf('(');
 						var lastIndex = uomValues[uomidx].indexOf(')');
 						if (firstIndex != -1 && lastIndex != -1 && lastIndex > firstIndex) {
-							_uomDescription = convertToUOMDescription(_uomCode.substring(0, firstIndex)) + uomValues[uomidx].substring(firstIndex, lastIndex) + ')';
+							_uomDescription = quickAdd_convertToUOMDescription(_uomCode.substring(0, firstIndex)) + uomValues[uomidx].substring(firstIndex, lastIndex) + ')';
 						}
 						//Condn added to check if selected UOM is equal to any alernate UOMs - Done for Jira 3841
 						if (selUOM != '' && selUOM == fvar) {
@@ -454,8 +556,8 @@ function quickAdd_redrawQuickAddList() {
 							}
 						}
 					}
-
 				}
+				
 				var createNewHiddenField = true;
 				if (defaultSelUOM == undefined && selUOM == '') {
 					code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + encodeForHTML(QuickAddElems[i].uom) + '" />';
@@ -488,13 +590,12 @@ function quickAdd_redrawQuickAddList() {
 					code += '<input type="hidden" name="enteredUOMs" id="enteredUOMs_' + i + '" value="' + selUOM + '" />';
 				}
 				code += '</td>';
-
-
-
 			}
-			if (document.QuickAddForm.jobIdValue != undefined && document.QuickAddForm.jobIdValue.value != null)
+			
+			if (document.QuickAddForm.jobIdValue != undefined && document.QuickAddForm.jobIdValue.value != null) {
 				jobValue = document.QuickAddForm.jobIdValue.value;
-
+			}
+			
 			if (custPOFlag) {
 				code += '<td class="col-item">';
 				code += '<input type="text" name="enteredPONos" maxlength="22" id="enteredPONos_' + i + '" value="' + encodeForHTML(QuickAddElems[i].purchaseOrder) + '" onchange="javascript:updateQuickAddElement(\'PO\',' + i + ')"/>';
@@ -516,23 +617,23 @@ function quickAdd_redrawQuickAddList() {
 				var checkedfieldId = "enteredSpecialItems_" + i;
 				code += '<input type="hidden" name="enteredSpecialItems" id="' + encodeForHTML(checkedfieldId) + '" value=""/>';
 			}
-
 			code += '</tr>';
+			
 			if (QuickAddElems[i].itemTypeText != "Special Item" && QuickAddElems[i].isEntitled == "false") {
 				code += '<tr class="error-row">';
-				code += '<td colspan="6">';
+				code += '<td colspan="4">';
 				code += '<div id="' + divIdErrorQty + '"></div>';
 				code += '</td>';
 				code += '</tr>';
 			} else if (QuickAddElems[i].orderMultiple > "1" && QuickAddElems[i].orderMultiple != null) {
 				code += '<tr class="error-row">';
-				code += '<td colspan="6">';
-				code += '<div align="center" class="notice qa-standalone-notice" id="' + divIdErrorQty + '" style="display : inline;">Must be ordered in units of ' + addComma(QuickAddElems[i].orderMultiple) + '&nbsp;' + convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom)) + '</div>';
+				code += '<td colspan="4">';
+				code += '<div align="center" class="notice qa-standalone-notice" id="' + divIdErrorQty + '" style="display : inline;">Must be ordered in units of ' + addComma(QuickAddElems[i].orderMultiple) + '&nbsp;' + quickAdd_convertToUOMDescription(encodeForHTML(QuickAddElems[i].uom)) + '</div>';
 				code += '</td>';
 				code += '</tr>';
 			} else {
 				code += '<tr class="error-row">';
-				code += '<td colspan="6">';
+				code += '<td colspan="4">';
 				code += '<div id="' + divIdErrorQty + '"></div>';
 				code += '</td>';
 				code += '</tr>';
@@ -552,7 +653,6 @@ function quickAdd_redrawQuickAddList() {
 				// TODO -FXD- : make the following line colspan '3' instead of two if the other customer defined fields are shown.
 				// ie. stretch into three columns if there are three, or two if there are two
 				code += 'Invalid item # ' + encodeForHTML(QuickAddElems[i].sku) + '. Please review and try again or contact Customer Service.</td>';
-
 
 				code += '<div id="' + encodeForHTML(specialDivId) + '" style="display: none;">';
 				code += '<div class="xpedx-light-box" id="inline1" style="height: 305px; width: 550px;>';
@@ -602,6 +702,36 @@ function quickAdd_redrawQuickAddList() {
 
 	svg_classhandlers_decoratePage();
 } // end function function quickAdd_redrawQuickAddList
+
+
+/*
+ * This method is a copy of XPEDXDraftOrderDetails.js/convertToUOMDescription with quick hacks for eb-1999, which was a quick hack for performance.
+ * I did NOT remove that function since it may have broken other pages.
+ * When this page is fully rewritten as part of the larger epic (eb-4366) then this should be cleaned up.
+ */
+var globalCachedUomDescriptions = {};
+function quickAdd_convertToUOMDescription(uomCode) {
+	if (!globalCachedUomDescriptions[uomCode]) {
+		var url = document.getElementById("uomDescriptionURL").value;
+		var req = null;
+		if (window.XMLHttpRequest) {
+			req = new XMLHttpRequest();
+		} else {
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		url = url + '&uomCode=' + uomCode;
+		req.open('POST', url, false);
+		req.send(null);
+		if (req.status == 200) {
+			globalCachedUomDescriptions[uomCode] = req.responseText;
+			return req.responseText;
+		} else {
+			// error case
+			return uomCode;
+		}
+	}
+	return globalCachedUomDescriptions[uomCode];
+}
 
 
 function quickAddCopyAndPaste(data) {
@@ -717,7 +847,7 @@ function quickAddCopyAndPaste(data) {
 					setErrorMessage('Please enter a valid Item #.');
 					return;
 				} else {
-					setErrorMessage();
+					clearErrorMessage();
 				}
 				if (quantity == "") {
 					quantity = 1;
@@ -773,20 +903,24 @@ function quickAddCopyAndPaste(data) {
 		} // end for itemLines
 	} // end if itemLineFlag is 'false'
 	
-	validateItems();
+	quickAdd_validateItems();
 	document.getElementById('productValidateURL').href = prodcutValidateUrl;
 } // end function quickAddCopyAndPaste
 
 
 function setErrorMessage(message) {
-	var $errorMsgItemBottom = $('#errorMsgItemBottom');
 	if (message) {
+		var $errorMsgItemBottom = $('#errorMsgItemBottom');
 		$errorMsgItemBottom.html(message);
 		$errorMsgItemBottom.show();
 	} else {
-		$errorMsgItemBottom.hide();
-		$errorMsgItemBottom.html('');
+		clearErrorMessage();
 	}
+}
+function clearErrorMessage() {
+	var $errorMsgItemBottom = $('#errorMsgItemBottom');
+	$errorMsgItemBottom.hide();
+	$errorMsgItemBottom.html('');
 }
 
 
