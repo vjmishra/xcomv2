@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.home;
 import org.apache.log4j.Logger;
 
 import com.sterlingcommerce.webchannel.core.wcaas.Logout;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 @SuppressWarnings("serial")
 public class XPEDXLogoutAction extends Logout {
@@ -18,7 +19,11 @@ public class XPEDXLogoutAction extends Logout {
 		}
 		if( isSalesRep!= null && isSalesRep.equalsIgnoreCase("true")){
 			returnType="SalesRepUser";
-		}		
+		}
+		boolean isPunchoutUser = XPEDXWCUtils.isPunchoutUser(getWCContext());
+		if(isPunchoutUser){
+			returnType="punchoutUser";
+		}
 		try {
 			super.execute();
 		} catch (Exception e) {

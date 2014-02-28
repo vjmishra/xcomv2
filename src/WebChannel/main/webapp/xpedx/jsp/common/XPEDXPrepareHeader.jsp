@@ -2621,7 +2621,10 @@ function msgWait(){
 				<li> | </li>
 				<li><a
 					href="<s:url action="logout" namespace="/home" includeParams='none'><s:param name='sfId' value='wCContext.storefrontId'/></s:url>"
-					tabindex="2006">Sign Out</a></li>									
+					tabindex="2006">
+					<s:if test='%{#isPunchoutUser}'>End Shopping</s:if>
+					<s:else>Sign Out</s:else>
+					</a></li>									
 				<!-- Open Welcome Message Block -->
 				<li> | </li>
 				<li class="text-right pointers" id="welcome-address-info-icon">
