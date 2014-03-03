@@ -483,7 +483,7 @@
 <body class="ext-gecko ext-gecko3">
 
 	<%-- fancybox workaround: fancybox only works with 'a' tag so programatically click it when the button is clicked --%>
-	<a style="display: none;" id="dlgShareListLink" href="#dlgShareListHL" />
+	<a style="display: none;" id="dlgShareListLinkHL" href="#dlgShareListHL" />
 	<a style="display: none;" id="various3" href="#dlgShareListHL" />
 	<a style="display: none;" id="various5" href="#dlgSelectedList" />
 	
@@ -667,7 +667,7 @@
 				</div>
 				
 				<div class="mil-lists-toolbar">
-					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLink').click(); return false;" />
+					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 					
 					<div class="search-pagination search-pagination-top clearboth addpadtop5">
 						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}"
@@ -837,7 +837,7 @@
 								showFirstAndLast="False" urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
 					</div>
 					
-					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLink').click(); return false;" />
+					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 				</div>
 				
 			</div> <%-- / container mil-list --%>
