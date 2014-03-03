@@ -474,18 +474,11 @@ public class XPEDXMyItemsDetailsAddToCartAction extends
 					if(enteredUOMStr!=null && enteredUOMStr.trim().length()>0)
 					{
 						
-						transactionalUOMs.add(enteredUOMStr);//EB-3651
-						if(enteredUOMStr!= null && 
-								(enteredUOMStr.equals("") || enteredUOMStr.equals("M_")))
-								System.out.println("XPEDXMyItemsDetailsAddToCartAction:enteredUOMStr::::::"+enteredUOMStr);//EB-3651
-					
+						transactionalUOMs.add(enteredUOMStr);
 					}
 					else
 					{
-						transactionalUOMs.add(result.getUOM());//EB-3651
-						if(result.getUOM()!= null && 
-								(result.getUOM().equals("") || result.getUOM().equals("M_")))
-						System.out.println("XPEDXMyItemsDetailsAddToCartAction:result.getUOM()::::::"+result.getUOM());//EB-3651
+						transactionalUOMs.add(result.getUOM());
 					}
 					orderedProductClasses.add(result.getDefaultProductClass());
 					setCustomerFieldsForOrderedItems(i);

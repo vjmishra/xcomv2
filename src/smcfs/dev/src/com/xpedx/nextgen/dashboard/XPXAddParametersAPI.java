@@ -1,6 +1,7 @@
 package com.xpedx.nextgen.dashboard;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -380,6 +381,44 @@ public class XPXAddParametersAPI implements YIFCustomApi {
 			log.debug("XPXAddParametersAPI-OutXML: " + SCXmlUtil.getString(inputXML));
 		}
 
+		//EB-3997 Adding weblinenumber if not already created.
+		try
+		{
+			if (rootElem.hasAttribute("EntryType")) {
+				   entryType = rootElem.getAttribute("EntryType");
+			}
+			String buyerOrganizationCode = rootElem.getAttribute(XPXLiterals.A_BUYER_ORGANIZATION_CODE);
+			if (!YFCObject.isNull(buyerOrganizationCode)
+					&& !YFCObject.isVoid(buyerOrganizationCode)) {
+				String[] splitArrayOnBuyerOrgCode = buyerOrganizationCode
+						.split("-");
+				if (splitArrayOnBuyerOrgCode.length > 2) {
+					envtCode = splitArrayOnBuyerOrgCode[3];
+				} else {
+					envtCode = "";
+				}
+			}
+			
+			ArrayList<Element> orderlinesElem= SCXmlUtil.getElements(rootElem, "OrderLines/OrderLine");
+			for(Element orderlineElem:orderlinesElem)
+			{
+				Element orderLineExtn=(Element)orderlineElem.getElementsByTagName("Extn").item(0);
+				if(orderLineExtn != null)
+				{
+					String extnWebLineNumber=orderLineExtn.getAttribute(XPXLiterals.A_WEB_LINE_NUMBER);
+					if(YFCObject.isNull(extnWebLineNumber))
+					{
+						extnWebLineNumber=generateWebLineNumber(orderlineElem.getAttribute("OrderLineKey"), envtCode, entryType);
+						orderLineExtn.setAttribute(XPXLiterals.A_WEB_LINE_NUMBER, extnWebLineNumber);
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("Error while generating new ExtnWebLineNumber for new lines " +e.getStackTrace()+e.getMessage());
+		}
+		
 		return inputXML;
 	}
 
@@ -943,6 +982,40 @@ public class XPXAddParametersAPI implements YIFCustomApi {
 		return stockTypeMap;
 	}
 
+	/**
+	 * Generates Web Line Number for each line with environment code and subsequent 8 digits of Order Line Key.
+	 * 
+	 */
+	
+	public String generateWebLineNumber(String orderLineKey, String envtCode, String entryType) {
+
+		String webLineNumber = "";
+		String uniqueSequence = "";
+
+		int uniqueSequenceLength = 8;
+		int orderLineKeylength = 0;
+		
+		if (!YFCObject.isNull(orderLineKey)) {
+			orderLineKeylength = orderLineKey.trim().length();
+		}
+		
+		if (orderLineKeylength > 8) {
+			int startIndex = orderLineKeylength-uniqueSequenceLength;
+			uniqueSequence = orderLineKey.substring(startIndex);
+		}	
+
+		if(entryType != null && (XPXLiterals.SOURCE_TYPE_B2B.equals(entryType) 
+				|| XPXLiterals.SOURCE_WEB.equals(entryType) || XPXLiterals.SOURCE_COM.equals(entryType))) {
+			envtCode = XPXLiterals.SYSTEM_SPECIFIER_WEB;
+		}
+		
+		webLineNumber = envtCode + uniqueSequence;
+		if (log.isDebugEnabled()) {
+			log.debug("Web Line Number: " + webLineNumber);
+		}
+		return webLineNumber;
+	}
+	
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
 

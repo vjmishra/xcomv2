@@ -131,6 +131,10 @@ public class DynamicQueryAction extends WCMashupAction {
 			grpVal = grpVal + "^^^" + "checked";
 		}
 		String status="30";
+		//EB 4152 : replacing single quote, since its giving javascript error for displaying authorized locations
+		if(grpVal!=null){
+			grpVal.replace("'", "\\'");
+		}
 		PrntChildComb = MsapId + "##" + grpVal+"##"+status;
 		try {
 			getChildCustomers(wcContext, MsapId);
@@ -190,8 +194,14 @@ public class DynamicQueryAction extends WCMashupAction {
 								&& assignedCustomerList.contains(EleCustID)) {
 							grpVal = grpVal + "^^^" + "checked";
 						}
+						if(grpVal!=null)
+						{
+							grpVal =grpVal.replace("'", "\\'");
+						}
 						String status="30";
-						String tempValue = EleCustID + "##" + grpVal+"##"+status;   
+						String tempValue = EleCustID + "##" + grpVal+"##"+status;  
+						//EB 4152 : replacing single quote, since its giving javascript error for displaying authorized locations
+						 
 						PrntChildComb = PrntChildComb + "|" + tempValue;
 
 					}

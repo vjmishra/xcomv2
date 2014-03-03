@@ -661,7 +661,7 @@ $(function() {
                             </td> 
                             
                         </tr> 
-                   
+                   </s:if>
                    <s:if test="#beanId.prefix == 'txt'">    
                         <tr>
                             <td> <s:property value="suffix"/> </td>
