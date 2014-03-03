@@ -30,8 +30,10 @@
         </div>
     </s:form>
     </div>
-    <div class="ui-po-errormsg"></div>
-    <div class="clearfix" ></div>
+    <div class="customer-comment">
+    	<s:property value="punchoutMessage" />
+    </div>
+    <div class="clearfix"></div>
     <s:set name='searchedString' value='searchString'/>
     <div class="ul-po-results">Search Results for: <span class="blackText"><s:property value="#searchedString" /></span></div>
    							<div>

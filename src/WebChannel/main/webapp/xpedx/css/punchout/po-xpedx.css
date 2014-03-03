@@ -180,4 +180,12 @@ a:link {
 	font-size:13px;
 	color: #000;
 	text-align: center;
-	}
+}
+
+.customer-comment {
+	font-family: Arial, Helvetica, sans-serif;
+	width: 580px;
+	font-size: 12px;
+	float: right;
+	line-height: 17px;
+}
