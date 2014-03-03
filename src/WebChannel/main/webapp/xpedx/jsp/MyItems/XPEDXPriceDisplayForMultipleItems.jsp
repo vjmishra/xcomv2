@@ -306,7 +306,7 @@
 								<h4>
 									Price (<s:property value='%{priceCurrencyCode}'/>)
 								</h4>
-								<s:div id="myPrice_%{#id}" cssClass="addpadleft20">
+								<s:div id="myPrice_%{#id}" cssClass="addpadright20">
 									<table class="mil-priceDiv-visibility" width="auto" cellspacing="0" cellpadding="0" border="0">
 										<tbody>
 											<s:set name="break" value="false"></s:set>

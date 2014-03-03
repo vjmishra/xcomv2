@@ -6238,10 +6238,11 @@ BEGIN 2014 styles
 
 .mil-pa-wrap {
 	display: block;
-	width: 100%;
-	clear: both;         
+	width: 927px;
+	clear: both;
 	padding: 10px;
-}              
+	overflow: hidden;
+}
 .mil-pa-wrap h4 {
 	display: block;
 	background:#e1e1e1;
@@ -6252,57 +6253,71 @@ BEGIN 2014 styles
 	font-size:11px;
 	font-style:italic;
 }
+.mil-pa-wrap .two-col {
+	overflow: hidden;
+}
+.mil-pa-wrap .three-col {
+	overflow: hidden;
+}
+
 
 .one-col .mil-pa-avail {
 	width: 930px;
 	float: left;
 	clear: none;
-	min-height: 115px;
 }
 .two-col .mil-pa-avail {
 	width: 615px;
 	float: left;
 	clear: none;
 	border-right: #e1e1e1 1px solid;
-	min-height: 115px;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
 }
 .three-col .mil-pa-avail {
 	width: 318px;
 	float: left;
 	clear: none;
 	border-right: #e1e1e1 1px solid;
-	min-height: 115px;
 	margin-right: 2px;
-}              
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
 
 .two-col .mil-pa-bracket {
 	width: 312px;
 	margin-right: 10px;
 	float: right;
 	clear: none;
-	min-height: 115px;          
+    padding-bottom: 500px;
+	margin-bottom: -500px;
 }
 .three-col .mil-pa-bracket {
 	width: 308px;
 	float: left;
 	clear: none;
 	border-right: #e1e1e1 1px solid;
-	min-height: 115px;
+ 	padding-bottom: 500px;
+	margin-bottom: -500px;
 }
 
 .two-col .mil-pa-price {
 	width: 310px;
 	margin-right: 10px;
-	float: right;
+	float: left;
+	margin-left: 2px;
 	clear: none;
-	min-height: 115px;          
+  	padding-bottom: 500px;
+	margin-bottom: -500px;
 }
 .three-col .mil-pa-price {
-	width: 296px;
+	width: 284px;
 	margin-right: 10px;
-	float: right;
+	float: left;
 	clear: none;
-	min-height: 115px;          
+	margin-left: 2px;
+    padding-bottom: 500px;
+ 	margin-bottom: -500px;
 }
 
 .mil-lists-legend {
