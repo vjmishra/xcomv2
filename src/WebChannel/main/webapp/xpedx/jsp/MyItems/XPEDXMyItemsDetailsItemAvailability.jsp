@@ -184,8 +184,8 @@
 											<td class="left"></td>
 										</tr>
 										<tr>
-											<td width="33%" align="left">Total Available:</td>
-											<td class="right" width="22%">
+											<td align="left" class="addpadright5">Total Available:</td>
+											<td class="right">
 												<s:if test='%{#jsonTotal != null}'>
 													<s:set name="jsonTotal" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonTotal)"/>
 													<s:property value="#xpedxutil.formatQuantityForCommas(#jsonTotal)" />
@@ -195,7 +195,7 @@
 													<s:property value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedQty(#jsonTotal)" />
 												</s:else>
 											</td>
-											<td class="left" width="45%" style="padding-left: 4px;">
+											<td class="left" style="padding-left: 4px;">
 												<s:property value="#jsonUOMDesc" />
 											</td>
 										</tr>
