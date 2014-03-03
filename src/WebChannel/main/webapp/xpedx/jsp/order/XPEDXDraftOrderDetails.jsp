@@ -1847,16 +1847,16 @@ var currentAadd2ItemList = new Object();
 </div>
 <a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a> 
 
-<div class="hidden-data"><s:if test='!#isPunchoutUser'>
+<div class="hidden-data"><%-- <s:if test='!#isPunchoutUser'> --%>
 	<s:a id='checkoutURL' href='%{#checkoutURLid}' />
-</s:if> <s:else>
+<%-- </s:if> <s:else>
 	<s:if test='#isProcurementInspectMode'>
 		<s:a id='checkoutURL' href='%{#procurementInspectModeCheckoutURLid}' />
 	</s:if>
 	<s:else>
 		<s:a id='checkoutURL' href='%{#procurementCheckoutURLid}' />
-	</s:else>
-</s:else> 
+	</s:else> 
+</s:else> --%>
 <s:url id='addProductsToOrderURLid' namespace='/order' action='draftOrderAddOrderLines' /> 
 <s:a id='addProductsToOrderURL'	href='%{#addProductsToOrderURLid}' /> 
 
