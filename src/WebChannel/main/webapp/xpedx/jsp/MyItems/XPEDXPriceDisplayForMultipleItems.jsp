@@ -115,7 +115,7 @@
 			<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 			
 			<s:if test='%{#lineStatusCodeMsg == "" && #_action.getIsOMError() != "true"}'>
-				<s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #category.trim().equals("Paper")  && #_action.getValidateOMForMultipleItems() == "true"}' />
+				<s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #category.trim().equals("Paper") && #_action.getValidateOMForMultipleItems() == "true" && #isBracketPricing == "true"}' />
 				<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
 				<%-- since the availability/bracket/pricing columns may be hidden, we indicate whether the P&A section is 1, 2, or 3 columns. this allows css specificity to customize layout --%>
 				<s:if test="%{#showPaBracket && #showPaPrices}">
