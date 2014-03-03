@@ -137,6 +137,12 @@ a:link {
 .blackText {
 	color:#000;
 }
+.redText{
+	color:#FF0000;
+}
+.redText bold{
+	font-weight:bold;
+}
 .po-search-btn {
 	height: 26px;
 	width: 26px;

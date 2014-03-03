@@ -17,6 +17,7 @@
 </head>
 
 <body class="bodyclass">
+<s:set name="isCustomerSelectedIntoConext" value="#wcUtil.isCustomerSelectedIntoConext(wCContext)"/>
 <div class="ui-po-wrap">
   <div class="ui-po-brand"></div>
   <div class="ui-po-content">
@@ -33,9 +34,10 @@
     <div class="customer-comment">
     	<s:property value="punchoutMessage" />
     </div>
-    <div class="clearfix"></div>
+    <div class="clearfix" ></div>
     <s:set name='searchedString' value='searchString'/>
-    <div class="ul-po-results">Search Results for: <span class="blackText"><s:property value="#searchedString" /></span></div>
+    <s:set name='arraySize' value='divisionBeanList.size()' />
+    
    							<div>
 						  		<s:form  id="ChangeShipToForm" name="ChangeShipToForm" action="setCurrentCustomerIntoContext-punchout" namespace="/common" method="post" >
 									<s:hidden id="setSelectedAsDefault" value="true" name="setSelectedAsDefault"/>
@@ -43,8 +45,23 @@
 									<s:hidden id="selectedCurrentCustomer" value="" name="selectedCurrentCustomer"/>									
 								</s:form>
 							</div>
-					      
-					     <div id="wrapper" class="location-list">    
+					      <s:if test="%{#searchedString==null && #arraySize==0}">
+			                   <div class="ul-po-results">Search Results for: <span class="blackText" id="searchedValue"><s:property
+							         value="#searchedString" /></span>
+				               </div>
+						 </s:if>
+			             <s:else>
+			               <s:if test="%{#arraySize==0}">
+				              <div class="ul-po-results">
+					              <span class="redText bold">No search results found for <s:property
+							            value="#searchedString" />. Click the search icon to reset to the original list.</span>
+				             </div>
+			              </s:if>
+			              <s:else>
+				                  <div class="ul-po-results"> Search Results for: <span class="blackText"><s:property
+							           value="#searchedString" /></span>
+				                  </div>
+					              <div id="wrapper" class="location-list">    
    			 				<div class="expand-links"><a href="javascript:void(0)" class="expand">Expand All</a> | <a href="javascript:void(0)" class="collapse">Collapse All</a></div>
    			 				 <s:iterator id="divisionBean" value="divisionBeanList">					     
 						        <s:set name='divisionName' value='#divisionBean.getDivisionName()'/>
@@ -65,8 +82,11 @@
 							    	   </s:iterator>					    	   
 							   	  </ul>
 						   	   </div> 
-					  		</s:iterator>   
-				  </div>
+					  		</s:iterator> 
+			 
+				        </div>
+				   </s:else>
+			</s:else> 
   </div>
    <div class="clearfix" ></div>
    <div style="height:100px"></div>
@@ -82,7 +102,13 @@
 	}
 	
 	function searchPunchoutShipTo(){
-		document.punchoutShipToSearchForm.submit();
+		var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
+	  	if(isCustomerSelectedIntoConext=="true"){
+			document.punchoutShipToSearchForm.submit();
+	  	}else{
+	  		document.getElementById("searchedValue").innerHTML=document.punchoutShipToSearchForm.searchString.value;
+	  		document.punchoutShipToSearchForm.searchString.value="";
+	  	}
 	}
 	
 $(document).ready(function() { 
