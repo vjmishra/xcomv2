@@ -127,7 +127,7 @@ public class XPEDXWCUtils {
 	private static String staticFileLocation = null;
 	private static String punchoutImageLocation=null;
 	private static String xpedxBuildKey =null;
-	
+
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
 
 	static {
@@ -6339,7 +6339,7 @@ public class XPEDXWCUtils {
 	public static void setXpedxBuildKey(String xpedxBuildKey) {
 		XPEDXWCUtils.xpedxBuildKey = xpedxBuildKey;
 	}
-	
+
 	public static String getPunchoutImageLocation() {
 		return punchoutImageLocation;
 	}
@@ -6595,7 +6595,7 @@ public class XPEDXWCUtils {
 
 		return versionString;
 	}
-	
+
 	public static String getpuchoutImagelocation()
 	{
 		if(staticFileLocation!=null)
@@ -6604,4 +6604,42 @@ public class XPEDXWCUtils {
 		}
 		return punchoutImageLocation;
 	}
+
+	/**
+	 * @param context
+	 * @return Returns the customer's punchout comments (see Master Customer ExtnPunchOutComments).
+	 * @throws Exception
+	 */
+	public static String getCustomerPunchoutMessage(IWCContext context) throws Exception {
+		String punchOutComments = (String) context.getWCAttribute("punchOutComments");
+		if (punchOutComments == null) {
+			// call api to get data
+			SCUIContext wSCUIContext = context.getSCUIContext();
+			ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			YIFApi api = YIFClientFactory.getInstance().getApi();
+
+			String masterCustomerId = (String) wSCUIContext.getSession(false).getAttribute("loggedInCustomerID");
+
+			Document outputTemplate = SCXmlUtil.createFromString(""
+					+ "<Customer CustomerID=\"\">"
+					+ "  <Extn ExtnPunchOutComments=\"\" />"
+					+ "</Customer>");
+			env.setApiTemplate("getCustomerDetails", outputTemplate);
+
+			Document getCustomerDetailsInputDoc = YFCDocument.createDocument("Customer").getDocument();
+			getCustomerDetailsInputDoc.getDocumentElement().setAttribute("OrganizationCode", context.getStorefrontId());
+			getCustomerDetailsInputDoc.getDocumentElement().setAttribute("CustomerID", masterCustomerId);
+
+			Document getCustomerDetailsOutputDoc = api.invoke(env, "getCustomerDetails", getCustomerDetailsInputDoc);
+
+			env.clearApiTemplate("getCustomerDetails");
+
+			Element extnElem = SCXmlUtil.getElements(getCustomerDetailsOutputDoc.getDocumentElement(), "Extn").get(0);
+			punchOutComments = extnElem.getAttribute("ExtnPunchOutComments");
+			context.setWCAttribute("punchOutComments", punchOutComments, WCAttributeScope.LOCAL_SESSION);
+		}
+		return punchOutComments;
+	}
+
 }

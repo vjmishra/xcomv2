@@ -7,27 +7,17 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
-import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
-import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
-import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
-import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
 import com.sterlingcommerce.xpedx.webchannel.punchout.DivisionBean;
 import com.sterlingcommerce.xpedx.webchannel.punchout.ShipToCustomerBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.yantra.interop.japi.YIFApi;
-import com.yantra.interop.japi.YIFClientFactory;
-import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfs.japi.YFSEnvironment;
 
 public class CustomHomeAction extends WCAction {
 
@@ -78,7 +68,7 @@ public class CustomHomeAction extends WCAction {
 
 			wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
 
-			setPunchoutMessage(getCustomerPunchoutMessage());
+			setPunchoutMessage(XPEDXWCUtils.getCustomerPunchoutMessage(wcContext));
 
 			// Remove data from session also
 			return "punchout";
@@ -128,40 +118,40 @@ public class CustomHomeAction extends WCAction {
 
 	}
 
-	/**
-	 * Performs API call to get customer's punchout message.
-	 * @return
-	 * @throws Exception
-	 */
-	private String getCustomerPunchoutMessage() throws Exception {
-		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		YIFApi api = YIFClientFactory.getInstance().getApi();
-
-		String masterCustomerId = (String) wcContext.getSCUIContext().getSession(false).getAttribute("loggedInCustomerID");
-
-		// TODO ideally we wouldn't have to make an api call just to get this specific data. is the master customer stored in the session?
-					// if so, can we tweak the code that puts it there to also fetch the ExtnPunchOutComments attribute?
-
-		Document outputTemplate = SCXmlUtil.createFromString(""
-				+ "<Customer CustomerID=\"\">"
-				+ "  <Extn ExtnPunchOutComments=\"\" />"
-				+ "</Customer>");
-		env.setApiTemplate("getCustomerDetails", outputTemplate);
-
-		Document getCustomerDetailsInputDoc = YFCDocument.createDocument("Customer").getDocument();
-		getCustomerDetailsInputDoc.getDocumentElement().setAttribute("OrganizationCode", context.getStorefrontId());
-		getCustomerDetailsInputDoc.getDocumentElement().setAttribute("CustomerID", masterCustomerId);
-
-		Document getCustomerDetailsOutputDoc = api.invoke(env, "getCustomerDetails", getCustomerDetailsInputDoc);
-
-		env.clearApiTemplate("getCustomerDetails");
-
-		Element extnElem = SCXmlUtil.getElements(getCustomerDetailsOutputDoc.getDocumentElement(), "Extn").get(0);
-		return extnElem.getAttribute("ExtnPunchOutComments");
-	}
+	//	/**
+	//	 * Performs API call to get customer's punchout message.
+	//	 * @return
+	//	 * @throws Exception
+	//	 */
+	//	private String getCustomerPunchoutMessage() throws Exception {
+	//		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+	//		SCUIContext wSCUIContext = context.getSCUIContext();
+	//		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+	//		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+	//		YIFApi api = YIFClientFactory.getInstance().getApi();
+	//
+	//		String masterCustomerId = (String) wcContext.getSCUIContext().getSession(false).getAttribute("loggedInCustomerID");
+	//
+	//		// TODO ideally we wouldn't have to make an api call just to get this specific data. is the master customer stored in the session?
+	//					// if so, can we tweak the code that puts it there to also fetch the ExtnPunchOutComments attribute?
+	//
+	//		Document outputTemplate = SCXmlUtil.createFromString(""
+	//				+ "<Customer CustomerID=\"\">"
+	//				+ "  <Extn ExtnPunchOutComments=\"\" />"
+	//				+ "</Customer>");
+	//		env.setApiTemplate("getCustomerDetails", outputTemplate);
+	//
+	//		Document getCustomerDetailsInputDoc = YFCDocument.createDocument("Customer").getDocument();
+	//		getCustomerDetailsInputDoc.getDocumentElement().setAttribute("OrganizationCode", context.getStorefrontId());
+	//		getCustomerDetailsInputDoc.getDocumentElement().setAttribute("CustomerID", masterCustomerId);
+	//
+	//		Document getCustomerDetailsOutputDoc = api.invoke(env, "getCustomerDetails", getCustomerDetailsInputDoc);
+	//
+	//		env.clearApiTemplate("getCustomerDetails");
+	//
+	//		Element extnElem = SCXmlUtil.getElements(getCustomerDetailsOutputDoc.getDocumentElement(), "Extn").get(0);
+	//		return extnElem.getAttribute("ExtnPunchOutComments");
+	//	}
 
 	private ArrayList<DivisionBean> divisionBeanList;
 
