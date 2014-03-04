@@ -320,7 +320,7 @@ function quickAdd_redrawQuickAddList() {
 	if (QuickAddElems.length > 0) {
 		code += '<thead><tr>';
 		code += '<th width="18" class="del-col">&nbsp;</th>';
-		code += '<th width="176" class="first-col-header col-header type-col">Item Type</th>';
+		code += '<th width="100" class="first-col-header col-header type-col">Item Type</th>';
 		code += '<th width="59" class="col-header item-col">Item #</th>';
 		code += '<th width="87" class="col-header qty-col">Qty</th>';
 		code += '<th width="141" class="col-header uom-col">UOM</th>';
@@ -329,7 +329,7 @@ function quickAdd_redrawQuickAddList() {
 			code += '<th width="241" class="last-col-header col-header job-col">' + customerPONoValue + '</th>';
 		}
 		if (jobidFlag == true && jobValue != null) {
-			code += '<th width="176" class="last-col-header col-header job-col">' + jobValue + '</th>';
+			code += '<th width="252" class="last-col-header col-header job-col">' + jobValue + '</th>';
 		}
 
 		code += '</tr></thead>';
