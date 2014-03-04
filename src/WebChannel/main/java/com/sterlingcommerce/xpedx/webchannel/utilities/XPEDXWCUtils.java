@@ -6620,24 +6620,25 @@ public class XPEDXWCUtils {
 			YIFApi api = YIFClientFactory.getInstance().getApi();
 
 			String masterCustomerId = (String) wSCUIContext.getSession(false).getAttribute("loggedInCustomerID");
+			if (masterCustomerId != null) {
+				Document outputTemplate = SCXmlUtil.createFromString(""
+						+ "<Customer CustomerID=\"\">"
+						+ "  <Extn ExtnPunchOutComments=\"\" />"
+						+ "</Customer>");
+				env.setApiTemplate("getCustomerDetails", outputTemplate);
 
-			Document outputTemplate = SCXmlUtil.createFromString(""
-					+ "<Customer CustomerID=\"\">"
-					+ "  <Extn ExtnPunchOutComments=\"\" />"
-					+ "</Customer>");
-			env.setApiTemplate("getCustomerDetails", outputTemplate);
+				Document getCustomerDetailsInputDoc = YFCDocument.createDocument("Customer").getDocument();
+				getCustomerDetailsInputDoc.getDocumentElement().setAttribute("OrganizationCode", context.getStorefrontId());
+				getCustomerDetailsInputDoc.getDocumentElement().setAttribute("CustomerID", masterCustomerId);
 
-			Document getCustomerDetailsInputDoc = YFCDocument.createDocument("Customer").getDocument();
-			getCustomerDetailsInputDoc.getDocumentElement().setAttribute("OrganizationCode", context.getStorefrontId());
-			getCustomerDetailsInputDoc.getDocumentElement().setAttribute("CustomerID", masterCustomerId);
+				Document getCustomerDetailsOutputDoc = api.invoke(env, "getCustomerDetails", getCustomerDetailsInputDoc);
 
-			Document getCustomerDetailsOutputDoc = api.invoke(env, "getCustomerDetails", getCustomerDetailsInputDoc);
+				env.clearApiTemplate("getCustomerDetails");
 
-			env.clearApiTemplate("getCustomerDetails");
-
-			Element extnElem = SCXmlUtil.getElements(getCustomerDetailsOutputDoc.getDocumentElement(), "Extn").get(0);
-			punchOutComments = extnElem.getAttribute("ExtnPunchOutComments");
-			context.setWCAttribute("punchOutComments", punchOutComments, WCAttributeScope.LOCAL_SESSION);
+				Element extnElem = SCXmlUtil.getElements(getCustomerDetailsOutputDoc.getDocumentElement(), "Extn").get(0);
+				punchOutComments = extnElem.getAttribute("ExtnPunchOutComments");
+				context.setWCAttribute("punchOutComments", punchOutComments, WCAttributeScope.LOCAL_SESSION);
+			}
 		}
 		return punchOutComments;
 	}
