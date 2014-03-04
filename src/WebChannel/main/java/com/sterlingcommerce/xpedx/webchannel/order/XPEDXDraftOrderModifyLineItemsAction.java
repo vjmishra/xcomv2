@@ -296,6 +296,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             	retVal=validateMaxOrderAmountWhileCheckOut(outputDocument);
             }
             
+            
+            
          }
         catch(XMLExceptionWrapper e)
         {
@@ -396,9 +398,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         } 
         
         XPEDXWCUtils.releaseEnv(wcContext);
+        if(SUCCESS.equals(retVal) && XPEDXWCUtils.isPunchoutUser(wcContext)){
+        	retVal="punchoutSuccess";
+        }
          
         long endTime=System.currentTimeMillis();
         System.out.println("Time taken in milliseconds in XPEDXDraftOrderModifyLineItemsAction class : "+(endTime-startTime));
+        System.out.println("++++++++++++retVal+++++++++++++++++"+retVal);
         return retVal;
    
     }    
