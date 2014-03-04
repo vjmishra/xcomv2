@@ -649,7 +649,7 @@ function quickAdd_redrawQuickAddList() {
 				code += '<a href="#" class="del-quick-add" onclick="javascript:removeProductFromQuickAddList(' + i + '); return false;" title="Remove" tabindex="' + tabIndex++ + '"><img src="/swc/xpedx/images/icons/12x12_red_x.png" /></a>';
 				code += '</td>';
 
-				code += '<td class="col-item" style="color:red" colspan="3" >';
+				code += '<td class="col-item" style="color:red" colspan="4" >';
 				// TODO -FXD- : make the following line colspan '3' instead of two if the other customer defined fields are shown.
 				// ie. stretch into three columns if there are three, or two if there are two
 				code += 'Invalid item # ' + encodeForHTML(QuickAddElems[i].sku) + '. Please review and try again or contact Customer Service.</td>';
