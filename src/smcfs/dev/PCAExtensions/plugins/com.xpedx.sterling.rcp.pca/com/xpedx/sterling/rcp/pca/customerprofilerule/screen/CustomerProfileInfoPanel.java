@@ -945,6 +945,7 @@ IYRCComposite {
 		txtMinOrderAmount.setTextLimit(20);
 		txtMinOrderAmount.addFocusListener(focusListener);
 		txtMinOrderAmount.setData("name", "txtMinOrderAmount");
+		txtMinOrderAmount.setEnabled(false);
 		stxtMinOrderCurrency = new StyledText(pnlCustomerProfileInfo, SWT.SIMPLE);
 		stxtMinOrderCurrency.setText("$");
 		stxtMinOrderCurrency.setEditable(false);
@@ -962,6 +963,7 @@ IYRCComposite {
 		txtSmallOrderFee.setTextLimit(20);
 		txtSmallOrderFee.addFocusListener(focusListener);
 		txtSmallOrderFee.setData("name", "txtSmallOrderFee");
+		txtSmallOrderFee.setEnabled(false);
 		stxtSmallOrderCurrency = new StyledText(pnlCustomerProfileInfo, SWT.SIMPLE);
 		stxtSmallOrderCurrency.setText("$");
 		stxtSmallOrderCurrency.setEditable(false);
@@ -2166,6 +2168,7 @@ IYRCComposite {
 		.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMinOrderAmount");
 		tbd.setDataType("Price");
 		tbd.setName("txtMinOrderAmount");
+		
 		txtMinOrderAmount
 		.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 
