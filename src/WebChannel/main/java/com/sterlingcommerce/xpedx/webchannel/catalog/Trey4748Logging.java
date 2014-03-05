@@ -40,10 +40,11 @@ public class Trey4748Logging {
 
 	/**
 	 * @param session
+	 * @param elapsed In milliseconds
 	 * @param description Used as {@code String.format(description, params)}
 	 * @param params Used as {@code String.format(description, params)}
 	 */
-	public void snapshot(HttpSession session, String description, Object... params) {
+	public void snapshot(HttpSession session, long elapsed, String description, Object... params) {
 		if (!isEnabled()) {
 			return;
 		}
@@ -72,11 +73,12 @@ public class Trey4748Logging {
 
 			conn.setAutoCommit(false);
 
-			stmt = conn.prepareStatement("insert into trey_4748_logging (session_id, username, description, mem_total, mem_free, mem_used, mem_max, created) values (?, ?, ?, ?, ?, ?, ?, ?)");
+			stmt = conn.prepareStatement("insert into trey_4748_logging (session_id, username, description, elapsed_millis, mem_total, mem_free, mem_used, mem_max, created) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			int idx = 1;
 			stmt.setString(idx++, session.getId());
 			stmt.setString(idx++, loginid);
 			stmt.setString(idx++, truncate(message));
+			stmt.setLong(idx++, elapsed);
 			stmt.setLong(idx++, total);
 			stmt.setLong(idx++, free);
 			stmt.setLong(idx++, total - free);
@@ -116,17 +118,6 @@ public class Trey4748Logging {
 	 */
 	private static String truncate(String str) {
 		return (str != null && str.length() > 4000) ? (str.substring(0, 3997) + "...") : str;
-	}
-
-	public static void main(String[] args) {
-		Trey4748Logging instance = new Trey4748Logging() {
-			@Override
-			public boolean isEnabled() {
-				return true;
-			}
-		};
-
-		instance.snapshot(null, "trey test");
 	}
 
 }

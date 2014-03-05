@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -1669,8 +1670,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 		try {
 			long catalogLoadStartTime = System.currentTimeMillis();
 
-			Trey4748Logging.getInstance().snapshot(req.getSession(), "ENTER XPEDXCatalogAction.navigate | path=%s | searchTerm=%s", path, searchTerm);
-
 			/* Start of webtrend tags */
 			setsearchMetaTag(false);
 			/* End of webtrend tags */
@@ -1747,9 +1746,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setMashupID(getCatalogLandingMashupID());
 			}
 
-			Trey4748Logging.getInstance().snapshot(req.getSession(), "BEFORE super.navigate");
+			StopWatch sw = new StopWatch();
+			sw.start();
 			String returnString = super.navigate();
-			Trey4748Logging.getInstance().snapshot(req.getSession(), "AFTER super.navigate: returnString=%s", returnString);
+			sw.stop();
+			Trey4748Logging.getInstance().snapshot(req.getSession(), sw.getTime(), "super.navigate: returnString=%s", returnString);
 			// XBT-260
 
 			if (ERROR.equals(returnString)) {
@@ -1790,8 +1791,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 			log.error("Error while refeshing catalog cache in method navigate",
 					exception);
 		}
-
-		Trey4748Logging.getInstance().snapshot(req.getSession(), "EXIT XPEDXCatalogAction.navigate | path=%s | searchTerm=%s", path, searchTerm);
 
 		return SUCCESS;
 	}
