@@ -165,10 +165,10 @@
 		           namespace="/profile/user" />
 
 	        <input type="button" class="btn-gradient floatright addmarginleft10 addmargintop10 addmarginright30"
-		           value="Submit" onclick="javascript:validateResetPassword();" tabindex=4 />
+		           value="Submit" onclick="javascript:validateResetPassword();" tabindex=3 />
 
 	        <input type="button" class="btn-neutral floatright addmargintop10" 
-	               value="Cancel" onclick="javascript:cancelForgotPasswordFlow();" tabindex=3 />
+	               value="Cancel" onclick="javascript:cancelForgotPasswordFlow();" />
 
 
             <div class="error"  style="float: left; margin-right: 12px; display:none; "
