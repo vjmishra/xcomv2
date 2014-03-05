@@ -28,6 +28,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -125,6 +126,15 @@ public class XPEDXWCUtils {
 	private static SecretKey sk = getSecretKey(sharedkey);
 	private static byte[] sharedkeyfinal = sk.getEncoded();
 	private static String staticFileLocation = null;
+	private static String pageName=null;
+	private static boolean checkPunchoutimageExists;
+
+
+
+
+
+
+
 	private static String punchoutImageLocation=null;
 	private static String xpedxBuildKey =null;
 
@@ -6340,14 +6350,7 @@ public class XPEDXWCUtils {
 		XPEDXWCUtils.xpedxBuildKey = xpedxBuildKey;
 	}
 
-	public static String getPunchoutImageLocation() {
-		return punchoutImageLocation;
-	}
-
-	public static void setPunchoutImageLocation(String punchoutImageLocation) {
-		XPEDXWCUtils.punchoutImageLocation = punchoutImageLocation;
-	}
-
+	
 	/**
 	 * extracts catalog main categories...
 	 *
@@ -6596,15 +6599,66 @@ public class XPEDXWCUtils {
 		return versionString;
 	}
 
-	public static String getpuchoutImagelocation()
-	{
-		if(staticFileLocation!=null)
-		{
-			punchoutImageLocation=staticFileLocation+"/xpedx/images/punchout/";
+	public static String getpuchoutImagelocation() throws Exception {
+		
+			String punchoutpageName = pageName;
+			if (punchoutpageName != null
+					&& punchoutpageName.equals("XPEDXhome.jsp")) {
+				punchoutImageLocation = "/xpedx/images/punchout/Punchout_Home_300x250"+ xpedxBuildKey +".jpg";
+			} else if (punchoutpageName != null
+					&& punchoutpageName.equals("XPEDXCatalogExt.jsp")) {
+				punchoutImageLocation =  "/xpedx/images/punchout/Punchout_Catalog_Ext_468_60"+xpedxBuildKey +".jpg";
+			}
+
+			else if (punchoutpageName != null
+					&& punchoutpageName.equals("XPEDXCatalogLanding.jsp")) {
+				punchoutImageLocation ="/xpedx/images/punchout/Punchout_Catalog_Landing_160_600"+ xpedxBuildKey +".jpg";
+			} else if (punchoutpageName != null
+					&& punchoutpageName.equals("XPEDXDraftOrderDetails.jsp")) {
+				punchoutImageLocation ="/xpedx/images/punchout/Punchout_MyCart_468x60"+xpedxBuildKey+".jpg";
+			} else {
+				punchoutImageLocation = "";
+			}
+			if (!"".equals(punchoutImageLocation)) {
+				punchoutImageLocation(punchoutImageLocation);
+
 		}
-		return punchoutImageLocation;
+		return staticFileLocation + punchoutImageLocation;
 	}
 
+	public static String getPageName() {
+		return pageName;
+	}
+
+	public static void setPageName(String pageName) {
+		XPEDXWCUtils.pageName = pageName;
+	}
+
+	public static boolean punchoutImageLocation(String punchoutimagepath) throws Exception { 
+	
+		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
+			if((!"".equals(punchoutimagepath)) && (XPEDXFileManager.checkFile(punchoutimagepath, wcContext,false)))
+		{
+			checkPunchoutimageExists=true;
+		}else
+		{
+			checkPunchoutimageExists=false;
+		}
+		return checkPunchoutimageExists;
+	}
+
+
+	public static boolean isCheckPunchoutimageExists() {
+		return checkPunchoutimageExists;
+	}
+
+	public static void setCheckPunchoutimageExists(boolean checkPunchoutimageExists) {
+		XPEDXWCUtils.checkPunchoutimageExists = checkPunchoutimageExists;
+	}
+	
+	
+	
 	/**
 	 * @param context
 	 * @return Returns the customer's punchout comments (see Master Customer ExtnPunchOutComments).

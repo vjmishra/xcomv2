@@ -10,7 +10,7 @@
 
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
-<s:set name="punchoutImagepath" value="#wcUtil.getpuchoutImagelocation()" />
+<s:set name="pageName" value="#wcUtil.setPageName('XPEDXhome.jsp')" />
 <s:set name='storefrontId' value="wCContext.storefrontId" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -287,8 +287,10 @@ Ext.onReady(function(){
 					<img width="300" height="250" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD3_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if> 
 				<s:elseif test="%{#isPunchoutUser}">
-				<s:if test="%{#punchoutImagepath!=''}">
-					<img width="300" height="250" border="0" alt="" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='punchoutImagepath'/>/Punchout_Home_300x250<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
+				<s:set name="punchoutImagepath" value="#wcUtil.getpuchoutImagelocation()" />
+				<s:if test="%{#isPunchoutimageExists}">
+					<img width="300" height="250" border="0" alt="" style="margin-top: 5px; padding-right: 5px;" src=<s:property value='punchoutImagepath'/>
 				 </s:if>
 				</s:elseif>
 				<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
