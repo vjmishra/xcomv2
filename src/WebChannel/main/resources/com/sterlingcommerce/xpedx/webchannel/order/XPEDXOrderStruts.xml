@@ -145,6 +145,10 @@
 				<param name="isEditOrder">${isEditOrder}</param>
 				<param name="draft">${draft}</param>				
 			</result>
+			<result name="punchoutSuccess" type="redirectAction">
+                <param name="actionName">customPunchoutOrder</param>
+                <param name="namespace">/order</param>
+             </result>
 		</action>
 
 		<action name="draftOrderSummaryUpdate"
@@ -715,11 +719,6 @@
 				<param name="isEditOrder">${isEditOrder}</param>
 				<param name="draft">${draft}</param>			
 			</result>
-			 <result name="punchoutSuccess" type="redirectAction">
-                <param name="actionName">customPunchoutOrder</param>
-                <param name="namespace">/order</param>
-                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
-             </result>
         </action>
 
         <action name="XPEDXMiniCartDisplay" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction">

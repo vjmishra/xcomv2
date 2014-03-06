@@ -356,6 +356,11 @@ public class XPEDXDraftOrderSummaryAction extends DraftOrderSummaryAction {
 		if(LOG.isDebugEnabled()){
 		LOG.debug("Time taken in milliseconds in XPEDXDraftOrderSummaryAction class : "+(endTime-startTime));
 		}
+		
+		if(XPEDXWCUtils.isPunchoutUser(wcContext)){
+			return "punchoutSuccess";
+        }
+		
 		return "success";
 	
 	}
