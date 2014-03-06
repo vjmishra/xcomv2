@@ -4664,6 +4664,7 @@ public class XPEDXWCUtils {
 		String customerContactId = context.getLoggedInUserId();
 		Map<String,String> valueMap = new HashMap<String,String>();
 		valueMap.put("/Page/API/Input/XPXCustomerAssignmentView/@UserId", customerContactId);
+		valueMap.put("/Page/API/Input/XPXCustomerAssignmentView/@Status", "30");
 		valueMap.put("/Page/@PageNumber", "1");
 		valueMap.put("/Page/@PageSize", "25");
 		valueMap.put("/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Desc", "N");
