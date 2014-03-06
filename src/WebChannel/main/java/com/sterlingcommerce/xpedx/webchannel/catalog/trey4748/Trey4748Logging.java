@@ -1,4 +1,4 @@
-package com.sterlingcommerce.xpedx.webchannel.catalog;
+package com.sterlingcommerce.xpedx.webchannel.catalog.trey4748;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -45,13 +45,13 @@ public class Trey4748Logging {
 	 * @param params Used as {@code String.format(description, params)}
 	 */
 	public void snapshot(HttpSession session, long elapsed, String description, Object... params) {
-		if (!isEnabled()) {
-			return;
-		}
-
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
+			if (!isEnabled()) {
+				return;
+			}
+
 			Runtime rt = Runtime.getRuntime();
 
 			long total = rt.totalMemory();
