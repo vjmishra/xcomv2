@@ -143,6 +143,11 @@ $(document).ready(function() {
         {$('.question').removeClass('active');}
     }
   );
+  $('#searchString').keypress(function(event){
+	    if (event.keyCode == 13) {
+	        event.preventDefault();
+	    	searchPunchoutShipTo();
+	});
 });
 </script>  
 
