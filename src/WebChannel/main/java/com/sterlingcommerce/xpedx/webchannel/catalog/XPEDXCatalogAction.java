@@ -1223,6 +1223,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 					complexQueryOrElement.appendChild((YFCNode) exp3Element);
 					orderMultipleMap.put(itemid, "1");
 				}
+
 				input.appendChild(input.getOwnerDocument().importNode(xrefInput, true));
 				input.appendChild(input.getOwnerDocument().importNode(pricLlistAssignmentInput, true));
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
@@ -1232,7 +1233,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				sw.start();
 				allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", input, wcContext.getSCUIContext());
 				sw.stop();
-				Trey4748Logging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: input=", SCXmlUtil.getString(input));
+				Trey4748Logging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
 
 				getOrderMultipleMapForItems();
 				getReplacmentItemsMapForItems(envCode, custDivision);
