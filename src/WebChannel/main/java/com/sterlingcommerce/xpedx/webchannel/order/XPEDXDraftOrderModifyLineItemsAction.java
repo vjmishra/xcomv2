@@ -398,7 +398,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         } 
         
         XPEDXWCUtils.releaseEnv(wcContext);
-        if(SUCCESS.equals(retVal) && XPEDXWCUtils.isPunchoutUser(wcContext)){
+        if(SUCCESS.equals(retVal) && XPEDXWCUtils.isPunchoutUser(wcContext) && "true".equals(isComingFromCheckout)){
         	retVal="punchoutSuccess";
         }
          
