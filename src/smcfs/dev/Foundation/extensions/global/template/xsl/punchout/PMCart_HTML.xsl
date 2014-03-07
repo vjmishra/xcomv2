@@ -11,7 +11,7 @@
 					<xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty, "#") ' disable-output-escaping="yes" />
 				</xsl:attribute>
 			</input>
-			<input type="hidden" name="NEW_ITEM-UNIT[{@PrimeLineNo}]" value="{Item/@UnitOfMeasure}"/>
+			<input type="hidden" name="NEW_ITEM-UNIT[{@PrimeLineNo}]" value="{OrderLineTranQuantity/@TransactionalUOM}"/>
 			<input type="hidden" name="NEW_ITEM-PRICE[{@PrimeLineNo}]" value="{Extn/@ExtnExtendedPrice}"/>
 			<input type="hidden" name="NEW_ITEM-PRICEUNIT[{@PrimeLineNo}]" value=""/>
 			<input type="hidden" name="NEW_ITEM-CURRENCY[{@PrimeLineNo}]" value="USD"/>
