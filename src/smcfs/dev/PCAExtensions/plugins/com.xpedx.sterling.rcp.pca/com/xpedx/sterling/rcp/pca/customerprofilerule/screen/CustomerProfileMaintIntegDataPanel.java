@@ -538,7 +538,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		txtComments.setLayoutData(gridDataSpan2b);
 		txtComments.setData("yrc:customType", "Text");
 		txtComments.setData("name", "txtComments");
-		txtComments.setTextLimit(250);
+		txtComments.setTextLimit(500);
 	}
 
 	private void createB2BMaintComposite() {
