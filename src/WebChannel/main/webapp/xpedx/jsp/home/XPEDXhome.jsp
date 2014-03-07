@@ -265,9 +265,18 @@ Ext.onReady(function(){
 			--%>
 			
 			<div class="slideshow">
+			     <s:if test="%{#isPunchoutUser}"> 
+			              <s:set name="punchoutPromotionPath" value="#wcUtil.getpuchoutPromotionImagelocation()" />
+			              <s:set name="checkPunchoutPromotionimageExists" value="#wcUtil.isCheckPunchoutPromotionimageExists()" />  
+				          <s:if test="%{#checkPunchoutPromotionimageExists}">
+				                <img width="650" height="260" border="0" alt="" style="margin-top: 5px;"src="<s:property value="#punchoutPromotionPath" />"/>
+				          </s:if> 
+				  </s:if> 
+				  <s:else>
 						<s:action name="xpedxDynamicPromotionsAction" executeResult="true" namespace="/common" >
 							<s:param name="callerPage">HomePage</s:param>
 						</s:action>
+				 </s:else> 		
 			</div>
 			<s:if test="#request['imageCounter'] > 1" >
 				<div id="home-image-rotation-nav">

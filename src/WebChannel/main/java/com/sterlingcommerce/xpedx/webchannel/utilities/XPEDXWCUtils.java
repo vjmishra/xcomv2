@@ -136,6 +136,8 @@ public class XPEDXWCUtils {
 
 
 	private static String punchoutImageLocation=null;
+	private static String punchoutPromotionLocation=null;
+	private static boolean checkPunchoutPromotionimageExists;
 	private static String xpedxBuildKey =null;
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
@@ -6656,6 +6658,57 @@ public class XPEDXWCUtils {
 
 	public static void setCheckPunchoutimageExists(boolean checkPunchoutimageExists) {
 		XPEDXWCUtils.checkPunchoutimageExists = checkPunchoutimageExists;
+	}
+	
+/*  Punchout Promotion Static Page  */
+	
+	public static String getpuchoutPromotionImagelocation() throws Exception {
+
+		String punchoutpageName = pageName;
+
+		if (punchoutpageName != null
+				&& punchoutpageName.equals("XPEDXhome.jsp")) {
+			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Home_Static_650x260"
+					+ xpedxBuildKey + ".jpg";
+
+		} else if (punchoutpageName != null
+				&& punchoutpageName.equals("XPEDXCatalogExt.jsp")) {
+			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Catalog_Ext_Static_482x72"
+					+ xpedxBuildKey + ".jpg";
+
+		} else {
+			punchoutPromotionLocation = "";
+		}
+		if (!"".equals(punchoutPromotionLocation)) {
+			punchoutPromotionLocation(punchoutPromotionLocation);
+		}
+		return staticFileLocation + punchoutPromotionLocation;
+	}
+
+	public static boolean punchoutPromotionLocation(String punchoutPromotionPath)
+			throws Exception {
+
+		IWCContext wcContext = WCContextHelper
+				.getWCContext(ServletActionContext.getRequest());
+		ServletContext servletContext = wcContext.getSCUIContext()
+				.getServletContext();
+		if ((!"".equals(punchoutPromotionPath))
+				&& (XPEDXFileManager.checkFile(punchoutPromotionPath,
+						wcContext, false))) {
+			checkPunchoutPromotionimageExists = true;
+		} else {
+			checkPunchoutPromotionimageExists = false;
+		}
+		return checkPunchoutPromotionimageExists;
+	}
+
+	public static boolean isCheckPunchoutPromotionimageExists() {
+		return checkPunchoutPromotionimageExists;
+	}
+
+	public static void setCheckPunchoutPromotionimageExists(
+			boolean checkPunchoutPromotionimageExists) {
+		XPEDXWCUtils.checkPunchoutPromotionimageExists = checkPunchoutPromotionimageExists;
 	}
 	
 	
