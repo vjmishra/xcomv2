@@ -3218,6 +3218,17 @@ td .inner {
 	float: right;
 	margin-top: 6px;
 }
+.noticewebconfpage{
+ cursor: pointer;
+ background-color: #F9F9E5;
+ border: 1px solid #828400;
+ color: #828400;
+ display: inline-block;
+ line-height: 15px;
+ padding-left: 5px;
+ padding-right: 5px;
+ width: auto;
+}
 .inf {
     background-color: #E5ECF9;
     border: 1px solid #0055B5;

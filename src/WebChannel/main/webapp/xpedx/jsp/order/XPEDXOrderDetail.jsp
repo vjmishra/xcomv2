@@ -758,7 +758,7 @@ function showSplitDiv(divId)
                         <br/><!-- blank line for george -->
                         <!-- Start Jira 4303 - Kubra -->
                          <s:if test='#isFOMessageDisplay  && #orderType == "Customer" '>
-							<div class="notice" id="msgForOrder" style="display : block;"> To see current fulfillment information, please go to the Order Detail page by clicking on the Order Number.&nbsp;<br/></div>
+							<div class="noticewebconfpage" id="msgForOrder" style="display : block;"> To see current fulfillment information, please go to the Order Detail page by clicking on the Order Number.&nbsp;<br/></div>
 						 </s:if>
                          <!-- End Jira 4303 - Kubra -->
                         
