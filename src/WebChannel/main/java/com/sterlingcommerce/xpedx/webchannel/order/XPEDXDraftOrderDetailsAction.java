@@ -116,28 +116,25 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 			setDefaultShipToIntoContext();
 			getCustomerLineDetails();
 
-			if (!isQuickAdd())
+			// eb-1999: skip price and availability altogether for quick add page
+			if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
 			{
-				// eb-1999: skip price and availability altogether for quick add page
-				if("true".equals(isPNACallOnLoad) || "Y".equals(isPNACallOnLoad))
+				callChangeOrder();
+				if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
+					return draftFlagError;
+				}
+				if(isOUErrorPage == true)
 				{
-					callChangeOrder();
-					if("true".equals(draftOrderFail) && "true".equals(isPNACallOnLoad)){
-						return draftFlagError;
-					}
-					if(isOUErrorPage == true)
-					{
-						return "OUErrorPage";
-					}
+					return "OUErrorPage";
+				}
 
-				} else {
-					changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
-					if(changeOrderOutputDoc!=null)
-					{
-						setOutputDocument(changeOrderOutputDoc);
-						getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+			} else {
+				changeOrderOutputDoc = (Document) getWCContext().getSCUIContext().getSession().getAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
+				if(changeOrderOutputDoc!=null)
+				{
+					setOutputDocument(changeOrderOutputDoc);
+					getWCContext().getSCUIContext().getSession().removeAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ);
 
-					}
 				}
 			}
 
@@ -2550,37 +2547,27 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		this.itemListMap = itemListMap;
 	}
 
-	/*
-	 * This will check if there is a cart in the context, if present opens the cart and opens the Quick add Link in the Draft Order details page
-	 * else Creates a new cart and then opens it and opens the quick add.
+	/**
+	 * Displays the Quick Add page, creating a cart if necessary.
 	 */
 	public String openQuickAdd() {
-		// TODO need to remove any unnecessary logic from this action? need to move to another action to avoid base class behavior?
-		String returnVal = SUCCESS;
-		String editedOrderHeaderKey=XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
-		boolean isDraftSet=false;
-		if(!YFCCommon.isVoid(editedOrderHeaderKey))
-		{
-			orderHeaderKey=editedOrderHeaderKey;
-			setDraft("N");
-			isEditOrder="true";
-			isDraftSet=true;
+		String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+		if (!YFCCommon.isVoid(editedOrderHeaderKey)) {
+			orderHeaderKey = editedOrderHeaderKey;
+		} else {
+			orderHeaderKey = (String) XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 		}
-		else
-		{
-			orderHeaderKey = (String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");//XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(wcContext);
-		}
-		if((orderHeaderKey==null || orderHeaderKey.equals("") || orderHeaderKey.equals("_CREATE_NEW_")) && XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())){
-			 XPEDXOrderUtils.createNewCartInContext(getWCContext());
-			 orderHeaderKey=(String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
+		if ((orderHeaderKey == null || orderHeaderKey.equals("") || orderHeaderKey.equals("_CREATE_NEW_")) && XPEDXOrderUtils.isCartOnBehalfOf(getWCContext())) {
+			XPEDXOrderUtils.createNewCartInContext(getWCContext());
+			orderHeaderKey = (String) XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext");
 		}
 
-		if(!isDraftSet)
-			setDraft("Y");
-		returnVal = execute();
-		return returnVal;
-
+		XPEDXWCUtils.setSAPCustomerExtnFieldsInCache();
+		customerFieldsMap = (LinkedHashMap<String, String>) XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
+		setSkuTypeList(XPEDXWCUtils.getSkuTypesForQuickAdd(getWCContext()));
+		return SUCCESS;
 	}
+
 	/*
 	 * Prepares a Arraylist of XPEDXItem, after looping through the orderlines
 	 */

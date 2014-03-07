@@ -69,7 +69,7 @@
 	<s:set name='sdoc' value="outputDocument" />
 	<s:set name='orderDetails' value='#util.getElement(#sdoc, "Order")' />
 	<s:set name='extnOrderDetails' value='#util.getElement(#sdoc, "Order/Extn")' />
-	<s:set name='orderHeaderKey' value='#orderDetails.getAttribute("OrderHeaderKey")' />
+	<s:set name='orderHeaderKey' value='%{#_action.getOrderHeaderKey()}' />
 	<s:set name='draftOrderFlag' value='#orderDetails.getAttribute("DraftOrderFlag")' />
 	<s:set name='priceInfo' value='#util.getElement(#sdoc, "Order/PriceInfo")' />
 	<s:set name='currencyCode' value='#priceInfo.getAttribute("Currency")' />

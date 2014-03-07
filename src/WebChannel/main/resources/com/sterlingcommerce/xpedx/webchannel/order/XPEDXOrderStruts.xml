@@ -265,6 +265,7 @@
 				<param name="actionName">quickAddAction</param>
 				<param name="namespace">/order</param>
 				<param name="addedToCart">true</param>
+				<param name="quickAdd">true</param>
 			</result>
 			<result name="OUErrorPage" type="redirectAction">
                 <param name="actionName">orderDetail</param>
@@ -813,21 +814,8 @@
         </action>
         <!-- NEW Page for Quick Add EB 4367  replacing XPEDXDraftOrderDetails.jsp -->
         
-        <action name="quickAddAction"
-			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
-			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDetailsActionBinding.xml</param>
-			<param name="mashups">xpedx_me_draftOrderDetails</param>
-			<param name="resourceId">/swc/order/guestShopping</param>
+        <action name="quickAddAction" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
 			<result name="success">/xpedx/jsp/order/QuickAdd.jsp</result>
-			<result name="input">/xpedx/jsp/order/QuickAdd.jsp</result>
-			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp</result>
-			<result name="OUErrorPage" type="redirectAction">
-                <param name="actionName">orderDetail</param>
-                <param name="namespace">/order</param>
-                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
-                <param name="isErrorMessage">Y</param>
-                <param name="draft">${draft}</param>
-            </result>
 		</action>
 		
         
