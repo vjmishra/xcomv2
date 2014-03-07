@@ -54,6 +54,7 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 
 /**
  * Action handler for performing submit order for punchout users
@@ -96,7 +97,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 			String outputData = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
 
-			// Is this a good way to determine whether OCI or cXML? Seems to work...
+			// //TODO move into Auth class Is this a good way to determine whether OCI or cXML? Seems to work...
 			if (punchoutRequest.getToIdentity() != null && !punchoutRequest.getToIdentity().isEmpty()) {
 				cXmlFormat(outputData);
 			}
@@ -137,6 +138,8 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);
 
+		updateOrderUoms(env, orderOutputDoc);
+
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
 	}
 
@@ -160,6 +163,57 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			throws ParserConfigurationException, SAXException, IOException {
 
 		ociData = outputData;
+	}
+
+	private void updateOrderUoms(YFSEnvironment env, Document orderOutputDoc)
+			throws RemoteException, YIFClientCreationException {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLineTranQuantity");
+
+		// replace UOM (MAX format) with EDI UOM
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			String maxUom = element.getAttribute("TransactionalUOM");
+			String convertedBaseUom = convertMaxUomToEdi(env, maxUom);
+			element.setAttribute("TransactionalUOM", convertedBaseUom);
+		}
+	}
+	//TODO move this method to xpxutils or wcutils?
+	public static String convertMaxUomToEdi(YFSEnvironment env, String maxUom)
+			throws YFSException, RemoteException, YIFClientCreationException {
+		String ediUom = maxUom;
+		Document legacyUomOutputDoc = null;
+		Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
+
+		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", "M");
+		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyUOM", maxUom);
+
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc); //TODO return fewer fields?
+
+		if (legacyUomOutputDoc != null) {
+			String mappedUom = SCXmlUtil.getXpathAttribute(legacyUomOutputDoc.getDocumentElement(),"/XPEDXLegacyUomXrefList/XPEDXLegacyUomXref/@UOM");
+
+			if (mappedUom != null && mappedUom.trim().length() > 0) {
+				ediUom = stripEnvFromUom(mappedUom); //TODO strip M_ here, before return, in caller or in xslt?
+				LOG.info("Converted max UOM " +maxUom+ " to EDI UOM " + ediUom);
+			}
+			else {
+				LOG.warn("convertMaxUomToEdi: UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table: " + maxUom);
+			}
+		} else {
+			LOG.error("convertMaxUomToEdi: Problem getting data from XPEDX_Legacy_Uom_Xref table for " + maxUom);
+		}
+
+		return ediUom;
+	}
+
+	private static String stripEnvFromUom(String mappedUom) {
+		String ediUom;
+		ediUom = mappedUom;
+		if (mappedUom.contains("_")) {
+			ediUom = mappedUom.split("_")[1];
+		}
+		return ediUom;
 	}
 
 	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
@@ -244,18 +298,14 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	private Document updateheaderElementValue(Document doc, String parentTag,
 			String ChildTag, String headerValue) {
 		NodeList headerParentTag = doc.getElementsByTagName(parentTag);
-		Element childTagname = null;
+
 		for (int i = 0; i < headerParentTag.getLength(); i++) {
 			try {
-				childTagname = (Element) headerParentTag.item(i);
-				Node name = childTagname.getElementsByTagName(ChildTag).item(0)
-						.getFirstChild();
+				Element childTagname = (Element) headerParentTag.item(i);
+				Node name = childTagname.getElementsByTagName(ChildTag).item(0).getFirstChild();
 				name.setTextContent(headerValue);
 			} catch (Exception Ex) {
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Exception while updateheaderElementValue: "
-							+ Ex.getLocalizedMessage());
-				}
+				LOG.info("Exception while updateheaderElementValue: "+ Ex.getLocalizedMessage());
 			}
 		}
 		return doc;
