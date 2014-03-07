@@ -1,5 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog.trey4748;
 
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -52,6 +53,9 @@ public class Trey4748Logging {
 				return;
 			}
 
+			String sessionId = session.getId();
+			sessionId = sessionId.substring(0, sessionId.indexOf("!")); // we only want the jsessionid portion
+
 			Runtime rt = Runtime.getRuntime();
 
 			long total = rt.totalMemory();
@@ -64,6 +68,8 @@ public class Trey4748Logging {
 
 			String message = String.format(description, params);
 
+			String serverName = InetAddress.getLocalHost().getHostName();
+
 			String driver = Manager.getProperty("jdbcService", "oraclePool.driver");
 			String url = Manager.getProperty("jdbcService", "oraclePool.url");
 			String user = Manager.getProperty("jdbcService", "oraclePool.user");
@@ -73,9 +79,9 @@ public class Trey4748Logging {
 
 			conn.setAutoCommit(false);
 
-			stmt = conn.prepareStatement("insert into trey_4748_logging (session_id, username, description, elapsed_millis, mem_total, mem_free, mem_used, mem_max, created) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			stmt = conn.prepareStatement("insert into trey_4748_logging (session_id, username, description, elapsed_millis, mem_total, mem_free, mem_used, mem_max, created, server_name) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			int idx = 1;
-			stmt.setString(idx++, session.getId());
+			stmt.setString(idx++, sessionId);
 			stmt.setString(idx++, loginid);
 			stmt.setString(idx++, truncate(message));
 			stmt.setLong(idx++, elapsed);
@@ -84,6 +90,7 @@ public class Trey4748Logging {
 			stmt.setLong(idx++, total - free);
 			stmt.setLong(idx++, max);
 			stmt.setTimestamp(idx++, new java.sql.Timestamp(now.getTime()));
+			stmt.setString(idx++, serverName);
 
 			stmt.executeUpdate();
 
