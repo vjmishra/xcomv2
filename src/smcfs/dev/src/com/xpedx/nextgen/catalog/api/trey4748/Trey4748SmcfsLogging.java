@@ -42,7 +42,7 @@ public class Trey4748SmcfsLogging {
 				return;
 			}
 
-			String sessionId = env.getUserId(); // token is always empty so provide something that at least scopes it to the user
+			String sessionId = "session_" + env.getUserId(); // token is always empty so provide something that at least scopes it to the user
 
 			Runtime rt = Runtime.getRuntime();
 
