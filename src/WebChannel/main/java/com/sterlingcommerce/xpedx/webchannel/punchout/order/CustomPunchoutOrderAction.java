@@ -97,8 +97,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 			String outputData = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
 
-			// //TODO move into Auth class Is this a good way to determine whether OCI or cXML? Seems to work...
-			if (punchoutRequest.getToIdentity() != null && !punchoutRequest.getToIdentity().isEmpty()) {
+			if (punchoutRequest.isCXML()) {
 				cXmlFormat(outputData);
 			}
 			else {
@@ -177,7 +176,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			element.setAttribute("TransactionalUOM", convertedBaseUom);
 		}
 	}
-	//TODO move this method to xpxutils or wcutils?
+	//TODO move this method to xpxutils or xpedxwcutils?
 	public static String convertMaxUomToEdi(YFSEnvironment env, String maxUom)
 			throws YFSException, RemoteException, YIFClientCreationException {
 		String ediUom = maxUom;
@@ -188,13 +187,13 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyUOM", maxUom);
 
 		YIFApi api = YIFClientFactory.getInstance().getApi();
-		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc); //TODO return fewer fields?
+		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc); //TODO return fewer fields by using mashup?
 
 		if (legacyUomOutputDoc != null) {
 			String mappedUom = SCXmlUtil.getXpathAttribute(legacyUomOutputDoc.getDocumentElement(),"/XPEDXLegacyUomXrefList/XPEDXLegacyUomXref/@UOM");
 
 			if (mappedUom != null && mappedUom.trim().length() > 0) {
-				ediUom = stripEnvFromUom(mappedUom); //TODO strip M_ here, before return, in caller or in xslt?
+				ediUom = stripEnvFromUom(mappedUom); //TODO if strip M_ here or in caller, don't need to do in xslt
 				LOG.info("Converted max UOM " +maxUom+ " to EDI UOM " + ediUom);
 			}
 			else {

@@ -11,12 +11,13 @@ import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutRequest;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
+	@Override
 	public SCUISecurityResponse authenticate(SCUIContext scuiCtx) {
 		SCUISecurityResponse response =  super.authenticate(scuiCtx);
 		setRequiredAttrbutes(scuiCtx.getRequest());
 		String url = scuiCtx.getRequest().getRequestURL().toString();
 		String loginPageSR = (String)scuiCtx.getRequest().getAttribute("SALES_REP_LOGIN_PAGE");
-		loginPageSR = (String)scuiCtx.getRequest().getParameter("SALES_REP_LOGIN_PAGE");
+		loginPageSR = scuiCtx.getRequest().getParameter("SALES_REP_LOGIN_PAGE");
     	if (SCUIUtils.isTrue(loginPageSR)){
     		String redirectParamName = scuiCtx.getServletContext().getInitParameter(WCConstants.URL_REDIRECT_PARAM_NAME);
     		String salesRepLoginPage = scuiCtx.getServletContext().getInitParameter("xpedx_sales_rep_login_url");
@@ -32,46 +33,52 @@ public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
   	  	        }
     		}
     	}
-		String aribaFlag = (String) scuiCtx.getRequest().getParameter("amiProcurementUser");
-		
+		String aribaFlag = scuiCtx.getRequest().getParameter("amiProcurementUser");
+
 		if (aribaFlag!= null && aribaFlag.equals("Y")) {
-			scuiCtx.getSession(false).setAttribute("aribaFlag", scuiCtx.getRequest().getParameter("amiProcurementUser")); 
+			scuiCtx.getSession(false).setAttribute("aribaFlag", scuiCtx.getRequest().getParameter("amiProcurementUser"));
 			scuiCtx.getSession(false).setAttribute("EnterpriseCode", scuiCtx.getRequest().getParameter("EnterpriseCode"));
-			
+
 			PunchoutRequest punchoutRequest = new PunchoutRequest();
-			punchoutRequest.setLoginID((String)scuiCtx.getRequest().getParameter("DisplayUserID"));
-			punchoutRequest.setSfId((String)scuiCtx.getRequest().getParameter("EnterpriseCode"));
-			punchoutRequest.setPayLoadID((String)scuiCtx.getRequest().getParameter("payLoadID"));
-			punchoutRequest.setOperation((String)scuiCtx.getRequest().getParameter("operation"));
-			punchoutRequest.setOrderHeaderKey((String)scuiCtx.getRequest().getParameter("orderHeaderKey"));
-			punchoutRequest.setReturnURL((String)scuiCtx.getRequest().getParameter("returnURL"));
-			punchoutRequest.setSelectedCategory((String)scuiCtx.getRequest().getParameter("selectedCategory"));
-			punchoutRequest.setSelectedItem((String)scuiCtx.getRequest().getParameter("selectedItem"));
-			punchoutRequest.setSelectedItemUOM((String)scuiCtx.getRequest().getParameter("selectedItemUOM"));
-			punchoutRequest.setBuyerCookie((String)scuiCtx.getRequest().getParameter("buyerCookie"));
-			punchoutRequest.setFromIdentity((String)scuiCtx.getRequest().getParameter("fromIdentity"));
-			punchoutRequest.setToIdentity((String)scuiCtx.getRequest().getParameter("toIdentity"));	
-			punchoutRequest.setIsProcurementUser((String)scuiCtx.getRequest().getParameter("amiProcurementUser"));
-			
+			punchoutRequest.setCXML(isCXML(scuiCtx));
+			punchoutRequest.setLoginID(scuiCtx.getRequest().getParameter("DisplayUserID"));
+			punchoutRequest.setSfId(scuiCtx.getRequest().getParameter("EnterpriseCode"));
+			punchoutRequest.setPayLoadID(scuiCtx.getRequest().getParameter("payLoadID"));
+			punchoutRequest.setOperation(scuiCtx.getRequest().getParameter("operation"));
+			punchoutRequest.setOrderHeaderKey(scuiCtx.getRequest().getParameter("orderHeaderKey"));
+			punchoutRequest.setReturnURL(scuiCtx.getRequest().getParameter("returnURL"));
+			punchoutRequest.setSelectedCategory(scuiCtx.getRequest().getParameter("selectedCategory"));
+			punchoutRequest.setSelectedItem(scuiCtx.getRequest().getParameter("selectedItem"));
+			punchoutRequest.setSelectedItemUOM(scuiCtx.getRequest().getParameter("selectedItemUOM"));
+			punchoutRequest.setBuyerCookie(scuiCtx.getRequest().getParameter("buyerCookie"));
+			punchoutRequest.setFromIdentity(scuiCtx.getRequest().getParameter("fromIdentity"));
+			punchoutRequest.setToIdentity(scuiCtx.getRequest().getParameter("toIdentity"));
+			punchoutRequest.setIsProcurementUser(scuiCtx.getRequest().getParameter("amiProcurementUser"));
+
 			scuiCtx.getSession().setAttribute("PunchoutRequest", punchoutRequest);
 			}
 		return response;
 	}
-	
+
+	private boolean isCXML(SCUIContext scuiCtx) {
+		String identity = scuiCtx.getRequest().getParameter("toIdentity");
+		return identity != null && !identity.isEmpty();
+	}
+
 	private void setRequiredAttrbutes(HttpServletRequest request){
 		String sessionUserName = (String)request.getSession(false).getAttribute("loggedInUserName");
-		
+
 		String sessionUserId = (String)request.getSession(false).getAttribute("loggedInUserId");
 		String sessionSREmailID = (String)request.getSession(false).getAttribute("SRSalesRepEmailID");
 		String requestUserName = (String)request.getAttribute("loggedInUserName");
 		String requestUserId = (String)request.getAttribute("loggedInUserId");
 		String requestSREmailID = (String)request.getAttribute("SRSalesRepEmailID");
 		if (requestUserId == null){
-			requestUserName = (String)request.getParameter("loggedInUserName");
+			requestUserName = request.getParameter("loggedInUserName");
 			//request.setAttribute("DisplayUserID",(String)request.getParameter("DisplayUserID"));
-			 requestUserId = (String)request.getParameter("loggedInUserId");
-			 requestSREmailID = (String)request.getParameter("SRSalesRepEmailID");
-		}		
+			 requestUserId = request.getParameter("loggedInUserId");
+			 requestSREmailID = request.getParameter("SRSalesRepEmailID");
+		}
 		if (requestUserId != null){
 			request.getSession(false).setAttribute("IS_SALES_REP", "true");
 			request.getSession(false).setAttribute("loggedInUserId",requestUserId);

@@ -3,8 +3,8 @@ package com.sterlingcommerce.xpedx.webchannel.punchout;
 public class PunchoutRequest {
 
 	private String loginID;
-	
-	private String sfId;	
+	private String sfId;
+	private boolean isCXML;
 	private String payLoadID;
 	private String operation;
 	private String orderHeaderKey;
@@ -16,7 +16,7 @@ public class PunchoutRequest {
 	private String fromIdentity;
 	private String toIdentity;
 	private String isProcurementUser;
-	
+
 
 	public String getLoginID() {
 		return loginID;
@@ -29,6 +29,12 @@ public class PunchoutRequest {
 	}
 	public void setSfId(String sfId) {
 		this.sfId = sfId;
+	}
+	public boolean isCXML() {
+		return isCXML;
+	}
+	public void setCXML(boolean isCXML) {
+		this.isCXML = isCXML;
 	}
 	public String getPayLoadID() {
 		return payLoadID;
@@ -96,5 +102,5 @@ public class PunchoutRequest {
 	public void setIsProcurementUser(String isProcurementUser) {
 		this.isProcurementUser = isProcurementUser;
 	}
-	
+
 }
