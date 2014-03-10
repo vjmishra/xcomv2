@@ -138,6 +138,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);
 
 		updateOrderUoms(env, orderOutputDoc);
+		updateLineNos(env, orderOutputDoc);
 
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
 	}
@@ -162,6 +163,17 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			throws ParserConfigurationException, SAXException, IOException {
 
 		ociData = outputData;
+	}
+
+	private void updateLineNos(YFSEnvironment env, Document orderOutputDoc)
+			throws RemoteException, YIFClientCreationException {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
+
+		// if items deleted then gaps in Line# so replace with sequential
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			element.setAttribute("PrimeLineNo", String.valueOf(i+1));
+		}
 	}
 
 	private void updateOrderUoms(YFSEnvironment env, Document orderOutputDoc)
