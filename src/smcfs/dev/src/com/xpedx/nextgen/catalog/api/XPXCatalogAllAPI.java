@@ -13,7 +13,6 @@ import java.util.Set;
 
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.lang.time.StopWatch;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -21,6 +20,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.xpedx.nextgen.catalog.api.trey4748.StopWatch;
+import com.xpedx.nextgen.catalog.api.trey4748.Trey4748SmcfsLogging;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.custom.dbi.XPX_Item_Associations;
 import com.yantra.custom.dbi.XPX_Item_Extn;
