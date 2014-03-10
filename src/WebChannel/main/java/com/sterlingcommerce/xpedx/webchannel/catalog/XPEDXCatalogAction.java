@@ -47,7 +47,7 @@ import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.xpedx.webchannel.catalog.trey4748.Trey4748Logging;
+import com.sterlingcommerce.xpedx.webchannel.catalog.trey4748.Trey4748SwcLogging;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
@@ -1233,7 +1233,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				sw.start();
 				allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", input, wcContext.getSCUIContext());
 				sw.stop();
-				Trey4748Logging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
+				Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
 
 				getOrderMultipleMapForItems();
 				getReplacmentItemsMapForItems(envCode, custDivision);
@@ -1393,7 +1393,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			sw.start();
 			String returnString = super.navigate();
 			sw.stop();
-			Trey4748Logging.getInstance().snapshot(req.getSession(), sw.getTime(), "super.navigate: returnString=%s", returnString);
+			Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "super.navigate: path=%s, returnString=%s", path, returnString);
 			// XBT-260
 
 			if (ERROR.equals(returnString)) {
@@ -1654,7 +1654,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 									sw.start();
 									XPXItemExtnListElement = XPEDXOrderUtils.getXPEDXItemAssociation(custID, shipFromDivision, itemId.getTextContent(), getWCContext());
 									sw.stop();
-									Trey4748Logging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke getXPEDXItemAssociation: custID=%s, shipFromDivision=%s, itemId=%s", custID, shipFromDivision, itemId.getTextContent());
+									Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke getXPEDXItemAssociation: custID=%s, shipFromDivision=%s, itemId=%s", custID, shipFromDivision, itemId.getTextContent());
 
 									List<Element> xPXItemExtn = XMLUtilities.getElements(XPXItemExtnListElement.getDocumentElement(),
 											"XPXItemExtn[@ItemID='" + itemId.getNodeValue() + "']");

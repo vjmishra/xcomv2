@@ -24,13 +24,13 @@ import com.yantra.yfs.core.YFSSystem;
  *
  * @author Trey Howard
  */
-public class Trey4748Logging {
+public class Trey4748SwcLogging {
 
-	private static final Logger log = Logger.getLogger(Trey4748Logging.class);
+	private static final Logger log = Logger.getLogger(Trey4748SwcLogging.class);
 
-	private static Trey4748Logging instance = new Trey4748Logging();
+	private static Trey4748SwcLogging instance = new Trey4748SwcLogging();
 
-	public static Trey4748Logging getInstance() {
+	public static Trey4748SwcLogging getInstance() {
 		return instance;
 	}
 
@@ -79,7 +79,7 @@ public class Trey4748Logging {
 
 			conn.setAutoCommit(false);
 
-			stmt = conn.prepareStatement("insert into trey_4748_logging (session_id, username, description, elapsed_millis, mem_total, mem_free, mem_used, mem_max, created, server_name) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			stmt = conn.prepareStatement("insert into trey_4748_logging (session_id, username, description, elapsed_millis, mem_total, mem_free, mem_used, mem_max, created, server_name, application) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			int idx = 1;
 			stmt.setString(idx++, sessionId);
 			stmt.setString(idx++, loginid);
@@ -91,6 +91,7 @@ public class Trey4748Logging {
 			stmt.setLong(idx++, max);
 			stmt.setTimestamp(idx++, new java.sql.Timestamp(now.getTime()));
 			stmt.setString(idx++, serverName);
+			stmt.setString(idx++, "swc");
 
 			stmt.executeUpdate();
 
