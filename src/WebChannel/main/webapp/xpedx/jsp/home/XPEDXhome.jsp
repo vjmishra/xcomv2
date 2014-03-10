@@ -266,10 +266,10 @@ Ext.onReady(function(){
 			
 			<div class="slideshow">
 			     <s:if test="%{#isPunchoutUser}"> 
-			              <s:set name="punchoutPromotionPath" value="#wcUtil.getpuchoutPromotionImagelocation()" />
-			              <s:set name="checkPunchoutPromotionimageExists" value="#wcUtil.isCheckPunchoutPromotionimageExists()" />  
-				          <s:if test="%{#checkPunchoutPromotionimageExists}">
-				                <img width="650" height="260" border="0" alt="" style="margin-top: 5px;"src="<s:property value="#punchoutPromotionPath" />"/>
+			              <s:set name="punchoutPromotionPath" value="#wcUtil.getPuchoutPromotionImageLocation()" />
+			              <s:set name="checkPunchoutPromotionImageExists" value="#wcUtil.doesPunchoutPromotionLocation(#punchoutPromotionPath)" />  
+				          <s:if test="%{#checkPunchoutPromotionImageExists}">
+				                <img width="650" height="260" border="0" alt="" style="margin-top: 5px;"src="<s:property value='#wcUtil.staticFileLocation' /><s:property value="#punchoutPromotionPath" />"/>
 				          </s:if> 
 				  </s:if> 
 				  <s:else>
@@ -464,4 +464,4 @@ function lodDivAsAjax(url,div)
 	});
 }
 </script>
-</html> 
+</html>

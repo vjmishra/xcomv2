@@ -136,8 +136,6 @@ public class XPEDXWCUtils {
 
 
 	private static String punchoutImageLocation=null;
-	private static String punchoutPromotionLocation=null;
-	private static boolean checkPunchoutPromotionimageExists;
 	private static String xpedxBuildKey =null;
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
@@ -6662,54 +6660,45 @@ public class XPEDXWCUtils {
 	
 /*  Punchout Promotion Static Page  */
 	
-	public static String getpuchoutPromotionImagelocation() throws Exception {
+	public static String getPuchoutPromotionImageLocation() throws Exception {
+		String punchoutPromotionLocation=null;
+        String punchoutPageName = pageName;
 
-		String punchoutpageName = pageName;
-
-		if (punchoutpageName != null
-				&& punchoutpageName.equals("XPEDXhome.jsp")) {
+		if (punchoutPageName != null
+				&& punchoutPageName.equals("XPEDXhome.jsp")) {
 			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Home_Static_650x260"
 					+ xpedxBuildKey + ".jpg";
 
-		} else if (punchoutpageName != null
-				&& punchoutpageName.equals("XPEDXCatalogExt.jsp")) {
+		} else if (punchoutPageName != null
+				&& punchoutPageName.equals("XPEDXCatalogExt.jsp")) {
 			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Catalog_Ext_Static_482x72"
 					+ xpedxBuildKey + ".jpg";
 
 		} else {
 			punchoutPromotionLocation = "";
 		}
-		if (!"".equals(punchoutPromotionLocation)) {
-			punchoutPromotionLocation(punchoutPromotionLocation);
-		}
-		return staticFileLocation + punchoutPromotionLocation;
+		
+		return punchoutPromotionLocation;
 	}
 
-	public static boolean punchoutPromotionLocation(String punchoutPromotionPath)
+	public static boolean doesPunchoutPromotionLocation(String  punchoutPromotionPath)
 			throws Exception {
-
-		IWCContext wcContext = WCContextHelper
-				.getWCContext(ServletActionContext.getRequest());
-		ServletContext servletContext = wcContext.getSCUIContext()
-				.getServletContext();
-		if ((!"".equals(punchoutPromotionPath))
-				&& (XPEDXFileManager.checkFile(punchoutPromotionPath,
-						wcContext, false))) {
-			checkPunchoutPromotionimageExists = true;
+		boolean  checkPunchoutPromotionImageExists= false;
+		
+        IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
+		
+		if ((!"".equals(punchoutPromotionPath)) && (XPEDXFileManager. checkFile(punchoutPromotionPath, wcContext, false))) {
+			checkPunchoutPromotionImageExists = true;
 		} else {
-			checkPunchoutPromotionimageExists = false;
+			checkPunchoutPromotionImageExists = false;
+			
 		}
-		return checkPunchoutPromotionimageExists;
+		return checkPunchoutPromotionImageExists;
+		
 	}
 
-	public static boolean isCheckPunchoutPromotionimageExists() {
-		return checkPunchoutPromotionimageExists;
-	}
 
-	public static void setCheckPunchoutPromotionimageExists(
-			boolean checkPunchoutPromotionimageExists) {
-		XPEDXWCUtils.checkPunchoutPromotionimageExists = checkPunchoutPromotionimageExists;
-	}
 	
 	
 	
