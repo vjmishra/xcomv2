@@ -54,7 +54,6 @@ import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
-import com.yantra.yfs.japi.YFSException;
 
 /**
  * Action handler for performing submit order for punchout users
@@ -184,49 +183,10 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Element element = (Element) nodeList.item(i);
 			String maxUom = element.getAttribute("TransactionalUOM");
-			String convertedBaseUom = convertMaxUomToEdi(env, maxUom);
+			String convertedBaseUom = XPEDXWCUtils.convertMaxUomToEdi(env, maxUom);
 			element.setAttribute("TransactionalUOM", convertedBaseUom);
 		}
 	}
-	//TODO move this method to xpxutils or xpedxwcutils?
-	public static String convertMaxUomToEdi(YFSEnvironment env, String maxUom)
-			throws YFSException, RemoteException, YIFClientCreationException {
-		String ediUom = maxUom;
-		Document legacyUomOutputDoc = null;
-		Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
-
-		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", "M");
-		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyUOM", maxUom);
-
-		YIFApi api = YIFClientFactory.getInstance().getApi();
-		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc); //TODO return fewer fields by using mashup?
-
-		if (legacyUomOutputDoc != null) {
-			String mappedUom = SCXmlUtil.getXpathAttribute(legacyUomOutputDoc.getDocumentElement(),"/XPEDXLegacyUomXrefList/XPEDXLegacyUomXref/@UOM");
-
-			if (mappedUom != null && mappedUom.trim().length() > 0) {
-				ediUom = stripEnvFromUom(mappedUom); //TODO if strip M_ here or in caller, don't need to do in xslt
-				LOG.info("Converted max UOM " +maxUom+ " to EDI UOM " + ediUom);
-			}
-			else {
-				LOG.warn("convertMaxUomToEdi: UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table: " + maxUom);
-			}
-		} else {
-			LOG.error("convertMaxUomToEdi: Problem getting data from XPEDX_Legacy_Uom_Xref table for " + maxUom);
-		}
-
-		return ediUom;
-	}
-
-	private static String stripEnvFromUom(String mappedUom) {
-		String ediUom;
-		ediUom = mappedUom;
-		if (mappedUom.contains("_")) {
-			ediUom = mappedUom.split("_")[1];
-		}
-		return ediUom;
-	}
-
 	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();

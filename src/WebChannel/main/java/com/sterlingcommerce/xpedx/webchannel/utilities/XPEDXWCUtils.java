@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.yantra.interop.client.ClientVersionSupport;
 import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.core.YFCIterable;
@@ -128,17 +130,11 @@ public class XPEDXWCUtils {
 	private static String staticFileLocation = null;
 //	private static String pageName=null;
 	private static boolean checkPunchoutimageExists;
-
-
-
-
-
-
-
 	private static String punchoutImageLocation=null;
 	private static String xpedxBuildKey =null;
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
+	private static Map<String, String> legacyUomMap;
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
@@ -2107,6 +2103,73 @@ public class XPEDXWCUtils {
         Map<String, String> UOMDescMap = (Map<String,String>)localSession.getAttribute("UOMDescriptionMap");
         return UOMDescMap;
     }
+
+
+	public static String convertMaxUomToEdi(YFSEnvironment env, String maxUom) {
+		String ediUom = maxUom;
+
+		if (legacyUomMap == null || legacyUomMap.size() == 0) {
+			try {
+				// Grab the entire legacy UOM map, and cache it
+				Document legacyUomOutputDoc = getLegacyUomDataFromServer(env);
+
+				legacyUomMap = extractLegacyUomMap(legacyUomOutputDoc);
+
+				log.info("Obtain legacy UOM map from server - entries: " + legacyUomMap.size());
+			}
+			catch (Exception e) {
+				log.error("Problem getting data from XPEDX_Legacy_Uom_Xref table", e);
+			}
+		}
+
+		if (legacyUomMap.containsKey(maxUom)) {
+			String mappedUom = legacyUomMap.get(maxUom);
+
+			ediUom = stripEnvFromUom(mappedUom);
+		}
+		else {
+			log.warn("convertMaxUomToEdi: UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table: " + maxUom);
+		}
+
+		return ediUom;
+	}
+
+	private static Document getLegacyUomDataFromServer(YFSEnvironment env)
+			throws YIFClientCreationException, RemoteException {
+
+		// Don't specify particular max uom, so get all entries
+		Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
+		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", "M");
+
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		Document legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc); //TODO return fewer fields?
+		return legacyUomOutputDoc;
+	}
+
+	private static Map<String, String> extractLegacyUomMap(Document legacyUomOutputDoc) {
+		HashMap<String, String> map = new HashMap<String,String>();
+		NodeList nodeList = legacyUomOutputDoc.getElementsByTagName("XPEDXLegacyUomXref");
+
+		// replace UOM (MAX format) with EDI UOM
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			String maxUom = element.getAttribute("LegacyUOM");
+			String ediUom = element.getAttribute("UOM");
+			map.put(maxUom, ediUom);
+		}
+
+		return map;
+	}
+
+	public static String stripEnvFromUom(String mappedUom) {
+		String ediUom;
+		ediUom = mappedUom;
+		if (mappedUom.contains("_")) {
+			ediUom = mappedUom.split("_")[1];
+		}
+		return ediUom;
+	}
+
 
 	public static String getLoginUserName(String UserID)	throws XPathExpressionException, XMLExceptionWrapper,
 	CannotBuildInputException
@@ -6351,7 +6414,7 @@ public class XPEDXWCUtils {
 		XPEDXWCUtils.xpedxBuildKey = xpedxBuildKey;
 	}
 
-	
+
 	/**
 	 * extracts catalog main categories...
 	 *
@@ -6544,15 +6607,15 @@ public class XPEDXWCUtils {
 	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items,boolean defaultShowUOMFlag) {
 
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
-		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
-				.getRequest());
-		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext
-				.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
-				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 		if(items == null || items.size() ==0)
 			return itemUomHashMap;
+
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
+				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+
 		try {
 			Element allAPIOutputDoc=getItemCustomExtnAndUOM(items,context,env);
 			Element wElement = (Element)allAPIOutputDoc.getElementsByTagName("ItemList").item(0);
@@ -6562,7 +6625,6 @@ public class XPEDXWCUtils {
 
 			if(allAPIOutputDoc != null)
 			{
-
 				if(items.size()== 1 && defaultShowUOMFlag == true)
 					itemUomHashMap.put(items.get(0), XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items.get(0), context.getStorefrontId()));
 				else
@@ -6575,14 +6637,13 @@ public class XPEDXWCUtils {
 		}
 		finally
 		{
-				scuiTransactionContext.end();
-				env.clearApiTemplate("XPXUOMListAPI");
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
-				env = null;
+			scuiTransactionContext.end();
+			env.clearApiTemplate("XPXUOMListAPI");
+			SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+			env = null;
 		}
-		return itemUomHashMap;
 
+		return itemUomHashMap;
 	}
 
 	public static String getBrowserVersion(String browserPropertyName) {
@@ -6601,7 +6662,7 @@ public class XPEDXWCUtils {
 	}
 
 	public static String getPuchoutImagelocation(String punchoutpageName) throws Exception {
-		
+
 			if (punchoutpageName != null
 					&& punchoutpageName.equals("XPEDXhome.jsp")) {
 				punchoutImageLocation = "/xpedx/images/punchout/Punchout_Home_300x250"+ xpedxBuildKey +".jpg";
@@ -6628,8 +6689,8 @@ public class XPEDXWCUtils {
 
 
 
-	public static boolean punchoutImageLocation(String punchoutimagepath) throws Exception { 
-	
+	public static boolean punchoutImageLocation(String punchoutimagepath) throws Exception {
+
 		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
 			if((!"".equals(punchoutimagepath)) && (XPEDXFileManager.checkFile(punchoutimagepath, wcContext,false)))
@@ -6650,8 +6711,8 @@ public class XPEDXWCUtils {
 	public static void setCheckPunchoutimageExists(boolean checkPunchoutimageExists) {
 		XPEDXWCUtils.checkPunchoutimageExists = checkPunchoutimageExists;
 	}
-	
-    
+
+
 	/**
 	 * Returns path of punchout promotion image location.
 	 * @return the path of punchout promotion image location.
@@ -6669,10 +6730,10 @@ public class XPEDXWCUtils {
 		} else {
 			punchoutPromotionLocation = "";
 		}
-		
+
 		return punchoutPromotionLocation;
 	}
-	
+
 	/**
 	 * Returns true if the punchout user promotion image location exists.
 	 * @param context
@@ -6682,17 +6743,17 @@ public class XPEDXWCUtils {
 	 */
 	public static boolean isPunchoutPromotionLocationExist(String  punchoutPromotionPath)
 			throws Exception {
-		
+
 		 IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		 ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
-		
+
 		return ((!"".equals(punchoutPromotionPath)) && (XPEDXFileManager. checkFile(punchoutPromotionPath, wcContext, false)));
 	}
 
 
-	
-	
-	
+
+
+
 	/**
 	 * @param context
 	 * @return Returns the customer's punchout comments (see Master Customer ExtnPunchOutComments).
