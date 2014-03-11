@@ -881,7 +881,7 @@ $(document).ready(function(){
 				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
 				<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXDraftOrderDetails.jsp')" />
 					<s:if test="%{#isPunchoutimageExists}">
-					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src=<s:property value='punchoutImagepath'/>
+					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src="<s:property value='punchoutImagepath'/> "/>
 				 </s:if>
 				</s:elseif>
 	

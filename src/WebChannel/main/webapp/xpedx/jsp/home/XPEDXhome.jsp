@@ -299,7 +299,7 @@ Ext.onReady(function(){
 				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
 				<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXhome.jsp')" />
 				<s:if test="%{#isPunchoutimageExists}">
-					<img width="300" height="250" border="0" alt="" style="margin-top: 5px; padding-right: 5px;" src=<s:property value='punchoutImagepath'/>
+					<img width="300" height="250" border="0" alt="" style="margin-top: 5px; padding-right: 5px;" src="<s:property value='punchoutImagepath'/> "/>
 				 </s:if>
 				</s:elseif>
 				<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >

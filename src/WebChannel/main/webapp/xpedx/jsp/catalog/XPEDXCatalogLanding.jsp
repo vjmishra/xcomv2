@@ -320,7 +320,7 @@
 					<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
 					<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXCatalogLanding.jsp')" />
 						<s:if test="%{#isPunchoutimageExists}">
-						<img width="160" height="600" border="0" alt="" style="margin-top:10px;padding-right:5px;" src=<s:property value='punchoutImagepath'/>
+						<img width="160" height="600" border="0" alt="" style="margin-top:10px;padding-right:5px;" src="<s:property value='punchoutImagepath'/> "/>
 				 	</s:if>
 					</s:elseif>
 				<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
