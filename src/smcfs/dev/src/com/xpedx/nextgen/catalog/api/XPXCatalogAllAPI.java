@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -57,6 +58,8 @@ import com.yantra.yfs.japi.YFSException;
  * This Service is create for performance improvement of Catalog page - By Amar
  */
 public class XPXCatalogAllAPI implements YIFCustomApi {
+
+	private static final Logger log4j = Logger.getLogger(XPXCatalogAllAPI.class);
 
 	/** API object. */
 	private static YIFApi api = null;// dfsdzcvvc
@@ -191,6 +194,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 
 		} catch (Exception e) {
 			log.error("", e);
+			log4j.error("", e);
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getCustXrefList");
 		}
 		setItemXrefDoc(outputDoc);
 		return custXrefElement;
@@ -371,6 +376,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 		} catch (Exception e) {
 			log.error("", e);
+			log4j.error("", e);
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getXPXItemExtnElement");
 		}
 		return xpxItemExtnList;
 	}
@@ -406,8 +413,10 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					if (priceListIter.hasNext()) {
 						YPM_Pricelist_Assignment pricelistAssignment = priceListIter.next();
 						pltqbPriceListLineList.append("AND pricelist_hdr_key IN  ('" + pricelistAssignment.getPricelist_Header_Key() + "'");
-					} else
+					} else {
 						return priceElement;
+					}
+
 					while (priceListIter.hasNext()) {
 						YPM_Pricelist_Assignment pricelistAssignment = priceListIter.next();
 						pltqbPriceListLineList.append(" ,'" + pricelistAssignment.getPricelist_Header_Key() + "'");
@@ -415,8 +424,10 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					pltqbPriceListLineList.append(")");
 
 					NodeList itemIdComplexQuery = pricelistAssignmentElement.getElementsByTagName("Exp");
-					if (itemIdComplexQuery == null)
+					if (itemIdComplexQuery == null) {
 						return priceElement;
+					}
+
 					pltqbPriceListLineList.append(" AND ITEM_ID IN ('" + ((Element) itemIdComplexQuery.item(0)).getAttribute("Value") + "'");
 					for (int i = 1; i < itemIdComplexQuery.getLength(); i++) {
 						Element itemIDElement = (Element) itemIdComplexQuery.item(i);
@@ -450,6 +461,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 		} catch (Exception e) {
 			log.error("", e);
+			log4j.error("", e);
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getPriceListElement");
 		}
 		return priceElement;
 	}
@@ -551,6 +564,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			if ("false".equals(customerDetails.get("isGetUOMCall"))) {
 				return complexQueryOutDoc.getDocument();
 			}
+
 			companyCode = customerDetails.get("companyCode");
 			customerDivision = customerDetails.get("customerDivision");
 			useOrderMulUOMFlag = customerDetails.get("useOrderMulUOMFlag");
@@ -678,6 +692,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 		} catch (Exception e) {
 			log.error("", e);
+			log4j.error("", e);
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getXpedxUOMList");
 		}
 		return complexQueryOutDoc.getDocument();
 	}
