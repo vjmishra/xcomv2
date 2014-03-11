@@ -266,8 +266,8 @@ Ext.onReady(function(){
 			
 			<div class="slideshow">
 			     <s:if test="%{#isPunchoutUser}"> 
-			              <s:set name="punchoutPromotionPath" value="#wcUtil.getPuchoutPromotionImageLocation()" />
-			              <s:set name="checkPunchoutPromotionImageExists" value="#wcUtil.doesPunchoutPromotionLocation(#punchoutPromotionPath)" />  
+			              <s:set name="punchoutPromotionPath" value="#wcUtil.getPuchoutPromotionImageLocation('XPEDXhome.jsp')" />
+			              <s:set name="checkPunchoutPromotionImageExists" value="#wcUtil.isPunchoutPromotionLocationExist(#punchoutPromotionPath)" />  
 				          <s:if test="%{#checkPunchoutPromotionImageExists}">
 				                <img width="650" height="260" border="0" alt="" style="margin-top: 5px;"src="<s:property value='#wcUtil.staticFileLocation' /><s:property value="#punchoutPromotionPath" />"/>
 				          </s:if> 
@@ -297,7 +297,7 @@ Ext.onReady(function(){
 				</s:if> 
 				<s:elseif test="%{#isPunchoutUser}">
 				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
-				<s:set name="punchoutImagepath" value="#wcUtil.getpuchoutImagelocation()" />
+				<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXhome.jsp')" />
 				<s:if test="%{#isPunchoutimageExists}">
 					<img width="300" height="250" border="0" alt="" style="margin-top: 5px; padding-right: 5px;" src=<s:property value='punchoutImagepath'/>
 				 </s:if>

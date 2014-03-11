@@ -126,7 +126,7 @@ public class XPEDXWCUtils {
 	private static SecretKey sk = getSecretKey(sharedkey);
 	private static byte[] sharedkeyfinal = sk.getEncoded();
 	private static String staticFileLocation = null;
-	private static String pageName=null;
+//	private static String pageName=null;
 	private static boolean checkPunchoutimageExists;
 
 
@@ -6594,15 +6594,14 @@ public class XPEDXWCUtils {
 			versionString="";
 		}
 		else {
-			versionString = versionString.trim();
+ 			versionString = versionString.trim();
 		}
 
 		return versionString;
 	}
 
-	public static String getpuchoutImagelocation() throws Exception {
+	public static String getPuchoutImagelocation(String punchoutpageName) throws Exception {
 		
-			String punchoutpageName = pageName;
 			if (punchoutpageName != null
 					&& punchoutpageName.equals("XPEDXhome.jsp")) {
 				punchoutImageLocation = "/xpedx/images/punchout/Punchout_Home_300x250"+ xpedxBuildKey +".jpg";
@@ -6627,13 +6626,7 @@ public class XPEDXWCUtils {
 		return staticFileLocation + punchoutImageLocation;
 	}
 
-	public static String getPageName() {
-		return pageName;
-	}
 
-	public static void setPageName(String pageName) {
-		XPEDXWCUtils.pageName = pageName;
-	}
 
 	public static boolean punchoutImageLocation(String punchoutimagepath) throws Exception { 
 	
@@ -6658,21 +6651,20 @@ public class XPEDXWCUtils {
 		XPEDXWCUtils.checkPunchoutimageExists = checkPunchoutimageExists;
 	}
 	
-/*  Punchout Promotion Static Page  */
-	
-	public static String getPuchoutPromotionImageLocation() throws Exception {
+    
+	/**
+	 * Returns path of punchout promotion image location.
+	 * @return the path of punchout promotion image location.
+	 * @throws Exception
+	 */
+	public static String getPuchoutPromotionImageLocation(String punchoutPageName) throws Exception {
 		String punchoutPromotionLocation=null;
-        String punchoutPageName = pageName;
 
-		if (punchoutPageName != null
-				&& punchoutPageName.equals("XPEDXhome.jsp")) {
-			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Home_Static_650x260"
-					+ xpedxBuildKey + ".jpg";
+		if (punchoutPageName != null && punchoutPageName.equals("XPEDXhome.jsp")) {
+			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Home_Static_650x260" + xpedxBuildKey + ".jpg";
 
-		} else if (punchoutPageName != null
-				&& punchoutPageName.equals("XPEDXCatalogExt.jsp")) {
-			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Catalog_Ext_Static_482x72"
-					+ xpedxBuildKey + ".jpg";
+		} else if (punchoutPageName != null && punchoutPageName.equals("XPEDXCatalogExt.jsp")) {
+			punchoutPromotionLocation = "/xpedx/images/punchout/Punchout_Catalog_Ext_Static_482x72" + xpedxBuildKey + ".jpg";
 
 		} else {
 			punchoutPromotionLocation = "";
@@ -6680,22 +6672,21 @@ public class XPEDXWCUtils {
 		
 		return punchoutPromotionLocation;
 	}
-
-	public static boolean doesPunchoutPromotionLocation(String  punchoutPromotionPath)
+	
+	/**
+	 * Returns true if the punchout user promotion image location exists.
+	 * @param context
+	 * @return  true  if the punchout user promotion image location exists;
+	 *                 false otherwise.
+	 * @throws Exception
+	 */
+	public static boolean isPunchoutPromotionLocationExist(String  punchoutPromotionPath)
 			throws Exception {
-		boolean  checkPunchoutPromotionImageExists= false;
 		
-        IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-		ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
+		 IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		 ServletContext servletContext = wcContext.getSCUIContext().getServletContext();
 		
-		if ((!"".equals(punchoutPromotionPath)) && (XPEDXFileManager. checkFile(punchoutPromotionPath, wcContext, false))) {
-			checkPunchoutPromotionImageExists = true;
-		} else {
-			checkPunchoutPromotionImageExists = false;
-			
-		}
-		return checkPunchoutPromotionImageExists;
-		
+		return ((!"".equals(punchoutPromotionPath)) && (XPEDXFileManager. checkFile(punchoutPromotionPath, wcContext, false)));
 	}
 
 
