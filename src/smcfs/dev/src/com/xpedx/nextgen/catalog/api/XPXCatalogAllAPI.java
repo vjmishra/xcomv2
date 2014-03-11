@@ -186,7 +186,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		List<XPX_Itemcust_Xref> xpxItemxrefList=
 			XPX_Itemcust_XrefDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
 		sw.stop();
-		Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemxrefList: pltQryBuilder=%s, xpxItemxrefList.size=%s", pltQryBuilder.toString(), xpxItemxrefList.size());
+		Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemxrefList: pltQryBuilder=%s, xpxItemxrefList.size=%s", pltQryBuilder.getReadableWhereClause(), xpxItemxrefList.size());
 		sw.reset();
 
 		sw.start();
@@ -315,7 +315,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				List<XPX_Item_Extn> xpxItemExtns=
 					XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
 				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemxrefList: pltQryBuilder=%s, xpxItemExtns.size=%s", pltQryBuilder.toString(), xpxItemExtns.size());
+				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemxrefList: pltQryBuilder=%s, xpxItemExtns.size=%s", pltQryBuilder.getReadableWhereClause(), xpxItemExtns.size());
 				sw.reset();
 
 				sw.start();
@@ -361,7 +361,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					List<XPX_Item_Associations> xpxItemAssociations=
 						XPX_Item_AssociationsDBHome.getInstance().listWithWhere((YFSContext)env, itemAssociationpltQryBuilder,5000);
 					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemAssociations: itemAssociationpltQryBuilder=%s, xpxItemAssociations.size=%s", itemAssociationpltQryBuilder.toString(), xpxItemAssociations.size());
+					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemAssociations: itemAssociationpltQryBuilder=%s, xpxItemAssociations.size=%s", itemAssociationpltQryBuilder.getReadableWhereClause(), xpxItemAssociations.size());
 					sw.reset();
 
 					ArrayList<Element> _xpxItemExtnList=SCXmlUtil.getElements(xpxItemExtnList, "XPXItemExtn");
@@ -515,7 +515,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				List<YPM_Pricelist_Assignment> priceListAssignments=
 					YPM_Pricelist_AssignmentDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);
 				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListAssignments: pltQryBuilder=%s, priceListAssignments.size=%s", pltQryBuilder.toString(), priceListAssignments.size());
+				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListAssignments: pltQryBuilder=%s, priceListAssignments.size=%s", pltQryBuilder.getReadableWhereClause(), priceListAssignments.size());
 				sw.reset();
 
 				Iterator<YPM_Pricelist_Assignment> priceListIter=priceListAssignments.iterator();
@@ -554,7 +554,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					List<YPM_Pricelist_Line> priceListLineList=
 						YPM_Pricelist_LineDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder1,5000);
 					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListLineList: pltQryBuilder1=%s, priceListLineList.size=%s", pltQryBuilder1.toString(), priceListLineList.size());
+					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListLineList: pltQryBuilder1=%s, priceListLineList.size=%s", pltQryBuilder1.getReadableWhereClause(), priceListLineList.size());
 					sw.reset();
 
 					sw.start();
@@ -781,7 +781,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				 List<YFS_Item_UOM> yfsItemUOMList=
 					 YFS_Item_UOMDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder1,5000);
 				 sw.stop();
-				 Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query yfsItemList: pltQryBuilder1=%s, yfsItemUOMList.size=%s", pltQryBuilder1.toString(), yfsItemUOMList.size());
+				 Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query yfsItemUOMList: pltQryBuilder1=%s, yfsItemUOMList.size=%s", pltQryBuilder1.getReadableWhereClause(), yfsItemUOMList.size());
 				 sw.reset();
 
 				 sw.start();
