@@ -57,8 +57,8 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     		Document doc = (Document)req.getAttribute(IAribaConstants.ARIBA_CXML_REQUEST_ATTRIBUTE_KEY);
     		cXMLFields = new XPEDXCXMLMessageFields(doc);
 
-    		//TODO Log in here because seem to need to be auth'ed so can call mashups - get guest from properties file?
-    		Document dummyloginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("dave@perrigo.com","Password1");
+    		//TODO Log in dummy user because seem to need to be auth'ed to get cust config from server - better way?
+    		Document dummyloginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("punchout_dummy","punchout_dummy");
     		securityResponse = SCUIPlatformUtils.login(dummyloginDoc,SCUIContextHelper.getUIContext(req, res));
 
     		log.info("Dummy Auth " + (securityResponse.getReturnStatus() ? "Successful" : "FAILED") + " - PayLoadID:"+cXMLFields.getPayLoadId());
@@ -88,17 +88,17 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 			}
 
 
-			//TODO extract user from cXML and replace the one in the DB startURL
+			//TODO later for Toys'R'Us: extract user from incoming cXML and use it instead
 			// *if* the one specified is valid punchout user in system; otherwise keep default
-			// [later: extract optional user from cxml using userXPath]
 
-			//TODO do we need to login actual user here ?
+			// Not sure if we need to login actual user here, could auth some other way
+			// but do want to make sure valid before return URL
+    		//From 2010: "TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return"
     		String userid = obtainUserid(dbStartPage);
 			String passwd = obtainPassword(dbStartPage);
 
 			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(userid, passwd);
     		securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
-    		//From 2010: "TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return"
 
     		if (securityResponse.getReturnStatus())
     			log.info("Authentication successful for user " + userid + " - PayLoadID:" + cXMLFields.getPayLoadId());
@@ -107,10 +107,9 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     			return new SCUISecurityResponse(false, "Invalid User");
     		}
 
-    		//TODO if userid specified in cXML, update URL with it
+    		//TODO later for TRU: if userid specified in cXML, update URL with it
 
-    		//TODO add params to URL: for now hardcoding but these come from incoming cXML
-    		// and other compututation
+    		// Add params to start URL from DB for this customer
     		String moreParams = "&payLoadID="+payLoadID+"&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
     							"&buyerCookie="+buyerCookie+"&fromIdentity="+toIdentity+"&toIdentity="+custIdentity+"&sfId=xpedx" +
     							"&returnURL="+URLEncoder.encode(returnUrl,"UTF-8");
@@ -118,19 +117,17 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     		startPageURL = dbStartPage + moreParams;
     	}
     	catch(Exception e){
-    		logError("Exception during authentication: "+e.getMessage(),e);
-    		throw new WCException("Exception during XPEDXPunchoutServlet.processRequest", e);  //TODO this doesn't seem to work right
+    		logError("Exception during authentication", e);
+    		throw new WCException("Exception during XPEDXPunchoutServlet.processRequest", e);  //does this work right?
     	}
 
-    	//TODO securityResponse.getForwardURL() has jsessionid - any use?
-    	System.out.println("------> Custom start URL to return: " + startPageURL); //TODO remove println's
-    	System.out.println("unused securityResponse.getForwardURL(): " + securityResponse.getForwardURL());
+    	log.info("Punchout cXML setup: start URL to return: " + startPageURL);
 		cXMLFields.setStartPageURL(startPageURL );
 
     	return securityResponse;
  	}
 
-	// Extract user/pwd from DB configured start URL: "http://XXX?u=advance@punchout.com&p=punchout123"
+	// Extract user/pwd from DB configured start URL: "http://xxx?u=advance@punchout.com&p=punchout123"
 	private String obtainUserid(String dbStartPage) {
 		int userStart = dbStartPage.indexOf(PARAMNAME_USERID);
 		int userEnd   = dbStartPage.indexOf("&");
@@ -150,7 +147,6 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 	protected WCIntegrationResponse processRequest (HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		try {
-    		log.info("Punchout post Authentication process start >>>>>>>>"); //TODO keep these or make debug?
 
     		// NOTE: not sure what these calls to Sterling APIs do - need them all?
 
@@ -175,7 +171,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
        				}
 
     				try {
-       					CommerceContextHelper.processProcurementPunchIn(wcContext); //TODO what does this do???
+       					CommerceContextHelper.processProcurementPunchIn(wcContext); // what does this do?
        				}
        		    	catch(Exception e) {
        	    			return sendFailureResponse("Failed to process the commerce context",
@@ -184,8 +180,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
     				// Shouldn't need this since we're now defining our own URL
     				// Note that it gives wrong server port - assumes 8001 regardless if running on 7002!
-    				String aribaStartPageURL = WCIntegrationHelper.getAribaStartPageURL(cXMLFields, wcContext);
-    		    	System.out.println("unused WCIntegrationHelper.getAribaStartPageURL: " + aribaStartPageURL);
+    				//String aribaStartPageURL = WCIntegrationHelper.getAribaStartPageURL(cXMLFields, wcContext);
 
     				//TODO "&" getting turned into "&amp;" - matter?
     		    	String startPageURL = cXMLFields.getStartPageURL(); // our custom URL from authenticateRequest
@@ -241,7 +236,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 
 	private WCIntegrationResponse sendSuccessResponse(String errorMessage) {
 
-		//TODO should setProcStatus for all successes?  cXMLFields.setProcessStatus(true);
+		// should setProcStatus for all successes?  cXMLFields.setProcessStatus(true);
 		// [This appears to log ERROR - any way to avoid that?]
 		return new WCIntegrationResponse( WCIntegrationResponse.SUCCESS,
 				new Error(new Long(IWCIntegrationStatusCodes.SUCCESS), errorMessage));
@@ -250,7 +245,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 	private WCIntegrationResponse sendFailureResponse(String errorMessage, int errorCode) {
 		logError("Error Code: "+errorCode + " & ErrorDesc: "+ errorMessage);
 
-		//TODO should setProcStatus for all failures?  cXMLFields.setProcessStatus(false);
+		// should setProcStatus for all failures?  cXMLFields.setProcessStatus(false);
 		return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,
 				new Error(new Long(errorCode),errorMessage));
 	}
