@@ -238,6 +238,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 			pltqbItemExtn.append(")");
 
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemxrefList: pltqbItemExtn=%s", pltqbItemExtn.getReadableWhereClause());
+
 			sw.start();
 			List<XPX_Item_Extn> xpxItemExtns = XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemExtn, 5000);
 			sw.stop();
@@ -278,10 +280,12 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			if (!isFirstRecord && "Y".equals(isAssociationRequired)) {
 				pltqbItemAssociation.append(")");
 
+				Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemAssociations: pltqbItemAssociation=%s", pltqbItemExtn.getReadableWhereClause());
+
 				sw.start();
 				List<XPX_Item_Associations> xpxItemAssociations = XPX_Item_AssociationsDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemAssociation, 5000);
 				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemAssociations: itemAssociationpltQryBuilder=%s, xpxItemAssociations.size=%s", pltqbItemAssociation.getReadableWhereClause(), xpxItemAssociations.size());
+				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemAssociations: pltqbItemAssociation=%s, xpxItemAssociations.size=%s", pltqbItemAssociation.getReadableWhereClause(), xpxItemAssociations.size());
 				sw.reset();
 
 				ArrayList<Element> _xpxItemExtnList = SCXmlUtil.getElements(xpxItemExtnList, "XPXItemExtn");
