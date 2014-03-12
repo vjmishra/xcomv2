@@ -58,7 +58,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     		cXMLFields = new XPEDXCXMLMessageFields(doc);
 
     		//TODO Log in dummy user because seem to need to be auth'ed to get cust config from server - better way?
-    		Document dummyloginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("punchout_dummy","punchout_dummy");
+    		Document dummyloginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("dave@perrigo.com","Password1");
     		securityResponse = SCUIPlatformUtils.login(dummyloginDoc,SCUIContextHelper.getUIContext(req, res));
 
     		log.info("Dummy Auth " + (securityResponse.getReturnStatus() ? "Successful" : "FAILED") + " - PayLoadID:"+cXMLFields.getPayLoadId());
