@@ -110,7 +110,8 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     		//TODO later for TRU: if userid specified in cXML, update URL with it
 
     		// Add params to start URL from DB for this customer
-    		String moreParams = "&payLoadID="+payLoadID+"&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
+    		String moreParams = "&payLoadID="+payLoadID+
+    							// don't need now - later? "&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
     							"&buyerCookie="+buyerCookie+"&fromIdentity="+toIdentity+"&toIdentity="+custIdentity+"&sfId=xpedx" +
     							"&returnURL="+URLEncoder.encode(returnUrl,"UTF-8");
 
