@@ -44,16 +44,18 @@ public class XPEDXAuthenticationProvider extends WCAuthenticationProvider {
 			punchoutRequest.setLoginID(scuiCtx.getRequest().getParameter("DisplayUserID"));
 			punchoutRequest.setSfId(scuiCtx.getRequest().getParameter("EnterpriseCode"));
 			punchoutRequest.setPayLoadID(scuiCtx.getRequest().getParameter("payLoadID"));
-			punchoutRequest.setOperation(scuiCtx.getRequest().getParameter("operation"));
-			punchoutRequest.setOrderHeaderKey(scuiCtx.getRequest().getParameter("orderHeaderKey"));
 			punchoutRequest.setReturnURL(scuiCtx.getRequest().getParameter("returnURL"));
-			punchoutRequest.setSelectedCategory(scuiCtx.getRequest().getParameter("selectedCategory"));
-			punchoutRequest.setSelectedItem(scuiCtx.getRequest().getParameter("selectedItem"));
-			punchoutRequest.setSelectedItemUOM(scuiCtx.getRequest().getParameter("selectedItemUOM"));
 			punchoutRequest.setBuyerCookie(scuiCtx.getRequest().getParameter("buyerCookie"));
 			punchoutRequest.setFromIdentity(scuiCtx.getRequest().getParameter("fromIdentity"));
 			punchoutRequest.setToIdentity(scuiCtx.getRequest().getParameter("toIdentity"));
 			punchoutRequest.setIsProcurementUser(scuiCtx.getRequest().getParameter("amiProcurementUser"));
+
+			// Currently these fields aren't used - future?
+			punchoutRequest.setOperation(scuiCtx.getRequest().getParameter("operation"));
+			punchoutRequest.setOrderHeaderKey(scuiCtx.getRequest().getParameter("orderHeaderKey"));
+			punchoutRequest.setSelectedCategory(scuiCtx.getRequest().getParameter("selectedCategory"));
+			punchoutRequest.setSelectedItem(scuiCtx.getRequest().getParameter("selectedItem"));
+			punchoutRequest.setSelectedItemUOM(scuiCtx.getRequest().getParameter("selectedItemUOM"));
 
 			scuiCtx.getSession().setAttribute("PunchoutRequest", punchoutRequest);
 			}
