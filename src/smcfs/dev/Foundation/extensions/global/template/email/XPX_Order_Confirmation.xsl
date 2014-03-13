@@ -222,8 +222,7 @@
 					</xsl:if>
 					<xsl:if test="(contains($Subject,$Pending))">
 					The following order requires your attention.					
-					</xsl:if>	
-					<xsl:if test="(contains($Subject,$Submit))">This is a courtesy notification that an order has been placed or changed at</xsl:if>											
+					</xsl:if>										
 					<xsl:choose>
 					<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
 						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
@@ -251,10 +250,43 @@
 						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"' >
 							<a href="{$storeSaalFeldFrontURL}/order">Click here</a>  to review this order on <xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
 						</xsl:if>
-			
+					</xsl:otherwise>
+					
+					</xsl:choose>
+					<br></br>
+					<xsl:if test="(contains($Subject,$Submit))">
+					<tr>
+					<td style="padding-left:8px;padding-top:8px;">This is a courtesy notification that an order has been placed or changed at 					
+					<xsl:choose>
+					<xsl:when test = 'Order/@EnvironmentID="STAGING"'>
+						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+							<xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+						</xsl:if>
+						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+							<xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+						</xsl:if>					 
+					</xsl:when>
+					<xsl:when test = 'Order/@EnvironmentID="DEVELOPMENT"'>
+						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+							<xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+						</xsl:if>
+						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+							<xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+						</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
+							<xsl:value-of select="Order/@EnterpriseCode"/>.com/order.
+						</xsl:if>
+						<xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
+							<xsl:value-of select="Order/@EnterpriseCode"/>redistribution.com/order.
+						</xsl:if>			
 					</xsl:otherwise>
 					</xsl:choose>
-					<xsl:if test="(contains($Subject,$Submit))">Thank you for your business!</xsl:if>
+					Thank you for your business!
+					</td>
+					</tr>
+					</xsl:if>
 					</td>
 					</tr>					
 					<tr>					
