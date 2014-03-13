@@ -203,21 +203,21 @@
 						
 						<label>
 							<span>Item Type:</span>
-							<s:select tabindex="3403" id="qaItemType" name="qaItemType" cssStyle="width:135px;" headerKey="1"
+							<s:select id="qaItemType" name="qaItemType" cssStyle="width:135px;" headerKey="1"
 									list="skuTypeList" listKey="key" listValue="value"/>
 							<s:hidden name="#qaItemType.type" value="ItemID" />
 						</label>
 						
 						<label>
 							<span>Item #:</span>
-							<input type="text" tabindex="3404" maxlength="27" style="width:80px;" id="qaProductID" name="qaProductID" class="text x-input" />
+							<input type="text" maxlength="27" style="width:80px;" id="qaProductID" name="qaProductID" class="text x-input" />
 							<s:hidden name="#qaProductID.type" value="ItemID" />
 							<s:hidden name='localizedMissingProductIDMessage'value='%{#_action.getText("QAMissingProductID")}' />
 						</label>
 						
 						<label>
 							<span>Qty:</span>
-							<input tabindex="3405" maxlength="7" style="width:80px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
+							<input maxlength="7" style="width:80px;" type="text" id="qaQuantity" name="qaQuantity" class="qty-field text x-input" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/>
 							<s:hidden name="#qaQuantity.type" value="OrderedQty" />
 						</label>
 						
@@ -235,7 +235,7 @@
 							<label>
 								<span><s:property value='#customerPONoFlag' />:</span>
 								<s:hidden name='customerPONoValue' value='%{#customerPONoFlag}' />
-								<input tabindex="3407" maxlength="22" style="width:180px;" type="text" name="purchaseOrder" value="" class="text x-input" />
+								<input maxlength="22" style="width:180px;" type="text" name="purchaseOrder" value="" class="text x-input" />
 							</label>
 						</s:if>
 						
@@ -243,7 +243,7 @@
 							<label>
 								<span><s:property value='#jobIdFlag' />:</span>
 								 <s:hidden name='jobIdValue' value='%{#jobIdFlag}' />
-								<input tabindex="3408" maxlength="24" style="width:180px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
+								<input maxlength="24" style="width:180px;" type="text" id="qaJobID" name="qaJobID" class="text x-input" />
 								<s:hidden name="#qaJobID.type" value="" />
 							</label>
 						</s:if>
@@ -266,7 +266,7 @@
 						<s:url id='productValidateURLid' namespace='/order' action='validateProduct' />
 						<s:url id='productListValidateURLid' namespace='/order' action='validateProductList' />
 						<s:a id='productValidateURL' href='%{#productValidateURLid}' tabindex="-1" />
-						<s:a id='productListValidateURL' href='%{#productListValidateURLid}' />
+						<s:a id='productListValidateURL' href='%{#productListValidateURLid}' tabindex="-1" />
 						
 						<div id="QuickAddList" style="display: block;"></div>
 						
