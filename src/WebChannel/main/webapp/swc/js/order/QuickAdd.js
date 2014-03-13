@@ -926,6 +926,9 @@ function clearErrorMessage() {
 
 $(document).ready(function() {
 	$('#copyPaste').fancybox({
+		onComplete: function() {
+			$('#dlgCopyAndPasteText').focus();
+		},
 		onClosed: function() {
 			$.fancybox.close();
 			
