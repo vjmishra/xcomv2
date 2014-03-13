@@ -43,7 +43,6 @@ import com.sterlingcommerce.webchannel.order.utilities.CommerceContext;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
-import com.sterlingcommerce.xpedx.webchannel.common.eprocurement.XPEDXCXMLMessageFields;
 import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutRequest;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.xpedx.nextgen.common.util.XPXLiterals;
@@ -65,17 +64,18 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	private static final String PUNCHOUT_XSL_LOCATION = "/global/template/xsl/punchout/";
 	public static final String MODE_SAVE = "save";
 	public static final String MODE_CANCEL = "cancel";
-
 	public static final String DRAFT_ORDER_DELETE_MASHUP = "draftOrderDelete";
 	public static final String GET_PUNCH_OUT_ORDER_MESSAGE_CXML_MASHUP = "XPEDXGetPunchOutOrderMessageCXML";
-
 	public static final String USER_AGENT_PROPERTY_KEY = "swc.ariba.userAgent";
 
 	public String mashUpId = null;
 
-	protected String msap = null;
 	protected String orderHeaderKey = null;
-	XPEDXCXMLMessageFields cXMLFields = null;
+	protected String returnUrl = null;
+	protected String cxmlData = null;
+	protected String ociData = null;
+
+	protected String msap = null;
 	private PunchoutRequest punchoutRequest = null;
 
 	private static final Logger LOG = Logger.getLogger(CustomPunchoutOrderAction.class);
@@ -92,13 +92,16 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			if (punchoutRequest == null)
 				throw new Exception("No procurement punch in context information found.");
 
-			setReturnUrlOnRequest();
+			setReturnUrlfromRequest();
 
 			String outputData = populatePunchOutOrderMessage(cc.getOrderHeaderKey(), aribaContext);
 
-			// TODO OCI - how determine which? Is Type=cXML on the session/params?  part of requestUrl?
-
-			cXmlFormat(outputData);
+			if (punchoutRequest.isCXML()) {
+				cXmlFormat(outputData);
+			}
+			else {
+				ociFormat(outputData);
+			}
 
 			deleteCart(cc.getOrderHeaderKey());
 
@@ -131,7 +134,10 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		String xsltFileName = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
 		String replaceChars = SCXmlUtil.getXpathAttribute( CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
 
-		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);  System.out.println("JOE: orderOutputDoc: " + WCIntegrationXMLUtils.AttachDocType(orderOutputDoc)); //TODO remove
+		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);
+
+		updateOrderUoms(env, orderOutputDoc);
+		updateLineNos(env, orderOutputDoc);
 
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
 	}
@@ -149,10 +155,38 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		updateheaderElementValue(orderOutputDoc, "PunchOutOrderMessage", "BuyerCookie", punchoutRequest.getBuyerCookie());
 
 		// For cXML, this will get added to form as one param, cxml-urlencoded
-		String cxml = WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
-		request.setAttribute("cxml", cxml);
+		cxmlData = WCIntegrationXMLUtils.AttachDocType(orderOutputDoc);
 	}
 
+	private void ociFormat(String outputData)
+			throws ParserConfigurationException, SAXException, IOException {
+
+		ociData = outputData;
+	}
+
+	private void updateLineNos(YFSEnvironment env, Document orderOutputDoc)
+			throws RemoteException, YIFClientCreationException {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
+
+		// if items deleted then gaps in Line# so replace with sequential
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			element.setAttribute("PrimeLineNo", String.valueOf(i+1));
+		}
+	}
+
+	private void updateOrderUoms(YFSEnvironment env, Document orderOutputDoc)
+			throws RemoteException, YIFClientCreationException {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLineTranQuantity");
+
+		// replace UOM (MAX format) with EDI UOM
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			String maxUom = element.getAttribute("TransactionalUOM");
+			String convertedBaseUom = XPEDXWCUtils.convertMaxUomToEdi(env, maxUom);
+			element.setAttribute("TransactionalUOM", convertedBaseUom);
+		}
+	}
 	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
@@ -182,12 +216,10 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		return orderElement.getOwnerDocument();
 	}
 
-	private void setReturnUrlOnRequest() throws Exception {
-		String punchoutURL = null;
+	private void setReturnUrlfromRequest() throws Exception {
 		if (punchoutRequest.getReturnURL() != null) {
-			punchoutURL = formatUrl(punchoutRequest.getReturnURL()).toString();
+			returnUrl = formatUrl(punchoutRequest.getReturnURL()).toString();
 		}
-		request.setAttribute("requestUrl", punchoutURL);
 	}
 
 	private URL formatUrl(String punchoutUrl) throws Exception
@@ -237,21 +269,29 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	private Document updateheaderElementValue(Document doc, String parentTag,
 			String ChildTag, String headerValue) {
 		NodeList headerParentTag = doc.getElementsByTagName(parentTag);
-		Element childTagname = null;
+
 		for (int i = 0; i < headerParentTag.getLength(); i++) {
 			try {
-				childTagname = (Element) headerParentTag.item(i);
-				Node name = childTagname.getElementsByTagName(ChildTag).item(0)
-						.getFirstChild();
+				Element childTagname = (Element) headerParentTag.item(i);
+				Node name = childTagname.getElementsByTagName(ChildTag).item(0).getFirstChild();
 				name.setTextContent(headerValue);
 			} catch (Exception Ex) {
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Exception while updateheaderElementValue: "
-							+ Ex.getLocalizedMessage());
-				}
+				LOG.info("Exception while updateheaderElementValue: "+ Ex.getLocalizedMessage());
 			}
 		}
 		return doc;
+	}
+
+	public String getReturnUrl() {
+		return returnUrl;
+	}
+
+	public String getCxmlData() {
+		return cxmlData;
+	}
+
+	public String getOciData() {
+		return ociData;
 	}
 
 	public String getOrderHeaderKey() {

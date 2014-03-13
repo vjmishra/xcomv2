@@ -499,6 +499,7 @@ $(document).ready(function(){
 <s:bean
 	name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils'
 	id='XPEDXWCUtils' />
+<s:set name="pageName" value="#wcUtil.setPageName('XPEDXDraftOrderDetails.jsp')" />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='util' />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />	
@@ -877,8 +878,10 @@ $(document).ready(function(){
 				<img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
 				</s:if>
 				<s:elseif test="%{#isPunchoutUser}">
-				<s:if test="%{#punchoutImagepath!=''}">
-					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src="<s:property value='punchoutImagepath'/>/Punchout_MyCart_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
+				<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXDraftOrderDetails.jsp')" />
+					<s:if test="%{#isPunchoutimageExists}">
+					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src="<s:property value='punchoutImagepath'/> "/>
 				 </s:if>
 				</s:elseif>
 	

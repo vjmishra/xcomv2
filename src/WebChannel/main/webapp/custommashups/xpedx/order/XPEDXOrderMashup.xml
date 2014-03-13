@@ -1852,6 +1852,7 @@
 						<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''/>
 						<Extn ExtnExtendedPrice=''/>		  
 						<ItemDetails ItemID=''>
+							<PrimaryInformation Description="" ExtendedDescription=""/>
 							<Extn ExtnUNSPSC=''/>
 						</ItemDetails>"
 					</OrderLine>

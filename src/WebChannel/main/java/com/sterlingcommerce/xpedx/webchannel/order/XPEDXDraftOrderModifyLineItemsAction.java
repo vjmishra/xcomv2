@@ -398,9 +398,6 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         } 
         
         XPEDXWCUtils.releaseEnv(wcContext);
-        if(SUCCESS.equals(retVal) && XPEDXWCUtils.isPunchoutUser(wcContext)){
-        	retVal="punchoutSuccess";
-        }
          
         long endTime=System.currentTimeMillis();
         System.out.println("Time taken in milliseconds in XPEDXDraftOrderModifyLineItemsAction class : "+(endTime-startTime));

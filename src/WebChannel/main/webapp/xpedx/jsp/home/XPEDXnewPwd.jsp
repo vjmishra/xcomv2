@@ -235,7 +235,7 @@ function validateResetPassword(){
 		errorDiv.style.display = 'inline';
 		return;
 	}
-	var url = '<s:property value="#ValidatePasswordURL" />';
+	var url = '<s:property value="#ValidatePasswordURL" escape="false" />';
 	
 		Ext.Ajax.request({
 	        url :url,

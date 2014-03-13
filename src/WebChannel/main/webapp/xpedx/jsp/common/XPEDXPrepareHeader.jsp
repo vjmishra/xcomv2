@@ -1883,7 +1883,7 @@ function passwordUpdateModal()
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
 			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
-			if((!isSalesRep) && (!isPunchoutUser) && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
+			if((!isSalesRep) && (isPunchoutUser!="true") && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
 				var myMask
 				var waitMsg = Ext.Msg.wait("");
 				 myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -1940,7 +1940,7 @@ function passwordUpdateModal()
 			 		'height' 		: 530  
 				}).trigger('click');
 			} 
-			else if((!isSalesRep && !isPunchoutUser) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
+			else if((!isSalesRep && (isPunchoutUser!="true")) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		

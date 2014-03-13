@@ -6,7 +6,7 @@
 <%@ taglib prefix="xpedx" uri="/WEB-INF/xpedx.tld"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
-<s:set name="punchoutImagepath" value="#wcUtil.getpuchoutImagelocation()" />
+<s:set name="pageName" value="#wcUtil.setPageName('XPEDXCatalogLanding.jsp')" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -317,8 +317,10 @@
 					<img width="160" height="600" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_160x600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/></div>
 				</s:if> 
 					<s:elseif test="%{#isPunchoutUser}">
-						<s:if test="%{#punchoutImagepath!=''}">
-						<img width="160" height="600" border="0" alt="" style="margin-top:10px;padding-right:5px;" src="<s:property value='punchoutImagepath'/>/Punchout_Catalog_Landing_160_600<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
+					<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
+					<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXCatalogLanding.jsp')" />
+						<s:if test="%{#isPunchoutimageExists}">
+						<img width="160" height="600" border="0" alt="" style="margin-top:10px;padding-right:5px;" src="<s:property value='punchoutImagepath'/> "/>
 				 	</s:if>
 					</s:elseif>
 				<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
