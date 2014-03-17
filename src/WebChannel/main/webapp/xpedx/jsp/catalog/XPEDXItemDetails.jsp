@@ -1415,7 +1415,7 @@ function SubmitActionWithValidation()
 			}
 			</script>
 			<s:if test= '%{#_action.getGoBackFlag() == "true"}'>
-			<a href="#"  onclick="javascript:window.history.back();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
+			<a href="#"  onclick="javascript:window.history.back(); return false;">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
 			</s:if>
 			<s:else>
 				<a href="javascript:getbackPageUrl();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
