@@ -167,39 +167,6 @@ public class XPXOrderApprovalService implements YIFCustomApi
 		}
 		return webLineNumber;
 	}
- /**
-     * Generates Web Line Number for each line with environment code and subsequent 8 digits of Order Line Key.
-     *  
-     */
-     
-    public String generateWebLineNumber(String orderLineKey, String envtCode, String entryType) {
- 
-        String webLineNumber = "";
-        String uniqueSequence = "";
- 
-        int uniqueSequenceLength = 8;
-        int orderLineKeylength = 0;
-         
-        if (!YFCObject.isNull(orderLineKey)) {
-            orderLineKeylength = orderLineKey.trim().length();
-        }
-         
-        if (orderLineKeylength > 8) {
-            int startIndex = orderLineKeylength-uniqueSequenceLength;
-            uniqueSequence = orderLineKey.substring(startIndex);
-        }    
- 
-        if(entryType != null && (XPXLiterals.SOURCE_TYPE_B2B.equals(entryType)  
-                || XPXLiterals.SOURCE_WEB.equals(entryType) || XPXLiterals.SOURCE_COM.equals(entryType))) {
-            envtCode = XPXLiterals.SYSTEM_SPECIFIER_WEB;
-        }
-         
-        webLineNumber = envtCode + uniqueSequence;
-        if (log.isDebugEnabled()) {
-            log.debug("Web Line Number: " + webLineNumber);
-        }
-        return webLineNumber;
-    }
      
 	public void setProperties(Properties props) throws Exception {
 		
