@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -40,6 +41,7 @@ import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -76,6 +78,7 @@ import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAd
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.yantra.interop.client.ClientVersionSupport;
+import com.yantra.interop.client.InteropEnvStub;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -89,8 +92,10 @@ import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCConfigurator;
+import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 
 /**
  * @author rugrani
@@ -2764,34 +2769,22 @@ public class XPEDXWCUtils {
 	/**
 	 * returns Element containing Extn fields for customer with specified Identity
 	 */
-	public static Element getPunchoutConfigForCustomerIdentity(
-			HttpServletRequest req, HttpServletResponse res, String custIdentity) {
+	public static Element getPunchoutConfigForCustomerIdentity(String custIdentity) {
+		if(YFCCommon.isVoid(custIdentity)){
+			 return null;
+		 }
 		Element wElement = null;
-
-		try {
-			if (null == custIdentity || custIdentity.length() <= 0) {
-				log.error("getAuthUserXPathForCustomerIdentity: Customer Identity missing.");
-				return null;
-			}
-			IWCContext wcContext = WCContextHelper.getWCContext(req);
-			Map<String, String> valueMap = new HashMap<String, String>();
-			valueMap.put("/Customer/Extn/@ExtnCustIdentity", custIdentity);
-
-			Element input = WCMashupHelper.getMashupInput(
-					"xpedx-customer-getUserXPath", valueMap, wcContext.getSCUIContext());
-			log.debug("Input XML: " + SCXmlUtil.getString(input));
-
-			Object obj = WCMashupHelper.invokeMashup(    // throws exception if not logged in
-					"xpedx-customer-getUserXPath", input, wcContext.getSCUIContext());
-
-			Document outputDoc = ((Element) obj).getOwnerDocument();
+		String apiName="getCustomerList";
+		String apiData="<Customer><Extn ExtnCustIdentity='"+custIdentity+"'/></Customer>";
+		String isFlow="N";
+		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";		
+		Document customerDetailsOutputDoc = handleApiRequestBeforeAuthentication(apiName,apiData,isFlow,template);
+		if(customerDetailsOutputDoc != null){
+			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();		
 			log.debug("Output XML: " + SCXmlUtil.getString(outputDoc));
 			wElement = outputDoc.getDocumentElement();
 			wElement = SCXmlUtil.getChildElement(wElement, "Customer");
 			wElement = SCXmlUtil.getChildElement(wElement, "Extn");
-		}
-		catch (Exception ex) {
-			log.error(ex.getMessage(),ex);
 		}
 		return wElement;
 	}
@@ -6791,5 +6784,61 @@ public class XPEDXWCUtils {
 		}
 		return punchOutComments;
 	}
+	/**
+	 * for calling an any API before authentication 
+	 * @param apiName
+	 * @param apiData
+	 * @param isFlow
+	 * @param template
+	 * @return
+	 */
+	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)	        
+    {	
+	  if(YFCCommon.isVoid(isFlow) || YFCCommon.isVoid(apiData) || YFCCommon.isVoid(apiName) )
+        {
+			return null;
+        }			
+		Document retDoc = null;
+		YIFApi localApi;
+        InteropEnvStub envStub = new InteropEnvStub("admin", "SterlingHttpTester");
+        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());	        
+        try
+        {
+              YFCDocument apiDoc = YFCDocument.parse(apiData);
+              localApi = YIFClientFactory.getInstance().getLocalApi();
+	          log.debug("Successfully intialized the local api");
+            if(!YFCCommon.isVoid(isFlow) && isFlow.equalsIgnoreCase("Y"))
+            {                  
+                retDoc = localApi.executeFlow(envStub, apiName, apiDoc.getDocument());
+            } else
+            {
+                retDoc = localApi.invoke(envStub, apiName, apiDoc.getDocument());
+            }           
+        }
+        catch(YIFClientCreationException e)
+        {
+        	log.fatal("Could not create local client", e);           
+        }
+        catch(SAXException e)
+        {
+        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);	            
+        }
+        catch(IOException e)
+        {
+        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);	           
+        }
+        catch(YFSException e)
+        {
+        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);	           
+        }
+        catch(YFCException e)
+        {
+        	log.fatal((new StringBuilder()).append("YFC Exception while invoking api ").append(apiName).toString(), e);
+        
+        }
+        finally{
+        	 return retDoc;	
+        }
+    }
 
 }

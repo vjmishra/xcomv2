@@ -57,12 +57,6 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     		Document doc = (Document)req.getAttribute(IAribaConstants.ARIBA_CXML_REQUEST_ATTRIBUTE_KEY);
     		cXMLFields = new XPEDXCXMLMessageFields(doc);
 
-    		//TODO Log in dummy user because seem to need to be auth'ed to get cust config from server - better way?
-    		Document dummyloginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc("dave@perrigo.com","Password1");
-    		securityResponse = SCUIPlatformUtils.login(dummyloginDoc,SCUIContextHelper.getUIContext(req, res));
-
-    		log.info("Dummy Auth " + (securityResponse.getReturnStatus() ? "Successful" : "FAILED") + " - PayLoadID:"+cXMLFields.getPayLoadId());
-
     		String custIdentity	= cXMLFields.getCustomerIdentity();
 			String cxmlSecret   = cXMLFields.getAuthPassword();
 			String buyerCookie	= cXMLFields.getBuyerCookie();
@@ -71,7 +65,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 			String payLoadID	= cXMLFields.getPayLoadId();
 
 			// Extract credentials from incoming cXML to compare to customer in DB
-    		Element custExtnElement = XPEDXWCUtils.getPunchoutConfigForCustomerIdentity(req, res, custIdentity);
+    		Element custExtnElement = XPEDXWCUtils.getPunchoutConfigForCustomerIdentity(custIdentity);
     		if (custExtnElement == null) {
 				log.warn("Can't get Punchout config for cust identity in cXML: " + custIdentity);
 				return new SCUISecurityResponse(false, "Invalid Identity");
