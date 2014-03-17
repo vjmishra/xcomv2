@@ -87,6 +87,7 @@ $(document).ready(function () {
 		'transitionOut' : 'none',
 		//added for clearing the copycart name and copycartdescription fields							
 	});
+	  validateQty();//EB-3840
 });
 
 

@@ -285,7 +285,8 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		page.getTargetModelForUpdateAssignments();
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setApiName("XPXManageCustomerAndAssignmentAPIService");
-		
+		if(multiAPIDocElement == null)
+			return;
 		ctx.setInputXml(multiAPIDocElement.getOwnerDocument());
 		ctx.setFormId(page.getFormId());
 		ctx.setShowError(false);

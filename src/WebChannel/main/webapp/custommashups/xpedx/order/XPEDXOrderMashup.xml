@@ -3353,7 +3353,7 @@
                 <Order OrderHeaderKey="" CustomerContactID="" OrderType="" ShipToID=""
                     OrderNo="" EnterpriseCode="" OrderName="" DraftOrderFlag="" Status=""
                     OrderDate="" MaxOrderStatus="" CustomerPONo="" HasPendingChanges=""  
-                    PendingChangesUserID="" ReqDeliveryDate="" SellerOrganizationCode="" Modifyts="" EntryType="" BuyerOrganizationCode="">
+                    PendingChangesUserID="" ReqDeliveryDate="" SellerOrganizationCode="" Modifyts=""  EntryType="" BuyerOrganizationCode="">
                     <Extn />
                     <PriceInfo Currency=""/>
                     <Instructions>
