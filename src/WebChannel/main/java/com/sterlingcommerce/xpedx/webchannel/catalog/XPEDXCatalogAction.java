@@ -1236,7 +1236,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 				Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
 
 				getOrderMultipleMapForItems();
-				getReplacmentItemsMapForItems(envCode, custDivision);
+				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
+				getReplacmentItemsMapForItems(envCode, shipFromBranch);
 				wcContext.setWCAttribute("replacmentItemsMap", replacmentItemsMap, WCAttributeScope.REQUEST);
 			} catch (Exception e) {
 				log.error("", e);
