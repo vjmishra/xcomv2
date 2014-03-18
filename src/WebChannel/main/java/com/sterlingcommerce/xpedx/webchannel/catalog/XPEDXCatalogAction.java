@@ -2858,13 +2858,24 @@ public class XPEDXCatalogAction extends CatalogAction {
 			Element inputDocElemen = SCXmlUtil.createFromString(searchIndexInputXML).getDocumentElement();
 			if (!YFCCommon.isVoid(facetListItemAttributeKey)) {
 				Element allAssignedListElem = SCXmlUtil.createChild(inputDocElemen, "ShowAllAssignedValues");
+
+				// Added this attribute after Hot fix HF80 for EB-2810
+				allAssignedListElem.setAttribute("ConsiderOnlyAllAssignedValueAttributes", "Y");
+
 				Element itemAttributeElem = SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
 				itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
 			}
-			Object outputObj = WCMashupHelper.invokeMashup("xpedxNarrowByCatalogSearch", inputDocElemen, wcContext.getSCUIContext());
-			Document outputDoc = ((Element) outputObj).getOwnerDocument();
-			setOutDoc(outputDoc);
-			setAttributeListForUIForNarrowBy();
+
+			// EB-3738 Should not display system error message. To catch the exception 'TooManyClauses'.
+			try {
+				Object outputObj = WCMashupHelper.invokeMashup("xpedxNarrowByCatalogSearch", inputDocElemen, wcContext.getSCUIContext());
+				Document outputDoc = ((Element) outputObj).getOwnerDocument();
+				setOutDoc(outputDoc);
+				setAttributeListForUIForNarrowBy();
+			} catch (Exception e) {
+				log.error("Exception in XPEDXCatalogAction - getFacetList method while retrieving the search results", e);
+				return retVal;
+			}
 		}
 		return retVal;
 	}
