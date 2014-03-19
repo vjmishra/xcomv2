@@ -69,7 +69,7 @@
 			<td colspan="3" class="left">
 			<s:if test="%{#_action.getCatagory() == 'Paper'}">
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'> 
-			<s:if test="isBracketPricing == 'true'"><span><i>My Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</i></span></s:if>
+			<s:if test="isBracketPricing == 'true'"><span><i>Bracket Pricing (<s:property value='%{priceCurrencyCode}'/>)</i></span></s:if>
 			</s:if>
 			</s:if>
 			<s:else>
@@ -250,7 +250,7 @@
 				<s:else>
 				<s:if test="%{#break == false}">
 					<TR>
-						<td width="45%" class="my-price left"><s:if test="#disUOMStatus.first"><strong>My Price:</strong></s:if></td>
+						<td width="45%" class="my-price left"><s:if test="#disUOMStatus.first"><strong>Price:</strong></s:if></td>
 						
 						<s:if test="%{#bracketPriceForUOM == #priceWithCurrencyTemp1}">
 							<td class="left" width="55%"><span class="red bold"><s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /></span></td>
