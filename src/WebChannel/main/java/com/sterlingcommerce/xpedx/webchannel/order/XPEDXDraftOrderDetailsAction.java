@@ -150,7 +150,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				editedOrderHeaderKey=orderHeaderKey;
 				String newDefaultShipToForEditOrder  = getOrderElementFromOutputDocument().getAttribute("BuyerOrganizationCode");
 				setCurrentCustomerIntoContext(newDefaultShipToForEditOrder);
-
+				Element orderExtn = SCXmlUtil.getChildElement(getOrderElementFromOutputDocument(), "Extn");
+				String orderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
+				XPEDXWCUtils.setObectInCache(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.EDIT_ORDER_NO, orderNumber);				
 			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey))
 			{

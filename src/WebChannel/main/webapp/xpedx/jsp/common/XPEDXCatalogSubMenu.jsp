@@ -13,7 +13,7 @@
 								<s:param name='newOP' value='%{true}'/>
 							</s:url>
 							<li>
-								<s:a href='%{catURL}' cssClass="link">
+								<s:a href='%{catURL}'>
 									<s:property value='#xutil.getAttribute(#category,"ShortDescription")'/>
 								</s:a>
 							</li>
