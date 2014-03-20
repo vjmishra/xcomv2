@@ -477,7 +477,7 @@ $(function() {
                },
                'autoDimensions'    : false,
                'width'             : 800,
-               'height'             : 310,
+               'height'             : 340,
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showLocationsDiv").innerHTML = '';
