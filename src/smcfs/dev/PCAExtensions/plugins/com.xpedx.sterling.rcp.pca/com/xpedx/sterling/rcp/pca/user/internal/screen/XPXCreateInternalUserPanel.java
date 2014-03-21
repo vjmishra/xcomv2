@@ -412,6 +412,7 @@ public class XPXCreateInternalUserPanel extends Composite implements
 			}
 
 			public void focusLost(FocusEvent evt) {
+				txtNetworkId.setText(txtNetworkId.getText().toLowerCase());
 				String currTxtNeworkVal=txtNetworkId.getText();
 
 				if((txtNetworkId.getText()=="")||(currTxtNeworkVal.equals(prevTxtNeworkVal))){
