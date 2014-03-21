@@ -36,7 +36,7 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 			YIFApi api=YIFClientFactory.getInstance().getLocalApi();	
 			
 			String strWaitTimeInMins=YFSSystem.getProperty("orderUpdateWaitTime");
-			int waitTimeInMins = -15;
+			int waitTimeInMins = -10;
 			if(strWaitTimeInMins!=null && strWaitTimeInMins.trim().length()>0) {
 				waitTimeInMins = -(Integer.parseInt(strWaitTimeInMins));
 			}			
