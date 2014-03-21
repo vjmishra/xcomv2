@@ -1465,10 +1465,19 @@ fieldset#bottom-fieldset { width: 933px; }
 table#QuickAddTable tr td {
 	border-top: 1px solid #ccc;	
 }
+table#QuickAddTableSaal tr td {
+	border-top: 1px solid #ccc;	
+}
 table#QuickAddTable tr.error-row td{
 	border-top: 0px solid #ccc;	
 }
+table#QuickAddTableSaal tr.error-row td{
+	border-top: 0px solid #ccc;	
+}
 #QuickAddTable .notice {
+	margin-left: 20px;
+	}
+	#QuickAddTableSaal .notice {
 	margin-left: 20px;
 	}
 #main {
@@ -1496,6 +1505,7 @@ div.wc-btn-bar a.grey-ui-btn { float:right; }
 div.wc-btn-bar a.float-left { float:left; }
 div.wc-table-header td { border: 0px; padding: 10px 5px; background-color:#039;}
 #QuickAddTable td input { width: 92%; }
+#QuickAddTableSaal td input { width: 92%; }
 
 .salesProNotice {
 	border: 1px solid #EE4000;
@@ -1855,10 +1865,26 @@ input.error {
 	text-align:center;
 	font-size: 11px;
 }
+
+#QuickAddTableSaal th {
+	background: #336633;
+	border-right: 1px solid #CCCCCC;
+	color: #FFFFFF;
+	height: 28px;
+	text-align:center;
+	font-size: 11px;
+}
+
 #QuickAddTable tr td {
 	padding: 4px;
 	text-align:center;
 }
+
+#QuickAddTableSaal tr td {
+	padding: 4px;
+	text-align:center;
+}
+
 .qa-standalone-notice {
 	margin: 2px 12px 5px 0px;
 }
@@ -1866,7 +1892,14 @@ table#QuickAddTable tr td {
 	border-top: 1px solid #ccc;	
 	padding-top: 6px;
 }
+table#QuickAddTableSaal tr td {
+	border-top: 1px solid #ccc;	
+	padding-top: 6px;
+}
 table#QuickAddTable.form label, .form table {
+	font-size: 11px;
+}
+table#QuickAddTableSaal.form label, .form table {
 	font-size: 11px;
 }
 .qa-standalone-cartbtn {

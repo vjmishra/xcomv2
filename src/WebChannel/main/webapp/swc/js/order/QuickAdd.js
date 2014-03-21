@@ -305,8 +305,9 @@ function quickAdd_addProductsToOrder() {
  */
 function quickAdd_redrawQuickAddList() {
 	var tabIndex = 210;
-	var showAddtoCartBtn = false;
-	var code = '<table cellspacing="0" cellpadding="0" id="QuickAddTable" width="96%">';
+	var showAddtoCartBtn = false;	
+	var QuickAddTable = (document.QuickAddForm.sfId.value=='xpedx') ? 'QuickAddTable' : 'QuickAddTableSaal';
+	var code = '<table cellspacing="0" cellpadding="0" id="'+QuickAddTable+'" width="96%">';
 	var jobValue;
 	var customerPONoValue;
 	addToCartDiv = document.getElementById("addProdsToOrder");

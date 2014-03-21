@@ -159,6 +159,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 			pltqbItemCustXref.append(")");
 
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemxrefList: pltqbItemCustXref=%s", pltqbItemCustXref.getReadableWhereClause());
 			sw.start();
 			List<XPX_Itemcust_Xref> xpxItemxrefList = XPX_Itemcust_XrefDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemCustXref, 5000);
 			sw.stop();
@@ -239,7 +240,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			pltqbItemExtn.append(")");
 
 			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemxrefList: pltqbItemExtn=%s", pltqbItemExtn.getReadableWhereClause());
-
 			sw.start();
 			List<XPX_Item_Extn> xpxItemExtns = XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemExtn, 5000);
 			sw.stop();
@@ -280,8 +280,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			if (!isFirstRecord && "Y".equals(isAssociationRequired)) {
 				pltqbItemAssociation.append(")");
 
-				Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemAssociations: pltqbItemAssociation=%s", pltqbItemExtn.getReadableWhereClause());
-
+				Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemAssociations: pltqbItemAssociation=%s", pltqbItemAssociation.getReadableWhereClause());
 				sw.start();
 				List<XPX_Item_Associations> xpxItemAssociations = XPX_Item_AssociationsDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemAssociation, 5000);
 				sw.stop();
@@ -403,6 +402,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				pltqbPriceListAssignment.append(" AND CUSTOMER_ID ='" + customerID + "'");
 				// pltQryBuilder.appendString(" AND PRICING_STATUS", "=","ACTIVE");
 
+				Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query priceListAssignments: pltqbPriceListAssignment=%s", pltqbPriceListAssignment.getReadableWhereClause());
 				sw.start();
 				List<YPM_Pricelist_Assignment> priceListAssignments = YPM_Pricelist_AssignmentDBHome.getInstance().listWithWhere((YFSContext) env, pltqbPriceListAssignment, 5000);
 				sw.stop();
@@ -439,10 +439,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					}
 					pltqbPriceListLineList.append(")");
 
+					Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query priceListLineList: pltqbPriceListLineList=%s", pltqbPriceListLineList.getReadableWhereClause());
 					sw.start();
 					List<YPM_Pricelist_Line> priceListLineList = YPM_Pricelist_LineDBHome.getInstance().listWithWhere((YFSContext) env, pltqbPriceListLineList, 5000);
 					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListLineList: pltQryBuilder1=%s, priceListLineList.size=%s", pltqbPriceListLineList.getReadableWhereClause(), priceListLineList.size());
+					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListLineList: pltqbPriceListLineList=%s, priceListLineList.size=%s", pltqbPriceListLineList.getReadableWhereClause(), priceListLineList.size());
 					sw.reset();
 
 					sw.start();
@@ -590,6 +591,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 
 			boolean isYFSItemCall = false;
 
+			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query yfsItemList: pltqbItem=%s", pltqbItem.getReadableWhereClause());
 			sw.start();
 			List<YFS_Item> yfsItemList = YFS_ItemDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItem, 5000);
 			sw.stop();
@@ -611,6 +613,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			pltqbItemUom.append(")");
 			Document outputListDocument = null;
 			if (isYFSItemCall) {
+				Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query yfsItemUOMList: pltqbItemUom=%s", pltqbItemUom.getReadableWhereClause());
 				sw.start();
 				List<YFS_Item_UOM> yfsItemUOMList = YFS_Item_UOMDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemUom, 5000);
 				sw.stop();

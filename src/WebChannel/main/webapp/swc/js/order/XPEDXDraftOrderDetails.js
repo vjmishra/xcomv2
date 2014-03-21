@@ -44,7 +44,8 @@ function checkOut()
     document.OrderDetailsForm.isComingFromCheckout.value = "true";
     document.OrderDetailsForm.action = document.getElementById('checkoutURL');   
 
-    //Added for EB-4754 - where the hidden uom field is not same as selected uom
+    //Added for EB-4798 - where the hidden uom field is not same as selected uom
+
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
 	var retVal=true;
 	if(orderLinesCount!=null && orderLinesCount==1){
@@ -73,7 +74,11 @@ function checkOut()
 			}
 		}
 	
+<<<<<<< HEAD
 	}//End of EB-4754
+=======
+	}//End of EB-4798
+>>>>>>> hardening_r13
     document.OrderDetailsForm.submit();
 }
 function validateQty(){

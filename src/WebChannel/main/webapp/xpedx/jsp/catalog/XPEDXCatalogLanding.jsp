@@ -331,7 +331,6 @@
 				aj_pv = true; aj_click = ''; </script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:if>
-				</s:elseif>
 				<s:else>
 				<script type="text/javascript" language="JavaScript">
 					aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
@@ -340,6 +339,7 @@
 				</script>
 				<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>
 				</s:else>
+				</s:elseif>
 				<!-- Ad Juggler Tag Ends -->  
 			</div>
 			
