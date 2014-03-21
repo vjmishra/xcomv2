@@ -2,7 +2,6 @@ package com.sterlingcommerce.xpedx.webchannel.utilities.megamenu;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,11 +20,31 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 /**
  * Helper class to encapsulate the searchCatalogIndex API call and converting it to a list of MegaMenuItem objects.
+ * Note that all methods take a context parameter since the mega menu is cached at the session level.
+ *
  * @author Trey Howard
  */
 public class MegaMenuUtil {
 
 	private static final Logger log = Logger.getLogger(MegaMenuUtil.class);
+
+	public static final String ATTR_MEGA_MENU = "MegaMenuUtil.data"; // session attribute
+
+	/**
+	 * @param context
+	 * @return Returns true if the menu is cached in the session.
+	 */
+	public boolean isDataAvailable(IWCContext context) {
+		return context.getWCAttribute(ATTR_MEGA_MENU) != null;
+	}
+
+	/**
+	 * Removes the mega menu from the session.
+	 * @param context
+	 */
+	public void purgeData(IWCContext context) {
+		context.removeWCAttribute(ATTR_MEGA_MENU, WCAttributeScope.LOCAL_SESSION);
+	}
 
 	/**
 	 * Lazy-loads session cached mega menu data model.
@@ -34,76 +53,79 @@ public class MegaMenuUtil {
 	 * @throws Exception If an API error.
 	 */
 	@SuppressWarnings("unchecked")
-	public synchronized List<MegaMenuItem> getMegaMenu(IWCContext context) throws Exception {
-		List<MegaMenuItem> megaMenu = (List<MegaMenuItem>) context.getWCAttribute("megaMenu");
-		if (true || megaMenu == null) {
-			log.debug("Making API call to get mega menu data model");
-			SCUIContext wSCUIContext = context.getSCUIContext();
-			ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-			YIFApi api = YIFClientFactory.getInstance().getApi();
+	public List<MegaMenuItem> getMegaMenu(IWCContext context) throws Exception {
+		// use session as mutex to avoid multiple identical calls (eg, user loads multiple pages before the API call finishes)
+		synchronized (context) {
+			List<MegaMenuItem> megaMenu = (List<MegaMenuItem>) context.getWCAttribute(ATTR_MEGA_MENU);
+			if (megaMenu == null) {
+				log.debug("Making API call to get mega menu data model");
+				SCUIContext wSCUIContext = context.getSCUIContext();
+				ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+				YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+				YIFApi api = YIFClientFactory.getInstance().getApi();
 
-			Document outputTemplate = SCXmlUtil.createFromString(""
-					+ "<CatalogSearch CallingOrganizationCode=\"\" CategoryDepth=\"\">"
-					+ "	<CategoryList>"
-					+ "		<Category CategoryID=\"\" CategoryPath=\"\" Count=\"\" ShortDescription=\"\">"
-					+ "			<ChildCategoryList>"
-					+ "				<Category CategoryPath=\"\" Count=\"\" ShortDescription=\"\"/>"
-					+ "			</ChildCategoryList>"
-					+ "		</Category>"
-					+ "	</CategoryList>"
-					+ "</CatalogSearch>");
-			env.setApiTemplate("searchCatalogIndex", outputTemplate);
+				Document outputTemplate = SCXmlUtil.createFromString(""
+						+ "<CatalogSearch CallingOrganizationCode=\"\" CategoryDepth=\"\">"
+						+ "	<CategoryList>"
+						+ "		<Category CategoryID=\"\" CategoryPath=\"\" Count=\"\" ShortDescription=\"\">"
+						+ "			<ChildCategoryList>"
+						+ "				<Category CategoryPath=\"\" Count=\"\" ShortDescription=\"\"/>"
+						+ "			</ChildCategoryList>"
+						+ "		</Category>"
+						+ "	</CategoryList>"
+						+ "</CatalogSearch>");
+				env.setApiTemplate("searchCatalogIndex", outputTemplate);
 
-			Document searchCatalogIndexInputDoc = YFCDocument.createDocument("SearchCatalogIndex").getDocument();
-			searchCatalogIndexInputDoc.getDocumentElement().setAttribute("CallingOrganizationCode", context.getStorefrontId());
-			searchCatalogIndexInputDoc.getDocumentElement().setAttribute("CategoryDepth", "3");
-			searchCatalogIndexInputDoc.getDocumentElement().setAttribute("IgnoreOrdering", "Y");
-			searchCatalogIndexInputDoc.getDocumentElement().setAttribute("PageNumber", "1");
-			searchCatalogIndexInputDoc.getDocumentElement().setAttribute("PageSize", "1");
+				Document searchCatalogIndexInputDoc = YFCDocument.createDocument("SearchCatalogIndex").getDocument();
+				searchCatalogIndexInputDoc.getDocumentElement().setAttribute("CallingOrganizationCode", context.getStorefrontId());
+				searchCatalogIndexInputDoc.getDocumentElement().setAttribute("CategoryDepth", "3");
+				searchCatalogIndexInputDoc.getDocumentElement().setAttribute("IgnoreOrdering", "Y");
+				searchCatalogIndexInputDoc.getDocumentElement().setAttribute("PageNumber", "1");
+				searchCatalogIndexInputDoc.getDocumentElement().setAttribute("PageSize", "1");
 
-			if (log.isDebugEnabled()) {
-				log.debug("searchCatalogIndex input XML:\n"
-						+ (searchCatalogIndexInputDoc == null ? null : SCXmlUtil.getString(searchCatalogIndexInputDoc)));
-			}
+				if (log.isDebugEnabled()) {
+					log.debug("searchCatalogIndex input XML:\n"
+							+ (searchCatalogIndexInputDoc == null ? null : SCXmlUtil.getString(searchCatalogIndexInputDoc)));
+				}
 
-			Document searchCatalogIndexOutputDoc = api.invoke(env, "searchCatalogIndex", searchCatalogIndexInputDoc);
+				Document searchCatalogIndexOutputDoc = api.invoke(env, "searchCatalogIndex", searchCatalogIndexInputDoc);
 
-			if (log.isDebugEnabled()) {
-				log.debug("searchCatalogIndex output XML:\n"
-						+ (searchCatalogIndexOutputDoc == null ? null : SCXmlUtil.getString(searchCatalogIndexOutputDoc)));
-			}
+				if (log.isDebugEnabled()) {
+					log.debug("searchCatalogIndex output XML:\n"
+							+ (searchCatalogIndexOutputDoc == null ? null : SCXmlUtil.getString(searchCatalogIndexOutputDoc)));
+				}
 
-			env.clearApiTemplate("searchCatalogIndex");
+				env.clearApiTemplate("searchCatalogIndex");
 
-			megaMenu = convertCatalogSearch(searchCatalogIndexOutputDoc.getDocumentElement());
+				megaMenu = convertCatalogSearch(searchCatalogIndexOutputDoc.getDocumentElement());
 
-			if (log.isDebugEnabled()) {
-				if (megaMenu == null) {
-					log.debug("megaMenu is null");
-				} else if (megaMenu.isEmpty()) {
-					log.debug("megaMenu is empty");
-				} else {
-					for (MegaMenuItem cat1 : megaMenu) {
-						log.debug("  cat1 = " + cat1);
-						for (MegaMenuItem cat2 : cat1.getSubcategories()) {
-							log.debug("    cat2 = " + cat2);
-							for (MegaMenuItem cat3 : cat2.getSubcategories()) {
-								log.debug("      cat3 = " + cat3);
+				if (log.isDebugEnabled()) {
+					if (megaMenu == null) {
+						log.debug("megaMenu is null");
+					} else if (megaMenu.isEmpty()) {
+						log.debug("megaMenu is empty");
+					} else {
+						for (MegaMenuItem cat1 : megaMenu) {
+							log.debug("  cat1 = " + cat1);
+							for (MegaMenuItem cat2 : cat1.getSubcategories()) {
+								log.debug("    cat2 = " + cat2);
+								for (MegaMenuItem cat3 : cat2.getSubcategories()) {
+									log.debug("      cat3 = " + cat3);
+								}
 							}
 						}
 					}
 				}
-			}
 
-			context.setWCAttribute("megaMenu", megaMenu, WCAttributeScope.LOCAL_SESSION);
+				context.setWCAttribute(ATTR_MEGA_MENU, megaMenu, WCAttributeScope.LOCAL_SESSION);
+			}
+			return megaMenu;
 		}
-		return megaMenu;
 	}
 
 	/**
 	 * @param catalogSearchElem
-	 * @return Returns a list of MegaMenuItem representing the given CatalogSearch XML.
+	 * @return Returns a list of MegaMenuItem representing the given CatalogSearch XML. The topmost elements are cat1, etc.
 	 */
 	private static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem) {
 		List<MegaMenuItem> megaMenu = new LinkedList<MegaMenuItem>();

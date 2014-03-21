@@ -294,5 +294,9 @@
 			<result>/xpedx/jsp/common/XPEDXHTTPData.jsp</result>
 		</action>
 		
+		<action name="megaMenu" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/MegaMenu.jsp</result>
+		</action>
+		
 	</package>
 </struts>

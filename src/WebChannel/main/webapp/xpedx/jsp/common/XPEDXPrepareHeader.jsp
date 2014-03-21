@@ -2756,17 +2756,44 @@ function msgWait(){
 <s:if test='(#isGuestUser != true)'>
 	<div class="menucontainer">
 		<ul class="megamenu" id="megamenu">
-			<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
-				<s:param name="displayAllCategories" value="%{true}" />
-				<s:param name='newOP' value='%{true}'/>
-				<s:param name="selectedHeaderTab">CatalogTab</s:param>
-			</s:url>
 			<li class="<s:property value='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'/>">
-				<s:a cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'
-						onmouseover='%{#categoryPath == null ? "javascript:getCategorySubMenu();" : ""}'>
+				<s:a cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'>
 					Catalog
 				</s:a>
-				<s:include value="MegaMenu.jsp" />
+				
+				<s:if test="#wcUtil.isMegaMenuCached(wCContext)">
+					<s:include value="MegaMenu.jsp" />
+				</s:if>
+				<s:else>
+					<%--
+						Developer note: Since the mega menu data is user-specific (entitlements, etc) the data is cached in the session.
+										However, the API call to fetch the data is slow enough that we don't want to block the page load,
+										 so if the data is not cached then we render the page without mega menu and immediately fetch it via an ajax call.
+										The response of the ajax call is the mega menu dom, which we inject into the page.
+					--%>
+					<s:url id="megaMenuURL" namespace="/common" action="megaMenu" />
+					<script type="text/javascript">
+						$(document).ready(function() {
+							function getMegaMenu() {
+								var url = '<s:property value="#megaMenuURL" escape="false" />';
+								$.ajax({
+									url: url,
+									dataType: 'html',
+									success: function(data) {
+										$('#megamenu li:first').append(data);
+									},
+									failure: function() {
+										// retry
+										getMegaMenu();
+									}
+								});
+							}
+							
+							// immediately fetch the mega menu (don't wait for hover)
+							getMegaMenu();
+						});
+					</script>
+				</s:else>
 			</li>
 				<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />

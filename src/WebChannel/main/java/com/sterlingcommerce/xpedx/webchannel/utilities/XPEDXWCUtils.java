@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -6847,12 +6846,19 @@ public class XPEDXWCUtils {
 
 	/**
 	 * @param context
-	 * @return Returns the mega menu data model that is cached in the session. If not currently in the session, then performs an API call to fetch it and caches it in the session.
+	 * @return Returns true if the mega menu data is available.
+	 */
+	public static boolean isMegaMenuCached(IWCContext context) {
+		return MEGA_MENU_UTIL.isDataAvailable(context);
+	}
+
+	/**
+	 * @param context
+	 * @return Returns the mega menu data model that is cached in the session, making an API call if necessary.
 	 * @throws Exception API error
 	 * @see MegaMenuUtil#getMegaMenu(IWCContext)
 	 */
 	public static List<MegaMenuItem> getMegaMenu(IWCContext context) throws Exception {
-		// TODO If not available, returns null and schedules an asynchronous API call to fetch it and put it in the session.
 		return MEGA_MENU_UTIL.getMegaMenu(context);
 	}
 
