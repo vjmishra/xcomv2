@@ -200,7 +200,7 @@
 						<s:hidden name='Currency' value='%{#currencyCode}' />
 						<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
 						<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />" />
-						
+						<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
 						<label>
 							<span>Item Type:</span>
 							<s:select id="qaItemType" name="qaItemType" cssStyle="width:135px;" headerKey="1"
