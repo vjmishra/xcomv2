@@ -978,7 +978,7 @@ ul.megamenu {
 	background: linear-gradient(to bottom,  #f7f7f7 25%,#b5b5b5 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#b5b5b5',GradientType=0 ); /* IE6-8 */
 }
-=======
+
 /*------------view hide buttons---------------*/
 .view-hide-images  {
 	width: 120px;
@@ -1002,4 +1002,4 @@ ul.megamenu {
 	background: url(../images/show-hide-btn.png) 1px -21px no-repeat;
 	border: none;
 }
->>>>>>> hardening_r13
+
