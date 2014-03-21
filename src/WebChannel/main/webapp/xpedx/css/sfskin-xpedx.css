@@ -454,12 +454,13 @@ ul.megamenu {
 }
 #add-existing a {
 	display: block;
-	width: 147px;
+	width: 146px;
 	text-align: center;
 	background-color: #526277;
 	color: #fff;
 	padding: 8px 0px 9px 0px;
 	border-left: 1px #ffffff solid;
+	border-right: 1px #ffffff solid;
 }
 #add-existing a:hover {
 	background-color: #212934;
