@@ -307,7 +307,7 @@
 			 <s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
 			 <s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
 			</div>
-				<div id="right-col-int" class="cat-landing" style="margin-top:0px;right:10px;">
+				<div id="right-col-int" class="cat-landing" style="margin-top:0px;">
 				 <div align="left" style="padding-right: 60px;margin-bottom:2px">
 				 <s:if test="%{!#isPunchoutUser}">
 					<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>
