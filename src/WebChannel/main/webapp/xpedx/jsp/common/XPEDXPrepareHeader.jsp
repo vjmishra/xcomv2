@@ -3053,6 +3053,29 @@ function msgWait(){
 	<div id="viewUsersDlg">
 	</div>
 </div>
+ <!-- order edit in progress bar begin -->
+<s:if test='!#guestUser'>
+	<s:if test="%{!#isPunchoutUser}">
+		 <s:if test="#isEditOrderHeaderKey != null && #isEditOrderHeaderKey !='' ">
+		 	<s:url id="viewEditOrderChanges" includeParams="none"
+							action='MyViewEditOrderChanges' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+							<s:param name="isEditOrder" value='true' />
+							<s:param name="isEditOrder" value='true' />
+			</s:url>
+			<s:url id="cancelEditOrderChanges" includeParams="none"
+							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+			</s:url>
+			<s:set name="editOrderNumber" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDIT_ORDER_NO)'/>		
+		 	<div class="order-edit-banner"> Editing Order #:  <s:property value="#editOrderNumber" /> <span>Changes will not be applied to order until checkout.</span>
+	      		<input name="" type="button"  class="btn-order-edit  addmarginleft20" value="View Changes" onclick="javascript:document.location.href='${viewEditOrderChanges}';"/>
+	      		<input name="" type="button"  class="btn-order-edit addmarginleft10" value="Cancel Changes" onclick="document.location.href='${cancelEditOrderChanges}'"/>
+    		</div>
+		 </s:if> 
+	 </s:if>
+ </s:if>
+  <!-- order edit in progress bar end -->
  <!-- ship to banner -->
 <s:if test="%{getShipToBanner()}">
 	<s:set name='guestUser' value="%{#_action.getWCContext().isGuestUser()}" />
@@ -3089,29 +3112,6 @@ function msgWait(){
     </s:if>
 </s:if>
 <!-- end ship to banner -->
- <!-- order edit in progress bar begin -->
-<s:if test='!#guestUser'>
-	<s:if test="%{!#isPunchoutUser}">
-		 <s:if test="#isEditOrderHeaderKey != null && #isEditOrderHeaderKey !='' ">
-		 	<s:url id="viewEditOrderChanges" includeParams="none"
-							action='MyViewEditOrderChanges' namespace='/order' escapeAmp="false">
-							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
-							<s:param name="isEditOrder" value='true' />
-							<s:param name="isEditOrder" value='true' />
-			</s:url>
-			<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
-							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
-			</s:url>
-			<s:set name="editOrderNumber" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDIT_ORDER_NO)'/>		
-		 	<div class="order-edit-banner"> Editing Order #:  <s:property value="#editOrderNumber" /> <span>Changes will not be applied to order until checkout.</span>
-	      		<input name="" type="button"  class="btn-order-edit  addmarginleft20" value="View Changes" onclick="javascript:document.location.href='${viewEditOrderChanges}';"/>
-	      		<input name="" type="button"  class="btn-order-edit addmarginleft10" value="Cancel Changes" onclick="document.location.href='${cancelEditOrderChanges}'"/>
-    		</div>
-		 </s:if> 
-	 </s:if>
- </s:if>
-  <!-- order edit in progress bar end -->
 <!-- begin search tips -->
 <div style="display: none;">
 	<div id="searchTips">
