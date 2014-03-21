@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <s:set name="megaMenu" value="%{#wcUtil.getMegaMenu(wCContext)}" />
@@ -32,7 +33,7 @@
 										<s:set name="cssClass" value="" />
 									</s:else>
 									
-									<a id='category-<s:property value="%{#cat2.id}"/>' class='mega-cat-2 <s:property value="%{#cssClass}"/>' href='#'
+									<a id='category-<s:property value="%{#cat2.id}"/>' class='mega-cat-2 <s:property value="%{#cssClass}"/>' style='cursor:pointer;'
 											data-cat1Id='<s:property value="%{#cat1.id}"/>'>
 										<s:property value="#cat2.name" /><div class="cat-2-arrow">&raquo;</div>
 									</a>
@@ -50,7 +51,7 @@
 												<s:param name='path' value='#cat2.path' />
 												<s:param name='cname' value='#cat2.name' />
 												<s:param name='newOP' value='true' />
-												<s:param name='CategoryC3' value='true' /> <%-- TODO: existing code does not have CategoryC3 param here, but page is broken without it. is this where _bcs_ triggers results? --%>
+												<s:param name='CategoryC3' value='true' />
 											</s:url>
 											<a href='<s:property value="#catURL" escape="false"/>'>
 												<span>
