@@ -1100,6 +1100,37 @@
 			</Template>
 		</API>
 	</mashup>
+
+	<mashup id='xpedxGetBrands' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Populate Brands List page">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>                                                <!-- TODO TEMP!!!! -->
+				<SearchCatalogIndex CallingOrganizationCode="xpedx" 
+					CategoryDepth="2" DisplayLocalizedFieldInLocale="" SortField="Item.ExtnBestMatch"
+					SortDescending="" CategoryPath="/MasterCatalog/300000/300005"> <!-- TODO TEMP!!!! -->
+					<Item GetAvailabilityFromCache='Y'
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="90-0001018921-000001-M-XX-S" /> <!-- TODO TEMP!!!! -->
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+			<CatalogSearch TotalHits="">
+			    <FacetList>
+			        <ItemAttribute ItemAttributeKey="" ItemAttributeName="">
+			            <Attribute AttributeID="" AttributeKey="" DataType="" LongDescription="" ShortDescription=""/>
+			            <AssignedValueList HasMoreAssignedValues="">
+			                <AssignedValue Count="" Value=""/>
+			            </AssignedValueList>
+			        </ItemAttribute>
+			    </FacetList>
+			</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
 	<!-- EB-694 xpedx catalog URL display for FSC, PEFC and SFI  -->
 	<mashup id='xpedxgetItemList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="getItemList API returns a list of Items">
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
