@@ -736,7 +736,8 @@ function redrawQuickAddList()
 {	
 	var tabIndex = 210;
 	var showAddtoCartBtn = false;
-    var code = '<table cellspacing="0" cellpadding="0" id="QuickAddTable" width="96%">';
+	var QuickAddTable = (document.QuickAddForm.sfId.value=='xpedx') ? 'QuickAddTable' : 'QuickAddTableSaal';
+	var code = '<table cellspacing="0" cellpadding="0" id="'+QuickAddTable+'" width="96%">';
     var jobValue;
     var customerPONoValue;//added for XB 769
     addToCartDiv = document.getElementById("addProdsToOrder");

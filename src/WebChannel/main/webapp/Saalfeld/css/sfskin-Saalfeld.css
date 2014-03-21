@@ -543,6 +543,7 @@ border: 2px #53b1f9 solid;
 	background: #336633;
 }
 
+<<<<<<< HEAD
 /************* CSS styles for Megamenu changes ******/
 .menucontainer {
 	position: absolute;
@@ -977,3 +978,28 @@ ul.megamenu {
 	background: linear-gradient(to bottom,  #f7f7f7 25%,#b5b5b5 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#b5b5b5',GradientType=0 ); /* IE6-8 */
 }
+=======
+/*------------view hide buttons---------------*/
+.view-hide-images  {
+	width: 120px;
+	height: 25px;
+	float: left;
+	clear: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+}
+.viewbtn {
+	display: block;
+	width: 100px;
+	height: 21px;
+	background: url(../images/show-hide-btn.png) 1px 5px no-repeat;
+	border: none;
+}
+.hidebtn {
+	width: 100px;
+	height: 21px;
+	background: url(../images/show-hide-btn.png) 1px -21px no-repeat;
+	border: none;
+}
+>>>>>>> hardening_r13
