@@ -496,6 +496,7 @@ ul.megamenu {
 	color: #000;
 	padding: 8px 0px 9px 0px;
 	border-left: 1px #ffffff solid;
+	border-bottom: 1px #f6e630 solid;
 }
 .order-edit-banner {
 	width: 100%;
