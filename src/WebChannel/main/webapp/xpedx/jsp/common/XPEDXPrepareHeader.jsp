@@ -2772,23 +2772,9 @@ function msgWait(){
 										The response of the ajax call is the mega menu dom, which we inject into the page.
 					--%>
 					<s:url id="megaMenuURL" namespace="/common" action="megaMenu" />
+					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='true'/>" />
 					<script type="text/javascript">
 						$(document).ready(function() {
-							function getMegaMenu() {
-								var url = '<s:property value="#megaMenuURL" escape="false" />';
-								$.ajax({
-									url: url,
-									dataType: 'html',
-									success: function(data) {
-										$('#megamenu li:first').append(data);
-									},
-									failure: function() {
-										// retry
-										getMegaMenu();
-									}
-								});
-							}
-							
 							// immediately fetch the mega menu (don't wait for hover)
 							getMegaMenu();
 						});

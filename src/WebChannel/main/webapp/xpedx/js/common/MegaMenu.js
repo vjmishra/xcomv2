@@ -1,9 +1,16 @@
-$(document).ready(function () {
+$(document).ready(function() {
+	initMegaMenu();
+});
+
+/*
+ * Wraps the megamenu plugin initialization, for re-usability elsewhere (see getMegaMenu function).
+ */
+function initMegaMenu() {
 	$('#megamenu').megamenu({
 		effect: 'show'
 	});
-
-	$('.mega-cat-2').click(function () {
+	
+	$('.mega-cat-2').click(function() {
 		$this = $(this);
 		var contentId = $this.attr('id') + '-content';
 		var cat1Id = $this.attr('data-cat1Id');
@@ -15,9 +22,11 @@ $(document).ready(function () {
 		
 		return false;
 	});
-	
-});
+}
 
+/*
+ * Opens the brand page for the given cat2 button clicked. 'self' parameter is the button clicked.
+ */
 function openBrandPage(self) {
 	$self = $(self);
 	
@@ -33,4 +42,23 @@ function openBrandPage(self) {
 //	window.location.href = brandsURL;
 	
 	return false;
+}
+
+/*
+ * Loads the megamenu asynchronously via ajax call.
+ */
+function getMegaMenu() {
+	var url = $('#megaMenuAjaxURL').val();
+	$.ajax({
+		url: url,
+		dataType: 'html',
+		success: function(data) {
+			$('#megamenu li:first').append(data);
+			initMegaMenu();
+		},
+		failure: function() {
+			// retry
+			getMegaMenu();
+		}
+	});
 }
