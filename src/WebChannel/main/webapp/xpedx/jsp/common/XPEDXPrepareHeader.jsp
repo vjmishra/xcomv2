@@ -53,6 +53,7 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.megamenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/MegaMenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
 	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
 		<s:param name="newOP">true</s:param>
@@ -81,9 +82,6 @@
 			}
 		});
 		
-		$(document).ready(function(){
-			$('#mymenu').megamenu({effect: 'show'});
-		});
 		// enable autocomplete for new search
 		$(document).ready(function() {
 			// autocomplete console.log('BEGIN doc-ready');
@@ -2757,38 +2755,19 @@ function msgWait(){
   </s:elseif>
 <s:if test='(#isGuestUser != true)'>
 	<div class="menucontainer">
-	        <ul class="megamenu" id="mymenu">
-	            <%-- Hemantha, removed since it is not in new UI screen --%>	            
-	            	<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
-		      			<s:param name="displayAllCategories" value="%{true}" />
-						<s:param name='newOP' value='%{true}'/>
-						<s:param name="selectedHeaderTab">CatalogTab</s:param>
-					</s:url>	
-					<s:set name="categoryPath" value='wCContext.getSCUIContext().getLocalSession().getAttribute("categoryCache")'/>
-	            	<s:if test='#selectedHeaderTab=="CatalogTab"'>
-	            		<li class="active">
-	            		<s:if test="#categoryPath !=null">
-	            			<s:a href="#"  cssClass="active">Catalog</s:a>
-	            		</s:if>
-	            		<s:else>
-	            			<s:a href="#"  onmouseover="javascript:getCategorySubMenu();" cssClass="active">Catalog</s:a>
-	            		</s:else>	            			            		
-	            	</s:if>
-	            	<s:else>
-	            		<li>
-	            		<s:if test="#categoryPath !=null">
-	            			<s:a href="#" >Catalog</s:a>
-	            		</s:if>
-	            		<s:else>
-	            			<s:a href="#" onmouseover="javascript:getCategorySubMenu();">Catalog</s:a>
-	            		</s:else>	            		
-	            	</s:else>
-	            	<ul class="sub_menu" id="categorySubMenu" >
-	            		<s:if test="#categoryPath !=null">
-	            			<s:include value="/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp"></s:include>
-	            		</s:if>
-	            	</ul>
-			    </li>
+		<ul class="megamenu" id="megamenu">
+			<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
+				<s:param name="displayAllCategories" value="%{true}" />
+				<s:param name='newOP' value='%{true}'/>
+				<s:param name="selectedHeaderTab">CatalogTab</s:param>
+			</s:url>
+			<li class="<s:property value='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'/>">
+				<s:a cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'
+						onmouseover='%{#categoryPath == null ? "javascript:getCategorySubMenu();" : ""}'>
+					Catalog
+				</s:a>
+				<s:include value="MegaMenu.jsp" />
+			</li>
 				<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />

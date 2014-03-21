@@ -71,10 +71,12 @@ import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
+import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrgNodeDetailsBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
+import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.yantra.interop.client.ClientVersionSupport;
@@ -140,6 +142,8 @@ public class XPEDXWCUtils {
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
 	private static Map<String, String> legacyUomMap;
+
+	private static final MegaMenuUtil MEGA_MENU_UTIL = new MegaMenuUtil();
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
@@ -2777,10 +2781,10 @@ public class XPEDXWCUtils {
 		String apiName="getCustomerList";
 		String apiData="<Customer><Extn ExtnCustIdentity='"+custIdentity+"'/></Customer>";
 		String isFlow="N";
-		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";		
+		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";
 		Document customerDetailsOutputDoc = handleApiRequestBeforeAuthentication(apiName,apiData,isFlow,template);
 		if(customerDetailsOutputDoc != null){
-			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();		
+			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();
 			log.debug("Output XML: " + SCXmlUtil.getString(outputDoc));
 			wElement = outputDoc.getDocumentElement();
 			wElement = SCXmlUtil.getChildElement(wElement, "Customer");
@@ -6785,60 +6789,71 @@ public class XPEDXWCUtils {
 		return punchOutComments;
 	}
 	/**
-	 * for calling an any API before authentication 
+	 * for calling an any API before authentication
 	 * @param apiName
 	 * @param apiData
 	 * @param isFlow
 	 * @param template
 	 * @return
 	 */
-	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)	        
-    {	
+	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)
+    {
 	  if(YFCCommon.isVoid(isFlow) || YFCCommon.isVoid(apiData) || YFCCommon.isVoid(apiName) )
         {
 			return null;
-        }			
+        }
 		Document retDoc = null;
 		YIFApi localApi;
         InteropEnvStub envStub = new InteropEnvStub("admin", "SterlingHttpTester");
-        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());	        
+        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());
         try
         {
               YFCDocument apiDoc = YFCDocument.parse(apiData);
               localApi = YIFClientFactory.getInstance().getLocalApi();
 	          log.debug("Successfully intialized the local api");
             if(!YFCCommon.isVoid(isFlow) && isFlow.equalsIgnoreCase("Y"))
-            {                  
+            {
                 retDoc = localApi.executeFlow(envStub, apiName, apiDoc.getDocument());
             } else
             {
                 retDoc = localApi.invoke(envStub, apiName, apiDoc.getDocument());
-            }           
+            }
         }
         catch(YIFClientCreationException e)
         {
-        	log.fatal("Could not create local client", e);           
+        	log.fatal("Could not create local client", e);
         }
         catch(SAXException e)
         {
-        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);	            
+        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);
         }
         catch(IOException e)
         {
-        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);	           
+        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);
         }
         catch(YFSException e)
         {
-        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);	           
+        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);
         }
         catch(YFCException e)
         {
         	log.fatal((new StringBuilder()).append("YFC Exception while invoking api ").append(apiName).toString(), e);
-        
+
         }
         finally{
-        	 return retDoc;	
+        	 return retDoc;
         }
     }
+
+	/**
+	 * @param context
+	 * @return Returns the mega menu data model that is cached in the session. If not currently in the session, then performs an API call to fetch it and caches it in the session.
+	 * @throws Exception API error
+	 * @see MegaMenuUtil#getMegaMenu(IWCContext)
+	 */
+	public static List<MegaMenuItem> getMegaMenu(IWCContext context) throws Exception {
+		// TODO If not available, returns null and schedules an asynchronous API call to fetch it and put it in the session.
+		return MEGA_MENU_UTIL.getMegaMenu(context);
+	}
 
 }
