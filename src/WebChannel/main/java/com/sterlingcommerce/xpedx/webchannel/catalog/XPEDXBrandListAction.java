@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,33 +20,33 @@ import edu.emory.mathcs.backport.java.util.Collections;
 
 public class XPEDXBrandListAction extends CatalogAction {
 
-	// TODO Is this OK hard-coded or need to look up?
-	//  [yfs_item_attr.item_attr_name='FF_1182', item_attr_description='Brand']
-	private static final String ITEM_ATTRIBUTE_KEY_BRAND = "20121030115421135299675";
+	// [yfs_item_attr.item_attr_name='FF_1182', item_attr_description='Brand']
+	private static final String INDEX_FIELD_NAME_BRAND = "ItemAttribute.xpedx.FF_1182";
 
 	private static final Logger log = Logger.getLogger(XPEDXBrandListAction.class);
 
 	private Map<String,List<String>> brandMap;
+	// these are set by input param
+	private String path = "";
+	private String cat1name = ""; // TODO use these for bread crumb in jsp, and bcs in links
+	private String cat2name = "";
 
 
 	public String getBrandsForCategory() {
 
-		String retVal = SUCCESS;
+		getBrandListFromApi();
 
+		return SUCCESS;
+	}
+
+	private void getBrandListFromApi() {
 		try {
-			Element inputDoc = WCMashupHelper.getMashupInput("xpedxGetBrands", wcContext.getSCUIContext());
-			System.out.println("initial xml: " + SCXmlUtil.getString(inputDoc));
-
-			Element allAssignedListElem = SCXmlUtil.createChild(inputDoc, "ShowAllAssignedValues");
-
-			//TODO move to Binding?
-			allAssignedListElem.setAttribute("ConsiderOnlyAllAssignedValueAttributes", "Y");
-
-			//TODO need to set this here or in Binding? sortField="Item.ExtnBestMatch--A"
-
-			//TODO move to Binding since hard-coded?
-			Element itemAttributeElem = SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
-			itemAttributeElem.setAttribute("ItemAttributeKey", ITEM_ATTRIBUTE_KEY_BRAND);
+			Map<String,String> valueMapinput = new HashMap<String,String>();
+			valueMapinput.put("/SearchCatalogIndex/@CallingOrganizationCode", wcContext.getStorefrontId());
+			valueMapinput.put("/SearchCatalogIndex/@CategoryPath", path);
+			valueMapinput.put("/SearchCatalogIndex/Item/CustomerInformation/@CustomerID", wcContext.getCustomerId());
+			valueMapinput.put("/SearchCatalogIndex/ShowAllAssignedValues/ItemAttribute/@IndexFieldName", INDEX_FIELD_NAME_BRAND);
+			Element inputDoc = WCMashupHelper.getMashupInput("xpedxGetBrands", valueMapinput, wcContext.getSCUIContext());
 
 			System.out.println("input xml: " + SCXmlUtil.getString(inputDoc));
 
@@ -55,15 +56,12 @@ public class XPEDXBrandListAction extends CatalogAction {
 
 			System.out.println("output xml: " + SCXmlUtil.getString(outputDoc)); //TODO remove println
 
-			// extract list of brand names from returned doc for jsp access
+			// extract list of brand names from returned doc for JSP access
 			setBrandListFromOutput();
-
 		}
 		catch (Exception e) {
-			log.error("Exception in XPEDXBrandListAction - getBrandsForCategory method", e);
+			log.error("Problem getting brand list for this customer & cat1/cat2", e);
 		}
-		 System.out.println("# brands: " + brandMap.size());
-		return retVal;
 	}
 
 	private void setBrandListFromOutput() {
@@ -74,12 +72,6 @@ public class XPEDXBrandListAction extends CatalogAction {
 		NodeList FacetList = SCXmlUtil.getXpathNodes(getOutDoc().getDocumentElement(), "/CatalogSearch/FacetList/ItemAttribute");
 		for (int i = 0; i < FacetList.getLength(); i++) {
 			Element facetElem = (Element) FacetList.item(i);
-			//TODO any reason to make sure this is the brand facet?
-//			Element itemattr = SCXmlUtil.getChildElement(facetElem, "Attribute");
-//			String shortDesc = itemattr.getAttribute("ShortDescription");
-//			if (facetDivShortDescription != null && !facetDivShortDescription.equalsIgnoreCase(shortDesc)) {
-//				continue;
-//			}
 
 			List<Element> values = SCXmlUtil.getElements(facetElem, "AssignedValueList/AssignedValue");
 
@@ -87,21 +79,34 @@ public class XPEDXBrandListAction extends CatalogAction {
 			for (Element value : values) {
 				brands.add(value.getAttribute("Value"));
 			}
-			brandList.addAll(brands);
 
+			brandList.addAll(brands);
 		}
 
 		brandMap = splitBrandsByLetter(brandList);
-
 	}
 
 	private Map<String, List<String>> splitBrandsByLetter(ArrayList<String> brandList) {
-		HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+		HashMap<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 
-		// returned list appears sorted but in case it's not
-		Collections.sort(brandList);
+		Collections.sort(brandList, String.CASE_INSENSITIVE_ORDER);
 
-		//TODO loop over brands and put into list keyed by first letter
+		// create entry for all letters/# since want empty ones too
+		map.put("#", new ArrayList<String>());
+		for (char c='A'; c<= 'Z'; c++) {
+			map.put(String.valueOf(c), new ArrayList<String>());
+		}
+
+		for (String brand: brandList) {
+			char letter = brand.charAt(0);
+			if (letter >= 'A' && letter <= 'Z') {
+				// should be unique so shouldn't already be in list
+				map.get(String.valueOf(letter)).add(brand);
+			}
+			else {
+				map.get("#").add(brand);
+			}
+		}
 
 		return map;
 	}
@@ -110,8 +115,31 @@ public class XPEDXBrandListAction extends CatalogAction {
 		return brandMap;
 	}
 
-	public void setBrands(Map<String, List<String>> brandMap) {
-		this.brandMap = brandMap;
+	@Override
+	public String getPath() {
+		return path;
 	}
+
+	@Override
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getCat1name() {
+		return cat1name;
+	}
+
+	public void setCat1name(String cat1name) {
+		this.cat1name = cat1name;
+	}
+
+	public String getCat2name() {
+		return cat2name;
+	}
+
+	public void setCat2name(String cat2name) {
+		this.cat2name = cat2name;
+	}
+
 }
 

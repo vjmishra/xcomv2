@@ -235,7 +235,6 @@
 		<action name="brands"
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXBrandListAction" method="getBrandsForCategory">
 			<param name="mashupID">xpedxGetBrands</param>
-			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXBrandsList.jsp</result>
 		</action>
 

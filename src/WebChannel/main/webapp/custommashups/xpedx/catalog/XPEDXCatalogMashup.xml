@@ -1106,14 +1106,15 @@
 		<classInformation
 			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
 		<API Name="searchCatalogIndex">
-			<Input>                                                <!-- TODO TEMP!!!! -->
-				<SearchCatalogIndex CallingOrganizationCode="xpedx" 
-					CategoryDepth="2" DisplayLocalizedFieldInLocale="" SortField="Item.ExtnBestMatch"
-					SortDescending="" CategoryPath="/MasterCatalog/300000/300005"> <!-- TODO TEMP!!!! -->
-					<Item GetAvailabilityFromCache='Y'
-						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
-						<CustomerInformation CustomerID="90-0001018921-000001-M-XX-S" /> <!-- TODO TEMP!!!! -->
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode="" IgnoreOrdering="Y"
+					CategoryPath="" CategoryDepth="2" DisplayLocalizedFieldInLocale="">
+					<Item GetAvailabilityFromCache='Y' ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID=""/>
 					</Item>
+					<ShowAllAssignedValues ConsiderOnlyAllAssignedValueAttributes="Y">
+						<ItemAttribute IndexFieldName=""/>
+					</ShowAllAssignedValues>
 				</SearchCatalogIndex>
 			</Input>
 			<Template>
