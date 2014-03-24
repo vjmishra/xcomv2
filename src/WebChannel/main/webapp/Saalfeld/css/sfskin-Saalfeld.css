@@ -553,6 +553,9 @@ border: 2px #53b1f9 solid;
 	height: 33px;
 	z-index: 1000;
 	clear: both;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size:12px;}
 }
 ul.megamenu, .megamenu ul {
 	margin: 0;
@@ -890,14 +893,10 @@ ul.megamenu {
 	background-color: #212934;
 }
 .button-nav-wrap {
-	width: 290px;
-	position: absolute;
-	top: 460px;
-	text-align: right;
-}
-.button-nav-alt {
-	position: inherit;
-	padding: 10px 0px;
+	width: 100%;
+	text-align: left;
+	margin-top: 15px;
+	margin-bottom: 5px;
 }
 .btn-nav-list {
 	border: 1px solid #008d61;
@@ -911,6 +910,7 @@ ul.megamenu {
 	color: #016747;
 	padding: 4px;
 	background: #ffffff;
+	cursor: pointer;
 }
 #order-edit a {
 	display: block;
@@ -928,10 +928,10 @@ ul.megamenu {
 	background: #ffe969;
 	padding: 2px 0px 2px 10px;
 	font-weight: bold;
-	}
+}
 .order-edit-banner span {
 	margin-left: 30px;
-	}
+}
 .btn-order-edit {
 	cursor: pointer;
 	border: 1px solid #c5c5c5;
@@ -1002,3 +1002,6 @@ ul.megamenu {
 	border: none;
 }
 
+.megamenu li.active > a {
+	background-color: #05226d;
+}
