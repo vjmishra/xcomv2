@@ -58,6 +58,7 @@ function getMegaMenu() {
 		url: url,
 		dataType: 'html',
 		success: function(data) {
+			$('#megaMenuLoadingMessage').remove();
 			$('#megamenu li:first').append(data);
 			initMegaMenu();
 		},

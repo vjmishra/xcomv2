@@ -2758,6 +2758,13 @@ function callAjaxForSorting(url,divId)
 					--%>
 					<s:url id="megaMenuURL" namespace="/common" action="megaMenu" />
 					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='false'/>" />
+					<ul id="megaMenuLoadingMessage">
+						<li>
+							<a>
+								Loading...
+							</a>
+						</li>
+					</ul>
 				</s:else>
 			</li>
 				<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
