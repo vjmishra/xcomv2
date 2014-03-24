@@ -199,8 +199,6 @@
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 	<s:set name="goBackFlag" value='%{"false"}' />
 	<s:hidden id="goBackFlag" name="goBackFlag" value="%{goBackFlag}"></s:hidden>
-<s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
-</s:url>
 	<s:url id="ValidatePasswordURL" action="xpedxPasswordValidation"/>
 	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>
 	<s:url id="orderdetailsURL" namespace="/order" action="orderDetail"/>
@@ -2394,50 +2392,36 @@ function callAjaxForSorting(url,divId)
 		writeMetaTag('WT.ti','Help');
 		//-- Web Trends tag End --
   		var load = window.open('https://xcontent.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
-  		}
-	function getCategorySubMenu()
-	{		
-		   	var url = "<s:property value='#getCategoryMenu'/>";
-   			url = ReplaceAll(url,"&amp;",'&');
-       		Ext.Ajax.request({
-		       	url:url,
-    		   	success: function (response, request)
-       			{
-	    			var myDiv = document.getElementById("categorySubMenu");
-    				myDiv.innerHTML = response.responseText;
-    			}
-			});
-	}	
-	
+  	}
 
 	//check for timeout for JIRA 1650 
-function checkSessionTimeout(){
-	<s:url id='homeAction' action='home' namespace='/home' />;
-    var logoutURL="<s:property value='#homeAction' />";
-    logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
-	<s:url id='checkSesseionTimeoutURL'  namespace='/order'  action='checkSessionTimeoutForCart.action' ></s:url>
-     var checkSesseionTimeoutURL="<s:property value='#checkSesseionTimeoutURL' />";
-     checkSesseionTimeoutURL = ReplaceAll(checkSesseionTimeoutURL,"&amp;",'&');
- 	Ext.Ajax.request({
-         url :checkSesseionTimeoutURL,
-         method: 'POST',
-         success: function (response, request){
- 		if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
-		window.location=logoutURL;
-		}
- 		
- 		
-    		},
-    		failure: function (response, request){
-    			if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
-    			window.location=logoutURL;
-    			}
-          }
-     });  
-}
-//added for XBT 298
-var myMask;
-function msgWait(){
+	function checkSessionTimeout(){
+		<s:url id='homeAction' action='home' namespace='/home' />;
+	    var logoutURL="<s:property value='#homeAction' />";
+	    logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
+		<s:url id='checkSesseionTimeoutURL'  namespace='/order'  action='checkSessionTimeoutForCart.action' ></s:url>
+	     var checkSesseionTimeoutURL="<s:property value='#checkSesseionTimeoutURL' />";
+	     checkSesseionTimeoutURL = ReplaceAll(checkSesseionTimeoutURL,"&amp;",'&');
+	 	Ext.Ajax.request({
+	         url :checkSesseionTimeoutURL,
+	         method: 'POST',
+	         success: function (response, request){
+	 		if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
+			window.location=logoutURL;
+			}
+	 		
+	 		
+	    		},
+	    		failure: function (response, request){
+	    			if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
+	    			window.location=logoutURL;
+	    			}
+	          }
+	     });  
+	}
+	//added for XBT 298
+	var myMask;
+	function msgWait(){
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 		myMask.show();

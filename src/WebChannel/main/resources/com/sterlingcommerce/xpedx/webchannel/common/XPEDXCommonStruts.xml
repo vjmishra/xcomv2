@@ -282,14 +282,6 @@
 			</result>
 		</action>
 		
-		<action name="gategorySubMenu"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction" method="getCategories">
-			<param name="categoryDepth">2</param>
-			<param name="mashups">xpedxCatalogNavBar</param>
-			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetCategories_Binding.xml</param>
-			<result name="success">/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp</result>
-		</action>
-		
 		<action name="httpaction" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHTTPAction">
 			<result>/xpedx/jsp/common/XPEDXHTTPData.jsp</result>
 		</action>
