@@ -5,8 +5,8 @@
 
 <s:set name="megaMenu" value="%{#wcUtil.getMegaMenu(wCContext)}" />
 
-<%-- <s:url id='baseBrandsURL' namespace='catalog' action='brands' /> --%>
-<%-- <s:a id='brandsURL' style='display:none;' href='#baseBrandsURL'></s:a> --%>
+<s:url id='baseBrandsURL' namespace='/catalog' action='brands' />
+<s:hidden id='baseBrandsURL' value='%{#baseBrandsURL}' />
 
 <ul>
 	<s:iterator value="megaMenu" id="cat1" status="cat1Status">

@@ -34,12 +34,11 @@ function openBrandPage(self) {
 	var cat1name = $self.attr('data-cat1name');
 	var cat2name = $self.attr('data-cat2name');
 	
-	alert('TODO: open brands page: path=' + path + ', cat1name=' + cat1name + ', cat2name=' + cat2name);
-//	var brandsURL = $('#brandsURL');
-//	brandsURL += '&path=' + encodeURIComponent(path);
-//	brandsURL += '&cat1name=' + encodeURIComponent(cat1name);
-//	brandsURL += '&cat2name=' + encodeURIComponent(cat2name);
-//	window.location.href = brandsURL;
+	var brandsURL = $('#baseBrandsURL').val();
+	brandsURL += '&path=' + encodeURIComponent(path);
+	brandsURL += '&cat1name=' + encodeURIComponent(cat1name);
+	brandsURL += '&cat2name=' + encodeURIComponent(cat2name);
+	window.location.href = brandsURL;
 	
 	return false;
 }
