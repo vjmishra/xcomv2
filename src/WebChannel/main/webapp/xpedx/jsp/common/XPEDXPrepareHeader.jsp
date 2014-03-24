@@ -2760,7 +2760,7 @@ function callAjaxForSorting(url,divId)
 					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='false'/>" />
 					<ul id="megaMenuLoadingMessage">
 						<li>
-							<a>
+							<a class="spinner">
 								Loading...
 							</a>
 						</li>

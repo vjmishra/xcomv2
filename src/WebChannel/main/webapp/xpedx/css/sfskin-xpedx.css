@@ -581,3 +581,8 @@ ul.megamenu {
 .megamenu li.active > a {
 	background-color: #0849a1;
 }
+
+#megaMenuLoadingMessage li a.spinner {
+	background: #93bcf4 url(../images/common/ajax-loader.gif) no-repeat;
+	background-position: 100px 11px;
+}

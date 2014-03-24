@@ -968,3 +968,8 @@ ul.megamenu {
 .megamenu li.active > a {
 	background-color: #045139;
 }
+
+#megaMenuLoadingMessage li a.spinner {
+	background: #d2edde url(../images/common/ajax-loader.gif) no-repeat;
+	background-position: 100px 11px;
+} 
