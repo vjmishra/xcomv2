@@ -809,13 +809,6 @@ ul.megamenu {
 .megamenu ul li a.mega-cat-2:hover div.cat-2-arrow {
 	color: #11b17f;
 }
-.megamenu ul li a.mega-cat-2:focus {
-	color: #000;
-}
-.megamenu ul li a.mega-cat-2:focus div.cat-2-arrow {
-	color: #128b65;
-}
-
 
 /************* CAT 3 *********************	*/
 
@@ -972,16 +965,6 @@ ul.megamenu {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#b5b5b5',GradientType=0 ); /* IE6-8 */
 }
 
-
-.megamenu li a:focus {
+.megamenu li.active > a {
 	background-color: #045139;
 }
-.megamenu ul li a:focus {
-	background-color: #d2edde;
-	}
-.megamenu ul li a.mega-cat-2:focus {
-	background-color: #ffffff;
-}
-.megamenu ul li .cat3-content a:focus {
-	background-color: #c2e5d1;
-	}
