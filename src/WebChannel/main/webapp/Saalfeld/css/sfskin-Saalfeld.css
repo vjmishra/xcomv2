@@ -616,7 +616,7 @@ ul.megamenu {
 	background-color: #b0d8c0;
 	color: #0b4b23;
 }
-.panel2 {
+.panel1 {
 	display: block;
 	position: absolute;
 	top: 0px;
@@ -632,7 +632,7 @@ ul.megamenu {
 	overflow: hidden;
 }
 
-.panel3 {
+.panel2 {
 	position: absolute;
 	top: -33px;
 	left: 0px;
@@ -647,7 +647,7 @@ ul.megamenu {
 	box-shadow: 15px 15px 20px 0px rgba(0,0,0,0.5);
 	overflow: hidden;
 }
-.panel4 {
+.panel3 {
 	position: absolute;
 	top: -66px;
 	left: 0px;
@@ -662,7 +662,7 @@ ul.megamenu {
 	box-shadow: 15px 15px 20px 0px rgba(0,0,0,0.5);
 	overflow: hidden;
 }
-.panel5 {
+.panel4 {
 	position: absolute;
 	top: -99px;
 	left: 0px;
