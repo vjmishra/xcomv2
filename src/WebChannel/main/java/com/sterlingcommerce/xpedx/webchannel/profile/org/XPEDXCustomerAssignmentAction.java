@@ -1231,6 +1231,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				e.printStackTrace();
 			}
 		}
+
+		XPEDXWCUtils.purgeMegaMenuCache(getWCContext());
 	}
 
 	public void resetOrganizationValuesForShipToCustomer() {
@@ -1484,7 +1486,7 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		}
 		return value;
 	}
-	
+
 	public String setCurrentCustomerIntoContextFromPunchout() throws CannotBuildInputException{
 		setCurrentCustomerIntoContext();
 		XPEDXOrderUtils.createNewCartInContext(getWCContext());

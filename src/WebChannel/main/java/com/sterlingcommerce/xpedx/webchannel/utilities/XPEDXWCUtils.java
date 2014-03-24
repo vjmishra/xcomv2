@@ -6853,6 +6853,14 @@ public class XPEDXWCUtils {
 	}
 
 	/**
+	 * Removes the mega menu cache.
+	 * @param context
+	 */
+	public static void purgeMegaMenuCache(IWCContext context) {
+		MEGA_MENU_UTIL.purgeData(context);
+	}
+
+	/**
 	 * @param context
 	 * @return Returns the mega menu data model that is cached in the session, making an API call if necessary.
 	 * @see MegaMenuUtil#getMegaMenu(IWCContext)
