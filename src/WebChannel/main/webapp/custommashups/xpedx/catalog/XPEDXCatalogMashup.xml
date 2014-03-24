@@ -1158,5 +1158,30 @@
             </Template>    
         </API>
     </mashup>
+	
+	<!-- EB-3981 mega menu -->
+	<mashup id='xpedxMegaMenuCategories' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Returns a list of all cat1, cat2, and cat3 with item counts">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode="" CategoryDepth="3" IgnoreOrdering="Y" PageNumber="1" PageSize="1">
+					<Item ExcludeChildItemsOfModelItems="Y" GetAvailabilityFromCache="Y" ShowFinalSupersededItemOnly="Y">
+						<CustomerInformation CustomerID=""/>
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode="" CategoryDepth="">
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Count="" ShortDescription="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Count="" ShortDescription=""/>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
 
-</mashups>       
+</mashups>

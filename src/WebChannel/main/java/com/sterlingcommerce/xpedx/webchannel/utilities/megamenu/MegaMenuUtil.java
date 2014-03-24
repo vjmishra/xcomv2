@@ -1,23 +1,19 @@
 package com.sterlingcommerce.xpedx.webchannel.utilities.megamenu;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
-import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
-import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
-import com.yantra.interop.japi.YIFApi;
-import com.yantra.interop.japi.YIFClientFactory;
-import com.yantra.yfc.dom.YFCDocument;
-import com.yantra.yfs.japi.YFSEnvironment;
 
 /**
  * Helper class to encapsulate the searchCatalogIndex API call and converting it to a list of MegaMenuItem objects.
@@ -61,45 +57,24 @@ public class MegaMenuUtil {
 			if (megaMenu == null) {
 				try {
 					log.debug("Making API call to get mega menu data model");
-					SCUIContext wSCUIContext = context.getSCUIContext();
-					ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-					YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-					YIFApi api = YIFClientFactory.getInstance().getApi();
-
-					Document outputTemplate = SCXmlUtil.createFromString(""
-							+ "<CatalogSearch CallingOrganizationCode=\"\" CategoryDepth=\"\">"
-							+ "	<CategoryList>"
-							+ "		<Category CategoryID=\"\" CategoryPath=\"\" Count=\"\" ShortDescription=\"\">"
-							+ "			<ChildCategoryList>"
-							+ "				<Category CategoryPath=\"\" Count=\"\" ShortDescription=\"\"/>"
-							+ "			</ChildCategoryList>"
-							+ "		</Category>"
-							+ "	</CategoryList>"
-							+ "</CatalogSearch>");
-					env.setApiTemplate("searchCatalogIndex", outputTemplate);
-
-					Document searchCatalogIndexInputDoc = YFCDocument.createDocument("SearchCatalogIndex").getDocument();
-					searchCatalogIndexInputDoc.getDocumentElement().setAttribute("CallingOrganizationCode", context.getStorefrontId());
-					searchCatalogIndexInputDoc.getDocumentElement().setAttribute("CategoryDepth", "3");
-					searchCatalogIndexInputDoc.getDocumentElement().setAttribute("IgnoreOrdering", "Y");
-					searchCatalogIndexInputDoc.getDocumentElement().setAttribute("PageNumber", "1");
-					searchCatalogIndexInputDoc.getDocumentElement().setAttribute("PageSize", "1");
+					Element searchCatalogIndexInputElem = WCMashupHelper.getMashupInput("xpedxMegaMenuCategories", createMashupValueMap(context), context);
+					Document searchCatalogIndexInputDoc = searchCatalogIndexInputElem.getOwnerDocument();
 
 					if (log.isDebugEnabled()) {
 						log.debug("searchCatalogIndex input XML:\n"
 								+ (searchCatalogIndexInputDoc == null ? null : SCXmlUtil.getString(searchCatalogIndexInputDoc)));
 					}
 
-					Document searchCatalogIndexOutputDoc = api.invoke(env, "searchCatalogIndex", searchCatalogIndexInputDoc);
+					Element searchCatalogIndexOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxMegaMenuCategories", searchCatalogIndexInputElem, context.getSCUIContext());
 
 					if (log.isDebugEnabled()) {
 						log.debug("searchCatalogIndex output XML:\n"
-								+ (searchCatalogIndexOutputDoc == null ? null : SCXmlUtil.getString(searchCatalogIndexOutputDoc)));
+								+ (searchCatalogIndexOutputElem == null ? null : SCXmlUtil.getString(searchCatalogIndexOutputElem)));
 					}
 
-					env.clearApiTemplate("searchCatalogIndex");
+					megaMenu = convertCatalogSearch(searchCatalogIndexOutputElem);
 
-					megaMenu = convertCatalogSearch(searchCatalogIndexOutputDoc.getDocumentElement());
+					context.setWCAttribute(ATTR_MEGA_MENU, megaMenu, WCAttributeScope.LOCAL_SESSION);
 
 					if (log.isDebugEnabled()) {
 						if (megaMenu == null) {
@@ -119,8 +94,6 @@ public class MegaMenuUtil {
 						}
 					}
 
-					context.setWCAttribute(ATTR_MEGA_MENU, megaMenu, WCAttributeScope.LOCAL_SESSION);
-
 				} catch (Exception e) {
 					log.error("", e);
 					throw new RuntimeException(e);
@@ -128,6 +101,22 @@ public class MegaMenuUtil {
 			}
 			return megaMenu;
 		}
+	}
+
+	/**
+	 * @param context
+	 * @return Returns a map in the format:
+	 *         key = XPATH expression
+	 *         value = value to insert into XML
+	 */
+	private Map<String, String> createMashupValueMap(IWCContext context) {
+		Map<String, String> valueMap = new LinkedHashMap<String, String>();
+
+		valueMap.put("/SearchCatalogIndex@CallingOrganizationCode", context.getStorefrontId());
+
+		valueMap.put("/SearchCatalogIndex/Item/CustomerInformation@CustomerID", context.getCustomerId());
+
+		return valueMap;
 	}
 
 	/**
