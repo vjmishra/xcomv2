@@ -543,7 +543,6 @@ border: 2px #53b1f9 solid;
 	background: #336633;
 }
 
-/************* CSS styles for Megamenu changes ******/
 .menucontainer {
 	position: absolute;
 	left: 0px;
@@ -555,7 +554,7 @@ border: 2px #53b1f9 solid;
 	clear: both;
 	font-family:Arial, Helvetica, sans-serif;
 	font-weight: bold;
-	font-size:12px;}
+	font-size:12px;
 }
 ul.megamenu, .megamenu ul {
 	margin: 0;
@@ -591,14 +590,12 @@ ul.megamenu {
 	width: 121px;
 }
 .megamenu li a:hover {
-	background-color: #066d4c;
+	background-color: #0c6d4c;
 }
 .megamenu ul li a:hover {
 	background-color: #d2edde;
 }
-.megamenu ul li a:focus {
-	background-color: #d2edde;
-}
+
 .megamenu li ul {
 	display: none;
 	position: absolute;
@@ -616,10 +613,10 @@ ul.megamenu {
 	display: block
 }
 .megamenu li ul a {
-	background-color: #b4dcc5;
-	color: #0b4c24;
+	background-color: #b0d8c0;
+	color: #0b4b23;
 }
-.panel1 {
+.panel2 {
 	display: block;
 	position: absolute;
 	top: 0px;
@@ -635,7 +632,7 @@ ul.megamenu {
 	overflow: hidden;
 }
 
-.panel2 {
+.panel3 {
 	position: absolute;
 	top: -33px;
 	left: 0px;
@@ -650,7 +647,7 @@ ul.megamenu {
 	box-shadow: 15px 15px 20px 0px rgba(0,0,0,0.5);
 	overflow: hidden;
 }
-.panel3 {
+.panel4 {
 	position: absolute;
 	top: -66px;
 	left: 0px;
@@ -665,7 +662,7 @@ ul.megamenu {
 	box-shadow: 15px 15px 20px 0px rgba(0,0,0,0.5);
 	overflow: hidden;
 }
-.panel4 {
+.panel5 {
 	position: absolute;
 	top: -99px;
 	left: 0px;
@@ -707,39 +704,39 @@ ul.megamenu {
 	background-color: #565656;
 	overflow: hidden;
 }
-.far-right-photo-300000 { /*facility supplies*/
+.far-right-photo-facility {
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/janitorial.jpg) no-repeat #3e4853;
+	background: url(janitorial.jpg);
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
-.far-right-photo-300002 { /*packaging*/
+.far-right-photo-packaging {
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/packaging.jpg) no-repeat #3e4853;
+	background: url(packaging.jpg);
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
-.far-right-photo-300057 { /*paper*/
+.far-right-photo-paper {
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/paper.jpg) no-repeat #3e4853;
+	background: url(paper.jpg);
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
-.far-right-photo-300001 { /*graphics*/
+.far-right-photo-graphics {
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/graphics.jpg) no-repeat #3e4853;
+	background: url(graphics.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -781,7 +778,7 @@ ul.megamenu {
 	background-color: #fff;
 	border-bottom: #e2e7ee 1px solid;
 	padding: 10px 0px 10px 10px;
-	color: #12803c;
+	color: #05865e;
 	font-size: 12px;
 	line-height: normal;
 	width: 192px;
@@ -804,19 +801,19 @@ ul.megamenu {
 	font-family: "Arial Black", Gadget, sans-serif;
 }
 .megamenu ul li a.mega-cat-2:hover {
-	color: #03491f;
+	color: #0b4b23;
 }
 .megamenu ul li a.mega-cat-2 div.cat-2-arrow {
-	color: #a9e9c4;
+	color: #b0d8c0;
 }
 .megamenu ul li a.mega-cat-2:hover div.cat-2-arrow {
-	color: #66c990;
+	color: #11b17f;
 }
 .megamenu ul li a.mega-cat-2:focus {
 	color: #000;
 }
 .megamenu ul li a.mega-cat-2:focus div.cat-2-arrow {
-	color: #3577d1;
+	color: #128b65;
 }
 
 
@@ -835,7 +832,7 @@ ul.megamenu {
 .megamenu ul li .cat3-content a span {
 	margin-top: -15px;
 	padding-right: 6px;
-	color: #0b4c24;
+	color: #0b4b23;
 }
 .megamenu ul li .mega-cat-3 h3 {
 	padding-bottom: 10px;
@@ -881,13 +878,12 @@ ul.megamenu {
 }
 #add-existing a {
 	display: block;
-	width: 146px;
+	width: 147px;
 	text-align: center;
 	background-color: #526277;
 	color: #fff;
 	padding: 8px 0px 9px 0px;
 	border-left: 1px #ffffff solid;
-	border-right: 1px #ffffff solid;
 }
 #add-existing a:hover {
 	background-color: #212934;
@@ -898,40 +894,38 @@ ul.megamenu {
 	margin-top: 15px;
 	margin-bottom: 5px;
 }
+
 .btn-nav-list {
-	border: 1px solid #008d61;
+	border: 1px solid #016747;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	text-decoration: none;
 	display: inline-block;
 	font-size: 10px;
-	font-weight: bold;
-	color: #016747;
+	color: #05865e;
 	padding: 4px;
 	background: #ffffff;
-	cursor: pointer;
 }
 #order-edit a {
 	display: block;
 	width: 147px;
 	text-align: center;
-	background-color: #ffe969;
+	background-color: #f6e630;
 	color: #000;
 	padding: 8px 0px 9px 0px;
 	border-left: 1px #ffffff solid;
-	border-bottom: 1px #ffe969 solid;
 }
 .order-edit-banner {
 	width: 100%;
 	height: 24px;
-	background: #ffe969;
+	background: #f6e630;
 	padding: 2px 0px 2px 10px;
 	font-weight: bold;
-}
+	}
 .order-edit-banner span {
 	margin-left: 30px;
-}
+	}
 .btn-order-edit {
 	cursor: pointer;
 	border: 1px solid #c5c5c5;
@@ -978,30 +972,16 @@ ul.megamenu {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#b5b5b5',GradientType=0 ); /* IE6-8 */
 }
 
-/*------------view hide buttons---------------*/
-.view-hide-images  {
-	width: 120px;
-	height: 25px;
-	float: left;
-	clear: none;
-	cursor: pointer;
-	margin: 0;
-	padding: 0;
-}
-.viewbtn {
-	display: block;
-	width: 100px;
-	height: 21px;
-	background: url(../images/show-hide-btn.png) 1px 5px no-repeat;
-	border: none;
-}
-.hidebtn {
-	width: 100px;
-	height: 21px;
-	background: url(../images/show-hide-btn.png) 1px -21px no-repeat;
-	border: none;
-}
 
-.megamenu li.active > a {
-	background-color: #05226d;
+.megamenu li a:focus {
+	background-color: #045139;
 }
+.megamenu ul li a:focus {
+	background-color: #d2edde;
+	}
+.megamenu ul li a.mega-cat-2:focus {
+	background-color: #ffffff;
+}
+.megamenu ul li .cat3-content a:focus {
+	background-color: #c2e5d1;
+	}
