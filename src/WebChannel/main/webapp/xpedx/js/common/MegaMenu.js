@@ -1,5 +1,11 @@
 $(document).ready(function() {
-	initMegaMenu();
+	if ($('#megaMenuAjaxURL').length == 0) {
+		// page loaded with megamenu dom, so initialize it
+		initMegaMenu();
+	} else {
+		// page loaded without megamenu dom, so fetch it via ajax
+		getMegaMenu();
+	}
 });
 
 /*

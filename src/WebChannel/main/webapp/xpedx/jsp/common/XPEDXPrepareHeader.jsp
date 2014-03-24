@@ -2752,17 +2752,12 @@ function callAjaxForSorting(url,divId)
 					<%--
 						Developer note: Since the mega menu data is user-specific (entitlements, etc) the data is cached in the session.
 										However, the API call to fetch the data is slow enough that we don't want to block the page load,
-										 so if the data is not cached then we render the page without mega menu and immediately fetch it via an ajax call.
+										 so if the data is not cached then we render the page without mega menu and immediately fetch it
+										 via an ajax call (see MegaMenu.js/getMegaMenu).
 										The response of the ajax call is the mega menu dom, which we inject into the page.
 					--%>
 					<s:url id="megaMenuURL" namespace="/common" action="megaMenu" />
-					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='true'/>" />
-					<script type="text/javascript">
-						$(document).ready(function() {
-							// immediately fetch the mega menu (don't wait for hover)
-							getMegaMenu();
-						});
-					</script>
+					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='false'/>" />
 				</s:else>
 			</li>
 				<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
