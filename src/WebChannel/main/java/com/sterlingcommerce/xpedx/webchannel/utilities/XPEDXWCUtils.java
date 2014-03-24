@@ -6855,10 +6855,9 @@ public class XPEDXWCUtils {
 	/**
 	 * @param context
 	 * @return Returns the mega menu data model that is cached in the session, making an API call if necessary.
-	 * @throws Exception API error
 	 * @see MegaMenuUtil#getMegaMenu(IWCContext)
 	 */
-	public static List<MegaMenuItem> getMegaMenu(IWCContext context) throws Exception {
+	public static List<MegaMenuItem> getMegaMenu(IWCContext context) {
 		return MEGA_MENU_UTIL.getMegaMenu(context);
 	}
 
