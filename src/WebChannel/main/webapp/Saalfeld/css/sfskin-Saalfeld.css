@@ -979,13 +979,13 @@ ul.megamenu {
 	display: block;
 	width: 100px;
 	height: 21px;
-	background: url(../images/show-hide-btn.png) 1px 5px no-repeat;
+	background: url(../images/mil/show-hide-btn.png) 1px 5px no-repeat;
 	border: none;
 }
 .hidebtn {
 	width: 100px;
 	height: 21px;
-	background: url(../images/show-hide-btn.png) 1px -21px no-repeat;
+	background: url(../images/mil/show-hide-btn.png) 1px -21px no-repeat;
 	border: none;
 }
 
