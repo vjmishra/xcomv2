@@ -737,7 +737,7 @@ function getNormalView() {
 	  </s:else>		
 	   '<div class="availablelink">',<s:if test='!#guestUser'>
 		'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
-		'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
+		'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">Show Price &amp; Availability</a></div>',</s:if>
 	   '</div>',
 	  </s:if>
 	  '</td>','</tr>',

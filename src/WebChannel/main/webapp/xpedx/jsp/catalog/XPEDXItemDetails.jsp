@@ -1796,7 +1796,7 @@ function SubmitActionWithValidation()
 				</s:if>
 			</s:if>
 				<div class="button-wrap">				
-					<a href="javascript:updatePandAfromLink()" class="pa-link">My Price & Availability</a>
+					<a href="javascript:updatePandAfromLink()" class="pa-link">Show Price & Availability</a>
 				<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>	
 				<s:if test='%{#isFlowInContext == true}'>
 				<input name="button" type="button" class="btn-gradient float-right addmarginleft5"   onclick="javascript:itemDetailAddToCart('%{#itemID}', '%{#unitOfMeasure}', '%{#appFlowContext.key}','%{#appFlowContext.returnURL}','%{#appFlowContext.type}','%{#appFlowContext.currency}');" class="btn-gradient float-right addmarginleft5" value="Add to Order"/>
