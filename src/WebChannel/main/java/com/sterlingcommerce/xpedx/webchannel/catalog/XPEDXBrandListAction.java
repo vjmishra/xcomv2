@@ -111,6 +111,11 @@ public class XPEDXBrandListAction extends CatalogAction {
 		return map;
 	}
 
+	// Need to round up int to nearest int
+	public int getNumRows(int size) {
+		return (int)Math.ceil(size / 4.0);
+	}
+
 	public Map<String, List<String>> getBrands() {
 		return brandMap;
 	}

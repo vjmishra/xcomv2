@@ -48,18 +48,20 @@
 
 	<title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
 
-	<s:set name='_action' value='[0]'/>
 </head>
 
 <body class="  ext-gecko ext-gecko3">
 	<s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean' id='util' />
 	<s:bean name='com.sterlingcommerce.webchannel.catalog.utils.CatalogUtilBean' id='catUtil' />
 	<s:url action='navigate.action' namespace='/catalog' id='myUrl'/>
+	<s:set name='_action' value='[0]' />
 	<s:set name='myParam' value='{"searchTerm", "", "cname"}'/>
 <%-- 	<s:set name='appFlowContext' value='#session.FlowContext'/> --%>
 <%-- 	<s:set name='isFlowInContext' value='#util.isFlowInContext(#appFlowContext)'/> --%>
 <%-- 	<s:set name='isGuestUser' value="wCContext.guestUser" /> --%>
 	<s:set name='guestUser' value="#_action.getWCContext().isGuestUser()" />
+	<s:set name='cat1name' value="cat1name"/>
+	<s:set name='cat2name' value="cat2name"/>
 	<s:set name='brandMap' value="brands"/>
 	<s:set name="keys" value="#brandMap.keySet()"/>
 
@@ -77,10 +79,11 @@
 	<!-- 	Different container div attrs for guest? -->
 	<div class="container container-pad">
 
-		<div class="page-title">TODO Breadcrumb here instead of this size: <s:property value='%{#brandMap.size()}' /></div>
+		<div class="page-title">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
 		<div class="alphabet">
 			<p>
-				<%-- row of letters across the top --%> 
+				<%-- row of letters across the top --%>
+				<%-- TODO first entry key works as "#" but should this be "numbers" instead though displayed as "#" ? --%>
 				<s:iterator id="key" value="keys">
 					<s:if test="#brandMap.get(#key).size()>0">
 						<s:a href='%{ "#" + #key }' cssClass="alpha-letter">
@@ -98,15 +101,22 @@
 		<s:iterator id="key" value="keys">
 			<div class="alpha-list">
 				<h2>
-					<s:property value="#key" /><a name='<s:property value="#key" />'></a> <!-- TODO this should be numbers -->
+					<s:property value="#key" /><a name='<s:property value="#key" />'></a>
 				</h2>
 				<div class="brand-wrap">
 					<ul>
-						<s:iterator id="brand" value="%{#brandMap.get(#key)}">
-								<!-- TODO break into columns -->
-<!-- 							<div class="col-1"> -->
-<!-- 								<li> -->
-							  <!-- TODO link to catalog incl. bcs - need brand name, cat1 path, cat1/2 path -->
+						<s:set name="letterBrands" value="%{#brandMap.get(#key)}"></s:set>
+						<s:set name="numRows" value="%{ #_action.getNumRows(#letterBrands.size()) }"></s:set>
+						<s:set name="column" value="0"></s:set>
+						<s:iterator id="brand" value="letterBrands" status="stat">
+
+							<s:if test="#stat.index % #numRows == 0">
+								<s:set name="column" value="%{#column+1}"></s:set>
+								<div class='col-<s:property value="#column"/>'>
+							</s:if>
+
+								<li>
+							  <%-- TODO link to catalog incl. bcs - need brand name, cat1 path, cat1/2 path --%>
 								<s:url id='brandURL' namespace='/catalog' action='filter.action'>
 									<s:param name='indexField' value='"ItemAttribute.xpedx.FF_1182"' />
 									<s:param name='facet' value='#brand' />
@@ -114,13 +124,17 @@
 									<s:param name='filterDesc' value='"Brand"' />
 								</s:url>
 								<a href='<s:property value="#brandURL" escape="false"/>'><s:property value='%{#brand}' /></a>
-<!-- 								</li> -->
-<!-- 							</div> -->
-<!-- 							<div class="col-2"></div> -->
-<!-- 							<div class="col-3"></div> -->
-<!-- 							<div class="col-4"></div> -->
-<!-- 							<div class="clearfix"></div> -->
+								</li>
+
+							<s:if test="((#stat.index+1) % #numRows == 0) || (#stat.index+1 == #letterBrands.size())">
+								</div>
+							</s:if>
 						</s:iterator>
+						<%-- Need to still put column divs even if no entries for this letter --%>
+						<s:if test="#column<2"><div class="col-2"></div></s:if>
+						<s:if test="#column<3"><div class="col-3"></div></s:if>
+						<s:if test="#column<4"><div class="col-4"></div></s:if>
+		                <div class="clearfix"></div>
 					</ul>
 				</div>
 			</div>
