@@ -106,7 +106,14 @@
 								<!-- TODO break into columns -->
 <!-- 							<div class="col-1"> -->
 <!-- 								<li> -->
-							<a href="#"><s:property value='%{#brand}' /></a>  <!-- TODO link to catalog incl. bcs -->
+							  <!-- TODO link to catalog incl. bcs - need brand name, cat1 path, cat1/2 path -->
+								<s:url id='brandURL' namespace='/catalog' action='filter.action'>
+									<s:param name='indexField' value='"ItemAttribute.xpedx.FF_1182"' />
+									<s:param name='facet' value='#brand' />
+									<s:param name='cname' value='#brand' />
+									<s:param name='filterDesc' value='"Brand"' />
+								</s:url>
+								<a href='<s:property value="#brandURL" escape="false"/>'><s:property value='%{#brand}' /></a>
 <!-- 								</li> -->
 <!-- 							</div> -->
 <!-- 							<div class="col-2"></div> -->
