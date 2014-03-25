@@ -190,29 +190,23 @@
 			<xsl:call-template name="applyStyle"/>
 			<body leftmargin="0" topmargin="0">
 			
-			<table style="margin-left:5px" width="815">
+			<table style="margin-left:5px">
 				<tr>	
-					<td style="padding-bottom:20px;">
-						<table width="720">
-							<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>
-							<tr>								
-								<td align="left" style="padding-bottom:4px;">
-								<img src="{$brandLogo}" width="108" height="32" />
-								</td>
-							</tr>
+					<td align="left">
+						
+							<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>							
+								<img src="{$brandLogo}" width="108" height="32" />							
 							</xsl:if>
-							 <xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>
-							 <tr>								
-								<td align="left" style="padding-bottom:4px;">
-								<img src="{$brandLogo}" width="216" height="64" />
-								</td>
-							</tr>
+							 <xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>							
+								<img src="{$brandLogo}" width="216" height="64" />							
 							 </xsl:if>
-						</table> 
-					    
+					</td>
+				</tr>
+				<tr>
+				<td style="padding-left:8px;padding-top:8px;padding-bottom:20px;">    
 				<table class="mainPanel" cellpadding="0"> 
-			  <tr>
-			  <td style="padding-left:8px;padding-top:8px;">
+				  <tr>
+				  <td>
 											
 			  		<xsl:if test="(contains($Subject,$Approver))">
 					Your order has been approved.
