@@ -704,39 +704,39 @@ ul.megamenu {
 	background-color: #565656;
 	overflow: hidden;
 }
-.far-right-photo-facility {
+.far-right-photo-300000 { /*facility supplies*/
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(janitorial.jpg);
+	background: url(../../xpedx/images/megamenu/facility.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
-.far-right-photo-packaging {
+.far-right-photo-300002 { /*packaging*/
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(packaging.jpg);
+	background: url(../../xpedx/images/megamenu/packaging.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
-.far-right-photo-paper {
+.far-right-photo-300057 { /*paper*/
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(paper.jpg);
+	background: url(../../xpedx/images/megamenu/paper.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
-.far-right-photo-graphics {
+.far-right-photo-300001 { /*graphics*/
 	float: right;
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(graphics.jpg) no-repeat #3e4853;
+	background: url(../../xpedx/images/megamenu/graphics.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
