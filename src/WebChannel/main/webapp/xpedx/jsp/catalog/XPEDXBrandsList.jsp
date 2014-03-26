@@ -66,6 +66,7 @@
 	<s:set name='guestUser' value="#_action.getWCContext().isGuestUser()" />
 	<s:set name='cat1name' value="cat1name"/>
 	<s:set name='cat2name' value="cat2name"/>
+	<s:set name='bcs' value="bcs"/>
 	<s:set name='brandMap' value="brands"/>
 	<s:set name="keys" value="#brandMap.keySet()"/>
 
@@ -125,6 +126,7 @@
 									<s:param name='facet' value='#brand' />
 									<s:param name='cname' value='#brand' />
 									<s:param name='filterDesc' value='"Brand"' />
+									<s:param name='_bcs_' value='#bcs' />
 								</s:url>
 								<a href='<s:property value="#brandURL" escape="false"/>'><s:property value='%{#brand}' /></a>
 								</li>

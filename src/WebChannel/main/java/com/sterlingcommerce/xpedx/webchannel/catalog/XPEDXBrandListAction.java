@@ -1,6 +1,8 @@
 
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,6 +16,8 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.catalog.CatalogAction;
+import com.sterlingcommerce.webchannel.common.Breadcrumb;
+import com.sterlingcommerce.webchannel.common.BreadcrumbHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -30,11 +34,14 @@ public class XPEDXBrandListAction extends CatalogAction {
 	private String path = "";
 	private String cat1name = "";
 	private String cat2name = "";
+	private String bcs = "";
 
 
 	public String getBrandsForCategory() {
 
 		getBrandListFromApi();
+
+		bcs = createBreadcrumbForCategories();
 
 		return SUCCESS;
 	}
@@ -107,6 +114,49 @@ public class XPEDXBrandListAction extends CatalogAction {
 		return map;
 	}
 
+	public String createBreadcrumbForCategories() {
+		List<Breadcrumb> bcl = new ArrayList<Breadcrumb>(3);
+
+		Breadcrumb root = new Breadcrumb(null, null, null);
+		root.setRoot(true);
+		root.setUrl("/swc/catalog/navigate.action?sfId=xpedx&scFlag=Y");
+		root.setGroup("catalog");
+		root.setDisplayGroup("search");
+		root.setDisplayName(null);
+		bcl.add(root);
+
+		Map<String, String> params1 = new LinkedHashMap<String, String>();
+		String path1 = path.substring(0, path.lastIndexOf('/'));
+		params1.put("path", path1);
+		params1.put("cname", cat1name);
+		params1.put("newOP", "true");
+		Breadcrumb bc1 = new Breadcrumb("/catalog", "navigate", params1);
+		bc1.setUrl("");
+		bc1.setGroup("catalog");
+		bc1.setDisplayGroup("search");
+		bc1.setDisplayName(cat1name);
+		bcl.add(bc1);
+
+		Map<String, String> params2 = new LinkedHashMap<String, String>();
+		params2.put("path", path);
+		params2.put("cname", cat2name);
+		Breadcrumb bc2 = new Breadcrumb("/catalog", "navigate", params2);
+		bc2.setUrl("");
+		bc2.setGroup("catalog");
+		bc2.setDisplayGroup("search");
+		bc2.setDisplayName(cat2name);
+		bcl.add(bc2);
+
+		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcl);
+
+		try {
+			// s:url will encode, so decode
+			return URLDecoder.decode(bcs, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	// Need to round up int to nearest int
 	public int getNumRows(int size) {
 		return (int)Math.ceil(size / 4.0);
@@ -140,6 +190,10 @@ public class XPEDXBrandListAction extends CatalogAction {
 
 	public void setCat2name(String cat2name) {
 		this.cat2name = cat2name;
+	}
+
+	public String getBcs() {
+		return bcs;
 	}
 
 }
