@@ -52,11 +52,12 @@
 												<s:param name='cname' value='#cat2.name' />
 												<s:param name='_bcs_' value='#cat2.breadcrumb' />
 											</s:url>
-											<a href='<s:property value="#catURL" escape="false"/>'>
+ 											<a href='<s:property value="%{#wcUtil.fixBreadcrumbParameter(#catURL, #cat2.breadcrumb)}" escape="false"/>'>
 												<span>
 													<s:property value="#cat2.name"/>
 												</span>(<s:property value="#cat2.count"/>)
 											</a>
+
 										</h3>
 										<s:iterator value="#cat2.subcategories" id="cat3" status="cat3Status">
 											<s:url id='catURL' namespace='/catalog' action='navigate.action'>
@@ -65,7 +66,7 @@
 												<s:param name='_bcs_' value='#cat3.breadcrumb' />
 												<s:param name='categoryDepthNarrowBy' value='2' />
 											</s:url>
-											<a href='<s:property value="#catURL" escape="false"/>'>
+											<a href='<s:property value="%{#wcUtil.fixBreadcrumbParameter(#catURL, #cat3.breadcrumb)}" escape="false"/>'>
 												<span>
 													<s:property value="#cat3.name"/>
 												</span>(<s:property value="#cat3.count"/>)
@@ -104,7 +105,7 @@
 						<s:param name='cname' value='#cat2.name' />
 						<s:param name='_bcs_' value='#cat2.breadcrumb' />
 					</s:url>
-					<a href='<s:property value="#catURL" escape="false"/>'>
+					<a href='<s:property value="%{#wcUtil.fixBreadcrumbParameter(#catURL, #cat2.breadcrumb)}" escape="false"/>'>
 						<span>
 							<s:property value="#cat2.name"/>
 						</span>(<s:property value="#cat2.count"/>)
@@ -117,7 +118,7 @@
 						<s:param name='_bcs_' value='#cat3.breadcrumb' />
 						<s:param name='categoryDepthNarrowBy' value='2' />
 					</s:url>
-					<a href='<s:property value="#catURL" escape="false"/>'>
+					<a href='<s:property value="%{#wcUtil.fixBreadcrumbParameter(#catURL, #cat3.breadcrumb)}" escape="false"/>'>
 						<span>
 							<s:property value="#cat3.name"/>
 						</span>(<s:property value="#cat3.count"/>)

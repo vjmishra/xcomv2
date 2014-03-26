@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -143,6 +145,7 @@ public class XPEDXWCUtils {
 	private static Map<String, String> legacyUomMap;
 
 	private static final MegaMenuUtil MEGA_MENU_UTIL = new MegaMenuUtil();
+	private static final Pattern PAT_MEGA_MENU_BCS = Pattern.compile("_bcs_=[^&]+");
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
@@ -6867,6 +6870,18 @@ public class XPEDXWCUtils {
 	 */
 	public static List<MegaMenuItem> getMegaMenu(IWCContext context) {
 		return MEGA_MENU_UTIL.getMegaMenu(context);
+	}
+
+	/**
+	 * Due to a bug in Struts2, the s:url tag is ignoring the s:param for _bcs_ parameter. This is a workaround that substitutes the incorrect _bcs_ query string parameter in
+	 * <code>url</code> with <code>bcs</code>.
+	 *
+	 * @param url
+	 * @param bcs
+	 * @return
+	 */
+	public static String fixBreadcrumbParameter(String url, String bcs) {
+		return PAT_MEGA_MENU_BCS.matcher(url).replaceAll("_bcs_=" + bcs);
 	}
 
 }

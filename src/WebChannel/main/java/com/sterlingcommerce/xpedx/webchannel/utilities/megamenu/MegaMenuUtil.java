@@ -1,7 +1,5 @@
 package com.sterlingcommerce.xpedx.webchannel.utilities.megamenu;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -204,11 +202,7 @@ public class MegaMenuUtil {
 		}
 
 		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcl);
-		try {
-			return URLDecoder.decode(bcs, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return bcs;
 	}
 
 }
