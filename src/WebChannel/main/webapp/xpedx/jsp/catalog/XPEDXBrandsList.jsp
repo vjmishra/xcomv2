@@ -16,17 +16,17 @@
 		request.setAttribute("isMergedCSSJS","true");
 	%>
 	
-	<!-- TODO does this need to vary depending on whether guest? -->
 	<s:set name='isGuestUser' value="wCContext.guestUser" />
 	<s:if test="#isGuestUser != true">
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<%-- 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> --%>
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->	
 	</s:if>
+
 	<s:else>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -46,7 +46,11 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
-	<title><s:property value="wCContext.storefrontId" /> - <s:text name='catalog.title' /></title>
+	<title><s:property value="wCContext.storefrontId" /> - Catalog - Brands</title>
+
+	<!-- Web Trends tag start -->
+	<meta name="WT.ti" content="<s:property value="wCContext.storefrontId" /> - Catalog - Brands"/>
+	<!-- Web Trends tag end -->
 
 </head>
 
@@ -65,18 +69,17 @@
 	<s:set name='brandMap' value="brands"/>
 	<s:set name="keys" value="#brandMap.keySet()"/>
 
-	<!--web trends start -->
-	<!-- TODO -->
-
 	<div id="main" class='%{ #guestUser ? "" : "anon-pages" }'>
 
-		<!-- TODO should this vary depending on whether guest? -->
+	<s:if test='!#guestUser'>  
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
 			<s:param name='shipToBanner' value="%{'true'}" />
-		</s:action> 
+		</s:action>
+	</s:if>
+	<s:else>
+		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+	</s:else>
 
-
-	<!-- 	Different container div attrs for guest? -->
 	<div class="container container-pad">
 
 		<div class="page-title">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
@@ -146,10 +149,40 @@
 	 
 	</div>
 
-	<!-- FOOTER GOES HERE -->
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
-	<!-- TODO add floating top/bottom buttons  -->
+	<!-- Quick Scroll Up and Down -->
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
+	<div id="back-to-top">
+		<div style="display:none;" class="nav_up" id="nav_up"></div>
+		<div style="display:none;" class="nav_down" id="nav_down"></div>
+	</div>
+	<script>
+		$(function() {
+			var $elem = $('#main');
+			
+			$('#nav_up').fadeIn('slow');
+			$('#nav_down').fadeIn('slow');  
+			
+			$(window).bind('scrollstart', function(){
+				$('#nav_up,#nav_down').stop().animate({'opacity':'0.2'});
+			});
+			$(window).bind('scrollstop', function(){
+				$('#nav_up,#nav_down').stop().animate({'opacity':'1'});
+			});
+			
+			$('#nav_down').click(
+				function (e) {
+				$('html, body').animate({scrollTop: $elem.height()}, "fast");
+				}
+			);
+			$('#nav_up').click(
+				function (e) {
+					$('html, body').animate({scrollTop: '0px'}, "fast");
+				}
+			);
+		});
+	</script>
 
 </body>
 </html>

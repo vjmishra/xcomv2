@@ -28,7 +28,7 @@ public class XPEDXBrandListAction extends CatalogAction {
 	private Map<String,List<String>> brandMap;
 	// these are set by input param
 	private String path = "";
-	private String cat1name = ""; // TODO use these for bread crumb in jsp, and bcs in links
+	private String cat1name = "";
 	private String cat2name = "";
 
 
@@ -48,13 +48,9 @@ public class XPEDXBrandListAction extends CatalogAction {
 			valueMapinput.put("/SearchCatalogIndex/ShowAllAssignedValues/ItemAttribute/@IndexFieldName", INDEX_FIELD_NAME_BRAND);
 			Element inputDoc = WCMashupHelper.getMashupInput("xpedxGetBrands", valueMapinput, wcContext.getSCUIContext());
 
-			System.out.println("input xml: " + SCXmlUtil.getString(inputDoc));
-
 			Object outputObj = WCMashupHelper.invokeMashup("xpedxGetBrands", inputDoc, wcContext.getSCUIContext());
 			Document outputDoc = ((Element) outputObj).getOwnerDocument();
 			setOutDoc(outputDoc);
-
-			System.out.println("output xml: " + SCXmlUtil.getString(outputDoc)); //TODO remove println
 
 			// extract list of brand names from returned doc for JSP access
 			setBrandListFromOutput();
