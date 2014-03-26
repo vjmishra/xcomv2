@@ -997,3 +997,37 @@ ul.megamenu {
 	background: #d2edde url(../images/common/ajax-loader.gif) no-repeat;
 	background-position: 100px 11px;
 } 
+
+/*-------------brands page----------------*/
+
+.alpha-letter {
+	width: 8px;
+	height: 10px;
+	padding: 3px 6px 3px 6px;
+	margin: 2px 3px;
+	background-color: #d2edde;
+	font-size:12px;
+	font-weight: bold;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	color: #085525;
+	}
+.alpha-letter-inactive {
+	width: 8px;
+	height: 10px;
+	padding: 3px 6px 3px 6px;
+	margin: 2px 3px;
+	background-color: #eeeeee;
+	color: #898989;
+	font-size:12px;
+	font-weight: bold;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	}
+.alpha-list {
+	width: 94%;
+	border-top: #d5dfdb 1px solid;
+	padding: 5px 0px;
+	}
