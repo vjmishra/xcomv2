@@ -1,5 +1,8 @@
 package com.sterlingcommerce.xpedx.webchannel.utilities.megamenu;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +13,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.webchannel.common.Breadcrumb;
+import com.sterlingcommerce.webchannel.common.BreadcrumbHelper;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -123,7 +128,7 @@ public class MegaMenuUtil {
 	 * @param catalogSearchElem
 	 * @return Returns a list of MegaMenuItem representing the given CatalogSearch XML. The topmost elements are cat1, etc.
 	 */
-	private static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem) {
+	/*default*/ static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem) {
 		List<MegaMenuItem> megaMenu = new LinkedList<MegaMenuItem>();
 
 		Element categoryList1 = SCXmlUtil.getChildElement(catalogSearchElem, "CategoryList");
@@ -136,12 +141,14 @@ public class MegaMenuUtil {
 			List<Element> cat2Elems = SCXmlUtil.getChildrenList(childCategoryList2);
 			for (Element cat2Elem : cat2Elems) {
 				MegaMenuItem mmCat2 = convertCategory(cat2Elem);
+				mmCat2.setBreadcrumb(createBreadcrumbForCategories(mmCat1));
 				mmCat1.getSubcategories().add(mmCat2);
 
 				Element childCategoryList3 = SCXmlUtil.getChildElement(cat2Elem, "ChildCategoryList");
 				List<Element> cat3Elems = SCXmlUtil.getChildrenList(childCategoryList3);
 				for (Element cat3Elem : cat3Elems) {
 					MegaMenuItem mmCat3 = convertCategory(cat3Elem);
+					mmCat3.setBreadcrumb(createBreadcrumbForCategories(mmCat1, mmCat2));
 					mmCat2.getSubcategories().add(mmCat3);
 				}
 			}
@@ -160,6 +167,48 @@ public class MegaMenuUtil {
 		String name = categoryElem.getAttribute("ShortDescription");
 		String count = categoryElem.getAttribute("Count");
 		return MegaMenuItem.create(id, path, name, Integer.valueOf(count));
+	}
+
+	/**
+	 * @param categories Creates a _bcs_ parameter for these categories.
+	 * @return Returns the value to be used for the <code>_bcs_</code> parameter.
+	 */
+	private static String createBreadcrumbForCategories(MegaMenuItem... categories) {
+		List<Breadcrumb> bcl = new ArrayList<Breadcrumb>(categories.length + 1);
+
+		Breadcrumb root = new Breadcrumb(null, null, null);
+		root.setRoot(true);
+		root.setUrl("/swc/catalog/navigate.action?sfId=xpedx&scFlag=Y");
+		root.setGroup("catalog");
+		root.setDisplayGroup("search");
+		root.setDisplayName(null);
+		bcl.add(root);
+
+		for (int i = 0, len = categories.length; i < len; i++) {
+			MegaMenuItem cat = categories[i];
+			boolean last = i == len - 1;
+
+			Map<String, String> params = new LinkedHashMap<String, String>();
+			params.put("path", cat.getPath());
+			params.put("cname", cat.getName());
+			if (!last) {
+				params.put("newOP", "true");
+			}
+
+			Breadcrumb bc = new Breadcrumb("/catalog", "navigate", params);
+			bc.setUrl("");
+			bc.setGroup("catalog");
+			bc.setDisplayGroup("search");
+			bc.setDisplayName(cat.getName());
+			bcl.add(bc);
+		}
+
+		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcl);
+		try {
+			return URLDecoder.decode(bcs, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

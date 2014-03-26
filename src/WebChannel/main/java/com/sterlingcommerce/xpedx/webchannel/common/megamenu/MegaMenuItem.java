@@ -9,6 +9,7 @@ public class MegaMenuItem {
 	private String path;
 	private String name;
 	private int count;
+	private String breadcrumb;
 	private List<MegaMenuItem> subcategories = new LinkedList<MegaMenuItem>();
 
 	public static MegaMenuItem create(String id, String path, String name, int count) {
@@ -23,7 +24,7 @@ public class MegaMenuItem {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("MegaMenuItem [id=").append(id).append(", path=").append(path).append(", name=").append(name).append(", count=").append(count).append(", subcategories.size=")
+		builder.append("MegaMenuItem [id=").append(id).append(", path=").append(path).append(", name=").append(name).append(", count=").append(count).append(", breadcrumb=").append(breadcrumb).append(", subcategories.size=")
 				.append(subcategories.size()).append("]");
 		return builder.toString();
 	}
@@ -58,6 +59,14 @@ public class MegaMenuItem {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public String getBreadcrumb() {
+		return breadcrumb;
+	}
+
+	public void setBreadcrumb(String breadcrumb) {
+		this.breadcrumb = breadcrumb;
 	}
 
 	public List<MegaMenuItem> getSubcategories() {

@@ -50,8 +50,7 @@
 											<s:url id='catURL' namespace='/catalog' action='navigate.action'>
 												<s:param name='path' value='#cat2.path' />
 												<s:param name='cname' value='#cat2.name' />
-												<s:param name='newOP' value='true' />
-												<s:param name='CategoryC3' value='true' />
+												<s:param name='_bcs_' value='#cat2.breadcrumb' />
 											</s:url>
 											<a href='<s:property value="#catURL" escape="false"/>'>
 												<span>
@@ -63,8 +62,8 @@
 											<s:url id='catURL' namespace='/catalog' action='navigate.action'>
 												<s:param name='path' value='#cat3.path' />
 												<s:param name='cname' value='#cat3.name' />
-												<s:param name='newOP' value='true' />
-												<s:param name='CategoryC3' value='true' />
+												<s:param name='_bcs_' value='#cat3.breadcrumb' />
+												<s:param name='categoryDepthNarrowBy' value='2' />
 											</s:url>
 											<a href='<s:property value="#catURL" escape="false"/>'>
 												<span>
@@ -103,8 +102,7 @@
 					<s:url id='catURL' namespace='/catalog' action='navigate.action'>
 						<s:param name='path' value='#cat2.path' />
 						<s:param name='cname' value='#cat2.name' />
-						<s:param name='newOP' value='true' />
-						<s:param name='CategoryC3' value='true' /> <%-- TODO: existing code does not have CategoryC3 param here, but page is broken without it. is this where _bcs_ triggers results? --%>
+						<s:param name='_bcs_' value='#cat2.breadcrumb' />
 					</s:url>
 					<a href='<s:property value="#catURL" escape="false"/>'>
 						<span>
@@ -116,8 +114,8 @@
 					<s:url id='catURL' namespace='/catalog' action='navigate.action'>
 						<s:param name='path' value='#cat3.path' />
 						<s:param name='cname' value='#cat3.name' />
-						<s:param name='newOP' value='true' />
-						<s:param name='CategoryC3' value='true' />
+						<s:param name='_bcs_' value='#cat3.breadcrumb' />
+						<s:param name='categoryDepthNarrowBy' value='2' />
 					</s:url>
 					<a href='<s:property value="#catURL" escape="false"/>'>
 						<span>
