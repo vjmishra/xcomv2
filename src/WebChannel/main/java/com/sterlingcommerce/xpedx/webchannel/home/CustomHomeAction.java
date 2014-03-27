@@ -199,9 +199,21 @@ public class CustomHomeAction extends WCAction {
 
 		String shipToCustomerID = shipToCustomerBean.getShipToCustomerID();
 		String shipToCustomer = shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S"));
+		
+		String zipCode=shipToCustomerBean.getZipCode();
+		String firstZip="";
+		String lastZip="";
+		
+		if(zipCode!=null && zipCode.length()>0){
+		    firstZip=zipCode.substring(0, 5);
+		
+		    if(zipCode.length()>5)
+		        lastZip="-"+zipCode.substring(5);
+		  }
+		
 
-		String ShipToDisplayString = shipToCustomerBean.getShipToCustomerName() + "("+ shipToCustomer + ")" + shipToCustomerBean.getAddressLine1() + "," + shipToCustomerBean.getCity()+ "," + shipToCustomerBean.getState() + "," + shipToCustomerBean.getZipCode() + "," + shipToCustomerBean.getCountry();
-
+		String ShipToDisplayString = shipToCustomerBean.getShipToCustomerName() + " ("+ shipToCustomer + ") " + shipToCustomerBean.getAddressLine1() + ", " + shipToCustomerBean.getCity()+ ", " +shipToCustomerBean.getState()+", "+ firstZip + lastZip + ", " + shipToCustomerBean.getCountry();
+      
 		shipToCustomerBean.setShipToDisplayString(ShipToDisplayString);
 		return shipToCustomerBean;
 	}
