@@ -139,7 +139,7 @@ public class MegaMenuUtil {
 			List<Element> cat2Elems = SCXmlUtil.getChildrenList(childCategoryList2);
 			for (Element cat2Elem : cat2Elems) {
 				MegaMenuItem mmCat2 = convertCategory(cat2Elem);
-				mmCat2.setBreadcrumb(createBreadcrumbForCategories(mmCat1));
+				mmCat2.setBreadcrumb(createBreadcrumbForCategories(mmCat1, null));
 				mmCat1.getSubcategories().add(mmCat2);
 
 				Element childCategoryList3 = SCXmlUtil.getChildElement(cat2Elem, "ChildCategoryList");
@@ -168,11 +168,14 @@ public class MegaMenuUtil {
 	}
 
 	/**
-	 * @param categories Creates a _bcs_ parameter for these categories.
+	 * Creates a _bcs_ parameter for the given category(s). Per Sterling convention, the breadcrumb contains a link to each parent category, plus 1 link to the catalog root.
+	 *
+	 * @param cat1 Must be non-null (all breadcrumbs contain cat1 link)
+	 * @param cat2 If non-null, includes a link to this category in the breadcrumb
 	 * @return Returns the value to be used for the <code>_bcs_</code> parameter.
 	 */
-	private static String createBreadcrumbForCategories(MegaMenuItem... categories) {
-		List<Breadcrumb> bcl = new ArrayList<Breadcrumb>(categories.length + 1);
+	private static String createBreadcrumbForCategories(MegaMenuItem cat1, MegaMenuItem cat2) {
+		List<Breadcrumb> bcl = new ArrayList<Breadcrumb>(3);
 
 		Breadcrumb root = new Breadcrumb(null, null, null);
 		root.setRoot(true);
@@ -182,23 +185,30 @@ public class MegaMenuUtil {
 		root.setDisplayName(null);
 		bcl.add(root);
 
-		for (int i = 0, len = categories.length; i < len; i++) {
-			MegaMenuItem cat = categories[i];
-			boolean last = i == len - 1;
+		Map<String, String> paramsCat1 = new LinkedHashMap<String, String>();
+		paramsCat1.put("path", cat1.getPath());
+		paramsCat1.put("cname", cat1.getName());
+		paramsCat1.put("newOP", "true");
+		paramsCat1.put("CategoryC3", "true");
 
-			Map<String, String> params = new LinkedHashMap<String, String>();
-			params.put("path", cat.getPath());
-			params.put("cname", cat.getName());
-			if (!last) {
-				params.put("newOP", "true");
-			}
+		Breadcrumb bcCat1 = new Breadcrumb("/catalog", "navigate", paramsCat1);
+		bcCat1.setUrl("");
+		bcCat1.setGroup("catalog");
+		bcCat1.setDisplayGroup("search");
+		bcCat1.setDisplayName(cat1.getName());
+		bcl.add(bcCat1);
 
-			Breadcrumb bc = new Breadcrumb("/catalog", "navigate", params);
-			bc.setUrl("");
-			bc.setGroup("catalog");
-			bc.setDisplayGroup("search");
-			bc.setDisplayName(cat.getName());
-			bcl.add(bc);
+		if (cat2 != null) {
+			Map<String, String> paramsCat2 = new LinkedHashMap<String, String>();
+			paramsCat2.put("path", cat2.getPath());
+			paramsCat2.put("cname", cat2.getName());
+
+			Breadcrumb bcCat2 = new Breadcrumb("/catalog", "navigate", paramsCat2);
+			bcCat2.setUrl("");
+			bcCat2.setGroup("catalog");
+			bcCat2.setDisplayGroup("search");
+			bcCat2.setDisplayName(cat2.getName());
+			bcl.add(bcCat2);
 		}
 
 		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcl);
