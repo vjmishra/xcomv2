@@ -6873,14 +6873,18 @@ public class XPEDXWCUtils {
 	}
 
 	/**
-	 * Due to a bug in Struts2, the s:url tag is ignoring the s:param for _bcs_ parameter. This is a workaround that substitutes the incorrect _bcs_ query string parameter in
-	 * <code>url</code> with <code>bcs</code>.
+	 * Replaces the _bcs_ parameter value with the given value (uses regex).
+	 * <br>
+	 * This is a workaround for the stick _bcs_ parameter. Per Struts documentation (http://struts.apache.org/release/2.0.x/docs/url.html), the &lt;s:url&gt; tag automatically
+	 * appends query string parameters, but the presence of an &lt;s:param%gt; tag takes precedent. However, during development of the mega menu (eb-3981) this was not the observed
+	 * behavior. In fact, even if &lt;s:url includeParams=none&gt; was used, the _bcs_ in the query string was incorrectly taking priority over the &lt;s:param%gt; tag (eg,
+	 * accessing mega menu while on a search results page). While initially only used for the mega menu, this may be needed elsewhere.
 	 *
 	 * @param url
 	 * @param bcs
 	 * @return
 	 */
-	public static String fixBreadcrumbParameter(String url, String bcs) {
+	public static String updateBreadcrumbParameter(String url, String bcs) {
 		return PAT_MEGA_MENU_BCS.matcher(url).replaceAll("_bcs_=" + bcs);
 	}
 
