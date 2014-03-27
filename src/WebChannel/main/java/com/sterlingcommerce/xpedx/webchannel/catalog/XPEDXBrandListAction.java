@@ -130,6 +130,7 @@ public class XPEDXBrandListAction extends CatalogAction {
 		params1.put("path", path1);
 		params1.put("cname", cat1name);
 		params1.put("newOP", "true");
+		params1.put("CategoryC3", "true");
 		Breadcrumb bc1 = new Breadcrumb("/catalog", "navigate", params1);
 		bc1.setUrl("");
 		bc1.setGroup("catalog");

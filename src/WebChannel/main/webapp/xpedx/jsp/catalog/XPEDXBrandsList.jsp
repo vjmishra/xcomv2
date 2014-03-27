@@ -87,7 +87,7 @@
 		<div class="alphabet">
 			<p>
 				<%-- row of letters across the top --%>
-				<%-- TODO first entry key works as "#" but should this be "numbers" instead though displayed as "#" ? --%>
+				<%-- (first entry key works as "#" but should this be "numbers" instead though displayed as "#" ?) --%>
 				<s:iterator id="key" value="keys">
 					<s:if test="#brandMap.get(#key).size()>0">
 						<s:a href='%{ "#" + #key }' cssClass="alpha-letter">
@@ -109,6 +109,8 @@
 				</h2>
 				<div class="brand-wrap">
 					<ul>
+
+						<%-- Put brands that start with this letter in 4 columns, each a link --%>
 						<s:set name="letterBrands" value="%{#brandMap.get(#key)}"></s:set>
 						<s:set name="numRows" value="%{ #_action.getNumRows(#letterBrands.size()) }"></s:set>
 						<s:set name="column" value="0"></s:set>
@@ -119,28 +121,28 @@
 								<div class='col-<s:property value="#column"/>'>
 							</s:if>
 
-								<li>
-							  <%-- TODO link to catalog incl. bcs - need brand name, cat1 path, cat1/2 path --%>
-								<s:url id='brandURL' namespace='/catalog' action='filter.action'>
-									<s:param name='indexField' value='"ItemAttribute.xpedx.FF_1182"' />
-									<s:param name='facet' value='#brand' />
-									<s:param name='cname' value='#brand' />
-									<s:param name='filterDesc' value='"Brand"' />
-									<s:param name='_bcs_' value='#bcs' />
-								</s:url>
-								<a href='<s:property value="#brandURL" escape="false"/>'><s:property value='%{#brand}' /></a>
-								</li>
+							<li>
+							<s:url id='brandURL' namespace='/catalog' action='filter.action'>
+								<s:param name='indexField' value='"ItemAttribute.xpedx.FF_1182"' />
+								<s:param name='facet' value='#brand' />
+								<s:param name='cname' value='#brand' />
+								<s:param name='filterDesc' value='"Brand"' />
+								<s:param name='_bcs_' value='#bcs' />
+							</s:url>
+							<a href='<s:property value="#brandURL" escape="false"/>'><s:property value='%{#brand}' /></a>
+							</li>
 
 							<s:if test="((#stat.index+1) % #numRows == 0) || (#stat.index+1 == #letterBrands.size())">
 								</div>
 							</s:if>
 						</s:iterator>
 						<%-- Need to still put column divs even if no entries for this letter --%>
-						<s:if test="#column<2"><div class="col-2"></div></s:if>
-						<s:if test="#column<3"><div class="col-3"></div></s:if>
-						<s:if test="#column<4"><div class="col-4"></div></s:if>
+						<s:if test="#column<2"> <div class="col-2"></div> </s:if>
+						<s:if test="#column<3"> <div class="col-3"></div> </s:if>
+						<s:if test="#column<4"> <div class="col-4"></div> </s:if>
 		                <div class="clearfix"></div>
 					</ul>
+
 				</div>
 			</div>
 		</s:iterator>
