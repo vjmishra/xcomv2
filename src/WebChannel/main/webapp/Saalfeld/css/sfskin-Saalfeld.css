@@ -899,6 +899,7 @@ ul.megamenu {
 	color: #05865e;
 	padding: 4px;
 	background: #ffffff;
+	cursor: pointer;
 }
 #order-edit a {
 	display: block;
