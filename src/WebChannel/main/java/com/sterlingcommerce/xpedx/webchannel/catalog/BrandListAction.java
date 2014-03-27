@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -22,12 +21,18 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
-public class XPEDXBrandListAction extends CatalogAction {
+/*
+ * Action class for the brands page. This page lists brands for particular CAT1 / CAT2.
+ * The brands on this page link to the catalog, specifying the brand selected along with
+ * a bcs specifying the CAT1 and CAT2, so that the resulting list will be filtered and
+ * the catalog page will be set up correctly including breadcrumb.
+ */
+public class BrandListAction extends CatalogAction {
 
 	// [yfs_item_attr.item_attr_name='FF_1182', item_attr_description='Brand']
 	private static final String INDEX_FIELD_NAME_BRAND = "ItemAttribute.xpedx.FF_1182";
 
-	private static final Logger log = Logger.getLogger(XPEDXBrandListAction.class);
+	private static final Logger log = Logger.getLogger(BrandListAction.class);
 
 	private Map<String,List<String>> brandMap;
 	// these are set by input param
@@ -37,16 +42,19 @@ public class XPEDXBrandListAction extends CatalogAction {
 	private String bcs = "";
 
 
-	public String getBrandsForCategory() {
+	@Override
+	public String execute() {
 
-		getBrandListFromApi();
+		// Make brand names for this cat1/cat2 available for JSP access
+		brandMap = getBrandListFromApi();
 
+		// Define bcs to be used for all brand links
 		bcs = createBreadcrumbForCategories();
 
 		return SUCCESS;
 	}
 
-	private void getBrandListFromApi() {
+	private Map<String, List<String>> getBrandListFromApi() {
 		try {
 			Map<String,String> valueMapinput = new HashMap<String,String>();
 			valueMapinput.put("/SearchCatalogIndex/@CallingOrganizationCode", wcContext.getStorefrontId());
@@ -56,29 +64,29 @@ public class XPEDXBrandListAction extends CatalogAction {
 			Element inputDoc = WCMashupHelper.getMashupInput("xpedxGetBrands", valueMapinput, wcContext.getSCUIContext());
 
 			Object outputObj = WCMashupHelper.invokeMashup("xpedxGetBrands", inputDoc, wcContext.getSCUIContext());
-			Document outputDoc = ((Element) outputObj).getOwnerDocument();
-			setOutDoc(outputDoc);
 
-			// extract list of brand names from returned doc for JSP access
-			setBrandListFromOutput();
+			setOutDoc(((Element) outputObj).getOwnerDocument()); // base class
+
+			return getBrandListFromOutput();
 		}
 		catch (Exception e) {
 			log.error("Problem getting brand list for this customer & cat1/cat2", e);
 		}
+		return new HashMap<String, List<String>>(0);
 	}
 
-	private void setBrandListFromOutput() {
-		brandMap = new HashMap<String, List<String>>();
-		ArrayList<String> brandList = new ArrayList<String>();
+	private Map<String, List<String>> getBrandListFromOutput() {
 
-		// Need this loop or just grab 1st/only entry (for brand facet)?
+		ArrayList<String> brandList = new ArrayList<String>(100);
 		NodeList FacetList = SCXmlUtil.getXpathNodes(getOutDoc().getDocumentElement(), "/CatalogSearch/FacetList/ItemAttribute");
+
+		// (should be exactly one entry for brand facet)
 		for (int i = 0; i < FacetList.getLength(); i++) {
 			Element facetElem = (Element) FacetList.item(i);
 
 			List<Element> values = SCXmlUtil.getElements(facetElem, "AssignedValueList/AssignedValue");
 
-			List<String> brands = new ArrayList<String>();
+			List<String> brands = new ArrayList<String>(values.size());
 			for (Element value : values) {
 				brands.add(value.getAttribute("Value"));
 			}
@@ -86,11 +94,11 @@ public class XPEDXBrandListAction extends CatalogAction {
 			brandList.addAll(brands);
 		}
 
-		brandMap = splitBrandsByLetter(brandList);
+		return splitBrandsByLetter(brandList);
 	}
 
 	private Map<String, List<String>> splitBrandsByLetter(ArrayList<String> brandList) {
-		HashMap<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>(27);
 
 		Collections.sort(brandList, String.CASE_INSENSITIVE_ORDER);
 
@@ -100,22 +108,26 @@ public class XPEDXBrandListAction extends CatalogAction {
 			map.put(String.valueOf(c), new ArrayList<String>());
 		}
 
+		// add each brand to appropriate letter's list
 		for (String brand: brandList) {
 			char letter = brand.charAt(0);
-			if (letter >= 'A' && letter <= 'Z') {
-				// should be unique so shouldn't already be in list
-				map.get(String.valueOf(letter)).add(brand);
-			}
-			else {
-				map.get("#").add(brand);
-			}
+			List<String> aList;
+
+			if (letter >= 'A' && letter <= 'Z')
+				aList = map.get(String.valueOf(letter));
+			else
+				aList = map.get("#");
+
+			aList.add(brand);
 		}
 
 		return map;
 	}
 
-	public String createBreadcrumbForCategories() {
-		List<Breadcrumb> bcl = new ArrayList<Breadcrumb>(3);
+	private String createBreadcrumbForCategories() {
+
+		// 3-part breadcrumb for this contains "Catalog", cat1, cat2
+		List<Breadcrumb> bcList = new ArrayList<Breadcrumb>(3);
 
 		Breadcrumb root = new Breadcrumb(null, null, null);
 		root.setRoot(true);
@@ -123,7 +135,7 @@ public class XPEDXBrandListAction extends CatalogAction {
 		root.setGroup("catalog");
 		root.setDisplayGroup("search");
 		root.setDisplayName(null);
-		bcl.add(root);
+		bcList.add(root);
 
 		Map<String, String> params1 = new LinkedHashMap<String, String>();
 		String path1 = path.substring(0, path.lastIndexOf('/'));
@@ -131,41 +143,43 @@ public class XPEDXBrandListAction extends CatalogAction {
 		params1.put("cname", cat1name);
 		params1.put("newOP", "true");
 		params1.put("CategoryC3", "true");
-		Breadcrumb bc1 = new Breadcrumb("/catalog", "navigate", params1);
-		bc1.setUrl("");
-		bc1.setGroup("catalog");
-		bc1.setDisplayGroup("search");
-		bc1.setDisplayName(cat1name);
-		bcl.add(bc1);
+		Breadcrumb bc1 = createCatBreadCrumb(params1, cat1name);
+		bcList.add(bc1);
 
 		Map<String, String> params2 = new LinkedHashMap<String, String>();
 		params2.put("path", path);
 		params2.put("cname", cat2name);
-		Breadcrumb bc2 = new Breadcrumb("/catalog", "navigate", params2);
-		bc2.setUrl("");
-		bc2.setGroup("catalog");
-		bc2.setDisplayGroup("search");
-		bc2.setDisplayName(cat2name);
-		bcl.add(bc2);
+		Breadcrumb bc2 = createCatBreadCrumb(params2, cat2name);
+		bcList.add(bc2);
 
-		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcl);
+		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcList);
 
 		try {
 			// s:url will encode, so decode
 			return URLDecoder.decode(bcs, "utf-8");
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	private Breadcrumb createCatBreadCrumb(Map<String, String> params, String catName) {
+		Breadcrumb bc1 = new Breadcrumb("/catalog", "navigate", params);
+		bc1.setUrl("");
+		bc1.setGroup("catalog");
+		bc1.setDisplayGroup("search");
+		bc1.setDisplayName(catName);
+		return bc1;
+	}
+
 
 	// Need to round up int to nearest int
 	public int getNumRows(int size) {
 		return (int)Math.ceil(size / 4.0);
 	}
 
-	public Map<String, List<String>> getBrands() {
-		return brandMap;
-	}
+
+	/**** setters and getters ****/
 
 	@Override
 	public String getPath() {
@@ -191,6 +205,10 @@ public class XPEDXBrandListAction extends CatalogAction {
 
 	public void setCat2name(String cat2name) {
 		this.cat2name = cat2name;
+	}
+
+	public Map<String, List<String>> getBrands() {
+		return brandMap;
 	}
 
 	public String getBcs() {

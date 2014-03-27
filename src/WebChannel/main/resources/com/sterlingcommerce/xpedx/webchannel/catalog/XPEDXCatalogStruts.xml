@@ -233,9 +233,9 @@
 		</action>
 
 		<action name="brands"
-			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXBrandListAction" method="getBrandsForCategory">
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.BrandListAction">
 			<param name="mashupID">xpedxGetBrands</param>
-			<result name="success">/xpedx/jsp/catalog/XPEDXBrandsList.jsp</result>
+			<result name="success">/xpedx/jsp/catalog/BrandList.jsp</result>
 		</action>
 
 	</package>
