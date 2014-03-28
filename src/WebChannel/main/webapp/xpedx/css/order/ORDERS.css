@@ -1791,7 +1791,8 @@ BEGIN 2014 styles
 	font-style: italic;
 	margin-bottom: -5px;
 }
-.qa-listrow {
+.qa-listrow,
+.qa-listheader {
 	clear: both;
 	padding-top: 5px;
 }
@@ -1802,12 +1803,14 @@ BEGIN 2014 styles
 	padding: 3px;
 	padding-bottom: 5px;
 }
-.qa-listrow label {
+.qa-listrow label,
+.qa-listheader label {
 	float: left;
 	clear: none;
 	margin-right: 12px;
 }
-.qa-listrow label div {
+.qa-listrow label div,
+.qa-listheader label div {
 	width: auto;
 	color: #666666;
 	font-size: 11px;

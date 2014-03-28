@@ -188,7 +188,7 @@
 					<!--*************ADD ITEMS LIST***************-->
 				<h3 class="addmargintop10 qa-subhead">Add Item List</h3>
 					<div class="float-right clearboth">
-								<input type="button" value="Add to Cart" onclick="quickAdd_addProductsToOrder(); return false;" class="btn-gradient floatright addmarginright20">
+								<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
 							</div>
 						<s:hidden name='fromQuickAdd' value='true' />
 						<s:hidden name='#action.name' id='validationActionNameQA' value='draftOrderDetails' />
@@ -210,7 +210,7 @@
 						<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)' />
 						<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}' />
 				<div class="qa-row-wrap">
-					<div class="qa-listrow pushleft">
+					<div class="qa-listheader pushleft">
 							<div class="label-item">Item</div>
 							<div class="label-qty">Qty</div>
 							<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
@@ -221,9 +221,9 @@
 							</s:if>
 						</div>
 					<s:iterator value='#_action.getQuickaddItemLines()' status="itemline" >
-							<div class="qa-listrow pushleft">		
-								<div class="label-item"><input type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" /></div>					
-								<div class="label-qty"><input maxlength="7"  size="8" type="text" id="enteredQuantities_<s:property value='#itemline.count'/>" name="enteredQuantities" class="inputfloat input-qty" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/></div>
+							<div id="qa-listrow-<s:property value='#itemline.count'/>" class="qa-listrow pushleft">		
+								<div class="label-item"><input value="1" type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" /></div>					
+								<div class="label-qty"><input value="1" maxlength="7"  size="8" type="text" id="enteredQuantities_<s:property value='#itemline.count'/>" name="enteredQuantities" class="inputfloat input-qty" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/></div>
 							
 								<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>	
 									<div class="label-po"><input maxlength="22" size="15" type="text" name="enteredPONos" value="" class="inputfloat input-po" id="enteredPONos_<s:property value='#itemline.count'/>"/></div>							
@@ -231,13 +231,12 @@
 								<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>						
 									<div class="label-account"><input maxlength="24" size="20" type="text" id="enteredJobIDs_<s:property value='#itemline.count'/>" name="enteredJobIDs" class="inputfloat input-account" /></div>	
 								</s:if>
-								<!-- <div id="producterrorLine_<s:property value='#itemline.count'/>"</div>	 -->
 								<div class="error" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
 							</div>
 						</s:iterator>
 						</div>
 							<div class="float-right clearboth">
-								<input type="button" value="Add to Cart" onclick="quickAdd_addProductsToOrder(); return false;" class="btn-gradient floatright addmarginright20">
+								<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
 							</div>
 				</form>
 				</div>
