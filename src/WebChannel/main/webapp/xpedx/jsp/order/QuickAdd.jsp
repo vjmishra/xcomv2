@@ -231,6 +231,7 @@
 								<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>						
 									<div class="label-account"><input maxlength="24" size="20" type="text" id="enteredJobIDs_<s:property value='#itemline.count'/>" name="enteredJobIDs" class="inputfloat input-account" /></div>	
 								</s:if>
+								<!-- <div id="producterrorLine_<s:property value='#itemline.count'/>"</div>	 -->
 								<div class="error" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
 							</div>
 						</s:iterator>
