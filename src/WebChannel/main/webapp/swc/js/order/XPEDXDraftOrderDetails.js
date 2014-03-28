@@ -61,15 +61,15 @@ function checkOut()
 	else{
 		var itemSelUom = new Array();
 		var lineKey = new Array();
-		var itemUomHidden;
-		itemSelUom = document.getElementById("OrderDetailsForm").elements["itemUOMsSelect"];
+		var itemUomHidden;		
 		lineKey = document.getElementById("OrderDetailsForm").elements["orderLineKeys"];
 
 		for(var i = 0; i < orderLinesCount; i++)
 		{	
 			itemUomHidden = document.getElementById("itemUOMs_" + lineKey[i].value).value;
-			if (itemSelUom[i].value != itemUomHidden ){
-				document.getElementById("itemUOMs_" + lineKey[i].value).value = itemSelUom[i].value;
+			itemSelUom = document.getElementById("itemUOMsSelect_" + lineKey[i].value).value;
+			if (itemSelUom != itemUomHidden ){
+				document.getElementById("itemUOMs_" + lineKey[i].value).value = itemSelUom;
 			}
 		}
 	
