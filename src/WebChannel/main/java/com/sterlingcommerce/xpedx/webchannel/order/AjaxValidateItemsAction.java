@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
+import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -65,31 +66,14 @@ public class AjaxValidateItemsAction extends WCAction {
 		}
 
 		if ("2".equals(itemType)) {
-			// 2 = Customer Part #
-			XPEDXShipToCustomer shipToCustomer =(XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache("shipToCustomer");
-
-			Map<String, String> valueMap = new LinkedHashMap<String, String>();
-			valueMap.put("/XPXItemcustXref@EnvironmentCode", "M");
-			valueMap.put("/XPXItemcustXref@CustomerDivision", shipToCustomer.getExtnCustomerDivision());
-			valueMap.put("/XPXItemcustXref@CustomerNumber", shipToCustomer.getExtnLegacyCustNumber());
-
-			Element xpedxItemCustXRefInputElem = WCMashupHelper.getMashupInput("xpedxItemCustXRef", valueMap, wcContext);
-			xpedxItemCustXRefInputElem.setAttribute("CustomerItemNumber", itemId);
-
-			Element xpedxItemCustXRefOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxItemCustXRef", xpedxItemCustXRefInputElem, wcContext.getSCUIContext());
-
-			Element xpxItemcustXrefElem = SCXmlUtils.getChildElement(xpedxItemCustXRefOutputElem, "XPXItemcustXref");
-			if (xpxItemcustXrefElem == null) {
-				// if output does not contain the requested item then it is invalid
+			// we must translate the customer part # to an xpedx item # before checking if it's valid
+			itemId = getItemNumberForCustomerPartNumber(itemId);
+			if (itemId == null) {
+				// unknown customer part #
 				return false;
-			} else {
-				// if out contains the requested item then we now have the xpedx Item # for this Customer Part #
-				// but we must still verify that the xpedx Item # is valid (entitled)
-				itemId = xpxItemcustXrefElem.getAttribute("LegacyItemNumber");
 			}
 		}
 
-		// 1 = xpedx Item #
 		Map<String, String> valueMap = new LinkedHashMap<String, String>();
 		valueMap.put("/Item@CallingOrganizationCode", wcContext.getStorefrontId());
 		valueMap.put("/Item@ItemID", itemId);
@@ -97,11 +81,54 @@ public class AjaxValidateItemsAction extends WCAction {
 
 		Element xpedxValidateItemsInputElem = WCMashupHelper.getMashupInput("xpedxValidateItems", valueMap, wcContext);
 
-		Element xpedxValidateItemsOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxValidateItems", xpedxValidateItemsInputElem, wcContext.getSCUIContext());
+		Element itemListElem = (Element) WCMashupHelper.invokeMashup("xpedxValidateItems", xpedxValidateItemsInputElem, wcContext.getSCUIContext());
 
 		// if output contains the requested item then the item is valid
-		return xpedxValidateItemsOutputElem.getChildNodes().getLength() > 0;
+		NodeList itemListNodes = itemListElem.getChildNodes();
+		for (int i = 0; i < itemListNodes.getLength(); i++) {
+			Element itemElem = (Element) itemListNodes.item(i);
+			if (itemId.equals(itemElem.getAttribute("ItemID"))) {
+				// output contains the item id, so it's valid
+				return true;
+			}
+		}
+
+		// output did not contain the item id, so it's invalid
+		return false;
 	}
+
+	/**
+	 * Performs API call to get xpedx Item Number for the given Customer Part Number.
+	 * @param customerPartNumber
+	 * @return Returns null if customerPartNumber does not exist
+	 * @throws Exception API error
+	 */
+	private String getItemNumberForCustomerPartNumber(String customerPartNumber) throws Exception {
+		XPEDXShipToCustomer shipToCustomer =(XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache("shipToCustomer");
+
+		Map<String, String> valueMap = new LinkedHashMap<String, String>();
+		valueMap.put("/XPXItemcustXref@EnvironmentCode", "M");
+		valueMap.put("/XPXItemcustXref@CustomerDivision", shipToCustomer.getExtnCustomerDivision());
+		valueMap.put("/XPXItemcustXref@CustomerNumber", shipToCustomer.getExtnLegacyCustNumber());
+
+		Element xpedxItemCustXRefInputElem = WCMashupHelper.getMashupInput("xpedxItemCustXRef", valueMap, wcContext);
+		xpedxItemCustXRefInputElem.setAttribute("CustomerItemNumber", customerPartNumber);
+
+		Element xpxItemcustXrefListElem = (Element) WCMashupHelper.invokeMashup("xpedxItemCustXRef", xpedxItemCustXRefInputElem, wcContext.getSCUIContext());
+
+		Element xpxItemcustXrefElem = SCXmlUtil.getChildElement(xpxItemcustXrefListElem, "XPXItemcustXref");
+		if (xpxItemcustXrefElem == null) {
+			// unknown customer part #
+			return null;
+
+		} else {
+			// if out contains the requested item then we now have the xpedx item # for this customer part #
+			// but we must still verify that the xpedx Item # is valid (entitled)
+			return xpxItemcustXrefElem.getAttribute("LegacyItemNumber");
+		}
+	}
+
+	// --- Input and Output fields
 
 	public void setItemType(String itemType) {
 		this.itemType = itemType;
