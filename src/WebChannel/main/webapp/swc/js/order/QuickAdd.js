@@ -205,8 +205,6 @@ function clearItemErrorMessages() {
 }
 
 function validateItems() {
-	console.log('---------------------------');
-	
 	clearItemErrorMessages();
 	
 	var itemsToValidate = [];
@@ -231,9 +229,9 @@ function validateItems() {
 		}
 		
 		if (!item) {
-			errorMessageForRowId[rowId] = 'Invalid Item # <item>. Please review and try again.';
+			errorMessageForRowId[rowId] = 'Please enter a valid item # and try again.';
 			hasErrors = true;
-		} else if (!qty) {
+		} else if (!qty || !isInt(qty)) {
 			errorMessageForRowId[rowId] = 'Please enter a valid quantity and try again.';
 			hasErrors = true;
 		} else {
@@ -257,11 +255,42 @@ function validateItems() {
 		return;
 		
 	} else {
-		alert('TODO: make ajax call to ajaxValidateItems that calls quickAdd_addProductsToOrder on success, or displays errors messages on failure');
+		var url = $('#ajaxValidateItemsURL').attr('href');
+		url += '&itemType=' + $('#qaItemType').val();
+		url += '&itemIds=' + itemsToValidate.join('&itemIds=');
+		$.ajax({
+			type: 'GET'
+			,url: url
+			,dataType: 'json'
+			,success: function(data) {
+				if (data.hasItemErrors) {
+					for (item in data.itemValidFlags) {
+						var validItem = data.itemValidFlags[item];
+						if (!validItem) {
+							var invalidRowIds = rowIdsForItem[item];
+							var errorDivs = $('#producterrorLine_' + invalidRowIds.join(',#producterrorLine_'));
+							for (var i = 0, len = errorDivs.length; i < len; i++) {
+								errorDivs[i].innerHTML = 'Invalid Item # <item>. Please review and try again.';
+							}
+						}
+					}
+					
+				} else {
+//					quickAdd_addProductsToOrder();
+					alert('TODO: add items to the cart');
+				}
+			}
+			,error: function(resp, textStatus, xhr) {
+				// TODO how to recover from this? definitely stop the processing bar. maybe also show error?
+			}
+		});
 		// TODO: make ajax call to quickAdd_addProductsToOrder
 	}
 }
 
+function isInt(n) {
+	return n % 1 == 0;
+}
 
 /*
  * This method is a copy of XPEDXDraftOrderDetails.js/addProductsToOrder with quick hacks for eb-1999, which was a quick hack for performance.
