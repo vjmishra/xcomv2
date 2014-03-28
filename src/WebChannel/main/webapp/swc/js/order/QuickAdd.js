@@ -198,7 +198,7 @@ function quickAdd_validateItems() {
 
 
 function clearItemErrorMessages() {
-	var errorDivs = $('.error');
+	var errorDivs = $('.producterrorLine');
 	for (var i = 0, len = errorDivs.length; i < len; i++) {
 		errorDivs[i].innerHTML = '';
 	}
@@ -214,29 +214,28 @@ function validateItems() {
 	var errorMessageForRowId = {}; // key=rowId, value=error message
 	
 	var rows = $('.qa-listrow');
+	var hasErrors = false;
 	for (var i = 0, len = rows.length; i < len; i++) {
 		var $row = $(rows[i]);
 		
 		var rowId = $row.attr('id');
-		var tokens = rowId.split('-');
+		var tokens = rowId.split('_');
 		rowId = tokens[tokens.length - 1];
 		
 		var item = $row.find('.input-item').val().trim();
 		var qty = $row.find('.input-qty').val().trim();
 		
-		console.log(rowId + ': item=' + item + ', qty=' + qty);
 		if (!item && !qty) {
-			console.log('item and quantity are blank: skip the row');
 			// ignore blank links
 			continue;
 		}
 		
 		if (!item) {
-			console.log('item is blank');
 			errorMessageForRowId[rowId] = 'Invalid Item # <item>. Please review and try again.';
+			hasErrors = true;
 		} else if (!qty) {
-			console.log('qty is blank');
 			errorMessageForRowId[rowId] = 'Please enter a valid quantity and try again.';
+			hasErrors = true;
 		} else {
 			itemsToValidate.push(item)
 			
@@ -250,27 +249,17 @@ function validateItems() {
 		}
 	}
 	
-	console.log('errorMessageForRowId = ' , errorMessageForRowId);
-	console.log('rowIdsForItem = ' , rowIdsForItem);
-	
-	var rowNums = Object.keys(errorMessageForRowId);
-	console.log('rowNums = ' , rowNums);
-	
-	var hasErrors = false;
-	for (var rowId in errorMessageForRowId) {
-		hasErrors = true;
-		var errorMessage = errorMessageForRowId[rowId];
-		console.log(rowId + ': errorMessage = ' , errorMessage);
-		
-		$('#producterrorLine_' + rowId).get(0).innerHTML = errorMessage;
-	}
-	
 	if (hasErrors) {
+		for (var rowId in errorMessageForRowId) {
+			var errorMessage = errorMessageForRowId[rowId];
+			$('#producterrorLine_' + rowId).get(0).innerHTML = errorMessage;
+		}
 		return;
+		
+	} else {
+		alert('TODO: make ajax call to ajaxValidateItems that calls quickAdd_addProductsToOrder on success, or displays errors messages on failure');
+		// TODO: make ajax call to quickAdd_addProductsToOrder
 	}
-	
-	console.log('TODO:  make ajax call to ajaxValidateItems that calls quickAdd_addProductsToOrder on success, or displays errors messages on failure');
-	// TODO: make ajax call to quickAdd_addProductsToOrder
 }
 
 

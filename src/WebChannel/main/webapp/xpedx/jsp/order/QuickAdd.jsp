@@ -174,43 +174,48 @@
 			<hr color="#dbe2f1" />
 			<hr color="#dbe2f1" />
 			<div class="container">
-			<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>  
-				<!--*************SELECT ITEM TYPE***************-->
-			<form name="QuickAddForm" class="addpadleft20 addpadtop10" id="QuickAddForm">
-				<label>
-					 <div class="qa-rightcol"><p>Select Item Type</p></div>
+				<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
+				
+				<form name="QuickAddForm" class="addpadleft20 addpadtop10" id="QuickAddForm">
+					<label>
+						 <div class="qa-rightcol">
+						 	<p>Select Item Type</p>
+						 </div>
 						<s:select id="qaItemType" name="qaItemType" cssStyle="width:135px;" headerKey="1"
-					 				list="skuTypeList" listKey="key" listValue="value"/>
-								<s:hidden name="#qaItemType.type" value="ItemID" />
-				</label>		
-				<div class="clearfix"></div>
-				<hr size="1" color="#cdcdcd" class=" addmargintop20 addmarginright20" />
-					<!--*************ADD ITEMS LIST***************-->
-				<h3 class="addmargintop10 qa-subhead">Add Item List</h3>
+						 		list="skuTypeList" listKey="key" listValue="value"/>
+						<s:hidden name="#qaItemType.type" value="ItemID" />
+					</label>		
+					<div class="clearfix"></div>
+					
+					<hr size="1" color="#cdcdcd" class=" addmargintop20 addmarginright20" />
+					
+					<h3 class="addmargintop10 qa-subhead">Add Item List</h3>
+					
 					<div class="float-right clearboth">
-								<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
-							</div>
-						<s:hidden name='fromQuickAdd' value='true' />
-						<s:hidden name='#action.name' id='validationActionNameQA' value='draftOrderDetails' />
-						<s:hidden name='#action.namespace' value='/order' />
-						<s:hidden name="orderHeaderKey"	value='%{#orderHeaderKey}' />
-						<s:hidden name="draft" value="%{#draftOrderFlag}" />
-						<s:hidden name='Currency' value='%{#currencyCode}' />
-						<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
-						<input type="hidden" name="isEditOrder" value="<s:property value='%{(#_action.getIsEditOrder())}' escape="false" />" />
-						<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />	
-						<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />" />
-						<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}' />
-						<s:set name="chargeAmount" value='%{chargeAmount}' />
-						<s:set name="fmtdchargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)' />
-						<s:set name="minOrderAmount" value='%{minOrderAmount}' />
-						<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)' />
-						<s:set name="erroMsg" value='%{erroMsg}' />
-						<s:set name="maxOrderAmount" value='%{maxOrderAmount}' />
-						<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)' />
-						<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}' />
-				<div class="qa-row-wrap">
-					<div class="qa-listheader pushleft">
+						<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
+					</div>
+					<s:hidden name='fromQuickAdd' value='true' />
+					<s:hidden name='#action.name' id='validationActionNameQA' value='draftOrderDetails' />
+					<s:hidden name='#action.namespace' value='/order' />
+					<s:hidden name="orderHeaderKey"	value='%{#orderHeaderKey}' />
+					<s:hidden name="draft" value="%{#draftOrderFlag}" />
+					<s:hidden name='Currency' value='%{#currencyCode}' />
+					<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
+					<input type="hidden" name="isEditOrder" value="<s:property value='%{(#_action.getIsEditOrder())}' escape="false" />" />
+					<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />	
+					<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />" />
+					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}' />
+					<s:set name="chargeAmount" value='%{chargeAmount}' />
+					<s:set name="fmtdchargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)' />
+					<s:set name="minOrderAmount" value='%{minOrderAmount}' />
+					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)' />
+					<s:set name="erroMsg" value='%{erroMsg}' />
+					<s:set name="maxOrderAmount" value='%{maxOrderAmount}' />
+					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)' />
+					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}' />
+					
+					<div class="qa-row-wrap">
+						<div class="qa-listheader pushleft">
 							<div class="label-item">Item</div>
 							<div class="label-qty">Qty</div>
 							<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
@@ -220,31 +225,33 @@
 								 <div class="label-account"><s:property value='#jobIdFlag' /></div>		
 							</s:if>
 						</div>
-					<s:iterator value='#_action.getQuickaddItemLines()' status="itemline" >
-							<div id="qa-listrow-<s:property value='#itemline.count'/>" class="qa-listrow pushleft">		
+						<s:iterator value='#_action.getQuickaddItemLines()' status="itemline" >
+							<div id="qa-listrow_<s:property value='#itemline.count'/>" class="qa-listrow pushleft">		
 								<div class="label-item"><input value="1" type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" /></div>					
 								<div class="label-qty"><input value="1" maxlength="7"  size="8" type="text" id="enteredQuantities_<s:property value='#itemline.count'/>" name="enteredQuantities" class="inputfloat input-qty" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/></div>
 							
 								<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>	
-									<div class="label-po"><input maxlength="22" size="15" type="text" name="enteredPONos" value="" class="inputfloat input-po" id="enteredPONos_<s:property value='#itemline.count'/>"/></div>							
+									<div class="label-po">
+										<input maxlength="22" size="15" type="text" name="enteredPONos" value="" class="inputfloat input-po" id="enteredPONos_<s:property value='#itemline.count'/>"/>
+									</div>							
 								</s:if>
 								<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>						
-									<div class="label-account"><input maxlength="24" size="20" type="text" id="enteredJobIDs_<s:property value='#itemline.count'/>" name="enteredJobIDs" class="inputfloat input-account" /></div>	
+									<div class="label-account">
+										<input maxlength="24" size="20" type="text" id="enteredJobIDs_<s:property value='#itemline.count'/>" name="enteredJobIDs" class="inputfloat input-account" />
+									</div>	
 								</s:if>
-								<div class="error" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
+								
+								<div class="error producterrorLine" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
 							</div>
 						</s:iterator>
-						</div>
-							<div class="float-right clearboth">
-								<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
-							</div>
-				</form>
-				</div>
-				<div class="clearfix" ></div>
-				
-			 <%-- / tq-quick-add-form --%>
+					</div> <%-- / qa-row-wrap --%>
+					<div class="float-right clearboth">
+						<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
+					</div>
+				</form> <%-- / QuickAddForm --%>
 			</div> <%-- / container --%>
 			
+			<div class="clearfix" ></div>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
 	
