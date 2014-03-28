@@ -3385,5 +3385,23 @@
                 </Order>
             </Template>
         </API>
-    </mashup>          
+    </mashup>
+	
+    <mashup id='xpedxValidateItems' transactional='true'
+        mashuptype='XAPI' endpoint='CATALOG' description="Get Abbreviated Item List (only returns valid items)">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+        <API Name="getCompleteItemList">
+            <Input>
+				<Item CallingOrganizationCode="" ItemID=""
+						IgnoreInvalidItems="N" IgnoreIsSoldSeparately="Y" IgnoreOrdering="Y" ShowFinalSupersededItemOnly="Y">
+					<CustomerInformation CustomerID="" />
+				</Item>
+            </Input>
+            <Template>
+                <ItemList>
+                    <Item ItemID="" />
+                </ItemList>
+            </Template>
+        </API>
+    </mashup>
 </mashups>
