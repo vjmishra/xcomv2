@@ -164,6 +164,9 @@
 	<s:url id="addProductsToOrderURLid" namespace="/order" action="draftOrderAddOrderLines" /> 
 	<s:a cssClass="display:none;" id="addProductsToOrderURL" href="%{#addProductsToOrderURLid}" />
 	
+	<s:url id="ajaxValidateItemsURLid" namespace="/order" action="ajaxValidateItems" /> 
+	<s:a cssClass="display:none;" id="ajaxValidateItemsURL" href="%{#ajaxValidateItemsURLid}" />
+	
 	<div id="main-container">
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
