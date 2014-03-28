@@ -230,8 +230,8 @@
 						</div>
 						<s:iterator value='#_action.getQuickaddItemLines()' status="itemline" >
 							<div id="qa-listrow_<s:property value='#itemline.count'/>" class="qa-listrow pushleft">		
-								<div class="label-item"><input value="1" type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" /></div>					
-								<div class="label-qty"><input value="1" maxlength="7"  size="8" type="text" id="enteredQuantities_<s:property value='#itemline.count'/>" name="enteredQuantities" class="inputfloat input-qty" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/></div>
+								<div class="label-item"><input type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" /></div>					
+								<div class="label-qty"><input maxlength="7"  size="8" type="text" id="enteredQuantities_<s:property value='#itemline.count'/>" name="enteredQuantities" class="inputfloat input-qty" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/></div>
 							
 								<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>	
 									<div class="label-po">
