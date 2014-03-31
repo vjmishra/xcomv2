@@ -3399,7 +3399,7 @@
             </Input>
             <Template>
                 <ItemList>
-                    <Item ItemID="" />
+                    <Item ItemID="" UnitOfMeasure="" />
                 </ItemList>
             </Template>
         </API>

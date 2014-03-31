@@ -36,6 +36,7 @@ public class AjaxValidateItemsAction extends WCAction {
 	// outputs
 	private boolean hasItemErrors;
 	private Map<String, Boolean> itemValidFlags = new LinkedHashMap<String, Boolean>();
+	private Map<String, String> itemUoms = new LinkedHashMap<String, String>();
 
 	@Override
 	public String execute() throws Exception {
@@ -45,7 +46,13 @@ public class AjaxValidateItemsAction extends WCAction {
 
 		for (String itemId : itemIds) {
 			// there is not an api that allows multiple item ids to be checked at one time, so we have to make a call per item id
-			itemValidFlags.put(itemId, isValidItem(itemId));
+			String uom = getUomForItem(itemId);
+			if (uom == null) {
+				itemValidFlags.put(itemId, false);
+			} else {
+				itemValidFlags.put(itemId, true);
+				itemUoms.put(itemId, uom);
+			}
 		}
 
 		// check if we have at least one invalid item
@@ -55,14 +62,14 @@ public class AjaxValidateItemsAction extends WCAction {
 	}
 
 	/**
-	 * Performs the appropriate api call(s) to determine if <code>itemId</code> is valid.
+	 * Performs the appropriate api call(s) to get the default uom for <code>itemId</code>. The implicitly validates that the item is valid, since an invalid item will not be returned from the api.
 	 * @param itemId If <code>itemType</code>=1 then this is the xpedx Item Number. If <code>itemType</code>=2 then this is the Customer Part Number.
-	 * @return
+	 * @return If the item is valid, returns the uom. Otherwise, returns null.
 	 * @throws Exception API error
 	 */
-	private boolean isValidItem(String itemId) throws Exception {
+	private String getUomForItem(String itemId) throws Exception {
 		if (itemId.trim().length() == 0) {
-			return false;
+			return null;
 		}
 
 		if ("2".equals(itemType)) {
@@ -70,7 +77,7 @@ public class AjaxValidateItemsAction extends WCAction {
 			itemId = getItemNumberForCustomerPartNumber(itemId);
 			if (itemId == null) {
 				// unknown customer part #
-				return false;
+				return null;
 			}
 		}
 
@@ -89,12 +96,12 @@ public class AjaxValidateItemsAction extends WCAction {
 			Element itemElem = (Element) itemListNodes.item(i);
 			if (itemId.equals(itemElem.getAttribute("ItemID"))) {
 				// output contains the item id, so it's valid
-				return true;
+				return itemElem.getAttribute("UnitOfMeasure");
 			}
 		}
 
 		// output did not contain the item id, so it's invalid
-		return false;
+		return null;
 	}
 
 	/**
@@ -144,6 +151,10 @@ public class AjaxValidateItemsAction extends WCAction {
 
 	public Map<String, Boolean> getItemValidFlags() {
 		return itemValidFlags;
+	}
+
+	public Map<String, String> getItemUoms() {
+		return itemUoms;
 	}
 
 }
