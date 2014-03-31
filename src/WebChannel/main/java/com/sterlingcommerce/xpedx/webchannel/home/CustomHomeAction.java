@@ -201,14 +201,12 @@ public class CustomHomeAction extends WCAction {
 		String shipToCustomer = shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S"));
 		
 		String zipCode=shipToCustomerBean.getZipCode();
-		String firstZip="";
+		String firstZip=zipCode;
 		String lastZip="";
-		
-		if(zipCode!=null && zipCode.length()>0){
+	
+		if(zipCode!=null && zipCode.length()>5){
 		    firstZip=zipCode.substring(0, 5);
-		
-		    if(zipCode.length()>5)
-		        lastZip="-"+zipCode.substring(5);
+		    lastZip="-"+zipCode.substring(5);
 		  }
 		
 
