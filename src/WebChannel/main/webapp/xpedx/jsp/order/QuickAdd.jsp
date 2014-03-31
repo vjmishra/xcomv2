@@ -46,6 +46,17 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
+	
+<script type="text/javascript">
+	$(document).ready(function() {
+	   $('.qa-row-wrap').show();
+	 });
+	function showNextRow(currentRowNumber){		
+		var nextRowNumber = currentRowNumber+1;		
+		var nextRowDivId="qa-listrow_"+nextRowNumber;		
+		document.getElementById(nextRowDivId).style.display="block";
+				}
+	</script>
 	<title>Quick Add</title>
 
 	<!-- Web Trends tag start -->
@@ -217,7 +228,7 @@
 					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)' />
 					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}' />
 					
-					<div class="qa-row-wrap">
+					<div class="qa-row-wrap" style="display:none;">
 						<div class="qa-listheader pushleft">
 							<div class="label-item">Item</div>
 							<div class="label-qty">Qty</div>
@@ -229,10 +240,20 @@
 							</s:if>
 						</div>
 						<s:iterator value='#_action.getQuickaddItemLines()' status="itemline" >
-							<div id="qa-listrow_<s:property value='#itemline.count'/>" class="qa-listrow pushleft">		
-								<div class="label-item"><input type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" /></div>					
+						 <s:if test='#itemline.count > #_action.getDisplayItemLines()'>
+							<div id="qa-listrow_<s:property value='#itemline.count'/>" class="qa-listrow pushleft" style="display:none;">
+						</s:if>
+						<s:else>
+							<div id="qa-listrow_<s:property value='#itemline.count'/>" class="qa-listrow pushleft">
+						</s:else>		
+								<div class="label-item"> <s:if test='#itemline.count < 4'>
+								<input type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" />
+								</s:if>
+								<s:else>								
+								<input type="text" maxlength="27" size="15" id="enteredProductIDs_<s:property value='#itemline.count'/>" name="enteredProductIDs" class="inputfloat input-item" 
+									    onclick="javascript:showNextRow(<s:property value='#itemline.count'/>)"></s:else>
+								</div>					
 								<div class="label-qty"><input maxlength="7"  size="8" type="text" id="enteredQuantities_<s:property value='#itemline.count'/>" name="enteredQuantities" class="inputfloat input-qty" onKeyUp="return isValidQuantityRemoveAlpha(this,event)"/></div>
-							
 								<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>	
 									<div class="label-po">
 										<input maxlength="22" size="15" type="text" name="enteredPONos" value="" class="inputfloat input-po" id="enteredPONos_<s:property value='#itemline.count'/>"/>
@@ -243,9 +264,9 @@
 										<input maxlength="24" size="20" type="text" id="enteredJobIDs_<s:property value='#itemline.count'/>" name="enteredJobIDs" class="inputfloat input-account" />
 									</div>	
 								</s:if>
-								
 								<div class="error producterrorLine" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
 							</div>
+						
 						</s:iterator>
 					</div> <%-- / qa-row-wrap --%>
 					<div class="float-right clearboth">
