@@ -268,6 +268,13 @@ function validateItems() {
 		}
 	}
 	
+	console.log('itemsToValidate = ' , itemsToValidate);
+	if (itemsToValidate.length == 0) {
+		// if form is completely blank, then treat as missing data on first row
+		errorMessageForRowId[1] = 'Please enter a valid item # and try again.';
+		hasErrors = true;
+	}
+	
 	if (hasErrors) {
 		for (var rowId in errorMessageForRowId) {
 			var errorMessage = errorMessageForRowId[rowId];
