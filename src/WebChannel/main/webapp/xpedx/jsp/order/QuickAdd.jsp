@@ -175,16 +175,14 @@
 			</s:action> 
 			<s:set name="shipToCustomer" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")' />
 			<s:set name="billToCustomer" value='#shipToCustomer.getBillTo()' />
-			<hr color="#dbe2f1" />
-			<hr color="#dbe2f1" />
 			<div class="container">
 				<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 				
 				<form name="QuickAddForm" class="addpadleft20 addpadtop10" id="QuickAddForm">
 					<label>
-						 <div class="qa-rightcol">
+						<div class="qa-rightcol">
 						 	<p>Select Item Type</p>
-						 </div>
+						</div>
 						<s:select id="qaItemType" name="qaItemType" cssStyle="width:135px;" headerKey="1"
 						 		list="skuTypeList" listKey="key" listValue="value"/>
 						<s:hidden name="#qaItemType.type" value="ItemID" />
@@ -225,8 +223,8 @@
 							<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
 							<div class="label-po"><s:property value='#customerPONoFlag' /></div>
 							</s:if>
-							  <s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
-								 <div class="label-account"><s:property value='#jobIdFlag' /></div>		
+							<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+								<div class="label-account"><s:property value='#jobIdFlag' /></div>		
 							</s:if>
 						</div>
 						<s:iterator value='#_action.getQuickaddItemLines()' status="itemline" >
@@ -248,8 +246,13 @@
 									</div>	
 								</s:if>
 								<div class="error producterrorLine" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
+								
+								<%-- These inputs are required for the backend to process, not visible in UI --%>
+								<s:hidden cssClass="input-uom" name="enteredUOMs" value="" /> <%-- populated by javascript before submission --%>
+								<s:hidden cssClass="input-itemType" name="enteredItemTypes" value="" /> <%-- populated by javascript before submission --%>
+								<s:hidden name="enteredProductDescs" value="" /> <%-- always empty --%>
+								<s:hidden name="quickAddOrderMultiple" value="1" /> <%-- always 1 (quick add ignores order multiple) --%>
 							</s:div> <%-- / qa-listrow --%>
-						
 						</s:iterator> <%-- quickaddItemLines --%>
 					</div> <%-- / qa-row-wrap --%>
 					
@@ -259,7 +262,7 @@
 				</form> <%-- / QuickAddForm --%>
 			</div> <%-- / container --%>
 			
-			<div class="clearfix" ></div>
+			<div class="clearfix"></div>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
 	

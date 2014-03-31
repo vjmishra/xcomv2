@@ -327,12 +327,8 @@ function quickAdd_addProductsToOrder(items, itemUoms, itemType) {
 		var itemId = $row.find('.input-item').val().trim();
 		var uom = itemUoms[itemId];
 		
-		// TODO for safety of re-submit, refactor this to be idempotent: dom should already have the hidden input, and this should simply upate its value
-		// it's important that we append the uom even when not available so that row indexes match on server-side (eg, if first row is empty)
-		htmlExtraInputs.push('<input type="hidden" name="enteredUOMs" value="' + (uom ? uom : '') + '" />');
-		htmlExtraInputs.push('<input type="hidden" name="enteredProductDescs" value="" />');
-		htmlExtraInputs.push('<input type="hidden" name="enteredItemTypes" value="' + itemType + '" />');
-		htmlExtraInputs.push('<input type="hidden" name="quickAddOrderMultiple" value="1" />');
+		$row.find('.input-uom').val(uom ? uom : '');
+		$row.find('.input-itemType').val(itemType);
 	}
 	$form.append(htmlExtraInputs.join(''));
 	
