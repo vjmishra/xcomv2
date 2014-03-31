@@ -176,6 +176,13 @@
 			<s:set name="shipToCustomer" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("shipToCustomer")' />
 			<s:set name="billToCustomer" value='#shipToCustomer.getBillTo()' />
 			<div class="container">
+				<s:if test='%{#parameters.addedToCart[0] == "true"}'>
+					<div id="infoMessage" class="addpadtop15">
+						Items successfully added to
+						<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "cart" : "order"}' />.
+					</div>
+				</s:if>
+				
 				<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 				
 				<form name="QuickAddForm" class="addpadleft20 addpadtop10" id="QuickAddForm">
