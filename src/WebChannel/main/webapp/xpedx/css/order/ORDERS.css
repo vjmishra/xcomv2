@@ -2012,3 +2012,8 @@ table#QuickAddTableSaal.form label, .form table {
 .addmarginright20 {
 	margin-right: 20px;
 }
+
+.producterrorLine {
+	float: left;
+	margin-top: 2px;
+}

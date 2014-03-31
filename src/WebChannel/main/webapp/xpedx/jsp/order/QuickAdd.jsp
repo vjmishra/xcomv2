@@ -252,7 +252,7 @@
 										<input maxlength="24" size="20" type="text" id="enteredJobIDs_<s:property value='#itemline.count'/>" name="enteredJobIDs" class="inputfloat input-account" />
 									</div>	
 								</s:if>
-								<div class="error producterrorLine" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
+								<div class="error producterrorLine" style="display:none;" id="producterrorLine_<s:property value='#itemline.count'/>"></div> 
 								
 								<%-- These inputs are required for the backend to process, not visible in UI --%>
 								<s:hidden cssClass="input-uom" name="enteredUOMs" value="" /> <%-- populated by javascript before submission --%>
