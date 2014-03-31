@@ -39,6 +39,8 @@ import com.yantra.yfc.util.YFCCommon;
 public class XPEDXDraftOrderAddOrderLinesAction extends
 		OrderItemValidationBaseAction {
 
+	private static final Logger log4j = Logger.getLogger(XPEDXDraftOrderAddOrderLinesAction.class);
+
 	public XPEDXDraftOrderAddOrderLinesAction() {
 		verificationOutputMap = new HashMap();
 		quickAddErrorList = new ArrayList();
@@ -138,6 +140,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 						+ "call draft order details............");
 				return resultSuccess;
 			}
+			log4j.debug("", databaseLockException);
 			LOG.debug(databaseLockException);
 			XPEDXWCUtils.releaseEnv(wcContext);
 			return "error";
@@ -650,6 +653,10 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			if(enteredPONos != null)
 				PONo = (String) enteredPONos.get(i);
 			String itemID = (String) enteredProductIDs.get(i);
+			if (itemID.trim().length() == 0) {
+				continue;
+			}
+
 			String enteredQtyStr = (String) enteredQuantities.get(i);
 			String enteredProdDesc = (String) enteredProductDescs.get(i);
 			String enteredUOM = (String) enteredUOMs.get(i);
