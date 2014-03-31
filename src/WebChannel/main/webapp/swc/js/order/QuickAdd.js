@@ -967,6 +967,17 @@ function clearErrorMessage() {
 	$errorMsgItemBottom.html('');
 }
 
+/*
+ * Shows the specified quick add row.
+ */
+function showQuickAddRow(rowNum){
+	if (rowNum > 200) {
+		return;
+	}
+	var rowDiv="qa-listrow_" + rowNum;
+	$('#' + rowDiv).show();
+}
+
 
 $(document).ready(function() {
 	$('#copyPaste').fancybox({
