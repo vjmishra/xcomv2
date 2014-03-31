@@ -234,9 +234,10 @@ function validateItems() {
 	var rowIdsForItem = {}; // key=item, value=list of rowId (since multiple rows could have the same item #)
 	var errorMessageForRowId = {}; // key=rowId, value=error message
 	
-	var rows = $('.qa-listrow');
+	var rows = $('.qa-listrow:visible');
 	var hasErrors = false;
 	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
+		console.log('rowId = ' , rowId);
 		var $row = $(rows[rowId - 1]);
 		var itemId = $row.find('.input-item').val().trim();
 		var qty = $row.find('.input-qty').val().trim();
@@ -328,7 +329,7 @@ function quickAdd_addProductsToOrder(items, itemUoms, itemType) {
 	// by design, the quick add ui doesn't collect all the input necessary for XPEDXDraftOrderAddOrderLinesAction.java/execute, so we must inject some extra data
 	// TODO: move the hard-coded values to the row creation logic (when the row is added to the page) rather than here
 	var htmlExtraInputs = [];
-	var rows = $('.qa-listrow');
+	var rows = $('.qa-listrow:visible');
 	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
 		var $row = $(rows[rowId - 1]);
 		var itemId = $row.find('.input-item').val().trim();
