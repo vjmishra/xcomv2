@@ -72,7 +72,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	private String customerItemFlag;
 	private String mfgItemFlag;
-	private int [] quickaddItemLines= new int[5];;
+	private int [] quickaddItemLines= new int[200];
+	private int displayItemLines =5;
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
 	}
@@ -2534,6 +2535,16 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	public void setQuickaddItemLines(int[] quickaddItemLines) {
 		this.quickaddItemLines = quickaddItemLines;
+	}
+
+
+	public int getDisplayItemLines() {
+		return displayItemLines;
+	}
+
+
+	public void setDisplayItemLines(int displayItemLines) {
+		this.displayItemLines = displayItemLines;
 	}
 
 
