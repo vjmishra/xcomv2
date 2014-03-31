@@ -237,7 +237,6 @@ function validateItems() {
 	var rows = $('.qa-listrow:visible');
 	var hasErrors = false;
 	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
-		console.log('rowId = ' , rowId);
 		var $row = $(rows[rowId - 1]);
 		var itemId = $row.find('.input-item').val().trim();
 		var qty = $row.find('.input-qty').val().trim();
@@ -269,7 +268,6 @@ function validateItems() {
 		}
 	}
 	
-	console.log('itemsToValidate = ' , itemsToValidate);
 	if (itemsToValidate.length == 0) {
 		// if form is completely blank, then treat as missing data on first row
 		errorMessageForRowId[1] = 'Please enter a valid item # and try again.';
