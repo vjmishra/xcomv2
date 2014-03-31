@@ -221,6 +221,17 @@ function clearItemErrorMessages() {
 }
 
 
+function showProcessingBar() {
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
+}
+function hideProcessingBar() {
+	Ext.Msg.hide();
+	myMask.hide();
+}
+
+
 /*
  * Performs validation on all rows with item and/or quantity (empty rows are ignored):
  * 1. Validates that each row has both item and quantity.
@@ -228,6 +239,7 @@ function clearItemErrorMessages() {
  * 3. Validates that each item exists (id exists, is entitled, etc).
  */
 function validateItems() {
+	showProcessingBar();
 	clearItemErrorMessages();
 	
 	var itemsToValidate = []; // holds objects
@@ -279,6 +291,7 @@ function validateItems() {
 			var errorMessage = errorMessageForRowId[rowId];
 			$('#producterrorLine_' + rowId).get(0).innerHTML = errorMessage;
 		}
+		hideProcessingBar();
 		return;
 		
 	} else {
@@ -304,6 +317,7 @@ function validateItems() {
 							}
 						}
 					}
+					hideProcessingBar();
 					
 				} else {
 					quickAdd_addProductsToOrder(itemsToValidate, data.itemUoms, itemType);
@@ -311,6 +325,7 @@ function validateItems() {
 			}
 			,error: function(resp, textStatus, xhr) {
 				// TODO how to recover from this? definitely stop the processing bar. ideally also show error message
+				hideProcessingBar();
 			}
 		});
 	}
