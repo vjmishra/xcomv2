@@ -44,7 +44,7 @@ function checkOut()
     document.OrderDetailsForm.isComingFromCheckout.value = "true";
     document.OrderDetailsForm.action = document.getElementById('checkoutURL');   
 
-    //Added for EB-4798 - where the hidden uom field is not same as selected uom
+    //Added for EB-4754 - where the hidden uom field is not same as selected uom
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;
 	var retVal=true;
 	if(orderLinesCount!=null && orderLinesCount==1){
@@ -61,19 +61,19 @@ function checkOut()
 	else{
 		var itemSelUom = new Array();
 		var lineKey = new Array();
-		var itemUomHidden;
-		itemSelUom = document.getElementById("OrderDetailsForm").elements["itemUOMsSelect"];
+		var itemUomHidden;		
 		lineKey = document.getElementById("OrderDetailsForm").elements["orderLineKeys"];
 
-		for(var i = 0; i < itemSelUom.length; i++)
+		for(var i = 0; i < orderLinesCount; i++)
 		{	
 			itemUomHidden = document.getElementById("itemUOMs_" + lineKey[i].value).value;
-			if (itemSelUom[i].value != itemUomHidden ){
-				document.getElementById("itemUOMs_" + lineKey[i].value).value = itemSelUom[i].value;
+			itemSelUom = document.getElementById("itemUOMsSelect_" + lineKey[i].value).value;
+			if (itemSelUom != itemUomHidden ){
+				document.getElementById("itemUOMs_" + lineKey[i].value).value = itemSelUom;
 			}
 		}
 	
-	}//End of EB-4798
+	}//End of EB-4754
     document.OrderDetailsForm.submit();
 }
 function validateQty(){

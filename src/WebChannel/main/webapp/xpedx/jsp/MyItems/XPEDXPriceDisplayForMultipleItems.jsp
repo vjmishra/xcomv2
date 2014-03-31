@@ -344,7 +344,7 @@
 													<tr>
 														<td width="auto" class="addpadright5">
 															<s:if test="#disUOMStatus.first">
-																<strong>My Price: </strong>
+																<strong>Price: </strong>
 															</s:if>
 														</td>
 														<td class="left" width="auto">
