@@ -197,6 +197,22 @@ function quickAdd_validateItems() {
 }
 
 
+/*
+ * Source: http://stackoverflow.com/questions/16941386/validate-a-string-is-non-negative-whole-number-in-javascript
+ */
+function isInt(n) {
+	if (n) {
+		var intRegex = /^\d+$/;
+		return intRegex.test(n);
+	} else {
+		return false;
+	}
+}
+
+
+/*
+ * Removes all item error messages
+ */
 function clearItemErrorMessages() {
 	var errorDivs = $('.producterrorLine');
 	for (var i = 0, len = errorDivs.length; i < len; i++) {
@@ -204,44 +220,49 @@ function clearItemErrorMessages() {
 	}
 }
 
+
+/*
+ * Performs validation on all rows with item and/or quantity (empty rows are ignored):
+ * 1. Validates that each row has both item and quantity.
+ * 2. Validates that each quantity has been entered as an integer.
+ * 3. Validates that each item exists (id exists, is entitled, etc).
+ */
 function validateItems() {
 	clearItemErrorMessages();
 	
-	var itemsToValidate = [];
+	var itemsToValidate = []; // holds objects
 	var rowIdsForItem = {}; // key=item, value=list of rowId (since multiple rows could have the same item #)
 	var errorMessageForRowId = {}; // key=rowId, value=error message
 	
 	var rows = $('.qa-listrow');
 	var hasErrors = false;
-	for (var i = 0, len = rows.length; i < len; i++) {
-		var $row = $(rows[i]);
-		
-		var rowId = $row.attr('id');
-		var tokens = rowId.split('_');
-		rowId = tokens[tokens.length - 1];
-		
-		var item = $row.find('.input-item').val().trim();
+	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
+		var $row = $(rows[rowId - 1]);
+		var itemId = $row.find('.input-item').val().trim();
 		var qty = $row.find('.input-qty').val().trim();
 		
-		if (!item && !qty) {
+		if (!itemId && !qty) {
 			// ignore blank links
 			continue;
 		}
 		
-		if (!item) {
+		if (!itemId) {
 			errorMessageForRowId[rowId] = 'Please enter a valid item # and try again.';
 			hasErrors = true;
 		} else if (!qty || !isInt(qty)) {
 			errorMessageForRowId[rowId] = 'Please enter a valid quantity and try again.';
 			hasErrors = true;
 		} else {
-			itemsToValidate.push(item)
+			itemsToValidate.push({
+				'id': itemId,
+				'qty': qty
+			});
 			
-			var bucket = rowIdsForItem[item];
+			var bucket = rowIdsForItem[itemId];
 			if (!bucket) {
 				// lazy-load list
 				bucket = [];
-				rowIdsForItem[item] = bucket;
+				rowIdsForItem[itemId] = bucket;
 			}
 			bucket.push(rowId);
 		}
@@ -255,19 +276,22 @@ function validateItems() {
 		return;
 		
 	} else {
+		var itemType = $('#qaItemType').val();
 		var url = $('#ajaxValidateItemsURL').attr('href');
-		url += '&itemType=' + $('#qaItemType').val();
-		url += '&itemIds=' + itemsToValidate.join('&itemIds=');
+		url += '&itemType=' + itemType;
+		for (var i = 0, len = itemsToValidate.length; i < len; i++) {
+			url += '&itemIds=' + encodeURIComponent(itemsToValidate[i].id);
+		}
 		$.ajax({
 			type: 'GET'
 			,url: url
 			,dataType: 'json'
 			,success: function(data) {
 				if (data.hasItemErrors) {
-					for (item in data.itemValidFlags) {
-						var validItem = data.itemValidFlags[item];
+					for (itemId in data.itemValidFlags) {
+						var validItem = data.itemValidFlags[itemId];
 						if (!validItem) {
-							var invalidRowIds = rowIdsForItem[item];
+							var invalidRowIds = rowIdsForItem[itemId];
 							var errorDivs = $('#producterrorLine_' + invalidRowIds.join(',#producterrorLine_'));
 							for (var i = 0, len = errorDivs.length; i < len; i++) {
 								errorDivs[i].innerHTML = 'Invalid Item # <item>. Please review and try again.';
@@ -276,121 +300,45 @@ function validateItems() {
 					}
 					
 				} else {
-//					quickAdd_addProductsToOrder();
-					alert('TODO: add items to the cart');
+					quickAdd_addProductsToOrder(itemsToValidate, data.itemUoms, itemType);
 				}
 			}
 			,error: function(resp, textStatus, xhr) {
-				// TODO how to recover from this? definitely stop the processing bar. maybe also show error?
+				// TODO how to recover from this? definitely stop the processing bar. ideally also show error message
 			}
 		});
-		// TODO: make ajax call to quickAdd_addProductsToOrder
 	}
 }
 
-function isInt(n) {
-	return n % 1 == 0;
-}
 
 /*
- * This method is a copy of XPEDXDraftOrderDetails.js/addProductsToOrder with quick hacks for eb-1999, which was a quick hack for performance.
- * I did NOT remove that function since it may have broken other pages.
- * When this page is fully rewritten as part of the larger epic (eb-4366) then this should be cleaned up.
+ * Adds the given items to the cart. The parameter 'items' contains an object with properties: id, qty, uom
  */
-function quickAdd_addProductsToOrder() {
-	if (QuickAddElems.length > 0) {
-		var enteredQuants;
-		var enteredUoms;
-		var enteredUomsConFact = new Array();
-		var availUomsConFact = new Array();
-		var baseUOM = new Array();
-		var entereditems;
-		var uomConvFac;
-		var selectedUomConvFac;
-		var selectedUomConvFacFromStr;
-		var selectedUomFromStr;
-		var orderMultiple; // only one..refine to set it only once.
-		var isError = false;
-		var noError = true;
-		var selectedUOM = new Array();
-		selectedUOM = document.getElementsByName("enteredUOMs");
-		baseUOM = document.getElementsByName("quickAddBaseUOMs");
-		for (var i = 0; i < QuickAddElems.length; i++) {
-			noError = true;
-			orderMultiple = encodeForHTML(QuickAddElems[i].orderMultiple);
-			if (orderMultiple != undefined && orderMultiple > 1 && orderMultiple.replace(/^\s*|\s*$/g, "") != '' && orderMultiple != null && orderMultiple != 0) {
-				var enteredUOM = selectedUOM[i].value;
-				enteredUOM = enteredUOM.split(" ");
-				enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
-				entereditems = encodeForHTML(QuickAddElems[i].sku);
-				enteredUoms = enteredUOM[0];
-				uomConvFac = encodeForHTML(QuickAddElems[i].itemUomAndConvString);
-			} else {
-				enteredQuants = encodeForHTML(QuickAddElems[i].quantity);
-				entereditems = encodeForHTML(QuickAddElems[i].sku);
-				enteredUoms = encodeForHTML(QuickAddElems[i].uom);
-				uomConvFac = encodeForHTML(QuickAddElems[i].itemUomAndConvString);
-			}
-			if (enteredUoms) {
-				if (uomConvFac != null) enteredUomsConFact = uomConvFac.split("|");
-				for (var j = 0; j < enteredUomsConFact.length; j++) {
-					availUomsConFact = enteredUomsConFact[j].split("-");
-					selectedUomConvFacFromStr = availUomsConFact[1];
-					selectedUomFromStr = availUomsConFact[0];
-					if (enteredUoms.trim() == selectedUomFromStr.trim()) {
-						selectedUomConvFac = selectedUomConvFacFromStr;
-						break;
-					}
-				}
-				enteredQuants = ReplaceAll(enteredQuants, ",", "");
-				
-				var divId = "errorQty_" + entereditems + i;
-				var divError = document.getElementById(divId);
-				if (selectedUomConvFac != undefined && selectedUomConvFac != null) {
-					if (orderMultiple == undefined || orderMultiple.replace(/^\s*|\s*$/g, "") == '' || orderMultiple == null || orderMultiple == 0) {
-						orderMultiple = 1;
-					}
-					var totalQty = selectedUomConvFac * enteredQuants;
-					var ordMul = totalQty % orderMultiple;
-
-					if (enteredQuants == '' || enteredQuants == '0') {
-						divError.innerHTML = 'Please enter a valid quantity and try again.';
-						divError.style.display = "inline-block";
-						divError.style.marginLeft = "20px";
-						divError.setAttribute("class", "error");
-						divError.setAttribute("align", "center");
-						isError = true;
-						noError = false;
-					}
-					if (orderMultiple > 1 && noError == true) {
-						divError.innerHTML = "Must be ordered in units of " + orderMultiple + " " + baseUOM[i].value;
-						divError.style.display = "inline-block";
-						divError.setAttribute("class", "notice qa-standalone-notice");
-						divError.setAttribute("align", "center");
-					}
-				}
-			} else {
-				continue;
-			}
-		}
-		if (!isError) { // no error, then submit to add the products to the cart
-			for (var i = 0; i < QuickAddElems.length; i++) {
-				var orderMultiple1 = encodeForHTML(QuickAddElems[i].orderMultiple);
-				if (orderMultiple1 == undefined || orderMultiple1.replace(/^\s*|\s*$/g, "") == '' || orderMultiple1 == null || orderMultiple1 == 0) {
-					orderMultiple1 = 1;
-				}
-
-				createHiddenField("QuickAddForm", "quickAddOrderMultiple", orderMultiple1);
-			}
-			document.QuickAddForm.action = document.getElementById('addProductsToOrderURL');
-			var form = Ext.get("QuickAddForm");
-			addCSRFToken(form.dom, 'form');
-			form.dom.submit();
-		} else {
-			return false;
-		}
+function quickAdd_addProductsToOrder(items, itemUoms, itemType) {
+	var $form = $("#QuickAddForm");
+	$form.attr('action', $('#addProductsToOrderURL').attr('href')); // TODO this is awkward and unnecessary - refactor the JSP to declare form as s:form
+	
+	// by design, the quick add ui doesn't collect all the input necessary for XPEDXDraftOrderAddOrderLinesAction.java/execute, so we must inject some extra data
+	// TODO: move the hard-coded values to the row creation logic (when the row is added to the page) rather than here
+	var htmlExtraInputs = [];
+	var rows = $('.qa-listrow');
+	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
+		var $row = $(rows[rowId - 1]);
+		var itemId = $row.find('.input-item').val().trim();
+		var uom = itemUoms[itemId];
+		
+		// TODO for safety of re-submit, refactor this to be idempotent: dom should already have the hidden input, and this should simply upate its value
+		// it's important that we append the uom even when not available so that row indexes match on server-side (eg, if first row is empty)
+		htmlExtraInputs.push('<input type="hidden" name="enteredUOMs" value="' + (uom ? uom : '') + '" />');
+		htmlExtraInputs.push('<input type="hidden" name="enteredProductDescs" value="" />');
+		htmlExtraInputs.push('<input type="hidden" name="enteredItemTypes" value="' + itemType + '" />');
+		htmlExtraInputs.push('<input type="hidden" name="quickAddOrderMultiple" value="1" />');
 	}
-} // end function quickAdd_addProductsToOrder
+	$form.append(htmlExtraInputs.join(''));
+	
+	addCSRFToken($form.get(0), 'form');
+	$form.submit();
+}
 
 
 /*
