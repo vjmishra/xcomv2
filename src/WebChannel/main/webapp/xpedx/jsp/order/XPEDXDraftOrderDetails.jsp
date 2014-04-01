@@ -167,7 +167,7 @@ function resetDeleteCart(formObj)
 {
 	document.getElementById("otherCartActions").value = "None";
 }
-function quickAddCopyAndPaste(data){
+/* function quickAddCopyAndPaste(data){
 	//Clean up the data
 	//Ext.get('dlgCopyAndPasteText').dom.value = '';
 	//$.fancybox.close();
@@ -243,7 +243,7 @@ function quickAddCopyAndPaste(data){
 		document.getElementById("qaQuantity").value= itemQty;
 		//call metods for quick add 3349 by balkhi
 		  addProductToQuickAddList(document.getElementById('quickAddButton'));
-		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' );  */
+		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' );  
 	}
 	if(itemLineFlag == "false")
 	{
@@ -387,8 +387,9 @@ function quickAddCopyAndPaste(data){
 	document.getElementById('productValidateURL').href =prodcutValidateUrl;
 	//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
 	//w.hide();
-}
-</script>
+}*/
+ 
+ </script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -472,10 +473,10 @@ $(document).ready(function(){
 					<!-- Web Trends tag end -->		
 </head>
 
-<div style="display:none;">
+<%-- <div style="display:none;">
 <div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px;">
 <h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <small>Limit is 20 items per copy/paste</small> </h2>
-<%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
+<p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file.
 <!-- Enter one item per line:<br /> -->
 <!-- Qty. [Tab or Comma] Item#</p> -->
 <p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers or customer item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
@@ -494,7 +495,7 @@ $(document).ready(function(){
 </form>
 </br></br></br><div class="error" id="errorMsgCopyBottom" style="display:none;position:relative;left:100px" ></div>
 </div>
-</div>
+</div> --%>
 
 <s:set name='_action' value='[0]' />
 <s:bean
