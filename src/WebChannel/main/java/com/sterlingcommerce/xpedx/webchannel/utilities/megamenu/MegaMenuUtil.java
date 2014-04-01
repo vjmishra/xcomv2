@@ -75,7 +75,7 @@ public class MegaMenuUtil {
 								+ (searchCatalogIndexOutputElem == null ? null : SCXmlUtil.getString(searchCatalogIndexOutputElem)));
 					}
 
-					megaMenu = convertCatalogSearch(searchCatalogIndexOutputElem);
+					megaMenu = convertCatalogSearch(searchCatalogIndexOutputElem, context);
 
 					context.setWCAttribute(ATTR_MEGA_MENU, megaMenu, WCAttributeScope.LOCAL_SESSION);
 
@@ -124,9 +124,10 @@ public class MegaMenuUtil {
 
 	/**
 	 * @param catalogSearchElem
+	 * @param context
 	 * @return Returns a list of MegaMenuItem representing the given CatalogSearch XML. The topmost elements are cat1, etc.
 	 */
-	/*default*/ static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem) {
+	/*default*/ static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem, IWCContext context) {
 		List<MegaMenuItem> megaMenu = new LinkedList<MegaMenuItem>();
 
 		Element categoryList1 = SCXmlUtil.getChildElement(catalogSearchElem, "CategoryList");
@@ -139,14 +140,14 @@ public class MegaMenuUtil {
 			List<Element> cat2Elems = SCXmlUtil.getChildrenList(childCategoryList2);
 			for (Element cat2Elem : cat2Elems) {
 				MegaMenuItem mmCat2 = convertCategory(cat2Elem);
-				mmCat2.setBreadcrumb(createBreadcrumbForCategories(mmCat1, null));
+				mmCat2.setBreadcrumb(createBreadcrumbForCategories(mmCat1, null, context));
 				mmCat1.getSubcategories().add(mmCat2);
 
 				Element childCategoryList3 = SCXmlUtil.getChildElement(cat2Elem, "ChildCategoryList");
 				List<Element> cat3Elems = SCXmlUtil.getChildrenList(childCategoryList3);
 				for (Element cat3Elem : cat3Elems) {
 					MegaMenuItem mmCat3 = convertCategory(cat3Elem);
-					mmCat3.setBreadcrumb(createBreadcrumbForCategories(mmCat1, mmCat2));
+					mmCat3.setBreadcrumb(createBreadcrumbForCategories(mmCat1, mmCat2, context));
 					mmCat2.getSubcategories().add(mmCat3);
 				}
 			}
@@ -172,14 +173,15 @@ public class MegaMenuUtil {
 	 *
 	 * @param cat1 Must be non-null (all breadcrumbs contain cat1 link)
 	 * @param cat2 If non-null, includes a link to this category in the breadcrumb
+	 * @param context
 	 * @return Returns the value to be used for the <code>_bcs_</code> parameter.
 	 */
-	private static String createBreadcrumbForCategories(MegaMenuItem cat1, MegaMenuItem cat2) {
+	private static String createBreadcrumbForCategories(MegaMenuItem cat1, MegaMenuItem cat2, IWCContext context) {
 		List<Breadcrumb> bcl = new ArrayList<Breadcrumb>(3);
 
 		Breadcrumb root = new Breadcrumb(null, null, null);
 		root.setRoot(true);
-		root.setUrl("/swc/catalog/navigate.action?sfId=xpedx&scFlag=Y");
+		root.setUrl("/swc/catalog/navigate.action?sfId=" + context.getStorefrontId() + "&scFlag=Y");
 		root.setGroup("catalog");
 		root.setDisplayGroup("search");
 		root.setDisplayName(null);
