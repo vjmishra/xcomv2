@@ -174,7 +174,7 @@ function validateItems() {
 		if (!itemId) {
 			errorMessageForRowId[rowId] = 'Please enter a valid item # and try again.';
 			hasErrors = true;
-		} else if (!qty || !isInt(qty)) {
+		} else if (!qty || !isInt(qty) || parseInt(qty) < 1) {
 			errorMessageForRowId[rowId] = 'Please enter a valid quantity and try again.';
 			hasErrors = true;
 		} else {
@@ -193,7 +193,7 @@ function validateItems() {
 		}
 	}
 	
-	if (itemsToValidate.length == 0) {
+	if (!hasErrors && itemsToValidate.length == 0) {
 		// if form is completely blank, then treat as missing data on first row
 		errorMessageForRowId[1] = 'Please enter a valid item # and try again.';
 		hasErrors = true;
