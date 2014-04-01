@@ -131,7 +131,7 @@ public class BrandListAction extends CatalogAction {
 
 		Breadcrumb root = new Breadcrumb(null, null, null);
 		root.setRoot(true);
-		root.setUrl("/swc/catalog/navigate.action?sfId=xpedx&scFlag=Y");
+		root.setUrl("/swc/catalog/navigate.action?sfId=" + wcContext.getStorefrontId() + "&scFlag=Y");
 		root.setGroup("catalog");
 		root.setDisplayGroup("search");
 		root.setDisplayName(null);
