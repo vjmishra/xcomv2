@@ -132,7 +132,9 @@ border: 2px #53b1f9 solid;
 	clear: both;
 	font-family:Arial, Helvetica, sans-serif;
 	font-weight: bold;
-	font-size:12px;}
+	font-size:12px;
+	border-bottom: 1px solid #fff;
+	}
 ul.megamenu, .megamenu ul {
 	margin: 0;
 	padding: 0;
