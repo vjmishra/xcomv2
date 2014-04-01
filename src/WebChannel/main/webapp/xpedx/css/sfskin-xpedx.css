@@ -332,6 +332,9 @@ ul.megamenu {
 	margin-top: 8px;
 	color: #000000;
 }
+.megamenu li:last-child a {
+    border-right: 1px #fff solid;
+}
 
 
 /************* CAT 2 *********************	*/	
@@ -492,7 +495,7 @@ ul.megamenu {
 }
 #order-edit a {
 	display: block;
-	width: 147px;
+	width: 146px;
 	text-align: center;
 	background-color: #f6e630;
 	color: #000;
@@ -501,7 +504,8 @@ ul.megamenu {
 	border-bottom: 1px #f6e630 solid;
 }
 .order-edit-banner {
-	width: 100%;
+	border-left: 1px #ffffff solid;
+	border-right: 1px #ffffff solid;
 	height: 24px;
 	background: #f6e630;
 	padding: 2px 0px 2px 10px;
