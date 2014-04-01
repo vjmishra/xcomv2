@@ -49,13 +49,14 @@ function checkOut()
 	var retVal=true;
 	if(orderLinesCount!=null && orderLinesCount==1){
 		var itemSelUom;
-		var lineKeys;
-		var itemUomHidden;
-		itemSelUom = document.getElementById("OrderDetailsForm").elements["itemUOMsSelect"];
+		var lineKey;
+		var itemUomHidden;		
+		
 		lineKey = document.getElementById("OrderDetailsForm").elements["orderLineKeys"];
+		itemSelUom = document.getElementById("itemUOMsSelect_" + lineKey.value).value;
 		itemUomHidden = document.getElementById("itemUOMs_" + lineKey.value).value;
-		if (itemSelUom!=null && itemSelUom.value != itemUomHidden ){
-			document.getElementById("itemUOMs_" + lineKey.value).value = itemSelUom.value;
+		if (itemSelUom!=null && itemSelUom != itemUomHidden ){
+			document.getElementById("itemUOMs_" + lineKey.value).value = itemSelUom;
 		}
 	}
 	else{
