@@ -325,8 +325,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			prodValdAjaxResp = sb.toString();
 
 		} catch (Exception e) {
-			LOG
-					.error("Unable to retrieve information about the entered products");
+			LOG.error("Unable to retrieve information about the entered products");
+			log4j.error("", e);
 		}
 
 
@@ -585,8 +585,11 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					break;
 				String itemType = (String) itemTypeIter.next();
 
+				productID = (String) productIDIter.next();
+				if (productID == null || productID.trim().length() == 0) {
+					continue;
+				}
 				if ("1".equals(itemType)) {
-					productID = (String) productIDIter.next();
 					if (verificationOutputMap.get(productID) == null) {
 						Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
 						Document productInfoDoc = getDocFromOutput(productInfoOutput);
@@ -603,7 +606,6 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					}
 				} else if("2".equals(itemType))
 				{
-					productID = (String) productIDIter.next();
 					if (verificationOutputMap.get(productID) == null) {
 						String customerPartNo = productID;
 						Map itemAttr = new HashMap();
@@ -653,9 +655,6 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			if(enteredPONos != null)
 				PONo = (String) enteredPONos.get(i);
 			String itemID = (String) enteredProductIDs.get(i);
-			if (itemID.trim().length() == 0) {
-				continue;
-			}
 
 			String enteredQtyStr = (String) enteredQuantities.get(i);
 			String enteredProdDesc = (String) enteredProductDescs.get(i);

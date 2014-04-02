@@ -72,7 +72,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	private String customerItemFlag;
 	private String mfgItemFlag;
-	private int [] quickaddItemLines= new int[20];
+	private int [] quickaddItemLines= new int[200];
 	private int displayItemLines =5;
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
