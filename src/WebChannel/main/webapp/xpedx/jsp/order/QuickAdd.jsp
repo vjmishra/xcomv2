@@ -201,7 +201,8 @@
 					<h3 class="addmargintop10 qa-subhead">Add Item List</h3>
 					
 					<div class="float-right clearboth">
-						<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
+						<input type="button" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"
+								value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
 					</div>
 					<s:hidden name='fromQuickAdd' value='true' />
 					<s:hidden name='#action.name' id='validationActionNameQA' value='draftOrderDetails' />
@@ -264,7 +265,8 @@
 					</div> <%-- / qa-row-wrap --%>
 					
 					<div class="float-right clearboth">
-						<input type="button" value="Add to Cart" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"/>
+						<input type="button" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"
+								value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
 					</div>
 				</form> <%-- / QuickAddForm --%>
 			</div> <%-- / container --%>
