@@ -72,7 +72,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	private String customerItemFlag;
 	private String mfgItemFlag;
-	private int [] quickaddItemLines= new int[200];
+	private int [] quickaddItemLines= new int[20];
 	private int displayItemLines =5;
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
@@ -154,7 +154,7 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				setCurrentCustomerIntoContext(newDefaultShipToForEditOrder);
 				Element orderExtn = SCXmlUtil.getChildElement(getOrderElementFromOutputDocument(), "Extn");
 				String orderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
-				XPEDXWCUtils.setObectInCache(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.EDIT_ORDER_NO, orderNumber);				
+				XPEDXWCUtils.setObectInCache(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.EDIT_ORDER_NO, orderNumber);
 			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey))
 			{
