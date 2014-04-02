@@ -20,7 +20,6 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -47,7 +46,6 @@ import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.xpedx.webchannel.catalog.trey4748.Trey4748SwcLogging;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
@@ -1229,11 +1227,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 
-				StopWatch sw = new StopWatch();
-				sw.start();
 				allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", input, wcContext.getSCUIContext());
-				sw.stop();
-				Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
 
 				getOrderMultipleMapForItems();
 				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
@@ -1390,11 +1384,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setMashupID(getCatalogLandingMashupID());
 			}
 
-			StopWatch sw = new StopWatch();
-			sw.start();
 			String returnString = super.navigate();
-			sw.stop();
-			Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "super.navigate: path=%s, returnString=%s", path, returnString);
 			// XBT-260
 
 			if (ERROR.equals(returnString)) {
@@ -1651,11 +1641,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 									ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 									Document XPXItemExtnListElement = null;
 
-									StopWatch sw = new StopWatch();
-									sw.start();
 									XPXItemExtnListElement = XPEDXOrderUtils.getXPEDXItemAssociation(custID, shipFromDivision, itemId.getTextContent(), getWCContext());
-									sw.stop();
-									Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke getXPEDXItemAssociation: custID=%s, shipFromDivision=%s, itemId=%s", custID, shipFromDivision, itemId.getTextContent());
 
 									List<Element> xPXItemExtn = XMLUtilities.getElements(XPXItemExtnListElement.getDocumentElement(),
 											"XPXItemExtn[@ItemID='" + itemId.getNodeValue() + "']");
