@@ -485,7 +485,6 @@ $(document).ready(function() {
 		// split data into lines, ignoring blank rows
 		var lines = $('#copypaste-text').val().match(/[^\r\n]+/g);
 		if (lines.length > 200) {
-			
 			$('#copypaste-error').show().get(0).innerHTML = 'You cannot add more than 200 items to the list.<br/>You have entered ' + lines.length + ' items.';
 			return;
 		}
@@ -503,6 +502,10 @@ $(document).ready(function() {
 			$row.find('.input-po').val(tokens[2] ? tokens[2] : '');
 			$row.find('.input-account').val(tokens[3] ? tokens[3] : '');
 			showQuickAddRow(rowId + 1);
+		}
+		
+		for (var rowId = lines.length + 1; rowId <= 200; rowId++) {
+			$('#qa-listrow_' + rowId + ' input').val('');
 		}
 		
 		// clear the textarea
