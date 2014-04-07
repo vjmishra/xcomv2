@@ -114,6 +114,9 @@
 .addmarginright30 {
 	margin-right: 30px;
 }
+.floatleft {
+	float: left;
+}
 .floatright {
 	float: right;
 }
