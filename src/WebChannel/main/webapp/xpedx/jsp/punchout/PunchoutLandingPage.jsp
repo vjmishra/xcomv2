@@ -45,7 +45,8 @@
 									<s:hidden id="selectedCurrentCustomer" value="" name="selectedCurrentCustomer"/>									
 								</s:form>
 							</div>
-					      <s:if test="%{#searchedString==null && #arraySize==0}">
+							<p class="search-message">Click the search icon to reset to the original list.</p>
+                         <s:if test="%{#searchedString==null && #arraySize==0}">
 			                   <div class="ul-po-results">Search Results for: <span class="blackText" id="searchedValue"><s:property
 							         value="#searchedString" /></span>
 				               </div>
@@ -54,7 +55,7 @@
 			               <s:if test="%{#arraySize==0}">
 				              <div class="ul-po-results">
 					              <span class="redText bold">No search results found for <s:property
-							            value="#searchedString" />. Click the search icon to reset to the original list.</span>
+							            value="#searchedString" />.</span>
 				             </div>
 			              </s:if>
 			              <s:else>
