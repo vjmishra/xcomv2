@@ -822,7 +822,7 @@
         <action name="quickAddAction" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
 			<result name="success">/xpedx/jsp/order/QuickAdd.jsp</result>
 		</action>
-        <action name="ajaxValidateItems" class="com.sterlingcommerce.xpedx.webchannel.order.AjaxValidateItemsAction">
+        <action name="ajaxAddItemsToCart" class="com.sterlingcommerce.xpedx.webchannel.order.AjaxAddItemsToCartAction">
 			<result type="json"></result>
 		</action>
 		

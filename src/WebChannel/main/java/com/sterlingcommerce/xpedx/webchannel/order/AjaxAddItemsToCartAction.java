@@ -27,7 +27,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
  * @author Trey Howard
  */
 @SuppressWarnings("serial")
-public class AjaxValidateItemsAction extends WCAction {
+public class AjaxAddItemsToCartAction extends WCAction {
 
 	// inputs
 	private String itemType; // 1=xpedx #, 2=Customer Part #

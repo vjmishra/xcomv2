@@ -104,7 +104,7 @@ function validateItems() {
 		
 	} else {
 		var itemType = $('#qaItemType').val();
-		var url = $('#ajaxValidateItemsURL').attr('href');
+		var url = $('#ajaxAddItemsToCartURL').attr('href');
 //		url += '&itemType=' + itemType;
 //		for (var i = 0, len = itemsToValidate.length; i < len; i++) {
 //			url += '&itemIds=' + encodeURIComponent(itemsToValidate[i].id);
