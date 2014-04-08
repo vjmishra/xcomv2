@@ -1206,9 +1206,6 @@ var currentAadd2ItemList = new Object();
 			<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Submit Cart</span></a>
 		</s:else>
 	</s:if>
-	<s:if test='#canAddLine'>
-		<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
-	</s:if>
 	</s:if>
 
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">

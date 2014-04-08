@@ -651,7 +651,6 @@ padding: 0;
  height:9px;
 }
 .header#top-bar { background-color:#003399; }
-.bottom-btn-bar a#cont-shopping{ float:right; }
 .bottom-btn-bar a#checkout-btn { float:right; }
 .ship-to-top a#apply-btn
 {
@@ -671,7 +670,6 @@ span.print-ico-xpedx.item-detail { margin-top: 0px; margin-right: 15px; }
 .availability-section { margin-left:375px; } 
 .mil-config.availability-table { width:auto; text-align: left; margin-bottom:10px;}
 .pricing-table { margin-top:-60px; }
-.cont-shopping-margin#cont-shopping { margin-right: 55px; }
 .replacement-img { display: inline; padding-left:5px; }
 .copy-paste-cancel {margin-right:10px;}
 .ship-to-top .ship-to-top-left { margin-left:29px;}

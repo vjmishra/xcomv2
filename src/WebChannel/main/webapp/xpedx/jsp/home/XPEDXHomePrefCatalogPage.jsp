@@ -18,6 +18,7 @@
 <s:param name='path' value='#userPrefcategoryElem.getAttribute("CategoryPath")'/>
 <s:param name='cname' value='#userPrefcategoryElem.getAttribute("ShortDescription")'/>
 <s:param name='newOP' value='%{true}'/>
+<s:param name='CategoryC3' value='%{true}'/>
 </s:url>
 <s:set name='assetIdValuelr' value='#userPrefcategoryElem.getAttribute("ShortDescription")+" Large"' />
 <s:set name='catAssetlr' value='#xmlUtilities.getElementByAttribute(#userPrefcategoryElem, "AssetList/Asset", "AssetID", #assetIdValuelr, true)' />

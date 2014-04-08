@@ -952,9 +952,6 @@ div.xpedx-light-box#delete-cart {
 .header#top-bar {
 	background-color: #003399;
 }
-.bottom-btn-bar a#cont-shopping {
-	float: right;
-}
 .bottom-btn-bar a#checkout-btn {
 	float: right;
 }
@@ -1002,9 +999,6 @@ span.print-ico-xpedx.item-detail {
 	text-align: left;
 	margin-bottom: 10px;
 	float: left;
-}
-.cont-shopping-margin#cont-shopping {
-	margin-right: 55px;
 }
 .replacement-img {
 	display: inline;
