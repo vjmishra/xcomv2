@@ -37,16 +37,26 @@ public class AjaxValidateItemsAction extends WCAction {
 	private boolean hasItemErrors;
 	private Map<String, Boolean> itemValidFlags = new LinkedHashMap<String, Boolean>();
 	private Map<String, String> itemUoms = new LinkedHashMap<String, String>();
+	private String[] items;
+	private String uom;
 
 	@Override
 	public String execute() throws Exception {
 		if (itemType == null) {
 			throw new IllegalArgumentException("itemType must be defined");
 		}
-
 		for (String itemId : itemIds) {
 			// there is not an api that allows multiple item ids to be checked at one time, so we have to make a call per item id
-			String uom = getUomForItem(itemId);
+			if (itemId.contains("*")) {
+				items = itemId.split("\\*");
+				for (String eachItem : items) {
+					uom = getUomForItem(eachItem);
+				}
+			} else {
+				uom = getUomForItem(itemId);
+			}
+			
+			
 			if (uom == null) {
 				itemValidFlags.put(itemId, false);
 			} else {

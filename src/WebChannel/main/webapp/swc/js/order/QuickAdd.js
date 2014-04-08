@@ -210,14 +210,20 @@ function validateItems() {
 	} else {
 		var itemType = $('#qaItemType').val();
 		var url = $('#ajaxValidateItemsURL').attr('href');
-		url += '&itemType=' + itemType;
-		for (var i = 0, len = itemsToValidate.length; i < len; i++) {
-			url += '&itemIds=' + encodeURIComponent(itemsToValidate[i].id);
+//		url += '&itemType=' + itemType;
+//		for (var i = 0, len = itemsToValidate.length; i < len; i++) {
+//			url += '&itemIds=' + encodeURIComponent(itemsToValidate[i].id);
+//		}
+		
+		var itemIdsList = itemsToValidate[0].id;
+		for (var i = 1, len = itemsToValidate.length; i < len; i++) {
+			itemIdsList += "*" + itemsToValidate[i].id;
 		}
 		$.ajax({
-			type: 'GET'
+			type: 'POST'
 			,url: url
 			,dataType: 'json'
+			,data: { 'itemType': itemType, 'itemIds': itemIdsList }
 			,success: function(data) {
 				if (data.hasItemErrors) {
 					for (itemId in data.itemValidFlags) {
