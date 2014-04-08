@@ -269,42 +269,49 @@
 								value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
 					</div>
 				</form> <%-- / QuickAddForm --%>
-			</div> <%-- / container --%>
 			
-			<div class="clearfix"></div>
+				<div class="clearfix"></div>
+				
+				<hr size="1" color="#cdcdcd" class=" addmargintop20" />
+				
+				<%-- Copy/Paste --%>
+				<h3 class="addmargintop10 addpadleft20">Copy and Paste</h3>
+				
+				<div class="qa-copy-instructions">
+					<p class="qa-psmall">
+						Paste or type the <s:property value="wCContext.storefrontId" /> item numbers or customer item numbers in the following format:
+					</p>
+					<p class="qa-plarge addmargintop12">
+						<strong>Item Number,Quantity</strong>
+					</p>
+					<p class="qa-psmall addmargintop20">
+						Examples:
+					</p>
+					<p class="qa-plarge">
+						<strong>50052121,12</strong> (item with quantity)
+					</p>
+					<p class="qa-plarge">
+						<strong>50052121</strong> (item without quantity)
+					</p>
+				</div>
+				
+        		<form class="pushleft addpadleft20 addpadtop15">
+					<div class="qa-copywrap">
+						<textarea name="items" id="copypaste-text" class="qa-copypaste" rows="10"></textarea>
+						<div class="qa-itemlimit">Item Limit 200</div>
+						<div class="floatright">
+							<input type="button" id="btn-reset-copy-paste" class="btn-neutral" value="Reset" />
+						</div>
+					</div>
+					<div class="clearfix"></div>
+					<div class="bottom-btn">
+						<input type="button" id="btn-add-to-quick-list" class="btn-gradient floatright addmarginright20" value="Add to List" />
+					</div>
+					<div id="copypaste-error" class="error floatleft" style="display:none;"></div>
+				</form>
+			</div> <%-- / container --%>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
-	
-	<div style="display:none;">
-		<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 450px; height: 600px;">
-			<h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <small>Limit is 20 items per copy/paste</small></h2>
-			<p>
-				Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" /> item numbers or customer item numbers from your file in the following format:
-				 quantity,item number (no spaces).
-				<br/>
-				Example: 12,5002121
-			</p>
-			<p>
-				To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).
-				<br/>
-				Example: ,5002121
-				<br/>
-			</p>
-			<br/>
-			<form id="form1" name="form1" method="post" action="">
-				<textarea name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="20"></textarea>
-				
-				<div class="button-container addpadtop15">
-					<input class="btn-gradient floatright addmarginright10" type="submit" value="Add to Quick List" onclick="quickAddCopyAndPaste($('#dlgCopyAndPasteText').val()); return false;" />
-					<input class="btn-neutral floatright addmarginright10" type="submit" value="Cancel" onclick="$.fancybox.close(); return false;" />
-				</div>
-			</form>
-			<br/>
-			<br/>
-			<br/>
-		<!--  <div class="error" id="errorMsgCopyBottom" style="display:none;position:relative;left:100px"></div> -->
-		</div> <%-- / dlgCopyAndPaste --%>
-	</div> <%-- / hidden div --%>
 	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx.swc.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	

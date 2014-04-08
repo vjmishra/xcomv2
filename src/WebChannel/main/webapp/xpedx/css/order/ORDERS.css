@@ -1816,19 +1816,15 @@ BEGIN 2014 styles
 	font-size: 11px;
 	margin-bottom: 4px;
 }
-qa-row-wrap {
-	float: left;
-	clear: none;
-	width: 600px;
-}
 .clearboth {
 	clear: both;
 }
 .qa-copy-instructions {
-	float: right;
 	clear: none;
+	float: right;
+	margin-right: 190px;
+	padding-top: 30px;
 	width: 310px;
-	margin-right: 90px;
 }
 .qa-psmall {
 	font-size: 11px;
@@ -2016,4 +2012,10 @@ table#QuickAddTableSaal.form label, .form table {
 .producterrorLine {
 	float: left;
 	margin-top: 2px;
+}
+
+.bottom-btn {
+	width: 940px;
+	text-align: right;
+	padding-right: 20px;
 }

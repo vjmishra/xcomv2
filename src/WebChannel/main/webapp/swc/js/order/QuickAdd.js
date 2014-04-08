@@ -231,7 +231,6 @@ function validateItems() {
 						if (!validItem) {
 							var invalidRowIds = rowIdsForItem[itemId];
 							for (var i = 0, len = invalidRowIds.length; i < len; i++) {
-								console.log('invalidRowIds[i] = ' , invalidRowIds[i]);
 								setItemErrorMessage(invalidRowIds[i], 'Invalid Item # <item>. Please review and try again.');
 							}
 						}
@@ -259,10 +258,9 @@ function validateItems() {
  */
 function quickAdd_addProductsToOrder(items, itemUoms, itemType) {
 	var $form = $("#QuickAddForm");
-	$form.attr('action', $('#addProductsToOrderURL').attr('href')); // TODO this is awkward and unnecessary - refactor the JSP to declare form as s:form
+	$form.attr('action', $('#addProductsToOrderURL').attr('href'));
 	
 	// by design, the quick add ui doesn't collect all the input necessary for XPEDXDraftOrderAddOrderLinesAction.java/execute, so we must inject some extra data
-	// TODO: move the hard-coded values to the row creation logic (when the row is added to the page) rather than here
 	var htmlExtraInputs = [];
 	var rows = $('.qa-listrow:visible');
 	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
@@ -457,11 +455,11 @@ function quickAddCopyAndPaste(data) {
 /*
  * Shows the specified quick add row.
  */
-function showQuickAddRow(rowNum){
-	if (rowNum > 200) {
+function showQuickAddRow(rowId){
+	if (rowId > 200) {
 		return;
 	}
-	var rowDiv="qa-listrow_" + rowNum;
+	var rowDiv="qa-listrow_" + rowId;
 	$('#' + rowDiv).show();
 }
 
@@ -481,5 +479,42 @@ $(document).ready(function() {
 			$errorMsgCopyBottom.innerHTML = '';
 			$errorMsgCopyBottom.hide();
 		}
+	});
+	
+	$('#btn-reset-copy-paste').click(function() {
+		$('#copypaste-text').val('');
+	});
+	
+	$('#btn-add-to-quick-list').click(function() {
+		$('#copypaste-error').hide().get(0).innerHTML = '';
+		
+		// split data into lines, ignoring blank rows
+		var lines = $('#copypaste-text').val().match(/[^\r\n]+/g);
+		if (lines.length > 200) {
+			$('#copypaste-error').show().get(0).innerHTML = 'You cannot add more than 200 items to the list.<br/>You have entered ' + lines.length + ' items.';
+			return;
+		}
+		
+		for (var i = 0, len = lines.length; i < len; i++) {
+			var line = lines[i];
+			var rowId = i + 1;
+			
+			var tokens = line.split(/\s*,\s*/);
+			
+			// overwrite each value - use empty for any values not provided
+			var $row = $('#qa-listrow_' + rowId);
+			$row.find('.input-item').val(tokens[0] ? tokens[0] : '');
+			$row.find('.input-qty').val(tokens[1] ? tokens[1] : '');
+			$row.find('.input-po').val(tokens[2] ? tokens[2] : '');
+			$row.find('.input-account').val(tokens[3] ? tokens[3] : '');
+			showQuickAddRow(rowId + 1);
+		}
+		
+		for (var rowId = lines.length + 1; rowId <= 200; rowId++) {
+			$('#qa-listrow_' + rowId + ' input').val('');
+		}
+		
+		// clear the textarea
+		$('#copypaste-text').val('');
 	});
 });
