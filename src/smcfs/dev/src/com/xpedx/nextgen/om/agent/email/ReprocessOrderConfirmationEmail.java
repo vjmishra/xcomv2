@@ -49,13 +49,13 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 																	.append(sysDateTime)
 																	.append("' ModifytsQryType='LT' OrderType='Customer' OrderTypeQryType='EQ' DraftOrderFlag='Y' DraftOrderFlagQryType='NE'> ")																	
 																	.append("<OrderBy><Attribute Name='OrderHeaderKey' Desc='N' /></OrderBy>")
-																	.append("<Extn ExtnOrderConfirmationEmailSentFlag='N'/></Order>").toString());
+																	.append("<Extn ExtnOrderConfirmationEmailSentFlag='Y' ExtnOrderConfirmationEmailSentFlagQryType='NE'/></Order>").toString());
 			if (log.isDebugEnabled()) {
 				log.debug((new StringBuilder()).append("Input_XML of ").append(XPXLiterals.GET_ORDER_LIST_API).append(" API: ").append(SCXmlUtil.getString(orderListInDoc)));
 			}
 			System.out.println((new StringBuilder()).append("Input_XML of ").append(XPXLiterals.GET_ORDER_LIST_API).append(" API: ").append(SCXmlUtil.getString(orderListInDoc)));
 			orderListTemplate = SCXmlUtil.createFromString(new StringBuffer()
-											              .append("<OrderList><Order OrderHeaderKey='' OrderNo='' DocumentType='' EnterpriseCode='' BillToID='' CustomerContactID='' >")
+											              .append("<OrderList><Order OrderHeaderKey='' OrderNo='' DocumentType='' EnterpriseCode='' BillToID='' CustomerContactID='' BuyerOrganizationCode=''>")
 											              .append("<Extn ExtnWebConfNum='' ExtnLastOrderOperation='' ExtnOrderConfirmationEmailSentFlag='' />")
 											              .append("<OrderHoldTypes><OrderHoldType HoldType='' OrderHeaderKey='' ReasonText='' ResolverUserId='' Status='' TransactionId=''/></OrderHoldTypes>")
 											              .append("</Order></OrderList>").toString());
