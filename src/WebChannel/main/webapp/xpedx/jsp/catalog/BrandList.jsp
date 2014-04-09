@@ -153,13 +153,5 @@
 
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
-	<%-- Quick Scroll Up and Down --%>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/navArrows<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-	<div id="scroll-up-down">
-		<div style="display:none;" class="nav_up" id="nav_up"></div>
-		<div style="display:none;" class="nav_down" id="nav_down"></div>
-	</div>
-
 </body>
 </html>

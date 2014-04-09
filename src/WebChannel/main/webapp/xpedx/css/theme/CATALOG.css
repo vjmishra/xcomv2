@@ -1149,33 +1149,6 @@ ul
 img#youtube { margin-right: 9px; }
 .container.catalog { min-height: 675px; }
 	
-/*Added for EB 1147 for back to top functionality*/
-#back-to-top a
-{
-    /* display: block before hiding */
-    display: block;
-    display: none;
-    opacity: 1;
-    /* link stays at same place on page */
-    position: fixed;
-
-    /* link goes at the bottom of the page */
-    top: 100%;
-    margin-top: -105px; /* = height + preferred bottom margin */
-	
-    /* link is centered */
-
-    width: 51px;
-    height: 51px;
-}
-
-#back-to-top:focus 
-{
-	outline:none;
-}
-
-/*End for EB 1147 for back to top functionality*/
-
 .catalog_line_input {
 	padding: 3px;
 	margin-left:5px;
