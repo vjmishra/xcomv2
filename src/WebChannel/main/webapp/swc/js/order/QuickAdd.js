@@ -155,6 +155,7 @@ function validateItems() {
 function addProductsToOrder(items, itemUoms, itemType) {
 	var $form = $("#QuickAddForm");
 	$form.attr('action', $('#addProductsToOrderURL').attr('href'));
+	$form.attr('onsubmit', '');
 	
 	// by design, the quick add ui doesn't collect all the input necessary for XPEDXDraftOrderAddOrderLinesAction.java/execute, so we must inject some extra data
 	var htmlExtraInputs = [];

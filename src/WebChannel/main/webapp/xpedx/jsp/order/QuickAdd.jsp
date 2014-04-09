@@ -185,7 +185,7 @@
 				
 				<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 				
-				<form name="QuickAddForm" class="addpadleft20 addpadtop10" id="QuickAddForm">
+				<form name="QuickAddForm" id="QuickAddForm" class="addpadleft20 addpadtop10" onsubmit="validateItems(); return false;">
 					<label>
 						<div class="qa-rightcol">
 						 	<p>Select Item Type</p>
@@ -201,7 +201,7 @@
 					<h3 class="addmargintop10 qa-subhead">Add Item List</h3>
 					
 					<div class="float-right clearboth">
-						<input type="button" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"
+						<input type="submit" class="btn-gradient floatright addmarginright20"
 								value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
 					</div>
 					<s:hidden name='fromQuickAdd' value='true' />
@@ -265,7 +265,7 @@
 					</div> <%-- / qa-row-wrap --%>
 					
 					<div class="float-right clearboth">
-						<input type="button" onclick="validateItems(); return false;" class="btn-gradient floatright addmarginright20"
+						<input type="submit" class="btn-gradient floatright addmarginright20"
 								value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
 					</div>
 				</form> <%-- / QuickAddForm --%>
