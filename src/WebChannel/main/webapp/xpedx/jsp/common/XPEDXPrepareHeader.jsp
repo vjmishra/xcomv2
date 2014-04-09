@@ -1013,11 +1013,10 @@ var selectedShipCustomer = null;
 	</div>
 </div>
 
-<div class='x-hidden dialog-body ' id="passwordUpdateContent">
-	<div id="ajax-passwordUpdateContent" class="xpedx-light-box"
-		style="width: auto; height: auto; ">
-	</div>
-</div>
+ <div id="passwordUpdateContent">
+     <div id="ajax-passwordUpdateContent">
+	 </div>
+ </div> 
 <%--JIRA 3487 end--%>
 <s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomers' />
 <s:url id='setStockedCheckboxURL' action="setStockedCheckbox" namespace="/catalog"/>
