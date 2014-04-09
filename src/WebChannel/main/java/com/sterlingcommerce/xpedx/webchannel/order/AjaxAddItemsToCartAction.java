@@ -1,19 +1,24 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfc.util.YFCCommon;
 
 /**
  * This action performs validation and adds the specified items to cart.
@@ -21,9 +26,17 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
  *
  * This action is intended to be called via ajax, since it returns a json response (see struts xml).
  *
+ * All input parameters except for 'itemType' are passed in as an asterisk-separated value (eg, <code>1*2*3</code>). All parameters must contain the same number of elements.
+ * For customers that don't support line po/account numbers, then pass empty string for each value (eg, <code>**</code> for 3 empty strings).
+ *
  * Inputs:
+ * isEditOrder: flag to indicate if if editing an existing order. value must be either 'true' or 'false'
+ * orderHeaderKey: order header key of order being modified
  * itemType: 1=xpedx Item Number, 2=Customer Part Number
- * itemIds: the item ids to validate
+ * items: the item ids to validate
+ * qtys: the quantity
+ * pos: the line po number (for customers that don't support this, use empty string)
+ * accounts: the line account number
  *
  * Outputs:
  * hasItemErrors: true if one or more of the items is invalid
@@ -36,50 +49,178 @@ public class AjaxAddItemsToCartAction extends WCAction {
 	public static final String TYPE_CUSTOMER_PART_NUMBER = "2";
 
 	// inputs
+	private String isEditOrder;
+	private String orderHeaderKey;
 	private String itemType; // 1=xpedx #, 2=Customer Part #
-	private String itemIds;
+	private String items;
+	private String qtys;
+	private String pos;
+	private String accounts;
 
 	// outputs
 	private boolean hasItemErrors;
 	private Map<String, Boolean> itemValidFlags = new LinkedHashMap<String, Boolean>();
-	private Map<String, String> itemUoms = new LinkedHashMap<String, String>();
+
+	/**
+	 * @throws IllegalArgumentException If missing a parameter
+	 */
+	private void assertInputs() {
+		if (isEditOrder == null) {
+			throw new IllegalArgumentException("Missing parameter: isEditOrder");
+		} else if (orderHeaderKey == null) {
+			throw new IllegalArgumentException("Missing parameter: orderHeaderKey");
+		} else if (itemType == null) {
+			throw new IllegalArgumentException("Missing parameter: itemType");
+		} else if (items == null) {
+			throw new IllegalArgumentException("Missing parameter: items");
+		} else if (qtys == null) {
+			throw new IllegalArgumentException("Missing parameter: qtys");
+		} else if (pos == null) {
+			throw new IllegalArgumentException("Missing parameter: pos");
+		} else if (accounts == null) {
+			throw new IllegalArgumentException("Missing parameter: accounts");
+		}
+	}
+
+	/**
+	 * Encapsulates the CSVReader for asterisk-separated <code>param</code>
+	 * @param param asterisk-separate value
+	 * @return
+	 * @throws RuntimeException CSV parsing error
+	 */
+	private static String[] parseParam(String param) {
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new StringReader(param), '*');
+			List<String[]> lines;
+			try {
+				lines = reader.readAll();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			return lines.isEmpty() ? new String[] { "" } : lines.get(0);
+
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+	}
+
+	/**
+	 * Encapsulates the conversion of <code>items</code>, <code>qtys</code>, <code>pos</code>, and <code>accounts</code> inputs into a list of <code>InputRow</code> objects.
+	 * @return
+	 * @throws IllegalArgumentException If number of elements in asterisk-separated inputs do not match.
+	 */
+	private List<InputRow> convertInputsToRows() {
+		String[] itemIds = parseParam(items);
+		String[] quantities = parseParam(qtys);
+		String[] linePOs = parseParam(pos);
+		String[] lineAccounts = parseParam(accounts);
+
+		if (quantities.length != itemIds.length) {
+			throw new IllegalArgumentException("qtys has " + quantities.length + " elements, but items has " + itemIds.length + " elements");
+		}
+		if (linePOs.length != itemIds.length) {
+			throw new IllegalArgumentException("pos has " + linePOs.length + " elements, but items has " + itemIds.length + " elements");
+		}
+		if (lineAccounts.length != itemIds.length) {
+			throw new IllegalArgumentException("accounts has " + lineAccounts.length + " elements, but items has " + itemIds.length + " elements");
+		}
+
+		List<InputRow> rows = new ArrayList<InputRow>(itemIds.length);
+		for (int i = 0; i < itemIds.length; i++) {
+			InputRow row = new InputRow();
+			row.setItem(itemIds[i]);
+			row.setQty(quantities[i]);
+			row.setPo(linePOs[i]);
+			row.setAccount(lineAccounts[i]);
+			rows.add(row);
+		}
+		return rows;
+	}
 
 	@Override
 	public String execute() throws Exception {
-		if (itemType == null) {
-			throw new IllegalArgumentException("Missing parameter: itemType");
+		assertInputs();
+
+		List<InputRow> rows = convertInputsToRows();
+
+		Set<String> uniqueItemIds = new LinkedHashSet<String>(rows.size());
+		for (InputRow row : rows) {
+			uniqueItemIds.add(row.getItem());
 		}
-		if (itemIds == null) {
-			throw new IllegalArgumentException("Missing parameter: itemIds");
+
+		Map<String, ItemDetails> itemDetails = getItemsDetails(uniqueItemIds);
+
+		// all items that have a uom are valid
+		for (String itemId : itemDetails.keySet()) {
+			itemValidFlags.put(itemId, true);
 		}
 
-		Set<String> itemIdsSet = new LinkedHashSet<String>(Arrays.asList(itemIds.split("\\*")));
-
-		initUomsForItems(itemIdsSet);
-
-		hasItemErrors = itemIdsSet.size() != itemUoms.size();
+		hasItemErrors = uniqueItemIds.size() != itemDetails.size();
 		if (hasItemErrors) {
 			// determine which item ids are not in the map
-			Set<String> copyItemIds = new LinkedHashSet<String>(itemIdsSet);
-			copyItemIds.removeAll(itemUoms.keySet());
+			Set<String> copyItemIds = new LinkedHashSet<String>(uniqueItemIds);
+			copyItemIds.removeAll(itemDetails.keySet());
 
 			for (String itemId : copyItemIds) {
 				itemValidFlags.put(itemId, false);
 			}
+
+		} else {
+			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
+			String draftOrderFlag = YFCCommon.isVoid(editedOrderHeaderKey) ? "Y" : "N";
+
+			Map<String, String> valueMap = new LinkedHashMap<String, String>();
+
+			valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
+			valueMap.put("/Order/@DraftOrderFlag", draftOrderFlag);
+
+			int rowCount = 1;
+			for (InputRow row : rows) {
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@CustomerPONo", row.getPo());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Extn/@ExtnCustLineAccNo", row.getAccount());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Extn/@ExtnEditOrderFlag", isEditOrder);
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemID", row.getItem());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@OrderedQty", row.getQty());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@OrderedQty", row.getQty());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", itemDetails.get(row.getItem()).getUom());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@UnitOfMeasure", itemDetails.get(row.getItem()).getUom());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", "");
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ProductClass", ""); // TODO verify this is always true - is this related to special item?
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@LineType", "P"); // TODO verify that special item is never applicable here
+				rowCount += 1;
+			}
+
+			Element xpedDraftOrderAddOrderLinesInputElem = WCMashupHelper.getMashupInput("xpedx_me_draftOrderAddOrderLines", valueMap, wcContext);
+			xpedDraftOrderAddOrderLinesInputElem.setAttribute("IgnoreOrdering", "Y");
+
+			Element changeOrderOutput = (Element) WCMashupHelper.invokeMashup("xpedx_me_draftOrderAddOrderLines", xpedDraftOrderAddOrderLinesInputElem, wcContext.getSCUIContext());
+
+			getWCContext().getSCUIContext().getSession().setAttribute(XPEDXDraftOrderAddOrderLinesAction.CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutput.getOwnerDocument());
+			if(YFCCommon.isVoid(editedOrderHeaderKey)) {
+				XPEDXWCUtils.setMiniCartDataInToCache(changeOrderOutput, wcContext);
+			}
+			XPEDXWCUtils.releaseEnv(wcContext);
 		}
 
 		return SUCCESS;
 	}
 
 	/**
-	 * Performs API call(s) to get the default uom for all <code>itemIds</code>. This implicitly validates that the item is valid,
+	 * Performs API call(s) to get the default uom and short description for all <code>itemIds</code>. This implicitly validates that the item is valid,
 	 *  since an invalid item will not be returned from the api.
-	 * <br>
-	 * Upon completion, <code>itemUoms</code> is populated with uoms and <code>itemValidFlags</code> is populated with <code>true</code> for each item in <code>itemUoms</code>.
 	 * @param itemId If <code>itemType</code>=1 then this is the xpedx Item Number. If <code>itemType</code>=2 then this is the Customer Part Number.
+	 * @return Returns a map in the form: key=item id, value=ItemDetails
 	 * @throws Exception API error
 	 */
-	private void initUomsForItems(Set<String> itemIds) throws Exception {
+	private Map<String, ItemDetails> getItemsDetails(Set<String> itemIds) throws Exception {
+		Map<String, ItemDetails> itemDetails = new LinkedHashMap<String, ItemDetails>(itemIds.size());
+
 		Set<String> xpedxItemIds = new LinkedHashSet<String>(itemIds.size());
 		if (TYPE_XPEDX.equals(itemType)) {
 			// itemIds contains xpedx item ids
@@ -93,7 +234,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		}
 
 		if (xpedxItemIds.isEmpty()) {
-			return;
+			return itemDetails;
 		}
 
 		// lookup xpedx item numbers
@@ -120,9 +261,15 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		for (int i = 0; i < itemListNodes.getLength(); i++) {
 			Element itemElem = (Element) itemListNodes.item(i);
 			String itemId = itemElem.getAttribute("ItemID");
-			itemValidFlags.put(itemId, true);
-			itemUoms.put(itemId, itemElem.getAttribute("UnitOfMeasure"));
+
+			Element primaryInformationElem = SCXmlUtil.getChildElement(itemElem, "PrimaryInformation");
+
+			ItemDetails detail = new ItemDetails();
+			detail.setUom(itemElem.getAttribute("UnitOfMeasure"));
+			itemDetails.put(itemId, detail);
 		}
+
+		return itemDetails;
 	}
 
 	/**
@@ -168,12 +315,32 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 	// --- Input and Output fields
 
+	public void setIsEditOrder(String isEditOrder) {
+		this.isEditOrder = isEditOrder;
+	}
+
+	public void setOrderHeaderKey(String orderHeaderKey) {
+		this.orderHeaderKey = orderHeaderKey;
+	}
+
 	public void setItemType(String itemType) {
 		this.itemType = itemType;
 	}
 
-	public void setItemIds(String itemIds) {
-		this.itemIds = itemIds;
+	public void setItems(String items) {
+		this.items = items;
+	}
+
+	public void setQtys(String qtys) {
+		this.qtys = qtys;
+	}
+
+	public void setPos(String pos) {
+		this.pos = pos;
+	}
+
+	public void setAccounts(String accounts) {
+		this.accounts = accounts;
 	}
 
 	public boolean isHasItemErrors() {
@@ -184,8 +351,49 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		return itemValidFlags;
 	}
 
-	public Map<String, String> getItemUoms() {
-		return itemUoms;
+	// --- Helper classes
+
+	private static class InputRow {
+		private String item;
+		private String qty;
+		private String po;
+		private String account;
+
+		public String getItem() {
+			return item;
+		}
+		public void setItem(String item) {
+			this.item = item;
+		}
+		public String getQty() {
+			return qty;
+		}
+		public void setQty(String qty) {
+			this.qty = qty;
+		}
+		public String getPo() {
+			return po;
+		}
+		public void setPo(String po) {
+			this.po = po;
+		}
+		public String getAccount() {
+			return account;
+		}
+		public void setAccount(String account) {
+			this.account = account;
+		}
+	}
+
+	private static class ItemDetails {
+		private String uom;
+
+		public String getUom() {
+			return uom;
+		}
+		public void setUom(String uom) {
+			this.uom = uom;
+		}
 	}
 
 }

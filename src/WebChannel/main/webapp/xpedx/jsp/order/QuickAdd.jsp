@@ -168,6 +168,11 @@
 	<s:url id="ajaxAddItemsToCartURLid" namespace="/order" action="ajaxAddItemsToCart" /> 
 	<s:a cssClass="display:none;" id="ajaxAddItemsToCartURL" href="%{#ajaxAddItemsToCartURLid}" />
 	
+	<s:url id="quickAddURLid" namespace="/order" action="quickAdd">
+		<s:param name="addedToCart" value="true" />
+	</s:url> 
+	<s:a cssClass="display:none;" id="quickAddURL" href="%{#quickAddURLid}" />
+	
 	<div id="main-container">
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
@@ -185,7 +190,7 @@
 				
 				<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 				
-				<form name="QuickAddForm" id="QuickAddForm" class="addpadleft20 addpadtop10" onsubmit="validateItems(); return false;">
+				<form name="QuickAddForm" id="QuickAddForm" class="addpadleft20 addpadtop10">
 					<label>
 						<div class="qa-rightcol">
 						 	<p>Select Item Type</p>
@@ -204,24 +209,11 @@
 						<input type="submit" class="btn-gradient floatright addmarginright20"
 								value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
 					</div>
-					<s:hidden name='fromQuickAdd' value='true' />
-					<s:hidden name='#action.name' id='validationActionNameQA' value='draftOrderDetails' />
-					<s:hidden name='#action.namespace' value='/order' />
-					<s:hidden name="orderHeaderKey"	value='%{#orderHeaderKey}' />
-					<s:hidden name="draft" value="%{#draftOrderFlag}" />
-					<s:hidden name='Currency' value='%{#currencyCode}' />
-					<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
-					<input type="hidden" name="isEditOrder" value="<s:property value='%{(#_action.getIsEditOrder())}' escape="false" />" />
-					<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />	
-					<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />" />
+					<s:hidden id="orderHeaderKey" value='%{#orderHeaderKey}' />
+					<s:hidden id="currencyCode" value='%{#currencyCode}' />
+					<s:hidden id="isEditOrder" value="%{(#_action.getIsEditOrder())}" />
+					
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}' />
-					<s:set name="chargeAmount" value='%{chargeAmount}' />
-					<s:set name="fmtdchargeAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#chargeAmount)' />
-					<s:set name="minOrderAmount" value='%{minOrderAmount}' />
-					<s:set name="fmtdMinOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#minOrderAmount)' />
-					<s:set name="erroMsg" value='%{erroMsg}' />
-					<s:set name="maxOrderAmount" value='%{maxOrderAmount}' />
-					<s:set name="fmtdMaxOrderAmount" value='#util.formatPriceWithCurrencySymbol(wCContext,#currencyCode,#maxOrderAmount)' />
 					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}' />
 					
 					<div class="qa-row-wrap">
@@ -229,7 +221,7 @@
 							<div class="label-item">Item</div>
 							<div class="label-qty">Qty</div>
 							<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-							<div class="label-po"><s:property value='#customerPONoFlag' /></div>
+								<div class="label-po"><s:property value='#customerPONoFlag' /></div>
 							</s:if>
 							<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
 								<div class="label-account"><s:property value='#jobIdFlag' /></div>		

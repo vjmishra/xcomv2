@@ -64,8 +64,6 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	@Override
 	public String execute() {
 		// allow parameter to force redirection back to quick add page
-		String resultSuccess = isFromQuickAdd() ? "quickAddSuccess" : "success";
-
 		try {
 			if (currency == null)
 				currency = getWCContext().getEffectiveCurrency();
@@ -138,7 +136,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					&& databaseLockException.toString().contains("YFC0101")) {
 				LOG.debug("Databse is locked, hence continuing to "
 						+ "call draft order details............");
-				return resultSuccess;
+				return SUCCESS;
 			}
 			log4j.debug("", databaseLockException);
 			LOG.debug(databaseLockException);
@@ -149,7 +147,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			getWCContext().setWCAttribute(getQuickAddErrorListSessionKey(),
 					quickAddErrorList, WCAttributeScope.SESSION);
 		XPEDXWCUtils.releaseEnv(wcContext);
-		return resultSuccess;
+		return SUCCESS;
 	}
 	/**
 	 * EB-466 code changes, removed Manufacturing Item, MPC code

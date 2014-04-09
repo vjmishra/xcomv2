@@ -3402,9 +3402,11 @@
 				</Item>
             </Input>
             <Template>
-                <ItemList>
-                    <Item ItemID="" UnitOfMeasure="" />
-                </ItemList>
+				<ItemList>
+					<Item ItemID="" UnitOfMeasure="">
+						<PrimaryInformation ShortDescription="" />
+					</Item>
+				</ItemList>
             </Template>
         </API>
     </mashup>

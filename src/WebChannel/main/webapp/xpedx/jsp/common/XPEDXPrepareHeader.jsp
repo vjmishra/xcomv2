@@ -887,7 +887,7 @@ var selectedShipCustomer = null;
 			if(orderHeaderKey == null || orderHeaderKey == '' || orderHeaderKey == 'null' || orderHeaderKey == '_CREATE_NEW_')
 			{
 				orderHeaderKey = "_CREATE_NEW_";
-				document.location.href= "/swc/order/quickAddAction.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&quickAdd=false&draft=Y&scFlag=Y";
+				document.location.href= "/swc/order/quickAdd.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&quickAdd=false&draft=Y&scFlag=Y";
 			}
 			else{
 				document.location.href= "/swc/order/draftOrderDetails.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&draft=Y&scFlag=Y";
@@ -2781,7 +2781,7 @@ function callAjaxForSorting(url,divId)
 		            		<s:a href="%{myListsLink}" cssClass="ieNavhack">My Items Lists</s:a>
 		            	</s:else>
 		            </li>
-	            <s:url id ='quickAddLink' action='quickAddAction' namespace='/order'>
+	            <s:url id ='quickAddLink' action='quickAdd' namespace='/order'>
 	            	<s:param name="selectedHeaderTab">QuickAdd</s:param>
 	       			<s:param name="quickAdd" value="%{true}" />
 	            </s:url>	            

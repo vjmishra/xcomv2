@@ -60,6 +60,8 @@ function validateItems() {
 		var $row = $(rows[rowId - 1]);
 		var itemId = $row.find('.input-item').val().trim();
 		var qty = $row.find('.input-qty').val().trim();
+		var po = $row.find('.input-po').val().trim();
+		var account = $row.find('.input-account').val().trim();
 		
 		if (!itemId && !qty) {
 			// ignore blank links
@@ -75,7 +77,9 @@ function validateItems() {
 		} else {
 			itemsToValidate.push({
 				'id': itemId,
-				'qty': qty
+				'qty': qty,
+				'po': po,
+				'account': account
 			});
 			
 			var bucket = rowIdsForItem[itemId];
@@ -105,21 +109,33 @@ function validateItems() {
 	} else {
 		var itemType = $('#qaItemType').val();
 		var url = $('#ajaxAddItemsToCartURL').attr('href');
-//		url += '&itemType=' + itemType;
-//		for (var i = 0, len = itemsToValidate.length; i < len; i++) {
-//			url += '&itemIds=' + encodeURIComponent(itemsToValidate[i].id);
-//		}
 		
-		var itemIdsList = itemsToValidate[0].id;
+		var items = itemsToValidate[0].id;
+		var qtys = itemsToValidate[0].qty;
+		var pos = itemsToValidate[0].po;
+		var accounts = itemsToValidate[0].account;
 		for (var i = 1, len = itemsToValidate.length; i < len; i++) {
-			itemIdsList += "*" + itemsToValidate[i].id;
+			items += "*" + itemsToValidate[i].id;
+			qtys += "*" + itemsToValidate[i].qty;
+			pos += "*" + itemsToValidate[i].po;
+			accounts += "*" + itemsToValidate[i].account;
 		}
+		
 		$.ajax({
 			type: 'POST'
 			,proccessData: false	
 			,url: url
 			,dataType: 'json'
-			,data: { 'itemType': itemType, 'itemIds': itemIdsList }
+			,data: {
+					'isEditOrder': $('#isEditOrder').val()
+					,'orderHeaderKey': $('#orderHeaderKey').val()
+					,'itemType': itemType
+					,'items': items
+					,'qtys': qtys
+					,'pos': pos
+					,'accounts': accounts
+					,'treyItems[]': ['1', '2', '3']
+				}
 			,success: function(data) {
 				if (data.hasItemErrors) {
 					for (itemId in data.itemValidFlags) {
@@ -134,7 +150,8 @@ function validateItems() {
 					hideProcessingBar();
 					
 				} else {
-					addProductsToOrder(itemsToValidate, data.itemUoms, itemType);
+					var quickAddUrl = $('#quickAddURL').attr('href');
+					window.location.href = quickAddUrl;
 				}
 			}
 			,error: function(resp, textStatus, xhr) {
@@ -143,35 +160,6 @@ function validateItems() {
 			}
 		});
 	}
-}
-
-
-/*
- * Adds the given items to the cart. Parameters:
- * items: An array of objects, each with the properties: id, qty
- * itemUoms: A hash in the form: key=itemId, value=uom
- * itemType: 1=xpedx item #, 2=Customer Part #
- */
-function addProductsToOrder(items, itemUoms, itemType) {
-	var $form = $("#QuickAddForm");
-	$form.attr('action', $('#addProductsToOrderURL').attr('href'));
-	$form.attr('onsubmit', '');
-	
-	// by design, the quick add ui doesn't collect all the input necessary for XPEDXDraftOrderAddOrderLinesAction.java/execute, so we must inject some extra data
-	var htmlExtraInputs = [];
-	var rows = $('.qa-listrow:visible');
-	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
-		var $row = $(rows[rowId - 1]);
-		var itemId = $row.find('.input-item').val().trim();
-		var uom = itemUoms[itemId];
-		
-		$row.find('.input-uom').val(uom ? uom : '');
-		$row.find('.input-itemType').val(itemType);
-	}
-	$form.append(htmlExtraInputs.join(''));
-	
-	addCSRFToken($form.get(0), 'form');
-	$form.submit();
 }
 
 
@@ -188,6 +176,11 @@ function showQuickAddRow(rowId){
 
 
 $(document).ready(function() {
+	$('#QuickAddForm').submit(function() {
+		validateItems();
+		return false;
+	});
+	
 	$('#btn-reset-copy-paste').click(function() {
 		$('#copypaste-text').val('');
 	});

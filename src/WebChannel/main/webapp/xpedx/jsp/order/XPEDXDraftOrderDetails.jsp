@@ -752,7 +752,7 @@ $(document).ready(function(){
 	</s:else>
 	
 	<li class="float-right">
-		<s:url id='quickAddURL' namespace="/order" action='quickAddAction' escapeAmp="false">
+		<s:url id='quickAddURL' namespace="/order" action='quickAdd' escapeAmp="false">
 			<s:param name="selectedHeaderTab">QuickAdd</s:param>
 			<s:param name="quickAdd" value="%{true}" />
 		</s:url>
