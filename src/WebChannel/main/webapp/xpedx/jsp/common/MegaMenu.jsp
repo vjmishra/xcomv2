@@ -4,7 +4,7 @@
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <s:set name="megaMenu" value="%{#wcUtil.getMegaMenu(wCContext)}" />
-
+<s:set name="unviewablebrands" value="#wcUtil.getNobrandstodisplay(wCContext)" />  
 <s:url id='baseBrandsURL' namespace='/catalog' action='brands' />
 <s:hidden id='baseBrandsURL' value='%{#baseBrandsURL}' />
 
@@ -72,11 +72,14 @@
 												</span>(<s:property value="#cat3.count"/>)
 											</a>
 										</s:iterator> <%-- / cat3 --%>
-										<div class='button-nav-wrap'>
-											<input name='button' type='button' class='btn-nav-list' value='View All Brands for <s:property value="#cat2.name"/>  &rsaquo;'
+										<s:set name="isbranddisplay" value="%{#unviewablebrands.contains(#cat2.name)}" />
+										 <s:if test='#isbranddisplay != true' >
+										    <div class='button-nav-wrap'>
+											 <input name='button' type='button' class='btn-nav-list' value='View All Brands for <s:property value="#cat2.name"/>  &rsaquo;'
 													onclick='openBrandPage(this); return false;' data-path='<s:property value="#cat2.path"/>'
 													data-cat1name="<s:property value="#cat1.name"/>" data-cat2name="<s:property value="#cat2.name"/>" />
-										</div>
+										   </div>
+										</s:if>
 									</div>
 							</div> <%-- / mega-cat-3 --%>
 							
@@ -124,11 +127,13 @@
 						</span>(<s:property value="#cat3.count"/>)
 					</a>
 				</s:iterator> <%-- / cat3 --%>
+				 <s:if test='#cat2.name != #unviewablebrands' >
 				<div class='button-nav-wrap'>
-					<input name='button' type='button' class='btn-nav-list' value='View All Brands for <s:property value="#cat2.name"/>  &rsaquo;'
+					<input name='button' type='button' class='btn-nav-list' value='View All Brands for <s:property value="#cat2.names"/>  &rsaquo;'
 							onclick='openBrandPage(this); return false;' data-path='<s:property value="#cat2.path"/>'
 							data-cat1name="<s:property value="#cat1.name"/>" data-cat2name="<s:property value="#cat2.name"/>" />
 				</div>
+				</s:if>
 			</div>
 		</div>
 	</s:iterator> <%-- / cat2 --%>

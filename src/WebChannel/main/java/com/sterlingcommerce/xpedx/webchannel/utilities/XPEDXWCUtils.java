@@ -146,6 +146,7 @@ public class XPEDXWCUtils {
 
 	private static final MegaMenuUtil MEGA_MENU_UTIL = new MegaMenuUtil();
 	private static final Pattern PAT_MEGA_MENU_BCS = Pattern.compile("_bcs_=[^&]+");
+	private static  String nobrandsToDisplay="";
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
@@ -6871,6 +6872,13 @@ public class XPEDXWCUtils {
 	public static List<MegaMenuItem> getMegaMenu(IWCContext context) {
 		return MEGA_MENU_UTIL.getMegaMenu(context);
 	}
+
+	public static String getNobrandstodisplay(WCContext context) {
+			loadXPEDXSpecficPropertiesIntoYFS("xpedx_webchannel.properties");
+			nobrandsToDisplay=(YFSSystem.getProperty(XPEDXConstants.MEGA_MENU_BRANDS_UNAVAILABLE_PROP)!=null)?YFSSystem.getProperty(XPEDXConstants.MEGA_MENU_BRANDS_UNAVAILABLE_PROP):"";
+			return nobrandsToDisplay;
+	}
+
 
 	/**
 	 * Replaces the _bcs_ parameter value with the given value (uses regex).
