@@ -3387,14 +3387,18 @@
         </API>
     </mashup>
 	
-    <mashup id='xpedxValidateItems' transactional='true'
+    <mashup id='xpedxGetUomsForItems' transactional='true'
         mashuptype='XAPI' endpoint='CATALOG' description="Get Abbreviated Item List (only returns valid items)">
         <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
         <API Name="getCompleteItemList">
             <Input>
-				<Item CallingOrganizationCode="" ItemID=""
-						IgnoreInvalidItems="N" IgnoreIsSoldSeparately="Y" IgnoreOrdering="Y" ShowFinalSupersededItemOnly="Y">
+				<Item CallingOrganizationCode="" IgnoreInvalidItems="N" IgnoreIsSoldSeparately="Y" IgnoreOrdering="Y" ShowFinalSupersededItemOnly="Y">
 					<CustomerInformation CustomerID="" />
+					<ComplexQuery>
+						<Or>
+							<!-- code must manually insert <Exp> tags here, such as: <Exp Name="ItemID" Value="2001020" /> -->
+						</Or>
+					</ComplexQuery>
 				</Item>
             </Input>
             <Template>
@@ -3404,4 +3408,26 @@
             </Template>
         </API>
     </mashup>
+    
+    <mashup id='xpedxGetItemIdsForCustomerPartNumbers' transactional='true'
+        mashuptype='XAPI' endpoint='CATALOG' description="Get xpedx Item Ids for Customer Part Numbers">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		 <API FlowName="getXPXItemcustXrefList">
+            <Input>
+  				<XPXItemcustXref EnvironmentCode="" CustomerNumber="" CustomerDivision="">
+  					<ComplexQuery>
+  						<Or>
+  							<!-- code must manually insert <Exp> tags here, such as: <Exp Name="CustomerItemNumber" Value="2030288" /> -->
+  						</Or>
+  					</ComplexQuery>
+  				</XPXItemcustXref>
+            </Input>
+            <Template>
+			<XPXItemcustXrefList>
+			    <XPXItemcustXref />
+			</XPXItemcustXrefList>
+            </Template>
+        </API>
+    </mashup>
+    
 </mashups>
