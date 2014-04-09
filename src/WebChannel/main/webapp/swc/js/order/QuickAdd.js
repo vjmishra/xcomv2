@@ -116,6 +116,7 @@ function validateItems() {
 		}
 		$.ajax({
 			type: 'POST'
+			,proccessData: false	
 			,url: url
 			,dataType: 'json'
 			,data: { 'itemType': itemType, 'itemIds': itemIdsList }
