@@ -50,34 +50,43 @@ function setStockItemFlag()
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
 <s:set name='narrowByCatalogItemsCount' value='%{0}' />
 <s:set name='expandNarrowByCatalogItems' value='"Y"' />
-<s:if test="%{ !(#FacetsList!=null && #FacetsList.size>0)}">
-<div id="left-col"><!-- breadcrumb -->
-<div class="bgleftcol">
 			
-			
+<s:if test="%{#FacetsList==null}">
+	<!-- Only want to do this first area once -->
+	<div id="left-col">
+	<div class="bgleftcol">
+
+	<s:form name='narrowSearch' action="%{searchURL}" onsubmit="setDefaultSearchText();">
+		<div class="searchbox-form1">
+			<div class="catalog-search-container">
+				<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
+					tabindex="1002" onclick="javascript:context_newSearch_searchTerm_onclick(this)" type="text">
+				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
+			</div>
+		</div>
+	</s:form>
+
 			<s:iterator id='subCatElem_dup' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
 				<s:set name='subCatElem_count' value='#subCatElem_dup.getAttribute("ShortDescription")' />
-				 <s:if test='#subCatElem_count!=null'>
+				<s:if test='#subCatElem_count!=null'>
 					<s:set name='subCatElem_flag' value='true' />
-				 </s:if>
-			  </s:iterator>
-					 <s:if test='#subCatElem_count!=null'>
-					 	<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
-						<div id="narrow_spb2" class="browseBox subPanelBox"> 
-						<div id="narrow_header2" class="header">
-						  <span class="float-right">
-						    <a href="#" class="expand-narrow-by" title="Show/Hide">
-						      <img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
-						    </a>
-						  </span>					
-								  
-							   <s:if test='#subCatElem_flag'>
+				</s:if>
+			</s:iterator>
+			<s:if test='#subCatElem_count!=null'>
+				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
+				<div id="narrow_spb2" class="browseBox subPanelBox">
+					<div id="narrow_header2" class="header">
+						<span class="float-right">
+						<a href="#" class="expand-narrow-by" title="Show/Hide">
+							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
+						</a>
+						</span>
+						<s:if test='#subCatElem_flag'>
 								 Product Categories
-								</s:if>
-													 
-						</div>
-						<div id="narrow_content2" class="content narrowbyattributes catalog-landing">
+						</s:if>
+					</div>
 
+					<div id="narrow_content2" class="content narrowbyattributes catalog-landing">
 						<ul>
 							<s:set name='count1' value='%{#tabStart + 10}' />
 							<s:iterator id='cat' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
@@ -94,35 +103,42 @@ function setStockItemFlag()
 									<s:param name='categoryDepthNarrowBy' value='#categoryDepthNarrowBy' />
 									<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 								</s:url>
+
 								<!-- s:if test='#subCatElem.size() > 0'-->
-									<s:set name='catCount' value='#cat.getAttribute("Count")' />
-									<s:set name='showCurrency' value="false" />
-									<li class="roll close">
-										<s:if test="%{#categoryDepthNarrowBy =='2' }">
-											<s:a href='%{#cat3URL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
-												<s:property value='#cat.getAttribute("ShortDescription")' />
-											</s:a>
-										</s:if>
-										<s:else>
-											<s:a href='%{#catURL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
-												<s:property value='#cat.getAttribute("ShortDescription")' />
-											</s:a>
-										</s:else>									
-									</li>
+								<s:set name='catCount' value='#cat.getAttribute("Count")' />
+								<s:set name='showCurrency' value="false" />
+								<li class="roll close">
+									<s:if test="%{#categoryDepthNarrowBy =='2' }">
+										<s:a href='%{#cat3URL}' tabindex="1012">
+											<span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
+											<s:property value='#cat.getAttribute("ShortDescription")' />
+										</s:a>
+									</s:if>
+									<s:else>
+										<s:a href='%{#catURL}' tabindex="1012">
+											<span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
+											<s:property value='#cat.getAttribute("ShortDescription")' />
+										</s:a>
+									</s:else>
+								</li>
 								<!-- /s:if-->
 							</s:iterator>
+
 						</ul>
-						</div>
-						</div>
+					</div>
+				</div>
 			</s:if>
-<!-- end browse category --> <!-- begin narrow by  -->
-<div id="narrowByDivList">
+	<!-- end browse category -->
+
+	<!-- begin narrow by - this div will be replaced with results of ajax call -->
+	<div id="narrowByDivList">
+
 </s:if>
 
 <s:if test="%{#FacetsList!=null && #FacetsList.size>0}"><%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
-
-	
+	<%-- Ajax call results are used to populate this on second pass through this file --%>
 	<s:set name='headercount' value='%{3}' />
+
 		<s:iterator id='facets'
 			value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")'>
 			<div id="narrow_spb<s:property value='#headercount'/>" class="browseBox subPanelBox">

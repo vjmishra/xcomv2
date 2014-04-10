@@ -302,20 +302,6 @@
 				<s:url id='searchURL' action='search' namespace='/catalog' includeContext='false' escapeAmp='false'>
 					<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 				</s:url>
-				<s:form name='narrowSearch' action="%{searchURL}" onSubmit="javascript:setDefaultSearchText();">
-					<div class="searchbox-form1">
-						<div  class="catalog-search-container"> <!-- -FX1- tile="search tooptip"  -->
-							<!-- XBT - 391 Removed onkeydown event -->
-							<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
-							tabindex="1002" type="text" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
-							
-							<button type="submit" class="searchButton"  tabindex="1003" title="Search" ></button>
-							
-							<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-							<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
-						</div>	
-					</div>		
-				</s:form>
 						
 				<div id="breadcrumbs-list-name">
 				<div id="breadcrumb-my-selection" style="margin-left:11px; padding-right: 4px; text-align: left;">My Selection</div>
