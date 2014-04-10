@@ -3,6 +3,9 @@ package com.sterlingcommerce.xpedx.webchannel.common.megamenu;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Simple data structure for mega menu items.
+ */
 public class MegaMenuItem {
 
 	private String id;
@@ -10,6 +13,7 @@ public class MegaMenuItem {
 	private String name;
 	private int count;
 	private String breadcrumb;
+	private boolean hasBrands;
 	private List<MegaMenuItem> subcategories = new LinkedList<MegaMenuItem>();
 
 	public static MegaMenuItem create(String id, String path, String name, int count) {
@@ -67,6 +71,14 @@ public class MegaMenuItem {
 
 	public void setBreadcrumb(String breadcrumb) {
 		this.breadcrumb = breadcrumb;
+	}
+
+	public boolean isHasBrands() {
+		return hasBrands;
+	}
+
+	public void setHasBrands(boolean hasBrands) {
+		this.hasBrands = hasBrands;
 	}
 
 	public List<MegaMenuItem> getSubcategories() {

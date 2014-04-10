@@ -1,14 +1,21 @@
 package com.sterlingcommerce.xpedx.webchannel.utilities.megamenu;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.common.Breadcrumb;
@@ -16,13 +23,14 @@ import com.sterlingcommerce.webchannel.common.BreadcrumbHelper;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.yfs.core.YFSSystem;
 
 /**
  * Helper class to encapsulate the searchCatalogIndex API call and converting it to a list of MegaMenuItem objects.
- * Note that all methods take a context parameter since the mega menu is cached at the session level.
- *
- * @author Trey Howard
+ * Note that all methods take a context parameter since the mega menu is cached in the session.
  */
 public class MegaMenuUtil {
 
@@ -127,7 +135,9 @@ public class MegaMenuUtil {
 	 * @param context
 	 * @return Returns a list of MegaMenuItem representing the given CatalogSearch XML. The topmost elements are cat1, etc.
 	 */
-	/*default*/ static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem, IWCContext context) {
+	private static List<MegaMenuItem> convertCatalogSearch(Element catalogSearchElem, IWCContext context) {
+		Set<String> categoriesWithNoBrands = getCategoriesWithNoBrands();
+
 		List<MegaMenuItem> megaMenu = new LinkedList<MegaMenuItem>();
 
 		Element categoryList1 = SCXmlUtil.getChildElement(catalogSearchElem, "CategoryList");
@@ -141,6 +151,7 @@ public class MegaMenuUtil {
 			for (Element cat2Elem : cat2Elems) {
 				MegaMenuItem mmCat2 = convertCategory(cat2Elem);
 				mmCat2.setBreadcrumb(createBreadcrumbForCategories(mmCat1, null, context));
+				mmCat2.setHasBrands(!categoriesWithNoBrands.contains(mmCat2.getId()));
 				mmCat1.getSubcategories().add(mmCat2);
 
 				Element childCategoryList3 = SCXmlUtil.getChildElement(cat2Elem, "ChildCategoryList");
@@ -215,6 +226,45 @@ public class MegaMenuUtil {
 
 		String bcs = BreadcrumbHelper.serializeBreadcrumb(bcl);
 		return bcs;
+	}
+
+	/**
+	 * @return Returns the category (cat2) ids that have disabled brands button in mega menu.
+	 * @see xpedx_webchannel.properties
+	 * @see XPEDXConstants#MEGA_MENU_BRANDS_UNAVAILABLE_PROP
+	 */
+	private static Set<String> getCategoriesWithNoBrands() {
+		// lazy-loading to cache the result
+		XPEDXWCUtils.loadXPEDXSpecficPropertiesIntoYFS("xpedx_webchannel.properties");
+
+		String brandsUnavailable = YFSSystem.getProperty(XPEDXConstants.MEGA_MENU_BRANDS_UNAVAILABLE_PROP);
+		if (brandsUnavailable == null) {
+			log.warn("Missing " + XPEDXConstants.MEGA_MENU_BRANDS_UNAVAILABLE_PROP + " from xpedx_webchannel.properties - fallback to brands button on all categories");
+			return new HashSet<String>();
+		}
+
+		String[] tokens;
+		CSVReader reader = null;
+		try {
+			reader = new CSVReader(new StringReader(brandsUnavailable));
+			List<String[]> lines;
+			try {
+				lines = reader.readAll();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			tokens = lines.isEmpty() ? new String[0] : lines.get(0);
+
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+
+		return new HashSet<String>(Arrays.asList(tokens));
 	}
 
 }
