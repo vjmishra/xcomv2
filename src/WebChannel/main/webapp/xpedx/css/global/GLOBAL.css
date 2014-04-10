@@ -3885,11 +3885,11 @@ padding-top:10px;
     margin-left: 10px;
     width: 212px;
 }
-.narrowbyattributes {
-    max-height: 15em;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
+/* .narrowbyattributes { */
+/*     max-height: 15em; */
+/*     overflow-x: hidden; */
+/*     overflow-y: auto; */
+/* } */
 #anon-breadcumbs-list-name, #anon-breadcrumbs-list-name {
     margin: 20px 0 20px 20px;
 }
@@ -4686,6 +4686,23 @@ table#tbl_data_facilitySupplies tr.last, table#tbl_data_paperSupplies tr.last {
 }
 .error-msg-btm {
     margin-top: 10px;
+}
+div.catalog-search-container {
+    background-color: #C3C3C3;
+    height: 30px;
+    padding-left: 10px;
+    width: 224px;
+}
+div.catalog-search-container input#search_searchTerm {
+    border: 1px solid #D9D9D9;
+    border-radius: 0 0 0 0;
+    color: #1E1E1E;
+    font-size: 12px;
+    height: 20px;
+    margin: 4px 0 0 -6px;
+    padding: 0 0 0 5px;
+    vertical-align: middle;
+    width: 174px;
 }
 .promo-txt p.short-description {
 }

@@ -436,19 +436,39 @@ div.catalog-search-container input#search_searchTerm {
 	font-weight: normal;
 	line-height: 15px;
 	margin: 0;
-	padding: 0;
 	text-decoration: none;
+}
+.browseBox ul li span {
+    color: #4B4B4B;
+    float: right;
+    font-weight: normal;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    margin-right: -16px;
 }
 .subPanelBox {
 	border: 0 solid #DDDDDD;
 	margin-bottom: 0px;
 	overflow: hidden;
 }
+.narrowbyattributes {
+	overflow: hidden;
+	margin-top: 6px;
+	height: auto;
+}
 .narrowbyattributes ul li {
 	clear: both;
 	font-size: 11px;
 	font-weight: normal;
-	max-height: 30px;
-	min-height: 15px;
-	padding: 3px 0 3px 10px;
+	padding: 3px 6px 3px 10px;
+	width: 130px;
+}
+#narrowByDiv_Brand {
+	overflow: hidden;
+}
+.narrowByViewAllLink {
+	float: right;
+	margin-right: 10px;
+	padding: 2px 0;
 }
