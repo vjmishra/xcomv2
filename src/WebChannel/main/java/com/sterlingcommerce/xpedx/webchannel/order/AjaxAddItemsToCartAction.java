@@ -187,9 +187,9 @@ public class AjaxAddItemsToCartAction extends WCAction {
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@OrderedQty", row.getQty());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", itemDetails.get(row.getItem()).getUom());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@UnitOfMeasure", itemDetails.get(row.getItem()).getUom());
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", "");
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ProductClass", ""); // TODO verify this is always true - is this related to special item?
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@LineType", "P"); // TODO verify that special item is never applicable here
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", ""); // not needed
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ProductClass", ""); // not needed
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@LineType", "P"); // we always add items to the cart using xpedx item number, so this is always 'P'
 				rowCount += 1;
 			}
 
