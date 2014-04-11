@@ -51,15 +51,14 @@ function setStockItemFlag()
 <s:set name='narrowByCatalogItemsCount' value='%{0}' />
 <s:set name='expandNarrowByCatalogItems' value='"Y"' />
 
-<%-- <s:set name='cname' value=<%=request.getParameter("cname")%> /> --%>
+<%-- Only want to do this Cat area once. This check isn't ideal but seems to work --%>
+<%-- (doesn't work for Cat1 page but that's going away --%>
+<s:if test='%{(#parameters.path!=null)||(#parameters.searchTerm!=null)||(#parameters.facet!=null)||(#parameters.cname!=null) }'>
 
-<%-- <s:if test="%{#FacetsList== null}"> --%>
-	<s:if test='%{(#parameters.path!=null)}'>
-	<!-- TODO Only want to do this Cat area once, and ideally skip even that if they searched and got no results -->
 	<div id="left-col">
 	<div class="bgleftcol">
 
-	<s:form name='narrowSearch' action="%{searchURL}" onsubmit="setDefaultSearchText();">
+	<s:form name='narrowSearch' action="search" onsubmit="setDefaultSearchText();">
 		<div class="searchbox-form1">
 			<div class="catalog-search-container">
 				<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
@@ -133,12 +132,13 @@ function setStockItemFlag()
 			</s:if>
 	<!-- end browse category -->
 
-	<!-- begin narrow by - this div will be replaced with results of ajax call -->
+	<!-- this div will be replaced with results of ajax call -->
 	<div id="narrowByDivList">
 
 </s:if>
 
 <s:if test="%{#FacetsList!=null && #FacetsList.size>0}"><%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
+
 	<%-- Ajax call results are used to populate this on second pass through this file --%>
 	<s:set name='headercount' value='%{3}' />
 
