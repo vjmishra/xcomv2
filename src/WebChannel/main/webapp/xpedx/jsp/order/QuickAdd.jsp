@@ -190,7 +190,7 @@
 				
 				<div id="breadcumbs-list-name" class="page-title addmarginbottom15 addmargintop17">Quick Add</div>
 				
-				<form name="QuickAddForm" id="QuickAddForm" class="addpadleft20 addpadtop10">
+				<form name="QuickAddForm" id="QuickAddForm" class="addpadleft20 addpadtop10" onsubmit="validateItems(); return false;">
 					<label>
 						<div class="qa-rightcol">
 						 	<p>Select Item Type</p>

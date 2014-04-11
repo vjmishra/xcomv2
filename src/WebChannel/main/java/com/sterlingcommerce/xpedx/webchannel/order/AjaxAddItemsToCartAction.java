@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -18,6 +19,7 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.yantra.yfc.util.YFCCommon;
 
 /**
@@ -39,11 +41,13 @@ import com.yantra.yfc.util.YFCCommon;
  * accounts: the line account number
  *
  * Outputs:
- * hasItemErrors: true if one or more of the items is invalid
+ * allItemsValid: true if all items are valid
  * itemValidFlags: Map in the format: key = item id, value = boolean indicating if item is valid (true is valid, false is invalid)
  */
 @SuppressWarnings("serial")
 public class AjaxAddItemsToCartAction extends WCAction {
+
+	private static final Logger log = Logger.getLogger(MegaMenuUtil.class);
 
 	public static final String TYPE_XPEDX = "1";
 	public static final String TYPE_CUSTOMER_PART_NUMBER = "2";
@@ -58,8 +62,9 @@ public class AjaxAddItemsToCartAction extends WCAction {
 	private String accounts;
 
 	// outputs
-	private boolean hasItemErrors;
+	private boolean allItemsValid;
 	private Map<String, Boolean> itemValidFlags = new LinkedHashMap<String, Boolean>();
+	private String unexpectedError;
 
 	/**
 	 * @throws IllegalArgumentException If missing a parameter
@@ -144,7 +149,8 @@ public class AjaxAddItemsToCartAction extends WCAction {
 	}
 
 	@Override
-	public String execute() throws Exception {
+	public String execute() {
+		try {
 		assertInputs();
 
 		List<InputRow> rows = convertInputsToRows();
@@ -161,17 +167,8 @@ public class AjaxAddItemsToCartAction extends WCAction {
 			itemValidFlags.put(itemId, true);
 		}
 
-		hasItemErrors = uniqueItemIds.size() != itemDetails.size();
-		if (hasItemErrors) {
-			// determine which item ids are not in the map
-			Set<String> copyItemIds = new LinkedHashSet<String>(uniqueItemIds);
-			copyItemIds.removeAll(itemDetails.keySet());
-
-			for (String itemId : copyItemIds) {
-				itemValidFlags.put(itemId, false);
-			}
-
-		} else {
+		allItemsValid = uniqueItemIds.size() == itemDetails.size();
+		if (allItemsValid) {
 			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			String draftOrderFlag = YFCCommon.isVoid(editedOrderHeaderKey) ? "Y" : "N";
 
@@ -206,6 +203,20 @@ public class AjaxAddItemsToCartAction extends WCAction {
 				XPEDXWCUtils.setMiniCartDataInToCache(changeOrderOutput, wcContext);
 			}
 			XPEDXWCUtils.releaseEnv(wcContext);
+
+		} else {
+			// 1+ items are invalid: determine which item ids are not in the map
+			Set<String> copyItemIds = new LinkedHashSet<String>(uniqueItemIds);
+			copyItemIds.removeAll(itemDetails.keySet());
+
+			for (String itemId : copyItemIds) {
+				itemValidFlags.put(itemId, false);
+			}
+		}
+
+		} catch (Exception e) {
+			log.error("", e);
+			unexpectedError = e.getMessage();
 		}
 
 		return SUCCESS;
@@ -343,12 +354,16 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		this.accounts = accounts;
 	}
 
-	public boolean isHasItemErrors() {
-		return hasItemErrors;
+	public boolean isAllItemsValid() {
+		return allItemsValid;
 	}
 
 	public Map<String, Boolean> getItemValidFlags() {
 		return itemValidFlags;
+	}
+
+	public String getUnexpectedError() {
+		return unexpectedError;
 	}
 
 	// --- Helper classes
