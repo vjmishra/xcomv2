@@ -49,7 +49,7 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 																	.append(sysDateTime)
 																	.append("' ModifytsQryType='LT' OrderType='Customer' OrderTypeQryType='EQ' DraftOrderFlag='Y' DraftOrderFlagQryType='NE'> ")																	
 																	.append("<OrderBy><Attribute Name='OrderHeaderKey' Desc='N' /></OrderBy>")
-																	.append("<Extn ExtnOrderConfirmationEmailSentFlag='Y' ExtnOrderConfirmationEmailSentFlagQryType='NE'/></Order>").toString());
+																	.append("<Extn ExtnOrderConfirmationEmailSentFlag='N'/></Order>").toString());
 			if (log.isDebugEnabled()) {
 				log.debug((new StringBuilder()).append("Input_XML of ").append(XPXLiterals.GET_ORDER_LIST_API).append(" API: ").append(SCXmlUtil.getString(orderListInDoc)));
 			}
