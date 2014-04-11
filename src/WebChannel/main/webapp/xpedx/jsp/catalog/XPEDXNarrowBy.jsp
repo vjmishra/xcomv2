@@ -50,9 +50,12 @@ function setStockItemFlag()
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
 <s:set name='narrowByCatalogItemsCount' value='%{0}' />
 <s:set name='expandNarrowByCatalogItems' value='"Y"' />
-			
-<s:if test="%{#FacetsList==null}">
-	<!-- Only want to do this first area once -->
+
+<%-- <s:set name='cname' value=<%=request.getParameter("cname")%> /> --%>
+
+<%-- <s:if test="%{#FacetsList== null}"> --%>
+	<s:if test='%{(#parameters.path!=null)}'>
+	<!-- TODO Only want to do this Cat area once, and ideally skip even that if they searched and got no results -->
 	<div id="left-col">
 	<div class="bgleftcol">
 
@@ -147,21 +150,21 @@ function setStockItemFlag()
 				value='XMLUtils.getElements(#facets, "AssignedValueList/AssignedValue")' />
 			<s:set name='hasMoreFacetList'
 				value='XMLUtils.getElements(#facets, "AssignedValueList").get(0).getAttribute("HasMoreAssignedValues")' />
-				
+
 			<%-- <s:set name='showFacet' value='"Y"' /> --%>
-			
-			
+
+
 			<!-- Webtrends tag start -->
 				<META Name="DCSext.w_x_narrowby" Content="1" />
 			<!-- Webtrends tag end -->
-			
-		
+
+
 				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 				<s:set name='headercount' value='%{#headercount + 1}' />
 				<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
 				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />										
-				
-				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
+
+				<div id="narrow_header<s:property value='#headercount'/>" class="header">
 					<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
 							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand"></a>
 					</span>
@@ -173,14 +176,14 @@ function setStockItemFlag()
 				<s:else>
 					<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes default-collapsed">
 				</s:else>
-				
+
 			<ul>
 				<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
 				<div id='narrowByDiv_<s:property value="#ShortDescription1" />' >
 					<s:iterator value="facetMap" id="factVal">
 							<s:set name='count1' value='%{#count1 + 1}' />
 							<s:url id='narrowURL' namespace='/catalog' action='filter.action'>						
-								
+
 								<s:param name='_bcs_' value='_bcs_' />
 								<s:param name='indexField'
 									value='#facets.getAttribute("IndexFieldName")' />
@@ -191,21 +194,25 @@ function setStockItemFlag()
 								<s:param name="path" value='#parameters.path'/>
 								<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 							</s:url>
-							
-							<li class="roll close"><s:a href="%{narrowURL}"
-								tabindex="%{#count1}">
+
+						<s:set name='facetCount' value='#factVal.getAttribute("Count")' />
+						<li class="roll close">
+							<s:a href="%{narrowURL}" tabindex="%{#count1}">
 								<s:property value='#factVal.getAttribute("Value")' />
-							</s:a> </li>
+							</s:a>
+							<span>(<s:property value='#util.formatNumber(#facetCount)' />)</span>
+						</li>
+
 					</s:iterator>
 					<s:if test='%{#hasMoreFacetList == "Y"}'>
-						
-							<a class="narrowByViewAllLink" style="" href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
+						<a class="narrowByViewAllLink" style=""
+							href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
 					</s:if>
 				</div>
-				
+
 			</ul>
 			</div>	
-			
+
 			</div>
 	</s:iterator>
 
@@ -244,14 +251,14 @@ Ext.onReady(function(){
 			method: 'POST',
 			success: function (response, request){
 				div.innerHTML=response.responseText;
-				
+
 				// eb-2296: we must bind click events for these new dom elements
 				//    note that this function is also called on page load (see xpedx-header.js)
 				//     since the 'Product Categories' narrow-by is loaded separately (at page load)
 				rebindClickForNarrowByExpandCollapse();
 			},
 			failure:function (response, request){
-				
+
 			}
 		});
 });
@@ -296,7 +303,7 @@ function getFacetList(shortDescription,itemAttributeKey)
 				div.innerHTML=response.responseText;
 			},
 			failure:function (response, request){
-				
+
 			}
 		});
 	//}
