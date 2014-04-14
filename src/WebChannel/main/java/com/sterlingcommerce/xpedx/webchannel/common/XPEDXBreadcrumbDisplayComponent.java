@@ -56,29 +56,39 @@ public class XPEDXBreadcrumbDisplayComponent
     	{
     		//1: generate output for root breadcrumb
     		int rootIndex = this.determineDisplayRootIndex(bcl);
-    		String rootDisp = this.getRootBreadcrumbDisplay(rootIndex, bcl);
+    		String rootDisp = this.getRootBreadcrumbDisplay(tag.getDisplayRootName());
     		sb.append(rootDisp);
     		if (bcl.size() > 1) {
     			sb.append(this.getSeparator());
     		}
 
-    		//2: generate output for regular breadcrumbs
-    		String prevDisp = null;
+			//2: special case where 2nd bc is a cat1
+    		Breadcrumb bc = bcl.get(rootIndex + 1);
+			String path = bc.getParams().get("path");
+			if (path != null && path.matches("/MasterCatalog/\\d+")) {
+				rootIndex += 1;
+	    		String cat1Disp = this.getRootBreadcrumbDisplay(bc.getDisplayName());
+	    		sb.append(cat1Disp);
+	    		if (bcl.size() > 2) {
+	    			sb.append(this.getSeparator());
+	    		}
+			}
+
+    		//3: generate output for regular breadcrumbs
     		for(int i = rootIndex + 1; i < bcl.size(); i++)
     		{
+    			boolean firstIter = i == rootIndex + 1;
     			boolean lastIter = i == bcl.size() - 1;
+    			boolean onlyIter = firstIter && lastIter;
 
-    			// The link for the breadcrum itself
-    			String disp = this.getBreadcrumbDisplay(i, bcl, null, false);
-    			// String disp = this.getBreadcrumbDisplay(i, bcl, "Catalog", false);
-    			/* changed for using Catalog as the root element */
-    			sb.append(disp);
+    			// The link for the breadcrumb itself
+    			sb.append(this.getBreadcrumbDisplay(i, bcl, null, false));
 
     			// If the breadcrumb is configured to be removable
-    			if(tag.isRemovable() && bcl.size() > 2)
+    			if(tag.isRemovable() && !onlyIter)
     			{
     				if (lastIter) {
-    					// TODO override url in remove breadcrumb display
+    					// override url in remove breadcrumb display
     					String url = getBreadcrumbURL(i - 1, bcl, null, false);
     					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, url));
 
@@ -91,24 +101,7 @@ public class XPEDXBreadcrumbDisplayComponent
     				// append the separator
     				sb.append(this.getSeparator());
     			}
-    			prevDisp = disp;
     		}
-
-    		// eb-5324: generate link and remove icon for last breadcrumb, for consistency
-//            //3: generate output for last breadcrumb
-//            //      This won't be generated if there's only the root breadcrumb
-//            if(bcl.size() - rootIndex > 1)
-//            {
-//                String lastDisp = this.getLastBreadcrumbDisplay(bcl);
-//                //Changes made for XBT 251 special characters replace by Space for Displaying Bread Crumb
-//            	//lastDisp=lastDisp.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-//                //start JIRA XBT-319
-//                lastDisp = processSpecialCharacters(lastDisp);
-//                //End JIRA XBT-319
-//                sb.append(lastDisp);
-//              //  sb.append(this.getSeparator());
-//                /* 3/10/2011 Seperator not required for the last bread crumb */
-//            }
 
     		try
     		{
@@ -165,15 +158,9 @@ public class XPEDXBreadcrumbDisplayComponent
         return rootIndex;
     }
 
-    protected String getRootBreadcrumbDisplay(int rootIndex, List<Breadcrumb> bcl)
+    protected String getRootBreadcrumbDisplay(String displayName)
     {
-        String toReturn = null;
-
-        String displayName = tag.getDisplayRootName();
-        displayName = findString(displayName);
-
-        toReturn = this.getBreadcrumbDisplay(rootIndex, bcl, displayName, true);
-        return toReturn;
+    	return findString(displayName);
     }
 
     protected String getBreadcrumbURL(int index, List<Breadcrumb> bcl, String displayName, boolean isDisplayRoot)
