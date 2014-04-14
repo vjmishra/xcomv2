@@ -3911,35 +3911,29 @@ padding-top:10px;
     text-decoration: underline;
 }
 #catalog-header-breadcrumbs {
-    margin: 10px 0;
+    margin: 0;
 }
-#catalog-header-breadcrumbs .searchbox-form1 {
-    background: none repeat scroll 0 0 #FFFFFF;
-    float: left;
-    height: 30px;
-    margin: 0 0 0 6px;
-    padding: 0 0 0 3px;
-    width: 208px;
+#searchBreadcrumb span {
+	margin: 0px 4px 0px 4px;
 }
 #catalog-header-breadcrumbs .searchbox-form1 a {
     margin: 0;
 }
 #catalog-header-breadcrumbs #breadcrumbs-list-name .breadcrumbs-inner {
-    color: #003399;
-    padding-left: 8px;
+	color: #000000;
 }
 #catalog-header-breadcrumbs .searchButton {
     cursor: pointer;
     margin-left: -3px;
 }
 #catalog-header-breadcrumbs #breadcrumb-my-selection {
-    color: black;
-    float: left;
-    font-weight: bold;
-    height: 16px;
-    padding-right: 15px;
-    text-align: right;
-    width: 94px;
+	color: black;
+	float: left;
+	font-weight: bold;
+	height: 16px;
+	padding-right: 15px;
+	text-align: right;
+	width: 94px;
 }
 #catalog-header-breadcrumbs #breadcrumb-my-selection a {
     font-size: 0.8em;
@@ -3984,16 +3978,26 @@ padding-top:10px;
     margin-left: 15px;
 }
 #catalog-header-breadcrumbs #breadcrumbs-list-name {
-    background: url("../../images/catalog/angle-108x30.png") no-repeat scroll left top #EEEEEE;
-    color: #999999;
-    float: left;
-    height: 16px;
-    margin: 0 10px 0 0;
-    padding: 7px 0;
-    width: 762px;
+	background: none;
+	color: #000000;
+	float: left;
+	height: 16px;
+	margin: 10px 0px 10px 0;
+	padding: 10px;
+	width: 980px;
+	font-size: 12px;
+	font-weight: bold;
 }
 #catalog-header-breadcrumbs #breadcrumbs-list-name a {
-    color: #003399;
+    color: #1062d1;
+}
+#catalog-header-breadcrumbs .searchbox-form1 {
+	background: none repeat scroll 0 0 #FFFFFF;
+	float: left;
+	height: 30px;
+	margin: 0 0 0 6px;
+	padding: 0 0 0 3px;
+	width: 208px;
 }
 .pagination p {
     color: #333333;
