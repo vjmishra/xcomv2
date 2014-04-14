@@ -715,6 +715,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			while (iter.hasNext()) {
 				Breadcrumb bc = iter.next();
 				if (bc.getAction() != null && bc.getAction().equals("filter")) {
+				//EB 4803 For a filter action indexField should not be null.
+				if(YFCCommon.isVoid(indexField))
+						indexField = (String) bc.getParams().get("indexField");
 					// String indexField = (String) bc.getParams().get(
 					// "indexField");
 					String filterDesc = (String) bc.getParams().get("filterDesc");
