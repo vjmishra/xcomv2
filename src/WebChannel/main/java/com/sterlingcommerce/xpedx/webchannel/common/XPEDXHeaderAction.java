@@ -352,7 +352,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			if (!getWCContext().isGuestUser()
 					&& !XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())) {
 				assignedShipTos = XPEDXWCUtils.getPaginatedAssignedCustomers(getWCContext());
-				XPEDXWCUtils.setCurrentCustomerIntoContext(assignedShipTos.get(0),getWCContext());
+				//XPEDXWCUtils.setCurrentCustomerIntoContext(assignedShipTos.get(0),getWCContext());
 			 if(wcContext.getSCUIContext().getSession().getAttribute(
 						XPEDXWCUtils.LOGGED_IN_FORMATTED_CUSTOMER_ID_MAP) == null){
 					XPEDXWCUtils.getFormattedMasterCustomer(wcContext.getCustomerId(), wcContext.getStorefrontId());
