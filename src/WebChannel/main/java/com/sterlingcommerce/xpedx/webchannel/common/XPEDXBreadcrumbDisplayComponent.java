@@ -62,14 +62,14 @@ public class XPEDXBreadcrumbDisplayComponent
 					Breadcrumb bc = bcl.get(1);
 					// String searchTerm = bc.getParams().get("searchTerm");
 					if (bc.getParams().containsKey("searchTerm")) {
-						writer.append(renderSearchTermBreadcrumbs(bcl));
+						writer.append(renderSearchTermBreadcrumb(bcl));
 					} else {
-						writer.append(renderCategoryBreadcrumbs(bcl));
+						writer.append(renderCategoryBreadcrumb(bcl));
 					}
 
 				} else {
 					// category landing page
-					writer.append(renderCategoryBreadcrumbs(bcl));
+					writer.append(renderCategoryBreadcrumb(bcl));
 				}
 			} catch (IOException e) {
 				log.error("Error writing to JSP", e);
@@ -85,7 +85,7 @@ public class XPEDXBreadcrumbDisplayComponent
      * @param bcl
      * @return Returns html string
      */
-    private String renderSearchTermBreadcrumbs(List<Breadcrumb> bcl) {
+    private String renderSearchTermBreadcrumb(List<Breadcrumb> bcl) {
 		StringBuilder sb = new StringBuilder(1024);
 
 		// 1: skip output for root breadcrumb
@@ -135,7 +135,7 @@ public class XPEDXBreadcrumbDisplayComponent
      * @param bcl
      * @return Returns html string
      */
-    private String renderCategoryBreadcrumbs(List<Breadcrumb> bcl) {
+    private String renderCategoryBreadcrumb(List<Breadcrumb> bcl) {
 		StringBuilder sb = new StringBuilder(1024);
 
 		// 1: generate output for root breadcrumb
@@ -148,14 +148,11 @@ public class XPEDXBreadcrumbDisplayComponent
 
 		// 2: render cat1 (if applicable)
 		Breadcrumb bcCat1 = bcl.get(rootIndex + 1);
-		String path = bcCat1.getParams().get("path");
-		if (path != null && path.matches("/MasterCatalog/\\d+")) { // TODO refactor as static Pattern
-			rootIndex += 1;
-			String cat1Disp = this.getRootBreadcrumbDisplay(bcCat1.getDisplayName());
-			sb.append(cat1Disp);
-			if (bcl.size() > 2) {
-				sb.append(this.getSeparator());
-			}
+		rootIndex += 1;
+		String cat1Disp = this.getRootBreadcrumbDisplay(bcCat1.getDisplayName());
+		sb.append(cat1Disp);
+		if (bcl.size() > 2) {
+			sb.append(this.getSeparator());
 		}
 
 		// 3: generate output for regular breadcrumbs
@@ -188,7 +185,7 @@ public class XPEDXBreadcrumbDisplayComponent
 		return sb.toString();
 	}
 
-    protected String getSeparator()
+    private String getSeparator()
     {
         String breadcrumbSeparator = this.tag.getBreadcrumbSeparator();
         if(breadcrumbSeparator == null)
@@ -207,7 +204,7 @@ public class XPEDXBreadcrumbDisplayComponent
      * @param bcl
      * @return index of the breadcrumb in the list display root
      */
-    protected int determineDisplayRootIndex(List<Breadcrumb> bcl)
+    private int determineDisplayRootIndex(List<Breadcrumb> bcl)
     {
         int rootIndex = bcl.size()-1;
 
@@ -230,12 +227,12 @@ public class XPEDXBreadcrumbDisplayComponent
         return rootIndex;
     }
 
-    protected String getRootBreadcrumbDisplay(String displayName)
+    private String getRootBreadcrumbDisplay(String displayName)
     {
     	return findString(displayName);
     }
 
-    protected String getBreadcrumbURL(int index, List<Breadcrumb> bcl, String displayName, boolean isDisplayRoot)
+    private String getBreadcrumbURL(int index, List<Breadcrumb> bcl, String displayName, boolean isDisplayRoot)
     {
         Breadcrumb bc = bcl.get(index);
         if(index != 0)
@@ -283,7 +280,7 @@ public class XPEDXBreadcrumbDisplayComponent
         return url;
     }
 
-    protected String getBreadcrumbDisplay(int index, List<Breadcrumb> bcl, String displayName, boolean isDisplayRoot)
+    private String getBreadcrumbDisplay(int index, List<Breadcrumb> bcl, String displayName, boolean isDisplayRoot)
     {
         String toReturn = null;
         StringBuilder sb = new StringBuilder(512);
@@ -319,7 +316,7 @@ public class XPEDXBreadcrumbDisplayComponent
     // the home nor the last breadcrumb.
     // The calculation for last breadcrumb would be done once and cached
     // Subsequent invokation are different only in the index
-    protected String getRemoveBreadcrumbDisplay(List<Breadcrumb>bcl, int skippedIndex, String overrideUrl)
+    private String getRemoveBreadcrumbDisplay(List<Breadcrumb>bcl, int skippedIndex, String overrideUrl)
     {
         String toReturn = null;
         String lastBreadcrumbURL = null;
@@ -359,25 +356,8 @@ public class XPEDXBreadcrumbDisplayComponent
         return toReturn;
     }
 
-    protected String getLastBreadcrumbDisplay(List<Breadcrumb> bcl)
-    {
-        String toReturn = null;
-        StringBuilder sb = new StringBuilder(512);
-        Breadcrumb bc = bcl.get(bcl.size()-1);
-
-        String name = bc.getDisplayName()==null?tag.getDefaultDisplayName():bc.getDisplayName();
-        name = TextUtils.htmlEncode(name);
-        sb.append(name);
-        toReturn = sb.toString();
-        if(!("").equals(toReturn) && (toReturn.indexOf("*") == 0 || toReturn.indexOf("?") == 0)) {
-        	toReturn = toReturn.substring(1, toReturn.length());
-        }
-
-        return toReturn;
-    }
-
     // Assuming the _bcs_ is not inlcuded
-    protected String getURLForBreadcrumb(Breadcrumb bc)
+    private String getURLForBreadcrumb(Breadcrumb bc)
     {
         String url = bc.getUrl();
         if(url == null || url.length() == 0)
@@ -398,7 +378,7 @@ public class XPEDXBreadcrumbDisplayComponent
         return url;
     }
 
-    protected String getActualRemoveIconURL()
+    private String getActualRemoveIconURL()
     {
         String actualValue = null;
         String value = this.tag.getRemoveIcon();
@@ -421,77 +401,10 @@ public class XPEDXBreadcrumbDisplayComponent
 
         return actualValue;
     }
+
     private int tabindex = -1;
-    protected HttpServletRequest req = null;
-    protected HttpServletResponse res = null;
-    protected XPEDXBreadcrumbDisplayTag tag = null;
+    private HttpServletRequest req = null;
+    private HttpServletResponse res = null;
+    private XPEDXBreadcrumbDisplayTag tag = null;
 
-  //Start JIRA  XBT-319
-	private String processSpecialCharacters(String searchText){
-		if(searchText == null){
-			return null;
-		}
-		String specialCharacterReg = "[\\[\\]^);{!(}:,~\\\\]";
-		searchText = searchText.replaceAll(specialCharacterReg," ");
-		searchText = processPlusCharacter(searchText);
-		searchText = processEiphenCharacter(searchText);
-		return searchText;
-	}
-
-	 /*Replace "+" with whitespace when it
-	 * a) appears as a word
-	 * b) appears as first character in a word
-	 * c) appears as last character in a word
-	 */
-	private String processPlusCharacter(String searchText){
-		String whiteSpaceReg = "[ ]";
-		String[] searchTexts = searchText.split(whiteSpaceReg);
-		StringBuilder searchTerm = new StringBuilder(512);
-		for(String textSegment : searchTexts){
-			textSegment = textSegment.trim();
-			if(textSegment.equals("+")){
-				continue;
-			}
-
-			if(textSegment.startsWith("+")){
-				textSegment = " " + textSegment.substring(1, textSegment.length());
-			}
-
-			if(textSegment.endsWith("+")){
-				textSegment = textSegment.substring(0, textSegment.length()-1) + " ";
-			}
-
-			searchTerm.append(textSegment);
-			searchTerm.append(" ");
-
-		}
-		return searchTerm.toString();
-	}
-
-	/*Replace "-" with whitespace when it
-	 * a) appears as a word
-	 * b) appears as last character in a word
-	 */
-	private String processEiphenCharacter(String searchText){
-		String whiteSpaceReg = "[ ]";
-		String[] searchTexts = searchText.split(whiteSpaceReg);
-		StringBuilder searchTerm = new StringBuilder(512);
-		for(String textSegment : searchTexts){
-			textSegment = textSegment.trim();
-			if(textSegment.equals("-")){
-				continue;
-			}
-
-			if(textSegment.endsWith("-")){
-				textSegment = textSegment.substring(0, textSegment.length()-1)+" ";
-
-			}
-
-			searchTerm.append(textSegment);
-			searchTerm.append(" ");
-
-		}
-		return searchTerm.toString();
-	}
-	//End JIRA XBT-319
 }
