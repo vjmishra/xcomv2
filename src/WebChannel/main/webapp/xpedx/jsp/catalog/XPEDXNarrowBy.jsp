@@ -51,9 +51,9 @@ function setStockItemFlag()
 <s:set name='narrowByCatalogItemsCount' value='%{0}' />
 <s:set name='expandNarrowByCatalogItems' value='"Y"' />
 
-<%-- Only want to do this Cat area once. This check isn't ideal but seems to work --%>
-<%-- (doesn't work for Cat1 page but that's going away --%>
-<s:if test='%{(#parameters.path!=null)||(#parameters.searchTerm!=null)||(#parameters.facet!=null)||(#parameters.cname!=null) }'>
+<%-- NarrowBy JSP is run twice - first when page loads to display Prod Cat, then after Ajax for rest of narrow bys --%>
+<%-- Need to run this Prod Cat block only on first time called (search with no results made us add param for this) --%>
+<s:if test='%{(#parameters.secondCallForFacets == null)}'>
 
 	<div id="left-col">
 	<div class="bgleftcol">
@@ -137,9 +137,10 @@ function setStockItemFlag()
 
 </s:if>
 
-<s:if test="%{#FacetsList!=null && #FacetsList.size>0}"><%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
+<%-- Ajax results of getting facets are used to populate this on second pass through this JSP --%>
+<%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
+<s:if test="%{#FacetsList!=null && #FacetsList.size>0}">
 
-	<%-- Ajax call results are used to populate this on second pass through this file --%>
 	<s:set name='headercount' value='%{3}' />
 
 		<s:iterator id='facets'
@@ -246,7 +247,8 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			url: url,
 			params: {
-				searchIndexInputXML:inutXML
+				searchIndexInputXML:inutXML,
+				secondCallForFacets:true
 			},
 			method: 'POST',
 			success: function (response, request){
