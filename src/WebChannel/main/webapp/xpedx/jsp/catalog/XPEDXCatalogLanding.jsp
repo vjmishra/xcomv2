@@ -121,7 +121,6 @@
 			<!-- BEGIN breadcrumb --> 
 			<div id="catalog-header-breadcrumbs">
 				<div id="breadcrumbs-list-name">
-					<div id="breadcrumb-my-selection" style="margin-left:11px; padding-right: 4px; text-align: left;">My Selection</div>
 					<s:url value='/xpedx/images/icons/12x12_charcoal_x.png' id='rbtn'   /> <!--  title="Search"  -->
 					<span class="breadcrumbs-inner"><span class="breadcrumb-inactive">
 					<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' / ' 
