@@ -4828,7 +4828,7 @@ ul#prodlist, ul.prodlist { max-height: 73px; overflow: hidden; }
 	color: #999;
 	width: 758px;
 	float: right;
-	background: url(../../images/catalog/angle-108x30.png) no-repeat top left #eeeeee;
+	background: #eeeeee;
 	height: 16px;
 	padding: 7px 0;
 	margin: 0 10px 0 0;

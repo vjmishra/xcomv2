@@ -5491,8 +5491,7 @@ ul#prodlist,ul.prodlist {
 	color: #999;
 	width: 762px;
 	float: left;
-	background: url(../../images/catalog/angle-108x30.png) no-repeat top
-		left #eeeeee;
+	background: #eeeeee;
 	height: 16px;
 	padding: 7px 0;
 	margin: 0 10px 0 0;
