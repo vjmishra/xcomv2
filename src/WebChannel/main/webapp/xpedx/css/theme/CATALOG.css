@@ -1154,3 +1154,11 @@ img#youtube { margin-right: 9px; }
 	margin-left:5px;
     width: 173px;
 }
+
+.removeBreadcrumbIcon {
+	display: inline;
+	width: 11px;	
+	height: 11px;
+	margin-left: 3px;
+	border: none;
+}
