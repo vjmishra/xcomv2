@@ -5,9 +5,11 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.components.Component;
 
 import com.opensymphony.xwork2.util.TextUtils;
@@ -31,6 +33,9 @@ import com.sterlingcommerce.webchannel.common.ParamAttachMapper;
 public class XPEDXBreadcrumbDisplayComponent
     extends Component
 {
+
+	private static final Logger log = Logger.getLogger(XPEDXBreadcrumbDisplayComponent.class);
+
     public static final String DEFAULT_BREADCRUMB_SEPARATOR = " > ";
     public XPEDXBreadcrumbDisplayComponent(ValueStack stck,
             HttpServletRequest req,
@@ -50,71 +55,138 @@ public class XPEDXBreadcrumbDisplayComponent
     @Override
     public boolean end(Writer writer, String body)
     {
-    	StringBuilder sb = new StringBuilder(1024);
-    	List<Breadcrumb> bcl = (List<Breadcrumb>) req.getAttribute(BreadcrumbHelper.BREADCRUMB_LIST);
-    	if(bcl != null)
-    	{
-    		//1: generate output for root breadcrumb
-    		int rootIndex = this.determineDisplayRootIndex(bcl);
-    		String rootDisp = this.getRootBreadcrumbDisplay(tag.getDisplayRootName());
-    		sb.append(rootDisp);
-    		if (bcl.size() > 1) {
-    			sb.append(this.getSeparator());
-    		}
+		List<Breadcrumb> bcl = (List<Breadcrumb>) req.getAttribute(BreadcrumbHelper.BREADCRUMB_LIST);
+		if (bcl != null) {
+			try {
+				if (bcl.size() > 1) {
+					Breadcrumb bc = bcl.get(1);
+					// String searchTerm = bc.getParams().get("searchTerm");
+					if (bc.getParams().containsKey("searchTerm")) {
+						writer.append(renderSearchTermBreadcrumbs(bcl));
+					} else {
+						writer.append(renderCategoryBreadcrumbs(bcl));
+					}
 
-			//2: special case where 2nd bc is a cat1
-    		Breadcrumb bc = bcl.get(rootIndex + 1);
-			String path = bc.getParams().get("path");
-			if (path != null && path.matches("/MasterCatalog/\\d+")) {
-				rootIndex += 1;
-	    		String cat1Disp = this.getRootBreadcrumbDisplay(bc.getDisplayName());
-	    		sb.append(cat1Disp);
-	    		if (bcl.size() > 2) {
-	    			sb.append(this.getSeparator());
-	    		}
+				} else {
+					// category landing page
+					writer.append(renderCategoryBreadcrumbs(bcl));
+				}
+			} catch (IOException e) {
+				log.error("Error writing to JSP", e);
+				// re-throw as runtime exception?
 			}
-
-    		//3: generate output for regular breadcrumbs
-    		for(int i = rootIndex + 1; i < bcl.size(); i++)
-    		{
-    			boolean firstIter = i == rootIndex + 1;
-    			boolean lastIter = i == bcl.size() - 1;
-    			boolean onlyIter = firstIter && lastIter;
-
-    			// The link for the breadcrumb itself
-    			sb.append(this.getBreadcrumbDisplay(i, bcl, null, false));
-
-    			// If the breadcrumb is configured to be removable
-    			if(tag.isRemovable() && !onlyIter)
-    			{
-    				if (lastIter) {
-    					// override url in remove breadcrumb display
-    					String url = getBreadcrumbURL(i - 1, bcl, null, false);
-    					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, url));
-
-    				} else {
-    					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, null));
-    				}
-    			}
-
-    			if (!lastIter) {
-    				// append the separator
-    				sb.append(this.getSeparator());
-    			}
-    		}
-
-    		try
-    		{
-    			writer.append((CharSequence)sb);
-    		}
-    		catch(IOException e)
-    		{
-    			//log error; throw runtime error
-    		}
-    	}
+		}
 
     	return super.end(writer, body);
     }
+
+    /**
+     * Renders main search term as plain text with label. Other breadcrumbs are rendered as normal
+     * @param bcl
+     * @return Returns html string
+     */
+    private String renderSearchTermBreadcrumbs(List<Breadcrumb> bcl) {
+		StringBuilder sb = new StringBuilder(1024);
+
+		// 1: skip output for root breadcrumb
+		int rootIndex = this.determineDisplayRootIndex(bcl) + 1;
+
+		// 2: render initial search term (not search within)
+		Breadcrumb bcMain = bcl.get(rootIndex);
+		String searchTerm = bcMain.getParams().get("searchTerm");
+		String searchResultsForDisp = this.getRootBreadcrumbDisplay(String.format("Search results for \"%s\"", searchTerm));
+		sb.append(searchResultsForDisp);
+		if (bcl.size() > 2) {
+			sb.append(this.getSeparator());
+		}
+
+		// 3: generate output for regular breadcrumbs
+		for (int i = rootIndex + 1; i < bcl.size(); i++) {
+			boolean firstIter = i == rootIndex + 1;
+			boolean lastIter = i == bcl.size() - 1;
+			boolean onlyIter = firstIter && lastIter;
+
+			// The link for the breadcrumb itself
+			sb.append(this.getBreadcrumbDisplay(i, bcl, null, false));
+
+			// If the breadcrumb is configured to be removable
+			if (tag.isRemovable() && !onlyIter) {
+				if (lastIter) {
+					// override url in remove breadcrumb display
+					String url = getBreadcrumbURL(i - 1, bcl, null, false);
+					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, url));
+
+				} else {
+					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, null));
+				}
+			}
+
+			if (!lastIter) {
+				// append the separator
+				sb.append(this.getSeparator());
+			}
+		}
+
+		return sb.toString();
+    }
+
+    /**
+     * Renders root and cat1 as plain text. Other breadcrumbs are rendered as normal
+     * @param bcl
+     * @return Returns html string
+     */
+    private String renderCategoryBreadcrumbs(List<Breadcrumb> bcl) {
+		StringBuilder sb = new StringBuilder(1024);
+
+		// 1: generate output for root breadcrumb
+		int rootIndex = this.determineDisplayRootIndex(bcl);
+		String rootDisp = this.getRootBreadcrumbDisplay(tag.getDisplayRootName());
+		sb.append(rootDisp);
+		if (bcl.size() > 1) {
+			sb.append(this.getSeparator());
+		}
+
+		// 2: render cat1 (if applicable)
+		Breadcrumb bcCat1 = bcl.get(rootIndex + 1);
+		String path = bcCat1.getParams().get("path");
+		if (path != null && path.matches("/MasterCatalog/\\d+")) { // TODO refactor as static Pattern
+			rootIndex += 1;
+			String cat1Disp = this.getRootBreadcrumbDisplay(bcCat1.getDisplayName());
+			sb.append(cat1Disp);
+			if (bcl.size() > 2) {
+				sb.append(this.getSeparator());
+			}
+		}
+
+		// 3: generate output for regular breadcrumbs
+		for (int i = rootIndex + 1; i < bcl.size(); i++) {
+			boolean firstIter = i == rootIndex + 1;
+			boolean lastIter = i == bcl.size() - 1;
+			boolean onlyIter = firstIter && lastIter;
+
+			// The link for the breadcrumb itself
+			sb.append(this.getBreadcrumbDisplay(i, bcl, null, false));
+
+			// If the breadcrumb is configured to be removable
+			if (tag.isRemovable() && !onlyIter) {
+				if (lastIter) {
+					// override url in remove breadcrumb display
+					String url = getBreadcrumbURL(i - 1, bcl, null, false);
+					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, url));
+
+				} else {
+					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, null));
+				}
+			}
+
+			if (!lastIter) {
+				// append the separator
+				sb.append(this.getSeparator());
+			}
+		}
+
+		return sb.toString();
+	}
 
     protected String getSeparator()
     {
