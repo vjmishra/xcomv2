@@ -75,7 +75,7 @@ public class XPEDXBreadcrumbDisplayComponent
     			sb.append(disp);
 
     			// If the breadcrumb is configured to be removable
-    			if(tag.isRemovable())
+    			if(tag.isRemovable() && bcl.size() > 2)
     			{
     				if (lastIter) {
     					// TODO override url in remove breadcrumb display
