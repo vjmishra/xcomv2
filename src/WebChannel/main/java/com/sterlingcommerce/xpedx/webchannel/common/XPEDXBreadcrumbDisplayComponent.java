@@ -142,9 +142,11 @@ public class XPEDXBreadcrumbDisplayComponent
 		int rootIndex = this.determineDisplayRootIndex(bcl);
 		String rootDisp = this.getRootBreadcrumbDisplay(tag.getDisplayRootName());
 		sb.append(rootDisp);
-		if (bcl.size() > 1) {
-			sb.append(this.getSeparator());
+		if (bcl.size() <= 1) {
+			return sb.toString();
 		}
+
+		sb.append(this.getSeparator());
 
 		// 2: render cat1 (if applicable)
 		Breadcrumb bcCat1 = bcl.get(rootIndex + 1);
