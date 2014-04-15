@@ -17,6 +17,7 @@ import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
 import com.yantra.yfc.rcp.YRCPlatformUI;
+import com.yantra.yfc.rcp.YRCSharedTaskOutput;
 import com.yantra.yfc.rcp.YRCXPathUtils;
 import com.yantra.yfc.rcp.YRCXmlUtils;
 
@@ -299,5 +300,15 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	public boolean isThisCustomerAssigned(Element eleCust) {
 		return assignedList.contains(eleCust.getAttribute("CustomerID"));
 		
-	}	
+	}
+	public void showAuthLocations(){
+		Document docInput = YRCXmlUtils.createDocument("User");		
+		Element eleInput = docInput.getDocumentElement();
+		eleInput.setAttribute("UserID", userID);
+		if(YRCPlatformUI.isTraceEnabled()){
+			YRCPlatformUI.trace("Shared Task: Launching with Input XML - "+YRCXmlUtils.getString(docInput));
+		}
+		//Launch Shared Task
+		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask", eleInput);
+	}
 }
