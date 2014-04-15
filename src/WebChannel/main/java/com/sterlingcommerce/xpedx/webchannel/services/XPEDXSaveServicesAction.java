@@ -565,14 +565,15 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			 * If toEmail is empty then ccEamil should be toEmail .
 			 * 
 			 * */
-			if((toEmailGen == null || toEmailGen.trim().length() > 0) && (toEmailPaper == null || toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
-				if((toEmailGen == null || toEmailGen.trim().length() > 0) && (paperFSObj.equalsIgnoreCase("facilitySupplies"))){
-					toEmailGen = ccEMail;
-				}
-				if((toEmailPaper == null || toEmailPaper.trim().length() > 0) && (paperPSObj.equalsIgnoreCase("PaperSupplies"))){
-					toEmailPaper = ccEMail;
-				}
-				ccEMail = "";
+            if(((toEmailGen == null || toEmailGen.trim().length() == 0) || (toEmailPaper == null || toEmailPaper.trim().length() == 0)) && (ccEMail!=null && ccEMail.trim().length() > 0)){
+                if((toEmailGen == null || toEmailGen.trim().length() == 0) && (paperFSObj.equalsIgnoreCase("facilitySupplies"))){
+                    toEmailGen = ccEMail;
+                    ccEMail = "";
+                }
+                if((toEmailPaper == null || toEmailPaper.trim().length() == 0) && (paperPSObj.equalsIgnoreCase("PaperSupplies"))){
+                    toEmailPaper = ccEMail;
+                    ccEMail = "";
+                }
 			}else
 			if((toEmailGen == null || toEmailGen.trim().length() > 0) && (toEmailPaper != null && toEmailPaper.trim().length() > 0) && (ccEMail!=null && ccEMail.trim().length() > 0)){
 				if(paperFSObj.equalsIgnoreCase("facilitySupplies")){
