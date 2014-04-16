@@ -561,6 +561,7 @@ width:100%;
 }
 .normal-view #item-ct dd .order-row {
 	height: 25px;
+	margin-bottom: 5px;
 }
 .normal-view #item-ct dd .order-input-wrap .order-label {
 	float: left;
