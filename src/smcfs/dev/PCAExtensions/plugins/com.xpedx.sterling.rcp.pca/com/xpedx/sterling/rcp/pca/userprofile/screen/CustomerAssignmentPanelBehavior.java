@@ -1,12 +1,17 @@
 package com.xpedx.sterling.rcp.pca.userprofile.screen;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
-
+import org.eclipse.swt.SWT;
 import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -310,5 +315,102 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 		}
 		//Launch Shared Task
 		YRCSharedTaskOutput output = YRCPlatformUI.launchSharedTask("com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask", eleInput);
+	}
+	public void exportAuthLocations(){
+		Element authorizedShipTosElement = getModel("AssignedShipTos");
+		if(authorizedShipTosElement!=null){
+			exportToFile();
+		}else{
+			getShipToID();
+			exportToFile();
+		}		
+	}
+	private void exportToFile(){
+		StringBuilder sbCSV = new StringBuilder();		
+		HashSet<String> set = new HashSet<String>();
+		Element eleOutput = getModel("AssignedShipTos");							
+		NodeList customerList = (NodeList) eleOutput.getElementsByTagName("XPXCustomerAssignmentView");
+		if (customerList != null && customerList.getLength()>0) {
+			sbCSV.append("User ID,MSAP,Customer Number,Bill-To Number,Ship-To Number,Name,Status,Address");
+			sbCSV.append("\n");
+			for(int j=0;j<customerList.getLength();j++){
+				Element eleCustomer = (Element)customerList.item(j);
+				sbCSV.append("\"").append(userID).append("\"").append(",");
+				sbCSV.append("\"").append(eleCustomer.getAttribute("MSAPCustomerID")).append("\"").append(",");
+				sbCSV.append("\"").append(eleCustomer.getAttribute("SAPCustomerID")).append("\"").append(",");
+
+				set.add(eleCustomer.getAttribute("BillToCustomerID"));
+				String billToCustomerID  = eleCustomer.getAttribute("BillToCustomerID");					
+				sbCSV.append("\"").append(
+						(!YRCPlatformUI.isVoid(billToCustomerID)&& billToCustomerID.lastIndexOf("-M-XX-B")!=-1)?billToCustomerID.substring(0,billToCustomerID.lastIndexOf("-M-XX-B")):"").append("\"").append(",");
+
+				String shipToCustomerID  = eleCustomer.getAttribute("ShipToCustomerID");					
+				sbCSV.append("\"").append(
+						(!YRCPlatformUI.isVoid(shipToCustomerID)&& shipToCustomerID.lastIndexOf("-M-XX-S")!=-1)?shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S")):"").append("\"").append(",");
+
+				sbCSV.append("\"").append(eleCustomer.getAttribute("ShipToCustomerName")).append("\"").append(",");
+				String status = eleCustomer.getAttribute("Status");
+				sbCSV.append("\"").append(!YRCPlatformUI.isVoid(status) && "30".equalsIgnoreCase(status.trim())?"[Suspended] do not use":"").append("\"").append(",");
+				sbCSV.append("\"").append(getAddressColumnText(eleCustomer)).append("\"");
+				sbCSV.append("\n");
+			}
+			org.eclipse.swt.widgets.FileDialog fileDialog = new FileDialog(YRCPlatformUI.getShell(), SWT.SAVE);
+			fileDialog.setFileName(userID+"_Authorized_Locations" +"_" + System.currentTimeMillis()+".csv");
+			fileDialog.setText("Save");
+			String filePath = fileDialog.open();
+			if(!YRCPlatformUI.isVoid(filePath))
+				saveFile(filePath,sbCSV);
+		}else{
+			YRCPlatformUI.showWarning("Export Authorized Locations", "There are no Ship-To Locations assigned to export.");
+		}
+
+	}
+	private String getAddressColumnText(Element eleCustomer) {			
+		String add1 = eleCustomer.getAttribute("AddressLine1");
+		String add2 = eleCustomer.getAttribute("AddressLine2");				
+		String city = eleCustomer.getAttribute("City");
+		String state = eleCustomer.getAttribute("State");
+		String country = eleCustomer.getAttribute("Country");
+		String zipCode = eleCustomer.getAttribute("ZipCode");
+		String firstZip=zipCode;
+		String lastZip="";			
+		if(!YRCPlatformUI.isVoid(zipCode) && zipCode.length()>5){
+			firstZip=zipCode.substring(0, 5);
+			lastZip="-"+zipCode.substring(5);
+		}
+		StringBuffer addressString = new StringBuffer();			 
+		if(!YRCPlatformUI.isVoid(add1))
+			addressString.append(add1);
+		if(!YRCPlatformUI.isVoid(add2))
+			addressString.append(", "+add2);
+		if(!YRCPlatformUI.isVoid(city))
+			addressString.append(", "+city);				
+		if(!YRCPlatformUI.isVoid(state))
+			addressString.append(", "+state);
+		if(!YRCPlatformUI.isVoid(firstZip))
+			addressString.append(", "+firstZip+lastZip);
+		if(!YRCPlatformUI.isVoid(country))
+			addressString.append(", "+country);
+		return addressString.toString();
+	}
+	private void saveFile(String filePath, StringBuilder output) {
+		if(YRCPlatformUI.isVoid(filePath))
+			return;
+		BufferedWriter out = null;
+		try {
+			out = new BufferedWriter(new FileWriter(filePath)); 				
+			out.write(output.toString());
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		finally{
+			if(out!=null){
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
