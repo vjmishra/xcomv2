@@ -562,8 +562,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 			if(getCustIDMap.size() >0){
 				String billtoID = getCustIDMap.get("BillToCustomerID");
 				inputDoc = setCSREmails(env,inputDoc,billtoID);
-				extnsalesRepEmail = getSalesRepEmail(env, inputDoc,billtoID);
-				System.out.println("Sales Rep Email ids.........."+extnsalesRepEmail);
+				extnsalesRepEmail = getSalesRepEmail(env,billtoID);
 				}
 			}	
 			NodeList extnElementList = inputDoc.getElementsByTagName("Extn");
@@ -678,16 +677,14 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 
 					
 				}
-				System.out.println("input doc : "+ SCXmlUtil.getString(inputDoc));
+				log.debug("input doc : "+ SCXmlUtil.getString(inputDoc));
 				return inputDoc;
 				
 			}
 	
-	 public  String getSalesRepEmail(YFSEnvironment env,
-	            Document customerDoc, String billToId) throws YFSException, RemoteException, YIFClientCreationException
+	 public  String getSalesRepEmail(YFSEnvironment env, String billToId) throws YFSException, RemoteException, YIFClientCreationException
 	    {
 	        api = YIFClientFactory.getInstance().getApi();
-	        System.out.println("getSalesRepEmail " +  SCXmlUtil.getString(customerDoc));
 	        String salesRepEmail = "";
 
 	        YFCDocument inputDocCustomer = YFCDocument.createDocument("Customer");
@@ -698,9 +695,9 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	        if(billToId != null && !billToId.equalsIgnoreCase(""))
 	        {
 	            element.setAttribute("CustomerID", billToId);
-	            System.out.println(" inputDoc.getDocument() " + inputDocCustomer.getDocument());
+	            log.debug(" inputDoc.getDocument() " + inputDocCustomer.getDocument());
 	            env.setApiTemplate("getCustomerList", getSalesRepListTemplate);
-	            System.out.println("getSalesRepEmail before Invoke.. " +  SCXmlUtil.getString(inputDocCustomer.getDocument()));
+	            log.debug("getSalesRepEmail before Invoke.. " +  SCXmlUtil.getString(inputDocCustomer.getDocument()));
 
 
 	            Document outputDocCustomerList = api.getCustomerList(env,inputDocCustomer.getDocument());
@@ -773,7 +770,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	            }
 	        }
 	        //temp added by ritesh to test.
-	        System.out.println("Inside XPXPendingApprovalOrder.getSalesRepEmail(). SalesRep Email IDs are: " + salesRepEmail);
+	        log.debug("Inside XPXPendingApprovalOrder.getSalesRepEmail(). SalesRep Email IDs are: " + salesRepEmail);
 	        return salesRepEmail;
 	    }
 	
