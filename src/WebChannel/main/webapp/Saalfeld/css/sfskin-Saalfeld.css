@@ -172,10 +172,6 @@ a.green-ui-btn:active span {
 	color:#006a3a;	
 }
 
-.subPanelBox .header {
-    background: url("../images/green_cell_slice_1x22.png") repeat-x scroll 0 0 #006a3a;
-}
-
 .browseBox ul li a {
     color: #006a3a;
 }
