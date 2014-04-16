@@ -764,25 +764,24 @@ function getNormalView() {
 									</s:if>
 								</s:if>
 							'</div>',
-						'</div>', <%-- / order-input-wrap" --%>
-						'<div class="clearfix"></div>',
-						
-						'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
-						<s:if test='!#guestUser'>
-							'<div class="cart-pa-button-wrap">',
-								'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
-								'<div class="availablelink">',
-									'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
-									'<div class=\"itemOption\">',
-										'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">Show Price &amp; Availability</a>',
+							
+							'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
+							<s:if test='!#guestUser'>
+								'<div class="cart-pa-button-wrap">',
+									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
+									'<div class="availablelink">',
+										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
+										'<div class=\"itemOption\">',
+											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">Show Price &amp; Availability</a>',
+										'</div>',
 									'</div>',
 								'</div>',
-							'</div>',
-							'<div class="uomLink" id="errorMsgForQty_{itemid}">',
-								'{uomLink}',
-							'</div>',
-						</s:if>
-							
+								'<div class="uomLink" id="errorMsgForQty_{itemid}">',
+									'{uomLink}',
+								'</div>',
+							</s:if>
+						'</div>', <%-- / order-input-wrap" --%>
+						
 						<s:if test='!#guestUser'>
 							'{repItem}',
 						</s:if>
@@ -798,6 +797,7 @@ function getNormalView() {
 							'</div>',
 						'</div>',
 						
+						'<div class="clearfix"></div>',
 					'</dd>',
 				'</tpl>',
 			'</dl>',
