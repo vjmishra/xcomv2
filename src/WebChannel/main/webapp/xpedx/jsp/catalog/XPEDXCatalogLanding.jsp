@@ -121,11 +121,10 @@
 			<!-- BEGIN breadcrumb --> 
 			<div id="catalog-header-breadcrumbs">
 				<div id="breadcrumbs-list-name">
-					<s:url value='/xpedx/images/icons/12x12_charcoal_x.png' id='rbtn'   /> <!--  title="Search"  -->
-					<span class="breadcrumbs-inner"><span class="breadcrumb-inactive">
-					<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' / ' 
-					removable='true' removeIcon='#rbtn' startTabIndex='2' />
-					</span></span>
+					<s:url id="rbtn" value="%{'/xpedx/images/icons/12x12_charcoal_x.png'}" escapeAmp="false"  />
+					<span class="breadcrumbs-inner" id="searchBreadcrumb" >
+						<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' <span>/</span> ' removable='true' removeIcon='#rbtn' startTabIndex='2' />
+					</span>
 				</div>
 				<div class="clearall">&nbsp;</div>
 			</div>
