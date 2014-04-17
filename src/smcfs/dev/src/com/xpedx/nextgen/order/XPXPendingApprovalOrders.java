@@ -682,97 +682,89 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 				
 			}
 	
-	 public  String getSalesRepEmail(YFSEnvironment env, String billToId) throws YFSException, RemoteException, YIFClientCreationException
-	    {
-	        api = YIFClientFactory.getInstance().getApi();
-	        String salesRepEmail = "";
+	public String getSalesRepEmail(YFSEnvironment env, String billToId) throws YFSException, RemoteException, YIFClientCreationException {
+		api = YIFClientFactory.getInstance().getApi();
+		String salesRepEmail = "";
+		YFCDocument inputDocCustomer = YFCDocument.createDocument("Customer");
+		YFCElement element = inputDocCustomer.getDocumentElement();
+		log.debug("billToId: "+ billToId);
+		if(billToId != null && !billToId.equalsIgnoreCase(""))
+		{
+			element.setAttribute("CustomerID", billToId);
+			log.debug(" inputDoc.getDocument() " + inputDocCustomer.getDocument());
+			env.setApiTemplate("getCustomerList", getSalesRepListTemplate);
+			log.debug("getSalesRepEmail before Invoke.. " +  SCXmlUtil.getString(inputDocCustomer.getDocument()));
+			Document outputDocCustomerList = api.getCustomerList(env,inputDocCustomer.getDocument());
+			env.clearApiTemplate("getCustomerList");
+			// check BT's email flags and only add to list if applicable
+			Element extn = (Element) outputDocCustomerList.getElementsByTagName("Extn").item(0);
+			boolean emailFlagPrimary = "Y".equalsIgnoreCase(extn.getAttribute("ExtnSalesProPrimaryEmailFlag"));
+			boolean emailFlagSecondary = "Y".equalsIgnoreCase(extn.getAttribute("ExtnSalesProAllEmailFlag"));
 
-	        YFCDocument inputDocCustomer = YFCDocument.createDocument("Customer");
-	        YFCElement element = inputDocCustomer.getDocumentElement();
-	        //String parentCustomerKey = inputDocument.getDocumentElement().getAttribute("parentCustomerKey");
-	        log.debug("billToId: "+ billToId);
+			NodeList salesRepList  = outputDocCustomerList.getElementsByTagName("XPEDXSalesRep");
+			List<String> salesRepUserKeys = new ArrayList<String>();
+			for (int counter = 0; counter < salesRepList.getLength() ; counter++) {
+				Element salesRep = (Element) salesRepList.item(counter);
 
-	        if(billToId != null && !billToId.equalsIgnoreCase(""))
-	        {
-	            element.setAttribute("CustomerID", billToId);
-	            log.debug(" inputDoc.getDocument() " + inputDocCustomer.getDocument());
-	            env.setApiTemplate("getCustomerList", getSalesRepListTemplate);
-	            log.debug("getSalesRepEmail before Invoke.. " +  SCXmlUtil.getString(inputDocCustomer.getDocument()));
+				String salesUserKey=salesRep.getAttribute("SalesUserKey");
+				if(!YFCObject.isVoid(salesUserKey))
+				{
+					// only add this sales rep to the list if bill-to email flags indicate we should
+					boolean isPrimarySalesRep = "Y".equalsIgnoreCase(salesRep.getAttribute("PrimarySalesRepFlag"));
+					if (isPrimarySalesRep && emailFlagPrimary) {
+						salesRepUserKeys.add(salesUserKey);
+					} else if (!isPrimarySalesRep && emailFlagSecondary) {
+						salesRepUserKeys.add(salesUserKey);
+					}
+				}
+			}
 
+			if(salesRepUserKeys.size() > 0)
+			{
+				YFCDocument inputXML = YFCDocument.getDocumentFor("<User>"+
+						"<ComplexQuery Operation=\"AND\">" +
+						"<Or>" +
+						"</Or>" +
+						"</ComplexQuery>" +
+						"</User>");
 
-	            Document outputDocCustomerList = api.getCustomerList(env,inputDocCustomer.getDocument());
-	            env.clearApiTemplate("getCustomerList");
+				YFCElement complexQryEle = inputXML.getDocumentElement().getChildElement("ComplexQuery");
+				YFCElement ele = complexQryEle.getChildElement("Or");
 
-	            // check BT's email flags and only add to list if applicable
-	            Element extn = (Element) outputDocCustomerList.getElementsByTagName("Extn").item(0);
-	            boolean emailFlagPrimary = "Y".equalsIgnoreCase(extn.getAttribute("ExtnSalesProPrimaryEmailFlag"));
-	            boolean emailFlagSecondary = "Y".equalsIgnoreCase(extn.getAttribute("ExtnSalesProAllEmailFlag"));
-
-	            NodeList salesRepList  = outputDocCustomerList.getElementsByTagName("XPEDXSalesRep");
-	            List<String> salesRepUserKeys = new ArrayList<String>();
-	            for (int counter = 0; counter < salesRepList.getLength() ; counter++) {
-	            	Element salesRep = (Element) salesRepList.item(counter);
-
-	            	String salesUserKey=salesRep.getAttribute("SalesUserKey");
-	            	if(!YFCObject.isVoid(salesUserKey))
-	            	{
-	            		// only add this sales rep to the list if bill-to email flags indicate we should
-	            		boolean isPrimarySalesRep = "Y".equalsIgnoreCase(salesRep.getAttribute("PrimarySalesRepFlag"));
-	            		if (isPrimarySalesRep && emailFlagPrimary) {
-	            			salesRepUserKeys.add(salesUserKey);
-	            		} else if (!isPrimarySalesRep && emailFlagSecondary) {
-	            			salesRepUserKeys.add(salesUserKey);
-	            		}
-	            	}
-	            }
-
-	            if(salesRepUserKeys.size() > 0)
-	            {
-	            	YFCDocument inputXML = YFCDocument.getDocumentFor("<User>"+
-	            			"<ComplexQuery Operation=\"AND\">" +
-	            			"<Or>" +
-	            			"</Or>" +
-	            			"</ComplexQuery>" +
-	            			"</User>");
-
-	            	YFCElement complexQryEle = inputXML.getDocumentElement().getChildElement("ComplexQuery");
-	            	YFCElement ele = complexQryEle.getChildElement("Or");
-
-	            	Iterator<String> itr = salesRepUserKeys.iterator();
-	            	while(itr.hasNext()) {
-	            		String itemId = (String)itr.next();
-	            		YFCElement expEle = inputXML.getOwnerDocument().createElement("Exp");
-	            		expEle.setAttribute("Name", "UserKey");
-	            		expEle.setAttribute("Value", itemId);
-	            		ele.appendChild(expEle);
-	            	}
-	            	env.setApiTemplate("getUserList", getUserListTemplate);
-	            	Document outputDoc1 = api.invoke(env, "getUserList", inputXML.getDocument());
-	            	env.clearApiTemplate("getUserList");
-	            	NodeList nodeList1  = outputDoc1.getElementsByTagName("ContactPersonInfo");
-	            	int contactPersonInfoLength = nodeList1.getLength();
-	            	if (contactPersonInfoLength > 0) {
-	            		for (int counter = 0; counter < contactPersonInfoLength; counter++) {
-	            			Element contactPersonInfo1 = (Element) nodeList1.item(counter);
-	            			if(contactPersonInfo1 != null && contactPersonInfo1.getAttribute("EMailID") != null)
-	            			{
-	            				//salesRepEmail = salesRepEmail + ";"+contactPersonInfo1.getAttribute("EmailID");
-	            				/*Make the changes on 10/10/2011 start */
-	            				if(counter==0)//EB 367 - For Sending Emails to all salesRep when Order is placed
-	            					salesRepEmail = SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
-	            				else
-	            					salesRepEmail = salesRepEmail + ","+SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
-
-	            				/*Make the changes on 10/10/2011 End*/
-	            			}
-	            		}
-	            	}
-	            }
-	        }
-	        //temp added by ritesh to test.
-	        log.debug("Inside XPXPendingApprovalOrder.getSalesRepEmail(). SalesRep Email IDs are: " + salesRepEmail);
-	        return salesRepEmail;
-	    }
+				Iterator<String> itr = salesRepUserKeys.iterator();
+				while(itr.hasNext()) {
+					String itemId = (String)itr.next();
+					YFCElement expEle = inputXML.getOwnerDocument().createElement("Exp");
+					expEle.setAttribute("Name", "UserKey");
+					expEle.setAttribute("Value", itemId);
+					ele.appendChild(expEle);
+				}
+				env.setApiTemplate("getUserList", getUserListTemplate);
+				Document outputDoc1 = api.invoke(env, "getUserList", inputXML.getDocument());
+				env.clearApiTemplate("getUserList");
+				NodeList nodeList1  = outputDoc1.getElementsByTagName("ContactPersonInfo");
+				int contactPersonInfoLength = nodeList1.getLength();
+				if (contactPersonInfoLength > 0) {
+					for (int counter = 0; counter < contactPersonInfoLength; counter++) {
+						Element contactPersonInfo1 = (Element) nodeList1.item(counter);
+						if(contactPersonInfo1 != null && contactPersonInfo1.getAttribute("EMailID") != null)
+						{
+							if(counter==0)
+							{
+								salesRepEmail = SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
+							}
+							else
+							{
+								salesRepEmail = salesRepEmail + ","+SCXmlUtil.getXpathAttribute(contactPersonInfo1, "./@EMailID");
+							}	
+						}
+					}
+				}
+			}
+		}    
+		log.debug("Inside XPXPendingApprovalOrder.getSalesRepEmail(). SalesRep Email IDs are: " + salesRepEmail);
+		return salesRepEmail;
+	}
 	
 	
 	
