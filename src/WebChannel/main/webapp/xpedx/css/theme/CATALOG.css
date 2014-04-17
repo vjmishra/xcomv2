@@ -530,6 +530,7 @@ width:100%;
 	clear: none;
 	padding: 10px 0px 0px 10px;
 	width: 240px;
+    min-height: 150px;
 	position: relative;
 }
 .normal-view #item-ct dd .contents .item-numbers {
