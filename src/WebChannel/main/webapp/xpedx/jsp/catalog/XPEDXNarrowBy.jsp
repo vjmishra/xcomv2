@@ -132,7 +132,7 @@ function setStockItemFlag()
 			</s:if>
 	<!-- end browse category -->
 
-	<!-- this div will be replaced with results of ajax call -->
+	<%-- this div will be replaced with results of ajax call --%>
 	<div id="narrowByDivList">
 
 </s:if>
