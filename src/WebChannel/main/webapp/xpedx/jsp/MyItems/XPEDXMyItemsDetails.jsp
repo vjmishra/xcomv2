@@ -2019,8 +2019,7 @@ function showSharedListForm(){
 							}
                                      
                  }
-   			 });
-		});
+
     </script>
 
 </head>
