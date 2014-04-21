@@ -29,6 +29,12 @@
 					<xsl:attribute name="SpendingLimit">
 						<xsl:value-of select="//CustomerContact/@SpendingLimit" />
 					</xsl:attribute>
+					<xsl:attribute name="ApproverProxyUserId">
+						<xsl:value-of select="//CustomerContact/@ApproverProxyUserId" />
+					</xsl:attribute>					
+					<xsl:attribute name="ApproverUserId">
+						<xsl:value-of select="//CustomerContact/@ApproverUserId" />
+					</xsl:attribute>
 					<xsl:attribute name="DayFaxNo">
 						<xsl:value-of select="//CustomerContact/@DayFaxNo" />
 					</xsl:attribute>
