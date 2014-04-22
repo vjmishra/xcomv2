@@ -3,6 +3,7 @@
  */
 package com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Vector;
  *
  */
 public class XPEDXItem {
-	
+
 	private String lineNumber;
 	private String legacyProductCode;
 	private String requestedQtyUOM;
@@ -24,14 +25,14 @@ public class XPEDXItem {
 	private String itemCost;
 	private String costCurrencyCode;
 	private String lineStatusCode;
-	private Vector brackets;
-	private Vector warehouseLocationList;
+	private Vector<XPEDXBracket> brackets;
+	private Vector<XPEDXWarehouseLocation> warehouseLocationList;
 	//added for jira 2885
 	private String lineStatusErrorMsg;
 	private String orderMultipleQty;
 	private String orderMultipleUOM;
 	private String orderMultipleErrorFromMax;
-	
+
 	public String getOrderMultipleErrorFromMax() {
 		return orderMultipleErrorFromMax;
 	}
@@ -39,7 +40,7 @@ public class XPEDXItem {
 	public void setOrderMultipleErrorFromMax(String orderMultipleErrorFromMax) {
 		this.orderMultipleErrorFromMax = orderMultipleErrorFromMax;
 	}
-	
+
 	public String getLineStatusErrorMsg() {
 		return lineStatusErrorMsg;
 	}
@@ -52,14 +53,14 @@ public class XPEDXItem {
 	 * Constructor
 	 */
 	public XPEDXItem() {
-		brackets = new Vector();
-		warehouseLocationList = new Vector();
+		brackets = new Vector<XPEDXBracket>();
+		warehouseLocationList = new Vector<XPEDXWarehouseLocation>();
 	}
-	
+
 	public void addBrackets(XPEDXBracket bracket){
 		brackets.addElement(bracket);
 	}
-	
+
 	public void addWarehouseLocations(XPEDXWarehouseLocation warehouseLocation){
 		warehouseLocationList.addElement(warehouseLocation);
 	}
@@ -222,16 +223,16 @@ public class XPEDXItem {
 	/**
 	 * @return the brackets
 	 */
-	public Vector getBrackets() {
+	public List<XPEDXBracket> getBrackets() {
 		return brackets;
 	}
 	/**
 	 * @return the warehouseLocationList
 	 */
-	public Vector getWarehouseLocationList() {
+	public Vector<XPEDXWarehouseLocation> getWarehouseLocationList() {
 		return warehouseLocationList;
 	}
-	
+
 	public String getOrderMultipleQty() {
 		return orderMultipleQty;
 	}

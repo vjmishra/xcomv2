@@ -6603,7 +6603,7 @@ public class XPEDXWCUtils {
 		}
 		return allAPIOutputDoc;
 	}
-	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items,boolean defaultShowUOMFlag) {
+	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(List<String> items,boolean defaultShowUOMFlag) {
 
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		if(items == null || items.size() ==0)

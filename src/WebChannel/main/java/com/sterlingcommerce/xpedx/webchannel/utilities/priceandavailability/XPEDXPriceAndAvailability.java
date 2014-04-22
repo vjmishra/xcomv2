@@ -18,7 +18,7 @@ public class XPEDXPriceAndAvailability {
 	private String shipToSuffix;
 	private String orderBranch;
 	private String headerStatusCode;
-	private Vector<XPEDXItem> items;	
+	private Vector<XPEDXItem> items;
 	private String statusVerboseMsg;
 	private String lineItemsVerboseMsg;
 
@@ -27,17 +27,17 @@ public class XPEDXPriceAndAvailability {
 	 * Constructor
 	 */
 	public XPEDXPriceAndAvailability() {
-		items = new Vector();
+		items = new Vector<XPEDXItem>();
 	}
-	
+
 	public void addItem(XPEDXItem item){
 		items.addElement(item);
 	}
-	
+
 	public void setItems(Vector<XPEDXItem> items) {
 		this.items = items;
 	}
-	
+
 	/**
 	 * @return the company
 	 */
@@ -137,25 +137,25 @@ public class XPEDXPriceAndAvailability {
 	/**
 	 * @return the items
 	 */
-	public Vector getItems() {
+	public Vector<XPEDXItem> getItems() {
 		return items;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return statusVerboseMsg
 	 */
 	public String getStatusVerboseMsg() {
 		return statusVerboseMsg;
 	}
 	/**
-	 * 
+	 *
 	 * @param set User Display message based on status of PriceAndAvailability WebserviceCall
 	 */
 	public void setStatusVerboseMsg(String statusVerboseMsg) {
 		this.statusVerboseMsg = statusVerboseMsg;
 	}
-	
+
 	/*
 	 * LineItems Verbose Message
 	 */
