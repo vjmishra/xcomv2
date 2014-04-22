@@ -72,6 +72,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				}
 				
 				var pricingForItem = pricingInfo[pnaItem.legacyProductCode];
+				console.log('pricingForItem = ' , pricingForItem);
 				
 				var showBracket = false;
 				var showPricing = false;
@@ -140,9 +141,10 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 						var bracket = pricingForItem.bracketsPricingList[j];
 						var formattedPrice = parseFloat(bracket.bracketPrice).toFixed(5) + "";
 						formattedPrice = numberWithCommas(formattedPrice);
+						// do NOT use bracket.brackUOM - use 1st displayPriceForUoms's bracketUOM. this is usually 'Thousand' but can be other such as 'Hundred' or 'Box', etc.
 						html.push('			<div class="pa-row">');
 						html.push('				<div class="col-1">', bracket.bracketQTY, ' ', bracket.bracketUOM, '</div>');
-						html.push('				<div class="col-2">-&nbsp;', formattedPrice, ' / Thousand</div>'); // TODO format with 5 decimals
+						html.push('				<div class="col-2">-&nbsp;', formattedPrice, ' / ', pricingForItem.displayPriceForUoms[0].bracketUOM, '</div>');
 						html.push('			</div>');
 					}
 					html.push('			</div>'); // close bracket-wrap
