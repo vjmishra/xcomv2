@@ -571,7 +571,7 @@ font-size:11.7px;
 			<div class="mil-top-border">
 			<table style="float:right; margin-right:1px;">
 			<tr>
-			<td class="center white text-right" width="153"> My Price (<s:property value='%{#wcContext.getWCAttribute("CUSTOMER_CURRENCY_CODE")}'/>) </td>
+			<td class="center white text-right" width="153"> Price (<s:property value='%{#wcContext.getWCAttribute("CUSTOMER_CURRENCY_CODE")}'/>) </td>
 			<td class="center white text-right pricing-border" width="161"> Extended Price (<s:property value='%{#wcContext.getWCAttribute("CUSTOMER_CURRENCY_CODE")}'/>)</td>
 
 			</tr>

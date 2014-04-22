@@ -1048,7 +1048,7 @@ from session . We have customer Contact Object in session .
 			
 			<table id="checkout-table-header">
 
-			<td class="center white text-right table-header-bar-left"> My Price (<s:property value='#currencyCode'/>) </td>
+			<td class="center white text-right table-header-bar-left"> Price (<s:property value='#currencyCode'/>) </td>
 			<td class="center white text-right pricing-border table-header-bar-right" style="width:143px;"> Extended Price (<s:property value='#currencyCode'/>)&nbsp;</td>
 
 			</tr>
