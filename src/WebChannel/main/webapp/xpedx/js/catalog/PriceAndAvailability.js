@@ -1,17 +1,13 @@
-$(document).ready(function() {
-	getPriceAndAvailabilityForItems(['2263242']);
-//	getPriceAndAvailabilityForItems(['5531440']);
-});
-
 /**
  * @param items array containing item ids
  * @param qtys array containing quantities
  * @param uoms array containing units of measure
  */
 function getPriceAndAvailabilityForItems(items, qtys, uoms) {
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
-	
-	clearPriceAndAvailability(items);
 	
 	if (!qtys) {
 		qtys = [];
@@ -23,7 +19,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			qtys.push(qty);
 		}
 	}
-
+	
 	if (!uoms) {
 		uoms = [];
 		for (var i = 0, len = items.length; i < len; i++) {
@@ -31,7 +27,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			uoms.push(uom);
 		}
 	}
-
+	
 	$.ajax({
 		url: url,
 		dataType: 'json',
@@ -42,8 +38,11 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			'qtys': qtys.join('*'),
 			'uoms': uoms.join('*')
 		},
+		complete: function() {
+			Ext.Msg.hide();
+			myMask.hide();
+		},
 		success: function(data) {
-			console.log('data = ' , data);
 			var pna = data.priceAndAvailability;
 			var pricingInfo = data.pricingInfo;
 			
@@ -55,11 +54,9 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			
 			for (var i = 0, len = pna.items.length; i < len; i++) {
 				var pnaItem = pna.items[i];
-				console.log('pnaItem = ' , pnaItem);
 				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
-					console.log('div not found: #availabilty_' + pnaItem.legacyProductCode);
 					continue;
 				}
 				
@@ -77,7 +74,6 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				var pricingForItem = pricingInfo ? pricingInfo[pnaItem.legacyProductCode] : null;
 				var showBracket = pricingInfo ? (pnaItem.brackets.length > 0) : false; // %{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #category.trim().equals("Paper") && #_action.getValidateOMForMultipleItems() == "true" && #isBracketPricing == "true"}
 				var showPricing = pricingInfo ? (pricingForItem.displayPriceForUoms.length > 0) : false; // %{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}
-				console.log('pricingForItem = ' , pricingForItem);
 				
 				var columnMode;
 				if (showBracket && showPricing) {
@@ -89,7 +85,6 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				}
 				
 				var pnaAvail = calculateAvailability(pnaItem);
-				console.log('pnaAvail = ' , pnaAvail);
 				
 				var html = [];
 				html.push('		<div class="pa-wrap ', columnMode, '">');
@@ -109,8 +104,6 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					html.push('				<div class="pa-row pa-status ready-two-day-color">Ready to Ship Two Plus Days</div>');
 				} else if (pnaAvail['total'] > 0 && requestedQty > pnaAvail['total']) {
 					html.push('				<div class="pa-row pa-status ready-partial-available-color">Partial Quantity Available</div>');
-					var availableBalance = requestedQty - pnaAvail['total']; // TODO where does this message display?
-					console.log('availableBalance = ' , availableBalance);
 				} else {
 					html.push('				<div class="pa-row pa-status ready-not-available-color"></div>');
 				}
@@ -121,14 +114,14 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				html.push('					</div>');
 				html.push('					<div class="pa-row">');
 				html.push('						<div class="col-1">2+ Days:</div>');
-				html.push('						<div class="col-2">', pnaAvail['2']), '</div>');
+				html.push('						<div class="col-2">', numberWithCommas(pnaAvail['2']), '</div>');
 				html.push('					</div>');
 				html.push('					<div class="pa-row">');
 				html.push('						<div class="col-1">Total Available:</div>');
-				html.push('						<div class="col-2">', pnaAvail['total']), '</div>');
+				html.push('						<div class="col-2">', numberWithCommas(pnaAvail['total']), '</div>');
 				html.push('						<div class="col-3">', data.uomDescriptions[pnaItem.requestedQtyUOM], '</div>');
 				html.push('					</div>');
-				html.push('					<div class="pa-row pa-location">', pnaAvail['0']), ' ', data.uomDescriptions[pnaItem.requestedQtyUOM], ' available today at ', data.divisionName, '</div>');
+				html.push('					<div class="pa-row pa-location">', numberWithCommas(pnaAvail['0']), ' ', data.uomDescriptions[pnaItem.requestedQtyUOM], ' available today at ', data.divisionName, '</div>');
 				html.push('				</div>'); // close avail-wrap
 				html.push('			</div>'); // close pa-avail
 				
@@ -193,22 +186,6 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			console.log('ajax failure:\njqXHR:\n' , jqXHR , '\ntextStatus:\n' , textStatus);
 		}
 	});
-}
-
-/**
- * @param items array containing item ids
- * @returns
- */
-function clearPriceAndAvailability(items) {
-	var selectorList = [];
-	for (var i = 0, len = items.length; i < len; i++) {
-		selectorList.push('#availabilty_' + items[i]);
-	}
-	
-	var itemAvailabilityDivs = $(selectorList.join(','));
-	for (var i = 0, len = itemAvailabilityDivs.length; i < len; i++) {
-		itemAvailabilityDivs[i].innerHTML = '';
-	}
 }
 
 /**
