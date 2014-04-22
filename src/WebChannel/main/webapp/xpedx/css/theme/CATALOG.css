@@ -523,7 +523,7 @@ width:100%;
 	z-index: 1;
 	background: #ffffff;
 	position: relative;
-	min-height: 175px;
+	min-height: 188px;
 }
 .normal-view #item-ct dd .contents {
 	float: left;
@@ -545,18 +545,16 @@ width:100%;
     width: 50%;
 }
 .normal-view #item-ct dd .ddesc {
-	position: absolute;
 	width: 555px;
 }
 .normal-view #item-ct dd #prodlist {
 	clear: both;
-	padding-top: 20px;
 }
 .normal-view #item-ct dd .order-input-wrap {
 	float: right;
 	clear: none;
 	width: 365px;
-	top: 30px;
+	top: 45px;
 	left: 424px;
 	position: absolute;
 }
@@ -632,7 +630,7 @@ ul
 
 #item-ct dd .buttons
 {
-	padding-top: 10px;
+	padding-top: 5px;
 	text-align:left;
 }
 

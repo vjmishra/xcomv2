@@ -479,6 +479,7 @@
 	padding: 1%;
 }
 .price-wrap {
+	line-height: 18px;
 	width: 98%;
 	padding: 1%;
 }
@@ -491,7 +492,6 @@
 .pa-status {
 	font-size: 13px;
 	font-weight: bold;
-	padding: 5px;
 }
 .pa-location {
 	font-style: italic;
