@@ -46,11 +46,10 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			var pna = data.priceAndAvailability;
 			var pricingInfo = data.pricingInfo;
 			
-			if (!pna) {
-				console.log('Failed to retrieve price and availability');
+			if (!pna || pna.transactionStatus != 'P') {
+				alert('Real time Price & Availability is not available at this time. Please contact Customer Service.');
 				return;
 			}
-			// pna.transactionStatus != 'P' is error condition
 			
 			for (var i = 0, len = pna.items.length; i < len; i++) {
 				var pnaItem = pna.items[i];
@@ -215,27 +214,44 @@ function calculateAvailability(pnaItem) {
 			'total': 0
 	};
 	
+	var significantDigits = {
+		'0': 0,
+		'1': 0,
+		'2': 0,
+		'total': 0
+	};
+	
 	for (var i = 0, len = pnaItem.warehouseLocationList.length; i < len; i++) {
 		var warehouse = pnaItem.warehouseLocationList[i];
 		var numQty = parseFloat(warehouse.availableQty);
 		qtys[warehouse.numberOfDays] += numQty;
 		qtys['total'] += numQty;
+		
+		var idxDecimal = warehouse.availableQty.indexOf('.');
+		var numPlaces;
+		if (idxDecimal == -1) {
+			numPlaces = 0;
+		} else {
+			numPlaces = warehouse.availableQty.length - idxDecimal - 1;
+		}
+		significantDigits[warehouse.numberOfDays] = Math.max(significantDigits[warehouse.numberOfDays], numPlaces);
+		significantDigits['total'] = Math.max(significantDigits['total'], numPlaces);
 	}
 	
 	qtys['1'] += qtys['0']; // next day total includes two day
 	
 	// round to 1 decimal place if necessary
 	if ((qtys['0'] + '').indexOf('.') != -1) {
-		qtys['0'] = qtys['0'].toFixed(1);
+		qtys['0'] = qtys['0'].toFixed(significantDigits['0']);
 	}
 	if ((qtys['1'] + '').indexOf('.') != -1) {
-		qtys['1'] = qtys['1'].toFixed(1);
+		qtys['1'] = qtys['1'].toFixed(significantDigits['1']);
 	}
 	if ((qtys['2'] + '').indexOf('.') != -1) {
-		qtys['2'] = qtys['2'].toFixed(1);
+		qtys['2'] = qtys['2'].toFixed(significantDigits['2']);
 	}
 	if ((qtys['total'] + '').indexOf('.') != -1) {
-		qtys['total'] = qtys['total'].toFixed(1);
+		qtys['total'] = qtys['total'].toFixed(significantDigits['total']);
 	}
 	
 	return qtys;
