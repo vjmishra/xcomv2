@@ -523,7 +523,7 @@ width:100%;
 	z-index: 1;
 	background: #ffffff;
 	position: relative;
-	min-height: 100px;
+	min-height: 175px;
 }
 .normal-view #item-ct dd .contents {
 	float: left;
@@ -1284,4 +1284,12 @@ img#youtube { margin-right: 9px; }
 	height: 11px;
 	margin-left: 3px;
 	border: none;
+}
+
+.replacement-item {
+	color: #ff0000;
+	padding-right:2px;
+	font-weight:bold; 
+	float:left; 
+	clear: none;"
 }

@@ -724,9 +724,17 @@ function getNormalView() {
 								'</div>',
 							</s:if>
 						'</div>',
+						
 						<s:if test='!#guestUser'>
 							<%-- mill-mfg --%>
 							'{itemtypedesc}',
+						</s:if>
+						
+						'<div class="clearfix"></div>',
+						<s:if test='!#guestUser'>
+							'<div class="replacement-item">',
+								'{repItem}',
+							'</div>',
 						</s:if>
 						
 						'<div class="order-input-wrap">',
@@ -783,10 +791,6 @@ function getNormalView() {
 								'</div>',
 							</s:if>
 						'</div>', <%-- / order-input-wrap" --%>
-						
-						<s:if test='!#guestUser'>
-							'{repItem}',
-						</s:if>
 						
 						<s:if test='!#guestUser'>
 							'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
