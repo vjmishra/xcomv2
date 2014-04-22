@@ -144,9 +144,9 @@
 
 
 .prod-config .button-wrap {
-                width: 100%;
-                padding: 10px 0px 0px 0px;
-                }
+	width: 100%;
+	padding: 10px 0px 0px 0px;
+}
 .prod-config .pa-link {
 	right: 0px;
 	float: left;
@@ -375,6 +375,166 @@
 	color: #555555;
 	font-style: italic;
 }
+
+/* Price and Availability */
+.ready-not-available-color {
+	color: #FF0000;
+}
+.ready-immediate-color {
+	color: #008000;
+}
+.ready-next-day-color {
+	color: #008000;
+}
+.ready-two-day-color {
+	color: #FF0000;
+}
+.ready-partial-available-color {
+	color: #FF0000;
+}
+.pa-wrap {
+	display: block;
+	width: 100%;
+	clear: both;
+	overflow: hidden;
+}
+.pa-wrap h4 {
+	display: block;
+	background: #e1e1e1;
+	border-right: #ffffff 1px solid;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: italic;
+	padding: 3px 0px 3px 5px;
+}
+.pa-wrap h4.pa-last {
+	border-right: none;
+}
+.pa-wrap .two-col {
+	overflow: hidden;
+}
+.pa-wrap .three-col {
+	overflow: hidden;
+}
+.one-col .pa-avail {
+	width: 100%;
+	float: left;
+	clear: none;
+}
+.two-col .pa-avail {
+	width: 60%;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.two-col .pa-bracket {
+	width: 39.75%;
+	float: left;
+	clear: none;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.two-col .pa-price {
+	width: 39.75%;
+	float: left;
+	clear: none;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.three-col .pa-avail {
+	width: 33%;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.three-col .pa-bracket {
+	width: 33%;
+	float: left;
+	clear: none;
+	border-right: #e1e1e1 1px solid;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.three-col .pa-price {
+	width: 33.55%;
+	float: left;
+	clear: none;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.avail-wrap {
+	width: 98%;
+	padding: 5px;
+}
+.bracket-wrap {
+	width: 98%;
+	padding: 1%;
+}
+.price-wrap {
+	width: 98%;
+	padding: 1%;
+}
+.pa-row {
+	display: block;
+	clear: both;
+	width: 98%;
+	padding: 0 0 3px 5px;
+}
+.pa-status {
+	font-size: 13px;
+	font-weight: bold;
+	padding: 5px;
+}
+.pa-location {
+	font-style: italic;
+	padding-top: 7px;
+}
+.extended {
+	padding-top: 7px;
+}
+.avail-wrap .pa-row .col-1 {
+	min-width: 90px;
+	float: left;
+	clear: none;
+}
+.avail-wrap .pa-row .col-2 {
+	min-width: 40px;
+	float: left;
+	clear: none;
+	text-align: right;
+}
+.avail-wrap .pa-row .col-3 {
+	float: left;
+	clear: none;
+	padding-left: 5px;
+}
+.bracket-wrap .pa-row .col-1 {
+	min-width: 60px;
+	float: left;
+	clear: none;
+	text-align: right;
+	padding-right: 2px;
+}
+.bracket-wrap .pa-row .col-2 {
+	float: left;
+	clear: none;
+}
+.price-wrap .pa-row .col-1 {
+	width: 98px;
+	float: left;
+	clear: none;
+	text-align: right;
+	padding-right: 4px;
+}
+.price-wrap .pa-row .col-2 {
+	float: left;
+	clear: none;
+}
+
 
 /*--------------Catalog narrow-by column----------- */  
 .container {

@@ -67,6 +67,8 @@
 </head>
 <body class="ext-gecko ext-gecko3"  onload="highlightRows()">
 
+	<s:url id="getPriceAndAvailabilityForItemsURLid" action="getPriceAndAvailabilityForItems" namespace="/catalog" />
+	<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
 
 
 <s:set name='_action' value='[0]'/>
@@ -772,7 +774,7 @@ function getNormalView() {
 									'<div class="availablelink">',
 										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 										'<div class=\"itemOption\">',
-											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">Show Price &amp; Availability</a>',
+											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"getPriceAndAvailabilityForItems([\'{itemid}\']);\">Show Price &amp; Availability</a>',
 										'</div>',
 									'</div>',
 								'</div>',
@@ -1519,6 +1521,7 @@ function validationforDragToCompare()
 </script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/XPEDXCatalogExt<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/PriceAndAvailability<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <!--<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>
