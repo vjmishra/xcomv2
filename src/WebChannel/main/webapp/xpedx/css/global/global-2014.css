@@ -392,6 +392,10 @@
 .ready-partial-available-color {
 	color: #FF0000;
 }
+.pa-price-tbd-color {
+	font-weight: bold;
+	color: #FF0000;
+}
 .pa-wrap {
 	display: block;
 	width: 100%;

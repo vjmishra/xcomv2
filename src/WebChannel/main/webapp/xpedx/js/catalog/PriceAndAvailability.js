@@ -57,6 +57,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
+					console.log('div not found: #availabilty_' + pnaItem.legacyProductCode);
 					continue;
 				}
 				
@@ -157,21 +158,30 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					
 					for (var j = 0, lenj = pricingForItem.displayPriceForUoms.length; j < lenj; j++) {
 						var displayPriceForUom = pricingForItem.displayPriceForUoms[j];
-						if (displayPriceForUom.bracketPrice.indexOf('$0.') != -1) {
-							// skip zero price
-							continue;
-						}
+						var isZero = displayPriceForUom.bracketPrice.indexOf('$0.') != -1;
 						if (j < lenj - 1) {
 							// bracket price
 							html.push('			<div class="pa-row">');
 							html.push('				<div class="col-1 bold">', (j == 0 ? 'Price:' : '&nbsp;'), '</div>');
-							html.push('				<div class="col-2">', displayPriceForUom.bracketPrice, ' / ', displayPriceForUom.bracketUOM, '</div>');
+							html.push('				<div class="col-2">');
+							if (isZero) {
+								html.push(				'<span class="pa-price-tbd-color">Call for price</span>');
+							} else {
+								html.push(				displayPriceForUom.bracketPrice, ' / ', displayPriceForUom.bracketUOM);
+							}
+							html.push('				</div>');
 							html.push('			</div>');
 						} else {
 							// last row is extended price
 							html.push('			<div class="pa-row">');
 							html.push('				<div class="col-1 bold">Extended Price:</div>');
-							html.push('				<div class="col-2">', displayPriceForUom.bracketPrice, '</div>');
+							html.push('				<div class="col-2">');
+							if (isZero) {
+								html.push(				'<span class="pa-price-tbd-color">To be determined</span>');
+							} else {
+								html.push(					displayPriceForUom.bracketPrice);
+							}
+							html.push('				</div>');
 							html.push('			</div>');
 						}
 					}
