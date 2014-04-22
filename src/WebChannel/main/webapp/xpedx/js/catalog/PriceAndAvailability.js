@@ -57,7 +57,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
-					console.log('div not found: #availabilty_' + pnaItem.legacyProductCode);
+					console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode);
 					continue;
 				}
 				
@@ -71,10 +71,15 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					continue;
 				}
 				
-				// pricingInfo is null when user lacks permission to see prices
-				var pricingForItem = pricingInfo ? pricingInfo[pnaItem.legacyProductCode] : null;
-				var showBracket = pricingInfo ? (pnaItem.brackets.length > 0) : false; // %{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #category.trim().equals("Paper") && #_action.getValidateOMForMultipleItems() == "true" && #isBracketPricing == "true"}
-				var showPricing = pricingInfo ? (pricingForItem.displayPriceForUoms.length > 0) : false; // %{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}
+				var pricingForItem = pricingInfo[pnaItem.legacyProductCode];
+				
+				var showBracket = false;
+				var showPricing = false;
+				if (data.userHasViewPricesRole) {
+					var isPaperCategory = pricingForItem.categoryPath.indexOf('/MasterCatalog/300057') != -1;
+					showBracket = pricingForItem.isBracketPricing == "true" && pnaItem.brackets.length > 0 && isPaperCategory; // old code also had: && #_action.getValidateOMForMultipleItems() == "true"
+					showPricing = pricingForItem.displayPriceForUoms.length > 0;
+				}
 				
 				var columnMode;
 				if (showBracket && showPricing) {
@@ -130,23 +135,17 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					html.push('		<div class="pa-bracket">');
 					html.push('			<h4> Bracket Pricing (', pricingForItem.priceCurrencyCode, ') </h4>');
 					html.push('			<div class="bracket-wrap">');
-					html.push('				<div class="pa-row">');
-					html.push('					<div class="col-1">40 M CTN</div>');
-					html.push('					<div class="col-2">-&nbsp;$12.40000 / Thousand</div>');
-					html.push('				</div>');
-					html.push('				<div class="pa-row">');
-					html.push('					<div class="col-1">10 M CTN</div>');
-					html.push('					<div class="col-2">-&nbsp;$13.05000 / Thousand</div>');
-					html.push('				</div>');
-					html.push('				<div class="pa-row">');
-					html.push('					<div class="col-1">1 M CTN</div>');
-					html.push('					<div class="col-2">-&nbsp;$12.40000 / Thousand</div>');
-					html.push('				</div>');
-					html.push('				<div class="pa-row">');
-					html.push('					<div class="col-1">1 M CTN</div>');
-					html.push('					<div class="col-2">-&nbsp;$13.05000 / Thousand</div>');
-					html.push('				</div>');
-					html.push('			</div>');
+					
+					for (var j = 0, lenj = pricingForItem.bracketsPricingList.length; j < lenj; j++) {
+						var bracket = pricingForItem.bracketsPricingList[j];
+						var formattedPrice = parseFloat(bracket.bracketPrice).toFixed(5) + "";
+						formattedPrice = numberWithCommas(formattedPrice);
+						html.push('			<div class="pa-row">');
+						html.push('				<div class="col-1">', bracket.bracketQTY, ' ', bracket.bracketUOM, '</div>');
+						html.push('				<div class="col-2">-&nbsp;', formattedPrice, ' / Thousand</div>'); // TODO format with 5 decimals
+						html.push('			</div>');
+					}
+					html.push('			</div>'); // close bracket-wrap
 					html.push('		</div>'); // close pa-bracket
 				}
 				
@@ -168,8 +167,8 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 							} else {
 								html.push(			displayPriceForUom.bracketPrice, ' / ', displayPriceForUom.bracketUOM);
 							}
-							html.push('			</div>');
-							html.push('		</div>');
+							html.push('			</div>'); // close col-2 (bracket price)
+							html.push('		</div>'); // close pa-row (bracket price)
 						} else {
 							// last row is extended price
 							html.push('		<div class="pa-row">');
@@ -180,8 +179,8 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 							} else {
 								html.push(			displayPriceForUom.bracketPrice);
 							}
-							html.push('			</div>');
-							html.push('		</div>');
+							html.push('			</div>'); // close pa-row (extended price)
+							html.push('		</div>'); // close col-2 (extended price)
 						}
 					}
 					html.push('			</div>'); // close pa-price
@@ -235,8 +234,8 @@ function htmlEncode(value){
  * Formats number with commas.
  * @author http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
  */
-function numberWithCommas(x) {
-    var parts = x.toString().split(".");
+function numberWithCommas(num) {
+    var parts = num.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }

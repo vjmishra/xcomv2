@@ -42,8 +42,10 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 	// output fields
 	private XPEDXPriceAndAvailability priceAndAvailability;
 	private Map<String, XPEDXItemPricingInfo> pricingInfo;
+	private boolean userHasViewPricesRole;
 	private String divisionName;
 	private Map<String, String> uomDescriptions;
+	private Map<String, String> itemCategories;
 	private Map<String, String> lineErrorMessages;
 
 	@Override
@@ -57,12 +59,11 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 
 		priceAndAvailability = XPEDXPriceandAvailabilityUtil.getPriceAndAvailability(xItems);
 
-		// TODO skip pricing if user permissions prevent seeing price: xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"
-		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
 
-		if ("Y".equals(xpedxCustomerContactInfoBean.getExtnViewPricesFlag())) {
-			pricingInfo = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(priceAndAvailability.getItems(), wcContext);
-		}
+		pricingInfo = XPEDXPriceandAvailabilityUtil.getPricingInfoFromItemDetails(priceAndAvailability.getItems(), wcContext);
+
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean) XPEDXWCUtils.getObjectFromCache("XPEDX_Customer_Contact_Info_Bean");
+		userHasViewPricesRole = "Y".equals(xpedxCustomerContactInfoBean.getExtnViewPricesFlag());
 
 		lineErrorMessages = XPEDXPriceandAvailabilityUtil.getLineErrorMessageMap(priceAndAvailability.getItems());
 
@@ -73,6 +74,9 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 			String uomDesc = XPEDXWCUtils.getUOMDescription(xItem.getRequestedQtyUOM());
 			uomDescriptions.put(xItem.getRequestedQtyUOM(), uomDesc);
 		}
+
+		itemCategories = new LinkedHashMap<String, String>();
+		// TODO need to pull PriceInfoDoc?
 
 		return SUCCESS;
 	}
@@ -170,12 +174,20 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 		return pricingInfo;
 	}
 
+	public boolean isUserHasViewPricesRole() {
+		return userHasViewPricesRole;
+	}
+
 	public String getDivisionName() {
 		return divisionName;
 	}
 
 	public Map<String, String> getUomDescriptions() {
 		return uomDescriptions;
+	}
+
+	public Map<String, String> getItemCategories() {
+		return itemCategories;
 	}
 
 	public Map<String, String> getLineErrorMessages() {

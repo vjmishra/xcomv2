@@ -1085,12 +1085,15 @@ public class XPEDXPriceandAvailabilityUtil {
 						prodMweight = null;
 					}
 
+					Element categoryElem = SCXmlUtil.getXpathElement(itemEle, "CategoryList/Category");
+					String categoryPath = categoryElem.getAttribute("CategoryPath");
 
 					XPEDXItemPricingInfo pricingInfo = null;
 					for (XPEDXItem pandAItem : items) {
 						if (pandAItem.getLegacyProductCode().equals(itemId)) {
 							String priceCurrencyCode = null;
 							pricingInfo = new XPEDXItemPricingInfo();
+							pricingInfo.setCategoryPath(categoryPath);
 							if (pandAItem.getPriceCurrencyCode() != null
 									&& pandAItem.getPriceCurrencyCode().trim().length() > 0) {
 								pricingInfo.setPriceCurrencyCode(pandAItem.getPriceCurrencyCode());
