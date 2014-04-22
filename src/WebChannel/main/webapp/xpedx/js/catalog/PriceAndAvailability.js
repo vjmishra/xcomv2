@@ -126,63 +126,62 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				html.push('				</div>'); // close avail-wrap
 				html.push('			</div>'); // close pa-avail
 				
-				
 				if (showBracket) {
-					html.push('			<div class="pa-bracket">');
-					html.push('				<h4> Bracket Pricing (', pricingForItem.priceCurrencyCode, ') </h4>');
-					html.push('				<div class="bracket-wrap">');
-					html.push('					<div class="pa-row">');
-					html.push('						<div class="col-1">40 M CTN</div>');
-					html.push('						<div class="col-2">-&nbsp;$12.40000 / Thousand</div>');
-					html.push('					</div>');
-					html.push('					<div class="pa-row">');
-					html.push('						<div class="col-1">10 M CTN</div>');
-					html.push('						<div class="col-2">-&nbsp;$13.05000 / Thousand</div>');
-					html.push('					</div>');
-					html.push('					<div class="pa-row">');
-					html.push('						<div class="col-1">1 M CTN</div>');
-					html.push('						<div class="col-2">-&nbsp;$12.40000 / Thousand</div>');
-					html.push('					</div>');
-					html.push('					<div class="pa-row">');
-					html.push('						<div class="col-1">1 M CTN</div>');
-					html.push('						<div class="col-2">-&nbsp;$13.05000 / Thousand</div>');
-					html.push('					</div>');
+					html.push('		<div class="pa-bracket">');
+					html.push('			<h4> Bracket Pricing (', pricingForItem.priceCurrencyCode, ') </h4>');
+					html.push('			<div class="bracket-wrap">');
+					html.push('				<div class="pa-row">');
+					html.push('					<div class="col-1">40 M CTN</div>');
+					html.push('					<div class="col-2">-&nbsp;$12.40000 / Thousand</div>');
 					html.push('				</div>');
-					html.push('			</div>'); // close pa-bracket
+					html.push('				<div class="pa-row">');
+					html.push('					<div class="col-1">10 M CTN</div>');
+					html.push('					<div class="col-2">-&nbsp;$13.05000 / Thousand</div>');
+					html.push('				</div>');
+					html.push('				<div class="pa-row">');
+					html.push('					<div class="col-1">1 M CTN</div>');
+					html.push('					<div class="col-2">-&nbsp;$12.40000 / Thousand</div>');
+					html.push('				</div>');
+					html.push('				<div class="pa-row">');
+					html.push('					<div class="col-1">1 M CTN</div>');
+					html.push('					<div class="col-2">-&nbsp;$13.05000 / Thousand</div>');
+					html.push('				</div>');
+					html.push('			</div>');
+					html.push('		</div>'); // close pa-bracket
 				}
 				
 				if (showPricing) {
-					html.push('			<div class="pa-price">');
-					html.push('				<h4 class="pa-last"> Price (', pricingForItem.priceCurrencyCode, ') </h4>');
-					html.push('				<div class="price-wrap">');
+					html.push('		<div class="pa-price">');
+					html.push('			<h4 class="pa-last"> Price (', pricingForItem.priceCurrencyCode, ') </h4>');
+					html.push('			<div class="price-wrap">');
 					
 					for (var j = 0, lenj = pricingForItem.displayPriceForUoms.length; j < lenj; j++) {
 						var displayPriceForUom = pricingForItem.displayPriceForUoms[j];
 						var isZero = displayPriceForUom.bracketPrice.indexOf('$0.') != -1;
 						if (j < lenj - 1) {
 							// bracket price
-							html.push('			<div class="pa-row">');
-							html.push('				<div class="col-1 bold">', (j == 0 ? 'Price:' : '&nbsp;'), '</div>');
-							html.push('				<div class="col-2">');
+							html.push('		<div class="pa-row">');
+							html.push('			<div class="col-1 bold">', (j == 0 ? 'Price:' : '&nbsp;'), '</div>');
+							html.push('			<div class="col-2">');
 							if (isZero) {
-								html.push(				'<span class="pa-price-tbd-color">Call for price</span>');
+								html.push(			'<span class="pa-price-tbd-color">Call for price</span>');
 							} else {
-								html.push(				displayPriceForUom.bracketPrice, ' / ', displayPriceForUom.bracketUOM);
+								html.push(			displayPriceForUom.bracketPrice, ' / ', displayPriceForUom.bracketUOM);
 							}
-							html.push('				</div>');
 							html.push('			</div>');
+							html.push('		</div>');
 						} else {
 							// last row is extended price
-							html.push('			<div class="pa-row">');
-							html.push('				<div class="col-1 bold">Extended Price:</div>');
-							html.push('				<div class="col-2">');
+							html.push('		<div class="pa-row">');
+							html.push('			<div class="col-1 bold">Extended Price:</div>');
+							html.push('			<div class="col-2">');
 							if (isZero) {
-								html.push(				'<span class="pa-price-tbd-color">To be determined</span>');
+								html.push(			'<span class="pa-price-tbd-color">To be determined</span>');
 							} else {
-								html.push(					displayPriceForUom.bracketPrice);
+								html.push(			displayPriceForUom.bracketPrice);
 							}
-							html.push('				</div>');
 							html.push('			</div>');
+							html.push('		</div>');
 						}
 					}
 					html.push('			</div>'); // close pa-price
