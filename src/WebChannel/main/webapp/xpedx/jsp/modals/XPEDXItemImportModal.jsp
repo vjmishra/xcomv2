@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
-
+<%@ page import="com.sterlingcommerce.xpedx.webchannel.common.DownloadSampleServlet"  %>
 <script type="text/javascript">
 	function importFile(){
 		document.formImport[0].submit();
 	}
-</script>
+	
+
 
 <style>
 	.share-modal { width:640px!important; height:414px;}		 
@@ -25,7 +26,7 @@
 					<p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. </p>
 					<p>A sample file is provided. Delete the item contents and enter your own data.</p>
 					
-					<input class="btn-neutral floatleft addmargintop10" type="submit" value="Download Sample" onclick="window.location.href='../sample/SampleImport.csv'; return false;" />
+					<input class="btn-neutral floatleft addmargintop10" type="submit" value="Download Sample" onclick="window.location.href='/swc/downloadsample'; return false;" />
 		
 					<p>Please note that an individual My Items List cannot exceed 200 items. </p>
 					<p>To import the file, locate the file on your hard drive by using the 'Browse' button or by typing the file path in the box below. After the file is located, click 'Open' and then click the 'Import' button. </p>
