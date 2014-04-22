@@ -139,11 +139,18 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					
 					for (var j = 0, lenj = pricingForItem.bracketsPricingList.length; j < lenj; j++) {
 						var bracket = pricingForItem.bracketsPricingList[j];
+						
 						var formattedPrice = parseFloat(bracket.bracketPrice).toFixed(5) + "";
 						formattedPrice = numberWithCommas(formattedPrice);
-						// do NOT use bracket.brackUOM - use 1st displayPriceForUoms's bracketUOM. this is usually 'Thousand' but can be other such as 'Hundred' or 'Box', etc.
+						
+						var formattedUom = bracket.bracketUOM;
+						if (formattedUom.indexOf('M_') == 0) {
+							formattedUom = formattedUom.substring(2);
+						}
+						
+						// do NOT use bracket.brackUOM here - use 1st displayPriceForUoms's bracketUOM. this is usually 'Thousand' but can be other such as 'Hundred' or 'Box', etc.
 						html.push('			<div class="pa-row">');
-						html.push('				<div class="col-1">', bracket.bracketQTY, ' ', bracket.bracketUOM, '</div>');
+						html.push('				<div class="col-1">', bracket.bracketQTY, ' ', formattedUom, '</div>');
 						html.push('				<div class="col-2">-&nbsp;', formattedPrice, ' / ', pricingForItem.displayPriceForUoms[0].bracketUOM, '</div>');
 						html.push('			</div>');
 					}
