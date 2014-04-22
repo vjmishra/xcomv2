@@ -749,31 +749,31 @@ function getNormalView() {
 								</s:if>
 							'</div>',
 							
-							'<div class="order-row">',
-								<s:if test='(#isCustomerPO == "Y" || (#mfgItemFlag != null && #mfgItemFlag == "Y"))'>
-									<s:if test='!#guestUser && #isCustomerPO == "Y"'>
+							<s:if test='(#isCustomerPO == "Y" || (#mfgItemFlag != null && #mfgItemFlag == "Y"))'>
+								<s:if test='!#guestUser && #isCustomerPO == "Y"'>
+									'<div class="order-row">',
 										'<div class="order-label">',
 											'<s:property value="customerPOLabel"/>: ',
 										'</div>',
 										'<div class="order-input">',
 											'<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}" maxlength="22" size="25"/>',
 										'</div>',
-									</s:if>
+									'</div>',
 								</s:if>
-							'</div>',
+							</s:if>
 							
-							'<div class="order-row">',
-								<s:if test='(#isCustomerLinAcc == "Y" || (#customerItemFlag != null && #customerItemFlag == "Y"))'>
-									<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'>
+							<s:if test='(#isCustomerLinAcc == "Y" || (#customerItemFlag != null && #customerItemFlag == "Y"))'>
+								<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'>
+									'<div class="order-row">',
 										'<div class="order-label">',
 											'<s:property value="custLineAccNoLabel"/>: ',
 										'</div>',
 										'<div class="order-input">',
 											'<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}" maxlength="24" size="25"/>',
 										'</div>',
-									</s:if>
+									'</div>',
 								</s:if>
-							'</div>',
+							</s:if>
 							
 							'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
 							<s:if test='!#guestUser'>
