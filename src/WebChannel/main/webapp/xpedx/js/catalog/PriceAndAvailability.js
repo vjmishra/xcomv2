@@ -72,7 +72,6 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				}
 				
 				var pricingForItem = pricingInfo[pnaItem.legacyProductCode];
-				console.log('pricingForItem = ' , pricingForItem);
 				
 				var showBracket = false;
 				var showPricing = false;
