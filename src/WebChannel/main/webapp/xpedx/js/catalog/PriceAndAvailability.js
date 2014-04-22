@@ -216,6 +216,20 @@ function calculateAvailability(pnaItem) {
 	
 	qtys['1'] += qtys['0']; // next day total includes two day
 	
+	// round to 1 decimal place if necessary
+	if ((qtys['0'] + '').indexOf('.') != -1) {
+		qtys['0'] = qtys['0'].toFixed(1);
+	}
+	if ((qtys['1'] + '').indexOf('.') != -1) {
+		qtys['1'] = qtys['1'].toFixed(1);
+	}
+	if ((qtys['2'] + '').indexOf('.') != -1) {
+		qtys['2'] = qtys['2'].toFixed(1);
+	}
+	if ((qtys['total'] + '').indexOf('.') != -1) {
+		qtys['total'] = qtys['total'].toFixed(1);
+	}
+	
 	return qtys;
 }
 
