@@ -596,14 +596,14 @@ div.catalog-search-container input#search_searchTerm {
 	background: #f1f1f1;
 }
 .subPanelBox .header {
-	background: #d2d2d2;
-	border-top: 1px #ffffff solid;
-	color: #333333;
-	font-weight: bold;
-	height: auto;
-	padding: 0 10px;
-	line-height: 22px;
-	margin-bottom: 2px;
+    background: none repeat scroll 0 0 #D2D2D2;
+    border-top: 1px solid #FFFFFF;
+    color: #333333;
+    font-weight: bold;
+    height: auto;
+    line-height: 22px;
+    margin-bottom: 2px;
+    padding: 0 6px;
 }
 .subPanelBox .content {
 	border: none;
@@ -623,9 +623,12 @@ div.catalog-search-container input#search_searchTerm {
     float: right;
     font-weight: normal;
     line-height: inherit;
-    margin: 0;
     padding: 0;
-    margin-right: -16px;
+    position: absolute;
+    right: -26px;
+    text-align: right;
+    top: 3px;
+   font-size: 11px;
 }
 .subPanelBox {
 	border: 0 solid #DDDDDD;
@@ -638,17 +641,21 @@ div.catalog-search-container input#search_searchTerm {
 	height: auto;
 }
 .narrowbyattributes ul li {
-	clear: both;
-	font-size: 11px;
-	font-weight: normal;
-	padding: 3px 6px 3px 10px;
-	width: 130px;
+    clear: both;
+    font-size: 11px;
+    font-weight: normal;
+    padding: 3px 0 3px 6px;
+    position: relative;
+    width: 127px;
 }
 #narrowByDiv_Brand {
 	overflow: hidden;
 }
 .narrowByViewAllLink {
-	float: right;
-	margin-right: 10px;
-	padding: 2px 0;
+    clear: both;
+    display: block;
+    margin-right: 10px;
+    padding: 2px 0;
+    text-align: right;
+    width: 158px;
 }
