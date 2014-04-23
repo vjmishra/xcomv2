@@ -1026,11 +1026,9 @@ var ct = Ext.get('item-box-inner');
 	</table>
 	</div>
 	
-	<s:if test='%{errorCode.trim().equals("")}'>		
-	</s:if>	
-	<s:else>
-		<center><div class="error"><s:property value='%{errorCode}' /></div> </center>
-	</s:else>
+	<s:if test='%{!errorCode.trim().equals("")}'>		
+		<center><div class="error-center"><s:property value='%{errorCode}' /></div> </center>
+	</s:if>
 			 
 	 
 	<div id="item-box">
