@@ -704,7 +704,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// To update Order and line level instructions.
 				YFCElement instElement = inXMLEle.getChildElement("Instructions");
 				if (instElement != null) {
-					setInstructionKeysOnException(inXMLEle, fOrderEle);
+					YFCElement instructionElement = inXMLEle.getChildElement("Instruction");
+					if(!YFCObject.isNull(instructionElement) && !YFCObject.isVoid(instructionElement) &&
+							!YFCObject.isNull(instructionElement.getAttribute("InstructionText")) && !YFCObject.isVoid(instructionElement.getAttribute("InstructionText")))
+						setInstructionKeysOnException(inXMLEle, fOrderEle);
+					else
+					{
+						inXMLEle.removeChild(instElement);
+					}
 				}
 				YFCElement pendignElement=inXMLEle.createChild("PendingChanges");
 				pendignElement.setAttribute("IgnorePendingChanges", "Y");
