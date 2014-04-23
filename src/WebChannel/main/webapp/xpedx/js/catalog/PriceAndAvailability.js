@@ -224,7 +224,13 @@ function calculateAvailability(pnaItem) {
 	for (var i = 0, len = pnaItem.warehouseLocationList.length; i < len; i++) {
 		var warehouse = pnaItem.warehouseLocationList[i];
 		var numQty = parseFloat(warehouse.availableQty);
-		qtys[warehouse.numberOfDays] += numQty;
+		
+		var numDays = warehouse.numberOfDays;
+		if (parseInt(numDays) > 2) {
+			numDays = '2';
+		}
+		
+		qtys[numDays] += numQty;
 		qtys['total'] += numQty;
 		
 		var idxDecimal = warehouse.availableQty.indexOf('.');
@@ -234,7 +240,7 @@ function calculateAvailability(pnaItem) {
 		} else {
 			numPlaces = warehouse.availableQty.length - idxDecimal - 1;
 		}
-		significantDigits[warehouse.numberOfDays] = Math.max(significantDigits[warehouse.numberOfDays], numPlaces);
+		significantDigits[numDays] = Math.max(significantDigits[warehouse.numberOfDays], numPlaces);
 		significantDigits['total'] = Math.max(significantDigits['total'], numPlaces);
 	}
 	
