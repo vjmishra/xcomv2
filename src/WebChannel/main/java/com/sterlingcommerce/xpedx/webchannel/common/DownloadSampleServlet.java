@@ -20,7 +20,7 @@ public class DownloadSampleServlet extends HttpServlet {
 			throws ServletException,IOException  {
 		try{   
 			PrintWriter out = response.getWriter();
-			String filename = "/WebChannel/main/webapp/sample/SampleImport.csv";
+			String filename = getServletContext().getRealPath("/") +"sample/SampleImport.csv";
 
 			   // set the http content type to "APPLICATION/OCTET-STREAM
 			   response.setContentType("APPLICATION/OCTET-STREAM");
