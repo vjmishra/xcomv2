@@ -12,10 +12,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 	if (!qtys) {
 		qtys = [];
 		for (var i = 0, len = items.length; i < len; i++) {
-			var qty = $('#Qty_' + items[i]).val();
-			if (qty.trim().length == 0) {
-				qty = '1';
-			}
+			var qty = $('#Qty_' + items[i]).val().trim();
 			qtys.push(qty);
 		}
 	}
@@ -99,18 +96,19 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				var requestedQty = parseFloat(pnaItem.requestedQty);
 				
-				if (pnaAvail['total'] == 0) {
-					html.push('				<div class="pa-row pa-status ready-not-available-color">Not Available</div>');
-				} else if (requestedQty <= pnaAvail['0']) {
-					html.push('				<div class="pa-row pa-status ready-immediate-color">Ready to Ship</div>');
-				} else if (requestedQty <= pnaAvail['1']) {
-					html.push('				<div class="pa-row pa-status ready-next-day-color">Ready to Ship Next Day</div>');
-				} else if (requestedQty <= pnaAvail['total']) {
-					html.push('				<div class="pa-row pa-status ready-two-day-color">Ready to Ship Two Plus Days</div>');
-				} else if (pnaAvail['total'] > 0 && requestedQty > pnaAvail['total']) {
-					html.push('				<div class="pa-row pa-status ready-partial-available-color">Partial Quantity Available</div>');
-				} else {
-					html.push('				<div class="pa-row pa-status ready-not-available-color"></div>');
+				if (qtys[i].trim().length > 0) {
+					// only display 'ready to ship' message if user requested a qty (omit message if user left qty field blank)
+					if (pnaAvail['total'] == 0) {
+						html.push('			<div class="pa-row pa-status ready-not-available-color">Not Available</div>');
+					} else if (requestedQty <= pnaAvail['0']) {
+						html.push('			<div class="pa-row pa-status ready-immediate-color">Ready to Ship</div>');
+					} else if (requestedQty <= pnaAvail['1']) {
+						html.push('			<div class="pa-row pa-status ready-next-day-color">Ready to Ship Next Day</div>');
+					} else if (requestedQty <= pnaAvail['total']) {
+						html.push('			<div class="pa-row pa-status ready-two-day-color">Ready to Ship Two Plus Days</div>');
+					} else if (pnaAvail['total'] > 0 && requestedQty > pnaAvail['total']) {
+						html.push('			<div class="pa-row pa-status ready-partial-available-color">Partial Quantity Available</div>');
+					}
 				}
 				
 				html.push('					<div class="pa-row">');
