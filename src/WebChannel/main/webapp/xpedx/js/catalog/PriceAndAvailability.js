@@ -86,7 +86,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					columnMode = 'one-col';
 				}
 				
-				var pnaAvail = calculateAvailability(pnaItem);
+				var pnaAvail = calculateAvailability(pnaItem.warehouseLocationList);
 				
 				var html = [];
 				html.push('		<div class="pa-wrap ', columnMode, '">');
@@ -202,9 +202,11 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 }
 
 /**
- * @param pnaItem
+ * @param warehouseLocationList
+ * @return Returns an object with properties: '0', '1', '2', 'total'.
+ *         The value for each property is the quantity (as a float) for the corresponding number of days: 0=Immediate, 1=Next Day, 2=2+ Days, total=Total
  */
-function calculateAvailability(pnaItem) {
+function calculateAvailability(warehouseLocationList) {
 	var qtys = {
 			'0': 0,
 			'1': 0,
@@ -212,6 +214,8 @@ function calculateAvailability(pnaItem) {
 			'total': 0
 	};
 	
+	// workaround for inexactness of JavaScript floating point math - we must explicitly round after adding
+	//     so we must track the number so the rounding preserves the significant digits of all the numbers added into each bucket
 	var significantDigits = {
 		'0': 0,
 		'1': 0,
@@ -219,46 +223,58 @@ function calculateAvailability(pnaItem) {
 		'total': 0
 	};
 	
-	for (var i = 0, len = pnaItem.warehouseLocationList.length; i < len; i++) {
-		var warehouse = pnaItem.warehouseLocationList[i];
+	for (var i = 0, len = warehouseLocationList.length; i < len; i++) {
+		var warehouse = warehouseLocationList[i];
 		var numQty = parseFloat(warehouse.availableQty);
 		
 		var numDays = warehouse.numberOfDays;
 		if (parseInt(numDays) > 2) {
+			// treat 3 day qty as 2+ day qty
 			numDays = '2';
 		}
 		
 		qtys[numDays] += numQty;
 		qtys['total'] += numQty;
 		
-		var idxDecimal = warehouse.availableQty.indexOf('.');
-		var numPlaces;
-		if (idxDecimal == -1) {
-			numPlaces = 0;
-		} else {
-			numPlaces = warehouse.availableQty.length - idxDecimal - 1;
-		}
-		significantDigits[numDays] = Math.max(significantDigits[warehouse.numberOfDays], numPlaces);
-		significantDigits['total'] = Math.max(significantDigits['total'], numPlaces);
+		var tmpSignificantDigits = getSignificantDigits(warehouse.availableQty);
+		significantDigits[numDays] = Math.max(significantDigits[warehouse.numberOfDays], tmpSignificantDigits);
+		significantDigits['total'] = Math.max(significantDigits['total'], tmpSignificantDigits);
 	}
 	
-	qtys['1'] += qtys['0']; // next day total includes two day
+	// next day includes immediate
+	qtys['1'] += qtys['0'];
+	significantDigits['1'] = Math.max(significantDigits['1'], significantDigits['0']);
 	
-	// round to 1 decimal place if necessary
+	// round to significant digits
 	if ((qtys['0'] + '').indexOf('.') != -1) {
-		qtys['0'] = qtys['0'].toFixed(significantDigits['0']);
+		qtys['0'] = parseFloat(qtys['0'].toFixed(significantDigits['0']));
 	}
 	if ((qtys['1'] + '').indexOf('.') != -1) {
-		qtys['1'] = qtys['1'].toFixed(significantDigits['1']);
+		qtys['1'] = parseFloat(qtys['1'].toFixed(significantDigits['1']));
 	}
 	if ((qtys['2'] + '').indexOf('.') != -1) {
-		qtys['2'] = qtys['2'].toFixed(significantDigits['2']);
+		qtys['2'] = parseFloat(qtys['2'].toFixed(significantDigits['2']));
 	}
 	if ((qtys['total'] + '').indexOf('.') != -1) {
-		qtys['total'] = qtys['total'].toFixed(significantDigits['total']);
+		qtys['total'] = parseFloat(qtys['total'].toFixed(significantDigits['total']));
 	}
 	
 	return qtys;
+}
+
+/**
+ * @param numStr
+ * @returns Number of digits after the decimal
+ */
+function getSignificantDigits(numStr) {
+	var idxDecimal = numStr.indexOf('.');
+	var numAfterDecimal;
+	if (idxDecimal == -1) {
+		numAfterDecimal = 0;
+	} else {
+		numAfterDecimal = numStr.length - idxDecimal - 1;
+	}
+	return numAfterDecimal;
 }
 
 /**
