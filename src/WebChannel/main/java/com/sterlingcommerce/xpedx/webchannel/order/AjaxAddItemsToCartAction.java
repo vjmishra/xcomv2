@@ -53,7 +53,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 	public static final String TYPE_CUSTOMER_PART_NUMBER = "2";
 
 	// inputs
-	private String isEditOrder;
+	private Boolean isEditOrder;
 	private String orderHeaderKey;
 	private String itemType; // 1=xpedx #, 2=Customer Part #
 	private String items;
@@ -181,7 +181,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 			for (InputRow row : rows) {
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@CustomerPONo", row.getPo());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Extn/@ExtnCustLineAccNo", row.getAccount());
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Extn/@ExtnEditOrderFlag", isEditOrder);
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Extn/@ExtnEditOrderFlag", isEditOrder ? "Y" : "N");
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemID", row.getItem());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@OrderedQty", row.getQty());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@OrderedQty", row.getQty());
@@ -195,6 +195,13 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 			Element xpedDraftOrderAddOrderLinesInputElem = WCMashupHelper.getMashupInput("xpedx_me_draftOrderAddOrderLines", valueMap, wcContext);
 			xpedDraftOrderAddOrderLinesInputElem.setAttribute("IgnoreOrdering", "Y");
+
+			// eb-5663: if editing order, must flag the order to record changes, otherwise item will be uneditable in the cart
+			if ("Y".equals(draftOrderFlag)) {
+				Element pendingChangesElem = xpedDraftOrderAddOrderLinesInputElem.getOwnerDocument().createElement("PendingChanges");
+				pendingChangesElem.setAttribute("RecordPendingChanges", "Y");
+				xpedDraftOrderAddOrderLinesInputElem.appendChild(pendingChangesElem);
+			}
 
 			Element changeOrderOutput = (Element) WCMashupHelper.invokeMashup("xpedx_me_draftOrderAddOrderLines", xpedDraftOrderAddOrderLinesInputElem, wcContext.getSCUIContext());
 
@@ -326,7 +333,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 	// --- Input and Output fields
 
-	public void setIsEditOrder(String isEditOrder) {
+	public void setIsEditOrder(Boolean isEditOrder) {
 		this.isEditOrder = isEditOrder;
 	}
 
