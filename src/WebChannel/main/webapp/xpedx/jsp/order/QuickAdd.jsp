@@ -211,7 +211,7 @@
 					</div>
 					<s:hidden id="orderHeaderKey" value='%{#orderHeaderKey}' />
 					<s:hidden id="currencyCode" value='%{#currencyCode}' />
-					<s:hidden id="isEditOrder" value="%{(#_action.getIsEditOrder())}" />
+					<s:hidden id="isEditOrder" value="%{(#isEditOrderHeaderKey != null && #isEditOrderHeaderKey != '')}" />
 					
 					<s:set name="jobIdFlag" value='%{customerFieldsMap.get("CustLineAccNo")}' />
 					<s:set name="customerPONoFlag" value='%{customerFieldsMap.get("CustomerPONo")}' />
