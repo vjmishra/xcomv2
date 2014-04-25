@@ -41,7 +41,7 @@
 }	
 
 .ui-addTrPad h2 {
-    border-bottom: none;
+	border-bottom: none;
 }
 
 .ui-addTrPad-head{
@@ -136,20 +136,20 @@
 	float: right;
 }
 .form input.btn-gradient.floatright{
-    display: inline;
-    float: right;
+	display: inline;
+	float: right;
 	cursor: pointer;
 }
 
 .form input.btn-gradient.floatright.addmarginleft10{
-    display: inline;
-    float: right;
+	display: inline;
+	float: right;
 	cursor: pointer;
 	margin-left: 10px;
 }
 .form input.btn-neutral.floatright.addmarginleft10{
-    display: inline;
-    float: right;
+	display: inline;
+	float: right;
 	cursor: pointer;
 	margin-left: 10px;
 }
@@ -166,7 +166,7 @@
 .addmarginleft5 {
 	margin-left: 5px;
 }
-                
+				
 /*------------Reset Password---------------*/
 .reset-wrap {
 	width: 800px;
@@ -226,34 +226,34 @@
 	padding-top: 20px;
 	color: #555555;
 	font-style:italic;
-}    
+}	
 	 
 /*--------------Quick Scroll Up and Down----------- */  
 .nav_up {
-    padding: 7px;
-    position: fixed;
-    background: transparent url(../../images/arrow-up.png) no-repeat top left;
-    width: 32px;
-    height: 33px;
-    bottom: 45px;
-    opacity: 0.7;
-    right: 0px;
-    white-space: nowrap;
-    cursor: pointer;
-    -moz-border-radius: 3px 3px 3px 3px;
+	padding: 7px;
+	position: fixed;
+	background: transparent url(../../images/arrow-up.png) no-repeat top left;
+	width: 32px;
+	height: 33px;
+	bottom: 45px;
+	opacity: 0.7;
+	right: 0px;
+	white-space: nowrap;
+	cursor: pointer;
+	-moz-border-radius: 3px 3px 3px 3px;
 	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
 }
 .nav_down {
-    padding: 7px;
-    position: fixed;
-    background: transparent url(../../images/arrow-down.png) no-repeat top left;
-    width: 32px;
-    height: 33px;
-    bottom: 10px;
-    opacity: 0.7;
-    right: 0px;
-    white-space: nowrap;
-    cursor: pointer;
+	padding: 7px;
+	position: fixed;
+	background: transparent url(../../images/arrow-down.png) no-repeat top left;
+	width: 32px;
+	height: 33px;
+	bottom: 10px;
+	opacity: 0.7;
+	right: 0px;
+	white-space: nowrap;
+	cursor: pointer;
 	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
 }
 #scroll-up-down {
@@ -267,8 +267,8 @@
 
 
 .commonHeader {
-    background: url(../../images/theme/theme-1/998x107_background.png) no-repeat scroll 0 0 transparent;
-    height: 115px;
+	background: url(../../images/theme/theme-1/998x107_background.png) no-repeat scroll 0 0 transparent;
+	height: 115px;
 }
 .addmarginleft20 {
 	margin-left: 20px;
@@ -619,13 +619,13 @@ div.catalog-search-container input#search_searchTerm {
 	text-decoration: none;
 }
 .browseBox ul li span {
-    color: #4B4B4B;
-    float: right;
-    font-weight: normal;
-    line-height: inherit;
-    margin: 0;
-    padding: 0;
-    margin-right: -16px;
+	color: #4B4B4B;
+	float: right;
+	font-weight: normal;
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+	margin-right: -16px;
 }
 .subPanelBox {
 	border: 0 solid #DDDDDD;
@@ -648,7 +648,10 @@ div.catalog-search-container input#search_searchTerm {
 	overflow: hidden;
 }
 .narrowByViewAllLink {
-	float: right;
+	clear: both;
+	display: block;
 	margin-right: 10px;
 	padding: 2px 0;
+	text-align: right;
+	width: 90%;
 }
