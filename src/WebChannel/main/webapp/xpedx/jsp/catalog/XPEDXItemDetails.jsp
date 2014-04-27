@@ -46,7 +46,6 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header.css" />
 <%-- <link media="print" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/print.css" /> --%>
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
 <link rel="stylesheet" type="text/css"
                href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
@@ -1415,7 +1414,7 @@ function SubmitActionWithValidation()
 			}
 			</script>
 			<s:if test= '%{#_action.getGoBackFlag() == "true"}'>
-			<a href="#"  onclick="javascript:window.history.back();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
+			<a href="#"  onclick="javascript:window.history.back(); return false;">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
 			</s:if>
 			<s:else>
 				<a href="javascript:getbackPageUrl();">Back</a> / <span class="page-title"><s:property value='%{#itemID}' /></span>
@@ -1797,7 +1796,7 @@ function SubmitActionWithValidation()
 				</s:if>
 			</s:if>
 				<div class="button-wrap">				
-					<a href="javascript:updatePandAfromLink()" class="pa-link">My Price & Availability</a>
+					<a href="javascript:updatePandAfromLink()" class="pa-link">Show Price & Availability</a>
 				<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>	
 				<s:if test='%{#isFlowInContext == true}'>
 				<input name="button" type="button" class="btn-gradient float-right addmarginleft5"   onclick="javascript:itemDetailAddToCart('%{#itemID}', '%{#unitOfMeasure}', '%{#appFlowContext.key}','%{#appFlowContext.returnURL}','%{#appFlowContext.type}','%{#appFlowContext.currency}');" class="btn-gradient float-right addmarginleft5" value="Add to Order"/>

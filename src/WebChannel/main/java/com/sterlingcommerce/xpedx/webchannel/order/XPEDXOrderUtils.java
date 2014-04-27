@@ -520,7 +520,7 @@ public class XPEDXOrderUtils {
 		return outputDoc;
 	}
 
-	public static Document getItemDetailsForPricingInfo(ArrayList<String> itemIDList, String custID,
+	public static Document getItemDetailsForPricingInfo(List<String> itemIDList, String custID,
 			String callingOrgCode, IWCContext wcContext) throws Exception {
 		Document outputDoc = null;
 		if (YFCCommon.isVoid(itemIDList) || itemIDList.size() <=0) {
@@ -1024,7 +1024,7 @@ public class XPEDXOrderUtils {
 	 */
 
 	public static Map<String, Map<String,String>> getXpedxUOMDescList(String customerID,
-			ArrayList<String> ItemID, String StoreFrontID, boolean defaultShowUOMFlag) {
+			List<String> ItemID, String StoreFrontID, boolean defaultShowUOMFlag) {
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		LinkedHashMap<String, String> itemCustomerUomConvFactHashMap = new LinkedHashMap<String, String>();
 		LinkedHashMap<String, String> itemCustomerUomHashMap = new LinkedHashMap<String, String>();

@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -33,7 +32,6 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
@@ -52,71 +50,78 @@ import com.yantra.yfc.util.YFCCommon;
 
 /**
  * @author rugrani
- * 
+ *
  */
 public class XPEDXPriceandAvailabilityUtil {
+
+	public static final String AVAILABILITY_NONE = "Not Available";
+	public static final String AVAILABILITY_IMMEDIATE = "Immediate";
+	public static final String AVAILABILITY_NEXT_DAY = "Next Day";
+	public static final String AVAILABILITY_TWO_DAY = "2+ days";
+	public static final String AVAILABILITY_PARTIAL_QUANTITY = "Availability";
+	public static final String AVAILABILITY_OTHER = "Other";
 
 	/*	Commented for Jira #2316, May comeback for more specific messages.
  	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Sorry, real time price and availability is not available at this time, please contact customer service.";
 	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Sorry, there was a problem processing your request.  Please contact customer service or try again later.";
 	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";
-	 
-	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Sorry, the item information for this item is not valid.  Please contact customer service for price and availability."; 
+
+	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Sorry, the item information for this item is not valid.  Please contact customer service for price and availability.";
 	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "One or more items may not have price or availability, please try again or contact customer service.";
 	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Price & Avaialbility is not available, please try again or contact customer service.";
 	*/
-	
+
 	private static final String customerExtnMashUp= "xpedx-customer-getCustomerAllExtnInformation";
-	
+
 	public static final String TH_UOM_A = "A_M";
-	
+
 	public static final String TH_UOM_M = "M_M";
-	
+
 	public static final String CWT_UOM_A = "A_CWT";
-	
+
 	public static final String CWT_UOM_M = "M_CWT";
-	
+
 	public static final int DECIMAL_PRECISION_NEEDED = 6;
-	
-	
-	
+
+
+
 	public static int PANDA_WS_AUTO_RESPONSE = 1;
 	public static int PANDA_WS_DUMMY_RESPONSE = 2;
 	public static int PANDA_WS_PROD = 0;
-	
+
 	public static int PANDA_WS_MODE = PANDA_WS_PROD ;
-	
+
 	//Start- Fix for 3105
-	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Real time My Price & Availability is not available at this time. Please contact Customer Service.";
+	public static final String WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";
 	//changed the PnA messages from max specific error messages to generic error message for jira 3707
-	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Real time My Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, there was a problem processing your request. Please contact customer service or try again later.";Sorry, Price & Availability is not available, please try again or contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Real time My Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";"Sorry, Price & Availability is not available, please contact customer service.";
-	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Real time My Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, the item information for this item is not valid. Please contact customer service for price and availability.";
-	//end of changes for jira 3707		
+	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, there was a problem processing your request. Please contact customer service or try again later.";Sorry, Price & Availability is not available, please try again or contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";"Sorry, Price & Availability is not available, please contact customer service.";
+	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, the item information for this item is not valid. Please contact customer service for price and availability.";
+	//end of changes for jira 3707
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_SERVICESTATUSDOWN_ERROR = "WSPriceAndAvailabilityOutputXmldocWithServiceStatusDownError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_TRANSMISSIONSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithTransmissionStatusError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_HEADERSTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithHeaderStatusError.xml";
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_LINESTATUS_ERROR = "WSPriceAndAvailabilityOutputXmldocWithLineStatusError.xml";
  public static final String WS_ORDERMULTIPLE_ERROR_FROM_MAX="14";
-	
-	
+
+
 	/**
 	 * Purpose of the method:1234960438
 	 * 1] Calling PNA webservice
 	 * 2] Handling errors and corresponding messages
 	 * 3] Use Dummy Webservice call, Manipulate response for creating different scenarios.
 	 * 4] Finally Creating XPEDXPriceAndAvailability Object
-	 * 
+	 *
 	 * @param inputItems
 	 * @return
 	 */
 	public static XPEDXPriceAndAvailability getPriceAndAvailability(
-			ArrayList<XPEDXItem> inputItems) {
+			List<XPEDXItem> inputItems) {
 		return getPriceAndAvailability(inputItems,"false");
 	}
-	
+
 	public static XPEDXPriceAndAvailability getPriceAndAvailability(
-			ArrayList<XPEDXItem> inputItems , String isOrderData) {
+			List<XPEDXItem> inputItems , String isOrderData) {
 		XPEDXPriceAndAvailability pnaOutput = new XPEDXPriceAndAvailability();
 		if (null == inputItems || inputItems.size() <= 0) {
 			log.debug("getPriceAndAvailability(): Item list is empty... Cannot call the service...");
@@ -126,72 +131,72 @@ public class XPEDXPriceandAvailabilityUtil {
 		String inputXML=null;
 		if(!"true".equals(isOrderData))
 		{
-			 inputDoc = prepareInputDoc(inputItems);
-			 inputXML = SCXmlUtil.getString(inputDoc);
+			inputDoc = prepareInputDoc(inputItems);
+			inputXML = SCXmlUtil.getString(inputDoc);
 			log.debug("getPriceAndAvailability: inputXML for P&A Webservice: "
 					+ inputXML);
 		}
 		String displayErrorMsgToUser = "";
 		Document outputDoc = null;
-		
+
 		// TODO: Call the actual service
 		try{
-					 if("true".equals(isOrderData))
-					{
-							outputDoc =(Document)XPEDXWCUtils.getObjectFromCache("PNA_RESPONSE_FOR_ITEM");
-							XPEDXWCUtils.removeObectFromCache("PNA_RESPONSE_FOR_ITEM");
-					}
-					 else if( PANDA_WS_MODE == PANDA_WS_AUTO_RESPONSE ){		//In case Auto it takes legacy number from input and sends the response
-							outputDoc = getPandADummyAutoResponse(  inputXML );	
-					}
-					else if( PANDA_WS_MODE == PANDA_WS_DUMMY_RESPONSE  ){	//Response based on DummyXML
-							outputDoc = getDummyOutPutDoc( ); 
-					}					
-					else { //Makes real P&A Call needed for Prod environment
-						outputDoc = XPEDXCallPnAService(inputDoc);
-					}
-			
-			}catch (Exception e){
-				displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ; 
+			if("true".equals(isOrderData))
+			{
+				outputDoc =(Document)XPEDXWCUtils.getObjectFromCache("PNA_RESPONSE_FOR_ITEM");
+				XPEDXWCUtils.removeObectFromCache("PNA_RESPONSE_FOR_ITEM");
 			}
-		
+			else if( PANDA_WS_MODE == PANDA_WS_AUTO_RESPONSE ){		//In case Auto it takes legacy number from input and sends the response
+				outputDoc = getPandADummyAutoResponse(  inputXML );
+			}
+			else if( PANDA_WS_MODE == PANDA_WS_DUMMY_RESPONSE  ){	//Response based on DummyXML
+				outputDoc = getDummyOutPutDoc( );
+			}
+			else { //Makes real P&A Call needed for Prod environment
+				outputDoc = XPEDXCallPnAService(inputDoc);
+			}
+
+		}catch (Exception e){
+			displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ;
+		}
+
 		if(null == outputDoc){
-			
-			log.error("PnA did not respond or it sent a Empty xml back.");		
+
+			log.error("PnA did not respond or it sent a Empty xml back.");
 			//added for jira 3974 : error message for delayed PnA response
 			displayErrorMsgToUser = "Your request has timed out. Please try again.";
 			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
 			//end of jira 3974
 			return pnaOutput;
-			
-		} else {	
-		
-			//Return Response valid and proceed further processing 			
+
+		} else {
+
+			//Return Response valid and proceed further processing
 			pnaOutput = new XPEDXPriceAndAvailability();
 			String responseXML = SCXmlUtil.getString(outputDoc);
 			log.debug("getPriceAndAvailability: response for P&A Webservice: " + responseXML);
-			
+
 			displayErrorMsgToUser = handlePandAWebServiceResponseSatuseses(outputDoc  , pnaOutput , displayErrorMsgToUser);
-						
+
 			//Check for the TransactionStatus
 			if ( "F".equalsIgnoreCase(pnaOutput.getTransactionStatus() ) ) {
 				return pnaOutput;
 			}
-			
+
 			//Fill the pnaOutput with java objects generated after parsing respXML.
 			pnaOutput = setBusinessObjects(outputDoc);
 			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
 		}
 		return pnaOutput;
 	}
-	
-	
+
+
 	public static XPEDXPriceAndAvailability getPriceAndAvailability(IWCContext wcContext, Element ueAdditionalAttrElem) {
 		XPEDXPriceAndAvailability pnaOutput = new XPEDXPriceAndAvailability();
-		
-		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/		
+
+		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 		/*HashMap<String, String> valueMap = new HashMap<String, String>();
-		
+
 		valueMap.put("/XPXUeAdditionalAttrXml/@OrderHeaderKey", orderHeaderKey);
 		valueMap.put("/XPXUeAdditionalAttrXml/@XMLType", "PNA");
 
@@ -215,127 +220,127 @@ public class XPEDXPriceandAvailabilityUtil {
 		{
 			//Element allChildDoc = ((Element) obj);
 			//String pnaXML=allChildDoc.getAttribute("ResponseXML");
-			
+
 			pnaXML=ueAdditionalAttrElem.getAttribute("ResponseXML");
-			
+
 			if(pnaXML != null)
 			{
 				outputDoc = SCXmlUtil.createFromString(pnaXML);
-			
-			}	
+
+			}
 		}
 		if(null == outputDoc){
 			//jira 2885
 			displayErrorMsgToUser =  "Your request has timed out. Please try again.";//added for EB 812.
-			//displayErrorMsgToUser =  WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ; 
+			//displayErrorMsgToUser =  WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR  ;
 			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
-			log.error("PnA did not respond or it sent a Empty xml back.");		
+			log.error("PnA did not respond or it sent a Empty xml back.");
 			return pnaOutput;
-			
-		} else {	
-		
-			//Return Response valid and proceed further processing 			
+
+		} else {
+
+			//Return Response valid and proceed further processing
 			pnaOutput = new XPEDXPriceAndAvailability();
 			//String responseXML = SCXmlUtil.getString(outputDoc);
 			log.debug("getPriceAndAvailability: response for P&A Webservice: " + pnaXML);
-			
+
 			//Use this for testing different scenarios
 			//outputDoc  = manipulateXML ( responseXML );
-			
+
 			displayErrorMsgToUser = handlePandAWebServiceResponseSatuseses(outputDoc  , pnaOutput , displayErrorMsgToUser);
-						
+
 			//Check for the TransactionStatus
 			if ( "F".equalsIgnoreCase(pnaOutput.getTransactionStatus() ) ) {
 				return pnaOutput;
 			}
-			
+
 			//Fill the pnaOutput with java objects generated after parsing respXML.
 			pnaOutput = setBusinessObjects(outputDoc);
 			pnaOutput.setStatusVerboseMsg(displayErrorMsgToUser);
 		}
 		return pnaOutput;
 	}
-	
-	
+
+
 
 	/*
 	 * Process Error handling for PriceAndAvailability Response Doc
-	 * 
-	 * Handle Errors for scenarios like 
+	 *
+	 * Handle Errors for scenarios like
 	 * 		a] Exception like ServiceDown
 	 * 		b] TransactionStatus
 	 * 		c] HeaderStatusCode
 	 * 		d] LineItem level 'LineStatusCode'
-	 * 
+	 *
 	 */
 	public static String handlePandAWebServiceResponseSatuseses (Document outputDoc, XPEDXPriceAndAvailability pna, String displayErrorMsgToUser ) {
-		
+
 		displayErrorMsgToUser = "";
-		
-		//Check for validity of the responseDoc and set appropriate message 
-		if (outputDoc == null ) {			
+
+		//Check for validity of the responseDoc and set appropriate message
+		if (outputDoc == null ) {
 			displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR ;
 			pna.setStatusVerboseMsg(displayErrorMsgToUser);
 			return displayErrorMsgToUser;
 		}
-		
+
 		//TransactionStatus
 		Element transactionStatusElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "TransactionStatus");
-		if(transactionStatusElement != null )	{	
+		if(transactionStatusElement != null )	{
 			String transactionStatusCode = transactionStatusElement.getTextContent();
 			if(YFCCommon.isVoid(transactionStatusCode) || transactionStatusCode.equalsIgnoreCase("F")){
 				log.error("PnA TransactionStatus failure.Returning empty PnA Business object");
 				pna.setTransactionStatus("F");
-				
-				displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR  ; 
+
+				displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR  ;
 			}
 		}
-		
+
 		//HeaderStatusCode
 		Element headerStatusElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "HeaderStatusCode");
-		if(headerStatusElement != null )	{	
+		if(headerStatusElement != null )	{
 			String headerStatusCode = headerStatusElement.getTextContent();
 			if(YFCCommon.isVoid(headerStatusCode) || !headerStatusCode.equalsIgnoreCase("00")){
 				log.error("PnA HeaderStatusCode failure.Indicates bad data from Sterling.Returning empty PnA Business object");
 				pna.setHeaderStatusCode ( headerStatusCode );
-				displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR  ; 
+				displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR  ;
 			}
 			/* (commented for jira 2885 as there is a seperate method for setting lineStatus error msg) else
 			{
 				//LineStatusCode
 				String lineStatusCodeCode = SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(), "/PriceAndAvailability/Items/Item/LineStatusCode");
-			
+
 
 				if(YFCCommon.isVoid(lineStatusCodeCode) || !lineStatusCodeCode.equalsIgnoreCase("00")){
-					displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR  ; 
+					displayErrorMsgToUser = WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR  ;
 					pna.setStatusVerboseMsg(displayErrorMsgToUser);
-					
+
 				}
 			}*/
 		}
-		
-		
+
+
 		//set message to on pna Object
 		pna.setStatusVerboseMsg(displayErrorMsgToUser);
-		
+
 		return displayErrorMsgToUser;
 	}
 
-	
+
 	/**
 	 * AutoDummy response for debug purpose (Purma) Helpful for debug on local system.
-	 * 
+	 *
 	 * @param inputXML
 	 * @return
 	 */
 	static Document getPandADummyAutoResponse (String inputXML) {
-		
+
 		String legacyProdCode = StringUtils.substringBetween(inputXML, "<LegacyProductCode>", "</LegacyProductCode>")	;
 		if(log.isDebugEnabled()){
 		log.debug( "inputXML : " + PANDA_WS_AUTO_RESPONSE + " : \n" +  inputXML);
 		}
 		StringBuffer sb =  new StringBuffer();
-		
+
 		sb.append("<?xml version='1.0' encoding='utf-8'?>" );
 		sb.append("<PriceAndAvailability>" );
 		sb.append("<TransactionStatus>Success</TransactionStatus>" );
@@ -378,12 +383,12 @@ public class XPEDXPriceandAvailabilityUtil {
 		       sb.append("</Item>" );
 		     sb.append("</Items>" );
 		sb.append("</PriceAndAvailability>" );
-				
-				
-		Document newDocument = SCXmlUtils.createFromString(sb.toString());
+
+
+		Document newDocument = SCXmlUtil.createFromString(sb.toString());
 	return newDocument;
 	}
-	
+
 	public static Document XPEDXCallPnAService(Document inputDoc) {
 		Document pnaResponse = null;
 		IWCContext wcContext = WCContextHelper
@@ -406,7 +411,7 @@ public class XPEDXPriceandAvailabilityUtil {
 	 * @param inputItems
 	 * @return
 	 */
-	private static Document prepareInputDoc(ArrayList<XPEDXItem> inputItems) {
+	private static Document prepareInputDoc(List<XPEDXItem> inputItems) {
 		Document returnDoc = null;
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
 				.getRequest());
@@ -472,24 +477,24 @@ public class XPEDXPriceandAvailabilityUtil {
 		/*Begin - Changes made for JIRA 3969*/
 		if(tagValue==null)
 		{
-			tagValue="";		
+			tagValue="";
 		}
 		/*End - Changes made for JIRA 3969*/
 		txt.setTextContent(tagValue);
 		textNode.appendChild(txt);
 	}
 
-	
-	
+
+
 	/**
 	 * @param outputDoc
 	 * @return
 	 */
 	private static XPEDXPriceAndAvailability setBusinessObjects(
 			Document outputDoc) {
-		
+
 		XPEDXPriceAndAvailability output = null;
-		
+
 		if (null == outputDoc) {
 			log
 					.error("setBusinessObjects(): Empty request received. Returning empty object!");
@@ -511,7 +516,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			output = (XPEDXPriceAndAvailability) digester
 					.parse(new StringInputStream(SCXmlUtil.getString(outputDoc)));
 			//added for jira 2885
-			Vector<XPEDXItem> items=output.getItems(); 
+			Vector<XPEDXItem> items=output.getItems();
 			if(items !=null)
 			{
 				for(int i=0;i<items.size();i++)
@@ -524,7 +529,7 @@ public class XPEDXPriceandAvailabilityUtil {
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
 						item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR);
 					}
-					
+
 				}
 			}
 		} catch (MalformedURLException e) {
@@ -542,10 +547,10 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return output;
 	}
-	
+
 	public static HashMap<String, JSONObject> getPnAHoverMap(
 			Vector<XPEDXItem> items) {
-		
+
 		return getPnAHoverMap(items,false);
 	}
 	public static boolean isNumeric(String i)
@@ -557,14 +562,14 @@ public class XPEDXPriceandAvailabilityUtil {
 			return false;
 		}
 	}
-	
-	public static HashMap getOrderMultipleMapFromSourcing(
-			Vector<XPEDXItem> items, boolean isLineNumberRequired) {
+
+	public static HashMap<String, String> getOrderMultipleMapFromSourcing(
+			List<XPEDXItem> items, boolean isLineNumberRequired) {
 		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
 		if (null == items || items.size() <= 0) {
 			return ordermultipleMapFromSourcing;
-		}		
-		for (XPEDXItem item : items) {	
+		}
+		for (XPEDXItem item : items) {
 			boolean isMaxError = false;
 			int lineNumber=Integer.parseInt(item.getLineNumber());
 			String uom = item.getOrderMultipleUOM();
@@ -597,28 +602,28 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 	}
 
-	public static HashMap useOrderMultipleErrorMapFromMax(
-			Vector<XPEDXItem> items) {
+	public static HashMap<String, String> useOrderMultipleErrorMapFromMax(
+			List<XPEDXItem> items) {
 		HashMap<String, String> useOrdermultipleMapFromSourcing = new HashMap<String, String>();
 		if (null == items || items.size() <= 0) {
 			return useOrdermultipleMapFromSourcing;
-		}		
-		for (XPEDXItem item : items) {		
+		}
+		for (XPEDXItem item : items) {
 			int lineNumber=Integer.parseInt(item.getLineNumber());
 			if(item.getOrderMultipleErrorFromMax()!= null && item.getOrderMultipleErrorFromMax().equalsIgnoreCase("true")){
 				useOrdermultipleMapFromSourcing.put(item.getLegacyProductCode()+"_"+lineNumber, item.getOrderMultipleErrorFromMax());
 			}
-			
+
 		}
 		return useOrdermultipleMapFromSourcing;
 	}
 	// Added for XB 214 for Item line level for BR requirements
-	public static HashMap getItemOrderMultipleFromSourceMap(Vector<XPEDXItem> items) throws XPathExpressionException, XMLExceptionWrapper, CannotBuildInputException {
+	public static HashMap<String, String> getItemOrderMultipleFromSourceMap(Vector<XPEDXItem> items) throws XPathExpressionException, XMLExceptionWrapper, CannotBuildInputException {
 		HashMap<String, String> ordermultipleMapFromSourcing = new HashMap<String, String>();
 		if (null == items || items.size() <= 0) {
 			return ordermultipleMapFromSourcing;
-		}		
-		for (XPEDXItem item : items) {		
+		}
+		for (XPEDXItem item : items) {
 			//int lineNumber=Integer.parseInt(item.getLineNumber());
 			if(item.getOrderMultipleQty()!= null ){
 				ordermultipleMapFromSourcing.put(item.getLegacyProductCode(), item.getOrderMultipleQty() + "|" + XPEDXWCUtils.getUOMDescription(item.getOrderMultipleUOM()));
@@ -627,7 +632,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return ordermultipleMapFromSourcing;
 	}
-	
+
 	public static List<String> processPNAResponseForOrderMultiple(Document changeOrderOutputDoc, String reqQty, String reqUOM, String reqProductCode){
 		List<String> orderMultipleErrorItems = new ArrayList<String>();
 		try
@@ -637,31 +642,31 @@ public class XPEDXPriceandAvailabilityUtil {
      		String responseXML = null;
      		String orderMultipleQty = "";
      		String orderMultipleUOM = "";
-     		
-     		
+
+
      		Element additionalAttrXmlList = SCXmlUtil.getChildElement(changeOrderOutputDoc.getDocumentElement(), "Extn");
      		Element additionalAttrXml = XMLUtilities.getElement(additionalAttrXmlList,"XPXUeAdditionalAttrXmlList/XPXUeAdditionalAttrXml");
      		if(additionalAttrXml != null){
          	    responseXML = additionalAttrXml.getAttribute("ResponseXML");
          		Document attrXml =SCXmlUtil.createFromString(responseXML);
 				Element priceAvailXml = attrXml.getDocumentElement();
-         		
+
 				Element itemPrice = XMLUtilities.getElement(priceAvailXml, "Items/Item");
 				Document doc  = itemPrice.getOwnerDocument();
 				YFCElement rootEle = YFCDocument.getDocumentFor(doc).getDocumentElement();
-				
+
 				if (rootEle.hasChildNodes()) {
 					YFCElement lineItem =  rootEle.getChildElement("Items");
 					YFCIterable<YFCElement> yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
-					
+
 					yfcItr = (YFCIterable<YFCElement>) lineItem.getChildren("Item");
 					while (yfcItr.hasNext()) {
-						YFCElement lineElem = (YFCElement) yfcItr.next();
+						YFCElement lineElem = yfcItr.next();
 						YFCElement lineStatusCodeElem = lineElem.getChildElement("LineNumber");
 						YFCElement legacyProductCodeElem = lineElem.getChildElement("LegacyProductCode");
 						YFCElement orderMultipleQtyElem = lineElem.getChildElement("OrderMultipleQty");
 						YFCElement lineStatusCode = lineElem.getChildElement("LineStatusCode");
-						YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty"); 
+						YFCElement requestedQtyElem = lineElem.getChildElement("RequestedQty");
 						YFCElement requestedUomElem = lineElem.getChildElement("RequestedQtyUOM");
 						if(orderMultipleQtyElem!=null){
 							orderMultipleQty= orderMultipleQtyElem.getNodeValue();
@@ -670,17 +675,17 @@ public class XPEDXPriceandAvailabilityUtil {
 						if(orderMultipleUOMElem!=null){
 							orderMultipleUOM= orderMultipleUOMElem.getNodeValue();
 						}
-						String lineNumber = lineStatusCodeElem.getNodeValue();							
+						String lineNumber = lineStatusCodeElem.getNodeValue();
 						String legacyProductCode = legacyProductCodeElem.getNodeValue();
 						String requestedQty = requestedQtyElem.getNodeValue();
 						String requestedUom = requestedUomElem.getNodeValue();
-						if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){								
+						if(lineStatusCode.getNodeValue()!= null && lineStatusCode.getNodeValue().equalsIgnoreCase("14")){
 							orderMultipleErrorItems.add(legacyProductCode+"_"+requestedQty+"_"+requestedUom);
 						}
 					}
-					
+
 				}
-				
+
      		}
 			}
 			catch(Exception e)
@@ -689,14 +694,14 @@ public class XPEDXPriceandAvailabilityUtil {
 			}
 			return orderMultipleErrorItems;
 }
-	//End of XB 214 	
-	
+	//End of XB 214
+
 	public static HashMap<String, JSONObject> getPnAHoverMap(
-			Vector<XPEDXItem> items,boolean isLineNumberRequired) {
+			List<XPEDXItem> items,boolean isLineNumberRequired) {
 		HashMap<String, JSONObject> pnaHoverDisplayMap = new HashMap<String, JSONObject>();
 		if (null == items || items.size() <= 0) {
 			return pnaHoverDisplayMap;
-		}		
+		}
 		for (XPEDXItem item : items) {
 			log.debug("Start Creating the JSON object for "+ item.getLegacyProductCode());
 			Vector wareHouseList = item.getWarehouseLocationList();
@@ -746,7 +751,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			//Availability For next day = Availability for today + Availability for next day
 			totalForNextDay += totalForImmediate;
 			JSONObject jsonData = new JSONObject();
-			
+
 			String requestedQtyStr = item.getRequestedQty();
 			if(YFCCommon.isVoid(requestedQtyStr)){
 				log.error("Empty requested Qty for "+item.getLegacyProductCode());
@@ -759,35 +764,36 @@ public class XPEDXPriceandAvailabilityUtil {
 				log.error("Corrupt requested Qty for item "+item.getLegacyProductCode());
 				requestedQtyFloat = new Integer(0);
 			}
-			
+
 			if (totalAvailable == 0) {
+				jsonData.put("Availability", AVAILABILITY_NONE);
 				jsonData.put("AvailabilityMessage", "Not Available");
 				jsonData.put("AvailabilityMessageColor", "#FF0000");
-			
+
 			} else if (requestedQtyFloat <= totalForImmediate) {
-				jsonData.put("Availability", "Immediate");
+				jsonData.put("Availability", AVAILABILITY_IMMEDIATE);
 				jsonData.put("AvailabilityMessage", "Ready to Ship");
 				jsonData.put("AvailabilityMessageColor", "#008000");
-			
+
 			} else if (requestedQtyFloat <= totalForNextDay) {
-				jsonData.put("Availability", "Next Day");
+				jsonData.put("Availability", AVAILABILITY_NEXT_DAY);
 				jsonData.put("AvailabilityMessage", "Ready To Ship Next Day");
 				jsonData.put("AvailabilityMessageColor", "#008000");
-				
+
 			} else if (requestedQtyFloat <= totalAvailable) {
-				jsonData.put("Availability", "2+ days");
+				jsonData.put("Availability", AVAILABILITY_TWO_DAY);
 				jsonData.put("AvailabilityMessage", "Ready to Ship Two Plus Days");
 				jsonData.put("AvailabilityMessageColor", "#FF0000");
-				
+
 			} else if (totalAvailable > 0 && requestedQtyFloat > totalAvailable) {
-				jsonData.put("Availability", "Availability");
+				jsonData.put("Availability", AVAILABILITY_PARTIAL_QUANTITY);
 				jsonData.put("AvailabilityMessage", "Partial Quantity Available");
 				Double availableBalance= new Double(requestedQtyStr.trim()).doubleValue() - totalAvailable;
 				jsonData.put("AvailabilityBalance", availableBalance.toString());
 				jsonData.put("AvailabilityMessageColor", "#FF0000");
-			
+
 			} else if(totalAvailable > 0) {
-				jsonData.put("Availability", "Availability");
+				jsonData.put("Availability", AVAILABILITY_OTHER);
 			}
 
 			//"".toLowerCase().contains("b");
@@ -803,8 +809,8 @@ public class XPEDXPriceandAvailabilityUtil {
 			}
 			jsonData.put("Total", totalAvailable.toString());
 
-			jsonData.put("PricingUOMUnitPrice", item.getUnitPricePerPricingUOM());			
-			jsonData.put("UnitPricePerRequestedUOM", item.getUnitPricePerRequestedUOM());			
+			jsonData.put("PricingUOMUnitPrice", item.getUnitPricePerPricingUOM());
+			jsonData.put("UnitPricePerRequestedUOM", item.getUnitPricePerRequestedUOM());
 			jsonData.put("ExtendedPrice", item.getExtendedPrice());
 			jsonData.put("PricingUOM", item.getPricingUOM());
 			if(isLineNumberRequired)
@@ -822,7 +828,7 @@ public class XPEDXPriceandAvailabilityUtil {
 	}
 
 	public static Double getLineTotal(String myPrice,String qty,String adjustments){
-		
+
 			Double lineTotal =new Double("0");
 			Double myPriceDouble =new Double("0");
 			Double qtyDouble =new Double("0");
@@ -838,12 +844,12 @@ public class XPEDXPriceandAvailabilityUtil {
 					adjustPrice=Double.valueOf(adjustments);
 				}
 				lineTotal=(myPriceDouble * qtyDouble)+adjustPrice;
-			}			
+			}
 			catch (Exception e) {
 				log.error("Exception while calculating line total price :: "+e);
 				lineTotal = new Double("0.0");
 			}
-			
+
 			try{
 				BigDecimal bd=new BigDecimal(""+lineTotal);
 				String lineTotalStr=""+bd.setScale(4,BigDecimal.ROUND_FLOOR);
@@ -860,7 +866,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			catch(Exception e){
 				log.error("Exception while Rounding "+e);
 			}
-			
+
 		return lineTotal;
 	}
 	public static String getPnALineErrorMessage(XPEDXItem item) {
@@ -934,7 +940,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return true;
 	}
-	
+
 	//Added to check whether the bracket pricing is available and price is greater than 0 return true else false
 	public static String isBracketPricingAvailable(List brackets)
 	{
@@ -944,9 +950,9 @@ public class XPEDXPriceandAvailabilityUtil {
 			if(brackets  != null){
 				for(Object bracket : brackets)
 				{
-					
+
 					XPEDXBracket brck=(XPEDXBracket)bracket;
-					BigDecimal bracketPrice = new BigDecimal(brck.getBracketPrice()); 
+					BigDecimal bracketPrice = new BigDecimal(brck.getBracketPrice());
 					if (bracketPrice.compareTo(BigDecimal.ZERO) > 0)
 					{
 						isBracketPricing="true";
@@ -959,10 +965,10 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return isBracketPricing;
 	}
-	
-	
 
-	
+
+
+
 	/*
 	 * Utility for dividing value for given precision
 	 * Takes Strings as input parameters.
@@ -974,18 +980,18 @@ public class XPEDXPriceandAvailabilityUtil {
 
 		return divideBDWithPrecision( bdVal1, bdVal2);
 	}
-	
+
 	/*
 	 * Utility for dividing value for given precision
 	 * Takes BigDecimals as input parameters
 	 */
 	public static BigDecimal divideBDWithPrecision(BigDecimal bdVal1, BigDecimal bdVal2) throws Exception {
-		
+
 		BigDecimal result = new BigDecimal("0");
 
 
 			try {
-			
+
 				result = bdVal1.divide(bdVal2, DECIMAL_PRECISION_NEEDED, RoundingMode.HALF_UP);
 
 			} catch (Exception e) {
@@ -993,69 +999,69 @@ public class XPEDXPriceandAvailabilityUtil {
 				log.debug(e.getMessage() ,  e);
 				throw e;
 			}
-			
-			
+
+
 			return result;
 	}
-	
-	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext) throws Exception
+
+	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(List<XPEDXItem> items,IWCContext wcContext) throws Exception
 	{
 		return getPricingInfoFromItemDetails(items,wcContext,false,null,false,null);
 	}
-	
-	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired) throws Exception
+
+	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(List<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired) throws Exception
 	{
 		return getPricingInfoFromItemDetails(items,wcContext,isLineNuberRequired,null,false,null);
 	}
-	
-	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(Vector<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired,
+
+	public static HashMap<String,XPEDXItemPricingInfo> getPricingInfoFromItemDetails(List<XPEDXItem> items,IWCContext wcContext,boolean isLineNuberRequired,
 																					 Element lineTypeMEle, boolean isComingFromCheckoutOrDraftOrderDetails, Document orderOutputDocument) throws Exception
 	{
 		HashMap<String, XPEDXItemPricingInfo> priceUomDisplayMap = new HashMap<String, XPEDXItemPricingInfo>();
-		
+
 		ArrayList<String> itemIDList = new ArrayList<String>();
 		for(XPEDXItem item:items)
 		{
 			String itemId = item.getLegacyProductCode();
 			itemIDList.add(itemId);
 		}
-		
+
 		Document pricingInfoDoc=null;
 		Map<String,List<String>> itemsUOMMap=null;
 		/*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
 		if(isComingFromCheckoutOrDraftOrderDetails)
 		{
 			pricingInfoDoc=orderOutputDocument;
-			itemsUOMMap = createItemUOMMap(pricingInfoDoc.getDocumentElement());		
-		
+			itemsUOMMap = createItemUOMMap(pricingInfoDoc.getDocumentElement());
+
 		} else {
 			pricingInfoDoc = XPEDXOrderUtils.getItemDetailsForPricingInfo(itemIDList,wcContext
 					.getCustomerId(), wcContext.getStorefrontId(), wcContext);
 			itemsUOMMap= createItemUOMMap(pricingInfoDoc);
-			
+
 		}
 		/*End - Changes made by Mitesh Parikh for JIRA#3595*/
-		
+
 		if(pricingInfoDoc!=null)
 		{
 			ArrayList<Element> allItemElems=null;
 			if(isComingFromCheckoutOrDraftOrderDetails)
 			{
 				allItemElems = getOrderItemDetailsElement(pricingInfoDoc.getDocumentElement());
-			
-			}else {				
+
+			}else {
 				allItemElems = SCXmlUtil.getElements(pricingInfoDoc.getDocumentElement(), "Item");
-				
+
 			}
-			
+
 			if(lineTypeMEle != null)
 			{
 				allItemElems.addAll(SCXmlUtil.getElements(lineTypeMEle, "Item"));
 			}
-			
+
 			if(allItemElems!=null && allItemElems.size()>0)
 			{
-				
+
 				for(Element itemEle : allItemElems)
 				{
 					SCXmlUtil.getString(itemEle);
@@ -1078,17 +1084,20 @@ public class XPEDXPriceandAvailabilityUtil {
 					if(null != prodMweight && (prodMweight.equals("0") || prodMweight.equals("0.0"))){
 						prodMweight = null;
 					}
-					
-					
+
+					Element categoryElem = SCXmlUtil.getXpathElement(itemEle, "CategoryList/Category");
+					String categoryPath = categoryElem.getAttribute("CategoryPath");
+
 					XPEDXItemPricingInfo pricingInfo = null;
 					for (XPEDXItem pandAItem : items) {
 						if (pandAItem.getLegacyProductCode().equals(itemId)) {
 							String priceCurrencyCode = null;
 							pricingInfo = new XPEDXItemPricingInfo();
+							pricingInfo.setCategoryPath(categoryPath);
 							if (pandAItem.getPriceCurrencyCode() != null
 									&& pandAItem.getPriceCurrencyCode().trim().length() > 0) {
 								pricingInfo.setPriceCurrencyCode(pandAItem.getPriceCurrencyCode());
-								
+
 							}
 							else{
 								//If price currency code is not set,set the currency code from customer profile
@@ -1110,18 +1119,18 @@ public class XPEDXPriceandAvailabilityUtil {
 							BigDecimal prodWeight = null;
 							BigDecimal priceForCWTUom = null;
 							BigDecimal priceForTHUom = null;
-							
+
 							//BaseUomDesc = getUomDesc(baseUOM);
 							String RequestedQtyUOMDesc = getUomDesc(pandAItem.getRequestedQtyUOM());
 							String PricingUOMDesc = getUomDesc(pricingUOM);
-							
+
 							String cwtUOMDesc = null;
 							String thUOMDesc = null;
 	//						displayUOMs.add(baseUOM); //removed as specified in the bug 185 comments on 03/Jan/11 3:58 PM by Barb Widmer
 							//Fix done as per Pawan's mail dated 25/03/2011
 							if (TH_UOM_M.equalsIgnoreCase(pricingUOM) || TH_UOM_A.equalsIgnoreCase(pricingUOM)) {
 								// hardcode for now.
-								
+
 								if (prodMweight != null && prodMweight.trim().length() > 0)
 									prodWeight = new BigDecimal(prodMweight);
 								else
@@ -1130,7 +1139,7 @@ public class XPEDXPriceandAvailabilityUtil {
 								// and CWT same.
 								/* priceForCWTUom = pricingUOMPrice.divide(prodWeight
 										.divide(new BigDecimal(100))); */
-								
+
 								priceForCWTUom = divideBDWithPrecision(pricingUOMPrice , divideBDWithPrecision(prodWeight , new BigDecimal(100)) );
 								cwtUOMDesc = XPEDXWCUtils.getUOMDescription(CWT_UOM_M);
 								if(cwtUOMDesc==null || cwtUOMDesc.length()==0)
@@ -1138,7 +1147,7 @@ public class XPEDXPriceandAvailabilityUtil {
 							}
 							//Fix done as per Pawan's mail dated 25/03/2011
 							if (CWT_UOM_M.equalsIgnoreCase(pricingUOM) || CWT_UOM_A.equalsIgnoreCase(pricingUOM)) {
-								
+
 								if (prodMweight != null && prodMweight.trim().length() > 0)
 									prodWeight = new BigDecimal(prodMweight);
 								else
@@ -1147,32 +1156,32 @@ public class XPEDXPriceandAvailabilityUtil {
 								// priceForCWTUom =
 								// pricingUOMPrice.divide(prodWeight.divide(new
 								// BigDecimal(100)));
-								
+
 							/*	priceForTHUom = pricingUOMPrice.multiply(prodWeight
 										.divide(new BigDecimal(100)));
 										*/
-								
+
 								priceForTHUom = pricingUOMPrice.multiply(divideBDWithPrecision(prodWeight  ,new BigDecimal(100)) );
 								thUOMDesc = XPEDXWCUtils.getUOMDescription(TH_UOM_M);
 								if(thUOMDesc==null || thUOMDesc.length()==0)
 									thUOMDesc = XPEDXWCUtils.getUOMDescription(TH_UOM_A);
 							}
-							
+
 							if (YFCCommon.isVoid(pricingUOMConvFactor)) {
 								pricingUOMConvFactor = "1";
 							}
-	
+
 							if (pricingUOMConvFactor != null
 									&& ((new BigDecimal(0)).compareTo(new BigDecimal(
 											pricingUOMConvFactor)) <= 0)) {
 								pricingUOMConvFactor = "1";
 							}
-							
+
 							BigDecimal basePrice = divideBDWithPrecision ( pricingUOMPrice,  new BigDecimal(pricingUOMConvFactor));
-	
+
 							XPEDXUtilBean xpedxUtilBean = new XPEDXUtilBean();
-							
-							
+
+
 							ArrayList<XPEDXBracket> displayPriceForUoms = new ArrayList<XPEDXBracket>();
 							//Moved code from  bottom to above for JIRA XB-558
 							String fmtPricePerUom =  xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode,pricingUOMUnitPrice);
@@ -1187,7 +1196,7 @@ public class XPEDXPriceandAvailabilityUtil {
 							}
 							if (priceForTHUom != null &&
 									(uomsList.contains(TH_UOM_M) || uomsList.contains(TH_UOM_A)))
-							{ 
+							{
 								String fmtPriceForTHUom = xpedxUtilBean.formatPriceWithCurrencySymbolWithPrecisionFive(wcContext, priceCurrencyCode, priceForTHUom.toString());
 								displayPriceForUoms.add(new XPEDXBracket(null, thUOMDesc,fmtPriceForTHUom ));
 								isThAndCwtAdded=true;
@@ -1199,12 +1208,12 @@ public class XPEDXPriceandAvailabilityUtil {
 								displayPriceForUoms.add(new XPEDXBracket(null, cwtUOMDesc, fmtPriceForCWTUom));
 								isThAndCwtAdded=true;
 							}
-							
+
 							if(!isPricingUOMAdded )
 							{
 								displayPriceForUoms.add(new XPEDXBracket(null, PricingUOMDesc, fmtPricePerUom));
 							}
-							
+
 							boolean isDisplayReqUOM=true;
 							for(int i=0;i<XPEDXConstants.DO_NOT_DISPLAY_REQUESTED_UOMS.length;i++)
 							{
@@ -1214,7 +1223,7 @@ public class XPEDXPriceandAvailabilityUtil {
 									break;
 								}
 							}
-							if(isThAndCwtAdded &&( RequestedQtyUOMDesc.toLowerCase().contains("thousand") || 
+							if(isThAndCwtAdded &&( RequestedQtyUOMDesc.toLowerCase().contains("thousand") ||
 									RequestedQtyUOMDesc.toLowerCase().contains("cwt")))
 							{
 								isDisplayReqUOM=false;
@@ -1227,10 +1236,10 @@ public class XPEDXPriceandAvailabilityUtil {
 							String extendedPrice =  xpedxUtilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, pandAItem.getExtendedPrice());
 							displayPriceForUoms.add(new XPEDXBracket(null, null, extendedPrice));
 							pricingInfo.setDisplayPriceForUoms(displayPriceForUoms);
-							
+
 							List bracketsPricingList = pandAItem.getBrackets();
 							pricingInfo.setBracketsPricingList(bracketsPricingList);
-							
+
 							pricingInfo.setIsBracketPricing(XPEDXPriceandAvailabilityUtil
 									.isBracketPricingAvailable(bracketsPricingList));
 							if(isLineNuberRequired)
@@ -1243,7 +1252,7 @@ public class XPEDXPriceandAvailabilityUtil {
 							else
 							{
 								log.debug("PRICEHOVERMAP KEYS FOR ELSE CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.KEY : "+pandAItem.getLegacyProductCode());
-								log.debug("PRICEHOVERMAP VALUES FOR ELSE CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.VALUE.extendedPrice : "+extendedPrice);								
+								log.debug("PRICEHOVERMAP VALUES FOR ELSE CONDITION OF SWC XPEDXPriceandAvailabilityUtil class - MAP.VALUE.extendedPrice : "+extendedPrice);
 								priceUomDisplayMap.put(pandAItem.getLegacyProductCode(), pricingInfo);
 							}
 						}
@@ -1252,9 +1261,9 @@ public class XPEDXPriceandAvailabilityUtil {
 			}
 		}
 		return priceUomDisplayMap;
-		
+
 	}
-	
+
 	private static Map<String,List<String>> createItemUOMMap(Document pricingInfoDoc)
 	{
 		Map<String,List<String>> itemUOMMap=new HashMap<String,List<String>>();
@@ -1279,7 +1288,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return itemUOMMap;
 	}
-	
+
 	private static Map<String,List<String>> createItemUOMMap(Element pricingInfoDocElement)
 	{
 		Map<String,List<String>> itemUOMMap=new HashMap<String,List<String>>();
@@ -1305,24 +1314,24 @@ public class XPEDXPriceandAvailabilityUtil {
 		return itemUOMMap;
 	}
 	/*
-	 * This takes care of displaying message to Users based on 
-	 * 		1] ServiceDown 2] Transmission Error 3] HeaderLevelError, 4] LineItemError  
+	 * This takes care of displaying message to Users based on
+	 * 		1] ServiceDown 2] Transmission Error 3] HeaderLevelError, 4] LineItemError
 	 */
 	public static String getAjaxDisplayStatusCodeMsg(XPEDXPriceAndAvailability pna) {
-		
-		String ajaxMsg = "";	
+
+		String ajaxMsg = "";
 		//modified for jira 2885
 		if(( pna == null || pna.getItems().size()==0) && ("F".equals(pna.getTransactionStatus())))
 			ajaxMsg  =   XPEDXPriceandAvailabilityUtil.WS_PRICEANDAVAILABILITY_WITH_SERVICESTATUSDOWN_ERROR;
 		else
 			ajaxMsg  =   pna.getStatusVerboseMsg();
-		
+
 		return ajaxMsg;
 	}
-	
+
 	/**
 	 * This returns a sample output doc, for testing purpose
-	 * 
+	 *
 	 * @return
 	 */
 	static Document getDummyOutPutDoc( ) {
@@ -1343,7 +1352,7 @@ public class XPEDXPriceandAvailabilityUtil {
 		InputStream is = XPEDXPriceandAvailabilityUtil.class
 				.getClassLoader()
 				.getResourceAsStream(
-						"com/sterlingcommerce/xpedx/webchannel/utilities/priceandavailability/" + xmlDocName 
+						"com/sterlingcommerce/xpedx/webchannel/utilities/priceandavailability/" + xmlDocName
 						);
 		returnDoc = SCXmlUtil.createFromStream(is);
 		return returnDoc;
@@ -1353,10 +1362,10 @@ public class XPEDXPriceandAvailabilityUtil {
 	 * Utility for Testing ..
 	 */
 	static Document manipulatePnAResponseXML(String inputXML) {
-		
+
 		String legacyProdCode = StringUtils.substringBetween(inputXML, "<LegacyProductCode>", "</LegacyProductCode>")	;
 		StringBuffer sb =  new StringBuffer();
-		
+
 		sb.append("<?xml version='1.0' encoding='utf-8'?>" );
 		sb.append("<PriceAndAvailability>" );
 		sb.append("<TransactionStatus>Success</TransactionStatus>" );
@@ -1403,16 +1412,16 @@ public class XPEDXPriceandAvailabilityUtil {
 		       sb.append("</Item>" );
 		     sb.append("</Items>" );
 		sb.append("</PriceAndAvailability>" );
-				
-				
-		Document newDocument = SCXmlUtils.createFromString(sb.toString());
+
+
+		Document newDocument = SCXmlUtil.createFromString(sb.toString());
 	return newDocument;
 	}
-	
+
 	//added for jira 2885
 	public static Map<String,String> getLineErrorMessageMap(Vector<XPEDXItem> items)
 	{
-		HashMap<String,String> pnALineErrorMessage=new HashMap<String,String>(); 
+		HashMap<String,String> pnALineErrorMessage=new HashMap<String,String>();
 		String errorMessage = "";
 		if(items !=null)
 		{
@@ -1432,39 +1441,39 @@ public class XPEDXPriceandAvailabilityUtil {
 		}
 		return pnALineErrorMessage;
 	}
-	
+
 	/**
 	 * Logger
 	 */
 	private static final Logger log = Logger
 			.getLogger(XPEDXPriceandAvailabilityUtil.class);
-	
-	
+
+
 	/**
 	 * main function for quick / simple testing / Utility
 	 */
 	  public static void main(String[] args) {
 		    if(log.isDebugEnabled()){
-			log.debug(" Test : testHandlePandAWebServiceResponseSatuseses " );		
+			log.debug(" Test : testHandlePandAWebServiceResponseSatuseses " );
 		    }
 			String actuialErrorMsgToUser = null;
-			XPEDXPriceAndAvailability pna = new XPEDXPriceAndAvailability();	
-			
+			XPEDXPriceAndAvailability pna = new XPEDXPriceAndAvailability();
+
 			XPEDXPriceandAvailabilityUtil testClass = new XPEDXPriceandAvailabilityUtil();
-			
+
 			Document newDoc = testClass.manipulatePnAResponseXML ( null );
-			String newXmlDoc = SCXmlUtils.getString( newDoc );
+			String newXmlDoc = SCXmlUtil.getString( newDoc );
 			if(log.isDebugEnabled()){
 			log.debug(" newXmlDoc " + newXmlDoc );
 			}
-			
+
 			XPEDXPriceandAvailabilityUtil.handlePandAWebServiceResponseSatuseses(newDoc, pna, actuialErrorMsgToUser );
 			actuialErrorMsgToUser = pna.getStatusVerboseMsg();
 			if(log.isDebugEnabled()){
-			log.debug(" actuialErrorMsgToUser " + actuialErrorMsgToUser );	
+			log.debug(" actuialErrorMsgToUser " + actuialErrorMsgToUser );
 			}
 	}
-	  
+
 	public static ArrayList<Element> getOrderItemDetailsElement(Element orderEl) {
 		ArrayList<Element> orderLineElements = SCXmlUtil.getElements(orderEl, "OrderLines/OrderLine");
 		ArrayList<Element> itemDetailsElements = new ArrayList<Element>();
@@ -1472,14 +1481,14 @@ public class XPEDXPriceandAvailabilityUtil {
 	    {
 	      for (int i = 0; i < orderLineElements.size(); i++)
 	      {
-	        Element orderLineEl = (Element)orderLineElements.get(i);
+	        Element orderLineEl = orderLineElements.get(i);
 	        itemDetailsElements.add(SCXmlUtil.getChildElement(orderLineEl, "ItemDetails"));
 
 	      }
 	    }
-	    
+
 	    return itemDetailsElements;
-	    
+
 	}
 
 }

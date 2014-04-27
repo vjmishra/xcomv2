@@ -3,9 +3,14 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 	<package name="xpedx.order" namespace='/order' extends="order">
-	 <global-results>
-	<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
-      </global-results>
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+		
+		<global-results>
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+		</global-results>
+		
 		<action name="xpedxDraftOrderDropDown"
 			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDropDownAction">
 			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDropDownBinding.xml</param>
@@ -260,12 +265,6 @@
 				<param name="quickAddErrorListSessionKey">${quickAddErrorListSessionKey}</param>
 				<param name="draft">${draft}</param>
 				<param name="draftOrderError">${draftOrderError}</param>
-			</result>
-			<result name="quickAddSuccess" type="redirectAction">
-				<param name="actionName">quickAddAction</param>
-				<param name="namespace">/order</param>
-				<param name="addedToCart">true</param>
-				<param name="quickAdd">true</param>
 			</result>
 			<result name="OUErrorPage" type="redirectAction">
                 <param name="actionName">orderDetail</param>
@@ -814,8 +813,11 @@
         </action>
         <!-- NEW Page for Quick Add EB 4367  replacing XPEDXDraftOrderDetails.jsp -->
         
-        <action name="quickAddAction" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
+        <action name="quickAdd" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
 			<result name="success">/xpedx/jsp/order/QuickAdd.jsp</result>
+		</action>
+        <action name="ajaxAddItemsToCart" class="com.sterlingcommerce.xpedx.webchannel.order.AjaxAddItemsToCartAction">
+			<result type="json"></result>
 		</action>
 		
         

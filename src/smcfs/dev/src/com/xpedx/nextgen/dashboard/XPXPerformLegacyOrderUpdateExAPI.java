@@ -529,7 +529,8 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						  "i) IsOrderUpdateFlag - ["+isOrderUpdateFlag+"] \n ii) HeaderProcessCode - ["+headerProcessCode+"] \n " +
 						  "iii) OrderEmailConfirmationSentFlag - ["+orderEmailConfirmationSentFlag+"] \n iv) LastOrderOperation - ["+lastOrderOperation+"].");
 			}
-			if("Y".equals(isOrderUpdateFlag)) {
+			//commenting as per EB-4699
+			/*if("Y".equals(isOrderUpdateFlag)) {
 				if(!"A".equals(headerProcessCode) && "N".equals(orderEmailConfirmationSentFlag)) {					
 					if(lastOrderOperation != null && lastOrderOperation.trim().length()>0) {
 						lastOrderOperation=lastOrderOperation.trim();
@@ -563,7 +564,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						}
 					}
 				}
-			}
+			}*/
 			
 		} catch (Exception ex) {
 			

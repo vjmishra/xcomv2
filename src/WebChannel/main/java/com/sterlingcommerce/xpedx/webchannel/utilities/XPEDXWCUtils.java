@@ -5,6 +5,7 @@ package com.sterlingcommerce.xpedx.webchannel.utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -40,6 +42,7 @@ import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -69,13 +72,16 @@ import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
+import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrgNodeDetailsBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
+import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.yantra.interop.client.ClientVersionSupport;
+import com.yantra.interop.client.InteropEnvStub;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -89,8 +95,10 @@ import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCConfigurator;
+import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
+import com.yantra.yfs.japi.YFSException;
 
 /**
  * @author rugrani
@@ -135,6 +143,9 @@ public class XPEDXWCUtils {
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
 	private static Map<String, String> legacyUomMap;
+
+	private static final MegaMenuUtil MEGA_MENU_UTIL = new MegaMenuUtil();
+	private static final Pattern PAT_MEGA_MENU_BCS = Pattern.compile("_bcs_=[^&]+");
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
@@ -2764,34 +2775,22 @@ public class XPEDXWCUtils {
 	/**
 	 * returns Element containing Extn fields for customer with specified Identity
 	 */
-	public static Element getPunchoutConfigForCustomerIdentity(
-			HttpServletRequest req, HttpServletResponse res, String custIdentity) {
+	public static Element getPunchoutConfigForCustomerIdentity(String custIdentity) {
+		if(YFCCommon.isVoid(custIdentity)){
+			 return null;
+		 }
 		Element wElement = null;
-
-		try {
-			if (null == custIdentity || custIdentity.length() <= 0) {
-				log.error("getAuthUserXPathForCustomerIdentity: Customer Identity missing.");
-				return null;
-			}
-			IWCContext wcContext = WCContextHelper.getWCContext(req);
-			Map<String, String> valueMap = new HashMap<String, String>();
-			valueMap.put("/Customer/Extn/@ExtnCustIdentity", custIdentity);
-
-			Element input = WCMashupHelper.getMashupInput(
-					"xpedx-customer-getUserXPath", valueMap, wcContext.getSCUIContext());
-			log.debug("Input XML: " + SCXmlUtil.getString(input));
-
-			Object obj = WCMashupHelper.invokeMashup(    // throws exception if not logged in
-					"xpedx-customer-getUserXPath", input, wcContext.getSCUIContext());
-
-			Document outputDoc = ((Element) obj).getOwnerDocument();
+		String apiName="getCustomerList";
+		String apiData="<Customer><Extn ExtnCustIdentity='"+custIdentity+"'/></Customer>";
+		String isFlow="N";
+		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";
+		Document customerDetailsOutputDoc = handleApiRequestBeforeAuthentication(apiName,apiData,isFlow,template);
+		if(customerDetailsOutputDoc != null){
+			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();
 			log.debug("Output XML: " + SCXmlUtil.getString(outputDoc));
 			wElement = outputDoc.getDocumentElement();
 			wElement = SCXmlUtil.getChildElement(wElement, "Customer");
 			wElement = SCXmlUtil.getChildElement(wElement, "Extn");
-		}
-		catch (Exception ex) {
-			log.error(ex.getMessage(),ex);
 		}
 		return wElement;
 	}
@@ -6604,7 +6603,7 @@ public class XPEDXWCUtils {
 		}
 		return allAPIOutputDoc;
 	}
-	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items,boolean defaultShowUOMFlag) {
+	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(List<String> items,boolean defaultShowUOMFlag) {
 
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		if(items == null || items.size() ==0)
@@ -6790,6 +6789,103 @@ public class XPEDXWCUtils {
 			}
 		}
 		return punchOutComments;
+	}
+	/**
+	 * for calling an any API before authentication
+	 * @param apiName
+	 * @param apiData
+	 * @param isFlow
+	 * @param template
+	 * @return
+	 */
+	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)
+    {
+	  if(YFCCommon.isVoid(isFlow) || YFCCommon.isVoid(apiData) || YFCCommon.isVoid(apiName) )
+        {
+			return null;
+        }
+		Document retDoc = null;
+		YIFApi localApi;
+        InteropEnvStub envStub = new InteropEnvStub("admin", "SterlingHttpTester");
+        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());
+        try
+        {
+              YFCDocument apiDoc = YFCDocument.parse(apiData);
+              localApi = YIFClientFactory.getInstance().getLocalApi();
+	          log.debug("Successfully intialized the local api");
+            if(!YFCCommon.isVoid(isFlow) && isFlow.equalsIgnoreCase("Y"))
+            {
+                retDoc = localApi.executeFlow(envStub, apiName, apiDoc.getDocument());
+            } else
+            {
+                retDoc = localApi.invoke(envStub, apiName, apiDoc.getDocument());
+            }
+        }
+        catch(YIFClientCreationException e)
+        {
+        	log.fatal("Could not create local client", e);
+        }
+        catch(SAXException e)
+        {
+        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);
+        }
+        catch(IOException e)
+        {
+        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);
+        }
+        catch(YFSException e)
+        {
+        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);
+        }
+        catch(YFCException e)
+        {
+        	log.fatal((new StringBuilder()).append("YFC Exception while invoking api ").append(apiName).toString(), e);
+
+        }
+        finally{
+        	 return retDoc;
+        }
+    }
+
+	/**
+	 * @param context
+	 * @return Returns true if the mega menu data is available.
+	 */
+	public static boolean isMegaMenuCached(IWCContext context) {
+		return MEGA_MENU_UTIL.isDataAvailable(context);
+	}
+
+	/**
+	 * Removes the mega menu cache.
+	 * @param context
+	 */
+	public static void purgeMegaMenuCache(IWCContext context) {
+		MEGA_MENU_UTIL.purgeData(context);
+	}
+
+	/**
+	 * @param context
+	 * @return Returns the mega menu data model that is cached in the session, making an API call if necessary.
+	 * @see MegaMenuUtil#getMegaMenu(IWCContext)
+	 */
+	public static List<MegaMenuItem> getMegaMenu(IWCContext context) {
+		return MEGA_MENU_UTIL.getMegaMenu(context);
+	}
+
+	/**
+	 * Replaces the _bcs_ parameter value with the given value (uses regex).
+	 * <br>
+	 * This is a workaround for the stick _bcs_ parameter. Per Struts documentation (http://struts.apache.org/release/2.0.x/docs/url.html), the &lt;s:url&gt; tag automatically
+	 * appends query string parameters, but the presence of an &lt;s:param%gt; tag takes precedent. However, during development of the mega menu (eb-3981) this was not the observed
+	 * behavior. In fact, even if &lt;s:url includeParams=none&gt; was used, the _bcs_ in the query string was incorrectly taking priority over the &lt;s:param%gt; tag (eg,
+	 * accessing mega menu while on a search results page). While initially only used for the mega menu, this may be needed elsewhere.
+	 *
+	 * @param url
+	 * @param bcs
+	 * @return
+	 */
+	public static String updateBreadcrumbParameter(String url, String bcs) {
+		return PAT_MEGA_MENU_BCS.matcher(url).replaceAll("_bcs_=" + bcs);
 	}
 
 }

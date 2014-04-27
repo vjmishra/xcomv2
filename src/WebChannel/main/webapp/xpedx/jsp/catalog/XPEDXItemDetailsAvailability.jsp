@@ -142,7 +142,7 @@
 								</s:else>			
 							<s:if test="#disUOMStatus.first">
 							<tr>
-										<td class="bold">My Price (<s:property value='priceCurrencyCode'/>):</td>
+										<td class="bold">Price (<s:property value='priceCurrencyCode'/>):</td>
 										<td>
 										 	<s:if test="%{#formattedUnitpriceForUom==#priceWithCurrencyTemp1}">
 														<span class="red bold"> <s:text name='MSG.SWC.ORDR.ORDR.GENERIC.CALLFORPRICE' /> </span>  
@@ -224,7 +224,7 @@
 					<s:if test="isBracketPricing == 'true'">
 						<tr>
 						<s:if test="%{#_action.getCategory() == 'Paper'}">
-							<td colspan="1" class="bold" colspan="2">My Bracket Pricing (<s:property value='priceCurrencyCode'/>):</td>
+							<td colspan="1" class="bold" colspan="2">Bracket Pricing (<s:property value='priceCurrencyCode'/>):</td>
 							</s:if>
 							<s:set name="isMyPriceZero" value="%{'false'}" />
 						<s:if test="displayPriceForUoms.size()>0" >					

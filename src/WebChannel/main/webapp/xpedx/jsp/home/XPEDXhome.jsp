@@ -110,7 +110,6 @@
 					</tr>
 				</table>
 		</div>
-
 		<script type="text/javascript">
 		var browserNotSupportedWin = new Ext.Window({
 			autoScroll: false,
@@ -145,14 +144,16 @@
 		// IE: "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR...; MS-RTC LM 8)"
 		// IE11 is different: "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko"
 		if (/MSIE (\d+\.\d+);/.test(userAgent)){ //test for MSIE x.x;
-		 	var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
+		   var ieversion=new Number(RegExp.$1); // capture x.x portion and store as a number
 			 if (ieversion < VER_IE)
 			 {
+				 // need? checking compatibility mode?
 				 if(document.documentMode < VER_IE)
 				 {
 					 warnBrowserVersion();
 				 }
 			 }
+				 
 		}
 
 		// Firefox: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0"
@@ -201,13 +202,13 @@
 		</script>
 <script type="text/javascript">
 Ext.onReady(function(){		
-	browserSupport();
+		browserSupport();
 });
-</script>	
+		</script>	
 </s:if>
-
 <!-- RUgrani BEGIN: Logged in User Home page -->
 <s:else>
+	
 	<div id="main-container">
 	<div id="main">
 

@@ -21,8 +21,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.xpedx.nextgen.catalog.api.trey4748.StopWatch;
-import com.xpedx.nextgen.catalog.api.trey4748.Trey4748SmcfsLogging;
 import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.custom.dbi.XPX_Item_Associations;
 import com.yantra.custom.dbi.XPX_Item_Extn;
@@ -89,43 +87,23 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 	}
 
 	public Document getAllCatalogAPI(YFSEnvironment env, Document inputXML) throws Exception {
-		StopWatch sw = new StopWatch();
-
 		Document outputDoc = SCXmlUtil.createDocument("XPXCatalogAllAPIService");
 
-		sw.start();
 		getPriceListElement(env, inputXML, outputDoc);
-		sw.stop();
-		Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "getPriceListElement");
-		sw.reset();
 
-		sw.start();
 		getCustXrefList(env, inputXML, outputDoc);
-		sw.stop();
-		Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "getCustXrefList");
-		sw.reset();
 
-		sw.start();
 		getXPXItemExtnElement(env, inputXML, outputDoc);
-		sw.stop();
-		Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "getXPXItemExtnElement");
-		sw.reset();
 
 		Element uomList = (Element) inputXML.getElementsByTagName("UOMList").item(0);
 
 		if (uomList != null) {
-			sw.start();
 			getXpedxUOMList(env, SCXmlUtil.createFromString(SCXmlUtil.getString(uomList)), outputDoc);
-			sw.stop();
-			Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "getXpedxUOMList: uomList=%s", SCXmlUtil.getString(uomList));
-			sw.reset();
 		}
 		return outputDoc;
 	}
 
 	private Element getCustXrefList(YFSEnvironment env, Document inputXML, Document outputDoc) throws SQLException {
-		StopWatch sw = new StopWatch();
-
 		Element custXrefElement = null;
 		if (itemsXrefDoc == null) {
 			custXrefElement = SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemcustXrefList");
@@ -159,13 +137,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 			pltqbItemCustXref.append(")");
 
-			sw.start();
 			List<XPX_Itemcust_Xref> xpxItemxrefList = XPX_Itemcust_XrefDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemCustXref, 5000);
-			sw.stop();
-			Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemxrefList: pltqbItemCustXref=%s, xpxItemxrefList.size=%s", pltqbItemCustXref.getReadableWhereClause(), xpxItemxrefList.size());
-			sw.reset();
 
-			sw.start();
 			Iterator<XPX_Itemcust_Xref> xpxItemxrefIter = xpxItemxrefList.iterator();
 			while (xpxItemxrefIter.hasNext()) {
 				XPX_Itemcust_Xref xpxItemxref = xpxItemxrefIter.next();
@@ -188,22 +161,16 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				itemXrefEleme.setAttribute("Createts", "" + xpxItemxref.getCreatets());
 				itemXrefEleme.setAttribute("Modifyts", "" + xpxItemxref.getModifyts());
 			}
-			sw.stop();
-			Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "iterate xpxItemxrefList: xpxItemxrefList.size=%s", xpxItemxrefList.size());
-			sw.reset();
 
 		} catch (Exception e) {
 			log.error("", e);
 			log4j.error("", e);
-			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getCustXrefList");
 		}
 		setItemXrefDoc(outputDoc);
 		return custXrefElement;
 	}
 
 	private Element getXPXItemExtnElement(YFSEnvironment env, Document inputXML, Document outputDoc) throws SQLException {
-		StopWatch sw = new StopWatch();
-
 		Element xpxItemExtnList = null;
 		if (itemExtnDoc == null) {
 			xpxItemExtnList = SCXmlUtil.createChild(outputDoc.getDocumentElement(), "XPXItemExtnList");
@@ -238,15 +205,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			}
 			pltqbItemExtn.append(")");
 
-			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemxrefList: pltqbItemExtn=%s", pltqbItemExtn.getReadableWhereClause());
-
-			sw.start();
 			List<XPX_Item_Extn> xpxItemExtns = XPX_Item_ExtnDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemExtn, 5000);
-			sw.stop();
-			Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemxrefList: pltqbItemExtn=%s, xpxItemExtns.size=%s", pltqbItemExtn.getReadableWhereClause(), xpxItemExtns.size());
-			sw.reset();
 
-			sw.start();
 			Iterator<XPX_Item_Extn> xpxItemExtnIter = xpxItemExtns.iterator();
 			boolean isFirstRecord = true;
 			while (xpxItemExtnIter.hasNext()) {
@@ -272,21 +232,12 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				itemXrefEleme.setAttribute(XPX_Item_Extn.CREATETS, "" + xpxItemExtn.getCreatets());
 				itemXrefEleme.setAttribute(XPX_Item_Extn.MODIFYTS, "" + xpxItemExtn.getModifyts());
 			}
-			sw.stop();
-			Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "iterate xpxItemxrefList: xpxItemExtns.size=%s", xpxItemExtns.size());
-			sw.reset();
 
 			// Adding XPX_ITEM_ASSOCIATION Element in Parent XPX_ITEM_EXTN
 			if (!isFirstRecord && "Y".equals(isAssociationRequired)) {
 				pltqbItemAssociation.append(")");
 
-				Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "BEFORE query xpxItemAssociations: pltqbItemAssociation=%s", pltqbItemExtn.getReadableWhereClause());
-
-				sw.start();
 				List<XPX_Item_Associations> xpxItemAssociations = XPX_Item_AssociationsDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemAssociation, 5000);
-				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query xpxItemAssociations: pltqbItemAssociation=%s, xpxItemAssociations.size=%s", pltqbItemAssociation.getReadableWhereClause(), xpxItemAssociations.size());
-				sw.reset();
 
 				ArrayList<Element> _xpxItemExtnList = SCXmlUtil.getElements(xpxItemExtnList, "XPXItemExtn");
 				Map<String, List<XPX_Item_Associations>> associationMap = new HashMap<String, List<XPX_Item_Associations>>();
@@ -312,7 +263,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				Element xrefOrElem = SCXmlUtil.createChild(xrefComplexQuery, "Or");
 
 				if (xpxItemAssociations != null && _xpxItemExtnList != null) {
-					sw.start();
 					for (XPX_Item_Associations xpxItemAssociation : xpxItemAssociations) {
 						List<XPX_Item_Associations> associationsList = new ArrayList<XPX_Item_Associations>();
 						if (associationMap.get(xpxItemAssociation.getItemExtnKey()) != null) {
@@ -345,11 +295,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 							isXPXItemCustXrefCall = true;
 						}
 					}
-					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "iterate xpxItemAssociations: xpxItemAssociations.size=%s", xpxItemAssociations.size());
-					sw.reset();
 
-					sw.start();
 					for (Element _xpxItemExtn : _xpxItemExtnList) {
 						Element xpxItemAssocEleme = SCXmlUtil.createChild(_xpxItemExtn, "XPXItemAssociationsList");
 						if (associationMap != null) {
@@ -365,9 +311,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 							}
 						}
 					}
-					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "iterate _xpxItemExtnList: _xpxItemExtnList.size=%s", _xpxItemExtnList.size());
-					sw.reset();
 
 					setItemExtnDoc(outputDoc);
 					if (isXPXItemExtnCall) {
@@ -381,14 +324,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		} catch (Exception e) {
 			log.error("", e);
 			log4j.error("", e);
-			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getXPXItemExtnElement");
 		}
 		return xpxItemExtnList;
 	}
 
 	private Element getPriceListElement(YFSEnvironment env, Document inputXML, Document outputDoc) throws SQLException {
-		StopWatch sw = new StopWatch();
-
 		Element priceElement = SCXmlUtil.createChild(outputDoc.getDocumentElement(), "PricelistLineList");
 		// getting price list details
 		try {
@@ -403,11 +343,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 				pltqbPriceListAssignment.append(" AND CUSTOMER_ID ='" + customerID + "'");
 				// pltQryBuilder.appendString(" AND PRICING_STATUS", "=","ACTIVE");
 
-				sw.start();
 				List<YPM_Pricelist_Assignment> priceListAssignments = YPM_Pricelist_AssignmentDBHome.getInstance().listWithWhere((YFSContext) env, pltqbPriceListAssignment, 5000);
-				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListAssignments: pltqbPriceListAssignment=%s, priceListAssignments.size=%s", pltqbPriceListAssignment.getReadableWhereClause(), priceListAssignments.size());
-				sw.reset();
 
 				Iterator<YPM_Pricelist_Assignment> priceListIter = priceListAssignments.iterator();
 				if (priceListIter.hasNext()) {
@@ -439,13 +375,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 					}
 					pltqbPriceListLineList.append(")");
 
-					sw.start();
 					List<YPM_Pricelist_Line> priceListLineList = YPM_Pricelist_LineDBHome.getInstance().listWithWhere((YFSContext) env, pltqbPriceListLineList, 5000);
-					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query priceListLineList: pltQryBuilder1=%s, priceListLineList.size=%s", pltqbPriceListLineList.getReadableWhereClause(), priceListLineList.size());
-					sw.reset();
 
-					sw.start();
 					Iterator<YPM_Pricelist_Line> priceListLineIter = priceListLineList.iterator();
 					while (priceListLineIter.hasNext()) {
 						YPM_Pricelist_Line priceListLine = priceListLineIter.next();
@@ -458,15 +389,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 						priceLineExtnElement.setAttribute("ExtnPricingUom", priceListLine.getExtn_Extn_Pricing_Uom());
 
 					}
-					sw.stop();
-					Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "iterate priceListAssignments: priceListLineList.size=%s", priceListLineList.size());
-					sw.reset();
 				}
 			}
 		} catch (Exception e) {
 			log.error("", e);
 			log4j.error("", e);
-			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getPriceListElement");
 		}
 		return priceElement;
 	}
@@ -534,8 +461,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 
 	private Document getXpedxUOMList(YFSEnvironment env, Document inXML, Document outputXML) throws XPathExpressionException, YFSException, YIFClientCreationException,
 			RemoteException {
-		StopWatch sw = new StopWatch();
-
 		log.beginTimer("XPXUOMListAPI:getUOMList started...");
 		LinkedHashMap<String, String> wUOMsToConversionFactors = new LinkedHashMap<String, String>();
 		String LegacyCustomerNumber = "";
@@ -555,7 +480,8 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			Element documentElement = inXML.getDocumentElement();
 			String customerID = documentElement.getAttribute("CustomerID");
 			itemID = documentElement.getAttribute("ItemID");
-			String storeFrontId = documentElement.getAttribute("OrganizationCode");
+		//	String storeFrontId = documentElement.getAttribute("OrganizationCode");
+			String storeFrontId = "xpedx";//EB-4571 jira to YFS_ITEM allways organization code is 'XPEDX'.
 			// Added to identify this request is from B2B order flow or not
 			String entryType = documentElement.getAttribute("EntryType");
 
@@ -590,11 +516,7 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 
 			boolean isYFSItemCall = false;
 
-			sw.start();
 			List<YFS_Item> yfsItemList = YFS_ItemDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItem, 5000);
-			sw.stop();
-			Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query yfsItemList: pltqbItem=%s, yfsItemList.size=%s", pltqbItem.getReadableWhereClause(), yfsItemList.size());
-			sw.reset();
 
 			PLTQueryBuilder pltqbItemUom = PLTQueryBuilderHelper.createPLTQueryBuilder();
 			pltqbItemUom.setCurrentTable("YFS_ITEM_UOM");
@@ -611,23 +533,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			pltqbItemUom.append(")");
 			Document outputListDocument = null;
 			if (isYFSItemCall) {
-				sw.start();
 				List<YFS_Item_UOM> yfsItemUOMList = YFS_Item_UOMDBHome.getInstance().listWithWhere((YFSContext) env, pltqbItemUom, 5000);
-				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "query yfsItemUOMList: pltqbItemUom=%s, yfsItemUOMList.size=%s", pltqbItemUom.getReadableWhereClause(), yfsItemUOMList.size());
-				sw.reset();
 
-				sw.start();
 				outputListDocument = createItemListDocument(yfsItemList, yfsItemUOMList);
-				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "createItemListDocument: yfsItemList.size=%s, yfsItemUOMList.size=%s", yfsItemList.size(), yfsItemUOMList.size());
-				sw.reset();
 			} else {
-				sw.start();
 				Document retval = complexQueryOutDoc.getDocument();
-				sw.stop();
-				Trey4748SmcfsLogging.getInstance().snapshot(env, sw.getTime(), "complexQueryOutDoc");
-				sw.reset();
 				return retval;
 			}
 
@@ -697,7 +607,6 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 		} catch (Exception e) {
 			log.error("", e);
 			log4j.error("", e);
-			Trey4748SmcfsLogging.getInstance().snapshot(env, -1, "ERROR getXpedxUOMList");
 		}
 		return complexQueryOutDoc.getDocument();
 	}

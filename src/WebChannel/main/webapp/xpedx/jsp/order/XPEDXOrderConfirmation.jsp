@@ -460,7 +460,6 @@
                     </fieldset >
                    <ul class="tool-bar-bottom-right" id="tool-bar">
                         <li><a href="<s:url action="orderList"></s:url>" class="grey-ui-btn"><span>View Orders</span></a></li>
-                    	<li><a href="<s:url namespace ="/catalog" action="navigate"></s:url>" class="orange-ui-btn"><span>Continue Shopping</span></a></li>
                    	</ul>
 
                     <div class="clearall"></div> 

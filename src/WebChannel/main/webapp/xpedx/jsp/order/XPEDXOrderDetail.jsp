@@ -804,7 +804,7 @@ function showSplitDiv(divId)
 	    <div class="wc-table-header">
 	    <table class="full-width no-border">
 	    		<tr>
-	    			<td class="text-right table-header-bar-left white">My Price (<s:property value='%{currencyCode}'/>)</td>
+	    			<td class="text-right table-header-bar-left white">Price (<s:property value='%{currencyCode}'/>)</td>
 	    			<s:if test="#orderType != 'Customer'">
 						<td class="text-right white" width="125">Shippable Price (<s:property value='%{currencyCode}'/>)</td>
 					</s:if>

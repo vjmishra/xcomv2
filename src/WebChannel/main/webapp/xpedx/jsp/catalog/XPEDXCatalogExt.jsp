@@ -42,7 +42,8 @@
 </s:if>
 <!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-	<![endif]-->
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<![endif]-->
 	
 
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
@@ -59,21 +60,15 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <!-- end carousel scripts js   -->
-<script type="text/javascript">
-$(document).ready(function() {
-		var id1Left= $('#main').width()		
-		backToTopLeft = parseInt(id1Left+5) + 'px';
-		$('#back-to-top').css('padding-left',backToTopLeft);
-		$('#back-to-top a').css('padding-left',backToTopLeft);
 
-} );
-</script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' /></title>
 
-	
+
 </head>
 <body class="ext-gecko ext-gecko3"  onload="highlightRows()">
 
+	<s:url id="getPriceAndAvailabilityForItemsURLid" action="getPriceAndAvailabilityForItems" namespace="/catalog" />
+	<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
 
 
 <s:set name='_action' value='[0]'/>
@@ -310,29 +305,13 @@ $(document).ready(function() {
 				<s:url id='searchURL' action='search' namespace='/catalog' includeContext='false' escapeAmp='false'>
 					<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 				</s:url>
-				<s:form name='narrowSearch' action="%{searchURL}" onSubmit="javascript:setDefaultSearchText();">
-					<div class="searchbox-form1">
-						<div  class="catalog-search-container"> <!-- -FX1- tile="search tooptip"  -->
-							<!-- XBT - 391 Removed onkeydown event -->
-							<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
-							tabindex="1002" type="text" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
-							
-							<button type="submit" class="searchButton"  tabindex="1003" title="Search" ></button>
-							
-							<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-							<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
-						</div>	
-					</div>		
-				</s:form>
-						
-				<div id="breadcrumbs-list-name">
-				<div id="breadcrumb-my-selection" style="margin-left:11px; padding-right: 4px; text-align: left;">My Selection</div>
-				 <s:url value='/xpedx/images/icons/12x12_charcoal_x.png' id='rbtn' />  <!-- -FX2- tile="Remove"  -->
 				
-				<span class="breadcrumbs-inner" id="searchBreadcrumb" >
-				<!--  <img  class="breadcrumb-x" src="/swc/xpedx/images/icons/12x12_charcoal_x.png" alt="Remove" title="Remove" id='rbtn' />  -->
-					<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' / ' removable='true' removeIcon='#rbtn' startTabIndex='2' />
-				</span>
+				<div id="breadcrumbs-list-name">
+					<s:url id="rbtn" value="%{'/xpedx/images/icons/12x12_charcoal_x.png'}" escapeAmp="false" />
+					
+					<span class="breadcrumbs-inner" id="searchBreadcrumb" >
+						<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' <span>/</span> ' removable='true' removeIcon='#rbtn' startTabIndex='2' />
+					</span>
 				</div>
 			<div class="clearall">&nbsp;</div>
 		</div>
@@ -341,7 +320,7 @@ $(document).ready(function() {
 	<s:include value='XPEDXNarrowBy.jsp' />
 	<!--  end of new content -->
 	
-	<div class="t1-main-content" id="navigateContainer"> 
+	<div class="t1-main-content-alt" id="navigateContainer"> 
 	
 	 <div class="pagination">
                  <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>
@@ -708,16 +687,135 @@ var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XML
 function getNormalView() {
 	return new Ext.XTemplate(
 	'<div id="item-ct">',
-	 '<tpl for=".">','<dl>','<tpl for="items">','<dd id="{itemkey}" class="itemdiv">',
-	   '<div class="imgs">','<a class="item-lnk" href="{itemDetailURL}normal-view">','<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/></a>',
-	    '<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
-	   '</div>',
-	   '<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
-	  '<div class="contents">','<p class="pprice">{price}</p>','<div class="descriptions">','<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}normal-view" tabindex="{tabidx}">',
-	   '<p class="ddesc">{name}</p></a>',
-	   '<div class="buttons"><a class="item-lnk" href="{itemDetailURL}normal-view" >{buttons}</a></div></div>',
-	   '<div class="clearBoth">&nbsp;</div>',
-	  '</div>',
+		'<tpl for=".">',
+			'<dl>',
+				'<tpl for="items">',
+					'<dd id="{itemkey}" class="itemdiv">',
+						'<div class="imgs">',
+							'<a class="item-lnk" href="{itemDetailURL}normal-view">',
+								'<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/>',
+							'</a>',
+							'<div class="hidden bubble extDescDiv" id="extDescDiv_{#}"></div>',
+						'</div>',
+						'<input type=\'hidden\' id=\'baseUOMItem_{itemid}\' name=\'baseUOMItem_{itemid}\' value=\'{uom}\'/>',
+						'<div class="contents">',
+							'<p class="pprice">{price}</p>',
+							'<div class="descriptions">',
+								'<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}normal-view" tabindex="{tabidx}">',
+									'<div class="ddesc">{name}</div>',
+								'</a>',
+								'<div class="clearfix"></div>',
+								'<div class="buttons">',
+									'<a class="item-lnk" href="{itemDetailURL}normal-view">{buttons}</a>',
+								'</div>',
+							'</div>',
+							
+							'<div class="item_number-wrap">',
+								'<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}',
+							'</div>',
+							<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>
+								'<div class="mfg-numbers">',
+									'{partno}',
+								'</div>',
+							</s:if>
+							<s:if test='#customerItemFlag != null && #customerItemFlag=="Y"'>
+								'<div class="cust-numbers">',
+									'{customerItemno}',
+								'</div>',
+							</s:if>
+						'</div>',
+						
+						<s:if test='!#guestUser'>
+							<%-- mill-mfg --%>
+							'{itemtypedesc}',
+						</s:if>
+						
+						'<div class="clearfix"></div>',
+						<s:if test='!#guestUser'>
+							'<div class="replacement-item">',
+								'{repItem}',
+							'</div>',
+						</s:if>
+						
+						'<div class="order-input-wrap">',
+							'<div class="order-row">',
+								<s:if test='!#guestUser'>
+									'<div class="order-label">Qty:</div>',
+									'<div class="order-input">',
+										'<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>',
+										'<input type="textfield" id=\'Qty_{itemid}\' name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this, \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />',
+										'{uomdisplay}',
+									'</div>',
+								</s:if>
+							'</div>',
+							
+							<s:if test='(#isCustomerPO == "Y" || (#mfgItemFlag != null && #mfgItemFlag == "Y"))'>
+								<s:if test='!#guestUser && #isCustomerPO == "Y"'>
+									'<div class="order-row">',
+										'<div class="order-label">',
+											'<s:property value="customerPOLabel"/>: ',
+										'</div>',
+										'<div class="order-input">',
+											'<s:textfield name="customerPONo" theme="simple" cssClass="catalog_line_input" id="customerPONo_{itemid}" value="" title="CustomerNumber" tabindex="%{#tabIndex}" maxlength="22" size="25"/>',
+										'</div>',
+									'</div>',
+								</s:if>
+							</s:if>
+							
+							<s:if test='(#isCustomerLinAcc == "Y" || (#customerItemFlag != null && #customerItemFlag == "Y"))'>
+								<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'>
+									'<div class="order-row">',
+										'<div class="order-label">',
+											'<s:property value="custLineAccNoLabel"/>: ',
+										'</div>',
+										'<div class="order-input">',
+											'<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}" maxlength="24" size="25"/>',
+										'</div>',
+									'</div>',
+								</s:if>
+							</s:if>
+							
+							'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
+							<s:if test='!#guestUser'>
+								'<div class="cart-pa-button-wrap">',
+									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
+									'<div class="availablelink">',
+										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
+										'<div class=\"itemOption\">',
+											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"getPriceAndAvailabilityForItems([\'{itemid}\']);\">Show Price &amp; Availability</a>',
+										'</div>',
+									'</div>',
+								'</div>',
+								'<div class="uomLink" id="errorMsgForQty_{itemid}">',
+									'{uomLink}',
+								'</div>',
+							</s:if>
+						'</div>', <%-- / order-input-wrap" --%>
+						
+						<s:if test='!#guestUser'>
+							'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
+						</s:if>
+							
+						'<div class="clearfix"></div>',
+						
+						'<div class="show-hide-wrap">',
+							'<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">',
+							'</div>',
+						'</div>',
+						
+						'<div class="clearfix"></div>',
+					'</dd>',
+				'</tpl>',
+			'</dl>',
+		'</tpl>',
+		'<div style="clear:left"></div>',
+	'</div>'
+		
+		
+		
+		
+		
+<%--
 	  '<table class="bottable">','<tr>','<td class="item_number">','<b><s:property value="wCContext.storefrontId" /> Item #: {itemid}</b> {cert}','</td>',
 	  '<td class="quantity_box" colspan="2">',<s:if test='!#guestUser'>'Qty:&nbsp;<input type="textfield" id=\'Qty_{itemid}\'  name=\'Qty_{itemid}\' value="" size="7" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" onclick="javascript:setFocus(this);" onchange="javascript:isValidQuantity(this);javascript:qtyInputCheck(this, \'{itemid}\');" onmouseover="javascript:qtyInputCheck(this,  \'{itemid}\');" onmousedown="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'\');" onmouseout="javascript:document.getElementById(\'{itemkey}\').setAttribute(\'class\',\'itemdiv\');" />','<input type="hidden" id="Qty_Check_Flag_{itemid}" name="Qty_Check_Flag_{itemid}" value="false"/>','{uomdisplay}','</td>',</s:if>
 	  '</td>','</tr>',
@@ -730,15 +828,20 @@ function getNormalView() {
 	  '<td style="text-align:right;width:40%">',<s:if test='!#guestUser && #isCustomerLinAcc == "Y"'> '<s:property value="custLineAccNoLabel"/>: ','</td>','<td>','<s:textfield name="Job" theme="simple" cssClass="catalog_line_input" id="Job_{itemid}" value="" title="JobNumber" tabindex="%{#tabIndex}"  maxlength="24" size="25"/>',</s:if>'</td>','</tr>',
 	   </s:if>
 	  '<tr>','<td style="width:50%" class="mill-mfg">',<s:if test='!#guestUser'>'{itemtypedesc}',</s:if>'</td>',
-	  '<td colspan="2" class="add_to_cart" style="width:auto"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',<s:if test='!#guestUser'><s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
-	  </s:if><s:else>
-	   '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
-	  </s:else>		
-	   '<div class="availablelink">',<s:if test='!#guestUser'>
-		'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
-		'<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">My Price &amp; Availability</a></div>',</s:if>
-	   '</div>',
+	  '<td colspan="2" class="add_to_cart" style="width:auto"><input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
+	  <s:if test='!#guestUser'>
+	    <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+	      '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a></div>',
+	    </s:if>
+	    <s:else>
+	       '<div class="addtocart"><a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a></div>',
+	    </s:else>		
+	     '<div class="availablelink">',
+	     <s:if test='!#guestUser'>
+		   '<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',  
+		   '<div class=\"itemOption\"><a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"displayAvailability(\'{itemid}\');\">Show Price &amp; Availability</a></div>',
+		 </s:if>
+	     '</div>',
 	  </s:if>
 	  '</td>','</tr>',
 	  '<tr>','<td class=style="width:65%;">',<s:if test='!#guestUser'>'{repItem}',</s:if>'</td>','<td colspan="2">',<s:if test='!#guestUser'>'<div class="uomLink" style="display: inline;margin-right: 2px; margin-top: 3px; width: auto;float: right;" id="errorMsgForQty_{itemid}">{uomLink}</div>',</s:if>'</td>','</tr>',
@@ -748,6 +851,7 @@ function getNormalView() {
 	  '<div class="clearBoth">&nbsp;</div>','<div class="show-hide-wrap">','<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">','</div>','</div>',
 	 '</dd>','</tpl>',  '</dl>','</tpl><div style="clear:left"></div>',
 	'</div>'	
+--%>
 	);
 	}
 function getCondensedView() {
@@ -922,19 +1026,18 @@ var ct = Ext.get('item-box-inner');
 	</table>
 	</div>
 	
-	<s:if test='%{errorCode.trim().equals("")}'>		
-	</s:if>	
-	<s:else>
-		<center><div class="error"><s:property value='%{errorCode}' /></div> </center>
-	</s:else>
+	<s:if test='%{!errorCode.trim().equals("")}'>		
+		<center><div class="error-center"><s:property value='%{errorCode}' /></div> </center>
+	</s:if>
 			 
 	 
-	<div id="item-box"><!-- Begin: dynamic filled in by javascript -->
-	<div id="item-box-inner"></div>
-	<!-- End: dynamic filled in by javascript --></div>
+	<div id="item-box">
+		<div id="item-box-inner">
+			<%-- dynamically filled by javascript --%>
+		</div>
 	</div>
-	<!-- end Ext list component --> <!-- START wctheme.form-close.ftl --></form>
-	<!-- END wctheme.form-close.ftl -->
+	</div>
+	</form>
 	
 	<div class="clearall">&nbsp;</div>
 	<div class="pagination line-spacing">
@@ -1019,8 +1122,6 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<!-- old narrow by include -->
 	</div>
-	 <%--Added for EB 1150 --%>
-	<div id="back-to-top"><a href="javascript:onclick = window.scrollTo(0,0)"></a></div>
 	<div class="clear"></div>
 	</div>
 	
@@ -1419,31 +1520,10 @@ function validationforDragToCompare()
         window.location.href="<s:property value='%{compareURL}' escape='false'/>";
     } 
 }
-//Added for EB 1147
-$(function () {
-		 var scroll_timer;
-	 var $message = $('#back-to-top a');
-	 var $window = $(window);
-
-	/* react to scroll event on window */
-		 $window.scroll(function () {
-		 window.clearTimeout(scroll_timer);
-		 scroll_timer = window.setTimeout(function () {
-		 if($window.scrollTop() <= 280)
-		 {
-			$message.fadeOut(500);
-		 }
-		 else 
-	 	{
-			 $message.stop(true, true).show().click(function () { $message.fadeOut(500); });
-		 }
-	 }, 100);
-});
-});
-//Added for EB 1147 - display back to top button on scroll down
 </script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/XPEDXCatalogExt<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/PriceAndAvailability<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <s:include value="../order/XPEDXRefreshMiniCart.jsp"/>
 <!--<script type="text/javascript" src="../xpedx/js/global/validation.js"></script>

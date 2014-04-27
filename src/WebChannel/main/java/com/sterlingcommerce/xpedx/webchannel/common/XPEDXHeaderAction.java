@@ -1203,7 +1203,8 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		return sapCustomerDocument;
 	}*/
-	public String getCategories() {
+	
+	private void getCategories() {
 		SCUIContext uictx = getWCContext().getSCUIContext();
 		Document outDoc = null;
 		// Commented for Performance - filter.action
@@ -1249,7 +1250,6 @@ public class XPEDXHeaderAction extends WCMashupAction {
 
 		log.debug("Currently Displayed number of Categories is *************"
 				+ numOfCatToDisplay);
-		return "success";
 	}
 
 	private Document callMashup(SCUIContext uictx, String mashupId) {

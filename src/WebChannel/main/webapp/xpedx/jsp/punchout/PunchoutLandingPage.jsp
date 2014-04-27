@@ -9,6 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Punchout Landing Page</title>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/punchout/po-xpedx<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -18,7 +19,14 @@
 
 <body class="bodyclass">
 <s:set name="isCustomerSelectedIntoConext" value="#wcUtil.isCustomerSelectedIntoConext(wCContext)"/>
-<div class="ui-po-wrap">
+<%-- Quick Scroll Up and Down --%>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/navArrows<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<div id="scroll-up-down">
+		<div style="display:none;" class="nav_up" id="nav_up"></div>
+		<div style="display:none;" class="nav_down" id="nav_down"></div>
+</div>
+<div class="ui-po-wrap" id="main">
   <div class="ui-po-brand"></div>
   <div class="ui-po-content">
     <div class="ui-po-search"> <span>Search for Ship To Location</span>
@@ -45,7 +53,8 @@
 									<s:hidden id="selectedCurrentCustomer" value="" name="selectedCurrentCustomer"/>									
 								</s:form>
 							</div>
-					      <s:if test="%{#searchedString==null && #arraySize==0}">
+							<p class="search-message">Click the search icon to reset to the original list.</p>
+                         <s:if test="%{#searchedString==null && #arraySize==0}">
 			                   <div class="ul-po-results">Search Results for: <span class="blackText" id="searchedValue"><s:property
 							         value="#searchedString" /></span>
 				               </div>
@@ -54,7 +63,7 @@
 			               <s:if test="%{#arraySize==0}">
 				              <div class="ul-po-results">
 					              <span class="redText bold">No search results found for <s:property
-							            value="#searchedString" />. Click the search icon to reset to the original list.</span>
+							            value="#searchedString" />.</span>
 				             </div>
 			              </s:if>
 			              <s:else>

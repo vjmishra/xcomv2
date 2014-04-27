@@ -52,7 +52,8 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-	
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.megamenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/MegaMenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
 	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
 		<s:param name="newOP">true</s:param>
@@ -198,8 +199,6 @@
 	<s:set name="canRequestProductSample" value="#session.showSampleRequest" />
 	<s:set name="goBackFlag" value='%{"false"}' />
 	<s:hidden id="goBackFlag" name="goBackFlag" value="%{goBackFlag}"></s:hidden>
-<s:url id='getCategoryMenu' action='gategorySubMenu' namespace='/common' >
-</s:url>
 	<s:url id="ValidatePasswordURL" action="xpedxPasswordValidation"/>
 	<s:url id="XPEDXPasswordSubmitURL" action="XPEDXPasswordSubmit"/>
 	<s:url id="orderdetailsURL" namespace="/order" action="orderDetail"/>
@@ -888,7 +887,7 @@ var selectedShipCustomer = null;
 			if(orderHeaderKey == null || orderHeaderKey == '' || orderHeaderKey == 'null' || orderHeaderKey == '_CREATE_NEW_')
 			{
 				orderHeaderKey = "_CREATE_NEW_";
-				document.location.href= "/swc/order/quickAddAction.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&quickAdd=false&draft=Y&scFlag=Y";
+				document.location.href= "/swc/order/quickAdd.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&quickAdd=false&draft=Y&scFlag=Y";
 			}
 			else{
 				document.location.href= "/swc/order/draftOrderDetails.action?sfId="+ storefrontId +"&orderHeaderKey=" + orderHeaderKey + "&draft=Y&scFlag=Y";
@@ -1014,11 +1013,10 @@ var selectedShipCustomer = null;
 	</div>
 </div>
 
-<div class='x-hidden dialog-body ' id="passwordUpdateContent">
-	<div id="ajax-passwordUpdateContent" class="xpedx-light-box"
-		style="width: auto; height: auto; ">
-	</div>
-</div>
+ <div id="passwordUpdateContent">
+     <div id="ajax-passwordUpdateContent">
+	 </div>
+ </div> 
 <%--JIRA 3487 end--%>
 <s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomers' />
 <s:url id='setStockedCheckboxURL' action="setStockedCheckbox" namespace="/catalog"/>
@@ -2393,50 +2391,36 @@ function callAjaxForSorting(url,divId)
 		writeMetaTag('WT.ti','Help');
 		//-- Web Trends tag End --
   		var load = window.open('https://xcontent.ipaper.com/storefront/<s:property value="wCContext.storefrontId" />_help.html','','menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
-  		}
-	function getCategorySubMenu()
-	{		
-		   	var url = "<s:property value='#getCategoryMenu'/>";
-   			url = ReplaceAll(url,"&amp;",'&');
-       		Ext.Ajax.request({
-		       	url:url,
-    		   	success: function (response, request)
-       			{
-	    			var myDiv = document.getElementById("categorySubMenu");
-    				myDiv.innerHTML = response.responseText;
-    			}
-			});
-	}	
-	
+  	}
 
 	//check for timeout for JIRA 1650 
-function checkSessionTimeout(){
-	<s:url id='homeAction' action='home' namespace='/home' />;
-    var logoutURL="<s:property value='#homeAction' />";
-    logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
-	<s:url id='checkSesseionTimeoutURL'  namespace='/order'  action='checkSessionTimeoutForCart.action' ></s:url>
-     var checkSesseionTimeoutURL="<s:property value='#checkSesseionTimeoutURL' />";
-     checkSesseionTimeoutURL = ReplaceAll(checkSesseionTimeoutURL,"&amp;",'&');
- 	Ext.Ajax.request({
-         url :checkSesseionTimeoutURL,
-         method: 'POST',
-         success: function (response, request){
- 		if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
-		window.location=logoutURL;
-		}
- 		
- 		
-    		},
-    		failure: function (response, request){
-    			if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
-    			window.location=logoutURL;
-    			}
-          }
-     });  
-}
-//added for XBT 298
-var myMask;
-function msgWait(){
+	function checkSessionTimeout(){
+		<s:url id='homeAction' action='home' namespace='/home' />;
+	    var logoutURL="<s:property value='#homeAction' />";
+	    logoutURL = ReplaceAll(logoutURL,"&amp;",'&');
+		<s:url id='checkSesseionTimeoutURL'  namespace='/order'  action='checkSessionTimeoutForCart.action' ></s:url>
+	     var checkSesseionTimeoutURL="<s:property value='#checkSesseionTimeoutURL' />";
+	     checkSesseionTimeoutURL = ReplaceAll(checkSesseionTimeoutURL,"&amp;",'&');
+	 	Ext.Ajax.request({
+	         url :checkSesseionTimeoutURL,
+	         method: 'POST',
+	         success: function (response, request){
+	 		if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
+			window.location=logoutURL;
+			}
+	 		
+	 		
+	    		},
+	    		failure: function (response, request){
+	    			if(response.responseText == undefined || response.responseText.indexOf('Search Catalog...')!=-1 ){
+	    			window.location=logoutURL;
+	    			}
+	          }
+	     });  
+	}
+	//added for XBT 298
+	var myMask;
+	function msgWait(){
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 		myMask.show();
@@ -2721,13 +2705,6 @@ function msgWait(){
 				<div class="float-right" style="margin-top:25px;margin-right:-60px; *margin-right:-20px;"><a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img border="0" alt="" width="120" height="40" top="15" position="absolute" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/888xpedx76.png"></a></div>
 				</s:if>
 			</s:else>
-<%-- 	   	</s:if>
-	   	<s:else>
-	   		<li><a href="<s:url action="getUserInfo" namespace="/profile/user" includeParams='none'/>"
-					tabindex="2004">My Account</a></li>
-			<li><a id="cancelShoppingLink" href="#cancelShopping"
-					tabindex="2006">Cancel Shopping</a></li>
-	   	</s:else>    --%>
   </ul>
   <s:set name='loggedInUserCustomerID' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoggedInCustomerFromSession(wCContext)'/>
   <s:set name="loggedInUserOrgCode"  value='wCContext.storefrontId'/>						
@@ -2760,67 +2737,36 @@ function msgWait(){
 			</s:iterator>
   </s:elseif>
 <s:if test='(#isGuestUser != true)'>
-	<div id="main-navigation">
-	        <ul class="dropdown" id="main-nav">
-	            <%-- Hemantha, removed since it is not in new UI screen --%>	            
-	            	<s:url id='allCatURL' namespace='/catalog' action='navigate.action'>
-		      			<s:param name="displayAllCategories" value="%{true}" />
-						<s:param name='newOP' value='%{true}'/>
-						<s:param name="selectedHeaderTab">CatalogTab</s:param>
-					</s:url>	
-					<s:set name="categoryPath" value='wCContext.getSCUIContext().getLocalSession().getAttribute("categoryCache")'/>
-	            	<s:if test='#selectedHeaderTab=="CatalogTab"'>
-	            		<li class="active">
-	            		<s:if test="#categoryPath !=null">
-	            			<s:a href="%{allCatURL}"  cssClass="active">Catalog</s:a>
-	            		</s:if>
-	            		<s:else>
-	            			<s:a href="%{allCatURL}"  onmouseover="javascript:getCategorySubMenu();" cssClass="active">Catalog</s:a>
-	            		</s:else>	            			            		
-	            	</s:if>
-	            	<s:else>
-	            		<li>
-	            		<s:if test="#categoryPath !=null">
-	            			<s:a href="%{allCatURL}" >Catalog</s:a>
-	            		</s:if>
-	            		<s:else>
-	            			<s:a href="%{allCatURL}" onmouseover="javascript:getCategorySubMenu();">Catalog</s:a>
-	            		</s:else>	            		
-	            	</s:else>
-	            	<ul class="sub_menu" style="visibility: hidden;" id="categorySubMenu" >
-	            		<s:if test="#categoryPath !=null">
-	            			<s:include value="/xpedx/jsp/common/XPEDXCatalogSubMenu.jsp"></s:include>
-	            		</s:if>
-	            	</ul>
-			    </li>
-
-			    <!-- TODO remove this if MIL is not optional for punchout cust/user -->
-<%-- 	            <s:if test="%{#isPunchoutUser}">
-	            	<s:if test="%{procurementMyItemsLinkFlag}">	            		
-						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
-							<s:param name="filterByAllChk" value="%{false}" />
-							<s:param name="filterByMyListChk" value="%{true}" />
-							<s:param name="selectedHeaderTab">MyItemTab</s:param>
-						</s:url>		            	
-		            	<s:if test='#selectedHeaderTab=="MyItemTab"'>
-		            		<li class="active">
-		            		<s:a href="%{myListsLink}"  cssClass="active ieNavhack">
-		            			<span class="left">&nbsp;</span><span class="right">My Items Lists</span>
-		            		</s:a>
-		            	</s:if>
-		            	<s:else>
-		            		<li>
-		            		<s:a href="%{myListsLink}" cssClass="ieNavhack">
-		            			<span class="left">&nbsp;</span><span class="right">My Items Lists</span>
-		            		</s:a>
-		            	</s:else>						
-						<div id="MILSubMenu" style="display: inline">
-						</div>
-		            </li>
-	            	</s:if>
-	            </s:if> --%>
-<%-- 	            <s:else> --%>
-						<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
+	<div class="menucontainer">
+		<ul class="megamenu" id="megamenu">
+			<li class="<s:property value='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'/>">
+				<s:a cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'>
+					Catalog
+				</s:a>
+				
+				<s:if test="#wcUtil.isMegaMenuCached(wCContext)">
+					<s:include value="MegaMenu.jsp" />
+				</s:if>
+				<s:else>
+					<%--
+						Developer note: Since the mega menu data is user-specific (entitlements, etc) the data is cached in the session.
+										However, the API call to fetch the data is slow enough that we don't want to block the page load,
+										 so if the data is not cached then we render the page without mega menu and immediately fetch it
+										 via an ajax call (see MegaMenu.js/getMegaMenu).
+										The response of the ajax call is the mega menu dom, which we inject into the page.
+					--%>
+					<s:url id="megaMenuURL" namespace="/common" action="megaMenu" />
+					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='false'/>" />
+					<ul id="megaMenuLoadingMessage">
+						<li>
+							<a class="spinner">
+								Loading...
+							</a>
+						</li>
+					</ul>
+				</s:else>
+			</li>
+				<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />
 							<s:param name="selectedHeaderTab">MyItemTab</s:param>
@@ -2834,9 +2780,7 @@ function msgWait(){
 		            		<s:a href="%{myListsLink}" cssClass="ieNavhack">My Items Lists</s:a>
 		            	</s:else>
 		            </li>
-<%-- 	            </s:else>	             --%>
-
-	            <s:url id ='quickAddLink' action='quickAddAction' namespace='/order'>
+	            <s:url id ='quickAddLink' action='quickAdd' namespace='/order'>
 	            	<s:param name="selectedHeaderTab">QuickAdd</s:param>
 	       			<s:param name="quickAdd" value="%{true}" />
 	            </s:url>	            
@@ -2856,13 +2800,13 @@ function msgWait(){
 					<s:if test='#selectedHeaderTab=="OrderTab"'>            	
 		            	<li class="active">
 		            	 <!-- cssClass="active" -->
-		            	<s:a  href='%{catURL11}' cssClass="link" >Order Management</s:a>
+		            	<s:a  href='#'>Order Management</s:a>
 	            	</s:if>
 	            	<s:else>
 	            		<li>
-	            		<s:a href='%{catURL11}'>Order Management</s:a>
+	            		<s:a href='#'>Order Management</s:a>
 	            	</s:else>
-	            	<ul class="sub_menu" style="visibility: hidden;" >			        					
+	            	<ul class="sub_menu">			        					
 				        <s:url id='catURL10' namespace='/order' action='approvalList.action'>
 									<s:param name="sfId"><s:property value="wCContext.storefrontId" /></s:param>
 									<s:param name="pageNumber">1</s:param>
@@ -2891,16 +2835,21 @@ function msgWait(){
 								</a>
 							</li>
 						</s:if>
-					<!--  	<li>
-							<s:a href='%{catURL11}' cssClass="link">
-								Return Requests
-							</s:a>
-						</li> -->
-						<li>
+					<li>
 							<a cssClass="link" href="<s:url action="draftOrderList" namespace="/order" />"  tabindex="2003">My Carts</a>
 						</li>
 			        </ul>
 	              </s:if>
+	              <s:else>
+		              <s:if test='#selectedHeaderTab=="OrderTab"'>            	
+			            	<li class="active">
+			            	<s:a  href='#'>Order Management</s:a>
+		            	</s:if>
+		            	<s:else>
+		            		<li>
+		            		<s:a href='#'>Order Management</s:a>
+		            	</s:else>
+	              </s:else>
 	            </s:if>
 	            <s:else> <!-- Punchout user only gets My Carts so make top-level -->
 						<s:url id='myCartsLink' namespace='/order' action='draftOrderList'>
@@ -2944,7 +2893,7 @@ function msgWait(){
 		            	<li>
 		            	<s:a >Resources</s:a>
 		            </s:else>
-		            <ul class="sub_menu" style="visibility: hidden;" >
+		            <ul class="sub_menu">
 		             <s:if test="%{isViewReports()}">
 		            	<li>
 							<s:a href='%{reportsLink}' cssClass="link">
@@ -3001,7 +2950,7 @@ function msgWait(){
 	            		<li class="admin_tab">
 	            		<s:a>Admin</s:a>
 	            	</s:else>
-	            	<ul class="sub_menu" style="visibility: hidden;" >
+	            	<ul class="sub_menu">
 				       	<s:url id='myProfile' namespace='/profile/user' action='MyUserProfile' >
 				       		<s:param name="isUserProfile" value="%{true}" />
 				       	</s:url>
@@ -3058,36 +3007,19 @@ function msgWait(){
 						<s:param name="sourceTab">Open</s:param>
 					</s:url>
 	            	<s:if test='#selectedHeaderTab=="AddToExistingOrder"'>
-	            		<li class="active lighter" >
+	            		<li id="add-existing" class="active" >
 		            	<s:a href="%{homeLink}" cssClass="active">Add To Existing Order</s:a>
 	            	</s:if>
 	            	<s:else>
-	            		<li class="lighter">
+	            		<li id="add-existing">
 	            		<s:a href="%{homeLink}">Add To Existing Order</s:a>
 	            	</s:else>
 	            </li>
 	            </s:if>
 	            <s:else>
-	            	<li class="lighter order-edit-bg">
+	            	<li id="order-edit">
 	            		<s:a href="">Order edit in progress...</s:a>
-	           		 </li>		
-	           		 
-					<s:url id="viewEditOrderChanges" includeParams="none"
-							action='MyViewEditOrderChanges' namespace='/order' escapeAmp="false">
-							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
-							<s:param name="isEditOrder" value='true' />
-							<s:param name="isEditOrder" value='true' />
-					</s:url>
-	            	<li class="lighter order-edit">
-	            		<s:a href="%{viewEditOrderChanges}">View Changes</s:a>
-	            	</li>
-	            	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
-							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
-					</s:url>
-	            	<li class="lighter order-edit">
-	            		<s:a href="%{cancelEditOrderChanges}">Cancel Changes</s:a>
-	            	</li>		            
+	           		 </li>     
 	            </s:else>
 	            </s:if>
 	        </ul>
@@ -3098,30 +3030,29 @@ function msgWait(){
 	<div id="viewUsersDlg">
 	</div>
 </div>
-<div style="display: none;">
-	<div id="cancelShopping">
-		<p> Are you sure you want to leave this page? </p><br/><br/>
-		<p>If inactive, your current cart will automatically be purged in 7 days.</p>
-		<div class="float-right">
-			<ul id="tool-bar" class="tool-bar-bottom">			
-			<s:url id='procurementPunchOutURL' action='procurementPunchOut' namespace="/order" escapeAmp="false">
-	            <s:param name='mode' value='"cancel"'/>
-	            <s:param name='draft' value='"Y"'/>
-	        </s:url>
-			<li>
-				<a class="green-ui-btn" href="<s:property value='#procurementPunchOutURL'/>">
-					<SPAN>Yes</SPAN>
-				</a>
-			</li>
-			<li>
-				<a class="grey-ui-btn" href="javascript:$.fancybox.close()">
-					<SPAN>No</SPAN>
-				</a>
-			</li>
-			</ul>
-		</div>
-	</div>
-</div>
+ <!-- order edit in progress bar begin -->
+<s:if test='!#guestUser'>
+	<s:if test="%{!#isPunchoutUser}">
+		 <s:if test="#isEditOrderHeaderKey != null && #isEditOrderHeaderKey !='' ">
+		 	<s:url id="viewEditOrderChanges" includeParams="none"
+							action='MyViewEditOrderChanges' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+							<s:param name="isEditOrder" value='true' />
+							<s:param name="isEditOrder" value='true' />
+			</s:url>
+			<s:url id="cancelEditOrderChanges" includeParams="none"
+							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
+							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
+			</s:url>
+			<s:set name="editOrderNumber" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDIT_ORDER_NO)'/>		
+		 	<div class="order-edit-banner"> Editing Order #:  <s:property value="#editOrderNumber" /> <span>Changes will not be applied to order until checkout.</span>
+	      		<input name="" type="button"  class="btn-order-edit  addmarginleft20" value="View Changes" onclick="javascript:document.location.href='${viewEditOrderChanges}';"/>
+	      		<input name="" type="button"  class="btn-order-edit addmarginleft10" value="Cancel Changes" onclick="document.location.href='${cancelEditOrderChanges}'"/>
+    		</div>
+		 </s:if> 
+	 </s:if>
+ </s:if>
+  <!-- order edit in progress bar end -->
  <!-- ship to banner -->
 <s:if test="%{getShipToBanner()}">
 	<s:set name='guestUser' value="%{#_action.getWCContext().isGuestUser()}" />
@@ -3158,7 +3089,6 @@ function msgWait(){
     </s:if>
 </s:if>
 <!-- end ship to banner -->
-
 <!-- begin search tips -->
 <div style="display: none;">
 	<div id="searchTips">

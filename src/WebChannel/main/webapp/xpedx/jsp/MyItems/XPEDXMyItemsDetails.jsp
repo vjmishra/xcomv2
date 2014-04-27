@@ -2019,27 +2019,7 @@ function showSharedListForm(){
 							}
                                      
                  }
-				  
-				  $(function () {
-   					 var scroll_timer;
-    				 var $message = $('#back-to-top a');
-    				 var $window = $(window);
 
-    				/* react to scroll event on window */
-   					 $window.scroll(function () {
-       				 window.clearTimeout(scroll_timer);
-       				 scroll_timer = window.setTimeout(function () {
-           			 if($window.scrollTop() <= 280)
-           			 {
-                		$message.fadeOut(500);
-           			 }
-           			 else 
-            		 {
-               			 $message.stop(true, true).show().click(function () { $message.fadeOut(500); });
-           			 }
-       			 }, 100);
-   			 });
-		});
     </script>
 
 </head>
@@ -3292,9 +3272,6 @@ function showSharedListForm(){
 					</s:if>
 					<!-- END carousel -->
 				</s:if>
-				<div id="back-to-top">
-					<a href="javascript:onclick = window.scrollTo(0,0)"></a>
-				</div>
 
 				<s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
 				<s:set name='lastModifiedUserId' value="lastModifiedUserId" />
@@ -3544,13 +3521,6 @@ function showSharedListForm(){
 			function() { $(this).addClass('green-background'); }, 
 			function() { $(this).removeClass('green-background'); }
 		);
-		
-		$(document).ready(function() {
-			var id1Left= $('#main').width();
-			backToTopLeft = parseInt(id1Left + 5) + 'px';
-			$('#back-to-top').css('padding-left', backToTopLeft);
-			$('#back-to-top a').css('padding-left', backToTopLeft);
-		});
 	</script>
 </body>
 </html>

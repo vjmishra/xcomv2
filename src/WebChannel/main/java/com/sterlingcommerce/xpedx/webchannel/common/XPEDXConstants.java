@@ -26,6 +26,9 @@ public class XPEDXConstants {
 	public static final String REQUEST_ATTR_PROMO_PAGE_URL = "PROMO_PAGE_URL";
 	public static final String DYN_PROMO_SHARED_PATH_PROP = "promotions_shared_path";
 	
+	// Mega Menu unavailable Brand 
+	public static final String MEGA_MENU_BRANDS_UNAVAILABLE_PROP = "megamenu_unavailable_brands";
+	
 	//Ad Jugler URL related constants
 	//jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging, added "yfs." to the key
 	public static final String AD_JUGGLER_KEYWORD_PREFIX_PROP = "yfs.xpedx.adjuggler.keyword.attribute.prefix";
@@ -192,4 +195,5 @@ public class XPEDXConstants {
 	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@xpedx.com";
 	
 	public static final String APPROVE_ORDER_FLAG="approveOrderFlag";
+	public static final String EDIT_ORDER_NO="EDIT_ORDER_NO";
 }

@@ -437,6 +437,7 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 				if(YFCCommon.isVoid(generatedErrorMessage))
 				{
 					wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
+					XPEDXWCUtils.removeObectFromCache(XPEDXConstants.EDIT_ORDER_NO);
 				}
 				
 				//the output required for the confirmation page; do the necessary getCompleteOrderDetails call.

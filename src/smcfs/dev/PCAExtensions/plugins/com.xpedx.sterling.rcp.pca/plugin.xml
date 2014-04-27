@@ -282,6 +282,10 @@
             description="ManageArticle"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateArticleSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateArticleSharedTask"/>
         <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask"
+            description="Authorized Locations"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask"/>
+        <SharedTask
             class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask"
             description="Select Ship To"
             id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask"/>

@@ -20,7 +20,6 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -47,7 +46,6 @@ import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.xpedx.webchannel.catalog.trey4748.Trey4748SwcLogging;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
@@ -717,6 +715,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			while (iter.hasNext()) {
 				Breadcrumb bc = iter.next();
 				if (bc.getAction() != null && bc.getAction().equals("filter")) {
+				//EB 4803 For a filter action indexField should not be null.
+				if(YFCCommon.isVoid(indexField))
+						indexField = (String) bc.getParams().get("indexField");
 					// String indexField = (String) bc.getParams().get(
 					// "indexField");
 					String filterDesc = (String) bc.getParams().get("filterDesc");
@@ -1229,14 +1230,11 @@ public class XPEDXCatalogAction extends CatalogAction {
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 
-				StopWatch sw = new StopWatch();
-				sw.start();
 				allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", input, wcContext.getSCUIContext());
-				sw.stop();
-				Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
 
 				getOrderMultipleMapForItems();
-				getReplacmentItemsMapForItems(envCode, custDivision);
+				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
+				getReplacmentItemsMapForItems(envCode, shipFromBranch);
 				wcContext.setWCAttribute("replacmentItemsMap", replacmentItemsMap, WCAttributeScope.REQUEST);
 			} catch (Exception e) {
 				log.error("", e);
@@ -1389,11 +1387,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setMashupID(getCatalogLandingMashupID());
 			}
 
-			StopWatch sw = new StopWatch();
-			sw.start();
 			String returnString = super.navigate();
-			sw.stop();
-			Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "super.navigate: path=%s, returnString=%s", path, returnString);
 			// XBT-260
 
 			if (ERROR.equals(returnString)) {
@@ -1650,11 +1644,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 									ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 									Document XPXItemExtnListElement = null;
 
-									StopWatch sw = new StopWatch();
-									sw.start();
 									XPXItemExtnListElement = XPEDXOrderUtils.getXPEDXItemAssociation(custID, shipFromDivision, itemId.getTextContent(), getWCContext());
-									sw.stop();
-									Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke getXPEDXItemAssociation: custID=%s, shipFromDivision=%s, itemId=%s", custID, shipFromDivision, itemId.getTextContent());
 
 									List<Element> xPXItemExtn = XMLUtilities.getElements(XPXItemExtnListElement.getDocumentElement(),
 											"XPXItemExtn[@ItemID='" + itemId.getNodeValue() + "']");
@@ -2857,13 +2847,24 @@ public class XPEDXCatalogAction extends CatalogAction {
 			Element inputDocElemen = SCXmlUtil.createFromString(searchIndexInputXML).getDocumentElement();
 			if (!YFCCommon.isVoid(facetListItemAttributeKey)) {
 				Element allAssignedListElem = SCXmlUtil.createChild(inputDocElemen, "ShowAllAssignedValues");
+
+				// Added this attribute after Hot fix HF80 for EB-2810
+				allAssignedListElem.setAttribute("ConsiderOnlyAllAssignedValueAttributes", "Y");
+
 				Element itemAttributeElem = SCXmlUtil.createChild(allAssignedListElem, "ItemAttribute");
 				itemAttributeElem.setAttribute("ItemAttributeKey", facetListItemAttributeKey);
 			}
-			Object outputObj = WCMashupHelper.invokeMashup("xpedxNarrowByCatalogSearch", inputDocElemen, wcContext.getSCUIContext());
-			Document outputDoc = ((Element) outputObj).getOwnerDocument();
-			setOutDoc(outputDoc);
-			setAttributeListForUIForNarrowBy();
+
+			// EB-3738 Should not display system error message. To catch the exception 'TooManyClauses'.
+			try {
+				Object outputObj = WCMashupHelper.invokeMashup("xpedxNarrowByCatalogSearch", inputDocElemen, wcContext.getSCUIContext());
+				Document outputDoc = ((Element) outputObj).getOwnerDocument();
+				setOutDoc(outputDoc);
+				setAttributeListForUIForNarrowBy();
+			} catch (Exception e) {
+				log.error("Exception in XPEDXCatalogAction - getFacetList method while retrieving the search results", e);
+				return retVal;
+			}
 		}
 		return retVal;
 	}

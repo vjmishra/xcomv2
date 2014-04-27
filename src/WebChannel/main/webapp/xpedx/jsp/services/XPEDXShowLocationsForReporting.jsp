@@ -73,15 +73,12 @@
 
 <div class="float-right">
 <ul id="tool-bar" class="tool-bar-bottom">
-	
-	
-		<li>
-			<a class="grey-ui-btn" href="#" style="" onclick="javascript:$.fancybox.close()"><span>Cancel</span></a>
-		</li>
-	
 	<li>
 		<a class="green-ui-btn" href="javascript:submitSapForm();"><span>Apply</span></a>
 	</li>
+		<li>
+			<a class="grey-ui-btn" href="#" style="" onclick="javascript:$.fancybox.close()"><span>Cancel</span></a>
+		</li>	
 </ul>
 	
 </div>
