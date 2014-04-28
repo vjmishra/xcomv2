@@ -214,15 +214,6 @@ function calculateAvailability(warehouseLocationList) {
 			'total': 0
 	};
 	
-	// workaround for inexactness of JavaScript floating point math - we must explicitly round after adding
-	//     so we must track the number so the rounding preserves the significant digits of all the numbers added into each bucket
-	var significantDigits = {
-		'0': 0,
-		'1': 0,
-		'2': 0,
-		'total': 0
-	};
-	
 	for (var i = 0, len = warehouseLocationList.length; i < len; i++) {
 		var warehouse = warehouseLocationList[i];
 		var numQty = parseFloat(warehouse.availableQty);
@@ -235,46 +226,17 @@ function calculateAvailability(warehouseLocationList) {
 		
 		qtys[numDays] += numQty;
 		qtys['total'] += numQty;
-		
-		var tmpSignificantDigits = getSignificantDigits(warehouse.availableQty);
-		significantDigits[numDays] = Math.max(significantDigits[warehouse.numberOfDays], tmpSignificantDigits);
-		significantDigits['total'] = Math.max(significantDigits['total'], tmpSignificantDigits);
 	}
 	
 	// next day includes immediate
 	qtys['1'] += qtys['0'];
-	significantDigits['1'] = Math.max(significantDigits['1'], significantDigits['0']);
 	
-	// round to significant digits
-	if ((qtys['0'] + '').indexOf('.') != -1) {
-		qtys['0'] = parseFloat(qtys['0'].toFixed(significantDigits['0']));
-	}
-	if ((qtys['1'] + '').indexOf('.') != -1) {
-		qtys['1'] = parseFloat(qtys['1'].toFixed(significantDigits['1']));
-	}
-	if ((qtys['2'] + '').indexOf('.') != -1) {
-		qtys['2'] = parseFloat(qtys['2'].toFixed(significantDigits['2']));
-	}
-	if ((qtys['total'] + '').indexOf('.') != -1) {
-		qtys['total'] = parseFloat(qtys['total'].toFixed(significantDigits['total']));
+	// workaround for inexactness of JavaScript floating point math - we must explicitly round after adding
+	for (var i = 0, len = qtys.length; i < len; i++) {
+		qtys[i] = parseFloat(qtys[i].toFixed(5));
 	}
 	
 	return qtys;
-}
-
-/**
- * @param numStr
- * @returns Number of digits after the decimal
- */
-function getSignificantDigits(numStr) {
-	var idxDecimal = numStr.indexOf('.');
-	var numAfterDecimal;
-	if (idxDecimal == -1) {
-		numAfterDecimal = 0;
-	} else {
-		numAfterDecimal = numStr.length - idxDecimal - 1;
-	}
-	return numAfterDecimal;
 }
 
 /**
