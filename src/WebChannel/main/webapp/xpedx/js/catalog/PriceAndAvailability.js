@@ -9,6 +9,10 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 	myMask.show();
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
 	
+	for (var i = 0, len = items.length; i < len; i++) {
+		$('#availabilty_' + items[i]).hide().get(0).innerHTML = '';
+	}
+	
 	var origQty = [];
 	if (!qtys) {
 		qtys = [];
@@ -85,15 +89,16 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					continue;
 				}
 				
+				// order multiple messaging
 				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
-				if ($divErrorMsgForQty.length > 0) {
-					var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
-					var cssClass = isOrderMultipleError ? 'error' : 'notice';
-					var html = [];
-					html.push('<div class="', cssClass, '" style="margin-right: 5px; font-weight: normal; float: right; display: inline;">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
-					$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
-					
-					$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
+				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
+				var cssClass = isOrderMultipleError ? 'error' : 'notice';
+				var html = [];
+				html.push('<div class="', cssClass, '" style="margin-right: 5px; font-weight: normal; float: right; display: inline;">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
+				$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
+				$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
+				if (isOrderMultipleError) {
+					continue;
 				}
 				
 				var pricingForItem = pricingInfo[pnaItem.legacyProductCode];
