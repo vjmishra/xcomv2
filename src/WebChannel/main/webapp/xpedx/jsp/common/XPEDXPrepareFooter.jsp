@@ -3,8 +3,15 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
-
 <%-- Quick Scroll Up and Down --%>
+<script>
+$(document).ready(function() {
+	// Check if body height is higher than window height :)
+    if ($("body").height() < $(window).height()) {
+    	$("#scroll-up-down").hide();
+      }
+});
+</script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/navArrows<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <div id="scroll-up-down">
