@@ -87,11 +87,13 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
 				if ($divErrorMsgForQty.length > 0) {
-					var defaultOrderMultipleQty = $divErrorMsgForQty.attr('data-defaultOrderMultipleQty');
-					var cssClass = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty ? 'error' : 'notice';
+					var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
+					var cssClass = isOrderMultipleError ? 'error' : 'notice';
 					var html = [];
 					html.push('<div class="', cssClass, '" style="margin-right: 5px; font-weight: normal; float: right; display: inline;">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
 					$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
+					
+					$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
 				}
 				
 				var pricingForItem = pricingInfo[pnaItem.legacyProductCode];
