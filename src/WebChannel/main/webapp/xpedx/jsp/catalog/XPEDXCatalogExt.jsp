@@ -1202,6 +1202,10 @@ x-dd-drop-nodrop">
 <s:set name='ItemDetailLastPageUrl' value='<s:property value=null />' scope='session'/>
 <!-- end of jira 2422 -->
 
+<s:iterator value='%{#_action.getUomConvFactorMap()}' id='uomConvFactor'>
+	<s:hidden id="%{'convF_' + #uomConvFactor.key}" value="%{#uomConvFactor.value}" />
+</s:iterator>
+
 <script type="text/javascript">
 
 function LoadPage()

@@ -80,6 +80,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private static final String CUSTOMER_PART_NUMBER_FLAG = "1";
 	private boolean stockedCheckeboxSelected;
 	private Map<String, Map<String, String>> itemUomHashMap = new HashMap<String, Map<String, String>>();
+	private Map<String, String> uomConvFactorMap = new HashMap<String, String>();
 	ArrayList<String> itemIDList = new ArrayList<String>();
 	private String catalogLandingMashupID = null;
 	private XPEDXShipToCustomer shipToCustomer;
@@ -1556,6 +1557,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 								// End - Code added to fix XNGTP 2964
 
 							}
+
+							if (objConversionFactor != null) {
+								uomConvFactorMap.put(uom, objConversionFactor.toString());
+							}
 							if (isCustomerUom.equalsIgnoreCase("Y")) { // Show only UOM code without M_
 								if ("0".equals(objConversionFactor) || "1".equals(objConversionFactor)) {
 									displayUomMap.put(uom, uom.substring(2, uom.length()));
@@ -1609,6 +1614,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}
 		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
+		wcContext.setWCAttribute("uomConvFactorMap", uomConvFactorMap, WCAttributeScope.REQUEST);
 		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
 	}
 
@@ -3213,6 +3219,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public void setItemUomHashMap(
 			Map<String, Map<String, String>> itemUomHashMap) {
 		this.itemUomHashMap = itemUomHashMap;
+	}
+
+	public Map<String, String> getUomConvFactorMap() {
+		return uomConvFactorMap;
+	}
+
+	public void setUomConvFactorMap(Map<String, String> uomConvFactorMap) {
+		this.uomConvFactorMap = uomConvFactorMap;
 	}
 
 	public String getTemplateName() {

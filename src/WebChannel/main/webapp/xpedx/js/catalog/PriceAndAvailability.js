@@ -9,11 +9,13 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 	myMask.show();
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
 	
+	var origQty = [];
 	if (!qtys) {
 		qtys = [];
 		for (var i = 0, len = items.length; i < len; i++) {
 			var qty = $('#Qty_' + items[i]).val().trim();
 			qtys.push(qty);
+			origQty.push(qty);
 		}
 	}
 	
@@ -25,12 +27,28 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 		}
 	}
 	
+	// if qty is blank, set qty and uom to default for order multiple
+	for (var i = 0, len = qtys.length; i < len; i++) {
+		if (qtys[i].trim().length == 0) {
+			qtys[i] = $('#orderMultiple_' + items[i]).val();
+			
+			var baseUom = $('#baseUOMItem_' + items[i]).val();
+			if (uoms[i] != baseUom) {
+				// adjust order multiple quantity for the requested uom
+				var uomConvFactor = $('#convF_' + uoms[i]).val();
+				if (qtys[i] % uomConvFactor == 0) {
+					qtys[i] = (qtys[i] / uomConvFactor) + '';
+				} else {
+					qtys[i] = '1';
+				}
+			}
+		}
+	}
+	
 	$.ajax({
 		url: url,
 		dataType: 'json',
 		data: {
-			'stockCheckAll': true,
-			'validateOM': true,
 			'items': items.join('*'),
 			'qtys': qtys.join('*'),
 			'uoms': uoms.join('*')
@@ -53,7 +71,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
-					console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode);
+					if (console) { console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode); }
 					continue;
 				}
 				
@@ -65,6 +83,15 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					html.push('		</div>');
 					$divItemAvailability.show().get(0).innerHTML = html.join('');
 					continue;
+				}
+				
+				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
+				if ($divErrorMsgForQty.length > 0) {
+					var defaultOrderMultipleQty = $divErrorMsgForQty.attr('data-defaultOrderMultipleQty');
+					var cssClass = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty ? 'error' : 'notice';
+					var html = [];
+					html.push('<div class="', cssClass, '" style="margin-right: 5px; font-weight: normal; float: right; display: inline;">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
+					$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
 				}
 				
 				var pricingForItem = pricingInfo[pnaItem.legacyProductCode];
@@ -96,7 +123,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				var requestedQty = parseFloat(pnaItem.requestedQty);
 				
-				if (qtys[i].trim().length > 0) {
+				if (origQty[i].trim().length > 0) {
 					// only display 'ready to ship' message if user requested a qty (omit message if user left qty field blank)
 					if (pnaAvail['total'] == 0) {
 						html.push('			<div class="pa-row pa-status ready-not-available-color">Not Available</div>');
@@ -196,7 +223,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			}
 		},
 		failure: function(jqXHR, textStatus) {
-			console.log('ajax failure:\njqXHR:\n' , jqXHR , '\ntextStatus:\n' , textStatus);
+			if (console) { console.log('ajax failure:\njqXHR:\n' , jqXHR , '\ntextStatus:\n' , textStatus); }
 		}
 	});
 }
