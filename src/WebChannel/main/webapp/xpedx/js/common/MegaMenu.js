@@ -26,6 +26,10 @@ function initMegaMenu() {
 		$megacat3.get(0).innerHTML = $('#' + contentId).get(0).innerHTML;
 		$megacat3.fadeIn(200);
 		
+		// change the active cat 2
+		$this.parent('.cat-2-wrap').find('.mega-cat-2').removeClass('mega-cat-2-active');
+		$this.addClass('mega-cat-2-active');
+		
 		return false;
 	});
 }

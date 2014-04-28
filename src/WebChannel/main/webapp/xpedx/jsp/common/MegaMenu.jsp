@@ -18,8 +18,6 @@
 				<li>
 					<s:div cssClass="panel%{#cat1Status.count}">
 						<div class="border-container">
-							<h2><s:property value="#cat1.name" /></h2>
-							
 							<div class="cat-2-wrap">
 								<s:iterator value="#cat1.subcategories" id="cat2" status="cat2Status">
 									<s:if test="#cat2Status.first">
@@ -34,7 +32,7 @@
 									
 									<a id='category-<s:property value="%{#cat2.id}"/>' class='mega-cat-2 <s:property value="%{#cssClass}"/>' style='cursor:pointer;'
 											data-cat1Id='<s:property value="%{#cat1.id}"/>'>
-										<s:property value="#cat2.name" /><div class="cat-2-arrow">&raquo;</div>
+										<s:property value="#cat2.name" /><div class="cat-2-arrow"></div>
 									</a>
 								</s:iterator> <%-- cat2 --%>
 							</div> <%-- / cat-2-wrap --%>
@@ -42,45 +40,6 @@
 						
 						<div class="mainContent">
 							<div id='megacat3-for-cat1-<s:property value="%{#cat1.id}"/>' class='mega-cat-3'>
-								<s:set name="cat2" value="#cat1.subcategories[0]" />
-								
-								<%-- developer note: note this cat3-content tag is identical to cat3-content tag later in page --%>
-								<div class='cat3-content'>
-									<h3>
-										<s:url id='catURL' namespace='/catalog' action='navigate.action'>
-											<s:param name='path' value='#cat2.path' />
-											<s:param name='cname' value='#cat2.name' />
-											<s:param name='_bcs_' value='#cat2.breadcrumb' />
-										</s:url>
-											<a href='<s:property value="%{#wcUtil.updateBreadcrumbParameter(#catURL, #cat2.breadcrumb)}" escape="false"/>'>
-											<span>
-												<s:property value="#cat2.name"/>
-											</span>(<s:property value="#cat2.count"/>)
-										</a>
-
-									</h3>
-									<s:iterator value="#cat2.subcategories" id="cat3" status="cat3Status">
-										<s:url id='catURL' namespace='/catalog' action='navigate.action'>
-											<s:param name='path' value='#cat3.path' />
-											<s:param name='cname' value='#cat3.name' />
-											<s:param name='_bcs_' value='#cat3.breadcrumb' />
-											<s:param name='categoryDepthNarrowBy' value='2' />
-										</s:url>
-										<a href='<s:property value="%{#wcUtil.updateBreadcrumbParameter(#catURL, #cat3.breadcrumb)}" escape="false"/>'>
-											<span>
-												<s:property value="#cat3.name"/>
-											</span>(<s:property value="#cat3.count"/>)
-										</a>
-									</s:iterator> <%-- / cat3 --%>
-									
-									<s:if test='#cat2.hasBrands'>
-										<div class='button-nav-wrap'>
-											<input name='button' type='button' class='btn-nav-list' value='View All Brands for <s:property value="#cat2.name"/>  &rsaquo;'
-													onclick='openBrandPage(this); return false;' data-path='<s:property value="#cat2.path"/>'
-													data-cat1name="<s:property value="#cat1.name"/>" data-cat2name="<s:property value="#cat2.name"/>" />
-										</div>
-									</s:if>
-								</div>
 							</div> <%-- / mega-cat-3 --%>
 							
 							<div class='far-right-photo-<s:property value="%{#cat1.id}"/>'></div>
