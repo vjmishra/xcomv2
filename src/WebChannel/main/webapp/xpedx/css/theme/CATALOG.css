@@ -1031,11 +1031,12 @@ ul
 
 .quantity_box input
 {
-	width: 7em;
+	width: 5em;
 }
 .quantity_box select, .uom-select select
 {
-	width: 9em;
+	width: auto;
+	margin-bottom: 6px;
 }
 .cart-pa-button input {
 	width: auto;
@@ -1294,6 +1295,98 @@ img#youtube { margin-right: 9px; }
 	float:left; 
 	clear: none;"
 }
+
+/* condensed view */
+.condensed-view .two-item-wrap {
+	overflow: hidden;
+	border-bottom: 1px dotted #cccccc;
+	border-right: 1px dotted #cccccc;
+	border-top: 1px dotted #cccccc;
+}
+.condensed-view #item-ct dd {
+    float: left;
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    width: 388px;
+	border: none;
+	border-left: 1px dotted #cccccc;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.condensed-view #item-ct dd .contents {
+	float:left;
+	clear: none;
+	width:220px;
+	padding-left: 10px;
+	overflow:visible;
+	margin:1px 0 0 0;
+	min-height: 145px;
+}
+.condensed-view #item-ct dd .ddesc {
+	font-weight: bold;
+	padding-top: 4px;
+	width: 210px;
+	position: relative;
+}
+
+.condensed-view  #item-ct dd .buttons {
+    padding-top:0px;
+}
+.condensed-view  #item-ct dd #prodlist {
+    clear: both;
+    padding-top: 8px;
+}
+
+.condensed-view #item-ct dd .order-input-wrap {
+	float: right;
+	clear: none;
+	width: 220px;
+	margin-top: 14px;
+	text-align: right;
+	padding-right: 10px;
+}
+.condensed-view #item-ct dd .order-row {
+	height: 25px;
+}
+.condensed-view #item-ct dd .order-input-wrap .order-label {
+	float: left;
+	width: 35px;
+	clear: none;
+	text-align: right;
+	padding: 3px 6px 6px 0px;
+}
+.condensed-view  #item-ct dd .cart-pa-button {
+	width: 320px;
+	float: right;
+	clear: both;
+	text-align: right;
+	margin: 6px 0px 16px 0px;
+}
+
+.condensed-view  #item-ct dd .mill-mfg {
+	position: absolute;
+	top: 220px;
+	left: 10px;
+}
+.condensed-view .order-input select {
+	width: 107px;
+}
+
+.condensed-view  #item-ct dd .item-numbers {
+	position: absolute;
+	top: 165px;
+	left: 10px;
+	clear: both;
+}
+
+.item-numbers img {
+	display: inline;
+}
+
+/* mini view */
 
 .mini-view #item-ct dd .cart-pa-button {
 	text-align: center;

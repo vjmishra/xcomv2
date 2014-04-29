@@ -655,3 +655,20 @@ div.catalog-search-container input#search_searchTerm {
 	text-align: right;
 	width: 90%;
 }
+
+.pagination {
+    background-color: #ececec;
+    background-image: none;
+    font-weight: bold;
+    height: 30px;
+	position: relative;
+}
+.sortbycontrols {
+    min-width: 320px;
+	position: absolute;
+	left: 10px;
+	top: 2px;	
+}
+.pageresults {
+    margin-top: -7px;
+}
