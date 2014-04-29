@@ -29,7 +29,9 @@ import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
 
@@ -104,14 +106,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		//rootEle contains the Legacy XML document. 
 		YFCElement rootEle = yfcDoc.getDocumentElement();
-
+		Element orderextn=null;
 		try {
 			if(log.isDebugEnabled()) {
 				log.debug("XPXPerformLegacyOrderUpdateAPI-InXML:" + YFCDocument.getDocumentFor(inXML).getString());
 			}
 			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(yfcDoc.getDocument().getDocumentElement(),"Extn");
 			if(orderExtnList != null ) {
-				Element orderextn=orderExtnList.get(0);
+				orderextn=orderExtnList.get(0);
 				if(orderextn != null) {
 					String customerDivision=orderextn.getAttribute("ExtnCustomerDivision");			
 					if(customerDivision!=null && customerDivision.indexOf("_")!=-1) {
@@ -622,6 +624,16 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				} catch (Exception ex1) {
 					ex1.printStackTrace();
 				}
+				if(orderextn.hasAttribute("ExtnLegacyOrderNo") && !YFCObject.isVoid(orderextn.getAttribute("ExtnLegacyOrderNo")))
+				{
+					YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
+					for(YFCElement orderElem :orderNodeList)							
+					{
+						if(orderElem != null && !"Customer".equals(orderElem.getAttribute("OrderType")))
+							updateIsReprocessFlagOnError(env,orderElem.getAttribute("OrderHeaderKey"));
+					}
+				}
+				
 			}
 		} finally {
 			if (isAPISuccess) {
@@ -691,7 +703,14 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// To update Order and line level instructions.
 				YFCElement instElement = inXMLEle.getChildElement("Instructions");
 				if (instElement != null) {
-					setInstructionKeysOnException(inXMLEle, fOrderEle);
+					YFCElement instructionElement = inXMLEle.getChildElement("Instruction");
+					if(!YFCObject.isNull(instructionElement) && !YFCObject.isVoid(instructionElement) &&
+							!YFCObject.isNull(instructionElement.getAttribute("InstructionText")) && !YFCObject.isVoid(instructionElement.getAttribute("InstructionText")))
+						setInstructionKeysOnException(inXMLEle, fOrderEle);
+					else
+					{
+						inXMLEle.removeChild(instElement);
+					}
 				}
 				YFCElement pendignElement=inXMLEle.createChild("PendingChanges");
 				pendignElement.setAttribute("IgnorePendingChanges", "Y");
@@ -6486,6 +6505,30 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.error(ex);
 		}
 	}
+	
+	private void updateIsReprocessFlagOnError(YFSEnvironment env,String orderHeaderKey) throws Exception {
+		try {
+			//cOrderEle, fOrderEle, rootEle, 
+			if(YFCCommon.isVoid(orderHeaderKey))
+				return;
+			YFCDocument chngOrderInDoc=YFCDocument.getDocumentFor("<Order><Extn/></Order>");
+			YFCElement chngOrderEle = chngOrderInDoc.getDocumentElement();
+			chngOrderEle.setAttribute("OrderHeaderKey", orderHeaderKey);
+			chngOrderEle.getChildElement("Extn").setAttribute("ExtnIsReprocessibleFlag", "N");
+			if(log.isDebugEnabled()){
+				log.debug("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.stampOUFailureLockFlag method]-InXML:" + chngOrderEle.getString());
+			}
+			Document xpxChangeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", chngOrderEle.getOwnerDocument().getDocument());
+			if(log.isDebugEnabled()){
+				YFCDocument chngOrderOutDoc = YFCDocument.getDocumentFor(xpxChangeOrderOutDoc);
+				log.debug("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.stampOUFailureLockFlag method]-OutXML:" +chngOrderOutDoc.getString());
+			}	
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			log.error(ex);
+		}
+	}
+	
 	
 	private void errorMessage(String webConfNum, String legacyOrdNo, String genNo, Exception originalException) throws Exception {
 		String errorString = new String("Error messages logged inside XPXPerformLegacyOrderUpdateAPI.getFulfillmentOrderListOnException() method - \n")
