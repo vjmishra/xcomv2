@@ -683,7 +683,9 @@ true;"
 <%-- //IMPORTANT: Removed redundant class="itemdiv" style from all Views (grid,normal,condensed) - JIRA 2798 --%>
 <%-- Modifying the itemkey div CSS class when we apply onmousedown, onmouseout events for highlighting the text on Qty input box (JIRA 500). The same logic applied for Normal (Full) View, Condensed View and Mini View --%>
 var itemWin;			
-var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{<xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
+var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{itemcount: <s:property value="#prodStatus.count" />, <xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
+
+
 function getNormalView() {
 	return new Ext.XTemplate(
 	'<div id="item-ct">',
@@ -812,6 +814,7 @@ function getNormalView() {
 	'</div>'
 	);
 }
+
 function getCondensedView() {
 	return new Ext.XTemplate(
 		'<div id="item-ct">',
