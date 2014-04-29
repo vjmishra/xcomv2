@@ -683,7 +683,7 @@ true;"
 <%-- //IMPORTANT: Removed redundant class="itemdiv" style from all Views (grid,normal,condensed) - JIRA 2798 --%>
 <%-- Modifying the itemkey div CSS class when we apply onmousedown, onmouseout events for highlighting the text on Qty input box (JIRA 500). The same logic applied for Normal (Full) View, Condensed View and Mini View --%>
 var itemWin;			
-var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{itemcount: <s:property value="#prodStatus.count" />, <xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
+var catalog = [{title: 'Search Results',items: [<s:iterator id='item' value='XMLUtils.getElements(#catDoc, "//ItemList/Item")' status='prodStatus'>{itemindex: <s:property value="#prodStatus.index" />, <xpedx:catalogResultInit ItemElement='#item' currency='#itemList.getAttribute("Currency")'/>}<s:if test='!#prodStatus.last'>,</s:if></s:iterator>]}];
 
 
 function getNormalView() {
@@ -929,7 +929,10 @@ function getMiniView() {
 			'<tpl for=".">',
 				'<dl>',
 					'<tpl for="items">',
-						'<dd id="{itemkey}" class="itemdiv" >',
+						'<tpl if="itemindex % 4 == 0">',
+							'<div class="four-item-wrap">',
+						'</tpl>',
+						'<dd id="{itemkey}" class="itemdiv">',
 							'<div class="imgs">',
 								'<a class="item-lnk" href="{itemDetailURL}mini-view">',
 									'<img title="{name}" alt="{name}" src="{icon}" class="prodImg" id="pimg_{#}"/>',
@@ -947,14 +950,16 @@ function getMiniView() {
 										'<a class="item-lnk" href="{itemDetailURL}mini-view">{buttons}</a>',
 									'</div>',
 								'</div>', // end descriptions
-								'<div class="clearBoth">&nbsp;</div>',
+								'<div class="clearfix"></div>',
 								
 								'<div class="item_number" style="word-wrap: break-word;">',
-									'<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}<br />',
-									<s:if test='#mfgItemFlag != null && #mfgItemFlag=="Y"'>
-										'{partno}<br />',
+									'<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}',
+									'<br />',
+									<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>
+										'{partno}',
+										'<br />',
 									</s:if>
-									<s:if test='#customerItemFlag != null && #customerItemFlag=="Y"'>
+									<s:if test='#customerItemFlag != null && #customerItemFlag == "Y"'>
 										'{customerItemno}',
 									</s:if>
 									'{itemtypedesc}',
@@ -972,36 +977,38 @@ function getMiniView() {
 											'{uomdisplay}',
 										</s:if>
 									'</div>',
-									'<div class="clearall">&nbsp;</div>',
+									'<div class="clearfix"></div>',
 									<s:if test='!#guestUser'>
 										'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
-										'<div class="addtocart">',
-											<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey==''" >
-												'<a class="" id=\'addtocart_{itemid}\' href="#" onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Cart</a>',
-											</s:if>
-											<s:else>
-												'<a class="" id=\'addtocart_{itemid}\' href="#"  onclick=\"javascript:addItemToCart(\'{itemid}\'); return false;\">Add to Order</a>',
-											</s:else>
+										'<div class="cart-pa-button">',
+											'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
 										'</div>',
 										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 									</s:if>
 									<s:if test='!#guestUser'>
-										'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',
+										'<div class="uomLink" id="errorMsgForQty_{itemid}">',
+											'{uomLink}',
+										'</div>',
 										'<br/>',
 									</s:if>
 								'</div>', // end quantity_box
 								
-								'<div class="line_error" >',
+								'<div class="line_error">',
 									<s:if test='!#guestUser'>
 										'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 									</s:if>
 								'</div>',
 								<s:if test='!#guestUser'>
-									'<div>{repItemsForMiniView}</div>',
+									'<div>',
+										'{repItemsForMiniView}',
+									'</div>',
 								</s:if>
 							'</div>', // end contents
-							'<div class="clearBoth">&nbsp;</div>',																								
+							'<div class="clearfix"></div>',																								
 						'</dd>',
+						'<tpl if="itemindex % 4 == 3">',
+							'</div>', // end four-item-wrap
+						'</tpl>',
 					'</tpl>',
 				'</dl>',
 			'</tpl>',
