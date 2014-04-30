@@ -697,7 +697,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/saalfeld/facilities.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/facilities.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -706,7 +706,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/saalfeld/packaging.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/packaging.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -715,7 +715,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/saalfeld/paper.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/paper.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -724,7 +724,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/xpedx/graphics.jpg) no-repeat #3e4853; /* saalfeld site doesn't have any entitlements in graphics, but re-using xpedx image just in case */
+	background: url(../images/megamenu/graphics.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -791,7 +791,7 @@ ul.megamenu {
 	height: 18px;
 	font-size: 16px;
 	font-family: "Arial Black", Gadget, sans-serif;
-	background: url(../../xpedx/images/megamenu/saalfeld/menu-arrow-button.gif) 0px 2px no-repeat;
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px 2px no-repeat;
 }
 .megamenu ul li a.mega-cat-2:hover {
 	color: #0b4b23;
@@ -1032,13 +1032,13 @@ ul.megamenu {
 .megamenu ul li a.mega-cat-2 .cat-2-arrow {
     width: 16px;
 	height: 18px;
-	background: url(../../xpedx/images/megamenu/saalfeld/menu-arrow-button.gif) 0px 2px no-repeat;
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px 2px no-repeat;
 }	
 	
 .megamenu ul li a.mega-cat-2:hover .cat-2-arrow {
-	background: url(../../xpedx/images/megamenu/saalfeld/menu-arrow-button.gif) 0px -22px no-repeat;
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px -22px no-repeat;
 }
 
 .megamenu ul li a.mega-cat-2-active .cat-2-arrow {
-	background: url(../../xpedx/images/megamenu/saalfeld/menu-arrow-button.gif) 0px -22px no-repeat;
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px -22px no-repeat;
 }
