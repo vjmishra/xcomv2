@@ -225,3 +225,7 @@ $(document).ready(function() {
 		$('#copypaste-text').val('');
 	});
 });
+
+$('#errorIcon_'+rowId).bind("click",function(){
+	clearItemErrorMessages();
+})

@@ -1,17 +1,5 @@
 /*EB-1130--------NEW STYLES 2014-------*/
 
-.error-center { 
-	background-color: #F9E5E6; 
-	border: 1px solid #B50007; 
-	color: #B50007; 
-	display: inline-block; 
-	line-height: 15px; 
-	margin-top: 6px; 
-	padding-left: 5px; 
-	padding-right: 5px; 
-	width: auto; 
-}
-
 .ui-addTrPad table tr td {
 	padding-bottom: 4px;
 }
@@ -41,7 +29,7 @@
 }	
 
 .ui-addTrPad h2 {
-	border-bottom: none;
+    border-bottom: none;
 }
 
 .ui-addTrPad-head{
@@ -60,9 +48,6 @@
 /*--------------basic layout adjustments-------------*/
 .addpadbottom20 {
 	padding-bottom: 20px;	
-}
-.addpadleft5 {
-	padding-left: 5px;
 }
 .addpadleft20{
 	padding-left: 20px;
@@ -136,29 +121,29 @@
 	float: right;
 }
 .form input.btn-gradient.floatright{
-	display: inline;
-	float: right;
+    display: inline;
+    float: right;
 	cursor: pointer;
 }
 
 .form input.btn-gradient.floatright.addmarginleft10{
-	display: inline;
-	float: right;
+    display: inline;
+    float: right;
 	cursor: pointer;
 	margin-left: 10px;
 }
 .form input.btn-neutral.floatright.addmarginleft10{
-	display: inline;
-	float: right;
+    display: inline;
+    float: right;
 	cursor: pointer;
 	margin-left: 10px;
 }
 
 
 .prod-config .button-wrap {
-	width: 100%;
-	padding: 10px 0px 0px 0px;
-}
+                width: 100%;
+                padding: 10px 0px 0px 0px;
+                }
 .prod-config .pa-link {
 	right: 0px;
 	float: left;
@@ -166,7 +151,7 @@
 .addmarginleft5 {
 	margin-left: 5px;
 }
-				
+                
 /*------------Reset Password---------------*/
 .reset-wrap {
 	width: 800px;
@@ -226,34 +211,34 @@
 	padding-top: 20px;
 	color: #555555;
 	font-style:italic;
-}	
+}    
 	 
 /*--------------Quick Scroll Up and Down----------- */  
 .nav_up {
-	padding: 7px;
-	position: fixed;
-	background: transparent url(../../images/arrow-up.png) no-repeat top left;
-	width: 32px;
-	height: 33px;
-	bottom: 45px;
-	opacity: 0.7;
-	right: 0px;
-	white-space: nowrap;
-	cursor: pointer;
-	-moz-border-radius: 3px 3px 3px 3px;
+    padding: 7px;
+    position: fixed;
+    background: transparent url(../../images/arrow-up.png) no-repeat top left;
+    width: 32px;
+    height: 33px;
+    bottom: 45px;
+    opacity: 0.7;
+    right: 0px;
+    white-space: nowrap;
+    cursor: pointer;
+    -moz-border-radius: 3px 3px 3px 3px;
 	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
 }
 .nav_down {
-	padding: 7px;
-	position: fixed;
-	background: transparent url(../../images/arrow-down.png) no-repeat top left;
-	width: 32px;
-	height: 33px;
-	bottom: 10px;
-	opacity: 0.7;
-	right: 0px;
-	white-space: nowrap;
-	cursor: pointer;
+    padding: 7px;
+    position: fixed;
+    background: transparent url(../../images/arrow-down.png) no-repeat top left;
+    width: 32px;
+    height: 33px;
+    bottom: 10px;
+    opacity: 0.7;
+    right: 0px;
+    white-space: nowrap;
+    cursor: pointer;
 	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
 }
 #scroll-up-down {
@@ -267,14 +252,17 @@
 
 
 .commonHeader {
-	background: url(../../images/theme/theme-1/998x107_background.png) no-repeat scroll 0 0 transparent;
-	height: 115px;
+    background: url(../../images/theme/theme-1/998x107_background.png) no-repeat scroll 0 0 transparent;
+    height: 115px;
 }
 .addmarginleft20 {
 	margin-left: 20px;
 }
 
 /*--------------catalog brands page-------------*/
+.container-pad {
+	padding: 20px 25px;
+}
 .alphabet {
 	width: 94%;
 	height: 40px; 
@@ -388,170 +376,6 @@
 	font-style: italic;
 }
 
-/* Price and Availability */
-.ready-not-available-color {
-	color: #FF0000;
-}
-.ready-immediate-color {
-	color: #008000;
-}
-.ready-next-day-color {
-	color: #008000;
-}
-.ready-two-day-color {
-	color: #FF0000;
-}
-.ready-partial-available-color {
-	color: #FF0000;
-}
-.pa-price-tbd-color {
-	font-weight: bold;
-	color: #FF0000;
-}
-.pa-wrap {
-	display: block;
-	width: 100%;
-	clear: both;
-	overflow: hidden;
-}
-.pa-wrap h4 {
-	display: block;
-	background: #e1e1e1;
-	border-right: #ffffff 1px solid;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-style: italic;
-	padding: 3px 0px 3px 5px;
-}
-.pa-wrap h4.pa-last {
-	border-right: none;
-}
-.pa-wrap .two-col {
-	overflow: hidden;
-}
-.pa-wrap .three-col {
-	overflow: hidden;
-}
-.one-col .pa-avail {
-	width: 100%;
-	float: left;
-	clear: none;
-}
-.two-col .pa-avail {
-	width: 60%;
-	float: left;
-	clear: none;
-	border-right: #e1e1e1 1px solid;
-	padding-bottom: 500px;
-	margin-bottom: -500px;
-}
-.two-col .pa-bracket {
-	width: 39.75%;
-	float: left;
-	clear: none;
-	padding-bottom: 500px;
-	margin-bottom: -500px;
-}
-.two-col .pa-price {
-	width: 39.75%;
-	float: left;
-	clear: none;
-	padding-bottom: 500px;
-	margin-bottom: -500px;
-}
-.three-col .pa-avail {
-	width: 33%;
-	float: left;
-	clear: none;
-	border-right: #e1e1e1 1px solid;
-	padding-bottom: 500px;
-	margin-bottom: -500px;
-}
-.three-col .pa-bracket {
-	width: 33%;
-	float: left;
-	clear: none;
-	border-right: #e1e1e1 1px solid;
-	padding-bottom: 500px;
-	margin-bottom: -500px;
-}
-.three-col .pa-price {
-	width: 33.55%;
-	float: left;
-	clear: none;
-	padding-bottom: 500px;
-	margin-bottom: -500px;
-}
-.avail-wrap {
-	width: 98%;
-	padding: 5px;
-}
-.bracket-wrap {
-	width: 98%;
-	padding: 1%;
-}
-.price-wrap {
-	line-height: 18px;
-	width: 98%;
-	padding: 1%;
-}
-.pa-row {
-	display: block;
-	clear: both;
-	width: 98%;
-	padding: 0 0 3px 5px;
-}
-.pa-status {
-	font-size: 13px;
-	font-weight: bold;
-}
-.pa-location {
-	font-style: italic;
-	padding-top: 7px;
-}
-.extended {
-	padding-top: 7px;
-}
-.avail-wrap .pa-row .col-1 {
-	min-width: 90px;
-	float: left;
-	clear: none;
-}
-.avail-wrap .pa-row .col-2 {
-	min-width: 40px;
-	float: left;
-	clear: none;
-	text-align: right;
-}
-.avail-wrap .pa-row .col-3 {
-	float: left;
-	clear: none;
-	padding-left: 5px;
-}
-.bracket-wrap .pa-row .col-1 {
-	min-width: 60px;
-	float: left;
-	clear: none;
-	text-align: right;
-	padding-right: 2px;
-}
-.bracket-wrap .pa-row .col-2 {
-	float: left;
-	clear: none;
-}
-.price-wrap .pa-row .col-1 {
-	width: 98px;
-	float: left;
-	clear: none;
-	text-align: right;
-	padding-right: 4px;
-}
-.price-wrap .pa-row .col-2 {
-	float: left;
-	clear: none;
-}
-
-
 /*--------------Catalog narrow-by column----------- */  
 .container {
 	background-color: #FFFFFF;
@@ -561,12 +385,8 @@
 	padding: 0 0 0 0px;
 	width: 1000px;
 }
-/* from brands page, needs to be below .container or lose left margin there  */
-.container-pad {
-	padding: 20px 25px;
-}
 div.catalog-search-container {
-	background-color: #ECECEC;
+	background-color: #c3c3c3;
 	height: 30px;
 	padding-left: 0px;
 	width: 165px;
@@ -619,13 +439,13 @@ div.catalog-search-container input#search_searchTerm {
 	text-decoration: none;
 }
 .browseBox ul li span {
-	color: #4B4B4B;
-	float: right;
-	font-weight: normal;
-	line-height: inherit;
-	margin: 0;
-	padding: 0;
-	margin-right: -16px;
+    color: #4B4B4B;
+    float: right;
+    font-weight: normal;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    margin-right: -16px;
 }
 .subPanelBox {
 	border: 0 solid #DDDDDD;
@@ -648,12 +468,17 @@ div.catalog-search-container input#search_searchTerm {
 	overflow: hidden;
 }
 .narrowByViewAllLink {
-	clear: both;
-	display: block;
+	float: right;
 	margin-right: 10px;
 	padding: 2px 0;
-	text-align: right;
-	width: 90%;
+}
+.content-container {
+    background-color: #FFFFFF;
+    clear: both;
+    min-height: 675px;
+	width: 950px;
+    padding: 20px 25px;
+
 }
 
 .pagination {
