@@ -18,6 +18,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils.CartSummaryPriceStatus;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.yantra.yfc.util.YFCCommon;
@@ -207,7 +208,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 			getWCContext().getSCUIContext().getSession().setAttribute(XPEDXDraftOrderAddOrderLinesAction.CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutput.getOwnerDocument());
 			if(YFCCommon.isVoid(editedOrderHeaderKey)) {
-				XPEDXWCUtils.setMiniCartDataInToCache(changeOrderOutput, wcContext);
+				XPEDXWCUtils.setMiniCartDataInToCache(changeOrderOutput, wcContext, CartSummaryPriceStatus.TBD);
 			}
 			XPEDXWCUtils.releaseEnv(wcContext);
 

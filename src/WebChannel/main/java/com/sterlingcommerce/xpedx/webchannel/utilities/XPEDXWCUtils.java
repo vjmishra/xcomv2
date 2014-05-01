@@ -76,6 +76,7 @@ import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrgNodeDetailsBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils.CartSummaryPriceStatus;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
 import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -5775,165 +5776,165 @@ public class XPEDXWCUtils {
 
 	public static void checkMultiStepCheckout() {
 
-	    	// read the value: SWC_CHECKOUT_TYPE from session
-	    	// if null, then fetch it from database else return the same
-		    try
-		    {
-			IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-			String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
-
-			// if the checkout type in multi_step change it to single_step.
-			if (definitionFromSession==null && isMultiStepCheckout(wcContext)){
-				// since the value is being set as valueMap.put("/UserUiState/@Definition", "Single_Step");
-				wcContext.setWCAttribute("SWC_CHECKOUT_TYPE","Single_Step", WCAttributeScope.LOCAL_SESSION);
-				Map<String, String> valueMap = new HashMap<String, String>();
-				valueMap.put("/UserUiState/@ComponentName", "SWC_CHECKOUT_TYPE");
-				valueMap.put("/UserUiState/@Definition", "Single_Step");
-				valueMap.put("/UserUiState/@Loginid", wcContext.getLoggedInUserId());
-				valueMap.put("/UserUiState/@ScreenName", "Webchannel");
-				valueMap.put("/UserUiState/@ApplicationName", "swc");
-				Element input = WCMashupHelper.getMashupInput("updateUserPreference", valueMap, wcContext.getSCUIContext());
-				Element outDoc = (Element)WCMashupHelper.invokeMashup("updateUserPreference",input , wcContext.getSCUIContext());
-			}
-		    }catch(Exception e)
-		    {
-		    	log.error("error geting checkout step "+e.getMessage());
-		    }
-		}
-	    private static boolean isMultiStepCheckout(IWCContext wcContext)
+    	// read the value: SWC_CHECKOUT_TYPE from session
+    	// if null, then fetch it from database else return the same
+	    try
 	    {
-	    	   boolean isMultiStepCheckoutObj=false;
-	    	    String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
-	           if(!"Single_Step".equals(definitionFromSession))
-	           {
-		    	    String checkoutType = UserPreferenceUtil.getUserPreference("SWC_CHECKOUT_TYPE", wcContext);
-		    	    wcContext.setWCAttribute("SWC_CHECKOUT_TYPE",checkoutType, WCAttributeScope.LOCAL_SESSION);
-		            if("Multi_Step".equals(checkoutType))
-		                isMultiStepCheckoutObj = Boolean.TRUE;
-		            else
-		                isMultiStepCheckoutObj = Boolean.FALSE;
-	           }
-	        return isMultiStepCheckoutObj;
+		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
+
+		// if the checkout type in multi_step change it to single_step.
+		if (definitionFromSession==null && isMultiStepCheckout(wcContext)){
+			// since the value is being set as valueMap.put("/UserUiState/@Definition", "Single_Step");
+			wcContext.setWCAttribute("SWC_CHECKOUT_TYPE","Single_Step", WCAttributeScope.LOCAL_SESSION);
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/UserUiState/@ComponentName", "SWC_CHECKOUT_TYPE");
+			valueMap.put("/UserUiState/@Definition", "Single_Step");
+			valueMap.put("/UserUiState/@Loginid", wcContext.getLoggedInUserId());
+			valueMap.put("/UserUiState/@ScreenName", "Webchannel");
+			valueMap.put("/UserUiState/@ApplicationName", "swc");
+			Element input = WCMashupHelper.getMashupInput("updateUserPreference", valueMap, wcContext.getSCUIContext());
+			Element outDoc = (Element)WCMashupHelper.invokeMashup("updateUserPreference",input , wcContext.getSCUIContext());
+		}
+	    }catch(Exception e)
+	    {
+	    	log.error("error geting checkout step "+e.getMessage());
 	    }
+	}
 
-		public static XPEDXCustomerContactInfoBean setXPEDXCustomerContactInfoBean(Document customerContactDocument, IWCContext wcContext){
-			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = new XPEDXCustomerContactInfoBean();
-			Element contactElem = XPEDXWCUtils.getMSAPCustomerContactFromContacts(customerContactDocument, wcContext);
+    private static boolean isMultiStepCheckout(IWCContext wcContext)
+    {
+    	   boolean isMultiStepCheckoutObj=false;
+    	    String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
+           if(!"Single_Step".equals(definitionFromSession))
+           {
+	    	    String checkoutType = UserPreferenceUtil.getUserPreference("SWC_CHECKOUT_TYPE", wcContext);
+	    	    wcContext.setWCAttribute("SWC_CHECKOUT_TYPE",checkoutType, WCAttributeScope.LOCAL_SESSION);
+	            if("Multi_Step".equals(checkoutType))
+	                isMultiStepCheckoutObj = Boolean.TRUE;
+	            else
+	                isMultiStepCheckoutObj = Boolean.FALSE;
+           }
+        return isMultiStepCheckoutObj;
+    }
 
-			if(contactElem!=null) {
-				String welcomeUserFirstName = SCXmlUtil.getAttribute(contactElem, "FirstName");
-				String welcomeUserLastName = SCXmlUtil.getAttribute(contactElem, "LastName");
-				String spendingLimit = SCXmlUtil.getAttribute(contactElem, "SpendingLimit");
-				String customerContactID = SCXmlUtil.getAttribute(contactElem, "CustomerContactID");
-				String msapEmailID = SCXmlUtil.getAttribute(contactElem, "EmailID");
-				String welcomeLocaleId = SCXmlUtil.getXpathAttribute(contactElem, "//CustomerContact/User/@Localecode");
-				Element extnElem = SCXmlUtil.getChildElement(contactElem, "Extn");
-				String viewInvoiceFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewInvoices");
-				String estimatorFlag = SCXmlUtil.getAttribute(extnElem, "ExtnEstimator");
-				String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
-				String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
-				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
-				String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
-				String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
+	public static XPEDXCustomerContactInfoBean setXPEDXCustomerContactInfoBean(Document customerContactDocument, IWCContext wcContext){
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = new XPEDXCustomerContactInfoBean();
+		Element contactElem = XPEDXWCUtils.getMSAPCustomerContactFromContacts(customerContactDocument, wcContext);
 
-				if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
-					b2bViewFromDB = b2bViewFromDB.trim();
-					int _b2bViewFromDB = Integer.parseInt(b2bViewFromDB);
-					if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_FULL_VIEW) {
-						b2bViewFromDB = "normal-view";
-					} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_CONDENCED_VIEW) {
-						b2bViewFromDB = "condensed-view";
-					} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_MINI_VIEW) {
-						b2bViewFromDB = "mini-view";
-					} else {
-						b2bViewFromDB = "papergrid-view";
-					}
+		if(contactElem!=null) {
+			String welcomeUserFirstName = SCXmlUtil.getAttribute(contactElem, "FirstName");
+			String welcomeUserLastName = SCXmlUtil.getAttribute(contactElem, "LastName");
+			String spendingLimit = SCXmlUtil.getAttribute(contactElem, "SpendingLimit");
+			String customerContactID = SCXmlUtil.getAttribute(contactElem, "CustomerContactID");
+			String msapEmailID = SCXmlUtil.getAttribute(contactElem, "EmailID");
+			String welcomeLocaleId = SCXmlUtil.getXpathAttribute(contactElem, "//CustomerContact/User/@Localecode");
+			Element extnElem = SCXmlUtil.getChildElement(contactElem, "Extn");
+			String viewInvoiceFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewInvoices");
+			String estimatorFlag = SCXmlUtil.getAttribute(extnElem, "ExtnEstimator");
+			String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
+			String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
+			String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
+			String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
+			String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
+
+			if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
+				b2bViewFromDB = b2bViewFromDB.trim();
+				int _b2bViewFromDB = Integer.parseInt(b2bViewFromDB);
+				if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_FULL_VIEW) {
+					b2bViewFromDB = "normal-view";
+				} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_CONDENCED_VIEW) {
+					b2bViewFromDB = "condensed-view";
+				} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_MINI_VIEW) {
+					b2bViewFromDB = "mini-view";
 				} else {
 					b2bViewFromDB = "papergrid-view";
 				}
-				boolean usergroupKeyListActive = false;
-				boolean isEstimator = false;
-
-				Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
-				Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
-
-				List<Element> userGroupList = SCXmlUtil.getElements(userElem,"/UserGroupLists/UserGroupList");
-				ArrayList<String> newusergroupkey = new ArrayList<String>();
-				if (userGroupList != null) {
-					for (Element userGroup : userGroupList) {
-						String userGroupKey = userGroup.getAttribute("UsergroupKey");
-						newusergroupkey.add(userGroupKey);
-					}
-					usergroupKeyListActive = true;
-				}
-
-				String isApprover = "N";
-				if(approverElem!=null) {
-					isApprover = "Y";
-				}
-				if(estimatorFlag.equals("Y")) {
-					isEstimator = true;
-				}
-
-				Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
-				Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
-				String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
-				//Start- Code added to fix XNGTP 2964
-				 String extnUseOrderMulUOMFlag = SCXmlUtil.getAttribute(customerExtnElem, "ExtnUseOrderMulUOMFlag");
-				//End- Code added to fix XNGTP 2964
-				 String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
-				if (defaultShipTo != null
-						&& defaultShipTo.trim().length() == 0) {
-					defaultShipTo = null;
-				}
-				String userPrefCategory = SCXmlUtil.getAttribute(extnElem,"ExtnPrefCatalog");
-				String orderConfirmationFalg=SCXmlUtil.getAttribute(extnElem,"ExtnOrderConfEmailFlag");
-				String emailID=SCXmlUtil.getAttribute(contactElem,"EmailID");
-				String personInfoElement="";
-				try
-				{
-					Element customerAdditionalAddressListElem=SCXmlUtils.getChildElement(contactElem, "CustomerAdditionalAddressList");
-					Element customerAdditionalAddressElem=SCXmlUtils.getChildElement(customerAdditionalAddressListElem, "CustomerAdditionalAddress");
-					Element personInfoElem=SCXmlUtils.getChildElement(customerAdditionalAddressElem, "PersonInfo");
-
-					if(personInfoElem !=null)
-					{
-						personInfoElement=SCXmlUtil.getAttribute(personInfoElem,"EMailID");
-					}
-				}
-				catch(NullPointerException ne)
-				{
-					log.error("Error while getting Additional address .");
-				}
-
-				xpedxCustomerContactInfoBean =
-					new XPEDXCustomerContactInfoBean(welcomeUserFirstName, welcomeUserLastName, customerContactID, msapEmailID,
-							welcomeLocaleId, viewInvoiceFlag, isEstimator,
-							viewReportFlag, viewPricesFlag,
-							newusergroupkey, defaultShipTo,
-							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
+			} else {
+				b2bViewFromDB = "papergrid-view";
 			}
-			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
-			return xpedxCustomerContactInfoBean;
+			boolean usergroupKeyListActive = false;
+			boolean isEstimator = false;
+
+			Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
+			Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
+
+			List<Element> userGroupList = SCXmlUtil.getElements(userElem,"/UserGroupLists/UserGroupList");
+			ArrayList<String> newusergroupkey = new ArrayList<String>();
+			if (userGroupList != null) {
+				for (Element userGroup : userGroupList) {
+					String userGroupKey = userGroup.getAttribute("UsergroupKey");
+					newusergroupkey.add(userGroupKey);
+				}
+				usergroupKeyListActive = true;
+			}
+
+			String isApprover = "N";
+			if(approverElem!=null) {
+				isApprover = "Y";
+			}
+			if(estimatorFlag.equals("Y")) {
+				isEstimator = true;
+			}
+
+			Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
+			Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
+			String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
+			//Start- Code added to fix XNGTP 2964
+			 String extnUseOrderMulUOMFlag = SCXmlUtil.getAttribute(customerExtnElem, "ExtnUseOrderMulUOMFlag");
+			//End- Code added to fix XNGTP 2964
+			 String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
+			if (defaultShipTo != null
+					&& defaultShipTo.trim().length() == 0) {
+				defaultShipTo = null;
+			}
+			String userPrefCategory = SCXmlUtil.getAttribute(extnElem,"ExtnPrefCatalog");
+			String orderConfirmationFalg=SCXmlUtil.getAttribute(extnElem,"ExtnOrderConfEmailFlag");
+			String emailID=SCXmlUtil.getAttribute(contactElem,"EmailID");
+			String personInfoElement="";
+			try
+			{
+				Element customerAdditionalAddressListElem=SCXmlUtils.getChildElement(contactElem, "CustomerAdditionalAddressList");
+				Element customerAdditionalAddressElem=SCXmlUtils.getChildElement(customerAdditionalAddressListElem, "CustomerAdditionalAddress");
+				Element personInfoElem=SCXmlUtils.getChildElement(customerAdditionalAddressElem, "PersonInfo");
+
+				if(personInfoElem !=null)
+				{
+					personInfoElement=SCXmlUtil.getAttribute(personInfoElem,"EMailID");
+				}
+			}
+			catch(NullPointerException ne)
+			{
+				log.error("Error while getting Additional address .");
+			}
+
+			xpedxCustomerContactInfoBean =
+				new XPEDXCustomerContactInfoBean(welcomeUserFirstName, welcomeUserLastName, customerContactID, msapEmailID,
+						welcomeLocaleId, viewInvoiceFlag, isEstimator,
+						viewReportFlag, viewPricesFlag,
+						newusergroupkey, defaultShipTo,
+						userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
+						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
 		}
+		XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
+		return xpedxCustomerContactInfoBean;
+	}
 
 	public static Element setMiniCartDataInToCache(Element orderElement, IWCContext wcContext)
 	{
-		/*List<String> itemAndTotalList=new ArrayList<String>();
-		String OrderTotal= SCXmlUtil.getXpathAttribute(orderElement, "/Order/Extn/@ExtnTotalOrderValue");
-    	 ArrayList<Element> orderLineList= SCXmlUtil.getElements(orderElement,"OrderLines/OrderLine");
-    	 itemAndTotalList.add(OrderTotal);
-    	 if(!YFCCommon.isVoid(orderLineList))
-    	 {
-    		 itemAndTotalList.add(""+orderLineList.size());
-    	 }
-    	 else
-    	 {
-    		 itemAndTotalList.add("0");
-    	 }
-    	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);*/
-		XPEDXOrderUtils.refreshMiniCart(wcContext,orderElement,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+		XPEDXOrderUtils.refreshMiniCart(wcContext, orderElement, true, false, XPEDXConstants.MAX_ELEMENTS_IN_MINICART, CartSummaryPriceStatus.NORMAL);
+		return orderElement;
+	}
+
+	/**
+	 * @param orderElement
+	 * @param wcContext
+	 * @param suppressPrice If true, forces the cart summary to be 'TBD'.
+	 * @return
+	 */
+	public static Element setMiniCartDataInToCache(Element orderElement, IWCContext wcContext, CartSummaryPriceStatus status)
+	{
+		XPEDXOrderUtils.refreshMiniCart(wcContext, orderElement, true, false, XPEDXConstants.MAX_ELEMENTS_IN_MINICART, status);
 		return orderElement;
 	}
 

@@ -88,6 +88,11 @@ public class XPEDXOrderUtils {
 	public final static String ITEM_EXTN_KEY = "ITEM_EXTN";
 	public final static String ITEM_LIST_KEY = "ITEM_LIST_KEY";
 	public static ArrayList<String> itemList = new ArrayList<String>();
+
+	public static enum CartSummaryPriceStatus {
+		NORMAL, TBD;
+	}
+
 	//XB-687 changes Start
 	//This map will have item id as key and value as a map with all UOMs and "Y" or "N" flag to indicate if it is a customer UOM or not
 	/*public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
@@ -2843,21 +2848,32 @@ public class XPEDXOrderUtils {
 	}
 	//End of JIRA 3523
 
+	public static void refreshMiniCart(IWCContext webContext, Element output, boolean isGetCompleteOrder, boolean readOrderLinesFromStart, int maxElements) {
+		refreshMiniCart(webContext, output, isGetCompleteOrder, readOrderLinesFromStart, maxElements, CartSummaryPriceStatus.NORMAL);
+	}
 
-	public static void refreshMiniCart(IWCContext webContext,Element output,boolean isGetCompleteOrder,boolean readOrderLinesFromStart,int maxElements)
+	/**
+	 * @param webContext
+	 * @param output
+	 * @param isGetCompleteOrder
+	 * @param readOrderLinesFromStart
+	 * @param maxElements
+	 * @param status If TBD, forces the cart summary to be 'TBD'.
+	 */
+	public static void refreshMiniCart(IWCContext webContext, Element output, boolean isGetCompleteOrder, boolean readOrderLinesFromStart, int maxElements, CartSummaryPriceStatus status)
 	{
-		 List<String> itemAndTotalList=new ArrayList<String>();
+		List<String> itemAndTotalList=new ArrayList<String>();
 		Element orderElement=null;
-		 if(output == null)
-		 {
-			 itemAndTotalList.add("0");
-		   	 itemAndTotalList.add("0");
-		   	 itemAndTotalList.add(webContext.getDefaultCurrency());
-		   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
-		   	 XPEDXWCUtils.setObectInCache("OrderLinesInContext",new ArrayList<Element>());
-		   	 //refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
-		   	 return;
-		 }
+		if(output == null)
+		{
+			itemAndTotalList.add("0");
+			itemAndTotalList.add("0");
+			itemAndTotalList.add(webContext.getDefaultCurrency());
+			XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
+			XPEDXWCUtils.setObectInCache("OrderLinesInContext",new ArrayList<Element>());
+			//refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
+			return;
+		}
 		if(isGetCompleteOrder == false)
 		{
 
@@ -2871,129 +2887,137 @@ public class XPEDXOrderUtils {
 			orderElement=output;
 		}
 
-		 String orderTotal= SCXmlUtil.getXpathAttribute(orderElement, "//Order/Extn/@ExtnTotalOrderValue");
-		 Element orderLinesEleme=(Element)orderElement.getElementsByTagName("OrderLines").item(0);
-	   	 itemAndTotalList.add(orderTotal);
-	   	 itemAndTotalList.add(orderLinesEleme.getAttribute("TotalNumberOfRecords"));
-	   	 try
-	   	 {
-		   	 String currency=SCXmlUtil.getXpathAttribute(orderElement, "//Order/PriceInfo/@Currency");
-		   	 if(YFCCommon.isVoid(currency))
-		   	 {
-		   		currency=webContext.getDefaultCurrency();
-		   	 }
-		   	 itemAndTotalList.add(currency);
-	   	 }
-	   	 catch(Exception e)
-	   	 {
+		String orderTotal;
+		if (status == CartSummaryPriceStatus.TBD) {
+			orderTotal = "TBD";
+		} else {
+			orderTotal = SCXmlUtil.getXpathAttribute(orderElement, "//Order/Extn/@ExtnTotalOrderValue");
+		}
 
-	   		 e.printStackTrace();
-	   		 log.error("Error while adding currency for minicart");
-	   	 }
+		Element orderLinesEleme=(Element)orderElement.getElementsByTagName("OrderLines").item(0);
+		itemAndTotalList.add(orderTotal);
+		itemAndTotalList.add(orderLinesEleme.getAttribute("TotalNumberOfRecords"));
+		try
+		{
+			String currency=SCXmlUtil.getXpathAttribute(orderElement, "//Order/PriceInfo/@Currency");
+			if(YFCCommon.isVoid(currency))
+			{
+				currency=webContext.getDefaultCurrency();
+			}
+			itemAndTotalList.add(currency);
+		}
+		catch(Exception e)
+		{
 
-	   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
-	   	 XPEDXWCUtils.setObectInCache("OrderHeaderInContext", orderElement.getAttribute("OrderHeaderKey"));
-	   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
+			e.printStackTrace();
+			log.error("Error while adding currency for minicart");
+		}
+
+		XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
+		XPEDXWCUtils.setObectInCache("OrderHeaderInContext", orderElement.getAttribute("OrderHeaderKey"));
+		refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
 	}
-	public static void refreshMiniCartDisplay(IWCContext webContext,Element orderElement,boolean readOrderLinesFromStart,int maxElements,boolean isOrderByModifyTs)
+
+	public static void refreshMiniCartDisplay(IWCContext webContext, Element orderElement,boolean readOrderLinesFromStart,int maxElements,boolean isOrderByModifyTs)
 	{
 		try
 		{
-				ArrayList<Element> majorLineElements = new ArrayList<Element>();
-				if(orderElement != null)
+			ArrayList<Element> majorLineElements = new ArrayList<Element>();
+			if(orderElement != null)
+			{
+				NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
+				int length = orderLines.getLength();
+				boolean hasMore = false;
+				if(isOrderByModifyTs)
 				{
-	            NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
-	            int length = orderLines.getLength();
-	            boolean hasMore = false;
-	            if(isOrderByModifyTs)
-	            {
-	            	for (int i = 0; i < length; i++) {
-	            		Element currNode = (Element) orderLines.item(i);
-	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    if(log.isDebugEnabled()){
-	                    log.debug("linekey-->"+lineKey);
-	                    }
-	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0) )
-	                    {
-	                            // Haven't hit the max number yet, so go ahead and add it to the list.
-	                            majorLineElements.add(currNode);
-	                    }
-	                }
+					for (int i = 0; i < length; i++) {
+						Element currNode = (Element) orderLines.item(i);
+						String lineKey = currNode.getAttribute("OrderLineKey");
+						if(log.isDebugEnabled()){
+							log.debug("linekey-->"+lineKey);
+						}
+						NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+						if ( (bundleParentLines.getLength() == 0) )
+						{
+							// Haven't hit the max number yet, so go ahead and add it to the list.
+							majorLineElements.add(currNode);
+						}
+					}
 
-	            	Collections.sort(majorLineElements, new XPEDXMiniCartComparator());
-	            	for (int i = majorLineElements.size()-1; i >0 ;) {
-	            		if(i>4)
-	            			majorLineElements.remove(i);
-	            		else
-	            			break;
-	            		i=majorLineElements.size()-1;
-	            	}
-	            }
-	            else if(readOrderLinesFromStart){
-	            	for (int i = 0; i < length; i++) {
-	            		Element currNode = (Element) orderLines.item(i);
-	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    if(log.isDebugEnabled()){
-		                    log.debug("linekey-->"+lineKey);
-	                    }
-	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0) &&
-	                         (!OrderHelper.isCancelledLine(currNode)) )
-	                    {
-	                    	if(log.isDebugEnabled()){
-	    	                    log.debug(lineKey+ " it's major line");
-	                    	}
-	                        if(majorLineElements.size() == maxElements)
-	                        {
-	                            // Already have accumulated the maximum number of line items to display.
-	                            // Set the "More..." indicator and break out of the loop.
-	                            hasMore = true;
-	                            break;
-	                        }
-	                        else
-	                        {
-	                            // Haven't hit the max number yet, so go ahead and add it to the list.
-	                            majorLineElements.add(currNode);
-	                        }
-	                    }
-	                }
-	            }
-	            else{
-	            	for (int i = length-1; i > -1; i--) {
-	                    Element currNode = (Element) orderLines.item(i);
-	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    if(log.isDebugEnabled()){
-		                    log.debug("linekey-->"+lineKey);
-	                    }
-	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0))
-	                    {
+					Collections.sort(majorLineElements, new XPEDXMiniCartComparator());
+					for (int i = majorLineElements.size()-1; i >0 ;) {
+						if(i>4)
+							majorLineElements.remove(i);
+						else
+							break;
+						i=majorLineElements.size()-1;
+					}
+				}
+				else if(readOrderLinesFromStart){
+					for (int i = 0; i < length; i++) {
+						Element currNode = (Element) orderLines.item(i);
+						String lineKey = currNode.getAttribute("OrderLineKey");
+						if(log.isDebugEnabled()){
+							log.debug("linekey-->"+lineKey);
+						}
+						NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+						if ( (bundleParentLines.getLength() == 0) &&
+								(!OrderHelper.isCancelledLine(currNode)) )
+						{
+							if(log.isDebugEnabled()){
+								log.debug(lineKey+ " it's major line");
+							}
+							if(majorLineElements.size() == maxElements)
+							{
+								// Already have accumulated the maximum number of line items to display.
+								// Set the "More..." indicator and break out of the loop.
+								hasMore = true;
+								break;
+							}
+							else
+							{
+								// Haven't hit the max number yet, so go ahead and add it to the list.
+								majorLineElements.add(currNode);
+							}
+						}
+					}
+				}
+				else{
+					for (int i = length-1; i > -1; i--) {
+						Element currNode = (Element) orderLines.item(i);
+						String lineKey = currNode.getAttribute("OrderLineKey");
+						if(log.isDebugEnabled()){
+							log.debug("linekey-->"+lineKey);
+						}
+						NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+						if ( (bundleParentLines.getLength() == 0))
+						{
 
-	                        if(majorLineElements.size() == maxElements)
-	                        {
-	                            // Already have accumulated the maximum number of line items to display.
-	                            // Set the "More..." indicator and break out of the loop.
-	                            hasMore = true;
-	                            break;
-	                        }
-	                        else
-	                        {
-	                            // Haven't hit the max number yet, so go ahead and add it to the list.
-	                            majorLineElements.add(currNode);
-	                        }
-	                    }
-	                }
-	            }
-	            //commented for performance to since minicart is not getting displayed.
-	            //XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
+							if(majorLineElements.size() == maxElements)
+							{
+								// Already have accumulated the maximum number of line items to display.
+								// Set the "More..." indicator and break out of the loop.
+								hasMore = true;
+								break;
+							}
+							else
+							{
+								// Haven't hit the max number yet, so go ahead and add it to the list.
+								majorLineElements.add(currNode);
+							}
+						}
+					}
+				}
+				//commented for performance to since minicart is not getting displayed.
+				//XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
 
 			}
-        } catch (Exception e) {
-        	log.error("++++++++ Got exception while refreshing mini cart display +++++++++++++");
-            e.printStackTrace();
-        }
+		} catch (Exception e) {
+			log.error("++++++++ Got exception while refreshing mini cart display +++++++++++++");
+			e.printStackTrace();
+		}
 	}
+
 	/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
 	public String getBillTofromOrderElement(Element orderElement)
 	{
