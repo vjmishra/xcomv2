@@ -656,3 +656,17 @@ ul.megamenu {
 .qa-marketing-copy span {
 	font-weight: bold;
 	}
+	
+	/*-----Search Tips--------*/
+#searchTips h2 {
+    color: #3577D1;
+    }
+#searchTips h3{
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 12px;
+    }
+ #searchTips ul li {
+    margin-top: 5px;
+    } 
+ 
