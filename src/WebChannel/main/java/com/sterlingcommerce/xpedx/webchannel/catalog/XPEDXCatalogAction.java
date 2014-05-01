@@ -431,7 +431,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchTerm = processSpecialCharacters(searchTerm);
 
 				searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
-				setSearchString(searchTerm);
+				String searchTermList[] = searchTerm.split(" ");
+				String[] tempSearchTermList= tempSearchTerm.split(" ");
+				String displaySearchTerm = "";
+				boolean flag=false;
+				for (String searchTermToken : searchTermList){
+				     for ( String tempSearchTermToken : tempSearchTermList){
+					      if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+					    	  displaySearchTerm=displaySearchTerm+tempSearchTermToken+" ";
+						        flag=true;
+						        break;
+					}
+					      
+				    }
+				    if(!flag)
+				    	displaySearchTerm=displaySearchTerm+searchTermToken+" ";
+				}
+				setSearchString(displaySearchTerm);
 
 				String appendStr = "&searchTerm=" + searchTerm;
 				XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
@@ -785,13 +801,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 			// Changes made for XBT 251 special characters replace by Space while Search
 			// searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-			String searchStringTokenList[] = searchStringValue.split(" ");
-
+			String[] searchStringTokenList = searchStringValue.split(" ");
+			searchTerm="";
 			setStockedItemFromSession();
 			List<String> specialWords = Arrays.asList(luceneEscapeWords);
 			for (String searchStringToken : searchStringTokenList) {
 				if (!specialWords.contains(searchStringToken.trim().toLowerCase())) {
 					if (!"".equals(searchStringToken.trim())) {
+						if (searchStartsWithFlag && searchStringToken.length()>3 && (!searchStringToken.substring(searchStringToken.length()-1).equals("*"))) {
+							searchStringToken =searchStringToken+ "*";
+						}
+						searchTerm=searchTerm+searchStringToken+" ";
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
 						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem) {
@@ -926,6 +946,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String newSearch() {
+		searchStartsWithFlag = true;
+		tempSearchTerm=searchTerm;
 		try {
 			init();
 			setCustomerNumber();
@@ -981,15 +1003,34 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 				if (searchTerm != null && searchTerm.indexOf("*") > -1) {
 					String searchTermList[] = searchTerm.split(" ");
+					String[] tempSearchTermList= tempSearchTerm.split(" ");
 					String strSearchTerm = "";
 					String removedSearchTerms = "";
 					for (String searchTermToken : searchTermList) {
 						if (searchTermToken.indexOf("*") > -1 && searchTermToken.length() > 5) {
-							strSearchTerm = strSearchTerm + searchTermToken + " ";
+							for ( String tempSearchTermToken : tempSearchTermList){
+								if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+									strSearchTerm = strSearchTerm + tempSearchTermToken + " ";
+									break;
+								}
+							}
+							
 							continue;
 						} else if (searchTermToken.indexOf("*") == -1) {
-							strSearchTerm = strSearchTerm + searchTermToken + " ";
+							for ( String tempSearchTermToken : tempSearchTermList){
+								if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+									strSearchTerm = strSearchTerm + tempSearchTermToken + " ";
+									break;
+									
+								}
+							}
 							continue;
+						}
+						for ( String tempSearchTermToken : tempSearchTermList){
+							if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+								searchTermToken=tempSearchTermToken;
+								break;
+							}
 						}
 						removedSearchTerms = removedSearchTerms + searchTermToken + " ";
 					}
@@ -3138,6 +3179,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String facetListItemAttributeKey;
 
 	private String rememberNewSearchText;
+	private boolean searchStartsWithFlag; // indicates whether to auto-append '*' to search terms
+	private String tempSearchTerm;        // used as temp variable for searchTerm
 
 	public Map<String, String> getSortListMap() {
 		sortListMap.put("Item.ExtnBestMatch--A", "Best Match");
