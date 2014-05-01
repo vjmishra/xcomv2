@@ -265,7 +265,7 @@
 									cssStyle='%{#itemline.count > #_action.getDisplayItemLines() ? "display:none;" : ""}'>
 									<div class="qa-listrow">
 										<div class="qa-error-icon" style="visibility: hidden">
-											<input type="image" id="errorIcon_<s:property value='#itemline.count'/>"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/errorIcon<s:property 
+											<input type="image" id="errorIcon_<s:property value='#itemline.count'/>"  src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x<s:property 
 											value='#wcUtil.xpedxBuildKey' />.png"  />
 										</div>
 										<div class="label-item">
