@@ -129,7 +129,7 @@ border: 2px #53b1f9 solid;
 	font-weight: bold;
 	font-size:12px;
 	border-bottom: 1px solid #fff;
-	}
+}
 ul.megamenu, .megamenu ul {
 	margin: 0;
 	padding: 0;
@@ -356,11 +356,11 @@ ul.megamenu {
 	display: block;
 	background-color: #fff;
 	border-bottom: #e2e7ee 1px solid;
-	padding: 10px 0px 10px 10px;
+	padding: 10px 0px 10px 6px;
 	color: #3577d1;
 	font-size: 12px;
 	line-height: normal;
-	width: 192px;
+	width: 200px;
 	margin-left: 0px;
 }
 .megamenu ul li a.mega-cat-2.last {
@@ -376,12 +376,11 @@ ul.megamenu {
 	margin: -2px 0px 0px 0px;
 }
 .megamenu ul li a.mega-cat-2 .cat-2-arrow {
+	width: 16px;
+	height: 18px;
 	font-size: 16px;
 	font-family: "Arial Black", Gadget, sans-serif;
-<<<<<<< HEAD
-=======
 	background: url(../images/megamenu/menu-arrow-button.gif) 0px 2px no-repeat;
->>>>>>> c747b7566db3f8c05501a8e70e6d69b45a1094b3
 }
 .megamenu ul li a.mega-cat-2:hover {
 	color: #273c75;
@@ -446,13 +445,14 @@ ul.megamenu {
 }
 .megamenu ul li .cat3-content {
 	margin: 30px 0px 0px 20px;
+	width: 300px;
 }
 .megamenu ul li .cat3-content a {
 	background-color: #bad7ff;
 	border: none;
-	width: 280px;
+	width: 300px;
 	color: #418cf2;
-	padding: 4px;
+	padding: 5px 0px 5px 0px;
 	font-size: 12px;
 	margin: 0px;
 }
@@ -606,7 +606,7 @@ ul.megamenu {
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 /*	border: 1px #93bcf4 solid;*/
-	}
+}
 .alpha-letter-inactive {
 	width: 8px;
 	height: 10px;
@@ -619,30 +619,14 @@ ul.megamenu {
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	}
+}
 .alpha-list {
 	width: 94%;
 	border-top: #e2e7ee 1px solid;
 	padding: 5px 0px;
-	}
-.content-container h1 {
-	font-family: Arial, Helvetica, sans-serif;
-	font-weight:bold;
-	font-size: 18px;
-	color: #3577d1;
-	font-weight: normal;
-	margin: 0 0 16px 0;
-	}
-.qa-marketing-copy {
-	font-size: 13px;
-	color: #3577d1;
-	font-style: italic;
-	padding-top: 20px;
 }
-.qa-marketing-copy span {
-	font-weight: bold;
-	}
-	.megamenu ul li a.mega-cat-2 .cat-2-arrow {
+
+.megamenu ul li a.mega-cat-2 .cat-2-arrow {
     width: 16px;
 	height: 18px;
 	background: url(../images/megamenu/menu-arrow-button.gif) 0px 2px no-repeat;
@@ -655,4 +639,3 @@ ul.megamenu {
 .megamenu ul li a.mega-cat-2-active .cat-2-arrow {
 	background: url(../images/megamenu/menu-arrow-button.gif) 0px -22px no-repeat;
 }
-	
