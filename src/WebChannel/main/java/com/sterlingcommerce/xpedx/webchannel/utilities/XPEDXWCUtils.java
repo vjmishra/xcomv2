@@ -115,9 +115,9 @@ public class XPEDXWCUtils {
 	public static final String XPEDX_ASSIGNED_CUSTOMER_MSAP = "MSAP";
 	public static final String XPEDX_ASSIGNED_CUSTOMER = "ASSIGNED";
 	public static final String XPEDX_SHIP_TO_ADDRESS_OVERIDDEN = "ShipToAddressOveridden";
-	public static final String Immedate_image = "../swc/images/theme/green/Available.png";
-	public static final String Next_image = "../swc/images/theme/green/Shippable.png";
-	public static final String Days2_Image = "../swc/images/theme/green/ItemPickUp.png";
+	public static final String Immedate_image = XPEDXWCUtils.getStaticFileLocation() + "/images/theme/green/Available.png";
+	public static final String Next_image = XPEDXWCUtils.getStaticFileLocation() + "/images/theme/green/Shippable.png";
+	public static final String Days2_Image = XPEDXWCUtils.getStaticFileLocation() + "/images/theme/green/ItemPickUp.png";
 	private static final String customerGeneralInformationMashUp = "xpedx-customer-getGeneralInformation";
 	private static final String parentCustomerInformationMashUp = "xpedx-customer-getParentCustInformation";
 	private static final String getOCIFieldsMashup = "xpedx-customer-getOCIFields";

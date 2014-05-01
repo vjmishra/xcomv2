@@ -1861,12 +1861,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 					if (contentLocation != null && contentId != null && contentLocation != "" && contentId != "") {
 						imageURL = contentLocation + "/" + contentId;
 					} else {
-						imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+						imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 					}
 				} else {
 					// no category images defined
 					log.error("no category image defined for " + topCategoryShortDesc);
-					imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+					imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 				}
 				XPEDXCatalogCategoryImageBean bean = new XPEDXCatalogCategoryImageBean(topCategoryShortDesc, topCategoryPath, imageURL);
 				ArrayList<XPEDXCatalogCategoryImageBean> topBeanList = new ArrayList<XPEDXCatalogCategoryImageBean>();
@@ -1890,12 +1890,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 						if (contentLocation != null && contentId != null && contentLocation != "" && contentId != "") {
 							imageURL = contentLocation + "/" + contentId;
 						} else {
-							imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+							imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 						}
 					} else {
 						// no category images defined
 						log.error("no category image defined for " + childCategoryName);
-						imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+						imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 					}
 					XPEDXCatalogCategoryImageBean bean = new XPEDXCatalogCategoryImageBean(childCategoryName, childCategoryPath, imageURL);
 					childBeanList.add(bean);

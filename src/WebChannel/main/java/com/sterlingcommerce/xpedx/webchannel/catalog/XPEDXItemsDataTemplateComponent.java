@@ -72,7 +72,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			myPrice = validate(price.getAttribute("UnitPrice"));
 		String pImg = (String)findValue("pImg");
 
-		String imageUrl = "/swc/xpedx/images/INF_150x150.jpg";
+		String imageUrl = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 		String ImageLocation = xpedxScxmlUtil.getAttribute(info, "ImageLocation");
 		String ImageID = xpedxScxmlUtil.getAttribute(info, "ImageID");
 		if(ImageLocation!= null && ImageID!=null && !("").equals(ImageLocation) && !("").equals(ImageID)) {
@@ -212,7 +212,6 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		sb.append("\",");
 		sb.append("icon: \"").append(pImg).append("\",");
-		//sb.append("icon: \"").append("https://www.xpedx.com/swc/xpedx/images/INF_150x150.jpg").append("\",");
 		sb.append("tabidx: \"").append(tabidx).append("\",");
 
 		String uomDesc = "";
@@ -264,7 +263,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("cert: \"");
 		if("Y".equals(b2cCert)) {
-			sb.append("<span><img width=\\\"20\\\" height=\\\"20\\\" src='/swc/xpedx/images/catalog/green-e-logo_small.png'></span>");
+			sb.append("<span><img width=\\\"20\\\" height=\\\"20\\\" src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/catalog/green-e-logo_small.png'></span>");
 		}
 		sb.append("\",");
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
