@@ -545,7 +545,7 @@ width:100%;
     width: 50%;
 }
 .normal-view #item-ct dd .ddesc {
-	width: 555px;
+	width: 325px;
 }
 .normal-view #item-ct dd #prodlist {
 	clear: both;
@@ -554,7 +554,7 @@ width:100%;
 	float: right;
 	clear: none;
 	width: 365px;
-	top: 45px;
+	top: 30px;
 	left: 424px;
 	position: absolute;
 }
@@ -591,6 +591,7 @@ width:100%;
 	 float: right;
 	 clear: none;
 	 width: auto;
+	 margin: 4px;
 }
 .normal-view #item-ct dd .cart-pa-button-wrap {
     clear: none;
@@ -1418,4 +1419,8 @@ img#youtube { margin-right: 9px; }
 	border-left: 1px dotted #cccccc;
 	padding-bottom: 200px;
 	margin-bottom: -200px;
+}
+
+.height {
+	height: 5px;
 }

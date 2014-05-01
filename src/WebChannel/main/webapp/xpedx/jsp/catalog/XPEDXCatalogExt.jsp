@@ -788,9 +788,11 @@ function getNormalView() {
 										'</div>',
 									'</div>',
 								'</div>',
+								'<div class="clearfix height5"></div>',
 								'<div class="uomLink" id="errorMsgForQty_{itemid}">',
 									'{uomLink}',
 								'</div>',
+								'<div class="clearfix height5"></div>',
 							</s:if>
 						'</div>', <%-- / order-input-wrap" --%>
 						
@@ -798,7 +800,7 @@ function getNormalView() {
 							'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 						</s:if>
 							
-						'<div class="clearfix"></div>',
+						'<div class="clearfix height5"></div>',
 						
 						'<div class="show-hide-wrap">',
 							'<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">',
