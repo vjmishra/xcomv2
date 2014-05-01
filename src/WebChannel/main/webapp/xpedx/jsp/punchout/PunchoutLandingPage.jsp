@@ -20,14 +20,6 @@
 <body class="bodyclass">
 <s:set name="isCustomerSelectedIntoConext" value="#wcUtil.isCustomerSelectedIntoConext(wCContext)"/>
 <%-- Quick Scroll Up and Down --%>
-<script>
-$(document).ready(function() {
-	// Check if body height is higher than window height :)
-    if ($("body").height() < $(window).height()) {
-    	$("#scroll-up-down").hide();
-      }
-});
-</script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/navArrows<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <div id="scroll-up-down">
