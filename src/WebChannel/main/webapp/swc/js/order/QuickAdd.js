@@ -10,12 +10,23 @@ function isInt(n) {
 	}
 }
 
-
+function clearErrorRow(rowId){
+	$('#errorIcon_'+ rowId).click(function(){
+		$('#enteredProductIDs_'+rowId).val('');
+		$('#enteredQuantities_'+rowId).val('');
+		$('#enteredPONos_'+rowId).val('');
+		$('#enteredJobIDs_'+rowId).val('');
+		clearItemErrorMessages();
+		document.getElementById("errorIcon_" + rowId).style.visibility="hidden";
+	});
+}
 /*
  * Manage error messages
  */
 function setItemErrorMessage(rowId, errorMessage) {
 	$('#producterrorLine_' + rowId).show().get(0).innerHTML = errorMessage;
+	document.getElementById("errorIcon_" + rowId).style.visibility="visible";
+	clearErrorRow(rowId);
 }
 function clearItemErrorMessages() {
 	var errorDivs = $('.producterrorLine');
@@ -23,6 +34,7 @@ function clearItemErrorMessages() {
 		errorDivs[i].innerHTML = '';
 		errorDivs[i].style.display = 'none';
 	}
+	
 }
 
 
@@ -75,7 +87,10 @@ function validateItems() {
 		
 		if (!itemId) {
 			errorMessageForRowId[rowId] = 'Please enter a valid item # and try again.';
+			//clearErrorRow(rowId);
 			hasErrors = true;
+			
+			
 		} else if (!qty || !isInt(qty) || parseInt(qty) < 1) {
 			errorMessageForRowId[rowId] = 'Please enter a valid quantity and try again.';
 			hasErrors = true;
@@ -107,6 +122,7 @@ function validateItems() {
 		for (var rowId in errorMessageForRowId) {
 			var errorMessage = errorMessageForRowId[rowId];
 			setItemErrorMessage(rowId, errorMessage);
+			
 		}
 		hideProcessingBar();
 		return;
@@ -189,6 +205,7 @@ $(document).ready(function() {
 		$('#copypaste-text').val('');
 	});
 	
+	
 	$('#btn-add-to-list').click(function() {
 		$('#copypaste-error').hide().get(0).innerHTML = '';
 		
@@ -225,3 +242,5 @@ $(document).ready(function() {
 		$('#copypaste-text').val('');
 	});
 });
+
+

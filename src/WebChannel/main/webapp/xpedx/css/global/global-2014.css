@@ -672,3 +672,11 @@ div.catalog-search-container input#search_searchTerm {
 .pageresults {
     margin-top: -7px;
 }
+.content-container {
+    background-color: #FFFFFF;
+    clear: both;
+    min-height: 675px;
+	width: 950px;
+    padding: 20px 25px;
+
+}
