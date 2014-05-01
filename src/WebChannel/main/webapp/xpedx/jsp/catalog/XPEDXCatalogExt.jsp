@@ -861,6 +861,10 @@ function getCondensedView() {
 								'<div class="mill-mfg">',
 									'{itemtypedesc}',
 								'</div>',
+								
+								'<div>',
+									'{repItemsForCondensedView}',
+								'</div>',
 							'</div>', // end contents
 							'<div class="clearfix"></div>',
 							
