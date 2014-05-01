@@ -198,7 +198,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 			xpedDraftOrderAddOrderLinesInputElem.setAttribute("IgnoreOrdering", "Y");
 
 			// eb-5663: if editing order, must flag the order to record changes, otherwise item will be uneditable in the cart
-			if ("Y".equals(draftOrderFlag)) {
+			if (!"Y".equals(draftOrderFlag)) {
 				Element pendingChangesElem = xpedDraftOrderAddOrderLinesInputElem.getOwnerDocument().createElement("PendingChanges");
 				pendingChangesElem.setAttribute("RecordPendingChanges", "Y");
 				xpedDraftOrderAddOrderLinesInputElem.appendChild(pendingChangesElem);
@@ -206,11 +206,12 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 			Element changeOrderOutput = (Element) WCMashupHelper.invokeMashup("xpedx_me_draftOrderAddOrderLines", xpedDraftOrderAddOrderLinesInputElem, wcContext.getSCUIContext());
 
+			XPEDXWCUtils.releaseEnv(wcContext);
+
 			getWCContext().getSCUIContext().getSession().setAttribute(XPEDXDraftOrderAddOrderLinesAction.CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, changeOrderOutput.getOwnerDocument());
 			if(YFCCommon.isVoid(editedOrderHeaderKey)) {
 				XPEDXWCUtils.setMiniCartDataInToCache(changeOrderOutput, wcContext, CartSummaryPriceStatus.TBD);
 			}
-			XPEDXWCUtils.releaseEnv(wcContext);
 
 		} else {
 			// 1+ items are invalid: determine which item ids are not in the map
