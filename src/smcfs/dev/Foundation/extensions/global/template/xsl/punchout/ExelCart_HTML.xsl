@@ -13,7 +13,11 @@
 				</xsl:attribute>
 			</input>
 			<input type="hidden" name="NEW_ITEM-UNIT[{@PrimeLineNo}]" value="{OrderLineTranQuantity/@TransactionalUOM}"/>
-			<input type="hidden" name="NEW_ITEM-PRICE[{@PrimeLineNo}]" value="{Extn/@ExtnExtendedPrice}"/>
+			<input type="hidden" name="NEW_ITEM-PRICE[{@PrimeLineNo}]">
+				<xsl:attribute name="value">
+					<xsl:value-of select='format-number(Extn/@UnitPriceRounded, "0.##")' disable-output-escaping="yes" />
+				</xsl:attribute>
+			</input>
 			<input type="hidden" name="NEW_ITEM-PRICEUNIT[{@PrimeLineNo}]" value=""/>
 			<input type="hidden" name="NEW_ITEM-CURRENCY[{@PrimeLineNo}]" value="USD"/>
 			<input type="hidden" name="NEW_ITEM-LEADTIME[{@PrimeLineNo}]" value="3"/>
