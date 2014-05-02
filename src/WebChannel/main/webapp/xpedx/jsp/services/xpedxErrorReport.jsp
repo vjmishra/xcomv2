@@ -32,6 +32,11 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/banner<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcwcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<![endif]-->
 
 <!--[if lt IE 8]>
 <link media="all" type="text/css" rel="stylesheet" href="../../css/theme/ie7<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
