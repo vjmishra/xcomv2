@@ -86,4 +86,7 @@ $(document).ready(function() {
 			</tr>
 		</table>
 </div>
+
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/watermark.js"></script>
+
 <s:include value="../../htmls/webtrends/webtrends.html"/><!--EB-519-->

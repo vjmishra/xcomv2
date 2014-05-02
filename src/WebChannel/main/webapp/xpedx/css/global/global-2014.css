@@ -680,3 +680,18 @@ div.catalog-search-container input#search_searchTerm {
     padding: 20px 25px;
 
 }
+
+.input-watermark {  
+    background: url("magnify.jpg") no-repeat scroll 2px 2px #FFFFFF;
+    border: 1px solid #D9D9D9;
+    border-radius: 0;
+    color: #000000;
+    font-size: 12px;
+    height: 18px;
+    margin: 4px 0 0 4px;
+    padding: 2px 0 0 18px;
+    width: 160px;
+}
+.input-watermark-color {
+	color: #a8a8a8 !important;
+}
