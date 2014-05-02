@@ -109,7 +109,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 				LOG.debug("Punchout output: " + outputData);
 			}
 
-	//TODO  deleteCart(cc.getOrderHeaderKey());
+			deleteCart(cc.getOrderHeaderKey());
 
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
