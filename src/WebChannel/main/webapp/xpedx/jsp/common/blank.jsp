@@ -87,7 +87,7 @@
 <script type="text/javascript" src="jquery.mousewheel-3.0.2.pack.js/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <script type="text/javascript" src="jquery.mousewheel-3.0.2.pack.js/js/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script type="text/javascript" src="jquery.mousewheel-3.0.2.pack.js/js/sorttable.js"></script>
-<link rel="stylesheet" type="text/css" href="jquery.mousewheel-3.0.2.pack.js/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="jquery.mousewheel-3.0.2.pack.js/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jcarousel/skins/xpedx/theme<s:property value='#wcUtil.xpedxBuildKey' />.css" /><!--  fixed path -->
 

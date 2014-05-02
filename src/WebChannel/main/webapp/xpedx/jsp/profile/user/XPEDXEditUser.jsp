@@ -78,8 +78,8 @@
 <!-- Facy Box (expand and collpse Modal Window -->
 
  
-<link rel="stylesheet" type="text/css" href="checkboxtree/demo.css"/>
-<link rel="stylesheet" type="text/css" href="checkboxtree/jquery.checkboxtree.css"/>
+<link rel="stylesheet" type="text/css" href="checkboxtree/demo<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
+<link rel="stylesheet" type="text/css" href="checkboxtree/jquery.checkboxtree<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <script type="text/javascript" src="checkboxtree/jquery.checkboxtree.js"></script>
 
 <!-- Facy Box (expand and collpse Modal Window -->
