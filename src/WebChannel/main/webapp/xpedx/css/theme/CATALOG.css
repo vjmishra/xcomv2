@@ -1340,6 +1340,9 @@ img#youtube { margin-right: 9px; }
     clear: both;
     padding-top: 8px;
 }
+.condensed-view  #item-ct dd .replacement-item {
+	margin-top: 5px;
+}
 
 .condensed-view #item-ct dd .order-input-wrap {
 	float: right;

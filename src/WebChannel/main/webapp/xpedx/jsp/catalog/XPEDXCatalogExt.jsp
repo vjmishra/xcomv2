@@ -720,7 +720,7 @@ function getNormalView() {
 									'{partno}',
 								'</div>',
 							</s:if>
-							<s:if test='#customerItemFlag != null && #customerItemFlag=="Y"'>
+							<s:if test='#customerItemFlag != null && #customerItemFlag == "Y"'>
 								'<div class="cust-numbers">',
 									'{customerItemno}',
 								'</div>',
@@ -728,7 +728,7 @@ function getNormalView() {
 						'</div>',
 						
 						<s:if test='!#guestUser'>
-							<%-- mill-mfg --%>
+							<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
 							'{itemtypedesc}',
 						</s:if>
 						
@@ -848,23 +848,22 @@ function getCondensedView() {
 								
 								'<div class="item-numbers">',
 									'<s:property value="wCContext.storefrontId" /> Item #: {itemid} {cert}',
-									<s:if test='#mfgItemFlag != null && #mfgItemFlag=="Y"'>
+									<s:if test='#mfgItemFlag != null && #mfgItemFlag == "Y"'>
 										'<div class="mfg-numbers">',
 											'{partno}',
 										'</div>',
 									</s:if>
-									<s:if test='#customerItemFlag != null && #customerItemFlag=="Y" && #mfgItemFlag != "Y"'>
+									<s:if test='#customerItemFlag != null && #customerItemFlag == "Y"'>
 										'<div class="cust-numbers">',
 											'{customerItemno}',
 										'</div>',
 									</s:if>
 								'</div>', // end item-numbers
 								
-								'<div class="mill-mfg">',
-									'{itemtypedesc}',
-								'</div>',
+								<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
+								'{itemtypedesc}', 
 								
-								'<div>',
+								'<div class="replacement-item">',
 									'{repItemsForCondensedView}',
 								'</div>',
 							'</div>', // end contents
@@ -941,6 +940,8 @@ function getMiniView() {
 									<s:if test='#customerItemFlag != null && #customerItemFlag == "Y"'>
 										'{customerItemno}',
 									</s:if>
+										
+									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
 									'{itemtypedesc}',
 								'</div>', // end item_number
 								
