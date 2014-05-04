@@ -854,6 +854,22 @@
                      </Template>
               </API>
        </mashup>
+	<mashup id='XPEDXGetAllShipToList-ShipTo' transactional='true' mashuptype='XAPI'
+              endpoint='CUSTOMER' description="Ship-To List">
+              <classInformation
+                     name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+              <API FlowName="XPXCustomerAssignmentViewService">
+                     <Input>
+                           <XPXCustomerAssignmentView UserId="" Status="30"  StatusQryType="NE"/>
+                     </Input>
+                     <Template>
+                           <XPXCustomerAssignmentViewList>
+                                  <XPXCustomerAssignmentView>                                          
+                                  </XPXCustomerAssignmentView>
+                           </XPXCustomerAssignmentViewList>
+                     </Template>
+              </API>
+       </mashup>
 	
 </mashups>	
 

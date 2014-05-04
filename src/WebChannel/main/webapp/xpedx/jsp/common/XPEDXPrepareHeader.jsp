@@ -1854,6 +1854,9 @@ function passwordUpdateModal()
     		$('#welcome-address-popup').hide();
     		return false;
     	});     	
+		$('#changeShipToURL').click(function(){
+			window.location.href = $('#changeShipToURL').attr('href');
+		});
 		try{
 		$("#selectusertomodify").fancybox({
 			'onStart' 	: function(){
@@ -2653,7 +2656,9 @@ function callAjaxForSorting(url,divId)
 								<a href="#viewPrvenetChangeShipToDlg" id="preventChangeShipTo">[Change]</a>
 							</s:if>
 							<s:else>
-								<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
+							<a href="#ajax-assignedShipToCustomers" id="shipToSelect" style="display: none;"></a>
+							<s:url id ='changeShipToURLid' action='changeShipTo' namespace='/common'/>				
+							<s:a id="changeShipToURL"href="%{#changeShipToURLid}">[Change]</s:a>
 							</s:else>
 						</s:if>						
 						<br/> 
