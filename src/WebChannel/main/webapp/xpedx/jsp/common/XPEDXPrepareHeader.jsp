@@ -7,7 +7,7 @@
 <!-- Creating global static file location variable. 
 It is not a good practice but creating on every jsp page is also not convenient -->
 <script type="text/javascript">
-	var XPEDXWCUtils_STATIC_FILE_LOCATION = <s:property value="%{#wcUtil.staticFileLocation}" />
+	var XPEDXWCUtils_STATIC_FILE_LOCATION =  '<s:property value="%{#wcUtil.staticFileLocation}" />';
 </script>
 
 <meta http-equiv="X-UA-Compatible" content="IE=8" /> 
