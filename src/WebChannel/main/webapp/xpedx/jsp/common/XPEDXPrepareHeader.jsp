@@ -987,7 +987,7 @@ var selectedShipCustomer = null;
 	action='MyManageOtherProfiles' />
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
-
+<s:url id ='changeShipToURLid' action='changeShipTo' namespace='/common'/>
 <!-- Terms of access modal doesnt work properly if the ext js is included after the css include -->
 <!-- which is the case in home page . If required dynamically include ext-js only if not included already  -->
 <div class='x-hidden dialog-body ' id="assignedShipToCustomersContent">
@@ -2656,8 +2656,7 @@ function callAjaxForSorting(url,divId)
 								<a href="#viewPrvenetChangeShipToDlg" id="preventChangeShipTo">[Change]</a>
 							</s:if>
 							<s:else>
-							<a href="#ajax-assignedShipToCustomers" id="shipToSelect" style="display: none;"></a>
-							<s:url id ='changeShipToURLid' action='changeShipTo' namespace='/common'/>				
+							<a href="#ajax-assignedShipToCustomers" id="shipToSelect" style="display: none;"></a>	<!-- TODO Delete this line -->										
 							<s:a id="changeShipToURL"href="%{#changeShipToURLid}">[Change]</s:a>
 							</s:else>
 						</s:if>						
@@ -3086,7 +3085,8 @@ function callAjaxForSorting(url,divId)
 		       <s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#defualtShipTAddress.getZipCode())}" /> 
 		       <s:property value="#defualtShipTAddress.getCountry()" />
 		       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect">[Change]</a>
+		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect" style="display: none;"></a>	<!-- TODO Delete this line -->	       					
+				<s:a id="changeShipToURL"href="%{#changeShipToURLid}">[Change]</s:a>
 		       </s:if>
 		    </p>
 	    	</div>
