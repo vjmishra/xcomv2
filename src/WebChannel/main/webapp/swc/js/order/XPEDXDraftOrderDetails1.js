@@ -231,7 +231,7 @@ function redrawQuickAddList()
     if(QuickAddElems.length > 0)
     {	
         code += '<td align="right" colspan="5">';
-        code += '<input type="image" onclick="javascript:addProductsToOrder()" name="addProdsToOrder"  class="add-to-cart-btn" src="/swc/xpedx/images/theme/theme-1/quick-add/addtocart.png" tabIndex="' + tabIndex++ + '"/>';
+        code += '<input type="image" onclick="javascript:addProductsToOrder()" name="addProdsToOrder"  class="add-to-cart-btn" src="'+ XPEDXWCUtils_STATIC_FILE_LOCATION +'/xpedx/images/theme/theme-1/quick-add/addtocart.png" tabIndex="' + tabIndex++ + '"/>';
         code += '</td>';
         code += '</tr>';
     }

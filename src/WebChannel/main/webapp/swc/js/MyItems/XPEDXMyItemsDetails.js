@@ -180,7 +180,7 @@ function qaAddItem(jobId, qty, itemId, itemType, purchaseOrder, itemTypeText){
 		cItemType.innerHTML 	= '<div id="'+divId+'"> </div> ';
 		cAction.className		= "wing-col-item";
 		cAction.align 			= "center";
-		cAction.innerHTML 		= '<a class="del-quick-add" href="javascript:void(0);" onclick="javascript: qaDeleteRow(\''+rowId+'\');"><input type="image" src="/swc/xpedx/images/icons/12x12_red_x.png" /></a>';
+		cAction.innerHTML 		= '<a class="del-quick-add" href="javascript:void(0);" onclick="javascript: qaDeleteRow(\''+rowId+'\');"><input type="image" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/icons/12x12_red_x.png" /></a>';
 		
 		qaValidateItem(divId, jobId, qty, itemId, itemType, purchaseOrder, itemTypeText);
 		
