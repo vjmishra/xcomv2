@@ -4380,6 +4380,7 @@ table.catalog-row-five td img {
     position: relative;
     text-align: left;
     z-index: 100;
+    cursor:default;
 }
 #welcome-address-popup-close {
     float: right;

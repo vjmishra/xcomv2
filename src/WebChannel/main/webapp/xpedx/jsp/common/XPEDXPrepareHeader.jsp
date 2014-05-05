@@ -1852,17 +1852,14 @@ function passwordUpdateModal()
 			$('#cart-management-popup').toggle();
 			return false;
 		});
-    	$("#welcome-address-info-icon").click(function(){
-    		$('#welcome-address-popup').toggle();
-    		return false;
+    	$("#welcome-address-info-icon-bar").click(function(event){
+            $('#welcome-address-popup').toggle();
+            return false;
     	});
 		$("#welcome-address-popup-close").click(function(){
     		$('#welcome-address-popup').hide();
     		return false;
     	});     	
-		$('#changeShipToURL').click(function(){
-			window.location.href = $('#changeShipToURL').attr('href');
-		});
 		try{
 		$("#selectusertomodify").fancybox({
 			'onStart' 	: function(){
@@ -2621,6 +2618,7 @@ function callAjaxForSorting(url,divId)
 				<!-- Open Welcome Message Block -->
 				<li> | </li>
 				<li class="text-right pointers" id="welcome-address-info-icon">
+					<div id="welcome-address-info-icon-bar">
 			    	<s:set name='customerId' value="wCContext.customerId" />
 					<s:set name='storeFrontId' value="wCContext.storefrontId" />
 					<s:set name="defualtShipTAddress" value="#_action.getShipToAddress()" />
@@ -2647,7 +2645,8 @@ function callAjaxForSorting(url,divId)
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storeFrontId)}'>
 				<img  src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/12x12_green_down.png" alt="" />	
 				</s:elseif>			
-					</s:else>										
+					</s:else>
+					</div>										
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
 						 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -2662,8 +2661,7 @@ function callAjaxForSorting(url,divId)
 								<a href="#viewPrvenetChangeShipToDlg" id="preventChangeShipTo">[Change]</a>
 							</s:if>
 							<s:else>
-							<a href="#ajax-assignedShipToCustomers" id="shipToSelect" style="display: none;"></a>	<!-- TODO Delete this line -->										
-							<s:a id="changeShipToURL"href="%{#changeShipToURLid}">[Change]</s:a>
+							<s:a id="changeShipToURL" href="%{#changeShipToURLid}">[Change]</s:a>
 							</s:else>
 						</s:if>						
 						<br/> 
@@ -3090,9 +3088,8 @@ function callAjaxForSorting(url,divId)
 		       <s:property value="#defualtShipTAddress.getState()" />
 		       <s:property value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getFormattedZipCode(#defualtShipTAddress.getZipCode())}" /> 
 		       <s:property value="#defualtShipTAddress.getCountry()" />
-		       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		       	<a href="#ajax-assignedShipToCustomers" id="shipToSelect" style="display: none;"></a>	<!-- TODO Delete this line -->	       					
-				<s:a id="changeShipToURL"href="%{#changeShipToURLid}">[Change]</s:a>
+		       <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">		       		       					
+				<s:a id="changeShipToURL" href="%{#changeShipToURLid}">[Change]</s:a>
 		       </s:if>
 		    </p>
 	    	</div>

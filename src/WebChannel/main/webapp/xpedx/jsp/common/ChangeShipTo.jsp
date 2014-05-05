@@ -16,8 +16,8 @@
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
-		<!--[if IE]>
-	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<!--[if IE]>
+		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 	
@@ -40,28 +40,27 @@
 </script>
 </head>
 <body class="ext-gecko ext-gecko3">
- <div id="main-container">
+	<div id="main-container">
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 			<div class="container">
-			<s:url id="getAssignedShipToCustomersURLid" namespace="/common" action="getAssignedShipToCustomers" /> 
-			<s:a cssClass="display:none;" id="getAssignedShipToCustomersURL" href="%{#getAssignedShipToCustomersURLid}" />
-			<s:url id='applytargetURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
-				<s:param name="initPrefs">true</s:param>
-			</s:url>
-			<s:a cssClass="display:none;" id="applytargetURL" href="%{#applytargetURLid}" />
-			<s:hidden name="customerContactId" value="%{#_action.getWCContext().getLoggedInUserId()}" />
-			<s:hidden name="includeShoppingForAndDefaultShipTo" value="true" />	
-			<div class="content-container">
-      		<h1>Change Ship-To</h1>
-      			<div class="ship-container" id="ship-container">
-      			<%-- dynamicaly populate data here --%>
-			   </div>
-			   </div>
+				<s:url id="getAssignedShipToCustomersURLid" namespace="/common" action="getAssignedShipToCustomers" />
+				<s:hidden id="getAssignedShipToCustomersURL" value="%{#getAssignedShipToCustomersURLid}" /> 
+				<s:url id='applytargetURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
+					<s:param name="initPrefs">true</s:param>
+				</s:url>
+				<s:hidden id="applytargetURL" value="%{#applytargetURLid}" />
+				<s:hidden id="customerContactId" value="%{#_action.getWCContext().getLoggedInUserId()}" />
+				<s:hidden id="includeShoppingForAndDefaultShipTo" value="true" />	
+				<div class="content-container">
+	      			<h1>Change Ship-To</h1>
+	      			<div class="ship-container" id="ship-container">
+	      				<%-- dynamically populate data here with ShipToComponent javascript  --%>
+				   </div>
+				</div>
 			</div> <%-- / container --%>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" /> 
-
 </body>
 </html>

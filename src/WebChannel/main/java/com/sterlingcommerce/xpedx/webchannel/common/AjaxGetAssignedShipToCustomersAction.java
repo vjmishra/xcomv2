@@ -2,27 +2,41 @@ package com.sterlingcommerce.xpedx.webchannel.common;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.webchannel.core.WCMashupAction;
+import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
 
-
+/**
+ * This ajax class implemented for Getting All the assigned Ship-To customers for Change Ship-To/Select Ship-To Pages/Modals
+ * 
+ * @param customerContactId Get all assigned ship-tos for this customer contact id(User id).
+ * @param includeShoppingForAndDefaultShipTo This is a flag for to get Default/Shopping for ship-to values or not.
+ * 
+ * @param shipToList  This is return ship-to list contains All the  assigned Ship-To customers for the corresponding input customer contact id(user id).
+ * @param defaultShipToCustomer This is Default ship to customer information for the corresponding input customer contact id(user id).
+ * @param shoppingForShipToCustomer This is Shopping-for ship to customer information for the corresponding input customer contact id(user id).
+ * 
+ */
 @SuppressWarnings("serial")
-public class AjaxGetAssignedShipToCustomersAction extends WCMashupAction {
+public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 
-
+	// input fields
 	private String customerContactId;
-	private ArrayList<ShipTo> shipToList;
+	private boolean includeShoppingForAndDefaultShipTo;
+	
+	// output fields
+	private List<ShipTo> shipToList;
 	private XPEDXShipToCustomer defaultShipToCustomer;
 	private XPEDXShipToCustomer shoppingForShipToCustomer;
-	private boolean includeShoppingForAndDefaultShipTo = false;
+	
 	
 	
 
@@ -40,7 +54,7 @@ public class AjaxGetAssignedShipToCustomersAction extends WCMashupAction {
 	public XPEDXShipToCustomer getDefaultShipToCustomer() {
 		return defaultShipToCustomer;
 	}
-	public ArrayList<ShipTo> getShipToList() {
+	public List<ShipTo> getShipToList() {
 		return shipToList;
 	}
 	public String getCustomerContactId() {
@@ -53,9 +67,9 @@ public class AjaxGetAssignedShipToCustomersAction extends WCMashupAction {
 	@Override
 	public String execute() {
 		if (!YFCUtils.isVoid(customerContactId)) {
-			getAllShipToList();
+			shipToList = getAllShipToList();
 			if(isIncludeShoppingForAndDefaultShipTo()){
-				getShoppingForAndDefaultShipTo();
+				initShoppingForAndDefaultShipTo();
 			}
 		}
 		else{
@@ -65,31 +79,33 @@ public class AjaxGetAssignedShipToCustomersAction extends WCMashupAction {
 	}
 	
 	/**
-	 * getting all Assigned Ship-to customers
+	 * getting all Assigned Ship-to customers for the corresponding customer contact id(user id)
 	 */
-	private void getAllShipToList(){
+	private List<ShipTo> getAllShipToList(){
+		List<ShipTo> returnshipToList = null;
 		Document inputDoc = SCXmlUtil.createDocument("XPXCustomerAssignmentView");
 		inputDoc.getDocumentElement().setAttribute("UserId", customerContactId);
 		Element custAssignedEle = (Element)WCMashupHelper.invokeMashup("XPEDXGetAllShipToList-Punchout",inputDoc.getDocumentElement(), wcContext.getSCUIContext());
-		ArrayList<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXCustomerAssignmentView");
+		List<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXCustomerAssignmentView");
 
 		if (assignedCustElems!=null && assignedCustElems.size() > 0) {
-			shipToList =  new ArrayList<ShipTo>();
+			returnshipToList =  new ArrayList<ShipTo>(assignedCustElems.size());
 			for (Element assignedCustElem : assignedCustElems) {
-				ShipTo shipTo = setShipToValues(assignedCustElem);
-				shipToList.add(shipTo);
+				ShipTo shipTo = createShipToFromElement(assignedCustElem);
+				returnshipToList.add(shipTo);
 			}
-			Collections.sort(shipToList);
+			Collections.sort(returnshipToList,ShipTo.COMPARATOR_DISPLAY);
 		}
+		return returnshipToList;
 	}
 	
 	/**
 	 * 
 	 * @param customer
 	 * @return
-	 * setting values to ShipTo Object from Element
+	 * creating the shipTo object from customer Element
 	 */
-	private ShipTo setShipToValues(Element customer){
+	private ShipTo createShipToFromElement(Element customer){
 		ShipTo shipTo = new ShipTo();
 		shipTo.setUserId(SCXmlUtil.getAttribute(customer,"UserId"));
 		shipTo.setShipToCustomerID(SCXmlUtil.getAttribute(customer,"ShipToCustomerID"));
@@ -119,10 +135,10 @@ public class AjaxGetAssignedShipToCustomersAction extends WCMashupAction {
 	}
 	
 	/**
-	 * This method will get Shopping for and Default Ship To customers. 
+	 * This method will initialize Shopping for and Default Ship To customers. 
 	 * If the customer contact Id matches to the logged in user then we are getting this info from Cache instead of calling an API
 	 */
-	private void getShoppingForAndDefaultShipTo(){
+	private void initShoppingForAndDefaultShipTo(){
 		if(customerContactId.equals(getWCContext().getLoggedInUserId().trim())){
 			shoppingForShipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		}else{

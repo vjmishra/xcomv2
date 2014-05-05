@@ -1,7 +1,19 @@
 package com.sterlingcommerce.xpedx.webchannel.common;
 
+import java.util.Comparator;
 
-public class ShipTo implements Comparable<ShipTo>{
+
+public class ShipTo {
+
+	/**
+	 * Sort by shipToDisplayString
+	 */
+	public static final Comparator<ShipTo> COMPARATOR_DISPLAY = new Comparator<ShipTo>() {
+		@Override
+		public int compare(ShipTo o1, ShipTo o2) {
+			return o1.getShipToDisplayString().compareToIgnoreCase(o2.getShipToDisplayString());
+		}
+	};
 
 	private String userId;
 	private String shipToCustomerID;
@@ -129,36 +141,5 @@ public class ShipTo implements Comparable<ShipTo>{
 	}
 	public void setShipToDisplayString(String shipToDisplayString) {
 		this.shipToDisplayString = shipToDisplayString;
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((shipToDisplayString == null) ? 0 : shipToDisplayString
-						.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ShipTo other = (ShipTo) obj;
-		if (shipToDisplayString == null) {
-			if (other.shipToDisplayString != null)
-				return false;
-		} else if (!shipToDisplayString.equals(other.shipToDisplayString))
-			return false;
-		return true;
-	}
-	
-	@Override
-	public int compareTo(ShipTo obj) {
-		return this.getShipToDisplayString().compareToIgnoreCase(obj.getShipToDisplayString());
 	}
 }
