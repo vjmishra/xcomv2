@@ -882,6 +882,7 @@ function getCondensedView() {
 									
 									'<div class="cart-pa-button">',
 										'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
+										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 										'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
 									'</div>', // end cart-pa-button
 								'</div>', // end order-input-wrap
