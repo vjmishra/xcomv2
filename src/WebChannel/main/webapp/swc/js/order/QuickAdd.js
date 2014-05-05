@@ -16,10 +16,16 @@ function clearErrorRow(rowId){
 		$('#enteredQuantities_'+rowId).val('');
 		$('#enteredPONos_'+rowId).val('');
 		$('#enteredJobIDs_'+rowId).val('');
-		clearItemErrorMessages();
-		document.getElementById("errorIcon_" + rowId).style.visibility="hidden";
+		clearErrorMessage(rowId);
+		
+		return false;
 	});
 }
+function clearErrorMessage(rowId){
+	$('#producterrorLine_' + rowId).hide();
+	document.getElementById("errorIcon_" + rowId).style.visibility="hidden";
+}
+
 /*
  * Manage error messages
  */
@@ -33,9 +39,11 @@ function clearItemErrorMessages() {
 	for (var i = 0, len = errorDivs.length; i < len; i++) {
 		errorDivs[i].innerHTML = '';
 		errorDivs[i].style.display = 'none';
+		
 	}
 	
 }
+
 
 
 /*
@@ -62,6 +70,7 @@ function validateItems() {
 	showProcessingBar();
 	clearItemErrorMessages();
 	
+	
 	var itemsToValidate = []; // holds objects
 	var rowIdsForItem = {}; // key=item, value=list of rowId (since multiple rows could have the same item #)
 	var errorMessageForRowId = {}; // key=rowId, value=error message
@@ -75,6 +84,7 @@ function validateItems() {
 		var po = $row.find('.input-po').val();
 		var account = $row.find('.input-account').val();
 		
+		clearErrorMessage(rowId);
 		itemId = itemId ? itemId.trim() : '';
 		qty = qty ? qty.trim() : '';
 		po = po ? po.trim() : '';
