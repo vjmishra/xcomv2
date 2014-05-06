@@ -1290,11 +1290,11 @@ img#youtube { margin-right: 9px; }
 }
 
 .replacement-item {
-	color: #ff0000;
-	padding-right:2px;
-	font-weight:bold; 
-	float:left; 
-	clear: none;"
+	clear: none;
+	color: #FF0000;
+	float: right;
+	font-weight: bold;
+	padding-right: 10px;
 }
 
 /* condensed view */
