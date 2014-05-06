@@ -773,6 +773,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	protected void populateMashupInput(String mashupId, Map<String, String> valueMap, Element mashupInput) throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
+		
+		boolean searchStartsWithFlag = true; // indicates whether to auto-append '*' to search terms
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this.get_bcs_());	
+		StringBuilder actionString = new StringBuilder();
+	/*	Searching for which action is triggered Search or newSearch*/
+		 for(int i = bcl.size() - 1; i >= 0; i--)
+         {
+             Breadcrumb bc = (Breadcrumb)bcl.get(i);
+             System.out.println("Action called: "+bc.getAction()) ;
+             actionString.append(bc.getAction()+",");
+         }
+		 if(actionString.toString().contains("search")){
+			 searchStartsWithFlag = false; 
+		 }
 
 		Set<String> keySet = valueMap.keySet();
 		Iterator<String> iterator = keySet.iterator();
@@ -946,7 +960,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String newSearch() {
-		searchStartsWithFlag = true;
 		tempSearchTerm=searchTerm;
 		try {
 			init();
@@ -3179,7 +3192,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String facetListItemAttributeKey;
 
 	private String rememberNewSearchText;
-	private boolean searchStartsWithFlag; // indicates whether to auto-append '*' to search terms
 	private String tempSearchTerm;        // used as temp variable for searchTerm
 
 	public Map<String, String> getSortListMap() {
