@@ -54,9 +54,9 @@ public class DebugMarketingGroupIndexAction extends AjaxAutocompleteAction {
 			String mgiRoot = YFSSystem.getProperty("marketingGroupIndex.rootDirectory");
 			String siRoot = YFSSystem.getProperty("searchIndex.rootDirectory");
 
-			String indexPath = CACHE_UTIL.getActiveIndexPath();
+			String indexPath = CACHE_UTIL.getActiveIndexPath(wcContext);
 
-			analyze(mgIds, mgiRoot, indexPath, siRoot, CACHE_UTIL.getSearcher(isRefresh()));
+			analyze(mgIds, mgiRoot, indexPath, siRoot, CACHE_UTIL.getSearcher(isRefresh(),wcContext));
 
 		} catch (Exception e) {
 			log.error("Unexpected error: " + e.getMessage());
