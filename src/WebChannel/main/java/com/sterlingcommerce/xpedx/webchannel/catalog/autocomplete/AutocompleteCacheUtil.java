@@ -117,7 +117,6 @@ public class AutocompleteCacheUtil {
 	 * @throws RuntimeException Database error
 	 */
 	public String getActiveIndexPath(IWCContext context) throws Exception {
-		context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
 		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 
