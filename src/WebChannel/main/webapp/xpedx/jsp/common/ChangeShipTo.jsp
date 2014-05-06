@@ -34,7 +34,7 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ChangeShipTo<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ShipTo<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ShipToComponent<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script>
 
 </script>
