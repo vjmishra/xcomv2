@@ -1357,7 +1357,7 @@ img#youtube { margin-right: 9px; }
 }
 .condensed-view #item-ct dd .order-input-wrap .order-label {
 	float: left;
-	width: 35px;
+	width: 135px;
 	clear: none;
 	text-align: right;
 	padding: 3px 6px 6px 0px;
@@ -1367,7 +1367,7 @@ img#youtube { margin-right: 9px; }
 	float: right;
 	clear: both;
 	text-align: right;
-	margin: 6px 0px 16px 0px;
+	margin: 25px 0px 16px 0px;
 }
 
 .condensed-view  #item-ct dd .mill-mfg {
@@ -1427,3 +1427,10 @@ img#youtube { margin-right: 9px; }
 .height {
 	height: 5px;
 }
+.condensed-view  #item-ct dd .error {
+	float: right;
+	margin-bottom: 10px;
+	}
+.condensed-view  #item-ct dd .notice {
+	margin-bottom: 10px;
+	}
