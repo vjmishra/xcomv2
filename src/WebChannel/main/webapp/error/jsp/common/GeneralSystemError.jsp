@@ -19,6 +19,9 @@
 <link media="all" type="text/css" rel="stylesheet"  href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet"  href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/theme-xpedx_v1.2<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="#storefrontID" />/css/sfskin-<s:property value="#storefrontID" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <script type="text/javascript">
 	
 	function getPreviousPageUrl(){	
