@@ -3102,14 +3102,14 @@ function callAjaxForSorting(url,divId)
 	<div id="searchTips">
       <h2>Search Tips</h2>
       <h3>Advanced Search:</h3>
-      <p>Utilize advanced search to search against the entire catalog. Enter the search criteria, then click ‘enter’ or click the search icon. The advanced search uses ‘and’ logic. Results will reflect items that contain all search terms.</p>
+      <p>Utilize advanced search to search against the entire catalog. Enter the search criteria, then click 'enter' or click the search icon. The advanced search uses 'and' logic. Results will reflect items that contain all search terms.</p>
       <p>The question mark (?) can be used in a search term as a substitute for exactly one unknown alphanumeric character. Using the question mark (?) as the leading character when specifying a search term is not supported. </p>
       <ul>
         <li>For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. </li>
         <li>However, you can search for the product using AB?D as the search term.</li>
       </ul>
       <h3>Guided Search:</h3>
-      <p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the drop down list of results. The guided search uses ‘or’ logic. Results will reflect items that contain any search terms.</p>
+      <p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the drop down list of results. The guided search uses 'or' logic. Results will reflect items that contain any search terms.</p>
       
       <ul>
       
