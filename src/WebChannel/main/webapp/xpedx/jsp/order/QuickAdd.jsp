@@ -230,7 +230,7 @@
 							</s:else>
 							<s:hidden id="orderHeaderKey" value='%{#orderHeaderKey}' />
 							<s:hidden id="currencyCode" value='%{#currencyCode}' />
-							<s:hidden id="isEditOrder"
+							<s:hidden id="isEditOrder" name="isEditOrder"
 								value="%{(#isEditOrderHeaderKey != null && #isEditOrderHeaderKey != '')}" />
 							<h3 class="qa-subhead">Add Item List</h3>
 							<%-- <s:set name="jobIdFlag"
