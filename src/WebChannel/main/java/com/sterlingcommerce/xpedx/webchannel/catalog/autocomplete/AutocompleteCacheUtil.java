@@ -122,10 +122,9 @@ public class AutocompleteCacheUtil {
 
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 
-		YIFApi api =  YIFClientFactory.getInstance().getApi();
-		Document inXML = SCXmlUtil.createDocument("<XPXMgiArchive ACTIVE_FLAG='Y'/></XPXMgiArchive>");
-		Document xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList", inXML);
-
+		Document inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");		
+		Document xpxMgiListOutDoc = new CustomApiImpl().getXPXMgiArchiveList(env, inXML);
+		
 		Element outputListElement = xpxMgiListOutDoc.getDocumentElement();
 		if(outputListElement!=null){
 			NodeList xpxArchiveExtnNL = outputListElement.getElementsByTagName("XPXMgiArchive");
