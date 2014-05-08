@@ -214,7 +214,11 @@ Ext.onReady(function(){
 	
 	<div id="main-container">
 	<div id="main">
-
+<div class='x-hidden dialog-body' id="ship-containerDiv">
+	<div class="ship-container" id="ship-container">
+	   <%-- dynamically populate data here with ShipToComponent javascript  --%>
+	</div>
+</div>
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		<div class="container">
 		<div id="homepage-image-rotation">

@@ -68,7 +68,7 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 	public String execute() {
 		if (!YFCUtils.isVoid(customerContactId)) {
 			shipToList = getAllShipToList();
-			if(isIncludeShoppingForAndDefaultShipTo()){
+			if(isIncludeShoppingForAndDefaultShipTo() && shipToList!=null && shipToList.size() >0){
 				initShoppingForAndDefaultShipTo();
 			}
 		}
@@ -147,7 +147,7 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 		if(shoppingForShipToCustomer!=null){
 			shoppingForShipToCustomer.setZipCode(getFormattedZip(shoppingForShipToCustomer.getZipCode()));
 			defaultShipToCustomer = shoppingForShipToCustomer.getDefaultShipToCustomer();
-			if(shoppingForShipToCustomer!=null){
+			if(defaultShipToCustomer!=null){
 				defaultShipToCustomer.setZipCode(getFormattedZip(defaultShipToCustomer.getZipCode()));
 			}
 		}

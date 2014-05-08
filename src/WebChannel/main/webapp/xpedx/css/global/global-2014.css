@@ -120,6 +120,9 @@
 .addmarginleft10 {
 	margin-left: 10px;
 }
+.addmarginbottom10 {
+	margin-bottom: 10px;
+}
 .addmargintop10 {
 	margin-top: 10px;
 }
@@ -128,6 +131,9 @@
 }
 .addmarginright30 {
 	margin-right: 30px;
+}
+.addmarginright20 {
+	margin-right: 20px;
 }
 .floatleft {
 	float: left;
@@ -781,4 +787,41 @@ div.catalog-search-container input#search_searchTerm {
 	float: left;
 	width: auto;
 	clear: none;
+}
+.ship-to-unassigned {
+	margin:0px;
+	padding:20px;
+	width:50%;
+	text-align:left;
+	color:#000000;
+}
+.ship-to-unassigned p{
+	padding-bottom:10px;
+}
+.ship-container h2 {
+    font-size: 16px;
+    padding: 10px 0 20px;
+}
+.ship-search-input-wrap {
+	width:300px;
+	float:left;
+	clear:none;
+	padding-bottom:15px;
+}
+.ship-modal-button-wrap {
+	float:right;
+	clear:none;
+	width:auto;
+	margin-right:20px;
+}
+.ship-button-wrap{
+	float:right;
+	clear:both;
+	margin-top: 10px;
+}
+div#fancybox-content .ship-button-wrap{
+	float:right;
+	clear:none;
+	width:auto;
+	margin-right:20px;
 }

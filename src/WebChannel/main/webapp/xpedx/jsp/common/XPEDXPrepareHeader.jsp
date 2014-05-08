@@ -63,6 +63,7 @@ It is not a good practice but creating on every jsp page is also not convenient 
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.megamenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/MegaMenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ShipToComponent<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
 	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
 		<s:param name="newOP">true</s:param>
@@ -997,6 +998,26 @@ var selectedShipCustomer = null;
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
 <s:url id ='changeShipToURLid' action='changeShipTo' namespace='/common'/>
+<s:url id="getAssignedShipToCustomersURLid" namespace="/common" action="getAssignedShipToCustomers" />
+<s:hidden id="getAssignedShipToCustomersURL" value="%{#getAssignedShipToCustomersURLid}" />
+<s:url id='applytargetURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
+	<s:param name="initPrefs">true</s:param>
+</s:url>
+<s:hidden id="applytargetURL" value="%{#applytargetURLid}" /> 
+<s:hidden id="LoggedInUserIdForShipTo" value="%{#_action.getWCContext().getLoggedInUserId()}" />
+<s:set name='storefrontId' value="wCContext.storefrontId" />
+<s:url id="shipTologoutURLid" action="logout" namespace="/home" escapeAmp="false">
+ 	<s:param name='sfId' value="%{#storefrontId}" />
+</s:url>
+<s:hidden id="shipTologoutURL" value="%{#shipTologoutURLid}" />
+<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+	<s:set name="ebusinessEmailAddress" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_EBUSINESS_EMAIL_ADDRESS"/>
+	<s:hidden id="ebusinessEmailAddress" value="%{#ebusinessEmailAddress}" />
+</s:if>
+<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+	<s:set name="ebusinessEmailAddress" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_EBUSINESS_EMAIL_ADDRESS"/>
+	<s:hidden id="ebusinessEmailAddress" value="%{#ebusinessEmailAddress}" />
+</s:if> 
 <!-- Terms of access modal doesnt work properly if the ext js is included after the css include -->
 <!-- which is the case in home page . If required dynamically include ext-js only if not included already  -->
 <div class='x-hidden dialog-body ' id="assignedShipToCustomersContent">
@@ -1119,7 +1140,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     title: 'Select ship to:'
   	});      
     var ajaxValidationURL = "<s:url value='/common/validators/ajaxValidateJson.action'/>";
-    loadDialog();
+
     function setCatShortDesc(path,displayName){
         path = document.getElementById(path);
         for(var i=0;i<path.options.length;i++){
@@ -1164,6 +1185,53 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
              }
         });     
     }
+    
+    function showShipToModal()
+    {
+    	var customerContactId = $('#LoggedInUserIdForShipTo').val();
+    	var includeShoppingForAndDefaultShipTo = "true";
+    	var shipToURL = $('#applytargetURL').val();	
+    	
+    	var applyShipToChanges = function applyShipToChanges(){	
+
+    		if (!$("input[name='selectedShipTo']:checked").val()) {
+    			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+    			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+    			return false;
+    		}
+    		if(!$('#setAsDefault').attr('checked')){
+    			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+    			$('.shipToErrTxt').text("Please Check Change Preferred Ship-To.");
+    			 return false;
+    		 }
+    		var url = $('input[id=shipToURL]').val();
+    		if($('#setAsDefault').attr('checked')){
+    			url = url+"&setSelectedAsDefault=true";
+    		}	
+    		window.location.href = url+"&selectedCurrentCustomer="+$("input[name='selectedShipTo']:checked").val();
+    	};
+    	
+    	applyNoShioTo = function applyNoShioTo (){
+    		var $shipTosContainerDiv = $('#ship-container');
+			var html = [];
+			html.push('			<div class="ship-to-unassigned">');
+			html.push('	We','\'','re sorry.  There are no ship-to locations assigned to your user account.  You will not be able to sign-in until at least one location has been assigned.');
+			html.push('				</br></br>');
+			html.push('			<h2>Please contact the eBusiness Customer Support Desk at 1-877-269-1784 or ', $('#ebusinessEmailAddress').val(), '</h2>');
+			html.push('			</div>');
+			html.push('			<div>');
+			html.push('					<input class="btn-gradient float-left addmarginleft20" type="submit" value="Sign Out" id ="signOutButton"  onclick="javascript:signOutFunction()"/>');
+			html.push('			</div>');
+			$shipTosContainerDiv.get(0).innerHTML = html.join('');	
+    	}
+    	
+    	showShiptos("Select Preferred Ship-To",	customerContactId,	shipToURL,	includeShoppingForAndDefaultShipTo,	null,	applyShipToChanges,	null, applyNoShioTo);
+    }
+    
+    function signOutFunction(){
+    	window.location.href =$('#shipTologoutURL').val();
+    }
+    
     function showAssignedShipToForOrderSearch(url)
     {
     	var x = document.getElementById('shipToOrderSearchDiv');
@@ -1552,31 +1620,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
         });
         document.body.style.cursor = 'default';
     }   
-    function loadDialog(){
-        var isguestuser = "<s:property value='%{wCContext.guestUser}'/>"; 
-   	 	var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';           
-        if(isguestuser!="true"){
-//			Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
-             var defaultShipTo = '<%=request.getAttribute("defaultShipTo")%>';
-             var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-            if(defaultShipTo=="" && assgnCustomerSize>0 && isCustomerSelectedIntoConext!="true"){
-            	$('#shipToSelect,#shipToSelect1,#shipToSelect2').trigger('click');
-//          Performance Fix - Removal of the mashup call of - XPEDXGetPaginatedCustomerAssignments
-            }else if((defaultShipTo=="" || defaultShipTo=="null" || defaultShipTo==null)&& 
-                    (assgnCustomerSize==0 || assgnCustomerSize==null) && isCustomerSelectedIntoConext!="true"){
-             /*   $(function() {
-                     $("#noassignedShipto").dialog({
-                    		 disabled: true,
-                 			resizable: false,
-                 			height:140,
-                 			modal: true,
-                 			closeOnEscape: false,
-                 			open: function(event, ui) { $(".ui-dialog-titlebar").hide(); }
-                 			});
-                }); commented for jira2881 */
-            }
-        }
-    }
+
     function newSearch_searchTerm_onclick(){
     	if(Ext.fly('newSearch_searchTerm').dom.value =='Search Catalog...')
    		{
@@ -1900,58 +1944,58 @@ function passwordUpdateModal()
 			} /* EB-76 Code Changes start  */
 			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext =="true" && isDefaultShipToSuspended=="true" ){	
 				//Please select an active ship-to as your default
-				$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
-					'onStart' 	: function(){			    	  	        
-			          	if(isguestuser!="true"){			               
-			            	showAssignedShipTo('<s:property value="#targetURLForDefault"/>');
-			 	        }
-			 		},
-			 		'onClosed'	: function(){			 			
-			 			if(isguestuser!="true"){			 			
-			 				 showAssignedShipTo('<s:property value="#targetURLForDefault"/>');
-			 			}
-			 		},
-			 		'hideOnOverlayClick': false,
-			 		'showCloseButton'	: false,
-			 		'enableEscapeButton': false,
-			 		'autoDimensions'	: false,
-			 		'scrolling'   		: 'no',
-			 		'width' 		: 750,
+				$("#shipToSelect").fancybox({
+					'onStart' 	: function(){
+									if(isguestuser!="true"){
+			            				showShipToModal();
+			            			}	
+					},
+					'onClosed'	: function(){					 			
+						 			if(isguestuser!="true"){
+						 				 var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
+						 				 var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
+						 				if(defaultShipTo=="" && isCustomerSelectedIntoConext!="true"){
+						 					showShipToModal();
+						 				}
+						 			}
+				 	},
+				 	'hideOnOverlayClick': false,
+				 	'showCloseButton'	: false,
+				 	'enableEscapeButton': false,
+				 	'autoDimensions'	: false,
+			 		'width' 		: 900,
 			 		'height' 		: 530  
 				}).trigger('click');
 			} /* EB-76 Code Changes End */
-			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){				
-					$("#shipToSelect,#shipToSelect1,#shipToSelect2").fancybox({
-					'onStart' 	: function(){
-			    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";            
-			          	if(isguestuser!="true"){			               
-			            	showAssignedShipTo('<s:property value="#targetURL"/>');
-			 	        }
-			 		},
-			 		'onClosed'	: function(){
-			 			var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";
-			 			if(isguestuser!="true"){
-			 				 var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
-			 				 var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			 				if(defaultShipTo=="" && isCustomerSelectedIntoConext!="true"){
-			 					 showAssignedShipTo('<s:property value="#targetURL"/>');
-			 				}
-			 			}
-			 		},
-			 		'hideOnOverlayClick': false,
-			 		'showCloseButton'	: false,
-			 		'enableEscapeButton': false,
-			 		'autoDimensions'	: false,
-			 		'scrolling'   		: 'no',
-			 		'width' 		: 750,
-			 		'height' 		: 530  
-				}).trigger('click');
+			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){	
+					$("#shipToSelect").fancybox({
+						'onStart' 	: function(){
+										if(isguestuser!="true"){
+				            				showShipToModal();
+				            			}	
+						},
+						'onClosed'	: function(){					 			
+							 			if(isguestuser!="true"){
+							 				 var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
+							 				 var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
+							 				if(defaultShipTo=="" && isCustomerSelectedIntoConext!="true"){
+							 					showShipToModal();
+							 				}
+							 			}
+					 	},
+					 	'hideOnOverlayClick': false,
+					 	'showCloseButton'	: false,
+					 	'enableEscapeButton': false,
+					 	'autoDimensions'	: false,
+				 		'width' 		: 900,
+				 		'height' 		: 530  
+					}).trigger('click');
 			} 
 			else if((!isSalesRep && (isPunchoutUser!="true")) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
 		  		selectSecurityQuestionDialog('<s:property value="#securityQueURL"/>');
 			}
 		}		
-        $("#shipToSelect,#contactUsShipTo,#shipToSelect1,#shipToSelect2").fancybox({
+        $("#contactUsShipTo,#shipToSelect1,#shipToSelect2").fancybox({
  			'onStart' 	: function(){
  	    	  	var isguestuser = "<s:property value='%{wCContext.guestUser}'/>";   
  	          	if(isguestuser!="true"){ 	                
@@ -2664,6 +2708,7 @@ function callAjaxForSorting(url,divId)
 								<a href="#viewPrvenetChangeShipToDlg" id="preventChangeShipTo">[Change]</a>
 							</s:if>
 							<s:else>
+							<a href="#ship-container" id="shipToSelect" style="display: none;"></a>
 							<s:a id="changeShipToURL" href="%{#changeShipToURLid}">[Change]</s:a>
 							</s:else>
 						</s:if>						

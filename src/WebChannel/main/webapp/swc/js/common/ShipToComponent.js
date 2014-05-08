@@ -1,15 +1,15 @@
 /**
  * This is main java script function for change/select ship-to. Automatically populate below html code.
- * @param titleOfModel Title of Model
+ * @param titleOfModal Title of Modal
  * @param customerContactId user id
  * @param shipToURL ship to url after clicking one of the button.
- * @param includeShoppingForAndDefaultShipTo : this is flag to show preffered Ship-to/shopping for.
+ * @param includeShoppingForAndDefaultShipTo : this is flag to show Preferred Ship-to/shopping for.
  * @param cancelShipToChanges Cancel function, send null if not needed cancel functionality.
  * @param applyShipToChanges Apply function, send null if not needed Apply functionality.
- * @param selectSaveShipToChanges Select and Save function, send null if not needed select & save cancel functionality.
+ * @param selectShipToChanges Select function, send null if not needed select functionality.
  * @returns
  */
-function showShiptos(titleOfModel, customerContactId, shipToURL, includeShoppingForAndDefaultShipTo, cancelShipToChanges, applyShipToChanges, selectSaveShipToChanges) {
+function showShiptos(titleOfModal, customerContactId, shipToURL, includeShoppingForAndDefaultShipTo, cancelShipToChanges, applyShipToChanges, selectShipToChanges, applyNoShioTo) {
 	function isEmpty(str) {
 		return (!str || 0 === str.trim().length);
 	}
@@ -23,7 +23,7 @@ function showShiptos(titleOfModel, customerContactId, shipToURL, includeShopping
 		Ext.Msg.hide();
 		myMask.hide();
 	}
-
+	
 	showProcessingBar();
 	var url = $('#getAssignedShipToCustomersURL').val();
 	$.ajax({
@@ -44,69 +44,97 @@ function showShiptos(titleOfModel, customerContactId, shipToURL, includeShopping
 				var shoppingForAddressList; 					
 				var $shipTosContainerDiv = $('#ship-container');
 				var html = [];
+				if (titleOfModal){
+					html.push('		<h2>',	titleOfModal,	'</h2>');
+				}
 				html.push('			<input type="hidden" name="userIdForSelectOrChangeShipTo" id="userIdForSelectOrChangeShipTo" value="', customerContactId, '"/>');
 				html.push('			<input type="hidden" name="shipToURL" id="shipToURL" value="', shipToURL, '"/>');
 				if(includeShoppingForAndDefaultShipTo=='true'){
-					defaultShipToCustomer = data.defaultShipToCustomer;
-					defaultShipToAddressList = data.defaultShipToCustomer.addressList;
-					shoppingForShipToCustomer = data.shoppingForShipToCustomer;
-					shoppingForAddressList = data.shoppingForShipToCustomer.addressList;	
-					html.push('		 <div class="ship-current-wrap">');					
-					html.push('			<h3>Currently Shopping for:</h3>');
-					html.push('			 <p>');	
-					html.push(					shoppingForShipToCustomer.customerID.replace("-M-XX-S",""), '<br/>');
-					html.push(					shoppingForShipToCustomer.organizationName,'<br/>');
-					if(!isEmpty(shoppingForShipToCustomer.locationID)){
-						html.push(				shoppingForShipToCustomer.locationID, '<br/>');
+					if (data.defaultShipToCustomer) {
+						defaultShipToCustomer = data.defaultShipToCustomer;
+						defaultShipToAddressList = data.defaultShipToCustomer.addressList;
 					}
-					for (var i = 0, len = shoppingForAddressList.length; i < len; i++) {
-						if(!isEmpty(shoppingForAddressList[i])){
-							html.push(					shoppingForAddressList[i], '<br/>');
+					if (data.shoppingForShipToCustomer) {
+						shoppingForShipToCustomer = data.shoppingForShipToCustomer;
+						shoppingForAddressList = data.shoppingForShipToCustomer.addressList;
+					}
+					if (data.shoppingForShipToCustomer && data.defaultShipToCustomer) {
+						html.push('		 <div class="ship-current-wrap">');					
+						html.push('			<h3>Currently Shopping for:</h3>');
+					
+						html.push('			 <p>');	
+						html.push(					shoppingForShipToCustomer.customerID.replace("-M-XX-S",""), '<br/>');
+						html.push(					shoppingForShipToCustomer.organizationName,'<br/>');
+						if(!isEmpty(shoppingForShipToCustomer.locationID)){
+							html.push(				shoppingForShipToCustomer.locationID, '<br/>');
 						}
-					}
-					html.push(				shoppingForShipToCustomer.city, ', ', shoppingForShipToCustomer.state, ' ', shoppingForShipToCustomer.zipCode, ' ', shoppingForShipToCustomer.country, '<br/>');
-					html.push('			 </p>');
-					html.push('		 </div>');
-
-					html.push('		 <div class="ship-preferred-wrap">');
-					html.push('			<h3>Preferred Ship-To:</h3>');
-					html.push('			 <p>');
-					html.push(				defaultShipToCustomer.customerID.replace("-M-XX-S",""), '<br/>');	
-					html.push(				defaultShipToCustomer.organizationName, '<br/>');
-					if(!isEmpty(shoppingForShipToCustomer.locationID)){
-						html.push(					shoppingForShipToCustomer.locationID, '<br/>');
-					}
-					for (var j = 0, len = defaultShipToAddressList.length; j < len; j++) {
-						if(!isEmpty(defaultShipToAddressList[j])){
-							html.push(		defaultShipToAddressList[j], '<br/>');
+						for (var i = 0, len = shoppingForAddressList.length; i < len; i++) {
+							if(!isEmpty(shoppingForAddressList[i])){
+								html.push(					shoppingForAddressList[i], '<br/>');
+							}
+						}					
+							html.push(				shoppingForShipToCustomer.city, ', ', shoppingForShipToCustomer.state, ' ', shoppingForShipToCustomer.zipCode, ' ', shoppingForShipToCustomer.country, '<br/>');
+							html.push('			</p>');
+						html.push('		 </div>');
+					
+						html.push('		 <div class="ship-preferred-wrap">');
+						html.push('			<h3>Preferred Ship-To:</h3>');
+						if (data.defaultShipToCustomer) {
+							html.push('			 <p>');
+							html.push(				defaultShipToCustomer.customerID.replace("-M-XX-S",""), '<br/>');	
+							html.push(				defaultShipToCustomer.organizationName, '<br/>');
+							if(!isEmpty(defaultShipToCustomer.locationID)){
+								html.push(					defaultShipToCustomer.locationID, '<br/>');
+							}
+							for (var j = 0, len = defaultShipToAddressList.length; j < len; j++) {
+								if(!isEmpty(defaultShipToAddressList[j])){
+									html.push(		defaultShipToAddressList[j], '<br/>');
+								}
+							}
+							html.push(				defaultShipToCustomer.city, ', ', defaultShipToCustomer.state, ' ', defaultShipToCustomer.zipCode, ' ', defaultShipToCustomer.country, '<br/>');
+							html.push('			 </p>');
 						}
-					}
-					html.push(				defaultShipToCustomer.city, ', ', defaultShipToCustomer.state, ' ', defaultShipToCustomer.zipCode, ' ', defaultShipToCustomer.country, '<br/>');
-					html.push('			 </p>');
-					html.push('			 <div class="preferred-select">');
-					html.push('		     	<input type="checkbox" name="setAsDefault" class="change-preferred-ship-to" id="setAsDefault"/>');
-					html.push('		     	<div>Change Preferred Ship-To to Selected</div>');
-					html.push('		     </div>');
-					html.push('		 </div>');
-					html.push('		 <div class="clearfix"></div>');						
+						html.push('			 <div class="preferred-select">');
+						html.push('		     	<input type="checkbox" name="setAsDefault" class="change-preferred-ship-to" id="setAsDefault"');
+						if (data.defaultShipToCustomer && "30" === data.defaultShipToCustomer.customerStatus) {
+							html.push('				checked', ' ', 'disabled');						
+						}
+						html.push('				/>')
+						html.push('		     	<div>Change Preferred Ship-To to Selected</div>');
+						html.push('		     </div>');						
+						html.push('		 </div>');
+					}else{
+							html.push('			 <div class="preferred-select" style="display:none">');
+							html.push('		     	<input type="checkbox" name="setAsDefault" class="change-preferred-ship-to" id="setAsDefault" checked');
+							html.push('				/>')
+							html.push('		     	<div>Change Preferred Ship-To to Selected</div>');
+							html.push('		     </div>');
+						}					
 				}
+				html.push('		    <div class="clearfix"></div>');	
 				html.push('			<hr class="divider-line addmargintop10">');
 				html.push('			<div class="ship-search-wrap">');
-				html.push('				<div class="notice float-right shipToErrTxt" >Changing the Ship-To could impact pricing on orders.</div>');
-				html.push('				<div class="clearfix"></div>');
-				html.push('				<div class="float-right clearboth addmargintop10">');
-				if (applyShipToChanges && typeof(applyShipToChanges) === "function") {  
-					html.push('				<input class="btn-gradient floatright" type="submit" value="Apply" id= "applyShipToButton"/>');
+				if (data.defaultShipToCustomer && "30" === data.defaultShipToCustomer.customerStatus) {
+					html.push('				<div><h3>Please select an active ship-to as your default.<h3></div>');
 				}
-				if (selectSaveShipToChanges && typeof(selectSaveShipToChanges) === "function") {  
-					html.push('				<input class="btn-gradient floatright" type="submit" value="Select" id="selectSaveShipToButton"/>');
+				else{
+					html.push('				<div class="notice float-right addmarginbottom10 shipToErrTxt" >Changing the Ship-To could impact pricing on orders.</div>');
+				}
+				html.push('				<div class="clearfix"></div>');	
+				html.push('				<div class="ship-button-wrap">');				
+				if (applyShipToChanges && typeof(applyShipToChanges) === "function") { 				
+						html.push('				<input class="btn-gradient floatright" type="submit" value="Apply" id="applyShipToButton"/>');			
+				}
+				if (selectShipToChanges && typeof(selectShipToChanges) === "function") {  
+						html.push('				<input class="btn-gradient floatright" type="submit" value="Select" id="selectShipToButton"/>');
 				}
 				if (cancelShipToChanges && typeof(cancelShipToChanges) === "function") { 
-					html.push('				<input type="submit" value="Cancel" class="btn-neutral floatright margin-right-10" id= "cancelShipToButton" />');
+						html.push('				<input type="submit" value="Cancel" class="btn-neutral floatright margin-right-10" id="cancelShipToButton" />');
 				}
 				html.push('				</div>');
+				
 
-				html.push('				<div id="header"></div>')				
+				html.push('				<div id="header" class="ship-search-input-wrap"></div>')				
 				html.push('					<ul id="list">');
 				for (var k = 0, len = shipToList.length; k < len; k++) {
 					var shipTo = shipToList[k];
@@ -121,19 +149,23 @@ function showShiptos(titleOfModel, customerContactId, shipToURL, includeShopping
 				}
 				html.push('					</ul>');
 				html.push('					<hr class="divider-line addmargintop10"/>');
-				html.push('					<div class="float-right clearboth  addmargintop10">');
-				if (applyShipToChanges && typeof(applyShipToChanges) === "function") {  
-					html.push('					<input class="btn-gradient floatright" type="submit" value="Apply" id= "applyShipToButton"/>');
+
+				html.push('					<div class="ship-button-wrap">');
+
+				if (applyShipToChanges && typeof(applyShipToChanges) === "function") {					
+						html.push('					<input class="btn-gradient floatright" type="submit" value="Apply" id= "applyShipToButton"/>');
 				}
-				if (selectSaveShipToChanges && typeof(selectSaveShipToChanges) === "function") {  
-					html.push('					<input class="btn-gradient floatright" type="submit" value="Select" id= "selectSaveShipToButton"/>');
+				if (selectShipToChanges && typeof(selectShipToChanges) === "function") {  
+						html.push('					<input class="btn-gradient floatright" type="submit" value="Select" id= "selectShipToButton"/>');
 				}
 				if (cancelShipToChanges && typeof(cancelShipToChanges) === "function") { 
-					html.push('					<input class="btn-neutral floatright margin-right-10" type="submit" value="Cancel" id= "cancelShipToButton"/>');
+						html.push('					<input class="btn-neutral floatright margin-right-10" type="submit" value="Cancel" id= "cancelShipToButton"/>');
 				}
 				html.push('					</div>');
 				html.push('					<div class="clearfix"></div>');
-				html.push('					<div class="notice float-right addmargintop10 shipToErrTxt">Changing the Ship-To could impact pricing on orders.</div>');
+				if ((!data.defaultShipToCustomer) || (data.defaultShipToCustomer && "30" !== data.defaultShipToCustomer.customerStatus)) {
+					html.push('					<div class="notice float-right addmargintop10 shipToErrTxt">Changing the Ship-To could impact pricing on orders.</div>');
+				}
 				html.push('					<div class="clearfix"></div>');
 				html.push('				</div>');
 				$shipTosContainerDiv.get(0).innerHTML = html.join('');
@@ -143,8 +175,8 @@ function showShiptos(titleOfModel, customerContactId, shipToURL, includeShopping
 				if (applyShipToChanges && typeof(applyShipToChanges) === "function") {
 					$('#applyShipToButton').click(applyShipToChanges);
 				}
-				if (selectSaveShipToChanges && typeof(selectSaveShipToChanges) === "function") {
-					$('#selectSaveShipToButton').click(selectSaveShipToChanges);
+				if (selectShipToChanges && typeof(selectShipToChanges) === "function") {
+					$('#selectShipToButton').click(selectShipToChanges);
 				}
 				if (cancelShipToChanges && typeof(cancelShipToChanges) === "function") {
 					$('#cancelShipToButton').click(cancelShipToChanges);
@@ -175,12 +207,15 @@ function showShiptos(titleOfModel, customerContactId, shipToURL, includeShopping
 					$(this).change();
 				});
 			} else {
-
+				
+				if (applyNoShioTo && typeof(applyNoShioTo) === "function") {
+					applyNoShioTo();
+				}
 			}
 		},
 		error: function(resp, textStatus, xhr) {
 			var $shipTosContainerDiv = $('#ship-container');
-			$shipTosContainerDiv.get(0).innerHTML = '<div class="error">Currently unable get assigned Ship-Tos. Please try again later</div>';
+				$shipTosContainerDiv.get(0).innerHTML = '<div class="error">Currently unable get assigned Ship-Tos. Please try again later</div>';
 			if (console) { console.log('showShiptos ajax error: resp = ', resp, '   textStatus = ', textStatus, '   xhr = ', xhr); }
 		}
 		,complete: function(){			
