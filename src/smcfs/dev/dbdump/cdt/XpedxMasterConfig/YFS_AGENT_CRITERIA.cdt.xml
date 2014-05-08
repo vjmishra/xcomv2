@@ -609,6 +609,7 @@
     MessageXml="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;Attributes>&#xa;    &lt;Attribute DisplayName=&quot;NumRecordsToBuffer&quot;&#xa;        Name=&quot;NumRecordsToBuffer&quot; Value=&quot;0&quot;/>&#xa; &lt;Attribute DisplayName=&quot;TableName&quot;&#xa; Modifiable=&quot;Y&quot; Name=&quot;TableName&quot; Value=&quot;&quot;/>&#xa; &lt;/Attributes>&#xa;"
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:58-04:00"
     Modifyuserid="SYSTEM" ServerKey="DEFAULT_SERVER" TransactionKey="20081016184600158032"/>
+<!--Commented out by ML to fix CDT issue with renaming the XPEDXAgentServer to XpedxOrderReprocessAgent-->
 <AgentCriteria AgentCriteriaId="RETRY_LEGACY_ORD_UPDATE"
     AgentCriteriaKey="2010070816311436520"
     Createprogid=".YCPWFRepositoryAPI"
@@ -617,7 +618,7 @@
     MessageXml="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;Attributes>&#xa;    &lt;Attribute DisplayName=&quot;Action&quot; Name=&quot;Action&quot; Value=&quot;Get&quot;/>&#xa;    &lt;Attribute DisplayName=&quot;CollectPendingJobs&quot;&#xa;        Name=&quot;CollectPendingJobs&quot; Value=&quot;N&quot;/>&#xa;    &lt;Attribute DisplayName=&quot;Number of Records To Buffer&quot;&#xa;        Name=&quot;NumRecordsToBuffer&quot; Value=&quot;30&quot;/>&#xa;&lt;/Attributes>&#xa;"
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2011-12-06T09:34:04-05:00" Modifyuserid="admin"
-    ServerKey="2010070816280336506" TransactionKey="2010070816265836502"/>
+    ServerKey="2014011508434264692" TransactionKey="2010070816265836502"/>
 <AgentCriteria AgentCriteriaId="Invoice_Update"
     AgentCriteriaKey="2010082419124643603"
     Createprogid=".YCPWFRepositoryAPI"
