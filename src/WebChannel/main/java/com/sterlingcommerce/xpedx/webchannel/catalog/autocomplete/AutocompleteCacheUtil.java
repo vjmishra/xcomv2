@@ -119,16 +119,13 @@ public class AutocompleteCacheUtil {
 	public String getActiveIndexPath(IWCContext context) throws Exception {
 		SCUIContext wSCUIContext = context.getSCUIContext();
 		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-
+		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-
 		Document inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");		
-		Document xpxMgiListOutDoc = new CustomApiImpl().getXPXMgiArchiveList(env, inXML);
-		
+		Document xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList",inXML);
 		Element outputListElement = xpxMgiListOutDoc.getDocumentElement();
 		if(outputListElement!=null){
 			NodeList xpxArchiveExtnNL = outputListElement.getElementsByTagName("XPXMgiArchive");
-
 			if(xpxArchiveExtnNL.getLength() > 0 ){
 				Element xpxmgiExtnEle = (Element)xpxArchiveExtnNL.item(0);
 				if(xpxmgiExtnEle!=null) {
