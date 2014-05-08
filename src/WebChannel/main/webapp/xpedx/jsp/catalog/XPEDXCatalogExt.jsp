@@ -861,10 +861,11 @@ function getCondensedView() {
 											'{customerItemno}',
 										'</div>',
 									</s:if>
+									
+									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
+									'{itemtypedesc}', 
+
 								'</div>', // end item-numbers
-								
-								<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-								'{itemtypedesc}', 
 								
 								'<div class="replacement-item">',
 									'{repItemsForCondensedView}',
