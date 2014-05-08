@@ -1060,7 +1060,7 @@ h6 {
 .searchButton {
     background: url("../../images/icons/22x22_white_search.png") no-repeat scroll 0 0 transparent;
     border: 0 none;
-    height: 22px;
+    height: 25px;
     margin: 0;
     width: 22px;
 }
@@ -1738,6 +1738,14 @@ inStoreIcon {
     top: -3px; /* jira 3826 */
     width: 22px;
 }
+@media screen and (-webkit-min-device-pixel-ratio:0) {    
+	.searchbox-1 .searchButton {
+		top: 6px;
+	}      
+}
+::i-block-chrome,.searchbox-1 .searchButton {
+ top: -1px;
+}}
 .checkboxtxt {
     color: #999999;
     font-size: 10px;

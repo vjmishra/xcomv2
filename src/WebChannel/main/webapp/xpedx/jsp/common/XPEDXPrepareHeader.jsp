@@ -54,6 +54,9 @@ It is not a good practice but creating on every jsp page is also not convenient 
 		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	</s:else>
+	<!--[if IE]>
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+		<![endif]-->
 	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.autocomplete<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -2551,7 +2554,7 @@ function callAjaxForSorting(url,divId)
 						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
 			<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-					style="top:-4px; margin-left: 3px; height: 20px;"></button>
+					></button>
 			<div id="tips-container">
 				<a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
 			</div> 
