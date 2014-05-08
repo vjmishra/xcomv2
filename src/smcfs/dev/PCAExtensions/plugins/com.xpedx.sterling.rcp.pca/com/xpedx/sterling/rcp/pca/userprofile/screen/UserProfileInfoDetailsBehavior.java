@@ -254,9 +254,12 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 		
 
 		String[] apinames = {"getXPXCustContExtn"};
+		Document inputXML=YRCXmlUtils.createFromString("<XPXCustomerContactExtn CustomerKey='"+ customerKey +"' />");
+		inputXML.getDocumentElement().setAttribute("CustomerContactID", customerContactID);
 		Document[] docInput = {
 				
-				YRCXmlUtils.createFromString("<XPXCustomerContactExtn CustomerKey='"+ customerKey +"' CustomerContactID='"+customerContactID+"'/>")	
+				//YRCXmlUtils.createFromString("<XPXCustomerContactExtn CustomerKey='"+ customerKey +"' CustomerContactID='"+customerContactID+"'/>")
+				inputXML
 		};
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId(getFormId());
@@ -383,9 +386,18 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 						setModel("UserList" , outXml);
 					}
 					else if ("getCustomerDetails".equals(apiname)) {
-						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();						
-						Element customerContactElement = (Element)YRCXPathUtils.evaluate(outXml, "/Customer/CustomerContactList/CustomerContact[@CustomerContactID='"+customerContactID+"']", XPathConstants.NODE);
+						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();	
+						//customerContactID=customerContactID.replace("'", "\'");
+						Element customerContactElement =null;
+						ArrayList<Element> customerContactsEleme=YRCXmlUtils.getChildren(YRCXmlUtils.getChildElement(outXml, "CustomerContactList"), "CustomerContact");
+						for(Element customerContactEleme :customerContactsEleme)
+						{
+							if(customerContactEleme.getAttribute("CustomerContactID").equals(customerContactID))
+								customerContactElement=customerContactEleme;
+						}
+							//Element customerContactElement = (Element)YRCXPathUtils.evaluate(outXml, "/Customer/CustomerContactList/CustomerContact[@CustomerContactID='"+customerContactID+"']", XPathConstants.NODE);
 						this.setCoustomerContactModel(customerContactElement);
+						customerContactID=customerContactID.replace("\'", "'");
 					}
 					else if("getDefaultShipToList".equals(apiname)){
 						Element eleOutput = ctx.getOutputXmls()[i].getDocumentElement();
@@ -537,7 +549,7 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 					this.modifyUserId=eleCust.getAttribute("Modifyuserid");
 				}
 				
-				if(modifyUserId.contains("@CD-")){
+				if(modifyUserId!= null && modifyUserId.contains("@CD-")){
 					List<String> words = Arrays.asList(this.modifyUserId.split("@"));
 					System.out.println("here " + words);
 					this.modifyUserId = words.get(0);

@@ -480,7 +480,11 @@ public class XPXCatalogAllAPI implements YIFCustomApi {
 			Element documentElement = inXML.getDocumentElement();
 			String customerID = documentElement.getAttribute("CustomerID");
 			itemID = documentElement.getAttribute("ItemID");
+<<<<<<< HEAD
 		//	String storeFrontId = documentElement.getAttribute("OrganizationCode");
+=======
+			//String storeFrontId = documentElement.getAttribute("OrganizationCode"); 
+>>>>>>> v2.0.13.01
 			String storeFrontId = "xpedx";//EB-4571 jira to YFS_ITEM allways organization code is 'XPEDX'.
 			// Added to identify this request is from B2B order flow or not
 			String entryType = documentElement.getAttribute("EntryType");

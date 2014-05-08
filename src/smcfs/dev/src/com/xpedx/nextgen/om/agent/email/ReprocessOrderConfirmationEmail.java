@@ -55,7 +55,7 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 			}
 			System.out.println((new StringBuilder()).append("Input_XML of ").append(XPXLiterals.GET_ORDER_LIST_API).append(" API: ").append(SCXmlUtil.getString(orderListInDoc)));
 			orderListTemplate = SCXmlUtil.createFromString(new StringBuffer()
-											              .append("<OrderList><Order OrderHeaderKey='' OrderNo='' DocumentType='' EnterpriseCode='' BillToID='' CustomerContactID='' >")
+											              .append("<OrderList><Order OrderHeaderKey='' OrderNo='' DocumentType='' EnterpriseCode='' BillToID='' CustomerContactID='' BuyerOrganizationCode=''>")
 											              .append("<Extn ExtnWebConfNum='' ExtnLastOrderOperation='' ExtnOrderConfirmationEmailSentFlag='' />")
 											              .append("<OrderHoldTypes><OrderHoldType HoldType='' OrderHeaderKey='' ReasonText='' ResolverUserId='' Status='' TransactionId=''/></OrderHoldTypes>")
 											              .append("</Order></OrderList>").toString());
