@@ -1693,8 +1693,13 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 					itemUom =  enteredUOMs.get(i);//itemBaseUOM.get(i); added for EB 2034
 				}
 
-				uoms = (Map) itemCon.get(itemId);
-				convFact = uoms.get(itemUom);
+				if(itemCon != null){
+					uoms = (Map) itemCon.get(itemId);
+				}
+				if(uoms != null)
+				{
+					convFact = uoms.get(itemUom);
+				}
 				if(itemUom==null || itemUom.equals(""))
 					itemUom = item.getAttribute("UomId");
 				//String itemSeqNum = item.getAttribute("ItemSeqNumber");
