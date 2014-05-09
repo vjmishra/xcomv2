@@ -50,17 +50,10 @@ function checkOut()
 	if(orderLinesCount!=null && orderLinesCount==1){
 		var itemSelUom;
 		var lineKey;
-<<<<<<< HEAD
 		var itemUomHidden;		
 		
 		lineKey = document.getElementById("OrderDetailsForm").elements["orderLineKeys"];
 		itemSelUom = document.getElementById("itemUOMsSelect_" + lineKey.value).value;
-=======
-		var itemUomHidden;
-		
-		lineKey = document.getElementById("OrderDetailsForm").elements["orderLineKeys"];
-		itemSelUom = document.getElementById("itemUOMsSelect_" + lineKey.value).value;		
->>>>>>> v2.0.13.01
 		itemUomHidden = document.getElementById("itemUOMs_" + lineKey.value).value;
 		if (itemSelUom!=null && itemSelUom != itemUomHidden ){
 			document.getElementById("itemUOMs_" + lineKey.value).value = itemSelUom;
