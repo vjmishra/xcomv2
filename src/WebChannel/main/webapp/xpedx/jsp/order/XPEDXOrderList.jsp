@@ -86,8 +86,49 @@ $(function() {
 	$(document).ready(function(){
 		$(".splitExpandInit").each(function(){
 			linkedRowToggle($(this).attr('orderHeaderKey'));
-		})
+		});
+		$("#shipToOrderSearch").fancybox({
+    		'onStart' 	: function(){	    		
+    			showShipToModalForOrderSearch();
+    		},
+    		'onClosed' : function() {    			
+    			if(!$('#shipToSelectedOnShipToModal').val().trim()){
+    				$("select#shipToSearchFieldName").attr('selectedIndex', 0);        				
+    			}
+      		},
+			'autoDimensions'	: false,
+			'width' 			: 800,
+	 		'height' 			: 400  
+		}); 
 	});
+	
+    function showShipToModalForOrderSearch() {
+    	var customerContactId = $('#LoggedInUserIdForShipTo').val();
+    	var getAssignedShipToURL = $('#getAssignedShipTosForSelectURL').val();
+    	var includeShoppingForAndDefaultShipTo = "false";
+    	$('#shipToSelectedOnShipToModal').val('');
+    	/* Select Button click functionality */
+    	selectShipToChanges = function selectShipToChanges(){
+    		if (!$("input[name='selectedShipTo']:checked").val()) {
+    			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+    			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+    			return false;
+    		}
+    		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val();
+    		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
+    		removeOptionAll();
+        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
+    		appendOptionLast(selectedShipCustomer,formattedShipTo);
+    		document.orderListForm.shipToSearchFieldName1.value = selectedShipCustomer;        	
+    		$.fancybox.close();    		
+    	};
+    	/* Cancel Button click functionality */
+    	cancelShipToChanges = function cancelShipToChanges(){
+    		$('#shipToSelectedOnShipToModal').val('');
+    		$.fancybox.close();
+    	};
+    	showShiptos("Select Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, null, selectShipToChanges, null);
+    }
 </script>
 
 <script type="text/javascript">
@@ -219,9 +260,12 @@ function printPOs(customerPos) {
 <!-- // header end -->
 
 <s:set name="ViewReportsFlag" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getReportsFlagForLoggedInUser(wCContext)" />
-
+<s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
+<s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
 <div class='x-hidden dialog-body ' id="shipToDivforordersearch">
-	<div id="shipToOrderSearchDiv"></div>
+	<div class="ship-container" id="ship-container">
+    	<%-- dynamicaly populate data here  --%>
+	</div>
 </div>
 		<div id="view-order-popup" style="display: none;">
 			<div class="float-right">
@@ -336,12 +380,10 @@ function printPOs(customerPos) {
 						<td> Ship-To: </td>
 						<td colspan="2"> 
 						<s:select cssClass=" " name="shipToSearchFieldName" headerValue="All Ship-Tos"
-						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTos();"/>
+						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTosOnSelect();"/>
 						<s:hidden name="shipToSearchFieldName1" id="shipToSearchFieldName1" value="%{getShipToSearchFieldName()}" />
-						<%--<s:select cssClass="ship-to-input-field x-input" name="shipToSearchFieldName" list="shipToList" 
-							listKey="key" listValue="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(key)"
-							value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" /> --%>
-						<a href='#shipToOrderSearchDiv' id="shipToOrderSearch"></a></td>
+						<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
+						<a href='#ship-container' id="shipToOrderSearch"></a></td>
 						<td colspan="1"><a class="orange-ui-btn float-right" href="javascript:submit_orderListForm();"><span>Search </span></a> 
 						<a class="grey-ui-btn float-right" href="javascript:clearFilters_onclick()" ><span>Clear </span></a> </td>
                         </tr>
@@ -1020,13 +1062,16 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 		document.getElementById("errorDateDiv").innerHTML = '';
 		//document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
 	}
-	function showShipTos(){		
+	function showShipTosOnSelect(){		
 		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
-			$('a[href="#shipToOrderSearchDiv"]').click(); }
+			$('#shipToOrderSearch').click();
+			}
 		else if(document.getElementById("shipToSearchFieldName").selectedIndex=='0'){
-			document.getElementById("shipToSearchFieldName1").value="";}
+			document.getElementById("shipToSearchFieldName1").value="";
+			}
 		else{
-			document.getElementById("shipToSearchFieldName1").value=document.getElementById("shipToSearchFieldName").value}
+			document.getElementById("shipToSearchFieldName1").value=document.getElementById("shipToSearchFieldName").value
+			}
 		return;
 		}
 	

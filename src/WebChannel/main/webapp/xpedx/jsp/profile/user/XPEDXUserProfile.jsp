@@ -224,7 +224,7 @@ function showShipToModalOnUserProfile() {
 	var customerContactId = $('#userName').val();
 	var includeShoppingForAndDefaultShipTo = "false";
 	var shipToURL = $('#usrProfileShipToApplyURL').val();
-	
+	var getAssignedShipToURL = $('#getAssignedShipTosForSelectPreferredURL').val();	
 	/* Apply Button click functionality */
 	var applyShipToChanges = function applyShipToChanges(){	
 
@@ -286,7 +286,7 @@ function showShipToModalOnUserProfile() {
 		$shipTosContainerDiv.get(0).innerHTML = html.join('');	
 	}
 	
-	showShiptos("Select Preferred Ship-To",	customerContactId,	null,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, applyShipToChanges, null, applyNoShioTo);
+	showShiptos("Select Preferred Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, applyShipToChanges, null, applyNoShioTo);
 }
 var selectedTabPanel = '<s:property value="#selectedTab" />';
 $(document).ready(function() 

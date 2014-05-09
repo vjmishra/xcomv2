@@ -37,7 +37,6 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ChangeShipTo<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ShipToComponent<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script>
 
 </script>
@@ -47,12 +46,14 @@
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 			<div class="container">
-				<s:url id="getAssignedShipToCustomersURLid" namespace="/common" action="getAssignedShipToCustomers" />
-				<s:hidden id="getAssignedShipToCustomersURL" value="%{#getAssignedShipToCustomersURLid}" /> 
-				<s:url id='applytargetURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
+				<s:url id="getAssignedShipTosForChangeShipToURLid" namespace="/common" action="getAssignedShipToCustomers" escapeAmp="false">
+					<s:param name="status">30</s:param>
+				</s:url>
+				<s:hidden id="getAssignedShipTosForChangeShipToURL" value="%{#getAssignedShipTosForChangeShipToURLid}" /> 
+				<s:url id='applytForChangeShipToURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
 					<s:param name="initPrefs">true</s:param>
 				</s:url>
-				<s:hidden id="applytargetURL" value="%{#applytargetURLid}" />
+				<s:hidden id="applytForChangeShipToURL" value="%{#applytForChangeShipToURLid}" />
 				<s:hidden id="customerContactId" value="%{#_action.getWCContext().getLoggedInUserId()}" />
 				<s:hidden id="includeShoppingForAndDefaultShipTo" value="true" />	
 				<div class="content-container">

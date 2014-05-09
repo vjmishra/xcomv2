@@ -2,14 +2,14 @@
  * This is main java script function for change/select ship-to. Automatically populate below html code.
  * @param titleOfModal Title of Modal
  * @param customerContactId user id
- * @param shipToURL ship to url after clicking one of the button.
+ * @param getAssignedShipToURL. this url for getting the shiptos
  * @param includeShoppingForAndDefaultShipTo : this is flag to show Preferred Ship-to/shopping for.
  * @param cancelShipToChanges Cancel function, send null if not needed cancel functionality.
  * @param applyShipToChanges Apply function, send null if not needed Apply functionality.
  * @param selectShipToChanges Select function, send null if not needed select functionality.
  * @returns
  */
-function showShiptos(titleOfModal, customerContactId, shipToURL, includeShoppingForAndDefaultShipTo, cancelShipToChanges, applyShipToChanges, selectShipToChanges, applyNoShioTo) {
+function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, includeShoppingForAndDefaultShipTo, cancelShipToChanges, applyShipToChanges, selectShipToChanges, applyNoShioTo) {
 	function isEmpty(str) {
 		return (!str || 0 === str.trim().length);
 	}
@@ -25,7 +25,7 @@ function showShiptos(titleOfModal, customerContactId, shipToURL, includeShopping
 	}
 	
 	showProcessingBar();
-	var url = $('#getAssignedShipToCustomersURL').val();
+	var url = getAssignedShipToURL;
 	$.ajax({
 		type : 'POST',
 		proccessData : false,
@@ -48,7 +48,7 @@ function showShiptos(titleOfModal, customerContactId, shipToURL, includeShopping
 					html.push('		<h2>',	titleOfModal,	'</h2>');
 				}
 				html.push('			<input type="hidden" name="userIdForSelectOrChangeShipTo" id="userIdForSelectOrChangeShipTo" value="', customerContactId, '"/>');
-				html.push('			<input type="hidden" name="shipToURL" id="shipToURL" value="', shipToURL, '"/>');
+				
 				if(includeShoppingForAndDefaultShipTo=='true'){
 					if (data.defaultShipToCustomer) {
 						defaultShipToCustomer = data.defaultShipToCustomer;
@@ -123,13 +123,13 @@ function showShiptos(titleOfModal, customerContactId, shipToURL, includeShopping
 				html.push('				<div class="clearfix"></div>');	
 				html.push('				<div class="ship-button-wrap">');				
 				if (applyShipToChanges && typeof(applyShipToChanges) === "function") { 				
-						html.push('				<input class="btn-gradient floatright" type="submit" value="Apply" id="applyShipToButton"/>');			
+						html.push('				<input class="btn-gradient floatright" type="submit" value="Apply" name="applyShipToButton"/>');			
 				}
 				if (selectShipToChanges && typeof(selectShipToChanges) === "function") {  
-						html.push('				<input class="btn-gradient floatright" type="submit" value="Select" id="selectShipToButton"/>');
+						html.push('				<input class="btn-gradient floatright" type="submit" value="Select" name="selectShipToButton"/>');
 				}
 				if (cancelShipToChanges && typeof(cancelShipToChanges) === "function") { 
-						html.push('				<input type="submit" value="Cancel" class="btn-neutral floatright margin-right-10" id="cancelShipToButton" />');
+						html.push('				<input type="submit" value="Cancel" class="btn-neutral floatright margin-right-10" name="cancelShipToButton" />');
 				}
 				html.push('				</div>');
 				
@@ -153,13 +153,13 @@ function showShiptos(titleOfModal, customerContactId, shipToURL, includeShopping
 				html.push('					<div class="ship-button-wrap">');
 
 				if (applyShipToChanges && typeof(applyShipToChanges) === "function") {					
-						html.push('					<input class="btn-gradient floatright" type="submit" value="Apply" id= "applyShipToButton"/>');
+						html.push('					<input class="btn-gradient floatright" type="submit" value="Apply" name="applyShipToButton"/>');
 				}
 				if (selectShipToChanges && typeof(selectShipToChanges) === "function") {  
-						html.push('					<input class="btn-gradient floatright" type="submit" value="Select" id= "selectShipToButton"/>');
+						html.push('					<input class="btn-gradient floatright" type="submit" value="Select" name="selectShipToButton"/>');
 				}
 				if (cancelShipToChanges && typeof(cancelShipToChanges) === "function") { 
-						html.push('					<input class="btn-neutral floatright margin-right-10" type="submit" value="Cancel" id= "cancelShipToButton"/>');
+						html.push('					<input class="btn-neutral floatright margin-right-10" type="submit" value="Cancel" name="cancelShipToButton"/>');
 				}
 				html.push('					</div>');
 				html.push('					<div class="clearfix"></div>');
@@ -173,13 +173,13 @@ function showShiptos(titleOfModal, customerContactId, shipToURL, includeShopping
 				/*	Add Apply, select and cancel button click events  */
 
 				if (applyShipToChanges && typeof(applyShipToChanges) === "function") {
-					$('#applyShipToButton').click(applyShipToChanges);
+					$("input[name='applyShipToButton']").click(applyShipToChanges);
 				}
 				if (selectShipToChanges && typeof(selectShipToChanges) === "function") {
-					$('#selectShipToButton').click(selectShipToChanges);
+					$("input[name='selectShipToButton']").click(selectShipToChanges);
 				}
 				if (cancelShipToChanges && typeof(cancelShipToChanges) === "function") {
-					$('#cancelShipToButton').click(cancelShipToChanges);
+					$("input[name='cancelShipToButton']").click(cancelShipToChanges);
 				}
 				// create search input box in header div
 				var form = $("<form>").attr({"class":"filterform","action":"#"}),

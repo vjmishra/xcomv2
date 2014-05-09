@@ -19,6 +19,7 @@ import com.yantra.util.YFCUtils;
  * 
  * @param customerContactId Get all assigned ship-tos for this customer contact id(User id).
  * @param includeShoppingForAndDefaultShipTo This is a flag for to get Default/Shopping for ship-to values or not.
+ * @param status. status of shipto customer. We need to get in some scenarios only active, in some other scenarios  all , including suspended ones.
  * 
  * @param shipToList  This is return ship-to list contains All the  assigned Ship-To customers for the corresponding input customer contact id(user id).
  * @param defaultShipToCustomer This is Default ship to customer information for the corresponding input customer contact id(user id).
@@ -31,6 +32,7 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 	// input fields
 	private String customerContactId;
 	private boolean includeShoppingForAndDefaultShipTo;
+	private String status;
 	
 	// output fields
 	private List<ShipTo> shipToList;
@@ -40,7 +42,9 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 	
 	
 
-	
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public boolean isIncludeShoppingForAndDefaultShipTo() {
 		return includeShoppingForAndDefaultShipTo;
 	}
@@ -85,7 +89,10 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 		List<ShipTo> returnshipToList = null;
 		Document inputDoc = SCXmlUtil.createDocument("XPXCustomerAssignmentView");
 		inputDoc.getDocumentElement().setAttribute("UserId", customerContactId);
-		Element custAssignedEle = (Element)WCMashupHelper.invokeMashup("XPEDXGetAllShipToList-Punchout",inputDoc.getDocumentElement(), wcContext.getSCUIContext());
+		if(status!=null && status.length()>0 ) {
+			inputDoc.getDocumentElement().setAttribute("Status", status);
+		}
+		Element custAssignedEle = (Element)WCMashupHelper.invokeMashup("XPEDXGetAllShipToList-ShipTo",inputDoc.getDocumentElement(), wcContext.getSCUIContext());
 		List<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXCustomerAssignmentView");
 
 		if (assignedCustElems!=null && assignedCustElems.size() > 0) {

@@ -860,7 +860,7 @@
                      name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
               <API FlowName="XPXCustomerAssignmentViewService">
                      <Input>
-                           <XPXCustomerAssignmentView UserId="" Status="30"  StatusQryType="NE"/>
+                           <XPXCustomerAssignmentView UserId="" Status=""  StatusQryType="NE"/>
                      </Input>
                      <Template>
                            <XPXCustomerAssignmentViewList>

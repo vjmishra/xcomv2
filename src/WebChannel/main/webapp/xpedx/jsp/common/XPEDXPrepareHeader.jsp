@@ -998,12 +998,14 @@ var selectedShipCustomer = null;
 <s:bean name='com.sterlingcommerce.webchannel.utilities.UtilBean'
 	id='hUtil' />
 <s:url id ='changeShipToURLid' action='changeShipTo' namespace='/common'/>
-<s:url id="getAssignedShipToCustomersURLid" namespace="/common" action="getAssignedShipToCustomers" />
-<s:hidden id="getAssignedShipToCustomersURL" value="%{#getAssignedShipToCustomersURLid}" />
-<s:url id='applytargetURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
+<s:url id="getAssignedShipTosForSelectPreferredURLid" namespace="/common" action="getAssignedShipToCustomers" escapeAmp="false">
+<s:param name="status">30</s:param>
+</s:url>
+<s:hidden id="getAssignedShipTosForSelectPreferredURL" value="%{#getAssignedShipTosForSelectPreferredURLid}" />
+<s:url id='applytForSelectPreferredShipToURLid' namespace='/common' action='setCurrentCustomerIntoContext-shipTo' escapeAmp="false">
 	<s:param name="initPrefs">true</s:param>
 </s:url>
-<s:hidden id="applytargetURL" value="%{#applytargetURLid}" /> 
+<s:hidden id="applytForSelectPreferredShipToURL" value="%{#applytForSelectPreferredShipToURLid}" /> 
 <s:hidden id="LoggedInUserIdForShipTo" value="%{#_action.getWCContext().getLoggedInUserId()}" />
 <s:set name='storefrontId' value="wCContext.storefrontId" />
 <s:url id="shipTologoutURLid" action="logout" namespace="/home" escapeAmp="false">
@@ -1190,7 +1192,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     {
     	var customerContactId = $('#LoggedInUserIdForShipTo').val();
     	var includeShoppingForAndDefaultShipTo = "true";
-    	var shipToURL = $('#applytargetURL').val();	
+    	var getAssignedShipToURL = $('#getAssignedShipTosForSelectPreferredURL').val();	
     	
     	var applyShipToChanges = function applyShipToChanges(){	
 
@@ -1204,7 +1206,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     			$('.shipToErrTxt').text("Please Check Change Preferred Ship-To.");
     			 return false;
     		 }
-    		var url = $('input[id=shipToURL]').val();
+    		var url = $('#applytForSelectPreferredShipToURL').val();
     		if($('#setAsDefault').attr('checked')){
     			url = url+"&setSelectedAsDefault=true";
     		}	
@@ -1225,32 +1227,14 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 			$shipTosContainerDiv.get(0).innerHTML = html.join('');	
     	}
     	
-    	showShiptos("Select Preferred Ship-To",	customerContactId,	shipToURL,	includeShoppingForAndDefaultShipTo,	null,	applyShipToChanges,	null, applyNoShioTo);
+    	showShiptos("Select Preferred Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	null,	applyShipToChanges,	null, applyNoShioTo);
     }
     
     function signOutFunction(){
     	window.location.href =$('#shipTologoutURL').val();
     }
     
-    function showAssignedShipToForOrderSearch(url)
-    {
-    	var x = document.getElementById('shipToOrderSearchDiv');
-    	valuesSet = null;
-        x.innerHTML = "Loading data... please wait!";
-    	Ext.Ajax.request({
-            url :url,
-            params: {
-            	isRequestedPage:"XPEDXOrderListPage"
-            },
-            method: 'POST',
-            success: function (response, request){
-	        	document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
-       		},
-       		failure: function (response, request){
-       			document.getElementById('shipToOrderSearchDiv').innerHTML = response.responseText;
-             }
-        });     
-    }
+
     function updateCurrentCustomer(url,selectedRadioButton){
         var selectedCustomer = selectedRadioButton.value;
         document.FormToPost.selectedCustomerId.value=selectedCustomer;
@@ -1357,45 +1341,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 	}
     }
     
-    function setVariable(defaultShipToValue, size){
-    	valuesSet = "selected";
-         if(selectedShipCustomer!=null) {
-        	if(document.orderListForm) {
-        		removeOptionAll();
-	        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
-        		appendOptionLast(selectedShipCustomer,formattedShipTo);
-        		document.orderListForm.shipToSearchFieldName1.value = selectedShipCustomer;
-        	}
-        	if(document.approvalList) { 
-        		removeOptionAll();
-	        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
-        		appendOptionLast(selectedShipCustomer,formattedShipTo);
-        		document.approvalList.shipToSearchFieldName1.value = selectedShipCustomer;
-        	}
-        }
-         else{
-        	 if(document.orderListForm) {
- 	        	var formattedShipTo = formatBillToShipToCustomer(defaultShipToValue); 
- 	        	if(size > 20){
- 	        	 valuesSet = null;
- 	        	}else{
- 	        	if(size < 20){
- 	   		     removeOptionAll();
- 	        	}
-         		appendOptionLast(defaultShipToValue,formattedShipTo);
-         		document.orderListForm.shipToSearchFieldName1.value = defaultShipToValue;
- 	        	}
-        	 }
-         	if(document.approvalList) {
-         		removeOptionAll();
-         		removeOptionSelected();
- 	        	var formattedShipTo = formatBillToShipToCustomer(defaultShipToValue); 
-         		appendOptionLast(defaultShipToValue,formattedShipTo);
-         		document.approvalList.shipToSearchFieldName1.value = defaultShipToValue;
-         	}
-         }
-       
-    }
+
     function isValidString(stringValue)
     {
         var numaric = stringValue;
@@ -1877,24 +1823,6 @@ function passwordUpdateModal()
 			'width' 			: 300,
 			'height' 			: 200  
 		});
-    	/* BB3 Select Ship-To */
-    	$("#shipToOrderSearch").fancybox({
-    		'onStart' 	: function(){
-	    		if(isguestuser!="true") {
-	    			 showAssignedShipToForOrderSearch('<s:property value="#shipToForOrderSearch"/>');
-	    		}
-	    		else {
-		    		alert('Please Login to see the Assigned Customers');
-		    		$fancybox.close();
-	    		}
-    			},
-    			'onClosed' : function() {
-   				 clearShipToField();      				
-   			},
-			'autoDimensions'	: false,
-			'width' 			: 800,
-	 		'height' 			: 400  
-		});   	
 		$('#cart-management-btn').click(function(){
 			$('#cart-management-popup').toggle();
 			return false;
