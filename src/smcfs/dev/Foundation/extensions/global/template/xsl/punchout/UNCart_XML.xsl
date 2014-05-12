@@ -67,9 +67,7 @@
 					<Money currency="USD">
 						<xsl:choose>
 							<xsl:when test="Extn/@ExtnReqUOMUnitPrice &gt; 0">
-								<xsl:attribute name="value">
-									<xsl:value-of select='format-number(Extn/@UnitPriceRounded, "0.##")' disable-output-escaping="yes" />
-								</xsl:attribute>
+								<xsl:value-of select='format-number(Extn/@UnitPriceRounded, "0.##")' disable-output-escaping="yes" />
 							</xsl:when>
 							<xsl:otherwise>0.00</xsl:otherwise>
 						</xsl:choose>
