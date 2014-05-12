@@ -139,25 +139,34 @@ function setTotalPrice(val){
 	}
 	
 	function validateCustomerPO()
-	{
-		
-		var errordiv=document.getElementById("requiredCustomerPOErrorDiv");
-		var errorMsg = document.getElementById("errorMsg");
+	{		
+		var errordiv=document.getElementById("requiredCustomerPOErrorDiv");		
 		errordiv.style.display="none";
+		var errorMsg = document.getElementById("errorMsg");
 		errorMsg.style.display="none";
+		errorMsg.innerHTML="";
+		var emailObj=document.getElementById("newEmailAddr");
+		emailObj.style.borderColor="";
 		var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
 		splInstructionsField.style.borderColor="";
 		var po_comboObj=document.getElementById("po_combo_input");
+
 		if(po_comboObj.value.trim().length == 0)
 		{			
 			errordiv.style.display="block";
 			po_comboObj.style.borderColor="#FF0000";
+			errordiv.innerHTML="PO #: is required field";
 			return false;
 		}
 		else
 		{
 			//setCustomerPONumber();validateForm_OrderSummaryForm;submitOrder();
-			validateFormSubmit();
+			po_comboObj.style.borderColor="";
+			errordiv.style.display="none";
+			errordiv.innerHTML="";
+			if(validateEmail()){
+				validateFormSubmit();
+			}
 			return false; //changed by bb6
 		}
 	}
@@ -216,6 +225,28 @@ function isValidDate(dtStr)
 	return true
 	}
 //EN of EB 2458
+
+//Added for EB-5457 - Email validation for comma saprated email addresses
+function validateEmail(){
+	var errorMsg = document.getElementById("errorMsg");
+	
+	errorMsg.style.display="none";
+	errorMsg.innerHTML ="";
+	var emailObj=document.getElementById("newEmailAddr");
+	emailObj.style.borderColor="";
+	var email = document.getElementById("newEmailAddr").value;
+
+	var pattern=/^[A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Z]{2,4}(?:[,;][A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Z]{2,4})*$/i;
+
+	if(!pattern.test(email)){
+		errorMsg.innerHTML = "Invalid email address. Please enter valid email addresses separated by commas.";
+		errorMsg.style.display="inline";			
+		emailObj.style.borderColor="#FF0000";
+		return false;
+		
+    }
+    return true;
+}
 	function validateFormSubmit(){
 		//Added For Jira 3232
 	    //Commented for 3475
