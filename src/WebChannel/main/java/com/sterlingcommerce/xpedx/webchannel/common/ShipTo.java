@@ -33,6 +33,7 @@ public class ShipTo {
 	private String shipToCustomerName;
 	private String status;
 	private String shipToDisplayString;
+	private String shipToMultiRowDisplay;
 	
 	public String getUserId() {
 		return userId;
@@ -142,4 +143,12 @@ public class ShipTo {
 	public void setShipToDisplayString(String shipToDisplayString) {
 		this.shipToDisplayString = shipToDisplayString;
 	}
+	public String getShipToMultiRowDisplay() {
+		return shipToMultiRowDisplay;
+	}
+	public void setShipToMultiRowDisplay(String shipToMultiRowDisplay) {
+		this.shipToMultiRowDisplay = shipToMultiRowDisplay;
+	}
+	
+	
 }

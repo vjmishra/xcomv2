@@ -117,8 +117,10 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 				if (data.defaultShipToCustomer && "30" === data.defaultShipToCustomer.customerStatus) {
 					html.push('				<div><h3>Please select an active ship-to as your default.<h3></div>');
 				}
-				else{
+				if (((!data.defaultShipToCustomer) || (data.defaultShipToCustomer && "30" !== data.defaultShipToCustomer.customerStatus)) && (!selectShipToChanges)) {					
 					html.push('				<div class="notice float-right addmarginbottom10 shipToErrTxt" >Changing the Ship-To could impact pricing on orders.</div>');
+				}else{
+					html.push('				<div class="float-right addmarginbottom10 shipToErrTxt" ></div>');	
 				}
 				html.push('				<div class="clearfix"></div>');	
 				html.push('				<div class="ship-button-wrap">');				
@@ -140,11 +142,13 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 					var shipTo = shipToList[k];
 					var shipToCustomerId = shipTo.shipToCustomerID;
 					var selectedShipToID = "selectedShipTo_"+shipToCustomerId; 
+					var shipToMultiRowDisplayID = "shipToMultiRowDisplay_"+shipToCustomerId;
 					html.push('					<li>');
 					html.push('						<a class="underlink;">');
 					html.push('							<input id="', selectedShipToID, '" type="radio" value="', shipTo.shipToCustomerID, '" name="selectedShipTo" />');
 					html.push('							<label for="', selectedShipToID, '">', shipTo.shipToDisplayString, '</label>');
 					html.push('						</a>');
+					html.push('						<input type="hidden" name="shipToMultiRowDisplay" id="',shipToMultiRowDisplayID,'" value="',shipTo.shipToMultiRowDisplay,'"/>');
 					html.push('					</li>');
 				}
 				html.push('					</ul>');
@@ -163,8 +167,11 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 				}
 				html.push('					</div>');
 				html.push('					<div class="clearfix"></div>');
-				if ((!data.defaultShipToCustomer) || (data.defaultShipToCustomer && "30" !== data.defaultShipToCustomer.customerStatus)) {
-					html.push('					<div class="notice float-right addmargintop10 shipToErrTxt">Changing the Ship-To could impact pricing on orders.</div>');
+				if (((!data.defaultShipToCustomer) || (data.defaultShipToCustomer && "30" !== data.defaultShipToCustomer.customerStatus)) && (!selectShipToChanges)) {					
+						html.push('			<div class="notice float-right addmargintop10 shipToErrTxt">Changing the Ship-To could impact pricing on orders.</div>');
+				}
+				else{
+						html.push('			<div class="float-right addmargintop10 shipToErrTxt"></div>');
 				}
 				html.push('					<div class="clearfix"></div>');
 				html.push('				</div>');
