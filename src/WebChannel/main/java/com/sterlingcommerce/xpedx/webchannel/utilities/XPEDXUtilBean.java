@@ -208,11 +208,12 @@ public class XPEDXUtilBean extends UtilBean {
 	    /**
 	     * Returns the DayPhone.
 	     * 
-	     * Need to format like 905 595-4351 instead of 9055954351.
+	     * Need to format like 0905 595-4351 instead of 9055954351.
 	     * If input String has more than 10 chars return same String.
 	     */
     public  String getFormattedPhone(String phoneNumber)
 	    {
+    	//String countryCode= "";
     	String areaCode = "";
     	String middleThree = "";
     	String lastFour = "";
@@ -228,6 +229,14 @@ public class XPEDXUtilBean extends UtilBean {
     		 areaCode  = phoneNumber.substring(0, 3);
      		 middleThree  = phoneNumber.substring(3, 6);
      		 lastFour  = phoneNumber.substring(6, 10);
+     		 fmtPhoneNumber = areaCode+ " " + middleThree + "-" + lastFour;
+    	}
+    	if (phoneNumber != null && phoneNumber.trim().length() == 12)
+    	{
+    		//countryCode  = phoneNumber.substring(0, 2);
+    		 areaCode  = phoneNumber.substring(2, 5);
+     		 middleThree  = phoneNumber.substring(5, 8);
+     		 lastFour  = phoneNumber.substring(8, 12);
      		 fmtPhoneNumber = areaCode+ " " + middleThree + "-" + lastFour;
     	}
     	
