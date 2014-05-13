@@ -415,7 +415,8 @@ $(function() {
       function showShipToModalForReports() {
       	var customerContactId = $('#LoggedInUserIdForShipTo').val();
       	var getAssignedShipToURL = $('#getAssignedShipTosForSelectURL').val();
-      	var includeShoppingForAndDefaultShipTo = "false";      
+      	var includeShoppingForAndDefaultShipTo = "false"; 
+      	$('#shipToSelectedOnShipToModal').val('');
       	/* Select Button click functionality */
       	selectShipToChanges = function selectShipToChanges(){
       		if (!$("input[name='selectedShipTo']:checked").val()) {
@@ -424,13 +425,15 @@ $(function() {
       			return false;
       		}
       		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val(); 
-      		$('#selectedCustId').val(selectedShipCustomer);    
+      		$('#selectedCustId').val(selectedShipCustomer); 
+      		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
       		$('#txtLocation').val($('#shipToMultiRowDisplay_'+selectedShipCustomer).val());
       		$.fancybox.close(); 
       	};
       	/* Cancel Button click functionality */
       	cancelShipToChanges = function cancelShipToChanges(){      		
-      		$.fancybox.close();
+      		$('#shipToSelectedOnShipToModal').val('');
+    		$.fancybox.close();
       	};
       	showShiptos("Select Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, null, selectShipToChanges, null);
       }
@@ -467,7 +470,12 @@ $(function() {
                },
                'autoDimensions'    : false,
                'width'             : 800,
-               'height'            : 400                      
+               'height'            : 400,
+               'onClosed' : function(){                
+            	   if(!$('#shipToSelectedOnShipToModal').val().trim()){
+       				$("select#optsLocations").attr('selectedIndex', 0);        				
+       			 }                  
+               }, 
        });
        $("#varBillTo").fancybox({
            'onStart'        :    function(){
@@ -519,6 +527,7 @@ $(function() {
           
            <div id="hidden_clicker" style="display:none">
                <a id="varSAP" href="#showLocationsDlg" >Hidden Clicker 1</a>
+               	<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
                <a id="varShipTo" href="#ship-container" >Hidden Clicker 2</a>
                <a id="varBillTo" href="#showBillToDlg" >Hidden Clicker 3</a>
            </div>

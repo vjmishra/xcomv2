@@ -819,9 +819,12 @@ div.catalog-search-container input#search_searchTerm {
 	clear:both;
 	margin-top: 10px;
 }
-div#fancybox-content .ship-button-wrap{
+div#fancybox-content .ship-button-wrap {
 	float:right;
 	clear:none;
 	width:auto;
+	margin-right:20px;
+}
+div#fancybox-content .error, div#fancybox-content .notice {
 	margin-right:20px;
 }
