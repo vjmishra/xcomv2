@@ -164,9 +164,12 @@ function setTotalPrice(val){
 			po_comboObj.style.borderColor="";
 			errordiv.style.display="none";
 			errordiv.innerHTML="";
-			if(validateEmail()){
-				validateFormSubmit();
+			if(emailObj!=null && emailObj.value!=''){
+				if(!validateEmail()){
+					return false;
+				}
 			}
+			validateFormSubmit();	
 			return false; //changed by bb6
 		}
 	}
