@@ -9,10 +9,10 @@
 {
 	overflow: visible !important;
 }
-.table-header-bar-left, .table-header-bar-right
+/* .table-header-bar-left, .table-header-bar-right
 {
 	background-color: #003399;
-}
+} */
 
 .ie_floatleft
 {
@@ -63,7 +63,7 @@ div.change-shipto-error { float:right;margin-top:1px;width:100%; }
 
 /* Begin Catalog UI review Changes */
 #catalog-header-breadcrumbs .searchButton { margin-top: 3px; }
-div.catalog-search-container input#search_searchTerm { margin-top:-14px; }
+div.catalog-search-container input#search_searchTerm { margin-top:5px; }
 
 div.narrowbyattributes  ul li { width:100%; }
 table#top-section { margin-top: 10px; }
