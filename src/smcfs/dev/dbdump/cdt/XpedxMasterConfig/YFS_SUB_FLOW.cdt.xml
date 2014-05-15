@@ -5943,8 +5943,13 @@
     FlowKey="2010070816311436509" Lockid="0"
     Modifyprogid=".YCPWFRepositoryAPI"
     Modifyts="2013-06-10T13:22:55-04:00" Modifyuserid="admin"
+<<<<<<< HEAD
     QueueKey=" " SeqNo="2" ServerKey="2010070816280336506"
     SubFlowKey="201306101322563041303" SubFlowName="RETRY_LEGACY_ORD_UPDATE"/-->
+=======
+    QueueKey=" " SeqNo="2" ServerKey="2014011508434264692"
+    SubFlowKey="201306101322563041303" SubFlowName="RETRY_LEGACY_ORD_UPDATE"/>
+>>>>>>> v2.0.13.01
 <SubFlow
     ConfigXML="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;SubFlowConfig>&#xa;    &lt;Node IsStartNode=&quot;N&quot; NodeGroup=&quot;Start&quot; NodeId=&quot;0&quot; NodeText=&quot;&quot; NodeType=&quot;Start&quot;/>&#xa;    &lt;Link ConditionValue=&quot;&quot; FromNode=&quot;0&quot; IsReceiver=&quot;&quot; LinkId=&quot;&quot;&#xa;        ToNode=&quot;1&quot; TransportType=&quot;&quot; Type=&quot;Simple&quot;/>&#xa;    &lt;Node IsStartNode=&quot;N&quot; NodeGroup=&quot;Transport&quot; NodeId=&quot;1&quot; NodeText=&quot;&quot; NodeType=&quot;LOCAL&quot;/>&#xa;    &lt;Link ConditionValue=&quot;&quot; FromNode=&quot;1&quot; IsReceiver=&quot;N&quot; LinkId=&quot;&quot;&#xa;        ToNode=&quot;2&quot; TransportType=&quot;JMS&quot; Type=&quot;Async&quot;>&#xa;        &lt;Properties AgentCompletedService=&quot;StoreSearchIndexFilesService&quot;&#xa;            AgentCompletedService_FlowName=&quot;StoreSearchIndexFilesService&quot;&#xa;            DeliveryMode=&quot;&quot; ExceptionQName=&quot;DEFAULT&quot;&#xa;            InitialContextFactory=&quot;weblogic.jndi.WLInitialContextFactory&quot;&#xa;            MessageSelector=&quot;FlowName='CATALOG_INDEX_BUILD_TRIGGERED'&quot;&#xa;            ProviderURL=&quot;${weblogic.providerUrl}&quot;&#xa;            QCFLookup=&quot;${weblogic.qcf}&quot; QName=&quot;xpedxSearchIndexQueue&quot;&#xa;            ReceivingMode=&quot;&quot; RunTimeId=&quot;CATALOG_INDEX_BUILD_TRIGGERED&quot;&#xa;            ScheduleTriggerTimeInterval=&quot;&quot; Threads=&quot;10&quot; TimeToLive=&quot;&quot;>&#xa;            &lt;SecurityProperties/>&#xa;        &lt;/Properties>&#xa;    &lt;/Link>&#xa;    &lt;Node IsStartNode=&quot;N&quot; NodeGroup=&quot;Transport&quot; NodeId=&quot;2&quot; NodeText=&quot;&quot; NodeType=&quot;JMS&quot;/>&#xa;&lt;/SubFlowConfig>&#xa;"
     Createprogid=".YCPWFRepositoryAPI"
