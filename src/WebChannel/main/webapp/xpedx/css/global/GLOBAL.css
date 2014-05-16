@@ -1734,7 +1734,7 @@ inStoreIcon {
     cursor: pointer;
     height: 23px;
     margin-left: 0px;
-    position: relative;
+    /* position: relative; */
     top: -3px; /* jira 3826 */
     width: 22px;
 }

@@ -120,17 +120,20 @@ input#newSearch_searchTerm {
     top: -3px; /* jira 3826 */
     margin-left: 3px;
     height: 30px;
+    
+    
 }
 
 div div.searchbox-1 input {
 	height: 15px !important;	
-	margin-top: -3px !important;
+	/* margin-top: -3px !important; */
 	margin-right: 2px;
 }
 
 div div.searchbox-1.auth input {	
 	margin-top: 1px !important;
 	margin-right: 2px;
+	
 } 
 
 .return-request div.middle-section table td.ie-fix-td {
