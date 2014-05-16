@@ -27,8 +27,8 @@
 
 #search_searchTerm
 {
-	padding-top: 3px;
-	margin-top: -1px;
+/* 	padding-top: 3px;
+	margin-top: -1px; */
 }
 
 .mil-attr-wrap
@@ -37,7 +37,7 @@
 }
 .xpedx-light-box span#catalog-descr
 {
-position:relative;
+	position:relative;
  	bottom:40px;
 }
 .xpedx-light-box textarea#Approve-Reject { width:382.6px; }
@@ -63,7 +63,7 @@ div.change-shipto-error { float:right;margin-top:1px;width:100%; }
 
 /* Begin Catalog UI review Changes */
 #catalog-header-breadcrumbs .searchButton { margin-top: 3px; }
-div.catalog-search-container input#search_searchTerm { margin-top:5px; }
+/* div.catalog-search-container input#search_searchTerm { margin-top:5px; } */
 
 div.narrowbyattributes  ul li { width:100%; }
 table#top-section { margin-top: 10px; }
@@ -116,24 +116,8 @@ input#newSearch_searchTerm {
 	float: left;
 }
 
-.searchbox-1 .searchButton {
-    top: -3px; /* jira 3826 */
-    margin-left: 3px;
-    height: 30px;
-    
-    
-}
-
-div div.searchbox-1 input {
-	height: 15px !important;	
-	/* margin-top: -3px !important; */
-	margin-right: 2px;
-}
-
 div div.searchbox-1.auth input {	
-	margin-top: 1px !important;
 	margin-right: 2px;
-	
 } 
 
 .return-request div.middle-section table td.ie-fix-td {

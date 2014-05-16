@@ -828,3 +828,28 @@ div#fancybox-content .ship-button-wrap {
 div#fancybox-content .error, div#fancybox-content .notice {
 	margin-right:20px;
 }
+
+.searchbox-1 .searchButton {
+	background: url("../../images/icons/22x22_header_search.png") no-repeat scroll 0 0 transparent;
+	border: medium none;
+	cursor: pointer;
+	height: 23px;
+	margin-left: 0px;
+	position: absolute;
+	top: 0;
+	left: 260px;
+	width: 22px;
+}
+.searchbox-1 input {
+	height: 17px;
+	padding-top: 1px;
+	width: 253px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#tips-container {
+	width: 75px;
+	float: left:10px;
+	margin-top: 30px;
+}
