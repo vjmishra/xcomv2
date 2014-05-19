@@ -853,3 +853,17 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	float: left:10px;
 	margin-top: 30px;
 }
+#home-image-rotation-nav a.activeSlide  {
+	background: #a8c1e9;
+	height: 10px;
+	width: 10px;
+	border-radius: 5px;}
+#home-image-rotation-nav-inner a {
+    background: #ffffff;
+    display: inline-block;
+    font-size: 0;
+    height: 10px;
+	width: 10px;
+    border-radius: 5px;
+    margin: 3px;
+}
