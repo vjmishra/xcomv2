@@ -199,7 +199,7 @@
 						<s:hidden name="draft" value="%{#draftOrderFlag}" />
 						<s:hidden name='Currency' value='%{#currencyCode}' />
 						<s:hidden id="isPNACallOnLoad" name="isPNACallOnLoad" value='false' />	
-						<input type="hidden" name="isEditOrder" value="<s:property	value='%{(#_action.getIsEditOrder())}' escape="false" />" />
+						<s:hidden id="isEditOrder" name="isEditOrder" value="%{(#isEditOrderHeaderKey != null && #isEditOrderHeaderKey != '')}" />
 						<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
 						<label>
 							<span>Item Type:</span>
