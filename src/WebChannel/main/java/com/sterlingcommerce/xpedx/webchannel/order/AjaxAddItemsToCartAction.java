@@ -170,6 +170,8 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 		allItemsValid = uniqueItemIds.size() == itemDetails.size();
 		if (allItemsValid) {
+			// EB-5895. Get the default transaction UOMs for order lines. In Quick add User does not have option to select UOMs. So add the default UOM for transaction UOM as per rules instead of Item UOMs
+			Map <String,String> defaultTransUOMMap = XPEDXOrderUtils.getDefaultTransactionalUOMsForQuickAdd(wcContext.getCustomerId(), new ArrayList<String>(uniqueItemIds), wcContext.getStorefrontId());
 			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			String draftOrderFlag = YFCCommon.isVoid(editedOrderHeaderKey) ? "Y" : "N";
 
@@ -186,7 +188,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemID", row.getItem());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@OrderedQty", row.getQty());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@OrderedQty", row.getQty());
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", itemDetails.get(row.getItem()).getUom());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", defaultTransUOMMap.get(row.getItem())!=null?defaultTransUOMMap.get(row.getItem()):itemDetails.get(row.getItem()).getUom());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@UnitOfMeasure", itemDetails.get(row.getItem()).getUom());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", ""); // not needed
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ProductClass", ""); // not needed
