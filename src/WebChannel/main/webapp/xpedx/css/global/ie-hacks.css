@@ -22,3 +22,6 @@ div.catalog-search-container input#search_searchTerm {
 div.narrowbyattributes ul li {
 	width: 145px;
 	}
+#narrowByDiv_Brand {
+	overflow: visible;
+}

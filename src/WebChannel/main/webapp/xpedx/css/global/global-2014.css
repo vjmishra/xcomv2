@@ -632,6 +632,7 @@ div.catalog-search-container input#search_searchTerm {
 	margin: 0;
 	padding: 0;
 	margin-right: -16px;
+	font-size: 11px;
 }
 .subPanelBox {
 	border: 0 solid #DDDDDD;
