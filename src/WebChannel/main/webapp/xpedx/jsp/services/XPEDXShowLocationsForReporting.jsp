@@ -72,16 +72,12 @@
  <div class="clearview">&nbsp;</div>
 
 <div class="float-right">
-<ul id="tool-bar" class="tool-bar-bottom">
-	<li>
-		<a class="green-ui-btn" href="javascript:submitSapForm();"><span>Apply</span></a>
-	</li>
-		<li>
-			<a class="grey-ui-btn" href="#" style="" onclick="javascript:$.fancybox.close()"><span>Cancel</span></a>
-		</li>	
-</ul>
-	
+	<div class="button-container addpadtop15">
+		<input class="btn-gradient floatright addmarginright10" type="submit" value="Apply"  onclick="submitSapForm(); return false;" />
+		<input class="btn-neutral  floatright addmarginright10" type="submit" value="Cancel" onclick="$.fancybox.close(); return false;" />
+	</div>
 </div>
+
 </div>
 
 </div>
