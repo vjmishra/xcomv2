@@ -1,7 +1,9 @@
 package com.xpedx.nextgen.dashboard;
 
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -81,7 +83,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	 */
 
 	public Document performLegacyOrderUpdate(YFSEnvironment env, Document inXML) throws Exception {
-
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+		long startTime = System.currentTimeMillis();
+		System.out.println("Start time performLegacyOrderUpdate: "+sdf.format(Calendar.getInstance().getTime()));
 		boolean isAPISuccess = false;
 		boolean isExceptionScenario = false;
 		YFCDocument returnToLegacyDoc = null;
@@ -154,16 +158,16 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			} else {
 				throw new Exception("Attribute HeaderProcessCode Not Available in Incoming Legace Message!");
 			}
-
+			System.out.println("Start time before validateInXML: "+sdf.format(Calendar.getInstance().getTime()));
 			validateInXML(rootEle, headerProcessCode, isOrderPlaceFlag, isOrderEditFlag);
-
+			System.out.println("End time after validateInXML: "+sdf.format(Calendar.getInstance().getTime()));
 			if(log.isDebugEnabled()) {
 				log.debug("InXML After Validation:" + YFCDocument.getDocumentFor(inXML).getString());
 			}			
-			
+			System.out.println("Start time before setProgressYFSEnvironmentVariables: "+sdf.format(Calendar.getInstance().getTime()));
 			// To set environment variables which are required for XPEDXOverrideGetOrderPriceUE.java
 			setProgressYFSEnvironmentVariables(env);
-
+			System.out.println("End time after setProgressYFSEnvironmentVariables: "+sdf.format(Calendar.getInstance().getTime()));
 			Document inDoc = YFCDocument.createDocument().getDocument();
 			inDoc.appendChild(inDoc.importNode(rootEle.getDOMNode(), true));
 			inDoc.renameNode(inDoc.getDocumentElement(), inDoc.getNamespaceURI(), "Order");
@@ -172,7 +176,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			// Validations done for the Xml received from legacy system.
 			if (cAndfOrderEle == null) {
 				// To get customer and fulfillment order details if exist.
+				System.out.println("Start time before getCustomerOrderAndFulfillmentOrderList: "+sdf.format(Calendar.getInstance().getTime()));
 				cAndfOrderEle = getCustomerOrderAndFulfillmentOrderList(env, rootEle, headerProcessCode);
+				System.out.println("End time after getCustomerOrderAndFulfillmentOrderList: "+sdf.format(Calendar.getInstance().getTime()));
 				if (cAndfOrderEle != null) {
 					
 					//Enterprise code is now set dynamically as we have to consider both xpedx and Saalfeld customers. Static value of Enterprise code set in orderUpdate.xsl is now removed
@@ -187,12 +193,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					if(log.isDebugEnabled()){
 						log.debug("Fulfillment OrderHeaderKey:" + fOrdHeaderKey);
 					}
+					System.out.println("Start time before getFulfillmentOrderEle: "+sdf.format(Calendar.getInstance().getTime()));
 					if (YFCObject.isNull(fOrdHeaderKey) || YFCObject.isVoid(fOrdHeaderKey)) {
 						fOrderEle = getFulfillmentOrderEle(headerProcessCode, rootEle, cAndfOrderEle);
 					} else {
 						fOrderEle = getFulfillmentOrderEle(headerProcessCode, fOrdHeaderKey, cAndfOrderEle);
 					}
-
+					System.out.println("End time after getFulfillmentOrderEle: "+sdf.format(Calendar.getInstance().getTime()));
 					if (fOrderEle == null) {
 						if (!headerProcessCode.equalsIgnoreCase("A")) {
 							throw new Exception("Fulfillment Order Does Not Exist in the System!");
@@ -207,19 +214,24 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 								rootEle.setAttribute("HeaderProcessCode", "C");
 							}
 						}
+						System.out.println("Start time before removeDeletedLines: "+sdf.format(Calendar.getInstance().getTime()));
 						// To remove the lines from InXML which is already been deleted from the system.
 						removeDeletedLines(rootEle, fOrderEle, isOrderEditFlag);
+						System.out.println("End time after removeDeletedLines: "+sdf.format(Calendar.getInstance().getTime()));
 					}
-
+					System.out.println("Start time before getCustomerOrderEle: "+sdf.format(Calendar.getInstance().getTime()));
 					// To get Customer order details.
 					cOrderEle = getCustomerOrderEle(env, headerProcessCode, rootEle, cAndfOrderEle);
+					System.out.println("End time after getCustomerOrderEle: "+sdf.format(Calendar.getInstance().getTime()));
 					if (cOrderEle == null) {
 						if (!headerProcessCode.equalsIgnoreCase("A")) {
 							throw new Exception("Customer Order Does Not Exist in the System!");
 						}
 					} else {
 						if (headerProcessCode.equalsIgnoreCase("A")) {
+							System.out.println("Start time before getOrderExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 							this.getOrderExtendedPriceInfo(rootEle);
+							System.out.println("End time after getOrderExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 						}
 					}
 
@@ -229,9 +241,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					
 					} else {
 						//Enterprise code is now set dynamically as we have to consider both xpedx and Saalfeld customers. Static value of Enterprise code set in orderUpdate.xsl is now removed
+						System.out.println("Start time before getEnterpriseCode: "+sdf.format(Calendar.getInstance().getTime()));
 						String enterpriseCode=getEnterpriseCode(env, rootEle);
+						System.out.println("End time after getEnterpriseCode: "+sdf.format(Calendar.getInstance().getTime()));
 						rootEle.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, enterpriseCode);
+						System.out.println("Start time before getOrderExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 						this.getOrderExtendedPriceInfo(rootEle);
+						System.out.println("End time after getOrderExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 					}
 				}
 			}
@@ -283,36 +299,51 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 
 			// If Header process code from input xml is A
 			if (headerProcessCode.equalsIgnoreCase("A")) {
+				System.out.println("Start time before setReqUOMPrice: "+sdf.format(Calendar.getInstance().getTime()));
 				this.setReqUOMPrice(env, rootEle);
-
+				System.out.println("End time after setReqUOMPrice: "+sdf.format(Calendar.getInstance().getTime()));
 				// To set the order header attributes of the customer order to the legacy input xml.
+				System.out.println("Start time before setOrderHeaderAttributes: "+sdf.format(Calendar.getInstance().getTime()));
 				this.setOrderHeaderAttributes(env, rootEle, cOrderEle);
-
+				System.out.println("End time after setOrderHeaderAttributes: "+sdf.format(Calendar.getInstance().getTime()));
 				Document cOrderInXML = YFCDocument.createDocument().getDocument();
 				cOrderInXML.appendChild(cOrderInXML.importNode(rootEle.getDOMNode(), true));
 				cOrderInXML.renameNode(cOrderInXML.getDocumentElement(), cOrderInXML.getNamespaceURI(), "Order");
 				YFCElement cOrderInXMLEle = YFCDocument.getDocumentFor(cOrderInXML).getDocumentElement();
 
 				// Set the Extended Price Info for FO.
+				System.out.println("Start time before setExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 				this.setExtendedPriceInfo(env, rootEle, false);
-
+				System.out.println("End time after setExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 				YFCElement custOrderEle = null;
 				if (cOrderEle != null) {
+					System.out.println("Start time before setExtendedPriceInfoCO: "+sdf.format(Calendar.getInstance().getTime()));
 					this.setExtendedPriceInfoCO(cOrderInXMLEle, rootEle, cAndfOrderEle,headerProcessCode);
+					System.out.println("End time after setExtendedPriceInfoCO: "+sdf.format(Calendar.getInstance().getTime()));
 					// Updates the customer order.
+					System.out.println("Start time before updateCustomerOrder: "+sdf.format(Calendar.getInstance().getTime()));
 					custOrderEle = updateCustomerOrder(env, cOrderInXMLEle, cOrderEle).getDocumentElement();
+					System.out.println("End time after updateCustomerOrder: "+sdf.format(Calendar.getInstance().getTime()));
 				} else {
+					System.out.println("Start time before setExtendedPriceInfo with true: "+sdf.format(Calendar.getInstance().getTime()));
 					this.setExtendedPriceInfo(env, cOrderInXMLEle, true);
+					System.out.println("End time after setExtendedPriceInfo with true: "+sdf.format(Calendar.getInstance().getTime()));
 					if("Saalfeld".equalsIgnoreCase(rootEle.getAttribute(XPXLiterals.A_ENTERPRISE_CODE))) {
 						cOrderInXMLEle.setAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE,"xpedx");
 					}
 					// To Create a new customer order.
+					System.out.println("Start time before createCustomerOrder: "+sdf.format(Calendar.getInstance().getTime()));
 					custOrderEle = createCustomerOrder(env, cOrderInXMLEle).getDocumentElement();
+					System.out.println("End time after createCustomerOrder: "+sdf.format(Calendar.getInstance().getTime()));
 				}
 
 				// To create fulfillment order.
+				System.out.println("Start time before createFulfillmentOrder: "+sdf.format(Calendar.getInstance().getTime()));
 				returnToLegacyDoc = createFulfillmentOrder(env, rootEle, custOrderEle, inXMLEle);
+				System.out.println("End time after createFulfillmentOrder: "+sdf.format(Calendar.getInstance().getTime()));
+				System.out.println("Start time before performOrderStatusChange: "+sdf.format(Calendar.getInstance().getTime()));
 				this.performOrderStatusChange(env, cAndfOrderEle, custOrderEle, returnToLegacyDoc.getDocumentElement(), hdrStatusCode, "A");
+				System.out.println("End time after performOrderStatusChange: "+sdf.format(Calendar.getInstance().getTime()));
 				isAPISuccess = true;
 
 			} else if (headerProcessCode.equalsIgnoreCase("C")) {
@@ -327,7 +358,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				/* Start - Work Around Fix For IBM PMR 51483 005 000 */
 				boolean changeOrderTwiceFO = false;
 				/* End - Work Around Fix For IBM PMR 51483 005 000 */
+				System.out.println("Start time before setReqUOMPrice: "+sdf.format(Calendar.getInstance().getTime()));
 				this.setReqUOMPrice(env, rootEle);
+				System.out.println("end time after setReqUOMPrice: "+sdf.format(Calendar.getInstance().getTime()));
 
 				// Build input document to call ChangeOrder API.
 				Document chngOrdDoc = YFCDocument.createDocument().getDocument();
@@ -414,33 +447,48 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				}
 
 				if (!isOrderPlaceFlag.equalsIgnoreCase("Y")) {
+					System.out.println("Start time before processFOHold: "+sdf.format(Calendar.getInstance().getTime()));
 					processFOHold(rootEle, fOrderEle);
+					System.out.println("End time after processFOHold: "+sdf.format(Calendar.getInstance().getTime()));
 				}
-
+				System.out.println("Start time before preparefOChange: "+sdf.format(Calendar.getInstance().getTime()));
 				changeOrderTwiceFO = preparefOChange(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, 
 						chngcOrdStatusEle1, chngcOrderEle1, fOrderEle, cOrderEle, isOrderPlaceFlag, isOrderEditFlag);
-				
+				System.out.println("End time after preparefOChange: "+sdf.format(Calendar.getInstance().getTime()));
 				// Updates customer and fulfillment order.
+				System.out.println("Start time before updatefOrder: "+sdf.format(Calendar.getInstance().getTime()));
 				returnToLegacyDoc = updatefOrder(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, chngcOrdStatusEle1, chngcOrderEle1, cOrderEle, fOrderEle, cAndfOrderEle, changeOrderTwiceFO);
+				System.out.println("End time after updatefOrder: "+sdf.format(Calendar.getInstance().getTime()));
+				System.out.println("Start time before performOrderStatusChange: "+sdf.format(Calendar.getInstance().getTime()));
 				this.performOrderStatusChange(env, cAndfOrderEle, cOrderEle, fOrderEle, hdrStatusCode, "C");
+				System.out.println("End time after performOrderStatusChange: "+sdf.format(Calendar.getInstance().getTime()));
 				isAPISuccess = true;
 
 			} else if (headerProcessCode.equalsIgnoreCase("D")) {
-
+				System.out.println("Start time before handleHeaderProcessCodeD: "+sdf.format(Calendar.getInstance().getTime()));
 				this.handleHeaderProcessCodeD(rootEle, fOrderEle, isOrderPlaceFlag, isOrderEditFlag);
+				System.out.println("End time after handleHeaderProcessCodeD: "+sdf.format(Calendar.getInstance().getTime()));
 				if (rootEle.hasAttribute("OrderHeaderKey") && !YFCObject.isNull(rootEle.getAttribute("OrderHeaderKey")) && !YFCObject.isVoid(rootEle.getAttribute("OrderHeaderKey"))) {
 					// To Set Instruction Detail Key To Update / Remove The Instruction Text For The Order.
+					System.out.println("Start time before setInstructionKeys: "+sdf.format(Calendar.getInstance().getTime()));
 					setInstructionKeys(rootEle, fOrderEle);
+					System.out.println("End time after setInstructionKeys: "+sdf.format(Calendar.getInstance().getTime()));
 					// To Calculate the Price Information For The FO.
+					System.out.println("Start time before setExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
 					setExtendedPriceInfo(env, rootEle, false);
-					filterAttributes(rootEle, false);					
+					System.out.println("End time after setExtendedPriceInfo: "+sdf.format(Calendar.getInstance().getTime()));
+					System.out.println("Start time before filterAttributes: "+sdf.format(Calendar.getInstance().getTime()));
+					filterAttributes(rootEle, false);		
+					System.out.println("End time after filterAttributes: "+sdf.format(Calendar.getInstance().getTime()));
 					YFCElement pendignElement=rootEle.createChild("PendingChanges");
 					pendignElement.setAttribute("IgnorePendingChanges", "Y");
 					rootEle.appendChild(pendignElement);
 					if(log.isDebugEnabled()){
 						log.debug("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:" + rootEle.getString());
 					}
+					System.out.println("Start time before XPXPerformLegacyOrderUpdateExAPI api(XPXChangeOrder) invoke: "+sdf.format(Calendar.getInstance().getTime()));
 					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrder", rootEle.getOwnerDocument().getDocument());
+					System.out.println("End time after XPXPerformLegacyOrderUpdateExAPI api(XPXChangeOrder) invoke: "+sdf.format(Calendar.getInstance().getTime()));
 					if (tempDoc != null) {
 						returnToLegacyDoc = YFCDocument.getDocumentFor(tempDoc);
 					} else {
@@ -465,7 +513,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				chngcOrdStatusEle.setAttribute("IgnoreTransactionDependencies", "Y");
 				chngcOrdStatusEle.setAttribute("TransactionId", tranId0);
 				chngcOrdStatusEle.setAttribute("BaseDropStatus", "1100.0010");
-	
+				
 				YFCElement chngCOStatusLinesEle = chngcOrdStatusEle.getOwnerDocument().createElement("OrderLines");
 				chngcOrdStatusEle.appendChild(chngCOStatusLinesEle);
 	
@@ -473,14 +521,17 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				chngcOrderInXML0.appendChild(chngcOrderInXML0.importNode(rootEle.getDOMNode(), true));
 				chngcOrderInXML0.renameNode(chngcOrderInXML0.getDocumentElement(), chngcOrderInXML0.getNamespaceURI(), "Order");
 				YFCElement chngcOrderEle0 = YFCDocument.getDocumentFor(chngcOrderInXML0).getDocumentElement();
-	
+				System.out.println("Start time before handleHeaderProcessCodeD api invoke: "+sdf.format(Calendar.getInstance().getTime()));
 				this.handleHeaderProcessCodeD(chngcOrderEle0, chngcOrdStatusEle, fOrderEle, cOrderEle, isOrderPlaceFlag, isOrderEditFlag);
+				System.out.println("End time after handleHeaderProcessCodeD api invoke: "+sdf.format(Calendar.getInstance().getTime()));
 				if (chngcOrdStatusEle.hasAttribute("OrderHeaderKey")) {
 	
 					if(log.isDebugEnabled()){
 						log.debug("XPXChangeOrderStatus_CO[HeaderProcessCode:D]-InXML:" + chngcOrdStatusEle.getString());
 					}
+					System.out.println("Start time before XPXPerformLegacyOrderUpdateExAPI api(XPXChangeOrderStatus) invoke: "+sdf.format(Calendar.getInstance().getTime()));
 					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderStatus", chngcOrdStatusEle.getOwnerDocument().getDocument());
+					System.out.println("End time after XPXPerformLegacyOrderUpdateExAPI api(XPXChangeOrderStatus) invoke: "+sdf.format(Calendar.getInstance().getTime()));
 					if (tempDoc != null) {
 						// Do Nothing
 					} else {
@@ -489,9 +540,12 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				}
 	
 				if (chngcOrderEle0.hasAttribute("OrderHeaderKey")) {
-					
+					System.out.println("Start time before setExtendedPriceInfoCO: "+sdf.format(Calendar.getInstance().getTime()));
 					setExtendedPriceInfoCO(chngcOrderEle0, returnToLegacyDoc.getDocumentElement(), cAndfOrderEle, headerProcessCode);
+					System.out.println("End time after setExtendedPriceInfoCO: "+sdf.format(Calendar.getInstance().getTime()));
+					System.out.println("Start time before filterAttributes: "+sdf.format(Calendar.getInstance().getTime()));
 					filterAttributes(chngcOrderEle0, true);
+					System.out.println("End time after filterAttributes: "+sdf.format(Calendar.getInstance().getTime()));
 	
 					if(log.isDebugEnabled()){
 						log.debug("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:" + chngcOrderEle0.getString());
@@ -499,7 +553,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 					YFCElement pendignElement=chngcOrderEle0.createChild("PendingChanges");
 					pendignElement.setAttribute("IgnorePendingChanges", "Y");
 					chngcOrderEle0.appendChild(pendignElement);
+					System.out.println("Start time before XPXPerformLegacyOrderUpdateExAPI api(XPXChangeOrderEx) invoke: "+sdf.format(Calendar.getInstance().getTime()));
 					Document tempDoc = XPXPerformLegacyOrderUpdateExAPI.api.executeFlow(env, "XPXChangeOrderEx", chngcOrderEle0.getOwnerDocument().getDocument());
+					System.out.println("End time after XPXPerformLegacyOrderUpdateExAPI api(XPXChangeOrderEx) invoke: "+sdf.format(Calendar.getInstance().getTime()));
 					if (tempDoc == null) {
 						throw new Exception("Service XPXChangeOrder Failed to Update Customer Order!");
 					} 
@@ -511,10 +567,10 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				isAPISuccess = true;
 
 			} else if (headerProcessCode.equalsIgnoreCase("S")) {
-
+				System.out.println("Start time before performOrderStatusChange: "+sdf.format(Calendar.getInstance().getTime()));
 				// To update the status of the order.
 				this.performOrderStatusChange(env, cAndfOrderEle, cOrderEle, fOrderEle, hdrStatusCode, "S");
-
+				System.out.println("End time after performOrderStatusChange: "+sdf.format(Calendar.getInstance().getTime()));
 				// Input xml has been passed as the output after updating the status.
 				returnToLegacyDoc = YFCDocument.getDocumentFor(inXML);
 				isAPISuccess = true;
@@ -574,6 +630,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			ex.printStackTrace();
 			APIException = ex;
 			if(!centExempt){
+				System.out.println("Start time before prepareErrorObject: "+sdf.format(Calendar.getInstance().getTime()));
 				if(customerError) {
 					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.CUSTOMER_ERROR_CLASS, env, inXML);
 					customerError = false;
@@ -583,6 +640,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				} else {
 					prepareErrorObject(ex, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.E_ERROR_CLASS, env, inXML);
 				}
+				System.out.println("End time after prepareErrorObject: "+sdf.format(Calendar.getInstance().getTime()));
 			}
 			// Added by Prasanth Kumar M. to prevent rollback of the orders if this code is invoked in OPResponse flow
 			if(log.isDebugEnabled()){
@@ -603,7 +661,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 									fOrdHeaderKey = fOrderEle.getAttribute("OrderHeaderKey");									
 								} else {
 									// 3. Fetch The Order Header Key From DB.
+									System.out.println("Start time before getFulfillmentOrderListOnException: "+sdf.format(Calendar.getInstance().getTime()));
 									fOrdHeaderKey = getFulfillmentOrderListOnException(env, rootEle, ex);
+									System.out.println("End time after getFulfillmentOrderListOnException: "+sdf.format(Calendar.getInstance().getTime()));
 								}
 							}
 						}		
@@ -614,9 +674,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 						rootEle.setAttribute("OrderHeaderKey", fOrdHeaderKey);
 						
 						if (isExceptionScenario) {
+							System.out.println("Start time before updateOrderHeaderDetails: "+sdf.format(Calendar.getInstance().getTime()));
 							updateOrderHeaderDetails(env, cAndfOrderEle, cOrderEle, fOrderEle, rootEle, headerProcessCode, hdrStatusCode);
-						} else {						
+							System.out.println("End time after updateOrderHeaderDetails: "+sdf.format(Calendar.getInstance().getTime()));
+						} else {		
+							System.out.println("Start time before updateOrderKeys: "+sdf.format(Calendar.getInstance().getTime()));
 							updateOrderKeys(env, rootEle, fOrderEle);
+							System.out.println("End time after updateOrderKeys: "+sdf.format(Calendar.getInstance().getTime()));
 						}	
 					}		
 				} catch (Exception ex1) {
@@ -644,6 +708,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		if(log.isDebugEnabled()){
 			log.debug("ReturnToLegacyDoc:" + returnToLegacyDoc);
 		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("End time before returning performLegacyOrderUpdate: "+ sdf.format(Calendar.getInstance().getTime()));
+		System.out.println("Total Time taken to process performLegacyOrderUpdate : ["+(endTime-startTime)+"]");
 		return returnToLegacyDoc.getDocument();
 	}
 
