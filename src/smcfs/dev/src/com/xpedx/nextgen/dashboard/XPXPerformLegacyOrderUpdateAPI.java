@@ -68,8 +68,7 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 	 */
 		
 	public Document performLegacyOrderUpdate(YFSEnvironment env,Document inXML) throws Exception {
-		long startTime = System.currentTimeMillis();
-		System.out.println("Start time performLegacyOrderUpdate: "+startTime);
+		
 		boolean isAPISuccess = false;
 		Exception APIException = null;
 		YFCDocument returnToLegacyDoc = null;
@@ -102,10 +101,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			} else {
 				throw new Exception("Attribute HeaderProcessCode Not Available in Incoming Legace Message!");
 			}
-		
-			System.out.println("Start time before validateInXML: "+System.currentTimeMillis());
+			
 			validateInXML(rootEle);
-			System.out.println("End time after validateInXML: "+System.currentTimeMillis());
+			
 			if(log.isDebugEnabled()){
 			log.debug("InXML After Validation:"+YFCDocument.getDocumentFor(inXML).getString());
 			}
@@ -122,9 +120,8 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			log.verbose("HeaderProcessCode:"+headerProcessCode);
 			
 			// To set environment variables which are required for XPEDXOverrideGetOrderPriceUE.java
-			System.out.println("Start time before setProgressYFSEnvironmentVariables: "+System.currentTimeMillis());
 			setProgressYFSEnvironmentVariables(env);
-			System.out.println("End time after setProgressYFSEnvironmentVariables: "+System.currentTimeMillis());
+			
 			Document inDoc = YFCDocument.createDocument().getDocument();
 			inDoc.appendChild(inDoc.importNode(rootEle.getDOMNode(), true));
 			inDoc.renameNode(inDoc.getDocumentElement(), inDoc.getNamespaceURI(), "Order");
@@ -133,23 +130,17 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			// Validations done for the Xml received from legacy system. 
 			if(cAndfOrderEle == null) {
 				// To get customer and fulfillment order details if exist.
-				System.out.println("Start time before getCustomerOrderAndFulfillmentOrderList: "+System.currentTimeMillis());
 				cAndfOrderEle = getCustomerOrderAndFulfillmentOrderList(env, rootEle, headerProcessCode);
-				System.out.println("End time after getCustomerOrderAndFulfillmentOrderList: "+System.currentTimeMillis());
 				if(cAndfOrderEle != null) {
 					// To get Customer order details.
-					System.out.println("Start time before getCustomerOrderEle: "+System.currentTimeMillis());
 					cOrderEle = getCustomerOrderEle(env, headerProcessCode, rootEle, cAndfOrderEle);
-					System.out.println("End time after getCustomerOrderEle: "+System.currentTimeMillis());
 					if(cOrderEle == null) {
 						if(!headerProcessCode.equalsIgnoreCase("A")) {
 							throw new Exception("Customer Order Does Not Exist in the System!");
 						}
 					} else {
 						if(headerProcessCode.equalsIgnoreCase("A")) {
-							System.out.println("Start time before getOrderExtendedPriceInfo: "+System.currentTimeMillis());
 							this.getOrderExtendedPriceInfo(rootEle, null);
-							System.out.println("End time after getOrderExtendedPriceInfo: "+System.currentTimeMillis());
 						}
 					}
 					
@@ -161,13 +152,13 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					}
 					log.verbose("");
 					log.verbose("Fulfillment OrderHeaderKey:"+fOrdHeaderKey);
-					System.out.println("Start time before getFulfillmentOrderEle: "+System.currentTimeMillis());
+					
 					if(YFCObject.isNull(fOrdHeaderKey) || YFCObject.isVoid(fOrdHeaderKey)) {
 						fOrderEle = getFulfillmentOrderEle(headerProcessCode, rootEle, cAndfOrderEle);
 					} else {
 						fOrderEle = getFulfillmentOrderEle(headerProcessCode, fOrdHeaderKey, cAndfOrderEle);
 					}
-					System.out.println("End time after getFulfillmentOrderEle: "+System.currentTimeMillis());
+					
 					if(fOrderEle == null) {
 						if(!headerProcessCode.equalsIgnoreCase("A")) {
 							throw new Exception("Fulfillment Order Does Not Exist in the System!");
@@ -184,9 +175,7 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 					if(!headerProcessCode.equalsIgnoreCase("A")) {
 						throw new Exception("Neither Customer Order Or Fulfillment Order Exists!");
 					} else {
-						System.out.println("Start time before getOrderExtendedPriceInfo: "+System.currentTimeMillis());
 						this.getOrderExtendedPriceInfo(rootEle, null);
-						System.out.println("End time after getOrderExtendedPriceInfo: "+System.currentTimeMillis());
 					}
 				}
 			}
@@ -216,47 +205,38 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			// If Header process code from input xml is A
 			if(headerProcessCode.equalsIgnoreCase("A")) {
 				this.setReqUOMPrice(env, rootEle);
-				System.out.println("Start time before setOrderHeaderAttributes: "+System.currentTimeMillis());
+				
 				// To set the order header attributes of the customer order to the legacy input xml. 
 				this.setOrderHeaderAttributes(env, rootEle, cOrderEle);
-				System.out.println("End time after setOrderHeaderAttributes: "+System.currentTimeMillis());
+				
 				Document cOrderInXML = YFCDocument.createDocument().getDocument();
 				cOrderInXML.appendChild(cOrderInXML.importNode(rootEle.getDOMNode(), true));
 				cOrderInXML.renameNode(cOrderInXML.getDocumentElement(), cOrderInXML.getNamespaceURI(), "Order");
 				YFCElement cOrderInXMLEle = YFCDocument.getDocumentFor(cOrderInXML).getDocumentElement();
-				System.out.println("Start time before setExtendedPriceInfo true: "+System.currentTimeMillis());
+				
 				// Set the Extended Price Info
 				this.setExtendedPriceInfo(env,cOrderInXMLEle, true);
-				System.out.println("End time after setExtendedPriceInfo true: "+System.currentTimeMillis());
+				
 				YFCElement custOrderEle = null;
 				if(cOrderEle != null) {
-					System.out.println("Start time before updateCustomerOrder: "+System.currentTimeMillis());
 					// Updates the customer order.
 					custOrderEle = updateCustomerOrder(env, cOrderInXMLEle, cOrderEle).getDocumentElement();
-					System.out.println("End time after updateCustomerOrder: "+System.currentTimeMillis());
 				} else {
 					// To Create a new customer order.
-					System.out.println("Start time before createCustomerOrder: "+System.currentTimeMillis());
 					custOrderEle = createCustomerOrder(env, cOrderInXMLEle).getDocumentElement();
-					System.out.println("End time after createCustomerOrder: "+System.currentTimeMillis());
 				}
-				System.out.println("Start time before setExtendedPriceInfo false: "+System.currentTimeMillis());
+				
 				// Set the Extended Price Info
 				this.setExtendedPriceInfo(env,rootEle, false);
-				System.out.println("End time after setExtendedPriceInfo false: "+System.currentTimeMillis());
-				System.out.println("Start time before createFulfillmentOrder: "+System.currentTimeMillis());
+				
 				// To create fulfillment order.
 				returnToLegacyDoc = createFulfillmentOrder(env, rootEle, custOrderEle, inXMLEle);
-				System.out.println("End after createFulfillmentOrder: "+System.currentTimeMillis());
-				System.out.println("Start before performOrderStatusChange: "+System.currentTimeMillis());
 				this.performOrderStatusChange(env, cAndfOrderEle, custOrderEle, returnToLegacyDoc.getDocumentElement(), hdrStatusCode, "A");
-				System.out.println("End after performOrderStatusChange: "+System.currentTimeMillis());
 				isAPISuccess = true;
 				
 			} else if(headerProcessCode.equalsIgnoreCase("C")) {
-				System.out.println("Start before setReqUOMPrice: "+System.currentTimeMillis());
 				this.setReqUOMPrice(env, rootEle);
-				System.out.println("End after setReqUOMPrice: "+System.currentTimeMillis());
+				
 				// Build input document to call ChangeOrder API.
 				Document chngOrdDoc = YFCDocument.createDocument().getDocument();
 				chngOrdDoc.appendChild(chngOrdDoc.importNode(rootEle.getDOMNode(), true));
@@ -322,20 +302,14 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				log.verbose("");
 				
 				if(!isOrderPlaceFlag.equalsIgnoreCase("Y")) {
-					System.out.println("Start before processFOHold: "+System.currentTimeMillis());
-					processFOHold(rootEle, fOrderEle);		
-					System.out.println("End after processFOHold: "+System.currentTimeMillis());
+					processFOHold(rootEle, fOrderEle);										
 				}
-				System.out.println("Start before preparefOChange: "+System.currentTimeMillis());
+				
 				preparefOChange(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, fOrderEle, cOrderEle);
-				System.out.println("End after preparefOChange: "+System.currentTimeMillis());
+				
 				// Updates customer and fulfillment order.
-				System.out.println("Start before updatefOrder: "+System.currentTimeMillis());
 				returnToLegacyDoc = updatefOrder(env, chngcOrderEle0, chngcOrdStatusEle0, chngcOrdStatusEle, rootEle, cOrderEle, fOrderEle);
-				System.out.println("End after updatefOrder: "+System.currentTimeMillis());
-				System.out.println("Start before performOrderStatusChange: "+System.currentTimeMillis());
 				this.performOrderStatusChange(env, cAndfOrderEle, cOrderEle, fOrderEle, hdrStatusCode, "C");
-				System.out.println("End after performOrderStatusChange: "+System.currentTimeMillis());
 				isAPISuccess = true;
 				
 			} else if(headerProcessCode.equalsIgnoreCase("D")) {
@@ -344,53 +318,40 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				chngcOrderInXML0.appendChild(chngcOrderInXML0.importNode(rootEle.getDOMNode(), true));
 				chngcOrderInXML0.renameNode(chngcOrderInXML0.getDocumentElement(), chngcOrderInXML0.getNamespaceURI(), "Order");
 				YFCElement chngcOrderEle0 = YFCDocument.getDocumentFor(chngcOrderInXML0).getDocumentElement();
-				System.out.println("Start before handleHeaderProcessCodeD: "+System.currentTimeMillis());
+				
 				this.handleHeaderProcessCodeD(rootEle, fOrderEle);
-				System.out.println("End after handleHeaderProcessCodeD: "+System.currentTimeMillis());
 				if(rootEle.hasAttribute("OrderHeaderKey")) {
-					System.out.println("Start before setInstructionKeys: "+System.currentTimeMillis());
 					setInstructionKeys(rootEle, fOrderEle);
-					System.out.println("End after setInstructionKeys: "+System.currentTimeMillis());
-					System.out.println("Start before setExtendedPriceInfo: "+System.currentTimeMillis());
 					setExtendedPriceInfo(env, rootEle, false);
-					System.out.println("End after setExtendedPriceInfo: "+System.currentTimeMillis());
-					System.out.println("Start before filterAttributes: "+System.currentTimeMillis());
 					filterAttributes(rootEle, false);
-					System.out.println("End after filterAttributes: "+System.currentTimeMillis());
 					
 					if(log.isDebugEnabled()){
 					log.debug("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:"+rootEle.getString());
 					}
 					log.verbose("");
 					log.verbose("XPXChangeOrder_FO[HeaderProcessCode:D]-InXML:"+rootEle.getString());
-					System.out.println("Start before api execute flow XPXChangeOrder: "+System.currentTimeMillis());
+					
 					Document tempDoc = this.api.executeFlow(env, "XPXChangeOrder", rootEle.getOwnerDocument().getDocument());
-					System.out.println("End after api execute flow XPXChangeOrder: "+System.currentTimeMillis());
 					if(tempDoc != null) {
 						returnToLegacyDoc = YFCDocument.getDocumentFor(tempDoc);
 					} else {
 						throw new Exception("Service XPXChangeOrder Failed!");
 					}
 				}
-				System.out.println("Start before handleHeaderProcessCodeD 3args: "+System.currentTimeMillis());
+				
 				this.handleHeaderProcessCodeD(chngcOrderEle0, fOrderEle, cOrderEle);
-				System.out.println("End after handleHeaderProcessCodeD 3args: "+System.currentTimeMillis());
 				if(chngcOrderEle0.hasAttribute("OrderHeaderKey")) {
-					System.out.println("Start before setExtendedPriceInfo: "+System.currentTimeMillis());
 					setExtendedPriceInfo(env, chngcOrderEle0, true);
-					System.out.println("End after setExtendedPriceInfo: "+System.currentTimeMillis());
-					System.out.println("Start before filterAttributes: "+System.currentTimeMillis());
 					filterAttributes(chngcOrderEle0, true);
-					System.out.println("End after filterAttributes: "+System.currentTimeMillis());
+					
 					if(log.isDebugEnabled()){
 					log.debug("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:"+chngcOrderEle0.getString());
 					}
 					
 					log.verbose("");
 					log.verbose("XPXChangeOrder_CO[HeaderProcessCode:D]-InXML:"+chngcOrderEle0.getString());
-					System.out.println("Start before api execute flow XPXChangeOrder 2: "+System.currentTimeMillis());
+					
 					Document tempDoc = this.api.executeFlow(env, "XPXChangeOrder", chngcOrderEle0.getOwnerDocument().getDocument());
-					System.out.println("End after api execute flow XPXChangeOrder 2:  "+System.currentTimeMillis());
 					if(tempDoc != null) {
 						returnToLegacyDoc = YFCDocument.getDocumentFor(tempDoc);
 					} else {
@@ -403,9 +364,9 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 				isAPISuccess = true;
 				
 			} else if(headerProcessCode.equalsIgnoreCase("S")) {
-				System.out.println("Start before performOrderStatusChange: "+System.currentTimeMillis());
+				
 				this.performOrderStatusChange(env, cAndfOrderEle, cOrderEle, fOrderEle, hdrStatusCode, "S");
-				System.out.println("End after performOrderStatusChange: "+System.currentTimeMillis());
+				
 				// Input xml has been passed as the output after updating the status.				
 				returnToLegacyDoc = YFCDocument.getDocumentFor(inXML);
 				
@@ -421,9 +382,7 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 			if(!"Y".equalsIgnoreCase(isOrderPlaceFlag)) {
 			   ((YFSContext)env).rollback();
 			}
-			System.out.println("Start before prepareErrorObject: "+System.currentTimeMillis());
 			prepareErrorObject(ex, "LegacyOrderUpdate", ex.getMessage(), env, inXML);
-			System.out.println("End after prepareErrorObject: "+System.currentTimeMillis());
 		} 
 		finally {
 			if(isAPISuccess) {
@@ -449,9 +408,6 @@ public class XPXPerformLegacyOrderUpdateAPI implements YIFCustomApi {
 		log.verbose("");
 		log.verbose("ReturnToLegacyDoc:"+returnToLegacyDoc.toString());
 		
-		long endTime = System.currentTimeMillis();
-		System.out.println("End before returning performLegacyOrderUpdate: "+ endTime);
-		log.info("Total Time taken to process performLegacyOrderUpdate : ["+(endTime-startTime)+"]");
 		return returnToLegacyDoc.getDocument();
 	}
 	
