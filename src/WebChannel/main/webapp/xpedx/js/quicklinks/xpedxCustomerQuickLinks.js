@@ -55,7 +55,7 @@ function addRow() {
 
 	var deleteLink = document.createElement('a');
 	var imageIcon = document.createElement('img');
-	imageIcon.setAttribute('src','"XPEDXWCUtils_STATIC_FILE_LOCATION +"/xpedx/images/icons/12x12_red_x.png');
+	imageIcon.setAttribute('src',XPEDXWCUtils_STATIC_FILE_LOCATION+'/xpedx/images/icons/12x12_red_x.png');
 	imageIcon.setAttribute('alt','delete');
 	imageIcon.setAttribute('title','Remove');
 	imageIcon.setAttribute('width','16');
