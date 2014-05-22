@@ -256,13 +256,13 @@ $(document).ready(function() {
 				</s:elseif>
 			<s:else>
 		<s:if test="#ad_keyword != null" >
-			<sif test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true)}' >
+			<s:if test='%{(#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT) && (#isGuestUser == true)}' >
 				 <script type="text/javascript" language="JavaScript">
 				 aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
 				aj_zone = 'ipaper'; aj_adspot = '147684'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
 				aj_pv = true; aj_click = '';
 				</script>
-			</sif>
+			</s:if>
 			<s:elseif test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
 				<script type="text/javascript" language="JavaScript">
 				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
