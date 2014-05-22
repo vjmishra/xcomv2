@@ -48,7 +48,7 @@ function setStockItemFlag()
 	<div id="left-col">
 	<div class="bgleftcol">
 
-	<s:form name='narrowSearch' action="search" onsubmit="showProcessingMessage();">
+	<s:form name='narrowSearch' action="search">
 		<div class="searchbox-form1">
 			<div class="catalog-search-container">
 				<input id="search_searchTerm" class="x-input input-watermark" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text">
