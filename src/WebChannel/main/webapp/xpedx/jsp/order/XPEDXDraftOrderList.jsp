@@ -261,9 +261,9 @@ span.underlink:hover {
        
         <s:action name="xpedxHeader" executeResult="true"
 		namespace="/common" />
-            <div class="container">
+            <div class="container content-container">
             	<!--  <div id="breadcumbs-list-name" class="page-title">My Carts </div> --> 
-            	 <div id="breadcumbs-list-name" class="page-title"> <s:text name='MSG.SWC.CART.CARTLIST.GENERIC.PGTITLE' /> </div> 
+            	 <h1><s:text name='MSG.SWC.CART.CARTLIST.GENERIC.PGTITLE' /></h1>
                 <div id="mid-col-mil">
                  <div id="tool-bar-bottom" style="margin-top: 10px; padding-bottom: 5px;">
                  <!-- Webtrends Tag starts -->
@@ -285,9 +285,10 @@ span.underlink:hover {
 					<!-- EB-2395 END -->
      			     		<!-- is your active cart. --> 
      			     		<s:text name='MSG.SWC.CART.CARTLIST.INFO.ACTIVECART' />
-     			     </span> 
-		          	<s:a cssClass="orange-ui-btn modal float-right-imp" id="various1"   href="#createNewCartDlg" 
-                 	onclick="javascript: writeMetaTag(tag,content,2);" title="Create New Cart"><span>Create New Cart</span></s:a>
+     			    </span>
+     			    <%-- (This used to have onclick="writeMetaTag(tag,content,2);" on top button but not bottom) --%> 
+					<input class="btn-gradient floatright" id="various1" type="button" href="#createNewCartDlg"
+						value="Create New Cart" />
                  </div> 
                 <br />
                 <div class="clear">&nbsp;</div>
@@ -348,7 +349,8 @@ span.underlink:hover {
 					<p class="search-pagination-bottom" align="right" style="float: right;">
 						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#draftOrderListPaginationURL}"/>
 					</p><br/><br/>
-                    <s:a cssClass="orange-ui-btn modal float-right" id="createCart2" href="#createNewCartDlg" title="Create New Cart"><span>Create New Cart</span></s:a> 
+					<input class="btn-gradient floatright" id="createCart2" type="button" href="#createNewCartDlg"
+						value="Create New Cart" />
                     </div>
                     <br />
 

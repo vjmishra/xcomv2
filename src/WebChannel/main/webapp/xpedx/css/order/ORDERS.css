@@ -1395,6 +1395,9 @@ div.shopping-cart .mil-attr-wrap {
 div.shopping-cart div.mil-edit-forms input {
 	width: 200px;
 }
+div.shopping-cart div.mil-edit-forms input.btn-neutral, div.shopping-cart div.mil-edit-forms input.btn-gradient {
+	width: auto;
+}
 div.shopping-cart div.mil-edit-forms textarea {
 	width: 400px;
 }
@@ -2057,5 +2060,17 @@ table#QuickAddTableSaal.form label, .form table {
 	margin-top: 20px;
 }
 
+/*********NEW STYLES FOR PAGE TITLES**************/
 
-	
+.content-container .rounded-border {
+	margin-left: 0px;
+	}
+.content-container .midsection {
+	margin-left: 0px;
+	}
+.content-container .search-pagination-bottom {
+	margin-right: 0px;
+	}
+.content-container #mid-col-mil {
+	margin-left: 0px;
+	}

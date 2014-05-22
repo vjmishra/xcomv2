@@ -285,14 +285,10 @@ function printPOs(customerPos) {
 			</div>
 		</div>
 		<!-- end tooltip boxes -->
-            <div class="container orders-page" > 
-                <!-- breadcrumb -->
-                <div class="OM-breadcrumb">
-                	<%-- <p><span class="page-title"> Order Management</span></p> --%>
-                	 <p><span class="page-title"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.PGTITLE' /> </span></p>
-                	<!-- <div id="divid" align="center" style="color:red;">&nbsp;</div>  --> 
-                </div>
-                <!-- end breadcrumb -->
+
+		<div class="container content-container" >
+			<h1><s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.PGTITLE' /></h1>
+
                 <!-- begin top section -->
                 <s:set name="selectedHeaderTab" value="#_action.getSelectedHeaderTab()"> </s:set>
                 <s:set name="blankValue" value="%{#selectedHeaderTab ==#blankValue}" />
@@ -306,7 +302,7 @@ function printPOs(customerPos) {
 	                	<s:set name='openOrder' value="%{'true'}"/>
 	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
-<br/>
+                	<br/>
                 <div class="rounded-border top-section ">
                 	<!-- begin content w/border -->
 			<fieldset class="x-corners mil-col-mil-div">
@@ -384,11 +380,15 @@ function printPOs(customerPos) {
 						<s:hidden name="shipToSearchFieldName1" id="shipToSearchFieldName1" value="%{getShipToSearchFieldName()}" />
 						<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
 						<a href='#ship-container' id="shipToOrderSearch"></a></td>
-						<td colspan="1"><a class="orange-ui-btn float-right" href="javascript:submit_orderListForm();"><span>Search </span></a> 
-						<a class="grey-ui-btn float-right" href="javascript:clearFilters_onclick()" ><span>Clear </span></a> </td>
+
+						<td colspan="1">
+							<input class="btn-gradient floatright addmarginright10" type="button" value="Search" onclick="submit_orderListForm();" />
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Clear" onclick="clearFilters_onclick();" />
+						</td>
                         </tr>
                         </table> <!-- end content-holding table -->
                 </fieldset><!-- end border content -->
+
                 <div id="search-view-links">
 					<s:url id='reportsLink' namespace='/services' action='myreports'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
@@ -720,7 +720,8 @@ function printPOs(customerPos) {
 											 	<s:set name='primaryApprover' value="%{#_action.getPrimaryApproverID()}"/>
 											 	<s:set name='proxyApprover' value="%{#_action.getProxyApproverID()}"/>
 											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser) && #parentOrder.getAttribute("Status") != "Cancelled"}'>
-													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
+												<input class="btn-neutral floatright addmarginright20" type="button" tabindex="91"
+													value="Approve / Reject" onclick="openNotePanel('approvalNotesPanel', 'Approve','<s:property value="customerOhk"/>');" />
 												</s:if><br/>
 											</s:if>
 											<s:elseif test='#isPendingApproval && #isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>

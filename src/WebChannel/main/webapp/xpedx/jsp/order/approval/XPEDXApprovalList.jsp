@@ -343,15 +343,10 @@
 		
 		<!-- end tooltip boxes -->
 		
-            <div class="container orders-page"> 
-                <!-- breadcrumb -->
-                <div class="OM-breadcrumb" class="page-title">
-                	<p class="page-title"><s:text name="approvallist.title" /></p>
-                </div>
-                <!-- end breadcrumb -->
+		<div class="container content-container">
+			<h1><s:text name="approvallist.title" /></h1>
                 
                 <!-- begin top section -->
-                 <br/>  <br/> 
                 <div class="rounded-border top-section">
                 	<!-- begin content w/border -->
 			<s:form name="approvalList" action="approvalList" id="approvalList" namespace="/order" method="POST">
@@ -414,9 +409,10 @@
 						<s:hidden name="shipToSearchFieldName1" id="shipToSearchFieldName1" value="%{getShipToSearchFieldName()}" />
 						<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
 						<a href='#ship-container' id="shipToOrderSearch"></a></td>
-						<td colspan="1"><a class="orange-ui-btn float-right" href="javascript:search_check(); submit_approveOrderListForm();" ><span>Search </span></a> 
-						
-						<a class="grey-ui-btn float-right" href="javascript:clearFilters_onclick()" ><span  class="orange-filter float-right">Clear </span></a> 
+
+						<td colspan="1">
+							<input class="btn-gradient floatright addmarginright10" type="button" value="Search" onclick="search_check(); submit_approveOrderListForm();" />
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Clear" onclick="clearFilters_onclick();" />
 						</td>
                         </tr>
                        
@@ -584,8 +580,8 @@
 										<s:property value="#parentOrder.getAttribute('Status')" />
 									</s:else>
 									<br/>
-									<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Accept','%{ohk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
-<%-- 									<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{ohk}'); " cssClass="grey-ui-btn" tabindex="92" theme="simple"><span>Reject</span></s:a> --%>
+									<input class="btn-neutral floatright addmarginright20" type="button" tabindex="91"
+										value="Approve / Reject" onclick="openNotePanel('approvalNotesPanel', 'Accept','<s:property value="ohk"/>');" />
 								</td>
 					
 							</tr>

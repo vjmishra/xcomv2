@@ -720,12 +720,15 @@ from session . We have customer Contact Object in session .
 	namespace="/order" method="POST">
 	<s:hidden name='fullBackURL' value='%{#returnURL}' />
 	<s:hidden name='customerHoldCheck' value='' id='customerHoldCheck'/>
-	<div class="container checkout"><!-- breadcrumb -->
+
+	<div class="container content-container">
 		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
-		<span class="page-title">Checkout</span>
-	<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink" style="margin-top:0px;">
-		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
+			<h1>Checkout</h1>
+			<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink" style="margin-top:0px;">
+				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
+					width="16" height="15" alt="Print Page" />Print Page</span></a>
 		</div>
+
 		<!--Commented for 3098  -->
 		<!-- <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div> -->
 		<%--jira 2885 --%>
@@ -1872,27 +1875,28 @@ from session . We have customer Contact Object in session .
 		<!--bottom button bar -->
 		<div class="bottom-btn-bar">
 		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-			<a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Cart</span></a>
+			<input class="btn-neutral floatleft" type="button" value="Edit Cart" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>";' />
 		</s:if>
-		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a>
+		<s:else>
+			<input class="btn-neutral floatleft" type="button" value="Edit Order" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>";' />
 		</s:else>	
 		
 		<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
 			<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
 			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Approve and Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Approve and Submit Order" onclick='validateCustomerPO();' />
 			</s:if>
 			<s:else>
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Submit Order" onclick='validateCustomerPO();' />
 			</s:else>	
 		</s:if>
 		<s:else>
 <%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
 			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">				
-			     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Approve and Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Approve and Submit Order" onclick='validateFormSubmit();' />
 			</s:if>
 			<s:else>
-				<a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Submit Order" onclick='validateFormSubmit();' />
 			</s:else>    
 		</s:else>	
 			

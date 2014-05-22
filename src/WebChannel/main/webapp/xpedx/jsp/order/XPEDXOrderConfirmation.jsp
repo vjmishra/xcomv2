@@ -261,23 +261,13 @@
 					</s:url>
         <div id="main">        	 
 			<div class="t1-header commonHeader" id="headerContainer"><s:action name="xpedxHeader" executeResult="true" namespace="/common" /></div>
-			<div class="container">
+			<div class="container content-container">
                 <!-- breadcrumb -->
                 <div id="breadcumbs-list-name">
-                		
-                		<s:if test='#isOrderOnApprovalHoldStatus'>
-                		<span class="page-title">Confirmation</span>
-<%-- 							<a href="<s:url action="portalHome" namespace="/home" includeParams='none'/>">&nbsp;Orders</a> / <span class="breadcrumb-inactive">Order Confirmation: <span class="breadcrumb-alert">Approval Required</span></span> --%>
-						</s:if>
-						<s:else>
-						<span class="page-title">Confirmation</span>
-<%-- 							<a href="<s:url action="portalHome" namespace="/home" includeParams='none'/>">Orders</a> / <span class="breadcrumb-inactive">Order Confirmation: <span class="breadcrumb-alert"></span>Success</span> --%>
-						</s:else>
+						<h1>Confirmation</h1>
                 	    <a href="javascript:window.print()"><span class="print-ico-xpedx order-confirm underlink" ><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>
-<%--                     <a href="javascript:emailLightBox('<s:property value="%{urlEmail}" />')" class="underlink"><span class="print-ico-xpedx order-confirm"><img width="16" height="15" alt="Print This Page" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/email-icon.gif">Email Page</span></a> --%>
-					<br/>
-					<br/>
                 </div>
+
                 <div id="mid-col-mil">
 					<fieldset  class="x-corners mil-col-mil-div">						
                         <legend>Web Confirmation:&nbsp; 
@@ -458,8 +448,11 @@
                         </table>
                         <p class="legal-text"> <s:text name='MSG.SWC.ORDR.OM.INFO.LEAGALTXT' /></p>
                     </fieldset >
-                   <ul class="tool-bar-bottom-right" id="tool-bar">
-                        <li><a href="<s:url action="orderList"></s:url>" class="grey-ui-btn"><span>View Orders</span></a></li>
+                    <ul class="tool-bar-bottom-right" id="tool-bar">
+                        <li>
+                        <input class="btn-neutral floatright" type="button"
+                        	value="View Orders" onclick="window.location='<s:url action="orderList"></s:url>'" />
+                        </li>
                    	</ul>
 
                     <div class="clearall"></div> 

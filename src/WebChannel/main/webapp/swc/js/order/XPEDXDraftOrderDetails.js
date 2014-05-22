@@ -331,15 +331,10 @@ function update()
 	
 	if(document.getElementById('cartName_new')!=null && document.getElementById('cartName_new').value.trim() == "")
 	{
-		//commented for 3098
-		//alert("Cart name can't be blank, please add a valid name for cart.");
-		document.getElementById("errorMsgTop").innerHTML = "Name is required." ;
-        	document.getElementById("errorMsgTop").style.display = "inline";
-        
-        	document.getElementById("errorMsgBottom").innerHTML = "Name is required." ;
-        	document.getElementById("errorMsgBottom").style.display = "inline";
-		//3098
-		
+		$('#errorMsgTop,#errorMsgBottom').each(function(){
+			$(this).find('p').text("Name is required.");
+			$(this).show();
+		});
 		return;
 	}
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;

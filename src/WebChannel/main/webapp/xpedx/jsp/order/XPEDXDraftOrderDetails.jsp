@@ -558,67 +558,67 @@ $(document).ready(function(){
 
 
 
-<div class="container shopping-cart">
+<div class="container content-container shopping-cart">
 
 <s:if test='ajaxLineStatusCodeMsg!=null'>
-	<div id="errorMsgDiv">
-	<s:if test='#pnaErrorStatusMsg !=null && pnaErrorStatusMsg != "" '>
-	<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+	<s:if test='#pnaErrorStatusMsg !=null && pnaErrorStatusMsg.trim() != "" '>
+		<div id="errorMsgDiv" class="error">
+			<s:property value="pnaErrorStatusMsg" />
+		</div>
 	</s:if>
-<%--	<h5 align="center"><b><font color="red"><s:property
-		value="ajaxLineStatusCodeMsg" /></font></b></h5>  --%>
-	</div>
 </s:if>
-<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5><br/>
-	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5><br/>
-	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
+<div id="minOrderErrorMessage" class="error" style="display: none"></div>
+<div id="maxOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="entitleErrorMessage"  class="error" style="display: none"></div>
 	
 <s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
 	<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5><br/>
 </s:if>
+
 <div id="infoMessage">
 	<s:if test=' "" != duplicateInfoMsg '>		
 		<s:property value="duplicateInfoMsg" />
 	</s:if>
 </div>
+
 <!-- EB-66 Suspended ShipTo -->
 	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
 	<br/><br/><br/><h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	
-<!-- breadcrumb / 'print page' button -->
-<div class="breadcrumb-title" id="breadcumbs-list-name">
-	<span class="page-title">
+<h1>
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		 My Cart:&nbsp;
+		 My Cart:
+        <span>
 		<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
 			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
-        	 Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
-        </s:if>
-        <s:else>
-        	Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/>
-        </s:else>
-	</s:if>
-	<s:else>
-			 	<s:property value='#orderDetails.getAttribute("OrderName")' />
+        		 Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
+	        </s:if>
+	        <s:else>
+	        	Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/>
+	        </s:else>
+		</s:if>
+		<s:else>
+		 	<s:property value='#orderDetails.getAttribute("OrderName")' />
 		</s:else>
+        </span>
 	</s:if>
 	<s:else>
-			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
-        		<b>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/></b>
-        	</s:if>
-        	<s:else>
-        		<b>Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/></b>
-        	</s:else>
+		<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
+       		<b>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/></b>
+       	</s:if>
+       	<s:else>
+       		<b>Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/></b>
+       	</s:else>
 	</s:else>
-	
-	</span>
-	
-
-<br/><br/>
-<a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
+</h1>
+<div style="margin-right: 0px;" class="print-ico-xpedx orders underlink">
+	<a href="javascript:window.print()">
+		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />
+    	Print Page
+	</a>
 </div>
 
 <div id="mid-col-mil">
@@ -759,27 +759,35 @@ $(document).ready(function(){
 			<s:param name="selectedHeaderTab">QuickAdd</s:param>
 			<s:param name="quickAdd" value="%{true}" />
 		</s:url>
-		<a tabindex="3403" id="quick-add-button" class="grey-ui-btn" href="<s:property value='%{#quickAddURL}'/>">
-			<span>Go to Quick Add</span>
-		</a>
+		<input type="button" id="quick-add-button" tabindex="3403" class="btn-neutral floatright addmarginright10"
+			value="Go to Quick Add" onclick="window.location='${quickAddURL}';" />
 	</li>
     <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-    	<li><a href="#" tabindex="3402" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
+		<input type="button" id="otherCartActions" tabindex="3402" class="btn-neutral floatright addmarginright10"
+			value="Copy Cart" onclick="actionOnList('Copy');" />
     </s:if>	
-<s:if test='majorLineElements.size() > 0'>
-	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-   	 <li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a></li>
-   	 </s:if>
-   	 <s:else>
-   	 	<li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a></li>
-   	 </s:else>
- </s:if>
+	<s:if test='majorLineElements.size() > 0'>
+		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+			<li>
+			<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+				value="Update Cart" onclick="update();" />
+			</li>
+		</s:if>
+		<s:else>
+		<li>
+		 	<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+				value="Update Order" onclick="update();" />
+		</li>
+		</s:else>
+	</s:if>
 
 </ul>
 	<br />
 	
 </div>
-<br/><div class="error" id="errorMsgTop" style="display:none;position:relative;margin-left:445px;" ></div>
+
+<div id="errorMsgTop" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+
 <div class="clear">&nbsp;</div>
 <!-- end item description -->
 
@@ -1198,26 +1206,29 @@ var currentAadd2ItemList = new Object();
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
 		<s:if test='!#isPunchoutUser'>
-			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">		    
-		    	<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>	    	
+			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">
+				<input type="button" class="btn-gradient floatright addmarginright10" value="Checkout" onclick="checkOut();" />
 			</s:if> 
 		    <s:if test='#hasPendingChanges == "Y"'>
 	        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
 	        </s:if>
 		</s:if>
 		<s:else>
-			<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Submit Cart</span></a>
+			<input type="button" id="checkout-btn" class="btn-gradient floatright addmarginright10" value="Submit Cart" onclick="checkOut();" />
 		</s:else>
 	</s:if>
 	</s:if>
 
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a>
+		<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+			value="Update Cart" onclick="update();" />
 	</s:if>
 	<s:else>
-		<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
+		<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+			value="Update Order" onclick="update();" />
 	</s:else>
 </div>
+<div class="clearfix"></div>
 
 <!--Added for 3098  -->
 <!-- EB-66 Suspended ShipTo -->
@@ -1226,12 +1237,11 @@ var currentAadd2ItemList = new Object();
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	
-<br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
-<br/><h5 align="center"><b><div  id="entitleErrorMessageBottom" style="position:relative;color:red;display:inline" ></div></b></h5>
-<br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
-<br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
+<div id="maxOrderErrorMessageBottom" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="minOrderErrorMessageBottom" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="entitleErrorMessageBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="errorMsgBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 
-<div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
 </div>
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
@@ -1650,59 +1660,34 @@ function validateOrder()
 	var fmtdchargeAmount='<s:property value='#fmtdchargeAmount' />';//JIRA 3547
 	var erroMsg = '<s:property value='#erroMsg' />';//Added for JIRA 3523
 	
-	//Added for JIRA 3523
 	if(erroMsg != null && erroMsg != ""){
-		var divId=document.getElementById("entileErrorMessade");
-		var divId1 = document.getElementById("entitleErrorMessageBottom");
-		if(divId != null)
-		{		
-			
-			divId.innerHTML="Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.";
-		}
-		if(divId1 != null)
-		{
-			divId1.innerHTML="Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.";
-		}
+		$('#entitleErrorMessage,#entitleErrorMessageBottom').each(function(){
+			$(this).find('p').text("Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.");
+			$(this).show();
+		});
 	}
-	
-	//JIRA 3488 start
+
 	if(maxAmount > 0 && totalAmountNum>maxAmount)
 	{
-		var divId=document.getElementById("maxOrderErrorMessage");
-		var divId1 = document.getElementById("maxOrderErrorMessageBottom");
-		if(divId != null)
-		{		
-			
-			divId.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
-		}
-		if(divId1 != null)
-		{
-			divId1.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
-		}
-			
+		$('#maxOrderErrorMessage,#maxOrderErrorMessageBottom').each(function(){
+			$(this).find('p').text("Order exceeds allowable maximum of "+fmtdMaxOrderAmount);
+			$(this).show();
+		});
 	}
-	//JIRA 3488 end
+
 	if(minAmount >totalAmountNum)
 	{
-		var divId=document.getElementById("minOrderErrorMessage");
-		var divId1=document.getElementById("minOrderErrorMessageBottom");
-		if(divId != null)
-		{		
-			//Start fix for 3547
-			//divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
-			divId.innerHTML="To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + "."
-		}
-		if(divId1 != null)
-		{
-			divId1.innerHTML="To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + ".";
-			//divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
-			//End fix for 3547
-		}
+		$('#minOrderErrorMessage,#minOrderErrorMessageBottom').each(function(){
+			$(this).find('p').text("To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + ".");
+			$(this).show();
+		});
 	}
 }
-	function updateValidation(){
-		$(".numeric").numeric();	
-	}
+
+function updateValidation(){
+	$(".numeric").numeric();	
+}
+
 	updateValidation();
 
 	// seems like we do want to do this on punchout too
