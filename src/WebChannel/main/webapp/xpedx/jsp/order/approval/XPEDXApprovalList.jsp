@@ -248,11 +248,11 @@
 	
 	
 	//added for XBT - 322
-	//var myMask;
+	var myMask;
 	function openNotePanelSetAction(actionValue){
-		/* var waitMsg = Ext.Msg.wait("Processing...");
+		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show(); */
+		myMask.show();
 		//end for XBT - 322
 		 if(actionValue == "Accept"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";

@@ -1943,9 +1943,9 @@ function SubmitActionWithValidation()
 		var myMask;
 		function addItemsToList(){
 			//added for jira 3974
-			/* var waitMsg = Ext.Msg.wait("Processing...");
+			var waitMsg = Ext.Msg.wait("Processing...");
 			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-			myMask.show(); */
+			myMask.show();
 			//alert('currentAadd2ItemListIndex '+currentAadd2ItemListIndex);
 			//alert('currentAadd2ItemList '+currentAadd2ItemList);
 			var idx = currentAadd2ItemListIndex;

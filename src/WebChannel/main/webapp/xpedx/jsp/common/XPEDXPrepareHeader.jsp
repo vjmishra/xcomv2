@@ -1577,12 +1577,12 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     }
 	// Added for removing the double quotes from an search term. Jira # 2415
 	
-	//var myMask;
+	var myMask;
 	function newSearch_onsubmit(e){
 		//added for jira 3974
-		/* var waitMsg = Ext.Msg.wait("Processing...");
+		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show(); */
+		myMask.show();
 		var searchText = document.getElementById("newSearch_searchTerm").value;
 		document.getElementById('newSearch_rememberNewSearchText').value = searchText;
 
@@ -2941,7 +2941,7 @@ function callAjaxForSorting(url,divId)
 			       		<s:url id='shipTo' namespace='/profile/org' action='xpedxGetShipToInfo' />
 						<s:url id='billTo' namespace='/profile/org' action='xpedxGetBillToInfo' />			       
 						<li>
-							<s:a href='%{myProfile}' cssClass="link" >
+							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
 								<s:text name="My Profile"></s:text>
 							</s:a>
 						</li>						
