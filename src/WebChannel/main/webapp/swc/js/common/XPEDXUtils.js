@@ -98,7 +98,7 @@ function replacementAddToList(uId) {
 	//Submit the form
 	form.dom.submit();
 	
-	Ext.Msg.wait('Saving your selection... Please wait.');
+	//Ext.Msg.wait('Saving your selection... Please wait.');
 }
 
 function replacementReplaceInList(uId) {
@@ -126,7 +126,7 @@ function replacementReplaceInList(uId) {
 	form.dom.uom.value 	= uom;
 	form.dom.submit();
 	
-	Ext.Msg.wait('Saving your selection... Please wait.');
+	//Ext.Msg.wait('Saving your selection... Please wait.');
 }
 
 function addComma(strOriginal){	 
