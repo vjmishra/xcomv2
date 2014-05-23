@@ -1,4 +1,4 @@
-	Ext.BLANK_IMAGE_URL = "<s:url value='"+XPEDXWCUtils_STATIC_FILE_LOCATION + "/ext/resources/images/default/s.gif'/>";
+	Ext.BLANK_IMAGE_URL = "<s:url value='/ext/resources/images/default/s.gif'/>";
 
 Ext.onReady(function() {
 	

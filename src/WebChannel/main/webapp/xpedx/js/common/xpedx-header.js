@@ -16793,7 +16793,7 @@ Ext.onReady(function () {
 //Adding order list xpedx/js/catalog/catalogExt.js
 
 
-Ext.BLANK_IMAGE_URL = "<s:url value='"+ XPEDXWCUtils_STATIC_FILE_LOCATION +"/ext/resources/images/default/s.gif'/>";
+Ext.BLANK_IMAGE_URL = "<s:url value='/ext/resources/images/default/s.gif'/>";
 
 function rebindClickForNarrowByExpandCollapse() {
 	// eb-2296: remove any existing click bindings before re-adding.
