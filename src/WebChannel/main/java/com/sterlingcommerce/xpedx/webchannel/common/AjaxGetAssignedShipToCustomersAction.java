@@ -167,6 +167,9 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
  */
    private String getFormattedZip(String zipCode){
 	   if(zipCode!=null){
+		 if (zipCode.indexOf("-") > -1) {
+			 zipCode = zipCode.replaceAll("-", "");
+		 }
 		String firstZip=zipCode;
 		String lastZip="";
 	
