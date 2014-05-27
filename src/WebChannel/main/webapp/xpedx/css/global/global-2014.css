@@ -632,6 +632,7 @@ div.catalog-search-container input#search_searchTerm {
 	margin: 0;
 	padding: 0;
 	margin-right: -16px;
+	font-size: 11px;
 }
 .subPanelBox {
 	border: 0 solid #DDDDDD;
@@ -744,6 +745,12 @@ div.catalog-search-container input#search_searchTerm {
 	margin: 4px 0 0 40px;
 	line-height: 22px;
 	}
+.ship-search-wrap span.resetlink {
+	margin: 4px 0 0 20px;
+	line-height: 22px;
+	color: #003399;
+	cursor:pointer;
+}
 .ship-search-wrap span a {
 	color: #e16901;
 	}
