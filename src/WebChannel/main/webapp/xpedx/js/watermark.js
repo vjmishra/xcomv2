@@ -2,8 +2,8 @@
  * This snippet of code emulates the HTML5 'placeholder' attribute, which we can't use because IE9 doesn't support it.
  * Usage: <input type="text" data-watermark="My placeholder text" />
  */
-$(document).ready(function() {
-	var inputs = $(":input[data-watermark]");
+function do_watermark(selector) {
+	var inputs = $(selector);
 	for (var i = 0, len = inputs.length; i < len; i++) {
 		var $input = $(inputs[i]);
 		
@@ -23,5 +23,9 @@ $(document).ready(function() {
 				$this.addClass('input-watermark-color');
 			}
 		});
-	}
+	}	
+}
+
+$(document).ready(function() {
+	do_watermark(':input[data-watermark]');
 });

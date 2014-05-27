@@ -182,16 +182,21 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 
 				// create search input box in header div
 				var form = $("<form>").attr({"class":"filterform", "action":"#"}),
-				input = $("<input>").attr({"class":"filterinput", "type":"text"});
-				$(form).append(input).appendTo($("#header"));
-
+				input = $("<input>").attr({"class":"filterinput", "type":"text", "data-watermark":"Search"});
+				$(form).append(input).append('<span class="resetlink">Reset</span>').appendTo($("#header"));
+				do_watermark('.filterinput'); //add water mark
 				// re-create ship-to list when user performs filter operation
 				$('.filterform').submit(function() {
 					var filter = $(this).find('.filterinput').val();
 					displaySearchResults(filter);
 					return false;
 				});
-
+				$('.resetlink').click(function() {
+					$("input[class='filterinput']").val('');
+					displaySearchResults('');
+					do_watermark('.filterinput');
+					return false;
+				});
 				function displaySearchResults(filter) {
 					var shipToList = [];
 					if (filter) {							
