@@ -1086,7 +1086,7 @@ public class XPEDXPriceandAvailabilityUtil {
 					}
 
 					Element categoryElem = SCXmlUtil.getXpathElement(itemEle, "CategoryList/Category");
-					String categoryPath = categoryElem.getAttribute("CategoryPath");
+					String categoryPath = categoryElem == null ? null : categoryElem.getAttribute("CategoryPath");
 
 					XPEDXItemPricingInfo pricingInfo = null;
 					for (XPEDXItem pandAItem : items) {
