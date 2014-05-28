@@ -1071,3 +1071,7 @@ ul.megamenu {
 #searchTips ul li {
 	margin-top: 5px;
 	}
+#home-image-rotation-nav a.activeSlide {
+    background: #69e295;
+}
+	
