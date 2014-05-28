@@ -2056,6 +2056,325 @@ table#QuickAddTableSaal.form label, .form table {
 	height: 1px;
 	margin-top: 20px;
 }
+/***************NEW DETAIL PAGE******************/
+.detail-view h1 {
+	width: 600px;
+	float: left;
+	clear: none;	
+	}
+.detail-image-wrap {
+	width: 170px;
+	float: left;
+	clear: none;
+	}
+.detail-view .print-ico-xpedx {
+	margin-top: -10px;
+	margin-right: 8px;
+	}
+.prodImg {
+    box-shadow: 1px 1px 4px #999999;
+}
+.detail-view .order-wrap {
+	width: 440px;
+	float: left;
+	clear: none;
+	border-left: #efefef 1px solid;
+	padding: 0px 0px 20px 15px;	
+	}
+.item-button-wrap {
+	clear: both;
+	height: 40px;
+	width:420px;
+	}
+.detail-view .order-input-wrap {
+	float:right;
+	display: block;
+	margin-top: 20px;
+}
+.detail-view .order-row {
+	height: 25px;
+	margin-bottom: 5px;
+	width: 500px;
+	text-align: right;
+	margin-right: 20px;
+}
+.detail-view .order-input-wrap .order-label {
+	float: left;
+	width: 153px;
+	text-align: right;
+	padding: 3px 6px 6px 0px;
+	margin-left: 155px;
+}
+.detail-view .order-input select {
 
+	width: auto;
+	text-align: left;
+}
+.detail-view ul#prodlist, .detail-view li.prodlist{
+	margin: 0px 0px 20px 10px;
+	font-size: 13px;
+	overflow: visible;
+	max-height: none;
+	}
+
+
+.detail-view .price-wrap .pa-row .col-1 {
+    clear: none;
+    float: left;
+    padding-right: 4px;
+    text-align: right;
+	width: 180px;
+	margin-right: 10px;
+
+}
+.detail-view .price-wrap .pa-row .col-1 {
+    clear: none;
+    float: left;
+	width: 175px;
+	margin-left: 10px;
+
+}
+.detail-view .list-wrap .pa-row .col-1 {
+    clear: none;
+    float: left;
+    padding-right: 4px;
+    text-align: right;
+	width: 90px;
+	margin-right: 10px;
+
+}
+
+.detail-view .item-numbers  {
+	margin-top: 10px;
+	}
+.detail-view .item-numbers img {
+	display: inline;
+	}
+.ready-to-ship {
+	color: #008000;
+}
+	
+table#prod-details-tbl  {
+	 border: 1px solid #CCCCCC;
+     border-collapse: separate;
+}
+.detail-view .bracket-wrap {
+	padding-left: 100px;
+}
+.detail-view .avail-wrap {
+	padding-left: 100px;
+	width: 300px;
+}
+.detail-view .list-wrap {
+	padding-left: 100px;
+	width: 300px;
+}
+.detail-view .pa-price {
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+
+}
+.detail-view .replacement-item {
+	color: #ff0000;
+	font-weight: bold;
+	text-align: right;
+	margin: 0px 18px 10px 0px;;
+	padding-top: 6px;
+	clear: both;
+	}
+.detail-view .replacement-item span{
+	color:#000000;
+	}
+/*	*****TOGGLE STYLES******/
+
+.specs-wrap {
+	float: right;
+	clear: none;
+	width: 300px;
+	height: auto;
+	overflow: hidden;
+	}
+.specs-trigger, .specs-trigger2, .specs-trigger3, .specs-trigger4{
+	width: 290px;
+	height: 25px;
+	border-top: #cccccc 1px solid;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-left: 0px;
+	padding-top: 7px;
+	color: #666666;
+	font-weight: bold;
+	text-transform: uppercase;
+	}
+.specs-trigger p, .specs-trigger2 p, .specs-trigger3 p, .specs-trigger4 p{
+	float: left;
+	clear: none;
+	margin-left: 10px;
+	}
+.specs-trigger4 {
+	border-bottom: #cccccc 1px solid;
+	}
+	
+.specs-trigger:hover, .specs-trigger2:hover, .specs-trigger3:hover, .specs-trigger4:hover {
+	cursor: pointer;
+}
+	
+	
+	
+.item-specs-plus, .size-specs-plus, .packing-specs-plus, .enviro-specs-plus{
+	float: left;
+	clear: none;
+	width: 16px;
+	height: 16px;
+	background: url(../plus-minus.png) no-repeat;
+	}
+div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
+	width: 270px;
+	padding: 10px;
+	background-color: #f5f5f5;
+	font: normal normal Arial, Helvetica, sans-serif/1.2em;
+}
+
+.specs-wrap li {
+	display: block;
+	overflow: hidden;
+	border-bottom: #cccccc 1px solid;
+	padding: 5px 0px;
+	width: 260px;
+	}
+.specs-wrap li.chart-spec-last{
+	border-bottom: none;
+	padding: 5px 0px 0px 0px;
+	}
+.chart-spec {
+	width: 100px;
+	float: left;
+	clear: none;
+	color: #666666;
+	}
+.chart-details {
+	width: 150px;
+	float: left;
+	clear: none;
+	padding-left: 5px;
+	}
+.associated-items-wrap {
+	width: 615px;
+	float: left;
+	clear: none;
+	padding: 22px 10px 10px 22px;
+	}
+.associated-items-wrap h3 {
+	padding-bottom: 6px;
+	}	
+.mill-mfg-message {
+	margin-top: 10px;
+	color: #FF0000;
+	}
+.jcarousel-skin-xpedx .jcarousel-container-horizontal {
+	float: left;
+	height: 151px;
+	margin: 0px;
+	width: 600px;
+}
+.jcarousel-skin-xpedx .jcarousel-prev-horizontal,
+.jcarousel-skin-xpedx .jcarousel-next-horizontal
+{
+	height: 151px;
+}
+.jcarousel-skin-xpedx .jcarousel-clip-horizontal {
+	height: 150px;
+	margin-top: 10px;
+	padding-left: 0px;
+	width: 600px;
+}
+.jcarousel-skin-xpedx .jcarousel-container {
+
+    border: 1px solid #EBEBEB;
+    height: 160px;
+    padding-left: 0px;
+    padding-right:0px;
+}
+.jcarousel-skin-xpedx .jcarousel-prev-horizontal {
+    background: url(prev-horizontal.gif) no-repeat;
+    cursor: pointer;
+    height: 160px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 13px;
+}
+.jcarousel-skin-xpedx .jcarousel-next-horizontal {
+    background: url(next-horizontal.gif) no-repeat;
+    cursor: pointer;
+    height: 160px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 13px;
+}
+
+.jcarousel-container a {
+    border-right: 1px solid #CCCCCC;
+    color: #003399;
+    float: left;
+    font-size: 12px;
+    margin-right: 21px;
+    padding-right: 10px;
+    text-align: left !important;
+    width: 233px;
+}
+.jcarousel-skin-xpedx .jcarousel-item-horizontal {
+    height: 160px;
+    padding-left: 40px;
+    vertical-align: middle;
+    width: 255px !important;
+}
+.detail-msds-button {
+	width: 150px;
+	clear: both;
+	text-align: left;
+	margin: 10px 0px;
+}
+
+.detail-view .show-pa {
+	margin: 0px 0px 0px 65px;
+	padding-top: 7px;
+	}
+.detail-view .list-price h4 {
+    background: none repeat scroll 0 0 #E1E1E1;
+    display: block;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    font-style: italic;
+    padding: 3px 0 3px 5px;
+}
+
+
+.detail-view .avail-wrap .pa-row .col-2 {
+	margin-left: 10px;
+	}
+.expand-links {
+	font-size: 11px;
+	text-align: right;
+	margin: 0px 10px 10px 0px;
+	}
+
+.detail-view .pa-wrap{
+	min-height: 260px;
+	}
+.detail-view .cost-wrap {
+
+	width: 400px;
+}
+.detail-view .cost-wrap .pa-row .col-1 {
+    clear: none;
+    float: left;
+    padding-right: 4px;
+    text-align: left;
+	width: 190px;
+	margin-right: 10px;
+
+}
 
 	
