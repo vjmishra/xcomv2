@@ -1580,9 +1580,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 	//var myMask;
 	function newSearch_onsubmit(e){
 		//added for jira 3974
-		/* var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show(); */
+		
 		var searchText = document.getElementById("newSearch_searchTerm").value;
 		document.getElementById('newSearch_rememberNewSearchText').value = searchText;
 
