@@ -1,8 +1,10 @@
 var defaultUOM;
 
-$(document).ready(function () {
-	document.productDetailForm.qtyBox.focus();
+$(document).ready(function() {
+	$('#qtyBox').focus();
+});
 
+$(document).ready(function() {
 	updateUOMFields();
 	var requestedUom = $('#selectedUOM').val();
 	var baseUom = $('#unitOfMeasure').val();
@@ -277,7 +279,7 @@ function validateOrderMultiple() {
 		var myMessageDiv = document.getElementById("errorMsgForQty");
 		if (OrdMultiple.value > 1) {
 			if (priceCheck == true) {
-				myMessageDiv.innerHTML = "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' /> " + addComma(OrdMultiple.value) + " <s:property value='#baseUOMDesc'></s:property>";
+				myMessageDiv.innerHTML = "Must be ordered in units of " + addComma(OrdMultiple.value) + " " + $('#baseUOMDesc').val();
 				myMessageDiv.style.display = "inline-block";
 				myMessageDiv.setAttribute("class", "notice");
 			} else {

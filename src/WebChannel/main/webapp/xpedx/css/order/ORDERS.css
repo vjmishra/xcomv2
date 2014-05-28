@@ -2073,6 +2073,8 @@ table#QuickAddTableSaal.form label, .form table {
 	}
 .prodImg {
     box-shadow: 1px 1px 4px #999999;
+    width: 150x;
+    height: 150px;
 }
 .detail-view .order-wrap {
 	width: 440px;
