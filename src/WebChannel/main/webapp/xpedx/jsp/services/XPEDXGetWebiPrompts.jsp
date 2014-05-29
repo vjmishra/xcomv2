@@ -103,11 +103,11 @@
        var selectedvalue = null;
        
        arr = document.getElementsByName('selectedShipTo');
-       for(var i = 0; i < arr.length; i++)        
+       for(var j = 0; j < arr.length; j++)        
         {            
-            var obj = arr.item(i);     
+            var obj = arr.item(j);     
             if(obj.checked == true)  {     
-                selectedvalue= arr[i].value;
+                selectedvalue= arr[j].value;
                 var hdnOrganization = document.getElementById('selectedorganization');
                 var hdnCompany = document.getElementById('selectedcompany');
                 var hdnAddress = document.getElementById('selectedaddressList');
@@ -174,9 +174,9 @@
            $.fancybox.close();
            var arr = new Array();
            arr = document.getElementsByName('customerId');
-           for(var i = 0; i < arr.length; i++)        
+           for(var j = 0; j < arr.length; j++)        
            {            
-               var obj = arr.item(i);     
+               var obj = arr.item(j);     
                if(obj.checked == true)  {     
            
                    var textElement = document.getElementById('txtLocation');
