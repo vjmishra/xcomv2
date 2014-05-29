@@ -3,6 +3,7 @@
  * @param options.items array containing item ids.
  * @param options.qtys array containing quantities. If not provided, will extract values from the DOM id='Qty_<code>ITEMID</code>'.
  * @param options.uoms array containing units of measure. If not provided, will extract values from the DOM id='itemUomList_<code>ITEMID</code>'.
+ * @param options.success Callback function called upon completion of ajax response is successfully processed. Callback function takes a single parameter, the ajax response.
  * @output For each item, the rendered HTML is set as the innerHTML of the DOM element with id=availabilty_<code>ITEMID</code> (note the misspelling!).
  */
 function getPriceAndAvailabilityForItems(options) {
@@ -238,6 +239,10 @@ function getPriceAndAvailabilityForItems(options) {
 				}
 				
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
+			}
+			
+			if (typeof(options.success) === 'function') {
+				options.success(data);
 			}
 		},
 		failure: function(jqXHR, textStatus) {

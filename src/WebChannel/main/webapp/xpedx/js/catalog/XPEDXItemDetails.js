@@ -11,8 +11,37 @@ $(document).ready(function() {
 	defaultUOM = $('#selectedUOM').val();
 
 //	callPnA(baseUom); // OBSOLETE - this is the old method 
-	getPriceAndAvailabilityForItems({modal:false, items:[$('#itemID').val()]});
+	getPriceAndAvailabilityForItems({modal:false, items:[$('#itemID').val()], success:successCallback_PriceAndAvailability});
 });
+
+function successCallback_PriceAndAvailability(data) {
+	var item = data.priceAndAvailability.items[0];
+	
+	var html = [];
+	html.push('		<div class="list-price addpadbottom10">');
+	html.push('			<h4>');
+	html.push('				Cost (' , item.costCurrencyCode, ')');
+	html.push('			</h4>');
+	html.push('			<div class="cost-wrap">');
+	html.push('				<div class="pa-row">');
+	html.push('					<div class="col-1">');
+	html.push('						<a id="show-hide" onclick="javascript:return showCost(this);" href="#">[Show]</a>');
+	html.push('					</div>');
+	html.push('					<div id="cost" class="col-2" style="display: none;">');
+	var formattedCost = parseFloat(item.itemCost).toFixed(5) + "";
+	if (item.itemCost.match(/^[0\.]+$/)) {
+		html.push('					$' , formattedCost);
+	} else {
+		html.push('					$' , formattedCost , ' / ' , item.pricingUOM.substring(2));
+	}
+	html.push('					</div>');
+	html.push('				</div>');
+	html.push('			</div>');
+	html.push('		</div>'); // list-price
+
+	var itemId = $('#itemID').val();
+	$('#availabilty_' + itemId).append(html.join(''));
+}
 
 function callPnA(requestedUom) {
 	var itemId = $('#itemID').val();
@@ -48,8 +77,6 @@ function addItemToCart()
 	//Quantity validation
 	if(Qty =='' || Qty=='0')
 	{
-//		document.getElementById("qtyBox").style.borderColor="#FF0000";
-//		document.getElementById("qtyBox").focus();
 		$('[id^=Qty_]').css('border-color', '#ff0000').focus();
 		
 		var errorMsgForQty = $('[id^=errorMsgForQty_]').get(0);
@@ -57,7 +84,6 @@ function addItemToCart()
   		errorMsgForQty.style.display = "inline-block"; 
   		errorMsgForQty.setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
-		//document.getElementById("qtyBox").value = ""; - failed to add to cart hence Qty not cleared for EB 40
 		Ext.Msg.hide();
 	    	myMask.hide();
 	    return;
@@ -152,8 +178,6 @@ function pandaByAjaxFromLink(itemId, reqUom, Qty, baseUom, prodMweight, pricingU
 	}
 	var itemAvailDiv = document.getElementById("tabs-1");
 	if (Qty == '0') {
-//		document.getElementById("qtyBox").style.borderColor = "#FF0000";
-//		document.getElementById("qtyBox").focus();
 		$('[id^=Qty_]').css('border-color', '#ff0000').focus();
 		
 		var errorMsgForQty = $('[id^=errorMsgForQty_]').get(0);
@@ -284,7 +308,6 @@ function resetQuantityErrorMessage() {
 	var divVal = document.getElementById(divId);
 	divVal.innerHTML = '';
 	$('[id^=Qty_]').css('border-color', '');
-//	document.getElementById("qtyBox").style.bordercolor = "";
 }
 
 function validateOrderMultiple() {
