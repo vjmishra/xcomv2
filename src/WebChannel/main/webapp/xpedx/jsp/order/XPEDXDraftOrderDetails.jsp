@@ -1187,7 +1187,7 @@ var currentAadd2ItemList = new Object();
 <!--bottom button 'bar' -->
 <div class="bottom-btn-bar scp">
 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	<a id="otherCartActions"  class="grey-ui-btn pointers" onclick="javascript:actionOnList('Delete');"><span>Delete Cart</span></a>
+	<input type="button" id="otherCartActions" class="btn-neutral floatleft" value="Delete Cart" onclick="actionOnList('Delete');" />
 </s:if>
 <s:else>
 	<s:url id="cancelEditOrderChanges" includeParams="none"
@@ -1207,7 +1207,7 @@ var currentAadd2ItemList = new Object();
 	<s:if test='majorLineElements.size() > 0'>
 		<s:if test='!#isPunchoutUser'>
 			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">
-				<input type="button" class="btn-gradient floatright addmarginright10" value="Checkout" onclick="checkOut();" />
+				<input type="button" id="checkout-btn" class="btn-gradient floatright addmarginright10" value="Checkout" onclick="checkOut();" />
 			</s:if> 
 		    <s:if test='#hasPendingChanges == "Y"'>
 	        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
