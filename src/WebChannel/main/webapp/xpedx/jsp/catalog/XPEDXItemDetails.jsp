@@ -277,5 +277,7 @@
 			</div> <%-- / main --%>
 		</div> <%-- / main-container --%>
 	</s:else> <%-- / if-else guest user --%>
+	
+	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body> 
 </swc:html>
