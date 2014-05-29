@@ -11,7 +11,7 @@ $(document).ready(function() {
 	defaultUOM = $('#selectedUOM').val();
 
 //	callPnA(baseUom); // OBSOLETE - this is the old method 
-	getPriceAndAvailabilityForItems(false, [$('#itemID').val()]);
+	getPriceAndAvailabilityForItems({modal:false, items:[$('#itemID').val()]});
 });
 
 function callPnA(requestedUom) {

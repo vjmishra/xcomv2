@@ -234,7 +234,7 @@
 								</s:else>						
 								<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="addItemToWishList();" type="button" />
 								<div class="show-pa">
-									<a href="javascript:getPriceAndAvailabilityForItems(true, ['<s:property value='%{#itemID}' />']);">Update Price &amp; Availability</a>
+									<a href="javascript:getPriceAndAvailabilityForItems({modal:true, items:['<s:property value='%{#itemID}' />']});">Update Price &amp; Availability</a>
 								</div>
 							</div> <%-- / item-button-wrap --%>
 							

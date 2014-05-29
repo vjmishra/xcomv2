@@ -1,16 +1,21 @@
 /**
- * @param modal If true, displays processing bar during ajax call.
- * @param items array containing item ids
- * @param qtys array containing quantities
- * @param uoms array containing units of measure
+ * @param options.modal If true, displays processing bar during ajax call.
+ * @param options.items array containing item ids.
+ * @param options.qtys array containing quantities. If not provided, will extract values from the DOM id='Qty_<code>ITEMID</code>'.
+ * @param options.uoms array containing units of measure. If not provided, will extract values from the DOM id='itemUomList_<code>ITEMID</code>'.
+ * @output For each item, the rendered HTML is set as the innerHTML of the DOM element with id=availabilty_<code>ITEMID</code> (note the misspelling!).
  */
-function getPriceAndAvailabilityForItems(modal, items, qtys, uoms) {
-	if (modal) {
+function getPriceAndAvailabilityForItems(options) {
+	if (options.modal) {
 		var waitMsg = Ext.Msg.wait("Processing...");
 		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
 		myMask.show();
 	}
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
+	
+	var items = options.items;
+	var qtys = options.qtys;
+	var uoms = options.uoms;
 	
 	for (var i = 0, len = items.length; i < len; i++) {
 		$('#availabilty_' + items[i]).hide().get(0).innerHTML = '';
@@ -61,7 +66,7 @@ function getPriceAndAvailabilityForItems(modal, items, qtys, uoms) {
 			'uoms': uoms.join('*')
 		},
 		complete: function() {
-			if (modal) {
+			if (options.modal) {
 				Ext.Msg.hide();
 				myMask.hide();
 			}
