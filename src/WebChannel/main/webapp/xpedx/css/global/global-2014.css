@@ -874,3 +874,13 @@ div#fancybox-content .error, div#fancybox-content .notice {
     border-radius: 5px;
     margin: 3px;
 }
+
+.pnaOrderMultipleMessage {
+	display: inline;
+	margin-right: 5px;
+	font-weight: normal;
+	float: right;
+}
+.detail-view .pnaOrderMultipleMessage {
+	margin-right: 18px;
+}

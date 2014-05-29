@@ -1,7 +1,7 @@
 var defaultUOM;
 
 $(document).ready(function() {
-	$('#qtyBox').focus();
+	$('[id^=Qty_]').focus();
 });
 
 $(document).ready(function() {
@@ -10,13 +10,13 @@ $(document).ready(function() {
 	var baseUom = $('#unitOfMeasure').val();
 	defaultUOM = $('#selectedUOM').val();
 
-	callPnA(baseUom);
-	//getPriceAndAvailabilityForItems([$('#itemID').val()]);
+//	callPnA(baseUom); // OBSOLETE - this is the old method 
+	getPriceAndAvailabilityForItems(false, [$('#itemID').val()]);
 });
 
 function callPnA(requestedUom) {
 	var itemId = $('#itemID').val();
-	var Quantity = $('#qtyBox').val();
+	var Quantity = $('[id^=Qty_]').val();
 	var baseUom = $('#unitOfMeasure').val();
 	var prodMweight = $('#prodMweight').val();
 	var pricingUOMConvFactor = $('#pricingUOMConvFactor').val();
@@ -25,7 +25,7 @@ function callPnA(requestedUom) {
 
 function callPnAfromLink(requestedUom) { // TODO why do we have separate implementation for 'FromLink'
 	var itemId = $('#itemID').val();
-	var Quantity = $('#qtyBox').val();
+	var Quantity = $('[id^=Qty_]').val();
 	var baseUom = $('#unitOfMeasure').val();
 	var prodMweight = $('#prodMweight').val();
 	var pricingUOMConvFactor = $('#pricingUOMConvFactor').val();
@@ -33,11 +33,56 @@ function callPnAfromLink(requestedUom) { // TODO why do we have separate impleme
 }
 
 function updateUOMFields() {
-	var uomvalue = $('#itemUOMsSelect').val();
+	var uomvalue = $('[id^=itemUomList_]').val();
 	$('#selectedUOM').val(uomvalue);
 	$('#uomConvFactor').val($('#convF_' + uomvalue).val());
 }
+
 var myMask;
+function addItemToCart()
+{	//added for jira 3974
+	var waitMsg = Ext.Msg.wait("Processing...");
+	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+	myMask.show();
+	var Qty = $('[id^=Qty_]').val();
+	//Quantity validation
+	if(Qty =='' || Qty=='0')
+	{
+//		document.getElementById("qtyBox").style.borderColor="#FF0000";
+//		document.getElementById("qtyBox").focus();
+		$('[id^=Qty_]').css('border-color', '#ff0000').focus();
+		
+		var errorMsgForQty = $('[id^=errorMsgForQty_]').get(0);
+		errorMsgForQty.innerHTML  = "Please enter a valid quantity and try again.";
+  		errorMsgForQty.style.display = "inline-block"; 
+  		errorMsgForQty.setAttribute("class", "error");
+		document.getElementById("Qty_Check_Flag").value = true;
+		//document.getElementById("qtyBox").value = ""; - failed to add to cart hence Qty not cleared for EB 40
+		Ext.Msg.hide();
+	    	myMask.hide();
+	    return;
+	}
+	var validationSuccess = validateOrderMultiple();
+	
+	document.getElementById("Qty_Check_Flag").value = false;
+
+	if(validationSuccess){
+		var ItemId=document.getElementById("itemId").value;
+		var UOM = $('[id^=itemUomList_]').val();
+		if(document.getElementById("Job")!=null) {
+			var Job=document.getElementById("Job").value;
+		}
+		if(document.getElementById("Customer")!=null) {
+			var customer=document.getElementById("Customer").value;
+		}
+		
+		var customerPO = "";
+		if(document.getElementById("customerPONo") != null && document.getElementById("customerPONo") != undefined) {
+			customerPO=document.getElementById("customerPONo").value; 
+		}
+		listAddToCartItem($('#addToCartURL'), ItemId, UOM, Qty, Job, customer, customerPO, '');
+	}
+}
 
 function updatePandAfromLink() {
 	/*Web Trends tag start*/
@@ -56,7 +101,7 @@ function updatePandAfromLink() {
 	myMask.show();
 	try {
 
-		var UOMelement = document.getElementById("itemUOMsSelect");
+		var UOMelement = $('[id^=itemUomList_]').get(0);
 		var uomvalue = UOMelement.options[UOMelement.selectedIndex].value;
 		callPnAfromLink(uomvalue);
 	} catch (err) {
@@ -81,7 +126,7 @@ function pandaByAjaxFromLink(itemId, reqUom, Qty, baseUom, prodMweight, pricingU
 	if (reqUom == null || reqUom == "null" || reqUom == "") {
 		reqUom = $('#selectedUOM').val();
 	}
-	var Qty = $('#qtyBox').val();
+	var Qty = $('[id^=Qty_]').val();
 	var qtyTextBox = Qty;
 
 	if (Qty == '') {
@@ -107,14 +152,16 @@ function pandaByAjaxFromLink(itemId, reqUom, Qty, baseUom, prodMweight, pricingU
 	}
 	var itemAvailDiv = document.getElementById("tabs-1");
 	if (Qty == '0') {
-
-		document.getElementById("qtyBox").style.borderColor = "#FF0000";
-		document.getElementById("qtyBox").focus();
-		document.getElementById("errorMsgForQty").innerHTML = "Please enter a valid quantity and try again.";
-		document.getElementById("errorMsgForQty").style.display = "inline-block";
-		document.getElementById("errorMsgForQty").setAttribute("class", "error");
+//		document.getElementById("qtyBox").style.borderColor = "#FF0000";
+//		document.getElementById("qtyBox").focus();
+		$('[id^=Qty_]').css('border-color', '#ff0000').focus();
+		
+		var errorMsgForQty = $('[id^=errorMsgForQty_]').get(0);
+		errorMsgForQty.innerHTML = "Please enter a valid quantity and try again.";
+		errorMsgForQty.style.display = "inline-block";
+		errorMsgForQty.setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
-		document.getElementById("qtyBox").value = "";
+		$('[id^=Qty_]').val('');
 		itemAvailDiv.style.display = "none";
 		Ext.Msg.hide();
 		myMask.hide();
@@ -236,14 +283,15 @@ function resetQuantityErrorMessage() {
 	var divId = 'errorMsgForQty';
 	var divVal = document.getElementById(divId);
 	divVal.innerHTML = '';
-	document.getElementById("qtyBox").style.bordercolor = "";
+	$('[id^=Qty_]').css('border-color', '');
+//	document.getElementById("qtyBox").style.bordercolor = "";
 }
 
 function validateOrderMultiple() {
 	resetQuantityErrorMessage();
-	var Qty = document.getElementById("qtyBox");
+	var Qty = $('[id^=Qty_]').get(0);
 	if (Qty.value == "" || Qty.value == null || Qty.value == '0') {}
-	var UOM = document.getElementById("itemUOMsSelect");
+	var UOM = $('[id^=itemUomList_]').get(0);
 	var OrdMultiple = document.getElementById("OrderMultiple");
 	var uomCF = 1;
 	if (OrdMultiple != null && OrdMultiple != undefined && OrdMultiple.value != 1) {

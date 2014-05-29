@@ -1,12 +1,15 @@
 /**
+ * @param modal If true, displays processing bar during ajax call.
  * @param items array containing item ids
  * @param qtys array containing quantities
  * @param uoms array containing units of measure
  */
-function getPriceAndAvailabilityForItems(items, qtys, uoms) {
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
+function getPriceAndAvailabilityForItems(modal, items, qtys, uoms) {
+	if (modal) {
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+	}
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
 	
 	for (var i = 0, len = items.length; i < len; i++) {
@@ -58,8 +61,10 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			'uoms': uoms.join('*')
 		},
 		complete: function() {
-			Ext.Msg.hide();
-			myMask.hide();
+			if (modal) {
+				Ext.Msg.hide();
+				myMask.hide();
+			}
 		},
 		success: function(data) {
 			var pna = data.priceAndAvailability;
@@ -93,8 +98,9 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
 				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
 				var cssClass = isOrderMultipleError ? 'error' : 'notice';
+				cssClass += ' pnaOrderMultipleMessage';
 				var html = [];
-				html.push('<div class="', cssClass, '" style="margin-right: 5px; font-weight: normal; float: right; display: inline;">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
+				html.push('<div class="', cssClass, '">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
 				$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
 				$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
 				if (isOrderMultipleError) {

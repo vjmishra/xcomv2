@@ -46,14 +46,17 @@
 </head>
 <body class="ext-gecko ext-gecko3">
 	
+	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
+	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
+	
 	<s:if test='%{#_action.getCustomerUOM() == #_action.getBaseUOM()}'>
 		<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
 	</s:if>
 	<s:else>
 		<s:set name="baseUOMDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#_action.getBaseUOM())" />
 	</s:else>
-	
 	<s:hidden id="baseUOMDesc" value="%{#baseUOMDesc}" />
+	
 	<s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>
 	<s:url id="xpedxItemDetailsPandAURL" namespace="/catalog" action="xpedxItemDetailsPandA"/>
 	<s:hidden name="xpedxItemDetailsPandAURLid" id="xpedxItemDetailsPandAURLid" value="%{#xpedxItemDetailsPandAURL}"/>
@@ -162,7 +165,7 @@
 									<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
 											<s:set name="link" value="value" />
 											<s:set name="desc" value="key" />
-											<input name="" type="button"  class="btn-neutral" value="MSDS" onclick="javascript:window.open('<s:property value='#link'/>');"/>
+											<input name="" type="button"  class="btn-neutral" value="MSDS" onclick="window.open('<s:property value='#link'/>');"/>
 									</s:iterator>									
 								</div>
 							</s:if>
@@ -179,16 +182,16 @@
 										<s:hidden id="Qty_Check_Flag" name="Qty_Check_Flag" value="false"/>
 										<div class="order-label">Qty:</div>
 										<div class="order-input">
-											<s:textfield name='qtyBox' id="qtyBox" size="7" maxlength="7"	
+											<s:textfield name='qtyBox' id="%{'Qty_' + #itemID}" size="7" maxlength="7"	
 													value="%{#_action.getRequestedQty()}"
-													theme="simple" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"
-													onchange="javascript:isValidQuantity(this); javascript:qtyInputCheck(this);"
-													onmouseover="javascript:qtyInputCheck(this);"
+													theme="simple" onkeyup="isValidQuantityRemoveAlpha(this,event);"
+													onchange="isValidQuantity(this); qtyInputCheck(this);"
+													onmouseover="qtyInputCheck(this);"
 													/>
 											<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
 											<s:hidden name="c" id="OrderMultiple" value="%{#mulVal}" />
 											<s:set name="itemuomMap" value='#_action.getDisplayItemUOMsMap()' />
-											<s:select name="itemUOMsSelect" id="itemUOMsSelect" onchange='javascript:updateUOMFields()'
+											<s:select name="itemUOMsSelect" id="%{'itemUomList_' + #itemID}" onchange='updateUOMFields()'
 													cssClass="qty_selector" list="itemuomMap" listKey="key"
 													listValue="value" value='%{#_action.getRequestedDefaultUOM()}' disabled="%{#isReadOnly}" theme="simple"
 													/>
@@ -224,18 +227,18 @@
 							
 							<div class="item-button-wrap">
 								<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-									<input name="button" type="button" onclick="javascript:addItemToCart();" class="btn-gradient floatright  addmarginright18" value="Add to Cart"/>
+									<input name="button" type="button" onclick="addItemToCart();" class="btn-gradient floatright  addmarginright18" value="Add to Cart"/>
 								</s:if>
 								<s:else>
-									<input name="button" type="button" onclick="javascript:addItemToCart();" class="btn-gradient floatright  addmarginright18" value="Add to Order"/>
+									<input name="button" type="button" onclick="addItemToCart();" class="btn-gradient floatright  addmarginright18" value="Add to Order"/>
 								</s:else>						
-								<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="javascript:addItemToWishList();" type="button" />
+								<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="addItemToWishList();" type="button" />
 								<div class="show-pa">
-									<a href="javascript:getPriceAndAvailabilityForItems(['<s:property value='%{#itemID}' />']);">Update Price & Availability</a>
+									<a href="javascript:getPriceAndAvailabilityForItems(true, ['<s:property value='%{#itemID}' />']);">Update Price &amp; Availability</a>
 								</div>
 							</div> <%-- / item-button-wrap --%>
 							
-							<div class="notice float-right addmarginright18" id="errorMsgForQty" style="display:inline-block;"></div>
+							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom20" cssStyle="display:inline-block;"></s:div>
 							
 							<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
 								<div class="replacement-item">
@@ -265,8 +268,7 @@
 							</s:if>
 							<div class="pa-wrap">
 								<%-- This will be filled by ajax as the PnA call happens on page load as Ajax --%>
-								<div id="priceAndAvailabilityAjax" class="pa-avail"></div>
-								<%--  <div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability"></div> --%>
+								<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability"></div>
 							</div>
 						</div> <%-- / order-wrap --%>
 					</div> <%-- / image-order-container --%>

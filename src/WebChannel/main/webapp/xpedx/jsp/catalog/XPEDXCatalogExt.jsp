@@ -787,7 +787,7 @@ function getNormalView() {
 									'<div class="availablelink">',
 										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 										'<div class=\"itemOption\">',
-											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"getPriceAndAvailabilityForItems([\'{itemid}\']);\">Show Price &amp; Availability</a>',
+											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"getPriceAndAvailabilityForItems(true, [\'{itemid}\']);\">Show Price &amp; Availability</a>',
 										'</div>',
 									'</div>',
 								'</div>',

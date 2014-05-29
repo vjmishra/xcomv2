@@ -2061,16 +2061,16 @@ table#QuickAddTableSaal.form label, .form table {
 	width: 600px;
 	float: left;
 	clear: none;	
-	}
+}
 .detail-image-wrap {
 	width: 170px;
 	float: left;
 	clear: none;
-	}
+}
 .detail-view .print-ico-xpedx {
 	margin-top: -10px;
 	margin-right: 8px;
-	}
+}
 .prodImg {
     box-shadow: 1px 1px 4px #999999;
     width: 150x;
@@ -2082,12 +2082,12 @@ table#QuickAddTableSaal.form label, .form table {
 	clear: none;
 	border-left: #efefef 1px solid;
 	padding: 0px 0px 20px 15px;	
-	}
+}
 .item-button-wrap {
 	clear: both;
 	height: 40px;
 	width:420px;
-	}
+}
 .detail-view .order-input-wrap {
 	float:right;
 	display: block;
@@ -2117,7 +2117,7 @@ table#QuickAddTableSaal.form label, .form table {
 	font-size: 13px;
 	overflow: visible;
 	max-height: none;
-	}
+}
 
 
 .detail-view .price-wrap .pa-row .col-1 {
@@ -2148,10 +2148,10 @@ table#QuickAddTableSaal.form label, .form table {
 
 .detail-view .item-numbers  {
 	margin-top: 10px;
-	}
+}
 .detail-view .item-numbers img {
 	display: inline;
-	}
+}
 .ready-to-ship {
 	color: #008000;
 }
@@ -2183,10 +2183,10 @@ table#prod-details-tbl  {
 	margin: 0px 18px 10px 0px;;
 	padding-top: 6px;
 	clear: both;
-	}
+}
 .detail-view .replacement-item span{
 	color:#000000;
-	}
+}
 /*	*****TOGGLE STYLES******/
 
 .specs-wrap {
@@ -2195,7 +2195,7 @@ table#prod-details-tbl  {
 	width: 300px;
 	height: auto;
 	overflow: hidden;
-	}
+}
 .specs-trigger, .specs-trigger2, .specs-trigger3, .specs-trigger4{
 	width: 290px;
 	height: 25px;
@@ -2207,15 +2207,15 @@ table#prod-details-tbl  {
 	color: #666666;
 	font-weight: bold;
 	text-transform: uppercase;
-	}
+}
 .specs-trigger p, .specs-trigger2 p, .specs-trigger3 p, .specs-trigger4 p{
 	float: left;
 	clear: none;
 	margin-left: 10px;
-	}
+}
 .specs-trigger4 {
 	border-bottom: #cccccc 1px solid;
-	}
+}
 	
 .specs-trigger:hover, .specs-trigger2:hover, .specs-trigger3:hover, .specs-trigger4:hover {
 	cursor: pointer;
@@ -2229,7 +2229,7 @@ table#prod-details-tbl  {
 	width: 16px;
 	height: 16px;
 	background: url(../plus-minus.png) no-repeat;
-	}
+}
 div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
 	width: 270px;
 	padding: 10px;
@@ -2243,36 +2243,36 @@ div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
 	border-bottom: #cccccc 1px solid;
 	padding: 5px 0px;
 	width: 260px;
-	}
+}
 .specs-wrap li.chart-spec-last{
 	border-bottom: none;
 	padding: 5px 0px 0px 0px;
-	}
+}
 .chart-spec {
 	width: 100px;
 	float: left;
 	clear: none;
 	color: #666666;
-	}
+}
 .chart-details {
 	width: 150px;
 	float: left;
 	clear: none;
 	padding-left: 5px;
-	}
+}
 .associated-items-wrap {
 	width: 615px;
 	float: left;
 	clear: none;
 	padding: 22px 10px 10px 22px;
-	}
+}
 .associated-items-wrap h3 {
 	padding-bottom: 6px;
-	}	
+}	
 .mill-mfg-message {
 	margin-top: 10px;
 	color: #FF0000;
-	}
+}
 .jcarousel-skin-xpedx .jcarousel-container-horizontal {
 	float: left;
 	height: 151px;
@@ -2342,7 +2342,7 @@ div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
 .detail-view .show-pa {
 	margin: 0px 0px 0px 65px;
 	padding-top: 7px;
-	}
+}
 .detail-view .list-price h4 {
     background: none repeat scroll 0 0 #E1E1E1;
     display: block;
@@ -2355,18 +2355,18 @@ div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
 
 .detail-view .avail-wrap .pa-row .col-2 {
 	margin-left: 10px;
-	}
+}
 .expand-links {
 	font-size: 11px;
 	text-align: right;
 	margin: 0px 10px 10px 0px;
-	}
+}
 
-.detail-view .pa-wrap{
+.detail-view .pa-wrap {
 	min-height: 260px;
-	}
+	margin-top: 10px;
+}
 .detail-view .cost-wrap {
-
 	width: 400px;
 }
 .detail-view .cost-wrap .pa-row .col-1 {
@@ -2376,7 +2376,13 @@ div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
     text-align: left;
 	width: 190px;
 	margin-right: 10px;
-
 }
-
-	
+.detail-view .pa-avail {
+	width: 100%;
+}
+.detail-view .pa-bracket {
+	width: 100%;
+}
+.detail-view .pa-price {
+	width: 100%;
+}
