@@ -1186,18 +1186,13 @@ var currentAadd2ItemList = new Object();
 
 <!--bottom button 'bar' -->
 <div class="bottom-btn-bar scp">
-<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	<input type="button" id="otherCartActions" class="btn-neutral floatleft" value="Delete Cart" onclick="actionOnList('Delete');" />
-</s:if>
-<s:else>
-	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
-							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
-	</s:url>
-	<a id="cancel-btn" class="grey-ui-btn" href="<s:property value="#cancelEditOrderChanges"/>"><span>Cancel Changes</span></a>
-	
-	
-</s:else>	
+	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		<input type="button" id="otherCartActions" class="btn-neutral floatleft" value="Delete Cart" onclick="actionOnList('Delete');" />
+	</s:if>
+	<s:else>
+		<input class="btn-neutral floatleft" type="button" value="Cancel Changes" onclick="window.location='${cancelEditOrderChanges}'" />
+	</s:else>	
+
 	<s:set name="ohk" value='%{#orderHeaderKey}' />
 	<s:set name="isEstimator" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<%--	Using CustomerContactBean object from session
@@ -1210,7 +1205,7 @@ var currentAadd2ItemList = new Object();
 				<input type="button" id="checkout-btn" class="btn-gradient floatright addmarginright10" value="Checkout" onclick="checkOut();" />
 			</s:if> 
 		    <s:if test='#hasPendingChanges == "Y"'>
-	        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
+	        	<input type="button" id="reset-btn" class="btn-neutral floatleft" value="Reset Changes" onclick="window.location='<s:property value="#discardPendingChangesURL"/>'" />
 	        </s:if>
 		</s:if>
 		<s:else>
