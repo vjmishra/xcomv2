@@ -273,11 +273,15 @@
 							</div>
 						</div> <%-- / order-wrap --%>
 					</div> <%-- / image-order-container --%>
+					
+					<s:include value="ItemDetailsPromotions.jsp" />
 				</div> <%-- / content-container --%>
 			</div> <%-- / main --%>
 		</div> <%-- / main-container --%>
 	</s:else> <%-- / if-else guest user --%>
 	
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
+	
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.liquidcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 </body> 
 </swc:html>
