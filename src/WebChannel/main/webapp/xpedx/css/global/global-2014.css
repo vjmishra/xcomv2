@@ -902,6 +902,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	float:left;
 	margin:0;
 	padding:0;
+	cursor:pointer;
 }
 .liquid-carousel .next {
 	display:block;
@@ -911,6 +912,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	float:right;
 	margin:0;
 	padding:0;
+	cursor:pointer;
 }
 .liquid-carousel ul li {
 	width:260px;
