@@ -2108,8 +2108,6 @@ table#QuickAddTableSaal.form label, .form table {
 	margin-left: 155px;
 }
 .detail-view .order-input select {
-
-	width: auto;
 	text-align: left;
 }
 .detail-view ul#prodlist, .detail-view li.prodlist{
