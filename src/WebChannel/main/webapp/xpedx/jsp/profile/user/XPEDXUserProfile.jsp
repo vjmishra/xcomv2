@@ -3312,25 +3312,25 @@ a.underlink:hover {
 		<s:if test="%{#_action.isSuccess() && #disableSinceSelfApprover }">
 			<div class="success" id="successMsgFor_save"
 				style="display: inline; float: right" />Profile has been updated successfully.
+		</s:if>
 	
-	</div>
-	<div class="loading-wrap"  style="display:none;">
-         <div class="load-modal" ></div>
-    </div>
-	</s:if>
+
 	<s:elseif test="%{#_action.isSuccess() && !#disableSinceSelfApprover}">
 		<div class="success" id="successMsgFor_save"
-			style="display: inline; float: right" />Profile for <s:property
+			style="display: inline; float: right" >Profile for <s:property
 			value="%{#displayUserID}" /> has been updated successfully.</div>
 	</s:elseif>
 	<s:elseif test="%{#_action.isSaveAddUser()}">
 		<div class="success" id="successMsgFor_save"
-			style="display: inline; float: right" />
+			style="display: inline; float: right" >
 		<s:property value="%{#displayUserID}" /> has been added successfully.</div>
 	</s:elseif>
 
 	<%-- End fix for XNGTP-3196 --%>
-
+   </div>
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 
 	<div class="clearview textAlignCenter">
 		<br>Last modified by

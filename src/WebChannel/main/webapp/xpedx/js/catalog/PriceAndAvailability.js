@@ -6,11 +6,21 @@
  * @param options.success Callback function called upon completion of ajax response is successfully processed. Callback function takes a single parameter, the ajax response.
  * @output For each item, the rendered HTML is set as the innerHTML of the DOM element with id=availabilty_<code>ITEMID</code> (note the misspelling!).
  */
+
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+}
+
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
+}
 function getPriceAndAvailabilityForItems(options) {
 	if (options.modal) {
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
+		showProcessingIcon();
 	}
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
 	
@@ -68,8 +78,7 @@ function getPriceAndAvailabilityForItems(options) {
 		},
 		complete: function() {
 			if (options.modal) {
-				Ext.Msg.hide();
-				myMask.hide();
+				hideProcessingIcon();
 			}
 		},
 		success: function(data) {
