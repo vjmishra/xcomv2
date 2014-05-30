@@ -1,22 +1,22 @@
 /**
- * @param items array containing item ids
- * @param qtys array containing quantities
- * @param uoms array containing units of measure
+ * @param options.modal If true, displays processing bar during ajax call.
+ * @param options.items array containing item ids.
+ * @param options.qtys array containing quantities. If not provided, will extract values from the DOM id='Qty_<code>ITEMID</code>'.
+ * @param options.uoms array containing units of measure. If not provided, will extract values from the DOM id='itemUomList_<code>ITEMID</code>'.
+ * @param options.success Callback function called upon completion of ajax response is successfully processed. Callback function takes a single parameter, the ajax response.
+ * @output For each item, the rendered HTML is set as the innerHTML of the DOM element with id=availabilty_<code>ITEMID</code> (note the misspelling!).
  */
-function showProcessingIcon(){
-	$(".loading-wrap").css('display','block');
-	$(".loading-icon").css('display','block');
-	$("body").css("overflow", "hidden");
-}
-
-function hideProcessingIcon(){
-	$(".loading-wrap").css('display','none');
-	$(".loading-icon").css('display','none');
-	$("body").css("overflow", "auto");
-}
-function getPriceAndAvailabilityForItems(items, qtys, uoms) {
-	showProcessingIcon();
+function getPriceAndAvailabilityForItems(options) {
+	if (options.modal) {
+		var waitMsg = Ext.Msg.wait("Processing...");
+		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
+		myMask.show();
+	}
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
+	
+	var items = options.items;
+	var qtys = options.qtys;
+	var uoms = options.uoms;
 	
 	for (var i = 0, len = items.length; i < len; i++) {
 		$('#availabilty_' + items[i]).hide().get(0).innerHTML = '';
@@ -67,7 +67,10 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			'uoms': uoms.join('*')
 		},
 		complete: function() {
-			hideProcessingIcon();
+			if (options.modal) {
+				Ext.Msg.hide();
+				myMask.hide();
+			}
 		},
 		success: function(data) {
 			var pna = data.priceAndAvailability;
@@ -101,8 +104,9 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
 				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
 				var cssClass = isOrderMultipleError ? 'error' : 'notice';
+				cssClass += ' pnaOrderMultipleMessage';
 				var html = [];
-				html.push('<div class="', cssClass, '" style="margin-right: 5px; font-weight: normal; float: right; display: inline;">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
+				html.push('<div class="', cssClass, '">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
 				$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
 				$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
 				if (isOrderMultipleError) {
@@ -235,6 +239,10 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				}
 				
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
+			}
+			
+			if (typeof(options.success) === 'function') {
+				options.success(data);
 			}
 		},
 		failure: function(jqXHR, textStatus) {
