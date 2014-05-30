@@ -20,6 +20,7 @@
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -252,6 +253,9 @@ function printPOs(customerPos) {
 </head>
 
 <body class="ext-gecko ext-gecko3" onLoad="setDateFields();hideSearchField(false);">
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div> 
 <div id="main-container">
 <div id="main">
 
@@ -876,6 +880,9 @@ function printPOs(customerPos) {
 				</div>
 		 </swc:dialogPanel> 
     </div><!-- end container  -->
+    <div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	
 </body>
 

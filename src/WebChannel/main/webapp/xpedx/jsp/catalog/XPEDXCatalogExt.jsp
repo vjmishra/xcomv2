@@ -69,6 +69,11 @@
 
 </head>
 <body class="ext-gecko ext-gecko3"  onload="highlightRows()">
+ 
+ 
+ <div >
+     <div class="loading-icon" style="display:none;"></div>
+</div> 
 
 	<s:url id="getPriceAndAvailabilityForItemsURLid" action="getPriceAndAvailabilityForItems" namespace="/catalog" />
 	<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
@@ -1200,6 +1205,9 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<!-- old narrow by include -->
 	</div>
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	<div class="clear"></div>
 	</div>
 	

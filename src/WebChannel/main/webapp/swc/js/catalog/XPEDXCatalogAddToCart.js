@@ -1,11 +1,19 @@
-var myMask;
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+}
+
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
+}
+
 function addItemToCart(itemId) {
 	var qty;
 	//added for jira 3974
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
-	//Ext.Msg.wait("Processing...");
+	showProcessingIcon();
 	if(Ext.util.Format.trim(document.getElementById('Qty_'+itemId).value)!='' && Ext.util.Format.trim(document.getElementById('Qty_'+itemId).value)!=null)
 		var qty = Number(Ext.util.Format.trim(document.getElementById('Qty_'+itemId).value));
 	else
@@ -19,8 +27,7 @@ function addItemToCart(itemId) {
 			document.getElementById('errorMsgForQty_'+itemId).setAttribute("class", "error");
 			document.getElementById('Qty_Check_Flag_'+itemId).value = true;
 			//document.getElementById('Qty_'+itemId).value = ""; commented for EB 41,42,43 - dont clear Qty on failure to add to cart
-			Ext.Msg.hide();
-			myMask.hide();
+            hideProcessingIcon();
 			return false;
 		}
 		var uomList = document.getElementById('itemUomList_'+itemId);
@@ -46,8 +53,7 @@ function addItemToCart(itemId) {
 		var draftOrder;
 		if(validateOrderMultiple(itemId) == false)
 		{
-			Ext.Msg.hide();
-			myMask.hide();
+			hideProcessingIcon();
 			return false;
 		}
 		else
@@ -88,15 +94,13 @@ function addItemToCart(itemId) {
 						//Added for EB 560
 		    	   			if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
 		    	   				window.location.reload(true);
-		    	   				Ext.Msg.hide();
-		    					myMask.hide();
+		    	   				hideProcessingIcon();
 		    					return;
 		    	   			}
 		    				//End of EB 560
 						if(responseText.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1){
 							refreshWithNextOrNewCartInContext();
-							Ext.Msg.hide();
-							myMask.hide();
+							hideProcessingIcon();
 							alert("This cart has already been submitted, please refer to the Order Management page to review the order.");
 							return false;
 						}	
@@ -110,8 +114,7 @@ function addItemToCart(itemId) {
 								document.getElementById('errorMsgForQty_'+itemId).setAttribute("style", "margin-right:5px;float:right;");
 								document.getElementById('Qty_Check_Flag_'+itemId).value = true;
 								//document.getElementById('Qty_'+itemId).value = ""; Commented for EB 41
-								Ext.Msg.hide();
-								myMask.hide();
+								hideProcessingIcon();
 								return false;
 							 }
 						 else if(responseText.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
@@ -142,15 +145,13 @@ function addItemToCart(itemId) {
 					        		document.getElementById('itemUomList_'+itemId).value = uomList.options[0].value;
 					        	}
 							//ENd of EB 41
-							Ext.Msg.hide();
-							myMask.hide();
+							hideProcessingIcon();
 							return true;
 				        }
 						else if(responseText.indexOf("Error")>-1)
 						{
 							refreshMiniCartLink();
-							Ext.Msg.hide();
-							myMask.hide();
+							hideProcessingIcon();
 							alert("Error Adding the Item to the cart. Please try again later");
 							return false;
 						}
@@ -184,8 +185,7 @@ function addItemToCart(itemId) {
 						        else {
 					        		document.getElementById('itemUomList_'+itemId).value = uomList.options[0].value;
 						        }
-							Ext.Msg.hide();
-							myMask.hide();
+							hideProcessingIcon();
 							 //-- Web Trends tag start --
 							 //var selCart = document.getElementById("draftOrders");
 							 //selCart = selCart.options[selCart.selectedIndex].value;         
@@ -200,8 +200,7 @@ function addItemToCart(itemId) {
 					failure: function (response, request){
 					    //Ext.MessageBox.hide(); 
 					    refreshMiniCartLink();
-					    	Ext.Msg.hide();
-						myMask.hide();
+					    hideProcessingIcon();
 						alert("Error Adding the Item to the cart. Please try again later");
 					    return false;
 					},
@@ -212,20 +211,16 @@ function addItemToCart(itemId) {
 		}
 	}
 var priceCheck;
-var myMask;
 	function displayAvailability(itemId) {
 		//added for jira 3974
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
+		showProcessingIcon();
 		
 		priceCheck = true;
 		var validateOM;
 		if(validateOrderMultiple(itemId) == false)
 		{
 			validateOM =  false;
-			Ext.Msg.hide();
-			myMask.hide();
+			 hideProcessingIcon();
 		}
 		else{
 			validateOM =  true;
@@ -233,8 +228,7 @@ var myMask;
 
 		//alert("priceCheck = "+priceCheck);
 		if(itemId == null || itemId =="") {
-			Ext.Msg.hide();
-			myMask.hide();
+			 hideProcessingIcon();
 			alert("Item ID cannot be null to make a PnA call");
 		}
 		else if(validateOM == true){
@@ -301,8 +295,7 @@ var myMask;
 	            	//Added for EB 560
 	    	   	if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
 	    	   		window.location.reload(true);
-	    	   		Ext.Msg.hide();
-	    			myMask.hide();
+	    	   	    hideProcessingIcon();
 	    			return;
 	    	   	}
 	    		//End of EB 560
@@ -311,8 +304,7 @@ var myMask;
 						document.getElementById('availabilty_'+itemId).innerHTML='';
 						document.getElementById('availabilty_'+itemId).innerHTML=responseText;
 						availabilityRow.style.display = '';
-						Ext.Msg.hide();
-						myMask.hide();
+						 hideProcessingIcon();
 						//document.getElementById('addtocart_'+itemId).focus();
 	            	}
 	            	else
@@ -376,8 +368,7 @@ var myMask;
 		            	}
 		            	}
 		            	//End of BR1 XB 214
-	            		Ext.Msg.hide();
-	            		myMask.hide();
+		            	 hideProcessingIcon();
 	            		//document.getElementById('addtocart_'+itemId).focus();
 	            	}	
 	            },
@@ -388,15 +379,13 @@ var myMask;
 	                document.getElementById('availabilty_'+itemId).innerHTML='';
 	                document.getElementById('availabilty_'+itemId).innerHTML=responseText;
 	                document.getElementById('availabilty_'+itemId).style.display = '';
-	                Ext.Msg.hide();
-	            	myMask.hide();
+	                hideProcessingIcon();
 	               
 	            },
 	        });
 			}
 			else{
-				Ext.Msg.hide();
-				myMask.hide();
+				 hideProcessingIcon();
 				alert("Item UOM cannot be null to make a PnA call");
 			}
 		}

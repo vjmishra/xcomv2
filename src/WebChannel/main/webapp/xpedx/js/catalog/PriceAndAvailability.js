@@ -3,10 +3,19 @@
  * @param qtys array containing quantities
  * @param uoms array containing units of measure
  */
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+}
+
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
+}
 function getPriceAndAvailabilityForItems(items, qtys, uoms) {
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
+	showProcessingIcon();
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
 	
 	for (var i = 0, len = items.length; i < len; i++) {
@@ -58,8 +67,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 			'uoms': uoms.join('*')
 		},
 		complete: function() {
-			Ext.Msg.hide();
-			myMask.hide();
+			hideProcessingIcon();
 		},
 		success: function(data) {
 			var pna = data.priceAndAvailability;

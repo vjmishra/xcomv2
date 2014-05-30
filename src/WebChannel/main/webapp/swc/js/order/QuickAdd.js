@@ -49,14 +49,15 @@ function clearItemErrorMessages() {
 /*
  * Manage processing bar, which must remain active during item validation
  */
-function showProcessingBar() {
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
 }
-function hideProcessingBar() {
-	Ext.Msg.hide();
-	myMask.hide();
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
 }
 
 
@@ -67,7 +68,7 @@ function hideProcessingBar() {
  * 3. Validates that each item exists (id exists, is entitled, etc).
  */
 function validateItems() {
-	showProcessingBar();
+	showProcessingIcon();
 	clearItemErrorMessages();
 	
 	
@@ -134,7 +135,7 @@ function validateItems() {
 			setItemErrorMessage(rowId, errorMessage);
 			
 		}
-		hideProcessingBar();
+		hideProcessingIcon();
 		return;
 		
 	} else {
@@ -186,12 +187,12 @@ function validateItems() {
 							}
 						}
 					}
-					hideProcessingBar();
+					hideProcessingIcon();
 				}
 			}
 			,error: function(resp, textStatus, xhr) {
 				// TODO how to recover from this? definitely stop the processing bar. ideally also show error message
-				hideProcessingBar();
+				hideProcessingIcon();
 			}
 		});
 	}

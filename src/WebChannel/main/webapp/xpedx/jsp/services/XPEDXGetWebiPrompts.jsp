@@ -14,6 +14,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/RESOURCES<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" /> 
 <!-- styles -->
@@ -505,6 +506,9 @@ $(function() {
 </script>
 </head>
 <body class="ext-gecko ext-gecko3">
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div>
 <div id="main-container">
   <div id="main" class="min-height-fix">
      <s:action name="xpedxHeader" executeResult="true"
@@ -701,6 +705,9 @@ $(function() {
     <!-- end main  -->
     <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- end container  -->
+<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 </body>
 <script type="text/javascript">
 <s:if test="getRenderReport() == 'true'">

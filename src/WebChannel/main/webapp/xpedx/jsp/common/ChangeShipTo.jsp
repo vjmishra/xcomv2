@@ -21,6 +21,7 @@
 	<![endif]--> 
 	<!--[if IE]>
 		<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	    <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 	
@@ -42,6 +43,9 @@
 </script>
 </head>
 <body class="ext-gecko ext-gecko3">
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div> 
 	<div id="main-container">
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
@@ -65,6 +69,9 @@
 			</div> <%-- / container --%>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" /> 
 </body>
 </html>

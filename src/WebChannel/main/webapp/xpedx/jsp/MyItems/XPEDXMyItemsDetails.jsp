@@ -50,6 +50,7 @@
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!-- end styles -->
 
@@ -372,16 +373,23 @@ function showSharedListForm(){
 			'height' 			: '100'  
 		});
 	});	
+	function showProcessingIcon(){
+		$(".loading-wrap").css('display','block');
+		$(".loading-icon").css('display','block');
+		$("body").css("overflow", "hidden");
+	}
 
+	function hideProcessingIcon(){
+		$(".loading-wrap").css('display','none');
+		$(".loading-icon").css('display','none');
+		$("body").css("overflow", "auto");
+	}
      var priceCheck;
-     var myMask;
-     	function checkAvailability(itemId,myItemsKey) {
+        	function checkAvailability(itemId,myItemsKey) {
      		priceCheck = true;
      		addToCartFlag = false;
      		//added for jira 3974
-     		var waitMsg = Ext.Msg.wait("Processing...");
-     		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-     		myMask.show();
+     		showProcessingIcon();
      		clearPreviousDisplayMsg()
      		
      		//Added for XB 224 - not to display availability when Item is not Entitled		
@@ -451,13 +459,11 @@ function showSharedListForm(){
     				displayAvailability(itemId,qty,uom,myItemsKey,url.value,validateOM,customerUom,qtyTextBox);
     			} 
     			else{
-            		Ext.Msg.hide();
-            		myMask.hide();
+            		hideProcessingIcon();
          		}
      		}
      		else{
-        		Ext.Msg.hide();
-        		myMask.hide();
+        		hideProcessingIcon();
      		}
      }
 		
@@ -549,13 +555,10 @@ function showSharedListForm(){
 		}	
 
 		var addToCartFlag;
-		var myMask;
 		//Resets the Messages and calls the actual javascript function
 		function myAddItemToCart(itemId, id){
 			//added for jira 3974
-			var waitMsg = Ext.Msg.wait("Processing...");
-			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-			myMask.show();
+			showProcessingIcon();
 			//Added isGlobal for Jira 3770
 			isGlobal = true;
 			addToCartFlag = true;
@@ -869,12 +872,9 @@ function showSharedListForm(){
 			}
      	}
 		var addItemsWithQty;
-		var myMask;
 		function addToCart(){
 			//added for jira 3974
-			var waitMsg = Ext.Msg.wait("Processing...");
-			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-			myMask.show();
+			showProcessingIcon();
 			addItemsWithQty = true;
 			isGlobal = false;
 			clearPreviousDisplayMsg();
@@ -885,8 +885,7 @@ function showSharedListForm(){
 				 //Added displayMsgHdrLevelForLineLevelError() here for displaying error msg when Add Item with Qty To cart
 				 //displayMsgHdrLevelForLineLevelError ();
 				 if(addToCartFlag == false){
-				 Ext.Msg.hide();
-			         myMask.hide();
+					 hideProcessingIcon();
 			         return;
 				 }
 					
@@ -921,15 +920,13 @@ function showSharedListForm(){
 	   		      		  {			
 		            	    refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
-		                    Ext.Msg.hide();
-		                	myMask.hide();
+		                    hideProcessingIcon();
 		       			 }
 	  		     	    else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
 	   		     		 {			
 		            	    refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
-		                    Ext.Msg.hide();
-		                	myMask.hide();
+		                    hideProcessingIcon();
 		       			 }
 	   		         	else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
 		             	{
@@ -941,14 +938,12 @@ function showSharedListForm(){
 	   		            else{
 	                	   setMsgOnAddItemsWithQtyToCart(response);  
 	                	   draftErrDiv.innerHTML="";
-	                	    Ext.Msg.hide();
-				    		myMask.hide();
+	                	   hideProcessingIcon();
 	   		         	}
 	                   },
 	                   failure: function (response, request){
 	                	   setMsgOnAddItemsWithQtyToCart(response);
-	                	   Ext.Msg.hide();
-			   	   		   myMask.hide();
+	                	   hideProcessingIcon();
 	                	}
 	               });    
 	                } 
@@ -957,8 +952,7 @@ function showSharedListForm(){
 				
 				
 			} else {
-				Ext.Msg.hide();
-	            		myMask.hide();
+				hideProcessingIcon();
 				alert("There is a problem in this page. Form formItemIds is missing.");
 			}
 		}
@@ -1026,8 +1020,7 @@ function showSharedListForm(){
 			        document.getElementById("errorMsgBottom").style.display = "inline";
 					errorflag= true;
 					isAddToCart=false;
-					Ext.Msg.hide();
-					myMask.hide();
+					hideProcessingIcon();
 			}
 			//XB 224 end
 
@@ -1048,8 +1041,7 @@ function showSharedListForm(){
 						divVal.setAttribute("class", "error");
 						divVal.style.display = 'block';
 						document.getElementById(arrQty.id).style.borderColor="#FF0000";
-						Ext.Msg.hide();
-						myMask.hide();
+						hideProcessingIcon();
 					}
 				isQuantityZero = false;
 			}
@@ -1257,8 +1249,7 @@ function showSharedListForm(){
 			}
 			if(isValidItemError)
 			{
-				Ext.Msg.hide();
-    			myMask.hide();
+				hideProcessingIcon();
 			}
 			return errorflag;
 			
@@ -1691,12 +1682,9 @@ function showSharedListForm(){
             document.getElementById("errorMsgBottom").style.display = "inline";
 		}
 		
-		var myMask;
 		function updateSelectedPAA(){
 			//added for jira 3974
-			var waitMsg = Ext.Msg.wait("Processing...");
-			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-			myMask.show();
+			showProcessingIcon();
 			priceCheck = true;
 			addToCartFlag = false;
 			var checkboxes = Ext.query('input[id*=checkItemKeys]');
@@ -1830,16 +1818,14 @@ function showSharedListForm(){
 		            			k++;
 		            		 
 		            		}
-	                     	Ext.Msg.hide();
-				        	myMask.hide();
+	                     	hideProcessingIcon();
 				        //-- Web Trends tag start --
 			            writeWebtrendTag(responseText);
 			            //-- Web Trends tag end --
 	                   },
 
 	                   failure: function (response, request){						
-						  Ext.Msg.hide();
-				          	  myMask.hide();
+						hideProcessingIcon();
 						  alert("Your request could not be completed at this time, please try again.");	                   }
 	               });     
 		}
@@ -1851,8 +1837,7 @@ function showSharedListForm(){
 
 				document.getElementById("errorMsgBottom").innerHTML = msgSelectItemFirst ;
                 		document.getElementById("errorMsgBottom").style.display = "inline";
-                		Ext.Msg.hide();
-	            		myMask.hide();
+                		hideProcessingIcon();
 			}
 		}
 
@@ -2028,6 +2013,10 @@ function showSharedListForm(){
 </head>
 <!-- Hemantha -->
 <body class="  ext-gecko ext-gecko3">
+
+<div >
+<div class="loading-icon" style="display:none;"></div>
+</div>
 
 	<%-- fancybox workaround: fancybox only works with 'a' tag so programatically click it when the button is clicked --%>
 	<a style="display: none;" id="dlgImportFormLink" href="#dlgImportForm" />
@@ -3291,6 +3280,9 @@ function showSharedListForm(){
 		<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
 	</div> <%-- / main-container --%>
+	<div class="loading-wrap"  style="display:none;">
+        <div class="load-modal" ></div>
+    </div> 
 
 	<div style="display: none;">
 

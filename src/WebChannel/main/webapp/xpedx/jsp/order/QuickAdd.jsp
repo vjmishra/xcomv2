@@ -27,6 +27,7 @@
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 	
@@ -164,6 +165,10 @@
 	<s:bean name='org.apache.commons.lang.StringUtils' id='strUtil' />
 </head>
 <body class="ext-gecko ext-gecko3">
+    
+ <div >
+     <div class="loading-icon" style="display:none;"></div>
+</div>
 	
 	<s:url id="addProductsToOrderURLid" namespace="/order" action="draftOrderAddOrderLines" /> 
 	<s:a cssClass="display:none;" id="addProductsToOrderURL" href="%{#addProductsToOrderURLid}" />
@@ -400,6 +405,9 @@
 			</div> <%-- / container --%>
 		</div> <%-- main --%>
 	</div> <%-- / main-container --%>
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/xpedx.swc.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	

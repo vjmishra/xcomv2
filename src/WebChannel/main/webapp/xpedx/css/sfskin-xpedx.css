@@ -669,4 +669,32 @@ ul.megamenu {
  #searchTips ul li {
     margin-top: 5px;
     } 
+    
+    /*---------Processing icon ---------*/
+    
+.loading-icon { 
+	padding:0; 
+    position: fixed;
+    top: 40%; 
+    left: 50%;   
+    width: 80px;
+    height: 100px;
+    background: url(../images/common/loading-xpedx.gif) no-repeat;
+    margin-left:-40px;
+    margin-top:-50px;  
+    -webkit-opacity: 1;
+    -moz-opacity:1;
+    opacity: 1;
+    z-index: 3000;
+     
+}
+   
+    
+    
+
+    
+    
+    
+
+    
  

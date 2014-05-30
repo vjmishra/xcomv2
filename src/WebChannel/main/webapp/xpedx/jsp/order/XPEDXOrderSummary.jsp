@@ -41,6 +41,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!--  End Styles -->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
@@ -253,6 +254,17 @@ function validateEmail(){
     }
     return true;
 }
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+}
+
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
+}
 	function validateFormSubmit(){
 		//Added For Jira 3232
 	    //Commented for 3475
@@ -350,7 +362,7 @@ function validateEmail(){
 		}
     	//ENd of EB 1975
     	//Added for 3475
-    	Ext.Msg.wait("Processing...");
+    	showProcessingIcon();
     	validateForm_OrderSummaryForm(),submitOrder()
    // document.OrderSummaryForm.submit();
     returnval = true;
@@ -705,6 +717,10 @@ from session . We have customer Contact Object in session .
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <body class="ext-gecko ext-gecko3">
+
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div> 
 <div id="main-container">
 <div id="main">
 <s:action name="xpedxHeader" executeResult="true" namespace="/common" >
@@ -1937,6 +1953,9 @@ from session . We have customer Contact Object in session .
 </s:form>
 
 </div>
+<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 <!-- id="main" -->
 </div>
 <!-- id="main-container" -->

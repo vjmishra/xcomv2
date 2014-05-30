@@ -14,14 +14,16 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 		return (!str || 0 === str.trim().length);
 	}
 
-	function showProcessingBar() {
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
+	function showProcessingIcon(){
+		$(".loading-wrap").css('display','block');
+		$(".loading-icon").css('display','block');
+		$("body").css("overflow", "hidden");
 	}
-	function hideProcessingBar() {
-		Ext.Msg.hide();
-		myMask.hide();
+
+	function hideProcessingIcon(){
+		$(".loading-wrap").css('display','none');
+		$(".loading-icon").css('display','none');
+		$("body").css("overflow", "auto");
 	}
 
 	function reset() {
@@ -29,7 +31,7 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 	}
 
 	reset();
-	showProcessingBar();
+	showProcessingIcon();
 	var url = getAssignedShipToURL;
 	$.ajax({
 		type : 'POST',
@@ -246,7 +248,7 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 			if (console) { console.log('showShiptos ajax error: resp = ', resp, '   textStatus = ', textStatus, '   xhr = ', xhr); }
 		},
 		complete: function(){			
-			hideProcessingBar();
+			hideProcessingIcon();
 		}
 	});
 

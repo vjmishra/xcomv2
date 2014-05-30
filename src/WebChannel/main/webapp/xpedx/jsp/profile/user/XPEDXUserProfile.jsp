@@ -39,6 +39,7 @@
 <link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree<s:property value='#wcUtil.xpedxBuildKey' />.css"	rel="stylesheet" type="text/css" id="skinSheet">
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!-- end styles -->
 
@@ -632,8 +633,20 @@ function funDivOpenClose(val1)
 			row.appendChild(data4);
 			tbody.appendChild(row);		
 		}
+		
+		function showProcessingIcon(){
+			$(".loading-wrap").css('display','block');
+			$(".loading-icon").css('display','block');
+			$("body").css("overflow", "hidden");
+		}
+
+		function hideProcessingIcon(){
+			$(".loading-wrap").css('display','none');
+			$(".loading-icon").css('display','none');
+			$("body").css("overflow", "auto");
+		}
+		
 		//added for XBT 298
-		var myMask;
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();
 
@@ -831,11 +844,7 @@ function funDivOpenClose(val1)
 
 			}		
 		
-		//start for XBT 298
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
-		//end for XBT 298
+			showProcessingIcon();
 		
 		    /*var tbody = document.getElementById("tb1").getElementsByTagName("tbody")[0];
 			var rowCount = tbody.rows.length;
@@ -1381,6 +1390,10 @@ a.underlink:hover {
 </head>
 <!-- END swc:head -->
 <body class="ext-gecko ext-gecko3">
+
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div>
 	<s:set name="isSalesRep"
 		value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}" />
 		<!-- Added for EB 633 -->
@@ -3301,6 +3314,9 @@ a.underlink:hover {
 				style="display: inline; float: right" />Profile has been updated successfully.
 	
 	</div>
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	</s:if>
 	<s:elseif test="%{#_action.isSuccess() && !#disableSinceSelfApprover}">
 		<div class="success" id="successMsgFor_save"

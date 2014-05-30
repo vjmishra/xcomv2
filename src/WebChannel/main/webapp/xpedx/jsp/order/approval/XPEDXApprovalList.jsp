@@ -22,6 +22,7 @@
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -307,6 +308,9 @@
 </head>
 
 <body class="ext-gecko ext-gecko3">
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div>
 <s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
 <s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
 <div class='x-hidden dialog-body ' id="shipToDivforordersearch">
@@ -635,6 +639,9 @@
 		</swc:dialogPanel> 
 	
     </div><!-- end container  -->
+    <div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
     
     <script type="text/javascript">
    
