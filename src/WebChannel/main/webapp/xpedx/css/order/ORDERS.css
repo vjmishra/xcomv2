@@ -2363,7 +2363,6 @@ div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
 }
 
 .detail-view .pa-wrap {
-	min-height: 260px;
 	margin-top: 10px;
 }
 .detail-view .cost-wrap {
