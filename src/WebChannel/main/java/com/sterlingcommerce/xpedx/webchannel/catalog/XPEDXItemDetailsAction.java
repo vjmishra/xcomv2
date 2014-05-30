@@ -138,7 +138,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		// Webtrends meta tag end here
 
 		// combine the lists for ease of use in JSP (minimizes redundant code)
-		combinedAlternativeItems = combine(upSellAssociatedItems, upgradeAssociatedItems, alternateAssociatedItems);
+		combinedAlternateItems = combine(upSellAssociatedItems, upgradeAssociatedItems, alternateAssociatedItems);
 		combinedCrosssellItems = combine(crossSellAssociatedItems, complimentAssociatedItems);
 
 		return returnVal;
@@ -1652,8 +1652,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		this.alternateAssociatedItems = alternateAssociatedItems;
 	}
 
-	public List getCombinedAlternativeItems() {
-		return combinedAlternativeItems;
+	public List getCombinedAlternateItems() {
+		return combinedAlternateItems;
 	}
 
 	public List getCombinedCrosssellItems() {
@@ -2064,7 +2064,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	//XB-673 - Changes Start
 	ArrayList alternateSBCAssociatedItems = null;
 	//XB-673 - Changes End
-	List combinedAlternativeItems = null;
+	List combinedAlternateItems = null;
 	List combinedCrosssellItems = null;
 
 	List displayUOMs = new ArrayList();

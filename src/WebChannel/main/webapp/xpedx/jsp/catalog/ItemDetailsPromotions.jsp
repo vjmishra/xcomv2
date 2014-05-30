@@ -5,8 +5,8 @@
 
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
-<s:if test='combinedAlternativeItems.size() > 0'>
-	<div class="associated-items-wrap">
+<s:if test='combinedAlternateItems.size() > 0'>
+	<div class="associated-items-wrap" style="display:none;">
 		<h3>You might also want to consider...</h3>
 		
 		<div class="liquid-carousel">
@@ -14,17 +14,17 @@
 			
 			<div class="wrapper">
 				<ul>
-					<s:iterator value='combinedAlternativeItems' id='upItemElem'>
-						<s:set name="upItemPrimInfoElem" value='#xutil.getChildElement(#upItemElem, "PrimaryInformation")' />
-						<s:set name="upItemComputedPrice" value='#xutil.getChildElement(#upItemElem, "ComputedPrice")' />
-						<s:set name="itemAssetList" value='#xutil.getElementsByAttribute(#upItemElem, "AssetList/Asset", "Type", "ITEM_IMAGE_1" )' />
+					<s:iterator value='combinedAlternateItems' id='itemElem'>
+						<s:set name="upItemPrimInfoElem" value='#xutil.getChildElement(#itemElem, "PrimaryInformation")' />
+						<s:set name="upItemComputedPrice" value='#xutil.getChildElement(#itemElem, "ComputedPrice")' />
+						<s:set name="itemAssetList" value='#xutil.getElementsByAttribute(#itemElem, "AssetList/Asset", "Type", "ITEM_IMAGE_1" )' />
 						
 						<s:url id='detailURLFromPromoProd' namespace='/catalog' action='itemDetails.action'>
 							<s:param name='itemID'>
-								<s:property value='#xutil.getAttribute(#upItemElem, "ItemID")' />
+								<s:property value='#xutil.getAttribute(#itemElem, "ItemID")' />
 							</s:param>
 							<s:param name='unitOfMeasure'>
-								<s:property value='#xutil.getAttribute(#upItemElem, "UnitOfMeasure")' />
+								<s:property value='#xutil.getAttribute(#itemElem, "UnitOfMeasure")' />
 							</s:param>
 							<%--  WebTrends tag start --%>
 							<s:param name='prItemtype'>
@@ -66,11 +66,11 @@
 			
 			<span class="next"></span>
 		</div>
-	</div> <%-- / associated-items-wrap (alternatives) --%>
+	</div> <%-- / associated-items-wrap (alternates) --%>
 </s:if>
 
 <s:if test='combinedCrosssellItems.size() > 0'>
-	<div class="associated-items-wrap">
+	<div class="associated-items-wrap" style="display:none;">
 		<h3>Popular Accessories</h3>
 		
 		<div class="liquid-carousel">
@@ -78,17 +78,17 @@
 			
 			<div class="wrapper">
 				<ul>
-					<s:iterator value='combinedAlternativeItems' id='upItemElem'>
-						<s:set name="upItemPrimInfoElem" value='#xutil.getChildElement(#upItemElem, "PrimaryInformation")' />
-						<s:set name="upItemComputedPrice" value='#xutil.getChildElement(#upItemElem, "ComputedPrice")' />
-						<s:set name="itemAssetList" value='#xutil.getElementsByAttribute(#upItemElem, "AssetList/Asset", "Type", "ITEM_IMAGE_1" )' />
+					<s:iterator value='combinedCrosssellItems' id='itemElem'>
+						<s:set name="upItemPrimInfoElem" value='#xutil.getChildElement(#itemElem, "PrimaryInformation")' />
+						<s:set name="upItemComputedPrice" value='#xutil.getChildElement(#itemElem, "ComputedPrice")' />
+						<s:set name="itemAssetList" value='#xutil.getElementsByAttribute(#itemElem, "AssetList/Asset", "Type", "ITEM_IMAGE_1" )' />
 						
 						<s:url id='detailURLFromPromoProd' namespace='/catalog' action='itemDetails.action'>
 							<s:param name='itemID'>
-								<s:property value='#xutil.getAttribute(#upItemElem, "ItemID")' />
+								<s:property value='#xutil.getAttribute(#itemElem, "ItemID")' />
 							</s:param>
 							<s:param name='unitOfMeasure'>
-								<s:property value='#xutil.getAttribute(#upItemElem, "UnitOfMeasure")' />
+								<s:property value='#xutil.getAttribute(#itemElem, "UnitOfMeasure")' />
 							</s:param>
 							<%--  WebTrends tag start --%>
 							<s:param name='prItemtype'>

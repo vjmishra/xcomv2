@@ -7,6 +7,7 @@ $(document).ready(function() {
 $(document).ready(function() {
 	// init carousel
 	$('.liquid-carousel').liquidcarousel({height:170, duration:700, hidearrows:false});
+	$('.associated-items-wrap').show();
 });
 
 $(document).ready(function() {
