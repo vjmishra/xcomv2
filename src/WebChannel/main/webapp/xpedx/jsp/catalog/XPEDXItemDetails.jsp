@@ -64,114 +64,118 @@
 	<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
 	<s:hidden name="catagory" id="catagory" value="%{#_action.getCatagory()}" />
 	<s:hidden id="custUOM" name="custUOM" value="%{#_action.getCustomerUOM()}" />
-	<s:if test='%{#_action.getWCContext().isGuestUser() == true}'>
-		<s:include value='XPEDXAnonItemDetails.jsp' />
-	</s:if>
-	<s:else>
-		<s:set name="itemListElem" value="itemListElem" />
-		<s:if test="%{null != #xutil.getChildElement(#itemListElem, 'Item')}">
-			<s:set name="itemElem" value='#xutil.getChildElement(#itemListElem,"Item")' />
-			
-			<s:set name='itemID' value='#xutil.getAttribute(#itemElem,"ItemID")' />
-			<s:set name='unitOfMeasure'	value='#xutil.getAttribute(#itemElem,"UnitOfMeasure")' />
-			<s:set name="prodMweight" value="%{#_action.getProdMweight()}"/>
-			<s:set name="pricingUOMConvFactor" value="%{#_action.getPricingUOMConvFactor()}"/>
-			<s:set name="pricingUOMConvFactor" value="%{#_action.getPricingUOMConvFactor()}"/>
-			
-			<s:hidden name="itemID" id="itemID" value="%{#itemID}" />
-			<s:hidden id="unitOfMeasure" name="unitOfMeasure" value="%{#unitOfMeasure}" />	
-			<s:hidden id="prodMweight" name="prodMweight" value="%{#prodMweight}" />
-			<s:hidden id="pricingUOMConvFactor" name="pricingUOMConvFactor" value="%{#pricingUOMConvFactor}" />
-				
-			<s:set name="itemElemExtn"	value='#xutil.getChildElement(#itemElem,"Extn")' />
-			<s:set name='certFlag'	value="#xutil.getAttribute(#itemElemExtn, 'ExtnCert')" />
-			<s:set name="primaryInfoElem" value='#xutil.getChildElement(#itemElem,"PrimaryInformation")' />
-			<s:set name="itemAssets" value='#xutil.getChildElement(#itemElem,"AssetList")' />
-			<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' /> 
-			<s:set name='pImg' value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
-			<s:if test='%{#pImg=="/"}'>
-				<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
-			</s:if>
-			<s:set name="isStocked" value="isStocked" />
-			<s:set name="orderMultiple" value="orderMultiple" />
-			<s:set name='showCurrencySymbol' value='true' />
-			<s:set name='currency' value='#xutil.getAttribute(#itemListElem,"Currency")' />
-			<s:if test='%{#kitCode == "BUNDLE" }'>
-				<s:set name='price'	value='#xutil.getAttribute(#computedPrice,"BundleTotal")' />
-			</s:if>
-			<s:else>
-				<s:set name='price'	value='#xutil.getAttribute(#computedPrice,"UnitPrice")' />
-			</s:else>
-			<s:if test="displayPriceForUoms.size() > 0">
-				<s:set name='price' value='%{displayPriceForUoms.get(2)}' />
-				<s:set name='formattedUnitprice' value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currency,#price,#showCurrencySymbol)' />
-			</s:if> 
-		</s:if>
+	
+	<s:set name="itemListElem" value="itemListElem" />
+	<s:if test="%{null != #xutil.getChildElement(#itemListElem, 'Item')}">
+		<s:set name="itemElem" value='#xutil.getChildElement(#itemListElem,"Item")' />
 		
-		<div id="main-container">
-			<div id="main">
-				<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
-					<s:param name='shipToBanner' value="%{'true'}" />
-				</s:action> 
-				<div class="container content-container detail-view" id="containerId">
-					<h1 style="font-weight:bold; "><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
-					<div id="printButton" class="print-ico-xpedx underlink">
-						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
-					</div>
-					<div class="clearfix"></div>
-					<div class="specs-wrap">
-						<%-- TODO Item specifications --%>
-					</div>
-					<div class="image-order-container">
-						<div class="detail-image-wrap">
-							<ul id="prodlist">
-								<s:property value='#xutil.getAttribute(#primaryInfoElem,"Description")' escape="false"/>
-							</ul>
-							<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
-								<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
-								<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
-								<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
-								<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
-								<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
-								<s:if test='%{#imageMainURL=="/"}'>
-									<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
-								</s:if>
-								<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
+		<s:set name='itemID' value='#xutil.getAttribute(#itemElem,"ItemID")' />
+		<s:set name='unitOfMeasure'	value='#xutil.getAttribute(#itemElem,"UnitOfMeasure")' />
+		<s:set name="prodMweight" value="%{#_action.getProdMweight()}"/>
+		<s:set name="pricingUOMConvFactor" value="%{#_action.getPricingUOMConvFactor()}"/>
+		<s:set name="pricingUOMConvFactor" value="%{#_action.getPricingUOMConvFactor()}"/>
+		
+		<s:hidden name="itemID" id="itemID" value="%{#itemID}" />
+		<s:hidden id="unitOfMeasure" name="unitOfMeasure" value="%{#unitOfMeasure}" />	
+		<s:hidden id="prodMweight" name="prodMweight" value="%{#prodMweight}" />
+		<s:hidden id="pricingUOMConvFactor" name="pricingUOMConvFactor" value="%{#pricingUOMConvFactor}" />
+			
+		<s:set name="itemElemExtn"	value='#xutil.getChildElement(#itemElem,"Extn")' />
+		<s:set name='certFlag'	value="#xutil.getAttribute(#itemElemExtn, 'ExtnCert')" />
+		<s:set name="primaryInfoElem" value='#xutil.getChildElement(#itemElem,"PrimaryInformation")' />
+		<s:set name="itemAssets" value='#xutil.getChildElement(#itemElem,"AssetList")' />
+		<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' /> 
+		<s:set name='pImg' value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
+		<s:if test='%{#pImg=="/"}'>
+			<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+		</s:if>
+		<s:set name="isStocked" value="isStocked" />
+		<s:set name="orderMultiple" value="orderMultiple" />
+		<s:set name='showCurrencySymbol' value='true' />
+		<s:set name='currency' value='#xutil.getAttribute(#itemListElem,"Currency")' />
+		<s:if test='%{#kitCode == "BUNDLE" }'>
+			<s:set name='price'	value='#xutil.getAttribute(#computedPrice,"BundleTotal")' />
+		</s:if>
+		<s:else>
+			<s:set name='price'	value='#xutil.getAttribute(#computedPrice,"UnitPrice")' />
+		</s:else>
+		<s:if test="displayPriceForUoms.size() > 0">
+			<s:set name='price' value='%{displayPriceForUoms.get(2)}' />
+			<s:set name='formattedUnitprice' value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currency,#price,#showCurrencySymbol)' />
+		</s:if> 
+	</s:if>
+	
+	<div id="main-container">
+		<div id="main">
+			<s:action name="xpedxHeader" executeResult="true" namespace="/common" >
+				<s:param name='shipToBanner' value="%{'true'}" />
+			</s:action> 
+			<div class="container content-container detail-view" id="containerId">
+				<h1 style="font-weight:bold; "><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
+				<div id="printButton" class="print-ico-xpedx underlink">
+					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
+				</div>
+				<div class="clearfix"></div>
+				<div class="specs-wrap">
+					<%-- TODO Item specifications --%>
+				</div>
+				<div class="image-order-container">
+					<div class="detail-image-wrap">
+						<ul id="prodlist">
+							<s:property value='#xutil.getAttribute(#primaryInfoElem,"Description")' escape="false"/>
+						</ul>
+						<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
+							<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
+							<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
+							<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
+							<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
+							<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
+							<s:if test='%{#imageMainURL=="/"}'>
+								<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 							</s:if>
-							<s:else>
-								<img src="<s:url value='%{#pImg}'/>"  class="prodImg" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
-							</s:else>
-							
-							<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
-							<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
-							<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
-							<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
-							<div class="item-numbers"><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' /></b>											
-								<s:if test='certFlag=="Y"'>
-									<img border="none" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" />
-								</s:if>
+							<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
+						</s:if>
+						<s:else>
+							<img src="<s:url value='%{#pImg}'/>"  class="prodImg" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
+						</s:else>
+						
+						<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
+						<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
+						<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
+						<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
+						<div class="item-numbers"><b><s:property value="wCContext.storefrontId" /> <s:property value="#xpedxItemLabel" />: <s:property value='%{#itemID}' /></b>											
+							<s:if test='certFlag=="Y"'>
+								<img border="none" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" alt="" />
+							</s:if>
+						</div>
+						<s:if test= '%{#_action.getExtnMfgItemFlag()== "Y"}'>
+							<div class="mfg-numbers"><s:property value="#manufacturerItemLabel" />: <s:property value='ManufacturerPartNumber' /></div>
+						</s:if>
+						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
+							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
+						</s:if>
+						<s:if test='%{#isStocked !="Y"}'>
+							<div class="mill-mfg-message">Mill / Mfg. Item - Additional charges may apply</div>
+						</s:if>
+						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
+							<div class="detail-msds-button">
+								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
+										<s:set name="link" value="value" />
+										<s:set name="desc" value="key" />
+										<input name="" type="button"  class="btn-neutral" value="MSDS" onclick="window.open('<s:property value='#link'/>');"/>
+								</s:iterator>									
 							</div>
-							<s:if test= '%{#_action.getExtnMfgItemFlag()== "Y"}'>
-								<div class="mfg-numbers"><s:property value="#manufacturerItemLabel" />: <s:property value='ManufacturerPartNumber' /></div>
-							</s:if>
-							<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
-								<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
-							</s:if>
-							<s:if test='%{#isStocked !="Y"}'>
-								<div class="mill-mfg-message">Mill / Mfg. Item - Additional charges may apply</div>
-							</s:if>
-							<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
-								<div class="detail-msds-button">
-									<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
-											<s:set name="link" value="value" />
-											<s:set name="desc" value="key" />
-											<input name="" type="button"  class="btn-neutral" value="MSDS" onclick="window.open('<s:property value='#link'/>');"/>
-									</s:iterator>									
-								</div>
-							</s:if>
-						</div> <%-- / detail-image-wrap --%>
-						<div class="order-wrap">
-							<p><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
+						</s:if>
+					</div> <%-- / detail-image-wrap --%>
+					
+					<div class="order-wrap">
+						<p><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
+						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
+							<div class="addpadtop20 addpadright20">
+								<h4>Price and availability are available to registered customers only. Please contact us at 1-888-973-3976 to learn more.</h4>
+							</div>
+						</s:if>
+						<s:else>
 							<div class="order-input-wrap">													
 								<s:set name="addToCartDisabled"	value="%{''}" />
 								<s:if test='%{(#catalogUtil.hasAccessToAddtoCart(#primaryInfoElem,#formattedUnitprice))=="Y"}'>
@@ -240,45 +244,45 @@
 							</div> <%-- / item-button-wrap --%>
 							
 							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom20" cssStyle="display:inline-block;"></s:div>
-							
-							<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
-								<div class="replacement-item">
-									This item will be replaced once inventory is depleted.<br/>Select item:
-									<s:iterator value='replacementAssociatedItems' id='replacementItem' status="count" >											
-										<s:set name="promoItemPrimInfoElem" value='#xutil.getChildElement(#replacementItem,"PrimaryInformation")' />
-										<s:set name="promoItemComputedPrice" value='#xutil.getChildElement(#replacementItem,"ComputedPrice")' />
-										<s:set name="itemAssetList" value='#xutil.getElementsByAttribute(#replacementItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
-										<s:if test='#itemAssetList != null && #itemAssetList.size() > 0'>
-											<s:set name="itemAsset" value='#itemAssetList[0]' />
-											<s:set name='imageLocation' value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
-											<s:set name='imageId' value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
-											<s:set name='imageLabel' value="#xutil.getAttribute(#itemAsset, 'Label')" />
-											<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
-											<s:if test='%{#imageURL == "/"}'>
-												<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
-											</s:if>
+						</s:else> <%-- / if-else guest user --%>
+						
+						<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
+							<div class="replacement-item">
+								This item will be replaced once inventory is depleted.<br/>Select item:
+								<s:iterator value='replacementAssociatedItems' id='replacementItem' status="count" >											
+									<s:set name="promoItemPrimInfoElem" value='#xutil.getChildElement(#replacementItem,"PrimaryInformation")' />
+									<s:set name="promoItemComputedPrice" value='#xutil.getChildElement(#replacementItem,"ComputedPrice")' />
+									<s:set name="itemAssetList" value='#xutil.getElementsByAttribute(#replacementItem,"AssetList/Asset","Type","ITEM_IMAGE_1" )' />
+									<s:if test='#itemAssetList != null && #itemAssetList.size() > 0'>
+										<s:set name="itemAsset" value='#itemAssetList[0]' />
+										<s:set name='imageLocation' value="#xutil.getAttribute(#itemAsset, 'ContentLocation')" />
+										<s:set name='imageId' value="#xutil.getAttribute(#itemAsset, 'ContentID')" />
+										<s:set name='imageLabel' value="#xutil.getAttribute(#itemAsset, 'Label')" />
+										<s:set name='imageURL' value="#imageLocation + '/' + #imageId " />
+										<s:if test='%{#imageURL == "/"}'>
+											<s:set name='imageURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 										</s:if>
-										<s:url id='detailURLFromPromoProd' namespace='/catalog'	action='itemDetails.action'>
-											<s:param name='itemID'><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:param>
-											<s:param name='unitOfMeasure'><s:property	value='#xutil.getAttribute(#replacementItem,"UnitOfMeasure")' /></s:param>
-										</s:url>
-										<s:if test='#count.index != 0'><span>,</span>&nbsp;</s:if>
-										<s:a href="%{detailURLFromPromoProd}"  ><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:a>									
-									</s:iterator>
-								</div> <%-- / replacement-item --%>
-							</s:if>
-							<div class="pa-wrap">
-								<%-- This will be filled by ajax as the PnA call happens on page load as Ajax --%>
-								<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability"></div>
-							</div>
-						</div> <%-- / order-wrap --%>
-					</div> <%-- / image-order-container --%>
-					
-					<s:include value="ItemDetailsPromotions.jsp" />
-				</div> <%-- / content-container --%>
-			</div> <%-- / main --%>
-		</div> <%-- / main-container --%>
-	</s:else> <%-- / if-else guest user --%>
+									</s:if>
+									<s:url id='detailURLFromPromoProd' namespace='/catalog'	action='itemDetails.action'>
+										<s:param name='itemID'><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:param>
+										<s:param name='unitOfMeasure'><s:property	value='#xutil.getAttribute(#replacementItem,"UnitOfMeasure")' /></s:param>
+									</s:url>
+									<s:if test='#count.index != 0'><span>,</span>&nbsp;</s:if>
+									<s:a href="%{detailURLFromPromoProd}"  ><s:property value='#xutil.getAttribute(#replacementItem,"ItemID")' /></s:a>									
+								</s:iterator>
+							</div> <%-- / replacement-item --%>
+						</s:if>
+						<div class="pa-wrap">
+							<%-- This will be filled by ajax as the PnA call happens on page load as Ajax --%>
+							<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability"></div>
+						</div>
+					</div> <%-- / order-wrap --%>
+				</div> <%-- / image-order-container --%>
+				
+				<s:include value="ItemDetailsPromotions.jsp" />
+			</div> <%-- / content-container --%>
+		</div> <%-- / main --%>
+	</div> <%-- / main-container --%>
 	
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	
