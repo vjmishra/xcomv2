@@ -21,32 +21,34 @@ $(document).ready(function() {
 });
 
 function successCallback_PriceAndAvailability(data) {
-	var item = data.priceAndAvailability.items[0];
+	if ($('#isSalesRep').val() == 'true') {
+		var item = data.priceAndAvailability.items[0];
+		
+		var html = [];
+		html.push('		<div class="list-price addpadbottom10">');
+		html.push('			<h4>');
+		html.push('				Cost (' , item.costCurrencyCode, ')');
+		html.push('			</h4>');
+		html.push('			<div class="cost-wrap">');
+		html.push('				<div class="pa-row">');
+		html.push('					<div class="col-1">');
+		html.push('						<a id="show-hide" onclick="javascript:return showCost(this);" href="#">[Show]</a>');
+		html.push('					</div>');
+		html.push('					<div id="cost" class="col-2" style="display: none;">');
+		var formattedCost = parseFloat(item.itemCost).toFixed(5) + "";
+		if (item.itemCost.match(/^[0\.]+$/)) {
+			html.push('					$' , formattedCost);
+		} else {
+			html.push('					$' , formattedCost , ' / ' , item.pricingUOM.substring(2));
+		}
+		html.push('					</div>');
+		html.push('				</div>');
+		html.push('			</div>');
+		html.push('		</div>'); // list-price
 	
-	var html = [];
-	html.push('		<div class="list-price addpadbottom10">');
-	html.push('			<h4>');
-	html.push('				Cost (' , item.costCurrencyCode, ')');
-	html.push('			</h4>');
-	html.push('			<div class="cost-wrap">');
-	html.push('				<div class="pa-row">');
-	html.push('					<div class="col-1">');
-	html.push('						<a id="show-hide" onclick="javascript:return showCost(this);" href="#">[Show]</a>');
-	html.push('					</div>');
-	html.push('					<div id="cost" class="col-2" style="display: none;">');
-	var formattedCost = parseFloat(item.itemCost).toFixed(5) + "";
-	if (item.itemCost.match(/^[0\.]+$/)) {
-		html.push('					$' , formattedCost);
-	} else {
-		html.push('					$' , formattedCost , ' / ' , item.pricingUOM.substring(2));
+		var itemId = $('#itemID').val();
+		$('#availabilty_' + itemId).append(html.join(''));
 	}
-	html.push('					</div>');
-	html.push('				</div>');
-	html.push('			</div>');
-	html.push('		</div>'); // list-price
-
-	var itemId = $('#itemID').val();
-	$('#availabilty_' + itemId).append(html.join(''));
 }
 
 function updateUOMFields() {

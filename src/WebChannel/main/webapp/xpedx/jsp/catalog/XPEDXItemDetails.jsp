@@ -49,6 +49,8 @@
 	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
 	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
 	
+	<s:hidden id="isSalesRep" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP') ? 'true' : 'false'}" />
+	
 	<s:if test='%{#_action.getCustomerUOM() == #_action.getBaseUOM()}'>
 		<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
 	</s:if>
