@@ -51,13 +51,15 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	// get price and availability on load
-	updateUOMFields();
-	var requestedUom = $('#selectedUOM').val();
-	var baseUom = $('#unitOfMeasure').val();
-	defaultUOM = $('#selectedUOM').val();
-	
-	getPriceAndAvailabilityForItems({modal:false, items:[$('#itemID').val()], success:successCallback_PriceAndAvailability});
+	if ($('#isGuestUser').val() == 'false') {
+		// get price and availability on load
+		updateUOMFields();
+		var requestedUom = $('#selectedUOM').val();
+		var baseUom = $('#unitOfMeasure').val();
+		defaultUOM = $('#selectedUOM').val();
+		
+		getPriceAndAvailabilityForItems({modal:false, items:[$('#itemID').val()], success:successCallback_PriceAndAvailability});
+	}
 });
 
 function successCallback_PriceAndAvailability(data) {
