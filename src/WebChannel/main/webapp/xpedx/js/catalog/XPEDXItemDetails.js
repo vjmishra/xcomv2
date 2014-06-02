@@ -1,7 +1,8 @@
 var defaultUOM;
 
 $(document).ready(function() {
-	$('[id^=Qty_]').focus();
+	var itemId = $('#itemID').val();
+	$('#Qty_' + itemId).focus();
 });
 
 $(document).ready(function() {
@@ -52,24 +53,26 @@ function successCallback_PriceAndAvailability(data) {
 }
 
 function updateUOMFields() {
-	var uomvalue = $('[id^=itemUomList_]').val();
+	var itemId = $('#itemID').val();
+	var uomvalue = $('#itemUomList_' + itemId).val();
 	$('#selectedUOM').val(uomvalue);
 	$('#uomConvFactor').val($('#convF_' + uomvalue).val());
 }
 
-function addItemToCart()
-{	//added for jira 3974
+function addItemToCart() {
+	var itemId = $('#itemID').val();
+	
 	showProcessingIcon();
-	var Qty = $('[id^=Qty_]').val();
+	var Qty = $('#Qty_' + itemId).val();
 	//Quantity validation
 	if(Qty =='' || Qty=='0')
 	{
-		$('[id^=Qty_]').css('border-color', '#ff0000').focus();
+		$('#Qty_' + itemId).css('border-color', '#ff0000').focus();
 		
-		var errorMsgForQty = $('[id^=errorMsgForQty_]').get(0);
+		var errorMsgForQty = $('#errorMsgForQty_' + itemId).get(0);
 		errorMsgForQty.innerHTML  = "Please enter a valid quantity and try again.";
   		errorMsgForQty.style.display = "inline-block"; 
-  		errorMsgForQty.setAttribute("class", "error");
+  		errorMsgForQty.setAttribute("class", "error pnaOrderMultipleMessage");
 		document.getElementById("Qty_Check_Flag").value = true;
 		hideProcessingIcon();
 	    return;
@@ -79,8 +82,7 @@ function addItemToCart()
 	document.getElementById("Qty_Check_Flag").value = false;
 
 	if(validationSuccess){
-		var ItemId=document.getElementById("itemId").value;
-		var UOM = $('[id^=itemUomList_]').val();
+		var UOM = $('#itemUomList_' + itemId).val();
 		if(document.getElementById("Job")!=null) {
 			var Job=document.getElementById("Job").value;
 		}
@@ -92,22 +94,156 @@ function addItemToCart()
 		if(document.getElementById("customerPONo") != null && document.getElementById("customerPONo") != undefined) {
 			customerPO=document.getElementById("customerPONo").value; 
 		}
-		listAddToCartItem($('#addToCartURL'), ItemId, UOM, Qty, Job, customer, customerPO, '');
+		listAddToCartItem($('#addToCartURL').val(), itemId, UOM, Qty, Job, customer, customerPO, '');
 	}
-}
+} // end addItemToCart
+
+function listAddToCartItem(url, productID, UOM, quantity, Job, customer, customerPO) {
+	var itemId = $('#itemID').val();
+	showProcessingIcon();
+	var baseUOM;
+	if (document.getElementById("baseUnitOfMeasure") != null && document.getElementById("baseUnitOfMeasure") != undefined) {
+		baseUOM = document.getElementById("baseUnitOfMeasure").value;
+	}
+	Ext.Ajax.request({
+		url: url,
+		params: {
+			productID: productID,
+			productUOM: UOM,
+			baseUnitOfMeasure: baseUOM,
+			quantity: quantity,
+			reqJobId: Job,
+			customerPONo: customerPO,
+			reqCustomer: customer
+		},
+		method: 'GET',
+		success: function (response, request) {
+			if (response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1) {
+				window.location.reload(true);
+				hideProcessingIcon();
+				return;
+			}
+			
+			var draftErr = response.responseText;
+			var myMessageDiv = document.getElementById("errorMsgForQty_" + itemId);
+			var draftErrDiv = document.getElementById("errorMessageDiv");
+
+			var enteredQty = document.getElementById("Qty_" + itemId).value;
+			var uomList = document.getElementById('itemUomList_' + itemId);
+			var selectedUom = uomList.options[uomList.selectedIndex].value;
+			var selectedUomText = uomList.options[uomList.selectedIndex].text;
+			var index = selectedUomText.indexOf("(");
+			if (index > -1) {
+				selectedUomText = selectedUomText.substring(0, index);
+			}
+
+			if (draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") > -1) {
+				refreshWithNextOrNewCartInContext();
+				draftErrDiv.innerHTML = "<h5 align='center'><b><font color=red>" + response.responseText + "</font></b></h5>";
+			} else if (draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") > -1) {
+				document.getElementById("Qty_" + itemId).style.borderColor = "#FF0000";
+				document.getElementById("Qty_" + itemId).focus();
+				document.getElementById("errorMsgForQty_" + itemId).innerHTML = "Please enter a valid quantity and try again.";
+				document.getElementById("errorMsgForQty_" + itemId).style.display = "inline-block";
+				document.getElementById("errorMsgForQty_" + itemId).setAttribute("class", "error pnaOrderMultipleMessage");
+				document.getElementById("Qty_Check_Flag").value = true;
+				hideProcessingIcon();
+				return;
+			} else if (draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") > -1) {
+				var orderHeaderKey = document.getElementById("editOrderHeaderKey").value;
+				var orderdetailsURL = document.getElementById('orderdetailsURLId').value + '&isErrorMessage=Y&orderHeaderKey=' + orderHeaderKey;
+				orderdetailsURL = ReplaceAll(orderdetailsURL, "&amp;", '&');
+				window.location = orderdetailsURL;
+			} else if (draftErr.indexOf(productID) !== -1) {
+				refreshMiniCartLink();
+				myMessageDiv.innerHTML = enteredQty + " " + selectedUomText + " has been added to your cart. Please review the cart to update the item with a valid quantity."; //"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
+				myMessageDiv.setAttribute("class", "error pnaOrderMultipleMessage");
+				myMessageDiv.style.display = "inline-block";
+				
+				document.getElementById("Qty_" + itemId).value = "";
+				var UOMelement = document.getElementById("itemUomList_" + itemId);
+				if (UOMelement != "" && UOMelement != null && defaultUOM != "") {
+					UOMelement.value = defaultUOM;
+				} else {
+					UOMelement.value = uomList.options[0].value;
+				}
+				updateUOMFields();
+			}
+			else {
+				var selCart = '<s:property value="#currentCartInContextOHK" />';
+				var tag = "";
+				var content = "";
+				var itemType = document.getElementById("pritemType");
+				
+				if (itemType != null && itemType != undefined && itemType.value != '') {
+
+					if (itemType = 'R') {
+						tag = "DCSext.w_x_item_repl_ac";
+					} else if (itemType = 'A') {
+						tag = "DCSext.w_x_item_alt_ac";
+					} else if (itemType = 'Cr') {
+						tag = "DCSext.w_x_item_crosssell_ac";
+					} else if (itemType = 'U') {
+						tag = "DCSext.w_x_item_upsell_ac";
+					}
+					content = "1";
+					writeMetaTag(tag, content);
+				} else {
+					tag = "WT.si_n,WT.tx_cartid,WT.si_x,DCSext.w_x_ord_ac";
+					content = "ShoppingCart," + selCart + ",2,1";
+					writeMetaTag(tag, content, 4);
+				}
+				
+				refreshMiniCartLink();
+				if (document.getElementById('isEditOrder') != null && document.getElementById('isEditOrder').value != null && document.getElementById('isEditOrder').value != '') {
+					myMessageDiv.innerHTML = "Item has been added to order.";
+				} else {
+					myMessageDiv.innerHTML = enteredQty + " " + selectedUomText + " has been added to your cart.";
+				}
+
+				myMessageDiv.style.display = "inline-block";
+				myMessageDiv.setAttribute("class", "success pnaOrderMultipleMessage");
+				//On successful addition to cart clear the Qty field & restore the default UOM - EB 40
+				document.getElementById("Qty_" + itemId).value = "";
+				var UOMelement = document.getElementById("itemUomList_" + itemId);
+				if (UOMelement != "" && UOMelement != null && defaultUOM != "") {
+					UOMelement.value = defaultUOM;
+				} else {
+					UOMelement.value = uomList.options[0].value;
+				}
+				updateUOMFields();
+			}
+			hideProcessingIcon();
+		},
+		failure: function (response, request) {
+			Ext.MessageBox.hide();
+
+			var myMessageDiv = document.getElementById("errorMsgForQty_" + itemId);
+			if (document.getElementById('isEditOrder') != null && document.getElementById('isEditOrder').value != null && document.getElementById('isEditOrder').value != '')
+				myMessageDiv.innerHTML = "Error in adding item to the order.";
+			else
+				myMessageDiv.innerHTML = "Error in adding item to the cart.";
+			myMessageDiv.style.display = "inline-block";
+			myMessageDiv.setAttribute("class", "error pnaOrderMultipleMessage");
+			refreshMiniCartLink();
+			hideProcessingIcon();
+		}
+	});
+} // end listAddToCartItem
 
 function resetQuantityErrorMessage() {
-	var divId = 'errorMsgForQty';
-	var divVal = document.getElementById(divId);
-	divVal.innerHTML = '';
-	$('[id^=Qty_]').css('border-color', '');
+	var itemId = $('#itemID').val();
+	$('#errorMsgForQty_' + itemId).get(0).innerHTML = '';
+	$('#Qty_' + itemId).css('border-color', '');
 }
 
+var priceCheck;
 function validateOrderMultiple() {
+	var itemId = $('#itemID').val();
 	resetQuantityErrorMessage();
-	var Qty = $('[id^=Qty_]').get(0);
+	var Qty = $('#Qty_' + itemId).get(0);
 	if (Qty.value == "" || Qty.value == null || Qty.value == '0') {}
-	var UOM = $('[id^=itemUomList_]').get(0);
+	var UOM = $('#itemUomList_' + itemId).get(0);
 	var OrdMultiple = document.getElementById("OrderMultiple");
 	var uomCF = 1;
 	if (OrdMultiple != null && OrdMultiple != undefined && OrdMultiple.value != 1) {
@@ -140,7 +276,7 @@ function validateOrderMultiple() {
 	var totalQty = uomCF * Qty.value;
 	if (OrdMultiple != null && OrdMultiple != undefined && OrdMultiple.value != 0) {
 		var ordMul = totalQty % OrdMultiple.value;
-		var myMessageDiv = document.getElementById("errorMsgForQty");
+		var myMessageDiv = $('#errorMsgForQty_' + itemId).get(0);
 		if (OrdMultiple.value > 1) {
 			if (priceCheck == true) {
 				myMessageDiv.innerHTML = "Must be ordered in units of " + addComma(OrdMultiple.value) + " " + $('#baseUOMDesc').val();
@@ -155,11 +291,12 @@ function validateOrderMultiple() {
 }
 
 function qtyInputCheck(component) {
+	var itemId = $('#itemID').val();
 	var qtyCheckFlag = $('#Qty_Check_Flag').val();
 	if (qtyCheckFlag == "true") {
 		if (component.value == "") {
 			component.style.borderColor = "#FF0000";
-			document.getElementById('errorMsgForQty').style.display = "inline-block";
+			$('#errorMsgForQty_' + itemId).css('display', 'inline-block');
 		} else {
 			component.style.borderColor = "";
 		}

@@ -114,8 +114,10 @@ function getPriceAndAvailabilityForItems(options) {
 				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
 				var cssClass = isOrderMultipleError ? 'error' : 'notice';
 				cssClass += ' pnaOrderMultipleMessage';
+				$divErrorMsgForQty.attr('class', cssClass);
+				
 				var html = [];
-				html.push('<div class="', cssClass, '">Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM], '</div>'); // TODO remove inline styles
+				html.push('Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM]);
 				$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
 				$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
 				if (isOrderMultipleError) {

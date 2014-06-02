@@ -53,9 +53,12 @@
 	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
 	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
 	
+	
 	<s:hidden id="isSalesRep" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP') ? 'true' : 'false'}" />
 	<s:hidden id="goBackFlag" value="%{#_action.getGoBackFlag()}" />
 	<s:hidden id="backPageUrl" value="%{#session.itemDtlBackPageURL.substring(#session.itemDtlBackPageURL.indexOf('/swc'))}" />
+	<s:hidden id="currentCartInContextOHK" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache('OrderHeaderInContext')" />
+	<s:hidden id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
 	
 	<s:if test='%{#_action.getCustomerUOM() == #_action.getBaseUOM()}'>
 		<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
@@ -122,6 +125,7 @@
 				
 				<p class="addmarginbottom15"><a href="javascript:goBack();">&lsaquo; Back</a></p>
 				
+				<div id="errorMessageDiv"></div>
 				<h1 style="font-weight:bold; "><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
 				<div id="printButton" class="print-ico-xpedx underlink">
 					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
