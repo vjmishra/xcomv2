@@ -10,6 +10,7 @@
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <s:bean	name='com.sterlingcommerce.webchannel.catalog.utils.CatalogUtilBean' id='catalogUtil' />
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
+<s:bean name='com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils' id='utilMIL' />
 <s:set name='scuicontext' value="uiContext" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
 
@@ -53,12 +54,20 @@
 	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
 	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
 	
-	
 	<s:hidden id="isSalesRep" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP') ? 'true' : 'false'}" />
 	<s:hidden id="goBackFlag" value="%{#_action.getGoBackFlag()}" />
 	<s:hidden id="backPageUrl" value="%{#session.itemDtlBackPageURL.substring(#session.itemDtlBackPageURL.indexOf('/swc'))}" />
 	<s:hidden id="currentCartInContextOHK" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache('OrderHeaderInContext')" />
 	<s:hidden id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
+	
+	<s:url id='getMyItemsListURLid' includeParams="none" namespace="/myItems" action='MyItemsList'/>
+	<s:hidden id="getMyItemsListURL" value="%{#getMyItemsListURLid}" />
+	
+	<s:url id="getPriceAndAvailabilityForItemsURLid" action="getPriceAndAvailabilityForItems" namespace="/catalog" />
+	<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
+	
+	<s:url id='addItemURLid' includeParams='none' escapeAmp="false" namespace="/order" action="xpedxAddItemsToList" />
+	<s:hidden id="addItemURL" value="%{#addItemURLid}" />
 	
 	<s:if test='%{#_action.getCustomerUOM() == #_action.getBaseUOM()}'>
 		<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
@@ -69,13 +78,13 @@
 	<s:hidden id="baseUOMDesc" value="%{#baseUOMDesc}" />
 	
 	<s:hidden name="webtrendItemType" id="webtrendItemType" value="%{#session.itemType}"/>
+	
 	<s:url id="xpedxItemDetailsPandAURL" namespace="/catalog" action="xpedxItemDetailsPandA"/>
 	<s:hidden name="xpedxItemDetailsPandAURLid" id="xpedxItemDetailsPandAURLid" value="%{#xpedxItemDetailsPandAURL}"/>
-	<s:url id="getPriceAndAvailabilityForItemsURLid" action="getPriceAndAvailabilityForItems" namespace="/catalog" />
-	<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
+	
 	<s:hidden name="catagory" id="catagory" value="%{#_action.getCatagory()}" />
 	<s:hidden id="custUOM" name="custUOM" value="%{#_action.getCustomerUOM()}" />
-	
+
 	<s:set name="itemListElem" value="itemListElem" />
 	<s:if test="%{null != #xutil.getChildElement(#itemListElem, 'Item')}">
 		<s:set name="itemElem" value='#xutil.getChildElement(#itemListElem,"Item")' />
@@ -114,6 +123,35 @@
 			<s:set name='price' value='%{displayPriceForUoms.get(2)}' />
 			<s:set name='formattedUnitprice' value='#xpedxutil.formatPriceWithCurrencySymbol(#scuicontext,#currency,#price,#showCurrencySymbol)' />
 		</s:if> 
+	
+		<s:form name="OrderDetailsForm" id="OrderDetailsForm" namespace="/order" action="xpedxAddItemsToList">
+			<s:hidden name="orderHeaderKey" value='%{#appFlowContext.key}' />
+			<s:hidden name="draft" value="%{#draftOrderFlag}" />
+			<s:hidden name='Currency' value='%{#currencyCode}' />
+			<s:hidden name='mode' value='%{#mode}' />
+			<s:hidden name='fullBackURL' value='%{#appFlowContext.returnURL}' />
+			<s:hidden name="orderLineKeyForNote" id="orderLineKeyForNote" value="" />
+		
+			<s:hidden name="listKey" id="listKey" value="" />
+			<s:hidden name="selectedLineItem" value="1" />
+			<s:hidden name="orderLineKeys" value="1" />
+			<s:hidden name="orderLineItemOrders" value="" />
+		
+			<s:hidden name="orderLineItemIDs" value="%{#itemID}" />
+			
+			<s:set name="primaryInfoElem" value='#xutil.getChildElement(#itemElem,"PrimaryInformation")' />
+			<s:hidden name="orderLineItemNames" value='%{#utilMIL.formatEscapeCharacters(#xutil.getAttribute(#primaryInfoElem, "ShortDescription"))}' />
+			<s:hidden name="orderLineItemDesc" value='%{#utilMIL.formatEscapeCharacters(#xutil.getAttribute(#primaryInfoElem, "Description"))}' />
+		
+			<s:hidden name="orderLineQuantities" value="%{#xutil.getAttribute(#primaryInfoElem, 'MinOrderQuantity')}" />
+			<s:hidden name="orderLineCustLineAccNo" value=" " />
+			<s:hidden name="itemUOMs" value=" " />
+			<s:hidden name="sendToItemDetails" value="true" />
+		
+			<s:hidden name="itemID" value="%{#itemID}" />
+			<s:hidden name="unitOfMeasure" value="%{#parameters.unitOfMeasure}" />
+			<s:hidden name="customerLinePONo" value="" />
+		</s:form>
 	</s:if>
 	
 	<div id="main-container">
@@ -251,7 +289,8 @@
 								<s:else>
 									<input name="button" type="button" onclick="addItemToCart();" class="btn-gradient floatright  addmarginright18" value="Add to Order"/>
 								</s:else>						
-								<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="addItemToWishList();" type="button" />
+								<input name="button" class="btn-neutral floatright  addmarginright10"  value="Add to List" onclick="addItemToWishList(); return false;" type="button" />
+								<s:include value="../modals/XPEDXSelectWishListModal.jsp" />
 								
 								<div class="show-pa">
 									<a href="javascript:getPriceAndAvailabilityForItems({modal:true, items:['<s:property value='%{#itemID}' />'], success:successCallback_PriceAndAvailability});">Update Price &amp; Availability</a>

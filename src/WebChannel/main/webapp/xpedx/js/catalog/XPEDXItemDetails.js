@@ -1,4 +1,6 @@
 var defaultUOM;
+var currentAadd2ItemList = null;
+var currentAadd2ItemListIndex = null;
 
 $(document).ready(function() {
 	var itemId = $('#itemID').val();
@@ -9,6 +11,30 @@ $(document).ready(function() {
 	// init carousel
 	$('.liquid-carousel').liquidcarousel({height:170, duration:700, hidearrows:false});
 	$('.associated-items-wrap').show();
+});
+
+$(document).ready(function() {
+	//Add to Wish List 
+	$("#dlgAddToListLink").fancybox({
+		'onStart' 	: function(){
+			showPrivateList();
+		},
+		'onClosed':function() {
+			var radio = document.addItemToList.itemListRadio;
+			if(radio != null)
+			{
+				for(var i = 0; i < radio.length; i++)
+				{
+					radio[i].checked = false;
+				}
+			}
+			currentAadd2ItemList = null;
+			currentAadd2ItemListIndex = null;
+		},
+		'autoDimensions'	: false,
+		'width' 			: 380,
+		'height' 			: 262  
+	});
 });
 
 $(document).ready(function() {
@@ -183,7 +209,7 @@ function listAddToCartItem(url, productID, UOM, quantity, Job, customer, custome
 				updateUOMFields();
 			}
 			else {
-				var selCart = '<s:property value="#currentCartInContextOHK" />';
+				var selCart = $('#currentCartInContextOHK').val();
 				var tag = "";
 				var content = "";
 				var itemType = document.getElementById("pritemType");
@@ -294,7 +320,7 @@ function validateOrderMultiple() {
 			if (priceCheck == true) {
 				myMessageDiv.innerHTML = "Must be ordered in units of " + addComma(OrdMultiple.value) + " " + $('#baseUOMDesc').val();
 				myMessageDiv.style.display = "inline-block";
-				myMessageDiv.setAttribute("class", "notice");
+				myMessageDiv.setAttribute("class", "notice pnaOrderMultipleMessage");
 			} else {
 				myMessageDiv.innerHTML = "";
 			}
@@ -324,6 +350,144 @@ function goBack() {
 		window.history.back();
 	}
 }
+
+function addItemToWishList() {
+	$("#dlgAddToListLink").trigger('click');
+}
+
+function showPrivateList(){
+	//Populate fields
+	var divMainId 	= "divMainPrivateList";
+	var divMain 	= document.getElementById(divMainId);
+	getMyItemsList(divMainId);
+}
+
+function getMyItemsList(divId) {
+	//Init vars
+	var url = $('#getMyItemsListURL').val() + '&ShareList=ShareList';
+	
+	document.getElementById(divId).innerHTML = "Loading data... please wait!";
+
+	//Execute the call
+	Ext.Ajax.request({
+		url: url,
+		params: {
+			filterByMyListChk: true,
+			//Parameter to fetch the private lists in the form of radio buttons
+			displayAsRadioButton: true,
+		},
+		method: 'POST',
+		success: function (response, request){
+			//Added for EB 560
+			if(response.responseText.indexOf('List Img') != -1)
+			{
+				var addItemListButtonVar = document.getElementById("addItemListButton");
+				if(addItemListButtonVar != null && addItemListButtonVar != undefined)
+				{
+					addItemListButtonVar.style.display="block";
+				}
+			}
+
+			if(response.responseText.indexOf('Sign In</span></a>') != -1 && response.responseText.indexOf('signId') != -1){
+				window.location.reload(true);
+				return;
+			}
+			//End of EB 560
+			setAndExecute(divId, response.responseText);
+		},
+		failure: function (response, request){
+			var x = document.getElementById(divId);
+			x.innerHTML = "";
+			alert('Failed to fecth the my items list');
+			document.body.style.cursor = 'default';                                                  
+		}
+	});     
+	document.body.style.cursor = 'default';
+} // end getMyItemsList
+
+function addItemsToList() {
+	var itemId = $('#itemID').val();
+	var idx = currentAadd2ItemListIndex;
+
+	//if idx is not set, no list is selected
+	if (idx != null) {
+		showProcessingIcon();
+		
+		var quantityValue = Ext.util.Format.trim(Ext.get("Qty_" + itemId).dom.value);
+
+		document.OrderDetailsForm.orderLineItemNames.value = unescape(document.OrderDetailsForm.orderLineItemNames.value);
+		document.OrderDetailsForm.orderLineItemDesc.value = unescape(document.OrderDetailsForm.orderLineItemDesc.value);
+
+		if (document.getElementById("#itemUomList_" + itemId) == null) {
+			document.OrderDetailsForm.itemUOMs.value = "EACH";
+		} else {
+			document.OrderDetailsForm.itemUOMs.value = document.getElementById("#itemUomList_" + itemId).value;
+		}
+
+		if (document.getElementById("Qty_' + itemId")) {
+			document.OrderDetailsForm.orderLineQuantities.value = quantityValue;
+		}
+
+		//Job#
+		if (document.getElementById("Job") != null) {
+			document.OrderDetailsForm.orderLineCustLineAccNo.value = document.getElementById("Job").value;
+		}
+
+		if (document.getElementById("customerPONo") != null) {
+			document.OrderDetailsForm.customerLinePONo.value = document.getElementById("customerPONo").value;
+		}
+		document.getElementById("listKey").value = currentAadd2ItemList.value;
+
+		var url = $('#addItemURL').val();
+
+		var itemCountValOfSelList = document.getElementById("itemCount_" + currentAadd2ItemList.value);
+		document.OrderDetailsForm.orderLineItemOrders.value = Number(itemCountValOfSelList.value) + 1;
+		if (itemCountValOfSelList.value < 200) {
+			document.body.style.cursor = 'wait';
+			var orderDetailsForm = Ext.get("OrderDetailsForm");
+			orderDetailsForm.dom.listKey.value = currentAadd2ItemList.value;
+			var itemId = $('#itemID').val();
+			Ext.Ajax.request({
+				url: url,
+				form: 'OrderDetailsForm',
+				method: 'POST',
+				success: function (response, request) {
+					document.body.style.cursor = 'default';
+					// Removal of MIL dropdown list from header for performance improvement
+					itemCountValOfSelList.value = itemCountValOfSelList.value + 1;
+
+					var myMessageDiv = document.getElementById("errorMsgForQty_" + itemId);
+					myMessageDiv.innerHTML = "Item has been added to the selected list.";
+					myMessageDiv.style.display = "inline-block";
+					myMessageDiv.setAttribute("class", "success pnaOrderMultipleMessage");
+					hideProcessingIcon();
+					/*Web Trends tag start*/
+					writeMetaTag("DCSext.w_x_list_additem", "1");
+					/*Web Trends tag end*/
+				},
+				failure: function (response, request) {
+					document.body.style.cursor = 'default';
+					var myMessageDiv = document.getElementById("errorMsgForQty_" + itemId);
+					myMessageDiv.innerHTML = "No lists have been created. Please create new list.";
+					myMessageDiv.style.display = "inline-block";
+					myMessageDiv.setAttribute("class", "notice pnaOrderMultipleMessage");
+					hideProcessingIcon();
+				}
+			});
+		} else {
+			alert("Maximum number of element in a list can only be 200..\n Please try again with removing some items or create a new list.");
+		}
+
+		document.body.style.cursor = 'default';
+		$.fancybox.close();
+	} else {
+		hideProcessingIcon();
+		alert('Please select a list or create a new list.');
+
+		document.body.style.cursor = 'default';
+		return;
+	}
+} // end addItemsToList
 
 function showProcessingIcon(){
 	$(".loading-wrap").css('display','block');
