@@ -46,6 +46,10 @@
 </head>
 <body class="ext-gecko ext-gecko3">
 	
+	<div>
+	     <div class="loading-icon" style="display:none;"></div>
+	</div>
+	
 	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
 	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
 	
@@ -290,6 +294,10 @@
 			</div> <%-- / content-container --%>
 		</div> <%-- / main --%>
 	</div> <%-- / main-container --%>
+	
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	

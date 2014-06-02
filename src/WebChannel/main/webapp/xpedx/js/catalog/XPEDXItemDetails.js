@@ -57,12 +57,9 @@ function updateUOMFields() {
 	$('#uomConvFactor').val($('#convF_' + uomvalue).val());
 }
 
-var myMask;
 function addItemToCart()
 {	//added for jira 3974
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
+	showProcessingIcon();
 	var Qty = $('[id^=Qty_]').val();
 	//Quantity validation
 	if(Qty =='' || Qty=='0')
@@ -74,8 +71,7 @@ function addItemToCart()
   		errorMsgForQty.style.display = "inline-block"; 
   		errorMsgForQty.setAttribute("class", "error");
 		document.getElementById("Qty_Check_Flag").value = true;
-		Ext.Msg.hide();
-	    	myMask.hide();
+		hideProcessingIcon();
 	    return;
 	}
 	var validationSuccess = validateOrderMultiple();
@@ -177,4 +173,16 @@ function goBack() {
 	} else {
 		window.history.back();
 	}
+}
+
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+}
+
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
 }
