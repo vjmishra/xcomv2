@@ -12,6 +12,19 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
+	$("#printButton").click(function () {
+		$('.specs-item').show();
+		$('.specs-size').show();
+		$('.specs-packing').show();
+		$('.specs-enviro').show();
+		// Print the page
+		window.print();
+		// After printing hide back all the tab panel contents which are supposed to be hidden
+		$('.specs-packing[aria-hidden=true]').hide();
+	});
+});
+
+$(document).ready(function() {
 	// get price and availability on load
 	updateUOMFields();
 	var requestedUom = $('#selectedUOM').val();
