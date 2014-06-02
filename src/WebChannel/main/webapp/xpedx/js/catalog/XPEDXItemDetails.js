@@ -169,3 +169,12 @@ function qtyInputCheck(component) {
 		}
 	}
 }
+
+function goBack() {
+	var backPageUrl = $('#backPageUrl').val();
+	if (backPageUrl) {
+		window.location.href = backPageUrl;
+	} else {
+		window.history.back();
+	}
+}
