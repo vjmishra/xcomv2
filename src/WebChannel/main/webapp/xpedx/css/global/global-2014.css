@@ -964,3 +964,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
     opacity:.8;
 }
 
+.content-container h1 span {
+	color: #000000;
+	font-size:14px;
+}
