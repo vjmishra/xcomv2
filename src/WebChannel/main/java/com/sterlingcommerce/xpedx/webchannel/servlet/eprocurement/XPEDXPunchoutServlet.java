@@ -152,7 +152,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
     			if(!YFCCommon.isVoid(cXMLFields) &&
        					YFCCommon.equals(IAribaConstants.CXML_REQUEST_SETUP_TAG,cXMLFields.getCXMLRequestType()))
     			{
-    				log.info("Punchout post Authentication Successful >>>>>>>>");
+    				log.info("Punchout post Authentication Successful");
 
     				populateAribaContext(wcContext);
 
@@ -225,7 +225,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 					IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
     	}
 
-    	log.info("Post Authentication process End >>>>>>>>");
+    	log.info("Post Authentication process End");
     	return wcResponse;
     }
 
@@ -258,7 +258,7 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 		aribaContext.setPayloadID(cXMLFields.getPayLoadId());
 		wcContext.setWCAttribute(IProcurementContext.PROCUREMENT_CONTEXT_ATTRIBUTE_KEY, aribaContext, WCAttributeScope.SESSION);
 		if (log.isDebugEnabled()){
-			logDebug(">>>>>>>>>>Details of AribaContext created:>>>>>>>>>>>.");
+			logDebug("=======Details of AribaContext created:=========.");
 			logDebug("IAribaContext.operation:"+cXMLFields.getOperation());
 			logDebug("IAribaContext.getOrderHeaderKey:"+cXMLFields.getOrderHeaderKey());
 			logDebug("IAribaContext.getReturnURL:"+cXMLFields.getReturnURL());

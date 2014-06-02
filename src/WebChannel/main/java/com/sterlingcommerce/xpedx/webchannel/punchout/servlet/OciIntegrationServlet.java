@@ -129,9 +129,9 @@ public class OciIntegrationServlet extends IntegrationServlet {
 					SCUIContextHelper.getUIContext(req, res));
 
 			if (scuiSecurityResponse.getReturnStatus())
-				logInfo("<<<<<<<<<<Authentication Successful >>>>>>>>");
+				logInfo("=====Authentication Successful =====");
 			else
-				logInfo("<<<<<<<<<<Authentication Failure >>>>>>>>");
+				logInfo("=====Authentication Failure =====");
 			
 			IWCContext context = WCContextHelper
 			.getWCContext(req);
@@ -154,9 +154,9 @@ public class OciIntegrationServlet extends IntegrationServlet {
 						SCUIContextHelper.getUIContext(req, res));
 
 				if (scuiSecurityResponse.getReturnStatus())
-					logInfo("<<<<<<<<<<Authentication Successful >>>>>>>>");
+					logInfo("=====Authentication Successful =====");
 				else
-					logInfo("<<<<<<<<<<Authentication Failure >>>>>>>>");
+					logInfo("=====Authentication Failure =====");
 				
 			}
 
@@ -197,9 +197,9 @@ public class OciIntegrationServlet extends IntegrationServlet {
 						.constructStartPageURL(startPageURL, wcContext);
 
 				if (!YFCCommon.isVoid(startPageURL)) {
-					errorMessage = ">>>>>>>>>>Request for Auth setup is success>>>>>>>>>>>>>.";
+					errorMessage = "=====Request for Auth setup is success=====.";
 					errorCode = new Long(IWCIntegrationStatusCodes.SUCCESS);
-					logInfo(">>>>>>>>>>>>>>>>Start page URL:"
+					logInfo("=====Start page URL:"
 							+ startPageURL);
 					wcResponse = new WCIntegrationResponse(
 							WCIntegrationResponse.SUCCESS, new Error(
@@ -236,7 +236,7 @@ public class OciIntegrationServlet extends IntegrationServlet {
 			return new WCIntegrationResponse(WCIntegrationResponse.FAILURE,
 					new Error(errorCode, errorMessage));
 		}
-		logInfo("<<<<<<<<<<Post Authentication process End >>>>>>>>");
+		logInfo("=====Post Authentication process End =====");
 		return wcResponse;
 
 	}
