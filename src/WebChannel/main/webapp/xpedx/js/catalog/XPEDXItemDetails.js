@@ -491,6 +491,112 @@ function addItemsToList() {
 	}
 } // end addItemsToList
 
+function submitNewlistAddItem(xForm) {
+	var itemId = $('#itemID').val();
+	//Validate the form
+	try{
+		if (xForm == undefined || xForm == null || xForm == ""){
+			xForm = "XPEDXMyItemsDetailsChangeShareList";
+		}
+	}catch(er){
+		xForm = "XPEDXMyItemsDetailsChangeShareList";
+	}
+	var form = Ext.get(xForm);
+
+	//Validate form
+	try{
+		var val = form.dom.listName.value;
+		if (val.trim() == ""){
+			alert("Name is required. Please enter a name for this list.");
+			return;
+		}
+	}catch(err){
+	}
+
+	var dataParams = new Object();
+
+	for (i = 0; i < form.dom.elements.length; i++){
+		var item = form.dom.elements[i];
+		if (item.name != ""){
+			dataParams[item.name] = item.value;
+		}
+	}
+	try{ console.debug("params" , dataParams); }catch(e){}
+
+	//adding the already seleted as hidden checkboxes to the form 
+	createHiddenInputsForSelectedCustomers(xForm);
+	clearTheArrays();// clearing the arrays
+
+	//Submit the data via ajax
+
+	//Init vars
+	var url = $('#myItemsDetailsChangeShareListURL').val();
+	
+	document.body.style.cursor = 'wait';
+
+	addItemToListnew(form);
+	$.fancybox.close();
+
+	Ext.Ajax.request({
+		url: url,
+		form: xForm,
+		method: 'POST',
+		success: function (response, request){
+			document.body.style.cursor = 'wait';	    	
+			var myMessageDiv = document.getElementById("errorMsgForQty_" + itemId);	            
+			myMessageDiv.innerHTML = "Item has been added to the selected list." ;	            
+			myMessageDiv.style.display = "inline-block"; 
+			myMessageDiv.setAttribute("class", "success pnaOrderMultipleMessage");	           
+			/*Web Trends tag start*/ 
+			writeMetaTag("DCSext.w_x_list_additem","1");
+			/*Web Trends tag end*/
+			document.body.style.cursor = 'default';
+
+		},
+		failure: function (response, request){
+			document.body.style.cursor = 'default';
+			Ext.Msg.hide();
+		}
+	});
+	document.body.style.cursor = 'default';
+}
+
+function addItemToListnew(form){
+	var itemId = $('#itemID').val();
+	
+	var idx = currentAadd2ItemListIndex;
+
+	var quantityValue = Ext.util.Format.trim(Ext.get('Qty_' + itemId).dom.value);	    			
+	form.dom.orderLineItemNames.value 	= document.OrderDetailsForm.orderLineItemNames.value;
+	form.dom.orderLineItemDesc.value 	= document.OrderDetailsForm.orderLineItemDesc.value;
+
+	if (document.getElementById("itemUomList_" + itemId) == null){
+		form.dom.itemUOMs.value = "EACH";
+	} else {
+		form.dom.itemUOMs.value 	= document.getElementById("itemUomList_" + itemId).value;
+	}
+
+	if (quantityValue){
+		form.dom.orderLineQuantities.value = quantityValue;
+	}
+
+	//Job#
+	if (document.getElementById("custLineAccNo")!=null){
+		form.dom.orderLineCustLineAccNo.value = document.getElementById("custLineAccNo").value;
+	}
+
+	if(document.getElementById("customerPONo")!=null) {
+		form.dom.customerLinePONo.value=document.getElementById("customerPONo").value;
+	}
+
+	var itemCountValOfSelList = "0";
+
+	form.dom.orderLineItemOrders.value = Number(itemCountValOfSelList.value) + 1;
+
+	form.dom.orderLineItemIDs.value = itemId;
+	form.dom.fromItemDetail.value = true;
+}
+
 function showProcessingIcon(){
 	$(".loading-wrap").css('display','block');
 	$(".loading-icon").css('display','block');

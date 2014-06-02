@@ -54,6 +54,7 @@
 	<s:url id='addToCartURLid' namespace='/order' action='addToCart' includeParams="none" />
 	<s:hidden id="addToCartURL" value="%{#addToCartURLid}" />
 	
+	<s:hidden id="isGuestUser" value="%{#_action.getWCContext().isGuestUser()}" />
 	<s:hidden id="isSalesRep" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP') ? 'true' : 'false'}" />
 	<s:hidden id="goBackFlag" value="%{#_action.getGoBackFlag()}" />
 	<s:hidden id="backPageUrl" value="%{#session.itemDtlBackPageURL.substring(#session.itemDtlBackPageURL.indexOf('/swc'))}" />
@@ -68,6 +69,9 @@
 	
 	<s:url id='addItemURLid' includeParams='none' escapeAmp="false" namespace="/order" action="xpedxAddItemsToList" />
 	<s:hidden id="addItemURL" value="%{#addItemURLid}" />
+	
+	<s:url id='myItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/myItems" escapeAmp="false" />
+	<s:hidden id="myItemsDetailsChangeShareListURL" value="%{#XPEDXMyItemsDetailsChangeShareListURLid}" />
 	
 	<s:if test='%{#_action.getCustomerUOM() == #_action.getBaseUOM()}'>
 		<s:set name="baseUOMDesc" value="#customerUomWithoutM" />										
