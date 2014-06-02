@@ -124,8 +124,8 @@ function addItemToCart() {
 
 	if(validationSuccess){
 		var UOM = $('#itemUomList_' + itemId).val();
-		if(document.getElementById("Job")!=null) {
-			var Job=document.getElementById("Job").value;
+		if(document.getElementById("custLineAccNo")!=null) {
+			var Job=document.getElementById("custLineAccNo").value;
 		}
 		if(document.getElementById("Customer")!=null) {
 			var customer=document.getElementById("Customer").value;
@@ -420,19 +420,19 @@ function addItemsToList() {
 		document.OrderDetailsForm.orderLineItemNames.value = unescape(document.OrderDetailsForm.orderLineItemNames.value);
 		document.OrderDetailsForm.orderLineItemDesc.value = unescape(document.OrderDetailsForm.orderLineItemDesc.value);
 
-		if (document.getElementById("#itemUomList_" + itemId) == null) {
+		if (document.getElementById("itemUomList_" + itemId) == null) {
 			document.OrderDetailsForm.itemUOMs.value = "EACH";
 		} else {
-			document.OrderDetailsForm.itemUOMs.value = document.getElementById("#itemUomList_" + itemId).value;
+			document.OrderDetailsForm.itemUOMs.value = document.getElementById("itemUomList_" + itemId).value;
 		}
 
-		if (document.getElementById("Qty_' + itemId")) {
+		if (document.getElementById("Qty_" + itemId)) {
 			document.OrderDetailsForm.orderLineQuantities.value = quantityValue;
 		}
 
 		//Job#
-		if (document.getElementById("Job") != null) {
-			document.OrderDetailsForm.orderLineCustLineAccNo.value = document.getElementById("Job").value;
+		if (document.getElementById("custLineAccNo") != null) {
+			document.OrderDetailsForm.orderLineCustLineAccNo.value = document.getElementById("custLineAccNo").value;
 		}
 
 		if (document.getElementById("customerPONo") != null) {
