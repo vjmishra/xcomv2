@@ -32,6 +32,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private final String B2BSourceIndicator = "1";
 
 	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml"; //TODO doesn't exist? Need?
+	String getCategoryListTemplate = "global/template/api/getCategoryList.XPXStockCheck.xml";
 	String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
 	String errorMessage_503 = "503 - An application error has occurred. If this error persists, please call the eBusiness " +
 			"Customer Support desk at 1-877-269-1784.";
@@ -98,7 +99,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		  if(pAndArequestInputDocument.getDocumentElement().getTagName().equalsIgnoreCase("PriceAndAvailability"))
 		  {
 			  Document pAndAResponseDocument = api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
-			  log.debug("The P&A reponse output is: "+SCXmlUtil.getString(pAndAResponseDocument));
+			  log.info("The P&A reponse output is: "+SCXmlUtil.getString(pAndAResponseDocument)); //TODO debug log
 
 			  if(pAndAResponseDocument!=null)
 			  {
@@ -158,7 +159,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		    return stockCheckOutputDocument;
 		}
 
-		log.debug("Final stock check doc: "+SCXmlUtil.getString(stockCheckOutputDocument));
+		log.info("Final stock check doc: "+SCXmlUtil.getString(stockCheckOutputDocument)); //TODO log debug
 		log.info("Completed Stock Check Web Service request");
 
 		return stockCheckOutputDocument;
@@ -615,57 +616,52 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  item.appendChild(customerNumber);
 
 					  Document getItemDetailsOutputDoc = getItemDetails(env,SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent());
-					  log.debug("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc));
+					  log.info("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc)); //TODO enable logging
 
 					  Element getCategoryOutputDocRoot =  getItemDetailsOutputDoc.getDocumentElement();
 					  Element itemElement = (Element) getCategoryOutputDocRoot.getElementsByTagName("Item").item(0);
 					  if(itemElement!=null)
 					  {
-						  //Get the category path details from the item table
-						  // TODO Need Categories in response - updated template to get CategoryList/Category,
-						  //  but it only returns CategoryPath="/MasterCatalog/300057/300166/300352"
-						  //   -> probably have to make another API call with that to get desc 3 or 4 cat #s in that path
+						  // Obtain descriptions for Category1-4.  XML data from item response includes this:
+						  //   "<CategoryList><Category CategoryPath="/MasterCatalog/300057/300166/300340"/></CategoryList>"
+						  if (itemElement.getElementsByTagName("CategoryList").getLength() > 0)
+						  {
+							  Element categoryListElement = (Element) itemElement.getElementsByTagName("CategoryList").item(0);
+							  if(categoryListElement.getElementsByTagName("Category").getLength()>0)
+							  {
+								  Element categoryElement = (Element) categoryListElement.getElementsByTagName("Category").item(0);
 
-//						  Element categoryListElement = (Element) itemElement.getElementsByTagName("CategoryList").item(0);
-//
-//						  if(categoryListElement.getElementsByTagName("Category").getLength()>0)
-//						  {
-//							  NodeList categoryList = categoryListElement.getElementsByTagName("Category");
-//							  for(int l=0; l<categoryList.getLength(); l++)
-//							  {
-//								     Element categoryElement = (Element) categoryList.item(l);
-//
-//								     if(l==0)
-//								     {
-//								     Element category1 = stockCheckResponseDocument.createElement("Category1");
-//								     category1.setTextContent(categoryElement.getAttribute("CategoryPath"));
-//									 item.appendChild(category1);
-//								     }
-//
-//								     if(l==1)
-//								     {
-//								    	 Element category2 = stockCheckResponseDocument.createElement("Category2");
-//									     category2.setTextContent(categoryElement.getAttribute("CategoryPath"));
-//										 item.appendChild(category2);
-//								     }
-//
-//								     if(l==2)
-//								     {
-//								    	 Element category3 = stockCheckResponseDocument.createElement("Category3");
-//									     category3.setTextContent(categoryElement.getAttribute("CategoryPath"));
-//										 item.appendChild(category3);
-//								     }
-//
-//								     if(l==3)
-//								     {
-//								    	 Element category4 = stockCheckResponseDocument.createElement("Category4");
-//									     category4.setTextContent(categoryElement.getAttribute("CategoryPath"));
-//										 item.appendChild(category4);
-//								     }
-//							  }
-//						  }
+								  String[] cats = categoryElement.getAttribute("CategoryPath").split("/");
+								    // cat[0]="", cat[1]="MasterCatalog"
+								  if (cats.length > 4)
+								  {
+									  Element category1 = stockCheckResponseDocument.createElement("Category1");
+									  category1.setTextContent(getCategoryShortDescription(cats[2], organizationCode, env));
+									  item.appendChild(category1);
 
-					 // Item description and Item Sell text
+									  Element category2 = stockCheckResponseDocument.createElement("Category2");
+									  category2.setTextContent(getCategoryShortDescription(cats[3], organizationCode, env));
+									  item.appendChild(category2);
+
+									  Element category3 = stockCheckResponseDocument.createElement("Category3");
+									  category3.setTextContent(getCategoryShortDescription(cats[4], organizationCode, env));
+									  item.appendChild(category3);
+
+									  // If no cat4, output "<Category4/>" (or skip?)
+									  //  Does "Paper Category" in fields count as cat4?
+									  String cat4 = "";
+									  if (cats.length > 5)
+									  {
+										  cat4 = getCategoryShortDescription(cats[5], organizationCode, env);
+									  }
+									  Element category4 = stockCheckResponseDocument.createElement("Category4");
+									  category4.setTextContent(cat4);
+									  item.appendChild(category4);
+								  }
+							  }
+						  }
+
+					  // Item description and Item Sell text
 					  Element itemDescription = stockCheckResponseDocument.createElement("ItemDescription");
 					  Element primaryInfoElement = (Element) itemElement.getElementsByTagName("PrimaryInformation").item(0);
 					  itemDescription.setTextContent(primaryInfoElement.getAttribute("ExtendedDescription"));
@@ -677,11 +673,14 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  item.appendChild(itemSellText);
 
 					  // Going by the logic that the first element in the warehouse locations is the primary warehouse.
+					  // TODO what if warehouse missing? Skip these?
 					  Element wareHouseLocations = SCXmlUtil.getXpathElement(itemElementFromPandA, "./WarehouseLocationList");
-				      NodeList wareHouseLocationsList =  wareHouseLocations.getElementsByTagName("WarehouseLocation");
+					  if (wareHouseLocations != null)
+					  {
+				        NodeList wareHouseLocationsList =  wareHouseLocations.getElementsByTagName("WarehouseLocation");
 
-				      if(wareHouseLocationsList != null && wareHouseLocationsList.getLength()>0)
-				      {
+				        if(wareHouseLocationsList != null && wareHouseLocationsList.getLength()>0)
+				        {
 				    	  for(int m=0; m<wareHouseLocationsList.getLength();m++)
 				    	  {
 				    		  Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);
@@ -727,7 +726,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 								  item.appendChild(twoDayQuantity);
 				    		  }
 				    	  }
-				      }
+				        }
 
 				      //Logic for availability message
 				      Element availMessage = stockCheckResponseDocument.createElement("AvailabilityMessage");
@@ -744,18 +743,20 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				      log.debug("The nextDayQty value is: "+nextDayQty);
 				      log.debug("The twoDayQty value is: "+twoDayQty);
 
-				   if(Integer.parseInt(quantity.getTextContent()) > 0 &&
-				    (Integer.parseInt(quantity.getTextContent()) > (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty))))
-				     {
+				      if(Integer.parseInt(quantity.getTextContent()) > 0 &&
+				    	(Integer.parseInt(quantity.getTextContent()) > (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty))))
+				      {
 					     int backOrderQty = Integer.parseInt(quantity.getTextContent()) - (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty));
 
 					     String backOrderedMessage = Integer.toString(backOrderQty)+""+unitOfMeasure.getTextContent()+""+"not currently available";
 
 					     backOrderMessage.setTextContent(backOrderedMessage);
 					     item.appendChild(backOrderMessage);
-				     }
+				      }
 
-				      // Logic for OrderMultiple and OrderMultiple Message and ItemStatus by invoking ItemBranch table
+				      }//end no warehouse info in P&A
+
+					  // Logic for OrderMultiple and OrderMultiple Message and ItemStatus by invoking ItemBranch table
 				      Document getItemBranchDetailsOutputDoc = getItemBranchDetails(env,envtId,companyCode,xpedxPartNumber.getTextContent());
 				      Element getXPXItemBranchListOutputDocRoot = getItemBranchDetailsOutputDoc.getDocumentElement();
 					  Element XPXItemExtnElement = (Element)getXPXItemBranchListOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_EXTN).item(0);
@@ -1114,9 +1115,11 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
         getItemDetailsInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID,itemID);
 
     	try {
+        	log.debug("The input to getItemList: "+SCXmlUtil.getString(getItemDetailsInputDoc));
 			 env.setApiTemplate(XPXLiterals.GET_ITEM_LIST_API, getItemListTemplate);
 			 getItemListOutputDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, getItemDetailsInputDoc);
 			 env.clearApiTemplate(XPXLiterals.GET_ITEM_LIST_API);
+	        log.debug("The output from getItemList: "+SCXmlUtil.getString(getItemListOutputDoc));
 		} catch (YFSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1560,6 +1563,33 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			 env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
 		return getCustomerListOutputDoc;
+	}
+
+	/**
+	 * Get the short desc of the category
+	 *
+	 * @param categoryID from category path (e.g. "300057")
+	 * @param organizationCode is this always "xpedx"?
+	 */
+	private String getCategoryShortDescription(String categoryID, String organizationCode, YFSEnvironment env) throws Exception
+	{
+		Document inputDoc = YFCDocument.createDocument("Category").getDocument();
+		inputDoc.getDocumentElement().setAttribute("CategoryID", categoryID);
+		inputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
+
+		env.setApiTemplate("getCategoryList", getCategoryListTemplate);
+		Document outputDoc = api.invoke(env, "getCategoryList", inputDoc);
+		env.clearApiTemplate("getCategoryList");
+
+		NodeList outputList = outputDoc.getElementsByTagName("Category");
+		String desc = "";
+		if(outputList.getLength() > 0)
+		{
+			Element catelem = (Element) outputList.item(0);
+			desc = catelem.getAttribute("ShortDescription");
+		}
+
+		return desc;
 	}
 
 	@Override
