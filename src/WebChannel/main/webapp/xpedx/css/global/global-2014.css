@@ -943,6 +943,10 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	margin-left: 5px;
 }
 
+#printButton {
+	cursor: pointer;
+}
+
 /*-------Processing Icon---------*/
 
 .loading-wrap {
