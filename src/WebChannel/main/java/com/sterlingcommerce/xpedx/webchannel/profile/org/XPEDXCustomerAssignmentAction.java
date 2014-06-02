@@ -1231,6 +1231,8 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				e.printStackTrace();
 			}
 		}
+
+		XPEDXWCUtils.purgeMegaMenuCache(getWCContext());
 	}
 
 	public void resetOrganizationValuesForShipToCustomer() {
@@ -1484,11 +1486,16 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		}
 		return value;
 	}
-	
+
 	public String setCurrentCustomerIntoContextFromPunchout() throws CannotBuildInputException{
 		setCurrentCustomerIntoContext();
 		XPEDXOrderUtils.createNewCartInContext(getWCContext());
 		XPEDXWCUtils.removeObectFromCache("divisionBeanList");
+		return SUCCESS;
+	}
+	
+	public String setCurrentCustomerIntoContextFromShipTo() throws CannotBuildInputException{
+		setCurrentCustomerIntoContext();		
 		return SUCCESS;
 	}
 	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";

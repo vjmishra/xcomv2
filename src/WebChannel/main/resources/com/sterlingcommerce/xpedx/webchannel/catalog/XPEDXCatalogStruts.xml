@@ -207,7 +207,11 @@
 			<result name="error">/xpedx/jsp/catalog/XPEDXItemAvailability.jsp
 			</result>
 		</action>
-
+		
+		<action name="getPriceAndAvailabilityForItems" class="com.sterlingcommerce.xpedx.webchannel.catalog.PriceAndAvailabilityForItemsAction">
+			<result type="json"></result>
+		</action>
+		
 		<action name="xpedxLink2CatalogAction" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/home/XPEDXLink2Catalog.jsp</result>
 		</action>
@@ -231,6 +235,12 @@
 			<param name="categoryDepth">2</param>
 			<result name="success">/xpedx/jsp/catalog/XPEDXNarrowBy.jsp</result>
 		</action>
-		
+
+		<action name="brands"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.BrandListAction">
+			<param name="mashupID">xpedxGetBrands</param>
+			<result name="success">/xpedx/jsp/catalog/BrandList.jsp</result>
+		</action>
+
 	</package>
 </struts>

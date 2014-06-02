@@ -70,7 +70,7 @@ border-left: black 1px solid;
 border-bottom: black 1px
 }
 </style>
-<link rel="stylesheet" type="text/css" name="stylelink" href="../../css/cmc.css">
+<link rel="stylesheet" type="text/css" name="stylelink" href="../../css/cmc<s:property value='#wcUtil.xpedxBuildKey' />.css">
 <script language="javascript" src="lib/dom.js"></script>
 <script language="javascript" src="lib/palette.js"></script>
 <script language="javascript" src="lib/menu.js"></script>

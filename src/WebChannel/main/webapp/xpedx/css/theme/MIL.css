@@ -6155,32 +6155,6 @@ div#main.userProfile { min-height: 850px; }
 }
 /* End - Changes made by Mitesh Parikh for JIRA#3186 */
 
-/*Added for EB 1150 for back to top functionality*/
-#back-to-top a
-{
-    /* display: block before hiding */
-    display: block;
-    display: none;
-    opacity: 1;
-    /* link stays at same place on page */
-    position: fixed;
-
-    /* link goes at the bottom of the page */
-    top: 100%;
-    margin-top: -105px; /* = height + preferred bottom margin */
-
-    /* link is centered */
-    
-    width: 51px;
-    height: 51px;
-}
-
-#back-to-top:focus {
-	outline:none;
-}
-
-/*End for EB 1150 for back to top functionality*/
-
 .mil-count-selected {
 	float: left;
 	clear: none;

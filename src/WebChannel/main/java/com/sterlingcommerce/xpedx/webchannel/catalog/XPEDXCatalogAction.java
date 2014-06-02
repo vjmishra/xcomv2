@@ -20,7 +20,6 @@ import javax.xml.xpath.XPathExpressionException;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -47,7 +46,6 @@ import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.xpedx.webchannel.catalog.trey4748.Trey4748SwcLogging;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
@@ -82,6 +80,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private static final String CUSTOMER_PART_NUMBER_FLAG = "1";
 	private boolean stockedCheckeboxSelected;
 	private Map<String, Map<String, String>> itemUomHashMap = new HashMap<String, Map<String, String>>();
+	private Map<String, String> uomConvFactorMap = new HashMap<String, String>();
 	ArrayList<String> itemIDList = new ArrayList<String>();
 	private String catalogLandingMashupID = null;
 	private XPEDXShipToCustomer shipToCustomer;
@@ -432,7 +431,23 @@ public class XPEDXCatalogAction extends CatalogAction {
 				searchTerm = processSpecialCharacters(searchTerm);
 
 				searchTerm = XPXCatalogDataProcessor.preprocessSearchQuery(searchTerm);
-				setSearchString(searchTerm);
+				String searchTermList[] = searchTerm.split(" ");
+				String[] tempSearchTermList= tempSearchTerm.split(" ");
+				String displaySearchTerm = "";
+				boolean flag=false;
+				for (String searchTermToken : searchTermList){
+				     for ( String tempSearchTermToken : tempSearchTermList){
+					      if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+					    	  displaySearchTerm=displaySearchTerm+tempSearchTermToken+" ";
+						        flag=true;
+						        break;
+					}
+					      
+				    }
+				    if(!flag)
+				    	displaySearchTerm=displaySearchTerm+searchTermToken+" ";
+				}
+				setSearchString(displaySearchTerm);
 
 				String appendStr = "&searchTerm=" + searchTerm;
 				XPEDXWCUtils.setItemDetailBackPageURLinSession(appendStr);
@@ -758,6 +773,20 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	protected void populateMashupInput(String mashupId, Map<String, String> valueMap, Element mashupInput) throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
+		
+		boolean searchStartsWithFlag = true; // indicates whether to auto-append '*' to search terms
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this.get_bcs_());	
+		StringBuilder actionString = new StringBuilder();
+	/*	Searching for which action is triggered Search or newSearch*/
+		 for(int i = bcl.size() - 1; i >= 0; i--)
+         {
+             Breadcrumb bc = (Breadcrumb)bcl.get(i);
+             System.out.println("Action called: "+bc.getAction()) ;
+             actionString.append(bc.getAction()+",");
+         }
+		 if(actionString.toString().contains("search")){
+			 searchStartsWithFlag = false; 
+		 }
 
 		Set<String> keySet = valueMap.keySet();
 		Iterator<String> iterator = keySet.iterator();
@@ -786,13 +815,17 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 			// Changes made for XBT 251 special characters replace by Space while Search
 			// searchStringValue=searchStringValue.replaceAll("[\\[\\]\\-\\+\\^\\)\\;{!(}:,~\\\\]"," ");
-			String searchStringTokenList[] = searchStringValue.split(" ");
-
+			String[] searchStringTokenList = searchStringValue.split(" ");
+			searchTerm="";
 			setStockedItemFromSession();
 			List<String> specialWords = Arrays.asList(luceneEscapeWords);
 			for (String searchStringToken : searchStringTokenList) {
 				if (!specialWords.contains(searchStringToken.trim().toLowerCase())) {
 					if (!"".equals(searchStringToken.trim())) {
+						if (searchStartsWithFlag && searchStringToken.length()>3 && (!searchStringToken.substring(searchStringToken.length()-1).equals("*"))) {
+							searchStringToken =searchStringToken+ "*";
+						}
+						searchTerm=searchTerm+searchStringToken+" ";
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
 						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem) {
@@ -927,6 +960,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	@Override
 	public String newSearch() {
+		tempSearchTerm=searchTerm;
 		try {
 			init();
 			setCustomerNumber();
@@ -982,15 +1016,34 @@ public class XPEDXCatalogAction extends CatalogAction {
 				}
 				if (searchTerm != null && searchTerm.indexOf("*") > -1) {
 					String searchTermList[] = searchTerm.split(" ");
+					String[] tempSearchTermList= tempSearchTerm.split(" ");
 					String strSearchTerm = "";
 					String removedSearchTerms = "";
 					for (String searchTermToken : searchTermList) {
 						if (searchTermToken.indexOf("*") > -1 && searchTermToken.length() > 5) {
-							strSearchTerm = strSearchTerm + searchTermToken + " ";
+							for ( String tempSearchTermToken : tempSearchTermList){
+								if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+									strSearchTerm = strSearchTerm + tempSearchTermToken + " ";
+									break;
+								}
+							}
+							
 							continue;
 						} else if (searchTermToken.indexOf("*") == -1) {
-							strSearchTerm = strSearchTerm + searchTermToken + " ";
+							for ( String tempSearchTermToken : tempSearchTermList){
+								if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+									strSearchTerm = strSearchTerm + tempSearchTermToken + " ";
+									break;
+									
+								}
+							}
 							continue;
+						}
+						for ( String tempSearchTermToken : tempSearchTermList){
+							if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
+								searchTermToken=tempSearchTermToken;
+								break;
+							}
 						}
 						removedSearchTerms = removedSearchTerms + searchTermToken + " ";
 					}
@@ -1232,11 +1285,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				input.appendChild(input.getOwnerDocument().importNode(xpxItemExtninputElem, true));
 				input.appendChild(input.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
 
-				StopWatch sw = new StopWatch();
-				sw.start();
 				allAPIOutputDoc = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", input, wcContext.getSCUIContext());
-				sw.stop();
-				Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke xpedxgetAllAPI: itemIds=%s", StringUtils.join(itemIds.iterator(), ", "));
 
 				getOrderMultipleMapForItems();
 				String shipFromBranch = shipToCustomer.getExtnShipFromBranch();
@@ -1393,11 +1442,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setMashupID(getCatalogLandingMashupID());
 			}
 
-			StopWatch sw = new StopWatch();
-			sw.start();
 			String returnString = super.navigate();
-			sw.stop();
-			Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "super.navigate: path=%s, returnString=%s", path, returnString);
 			// XBT-260
 
 			if (ERROR.equals(returnString)) {
@@ -1566,6 +1611,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 								// End - Code added to fix XNGTP 2964
 
 							}
+
+							if (objConversionFactor != null) {
+								uomConvFactorMap.put(uom, objConversionFactor.toString());
+							}
 							if (isCustomerUom.equalsIgnoreCase("Y")) { // Show only UOM code without M_
 								if ("0".equals(objConversionFactor) || "1".equals(objConversionFactor)) {
 									displayUomMap.put(uom, uom.substring(2, uom.length()));
@@ -1619,6 +1668,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			}
 		}
 		wcContext.setWCAttribute("itemUomHashMap", itemUomHashMap, WCAttributeScope.REQUEST);
+		wcContext.setWCAttribute("uomConvFactorMap", uomConvFactorMap, WCAttributeScope.REQUEST);
 		wcContext.setWCAttribute("defaultShowUOMMap", defaultShowUOMMap, WCAttributeScope.REQUEST);
 	}
 
@@ -1654,11 +1704,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 									ArrayList<String> itemIDListForGetCompleteItemList = new ArrayList<String>();
 									Document XPXItemExtnListElement = null;
 
-									StopWatch sw = new StopWatch();
-									sw.start();
 									XPXItemExtnListElement = XPEDXOrderUtils.getXPEDXItemAssociation(custID, shipFromDivision, itemId.getTextContent(), getWCContext());
-									sw.stop();
-									Trey4748SwcLogging.getInstance().snapshot(req.getSession(), sw.getTime(), "invoke getXPEDXItemAssociation: custID=%s, shipFromDivision=%s, itemId=%s", custID, shipFromDivision, itemId.getTextContent());
 
 									List<Element> xPXItemExtn = XMLUtilities.getElements(XPXItemExtnListElement.getDocumentElement(),
 											"XPXItemExtn[@ItemID='" + itemId.getNodeValue() + "']");
@@ -1869,12 +1915,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 					if (contentLocation != null && contentId != null && contentLocation != "" && contentId != "") {
 						imageURL = contentLocation + "/" + contentId;
 					} else {
-						imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+						imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 					}
 				} else {
 					// no category images defined
 					log.error("no category image defined for " + topCategoryShortDesc);
-					imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+					imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 				}
 				XPEDXCatalogCategoryImageBean bean = new XPEDXCatalogCategoryImageBean(topCategoryShortDesc, topCategoryPath, imageURL);
 				ArrayList<XPEDXCatalogCategoryImageBean> topBeanList = new ArrayList<XPEDXCatalogCategoryImageBean>();
@@ -1898,12 +1944,12 @@ public class XPEDXCatalogAction extends CatalogAction {
 						if (contentLocation != null && contentId != null && contentLocation != "" && contentId != "") {
 							imageURL = contentLocation + "/" + contentId;
 						} else {
-							imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+							imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 						}
 					} else {
 						// no category images defined
 						log.error("no category image defined for " + childCategoryName);
-						imageURL = "/swc/xpedx/images/INF_150x150.jpg";
+						imageURL = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 					}
 					XPEDXCatalogCategoryImageBean bean = new XPEDXCatalogCategoryImageBean(childCategoryName, childCategoryPath, imageURL);
 					childBeanList.add(bean);
@@ -3146,6 +3192,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private String facetListItemAttributeKey;
 
 	private String rememberNewSearchText;
+	private String tempSearchTerm;        // used as temp variable for searchTerm
 
 	public Map<String, String> getSortListMap() {
 		sortListMap.put("Item.ExtnBestMatch--A", "Best Match");
@@ -3227,6 +3274,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public void setItemUomHashMap(
 			Map<String, Map<String, String>> itemUomHashMap) {
 		this.itemUomHashMap = itemUomHashMap;
+	}
+
+	public Map<String, String> getUomConvFactorMap() {
+		return uomConvFactorMap;
+	}
+
+	public void setUomConvFactorMap(Map<String, String> uomConvFactorMap) {
+		this.uomConvFactorMap = uomConvFactorMap;
 	}
 
 	public String getTemplateName() {

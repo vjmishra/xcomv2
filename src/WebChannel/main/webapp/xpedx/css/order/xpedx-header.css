@@ -68,7 +68,6 @@ td{margin:0;padding:0;}
 hr{margin:0;padding:0;}
 blockquote{margin:0;padding:0;}
 #main{margin:0 auto;padding:0;width:998px;overflow:hidden;position:relative;}
-.container{overflow:hidden;width:100%;clear:both;padding:25px 0 10px 0;}
 input[type="checkbox"]{height:1em;width:1em;}
 input.xpedx_select_sm{background:url("../xpedx/css/global/imagebuilderwebapp/images/shape.svg_png?shape=rect&shapeRendering=geometricPrecision&width=103&height=22&curveX=6&curveY=6&fillColor=%23ccc&fillOpacityPct=80&fillGradientType=b2t&fillGradientTargetColor=%23fff&fillGradientTargetOpacityPct=%23fff&borderWidth=0&shadingStyle=%23sine") no-repeat scroll left top transparent;border:medium none;font-size:11px;height:21px;padding:3px 4px 4px;width:55px;}
 .t1-header{position:relative;top:0;left:0;z-index:10;}
@@ -258,7 +257,6 @@ input.xpedx_select_sm{background:url("../xpedx/css/global/imagebuilderwebapp/ima
 .searchbox-1 .searchbox-form select{vertical-align:middle;width:112px;}
 .searchbox-1 .searchbox-form .searchTermBox{vertical-align:middle;border:0px;height:26px;margin-bottom:1px;background:none;}
 .searchbox-1 .btn-go, .searchbox-form-transaction-search .btn-go{border:none;padding:2px 2px 2px 2px;vertical-align:middle;width:auto;margin-left:3px;}
-.searchbox-1 .searchButton{background:transparent url('../../images/common/search_button.gif') no-repeat scroll 0 0;border:0 none;vertical-align:middle;width:24px;height:24px;margin-left:-8px;}
 .searchbox-form-transaction-search .btn-go{}
 .searchbox-1 .searchbox-links{line-height:24px;}
 .closeButton{cursor:pointer;margin-left:auto}
@@ -437,21 +435,7 @@ blockquote {
 	overflow: hidden;
 	position: relative;
 }
-.container {
-	overflow: hidden;
-	width: 100%;
-/*
-	-moz-background-clip:border;
-	-moz-background-inline-policy:continuous;
-	-moz-background-origin:padding;
-*/
-/*
-	border:1px solid #E7E9EB;
-*/
-	clear: both;
-	/*padding: 141px 0 0;*/
-	padding: 50px 0 10px 0;
-}
+
 
 /* make checkbox and radio buttons scale with surrounding character data */
 input[type="checkbox"] {

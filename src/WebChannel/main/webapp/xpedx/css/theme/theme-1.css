@@ -1655,14 +1655,14 @@ progressBar {
  */
 .sort-field-up {
   /*background-color:lightgray;*/
-  background-image:url( /swc/xpedx/images/icons/12x12_white_up.png);
+  background-image:url( ../../images/icons/12x12_white_up.png);
   background-repeat:no-repeat;
   background-position:right;
   padding-right:20px;
 }
 .sort-field-down {
   /*background-color:lightgray;*/
-  background-image:url(/swc/xpedx/images/icons/12x12_white_down.png);
+  background-image:url(../../images/icons/12x12_white_down.png);
   background-repeat:no-repeat;
   background-position:right;
   padding-right:20px;

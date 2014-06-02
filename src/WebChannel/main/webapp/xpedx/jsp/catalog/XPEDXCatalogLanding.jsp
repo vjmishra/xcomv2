@@ -25,10 +25,14 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
  <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+ <!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->	
 
 </s:if>
@@ -39,6 +43,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 
 </s:else>
@@ -117,29 +122,14 @@
 <!-- Hemantha 
 		<div class="container">
 		 -->
+
 			<!-- BEGIN breadcrumb --> 
 			<div id="catalog-header-breadcrumbs">
-				<s:form name='narrowSearch' action='search' namespace='/catalog'>
-				<div class="searchbox-form1">
-					<div class="catalog-search-container">
-					<input id="search_searchTerm" value="Search Within Results..." name="searchTerm"
-					tabindex="1002" type="text" onkeydown="javascript:validateDQuote(event)" onclick="javascript:context_newSearch_searchTerm_onclick(this)" /> 
-					<button type="submit" class="searchButton" tabindex="1003" title="Search" onclick="javascript:setDefaultSearchText();"></button> 
-						<s:set name="checkedval1" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-						<s:hidden id="stockedItem" name="stockedItem" value="%{#checkedval1}"/> 
-						<!-- START wctheme.submit.ftl (use simple) --> 
-						<!-- <button type="submit" id="search_0" value="Submit" class="searchButton"></button> --> 
-						<!-- END submit.ftl --> 
-					</div>
-				</div>
-				</s:form>
 				<div id="breadcrumbs-list-name">
-					<div id="breadcrumb-my-selection" style="margin-left:11px; padding-right: 4px; text-align: left;">My Selection</div>
-					<s:url value='/xpedx/images/icons/12x12_charcoal_x.png' id='rbtn'   /> <!--  title="Search"  -->
-					<span class="breadcrumbs-inner"><span class="breadcrumb-inactive">
-					<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' / ' 
-					removable='true' removeIcon='#rbtn' startTabIndex='2' />
-					</span></span>
+					<s:url id="rbtn" value="%{'/xpedx/images/icons/12x12_charcoal_x.png'}" escapeAmp="false"  />
+					<span class="breadcrumbs-inner" id="searchBreadcrumb" >
+						<xpedx:breadcrumbDisplay displayRootName='Catalog' breadcrumbSeparator=' <span>/</span> ' removable='true' removeIcon='#rbtn' startTabIndex='2' />
+					</span>
 				</div>
 				<div class="clearall">&nbsp;</div>
 			</div>
@@ -307,7 +297,7 @@
 			 <s:set name="prependTestString" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getAdJugglerKeywordPrefix()" />
 			 <s:set name="sanitizedCategoryName" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@sanitizeAJKeywords(#ad_keyword)"/>
 			</div>
-				<div id="right-col-int" class="cat-landing" style="margin-top:0px;right:10px;">
+				<div id="right-col-int" class="cat-landing" style="margin-top:0px;">
 				 <div align="left" style="padding-right: 60px;margin-bottom:2px">
 				 <s:if test="%{!#isPunchoutUser}">
 					<div class="ad-float smallBody" style="float: none;" > <img height="4" width="7" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="" class="float-left" /> advertisement</div>

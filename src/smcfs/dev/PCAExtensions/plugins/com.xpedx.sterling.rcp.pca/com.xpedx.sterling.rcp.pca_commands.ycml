@@ -691,4 +691,13 @@
             <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
         </namespaces>
     </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfAuthorizedLocationsPanel">
+        <commands>
+            <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetListOfAssignedShipTosForAUserService_out" templateName="CustomerAssignmentList" type="output"/>
+        </namespaces>
+    </form>
 </forms>

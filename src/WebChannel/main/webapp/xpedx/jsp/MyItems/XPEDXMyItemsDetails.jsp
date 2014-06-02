@@ -65,6 +65,9 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MIL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numeric<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <s:include value="../order/XPEDXRefreshMiniCart.jsp" />
@@ -2019,27 +2022,7 @@ function showSharedListForm(){
 							}
                                      
                  }
-				  
-				  $(function () {
-   					 var scroll_timer;
-    				 var $message = $('#back-to-top a');
-    				 var $window = $(window);
 
-    				/* react to scroll event on window */
-   					 $window.scroll(function () {
-       				 window.clearTimeout(scroll_timer);
-       				 scroll_timer = window.setTimeout(function () {
-           			 if($window.scrollTop() <= 280)
-           			 {
-                		$message.fadeOut(500);
-           			 }
-           			 else 
-            		 {
-               			 $message.stop(true, true).show().click(function () { $message.fadeOut(500); });
-           			 }
-       			 }, 100);
-   			 });
-		});
     </script>
 
 </head>
@@ -3292,9 +3275,6 @@ function showSharedListForm(){
 					</s:if>
 					<!-- END carousel -->
 				</s:if>
-				<div id="back-to-top">
-					<a href="javascript:onclick = window.scrollTo(0,0)"></a>
-				</div>
 
 				<s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
 				<s:set name='lastModifiedUserId' value="lastModifiedUserId" />
@@ -3544,13 +3524,6 @@ function showSharedListForm(){
 			function() { $(this).addClass('green-background'); }, 
 			function() { $(this).removeClass('green-background'); }
 		);
-		
-		$(document).ready(function() {
-			var id1Left= $('#main').width();
-			backToTopLeft = parseInt(id1Left + 5) + 'px';
-			$('#back-to-top').css('padding-left', backToTopLeft);
-			$('#back-to-top a').css('padding-left', backToTopLeft);
-		});
 	</script>
 </body>
 </html>

@@ -4,8 +4,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %> 
 
-<!-- link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/home/home.css'/>" /-->
-<!-- link media="all" type="text/css" rel="stylesheet" href="<s:url value='/swc/xpedx/css/common/notes-list.css'/>" /-->
+
 
 <s:bean name='com.sterlingcommerce.framework.utils.SCXmlUtils' id='util' />
 

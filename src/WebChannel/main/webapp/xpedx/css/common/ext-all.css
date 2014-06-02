@@ -5202,15 +5202,15 @@ body.ext-ie6.x-body-masked .x-window select {
 }
 
 .x-shadow .xsmc {
-    background-image: url(/swc/xpedx/images/default/shadow-c.png);
+    background-image: url(../../images/default/shadow-c.png);
 }
 
 .x-shadow .xsml, .x-shadow .xsmr {
-    background-image: url(/swc/xpedx/images/default/shadow-lr.png);
+    background-image: url(../../images/default/shadow-lr.png);
 }
 
 .x-shadow .xstl, .x-shadow .xstc,  .x-shadow .xstr, .x-shadow .xsbl, .x-shadow .xsbc, .x-shadow .xsbr{
-    background-image: url(/swc/xpedx/css/images/default/shadow.png);
+    background-image: url(../images/default/shadow.png);
 }
 
 .loading-indicator {

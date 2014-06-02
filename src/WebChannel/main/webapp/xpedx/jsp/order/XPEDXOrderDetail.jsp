@@ -19,6 +19,9 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css"
                href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
@@ -804,7 +807,7 @@ function showSplitDiv(divId)
 	    <div class="wc-table-header">
 	    <table class="full-width no-border">
 	    		<tr>
-	    			<td class="text-right table-header-bar-left white">My Price (<s:property value='%{currencyCode}'/>)</td>
+	    			<td class="text-right table-header-bar-left white">Price (<s:property value='%{currencyCode}'/>)</td>
 	    			<s:if test="#orderType != 'Customer'">
 						<td class="text-right white" width="125">Shippable Price (<s:property value='%{currencyCode}'/>)</td>
 					</s:if>

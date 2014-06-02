@@ -1191,14 +1191,14 @@ function processSortByUpperTroyJS(theValue,directionValue,theSpanNameValue,pUrl)
 	{
 	// alert("up");
 	theUrl = theUrl + "&sortField=" + sortFieldValue + "&sortDirection=" + "sortDown"+"&theSpanNameValue="+theSpanNameValue;
-	theImageSpan.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/12x12_white_up.png" class="sort-order sort-desc">';
+	theImageSpan.innerHTML = '&nbsp;<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/12x12_white_up.png" class="sort-order sort-desc">';
 	// alert(theImageSpan);
 	}
 	else if(directionValue == "sortDown")
 	{
 	//alert("down");
 	theUrl = theUrl + "&sortField=" + sortFieldValue + "&sortDirection=" + "sortUp"+"&theSpanNameValue="+theSpanNameValue;
-	theImageSpan.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/12x12_white_down.png" class="sort-order sort-desc">';
+	theImageSpan.innerHTML = '&nbsp;<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/12x12_white_down.png" class="sort-order sort-desc">';
 	// alert(theImageSpan);
 	}
 	setTimeout("changeUrl()",1000);
@@ -1220,14 +1220,14 @@ function SetArrowForSorting()
 		if(globalsortDirection == "sortDown")
 		{	// alert("up");
 		
-		theImageSpan.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
+		theImageSpan.innerHTML = '&nbsp;<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
 		// alert(theImageSpan);
 		
 		}
 		else if(globalsortDirection == "sortUp")
 		{
 			//alert("down");		
-		theImageSpan.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
+		theImageSpan.innerHTML = '&nbsp;<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
 		// alert(theImageSpan);
 		}
 		

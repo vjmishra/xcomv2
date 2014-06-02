@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
@@ -19,10 +19,8 @@ import org.w3c.dom.Element;
 
 import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.ValueStack;
-import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.compat.SCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
-import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -34,7 +32,7 @@ import com.yantra.yfc.util.YFCCommon;
  */
 public class XPEDXItemsDataTemplateComponent extends Component {
 	XPEDXSCXmlUtils xpedxScxmlUtil;
-	
+
 	public XPEDXItemsDataTemplateComponent(ValueStack stack, HttpServletRequest req,
             HttpServletResponse res, XPEDXItemsDataTemplateTag tag) {
 		super(stack);
@@ -45,22 +43,22 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 
 	@Override
 	public boolean end(Writer writer, String body) {
-		
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		Element item = (Element) findValue(tag.getItemElement(), Element.class);
-		int tabidx = 101;		
+		int tabidx = 101;
 		SCXmlUtils xmlUtils = XPEDXSCXmlUtils.getInstance();
 		Element info = xmlUtils.getChildElement(item, "PrimaryInformation");
 		String itemID = validate(item.getAttribute("ItemID"));
 		String itemDetailURL=validate(item.getAttribute("itemDetailURL"));
 		HashMap<String, String> itemUOMList = tag.getItemUomHashMap().get(itemID);
 		itemUOMList = itemUOMList == null ? new HashMap<String, String>() : itemUOMList;
-		String defaultUOM = validate(tag.getDefaultShowUOMMap().get(itemID));	
+		String defaultUOM = validate(tag.getDefaultShowUOMMap().get(itemID));
 		String defaultUomCode = ""; //Added for EB 41,42,43
 		//EB-225 - For retrieving the customer UOM of ItemID, from ItemIdcustomerUOM Map
 		String custUOM = validate(tag.getItemCustomerUomMap().get(itemID));
-		
+
 		String shortDesc = validate(info.getAttribute("ShortDescription"));
 		String desc = validate(info.getAttribute("Description"));
 		String itemKey = validate(item.getAttribute("ItemKey"));
@@ -70,11 +68,11 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String myPrice = "";
 		if("BUNDLE".equals(kitCode))
 			myPrice = validate(price.getAttribute("BundleTotal"));
-		else 
+		else
 			myPrice = validate(price.getAttribute("UnitPrice"));
 		String pImg = (String)findValue("pImg");
-		
-		String imageUrl = "/swc/xpedx/images/INF_150x150.jpg";
+
+		String imageUrl = XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/INF_150x150.jpg";
 		String ImageLocation = xpedxScxmlUtil.getAttribute(info, "ImageLocation");
 		String ImageID = xpedxScxmlUtil.getAttribute(info, "ImageID");
 		if(ImageLocation!= null && ImageID!=null && !("").equals(ImageLocation) && !("").equals(ImageID)) {
@@ -85,24 +83,24 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 
 		pImg = imageUrl;
-		
+
 		//ItemID value is required not string - JIRA 3538
 		HashMap<String, String> skuMap = tag.getItemMap().get(itemID);
 		skuMap = skuMap == null ? new HashMap<String, String>() : skuMap;
 		XPEDXItemBranchInfoBean itemBranchBean = tag.getItemToItemBranchBeanMap().get(itemID);
 		itemBranchBean = itemBranchBean == null ? new XPEDXItemBranchInfoBean("","","","","","","","") : itemBranchBean;
-		String orderMultiple = validate(tag.getOrderMultipleMap().get(itemID));		
+		String orderMultiple = validate(tag.getOrderMultipleMap().get(itemID));
 		Element b2cItemExtn = xmlUtils.getChildElement(item, "Extn");
 		String b2cSize = validate(b2cItemExtn.getAttribute("ExtnSize"));
 		String b2cColor = validate(b2cItemExtn.getAttribute("ExtnColor"));
-		
+
 		// start-- EB-78 Catalog color Grid View
-		
+
 		if (b2cColor.contains("/"))
 			b2cColor = b2cColor.replace("/", " / ");
-		
+
 		// END-- EB-78 Catalog color Grid View
-		
+
 		String b2cMwt = validate(b2cItemExtn.getAttribute("ExtnMwt"));
 		String b2cBasis = validate(b2cItemExtn.getAttribute("ExtnBasis"));
 		String b2cCert = validate(b2cItemExtn.getAttribute("ExtnCert"));
@@ -140,27 +138,27 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		replacmentList = replacmentList == null ? new ArrayList<Element>() : replacmentList;
 		String itemCurrency = validate((String) findValue(tag.getCurrency()));
-	
-		
+
+
 		XPEDXUtilBean utilBean = new XPEDXUtilBean();
 		String formattedUnitprice = validate(utilBean.formatPriceWithCurrencySymbol(tag.getCtx(),itemCurrency,myPrice));
 		boolean hasTier = false;
-		
+
 		sb.append("itemid: \"").append(itemID).append("\",");
 		sb.append("itemkey: \"").append(itemKey).append("\",");
 		sb.append("uom: \"").append(TextUtils.htmlEncode(unitOfMeasure)).append("\",");
 		sb.append("name: \"").append(XPEDXMyItemsUtils.formatEscapeCharactersHtml(shortDesc)).append("\",");
-		
-		
+
+
 		if(isGuestUser)
 		{
 			itemDetailURL="/swc/catalog/itemDetails.action?sfId="+storeFrontId+"&scGuestUser=Y"+"&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3F"+storeFrontId+"%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"+"&itemID="+itemID+"&unitOfMeasure="+unitOfMeasure+"&selectedView=";
 		}else
 		{
-			
+
 			itemDetailURL="/swc/catalog/itemDetails.action?sfId=" + storeFrontId + "&_bcs_=%11true%12%12%12%2Fswc%2Fcatalog%2Fnavigate.action%3F"+storeFrontId+"%3Dxpedx%26scFlag%3DY%26%12%12catalog%12search%12%11&scFlag=Y"+"&itemID="+itemID+"&unitOfMeasure="+unitOfMeasure+"&selectedView=";
 		}
-		
+
 		sb.append("itemDetailURL: \"").append(itemDetailURL).append("\",");
 		sb.append("listprice: \"");
 		String tierPrice = "";
@@ -198,25 +196,24 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 						formatUOMPriceQty(priceList2, tierQty, tierPriceUOM, formattedTierUnitprice);
 					}
 				}
-				
+
 			}
 			sb.append(priceList1);
 			sb.append(priceList2);
 		}
-		
+
 		if(hasTier == false && !"".equals(formattedUnitprice)) {
 			sb.append(formattedUnitprice).append(" /");
 			try {
 				sb.append(TextUtils.htmlEncode(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils.getFormattedUOMCode(unitOfMeasure)));
 			} catch (Exception e) {
 				sb.append(TextUtils.htmlEncode(unitOfMeasure));
-			} 
+			}
 		}
 		sb.append("\",");
 		sb.append("icon: \"").append(pImg).append("\",");
-		//sb.append("icon: \"").append("https://www.xpedx.com/swc/xpedx/images/INF_150x150.jpg").append("\",");
 		sb.append("tabidx: \"").append(tabidx).append("\",");
-		
+
 		String uomDesc = "";
 		try {
 			if(custUOM!=null && custUOM.equalsIgnoreCase(unitOfMeasure)){
@@ -230,7 +227,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		//modified for jira 3253 to format quantity of ordermultiple
 		if (isGuestUser == false) {
-			
+
 			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
 						.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
@@ -242,7 +239,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			}
 
 		}
-		
+
 		sb.append("price: \"").append(TextUtils.htmlEncode(tierPrice)).append("\",");
 		tabidx++;
 		sb.append("buttons: \"").append("<ul id=\\\"prodlist\\\">").append(deschtml).append("</ul>\",");
@@ -266,7 +263,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 		sb.append("cert: \"");
 		if("Y".equals(b2cCert)) {
-			sb.append("<span><img width=\\\"20\\\" height=\\\"20\\\" src='/swc/xpedx/images/catalog/green-e-logo_small.png'></span>");
+			sb.append("<span><img width=\\\"20\\\" height=\\\"20\\\" src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/catalog/green-e-logo_small.png'></span>");
 		}
 		sb.append("\",");
 		sb.append("qtyGreaterThanZeroMsg: \"").append(tag.getQtyString()).append("\",");
@@ -279,9 +276,9 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if(extnMfgItemFlag != null && extnMfgItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MANUFACTURER_ITEM_LABEL)
 				.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
-		
-		}	
-		
+
+		}
+
 			sb.append("\",");
 			/* else if("3".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MPC_ITEM_LABEL)
@@ -291,12 +288,12 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		if(extnCustomerItemFlag!=null && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
-		}		
-		
+		}
+
 		//End of EB 47
 		sb.append("\",");
-		
-		sb.append("uomdisplay: \"<div class=\'uom-select\'><select name='itemUomList' ").append("onmousedown=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class',''); ")
+
+		sb.append("uomdisplay: \"<select name='itemUomList' ").append("onmousedown=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class',''); ")
 			.append("onmouseout=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class','itemdiv');")
 			.append(" id='itemUomList_")
 			.append(itemID).append("'>");
@@ -320,16 +317,16 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//End of EB EB 41,42,43
 		sb.append("<input type='hidden' id='orderMultiple_");
 		sb.append(itemID).append("' value='");
-		sb.append(orderMultiple).append("'/></div>\",");
+		sb.append(orderMultiple).append("'/>\",");
 		sb.append("itemtypedesc: \"");
 		if(!"W".equals(b2cstockStatus) && isGuestUser == false) {
 			sb.append("<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>");
 		}
 		sb.append("\",");
-		if(replacmentList!=null && replacmentList.size()>0){			
+		if(replacmentList!=null && replacmentList.size()>0){
 		StringBuffer repItemsForMiniView = new StringBuffer();
 		StringBuffer repItemsForCondensedView = new StringBuffer();
-		sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");		
+		sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 		for(int i=0;i<replacmentList.size();i++ )
@@ -344,10 +341,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append(TextUtils.htmlEncode(replacementItem));
 		sb.append("','");
 		sb.append(TextUtils.htmlEncode(replacementItemUOM));
-		sb.append("');\\\">");		
+		sb.append("');\\\">");
 		sb.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
 		sb.append("</a>");
-		
+
 		if (i>0) repItemsForCondensedView.append(",");
 		repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
 		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItem));
@@ -356,7 +353,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		repItemsForCondensedView.append("');\\\">");
 		repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
 		repItemsForCondensedView.append("</a>");
-		
+
 		if (i>0) repItemsForMiniView.append(",");
 		if((i %2)!=0)repItemsForMiniView.append("<br/>");
 		repItemsForMiniView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
@@ -368,8 +365,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		repItemsForMiniView.append("</a>");
 		}
 		sb.append("\"");
-		
-		repItemsForMiniView.append("\"");		
+
+		repItemsForMiniView.append("\"");
 		sb.append(repItemsForMiniView);
 		repItemsForCondensedView.append("\"");
 		sb.append(repItemsForCondensedView);
@@ -377,7 +374,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//sb = parseData(sb);
 		//sb = parseData(sb);
 		//sb = parseData(sb);
-		
+
 		try {
 			writer.append((CharSequence) sb);
 		} catch (IOException e) {
@@ -385,11 +382,11 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		return super.end(writer, body);
 	}
-	
+
 	private String validate(String str) {
 		return (str==null ? "" : str);
 	}
-	
+
 	private void formatUOMPriceQty(StringBuilder priceList, String tierQty, String tierPriceUOM, String formattedTierUnitprice){
 		String htmlSpace = "&nbsp;";
 		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
@@ -404,26 +401,26 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			priceList.append(TextUtils.htmlEncode(XPEDXWCUtils.getFormattedUOMCode(tierPriceUOM))).append("-");
 		} catch (Exception e) {
 			priceList.append(TextUtils.htmlEncode(tierPriceUOM)).append("-");
-		} 
+		}
 		priceList.append(formattedTierUnitprice);
-		  
+
 		priceList.append("<br/>");
 	}
-	
+
 	/**
-	 * The data in SB is used by the javascript. Use this method to test and parse any 
+	 * The data in SB is used by the javascript. Use this method to test and parse any
 	 * invalid character in here.
 	 * @param sb
 	 * @return
 	 */
 	private StringBuffer parseData(StringBuffer sb) {
 		int startIndex = -1;
-		while((startIndex = sb.indexOf("//")) >= 0) {			
+		while((startIndex = sb.indexOf("//")) >= 0) {
 			sb = sb.replace(startIndex, (startIndex+2), "/");
 		}
 		return sb;
 	}
-	
+
 	XPEDXItemsDataTemplateTag tag;
 	HttpServletRequest req;
 

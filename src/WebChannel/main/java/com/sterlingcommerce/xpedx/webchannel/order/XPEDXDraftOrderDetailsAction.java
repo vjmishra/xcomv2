@@ -72,6 +72,8 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 	XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean;
 	private String customerItemFlag;
 	private String mfgItemFlag;
+	private int [] quickaddItemLines= new int[200];
+	private int displayItemLines =5;
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
 	}
@@ -150,7 +152,9 @@ public class XPEDXDraftOrderDetailsAction extends DraftOrderDetailsAction {
 				editedOrderHeaderKey=orderHeaderKey;
 				String newDefaultShipToForEditOrder  = getOrderElementFromOutputDocument().getAttribute("BuyerOrganizationCode");
 				setCurrentCustomerIntoContext(newDefaultShipToForEditOrder);
-
+				Element orderExtn = SCXmlUtil.getChildElement(getOrderElementFromOutputDocument(), "Extn");
+				String orderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
+				XPEDXWCUtils.setObectInCache(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.EDIT_ORDER_NO, orderNumber);
 			}
 			if(YFCCommon.isVoid(editedOrderHeaderKey))
 			{
@@ -2523,6 +2527,26 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public String getCustomerId() {
 		return customerId;
 	}
+
+	public int[] getQuickaddItemLines() {
+		return quickaddItemLines;
+	}
+
+
+	public void setQuickaddItemLines(int[] quickaddItemLines) {
+		this.quickaddItemLines = quickaddItemLines;
+	}
+
+
+	public int getDisplayItemLines() {
+		return displayItemLines;
+	}
+
+
+	public void setDisplayItemLines(int displayItemLines) {
+		this.displayItemLines = displayItemLines;
+	}
+
 
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;

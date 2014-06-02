@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XPEDXItemPricingInfo {
-	
+
 	private List<XPEDXBracket> displayPriceForUoms;
 	private List bracketsPricingList;
 	private String isBracketPricing;
 	private String priceCurrencyCode;
-	
+	private String categoryPath;
+
 	public XPEDXItemPricingInfo()
 	{
 		displayPriceForUoms = new ArrayList<XPEDXBracket>();
@@ -46,6 +47,13 @@ public class XPEDXItemPricingInfo {
 	public void setPriceCurrencyCode(String priceCurrencyCode) {
 		this.priceCurrencyCode = priceCurrencyCode;
 	}
-	
-	
+
+	public String getCategoryPath() {
+		return categoryPath;
+	}
+
+	public void setCategoryPath(String categoryPath) {
+		this.categoryPath = categoryPath;
+	}
+
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -71,10 +72,13 @@ import com.sterlingcommerce.webchannel.utilities.YfsUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
+import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrgNodeDetailsBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils.CartSummaryPriceStatus;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
+import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.xpedx.nextgen.common.util.XPXTranslationUtilsAPI;
 import com.yantra.interop.client.ClientVersionSupport;
@@ -112,9 +116,9 @@ public class XPEDXWCUtils {
 	public static final String XPEDX_ASSIGNED_CUSTOMER_MSAP = "MSAP";
 	public static final String XPEDX_ASSIGNED_CUSTOMER = "ASSIGNED";
 	public static final String XPEDX_SHIP_TO_ADDRESS_OVERIDDEN = "ShipToAddressOveridden";
-	public static final String Immedate_image = "../swc/images/theme/green/Available.png";
-	public static final String Next_image = "../swc/images/theme/green/Shippable.png";
-	public static final String Days2_Image = "../swc/images/theme/green/ItemPickUp.png";
+	public static final String Immedate_image = XPEDXWCUtils.getStaticFileLocation() + "/images/theme/green/Available.png";
+	public static final String Next_image = XPEDXWCUtils.getStaticFileLocation() + "/images/theme/green/Shippable.png";
+	public static final String Days2_Image = XPEDXWCUtils.getStaticFileLocation() + "/images/theme/green/ItemPickUp.png";
 	private static final String customerGeneralInformationMashUp = "xpedx-customer-getGeneralInformation";
 	private static final String parentCustomerInformationMashUp = "xpedx-customer-getParentCustInformation";
 	private static final String getOCIFieldsMashup = "xpedx-customer-getOCIFields";
@@ -140,6 +144,9 @@ public class XPEDXWCUtils {
 
 	private final static Logger log = Logger.getLogger(XPEDXWCUtils.class);
 	private static Map<String, String> legacyUomMap;
+
+	private static final MegaMenuUtil MEGA_MENU_UTIL = new MegaMenuUtil();
+	private static final Pattern PAT_MEGA_MENU_BCS = Pattern.compile("_bcs_=[^&]+");
 
 	static {
 		staticFileLocation = YFSSystem.getProperty("remote.static.location");
@@ -2777,10 +2784,10 @@ public class XPEDXWCUtils {
 		String apiName="getCustomerList";
 		String apiData="<Customer><Extn ExtnCustIdentity='"+custIdentity+"'/></Customer>";
 		String isFlow="N";
-		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";		
+		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";
 		Document customerDetailsOutputDoc = handleApiRequestBeforeAuthentication(apiName,apiData,isFlow,template);
 		if(customerDetailsOutputDoc != null){
-			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();		
+			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();
 			log.debug("Output XML: " + SCXmlUtil.getString(outputDoc));
 			wElement = outputDoc.getDocumentElement();
 			wElement = SCXmlUtil.getChildElement(wElement, "Customer");
@@ -5769,165 +5776,165 @@ public class XPEDXWCUtils {
 
 	public static void checkMultiStepCheckout() {
 
-	    	// read the value: SWC_CHECKOUT_TYPE from session
-	    	// if null, then fetch it from database else return the same
-		    try
-		    {
-			IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-			String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
-
-			// if the checkout type in multi_step change it to single_step.
-			if (definitionFromSession==null && isMultiStepCheckout(wcContext)){
-				// since the value is being set as valueMap.put("/UserUiState/@Definition", "Single_Step");
-				wcContext.setWCAttribute("SWC_CHECKOUT_TYPE","Single_Step", WCAttributeScope.LOCAL_SESSION);
-				Map<String, String> valueMap = new HashMap<String, String>();
-				valueMap.put("/UserUiState/@ComponentName", "SWC_CHECKOUT_TYPE");
-				valueMap.put("/UserUiState/@Definition", "Single_Step");
-				valueMap.put("/UserUiState/@Loginid", wcContext.getLoggedInUserId());
-				valueMap.put("/UserUiState/@ScreenName", "Webchannel");
-				valueMap.put("/UserUiState/@ApplicationName", "swc");
-				Element input = WCMashupHelper.getMashupInput("updateUserPreference", valueMap, wcContext.getSCUIContext());
-				Element outDoc = (Element)WCMashupHelper.invokeMashup("updateUserPreference",input , wcContext.getSCUIContext());
-			}
-		    }catch(Exception e)
-		    {
-		    	log.error("error geting checkout step "+e.getMessage());
-		    }
-		}
-	    private static boolean isMultiStepCheckout(IWCContext wcContext)
+    	// read the value: SWC_CHECKOUT_TYPE from session
+    	// if null, then fetch it from database else return the same
+	    try
 	    {
-	    	   boolean isMultiStepCheckoutObj=false;
-	    	    String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
-	           if(!"Single_Step".equals(definitionFromSession))
-	           {
-		    	    String checkoutType = UserPreferenceUtil.getUserPreference("SWC_CHECKOUT_TYPE", wcContext);
-		    	    wcContext.setWCAttribute("SWC_CHECKOUT_TYPE",checkoutType, WCAttributeScope.LOCAL_SESSION);
-		            if("Multi_Step".equals(checkoutType))
-		                isMultiStepCheckoutObj = Boolean.TRUE;
-		            else
-		                isMultiStepCheckoutObj = Boolean.FALSE;
-	           }
-	        return isMultiStepCheckoutObj;
+		IWCContext wcContext = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+		String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
+
+		// if the checkout type in multi_step change it to single_step.
+		if (definitionFromSession==null && isMultiStepCheckout(wcContext)){
+			// since the value is being set as valueMap.put("/UserUiState/@Definition", "Single_Step");
+			wcContext.setWCAttribute("SWC_CHECKOUT_TYPE","Single_Step", WCAttributeScope.LOCAL_SESSION);
+			Map<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/UserUiState/@ComponentName", "SWC_CHECKOUT_TYPE");
+			valueMap.put("/UserUiState/@Definition", "Single_Step");
+			valueMap.put("/UserUiState/@Loginid", wcContext.getLoggedInUserId());
+			valueMap.put("/UserUiState/@ScreenName", "Webchannel");
+			valueMap.put("/UserUiState/@ApplicationName", "swc");
+			Element input = WCMashupHelper.getMashupInput("updateUserPreference", valueMap, wcContext.getSCUIContext());
+			Element outDoc = (Element)WCMashupHelper.invokeMashup("updateUserPreference",input , wcContext.getSCUIContext());
+		}
+	    }catch(Exception e)
+	    {
+	    	log.error("error geting checkout step "+e.getMessage());
 	    }
+	}
 
-		public static XPEDXCustomerContactInfoBean setXPEDXCustomerContactInfoBean(Document customerContactDocument, IWCContext wcContext){
-			XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = new XPEDXCustomerContactInfoBean();
-			Element contactElem = XPEDXWCUtils.getMSAPCustomerContactFromContacts(customerContactDocument, wcContext);
+    private static boolean isMultiStepCheckout(IWCContext wcContext)
+    {
+    	   boolean isMultiStepCheckoutObj=false;
+    	    String definitionFromSession = (String)wcContext.getWCAttribute("SWC_CHECKOUT_TYPE", WCAttributeScope.LOCAL_SESSION);
+           if(!"Single_Step".equals(definitionFromSession))
+           {
+	    	    String checkoutType = UserPreferenceUtil.getUserPreference("SWC_CHECKOUT_TYPE", wcContext);
+	    	    wcContext.setWCAttribute("SWC_CHECKOUT_TYPE",checkoutType, WCAttributeScope.LOCAL_SESSION);
+	            if("Multi_Step".equals(checkoutType))
+	                isMultiStepCheckoutObj = Boolean.TRUE;
+	            else
+	                isMultiStepCheckoutObj = Boolean.FALSE;
+           }
+        return isMultiStepCheckoutObj;
+    }
 
-			if(contactElem!=null) {
-				String welcomeUserFirstName = SCXmlUtil.getAttribute(contactElem, "FirstName");
-				String welcomeUserLastName = SCXmlUtil.getAttribute(contactElem, "LastName");
-				String spendingLimit = SCXmlUtil.getAttribute(contactElem, "SpendingLimit");
-				String customerContactID = SCXmlUtil.getAttribute(contactElem, "CustomerContactID");
-				String msapEmailID = SCXmlUtil.getAttribute(contactElem, "EmailID");
-				String welcomeLocaleId = SCXmlUtil.getXpathAttribute(contactElem, "//CustomerContact/User/@Localecode");
-				Element extnElem = SCXmlUtil.getChildElement(contactElem, "Extn");
-				String viewInvoiceFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewInvoices");
-				String estimatorFlag = SCXmlUtil.getAttribute(extnElem, "ExtnEstimator");
-				String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
-				String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
-				String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
-				String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
-				String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
+	public static XPEDXCustomerContactInfoBean setXPEDXCustomerContactInfoBean(Document customerContactDocument, IWCContext wcContext){
+		XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = new XPEDXCustomerContactInfoBean();
+		Element contactElem = XPEDXWCUtils.getMSAPCustomerContactFromContacts(customerContactDocument, wcContext);
 
-				if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
-					b2bViewFromDB = b2bViewFromDB.trim();
-					int _b2bViewFromDB = Integer.parseInt(b2bViewFromDB);
-					if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_FULL_VIEW) {
-						b2bViewFromDB = "normal-view";
-					} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_CONDENCED_VIEW) {
-						b2bViewFromDB = "condensed-view";
-					} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_MINI_VIEW) {
-						b2bViewFromDB = "mini-view";
-					} else {
-						b2bViewFromDB = "papergrid-view";
-					}
+		if(contactElem!=null) {
+			String welcomeUserFirstName = SCXmlUtil.getAttribute(contactElem, "FirstName");
+			String welcomeUserLastName = SCXmlUtil.getAttribute(contactElem, "LastName");
+			String spendingLimit = SCXmlUtil.getAttribute(contactElem, "SpendingLimit");
+			String customerContactID = SCXmlUtil.getAttribute(contactElem, "CustomerContactID");
+			String msapEmailID = SCXmlUtil.getAttribute(contactElem, "EmailID");
+			String welcomeLocaleId = SCXmlUtil.getXpathAttribute(contactElem, "//CustomerContact/User/@Localecode");
+			Element extnElem = SCXmlUtil.getChildElement(contactElem, "Extn");
+			String viewInvoiceFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewInvoices");
+			String estimatorFlag = SCXmlUtil.getAttribute(extnElem, "ExtnEstimator");
+			String viewReportFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewReportsFlag");
+			String viewPricesFlag = SCXmlUtil.getAttribute(extnElem, "ExtnViewPricesFlag");
+			String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
+			String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
+			String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
+
+			if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
+				b2bViewFromDB = b2bViewFromDB.trim();
+				int _b2bViewFromDB = Integer.parseInt(b2bViewFromDB);
+				if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_FULL_VIEW) {
+					b2bViewFromDB = "normal-view";
+				} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_CONDENCED_VIEW) {
+					b2bViewFromDB = "condensed-view";
+				} else if (_b2bViewFromDB == XPEDXConstants.XPEDX_B2B_MINI_VIEW) {
+					b2bViewFromDB = "mini-view";
 				} else {
 					b2bViewFromDB = "papergrid-view";
 				}
-				boolean usergroupKeyListActive = false;
-				boolean isEstimator = false;
-
-				Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
-				Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
-
-				List<Element> userGroupList = SCXmlUtil.getElements(userElem,"/UserGroupLists/UserGroupList");
-				ArrayList<String> newusergroupkey = new ArrayList<String>();
-				if (userGroupList != null) {
-					for (Element userGroup : userGroupList) {
-						String userGroupKey = userGroup.getAttribute("UsergroupKey");
-						newusergroupkey.add(userGroupKey);
-					}
-					usergroupKeyListActive = true;
-				}
-
-				String isApprover = "N";
-				if(approverElem!=null) {
-					isApprover = "Y";
-				}
-				if(estimatorFlag.equals("Y")) {
-					isEstimator = true;
-				}
-
-				Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
-				Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
-				String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
-				//Start- Code added to fix XNGTP 2964
-				 String extnUseOrderMulUOMFlag = SCXmlUtil.getAttribute(customerExtnElem, "ExtnUseOrderMulUOMFlag");
-				//End- Code added to fix XNGTP 2964
-				 String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
-				if (defaultShipTo != null
-						&& defaultShipTo.trim().length() == 0) {
-					defaultShipTo = null;
-				}
-				String userPrefCategory = SCXmlUtil.getAttribute(extnElem,"ExtnPrefCatalog");
-				String orderConfirmationFalg=SCXmlUtil.getAttribute(extnElem,"ExtnOrderConfEmailFlag");
-				String emailID=SCXmlUtil.getAttribute(contactElem,"EmailID");
-				String personInfoElement="";
-				try
-				{
-					Element customerAdditionalAddressListElem=SCXmlUtils.getChildElement(contactElem, "CustomerAdditionalAddressList");
-					Element customerAdditionalAddressElem=SCXmlUtils.getChildElement(customerAdditionalAddressListElem, "CustomerAdditionalAddress");
-					Element personInfoElem=SCXmlUtils.getChildElement(customerAdditionalAddressElem, "PersonInfo");
-
-					if(personInfoElem !=null)
-					{
-						personInfoElement=SCXmlUtil.getAttribute(personInfoElem,"EMailID");
-					}
-				}
-				catch(NullPointerException ne)
-				{
-					log.error("Error while getting Additional address .");
-				}
-
-				xpedxCustomerContactInfoBean =
-					new XPEDXCustomerContactInfoBean(welcomeUserFirstName, welcomeUserLastName, customerContactID, msapEmailID,
-							welcomeLocaleId, viewInvoiceFlag, isEstimator,
-							viewReportFlag, viewPricesFlag,
-							newusergroupkey, defaultShipTo,
-							userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-							emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
+			} else {
+				b2bViewFromDB = "papergrid-view";
 			}
-			XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
-			return xpedxCustomerContactInfoBean;
+			boolean usergroupKeyListActive = false;
+			boolean isEstimator = false;
+
+			Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
+			Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
+
+			List<Element> userGroupList = SCXmlUtil.getElements(userElem,"/UserGroupLists/UserGroupList");
+			ArrayList<String> newusergroupkey = new ArrayList<String>();
+			if (userGroupList != null) {
+				for (Element userGroup : userGroupList) {
+					String userGroupKey = userGroup.getAttribute("UsergroupKey");
+					newusergroupkey.add(userGroupKey);
+				}
+				usergroupKeyListActive = true;
+			}
+
+			String isApprover = "N";
+			if(approverElem!=null) {
+				isApprover = "Y";
+			}
+			if(estimatorFlag.equals("Y")) {
+				isEstimator = true;
+			}
+
+			Element customerElem = SCXmlUtil.getChildElement(contactElem, "Customer");
+			Element customerExtnElem = SCXmlUtil.getChildElement(customerElem, "Extn");
+			String myItemsLink = SCXmlUtil.getAttribute(customerExtnElem, "ExtnMyItemsLink");
+			//Start- Code added to fix XNGTP 2964
+			 String extnUseOrderMulUOMFlag = SCXmlUtil.getAttribute(customerExtnElem, "ExtnUseOrderMulUOMFlag");
+			//End- Code added to fix XNGTP 2964
+			 String defaultShipTo = SCXmlUtil.getAttribute(extnElem,	"ExtnDefaultShipTo");
+			if (defaultShipTo != null
+					&& defaultShipTo.trim().length() == 0) {
+				defaultShipTo = null;
+			}
+			String userPrefCategory = SCXmlUtil.getAttribute(extnElem,"ExtnPrefCatalog");
+			String orderConfirmationFalg=SCXmlUtil.getAttribute(extnElem,"ExtnOrderConfEmailFlag");
+			String emailID=SCXmlUtil.getAttribute(contactElem,"EmailID");
+			String personInfoElement="";
+			try
+			{
+				Element customerAdditionalAddressListElem=SCXmlUtils.getChildElement(contactElem, "CustomerAdditionalAddressList");
+				Element customerAdditionalAddressElem=SCXmlUtils.getChildElement(customerAdditionalAddressListElem, "CustomerAdditionalAddress");
+				Element personInfoElem=SCXmlUtils.getChildElement(customerAdditionalAddressElem, "PersonInfo");
+
+				if(personInfoElem !=null)
+				{
+					personInfoElement=SCXmlUtil.getAttribute(personInfoElem,"EMailID");
+				}
+			}
+			catch(NullPointerException ne)
+			{
+				log.error("Error while getting Additional address .");
+			}
+
+			xpedxCustomerContactInfoBean =
+				new XPEDXCustomerContactInfoBean(welcomeUserFirstName, welcomeUserLastName, customerContactID, msapEmailID,
+						welcomeLocaleId, viewInvoiceFlag, isEstimator,
+						viewReportFlag, viewPricesFlag,
+						newusergroupkey, defaultShipTo,
+						userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
+						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
 		}
+		XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
+		return xpedxCustomerContactInfoBean;
+	}
 
 	public static Element setMiniCartDataInToCache(Element orderElement, IWCContext wcContext)
 	{
-		/*List<String> itemAndTotalList=new ArrayList<String>();
-		String OrderTotal= SCXmlUtil.getXpathAttribute(orderElement, "/Order/Extn/@ExtnTotalOrderValue");
-    	 ArrayList<Element> orderLineList= SCXmlUtil.getElements(orderElement,"OrderLines/OrderLine");
-    	 itemAndTotalList.add(OrderTotal);
-    	 if(!YFCCommon.isVoid(orderLineList))
-    	 {
-    		 itemAndTotalList.add(""+orderLineList.size());
-    	 }
-    	 else
-    	 {
-    		 itemAndTotalList.add("0");
-    	 }
-    	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);*/
-		XPEDXOrderUtils.refreshMiniCart(wcContext,orderElement,true,false,XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
+		XPEDXOrderUtils.refreshMiniCart(wcContext, orderElement, true, false, XPEDXConstants.MAX_ELEMENTS_IN_MINICART, CartSummaryPriceStatus.NORMAL);
+		return orderElement;
+	}
+
+	/**
+	 * @param orderElement
+	 * @param wcContext
+	 * @param suppressPrice If true, forces the cart summary to be 'TBD'.
+	 * @return
+	 */
+	public static Element setMiniCartDataInToCache(Element orderElement, IWCContext wcContext, CartSummaryPriceStatus status)
+	{
+		XPEDXOrderUtils.refreshMiniCart(wcContext, orderElement, true, false, XPEDXConstants.MAX_ELEMENTS_IN_MINICART, status);
 		return orderElement;
 	}
 
@@ -6597,7 +6604,7 @@ public class XPEDXWCUtils {
 		}
 		return allAPIOutputDoc;
 	}
-	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(ArrayList<String> items,boolean defaultShowUOMFlag) {
+	public static Map<String, Map<String,String>> getXpedxUOMListFromCustomService(List<String> items,boolean defaultShowUOMFlag) {
 
 		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
 		if(items == null || items.size() ==0)
@@ -6785,60 +6792,101 @@ public class XPEDXWCUtils {
 		return punchOutComments;
 	}
 	/**
-	 * for calling an any API before authentication 
+	 * for calling an any API before authentication
 	 * @param apiName
 	 * @param apiData
 	 * @param isFlow
 	 * @param template
 	 * @return
 	 */
-	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)	        
-    {	
+	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)
+    {
 	  if(YFCCommon.isVoid(isFlow) || YFCCommon.isVoid(apiData) || YFCCommon.isVoid(apiName) )
         {
 			return null;
-        }			
+        }
 		Document retDoc = null;
 		YIFApi localApi;
         InteropEnvStub envStub = new InteropEnvStub("admin", "SterlingHttpTester");
-        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());	        
+        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());
         try
         {
               YFCDocument apiDoc = YFCDocument.parse(apiData);
               localApi = YIFClientFactory.getInstance().getLocalApi();
 	          log.debug("Successfully intialized the local api");
             if(!YFCCommon.isVoid(isFlow) && isFlow.equalsIgnoreCase("Y"))
-            {                  
+            {
                 retDoc = localApi.executeFlow(envStub, apiName, apiDoc.getDocument());
             } else
             {
                 retDoc = localApi.invoke(envStub, apiName, apiDoc.getDocument());
-            }           
+            }
         }
         catch(YIFClientCreationException e)
         {
-        	log.fatal("Could not create local client", e);           
+        	log.fatal("Could not create local client", e);
         }
         catch(SAXException e)
         {
-        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);	            
+        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);
         }
         catch(IOException e)
         {
-        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);	           
+        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);
         }
         catch(YFSException e)
         {
-        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);	           
+        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);
         }
         catch(YFCException e)
         {
         	log.fatal((new StringBuilder()).append("YFC Exception while invoking api ").append(apiName).toString(), e);
-        
+
         }
         finally{
-        	 return retDoc;	
+        	 return retDoc;
         }
     }
+
+	/**
+	 * @param context
+	 * @return Returns true if the mega menu data is available.
+	 */
+	public static boolean isMegaMenuCached(IWCContext context) {
+		return MEGA_MENU_UTIL.isDataAvailable(context);
+	}
+
+	/**
+	 * Removes the mega menu cache.
+	 * @param context
+	 */
+	public static void purgeMegaMenuCache(IWCContext context) {
+		MEGA_MENU_UTIL.purgeData(context);
+	}
+
+	/**
+	 * @param context
+	 * @return Returns the mega menu data model that is cached in the session, making an API call if necessary.
+	 * @see MegaMenuUtil#getMegaMenu(IWCContext)
+	 */
+	public static List<MegaMenuItem> getMegaMenu(IWCContext context) {
+		return MEGA_MENU_UTIL.getMegaMenu(context);
+	}
+
+	/**
+	 * Replaces the _bcs_ parameter value with the given value (uses regex).
+	 * <br>
+	 * This is a workaround for the stick _bcs_ parameter. Per Struts documentation (http://struts.apache.org/release/2.0.x/docs/url.html), the &lt;s:url&gt; tag automatically
+	 * appends query string parameters, but the presence of an &lt;s:param%gt; tag takes precedent. However, during development of the mega menu (eb-3981) this was not the observed
+	 * behavior. In fact, even if &lt;s:url includeParams=none&gt; was used, the _bcs_ in the query string was incorrectly taking priority over the &lt;s:param%gt; tag (eg,
+	 * accessing mega menu while on a search results page). While initially only used for the mega menu, this may be needed elsewhere.
+	 *
+	 * @param url
+	 * @param bcs
+	 * @return
+	 */
+	public static String updateBreadcrumbParameter(String url, String bcs) {
+		return PAT_MEGA_MENU_BCS.matcher(url).replaceAll("_bcs_=" + bcs);
+	}
 
 }

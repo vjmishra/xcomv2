@@ -510,7 +510,7 @@
 	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXSessionManageFilter</filter-class>
 		<init-param>
 	<param-name>excludeActions</param-name>
-	<param-value>ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,salesRepCustomerLogin.action,pLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action</param-value>
+	<param-value>brands.action,ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,salesRepCustomerLogin.action,pLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action</param-value>
     </init-param>
 	</filter>
 	<filter-mapping>
@@ -1081,6 +1081,12 @@
 		<servlet-name>SalesRepLogin</servlet-name>
         <jsp-file>/xpedx/jsp/salesrep/salesRepLogin.jsp</jsp-file>
 	</servlet>	
+	<servlet>
+		<display-name>DownloadSample</display-name>
+		<servlet-name>DownloadSample</servlet-name>
+		<servlet-class>com.sterlingcommerce.xpedx.webchannel.common.DownloadSampleServlet</servlet-class>
+	</servlet>	
+	
     <servlet-mapping id="ServletMapping_1">
         <servlet-name>dataTypeServlet</servlet-name>
         <url-pattern>/dataType/*</url-pattern>
@@ -1252,6 +1258,10 @@
     <servlet-mapping id="ServletMapping_43">
 			<servlet-name>SalesRepLogin</servlet-name>
 			<url-pattern>/salesRepLoginPage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping id="ServletMapping_44">
+			<servlet-name>DownloadSample</servlet-name>
+			<url-pattern>/downloadsample</url-pattern>
 	</servlet-mapping>
        
     <session-config>

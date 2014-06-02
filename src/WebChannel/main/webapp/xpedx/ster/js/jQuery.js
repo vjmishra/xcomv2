@@ -2111,7 +2111,8 @@ var disappeardelay=250  //tooltip disappear delay (in miliseconds)
 var verticaloffset=-130 //added vertical offset of tooltip from anchor link, if any
 var horizontaloffset=-150 //added horizontal offset of tooltip from anchor link, if any
 var enablearrowhead=0 //0, 1, or 2 - to disable(0) or enable the top(1) or side(2) arrow image
-var arrowheadimg=["/images/arrowdown.gif", "/images/arrowup.gif", "/images/arrowleft.gif", "/images/arrowright.gif"] //path to down and up left and right arrow images
+//var arrowheadimg=["/images/arrowdown.gif", "/images/arrowup.gif", "/images/arrowleft.gif", "/images/arrowright.gif"] //path to down and up left and right arrow images
+var arrowheadimg=[];
 var arrowheadsize=11 //size of arrow image (amount to reveal)
 
 /////No further editting needed

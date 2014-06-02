@@ -16203,7 +16203,7 @@ Ext.onReady(function(){
 		var test = new Image();
 		var tmp = new Date();
 		var suffix = tmp.getTime();
-		test.src = this.getContext() + '/swc/xpedx/images/common/fir_assumptions.gif?'+suffix;
+		test.src = this.getContext() +XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/common/fir_assumptions.gif?'+suffix;
 		test.onload = function() {
 	            decorators.imagesLoaded = true;
 	            decorators.decoratePage();
@@ -16806,12 +16806,12 @@ function rebindClickForNarrowByExpandCollapse() {
 		if (x.is(':visible'))
 		{			 
 			x.slideUp('fast');
-			$(this).find('.expand-narrow-by').html("<img src='../xpedx/images/icons/12x12_white_expand.png' style='margin-top:5px' alt='expand'>");
+			$(this).find('.expand-narrow-by').html("<img src='"+  XPEDXWCUtils_STATIC_FILE_LOCATION + "/xpedx/images/icons/12x12_white_expand.png' style='margin-top:5px' alt='expand'>");
 		}
 		else
 		{			
 			x.slideDown('fast');
-			$(this).find('.expand-narrow-by').html("<img src='../xpedx/images/icons/12x12_white_collapse.png' style='margin-top:5px' alt='expand'>");
+			$(this).find('.expand-narrow-by').html("<img src='"+ XPEDXWCUtils_STATIC_FILE_LOCATION + "/xpedx/images/icons/12x12_white_collapse.png' style='margin-top:5px' alt='expand'>");
 		}
 		return false;
 	});

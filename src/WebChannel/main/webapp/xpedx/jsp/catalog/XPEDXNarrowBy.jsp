@@ -21,16 +21,6 @@
 	name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils'
 	id='util' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
-<script type="text/javascript">	
-	function context_newSearch_searchTerm_onclick(obj){
-		if(obj.value == 'Search Within Results...')
-	  		{ obj.value=''; }
-		else
-			{ }
-	  	return;
-	  }
-	  
-</script>
 
 <script type="text/javascript">	
 function setStockItemFlag()
@@ -50,34 +40,44 @@ function setStockItemFlag()
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
 <s:set name='narrowByCatalogItemsCount' value='%{0}' />
 <s:set name='expandNarrowByCatalogItems' value='"Y"' />
-<s:if test="%{ !(#FacetsList!=null && #FacetsList.size>0)}">
-<div id="left-col"><!-- breadcrumb -->
-<div class="bgleftcol">
-			
-			
+
+<%-- NarrowBy JSP is run twice - first when page loads to display Prod Cat, then after Ajax for rest of narrow bys --%>
+<%-- Need to run this Prod Cat block only on first time called (search with no results made us add param for this) --%>
+<s:if test='%{(#parameters.secondCallForFacets == null)}'>
+
+	<div id="left-col">
+	<div class="bgleftcol">
+
+	<s:form name='narrowSearch' action="search" onsubmit="showProcessingMessage();">
+		<div class="searchbox-form1">
+			<div class="catalog-search-container">
+				<input id="search_searchTerm" class="x-input input-watermark" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text">
+				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
+			</div>
+		</div>
+	</s:form>
+
 			<s:iterator id='subCatElem_dup' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
 				<s:set name='subCatElem_count' value='#subCatElem_dup.getAttribute("ShortDescription")' />
-				 <s:if test='#subCatElem_count!=null'>
+				<s:if test='#subCatElem_count!=null'>
 					<s:set name='subCatElem_flag' value='true' />
-				 </s:if>
-			  </s:iterator>
-					 <s:if test='#subCatElem_count!=null'>
-					 	<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
-						<div id="narrow_spb2" class="browseBox subPanelBox"> 
-						<div id="narrow_header2" class="header">
-						  <span class="float-right">
-						    <a href="#" class="expand-narrow-by" title="Show/Hide">
-						      <img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
-						    </a>
-						  </span>					
-								  
-							   <s:if test='#subCatElem_flag'>
+				</s:if>
+			</s:iterator>
+			<s:if test='#subCatElem_count!=null'>
+				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
+				<div id="narrow_spb2" class="browseBox subPanelBox">
+					<div id="narrow_header2" class="header">
+						<span class="float-right">
+						<a href="#" class="expand-narrow-by" title="Show/Hide">
+							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand">
+						</a>
+						</span>
+						<s:if test='#subCatElem_flag'>
 								 Product Categories
-								</s:if>
-													 
-						</div>
-						<div id="narrow_content2" class="content narrowbyattributes catalog-landing">
+						</s:if>
+					</div>
 
+					<div id="narrow_content2" class="content narrowbyattributes catalog-landing">
 						<ul>
 							<s:set name='count1' value='%{#tabStart + 10}' />
 							<s:iterator id='cat' value='XMLUtils.getElements(#catDoc, "//CategoryList/Category")'>
@@ -94,35 +94,44 @@ function setStockItemFlag()
 									<s:param name='categoryDepthNarrowBy' value='#categoryDepthNarrowBy' />
 									<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 								</s:url>
+
 								<!-- s:if test='#subCatElem.size() > 0'-->
-									<s:set name='catCount' value='#cat.getAttribute("Count")' />
-									<s:set name='showCurrency' value="false" />
-									<li class="roll close">
-										<s:if test="%{#categoryDepthNarrowBy =='2' }">
-											<s:a href='%{#cat3URL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
-												<s:property value='#cat.getAttribute("ShortDescription")' />
-											</s:a>
-										</s:if>
-										<s:else>
-											<s:a href='%{#catURL}' tabindex="1012"><span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
-												<s:property value='#cat.getAttribute("ShortDescription")' />
-											</s:a>
-										</s:else>									
-									</li>
+								<s:set name='catCount' value='#cat.getAttribute("Count")' />
+								<s:set name='showCurrency' value="false" />
+								<li class="roll close">
+									<s:if test="%{#categoryDepthNarrowBy =='2' }">
+										<s:a href='%{#cat3URL}' tabindex="1012">
+											<span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
+											<s:property value='#cat.getAttribute("ShortDescription")' />
+										</s:a>
+									</s:if>
+									<s:else>
+										<s:a href='%{#catURL}' tabindex="1012">
+											<span>(<s:property value='#util.formatNumber(#catCount)' />)</span>
+											<s:property value='#cat.getAttribute("ShortDescription")' />
+										</s:a>
+									</s:else>
+								</li>
 								<!-- /s:if-->
 							</s:iterator>
+
 						</ul>
-						</div>
-						</div>
+					</div>
+				</div>
 			</s:if>
-<!-- end browse category --> <!-- begin narrow by  -->
-<div id="narrowByDivList">
+	<!-- end browse category -->
+
+	<%-- this div will be replaced with results of ajax call --%>
+	<div id="narrowByDivList">
+
 </s:if>
 
-<s:if test="%{#FacetsList!=null && #FacetsList.size>0}"><%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
+<%-- Ajax results of getting facets are used to populate this on second pass through this JSP --%>
+<%-- Show Narrow By section only if FacetsList size is greater than 0 --%>
+<s:if test="%{#FacetsList!=null && #FacetsList.size>0}">
 
-	
 	<s:set name='headercount' value='%{3}' />
+
 		<s:iterator id='facets'
 			value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")'>
 			<div id="narrow_spb<s:property value='#headercount'/>" class="browseBox subPanelBox">
@@ -131,21 +140,21 @@ function setStockItemFlag()
 				value='XMLUtils.getElements(#facets, "AssignedValueList/AssignedValue")' />
 			<s:set name='hasMoreFacetList'
 				value='XMLUtils.getElements(#facets, "AssignedValueList").get(0).getAttribute("HasMoreAssignedValues")' />
-				
+
 			<%-- <s:set name='showFacet' value='"Y"' /> --%>
-			
-			
+
+
 			<!-- Webtrends tag start -->
 				<META Name="DCSext.w_x_narrowby" Content="1" />
 			<!-- Webtrends tag end -->
-			
-		
+
+
 				<s:set name='narrowByCatalogItemsCount' value='%{#narrowByCatalogItemsCount + 1}' />
 				<s:set name='headercount' value='%{#headercount + 1}' />
 				<s:set name='AttributeElement1' value='XMLUtils.getChildElement(#facets, "Attribute")' />
 				<s:set name='ShortDescription1' value='#AttributeElement1.getAttribute("ShortDescription")' />										
-				
-				<div id="narrow_header<s:property value='#headercount'/>" class="header"  style="background-color:#003399">
+
+				<div id="narrow_header<s:property value='#headercount'/>" class="header">
 					<span class="float-right"><a href="#" class="expand-narrow-by" title="Show/Hide">
 							<img src="<s:property value='#util.staticFileLocation' />/xpedx/images/icons/12x12_white_collapse.png" style="margin-top:5px" alt="expand"></a>
 					</span>
@@ -157,14 +166,14 @@ function setStockItemFlag()
 				<s:else>
 					<div id="narrow_content<s:property value='#headercount'/>" class="content narrowbyattributes default-collapsed">
 				</s:else>
-				
+
 			<ul>
 				<s:set name='facetMap' value='facetListMap.get(#ShortDescription1)'/>
 				<div id='narrowByDiv_<s:property value="#ShortDescription1" />' >
 					<s:iterator value="facetMap" id="factVal">
 							<s:set name='count1' value='%{#count1 + 1}' />
 							<s:url id='narrowURL' namespace='/catalog' action='filter.action'>						
-								
+
 								<s:param name='_bcs_' value='_bcs_' />
 								<s:param name='indexField'
 									value='#facets.getAttribute("IndexFieldName")' />
@@ -175,21 +184,25 @@ function setStockItemFlag()
 								<s:param name="path" value='#parameters.path'/>
 								<s:param name='marketingGroupId' value='#parameters.marketingGroupId' />
 							</s:url>
-							
-							<li class="roll close"><s:a href="%{narrowURL}"
-								tabindex="%{#count1}">
+
+						<s:set name='facetCount' value='#factVal.getAttribute("Count")' />
+						<li class="roll close">
+							<s:a href="%{narrowURL}" tabindex="%{#count1}">
 								<s:property value='#factVal.getAttribute("Value")' />
-							</s:a> </li>
+							</s:a>
+							<span>(<s:property value='#util.formatNumber(#facetCount)' />)</span>
+						</li>
+
 					</s:iterator>
 					<s:if test='%{#hasMoreFacetList == "Y"}'>
-						
-							<a class="narrowByViewAllLink" style="" href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
+						<a class="narrowByViewAllLink" style=""
+							href="javascript:getFacetList('<s:property value='#ShortDescription1' />','<s:property value='#facets.getAttribute("ItemAttributeKey")' />');">View All</a> 
 					</s:if>
 				</div>
-				
+
 			</ul>
 			</div>	
-			
+
 			</div>
 	</s:iterator>
 
@@ -223,19 +236,20 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 			url: url,
 			params: {
-				searchIndexInputXML:inutXML
+				searchIndexInputXML:inutXML,
+				secondCallForFacets:true
 			},
 			method: 'POST',
 			success: function (response, request){
 				div.innerHTML=response.responseText;
-				
+
 				// eb-2296: we must bind click events for these new dom elements
 				//    note that this function is also called on page load (see xpedx-header.js)
 				//     since the 'Product Categories' narrow-by is loaded separately (at page load)
 				rebindClickForNarrowByExpandCollapse();
 			},
 			failure:function (response, request){
-				
+
 			}
 		});
 });
@@ -245,11 +259,8 @@ function showViewAllDialog(attr)
     svg_classhandlers_decoratePage();
 }
 var myMask;
-function setDefaultSearchText()
+function showProcessingMessage()
 {
-	if( document.getElementById("search_searchTerm").value=="Search Within Results..."){
-		document.getElementById("search_searchTerm").value="";
-	}
 	//added for jira 3974
 	var waitMsg = Ext.Msg.wait("Processing...");
 	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
@@ -280,7 +291,7 @@ function getFacetList(shortDescription,itemAttributeKey)
 				div.innerHTML=response.responseText;
 			},
 			failure:function (response, request){
-				
+
 			}
 		});
 	//}

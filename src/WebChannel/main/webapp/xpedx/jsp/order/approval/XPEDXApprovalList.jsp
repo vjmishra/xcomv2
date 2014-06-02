@@ -10,15 +10,18 @@
 
 <!-- styles -->
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css"
-               href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+               href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -96,55 +99,47 @@
 				$('#split-order-overlay').toggle();
 				return false;
 		});
+		$("#shipToOrderSearch").fancybox({
+    		'onStart' 	: function(){	    		
+    			showShipToModalForOrderSearch();
+    		},
+    		'onClosed' : function() {    			
+    			if(!$('#shipToSelectedOnShipToModal').val().trim()){
+    				$("select#shipToSearchFieldName").attr('selectedIndex', 0);        				
+    			}
+      		},
+			'autoDimensions'	: false,
+			'width' 			: 800,
+	 		'height' 			: 400  
+		});
 });
-	/*
-		$(document).ready(function(){
-			$(document).pngFix();
-			$('#view-all-invoices-btn').click(function(){
-					var offset = $(this).offset();
-					//$('#view-invoices-popup').css({ top: offset.top+25 });         
-					$('#view-invoices-popup').toggle();
-					return false;
-			});
-			$('#view-all-invoices-btn-close').click(function(){
-					$('#view-invoices-popup').toggle();
-					return false;
-			});
-			$('#view-order-history-btn').click(function(){
-					var offset = $(this).offset();
-					//$('#info-popup').css({ top: offset.top+25 }); 
-					//$('#info-popup').css({ left: offset.left }); 
-					$('#view-order-popup').toggle();
-					return false;
-			});
-			$('#view-order-history-btn-close').click(function(){
-					$('#view-order-popup').toggle();
-					return false;
-			});
-		
-		});*/
-</script>
-
-
-
-
-<script type="text/javascript">
-/*	$(function() {
-		$(".modal").fancybox({
-			'transitionIn'		: 'fade',
-			'transitionOut'		: 'fade'
-		});
-				
-				$(".datepicker").datepicker({
-			showOn: 'button',
-						numberOfMonths: 1,
-
-			buttonImage: '../xpedx/images/theme/theme-1/calendar-icon.png',
-			buttonImageOnly: true
-		});
-		
-	});
-*/	
+    function showShipToModalForOrderSearch() {
+    	var customerContactId = $('#LoggedInUserIdForShipTo').val();
+    	var getAssignedShipToURL = $('#getAssignedShipTosForSelectURL').val();
+    	var includeShoppingForAndDefaultShipTo = "false";
+    	$('#shipToSelectedOnShipToModal').val('');
+    	/* Select Button click functionality */
+    	selectShipToChanges = function selectShipToChanges(){
+    		if (!$("input[name='selectedShipTo']:checked").val()) {
+    			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+    			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+    			return false;
+    		}
+    		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val();
+    		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
+    		removeOptionAll();
+        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
+    		appendOptionLast(selectedShipCustomer,formattedShipTo);
+    		document.approvalList.shipToSearchFieldName1.value = selectedShipCustomer;
+    		$.fancybox.close();    		
+    	};
+    	/* Cancel Button click functionality */
+    	cancelShipToChanges = function cancelShipToChanges(){
+    		$('#shipToSelectedOnShipToModal').val('');
+    		$.fancybox.close();
+    	};
+    	showShiptos("Select Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, null, selectShipToChanges, null);
+    }
 </script>
 <SCRIPT type="text/javascript">
 	function clearFilters_onclick(){
@@ -284,12 +279,9 @@
 		 document.forms["approval"].submit();
 		}
 	// Added for JIRA 2770
-	function showShipTos(){		
-		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
-			//alert("hi");		
-			$('a[href="#shipToOrderSearchDiv"]').click(); 
-			//showAssignedShipToForOrderSearch('<s:property value="#shipToForOrderSearch"/>');
-			
+	function showShipTosOnSelect(){		
+		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){
+			 $('#shipToOrderSearch').click();
 			}
 		else if(document.getElementById("shipToSearchFieldName").selectedIndex=='0'){
 			document.getElementById("shipToSearchFieldName1").value="";
@@ -317,8 +309,12 @@
 </head>
 
 <body class="ext-gecko ext-gecko3">
+<s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
+<s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
 <div class='x-hidden dialog-body ' id="shipToDivforordersearch">
-	<div id="shipToOrderSearchDiv"></div>
+	<div class="ship-container" id="ship-container">
+    	<%-- dynamicaly populate data here  --%>
+	</div>
 </div>
     <div id="main-container">
         <div id="main">
@@ -416,12 +412,10 @@
 						<td> Ship-To: </td>
 						<td colspan="2">						
 						<s:select cssClass=" " name="shipToSearchFieldName" headerValue="All Ship-To(s)"
-						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTos();"/>
+						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTosOnSelect();"/>
 						<s:hidden name="shipToSearchFieldName1" id="shipToSearchFieldName1" value="%{getShipToSearchFieldName()}" />
-						<%--<s:select cssClass="ship-to-input-field x-input" name="shipToSearchFieldName" list="shipToList" 
-							listKey="key" listValue="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(key)"
-							value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" /> --%>
-						<a href='#shipToOrderSearchDiv' id="shipToOrderSearch"></a></td>
+						<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
+						<a href='#ship-container' id="shipToOrderSearch"></a></td>
 						<td colspan="1"><a class="orange-ui-btn float-right" href="javascript:search_check(); submit_approveOrderListForm();" ><span>Search </span></a> 
 						
 						<a class="grey-ui-btn float-right" href="javascript:clearFilters_onclick()" ><span  class="orange-filter float-right">Clear </span></a> 

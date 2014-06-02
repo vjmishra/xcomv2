@@ -39,6 +39,8 @@ import com.yantra.yfc.util.YFCCommon;
 public class XPEDXDraftOrderAddOrderLinesAction extends
 		OrderItemValidationBaseAction {
 
+	private static final Logger log4j = Logger.getLogger(XPEDXDraftOrderAddOrderLinesAction.class);
+
 	public XPEDXDraftOrderAddOrderLinesAction() {
 		verificationOutputMap = new HashMap();
 		quickAddErrorList = new ArrayList();
@@ -62,8 +64,6 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 	@Override
 	public String execute() {
 		// allow parameter to force redirection back to quick add page
-		String resultSuccess = isFromQuickAdd() ? "quickAddSuccess" : "success";
-
 		try {
 			if (currency == null)
 				currency = getWCContext().getEffectiveCurrency();
@@ -136,8 +136,9 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 					&& databaseLockException.toString().contains("YFC0101")) {
 				LOG.debug("Databse is locked, hence continuing to "
 						+ "call draft order details............");
-				return resultSuccess;
+				return SUCCESS;
 			}
+			log4j.debug("", databaseLockException);
 			LOG.debug(databaseLockException);
 			XPEDXWCUtils.releaseEnv(wcContext);
 			return "error";
@@ -146,7 +147,7 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			getWCContext().setWCAttribute(getQuickAddErrorListSessionKey(),
 					quickAddErrorList, WCAttributeScope.SESSION);
 		XPEDXWCUtils.releaseEnv(wcContext);
-		return resultSuccess;
+		return SUCCESS;
 	}
 	/**
 	 * EB-466 code changes, removed Manufacturing Item, MPC code
@@ -322,8 +323,8 @@ public class XPEDXDraftOrderAddOrderLinesAction extends
 			prodValdAjaxResp = sb.toString();
 
 		} catch (Exception e) {
-			LOG
-					.error("Unable to retrieve information about the entered products");
+			LOG.error("Unable to retrieve information about the entered products");
+			log4j.error("", e);
 		}
 
 
@@ -582,8 +583,11 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					break;
 				String itemType = (String) itemTypeIter.next();
 
+				productID = (String) productIDIter.next();
+				if (productID == null || productID.trim().length() == 0) {
+					continue;
+				}
 				if ("1".equals(itemType)) {
-					productID = (String) productIDIter.next();
 					if (verificationOutputMap.get(productID) == null) {
 						Element productInfoOutput = prepareAndInvokeMashup("addToCartGetCompleteItemList");
 						Document productInfoDoc = getDocFromOutput(productInfoOutput);
@@ -600,7 +604,6 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 					}
 				} else if("2".equals(itemType))
 				{
-					productID = (String) productIDIter.next();
 					if (verificationOutputMap.get(productID) == null) {
 						String customerPartNo = productID;
 						Map itemAttr = new HashMap();
@@ -650,6 +653,7 @@ public void createItemForUI(StringBuilder sb,Map<String,Map<String,String>> item
 			if(enteredPONos != null)
 				PONo = (String) enteredPONos.get(i);
 			String itemID = (String) enteredProductIDs.get(i);
+
 			String enteredQtyStr = (String) enteredQuantities.get(i);
 			String enteredProdDesc = (String) enteredProductDescs.get(i);
 			String enteredUOM = (String) enteredUOMs.get(i);

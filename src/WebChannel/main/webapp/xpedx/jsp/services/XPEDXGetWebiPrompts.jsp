@@ -17,7 +17,6 @@
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" /> 
 <!-- styles -->
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/banner<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -411,53 +410,33 @@ $(function() {
                    });
        
                }
-           }            
-           function showAllShipToLocations() {
-               var url = document.getElementById("showShipToLocationUrl").value;
-               var customerId = document.getElementById("customerId").value;
-               
-               
-               if(url!=null) {
-                   //Added For Jira 2903
-                   //Commented for 3475
-                   //Ext.Msg.wait("Processing..."); 
-                   //Ext.Msg.wait("Getting the Ship-To Locations.... Please Wait..."); 
-                   Ext.Ajax.request({
-                       url: url,
-                       params: {
-                           //organizationCode: organizationCode
-                           userId : customerId,
-                           orderByAttribute:'ShipToCustomerID'
-                           },
-                       method: 'POST',
-                       success: function (response, request){
-                           var responseText = response.responseText;
-                           if(responseText.indexOf("Error")>-1)
-                           {
-                               alert("Error Getting the Locations. Please try again later");
-                               Ext.MessageBox.hide();
-                               $.fancybox.close();
-                           }
-                           else
-                           {
-                               Ext.MessageBox.hide(); 
-                                                       
-                               document.getElementById('showShipToLocationsDiv').innerHTML = responseText;
-                                var x = document.getElementById('showShipToLocationsDiv').getElementsByTagName("script");   
-                                  for( var i=0; i < x.length; i++) {  
-                                    eval(x[i].text);  
-                                  }  
-                           }    
-                       },
-                       failure: function (response, request){
-                           alert("Error Getting the Locations. Please try again later");
-                           Ext.MessageBox.hide();
-                           $.fancybox.close();
-                       },
-                   });
-       
-               }
-           }
+           } 
+           
+      function showShipToModalForReports() {
+      	var customerContactId = $('#LoggedInUserIdForShipTo').val();
+      	var getAssignedShipToURL = $('#getAssignedShipTosForSelectURL').val();
+      	var includeShoppingForAndDefaultShipTo = "false"; 
+      	$('#shipToSelectedOnShipToModal').val('');
+      	/* Select Button click functionality */
+      	selectShipToChanges = function selectShipToChanges(){
+      		if (!$("input[name='selectedShipTo']:checked").val()) {
+      			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+      			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+      			return false;
+      		}
+      		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val(); 
+      		$('#selectedCustId').val(selectedShipCustomer); 
+      		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
+      		$('#txtLocation').val($('#shipToMultiRowDisplay_'+selectedShipCustomer).val());
+      		$.fancybox.close(); 
+      	};
+      	/* Cancel Button click functionality */
+      	cancelShipToChanges = function cancelShipToChanges(){      		
+      		$('#shipToSelectedOnShipToModal').val('');
+    		$.fancybox.close();
+      	};
+      	showShiptos("Select Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, null, selectShipToChanges, null);
+      }
                
    $(document).ready(function() {
        $(document).pngFix();
@@ -477,7 +456,7 @@ $(function() {
                },
                'autoDimensions'    : false,
                'width'             : 800,
-               'height'             : 310,
+               'height'             : 340,
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showLocationsDiv").innerHTML = '';
@@ -487,27 +466,16 @@ $(function() {
        });    
        $("#varShipTo").fancybox({
            'onStart'        :    function(){
-           //Show location fancybox
-           if(document.getElementById("showLocationsUrl").value == '')    
-                   {    
-                   
-                   $.fancybox.close();
-               }
-           else
-               {
-                   //showLocations();
-                   showAllShipToLocations();
-               }
+        	   showShipToModalForReports();
                },
                'autoDimensions'    : false,
-               'width'             : 740,
-               'height'             : 370,
-               //XNGTP - JIRA- 489 
+               'width'             : 800,
+               'height'            : 400,
                'onClosed' : function(){                
-                   document.getElementById("showShipToLocationsDiv").innerHTML = '';
-                   //alert("Closed .. " );
-               },        
-                               
+            	   if(!$('#shipToSelectedOnShipToModal').val().trim()){
+       				$("select#optsLocations").attr('selectedIndex', 0);        				
+       			 }                  
+               }, 
        });
        $("#varBillTo").fancybox({
            'onStart'        :    function(){
@@ -559,7 +527,8 @@ $(function() {
           
            <div id="hidden_clicker" style="display:none">
                <a id="varSAP" href="#showLocationsDlg" >Hidden Clicker 1</a>
-               <a id="varShipTo" href="#showShipToLocationsDlg" >Hidden Clicker 2</a>
+               	<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
+               <a id="varShipTo" href="#ship-container" >Hidden Clicker 2</a>
                <a id="varBillTo" href="#showBillToDlg" >Hidden Clicker 3</a>
            </div>
           
@@ -721,14 +690,12 @@ $(function() {
    
    </div>
 </div>
-<div style="display: none;">    
-   
-   <div title="Showing the Ship-To Locations" id="showShipToLocationsDlg">
-       <div id="showShipToLocationsDiv">
-           
-       </div>
-   
-   </div>
+<s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
+<s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
+<div class='x-hidden dialog-body' id="showShipToLocationsDlg">
+	<div class="ship-container" id="ship-container">
+	   <%-- dynamically populate data here with ShipToComponent javascript  --%>
+	</div>
 </div>
 <!-- LB CODE End -->
     <!-- end main  -->

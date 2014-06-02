@@ -26,12 +26,15 @@
 </s:if>
 <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <!--EB-1689 END -->
  
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MISC<s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 
 <!--[if IE]>
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 
 <s:if test="#isGuestUser == true">
@@ -114,7 +117,7 @@
                 
               
 	<s:form action="xpedxContactUsSendMail" namespace="/common" method="post" name="contractUsForm" id="contractUsForm">
-                <div id="mid-col-mil"><br>
+                <div id="mid-col-mil"><br/>
                 
 	                <div class="page-title"> Contact Us</div>
                 
@@ -207,8 +210,14 @@
                    <table class="full-width">
           <tbody>
             <tr>
-              <td colspan="2" class="underlines no-border-right-user">
-			                   Technical Support: <s:property value='%{#fmtEBusinessPhoneNo}'/>, <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br>
+              <td class="underlines no-border-right-user" style="width: 190px;">
+			                   
+			                   <b>Technical Support: </b><br/>
+			                   
+			                   </td>
+			                   <td valign="top" class="underlines no-border-right-user">
+			                   <br/><s:property value='%{#fmtEBusinessPhoneNo}'/><br/> 
+			                   <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a>
                             </td>
             </tr>
           
@@ -216,8 +225,7 @@
 								<tr>
 	                                <td valign="top" class="underlines no-border-right-user" style="width: 190px;">
 	                                <div>
-	                                   Questions Related To Ship To: <br/>
-	                                   <p style="color: #00399;"><a href="#ajax-assignedShipToCustomers" id="contactUsShipTo" class="eleven underlink">[Change]</a></p>
+	                                   <b>Current Ship To: </b><br/>
 	                                </div>
 	                                </td>
 	                            	<td valign="top" class="underlines no-border-right-user">
@@ -278,10 +286,11 @@
 								 <s:if test='(#salesRepUserList != null && #salesRepUserList.size > 0)'>
 								 	<tr>
 								 		<td valign="top" class="underlines no-border-right-user">
-								 			Sales Professional:
+								 			<b>Sales Professional: </b>
 								 		</td>
 								 		<td class="underlines no-border-right-user">
-								 			<s:iterator value='salesRepUserList' id='salesRepUser' status="salesRepCount">
+								 		
+								 			<s:iterator value='salesRepUserList' id='salesRepUser' status="salesRepCount" >
 												<s:set name="userContInfoEle" value='#xutil.getChildElement(#salesRepUser,"ContactPersonInfo")' />
 												<s:set name="FirstName" value='#xutil.getAttribute(#userContInfoEle,"FirstName")' />
 												<s:set name="LastName" value='#xutil.getAttribute(#userContInfoEle,"LastName")' />
@@ -289,14 +298,14 @@
 												<s:set name="Phone" value='#xutil.getAttribute(#userContInfoEle,"DayPhone")' />
 												 <s:set name="fmtPhone" value='#xpedxUtilBean.getFormattedPhone( #Phone )' />
 				                               	<s:property value='%{#FirstName}'/> <s:property value='%{#LastName}'/><br/>
-				                               	<s:if test='%{#fmtPhone != ""}'>
-				                               	<s:property value='%{#fmtPhone}'/><br/>
-				                               	</s:if>
 				                               	<s:if test='%{#EMailID != ""}'>
-				                               		<a href="mailto:<s:property value='%{#EMailID}'/>"><s:property value='%{#EMailID}'/></a><br/><br/>
+				                               		<a href="mailto:<s:property value='%{#EMailID}'/>"><s:property value='%{#EMailID}'/></a><br/>
 				                               	</s:if>
-				                               	<s:else><br/><br/></s:else>
-			                           		</s:iterator>
+				                               	<s:if test='%{#fmtPhone != ""}'>
+				                               	<s:property value='%{#fmtPhone}'/><br/><s:if test="!#salesRepCount.last"><br/></s:if>
+				                               	</s:if>
+				                               	<s:else><s:if test="!#salesRepCount.last"><br/></s:if></s:else>
+			                           		 </s:iterator>
 								 		</td>
 								 	</tr>
 								 </s:if>
@@ -308,11 +317,11 @@
 					<s:if test='#csr1Ele != null'>
 						<s:if test="%{#customerService == 'false'}">
 							<tr class="padding-bottom1">
-				            	<td valign="top" class="no-border-right padding0">Customer Service:</td>
+				            	<td valign="top" class="no-border-right padding0"><b>Customer Service:</b></td>
 				            	<td colspan="3" valign="top" class="underlines no-border-right-user padding-bottom1">
 				            	<s:property value='%{#csr1UserName}'/><br/>
 				            	<a href="mailto:<s:property value='%{#csr1EMailID}'/>"><s:property value='%{#csr1EMailID}'/></a><br/>
-								<span class="grey-italic">
+								<span class="regular-black">
 									<s:if test='%{#fmtCsr1Phone != ""}'>
 							          	<s:property value='%{#fmtCsr1Phone}'/>
 							          	 <br/>
@@ -329,13 +338,13 @@
 				            	<s:property value='%{#csr2UserName}'/><br />
 				            	<a href="mailto:<s:property value='%{#csr1EMailID}'/>"><s:property value='%{#csr1EMailID}'/></a>
 						         <br/>
-								<span class="grey-italic">
+								<span class="regular-black">
 				            		
 				            	<s:if test='%{#fmtCsr2Phone != ""}'>
 						           	<s:property value='%{#fmtCsr2Phone}'/><br/>
 						           	<br/>
 						        </s:if>
-						            	 
+						           </span></td> 	 
 				          	</tr>
 						</s:else>
 					</s:if>
@@ -348,13 +357,13 @@
 				            	<s:property value="#csr2UserName"/><br />
 				            	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>
 				            	<br />
-								<span class="grey-italic">
+								<span class="regular-black">
   					            
 				            	<s:if test="%{#fmtCsr2Phone != ''}">
 				            		<s:property value="#fmtCsr2Phone"/>
 				            		<br/>
 				            	</s:if>
-				            	
+				            	</span></td>
 				          	</tr>
 						</s:if>
 						<s:else>
@@ -362,7 +371,7 @@
 				            	<td valign="top" class="no-border-right padding0">&nbsp; </td>
 				            	<td colspan="3" valign="top" class="underlines no-border-right-user padding-bottom1">
 				            	<s:property value="#csr2UserName"/>
-				            	<span class="grey-italic">
+				            	<span class="regular-black">
 				            	<br/>
 				            	 	<a href="mailto:<s:property value='%{#csr2EMailID}'/>"><s:property value='%{#csr2EMailID}'/></a>
 								<br/>
@@ -377,7 +386,8 @@
 							
 							    <tr>
                                 <td valign="top" class="underlines no-border-right-user">
-                                   Division Information:</td>
+                                   <b>Division Information:</b>
+                                   </td>
                                 <td valign="top" class="underlines no-border-right-user">
                                 <s:property value="%{#OrgName}" />&nbsp; (<s:property value="%{#OrgCode}"/>)<br/>
                                 <s:property value='%{#orgAddress1}'/>&nbsp;<s:property value='%{#orgAddress2}'/><br/>
@@ -411,10 +421,15 @@
                      <table class="full-width">
 			          <tbody>
 			            <tr>
-		              <td colspan="3" class="underlines no-border-right-user">
-			                   Technical Support: <s:property value='%{#fmtEBusinessPhoneNo}'/>, <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br>
+              <td class="underlines no-border-right-user" style="width: 190px;">
+			                   <div>
+			                   <b>Technical Support:</b> <br/>
+			                   </div> 
 			                   </td>
-          		 		 </tr>
+			                   <td valign="top" class="underlines no-border-right-user">
+			                   <br/><s:property value='%{#fmtEBusinessPhoneNo}'/><br/> <a href="mailto:<s:property value="%{eBusinessEmailID}"/>"><s:property value="%{eBusinessEmailID}"/></a><br/>
+                            </td>
+            </tr>
           		 		 <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 								<tr>
 									<td><a href="https://www.xpedx.com/locate-us.aspx" target="_blank"><b>Locate Us</b></a></td>
@@ -442,10 +457,11 @@
                     
                                 
                     
-                    <br>
+                    <br/>
+	                </div>
                 </div>
-            </div>
-        </div>
+            
+       
      
     <!-- end main  -->
     

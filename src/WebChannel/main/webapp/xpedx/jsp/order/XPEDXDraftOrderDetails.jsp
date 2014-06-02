@@ -22,6 +22,9 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -167,227 +170,7 @@ function resetDeleteCart(formObj)
 {
 	document.getElementById("otherCartActions").value = "None";
 }
-function quickAddCopyAndPaste(data){
-	//Clean up the data
-	//Ext.get('dlgCopyAndPasteText').dom.value = '';
-	//$.fancybox.close();
-	
-	//console.debug("data: ", data);
-	var prodcutValidateUrl=document.getElementById('productValidateURL').href;
-	document.getElementById('productValidateURL').href =document.getElementById('productListValidateURL').href;
-	var itemLineFlag = "false";
-	var itemsString = data;
-	var char = '\n';
-	var itemLines = itemsString.split(char);
-	var checklength=itemLines.length;//jira 4128
-	if(itemsString == "")
-	{
-		document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
-        document.getElementById("errorMsgCopyBottom").style.display = "inline";
-	}
-	else 
-	{
-		document.getElementById("errorMsgCopyBottom").innerHTML = "" ;
-        document.getElementById("errorMsgCopyBottom").style.display = "none";
-	}
-				
-	for(var i=0;i < itemLines.length; i++)
-	{
-		var itemQty = null;
-		var itemSku = null;
-		var jobId = "";
-		var itemLine = itemLines[i].split('\t');
-		if(i == itemLines.length-1){
-			if(itemLine == ""){
-				break;
-			}
-		}//jira4128 start
-		if(checklength > 20)
-		{
-			
-			itemLineFlag = "true";
-			alert( "<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.QTYGT20' />");
-			break;
-			//document.getElementById("errorMsgCopyBottom").innerHTML = "You can only add 20 items per copy/paste." ;
-	        //document.getElementById("errorMsgCopyBottom").style.display = "inline";
-		}
-		//jira4128 stop
-		if(itemLine.length > 1 )
-		{
-			itemQty = itemLine[0];
-			itemSku = itemLine[1];
-		}
-		itemLine = itemLines[i].split(',');
-		if(itemLine.length > 1 )
-		{
-			itemQty = itemLine[0];
-			itemSku = itemLine[1];
-			if(itemSku == "" && itemQty == ""){
-				itemLineFlag = "true";
-				document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
-		        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
-			}
-		}
-		else
-		{
-			itemLineFlag = "true";
-			document.getElementById("errorMsgCopyBottom").innerHTML = "Valid string is required. See instructions above." ;
-	        document.getElementById("errorMsgCopyBottom").style.display = "inline"; 
-		}
-		
-		/*
-		itemSku = Ext.util.Format.trim(itemSku);
-		itemQty = Ext.util.Format.trim(itemQty);
-		
-		document.getElementById("qaProductID").value= itemSku;
-		document.getElementById("qaQuantity").value= itemQty;
-		//call metods for quick add 3349 by balkhi
-		  addProductToQuickAddList(document.getElementById('quickAddButton'));
-		//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' );  */
-	}
-	if(itemLineFlag == "false")
-	{
-		for(var i=0;i < itemLines.length; i++)
-		{
-			var itemQty = null;
-			var itemSku = null;
-			var jobId = "";
-			var itemLine = itemLines[i].split('\t');
-			
-			if(itemLine.length > 1 )
-			{
-				itemQty = itemLine[0];
-				itemSku = itemLine[1];
-			}
-			itemLine = itemLines[i].split(',');
-		
-			if(itemLine.length > 1 )
-			{
-				itemQty = itemLine[0];
-				itemSku = itemLine[1];
-			}					
-			if((i+1) == itemLines.length && itemLineFlag == "false")
-			{
-				$.fancybox.close();
-				Ext.get('dlgCopyAndPasteText').dom.value = '';
-			}
-			itemSku = Ext.util.Format.trim(itemSku);
-			itemQty = Ext.util.Format.trim(itemQty);
-			if(itemSku != null && itemSku != "null"){
-				
-			document.getElementById("qaProductID").value= itemSku;
-			document.getElementById("qaQuantity").value= itemQty;
-			//call metods for quick add 3349 by balkhi
-		  	//addProductToQuickAddList(document.getElementById('quickAddButton'));
-			
-		  //alert("-LP11- Shopping Cart addProductToQuickAddList ");
-			var theForm = document.getElementById('quickAddButton').form;
-		    var otherForm = document.OrderDetailsForm;
-		    clearErrorMessages(otherForm);
-		    clearErrorLabels(otherForm);
 
-		    var sku = trim(theForm.qaProductID.value);
-		    var quantity = trim(theForm.qaQuantity.value);
-		    var jobId = "";
-		    if(theForm.qaJobID != null){
-		    	jobId = trim(theForm.qaJobID.value);
-		    	jobidFlag = true;
-		    }
-		    var itemType = trim(theForm.qaItemType.value);
-		    var itemTypeText = itemType;
-		    
-		    var itemTypeSelElem = theForm.qaItemType;
-		    if(itemTypeSelElem!=null){
-		    	itemType = itemTypeSelElem.options[itemTypeSelElem.selectedIndex].value;
-		    	itemTypeText = itemTypeSelElem.options[itemTypeSelElem.selectedIndex].text;
-		    }
-		    
-		    var uomArray = new Array();
-		    var CustomUomArray = new Array();
-		    var purchaseOrder = "";
-		    if(theForm.purchaseOrder != null){
-		    	purchaseOrder = theForm.purchaseOrder.value;
-		    	custPOFlag = true;
-		    }
-		    if(sku == "")
-		    {
-		        //Added to fix 3098
-		    	//alertString = theForm.localizedMissingProductIDMessage.value;
-		        //alert(alertString);
-		    	document.getElementById("errorMsgItemBottom").innerHTML = "Please enter a valid Item #." ;
-		        document.getElementById("errorMsgItemBottom").style.display = "inline";
-		        return;
-		    }
-		    else
-		    	{
-		        document.getElementById("errorMsgItemBottom").innerHTML = "";
-		        document.getElementById("errorMsgItemBottom").style.display = "none";
-		    	}
-		    if(quantity == "")
-		    {
-		        quantity = 1;
-		        theForm.qaQuantity.value = quantity;
-		    }
-		        
-		    document.getElementById("validationActionNameQA").value = "draftOrderAddOrderLines";
-		    if(swc_validateForm("QuickAddForm") == false)
-		    {
-		        theForm.qaQuantity.focus();
-		        return;
-		    }
-
-		    QuickAddElems[QuickAddElems.length] =
-		    {
-		            sku: sku,
-		            quantity: quantity,
-		            jobId: jobId,
-		            purchaseOrder: purchaseOrder,
-		            itemType: itemType,
-		            itemTypeText: itemTypeText,
-		            itemDesc: "",
-		            uom: "",
-		            uomList: uomArray,
-		            isValidated: "false",
-		            isEntitled: "true",
-		            orderMultiple:"",
-		            itemUomAndConvString:"",
-		            //Added selectedUOM for Jira 3862
-		            selectedUOM:"",
-		            customUOM:CustomUomArray
-		    }
-
-		    theForm.qaProductID.value = "";
-		    theForm.qaQuantity.value = "";
-		    if(theForm.qaJobID != null){
-		    	theForm.qaJobID.value = "";
-		    }
-		    if(theForm.purchaseOrder != null){
-		    	theForm.purchaseOrder.value = "";
-		    }
-		//    theForm.qaItemType.value = "1";
-		    
-		    // Kludge to get localized string from the form for use in the HTML
-		    // generated by redrawQuickAddList. It counts on the fact that the
-		    // first time redrawQuickAddList will be called on the page is for
-		    // the add. If it were to be called beforehand, there would be no
-		    // deleteStringFromForm set.
-		    if(deleteStringFromForm == "")
-		    {
-		        deleteStringFromForm = theForm.localizedDeleteLabel.value;
-		    }
-		    if(addStringFromForm == "")
-		    {
-		        addStringFromForm = theForm.localizedAddToCartLabel.value;
-		    }
-			//qaAddItem(jobId, itemQty, itemSku, '','', 'xpedx #' ); 
-			}
-		}
-	}
-	validateItems();
-	document.getElementById('productValidateURL').href =prodcutValidateUrl;
-	//var w = Ext.WindowMgr.get("dlgCopyAndPaste");
-	//w.hide();
-}
 </script>
 
 <script type="text/javascript">
@@ -471,30 +254,6 @@ $(document).ready(function(){
 						
 					<!-- Web Trends tag end -->		
 </head>
-
-<div style="display:none;">
-<div id="dlgCopyAndPaste" class="xpedx-light-box" style="width: 400px; height: 300px;">
-<h2>Copy and Paste &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <small>Limit is 20 items per copy/paste</small> </h2>
-<%-- <p>Copy and Paste the quantities and <s:property value="wCContext.storefrontId" /> item #'s from your file. --%>
-<!-- Enter one item per line:<br /> -->
-<!-- Qty. [Tab or Comma] Item#</p> -->
-<p>Copy and paste or type the quantities and <s:property value="wCContext.storefrontId" />  item numbers or customer item numbers from your file in the following format: quantity,item number (no spaces). <br/>Example:12,5002121 </p>
-<p>To enter items without quantities, copy and paste or type a comma followed by the item number (no spaces).<br/> Example: ,5002121  <br />
-</p>
-<br />
-<form id="form1" name="form1" method="post" action=""><textarea
-	name="dlgCopyAndPasteText" id="dlgCopyAndPasteText" cols="48" rows="5"></textarea>
-<ul id="tool-bar" class="tool-bar-bottom" style="float:right";>
-	<li><a class="grey-ui-btn" href="javascript:$.fancybox.close();"
-		onclick="Ext.get('dlgCopyAndPasteText').dom.value = '';Ext.get('errorMsgCopyBottom').dom.innerHTML='';Ext.get('errorMsgCopyBottom').dom.style.display='none'"><span>Cancel</span></a></li>
-	<li style="float: right;"><a href="javascript: quickAddCopyAndPaste( document.form1.dlgCopyAndPasteText.value);" class="green-ui-btn" style="margin-left:5px;"><span>Add to Quick List</span></a></li>
-	
-	
-</ul>
-</form>
-</br></br></br><div class="error" id="errorMsgCopyBottom" style="display:none;position:relative;left:100px" ></div>
-</div>
-</div>
 
 <s:set name='_action' value='[0]' />
 <s:bean
@@ -996,7 +755,7 @@ $(document).ready(function(){
 	</s:else>
 	
 	<li class="float-right">
-		<s:url id='quickAddURL' namespace="/order" action='quickAddAction' escapeAmp="false">
+		<s:url id='quickAddURL' namespace="/order" action='quickAdd' escapeAmp="false">
 			<s:param name="selectedHeaderTab">QuickAdd</s:param>
 			<s:param name="quickAdd" value="%{true}" />
 		</s:url>
@@ -1449,9 +1208,6 @@ var currentAadd2ItemList = new Object();
 		<s:else>
 			<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Submit Cart</span></a>
 		</s:else>
-	</s:if>
-	<s:if test='#canAddLine'>
-		<a id="cont-shopping" class="grey-ui-btn"  href="<s:property value="#continueShoppingURL"/>"><span>Continue Shopping</span></a>
 	</s:if>
 	</s:if>
 

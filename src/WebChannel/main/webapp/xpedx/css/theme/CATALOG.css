@@ -513,11 +513,114 @@ width:100%;
     float:left;
 }
 
-.normal-view #item-ct dd .contents {
-	float:left;
-	width: 500px;
-	padding: 10px 15px 10px 10px;
+.normal-view #item-ct dd {
+	cursor: pointer;
+	float: left;
+	margin: 0;
+	padding: 3px;
+	vertical-align: middle;
+	width: 785px;
+	z-index: 1;
+	background: #ffffff;
+	position: relative;
+	min-height: 188px;
 }
+.normal-view #item-ct dd .contents {
+	float: left;
+	clear: none;
+	padding: 10px 0px 0px 10px;
+	width: 240px;
+    min-height: 150px;
+	position: relative;
+}
+.normal-view #item-ct dd .contents .item-numbers {
+	color: #000000;
+	padding-top: 3px;
+}
+.normal-view #item-ct dd .contents .item-numbers img {
+	display: inline-block;
+}
+.normal-view #item-ct dd .mill-mfg {
+	float: left;
+    width: 50%;
+}
+.normal-view #item-ct dd .ddesc {
+	width: 325px;
+}
+.normal-view #item-ct dd #prodlist {
+	clear: both;
+}
+.normal-view #item-ct dd .order-input-wrap {
+	float: right;
+	clear: none;
+	width: 365px;
+	top: 30px;
+	left: 424px;
+	position: absolute;
+}
+.normal-view #item-ct dd .order-row {
+	height: 25px;
+	margin-bottom: 5px;
+}
+.normal-view #item-ct dd .order-input-wrap .order-label {
+	float: left;
+	width: 160px;
+	text-align: right;
+	padding: 3px 6px 6px 0px;
+}
+.normal-view #item-ct dd .order-input-wrap .order-input {
+	float: right;
+	clear: none;
+	width: 195px;
+	text-align: left;
+}
+.normal-view #item-ct dd .buttons {
+	clear: both;
+}
+.normal-view #item-ct dd .optional-display {
+	display: block;
+}
+.normal-view .notice {
+	width: auto;
+	float: right;
+	clear: both;
+	display: block;
+	margin-bottom: 6px;
+}
+.normal-view .error {
+	 float: right;
+	 clear: none;
+	 width: auto;
+	 margin: 4px;
+}
+.normal-view #item-ct dd .cart-pa-button-wrap {
+    clear: none;
+    float: right;
+    padding-right: 10px;
+    text-align: right;
+    width: 380px;
+}
+.normal-view #item-ct dd .cart-pa-button-wrap input {
+	float: right;
+	clear: none;
+	width: auto;
+}
+.normal-view #item-ct dd .order-input-wrap .order-input input {
+	margin-left: 3px;
+}
+.normal-view #item-ct dd .order-input-wrap .order-input select {
+	margin-left: 3px;
+}
+
+.itemdiv .imgs {
+	box-shadow: 1px 1px 4px #999999;
+}
+.item-thumbnail {
+	box-shadow: 1px 1px 4px #999999;
+}
+
+
+
 
 ul
 
@@ -528,7 +631,7 @@ ul
 
 #item-ct dd .buttons
 {
-	padding-top: 10px;
+	padding-top: 5px;
 	text-align:left;
 }
 
@@ -757,9 +860,16 @@ ul
 	padding-right: 5px;
 }
 
-.t1-main-content
-{
+.t1-main-content {
 	min-height: 768px;
+}
+.t1-main-content-alt {
+	min-height: 768px;
+	float: right;
+	width: 795px;
+	margin: 0;
+	padding-left: 0px;
+	padding-right: 20px;
 }
 
 
@@ -902,9 +1012,6 @@ ul
 	/* width: 165px; */
     word-wrap: break-word;
 }
-.normal-view #item-ct dd { min-height: 230px; }
-/* .normal-view #item-ct dd .descriptions { height: 11.2em; }
-.normal-view #item-ct dd .descriptions { height: 12.5em; } */
 
 .normal-view .compare_check { width: 135px; padding-left: 5px; }
 .bottable .compare_check input { margin-right: 6px; }
@@ -925,11 +1032,15 @@ ul
 
 .quantity_box input
 {
-	width: 7em;
+	width: 5em;
 }
 .quantity_box select, .uom-select select
 {
-	width: 9em;
+	width: auto;
+	margin-bottom: 6px;
+}
+.cart-pa-button input {
+	width: auto;
 }
 
 .condensed-view #item-ct dd {
@@ -994,11 +1105,7 @@ ul
 	margin-top:5px;
 }
 
-/* .mill-mfg
-{
-	margin-top: 10px;
-} */
-/* .normal-view */ .mill-mfg
+.mill-mfg
 {
 	color: #f00;
 }
@@ -1022,6 +1129,25 @@ ul
 
 .item_number img { display: inline; }
 
+.item_number-wrap {
+	margin-top: 5px;
+}
+.item_number-wrap img {
+	display: inline;
+}
+
+.availablelink .submitBtnBg1 {
+    display: block;
+    margin: 0;
+    padding: 0px;
+    text-align: left;
+	width: 160px;
+	float: left;
+	clear: none;
+	margin-top: 8px;
+}
+
+
 #item-box #item-box-inner dd a:hover { text-decoration: none; }
 
 /* Grid */
@@ -1039,7 +1165,7 @@ ul
 }
 .papergrid-view #x-tbl-cmmn
 {
-	width: 724px;
+	width: 787px;
 	border: none !important;
 	margin-left: 1px;
 	font-size: 0.95em;
@@ -1149,35 +1275,160 @@ ul
 img#youtube { margin-right: 9px; }
 .container.catalog { min-height: 675px; }
 	
-/*Added for EB 1147 for back to top functionality*/
-#back-to-top a
-{
-    /* display: block before hiding */
-    display: block;
-    display: none;
-    opacity: 1;
-    /* link stays at same place on page */
-    position: fixed;
-
-    /* link goes at the bottom of the page */
-    top: 100%;
-    margin-top: -105px; /* = height + preferred bottom margin */
-	
-    /* link is centered */
-
-    width: 51px;
-    height: 51px;
-}
-
-#back-to-top:focus 
-{
-	outline:none;
-}
-
-/*End for EB 1147 for back to top functionality*/
-
 .catalog_line_input {
 	padding: 3px;
 	margin-left:5px;
     width: 173px;
 }
+
+.removeBreadcrumbIcon {
+	display: inline;
+	width: 11px;	
+	height: 11px;
+	margin-left: 3px;
+	border: none;
+}
+
+.replacement-item {
+	clear: none;
+	color: #FF0000;
+	float: right;
+	font-weight: bold;
+	padding: 10px;
+}
+
+/* condensed view */
+.condensed-view .two-item-wrap {
+	overflow: hidden;
+	border-bottom: 1px dotted #cccccc;
+	border-right: 1px dotted #cccccc;
+	border-top: 1px dotted #cccccc;
+}
+.condensed-view #item-ct dd {
+    float: left;
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    width: 388px;
+	border: none;
+	border-left: 1px dotted #cccccc;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.condensed-view #item-ct dd .contents {
+	float:left;
+	clear: none;
+	width:220px;
+	padding-left: 10px;
+	overflow:visible;
+	margin:1px 0 0 0;
+	min-height: 145px;
+}
+.condensed-view #item-ct dd .ddesc {
+	font-weight: bold;
+	padding-top: 4px;
+	width: 210px;
+	position: relative;
+}
+
+.condensed-view  #item-ct dd .buttons {
+    padding-top:0px;
+}
+.condensed-view  #item-ct dd #prodlist {
+    clear: both;
+    padding-top: 8px;
+}
+.condensed-view  #item-ct dd .replacement-item {
+	margin-top: 5px;
+}
+
+.condensed-view #item-ct dd .order-input-wrap {
+	float: right;
+	clear: none;
+	width: 220px;
+	margin-top: 14px;
+	text-align: right;
+	padding-right: 10px;
+}
+.condensed-view #item-ct dd .order-row {
+	height: 25px;
+}
+.condensed-view #item-ct dd .order-input-wrap .order-label {
+	float: left;
+	width: 135px;
+	clear: none;
+	text-align: right;
+	padding: 3px 6px 6px 0px;
+}
+.condensed-view  #item-ct dd .cart-pa-button {
+	width: 320px;
+	float: right;
+	clear: both;
+	text-align: right;
+	margin: 25px 0px 16px 0px;
+}
+
+.condensed-view  #item-ct dd .mill-mfg {
+	margin-top: 6px;
+}
+.condensed-view .order-input select {
+	width: 107px;
+}
+
+.condensed-view  #item-ct dd .item-numbers {
+	position: absolute;
+	top: 165px;
+	left: 10px;
+	clear: both;
+}
+
+.item-numbers img {
+	display: inline;
+}
+
+/* mini view */
+
+.mini-view #item-ct dd .cart-pa-button {
+	text-align: center;
+}
+.mini-view #item-ct dd .ddesc {
+	padding-bottom: 6px;
+}
+.mini-view .quantity_box .qty {
+	padding-top: 6px;
+}
+.mini-view .four-item-wrap {
+	display: block;
+	width: 792px;
+	height: auto;
+	overflow: hidden;
+	border-bottom: 1px dotted #cccccc;
+	border-right: 1px dotted #cccccc;
+	border-top: 1px dotted #cccccc;
+}
+.mini-view #item-ct dd {
+	float: left;
+	height: auto;
+	margin: 0;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+	width: 185px;
+	border: none;
+	border-left: 1px dotted #cccccc;
+	padding-bottom: 200px;
+	margin-bottom: -200px;
+}
+
+.height {
+	height: 5px;
+}
+.condensed-view  #item-ct dd .error {
+	float: right;
+	margin-bottom: 10px;
+	}
+.condensed-view  #item-ct dd .notice {
+	margin-bottom: 10px;
+	}

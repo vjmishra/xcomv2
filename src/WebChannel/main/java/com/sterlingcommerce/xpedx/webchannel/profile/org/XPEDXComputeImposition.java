@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+
 public class XPEDXComputeImposition {
 
 	// Declare Local Variables for Calculations
@@ -95,7 +97,7 @@ public class XPEDXComputeImposition {
 		int nNumout1 = (int) (Math.floor(lnPshort / lnfshort) * Math
 				.floor(lnPlong / lnflong));
 		int nWaste1 = (int) Math.floor(((lnPArea - (lnFarea * nNumout1))
-				/ lnPArea * 100));	
+				/ lnPArea * 100));
 
 		nAcross1 = (int) Math.floor((lnPlong / lnflong));
 		nDown1 = (int) Math.floor((lnPshort / lnfshort));
@@ -210,10 +212,10 @@ public class XPEDXComputeImposition {
 		cPassBack = "<div id=\"requestform2\"> <TABLE Border=2 class=\"form\"><TR><TD style=\"border:none; padding:0px;\">";
 		cPassBack = cPassBack + "<TABLE><TR><TD>&nbsp;</TD>";
 		cPassBack = cPassBack
-				+ "<TD ALIGN='CENTER'><IMG SRC='/swc/xpedx/images/pls.gif' WIDTH=200 HEIGHT=12 BORDER=0 ALT='Sheet Long Side'></TD>";
+				+ "<TD ALIGN='CENTER'><IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/pls.gif' WIDTH=200 HEIGHT=12 BORDER=0 ALT='Sheet Long Side'></TD>";
 		cPassBack = cPassBack + "<TD></TD></TR><TR>";
 		cPassBack = cPassBack
-				+ "<TD><IMG SRC='/swc/xpedx/images/pss.gif' WIDTH=12 HEIGHT=200 BORDER=0 ALT='Sheet Short Side'></TD>";
+				+ "<TD><IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/pss.gif' WIDTH=12 HEIGHT=200 BORDER=0 ALT='Sheet Short Side'></TD>";
 		cPassBack = cPassBack
 				+ "<TD><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=1><TR>";
 
@@ -222,7 +224,7 @@ public class XPEDXComputeImposition {
 			cPassBack = cPassBack
 					+ "<TD BGCOLOR='BLUE' WIDTH="
 					+ (lnSGuide * nSUnits)
-					+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+					+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 		}
 
 		// Add Gutter if Exists
@@ -230,7 +232,7 @@ public class XPEDXComputeImposition {
 			cPassBack = cPassBack
 					+ "<TD BGCOLOR='SILVER' WIDTH="
 					+ (lnGutter * nSUnits)
-					+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+					+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 		}
 
 		// Build Main Table
@@ -250,7 +252,7 @@ public class XPEDXComputeImposition {
 					cPassBack = cPassBack + " HEIGHT="
 							+ (int) Math.floor(nSuTshort);
 					cPassBack = cPassBack
-							+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+							+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 				}
 				cPassBack = cPassBack + "</TR>";
 			}
@@ -273,7 +275,7 @@ public class XPEDXComputeImposition {
 					cPassBack = cPassBack + " HEIGHT="
 							+ (int) Math.floor(nSuTLong);
 					cPassBack = cPassBack
-							+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+							+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 				}
 				cPassBack = cPassBack + "</TR>";
 			}
@@ -306,7 +308,7 @@ public class XPEDXComputeImposition {
 					cPassBack = cPassBack + " HEIGHT="
 							+ (int) Math.floor(nSuTshort);
 					cPassBack = cPassBack
-							+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+							+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 				}
 				cPassBack = cPassBack + "</TR>";
 			}
@@ -323,7 +325,7 @@ public class XPEDXComputeImposition {
 						cPassBack = cPassBack + " HEIGHT="
 								+ (int) Math.floor(nSuTLong);
 						cPassBack = cPassBack
-								+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+								+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 					}
 					cPassBack = cPassBack + "</TR>";
 				}
@@ -348,7 +350,7 @@ public class XPEDXComputeImposition {
 					cPassBack = cPassBack + " HEIGHT="
 							+ (int) Math.floor(nSuTLong);
 					cPassBack = cPassBack
-							+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+							+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 				}
 				cPassBack = cPassBack + "</TR>";
 			}
@@ -365,7 +367,7 @@ public class XPEDXComputeImposition {
 						cPassBack = cPassBack + " HEIGHT="
 								+ (int) Math.floor(nSuTshort);
 						cPassBack = cPassBack
-								+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
+								+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD>";
 					}
 					cPassBack = cPassBack + "</TR>";
 				}
@@ -392,7 +394,7 @@ public class XPEDXComputeImposition {
 					+ nColSpan
 					+ " HEIGHT="
 					+ (int) Math.floor((lnColorb * nSUnits))
-					+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD></TR>";
+					+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD></TR>";
 		}
 
 		// Build Gripper if Exists
@@ -402,7 +404,7 @@ public class XPEDXComputeImposition {
 					+ nColSpan
 					+ " HEIGHT="
 					+ (int) Math.floor((lnGripper * nSUnits))
-					+ "> <IMG SRC='/swc/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD></TR>";
+					+ "> <IMG SRC='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/bpixel.gif' WIDTH=2 HEIGHT=2 BORDER=0 ALT=''></TD></TR>";
 		}
 
 		// Close up Table

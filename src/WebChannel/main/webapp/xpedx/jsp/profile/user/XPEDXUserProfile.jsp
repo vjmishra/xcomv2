@@ -28,6 +28,7 @@
 		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.custom.js"	type="text/javascript"></script>
 		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.cookie.js"	type="text/javascript"></script>
 		<script	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dynatree-1.2.4.js"	type="text/javascript"></script>
+		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ShipToComponent<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	
 <!-- styles -->
 
@@ -35,7 +36,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree.css"	rel="stylesheet" type="text/css" id="skinSheet">
+<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree<s:property value='#wcUtil.xpedxBuildKey' />.css"	rel="stylesheet" type="text/css" id="skinSheet">
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
@@ -214,6 +215,79 @@ function showShipToForUserProfile(url)
         }
     });       
 }
+
+/**
+ * Select Preferred Ship-To Changes functionality.
+ */
+function showShipToModalOnUserProfile() {
+	
+	var customerContactId = $('#userName').val();
+	var includeShoppingForAndDefaultShipTo = "false";
+	var shipToURL = $('#usrProfileShipToApplyURL').val();
+	var getAssignedShipToURL = $('#getAssignedShipTosForSelectPreferredURL').val();	
+	/* Apply Button click functionality */
+	var applyShipToChanges = function applyShipToChanges(){	
+
+		if (!$("input[name='selectedShipTo']:checked").val()) {
+			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+			return false;
+		}
+		selectedCustomer =$("input[name='selectedShipTo']:checked").val();
+		var checkboxChecked = true;	
+		 Ext.Ajax.request({
+	            url: shipToURL,
+	            params: {
+	                selectedCurrentCustomer: selectedCustomer,
+	                setSelectedAsDefault: checkboxChecked,
+	                selectedCustomerContactId:customerContactId
+	            },
+	            method: 'POST',
+	            success: function (response, request){
+	            	 document.body.style.cursor = 'default';
+	            	 var pathname=window.location.pathname;
+	            	 var customerId = document.getElementById("customerId").value;
+	                 var selectedTab;
+	                 
+	                 if(document.getElementById("selectedTab")!=null){
+	                 	selectedTab = document.getElementById("selectedTab").value;
+	                 }
+	                 
+	                 
+	                 if(pathname=="/swc/profile/user/MyUserProfile.action"){
+  	                   		window.location.href=$('#manageMyUsrProfileURL').val()+"&customerContactId="+customerContactId+"&customerId="+customerId+"&selectedTab="+selectedTab+"&success=true";	
+	                  }
+	                 
+	                 if(pathname=="/swc/profile/user/MyManageOtherProfiles.action"){
+	                	 	window.location.href=$('#manageOtherUsrProfileURL').val()+"&customerContactId="+customerContactId+"&customerId="+customerId+"&selectedTab="+selectedTab+"&success=true";	
+	                  }
+	            },
+	            failure: function (response, request){
+	            	 $.fancybox.close();
+	            	 document.body.style.cursor = 'default';	            	
+	            }
+	        });  
+	}
+	/* Cancel Button click functionality */
+	cancelShipToChanges = function cancelShipToChanges(){
+		$.fancybox.close();
+	}
+	
+	/* If no ship-to locations assigned for the corresponding user functionality*/
+	applyNoShioTo = function applyNoShioTo (){
+		var $shipTosContainerDiv = $('#ship-container');
+		var html = [];
+		html.push('			<div class="ship-to-unassigned">');
+		html.push('<p>	We','\'','re sorry.	There are no ship-to locations assigned to the selected user account.</p><p> You will not be able to select a preferred ship to until at least one active location has been assigned on the Authorized Locations tab.</p>');
+		html.push('			</div>');
+		html.push('			<div>');
+		html.push('					<input class="btn-neutral float-left addmarginleft20" type="submit" value="Cancel" id= "cancelShipToButton" onclick="javascript:$.fancybox.close()"/>');
+		html.push('			</div>');
+		$shipTosContainerDiv.get(0).innerHTML = html.join('');	
+	}
+	
+	showShiptos("Select Preferred Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, applyShipToChanges, null, applyNoShioTo);
+}
 var selectedTabPanel = '<s:property value="#selectedTab" />';
 $(document).ready(function() 
 		{$(document).pngFix();
@@ -265,7 +339,7 @@ $(document).ready(function()
 			});
 		$("#changeShipToForUserProfile").fancybox({
 			'onStart'	:	function(){			
-			showShipToForUserProfile('<s:property value="#assignedShipToURLforUserProfile"/>');
+			 showShipToModalOnUserProfile()
 			},
 			'autoDimensions'	: false,
 			'width' 			: 751,
@@ -1390,11 +1464,19 @@ a.underlink:hover {
 		<s:set name='isDisabled' value="%{'true'}" />
 	</s:else>
 
-	<div class='x-hidden dialog-body ' id="shipToUserProfileDiv">
-		<div id="shipToUserProfile">
-			<div id="errorText" class="float-right"></div>
-		</div>
+	<s:url id='usrProfileShipToApplyURLid' namespace='/common' action='setCurrentCustomerIntoContext' />
+	<s:hidden id="usrProfileShipToApplyURL" value="%{#usrProfileShipToApplyURLid}" />
 
+	<s:url id='manageMyUsrProfileURLid' namespace='/profile/user' action='MyUserProfile' escapeAmp="false"/>
+	<s:hidden id="manageMyUsrProfileURL" value="%{#manageMyUsrProfileURLid}" />
+
+	<s:url id='manageOtherUsrProfileURLid' namespace='/profile/user' action='MyManageOtherProfiles' escapeAmp="false"/>
+	<s:hidden id="manageOtherUsrProfileURL" value="%{#manageOtherUsrProfileURLid}" />
+	
+	<div class='x-hidden dialog-body ' id="shipToUserProfileDiv">
+		<div class="ship-container" id="ship-container">
+      			<%-- dynamicaly populate data here --%>
+	    </div>
 	</div>
 
 	<div id="main-container">
@@ -2484,7 +2566,7 @@ a.underlink:hover {
 															<div class="clearview txt-small"
 																style="margin-left: 2px;">
 																<a id='changeShipToForUserProfile'
-																	href='#shipToUserProfile'
+																	href='#ship-container'
 																	onclick="javascript: writeMetaTag('WT.ti', '<s:property value='wCContext.storefrontId' /> / User Profile');"
 																	class=" underlines">[Change]</a>
 															</div>

@@ -23,6 +23,7 @@ public class XPEDXResetPendingOrderAction extends ResetPendingOrderAction {
 		XPEDXWCUtils.resetEditedOrderShipTo(wcContext);
 		wcContext.getSCUIContext().getSession().removeAttribute(XPEDXConstants.EDITED_ORDER_HEADER_KEY);
 		XPEDXWCUtils.removeObectFromCache(XPEDXConstants.APPROVE_ORDER_FLAG);
+		XPEDXWCUtils.removeObectFromCache(XPEDXConstants.EDIT_ORDER_NO);
 		return super.execute();
 	}
 }

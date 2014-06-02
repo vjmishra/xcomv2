@@ -42,17 +42,16 @@
 <head>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- begin styles. These should be the only three styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <%-- <link media="print" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/print.css" /> --%>
-<s:include value="../common/XPEDXStaticInclude.jsp"/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css"
-               href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+               href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!--  End Styles -->
 
@@ -1797,7 +1796,7 @@ function SubmitActionWithValidation()
 				</s:if>
 			</s:if>
 				<div class="button-wrap">				
-					<a href="javascript:updatePandAfromLink()" class="pa-link">My Price & Availability</a>
+					<a href="javascript:updatePandAfromLink()" class="pa-link">Show Price & Availability</a>
 				<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>	
 				<s:if test='%{#isFlowInContext == true}'>
 				<input name="button" type="button" class="btn-gradient float-right addmarginleft5"   onclick="javascript:itemDetailAddToCart('%{#itemID}', '%{#unitOfMeasure}', '%{#appFlowContext.key}','%{#appFlowContext.returnURL}','%{#appFlowContext.type}','%{#appFlowContext.currency}');" class="btn-gradient float-right addmarginleft5" value="Add to Order"/>

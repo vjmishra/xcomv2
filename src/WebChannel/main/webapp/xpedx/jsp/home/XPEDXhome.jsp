@@ -26,9 +26,12 @@
   	 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
   	 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
   	 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+  	 <!--[if IE]> 
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+	<![endif]--> 
  
  	<!--[if IE]>
-	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	<s:if test="#isGuestUser != true">
 	    
@@ -211,7 +214,11 @@ Ext.onReady(function(){
 	
 	<div id="main-container">
 	<div id="main">
-
+<div class='x-hidden dialog-body' id="ship-containerDiv">
+	<div class="ship-container" id="ship-container">
+	   <%-- dynamically populate data here with ShipToComponent javascript  --%>
+	</div>
+</div>
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		<div class="container">
 		<div id="homepage-image-rotation">

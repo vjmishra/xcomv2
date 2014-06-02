@@ -7,7 +7,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
@@ -15,6 +14,7 @@ import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.SSLSwitchingHelper;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfs.core.YFSSystem;
 
 public class XPEDXPreviewLogoHeaderAction extends WCAction implements
@@ -79,36 +79,36 @@ public class XPEDXPreviewLogoHeaderAction extends WCAction implements
 		String logo = (String) wcContext.getWCAttribute("SF_THEME_LOGO",
 				WCAttributeScope.LOCAL_SESSION);
 		if (logo != null && logo.length() > 0) {
-			LOG.debug((new StringBuilder())
+			LOG.debug((new StringBuilder(256))
 					.append("Found Logo URL in the context=").append(logo)
 					.toString());
 			setLogoURL(logo);
 			return;
 		}
 		ServletContext servletCtx = ServletActionContext.getServletContext();
-		String baseLogoURL = (new StringBuilder())
-				.append(request.getContextPath()).append("/swc/images/logo/")
+		String baseLogoURL = (new StringBuilder(256))
+				.append(XPEDXWCUtils.getStaticFileLocation()).append("/images/logo/")
 				.append(getSFLogoDir()).toString();
-		logo = (new StringBuilder()).append(baseLogoURL).append("/logo.gif")
+		logo = (new StringBuilder(256)).append(baseLogoURL).append("/logo.gif")
 				.toString();
 		String theme = getSFTheme();
 		if (servletCtx != null && theme != null && theme.length() > 0) {
-			String themeLogoURL = (new StringBuilder())
-					.append("/swc/images/logo/").append(getSFLogoDir())
+			String themeLogoURL = new StringBuilder(256)
+					.append(XPEDXWCUtils.getStaticFileLocation()).append("/images/logo/").append(getSFLogoDir())
 					.append("/logo-").append(theme).append(".gif").toString();
-			LOG.debug((new StringBuilder())
+			LOG.debug((new StringBuilder(256))
 					.append("Checking for theme specific logo [")
 					.append(themeLogoURL).append("]").toString());
 			try {
 				java.net.URL url = servletCtx.getResource(themeLogoURL);
-				LOG.debug((new StringBuilder())
+				LOG.debug((new StringBuilder(256))
 						.append("URL from servletContext=").append(url)
 						.toString());
 				if (url != null) {
-					LOG.debug((new StringBuilder())
+					LOG.debug((new StringBuilder(256))
 							.append("Using theme based LogoURL [").append(url)
 							.append("]").toString());
-					logo = (new StringBuilder()).append(baseLogoURL)
+					logo = (new StringBuilder(256)).append(baseLogoURL)
 							.append("/logo-").append(theme).append(".gif")
 							.toString();
 				}
@@ -116,7 +116,7 @@ public class XPEDXPreviewLogoHeaderAction extends WCAction implements
 				e.printStackTrace();
 			}
 		}
-		LOG.debug((new StringBuilder()).append("Logo URL =[").append(logo)
+		LOG.debug((new StringBuilder(256)).append("Logo URL =[").append(logo)
 				.append("]").toString());
 		setLogoURL(logo);
 		wcContext.setWCAttribute("SF_THEME_LOGO", logo,

@@ -35,6 +35,9 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
  <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+ <!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -1082,7 +1085,7 @@ from session . We have customer Contact Object in session .
 			
 			<table id="checkout-table-header">
 
-			<td class="center white text-right table-header-bar-left"> My Price (<s:property value='#currencyCode'/>) </td>
+			<td class="center white text-right table-header-bar-left"> Price (<s:property value='#currencyCode'/>) </td>
 			<td class="center white text-right pricing-border table-header-bar-right" style="width:143px;"> Extended Price (<s:property value='#currencyCode'/>)&nbsp;</td>
 
 			</tr>
@@ -1982,5 +1985,6 @@ from session . We have customer Contact Object in session .
 <!-- Footer Start --> 
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" /> 
 <!-- Footer End --> 
+
 </body>
 </html>

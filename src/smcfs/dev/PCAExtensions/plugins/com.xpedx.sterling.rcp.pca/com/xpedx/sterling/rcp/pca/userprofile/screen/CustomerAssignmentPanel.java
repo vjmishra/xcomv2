@@ -44,6 +44,8 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 	public Object inputObject;
 
 	private Button btnUpdate;
+	private Button btnAuthLocations;
+	private Button btnExportAuthLocations;
 	
 	private Button btnCancel;
 	Tree tree=null;
@@ -310,14 +312,38 @@ public class CustomerAssignmentPanel extends Composite implements IYRCComposite 
 		gridData2.grabExcessHorizontalSpace = true;
 		gridData2.verticalAlignment = SWT.BEGINNING;
 		GridLayout gridLayout2 = new GridLayout();
-		gridLayout2.numColumns = 2;
+		gridLayout2.numColumns = 4;
 		
 		compositeMiscPnl = new Composite(pnlProfileInfo, 0);
 		compositeMiscPnl.setLayoutData(gridData2);
 		compositeMiscPnl.setLayout(gridLayout2);
 		compositeMiscPnl.setData("yrc:customType", "TaskComposite");
 		compositeMiscPnl.setData("name", "compositeMiscPnl");
+		
+		GridData gridData6 = new GridData();
+		gridData6.heightHint = 25;
+		gridData6.widthHint = 145;
 
+		btnAuthLocations = new Button(compositeMiscPnl, 0);
+		btnAuthLocations.setText("Authorized Locations");
+		btnAuthLocations.setLayoutData(gridData6);
+		btnAuthLocations.setData("name", "btnAuthLocations");
+		setTheme(btnAuthLocations, "Button");
+		btnAuthLocations.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				myBehavior.showAuthLocations();
+			}
+		});
+		btnExportAuthLocations = new Button(compositeMiscPnl, 0);
+		btnExportAuthLocations.setText("Export Authorized Locations");
+		btnExportAuthLocations.setLayoutData(gridData6);
+		btnExportAuthLocations.setData("name", "btnExportAuthLocations");
+		setTheme(btnExportAuthLocations, "Button");
+		btnExportAuthLocations.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e)  {
+				myBehavior.exportAuthLocations();
+			}
+		});
 		btnUpdate = new Button(compositeMiscPnl, 0);
 		btnUpdate.setText("Update_Customer_Assignment");
 		btnUpdate.setLayoutData(gridData5);

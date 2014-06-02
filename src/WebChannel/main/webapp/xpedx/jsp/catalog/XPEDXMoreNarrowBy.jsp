@@ -59,10 +59,13 @@
 							<s:param name="marketingGroupId" value='#parameters.marketingGroupId'/>
 						</s:url>
 						
-						<li class="roll close"><s:a href="%{narrowURL}"
-							tabindex="%{#count1}">
-							<s:property value='#factVal.getAttribute("Value")' />
-						</s:a> </li>
+						<s:set name='facetCount' value='#factVal.getAttribute("Count")' />
+						<li class="roll close">
+							<s:a href="%{narrowURL}" tabindex="%{#count1}">
+								<s:property value='#factVal.getAttribute("Value")' />
+							</s:a>
+							<span>(<s:property value='#util.formatNumber(#facetCount)' />)</span>
+						</li>
 				</s:iterator>
 			</ul>
 	</s:iterator>
