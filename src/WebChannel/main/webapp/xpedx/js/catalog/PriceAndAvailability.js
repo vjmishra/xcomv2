@@ -293,7 +293,7 @@ function calculateAvailability(warehouseLocationList) {
 	qtys['1'] += qtys['0'];
 	
 	// workaround for inexactness of JavaScript floating point math - we must explicitly round after adding
-	for (var i = 0, len = qtys.length; i < len; i++) {
+	for (var i in qtys) {
 		qtys[i] = parseFloat(qtys[i].toFixed(5));
 	}
 	
