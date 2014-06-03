@@ -39,14 +39,36 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	$("#printButton").click(function () {
-		$('.specs-item').show();
-		$('.specs-size').show();
-		$('.specs-packing').show();
-		$('.specs-enviro').show();
+		$('.specs-tab').show();
 		// Print the page
 		window.print();
 		// After printing hide back all the tab panel contents which are supposed to be hidden
 		$('.specs-packing[aria-hidden=true]').hide();
+	});
+});
+
+$(document).ready(function () {
+	// item spec expand/collapse buttons
+	$("#expandAll").click(function () {
+		$('.specs-tab').slideDown("fast");
+		$('.specs-tab-plus').css('background-position', 'bottom left');
+	});
+
+	$("#collapseAll").click(function () {
+		$('.specs-tab').slideUp("fast");
+		$('.specs-tab-plus').css('background-position', 'top left');
+	});
+
+	$('.specs-trigger').click(function() {
+		$(this).next('.specs-tab').slideToggle(400, function() {
+			var $tab = $(this);
+			var $plus = $tab.prev('.specs-trigger').find('.specs-tab-plus');
+			if ($tab.is(':visible')) {
+				$plus.css('background-position', 'bottom left');
+			} else {
+				$plus.css('background-position', 'top left');
+			}
+		});
 	});
 });
 
@@ -57,18 +79,18 @@ $(document).ready(function() {
 		var requestedUom = $('#selectedUOM').val();
 		var baseUom = $('#unitOfMeasure').val();
 		defaultUOM = $('#selectedUOM').val();
-		
+
 		getPriceAndAvailabilityForItems({modal:false, items:[$('#itemID').val()], success:successCallback_PriceAndAvailability});
 	}
 });
 
 function successCallback_PriceAndAvailability(data) {
 	var html = [];
-	
+
 	var listPriceUnits = $('[id^=listPriceUnit_]');
 	var listPriceCosts = $('[id^=listPriceCost_]');
 	if (listPriceUnits.length > 0) {
-		
+
 		html.push('		<div class="list-price addpadbottom10">');
 		html.push('			<h4>List Price</h4>');
 		html.push('			<div class="list-wrap">');
@@ -83,10 +105,10 @@ function successCallback_PriceAndAvailability(data) {
 		html.push('			</div>'); // end list-wrap
 		html.push('		</div>'); // end list-price
 	}
-	
+
 	if ($('#isSalesRep').val() == 'true') {
 		var item = data.priceAndAvailability.items[0];
-		
+
 		html.push('		<div class="list-price addpadbottom10">');
 		html.push('			<h4>');
 		html.push('				Cost (' , item.costCurrencyCode, ')');
@@ -108,7 +130,7 @@ function successCallback_PriceAndAvailability(data) {
 		html.push('			</div>');
 		html.push('		</div>'); // list-price
 	}
-	
+
 	if (html.length > 0) {
 		var itemId = $('#itemID').val();
 		$('#availabilty_' + itemId).append(html.join(''));
@@ -124,24 +146,24 @@ function updateUOMFields() {
 
 function addItemToCart() {
 	var itemId = $('#itemID').val();
-	
+
 	showProcessingIcon();
 	var Qty = $('#Qty_' + itemId).val();
 	//Quantity validation
 	if(Qty =='' || Qty=='0')
 	{
 		$('#Qty_' + itemId).css('border-color', '#ff0000').focus();
-		
+
 		var errorMsgForQty = $('#errorMsgForQty_' + itemId).get(0);
 		errorMsgForQty.innerHTML  = "Please enter a valid quantity and try again.";
-  		errorMsgForQty.style.display = "inline-block"; 
-  		errorMsgForQty.setAttribute("class", "error pnaOrderMultipleMessage");
+		errorMsgForQty.style.display = "inline-block"; 
+		errorMsgForQty.setAttribute("class", "error pnaOrderMultipleMessage");
 		document.getElementById("Qty_Check_Flag").value = true;
 		hideProcessingIcon();
-	    return;
+		return;
 	}
 	var validationSuccess = validateOrderMultiple();
-	
+
 	document.getElementById("Qty_Check_Flag").value = false;
 
 	if(validationSuccess){
@@ -152,7 +174,7 @@ function addItemToCart() {
 		if(document.getElementById("Customer")!=null) {
 			var customer=document.getElementById("Customer").value;
 		}
-		
+
 		var customerPO = "";
 		if(document.getElementById("customerPONo") != null && document.getElementById("customerPONo") != undefined) {
 			customerPO=document.getElementById("customerPONo").value; 
@@ -186,7 +208,7 @@ function listAddToCartItem(url, productID, UOM, quantity, Job, customer, custome
 				hideProcessingIcon();
 				return;
 			}
-			
+
 			var draftErr = response.responseText;
 			var myMessageDiv = document.getElementById("errorMsgForQty_" + itemId);
 			var draftErrDiv = document.getElementById("errorMessageDiv");
@@ -222,7 +244,7 @@ function listAddToCartItem(url, productID, UOM, quantity, Job, customer, custome
 				myMessageDiv.innerHTML = enteredQty + " " + selectedUomText + " has been added to your cart. Please review the cart to update the item with a valid quantity."; //"Item has been added to your cart. Please review the cart to update the item with a valid quantity." ;//add for EB 40
 				myMessageDiv.setAttribute("class", "error pnaOrderMultipleMessage");
 				myMessageDiv.style.display = "inline-block";
-				
+
 				document.getElementById("Qty_" + itemId).value = "";
 				var UOMelement = document.getElementById("itemUomList_" + itemId);
 				if (UOMelement != "" && UOMelement != null && defaultUOM != "") {
@@ -237,7 +259,7 @@ function listAddToCartItem(url, productID, UOM, quantity, Job, customer, custome
 				var tag = "";
 				var content = "";
 				var itemType = document.getElementById("pritemType");
-				
+
 				if (itemType != null && itemType != undefined && itemType.value != '') {
 
 					if (itemType = 'R') {
@@ -256,7 +278,7 @@ function listAddToCartItem(url, productID, UOM, quantity, Job, customer, custome
 					content = "ShoppingCart," + selCart + ",2,1";
 					writeMetaTag(tag, content, 4);
 				}
-				
+
 				refreshMiniCartLink();
 				if (document.getElementById('isEditOrder') != null && document.getElementById('isEditOrder').value != null && document.getElementById('isEditOrder').value != '') {
 					myMessageDiv.innerHTML = "Item has been added to order.";
@@ -389,7 +411,7 @@ function showPrivateList(){
 function getMyItemsList(divId) {
 	//Init vars
 	var url = $('#getMyItemsListURL').val() + '&ShareList=ShareList';
-	
+
 	document.getElementById(divId).innerHTML = "Loading data... please wait!";
 
 	//Execute the call
@@ -436,7 +458,7 @@ function addItemsToList() {
 	//if idx is not set, no list is selected
 	if (idx != null) {
 		showProcessingIcon();
-		
+
 		var quantityValue = Ext.util.Format.trim(Ext.get("Qty_" + itemId).dom.value);
 
 		document.OrderDetailsForm.orderLineItemNames.value = unescape(document.OrderDetailsForm.orderLineItemNames.value);
@@ -553,7 +575,7 @@ function submitNewlistAddItem(xForm) {
 
 	//Init vars
 	var url = $('#myItemsDetailsChangeShareListURL').val();
-	
+
 	document.body.style.cursor = 'wait';
 
 	addItemToListnew(form);
@@ -585,7 +607,7 @@ function submitNewlistAddItem(xForm) {
 
 function addItemToListnew(form){
 	var itemId = $('#itemID').val();
-	
+
 	var idx = currentAadd2ItemListIndex;
 
 	var quantityValue = Ext.util.Format.trim(Ext.get('Qty_' + itemId).dom.value);	    			

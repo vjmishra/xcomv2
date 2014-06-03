@@ -2205,7 +2205,8 @@ table#prod-details-tbl  {
 .detail-view .replacement-item span{
 	color:#000000;
 }
-/*	*****TOGGLE STYLES******/
+
+/******ITEM DETAIL SPEC TOGGLE STYLES******/
 
 .specs-wrap {
 	float: right;
@@ -2214,7 +2215,7 @@ table#prod-details-tbl  {
 	height: auto;
 	overflow: hidden;
 }
-.specs-trigger, .specs-trigger2, .specs-trigger3, .specs-trigger4{
+#specs-trigger1, #specs-trigger2, #specs-trigger3, #specs-trigger4{
 	width: 290px;
 	height: 25px;
 	border-top: #cccccc 1px solid;
@@ -2226,29 +2227,29 @@ table#prod-details-tbl  {
 	font-weight: bold;
 	text-transform: uppercase;
 }
-.specs-trigger p, .specs-trigger2 p, .specs-trigger3 p, .specs-trigger4 p{
+#specs-trigger1 p, #specs-trigger2 p, #specs-trigger3 p, #specs-trigger4 p{
 	float: left;
 	clear: none;
 	margin-left: 10px;
 }
-.specs-trigger4 {
+#specs-trigger4 {
 	border-bottom: #cccccc 1px solid;
 }
 	
-.specs-trigger:hover, .specs-trigger2:hover, .specs-trigger3:hover, .specs-trigger4:hover {
+#specs-trigger1:hover, #specs-trigger2:hover, #specs-trigger3:hover, #specs-trigger4:hover {
 	cursor: pointer;
 }
-	
-	
-	
-.item-specs-plus, .size-specs-plus, .packing-specs-plus, .enviro-specs-plus{
+
+
+
+.specs-tab-plus {
 	float: left;
 	clear: none;
 	width: 16px;
 	height: 16px;
-	background: url(../plus-minus.png) no-repeat;
+	background: url(../../images/catalog/plus-minus.png) no-repeat;
 }
-div.specs-item, div.specs-size, div.specs-packing, div.specs-enviro {
+div.specs-tab {
 	width: 270px;
 	padding: 10px;
 	background-color: #f5f5f5;

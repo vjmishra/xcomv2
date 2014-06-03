@@ -26,7 +26,8 @@
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 	<!--[if IE]>
-	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	
 	<title><s:property value="wCContext.storefrontId" /> - <s:property value="wCContext.storefrontId" /> Product Details</title>
@@ -178,9 +179,30 @@
 					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
 				</div>
 				<div class="clearfix"></div>
+				
 				<div class="specs-wrap">
-					<%-- TODO Item specifications --%>
-				</div>
+					<div class="expand-links">
+						<a href="javascript:void(0)" id="expandAll" class="expand">Expand All</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" id="collapseAll" class="collapse">Collapse All</a>
+					</div>
+					
+					<s:iterator value="%{#_action.getSpecificationGroups()}" id="specGroup" status="specGroupStatus">
+						<s:div id="%{'specs-trigger' + #specGroupStatus.count}" cssClass="specs-trigger">
+							<div class="specs-tab-plus"></div>
+							<p><s:property value="%{#specGroup.name}" /></p>
+						</s:div>
+						<div style="display: none;" class="specs-tab">
+							<ul>
+								<s:iterator value="%{#specGroup.specifications}" id="spec" status="specStatus">
+									<li>
+										<div class="chart-spec"><s:property value="#spec.description" /></div>
+										<div class="chart-details"><s:property value="#spec.value" /></div>
+									</li>
+								</s:iterator>
+							</ul>
+						</div>
+					</s:iterator>
+				</div> <%-- / specs-wrap --%>
+				
 				<div class="image-order-container">
 					<div class="detail-image-wrap">
 						<ul id="prodlist">

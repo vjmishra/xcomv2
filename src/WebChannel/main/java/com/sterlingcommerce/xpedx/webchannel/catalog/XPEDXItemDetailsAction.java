@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.catalog;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -38,6 +39,8 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemListPrice;
+import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemSpecification;
+import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemSpecificationGroup;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
@@ -152,7 +155,73 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			log.error("Failed to get list price information", e);
 		}
 
+		try {
+			specificationGroups = createSpecGroups();
+		} catch (Exception e) {
+			log.error("Failed to get item specifications", e);
+		}
+
 		return returnVal;
+	}
+
+	private List<ItemSpecificationGroup> createSpecGroups() throws Exception {
+		List<ItemSpecificationGroup> groups = new ArrayList<ItemSpecificationGroup>(4);
+		groups.add(ItemSpecificationGroup.create("Item Specs"));
+		groups.add(ItemSpecificationGroup.create("Size"));
+		groups.add(ItemSpecificationGroup.create("Packing Sites"));
+		groups.add(ItemSpecificationGroup.create("Enviro Specs"));
+
+		Element itemElem = XMLUtilities.getElement(m_itemListElem, "Item");
+		log.debug("itemElem:\n" + SCXmlUtil.getString(itemElem));
+
+		// TODO first element in 1st group is item description
+		groups.get(0).addItemSpecification(ItemSpecification.create("Product Description", itemElem.getAttribute("ShortDescription")));
+
+		Element itemAttributeGroupTypeListElem = SCXmlUtil.getChildElement(itemElem,"ItemAttributeGroupTypeList");
+		List<Element> itemAttributeGroupTypeElems = SCXmlUtil.getChildren(itemAttributeGroupTypeListElem, "ItemAttributeGroupType");
+		for (Element itemAttributeGroupTypeElem : itemAttributeGroupTypeElems) {
+			if ("SPECIFICATION".equals(itemAttributeGroupTypeElem.getAttribute("ClassificationPurposeCode"))) {
+				log.debug("itemAttributeGroupTypeElem:\n" + SCXmlUtil.getString(itemAttributeGroupTypeElem));
+
+				Element itemAttributeGroupListElem = SCXmlUtil.getChildElement(itemAttributeGroupTypeElem, "ItemAttributeGroupList");
+
+				List<Element> itemAttributeGroupElems = SCXmlUtil.getChildrenList(itemAttributeGroupListElem);
+				for (Element itemAttributeGroupElem : itemAttributeGroupElems) {
+					Element itemAttributeListElem = SCXmlUtil.getChildElement(itemAttributeGroupElem, "ItemAttributeList");
+
+					List<Element> itemAttributeElems = SCXmlUtil.getChildrenList(itemAttributeListElem);
+					for (Element itemAttributeElem : itemAttributeElems) {
+						String key = itemAttributeElem.getAttribute("ItemAttributeKey");
+						String sequenceStr = itemAttributeElem.getAttribute("SequenceNo");
+						String description = itemAttributeElem.getAttribute("ItemAttributeDescription");
+						String value = itemAttributeElem.getAttribute("Value");
+
+						int sequence;
+						try {
+							sequence = Integer.valueOf(sequenceStr);
+						} catch (Exception ignore) {
+							sequence = Integer.MAX_VALUE;
+						}
+
+						// old code did this, which seems equivalent, but more difficult to read
+//						Element assignedValueListElem = SCXmlUtil.getChildElement(itemAttributeElem, "AssignedValueList");
+//						String value = assignedValueListElem.getAttribute("Value");
+
+						if (value != null && value.trim().length() > 0) {
+							// TODO use mapping to put into the appropriate group
+							groups.get(0).addItemSpecification(ItemSpecification.create(description, value, sequence));
+						}
+					}
+				}
+			}
+		}
+
+		// sort each group
+		for (ItemSpecificationGroup group : groups) {
+			Collections.sort(group.getSpecifications(), ItemSpecification.COMPARATOR_SEQUENCE);
+		}
+
+		return groups;
 	}
 
 	private List<ItemListPrice> getPricelistLine() throws Exception {
@@ -2632,6 +2701,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	public List<ItemListPrice> getListPrices() {
 		return listPrices;
+	}
+
+	private List<ItemSpecificationGroup> specificationGroups = new LinkedList<ItemSpecificationGroup>();
+
+	public List<ItemSpecificationGroup> getSpecificationGroups() {
+		return specificationGroups;
 	}
 
 }
