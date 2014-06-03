@@ -256,7 +256,14 @@
 						<p><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
 						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
 							<div class="addpadtop20 addpadright20">
-								<h4>Price and availability are available to registered customers only. Please contact us at 1-888-973-3976 to learn more.</h4>
+								<h4>Price and availability are available to registered customers only. Please contact us at
+								<s:if test="%{wCContext.storefrontId == 'Saalfeld'}">
+									1-877-372-2533
+								</s:if>
+								<s:else>
+									1-888-973-3976
+								</s:else>
+								to learn more.</h4>
 							</div>
 						</s:if>
 						<s:else>
