@@ -58,8 +58,13 @@
 	<s:hidden id="isSalesRep" value="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP') ? 'true' : 'false'}" />
 	<s:hidden id="goBackFlag" value="%{#_action.getGoBackFlag()}" />
 	<s:hidden id="backPageUrl" value="%{#session.itemDtlBackPageURL.substring(#session.itemDtlBackPageURL.indexOf('/swc'))}" />
-	<s:hidden id="currentCartInContextOHK" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache('OrderHeaderInContext')" />
+	<s:hidden id="currentCartInContextOHK" value="%{@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache('OrderHeaderInContext')}" />
 	<s:hidden id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
+	
+	<s:iterator value="%{#_action.getListPrices()}" id="lp" status="lpStatus">
+		<s:hidden id="%{'listPriceUnit_' + #lpStatus.count}" value="%{#lp.unit}" />
+		<s:hidden id="%{'listPriceCost_' + #lpStatus.count}" value="%{#lp.cost}" />
+	</s:iterator>
 	
 	<s:url id='getMyItemsListURLid' includeParams="none" namespace="/myItems" action='MyItemsList'/>
 	<s:hidden id="getMyItemsListURL" value="%{#getMyItemsListURLid}" />

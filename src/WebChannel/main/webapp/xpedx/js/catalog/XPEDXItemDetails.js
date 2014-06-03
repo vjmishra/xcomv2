@@ -63,10 +63,30 @@ $(document).ready(function() {
 });
 
 function successCallback_PriceAndAvailability(data) {
+	var html = [];
+	
+	var listPriceUnits = $('[id^=listPriceUnit_]');
+	var listPriceCosts = $('[id^=listPriceCost_]');
+	if (listPriceUnits.length > 0) {
+		
+		html.push('		<div class="list-price addpadbottom10">');
+		html.push('			<h4>List Price</h4>');
+		html.push('			<div class="list-wrap">');
+		for (var i = 0, len = listPriceUnits.length; i < len; i++) {
+			var unit = listPriceUnits[i].value;
+			var cost = listPriceCosts[i].value;
+			html.push('			<div class="pa-row">');
+			html.push('				<div class="col-1">', unit, ':</div>');
+			html.push('				<div class="col-2">', cost, '</div>');
+			html.push('			</div>');
+		}
+		html.push('			</div>'); // end list-wrap
+		html.push('		</div>'); // end list-price
+	}
+	
 	if ($('#isSalesRep').val() == 'true') {
 		var item = data.priceAndAvailability.items[0];
 		
-		var html = [];
 		html.push('		<div class="list-price addpadbottom10">');
 		html.push('			<h4>');
 		html.push('				Cost (' , item.costCurrencyCode, ')');
@@ -87,7 +107,9 @@ function successCallback_PriceAndAvailability(data) {
 		html.push('				</div>');
 		html.push('			</div>');
 		html.push('		</div>'); // list-price
+	}
 	
+	if (html.length > 0) {
 		var itemId = $('#itemID').val();
 		$('#availabilty_' + itemId).append(html.join(''));
 	}

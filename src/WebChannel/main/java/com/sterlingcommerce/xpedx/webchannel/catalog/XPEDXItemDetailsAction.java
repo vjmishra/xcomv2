@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,26 +35,30 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCConstants;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
+import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemListPrice;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXItem;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceAndAvailability;
 import com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil;
 import com.yantra.interop.japi.YIFClientCreationException;
+import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.japi.YFSException;
 
 public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 4415525560179441485L;
+
+	private static final Logger log = Logger.getLogger(XPEDXItemDetailsAction.class);
 
 	@Override
 	public String execute() {
@@ -141,7 +146,165 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		combinedAlternateItems = combine(upSellAssociatedItems, upgradeAssociatedItems, alternateAssociatedItems);
 		combinedCrosssellItems = combine(crossSellAssociatedItems, complimentAssociatedItems);
 
+		try {
+			listPrices = getPricelistLine();
+		} catch (Exception e) {
+			log.error("Failed to get list price information", e);
+		}
+
 		return returnVal;
+	}
+
+	private List<ItemListPrice> getPricelistLine() throws Exception {
+		List<ItemListPrice> retval = new LinkedList<ItemListPrice>();
+
+		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+
+		if (shipToCustomer == null) {
+			XPEDXWCUtils.setCustomerObjectInCache(XPEDXWCUtils.getCustomerDetails(wcContext.getCustomerId(), wcContext.getStorefrontId()).getDocumentElement());
+			shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		}
+
+		// most of this was copied from XPEDXCatalogAction
+		// the API's implementation relies on ComplexQuery tags, so we must use them even though we're only fetching a single item
+		if (shipToCustomer != null) {
+			String envCode = shipToCustomer.getExtnEnvironmentCode();
+			String legacyCustomerNumber = shipToCustomer
+					.getExtnLegacyCustNumber();
+			//String custDivision = shipToCustomer.getExtnShipFromBranch();
+			String custDivision = shipToCustomer.getExtnCustomerDivision();
+			HashMap<String, String> valueMap = new HashMap<String, String>();
+			valueMap.put("/XPXItemcustXref/@EnvironmentCode", envCode);
+			valueMap.put("/XPXItemcustXref/@CustomerNumber", legacyCustomerNumber);
+			// valueMap.put("/XPXItemcustXref/@LegacyItemNumber", itemId);
+			// Filled using Complex Query
+			valueMap.put("/XPXItemcustXref/@CustomerDivision", custDivision);
+
+			Element xrefInput = xrefInput = WCMashupHelper.getMashupInput("XPEDXMyItemsListGetCustomersPart", valueMap, wcContext.getSCUIContext());
+			Element complexQuery = xrefInput.getOwnerDocument().createElement("ComplexQuery");
+			xrefInput.appendChild(complexQuery);
+			Element Or = xrefInput.getOwnerDocument().createElement("Or");
+			complexQuery.appendChild(Or);
+
+			String customerId = wcContext.getCustomerId();
+			Map<String, String> valueMaps = new HashMap<String, String>();
+			valueMaps.put("/PricelistAssignment//@CustomerID", customerId);
+			valueMaps.put("/PricelistAssignment//@ExtnPriceWareHouse", shipToCustomer.getExtnPriceWareHouse());
+			valueMaps.put("/PricelistAssignment/PricelistLine/Item/@OrganizationCode", wcContext.getStorefrontId());
+			Element pricLlistAssignmentInput = WCMashupHelper.getMashupInput("xpedxYpmPriceLinelistAssignmentList", valueMaps, getWCContext().getSCUIContext());
+			Document pricLlistAssignmentInputDoc = pricLlistAssignmentInput.getOwnerDocument();
+			NodeList pricLlistAssignmentInputNodeList = pricLlistAssignmentInput.getElementsByTagName("Or");
+			Element pricLlistAssignmentInputElemt = (Element) pricLlistAssignmentInputNodeList.item(0);
+			Element xpxCatalogAllAPIServiceInputElem = WCMashupHelper.getMashupInput("xpedxgetAllAPI", wcContext.getSCUIContext());
+
+			YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+			YFCElement documentElement = inputDocument.getDocumentElement();
+
+			documentElement.setAttribute("CustomerID", customerId);
+
+			// workaround for eb-2035: hard-code 'xpedx' storefrontId here due to brand-specific records in the yfs_item_uom_master table
+			// this avoids duplicating UOMs per brand in the Sterling configuration, which is not desired as of August 2013
+			documentElement.setAttribute("OrganizationCode", "xpedx");
+
+			YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+			YFCElement complexQueryOrElement = documentElement.createChild("Or");
+
+			complexQueryElement.setAttribute("Operator", "AND");
+			complexQueryElement.appendChild(complexQueryOrElement);
+			Element customerDetails = SCXmlUtil.createChild(inputDocument.getDocument().getDocumentElement(), "CustomerDetails");
+			customerDetails.setAttribute("ExtnEnvironmentCode", shipToCustomer.getExtnEnvironmentCode());
+			customerDetails.setAttribute("ExtnShipFromBranch", shipToCustomer.getExtnShipFromBranch());
+			customerDetails.setAttribute("ExtnCustomerDivision", shipToCustomer.getExtnCustomerDivision());
+			customerDetails.setAttribute("ExtnUseOrderMulUOMFlag", shipToCustomer.getExtnUseOrderMulUOMFlag());
+
+			valueMap = new HashMap<String, String>();
+			valueMap.put("/XPXItemExtn/@XPXDivision", shipToCustomer.getExtnShipFromBranch());
+			valueMap.put("/XPXItemExtn/@EnvironmentID", envCode);
+
+			Element xpxItemExtninputElem = WCMashupHelper.getMashupInput("xpedxXPXItemExtnList", valueMap, wcContext.getSCUIContext());
+
+			Document inputDoc = xpxItemExtninputElem.getOwnerDocument();
+			NodeList inputNodeList = inputDoc.getElementsByTagName("Or");
+			Element inputNodeListElemt = (Element) inputNodeList.item(0);
+
+			// Complex query for XPXItemExtn input xml
+			Element expElement = SCXmlUtil.createChild(inputNodeListElemt, "Exp");
+			expElement.setAttribute("Name", "ItemID");
+			expElement.setAttribute("Value", getItemID());
+
+			// Complex query for itemXef input xml
+			Element exp1Element = xrefInput.getOwnerDocument().createElement("Exp");
+			exp1Element.setAttribute("Name", "LegacyItemNumber");
+			exp1Element.setAttribute("QryType", "EQ");
+			exp1Element.setAttribute("Value", getItemID());
+			SCXmlUtil.importElement(Or, exp1Element);
+
+			// Complex query for PriceLineList input xml
+			Document expDoc = YFCDocument.createDocument("Exp").getDocument();
+			Element exp2Element = expDoc.getDocumentElement();
+			exp2Element.setAttribute("Name", "ItemID");
+			exp2Element.setAttribute("Value", getItemID());
+			pricLlistAssignmentInputElemt.appendChild(pricLlistAssignmentInputDoc.importNode(exp2Element, true));
+
+			// UOMList input XML
+			YFCElement exp3Element = documentElement.createChild("Exp");
+			exp3Element.setAttribute("Name", "ItemID");
+			exp3Element.setAttribute("Value", getItemID());
+			complexQueryOrElement.appendChild((YFCNode) exp3Element);
+
+			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(xrefInput, true));
+			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(pricLlistAssignmentInput, true));
+			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(xpxItemExtninputElem, true));
+			xpxCatalogAllAPIServiceInputElem.appendChild(xpxCatalogAllAPIServiceInputElem.getOwnerDocument().importNode(inputDocument.getDocument().getDocumentElement(), true));
+
+			Element xpxCatalogAllAPIServiceOutputElem = (Element) WCMashupHelper.invokeMashup("xpedxgetAllAPI", xpxCatalogAllAPIServiceInputElem, wcContext.getSCUIContext());
+
+			Element pricelistLineListElem = SCXmlUtil.getChildElement(xpxCatalogAllAPIServiceOutputElem, "PricelistLineList");
+			if (pricelistLineListElem != null) {
+				List<Element> pricelistLineElems = SCXmlUtil.getChildren(pricelistLineListElem, "PricelistLine");
+				if (pricelistLineElems != null) {
+					XPEDXUtilBean utilBean = new XPEDXUtilBean();
+					for (Element pricelistLineElem : pricelistLineElems) {
+						Element extnElem = SCXmlUtil.getChildElement(pricelistLineElem, "Extn");
+
+						String listPrice = pricelistLineElem.getAttribute("ListPrice");
+
+						String fromQty = pricelistLineElem.getAttribute("FromQuantity");
+						if (fromQty == null || fromQty.trim().length() == 0 || fromQty.trim().equals("null")) {
+							fromQty = "1";
+						} else {
+							fromQty = String.valueOf(Math.round(Double.parseDouble(fromQty)));
+						}
+
+						String tierUom = extnElem.getAttribute("ExtnTierUom");
+						tierUom = tierUom.substring(2); // remove leading M_
+
+						ItemListPrice ilp = new ItemListPrice();
+						ilp.setUnit(fromQty + " " + tierUom);
+						ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, listPrice));
+						retval.add(ilp);
+					}
+				}
+			}
+		}
+
+		if (retval.isEmpty()) {
+			// fallback to computed price
+			Element itemElem = XMLUtilities.getElement(m_itemListElem, "Item");
+			Element computedPriceElem = XMLUtilities.getElement(itemElem, "ComputedPrice");
+			if (computedPriceElem != null) {
+				XPEDXUtilBean utilBean = new XPEDXUtilBean();
+				String computedUnitPrice = computedPriceElem.getAttribute("UnitPrice");
+				if (computedUnitPrice != null) {
+					ItemListPrice ilp = new ItemListPrice();
+					ilp.setUnit("1 " + unitOfMeasure.substring(2));
+					ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, computedUnitPrice));
+					retval.add(ilp);
+				}
+			}
+		}
+
+		return retval;
 	}
 
 	private static List combine(List... lists) {
@@ -1152,7 +1315,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		prepareXpedxItemAssociationMap();
 	}
 
-	protected void prepareXpedxItemAssociationMap() throws XPathExpressionException{
+	protected void prepareXpedxItemAssociationMap() throws Exception{
 		String custID = wcContext.getCustomerId();
 		Document itemAssociationDoc = null;
 		ArrayList<String> itemList = new ArrayList<String>();
@@ -1186,9 +1349,20 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		Element itemElement = (Element)nItemList.item(0);
 		String itemID = SCXmlUtil.getAttribute(itemElement, "ItemID");
 		LOG.debug("Preparing national level association for item Id "+itemID);
-		Element associationTypeListElem = null;
-		associationTypeListElem = XMLUtilities.getElement(itemElement, "AssociationTypeList");
 
+//		Element computedPriceElem = XMLUtilities.getElement(itemElement, "ComputedPrice");
+//		if (computedPriceElem != null) {
+//			XPEDXUtilBean utilBean = new XPEDXUtilBean();
+//			String computedUnitPrice = computedPriceElem.getAttribute("UnitPrice");
+//			if (computedUnitPrice != null) {
+//				ItemListPrice ilp = new ItemListPrice();
+//				ilp.setUnit(unitOfMeasure.substring(2));
+//				ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, computedUnitPrice));
+//				listPrices.add(ilp);
+//			}
+//		}
+
+		Element associationTypeListElem = XMLUtilities.getElement(itemElement, "AssociationTypeList");
 		if (associationTypeListElem != null) {
 			List<Element> crossSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='CrossSell']");
 			List<Element> upSellElements = XMLUtilities.getElements(associationTypeListElem,"AssociationType[@Type='UpSell']");
@@ -2452,6 +2626,12 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 	public void setQtyTextBox(String qtyTextBox) {
 		this.qtyTextBox = qtyTextBox;
+	}
+
+	private List<ItemListPrice> listPrices = new LinkedList<ItemListPrice>();
+
+	public List<ItemListPrice> getListPrices() {
+		return listPrices;
 	}
 
 }
