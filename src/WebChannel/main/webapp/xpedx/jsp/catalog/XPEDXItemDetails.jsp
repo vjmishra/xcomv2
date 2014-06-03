@@ -186,20 +186,22 @@
 					</div>
 					
 					<s:iterator value="%{#_action.getSpecificationGroups()}" id="specGroup" status="specGroupStatus">
-						<s:div id="%{'specs-trigger' + #specGroupStatus.count}" cssClass="specs-trigger">
-							<div class="specs-tab-plus"></div>
-							<p><s:property value="%{#specGroup.name}" /></p>
-						</s:div>
-						<div style="display: none;" class="specs-tab">
-							<ul>
-								<s:iterator value="%{#specGroup.specifications}" id="spec" status="specStatus">
-									<li>
-										<div class="chart-spec"><s:property value="#spec.description" /></div>
-										<div class="chart-details"><s:property value="#spec.value" /></div>
-									</li>
-								</s:iterator>
-							</ul>
-						</div>
+						<s:if test="%{#specGroup.specifications.size() > 0}">
+							<s:div id="%{'specs-trigger' + #specGroupStatus.count}" cssClass="specs-trigger">
+								<div class="specs-tab-plus"></div>
+								<p><s:property value="%{#specGroup.name}" /></p>
+							</s:div>
+							<div style="display: none;" class="specs-tab">
+								<ul>
+									<s:iterator value="%{#specGroup.specifications}" id="spec" status="specStatus">
+										<li>
+											<div class="chart-spec"><s:property value="#spec.description" /></div>
+											<div class="chart-details"><s:property value="#spec.value" /></div>
+										</li>
+									</s:iterator>
+								</ul>
+							</div>
+						</s:if>
 					</s:iterator>
 				</div> <%-- / specs-wrap --%>
 				
