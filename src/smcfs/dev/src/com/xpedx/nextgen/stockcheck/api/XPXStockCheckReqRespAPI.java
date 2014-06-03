@@ -1,6 +1,8 @@
 package com.xpedx.nextgen.stockcheck.api;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.w3c.dom.DOMException;
@@ -25,23 +27,25 @@ import com.yantra.yfs.japi.YFSUserExitException;
 
 public class XPXStockCheckReqRespAPI implements YIFCustomApi
 {
+	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml"; //TODO doesn't exist? Need?
+	private static final String getCategoryListTemplate = "global/template/api/getCategoryList.XPXStockCheck.xml";
+	private static final String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
+	private static final String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
+
+	private static final String errorMessage_503 = "503 - An application error has occurred. If this error persists, please call the eBusiness " +
+			"Customer Support desk at 1-877-269-1784.";
+	private static final String errorMessage_105 = "105 – The stock check request is not in the correct format.  " +
+			"Please contact your CSR or eBusiness Customer Support at 1- 877-269-1784.";
+	private static final String errorMessage_104 = "104 – Please restrict your Stock Check request to 200 items or less.";
+	private static final String errorMessage_100 = "100 - Sorry, we could not verify the User ID / Password that was sent.";
+	private static final String errorMessage_101 = "101 - Sorry, the user credentials supplied is not authorized to access the Stock Check Web Service.";
+	private static final String errorMessage_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
 
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
+	private static Map<String,String> uomDescMap;
 
 	private final String B2BSourceIndicator = "1";
-
-	String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml"; //TODO doesn't exist? Need?
-	String getCategoryListTemplate = "global/template/api/getCategoryList.XPXStockCheck.xml";
-	String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
-	String errorMessage_503 = "503 - An application error has occurred. If this error persists, please call the eBusiness " +
-			"Customer Support desk at 1-877-269-1784.";
-	String errorMessage_105 = "105 – The stock check request is not in the correct format.  " +
-			"Please contact your CSR or eBusiness Customer Support at 1- 877-269-1784.";
-	String errorMessage_104 = "104 – Please restrict your Stock Check request to 200 items or less.";
-	String errorMessage_100 = "100 - Sorry, we could not verify the User ID / Password that was sent.";
-	String errorMessage_101 = "101 - Sorry, the user credentials supplied is not authorized to access the Stock Check Web Service.";
-	String errorMessage_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
 
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -73,6 +77,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		if(isLoginValid)
 		{
+			// load the uom descriptions for later lookups
+			uomDescMap = getUOMList(env);
+
 		  try
 		  {
 		     pAndArequestInputDocument = createPandARequestInputDocument(env,stockCheckInputDocRoot);
@@ -110,7 +117,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		    	catch(Exception e) {
 	    			e.printStackTrace();
 
-	    			//TODO does this work??
+	    			//TODO does this work?
 	    			com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
 
 					errorObject.setTransType("B2B-PA");
@@ -379,8 +386,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		String twoDayQty = null;
 		String inventoryIndicator = null;
 		String orderMultiple = null;
-		String requestedUOMDescription = null;
-		String pricingUOMDescription = null;
 		String sapParentAccountNo = null;
 
 		int listLength = 0;
@@ -590,14 +595,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  quantity.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQty").getTextContent());
 					  item.appendChild(quantity);
 
-					  //Not sure as to why requestedUOM is not passed here but the pricing UOM is passed...need to ask Prashant...I changed it to RequestedUom...
+					  //[OLD: Not sure as to why requestedUOM is not passed here but the pricing UOM is passed...need to ask Prashant...I changed it to RequestedUom...
 					  Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
-					  String baseUOM = SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent();
-					  String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
-					  String convertedBaseUnitOfMeasure = null;
-
-					  convertedBaseUnitOfMeasure = XPXUtils.replaceOutgoingUOMFromLegacy(env, baseUOM, xpedxPartNumber.getTextContent(), buyerID.getTextContent(), eTradingID.getTextContent());
-					  unitOfMeasure.setTextContent(convertedBaseUnitOfMeasure);
+					  String baseUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent();
+					  String convertedBaseUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, baseUom, xpedxPartNumber.getTextContent(), buyerID.getTextContent(), eTradingID.getTextContent());
+					  String baseUomDescription = getUomDesc(baseUom, convertedBaseUom);
+					  unitOfMeasure.setTextContent(convertedBaseUom);
 					  item.appendChild(unitOfMeasure);
 
 					  //Dont know what to map(Level 3 error codes)
@@ -616,7 +619,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  item.appendChild(customerNumber);
 
 					  Document getItemDetailsOutputDoc = getItemDetails(env,SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent());
-					  log.info("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc)); //TODO enable logging
+					  log.info("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc)); //TODO log debug
 
 					  Element getCategoryOutputDocRoot =  getItemDetailsOutputDoc.getDocumentElement();
 					  Element itemElement = (Element) getCategoryOutputDocRoot.getElementsByTagName("Item").item(0);
@@ -673,7 +676,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  item.appendChild(itemSellText);
 
 					  // Going by the logic that the first element in the warehouse locations is the primary warehouse.
-					  // TODO what if warehouse missing? Skip these?
+					  // -> if warehouse info missing in P&A, skipping these - is that ok?
 					  Element wareHouseLocations = SCXmlUtil.getXpathElement(itemElementFromPandA, "./WarehouseLocationList");
 					  if (wareHouseLocations != null)
 					  {
@@ -773,11 +776,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 						if(orderMultiple!=null && orderMultiple.trim().length()!=0)
 						{
-						  //Get base uom description by invoking getUomList
-						  requestedUOMDescription = invokeGetUomList(env,baseUOM);
-
 						  Element orderMultipleMessage = stockCheckResponseDocument.createElement("OrderMultipleMessage");
-						  orderMultipleMessage.setTextContent("Must be ordered in units of "+orderMultiple+""+requestedUOMDescription);
+						  orderMultipleMessage.setTextContent("Must be ordered in units of "+orderMultiple+" "+baseUomDescription);
 						  item.appendChild(orderMultipleMessage);
 						}
 
@@ -822,42 +822,51 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						//Need to confirm with Prashant 28-09-2010
 						Element unitPrice1 = stockCheckResponseDocument.createElement("UnitPrice1");
 						Element unitPrice2 = stockCheckResponseDocument.createElement("UnitPrice2");
-						unitPrice1.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent()+"/"+pricingUom);
+						unitPrice1.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent()
+								+"/"+baseUomDescription);
 						item.appendChild(unitPrice1);
 
 						if(!SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent().
 								equals(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()))
 						{
-						   unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()+"/"+convertedBaseUnitOfMeasure);
-						   item.appendChild(unitPrice2);
+							String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
+							String convertedPricingUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, pricingUom, xpedxPartNumber.getTextContent(), buyerID.getTextContent(), eTradingID.getTextContent());
+							String pricingUomDescription = getUomDesc(pricingUom, convertedPricingUom);
+							unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()
+									+"/"+pricingUomDescription);
+							item.appendChild(unitPrice2);
 						}
 
-						//Logic for retrieving UOM Codes and description is to retrieve UOMs from XPXUOMListAPI - use later?
+
+						//Logic for retrieving UOM Codes and description(?) is to retrieve UOMs from XPXUOMListAPI
 						Document getXPXUOMListAPIOutputDoc = getXPXUomList(env,xpedxPartNumber.getTextContent(), customerID, organizationCode);
+						NodeList uomList = getXPXUOMListAPIOutputDoc.getDocumentElement().getElementsByTagName("UOM");
 
 						Element uomNodeList = stockCheckResponseDocument.createElement("UOMList");
 
-						NodeList uomList = getXPXUOMListAPIOutputDoc.getDocumentElement().getElementsByTagName("UOM");
-
 						for(int b=0; b<uomList.getLength();b++)
 						{
-						         Element uomElement  =  (Element) uomList.item(b);
+							Element uomElement  =  (Element) uomList.item(b);
+							String xpxUom = uomElement.getAttribute("UnitOfMeasure");
 
-						         Element uom = stockCheckResponseDocument.createElement("UOM");
-						         Element uomCode1 = stockCheckResponseDocument.createElement("UOMCode1");
-						         Element uomDescription1 = stockCheckResponseDocument.createElement("UOMDescription1");
+							Element uom = stockCheckResponseDocument.createElement("UOM");
+							Element uomCode1 = stockCheckResponseDocument.createElement("UOMCode1");
+							Element uomDescription1 = stockCheckResponseDocument.createElement("UOMDescription1");
 
-						        String convertedToCustomerUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, uomElement.getAttribute("UnitOfMeasure"), xpedxPartNumber.getTextContent(),
-						        		                                                               buyerID.getTextContent(), eTradingID.getTextContent());
-						       // uomCode1.setTextContent(uomElement.getAttribute("UnitOfMeasure"));
+							//TODO is this slow? Do this call (and ones above) get cached?
+							String convertedToCustomerUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, xpxUom, xpedxPartNumber.getTextContent(),
+									buyerID.getTextContent(), eTradingID.getTextContent());
 
-						        uomCode1.setTextContent(convertedToCustomerUom);
-						        uom.appendChild(uomCode1);
-						        uomDescription1.setTextContent("UOMDescription"); //TODO need value - XPXGetLegacyUomXrefService has LegacyDesc
-						        uom.appendChild(uomDescription1);
-						        uomNodeList.appendChild(uom);
+							String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
+
+							uomCode1.setTextContent(convertedToCustomerUom);
+							uom.appendChild(uomCode1);
+							uomDescription1.setTextContent(uomDesc); //TODO XPXGetLegacyUomXrefService has LegacyDesc ??
+							uom.appendChild(uomDescription1);
+							uomNodeList.appendChild(uom);
 						}
 						item.appendChild(uomNodeList);
+
 
 						// Logic for catalog attribute name and value...Not sure which one....ItemAttribute or Attribute
 						Element additionalAttrList = (Element) itemElement.getElementsByTagName("AdditionalAttributeList").item(0);
@@ -1005,6 +1014,19 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		return stockCheckResponseDocument;
 	}
 
+	/**
+	 * Get UOM description using previously loaded info
+	 * @param legacyUom - uom to get description for (e.g. M_SHT)
+	 * @param customerUom - value to be used in if can't get description
+	 */
+	private String getUomDesc(String legacyUom, String customerUom) {
+		String uomDesc = uomDescMap.get(legacyUom);
+		if (uomDesc==null || uomDesc.equals("")) {
+			uomDesc = customerUom;
+		}
+		return uomDesc;
+	}
+
 	private Document getXPXUomList(YFSEnvironment env, String itemID, String customerID, String organizationCode) throws YFSException, RemoteException
 	{
 		Document uomListOutputDoc = null;
@@ -1014,41 +1036,11 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("CustomerID", customerID);
 		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
 
+    	log.info("The input to XPXUOMListAPI: "+SCXmlUtil.getString(invokeUOMlistAPIDoc));
 		uomListOutputDoc = api.executeFlow(env, "XPXUOMListAPI", invokeUOMlistAPIDoc);
+		log.info("The output from XPXUOMListAPI: "+SCXmlUtil.getString(uomListOutputDoc));
 
 		return uomListOutputDoc;
-	}
-
-	//TODO currently returning fixed string - need UOMDescription
-	private String invokeGetUomList(YFSEnvironment env, String baseUOM)
-	{
-		Document getUOMListOutputDoc = null;
-		String uomDescription = "UOMDescription"; //TODO hardcoded for testing...
-
-		Document getUOMListInputDoc = YFCDocument.createDocument(XPXLiterals.E_UOM).getDocument();
-
-		getUOMListInputDoc.getDocumentElement().setAttribute(XPXLiterals.E_UOM, baseUOM);
-
-		//TODO use XPXGetLegacyUomXrefService/LegacyDesc here or cache with other place UOMDesc needed?
-//		try {
-//			getUOMListOutputDoc = api.executeFlow(env, XPXLiterals.GET_UOM_LIST_API, getUOMListInputDoc);
-//		} catch (YFSException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (RemoteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		log.debug("The output of getUomList: "+SCXmlUtil.getString(getUOMListOutputDoc));
-//
-//		 Element uomElement = (Element) getUOMListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_UOM).item(0);
-//
-//		  if(uomElement!= null)
-//		  {
-//			  uomDescription = uomElement.getAttribute(XPXLiterals.E_UOM);
-//		  }
-//
-		return uomDescription;
 	}
 
 	private Document getItemBranchDetails(YFSEnvironment env,String envtId, String companyCode, String itemId)
@@ -1069,7 +1061,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 
 		return getItemBranchDetailsOutputDoc;
 	}
@@ -1573,6 +1564,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 */
 	private String getCategoryShortDescription(String categoryID, String organizationCode, YFSEnvironment env) throws Exception
 	{
+		//TODO cache the categories??
+
 		Document inputDoc = YFCDocument.createDocument("Category").getDocument();
 		inputDoc.getDocumentElement().setAttribute("CategoryID", categoryID);
 		inputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
@@ -1590,6 +1583,52 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 
 		return desc;
+	}
+
+	// load all the UOM descriptions from the server for lookups
+	// (copied from XPXPendingApprovalOrders.java - maybe put in shared loc)
+	private Map<String,String> getUOMList(YFSEnvironment env){
+		Map<String,String> UOMDesriptionMap = new HashMap<String,String>();
+		try
+		{
+			Document getItemUomMasterListInputDoc = YFCDocument.createDocument("ItemUOMMaster").getDocument();
+			getItemUomMasterListInputDoc.getDocumentElement().setAttribute("UnitOfMeasure","" );
+			getItemUomMasterListInputDoc.getDocumentElement().setAttribute("OrganizationCode", "");
+
+			env.setApiTemplate("getItemUOMMasterList", getItemUomMasterListTemplate);
+			Document getItemUomMasterListOutputDoc = api.invoke(env, "getItemUOMMasterList", getItemUomMasterListInputDoc);
+			env.clearApiTemplate("getItemUOMMasterList");
+
+			NodeList itemUOMMasterList = getItemUomMasterListOutputDoc.getDocumentElement().getElementsByTagName("ItemUOMMaster");
+			if (itemUOMMasterList != null)
+			{
+				int itemUOMLength = itemUOMMasterList.getLength();
+				if(itemUOMLength > 0)
+				{
+					for(int i=0; i < itemUOMLength ;i++)
+					{
+						String itemUomDescriptionMaster ="";
+						String itemUomMaster = "";
+						Element itemUomMasterElement = (Element) itemUOMMasterList.item(i);
+						if (itemUomMasterElement.hasAttribute("Description"))
+						{
+							itemUomDescriptionMaster = itemUomMasterElement.getAttribute("Description");
+							itemUomMaster = itemUomMasterElement.getAttribute("UnitOfMeasure");
+						}
+						else
+						{
+							itemUomDescriptionMaster = "";
+						}
+						UOMDesriptionMap.put(itemUomMaster, itemUomDescriptionMaster);
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("getUOMList: Error while getting UOM Descriptions"+e.getMessage());
+		}
+		return UOMDesriptionMap;
 	}
 
 	@Override
