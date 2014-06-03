@@ -14,19 +14,7 @@ function showShiptos(titleOfModal, customerContactId, getAssignedShipToURL, incl
 		return (!str || 0 === str.trim().length);
 	}
 
-	function showProcessingIcon(){
-		$(".loading-wrap").css('display','block');
-		$(".loading-icon").css('display','block');
-		$("body").css("overflow", "hidden");
-	}
-
-	function hideProcessingIcon(){
-		$(".loading-wrap").css('display','none');
-		$(".loading-icon").css('display','none');
-		$("body").css("overflow", "auto");
-	}
-
-	function reset() {
+function reset() {
 		$('#ship-container').get(0).innerHTML = '';
 	}
 

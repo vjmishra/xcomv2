@@ -634,18 +634,6 @@ function funDivOpenClose(val1)
 			tbody.appendChild(row);		
 		}
 		
-		function showProcessingIcon(){
-			$(".loading-wrap").css('display','block');
-			$(".loading-icon").css('display','block');
-			$("body").css("overflow", "hidden");
-		}
-
-		function hideProcessingIcon(){
-			$(".loading-wrap").css('display','none');
-			$(".loading-icon").css('display','none');
-			$("body").css("overflow", "auto");
-		}
-		
 		//added for XBT 298
 		function callSave(docDivId, ignoreDivIds) {
 			resetCallSaveDiv();

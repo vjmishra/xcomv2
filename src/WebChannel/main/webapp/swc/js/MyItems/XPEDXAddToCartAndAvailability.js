@@ -52,18 +52,6 @@
 			
 		}
 	}
-	function showProcessingIcon(){
-		$(".loading-wrap").css('display','block');
-		$(".loading-icon").css('display','block');
-		$("body").css("overflow", "hidden");
-	}
-
-	function hideProcessingIcon(){
-		$(".loading-wrap").css('display','none');
-		$(".loading-icon").css('display','none');
-		$("body").css("overflow", "auto");
-	}
-	
 	function addItemToCart(itemId,uid) {
 		//added for jira 3974
 		showProcessingIcon();

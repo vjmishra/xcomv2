@@ -44,23 +44,6 @@ function clearItemErrorMessages() {
 	
 }
 
-
-
-/*
- * Manage processing bar, which must remain active during item validation
- */
-function showProcessingIcon(){
-	$(".loading-wrap").css('display','block');
-	$(".loading-icon").css('display','block');
-	$("body").css("overflow", "hidden");
-}
-function hideProcessingIcon(){
-	$(".loading-wrap").css('display','none');
-	$(".loading-icon").css('display','none');
-	$("body").css("overflow", "auto");
-}
-
-
 /*
  * Performs validation on all rows with item and/or quantity (empty rows are ignored):
  * 1. Validates that each row has both item and quantity.
