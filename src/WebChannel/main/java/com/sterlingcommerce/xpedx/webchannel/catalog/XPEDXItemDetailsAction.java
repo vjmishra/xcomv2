@@ -40,6 +40,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInput
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemListPrice;
 import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemSpecification;
+import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemSpecificationAttribute;
 import com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail.ItemSpecificationGroup;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
@@ -168,21 +169,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		List<ItemSpecificationGroup> groups = new ArrayList<ItemSpecificationGroup>(4);
 		groups.add(ItemSpecificationGroup.create("Item Specs"));
 		groups.add(ItemSpecificationGroup.create("Size"));
-		groups.add(ItemSpecificationGroup.create("Packing Sites"));
+		groups.add(ItemSpecificationGroup.create("Packing Specs"));
 		groups.add(ItemSpecificationGroup.create("Enviro Specs"));
 
 		Element itemElem = XMLUtilities.getElement(m_itemListElem, "Item");
-		log.debug("itemElem:\n" + SCXmlUtil.getString(itemElem));
-
-		// TODO first element in 1st group is item description
-		groups.get(0).addItemSpecification(ItemSpecification.create("Product Description", itemElem.getAttribute("ShortDescription")));
 
 		Element itemAttributeGroupTypeListElem = SCXmlUtil.getChildElement(itemElem,"ItemAttributeGroupTypeList");
 		List<Element> itemAttributeGroupTypeElems = SCXmlUtil.getChildren(itemAttributeGroupTypeListElem, "ItemAttributeGroupType");
 		for (Element itemAttributeGroupTypeElem : itemAttributeGroupTypeElems) {
 			if ("SPECIFICATION".equals(itemAttributeGroupTypeElem.getAttribute("ClassificationPurposeCode"))) {
-				log.debug("itemAttributeGroupTypeElem:\n" + SCXmlUtil.getString(itemAttributeGroupTypeElem));
-
 				Element itemAttributeGroupListElem = SCXmlUtil.getChildElement(itemAttributeGroupTypeElem, "ItemAttributeGroupList");
 
 				List<Element> itemAttributeGroupElems = SCXmlUtil.getChildrenList(itemAttributeGroupListElem);
@@ -191,11 +186,9 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 					List<Element> itemAttributeElems = SCXmlUtil.getChildrenList(itemAttributeListElem);
 					for (Element itemAttributeElem : itemAttributeElems) {
-						String key = itemAttributeElem.getAttribute("ItemAttributeKey");
 						String sequenceStr = itemAttributeElem.getAttribute("SequenceNo");
 						String description = itemAttributeElem.getAttribute("ItemAttributeDescription");
 						String value = itemAttributeElem.getAttribute("Value");
-
 						int sequence;
 						try {
 							sequence = Integer.valueOf(sequenceStr);
@@ -203,13 +196,28 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							sequence = Integer.MAX_VALUE;
 						}
 
-						// old code did this, which seems equivalent, but more difficult to read
-//						Element assignedValueListElem = SCXmlUtil.getChildElement(itemAttributeElem, "AssignedValueList");
-//						String value = assignedValueListElem.getAttribute("Value");
-
 						if (value != null && value.trim().length() > 0) {
+							Element attributeElem = SCXmlUtil.getChildElement(itemAttributeElem, "Attribute");
+							String longDescription = attributeElem.getAttribute("LongDescription");
+
+							// we use longDescription to map to group
+							ItemSpecificationAttribute attr;
+							try {
+								attr = ItemSpecificationAttribute.valueOf(longDescription);
+								if (attr.getGroup() == null) {
+									// do not display this attribute on the page
+									continue;
+								}
+							} catch (IllegalArgumentException e) {
+								log.warn("Unexpected longDescription: " + longDescription);
+								continue;
+							}
+
 							// TODO use mapping to put into the appropriate group
-							groups.get(0).addItemSpecification(ItemSpecification.create(description, value, sequence));
+							ItemSpecificationGroup group = groups.get(attr.getGroup().getIndex());
+							if (group != null) {
+								group.addItemSpecification(ItemSpecification.create(description, value, sequence));
+							}
 						}
 					}
 				}
