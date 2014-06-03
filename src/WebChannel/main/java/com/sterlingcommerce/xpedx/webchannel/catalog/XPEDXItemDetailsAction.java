@@ -150,7 +150,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		combinedCrosssellItems = combine(crossSellAssociatedItems, complimentAssociatedItems);
 
 		try {
-			listPrices = getPricelistLine();
+			listPrices = createListPrices();
 		} catch (Exception e) {
 			log.error("Failed to get list price information", e);
 		}
@@ -224,7 +224,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		return groups;
 	}
 
-	private List<ItemListPrice> getPricelistLine() throws Exception {
+	private List<ItemListPrice> createListPrices() throws Exception {
 		List<ItemListPrice> retval = new LinkedList<ItemListPrice>();
 
 		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
@@ -337,10 +337,15 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 						Element extnElem = SCXmlUtil.getChildElement(pricelistLineElem, "Extn");
 
 						String listPrice = pricelistLineElem.getAttribute("ListPrice");
+						if (listPrice == null || listPrice.trim().length() == 0) {
+							continue;
+						}
 
 						String fromQty = pricelistLineElem.getAttribute("FromQuantity");
 						if (fromQty == null || fromQty.trim().length() == 0 || fromQty.trim().equals("null")) {
 							fromQty = "1";
+						} else if (fromQty.trim().equals("0.0")) {
+							fromQty = ""; // omit qty
 						} else {
 							fromQty = String.valueOf(Math.round(Double.parseDouble(fromQty)));
 						}
