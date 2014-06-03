@@ -2215,7 +2215,10 @@ table#prod-details-tbl  {
 	height: auto;
 	overflow: hidden;
 }
-#specs-trigger1, #specs-trigger2, #specs-trigger3, #specs-trigger4{
+.specs-wrap div.specs-trigger:nth-last-of-type(2) {
+	border-bottom: #cccccc 1px solid;
+}
+.specs-trigger {
 	width: 290px;
 	height: 25px;
 	border-top: #cccccc 1px solid;
@@ -2227,13 +2230,10 @@ table#prod-details-tbl  {
 	font-weight: bold;
 	text-transform: uppercase;
 }
-#specs-trigger1 p, #specs-trigger2 p, #specs-trigger3 p, #specs-trigger4 p{
+.specs-trigger p {
 	float: left;
 	clear: none;
 	margin-left: 10px;
-}
-#specs-trigger4 {
-	border-bottom: #cccccc 1px solid;
 }
 	
 #specs-trigger1:hover, #specs-trigger2:hover, #specs-trigger3:hover, #specs-trigger4:hover {
