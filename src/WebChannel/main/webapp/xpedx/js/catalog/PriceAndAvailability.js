@@ -6,18 +6,6 @@
  * @param options.success Callback function called upon completion of ajax response is successfully processed. Callback function takes a single parameter, the ajax response.
  * @output For each item, the rendered HTML is set as the innerHTML of the DOM element with id=availabilty_<code>ITEMID</code> (note the misspelling!).
  */
-
-function showProcessingIcon(){
-	$(".loading-wrap").css('display','block');
-	$(".loading-icon").css('display','block');
-	$("body").css("overflow", "hidden");
-}
-
-function hideProcessingIcon(){
-	$(".loading-wrap").css('display','none');
-	$(".loading-icon").css('display','none');
-	$("body").css("overflow", "auto");
-}
 function getPriceAndAvailabilityForItems(options) {
 	if (options.modal) {
 		showProcessingIcon();
@@ -90,12 +78,14 @@ function getPriceAndAvailabilityForItems(options) {
 				return;
 			}
 			
+			var pnaSuccess = true;
 			for (var i = 0, len = pna.items.length; i < len; i++) {
 				var pnaItem = pna.items[i];
 				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
 					if (console) { console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode); }
+					pnaSuccess = false;
 					continue;
 				}
 				
@@ -106,6 +96,7 @@ function getPriceAndAvailabilityForItems(options) {
 					html.push('			<h5 align="center"><b><font color="red">', htmlEncode(lineErrorMessage), '</font></b></h5>');
 					html.push('		</div>');
 					$divItemAvailability.show().get(0).innerHTML = html.join('');
+					pnaSuccess = false;
 					continue;
 				}
 				
@@ -121,6 +112,7 @@ function getPriceAndAvailabilityForItems(options) {
 				$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
 				$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
 				if (isOrderMultipleError) {
+					pnaSuccess = false;
 					continue;
 				}
 				
@@ -252,7 +244,7 @@ function getPriceAndAvailabilityForItems(options) {
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
 			}
 			
-			if (typeof(options.success) === 'function') {
+			if (pnaSuccess && typeof(options.success) === 'function') {
 				options.success(data);
 			}
 		},
@@ -319,4 +311,16 @@ function numberWithCommas(num) {
     var parts = num.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
+}
+
+function showProcessingIcon(){
+	$(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+}
+
+function hideProcessingIcon(){
+	$(".loading-wrap").css('display','none');
+	$(".loading-icon").css('display','none');
+	$("body").css("overflow", "auto");
 }
