@@ -295,7 +295,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 			if (computedPriceElem != null) {
 				XPEDXUtilBean utilBean = new XPEDXUtilBean();
 				String computedUnitPrice = computedPriceElem.getAttribute("UnitPrice");
-				if (computedUnitPrice != null) {
+				if (computedUnitPrice != null && computedUnitPrice.trim().length() > 0) {
 					ItemListPrice ilp = new ItemListPrice();
 					ilp.setUnit("1 " + unitOfMeasure.substring(2));
 					ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, computedUnitPrice));
