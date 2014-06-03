@@ -186,15 +186,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 					List<Element> itemAttributeElems = SCXmlUtil.getChildrenList(itemAttributeListElem);
 					for (Element itemAttributeElem : itemAttributeElems) {
-						String sequenceStr = itemAttributeElem.getAttribute("SequenceNo");
 						String description = itemAttributeElem.getAttribute("ItemAttributeDescription");
 						String value = itemAttributeElem.getAttribute("Value");
-						int sequence;
-						try {
-							sequence = Integer.valueOf(sequenceStr);
-						} catch (Exception ignore) {
-							sequence = Integer.MAX_VALUE;
-						}
 
 						if (value != null && value.trim().length() > 0) {
 							Element attributeElem = SCXmlUtil.getChildElement(itemAttributeElem, "Attribute");
@@ -216,7 +209,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							// TODO use mapping to put into the appropriate group
 							ItemSpecificationGroup group = groups.get(attr.getGroup().getIndex());
 							if (group != null) {
-								group.addItemSpecification(ItemSpecification.create(description, value, sequence));
+								group.addItemSpecification(ItemSpecification.create(description, value, attr.getSequence()));
 							}
 						}
 					}
