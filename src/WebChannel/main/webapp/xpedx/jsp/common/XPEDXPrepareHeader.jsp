@@ -2965,7 +2965,7 @@ function callAjaxForSorting(url,divId)
 					</s:if>
 					<s:if test="%{#isUserAdmin}">
 						<li>
-							<s:a href='%{myProfile}' cssClass="link" onclick="javascript:msgWait();">
+							<s:a href='%{myProfile}' cssClass="link" >
 								<s:text name="My Users"></s:text>
 							</s:a>
 						</li>
