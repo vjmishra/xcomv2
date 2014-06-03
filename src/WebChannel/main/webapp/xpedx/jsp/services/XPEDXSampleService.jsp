@@ -35,7 +35,6 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
-<%-- <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/itemdetails.js"></script> --%>
 <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/XPEDXItemdetails<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/advancedSearch<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript"	src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/catalog/swcxmltreeloader<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
