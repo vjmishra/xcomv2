@@ -253,6 +253,7 @@
 	function openNotePanelSetAction(actionValue){
 		
 		//end for XBT - 322
+		showProcessingIcon();
 		 if(actionValue == "Accept"){
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
@@ -617,7 +618,10 @@
    <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- // footer end -->
 <!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
-		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 		
+		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 	
+		 <div >
+            <div class="loading-icon" style="display:none;"></div>
+         </div>	
 		<div  class="xpedx-light-box" id="" style="width:400px; height:150px;">	    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
@@ -635,7 +639,9 @@
 					</ul>
 				</s:form>
 				</div>
-				
+				<div class="loading-wrap"  style="display:none;">
+                   <div class="load-modal" ></div>
+               </div>
 		</swc:dialogPanel> 
 	
     </div><!-- end container  -->

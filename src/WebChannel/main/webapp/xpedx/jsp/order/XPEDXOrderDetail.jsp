@@ -27,6 +27,7 @@
                href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!-- javascript -->
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -242,6 +243,7 @@ function showSplitDiv(divId)
 	    	
 			//end for XBT - 322
 		 if(actionValue == "Accept"){
+			 showProcessingIcon();
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
 			 		document.getElementById("ReasonText").value="Empty";
@@ -1836,6 +1838,9 @@ function showSplitDiv(divId)
 <a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a>
 <s:if test ="#_action.approvalAllowed()" >
 	<swc:dialogPanel  title="" isModal="true" id="approvalNotesPanel"> 
+	    <div >
+             <div class="loading-icon" style="display:none;"></div>
+         </div>	
 			
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<h2>Approval / Rejection Comments</h2>
@@ -1859,6 +1864,9 @@ function showSplitDiv(divId)
 				</ul>
 			</s:form>
 		</div>
+		<div class="loading-wrap"  style="display:none;">
+            <div class="load-modal" ></div>
+         </div>
 	 </swc:dialogPanel>   
 </s:if>     
 <!-- end container  -->

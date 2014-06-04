@@ -859,7 +859,10 @@ function printPOs(customerPos) {
 	<!-- // footer end -->
 	<%-- Add the Approval Panel --%>
 	
-		<swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 		
+		<swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 
+		<div >
+             <div class="loading-icon" style="display:none;"></div>
+         </div>		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
 			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			
@@ -878,6 +881,9 @@ function printPOs(customerPos) {
 					</ul>
 				</s:form>
 				</div>
+				<div class="loading-wrap"  style="display:none;">
+                     <div class="load-modal" ></div>
+                 </div>
 		 </swc:dialogPanel> 
     </div><!-- end container  -->
     <div class="loading-wrap"  style="display:none;">
@@ -991,6 +997,7 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 	   
 		//end for XBT - 322
 	 if(actionValue == "Accept"){
+	     showProcessingIcon();
 	     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 	     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
 	 		document.getElementById("ReasonText").value="Empty";
