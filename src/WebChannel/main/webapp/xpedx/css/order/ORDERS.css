@@ -2190,9 +2190,11 @@ table#prod-details-tbl  {
 	width: 300px;
 }
 .detail-view .pa-price {
-	padding-bottom: 10px;
-	margin-bottom: 10px;
-
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
+.detail-view .pa-wrap h4 {
+    margin-top: 5px;
 }
 .detail-view .replacement-item {
 	color: #ff0000;
@@ -2368,6 +2370,7 @@ div.specs-tab {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 11px;
     font-style: italic;
+    margin-bottom: 6px;
     padding: 3px 0 3px 5px;
 }
 
