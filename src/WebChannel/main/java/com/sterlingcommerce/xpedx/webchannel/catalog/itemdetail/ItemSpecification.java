@@ -12,7 +12,10 @@ public class ItemSpecification {
 	private String value;
 	private int sequence;
 
-	public static Comparator<ItemSpecification> COMPARATOR_SEQUENCE = new Comparator<ItemSpecification>() {
+	/**
+	 * Sort ascending by sequence.
+	 */
+	public static final Comparator<ItemSpecification> COMPARATOR_SEQUENCE = new Comparator<ItemSpecification>() {
 		@Override
 		public int compare(ItemSpecification o1, ItemSpecification o2) {
 			return o1.getSequence() - o2.getSequence();
