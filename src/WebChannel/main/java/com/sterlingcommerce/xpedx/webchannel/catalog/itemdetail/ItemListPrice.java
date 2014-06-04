@@ -1,6 +1,9 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog.itemdetail;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class ItemListPrice {
 
@@ -12,12 +15,12 @@ public class ItemListPrice {
 		public int compare(ItemListPrice o1, ItemListPrice o2) {
 			double cost1, cost2;
 			try {
-				cost1 = Double.parseDouble(o1.getCost());
+				cost1 = Double.parseDouble(o1.getCost().substring(1));
 			} catch (NumberFormatException e) {
 				return 1;
 			}
 			try {
-				cost2 = Double.parseDouble(o2.getCost());
+				cost2 = Double.parseDouble(o2.getCost().substring(1));
 			} catch (NumberFormatException e) {
 				return -1;
 			}
@@ -49,6 +52,20 @@ public class ItemListPrice {
 
 	public void setCost(String cost) {
 		this.cost = cost;
+	}
+
+	public static void main(String[] args) {
+		List<ItemListPrice> list = new ArrayList<ItemListPrice>();
+
+		list.add(create("10 CTN", "$12.16"));
+		list.add(create("40 CTN", "$11.19"));
+		list.add(create("1 CTN", "$13.55"));
+
+		Collections.sort(list, COMPARATOR_COST);
+
+		for (ItemListPrice ilp : list) {
+			System.out.println(ilp.getUnit() + " " + ilp.getCost());
+		}
 	}
 
 }
