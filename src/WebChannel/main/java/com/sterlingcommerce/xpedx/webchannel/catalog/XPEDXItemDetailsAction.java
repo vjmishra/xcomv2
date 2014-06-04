@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
@@ -179,6 +180,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		for (Element itemAttributeGroupTypeElem : itemAttributeGroupTypeElems) {
 			if ("SPECIFICATION".equals(itemAttributeGroupTypeElem.getAttribute("ClassificationPurposeCode"))) {
 				Element itemAttributeGroupListElem = SCXmlUtil.getChildElement(itemAttributeGroupTypeElem, "ItemAttributeGroupList");
+				log.debug("itemAttributeGroupListElem:\n" + SCXmlUtil.getString(itemAttributeGroupListElem));
 
 				List<Element> itemAttributeGroupElems = SCXmlUtil.getChildrenList(itemAttributeGroupListElem);
 				for (Element itemAttributeGroupElem : itemAttributeGroupElems) {
@@ -186,11 +188,30 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 
 					List<Element> itemAttributeElems = SCXmlUtil.getChildrenList(itemAttributeListElem);
 					for (Element itemAttributeElem : itemAttributeElems) {
-						String description = itemAttributeElem.getAttribute("ItemAttributeDescription");
-						String value = itemAttributeElem.getAttribute("Value");
+						Element attributeElem = SCXmlUtil.getChildElement(itemAttributeElem, "Attribute");
+						if (attributeElem == null) {
+							continue;
+						}
 
-						if (value != null && value.trim().length() > 0) {
-							Element attributeElem = SCXmlUtil.getChildElement(itemAttributeElem, "Attribute");
+						String description = attributeElem.getAttribute("ShortDescription");
+
+						// old code did this, which seems equivalent, but more difficult to read
+						Element assignedValueListElem = SCXmlUtil.getChildElement(itemAttributeElem, "AssignedValueList");
+						if (assignedValueListElem == null) {
+							continue;
+						}
+
+						// gather non-null values
+						List<String> values = new LinkedList<String>();
+						List<Element> assignedValueElems = SCXmlUtil.getChildrenList(assignedValueListElem);
+						for (Element assignedValueElem : assignedValueElems) {
+							String value = assignedValueElem.getAttribute("Value");
+							if (value != null) {
+								values.add(value);
+							}
+						}
+
+						if (values.size() > 0) {
 							String longDescription = attributeElem.getAttribute("LongDescription");
 
 							// we use longDescription to map to group
@@ -206,9 +227,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 								continue;
 							}
 
-							// TODO use mapping to put into the appropriate group
 							ItemSpecificationGroup group = groups.get(attr.getGroup().getIndex());
 							if (group != null) {
+								// join multiple values with <br> tag
+								String value = StringUtils.join(values.toArray(new String[0]), "<br/>");
 								group.addItemSpecification(ItemSpecification.create(description, value, attr.getSequence()));
 							}
 						}
