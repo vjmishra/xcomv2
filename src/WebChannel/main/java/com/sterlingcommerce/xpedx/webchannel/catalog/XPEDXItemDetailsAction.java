@@ -226,7 +226,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	private List<ItemListPrice> createListPrices() throws Exception {
-		List<ItemListPrice> retval = new LinkedList<ItemListPrice>();
+		List<ItemListPrice> itemListPrices = new LinkedList<ItemListPrice>();
 
 		XPEDXShipToCustomer shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 
@@ -357,13 +357,13 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 						ItemListPrice ilp = new ItemListPrice();
 						ilp.setUnit(fromQty + " " + tierUom);
 						ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, listPrice));
-						retval.add(ilp);
+						itemListPrices.add(ilp);
 					}
 				}
 			}
 		}
 
-		if (retval.isEmpty()) {
+		if (itemListPrices.isEmpty()) {
 			// fallback to computed price
 			Element itemElem = XMLUtilities.getElement(m_itemListElem, "Item");
 			Element computedPriceElem = XMLUtilities.getElement(itemElem, "ComputedPrice");
@@ -374,12 +374,14 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					ItemListPrice ilp = new ItemListPrice();
 					ilp.setUnit("1 " + unitOfMeasure.substring(2));
 					ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, computedUnitPrice));
-					retval.add(ilp);
+					itemListPrices.add(ilp);
 				}
 			}
 		}
 
-		return retval;
+		Collections.sort(itemListPrices, ItemListPrice.COMPARATOR_COST);
+
+		return itemListPrices;
 	}
 
 	private static List combine(List... lists) {
@@ -1424,18 +1426,6 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 		Element itemElement = (Element)nItemList.item(0);
 		String itemID = SCXmlUtil.getAttribute(itemElement, "ItemID");
 		LOG.debug("Preparing national level association for item Id "+itemID);
-
-//		Element computedPriceElem = XMLUtilities.getElement(itemElement, "ComputedPrice");
-//		if (computedPriceElem != null) {
-//			XPEDXUtilBean utilBean = new XPEDXUtilBean();
-//			String computedUnitPrice = computedPriceElem.getAttribute("UnitPrice");
-//			if (computedUnitPrice != null) {
-//				ItemListPrice ilp = new ItemListPrice();
-//				ilp.setUnit(unitOfMeasure.substring(2));
-//				ilp.setCost(utilBean.formatPriceWithCurrencySymbol(wcContext, priceCurrencyCode, computedUnitPrice));
-//				listPrices.add(ilp);
-//			}
-//		}
 
 		Element associationTypeListElem = XMLUtilities.getElement(itemElement, "AssociationTypeList");
 		if (associationTypeListElem != null) {
