@@ -1612,7 +1612,7 @@ function showSplitDiv(divId)
 					</s:if>		
 					<s:else>				
 						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>			     
-								<input class="btn-neutral floatright" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+							<input class="btn-neutral floatright" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>				
 					</s:else>
 			</s:if>
@@ -1625,19 +1625,6 @@ function showSplitDiv(divId)
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </div>
 
-
-<script type="text/javascript">
-/* 	Ext.onReady(function(){             	          		 
-        		  new Ext.ToolTip({        
-        			  	 target: 'tip_${orderHeaderKey}',
-					 anchor: 'right',
-					 html:	Ext.DomQuery.selectNode('.orderTotalAdjustmentLightBox').innerHTML,													
-					 autoHide: true,
-					 closable: true
-				});
-        		 	Ext.QuickTips.init();
-        		 }); */
-</script>
 
 <div id="split-order-overlay" style="display: none; right:893px; top:215.5px;">
 	<div>
