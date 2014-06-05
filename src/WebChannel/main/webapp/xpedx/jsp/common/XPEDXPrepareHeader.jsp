@@ -143,9 +143,6 @@ It is not a good practice but creating on every jsp page is also not convenient 
 					url += '&rememberNewSearchText=' + encodeURIComponent($('#newSearch_searchTerm').val());
 					
 					// autocomplete console.log('posting to url = ' , url);
-					var waitMsg = Ext.Msg.wait("Processing...");
-					myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-					myMask.show();
 					
 					window.location.href = url;
 				}
@@ -1577,7 +1574,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     }
 	// Added for removing the double quotes from an search term. Jira # 2415
 	
-	//var myMask;
+	
 	function newSearch_onsubmit(e){
 		//added for jira 3974
 		
@@ -1861,10 +1858,7 @@ function passwordUpdateModal()
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
 			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
 			if((!isSalesRep) && (isPunchoutUser!="true") && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
-				var myMask
-				var waitMsg = Ext.Msg.wait("");
-				 myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-				 myMask.show();
+				
 				passwordUpdateModal();
 				Ext.Msg.hide();
 			} /* EB-76 Code Changes start  */
@@ -2398,12 +2392,7 @@ function callAjaxForSorting(url,divId)
 	     });  
 	}
 	//added for XBT 298
-	var myMask;
-	function msgWait(){
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
-	}
+	
 //end for XBT 298
 
 </script>
