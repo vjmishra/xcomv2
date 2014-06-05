@@ -1,5 +1,6 @@
 /**
- *
+ * NOTE: This file was developed by Sterling(IBM) consultants in 2010 - it was never actually used.
+ * See XPEDXPunchoutServlet.java for the 2014 code that was implemented by xpedx instead.
  */
 package com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement;
 
@@ -39,6 +40,7 @@ import com.sterlingcommerce.webchannel.common.integration.Error;
  * @author adsouza
  *
  */
+@Deprecated
 public class XPEDXAribaIntegrationServlet extends AribaIntegrationServlet{
 	XPEDXCXMLMessageFields cXMLFields = null;
 	WCIntegrationResponse wcResponse = null;
