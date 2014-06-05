@@ -383,7 +383,5 @@
     </div>
 	
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
-	
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.liquidcarousel.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 </body> 
 </swc:html>
