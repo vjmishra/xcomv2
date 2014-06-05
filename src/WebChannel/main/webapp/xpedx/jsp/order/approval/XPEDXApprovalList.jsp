@@ -253,8 +253,9 @@
 	function openNotePanelSetAction(actionValue){
 		
 		//end for XBT - 322
-		showProcessingIcon();
+		
 		 if(actionValue == "Accept"){
+			 showProcessingIcon();
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
 			 		document.getElementById("ReasonText").value="Empty"; 
@@ -309,9 +310,9 @@
 </head>
 
 <body class="ext-gecko ext-gecko3">
-<div >
-     <div class="loading-icon" style="display:none;"></div>
-</div>
+		<div>
+			<div class="loading-icon" style="display:none;"></div>
+		</div>
 <s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
 <s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
 <div class='x-hidden dialog-body ' id="shipToDivforordersearch">
@@ -619,9 +620,9 @@
 <!-- // footer end -->
 <!-- Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes -->
 		 <swc:dialogPanel title="" isModal="true" id="approvalNotesPanel" width="450"> 	
-		 <div >
-            <div class="loading-icon" style="display:none;"></div>
-         </div>	
+		<div>
+			<div class="loading-icon" style="display:none;"></div>
+ 		</div>	
 		<div  class="xpedx-light-box" id="" style="width:400px; height:150px;">	    			
 			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
@@ -640,8 +641,8 @@
 				</s:form>
 				</div>
 				<div class="loading-wrap"  style="display:none;">
-                   <div class="load-modal" ></div>
-               </div>
+					<div class="load-modal" ></div>
+				</div>
 		</swc:dialogPanel> 
 	
     </div><!-- end container  -->
