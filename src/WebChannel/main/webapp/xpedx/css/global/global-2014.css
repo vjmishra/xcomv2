@@ -948,24 +948,23 @@ div#fancybox-content .error, div#fancybox-content .notice {
 }
 
 /*-------Processing Icon---------*/
-
 .loading-wrap {
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
 }
 
 .load-modal {
-    position: fixed;
-    z-index: 2000;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    padding-top: 20%; 
-    background: rgba(0,0,0,0.8);
-    display:block;
-    opacity:.8;
+	position: fixed;
+	z-index: 2000;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	padding-top: 20%;
+	background: rgba(0, 0, 0, 0.8);
+	display: block;
+	opacity: .8;
 }
 
 .content-container h1 span {
