@@ -34,14 +34,11 @@ $(document).ready(function() {
 $(document).ready(function() {
 	$("#printButton").click(function () {
 		$('.specs-tab').show();
+		$('.specs-tab-plus').css('background-position', 'bottom left');
 		// Print the page
 		window.print();
-		// After printing hide back all the tab panel contents which are supposed to be hidden
-		$('.specs-packing[aria-hidden=true]').hide();
 	});
-});
-
-$(document).ready(function () {
+	
 	// item spec expand/collapse buttons
 	$("#expandAll").click(function () {
 		$('.specs-tab').slideDown("fast");
