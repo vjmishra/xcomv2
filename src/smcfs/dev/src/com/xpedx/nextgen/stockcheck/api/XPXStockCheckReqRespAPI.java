@@ -539,7 +539,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			Element customerExtnElement = (Element) customerElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
 
 			envtId = customerExtnElement.getAttribute("ExtnEnvironmentCode");
-			companyCode = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_COMPANY_CODE);
+			companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
 			shipToSuffix = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_SHIP_TO_SUFFIX);
 			shipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch");
 			legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
@@ -760,7 +760,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				      }//end no warehouse info in P&A
 
 					  // Logic for OrderMultiple and OrderMultiple Message and ItemStatus by invoking ItemBranch table
-				      Document getItemBranchDetailsOutputDoc = getItemBranchDetails(env,envtId,companyCode,xpedxPartNumber.getTextContent());
+				      Document getItemBranchDetailsOutputDoc = getItemBranchDetails(env, envtId, companyCode, shipFromBranch, xpedxPartNumber.getTextContent());
 				      Element getXPXItemBranchListOutputDocRoot = getItemBranchDetailsOutputDoc.getDocumentElement();
 					  Element XPXItemExtnElement = (Element)getXPXItemBranchListOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_EXTN).item(0);
 
@@ -1036,14 +1036,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("CustomerID", customerID);
 		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
 
-    	log.info("The input to XPXUOMListAPI: "+SCXmlUtil.getString(invokeUOMlistAPIDoc));
 		uomListOutputDoc = api.executeFlow(env, "XPXUOMListAPI", invokeUOMlistAPIDoc);
-		log.info("The output from XPXUOMListAPI: "+SCXmlUtil.getString(uomListOutputDoc));
 
 		return uomListOutputDoc;
 	}
 
-	private Document getItemBranchDetails(YFSEnvironment env,String envtId, String companyCode, String itemId)
+	private Document getItemBranchDetails(YFSEnvironment env,String envtId, String companyCode, String division, String itemId)
 	{
 		Document getItemBranchDetailsOutputDoc = null;
 
@@ -1051,6 +1049,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID, itemId);
 		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute("EnvironmentID",envtId);
 		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute("CompanyCode",companyCode);
+		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute("XPXDivision",division);
 
 		try {
 			getItemBranchDetailsOutputDoc = api.executeFlow(env,XPXLiterals.GET_XPX_ITEM_BRANCH_LIST_SERVICE, getItemBranchDetailsInputDoc);
@@ -1549,9 +1548,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		getCustomerListInputDoc.getDocumentElement().appendChild(customerExtnElement);
 
-			 env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
-			 getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
-			 env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
+		getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
+		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
 		return getCustomerListOutputDoc;
 	}
