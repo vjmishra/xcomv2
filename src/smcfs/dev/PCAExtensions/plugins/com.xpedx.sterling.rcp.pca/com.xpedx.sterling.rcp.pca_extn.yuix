@@ -3835,4 +3835,28 @@
             </ExistingField>
         </ExistingFields>
     </Form>
+      <Form extensionBehaviorName=""
+        id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileRulePanel" wizard="false">
+        <NewFields/>
+        <ExistingFields>
+            <ExistingField attachTo="" enabled="true" name="pnlParam1"
+                type="Composite" visible="true">
+                <Layout horizontalSpacing="2"
+                    makeColumnsEqualWidth="true" marginHeight="2"
+                    marginWidth="2" numberOfColumns="6" verticalSpacing="2"/>
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="true" hAlignment="Beginning"
+                    hColSpan="1" hIndent="0" heightHint="-1"
+                    vAlignment="Fill" vColSpan="1" widthHint="400"/>
+            </ExistingField>
+            <ExistingField attachTo="" name="txtParamRule" type="Text" visible="true">
+                <LayoutData grabExcessHSpace="true"
+                    grabExcessVSpace="false" hAlignment="Beginning"
+                    hColSpan="4" hIndent="0" heightHint="-1"
+                    vAlignment="Top" vColSpan="1" widthHint="600"/>
+                <SetData name="yrc:customType" value="Text"/>
+                <SetData name="isMandatory" value="false"/>
+            </ExistingField>
+        </ExistingFields>
+    </Form>
 </Forms>
