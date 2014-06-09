@@ -2722,7 +2722,7 @@ function callAjaxForSorting(url,divId)
 	<div class="menucontainer">
 		<ul class="megamenu" id="megamenu">
 			<li class="<s:property value='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'/>">
-				<s:a cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'>
+				<s:a id="megamenu-top-catalog" cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'>
 					Catalog
 				</s:a>
 				

@@ -62,9 +62,16 @@ function getMegaMenu() {
 		url: url,
 		dataType: 'html',
 		success: function(data) {
+			var isLoadingMessageVisible = $('#megaMenuLoadingMessage').is(':visible');
+			
 			$('#megaMenuLoadingMessage').remove();
 			$('#megamenu li:first').append(data);
 			initMegaMenu();
+			
+			if (isLoadingMessageVisible) {
+				// need to force a mouseenter event to trigger mega menu to show. this is necessary because we changed the DOM while menu was being hovered.
+				$('#megamenu-top-catalog').mouseenter();
+			}
 		},
 		failure: function() {
 			// retry
