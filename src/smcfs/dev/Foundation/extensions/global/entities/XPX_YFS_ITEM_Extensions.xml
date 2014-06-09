@@ -226,6 +226,13 @@
           	Nullable="true" 
           	XMLName="ExtnMarketingGroupId"
          	XMLGroup="Extn" />
+         	
+	  		<Attribute ColumnName="EXTN_SOURCING_STATUS" 
+          	DataType="Text-2"
+	  		Description="Extn field with the Sourcing_status_item value (CR-Core Line, CP=Custom Packaging, etc)"  
+          	Nullable="true" 
+          	XMLName="ExtnSourcingStatus"
+         	XMLGroup="Extn" />
 	  
         </Attributes>
         
