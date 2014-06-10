@@ -3,6 +3,7 @@ package com.sterlingcommerce.xpedx.webchannel.order;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -66,6 +67,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 	private boolean allItemsValid;
 	private Map<String, Boolean> itemValidFlags = new LinkedHashMap<String, Boolean>();
 	private String unexpectedError;
+	List<InputRow> rows;
 
 	/**
 	 * @throws IllegalArgumentException If missing a parameter
@@ -154,7 +156,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		try {
 		assertInputs();
 
-		List<InputRow> rows = convertInputsToRows();
+		rows = convertInputsToRows();
 
 		Set<String> uniqueItemIds = new LinkedHashSet<String>(rows.size());
 		for (InputRow row : rows) {
@@ -162,14 +164,26 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		}
 
 		Map<String, ItemDetails> itemDetails = getItemsDetails(uniqueItemIds);
-
+		
+		
+		/*for (InputRow row : rows) {
+			if(uniqueItemIds.contains(row.getCustomerItemNumber()) )
+			{
+				itemValidFlags.put(row.getCustomerItemNumber(), true);
+			}else if(uniqueItemIds.contains(row.getItem()))
+			{
+				
+			}
+		}*/
 		// all items that have a uom are valid
-		for (String itemId : itemDetails.keySet()) {
+		/*for (String itemId : itemDetails.keySet()) {
 			itemValidFlags.put(itemId, true);
-		}
+		}*/
 
 		allItemsValid = uniqueItemIds.size() == itemDetails.size();
 		if (allItemsValid) {
+			// EB-5895. Get the default transaction UOMs for order lines. In Quick add User does not have option to select UOMs. So add the default UOM for transaction UOM as per rules instead of Item UOMs
+			Map <String,String> defaultTransUOMMap = XPEDXOrderUtils.getDefaultTransactionalUOMsForQuickAdd(wcContext.getCustomerId(), new ArrayList<String>(itemDetails.keySet()), wcContext.getStorefrontId());
 			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			String draftOrderFlag = YFCCommon.isVoid(editedOrderHeaderKey) ? "Y" : "N";
 
@@ -186,7 +200,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemID", row.getItem());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/@OrderedQty", row.getQty());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@OrderedQty", row.getQty());
-				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", itemDetails.get(row.getItem()).getUom());
+				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/OrderLineTranQuantity/@TransactionalUOM", defaultTransUOMMap.get(row.getItem())!=null?defaultTransUOMMap.get(row.getItem()):itemDetails.get(row.getItem()).getUom());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@UnitOfMeasure", itemDetails.get(row.getItem()).getUom());
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ItemShortDesc", ""); // not needed
 				valueMap.put("/Order/OrderLines/OrderLine[" + rowCount + "]/Item/@ProductClass", ""); // not needed
@@ -215,11 +229,12 @@ public class AjaxAddItemsToCartAction extends WCAction {
 
 		} else {
 			// 1+ items are invalid: determine which item ids are not in the map
-			Set<String> copyItemIds = new LinkedHashSet<String>(uniqueItemIds);
+			/*Set<String> copyItemIds = new LinkedHashSet<String>(uniqueItemIds);
 			copyItemIds.removeAll(itemDetails.keySet());
-
-			for (String itemId : copyItemIds) {
-				itemValidFlags.put(itemId, false);
+*/			Set<String> validItems=itemValidFlags.keySet();
+			for (String itemId : uniqueItemIds) {
+				if(!validItems.contains(itemId))
+					itemValidFlags.put(itemId, false);
 			}
 		}
 
@@ -242,6 +257,8 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		Map<String, ItemDetails> itemDetails = new LinkedHashMap<String, ItemDetails>(itemIds.size());
 
 		Set<String> xpedxItemIds = new LinkedHashSet<String>(itemIds.size());
+		Map<String,String> itemAndCustomerNumber=new HashMap<String,String>();
+		Map<String, String> itemIdsForCustomerPartNumbers =null;
 		if (TYPE_XPEDX.equals(itemType)) {
 			// itemIds contains xpedx item ids
 			xpedxItemIds.addAll(itemIds);
@@ -249,8 +266,13 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		} else {
 			// TODO create new multi-item mashup to gather all of these at once: uncomment getItemNumbersForCustomerPartNumbers
 			// we must translate each customer part # to an xpedx item # before checking if it's valid
-			Map<String, String> itemIdsForCustomerPartNumbers = getItemNumbersForCustomerPartNumbers(itemIds);
+			itemIdsForCustomerPartNumbers = getItemNumbersForCustomerPartNumbers(itemIds);
 			xpedxItemIds.addAll(itemIdsForCustomerPartNumbers.values());
+			for (InputRow row : rows) {
+				row.setCustomerItemNumber(row.getItem());
+				row.setItem(itemIdsForCustomerPartNumbers.get(row.getItem()));
+				itemAndCustomerNumber.put(row.getItem(), row.getCustomerItemNumber());
+			}
 		}
 
 		if (xpedxItemIds.isEmpty()) {
@@ -287,6 +309,15 @@ public class AjaxAddItemsToCartAction extends WCAction {
 			ItemDetails detail = new ItemDetails();
 			detail.setUom(itemElem.getAttribute("UnitOfMeasure"));
 			itemDetails.put(itemId, detail);
+			if (TYPE_XPEDX.equals(itemType)) 
+			{
+				itemValidFlags.put(itemId, true);
+
+			}
+			else 
+			{
+				itemValidFlags.put(itemAndCustomerNumber.get(itemId), true);
+			}
 		}
 
 		return itemDetails;
@@ -382,6 +413,7 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		private String qty;
 		private String po;
 		private String account;
+		private String customerItemNumber;
 
 		public String getItem() {
 			return item;
@@ -407,6 +439,14 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		public void setAccount(String account) {
 			this.account = account;
 		}
+		public String getCustomerItemNumber() {
+			return customerItemNumber;
+		}
+		public void setCustomerItemNumber(String customerItemNumber) {
+			this.customerItemNumber = customerItemNumber;
+		}
+		
+		
 	}
 
 	private static class ItemDetails {
