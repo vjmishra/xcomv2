@@ -1465,6 +1465,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 				setColumnListForUI();
 				// prepareMyItemListList();
 				getSortFieldDocument();
+				path = tempCategoryPath;
+				categoryPath = path;
 			}
 
 			getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(), path);
@@ -2035,6 +2037,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 		setAttributeListForUI();
 		prepareItemBranchInfoBean();
 		setColumnListForUI();
+		
+		path = tempCategoryPath;
+		categoryPath = path;
 
 		if ((path == null || path.equals("/")) && getFirstItem().trim() != "") {
 			YFCNode yfcNode = YFCDocument.getDocumentFor(getOutDoc()).getDocumentElement().getChildElement("ItemList").getFirstChild();
