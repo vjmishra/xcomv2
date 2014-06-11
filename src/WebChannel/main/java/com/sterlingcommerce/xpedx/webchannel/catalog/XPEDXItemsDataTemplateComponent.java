@@ -34,7 +34,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	XPEDXSCXmlUtils xpedxScxmlUtil;
 
 	public XPEDXItemsDataTemplateComponent(ValueStack stack, HttpServletRequest req,
-            HttpServletResponse res, XPEDXItemsDataTemplateTag tag) {
+			HttpServletResponse res, XPEDXItemsDataTemplateTag tag) {
 		super(stack);
 		this.tag = tag;
 		this.req = req;
@@ -129,7 +129,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		/*String isConfigurableBundle = "N";
 		if("BUNDLE".equals(kitCode) && "Y".equals(isConfigurable))
 			isConfigurableBundle = "Y";
-		*/
+		 */
 		List<Element> replacmentList =null;
 		boolean isGuestUser = (Boolean)findValue("guestUser");
 		if(tag.getReplacmentItemsMap()!=null && isGuestUser!=true)
@@ -230,10 +230,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 
 			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
-						.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
-						.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
-						.append(" ")
-						.append(uomDesc).append("</div>\",");
+				.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
+				.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
+				.append(" ")
+				.append(uomDesc).append("</div>\",");
 			} else {
 				sb.append("uomLink: \"\",");
 			}
@@ -275,16 +275,16 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		//Commented for EB 47 String custUserSKU = (String)tag.getWcContext().getWCAttribute("customerUseSKU");
 		if(extnMfgItemFlag != null && extnMfgItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MANUFACTURER_ITEM_LABEL)
-				.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
+			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPN"))));
 
 		}
 
-			sb.append("\",");
-			/* else if("3".equals(custUserSKU)) {
+		sb.append("\",");
+		/* else if("3".equals(custUserSKU)) {
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.MPC_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("MPC"))));
 		} else if("1".equals(custUserSKU)) {*/
-			sb.append("customerItemno: \"");
+		sb.append("customerItemno: \"");
 		if(extnCustomerItemFlag!=null && extnCustomerItemFlag.equalsIgnoreCase("Y")){
 			sb.append(com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants.CUSTOMER_ITEM_LABEL)
 			.append(": ").append(TextUtils.htmlEncode(validate(skuMap.get("CPN"))));
@@ -294,9 +294,9 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append("\",");
 
 		sb.append("uomdisplay: \"<select name='itemUomList' ").append("onmousedown=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class',''); ")
-			.append("onmouseout=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class','itemdiv');")
-			.append(" id='itemUomList_")
-			.append(itemID).append("'>");
+		.append("onmouseout=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class','itemdiv');")
+		.append(" id='itemUomList_")
+		.append(itemID).append("'>");
 		for (Iterator<Map.Entry <String, String>> iterator = itemUOMList.entrySet().iterator(); iterator.hasNext();) {
 			Map.Entry  pair = (Map.Entry ) iterator.next();
 			sb.append("<option value='").append(pair.getKey()).append("'");
@@ -324,52 +324,52 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 		sb.append("\",");
 		if(replacmentList!=null && replacmentList.size()>0){
-		StringBuffer repItemsForMiniView = new StringBuffer();
-		StringBuffer repItemsForCondensedView = new StringBuffer();
-		sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
-		repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
-		repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
-		for(int i=0;i<replacmentList.size();i++ )
-		{
-		Element replacementItemElement = (Element)replacmentList.get(i);
-		String replacementItem = validate(replacementItemElement.getAttribute("ItemID"));
-		String replacementItemUOM = validate(replacementItemElement.getAttribute("UnitOfMeasure"));
-		if (i>0) sb.append(",");
-		//fixed for EB-4010
-		//if (i==1) sb.append("<br/>");
-		sb.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
-		sb.append(TextUtils.htmlEncode(replacementItem));
-		sb.append("','");
-		sb.append(TextUtils.htmlEncode(replacementItemUOM));
-		sb.append("');\\\">");
-		sb.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
-		sb.append("</a>");
+			StringBuffer repItemsForMiniView = new StringBuffer();
+			StringBuffer repItemsForCondensedView = new StringBuffer();
+			sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
+			repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
+			repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
+			for(int i=0;i<replacmentList.size();i++ )
+			{
+				Element replacementItemElement = (Element)replacmentList.get(i);
+				String replacementItem = validate(replacementItemElement.getAttribute("ItemID"));
+				String replacementItemUOM = validate(replacementItemElement.getAttribute("UnitOfMeasure"));
+				if (i>0) sb.append(",");
+				//fixed for EB-4010
+				//if (i==1) sb.append("<br/>");
+				sb.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+				sb.append(TextUtils.htmlEncode(replacementItem));
+				sb.append("','");
+				sb.append(TextUtils.htmlEncode(replacementItemUOM));
+				sb.append("');\\\">");
+				sb.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
+				sb.append("</a>");
 
-		if (i>0) repItemsForCondensedView.append(",");
-		repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
-		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItem));
-		repItemsForCondensedView.append("','");
-		repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItemUOM));
-		repItemsForCondensedView.append("');\\\">");
-		repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
-		repItemsForCondensedView.append("</a>");
+				if (i>0) repItemsForCondensedView.append(",");
+				repItemsForCondensedView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+				repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItem));
+				repItemsForCondensedView.append("','");
+				repItemsForCondensedView.append(TextUtils.htmlEncode(replacementItemUOM));
+				repItemsForCondensedView.append("');\\\">");
+				repItemsForCondensedView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
+				repItemsForCondensedView.append("</a>");
 
-		if (i>0) repItemsForMiniView.append(",");
-		if((i %2)!=0)repItemsForMiniView.append("<br/>");
-		repItemsForMiniView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
-		repItemsForMiniView.append(TextUtils.htmlEncode(replacementItem));
-		repItemsForMiniView.append("','");
-		repItemsForMiniView.append(TextUtils.htmlEncode(replacementItemUOM));
-		repItemsForMiniView.append("');\\\">");
-		repItemsForMiniView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
-		repItemsForMiniView.append("</a>");
-		}
-		sb.append("\"");
+				if (i>0) repItemsForMiniView.append(",");
+				if((i %2)!=0)repItemsForMiniView.append("<br/>");
+				repItemsForMiniView.append("<a class=\\\"underlink\\\" href=\\\"javascript:processDetail('");
+				repItemsForMiniView.append(TextUtils.htmlEncode(replacementItem));
+				repItemsForMiniView.append("','");
+				repItemsForMiniView.append(TextUtils.htmlEncode(replacementItemUOM));
+				repItemsForMiniView.append("');\\\">");
+				repItemsForMiniView.append("<b>"+TextUtils.htmlEncode(replacementItem)+"</b>");
+				repItemsForMiniView.append("</a>");
+			}
+			sb.append("\"");
 
-		repItemsForMiniView.append("\"");
-		sb.append(repItemsForMiniView);
-		repItemsForCondensedView.append("\"");
-		sb.append(repItemsForCondensedView);
+			repItemsForMiniView.append("\"");
+			sb.append(repItemsForMiniView);
+			repItemsForCondensedView.append("\"");
+			sb.append(repItemsForCondensedView);
 		}
 		//sb = parseData(sb);
 		//sb = parseData(sb);
@@ -390,12 +390,12 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 	private void formatUOMPriceQty(StringBuilder priceList, String tierQty, String tierPriceUOM, String formattedTierUnitprice){
 		String htmlSpace = "&nbsp;";
 		String formattedQty = XPEDXWCUtils.getFormattedQty(tierQty);
-	    if(formattedQty != null && formattedQty.equals("0")){
-	    	formattedQty = htmlSpace+htmlSpace;
-	    	priceList.append(formattedQty);
-	    }else{
-	    	priceList.append(TextUtils.htmlEncode(formattedQty));
-	    }
+		if(formattedQty != null && formattedQty.equals("0")){
+			formattedQty = htmlSpace+htmlSpace;
+			priceList.append(formattedQty);
+		}else{
+			priceList.append(TextUtils.htmlEncode(formattedQty));
+		}
 		priceList.append(htmlSpace);
 		try {
 			priceList.append(TextUtils.htmlEncode(XPEDXWCUtils.getFormattedUOMCode(tierPriceUOM))).append("-");
