@@ -6889,4 +6889,13 @@ public class XPEDXWCUtils {
 		return PAT_MEGA_MENU_BCS.matcher(url).replaceAll("_bcs_=" + bcs);
 	}
 
+	/**
+	 * @param itemElem
+	 * @return Returns true if the given item is a core item (/Item/Extn@ExtnSourcingStatus=CR).
+	 */
+	public static boolean isCoreItem(Element itemElem) {
+		Element extnElem = SCXmlUtil.getChildElement(itemElem, "Extn");
+		return extnElem != null && "CR".equalsIgnoreCase(extnElem.getAttribute("ExtnSourcingStatus"));
+	}
+
 }

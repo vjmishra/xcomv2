@@ -210,20 +210,25 @@
 						<ul id="prodlist">
 							<s:property value='#xutil.getAttribute(#primaryInfoElem,"Description")' escape="false"/>
 						</ul>
-						<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
-							<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
-							<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
-							<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
-							<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
-							<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
-							<s:if test='%{#imageMainURL=="/"}'>
-								<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+						<div class="relative">
+							<s:if test="%{#wcUtil.isCoreItem(#itemElem)}">
+								<div class="core-item"></div>
 							</s:if>
-							<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
-						</s:if>
-						<s:else>
-							<img src="<s:url value='%{#pImg}'/>"  class="prodImg" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
-						</s:else>
+							<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
+								<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
+								<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
+								<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
+								<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
+								<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
+								<s:if test='%{#imageMainURL=="/"}'>
+									<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+								</s:if>
+								<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
+							</s:if>
+							<s:else>
+								<img src="<s:url value='%{#pImg}'/>"  class="prodImg" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
+							</s:else>
+						</div>
 						
 						<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 						<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>

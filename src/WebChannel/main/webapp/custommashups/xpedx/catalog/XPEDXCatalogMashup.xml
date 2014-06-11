@@ -107,7 +107,7 @@
 							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
 								ContentSize="" Description="" Label="" Type="" />
 						</AssetList>
-						<Extn ExtnMwt="" ExtnCert="" ExtnSellText="" ExtnMpc="" ExtnSupplierNameDisplay="" />
+						<Extn ExtnMwt="" ExtnCert="" ExtnSellText="" ExtnMpc="" ExtnSupplierNameDisplay="" ExtnSourcingStatus="" />
 						<AlternateUOMList>
 							<AlternateUOM Quantity="" UnitOfMeasure="" IsOrderingUOM=""/>
 						</AlternateUOMList>
