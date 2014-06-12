@@ -115,6 +115,8 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String b2cPly = validate(b2cItemExtn.getAttribute("ExtnPly"));
 		String b2cPackMethod = validate(b2cItemExtn.getAttribute("ExtnPackMethod")); //added for XBT 262 & 258
 		String b2cstockStatus = validate(itemBranchBean.getInventoryIndicator());
+		String b2cSourcingStatus = validate(b2cItemExtn.getAttribute("ExtnSourcingStatus"));
+
 		String storeFrontId=(String) tag.getWcContext().getStorefrontId();
 		//String isSuperseded = validate(item.getAttribute("IsItemSuperseded"));
 		//String isValid = validate(info.getAttribute("IsValid"));
@@ -291,6 +293,12 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		}
 
 		//End of EB 47
+		sb.append("\",");
+
+		sb.append("coreitemdiv: \"");
+		if ("CR".equals(b2cSourcingStatus)) {
+			sb.append("<div class=\\\"core-item\\\"></div>");
+		}
 		sb.append("\",");
 
 		sb.append("uomdisplay: \"<select name='itemUomList' ").append("onmousedown=javascript:document.getElementById(").append("'").append(itemKey).append("'").append(").setAttribute('class',''); ")
