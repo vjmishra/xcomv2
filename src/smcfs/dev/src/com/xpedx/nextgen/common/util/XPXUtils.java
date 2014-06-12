@@ -2144,7 +2144,7 @@ public class XPXUtils implements YIFCustomApi {
 		 * This needs to be revisited once the logo image names are confirmed.
 		 **/
 		if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/logo-email.jpg";
+			_imageName = "/xpedx_r_rgb_lo.jpg";
 		} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
 		} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
@@ -2162,7 +2162,7 @@ public class XPXUtils implements YIFCustomApi {
 		} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/Zellerbach_r_rgb_lo.jpg";
 		} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/logo-email.jpg";
+			_imageName = "/xpedx_r_rgb_lo.jpg";
 		} 
 		return _imageName;
 	}
