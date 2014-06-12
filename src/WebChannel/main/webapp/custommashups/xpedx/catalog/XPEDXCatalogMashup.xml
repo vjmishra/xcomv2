@@ -691,7 +691,7 @@
 							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
 						</CategoryList>
 						<ComputedPrice UnitPrice=""/>
-						<Extn ExtnMpc ="" ExtnCert=""/>
+						<Extn ExtnMpc ="" ExtnCert="" ExtnSourcingStatus="" />
 					</Item>
 				</ItemList>
 			</Template>
@@ -742,28 +742,29 @@
 			<Template>
 				<ItemList Currency="" >
 					<Item ItemID=""  UnitOfMeasure="" ItemKey="">
-					<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
-							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation="" ManufacturerItem="" ManufacturerName=""/>
-					<AssociationTypeList>
-						<AssociationType CodeShortDescription="" Type="">
-						 <AssociationList>
-							 <Association AssociatedQuantity="" AssociationType="" EffectiveFrom="" EffectiveTo="" Priority="">
-								 <Item ItemID="" UnitOfMeasure="" >
-								   <PrimaryInformation Description="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ExtendedDescription="" IsValid=""/>
-								   <AssetList TotalNumberOfRecords="">
-								      <Asset AssetID="" AssetKey="" ContentID="" ContentLocation="" ContentSize="" Description="" Label="" Type=""/>
-								   </AssetList>
-								 </Item>
-							 </Association>
-						  </AssociationList>
-						</AssociationType>
-					</AssociationTypeList>
-					<Extn ExtnMpc=""/>
+						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
+								IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation="" ManufacturerItem="" ManufacturerName=""/>
+						<AssociationTypeList>
+							<AssociationType CodeShortDescription="" Type="">
+							 <AssociationList>
+								 <Association AssociatedQuantity="" AssociationType="" EffectiveFrom="" EffectiveTo="" Priority="">
+									 <Item ItemID="" UnitOfMeasure="" >
+									   <PrimaryInformation Description="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ExtendedDescription="" IsValid=""/>
+									   <AssetList TotalNumberOfRecords="">
+									      <Asset AssetID="" AssetKey="" ContentID="" ContentLocation="" ContentSize="" Description="" Label="" Type=""/>
+									   </AssetList>
+									 </Item>
+								 </Association>
+							  </AssociationList>
+							</AssociationType>
+						</AssociationTypeList>
+						<Extn ExtnMpc="" ExtnSourcingStatus="" />
 					</Item>
 				</ItemList>
 			</Template>
 		</API>
 	</mashup>
+	
 	<mashup id ='xpedxItemBranchDetailsForItemAssociation' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
 		<API FlowName="getXPXItemBranchListService" >

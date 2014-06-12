@@ -2637,8 +2637,10 @@ function showSharedListForm(){
 											
 											<%-- TODO: add escape=false to this s:property (href's query string is messed up without it) --%>
 											<a href='<s:property value="%{itemDetailsLink}" />'>
-												<div class="imagewrap">
-													<%-- TODO: ideally find a way to omit these images until toggled on to avoid loading images in the background --%>
+												<div class="imagewrap relative">
+													<s:if test="#wcUtil.isCoreItemByExtn(#YFSItmeExtn)">
+														<div class="core-item"></div>
+													</s:if>
 													<img class="item-thumbnail"
 															data-src="<s:url value='%{#itemImagesMap.get(#itemId)}' includeParams='none' />"
 															width="150" height="150" alt="" />

@@ -6895,6 +6895,14 @@ public class XPEDXWCUtils {
 	 */
 	public static boolean isCoreItem(Element itemElem) {
 		Element extnElem = SCXmlUtil.getChildElement(itemElem, "Extn");
+		return isCoreItemByExtn(extnElem);
+	}
+
+	/**
+	 * @param extnElem The 'Extn' element for the item
+	 * @return Returns true if the given item is a core item (/Item/Extn@ExtnSourcingStatus=CR).
+	 */
+	public static boolean isCoreItemByExtn(Element extnElem) {
 		return extnElem != null && "CR".equalsIgnoreCase(extnElem.getAttribute("ExtnSourcingStatus"));
 	}
 

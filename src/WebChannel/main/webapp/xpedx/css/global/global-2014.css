@@ -927,3 +927,6 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	width: 91px;
 	height: 70px;
 }
+.hide-item-thumbnails .mil-wrap-condensed-container .core-item {
+	display: none;
+}
