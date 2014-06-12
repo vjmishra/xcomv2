@@ -222,82 +222,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		Element itemsElementFromInput = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/StockCheckRequest/Items");
 
-		/*Element items = stockCheckErrorDoc.createElement("Items");
-		Element item = stockCheckErrorDoc.createElement("Item");
-
-		Element indexID = stockCheckErrorDoc.createElement("IndexID");
-		item.appendChild(indexID);
-		Element xpedxPartNumber = stockCheckErrorDoc.createElement("xpedxPartNumber");
-		item.appendChild(xpedxPartNumber);
-		Element customerPartNumber = stockCheckErrorDoc.createElement("CustomerPartNumber");
-		item.appendChild(customerPartNumber);
-		Element quantity = stockCheckErrorDoc.createElement("Quantity");
-		item.appendChild(quantity);
-		Element unitOfMeasure = stockCheckErrorDoc.createElement("UnitOfMeasure");
-		item.appendChild(unitOfMeasure);
-		Element errorCode2 = stockCheckErrorDoc.createElement("ErrorCode");
-		item.appendChild(errorCode2);
-		Element errorMessage2 = stockCheckErrorDoc.createElement("ErrorMessage");
-		item.appendChild(errorMessage2);
-		Element customerNumber = stockCheckErrorDoc.createElement("CustomerNumber");
-		item.appendChild(customerNumber);
-		Element category1 = stockCheckErrorDoc.createElement("Category1");
-		item.appendChild(category1);
-		Element category2 = stockCheckErrorDoc.createElement("Category2");
-		item.appendChild(category2);
-		Element category3 = stockCheckErrorDoc.createElement("Category3");
-		item.appendChild(category3);
-		Element category4 = stockCheckErrorDoc.createElement("Category4");
-		item.appendChild(category4);
-		Element itemDescription = stockCheckErrorDoc.createElement("ItemDescription");
-		item.appendChild(itemDescription);
-		Element itemSellText = stockCheckErrorDoc.createElement("ItemSellText");
-		item.appendChild(itemSellText);
-		Element sameDayDesc = stockCheckErrorDoc.createElement("SameDayDescription");
-		item.appendChild(sameDayDesc);
-		Element sameDayQuantity = stockCheckErrorDoc.createElement("SameDayQuantity");
-		item.appendChild(sameDayQuantity);
-		Element nextDayDesc = stockCheckErrorDoc.createElement("NextDayDescription");
-		item.appendChild(nextDayDesc);
-		Element nextDayQuantity = stockCheckErrorDoc.createElement("NextDayQuantity");
-		item.appendChild(nextDayQuantity);
-		Element twoDayDesc = stockCheckErrorDoc.createElement("TwoDayDescription");
-		item.appendChild(twoDayDesc);
-		Element twoDayQuantity = stockCheckErrorDoc.createElement("TwoDayQuantity");
-		item.appendChild(twoDayQuantity);
-		Element availMessage = stockCheckErrorDoc.createElement("AvailabilityMessage");
-		item.appendChild(availMessage);
-		Element backOrderMessage = stockCheckErrorDoc.createElement("BackOrderMessage");
-		item.appendChild(backOrderMessage);
-		Element orderMultipleElement = stockCheckErrorDoc.createElement("OrderMultiple");
-		item.appendChild(orderMultipleElement);
-		Element orderMultipleMessage = stockCheckErrorDoc.createElement("OrderMultipleMessage");
-		item.appendChild(orderMultipleMessage);
-		Element itemStatus = stockCheckErrorDoc.createElement("ItemStatus");
-		item.appendChild(itemStatus);
-		Element totalPrice = stockCheckErrorDoc.createElement("TotalPrice");
-		item.appendChild(totalPrice);
-		Element manufacturer = stockCheckErrorDoc.createElement("Manufacturer");
-		item.appendChild(manufacturer);
-		Element manufacturerPartNo = stockCheckErrorDoc.createElement("ManufacturerPartNumber");
-		item.appendChild(manufacturerPartNo);
-		Element unitPrice1 = stockCheckErrorDoc.createElement("UnitPrice1");
-		item.appendChild(unitPrice1);
-		Element unitPrice2 = stockCheckErrorDoc.createElement("UnitPrice2");
-		item.appendChild(unitPrice2);
-		Element uomNodeList = stockCheckErrorDoc.createElement("UOMList");
-		item.appendChild(uomNodeList);
-		Element catalogAttributeName = stockCheckErrorDoc.createElement("CatalogAttributeName1");
-		item.appendChild(catalogAttributeName);
-		Element catalogAttributeValue = stockCheckErrorDoc.createElement("CatalogAttributeValue1");
-		item.appendChild(catalogAttributeValue);
-
-
-
-
-		items.appendChild(item);
-		stockCheckResponse.appendChild(items);*/
-
 		importElement(stockCheckResponse,itemsElementFromInput);
 
 		stockCheckResponses.appendChild(stockCheckResponse);
@@ -390,84 +314,14 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		int listLength = 0;
 
-		Document getCustomerListOutputDoc = null;
 		Document stockCheckResponseDocument = YFCDocument.createDocument("xpedxStockCheckWSResponse").getDocument();
 		Element stockCheckResponseDocRoot = stockCheckResponseDocument.getDocumentElement();
 
 		Element pAndAResponseDocRoot = pandAResponseDocument.getDocumentElement();
 
-		/*
-		 * Stock Check Response xml
-		 * -----------------------------
-		 *
-		 * <xpedxStockCheckWSResponse xmlns="http://b2b.xpedx.com/StockCheck_WebService/">
-         *  <RootErrorInfo>
-                    <ErrorCode></ErrorCode>
-                    <ErrorMessage></ErrorMessage>
-            </RootErrorInfo>
-            <SenderCredentials>
-                     <UserEmail />
-                     <UserPassword />
-            </SenderCredentials>
-            <StockCheckResponses>
-                     <BuyerID/>
-                <StockCheckResponse>
-                     <eTradingPartnerID />
-                     <ErrorCode></ErrorCode>
-                     <ErrorMessage></ErrorMessage>
-                     <Items>
-                         <Item>
-                               <IndexID></IndexID>
-                               <xpedxPartNumber />
-                               <CustomerPartNumber />
-                               <Quantity></Quantity>
-                               <UnitOfMeasure />
-                               <ErrorCode></ErrorCode>
-                               <ErrorMessage></ErrorMessage>
-                               <CustomerNumber />
-                               <Category1 />
-                               <Category2 />
-                               <Category3 />
-                               <Category4 />
-                               <PUN />//Not required anymore as per latest design 22-09-2010
-                               <ItemDescription />
-                               <ItemSellText />
-                               <AvailabilityMessage />
-                               <BackOrderMessage />
-                               <SameDayDescription />
-                               <SameDayQuantity></SameDayQuantity>
-                               <NextDayDescription />
-                               <NextDayQuantity></NextDayQuantity>
-                               <TwoDayDescription />
-                               <TwoDayQuantity></TwoDayQuantity>
-                               <OrderMultiple></OrderMultiple>
-                               <OrderMultipleMessage />
-                               <TotalPrice />
-                               <Manufacturer />
-                               <ManufacturerPartNumber />
-                               <ItemStatus />
-                               <UnitPrice1 />
-                               <UnitPrice2 />
-                               <UnitPrice..n />
-                               <UOMCode1 />
-                               <UOMDescription1 />
-                               <UOMCode2/>
-                               <UOMDescription2 />
-                               <UOMCode..n/>
-                               <UOMDescription..n />
-                               <CatalogAttributeName1 />
-                               <CatalogAttributeValue1 />
-                               </Item>
-                       </Items>
-             </StockCheckResponse>
-            </StockCheckResponses>
-           </xpedxStockCheckWSResponse>
-		 */
-
 		/**
 		 * Root Error Info----Gap here so left it at just element creation(Level 1 error codes)
 		 */
-
 		Element rootErrorInfo = stockCheckResponseDocument.createElement("RootErrorInfo");
 
 		Element errorCode = stockCheckResponseDocument.createElement("ErrorCode");
@@ -483,7 +337,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		/**
 		 * Sender Credentials
 		 */
-
 		Element senderCredentials = stockCheckResponseDocument.createElement("SenderCredentials");
 
 		Element userEmail = stockCheckResponseDocument.createElement("UserEmail");
@@ -502,30 +355,27 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		 *  Stock Check Response Element
 		 */
 		Element stockCheckResponses = stockCheckResponseDocument.createElement("StockCheckResponses");
-		Element stockCheckResponse  = stockCheckResponseDocument.createElement("StockCheckResponse"); //Dont forget to append to root element
-		// and check if you have coded for repeating stock check response elements.
+		Element stockCheckResponse  = stockCheckResponseDocument.createElement("StockCheckResponse");
+		//TODO OLD: Dont forget to append to root element and check if you have coded for repeating stock check response elements.
 
 		Element eTradingID = stockCheckResponseDocument.createElement("eTradingPartnerID");
-		eTradingID.setTextContent(SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/StockCheckRequest/eTradingPartnerID").getTextContent());
+		String eTradingIdIn = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/StockCheckRequest/eTradingPartnerID").getTextContent();
+		eTradingID.setTextContent(eTradingIdIn);
 		stockCheckResponse.appendChild(eTradingID);
 
 		Element buyerID = stockCheckResponseDocument.createElement("BuyerID");
-		buyerID.setTextContent(SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/BuyerID").getTextContent());
+		String buyerIdIn = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/BuyerID").getTextContent();
+		buyerID.setTextContent(buyerIdIn);
 		stockCheckResponses.appendChild(buyerID);
 		stockCheckResponseDocRoot.appendChild(stockCheckResponses);
 
-		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(env,
-				SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/BuyerID").getTextContent());
+		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(env, buyerIdIn);
 
 		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
 		String sapCustOrgCode = sapCustomerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
 
-
 		//With the SAP parent customer org code and the etrading id,we retrieve the ship to customer
-
-		getCustomerListOutputDoc = getCustomerListOutput(env,
-				SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./StockCheckRequests/StockCheckRequest/eTradingPartnerID").getTextContent(),sapCustOrgCode);
-
+		Document getCustomerListOutputDoc = getCustomerListOutput(env, eTradingIdIn,sapCustOrgCode);
 
 		// Get the customer details
 		if(getCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).getLength()>0)
@@ -598,7 +448,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  //[OLD: Not sure as to why requestedUOM is not passed here but the pricing UOM is passed...need to ask Prashant...I changed it to RequestedUom...
 					  Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
 					  String baseUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent();
-					  String convertedBaseUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, baseUom, xpedxPartNumber.getTextContent(), buyerID.getTextContent(), eTradingID.getTextContent());
+					  String convertedBaseUom = XPXUtils.replaceOutgoingUOMFromLegacy(
+							  env, baseUom, xpedxPartNumber.getTextContent(), getCustomerListOutputDoc);
 					  String baseUomDescription = getUomDesc(baseUom, convertedBaseUom);
 					  unitOfMeasure.setTextContent(convertedBaseUom);
 					  item.appendChild(unitOfMeasure);
@@ -619,7 +470,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  item.appendChild(customerNumber);
 
 					  Document getItemDetailsOutputDoc = getItemDetails(env,SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent());
-					  log.info("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc)); //TODO log debug
+					  log.debug("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc));
 
 					  Element getCategoryOutputDocRoot =  getItemDetailsOutputDoc.getDocumentElement();
 					  Element itemElement = (Element) getCategoryOutputDocRoot.getElementsByTagName("Item").item(0);
@@ -830,7 +681,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 								equals(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()))
 						{
 							String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
-							String convertedPricingUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, pricingUom, xpedxPartNumber.getTextContent(), buyerID.getTextContent(), eTradingID.getTextContent());
+							String convertedPricingUom = XPXUtils.replaceOutgoingUOMFromLegacy(
+									env, pricingUom, xpedxPartNumber.getTextContent(), getCustomerListOutputDoc);
+
 							String pricingUomDescription = getUomDesc(pricingUom, convertedPricingUom);
 							unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()
 									+"/"+pricingUomDescription);
@@ -853,9 +706,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 							Element uomCode1 = stockCheckResponseDocument.createElement("UOMCode1");
 							Element uomDescription1 = stockCheckResponseDocument.createElement("UOMDescription1");
 
-							//TODO is this slow? Do this call (and ones above) get cached?
-							String convertedToCustomerUom = XPXUtils.replaceOutgoingUOMFromLegacy(env, xpxUom, xpedxPartNumber.getTextContent(),
-									buyerID.getTextContent(), eTradingID.getTextContent());
+							String convertedToCustomerUom = XPXUtils.replaceOutgoingUOMFromLegacy(
+									env, xpxUom, xpedxPartNumber.getTextContent(), getCustomerListOutputDoc);
 
 							String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
 
@@ -1036,7 +888,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("CustomerID", customerID);
 		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
 
+    	log.info("XPXUOMListAPI input: "+SCXmlUtil.getString(invokeUOMlistAPIDoc)); //TODO remove
 		uomListOutputDoc = api.executeFlow(env, "XPXUOMListAPI", invokeUOMlistAPIDoc);
+    	log.info("XPXUOMListAPI output: "+SCXmlUtil.getString(uomListOutputDoc)); //TODO remove
 
 		return uomListOutputDoc;
 	}
@@ -1057,7 +911,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -1114,7 +967,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    }
@@ -1141,7 +993,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -1385,7 +1236,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	    				{
 	    					String uom = SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent();
 
-	    					String convertedUom = XPXUtils.replaceIncomingUOMFromCustomer(env, uom, sLegacyProductCode.getTextContent(), buyerID, eTradingID);
+	    					String convertedUom = XPXUtils.replaceIncomingUOMFromCustomer(
+	    							env, uom, sLegacyProductCode.getTextContent(), getShipToCustomerDetailsOutputDoc, getSAPCustomerDetailsOutputDoc);
 	    					sRequestedQtyUOM.setTextContent(convertedUom);
 	    				}
 	    			}
@@ -1548,9 +1400,11 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		getCustomerListInputDoc.getDocumentElement().appendChild(customerExtnElement);
 
+		//log.info("SC getCustomerList: " + SCXmlUtil.getString(getCustomerListInputDoc)); //TODO remove
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
 		getCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+		//log.info("SC getCustomerList: " + SCXmlUtil.getString(getCustomerListOutputDoc)); //TODO remove
 
 		return getCustomerListOutputDoc;
 	}
