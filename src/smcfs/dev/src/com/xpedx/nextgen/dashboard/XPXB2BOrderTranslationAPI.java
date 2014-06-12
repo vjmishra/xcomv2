@@ -753,7 +753,7 @@ public class XPXB2BOrderTranslationAPI implements YIFCustomApi
 				//Prepare the input that needs to be sent out the email component
 				   /* <RefOrder CSR1="" CSR2="" BuyerID="12345" ETradingID="12345" LiaisonMessageID="12345" InvalidEntity="item" OrderDate="20101124T14:10:07" 
 					ShipToAddress1="1200 EL CAMINO REAL" ShipToAddress2="Mn. Junction" CustomerPO="123" ShipToCity="Cincin" ShipToState="Ohio" ShipToZIP="123" 
-					ShipToCountryCode="US" LogoPath="D:/workspace/XpedxArtifacts/smcfs/Design/Templates/EMail Templates - Business Approved Content/logo-email.jpg">
+					ShipToCountryCode="US" LogoPath="D:/workspace/XpedxArtifacts/smcfs/Design/Templates/EMail Templates - Business Approved Content/xpedx_r_rgb_lo.jpg">
 					<RefOrderLines>
 					<RefOrderLine LegacyProductCode="123" LineDescription="FirstItem" RequestedOrderQuantity="4" RequestedUnitOfMeasure="EACH" 
 					PriceUnitOfMeasure="EA" UnitPrice="10.00" POLineID="123" CustomerProductCode="123"/>
