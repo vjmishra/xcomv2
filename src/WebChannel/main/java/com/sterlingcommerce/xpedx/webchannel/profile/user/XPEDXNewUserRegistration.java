@@ -194,7 +194,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	private String getLogoName(String sellerOrgCode) {
 		String _imageName = "";
 		if (XPEDXConstants.XPEDX_LOGO.equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/logo-email.jpg";
+			_imageName = "/xpedx_r_rgb_lo.jpg";
 		} else if (XPEDXConstants.BULKLEYDUNTON_LOGO
 				.equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
@@ -220,7 +220,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			_imageName = "/Zellerbach_r_rgb_lo.jpg";
 		} else if (XPEDXConstants.XPEDXCANADA_LOGO
 				.equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/logo-email.jpg";
+			_imageName = "/xpedx_r_rgb_lo.jpg";
 		}
 		return _imageName;
 	}

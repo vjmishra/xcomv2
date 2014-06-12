@@ -2158,7 +2158,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 	private String getLogoName(String sellerOrgCode) {
 		String _imageName = "";
 		if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/logo-email.jpg";
+			_imageName = "/xpedx_r_rgb_lo.jpg";
 		} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
 		} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
@@ -2176,7 +2176,7 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/Zellerbach_r_rgb_lo.jpg";
 		} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/logo-email.jpg";
+			_imageName = "/xpedx_r_rgb_lo.jpg";
 		}
 		return _imageName;
 	}
