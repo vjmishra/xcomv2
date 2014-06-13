@@ -449,7 +449,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
 					  String baseUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent();
 					  String convertedBaseUom = XPXUtils.replaceOutgoingUOMFromLegacy(
-							  env, baseUom, xpedxPartNumber.getTextContent(), getCustomerListOutputDoc);
+							  env, baseUom, xpedxPartNumber.getTextContent());
 					  String baseUomDescription = getUomDesc(baseUom, convertedBaseUom);
 					  unitOfMeasure.setTextContent(convertedBaseUom);
 					  item.appendChild(unitOfMeasure);
@@ -682,7 +682,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						{
 							String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
 							String convertedPricingUom = XPXUtils.replaceOutgoingUOMFromLegacy(
-									env, pricingUom, xpedxPartNumber.getTextContent(), getCustomerListOutputDoc);
+									env, pricingUom, xpedxPartNumber.getTextContent());
 
 							String pricingUomDescription = getUomDesc(pricingUom, convertedPricingUom);
 							unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()
@@ -703,17 +703,17 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 							String xpxUom = uomElement.getAttribute("UnitOfMeasure");
 
 							Element uom = stockCheckResponseDocument.createElement("UOM");
-							Element uomCode1 = stockCheckResponseDocument.createElement("UOMCode1");
-							Element uomDescription1 = stockCheckResponseDocument.createElement("UOMDescription1");
+							Element uomCode1 = stockCheckResponseDocument.createElement("UOMCode"+(b+1));
+							Element uomDescription1 = stockCheckResponseDocument.createElement("UOMDescription"+(b+1));
 
 							String convertedToCustomerUom = XPXUtils.replaceOutgoingUOMFromLegacy(
-									env, xpxUom, xpedxPartNumber.getTextContent(), getCustomerListOutputDoc);
+									env, xpxUom, xpedxPartNumber.getTextContent());
 
 							String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
 
 							uomCode1.setTextContent(convertedToCustomerUom);
 							uom.appendChild(uomCode1);
-							uomDescription1.setTextContent(uomDesc); //TODO XPXGetLegacyUomXrefService has LegacyDesc ??
+							uomDescription1.setTextContent(uomDesc);
 							uom.appendChild(uomDescription1);
 							uomNodeList.appendChild(uom);
 						}
@@ -927,9 +927,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 		else if((Integer.parseInt(reqQty) > Integer.parseInt(sameDayQty)) &&
 				   (Integer.parseInt(reqQty) <= (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty))))
-				{
-			             availabilityMessage = "Ready To Ship Next Day";
-				}
+		{
+	             availabilityMessage = "Ready To Ship Next Day";
+		}
 		else if((Integer.parseInt(reqQty) > (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)))&&
 				(Integer.parseInt(reqQty) <= (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty))))
 		{
@@ -1237,7 +1237,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	    					String uom = SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent();
 
 	    					String convertedUom = XPXUtils.replaceIncomingUOMFromCustomer(
-	    							env, uom, sLegacyProductCode.getTextContent(), getShipToCustomerDetailsOutputDoc, getSAPCustomerDetailsOutputDoc);
+	    							env, uom, sLegacyProductCode.getTextContent(), getSAPCustomerDetailsOutputDoc);
 	    					sRequestedQtyUOM.setTextContent(convertedUom);
 	    				}
 	    			}
@@ -1486,7 +1486,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 	}
 
 }

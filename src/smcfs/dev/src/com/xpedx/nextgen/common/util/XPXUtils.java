@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.xpath.XPath;
@@ -52,16 +53,20 @@ public class XPXUtils implements YIFCustomApi {
 
 	private static final String GLOBAL_TEMPLATE_API_GET_ORGANIZATION_LIST_XPX_GET_ARTICLE_DETAILS_SERVICE = "global/template/api/getOrganizationList.XPXGetArticleDetailsService.xml";
 	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";
-	/** API object. */
-	private static YIFApi api = null;
+	private static final String propertyFile="/xpedx/sterling/Foundation/properties/centExempt.properties";
+
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static final XPathFactory xPathFactory = XPathFactory.newInstance();
-	private static final String propertyFile="/xpedx/sterling/Foundation/properties/centExempt.properties";
+
+	private static YIFApi api = null;
+	private static Map<String,String> uomIncomingXrefMap;
+	private static Map<String,String> uomOutgoingXrefMap;
 	static {
-
 		try {
-
 			api = YIFClientFactory.getInstance().getApi();
+
+			uomIncomingXrefMap = new HashMap<String, String>();
+			uomOutgoingXrefMap = new HashMap<String, String>();
 
 		} catch (YIFClientCreationException e) {
 			// TODO Auto-generated catch block
@@ -1117,12 +1122,11 @@ public class XPXUtils implements YIFCustomApi {
 			customerOrderBranch = outputExtnElement
 					.getAttribute("ExtnCustOrderBranch");
 
-			String envtCode = outputExtnElement
-					.getAttribute("ExtnEnvironmentCode");
+			//TODO remove this since always "M"?
+			String envtCode = outputExtnElement.getAttribute("ExtnEnvironmentCode");
 			if (envtCode == null || envtCode.trim().length() <= 0) {
 				// Throw new YFSException with the description
-				throw new YFSException(
-						"Environment code for the customer is null or empty");
+				throw new YFSException("Environment code for the customer is null or empty");
 			}
 
 			if (customerDivision.trim().length() > 0) {
@@ -1162,6 +1166,7 @@ public class XPXUtils implements YIFCustomApi {
 		return divisionCodes;
 	}
 
+
 	// Keep this old signature as wrapper method though the one caller is hopefully not using it anymore
 	public static String replaceOutgoingUOMFromLegacy(YFSEnvironment env,
 			String incomingUOM, String itemID, String buyerID, String eTradingID)
@@ -1190,119 +1195,71 @@ public class XPXUtils implements YIFCustomApi {
 					"IncomingUOM cannot be null or empty to XPXUtils.replaceOutgoingUOMFromLegacy)");
 		}
 
-		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(
-				env, buyerID);
-		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		String sapCustOrgCode = sapCustomerElement
-				.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
-
-		// With the SAP parent customer org code and the etrading id,we retrieve
-		// the ship to customer
-
-		Document getShipToCustomerDetailsOutputDoc = getCustomerDetailsOutput(
-				env, eTradingID, sapCustOrgCode);
-		return replaceOutgoingUOMFromLegacy(env, incomingUOM, itemID, getShipToCustomerDetailsOutputDoc);
+		return replaceOutgoingUOMFromLegacy(env, incomingUOM, itemID);
 	}
 
-	public static String replaceOutgoingUOMFromLegacy(YFSEnvironment env,
-			String incomingUOM, String itemID, Document getShipToCustomerDetailsOutputDoc)
-			throws YFSException, RemoteException, YIFClientCreationException,
-			NullPointerException, Exception {
+	public static String replaceOutgoingUOMFromLegacy(YFSEnvironment env,String incomingUOM, String itemID)
+			throws YFSException, RemoteException, YIFClientCreationException, NullPointerException {
 
-		Element customerElement = (Element) getShipToCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		String customerID = customerElement.getAttribute("CustomerID");
-		Element extnCustomerElement = (Element) customerElement
-				.getElementsByTagName("Extn").item(0);
-		String extnUomType = extnCustomerElement.getAttribute("ExtnUomType");
-    	log.info("extnUomType: "+extnUomType); //TODO remove
-
-		// Tokenizing the customer id to get the envt id, legacy customer no,
-		// company code
-		String environment_id = null;
-		if (customerID != null || customerID.trim().length() != 0) {
-			/*
-			 * String tempBuyerOrgCode = "30-057520-200-DEV-MM"; String[]
-			 * splitArrayOnBuyerOrgCode = tempBuyerOrgCode.split("-");
-			 */
-
-			String[] splitArrayOnBuyerOrgCode = customerID.split("-");
-
-			//TODO continue to shrink this since only seem to know env
-			for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
-				if (i == 3) {
-					environment_id = splitArrayOnBuyerOrgCode[i];
-					if(log.isDebugEnabled()){
-						log.debug("The envt code is: " + environment_id);
-					}
-				}
-			}
-		}
-
+		// (removed cust lookup for env since always "M")
+		String environment_id = "M";
 		if (!incomingUOM.contains("_")) {
 			incomingUOM = environment_id + "_" + incomingUOM;
 		}
 
-		// TODO cache these?
 		String replacedUOM = null;
-		Document legacyUomOutputDoc = null;
-		Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
-		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", environment_id);
-		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyUOM", incomingUOM);
 
-		log.info("The input to getLegacyUomXrefService is : " + SCXmlUtil.getString(legacyUomInputDoc)); //TODO debug
-		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc);
-		log.info("The output of getLegacyUomXrefService is : " + SCXmlUtil.getString(legacyUomOutputDoc)); //TODO debug
+		if (uomOutgoingXrefMap.containsKey(incomingUOM)) {
+			replacedUOM = uomOutgoingXrefMap.get(incomingUOM);
+			log.info("Legacy UOM xref cache hit: " + incomingUOM + " -> "+replacedUOM); //TODO remove
+		}
+		else {
+			// Lookup legacy UOM in xref table & cache
+			Document legacyUomOutputDoc = null;
+			Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
+			legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", environment_id);
+			legacyUomInputDoc.getDocumentElement().setAttribute("LegacyUOM", incomingUOM);
 
-		//TODO what does this do? Need?
-		if (extnUomType.equalsIgnoreCase("E")) {
-			log.info("Inside the loop where the uom type is E");
-			// EDI UOM
+			log.info("The input to getLegacyUomXrefService is : " + SCXmlUtil.getString(legacyUomInputDoc)); //TODO debug
+			legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc);
+			log.info("The output of getLegacyUomXrefService is : " + SCXmlUtil.getString(legacyUomOutputDoc)); //TODO debug
+
 			if (legacyUomOutputDoc != null) {
-				Element legacyUomXrefElement = (Element) legacyUomOutputDoc
-						.getDocumentElement()
-						.getElementsByTagName("XPEDXLegacyUomXref")
-						.item(0);
+				Element legacyUomXrefElement = (Element) legacyUomOutputDoc.getDocumentElement()
+						.getElementsByTagName("XPEDXLegacyUomXref").item(0);
+
 				if (legacyUomXrefElement != null) {
-					String ediUom = legacyUomXrefElement
-							.getAttribute("UOM");
+					String ediUom = legacyUomXrefElement.getAttribute("UOM");
+
 					if (ediUom != null && ediUom.trim().length() > 0) {
 						replacedUOM = ediUom;
 					} else {
-						throw new YFSException(
-								"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
+						throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 					}
 				} else {
-					throw new YFSException(
-							"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
+					throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 				}
 			} else {
-				throw new YFSException(
-						"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
+				throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 			}
-		} else {
-			log.debug("Inside the loop where the uom type is L");
-			replacedUOM = incomingUOM;
-		}
 
-		if (replacedUOM.contains("_")) {
-			// Means the envt id is appended to this uom....in this case, strip
-			// the envt id and then send it to customer
-			String[] splitArrayOnUom = replacedUOM.split("_");
+			if (replacedUOM.contains("_")) {
+				// Means the envt id is appended to this uom....in this case, strip
+				// the envt id and then send it to customer
+				String[] splitArrayOnUom = replacedUOM.split("_");
 
-			for (int i = 0; i < splitArrayOnUom.length; i++) {
-				if (i == 1) {
-					replacedUOM = splitArrayOnUom[i];
-					log.info("The replacedUOM UOM after the split is: " + replacedUOM); //TODO debug
+				for (int i = 0; i < splitArrayOnUom.length; i++) {
+					if (i == 1) {
+						replacedUOM = splitArrayOnUom[i];
+						log.info("The replacedUOM UOM after the split is: " + replacedUOM); //TODO debug
+					}
 				}
 			}
-		}
-		{
-			log.info("The final replaced uom in the replaceOutgoing method is: "
-				+ replacedUOM);
+			{
+				log.info("The final replaced uom in the replaceOutgoing method is: "
+					+ replacedUOM);
+			}
+			uomOutgoingXrefMap.put(incomingUOM, replacedUOM);
 		}
 		return replacedUOM;
 	}
@@ -1311,8 +1268,7 @@ public class XPXUtils implements YIFCustomApi {
 	// Keep this old signature as wrapper method though the one caller is hopefully not using it anymore
 	public static String replaceIncomingUOMFromCustomer(YFSEnvironment env,
 			String incomingUOM, String itemID, String buyerID, String eTradingID)
-			throws YFSException, RemoteException, YIFClientCreationException,
-			NullPointerException, Exception {
+			throws YFSException, RemoteException, YIFClientCreationException {
 
 		if (env == null) {
 			throw new YFSException(
@@ -1332,105 +1288,45 @@ public class XPXUtils implements YIFCustomApi {
 		}
 
 		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(env, buyerID);
-		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc
-				.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		String sapCustOrgCode = sapCustomerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
 
-		// With the SAP parent customer org code and the etrading id, we retrieve the ship to customer
-		Document getShipToCustomerDetailsOutputDoc = getCustomerDetailsOutput(env, eTradingID, sapCustOrgCode);
-
-		return replaceIncomingUOMFromCustomer(env, incomingUOM, itemID, getShipToCustomerDetailsOutputDoc, getSAPCustomerDetailsOutputDoc);
+		return replaceIncomingUOMFromCustomer(env, incomingUOM, itemID, getSAPCustomerDetailsOutputDoc);
 	}
 
-	public static String replaceIncomingUOMFromCustomer(
-			YFSEnvironment env,String incomingUOM, String itemID,
-			Document getShipToCustomerDetailsOutputDoc, Document getSAPCustomerDetailsOutputDoc)
-			throws YFSException, RemoteException, YIFClientCreationException, NullPointerException, Exception {
+	public static String replaceIncomingUOMFromCustomer(YFSEnvironment env,
+			String incomingUOM, String itemID, Document getSAPCustomerDetailsOutputDoc)
+			throws YFSException, RemoteException, YIFClientCreationException, NullPointerException {
 
 		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc
 				.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
 		String sapCustOrgCode = sapCustomerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
-		Element extnSAPCustomerElement = (Element) sapCustomerElement
-				.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
-		String extnUomType = extnSAPCustomerElement.getAttribute("ExtnUomType");
 
-		Element customerElement = (Element) getShipToCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		String customerID = customerElement.getAttribute("CustomerID");
-
-		String convertedUOM = null;
-		String environment_id = null;
-
-		/**********Commented out as per review comments on 12/05/2011***/
-		//extnUomType = extnCustomerElement.getAttribute("ExtnUomType");
-
-		// Tokenizing the customer id to get the envt id, legacy customer no, company code
-		if (customerID != null || customerID.trim().length() != 0) {
-
-			String[] splitArrayOnBuyerOrgCode = customerID.split("-");
-
-			//TODO condense
-			for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
-				if (i == 3) {
-					environment_id = splitArrayOnBuyerOrgCode[i];
-					{
-						log.info("The envt code is: " + environment_id);
-					}
-				}
-			}
-		}
+		// (removed cust lookup for env since always "M")
+		String environment_id = "M";
 
 		/*** Added as of 30/03/2010 ******/
 		incomingUOM = environment_id + "_" + incomingUOM;
 
-		// This is what actually converts the UOM from customer to legacy
-		String replacedUOM = checkCustomerProfileUom(env, incomingUOM, customerID, sapCustOrgCode, extnUomType, itemID);
+		String replacedUOM;
+		if (uomIncomingXrefMap.containsKey(incomingUOM)) {
+			replacedUOM = uomIncomingXrefMap.get(incomingUOM);
+			log.info("In Legacy UOM xref cache hit: " + incomingUOM + " -> "+replacedUOM); //TODO remove
+		}
+		else {
+			// This is what actually converts the UOM from customer to legacy
+			replacedUOM = checkCustomerProfileUom(env, incomingUOM, itemID);
 
-		if (replacedUOM.contains("_")) {
-			validateUOMWithItemUOMMaster(env, replacedUOM, sapCustOrgCode, itemID);
-			return replacedUOM;
-		} else {
-			convertedUOM = environment_id + "_" + replacedUOM;
-			{
-				log.info("convertedUOM: " + convertedUOM);
+			if (replacedUOM.contains("_")) {
+				validateUOMWithItemUOMMaster(env, replacedUOM, sapCustOrgCode, itemID);
+			} else {
+				replacedUOM = environment_id + "_" + replacedUOM;
+				{
+					log.info("convertedUOM: " + replacedUOM);
+				}
+				validateUOMWithItemUOMMaster(env, replacedUOM, sapCustOrgCode,itemID);
 			}
-			validateUOMWithItemUOMMaster(env, convertedUOM, sapCustOrgCode,
-					itemID);
-			return convertedUOM;
+			uomIncomingXrefMap.put(incomingUOM, replacedUOM);
 		}
-	}
-
-	private static Document getCustomerDetailsOutput(YFSEnvironment env,
-			String eTradingId, String sapCustOrgCode) throws YFSException,
-			RemoteException {
-
-		Document getCustomerDetailsOutputDoc = null;
-
-		YFCDocument getCustomerDetailsInputDoc = YFCDocument
-				.createDocument(XPXLiterals.E_CUSTOMER);
-		getCustomerDetailsInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_ORGANIZATION_CODE, sapCustOrgCode);
-		YFCElement extnElement = getCustomerDetailsInputDoc
-				.createElement(XPXLiterals.E_EXTN);
-		extnElement.setAttribute("ExtnETradingID", eTradingId);
-
-		getCustomerDetailsInputDoc.getDocumentElement()
-				.appendChild(extnElement);
-
-		log.info("getCustomerList2: " + SCXmlUtil.getString(getCustomerDetailsInputDoc.getDocument())); //TODO debug
-		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,
-				getCustomerListTemplate);
-		getCustomerDetailsOutputDoc = api.invoke(env,
-				XPXLiterals.GET_CUSTOMER_LIST_API,
-				getCustomerDetailsInputDoc.getDocument());
-		{
-			log.info("The shipto customer details are: " + SCXmlUtil.getString(getCustomerDetailsOutputDoc)); //TODO debug
-		}
-		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
-
-		return getCustomerDetailsOutputDoc;
-
+		return replacedUOM;
 	}
 
 	private static Document getSAPCustomerDetailsOutput(YFSEnvironment env,
@@ -1462,164 +1358,47 @@ public class XPXUtils implements YIFCustomApi {
 
 	}
 
-	private static String checkCustomerProfileUom(YFSEnvironment env,
-			String incomingUOM, String customerID, String organizationCode,
-			String extnUomType, String itemID) throws YFSException,
-			RemoteException, NullPointerException, Exception {
-		if(log.isDebugEnabled()){
-			log.debug("Inside checkCustomerProfileUom");
-		}
+	private static String checkCustomerProfileUom(YFSEnvironment env, String incomingUOM, String itemID)
+					throws YFSException, RemoteException, NullPointerException {
+
 		String customerProfileUOM = null;
-		String environment_id = null;
 		Document legacyUomOutputDoc = null;
-		if(log.isDebugEnabled()){
-			log.debug("The customer id is: " + customerID);
-		}
-		String[] splitArrayOnBuyerOrgCode = customerID.split("-");
 
-		//TODO condense
-		for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
-			if (i == 3) {
-				environment_id = splitArrayOnBuyerOrgCode[i];
-				if(log.isDebugEnabled()){
-					log.debug("The envt code in checkCustomerProfileUom is: "
-						+ environment_id);
-				}
-			}
-
-		}
+		// (removed cust lookup for env since always "M")
+		String environment_id = "M";
 
 		// TODO cache these? (template to reduce data?)
-		Document legacyUomInputDoc = YFCDocument.createDocument(
-				"XPEDXLegacyUomXref").getDocument();
+		Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
 		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", environment_id);
-
-		/*
-		 * if(incomingUOM.contains("_")) { String[] splitArrayOnUom =
-		 * incomingUOM.split("_");
-		 *
-		 * for(int i=0; i<splitArrayOnUom.length; i++) {
-		 *
-		 * if(i==1) { incomingUOM = splitArrayOnUom[i];
-		 * log.debug("The edi uom used for validation is: "+incomingUOM); }
-		 *
-		 * } }
-		 */
 		legacyUomInputDoc.getDocumentElement().setAttribute("UOM", incomingUOM);
+
 		{
-			log.info("The i/p doc to getlegacyUomXref is: "
-				+ SCXmlUtil.getString(legacyUomInputDoc));
+			log.info("The i/p doc to getlegacyUomXref is: " + SCXmlUtil.getString(legacyUomInputDoc));
 		}
 		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService",
 				legacyUomInputDoc);
 		{
 			log.info("The o/p doc o getlegacyUomXref is: " + SCXmlUtil.getString(legacyUomOutputDoc));
-			log.info("The extn uom type in the last loop is: " + extnUomType);
 		}
-		if (extnUomType.equalsIgnoreCase("E")) {
-			// EDI UOM
-			if(log.isDebugEnabled()){
-				log.debug("Inside the loop where extn uom type is E");
-			}
-			Element legacyUomXrefElement = (Element) legacyUomOutputDoc
-					.getDocumentElement()
-					.getElementsByTagName("XPEDXLegacyUomXref").item(0);
-			if (legacyUomXrefElement != null) {
-				String legacyUom = legacyUomXrefElement
-						.getAttribute("LegacyUOM");
-				if (legacyUom != null && legacyUom.trim().length() > 0) {
-					if(log.isDebugEnabled()){
-						log.debug("The legacy uom is: " + legacyUom);
-					}
-					customerProfileUOM = legacyUom;
-				} else {
-					// No Legacy UOM attribute value available
-					throw new YFSException(
-							"No Legacy UOM available despite EDI flag being being set!!!");
-				}
-			} else {
-				// No entry in Legacy UOM Xref table despite flag being EDI
-				// Throw new YFSException with the description
-				throw new YFSException(
-						"No Legacy UOM XRef entry available despite EDI flag being being set!!!");
 
+		Element legacyUomXrefElement = (Element) legacyUomOutputDoc.getDocumentElement()
+				.getElementsByTagName("XPEDXLegacyUomXref").item(0);
+		if (legacyUomXrefElement != null) {
+			String legacyUom = legacyUomXrefElement.getAttribute("LegacyUOM");
+			if (legacyUom != null && legacyUom.trim().length() > 0) {
+				if(log.isDebugEnabled()){
+					log.debug("The legacy uom is: " + legacyUom);
+				}
+				customerProfileUOM = legacyUom;
+			} else {
+				throw new YFSException("No Legacy UOM available");
 			}
 		} else {
-			log.debug("Inside the loop where extn uom type is not E");
-			customerProfileUOM = incomingUOM;
+			throw new YFSException("No Legacy UOM XRef entry available");
 		}
 		return customerProfileUOM;
 	}
 
-	private static Document getXPXUomList(YFSEnvironment env, String itemID,
-			String customerID, String organizationCode) throws YFSException,
-			RemoteException, Exception {
-		Document uomListOutputDoc = null;
-
-		Document invokeUOMlistAPIDoc = YFCDocument.createDocument("UOM")
-				.getDocument();
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("ItemID", itemID);
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("CustomerID",
-				customerID);
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute(
-				"OrganizationCode", organizationCode);
-
-		uomListOutputDoc = api.executeFlow(env, "XPXUOMListAPI",
-				invokeUOMlistAPIDoc);
-
-		/*
-		 * YFCDocument inputDocument = YFCDocument.createDocument("Item");
-		 * YFCElement inputElement = inputDocument.getDocumentElement();
-		 * inputElement.setAttribute("ItemID", itemID);
-		 * inputElement.setAttribute("OrganizationCode", organizationCode);
-		 * env.setApiTemplate("getItemList", SCXmlUtil.createFromString("" +
-		 * "<ItemList><Item><AlternateUOMList><AlternateUOM />" +
-		 * "</AlternateUOMList></Item></ItemList>"));
-		 *
-		 *
-		 * log.debug("The input to get the effective list of uoms is: "+SCXmlUtil
-		 * .getString(inputDocument.getDocument())); uomListOutputDoc =
-		 * api.invoke(env, "getItemList",inputDocument.getDocument());
-		 * log.debug(
-		 * "The output of get the effective list of uoms is: "+SCXmlUtil
-		 * .getString(uomListOutputDoc)); env.clearApiTemplate("getItemList");
-		 */
-
-		return uomListOutputDoc;
-	}
-
-	private static Document invokeXREF(YFSEnvironment env, String itemID,
-			String legacyCustomerNumber, String environment_id,
-			String company_code) throws YFSException, RemoteException,
-			Exception {
-		Document XREFOutputDoc = null;
-
-		Document XREFInputDoc = YFCDocument.createDocument(
-				XPXLiterals.E_XPX_ITEM_CUST_XREF).getDocument();
-		XREFInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENVT_CODE,
-				environment_id);
-		XREFInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_COMPANY_CODE, company_code);
-		XREFInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_CUSTOMER_NO, legacyCustomerNumber);
-		XREFInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_LEGACY_ITEM_NO, itemID);
-		{
-		log.info("The input to getXrefList is: "
-				+ SCXmlUtil.getString(XREFInputDoc));
-		}
-		// <XPXItemcustXrefList />
-
-
-		XREFOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST,
-				XREFInputDoc);
-		{
-		log.info("The output of getXrefList is: "
-				+ SCXmlUtil.getString(XREFOutputDoc));
-		}
-
-		return XREFOutputDoc;
-	}
 
 	/**
 	 * Appends EnvtId and Node in this format[if both are not null]:NODE_ENVTID
@@ -1637,35 +1416,20 @@ public class XPXUtils implements YIFCustomApi {
 		return strNode;
 	}
 
-	/**
-	 * Validates the replaced UOM with the ItemUOMMaster.
-	 *
-	 * @param incomingUOM
-	 *            - Replaced UOM that needs to be validated with the master
-	 *            table.
-	 * @param organizationCode
-	 * @return incomingUOM (If its a valid UOM else throws a exception as
-	 *         invalid UOM)
-	 */
-
-	private static void validateUOMWithItemUOMMaster(YFSEnvironment env,
-			String incomingUOM, String organizationCode, String itemID)
-			throws YFSException, NullPointerException, Exception {
+	private static void validateUOMWithItemUOMMaster(YFSEnvironment env, String incomingUOM, String organizationCode, String itemID)
+			throws YFSException, NullPointerException, RemoteException {
 		if(log.isDebugEnabled()){
 			log.debug("Validate UOM with the Item UOM master table.");
 		}
-		boolean itemIDUOMExist = false;
-		boolean entryInItemMaster = false;
-		boolean validUOM = false;
 		String itemUOMTemplate = "global/template/api/getItemUOMListTemplate.xml";
 
 		// Validate incoming UOM based on Item UOM Master list.
 		if (YFCObject.isNull(incomingUOM) || YFCObject.isVoid(incomingUOM)) {
-			throw new Exception("UOM is empty");
+			throw new IllegalArgumentException("UOM is empty");
 		}
 		if (YFCObject.isNull(organizationCode)
 				|| YFCObject.isVoid(organizationCode)) {
-			throw new Exception("Organization code is empty");
+			throw new IllegalArgumentException("Organization code is empty");
 		}
 
 		/* Input xml : <Item ItemID="" OrganizationCode="" /> */
@@ -1682,39 +1446,37 @@ public class XPXUtils implements YIFCustomApi {
 		{
 			log.info("itemUOMInputDoc = " + SCXmlUtil.getString(itemUOMInputDoc));
 		}
-		Document itemUOMOutputDoc = api.invoke(env, "getItemUOMList",
-				itemUOMInputDoc);
+		Document itemUOMOutputDoc = api.invoke(env, "getItemUOMList", itemUOMInputDoc);
 		{
 			log.info("itemUOMOutputDoc = " + SCXmlUtil.getString(itemUOMOutputDoc));
 		}
 		// To clear the api template.
 		env.clearApiTemplate("getItemUOMList");
 
+		boolean itemIDUOMExist = false;
+		boolean validUOM = false;
+
 		if (itemUOMOutputDoc != null) {
-			NodeList itemUOMList = itemUOMOutputDoc.getDocumentElement()
-					.getElementsByTagName("ItemUOM");
+				NodeList itemUOMList = itemUOMOutputDoc.getDocumentElement().getElementsByTagName("ItemUOM");
+
 			int itemUOMListSize = itemUOMList.getLength();
 			for (int itemUOMCount = 0; itemUOMCount < itemUOMListSize; itemUOMCount++) {
+
 				// Item UOM Exists for the item Id.
-				Element itemUOMElement = (Element) itemUOMList
-						.item(itemUOMCount);
-				if (itemUOMElement != null
-						&& itemUOMElement.hasAttribute("IsOrderingUOM")) {
-					String itemUOM = itemUOMElement
-							.getAttribute("UnitOfMeasure");
-					// To check if incoming UOM is equal with the UOM in
-					// yfs_item_uom table.
-					if (itemUOM != null
-							&& itemUOM.equalsIgnoreCase(incomingUOM)) {
+				Element itemUOMElement = (Element) itemUOMList.item(itemUOMCount);
+				if (itemUOMElement != null&& itemUOMElement.hasAttribute("IsOrderingUOM")) {
+					String itemUOM = itemUOMElement.getAttribute("UnitOfMeasure");
+
+					// To check if incoming UOM is equal with the UOM in yfs_item_uom table.
+					if (itemUOM != null && itemUOM.equalsIgnoreCase(incomingUOM)) {
 						itemIDUOMExist = true;
-						String isOrderingUOM = itemUOMElement
-								.getAttribute("IsOrderingUOM");
+
+						String isOrderingUOM = itemUOMElement.getAttribute("IsOrderingUOM");
 						if (!YFCObject.isNull(isOrderingUOM)) {
+
 							// To check if the UOM is an ordering UOM.
 							if (isOrderingUOM.equalsIgnoreCase("Y")) {
-								if(log.isDebugEnabled()){
-									log.debug("Valid UOM");
-								}
+								if(log.isDebugEnabled()){ log.debug("Valid UOM"); }
 								validUOM = true;
 								break;
 							}
@@ -1725,17 +1487,17 @@ public class XPXUtils implements YIFCustomApi {
 
 			// Throw the exception based on the flags set above.
 			if (!itemIDUOMExist) {
-				throw new Exception(
+				throw new IllegalArgumentException(
 						"Invalid UOM as Item ID UOM combination isn't available with Item ID = "
 								+ itemID + " and UOM = " + incomingUOM);
 			}
 			if (!validUOM) {
-				throw new Exception(
+				throw new IllegalArgumentException(
 						"Invalid UOM as Item UOM is not available for ordering.");
 			}
 
 		} else {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"Invalid UOM as Item ID UOM combination isn't available with Item ID = "
 							+ itemID + " and UOM = " + incomingUOM);
 		}
