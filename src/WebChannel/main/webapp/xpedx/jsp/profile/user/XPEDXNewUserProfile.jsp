@@ -210,6 +210,7 @@
 						<s:hidden name="#action.name" value="saveNewUserInfo" />
 						<s:hidden name='buyerOrgCode' value='%{#_action.getBuyerOrgCode()}' />
 						<s:hidden name="preferredLocale" id="saveNewUserInfo_preferredLocale" value="%{'en_US_EST'}"/>
+						<s:hidden name='orderConfirmationEmailFlag' value='Y' />
 			
 			      	<s:hidden id="mandatoryFieldCheckFlag_addNewUserForm" name="mandatoryFieldCheckFlag_addNewUserForm" value="%{false}"/>
 			       <div id="mid-col-mil">
