@@ -6,7 +6,7 @@
 <body> 
 <table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
   <tr>
-    <td height="44"><img src="xpedx_r_rgb_lo.jpg" width="216" height="69" alt="xpedx"  /></td>
+    <td height="44"><img src="logo-email.jpg" width="216" height="69" alt="xpedx"  /></td>
   </tr>
   <tr>
     <td  ><table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -16,7 +16,7 @@
             <td width="600" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; padding:0px 0px"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
           </tr>
           <tr>
-            <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; padding:0px 0px">              This is to notify you  that the following buyer been removed from your  <xsl:value-of select="//@BrandName" />.com  account.</td>
+            <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; padding:0px 0px">              This is to notify you  that the following buyer been removed fromï¿½your  <xsl:value-of select="//@BrandName" />.com  account.</td>
           </tr>
           <tr>
             <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000; padding:0px 0px"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
