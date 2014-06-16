@@ -2334,4 +2334,29 @@ public class XPXUtils implements YIFCustomApi {
 		}
 	}
 
+	public boolean updateEmailSentFlag(YFSEnvironment env, String cOrderHeaderKey, String orderConfirmationEmailSentFlag, String className) {
+		YFCDocument changeOrderInputDoc=null;
+		try {
+			changeOrderInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER);
+			changeOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHeaderKey);
+			
+			YFCElement extnOrderEle = changeOrderInputDoc.getDocumentElement().createChild("Extn");
+			extnOrderEle.setAttribute(XPXLiterals.ORDER_CONFIRMATION_EMAIL_SENT_FLAG, orderConfirmationEmailSentFlag);
+			
+			if(log.isDebugEnabled()){
+				log.debug("Inside callChangeOrder method of "+className+" class. changeOrder-InXML: " + changeOrderInputDoc.getString());
+			}
+			api.invoke(env, "changeOrder", changeOrderInputDoc.getDocument());
+			return true;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error("Inside callChangeOrder method of "+className+" class. changeOrder API call failed while updating ExtnOrderConfirmationEmailSentFlag value: ["
+						+ orderConfirmationEmailSentFlag+"] for order: ["+cOrderHeaderKey+"]");
+			
+			prepareErrorObject(e, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, changeOrderInputDoc.getDocument());
+	        return false;
+		}		
+	}	
+	
 }
