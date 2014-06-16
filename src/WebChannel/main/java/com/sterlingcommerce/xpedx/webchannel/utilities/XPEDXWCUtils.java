@@ -6187,7 +6187,7 @@ public class XPEDXWCUtils {
 		{
 			String _imageName = "";
 			if (XPEDXConstants.XPEDX_LOGO.equalsIgnoreCase(sellerOrgCode)) {
-				_imageName = "/xpedx_r_rgb_lo.jpg";
+				_imageName = "/logo-email.jpg";
 			} else if (XPEDXConstants.BULKLEYDUNTON_LOGO.equalsIgnoreCase(sellerOrgCode)) {
 				_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
 			} else if (XPEDXConstants.CENTRAILEWMAR_LOG0.equalsIgnoreCase(sellerOrgCode)) {
@@ -6205,7 +6205,7 @@ public class XPEDXWCUtils {
 			} else if (XPEDXConstants.ZELLERBACH_LOGO.equalsIgnoreCase(sellerOrgCode)) {
 				_imageName = "/Zellerbach_r_rgb_lo.jpg";
 			} else if (XPEDXConstants.XPEDXCANADA_LOGO.equalsIgnoreCase(sellerOrgCode)) {
-				_imageName = "/xpedx_r_rgb_lo.jpg";
+				_imageName = "/logo-email.jpg";
 			}
 			return _imageName;
 		}
