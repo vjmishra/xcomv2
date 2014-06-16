@@ -110,7 +110,7 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 			lastOrderOperation=extnOrderElem.getAttribute(XPXLiterals.LAST_ORDER_OPERATION);
 			orderEmailConfirmationSentFlag=extnOrderElem.getAttribute(XPXLiterals.ORDER_CONFIRMATION_EMAIL_SENT_FLAG);
 		}
-		
+		boolean updateEmailFlag = false;
 		if("N".equals(orderEmailConfirmationSentFlag) && lastOrderOperation != null && lastOrderOperation.trim().length()>0) {
 			lastOrderOperation=lastOrderOperation.trim();			
 			if ("OrderPlacement".equals(lastOrderOperation) || "OrderEdit".equals(lastOrderOperation)) {
@@ -121,13 +121,18 @@ public class ReprocessOrderConfirmationEmail extends YCPBaseAgent {
 				}
 				String cOrder=SCXmlUtil.getString(orderConfirmationEmailElem);
 				Document cOrderDoc=SCXmlUtil.createFromString(cOrder);
+				XPXUtils utilsObj=new XPXUtils();
 				try {
-					api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderDoc);
 					orderEmailConfirmationSentFlag="Y";
-					XPXUtils utilsObj=new XPXUtils();
-					utilsObj.callChangeOrder(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
+					updateEmailFlag = utilsObj.updateEmailSentFlag(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
+					if(updateEmailFlag==true){
+						api.executeFlow(env, "XPXPutOrderChangesInOrderConfirmationEmailQueue", cOrderDoc);						
+					}
 				}catch(Exception ex) {
 					log.error("Exception occured on posting order confirmation email XML to XPXPutOrderChangesInOrderConfirmationEmailQueue service "+ex.getMessage());
+					//EB-5955 - Duplicate Order Confirmation EMails -Code to verify if there is an issue with Queue mark Email sent flag as N.
+					orderEmailConfirmationSentFlag="N";
+					updateEmailFlag = utilsObj.updateEmailSentFlag(env, cOrderHeaderKey, orderEmailConfirmationSentFlag, this.getClass().getSimpleName());
 				}			
 			
 			} else if("OrderApproved".equals(lastOrderOperation)) {

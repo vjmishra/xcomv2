@@ -731,6 +731,7 @@
 								<s:form id="doAction_edit_%{#uId}" action="MyItemsDetails" method="post">
 									<s:hidden name="listKey" value="%{#id}" />
 									<s:hidden name="listName" value="%{#name}" />
+									<s:hidden name="listDesc" value="%{#desc}" />
 									<s:hidden name="command" value="edit_list" />
 									<s:hidden name="itemCount" value="%{#numOfItems}" />
 									<s:hidden name="editMode" value="%{true}" />
