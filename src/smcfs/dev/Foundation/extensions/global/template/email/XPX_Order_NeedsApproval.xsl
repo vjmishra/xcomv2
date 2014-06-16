@@ -306,7 +306,7 @@
 								<td >
 								</td>
 								<td width="100%">
-								<img src="{$brandLogo}" width="216" height="69"  />
+								<img src="{$brandLogo}" width="210" height="79"  />
 								</td>
 							</tr>
 						</table> 

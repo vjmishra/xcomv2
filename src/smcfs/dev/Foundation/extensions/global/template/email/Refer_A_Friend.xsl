@@ -17,7 +17,7 @@
 			<body> 
 			<table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
 			  <tr>
-				<td height="44"><img src="logo-email.jpg" width="216" height="69" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
+				<td height="44"><img src="logo-email.jpg" width="210" height="79" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
 			  </tr>
 			  <tr>
 				<td ><table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:solid 1px #999;  padding:20px 20px 0px 20px;">
@@ -43,7 +43,7 @@
 						<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; border:solid 1px #818181;color:#000;padding:0px 2px; "> 
 						  <table width="100%" border="0" cellpadding="0" cellspacing="0">
 							<tr>
-							  <td width="45%" rowspan="8" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><div align="center"><img name="" src="logo-email.jpg" width="216" height="69" alt="" /></div></td>
+							  <td width="45%" rowspan="8" style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;"><div align="center"><img name="" src="logo-email.jpg" width="210" height="79" alt="" /></div></td>
 							  <td colspan="2" style="font-family:padding:10px 4px; Arial, Geneva, sans-serif;font-size:12px; color:#000;border-left:solid 1px #818181;"><h1 style="font-family:Arial, Geneva, sans-serif; font-size:20px; font-weight:normal; margin:10px 0px; margin-bottom:10px;">&lt;Product Heading&gt;</h1></td>
 							  </tr>
 							<tr>
