@@ -10,7 +10,7 @@
 		<table width="600" border="0" align="left" cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 		<tr>
 		<td>
-		<img src="{$imageURL}"	width="210" height="79" />
+		<img src="{$imageURL}"	width="210" height="47" />
 	     </td>
 		</tr>
 		  <tr>

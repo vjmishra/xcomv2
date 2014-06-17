@@ -6,7 +6,7 @@
 <body> 
 <table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
   <tr>
-    <td height="44"><img src="logo-email.jpg" width="210" height="79" alt="xpedx"  /></td>
+    <td height="44"><img src="logo-email.jpg" width="210" height="47" alt="xpedx"  /></td>
   </tr>
   <tr>
     <td  ><table width="100%" border="0" cellpadding="0" cellspacing="0">
