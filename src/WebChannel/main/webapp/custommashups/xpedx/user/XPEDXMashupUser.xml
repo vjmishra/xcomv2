@@ -49,7 +49,7 @@
 								ExtnEmployeeID="" ExtnMaxOrderAmount="" ExtnMinOrderAmount=""
 								ExtnAddnlEmailAddrs="" ExtnPOList="" ExtnOrderEmailFormat=""
 								ExtnPrefCatalog="" ExtnDefaultShipTo="" ExtnPaper101Grade=""  ExtnOrderApprovalFlag=""
-								ExtnB2BCatalogView="" ExtnViewReportsFlag="" ExtnViewPricesFlag=""/>
+								ExtnB2BCatalogView="" ExtnViewReportsFlag="" ExtnViewPricesFlag="" ExtnOrderConfEmailFlag=""/>
 							<CustomerAdditionalAddressList>
 								<CustomerAdditionalAddress CustomerAdditionalAddressID="">
 									<PersonInfo AddressID="" AddressLine1="" AddressLine2="" AddressLine3="" 
