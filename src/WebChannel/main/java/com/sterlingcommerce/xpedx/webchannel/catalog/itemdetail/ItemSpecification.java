@@ -8,7 +8,8 @@ import java.util.Comparator;
  */
 public class ItemSpecification {
 
-	private String description;
+	private String label;
+	private String id;
 	private String value;
 	private int sequence;
 
@@ -22,27 +23,29 @@ public class ItemSpecification {
 		}
 	};
 
-	public static ItemSpecification create(String description, String value) {
-		ItemSpecification is = new ItemSpecification();
-		is.setDescription(description);
-		is.setValue(value);
-		return is;
+	public static ItemSpecification create(String id, String label, String value, int sequence) {
+		ItemSpecification bean = new ItemSpecification();
+		bean.setId(id);
+		bean.setLabel(label);
+		bean.setValue(value);
+		bean.setSequence(sequence);
+		return bean;
 	}
 
-	public static ItemSpecification create(String description, String value, int sequence) {
-		ItemSpecification is = new ItemSpecification();
-		is.setDescription(description);
-		is.setValue(value);
-		is.setSequence(sequence);
-		return is;
+	public String getLabel() {
+		return label;
 	}
 
-	public String getDescription() {
-		return description;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getValue() {

@@ -193,7 +193,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							continue;
 						}
 
-						String description = attributeElem.getAttribute("ShortDescription");
+						String shortDescription = attributeElem.getAttribute("ShortDescription");
 
 						// old code did this, which seems equivalent, but more difficult to read
 						Element assignedValueListElem = SCXmlUtil.getChildElement(itemAttributeElem, "AssignedValueList");
@@ -231,7 +231,7 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 							if (group != null) {
 								// join multiple values with <br> tag
 								String value = StringUtils.join(values.toArray(new String[0]), "<br/>");
-								group.addItemSpecification(ItemSpecification.create(description, value, attr.getSequence()));
+								group.addItemSpecification(ItemSpecification.create(longDescription, shortDescription, value, attr.getSequence()));
 							}
 						}
 					}

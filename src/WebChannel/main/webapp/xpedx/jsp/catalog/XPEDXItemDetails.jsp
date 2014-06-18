@@ -195,8 +195,17 @@
 								<ul>
 									<s:iterator value="%{#specGroup.specifications}" id="spec" status="specStatus">
 										<li>
-											<div class="chart-spec"><s:property value="#spec.description" /></div>
-											<div class="chart-details"><s:property value="#spec.value" /></div>
+											<div class="chart-spec"><s:property value="#spec.label" /></div>
+											<div class="chart-details">
+												<s:if test="%{#spec.id == 'FSC_Cert' || #spec.id == 'SFI_Cert' || #spec.id == 'PEFC_Cert'}">
+													<a target="_blank" href="https://xcontent.ipaper.com/ProductImages/FSC/<s:property value='#spec.value'/>.pdf">
+														<s:property value='#spec.value'/>
+													</a>
+												</s:if>
+												<s:else>
+													<s:property value="#spec.value" />
+												</s:else>
+											</div>
 										</li>
 									</s:iterator>
 								</ul>
