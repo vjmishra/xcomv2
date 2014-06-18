@@ -36,7 +36,7 @@
 			<table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
 				<tr>
 					<td>
-						<img src="{$brandLogo}" width="210" height="79" alt="xpedx" longdesc="http://www.xpedx.com" />
+						<img src="{$brandLogo}" width="210" height="47" alt="xpedx" longdesc="http://www.xpedx.com" />
 					</td>
 				</tr>
 				<tr>

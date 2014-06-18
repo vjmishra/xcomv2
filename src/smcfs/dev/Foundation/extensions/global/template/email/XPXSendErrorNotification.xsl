@@ -21,7 +21,7 @@ a:hover {	text-decoration:none;	color:#900;}
   <xsl:variable name="BrandLogo">
    <xsl:value-of select="/RefOrder/@LogoPath"/>
   </xsl:variable>
-    <td><img src="{$BrandLogo}" width="210" height="79" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
+    <td><img src="{$BrandLogo}" width="210" height="47" alt="xpedx" longdesc="http://www.xpedx.com" /></td>
   </tr>
   <tr>
       <td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" ><table width="100%" border="0" cellpadding="0"  style="border:solid 1px #999;  padding:20px 20px 0px 20px;">

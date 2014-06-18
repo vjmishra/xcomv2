@@ -14,7 +14,7 @@
 			<body>
 				<table width="600" border="0" align="left" cellpadding="2" cellspacing="2">
 					<tr>
-						<td><img src="{$imageURL}" width="210" height="79"  /></td>
+						<td><img src="{$imageURL}" width="210" height="47"  /></td>
 					</tr>
 					<tr>
 						<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
