@@ -686,3 +686,7 @@ ul.megamenu {
 	opacity: 1;
 	z-index: 3000;
 }
+
+.ship-search-wrap span.resetlink {
+	color: #003399;
+}
