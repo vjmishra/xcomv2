@@ -35,6 +35,7 @@ import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
@@ -836,6 +837,8 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 	
 	public static String getApproversUserName(String UserID) throws CannotBuildInputException, XPathExpressionException
 	{
+		if(YFCCommon.isVoid(UserID))
+			return "";
 		String FirstName;
 		String LastName;
 		String UserName = null;
