@@ -30,7 +30,9 @@ import com.yantra.shared.ycp.YFSContext;
 import com.yantra.yfc.core.YFCIterable;
 import com.yantra.yfc.core.YFCObject;
 import com.yantra.yfc.dom.YFCDocument;
+import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.log.YFCLogCategory;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -108,14 +110,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		//rootEle contains the Legacy XML document. 
 		YFCElement rootEle = yfcDoc.getDocumentElement();
-
+		Element orderextn=null;
+		
 		try {
 			if(log.isDebugEnabled()) {
 				log.debug("XPXPerformLegacyOrderUpdateAPI-InXML:" + YFCDocument.getDocumentFor(inXML).getString());
 			}
 			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(yfcDoc.getDocument().getDocumentElement(),"Extn");
 			if(orderExtnList != null ) {
-				Element orderextn=orderExtnList.get(0);
+				 orderextn=orderExtnList.get(0);
 				if(orderextn != null) {
 					String customerDivision=orderextn.getAttribute("ExtnCustomerDivision");			
 					if(customerDivision!=null && customerDivision.indexOf("_")!=-1) {
@@ -628,6 +631,29 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				log.debug("Exception Description:" + ex.getMessage());
 			}
 			ex.printStackTrace();
+			//Start of EB-6257
+			boolean  isExtnProcessibleFlagUpdated=false;
+			try
+			{
+				if(rootEle.hasAttribute("FromRetryAgent") && "Y".equals(rootEle.getAttribute("FromRetryAgent") ))
+				{
+					YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
+					for(YFCElement orderElem :orderNodeList)							
+					{
+						if(orderElem != null && rootEle.hasAttribute("OrderHeaderKey"))
+						{
+							updateIsReprocessFlagOnError(env,rootEle.getAttribute("OrderHeaderKey"));
+							isExtnProcessibleFlagUpdated=true;
+						}
+					}
+				}
+				
+			}
+			catch(Exception e)
+			{
+				log.error("Exception while updating extnisreprocessibleflag on reprocess order ");
+			}
+			//End of EB-6257
 			APIException = ex;
 			if(!centExempt){
 				System.out.println("Start time before prepareErrorObject: "+sdf.format(Calendar.getInstance().getTime()));
@@ -686,6 +712,17 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				} catch (Exception ex1) {
 					ex1.printStackTrace();
 				}
+				//Start of EB-6257
+				if(orderextn.hasAttribute("ExtnLegacyOrderNo") && !YFCObject.isVoid(orderextn.getAttribute("ExtnLegacyOrderNo")) && !isExtnProcessibleFlagUpdated)
+				{
+					YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
+					for(YFCElement orderElem :orderNodeList)							
+					{
+						if(orderElem != null && !"Customer".equals(orderElem.getAttribute("OrderType")))
+							updateIsReprocessFlagOnError(env,orderElem.getAttribute("OrderHeaderKey"));
+					}
+				}//ENd of EB-6257
+				
 			}
 		} finally {
 			if (isAPISuccess) {
@@ -5256,7 +5293,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	
 	private Document setItemUOMListTemplate(YFSEnvironment env)
 	{
-		Document orderTemplateDoc = SCXmlUtil.createFromString(new StringBuffer()
+		Document orderTemplateDoc=null;
+		//Document orderTemplateDoc = SCXmlUtil.createDocument("ItemUOMList"); //EB-6257
+		orderTemplateDoc = SCXmlUtil.createFromString(new StringBuffer()
 		.append("<ItemUOMList>")
 		.append(" <ItemUOM Quantity='' UnitOfMeasure='' >")
 		.append("<Item ItemID='' OrganizationCode='' UnitOfMeasure=''/>")
@@ -5276,6 +5315,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				log.debug("getItemUOMList-InXML:" + itemEle.getString());
 			}
 			Document getItemUOMListDoc = setItemUOMListTemplate(env);
+			//EB-6257
+			env.clearApiTemplates();
+			
 			env.setApiTemplate("getItemUOMList", getItemUOMListDoc);
 			Document temp = XPXPerformLegacyOrderUpdateExAPI.api.invoke(env, "getItemUOMList", itemEle.getOwnerDocument().getDocument());
 			env.clearApiTemplate("getItemUOMList");
@@ -6553,6 +6595,31 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			log.error(ex);
 		}
 	}
+	
+	//Start EB-6257
+	private void updateIsReprocessFlagOnError(YFSEnvironment env,String orderHeaderKey) throws Exception {
+		try {
+			//cOrderEle, fOrderEle, rootEle, 
+			if(YFCCommon.isVoid(orderHeaderKey))
+				return;
+			YFCDocument chngOrderInDoc=YFCDocument.getDocumentFor("<Order><Extn/></Order>");
+			YFCElement chngOrderEle = chngOrderInDoc.getDocumentElement();
+			chngOrderEle.setAttribute("OrderHeaderKey", orderHeaderKey);
+			chngOrderEle.getChildElement("Extn").setAttribute("ExtnIsReprocessibleFlag", "N");
+			//if(log.isDebugEnabled()){
+				log.error("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.ExtnIsReprocessibleFlag method]-InXML:" + chngOrderEle.getString());
+			//}
+			Document xpxChangeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.invoke(env, "changeOrder", chngOrderEle.getOwnerDocument().getDocument());
+			if(log.isDebugEnabled()){
+				YFCDocument chngOrderOutDoc = YFCDocument.getDocumentFor(xpxChangeOrderOutDoc);
+				log.debug("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.stampOUFailureLockFlag method]-OutXML:" +chngOrderOutDoc.getString());
+			}	
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			log.error(ex);
+		}
+	}
+	//ENd
 	
 	private void errorMessage(String webConfNum, String legacyOrdNo, String genNo, Exception originalException) throws Exception {
 		String errorString = new String("Error messages logged inside XPXPerformLegacyOrderUpdateAPI.getFulfillmentOrderListOnException() method - \n")
