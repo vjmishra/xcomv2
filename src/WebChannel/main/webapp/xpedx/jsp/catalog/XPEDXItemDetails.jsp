@@ -197,11 +197,21 @@
 										<li>
 											<div class="chart-spec"><s:property value="#spec.label" /></div>
 											<div class="chart-details">
-												<s:if test="%{#spec.id == 'FSC_Cert' || #spec.id == 'SFI_Cert' || #spec.id == 'PEFC_Cert'}">
+												<s:if test="%{#spec.id == 'FSC_Cert'}">
 													<a target="_blank" href="https://xcontent.ipaper.com/ProductImages/FSC/<s:property value='#spec.value'/>.pdf">
 														<s:property value='#spec.value'/>
 													</a>
 												</s:if>
+												<s:elseif test="%{#spec.id == 'SFI_Cert'}">
+													<a target="_blank" href="https://xcontent.ipaper.com/ProductImages/SFI/<s:property value='#spec.value'/>.pdf">
+														<s:property value='#spec.value'/>
+													</a>
+												</s:elseif>
+												<s:elseif test="%{#spec.id == 'PEFC_Cert'}">
+													<a target="_blank" href="https://xcontent.ipaper.com/ProductImages/PEFC/<s:property value='#spec.value'/>.pdf">
+														<s:property value='#spec.value'/>
+													</a>
+												</s:elseif>
 												<s:else>
 													<s:property value="#spec.value" />
 												</s:else>
