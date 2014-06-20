@@ -2,9 +2,11 @@ package com.xpedx.nextgen.common.util;
 
 import java.rmi.RemoteException;
 import java.util.Properties;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
@@ -20,15 +22,15 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 	@Override
 	public void setProperties(Properties arg0) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 	private static YIFApi api = null;
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
-	
+
 	static String getCustomerListTemplate = "global/template/api/getCustomerList.XPXTranslationUtilsAPI.xml";
-	
+
 	String getItemListTemplate = "global/template/api/getItemList.XPXTranslationUtilsAPI";
-	
+
 	//this method is to convert customer specific uom to Sterling specific uom for an incoming order
 	public Document translateUomCustomerToSterlingForOrder(YFSEnvironment env, Document inputXML) throws YIFClientCreationException, YFSException, RemoteException
 	{
@@ -36,7 +38,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		String xpedxUnspsc = "";
 		api = YIFClientFactory.getInstance().getApi();
 		if(inputXML != null){
-			log.debug("The inputXML to translateUomCustomerToSterlingForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
+			log.debug("The inputXML to translateUomCustomerToSterlingForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );
 		}
 		//get the customer id for the b2b order place
 		Element inputElement = inputXML.getDocumentElement();
@@ -47,20 +49,20 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		//does not apply for order
 		//unspscConversion(env, inputXML, masterCustomer);
 		uomConversion(env, inputXML, masterCustomer);
-		
+
 		return inputXML;
 	}
-	
+
 	//this method is to convert customer specific unspsc to Sterling specific unspsc for an incoming order
 	public Document translateUnspscSterlingToCustomerForOrder(YFSEnvironment env, Document inputXML) throws YIFClientCreationException, YFSException, RemoteException
 	{
 		String itemID = "";
 		String xpedxUnspsc = "";
 		api = YIFClientFactory.getInstance().getApi();
-		String orgCode = "";		
+		String orgCode = "";
 		//get the customer id for the b2b order place
 		if(inputXML != null){
-			log.debug("The inputXML to translateUnspscSterlingToCustomerForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );	
+			log.debug("The inputXML to translateUnspscSterlingToCustomerForOrder in XPXTranslationUtilsAPI is : "+ SCXmlUtil.getString(inputXML) );
 		}
 		Element inputElement = inputXML.getDocumentElement();
 		String customerID = inputElement.getAttribute("CustomerID");
@@ -69,7 +71,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		unspscConversion(env, inputXML, masterCustomer);
 		return inputXML;
 	}
-	
+
 	//this method is to convert Sterling specific uom to Customer specific uom for an outgoing order
 	public void translateUomSterlingToCustomer(YFSEnvironment env,Element customerOrderElement) throws YFSException, RemoteException
 	{
@@ -95,7 +97,10 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 			}
 		}
 	}
-	
+
+	/**
+	 * NOTE: these are untested (and blew up until I fixed the name of the service being called June 2014)
+	 */
 	//this method is used to change Sterling specific unspsc to customer unspsc for invoice ack
 	public String translateUnspscSterlingToCustomerInvoice(YFSEnvironment env, String customerID,String itemID,String orgCode) throws YFSException, RemoteException
 	{
@@ -110,7 +115,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		inputUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
 		inputUnspscElement.setAttribute("LegacyItemID", itemID);
 		inputUnspscElement.setAttribute("XpedxUNSPSC", xpedxUnspsc);
-		Document outputUnspsc = api.executeFlow(env, "getXPXB2bLegacyUnspscXrefList", inputUnspscDoc);
+		Document outputUnspsc = api.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputUnspscDoc);
 		NodeList unspscNodeList = outputUnspsc.getElementsByTagName("XPXB2bLegacyUnspscXref");
 		int unspscLength = unspscNodeList.getLength();
 		if(unspscLength != 0)
@@ -118,10 +123,10 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 			Element unspscElement = (Element)unspscNodeList.item(0);
 			customerUnspsc = unspscElement.getAttribute("CustomerUNSPSC");
 		}
-		
+
 		return customerUnspsc;
 	}
-	
+
 	private void checkUomconversionType(YFSEnvironment env, Element orderLineElement, String masterCustomer) throws YFSException, RemoteException
 	{
 		String uom = SCXmlUtil.getXpathAttribute(orderLineElement, "./OrderLineTranQuantity/@TransactionalUOM");
@@ -159,11 +164,11 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 				Element itemElement = (Element)itemNodeList.item(0);
 				itemElement.setAttribute("UnitOfMeasure", legacyUOM);
 			}
-			
+
 		}
 	}
-	
-	
+
+
 	private void uomConversion(YFSEnvironment env, Document inputXML, String masterCustomer) throws YFSException, RemoteException
 	{
 		String uom;
@@ -181,11 +186,11 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 					uom = SCXmlUtil.getXpathAttribute(orderLineElement, "./OrderLineTranQuantity/@TransactionalUOM");
 					checkUOMConversionType(env,inputXML,masterCustomer,uom,orderLineElement);
 				}
-				
+
 			}
 		}
 	}
-	
+
 	private void checkUOMConversionType(YFSEnvironment env, Document inputXML, String masterCustomer, String uom, Element orderLineElement) throws YFSException, RemoteException
 	{
 		String legacyUOM = "";
@@ -215,8 +220,8 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 				Element tranElement = (Element)tranNodeList.item(0);
 				tranElement.setAttribute("TransactionalUOM", legacyUOM);
 			}
-			
-			
+
+
 		}
 	}
 
@@ -239,11 +244,11 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 					xpedxUnspsc = getUnspscCode(env,itemID);
 					checkUNSPSCConversionType(env,itemID,masterCustomer,xpedxUnspsc,orderLineElement,inputXML);
 				}
-				
+
 			}
 		}
 	}
-	
+
 	private String getUnspscCode(YFSEnvironment env, String itemID) throws YFSException, RemoteException
 	{
 		String xpedxUnspsc = "";
@@ -259,11 +264,14 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		{
 			Element itemElement = (Element)itemNodeList.item(0);
 			xpedxUnspsc = itemElement.getAttribute("UNSPSC");
-			
+
 		}
 		return xpedxUnspsc;
 	}
-	
+
+	/**
+	 * NOTE: these are untested (and blew up until I fixed the name of the service being called June 2014)
+	 */
 	private void checkUNSPSCConversionType(YFSEnvironment env,String itemID,String masterCustomer,String xpedxUnspsc,Element orderLineElement,Document inputXML) throws YFSException, RemoteException
 	{
 		String customerUNSPSC = "";
@@ -273,7 +281,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		inputUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
 		inputUnspscElement.setAttribute("LegacyItemID", itemID);
 		inputUnspscElement.setAttribute("XpedxUNSPSC", xpedxUnspsc);
-		Document unspscListDoc = api.executeFlow(env, "getXPXB2bLegacyUnspscXrefList", inputUnspscDoc);
+		Document unspscListDoc = api.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputUnspscDoc);
 		NodeList unspscNodeList = unspscListDoc.getElementsByTagName("XPXB2bLegacyUnspscXref");
 		int unspscLength = unspscNodeList.getLength();
 		if(unspscLength != 0)
@@ -296,9 +304,9 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 				Element classificationElement = inputXML.createElement("ClassificationCodes");
 				classificationElement.setAttribute("UNSPSC", customerUNSPSC);
 				itemElement.appendChild(classificationElement);
-				
+
 			}
-			
+
 		}
 	}
 	public static String getMsap(YFSEnvironment env,String customerID,String orgCode) throws YFSException, RemoteException
@@ -307,7 +315,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		String masterCustomer = "";
 		try{
 			YIFApi api1 = YIFClientFactory.getInstance().getApi();
-		
+
 		String customerKey = "";
 		Document inputCustomerDoc = SCXmlUtil.createDocument("Customer");
 		Element inputCustomerElement = inputCustomerDoc.getDocumentElement();
@@ -322,24 +330,24 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		{
 			Element customerElement = (Element)customerNodeList.item(0);
 			customerKey = customerElement.getAttribute("RootCustomerKey");
-			
+
 		}
 		masterCustomer = getCustomer(env,customerKey);
 
-		
+
 		} catch( Exception e){
 			e.printStackTrace();
 		}
 		return masterCustomer;
 	}
-	
+
 	public static String getCustomer(YFSEnvironment env,String customerKey) throws YFSException, RemoteException
 	{
 		String customerID = "";
 		try{
 			YIFApi api2 = YIFClientFactory.getInstance().getApi();
 
-		
+
 		Document customerDoc = SCXmlUtil.createDocument("Customer");
 		Element customerElement = customerDoc.getDocumentElement();
 		customerElement.setAttribute("CustomerKey", customerKey);
@@ -356,7 +364,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		}
 		return customerID;
 	}
-	
+
 	public String getSterlingUom(YFSEnvironment env,String legacyUom, String envID) throws YFSException, RemoteException
 	{
 		String uom = "";
@@ -373,9 +381,9 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 			uom = uomElement.getAttribute("UOM");
 		}
 		return uom;
-		
+
 	}
-	
+
 	public String getLegacyUom(YFSEnvironment env,String masterCustomer, String customerUom) throws YFSException, RemoteException
 	{
 		String legacyUom = "";
@@ -394,14 +402,14 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		}
 		return legacyUom;
 	}
-	
+
 	public static String getCustomerUom(YFSEnvironment env,String masterCustomer, String legacyUom) throws YFSException
 	{
 		String customerUom = "";
 		try{
 			YIFApi api3 = YIFClientFactory.getInstance().getApi();
 
-		
+
 		//form the input
 		Document inputCustomerUomDoc = SCXmlUtil.createDocument("XPXB2bLegacyUomXref");
 		Element inputCustomerUomElement = inputCustomerUomDoc.getDocumentElement();
@@ -420,7 +428,10 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		}
 		return customerUom;
 	}
-	
+
+	/**
+	 * NOTE: these are untested (and blew up until I fixed the name of the service being called June 2014)
+	 */
 	public static String getCustomerUnspsc(YFSEnvironment env, String masterCustomer,String itemID,String sterlingUnspsc) throws YFSException
 	{
 		String customerUnspsc = "";
@@ -432,7 +443,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		inputsterlingUnspscElement.setAttribute("LegacyItemID", itemID);
 		inputsterlingUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
 		inputsterlingUnspscElement.setAttribute("XpedxUNSPSC", sterlingUnspsc);
-		Document outputCustomerUnspscDoc = api4.executeFlow(env, "getXPXB2bLegacyUnspscXrefList", inputSterlingUnspscDoc);
+		Document outputCustomerUnspscDoc = api4.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputSterlingUnspscDoc);
 		NodeList unspscNodeList = outputCustomerUnspscDoc.getElementsByTagName("XPXB2bLegacyUnspscXref");
 		int unspscLength = unspscNodeList.getLength();
 		if(unspscLength != 0){
@@ -442,63 +453,62 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		}catch( Exception e){
 			e.printStackTrace();
 		}
-		
+
 		return customerUnspsc;
-		
 	}
-	
+
 	/**
 	 * Gets the Buyer ID stored at SAP level customer.
-	 * 
+	 *
 	 * @param env
 	 * @param customerID - Ship To ID of the customer.
 	 * @param orgCode - Organization code of the customer.
-	 * 
+	 *
 	 * @return buyerID - buyer ID of the SAP level customer.
 	 * @throws YFSException
 	 * @throws RemoteException
 	 */
-	
+
 	public static String getBuyerID(YFSEnvironment env,String customerID,String orgCode) throws YFSException, RemoteException
-	{		
+	{
 		String billToID = "";
 		String SAPCustomerID = "";
 		String buyerID = "";
 		try{
 			YIFApi api1 = YIFClientFactory.getInstance().getApi();
-		
+
 		// To get the billToID customer.
 		Document inputCustomerDoc = SCXmlUtil.createDocument("Customer");
 		Element inputCustomerElement = inputCustomerDoc.getDocumentElement();
 		inputCustomerElement.setAttribute("CustomerID", customerID);
 		inputCustomerElement.setAttribute("OrganizationCode", orgCode);
 		env.setApiTemplate("getCustomerList", getCustomerListTemplate);
-		Document shipToCustomerListDoc = api1.invoke(env, "getCustomerList", inputCustomerDoc);		
-		billToID = getParentCustomerID(env, shipToCustomerListDoc);	
-		
+		Document shipToCustomerListDoc = api1.invoke(env, "getCustomerList", inputCustomerDoc);
+		billToID = getParentCustomerID(env, shipToCustomerListDoc);
+
 		// To get the SAP level customer ID from BillToID.
-		inputCustomerElement.setAttribute("CustomerID", billToID);		
-		Document billToCustomerListDoc = api1.invoke(env, "getCustomerList", inputCustomerDoc);	
+		inputCustomerElement.setAttribute("CustomerID", billToID);
+		Document billToCustomerListDoc = api1.invoke(env, "getCustomerList", inputCustomerDoc);
 		SAPCustomerID = getParentCustomerID(env, billToCustomerListDoc);
-		
+
 		// To get the buyer id of the SAP customer.
 		inputCustomerElement.setAttribute("CustomerID", SAPCustomerID);
 		Document SAPCustomerListDoc = api1.invoke(env, "getCustomerList", inputCustomerDoc);
-		
+
 		if(SAPCustomerListDoc != null && SAPCustomerListDoc.getDocumentElement().hasChildNodes()){
 			Element customerElem = (Element) SAPCustomerListDoc.getDocumentElement().getElementsByTagName("Customer").item(0);
 			Element extnElement = (Element) customerElem.getElementsByTagName("Extn").item(0);
 			if(extnElement.hasAttribute("ExtnBuyerID")){
 			buyerID = extnElement.getAttribute("ExtnBuyerID");
-			}			
+			}
 		}
-		
+
 		env.clearApiTemplate("getCustomerList");
-		
+
 		} catch( Exception e){
 			e.printStackTrace();
 		}
-		
+
 		if(log.isDebugEnabled()){
 	//		log.debug("");
 			log.debug("XPXTranslationUtilsAPI : buyerID = " + buyerID);
@@ -507,35 +517,35 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		//	log.debug("");
 			log.debug("XPXTranslationUtilsAPI : buyerID = " + buyerID);
 		}
-		
+
 		return buyerID;
 	}
-	
+
 	/**
 	 * Gets the parent customer ID of the customer id passes as input.
-	 * 
+	 *
 	 * @param env
 	 * @param customerListDoc - Document which holds the customer list.
-	 * 
+	 *
 	 * @return parentCustID - parent customer ID of the customer passed.
 	 * @throws YFSException
 	 * @throws RemoteException
 	 */
-	
+
 	public static String getParentCustomerID(YFSEnvironment env,Document customerListDoc) throws YFSException, RemoteException
 	{
 		String parentCustID = "";
-		
+
 		if(customerListDoc != null && customerListDoc.hasChildNodes()){
-			NodeList customerNodeList = customerListDoc.getElementsByTagName("Customer");			
+			NodeList customerNodeList = customerListDoc.getElementsByTagName("Customer");
 			if(customerNodeList.getLength() > 0){
-				Element customerElement = (Element)customerNodeList.item(0);	
+				Element customerElement = (Element)customerNodeList.item(0);
 				NodeList parentCustomerList = customerElement.getElementsByTagName("ParentCustomer");
 				if(parentCustomerList.getLength() > 0){
-				Element parentCustomerElem = (Element) parentCustomerList.item(0);				
+				Element parentCustomerElem = (Element) parentCustomerList.item(0);
 				parentCustID = parentCustomerElem.getAttribute("CustomerID");
 				}
-			}		
+			}
 		}
 		if(log.isDebugEnabled()){
 			//log.debug("");
@@ -545,7 +555,7 @@ public class XPXTranslationUtilsAPI implements YIFCustomApi{
 		//	log.debug("");
 			log.debug("XPXTranslationUtilsAPI : parentCustID = " + parentCustID);
 		}
-		
+
 		return parentCustID;
 	}
 

@@ -74,9 +74,9 @@ import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
 import com.sterlingcommerce.xpedx.webchannel.common.megamenu.MegaMenuItem;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils.CartSummaryPriceStatus;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrgNodeDetailsBean;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
-import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils.CartSummaryPriceStatus;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
 import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -1890,6 +1890,31 @@ public class XPEDXWCUtils {
 		return replacedUOM;
 	}
 
+	/**
+	 * Look up UNSPSC in mapping table. If exists for this master customer and item ID, return it, otherwise null.
+	 */
+	public static String getReplacementUNSPSC(YFSEnvironment env, String masterCustomer, String itemID)
+			throws YFSException, RemoteException, YIFClientCreationException {
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+		String customerUnspsc = null;
+
+		Document inputSterlingUnspscDoc = SCXmlUtil.createDocument("XPXB2bLegacyUnspscXref");
+		Element inputsterlingUnspscElement = inputSterlingUnspscDoc.getDocumentElement();
+		inputsterlingUnspscElement.setAttribute("LegacyItemID", itemID);
+		inputsterlingUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
+		//inputsterlingUnspscElement.setAttribute("XpedxUNSPSC", sterlingUnspsc); not used
+
+		Document outputCustomerUnspscDoc = api.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputSterlingUnspscDoc);
+
+		NodeList unspscNodeList = outputCustomerUnspscDoc.getElementsByTagName("XPXB2bLegacyUnspscXref");
+		int unspscLength = unspscNodeList.getLength(); SCXmlUtil.getString(inputSterlingUnspscDoc); SCXmlUtil.getString(outputCustomerUnspscDoc);
+		if(unspscLength != 0){
+			Element unspscElement = (Element)unspscNodeList.item(0);
+			customerUnspsc = unspscElement.getAttribute("CustomerUNSPSC");
+		}
+
+		return customerUnspsc;
+	}
 	public static String getUNSPSCReplacement(YFSEnvironment Env, String masterCust, String itemID, String UNSPSC) {
 		//String replacedUNSPSC = "ReplacedUNSPSC" + UNSPSsC;
 		String replacedUNSPSC = XPXTranslationUtilsAPI.getCustomerUnspsc(Env, masterCust, itemID, UNSPSC);
@@ -2787,7 +2812,7 @@ public class XPEDXWCUtils {
 		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";
 		Document customerDetailsOutputDoc = handleApiRequestBeforeAuthentication(apiName,apiData,isFlow,template);
 		if(customerDetailsOutputDoc != null){
-			Document outputDoc = ((Element) customerDetailsOutputDoc.getDocumentElement()).getOwnerDocument();
+			Document outputDoc = customerDetailsOutputDoc.getDocumentElement().getOwnerDocument();
 			log.debug("Output XML: " + SCXmlUtil.getString(outputDoc));
 			wElement = outputDoc.getDocumentElement();
 			wElement = SCXmlUtil.getChildElement(wElement, "Customer");

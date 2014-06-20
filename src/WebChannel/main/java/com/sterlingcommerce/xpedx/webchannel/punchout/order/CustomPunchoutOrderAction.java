@@ -141,8 +141,33 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		updateOrderUoms(env, orderOutputDoc);
 		updateLineNos(orderOutputDoc);
 		addRoundedUnitPrices(orderOutputDoc);
+		updateCustomUnspsc(context, env, orderOutputDoc);
 
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
+	}
+
+	private void updateCustomUnspsc(IWCContext context, YFSEnvironment env, Document orderOutputDoc) {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
+
+		// If custom UNSPSC mapped for an item, use it instead of UNSPSC stored on the item
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element orderLine = (Element) nodeList.item(i);
+
+			try {
+				// lookup is by item # (not by item's UNSPSC)
+				String itemId = SCXmlUtil.getXpathAttribute(orderLine, "Item/@ItemID");
+				String customUnspsc = XPEDXWCUtils.getReplacementUNSPSC(env, context.getBuyerOrgCode(), itemId);
+				LOG.debug("item# " + itemId + " -> custom UNSPCS: " + customUnspsc);
+
+				if (customUnspsc !=null) {
+					Element extnElem = SCXmlUtil.getXpathElement(orderLine, "ItemDetails/Extn");
+					extnElem.setAttribute("ExtnUNSPSC", customUnspsc);
+				}
+			}
+			catch (Exception e) {
+				LOG.error("Punchout: problem converting to custom UNSPSC", e);
+			}
+		}
 	}
 
 	private Document getCustDetails(IWCContext context, YFSEnvironment env)
