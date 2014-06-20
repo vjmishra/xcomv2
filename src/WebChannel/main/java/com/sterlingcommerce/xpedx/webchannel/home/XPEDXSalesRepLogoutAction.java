@@ -33,7 +33,7 @@ public class XPEDXSalesRepLogoutAction extends Logout {
 		}
 		Boolean isSalesRep = null;
 		if(getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP")!=null){
-			isSalesRep=Boolean.valueOf((Boolean) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP"));
+			isSalesRep=Boolean.parseBoolean((String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP"));
 		}
 		if( isSalesRep!= null && isSalesRep==true){
 			returnType="SalesRepUser";

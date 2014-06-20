@@ -25,13 +25,18 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/style<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <%--  <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/SpryTooltip<s:property value='#wcUtil.xpedxBuildKey' />.css" />--%>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/sales-rep<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/lib<s:property value='#wcUtil.xpedxBuildKey' />.js">
 </script>
+
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/SpryTooltip<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/salesRepCustomers<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/scroll-startstop.events.jquery<s:property value='#wcUtil.xpedxBuildKey' />.js"></script> 
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/processingIcon<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/navArrows<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <style>
 div a.underlink { text-decoration: none; }
 div a.underlink:hover { text-decoration: underline;}
@@ -57,10 +62,69 @@ var data="false";
 //End fix for 3108
 </script>
 </head>
-<body>
-<div id="container">
+<body class="loading">
+ 	
+ 	<div id="main">
+   	<div id="container" class="container content-container">
+		
+		<div id="scroll-up-down">
+			<div style="display: none;" class="nav_up" id="nav_up"></div>
+			<div style="display: none;" class="nav_down" id="nav_down"></div>
+		</div>
+		
+		<s:url id='selectedCustURL' namespace='/common'
+			action='salesRepCustomerLogin'></s:url>
+		<s:hidden id="selectedCustURL" value="%{#selectedCustURL}" />
+		<s:url id="getSalesRepCustomerListid" namespace="/common"
+			action="getSalesProCustomersList" escapeAmp="false">
+			<s:param name="status">30</s:param>
+		</s:url>
+		<s:hidden id="getSalesRepCustomerURL" value="%{#getSalesRepCustomerListid}" />
 
-  <div class="searchbg">
+		
+			<s:url id='logoutURL' namespace='/home' action='saleslogout' includeParams='none' />
+			<p class="logout">
+				<s:a href="%{#logoutURL}">Log Out</s:a>
+			</p>
+			
+			<h1>Select an Account</h1>
+			<p class="addpadbottom20">
+				<strong>Note:</strong> Please ensure correct Ship-To has been
+				selected once you are logged in. You can view/change Ship-To by
+				clicking on customer name on top right corner.
+			</p>
+			
+			<s:set name='_action' value='[0]' />
+			<s:set name='wcContext' value="#_action.getWCContext()" />
+
+			<div class="search">
+				<div class="ship-search-input-wrap">
+					<form class="filterform" action="#">
+						<input id="searchTerm" class="filterinput input-watermark-color"
+							type="text" data-watermark="Search" /> <span class="resetlink"><a
+							href="#">Reset</a></span>
+					</form>
+				</div>
+			</div>
+			
+			<div class="table" id="listOfCustomers">
+				<%-- dynamically populate data here with salesRepCustomers javascript  --%>
+			</div>
+
+			<br/>
+			<div id="errorMsgForCustomerData" align="center">
+				<font color="red">No customer records found with the above
+					criteria</font>
+			</div>
+		
+	</div>
+	</div>
+	
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ><div class="loading-icon" style="display:none;"></div></div>
+    </div>
+
+	<%-- <div class="searchbg">
   <s:url id='logoutURL' namespace='/home' action='saleslogout' includeParams='none'/>							  
   <div id="logout-text">
   <s:a href="%{#logoutURL}" >Sign Out</s:a>
@@ -75,7 +139,7 @@ var data="false";
         <input name="button" type="image" id="button" style="float:right;"  value="Submit" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/salesrep/button.png" onclick="javascript:document.login2.submit"/> </s:form>
     </div>
     </div>
-    <%-- added for jira 3442 pagination--%>
+    added for jira 3442 pagination
   <s:set name='_action' value='[0]'/>
   <s:set name='wcContext' value="#_action.getWCContext()"/>
 
@@ -96,7 +160,7 @@ var data="false";
 </div></td></tr></table>
 </div>
 <div> </div>
- <%-- end of jira 3442 pagination--%>
+ end of jira 3442 pagination
     <div class="table">     
     
     <table width="100%" id="mil-list-new" style="width:97%; margin:auto;">
@@ -192,7 +256,7 @@ var data="false";
 	<div id="errorMsgForCustomerData" align="center"><font color="red">No customer records found with the above criteria</font></div>
 </div>
 </div></div>
-<%-- added for jira 3442 pagination--%>
+added for jira 3442 pagination
   <s:set name='_action' value='[0]'/>
   <s:set name='wcContext' value="#_action.getWCContext()"/>
 
@@ -208,13 +272,13 @@ var data="false";
   </span>
 </div>
 <div> </div>
-</div>
- <%-- end of jira 3442 pagination--%>
- <div id="strdiv2"></div>
-  </div>   
+</div> --%>
+	<%-- end of jira 3442 pagination--%>
+	<div id="strdiv2"></div>
+	<!-- </div>   
   <div> </div>
-</div>
- <script type="text/javascript">
+</div> -->
+	<script type="text/javascript">
  if(data=="true")
 	 {
 	 document.getElementById("errorMsgForCustomerData").style.display ='block';
@@ -224,5 +288,6 @@ var data="false";
       document.getElementById("errorMsgForCustomerData").style.display ="none";
 	 }
 </script>
+	
 </body>
 </html>

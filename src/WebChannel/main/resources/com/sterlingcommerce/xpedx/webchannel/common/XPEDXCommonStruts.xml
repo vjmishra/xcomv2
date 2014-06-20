@@ -221,12 +221,15 @@
             <result>/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
         </action> -->
 			
-		<action name="salesRepLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
-			method="getCustomersForSalesRep">
+		<action name="salesRepLogin" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 			<result name="error">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
 		</action>
+		
+		<action name="getSalesProCustomersList" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxGetSalesProCustomersListAction">		
+			<result type="json"></result>
+		</action>
+		
 		<action name="salesrepLogout"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
 			method="logoutSalesRep">
