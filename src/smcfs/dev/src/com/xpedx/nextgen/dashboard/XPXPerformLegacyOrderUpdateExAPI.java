@@ -5293,14 +5293,18 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 	
 	private Document setItemUOMListTemplate(YFSEnvironment env)
 	{
-		Document orderTemplateDoc=null;
-		//Document orderTemplateDoc = SCXmlUtil.createDocument("ItemUOMList"); //EB-6257
-		orderTemplateDoc = SCXmlUtil.createFromString(new StringBuffer()
-		.append("<ItemUOMList>")
-		.append(" <ItemUOM Quantity='' UnitOfMeasure='' >")
-		.append("<Item ItemID='' OrganizationCode='' UnitOfMeasure=''/>")
-		.append("</ItemUOM>")
-		.append("</ItemUOMList>").toString());
+		//Start EB-6257
+		Document orderTemplateDoc = SCXmlUtil.createDocument("ItemUOMList"); 
+		Element itemUomElem = orderTemplateDoc.createElement("<ItemUOM>");
+		
+		SCXmlUtil.setAttribute(itemUomElem, "Quantity", "");
+		SCXmlUtil.setAttribute(itemUomElem, "UnitOfMeasure", "");
+		
+		Element itemElem = SCXmlUtil.createChild(itemUomElem, "Item");
+		itemElem.setAttribute("ItemID", "");
+		itemElem.setAttribute("OrganizationCode", "");
+		itemElem.setAttribute("UnitOfMeasure", "");
+		// end of EB-6257
 		return orderTemplateDoc;
 	}
 
