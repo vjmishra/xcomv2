@@ -1475,6 +1475,11 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 			Element xpedxMyItemsListElement = SCXmlUtil.getChildElement(outputDoc.getDocumentElement(), "XPEDXMyItemsList");
 			if(xpedxMyItemsListElement!=null){
+				String shareAdminOnlyFlag="";
+				if(xpedxMyItemsListElement.getAttribute("ShareAdminOnly")!=null){
+					shareAdminOnlyFlag = xpedxMyItemsListElement.getAttribute("ShareAdminOnly");
+					setShareAdminOnly(shareAdminOnlyFlag);
+				}
 				//modified to display lastModifiedBy
 				//modifyUserIdStr = xpedxMyItemsListElement.getAttribute("Modifyuserid");
 				modifyUserIdStr = xpedxMyItemsListElement.getAttribute("ModifyUserName");
