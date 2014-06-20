@@ -808,7 +808,7 @@ public class XPEDXWCUtils {
 			if (ExtnServiceOptCode != null
 					&& !ExtnServiceOptCode.trim().equals("")) {
 				if (ExtnServiceOptCode.equals("K")
-						|| ExtnServiceOptCode.equals("P")) {
+						|| ExtnServiceOptCode.equals("P")|| ExtnServiceOptCode.equals("D")) {
 					wcContext.getSCUIContext().getSession().setAttribute("showSampleRequest","Y");
 				}else
 				{
