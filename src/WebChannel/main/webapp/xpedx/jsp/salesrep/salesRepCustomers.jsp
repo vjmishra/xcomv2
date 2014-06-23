@@ -61,7 +61,7 @@ var data="false";
 } */
 //End fix for 3108
 </script>
-<meta name="viewport" content="width=device-width, maximum-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 	/* 
 	Max width before this PARTICULAR table gets nasty
@@ -153,7 +153,7 @@ var data="false";
 	/* iPads (portrait and landscape) ----------- */
 	@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
 		body { 
-			width: 495px; 
+			width:100%;
 		}
 	}
 	
