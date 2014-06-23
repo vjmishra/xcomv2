@@ -107,6 +107,10 @@ var data="false";
 		
 		}
 		
+		p.customer{
+			max-width:120px;
+		}
+		
 		td a {
 			position: absolute;
 			right: 20px;

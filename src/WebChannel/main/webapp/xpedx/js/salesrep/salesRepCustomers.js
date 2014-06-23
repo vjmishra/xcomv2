@@ -61,7 +61,9 @@ $(document).ready(function() {
 					var customerName = sRCustomer.customerName; 
 
 					html.push('    		 <tr>');
-					html.push('    		 	<td>',customerName,'</td>');
+					html.push('    		 	<td>');
+					html.push('					<p class="customer">',customerName,'</p>');
+					html.push('				</td>');
 					html.push('    		 	<td valign="top">',customerNo,'</td>');
 					html.push('    		 	<td valign="top">');
 					html.push('    			<a href="' , getselectedCustURL , '&selectedCustomer=' , customerNo , '">Select</a></td>');
