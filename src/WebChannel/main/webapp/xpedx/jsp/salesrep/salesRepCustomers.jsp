@@ -62,11 +62,28 @@ var data="false";
 //End fix for 3108
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <style type="text/css">
-@media only screen and (max-width: 760px) , {
-	/* Force table to not be like tables anymore */
+th p {
+	text-align: center;
+}
+
+td {
+	text-align: center;
+}
+
+td p.customer {
+	text-align: left;
+}
+
+@media only screen and (device-width: 768px) , 
+	only screen and (max-width: 768px) { /* Force table to not be like tables anymore */
+	
 	table,thead,tbody,th,td,tr {
 		display: block;
+	}
+	td {
+		text-align: left;
 	}
 
 	/* Hide table headers (but not display: none;, for accessibility) */
@@ -85,11 +102,6 @@ var data="false";
 		padding: 2px;
 		padding-top: 12px;
 		padding-left: 2%;
-	}
-	.table td {
-		border: none;
-		padding: 10px 8px 0;
-		text-align: left;
 	}
 	td a {
 		position: absolute;
@@ -120,8 +132,7 @@ var data="false";
 }
 
 /* Smartphones (portrait and landscape) ----------- */
-@media only screen and (min-device-width : 320px) and (max-device-width
-	: 480px) {
+@media only screen and (min-device-width : 320px) and (max-device-width: 480px) {
 	body {
 		padding: 0;
 		margin: 0; /*width: 320px; */
@@ -135,7 +146,7 @@ var data="false";
 @media only screen and (min-device-width: 768px) and (max-device-width:
 	1024px) {
 	body {
-		
+		width: 100%;
 	}
 }
 </style>
