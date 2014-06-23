@@ -45,6 +45,18 @@
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/PriceAndAvailability<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<!-- Web Trends tag end  -->
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/XPEDXItemDetails<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	
+	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />
+	<s:set name="CurrentCustomerId" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getCurrentCustomerId(wCContext)" />
+	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+	<s:if test = '%{#isEstUser == null || #isEstUser == ""}'>
+		<s:set name="isEstUser" value="false"/>
+	</s:if>
+	
+	<script type="text/javascript">
+		var isUserAdmin = <s:property value="#isUserAdmin"/>;
+		var isEstUser = <s:property value="#isEstUser"/>;
+	</script>
 </head>
 <body class="ext-gecko ext-gecko3">
 	
