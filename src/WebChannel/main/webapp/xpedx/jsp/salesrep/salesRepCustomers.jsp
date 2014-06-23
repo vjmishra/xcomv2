@@ -70,7 +70,7 @@ var data="false";
 	*/
 	@media 
 	only screen and (max-width: 760px),
-	(min-device-width: 768px) and (max-device-width: 1024px)  {
+	  {
 	
 		/* Force table to not be like tables anymore */
 		table, thead, tbody, th, td, tr { 
@@ -146,7 +146,7 @@ var data="false";
 		body { 
 			padding: 0; 
 			margin: 0; 
-			width: 320px; }
+			 }
 	
 		}
 	
