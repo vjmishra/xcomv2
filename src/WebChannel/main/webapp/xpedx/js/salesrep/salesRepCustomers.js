@@ -110,16 +110,8 @@ $(document).ready(function() {
 		}	
 	}
 
-	$(window).resize(function() {
-		if ($("body").height() < $(window).height()) {
-			$("#scroll-up-down").hide();
-
-		} else 
-			$("#scroll-up-down").show();
-	});
-
 	if ($("body").height() < $(window).height()) {
-		$("#scroll-up-down").hide();
-	}
+	    	$("#scroll-up-down").hide();
+	      }
 	
 });

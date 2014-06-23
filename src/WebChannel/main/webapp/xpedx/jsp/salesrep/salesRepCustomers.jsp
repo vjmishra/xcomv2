@@ -86,6 +86,12 @@ var data="false";
 		
 		tr { border: 1px solid #ccc; }
 		
+		.table td {
+    		border: none;
+    		padding: 10px 8px 0px;
+    		text-align: left;
+			}
+		
 		td { 
 			/* Behave  like a "row" */
 			border: none;
@@ -94,6 +100,11 @@ var data="false";
 			padding: 2px;
 			padding-top: 12px;
 			padding-left: 2%; 
+		}
+		
+		#scroll-up-down{
+			display: none;
+		
 		}
 		
 		td a {
