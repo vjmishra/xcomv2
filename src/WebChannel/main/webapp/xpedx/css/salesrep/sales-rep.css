@@ -412,6 +412,9 @@ strong {
 	filter: progid:DXImageTransform.Microsoft.gradient(   startColorstr='#f8933e',
 		endColorstr='#c94915', GradientType=0 ); /* IE6-8 */
 }
+ p.customer{
+			max-width:320px;
+		}
 
 .nav_up {
 	padding: 7px;
