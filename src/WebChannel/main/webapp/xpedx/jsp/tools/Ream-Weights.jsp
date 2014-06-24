@@ -81,6 +81,7 @@
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
             <div class="container content-container"> 
+            	<h1>Ream Weight Calculator</h1>
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -89,10 +90,9 @@
                 	<!-- a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="breadcrumb-inactive"><s:text name="tools.reamweight.title" /></span> Commented for jira 1538-->
                 </div>
                 <div id="mid-col-mil"><div style=" width: 600px;">
- <div id="requestform">
- 						 <div class="clearview">&nbsp;</div>
-                        <h1>Ream Weight Calculator</h1>
-                        <br><!-- Add comment for jira 1538 -->
+ 	<div id="requestform">
+ 
+                     <!-- Add comment for jira 1538 -->
                         <p style="width: 600px;">Enter all fields to calculate the weight of the given size.</p><p style="width: 600px;"><strong>Note:</strong> For this tool, a ream is assumed to be 500 shts. 
                         </p>
                         <br />
@@ -136,7 +136,7 @@
                           <td colspan="3"> 
                             <!-- <ul id="cart-actions"><li><a href="#" onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li> -->
                              <!-- Changes done for jira 1538  -->
-                             <ul id="cart-actions"><li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onClick="javascript:validateForm()" class="btn-gradient"><span>Calculate</span></a></li> 
+                             <ul id="cart-actions" style="height:auto;"><li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onClick="javascript:validateForm()" class="btn-gradient"><span>Calculate</span></a></li> 
                                 
                             </ul>
                          </td>

@@ -74,7 +74,8 @@
         <div id="main">
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container content-container"> 
+            <div class="container content-container">
+             	<h1>Basis Weight Conversion Chart</h1> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -83,12 +84,9 @@
           <!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="breadcrumb-inactive"><s:text name="tools.basiswtconvchart.title" /></span> Commented for jira 1538-->
                 </div>
                 <div id="mid-col-mil"><div style=" width: 600px;">  
-                <div class="clearview">&nbsp;</div>
-                 <h1>Basis Weight Conversion Chart</h1>
- <p>&nbsp; </p>
-<br />
-
-<table style="width: 100%;" id="mil-list-new">
+              
+             <p>&nbsp;	</p>
+          <table style="width: 100%;" id="mil-list-new">
                       <tbody><tr class="table-header-bar">
                        
                                 <td width="199" colspan="2" class="no-border table-header-bar-left noBorders-blue"><span class="white txt-small">Lbs./ 25 x 38" 500 g/m2 </span></td>

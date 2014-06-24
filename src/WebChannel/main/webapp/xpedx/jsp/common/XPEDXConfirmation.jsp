@@ -94,12 +94,13 @@
 	<div id="main" class="anon-pages">
 	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
     	<div class="container content-container">
+    		<h1><s:text name="MSG.SWC.MISC.CONFIRMATION.GENERIC.PGTITLE"/></h1>
       	<!-- breadcrumb -->
       		<div id="mid-col-mil"> 
 		    	
-      				<h1><s:text name="MSG.SWC.MISC.CONFIRMATION.GENERIC.PGTITLE"/></h1>
+      				
 				
-				<div class=" padding-bottom clearview"> </div>
+				
 				<s:set name="messageType" value='%{#_action.getMessageType()}'/>
 				<s:if test="%{#messageType == 'NewUser'}">
 					<p> <s:text name='MSG.SWC.MISC.NEWUSERCONFIRMATION.GENERIC.GENINFO' /> </p> 

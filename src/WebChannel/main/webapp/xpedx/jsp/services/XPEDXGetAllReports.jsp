@@ -125,12 +125,9 @@ p{margin-bottom:8px;}
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		
       		<div class="container content-container">
-                <div id="mid-col-mil">
-				
-      <div class="clearview"> &nbsp;</div>
-    		<h1>Reports</h1>
-       
-        <div>
+      		   <h1>Reports</h1>
+                	<div id="mid-col-mil">
+						<div>
                <div class="x-input">
                 
                  <s:iterator value="standardReportList" id='rId'>

@@ -83,24 +83,14 @@
 <body class="ext-gecko ext-gecko3">
     <div id="main-container">
         <div id="main">
-
-		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		
-
-
-
-            <div class="container content-container"> 
+			<div class="container content-container"> 
+             	<h1><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></h1>
                 <!-- breadcrumb -->
-               
-                <div id="mid-col-mil">
-				<br/>
+               <div id="mid-col-mil">
 				
-				
-				
-                	  <h1><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></h1>
-             
-				
-               	<div class="underlines x-input"> 
+				<div class="underlines x-input"> 
             <ul class="tools-page">
 
             <!---->

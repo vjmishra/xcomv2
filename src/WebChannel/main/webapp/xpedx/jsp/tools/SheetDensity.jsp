@@ -82,6 +82,7 @@
 
         	 <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
             <div class="container content-container"> 
+            	<h1>Sheet Density</h1>
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -90,11 +91,7 @@
            <!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="page-title"><s:text name="tools.sheetdensity.title" /></span> Commented for jira 1538 -->
                 </div>
                 <div id="mid-col-mil"><div style=" width: 600px;">
- <br />
-
-                        <h1>Sheet Density</h1>
-	<div class="clearview">&nbsp;</div> 
-                        
+ 
                       <p>To determine the density of any given sheet, divide the basis weight by the caliper. 
 
 </p>
@@ -124,7 +121,7 @@
                         </tr>
                         <tr>
                           <td colspan="2">
-                            <ul id="cart-actions">
+                            <ul id="cart-actions" style="height:auto;">
                             	<li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li>
                             	<li><a href="#" onclick="javascript:validateForm();" class="btn-gradient"><span>Calculate</span></a></li>
                             </ul>

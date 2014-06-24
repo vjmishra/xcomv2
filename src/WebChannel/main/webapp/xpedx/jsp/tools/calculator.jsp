@@ -77,6 +77,7 @@
       <div id="main">
         <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
         <div class="container content-container">
+         	<h1>Paper Calculator</h1>
           <!-- breadcrumb -->
           <div id="searchBreadcrumb">
 	    	  	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -86,8 +87,8 @@
           		 </div>
 	        <div id="mid-col-mil">
             <div style=" width: 1000px;">
-               <div class="clearview">&nbsp;</div>
-              <h1>Paper Calculator</h1>
+               
+             
               <br>
                  <p>To estimate the total pounds of paper needed for a job based on the information entered, the tool will calculate</p>
                  <p>total pounds needed. In order to get the most accurate estimate, enter all fields (waste % is optional)</p>
@@ -142,7 +143,7 @@
                         </span></td>
                       </tr>
                       <tr>
-                        <td colspan="2"><ul id="cart-actions">
+                        <td colspan="2"><ul id="cart-actions" style="height:auto;">
                           <li><a class="btn-neutral" href="#" onClick="javascript:document.calculator.reset()"><span>Clear</span></a></li>
                           <li><a href="#" onclick="javascript:calc();" class="btn-gradient"><span>Calculate</span></a></li>
                         </ul></td>

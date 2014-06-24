@@ -515,12 +515,9 @@ $(function() {
        namespace="/common" />
     <div class="container content-container">
       <!-- breadcrumb -->
+      <h1><s:property value="%{name}"/></h1>
       <div id="mid-col-mil"> 
-      <div class="clearview"> &nbsp;</div>
-		<h1><s:property value="%{name}"/></h1>
-       
-    
-          <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
+    		 <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
                  <s:iterator value="getErrorNames()" status="errorListStatus" id="listId">
                   <font color = "red"><s:property/></font>
               </s:iterator>                            

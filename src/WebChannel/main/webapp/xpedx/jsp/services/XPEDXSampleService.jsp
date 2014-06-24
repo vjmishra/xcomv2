@@ -772,19 +772,20 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 	id='servicesLink' namespace="/services"
 	action='MyServicesHome'>
 </s:url>
-<div class="clearview">&nbsp;</div>
-<div id="mid-col-mil">
+  <h1>Request Sample</h1>
+  
+
+	<div id="mid-col-mil" style="margin-left:0px;">
 			<s:if test="%{#_action.getErrorMesage()!=null}">
 				<h2><font size="2" color="red"><s:property
 					value='%{#_action.getErrorMesage()}' /></font></h2>
 			</s:if> 
 			<s:set name="currentShipTo"	value="#wcUtil.getShipToAdress(wCContext.customerId, wCContext.storefrontId)" />
 
-	<div>
-		  <h2> </h2>
-          <h1>Request Sample</h1>
-          <br />
-          <span class="smallfont"> * - Required Field </span>
+		<div>
+     
+   			<span class="smallfont"> * - Required Field </span>
+          
           <s:form id="serviceRequestForm" name="serviceRequestForm" namespace="/services" method="post" action="saveServiceRequest">
           <s:property value="%{#errorMesage}" />
           <div class="clearview"> &nbsp;</div>
