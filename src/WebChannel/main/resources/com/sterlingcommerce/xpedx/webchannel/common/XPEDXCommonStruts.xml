@@ -217,10 +217,6 @@
 			</result>
 		</action>
 			
-		<!-- <action name="salesReploginFullPage" class="com.sterlingcommerce.webchannel.core.WCAction">
-            <result>/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
-        </action> -->
-			
 		<action name="salesRepLogin" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 			<result name="error">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
@@ -250,11 +246,6 @@
 			<result name="success">/xpedx/jsp/punchout/punchoutlogin.jsp</result>				
 		</action>
 		
-		
-	<!--<action name="punchoutCustomerLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
-			<result name="success">/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
-		</action>-->
 		<action name="searchCustomer"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
 			method="getCustomersForSalesRep">
