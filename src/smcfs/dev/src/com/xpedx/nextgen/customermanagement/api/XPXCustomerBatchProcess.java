@@ -3267,7 +3267,7 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 
 
 		//sayan - added START
-		if("K".equalsIgnoreCase(strServiceOptCode)|| "P".equalsIgnoreCase(strServiceOptCode)|| "Q".equalsIgnoreCase(strServiceOptCode))
+		if("K".equalsIgnoreCase(strServiceOptCode)|| "P".equalsIgnoreCase(strServiceOptCode)|| "Q".equalsIgnoreCase(strServiceOptCode)|| "D".equalsIgnoreCase(strServiceOptCode))
 		{
 			extnElement.setAttribute("ExtnSampleRequestFlag", "Y");
 		}

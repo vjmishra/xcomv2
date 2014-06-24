@@ -205,7 +205,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 				.equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
 		} else if (XPEDXConstants.SAALFELD_LOGO.equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/Saalfeld_r_rgb_lo.jpg";
+			_imageName = "/saalfeld_210x47px.jpg";
 		} else if (XPEDXConstants.STRATEGICPAPER_LOG0
 				.equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/StrategicPaper_r_rgb_lo.jpg";

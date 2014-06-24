@@ -198,7 +198,7 @@
 								<img src="{$brandLogo}" width="210" height="47" />							
 							</xsl:if>
 							 <xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>							
-								<img src="{$brandLogo}" width="216" height="64" />							
+								<img src="{$brandLogo}" width="210" height="47" />							
 							 </xsl:if>
 					</td>
 				</tr>
