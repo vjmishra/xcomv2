@@ -768,7 +768,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 <div id="main-container">
 <div id="main"><s:action name="xpedxHeader" executeResult="true"
 	namespace="/common" />
-<div class="container"><!-- breadcrumb --> <s:url
+<div class="container content-container"><!-- breadcrumb --> <s:url
 	id='servicesLink' namespace="/services"
 	action='MyServicesHome'>
 </s:url>
@@ -782,7 +782,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 
 	<div>
 		  <h2> </h2>
-          <span class="page-title">Request Sample</span>
+          <h1>Request Sample</h1>
           <br />
           <span class="smallfont"> * - Required Field </span>
           <s:form id="serviceRequestForm" name="serviceRequestForm" namespace="/services" method="post" action="saveServiceRequest">
@@ -918,7 +918,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                 <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"/>
                                </td>
                                 <td width="10%" class="padding8 border-left-gray  border-right-gray"><ul id="cart-actions">
-                                  <li><a href="javascript:void(0)" class="grey-ui-btn" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');"><span>Add</span></a></li> 
+                                  <li><a href="javascript:void(0)" class="btn-neutral" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');"><span>Add</span></a></li> 
                                 </ul></td>
                               </tr>
                             </tbody>
@@ -976,7 +976,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
 	                                <td class="padding8 border-left-gray"><s:textfield id='qty' name='qty' cssClass="x-input width-50px" tabindex="" value='' maxlength="7" size="10" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" /> 
 	                                </td>
 	                                <td class="padding8 border-left-gray border-right-gray"><ul id="cart-actions">
-	             							 <li><a href="javascript:void(0)" class="grey-ui-btn" onclick="return validateAndAddDataRecord('tbl_data_paperSupplies');"><span>Add</span></a></li> 
+	             							 <li><a href="javascript:void(0)" class="btn-neutral" onclick="return validateAndAddDataRecord('tbl_data_paperSupplies');"><span>Add</span></a></li> 
 	           							 </ul>
 	           						</td>
                               </tr>
@@ -1033,8 +1033,8 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
             <s:url id='RequestProdSampleLink' namespace='/services'
 					action='MyServices'></s:url>
            
-              <li class="float-left"><s:a href="%{RequestProdSampleLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
-              <li ><a class="orange-ui-btn" href="#" onclick="return submitForm('tbl_data_facilitySupplies','tbl_data_paperSupplies');">             
+              <li class="float-left"><s:a href="%{RequestProdSampleLink}" cssClass="btn-neutral"><span>Cancel</span></s:a></li>
+              <li ><a class="btn-gradient" href="#" onclick="return submitForm('tbl_data_facilitySupplies','tbl_data_paperSupplies');">             
               <span>Submit Request</span></a></li>
             </ul>
           </div></td>

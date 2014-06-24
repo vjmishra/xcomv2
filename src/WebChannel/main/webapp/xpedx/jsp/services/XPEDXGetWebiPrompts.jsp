@@ -513,12 +513,12 @@ $(function() {
   <div id="main" class="min-height-fix">
      <s:action name="xpedxHeader" executeResult="true"
        namespace="/common" />
-    <div class="container">
+    <div class="container content-container">
       <!-- breadcrumb -->
       <div id="mid-col-mil"> 
       <div class="clearview"> &nbsp;</div>
-   <div class="padding-bottom3"><p><span class="page-title"><s:property value="%{name}" /> </span></p>
-       </div>
+		<h1><s:property value="%{name}"/></h1>
+       
     
           <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
                  <s:iterator value="getErrorNames()" status="errorListStatus" id="listId">
@@ -660,8 +660,8 @@ $(function() {
                 <td>&nbsp;</td>
                 <td>  <div id="cart-actions" >
             <ul id="cart-actions" class="float-right">
-              <li class="float-left"><s:a href="%{backLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
-              <li><a href="#" onclick="return submitReportForm();" class="orange-ui-btn"><span>Submit Report</span></a></li>
+              <li class="float-left"><s:a href="%{backLink}" cssClass="btn-neutral"><span>Cancel</span></s:a></li>
+              <li><a href="#" onclick="return submitReportForm();" class="btn-gradient"><span>Submit Report</span></a></li>
             </ul>
           </div></td>
               </tr>

@@ -124,15 +124,15 @@ p{margin-bottom:8px;}
 
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		
-      		<div class="container">
+      		<div class="container content-container">
                 <div id="mid-col-mil">
 				
       <div class="clearview"> &nbsp;</div>
-   <div class="padding-bottom3"> <span class="page-title">Reports</span>
-       </div>
+    		<h1>Reports</h1>
+       
         <div>
                <div class="x-input">
-                 <div class=" padding-all2" style="padding: 10px 10px 10px 0;"> 
+                
                  <s:iterator value="standardReportList" id='rId'>
 	<s:url id='myreporting' namespace='/services'
 		action='getprompts'>
@@ -142,7 +142,7 @@ p{margin-bottom:8px;}
 	</s:url>
 
 		
-	<p>
+	
 	<h4><s:a href='%{#myreporting}'>
 		<s:property value="%{#rId.name}" />
 	</s:a></h4>

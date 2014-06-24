@@ -78,7 +78,7 @@
         <div id="main">
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container"> 
+            <div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 <s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -91,7 +91,7 @@
                 <div id="mid-col-mil"><div style=" width: 600px;">
  <div class="clearview">&nbsp;</div>
 						
-						<h2>  M Weight Calculation</h2><!-- Add comment for jira 1538 -->
+						<h1>M Weight Calculation</h1><!-- Add comment for jira 1538 -->
 						<p style="width: 600px;">To calculate the M weight of a particular size, enter the length, width and basis weight.Then Enter the basic size for the table provided.The tool will then provide the total weight per 1,000 shts of the particular size.</p>
                         <br />
                         <p style="width: 600px;">The ream weight is the weight of 500 sheets; the M weight is the weight of 1,000 sheets. The M weight can be obtained by first finding the ream weight, rounding it by the rounding rules, then multiplying by 2.</p>
@@ -136,7 +136,7 @@
                           <td colspan="3"> 
                             <!-- <ul id="cart-actions"><li><a href="#"onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#"><span>Clear</span></a></li> -->
                               <!-- Changes done for jira 1538 -->
-                              <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#"onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li>   
+                              <ul id="cart-actions"><li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#"onClick="javascript:validateForm()" class="btn-gradient"><span>Calculate</span></a></li>   
                             </ul>
                          </td>
                         </tr>

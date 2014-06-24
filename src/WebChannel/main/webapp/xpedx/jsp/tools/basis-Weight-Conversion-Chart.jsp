@@ -74,7 +74,7 @@
         <div id="main">
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container"> 
+            <div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -84,7 +84,7 @@
                 </div>
                 <div id="mid-col-mil"><div style=" width: 600px;">  
                 <div class="clearview">&nbsp;</div>
-                 <h2>Basis Weight Conversion Chart</h2>
+                 <h1>Basis Weight Conversion Chart</h1>
  <p>&nbsp; </p>
 <br />
 

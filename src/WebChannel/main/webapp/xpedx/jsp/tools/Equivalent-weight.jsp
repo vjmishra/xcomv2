@@ -73,7 +73,7 @@
         <div id="main">
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="equivalent container"> 
+            <div class="equivalent container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -84,7 +84,7 @@
                 <div id="mid-col-mil"><div style=" width: 600px;">
  <br />
 
-                        <h2>Equivalent Basis Wts Chart</h2>
+                        <h1>Equivalent Basis Wts Chart</h1>
                         
                       <p>In reams (500 sheets); basis weights in bold type: 
 

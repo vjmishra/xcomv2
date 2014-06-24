@@ -81,7 +81,7 @@
         <div id="main">
 
         	 <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container"> 
+            <div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -92,7 +92,7 @@
                 <div id="mid-col-mil"><div style=" width: 600px;">
  <br />
 
-                        <h2>Sheet Density</h2>
+                        <h1>Sheet Density</h1>
 	<div class="clearview">&nbsp;</div> 
                         
                       <p>To determine the density of any given sheet, divide the basis weight by the caliper. 
@@ -125,8 +125,8 @@
                         <tr>
                           <td colspan="2">
                             <ul id="cart-actions">
-                            	<li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li>
-                            	<li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li>
+                            	<li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li>
+                            	<li><a href="#" onclick="javascript:validateForm();" class="btn-gradient"><span>Calculate</span></a></li>
                             </ul>
                          </td>
                         </tr>

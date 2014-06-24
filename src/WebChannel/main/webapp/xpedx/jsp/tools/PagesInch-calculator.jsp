@@ -76,7 +76,7 @@
         <div id="main">
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container"> 
+            <div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	 <s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -87,7 +87,7 @@
                 <div id="mid-col-mil"><div style=" width: 600px;">
  <br />
 
-                        <h2>Pages/Inch Calculator</h2>
+                        <h1>Pages/Inch Calculator</h1>
                        <br/> 
                       <p> To determine the pages per inch (PPI), divide 2 by the caliper of the given   											sheet.<br />
                       </p>
@@ -112,7 +112,7 @@
                         <tr>
                           <td colspan="2">
 			<!-- Changes done for jira 1538 -->
-			 <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li>
+			 <ul id="cart-actions"><li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onclick="javascript:validateForm();" class="btn-gradient"><span>Calculate</span></a></li>
                             <!--<ul id="cart-actions"><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li> -->
                                 
                             </ul>

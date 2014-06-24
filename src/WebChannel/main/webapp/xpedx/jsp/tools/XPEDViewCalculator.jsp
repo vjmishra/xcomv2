@@ -105,7 +105,7 @@
         <div id="main">
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
         
-			<div class="container"> 
+			<div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <a href="<s:url action="XPEDXTools" namespace="/xpedx/tools" includeParams='none'/>">Tools</a>  / <span class="breadcrumb-inactive">Imposition Calculater</span> Commented for jira 1538-->
@@ -113,7 +113,7 @@
                 
                 <div id="mid-col-mil"><div style=" width: 600px;">  
                  <div class="clearview">&nbsp;</div>
-                 <h2> Imposition Calculator</h2>
+                 <h1> Imposition Calculator</h1>
                   To calculate the possible options for cutting a smaller sheet size from a larger sheet size, enter as much information as possible for the most accurate calculations.
                   
                   <div id="requestform">
@@ -181,7 +181,7 @@
                           <td colspan="5"> 
                             <!-- <ul id="cart-actions"><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="clearValues();"><span>Clear</span></a></li>-->
                               <!-- Changes done for jira 1538 -->
-                              <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="clearValues();"><span>Clear</span></a></li><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li>  
+                              <ul id="cart-actions"><li><a class="btn-neutral" href="#" onClick="clearValues();"><span>Clear</span></a></li><li><a href="#" onclick="return checkCalculatorValues();" class="btn-gradient"><span>Calculate</span></a></li>  
                             </ul>
                          </td>
                         </tr>                       

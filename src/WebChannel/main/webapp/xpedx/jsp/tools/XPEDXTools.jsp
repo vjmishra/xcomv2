@@ -89,16 +89,16 @@
 
 
 
-            <div class="container"> 
+            <div class="container content-container"> 
                 <!-- breadcrumb -->
                
                 <div id="mid-col-mil">
 				<br/>
 				
 				
-				 <div  class="padding-bottom3" >
-                	  <span class="page-title"><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></span><!--  > Commented for jira 1538-->
-                </div>
+				
+                	  <h1><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></h1>
+             
 				
                	<div class="underlines x-input"> 
             <ul class="tools-page">

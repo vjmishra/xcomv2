@@ -80,7 +80,7 @@
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
-            <div class="container"> 
+            <div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -91,7 +91,7 @@
                 <div id="mid-col-mil"><div style=" width: 600px;">
  <div id="requestform">
  						 <div class="clearview">&nbsp;</div>
-                        <h2>Ream Weight Calculator</h2>
+                        <h1>Ream Weight Calculator</h1>
                         <br><!-- Add comment for jira 1538 -->
                         <p style="width: 600px;">Enter all fields to calculate the weight of the given size.</p><p style="width: 600px;"><strong>Note:</strong> For this tool, a ream is assumed to be 500 shts. 
                         </p>
@@ -136,7 +136,7 @@
                           <td colspan="3"> 
                             <!-- <ul id="cart-actions"><li><a href="#" onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li> -->
                              <!-- Changes done for jira 1538  -->
-                             <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li> 
+                             <ul id="cart-actions"><li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onClick="javascript:validateForm()" class="btn-gradient"><span>Calculate</span></a></li> 
                                 
                             </ul>
                          </td>
