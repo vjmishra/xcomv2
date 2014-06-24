@@ -1,16 +1,13 @@
 $(document).ready(function() {
 	showProcessingIcon();
-	$('.content-container').hide();
 	var getselectedCustURL = $('#selectedCustURL').val();
 	var getSalesRepCustomerURL=$('#getSalesRepCustomerURL').val();
 	var url = getSalesRepCustomerURL;
+
 	$.ajax({
 		type : 'GET',
 		url : url,
 		dataType : 'json',
-		data : {
-
-		},
 		success : function(data) {
 			var $customerListDiv = $('#listOfCustomers');
 
@@ -37,41 +34,46 @@ $(document).ready(function() {
 						}
 					}
 
-				} 
-				else {
+				} else {
 					// no filter, so use full list
 					customerList = data.customerList;
 				}
 
-				html.push('	    <table id="mil-list-new" class="salespro-accounts">');
-				html.push(' 		<thead>');
+				if (customerList.length > 0) {
+					html.push('	    <table id="mil-list-new" class="salespro-accounts">');
+					html.push(' 		<thead>');
 
-				html.push(' 			<tr>');
-				html.push(' 				<th width="50%">Customer Name</th>');
-				html.push(' 				<th width="25%"><p>Customer Number</p></th>');
-				html.push(' 				<th width="25%">&nbsp;</th>');
-				html.push(' 			</tr>');
+					html.push(' 			<tr>');
+					html.push(' 				<th width="50%">Customer Name</th>');
+					html.push(' 				<th width="25%"><p>Customer Number</p></th>');
+					html.push(' 				<th width="25%">&nbsp;</th>');
+					html.push(' 			</tr>');
 
-				html.push(' 		</thead>');
-				html.push(' 		<body>');
+					html.push(' 		</thead>');
+					html.push(' 		<tbody>');
 
-				for (var k = 0, len = customerList.length; k < len; k++) {
-					var sRCustomer = customerList[k];
-					var customerNo = sRCustomer.customerNo;
-					var customerName = sRCustomer.customerName; 
+					for (var k = 0, len = customerList.length; k < len; k++) {
+						var sRCustomer = customerList[k];
+						var customerNo = sRCustomer.customerNo;
+						var customerName = sRCustomer.customerName; 
 
-					html.push('    		 <tr>');
-					html.push('    		 	<td>');
-					html.push('					<p class="customer">',customerName,'</p>');
-					html.push('				</td>');
-					html.push('    		 	<td valign="top">',customerNo,'</td>');
-					html.push('    		 	<td valign="top">');
-					html.push('    			<a href="' , getselectedCustURL , '&selectedCustomer=' , customerNo , '">Select</a></td>');
-					html.push('    		 </tr>');
+						html.push('    		 <tr>');
+						html.push('    		 	<td>');
+						html.push('					<p class="customer">',customerName,'</p>');
+						html.push('				</td>');
+						html.push('    		 	<td valign="top">',customerNo,'</td>');
+						html.push('    		 	<td valign="top">');
+						html.push('    			<a href="' , getselectedCustURL , '&selectedCustomer=' , customerNo , '">Select</a></td>');
+						html.push('    		 </tr>');
+					}
+
+					html.push(' 		</tbody>');
+					html.push(' 	</table>');
+
+				} else {
+					// no results, so display empty result message
+					html.push('<div class="alert alert-warning">No results found.</div>');
 				}
-
-				html.push(' 		</body>');
-				html.push(' 	</table>');
 
 				$customerListDiv.get(0).innerHTML = html.join('');
 				hideProcessingIcon();
@@ -85,9 +87,9 @@ $(document).ready(function() {
 		error: function(resp, textStatus, xhr) {
 			if (console) { console.log('ajax error: resp = ', resp, '   textStatus = ', textStatus, '   xhr = ', xhr); }
 		}
-		
-});
-	
+
+	});
+
 	function do_watermark(selector) {
 		var inputs = $(selector);
 		for (var i = 0, len = inputs.length; i < len; i++) {
@@ -113,7 +115,7 @@ $(document).ready(function() {
 	}
 
 	if ($("body").height() < $(window).height()) {
-	    	$("#scroll-up-down").hide();
-	      }
-	
+		$("#scroll-up-down").hide();
+	}
+
 });

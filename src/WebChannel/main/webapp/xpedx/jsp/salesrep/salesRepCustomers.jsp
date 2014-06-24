@@ -58,7 +58,7 @@
 <body class="loading">
  	
 	 <div id="main">
-		<div id="container" class="container content-container">
+		<div id="container" class="container content-container" style="display:none;">
 			
 			<div id="scroll-up-down">
 				<div style="display: none;" class="nav_up" id="nav_up"></div>
@@ -81,9 +81,8 @@
 			
 			<h1>Select an Account</h1>
 			<p class="addpadbottom20">
-				<strong>Note:</strong> Please ensure correct Ship-To has been
-				selected once you are logged in. You can view/change Ship-To by
-				clicking on customer name on top right corner.
+				<strong>Note:</strong> Please ensure correct Ship-To has been selected once you are logged in.
+				You can view/change Ship-To by clicking on customer name on top right corner.
 			</p>
 			
 			<s:set name='_action' value='[0]' />
@@ -104,11 +103,6 @@
 				<%-- dynamically populate data here with salesRepCustomers javascript  --%>
 			</div>
 			
-			<br/>
-			<div id="errorMsgForCustomerData" align="center" style="display:none;">
-				<font color="red">No customer records found with the above criteria</font>
-			</div>
-			
 		</div> <%-- / container --%>
 	</div> <%-- / main --%>
 	
@@ -116,15 +110,5 @@
 		 <div class="load-modal" ><div class="loading-icon" style="display:none;"></div></div>
 	</div>
 
-	<div id="strdiv2"></div>
-	
-	<script type="text/javascript">
-		if(data == "true") {
-			document.getElementById("errorMsgForCustomerData").style.display ='block';
-		} else {
-			document.getElementById("errorMsgForCustomerData").style.display ="none";
-		}
-	</script>
-	
 </body>
 </html>
