@@ -144,8 +144,8 @@
                       </tr>
                       <tr>
                         <td colspan="2"><ul id="cart-actions" style="height:auto;">
-                          <li><a class="btn-neutral" href="#" onClick="javascript:document.calculator.reset()"><span>Clear</span></a></li>
-                          <li><a href="#" onclick="javascript:calc();" class="btn-gradient"><span>Calculate</span></a></li>
+                          <li><input type="button" class="btn-neutral" href="#" onClick="javascript:document.calculator.reset()" value="Clear"/></li>
+                          <li><input type="button" href="#" onclick="javascript:calc();" class="btn-gradient" value="Calculate"/></li>
                         </ul></td>
                       </tr>
                       <tr >

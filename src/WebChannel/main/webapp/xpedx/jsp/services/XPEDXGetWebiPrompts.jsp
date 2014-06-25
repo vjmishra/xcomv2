@@ -311,6 +311,11 @@ $(function() {
            $('#split-order-overlay').toggle();
            return false;
    });
+   $("#cancelId").click(function(){
+		var url = $('#backLinkId').val();
+		window.location.href = url;
+		return false;
+	});
 });
                    
            function showAllAccounts() {
@@ -649,6 +654,7 @@ $(function() {
           </table>
           <s:url id='backLink' namespace='/services' action='myreports'>
        </s:url>
+       <s:hidden id="backLinkId" value="%{#backLink}"/>
                
           <div class="clearview">&nbsp;</div>
           <div class="form-service"> 
@@ -657,8 +663,8 @@ $(function() {
                 <td>&nbsp;</td>
                 <td>  <div id="cart-actions" >
             <ul id="cart-actions" class="float-right">
-              <li class="float-left"><s:a href="%{backLink}" cssClass="btn-neutral"><span>Cancel</span></s:a></li>
-              <li><a href="#" onclick="return submitReportForm();" class="btn-gradient"><span>Submit Report</span></a></li>
+              <li class="float-left"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/></li>
+              <li><input href="#" onclick="return submitReportForm();" class="btn-gradient" type="button" value="Submit Report"/></li>
             </ul>
           </div></td>
               </tr>

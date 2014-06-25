@@ -129,7 +129,7 @@ To find the approximate weight of a roll multiply roll diameter squared minus co
                         <tr>
                           <td colspan="2">
                             <!-- <ul id="cart-actions"><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="javascript:document.eform.reset()"><span>Clear</span></a></li> Changes done for jira 1538-->
-                           <ul id="cart-actions" style="height:auto;"><li><a class="btn-neutral" href="#" onclick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onclick="javascript:validateForm();" class="btn-gradient"><span>Calculate</span></a></li>    
+                           <ul id="cart-actions" style="height:auto;"><li><input class="btn-neutral" type="button" href="#" onclick="javascript:document.eform.reset()" value="Clear"/></li><li><input href="#" onclick="javascript:validateForm();" class="btn-gradient" type="button" value="Calculate"/></li>    
                             </ul>
                          </td>
                         </tr>

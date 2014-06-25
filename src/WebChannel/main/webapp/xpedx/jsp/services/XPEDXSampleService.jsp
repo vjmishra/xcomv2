@@ -729,6 +729,12 @@ $("#various22").fancybox();
 
 $('.phone-numeric').numeric(false); 
 $("#serviceRequestForm_phone").mask("999 999-9999");
+
+$("#cancelId").click(function(){
+	var url = $('#RequestProdSampleLinkId').val();
+	window.location.href = url;
+	return false;
+});
 });
 	
 	
@@ -919,7 +925,7 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
                                 <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"/>
                                </td>
                                 <td width="10%" class="padding8 border-left-gray  border-right-gray"><ul id="cart-actions">
-                                  <li><a href="javascript:void(0)" class="btn-neutral" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');"><span>Add</span></a></li> 
+                                  <li><input href="javascript:void(0)" class="btn-neutral" type="button" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');" value="Add"/></li> 
                                 </ul></td>
                               </tr>
                             </tbody>
@@ -1033,10 +1039,10 @@ $("#serviceRequestForm_phone").mask("999 999-9999");
             <ul id="cart-actions" class="float-right">
             <s:url id='RequestProdSampleLink' namespace='/services'
 					action='MyServices'></s:url>
-           
-              <li class="float-left"><s:a href="%{RequestProdSampleLink}" cssClass="btn-neutral"><span>Cancel</span></s:a></li>
-              <li ><a class="btn-gradient" href="#" onclick="return submitForm('tbl_data_facilitySupplies','tbl_data_paperSupplies');">             
-              <span>Submit Request</span></a></li>
+            <s:hidden id="RequestProdSampleLinkId" value="%{#RequestProdSampleLink}"/>
+              <li class="float-left"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/></li>
+              <li ><input class="btn-gradient" onclick="return submitForm('tbl_data_facilitySupplies','tbl_data_paperSupplies');" type="button" value="Submit Request"/>             
+              </li>
             </ul>
           </div></td>
               </tr>

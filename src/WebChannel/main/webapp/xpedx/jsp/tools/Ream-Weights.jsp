@@ -136,7 +136,7 @@
                           <td colspan="3"> 
                             <!-- <ul id="cart-actions"><li><a href="#" onClick="javascript:validateForm()" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li> -->
                              <!-- Changes done for jira 1538  -->
-                             <ul id="cart-actions" style="height:auto;"><li><a class="btn-neutral" href="#" onClick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onClick="javascript:validateForm()" class="btn-gradient"><span>Calculate</span></a></li> 
+                             <ul id="cart-actions" style="height:auto;"><li><input class="btn-neutral" type="button"  href="#" onClick="javascript:document.eform.reset()" value="Clear"/></li><li><input href="#" onClick="javascript:validateForm()" class="btn-gradient" type="button" value="Calculate"/></li> 
                                 
                             </ul>
                          </td>

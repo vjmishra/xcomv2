@@ -181,7 +181,7 @@
                           <td colspan="5"> 
                             <!-- <ul id="cart-actions"><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="clearValues();"><span>Clear</span></a></li>-->
                               <!-- Changes done for jira 1538 -->
-                              <ul id="cart-actions" style="height:auto;"><li><a class="btn-neutral" href="#" onClick="clearValues();"><span>Clear</span></a></li><li><a href="#" onclick="return checkCalculatorValues();" class="btn-gradient"><span>Calculate</span></a></li>  
+                              <ul id="cart-actions" style="height:auto;"><li><input class="btn-neutral" type="button" href="#" onClick="clearValues();" value="Clear"/></li><li><input href="#" onclick="return checkCalculatorValues();" class="btn-gradient" type="button" value="Calculate"/></li>  
                             </ul>
                          </td>
                         </tr>                       
