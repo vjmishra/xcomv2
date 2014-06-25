@@ -13,6 +13,7 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXShipToCustomer;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.util.YFCUtils;
+import com.yantra.yfc.util.YFCCommon;
 
 /**
  * This ajax class implemented for Getting All the assigned Ship-To customers for Change Ship-To/Select Ship-To Pages/Modals
@@ -135,8 +136,10 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 		String shipToCustomer = shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S"));
 		String formattedZip = getFormattedZip(shipTo.getZipCode());
 		shipTo.setShipToMultiRowDisplay(shipToCustomer +"\n"+ shipTo.getShipToCustomerName() +"\n"+  shipTo.getAddressLine1()  +"\n"+  shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry() +"\n");
-		String ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+" " + shipTo.getAddressLine1() + ", " + shipTo.getAddressLine2()+ ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
-      
+		String ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+" " + shipTo.getAddressLine1() + ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
+		if(!YFCCommon.isVoid(shipTo.getAddressLine2()))
+			ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+" " + shipTo.getAddressLine1() + ", " + shipTo.getAddressLine2()+ ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
+		
 		shipTo.setShipToDisplayString(ShipToDisplayString);
 		return shipTo;
 	}
