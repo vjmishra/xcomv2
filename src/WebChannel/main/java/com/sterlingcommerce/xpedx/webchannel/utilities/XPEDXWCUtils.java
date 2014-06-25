@@ -1907,8 +1907,8 @@ public class XPEDXWCUtils {
 		Document outputCustomerUnspscDoc = api.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputSterlingUnspscDoc);
 
 		NodeList unspscNodeList = outputCustomerUnspscDoc.getElementsByTagName("XPXB2bLegacyUnspscXref");
-		int unspscLength = unspscNodeList.getLength(); SCXmlUtil.getString(inputSterlingUnspscDoc); SCXmlUtil.getString(outputCustomerUnspscDoc);
-		if(unspscLength != 0){
+		int unspscLength = unspscNodeList.getLength();
+		if (unspscLength != 0) {
 			Element unspscElement = (Element)unspscNodeList.item(0);
 			customerUnspsc = unspscElement.getAttribute("CustomerUNSPSC");
 		}

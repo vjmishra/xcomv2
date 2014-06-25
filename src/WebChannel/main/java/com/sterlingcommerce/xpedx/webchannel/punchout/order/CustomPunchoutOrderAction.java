@@ -146,20 +146,29 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
 	}
 
+	/**
+	 * If custom UNSPSC mapped for an item, use it instead of UNSPSC stored on the item
+	 */
 	private void updateCustomUnspsc(IWCContext context, YFSEnvironment env, Document orderOutputDoc) {
 		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
 
-		// If custom UNSPSC mapped for an item, use it instead of UNSPSC stored on the item
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Element orderLine = (Element) nodeList.item(i);
 
 			try {
 				// lookup is by item # (not by item's UNSPSC)
 				String itemId = SCXmlUtil.getXpathAttribute(orderLine, "Item/@ItemID");
+				if (itemId == null) {
+					LOG.warn("Punchout: null ItemId on item when looking for custom UNSPSC for customer: " + context.getCustomerId());
+					return;
+				}
+
 				String customUnspsc = XPEDXWCUtils.getReplacementUNSPSC(env, context.getBuyerOrgCode(), itemId);
-				LOG.debug("item# " + itemId + " -> custom UNSPCS: " + customUnspsc);
 
 				if (customUnspsc !=null) {
+					if(LOG.isDebugEnabled()){
+						LOG.debug("Punchout: for item: " + itemId + " replacing with custom UNSPCS: " + customUnspsc);
+					}
 					Element extnElem = SCXmlUtil.getXpathElement(orderLine, "ItemDetails/Extn");
 					extnElem.setAttribute("ExtnUNSPSC", customUnspsc);
 				}
