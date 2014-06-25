@@ -766,12 +766,14 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 
 				}
 				// START - Display the custom fields
+				String custPoFlag = "";
+				String custLineAccFlag="";
 				for (Iterator iterator = getCustomerFieldsDBMap().keySet()
 						.iterator(); iterator.hasNext();) {
 					String customKey = (String) iterator.next();
 
 					if("CustomerPONo".equalsIgnoreCase(customKey) || "CustLineAccNo".equalsIgnoreCase(customKey)){
-					if(XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey))).length()>0)
+					if(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey))!=null && XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey))).length()>0)
 					{
 					sbCSV.append("\"").append("'"+XPEDXMyItemsUtils.encodeStringForCSV(item.getAttribute((String) getCustomerFieldsDBMap().get(customKey)))+"'").append("\"");
 					}
@@ -780,7 +782,20 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						sbCSV.append(" ");
 					}
 					sbCSV.append(",");
+					if("CustomerPONo".equalsIgnoreCase(customKey)){
+						custPoFlag = "Y";
+					}
+					if("CustLineAccNo".equalsIgnoreCase(customKey)){
+						custLineAccFlag = "Y";
+					}					
 				}
+				}
+				if(!custPoFlag.equalsIgnoreCase("Y") && !custLineAccFlag.equalsIgnoreCase("Y")){
+					sbCSV.append(",,");
+				}else if(custPoFlag.equalsIgnoreCase("Y") && !custLineAccFlag.equalsIgnoreCase("Y")){
+					sbCSV.append(",");
+				}else if(!custPoFlag.equalsIgnoreCase("Y") && custLineAccFlag.equalsIgnoreCase("Y")){
+					sbCSV.append(",");
 				}
 				// END - Display the custom fields
 
