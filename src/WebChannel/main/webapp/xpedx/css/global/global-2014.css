@@ -929,3 +929,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 .hide-item-thumbnails .mil-wrap-condensed-container .core-item {
 	display: none;
 }
+.center{
+	width: 100%;
+	text-align: center;
+}
