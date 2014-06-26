@@ -690,3 +690,11 @@ ul.megamenu {
 .ship-search-wrap span.resetlink {
 	color: #003399;
 }
+
+.core-item {
+	position: absolute;
+	left: 59px;
+	background: url(../images/catalog/best-seller.png) no-repeat;
+	width: 91px;
+	height: 70px;
+}

@@ -1095,3 +1095,11 @@ ul.megamenu {
 .ship-search-wrap span.resetlink {
 	color: #006A3A;
 }
+
+.core-item {
+	position: absolute;
+	left: 59px;
+	background: url(../images/catalog/best-seller.png) no-repeat;
+	width: 91px;
+	height: 70px;
+}
