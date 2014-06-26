@@ -72,10 +72,12 @@
 <ul id="tool-bar" class="tool-bar-bottom">
 
 		<li>
-			<a class="grey-ui-btn" href="#" style="" onclick="javascript:$.fancybox.close()"><span>Cancel</span></a>
+			<input class="btn-gradient"  onclick="javascript:submitBillToForm();" type="button" value="Apply"/>
+			
 		</li>
+		
 	<li>
-		<a class="green-ui-btn" href="javascript:submitBillToForm();"><span>Apply</span></a>
+		<input class="btn-neutral addmarginright10" onclick="javascript:$.fancybox.close()" type="button" value="Cancel"/>
 	</li>
 </ul>
 	
