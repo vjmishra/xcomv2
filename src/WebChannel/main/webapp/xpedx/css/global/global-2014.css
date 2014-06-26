@@ -874,3 +874,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
     border-radius: 5px;
     margin: 3px;
 }
+.center{
+	width: 100%;
+	text-align: center;
+}

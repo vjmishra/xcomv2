@@ -24,7 +24,7 @@
 									<br/>
 									<p>This Privacy Policy, together with the Terms of Access posted on our Website, sets forth the general rules and policies governing your use of our Website.  Depending on your activities when visiting our Website, you may be required to agree to additional terms and conditions. </p>
 									<br/>
-									<span class="bold"><i>Modifications to this Privacy Policy</i></span>
+									<p class ="bold center"><i>Modifications to this Privacy Policy</i></p><br/><br/>
 									<p>We generally keep this Privacy Policy posted on our Website and you should review it frequently, as it may change from time to time without notice. Any changes will be effective immediately upon the posting of the revised Privacy Policy.  WHEN YOU ACCESS OUR WEBSITE, YOU AGREE TO THIS PRIVACY POLICY.  IF YOU DO NOT AGREE TO THIS PRIVACY POLICY, OR TO ANY CHANGES WE MAY SUBSEQUENTLY MAKE, IMMEDIATELY STOP ACCESSING OUR WEBSITE.  If, at any point, we decide to use your personally identifiable information in a manner materially different than what was stated at the time it was collected, we will notify you of this change by e-mail to the last e-mail address provided to us. You will have a choice (by means of an &quot;opt out&quot; opportunity) as to whether or not we use their information in this different manner. We will use information in accordance with the Privacy Policy under which your information was collected if you opt out of the new policy. </p>
 									<br/>
 								</td>
