@@ -186,10 +186,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "false");
 			setupLogoURL();
-			String servletPath = request.getServletPath();
-			if (!getWCContext().isGuestUser()){
-				prepareHeaderNavigationHighlight(servletPath);
-			}
+			prepareHeaderNavigationHighlight(request.getServletPath());
 			if (!getWCContext().isGuestUser()){
 				//checkMultiStepCheckout();
 				if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext))

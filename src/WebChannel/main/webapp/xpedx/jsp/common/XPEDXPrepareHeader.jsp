@@ -2707,36 +2707,25 @@ function callAjaxForSorting(url,divId)
 				</s:if>
 			</s:iterator>
   </s:elseif>
+
+<s:if test='(#isGuestUser == true)'>
+	<div class="menucontainer">
+		<ul class="megamenu" id="megamenu">
+			<%-- MenuCatalogTab encapsulates the lazy-loading mega menu (contains the whole <li> tag) --%>
+			<jsp:include page="MenuCatalogTab.jsp">
+				<jsp:param name="tabName" value="Shop Our Catalog" />
+			</jsp:include>
+		</ul>
+	</div>
+</s:if>
 <s:if test='(#isGuestUser != true)'>
 	<div class="menucontainer">
 		<ul class="megamenu" id="megamenu">
-			<li class="<s:property value='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'/>">
-				<s:a id="megamenu-top-catalog" cssStyle='cursor:pointer;' cssClass='%{#selectedHeaderTab == "CatalogTab" ? "active" : ""}'>
-					Catalog
-				</s:a>
-				
-				<s:if test="#wcUtil.isMegaMenuCached(wCContext)">
-					<s:include value="MegaMenu.jsp" />
-				</s:if>
-				<s:else>
-					<%--
-						Developer note: Since the mega menu data is user-specific (entitlements, etc) the data is cached in the session.
-										However, the API call to fetch the data is slow enough that we don't want to block the page load,
-										 so if the data is not cached then we render the page without mega menu and immediately fetch it
-										 via an ajax call (see MegaMenu.js/getMegaMenu).
-										The response of the ajax call is the mega menu dom, which we inject into the page.
-					--%>
-					<s:url id="megaMenuURL" namespace="/common" action="megaMenu" />
-					<input type="hidden" id="megaMenuAjaxURL" value="<s:property value='#megaMenuURL' escape='false'/>" />
-					<ul id="megaMenuLoadingMessage">
-						<li>
-							<a class="spinner">
-								Loading...
-							</a>
-						</li>
-					</ul>
-				</s:else>
-			</li>
+			<%-- MenuCatalogTab encapsulates the lazy-loading mega menu (contains the whole <li> tag) --%>
+			<jsp:include page="MenuCatalogTab.jsp">
+				<jsp:param name="tabName" value="Catalog" />
+			</jsp:include>
+			
 				<s:url id='myListsLink' namespace='/myItems' action='MyItemsList.action'>
 							<s:param name="filterByAllChk" value="%{false}" />
 							<s:param name="filterByMyListChk" value="%{false}" />

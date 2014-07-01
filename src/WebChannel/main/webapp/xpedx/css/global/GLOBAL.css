@@ -4284,7 +4284,7 @@ table.catalog-row-five td img {
 #signon-table {
     background-color: white;
     height: 320px;
-    width: 998px;
+    width: 1000px;
 }
 #signon-table td img {
     display: inline;
@@ -4340,9 +4340,6 @@ table.catalog-row-five td img {
 #social-networking-footer {
     color: #000000;
     text-align: right;
-}
-#headerContainer.signOnHeader {
-    height: 78px;
 }
 #main-navigation ul li.lighter {
     background: url("../../images/theme/theme-1/navigation/order_msg_bkgrnd.png") repeat-x scroll 0 0 transparent;
