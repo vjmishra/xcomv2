@@ -89,7 +89,7 @@
 				
 				<s:if test='#cat2.hasBrands'>
 					<div class='button-nav-wrap'>
-						<input name='button' type='button' class='btn-nav-list' value='View All Brands for <s:property value="#cat2.name"/>  &rsaquo;'
+						<input name='button' type='button' class='btn-nav-list' value='View All Brands'
 								onclick='openBrandPage(this); return false;' data-path='<s:property value="#cat2.path"/>'
 								data-cat1name="<s:property value="#cat1.name"/>" data-cat2name="<s:property value="#cat2.name"/>" />
 					</div>
