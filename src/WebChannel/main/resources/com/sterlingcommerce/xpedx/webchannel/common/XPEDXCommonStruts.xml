@@ -293,6 +293,10 @@
 		<action name="megaMenu" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/MegaMenu.jsp</result>
 		</action>
+		<action name="debugMegaMenu" class="com.sterlingcommerce.xpedx.webchannel.common.DebugMegaMenuAction">
+			<result type="json"></result>
+		</action>
+		
 		<action name="changeShipTo" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/ChangeShipTo.jsp</result>
 		</action>
