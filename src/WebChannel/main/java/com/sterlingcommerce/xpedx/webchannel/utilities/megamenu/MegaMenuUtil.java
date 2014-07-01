@@ -95,11 +95,7 @@ public class MegaMenuUtil {
 	 * @return Returns true if the menu is cached.
 	 */
 	public boolean isDataAvailable(IWCContext context) {
-		if (isAnonymous(context)) {
-			return ANONYMOUS_MEGAMENU.get(context.getStorefrontId()) != null;
-		} else {
-			return context.getWCAttribute(ATTR_MEGA_MENU) != null;
-		}
+		return getCachedMegaMenu(context) != null;
 	}
 
 	/**
