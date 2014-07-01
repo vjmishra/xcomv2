@@ -3054,20 +3054,16 @@ function callAjaxForSorting(url,divId)
 	<div id="searchTips">
       <h2>Search Tips</h2>
       <h3>Advanced Search:</h3>
-      <p>Utilize advanced search to search against the entire catalog. Enter the search criteria, then click 'enter' or click the search icon. The advanced search uses 'and' logic. Results will reflect items that contain all search terms.</p>
-      <p>The question mark (?) can be used in a search term as a substitute for exactly one unknown alphanumeric character. Using the question mark (?) as the leading character when specifying a search term is not supported. </p>
-      <ul>
-        <li>For example, if you are looking for a product with ABCD as the Product ID, you cannot provide ?BCD as the search term. </li>
-        <li>However, you can search for the product using AB?D as the search term.</li>
-      </ul>
+      <p>Utilize advanced search to search against the entire catalog. Enter the search criteria, then click ‘enter’ or click the search icon.</p>
+      <p>You can use the asterisk (*) as a wildcard when performing an advanced search. The asterisk (*) can be used in search terms for any number of unknown alphanumeric characters.  Using the asterisk (*) as the leading character when specifying a search term is not supported.  For example:  "water*" can be used to search for products containing terms such as "water cup”, "watermark", “water-based” or “waterless”.</p>
+      <p>The advanced search uses ‘and’ logic. Results will reflect items that contain all search terms.</p>
+      
       <h3>Guided Search:</h3>
-      <p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the drop down list of results. The guided search uses 'or' logic. Results will reflect items that contain any search terms.</p>
-      
+      <p>Utilize guided search to view specific items within a category. Enter 3 or more characters and select from the list of categories.</p>
       <ul>
-      
-      <li>Terms that match the search criteria are bolded in black.</li>
-      <li>The search criteria will remain in the search box until the page is refreshed so you can easily recreate the previous search.</li>
-      
+      	<li>Terms that match the search criteria are bolded in black.</li>
+      	<li>The search criteria will remain in the search box until the page is refreshed so you can easily recreate the previous search.</li>
       </ul>
+      <p>The guided search uses ‘or’ logic. Results will reflect items that contain any search terms.</p>
     </div></div>
 <!-- end search tips -->
