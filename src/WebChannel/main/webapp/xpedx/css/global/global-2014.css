@@ -926,3 +926,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	width: 100%;
 	text-align: center;
 }
+
+#main {
+	min-height: 665px;
+}
