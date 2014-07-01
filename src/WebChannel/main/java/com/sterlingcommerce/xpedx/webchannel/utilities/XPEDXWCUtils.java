@@ -3502,32 +3502,16 @@ public class XPEDXWCUtils {
 		return customerHashMap;
 	}
 
-	public static String getFormattedZipCode(String zipCode){
-		try
-		{
-			if (zipCode != null && zipCode.length() > 0) {
-				String zipCode1 = "";
-				if (zipCode.indexOf("-") > -1) {
-					zipCode1 = zipCode.replaceAll("-", "");
-				} else {
-					zipCode1 = zipCode;
-				}
-				long zipCode2 = Long.parseLong(zipCode1);
-				String zipCode3 = String.valueOf(zipCode2);
-				if(zipCode3.length() > 5) {
-					java.text.MessageFormat phoneMsgFmt=new java.text.MessageFormat("{0}-{1}");
-					String[] numArr = {zipCode3.substring(0, 5), zipCode3.substring(5, zipCode3.length())};
-					return phoneMsgFmt.format(numArr);
-				} else {
-					return zipCode1;
-				}
-			} else {
-				return zipCode;
-			}
+	public static String getFormattedZipCode(String zip) {
+		if (zip == null || zip.trim().length() == 0) {
+			return zip;
 		}
-		catch(Exception e)
-		{
-			return zipCode;
+
+		String zipSafe = zip.replaceAll("-", "");
+		if (zip.length() > 5) {
+			return String.format("%s-%s", zip.substring(0, 5), zip.substring(5));
+		} else {
+			return zipSafe;
 		}
 	}
 
