@@ -136,9 +136,9 @@ public class AjaxGetAssignedShipToCustomersAction extends WCAction {
 		String shipToCustomer = shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S"));
 		String formattedZip = getFormattedZip(shipTo.getZipCode());
 		shipTo.setShipToMultiRowDisplay(shipToCustomer +"\n"+ shipTo.getShipToCustomerName() +"\n"+  shipTo.getAddressLine1()  +"\n"+  shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry() +"\n");
-		String ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+" " + shipTo.getAddressLine1() + ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
+		String ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+ ", " +" " + shipTo.getAddressLine1() + ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
 		if(!YFCCommon.isVoid(shipTo.getAddressLine2()))
-			ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+" " + shipTo.getAddressLine1() + ", " + shipTo.getAddressLine2()+ ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
+			ShipToDisplayString = " ("+ shipToCustomer + ") " + shipTo.getShipToCustomerName()+ ", " +" " + shipTo.getAddressLine1() + ", " + shipTo.getAddressLine2()+ ", " + shipTo.getCity()+ ", " +shipTo.getState()+", "+ formattedZip + ", " + shipTo.getCountry();
 		
 		shipTo.setShipToDisplayString(ShipToDisplayString);
 		return shipTo;
