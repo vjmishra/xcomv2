@@ -5452,6 +5452,12 @@ width:auto;
 	padding-top: 3px;
 	width: 5px;
 }
+#mil-edit label, .mil-wrap-condensed-desc label{
+	width: 75px;
+	display: inline-block;
+	vertical-align: top;
+}
+
 .mil-wrap-condensed-desc {
     float: left;
     height: 59px;
@@ -6410,9 +6416,19 @@ BEGIN 2014 styles
 }
 
 .mil-edit-forms {
-	width: 225px;
+	width: 360px;
 	float: left;
 	clear: none;
+	margin-top: -20px;
+}
+.mil-edit-forms span {
+	width: 100px;
+	}
+.mil-edit-forms-desc {
+	width: 660px;
+	float: left;
+	clear: both;
+	margin-top: 8px;
 }
 
 .green-e-logo {
@@ -6421,7 +6437,6 @@ BEGIN 2014 styles
 
 .mid-altwrap {
 	height: auto;
-	margin-left:20px;
 	margin-top:0;
 	width:950px;
 	clear: both;

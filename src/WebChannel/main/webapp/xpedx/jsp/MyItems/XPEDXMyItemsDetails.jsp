@@ -128,10 +128,6 @@
 			addToCart();
 			return false;
 		});
-		
-		$("#printButton").click(function(){
-			window.print();
-		});
 	});
 		
 </script>
@@ -2153,7 +2149,6 @@ function showSharedListForm(){
 			</s:if>
 
 			<div class="container content-container" style="min-height: 535px;">
-				
 				<!-- breadcrumb -->
 				<s:url action='home.action' namespace='/home' id='urlHome' includeParams='none' />
 				<s:url id='urlMIL' namespace='/myItems' action='MyItemsList.action' includeParams="get" escapeAmp="false">
@@ -2170,7 +2165,6 @@ function showSharedListForm(){
 					</h5>
 				</div>
 				<div id="errorMessageDiv"></div>
-				<br />
 				<div id="infoMessage">
 					<s:if test=' "" != duplicateInfoMsg '>
 						<s:property value="duplicateInfoMsg" />
@@ -2183,36 +2177,28 @@ function showSharedListForm(){
 				<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL" />
 
 				<s:hidden id="mandatoryFieldCheckFlag_mil-edit" name="mandatoryFieldCheckFlag_mil-edit" value="%{false}"></s:hidden>
-
-				<h1><s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:&nbsp;<span><s:property value="listName" /></span></h1>
-				<div id="printButton" class="print-ico-xpedx underlink print-adjust">
-					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
-				</div>
-				<%-- <span class="float-left">
+				
+				<s:if test="%{editMode}">
+					<p class="return-link">
+						<a href="javascript:cancelChanges();">&lsaquo; Return to List</a>
+					</p>
+				</s:if>
+				
+				<h1>
+					Edit My Items List:
+					<span class="list-name">
 						<s:property value="listName" />
-				</span> --%>
-				<%-- <div id="breadcumbs-list-name">
-					<span class="page-title"> <s:text
-							name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:
 					</span>
-					&nbsp;
-					<span>
-						<s:property value="listName" />
-					</span> --%>
-					<%-- <div id="printButton" class="print-ico-xpedx underlink print-adjust" >
-						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
-					</div --%>
-					
-					<%--  <a href="javascript:window.print()">
-						<span class="print-ico-xpedx underlink" style="font-weight: normal; font-size: 12px;">
-							<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
-									width="16" height="15" alt="Print Page" />
-							Print Page
-						</span>
-					</a> --%> 
+				</h1>
+				<div id="printButton" class="print-ico-xpedx underlink">
+					<a href="javascript:window.print()">
+						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
+								width="16" height="15" alt="Print Page" />
+						Print Page
+					</a>
+				</div>
 				
-				
-				<div class="addpadleft20 addmargintop-10">
+				<div>
 					<span class="grey" style="width: 421px; word-wrap: break-word; float: left;">
 						<s:property value="listDesc" />
 					</span>
@@ -2279,6 +2265,18 @@ function showSharedListForm(){
 					</s:if>
 					<s:else> <%-- editMode --%>
 						<div id="mil-edit" class="mil-edit" style="width: 100%">
+							<div class="button-container"> <%-- edit mode top --%>
+								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+								<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+								
+								<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
+								
+								<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
+									<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
+								</s:if>
+							</div>
+							<div class="clearfix"></div>
+							
 							<div class="mil-edit-forms">
 								<s:set name='isPrivateList' value="%{#_action.isFilterByMyListChk()}" />
 								<s:set name='isSelectedList' value="%{#_action.isFilterBySelectedListChk()}" />
@@ -2302,168 +2300,21 @@ function showSharedListForm(){
 									</s:else>
 								</s:else>
 								
-								<p>Name</p>
-								<s:if test="%{#disableListNameAndDesc == true}">
-									<input style="width: 201px;" class="x-input text" id="listName"
-											title="Name" maxlength="35" disabled="disabled"
-											onkeyup="javascript:listNameCheck(this, 'mil-edit');"
-											onmouseover="javascript:listNameCheck(this, 'mil-edit');"
-											value="<s:property value="listName"/>" />
-								</s:if>
-								<s:else>
-									<input style="width: 201px;" class="x-input text" id="listName"
-											title="Name" maxlength="35"
-											onkeyup="javascript:listNameCheck(this, 'mil-edit');"
-											onmouseover="javascript:listNameCheck(this, 'mil-edit');"
-											value="<s:property value="listName"/>" />
-								</s:else>
-								<br /> <br />
-								<p>Description</p>
-								<s:if test="%{#disableListNameAndDesc == true}">
-									<textarea class="x-input" id="listDesc" disabled="disabled"
-											title="Description" rows="2"
-											onkeyup="javascript:restrictTextareaMaxLength(this,250);"
-											style="width: 220px; height: 92px; word-wrap: break-word;"><s:property value="listDesc" /></textarea>
-								</s:if>
-								<s:else>
-									<textarea class="x-input" id="listDesc"
-											title="Description" rows="2"
-											onkeyup="javascript:restrictTextareaMaxLength(this,250);"
-											style="width: 220px; height: 92px; word-wrap: break-word;"><s:property value="listDesc" /></textarea>
-								</s:else>
+								<label>Name:</label>
+								<input id="listName" class="x-input text addheight" size="40" maxlength="35" title="Name"
+										<s:property value="%{#disableListNameAndDesc ? 'disabled=\'disabled\'' : ''}" />
+										onkeyup="listNameCheck(this, 'mil-edit');"
+										onmouseover="listNameCheck(this, 'mil-edit');"
+										value="<s:property value="listName"/>" />
 							</div> <%-- / mil-edit-forms --%>
-
-							<div id="quick-add" class="quick-add float-right ">
-								<div class="clearfix"></div>
-								<s:hidden id="mandatoryFieldCheckFlag_quick-add"
-									name="mandatoryFieldCheckFlag_quick-add" value="%{false}"></s:hidden>
-								<h2 style="float: left; margin-top: 5px;">Quick Add</h2>
-								<s:set name='storefrontId' value="wCContext.storefrontId" />
-								<s:if
-									test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-									<p class="quick-add-aux-links underlink"
-										style="color: orange; margin-top: 5px; margin-right: 5px;">
-										<a id="various2" class="modal" href="#dlgCopyAndPaste"
-											onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy
-											and Paste</a>
-									</p>
-								</s:if>
-								<s:elseif
-									test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-									<p class="quick-add-aux-links underlink"
-										style="color: #006a3a; margin-top: 5px; margin-right: 5px;">
-										<a id="various2" class="modal" href="#dlgCopyAndPaste"
-											onclick="javascript: writeMetaTag('DCSext.w_x_ord_quickadd_cp', '1');">Copy
-											and Paste</a>
-									</p>
-								</s:elseif>
-								<div class="clearfix"></div>
-								<div class="quick-add-form-top">&nbsp;</div>
-								<div class="quick-add-form quick-add-form-mil">
-									<form class="form selector" id="quick-add-selector"
-										name="quickaddselector">
-										<br />
-
-										<ul class="hvv">
-											<li>
-												<label>Item Type</label>
-												<s:select name="itemType" cssStyle="width:100px; margin-left: 0px;" headerKey="1"
-														list="skuTypeList" listKey="key" listValue="value" />
-											</li>
-											<li>
-												<label>Item #</label>
-												<p class="p-word-wrap">
-													<s:textfield maxlength="27" cssStyle="width:50px;"
-														cssClass="text x-input" name="prodId"
-														onkeyup="javascript:listNameCheck(this, 'quick-add');"
-														onmouseover="javascript:listNameCheck(this, 'quick-add');" />
-												</p>
-											</li>
-											<li>
-												<label>Qty</label>
-												<s:textfield maxlength="7" cssStyle="width:63px;" cssClass="qty-field text x-input"
-														name="qty" value="" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" />
-											</li>
-											<!-- This condition check is also applied to the kind of css file that's been included. Refer in this page above in the <head> tag. -->
-											<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-												<li>
-													<label><s:property value="#custPONo" />:</label>
-													<s:textfield maxlength="22" cssStyle="width:154px;"
-															cssClass="text x-input" name="purchaseOrder" value="" />
-												</li>
-											</s:if>
-											<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
-												<li>
-													<label><s:property value="#jobIdFlag" />:</label>
-													<s:textfield maxlength="24" cssStyle="width:154px;"
-															cssClass="text x-input" name="jobId" value="" />
-												</li>
-											</s:if>
-											<li class="nomarginright">
-												<label>&nbsp;</label>
-												<s:set name='storefrontId' value="wCContext.storefrontId" />
-												<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-													<input type="image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/quick-add/addtoquicklist.png"
-															onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
-												</s:if>
-												<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-													<input type="image" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/buttons/addtoquicklist green.png"
-															onclick="$('#prodId').focus();qaAddItem1(this.form); return false;" />
-												</s:elseif>
-											</li>
-										</ul>
-									</form>
-
-									<s:form id="formAdd2List" action="MyItemsDetailsQuickAdd" method="post"
-											cssClass="form quick-add-to-cart-form"
-											cssStyle="padding-right:21px;">
-										<s:hidden name="listKey" value="%{listKey}"></s:hidden>
-										<s:hidden name="listName" value=""></s:hidden>
-										<s:hidden name="listDesc" value=""></s:hidden>
-										<s:hidden name="itemCount" value="%{#parameters.itemCount}"></s:hidden>
-										<s:hidden name="editMode" value="%{editMode}"></s:hidden>
-										
-										<table id="qaTableOld" cellspacing="0" cellpadding="0"
-											<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>width="694"</s:if>
-											<s:else>width="524"</s:else>>
-											<thead>
-												<tr>
-													<th class="del-col">&nbsp;</th>
-													<th class="first-col-header col-header type-col">Item Type</th>
-													<th class="col-header item-col">Item #</th>
-													<th class="col-header qty-col">Qty</th>
-													<th class="col-header uom-col">UOM</th>
-													<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-														<th class="col-header col-header job-col"><s:property value="#custPONo" /></th>
-													</s:if>
-													<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
-														<th class="last-col-header col-header po-col">
-															<!-- Job Number  -->
-															<s:property value="#jobIdFlag" />
-														</th>
-													</s:if>
-												</tr>
-											</thead>
-											<tbody>
-											</tbody>
-										</table>
-										<table id="qaTable" cellspacing="0" cellpadding="0"
-											<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>width="694"</s:if>
-											<s:else>width="524"</s:else>>
-										</table>
-										<div class="fFVVEM_wrap">
-											<div style="display: none;" class="error" id="errorMsgForMandatoryFields_quick-add"></div>
-										</div>
-										<input id="btnQLAdd2Cart" name="button" type="button" class="btn-gradient floatright addmargintop20" value="Add to My Items List" onclick="add2List(); return false;" />
-									</s:form>
-
-									<div class="clearfix"></div>
-									<div class="quick-add-form-bot addpadleft20">
-										<div class="error" id="errorMsgFor_QL" style="display: none"></div>
-										Click the Add to Quick List button once you have entered an item number.
-									</div>
-								</div> <%-- / quick-add-form quick-add-form-mil --%>
-							</div> <%-- / quick-add --%>
+							
+							<div class="mil-edit-forms-desc">
+								<label>Description:</label>
+								<input type="text" class="x-input addheight" id="listDesc" title="Description"
+										<s:property value="%{#disableListNameAndDesc ? 'disabled=\'disabled\'' : ''}" />
+										onkeyup="javascript:restrictTextareaMaxLength(this,200);" value="" size="90"
+										value="<s:property value="listDesc"/>" />
+							</div> <%-- / mil-edit-forms-desc --%>
 						</div> <%-- / mil-edit --%>
 						
 						<div class="clearfix"></div>
@@ -2475,18 +2326,6 @@ function showSharedListForm(){
 						<div class="view-hide-images addpadtop10">
 							<a id="toggleview" class="viewbtn"></a>
 						</div>
-						
-						<div class="button-container"> <%-- edit mode top --%>
-							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
-							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
-							
-							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
-							
-							<s:if test="%{canShare || (#isEstUser && (#shareAdminOnlyFlg=='' || #shareAdminOnlyFlg=='N'))}">
-								<input name="button" type="button" class="btn-share-list btn-neutral floatright  addmarginleft10" value="Share List" />
-							</s:if>
-						</div>
-						
 					</s:else> <%-- end if-else editMode --%>
 	
 					<s:form id="formItemIds" method="post">
@@ -2811,7 +2650,7 @@ function showSharedListForm(){
 															<s:textfield title="QTY" cssClass="x-input"
 																	cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
 																	maxlength="7" tabindex="1" value="%{#qty}"
-																	onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);"
+																	onkeyup="isValidQuantityRemoveAlpha(this,event);isValidQuantity(this);updateHidden(this,'%{#id}');setFocus(this,event);"
 																	theme="simple" />
 															<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
 															<s:hidden id="enteredUOMs_%{#id}" name="enteredUOMs" value="%{#itemUomId}" />
@@ -2822,7 +2661,7 @@ function showSharedListForm(){
 															<s:textfield title="QTY" cssClass="x-input"
 																	cssStyle="width:51px;" name="qtys" id="qtys_%{#id}"
 																	tabindex="1" value="%{#qty}"
-																	onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
+																	onkeyup="isValidQuantityRemoveAlpha(this,event);updateHidden(this,'%{#id}');isValidQuantity(this);setFocus(this,event);"
 																	theme="simple" readonly="true" />
 															<s:hidden name='QTY_%{#id}' id='QTY_%{#id}' value='%{#qty}' />
 														</s:else>

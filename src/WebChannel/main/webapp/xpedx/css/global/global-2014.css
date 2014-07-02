@@ -937,3 +937,441 @@ div#fancybox-content .error, div#fancybox-content .notice {
 #main {
 	min-height: 665px;
 }
+
+/*-------------- Quick Add ----------- */
+.qa-add-wrap {
+	width: 870px;
+	padding: 10px 0px 10px 88px;
+}
+.qa-add-wrap h3 {
+	margin-left: 12px;
+}
+.qa-copy-wrap {
+	width: 870px;
+	padding: 0px 0px 10px 100px;
+}
+.qa-button-wrap {
+	width: 730px;
+	clear: both;
+}
+.qa-button-wrap-copy {
+	width: 338px;
+	clear: both;
+}
+.qa-error-icon {
+	width: 15px;
+	float: left;
+	clear: none;
+	margin-top: 6px;
+}
+.qa-add-wrap .qa-button-wrap-alt {
+	width: 350px;
+	clear: both;
+}
+.qa-divider {
+	border-bottom: #cdcdcd 1px solid;
+	width: 720px;
+	height: 1px;
+	margin-top: 20px;
+}
+.qa-add-divider {
+	border-bottom: #cdcdcd 1px solid;
+	width: 720px;
+	height: 1px;
+	margin: 20px 0px 20px 15px;
+}
+.qa-divider-alt {
+	border-bottom: #cdcdcd 1px solid;
+	width: 500px;
+	height: 1px;
+	margin-top: 20px;
+}
+
+.qa-subhead {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding-top: 20px;
+}
+#mil-qa-content .qa-subhead {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding-top: 6px;
+}
+.qa-subhead span {
+	color: #666666;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-style: italic;
+	padding-left: 4px;
+}
+.addmarginbottom15 {
+	margin: 0px 0px 15px 0px;
+}
+.qa-rightcol {
+	float: left;
+	width: 100px;
+}
+.qa-rightcol p {
+	margin: 2px 0px 0px 0px;
+}
+.qa-rightcol span {
+	margin: 2px 10px 0px 0px;
+}
+.auto-width {
+	width: auto;
+}
+.clearfix {
+	height: 1px;
+	clear: both;
+}
+.hidden {
+	display: none;
+}
+.qa-copywrap {
+	float: left;
+	clear: none;
+}
+.qa-copypaste {
+	width: 400px;
+}
+.qa-copypaste textarea {
+	width: 400px;
+	clear: both;
+}
+.qa-itemlimit {
+	font-size: 12px;
+	color: #666666;
+	font-style: italic;
+}
+.qa-itemlimit-list {
+	font-size: 12px;
+	color: #666666;
+	font-style: italic;
+	clear: left;
+	float: left;
+	padding: 6px 0px 0px 15px;
+}
+.qa-listheader {
+	margin-left: 12px;
+}
+.qa-listrow, .qa-listheader {
+	clear: both;
+	padding-top: 5px;
+}
+.inputfloat {
+	display: inline;
+	float: left;
+	clear: none;
+	padding: 3px;
+	padding-bottom: 5px;
+}
+.qa-listrow label, .qa-listheader label {
+	float: left;
+	clear: none;
+	margin-right: 12px;
+}
+.qa-listrow label div, .qa-listheader label div {
+	width: auto;
+	color: #666666;
+	font-size: 11px;
+	margin-bottom: 4px;
+}
+.clearboth {
+	clear: both;
+}
+.qa-copy-instructions {
+	clear: none;
+	float: left;
+	padding: 10px 0px 0px 15px;
+	width: 240px;
+}
+.qa-psmall {
+	font-size: 11px;
+	color: #666666;
+	font-style: italic;
+}
+.qa-plarge {
+	font-size: 13px;
+	color: #333333;
+	line-height: 18px;
+}
+.addmargintop12 {
+	margin-top: 12px;
+}
+.qa-listrow label div.error {
+	color: #B50007;
+	float: left;
+	clear: none;
+	margin: 2px 0px 0px 10px;
+}
+input.error {
+	border: 1px solid #B50007;
+	background: #FFF;
+}
+.addmargintop12 {
+	margin-top: 12px;
+}
+.addmargintop17 {
+	margin-top: 17px;
+}
+.label-item {
+	clear: none;
+	color: #666666;
+	display: inline-block;
+	float: left;
+	font-size: 12px;
+	margin: 0;
+	padding: 0 10px 0 0;
+	width: 140px;
+}
+.label-qty {
+	clear: none;
+	color: #666666;
+	display: inline-block;
+	float: left;
+	font-size: 12px;
+	margin: 0;
+	padding: 0 11px 0 0;
+	width: 65px;
+}
+.label-po {
+	clear: none;
+	color: #666666;
+	display: inline-block;
+	float: left;
+	font-size: 12px;
+	margin: 0;
+	padding: 0 10px 0 0;
+	width: 180px;
+}
+.label-account {
+	clear: none;
+	color: #666666;
+	display: inline-block;
+	float: left;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+	width: 190px;
+}
+.inputfloat {
+	clear: none;
+	display: inline;
+	float: left;
+	padding: 3px 3px 5px;
+}
+.input-item {
+	padding-right: 10px;
+	width: 130px;
+}
+.input-qty {
+	padding-right: 10px;
+	width: 55px;
+}
+.input-po {
+	padding-right: 10px;
+	width: 170px;
+}
+.input-account {
+	padding-right: 10px;
+	width: 170px;
+}
+.qa-error-icon {
+	clear: none;
+	float: left;
+	margin-top: 6px;
+	width: 15px;
+}
+.error {
+	margin-top: 4px;
+}
+input.addheight {
+	height: 16px;
+}
+.new-page-title {
+	color: #3577D1;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: normal;
+	margin: 0 0 16px;
+}
+.list-name {
+	font-size: 16px;
+	font-weight: bold;
+	color: #000000;
+}
+.mil-qa-plus {
+	background: url("plus-minus.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+	clear: none;
+	float: left;
+	height: 16px;
+	width: 16px;
+}
+#mil-qa-trigger {
+	border-top: 1px solid #CCCCCC;
+	color: #666666;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	height: 25px;
+	padding-left: 0;
+	padding-top: 7px;
+	text-transform: uppercase;
+	width: 950px;
+	margin-top: 15px;
+	text-align: center;
+}
+#mil-qa-trigger p {
+	color: #d35d00;
+	cursor: pointer;
+}
+#mil-edit .button-container {
+	clear: none;
+	float: right;
+	margin-top: -10px;
+	padding-bottom: 20px;
+	text-align: right;
+	width: 600px;
+}
+#mil-edit .button-container-lower {
+	clear: none;
+	float: right;
+	padding-bottom: 20px;
+	text-align: right;
+	width: 600px;
+}
+#mil-edit .button-container-bottom {
+	clear: none;
+	float: right;
+	padding-bottom: 20px;
+	text-align: right;
+	width: 600px;
+}
+.mil-only.mil-wrap-condensed-container.last {
+	border-radius: 0;
+}
+h3 {
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding-bottom: 6px;
+}
+.mil-pa-select-item {
+	width: 235px;
+}
+#mil-qa-content {
+	padding: 0px 10px 30px 10px;
+	border-bottom: 1px #ccc solid;
+}
+
+.mil-qa-list-po {
+	display: block;
+	vertical-align: top;
+	height: auto;
+	width: auto;
+}
+.mil-qa-list-wrap {
+
+}
+.mil-add-item-wrap .mil-qa-list-wrap {
+	display: inline-block;
+	vertical-align: top;
+	height: auto;
+	width: 530px;
+}
+.mil-qa-list-po .mil-qa-button-wrap {
+	width: auto;
+	clear: both;
+	padding: 10px 0 0 388px;
+}
+.mil-qa-list-wrap .mil-qa-button-wrap {
+	width: 500px;
+	clear: both;
+	padding: 10px 0 0 0px;
+}
+.mil-qa-list-po .qa-button-wrap {
+	width: 338px;
+	clear: both;
+	padding: 10px 0 0 0px;
+}
+.mil-qa-list-wrap .qa-button-wrap {
+	clear: both;
+	padding: 10px 0 0 0px;
+}
+#copypaste-text {
+	width: 330px;
+}
+.arrows-up {
+	width: 146px;
+	height: 20px;
+	cursor: pointer;
+	margin-left: 400px;
+	background: url(../view-pa-button.png) no-repeat 0px -2px;
+}
+.arrows-down {
+	width: 146px;
+	height: 20px;
+	cursor: pointer;
+	margin-left: 400px;
+	background: url(../view-pa-button.png) no-repeat 0px -25px;
+}
+.mil-qa-list-po hr.pa-horiz {
+    background: #cccccc;
+    border: 0 none;
+    height: 1px;
+	margin-top: 20px;
+}
+.mil-add-item-wrap hr.pa-horiz {
+	display: none;
+}
+.mil-qa-list-wrap hr.pa-horiz {
+	display: none;
+}
+.mil-qa-copy-instructions {
+	float: right;
+}
+.mil-qa-list-po .mil-qa-copy-paste {
+	display: inline-block;
+	vertical-align: top;
+	height: auto;
+	padding-left: 20px;
+	padding-top: 15px;
+	width: 785px;
+}
+.mil-qa-list-wrap .mil-qa-copy-paste {
+	display: inline-block;
+	vertical-align: top;
+	height: auto;
+	padding-left: 20px;
+	width: 335px;
+	border-left: 1px #e5e4e4 solid;
+}
+
+.mil-qa-list-wrap .mil-add-item-wrap {
+	display: inline-block;
+	vertical-align: top;
+	height: auto;
+	width: 515px;
+}
+
+.mid-altwrap {
+	margin-left: 0px;
+}
+.width-auto {
+	width: auto;
+}
+.return-link {
+	margin-bottom: 15px;
+	width: 150px;	
+}
+.print-ico-xpedx {
+    margin-right: 8px;
+    margin-top: -48px;
+	cursor: pointer;
+}
+/*-------------- end Quick Add ----------- */
