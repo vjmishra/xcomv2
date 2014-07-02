@@ -194,7 +194,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	private String getLogoName(String sellerOrgCode) {
 		String _imageName = "";
 		if (XPEDXConstants.XPEDX_LOGO.equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/xpedx_r_rgb_lo.jpg";
+			_imageName = "/logo-email.jpg";
 		} else if (XPEDXConstants.BULKLEYDUNTON_LOGO
 				.equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
@@ -205,7 +205,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 				.equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
 		} else if (XPEDXConstants.SAALFELD_LOGO.equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/Saalfeld_r_rgb_lo.jpg";
+			_imageName = "/saalfeld_210x47px.jpg";
 		} else if (XPEDXConstants.STRATEGICPAPER_LOG0
 				.equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/StrategicPaper_r_rgb_lo.jpg";
@@ -220,7 +220,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			_imageName = "/Zellerbach_r_rgb_lo.jpg";
 		} else if (XPEDXConstants.XPEDXCANADA_LOGO
 				.equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/xpedx_r_rgb_lo.jpg";
+			_imageName = "/logo-email.jpg";
 		}
 		return _imageName;
 	}

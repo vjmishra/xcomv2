@@ -130,7 +130,7 @@
 	<table width="600" border="0"  cellpadding="2" cellspacing="2" topmargin="0" leftmargin="0" STYLE="font:normal 10pt Tahoma">
 	<tr>
 	<td height="44">
-	<img src="{$imageURL}"	width="216" height="69" />
+	<img src="{$imageURL}"	width="210" height="47" />
 	</td></tr></table>
 		<HTML>
 			<xsl:call-template name="applyStyle"/>

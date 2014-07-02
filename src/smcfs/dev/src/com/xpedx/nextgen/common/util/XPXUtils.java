@@ -2144,7 +2144,7 @@ public class XPXUtils implements YIFCustomApi {
 		 * This needs to be revisited once the logo image names are confirmed.
 		 **/
 		if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/xpedx_r_rgb_lo.jpg";
+			_imageName = "/logo-email.jpg";
 		} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
 		} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
@@ -2152,7 +2152,7 @@ public class XPXUtils implements YIFCustomApi {
 		} else if ("CentralMarquardt".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
 		} else if ("Saalfeld".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/Saalfeld_r_rgb_lo.jpg";
+			_imageName = "/saalfeld_210x47px.jpg";
 		} else if ("StrategicPaper".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/StrategicPaper_r_rgb_lo.jpg";
 		} else if ("WesternPaper".equalsIgnoreCase(sellerOrgCode)) {
@@ -2162,7 +2162,7 @@ public class XPXUtils implements YIFCustomApi {
 		} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/Zellerbach_r_rgb_lo.jpg";
 		} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/xpedx_r_rgb_lo.jpg";
+			_imageName = "/logo-email.jpg";
 		} 
 		return _imageName;
 	}
