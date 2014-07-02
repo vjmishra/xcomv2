@@ -1082,6 +1082,9 @@ ul.megamenu {
 #home-image-rotation-nav a.activeSlide {
     background: #69e295;
 }
+#tips-container a {
+	color: #006A3A;
+}
 
 /*---------Processing icon ---------*/
 .loading-icon {

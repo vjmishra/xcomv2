@@ -63,6 +63,7 @@ It is not a good practice but creating on every jsp page is also not convenient 
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.position<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.megamenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/MegaMenu<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/watermark.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/ShipToComponent<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<s:url id="autocompleteURL" action="ajaxAutocomplete" namespace="/catalog" escapeAmp="false" />
 	<s:url id="newSearchURL" action="newSearch" namespace="/catalog" escapeAmp="false">
@@ -2479,16 +2480,16 @@ function callAjaxForSorting(url,divId)
 			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	   		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-						value="Search Catalog..." onclick="clearTxt();" />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
+						data-watermark="Search Catalog..." onclick="clearTxt();" />
 	   		</s:if>
 	   		<s:else>
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
 						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
-			<button type="submit" id="newSearch_0" value="Submit" class="searchButton" title="Search" tabindex="2013"></button>
+			
 			<div id="tips-container">
-				 <a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
+				 <a class="underlink" id="inline" href="#searchTips"> Search Tips </a>
 			</div>
 		</s:form>
 		<!-- END wctheme.form-close.ftl --> 
@@ -2505,17 +2506,16 @@ function callAjaxForSorting(url,divId)
 	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	  		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-						value="Search Catalog..." onclick="clearTxt();" />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
+						data-watermark="Search Catalog..." onclick="clearTxt();" />
 	   		</s:if>
 	   		<s:else>
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" 
-						value='<s:property value="rememberNewSearchText" />' />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
+						data-watermark='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
-			<button type="submit" id="newSearch_0" value="Submit" class="searchButton"  title="Search"  tabindex="2013" 
-					></button>
+			
 			<div id="tips-container">
-				<a class="whitest underlink" id="inline" href="#searchTips"> Search Tips </a>
+				<a class="underlink" id="inline" href="#searchTips"> Search Tips </a>
 			</div> 
 	   </s:form>
 	 </div>
