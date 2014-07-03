@@ -1,4 +1,4 @@
-ï»¿<%--
+<%--
 	DRY TOA and privacy policy. This page contains this brand's TOA for re-use across multiple pages (XPEDXTermsOfAccess.jsp and XPEDTermsOfAccessModal.jsp).
 	This allows it to be shared by both modal and non-modal pages. Note the inclusion of pp_brand.jsp in middle of content so this brand's privacy policy is re-used.
 --%>

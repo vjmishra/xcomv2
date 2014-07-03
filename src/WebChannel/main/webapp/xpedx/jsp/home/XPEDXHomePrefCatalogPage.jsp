@@ -33,7 +33,7 @@
                 				title="<s:property value='#userPrefcategoryElem.getAttribute("ShortDescription")'/> Image" 
                 				alt="" /> 							
 							<br />
-							<input id="userPrefCat" type="button" class="btn-gradient" onclick="navigateCatalogPage('<s:property value="#userPrefCatURL" escape='false'/>')" value="Shop <s:property value='#userPrefcategoryElem.getAttribute("ShortDescription")'/>"/>
+							<input id="userPrefCat" type="button" class="btn-gradient" style="width:160px" onclick="navigateCatalogPage('<s:property value="#userPrefCatURL" escape='false'/>')" value="Shop <s:property value='#userPrefcategoryElem.getAttribute("ShortDescription")'/>"/>
 								
 						</td>
 						<td>
@@ -84,7 +84,7 @@
             		<s:else>
             			<div class="category">
 	            			<img src="<s:property value="#contentlocation"/>/<s:property value="#contentid"/>" alt=""/>
-							<input id="catId" type="button"  class="btn-gradient addmargintop20 addmarginleft40"  onclick="navigateCatalog('<s:property value="#catURL" escape='false'/>')" value="Shop <s:property value='#cat.getAttribute("ShortDescription")'/>"/>
+							<input id="catId" type="button"  class="btn-gradient addmargintop20 addmarginleft40"  style="width:160px" onclick="navigateCatalog('<s:property value="#catURL" escape='false'/>')" value="Shop <s:property value='#cat.getAttribute("ShortDescription")'/>"/>
 						</div>
 	            		<s:set name="noOfCatsDisplayed" value="%{#noOfCatsDisplayed+1}"></s:set>
             		</s:else>

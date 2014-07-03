@@ -87,7 +87,7 @@
 	<div class="container  content-container">
 		<h1>Brands</h1>
 		
-		<div class="page-title container-pad">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
+		<div class="page-title" style="padding:10px 25px">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
 		<div class="alphabet">
 			<p>
 				<%-- row of letters across the top --%>
