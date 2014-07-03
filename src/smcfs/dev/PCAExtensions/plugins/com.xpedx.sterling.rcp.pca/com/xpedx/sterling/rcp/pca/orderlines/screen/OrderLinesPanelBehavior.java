@@ -1478,7 +1478,7 @@ private String getItemListAPIQuery(){
 	}
 	
 	public void preaprePlacedOrderHeaderErrors(){
-	PlacedOrderHeaderErrorTable.put("M_M0002","Order not found in change mode");
+	
 	PlacedOrderHeaderErrorTable.put("M_M0003",	"Order in use in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0004",	"Order status not valid in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0005",	"Order not found for delete in change mode");
@@ -1487,37 +1487,25 @@ private String getItemListAPIQuery(){
 	PlacedOrderHeaderErrorTable.put("M_M0008",	"This ship-to number is not on file");
 	PlacedOrderHeaderErrorTable.put("M_M0009",	"Order status not valid for delete");
 	PlacedOrderHeaderErrorTable.put("M_M0010",	"Order in use, delete not allowed");
-	PlacedOrderHeaderErrorTable.put("M_M0020"	,"Invalid request date");
+	PlacedOrderHeaderErrorTable.put("M_M0015",	"Company name not found");
+	PlacedOrderHeaderErrorTable.put("M_M0018",	"A/R Aging not found ORCTL");
+	PlacedOrderHeaderErrorTable.put("M_M0020",  "Invalid request date");
 	PlacedOrderHeaderErrorTable.put("M_M0021",	"Order source code is required for this company");
 	PlacedOrderHeaderErrorTable.put("M_M0023",	"Warehouse ID is not valid");
 	PlacedOrderHeaderErrorTable.put("M_M0036",	"Next shipping date is taken");
 	PlacedOrderHeaderErrorTable.put("M_M0037",	"date/warehouse/carrier is not in the date file");
-	PlacedOrderHeaderErrorTable.put("M_M0037"	,"date/warehouse/carrier is not in the date file");
-	PlacedOrderHeaderErrorTable.put("M_M0039"	,"Company number sent is zero or blank");
+	PlacedOrderHeaderErrorTable.put("M_M0038",	"Order process code is not valid");
+	PlacedOrderHeaderErrorTable.put("M_M0039",	"Company number sent is zero or blank");
 	PlacedOrderHeaderErrorTable.put("M_M0040",	"Customer number sent is zero or blank");
+	PlacedOrderHeaderErrorTable.put("M_M0044",	"Sequence number is more than 997");
+	PlacedOrderHeaderErrorTable.put("M_M0050",	"A change or delete requested but line is not on order in MAX");
+	PlacedOrderHeaderErrorTable.put("M_M0057",	"B/O not allowed for returns");
+	PlacedOrderHeaderErrorTable.put("M_M0088",	"Wrong Environment");
 	PlacedOrderHeaderErrorTable.put("M_M0097",	"Requested ship date is a far off date in future, ship date is invalid or blank");
 	PlacedOrderHeaderErrorTable.put("M_M0099",	"Environment sent is invalid");
+	PlacedOrderHeaderErrorTable.put("M_M9999",	"All line items are in error");
 	
-	PlacedOrderHeaderErrorTable.put("A_01" ,"Invalid Order Nbr");
-	PlacedOrderHeaderErrorTable.put("A_02" ,"Invalid Customer Order Number");
-	PlacedOrderHeaderErrorTable.put("A_05" ,"Invalid Ship To Suffix");
-	PlacedOrderHeaderErrorTable.put("A_08" ,"Invalid Branch Number Ship From");
-	PlacedOrderHeaderErrorTable.put("A_09" ,"Invalid Required Date");
-	PlacedOrderHeaderErrorTable.put("A_10" ,"Invalid Promise Date");
-	PlacedOrderHeaderErrorTable.put("A_12" ,"Order Status must ='',C,F,H,I,P");
-	PlacedOrderHeaderErrorTable.put("A_17" ,"Invalid Backorder Status");
-	PlacedOrderHeaderErrorTable.put("A_24" ,"Invalid State Code");
-	PlacedOrderHeaderErrorTable.put("A_36" ,"Invalid Freight in Amount");
-	PlacedOrderHeaderErrorTable.put("A_37" ,"Invalid Freight out Amount");
-	PlacedOrderHeaderErrorTable.put("A_39" ,"Invalid Address");
-	PlacedOrderHeaderErrorTable.put("A_46" ,"Too many Header Comments");
-	PlacedOrderHeaderErrorTable.put("A_47" ,"Invalid Customer Order Date");
-	PlacedOrderHeaderErrorTable.put("A_49" ,"'S' Order Promise Date > 7 Days Out");
-	PlacedOrderHeaderErrorTable.put("A_52" ,"Rush Order");
-	PlacedOrderHeaderErrorTable.put("A_58","Header Comment Added .com");
 	
-
-
 }
 private void preparePlaceOrderLineErrors() {
 	
@@ -1529,35 +1517,35 @@ private void preparePlaceOrderLineErrors() {
 	PlacedOrderLineError.put("M_M0014",	"Quantity(s) are invalid");
 	PlacedOrderLineError.put("M_M0019",	"Invalid line code provided for header code send");
 	PlacedOrderLineError.put("M_M0022",	"If change or delete is attempted on a direct order.");
-	PlacedOrderLineError.put("M_M0024"	,"Header process code(NHOPCD) = 'A' and line process");
-	PlacedOrderLineError.put("M_M0025",	"Header process code(NHOPCD) = 'D' and line process");
+	PlacedOrderLineError.put("M_M0024", "Header process code(NHOPCD) = 'A' and line process not eqaul to 'A'");
+	PlacedOrderLineError.put("M_M0025",	"Header process code(NHOPCD) = 'D' and line process not eqaul to 'D'");
 	PlacedOrderLineError.put("M_M0029",	"Invalid Customer UOM");
 	PlacedOrderLineError.put("M_M0030",	"Invalid MAX UOM");
-	PlacedOrderLineError.put("M_M0031",	"If the customer ordered UOM is not there a Base UO");
-	PlacedOrderLineError.put("M_M0075"	,"Qty ordered > 9999999");
-	PlacedOrderLineError.put("M_M0078"	,"Item number in IAXRF");
+	PlacedOrderLineError.put("M_M0031", "When the Customer Ordered UOM sent to MAX does not equal any of the UOMs for the item and does not match a UOM in the customer cross reference file"); 
+	PlacedOrderLineError.put("M_M0045",	"ITTAX <> Y/N");
+	PlacedOrderLineError.put("M_M0046",	"ITTAX EXMPT mismatch");
+	PlacedOrderLineError.put("M_M0047",	"Special Charge code invalid");
+	PlacedOrderLineError.put("M_M0047",	"Item description is blank");
+	PlacedOrderLineError.put("M_M0053",	"Alt UOM issue");
+	PlacedOrderLineError.put("M_M0054",	"No record for any alternate warehouse in Item Balance (ITBAL)");
+	PlacedOrderLineError.put("M_M0055",	"M0055");
+	PlacedOrderLineError.put("M_M0058",	"B/O not allowed for this item");
+	PlacedOrderLineError.put("M_M0060",	"Negative List Price");
+	PlacedOrderLineError.put("M_M0061",	"Negative Discount %");
+	PlacedOrderLineError.put("M_M0062",	"Negative Sell Price");
+	PlacedOrderLineError.put("M_M0063",	"Kit UOM error");
+	PlacedOrderLineError.put("M_M0064",	"Invalid qty (decimal) for kit");
+	PlacedOrderLineError.put("M_M0065",	"Blank item description");
+	PlacedOrderLineError.put("M_M0066",	"Qty <> catch weight");
+	PlacedOrderLineError.put("M_M0067",	"Ext weight with qty = 0");
+	PlacedOrderLineError.put("M_M0068",	"Kit qty override code");
+	PlacedOrderLineError.put("M_M0069",	"Bid qty > qty shipped");
+	PlacedOrderLineError.put("M_M0070",	"Build quantity is less than 0");	
+	PlacedOrderLineError.put("M_M0075", "Qty ordered > 9999999");
+	PlacedOrderLineError.put("M_M0078", "Customer part number sent is not in the customer x-ref file in MAX");
 	PlacedOrderLineError.put("M_M0080",	"Invalid Order Multiple");
+	PlacedOrderLineError.put("M_M0089",	"Direct Item included on an order with a regular warehouse item");
 	PlacedOrderLineError.put("M_M0098",	"Item not found in ITBAL");
-	
-	PlacedOrderLineError.put("A_00" ,"Product Not Found, Changed");
-	PlacedOrderLineError.put("A_03" ,"Invalid Part Key");
-	PlacedOrderLineError.put("A_07" ,"Invalid Branch Number Ship From");
-	PlacedOrderLineError.put("A_08" ,"Invalid Base Unit");
-	PlacedOrderLineError.put("A_09" ,"Invalid Order Quantity");
-	PlacedOrderLineError.put("A_13" ,"Invalid Unit of Measure");
-	PlacedOrderLineError.put("A_14" ,"Invalid Unit Price");
-	PlacedOrderLineError.put("A_15" ,"Invalid Item Type");
-	PlacedOrderLineError.put("A_16" ,"Invalid Commodity Code");
-	PlacedOrderLineError.put("A_17" ,"Invalid Required Date");
-	PlacedOrderLineError.put("A_18" ,"Invalid Promise Date");
-	PlacedOrderLineError.put("A_26" ,"Invalid Bacorder Switch");
-	PlacedOrderLineError.put("A_28" ,"Invalid Customer Part Number");
-	PlacedOrderLineError.put("A_29" ,"Unit Price Not Equal");
-	PlacedOrderLineError.put("A_31" ,"Backorder Quantity Created");
-	PlacedOrderLineError.put("A_32" ,"Cannot Add Line to Backorder");
-	PlacedOrderLineError.put("A_36","Non Stock Added on .com");
-	PlacedOrderLineError.put("A_37","Line Comments Added on .com");
-
 	
 }
 	private void getErrorCodesforPlacedOrder(String orderNo, String errorCode) {
