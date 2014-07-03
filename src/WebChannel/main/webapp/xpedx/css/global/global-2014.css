@@ -123,6 +123,9 @@
 .addmarginleft10 {
 	margin-left: 10px;
 }
+.addmarginleft40 {
+	margin-left: 40px;
+}
 .addmarginbottom10 {
 	margin-bottom: 10px;
 }
@@ -137,6 +140,9 @@
 }
 .addmarginright20 {
 	margin-right: 20px;
+}
+.addmarginbottom15 {
+    margin: 0 0 15px;
 }
 .floatleft {
 	float: left;
@@ -888,6 +894,10 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	cursor: pointer;
 }
 
+.print-adjust{
+	width:auto;
+	margin-top:-35px;	
+}
 /*-------Processing Icon---------*/
 .loading-wrap {
 	overflow: hidden;

@@ -128,6 +128,10 @@
 			addToCart();
 			return false;
 		});
+		
+		$("#printButton").click(function(){
+			window.print();
+		});
 	});
 		
 </script>
@@ -2148,7 +2152,8 @@ function showSharedListForm(){
 				<s:action name="xpedxShiptoHeader" executeResult="true" namespace="/common" />
 			</s:if>
 
-			<div class="container" style="min-height: 535px;">
+			<div class="container content-container" style="min-height: 535px;">
+				
 				<!-- breadcrumb -->
 				<s:url action='home.action' namespace='/home' id='urlHome' includeParams='none' />
 				<s:url id='urlMIL' namespace='/myItems' action='MyItemsList.action' includeParams="get" escapeAmp="false">
@@ -2179,23 +2184,33 @@ function showSharedListForm(){
 
 				<s:hidden id="mandatoryFieldCheckFlag_mil-edit" name="mandatoryFieldCheckFlag_mil-edit" value="%{false}"></s:hidden>
 
-
-				<div id="breadcumbs-list-name">
+				<h1><s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:&nbsp;<span><s:property value="listName" /></span></h1>
+				<div id="printButton" class="print-ico-xpedx underlink print-adjust">
+					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
+				</div>
+				<%-- <span class="float-left">
+						<s:property value="listName" />
+				</span> --%>
+				<%-- <div id="breadcumbs-list-name">
 					<span class="page-title"> <s:text
 							name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:
 					</span>
 					&nbsp;
 					<span>
 						<s:property value="listName" />
-					</span>
-					<a href="javascript:window.print()">
+					</span> --%>
+					<%-- <div id="printButton" class="print-ico-xpedx underlink print-adjust" >
+						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
+					</div --%>
+					
+					<%--  <a href="javascript:window.print()">
 						<span class="print-ico-xpedx underlink" style="font-weight: normal; font-size: 12px;">
 							<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
 									width="16" height="15" alt="Print Page" />
 							Print Page
 						</span>
-					</a>
-				</div>
+					</a> --%> 
+				
 				
 				<div class="addpadleft20 addmargintop-10">
 					<span class="grey" style="width: 421px; word-wrap: break-word; float: left;">

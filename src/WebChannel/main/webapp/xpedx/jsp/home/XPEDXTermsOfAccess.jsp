@@ -78,6 +78,11 @@ $(document).ready(function() {
 		'transitionIn'		: 'fade',
 		'transitionOut'		: 'fade'
 	});
+	
+	$("#printButton").click(function(){
+		window.print();
+	});
+	
 });
 </script>
   
@@ -94,24 +99,17 @@ $(document).ready(function() {
 			<div id="main">
 				
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-
-			<div class="container">
+			<div class="container content-container">
 				<!-- breadcrumb -->
+				<h1>Terms of Access</h1>
 
-				<div id="mid-col-mil">
-
-					<div>
-						<div class="padding-top2 float-right">
-							<a href="javascript:window.print()" class="underlink"><span class="print-ico-xpedx underlink"><img
-									height="15" width="16" alt="Print This Page"
-									src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif">Print Page
-							</span>
-							</a>
-						</div>
+				 	<div id="printButton" class="print-ico-xpedx underlink print-adjust" >
+						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
+					</div> 
+						
 						<div class="padding-top3 black">
 						</div>
 
-					</div>
 					
 					<s:if test="wCContext.storefrontId == 'xpedx'">
 						<jsp:include page="../common/sharedTermsOfAccess_xpedx.jsp">
@@ -124,7 +122,7 @@ $(document).ready(function() {
 						</jsp:include>
 					</s:if>
 					
-				</div> 
+				 
 				<!-- End Pricing -->
 				<br />
 			</div>

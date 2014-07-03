@@ -95,7 +95,8 @@
     	<script type="text/javascript">
 			document.getElementById("newSearch").style.display = 'none';
 		</script>
-    	<div class="container">
+    	<div class="container content-container">
+    		<h1><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></h1>
       	<!-- breadcrumb -->
        		<s:set name='error' value="#_action.getErrorMessageType()"/>
        		
@@ -103,10 +104,7 @@
 			
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
       		<div id="mid-col-mil"> 
-		    <div>
-      		<%-- <div class="padding-top3 page-title black"><strong class="black"> Forgot Password</strong></div> --%>
-      		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
-			</div>
+		   
 			<div class=" padding-bottom clearview"> </div>
 			
 		<!-- begin progress bar -->
@@ -156,14 +154,14 @@
 						<td width="38%" class="grey  no-border-right-user">
 							<div class="fp-btn-container">
 								<ul class="float-left  padding-left1">
-									<li class="float-left margin-10"><a href="javascript:cancelForgotPasswordFlow();"
-										class="grey-ui-btn"><span>Cancel</span>
+									<li class="float-left margin-10"><input type="button" onclick="javascript:cancelForgotPasswordFlow();"
+										class="btn-neutral" value="Cancel"/>
 									</a>
 									</li>
 									<!-- <li class="float-right"><a href="javascript:secretQuestionSubmit();"
 										class="orange-ui-btn"><span>Submit</span> -->
-									 <li class="float-left"><a href="#" onclick="secretQuestionSubmit();" 
-                                        class="orange-ui-btn"><span>Submit</span>										
+									 <li class="float-left"><input type="button" onclick="secretQuestionSubmit();" 
+                                        class="btn-gradient" value="Submit"/>										
 									</a>
 									</li>
 								</ul>

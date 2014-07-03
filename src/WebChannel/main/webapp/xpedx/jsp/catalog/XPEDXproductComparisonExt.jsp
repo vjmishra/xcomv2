@@ -37,8 +37,7 @@
 					
 <s:if test="#isGuestUser == true">
 	
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
@@ -99,6 +98,8 @@
 <!-- Facy Box (Lightbox/Modal Window -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!-- Page Calls -->
 </head>
 <body class="ext-gecko ext-gecko3">
@@ -157,15 +158,13 @@
 		<s:if test='!#guestUser'>  	
 			<s:action name="xpedxShiptoHeader" executeResult="true" namespace="/common" />
 		</s:if>	
- 		<s:if test='!#guestUser'> 
- 			<div class="container" style="overflow: auto;" >
- 		</s:if>
- 		<s:else>
- 			<div class="container" style="overflow: auto; margin-top: -30px;" >
- 		</s:else>
+ 		
+ 			<div class="container content-container">
+ 		
+ 		
  
  		<!--- begin breadcrumbs header--->
-		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
+		
 			<!-- <a href="javascript:window.history.back();">Back</a> / Compare Items -->			
 			<!-- Begin - Changes made by Mitesh Parikh for 2422 JIRA -->
 			<script type="text/javascript">
@@ -175,7 +174,8 @@
 				window.location.href=backUrl;
 			}
 			</script>
-			<a href="javascript:getbackUrl();" style="margin-left:-10px">Back</a> / <span class="page-title"> Compare Items </span>
+			<p class="addmarginbottom15"><a href="javascript:getbackUrl();">&lsaquo; Back</a></p> <%-- / <span class="page-title"> Compare Items </span> --%>
+			<h1>Compare Items</h1>
 			<%--<s:property value='%{#session.lastPage}' />
 			 String referer = request.getHeader("referer");
 			
@@ -188,7 +188,7 @@
 		--%>
 			<s:hidden id='backUrl' name='backUrl' value="%{#session.productCompareBackPageURL.substring(#session.productCompareBackPageURL.indexOf('/swc'))}" />
 			<!-- End - Changes made by Mitesh Parikh for 2422 JIRA -->
-		</div>
+		
 		<!--- clearall puts stuff below 'floating' items. nonbreaking space is for IE--->				
 		<div class="clearall">&nbsp;</div>
 		<!--- end breadcrumbs header --->

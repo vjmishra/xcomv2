@@ -33,8 +33,8 @@
                 				title="<s:property value='#userPrefcategoryElem.getAttribute("ShortDescription")'/> Image" 
                 				alt="" /> 							
 							<br />
-							<a class="orange-ui-btn" href="<s:property value="#userPrefCatURL" escape="false"/>">
-								<span>Shop <s:property value='#userPrefcategoryElem.getAttribute("ShortDescription")'/></span></a>
+							<input id="userPrefCat" type="button" class="btn-gradient" onclick="navigateCatalogPage('<s:property value="#userPrefCatURL" escape='false'/>')" value="Shop <s:property value='#userPrefcategoryElem.getAttribute("ShortDescription")'/>"/>
+								
 						</td>
 						<td>
 							<ul>
@@ -76,7 +76,7 @@
 					<s:param name='path' value='#cat.getAttribute("CategoryPath")'/>
 					<s:param name='cname' value='#cat.getAttribute("ShortDescription")'/>
 					<s:param name='newOP' value='%{true}'/>
-				</s:url>
+				</s:url>				
 				<s:set name='catPath' value="#cat.getAttribute('CategoryPath')"/>
 				<s:if test="%{#userPrefcategoryPath != #catPath}">
 					<s:if test="#noOfCatsDisplayed >= 3" >		
@@ -84,9 +84,8 @@
             		<s:else>
             			<div class="category">
 	            			<img src="<s:property value="#contentlocation"/>/<s:property value="#contentid"/>" alt=""/>
-							<s:a href="%{catURL}" cssClass="orange-ui-btn"><span>Shop <s:property value='#cat.getAttribute("ShortDescription")'/></span>
-							</s:a>	
-	            		</div>
+							<input id="catId" type="button"  class="btn-gradient addmargintop20 addmarginleft40"  onclick="navigateCatalog('<s:property value="#catURL" escape='false'/>')" value="Shop <s:property value='#cat.getAttribute("ShortDescription")'/>"/>
+						</div>
 	            		<s:set name="noOfCatsDisplayed" value="%{#noOfCatsDisplayed+1}"></s:set>
             		</s:else>
             	</s:if>

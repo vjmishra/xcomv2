@@ -84,9 +84,10 @@
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 	</s:else>
 
-	<div class="container container-pad">
-
-		<div class="page-title">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
+	<div class="container  content-container">
+		<h1>Brands</h1>
+		
+		<div class="page-title container-pad">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
 		<div class="alphabet">
 			<p>
 				<%-- row of letters across the top --%>

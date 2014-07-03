@@ -977,7 +977,8 @@ var selectedShipCustomer = null;
 <s:url id='refreshCustomerIntoContext' namespace='/common' action='refreshCustomerIntoContextForMIL.action'>	
 <s:param name='shipToBanner' value="%{'true'}" />					
 </s:url>
-		 
+<s:url id="logoutlink" action='logout' namespace='/home' includeParams='none'/>
+<s:hidden id="logoutId" value="%{#logoutlink}"/>	 
 <s:url id='shipToForOrderSearch' namespace='/common'
 	action='xpedxGetAssignedCustomersForOrderList' />
 <s:url id='shipToForUserProfileSearch' namespace='/common'
@@ -1974,6 +1975,11 @@ function passwordUpdateModal()
 			'width' 			: 450,
 			'height' 			: 350  
 		});
+        $("#cancelId").click(function(){
+    		var url = $('#logoutId').val();
+    		window.location.href = url;
+    		return false;
+    	});
  });
 </script>
 <script type="text/javascript">

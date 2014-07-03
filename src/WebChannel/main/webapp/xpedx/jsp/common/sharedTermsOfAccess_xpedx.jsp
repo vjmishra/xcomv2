@@ -1,4 +1,4 @@
-﻿<%--
+ï»¿<%--
 	DRY TOA and privacy policy. This page contains this brand's TOA for re-use across multiple pages (XPEDXTermsOfAccess.jsp and XPEDTermsOfAccessModal.jsp).
 	This allows it to be shared by both modal and non-modal pages. Note the inclusion of pp_brand.jsp in middle of content so this brand's privacy policy is re-used.
 --%>
@@ -135,13 +135,11 @@
 								<tr>
 									<td colspan="2" valign="top" class="no-border-right-user">
 										<ul class="float-right ">
-											<li class="float-right margin-10"><a href="javascript:toaSubmit('Y')"
-												class="grey-ui-btn"><span>Accept</span>
-												</a>
+											<li class="float-right margin-10"><input type="button" onclick="javascript:toaSubmit('Y')"
+												class="btn-neutral" value="Accept"/>
+												
 											</li>
-											<li class="float-right margin-10 checkaddavail"><a href="<s:url action='logout' namespace='/home' includeParams='none'/>"
-												class="grey-ui-btn"><span>Cancel</span>
-												</a>
+											<li class="float-right margin-10 checkaddavail"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/>
 											</li>
 										</ul>
 									</td>

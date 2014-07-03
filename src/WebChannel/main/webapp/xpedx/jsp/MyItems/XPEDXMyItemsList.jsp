@@ -653,10 +653,8 @@
 			   <s:param name='shipToBanner' value="%{'true'}" />
 			</s:action>
 			
-			<div class="container">
-				<div id="breadcumbs-list-name" class="page-title">
-					<s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' />
-				</div>
+			<div class="container content-container">
+				<h1><s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' /></h1>
 				
 				<div class="mil-lists-legend">
 					<div class="mil-lists-personal">Personal</div>

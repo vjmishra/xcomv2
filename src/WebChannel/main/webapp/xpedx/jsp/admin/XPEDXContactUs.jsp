@@ -20,26 +20,22 @@
 
 
 <!-- styles -->
-<s:if test="#isGuestUser == false">
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-</s:if>
+
 <!-- Added for EB-1689 view the correct support information on the Contact Us page Starts -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 <![endif]--> 
 <!--EB-1689 END -->
- 
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MISC<s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+ <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MISC<s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 
 <!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/global/IE<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 
-<s:if test="#isGuestUser == true">
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-</s:if>
+
 
 <!-- javascript -->
 
@@ -110,8 +106,9 @@
     </s:if>
         <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
         
-            <div class="container">
+            <div class="container content-container">
                 <!-- breadcrumb -->
+                <h1>Contact Us</h1>
                 <s:set name="eBusinessPhoneNo" value="eBusinessPhoneNo" />
                 <s:set name="fmtEBusinessPhoneNo" value='#xpedxUtilBean.getFormattedPhone( #eBusinessPhoneNo )' />
                 
@@ -119,7 +116,7 @@
 	<s:form action="xpedxContactUsSendMail" namespace="/common" method="post" name="contractUsForm" id="contractUsForm">
                 <div id="mid-col-mil"><br/>
                 
-	                <div class="page-title"> Contact Us</div>
+	               
                 
                 <s:if test="#isGuestUser == false">
                 <%-- Code Commented for JIra 3307 

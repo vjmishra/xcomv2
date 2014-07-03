@@ -135,13 +135,10 @@
 								<tr>
 									<td colspan="2" valign="top" class="no-border-right-user">
 										<ul class="float-right ">
-											<li class="float-right margin-10"><a href="javascript:toaSubmit('Y')"
-												class="grey-ui-btn"><span>Accept</span>
-												</a>
+											<li class="float-right margin-10"><input type="button"  onclick="javascript:toaSubmit('Y')"
+												class="btn-neutral" value="Accept"/>
 											</li>
-											<li class="float-right margin-10 checkaddavail"><a href="<s:url action='logout' namespace='/home' includeParams='none'/>"
-												class="grey-ui-btn"><span>Cancel</span>
-												</a>
+											<li class="float-right margin-10 checkaddavail"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/>
 											</li>
 										</ul>
 									</td>

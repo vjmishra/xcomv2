@@ -387,6 +387,15 @@ Ext.onReady(function(){
 	});
 	$(document).ready(function() { 
 		$("#primary-category td ul li a").shorten();});
+	
+	function navigateCatalog(url){
+		window.location.href = url;
+		return false;
+	}
+	function navigateCatalogPage(url){
+		window.location.href = url;
+		return false;
+	}
 		</script>
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-home-common<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
