@@ -228,12 +228,21 @@
 								<input type="submit"
 									class="btn-gradient floatright "
 									value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
+							<input
+									id="btn-clear-all"
+									class="btn-neutral floatright addmarginright10" value="Clear"
+									type="button" onclick="clearAll()"/>
 							</div>
 							</s:if>
 							<s:else>
 							<div class="qa-button-wrap-alt ">
+							
 								<input type="submit" class="btn-gradient floatright "
 									value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
+							<input
+									id="btn-clear-all"
+									class="btn-neutral floatright addmarginright10" value="Clear"
+									type="button" onclick="clearAll()"/>
 							</div>
 							</s:else>
 							<s:hidden id="orderHeaderKey" value='%{#orderHeaderKey}' />
@@ -325,17 +334,25 @@
 							<%-- quickaddItemLines --%>
 							<s:if
 							test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-							<div class="qa-button-wrap addpadtop10">
+							<div class="qa-button-wrap addpadtop20">
 								<input type="submit"
 									class="btn-gradient floatright "
 									value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
+							<input
+									id="btn-clear-all"
+									class="btn-neutral floatright addmarginright10" value="Clear"
+									type="button" onclick="clearAll()"/>
 							</div>
 							</s:if>
 							<s:else>
-							<div class="qa-button-wrap-alt addpadtop10">
+							<div class="qa-button-wrap-alt addpadtop20">
 								<input type="submit"
 									class="btn-gradient floatright "
 									value="<s:property value='%{#isEditOrderHeaderKey == null || #isEditOrderHeaderKey == "" ? "Add to Cart" : "Add to Order"}'/>" />
+							<input
+									id="btn-clear-all"
+									class="btn-neutral floatright addmarginright10" value="Clear"
+									type="button" onclick="clearAll()"/>
 							</div>
 							</s:else>
 						</div>

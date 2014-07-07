@@ -945,13 +945,14 @@ div#fancybox-content .error, div#fancybox-content .notice {
 }
 .qa-add-wrap h3 {
 	margin-left: 12px;
+	margin-top: 40px;
 }
 .qa-copy-wrap {
 	width: 870px;
 	padding: 0px 0px 10px 100px;
 }
 .qa-button-wrap {
-	width: 730px;
+	width: 617px;
 	clear: both;
 }
 .qa-button-wrap-copy {
@@ -965,7 +966,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	margin-top: 6px;
 }
 .qa-add-wrap .qa-button-wrap-alt {
-	width: 350px;
+	width: 235px;
 	clear: both;
 }
 .qa-divider {

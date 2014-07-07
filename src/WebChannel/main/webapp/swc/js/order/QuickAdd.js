@@ -9,7 +9,19 @@ function isInt(n) {
 		return false;
 	}
 }
-
+function clearAll(){
+	var rows = $('.qa-listrow:visible');
+	for (var rowId = 1, len = rows.length; rowId <= len; rowId++){
+		$('#enteredProductIDs_'+rowId).val('');
+		$('#enteredQuantities_'+rowId).val('');
+		$('#enteredPONos_'+rowId).val('');
+		$('#enteredJobIDs_'+rowId).val('');
+		if (rowId > 5){
+			var rowDiv="qa-listrow_" + rowId;
+			$('#' + rowDiv).hide();
+		}
+	}
+}
 function clearErrorRow(rowId){
 	$('#errorIcon_'+ rowId).click(function(){
 		$('#enteredProductIDs_'+rowId).val('');
