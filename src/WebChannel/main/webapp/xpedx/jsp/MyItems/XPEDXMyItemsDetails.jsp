@@ -2268,8 +2268,7 @@ function showSharedListForm(){
 					<s:else> <%-- editMode --%>
 						<div id="mil-edit" class="mil-edit" style="width: 100%">
 							<div class="button-container"> <%-- edit mode top --%>
-								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
-								<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Changes" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 								
 								<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
 								
@@ -2314,7 +2313,7 @@ function showSharedListForm(){
 								<label>Description:</label>
 								<input type="text" class="x-input addheight" id="listDesc" title="Description"
 										<s:property value="%{#disableListNameAndDesc ? 'disabled=\'disabled\'' : ''}" />
-										onkeyup="restrictTextareaMaxLength(this,200);" value="" size="90"
+										onkeyup="restrictTextareaMaxLength(this,200);" size="90"
 										value="<s:property value="listDesc"/>" />
 							</div> <%-- / mil-edit-forms-desc --%>
 						</div> <%-- / mil-edit --%>
@@ -2331,10 +2330,15 @@ function showSharedListForm(){
 									</div>
 									
 									<div id="mil-qa-content" style="display: none;">
-										<s:div cssClass="mil-add-item">
+										<s:div cssClass="%{(#showLinePo || #showLineAcct) ? 'mil-add-item' : 'mil-add-item-wrap'}">
 											<h3 class="qa-subhead">Quick Add List</h3>
-											<div class="mil-pa-select-item addpadbottom20 ">Select Item Type
-												<s:select name="qaItemType" cssStyle="width:135px;" headerKey="1" list="skuTypeList" listKey="key" listValue="value" />
+											<div class="mil-pa-select-item addpadbottom20 ">
+												Select Item Type
+												<select id="qaItemType" name="qaItemType" style="width:135px;">
+													<s:iterator value="skuTypeList" id="skuType">
+														<option label="<s:property value="%{#skuType.value}"/>" value="<s:property value="%{#skuType.key}"/>" />
+													</s:iterator>
+												</select>
 											</div>
 											<div class="qa-listheader ">
 												<div class="label-item">Item</div>
@@ -2404,7 +2408,7 @@ function showSharedListForm(){
 											</s:iterator>
 											
 											<div class="mil-qa-button-wrap">
-												<input id="btn-reset-copy-paste" class="btn-neutral addmarginleft15  addmarginright10" value="Clear" type="button" />
+												<input id="btn-reset-items" class="btn-neutral addmarginleft15  addmarginright10" value="Clear" type="button" />
 												<input class="btn-gradient" type="submit" value="Add to My Items List" />
 											</div>
 	
@@ -3092,8 +3096,7 @@ function showSharedListForm(){
 						</div>
 						
 						<div class="button-container addpadtop10"> <%-- edit mode bottom --%>
-							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Item Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
-							<input name="button" type="button" class="btn-neutral floatright addmarginleft10" value="Cancel Item Updates" onclick="cancelChanges();" />
+							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Changes" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 							
 							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
 							

@@ -193,6 +193,11 @@ $(document).ready(function() {
 	$('#btn-reset-copy-paste').click(function() {
 		$('#copypaste-text').val('');
 	});
+	$('#btn-reset-items').click(function() {
+		// clear all inputs and hide all but first 5 rows
+		$('.qa-listrow input').val('');
+		$('.qa-listrow').slice(5, -1).hide();
+	});
 
 
 	$('#btn-add-to-list').click(function() {
