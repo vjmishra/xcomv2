@@ -35,7 +35,6 @@
 <script type="text/javascript">
 	var isUserAdmin = <s:property value="#isUserAdmin"/>;
 	var isEstUser = <s:property value="#isEstUser"/>;
-
 </script>
 
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -226,11 +225,8 @@ function showSharedListForm(){
 #errorMsgBottom {
 	margin: 20px 30px 20px 20px;
 }
-
-.error {
-	margin-top: 10px;
-}
 </style>
+
 <script type="text/javascript">
 	var availabilityURL = '<s:property value="#availabilityURL"/>';
 	var addToCartURL = '<s:property value="#addToCartURL"/>';
@@ -521,7 +517,7 @@ function showSharedListForm(){
 			
 			//Clear previous messages if any
 			clearPreviousDisplayMsg();
-			javascript:updateSelectedPAA( );
+			updateSelectedPAA( );
 		}
 		
 		//added for jira 3742
@@ -553,7 +549,7 @@ function showSharedListForm(){
 			addToCartFlag = true;
 			//Clear previous messages if any
 			clearPreviousDisplayMsg();
-			javascript:addItemToCart(itemId, id );
+			addItemToCart(itemId, id );
 		}
 		var isAdd2List=false;
 		function add2List(){
@@ -2003,6 +1999,12 @@ function showSharedListForm(){
 <!-- Hemantha -->
 <body class="  ext-gecko ext-gecko3">
 
+	<s:url id="ajaxAddItemsToMILURLid" namespace="/myItems" action="ajaxAddItemsToMIL" />
+	<s:hidden id="ajaxAddItemsToMILURL" value="%{#ajaxAddItemsToMILURLid}" />
+	
+	<s:hidden id="listKey" value="%{listKey}"></s:hidden>
+	<s:hidden id="itemCount" value="%{XMLUtils.getElements(#outDoc2, 'XPEDXMyItemsItems').size()}" />
+
 <div >
 <div class="loading-icon" style="display:none;"></div>
 </div>
@@ -2312,13 +2314,139 @@ function showSharedListForm(){
 								<label>Description:</label>
 								<input type="text" class="x-input addheight" id="listDesc" title="Description"
 										<s:property value="%{#disableListNameAndDesc ? 'disabled=\'disabled\'' : ''}" />
-										onkeyup="javascript:restrictTextareaMaxLength(this,200);" value="" size="90"
+										onkeyup="restrictTextareaMaxLength(this,200);" value="" size="90"
 										value="<s:property value="listDesc"/>" />
 							</div> <%-- / mil-edit-forms-desc --%>
 						</div> <%-- / mil-edit --%>
-						
 						<div class="clearfix"></div>
-		
+						
+						<s:set name="showLinePo" value="#customerPONoFlag != null && !#customerPONoFlag.equals('')" />
+						<s:set name="showLineAcct" value="#jobIdFlag != null && !#jobIdFlag.equals('')" />
+						
+						<form name="QuickAddForm" id="QuickAddForm" onsubmit="validateItems(); return false;">
+							<div id="quick-add">
+								<s:div cssClass="%{(#showLinePo || #showLineAcct) ? 'mil-qa-list-po' : 'mil-qa-list-wrap'}">
+									<div id="mil-qa-trigger">
+										<div id="view-qa-wrap" class="arrows-down"></div>
+									</div>
+									
+									<div id="mil-qa-content" style="display: none;">
+										<s:div cssClass="mil-add-item">
+											<h3 class="qa-subhead">Quick Add List</h3>
+											<div class="mil-pa-select-item addpadbottom20 ">Select Item Type
+												<s:select name="qaItemType" cssStyle="width:135px;" headerKey="1" list="skuTypeList" listKey="key" listValue="value" />
+											</div>
+											<div class="qa-listheader ">
+												<div class="label-item">Item</div>
+												<div class="label-qty">Qty</div>
+												<s:if test="%{#showLinePo}">
+													<div class="label-po">
+														<s:property value='#customerPONoFlag' />
+													</div>
+												</s:if>
+												<s:if test="%{#showLineAcct}">
+													<div class="label-account">
+														<s:property value='#jobIdFlag' />
+													</div>
+												</s:if>
+											</div>
+											
+											<s:set name="numRows" value="%{200}" />
+											<s:iterator value="%{new int[#numRows]}" status="itemline">
+												<s:div id='%{"qa-listrow_" + #itemline.count}' cssStyle='%{#itemline.count > 5 ? "display:none;" : ""}'>
+													<div class="qa-listrow">
+														<div class="qa-error-icon" style="visibility: hidden">
+															<input type="image" id="errorIcon_<s:property value='#itemline.count'/>" 
+																	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x<s:property value='#wcUtil.xpedxBuildKey' />.png"  />
+														</div>
+														<div class="label-item">
+															<input type="text" maxlength="27" size="15"
+																	id="enteredProductIDs_<s:property value='#itemline.count'/>"
+																	name="enteredProductIDs" class="inputfloat input-item"
+																	onfocus="showQuickAddRow(<s:property value='%{#itemline.count + 1}'/>)" />
+														</div>
+														<div class="label-qty">
+															<input maxlength="7" size="8" type="text"
+																	id="enteredQuantities_<s:property value='#itemline.count'/>"
+																	name="enteredQuantities" class="inputfloat input-qty"
+																	onkeyup="return isValidQuantityRemoveAlpha(this,event)" />
+														</div>
+														<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+															<div class="label-po">
+																<input maxlength="22" size="15" type="text"
+																		name="enteredPONos" value="" class="inputfloat input-po"
+																		id="enteredPONos_<s:property value='#itemline.count'/>" />
+															</div>
+												
+														</s:if>
+														<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+															<div class="label-account">
+																<input maxlength="24" size="20" type="text"
+																		id="enteredJobIDs_<s:property value='#itemline.count'/>"
+																		name="enteredJobIDs" class="inputfloat input-account" />
+															</div>
+														</s:if>
+														
+														<div class="error producterrorLine" style="display: none;" id="producterrorLine_<s:property value='#itemline.count'/>">
+														</div>
+				
+														<%-- These inputs are required for the backend to process, not visible in UI --%>
+														<s:hidden cssClass="input-uom" name="enteredUOMs" value="" />
+														<%-- populated by javascript before submission --%>
+														<s:hidden cssClass="input-itemType" name="enteredItemTypes" value="" />
+														<%-- populated by javascript before submission --%>
+														<s:hidden name="enteredProductDescs" value="" />
+														<%-- always empty --%>
+														<s:hidden name="quickAddOrderMultiple" value="1" />
+														<%-- always 1 (quick add ignores order multiple) --%>
+													</div> <%-- / qa-listrow --%>
+												</s:div> <%-- / qa-listrow_# --%>
+											</s:iterator>
+											
+											<div class="mil-qa-button-wrap">
+												<input id="btn-reset-copy-paste" class="btn-neutral addmarginleft15  addmarginright10" value="Clear" type="button" />
+												<input class="btn-gradient" type="submit" value="Add to My Items List" />
+											</div>
+	
+											<hr class="qa-horiz" />
+										</s:div> <%-- / mil-add-item OR mil-add-item-wrap --%>
+										
+										<div class="mil-qa-copy-paste">
+											<h3 class="qa-subhead">Copy and Paste <span>(replaces content in the Quick Add List)</span></h3>
+	
+											<div class="mil-copytext-wrap">
+												<div class="mil-qa-copy-instructions">
+													<p class="qa-psmall">Paste or type the xpedx item numbers or customer item numbers in the following format:</p>
+													<p class="qa-plarge addmargintop12">
+														<strong>Item Number,Quantity</strong>
+													</p>
+													<p class="qa-psmall addmargintop10">Examples:</p>
+													<p class="qa-plarge"><strong>50052121,12</strong> (item with quantity)</p>
+													<p class="qa-plarge"><strong>50052121</strong> (item without quantity)</p>
+												</div>
+											</div> <%-- / mil-copytext-wrap --%>
+	
+											<textarea name="items" id="copypaste-text" class="mil-qa-copypaste" rows="5"></textarea>
+											<div class="qa-itemlimit">Item Limit 200</div>
+											<div class="qa-button-wrap">
+												<input id="btn-add-to-list" class="btn-gradient floatright" value="Add to Quick Add List" type="button" />
+												<input id="btn-reset-copy-paste" class="btn-neutral floatright addmarginright10" value="Clear" type="button" />
+											</div>
+											<div id="copypaste-error" class="error floatleft" style="display: none;"></div>
+										</div> <%-- / mil-qa-copy-paste --%>
+									</div> <%-- / close mil-qa-content --%>
+								</s:div> <%-- / mil-qa-list-po OR mil-qa-list-wrap --%>
+							</div> <%-- / quick-add --%>
+						</form>
+						
+						<s:form id="ReloadFormForQuickAdd" namespace="/myItems" action="MyItemsDetails" method="get">
+							<s:hidden name="listKey" value="%{listKey}" />
+							<s:hidden name="listName" value="%{listName}" />
+							<s:hidden name="listDesc" value="%{listDesc}" />
+							<s:hidden name="itemCount" value="%{itemCount}" cssClass="itemCount" />
+							<s:hidden name="editMode" value="true" />
+						</s:form>
+										
 						<div class="clear"></div>
 						<br />
 						<s:set name="shareAdminOnlyFlg" value="%{#_action.getShareAdminOnly()}" />
@@ -2588,7 +2716,7 @@ function showSharedListForm(){
 													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
 														<p class="replacementtext">
 															<a href="#linkToReplacement" class="modal red"
-																	onclick='javascript:showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
+																	onclick='showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
 																This item will be replaced once inventory is depleted.
 															</a>
 														</p>
@@ -2674,7 +2802,7 @@ function showSharedListForm(){
 																		cssStyle="width:140px;" name="uoms" id="uoms_%{#id}"
 																		list="#uomList" listKey="key" listValue="value"
 																		value='itemUomId'
-																		onchange="javascript:updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
+																		onchange="updateHidden(this,'%{#id}',0,'%{#_action.getJsonStringForMap(#itemUOMsMap)}');"
 																		theme="simple" />
 																<s:hidden name='initialUOM_key_%{#id}' id='initialUOM_key_%{#id}' value='%{#itemUomId}' />
 																<s:set name="itemUomIdDesc" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getUOMDescription(#itemUomId)" />
@@ -2685,7 +2813,7 @@ function showSharedListForm(){
 														<s:else> <%-- itemType == '99.00' --%>
 															<s:textfield cssClass="x-input" cssStyle="width:140px;"
 																	name="uoms" value="%{#itemUomId}"
-																	onchange="javascript:updateHidden(this,'%{#id}');"
+																	onchange="updateHidden(this,'%{#id}');"
 																	theme="simple" readonly="true" />
 															<s:hidden name='UOM_%{#id}' id='UOM_%{#id}' value=' ' />
 														</s:else>
@@ -2732,7 +2860,7 @@ function showSharedListForm(){
 																	id="customField%{#FieldLabel}s" size='10'
 																	value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
 																	title="%{#FieldValue}"
-																	onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+																	onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
 																<s:hidden
 																	name='customerField_%{#custFieldStatus.count}_%{#id}'
 																	id='customerField_%{#custFieldStatus.count}_%{#id}'
@@ -2746,7 +2874,7 @@ function showSharedListForm(){
 																	id="customField%{#FieldLabel}s" size='10'
 																	value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
 																	title="%{#FieldValue}"
-																	onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+																	onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
 																<s:hidden
 																	name='customerField_%{#custFieldStatus.count}_%{#id}'
 																	id='customerField_%{#custFieldStatus.count}_%{#id}'
@@ -2760,7 +2888,7 @@ function showSharedListForm(){
 																	id="customField%{#FieldLabel}s" size='10'
 																	value="%{@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@getReplacedValue(#CustomFieldValue)}"
 																	title="%{#FieldValue}"
-																	onchange="javascript:updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
+																	onchange="updateHidden(this,'%{#id}','%{#custFieldStatus.count}');" />
 																<s:hidden
 																	name='customerField_%{#custFieldStatus.count}_%{#id}'
 																	id='customerField_%{#custFieldStatus.count}_%{#id}'
@@ -3185,7 +3313,7 @@ function showSharedListForm(){
 											</s:if>
 											<s:else>
 												<input name="relatedItems"
-													onclick="javascript:setUId('<s:property value="#uId" />');"
+													onclick="setUId('<s:property value="#uId" />');"
 													type="radio" />
 											</s:else>
 											<div class="mil-question-mark">
@@ -3351,6 +3479,7 @@ function showSharedListForm(){
 	
 	<!-- page specific JS includes -->
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/MyItems/XPEDXMyItemsDetails<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/MyItems/XPEDXMyItemsDetails-QuickAdd<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/MyItems/XPEDXAddToCartAndAvailability<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/XPEDXUtils<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.numberformatter-1.1.0<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>

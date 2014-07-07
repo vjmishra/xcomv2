@@ -1275,9 +1275,6 @@ h3 {
 	height: auto;
 	width: auto;
 }
-.mil-qa-list-wrap {
-
-}
 .mil-add-item-wrap .mil-qa-list-wrap {
 	display: inline-block;
 	vertical-align: top;
@@ -1300,6 +1297,7 @@ h3 {
 	padding: 10px 0 0 0px;
 }
 .mil-qa-list-wrap .qa-button-wrap {
+	width: auto;
 	clear: both;
 	padding: 10px 0 0 0px;
 }
@@ -1311,25 +1309,25 @@ h3 {
 	height: 20px;
 	cursor: pointer;
 	margin-left: 400px;
-	background: url(../view-pa-button.png) no-repeat 0px -2px;
+	background: url(../../images/mil/view-quick-add-button.png) no-repeat 0px -2px;
 }
 .arrows-down {
 	width: 146px;
 	height: 20px;
 	cursor: pointer;
 	margin-left: 400px;
-	background: url(../view-pa-button.png) no-repeat 0px -25px;
+	background: url(../../images/mil/view-quick-add-button.png) no-repeat 0px -25px;
 }
-.mil-qa-list-po hr.pa-horiz {
+.mil-qa-list-po hr.qa-horiz {
     background: #cccccc;
     border: 0 none;
     height: 1px;
 	margin-top: 20px;
 }
-.mil-add-item-wrap hr.pa-horiz {
+.mil-add-item-wrap hr.qa-horiz {
 	display: none;
 }
-.mil-qa-list-wrap hr.pa-horiz {
+.mil-qa-list-wrap hr.qa-horiz {
 	display: none;
 }
 .mil-qa-copy-instructions {

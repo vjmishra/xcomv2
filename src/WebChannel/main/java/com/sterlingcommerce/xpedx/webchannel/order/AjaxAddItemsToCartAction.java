@@ -21,7 +21,6 @@ import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils.CartSummaryPriceStatus;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
-import com.sterlingcommerce.xpedx.webchannel.utilities.megamenu.MegaMenuUtil;
 import com.yantra.yfc.util.YFCCommon;
 
 /**
@@ -49,7 +48,7 @@ import com.yantra.yfc.util.YFCCommon;
 @SuppressWarnings("serial")
 public class AjaxAddItemsToCartAction extends WCAction {
 
-	private static final Logger log = Logger.getLogger(MegaMenuUtil.class);
+	private static final Logger log = Logger.getLogger(AjaxAddItemsToCartAction.class);
 
 	public static final String TYPE_XPEDX = "1";
 	public static final String TYPE_CUSTOMER_PART_NUMBER = "2";
@@ -164,15 +163,15 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		}
 
 		Map<String, ItemDetails> itemDetails = getItemsDetails(uniqueItemIds);
-		
-		
+
+
 		/*for (InputRow row : rows) {
 			if(uniqueItemIds.contains(row.getCustomerItemNumber()) )
 			{
 				itemValidFlags.put(row.getCustomerItemNumber(), true);
 			}else if(uniqueItemIds.contains(row.getItem()))
 			{
-				
+
 			}
 		}*/
 		// all items that have a uom are valid
@@ -309,12 +308,12 @@ public class AjaxAddItemsToCartAction extends WCAction {
 			ItemDetails detail = new ItemDetails();
 			detail.setUom(itemElem.getAttribute("UnitOfMeasure"));
 			itemDetails.put(itemId, detail);
-			if (TYPE_XPEDX.equals(itemType)) 
+			if (TYPE_XPEDX.equals(itemType))
 			{
 				itemValidFlags.put(itemId, true);
 
 			}
-			else 
+			else
 			{
 				itemValidFlags.put(itemAndCustomerNumber.get(itemId), true);
 			}
@@ -445,8 +444,8 @@ public class AjaxAddItemsToCartAction extends WCAction {
 		public void setCustomerItemNumber(String customerItemNumber) {
 			this.customerItemNumber = customerItemNumber;
 		}
-		
-		
+
+
 	}
 
 	private static class ItemDetails {

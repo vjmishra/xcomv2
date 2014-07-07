@@ -17,7 +17,7 @@ function clearErrorRow(rowId){
 		$('#enteredPONos_'+rowId).val('');
 		$('#enteredJobIDs_'+rowId).val('');
 		clearErrorMessage(rowId);
-		
+
 		return false;
 	});
 }
@@ -39,26 +39,23 @@ function clearItemErrorMessages() {
 	for (var i = 0, len = errorDivs.length; i < len; i++) {
 		errorDivs[i].innerHTML = '';
 		errorDivs[i].style.display = 'none';
-		
 	}
-	
 }
 
 /*
  * Performs validation on all rows with item and/or quantity (empty rows are ignored):
- * 1. Validates that each row has both item and quantity.
+ * 1. Validates that each row with a quantity has an item.
  * 2. Validates that each quantity has been entered as an integer.
  * 3. Validates that each item exists (id exists, is entitled, etc).
  */
 function validateItems() {
 	showProcessingIcon();
 	clearItemErrorMessages();
-	
-	
+
 	var itemsToValidate = []; // holds objects
 	var rowIdsForItem = {}; // key=item, value=list of rowId (since multiple rows could have the same item #)
 	var errorMessageForRowId = {}; // key=rowId, value=error message
-	
+
 	var rows = $('.qa-listrow:visible');
 	var hasErrors = false;
 	for (var rowId = 1, len = rows.length; rowId <= len; rowId++) {
@@ -67,27 +64,23 @@ function validateItems() {
 		var qty = $row.find('.input-qty').val();
 		var po = $row.find('.input-po').val();
 		var account = $row.find('.input-account').val();
-		
+
 		clearErrorMessage(rowId);
 		itemId = itemId ? itemId.trim() : '';
 		qty = qty ? qty.trim() : '';
 		po = po ? po.trim() : '';
 		account = account ? account.trim() : '';
-		
+
 		if (!itemId && !qty) {
 			// ignore blank links
 			continue;
 		}
-		
+
 		if (!itemId) {
 			errorMessageForRowId[rowId] = 'Please enter a valid item # and try again.';
 			//clearErrorRow(rowId);
 			hasErrors = true;
-			
-			
-		} else if (!qty || !isInt(qty) || parseInt(qty) < 1) {
-			errorMessageForRowId[rowId] = 'Please enter a valid quantity and try again.';
-			hasErrors = true;
+
 		} else {
 			itemsToValidate.push({
 				'id': itemId,
@@ -95,7 +88,7 @@ function validateItems() {
 				'po': po,
 				'account': account
 			});
-			
+
 			var bucket = rowIdsForItem[itemId];
 			if (!bucket) {
 				// lazy-load list
@@ -105,26 +98,24 @@ function validateItems() {
 			bucket.push(rowId);
 		}
 	}
-	
+
 	if (!hasErrors && itemsToValidate.length == 0) {
 		// if form is completely blank, then treat as missing data on first row
 		errorMessageForRowId[1] = 'Please enter a valid item # and try again.';
 		hasErrors = true;
 	}
-	
+
 	if (hasErrors) {
 		for (var rowId in errorMessageForRowId) {
 			var errorMessage = errorMessageForRowId[rowId];
 			setItemErrorMessage(rowId, errorMessage);
-			
 		}
 		hideProcessingIcon();
-		return;
-		
+
 	} else {
 		var itemType = $('#qaItemType').val();
-		var url = $('#ajaxAddItemsToCartURL').attr('href');
-		
+		var url = $('#ajaxAddItemsToMILURL').val();
+
 		var items = itemsToValidate[0].id;
 		var qtys = itemsToValidate[0].qty;
 		var pos = itemsToValidate[0].po;
@@ -138,45 +129,49 @@ function validateItems() {
 		
 		$.ajax({
 			type: 'POST'
-			,proccessData: false	
-			,url: url
-			,dataType: 'json'
-			,data: {
-					'isEditOrder': $('#isEditOrder').val()
-					,'orderHeaderKey': $('#orderHeaderKey').val()
-					,'itemType': itemType
-					,'items': items
-					,'qtys': qtys
-					,'pos': pos
-					,'accounts': accounts
-				}
-			,success: function(data) {
-				if (data.allItemsValid) {
-					var quickAddUrl = $('#quickAddURL').attr('href');
-					window.location.href = quickAddUrl;
-					
-				} else if (data.unexpectedError) {
-					setItemErrorMessage(1, 'Unexpected error. Please try again.');
-					hideProcessingIcon();
-					if (console) { console.log('Unexpected error while adding items to cart: ' + data.unexpectedError); }
-					
-				} else {
-					for (itemId in data.itemValidFlags) {
-						var validItem = data.itemValidFlags[itemId];
-						if (!validItem) {
-							var invalidRowIds = rowIdsForItem[itemId];
-							for (var i = 0, len = invalidRowIds.length; i < len; i++) {
-								setItemErrorMessage(invalidRowIds[i], 'Invalid Item # <item>. Please review and try again.');
-							}
+				,proccessData: false	
+				,url: url
+				,dataType: 'json'
+					,data: {
+						'listKey': $('#listKey').val()
+						,'currentItemCount': $('#itemCount').val()
+						,'itemType': itemType
+						,'items': items
+						,'qtys': qtys
+						,'pos': pos
+						,'accounts': accounts
+					}
+		,success: function(data) {
+			if (data.allItemsValid) {
+				// TODO submit form to reload page
+				var form = $('#ReloadFormForQuickAdd');
+				var itemCount = parseInt($('#itemCount').val());
+				itemCount += Object.keys(data.itemValidFlags).length;
+				form.find('.itemCount').val(itemCount);
+				form.submit();
+
+			} else if (data.unexpectedError) {
+				$('#errorMessageDiv').get(0).innerHTML = "<h5 align='center'><b><font color=red>An error occurred adding items to My Items List. Please review and try again.</font></b></h5>";
+				hideProcessingIcon();
+				if (console) { console.log('Unexpected error while adding items to MIL: ' + data.unexpectedError); }
+
+			} else {
+				for (itemId in data.itemValidFlags) {
+					var validItem = data.itemValidFlags[itemId];
+					if (!validItem) {
+						var invalidRowIds = rowIdsForItem[itemId];
+						for (var i = 0, len = invalidRowIds.length; i < len; i++) {
+							setItemErrorMessage(invalidRowIds[i], 'Invalid Item # <item>. Please review and try again.');
 						}
 					}
-					hideProcessingIcon();
 				}
-			}
-			,error: function(resp, textStatus, xhr) {
-				// TODO how to recover from this? definitely stop the processing bar. ideally also show error message
 				hideProcessingIcon();
 			}
+		}
+		,error: function(resp, textStatus, xhr) {
+			// TODO how to recover from this? definitely stop the processing bar. ideally also show error message
+			hideProcessingIcon();
+		}
 		});
 	}
 }
@@ -198,11 +193,11 @@ $(document).ready(function() {
 	$('#btn-reset-copy-paste').click(function() {
 		$('#copypaste-text').val('');
 	});
-	
-	
+
+
 	$('#btn-add-to-list').click(function() {
 		$('#copypaste-error').hide().get(0).innerHTML = '';
-		
+
 		// split data into lines, ignoring blank rows
 		var lines = $('#copypaste-text').val().match(/[^\r\n]+/g);
 		if (lines.length == 0) {
@@ -212,13 +207,13 @@ $(document).ready(function() {
 			$('#copypaste-error').show().get(0).innerHTML = 'You cannot add more than 200 items to the list.<br/>You have entered ' + lines.length + ' items.';
 			return;
 		}
-		
+
 		for (var i = 0, len = lines.length; i < len; i++) {
 			var line = lines[i];
 			var rowId = i + 1;
-			
+
 			var tokens = line.split(/\s*,\s*/);
-			
+
 			// overwrite each value - use empty for any values not provided
 			var $row = $('#qa-listrow_' + rowId);
 			$row.find('.input-item').val(tokens[0] ? tokens[0] : '');
@@ -227,14 +222,19 @@ $(document).ready(function() {
 			$row.find('.input-account').val(tokens[3] ? tokens[3] : '');
 			showQuickAddRow(rowId + 1);
 		}
-		
+
 		for (var rowId = lines.length + 1; rowId <= 200; rowId++) {
 			$('#qa-listrow_' + rowId + ' input').val('');
 		}
-		
+
 		// clear the textarea
 		$('#copypaste-text').val('');
 	});
 });
 
-
+$(document).ready(function() {
+	$("#mil-qa-trigger").click(function () {
+		$("#mil-qa-content").slideToggle("slow");
+		$('#view-qa-wrap').toggleClass("arrows-up arrows-down");
+	});
+});
