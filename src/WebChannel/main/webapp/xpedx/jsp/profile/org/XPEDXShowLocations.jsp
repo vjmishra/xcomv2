@@ -77,7 +77,7 @@ div#fancybox-content
 <s:form name="locatoinsForm" id="locatoinsForm" namespace="/profile/org" action="getShipToBillToInfo">
 	<s:hidden name='orgCode' value="%{#_action.getWCContext().getStorefrontId()}" />
 	<input type="hidden" name="sapCustomerID" value="<s:property value='shownCustomerId' />" />
-	    <h2 style="color:#000;">Change Location</h2>
+	    <h1>Change Location</h1>
 		<br /> 
 		<div class="radio-container">
 		<s:property value="%{#_action.getBuyrOrgName()}"/><br />
@@ -95,20 +95,16 @@ div#fancybox-content
 			</ul>
 		</div>
 		<div style="" class="clearview"> 
-			<div>
+		
 	            <ul class="float-right">
 	              <li class="float-left margin-10">
-	              	<s:a cssClass="grey-ui-btn "	href="javascript:$.fancybox.close();">
-						<span>Cancel</span>
-						</s:a>
+	              		<input type="button" class="btn-neutral" onclick="javascript:$.fancybox.close();" value="Cancel"/>
 					</li>
 	              <li class="float-right">
-	              	<s:a href="javascript:submitForm()" cssClass="green-ui-btn">
-							<span>Apply</span>
-						</s:a>
+	              		<input  type="button" class="btn-gradient" onclick="javascript:submitForm()" value="Apply"/>
 					</li>
 	            </ul>
-	          </div>
+	         
          </div>
 </s:form>
 </div>		

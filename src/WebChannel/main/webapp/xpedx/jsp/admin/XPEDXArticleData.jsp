@@ -266,9 +266,9 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 				<s:hidden name='rowToDelete' id='rowToDelete' value=""/>
 				<s:hidden name='deleteFromTable' id='deleteFromTable' value=""/>
 				<!-- end for jira 2484  -->
-			<div class="container">
+			<div class="container content-container">
 			      <!-- breadcrumb -->
-			     <div id="mid-col-mil"><br />
+			   <h1><s:text name="MSG.SWC.NEWSARTL.LISTALL.GENERIC.PGTITLE"/></h1>
 			      
 			      <s:url id='toolsLink' namespace='/tools' action='MyTools'>
 						<s:param name="selectedHeaderTab">ToolsTab</s:param>
@@ -284,18 +284,16 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 				  </s:form>
 				  
 <%-- 			      <div id="breadcumbs-list-name" class="page-title"><s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a> /  <span class="breadcrumb-inactive"><s:text name="tools.newsmaintenance.title" /></span> <a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:property value='#util.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>     </div> --%>
-					<div>
+					
 						<%-- <span class="page-title">News Articles</span> --%>
-						<span class="page-title"> <s:text name="MSG.SWC.NEWSARTL.LISTALL.GENERIC.PGTITLE" /> </span>
-					</div>
-			      
+						
 <!-- 			      <ul id="tool-bar" class="tool-bar-top"> -->
 <%-- 			         <li><s:a cssClass="orange-ui-btn" href="%{newArticleLink}" id="various3" ><span>New Article</span></s:a></li> --%>
 <!-- 				  </ul> -->
 					<s:hidden  value="%{newArticleLink}" id="various3" /> 
  					 <div class="clearview black padding-bottom4"> 
  					    <ul class="float-right">
-      						<li><s:a cssClass="orange-ui-btn" href="javascript:document.newArticleForm.submit();" id="various3"><span>Create New Article</span></s:a></li> 
+      						<li><input type="button" class="btn-gradient" onclick="javascript:document.newArticleForm.submit();" id="various3" value="Create New Article"/></li> 
     					</ul>  
     					
     				
@@ -355,7 +353,7 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 					
 		        	<div class="clearview">&nbsp;</div>
 		        	<div class="clearview">
-		        	<ul class="float-right"><li><s:a cssClass="orange-ui-btn" href="javascript:document.newArticleForm.submit();" id="various3"><span>Create New Article</span></s:a></li></ul>  
+		        	<ul class="float-right"><li><input type="button" class="btn-gradient" onclick="javascript:document.newArticleForm.submit();" id="various3" value="Create New Article"/></li></ul>  
 		         	
 		         	  <!-- <fieldset class="feildsets" style="width:120px;"><legend>For Selected Items:</legend> 
 		        	  <ul id="tool-bar" class="tool-bar-top padding-left2 padding-top2" >
@@ -366,7 +364,7 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 					</div>
 		       		<div class=" bot-margin">&nbsp;</div>
 		       		<div class=" bot-margin">&nbsp;</div>
-				</div>
+				
 			      <!-- End Pricing -->
 			   <br />
 			</div>

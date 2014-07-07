@@ -169,22 +169,16 @@ ul.checkboxTree li
 <div id="main-container">
   <div id="main">
   	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-  	<div class="container ship-to">
-      <!-- breadcrumb -->
-      <div id="mid-col-mil">
-    <%--   <div id="searchBreadcrumb"><a href="%{#adminProfile}"><s:text name="admin.title" /></a> / <a href="#"><s:text name="admin.customerprofile.title" /></a> / <span class="breadcrumb-inactive"><s:text name="admin.shipto.title" /></span> 
-      <a href="#"><span class="print-ico-xpedx">
-      		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>     </div> --%>
-      		<br/>
-   	 	<div class="underlines">
+  	<div class="container ship-to content-container">
+  	<h1>Ship-To:&nbsp;<span><s:property value="displayCustomerFormat"/></span><br/>&nbsp;
+         	<span class="txt-small underlines">
+			<a href="#showLocationsDlg" class="underlines" name="changeLocationCL" id="changeLocationCL" style="font-size:12px">[Change Location]</a></span></h1>
+     
 	 	 	<s:url id='showLocationUrlId' namespace="/profile/org" action='xpedxShowLocations' ></s:url>
 	    	<s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
-         	<strong>Ship-To</strong>: <s:property value="displayCustomerFormat"/><br/>
-         	<span class="txt-small underlines">
-			<a href="#showLocationsDlg" class="underlines" name="changeLocationCL" id="changeLocationCL">[Change Location]</a></span></div>
-   	         <div class="clearview">&nbsp;</div>
-        <s:form name="shipToInfo" action="xpedxSaveShipToInfo" namespace="/profile/org">
-        <div id="requestform">
+         	
+   	    <s:form name="shipToInfo" action="xpedxSaveShipToInfo" namespace="/profile/org">
+        	<div id="requestform">
        			<s:hidden name="customerId" id="customerId" value="%{#sdoc.getAttribute('CustomerID')}" />
        			<s:hidden name="OrgCode" id="OrgCode" value="%{#sdoc.getAttribute('OrganizationCode')}" />
        			<s:hidden name="organizationCode" id="organizationCode" value="%{#sdoc.getAttribute('OrganizationCode')}" />
@@ -193,7 +187,7 @@ ul.checkboxTree li
    	 			 <tr>
 				    <td width="10%" class="no-border-right">Attention:&nbsp;
 				    	<span class="float-right help"><a href="#">
-			   	 			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" border="0" title="Approved Ship-To locations which cannot be edited online. If data is incorrect or a new Ship-To needs to be setup, please call your CSR." style="display:inline;"></a>
+			   	 			<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png" border="0" title="Approved Ship-To locations which cannot be edited online. If data is incorrect or a new Ship-To needs to be setup, please call your CSR." style="display:inline;"/></a>
 			   	 		</span>
 				    </td>
 				    <td colspan="3" class="no-border-right noBorder-left">
@@ -303,14 +297,14 @@ ul.checkboxTree li
         <div id="clearview" class="float-right">    
             <ul id="cart-actions">
                
-               	<li><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
-                <li><a class="green-ui-btn" href="javascript:(function(){document.shipToInfo.submit();})();"><span>Save</span></a></li>
+               	<li><input type="button" onclick="javascript:window.location.reload();"  class="btn-neutral" value="Cancel"/></li>
+                <li><input type="button" class="btn-gradient" onclick="javascript:(function(){document.shipToInfo.submit();})();" value="Save"/></li>
             </ul>
         </div>
         <div class="clearview">&nbsp;</div>
         <%--Code Added For XNGTP-3196 --%>
         <s:if test="%{#_action.isSuccess()}">
-	<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Ship-To Profile has been updated successfully.</div>
+	<div class="success" id="successMsgFor_save" style="display : inline; float: right">Ship-To Profile has been updated successfully.</div>
 	</s:if>
          <%-- End fix for XNGTP-3196 --%>
          <s:if test='modifiedUser!=""'>
@@ -327,9 +321,9 @@ ul.checkboxTree li
 			</div>
 		</div>
         </div>
-        </div>
-     	</div>
-    </div>
+     </div>
+ </div>
+   
     <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	</body> 
 </html> 	 

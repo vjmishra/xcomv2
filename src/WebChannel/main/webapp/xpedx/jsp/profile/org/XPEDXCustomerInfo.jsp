@@ -209,20 +209,19 @@ ul.checkboxTree li
   	<s:hidden name="customerId" id="customerId" value='%{#sdoc.getAttribute("CustomerID")}' />
   	<s:hidden name="sapCustomerID" id="sapCustomerID" value='%{#_action.getSapCustomerID()}' />
      <s:hidden name='organizationCode' id='organizationCode' value='%{#sdoc.getAttribute("OrganizationCode")}' />
-  <div class="container">
-      <div id="mid-col-mil">
-        <div>
+  <div class="container content-container">
+     
+   
           <s:url id='showLocationUrlId' namespace="/profile/org" action='xpedxShowLocations' ></s:url>
 		    <s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
       			<!-- breadcrumb 
       		<div id="searchBreadcrumb" class="page-title"><a href="%{#adminProfile}"><s:text name="admin.title" /></a> / <a href="#"><s:text name="admin.customerprofile.title" /></a> / <span class="breadcrumb-inactive"><s:text name="admin.customer.title" /></span>
           	-->
-          	<br/>
+          	
 			<s:set name="displayCustomerMap" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@custFullAddresses(#sdoc.getAttribute('CustomerID'),wCContext.storefrontId)" />
-          	<strong>Account</strong>: <s:property value='%{#displayCustomerMap.get(#sdoc.getAttribute("CustomerID"))}' />
-          	<br/>
-          	<span class="txt-small underlines"><s:a href="#showLocationsDlg"  name="changeLocationCL" id="changeLocationCL" cssClass="underlines"> [Change Location]</s:a></span></div>
-	        <br />
+          	<h1>Account:&nbsp;<span><s:property value='%{#displayCustomerMap.get(#sdoc.getAttribute("CustomerID"))}' /></span><br />
+       		&nbsp;<span class="txt-small underlines" style="font-size:12px"><s:a href="#showLocationsDlg"  name="changeLocationCL" id="changeLocationCL" cssClass="underlines"> [Change Location]</s:a></span></h1>
+	        
 	        <div class="question">
 	          <ul class="padding-top2 padding-bottom2">
 	            <li> <strong>Central Contact Information </strong></li>
@@ -418,13 +417,13 @@ ul.checkboxTree li
      <div class="clearview">&nbsp;</div>
          <div class="clearview"> <div>
             <ul class="float-right">
-              <li class="float-left margin-10"><a href="#" onclick="javascript:window.location.reload();"  class="grey-ui-btn"><span>Cancel</span></a></li>
-              <li class="float-right"><a href="javascript:callSave()" class="green-ui-btn"><span>Save</span></a></li>
+              <li class="float-left margin-10"><input type="button"  onclick="javascript:window.location.reload();" class="btn-neutral" value="Cancel"/></li>
+              <li class="float-right"><input type="button" onclick="javascript:callSave()" class="btn-gradient" value="Save"/></li>
             </ul>
           </div></div>
            <div class="clearview">&nbsp;</div>
 	           <s:if test="%{#_action.isSuccess()}">
-					<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Account Profile has been updated successfully.</div>
+					<div class="success" id="successMsgFor_save" style="display : inline; float: right">Account Profile has been updated successfully.</div>
 				</s:if>
               <div class="clearview textAlignCenter">Last modified by <s:property value="%{getContactFirstName()}"/> <s:property value="%{getContactLastName()}"/> on <s:property value="#_action.getLastModifiedDateToDisplay()"/></div>
         
@@ -432,10 +431,11 @@ ul.checkboxTree li
          
         <div class="clearview">&nbsp;</div>
          
-      </div>
+     </div>
     </s:form>
+     </div>
     </div>
-    </div>
+    
     <!-- End Pricing -->
 <div style="display: none;">
 <div title="Add New Quick Link" id="newQL"

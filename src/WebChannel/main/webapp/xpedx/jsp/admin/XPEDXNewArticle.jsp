@@ -29,7 +29,7 @@
 
 <!-- begin styles. -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#util.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#util.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#util.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="screen" rel="stylesheet" type="text/css"	href="<s:property value='#util.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css"  /> 
 <!--[if IE]>
@@ -71,6 +71,11 @@
 			numberOfMonths: 1,
 			buttonImage: '<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/calendar-icon.png',
 			buttonImageOnly: true
+		});
+		$("#cancelpage").click(function(){
+			var url = $('#toolsNewsMaintLinkId').val();
+			window.location.href = url;
+			return false;
 		});
 	});
 </script>
@@ -201,7 +206,6 @@
 			}
 	}
 //end of jira 2647	
-
 </script>
 
 <style>
@@ -221,26 +225,22 @@ margin-top:2px; }
 				
 				<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 				<!-- // header end -->			
-			<div class="container">
+			<div class="container content-container">
 			      <!-- breadcrumb -->
-			     <div id="mid-col-mil"><br />
+			     <h1><s:text name='MSG.SWC.NEWSARTL.CREATE.GENERIC.PGTITLE' /></h1>
 			      
 			      <s:url id='toolsLink' namespace='/tools' action='MyTools'>
 						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
 				  <s:url id='toolsNewsMaintLink' namespace="/profile/user" action='MyNewsMaintenance'>					
 				  </s:url>
+				  <s:hidden id="toolsNewsMaintLinkId" value="%{#toolsNewsMaintLink}"/> 
 <%-- 				  <div id="breadcumbs-list-name" class="page-title"><s:a href="%{toolsLink}">Tools</s:a> /  <s:a href="%{toolsNewsMaintLink}"> News Maintenance</s:a> /  <span class="breadcrumb-inactive">  New Article</span> <a href="#"><span class="print-ico-xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>     </div> --%>
 			     
 		          <div id="requestform">
 <%-- 		          <div>
           				<a class="underlines" href="javascript:history.go(-1)">Back</a>&nbsp;/&nbsp;<strong>News Article</strong> 
  				  </div>  --%>
- 				  <div>
- 				 	 <%-- <span class="page-title">News Maintenance</span> --%>
- 				 	 <span class="page-title"><s:text name='MSG.SWC.NEWSARTL.CREATE.GENERIC.PGTITLE' /></span>
- 				  </div>
- 				  <br/>
 		          <s:form name="newArticleForm" action="MyViewArticle" namespace="/profile/user" method="POST">
 					<input type="hidden" name="nextActionName" value="xpedxAddArticle"/>
 				    <input type="hidden" name="backActionName" value="XPEDXNewArticle"/>
@@ -278,9 +278,9 @@ margin-top:2px; }
 		            <tr>
 		              <td colspan="4">
 		              <ul id="cart-actions" class="float-right news-page">
-		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="%{toolsNewsMaintLink}"><span>Cancel</span></s:a></li>
+		            <li><input type="button" class="btn-neutral" style="margin-top: 0px;" id="cancelpage" value="Cancel"/></li>
 		           <!--<li><s:a href="javascript:document.newArticleForm.submit();" onclick="javascript:isDateSelected();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>  commented for 2647jira-->
-		            <li><s:a href="#" onclick="javascript:isArticleFormValidation();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li> <!-- modified for jira  2647 -->
+		            <li><input type="button" onclick="javascript:isArticleFormValidation();" class="btn-gradient" value="Preview"/></li> <!-- modified for jira  2647 -->
 		            
 		            
 		          	</ul></td>
@@ -290,7 +290,7 @@ margin-top:2px; }
 		        </div> 
 		<div class="clearview">&nbsp;</div>  
 		      
-		</div>
+		
 			</div>
 			      <!-- End Pricing -->
 			   <br />
