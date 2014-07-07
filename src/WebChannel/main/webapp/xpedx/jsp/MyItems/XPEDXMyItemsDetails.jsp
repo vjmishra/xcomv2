@@ -2268,7 +2268,7 @@ function showSharedListForm(){
 					<s:else> <%-- editMode --%>
 						<div id="mil-edit" class="mil-edit" style="width: 100%">
 							<div class="button-container"> <%-- edit mode top --%>
-								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Changes" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+								<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 								
 								<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
 								
@@ -2336,7 +2336,9 @@ function showSharedListForm(){
 												Select Item Type
 												<select id="qaItemType" name="qaItemType" style="width:135px;">
 													<s:iterator value="skuTypeList" id="skuType">
-														<option label="<s:property value="%{#skuType.value}"/>" value="<s:property value="%{#skuType.key}"/>" />
+														<option value="<s:property value="%{#skuType.key}"/>">
+															<s:property value="%{#skuType.value}"/>
+														</option>
 													</s:iterator>
 												</select>
 											</div>
@@ -3096,7 +3098,7 @@ function showSharedListForm(){
 						</div>
 						
 						<div class="button-container addpadtop10"> <%-- edit mode bottom --%>
-							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Changes" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
+							<input name="button" type="button" class="btn-gradient floatright addmarginleft10" value="Save Updates" onclick="saveAllItemsNew('mil-edit', ['quick-add']); return false;" />
 							
 							<input name="button" type="button" class="btn-import-items btn-neutral floatright addmarginleft10" value="Import List" />
 							

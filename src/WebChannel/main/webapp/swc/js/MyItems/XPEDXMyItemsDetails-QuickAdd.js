@@ -10,6 +10,21 @@ function isInt(n) {
 	}
 }
 
+if (!Object.keys) {
+	// IE8 workaround: http://stackoverflow.com/questions/18912932/object-keys-not-working-in-internet-explorer
+	Object.keys = function(obj) {
+		var keys = [];
+
+		for (var i in obj) {
+			if (obj.hasOwnProperty(i)) {
+				keys.push(i);
+			}
+		}
+
+		return keys;
+	};
+}
+
 function clearErrorRow(rowId){
 	$('#errorIcon_'+ rowId).click(function(){
 		$('#enteredProductIDs_'+rowId).val('');
@@ -126,7 +141,7 @@ function validateItems() {
 			pos += "*" + itemsToValidate[i].po;
 			accounts += "*" + itemsToValidate[i].account;
 		}
-		
+
 		$.ajax({
 			type: 'POST'
 				,proccessData: false	
