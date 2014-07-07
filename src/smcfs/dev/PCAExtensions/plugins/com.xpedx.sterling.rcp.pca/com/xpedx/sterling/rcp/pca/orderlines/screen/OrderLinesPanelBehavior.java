@@ -1479,6 +1479,7 @@ private String getItemListAPIQuery(){
 	
 	public void preaprePlacedOrderHeaderErrors(){
 	
+	PlacedOrderHeaderErrorTable.put("M_M0002",	"Order not found in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0003",	"Order in use in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0004",	"Order status not valid in change mode");
 	PlacedOrderHeaderErrorTable.put("M_M0005",	"Order not found for delete in change mode");
