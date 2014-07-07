@@ -200,8 +200,6 @@ public class AjaxAddItemsToMILAction extends WCAction {
 
 				Element xpedxMyItemsListInputElem = WCMashupHelper.getMashupInput("XPEDXMyItemsQuickAddMulti", valueMap, wcContext);
 
-				System.out.println("xpedxMyItemsListElem:\n" + SCXmlUtil.getString(xpedxMyItemsListInputElem));
-
 				WCMashupHelper.invokeMashup("XPEDXMyItemsQuickAddMulti", xpedxMyItemsListInputElem, wcContext.getSCUIContext());
 
 			} else {
