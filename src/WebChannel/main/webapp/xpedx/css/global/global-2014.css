@@ -756,7 +756,7 @@ div.catalog-search-container input#search_searchTerm {
 	}
 .ship-search-wrap span.resetlink {
 	margin: 4px 0 0 20px;
-	line-height: 22px;
+	line-height: 27px;
 	cursor:pointer;
 }
 .ship-search-wrap span a {
@@ -789,13 +789,13 @@ div.catalog-search-container input#search_searchTerm {
     margin-top: 15px;
 }
 .filterinput {
-	background: url(../../images/icons/magnify.jpg) no-repeat scroll 2px 2px #FFFFFF;
+	background: url(../../images/icons/magnify.jpg) no-repeat scroll 3px 6px #FFFFFF;
 	border: 1px solid #D9D9D9;
 	border-radius: 0;
 	color: #000000;
 	font-size: 12px;
-	height: 20px;
-	padding: 2px 0 0 18px;
+	height: 25px;
+	padding: 1px 0 0 22px;
 	width: 138px;
 }
 #header input {
