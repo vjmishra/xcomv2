@@ -3503,13 +3503,13 @@ public class XPEDXWCUtils {
 	}
 
 	public static String getFormattedZipCode(String zip) {
-		if (zip == null || zip.trim().length() == 0) {
+		if (zip == null) {
 			return zip;
 		}
 
-		String zipSafe = zip.replaceAll("-", "");
-		if (zip.length() > 5) {
-			return String.format("%s-%s", zip.substring(0, 5), zip.substring(5));
+		String zipSafe = zip.replaceAll("\\D+", "");
+		if (zipSafe.length() > 5) {
+			return String.format("%s-%s", zipSafe.substring(0, 5), zipSafe.substring(5));
 		} else {
 			return zipSafe;
 		}
