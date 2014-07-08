@@ -1373,4 +1373,8 @@ h3 {
     margin-top: -48px;
 	cursor: pointer;
 }
+.producterrorLine {
+	float: left;
+	margin-top: 2px;
+}
 /*-------------- end Quick Add ----------- */
