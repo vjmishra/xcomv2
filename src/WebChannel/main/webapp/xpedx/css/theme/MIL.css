@@ -6302,7 +6302,7 @@ BEGIN 2014 styles
 
 .mil-lists-legend {
 	width: 500px;
-	padding:25px 0px 0px 50px;
+	padding:25px 0px 0px 0px;
 	height: 20px;
 	float: left;
 	clear: none;
@@ -6334,7 +6334,7 @@ BEGIN 2014 styles
 	float: right;
 	clear: none;
 	text-align: right;
-	padding: 0px 30px 0px 0px;
+	padding: 0px 5px 0px 0px;
 }
 
 .mil-list-icon {
