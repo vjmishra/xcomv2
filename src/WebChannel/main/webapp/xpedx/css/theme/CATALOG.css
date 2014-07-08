@@ -603,6 +603,7 @@ width:100%;
 .normal-view #item-ct dd .cart-pa-button-wrap input {
 	float: right;
 	clear: none;
+	margin-left: 5px;
 	width: auto;
 }
 .normal-view #item-ct dd .order-input-wrap .order-input input {
@@ -1146,7 +1147,16 @@ ul
 	clear: none;
 	margin-top: 8px;
 }
-
+.normal-view .availablelink .submitBtnBg1 {
+    display: block;
+    margin: 8px 0 0 16px;
+    padding: 0px;
+    text-align: left;
+	width: auto;
+	float: left;
+	clear: none;
+	font-weight: normal;
+}
 
 #item-box #item-box-inner dd a:hover { text-decoration: none; }
 

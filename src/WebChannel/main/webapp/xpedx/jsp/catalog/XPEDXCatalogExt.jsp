@@ -61,11 +61,18 @@
 <script type="text/javascript" src="../xpedx/js/catalog/catalogExt.js"></script>
 --><script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-jquery-headder<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <!-- end carousel scripts js   -->
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name='Catalog_Page_Title' /></title>
-
+	<s:set name="isEstUser" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
+	<s:if test = '%{#isEstUser == null || #isEstUser == ""}'>
+		<s:set name="isEstUser" value="false"/>
+	</s:if>
+	
+	<script type="text/javascript">
+		var isEstUser = <s:property value="#isEstUser"/>;
+	</script>
 
 </head>
 <body class="ext-gecko ext-gecko3"  onload="highlightRows()">
@@ -790,10 +797,11 @@ function getNormalView() {
 							<s:if test='!#guestUser'>
 								'<div class="cart-pa-button-wrap">',
 									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
+									'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\',\'{name}\'); return false;" value="Add to List">',
 									'<div class="availablelink">',
 										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 										'<div class=\"itemOption\">',
-											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" style=\"padding-left:115px; font-weight: normal; \" onclick=\"getPriceAndAvailabilityForItems({modal:true, items:[\'{itemid}\']});\">Show Price &amp; Availability</a>',
+											'<a href=\"javascript:void(0);\" class=\"submitBtnBg1 underlink\" onclick=\"getPriceAndAvailabilityForItems({modal:true, items:[\'{itemid}\']});\">Show Price &amp; Availability</a>',
 										'</div>',
 									'</div>',
 								'</div>',
@@ -1294,7 +1302,43 @@ x-dd-drop-nodrop">
 <s:iterator value='%{#_action.getUomConvFactorMap()}' id='uomConvFactor'>
 	<s:hidden id="%{'convF_' + #uomConvFactor.key}" value="%{#uomConvFactor.value}" />
 </s:iterator>
+<s:if test ='%{!(#_action.getWCContext().isGuestUser() == true)}'>
+	<s:url id='getMyItemsListURLid' includeParams="none" namespace="/myItems" action='MyItemsList'/>
+	<s:hidden id="getMyItemsListURL" value="%{#getMyItemsListURLid}" />
+	<s:url id='addItemURLid' includeParams='none' escapeAmp="false" namespace="/order" action="xpedxAddItemsToList" />
+	<s:hidden id="addItemURL" value="%{#addItemURLid}" />
+	<s:url id='myItemsDetailsChangeShareListURL' includeParams='none' action='XPEDXMyItemsDetailsChangeShareListForItemDetail' namespace="/myItems" escapeAmp="false" />
+	<s:hidden id="myItemsDetailsChangeShareListURL" value="%{#XPEDXMyItemsDetailsChangeShareListURLid}" />
+	<s:hidden name="itemIDForMyItemsList" id="itemIDForMyItemsList" value="" />
+	<s:include value="../modals/XPEDXSelectWishListModal.jsp" />
+	<s:form name="OrderDetailsForm" id="OrderDetailsForm" namespace="/order" action="xpedxAddItemsToList">
+			<s:hidden name="orderHeaderKey" id="orderHeaderKey" value='%{#appFlowContext.key}' />
+			<s:hidden name="draft" id="draft" value="%{#draftOrderFlag}" />
+			<s:hidden name='Currency' id='Currency' value='%{#currencyCode}' />
+			<s:hidden name='mode' id='mode' value='%{#mode}' />
+			<s:hidden name='fullBackURL' id='fullBackURL' value='%{#appFlowContext.returnURL}' />
+			<s:hidden name="orderLineKeyForNote" id="orderLineKeyForNote" value="" />
+		
+			<s:hidden name="listKey" id="listKey" value="" />
+			<s:hidden name="selectedLineItem" id="selectedLineItem" value="1" />
+			<s:hidden name="orderLineKeys" id="orderLineKeys" value="1" />
+			<s:hidden name="orderLineItemOrders" id="orderLineItemOrders" value="" />
+		
+			<s:hidden name="orderLineItemIDs" id="orderLineItemIDs" value="" />
 
+			<s:hidden name="orderLineItemNames" id="orderLineItemNames" value=""/>
+			<s:hidden name="orderLineItemDesc" id="orderLineItemDesc" value="" />
+		
+			<s:hidden name="orderLineQuantities" id="orderLineQuantities" value="" />
+			<s:hidden name="orderLineCustLineAccNo" id="orderLineCustLineAccNo" value="" />
+			<s:hidden name="itemUOMs"  id="itemUOMs" value=" " />
+			<s:hidden name="sendToItemDetails" id="sendToItemDetails" value="true" />
+		
+			<s:hidden name="itemID" id="itemID" value="" />
+			<s:hidden name="unitOfMeasure" id="unitOfMeasure" value="" />
+			<s:hidden name="customerLinePONo" id="customerLinePONo" value="" />
+		</s:form>
+</s:if>
 <script type="text/javascript">
 
 function LoadPage()
@@ -1614,7 +1658,7 @@ function validationforDragToCompare()
     } 
 }
 </script>
-<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/XPEDXCatalogExt<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/PriceAndAvailability<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jqdialog/jqdialog<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
