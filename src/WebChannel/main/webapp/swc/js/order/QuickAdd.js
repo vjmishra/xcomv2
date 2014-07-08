@@ -168,7 +168,7 @@ function validateItems() {
 					window.location.href = quickAddUrl;
 					
 				} else if (data.unexpectedError) {
-					setItemErrorMessage(1, 'Unexpected error. Please try again.');
+					$('#errorMessageDiv').get(0).innerHTML = "<h5 align='center'><b><font color=red>An error occurred adding items to My Items List. Please review and try again.</font></b></h5>";
 					hideProcessingIcon();
 					if (console) { console.log('Unexpected error while adding items to cart: ' + data.unexpectedError); }
 					

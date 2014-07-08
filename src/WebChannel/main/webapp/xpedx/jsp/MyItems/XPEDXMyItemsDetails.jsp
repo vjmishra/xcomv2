@@ -2359,54 +2359,48 @@ function showSharedListForm(){
 											
 											<s:set name="numRows" value="%{200}" />
 											<s:iterator value="%{new int[#numRows]}" status="itemline">
-												<s:div id='%{"qa-listrow_" + #itemline.count}' cssStyle='%{#itemline.count > 5 ? "display:none;" : ""}'>
-													<div class="qa-listrow">
-														<div class="qa-error-icon" style="visibility: hidden">
-															<input type="image" id="errorIcon_<s:property value='#itemline.count'/>" 
-																	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x<s:property value='#wcUtil.xpedxBuildKey' />.png"  />
+												<s:div id='%{"qa-listrow_" + #itemline.count}' cssStyle='%{#itemline.count > 5 ? "display:none;" : ""}' cssClass="qa-listrow">
+													<div class="qa-error-icon" style="visibility: hidden">
+														<input type="image" id="errorIcon_<s:property value='#itemline.count'/>" 
+																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x<s:property value='#wcUtil.xpedxBuildKey' />.png"  />
+													</div>
+													<div class="label-item">
+														<input type="text" maxlength="27" size="15"
+																id="enteredProductIDs_<s:property value='#itemline.count'/>"
+																name="enteredProductIDs" class="inputfloat input-item"
+																onfocus="showQuickAddRow(<s:property value='%{#itemline.count + 1}'/>)" />
+													</div>
+													<div class="label-qty">
+														<input maxlength="7" size="8" type="text"
+																id="enteredQuantities_<s:property value='#itemline.count'/>"
+																name="enteredQuantities" class="inputfloat input-qty"
+																onkeyup="return isValidQuantityRemoveAlpha(this,event)" />
+													</div>
+													<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
+														<div class="label-po">
+															<input maxlength="22" size="15" type="text"
+																	name="enteredPONos" value="" class="inputfloat input-po"
+																	id="enteredPONos_<s:property value='#itemline.count'/>" />
 														</div>
-														<div class="label-item">
-															<input type="text" maxlength="27" size="15"
-																	id="enteredProductIDs_<s:property value='#itemline.count'/>"
-																	name="enteredProductIDs" class="inputfloat input-item"
-																	onfocus="showQuickAddRow(<s:property value='%{#itemline.count + 1}'/>)" />
+											
+													</s:if>
+													<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
+														<div class="label-account">
+															<input maxlength="24" size="20" type="text"
+																	id="enteredJobIDs_<s:property value='#itemline.count'/>"
+																	name="enteredJobIDs" class="inputfloat input-account" />
 														</div>
-														<div class="label-qty">
-															<input maxlength="7" size="8" type="text"
-																	id="enteredQuantities_<s:property value='#itemline.count'/>"
-																	name="enteredQuantities" class="inputfloat input-qty"
-																	onkeyup="return isValidQuantityRemoveAlpha(this,event)" />
-														</div>
-														<s:if test='%{#customerPONoFlag != null && !#customerPONoFlag.equals("")}'>
-															<div class="label-po">
-																<input maxlength="22" size="15" type="text"
-																		name="enteredPONos" value="" class="inputfloat input-po"
-																		id="enteredPONos_<s:property value='#itemline.count'/>" />
-															</div>
-												
-														</s:if>
-														<s:if test='%{#jobIdFlag != null && !#jobIdFlag.equals("")}'>
-															<div class="label-account">
-																<input maxlength="24" size="20" type="text"
-																		id="enteredJobIDs_<s:property value='#itemline.count'/>"
-																		name="enteredJobIDs" class="inputfloat input-account" />
-															</div>
-														</s:if>
-														
-														<div class="error producterrorLine" style="display: none;" id="producterrorLine_<s:property value='#itemline.count'/>">
-														</div>
-				
-														<%-- These inputs are required for the backend to process, not visible in UI --%>
-														<s:hidden cssClass="input-uom" name="enteredUOMs" value="" />
-														<%-- populated by javascript before submission --%>
-														<s:hidden cssClass="input-itemType" name="enteredItemTypes" value="" />
-														<%-- populated by javascript before submission --%>
-														<s:hidden name="enteredProductDescs" value="" />
-														<%-- always empty --%>
-														<s:hidden name="quickAddOrderMultiple" value="1" />
-														<%-- always 1 (quick add ignores order multiple) --%>
-													</div> <%-- / qa-listrow --%>
-												</s:div> <%-- / qa-listrow_# --%>
+													</s:if>
+													
+													<div class="error producterrorLine" style="display: none;" id="producterrorLine_<s:property value='#itemline.count'/>">
+													</div>
+			
+													<%-- These inputs are required for the backend to process, not visible in UI --%>
+													<s:hidden cssClass="input-uom" name="enteredUOMs" value="" /> <%-- populated by javascript before submission --%>
+													<s:hidden cssClass="input-itemType" name="enteredItemTypes" value="" /> <%-- populated by javascript before submission --%>
+													<s:hidden name="enteredProductDescs" value="" /> <%-- always empty --%>
+													<s:hidden name="quickAddOrderMultiple" value="1" /> <%-- always 1 (quick add ignores order multiple) --%>
+												</s:div> <%-- / qa-listrow --%>
 											</s:iterator>
 											
 											<div class="mil-qa-button-wrap">

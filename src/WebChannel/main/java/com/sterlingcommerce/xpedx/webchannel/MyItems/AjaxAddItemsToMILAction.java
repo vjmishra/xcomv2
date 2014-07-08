@@ -179,22 +179,23 @@ public class AjaxAddItemsToMILAction extends WCAction {
 				valueMap.put("/XPEDXMyItemsList/@ModifyUserName", "createUserName");
 
 				int itemIndex = currentItemCount + 1;
-				int rowCount = 1;
+				int xpathIndex = 1;
+				String xpathPrefix = "/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + xpathIndex + "]/";
 				for (InputRow row : rows) {
 					String uom = defaultTransUOMMap.get(row.getItem()) != null ? defaultTransUOMMap.get(row.getItem()):itemDetails.get(row.getItem()).getUom();
 
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@Qty", row.getQty());
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@JobId", row.getAccount());
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@ItemOrder", String.valueOf(itemIndex));
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@ItemId", row.getItem());
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@ItemType", itemType);
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@UomId", uom);
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@ItemPoNumber", row.getPo());
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@MyItemsListKey", listKey);
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@Createuserid", contactInfo.getCustomerContactID());
-					valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + rowCount + "]/@ModifyUserName", contactInfo.getFirstName() + " " + contactInfo.getLastName());
+					valueMap.put(xpathPrefix + "@Qty", row.getQty());
+					valueMap.put(xpathPrefix + "@JobId", row.getAccount());
+					valueMap.put(xpathPrefix + "@ItemOrder", String.valueOf(itemIndex));
+					valueMap.put(xpathPrefix + "@ItemId", row.getItem());
+					valueMap.put(xpathPrefix + "@ItemType", itemType);
+					valueMap.put(xpathPrefix + "@UomId", uom);
+					valueMap.put(xpathPrefix + "@ItemPoNumber", row.getPo());
+					valueMap.put(xpathPrefix + "@MyItemsListKey", listKey);
+					valueMap.put(xpathPrefix + "@Createuserid", contactInfo.getCustomerContactID());
+					valueMap.put(xpathPrefix + "@ModifyUserName", contactInfo.getFirstName() + " " + contactInfo.getLastName());
 
-					rowCount++;
+					xpathIndex++;
 					itemIndex++;
 				}
 
