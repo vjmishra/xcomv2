@@ -210,7 +210,7 @@ function getPriceAndAvailabilityForItems(options) {
 					
 					for (var j = 0, lenj = pricingForItem.displayPriceForUoms.length; j < lenj; j++) {
 						var displayPriceForUom = pricingForItem.displayPriceForUoms[j];
-						var isZero = displayPriceForUom.bracketPrice.indexOf('$0.') != -1;
+						var isZero = displayPriceForUom.bracketPrice == '$0.00000' || displayPriceForUom.bracketPrice == '$0.00';
 						if (j < lenj - 1) {
 							// bracket price
 							html.push('		<div class="pa-row">');
