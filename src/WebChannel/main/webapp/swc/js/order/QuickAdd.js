@@ -20,6 +20,7 @@ function clearAll(){
 			var rowDiv="qa-listrow_" + rowId;
 			$('#' + rowDiv).hide();
 		}
+		clearErrorMessage(rowId);
 	}
 }
 function clearErrorRow(rowId){
