@@ -24,8 +24,9 @@
 
 
 
-Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes  .swc-ext .x-window-ml {
- padding-left: 0px;
+/*Added for EB-3642 Approval/Rejection Model Dailog pannel resize changes*/
+.swc-ext .x-window-ml {
+	padding-left: 0px;
 }
 #approvalNotesPanel .x-panel-nofooter {
 	display: none;
@@ -2077,4 +2078,10 @@ div.specs-tab {
 }
 .detail-view .pa-price {
 	width: 100%;
+}
+
+.detail-image-wrap {
+	width: 170px;
+	float: left;
+	clear: none;
 }
