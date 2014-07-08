@@ -1474,7 +1474,7 @@ function submitNewlistAddItem(xForm) {
 		xForm = "XPEDXMyItemsDetailsChangeShareList";
 	}
 	var form = Ext.get(xForm);
-
+	form.dom.listKey.value="new";
 	//Validate form
 	try{
 		var val = form.dom.listName.value;
