@@ -162,14 +162,15 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 					LOG.warn("Punchout: null ItemId on item when looking for custom UNSPSC for customer: " + context.getCustomerId());
 					return;
 				}
-
-				String customUnspsc = XPEDXWCUtils.getReplacementUNSPSC(env, context.getBuyerOrgCode(), itemId);
+				Element extnElem = SCXmlUtil.getXpathElement(orderLine, "ItemDetails/Extn");
+				String xpedxUnspsc = extnElem.getAttribute("ExtnUNSPSC");
+				String customUnspsc = XPEDXWCUtils.getReplacementUNSPSC(env, context.getBuyerOrgCode(), itemId, xpedxUnspsc);
 
 				if (customUnspsc !=null) {
 					if(LOG.isDebugEnabled()){
 						LOG.debug("Punchout: for item: " + itemId + " replacing with custom UNSPCS: " + customUnspsc);
 					}
-					Element extnElem = SCXmlUtil.getXpathElement(orderLine, "ItemDetails/Extn");
+					
 					extnElem.setAttribute("ExtnUNSPSC", customUnspsc);
 				}
 			}

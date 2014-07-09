@@ -1891,29 +1891,52 @@ public class XPEDXWCUtils {
 	}
 
 	/**
-	 * Look up UNSPSC in mapping table. If exists for this master customer and item ID, return it, otherwise null.
+	 * Look up UNSPSC in mapping table. If exists for this master customer and item ID, return it, 
+	 * else Lookup for the same table. If exists for this master customer and xpedx UNSPSC code then return it, otherwise return null;
 	 */
-	public static String getReplacementUNSPSC(YFSEnvironment env, String masterCustomer, String itemID)
+	public static String getReplacementUNSPSC(YFSEnvironment env, String masterCustomer, String itemID, String xpedxUnspsc)
 			throws YFSException, RemoteException, YIFClientCreationException {
-		YIFApi api = YIFClientFactory.getInstance().getApi();
+		
 		String customerUnspsc = null;
-
+		// lookup is by item # and master customer #
 		Document inputSterlingUnspscDoc = SCXmlUtil.createDocument("XPXB2bLegacyUnspscXref");
 		Element inputsterlingUnspscElement = inputSterlingUnspscDoc.getDocumentElement();
 		inputsterlingUnspscElement.setAttribute("LegacyItemID", itemID);
 		inputsterlingUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
-		//inputsterlingUnspscElement.setAttribute("XpedxUNSPSC", sterlingUnspsc); not used
-
+		customerUnspsc = invokeAPIForCustomerUNSPSC(env,inputSterlingUnspscDoc);
+		
+		if (SCUIUtils.isVoid(customerUnspsc) && !SCUIUtils.isVoid(xpedxUnspsc)){
+			// lookup is by item's UNSPSC and master customer #
+			inputSterlingUnspscDoc = SCXmlUtil.createDocument("XPXB2bLegacyUnspscXref");
+			inputsterlingUnspscElement = inputSterlingUnspscDoc.getDocumentElement();
+			inputsterlingUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
+			inputsterlingUnspscElement.setAttribute("XpedxUNSPSC", xpedxUnspsc);
+			customerUnspsc = invokeAPIForCustomerUNSPSC(env,inputSterlingUnspscDoc);
+		}
+		
+		return customerUnspsc;
+	}
+	/**
+	 * 
+	 * @param env
+	 * @param inputSterlingUnspscDoc
+	 * @return returning Customer UNSPSC value if exist based on input document otherwise return null
+	 * @throws YFSException
+	 * @throws RemoteException
+	 * @throws YIFClientCreationException
+	 */
+	private static String invokeAPIForCustomerUNSPSC(YFSEnvironment env, Document inputSterlingUnspscDoc) 
+		throws YFSException, RemoteException, YIFClientCreationException{
+		
+		YIFApi api = YIFClientFactory.getInstance().getApi();
 		Document outputCustomerUnspscDoc = api.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputSterlingUnspscDoc);
-
 		NodeList unspscNodeList = outputCustomerUnspscDoc.getElementsByTagName("XPXB2bLegacyUnspscXref");
 		int unspscLength = unspscNodeList.getLength();
 		if (unspscLength != 0) {
 			Element unspscElement = (Element)unspscNodeList.item(0);
-			customerUnspsc = unspscElement.getAttribute("CustomerUNSPSC");
+			return unspscElement.getAttribute("CustomerUNSPSC");			
 		}
-
-		return customerUnspsc;
+		return null;
 	}
 	public static String getUNSPSCReplacement(YFSEnvironment Env, String masterCust, String itemID, String UNSPSC) {
 		//String replacedUNSPSC = "ReplacedUNSPSC" + UNSPSsC;
