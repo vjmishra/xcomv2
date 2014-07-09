@@ -154,7 +154,7 @@ a:link {
 
 .po-thanks {
 	display: block;
-	margin: auto;
+	margin-left: 300px;
 	width: 300px;
 	padding: 18px;
 	background-color: #f0f1f3;
