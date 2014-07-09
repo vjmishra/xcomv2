@@ -176,6 +176,11 @@ import com.yantra.yfc.rcp.YRCXmlUtils;
 			if(!YRCPlatformUI.isVoid(getFieldValue("txtLoginid")))
 			{
 				String logInID = getFieldValue("txtLoginid");
+				if(logInID.contains("'") || logInID.contains("?"))
+				{
+					YRCPlatformUI.showInformation("Error!", "Please remove ' or ? from login ID");
+			        return null;
+				}
 				boolean upperFound = false;
 				for (char c : logInID.toCharArray()) {
 				    if (Character.isUpperCase(c)) {
