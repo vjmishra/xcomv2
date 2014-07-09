@@ -141,6 +141,13 @@
                 <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; color:#000;border-bottom:solid 1px #818181; color:#000;padding:10px 2px; "><xsl:value-of select="Item/@ItemDesc"/></td>
 
                 <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="OrderLineTranQuantity/@OrderedQty"/></td>
+
+                <xsl:for-each select="OrderLine/Extn">
+                <xsl:if test ="ExtnLineStatusCode=M0100">
+                <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; ">This item has been discontinued and no backorders will be accepted.</td>
+                </xsl:if>
+                </xsl:for-each>
+
                 <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="Extn/@ExtnReqBackOrdQty"/></td>
                 <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181; border-bottom:solid 1px #818181; color:#000;color:#000;padding:10px 2px; "><xsl:value-of select="OrderLineTranQuantity/@TransactionalUOM"/></td>
                 <td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; border-left:solid 1px #818181;border-bottom:solid 1px #818181; color:#000; color:#000;padding:10px 2px; "><xsl:value-of select="Extn/@ExtnUnitPrice"/>/<xsl:value-of select="Extn/@ExtnPricingUOM"/></td>
