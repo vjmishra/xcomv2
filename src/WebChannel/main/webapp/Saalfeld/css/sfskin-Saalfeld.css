@@ -161,7 +161,7 @@ a.green-ui-btn:active span {
 /*EB-1689*/
 /*EB-2727*/
 .underlines a:link{text-decoration:none;color: #006a3a;}
-.underlines a:hover{text-decoration:underline;color: #006a3a;}
+.underlines a:hover{text-decoration:underline;color: #006a3a;} 
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
 .whitest {
     color: #006a3a;
@@ -1114,3 +1114,15 @@ ul.megamenu {
 	width: 91px;
 	height: 70px;
 }
+
+.xpedx-light-box h1 {
+	border-bottom: 1px solid #CCCCCC;
+   	color: #006A3A;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0 0 16px;
+    padding: 0 0 10px;
+    margin-bottom: 5px;
+}
+

@@ -196,7 +196,7 @@
 		              <td  colspan="4"><textarea cols="9" name="articleBody" id="articleBody" rows="20" class="ckeditor x-input article-textarea" style="width:924px;" maxlength="2000" onkeyup="return ismaxlength(this)"><s:property value='#xutil.getAttribute(#articleElement,"Article")'/></textarea></td>
 		            </tr>
 		           <tr>
-		              <td colspan="4"><ul id="cart-actions" class="float-right">
+		              <td colspan="4"><ul id="cart-actions" class="float-right news-page">
 		            <li><input type="button" class="btn-neutral" style="margin-top: 0px;" id="cancelpage" value="Cancel"/></li>
 		         <!-- <li><s:a href="javascript:document.newArticleForm.submit();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>   -->
 		            <li><input type="button" onclick="javascript:articleFormValidation();" class="btn-gradient" value="Preview"/></li>
