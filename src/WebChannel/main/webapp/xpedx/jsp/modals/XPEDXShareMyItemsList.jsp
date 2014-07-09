@@ -39,6 +39,8 @@
 			<s:hidden name="editMode" value="%{editMode}"></s:hidden>
 			<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
 			<s:hidden name="shareAdminOnly1" value="%{shareAdminOnly}"></s:hidden>
+			<s:hidden name="sharePrivateFlag" value="%{getSharePrivateField().trim()}"></s:hidden>
+		
 			
 			<s:set name="rbPermissionShared" value="%{''}" />
 			<s:set name="rbPermissionPrivate" value="%{''}" />
@@ -49,10 +51,18 @@
 			<s:else>
 				<s:set name="rbPermissionPrivate" value="%{' checked '}" />
 			</s:else>
-			<s:if test="getSharePrivateField() != '' && getSharePrivateField() != null" >
+			
+			
+			<s:if test='%{getSharePrivateField()!= null && getSharePrivateField().trim() != ""}'>
+				<s:hidden name="test11" value="%{getSharePrivateField().trim()}"></s:hidden>
 				<s:set name="rbPermissionShared" value="%{''}" />
 				<s:set name="rbPermissionPrivate" value="%{' checked '}" />
 			</s:if>
+			<s:else>
+				<s:set name="rbPermissionPrivate" value="" />
+				<s:set name="rbPermissionShared" value="%{' checked '}" />
+			</s:else>
+			
 			<s:set name="saCV" value="%{''}" />
 			<s:if test='%{shareAdminOnly == "Y"}'>
 				<s:set name="saCV" value="%{' checked '}" />
