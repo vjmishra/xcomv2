@@ -264,8 +264,7 @@ span.underlink:hover {
             <div class="container content-container">
             	<!--  <div id="breadcumbs-list-name" class="page-title">My Carts </div> --> 
             	 <h1><s:text name='MSG.SWC.CART.CARTLIST.GENERIC.PGTITLE' /></h1>
-                <div id="mid-col-mil">
-                 <div id="tool-bar-bottom" style="margin-top: 10px; padding-bottom: 5px;">
+                	<div id="tool-bar-bottom" style="margin-top: 10px; padding-bottom: 5px;">
                  <!-- Webtrends Tag starts -->
      				<script type="text/javascript">
      				var tag = "WT.ti,DCSext.w_x_cart_em";
@@ -358,7 +357,7 @@ span.underlink:hover {
                     <br />
                     <!-- <div type="text" id="example10" class="target">hover</div> -->
                     <!-- <a href="tool-tip-content.html">Tool Tip</a> -->
-                </div>
+                
                 <!-- End mid-col-mil -->
                 
                 <div style="height:200px;"></div>
