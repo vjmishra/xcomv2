@@ -672,6 +672,7 @@
 						 </xsl:otherwise>
 						 </xsl:choose>
 						
+                		
 						<th bgcolor="#003399" class="align-center" valign="top">My<br/>Price&#160;(USD)</th>
 						 <xsl:choose>
 						 <xsl:when test = '(Order/OrderLines/OrderLine/Extn/@ExtnTotalOfShippableTotals!="") ' > 
@@ -928,9 +929,15 @@
 											</xsl:if>
 											<xsl:if test = 'Item/@CustomerItem!=""' >
 											<td>My Item #: <xsl:value-of select="Item/@CustomerItem"/></td>
-											</xsl:if>	
+											</xsl:if>
+												
 											</xsl:if>
 											</tr>
+											<xsl:if test='Extn/@ExtnLineStatusCode="M0100"'>
+											<tr>
+													<td class="labelText" style="font-family: Arial, Geneva, sans-serif;font-size:12px;  color:#000; color:#000;padding:10px 2px; ">This item has been discontinued and no backorders will be accepted.</td>
+											</tr>
+											</xsl:if>
 										</table>
 									</td>
 							 		<td colspan="3" style="padding-bottom:10px;border-bottom:1px solid #cccccc;"></td>
