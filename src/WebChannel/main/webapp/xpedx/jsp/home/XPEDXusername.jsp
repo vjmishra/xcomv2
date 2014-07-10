@@ -121,22 +121,19 @@ function usernameSubmit(){
 			document.getElementById("newSearch").style.display = 'none';
 		</script>
     	<div class="container content-container">
-    		<div>
+    		
 		   		<% if(null != request.getParameter("requestId")){%>
 		     		<h1><s:text name="Reset.Password"/></h1>
 		    	<%}
 		    	else{ %>		    
       				<h1><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></h1>      		
       			<%} %>
-			</div>
-      	<!-- breadcrumb -->
-       		<s:set name='wcContext' value="#_action.getWCContext()"/>
-      		<div id="mid-col-mil"> 
-		    	<div class=" padding-bottom clearview"> </div>
-				
-		<!-- begin progress bar -->
 			
-		<div id="second-navigation">
+      	
+       		<s:set name='wcContext' value="#_action.getWCContext()"/>
+  		
+  		<!-- begin progress bar -->
+			<div id="second-navigation">
              <ul id="main-nav" class="dropdown">
 				<li class="active">
 				     <span class="link" >Confirm your identity</span>
@@ -238,8 +235,6 @@ function usernameSubmit(){
         	</table>
         	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
-  
-			</div>
       		<br />
     	</div>
 	</div>

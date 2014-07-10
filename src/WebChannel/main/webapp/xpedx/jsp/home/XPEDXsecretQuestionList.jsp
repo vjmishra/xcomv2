@@ -99,14 +99,8 @@
     		<h1><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></h1>
       	<!-- breadcrumb -->
        		<s:set name='error' value="#_action.getErrorMessageType()"/>
-       		
-
-			
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
-      		<div id="mid-col-mil"> 
-		   
-			<div class=" padding-bottom clearview"> </div>
-			
+      		
 		<!-- begin progress bar -->
 			<div id="second-navigation">
 	             <ul id="main-nav" class="dropdown">
@@ -195,9 +189,7 @@
         	
         	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
-  
-			</div>
-      		<br />
+  			<br />
     	</div>
 	</div>
 </div>

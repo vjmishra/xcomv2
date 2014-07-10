@@ -29,8 +29,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-forms<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-quick-add<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/prod-details<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcwcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]--> 
@@ -106,17 +106,14 @@
     	<script type="text/javascript">
 			document.getElementById("newSearch").style.display = 'none';
 		</script>  
-    	<div class="container">
-      	<!-- breadcrumb -->
-      		<div id="mid-col-mil"> 
-		    <div>
+    	<div class="container content-container" style="margin-top:35px">
+    
       			<% if(null != request.getParameter("requestId")){%>
-		           <div class="padding-top3 page-title black"><strong class="black"> <s:text name="Reset.Password"/></strong></div>
+		           <h1><s:text name="Reset.Password"/></h1>
 		   	    <%}else{ %>
-      		       <div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
+      		       <h1><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></h1>
       		     <%}%>
-			</div>
-			<div class=" padding-bottom clearview"> </div>
+			
 			
 		<!-- begin progress bar -->
 		<div id="second-navigation">
@@ -165,7 +162,6 @@
         	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
   
-			</div>
       		<br />
     	</div>
 	</div>
