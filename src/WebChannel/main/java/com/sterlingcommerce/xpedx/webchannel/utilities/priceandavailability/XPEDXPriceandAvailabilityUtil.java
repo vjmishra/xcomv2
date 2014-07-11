@@ -890,10 +890,7 @@ public class XPEDXPriceandAvailabilityUtil {
 			log.debug("getPnALineErrorMessage: lineStatusCode is zero.Successful. Returning a empty message.");
 			return errorMessage;
 		}
-		if (lineStatusCode.equals("00") || lineStatusCode.equalsIgnoreCase(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX)) {
-			log.debug("getPnALineErrorMessage: lineStatusCode is zero.Successful. Returning a empty message.");
-			return errorMessage;
-		} 
+		
 		if (isANumber(lineStatusCode)) {
 			switch (Integer.parseInt(lineStatusCode)) {
 			case 0:
