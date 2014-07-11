@@ -180,10 +180,10 @@ public class AjaxAddItemsToMILAction extends WCAction {
 
 				int itemIndex = currentItemCount + 1;
 				int xpathIndex = 1;
-				String xpathPrefix = "/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + xpathIndex + "]/";
 				for (InputRow row : rows) {
 					String uom = defaultTransUOMMap.get(row.getItem()) != null ? defaultTransUOMMap.get(row.getItem()):itemDetails.get(row.getItem()).getUom();
 
+					String xpathPrefix = "/XPEDXMyItemsList/XPEDXMyItemsItemsList/XPEDXMyItemsItems[" + xpathIndex + "]/";
 					valueMap.put(xpathPrefix + "@Qty", row.getQty());
 					valueMap.put(xpathPrefix + "@JobId", row.getAccount());
 					valueMap.put(xpathPrefix + "@ItemOrder", String.valueOf(itemIndex));
