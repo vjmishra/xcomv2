@@ -100,7 +100,7 @@ $("#various5").fancybox();
       <h1><s:text name='MSG.SWC.NEWSARTL.PREVIEW.GENERIC.PGTITLE' /><br/>&nbsp;
       <span class="dkcharcole" style="font-size:12px"> <s:text name='MSG.SWC.NEWSARTL.PREVIEW.INFO.PREVIEWNOTE'/></span></h1>
 	  
-	  <div class="float-right clearview padding-bottom3" ><a href="javascript:window.print()"><span
+	  <div class="clearview padding-bottom3" style="padding-bottom:5px"><a href="javascript:window.print()"><span
 			class="print-ico-xpedx underlink"><img
 			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15"
 			alt="Print This Page" />Print Page</span></a></div>
