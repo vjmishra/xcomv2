@@ -1526,7 +1526,7 @@ private void preparePlaceOrderLineErrors() {
 	PlacedOrderLineError.put("M_M0045",	"ITTAX <> Y/N");
 	PlacedOrderLineError.put("M_M0046",	"ITTAX EXMPT mismatch");
 	PlacedOrderLineError.put("M_M0047",	"Special Charge code invalid");
-	PlacedOrderLineError.put("M_M0047",	"Item description is blank");
+	PlacedOrderLineError.put("M_M0048",	"Item description is blank");
 	PlacedOrderLineError.put("M_M0053",	"Alt UOM issue");
 	PlacedOrderLineError.put("M_M0054",	"No record for any alternate warehouse in Item Balance (ITBAL)");
 	PlacedOrderLineError.put("M_M0055",	"M0055");
