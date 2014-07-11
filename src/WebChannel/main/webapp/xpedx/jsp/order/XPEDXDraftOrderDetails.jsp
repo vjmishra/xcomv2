@@ -621,10 +621,6 @@ $(document).ready(function(){
 	</a>
 </div>
 
-<div id="mid-col-mil">
-
-<div class="mil-edit">
-
 <div class="float-right">
 	<!-- promotion -->
 	<div class="ad-margin">
@@ -1038,11 +1034,8 @@ function prepareDiv(data, itemId, name, desc, qty, uom){
 var currentAadd2ItemList = new Object();
 
 </script>
- 
-</div>
-</s:if>
-</div>
 
+</s:if>
 <div class="clearall">&nbsp;</div>
 <br />
 
@@ -1202,14 +1195,14 @@ var currentAadd2ItemList = new Object();
 	<s:if test='majorLineElements.size() > 0'>
 		<s:if test='!#isPunchoutUser'>
 			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">
-				<input type="button" id="checkout-btn" class="btn-gradient floatright addmarginright10" value="Checkout" onclick="checkOut();" />
+				<input type="button" id="checkout-btn" class="btn-gradient floatright" value="Checkout" onclick="checkOut();" />
 			</s:if> 
 		    <s:if test='#hasPendingChanges == "Y"'>
 	        	<input type="button" id="reset-btn" class="btn-neutral floatleft" value="Reset Changes" onclick="window.location='<s:property value="#discardPendingChangesURL"/>'" />
 	        </s:if>
 		</s:if>
 		<s:else>
-			<input type="button" id="checkout-btn" class="btn-gradient floatright addmarginright10" value="Submit Cart" onclick="checkOut();" />
+			<input type="button" id="checkout-btn" class="btn-gradient floatright" value="Submit Cart" onclick="checkOut();" />
 		</s:else>
 	</s:if>
 	</s:if>

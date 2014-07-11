@@ -353,11 +353,11 @@
 			<h1><s:text name="approvallist.title" /></h1>
                 
                 <!-- begin top section -->
-                <div class="rounded-border top-section">
+                <div class="rounded-border top-section addmarginleft0">
                 	<!-- begin content w/border -->
 			<s:form name="approvalList" action="approvalList" id="approvalList" namespace="/order" method="POST">
 			
-			<fieldset class="x-corners mil-col-mil-div" style="margin-right:40px">
+			<fieldset class="x-corners mil-col-mil-div addmarginright5">
 			<!-- text on border -->
 			   <!--  <legend class="search-legend">Search Orders: Awaiting Approval</legend> -->
 			    <legend class="search-legend">  <s:text name='MSG.SWC.ORDR.APPROVALS.GENERIC.LEGEND' /> </legend>
@@ -433,7 +433,7 @@
 	    </div> <!-- end top section -->
 	    <br/>
 	    <!-- Begin mid-section -->
-	    <div class="midsection" style="margin-left:0px"> <!-- Begin mid-section container -->
+	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
 	    	
 	       <div class="search-pagination-top">
 	       		  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>

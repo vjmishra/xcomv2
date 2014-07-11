@@ -307,9 +307,9 @@ function printPOs(customerPos) {
 	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
                 	<br/>
-                <div class="rounded-border top-section ">
+                <div class="rounded-border top-section addmarginleft0">
                 	<!-- begin content w/border -->
-			<fieldset class="x-corners mil-col-mil-div" style="margin-right:40px">
+			<fieldset class="x-corners mil-col-mil-div addmarginright5">
 			<!-- text on border -->
 			<s:if test="%{#ViewReportsFlag}">
 			    <legend class="search-legend"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.ORDRLAST6MONTHS' /> <a href="#" id="" ><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_help.png" alt="" 
@@ -412,7 +412,7 @@ function printPOs(customerPos) {
 			</s:form>
 			
 	    <!-- Begin mid-section -->
-	    <div class="midsection" style="margin-left:0px"> <!-- Begin mid-section container -->
+	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
 		
              <div id="open-orders-Msg-top"  style="display: none;position:relative;left:375px;color:red;" class="error">&nbsp;</div> 
             <div class="search-pagination-bottom">

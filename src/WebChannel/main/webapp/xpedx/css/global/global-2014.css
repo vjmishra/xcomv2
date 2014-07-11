@@ -126,6 +126,12 @@
 .addmarginleft40 {
 	margin-left: 40px;
 }
+.addmarginleft0 {
+	margin-left: 0px;
+}
+.addmarginright5 {
+	margin-right: 5px;
+}
 .addmarginbottom10 {
 	margin-bottom: 10px;
 }

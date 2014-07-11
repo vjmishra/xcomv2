@@ -482,7 +482,7 @@ function showSplitDiv(divId)
                 </s:if>
                 
                 <!-- begin top section -->
-                <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
+                <div id="wc-btn-bar" style="width:976px;padding-top:5px; margin-left:-20px">
                 <s:form namespace="/order" method="post"  id= "postOrderForm" name='postOrderForm'>
 		            <s:hidden name="orderHeaderKey" value="%{dorderHeaderKey}" />
 		            <s:hidden name="draft" value="%{#draftOrderFlag}"/>
@@ -511,7 +511,7 @@ function showSplitDiv(divId)
 					<s:if test="#_action.canOrderAgain() && #orderType == 'Customer' ">
 						<%--Added the below condition for extnLegOrderType for Jira 3544 --%>
 						<s:if test='(#extnLegOrderType != "Q" && #extnLegOrderType != "F" && #extnLegOrderType != "R" && #extnLegOrderType != "I")'>
-							<input class="btn-neutral orders floatright" type="button" value="Re-Order" onclick="xpedxOrderAgain();" />
+							<input class="btn-neutral orders floatright addmarginright10" type="button" value="Re-Order" onclick="xpedxOrderAgain();" />
 						</s:if>
 					</s:if>
 					</s:if>
@@ -532,12 +532,12 @@ function showSplitDiv(divId)
 					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 						<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
-							<input class="btn-neutral floatright" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>
 					</s:if>				
 					<s:else>					
 						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>
-							<input class="btn-neutral floatright" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>					
 					</s:else>
 				 </s:if>
@@ -550,7 +550,7 @@ function showSplitDiv(divId)
 					<br/> <br/> <br/>
                  </s:form>
                  </div>
-                <div class="rounded-border top-section">
+                <div class="rounded-border top-section" style="margin-left:0px">
                 	<!-- begin content w/border -->
 			<fieldset class="x-corners mil-col-mil-div">
 			<!-- text on border -->
@@ -804,7 +804,7 @@ function showSplitDiv(divId)
 	    </div>
 	    
 	    <!-- begin table header -->
-	    <div class="wc-table-header">
+	    <div class="wc-table-header" style="margin-left:-9px">
 	    <table class="full-width no-border">
 	    		<tr>
 	    			<td class="text-right table-header-bar-left white">Price (<s:property value='%{currencyCode}'/>)</td>
@@ -878,7 +878,7 @@ function showSplitDiv(divId)
 			<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 			<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 			
-			    <div 
+			    <div style="margin-left:0px"
 			    <s:if test='%{#orderLineStatIndexSize == 1}'>class="middle-section rounded-border rr-border WC" id="one-item"</s:if>
 			    	<s:elseif test='%{#orderLineStatIndex.count == 1}'>class="middle-section rounded-border rr-border WC" id="first-item"</s:elseif>
 					<s:elseif test="#orderLineStatIndex.last">class="middle-section rounded-border rr-border WC" id="last-item"</s:elseif>
@@ -1393,7 +1393,7 @@ function showSplitDiv(divId)
 		<s:set name='shippableOrderPrice' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderDetailExtn.getAttribute("ExtnTotalShipValue"))'/>
 		
 		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<div class="cart-sum-right">
+			<div class="cart-sum-right" style="margin-right:-10px">
 				<table cellspacing="0"  align="right">
 					<tr>
 						<th>Subtotal:</th>
@@ -1556,9 +1556,9 @@ function showSplitDiv(divId)
 		</s:if>		
 		<div class="clearall">&nbsp;</div>
 		
-		<div id="wc-btn-bar" class="padding-top" style="width:98.3%">
+		<div id="wc-btn-bar" class="padding-top" style="width:960px; margin-left:0px">
 			<!--Changed returnOrderListId for  Jira 2039  -->
-			<input class="btn-neutral return-orders floatleft" id='returnOrderListId' type="button"
+			<input class="btn-neutral return-orders floatleft addmarginright10" id='returnOrderListId' type="button"
 				value="Return to Orders" onclick='window.location="<s:property value="orderListReturnUrl"/>";' />
 
 			<s:if test="%{'Invoiced' == #xutil.getAttribute(#orderDetail,'Status')}">
@@ -1588,7 +1588,7 @@ function showSplitDiv(divId)
 				<s:if test="#_action.canOrderAgain()  && #orderType == 'Customer'">
 					<%--Added the below condition for extnLegOrderType for Jira 3544 --%>
 					<s:if test='(#extnLegOrderType != "Q" && #extnLegOrderType != "F" && #extnLegOrderType != "R" && #extnLegOrderType != "I")'>
-						<input class="btn-neutral re-order floatright" type="button" value="Re-Order" onclick="xpedxOrderAgain();" />
+						<input class="btn-neutral re-order floatright addmarginright10" type="button" value="Re-Order" onclick="xpedxOrderAgain();" />
 					</s:if>
 				</s:if>
 				</s:if>
@@ -1607,12 +1607,12 @@ function showSplitDiv(divId)
 					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 						<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
-							<input class="btn-neutral edit-order floatright" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+							<input class="btn-neutral edit-order floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>
 					</s:if>		
 					<s:else>				
 						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>			     
-							<input class="btn-neutral floatright" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>				
 					</s:else>
 			</s:if>
