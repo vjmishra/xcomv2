@@ -514,8 +514,23 @@ public class XPXCustomerBatchProcess implements YIFCustomApi  {
 									}
 
 									//3740 - Modified for SalesRep in report End
-									api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());
+									//api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());
 									/*End - Changes made by Mitesh Parikh for JIRA 3002*/
+									//JIRA EB-6183 - To not send blank email and send email using new mechanism
+									//api.executeFlow(env, "XPXPutParentSAPChangesInQueue", reportParentSAPChangeDoc.getDocument());
+									String emailBrand = reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE) + ".com";
+									StringBuffer subjectLine = new StringBuffer(emailBrand); 
+									subjectLine.append(" Parent SAP # Changed Notification in ").append(YFSSystem.getProperty("environment")).append(" environment");
+									reportParentSAPChangeDoc.getDocumentElement().setAttribute("Subject", subjectLine.toString());
+									
+									StringBuffer reportParentSAPChangeEmailID = new StringBuffer();
+									reportParentSAPChangeEmailID.append(YFSSystem.getProperty("fromAddress.username")).append("@").append(emailBrand);
+									reportParentSAPChangeDoc.getDocumentElement().setAttribute("FromEmailID", reportParentSAPChangeEmailID.toString());
+									reportParentSAPChangeDoc.getDocumentElement().setAttribute("ToEmailID", YFSSystem.getProperty("reportParentSAPChangeToEmailID")) ;
+									XPXEmailUtil.insertEmailDetailsIntoDB(env,reportParentSAPChangeDoc.getString(), "PARENT_SAP_CHANGE_EMAIL", subjectLine.toString(), reportParentSAPChangeEmailID.toString(), reportParentSAPChangeDoc.getDocumentElement().getAttribute(XPXLiterals.A_SELLER_ORGANIZATION_CODE),existingMSAPNumber);
+									/*End - JIRA EB-6183*/
+
+
 								    }
 
 									//JIRA 3740 - Start
