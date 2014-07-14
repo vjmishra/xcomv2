@@ -1,0 +1,25 @@
+@CHARSET "ISO-8859-1";
+
+#fancybox-wrap{
+	width:880px;
+}
+
+#fancybox-content{
+	width:840px;
+}
+
+.share-modal1{
+	width:840px;	
+}
+
+.radio-container
+{
+	min-height: 200px;
+	max-height: 300px;
+	width:836px;
+	overflow-y: auto; 
+	border: 1px solid #cccccc;
+	margin: 0px 0px 10px 0px;
+	white-space: nowrap;
+	padding:6px;
+}

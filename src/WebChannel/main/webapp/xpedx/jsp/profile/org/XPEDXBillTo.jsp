@@ -100,8 +100,9 @@ function Clear()
 			}
 			},
 			'autoDimensions'	: false,
-			'width' 			: 670,
+			'width' 			: 880,
 			'height' 			: 420,
+			'scrolling'			:'no',
 			//XNGTP - JIRA- 489 
 			'onClosed' : function(){				
 		    	document.getElementById("showLocationsDiv").innerHTML = '';
@@ -173,13 +174,7 @@ ul.checkboxTree li
 	font-weight: normal;
 	font-size: 11.7px;
 }
-.radio-container
-{
-	max-height: 200px;
-	overflow: auto;
-	border: 1px solid #ccc;
-	margin: 0px 0px 10px 0px;
-}
+
 #collapseAllButtonsTree
 {
 	padding: 0px 20px;
