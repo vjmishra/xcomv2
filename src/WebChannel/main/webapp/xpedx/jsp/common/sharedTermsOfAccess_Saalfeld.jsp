@@ -138,7 +138,9 @@
 											<li class="float-right margin-10"><input type="button"  onclick="javascript:toaSubmit('Y')"
 												class="btn-neutral" value="Accept"/>
 											</li>
-											<li class="float-right margin-10 checkaddavail"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/>
+											<li class="float-right margin-10 checkaddavail"><input type="button" onclick="javascript:cancelTermsOfAccess('<s:url action='logout' namespace='/home' includeParams='none'/>')"
+											class="btn-neutral" value="Cancel"/>
+												
 											</li>
 										</ul>
 									</td>
