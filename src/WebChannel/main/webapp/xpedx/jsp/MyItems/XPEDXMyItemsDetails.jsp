@@ -2330,6 +2330,11 @@ function showSharedListForm(){
 									</div>
 									
 									<div id="mil-qa-content" style="display: none;">
+										<div class="mil-qa-button-wrap">
+											<input class="btn-reset-items btn-neutral addmarginleft15  addmarginright10" value="Clear" type="button" />
+											<input class="btn-gradient" type="submit" value="Add to My Items List" />
+										</div>
+										
 										<s:div cssClass="%{(#showLinePo || #showLineAcct) ? 'mil-add-item' : 'mil-add-item-wrap'}">
 											<h3 class="qa-subhead">Quick Add List</h3>
 											<div class="mil-pa-select-item addpadbottom20 ">
@@ -2404,7 +2409,7 @@ function showSharedListForm(){
 											</s:iterator>
 											
 											<div class="mil-qa-button-wrap">
-												<input id="btn-reset-items" class="btn-neutral addmarginleft15  addmarginright10" value="Clear" type="button" />
+												<input class="btn-reset-items btn-neutral addmarginleft15  addmarginright10" value="Clear" type="button" />
 												<input class="btn-gradient" type="submit" value="Add to My Items List" />
 											</div>
 	
