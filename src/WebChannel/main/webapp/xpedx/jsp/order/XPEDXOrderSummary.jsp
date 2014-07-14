@@ -727,12 +727,11 @@ from session . We have customer Contact Object in session .
 	<s:hidden name='customerHoldCheck' value='' id='customerHoldCheck'/>
 
 	<div class="container content-container">
-		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
 			<h1>Checkout</h1>
-			<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink" style="margin-top:0px;">
+			<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink">
 				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
 					width="16" height="15" alt="Print Page" />Print Page</span></a>
-		</div>
+		
 
 		<!--Commented for 3098  -->
 		<!-- <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div> -->
@@ -757,7 +756,7 @@ from session . We have customer Contact Object in session .
 	    --%>
 <!-- 	new ui	 -->
 	<s:set name='renderPersonInfo' value='#billTo' />
-	<div class="checkout-body" id="checkout-container">
+	<div class="checkout-body" id="checkout-container" style="margin:0px">
 		<fieldset>
 			<legend>
 
@@ -1774,7 +1773,7 @@ from session . We have customer Contact Object in session .
 				<s:set name = "setTBD" value="%{true}"/>
 			</s:if>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<div class="cart-sum-right">
+			<div class="cart-sum-right" style="margin-right:-10px">
 			<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				<table cellspacing="0"  align="right">
 					<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
@@ -1892,7 +1891,7 @@ from session . We have customer Contact Object in session .
 				<input class="btn-gradient floatright addmarginright10" type="button" value="Approve and Submit Order" onclick='validateCustomerPO();' />
 			</s:if>
 			<s:else>
-				<input class="btn-gradient floatright addmarginright10" type="button" value="Submit Order" onclick='validateCustomerPO();' />
+				<input class="btn-gradient floatright" type="button" value="Submit Order" onclick='validateCustomerPO();' />
 			</s:else>	
 		</s:if>
 		<s:else>
