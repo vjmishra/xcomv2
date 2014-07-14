@@ -1,0 +1,723 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html class="ext-strict" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<!-- styles -->
+<!-- styles -->
+<link media="all" type="text/css" rel="stylesheet" href="../../css/global/global-1.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/global/swc.min.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/home/home.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/home/portalhome.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/catalog/narrowBy.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/catalog/catalogExt.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/global/styles.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/global/ext-all.css" />
+
+<link media="all" type="text/css" rel="stylesheet" href="../../css/global/swc.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/xpedx-dan.css"/>
+<link type="text/css" href="../../js/jquery-ui-1/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/theme-xpedx.css" />
+<link media="all" type="text/css" rel="stylesheet" href="../../css/theme/prod-details.css" />
+<link media="all" rel="stylesheet" type="text/css" href="../../css/theme/xpedx-mil.css" />
+<link media="all" rel="stylesheet" type="text/css" href="../../css/theme/xpedx-mil-new.css" />
+
+<!-- javascript -->
+<script type="text/javascript" src="../../js/global/ext-base.js"></script>
+<script type="text/javascript" src="../../js/global/ext-all.js"></script>
+<script type="text/javascript" src="../../js/global/validation.js"></script>
+<script type="text/javascript" src="../../js/global/dojo.js"></script>
+<script type="text/javascript" src="../../js/global/dojoRequire.js"></script>
+<script type="text/javascript" src="../../js/theme/theme-1/theme.js"></script>
+
+<script type="text/javascript" src="../../js/catalog/catalogExt.js"></script>
+<script type="text/javascript" src="../../js/swc.js"></script>
+<script type="text/javascript" src="../../js/jquery-ui-1/development-bundle/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../../js/pngFix/jquery.pngFix.pack.js"></script>
+<script type="text/javascript" src="../../js/jquery-ui-1/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="../../js/jquery-ui-1/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="../../js/jquery-ui-1/development-bundle/ui/jquery.ui.tabs.js"></script>
+
+<!-- Facy Box (Lightbox/Modal Window -->
+
+<!-- Facy Box (Lightbox/Modal Window -->
+<script type="text/javascript" src="../../js/fancybox/jquery.mousewheel-3.0.2.pack.js"></script>
+<script type="text/javascript" src="../../js/fancybox/jquery.fancybox-1.3.1.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../../js/jquery-ui-1/css/smoothness/jquery-ui-1.8.2.custom.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="../../js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+
+<script src="../../js/SpryTabbedPanels.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function() 
+{$(document).pngFix();
+$("#varous1").fancybox();
+$("#various2").fancybox();
+$("#various3").fancybox();
+$("#various4").fancybox();
+$("#various5").fancybox();
+$("#various6").fancybox();
+$("#various7").fancybox();
+$("#various8").fancybox();
+$("#various9").fancybox();
+$("#various10").fancybox();
+$("#various11").fancybox();
+$("#various12").fancybox();
+$("#various13").fancybox();
+$("#various14").fancybox();
+$("#various15").fancybox();
+$("#various16").fancybox();
+$("#various17").fancybox();
+$("#various18").fancybox();
+$("#various19").fancybox();
+$("#various20").fancybox();
+$("#various21").fancybox();
+$("#various22").fancybox();
+});
+	
+	
+	
+</script>
+ 
+        
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+
+<!-- Facy Box (expand and collpse Modal Window -->
+
+<link rel="stylesheet" type="text/css" href="checkboxtree/demo.css"/>
+<link rel="stylesheet" type="text/css" href="checkboxtree/jquery.checkboxtree.css"/>
+<script type="text/javascript" src="checkboxtree/jquery.checkboxtree.js"></script>
+<script type="text/javascript">
+        //<!--
+            $(document).ready(function() {
+                $('#tree').checkboxTree();
+                $('#collapseAllButtonsTree').checkboxTree({
+                    collapseAllButton: 'Collapse All',
+                    expandAllButton: 'Expand All'
+                });
+            });
+			
+function funDivOpenClose(val1)
+{
+	for(i=1;i<=2;i++)
+	{
+		document.getElementById("strdiv"+i).style.display="none";
+	}
+	document.getElementById("strdiv"+val1).style.display="block";
+}
+
+
+function addRow(tableID) {
+
+			var table = document.getElementById(tableID);
+
+			var rowCount = table.rows.length;
+			//alert(rowCount);
+			var row = table.insertRow(rowCount);
+
+			var cell1 = row.insertCell(0);
+			var element1 = document.createElement("input");
+			element1.type = "checkbox";
+			cell1.appendChild(element1);
+
+			var cell2 = row.insertCell(1);
+			cell2.innerHTML = rowCount;
+
+			var cell3 = row.insertCell(2);
+			var element2 = document.createElement("input");
+			element2.type = "text";
+			element2.className="x-input";
+			element2.value = "Enter E-mail Id";
+			element2.setAttribute('id',rowCount);
+			element2.onclick = new Function("addRow('dataTable');blockRow('dataTable');"); 
+			
+			cell3.appendChild(element2);
+			
+			var cell4 = row.insertCell(3);
+			var element3 = document.createElement("a");
+			element3.href = "#strss";
+			var element4 = document.createElement("img");
+			element4.setAttribute('src','../../images/common/icon_delete.gif');
+			element3.appendChild(element4);
+			
+			//element2.setAttribute('id',rowCount);
+			element3.onclick = new Function("deleteRow('dataTable')"); 			 
+			cell4.appendChild(element3);
+
+
+		}
+		function blockRow(tableID) {	
+		    
+			var table = document.getElementById(tableID);
+
+			var rowCount = table.rows.length;
+			rowCount=rowCount-2;
+			//alert(rowCount);
+			var element = document.getElementById(rowCount);
+			element.onclick = new Function(""); 
+			element.value="";
+			
+		}
+		
+		function deleteRow(tableID) {
+			try {
+			var table = document.getElementById(tableID);
+			var rowCount = table.rows.length;
+
+			for(var i=0; i<rowCount; i++) {
+				var row = table.rows[i];
+				var chkbox = row.cells[0].childNodes[0];
+				if(null != chkbox && true == chkbox.checked) {
+					table.deleteRow(i);
+					rowCount--;
+					i--;
+				}
+
+
+			}
+			}catch(e) {
+				alert(e);
+			}
+		}
+
+
+
+        //-->
+        </script>
+
+<style type="text/css"> 
+.checkboxTree input[type=checkbox]{visibility:hidden;display:none; }
+</style>
+
+<!-- Facy Box (expand and collpse Modal Window -->
+
+<title>xpedx /  User Profile</title>
+
+
+
+<link href="../../css/theme/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
+</head>
+<!-- END swc:head -->
+<body class="ext-gecko ext-gecko3">
+<div id="main-container">
+  <div id="main">
+    <div class="t1-header commonHeader" id="headerContainer"> <strong class="logo"><a title="xpedx" href="#"></a></strong>
+      <div id="customer-block">
+        <div class="account-name">
+          <div id="account-name-info">
+            <p>CA-002101135-00001<br />
+              Metro Graphics </p>
+          </div>
+          <a href="#"><img src="../../images/global/header-info-icon.jpg" class="info-icon" border="none"/></a> </div>
+        <div class="change-ship-to"> <a href="#">Change Ship-to<br />
+          Address</a> </div>
+        <div class="shoppingfor">
+          <p>Shopping For</p>
+          <select name="pageSize" class="xpedx_select_sm" tabindex="81" id="Select1">
+            <option value="5"  selected="selected">Mike's Cart</option>
+            <option value="8">Joe's Cart</option>
+            <option value="5">Andy's Cart</option>
+            <option value="5">Sue's Cart</option>
+          </select>
+          <div class="view_cart">
+            <p><a href="header_bg3.gif">View Cart</a></p>
+          </div>
+        </div>
+      </div>
+      <div id="ext-gen20" class="searchbox-1">
+        <form id="newSearch" name="newSearch" onsubmit="return true;" action="#" method="post">
+          <div class="searchbox-form">
+            <div class="searchbox-form-bg">
+              <div class="inlineWrapper">
+                <div id="wwgrp_newSearch_searchTerm" class="wwgrp">
+                  <div id="wwctrl_newSearch_searchTerm" class="wwctrl">
+                    <input name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox" type="text" value="Search Catalog..." onclick="return newSearch_searchTerm_onclick()" />
+                  </div>
+                </div>
+                <button type="submit" id="newSearch_0" value="Submit" class="searchButton" tabindex="2013" onclick="return newSearch_0_onclick()"></button>
+              </div>
+            </div>
+          </div>
+          <div class="searchbox-links"> <a id="newSearch_" href="#"tabindex="2014"> <span class="stockcheck">Stock Check</span></a> </div>
+        </form>
+      </div>
+      <ul class="header-subnav commonHeader-subnav">
+        <li><a href="#"tabindex="2001">Help</a></li>
+        <li> <a href="#" tabindex="2002">My Carts</a></li>
+        <li><a href="#" tabindex="2002">MetroGraphics</a></li>
+        <li> </li>
+      </ul>
+      <div style="display: none;"> <a id="miniCartLinkDisplayURL" href="#"></a><a id="miniCartDisplayURL"  href="#"></a> <a id="miniCartDeleteURL" href="#"></a> <a id="miniCartUpdateURL"  href="#"></a> </div>
+      <div id="main-navigation">
+        <ul id="main-nav" class="dropdown">
+          <li><a href="#"><span class="left">&nbsp;</span><span class="right">Home</span></a></li>
+          <li><a href="#" class="ieNavhack"><span class="left">&nbsp;</span><span class="right">My Items Lists</span></a></li>
+          <li><a href="#"><span class="left">&nbsp;</span><span class="right">Catalog</span></a></li>
+          <li><a href="#"><span class="left">&nbsp;</span><span class="right">Orders</span></a>
+            <ul class="sub_menu">
+              <li><a class="link" href="#">Facilities Supplies</a></li>
+              <li><a class="link" href="#">Graphics</a></li>
+              <li><a class="link" href="#">Paper</a></li>
+              <li><a class="link" href="#">Packaging</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><span class="left">&nbsp;</span><span class="right">Services</span></a></li>
+          <li><a href="#"><span class="left">&nbsp;</span><span class="right">Tools</span></a></li>
+          <li><a class="active ieNavhack" href="#"><span class="left">&nbsp;</span><span class="right">Admin</span></a>
+            <ul class="sub_menu">
+              <li><a class="link" href="#">My Profile</a></li>
+              <li><a class="link" href="#">Manage Other Profiles</a></li>
+              <li><a class="link" href="#">Customer Profile</a></li>
+              <li><a class="link" href="#"> Bill-To Profile(s)</a></li>
+              <li><a class="link" href="#"> Ship-To Profile(s)</a></li>
+            </ul>
+          </li>
+          <!-- <li class="hidden"><a class="last" href="#">&nbsp;</a></li> -->
+        </ul>
+      </div> 
+    </div>
+    <div class="container">
+      <!-- breadcrumb -->
+       
+      <div id="mid-col-mil"><br />
+        
+         <div id="requestform">  <table class="form" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="15%" >User Name:  </td>
+    <td width="85%" class="padding-left4 "> Beth1@tstudio.com</td>
+     
+  </tr>
+  <tr>
+    <td width="12%" ><span class="txt-small underlines"><a href="#">Show My User</a></span><img src="../../images/help.png" width="19" height="19" alt="help" align="right" /></td>
+    <td valign="top" class="padding-left4 "> <ul  class="float-left">
+              <li class="float-left"><a href="#" class="grey-ui-btn"><span>Add User</span></a></li>
+            
+            </ul></td>
+  </tr>
+         </table>
+
+        </div>
+        <div class="clearview"> &nbsp;</div>
+        <div id="TabbedPanels1" class="TabbedPanels">
+          <ul class="TabbedPanelsTabGroup" style="margin-left:5px;">
+            <li class="TabbedPanelsTab" tabindex="0">User Information</li>
+            <li class="TabbedPanelsTab" tabindex="0">Authorized Locations</li>
+            <li class="TabbedPanelsTab" tabindex="0">Site Preference</li>
+            <li class="TabbedPanelsTab" tabindex="0">Spending Limit & Approvers</li>
+          </ul>
+          <div class="TabbedPanelsContentGroup">
+            <div class="TabbedPanelsContent">
+              <div id="requestform">
+                <table width="100%" class="form" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td colspan="2" class="paddingtop0">User Status:</td>
+                    <td colspan="3" class="paddingtop0"> <label>
+                      <input type="radio" name="radio2" id="US" value="US" />
+                      Active</label><label>
+                        <input type="radio" name="radio2" id="US" value="US" />
+                    Suspended</label>
+                    <div class="float-right txt-small padding-right1" style="padding-right:25px;"><span>Last Login: 01-01-2011 </span><span class="padding-left2">User Created:   DD/MM/YYYY  </span></div></td>
+                  </tr>
+                  <tr >
+                    <td>User Type:</td>
+                    <td><a href="#"><img src="../../images/help.png" alt="help" width="19" height="19" border="0" /></a></td>
+                    <td colspan="3"><label>
+                      <input type="checkbox" name="UT" id="UT" />
+                      Admin</label> 
+                      <label>
+                        <input type="checkbox" name="UT" id="UT" />
+                      Approver</label> 
+                      <label>
+                        <input type="checkbox" name="UT" id="UT" />
+                      Buyer</label> 
+                      <label>
+                        <input type="checkbox" name="UT" id="UT" />
+                      Estimator</label>
+                      <label>
+                        <input type="checkbox" name="UT" id="UT" />
+                      View Invoice</label> 
+                      <label>
+                        <input type="checkbox" name="UT" id="UT" />
+                      View Prices</label> 
+                      <label>
+                        <input type="checkbox" name="UT" id="UT" />
+                    View Reports</label></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2"><span class="mandatory">*</span> First Name:</td>
+                    <td width="38%"><input type="text" class="x-input" style="width: 185px;" name="input11" /></td>
+                    <td width="16%"><span class="mandatory">*</span> Last Name:</td>
+                    <td width="33%"><input type="text" class="x-input" style="width: 185px;" name="input14" /></td>
+                  </tr>
+                  <tr >
+                    <td width="10%"> Password:</td>
+                    <td width="3%"><a href="#"><img src="../../images/help.png" alt="help" width="19" height="19" border="0" /></a></td>
+                    <td width="38%"><input type="text" class="x-input" style="width: 185px;" name="input17" /> 
+                    <ul  class="float-right">
+              <li><a href="#" class="grey-ui-btn"><span>Reset Password</span></a></li>
+            
+            </ul></a></td>
+                    <td width="16%">Confirm  Password:</td>
+                    <td width="33%"><input type="text" class="x-input" style="width: 185px;" name="input13" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">Secret Question:</td>
+                    <td colspan="3"><select name="select2" id="select2" style="width:677px;">
+                      <option value="1">What is the name of my first school? </option>
+                      <option value="2">What are the last five digits of my social security number? </option>
+                      <option value="3">What is my mother's maiden name? </option>
+                    </select></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">Secret Answer:</td>
+                    <td><input type="text" class="x-input" style="width: 185px;" name="input2" /></td>
+                    <td>Confirm Answer:</td>
+                    <td><input type="text" class="x-input" style="width: 185px;" name="input7" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2"><span class="mandatory">*</span> Email Address:</td>
+                    <td><input type="text" class="x-input" style="width: 185px;" name="input3" /></td>
+                    <td><span class="mandatory">*</span> Confirm Email Address:</td>
+                    <td><input type="text" class="x-input" style="width: 185px;" name="input12" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">Address Line 1:</td>
+                    <td colspan="3"><input type="text" class="x-input" style="width:463px;" name="input10" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">Address Line 2:</td>
+                    <td colspan="3"><input type="text" class="x-input" style="width:463px;" name="input4" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">Address Line 3:</td>
+                    <td colspan="3"><input type="text" class="x-input" style="width:463px;" name="input5" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">City:</td>
+                    <td><input type="text" class="x-input" style="width:190px;" name="input" /></td>
+                    <td>State / Province:</td>
+                    <td><input type="text" class="x-input" style="width: 190px;" name="input8" /></td>
+                  </tr>
+                  <tr >
+                    <td colspan="2">Postal Code:</td>
+                    <td><input type="text" class="x-input" style="width: 190px;" name="input9" /></td>
+                    <td>Country:</td>
+                    <td><input type="text" class="x-input" style="width: 190px;" name="input6" /></td>
+                  </tr>
+                <tr >
+                    <td colspan="2">Phone:</td>
+                    <td><input type="text" class="x-input" style="width: 190px;" name="input9" /></td>
+                    <td>Fax:</td>
+                    <td><input type="text" class="x-input" style="width: 190px;" name="input6" /></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="TabbedPanelsContent">
+              <div>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tabs">
+                  <tr>
+                    <td width="15%" class="no-borders paddingtop0" valign="top">Default Ship-To:<br />
+ <a href="#" class="txt-lnk-sml-1">[Change]</a></td>
+                    <td valign="top" class="no-borders paddingtop0"><div class="float-right"><img height="19" border="0" width="19" alt="help" src="../../images/help.png"></div>CA-0002101135-000001<br />
+                      METRO GRAPHICS<br />
+                      1119 CLEMENT AVE<br />
+                      CHARLOTTE, NORTH CAROLINA 28205<br />
+                     </td>
+                  </tr>
+                  <tr>
+                    <td valign="top" class="no-borders padding0">Available Locations:</td>
+                    <td class="no-borders padding0"> 
+                      <select multiple="multiple" name="select5" id="select5" style=" width:600px;">
+                        <option>121211-0001-METRO GRAPHICS-DBA-Flash Printing Cherlotte, NC 28209 </option>
+                        <option>121211-0003-METRO GRAPHICS-DBA-Flash Printing Cherlotte, NC 28301 </option>
+                      </select></td>
+                  </tr>
+                  <tr>
+                    <td valign="top" class="no-borders padding0">&nbsp;</td>
+                    <td align="right" valign="top" class="no-borders padding0"><div class="float-left padding-left0" style="" align="center"><a href="#"><img src="../../images/bu-remove.jpg" alt="remove" width="88" height="23" border="0" align="right" class=" padding-right2"  /></a><a href="#"><img src="../../images/bu-add.jpg" alt="Add" width="80" height="23" border="0" align="right" class="padding-right2" /></a></div> </td>
+                  </tr>
+                  <tr>
+                    <td valign="top" class="no-borders padding0"> Authorized Locations:</td>
+                    <td valign="top" class="no-borders padding0"><div class=" clearview"> 
+                      <select multiple="multiple" name="select4" id="select4" style=" width:600px;">
+                        <option>METRO GRAPHICS</option>
+                        <option>121211-0001-METRO GRAPHICS-DBA-Flash Printing Cherlotte, NC 28205 </option>
+                        <option>121211-0002-METRO GRAPHICS-DBA-Fast Printing Cherlotte, NC 28206 </option>
+                        <option>121211-0003-METRO GRAPHICS-DBA-Flash Printing Cherlotte, NC 28207 </option>
+                        <option>121211-0007-METRO GRAPHICS-DBA-Flash Printing Cherlotte, NC 28208</option>
+                      </select>
+              </div>
+                        </td>
+                  </tr>
+                  <tr>
+                    <td valign="top" class="no-borders ">&nbsp;</td>
+                    <td valign="top" class="no-borders ">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td valign="top" class="no-borders ">&nbsp;</td>
+                    <td valign="top" class="no-borders ">&nbsp; </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="TabbedPanelsContent">
+              <form id="form1" name="form1" method="post" action="">
+              <div>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                  <tr>
+                    <td valign="top" class="no-borders paddingtop0"><table width="100%" border="0" cellpadding="0" cellspacing="0"  >
+                      <tr>
+                        <td class="no-borders paddingtop0"><div class="float-right"><img height="19" border="0" width="19" alt="help" src="../../images/help.png" /></div>
+                          <h2>Catalog Preferences</h2></td>
+                      </tr>
+                      <tr>
+                        <td width="20%" valign="top" class="no-borders padding0">Preferred Catalog View:</td>
+                        <td width="25%" valign="top" class="no-borders padding0"><div class="divs">
+                          <div>
+                            <input type="radio" name="radio" id="radio" value="radio" />
+                          </div>
+                          <div class="view1"></div>
+                          <div>**Full View 1 item per row </div>
+                        </div>
+                          <div class="divs">
+                            <div>
+                              <input type="radio" name="radio" id="radio" value="radio" />
+                            </div>
+                            <div class="view3"></div>
+                            <div>**Mini View  4 items per row</div>
+                          </div></td>
+                        <td width="55%" valign="top" class="no-borders user-profile "><div class="divs">
+                          <div>
+                            <input type="radio" name="radio" id="radio" value="radio" />
+                          </div>
+                          <div class="view2"></div>
+                          <div>**Condensed View  2 items per row</div>
+                        </div>
+                          <div class="divs">
+                            <div>
+                              <input type="radio" name="radio" id="radio" value="radio" />
+                            </div>
+                            <div class="view4"></div>
+                            <div>**Grid View  No images</div>
+                          </div></td>
+                      </tr>
+                      <tr class="bottomBorder">
+                        <td valign="top" class="no-borders padding0">Preferred Catalog:</td>
+                        <td colspan="2" valign="top" class="no-borders user-profile padding0 "><select name="select"  id="select"><option  selected="selected">Select Catalog</option>
+                          <option value="paper">Paper</option>
+                        </select></td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" valign="top" class="no-borders padding0"><div class="clearview"> &nbsp;</div>
+                          <div style="width:10%">
+                            <div class="float-right"><img height="19" border="0" width="19" alt="help" src="../../images/help.png" /></div>
+                            <h2>PO List</h2>
+                          </div>
+                          <div class="clearview">&nbsp;</div>
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0"  >
+                            <tr>
+                              <td width="19%" valign="top" class="no-borders paddingtop0"><select style="width: 150px;" id="select" name="select" multiple="multiple">
+                                <option>Test Po</option>
+                              </select></td>
+                              <td width="81%" class="no-borders padding0 padding-top4"><input name="Text4" class="input-details-cart  x-input" id="Text4" style="width: 100px;" tabindex="12" title="JobNumber" />
+                                <div class="clearview">&nbsp;</div>
+                                <div class="clearview">
+                                  <ul  class="float-left">
+                                    <li class="float-left margin-10"><a href="#" class="grey-ui-btn"><span>Add to List</span></a></li>
+                                  </ul>
+                                </div>
+                                <div class="clearview">&nbsp;</div>
+                                <div class="clearview">
+                                  <ul  class="float-left">
+                                    <li class="float-left margin-10"><a href="#" class="grey-ui-btn"><span>Remove from List</span></a></li>
+                                  </ul>
+                                </div></td>
+                            </tr>
+                          </table>
+                          <div class="clearview">&nbsp;</div>
+                          <div style="width:17%">
+                            <div class="float-right"><a href="#"><img src="../../images/help.png" alt="help" width="19" height="19" border="0" /></a></div>
+                            <h2>Email Preferences</h2>
+                          </div></td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="no-borders padding0"><label>
+                          <input type="checkbox" name="checkbox" id="checkbox"  class=" margin-15"/>
+                          Order Confirmation</label></td>
+                        <td colspan="2" valign="top" class="no-borders padding0"><table border="0" align="left" cellpadding="0" cellspacing="0" id="mil-list-new" style="background:none repeat scroll 0% 0% transparent; width:70%;">
+                          <tbody>
+                            <tr class="table-header-bar" id="none">
+                              <td width="55%" class="no-border table-header-bar-left noBorders-blue"><span class="white">Additional order Confirmation E-mail Address(es) </span></td>
+                              <td width="45%" class="no-border-right table-header-bar-right ">&nbsp;</td>
+                            </tr>	
+                            <tr>
+                              <td valign="top"  class="noBorder noBorders-FAFAFA" ><select style="width: 250px;" id="select6" name="select6" multiple="multiple">
+                                <option>&nbsp;</option>
+                                <option>&nbsp;</option>
+                                 <option>&nbsp;</option>
+                                 <option>&nbsp;</option>
+                                <option>&nbsp;</option>
+                                 <option>&nbsp;</option>
+                                  <option>&nbsp;</option>
+                              </select></td>
+                              <td colspan="2" valign="top"  class="noBorder"><input name="Text4" class="input-details-cart  x-input" id="Text4" style="width: 150px;" tabindex="12" title="JobNumber" />
+                                <div class="clearview">&nbsp;</div>
+                                <div class="clearview">
+                                  <ul  class="float-left">
+                                    <li class="float-left margin-10"><a href="#" class="grey-ui-btn"><span>Add to List</span></a></li>
+                                  </ul>
+                                </div>
+                                <div class="clearview">&nbsp;</div>
+                                <div class="clearview">
+                                  <ul  class="float-left">
+                                    <li class="float-left margin-10"><a href="#" class="grey-ui-btn"><span>Remove from List</span></a></li>
+                                  </ul>
+                                </div></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                          <div id="table-bottom-bar" style="width:70%; clear:both;">
+                            <div id="table-bottom-bar-L"></div>
+                            <div id="table-bottom-bar-R"></div>
+                          </div></td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="no-borders padding0"><span class="no-borders user-profile ">
+                          <label>
+                            <input type="checkbox" name="checkbox2" id="checkbox2" class=" margin-15" />
+                            Order Shipped </label>
+                        </span></td>
+                        <td colspan="2" valign="top" class="no-borders user-profile ">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="no-borders padding0"><span class="no-borders user-profile ">
+                          <label>
+                            <input type="checkbox" name="checkbox3" id="checkbox3" class=" margin-15" />
+                            Order Backorder</label>
+                        </span></td>
+                        <td colspan="2" valign="top" class="no-borders user-profile ">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="no-borders padding0"><span class="no-borders user-profile ">
+                          <label>
+                            <input type="checkbox" name="checkbox4" id="checkbox4" class=" margin-15" />
+                            Orders Cancelled</label>
+                        </span></td>
+                        <td colspan="2" valign="top" class="no-borders user-profile ">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" class="no-borders padding0"><div style="width:11%; margin-bottom:14px;"> <strong class="padding-15"> Quick Links</strong>
+                          <div class="float-right"><a href="#"><img src="../../images/help.png" alt="help" width="19" height="19" border="0" /></a></div>
+                        </div>
+                          <table id="mil-list-new" style=" width:85%;">
+                            <tbody>
+                              <tr class="table-header-bar">
+                                <td width="30%" colspan="2" class="no-border table-header-bar-left"><span class="white txt-small"> Name</span></td>
+                                <td width="60%" align="left" class="no-border  "><span class="white txt-small">URL</span></td>
+                                <td width="5%" align="left" class="no-border"><span class="white txt-small">Show</span></td>
+                                <td width="5%" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small">Sqn</span></td>
+                              </tr>
+                              <tr>
+                                <td class=" noBorders-FAFAFA"><a href="#"><img src="../../images/common/icon_delete.gif" alt="delete" width="16" height="16" border="0" style="float:left" /></a></td>
+                                <td><input name="Text2" class="input-details-cart  x-input" id="Text" style="width: 100px;" tabindex="12" title="JobNumber" /></td>
+                                <td valign="top" ><input name="Text" class="input-details-cart  x-input" id="Text3" style="width: 370px;" tabindex="12" title="JobNumber" /></td>
+                                <td valign="top" ><input type="checkbox" name="checkbox5" id="checkbox5" class=" margin-15" /></td>
+                                <td valign="top" ><input name="Text" class="input-details-cart  x-input" id="Text3" style="width:60px;" tabindex="12" title="JobNumber" /></td>
+                              </tr>
+                              <tr class="odd">
+                                <td class=" noBorders-FAFAFA"><a href="#"><img src="../../images/common/icon_delete.gif" alt="delete" width="16" height="16" border="0" style="float:left" /></a></td>
+                                <td ><input name="Text3" class="input-details-cart  x-input" id="Text2" style="width: 100px;" tabindex="12" title="JobNumber" /></td>
+                                <td valign="top"><input name="Text" class="input-details-cart  x-input" id="Text3" style="width: 370px;" tabindex="12" title="JobNumber" /></td>
+                                <td valign="top" ><input type="checkbox" name="checkbox5" id="checkbox5" class=" margin-15" /></td>
+                                <td valign="top" ><input name="Text" class="input-details-cart  x-input" id="Text3" style="width:60px;" tabindex="12" title="JobNumber" /></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div id="table-bottom-bar" style="width:85%;">
+                            <div id="table-bottom-bar-L"></div>
+                            <div id="table-bottom-bar-R"></div>
+                          </div></td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                </table>
+              </div>              
+              </form>
+            </div>
+             <div class="TabbedPanelsContent">
+              <form id="form1" name="form1" method="post" action="">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:0px;">
+                 <tr>
+                        <td width="100%" colspan="2" valign="top" class="no-borders paddingtop0"><div class="float-right"><a href="#"><img src="../../images/help.png" width="19" height="19" alt="help" title="help" /></a></div><h2>Spending Limit:</h2></td>
+                        
+                      </tr> 
+                    
+                  
+                  <tr>
+                        <td width="16%" valign="top" class="no-borders padding0">Currency Type:</td>
+                        <td valign="top" width="84%" class="no-borders padding0"><select name="select3" id="select3">
+                          <option style=" width:150px;"  selected="selected">Select Currency</option>
+                          <option value="USD">USD</option>
+                        </select></td>
+                      </tr> <tr>
+                           <td width="16%" valign="top" class="no-borders padding0">Spending Limit:</td>
+                           <td valign="top" width="84%" class="no-borders padding0"> <input class="x-input" style=" width:165px;" type="text" name="textfield" id="textfield" /></td>
+                      </tr>
+                    <tr>
+                        <td width="100%" colspan="2" valign="top" class="no-borders padding0"><h2>Approvers:</h2></td>
+                        
+                      </tr> 
+                      <tr>
+                        <td width="16%" valign="top" class="no-borders padding0">Primary  Approver:</td>
+                        <td valign="top" width="84%" class="no-borders padding0 "><select name="select3" id="select3">
+                          <option style=" width:150px;"  selected="selected">Select Approver</option>
+                           
+                        </select></td>
+                      </tr> <tr>
+                           <td valign="top" width="16%" class="no-borders padding0">Alternate Approver:</td>
+                           <td valign="top" width="84%" class="no-borders padding0"> <select name="select3" id="select3">
+                          <option style="width:150px;"  selected="selected">Select Approver</option>
+                           
+                        </select></td>
+                      </tr>
+                       
+                       
+                       
+                    </table>
+                </table>
+              </form>
+            </div>
+          </div>
+          <div class="clearview">&nbsp;</div>
+          <div>
+            <ul  class="float-right">
+              <li class="float-left margin-10"><a href="#" class="grey-ui-btn"><span>Cancel</span></a></li>
+              <li class="float-right"><a class="green-ui-btn" href="#" ><span>Save</span></a></li>
+            </ul>
+          </div>
+             <div class="clearview">&nbsp;</div>
+           <div class="clearview textAlignCenter txt-small">Last Edited By: Bill Smeltz on DD/MM/YYYY </div>
+              <div class="clearview">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+<!--
+var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
+//-->
+            </script>
+  </div>
+  <!-- end main  -->
+    <div class="t1-footer commonFooter" id="t1-footer">
+      <table>
+        <tr>
+          <td class="first"><a href="#" tabindex="2501">Home</a></td>
+          <td><a href="#" tabindex="2502">About Us</a></td>
+          <td><a href="#" tabindex="2503">Contact Us</a></td>
+          <td><a href="#" tabindex="2504">Customer Service</a></td>
+        </tr>
+      </table>
+    </div>
+</div>
+</body>
+</html>

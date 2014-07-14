@@ -1,0 +1,170 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Merge Dimension Properties Dialog</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+p = parent
+initialized = false
+pane = p.leftPane.getFrame();
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "mergeDimProp");
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+buttonsWidth = 60
+mergeDimPropDlg = newDialogBoxWidget("mergeDimPropDlg","Edit Merged Dimension",null,null,
+OkCB, cancelCB, false);
+mergeDimZone=newFrameZoneWidget("mergeDimZone",null,null)
+nameTxt = newTextFieldWidget( "mergeDimPropDlgNameTxt", null, 32, null, null, true, 'Name of the merged dimension', 260)
+descriptionTxt = newWidget("mergeDimPropDescriptionTxt")
+sourceDimCombo = newComboWidget("mergeDimSourceDimProp", sourceDimComboCB, true, 262)
+info = newInfoWidget("mergeDimInfo","More Information","","Use this dialog box to define the name and description of the merged dimension.", 60)
+OkButton = newButtonWidget("mergeDimOkButton", "OK", 
+"OkCB(false)", buttonsWidth, "OK", 
+"OK", 0, 0);
+cancelButton = newButtonWidget("mergeDimCancelButton", "Cancel", 
+"cancelCB()", buttonsWidth, "Cancel", 
+"Cancel", 0, 0);
+helpButton = newButtonWidget("mergeDimHelpButton", "Help", 
+"helpCB()", buttonsWidth, "Break properties help.", 
+"Break properties help.", 0, 0);
+mergeDimPropDlg.attachDefaultButton(OkButton);
+}
+if ( !_curWin.mergeDimPropDlgInitialized )
+{
+_curWin.mergeDimPropDlgInitialized = true;
+targetApp(
+mergeDimPropDlg.beginHTML() +
+'<table cellspacing="5" width="280" cellpadding="2" border="0"><tbody><tr><td align="center">'+
+mergeDimZone.beginHTML() +
+'<table cellspacing="0" cellpadding="2" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td valign="top">' + 'Select a source dimension to provide default properties for the new merged dimension:' + '<br>' + '</td>' +
+   '</tr>'+
+'<tr>'+
+'<td valign="top">' + 
+'<b>' + 'Source Dimension' + '</b>' + '<br>' +
+sourceDimCombo.getHTML() + 
+'</td>' +
+   '</tr>'+
+   '<tr>'+
+'<td >' + getSep() + '</td>' +
+   '</tr>'+   
+'<tr>'+
+'<td valign="top">' + 
+'<b>' + 'Merged Dimension Name' + '</b>' + '<br>' +
+nameTxt.getHTML() + 
+'</td>' +
+   '</tr>'+
+'<tr>'+
+'<td valign="top">' + '&nbsp;' + '</td>' +
+   '</tr>'+
+'<tr>'+
+'<td valign="top">' + 
+'<b>' + 'Description' + '</b>' + '<br>' +
+'<textarea id="mergeDimPropDescriptionTxt" class="textinputs" rows="3" cols="48" ondragstart="return true" onselectstart="event.cancelBubble=true;return true"></textarea>'+ '<br>' +
+'</td>' +
+   '</tr>'+
+'<tr>'+
+'<td valign="top">' + '&nbsp;' + '</td>' +
+   '</tr>'+
+   '</tbody></table>' +
+mergeDimZone.endHTML() + '<br>' +
+'<table width="280" cellspacing="0" cellpadding="2" border="0" class="dialogzone"><tbody>'+
+'<tr><td>'+
+info.getHTML()+
+'</td></tr>'+
+   '<tr>' +
+   '<td align="right" colspan="3">' +
+   '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' + OkButton.getHTML() + '</td>' + 
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + cancelButton.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + helpButton.getHTML() +'</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+'</td></tr></tbody></table>' +
+mergeDimPropDlg.endHTML()
+);
+}
+mergeDimPropDlg.init()
+nameTxt.init()
+descriptionTxt.init()
+sourceDimCombo.init()
+info.init()
+OkButton.init()
+cancelButton.init()
+helpButton.init()
+helpButton.setDisplay(false)
+if (pane.selName) nameTxt.setValue(pane.selName)
+descriptionTxt.setHTML(pane.selDesc?pane.selDesc:"")
+var lenSources = pane.arraySources.length
+sourceDimCombo.del()
+for (var i = 0; i < lenSources; i++) {
+sourceDimCombo.add(pane.arraySources[i].name,pane.arraySources[i].id,(i==0))
+}
+mergeDimPropDlg.show(true);
+}
+function sourceDimComboCB()
+{
+}
+function OkCB()
+{
+p.wt()
+doProcess()
+mergeDimPropDlg.show(false);
+}
+function cancelCB()
+{
+mergeDimPropDlg.show(false);
+}
+function helpCB()
+{
+}
+function doProcess()
+{
+p.eventManager.notify(p._EVT_VARS_UPDATE)
+var f = self.document.processForm
+f.sDimensionIDs.value = "" + pane.selID
+f.name.value = "" + nameTxt.getValue()
+f.description.value = "" + descriptionTxt.layer.value
+var sel = sourceDimCombo.getSelection(); 
+if(sel && sel.index > 0)
+f.sourceID.value=""+ sel.value
+var url = p._root + "processMergeDimensions" + p._appExt
+url += p.urlParamsNoBID()
+f.action = url
+f.submit()
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<form target="Report" style="display:none" name="processForm" method="post" action="">
+<input type="hidden" name="sMergeAction" id="sMergeAction" value="chgSource">
+<input type="hidden" name="sDimensionIDs" id="sDimensionIDs" value="">
+<input type="hidden" name="name" id="name" value="">
+<input type="hidden" name="description" id="description" value="">
+<input type="hidden" name="sourceID" id="sourceID" value="">
+</form>
+</body>
+</html>

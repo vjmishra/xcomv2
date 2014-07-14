@@ -1,0 +1,332 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Document Properties</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"cellFormatTDCDlg");
+</script>
+<script language="javascript">
+var buttonsWidth= 60
+var dlgWidth= 300
+var dlgHeight= 220
+var frameWidth= dlgWidth-10
+var frameHeight= dlgHeight-125
+var initialized= false
+fntStyleLst = requestQueryString(window,"fntSt")
+fgColor = requestQueryString(window,"fgColor")
+bgColor = requestQueryString(window,"bgColor")
+_isNum = requestQueryString(window,"isNum")
+_formatName = requestQueryString(window,"formatName")
+</script>
+<script language="javascript">
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+cellFormatTDCDlg = newDialogBoxWidget("cellFormatTDCDlg","Format Cell - Changed Data",dlgWidth,dlgHeight,okCB,cancelCB)
+cellFormatTDCFramezone = newFrameZoneWidget("cellFormatTDCFramezone",frameWidth,frameHeight)
+var styleW = 70
+fntStyle = newTextFieldWidget( "fcTDCFntStyle", null, null, null, null, true, null, styleW)
+fntStyleList = newListWidget( "fcTDCFntStyleList", changeFntCB, false, styleW, 6, 'Available font styles')
+underlineCheck = newCheckWidget( "fcTDCUnderlineCheck",'Underline', changeFntCB)
+strikeCheck = newCheckWidget( "fcTDCStrikeCheck",'Strikethrough', changeFntCB)
+fntFgColor = newIconColorMenuWidget("fcTDCFntFgColor",p._img+"format.gif",changeFntColorCB,null,'Text color',16,16,7*16,0,7*16,16,p._lastUsedColorsAr)
+fntBgColor = newIconColorMenuWidget("fcTDCFntBgColor",p._img+"format.gif",changeFntColorCB,null,'Background color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+Preview = newWidget("fcTDCPreview")
+PreviewBG = newWidget("fcTDCPreviewBG")
+info=newInfoWidget("cellFormatTDCDlgInfo","More Information","","Use this dialog box to change the reference data and to define the cell formats used to display changed data.")
+OkButton=newButtonWidget("cellFormatTDCDlgOkButton","OK",okCB,buttonsWidth)
+HelpButton=newButtonWidget("cellFormatTDCDlgHelpButton","Help",okCB,buttonsWidth)
+CancelButton=newButtonWidget("cellFormatTDCDlgCancelButton","Cancel",cancelCB,buttonsWidth)
+cellFormatTDCDlg.attachDefaultButton(OkButton);
+}
+if ( !_curWin.cellFormatTDCDlgInitialized )
+{
+_curWin.cellFormatTDCDlgInitialized=true
+targetApp(
+cellFormatTDCDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+cellFormatTDCFramezone.beginHTML() +
+'<table cellspacing="0" cellpadding="0" border="0" class="dialogzone" width="100%"><tbody>'+
+'<tr>'+
+'<td>' + 'Font style:' + '</td>'+
+'<td>' + 'Color:' + '</td>'+
+'</tr>'+
+'<tr>'+
+'<td>' + 
+'<table class="dialogzone" border="0" cellspacing="0" cellpadding="0"><tbody>'+
+'<tr>'+
+'<td>' + 
+fntStyle.getHTML() +
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>' + 
+fntStyleList.getHTML() +
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td>'+
+'<td>'+
+'<table class="dialogzone" border="0" cellspacing="0" cellpadding="0"><tbody>'+
+'<tr><td width="70">' + 'Font:' +'</td>'+
+'<td>'+  fntFgColor.getHTML() + '</td></tr>'+
+'<tr><td>' + 'Background:' +'</td>'+
+'<td>'+  fntBgColor.getHTML() + '</td></tr>'+
+'<tr><td colspan="2">' + getSep() + '</td></tr>'+
+'<tr>'+
+'<td>' + underlineCheck.getHTML() + '</td>'+
+'</tr>'+
+'<tr>'+
+'<td>' + strikeCheck.getHTML() + '</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td colspan="4">' + getSep() + '</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="center" valign="middle">' + 'Preview' + '</td>'+
+'<td>'+
+'<div style="overflow:hidden;width:140;height:25px">'+
+'<table id="fcTDCPreviewBG" cellspacing="0" cellpadding="0" border="0" width="140" height="25"><tbody>'+
+'<tr><td valign="middle" align="center" id="fcTDCPreview">' + '$100.00' + '</td></tr>'+
+'</tbody></table>'+
+'</div>'+
+'</td>'+
+   '</tr>' + 
+'</tbody></table>' +
+cellFormatTDCFramezone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center" valign="right">' +
+   info.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   OkButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   CancelButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' +
+   HelpButton.getHTML() +
+   '</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+cellFormatTDCDlg.endHTML()
+);
+}
+cellFormatTDCDlg.init()
+cellFormatTDCFramezone.init()
+fntStyle.init()
+underlineCheck.init()
+strikeCheck.init()
+styles = new Array("Regular", "Italic", "Bold", "Bold Italic")
+fntStyleList.init()
+fntStyleList.del()
+for (var i=0;i<styles.length;i++)
+{
+fntStyleList.add(styles[i], "" + styles[i])
+}
+objStyle = fntStyleListToObject(fntStyleLst)
+var styleIdx = 0
+styleIdx += objStyle.italic?1:0
+styleIdx += objStyle.bold?2:0
+fntStyleList.select(styleIdx)
+fntStyle.setValue(fntStyleList.getSelection()?fntStyleList.getSelection().value:"")
+underlineCheck.check(objStyle.under)
+strikeCheck.check(objStyle.strike)
+fntFgColor.init()
+fntFgColor.setColor(unrgb(fgColor))
+fntBgColor.init()
+fntBgColor.setColor(unrgb(bgColor))
+fntBgColor.isBg=true
+Preview.init()
+PreviewBG.init()
+OkButton.init()
+CancelButton.init()
+HelpButton.init()
+info.init()
+updatePreviewFnt(objStyle,fgColor,bgColor,_isNum)
+HelpButton.setDisplay(false)
+cellFormatTDCDlg.show(true)
+}
+function okCB()
+{
+fr = parent.getFrame("DlgFrame")
+if (fr && fr.updatePreviewWithName) {
+fr.updatePreviewWithName(_formatName, unrgb(Preview.fgColor), unrgb(PreviewBG.bgColor), fntStyleObjectToList(styleFromWidgets()))
+}
+cellFormatTDCDlg.show(false);
+Preview = null
+PreviewBG = null
+cellFormatTDCDlg = null
+}
+function cancelCB()
+{
+cellFormatTDCDlg.show(false);
+Preview = null
+PreviewBG = null
+cellFormatTDCDlg = null
+}
+function changeFntCB()
+{
+fntStyle.setValue(fntStyleList.getSelection()?fntStyleList.getSelection().value:"")
+updatePreviewFnt(styleFromWidgets(), null, null, _isNum)
+}
+function changeFntColorCB()
+{
+var color=this.getColor();
+if (color==null)
+{
+p._currColorCombo= this
+p._currColorCB= (this.isBg) ? changeColorBGPreviewFntCB : changeColorPreviewFntCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} 
+else 
+{
+p.addLastUsedColor(color)
+var c= "rgb("+color+")"
+if (this.isBg) {
+updatePreviewFnt(null, null, c, _isNum)
+} else {
+updatePreviewFnt(null, c, null, _isNum)
+}
+}
+}
+function changeColorPreviewFntCB(c,isBg)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+if (c) {
+p.addLastUsedColor(c)
+if (isBg) {
+updatePreviewFnt(null, null, "rgb("+c+")", _isNum)
+} else {
+updatePreviewFnt(null, "rgb("+c+")", null, _isNum)
+}
+}
+}
+function changeColorBGPreviewFntCB(c)
+{
+changeColorPreviewFntCB(c,true)
+}
+function updatePreviewFnt(st,fgColor,bgColor,isNum)
+{
+var css = Preview.css, cssBG = PreviewBG.css, isNum=(isNum=="true")?true:false
+if (st) 
+{
+css.fontWeight= st.bold? 'bold':'normal'
+css.fontStyle= st.italic? 'italic':'normal'
+var txtDeco = st.under? 'underline ' : ''
+txtDeco += st.strike? 'line-through ' : ''
+css.textDecoration = (txtDeco=='')? 'none' : txtDeco
+}
+if (fgColor)
+{
+    if ( fgColor != "rgb(-1,-1,-1)")
+    {
+        css.color= fgColor
+    }
+    else
+    {
+        css.color= "rgb(0,0,0)"
+    }
+    Preview.fgColor=fgColor;
+}
+if (bgColor)
+{
+    if ( bgColor != "rgb(-1,-1,-1)")
+    {
+    cssBG.backgroundColor= bgColor
+}
+else
+{
+    cssBG.backgroundColor= ""
+}
+PreviewBG.bgColor=bgColor;
+} 
+Preview.setHTML(isNum?'$100.00':'AbCd123')
+}
+function fntStyleListToObject(styleList)
+{
+arrStyle = styleList.split(",")
+if (arrStyle && (arrStyle.length==4))
+{
+var o = new Object
+o.bold= (arrStyle[0] == 1)
+o.italic= (arrStyle[1] == 1)
+o.under= (arrStyle[2] == 1)
+o.strike= (arrStyle[3] == 1)
+return o  
+} else {
+return null
+}
+}
+function fntStyleObjectToList(st) 
+{
+if (st) {
+return (st.bold?"1":"0") + "," +
+(st.italic?"1":"0") + "," +
+(st.under?"1":"0") + "," +
+(st.strike?"1":"0") ;
+} else {
+return "0,0,0,0"
+} 
+}
+function styleFromWidgets()
+{
+var o = new Object
+var styleListIdx = (fntStyleList.getSelection())?fntStyleList.getSelection().index:0
+o.bold = ((styleListIdx==2)||(styleListIdx==3)) 
+o.italic = ((styleListIdx==1)||(styleListIdx==3)) 
+o.under = underlineCheck.isChecked()
+o.strike = strikeCheck.isChecked() 
+return o
+}
+function unrgb(c)
+{
+if (c) {
+var l=c.length
+return c.substring(4, (l-1))
+} else {
+"-1,-1,-1"
+}
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

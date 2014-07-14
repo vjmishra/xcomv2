@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for SaveUserInfo action</comment>
+	<entry key="#parameters.customerId">ManageXpedxContact:/Customer/@CustomerID,
+		ManageUser:/Customer/@CustomerID,
+		ManageXpedxUserForSalesRep:/Customer/@CustomerID,
+		ManageXpedxUser:/Customer/@CustomerID</entry>
+	<entry key="#parameters.buyerOrgCode">ManageUser:/Customer/CustomerContactList/CustomerContact/User/@OrganizationKey,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/@OrganizationKey,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/User/@OrganizationKey		
+	</entry>
+	<entry key="WCContext.storefrontId">ManageXpedxContact:/Customer/@OrganizationCode,
+		ManageUser:/Customer/@OrganizationCode,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/@EnterpriseCode,
+		ManageXpedxUser:/Customer/@OrganizationCode,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/@EnterpriseCode,
+		ManageXpedxUserForSalesRep:/Customer/@OrganizationCode,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/User/@EnterpriseCode,
+		getOrgInfo:/Organization/@OrganizationCode</entry>
+	<entry key="#parameters.customerContactId">
+		ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@CustomerContactID,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@CustomerContactID,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@CustomerContactID,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/@CustomerContactID
+	</entry>
+	<entry key="#parameters.dayFaxNo">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@DayFaxNo,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@DayFaxNo,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@DayFaxNo</entry>
+	<entry key="#parameters.dayPhone">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@DayPhone,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@DayPhone,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@DayPhone</entry>
+	<entry key="#parameters.deptName">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@Department,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@Department,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@Department,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@Department,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@Department</entry>
+	<entry key="#parameters.emailId">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@EmailID,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@EmailID,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@EMailID,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@EmailID,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@EMailID</entry>
+	<entry key="#parameters.eveningFaxNo">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@EveningFaxNo,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@EveningFaxNo,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@EveningFaxNo</entry>
+	<entry key="#parameters.eveningPhone">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@EveningPhone,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@EveningPhone,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@EveningPhone</entry>
+	<entry key="#parameters.firstName">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@FirstName,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@FirstName,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@FirstName,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@FirstName,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@FirstName</entry>
+	<entry key="#parameters.jobTitle">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@JobTitle,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@JobTitle,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@JobTitle,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@JobTitle,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@JobTitle</entry>
+	<entry key="#parameters.lastName">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@LastName,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@LastName,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@LastName,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@LastName,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@LastName</entry>
+	<entry key="#parameters.mobilePhone">
+		ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@MobilePhone,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@MobilePhone,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@MobilePhone</entry>
+	<entry key="title">
+		ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@Title,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@Title,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@Title,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@Title,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/ContactPersonInfo/@Title</entry>
+	<entry key="contactStatus">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@Status,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/@Status,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@Status</entry>
+	<entry key="userStatus">ManageUser:/Customer/CustomerContactList/CustomerContact/User/@Activateflag,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/@Activateflag</entry>
+	<entry key="#parameters.userName">ManageUser:/Customer/CustomerContactList/CustomerContact/User/@DisplayUserID,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/@DisplayUserID,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/User/@DisplayUserID,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@CustomerContactID</entry>
+	<entry key="#parameters.preferredLocale">ManageUser:/Customer/CustomerContactList/CustomerContact/User/@Localecode,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/@Localecode,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/User/@Localecode
+	</entry>
+	<entry key="userRoleList">ManageUser:/Customer/CustomerContactList/CustomerContact/User/UserGroupLists/UserGroupList[]/@UsergroupKey,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/UserGroupLists/UserGroupList[]/@UsergroupKey</entry>
+	<entry key="userNameAttribute">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/User/@Username,
+		ManageUser:/Customer/CustomerContactList/CustomerContact/User/@Username</entry>
+	<entry key="viewInvoices">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnViewInvoices</entry>
+	<entry key="estimator">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEstimator</entry>
+	<entry key="stockCheckWebservice">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnStockCheckWS</entry>
+	<entry key="punchoutUsers">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPunchOutUser</entry>
+	<entry key="defaultShipTo">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnDefaultShipTo</entry>
+	<entry key="#parameters.networkID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnUserNetworkID</entry>
+	<entry key="#parameters.employeeID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnEmployeeID</entry>
+	<entry key="#parameters.txtMaxOrderAmt">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnMaxOrderAmount</entry>
+	<entry key="#parameters.txtMinOrderAmt">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnMinOrderAmount</entry>
+	<entry key="#parameters.OrderEmailOption">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderEmailFormat</entry>
+	<entry key="#parameters.PrefCatalog">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPrefCatalog,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPrefCatalog
+	</entry>
+	<entry key="#parameters.b2bCatalogView">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnB2BCatalogView,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnB2BCatalogView
+	</entry>
+	<!--	
+	<entry key="AddnlEmailAddrText">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnAddnlEmailAddrs,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnAddnlEmailAddrs
+	</entry>
+	<entry key="#parameters.POListText">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPOList,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPOList
+	</entry>
+	-->
+	<entry key="paper101Grade">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnPaper101Grade</entry>
+	
+	<entry key="viewPrices">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnViewPricesFlag</entry>
+	<entry key="viewReports">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnViewReportsFlag</entry>
+	<entry key="orderConfirmationEmailFlag">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderConfEmailFlag,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderConfEmailFlag
+	</entry>
+	<entry key="orderCancellationEmailFlag">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderCancelEmailFlag,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderCancelEmailFlag
+	</entry>
+	<entry key="orderShipmentEmailFlag">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderShipEmailFlag,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderShipEmailFlag
+	</entry>
+	<entry key="backorderEmailFlag">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnBackOrderEmailFlag,
+		ManageXpedxUserForSalesRep:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnBackOrderEmailFlag
+	</entry>
+	<entry key="#parameters.invoiceEmailID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnInvoiceEMailID</entry>
+	
+	<entry key="#parameters.addtnlAddressID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/@CustomerAdditionalAddressID</entry>
+	<entry key="#parameters.dayPhone_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@DayPhone</entry>
+	<entry key="#parameters.dayFaxNo_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@DayFaxNo</entry>
+	<entry key="#parameters.personfInfoAddressID">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressID</entry>
+	<entry key="#parameters.personfInfoKey">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@PersonInfoKey</entry>
+	<entry key="#parameters.isCommercialAddress">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@IsCommercialAddress</entry>
+	<entry key="#parameters.addressLine1_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine1</entry>
+	<entry key="#parameters.addressLine2_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine2</entry>	
+	<entry key="#parameters.addressLine3_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@AddressLine3</entry>	
+	<entry key="#parameters.city_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@City</entry>
+	<entry key="#parameters.state_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@State</entry>
+	<entry key="#parameters.zipCode_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@ZipCode</entry>
+	<entry key="#parameters.country_new">ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country</entry>
+	
+	<entry key="#parameters.alternateApprover">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@ApproverProxyUserId,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@ApproverProxyUserId</entry>
+	<entry key="#parameters.primaryApprover">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@ApproverUserId, 
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@ApproverUserId</entry>
+	<entry key="spendingLtCurrency">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@SpendingLimitCurrency,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@SpendingLimitCurrency</entry>
+	<entry key="#parameters.spendingLt">ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/@SpendingLimit,
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/@SpendingLimit</entry>
+	<entry key="orderApprovalFlag">
+		ManageXpedxUser:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderApprovalFlag,
+		ManageXpedxContact:/Customer/CustomerContactList/CustomerContact/Extn/@ExtnOrderApprovalFlag
+	</entry>
+	
+</properties>

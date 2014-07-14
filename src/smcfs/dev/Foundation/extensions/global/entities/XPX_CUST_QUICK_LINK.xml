@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+    <Entities>
+        <Entity
+            ApiNeeded = "Y"
+            AuditRequired = "N"
+            Description = "Customer Quick Links Table"
+            Prefix = "XPX"
+            TableName = "XPX_CUST_QUICK_LINK">
+            <!--table columns -->
+            <Attributes>
+                <Attribute
+                    ColumnName = "CUST_KEY"
+                    DataType = "Key"
+                    Nullable = "false"
+                    Description = "Cust Key"
+                    XMLName = "CustKey"/>
+				<Attribute
+                    ColumnName = "CUSTOMER_KEY"
+                    DataType = "Key"
+                    Nullable = "false"
+                    Description = "Customer Key"
+                    XMLName = "CustomerKey"/>
+                <Attribute
+                    ColumnName = "CUST_QUICK_LINK_NAME"
+                    DataType = "Text-150"
+                    DefaultValue = ""
+					Nullable = "false"
+                    Description = "Name for a link"
+                    XMLName = "CustQuickLinkName"/>
+                <Attribute
+                    ColumnName = "CUST_QUICK_LINK_URL"
+                    DataType = "URL"
+                    DefaultValue = ""
+                    Nullable = "false"
+					Description = "Quick Link URL"
+                    XMLName = "CustQuickLinkUrl"/>
+				<Attribute
+                    ColumnName = "Cust_URL_ORDER"
+                    DataType = "Text-10"
+                    DefaultValue = ""
+                    Nullable = "false"
+					Description = "Priority of URLs"
+                    XMLName = "CustURLOrder"/>
+                  <Attribute
+                    ColumnName = "CUST_SHOW_QUICK_LINK"
+                    DataType = "Flag"
+                    DefaultValue = ""
+                    Nullable = "true"
+					Description = "Customer Show Quick Link"
+                    XMLName = "CustShowQuickLink"/>
+
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+
+            </Attributes>
+            <!--PrimaryKey is a mandatory attribute in entity definition. This
+            element can have ONLY ONE attribute element -->
+            <PrimaryKey Name = "XPX_CUST_KEY_PK">
+                <Attribute ColumnName = "CUST_KEY"/>
+            </PrimaryKey> 
+			<Parent ParentTableName="YFS_CUSTOMER" >
+				<Attribute ColumnName="CUSTOMER_KEY" ParentColumnName="CUSTOMER_KEY" />
+			</Parent>
+
+        </Entity>
+    </Entities>
+</DBSchema>

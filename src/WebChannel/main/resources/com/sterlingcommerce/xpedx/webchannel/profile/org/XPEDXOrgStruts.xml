@@ -1,0 +1,274 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="xpedx.customer" namespace="/profile/org"
+		extends="customer">
+
+
+		<action name="customerNavigationTab"
+			class="com.sterlingcommerce.webchannel.profile.org.CustomerTab">
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<result>/xpedx/jsp/profile/org/XPEDXCustomerNavigationTab.jsp
+			</result>
+			<result name="input">/xpedx/jsp/profile/org/XPEDXCustomerNavigationTab.jsp
+			</result>
+		</action>
+
+		<action name="xpedxPublishArticle"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle">
+			<param name="xmlBindingFile">XPEDXGetArticleListBinding.xml</param>
+			<param name="mashups">XPEDXArticleList</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success">/xpedx/jsp/profile/org/XPEDXPublishArticle.jsp
+			</result>
+		</action>
+
+		<action name="xpedxCustomerArticle"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle">
+			<param name="xmlBindingFile">XPEDXGetArticleListBinding.xml</param>
+			<param name="mashups">XPEDXArticleList</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success">/xpedx/jsp/common/XPEDXArticleData.jsp</result>
+		</action>
+
+		<action name="xpedxAddArticle"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXAddArticle">
+			<param name="xmlBindingFile">XPEDXAddArticleBinding.xml</param>
+			<param name="mashups">XPEDXAddArticle</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">xpedxPublishArticle</param>
+				<param name="organizationCode">${#parameters.organizationCode}</param>
+				<param name="customerId">${#parameters.customerId }</param>
+				<param name="customerContactId">${#parameters.customerContactId }</param>
+			</result>
+		</action>
+
+		<action name="CustomerAssignment" method="getCustomersInHierarchy"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
+			<param name="mashups">xpedxCustomerAssignment</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerAssignmentBinding.xml</param>
+			<result name="success">/xpedx/jsp/profile/org/XPEDXCustomerAssignment.jsp
+			</result>
+		</action>
+		<action name="saveCustomerAssignments" method="saveChanges"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
+			<param name="mashups">xpedxSaveCustomerAssignments</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">CustomerAssignment</param>
+				<param name="organizationCode">${#parameters.organizationCode}</param>
+				<param name="customerId">${#parameters.customerId }</param>
+			</result>
+		</action>
+		<!--Start For Jira 4146 - On Remove, we call this action  -->
+			<action name="removeCustomersFromAuthorize" method="removeAuthorize"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction">
+			<param name="mashups">xpedxSaveCustomerAssignments</param>
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXPaginateCustomerLocations.jsp</result>
+		</action>
+		<!-- End For Jira 4146 - On Remove, we call this action  -->
+		
+		
+		<!-- Customer Logo Customization Starts : Manoj Kodagali -->
+		
+		<action name="getCustomerGeneralInfo" method="getGeneralInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerOrganizationAction">
+			<param name="mashups">xpedx-customer-getGeneralInformation</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">XPEDXGetCustomerOrganizationActionBinding.xml</param> 
+			<result name="success">/xpedx/jsp/profile/org/XPEDXGeneralInformation.jsp</result>	
+		</action>
+		
+		<action name="uploadCustomerLogo" method="uploadLogo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerLogoAction">
+			<param name="mashups">customer-uploadLogo</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerLogoBinding.xml</param> 
+			<result name="success" type="redirectAction">
+                 <param name="actionName">getCustomerGeneralInfo</param>
+                 <param name="customerId">${#parameters.customerId}</param>
+                 <param name="organizationCode">${#parameters.organizationCode}</param>
+				 <param name="expandAddressPanel">false</param>
+                 <param name="parse">true</param>
+            </result>	
+		</action>
+		
+		<action name="deleteCustomerLogo" method="deleteLogo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerLogoAction">
+			<param name="mashups">customer-uploadLogo</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerLogoBinding.xml</param>
+			<result name="success" type="redirectAction">
+                 <param name="actionName">getCustomerGeneralInfo</param>
+                 <param name="customerId">${#parameters.customerId}</param>
+                 <param name="organizationCode">${#parameters.organizationCode}</param>
+				 <param name="expandAddressPanel">false</param>
+                 <param name="parse">true</param>
+            </result>	
+		</action>
+		
+		<action name="viewCustomerLogo" method="viewLogo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerLogoAction">
+			<param name="mashups">customer-uploadLogo</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">XPEDXCustomerLogoBinding.xml</param> 
+			<result>/xpedx/jsp/profile/org/XPEDXViewLogo.jsp</result>
+		</action>
+		
+		<action name="previewCustomerLogo" method="previewLogo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerLogoAction">
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<result name="success" type="redirectAction">
+                 <param name="actionName">previewLogoHeader</param>
+                 <param name="custLogoFile">${uploadFileName}</param>
+            </result>
+		</action>
+		
+		<action name="previewLogoHeader" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXPreviewLogoHeaderAction">
+      		<result>/xpedx/jsp/profile/org/XPEDXPreviewHeader.jsp</result> 
+    	</action>
+    	
+    	<action name="delPreviewLogoHeader" method="deletePreviewLogo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXPreviewLogoHeaderAction">
+      		<result>/xpedx/jsp/profile/org/XPEDXPreviewHeader.jsp</result>
+    	</action>
+    	
+    	<!-- Customer Logo Customization Ends : Manoj Kodagali -->
+
+
+		<!--  STARTS - Customer-User Profile Changes - adsouza -->
+		<action name="getCustomerCorporateInfo" method="getCorporateInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerOrganizationAction">
+			<param name="mashups">xpedx-cust-GetCustomerCorpInfo</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetCustomerOrganizationActionBinding.xml</param> 
+			<result name="success">/xpedx/jsp/profile/org/XPEDXCorporateInformation.jsp</result>				
+		</action>
+		
+		<action name="xpedxCustomerMaintenance" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerMaintenanceAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetCustomerMaintenanceBinding.xml</param>
+			<param name="mashups">xpedx_getCustMaintenance,xpedx-cust-GetEmployeeNames</param>
+			<result name="success">/xpedx/jsp/profile/org/XPEDXCustomerMaintenance.jsp</result>				
+		</action>
+		
+		<action name="updateCustMaintenanceInfo" method="manageCustMaintenanceInfo" 
+		class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXManageCustMaintenanceInfo">
+			<param name="mashups">customer-manageCustMaintenanceInfo</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXManageCustMaintenanceInfoBinding.xml</param>
+ 			<result name="UpdateCustomerCorporateInfo" type="redirectAction">
+                 <param name="actionName">updateCustomerCorporateInfo</param>
+                 <param name="customerId">${#parameters.customerId}</param>
+                 <param name="organizationCode">${#parameters.organizationCode}</param>
+                 <param name="customerSchPreferenceKey">${#parameters.customerSchPreferenceKey}</param>
+                 <param name="optimizationType">${#parameters.optimizationType}</param>
+            </result>	
+		</action>
+		
+		<action name="xpedxGetCustLocationList" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustLocationList">
+			<param name="mashups">cust-GetCustLocationList</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetCustomerLocationListBinding.xml</param> 
+			<result name="success">/xpedx/jsp/profile/org/XPEDXCustLocationList.jsp</result>				
+		</action>
+		
+		
+		<action name="xpedxGetOrderBusinessRules" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetOrderBusinessRulesAction">
+			<param name="mashups">xpedx-cust-GetOrderBusinessRules</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetOrderBusinessRulesBinding.xml</param> 
+			<result name="success">/xpedx/jsp/profile/org/XPEDXOrderBusinessRules.jsp</result>				
+		</action>
+		
+		<action name="MyGetCustomerInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerMaintenanceAction">
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>   
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXCustomerInfoBinding.xml</param>
+			<param name="mashups">xpedx_getCustMaintenance,xpedx-cust-GetEmployeeNames</param>
+			<result name="success">/xpedx/jsp/profile/org/XPEDXCustomerInfo.jsp</result>				
+		</action>
+		
+		<action name="xpedxGetCustomerAccounts" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerAccountsAction">
+			<param name="mashups">XPEDXGetImmediateChildCustomers</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXCustomerInfoBinding.xml</param>
+        	<result name="success">/xpedx/jsp/profile/org/XPEDXGetCustomerAccounts.jsp</result>					
+		</action>
+		
+		<action name="xpedxGetShipToInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerShipTo">
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>   
+			<result name="success">/xpedx/jsp/profile/org/XPEDXShipTo.jsp</result>				
+		</action>
+		<action name="xpedxGetBillToInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerBillTo">
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>   
+			<result name="success">/xpedx/jsp/profile/org/XPEDXBillTo.jsp</result>					
+		</action>
+		<action name="xpedxSaveBillToInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXSaveBillToInfo">
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXSaveBillToInfo.xml</param>   
+			<result name="success" type="redirectAction">
+				<param name="actionName">getShipToBillToInfo</param>
+				<param name="namespace">/profile/org</param>
+				<param name="customerId">${customerId}</param>
+				<param name="orgCode">${organizationCode}</param>
+				<param name="success">${success}</param>
+			</result>				
+		</action>
+		<action name="xpedxSaveShipToInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXSaveShipToInfo">
+			<param name="resourceId">/swc/profile/ManageUserProfile</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXSaveShipToInfo.xml</param>   
+			<result name="success" type="redirectAction">
+				<param name="actionName">getShipToBillToInfo</param>
+				<param name="namespace">/profile/org</param>
+				<param name="customerId">${customerId}</param>
+				<param name="orgCode">${organizationCode}</param>
+				<param name="success">${success}</param>
+			</result>				
+		</action>
+		<action name="getCustomerQuickLinks" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetCustomerQuickLinkAction">
+			<param name="mashups">xpedx-getCustomerQuickLinks</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXCustomerQuickLink_Binding.xml</param>
+			<result name="success">/xpedx/jsp/profile/user/XPEDXCustomerQuickLink.jsp</result>
+			<result name="createsuccess">/xpedx/jsp/profile/org/XPEDXCustomerQuickLinks.jsp</result>
+			<result name="error">/xpedx/jsp/admin/XPEDXCustomerQuickLinkError.jsp</result>
+		</action>
+		<action name="xpedxSaveCustInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXSaveCustomerInfo">
+			<param name="mashups">xpedx-saveCustomerQuickLinks</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXCreateCustQuickLinks_binding.xml</param>
+			<result name="redirect" type="redirectAction">
+				<param name="actionName">MyGetCustomerInfo</param>
+				<param name="namespace">/profile/org</param>
+				<param name="customerId">${customerId}</param>
+                <param name="organizationCode">${organizationCode}</param>
+                <param name="success">${success}</param>
+			</result>
+		</action>
+		<action name="getShipToBillToInfo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetShipToBillToInfoAction">
+			<param name="mashups">xpedx-customer-getShipToBillToInfo</param>
+			<result name="shipToInfo">/xpedx/jsp/profile/org/XPEDXShipTo.jsp</result>
+			<result name="billToInfo">/xpedx/jsp/profile/org/XPEDXBillTo.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">MyGetCustomerInfo</param>
+				<param name="namespace">/profile/org</param>
+				<param name="customerId">${customerId}</param>
+                <param name="organizationCode">${orgCode}</param>
+                <param name="success">${success}</param>
+			</result>
+		</action>
+		<action name="xpedxShowLocations" method="getPaginatedCustomerList" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXShowLocations">
+			<param name="mashups">xpedx-customer-showLocations</param>
+			<param name="resourceId">/swc/profile/ManageOrganizationProfile</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXShowLocations_binding.xml</param>
+			<result name="success">/xpedx/jsp/profile/org/XPEDXShowLocations.jsp</result>
+			<result name="page">/xpedx/jsp/profile/org/XPEDXShowLocationsList.jsp</result>
+			
+		</action>
+		
+		<!--  ENDS - Customer-User Profile Changes - adsouza -->
+	</package>
+	
+	<package name="xpedx.customerFragments" namespace="/profile/org" extends="customerFragments">
+	         <action name="CustomerAddressListAnchor"
+             class="com.sterlingcommerce.webchannel.common.SimpleCellBuilderAction">
+           		<result>/xpedx/jsp/profile/org/XPEDXAddressListAnchor.jsp</result>
+         	</action>
+         	
+         <action name="CustomerAddressPersonInfoAnchor"
+             class="com.sterlingcommerce.webchannel.common.SimpleCellBuilderAction">
+           <result>/xpedx/jsp/profile/org/XPEDXAddressListPersonInfoAnchor.jsp</result>
+         </action>
+	</package>
+	
+</struts>

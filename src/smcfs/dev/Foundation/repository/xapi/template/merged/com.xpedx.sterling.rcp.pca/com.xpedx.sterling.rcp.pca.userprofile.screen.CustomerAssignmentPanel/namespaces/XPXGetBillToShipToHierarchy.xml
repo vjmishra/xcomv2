@@ -1,0 +1,7 @@
+<BillToList>
+ <BillTo>
+     <ShipToList>
+           <ShipTo/>
+     </ShipToList>
+ </BillTo>
+</BillToList>

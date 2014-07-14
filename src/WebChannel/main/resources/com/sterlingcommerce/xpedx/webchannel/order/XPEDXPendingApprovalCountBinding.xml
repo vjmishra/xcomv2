@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="WCContext.storefrontId">xpedxPendingApprovalCount:/Order/@EnterpriseCode,userListForApproval:/CustomerContact/@OrganizationCode</entry>
+	<entry key="WCContext.customerId">xpedxPendingApprovalCount:/Order/@BuyerOrganizationCode</entry>	
+	<entry key="nameExp">xpedxPendingApprovalCount:/Order/OrderHoldType/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="oUserList">xpedxPendingApprovalCount:/Order/OrderHoldType/ComplexQuery/Or/Exp[]/@Value</entry>
+	<entry key="approvalHoldType">xpedxPendingApprovalCount:/Order/OrderHoldType/@HoldType</entry>
+	<entry key="userNameExp">userListForApproval:/CustomerContact/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="userList">userListForApproval:/CustomerContact/ComplexQuery/Or/Exp[]/@Value</entry>
+</properties>

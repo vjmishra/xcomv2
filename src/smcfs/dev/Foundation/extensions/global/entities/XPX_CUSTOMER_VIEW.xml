@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" Extensible="N" Description="The View to Get All the Customers"
+			EntityType="VIEW" Prefix="XPX" TableName="XPX_CUST_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPXCustView">
+			<Attributes>
+				<Attribute ColumnName="CUSTOMER_ID" DataType="CustomerId"
+					Description="The Customer ID" Nullable="false" XMLName="CustomerID" />
+				<Attribute ColumnName="CUSTOMER_NAME" DataType="Text-240"
+					Description="The Customer Name" Nullable="true" XMLName="CustomerName" />
+				<Attribute ColumnName="EXTN_CUST_STORE_NO" DataType="Text-240"
+					Description="The Customer Store Name" Nullable="true" XMLName="ExtnCustStoreNo" />
+				<Attribute ColumnName="CUSTOMER_KEY" DataType="Text-50"
+					Description="The Customer Key" Nullable="false" XMLName="CustomerKey" />
+				<Attribute ColumnName="ENTERPRISE_CODE" DataType="OrgCode"
+					Description="The Ship to Emterprise Code" Nullable="false" XMLName="EnterpriseCode" />
+					<Attribute ColumnName="ROOT_CUSTOMER_KEY" DataType="Text-40"
+					Description="The Root Key for the hierarchy" Nullable="false" XMLName="RootCustomerKey" />
+					
+					<Attribute ColumnName="USER_ID" DataType="ID-24"
+					Description="The id of the end user" Nullable="false" XMLName="UserID" />
+					
+				<Attribute ColumnName="FIRST_NAME" DataType="PersonName"
+					Description="The Ship to Customer Addresses's First Name " Nullable="true" XMLName="FirstName" />
+				<Attribute ColumnName="LAST_NAME" DataType="PersonName"
+					Description="The Ship to Customer Addresses's Last Name" Nullable="true" XMLName="LastName" />
+				<Attribute ColumnName="SHIP_TO_ADDR_LINE_1" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine1" />
+				<Attribute ColumnName="SHIP_TO_ADDR_LINE_2" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine2" />
+				<Attribute ColumnName="SHIP_TO_ADDR_LINE_3" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine3" />
+				<Attribute ColumnName="SHIP_TO_CITY" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="City" />
+				<Attribute ColumnName="SHIP_TO_STATE" DataType="Text-500"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="State" />
+				<Attribute ColumnName="SHIP_TO_ZIP_CODE" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="ZipCode" />
+				<Attribute ColumnName="EXTN_ZIP4" DataType="Text-10"
+					Description="The Ship to Customer Addresses's Extended 4 digit Zip Code" Nullable="true" XMLName="ExtnZip4" />
+				<Attribute ColumnName="SHIP_TO_COUNTRY" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="Country" />
+				<Attribute ColumnName="EMAILID" DataType="EMailID"
+					Description="The Ship to Customer Addresses's EMail ID" Nullable="true" XMLName="EMailID" />
+				
+				
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_ACCNO_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" 
+					Size="" XMLName="SAPExtnCustLineAccNoFlag" />
+					
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_COMM_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineCommentsFlag" />
+				
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_ACC_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineAccLbl" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_PO_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLinePOLbl" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_SEQNO_FLAG" DataType="Text-1" DefaultValue="' '" 	Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineSeqNoFlag" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_PONO_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLinePONoFlag" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD1_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineField1Flag" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD1_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineField1Label" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD2_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineField2Flag" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD2_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineField2Label" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD3_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineField3Flag" />
+				<Attribute ColumnName="SAP_EXTN_CUST_LINE_FIELD3_LBL" DataType="Text-25" DefaultValue="' '" Description=" " 
+					Nullable="true" Size="" XMLName="SAPExtnCustLineField3Label" />
+				<Attribute ColumnName="CUSTOMER_PATH" DataType="CustomerId" DefaultValue="' '" Description="Exact path of customer"  
+          			Nullable="false" XMLName="CustomerPath" />	
+			</Attributes>
+			<PrimaryKey Name="XPX_CUST_PK">
+				<Attribute ColumnName="CUSTOMER_ID" />
+			</PrimaryKey>
+			<Indices>
+				<Index Name="XPX_CUST_VIEW_I01" Unique="True">
+					<Column Name="CUSTOMER_ID" />
+				</Index>
+				</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

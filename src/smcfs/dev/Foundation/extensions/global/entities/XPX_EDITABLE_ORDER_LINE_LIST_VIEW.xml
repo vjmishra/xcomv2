@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" Extensible="N" Description="The View to Get All Editable Orders for assigned customer and Item IDs for these editable orders"
+			EntityType="VIEW" Prefix="XPX" TableName="XPX_EDIT_ORDER_LINE_LIST_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPEDXEditableOrderLineListView">
+			<Attributes>
+				<Attribute ColumnName="DOCUMENT_TYPE" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="DocumentType" />
+				<Attribute ColumnName="ENTERPRISE_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="EnterpriseCode" />
+				<Attribute ColumnName="SHIP_TO_ID" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="ShipToID" />
+				<Attribute ColumnName="EXTN_WEB_CONF_NUM" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnWebConfNum" />
+				<Attribute ColumnName="ITEM_ID" DataType="ItemID" 
+					DefaultValue="' '" Description="Legacy Product Number" 
+					Nullable="true" XMLName="ItemID"/>
+				<Attribute ColumnName="IS_HLD_TYP_SBMT_CSR_REVIEW" DataType="Text-1"
+					DefaultValue="'N'" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="IsHoldTypeSbmtCSRReview" />
+				<Attribute ColumnName="IS_ORDER_LOCKED" DataType="Text-1"
+					DefaultValue="'N'" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="IsOrderLocked" />			
+			</Attributes>
+			<PrimaryKey Name = "XPX_EDIT_ORDLNS_PK">
+                <Attribute ColumnName = "EXTN_WEB_CONF_NUM"/>
+            </PrimaryKey>
+		</Entity>
+	</Entities>
+</DBSchema>

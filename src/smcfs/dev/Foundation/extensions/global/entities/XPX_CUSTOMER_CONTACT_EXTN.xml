@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity TableName="YFS_CUSTOMER_CONTACT">
+			<Attributes>
+				<Attribute ColumnName="EXTN_VIEW_INVOICES" DataType="Flag"
+					DefaultValue="Y" Description=" " Nullable="false" XMLName="ExtnViewInvoices"
+					XMLGroup="Extn">
+				</Attribute>
+				<Attribute ColumnName="EXTN_ESTIMATOR" DataType="Flag"
+					DefaultValue="F" Description=" " Nullable="false" XMLName="ExtnEstimator"
+					XMLGroup="Extn">
+				</Attribute>
+				<Attribute ColumnName="EXTN_STOCK_CHECK_WS" DataType="Flag"
+					DefaultValue="F" Description=" " Nullable="false" XMLName="ExtnStockCheckWS"
+					XMLGroup="Extn">
+				</Attribute>
+				<Attribute ColumnName="EXTN_PUNCH_OUT_USER" DataType="Flag"
+					DefaultValue="F" Description=" " Nullable="false" XMLName="ExtnPunchOutUser"
+					XMLGroup="Extn">
+				</Attribute>
+				<!-- Added for XB-258 Commenting to revert the changes -->
+				<Attribute ColumnName="EXTN_ORDER_APPROVAL_FLAG" DataType="Flag"
+					DefaultValue="N" Description=" " Nullable="false" XMLName="ExtnOrderApprovalFlag"
+					XMLGroup="Extn">
+				</Attribute>
+				
+				<!-- START Customer/User Profile Data : adsouza-->
+				<Attribute ColumnName="EXTN_USER_NETWORK_ID" DataType="Text-25"
+					DefaultValue="' '" Description="User Network ID" Nullable="true"
+					XMLName="ExtnUserNetworkID" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_EMPLOYEE_ID" DataType="Text-25"
+					DefaultValue="' '" Description="Employee ID" Nullable="true"
+					XMLName="ExtnEmployeeID" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_MAX_ORDER_AMOUNT" DataType="Money"
+					DefaultValue="0" Description=" " Nullable="true" XMLName="ExtnMaxOrderAmount"
+					XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_MIN_ORDER_AMOUNT" DataType="Money"
+					DefaultValue="0" Description=" " Nullable="true" XMLName="ExtnMinOrderAmount"
+					XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_MIN_CHARGE_AMOUNT" DataType="Money"
+					DefaultValue="0" Description=" " Nullable="true" XMLName="ExtnMinChargeAmount"
+					XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_ADDNL_EMAIL_ADDRS" DataType="Text-2000"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnAddnlEmailAddrs" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_PO_LIST" DataType="Text-2000"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnPOList" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_ORDER_EMAIL_FORMAT" DataType="Text-10"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnOrderEmailFormat" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_PREF_CATALOG" DataType="Text-25"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnPrefCatalog" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_DEFAULT_SHIP_TO" DataType="Text-50"
+					DefaultValue="' '"
+					Description="User's default ship to location, this will be displayed in WC"
+					Nullable="true" Size="" XMLName="ExtnDefaultShipTo" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_PAPER_101_GRADE" DataType="Text-1"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnPaper101Grade" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_B2B_CATALOG_VIEW" DataType="Text-1"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnB2BCatalogView" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_USER_TYPE" DataType="Text-15"
+					DefaultValue="' '" Description=" " Nullable="true" Size=""
+					XMLName="ExtnUserType" XMLGroup="Extn" />
+				<!-- END Customer/User Profile Data : adsouza-->
+				
+				<Attribute ColumnName="EXTN_VIEW_PRICES_FLAG" DataType="Flag" DefaultValue="'Y'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnViewPricesFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_VIEW_REPORTS_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnViewReportsFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_INVOICE_EMAIL_ID" DataType="Text-500" DefaultValue="''" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnInvoiceEMailID" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_ORDER_CONF_EMAIL_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnOrderConfEmailFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_ORDER_CANCEL_EMAIL_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnOrderCancelEmailFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_ORDER_SHIP_EMAIL_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnOrderShipEmailFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_BACK_ORDER_EMAIL_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnBackOrderEmailFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_ACCEPT_T_AND_C_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size=""  
+				XMLName="ExtnAcceptTAndCFlag" XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_T_AND_C_ACCEPTED_ON" DataType="TimeStamp" Description="Acceptance Date: On acceptance of Terms and Conditions by the contact while he login to SWC for the first time." Nullable="true" XMLName="ExtnTAndCAcceptedOn" 
+				 XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_LAST_LOGIN_DATE" DataType="TimeStamp" Description=" " Nullable="true" XMLName="ExtnLastLoginDate" 
+				 XMLGroup="Extn" />
+				<Attribute 	ColumnName="EXTN_ZIP4" DataType="ZipCode" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="ExtnZip4"  
+				XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_IS_SALES_REP" DataType="Text-1" DefaultValue="'N'" Description="This flag indicates that, this contact is a Sales 
+				Representative." Nullable="false" Size="" XMLName="ExtnIsSalesRep" XMLGroup="Extn" />		   
+				
+				
+			</Attributes>
+		</Entity>
+	</Entities>
+</DBSchema>
+

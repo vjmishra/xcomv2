@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for User general information</comment>
+    <entry key="userId">getSecretQuestionList:/AuthQuestion/User/@Loginid</entry>
+    <entry key="WCContext.storefrontId">getXpedxCustomerContactDetailsNew:/CustomerContact/Customer/@CallingOrganizationCode,
+        getAdminList:/CustomerContact/Customer/@CallingOrganizationCode,
+        getSecretQuestionList:/AuthQuestion/@OrganizationCode</entry>
+	<entry key="buyerOrgCode">getOrgSecretQuestionList:/AuthQuestion/@CallingOrganizationCode</entry> 
+    <entry key="customerContactId">getXpedxCustomerContactDetailsNew:/CustomerContact/@CustomerContactID</entry>
+    <entry key="customerID">getXpedxCustomerContactDetailsNew:/CustomerContact/Customer/@CustomerID,
+        getAdminList:/CustomerContact/Customer/@CustomerID</entry>
+    <entry key="b2bCatalogView">getXpedxCustomerContactDetailsNew:/CustomerContactList/CustomerContact/Extn/@ExtnB2BCatalogView</entry>
+	<entry key="AdminLoginidList">getAdminList:/CustomerContact/ComplexQuery/Or/Exp[]/@Value</entry>
+	<entry key="networkId">XPEDX-GetUserList:/User/Extn/@ExtnEmployeeId</entry>
+</properties>

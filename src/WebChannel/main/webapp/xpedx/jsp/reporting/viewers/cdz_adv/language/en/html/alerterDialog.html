@@ -1,0 +1,240 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Alerter dialog window</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"alerterDlg");
+p._globalWOMCallback = null;
+function AlerterElement(id,s,st,desc)
+{
+var o=this;
+o.id=id;
+o.name=s;
+o.state=st;
+o.description=desc;
+return o;
+};
+</script>
+<script language="javascript"> 
+var url = p._root + "incAlerters" + p._appExt;
+url += p.urlParams(false,false);
+includeScript(url) ;
+</script>
+<script language="javascript">
+var arrW = null;
+var alerterDlg = null;
+var info = null;
+var okButton = null;
+var cancelButton = null;
+var helpButton = null;
+var applyButton = null;
+var buttonsWidth= 60;
+var buttonsHeight= 52;
+var dlgWidth= 450;
+var dlgHeight= 350;
+var scrollZoneW= 0.94*dlgWidth;
+var scrollZoneH= 0.4*dlgHeight;
+var frmZoneW= 0.94*dlgWidth;
+var frmZoneH= 0.14*dlgHeight;
+var initialized= false;
+function clickCB()
+{
+var o=this
+var s=''
+for (var i in arrAlerter)
+{
+if (arrAlerter[i].name==o.text)
+{
+s=arrAlerter[i].description
+break
+}
+}
+if (s == '')
+s='&nbsp;'
+alrtDesc.setHTML(s)
+}
+function applyCB()
+{
+okCB(true)
+}
+function okCB(bApplyBtn)
+{
+if (!bApplyBtn)
+alerterDlg.show(false)
+if (arrAlerter.length==0)
+return
+okButton.setDisabled(true)
+applyButton.setDisabled(true)
+var ids=''
+var i
+for (i=0;i<arrW.length;i++)
+{
+ids+=arrAlerter[i].id
+ids+=','
+ids+=arrW[i].isChecked()
+ids+=(i<(arrW.length-1))?';':''
+}
+self.document.alrtForm.alrtIDS.value=ids
+self.document.alrtForm.target=p.getReportFrame().name
+p.wt(bApplyBtn)
+var alrtURL=p._root+'processAlerters'+p._appExt
+alrtURL+=p.urlParams(false,false)
+document.alrtForm.action=alrtURL
+setTimeout("document.alrtForm.submit()",1)
+if (bApplyBtn) {
+alerterDlg.unload()
+p._globalWOMCallback = p.alerter_globalWOMCallback
+}
+okButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+function cancelCB()
+{
+alerterDlg.show(false);
+}
+function helpCB()
+{
+p.showAlertDialog("Not implemented yet !","Development version",0);
+alerterDlg.show(false);
+}
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+alerterDlg = newDialogBoxWidget("alerterDlg","Alerters",
+dlgWidth,dlgHeight,okCB,cancelCB)
+checkScrollZone = newScrolledZoneWidget("scrollZone",2,4,scrollZoneW,scrollZoneH)
+tzone=newFrameZoneWidget("tzone",frmZoneW,50,true)
+alrtDesc=newWidget("alrtDesc")
+        arrW = new Array
+for (var i in arrAlerter)
+{
+arrW[i]=newCheckWidget("arrW_"+i,arrAlerter[i].name,clickCB,null,null,null,null,true)
+arrW[i].layerClass='treeNormal'
+}
+info = newInfoWidget("alerterInfo","More Information","","You can activate or deactivate alerters here.")
+okButton = newButtonWidget("alerterOkButton", "OK", 
+okCB, buttonsWidth)
+cancelButton = newButtonWidget("alerterCancelButton", "Cancel", 
+cancelCB, buttonsWidth)
+helpButton = newButtonWidget("alerterHelpButton", "Help", 
+helpCB, buttonsWidth)
+applyButton = newButtonWidget("alerterApplyButton", "Apply", 
+applyCB, buttonsWidth)
+alerterDlg.attachDefaultButton(okButton);
+}
+if ( !_curWin.alerterDlgInitialized )
+{
+_curWin.alerterDlgInitialized = true;
+var sCheck=''
+sCheck+='<table cellspacing="0" cellpadding="0" border="0"><tbody>'
+if ( arrW.length != 0 ) 
+{
+for (var i in arrW)
+{
+sCheck+='<tr><td>'
+sCheck+=arrW[i].getHTML()
+sCheck+='</td></tr>'
+}
+}
+else
+sCheck+='<tr><td>No Alerter</td></tr>'
+sCheck+='</tbody></table>'
+targetApp(
+alerterDlg.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="5" border="0"><tbody>'+
+'<tr>'+
+'<td>'+
+checkScrollZone.beginHTML() +
+sCheck + 
+checkScrollZone.endHTML() +
+'</td>' +
+'</tr>' +
+     '<tr>' +     
+   '<td align="center">' +
+   tzone.beginHTML() +
+   '<div id="alrtDesc" style="width:'+frmZoneW+'px;height:'+frmZoneH+'px;overflow:auto">'+alrtDesc.getHTML()+'</div>' +
+   tzone.endHTML() +
+   '</td>' +   
+   '</tr>' + 
+'<tr>' +
+   '<td align="center">' +
+   info.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody>' +
+   '<tr>' +
+   '<td>' + okButton.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + cancelButton.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + applyButton.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + helpButton.getHTML() + '</td>' +
+'</tr>'+
+'</tbody></table>'+   
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+alerterDlg.endHTML()
+);
+}
+alerterDlg.init()
+checkScrollZone.init()
+for (var i in arrW)
+arrW[i].init()
+tzone.init()
+alrtDesc.init()
+alrtDesc.setHTML('Select an alerter to see its description')
+info.init()
+okButton.init()
+cancelButton.init()
+helpButton.init()
+applyButton.init()
+for (var i in arrAlerter)
+{
+arrW[i].setIndeterminate(false)
+var st = arrAlerter[i].state
+if (st == 0)
+arrW[i].check(false)
+else if (st == 1)
+arrW[i].check(true)
+else
+arrW[i].setIndeterminate(true)
+}
+helpButton.setDisplay(false)
+alerterDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden form -->
+<form target="" style="display:none" name="alrtForm" method="post" action="">
+<input type="hidden" name="alrtIDS" id="alrtIDS">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

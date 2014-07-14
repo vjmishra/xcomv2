@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pca Plug-in
+Bundle-SymbolicName: com.xpedx.sterling.rcp.pca; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: com.xpedx.sterling.rcp.pca.XpedxPlugin
+Bundle-Vendor: XPEDX
+Bundle-Localization: plugin
+Require-Bundle: com.yantra.yfc.rcp,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.yantra.pca.ycd.rcp
+Eclipse-LazyStart: true

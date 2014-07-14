@@ -1,0 +1,152 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Title zone</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+p = parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "printOptionsDlg")
+initialized= false;
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+buttonsWidth = 60
+pane = p.leftPane.getFrame();
+printOptionsDlg = newDialogBoxWidget("printOptionsDlg","Printer Friendly Options",260,200,
+OkCB, cancelCB, true);
+var checkedOptions = ''
+checkArray = new Array
+var checkedOptionsMaxLength = 5
+for (var i = 0; i < checkedOptionsMaxLength; i++)
+{
+checkArray[i] =  newCheckWidget( "check" + i, "", checkCB, 
+false, "", 0, 0);
+checkedOptions += '<tr><td width="30"></td><td>' + checkArray[i].getHTML() + '</td></tr>'
+}
+info = newInfoWidget("infoPrintOptions","Printer Friendly","","The Printer Friendly window allows you to select the document information you want to print.")
+OkButton = newButtonWidget("printButton", "OK", 
+"OkCB()", buttonsWidth, "OK", 
+"OK", 0, 0);
+cancelButton = newButtonWidget("mergeDimCancelButton", "Cancel", 
+"cancelCB()", buttonsWidth, "Cancel", 
+"Cancel", 0, 0);
+helpButton = newButtonWidget("mergeDimHelpButton", "Help", 
+"helpCB()", buttonsWidth, "Break properties help.", 
+"Break properties help.", 0, 0);
+printOptionsDlg.attachDefaultButton(OkButton);
+}
+if ( !_curWin.printOptionsDlgInitialized )
+{
+_curWin.printOptionsDlgInitialized = true;
+var arrBodyHTML = new Array(), ai=0
+arrBodyHTML[ai++]=printOptionsDlg.beginHTML()
+arrBodyHTML[ai++]='<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'
+arrBodyHTML[ai++]='<tr><td>' + "Select the section you want to print out:" + '</td></tr>'
+arrBodyHTML[ai++]='<tr>'
+arrBodyHTML[ai++]='<td>'
+   arrBodyHTML[ai++]='<table class="dialogzone" cellspacing="0" cellpadding="5" border="0"><tbody>'
+arrBodyHTML[ai++]=checkedOptions
+   arrBodyHTML[ai++]='</tbody></table>'   
+   arrBodyHTML[ai++]='</td>'
+arrBodyHTML[ai++]='</tr>'
+arrBodyHTML[ai++]='<tr>'
+   arrBodyHTML[ai++]='<td align="center" valign="right">'
+   arrBodyHTML[ai++]=info.getHTML()
+   arrBodyHTML[ai++]='</td>'
+   arrBodyHTML[ai++]='</tr>'
+   arrBodyHTML[ai++]='<tr>' 
+   arrBodyHTML[ai++]='<td align="right" valign="center">'
+   arrBodyHTML[ai++]='<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+   arrBodyHTML[ai++]='<td>'
+   arrBodyHTML[ai++]=OkButton.getHTML()
+   arrBodyHTML[ai++]='</td>'
+   arrBodyHTML[ai++]='<td>' + getSpace(5,1)+ '</td>'
+   arrBodyHTML[ai++]='<td>'
+   arrBodyHTML[ai++]=cancelButton.getHTML()
+   arrBodyHTML[ai++]='</td>'
+   arrBodyHTML[ai++]='<td>' + getSpace(5,1)+ '</td>'
+   arrBodyHTML[ai++]='<td>'
+   arrBodyHTML[ai++]=helpButton.getHTML()
+   arrBodyHTML[ai++]='</td>'
+arrBodyHTML[ai++]='</tr></tbody></table>'
+   arrBodyHTML[ai++]='</table>'
+   arrBodyHTML[ai++]='</td>'
+   arrBodyHTML[ai++]='</tr>'
+arrBodyHTML[ai++]='</table>'
+arrBodyHTML[ai++]=printOptionsDlg.endHTML()
+targetApp(arrBodyHTML.join(''))
+checkedOptions = null
+arrBodyHTML = null
+}
+printOptionsDlg.init()
+for (var i = 0; i < checkedOptionsMaxLength; i++)
+{
+checkArray[i].init()
+if (pane.checkedDisplayOptions[i]) {
+checkArray[i].check(pane.checkedPrintOptions[i])
+checkArray[i].setText(pane.checkedPrintOptionLabels[i])
+checkArray[i].setDisplay(true)
+} else {
+checkArray[i].setDisplay(false)
+}
+}
+info.init()
+OkButton.init()
+cancelButton.init()
+helpButton.init()
+helpButton.setDisplay(false)
+printOptionsDlg.show(true);
+}
+function checkCB()
+{
+for (var i = 0; i < checkArray.length; i++)
+{
+if ((pane.checkedDisplayOptions[i]) && checkArray[i].isChecked()) {
+OkButton.setDisabled(false)
+return
+}
+}
+OkButton.setDisabled(true)
+}
+function OkCB()
+{
+pane._printDoc = true
+for (var i = 0; i < checkArray.length; i++)
+{
+pane.checkedPrintOptions[i] = (pane.checkedDisplayOptions[i])? checkArray[i].isChecked() : false
+}
+printOptionsDlg.show(false);
+pane.doPrint()
+}
+function cancelCB()
+{
+pane._printDoc = false
+printOptionsDlg.show(false);
+}
+function helpCB()
+{
+pane._printDoc = false
+printOptionsDlg.show(false);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

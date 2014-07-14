@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+    
+      <Entity TableName="YFS_ORDER_HEADER" >
+        <Attributes>
+		  <Attribute ColumnName="EXTN_IS_PROCESSED_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="false" Size="" 
+          XMLName="ExtnIsProcessedFlag" XMLGroup="Extn" />
+      
+        <Attribute ColumnName="EXTN_ENVT_ID" DataType="Text-20" DefaultValue="' '" Description="Indicates the environment from the Customer Profile" Nullable="true" Size="" XMLName="ExtnEnvtId" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_ORIG_ENVIRONMENT_CODE" DataType="Text-10" DefaultValue="' '" Description="Original Environment Code" Nullable="true" XMLName="ExtnOrigEnvironmentCode" XMLGroup="Extn" />
+	  <Attribute ColumnName="EXTN_COMPANY_ID" DataType="Text-20" DefaultValue="' '" Description="Indicated Company Code " Nullable="true" Size="" 
+          XMLName="ExtnCompanyId" XMLGroup="Extn" />
+ 	 <Attribute ColumnName="EXTN_WEB_CONF_NUM" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnWebConfNum" XMLGroup="Extn" />
+		   <Attribute ColumnName="EXTN_ORDER_DIVISION" DataType="OrgCode" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnOrderDivision" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_LEGACY_ORDER_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLegacyOrderNo" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_GENERATION_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnGenerationNo" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_LEGACY_ORDER_TYPE" DataType="Text-20" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLegacyOrderType" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_WEB_HOLD_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnWebHoldFlag" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustomerDivision" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_CUSTOMER_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustomerNo" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_SHIP_TO_NAME" DataType="OrganizationName" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnShipToName" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_BILL_TO_NAME" DataType="Text-50" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnBillToName" XMLGroup="Extn" />  
+        <Attribute ColumnName="EXTN_SHIP_COMPLETE" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnShipComplete" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_WILL_CALL" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnWillCall" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_ORDERED_BY_NAME" DataType="Text-40" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnOrderedByName" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_CURRENCY_CODE" DataType="Currency" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCurrencyCode" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_TOTAL_SHIP_VALUE" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnTotalShipValue" XMLGroup="Extn" />
+        
+        <Attribute ColumnName="EXTN_TOT_ORD_VAL_WITHOUT_TAXES" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnTotOrdValWithoutTaxes" XMLGroup="Extn" />
+        
+        <Attribute ColumnName="EXTN_TOTAL_ORDER_VALUE" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnTotalOrderValue" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_ORDER_SPECIAL_CHARGES" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnOrderSpecialCharges" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_TOTAL_ORDER_FREIGHT" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnTotalOrderFreight" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_ORDER_TAX" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnOrderTax" XMLGroup="Extn" />
+         <Attribute ColumnName="EXTN_SYSTEM_IDENTIFIER" DataType="Text-10" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnSystemIdentifier" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ATTENTION_NAME" DataType="Text-500" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnAttentionName" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ORD_STAT_COM" DataType="Comments" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnOrdStatCom" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ORDER_DESCRIPTION" DataType="Text-256" DefaultValue="' '" XMLGroup="Extn" XMLName="ExtnOrderDesc" />
+		  <Attribute ColumnName="EXTN_WEB_HOLD_REASON" DataType="Comments" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnWebHoldReason" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_E_TRADING_ID" DataType="OrgCode" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnETradingID" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_SHIP_TO_SUFFIX" DataType="Text-10" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnShipToSuffix" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_BILL_TO_SUFFIX" DataType="Text-10" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnBillToSuffix" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_HEADER_STATUS_CODE" DataType="Text-10" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnHeaderStatusCode" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_SAP_PARENT_NAME" DataType="Text-100" DefaultValue="' '" Description="Master Customer Number" Nullable="false" 
+          XMLName="ExtnSAPParentName" XMLGroup="Extn"/>
+          <Attribute ColumnName="EXTN_RUSH_ORDER_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnRushOrderFlag" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_RUSH_ORDER_DELIVERY_DATE" DataType="TimeStamp" Description=" " Nullable="true" 
+             XMLName="ExtnRushOrderDeliveryDate" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_DELIVERY_HOLD_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnDeliveryHoldFlag" XMLGroup="Extn" />
+		  	<Attribute ColumnName="EXTN_DELIVERY_HOLD_DATE" DataType="TimeStamp" Description=" " Nullable="true" Name="ExtnDeliveryHoldDate" 
+		  	XMLName="ExtnDeliveryHoldDate" XMLGroup="Extn" />
+		  	<Attribute ColumnName="EXTN_DELIVERY_HOLD_TIME" DataType="Text-10" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+		  	XMLName="ExtnDeliveryHoldTime" XMLGroup="Extn" />
+			<Attribute ColumnName="EXTN_RUSH_ORDER_COMMENTS" DataType="Text-2000" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+			XMLName="ExtnRushOrderComments" XMLGroup="Extn" />
+			<Attribute ColumnName="EXTN_ADDNL_EMAIL_ADDR" DataType="varchar2-2600" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+			XMLName="ExtnAddnlEmailAddr" XMLGroup="Extn" />
+			<Attribute ColumnName="EXTN_SOURCE_TYPE" DataType="Text-40" Description="" DefaultValue="' '" Nullable="true" Size="" 
+			XMLName="ExtnSourceType" XMLGroup="Extn" />	
+            <Attribute ColumnName="EXTN_INVOICE_NO" DataType="InvoiceNo" Description="Invoice number" DefaultValue="' '" Nullable="true" 
+            XMLName="ExtnInvoiceNo" XMLGroup="Extn" />	
+            <Attribute ColumnName="EXTN_INVOICE_TOTAL" DataType="Money" Description="Grand total for the invoice" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnInvoiceTotal" XMLGroup="Extn" />	
+            <Attribute ColumnName="EXTN_INVOICED_DATE" DataType="Date" Description="Grand total for the invoice" Nullable="true" XMLName="ExtnInvoicedDate" XMLGroup="Extn" />
+            <Attribute ColumnName="EXTN_MSG_HEADER_ID" DataType="VarcharDocumentNo" Description="MSG ID sent by WebMethods on B2B orders" DefaultValue="''" Nullable="true" XMLName="ExtnMsgHeaderId" XMLGroup="Extn" />
+            <Attribute ColumnName="EXTN_CART_CREATION_DATE" DataType="TimeStamp" Description="The date on which the cart was created" Nullable="true" XMLName="ExtnCartCreationDate" XMLGroup="Extn"/>
+         
+          <Attribute ColumnName="EXTN_ORDER_SUB_TOTAL" DataType="Money" Description="Grand total for the invoice" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnOrderSubTotal" XMLGroup="Extn" />	
+		  <Attribute ColumnName="EXTN_ORDER_DISCOUNT" DataType="Money" Description="Grand total for the invoice" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnOrderDiscount" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ORDER_COUPON_DISCOUNT" DataType="Money" Description="Grand total for the invoice" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnOrderCouponDiscount" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_TOT_ORDER_ADJUSTMENTS" DataType="Money" Description="Grand total for the invoice" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnTotOrderAdjustments" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_LEG_TOT_ORDER_ADJUSTMENTS" DataType="Money" Description="Grand total for the invoice" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnLegTotOrderAdjustments" XMLGroup="Extn" />
+			
+		  <Attribute ColumnName="EXTN_ORDER_STATUS" DataType="Text-10" Description="Status code for the order" DefaultValue="' '" Nullable="true"   
+			XMLName="ExtnOrderStatus" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ORDER_STATUS_PREFIX" DataType="Text-40" Description="Prefix for the order status" DefaultValue="' '" Nullable="true"   
+			XMLName="ExtnOrderStatusPrefix" XMLGroup="Extn" />
+			
+			<Attribute ColumnName="EXTN_IS_REPROCESSIBLE_FLAG" DataType="Flag" DefaultValue="'Y'" Description="Used for determining if the order needs to be reprocessed by the reprocess agent " Nullable="false" Size="" XMLName="ExtnIsReprocessibleFlag" XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_ORDER_LOCK_FLAG" DataType="Flag" DefaultValue="'Y'" Description="Lock Flag - set to Lock whenever the Order is placed or edited in Sterling." Nullable="false" Size="" XMLName="ExtnOrderLockFlag" XMLGroup="Extn" />
+
+       	  <Attribute ColumnName="EXTN_OU_FAILURE_LOCK_FLAG" DataType="Flag" DefaultValue="'N'" Description="Lock Flag - set to Lock order if there is a OU failure." Nullable="false" Size="1" XMLName="ExtnOUFailureLockFlag" XMLGroup="Extn" />
+
+       	  <Attribute ColumnName="EXTN_BILL_TO_CUSTOMER_ID" DataType="CustomerId"
+					Description="The Bill to Customer ID" Nullable="true" XMLName="ExtnBillToCustomerID"  XMLGroup="Extn"/>
+		  <Attribute ColumnName="EXTN_ORDHDR_FAILED_RULE_IDS" DataType="Text-500"
+					Description="Failed Busines Rule IDS at order header level" Nullable="true" XMLName="ExtnOrdHdrLevelFailedRuleID"  XMLGroup="Extn"/>		
+       	  <Attribute ColumnName="EXTN_ORDEDIT_CUST_CONTACT_ID" DataType="Text-40"
+					Description="Customer Contact Id of a User who edits an order" Nullable="true" XMLName="ExtnOrderEditCustContactID"  XMLGroup="Extn"/>
+		  <Attribute ColumnName="EXTN_LAST_ORDER_OPERATION" DataType="varchar2-20"
+					Description="Last action/operation executed on the customer order" Nullable="true" XMLName="ExtnLastOrderOperation"  XMLGroup="Extn"/>
+		  <Attribute ColumnName="EXTN_ORDCONFIRM_EMAILSENT_FLAG" DataType="Text-1"
+					Description="Last action/operation executed on the customer order" Nullable="true" XMLName="ExtnOrderConfirmationEmailSentFlag"  XMLGroup="Extn"/>
+       	
+        </Attributes>
+		<!-- Begin : New index created for XBT-361 -->
+		<Indices>
+            <Index Name="XPX_YFS_ORDER_HEADER_I20" Unique="False">
+               <Column Name="EXTN_WEB_CONF_NUM"/>
+			   <Column Name="EXTN_LEGACY_ORDER_NO"/>               
+            </Index>	
+            <Index Name="XPX_YFS_ORDER_HEADER_I21" Unique="False">
+				<Column Name="SHIP_TO_ID"/>
+				<Column Name="ORDER_TYPE"/>     
+				<Column Name="DRAFT_ORDER_FLAG"/> 
+				<Column Name="EXTN_WEB_CONF_NUM"/> 
+				<Column Name="EXTN_LEGACY_ORDER_NO"/> 
+				<Column Name="BILL_TO_ID"/> 
+				<Column Name="ORDER_HEADER_KEY"/> 
+				<Column Name="BUYER_ORGANIZATION_CODE"/> 
+				<Column Name="SELLER_ORGANIZATION_CODE"/> 
+				<Column Name="CUSTOMER_PO_NO"/> 
+				<Column Name="CUSTOMER_CONTACT_ID"/> 
+				<Column Name="EXTN_ORDER_DIVISION"/> 
+				<Column Name="EXTN_ORDER_STATUS"/> 
+			</Index>		
+        </Indices>
+		<!-- End : New index created for XBT-361 -->		
+      </Entity>
+
+      <Entity TableName="YFS_ORDER_LINE" >
+        <Attributes>
+
+	  <Attribute ColumnName="EXTN_WEB_LINE_NUMBER" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnWebLineNumber" XMLGroup="Extn" />
+       <Attribute ColumnName="EXTN_LEGACY_LINE_NUMBER" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLegacyLineNumber" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_PRICE_OVERRIDE_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnPriceOverrideFlag" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_CUST_LINE_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustLineNo" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_CUST_LINE_FIELD1" DataType="Text-50" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustLineField1" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_CUST_LINE_FIELD2" DataType="Text-50" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustLineField2" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_CUST_LINE_FIELD3" DataType="Text-50" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustLineField3" XMLGroup="Extn" />  
+        <Attribute ColumnName="EXTN_LINE_SHIPPABLE_TOTAL" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLineShippableTotal" XMLGroup="Extn" />
+        <Attribute ColumnName="EXTN_LINE_ORDERED_TOTAL" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLineOrderedTotal" XMLGroup="Extn" />
+         <Attribute ColumnName="EXTN_SHIP_QTY_BASE" DataType="Quantity" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnShipQtyBase" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_BACK_QTY_BASE" DataType="Quantity" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnBackQtyBase" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_ORDERED_QTY_BASE" DataType="Quantity" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnBaseOrderedQty" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_REQ_SHIP_ORD_QTY" DataType="Quantity" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnReqShipOrdQty" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_REQ_BACK_ORD_QTY" DataType="Quantity" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnReqBackOrdQty" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_CUST_LINE_ACC_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnCustLineAccNo" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_PRICING_UOM" DataType="UOM" DefaultValue="''" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnPricingUOM" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_UNIT_PRICE_IN_PRICING_UOM" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnUnitPrice" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_UNIT_PRICE_DISCOUNT" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnUnitPriceDiscount" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_LINE_STATUS_CODE" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLineStatusCode" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_ADJ_DOLLAR_AMT" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnAdjDollarAmt" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_LINE_TYPE" DataType="LineType" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLineType" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_UNIT_PRICE_IN_REQ_UOM" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnReqUOMUnitPrice" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_MSG_LINE_ID" DataType="VarcharDocumentNo" Description="MSG ID sent by WebMethods on B2B orders" DefaultValue="''" 
+            Nullable="true" XMLName="ExtnMsgLineId" XMLGroup="Extn" />
+            
+          <Attribute ColumnName="EXTN_EXTENDED_PRICE" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnExtendedPrice" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_LINE_COUPON_DISCOUNT" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnLineCouponDiscount" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_ADJ_UOM_UNIT_PRICE" DataType="UnitPrice" DefaultValue="0" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnAdjUOMUnitPrice" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_EDIT_ORDER_FLAG" DataType="Text-5" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnEditOrderFlag" XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_LEG_ORDLINE_ADJMNS" DataType="Money" Description="OrderLine Adjustments" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnLegOrderLineAdjustments" XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ADJ_UNIT_PRICE" DataType="Money" Description="OrderLine Adjustments" DefaultValue="0" Nullable="true"   
+			XMLName="ExtnAdjUnitPrice" XMLGroup="Extn" />		
+		  <Attribute ColumnName="EXTN_ORDLINE_FAILED_RULE_IDS" DataType="Text-500"
+					Description="Failed Busines Rule IDS at order line level" Nullable="true" XMLName="ExtnOrdLineLevelFailedRuleID"  XMLGroup="Extn"/>
+        </Attributes>		
+      </Entity>
+
+
+      <!-- <Entity TableName="YFS_ITEM" >
+        <Attributes>
+
+	  <Attribute ColumnName="EXTN_ITEM_TYPE" DataType="Text-40" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          XMLName="ExtnItemType" XMLGroup="Extn" />
+       
+        </Attributes>		
+      </Entity>-->
+         </Entities>
+</DBSchema>

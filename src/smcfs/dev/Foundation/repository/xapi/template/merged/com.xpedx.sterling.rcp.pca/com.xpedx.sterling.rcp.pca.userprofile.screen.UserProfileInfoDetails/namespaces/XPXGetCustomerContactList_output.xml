@@ -1,0 +1,11 @@
+<CustomerContactList>
+	<CustomerContact ApproverProxyUserId="" ApproverUserId="" Company="" CustomerContactID="" CustomerKey="" Modifyuserid=""  Modifyts="">
+		<Customer CustomerID="" BuyerOrganizationCode="" OrganizationCode=""/>
+		<User DisplayUserID="" Username=""  Modifyuserid=""  Modifyts="" >
+		<UserGroupLists>
+			<UserGroupList UsergroupKey="" />
+		</UserGroupLists>
+		</User>
+	</CustomerContact>
+</CustomerContactList>
+

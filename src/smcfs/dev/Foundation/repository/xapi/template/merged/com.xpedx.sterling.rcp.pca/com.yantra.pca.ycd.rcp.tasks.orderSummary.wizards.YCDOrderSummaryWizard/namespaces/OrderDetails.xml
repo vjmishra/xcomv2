@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order BillToID="" BuyerUserId="" CarrierServiceCode=""
+    CreatorOrganizationCode="" CustomerContactID="" CustomerFirstName=""
+    CustomerLastName="" CustomerPONo="" DisplayStatusDescription="" DocumentType=""
+    DraftOrderFlag="" EnterpriseCode="" EntryType="" 
+    ExchangeType="" HasPendingChanges=""
+    MaxOrderStatusDesc="" MultipleStatusesExist="" OrderDate="" PriceProgramKey="" 
+    OrderHeaderKey="" OrderName="" OrderNo="" OverallStatus="" ReqDeliveryDate="" 
+    ReturnOrderHeaderKeyForExchange="" ScacAndService=""
+    ScacAndServiceKey="" SellerOrganizationCode="" SortingType="" Status="" SupportLevel="">
+    <Extn />
+    <PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3=""
+        AddressLine4="" AddressLine5="" AddressLine6=""
+        AlternateEmailID="" Beeper="" City="" Company="" Country=""
+        DayFaxNo="" DayPhone="" Department="" EMailID="" EveningFaxNo=""
+        EveningPhone="" FirstName="" JobTitle="" LastName=""
+        MiddleName="" MobilePhone="" OtherPhone="" PersonID=""
+        PersonInfoKey="" State="" Suffix="" Title="" ZipCode=""/>
+    <PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3=""
+        AddressLine4="" AddressLine5="" AddressLine6=""
+        AlternateEmailID="" Beeper="" City="" Company="" Country=""
+        DayFaxNo="" DayPhone="" Department="" EMailID="" EveningFaxNo=""
+        EveningPhone="" FirstName="" JobTitle="" LastName=""
+        MiddleName="" MobilePhone="" OtherPhone="" PersonID=""
+        PersonInfoKey="" State="" Suffix="" Title="" ZipCode=""/>
+    <OverallTotals GrandTotal=""/>
+    <PriceInfo Currency=""/>
+    <OrderLines>
+        <OrderLine CarrierServiceCode="" ComponentShipped=""
+            ConfigurationKey="" CurrentWorkOrderKey="" DeliveryMethod=""
+            DisplayStatusDescription="" GiftFlag="" GiftWrap=""
+            IsBundleParent="" IsPriceLocked="" IsPriceMatched=""
+            ItemGroupCode="" KitCode="" KitQty="" LineType="" MaxLineStatusDesc=""
+            MinLineStatus="" MultipleStatusesExist="" OpenQty="" OrderHeaderKey="" 
+            OrderLineKey="" OrderedQty="" OverallStatus=""
+            PrimeLineNo="" ProductClass="" ReqShipDate="" ReshipParentLineKey=""
+            ReshippedQty="" ScacAndService="" ScacAndServiceKey=""
+            ShipNode="" ShipToID="" ShippedQuantity="" Status="" isHistory=""
+	    ShipToKey="" SubLineNo="">
+			<Extn>
+			<C3OrderlineList>
+        	            <C3Orderline Configuration=""/>
+	                </C3OrderlineList>
+			</Extn>
+            <ParentOrderLineRelationships>
+                <OrderLineRelationship OrderLineRelationshipKey=""
+                    ParentOrderLineKey="" RelationshipType="">
+                    <ParentLine OrderLineKey=""/>
+                </OrderLineRelationship>
+            </ParentOrderLineRelationships>
+            <OrderDates>
+                <OrderDate ActualDate="" CommittedDate="" DateTypeId=""
+                    ExpectedDate="" OrderHeaderKey="" OrderLineKey=""
+                    OrderReleaseKey="" RequestedDate=""/>
+            </OrderDates>
+            <OrderLineInvAttRequest>
+                <Extn/>
+            </OrderLineInvAttRequest>
+            <Notes NumberOfNotes="">
+                <Note ContactReference="" ContactTime="" ContactType=""
+                    ContactUser="" CustomerSatIndicator="" NoteText=""
+                    Priority="" ReasonCode="" VisibleToAll="">
+                    <User Username=" "/>
+                </Note>
+            </Notes>
+            <Item AlternateItemID="" ItemID="" ItemImage=""
+                ItemShortDesc="" ReshipParentLineKey="" UnitOfMeasure=""/>
+            <ItemDetails ItemID="">
+		<AlternateUOMList>
+                    <AlternateUOM Height="" HeightUOM="" IsOrderingUOM="" ItemKey="" ItemUOMKey="" Length="" LengthUOM="" Quantity="" UnitOfMeasure="" Weight="" WeightUOM="" Width="" WidthUOM=""/>
+                </AlternateUOMList>
+                <PrimaryInformation BundleFulfillmentMode=""
+ ConfigurationKey="" ConfiguredModelKey="" 
+                    DefaultProductClass="" Description=""
+                    ExtendedDescription="" 
+		    IsConfigurable="" IsDeliveryAllowed="" IsPickupAllowed="" 
+		    IsPreConfigured="" IsShippingAllowed="" MaxOrderQuantity="" 
+		    MinOrderQuantity="" OrderingQuantityStrategy="" 
+		    ShortDescription=""/>
+ 		<ClassificationCodes Model=""/>
+                <ItemAttributeGroupTypeList>
+                    <ItemAttributeGroupType ClassificationPurposeCode=""
+                        Description="" IsAdditionalAttributeAllowed=""
+                        IsSingleGroup="" ItemAttributeGroupType="" ItemAttributeGroupTypeKey="">
+                        <ItemAttributeGroupList>
+                            <ItemAttributeGroup CategoryKey=""
+                                IsInherited=""
+                                ItemAttributeGroupDescription=""
+                                ItemAttributeGroupID=""
+                                ItemAttributeGroupKey="" SequenceNo="">
+                                <ItemAttributeList>
+                                    <ItemAttribute IsKeyAttribute=""
+                                    ItemAttributeDescription=""
+                                    ItemAttributeGroupKey=""
+                                    ItemAttributeKey=""
+                                    ItemAttributeName=""
+                                    SequenceNo="" Value=""/>
+                                </ItemAttributeList>
+                            </ItemAttributeGroup>
+                        </ItemAttributeGroupList>
+                    </ItemAttributeGroupType>
+                </ItemAttributeGroupTypeList>
+            </ItemDetails>
+            <LinePriceInfo BundleUnitPrice="" DisplayUnitPrice=""
+                IsPriceLocked="" UnitPrice="" PricingUOM=""/>
+            <Containers>
+                <Container TrackingNo=""/>
+            </Containers>
+            <DeliveryAssociations>
+                <DeliveryAssociation>
+                    <ServiceLine OrderLineKey="" PrimeLineNo=""/>
+                </DeliveryAssociation>
+            </DeliveryAssociations>
+            <OrderStatuses>
+                <OrderStatus Status="" StatusQty="">
+                    <Details ExpectedDeliveryDate="" ExpectedShipmentDate=""/>
+                </OrderStatus>
+            </OrderStatuses>
+            <ReturnOrderLines>
+                <OrderLine OrderHeaderKey="" OrderLineKey=""/>
+            </ReturnOrderLines>
+            <ShipNode ShipNode="">
+                <ShipNodePersonInfo City="" State=""/>
+            </ShipNode>
+            <ShipmentLines>
+                <ShipmentLine IsChainedLine="" ShipmentKey="" ShipmentLineKey=""/>
+            </ShipmentLines>
+            <OrderLineTranQuantity OrderedQty="" ShippedQuantity="" TransactionalUOM=""/>
+            <PersonInfoShipTo AddressLine1="" AddressLine2=""
+                AddressLine3="" AddressLine4="" AddressLine5=""
+                AddressLine6="" AlternateEmailID="" Beeper="" City=""
+                Company="" Country="" DayFaxNo="" DayPhone=""
+                Department="" EMailID="" EveningFaxNo="" EveningPhone=""
+                FirstName="" IsCommercialAddress="" JobTitle=""
+                LastName="" MiddleName="" MobilePhone="" OtherPhone=""
+                PersonID="" PersonInfoKey="" State="" Suffix=""
+                TaxGeoCode="" Title="" ZipCode=""/>
+            <PersonInfoMarkFor DayPhone="" FirstName="" LastName=""/>
+            <OrderHoldTypes>
+                <OrderHoldType Status=""/>
+            </OrderHoldTypes>
+            <BundleParentLine OrderLineKey=""/>
+            <StopDeliveryRequestDetails TotalNumberOfRecords="">
+                <StopDeliveryRequestDetail Comments="" Createts=""
+                    RequestedQty="" StopDeliveryRequestDetailKey="" SuccessfulQty="">
+                    <OrderLine OrderLineKey="" PrimeLineNo="" SubLineNo=""/>
+                </StopDeliveryRequestDetail>
+            </StopDeliveryRequestDetails>
+	    <Notes NumberOfNotes="">
+                <Note ContactReference="" ContactTime="" ContactType="" 
+		ContactUser="" CustomerSatIndicator="" NoteText="" 
+		NotesKey="" Priority="" ReasonCode="">
+                    <User Username=" "/>
+                </Note>
+            </Notes>
+            <OrderLineInvAttRequest>
+                <Extn/>
+            </OrderLineInvAttRequest>
+            <ChildOrderLineRelationships>
+                <OrderLineRelationship OrderLineRelationshipKey="" RelationshipType="">
+                    <ChildLine OrderLineKey="" TransactionalLineID=""/>
+                </OrderLineRelationship>
+            </ChildOrderLineRelationships>
+            <ParentOrderLineRelationships>
+                <OrderLineRelationship OrderLineRelationshipKey="" ParentOrderLineKey="" RelationshipType="">
+                    <ParentLine OrderLineKey=""/>
+                </OrderLineRelationship>
+            </ParentOrderLineRelationships>
+            <PersonInfoShipTo/>
+            <Instructions>
+                <Instruction/>
+            </Instructions>
+        </OrderLine>
+    </OrderLines>
+    <ReturnOrders>
+        <ReturnOrder DisplayStatusDescription="" DocumentType=""
+            OrderHeaderKey="" OrderNo="">
+            <OrderLines>
+                <OrderLine DisplayStatusDescription="" OpenQty=""
+                    OrderLineKey="" OrderedQty=""/>
+            </OrderLines>
+            <ExchangeOrders>
+                <ExchangeOrder DisplayStatusDescription=""
+                    DocumentType="" OrderHeaderKey="" OrderNo="">
+                    <OrderLines>
+                        <OrderLine DisplayStatusDescription=""
+                            OpenQty="" OrderLineKey="" OrderedQty="" ReturnOrderHeaderKeyForExchange="">
+                            <Item ItemID=""/>
+                        </OrderLine>
+                    </OrderLines>
+                </ExchangeOrder>
+            </ExchangeOrders>
+        </ReturnOrder>
+    </ReturnOrders>
+    <Notes NumberOfNotes="">
+        <Note ContactReference="" ContactTime="" ContactType=""
+            ContactUser="" CustomerSatIndicator="" NoteText=""
+            NotesKey="" Priority="" ReasonCode="" VisibleToAll="">
+            <User Username=" "/>
+        </Note>
+    </Notes>
+    <WorkOrders NumberOfWorkOrders="">
+        <WorkOrder Status="" Timezone="" WorkOrderKey="" WorkOrderNo="">
+            <WorkOrderAppointments>
+                <WorkOrderAppointment ApptSeq=" " ApptStatus=" "
+                    ExecutionEndTime=" " ExecutionStartTime=" "
+                    FailureReasonCode=" " PromisedApptEndDate=" "
+                    PromisedApptStartDate=" " ResourceId=" " ResourcePoolId=" "/>
+            </WorkOrderAppointments>
+            <WorkOrderProdDeliveries>
+                <WorkOrderProdDelivery CauseAppointmentChange="">
+                    <OrderLine OrderLineKey=""/>
+                </WorkOrderProdDelivery>
+            </WorkOrderProdDeliveries>
+        </WorkOrder>
+    </WorkOrders>
+    <OrderHoldTypes>
+        <OrderHoldType Status="" ResolverUserId="" Modifyuserid="" Modifyts=""/>
+    </OrderHoldTypes>
+    <OrderLineRelationships/>
+    <OrderStatuses>
+        <OrderStatus Status=""/>
+    </OrderStatuses>
+    <Modifications>
+        <Modification ModificationAllowed="" ModificationType=""/>
+    </Modifications>
+</Order>

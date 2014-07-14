@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries Item Details/Variant action</comment>
+
+	<entry key="AccountNumber">xpedxItemDetailsEmail:/Emails/Email/@AccountNumber</entry>
+	<entry key="CityRequest">xpedxItemDetailsEmail:/Emails/Email/@CityRequest</entry>
+	<entry key="ContactPhoneNumber">xpedxItemDetailsEmail:/Emails/Email/@ContactPhoneNumber</entry>
+	<entry key="CustomerJobTitle">xpedxItemDetailsEmail:/Emails/Email/@CustomerJobTitle</entry>
+	<entry key="CustomerName">xpedxItemDetailsEmail:/Emails/Email/@CustomerName</entry>
+	<entry key="DivisionNumber">xpedxItemDetailsEmail:/Emails/Email/@DivisionNumber</entry>
+	<entry key="Manufacturer">xpedxItemDetailsEmail:/Emails/Email/@Manufacturer</entry>
+	<entry key="ManufacturerPartNumber">xpedxItemDetailsEmail:/Emails/Email/@ManufacturerPartNumber</entry>
+	<entry key="Notes">xpedxItemDetailsEmail:/Emails/Email/@Notes</entry>
+	<entry key="Quantity">xpedxItemDetailsEmail:/Emails/Email/@Quantity</entry>
+	<entry key="RequestedDeliveryDate">xpedxItemDetailsEmail:/Emails/Email/@RequestedDeliveryDate</entry>
+	<entry key="SalesRepresentative1">xpedxItemDetailsEmail:/Emails/Email/@SalesRepresentative1</entry>
+	<entry key="ShippingAddress2">xpedxItemDetailsEmail:/Emails/Email/@ShippingAddress2</entry>
+	<entry key="ShippingAddress3">xpedxItemDetailsEmail:/Emails/Email/@ShippingAddress3</entry>
+	<entry key="StateRequest">xpedxItemDetailsEmail:/Emails/Email/@StateRequest</entry>
+	<entry key="UnitofMeasure1">xpedxItemDetailsEmail:/Emails/Email/@UnitofMeasure1</entry>
+	<entry key="ZipRequest">xpedxItemDetailsEmail:/Emails/Email/@ZipRequest</entry>
+	<entry key="email1">xpedxItemDetailsEmail:/Emails/Email/@email1</entry>
+	<entry key="email2">xpedxItemDetailsEmail:/Emails/Email/@email2</entry>
+</properties>

@@ -1,0 +1,156 @@
+@charset "UTF-8";
+
+.TabbedPanels {
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	clear: none;
+	width: 100%; /* IE Hack to force proper layout when preceded by a paragraph. (hasLayout Bug)*/
+}
+
+.TabbedPanelsTabGroup {
+	margin: 0px;
+	padding: 0px;
+}
+.TabbedPanelsTabGroup ul {
+	margin: 7px;
+	padding: 0px;
+	font-size:1.1em;
+}
+
+.TabbedPanelsTab {
+	position: relative;
+	top: 1px;
+	float: left;
+	padding: 8px 14px;
+	margin: 0px 2px 0px 0px; 
+	background-color: #DDD;
+	list-style: none;
+	border:1px solid #D3D3D3;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	/*-moz-border-radius:4px 4px 0px 0px;	*/
+	background-image:url(../../images/theme/tab-bg.jpg);
+	cursor: pointer;
+	color:#555;
+	font-size:1.1em;
+	width: 203px;
+	text-align:center;
+}
+
+.TabbedPanelsTabHover {
+	background-color: #CCC;
+	background-image:url(../../images/theme/tab-bg-hover.jpg);
+	background-repeat:repeat-x;
+	color:#555;
+	font-size:1.1em;
+	border:solid 1px #999999;
+	border-bottom:solid 0px #999999;
+}
+
+.TabbedPanelsTabSelected {
+	background-color: #fff;
+	border-bottom: 1px solid #fff;
+	/*-moz-border-radius:4px 4px 0px 0px;*/
+	background-image:none;
+	color:#212121;
+	font-size:1.1em;
+}
+
+.TabbedPanelsTab a {
+	color: black;
+	text-decoration: none;
+}
+.TabbedPanelsContentGroup {
+	clear: both;
+	border: solid 1px #d7d7d7;
+	background-color: #fff;
+	overflow: visible;
+	/*-moz-border-radius:4px 4px 4px 4px;*/
+}
+.TabbedPanelsContentGroup h2{ color:#000;}
+.TabbedPanelsContent {
+	padding: 16px;
+}
+
+.TabbedPanelsContentVisible {
+}
+
+
+.VTabbedPanels .TabbedPanelsTabGroup {
+	float: left;
+	width: 10em;
+	height: 30em;
+	background-color: #EEE;
+	position: relative;
+	border-top: solid 1px #999;
+	border-right: solid 1px #999;
+	border-left: solid 1px #CCC;
+	border-bottom: solid 1px #CCC;
+	-moz-border-radius:8px 8px 0px 0px;
+	border-radius:8px 8px 0px 0px;
+	-webkit-border-radius:8px 8px 0px 0px;
+		
+}
+
+.VTabbedPanels .TabbedPanelsTab {
+	float: none;
+	margin: 0px;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	-moz-border-radius:4px 4px 0px 0px;
+	-webkit-border-radius:4px 4px 0px 0px;
+	border-radius:4px 4px 0px 0px;
+}
+
+.VTabbedPanels .TabbedPanelsTabSelected {
+	background-color: #fff;
+	border-bottom: solid 1px #999;
+}
+
+.VTabbedPanels .TabbedPanelsContentGroup {
+	clear: none;
+	float: left;
+	padding: 0px;
+	width: 30em;
+	height: 20em;
+}
+
+.no-borders{
+	border:none;}
+
+.no-borders td table{
+	border:none;}
+	
+.no-borders-right{
+	border-right:none;}
+
+.no-borders-right td table{
+	border-right:none;
+	border-left:solid 1px #ccc;}
+
+	
+.no-borders-left{
+	border-right:none;}
+	
+.no-borders-left td table{
+	border-left:none;
+	border-right:solid 0px #ccc;}
+	
+.user-profile { margin-left:15px; }
+.user-profile ul{margin-left:15px; font-weight:bold;}
+.user-profile li{ padding-bottom:3px; font-weight:bold;}
+
+.user-profile ul li{ list-style-image:url(../../images/theme/theme-1/grid/mainCartRowArrowRt.gif); padding-bottom:3px;}
+
+.user-profile ul li ul{ margin-left:15px; font-weight:bold;}
+
+.user-profile ul li ul li {list-style-image:none; margin-left:5px; font-weight:bold;} 
+
+.user-profile ul li ul li ul li{ list-style-image:none; padding-bottom:3px;}
+
+.user-profile label{ clear:both; float:left; padding-bottom:8px;}
+
+.tabss {padding:0px; margin:0px;}
+.tabss td table tr{padding:0px; margin:0px;}

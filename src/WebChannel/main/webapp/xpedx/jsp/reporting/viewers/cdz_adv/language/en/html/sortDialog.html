@@ -1,0 +1,553 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sort Properties Dialog</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../scripts/sorts.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"sortDlg")
+p._globalWOMCallback = null
+</script>
+<script language="javascript">
+var HORIZ_TAB=0
+var VERTI_TAB=1
+var sortDlg=null
+var sortTabZone=null
+var sortInfo=null
+var sortOkBtn=null
+var sortCancelBtn=null
+var sortHelpBtn=null
+var sortApplyBtn=null
+var sortListH=null
+var sortRemoveBtn=null
+var sortCustomBtnH=null
+var sortUpArrowH=null
+var sortDownArrowH=null
+var sortListV=null
+var sortRemoveBtnV=null
+var sortCustomBtnV=null
+var sortUpArrowV=null
+var sortDownArrowV=null
+var actionUrl=''
+var indexUlr=''
+var axisUrl=''
+var stepUrl=''
+var dlgW= 300
+var dlgH= 380
+var dlgSpacing= 2
+var tabZoneW= dlgW-2*dlgSpacing-20
+var tabZoneH= 4*dlgH/7
+var sortListWidth= 4*dlgW/5
+var sortListHeight= 5*tabZoneH/7
+var frZoneW= sortListWidth+10
+var frZoneH= 10
+var buttonsW= 60
+var btnBigW= 80
+var initialized= false
+var url = p._root + "incSorts" + p._appExt
+url += p.urlParams(true,false)
+includeScript(url)
+</script>
+<script language="javascript">
+function setUpDownArrow()
+{
+var up=null,down=null,list=null
+if (p._sortDlgSelectedPane==HORIZ_TAB)
+{
+list=sortListH
+up=sortUpArrowH
+down=sortDownArrowH
+}
+else
+{
+list=sortListV
+up=sortUpArrowV
+down=sortDownArrowV
+}
+var nb=list.getCount(),sel=list.getSelection(),idx=sel?sel.index:-1
+up.setDisabled( (idx==-1) || (idx==0) || (nb<=1) )
+down.setDisabled( (idx==-1) || (idx==(nb-1)) || (nb<=1) ) 
+}
+_selID=null
+function setRemoveAndCustomBtns()
+{
+var arr=null,btn1=null,btn2=null
+if (p._sortDlgSelectedPane==HORIZ_TAB)
+{
+arr=arrH
+list=sortListH
+btn1=sortRemoveBtnH
+btn2=sortCustomBtnH
+}
+else
+{
+arr=arrV
+list=sortListV
+btn1=sortRemoveBtnV
+btn2=sortCustomBtnV
+}
+var dis = ((arr==null) || (arr.length==0))
+btn1.setDisabled(dis)
+if (!dis) {
+var e=list.getSelection(),from=e?e.index:-1
+dis = (from>=0) ? !(arr[from].canHaveCustom): false
+if ((!dis) && (from>=0)) 
+_selID = arr[from].id
+}
+btn2.setDisabled(dis)
+}
+function setSortList(arr,list)
+{
+if ( (arr==null) || (arr.length==0) )
+{
+list.deleteAll()
+list.rebuildHTML()
+return
+}
+list.deleteAll()
+for (var i=0;i<arr.length;i++)
+{
+if (arr[i]==null)
+continue
+var iconDelta=p.isCustomSort(arr[i].id)? 13 : 0
+var elem=newTreeWidgetElem(arr[i].type+iconDelta,parseInt(arr[i].idx+1)+'.'+arr[i].expr,arr[i].bHaxis,"")
+list.add(elem)
+}
+list.rebuildHTML()
+}
+function updateSortList()
+{
+var list=sortListH, arr=arrH, i=0
+for (i=0;i<list.getCount();i++)
+{
+var iconDelta=p.isCustomSort(arr[i].id)? 13 : 0
+var elem=list.sub[i]
+if (elem != null)
+elem.change(arr[i].type+iconDelta)
+}
+list=sortListV, arr=arrV
+for (i=0;i<list.getCount();i++)
+{
+var iconDelta=p.isCustomSort(arr[i].id)? 13 : 0
+var elem=list.sub[i]
+if (elem != null)
+elem.change(arr[i].type+iconDelta)
+}
+}
+function moveSort(step)
+{
+var arr=null,list=null
+if (p._sortDlgSelectedPane==HORIZ_TAB)
+{
+list=sortListH
+arr=arrH
+}
+else
+{
+list=sortListV
+arr=arrV
+}
+var e=list.getSelection()
+var from=e.index
+if ((from==0) && (step==-1))
+return
+if ((from==arr.length) && (step==1))
+return
+var to=from+step
+var sav=arr[to]
+arr[to]=arr[from]
+arr[from]=sav
+setSortList(arr,list)
+list.select(to)
+setUpDownArrow()
+setRemoveAndCustomBtns()
+var f=document.sortForm
+if (f.iSortAction.value!='')
+f.iSortAction.value+=','
+f.iSortAction.value+='3'
+if (f.sSortIdx.value!='')
+f.sSortIdx.value+=','
+f.sSortIdx.value+=e.index
+if (f.bSortHAxis.value!='')
+f.bSortHAxis.value+=','
+f.bSortHAxis.value+=e.value
+if (f.sStep.value!='')
+f.sStep.value+=','
+f.sStep.value+=step
+}
+function removeSort()
+{
+var arr=null,list=null,e=null,idx=0
+if (p._sortDlgSelectedPane==HORIZ_TAB)
+{
+list=sortListH
+e=list.getSelection()
+idx=e.index
+p.arrayRemove(this,'arrH',idx)
+setSortList(arrH,list)
+}
+else
+{
+list=sortListV
+e=list.getSelection()
+idx=e.index
+p.arrayRemove(this,'arrV',idx)
+setSortList(arrV,list)
+}
+var len = list.getCount()
+var newIdx = Math.min(idx, len - 1)
+if (len > 0)
+list.select(newIdx)
+setRemoveAndCustomBtns()
+var f=document.sortForm
+if (f.iSortAction.value!='')
+f.iSortAction.value+=','
+f.iSortAction.value+='4'
+if (f.sSortIdx.value!='')
+f.sSortIdx.value+=','
+f.sSortIdx.value+=e.index
+if (f.bSortHAxis.value!='')
+f.bSortHAxis.value+=','
+f.bSortHAxis.value+=e.value
+if (f.sStep.value!='')
+f.sStep.value+=','
+f.sStep.value+=0
+}
+function tabCB(index)
+{
+p._sortDlgSelectedPane=index;
+setUpDownArrow()
+setRemoveAndCustomBtns()
+}
+function sortClickCB()
+{
+sortOkBtn.setDisabled(false)
+sortApplyBtn.setDisabled(false)
+var id=this.id
+switch(id)
+{
+case "sortListH":
+case "sortListV":
+setUpDownArrow()
+setRemoveAndCustomBtns()
+break;
+case "sortUpArrowH":
+case "sortUpArrowV":
+moveSort(-1)
+break;
+case "sortDownArrowH":
+case "sortDownArrowV":
+moveSort(+1)
+break;
+case "sortRemoveBtnH":
+case "sortRemoveBtnV":
+removeSort()
+break;
+case "sortCustomBtnH":
+case "sortCustomBtnV":
+p.frameNav("SecondDlgFrame",p._root + "language/"+p._lang+"/html/applyCustomSortDialog.html?ID=" + convURL(_selID))
+break;
+}
+}
+function okCB(bApplyBtn)
+{
+sortOkBtn.setDisabled(true)
+sortApplyBtn.setDisabled(true)
+if (!bApplyBtn)
+sortDlg.show(false);
+var f=document.sortForm
+if (f.iSortAction.value=='')
+return
+var url=p._root+'processSorts'+p._appExt
+url+=p.urlParams(true,false)
+document.sortForm.action=url;
+setTimeout("document.sortForm.submit()",1);
+if (bApplyBtn)
+p._globalWOMCallback=p.sortProperties_globalWOMCallback
+sortOkBtn.setDisabled(false)
+sortApplyBtn.setDisabled(false)
+}
+function cancelCB()
+{
+sortDlg.show(false);
+}
+function helpCB()
+{
+p.showAlertDialog("Not implemented yet !","Development version",0);
+sortDlg.show(false);
+}
+function loadCB()
+{
+if (window._isSessionInvalid)
+{
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized=true;
+sortDlg=newDialogBoxWidget("sortDlg","Sort Properties",dlgW,dlgH,okCB,cancelCB)
+sortTabZone=newTabbedZone("sortTabZone",tabCB,tabZoneW,tabZoneH)
+sortTabZone.add("Horizontal Sorts","horiz")
+sortTabZone.add("Vertical Sorts","vert")
+tzoneH=newFrameZoneWidget("tzoneH",frZoneW,frZoneH,false)
+tzoneV=newFrameZoneWidget("tzoneV",frZoneW,frZoneH,false)
+sortListH=newIconListWidget("sortListH",sortListWidth,sortListHeight,p._img+"report.gif",sortClickCB,sortClickCB)
+sortListH.iconOrientVertical=false
+sortListV=newIconListWidget("sortListV",sortListWidth,sortListHeight,p._img+"report.gif",sortClickCB,sortClickCB)
+sortListV.iconOrientVertical=false                
+sortRemoveBtnH=newButtonWidget("sortRemoveBtnH","Remove",sortClickCB)
+sortRemoveBtnV=newButtonWidget("sortRemoveBtnV","Remove",sortClickCB)
+sortCustomBtnH=newButtonWidget("sortCustomBtnH","Custom sort...",sortClickCB)
+sortCustomBtnV=newButtonWidget("sortCustomBtnV","Custom sort...",sortClickCB)
+sortUpArrowH=newButtonWidget("sortUpArrowH",null,sortClickCB,null,null,"Move up",null,null,_skin+'buttonIcons.gif',16,16,0,64,null,16,64)
+sortUpArrowH.extraStyle="margin-top:2px;"
+sortUpArrowV=newButtonWidget("sortUpArrowV",null,sortClickCB,null,null,"Move up",null,null,_skin+'buttonIcons.gif',16,16,0,64,null,16,64)
+sortUpArrowV.extraStyle="margin-top:2px;"
+sortDownArrowH=newButtonWidget("sortDownArrowH",null,sortClickCB,null,null,"Move down",null,null,_skin+'buttonIcons.gif',16,16,0,80,null,16,80)
+sortDownArrowH.extraStyle="margin-top:2px;"
+sortDownArrowV=newButtonWidget("sortDownArrowV",null,sortClickCB,null,null,"Move down",null,null,_skin+'buttonIcons.gif',16,16,0,80,null,16,80)
+sortDownArrowV.extraStyle="margin-top:2px;"
+sortInfo=newInfoWidget("sortInfo","Info","","Sort information zone")
+sortOkBtn=newButtonWidget("sortOkBtn","OK","okCB(false)",buttonsW)
+sortCancelBtn=newButtonWidget("sortCancelBtn","Cancel",cancelCB,buttonsW)
+sortHelpBtn=newButtonWidget("sortHelpBtn","Help",helpCB,buttonsW)
+sortApplyBtn=newButtonWidget("sortApplyBtn","Apply","okCB(true)",buttonsW)
+sortDlg.attachDefaultButton(sortOkBtn);
+}
+if (!_curWin.sortDlgInitialized)
+{
+_curWin.sortDlgInitialized=true;
+targetApp(
+sortDlg.beginHTML() +
+'<table cellspacing="'+ dlgSpacing +'px" cellpadding="0" width="100%" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+'<table cellspacing="0" cellpadding="0" width="100%" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+sortTabZone.beginHTML() +
+sortTabZone.beginTabHTML(HORIZ_TAB) +
+'<table cellspacing="0" cellpadding="0" width="100%" border="0" class="dialogzone"><tbody>'+
+'<tr>'+ 
+'<td>' + 'List of sorts applied to the table:' + '</td>' +
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+'<tr>'+
+'<td>' + 
+tzoneH.beginHTML()+
+'a..z Name' +
+tzoneH.endHTML()+ 
+'</td>' +
+   '<td rowspan="2" valign="top">' + 
+   '<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+   '<tr>'+ '<td>' + sortUpArrowH.getHTML() + '</td>' + '</tr>' +
+'<tr>'+ '<td>' + sortDownArrowH.getHTML() + '</td>' + '</tr>' +
+'</tbody></table>' +
+   '</td>'+
+   '</tr>'+
+   '<tr>'+
+   '<td>' + sortListH.getHTML() + '</td>'+
+   '</tr>'+
+   '</tbody></table>' +
+'</td>' +
+'</tr>' +
+     '<tr>' +
+   '<td style="padding-top:5px;padding-bottom:5px;" align="center" valign="middle">' +
+   '<table cellspacing="0" cellpadding="0" width="50%" border="0"><tbody>' +
+   '<tr>'+
+'<td>' + sortRemoveBtnH.getHTML() + '</td>' +
+'<td>' + getSpace(4,1)+ '</td>' +
+'<td>' + sortCustomBtnH.getHTML() + '</td>' +
+'</tr>'+
+'</tbody></table>' +
+   '</td>' +   
+   '</tr>' +
+'</tbody></table>'+
+sortTabZone.endTabHTML() +
+sortTabZone.beginTabHTML(VERTI_TAB) +
+'<table cellspacing="0" cellpadding="0" width="100%" border="0" class="dialogzone"><tbody>'+
+'<tr>'+ 
+'<td>' + 'List of sorts applied to the table:' + '</td>' +
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+'<tr>'+
+'<td>' + 
+tzoneV.beginHTML() + 
+'a..z Name' +
+tzoneV.endHTML() +
+'</td>' +
+   '<td rowspan="2" valign="top">' + 
+   '<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+   '<tr>'+ '<td>' + sortUpArrowV.getHTML() + '</td>' + '</tr>' +
+'<tr>'+ '<td>' + sortDownArrowV.getHTML() + '</td>' + '</tr>' +
+'</tbody></table>' +
+   '</td>'+
+   '</tr>'+
+   '<tr>'+
+   '<td>' + sortListV.getHTML() + '</td>'+
+   '</tr>'+
+   '</tbody></table>' +
+'</td>' +
+'</tr>' +
+     '<tr>' +
+   '<td style="padding-top:5px;padding-bottom:5px;" align="center">' +
+   '<table cellspacing="0" cellpadding="0" width="50%" border="0"><tbody>' +
+   '<tr>'+
+'<td>' + sortRemoveBtnV.getHTML() + '</td>' +
+'<td>' + getSpace(4,1)+ '</td>' +
+'<td>' + sortCustomBtnV.getHTML() + '</td>' +
+'</tr>'+
+'</tbody></table>' +
+   '</td>' +   
+   '</tr>' +
+'</tbody></table>'+
+sortTabZone.endTabHTML() +
+sortTabZone.endHTML() +
+'</td>'+
+'</tr>' +
+'<tr>' +
+   '<td style="padding-top:5px;" align="center" valign="middle">' + sortInfo.getHTML() + '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td style="padding-top:5px;" align="right" valign="middle">' +
+   '<table cellspacing="0" cellpadding="0" border="0"><tbody>' +
+   '<tr>' +
+   '<td>' +   
+   sortOkBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   sortCancelBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   sortApplyBtn.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   sortHelpBtn.getHTML() +
+   '</td>' +
+'</tr>' +
+'</tbody></table>'+
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+'</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+sortDlg.endHTML()
+);
+}
+sortDlg.init()
+sortTabZone.init()
+tzoneH.init()
+sortListH.init()
+sortRemoveBtnH.init()
+sortRemoveBtnH.resize(btnBigW)
+sortCustomBtnH.init()
+sortCustomBtnH.resize(btnBigW)
+sortUpArrowH.init()
+sortDownArrowH.init()
+tzoneV.init()
+sortListV.init()
+sortRemoveBtnV.init()
+sortRemoveBtnV.resize(btnBigW)
+sortCustomBtnV.init()
+sortCustomBtnV.resize(btnBigW)
+sortUpArrowV.init()
+sortDownArrowV.init()
+sortInfo.init()
+sortOkBtn.init()
+sortCancelBtn.init()
+sortHelpBtn.init()
+sortApplyBtn.init()
+setSortList(arrH,sortListH)
+setSortList(arrV,sortListV)
+var tH=sortTabZone.tabs.items[HORIZ_TAB]
+var tV=sortTabZone.tabs.items[VERTI_TAB]
+if (sBlockType=='GRAPH')
+{
+tH.change("X-Axis")
+tV.change("Y-Axis")
+}
+else
+{
+tH.change("Horizontal Sorts")
+tV.change("Vertical Sorts")
+}
+var sH,sV;
+if ((sBlockType=='HTABLE') || (sBlockType=='SECTION'))
+{
+sH=true
+sV=false
+sortListH.select(0)
+p._sortDlgSelectedPane=0
+}
+if ((sBlockType=='VTABLE') || (sBlockType=='FORM'))
+{
+sH=false
+sV=true
+sortListV.select(0)
+p._sortDlgSelectedPane=1
+}
+if ((sBlockType=='XTABLE') || (sBlockType=='GRAPH'))
+{
+sH=true
+sV=true
+sortListH.select(0)
+sortListV.select(0)
+p._sortDlgSelectedPane=0
+}
+sortTabZone.showTab(HORIZ_TAB,sH)
+sortTabZone.showTab(VERTI_TAB,sV)
+sortTabZone.select(p._sortDlgSelectedPane)
+setUpDownArrow()
+setRemoveAndCustomBtns()
+sortHelpBtn.setDisplay(false)
+sortDlg.show(true)
+sortObs=p.newObserverTwoEvents(p._EVT_CUSTOMSORT_ACTION,p._EVT_WOM_LOADED,updateSortList)
+}
+function unloadCB()
+{
+if (window.sortObs) 
+p.eventManager.detach(sortObs);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)" onUnload="unloadCB()">
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="sortForm" method="post" action="">
+<input type="hidden" name="iSortAction" id="iSortAction" value="">
+<input type="hidden" name="sSortIdx" id="sSortIdx" value="">
+<input type="hidden" name="bSortHAxis" id="bSortHAxis" value="">
+<input type="hidden" name="sStep" id="sStep" value="">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

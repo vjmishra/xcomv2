@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for user addresses</comment>
+	<entry key="nameExp">xpedxGetAddressBook:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="valExp">xpedxGetAddressBook:/Customer/CustomerContactList/CustomerContact/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/ComplexQuery/Or/Exp[]/@Value</entry>
+	<entry key="nameExp">xpedxGetAddressBook:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="valExp">xpedxGetAddressBook:/Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/ComplexQuery/Or/Exp[]/@Value</entry>
+</properties>

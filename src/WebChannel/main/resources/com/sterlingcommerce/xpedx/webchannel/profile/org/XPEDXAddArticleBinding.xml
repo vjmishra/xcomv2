@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Org articles</comment>
+    <entry key="WCContext.storefrontId">XPEDXAddArticle:/XPXArticle/@OrganizationCode</entry>
+    <entry key="customerId">XPEDXAddArticle:/XPXArticle/@CustomerID</entry>
+    <entry key="#parameters.articleName">XPEDXAddArticle:/XPXArticle/@ArticleName</entry>
+    <entry key="#parameters.articleBody">XPEDXAddArticle:/XPXArticle/@Article</entry>
+    <entry key="#parameters.submittedTSFrom">XPEDXAddArticle:/XPXArticle/@StartDate</entry>
+    <entry key="#parameters.submittedTSTo">XPEDXAddArticle:/XPXArticle/@EndDate</entry>
+    <entry key="#parameters.forcedMessage">XPEDXAddArticle:/XPXArticle/@ForcedMessage</entry>
+    <entry key="WCContext.loggedInUserId">XPEDXAddArticle:/XPXArticle/@Createuserid</entry>
+</properties>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="" HasHistory="False" Prefix="XPEDX" TableName="XPEDX_MY_ITEMS_ITEMS">
+			<Attributes>
+				<Attribute ColumnName="MODIFYTS" 	 DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp"/>
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId" 		DefaultValue="' '" Description="Creating User ID"/>
+				<Attribute ColumnName="CREATEUSERNAME" DataType="UserName" 	DefaultValue="' '" Description="Creating User Name"/>
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId" 		DefaultValue="' '" Description="Modifying User ID"/>
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID" 	DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" 	DefaultValue="' '" Description="Modifying Program ID"/>
+				<Attribute ColumnName="LOCKID" 		 DataType="Lockid" 		DefaultValue="0" Description="Lock ID"/>
+				
+				<Attribute ColumnName="MY_ITEMS_KEY"  		DataType="Key" 		Description="" Nullable="False" XMLName="MyItemsKey"/>
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY" 	DataType="Key" 		Description="" Nullable="False" XMLName="MyItemsListKey"/>
+				<Attribute ColumnName="ITEM_NAME"  	 	 DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Name"/>
+				<Attribute ColumnName="ITEM_DESC"  	 	 DataType="Text-1500" 	DefaultValue=" " Description="" Nullable="False" XMLName="Desc"/>
+				<Attribute ColumnName="ITEM_QTY"  		 DataType="Number" 		DefaultValue="" Description=""  Nullable="True" XMLName="Qty"/>
+				<Attribute ColumnName="ITEM_UOM_ID"  	 DataType="Text-255" 	DefaultValue="" Description="" Nullable="False" XMLName="UomId"/>
+				<Attribute ColumnName="ITEM_JOB_ID"  	 DataType="Text-255"  	DefaultValue=" " Description="" Nullable="False" XMLName="JobId"/>
+				<Attribute ColumnName="ITEM_AVAILABILITY_ID" DataType="Number"  	DefaultValue="0" Description="" Nullable="False" XMLName="AvailabilityId"/>
+				
+				<Attribute ColumnName="ITEM_ITEM_ID" 	 DataType="Text-255"  	DefaultValue=" " Description="" Nullable="True" XMLName="ItemId"/>
+				<Attribute ColumnName="ITEM_ITEM_TYPE" 	 DataType="Number"  	DefaultValue="0" Description="" Nullable="True" XMLName="ItemType"/>
+				
+				<Attribute ColumnName="ITEM_ITEM_ORDER"  DataType="Integer"  	DefaultValue="0" Description="" Nullable="False" XMLName="ItemOrder"/>
+				<Attribute ColumnName="ITEM_ITEM_PO_NUMBER"  DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="ItemPoNumber"/>
+				<Attribute ColumnName="ITEM_ITEM_SEQ_NUMBER"  DataType="Text-255"  	DefaultValue="0" Description="" Nullable="true" XMLName="ItemSeqNumber"/>
+				
+				<Attribute ColumnName="ITEM_ITEM_CUSTOM_FIELD1"  DataType="Text-255"  	DefaultValue="" Description="" Nullable="true" XMLName="ItemCustomField1"/>
+				<Attribute ColumnName="ITEM_ITEM_CUSTOM_FIELD2"  DataType="Text-255"  	DefaultValue="" Description="" Nullable="true" XMLName="ItemCustomField2"/>
+				<Attribute ColumnName="ITEM_ITEM_CUSTOM_FIELD3"  DataType="Text-255"  	DefaultValue="" Description="" Nullable="true" XMLName="ItemCustomField3"/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPEDX_MY_ITEMS_PK">
+				<Attribute ColumnName="MY_ITEMS_KEY"/>
+			</PrimaryKey>
+			
+			<Parent ParentTableName="XPEDX_MY_ITEMS_LIST" >
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY" ParentColumnName="MY_ITEMS_LIST_KEY" />
+			</Parent>
+			<Indices>
+				<Index Name="XPEDX_MY_ITEMS_ITEMS_I01" Unique="False">
+					<Column Name="MY_ITEMS_LIST_KEY" />
+				</Index>
+			</Indices>
+	
+			
+		</Entity>
+	</Entities>
+</DBSchema>

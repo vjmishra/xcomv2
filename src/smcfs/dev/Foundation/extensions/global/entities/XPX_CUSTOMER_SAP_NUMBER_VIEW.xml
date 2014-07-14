@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" Extensible="N" Description="The View to Get All the Details at SAP and MSAP in the Hierarchy"
+			EntityType="VIEW" Prefix="XPX" TableName="XPX_CUSTOMER_SAP_NUMBER_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPXCustomerSAPNumberView">
+			<Attributes>
+				<Attribute ColumnName="SAP_CUSTOMER_ID" DataType="CustomerId"
+					Description="The MSAP Customer ID" Nullable="false"	XMLName="SAPCustomerID" />
+				<Attribute ColumnName="SAP_NUMBER" DataType="Text-25" DefaultValue="' '" Description="SAP Number" Nullable="false" XMLName="SAPNumber" />
+				<Attribute ColumnName="SAP_PARENT_ACC_NO" DataType="Text-25" DefaultValue="' '" Description="SAP Number" Nullable="false" XMLName="SAPParentAccNo" />
+				<Attribute ColumnName="CUST_LINE_ACCNO_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineAccNoFlag"/>
+				<Attribute ColumnName="CUST_LINE_ACC_LBL" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineAccLbl"/>
+				<Attribute ColumnName="CUST_LINE_FIELD1_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineField1Flag" />
+				<Attribute ColumnName="CUST_LINE_FIELD2_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineField2Flag" />
+				<Attribute ColumnName="CUST_LINE_FIELD3_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineField3Flag" />
+				<Attribute ColumnName="CUST_LINE_FIELD1_LBL" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineField1Label" />
+				<Attribute ColumnName="CUST_LINE_FIELD2_LBL" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineField2Label" />
+				<Attribute ColumnName="CUST_LINE_FIELD3_LBL" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineField3Label" />
+				<Attribute ColumnName="CUST_LINE_SEQNO_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLineSeqNoFlag" />
+				<Attribute ColumnName="CUST_LINE_PONO_FLAG" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="CustLinePONoFlag" />
+				<Attribute ColumnName="MSAP_CUSTOMER_ID" DataType="CustomerId"
+					Description="The MSAP Customer ID" Nullable="false"	XMLName="MSAPCustomerID" />
+				<Attribute ColumnName="USE_CUST_SKU" DataType="Text-1" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="ExtnUseCustSKU" />
+			</Attributes>
+			<PrimaryKey Name="XPX_CUST_SAPN_PK">
+				<Attribute ColumnName="SAP_CUSTOMER_ID" />
+			</PrimaryKey>
+			<Indices>
+				<Index Name="XPX_CUSTOMER_SAP_NUMBER_VIEW_I01" Unique="False">
+					<Column Name="SAP_CUSTOMER_ID" />
+				</Index>	
+				<Index Name="XPX_CUSTOMER_SAP_NUMBER_VIEW_I02" Unique="False">
+					<Column Name="MSAP_CUSTOMER_ID" />
+				</Index>					
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

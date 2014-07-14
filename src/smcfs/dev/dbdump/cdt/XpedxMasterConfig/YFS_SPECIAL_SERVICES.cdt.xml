@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_SPECIAL_SERVICESList TableName="YFS_SPECIAL_SERVICES">
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="DECLVAL"
+    SpecialServicesDescription="Declared Value Insurance" SpecialServicesKey="201004202102123589"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="SHPNTFY"
+    SpecialServicesDescription="Ship Notification" SpecialServicesKey="201004202102123590"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="ADULTSIGN"
+    SpecialServicesDescription="Adult Signature Required" SpecialServicesKey="201004202102123591"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="DELCONF"
+    SpecialServicesDescription="Delivery Confirmation" SpecialServicesKey="201004202102123592"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="SATDELI"
+    SpecialServicesDescription="Saturday Delivery" SpecialServicesKey="201004202102123593"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="SIGNREQD"
+    SpecialServicesDescription="Signature Required" SpecialServicesKey="201004202102123594"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="TAGLESSCOD"
+    SpecialServicesDescription="Tagless COD" SpecialServicesKey="201004202102123595"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="SATPICKUP"
+    SpecialServicesDescription="Saturday Pickup" SpecialServicesKey="201004202102123596"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="RETSHIPLABEL"
+    SpecialServicesDescription="Return Shipping Label Required" SpecialServicesKey="201004202102123597"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="INDSIGN"
+    SpecialServicesDescription="Indirect Signature Required" SpecialServicesKey="201004202102123598"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="SHIPALERT"
+    SpecialServicesDescription="Ship Alert Notification for Shipper" SpecialServicesKey="201004202102123599"/>
+<SpecialServices Createprogid="XMLMigrator"
+    Createts="2010-04-20T21:02:11-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="YDKConfigDeploy"
+    Modifyts="2010-04-20T21:02:11-04:00" Modifyuserid="ng"
+    SpecialServicesCode="COD"
+    SpecialServicesDescription="Collect On Delivery" SpecialServicesKey="201004202102123600"/>
+</YFS_SPECIAL_SERVICESList>

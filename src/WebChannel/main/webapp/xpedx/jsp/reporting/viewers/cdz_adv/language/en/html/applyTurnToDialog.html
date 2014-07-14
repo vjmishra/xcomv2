@@ -1,0 +1,308 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>"Turn To"</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+p = parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "turnTo")
+p._globalWOMCallback = null
+initialized = false
+turnToDlg = null
+iconByLines = 5
+widthCell = 70
+minW = (widthCell * iconByLines)
+minH = 210
+sBid = null
+selBlockType = -1
+selBlockSubType = -1
+curBlockType = -1
+curBlockSubType = -1
+intTypeToXYType = new Array
+blockIconsImg = p._img + "blockicons.gif"
+subBlockIconsImg = p._img + "subblockicons.gif"
+function loadDialog()
+{
+if (!initialized)
+{
+initialized = true
+p.applyBid = null
+turnToDlg   = newDialogBoxWidget("turnToDlg","Turn To",500,390,null,cancelCB,false)
+blockIconsList = newIconListWidget("blockIconsList",120,minH, blockIconsImg, selItCB, selItCB)
+subBlockFrame  = newFrameZoneWidget("subBlockFrame",minW,minH)
+info = newInfoWidget("infoTurnTo","More Information","","")
+OKButton = newButtonWidget("turnToOKButton","OK","okCB(false)",60)
+HelpButton = newButtonWidget("turnToHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("turnToCancelButton","Cancel","cancelCB()",60)
+applyButton =newButtonWidget("turnToApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+turnToDlg.attachDefaultButton(OKButton);
+widjBlockAr = new Array
+subBlockAr = new Array
+blockAr = new Array("Tables", "Bar Charts", "Line Charts", "Area Charts", "Pie Charts", "Radar Charts")
+idBlocksAr = new Array("table", "bar", "line", "area", "pie", "radar")
+var i = 0
+subBlockAr[i++] = new Array( "Horizontal Table", "Vertical Table", "Crosstab", "Form")
+subBlockAr[i++] = new Array( "Vertical Grouped", "Horizontal Grouped", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Bar", "Vertical \nBar & Line", "Horizontal \nBar & Line")
+subBlockAr[i++] = new Array( "Vertical Mixed","Horizontal Mixed", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Line Chart", "3D Surface")
+subBlockAr[i++] = new Array( "Vertical Absolute", "Horizontal Absolute", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Area", "3D Volume")
+subBlockAr[i++] = new Array( "Pie", "Doughnut", "3D Pie", "3D Doughnut")
+subBlockAr[i++] = new Array( "Radar Line", "Radar Stacked Area", "Polar", "Scatter")
+subBlockHelpTxtAr = new Array
+i = 0
+subBlockHelpTxtAr[i++] = new Array( "Horizontal tables are useful for reports with several measures, such as financial reports and balance sheets.", "Vertical tables display header cells at the top of the table and the corresponding data in columns.", "Crosstabs are useful for presenting results that correspond to the intersection of two or more dimensions.", "Forms are useful to display detailed information per customer or product, such as customer records.")
+subBlockHelpTxtAr[i++] = new Array( "Vertical grouped bar charts are useful if you want to compare similar groups of data with measures displayed from bottom to top.", "Horizontal grouped bar charts are useful if you want to compare similar groups of data with measures displayed from left to right.", "Vertical stacked bar charts are useful to show the relationship of individual items to the whole and display measures from bottom to top.", "Horizontal stacked bar charts are useful to show the relationship of individual items to the whole and display measures from left to right.", "Vertical Percent bar charts show relationships to a whole with measures displayed from bottom to top.", "Horizontal Percent bar charts show relationships to a whole with measures displayed from left to right.", "3D Bar charts are useful if you want to emphasize the values of individual items at a specific time or draw comparisons between items.", "Vertical Bar and Line charts are useful if you want to compare quantities using bars and show trends using lines. Measures are displayed from bottom to top.", "Horizontal Bar and Line charts are useful if you want to compare quantities using bars and show trends using lines. Measures are displayed from left to right.")
+subBlockHelpTxtAr[i++] = new Array( "Vertical Mixed Line charts are useful if you want to compare trends. Measures are displayed from left to right.","Horizontal Mixed Line charts are useful if you want to compare trends. Measures are displayed from bottom to top.", "Vertical stacked bar charts are useful to show the relationship of individual items to the whole and display measures from bottom to top.", "Horizontal stacked bar charts are useful to show the relationship of individual items to the whole and display measures from left to right.", "Vertical Percent bar charts show relationships to a whole with measures displayed from bottom to top.", "Horizontal Percent bar charts show relationships to a whole with measures displayed from left to right.", "Line charts are useful if you want to show trends in data at equal intervals.", "3D Area charts are useful if you want to emphasize the size of the total data in a report, as opposed to the changes in the data. ")
+subBlockHelpTxtAr[i++] = new Array( "Vertical Absolute Area charts are useful if you want to show the magnitude of change over time. Measures are displayed from left to right.", "Horizontal Absolute Area charts are useful if you want to show the magnitude of change over time. Measures are displayed from bottom to top.", "Vertical stacked bar charts are useful to show the relationship of individual items to the whole and display measures from bottom to top.", "Horizontal stacked bar charts are useful to show the relationship of individual items to the whole and display measures from left to right.", "Vertical Percent bar charts show relationships to a whole with measures displayed from bottom to top.", "Horizontal Percent bar charts show relationships to a whole with measures displayed from left to right.", "Area charts are useful if you want to emphasize the size of the total data in a report, as opposed to the changes in the data.", "3D Volume charts are useful if you want to show trends in values across two dimensions in a continuous curve.")
+subBlockHelpTxtAr[i++] = new Array( "Pie charts are useful if you want to show how the proportional size of values that make up a dimension. You can only include one dimension.", "Doughnut charts are useful to show the relationship of parts to a whole and contain more than one dimension.", "3D Pie charts are useful if you want to show how the proportional size of values that make up a dimension with a 3D appearance. You can only include one dimension.", "3D Doughnut charts are useful if you want to show the relationship of parts to a whole, with a 3D appearance, and compare more than one dimension.")
+subBlockHelpTxtAr[i++] = new Array( "Radar charts are useful if you want to compare the aggregate values of several dimensions.", "Radar Stacked Area charts are useful if you want to look at several different factors related to one item.", "Polar charts are useful if you want to plot polar coordinates on a circular graph.", "Scatter charts are useful if you want to make a comparison between specific data points.")
+subBlock=''
+subBlockIcons = new Array
+subBlockLabels = new Array
+var idx = 7 
+for (var i = 0; i < blockAr.length; i++) 
+{
+widjBlockAr[i] = newWidget('block' + idBlocksAr[i])
+subBlock += '<table id="block' + idBlocksAr[i] + 
+'" cellspacing="0" cellpadding="0" border="0">' +
+'<tbody>'
+subBlockIcons[i] = new Array
+subBlockLabels[i] = new Array
+blockIconsList.add( newTreeWidgetElem(i, blockAr[i], "", blockAr[i]))
+icons =''
+labels =''
+for (var k = 0; k < subBlockAr[i].length; k++) 
+{
+intTypeToXYType[idx++] = new Array( i, k ) 
+subBlockIcons[i][k] = newIconRadioWidget( 'icSB' + i + '_' + k, subBlockIconsImg, iconCB, null, subBlockAr[i][k],blockAr[i],50,50,50*k,50*i,null,50*i+300)
+icons += '<td align="center" width="' + widthCell + '">' + 
+subBlockIcons[i][k].getHTML() +'</td>'
+subBlockLabels[i][k]=NewLabelWidget('SBIconTxt'+ i + '_' + k, subBlockAr[i][k], false, true);
+labels += '<td align="center" width="' + widthCell + '" valign="top" class="dialogzone">' +  
+subBlockLabels[i][k].getHTML() + '</td>';
+if ( ((k+1) % iconByLines) == 0 ) 
+{
+subBlock += '<tr>' + icons + '</tr><tr>' + labels + '</tr>' + 
+'<tr><td colspan="' + iconByLines + '" height="10">&nbsp;</td></tr>'
+icons =''
+labels =''
+}
+}
+subBlock += '<tr>' + icons + '</tr><tr>' + labels + '</tr>'
+subBlock += '</tbody></table>'
+}
+}
+if (_curWin.turnToInitialized!=true)
+{
+_curWin.turnToInitialized=true
+targetApp
+(
+turnToDlg.beginHTML()+
+'<table cellspacing="10" cellpadding="0" border="0" width="100%"><tbody>'+
+'<tr>'+
+'<td align="left" width="70" class="dialogzonebold">'+
+"Chart and Table Types"+
+'</td>'+
+'<td align="left" colspan="2" class="dialogzonebold">'+
+"Available Formats"+
+'</td>'+
+'</tr>' +
+'<tr>'+
+'<td align="left" valign="top">'+
+blockIconsList.getHTML() +
+'</td>'+
+'<td align="left" valign="top" colspan="2">'+
+ subBlockFrame.beginHTML() +
+ subBlock +
+ subBlockFrame.endHTML() +
+'</td>'+
+'</tr>' +
+'<tr>'+
+'<td align="left" colspan="3">'+
+info.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="right" colspan="3">'+
+'<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'+
+'<td>' + OKButton.getHTML()+ '</td>'+
+'<td>' + getSpace(5,1)+ '</td>'+
+'<td>' + CancelButton.getHTML()+ '</td>'+
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + applyButton.getHTML()+ '</td>' +
+'<td>' + getSpace(5,1)+ '</td>'+
+'<td>' + HelpButton.getHTML()+ '</td>'+
+'</tr></tbody></table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+ 
+turnToDlg.endHTML()
+)
+}
+turnToDlg.init()
+blockIconsList.init()
+info.init()
+OKButton.init()
+CancelButton.init()
+applyButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+subBlockFrame.init()
+p.initCurrentBlockType(intTypeToXYType)
+for (var i = 0; i < blockAr.length; i++) 
+{
+widjBlockAr[i].init()
+if (i == p.curBlockType)
+{
+widjBlockAr[i].setDisplay(true)
+} else {
+widjBlockAr[i].setDisplay(false)
+}
+var found = false
+for (var k = 0; k < subBlockAr[i].length; k++) 
+{
+subBlockIcons[i][k].setClasses("iconnocheck", "iconcheckwhite", "iconhover", "iconcheckhoverwhite")
+subBlockIcons[i][k].init()
+subBlockIcons[i][k].setDisabled(((p.nMeasures==0) && (i!=0)));
+subBlockLabels[i][k].init();
+subBlockLabels[i][k].setDisabled(((p.nMeasures==0) && (i!=0)));
+if ((i == p.curBlockType) && (k == p.curBlockSubType))
+{
+subBlockIcons[i][k].check(true) 
+info.setTitleBold(subBlockAr[i][k])
+info.setText(subBlockHelpTxtAr[i][k])
+found = true
+}
+}
+if (!found)
+subBlockIcons[i][0].check(true)
+}
+for (var i=1; i< blockIconsList.getCount(); i++)
+{
+var item=blockIconsList.findInName(blockAr[i]);
+item.init();
+item.setGrayStyle(p.nMeasures==0);
+}
+blockIconsList.select(p.curBlockType)
+applyButton.setDisabled(!p.canApplyTurnTo(selBlockType, selBlockSubType, p.nDimDetails, p.nMeasures))
+turnToDlg.show(true)
+setTimeout("selItCB()",1)
+}
+function selItCB()
+{
+for (var i = 0; i < blockAr.length; i++) 
+{
+if (i == blockIconsList.getSelection().index)
+{
+widjBlockAr[i].setDisplay(true)
+for (var k = 0; k < subBlockAr[i].length; k++)
+{
+if (subBlockIcons[i][k].isChecked())
+{
+selBlockType = i
+selBlockSubType = k
+info.setTitleBold( subBlockAr[i][k])
+info.setText( subBlockHelpTxtAr[i][k])
+}
+}
+} else {
+widjBlockAr[i].setDisplay(false)
+}
+}
+applyButton.setDisabled(!p.canApplyTurnTo(selBlockType, selBlockSubType, p.nDimDetails, p.nMeasures))
+}
+function iconCB()
+{
+var selIconId = this.id.substr( "icSB".length )
+var a = selIconId.split('_')
+var type = a[0]
+var subType = a[1]
+for (var i = 0; i < blockAr.length; i++)
+{
+for (var k = 0; k < subBlockAr[i].length; k++) 
+{
+if ((i == type) && (k == subType))
+{
+selBlockType = type
+selBlockSubType = subType
+info.setTitleBold( subBlockAr[i][k])
+info.setText( subBlockHelpTxtAr[i][k])
+}
+}
+}
+applyButton.setDisabled(!p.canApplyTurnTo(selBlockType, selBlockSubType, p.nDimDetails, p.nMeasures))
+}
+function okCB(bApplyBtn)
+{
+if(bApplyBtn)
+{ 
+applyButton.setDisabled(true)
+turnToDlg.unload()
+doTurnTo()
+p._globalWOMCallback = p.formatTurnTo_globalWOMCallback;
+p.deselectAll(p.applyBid)
+p.selectSingle(p.applyBid)
+p.applyBid = null
+turnToDlg.show(bApplyBtn)
+p.wt(true)
+}
+else
+{
+if(!applyButton.isDisabled())
+{
+p.wt()
+doTurnTo()
+}
+turnToDlg.show(false)
+}
+}
+function doTurnTo()
+{
+self.document.submitForm.sNewBlockType.value="" + selBlockType 
+self.document.submitForm.sNewBlockSubType.value="" + selBlockSubType 
+var curL=p.getLayerByIdRef(p._curIdRef)
+blockL= p.getParentLayerFromBid(curL,p.applyBid)
+if (blockL)
+p._curIdRef=blockL.getAttribute("idref")
+else
+p._curIdRef=null
+var url = p._root + "processTurnTo" + p._appExt
+url += p.urlParams(true)
+document.submitForm.action = url
+setTimeout("document.submitForm.submit()",1)
+}
+function cancelCB()
+{
+turnToDlg.show(false)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<form  target="Report" name="theForm" id="theForm" method="post" action="">
+<select name="FV" id="FV" size="2" multiple></select>
+</form>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="submitForm" method="post" action="">
+<input type="hidden" name="sNewBlockType" id="sNewBlockType">
+<input type="hidden" name="sNewBlockSubType" id="sNewBlockSubType">
+</form>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for draft order detail information</comment>
+	<entry key="WCContext.storefrontId">xpedxGetCustomerUsers:/CustomerContact/Customer/@CallingOrganizationCode</entry>
+	<entry key="selectedCustomer">xpedxGetCustomerUsers:/CustomerContact/Customer/@CustomerID</entry>
+</properties>

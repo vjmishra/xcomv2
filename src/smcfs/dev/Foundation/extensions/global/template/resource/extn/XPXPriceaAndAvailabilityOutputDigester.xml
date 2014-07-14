@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<digester-rules>
+	<pattern value="PriceAndAvailability">
+		<object-create-rule classname="com.xpedx.nextgen.priceAndAvailabilityService.XPXPriceAndAvailability" />
+		<call-method-rule pattern="TransactionStatus" methodname="setTransactionStatus" paramcount="0" />
+		<call-method-rule pattern="EnvironmentId" methodname="setEnvironmentId" paramcount="0" />
+		<call-method-rule pattern="Company" methodname="setCompany" paramcount="0" />
+		<call-method-rule pattern="CustomerBranch" methodname="setCustomerBranch" paramcount="0" />
+		<call-method-rule pattern="CustomerNumber" methodname="setCustomerNumber" paramcount="0" />
+		<call-method-rule pattern="ShipToSuffix" methodname="setShipToSuffix" paramcount="0" />
+		<call-method-rule pattern="OrderBranch" methodname="setOrderBranch" paramcount="0" />
+		<call-method-rule pattern="HeaderStatusCode" methodname="setHeaderStatusCode" paramcount="0" />
+		
+		<pattern value="Items/Item">
+			<object-create-rule classname="com.xpedx.nextgen.priceAndAvailabilityService.XPXItem" />
+			<call-method-rule pattern="LineNumber" methodname="setLineNumber" paramcount="0" />
+			<call-method-rule pattern="LegacyProductCode" methodname="setLegacyProductCode" paramcount="0" />
+			<call-method-rule pattern="RequestedQtyUOM" methodname="setRequestedQtyUOM" paramcount="0" />
+			<call-method-rule pattern="RequestedQty" methodname="setRequestedQty" paramcount="0" />
+			<call-method-rule pattern="PurchaseOrderQty" methodname="setPurchaseOrderQty" paramcount="0" />
+			<call-method-rule pattern="PricingUOM" methodname="setPricingUOM" paramcount="0" />
+			<call-method-rule pattern="PriceCurrencyCode" methodname="setPriceCurrencyCode" paramcount="0" />
+			<call-method-rule pattern="UnitPricePerPricingUOM" methodname="setUnitPricePerPricingUOM" paramcount="0" />
+			<call-method-rule pattern="UnitPricePerRequestedUOM" methodname="setUnitPricePerRequestedUOM" paramcount="0" />
+			<call-method-rule pattern="ExtendedPrice" methodname="setExtendedPrice" paramcount="0" />
+			<call-method-rule pattern="ItemCost" methodname="setItemCost" paramcount="0" />
+			<call-method-rule pattern="CostCurrencyCode" methodname="setCostCurrencyCode" paramcount="0" />
+			<call-method-rule pattern="LineStatusCode" methodname="setLineStatusCode" paramcount="0" />
+			<call-method-rule pattern="OrderMultipleQty" methodname="setOrderMultipleQty" paramcount="0" />
+			<call-method-rule pattern="OrderMultipleUOM" methodname="setOrderMultipleUOM" paramcount="0" />
+			<pattern value="Brackets/Bracket">
+				<object-create-rule classname="com.xpedx.nextgen.priceAndAvailabilityService.XPXBracket" />
+				<call-method-rule pattern="BracketQTY" methodname="setBracketQTY" paramcount="0" />
+				<call-method-rule pattern="BracketUOM" methodname="setBracketUOM" paramcount="0" />
+				<call-method-rule pattern="BracketPrice" methodname="setBracketPrice" paramcount="0" />
+				<set-next-rule methodname="addBrackets" />
+			</pattern>
+			<pattern value="WarehouseLocationList/WarehouseLocation">
+				<object-create-rule classname="com.xpedx.nextgen.priceAndAvailabilityService.XPXWarehouseLocation" />
+				<call-method-rule pattern="Warehouse" methodname="setWarehouse" paramcount="0" />
+				<call-method-rule pattern="AvailableQty" methodname="setAvailableQty" paramcount="0" />
+				<call-method-rule pattern="NumberOfDays" methodname="setNumberOfDays" paramcount="0" />
+				<set-next-rule methodname="addWarehouseLocations" />
+			</pattern>
+			<set-next-rule methodname="addItem" />
+		</pattern>
+	</pattern>
+</digester-rules>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Add To Cart Handler</comment>
+    <entry key="productID">addToCartGetCompleteItemList:/Item/@ItemID,xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/Item/@ItemID</entry>
+	<entry key="productUOM">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/Item/@UnitOfMeasure</entry>
+    <entry key="productClass">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/Item/@ProductClass</entry>
+    <entry key="WCContext.storefrontId">addToCartGetCompleteItemList:/Item/@CallingOrganizationCode</entry>
+	<entry key="WCContext.customerId">addToCartGetCompleteItemList:/Item/CustomerInformation/@CustomerID</entry>
+    <entry key="currency">addToCartGetCompleteItemList:/Item/@Currency</entry>
+    <entry key="quantity">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/@OrderedQty, xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@OrderedQty</entry>
+	<entry key="orderHeaderKey">xpedx_me_addToCartAddOrderLines:/Order/@OrderHeaderKey</entry>
+    <entry key="recordPendingChanges">xpedx_me_addToCartAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry>
+    <entry key="reqProductUOM">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@TransactionalUOM</entry>
+    <entry key="reqJobId">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/Extn/@ExtnCustLineAccNo</entry>
+    <entry key="customerPONo">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/@CustomerPONo</entry>
+    <entry key="reqCustomer">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/Extn/@ExtnCustLineField1</entry>
+    <entry key="lineType">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine/@LineType</entry>
+    <entry key="isEditNewline">xpedx_me_addToCartAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnEditOrderFlag</entry>
+    <entry key="draftOrderflag">xpedx_me_addToCartAddOrderLines:/Order/@DraftOrderFlag</entry>
+</properties>

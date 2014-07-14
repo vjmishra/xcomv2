@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for getting order payment detail information</comment>
+    <entry key="#parameters.orderHeaderKey">GetPaymentMethodOnOrder:/Order/@OrderHeaderKey,me_getOrderBillToAddress:/Order/@OrderHeaderKey,me_OrderPayment:/Order/@OrderHeaderKey</entry>
+    <entry key="WCContext.storefrontId">PaymentTypeListUtil:/PaymentTypeList/@CallingOrganizationCode,GetPaymentBook:/Customer/@OrganizationCode</entry>
+    <entry key="WCContext.customerId">GetPaymentBook:/Customer/@CustomerID</entry>
+	</properties>
+

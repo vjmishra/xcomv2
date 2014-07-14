@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wstk_bridge>
+	<config read_chunk_size="10000" write_chunk_size="10000" />
+	<bridges>
+		<bridge name="RepositoryBridge">
+			<impl type="java" class="com.bo.repo_bridge.RepositoryBridge" />
+			<impl type="COM"  class="BusinessObjects.RepositoryBridge.IRepoBridge.1" />
+		</bridge>
+		<bridge name="HTTPConfiguration">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.ConfigurationImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpConfiguration.1" />
+	    </bridge>
+		<bridge name="HTTPConnectionManager">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.ConnectionManagerImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpConnectionManager.1" />
+		</bridge>
+		<bridge name="HTTPOpenJob">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.OpenJobImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpOpenJob.1" />
+		</bridge>
+                <bridge name="HTTPRDBMSJob">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.RDBMSJobImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpRDBMSJob.1" />
+		</bridge>
+                <bridge name="HTTPRepositoryJob">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.RepositoryJobImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpRepositoryJob.1" />
+		</bridge>
+		<bridge name="HTTPOpenDictionary">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.OpenDictionaryImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpOpenDictionary.1" />
+		</bridge>
+                <bridge name="HTTPRDBMSDictionary">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.RDBMSDictionaryImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpRDBMSDictionary.1" />
+		</bridge>
+                <bridge name="HTTPOLAPDictionary">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.OLAPDictionaryImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpOLAPDictionary.1" />
+		</bridge>
+                <bridge name="HTTPSAPBAPI">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.SAPBAPIImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpSAPBAPI.1" />
+		</bridge>
+	        <bridge name="HTTPOLEDBOLAP">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.OLEDBOLAPImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpOLEDBOLAP.1" />
+		</bridge>
+		<bridge name="HTTPEssbase">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.EssbaseImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.HttpEssbase.1" />
+		</bridge>
+		<bridge name="HTTPClientAccessAS400">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.ClientAccessAS400Impl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpClientAccessAS400.1" />
+		</bridge>
+		<bridge name="HTTPDB2CAE">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.DB2CAEImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpDB2CAE.1" />
+		</bridge>
+		<bridge name="HTTPInformixCLI">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.InformixCLIImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpInformixCLI.1" />
+		</bridge>
+		<bridge name="HTTPODBC">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.ODBCImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpODBC.1" />
+		</bridge>
+		<bridge name="HTTPOLEDB">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.OLEDBImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpOLEDB.1" />
+		</bridge>
+		<bridge name="HTTPOracleOCI">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.OracleOCIImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpOracleOCI.1" />
+		</bridge>
+		<bridge name="HTTPTeradata">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.TeradataImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpTeradata.1" />
+		</bridge>
+		<bridge name="HTTPSybaseCTL">
+			<impl type="java" class="com.businessobjects.connectionserver.http.bridge.SybaseCTLImpl" />
+			<impl type="COM"  class="BusinessObjects.CSBridge.IHttpSybaseCTL.1" />
+		</bridge>
+	</bridges>
+</wstk_bridge>
+
+
+
+
+
+
+
+
+

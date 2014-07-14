@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE weblogic-web-app PUBLIC "-//BEA Systems, Inc.//DTD Web Application 8.1//EN"
+                                  "http://www.bea.com/servers/wls810/dtd/weblogic810-web-jar.dtd">
+<weblogic-web-app>
+	<jsp-descriptor>
+		<jsp-param>
+			<param-name>keepgenerated</param-name>
+			<param-value>true</param-value>
+		</jsp-param>
+		<jsp-param>
+			<param-name>precompile</param-name>
+			<param-value>true</param-value>
+		</jsp-param>
+		<jsp-param>
+			<param-name>pageCheckSeconds</param-name>
+			<param-value>-1</param-value>
+		</jsp-param>
+	</jsp-descriptor>
+	<charset-params>
+		<input-charset>
+			<resource-path>/*</resource-path>
+			<java-charset-name>UTF-8</java-charset-name>
+		</input-charset>
+	</charset-params>
+	<fast-swap>
+		<enabled>false</enabled>
+		<refresh-interval>1</refresh-interval>
+		<redefinition-task-limit>5</redefinition-task-limit>
+	</fast-swap>
+	<container-descriptor>
+		<servlet-reload-check-secs>-1</servlet-reload-check-secs>
+		<show-archived-real-path-enabled>true</show-archived-real-path-enabled>
+	</container-descriptor>
+	<context-root>swc</context-root>
+</weblogic-web-app>

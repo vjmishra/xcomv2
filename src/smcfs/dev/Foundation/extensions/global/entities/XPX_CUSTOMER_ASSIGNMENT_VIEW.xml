@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" Extensible="N" Description="The View to Get All the Assigned Customers in the Hierarchy"
+			EntityType="VIEW" Prefix="XPX" TableName="XPX_CUSTOMER_ASSIGNMENT_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPXCustomerAssignmentView">
+			<Attributes>
+				<Attribute ColumnName="USER_ID" DataType="UserId"
+					Description="User Id" Nullable="false" XMLName="UserId" />
+				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" DataType="CustomerId"
+					Description="The Ship to Customer ID" Nullable="false" XMLName="ShipToCustomerID" />
+				<Attribute ColumnName="SHIP_TO_CUSTOMER_NAME" DataType="Text-240"
+					Description="The Ship to Customer Name" Nullable="true" XMLName="ShipToCustomerName" />
+				<Attribute ColumnName="SHIP_TO_EXTN_CUST_STORE_NO" DataType="Text-240"
+					Description="The Ship to Customer Name" Nullable="true" XMLName="ShipToExtnCustStoreNo" />
+				<Attribute ColumnName="SHIP_TO_CUSTOMER_KEY" DataType="Text-50"
+					Description="The Ship to Customer Key" Nullable="false" XMLName="ShipToCustomerKey" />
+				<Attribute ColumnName="ENTERPRISE_CODE" DataType="OrgCode"
+					Description="The Ship to Emterprise Code" Nullable="false" XMLName="EnterpriseCode" />
+				<Attribute ColumnName="FIRST_NAME" DataType="PersonName"
+					Description="The Ship to Customer Addresses's First Name " Nullable="true" XMLName="FirstName" />
+				<Attribute ColumnName="LAST_NAME" DataType="PersonName"
+					Description="The Ship to Customer Addresses's First Name" Nullable="true" XMLName="LastName" />
+				<Attribute ColumnName="SHIP_TO_ADDR_LINE_1" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine1" />
+				<Attribute ColumnName="SHIP_TO_ADDR_LINE_2" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine2" />
+				<Attribute ColumnName="SHIP_TO_ADDR_LINE_3" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine3" />
+				<Attribute ColumnName="SHIP_TO_CITY" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="City" />
+				<Attribute ColumnName="SHIP_TO_STATE" DataType="Text-500"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="State" />
+				<Attribute ColumnName="SHIP_TO_ZIP_CODE" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="ZipCode" />
+				<Attribute ColumnName="EXTN_ZIP4" DataType="Text-10"
+					Description="The Ship to Customer Address Lines Extended 4 digit Zip Code" Nullable="true" XMLName="ExtnZip4" />
+				<Attribute ColumnName="SHIP_TO_COUNTRY" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="Country" />
+				<Attribute ColumnName="EMAILID" DataType="EMailID"
+					Description="The Ship to Customer Addresses's EMail ID" Nullable="true" XMLName="EMailID" />
+				<Attribute ColumnName="BILL_TO_CUSTOMER_ID" DataType="CustomerId"
+					Description="The Bill to Customer ID" Nullable="false" XMLName="BillToCustomerID" />
+				<Attribute ColumnName="BILL_TO_CUSTOMER_NAME" DataType="Text-240"
+					Description="The Bill to Customer Name" Nullable="true" XMLName="BillToCustomerName" />
+				<Attribute ColumnName="BILL_TO_CUSTOMER_KEY" DataType="Text-50"
+					Description="The Bill to Customer Key" Nullable="false" XMLName="BillToCustomerKey" />
+				<Attribute ColumnName="SAP_CUSTOMER_ID" DataType="CustomerId"
+					Description="The SAP Customer ID" Nullable="false" XMLName="SAPCustomerID" />
+				<Attribute ColumnName="SAP_CUSTOMER_KEY" DataType="Text-50"
+					Description="The SAP Customer Key" Nullable="false" XMLName="SAPCustomerKey" />
+				<Attribute ColumnName="MSAP_CUSTOMER_ID" DataType="CustomerId"
+					Description="The MSAP Customer ID" Nullable="false"	XMLName="MSAPCustomerID" />
+				<Attribute ColumnName="MSAP_CUSTOMER_KEY" DataType="Text-50"
+					Description="The MSAP Customer Key" Nullable="false" XMLName="MSAPCustomerKey" />
+				<Attribute ColumnName="SHIP_TO_ADDRESS_STRING" DataType="Text-1500"
+					Description="The Ship To Customer Address String" Nullable="true" XMLName="ShipToAddressString" />
+				<Attribute ColumnName="STATUS" DataType="char-2" DefaultValue="' '" Description="Status of the customer"  
+          			Nullable="true" XMLName="Status" />
+				<Attribute ColumnName="SHIP_TO_DIVISION_ID" DataType="OrgCode"
+					Description="SHIP_TO_DIVISION_ID" Nullable="true" XMLName="ExtnCustomerDivisionID" />
+				<Attribute ColumnName="DIVISION_NAME" DataType="varchar2-100" Description="Division Name"  
+          			Nullable="true" XMLName="DivisionName" />
+			</Attributes>
+			<PrimaryKey Name="XPX_CUST_H_PK">
+				<Attribute ColumnName="SHIP_TO_CUSTOMER_ID" />
+				<Attribute ColumnName="USER_ID" />
+			</PrimaryKey>
+			<Indices>
+				<Index Name="XPX_CUSTOMER_ASSIGNMENT_VIEW_I01" Unique="True">
+					<Column Name="SHIP_TO_CUSTOMER_ID" />
+					<Column Name="USER_ID" />
+				</Index>
+				<Index Name="XPX_CUSTOMER_ASSIGNMENT_VIEW_I02" Unique="False">
+					<Column Name="BILL_TO_CUSTOMER_ID" />
+				</Index>
+				<Index Name="XPX_CUSTOMER_ASSIGNMENT_VIEW_I03" Unique="False">
+					<Column Name="SAP_CUSTOMER_ID" />
+				</Index>	
+				<Index Name="XPX_CUSTOMER_ASSIGNMENT_VIEW_I04" Unique="False">
+					<Column Name="MSAP_CUSTOMER_ID" />
+				</Index>
+				<Index Name="XPX_CUSTOMER_ASSIGNMENT_VIEW_I05" Unique="False">
+					<Column Name="SHIP_TO_ADDRESS_STRING" />
+				</Index>					
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

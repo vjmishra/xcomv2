@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataTypes>
+    <DataType Name="MAXItemID" Size="40" Type="NCHAR">
+        <UIType Size="20" UITableSize="25"/>
+    </DataType>
+	<DataType Name="ItemStatus" Size="1" Type="NCHAR">
+        <UIType Size="10" UITableSize="10"/>
+        <Enumeration>
+            <Enum Description="Indicates that Item is Active." Value="A"/>
+            <Enum Description="Indicates that item is Suspended." Value="S"/>
+        </Enumeration>
+    </DataType>
+	<DataType Name="ItemStockStatus" Size="40" Type="NVARCHAR">
+        <UIType Size="20" UITableSize="20"/>
+    </DataType>
+	<DataType Name="OrderMultiple" NegativeAllowed="false" Size="8" Type="NUMBER" ZeroAllowed="false"/>
+	<DataType Name="AssociationType" Size="1" Type="NCHAR">
+        <Enumeration>
+            <Enum Description="Indicates that an Alternate Item is associated." Value="A"/>
+            <Enum Description="Indicates that an Complimentary Item is associated." Value="C"/>
+			<Enum Description="Indicates that an Replacement Item is associated." Value="R"/>
+        </Enumeration>
+    </DataType>
+	 <DataType Name="OrgCode" Size="50" Type="NCHAR">
+        <UIType Size="20" UITableSize="20"/>
+    </DataType>
+    <DataType Name="Key" Size="50" Type="NCHAR">
+        <UIType Size="20" UITableSize="20"/>
+    </DataType>
+	<DataType Name="LoginId" Size="100" Type="NCHAR"/>
+    <DataType Name="varchar2-20" Size="20" Type="VARCHAR2"/>
+    <DataType Name="varchar2-30" Size="30" Type="VARCHAR2"/>
+    <DataType Name="varchar2-60" Size="60" Type="VARCHAR2"/>
+    <DataType Name="varchar2-64" Size="64" Type="VARCHAR2"/>
+    <DataType Name="varchar2-100" Size="100" Type="VARCHAR2"/>
+    <DataType Name="varchar2-200" Size="200" Type="VARCHAR2"/>
+	<DataType Name="varchar2-300" Size="300" Type="VARCHAR2"/>
+    <DataType Name="varchar2-255" Size="255" Type="VARCHAR2"/>
+	<DataType Name="varchar2-500" Size="500" Type="VARCHAR2"/>
+	<DataType Name="varchar2-1000" Size="1000" Type="VARCHAR2"/>
+	<DataType Name="varchar2-2000" Size="2000" Type="VARCHAR2"/>
+	<DataType Name="varchar2-650" Size="650" Type="VARCHAR2"/>
+	<DataType Name="varchar2-2600" Size="2600" Type="VARCHAR2"/>
+	<DataType Name="varchar2-1300" Size="1300" Type="VARCHAR2"/>
+    <DataType Name="char-1" Size="1" Type="CHAR"/>
+    <DataType Name="char-2" Size="2" Type="CHAR"/>
+    <DataType DecimalDigits="5" Name="ConversionFactor" NegativeAllowed="false" Size="15" Type="NUMBER"/>
+    <DataType DecimalDigits="5" Name="XPXUnitPrice" NegativeAllowed="false"
+        Size="15" Type="NUMBER">
+        <UIType Size="7" UITableSize="7"/>
+    </DataType>
+    <DataType DecimalDigits="3" Name="XPXOrderedQty" NegativeAllowed="false"
+        Size="10" Type="NUMBER">
+        <UIType Size="7" UITableSize="7"/>
+    </DataType>
+			<DataType Name="Text-40" Size="40" Type="NVARCHAR"/>
+		    <DataType Name="Text-55" Size="55" Type="NVARCHAR"/>
+			<DataType Name="Text-60" Size="60" Type="NVARCHAR"/>
+	<DataType Name="DivisionNo" Size="1800" Type="NCHAR" />
+	<DataType Name="NUMBER-3" Size="3" Type="NUMBER"/>
+</DataTypes>

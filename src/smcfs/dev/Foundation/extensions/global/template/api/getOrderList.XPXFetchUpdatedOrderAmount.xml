@@ -1,0 +1,11 @@
+<OrderList>
+<Order OrderHeaderKey="" OrderType="" >
+<Extn ExtnWebConfNum="" ExtnTotalOrderValue="" />
+<OrderLines>
+<OrderLine LineType="">
+<Item ItemID="" />
+<Extn ExtnLineOrderedTotal="" />
+</OrderLine>
+</OrderLines>
+</Order>
+</OrderList>

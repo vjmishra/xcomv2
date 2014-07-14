@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for return items action</comment>
+	<!-- <entry key="WCContext.storefrontId">getCustomerQuickLink:/CustomerContact/Customer/@OrganizationCode</entry>
+	<entry key="WCContext.customerId">getCustomerQuickLink:/CustomerContact/Customer/@CustomerID</entry>
+	<entry key="WCContext.customerContactId">getCustomerQuickLink:/CustomerContact/@CustomerContactID</entry>  -->
+	<entry key="#parameters.orderHeaderKey">XPEDXOrderDetailMashup:/Order/@OrderHeaderKey</entry>
+    <entry key="trackingNoList">getTrackingNumberURL:/InvokeUE/XMLData/TrackingNumbers/TrackingNumber[]/@TrackingNo</entry>
+    <entry key="requestNoList">getTrackingNumberURL:/InvokeUE/XMLData/TrackingNumbers/TrackingNumber[]/@RequestNo</entry>
+ 	<entry key="carrierServiceList">getTrackingNumberURL:/InvokeUE/XMLData/TrackingNumbers/TrackingNumber[]/@CarrierServiceCode</entry>
+  	<entry key="scacList">getTrackingNumberURL:/InvokeUE/XMLData/TrackingNumbers/TrackingNumber[]/@SCAC</entry>
+  	<entry key="scacAndServiceList">getTrackingNumberURL:/InvokeUE/XMLData/TrackingNumbers/TrackingNumber[]/@ScacAndService</entry>
+ 	<entry key="WCContext.storefrontId">isUserExitImplAvailableForgetTrackingNumberURL:/InvokeUE/@EnterpriseCode,getTrackingNumberURL:/InvokeUE/@EnterpriseCode,getHoldTypeList:/HoldType/@CallingOrganizationCode</entry>
+ 	<entry key="WCContext.storefrontId">getDivisionEmail:/Customer/@OrganizationCode</entry>
+	<entry key="WCContext.customerId">getDivisionEmail:/Customer/@CustomerID</entry>
+</properties>

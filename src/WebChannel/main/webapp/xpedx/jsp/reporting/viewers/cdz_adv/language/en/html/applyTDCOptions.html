@@ -1,0 +1,595 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Document Properties</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"TDCOptionsDlg");
+function rgb(c)
+{
+return "rgb(" + c + ")"
+}
+</script>
+<script language="javascript">
+var buttonsWidth= 60
+var dlgWidth= 430 
+var dlgHeight= 460 
+var frameWidth= dlgWidth-10
+var frameHeight= dlgHeight-125
+var initialized= false
+var comboW= 200;
+var tdcTabzone = null;
+var TDCOptionsDlg=null;
+var autoupdateOptionDlgRadio=null
+var setFixedRefRadio=null
+var refDateCombo=null;
+var tabIndex = requestQueryString(window,"tabIndex")
+if (typeof(tabIndex)=="undefined")
+tabIndex=0;
+var url =  p._root + "incTDCOptions" + p._appExt
+url +=  p.urlParamsNoBID()
+includeScript(url)
+</script>
+<script language="javascript">
+function cancelCB()
+{
+TDCOptionsDlg.show(false);
+}
+function setFormatTab()
+{
+if (!initFormat)
+{
+initFormat=true;
+insertionCheck.init()
+insertionFormatButton.init()
+deletionCheck.init()
+deletionFormatButton.init()
+changeCheck.init()
+changeFormatButton.init()
+increasedCheck.init()
+increasedFormatButton.init()
+greaterEqualIncreasedCheck.init()
+thresholdIncreasedField.init()
+decreasedCheck.init()
+decreasedFormatButton.init()
+greaterEqualDecreasedCheck.init()
+thresholdDecreasedField.init()
+insertionPreviewBG.init()
+insertionPreview.init()
+deletionPreviewBG.init()
+deletionPreview.init()
+changePreviewBG.init()
+changePreview.init()
+increasedPreviewBG.init()
+increasedPreview.init()
+decreasedPreviewBG.init()
+decreasedPreview.init()
+formatTDC = p.isInteractive && p.isEnableUserRight(p._usrTDCChangeFormat)
+insertionFormatButton.show(formatTDC)
+deletionFormatButton.show(formatTDC)
+changeFormatButton.show(formatTDC)
+increasedFormatButton.show(formatTDC)
+decreasedFormatButton.show(formatTDC)
+insertionCheck.check(bInsertionCheck)
+deletionCheck.check(bDeletionCheck)
+changeCheck.check(bChangeCheck)
+increasedCheck.check(bIncreasedCheck)
+decreasedCheck.check(bDecreasedCheck)
+updatePreview(insertionPreview,insertionFgColor, insertionBgColor, insertionFntStyle)
+updatePreview(deletionPreview,deletionFgColor, deletionBgColor, deletionFntStyle)
+updatePreview(changePreview,changeFgColor, changeBgColor, changeFntStyle)
+updatePreview(increasedPreview,increasedFgColor, increasedBgColor, increasedFntStyle, true)
+updatePreview(decreasedPreview,decreasedFgColor, decreasedBgColor, decreasedFntStyle, true)
+greaterEqualIncreasedCheck.check(increasedThresholdActive)
+thresholdIncreasedField.setValue((increasedThreshold != "")?increasedThreshold:"10.0")
+thresholdIncreasedField.setDisabled(!increasedThresholdActive)
+greaterEqualDecreasedCheck.check(decreasedThresholdActive)
+thresholdDecreasedField.setValue((decreasedThreshold != "")?decreasedThreshold:"10.0")
+thresholdDecreasedField.setDisabled(!decreasedThresholdActive)
+insertionCheck.setDisabled(!formatTDC)
+deletionCheck.setDisabled(!formatTDC)
+changeCheck.setDisabled(!formatTDC)
+increasedCheck.setDisabled(!formatTDC)
+decreasedCheck.setDisabled(!formatTDC)
+greaterEqualIncreasedCheck.setDisabled(!formatTDC)
+greaterEqualDecreasedCheck.setDisabled(!formatTDC)
+}
+}
+function setRefDataTab()
+{
+if (!initRefData)
+{
+initRefData=true;
+autoupdateOptionDlgRadio.init()
+setFixedRefRadio.init()
+refDateCombo.init();
+refDateCombo.del();
+refDateCombo.add(p.strLastRefreshDate, 0, true, null, null, "Current data refresh date");
+if (p._refTDCDateInMs!=p._lLastRefreshMilliSecDate)
+{
+refDateCombo.add(p._refTDCDate, 1, false, null, null, "Current reference data refresh date");
+}
+refDateCombo.setDisabled((p._refTDCDateInMs==p._lLastRefreshMilliSecDate), false);
+refDateCombo.select((refDateCombo.getCount()>1)?1:0);
+if (p._bTDCAutoUpdateDataOnRefresh)
+{
+autoupdateOptionDlgRadio.check(true)
+}
+else
+{
+setFixedRefRadio.check(true)
+}
+}
+}
+function selectZoneCB(index)
+{
+switch(index) 
+{
+case 0:
+case "0":
+setFormatTab();
+break;
+case "1":
+case 1:
+setRefDataTab();
+break;
+}
+}
+function loadCB()
+{
+if (!bIncTDCOptionsOK) return
+if (!initialized)
+{
+initialized=true;
+TDCOptionsDlg = newDialogBoxWidget("TDCOptionsDlg","Data Tracking Options",dlgWidth,dlgHeight,okCB,cancelCB)
+tdcTabzone = newTabbedZone("TDCOptionsDlgTzone",selectZoneCB,frameWidth,frameHeight)
+tdcTabzone.add("Format","format")
+tdcTabzone.add("Reference Data","refdata")
+insertionPreviewBG = newWidget("insertionPreviewBG")
+insertionPreview = newWidget("insertionPreview") 
+deletionPreviewBG  = newWidget("deletionPreviewBG")
+deletionPreview = newWidget("deletionPreview") 
+changePreviewBG = newWidget("changePreviewBG") 
+changePreview = newWidget("changePreview") 
+increasedPreviewBG = newWidget("increasedPreviewBG") 
+increasedPreview = newWidget("increasedPreview") 
+decreasedPreviewBG = newWidget("decreasedPreviewBG") 
+decreasedPreview = newWidget("decreasedPreview")
+insertionCheck=newCheckWidget("insertionCheck","Insertions")
+insertionFormatButton=newButtonWidget("insertionFormatButton","Format...",formatCB)
+deletionCheck=newCheckWidget("deletionCheck","Deletions")
+deletionFormatButton=newButtonWidget("deletionFormatButton","Format...",formatCB)
+changeCheck=newCheckWidget("changeCheck","Changes")
+changeFormatButton=newButtonWidget("changeFormatButton","Format...",formatCB)
+increasedCheck=newCheckWidget("increasedCheck","Increased values", increasedCheckCB)
+increasedFormatButton=newButtonWidget("increasedFormatButton","Format...",formatCB)
+greaterEqualIncreasedCheck=newCheckWidget("greaterEqualIncreasedCheck","greater or equal to", greaterEqualIncreasedCheckCB)
+thresholdIncreasedField=newFloatFieldWidget("thresholdIncreasedField",null,8,null,null,true,"",40)
+thresholdIncreasedField.setMin(0)
+thresholdIncreasedField.setPrecision(2)
+decreasedCheck=newCheckWidget("decreasedCheck","Decreased values", decreasedCheckCB)
+decreasedFormatButton=newButtonWidget("decreasedFormatButton","Format...",formatCB)
+greaterEqualDecreasedCheck=newCheckWidget("greaterEqualDecreasedCheck","greater or equal to", greaterEqualDecreasedCheckCB)
+thresholdDecreasedField=newFloatFieldWidget("thresholdDecreasedField",null,8,null,null,true,"",40)
+thresholdDecreasedField.setMin(0)
+thresholdDecreasedField.setPrecision(2)
+info=newInfoWidget("TDCOptionsDlgInfo","More Information","","Use this dialog box to change the reference data and to define the cell formats used to display changed data.")
+autoupdateOptionDlgRadio=newRadioWidget("autoupdateOptionDlgRadio","setRefGroup", "Auto-update the reference data with each refresh")
+        setFixedRefRadio=newRadioWidget("setFixedRefRadio","setRefGroup","Use fixed reference data from:")
+refDateCombo=newComboWidget("tdcOptionRefDateCombo",null, null, comboW, "Current reference data refresh date");
+OkButton=newButtonWidget("TDCOptionsDlgOkButton","OK",okCB,buttonsWidth)
+CancelButton=newButtonWidget("TDCOptionsDlgCancelButton","Cancel",cancelCB,buttonsWidth)
+TDCOptionsDlg.attachDefaultButton(OkButton);
+}
+if ( !_curWin.TDCOptionsDlgInitialized )
+{
+_curWin.TDCOptionsDlgInitialized=true
+targetApp(
+TDCOptionsDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+tdcTabzone.beginHTML()+
+tdcTabzone.beginTabHTML(0)+
+'<table class="dialogzone" cellspacing="2" cellpadding="2" border="0"><tbody>' +
+'<tr>' +
+'<td colspan="4">'+'Select which changes you want to display and their formats.'+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td colspan="4">'+
+'<table border="0" class="dialogzone" width="100%"><tbody>'+
+'<td><nobr>'+'Dimensions'+'</nobr></td>'+
+'<td style="padding-left:5px" width="100%">'+getSep()+'</td>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+insertionCheck.getHTML()+'</td>'+
+'<td style="padding-left:15px;padding-right:20px">'+
+'<div style="overflow:hidden;width:140;height:25px">'+
+'<table id="insertionPreviewBG" cellspacing="0" cellpadding="0" border="0" width="140" height="25"><tbody>'+
+'<tr><td valign="middle" align="center" id="insertionPreview">' + 'AbCd123' + '</td></tr>'+
+'</tbody></table>'+
+'</div>'+
+'</td>'+
+'<td>'+insertionFormatButton.getHTML()+'</td>'+
+'<td width="50">&nbsp;</td>' + 
+'</tr>' + 
+'<tr>' +
+'<td>'+deletionCheck.getHTML()+'</td>'+
+'<td style="padding-left:15px;padding-right:20px">'+
+'<div style="overflow:hidden;width:140;height:25px">'+
+'<table id="deletionPreviewBG" cellspacing="0" cellpadding="0" border="0" width="140" height="25"><tbody>'+
+'<tr><td valign="middle" align="center" id="deletionPreview">' + 'AbCd123' + '</td></tr>'+
+'</tbody></table>'+
+'</div>'+
+'</td>'+
+'<td>'+deletionFormatButton.getHTML()+'</td>'+
+'<td width="50">&nbsp;</td>' + 
+'</tr>' +
+'<tr>' +
+'<td colspan="4" style="padding-top:10px">'+
+'<table border="0" class="dialogzone" width="100%"><tbody>'+
+'<td><nobr>'+'Details'+'</nobr></td>'+
+'<td style="padding-left:5px" width="100%">'+getSep()+'</td>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+changeCheck.getHTML()+'</td>'+
+'<td style="padding-left:15px;padding-right:20px">'+
+'<div style="overflow:hidden;width:140;height:25px">'+
+'<table id="changePreviewBG" cellspacing="0" cellpadding="0" border="0" width="140" height="25"><tbody>'+
+'<tr><td valign="middle" align="center" id="changePreview">' + 'AbCd123' + '</td></tr>'+
+'</tbody></table>'+
+'</div>'+
+'</td>'+
+'<td>'+changeFormatButton.getHTML()+'</td>'+
+'<td width="50">&nbsp;</td>' + 
+'</tr>' +
+'<tr>'+
+'<td colspan="4" style="padding-top:10px">'+
+'<table border="0" class="dialogzone" width="100%"><tbody>'+
+'<td><nobr>' +'Measures and details (numerical values only)' + '</nobr></td>'+
+'<td style="padding-left:5px" width="100%">' + getSep() + '</td>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+increasedCheck.getHTML()+'</td>'+
+'<td style="padding-left:15px;padding-right:20px">'+
+'<div style="overflow:hidden;width:140;height:25px">'+
+'<table id="increasedPreviewBG" cellspacing="0" cellpadding="0" border="0" width="140" height="25"><tbody>'+
+'<tr><td valign="middle" align="center" id="increasedPreview">' + '$100.00' + '</td></tr>'+
+'</tbody></table>'+
+'</div>'+
+'</td>'+
+'<td>'+increasedFormatButton.getHTML()+'</td>'+
+'<td width="50">&nbsp;</td>' + 
+'</tr>' +
+'<tr>' +
+'<td colspan="4">'+
+'<table class="dialogzone" cellspacing="2" cellpadding="0" border="0"><tbody><tr>'+
+'<td width="40">&nbsp;</td>' + 
+'<td>'+greaterEqualIncreasedCheck.getHTML() + '</td>'+
+'<td style="padding-left:15px">'+ thresholdIncreasedField.getHTML() + '&nbsp;%</td>'+
+'</tr></tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+decreasedCheck.getHTML()+'</td>'+
+'<td style="padding-left:15px;padding-right:20px">'+
+'<div style="overflow:hidden;width:140;height:25px">'+
+'<table id="decreasedPreviewBG" cellspacing="0" cellpadding="0" border="0" width="140" height="25"><tbody>'+
+'<tr><td valign="middle" align="center" id="decreasedPreview">' + '$100.00' + '</td></tr>'+
+'</tbody></table>'+
+'</div>'+
+'</td>'+
+'<td>'+decreasedFormatButton.getHTML()+'</td>'+
+'<td width="50">&nbsp;</td>' + 
+'</tr>' +
+'<tr>' +
+'<td colspan="4">'+
+'<table class="dialogzone" cellspacing="2" cellpadding="0" border="0"><tbody><tr>'+
+'<td width="40">&nbsp;</td>' + 
+'<td>'+greaterEqualDecreasedCheck.getHTML() + '</td>'+
+'<td style="padding-left:15px">'+thresholdDecreasedField.getHTML() + '&nbsp;%</td>'+
+'</tr></tbody></table>'+
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+tdcTabzone.endTabHTML()+
+tdcTabzone.beginTabHTML(1)+
+'<table border="0" class="dialogzone" width=100%"><tbody>'+
+'<tr>'+
+'<td><NOBR>' + 'Select the reference data you want to use for comparison;' + '</NOBR></td>'+
+'</tr>'+
+'<tr>'+
+'<td style="padding-left:10px">' + autoupdateOptionDlgRadio.getHTML() + '</td>'+
+'</tr>'+
+'<tr>'+
+'<td style="padding-left:10px;">'+
+'<table border="0" class="dialogzone" cellspacing="0" cellpadding="0"><tbody>'+
+'<tr>'+
+'<td>' + setFixedRefRadio.getHTML() + '</td>'+
+'<td>' + getSpace(5,1)+ '</td>' +   
+'<td>' + refDateCombo.getHTML() + '</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+tdcTabzone.endTabHTML()+
+tdcTabzone.endHTML() +
+'</td>' +
+'</tr>' +
+     // BOTTOM DIALOG
+'<tr>' +
+   '<td align="center" valign="right">' +
+   info.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   OkButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   CancelButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' +
+   '</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+TDCOptionsDlg.endHTML()
+);
+}
+// --------------------------------------------------------
+// Init widgets
+// --------------------------------------------------------
+TDCOptionsDlg.init()
+tdcTabzone.init()
+OkButton.init()
+CancelButton.init()
+info.init()
+// --------------------------------------------------------
+// Show the dialog box
+// --------------------------------------------------------
+initFormat=false
+initRefData=false
+tdcTabzone.select(tabIndex)
+selectZoneCB(tabIndex)
+TDCOptionsDlg.show(true)
+}
+// function okCB
+// Called when click on the OK button
+function okCB( )
+{
+p.eventManager.notify(p._EVT_TDC_CHANGED)
+TDCOptionsDlg.show(false);
+var bProcessTDCNow=true;
+// fill form
+var f = self.document.TDCOptionsForm
+if (initFormat)
+{
+f.sTdcOptions.value = "true"
+f.insertionCheck.value = "" + insertionCheck.isChecked()
+f.deletionCheck.value = "" + deletionCheck.isChecked()
+f.changeCheck.value = "" + changeCheck.isChecked()
+f.increasedCheck.value = "" + increasedCheck.isChecked()
+f.greaterEqualIncreasedCheck.value = "" + greaterEqualIncreasedCheck.isChecked()
+f.thresholdIncreasedField.value= "" + thresholdIncreasedField.getValue()
+f.decreasedCheck.value = "" + decreasedCheck.isChecked()
+f.greaterEqualDecreasedCheck.value = "" + greaterEqualDecreasedCheck.isChecked()
+f.thresholdDecreasedField.value= "" + thresholdDecreasedField.getValue()
+if (formatTDC) {
+f.TDCFormat.value = "true"
+f.insertionFgColor.value = "" + insertionPreview.fgColor
+f.insertionBgColor.value = "" + insertionPreview.bgColor
+f.insertionFntStyle.value = "" + insertionPreview.styleList
+f.deletionFgColor.value = "" + deletionPreview.fgColor
+f.deletionBgColor.value = "" + deletionPreview.bgColor
+f.deletionFntStyle.value = "" + deletionPreview.styleList
+f.changeFgColor.value = "" + changePreview.fgColor
+f.changeBgColor.value = "" + changePreview.bgColor
+f.changeFntStyle.value = "" + changePreview.styleList
+f.increasedFgColor.value = "" + increasedPreview.fgColor
+f.increasedBgColor.value = "" + increasedPreview.bgColor
+f.increasedFntStyle.value = "" + increasedPreview.styleList
+f.decreasedFgColor.value = "" + decreasedPreview.fgColor
+f.decreasedBgColor.value = "" + decreasedPreview.bgColor
+f.decreasedFntStyle.value = "" + decreasedPreview.styleList
+}
+}
+var url = p._root + "processTrackDataChanges" + p._appExt
+url += p.urlParamsNoBID()
+if (initRefData)
+{
+p._bTDCAutoUpdateDataOnRefresh=autoupdateOptionDlgRadio.isChecked();
+if (setFixedRefRadio.isChecked()) 
+{
+//0: current refresh date
+//1: current TDC reference date
+if ((refDateCombo.getSelection().value==0) || (p._refTDCDateInMs==p._lLastRefreshMilliSecDate))
+{
+url+="&sSetAsRef=true"
+bProcessTDCNow=false;
+//set _bTDCRefreshNow to know refresh now/later
+var msg=convStr('The last refresh date and the date of the reference data are identical.'+ '\n'+
+'There are no data changes to display.'+ '\n'+
+'To see data changes, please refresh the document.');
+showTdcPromptDialog(msg,"Data Tracking",p._promptDlgInfo,refreshTdcLaterCB,refreshTdcNowCB, "Refresh later", "Refresh now",420, 100)
+}
+}
+p.recordProp("CDZ_VIEW_tdcAutoMode",p._bTDCAutoUpdateDataOnRefresh?"1":"0") // save user pref
+}
+//
+url+="&sEnableTdc="+p._bTdcActivate+"&bAutoUpdateChanges="+p._bTDCAutoUpdateDataOnRefresh
+url+="&sShowCurrentReportChanges="+p.tdcShowChangesIcon.isChecked()
+f.action=url
+if (bProcessTDCNow) doTdcOptionsDlgHandling();
+}
+function showTdcPromptDialog(msg,title,iPromptType,yesCB,noCB, yesText, noText, width, height)
+{
+tdcpromptDlg=newPromptDialog("tdcpromptDlg",title,msg,yesText,noText,_promptDlgInfo, yesCB, noCB, true, width, height)
+targetApp(tdcpromptDlg.getHTML());
+tdcpromptDlg.init()
+tdcpromptDlg.show(true)
+}
+function refreshTdcNowCB( )
+{
+self.document.TDCOptionsForm.action+="&bRefreshNow="+true;
+doTdcOptionsDlgHandling()
+}
+function refreshTdcLaterCB()
+{
+doTdcOptionsDlgHandling()
+}
+function doTdcOptionsDlgHandling()
+{
+p.wt()
+setTimeout("document.TDCOptionsForm.submit()",1)
+}
+function increasedCheckCB() 
+{
+greaterEqualIncreasedCheck.setDisabled(!this.isChecked())
+}
+function decreasedCheckCB() 
+{
+greaterEqualDecreasedCheck.setDisabled(!this.isChecked())
+}
+function greaterEqualIncreasedCheckCB() 
+{
+thresholdIncreasedField.setDisabled(!this.isChecked())
+}
+function greaterEqualDecreasedCheckCB() 
+{
+thresholdDecreasedField.setDisabled(!this.isChecked())
+}
+//
+function updatePreview(Preview,fg,bg,styleList,isNum)
+{
+Preview.fgColor=fg
+Preview.bgColor=bg
+fg = rgb(fg)
+bg = rgb(bg)
+var css = Preview.css, cssBG = eval(Preview.id + 'BG.css'), isNum=isNum?true:false
+if (styleList) 
+{
+Preview.styleList=styleList
+st=fntStyleListToObject(styleList)
+css.fontWeight= st.bold? 'bold':'normal'
+css.fontStyle= st.italic? 'italic':'normal'
+var txtDeco = st.under? 'underline ' : ''
+txtDeco += st.strike? 'line-through ' : ''
+css.textDecoration = (txtDeco=='')? 'none' : txtDeco
+}
+// Foreground color
+if (fg != "rgb(-1,-1,-1)")
+{
+css.color= fg
+} else {
+css.color= "rgb(0,0,0)"
+}
+// Background color
+if (bg != "rgb(-1,-1,-1)")
+{
+cssBG.backgroundColor= bg
+} else {
+cssBG.backgroundColor= ""
+}
+Preview.setHTML(isNum?'$100.00':'AbCd123')
+Preview.isNum=isNum
+}
+function updatePreviewWithName(name,fg,bg,st) {
+var Preview = eval(name)
+updatePreview(Preview,fg,bg,st,Preview.isNum)
+}
+function formatCB()
+{
+rootName = this.id.split("FormatButton")[0] + "Preview"
+//var fgColor = eval(rootName + '.css.color')
+//var bgColor = eval(rootName + 'BG.css.backgroundColor')
+var fgColor = eval(rootName + '.fgColor')
+var bgColor = eval(rootName + '.bgColor')
+var isNum  = eval(rootName + '.isNum')
+var fntSt = eval(rootName + '.styleList')
+p.frameNav("ThirdDlgFrame", "cellFormatTDC.html?fntSt="+fntSt + "&fgColor=" + rgb(fgColor) + "&bgColor=" + rgb(bgColor) + "&isNum=" + isNum + "&formatName=" + rootName)
+}
+function fntStyleListToObject(styleList)
+{
+arrStyle = styleList.split(",")
+if (arrStyle && (arrStyle.length==4))
+{
+var o = new Object
+o.bold= (arrStyle[0] == 1)
+o.italic= (arrStyle[1] == 1)
+o.under= (arrStyle[2] == 1)
+o.strike= (arrStyle[3] == 1)
+return o  
+} else {
+return null
+}
+}
+// 
+// END OF FUNCTIONS
+//
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="TDCOptionsForm" method="post" action="">
+<input type="hidden" name="sTdcOptions" id="sTdcOptions" value="false">
+<input type="hidden" name="TDCFormat" id="TDCFormat" value="false">
+<input type="hidden" name="insertionCheck" id="insertionCheck" value="">
+<input type="hidden" name="insertionFgColor" id="insertionFgColor" value="">
+<input type="hidden" name="insertionBgColor" id="insertionBgColor" value="">
+<input type="hidden" name="insertionFntStyle" id="insertionFntStyle" value="">
+<input type="hidden" name="deletionCheck" id="deletionCheck" value="">
+<input type="hidden" name="deletionFgColor" id="deletionFgColor" value="">
+<input type="hidden" name="deletionBgColor" id="deletionBgColor" value="">
+<input type="hidden" name="deletionFntStyle" id="deletionFntStyle" value="">
+<input type="hidden" name="changeCheck" id="changeCheck" value="">
+<input type="hidden" name="changeFgColor" id="changeFgColor" value="">
+<input type="hidden" name="changeBgColor" id="changeBgColor" value="">
+<input type="hidden" name="changeFntStyle" id="changeFntStyle" value="">
+<input type="hidden" name="increasedCheck" id="increasedCheck" value="">
+<input type="hidden" name="increasedFgColor" id="increasedFgColor" value="">
+<input type="hidden" name="increasedBgColor" id="increasedBgColor" value="">
+<input type="hidden" name="increasedFntStyle" id="increasedFntStyle" value="">
+<input type="hidden" name="greaterEqualIncreasedCheck" id="greaterEqualIncreasedCheck" value="">
+<input type="hidden" name="thresholdIncreasedField" id="thresholdIncreasedField" value="">
+<input type="hidden" name="decreasedCheck" id="decreasedCheck" value="">
+<input type="hidden" name="decreasedFgColor" id="decreasedFgColor" value="">
+<input type="hidden" name="decreasedBgColor" id="decreasedBgColor" value="">
+<input type="hidden" name="decreasedFntStyle" id="decreasedFntStyle" value="">
+<input type="hidden" name="greaterEqualDecreasedCheck" id="greaterEqualDecreasedCheck" value="">
+<input type="hidden" name="thresholdDecreasedField" id="Hidden1" value="">
+<input type="hidden" name="autoDataCheck" id="autoDataCheck" value="">
+</form>
+</body>
+</html>

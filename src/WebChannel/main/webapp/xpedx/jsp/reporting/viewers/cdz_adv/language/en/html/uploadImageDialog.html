@@ -1,0 +1,188 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Upload Image dialog window</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"uploadImgDlg");
+p._globalWOMCallback = null;
+</script>
+<script language="javascript">
+var arrW = null;
+var uploadImgDlg = null;
+var info = null;
+var uploadButton = null;
+var cancelButton = null;
+var buttonsWidth= 60;
+var buttonsHeight= 52;
+var dlgWidth= 350;
+var dlgHeight= 110;
+var frmZoneW= 0.95*dlgWidth;
+var frmZoneH= 0.8*dlgHeight;
+var uploadW= 0.13*frmZoneW;
+var initialized= false;
+var curEntry = requestQueryString(window,"curEntry")
+var backgrdImg=requestQueryString(window,"backgrdImg")
+function updateEntry(uploadOk, entry)
+{
+if (!uploadOk)
+return
+var f=parent.getTopFrameset()
+var dlgFrame=f.getFrame("DlgFrame")
+if (typeof(dlgFrame.updateDialog)!="undefined")
+dlgFrame.updateDialog(entry, uploadWidget.getValue())
+uploadImgDlg.show(false)
+}
+function uploadCB()
+{
+if (uploadWidget.getValue()=='')
+return
+var re=/^[a-zA-Z][:][\\][\w-\.\[\]\(\)\s\\]+\.[a-zA-Z]{1,3}$/;
+                if (!uploadWidget.getValue().match(re))
+    {
+        parent.showAlertDialog("The  file does not exist.", "Upload Image", 2);
+        return;
+}
+var topf=p.getTopFrameset()
+var dlgFrame=topf.getFrame("DlgFrame")
+if (typeof(dlgFrame.getREType)=="undefined")
+return
+var url = p._root + "processEmbeddedImage" + p._appExt
+if ( dlgFrame.getREType() == "cell" )
+url += p.urlParams(false,false,curEntry)
+else
+{
+url += p.urlParamsNoBID(curEntry,null,dlgFrame._iReportIdx)
+url += "&sBid="+dlgFrame._bid
+}
+url += "&sREType=" + dlgFrame.getREType()
+parent.document.uploadForm.action = url
+parent.document.uploadForm.target = 'uploadFrame' 
+setTimeout("parent.document.uploadForm.submit()",1)
+}
+function keyDownCB(key)
+{
+var isEmpty=false;
+var content=uploadWidget.getValue();
+if (typeof(key)!="undefined")
+{
+if ((key==8) && (content.length<=1))
+isEmpty=true;
+}
+else
+isEmpty=(content=="")?true:false;
+uploadButton.setDisabled(isEmpty)
+}
+function changeCB(isEmpty)
+{
+uploadButton.setDisabled(isEmpty)
+}
+function cancelCB()
+{
+uploadImgDlg.show(false);
+}
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+uploadImgDlg = newDialogBoxWidget("uploadImgDlg","Upload Image",
+dlgWidth,dlgHeight,uploadCB,cancelCB)
+uploadWidget = newBrowseWidget("uploadWidget","File to upload",true,uploadW, keyDownCB, changeCB)
+tzone=newFrameZoneWidget("tzone",frmZoneW,frmZoneH,false)
+uploadWidgetContainer=newWidget("uploadWidgetContainer")
+uploadLabelContainer=newWidget("uploadLabelContainer")
+uploadButton = newButtonWidget("uploadButton", "Upload", 
+uploadCB, buttonsWidth)
+cancelButton = newButtonWidget("cancelButton", "Cancel", 
+cancelCB, buttonsWidth)
+uploadImgDlg.attachDefaultButton(uploadButton);
+}
+if ( !_curWin.uploadImgDlgInitialized )
+{
+_curWin.uploadImgDlgInitialized = true;
+targetApp(
+uploadImgDlg.beginHTML() +
+'<form enctype="multipart/form-data" target="" name="uploadForm" id="uploadForm" method="post">'+
+'<table class="dialogzone" cellspacing="0" cellpadding="5" border="0"><tbody>'+
+     '<tr>' +     
+   '<td align="center">' +
+   tzone.beginHTML() +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody>' +
+   '<tr>' +
+   '<td id="uploadLabelContainer"></td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td align="right" id="uploadWidgetContainer"></td>' +
+   '</tr>' +
+   '</tbody></table>'+   
+   tzone.endHTML() +
+   '</td>' +   
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody>' +
+   '<tr>' +
+   '<td>' + uploadButton.getHTML() + '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' + cancelButton.getHTML() + '</td>' +   
+'</tr>'+
+'</tbody></table>'+   
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+'</form>' +
+uploadImgDlg.endHTML()
+);
+}
+uploadImgDlg.init()
+uploadWidgetContainer.init();
+uploadWidgetContainer.setHTML(uploadWidget.getHTML())
+var label="";
+if (typeof(backgrdImg)=="undefined")
+label="Click Browse to select the file, or type the path to the file in the box below."
+else
+if (backgrdImg=="")
+label="Click Browse to change the image file" + ", "+" or type the path to the file in the box below."
+else
+if (backgrdImg.length>1)
+label="Click Browse to change the image file" + " <B>"+ backgrdImg +"</B>, "+" or type the path to the file in the box below."
+uploadLabelContainer.init();
+uploadLabelContainer.setHTML(label)
+uploadWidget.init()
+tzone.init()
+uploadButton.init()
+cancelButton.init()
+keyDownCB()
+uploadImgDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden frame -->
+<iframe name="uploadFrame" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<!--
+<form enctype="multipart/form-data" target="" style="display:none" name="alrtForm" method="post" action="">
+<input type="hidden" name="alrtIDS" id="alrtIDS">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+-->
+</body>
+</html>

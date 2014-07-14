@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>  
+    <Entity ApiNeeded="Y" Extensible="N" Description="Order List detail"
+			EntityType="VIEW" Prefix="XPEDX" TableName="XPEDX_ORDER_LIST_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPXOrderListView">
+        <Attributes>
+        
+        <Attribute ColumnName="ORDERED_BY_NAME" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Ordered by name" 
+		  Name="OrderedByName"
+          Nullable="true" 
+          XMLName="OrderedByName"
+          />
+          
+          <Attribute ColumnName="DRAFT_ORDER_FLAG" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Draft Order Flag" 
+          Nullable="false" 
+          XMLName="DraftOrderFlag"
+          />
+          
+          <Attribute ColumnName="DOCUMENT_TYPE" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Document Type" 
+          Nullable="false" 
+          XMLName="DocumentType"
+          />
+          
+          <Attribute ColumnName="AUTHORIZED_CLIENT" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Authorized Client" 
+          Nullable="true" 
+          XMLName="AuthorizedClient"
+          />
+          
+          <Attribute ColumnName="BUYER_ORGANIZATION_CODE" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Buyer Organization Code" 
+          Nullable="true" 
+          XMLName="BuyerOrganizationCode"
+          />
+        
+		  <Attribute ColumnName="LAST_MODIFYTS" 
+          DataType="Date"
+          DefaultValue="' '" 
+          Description="Last Modify Time Stamp"  
+          Nullable="false" 
+          XMLName="Modifyts"
+          />	
+		  
+		   <Attribute ColumnName="ORDER_NAME" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Cart Name"  
+          Nullable="false" 
+          XMLName="OrderName"
+          />
+		  
+		    <Attribute ColumnName="ORDER_HEADER_KEY" 
+          DataType="Key"
+          DefaultValue="' '" 
+          Description="Order header "  
+          Nullable="false" 
+          XMLName="OrderHeaderKey"
+          />
+		  
+		  <Attribute ColumnName="ORDER_NO" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Order Number"
+          Name="OrderNo"  
+          Nullable="true" 
+          XMLName="OrderNo"
+          />
+          
+		  <Attribute ColumnName="EXTN_WEB_CONF_NUM" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Customer to whom the Sales Rep is assigned"  
+          Nullable="false" 
+          XMLName="WebConfNum"
+           /> 
+           
+           <Attribute ColumnName="EXTN_ORDER_DESCRIPTION" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Customer to whom the Sales Rep is assigned"  
+          Nullable="true" 
+          XMLName="ExtnOrderDesc"
+           /> 
+           
+           <Attribute ColumnName="total_number_of_item" 
+          DataType="varchar2-100"
+          DefaultValue="' '" 
+          Description="Customer to whom the Sales Rep is assigned"  
+          Nullable="false" 
+          XMLName="TotalNumberOfItems"
+           /> 
+		   
+		  <Attribute ColumnName="CUSTOMER_CONTACT_ID" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="CustomerContactID" />
+		  <Attribute ColumnName="BILL_TO_ID" DataType="VarcharDocumentNo"
+				DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+				Nullable="true" XMLName="BillToID" />
+		   
+		   <Attribute ColumnName="ENTERPRISE_KEY" DataType="OrgCode" DefaultValue="' '" Description="Enterprise key" Nullable="false" XMLName="EnterpriseCode"/>
+		   
+        </Attributes>
+         <PrimaryKey Name="XPEDX_ORDER_NO">
+		      <Attribute ColumnName="ORDER_NO" Name="OrderNo"/>
+		 </PrimaryKey>
+      </Entity>
+</Entities>
+</DBSchema>

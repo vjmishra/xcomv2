@@ -1,0 +1,196 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript">
+var p=parent;
+initDom(p._root+"lib/images/"+p._skinName+"/",p._lang,p,"selectPromptsDlg");
+</script>
+<script language="javascript">
+var initialized=false;
+var srcFrame=p.DlgFrame;
+var labelDlgTitle="Select Prompts";
+var labelSelectPromptsMsg="Which prompt do you want the selected cell to answer?"
+var labelCellContentMsg="Selected cell contains %P%";
+var infoZoneMsg="Select the prompt you want to answer. You can select more than one prompt.";
+var labelInfoZone="More Information";
+var labelOKButton="OK";
+var labelCancelButton="Cancel";
+function loadCB()
+{
+var iListWidth=260;
+if (!initialized)
+{
+initialized=true;
+selectPromptsDlg=newDialogBoxWidget("selectPromptsDlg",labelDlgTitle,270,null,okCB,cancelCB,false);
+infozone=newInfoWidget("selectPromptsInfozone",labelInfoZone,"",infoZoneMsg,60);
+okButton=newButtonWidget("selectPromptsOKButton",labelOKButton,"okCB()",60);
+cancelButton=newButtonWidget("selectPromptsCancelButton",labelCancelButton,"cancelCB()",60);
+promptsCheckList=newIconListWidget("selectPrompts",iListWidth,170,null,promptsListClickCB);
+}
+if (!_curWin.selectPromptsDlgInitialized)
+{
+_curWin.selectPromptsDlgInitialized=true;
+targetApp
+(
+selectPromptsDlg.beginHTML()+
+'<table border="0" cellspacing="0" cellpadding="0" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:2px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone" style="padding-left:2px">'+
+'<label for="'+promptsCheckList.id+'">'+labelSelectPromptsMsg+'</label>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:5px" border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td class="dialogzone" style="padding-left:2px;white-space:nowrap">'+
+'<div id="selectPromptsCellNameMsgID" style="overflow:hidden;text-overflow:ellipsis;width:'+iListWidth+'">&nbsp;</div>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+'<table style="margin-top:5px" border="0" cellspacing="0" cellpadding="0" width="100%">'+
+'<tr>'+
+'<td>'+
+promptsCheckList.getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getSpace(10,5)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+infozone.getHTML()+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+
+getSpace(1,5)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="right">'+
+'<table border="0" cellspacing="0" cellpadding="0">'+
+'<tr>'+
+'<td>'+
+okButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(10,1)+
+'</td>'+
+'<td>'+
+cancelButton.getHTML()+
+'</td>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+selectPromptsDlg.endHTML()
+);
+}
+selectPromptsDlg.init();
+infozone.init();
+okButton.init();
+okButton.setDisabled(true);
+cancelButton.init();
+promptsCheckList.init();
+var l=getLayer("selectPromptsCellNameMsgID");
+l.innerHTML=labelCellContentMsg.replace(/%P%/g,'<b>'+srcFrame.strCellName+'</b>');
+l.title=labelCellContentMsg.replace(/%P%/g,srcFrame.strCellName);
+promptsCheckList.deleteAll();
+var prompts=srcFrame.doc.arrPrompts;
+for (var i=0;i<prompts.length;i++)
+{
+var checkItem=newTreeWidgetElem(-1,prompts[i].name,"P-"+i,"",null,"");
+checkItem.isCheck=true;
+checkItem.checkCB=promptCheckCB;
+promptsCheckList.add(checkItem);
+}
+promptsCheckList.rebuildHTML();
+selectPromptsDlg.show(true);
+}
+function promptsListClickCB()
+{
+var arrSel=promptsCheckList.getSelections();
+if (arrSel.length==1)
+{
+var isChecked=arrSel[0].checked;
+arrSel[0].check(!isChecked);
+}
+updateOkBtn();
+}
+function promptCheckCB()
+{
+updateOkBtn();
+}
+function updateOkBtn()
+{
+var isSelection=false;
+var arrElems=promptsCheckList.elems;
+for (var i=0;i<arrElems.length;i++)
+{
+if (arrElems[i].checked)
+{
+isSelection=true;
+break;
+}
+}
+okButton.setDisabled(!isSelection);
+}
+function cancelCB()
+{
+selectPromptsDlg.show(false);
+}
+function okCB()
+{
+var prompts=srcFrame.doc.arrPrompts;
+var arrElems=promptsCheckList.elems;
+for (var i=0;i<arrElems.length;i++)
+{
+if (arrElems[i].checked)
+prompts[i].isSelected=true;
+}
+if (srcFrame.setPromptsCB)
+srcFrame.setPromptsCB();
+selectPromptsDlg.show(false);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Org articles</comment>
+    <entry key="WCContext.storefrontId">XPEDXArticleList:/XPXArticle/@OrganizationCode</entry>
+    <entry key="customerIDNameList">XPEDXArticleList:/XPXArticle/ComplexQuery/And/Or/Exp[]/@Name</entry>
+    <entry key="CustomerIDList">XPEDXArticleList:/XPXArticle/ComplexQuery/And/Or/Exp[]/@Value</entry>
+</properties>

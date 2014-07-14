@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<!--  <Entity TableName="XPX_CUSTOMERCONTACT_EXTN" > -->
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Extn Fields for Customer Contact"
+			HasHistory="False" Prefix="XPX" TableName="XPX_CUSTOMERCONTACT_EXTN">
+			<Attributes>
+			
+				<Attribute ColumnName="CUST_CONT_REF_KEY" DataType="Key"
+					DefaultValue="' '" Description="Primary key of this table" Name="CustContRefKey"
+					Nullable="false" XMLName="CustContRefKey" />
+					
+				<Attribute ColumnName="CUSTOMER_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_CUSTOMER table." Name="CustomerKey"
+					Nullable="false" XMLName="CustomerKey" />
+					
+				<Attribute ColumnName="CUSTOMER_CONTACT_ID" DataType="Text-40"
+					DefaultValue="' '" Description="Refers to the column in the YFS_CUSTOMER_CONTACT table." Name="CustomerContactID"
+					Nullable="false" XMLName="CustomerContactID" />
+				
+				<Attribute ColumnName="ADDNL_EMAIL_ADDRS" DataType="varchar2-2600"
+					DefaultValue="' '" Description="Additional Email Addresses for the Contact" Nullable="true" Size=""
+					XMLName="AddnlEmailAddrs" />
+
+				<Attribute ColumnName="PO_LIST" DataType="Text-500"
+					DefaultValue="' '" Description="PO list for the Contact" Nullable="true" XMLName="POList" />
+				
+				<Attribute ColumnName="ACCEPT_T_AND_C_FLAG" DataType="Flag" 
+				DefaultValue="'N'" Description=" " Nullable="true" Size="" XMLName="AcceptTAndCFlag"/>
+				
+				<Attribute ColumnName="T_AND_C_ACCEPTED_ON" DataType="TimeStamp" Description="Acceptance Date: On acceptance of Terms and Conditions by the contact while he login to SWC for the first time." 
+				Nullable="true" XMLName="TAndCAcceptedOn" />
+				
+				<Attribute ColumnName="LAST_LOGIN_DATE" DataType="TimeStamp" Description="Last login date for webchannel user" Nullable="true" XMLName="LastLoginDate"/>
+				 
+				<!-- Mandatory Attributes -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was created."
+					Name="Createts" />
+
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was last modified."
+					Name="Modifyts" />
+
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Creating User ID" />
+
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Modifying User ID" />
+
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Creating Program ID" />
+
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Modifying Program ID" />
+
+				<Attribute ColumnName="LOCKID" DataType="Lockid"
+					DefaultValue="0"
+					Description="An integer used to track and prevent concurrent modifications." />
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_CUST_CONT_PK">
+                <Attribute ColumnName="CUST_CONT_REF_KEY" Name="CustContRefKey" XmlName="CustContRefKey"/>
+            </PrimaryKey>
+
+			
+			<Indices>
+				<Index Name="XPX_CC_EXTN_I1" Unique="True">
+					<Column Name="CUSTOMER_KEY" />
+					<Column Name="CUSTOMER_CONTACT_ID" />
+				</Index>
+
+			</Indices>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

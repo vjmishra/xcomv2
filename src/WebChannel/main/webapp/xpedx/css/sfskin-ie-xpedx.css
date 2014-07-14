@@ -1,0 +1,56 @@
+.btn-gradient {
+	border: 1px solid #ff821c;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	display: inline-block;
+	font-weight: bold;
+	color: #FFFFFF;
+	padding: 4px 14px;
+	background: #ffa154; /* Old browsers */
+}
+
+.btn-gradient:hover {
+	cursor: pointer;
+	border: 1px solid #ff821c;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	display: inline-block;
+	font-weight: bold;
+	color: #FFFFFF;
+	padding: 4px 14px;
+	background: #c94915; /* Old browsers */
+}
+
+.btn-neutral {
+	cursor: pointer;
+	border: 1px solid #c5c5c5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	display: inline-block;
+	color: #000000;
+	padding: 4px 14px;
+	background: #ffffff; /* Old browsers */
+}
+
+.btn-neutral:hover {
+	cursor: pointer;
+	border: 1px solid #c5c5c5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	display: inline-block;
+	color: #000000;
+	padding: 4px 14px;
+	background: #f7f7f7; /* Old browsers */
+}
+.table-header-bar-left, .table-header-bar-right
+{
+	background-color: #003399;
+}

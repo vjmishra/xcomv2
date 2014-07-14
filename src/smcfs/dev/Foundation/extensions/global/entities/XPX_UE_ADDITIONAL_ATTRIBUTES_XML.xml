@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<!--  <Entity TableName="XPX_PNA_RESP_XML" > -->
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Extn Fields for Customer Contact"
+			HasHistory="False" Prefix="XPX" TableName="XPX_UE_ADDITIONAL_ATTR_XML">
+			<Attributes>
+			
+				<Attribute ColumnName="UE_ADDITIONAL_ATTRBTS_KEY" DataType="Key"
+					DefaultValue="' '" Description="Primary key of this table" Name="UEAdditionalAttribsKey"
+					Nullable="false" XMLName="UEAdditionalAttribsKey" />
+					
+				<Attribute ColumnName="ORDER_HEADER_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." Name="OrderHeaderKey"
+					Nullable="false" XMLName="OrderHeaderKey" />
+					
+				<Attribute ColumnName="XML_TYPE" DataType="Text-20"
+					DefaultValue="' '" Description="This field determine whether it is PNA response or used for other purpose line change order input doc" Name="XMLType"
+					Nullable="true" XMLName="XMLType" />
+				
+				<Attribute ColumnName="RESPONSE_XML" DataType="CLOB"
+					DefaultValue="' '" Description="This is response from the pna or change order input doc" Nullable="true" 
+					XMLName="ResponseXML" />				
+				 
+				<!-- Mandatory Attributes -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was created."
+					Name="Createts" />
+
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was last modified."
+					Name="Modifyts" />
+
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Creating User ID" />
+
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Modifying User ID" />
+
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Creating Program ID" />
+
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Modifying Program ID" />
+
+				<Attribute ColumnName="LOCKID" DataType="Lockid"
+					DefaultValue="0"
+					Description="An integer used to track and prevent concurrent modifications." />
+			</Attributes>
+			
+			<PrimaryKey Name="UE_ATTRIBS_PK">
+                <Attribute ColumnName="UE_ADDITIONAL_ATTRBTS_KEY" Name="UEAdditionalAttribsKey" XmlName="UEAdditionalAttribsKey"/>
+            </PrimaryKey>
+            
+            <Parent ParentTableName="YFS_ORDER_HEADER" >
+				<Attribute ColumnName="ORDER_HEADER_KEY" ParentColumnName="ORDER_HEADER_KEY" />
+	 		</Parent>
+            
+            <Indices>
+				<Index Name="XPX_UE_ATTRIB_I" Unique="True">
+					<Column Name="ORDER_HEADER_KEY" />
+					<Column Name="XML_TYPE" />
+				</Index>
+				<Index Name="XPX_UE_ADTIONAL_ATTR_XML_I01" Unique="True">
+					<Column Name="ORDER_HEADER_KEY" />
+				</Index>
+
+			</Indices>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

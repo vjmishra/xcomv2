@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+	    <Entity TableName="YFS_ITEM" AuditRequired="N">
+        <Attributes>
+        <Attribute ColumnName="EXTN_ITEM_TYPE" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnItemType"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_MPC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnMpc"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_SIZE" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnSize"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_COLOR" 
+          DataType="Text-200"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnColor"
+          XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_BEST_MATCH" 
+          DataType="Text-200"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnBestMatch"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_BASIS" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnBasis"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_MWT" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnMwt"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_MATERIAL" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnMaterial"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_FORM" 
+          DataType="Text-200"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnForm"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ENVIRONMENT" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnEnvironment"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_CAPACITY" 
+          DataType="Text-200"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnCapacity"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_MODEL" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnModel"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_GAUGE" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnGauge"
+          XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_THICKNESS" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnThickness"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PLY" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnPly"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_VENDOR_NO" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnVendorNo"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_STOCK_STATUS" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnStockStatus"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_LEGACY_ID" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnLegacyId"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_CERT" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnCert"
+          XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_SUPPLIER_NAME_DISPLAY" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnSupplierNameDisplay"
+          XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_SELL_COPY" 
+          DataType="Text-2000"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnSellText"
+          XMLGroup="Extn" />
+          <Attribute ColumnName="EXTN_ROLL_WIDTH" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnRollWidth"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_ROLL_DIAMETER" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnRollDiameter"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_BRAND" 
+          DataType="Text-100"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnBrand"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_UNSPSC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnUNSPSC"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PKLV1UPC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnPKLV1UPC"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PKLV2UPC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnPKLV2UPC"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PKLV3UPC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnPKLV3UPC"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PKLV4UPC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnPKLV4UPC"
+          XMLGroup="Extn" />
+		  <Attribute ColumnName="EXTN_PKLV5UPC" 
+          DataType="Text-40"
+		  Description=" "  
+          Nullable="true" 
+          XMLName="ExtnPKLV5UPC"
+          XMLGroup="Extn" />
+
+		<Attribute ColumnName="EXTN_KEYWORDS" 
+		          DataType="varchar2-1300"
+				  Description="Extn field with modified special charecters "  
+		          Nullable="true" 
+		          XMLName="ExtnKeywords"
+          XMLGroup="Extn" />
+          
+		  <Attribute ColumnName="EXTN_SHORT_DESCRIPTION" 
+          DataType="varchar2-300"
+		  Description="Extn field with modified special charecters "  
+          Nullable="true" 
+          XMLName="ExtnShortDescription"
+          XMLGroup="Extn" />
+	  
+		    <Attribute ColumnName="EXTN_DESCRIPTION" 
+          DataType="varchar2-650"
+		  Description="Extn field with modified special charecters  "  
+          Nullable="true" 
+          XMLName="ExtnDescription"
+          XMLGroup="Extn" />
+       
+		    <Attribute ColumnName="EXTN_EXTENDED_DESCRIPTION" 
+          DataType="varchar2-2600"
+		  Description="Extn field with modified special charecters  "  
+          Nullable="true" 
+          XMLName="ExtnExtendedDesc"
+          XMLGroup="Extn" />
+	  
+	  		<Attribute ColumnName="EXTN_PACK_METHOD" 
+          	DataType="Text-50"
+	  		Description="Extn field with the packaging type or method"  
+          	Nullable="true" 
+          	XMLName="ExtnPackMethod"
+         	XMLGroup="Extn" />
+	  
+	  		<Attribute ColumnName="EXTN_MARKETING_GROUP_ID" 
+          	DataType="Text-100"
+	  		Description="Extn field with the Marketing Group ID (aka Publishing Unit Name)"  
+          	Nullable="true" 
+          	XMLName="ExtnMarketingGroupId"
+         	XMLGroup="Extn" />
+	  
+        </Attributes>
+        
+        <Indices>
+            <Index Name="EXTN_ITEM_I1" Unique="False">
+               <Column Name="EXTN_MPC"/>
+            </Index>
+            
+         
+				<Index Name="EXTN_ITEM_I2" Unique="False">
+					<Column Name="ORGANIZATION_CODE" />
+					<Column Name="MAX_MODIFYTS" />
+				</Index>
+				
+				<Index Name="EXTN_ITEM_I3" Unique="False">
+					<Column Name="ORGANIZATION_CODE" />
+					<Column Name="ITEM_GROUP_CODE" />
+				</Index>
+				
+				<Index Name="EXTN_ITEM_I4" Unique="False">
+					<Column Name="ITEM_ID" />
+					<Column Name="UOM" />
+				</Index>
+								
+				<Index Name="EXTN_ITEM_I5" Unique="False">
+					<Column Name="ITEM_ID" />
+					<Column Name="UOM" />
+					<Column Name="ORGANIZATION_CODE" />
+				</Index>
+				
+				<Index Name="EXTN_ITEM_I6" Unique="False">
+					<Column Name="ITEM_GROUP_CODE" />
+				</Index>
+				
+				<Index Name="EXTN_ITEM_I7" Unique="False">
+					<Column Name="ITEM_GROUP_CODE" />
+					<Column Name="STATUS" />
+				</Index>
+				
+				<Index Name="EXTN_ITEM_I8" Unique="False">
+					<Column Name="EXTN_BEST_MATCH" />
+				</Index>
+		
+         </Indices>
+        		
+      </Entity>
+	</Entities>
+</DBSchema>

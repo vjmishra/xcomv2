@@ -1,0 +1,80 @@
+<Order
+ActualPricingDate=""
+    AdjustmentInvoicePending="" AllAddressesVerified=""
+    ApprovalCycle=""
+    AuthorizationExpirationDate=""
+    AuthorizedClient="" BillToID=""
+    BillToKey=""
+    BuyerOrganizationCode=""
+    CarrierAccountNo="" CarrierServiceCode=""
+    ChainType="" ChargeActualFreightFlag=""
+    ComplimentaryGiftBoxQty="" CreatedAtNode="" Createprogid=""
+    Createts=""
+    Createuserid="" CustCustPONo=""
+    CustomerContactID="" CustomerFirstName=""
+    CustomerLastName="" CustomerPONo="" CustomerPhoneNo=""
+    CustomerZipCode="" DeliveryCode="" Division="" DoNotConsolidate=""
+    DocumentType="" DraftOrderFlag="" EnterpriseCode=""
+    EntryType="" FreightTerms="" HasDerivedChild=""
+    HasDerivedParent="" HoldFlag="" HoldReasonCode="" InternalApp=""
+    InvoiceComplete="" Lockid="" Modifyprogid=""
+    Modifyts="" Modifyuserid=""
+    NextAlertTs="" NoOfAuthStrikes=""
+    NotifyAfterShipmentFlag="" OrderComplete=""
+    OrderDate=""
+    OrderHeaderKey="" OrderName=""
+    OrderNo="" OrderType="" OriginalTax=""
+    OriginalTotalAmount="" OtherCharges="" Override=""
+    PaymentRuleId="" PaymentStatus=""
+    PendingTransferIn="" PersonalizeCode="" PriceOrder=""
+    PriceProgramName="" PriorityCode="" PriorityNumber=""
+    PropagateCancellations="" Purpose=""
+    ReqDeliveryDate="" ReserveInventoryFlag=""
+    ReturnByGiftRecipient="" SCAC="" SaleVoided="" SearchCriteria1=""
+    SearchCriteria2="" SellerOrganizationCode="" ShipNode=""
+    ShipToID=""
+    ShipToKey="" SourceIPAddress="" SourceType=""
+    TaxExemptFlag="" TaxExemptionCertificate="" TaxJurisdiction=""
+    TaxPayerId="" TermsCode="" TotalAdjustmentAmount="" isHistory="" 
+	Status="" >
+<Extn/>
+<PriceInfo/>
+<Instructions>
+<Instruction  InstructionDetailKey="" InstructionType="" InstructionText=""/>
+</Instructions>
+<OverallTotals GrandTotal=""/>
+<OrderHoldTypes>
+<OrderHoldType/>
+</OrderHoldTypes>
+<OrderLines>
+<OrderLine CarrierServiceCode="" CustomerLinePONo="" CustomerPONo="" IsPriceLocked="" ItemGroupCode="" LineType="" MaxLineStatus="" MaxLineStatusDesc="" 
+MinLineStatus="" MinLineStatusDesc="" OrderHeaderKey="" OrderLineKey="" OrderedQty="" PrimeLineNo="" ReqShipDate="" ReqDeliveryDate="" ShipNode="" ShipToID="" 
+ShippedQuantity="" Status="" ShipToKey="" SubLineNo="">
+<Extn/>
+<Item>
+<Extn/>
+</Item>
+
+            <ItemDetails ItemID="">
+
+	<PrimaryInformation BundleFulfillmentMode=""
+		ConfigurationKey="" ConfiguredModelKey="" DefaultProductClass=""
+		Description="" ExtendedDescription="" IsConfigurable=""
+		IsDeliveryAllowed="" IsPickupAllowed="" IsPreConfigured=""
+		IsShippingAllowed="" MaxOrderQuantity="" MinOrderQuantity=""
+		OrderingQuantityStrategy="" ShortDescription="" />
+</ItemDetails>
+<LineOverallTotals />
+<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+<LinePriceInfo/>
+<Instructions>
+<Instruction InstructionType="" InstructionText=""/>
+</Instructions>
+<Awards>
+<Award/>
+</Awards>
+</OrderLine>
+</OrderLines>
+<PersonInfoShipTo/>
+<PersonInfoBillTo/>
+</Order>

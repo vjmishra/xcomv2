@@ -1,0 +1,88 @@
+.ship-to-header
+{
+border-bottom: 1px solid rgb(204, 204, 204); 
+height:29px; 
+margin-bottom: 8px;
+width: 740px;
+}
+.input-details#Text1
+{
+width: 13.1em;
+float:right;	
+}
+.searchButton#magGlass
+{
+float:right;
+background-color: #fff;	
+margin-left:5px;
+}
+.xpedx-light-box #address-list ul 
+{
+    padding: 10px;
+}
+
+.xpedx-light-box #address-list li 
+{
+    float: left;
+    margin: 0 0px 20px 0;
+}
+
+.xpedx-light-box#change-ship-to
+{
+ padding:0px;
+width: 775px;
+height: 485px;
+}
+
+.xpedx-light-box#select-ship-to
+{
+ padding:0px;
+ padding-left: 5px;
+width: 745px;
+height: 344px;
+}
+
+.black
+{
+ color:black;	
+}
+.ship-to-top
+{
+width: auto; 
+height: 125px;	
+}
+.ship-to-top-left
+{
+float:left; 
+margin-right:38px;
+}
+.ship-to-body
+{
+float: left;
+width: 740px;	
+}
+.ship-to-address-list
+{
+border: 1px solid #CCC; 
+height: 216px;
+overflow: auto;
+}
+.ship-to-list
+{
+width:232px;
+height:auto;	
+}
+.change-preferred-ship-to { margin-right:3px; margin-top:9px; }
+.ship-to-top a#apply-btn
+{
+    bottom: 114px;
+    position: relative;
+    left: 150px;
+}
+.no-border{ border:none; }
+.right { text-align: right; }
+/*.ship-to-top .ship-to-top-left { margin-left:29px; }
+.mill-container-extended-pricing { margin-right:5px; }*/
+li.ship-to-list  {
+  height: 94px;
+}

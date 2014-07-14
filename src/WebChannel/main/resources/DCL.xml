@@ -1,0 +1,6 @@
+<dcl>
+	<vendor>
+		<name>swc_cust/1_0/swc_cust.jar</name>
+		<target>DCL|APP</target>
+	</vendor>
+</dcl>

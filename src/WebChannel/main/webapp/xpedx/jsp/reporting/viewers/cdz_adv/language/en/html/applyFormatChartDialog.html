@@ -1,0 +1,2720 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Title zone</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../scripts/ReportWom.js"></script>
+<script language="javascript" src="../scripts/applyFormat_borderTab.js"></script>
+<script language="javascript">
+p = parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang, p, "formatChart")
+_iReportIdx = requestQueryString(window,"reportIndex")
+_iReportIdx=(_iReportIdx=="" || _iReportIdx=="undefined" )?null:_iReportIdx
+p._globalWOMCallback = null;
+p._doNotHideOnLoadReport=false
+if (p.formatChartBid) {
+_bid = p.formatChartBid
+elt = p.findByBID(p.doc,_bid)
+elts = new Array
+elts[0]=elt
+} else {
+elts = p.getSelectedElts()
+elt = elts[0]
+_bid = elt.bid
+}
+var url =  p._root + "incObjects" + p._appExt
+urlParams = p.urlParamsNoBID(null,null,_iReportIdx)
+includeScript(url+urlParams)
+</script>
+<script language="javascript">
+var url =  p._root + "incFormatNumbers" + p._appExt
+includeScript(url+urlParams)
+</script>
+<script language="javascript">
+initialized = false
+formatChartDlg = null
+currList = null
+var gotoPivot = (requestQueryString(window,"gotoPivot") == 'yes')
+function block(nm, bt, ndd, nmes, dr, snp, roep, apb, u, ph, pv, se)
+{
+    var b=new Object
+b.name=nm
+b.blockType=bt
+b.nDimDetails=ndd
+b.nMeasures=nmes
+b.dupRow=dr
+b.startNewPage=snp
+b.repeatOnEveryPage=roep
+b.avoidPageBreak=apb
+b.unitIsInch=u
+b.posH=ph
+b.posV=pv
+    b.showWhenEmpty=se
+    return b
+}
+function graph(u, w, h, st, ttl,sl, pl, sd, dl)
+{
+var g=new Object
+g.unitIsInch=u
+g.width=w
+    g.height=h
+    g.showTitle=st
+    g.title=ttl
+    g.showLegend=sl
+    g.posLegend=pl
+    g.showDataValues=sd
+    g.threeDLook=dl
+    return g
+}
+function graphApp(td,bw,wc,lw,rw,pc,pct,xla,xf,xo,xg,xc,xfn,xfnt,yla,yf,ymi,ymiv,yma,ymav,yl,yo,yg,yc,yfn,yfnt,zla,zf,zmi,zmiv,zma,zmav,zl,zo,zg,zc,zfn,zfnt)
+{
+var ga=new Object
+ga.is3D=td
+ga.bottomWall=bw
+ga.wallColor=wc
+ga.leftWall=lw
+ga.rightWall=rw
+ga.primColor=pc
+ga.percent=pct
+ga.XLabel=xla
+ga.XFreq=xf
+ga.XOrient=xo
+ga.XGrid=xg
+ga.XGridColor=xc
+ga.XFormatNb=xfn
+ga.XFormatNbType=xfnt
+ga.YLabel=yla
+ga.YFreq=yf
+ga.YMin=ymi
+ga.YMinVal=ymiv
+ga.YMax=yma
+ga.YMaxVal=ymav
+ga.YLog=yl
+ga.YOrient=yo
+ga.YGrid=yg
+ga.YGridColor=yc
+ga.YFormatNb=yfn
+ga.YFormatNbType=yfnt
+ga.ZLabel=zla
+ga.ZFreq=zf
+ga.ZMin=zmi
+ga.ZMinVal=zmiv
+ga.ZMax=zma
+ga.ZMaxVal=zmav
+ga.ZLog=zl
+ga.ZOrient=zo
+ga.ZGrid=zg
+ga.ZGridColor=zc
+ga.ZFormatNb=zfn
+ga.ZFormatNbType=zfnt
+return ga
+}
+function cl(r,g,b)
+{
+   var o=new Object
+   o.rgb=""+r+","+g+","+b
+   return o
+}
+function align(o,h,v,wrap)
+{
+    var a=o.align=new Object
+    a.h=h
+    a.v=v
+    a.wrap=wrap
+}
+function padding(o,t,b,l,r)
+{
+    var p=o.padding=new Object
+    p.top=t
+    p.bottom=b
+    p.left=l
+    p.right=r
+}
+function bd(o,sz, col)
+{
+    var b=o.border=new Object
+    b.size=sz
+    b.color=col
+}
+function bs(o, tsz, tcol, bsz, bcol, lsz, lcol, rsz, rcol)
+{
+    var b=o.borders=new Object
+    b.topSize=tsz
+    b.topColor=tcol
+    b.bottomSize=bsz
+    b.bottomColor=bcol
+    b.leftSize=lsz
+    b.leftColor=lcol
+    b.rightSize=rsz
+    b.rightColor=rcol
+}
+function attach(o, toH, h, toV, v)
+{
+    var a=o.attach=new Object
+    a.toH=toH
+    a.h=h
+    a.toV=toV
+    a.v=v
+}
+function fnt(o,name,size,bold,italic,under,strike)
+{
+    var f=o.font=new Object
+    f.name=name
+    f.size=size
+    f.bold=bold
+    f.italic=italic
+    f.under=under
+    f.strike=strike    
+}
+function unloadCB()
+{
+if (elt) {
+elt.block=null 
+elt.graph=null
+elt.graphApp=null
+elt.chartData = null
+elt.XAxisValues = null
+elt.YAxisValues = null
+elt.ZAxisValues = null
+elt.chartTitle = null
+elt.chartLegend = null
+elt.XAxisLabel = null
+elt.YAxisLabel = null
+elt.ZAxisLabel = null
+elt.attributes = null
+}
+}
+</script>
+<script language="javascript">
+var url =  p._root + "incChartWom" + p._appExt
+urlParams += "&sBid=" + _bid
+includeScript(url+urlParams)
+</script>
+<script language="javascript">
+elt.block = varBlock
+elt.graph = varGraph
+elt.graphApp = varGraphApp
+elt.chartData = chartData
+elt.XAxisValues = XAxisValues
+elt.YAxisValues = YAxisValues
+elt.ZAxisValues = ZAxisValues
+elt.chartTitle = chartTitle
+elt.chartLegend = chartLegend
+elt.XAxisLabel = XAxisLabel
+elt.YAxisLabel = YAxisLabel
+elt.ZAxisLabel = ZAxisLabel
+graphUnitIsInch = (elt.graph.unitIsInch == 1)
+_orientation = new Array('None', '45', '90', '180', '270', '315', 'Hotel')
+_legendPos = new Array('Left','Right','Bottom')
+idBlocksAr = new Array("table", "bar", "line", "area", "pie", "radar")
+subBlockAr = new Array
+var i = 0
+subBlockAr[i++] = new Array( "Horizontal Table", "Vertical Table", "Crosstab", "Form")
+subBlockAr[i++] = new Array( "Vertical Grouped", "Horizontal Grouped", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Bar", "Vertical \nBar & Line", "Horizontal \nBar & Line")
+subBlockAr[i++] = new Array( "Vertical Mixed","Horizontal Mixed", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Line Chart", "3D Surface")
+subBlockAr[i++] = new Array( "Vertical Absolute", "Horizontal Absolute", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Area", "3D Volume")
+subBlockAr[i++] = new Array( "Pie", "Doughnut", "3D Pie", "3D Doughnut")
+subBlockAr[i++] = new Array( "Radar Line", "Radar Stacked Area", "Polar", "Scatter")
+var _b = 0 
+var _l = 1 
+var _r = 2 
+_matrixCharts = new Array(['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['x','y','z'],['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['y','x','z'],['x','y','z'],['x','y','z'],['','y',''],['','y',''],['','y',''],['','y',''],['x','y',''],['x','y',''],['y','z',''],['y','z',''])
+_block = elt
+_blockKind = (elt.block.blockType - 7) 
+_axisMatrix = _matrixCharts[_blockKind - 4] 
+_hasxAxis = false
+_hasyAxis = false
+_haszAxis = false
+_ax_x =''
+_ax_y =''
+_ax_z =''
+ax = _axisMatrix[_b]
+if (ax != '') 
+{
+eval('_has' + ax + 'Axis = true')
+eval('_ax_' + ax + ' = \'b\'')
+}
+ax = _axisMatrix[_l]
+if (ax != '') 
+{
+eval('_has' + ax + 'Axis = true')
+eval('_ax_' + ax + ' = \'l\'')
+}
+ax = _axisMatrix[_r]
+if (ax != '') 
+{
+eval('_has' + ax + 'Axis = true')
+eval('_ax_' + ax + ' = \'r\'')
+}
+_isVLineBar= (_blockKind==11)
+_isHLineBar= (_blockKind==12)
+_isLineBar= (_isVLineBar || _isHLineBar) 
+_isPolarScatter= (_blockKind==35) || (_blockKind==36) 
+_isPie= (_blockKind==29) || (_blockKind==30) || (_blockKind==31) || (_blockKind==32)
+_is3D= (elt.graphApp.is3D == 1)
+_no3DLook= (_is3D) || (_isPie) || (_isPolarScatter) || (_blockKind==33)|| (_blockKind==34)
+_noLogScale = (_isPie) || (_blockKind==8) || (_blockKind==9) || (_blockKind==25) || (_blockKind==26)
+_hasZAppearance = (_is3D && !_isPie) || _isPolarScatter || _isLineBar
+blockIcons = p._img + "subblockicons.gif"
+var idx = 0
+for (var i = 0; i < idBlocksAr.length; i++) 
+{
+for (var k = 0; k < subBlockAr[i].length; k++) 
+{
+if (idx++ == _blockKind) 
+{
+_img_dx = 50*k
+_img_dy = 50*i
+_img_tooltip = subBlockAr[i][k]
+blockImgWhiteBG = newIconWidget( 'blockImgWhiteBG', blockIcons, voidCB, null, _img_tooltip, 50, 50, _img_dx,_img_dy)
+blockImg = newIconWidget( 'blockImg', blockIcons, null, null, _img_tooltip, 50, 50, _img_dx,_img_dy)
+break
+}
+}
+}
+_axisCommands = new Array
+function loadDialog()
+{
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized = true
+formatChartDlg = newDialogBoxWidget("formatChartDlg",'Format Chart',null,null, okCB, cancelCB)
+tzone = newTabbedZone("fchartDlgTzone",selectZoneCB,645,300)
+tzone.add('General',"gen")
+tzone.add("Border","bdr")
+tzone.add('Appearance',"app")
+tzone.add('Layout',"lay")
+tzone.add('Pivot',"piv")
+nameTxt = newTextFieldWidget( "fchartDlgNameTxt", null, 30, null, null, true, 'The name of the chart', 240)
+width = newFloatFieldWidget( "fchartDlgWidthField", null, null, null, null, true, 'The width of the chart', 40)
+widthUnit= newWidget("fchartDlgWidthUnit")
+height = newFloatFieldWidget( "fchartDlgHeightField", null, null, null, null, true, 'The height of the chart', 40)
+heightUnit= newWidget("fchartDlgHeightUnit")
+showChartCheck = newCheckWidget("fchartDlgShowChartCheck",'Show chart when empty', null)
+dupRowCheck = newCheckWidget("fchartDlgDupRowCheck",'Avoid duplicate row aggregation')
+chartTitleCheck = newCheckWidget("fchartDlgChartTitleCheck",'Show chart title', chartTitleCheckCB)
+legendCheck = newCheckWidget("fchartDlgLegendCheck",'Show legend', legendCheckCB)
+legendCombo = newComboWidget("fchartDlgLegendCombo",null, true, 90)
+x_axisLabelCheck = newCheckWidget("fchartDlgXAxisLabelCheck",'Show X Axis label', x_axisLabelCheckCB)
+y_axisLabelCheck = newCheckWidget("fchartDlgYAxisLabelCheck",'Show Y Axis label', y_axisLabelCheckCB)
+z_axisLabelCheck = newCheckWidget("fchartDlgZAxisLabelCheck",'Show Z Axis label', z_axisLabelCheckCB)
+dataValuesCheck = newCheckWidget("fchartDlgDataValuesCheck",'Show data values', dataValuesCheckCB)
+threeDLookCheck = newCheckWidget("fchartDlgThreeDLookCheck",'3D look', threeDLookCheckCB)
+bgColor = newIconColorMenuWidget("fchartDlgBgColor",p._img+"format.gif",chgColorCB,null,'Background color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+createWidgetsForBorderTab("fchart");
+curIcon="format.gif"
+formatContainer=newFrameZoneWidget("fchartDlgformatContainer",200,20)
+formatPal=newPaletteWidget("formatPal")
+fontCombo=addCombo("fchartDlgfontCombo",true,150,"Font name")
+sizeCombo=addIntCombo("fchartDlgsizeCombo", 3, "Font size", 50)
+sizeCombo.setMin (parent._fntSMin) 
+sizeCombo.setMax (parent._fntSMax) 
+sp()
+bold=addCheck("fchartDlgbold",3,null,"Bold")
+italic=addCheck("fchartDlgitalic",4,null,"Italic")
+under=addCheck("fchartDlgunder",5,null,"Underlined")
+sp()
+bgCombo=formatPal.add(newIconColorMenuWidget("fchartDlgbgCombo",p._img+curIcon,chgColorCB,null,"Background color",16,16,6*16,0,6*16,16,p._lastUsedColorsAr))
+sp()
+fgCombo=formatPal.add(newIconColorMenuWidget("fchartDlgfgCombo",p._img+curIcon,chgColorCB,null,"Text color",16,16,7*16,0,7*16,16,p._lastUsedColorsAr))
+sp()
+borders=addCheck("fchartDlgborders",9,null,"Borders")
+thicknessCombo=addCombo("fchartDlgthicknessCombo",true,60,"Border size")
+borderColor=formatPal.add(newIconColorMenuWidget("fchartDlgborderColor",p._img+curIcon,chgColorCB,null,"Border color",16,16,8*16,0,8*16,16,p._lastUsedColorsAr))
+titleClick = newWidget("titleClick")
+chartClick = newWidget("chartClick")
+chartLegend_title = newWidget("chartLegend_title")
+sBottomAxisHTML = makeBlock('b')
+sLeftAxisHTML = makeBlock('l')
+sRightAxisHTML = makeBlock('r')
+chartTitleZone = newWidget("chartTitleZone")
+chartTitle = newWidget("chartTitle")
+y_axisZone = newWidget("y_axisZone")
+x_axisZone = newWidget("x_axisZone")
+z_axisZone = newWidget("z_axisZone")
+centerZone = newWidget("centerZone")
+floorCheck = newCheckWidget("fchartDlgFloorCheck",'Show floor', floorCheckCB)
+floorColor = newIconColorMenuWidget("fchartDlgFloorColor",p._img+"format.gif",chgColorCB,null,'Floor color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+leftWallCheck = newCheckWidget("fchartDlgLeftWallCheck",'Show left wall', null)
+rightWallCheck = newCheckWidget("fchartDlgRightWallCheck",'Show right wall', null)
+asPercentCheck = newCheckWidget("fchartDlgAsPercentCheck",'Show as percentages', null)
+x_axisValueFreqZone = newWidget("fchartDlgX_axisValueFreqZone")
+x_axisValueFreqCheck = newCheckWidget("fchartDlgx_AxisValueFreqCheck",'Auto axis value frequency', x_axisValueFreqCheckCB)
+x_frequencyInput = newIntFieldWidget("fchartDlgx_FrequencyInput", null,6,null,null,null,'X Axis Frequency',50)
+x_orientation_zone = newWidget("fchartDlgX_orientation_zone")
+x_orientationCombo = newComboWidget("fchartDlgx_OrientationCombo", null, true, 90)
+x_gridCheck = newCheckWidget("fchartDlgx_GridCheck",'Show grid', x_gridCheckCB)
+x_gridColor = newIconColorMenuWidget("fchartDlgx_GridColor",p._img+"format.gif",chgColorCB,null,'X grid color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+y_axisValueFreqCheck = newCheckWidget("fchartDlgy_AxisValueFreqCheck",'Auto axis value frequency', y_axisValueFreqCheckCB)
+y_frequencyInput = newIntFieldWidget("fchartDlgy_FrequencyInput", null,6,null,null,null,'Y Axis Frequency',50)
+y_orientationCombo = newComboWidget("fchartDlgy_OrientationCombo", null, true, 90)
+y_gridCheck = newCheckWidget("fchartDlgy_GridCheck",'Show grid', y_gridCheckCB)
+y_gridColor = newIconColorMenuWidget("fchartDlgy_GridColor",p._img+"format.gif",chgColorCB,null,'Y grid color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+minValueCheck = newCheckWidget("fchartDlgMinValueCheck",'Min. value', minValueCheckCB)
+minValueInput = newFloatFieldWidget("fchartDlgMinValueInput", null,null,null,null,null,'Y Axis min. value',50)
+maxValueCheck = newCheckWidget("fchartDlgMaxValueCheck",'Max. value', maxValueCheckCB)
+maxValueInput = newFloatFieldWidget("fchartDlgMaxValueInput", null,null,null,null,null,'Y Axis max. value',50)
+logScaleCheck = newCheckWidget("fchartDlgLogScaleCheck",'Logarithmic scale', null)
+z_axisValueFreqZone = newWidget("fchartDlgZ_axisValueFreqZone")
+z_axisValueFreqCheck = newCheckWidget("fchartDlgz_AxisValueFreqCheck",'Auto axis value frequency', z_axisValueFreqCheckCB)
+z_frequencyInput = newIntFieldWidget("fchartDlgz_FrequencyInput", null,6,null,null,null,'Z Axis Frequency',50)
+z_orientationCombo = newComboWidget("fchartDlgz_OrientationCombo", null, true, 90)
+z_gridCheck = newCheckWidget("fchartDlgz_GridCheck",'Show grid', z_gridCheckCB)
+z_gridColor = newIconColorMenuWidget("fchartDlgz_GridColor",p._img+"format.gif",chgColorCB, null,'Z grid color',16,16,6*16,0,6*16,16,p._lastUsedColorsAr)
+z_minValueCheck = newCheckWidget("fchartDlgz_AxisMinValueCheck",'Min. value', z_minValueCheckCB)
+z_minValueInput = newFloatFieldWidget("fchartDlgz_AxisMinValueInput", null,null,null,null,null,'Z Axis min. value',50)
+z_maxValueCheck = newCheckWidget("fchartDlgz_AxisMaxValueCheck",'Max. value', z_maxValueCheckCB)
+z_maxValueInput = newFloatFieldWidget("fchartDlgz_AxisMaxValueInput", null,null,null,null,null,'Z Axis max. value',50)
+z_logScaleCheck = newCheckWidget("fchartDlgz_AxisLogScaleCheck",'Logarithmic scale', null)
+z_axisValueMinMaxLogZone = newWidget("fchartDlgZ_axisValueMinMaxLogZone")
+x_formatNumbersCombo = newComboWidget("fcDlgx_formatNumbersCombo", formatNumbersCB, true, 160)
+y_formatNumbersCombo = newComboWidget("fcDlgy_formatNumbersCombo", formatNumbersCB, true, 160)
+z_formatNumbersCombo = newComboWidget("fcDlgz_formatNumbersCombo", formatNumbersCB, true, 160)
+startNewPageCheck = newCheckWidget("fchartDlgStartNewPageCheck",'Start on a new page', null)
+repeatEveryPageCheck = newCheckWidget("fchartDlgRepeatEveryPageCheck",'Repeat on every page', null)
+avoidPageBreakCheck = newCheckWidget("fchartDlgAvoidPageBreakCheck",'Avoid page breaks in chart', null)
+horizontalImg = newWidget("fchartDlgHorizontalImg")
+horizontalPosField = newFloatFieldWidget( "fchartDlgHorizontalPosField", null, null, null, null, true, 'Horizontal position', 40)
+HPosUnit = newWidget("fchartDlgHPosUnit")
+horizontalPosCombo = newComboWidget("fchartDlgHorizontalPosCombo", horizontalPosComboCB, true, 160)
+horizontalEltCombo = newComboWidget("fchartDlgHorizontalEltCombo", elementComboCB, true, 120)
+sectionOrBodyTxt = newWidget("fchartDlgSectionOrBodyTxt")
+verticalImg = newWidget("fchartDlgVerticalImg")
+verticalPosField = newFloatFieldWidget( "fchartDlgVerticalPosField", null, null, null, null, true, 'Vertical position', 40)
+VPosUnit = newWidget("fchartDlgVPosUnit")
+verticalPosCombo = newComboWidget("fchartDlgVerticalPosCombo", verticalPosComboCB, true, 160)
+verticalEltCombo = newComboWidget("fchartDlgVerticalEltCombo", elementComboCB, true, 120)
+condDisplayCheck = newCheckWidget("fchartDlgCondDisplayCheck",'Conditional display if:', condDisplayCheckCB)
+condDisplayTxt = newWidget("fchartDlgCondDisplayTxt")
+valButton = newButtonWidget("fchartDlgValButton",'Validate',"testBtCB()",60)
+_wPivotZone = 110
+_hPivotZone = 160
+dicTree = newTreeWidget('fchartDlgDicTree', 150, 270, p._img + "qualificationIcons.gif", clickCB, dclickCB)
+dicTree.setTooltipOnMouseOver(true);
+dicTree.setDragDrop(dragCB, acceptDropCB, dropCB)
+addObjButton = newButtonWidget('fchartDlgAddObjButton',null, addButtonCB,null,null,"Add selected object from available objects",null,null,p._skin+'buttonIcons.gif',16,16,0,0)
+delObjButton = newButtonWidget('fchartDlgDelObjButton',null, removeButtonCB,null,null,"Remove selected object",null,null,p._skin+'buttonIcons.gif',16,16,0,16)
+currentObj = null
+validZones = new Array
+_blockCurrent = null
+axisObjects = new Array 
+_axisType = new Array()
+_axisType['x'] = 3
+_axisType['y'] = 4
+_axisType['z'] = 5
+axisObjects['x'] = _block.axis[_axisType['x']].vars
+axisObjects['y'] = _block.axis[_axisType['y']].vars
+axisObjects['z'] = _block.axis[_axisType['z']].vars
+widgetX = newWidget("x")
+widgetY = newWidget("y")
+widgetZ = newWidget("z")
+createList('x', ((_is3D || _isPolarScatter) && !_isPie) ? 'X-Axis (Optional)':'X-Axis','_vertBOList')
+createList('y', 'Y-Axis','_vertBOList')
+createList('z',_isPolarScatter ? 'Z-Axis':'Z-Axis (Optional)','_vertBOList')
+info = newInfoWidget("fchartDlgInfo","More Information","","Modify the chart format here.")
+OKButton = newButtonWidget("fchartDlgOKButton","OK","okCB(false)",60)
+HelpButton = newButtonWidget("fchartDlgHelpButton","Help","helpCB()",60)
+CancelButton = newButtonWidget("fchartDlgCancelButton","Cancel","okCB(null,true)",60)
+applyButton = newButtonWidget("fchartDlgApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+formatChartDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.formatChartInitialized!=true)
+{
+_curWin.formatChartInitialized=true
+var arHTML = new Array(), i=0
+arHTML[i++] = formatChartDlg.beginHTML()
+arHTML[i++] = '<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = tzone.beginHTML()
+arHTML[i++] = tzone.beginTabHTML(0)
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="0" cellpadding="0" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="100">' + 'Name:' + '</td>'
+arHTML[i++] = '<td>' + nameTxt.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="100">' + 'Width:' + '</td>'
+arHTML[i++] = '<td>' + width.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="fchartDlgWidthUnit"></span>' + '</td>'
+arHTML[i++] = '<td width="100" align="right">' +'Height:' + '</td>'
+arHTML[i++] = '<td>' + height.getHTML() + '</td>'
+arHTML[i++] = '<td>' + '<span id="fchartDlgHeightUnit"></span>'  + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="100">' + 'Display:' + '</td>'
+arHTML[i++] = '<td width="200">' + showChartCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + dupRowCheck.getHTML() + '</td>'
+arHTML[i++] = '<td></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td width="200">' + chartTitleCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + legendCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + legendCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td>' + x_axisLabelCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + z_axisLabelCheck.getHTML() + '</td>'
+arHTML[i++] = '<td></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>'
+arHTML[i++] = '<td>' + y_axisLabelCheck.getHTML() + '</td>' 
+arHTML[i++] = '<td>' + dataValuesCheck.getHTML() + '</td>'
+arHTML[i++] = '<td></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + '' + '</td>' 
+arHTML[i++] = '<td>' + threeDLookCheck.getHTML() + '</td>' 
+arHTML[i++] = '<td colspan="2"></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + getSep() + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' 
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="2" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="100">' + 'Background color:' + '</td>'
+arHTML[i++] = '<td>' + bgColor.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>' 
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(1)
+arHTML[i++] = getHTMLForBorderTab("fchart")
+arHTML[i++] =tzone.endTabHTML() 
+arHTML[i++] = tzone.beginTabHTML(2)
+arHTML[i++] = '<table class="dialogzone" border="0" cellspacing="0" cellpadding="0" width=100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">'
+arHTML[i++] = formatContainer.beginHTML()
+arHTML[i++] = formatPal.getHTML()
+arHTML[i++] = formatContainer.endHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr><td>' + "<br>" + '</td></tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top" width="190">' 
+arHTML[i++] =  '<table class="blockZoneFrame" border="0" cellspacing="5" cellpadding="8" width="220" heigth="400"><tbody>' 
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="50">' + '<nobr>' +'</td>'
+arHTML[i++] = '<td id="titleClick" class="blockZone"  style="cursor:'+_hand+'" align="center" onClick="' + _codeWinName + '.clickZoneCB(id);return false">'
+arHTML[i++] = "Chart Title"
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td width="50">' + '<nobr>' +'</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td align="center">'
+arHTML[i++] = sLeftAxisHTML
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td id="chartClick" align="center" class="blockZone" onClick="' + _codeWinName + '.clickZoneCB(id);return false">' + blockImgWhiteBG.getHTML() + '</td>'
+arHTML[i++] = '<td align="center">'
+arHTML[i++] = sRightAxisHTML
+arHTML[i++] = '</td>' 
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td height="50">' + '<nobr>' + '</td>'
+arHTML[i++] = '<td align="center">'
+arHTML[i++] = sBottomAxisHTML + '<br>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td id ="chartLegend_title" style="cursor:'+_hand+'" class="blockZone" align="center" onClick="' + _codeWinName + '.clickZoneCB(id);return false">'
+arHTML[i++] = 'Legend' + '<br>'
+arHTML[i++] = img(p._img + "legend.gif", 41, 36) 
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+//arHTML[i++] = '<tr><td>' + "&nbsp;" + '</td></tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td valign="top">'
+arHTML[i++] = '<table id="chartTitleZone" width="100%" border="0" class="dialogzone" cellspacing="0" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + "Chart title:" + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">'
+arHTML[i++] = '<textarea id="chartTitle" class="textinputs" rows="3" cols="32" ondragstart="return true" onselectstart="event.cancelBubble=true;return true"></textarea>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>' 
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] ='<table id="x_axisZone" width="100%" border="0" class="dialogzone" cellspacing="0" cellpadding="0">'
+arHTML[i++] ='<tbody id="fchartDlgX_axisValueFreqZone">'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td colspan="2">' + x_axisValueFreqCheck.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="40">' + "Frequency:" + '</td>'
+arHTML[i++] ='<td>' + x_frequencyInput.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody>'
+arHTML[i++] ='<tbody id="fchartDlgX_orientation_zone">'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + "Orientation:" + '</td>'
+arHTML[i++] ='<td>' + x_orientationCombo.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td colspan="2">' + getSep() + '</td>' 
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody>'
+arHTML[i++] ='<tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + x_gridCheck.getHTML() + '</td>'
+arHTML[i++] ='<td>' + x_gridColor.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + "Format Number:" + '</td>'
+arHTML[i++] ='<td>' + x_formatNumbersCombo.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] = '<table id="y_axisZone" width="100%" border="0" class="dialogzone" cellspacing="0" cellpadding="0"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + y_axisValueFreqCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="40">' + "Frequency:" + '</td>'
+arHTML[i++] = '<td>' + y_frequencyInput.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + minValueCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + minValueInput.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + maxValueCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + maxValueInput.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + logScaleCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + "Orientation:" + '</td>'
+arHTML[i++] = '<td>' + y_orientationCombo.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + y_gridCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + y_gridColor.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>' 
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + "Format Number:" + '</td>' 
+arHTML[i++] = '<td>' + y_formatNumbersCombo.getHTML() + '</td>' 
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '<table id="z_axisZone" width="100%" border="0" class="dialogzone" cellspacing="0" cellpadding="0">'
+arHTML[i++] ='<tbody id="fchartDlgZ_axisValueFreqZone">'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + z_axisValueFreqCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td width="40">' + "Frequency:" + '</td>' 
+arHTML[i++] = '<td>' + z_frequencyInput.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='</tbody>'
+arHTML[i++] ='<tbody id="fchartDlgZ_axisValueMinMaxLogZone">'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + z_minValueCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + z_minValueInput.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + z_maxValueCheck.getHTML() + '</td>'
+arHTML[i++] = '<td>' + z_maxValueInput.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + z_logScaleCheck.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='</tbody>'
+arHTML[i++] ='<tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>' + "Orientation:" + '</td>' 
+arHTML[i++] ='<td>' + z_orientationCombo.getHTML() + '</td>' 
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + z_gridCheck.getHTML() + '</td>'
+arHTML[i++] ='<td>' + z_gridColor.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td colspan="2">' + getSep() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + "Format Number:" + '</td>'
+arHTML[i++] ='<td>' + z_formatNumbersCombo.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='<table id="centerZone" width="100%" border="0" class="dialogzone" cellspacing="0" cellpadding="0"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="60">' + "Wall(s):" + '</td>'
+arHTML[i++] ='<td>' + floorCheck.getHTML() + '</td>' 
+arHTML[i++] ='<td>' + floorColor.getHTML() + '</td>' 
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + '' + '</td>' 
+arHTML[i++] ='<td colspan="2">' + leftWallCheck.getHTML()  + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + '' + '</td>'
+arHTML[i++] ='<td colspan="2">' + rightWallCheck.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+//arHTML[i++] ='<tr>'
+//arHTML[i++] ='<td colspan="3">' + getSep() + '</td>'
+//arHTML[i++] ='</tr>'
+//arHTML[i++] ='<tr>'
+//arHTML[i++] ='<td>' + "Data:" + '</td>'
+//arHTML[i++] ='<td>' + "Primary color:" + '</td>'
+//arHTML[i++] ='<td>' + primColor.getHTML() + '</td>' 
+//arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + '' + '</td>' 
+arHTML[i++] ='<td colspan="2">' + asPercentCheck.getHTML() + '</td>' 
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td  width="200" style="padding:3px;"><i>'
+arHTML[i++] ='Click any element of the chart to access its properties.'
+arHTML[i++] ='</i></td>'
+arHTML[i++] ='<td>' + '' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] =tzone.endTabHTML()
+// LAYOUT PROPERTIES
+arHTML[i++] =tzone.beginTabHTML(3)
+arHTML[i++] ='<table border="0" class="dialogzone" width=100%"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'
+arHTML[i++] ='<table border="0" class="dialogzone" width="100%"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="80">' + 'New page:' + '</td>'
+arHTML[i++] ='<td>' + startNewPageCheck.getHTML() + '</td>'
+arHTML[i++] ='<td width="90">' + 'Page layout:' + '</td>'
+arHTML[i++] ='<td>' + avoidPageBreakCheck.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + '' + '</td>' 
+arHTML[i++] ='<td>' + repeatEveryPageCheck.getHTML() + '</td>'
+arHTML[i++] ='<td colspan="2">' + '' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + getSep() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'
+arHTML[i++] ='<table border="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="60">' +'Position:' + '</td>'
+arHTML[i++] ='<td colspan="5">' + 'Within the' + ' <b>' + '<span id="fchartDlgSectionOrBodyTxt"></span>' + '</b>' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td align="right" rowspan="2">' + '<div id="fchartDlgHorizontalImg">'+ horizontalImg.getHTML() + '</td>'
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'The left of this chart is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + horizontalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="fchartDlgHPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + horizontalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + horizontalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td align="right" rowspan="2">' + '<div id="fchartDlgVerticalImg">'+ verticalImg.getHTML() + '</td>' 
+arHTML[i++] = '<td><table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + 'The top of this chart is' + '&nbsp;</td>'
+arHTML[i++] = '<td>' + verticalPosField.getHTML()+ '</td>'
+arHTML[i++] = '<td>&nbsp;<span id="fchartDlgVPosUnit"></span>&nbsp;to</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr><tr>'
+arHTML[i++] = '<td><table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] = '<td>' + verticalPosCombo.getHTML()+ '</td>'
+arHTML[i++] = '<td>' + verticalEltCombo.getHTML()+ '</td>'
+arHTML[i++] = '</tr></tbody></table></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] =tzone.endTabHTML()
+arHTML[i++] =tzone.beginTabHTML(4)
+arHTML[i++] ='<table border="0" cellpadding="5" cellspacing="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td valign="top">' + "Available Objects" + '<br>'
+arHTML[i++] =dicTree.getHTML()
+arHTML[i++] ='</td>'
+arHTML[i++] ='<td valign="top" align="center" width="70">' + '<br>'
+arHTML[i++] =addObjButton.getHTML()
+arHTML[i++] ='<br>'
+arHTML[i++] =delObjButton.getHTML()
+arHTML[i++] ='</td>'
+arHTML[i++] ='<td>' 
+arHTML[i++] ='<table border="0" cellspacing="0" cellpadding="5" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td width="35%"><div id="y">' + getBlockZone('y') + '</div></td>'
+arHTML[i++] ='<td width="30%" align="center" valign="bottom">' + blockImg.getHTML() + '</td>'
+arHTML[i++] ='<td width="35%"><div id="z">'+ getBlockZone('z') +'</div>' + getSpace(150,1) + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td align="center" colspan="3">'
+arHTML[i++] ='<table border="0" cellspacing="0" cellpadding="0" class="dialogzone"><tbody>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td><div id="x">' + getBlockZone('x') +'</div></td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.endHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>' + '' + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td>'+info.getHTML() + '</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='<tr>'
+arHTML[i++] ='<td align="right">'
+arHTML[i++] ='<table cellspacing="0" cellpadding="0" border="0"><tbody><tr>'
+arHTML[i++] ='<td>' + OKButton.getHTML() + '</td>'
+arHTML[i++] ='<td>' + getSpace(5,1)+ '</td>'
+arHTML[i++] ='<td>' + CancelButton.getHTML() + '</td>'
+   arHTML[i++] ='<td>' + getSpace(5,1)+ '</td>'
+   arHTML[i++] ='<td>' + applyButton.getHTML() + '</td>'
+arHTML[i++] ='<td>' + getSpace(5,1) + '</td>'
+arHTML[i++] ='<td>' + HelpButton.getHTML() + '</td>'
+arHTML[i++] ='</tr></tbody></table>'
+arHTML[i++] ='</td>'
+arHTML[i++] ='</tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] = formatChartDlg.endHTML()
+targetApp(arHTML.join(''))
+arHTML=null
+}
+formatChartDlg.init()
+tzone.init()
+info.init()
+OKButton.init()
+CancelButton.init()
+applyButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+if (gotoPivot) p._fchartDlgSelectedPane = 4
+nameTxt.init()
+nameTxt.setValue(elt.block.name)
+chartTitle.init()
+chartTitle.setHTML(elt.graph.title)
+_has3DLook = (elt.graph.threeDLook == 1)
+initGeneral= false
+initBorders= false
+initAppearance= false
+initPageLayout= false
+initPivot= false
+tzone.select(p._fchartDlgSelectedPane)
+selectZoneCB(p._fchartDlgSelectedPane)
+formatChartDlg.show(true)
+}
+function selectZoneCB(index)
+{
+switch(index) 
+{
+case 0: 
+setGeneral(elt)
+info.setText("Modify the chart format here.")
+break;
+case 1: 
+setBorders(elts) 
+info.setText("Set the borders of the selected cells here.")
+break;
+case 2: 
+setGeneral(elt)
+setAppearance(elt)
+info.setText("Modify the chart appearance here.")
+break;
+case 3: 
+setLayout(elt)
+info.setText("Modify the chart layout here.")
+break;
+case 4: 
+setPivot(elt)
+info.setText("Modify the relationship between data and chart axes")
+break;
+}
+}
+function ftClickCB()
+{
+if (this) this.hasChanged=true
+if (fontCombo.hasChanged)
+{
+eval("self.document.formatChartForm." + formatZone + "_fntName.value = \"\" + fontCombo.getSelection().value")
+fontComboAr[formatZone] = fontCombo.getSelection().value
+fontCombo.hasChanged=false
+}
+if (sizeCombo.hasChanged)
+{
+if (sizeCombo.text != null)
+{
+var newVal = sizeCombo.getTextValue()
+eval("self.document.formatChartForm."  + formatZone + "_fntSize.value = \"\" + newVal")
+sizeComboAr[formatZone] = newVal
+sizeCombo.hasChanged=false
+}
+}
+if (bold.hasChanged)
+{
+eval("self.document.formatChartForm."  + formatZone + "_bold.value = \"\" + (bold.isChecked()? 1:0)")
+boldAr[formatZone] = (bold.isChecked()? 1:0)
+bold.hasChanged=false
+}
+if (italic.hasChanged)
+{
+eval("self.document.formatChartForm."  + formatZone + "_italic.value = \"\" + (italic.isChecked()? 1:0)")
+italicAr[formatZone] = (italic.isChecked()? 1:0)
+italic.hasChanged=false
+}
+if (under.hasChanged)
+{
+eval("self.document.formatChartForm." + formatZone + "_underline.value = \"\" + (under.isChecked()? 1:0)")
+underAr[formatZone] = (under.isChecked()? 1:0)
+under.hasChanged=false
+}
+if (bgCombo.hasChanged)
+{
+eval("self.document.formatChartForm." + formatZone + "_bgColor.value = \"\" + bgCombo.getColor()")
+bgComboAr[formatZone] = bgCombo.getColor()
+bgCombo.hasChanged=false
+}
+if (fgCombo.hasChanged)
+{
+eval("self.document.formatChartForm." + formatZone + "_fgColor.value = \"\" + fgCombo.getColor()")
+fgComboAr[formatZone] = fgCombo.getColor()
+fgCombo.hasChanged=false
+}
+if (thicknessCombo.hasChanged)
+{
+eval("self.document.formatChartForm." + formatZone + "_borderSize.value = \"\" + thicknessCombo.getSelection().index")
+thicknessComboAr[formatZone] = thicknessCombo.getSelection().index
+thicknessCombo.hasChanged=false
+}
+if (borderColor.hasChanged)
+{
+eval("self.document.formatChartForm." + formatZone + "_borderColor.value = \"\" + borderColor.getColor()")
+borderColorAr[formatZone] = borderColor.getColor()
+borderColor.hasChanged=false
+}
+}
+function chgColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB= changeColorPreviewCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} else {
+this.hasChanged=true
+ftClickCB()
+p.addLastUsedColor(this.getColor())
+}
+}
+function changeColorPreviewCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+ftClickCB()
+p.addLastUsedColor(c)
+}
+function testBtCB()
+{
+}
+function horizontalPosComboCB()
+{
+var sel=horizontalPosCombo.getSelection().value,imgsrc=''
+horizontalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))
+imgsrc='position_left_edge.gif'
+else
+imgsrc='position_right_edge.gif'
+horizontalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+function verticalPosComboCB()
+{
+var sel=verticalPosCombo.getSelection().value,imgsrc=''
+verticalEltCombo.show(sel!=0)
+if ((sel==0)||(sel==1))
+imgsrc='position_top_edge.gif'
+else
+imgsrc='position_bottom_edge.gif'
+verticalImg.setHTML(img(p._img + imgsrc,48,48))
+}
+function elementComboCB()
+{
+}
+function cancelCB() {
+okCB(null,true)
+}
+function isAppearanceTabValuesOK()
+{
+if (initAppearance)
+{
+if (minValueCheck.isChecked() && maxValueCheck.isChecked()) 
+{
+if (minValueInput.floatValue() > maxValueInput.floatValue())
+{
+p.showAlertDialog("The minimum value must be smaller than the maximum value.","Web Intelligence",p._promptDlgWarning);
+return false;
+}
+}
+if (z_minValueCheck.isChecked() && z_maxValueCheck.isChecked()) 
+{
+if (z_minValueInput.floatValue() > z_maxValueInput.floatValue())
+{
+p.showAlertDialog("The minimum value must be smaller than the maximum value.","Web Intelligence",p._promptDlgWarning);
+return false;
+}
+}
+} 
+return true;
+}
+function okCB(bApplyBtn, isCancel)
+{
+isCancel = isCancel ? isCancel:false
+bApplyBtn = bApplyBtn ? bApplyBtn:false
+p.formatChartBid = bApplyBtn?_bid:null
+if (isCancel) {
+p.formatChartBid=null
+if (gotoPivot) {
+p.deselectAll() 
+var params=p.urlParamsNoBID(p.oldEntry)
+if (params!="") {
+p.frameNav("Report",p._root+"report"+p._appExt+params)
+}
+} 
+formatChartDlg.show(false)
+return
+}
+if (initPivot && !canApply()) return
+if (!isAppearanceTabValuesOK()) return;
+if (p.alertDlg) p.alertDlg.show(false)
+p._fchartDlgSelectedPane = tzone.tabs.selIndex
+OKButton.setDisabled(true)
+applyButton.setDisabled(true)
+doFormatChart()
+p.wt(bApplyBtn)
+if (bApplyBtn) {
+formatChartDlg.unload()
+p._globalWOMCallback = p.formatChart_globalWOMCallback;
+} else {
+formatChartDlg.show(false)
+}
+OKButton.setDisabled(false)
+applyButton.setDisabled(false)
+}
+function helpCB()
+{
+}
+function condDisplayCheckCB()
+{
+condDisplayTxt.setDisabled(!condDisplayCheck.isChecked())
+}
+function setGeneral(elt)
+{
+if (!initGeneral) 
+{
+initGeneral= true
+width.init()
+width.setPrecision(2)
+width.setMin(p.toUserUnit(0.5, false)) 
+width.setMax(p.toUserUnit(9999.9, false)) 
+widthUnit.init()
+widthUnit.setHTML(p._unitLabel)
+height.init()
+height.setPrecision(2)
+height.setMin(p.toUserUnit(0.5, false)) 
+height.setMax(p.toUserUnit(9999.9, false)) 
+heightUnit.init()
+heightUnit.setHTML(p._unitLabel)
+showChartCheck.init()
+dupRowCheck.init()
+chartTitleCheck.init()
+legendCheck.init()
+legendCombo.init()
+legendCombo.del()
+for (var i=0; i < _legendPos.length; i++)
+{
+var t = _legendPos[i]
+legendCombo.add(t,""+t)
+}
+x_axisLabelCheck.init()
+y_axisLabelCheck.init()
+z_axisLabelCheck.init()
+dataValuesCheck.init()
+threeDLookCheck.init()
+bgColor.init()
+width.setValue( p.toUserUnit(elt.graph.width, graphUnitIsInch))
+height.setValue( p.toUserUnit(elt.graph.height, graphUnitIsInch))
+showChartCheck.check(elt.block.showWhenEmpty == 1)
+dupRowCheck.check(elt.block.dupRow == 0)
+chartTitleCheck.check(elt.graph.showTitle == 1)
+legendCheck.check(elt.graph.showLegend == 1)
+legendCheck.show(!_is3D)
+legendCombo.select(elt.graph.posLegend)
+legendCombo.setDisabled(!legendCheck.isChecked())
+legendCombo.show(!_is3D)
+x_axisLabelCheck.check(elt.graphApp.XLabel == 1)
+x_axisLabelCheck.show(_hasxAxis)
+y_axisLabelCheck.check(elt.graphApp.YLabel == 1)
+y_axisLabelCheck.show(_hasyAxis)
+z_axisLabelCheck.check(elt.graphApp.ZLabel == 1)
+z_axisLabelCheck.show(_hasZAppearance)
+dataValuesCheck.check(elt.graph.showDataValues == 1)
+threeDLookCheck.check(_has3DLook)
+threeDLookCheck.show(!_no3DLook)
+bgColor.setColor(elt.bgColor.rgb)
+}
+}
+function setAppearance(elt)
+{
+if (!initAppearance) 
+{
+initAppearance= true
+formatContainer.init()
+formatPal.init()
+fontComboAr = new Array 
+sizeComboAr = new Array
+thicknessComboAr = new Array
+borderColorAr = new Array
+boldAr = new Array
+italicAr = new Array
+underAr = new Array
+fgComboAr = new Array 
+bgComboAr = new Array
+borders.setDisabled(true)
+fontCombo.init()
+fontCombo.del()
+for (var i=0; i < p.allFonts.length; i++)
+{
+fontCombo.add(p.allFonts[i], "" + p.allFonts[i])
+}
+sizeCombo.init()
+sizeCombo.del()
+for (var i=0; i < p.sizes.length; i++)
+{
+sizeCombo.add(p.sizes[i], "" + p.sizes[i])
+}
+thicknessCombo.init()
+thicknessCombo.del()
+for (var i=0; i < p._thickness.length; i++)
+{
+thicknessCombo.add(p._thickness[i],""+p._thickness[i])
+}
+blockImgWhiteBG.init()
+blockImgWhiteBG.setBgColor("white")
+blockImgWhiteBG.changeImg(_img_dx,_img_dy)
+blockImgWhiteBG.changeTooltip(_img_tooltip)
+setAxisBlocks()
+if (_hasxAxis)
+{
+x_axisValueFreqZone.init()
+x_axisValueFreqZone.setDisplay(_is3D)
+x_axisValueFreqCheck.init()
+x_frequencyInput.init()
+x_frequencyInput.setMin(0)
+x_orientation_zone.init()
+x_orientation_zone.setDisplay(_is3D)
+x_orientationCombo.init()
+x_orientationCombo.del()
+for (var i = 0; i <_orientation.length; i++)
+{
+x_orientationCombo.add(_orientation[i], i)
+}
+x_gridCheck.init()
+x_gridColor.init()
+x_axisValueFreqCheck.check(elt.graphApp.XFreq == -1)
+x_frequencyInput.setValue(x_axisValueFreqCheck.isChecked()? 1 : elt.graphApp.XFreq)
+x_frequencyInput.setDisabled(x_axisValueFreqCheck.isChecked())
+x_orientationCombo.select(elt.graphApp.XOrient)
+x_gridCheck.check(elt.graphApp.XGrid == 1)
+x_gridColor.setColor(elt.graphApp.XGridColor.rgb)
+x_gridColor.setDisabled(!x_gridCheck.isChecked())
+setFormatNumberCombo("x_formatNumbersCombo", 'X', elt.graphApp)
+setFormatFromElt(elt.XAxisLabel, 'XAxisLabel')
+setFormatFromElt(elt.XAxisValues, 'XAxisValues')
+}
+x_axisZone.init()
+if (_hasyAxis)
+{
+if (!_isPie) { 
+if (values_l && values_l.initialized()) {
+values_l.setDisplay(true)
+}
+y_axisValueFreqCheck.init()
+y_frequencyInput.init()
+y_frequencyInput.setMin(0)
+y_orientationCombo.init()
+y_orientationCombo.del()
+for (var i = 0; i <_orientation.length; i++)
+{
+y_orientationCombo.add(_orientation[i], i)
+}
+y_gridCheck.init()
+y_gridColor.init()
+y_axisValueFreqCheck.check(elt.graphApp.YFreq == -1)
+y_frequencyInput.setValue(y_axisValueFreqCheck.isChecked()? 1 : elt.graphApp.YFreq)
+y_frequencyInput.setDisabled(y_axisValueFreqCheck.isChecked())
+y_orientationCombo.select(elt.graphApp.YOrient)
+y_gridCheck.check(elt.graphApp.YGrid == 1)
+y_gridColor.setColor(elt.graphApp.YGridColor.rgb)
+y_gridColor.setDisabled(!y_gridCheck.isChecked())
+setFormatNumberCombo("y_formatNumbersCombo", 'Y', elt.graphApp)
+setFormatFromElt(elt.YAxisValues, 'YAxisValues')
+} else {
+values_l.setDisplay(false) 
+}
+setFormatFromElt(elt.YAxisLabel, 'YAxisLabel')
+}
+y_axisZone.init()
+if (_hasZAppearance) 
+{
+z_axisValueFreqZone.init()
+z_axisValueFreqZone.setDisplay(_is3D || _isLineBar || _isPolarScatter)
+z_axisValueFreqCheck.init()
+z_frequencyInput.init()
+z_frequencyInput.setMin(0)
+z_orientationCombo.init()
+z_orientationCombo.del()
+for (var i = 0; i <_orientation.length; i++)
+{
+z_orientationCombo.add(_orientation[i], i)
+}
+z_gridCheck.init()
+z_gridColor.init()
+z_axisValueFreqCheck.check(elt.graphApp.ZFreq == -1)
+z_frequencyInput.setValue(z_axisValueFreqCheck.isChecked()? 1 : elt.graphApp.ZFreq)
+z_frequencyInput.setDisabled(z_axisValueFreqCheck.isChecked())
+z_orientationCombo.select(elt.graphApp.ZOrient)
+z_gridCheck.check(elt.graphApp.ZGrid == 1)
+z_gridColor.setColor(elt.graphApp.ZGridColor.rgb)
+z_gridColor.setDisabled(!z_gridCheck.isChecked())
+setFormatNumberCombo("z_formatNumbersCombo", 'Z', elt.graphApp)
+setFormatFromElt(elt.ZAxisLabel, 'ZAxisLabel')
+setFormatFromElt(elt.ZAxisValues, 'ZAxisValues')
+}
+z_axisZone.init()
+titleClick.init()
+titleClick.show(chartTitleCheck.isChecked())
+setFormatFromElt(elt.chartTitle, 'title')
+chartTitleZone.init()
+chartClick.init()
+setFormatFromElt(elt.chartData, 'chartData')
+chartLegend_title.init()
+chartLegend_title.show(!_is3D && legendCheck.isChecked())
+setFormatFromElt(elt.chartLegend, 'legendTitle')
+centerZone.init()
+floorCheck.init()
+floorColor.init()
+floorColor.changeTooltip(_is3D?"Walls Color":"Floor color")
+leftWallCheck.init()
+leftWallCheck.show(_is3D)
+rightWallCheck.init()
+rightWallCheck.show(_is3D)
+asPercentCheck.init()
+floorCheck.check((!_isPie && _is3D)? (elt.graphApp.bottomWall == 1) : (elt.graphApp.rightWall == 1))
+floorColor.setColor(elt.graphApp.wallColor.rgb)
+floorColor.setDisabled(!floorCheck.isChecked() && !_is3D)
+leftWallCheck.check(elt.graphApp.leftWall == 1)
+rightWallCheck.check(elt.graphApp.rightWall == 1)
+asPercentCheck.check(elt.graphApp.percent == 1)
+asPercentCheck.setDisplay(_isPie && dataValuesCheck.isChecked())
+minValueCheck.init()
+minValueInput.init()
+minValueInput.setPrecision(2)
+maxValueCheck.init()
+maxValueInput.init()
+maxValueInput.setPrecision(2)
+logScaleCheck.init()
+maxValueCheck.check(false) 
+minValueInput.setValue(elt.graphApp.YMinVal)
+maxValueInput.setValue(elt.graphApp.YMaxVal)
+minValueCheck.check(elt.graphApp.YMin == 1) 
+maxValueCheck.check(elt.graphApp.YMax == 1)
+minValueInput.setDisabled(!minValueCheck.isChecked())
+maxValueInput.setDisabled(!maxValueCheck.isChecked())
+logScaleCheck.check(elt.graphApp.YLog == 1)
+logScaleCheck.show(!_noLogScale)
+z_axisValueMinMaxLogZone.init()
+z_minValueCheck.init()
+z_minValueInput.init()
+z_minValueInput.setPrecision(2)
+z_maxValueCheck.init()
+z_maxValueInput.init()
+z_maxValueInput.setPrecision(2)
+z_logScaleCheck.init()
+if (_isLineBar) 
+{
+z_axisValueMinMaxLogZone.setDisplay(true)
+z_minValueCheck.check(false)
+z_minValueInput.setValue(elt.graphApp.ZMinVal)
+z_maxValueInput.setValue(elt.graphApp.ZMaxVal)
+z_maxValueCheck.check(elt.graphApp.ZMax == 1)
+z_minValueCheck.check(elt.graphApp.ZMin == 1)
+z_minValueInput.setDisabled(!z_minValueCheck.isChecked())
+z_maxValueInput.setDisabled(!z_maxValueCheck.isChecked())
+z_logScaleCheck.check(elt.graphApp.ZLog == 1)
+z_logScaleCheck.show(!_noLogScale)
+} else {
+z_axisValueMinMaxLogZone.setDisplay(false)
+}
+}
+if (!(p._fchartDlgClickZone))
+{
+p._fchartDlgClickZone = "chartClick"
+}
+clickZoneCB(p._fchartDlgClickZone)
+}
+function setLayout(elt)
+{
+if (!initPageLayout)
+{
+initPageLayout = true
+startNewPageCheck.init()
+repeatEveryPageCheck.init()
+avoidPageBreakCheck.init()
+sectionOrBodyTxt.init()
+horizontalImg.init()
+horizontalPosField.init()
+horizontalPosField.setPrecision(2)
+horizontalPosField.setMin(0)
+horizontalPosField.setMax(p.toUserUnit(9999.9, false)) 
+HPosUnit.init()
+HPosUnit.setHTML(p._unitLabel)
+horizontalPosCombo.init()
+horizontalPosCombo.del()
+horizontalEltCombo.init()
+verticalImg.init()
+verticalPosField.init()
+verticalPosField.setPrecision(2)
+verticalPosField.setMin(0)
+verticalPosField.setMax(p.toUserUnit(9999.9, false))
+VPosUnit.init()
+VPosUnit.setHTML(p._unitLabel)
+verticalPosCombo.init()
+verticalPosCombo.del()
+verticalEltCombo.init()
+startNewPageCheck.check(elt.block.startNewPage == 1)
+repeatEveryPageCheck.check(elt.block.repeatOnEveryPage == 1)
+avoidPageBreakCheck.check(elt.block.avoidPageBreak == 1)
+setPosition(elt)
+}
+}
+function setPosition(elt)
+{
+blockPosUnitIsInch = (elt.block.unitIsInch == 1)
+horizontalPosField.setValue( p.toUserUnit(elt.block.posH, blockPosUnitIsInch))
+verticalPosField.setValue( p.toUserUnit(elt.block.posV, blockPosUnitIsInch))
+var attached = (elt.attach)? true : false
+var inSection = (elt.parent.className == "section")
+sectionOrBodyTxt.setHTML(inSection? "Section":"Report")
+horizontalEltCombo.del()
+verticalEltCombo.del()
+var children = elt.parent.children
+var lenChildren = children.length
+var attachToHEltBid = attached ? elt.attach.toH : 0
+var attachToVEltBid = attached ? elt.attach.toV : 0
+var eltBid = elt.bid
+for (var j = 0; j < lenChildren; j++) 
+{
+var child = children[j]
+var childBid = child.bid
+if ((eltBid != childBid) && (child.className != "section")) 
+{
+var name = ""
+if (child.fcell) 
+{
+name = child.fcell.formula
+}
+if (child.className == "block") 
+{
+name = child.block.name
+}
+if (child.className == "reportCell") 
+{
+name = child.formula
+}
+if (name == "") name = "Empty Cell"
+if (child.attach && (child.attach.toH != eltBid)) {
+if (attachToHEltBid == childBid)
+{
+horizontalEltCombo.add(name,childBid, true) 
+} else {
+horizontalEltCombo.add(name, childBid)
+}
+}
+if (child.attach && (child.attach.toV != eltBid)) {
+if (attachToVEltBid == childBid)
+{
+verticalEltCombo.add(name, childBid, true)
+} else {
+verticalEltCombo.add(name, childBid)
+}
+}
+}
+}
+horizontalPosCombo.del()
+horizontalPosCombo.add(inSection?"Left edge of section":"Left edge of report",0, true)
+verticalPosCombo.del()
+verticalPosCombo.add(inSection?"Top edge of section":"Top edge of report",0, true)
+if (horizontalEltCombo.getCount() > 0) 
+{
+var res = (attached) ? elt.attach.h : 0
+for (var i=1; i < p._attachH.length; i++)
+{
+horizontalPosCombo.add(p._attachH[i], i, (res == i))
+}
+res =  (attached) ? elt.attach.v : 0
+for (var i=1; i < p._attachV.length; i++)
+{
+verticalPosCombo.add(p._attachV[i], i, (res == i))
+}
+}
+horizontalPosComboCB()
+verticalPosComboCB()
+}
+function setPivot(elt)
+{
+if (!initPivot) 
+{
+initPivot = true
+dicTree.init()
+buildTree(dicTree, true)
+addObjButton.init()
+delObjButton.init()
+widgetX.init()
+widgetY.init()
+widgetZ.init()
+blockImg.init()
+blockImg.changeImg(_img_dx,_img_dy)
+blockImg.changeTooltip(_img_tooltip)
+validZones['x']=true
+validZones['y']=true
+validZones['z']= !_isPie
+objectsByID = new Array
+for (var i in _docObjects)
+{
+objectsByID[_docObjects[i].id] = _docObjects[i]
+}
+for (var i in _variableObjects)
+{
+objectsByID[_variableObjects[i].id] = _variableObjects[i]
+}
+for (var i in _formulaObjects)
+{
+objectsByID[_formulaObjects[i].id] = _formulaObjects[i]
+}
+for (var i in validZones)
+{
+var zone=i
+window[zone+'Radio'].init()
+if (zone == 'x') window[zone+'Radio'].setText(((_is3D || _isPolarScatter) && !_isPie)? 'X-Axis (Optional)':'X-Axis')
+if (zone == 'z') window[zone+'Radio'].setText(_isPolarScatter ? 'Z-Axis':'Z-Axis (Optional)')
+window[zone+'L'].init()
+window[zone+'L'].remove()
+window[zone+'L'].resize(_wPivotZone,_hPivotZone)
+window[zone+'LEd'].init()
+window[zone+'L'].remove()
+fillList(zone)
+}
+for (var i in validZones)
+{
+setTargetCurrent(i)
+break
+}
+widgetZ.setDisplay(!_isPie)
+}
+}
+function createList(coll,title,layout)
+{
+window[coll+"Radio"] = newRadioWidget(coll+"Radio","targetGroup",title,eval('set'+coll+'Target'),false)
+eval('window.'+coll+'LEd = newBOListContainerWidget("'+coll+'LEd",150,95,parent._img+"qualificationIcons.gif",'+layout+',changeObjSelCB,null,moveCB,removeButtonCB,true,focusCB)')
+eval('window.'+coll+'L = window.'+coll+'LEd.getList()')
+eval('window.'+coll+'L.setDragDrop(dragCB, acceptDropCB, dropCB)');
+eval('window.'+coll+'L.targetName="'+coll+'"');
+}
+function focusCB()
+{
+setTargetCurrent(this.targetName)
+}
+function changeObjSelCB()
+{
+if (this.targetName) {
+currCont=eval(this.targetName+'LEd')
+} else {
+currCont=eval(_blockCurrent+'LEd')
+}
+var len = this.items.length
+if (len <= 1) {
+currCont.up.setDisabled(true)
+currCont.down.setDisabled(true)
+} else {
+var sel=this.getSelection()
+if (sel)
+{
+if(sel.index == 0)
+currCont.up.setDisabled(true)
+else
+currCont.up.setDisabled(false)
+if (sel.index == len-1)
+currCont.down.setDisabled(true)
+else
+currCont.down.setDisabled(false)
+}
+else
+{
+currCont.up.setDisabled(true)
+currCont.down.setDisabled(true)
+}
+}
+}
+function updateButtons()
+{
+}
+function dataValuesCheckCB()
+{
+if (dataValuesCheck.initialized()) {
+if (asPercentCheck.initialized()) {
+asPercentCheck.setDisplay(_isPie && dataValuesCheck.isChecked())
+}
+if (initAppearance && (p._fchartDlgClickZone == "chartClick")) updateFormatToolbar('chartData', !dataValuesCheck.isChecked())
+}
+}
+function threeDLookCheckCB()
+{
+_has3DLook = threeDLookCheck.isChecked()
+}
+function dragCB(source) {}
+function acceptDropCB(source,target,ctrl,shift)
+{
+if ((source == null) || (target == null)) return false
+var currentObj = null
+if (source.id == 'fchartDlgDicTree') {
+currentObj = source.getSelectedItem().userData
+} else if (source.selection != null) {
+currentObj = source.selection.value
+}
+if ((currentObj != null) && (currentObj.id)) return true
+return false
+}
+function dropCB(source,target,ctrl,shift)
+{
+if (target.id=='fchartDlgDicTree')
+{
+if (source && (source.id != 'fchartDlgDicTree')){
+var sourceItem = source.selection
+var srcIdx = sourceItem.getIndexInParent()
+sourceItem.remove()
+}
+} else {
+var targetItem = target.dropWidget
+var index      = target.dropIndex
+if (source && (source.id != 'fchartDlgDicTree'))
+{
+currList = target
+var sourceItem = source.selection
+var srcIdx = sourceItem.getIndexInParent()
+currentObj = sourceItem.value
+if (!canAdd()) return
+if (shift) 
+{
+targetItem = targetItem.items[index]
+var targIdx = index
+var n1=source.add(targetItem.text,targetItem.value.kind,targetItem.value,targetItem.text,sourceItem.getIndexInParent())
+var n2=target.add(sourceItem.text,sourceItem.value.kind,sourceItem.value,sourceItem.text,targetItem.getIndexInParent())
+sourceItem.remove()
+targetItem.remove()
+n1.select(true)
+n2.select(true)
+} else {
+var n = target.add(sourceItem.text,sourceItem.value.kind,sourceItem.value,sourceItem.text,index)
+if (srcIdx < index) {
+if (!ctrl) {
+sourceItem.remove()
+}
+} else {
+if (!ctrl) { 
+sourceItem.remove()
+}
+}
+n.select(true)
+}
+}
+if (source && (source.id == 'fchartDlgDicTree'))
+{
+currList = target
+if (!canAdd()) return
+var n = target.add(currentObj.name,currentObj.kind,currentObj,currentObj.name,index)
+n.select(true)
+}
+}
+}
+function moveCB(elem,node,idx)
+{
+var srcIdx = node.selection.getIndexInParent()
+var n = node.add(elem.text,elem.value.kind,elem.value,elem.text,idx)
+node.selection.remove()
+n.select(true)
+return false
+}
+        function clickCB(userData)
+        {
+currentObj=userData
+        var items = dicTree.getSelections()
+        _singleSel  = items[0]   
+        setMatchDPName(dicTree.sub[0], "", true, true)
+        if ((_singleSel.par) && (currentObj) && !(currentObj.isFormula) && !(currentObj.isVariable)) {
+           _singleSel.setGrayStyle(!_singleSel.isGrayStyle())
+           switch (currentObj.kind)
+           {       
+           case _dim :
+           case _dtl :
+           var DPName = currentObj.DPName           
+           setMatchDPName(dicTree.sub[0], DPName, false, false)
+           break;
+           case _linkDim : 
+           setMatchDPName(dicTree.sub[0], "", true, false)         
+        for (var k=0; k < currentObj.DPNames.length; k++) {                
+        var DPName = currentObj.DPNames[k]
+           setMatchDPName(dicTree.sub[0], DPName, false, true)                     
+        }
+           break;
+           case _msr :                               
+           case _variable :
+           case _formula :
+}
+        }
+        }
+        function setMatchDPName(subTree, DPName, deselectAll, setOnly) {
+   var subTreeCount = subTree.sub.length
+        for (var j=0; j < subTreeCount; j++)
+        {                  
+        obj = subTree.sub[j]                
+        if (deselectAll) {
+        obj.setGrayStyle(false)
+        }
+        if ((obj.userData != null) && (obj.userData.kind != _msr))  {
+        if (obj.userData.kind == _linkDim) {
+        var matchOneDP = false
+        for (var m=0; m < obj.userData.DPNames.length; m++) {        
+        if (DPName == obj.userData.DPNames[m]) {
+        matchOneDP = true
+        break
+        }                        
+        }
+        if (setOnly) {
+        if (matchOneDP) obj.setGrayStyle(false)
+        } else {
+        obj.setGrayStyle(!matchOneDP)
+        }        
+        } else {
+        if (setOnly) {
+        if (DPName == obj.userData.DPName) obj.setGrayStyle(false)
+        } else {
+        obj.setGrayStyle(DPName != obj.userData.DPName)
+        }
+        }
+        }
+        if (obj.sub.length) setMatchDPName(obj, DPName, deselectAll, setOnly)
+        }
+        }
+function dclickCB(data)
+{
+currentObj=data;
+addButtonCB();
+}
+function addButtonCB()
+{
+if (currentObj==null) return;
+if (this.targetName) {
+currList=eval(this.targetName+'L')
+} else {
+currList=eval(_blockCurrent+'L')
+}
+var idx = currList.items? currList.items.length : 0
+if (!canAdd()) return
+var n = currList.add(currentObj.name,currentObj.kind,currentObj,currentObj.name,idx)
+n.select(true)
+currList.changeCB();
+}
+function removeButtonCB()
+{
+if (this.targetName) {
+currList=eval(this.targetName+'L')
+} else {
+currList=eval(_blockCurrent+'L')
+}
+var sel=currList.getSelection(), idx = sel ? sel.index : null
+if (idx!=null)
+{
+currList.remove(idx)
+currList.select(Math.min(idx,currList.getLength()-1))
+}
+currList.changeCB();
+}
+function canAdd()
+{
+if (currentObj != null)
+{
+var isMeasure = (currentObj.kind == p._msr)
+if (currList.targetName=="x")
+{
+if (isMeasure)
+{
+p.showAlertDialog("You cannot insert measures on the X-Axis of this type of chart. (Error: WIH 00005)","Web Intelligence",p._promptDlgWarning)
+return false
+}
+}
+if (currList.targetName=="y")
+{
+if (!isMeasure)
+{
+p.showAlertDialog("You cannot insert dimensions or details on the Y-Axis of this type of chart. (Error: WIH 000006)","Web Intelligence",p._promptDlgWarning)
+return false
+}
+}
+if (currList.targetName=="z")
+{
+if (_isLineBar || _isPolarScatter)
+{
+if (!isMeasure)
+{
+p.showAlertDialog("You cannot insert dimension or detail objects on the Z-Axis of this type of chart. (Error: WIH 00010)","Web Intelligence",p._promptDlgWarning)
+return false
+}
+} else {
+if (isMeasure)
+{
+p.showAlertDialog("You cannot insert measures on the Z-Axis of this type of chart. (Error: WIH 00007)","Web Intelligence",p._promptDlgWarning)
+return false
+}
+}
+}
+return true
+}
+}
+function canApply()
+{
+var ok=false
+var tooMany=false
+var xlen=xL.items.length
+var ylen=yL.items.length
+var zlen=zL.items.length
+if (_isLineBar)
+{
+ok=((ylen>0)&&(xlen>0))
+if (ok)
+{
+for (var i in xL.items)
+{
+var kind=xL.items[i].value.kind
+if (kind == p._msr) ok=false
+}
+for (var i in yL.items)
+{
+var kind=yL.items[i].value.kind
+if (kind != p._msr) ok=false
+}
+for (var i in zL.items)
+{
+var kind=zL.items[i].value.kind
+if (kind != p._msr) ok=false
+}
+}
+}
+else if (_isPolarScatter) 
+{
+ok=((ylen+xlen)>0)&&(zlen>0)
+if (ok)
+{
+for (var i in xL.items)
+{
+var kind=xL.items[i].value.kind
+if (kind == p._msr) ok=false
+}
+for (var i in yL.items)
+{
+var kind=yL.items[i].value.kind
+if (kind != p._msr) ok=false
+}
+for (var i in zL.items)
+{
+var kind=zL.items[i].value.kind
+if (kind != p._msr) ok=false
+}
+}
+}
+else if (((_blockKind >= 4)&&(_blockKind <= 28)) || ((_blockKind >= 33)&&(_blockKind <= 34)))
+{
+if (ylen >= 1) ok=true
+if ((xlen==0) || (ylen==0)) ok=false
+for (var i in xL.items)
+{
+var kind=xL.items[i].value.kind
+if (kind == p._msr) ok=false
+}
+for (var i in yL.items)
+{
+var kind=yL.items[i].value.kind
+if (kind != p._msr) ok=false
+}
+for (var i in zL.items)
+{
+var kind=zL.items[i].value.kind
+if (kind == p._msr) ok=false
+}
+}
+else if (_isPie)
+{
+if (ylen==1) ok=true
+if (ylen>1) 
+{
+ok=false
+tooMany=true
+}
+if (ylen==0) ok=false
+if (xlen==0) ok=false
+for (var i in xL.items)
+{
+var kind=xL.items[i].value.kind
+if (kind == p._msr) ok=false
+}
+for (var i in yL.items)
+{
+var kind=yL.items[i].value.kind
+if (kind != p._msr) ok=false
+}
+}
+if (ok)
+{
+var idx = -1
+var ax = _axisType[xL.targetName]
+for (var xi=0; xi < xlen; xi++)
+{
+_axisCommands[_axisCommands.length] = "a," + ax + ","  + idx + "," + xL.getItem(xi).value.id
+}
+ax = _axisType[yL.targetName]
+for (var yi=0; yi < ylen; yi++)
+{
+_axisCommands[_axisCommands.length] = "a," + ax + ","  + idx + "," + yL.getItem(yi).value.id
+}
+ax = _axisType[zL.targetName]
+for (var zi=0; zi < zlen; zi++)
+{
+_axisCommands[_axisCommands.length] = "a," + ax + ","  + idx + "," + zL.getItem(zi).value.id
+}
+} else {
+p.showAlertDialog(tooMany?"There are too many dimensions, details, or measures on an axis.":"There are not enough objects on one of the chart axes.","Web Intelligence",p._promptDlgWarning)
+}
+return ok
+}
+function fillList(zone)
+{
+list = eval(zone+'L')
+collection = axisObjects[zone]
+if (collection)
+{
+len=collection.length
+for (var k=0;k<len;k++)
+{
+var obj = objectsByID[collection[k]]
+if (obj) list.add(obj.name,obj.kind,obj,obj.name)
+}
+if (len>0) list.select(0)
+}
+list.changeCB();
+}
+function getBlockZone(kind)
+{
+var s=''
+s += '<div align="left">' + window[kind+"Radio"].getHTML() + '</div>'
+currList = eval(kind+'L')
+var currListEditable = eval(kind+'LEd')
+s += currListEditable.getHTML()
+return s
+}
+function setTargetCurrent(kind){if (window[kind+'Radio']!=null){ _blockCurrent=kind;window[kind+'Radio'].check(true)}}
+function setxTarget() {setTargetCurrent('x')}
+function setyTarget() {setTargetCurrent('y')}
+function setzTarget() {setTargetCurrent('z')}
+function refuseDropCB()
+{
+return false
+}
+function clickZoneCB(id)
+{
+if (p._fchartDlgLastChartKind && (p._fchartDlgLastChartKind != _blockKind)) {
+id = "chartClick"
+}
+if ((id=='titleClick') && (!chartTitleCheck.isChecked())){
+id = "chartClick"
+}
+p._fchartDlgLastChartKind = _blockKind
+p._fchartDlgClickZone = id
+label_b.layer.className= (id=='label_b')? "blockZone_labelSelected":"blockZone_label"
+values_b.layer.className= (id=='values_b')? "blockZone_valuesSelected":"blockZone_values"
+label_l.layer.className= (id=='label_l')? "blockZone_labelSelected":"blockZone_label"
+values_l.layer.className= (id=='values_l')? "blockZone_valuesSelected":"blockZone_values"
+label_r.layer.className= (id=='label_r')? "blockZone_labelSelected":"blockZone_label"
+values_r.layer.className= (id=='values_r')? "blockZone_valuesSelected":"blockZone_values"
+x_axisZone.setDisplay(false)
+y_axisZone.setDisplay(false)
+z_axisZone.setDisplay(false)
+chartClick.layer.className= (id=='chartClick')? "blockZoneSelected":"blockZone"
+titleClick.layer.className= (id=='titleClick')? "blockZoneSelected":"blockZone"
+chartLegend_title.layer.className= (id=='chartLegend_title')? "blockZoneSelected":"blockZone"
+centerZone.setDisplay(id=='chartClick')
+chartTitleZone.setDisplay(id=='titleClick')
+txtElt = null
+var disabled = false
+switch(id)
+{
+case 'label_b':
+setAxisLabel(_b)
+break;
+case 'label_l':
+setAxisLabel(_l)
+break;
+case 'label_r':
+setAxisLabel(_r)
+break;
+case 'values_b':
+setAxisValues(_b)
+break;
+case 'values_l':
+setAxisValues(_l)
+break;
+case 'values_r':
+setAxisValues(_r)
+break;
+case 'titleClick':
+txtElt = elt.chartTitle
+formatZone = 'title'
+break;
+case 'chartClick':
+txtElt = elt.chartData
+formatZone = 'chartData'
+disabled = !dataValuesCheck.isChecked()
+break;
+case 'chartLegend_title':
+txtElt = elt.chartLegend
+formatZone = 'legendTitle'
+break;
+case 'chartLegend_values':
+txtElt = elt.chartLegend
+formatZone = 'legendTitle'
+break;
+}
+updateFormatToolbar(formatZone, disabled)
+}
+function setAxisLabel(b)
+{
+ax = _axisMatrix[b]
+var AX
+switch (ax)
+{
+case 'x':
+AX = 'X'
+break
+case 'y':
+AX = 'Y'
+break
+case 'z':
+AX = 'Z'
+break
+}
+eval('txtElt = elt.'+ AX + 'AxisLabel')
+eval('formatZone = \'' + AX + 'AxisLabel\'')
+}
+function setAxisValues(b)
+{
+ax = _axisMatrix[b]
+var AX
+switch (ax)
+{
+case 'x':
+AX = 'X'
+eval( ax + '_axisZone.setDisplay(true)')
+break
+case 'y':
+AX = 'Y'
+eval( ax + '_axisZone.setDisplay(true)')
+break
+case 'z':
+AX = 'Z'
+eval( ax + '_axisZone.setDisplay(true)')
+break
+}
+eval('txtElt = elt.'+ AX + 'AxisValues')
+eval('formatZone = \'' + AX + 'AxisValues\'')
+}
+function x_axisLabelCheckCB()
+{
+eval('if (initAppearance) label_' + _ax_x + '.setDisplay(_hasxAxis && x_axisLabelCheck.isChecked())') 
+}
+function y_axisLabelCheckCB()
+{
+eval('if (initAppearance) label_' + _ax_y + '.setDisplay(_hasyAxis &&  y_axisLabelCheck.isChecked())')  
+}
+function z_axisLabelCheckCB()
+{
+eval('if (initAppearance) label_' + _ax_z + '.setDisplay(_haszAxis && z_axisLabelCheck.isChecked())')  
+}
+function legendCheckCB()
+{
+legendCombo.setDisabled(!legendCheck.isChecked())
+if (initAppearance) chartLegend_title.show(legendCheck.isChecked())
+}
+function chartTitleCheckCB()
+{
+if (initAppearance) titleClick.show(chartTitleCheck.isChecked())
+}
+function x_axisValueFreqCheckCB()
+{
+x_frequencyInput.setDisabled(x_axisValueFreqCheck.isChecked())
+}
+function y_axisValueFreqCheckCB()
+{
+y_frequencyInput.setDisabled(y_axisValueFreqCheck.isChecked())
+}
+function z_axisValueFreqCheckCB()
+{
+z_frequencyInput.setDisabled(z_axisValueFreqCheck.isChecked())
+}
+function minValueCheckCB()
+{
+minValueInput.setDisabled(!minValueCheck.isChecked())
+}
+function maxValueCheckCB()
+{
+maxValueInput.setDisabled(!maxValueCheck.isChecked())
+}
+function z_minValueCheckCB()
+{
+z_minValueInput.setDisabled(!z_minValueCheck.isChecked())
+}
+function z_maxValueCheckCB()
+{
+z_maxValueInput.setDisabled(!z_maxValueCheck.isChecked())
+}
+function x_gridCheckCB()
+{
+x_gridColor.setDisabled(!x_gridCheck.isChecked())
+}
+function y_gridCheckCB()
+{
+y_gridColor.setDisabled(!y_gridCheck.isChecked())
+}
+function z_gridCheckCB()
+{
+z_gridColor.setDisabled(!z_gridCheck.isChecked())
+}
+function floorCheckCB()
+{
+floorColor.setDisabled(!floorCheck.isChecked() && !_is3D)
+}
+function makeBlock(id)
+{
+if (id =='') return ""
+eval( 'block_' + id  +' = newWidget( \"block_' + id + '\")')
+eval( 'blockZone_txt_' + id  +' = newWidget( \"blockZone_txt_' + id + '\")')
+eval( 'label_' + id  +' = newWidget( \"label_' + id + '\")')
+eval( 'values_' + id  +' = newWidget( \"values_' + id + '\")')
+var aHTML = new Array
+aHTML[aHTML.length] = '<table class="blockZone_txt" id="block_' + id  + '\" border="0" cellspacing="1" cellpadding="0"><tbody>'
+aHTML[aHTML.length] = '<tr><td align="center" class="blockZone_txt" width="50">' + '<span id="blockZone_txt_' + id  + '\"></span>' + '</td></tr>'
+aHTML[aHTML.length] = '<tr><td id="label_' + id  + '\" style="cursor:'+_hand+'" align="center" onClick="' + _codeWinName + '.clickZoneCB(id);return false" class="blockZone_label">' + "Label" + '</td></tr>'
+aHTML[aHTML.length] = '<tr><td id="values_' + id + '\" style="cursor:'+_hand+'" align="center" onClick="' + _codeWinName + '.clickZoneCB(id);return false" class="blockZone_values">' + "Values" + '</td></tr>'
+aHTML[aHTML.length] = '</tbody></table>'
+return aHTML.join("")
+}
+function setAxisBlocks()
+{
+xtxt = "X Axis"
+ytxt = "Y Axis"
+ztxt = "Z Axis"
+setOneAxisBlock('b',_b)
+setOneAxisBlock('l',_l)
+setOneAxisBlock('r',_r)
+}
+function setOneAxisBlock(t_id,i_id)
+{
+eval('block_' + t_id + '.init()')
+eval('block_' + t_id + '.setDisplay(false)')
+eval('blockZone_txt_' + t_id  + '.init()');
+eval('label_' + t_id + '.init()')
+eval('values_' + t_id + '.init()')
+ax = _axisMatrix[i_id]
+if (ax != '') 
+{
+eval('block_' + t_id + '.setDisplay(true)')
+eval( 'blockZone_txt_' + t_id  + '.setHTML(' + ax + 'txt)');
+if (ax == 'z') eval('block_' + t_id + '.setDisplay(_hasZAppearance)')
+eval('label_' + t_id + '.setDisplay(' + ax + '_axisLabelCheck.isChecked())')
+}
+}
+function doFormatChart()
+{
+var f = self.document.formatChartForm
+f.unitIsInch.value="" + p._unitIsInch
+f.name.value="" + nameTxt.getValue()
+if (width.initialized()) {
+f.width.value="" + width.getValue()
+f.height.value="" + height.getValue()
+f.showWhenEmpty.value = "" + showChartCheck.isChecked()
+f.dupRow.value="" + !dupRowCheck.isChecked() 
+f.chartTitleShow.value="" + chartTitleCheck.isChecked()
+f.x_label.value="" + x_axisLabelCheck.isChecked()
+f.y_label.value="" + y_axisLabelCheck.isChecked()
+f.z_label.value="" + z_axisLabelCheck.isChecked()
+f.legend.value="" + legendCheck.isChecked()
+f.posLegend.value="" + legendCombo.getSelection().index
+f.dataValues.value="" + dataValuesCheck.isChecked()
+f.threeDLook.value="" + threeDLookCheck.isChecked()
+if (bgColor.initialized()) {
+if (bgColor.getColor())
+{
+f.bgColor.value="" + bgColor.getColor()
+}
+}
+}
+f.isPie.value="" + _isPie
+doFormatForBorders(f);
+f.chartTitle.value="" + chartTitle.layer.value
+if (floorColor.initialized()) {
+if (floorColor.getColor())
+{
+f.floorColor.value="" + floorColor.getColor()
+}
+}
+if (leftWallCheck.initialized()) {
+f.leftWall.value="" + (_is3D?leftWallCheck.isChecked():"")
+f.rightWall.value="" + (_is3D?rightWallCheck.isChecked():"")
+}
+if (floorCheck.initialized()) {
+f.floor.value="" + floorCheck.isChecked()
+f.asPercent.value="" + asPercentCheck.isChecked()
+if (_hasxAxis && x_axisLabelCheck.isChecked())
+{
+f.x_frequency.value="" + (x_axisValueFreqCheck.isChecked() ? -1 : x_frequencyInput.getValue())
+f.x_orientation.value="" + x_orientationCombo.getSelection().value
+f.x_grid.value="" + x_gridCheck.isChecked()
+if (x_gridColor.initialized()) {
+if (x_gridColor.getColor())
+{
+f.x_gridColor.value="" + x_gridColor.getColor()
+}
+}
+f.x_formatNb.value="" + x_formatNumbersCombo.getSelection().value
+f.x_max_idx.value = "" + (xL.initialized()? xL.items.length : (axisObjects['x']? axisObjects['x'].length : 0))
+}
+if (_hasyAxis && !_isPie && y_axisLabelCheck.isChecked())
+{
+f.y_frequency.value="" + (y_axisValueFreqCheck.isChecked() ? -1 : y_frequencyInput.getValue())
+f.hasMinValue.value="" + minValueCheck.isChecked()
+f.minValue.value="" + minValueInput.getValue()
+f.hasMaxValue.value="" + maxValueCheck.isChecked()
+f.maxValue.value="" + maxValueInput.getValue()
+f.logScale.value="" + logScaleCheck.isChecked()
+f.y_orientation.value="" + y_orientationCombo.getSelection().value
+f.y_grid.value="" + y_gridCheck.isChecked()
+if (y_gridColor.initialized()) {
+if (y_gridColor.getColor())
+{
+f.y_gridColor.value="" + y_gridColor.getColor()
+}
+}
+f.y_formatNb.value="" + y_formatNumbersCombo.getSelection().value
+f.y_max_idx.value = "" + (yL.initialized()? yL.items.length : (axisObjects['y']? axisObjects['y'].length : 0))
+}
+if (_hasZAppearance && z_axisLabelCheck.isChecked())
+{
+f.z_frequency.value="" + (z_axisValueFreqCheck.isChecked() ? -1 : z_frequencyInput.getValue())
+f.z_hasMinValue.value="" + z_minValueCheck.isChecked()
+f.z_minValue.value="" + z_minValueInput.getValue()
+f.z_hasMaxValue.value="" + z_maxValueCheck.isChecked()
+f.z_maxValue.value="" + z_maxValueInput.getValue()
+f.z_logScale.value="" + z_logScaleCheck.isChecked()
+f.z_orientation.value="" + z_orientationCombo.getSelection().value
+f.z_grid.value="" + z_gridCheck.isChecked()
+if (z_gridColor.initialized()) {
+if (z_gridColor.getColor())
+{
+f.z_gridColor.value="" + z_gridColor.getColor()
+}
+}
+f.z_formatNb.value="" + z_formatNumbersCombo.getSelection().value
+f.z_max_idx.value = "" + (zL.initialized()? zL.items.length : (axisObjects['z']? axisObjects['z'].length : 0))
+}
+}
+if (startNewPageCheck.initialized()) {
+f.startNewPage.value="" + startNewPageCheck.isChecked()
+f.repeatOnEveryPage.value="" + repeatEveryPageCheck.isChecked()
+f.avoidPageBreak.value="" + avoidPageBreakCheck.isChecked()
+f.posH.value="" + horizontalPosField.getValue()
+f.posV.value="" + verticalPosField.getValue()
+if (horizontalEltCombo.getSelection()){
+f.attachToH.value="" + horizontalEltCombo.getSelection().value
+}
+f.attachH.value="" + horizontalPosCombo.getSelection().value
+if (verticalEltCombo.getSelection()){
+f.attachToV.value="" + verticalEltCombo.getSelection().value
+}
+f.attachV.value="" + verticalPosCombo.getSelection().value
+}
+if(_axisCommands.length > 0) {
+var sCommands = "" 
+for (var i = 0; i < _axisCommands.length; i++) {
+sCommands += "[" + _axisCommands[i] + "]"
+if (i < _axisCommands.length-1) sCommands += ","
+}
+f.axisCommands.value="[" + sCommands + "]"
+}
+var url = p._root + "processFormatChart" + p._appExt
+url += p.urlParamsNoBID(null,null,_iReportIdx)
+url += "&sBid="+ elt.bid
+f.action = url
+setTimeout("document.formatChartForm.submit()",1)
+}
+function buildTree(tree,withFormula)
+{
+tree.deleteAll()
+setListOrder()
+_docObjects.sort(sortFuncUsingListOrder) 
+renameSameNameDifferentDPObj()
+newTreeElt1 = newTreeWidgetElem(1,"Available Objects", null, null, null, "Available Objects");
+tree.add(newTreeElt1);
+var len = _docObjects.length
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+switch(item.kind) 
+{
+case _linkDim:
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) {
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.isPartOfALinkedDim) continue
+if (el.id == item.linkedIDs[k]) {
+_docObjects[m].isPartOfALinkedDim = true
+}
+}
+}
+break;
+}
+}
+len = _docObjects.length
+for (var i=0; i < len; i++)
+{
+var item =_docObjects[i]
+if (item.isPartOfALinkedDim) continue
+var sTooltipHdr = "Based On:"
+var sTooltipDesc = "Description:"
+switch(item.kind) 
+{
+case _dim:
+case _msr:
+case _dtl:
+tooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+tooltip = sTooltipHdr + " " + item.DPName + tooltipDesc
+newTreeElt1.add(newTreeWidgetElem(item.kind, item.name, item, null,null, shrinkTooltip(tooltip)));
+break;
+case _linkDim:
+mergedTooltip = ""
+mergedTooltipDesc = ""
+nLinkDim = newTreeWidgetElem(_linkDim, item.name, item, null,null, "")
+newTreeElt1.add(nLinkDim);
+var l = item.linkedIDs.length
+for (var k=0; k < l; k++) { 
+for (var m=0; m < len ; m++) {
+var el = _docObjects[m]
+if (el.id == item.linkedIDs[k]) {
+tooltipDesc = (el.desc)? ("\n" + sTooltipDesc + " " + el.desc) : ""
+tooltip = sTooltipHdr + " " + el.DPName + tooltipDesc
+nLinkDim.add(newTreeWidgetElem(el.kind, el.name, el, null,null, shrinkTooltip(tooltip)))
+mergedTooltip += el.DPName
+if (k < (l-1)) mergedTooltip += ", "
+}
+}
+}
+mergedTooltipDesc = (item.desc)? ("\n" + sTooltipDesc + " " + item.desc) : ""
+nLinkDim.tooltip = sTooltipHdr + " " + mergedTooltip + mergedTooltipDesc
+break;
+}
+}
+}
+_variableObjects.sort(BOObj_sortFunc)
+newTreeElt2 = newTreeWidgetElem(1,"Variables", null,null,null, "Variables");
+tree.add(newTreeElt2);
+var len = _variableObjects.length
+if (len>0)
+{
+for (var i=0; i < len; i++)
+{
+var item = _variableObjects[i]
+item.isVariable=true
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.formula)? ("\n" + item.formula) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt2.add(newTreeWidgetElem(item.kind, item.name, item, null, null, itemToolTip));
+}
+}
+newTreeElt2.expanded = p._varsBranchExp
+if (withFormula) 
+{
+_formulaObjects.sort(BOObj_sortFunc)
+var len = _formulaObjects.length
+if (len>0)
+{
+newTreeElt3 = newTreeWidgetElem(1,"Formulas",null, null,null, "Formulas");
+tree.add(newTreeElt3);
+for (var i=0; i < len;i++)
+{
+var item = _formulaObjects[i]
+item.isFormula=true
+tooltipType = "Type:" +  " " + p._labDataType[item.dataType];
+tooltipDesc = (item.desc)? ("\n" + item.desc) : ""
+var itemToolTip = shrinkTooltip( tooltipType + tooltipDesc)
+newTreeElt3.add(newTreeWidgetElem(item.kind, item.name, item, null, null, itemToolTip));
+}
+newTreeElt3.expanded = p._formulaeBranchExp
+}
+}
+tree.rebuildHTML()
+}
+function sp()
+{
+formatPal.add()
+}
+function addCheck(a,b,c,d)
+{
+return formatPal.add(newIconCheckWidget(a,(b!=null)?p._img+curIcon:null,ftClickCB,c,d,16,16,b?b*16:0,0,b?b*16:0,16))
+}
+function addRad(a,b,c,d,e)
+{
+return formatPal.add(newIconRadioWidget(a,(b!=null)?p._img+curIcon:null,ftClickCB,c,d,e,16,16,b?b*16:0,0,b?b*16:0,16))
+}
+function addLabel(a,b)
+{
+return formatPal.add(NewLabelWidget(a,b))
+}
+function addCombo(a,b,c,d)
+{
+return formatPal.add(newCustomCombo(a,ftClickCB,b,c,d))
+}
+function addIntCombo(a,b,c,d)
+{
+return formatPal.add(newIntComboWidget(a,b,c,d,ftClickCB,ftClickCB))
+}
+function setFormatFromElt(txtElt, formatZone)
+{
+fontComboAr[formatZone] = txtElt.font.name
+sizeComboAr[formatZone] = txtElt.font.size
+boldAr[formatZone] = txtElt.font.bold
+italicAr[formatZone] = txtElt.font.italic
+underAr[formatZone] = txtElt.font.under
+thicknessComboAr[formatZone] = null
+borderColorAr[formatZone] = null
+if (txtElt.border) {
+thicknessComboAr[formatZone] = txtElt.border.size
+borderColorAr[formatZone] = txtElt.border.color.rgb
+} else if (txtElt.borders) {
+res = p.getAttFromElts(".borders.topSize",txtElt)
+retTopSize = (res.defined)? res.ret:null
+res = p.getAttFromElts(".borders.bottomSize",txtElt)
+retBottomSize = (res.defined)? res.ret:null
+res = p.getAttFromElts(".borders.leftSize",txtElt)
+retLeftSize = (res.defined)? res.ret:null
+res = p.getAttFromElts(".borders.rightSize",txtElt)
+retRightSize = (res.defined)? res.ret:txtElt
+if ((retTopSize == retBottomSize) && (retBottomSize == retLeftSize) && (retLeftSize == retRightSize))
+{
+thicknessComboAr[formatZone] = retTopSize
+}
+res = p.getAttFromElts(".borders.bottomColor.rgb",txtElt)
+retBottomColor = (res.defined)? res.ret:null
+res = p.getAttFromElts(".borders.leftColor.rgb",txtElt)
+retLeftColor = (res.defined)? res.ret:null
+res = p.getAttFromElts(".borders.topColor.rgb",txtElt)
+retTopColor = (res.defined)? res.ret:null
+res = p.getAttFromElts(".borders.rightColor.rgb",txtElt)
+retRightColor = (res.defined)? res.ret:null
+if ((retBottomColor == retLeftColor) && (retLeftColor == retTopColor) && (retTopColor == retRightColor)) 
+{
+borderColorAr[formatZone] = retBottomColor
+}
+}
+if (txtElt.fgColor)
+{
+fgComboAr[formatZone] = txtElt.fgColor.rgb
+}
+if (txtElt.bgColor)
+{
+bgComboAr[formatZone] = txtElt.bgColor.rgb
+}
+}
+function updateFormatToolbar(formatZone, disabled)
+{
+setFont(formatZone, disabled)
+setBordersTb(formatZone, disabled)
+setColors(formatZone, disabled)
+}
+function setFont(formatZone, disabled)
+{
+var res= fontComboAr[formatZone]
+fontCombo.hasChanged=false
+fontCombo.setDisabled(res==null || disabled)
+fontCombo.setUndefined(false)
+if (res!=null)
+fontCombo.valueSelect(res?res:"")
+res= sizeComboAr[formatZone]
+sizeCombo.hasChanged=false
+sizeCombo.setDisabled(res==null || disabled)
+sizeCombo.setUndefined(false)
+sizeCombo.valueSelect(res?(""+res):"")
+res= boldAr[formatZone]
+bold.hasChanged=false
+bold.setDisabled(res==null || disabled)
+bold.check(res==1)
+res= italicAr[formatZone]
+italic.hasChanged=false
+italic.setDisabled(res==null || disabled)
+italic.check(res==1)
+res= underAr[formatZone]
+under.hasChanged=false
+under.setDisabled(res==null || disabled)
+under.check(res==1)
+}
+function setBordersTb(formatZone, disabled)
+{
+var noBorder = false
+var res= thicknessComboAr[formatZone]
+thicknessCombo.hasChanged=false
+thicknessCombo.setDisabled(noBorder || res==null || disabled)
+thicknessCombo.setUndefined(false)
+thicknessCombo.select(res)
+res= borderColorAr[formatZone]
+borderColor.setDisabled(noBorder || res==null || disabled)
+borderColor.hasChanged=false
+borderColor.setColor(res)
+}
+function setColors(formatZone, disabled)
+{
+if (fgComboAr[formatZone] != null)
+{
+var res= fgComboAr[formatZone]
+fgCombo.hasChanged=false
+fgCombo.setDisabled(res==null || disabled)
+fgCombo.setColor(res)
+}
+else
+{
+fgCombo.setColor(null)
+fgCombo.setDisabled(true)
+}
+if (bgComboAr[formatZone] != null)
+{
+var res=bgComboAr[formatZone]
+bgCombo.hasChanged=false
+bgCombo.setDisabled(res==null || disabled)
+bgCombo.setColor(res)
+}
+else
+{
+bgCombo.setColor(null)
+bgCombo.setDisabled(true)
+}
+}
+function voidCB()
+{
+}
+function formatNumbersCB()
+{
+}
+function setFormatNumberCombo(combo, axis, graphApp)
+{
+eval('foundFormat = graphApp.'+ axis +'FormatNb')
+eval('typeToDisplay = graphApp.'+ axis +'FormatNbType')
+index = new Array(_CURRENCY, _DATE_TIME, _NUMBER, _CUSTOM)
+eval(combo + ".init()")
+eval(combo + ".del()")
+eval(combo + ".add('Default', 'null')")
+for (var j=0; j < index.length; j++)
+{
+var count = _formatNumbers[index[j]].length
+for (var i=0; i < count; i++)
+{
+el = _formatNumbers[index[j]][i]
+eval(combo + ".add(el, el, (foundFormat == el))")
+}
+}
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<form target="Report" style="display:none" name="formatChartForm" method="post" action="">
+<input type="hidden" name="unitIsInch" id="unitIsInch" value="">
+<input type="hidden" name="name" id="name" value="">
+<input type="hidden" name="width" id="width" value="">
+<input type="hidden" name="height" id="height" value="">
+<input type="hidden" name="showWhenEmpty" id="showWhenEmpty" value="">
+<input type="hidden" name="chartTitleShow" id="chartTitleShow" value="">
+<input type="hidden" name="chartTitle" id="chartTitle" value="">
+<input type="hidden" name="legend" id="legend" value="">
+<input type="hidden" name="posLegend" id="posLegend" value="">
+<input type="hidden" name="x_label" id="x_label" value="">
+<input type="hidden" name="y_label" id="y_label" value="">
+<input type="hidden" name="z_label" id="z_label" value="">
+<input type="hidden" name="dataValues" id="dataValues" value="">
+<input type="hidden" name="threeDLook" id="threeDLook" value="">
+<input type="hidden" name="bgColor" id="bgColor" value="">
+<input type="hidden" name="isPie" id="isPie" value="">
+<input type="hidden" name="borderSize" id="borderSize" value="">
+<input type="hidden" name="borderColor" id="borderColor" value="">
+<input type="hidden" name="topBorderSize" id="topBorderSize" value="">
+<input type="hidden" name="topBorderColor" id="topBorderColor" value="">
+<input type="hidden" name="bottomBorderSize" id="bottomBorderSize" value="">
+<input type="hidden" name="bottomBorderColor" id="bottomBorderColor" value="">
+<input type="hidden" name="leftBorderSize" id="leftBorderSize" value="">
+<input type="hidden" name="leftBorderColor" id="leftBorderColor" value="">
+<input type="hidden" name="rightBorderSize" id="rightBorderSize" value="">
+<input type="hidden" name="rightBorderColor" id="rightBorderColor" value="">
+<input type="hidden" name="title_fntName" id="title_fntName" value="">
+<input type="hidden" name="title_fntSize" id="title_fntSize" value="">
+<input type="hidden" name="title_bold" id="title_bold" value="">
+<input type="hidden" name="title_italic" id="title_italic" value="">
+<input type="hidden" name="title_underline" id="title_underline" value="">
+<input type="hidden" name="title_strike" id="title_strike" value="">
+<input type="hidden" name="title_alignH" id="title_alignH" value="">
+<input type="hidden" name="title_fgColor" id="title_fgColor" value="">
+<input type="hidden" name="title_bgColor" id="title_bgColor" value="">
+<input type="hidden" name="title_borderSize" id="title_borderSize" value="">
+<input type="hidden" name="title_borderColor" id="title_borderColor" value="">
+<input type="hidden" name="chartData_fntName" id="chartData_fntName" value="">
+<input type="hidden" name="chartData_fntSize" id="chartData_fntSize" value="">
+<input type="hidden" name="chartData_bold" id="chartData_bold" value="">
+<input type="hidden" name="chartData_italic" id="chartData_italic" value="">
+<input type="hidden" name="chartData_underline" id="chartData_underline" value="">
+<input type="hidden" name="chartData_strike" id="chartData_strike" value="">
+<input type="hidden" name="chartData_alignH" id="chartData_alignH" value="">
+<input type="hidden" name="chartData_fgColor" id="chartData_fgColor" value="">
+<input type="hidden" name="chartData_bgColor" id="chartData_bgColor" value="">
+<input type="hidden" name="chartData_borderSize" id="chartData_borderSize" value="">
+<input type="hidden" name="chartData_borderColor" id="chartData_borderColor" value="">
+<input type="hidden" name="legendTitle_fntName" id="legendTitle_fntName" value="">
+<input type="hidden" name="legendTitle_fntSize" id="legendTitle_fntSize" value="">
+<input type="hidden" name="legendTitle_bold" id="legendTitle_bold" value="">
+<input type="hidden" name="legendTitle_italic" id="legendTitle_italic" value="">
+<input type="hidden" name="legendTitle_underline" id="legendTitle_underline" value="">
+<input type="hidden" name="legendTitle_strike" id="legendTitle_strike" value="">
+<input type="hidden" name="legendTitle_alignH" id="legendTitle_alignH" value="">
+<input type="hidden" name="legendTitle_fgColor" id="legendTitle_fgColor" value="">
+<input type="hidden" name="legendTitle_bgColor" id="legendTitle_bgColor" value="">
+<input type="hidden" name="legendTitle_borderSize" id="legendTitle_borderSize" value="">
+<input type="hidden" name="legendTitle_borderColor" id="legendTitle_borderColor" value="">
+<input type="hidden" name="XAxisLabel_fntName" id="XAxisLabel_fntName" value="">
+<input type="hidden" name="XAxisLabel_fntSize" id="XAxisLabel_fntSize" value="">
+<input type="hidden" name="XAxisLabel_bold" id="XAxisLabel_bold" value="">
+<input type="hidden" name="XAxisLabel_italic" id="XAxisLabel_italic" value="">
+<input type="hidden" name="XAxisLabel_underline" id="XAxisLabel_underline" value="">
+<input type="hidden" name="XAxisLabel_strike" id="XAxisLabel_strike" value="">
+<input type="hidden" name="XAxisLabel_alignH" id="XAxisLabel_alignH" value="">
+<input type="hidden" name="XAxisLabel_fgColor" id="XAxisLabel_fgColor" value="">
+<input type="hidden" name="XAxisLabel_bgColor" id="XAxisLabel_bgColor" value="">
+<input type="hidden" name="XAxisLabel_borderSize" id="XAxisLabel_borderSize" value="">
+<input type="hidden" name="XAxisLabel_borderColor" id="XAxisLabel_borderColor" value="">
+<input type="hidden" name="YAxisLabel_fntName" id="YAxisLabel_fntName" value="">
+<input type="hidden" name="YAxisLabel_fntSize" id="YAxisLabel_fntSize" value="">
+<input type="hidden" name="YAxisLabel_bold" id="YAxisLabel_bold" value="">
+<input type="hidden" name="YAxisLabel_italic" id="YAxisLabel_italic" value="">
+<input type="hidden" name="YAxisLabel_underline" id="YAxisLabel_underline" value="">
+<input type="hidden" name="YAxisLabel_strike" id="YAxisLabel_strike" value="">
+<input type="hidden" name="YAxisLabel_alignH" id="YAxisLabel_alignH" value="">
+<input type="hidden" name="YAxisLabel_fgColor" id="YAxisLabel_fgColor" value="">
+<input type="hidden" name="YAxisLabel_bgColor" id="YAxisLabel_bgColor" value="">
+<input type="hidden" name="YAxisLabel_borderSize" id="YAxisLabel_borderSize" value="">
+<input type="hidden" name="YAxisLabel_borderColor" id="YAxisLabel_borderColor" value="">
+<input type="hidden" name="ZAxisLabel_fntName" id="ZAxisLabel_fntName" value="">
+<input type="hidden" name="ZAxisLabel_fntSize" id="ZAxisLabel_fntSize" value="">
+<input type="hidden" name="ZAxisLabel_bold" id="ZAxisLabel_bold" value="">
+<input type="hidden" name="ZAxisLabel_italic" id="ZAxisLabel_italic" value="">
+<input type="hidden" name="ZAxisLabel_underline" id="ZAxisLabel_underline" value="">
+<input type="hidden" name="ZAxisLabel_strike" id="ZAxisLabel_strike" value="">
+<input type="hidden" name="ZAxisLabel_alignH" id="ZAxisLabel_alignH" value="">
+<input type="hidden" name="ZAxisLabel_fgColor" id="ZAxisLabel_fgColor" value="">
+<input type="hidden" name="ZAxisLabel_bgColor" id="ZAxisLabel_bgColor" value="">
+<input type="hidden" name="ZAxisLabel_borderSize" id="ZAxisLabel_borderSize" value="">
+<input type="hidden" name="ZAxisLabel_borderColor" id="ZAxisLabel_borderColor" value="">
+<input type="hidden" name="XAxisValues_fntName" id="XAxisValues_fntName" value="">
+<input type="hidden" name="XAxisValues_fntSize" id="XAxisValues_fntSize" value="">
+<input type="hidden" name="XAxisValues_bold" id="XAxisValues_bold" value="">
+<input type="hidden" name="XAxisValues_italic" id="XAxisValues_italic" value="">
+<input type="hidden" name="XAxisValues_underline" id="XAxisValues_underline" value="">
+<input type="hidden" name="XAxisValues_strike" id="XAxisValues_strike" value="">
+<input type="hidden" name="XAxisValues_alignH" id="XAxisValues_alignH" value="">
+<input type="hidden" name="XAxisValues_fgColor" id="XAxisValues_fgColor" value="">
+<input type="hidden" name="XAxisValues_bgColor" id="XAxisValues_bgColor" value="">
+<input type="hidden" name="XAxisValues_borderSize" id="XAxisValues_borderSize" value="">
+<input type="hidden" name="XAxisValues_borderColor" id="XAxisValues_borderColor" value="">
+<input type="hidden" name="XAxisValues_formatNb" id="XAxisValues_formatNb" value="">
+<input type="hidden" name="YAxisValues_fntName" id="YAxisValues_fntName" value="">
+<input type="hidden" name="YAxisValues_fntSize" id="YAxisValues_fntSize" value="">
+<input type="hidden" name="YAxisValues_bold" id="YAxisValues_bold" value="">
+<input type="hidden" name="YAxisValues_italic" id="YAxisValues_italic" value="">
+<input type="hidden" name="YAxisValues_underline" id="YAxisValues_underline" value="">
+<input type="hidden" name="YAxisValues_strike" id="YAxisValues_strike" value="">
+<input type="hidden" name="YAxisValues_alignH" id="YAxisValues_alignH" value="">
+<input type="hidden" name="YAxisValues_fgColor" id="YAxisValues_fgColor" value="">
+<input type="hidden" name="YAxisValues_bgColor" id="YAxisValues_bgColor" value="">
+<input type="hidden" name="YAxisValues_borderSize" id="YAxisValues_borderSize" value="">
+<input type="hidden" name="YAxisValues_borderColor" id="YAxisValues_borderColor" value="">
+<input type="hidden" name="YAxisValues_formatNb" id="YAxisValues_formatNb" value="">
+<input type="hidden" name="ZAxisValues_fntName" id="ZAxisValues_fntName" value="">
+<input type="hidden" name="ZAxisValues_fntSize" id="ZAxisValues_fntSize" value="">
+<input type="hidden" name="ZAxisValues_bold" id="ZAxisValues_bold" value="">
+<input type="hidden" name="ZAxisValues_italic" id="ZAxisValues_italic" value="">
+<input type="hidden" name="ZAxisValues_underline" id="ZAxisValues_underline" value="">
+<input type="hidden" name="ZAxisValues_strike" id="ZAxisValues_strike" value="">
+<input type="hidden" name="ZAxisValues_alignH" id="ZAxisValues_alignH" value="">
+<input type="hidden" name="ZAxisValues_fgColor" id="ZAxisValues_fgColor" value="">
+<input type="hidden" name="ZAxisValues_bgColor" id="ZAxisValues_bgColor" value="">
+<input type="hidden" name="ZAxisValues_borderSize" id="ZAxisValues_borderSize" value="">
+<input type="hidden" name="ZAxisValues_borderColor" id="ZAxisValues_borderColor" value="">
+<input type="hidden" name="floor" id="floor" value="">
+<input type="hidden" name="floorColor" id="floorColor" value="">
+<input type="hidden" name="leftWall" id="leftWall" value="">
+<input type="hidden" name="rightWall" id="rightWall" value="">
+<input type="hidden" name="primColor" id="primColor" value="">
+<input type="hidden" name="asPercent" id="asPercent" value="">
+<input type="hidden" name="x_frequency" id="x_frequency" value="">
+<input type="hidden" name="x_orientation" id="x_orientation" value="">
+<input type="hidden" name="x_grid" id="x_grid" value="">
+<input type="hidden" name="x_gridColor" id="x_gridColor" value="">
+<input type="hidden" name="x_formatNb" id="x_formatNb" value="">
+<input type="hidden" name="x_max_idx" id="x_max_idx" value="">
+<input type="hidden" name="y_frequency" id="y_frequency" value="">
+<input type="hidden" name="hasMinValue" id="hasMinValue" value="">
+<input type="hidden" name="minValue" id="minValue" value="">
+<input type="hidden" name="hasMaxValue" id="hasMaxValue" value="">
+<input type="hidden" name="maxValue" id="maxValue" value="">
+<input type="hidden" name="logScale" id="logScale" value="">
+<input type="hidden" name="y_orientation" id="y_orientation" value="">
+<input type="hidden" name="y_grid" id="y_grid" value="">
+<input type="hidden" name="y_gridColor" id="y_gridColor" value="">
+<input type="hidden" name="y_formatNb" id="y_formatNb" value="">
+<input type="hidden" name="y_max_idx" id="y_max_idx" value="">
+<input type="hidden" name="z_frequency" id="z_frequency" value="">
+<input type="hidden" name="z_hasMinValue" id="z_hasMinValue" value="">
+<input type="hidden" name="z_minValue" id="z_minValue" value="">
+<input type="hidden" name="z_hasMaxValue" id="z_hasMaxValue" value="">
+<input type="hidden" name="z_maxValue" id="z_maxValue" value="">
+<input type="hidden" name="z_logScale" id="z_logScale" value="">
+<input type="hidden" name="z_orientation" id="z_orientation" value="">
+<input type="hidden" name="z_grid" id="z_grid" value="">
+<input type="hidden" name="z_gridColor" id="z_gridColor" value="">
+<input type="hidden" name="z_formatNb" id="z_formatNb" value="">
+<input type="hidden" name="z_max_idx" id="z_max_idx" value="">
+<input type="hidden" name="startNewPage" id="startNewPage" value="">
+<input type="hidden" name="repeatOnEveryPage" id="repeatOnEveryPage" value="">
+<input type="hidden" name="avoidPageBreak" id="avoidPageBreak" value="">
+<input type="hidden" name="dupRow" id="dupRow" value="">
+<input type="hidden" name="posH" id="posH" value="">
+<input type="hidden" name="posV" id="posV" value="">
+<input type="hidden" name="attachToH" id="attachToH" value="">
+<input type="hidden" name="attachH" id="attachH" value="">
+<input type="hidden" name="attachToV" id="attachToV"  value="">
+<input type="hidden" name="attachV" id="attachV" value="">
+<input type="hidden" name="axisCommands" id="axisCommands" value="">
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for adding line items to a draft order (via Quick Add).</comment>
+    
+    <!--  <entry key="WCContext.storefrontId">xpedx_me_draftOrderAddOrderLines:/Item/@CallingOrganizationCode</entry>-->
+    <entry key="itemId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@ItemID</entry>
+    <!-- <entry key="associationTypesOfInterest">xpedx_me_draftOrderAddOrderLines:/Item/ItemAssociationTypeList/ItemAssociationType/@Type</entry> -->
+	 <!-- <entry key="WCContext.customerId">xpedx_me_draftOrderAddOrderLines:/Item/CustomerInformation/@CustomerID</entry> -->
+    <!--  <entry key="currency">xpedx_me_draftOrderAddOrderLines:/Item/@Currency</entry> -->
+    <entry key="orderHeaderKey">xpedx_me_draftOrderAddOrderLines:/Order/@OrderHeaderKey, xpedx_me_draftOrderReplaceOrderLines:/Order/@OrderHeaderKey</entry>
+    <entry key="qty">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/@OrderedQty</entry>
+    <entry key="qty">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@OrderedQty</entry>
+    <entry key="uomId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@UnitOfMeasure</entry>
+    <entry key="uomId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/OrderLineTranQuantity/@TransactionalUOM</entry>
+    <!--  <entry key="orderedProductClass">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@ProductClass</entry> -->
+    <entry key="name">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Item/@ItemShortDesc</entry>
+    <!-- <entry key="jobId">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/Extn/@ExtnCustLineAccNo</entry>  -->
+    <!--  <entry key="itemType">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine/@LineType</entry> -->
+    <!-- <entry key="recordPendingChange">xpedx_me_draftOrderAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry> -->
+    <entry key="key">xpedx_me_draftOrderReplaceOrderLines:/Order/OrderLines/OrderLine/@OrderLineKey</entry>
+    <entry key="orderedLineType">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@LineType</entry>
+    <entry key="draftOrderFlag">xpedx_me_draftOrderAddOrderLines:/Order/@DraftOrderFlag</entry>
+</properties>

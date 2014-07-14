@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="mailHost">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@MailHost</entry>
+	<entry key="mailFromAddress">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@FromAddress</entry>
+	<entry key="appendedCSREmailIDs">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/ToAddresses/ToAddress/@EmailID</entry>
+	<entry key="mailCCAddress">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/CCAddresses/CCAddress/@EmailID</entry>
+	<entry key="mailSubject">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@SubjectText</entry>
+	<!-- <entry key="newUserName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Name</entry> -->
+	<entry key="newUserFirstName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@FirstName</entry>
+	<entry key="newUserLastName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@LastName</entry>
+	<entry key="newUserEmail">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@EmailID</entry>
+	<entry key="newUserPhone">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Phone</entry>
+	<entry key="newUserCompanyName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@CompanyName</entry>
+	<entry key="newUserAddress1">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Address1</entry>
+	<entry key="newUserAddress2">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Address2</entry>
+	<entry key="newUserCity">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@City</entry>
+	<entry key="newUserState">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@State</entry>
+	<entry key="newUserZipCode">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@ZipCode</entry>
+	<entry key="newUserComments">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Comments</entry>
+	<entry key="imageUrlPath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@ImageUrl</entry>
+	<entry key="templatePath">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@TemplateFile</entry>
+	<entry key="brandEmail">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Brand</entry>
+</properties>

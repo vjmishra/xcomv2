@@ -1,0 +1,941 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="xpedx.order" namespace='/order' extends="order">
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+		
+		<global-results>
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+		</global-results>
+		
+		<action name="xpedxDraftOrderDropDown"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDropDownAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDropDownBinding.xml</param>
+			<param name="mashups">xpedxDraftOrderDropDown</param>
+			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDropDown.jsp
+			</result>
+		</action>
+		<action name="draftOrderList"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderListAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderListBinding.xml</param>
+			<param name="mashups">xpedxDraftOrderList</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderList.jsp</result>
+			<result name="copyCart" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${copyFlag}</param>
+				<param name="draft">Y</param>				
+			</result>
+			
+		</action>
+		<action name="draftOrderCopy"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderCopyAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/DraftOrderCopy_binding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.order.OrderListValidation</param>
+			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
+			</result>
+			
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="copyFlag">${copyCartName}</param>	
+				<param name="OrderHeaderKey">${newOrderHeaderKey}</param>
+				<param name="draft">Y</param>			
+			</result>
+		</action>
+
+		<!-- action for draft order creation -->
+		<action name="xpedxCustomerUserDraftOrderCreate"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderCreateAction">
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${orderHeaderKey}</param>
+				<param name="draft">Y</param>
+			</result>
+		</action>
+
+		<action name="xpedxDraftOrderListOrderNameAnchor"
+			class="com.sterlingcommerce.webchannel.common.SimpleCellBuilderAction">
+			<result>/xpedx/jsp/order/XPEDXDraftOrderListOrderNameAnchor.jsp
+			</result>
+		</action>
+		<action name="xpedxDraftOrderListActionAnchor"
+			class="com.sterlingcommerce.webchannel.common.SimpleCellBuilderAction">
+			<result>/xpedx/jsp/order/XPEDXDraftOrderListActionAnchor.jsp</result>
+		</action>
+		<action name="xpedxDraftOrderListOwnerNameAnchor"
+			class="com.sterlingcommerce.webchannel.common.SimpleCellBuilderAction">
+			<result>/xpedx/jsp/order/XPEDXDraftOrderListOwnerName.jsp
+			</result>
+		</action>
+		<action name="xpedxDraftOrderListUserInfo"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderListUserInfoAction">
+			<result>/xpedx/jsp/order/XPEDXDraftOrderListOwnerName.jsp
+			</result>
+		</action>
+
+		<action name="xpedxPendingApprovalCount"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXPendingApprovalCountAction">
+			<param name="mashups">xpedxPendingApprovalCount</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXPendingApprovalCountBinding.xml</param>
+			<result name="success">/xpedx/jsp/order/approval/XPEDXPendingApprovalCount.jsp
+			</result>
+		</action>
+		<!-- Start:Order on behalf of customer and user -->
+		<action name="draftOrderDetails"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDetailsActionBinding.xml</param>
+			<param name="mashups">xpedx_me_draftOrderDetails</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp
+			</result>
+			<result name="input">/xpedx/jsp/order/XPEDXDraftOrderDetails.jsp
+			</result>
+			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
+			</result>
+			 <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+            </result>
+		</action>
+
+		<!-- Start:Manohar -->
+		<action name="getCustomerUsers"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderListAction"
+			method="populateCustomerUsers">
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXGetCustomerUsersBinding.xml</param>
+			<result name="success">/xpedx/jsp/order/XPEDXGetCustomersAndUsers.jsp
+			</result>
+		</action>
+		<!-- End:Manohar -->
+
+		<!-- End:Order on behalf of customer and user -->
+
+		<action name="OrderSummary"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderSummaryAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderSummaryActionBinding.xml</param>
+			<param name="mashups">xpedx_draftOrderSummary</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXOrderSummary.jsp</result>
+			<result name="draftFlagError">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
+			</result>
+			<result name="committedDateBindingFailure" type="redirectAction">
+				<param name="actionName">shippingOption</param>
+				<param name="parse">true</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="draft">${draft}</param>
+				<param name="shippingOptionErrorSessionKey">${shippingOptionErrorSessionKey}</param>
+				<param name="returnURL">${returnURL}</param>
+				<param name="fullBackURL">${#parameters.fullBackURL}</param>
+			</result>
+			<result name="Required_CustFields_Error" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="isEditOrder">${isEditOrder}</param>
+				<param name="draft">${draft}</param>
+				<param name="customerFieldsValidated">${customerFieldsValidated}</param>
+			</result>
+			<result name="Order_Multiple_Error" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="isEditOrder">${isEditOrder}</param>
+				<param name="draft">${draft}</param>				
+			</result>
+			<result name="punchoutSuccess" type="redirectAction">
+                <param name="actionName">customPunchoutOrder</param>
+                <param name="namespace">/order</param>
+             </result>
+		</action>
+
+		<action name="draftOrderSummaryUpdate"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderSummaryUpdateAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderSummaryUpdateActionBinding.xml</param>
+			<param name="mashups">xpedx_draftOrderSummaryUpdate</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">OrderSummary</param>
+				<param name="namespace">/order</param>
+				<param name="OrderHeaderKey">${#parameters.OrderHeaderKey}</param>
+				<param name="draft">${draft}</param>
+			</result>
+			
+		</action>
+
+		<action name="getOrderShipToAddress"
+			class="com.sterlingcommerce.webchannel.order.GetOrderAddressAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/GetOrderAddressShipTo_binding.xml</param>
+			<param name="mashups">me_getOrderShipToAddress</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXOrderShipToAddress.jsp
+			</result>
+		</action>
+		<action name="draftOrderCreate"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderCreateAction">
+			<param name="mashupId">draftOrderCreate</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderCreate_binding.xml</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${orderHeaderKey}</param>
+				<param name="draft">Y</param>
+			</result>
+		</action>
+
+		<!-- BEGIN: OrderList page: RUgrani -->
+		<action name="orderList"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderListAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderListBinding.xml</param>
+			<param name="mashups">XPEDXOrderList</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.order.OrderListValidation</param>
+			<result name="success">/xpedx/jsp/order/XPEDXOrderList.jsp</result>
+		</action>
+		<action name="orderDetail"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderDetailAction">
+			<param name="mashups">XPEDXOrderDetailMashup</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderDetailBinding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXOrderDetail.jsp</result>
+			<result name="orderDetailError">/error/jsp/common/GeneralSystemError.jsp</result>
+		</action>
+		<!-- END: OrderList page: RUgrani -->
+		
+		<action name="printOrderDetail"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXPrintOrderDetailAction">
+			<param name="mashups">XPEDXOrderDetailMashup</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderDetailBinding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="namespace">/order</param>
+			<param name="orderHeaderKey">${orderHeaderKey}</param>
+			<result name="success">/xpedx/jsp/order/PrintOrder.jsp</result>
+			<result name="orderDetailError">/error/jsp/common/GeneralSystemError.jsp</result>
+		</action>
+
+		<!-- BEGIN: ReOrder page: RUgrani -->
+		<action name="orderAgain"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderAgainAction">
+			<param name="mashups">xpedxOrderAgain</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderAgain_binding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="draft">Y</param>
+				<param name="isPNACallOnLoad">false</param>
+			</result>
+		</action>
+		<!-- END: ReOrder page: RUgrani -->
+
+		<!-- Draft Order Details customization starts : Manoj Kodagali -->
+
+		<action name="changeOrderHeader"
+			class="com.sterlingcommerce.webchannel.order.CartInContextRefreshingWCMashupAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXChangeOrderHeaderBinding.xml</param>
+			<param name="mashups">xpedx_me_changeOrderHeader</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${#parameters.OrderHeaderKey}</param>
+				<param name="draft">${draft}</param>
+			</result>
+		</action>
+
+		<action name="draftOrderAddOrderLines"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddOrderLinesAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderAddOrderLinesActionBinding.xml</param>
+			<param name="mashups">xpedx_me_draftOrderAddOrderLines</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="isEditOrder">${#parameters.isEditOrder}</param>
+				<param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
+				<param name="quickAddErrorListSessionKey">${quickAddErrorListSessionKey}</param>
+				<param name="draft">${draft}</param>
+				<param name="draftOrderError">${draftOrderError}</param>
+			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+		</action>
+
+		<action name="draftOrderModifyLineItems"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyLineItemsActionBinding.xml</param>
+			<param name="mashups">xpedx_me_changeOrderLineDetails</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="canCheckout">${#parameters.canCheckout}</param>
+				<param name="isEditOrder">${#parameters.isEditOrder}</param>
+				<param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param>
+				<param name="draft">${draft}</param>
+				<param name="validateCustomerFields">${validateCustomerFields}</param>
+				<param name="modifyOrderLines">true</param>
+				<param name="draftOrderError">${draftOrderError}</param>
+			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+		</action>
+
+		<action name="draftOrderModifyEmptyLineItems"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyEmptyLineItemsActionBinding.xml</param>
+			<param name="mashups">xpedx_me_changeOrderDetails</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="canCheckout">${#parameters.canCheckout}</param>
+				<param name="draft">${draft}</param>
+			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+		</action>
+
+		<action name="xpedxDraftOrderModifyLineNotes" method="updateNotes"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyLineItemsActionBinding.xml</param>
+			<param name="mashups">xpedx_me_changeOrderLineNotes</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="canCheckout">${#parameters.canCheckout}</param>
+				<param name="draft">${draft}</param>
+			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+		</action>
+		
+		<action name="xpedxOrderSummaryModifyLineNotes" method="updateNotes"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyLineItemsActionBinding.xml</param>
+			<param name="mashups">xpedx_me_changeOrderLineNotes</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">OrderSummary</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="fullBackURL">${#parameters.fullBackURL}</param>
+				<param name="draft">${draft}</param>
+			</result>
+			<result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+		</action>
+		
+
+		<action name="xpedxAddItemsToList"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddItemsToListAction">
+			<param name="mashups">XPEDXAddItemsToList</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="canCheckout">${#parameters.canCheckout}</param>
+				<param name="draft">${draft}</param>
+			</result>
+			<!--
+				<result name="success2ItemDetails" type="redirectAction"> <param
+				name="actionName">itemDetails</param> <param
+				name="namespace">/catalog</param> <param
+				name="itemID">${itemID}</param> <param name="scFlag">Y</param>
+				<param name="_bcs_">${_bcs_}</param> <param
+				name="unitOfMeasure">${unitOfMeasure}</param> </result>
+			-->
+			<result name="success2ItemDetails" type="httpheader">
+				<param name="status">200</param>
+			</result>
+		</action>
+
+		<action name="validateProduct" method="validateProduct"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddOrderLinesAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderAddOrderLinesActionBinding.xml</param>
+			<param name="mashups">addToCartGetCompleteItemList</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success">/xpedx/jsp/order/XPEDXValidateProudct.jsp
+			</result>
+		</action>
+
+		<action name="validateProductList" method="validateProductList"
+                  class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddOrderLinesAction">
+                  <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderAddOrderLinesActionBinding.xml</param>
+                  <param name="mashups">addToCartGetCompleteItemList</param>
+                  <param name="resourceId">/swc/order/guestShopping</param>
+                  <result name="success">/xpedx/jsp/order/XPEDXValidateProudct.jsp
+                  </result>
+            </action>
+		
+
+		<!-- Draft Order Customization Ends : Manoj Kodagali -->
+
+		<!-- Product Detail Changes Starts : Manoj Kodagali -->
+
+		<action name="addToCart"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXAddToCartAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXAddToCartBinding.xml</param>
+			<param name="mashups">xpedx_me_addToCartAddOrderLines</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success">/swc/jsp/order/addToCartSuccess.jsp</result>
+			<result name="MaxError">/xpedx/jsp/catalog/XPEDXItemsDetailsAddtoCartError.jsp</result>
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+			<result name="DraftError">/xpedx/jsp/common/XPEDXDraftOrderFlagError.jsp</result>
+			<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>			
+		</action>
+
+		<!-- Product Details Changes End : Manoj Kodagali  -->
+
+		<!-- action for order list widget. RUgrani-->
+		<action name="orderListWIdget"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderListAction">
+			<param name="mashups">XPEDXOrderList</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderListBinding.xml</param>
+			<param name="messageType">OrderListWidget</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXOrderListWidget.jsp
+			</result>
+		</action>
+
+
+		<!--Action for List of Orders for Approval. RUgrani-->
+		<action name="approvalList"
+			class="com.sterlingcommerce.xpedx.webchannel.order.approval.XPEDXOrderApprovalAction">
+			<param name="mashups">orderApprovalList</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderApprovalAction_binding.xml</param>
+			<param name="resourceId">/swc/order/approvals</param>
+			<result name="success">/xpedx/jsp/order/approval/XPEDXApprovalList.jsp
+			</result>
+		</action>
+		<!-- action for approval list widget. RUgrani-->
+		<action name="approvalWidget"
+			class="com.sterlingcommerce.xpedx.webchannel.order.approval.XPEDXOrderApprovalAction">
+			<param name="mashups">orderApprovalListWidget</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderApprovalAction_binding.xml</param>
+			<param name="resourceId">/swc/order/approvals</param>
+			<result name="success">/xpedx/jsp/order/approval/XPEDXApprovalWidget.jsp
+			</result>
+		</action>
+
+		<action name="approvalAction" class="com.sterlingcommerce.xpedx.webchannel.order.approval.XPEDXOrderApprovalAction">
+			<param name="mashups">orderApproval</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderApprovalAction_binding.xml</param>
+			<param name="resourceId">/swc/order/approvals</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">approvalList</param>
+				<param name="orderListReturnUrl">${orderListReturnUrl}</param>
+			</result>
+			<result name="successOrderList" type="redirectAction">
+				<param name="actionName">orderList</param>
+				<param name="namespace">/order</param>
+			</result>
+			<result name="successWebConf" type="redirectAction">
+				<param name="actionName">orderDetail</param>
+				<param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="orderListReturnUrl">${orderListReturnUrl}</param>
+			</result>
+		</action>
+
+		<action name="xpedxAddSpecialItemToCart"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddSpecialItemAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderAddSpecialItemActionBinding.xml</param>
+			<param name="mashups">XPEDXAddSpecialOrderLine</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="draft">${#parameters.draft}</param>
+			</result>
+		</action>
+
+		<action name="xpedxUpdateSpecialItem"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderAddSpecialItemAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderAddSpecialItemActionBinding.xml</param>
+			<param name="mashups">XPEDXUpdateSpecialOrderLine</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="zipCode">${#parameters.zipCode}</param>
+				<param name="draft">${#parameters.draft}</param>
+			</result>
+		</action>
+
+		<!-- action for approval list widget. RUgrani-->
+		<action name="xpedxCartListWidget"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderListAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderListBinding.xml</param>
+			<param name="mashups">xpedxDraftOrderList</param>
+			<param name="messageType">XPEDXCartListWidget</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXCartWidget.jsp</result>
+		</action>
+
+		<!--
+			action to save cart summary information (same as
+			draftOrderSummaryUpdate) on orderplace
+		-->
+		<action name="saveOrderSummary"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderSummaryUpdateAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderSummaryUpdateActionBinding.xml</param>
+			<param name="mashups">XPEDXDraftOrderSummaryOnOrderPlace, XPEDXDraftOrderSummaryUpdateOnOrderPlace</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="messageType">OrderPlace</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">orderPlace</param>
+				<param name="namespace">/order</param>
+				<param name="OrderHeaderKey">${#parameters.OrderHeaderKey}</param>
+				<param name="draft">${draft}</param>
+			</result>
+		</action>
+
+		<!-- action for procurement punchout adsouza-->
+		<action name="procurementPunchOut"
+			class="com.sterlingcommerce.xpedx.webchannel.punchout.order.XPEDXProcurementPunchOutAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/punchout/order/XPEDXProcurementPunchOut_binding.xml</param>
+			<param name="mashups">XPEDXGetPunchOutOrderMessageCXML</param>
+			<param name="resourceId">/swc/procurement/activity</param>
+			<result name="success">/swc/jsp/order/procurementPunchOut.jsp</result>
+		</action>
+		
+		<action name="customPunchoutOrder"
+			class="com.sterlingcommerce.xpedx.webchannel.punchout.order.CustomPunchoutOrderAction">
+			<result name="success">/xpedx/jsp/order/punchoutpost.jsp</result>
+		</action>
+
+		<action name="shippingOption"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXShippingOptionAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXShippingOption_binding.xml</param>
+			<param name="mashups">me_shippingOption</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/swc/jsp/order/shippingOption.jsp</result>
+		</action>
+
+		<action name="OrderPayment"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXGetOrderPaymentAction">
+			<param name="mashups">me_OrderPayment</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXGetOrderPayment_binding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="successSingleNonGiftPayment">/swc/jsp/order/payment/SingleNonGiftPayment.jsp
+			</result>
+			<result name="successMultipleNonGiftPayment">/swc/jsp/order/payment/MultipleNonGiftPayment.jsp
+			</result>
+		</action>
+
+		<action name="orderPlace"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderPlaceAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderPlace_binding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success">/xpedx/jsp/order/XPEDXOrderConfirmation.jsp
+			</result>
+			<!-- <result name="failure">/xpedx/jsp/order/Failure.jsp</result>  XBT-109-->
+			<result name="failure" type="redirectAction">
+				<param name="actionName">MyResetPendingOrder</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="resetWithError">Y</param>
+			</result>
+			<result name="draftErrorFlagOrderSummary" type="redirectAction">
+                <param name="actionName">OrderSummary</param>
+                <param name="namespace">/order</param>
+                <param name="parse">true</param>
+                <param name="OrderHeaderKey">${orderHeaderKey}</param>
+                <param name="draft">${draft}</param>
+                <param name="draftOrderFlagOrderSummary">true</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+            </result>
+			 <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+		</action>
+		<action name="draftOrderMakeCartInContext"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderMakeCartInContextAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/DraftOrderMakeCartInContext_binding.xml</param>
+			<param name="mashups">draftOrderMakeCartInContext</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderList</param>
+			</result>
+		</action>
+		<action name="draftOrderMakeCartInContextDetails"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderMakeCartInContextAction">
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<param name="redirectToDraftOrderDetails">true</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${OrderHeaderKey}</param>
+				<param name="draft">Y</param>
+				<param name="draftOrderList">Y</param>
+			</result>
+		</action>		
+		<action name="draftOrderAddReplacementOrderLines"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXReplacementItemsCartAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXReplacementItemsCartActionBinding.xml</param>
+			<param name="mashups">xpedx_me_draftOrderAddOrderLines, xpedx_me_draftOrderReplaceOrderLines</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="draft">${#parameters.draft}</param>
+			</result>
+		</action>
+		
+		<action name="MyOrderCancel"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderCancelAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXOrderCancel_binding.xml</param>
+			<param name="resourceId">/swc/order/authenticatedOrdering</param>
+			<result name="success" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="orderListReturnUrl">${#parameters.orderListReturnUrl}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="orderListReturnUrl">${#parameters.orderListReturnUrl}</param>
+                <param name="errorMsg">${errorMsg}</param>
+            </result>
+		</action>
+		
+		<!-- 
+			action to save cart detail information (same as draftOrderModifyLineItems) before checkout.
+			Overriding OOTB saveCartDetails action to change the Binding file.
+		 	com/sterlingcommerce/xpedx/webchannel/order/XPEDXChecoutDraftOrderModifyLineItemsAction_binding.xml
+		 -->
+        <action name="xpedxsaveCartDetails" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderModifyLineItemsAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderModifyLineItemsActionBinding.xml</param>
+            <param name="mashups">xpedx_checkout_changeOrderLineDetails</param>
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">LineLevelISPU</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="zipCode">${#parameters.zipCode}</param>
+                <param name="canCheckout">${#parameters.canCheckout}</param>
+                <param name="isMultiStepCheckoutObj">${isMultiStepCheckoutObj}</param>
+                <param name="draft">${draft}</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
+            </result>
+            <result name="approveOrder" type="redirectAction">
+                <param name="actionName">orderPlace</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="zipCode">${#parameters.zipCode}</param>
+                <param name="canCheckout">${#parameters.canCheckout}</param>
+                <param name="isMultiStepCheckoutObj">${isMultiStepCheckoutObj}</param>
+                <param name="draft">${draft}</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>        
+            </result>
+            <result name="checkoutError" type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="zipCode">${#parameters.zipCode}</param>
+                <param name="canCheckout">${#parameters.canCheckout}</param>
+                <param name="isMultiStepCheckoutObj">${isMultiStepCheckoutObj}</param>
+                <param name="draft">${draft}</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
+            </result>
+            <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+            <result name="Required_CustFields_Error" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="isEditOrder">${isEditOrder}</param>
+				<param name="draft">${draft}</param>
+				<param name="customerFieldsValidated">${customerFieldsValidated}</param>
+			</result>
+			<result name="Order_Multiple_Error" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="namespace">/order</param>
+				<param name="orderHeaderKey">${orderHeaderKey}</param>
+				<param name="isEditOrder">${isEditOrder}</param>
+				<param name="draft">${draft}</param>			
+			</result>
+        </action>
+
+        <action name="XPEDXMiniCartDisplay" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction">
+            <param name="xmlBindingFile">XPEDXMiniCartDisplay_binding.xml</param>
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success">/xpedx/jsp/order/XPEDXMiniCart.jsp</result>
+        </action>
+
+    	<action name="XPEDXMiniCartLinkDisplay" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartLinkDisplayAction">
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>
+        </action>
+        <action name="XPEDXRefreshCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartLinkDisplayAction" method="refreshWithNextOrNewCartInContextOrderHeaderKey">
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success">/xpedx/jsp/order/XPEDXMiniCartLink.jsp</result>  
+        </action>
+
+        <!-- action to check for timeout for JIRA 1650-->
+        <action name="checkSessionTimeoutForCart" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXMiniCartDisplayAction" method="checkSessionTimeout">
+        <result name="timeout">/error/jsp/common/GeneralSystemError.jsp</result>
+        </action>
+
+		<!-- action for draft order delete line item -->
+        <action name="draftOrderDeleteLineItems" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDeleteLineItemAction">
+        	<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXDraftOrderDeleteLineItem_binding.xml</param>
+            <param name="mashups">xpedx_me_draftOrderDeleteLineItems</param>
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <param name="validationClass">com.sterlingcommerce.webchannel.order.CartDetailValidation</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="zipCode">${#parameters.zipCode}</param>
+                <param name="canCheckout">${#parameters.canCheckout}</param>
+                <param name="isPNACallOnLoad">${#parameters.isPNACallOnLoad}</param> 
+                <param name="isEditOrder">${#parameters.isEditOrder}</param>
+                <param name="draft">${draft}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
+            </result>
+            <result name="pendingChangeConflict" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="draft">${draft}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
+                <param name="pendingChangeConflictErrorMsg">${errorMessage}</param>
+            </result>
+            <result name="OUErrorPage" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="isErrorMessage">Y</param>
+                <param name="draft">${draft}</param>
+            </result>
+        </action>
+        
+         <action name="miniCartUpdate" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
+            <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
+            <param name="mashups">updateOrderForMiniCart</param>
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">XPEDXMiniCartDisplay</param>
+            </result>
+            <result name="draftOrderFailure">/xpedx/jsp/order/XPEDXMiniCartErrorDisplay.jsp</result>
+        </action>
+        
+        <action name="miniCartCheckout" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
+            <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
+            <param name="mashups">checkoutOrderForMiniCart</param>
+            <param name="resourceId">/swc/order/guestShopping</param>
+           <!-- <result name="success" type="redirectAction">-->
+            <result name="success" type="chain">
+                <param name="actionName">LineLevelISPU</param>
+                <param name="namespace">/order</param>
+                <param name="parse">true</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="draft">Y</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+            </result>
+             <result name="CartError" type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="draft">Y</param>	
+                <param name="draftOrderError">${draftOrderError}</param>			
+            </result>
+            <result name="draftOrderFailure"  type="redirectAction">
+                <param name="actionName">draftOrderDetails</param>
+                <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+                <param name="draft">Y</param>	
+                <param name="draftOrderError">${draftOrderError}</param>
+             </result>
+        </action>
+        <!-- NEW Page for Quick Add EB 4367  replacing XPEDXDraftOrderDetails.jsp -->
+        
+        <action name="quickAdd" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDetailsAction" method="openQuickAdd">
+			<result name="success">/xpedx/jsp/order/QuickAdd.jsp</result>
+		</action>
+        <action name="ajaxAddItemsToCart" class="com.sterlingcommerce.xpedx.webchannel.order.AjaxAddItemsToCartAction">
+			<result type="json"></result>
+		</action>
+		
+        
+        <action name="xpedxEditOrder"
+			class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXEditOrderAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXEditOrderActionBinding.xml</param>
+			<param name="mashups">xpedx_changepricelock</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="isEditOrder">${#parameters.isEditOrder}</param>				
+				<param name="draft">N</param>
+			</result>
+		</action>
+		
+		<action name="MyViewEditOrderChanges"
+			class="com.sterlingcommerce.webchannel.core.WCAction">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXEditOrderActionBinding.xml</param>
+			<param name="mashups">xpedx_changepricelock</param>
+			<param name="resourceId">/swc/order/guestShopping</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">draftOrderDetails</param>
+				<param name="OrderHeaderKey">${#parameters.orderHeaderKey}</param>
+				<param name="isEditOrder">true</param>				
+				<param name="draft">N</param>
+			</result>
+		</action>
+		
+		 <action name="xpedxaddCoupon" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXAddCouponAction">
+            <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/AddCoupon_binding.xml</param>
+            <param name="mashups">validateCoupon,me_addCoupon</param>
+            <param name="resourceId">/swc/order/authenticatedOrdering</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">OrderSummary</param>
+                <param name="parse">true</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="newPoNumber">${newPoNumber}</param>
+                <param name="instructionText">${SpecialInstructions}</param>
+                <param name="couponApplied">true</param>
+                <param name="couponOperationErrorSessionKey">${couponOperationErrorSessionKey}</param>
+                <param name="draft">${draft}</param>
+            </result>
+        </action>
+        
+         <action name="MyResetPendingOrder" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXResetPendingOrderAction">
+            <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/ResetPendingOrder_binding.xml</param>
+            <param name="mashups">ResetPendingOrder</param>
+            <param name="resourceId">/swc/order/authenticatedOrdering</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">orderDetail</param>
+                <param name="namespace">/order</param>
+                <param name="orderHeaderKey">${orderHeaderKey}</param>
+                <param name="resetWithError">${resetWithError}</param>
+            </result>
+        </action>
+		
+		<action name="xpedxpendingapprovalcount"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction" method = "getPendingOrdersCount" >
+			<param name="categoryDepth">2</param>
+			<result>/xpedx/jsp/common/XPEDXPendingApprovalCount.jsp</result>
+		</action>
+		
+		
+		<!-- In Store Pickup Page -->
+        <action name="LineLevelISPU" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXLineLevelSPUAction">
+            <param name="mashups">me_orderDetailsForPickup</param>
+            <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/LineLevelISPU_binding.xml</param>
+            <param name="resourceId">/swc/order/authenticatedOrdering</param>
+            <result name="success">/swc/jsp/order/lineLevelISPU.jsp</result>
+     	    <result name="SoldTo" type="redirectAction">
+                 <param name="actionName">getOrderSoldToAddress</param>
+                 <param name="parse">true</param>
+                 <param name="orderHeaderKey">${orderHeaderKey}</param>
+                 <param name="draft">${draft}</param>
+            </result>
+           <!--  <result name="OrderSummary" type="redirectAction">  -->
+            <result name="OrderSummary" type="chain">
+                <param name="actionName">OrderSummary</param>
+                <param name="namespace">/order</param>
+                <param name="parse">true</param>
+                <param name="OrderHeaderKey">${orderHeaderKey}</param>
+                <param name="draft">${draft}</param>
+                <param name="fullBackURL">${#parameters.fullBackURL}</param>
+                <param name="draftOrderError">${draftOrderError}</param>
+            </result>
+     		 <result name="draftOrderDetails" type="redirectAction">
+                 <param name="actionName">draftOrderDetails</param>
+                 <param name="parse">true</param>
+                 <param name="orderHeaderKey">${orderHeaderKey}</param>
+         		<param name="draft">${draft}</param>
+         		<param name="draftOrderError">${draftOrderError}</param>
+            </result>
+        </action>
+		
+    <action name="miniCartDelete" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXUpdateMiniCartAction">
+            <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/order/XPEDXMiniCartSave_binding.xml</param>
+            <param name="mashups">deleteLineForMiniCart</param>
+            <param name="resourceId">/swc/order/guestShopping</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">XPEDXMiniCartLinkDisplay</param>
+            </result>
+            <result name="draftOrderFailure">/xpedx/jsp/order/XPEDXMiniCartErrorDisplay.jsp</result>          
+        </action>
+        
+        <action name="draftOrderDelete" class="com.sterlingcommerce.xpedx.webchannel.order.XPEDXDraftOrderDeleteAction">
+            <param name="xmlBindingFile">com/sterlingcommerce/webchannel/order/DraftOrderDelete_binding.xml</param>
+            <param name="validationClass">com.sterlingcommerce.webchannel.order.OrderListValidation</param>
+            <param name="mashups">draftOrderDelete</param>
+            <param name="resourceId">/swc/order/authenticatedOrdering</param>
+            <result name="success" type="redirectAction">
+                <param name="actionName">draftOrderList</param>
+                <param name="deleteOrder">true</param>
+            </result>
+            <result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+            <result name="failure">/xpedx/jsp/order/XPEDXDraftOrderFlagError.jsp
+			</result>
+        </action>
+       
+	</package>
+</struts>

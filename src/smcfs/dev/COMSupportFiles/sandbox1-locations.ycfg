@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Locations>
+	<Location id="Dev" proxyServer="" proxyPort="" updateType="pull">
+		<Config Name="DEFAULT" 
+	        Protocol = "http"
+	        BaseUrl = "xpappd02.ipaper.com"
+	        PortNumber  = "8003"
+	        ApiUrl = "/smcfs/RcpServlet"
+ 	        CompressionEnabled="Y">
+		</Config>
+
+		<Config Name = "COM.SBC"
+		ApplicationID = "SBCSYS00001"
+		Protocol = "http"
+		BaseUrl = "xpappd02.ipaper.com"
+		PortNumber = "8003"
+		WebAppContext = "/sbc"
+		NoUILoginURL = "/NoUILoginServlet">
+		</Config>
+
+		<Config Name="IMAGE" 
+		        Protocol = "http"
+		        BaseUrl = "xpappd02.ipaper.com"
+		        PortNumber  = "80"
+		        DefaultApiUrl = "/icons/rcp/404.jpeg"
+		        ApiUrl = "/icons/rcp/$param1$.gif">
+		</Config>
+		
+		<Config Name="IMAGE_SMALL" 
+		        Protocol = "http"
+		        BaseUrl = "xpappd02.ipaper.com"
+		        PortNumber  = "80"
+		        ApiUrl = "/icons/rcp/$param1$.gif"
+				DefaultApiUrl = "/icons/rcp/404.gif">
+		</Config>
+		
+		<Config Name="IMAGE_BIG" 
+		        Protocol = "http"
+		        BaseUrl = "xpappd02.ipaper.com"
+		        PortNumber  = "80"
+		        ApiUrl = "/icons/rcp/$param1$.jpeg"
+				DefaultApiUrl = "/icons/rcp/404.jpeg">
+		</Config>
+		
+		<Config Name="HELP" 
+	         Protocol = "http"
+	         BaseUrl = "xpappd02.ipaper.com"
+	         PortNumber  = "8003"
+			 ApiUrl = "/smcfsdocs/yfscommon/online_help/$param1/wwhelp/wwhimpl/common/html/wwhelp.htm?context=$param2_userguide&amp;topic=$param3">
+		</Config>
+		
+	</Location>
+
+
+</Locations>

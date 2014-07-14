@@ -1,0 +1,124 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+p=parent;
+initDom(p._root+ "lib/images/"+p._skinName+"/",p._lang,p,"rValues");
+initialized=false;
+pf=(typeof(p.Report.promptsUI)!="undefined")?p.Report:p.DlgFrame;
+iCbWidth=pf.promptsUI.iPromptWidth;
+arrParams=new Array();
+if (pf.rangeValuesParams!=null)
+arrParams=pf.rangeValuesParams.split('-');
+function loadDialog()
+{
+if (!initialized)
+{
+initialized=true;
+var strRangeValuesCaption="Select a range of values";
+rValuesDlg = newDialogBoxWidget("rValuesDlg",strRangeValuesCaption,300,135,submitCB,cancelCB,false);
+cbBatchValues=newComboWidget("cbValues",null,true,iCbWidth,strRangeValuesCaption);
+OKButton=newButtonWidget("rValuesOKButton","OK","submitCB()",60);
+CancelButton=newButtonWidget("rValuesCancelButton","Cancel","cancelCB()",60);
+}
+targetApp
+(
+rValuesDlg.beginHTML()+
+'<table align="right" border="0" cellspacing="5" cellpadding="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td></td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+cbBatchValues.getHTML()+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+getSpace(10,10)+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="right">'+
+'<table cellpadding="0" cellspacing="5" border="0">'+
+'<tr>'+
+'<td>'+OKButton.getHTML()+'</td>'+
+'<td>'+CancelButton.getHTML()+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+rValuesDlg.endHTML()
+)
+rValuesDlg.init();
+cbBatchValues.init();
+OKButton.init();
+CancelButton.init();
+fillCombo();
+rValuesDlg.show(true);
+}
+function fillCombo()
+{
+if (arrParams.length>0)
+{
+cbBatchValues.del();
+var iPrompt=parseInt(arrParams[0]);
+var iNbBatchLovItems=pf.arrNbBatchLovItems[iPrompt];
+for (var i=0;i<iNbBatchLovItems;i++)
+{
+cbBatchValues.add(pf.arrBatchLovTexts[iPrompt][i],i.toString(),false);
+}
+}
+}
+function submitCB()
+{
+rValuesDlg.show(false);
+setTimeout('closeDlg('+cbBatchValues.getSelection().index+')',1);
+}
+function cancelCB()
+{
+rValuesDlg.show(false);
+closeDlg(null);
+}
+function closeDlg(iChunk)
+{
+if (arrParams.length>0)
+{
+var iPrompt=parseInt(arrParams[0]);
+pf.getComboNPChunkValues(iPrompt,iChunk);
+}
+finalize();
+}
+function finalize()
+{
+var l=rValuesDlg.layer;
+for (var i in _widgets)
+{
+var w=_widgets[i];
+w.layer=null;
+_widgets[i]=null;
+}
+l.parentNode.removeChild(l);
+}
+function loadCB()
+{
+setTimeout('loadDialog()',1);
+}
+</script>
+</head>
+<body onload="loadCB()">
+</body>
+</html>

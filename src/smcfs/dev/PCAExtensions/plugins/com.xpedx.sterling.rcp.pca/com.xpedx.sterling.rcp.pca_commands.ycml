@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+    <form Id="com.xpedx.sterling.rcp.pca.orderlines.wizard.XPXOrderLinesWizard">
+        <Wizard>
+            <WizardEntities>
+                <WizardEntity id="OrderLinesPanel" impl="com.xpedx.sterling.rcp.pca.orderlines.screen.OrderLinesPanel" start="true" type="PAGE" xPos="54" yPos="96"/>
+            </WizardEntities>
+        </Wizard>
+        <commands>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetLineTypeList" URL="" inputNamespace="Input_XPXGetLineTypeList" outputNamespace="LineTypeList" postCommand="" preCommand=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetOrderChargesList" URL="" inputNamespace="Input_XPXGetOrderChargesList" outputNamespace="OrderCharges" postCommand="" preCommand=""/>
+            <command APIName="XPXGetOrderListServiceCC" APIType="SERVICE" Name="XPXGetOrderListServiceCC" URL="DEFAULT" inputNamespace="XPXGetOrderListServiceCC_input"
+                outputNamespace="XPXGetOrderListServiceCC_output" version="ver77"/>
+            <command APIName="XPXChangeOrderDetailsService" APIType="SERVICE" Name="XPXChangeOrderDetailsService" URL="DEFAULT" inputNamespace="XPXChangeOrderDetailsService_input"
+                outputNamespace="XPXChangeOrderDetailsService_output" version=""/>
+            <command APIName="XPXFetchUpdatedOrderAmount" APIType="SERVICE" Name="fetchUpdatedOrderTotal" URL="DEFAULT" inputNamespace="XPXFetchUpdatedOrderAmount_input"
+                outputNamespace="XPXFetchUpdatedOrderAmount_output" version=""/>
+            <command APIName="changeOrder" APIType="API" Name="changeOrder" URL="DEFAULT" inputNamespace="changeOrder_input" outputNamespace="changeOrder_output" version=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="" inputNamespace="getOrganizationList_input" outputNamespace="getOrganizationList_output"/>
+            <command APIName="listCarrierService" APIType="API" Name="XPXGetShipMethodList" URL="" inputNamespace="Input_getCarrierServiceList" outputNamespace="ShipMethods" postcommand="" precommand=""/>
+            <command APIName="getChargeCategoryList" APIType="API" Name="XPXChargeCategoriesList" URL="" inputNamespace="Input_getChargeCategoryList" outputNamespace="Charges" postcommand="" precommand=""/>
+            <command APIName="XPXMarkOrderToCompleteService" APIType="SERVICE" Name="XPXMarkOrderToCompleteService" URL="DEFAULT" inputNamespace="XPXMarkOrderToCompleteService_input"
+                outputNamespace="XPXMarkOrderToCompleteService_output" version=""/>
+            <command APIName="XPXPlaceFulfillmentOrdersService" APIType="SERVICE" Name="XPXPlaceFulfillmentOrdersService" URL="DEFAULT" inputNamespace="XPXPlaceFulfillmentOrdersService_input"
+                outputNamespace="XPXPlaceFulfillmentOrdersService_output" version=""/>
+            <command APIName="XPXUOMListAPI" APIType="SERVICE" Name="XPXUOMListService" URL="DEFAULT" inputNamespace="XPXUOMListService_input" outputNamespace="XPXUOMListService_output" version=""/>
+            <command APIName="XPXPandAWebService" APIType="SERVICE" Name="XPXPnAService" URL="DEFAULT" inputNamespace="XPXPnAService_input" outputNamespace="OrderLevelPAndAResponse" version=""/>
+            <command APIName="XPXGetCustomerInfoForCC_OMService" APIType="SERVICE" Name="XPXGetCustomerListService" URL="DEFAULT" inputNamespace="XPXGetCustomerListService_input"
+                outputNamespace="XPXGetCustomerListService" version=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetSearchableSKUTypeList" URL="" inputNamespace="Input_XPXGetSearchableSKUTypeList" outputNamespace="SKUTypes" postCommand="" preCommand=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="XPXGetTransferCirclesList" URL="" inputNamespace="Input_XPXGetTransferCirclesList"
+                outputNamespace="XPXGetTransferCirclesList_output" postCommand="" preCommand=""/>
+            <command APIName="getItemUOMMasterList" APIType="API" Name="XPXGetItemUOMMasterList" URL="" inputNamespace="Input_XPXGetItemUOMMasterList" outputNamespace="XPXGetItemUOMMasterList_output"
+                postCommand="" preCommand=""/>
+            <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" OutputTemplateName="getXPXReferenceOrderListService_output" URL="DEFAULT"
+                postCommand="" preCommand=""/>
+            <command APIName="getOrderList" APIType="API" Name="getOrderList" URL="" inputNamespace="Input_getOrderList" outputNamespace="getOrderList_output" postCommand="" preCommand=""/>
+            <command APIName="getXPXItemBranchListService" APIType="SERVICE" Name="getXPXItemBranchListService" URL="DEFAULT" inputNamespace="getXPXItemBranchListService_input"
+                outputNamespace="getXPXItemBranchListService_output" version=""/>
+            <command APIName="XPXSendCSREmailService" APIType="SERVICE" Name="XPXSendCSREmailService" URL="DEFAULT" inputNamespace="XPXSendCSREmailService_input"
+                outputNamespace="XPXSendCSREmailService_output" version=""/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getSalesOrderDetailsWithAddressesAndOrderLines" templateName="getSalesOrderDetailsWithAddressesAndOrderLines" type="output"/>
+            <namespace name="XPXGetOrderListServiceCC_output" templateName="XPXGetOrderListService" type="output"/>
+            <namespace name="XPXGetOrderListServiceCC_input" templateName="XPXGetOrderListServiceCC_input" type="input"/>
+            <namespace name="XPXChangeOrderDetailsService_output" templateName="XPXChangeOrderDetailsService_output" type="output"/>
+            <namespace name="XPXChangeOrderDetailsService_input" templateName="XPXChangeOrderDetailsService_input" type="input"/>
+            <namespace name="XPXFetchUpdatedOrderAmount_input" templateName="XPXFetchUpdatedOrderAmount_input" type="input"/>
+            <namespace name="XPXFetchUpdatedOrderAmount_output" templateName="XPXFetchUpdatedOrderAmount_output" type="output"/>
+            <namespace name="LineTypeList" templateName="LineTypeList" type="output"/>
+            <namespace name="ShipMethods" templateName="ShipMethods" type="output"/>
+            <namespace name="Charges" templateName="Charges" type="output"/>
+            <namespace name="Input_XPXGetLineTypeList" templateName="Input_XPXGetLineTypeList" type="input"/>
+            <namespace name="XPXUOMListService_output" templateName="XPXUOMListService_output" type="output"/>
+            <namespace name="XPXPlaceFulfillmentOrdersService_output" templateName="XPXPlaceFulfillmentOrdersService_output" type="output"/>
+            <namespace name="OrderLevelPAndAResponse" templateName="OrderLevelPAndAResponse" type="output"/>
+            <namespace name="XPXGetCustomerListService" templateName="XPXGetCustomerListService" type="output"/>
+            <namespace name="SKUTypes" templateName="SKUTypes" type="output"/>
+            <namespace name="XPXGetTransferCirclesList_output" templateName="XPXGetTransferCirclesList" type="output"/>
+            <namespace name="XPXGetItemUOMMasterList_output" templateName="XPXGetItemUOMMasterList" type="output"/>
+            <namespace name="getOrderList_output" templateName="getOrderList" type="output"/>
+            <namespace name="getOrganizationList_input" templateName="getOrganizationList_input" type="input"/>
+            <namespace name="getOrganizationList_output" templateName="getOrganizationList" type="output"/>
+            <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard"/>
+    <form Id="com.xpedx.sterling.rcp.pca.orderheader.screen.OrderHeaderPanel">
+        <commands>
+            <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" OutputTemplateName="" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" outputNamespace="getCustomerContactList_output" version=""/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
+            <command APIName="getOrderList" APIType="API" Name="getOrderList" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
+            <command APIName="XPXGetOrderSearchListViewService" APIType="SERVICE" Name="XPXGetOrderSearchListViewService" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerContactList_output" templateName="getCustomerContactList_output" type="output"/>
+            <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
+            <namespace name="getOrderList_Output" templateName="getOrderList_Output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileRulePanel">
+        <commands>
+            <command APIName="XPXGetRuleListWithParam" APIType="SERVICE" Name="XPXGetRuleListWithParam" URL="DEFAULT" inputNamespace="XPXGetRuleListWithParam_input"
+                outputNamespace="XPXGetRuleListWithParam_output" version=""/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetRuleListWithParam_output" templateName="XPXGetRuleListWithParam_output" type="output"/>
+            <namespace name="XPXGetRuleListWithParam_input" templateName="XPXGetRuleListWithParam_input" type="input"/>
+            <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
+            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="input"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.orderSearch.wizards.YCDOrderSearchWizard">
+        <commands>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetStatusList" URL="" inputNamespace="Input_XPXGetStatusList" outputNamespace="StatusList" postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="StatusList" templateName="StatusList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.orderlines.screen.OrderLinePanel">
+        <commands>
+            <command APIName="XPXPandAWebService" APIType="SERVICE" Name="XPXPnAService" URL="DEFAULT" inputNamespace="XPXPnAService_input" outputNamespace="PnAResponse" version=""/>
+            <command APIName="getItemList" APIType="API" Name="XPXGetItemList" URL="DEFAULT" inputNamespace="XPXGetItemList_input" outputNamespace="ItemList" version=""/>
+            <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="XPXGetSKUDetailsService_input" outputNamespace="Item" version=""/>
+            <command APIName="changeOrder" APIType="API" Name="changeOrder" URL="DEFAULT" inputNamespace="changeOrder_input" outputNamespace="changeOrder_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="PnAResponse" templateName="PnAResponse" type="output"/>
+            <namespace name="ItemList" templateName="ItemList" type="output"/>
+            <namespace name="Item" templateName="Item" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileInfoPanel">
+        <commands>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_output" version=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetBrandCodeList" URL="" inputNamespace="Input_XPXGetBrandCodeList" outputNamespace="XPXGetBrandCodeList" postCommand="" preCommand=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetInvoiceDistMethodCodeList" URL="" inputNamespace="Input_XPXGetInvoiceDistMethodCodeList"
+                outputNamespace="XPXGetInvoiceDistMethodCodeList" postCommand="" preCommand=""/>
+            <command APIName="XPXManageCustomerExtnList" APIType="SERVICE" Name="XPXManageCustomerExtnList" OutputTemplateName="" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
+            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="input"/>
+            <namespace name="XPXGetBrandCodeList" templateName="XPXGetBrandCodeList" type="output"/>
+            <namespace name="XPXGetInvoiceDistMethodCodeList" templateName="XPXGetInvoiceDistMethodCodeList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileMaintenance">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerListService" URL="DEFAULT" inputNamespace="XPXGetCustomerListService_input" outputNamespace="XPXGetCustomerListService" version=""/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" OutputTemplateName="XPXGetParentCustomerListService" URL="DEFAULT"
+                postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerListService" templateName="XPXGetCustomerListService" type="output"/>
+            <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
+            <namespace name="XPXGetParentCustomerListService" templateName="XPXGetParentCustomerListService" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.articles.screen.ArticlesSearchListPanel">
+        <commands>
+            <command APIName="GetXpedxArticleList" APIType="SERVICE" Name="getXPXArticleListService" OutputTemplateName="XPXArticlesList" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="" inputNamespace="" outputNamespace="getCustomerList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXArticlesList" templateName="XPXArticlesList" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.articles.screen.XPXManageArticlePopupPanel">
+        <commands>
+            <command APIName="changeXPXArticleService" APIType="SERVICE" Name="changeXPXArticleService" OutputTemplateName="XPXArticle" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="deleteXPXArticleService" APIType="SERVICE" Name="deleteXPXArticleService" OutputTemplateName="XPXArticle" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="CreateXpedxArticle" APIType="SERVICE" Name="CreateXpedxArticle" OutputTemplateName="XPXArticle" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="GetXPXArticleDetailsForCOMService" APIType="SERVICE" Name="getXPXArticleDetailsService" OutputTemplateName="XPXArticle" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXArticle" templateName="XPXArticle" type="output"/>
+            <namespace name="OrganizationList" templateName="OrganizationList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.divisionMaintainance.screen.DivisionMaintainanceSearchListPanel">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXBrandCodesList" URL="" inputNamespace="Input_XPXBrandCodesList" outputNamespace="BrandCodeList" postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="OrganizationList" templateName="OrganizationList" type="output"/>
+            <namespace name="BrandCodeList" templateName="getCommonCodeList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.divisionMaintainance.screen.DivisionMaintainancePanel">
+        <commands>
+            <command APIName="getOrganizationHierarchy" APIType="API" Name="getOrganizationHierarchy" URL="DEFAULT" outputNamespace="Organization" postCommand="" preCommand="" version=""/>
+            <command APIName="manageOrganizationHierarchy" APIType="API" Name="manageOrganizationHierarchy" URL="DEFAULT" outputNamespace="Organization" postCommand="" preCommand="" version=""/>
+            <command APIName="getUserList" APIType="API" Name="getUserList" URL="DEFAULT" outputNamespace="getUserList_output" postCommand="" preCommand="" version=""/>
+            <command APIName="getUserList" APIType="API" Name="getModifiedByUserInfo" URL="DEFAULT" outputNamespace="getModifiedByUserInfo_output" postCommand="" preCommand="" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="Organization" templateName="Organization" type="output"/>
+            <namespace name="getUserList_output" templateName="getUserList_output" type="output"/>
+            <namespace name="getModifiedByUserInfo_output" templateName="getModifiedByUserInfo_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.userprofile.screen.UserProfileInfoDetails">
+        <commands>
+            <command APIName="getCustomerAssignmentList" APIType="API" Name="getCustomerAssignmentList" URL="DEFAULT" inputNamespace="XPXGetCustomerAssignmentList_input"
+                outputNamespace="XPXGetCustomerAssignmentList" version=""/>
+            <command APIName="searchCatalogIndex" APIType="API" Name="searchCatalogIndex" URL="DEFAULT" inputNamespace="XPXSearchCatalogIndex_input" outputNamespace="XPXSearchCatalogIndex" version=""/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
+            <command APIName="getCustomerDetails" APIType="API" Name="getCustomerDetails" URL="DEFAULT" inputNamespace="getCustomerDetails_input" outputNamespace="getCustomerDetails_output" version="ver77"/>
+            <command APIName="requestPasswordReset" APIType="API" Name="requestPasswordReset" URL="DEFAULT" inputNamespace="" outputNamespace="" version=""/>
+            <command APIName="XPXSendUserUpdateEmailService" APIType="SERVICE" Name="XPXSendUserUpdateEmailService" URL="DEFAULT" inputNamespace="XPXSendUserUpdateEmailService_input"
+                outputNamespace="XPXSendUserUpdateEmailService_output" version=""/>
+            <command APIName="XPXGetListOfAssignedShipTosForAUserService" APIType="SERVICE" Name="XPXGetCustomerAssignmentListService" URL="DEFAULT"
+                inputNamespace="XPXGetCustomerAssignmentListService_input" outputNamespace="XPXGetCustomerAssignmentListService_output" version=""/>
+            <command APIName="createXPXCustContExtn" APIType="SERVICE" Name="createXPXCustContExtn" URL="DEFAULT" inputNamespace="createXPXCustContExtn_input"
+                outputNamespace="createXPXCustContExtn_output" version=""/>
+            <command APIName="changeXPXCustContExtn" APIType="SERVICE" Name="changeXPXCustContExtn" URL="DEFAULT" inputNamespace="changeXPXCustContExtn_input"
+                outputNamespace="changeXPXCustContExtn_output" version=""/>
+            <command APIName="getXPXCustContExtn" APIType="SERVICE" Name="getXPXCustContExtn" URL="DEFAULT" inputNamespace="getXPXCustContExtn_input" outputNamespace="getXPXCustContExtn_output" version=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getDefaultShipToList" URL="DEFAULT" inputNamespace="getDefaultShipToList_input" outputNamespace="getDefaultShipToList_output" version=""/>
+            <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="XPXGetCustomerContactList_input"
+                outputNamespace="XPXGetCustomerContactList_output" version=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getBilltoExtnCustomerClass" URL="DEFAULT" inputNamespace="getBilltoExtnCustomerClass_input"
+                outputNamespace="getBilltoExtnCustomerClass_output" version="ver77"/>
+            <command APIName="getUserList" APIType="API" Name="getUserList" URL="DEFAULT" outputNamespace="getUserList" version=""/>
+            <command APIName="getPersonInfoList" APIType="API" Name="getPersonInfoList" URL="DEFAULT" inputNamespace="getPersonInfoList" outputNamespace="getPersonInfoList" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>
+            <namespace name="XPXSearchCatalogIndex" templateName="XPXSearchCatalogIndex" type="output"/>
+            <namespace name="XPXmanageCustomer" templateName="XPXmanageCustomer" type="output"/>
+            <namespace name="getCustomerDetails_output" templateName="getCustomerDetails_output" type="output"/>
+            <namespace name="getDefaultShipToList_output" templateName="getDefaultShipToList_output" type="output"/>
+            <namespace name="XPXGetCustomerContactList_output" templateName="XPXGetCustomerContactList" type="output"/>
+            <namespace name="getBilltoExtnCustomerClass_output" templateName="getBilltoExtnCustomerClass_output" type="output"/>
+            <namespace name="getUserList" templateName="getUserList" type="output"/>
+            <namespace name="getPersonInfoList" templateName="getPersonInfoList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard">
+        <commands>
+            <command APIName="XPXGetChildCustomerListService" APIType="SERVICE" Name="XPXGetChildCustomerListService" URL="DEFAULT" inputNamespace="XPXGetChildCustomerListService_input"
+                outputNamespace="XPXGetChildCustomerListService" version=""/>
+            <command APIName="XPXSendUserUpdateEmailService" APIType="SERVICE" Name="XPXSendUserUpdateEmailService" URL="DEFAULT" inputNamespace="XPXGetChildCustomerListService_input"
+                outputNamespace="XPXSendUserUpdateEmailService" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetChildCustomerListService" templateName="XPXGetChildCustomerListService" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfShipToPanel">
+        <commands>
+            <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" postCommand="" preCommand="" version="ver77"/>
+            <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version=""/>
+            <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="XPXGetCustomerContactList_input"
+                outputNamespace="XPXGetCustomerContactList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetListOfAssignedShipTosForAUserService_out" templateName="CustomerAssignmentList" type="output"/>
+            <namespace name="getPage" templateName="getPage" type="output"/>
+            <namespace name="XPXGetCustomerContactList_output" templateName="XPXGetCustomerContactList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.orderEntry.screens.YCDCustomerSearchPage">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetShipToCustomerList" URL="DEFAULT" inputNamespace="GetShipToCustomerList_input" outputNamespace="GetShipToCustomerList"
+                postCommand="" preCommand="" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="GetShipToCustomerList" templateName="GetShipToCustomerList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.quickAccess.extn.XPXQuickAcceswsExtensionPanel">
+        <commands>
+            <command APIName="GetXpedxArticleList" APIType="SERVICE" Name="getXPXArticleListService" OutputTemplateName="XPXArticlesList" URL="DEFAULT" postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXArticlesList" templateName="XPXArticlesList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.catalogexport.screen.CatalogExportSearchListPanel">
+        <commands>
+            <command APIName="XPXGetCatalogExportListService" APIType="SERVICE" Name="XPXGetCatalogExportListService" OutputTemplateName="XPXGetCatalogExportList" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="getQueryTypeList" APIType="API" Name="getQueryTypeList" OutputTemplateName="getQueryTypeList" URL="DEFAULT" postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCatalogExportList" templateName="XPXGetCatalogExportList" type="output"/>
+            <namespace name="getQueryTypeList" templateName="getQueryTypeList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.catalogexport.screen.XPXManageCatalogExportPopupPanel">
+        <commands>
+            <command APIName="XPXChangeCatalogExportService" APIType="SERVICE" Name="XPXChangeCatalogExportService" OutputTemplateName="XPXCatalogExport" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXCreateCatalogExport" APIType="SERVICE" Name="XPXCreateCatalogExport" OutputTemplateName="XPXCatalogExport" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXGetCatalogExportDetailsService" APIType="SERVICE" Name="XPXGetCatalogExportDetailsService" OutputTemplateName="XPXCatalogExport" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXDeleteCatalogExportService" APIType="SERVICE" Name="XPXDeleteCatalogExportService" OutputTemplateName="XPXCatalogExport" URL="DEFAULT" postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXCatalogExport" templateName="XPXCatalogExport" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.referenceorder.screen.XPXReferenceOrderSearchListScreen">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" inputNamespace="OrgListInput" outputNamespace="OrgList"/>
+            <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" OutputTemplateName="XPXReferenceOrderList" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="changeXPXRefOrderHdr" APIType="SERVICE" Name="changeXPXRefOrderHdr" OutputTemplateName="changeXPXRefOrderHdrOutput" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXReprocessReferenceOrderService" APIType="SERVICE" Name="XPXReprocessReferenceOrderService" OutputTemplateName="XPXReprocessReferenceOrderServiceOutput" URL="DEFAULT"
+                postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="OrgListInput" templateName="getOrganizationListInput" type="input"/>
+            <namespace name="OrgList" templateName="getOrganizationList" type="output"/>
+            <namespace name="XPXReferenceOrderList" templateName="XPXReferenceOrderList" type="output"/>
+            <namespace name="changeXPXRefOrderHdrOutput" templateName="changeXPXRefOrderHdrOutput" type="output"/>
+            <namespace name="XPXReprocessReferenceOrderServiceOutput" templateName="XPXReprocessReferenceOrderServiceOutputs" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.referenceorder.screen.XPXReferenceOrderSummaryPanel">
+        <commands>
+            <command APIName="getXPXReferenceOrderDetailsService" APIType="SERVICE" Name="getXPXReferenceOrderDetailsService" OutputTemplateName="XPXReferenceOrderDetails" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList" postCommand="" preCommand=""/>
+            <command APIName="XPXPandAWebService" APIType="SERVICE" Name="XPXPandAWebService" URL="DEFAULT" inputNamespace="XPXPnAService_input" outputNamespace="OrderLevelPAndAResponse" version=""/>
+            <command APIName="XPXReprocessReferenceOrderService" APIType="SERVICE" Name="XPXReprocessReferenceOrderService" OutputTemplateName="XPXReprocessReferenceOrderServiceOutput" URL="DEFAULT"
+                postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXReferenceOrderDetails" templateName="XPXReferenceOrderDetails" type="output"/>
+            <namespace name="getCustomerList" templateName="getCustomerList" type="output"/>
+            <namespace name="OrderLevelPAndAResponse" templateName="OrderLevelPAndAResponse" type="output"/>
+            <namespace name="XPXReprocessReferenceOrderServiceOutput" templateName="XPXReprocessReferenceOrderServiceOutputs" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.referenceorder.screen.XPXRefOrderLinePanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList" postCommand="" preCommand=""/>
+            <command APIName="getXrefList" APIType="SERVICE" Name="getXrefList" URL="DEFAULT" outputNamespace="getXrefListOutput" postCommand="" preCommand=""/>
+            <command APIName="XPXPandAWebService" APIType="SERVICE" Name="XPXPandAWebService" URL="DEFAULT" inputNamespace="XPXPnAService_input" outputNamespace="OrderLevelPAndAResponse" version=""/>
+            <command APIName="XPXReprocessReferenceOrderService" APIType="SERVICE" Name="XPXReprocessReferenceOrderService" OutputTemplateName="XPXReprocessReferenceOrderServiceOutput" URL="DEFAULT"
+                postCommand="" preCommand=""/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList" templateName="getCustomerList" type="output"/>
+            <namespace name="getXrefListOutput" templateName="getXrefListOutput" type="output"/>
+            <namespace name="OrderLevelPAndAResponse" templateName="OrderLevelPAndAResponse" type="output"/>
+            <namespace name="XPXReprocessReferenceOrderServiceOutput" templateName="XPXReprocessReferenceOrderServiceOutputs" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.userprofile.screen.CustomerAssignmentPanel">
+        <commands>
+            <command APIName="getCustomerAssignmentList" APIType="API" Name="getCustomerAssignmentList" URL="DEFAULT" outputNamespace="XPXGetCustomerAssignmentList" postCommand="" preCommand=""/>
+            <command APIName="XPXGetBillToShipToHierarchy" APIType="SERVICE" Name="XPXGetBillToShipToHierarchy" OutputTemplateName="XPXGetBillToShipToHierarchy" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXGetImmediateChildCustomerListService" APIType="SERVICE" Name="XPXGetImmediateChildCustomerListService" OutputTemplateName="XPXGetImmediateChildCustomerListService"
+                URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXManageCustomerAndAssignmentAPIService" APIType="SERVICE" Name="XPXManageCustomerAndAssignmentAPIService" OutputTemplateName="multiApi" URL="DEFAULT" inputNamespace=""
+                outputNamespace="" postCommand="" preCommand="" version="ver77"/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
+            <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>
+            <namespace name="XPXGetBillToShipToHierarchy" templateName="XPXGetBillToShipToHierarchy" type="output"/>
+            <namespace name="XPXGetImmediateChildCustomerListService" templateName="XPXGetImmediateChildCustomerListService" type="output"/>
+            <namespace name="multiApi" templateName="multiApi" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="XPXmanageCustomer" templateName="XPXmanageCustomer" type="output"/>
+            <namespace name="XPXGetListOfAssignedShipTosForAUserService_out" templateName="CustomerAssignmentList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.enterpriseUserEntry.wizards.YCDEnterpriseUserEntryWizard">
+        <commands>
+            <command APIName="getUserGroupList" APIType="API" Name="getUserGroupList" URL="DEFAULT" outputNamespace="getUserGroupLists_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="getUserGroupLists_output" templateName="getUserGroupLists_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerProfileMaintIntegDataPanel">
+        <commands>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_output" version=""/>
+            <command APIName="XPXManageListDataUtilService" APIType="SERVICE" Name="XPXManageCustomersService" URL="DEFAULT" inputNamespace="XPXManageCustomersService_input"
+                outputNamespace="XPXManageCustomersService_output" version=""/>
+            <command APIName="XPXGetListOfShipTosByTemplateService" APIType="SERVICE" Name="XPXGetListOfShipTosByTemplateService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfShipTosByTemplateService_input" outputNamespace="XPXGetListOfShipTosByTemplateService_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
+            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="input"/>
+            <namespace name="XPXManageCustomersService_output" templateName="XPXManageCustomersService_output" type="output"/>
+            <namespace name="XPXGetListOfShipTosByTemplateService_output" templateName="XPXGetListOfShipTosByTemplateService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.CustomerETradingIDMaintenancePanel">
+        <commands>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_output" version=""/>
+            <command APIName="XPXManageListDataUtilService" APIType="SERVICE" Name="XPXManageCustomersService" URL="DEFAULT" inputNamespace="XPXManageCustomersService_input"
+                outputNamespace="XPXManageCustomersService_output" version=""/>
+            <command APIName="XPXGetListOfShipTosByTemplateService" APIType="SERVICE" Name="XPXGetListOfShipTosByTemplateService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfShipTosByTemplateService_input" outputNamespace="XPXGetListOfShipTosByTemplateService_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
+            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="input"/>
+            <namespace name="XPXManageCustomersService_output" templateName="XPXManageCustomersService_output" type="output"/>
+            <namespace name="XPXGetListOfShipTosByTemplateService_output" templateName="XPXGetListOfShipTosByTemplateService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsSearchListScreen">
+        <commands>
+            <command APIName="getTeamList" APIType="API" Name="getTeamList" URL="DEFAULT" outputNamespace="getTeamList_output" version=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="getOrganizationList_output" version=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" version=""/>
+            <command APIName="deleteXPEDX_MyItemsList" APIType="SERVICE" Name="deleteXPEDXMyItemsList" URL="DEFAULT" outputNamespace="deleteXPEDX_MyItemsList_output" version=""/>
+            <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version=""/>
+            <command APIName="XPXGetBothMyItemsList" APIType="SERVICE" Name="XPXGetBothMyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetBothMyItemsList_output" version="ver77"/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" inputNamespace=""
+                outputNamespace="XPXGetParentCustomerListService_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getTeamList_output" templateName="getTeamList_output" type="output"/>
+            <namespace name="getOrganizationList_output" templateName="getOrganizationList_output" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="deleteXPEDX_MyItemsList_output" templateName="deleteXPEDX_MyItemsList_output" type="output"/>
+            <namespace name="getPage" templateName="getPage" type="output"/>
+            <namespace name="XPXGetBothMyItemsList_output" templateName="XPXGetBothMyItemsList_output" type="output"/>
+            <namespace name="XPXGetParentCustomerListService_output" templateName="XPXGetParentCustomerListService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXCreateNewMyItemsListPopupPanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerListService" URL="DEFAULT" inputNamespace="XPXGetCustomerListService_input"
+                outputNamespace="XPXGetCustomerListService_output" version=""/>
+            <command APIName="createXPEDX_MyItemsList" APIType="SERVICE" Name="createXPEDX_MyItemsList" OutputTemplateName="createXPEDX_MyItemsList_output" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" OutputTemplateName="XPXGetParentCustomerListService_output" URL="DEFAULT"
+                postCommand="" preCommand=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" version=""/>
+            <command APIName="XPXCustomerHierarchyViewService" APIType="SERVICE" Name="XPXCustomerHierarchyViewService" URL="DEFAULT" inputNamespace=""
+                outputNamespace="XPXCustomerHierarchyViewService_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerListService_output" templateName="XPXGetCustomerListService_output" type="output"/>
+            <namespace name="createXPEDX_MyItemsList_output" templateName="createXPEDX_MyItemsList_output" type="output"/>
+            <namespace name="XPXGetParentCustomerListService_output" templateName="XPXGetParentCustomerListService_output" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="XPXCustomerHierarchyViewService_output" templateName="XPXCustomerHierarchyViewService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXGetCompleteChildCustomerTree">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXMyItemListShareListPanel">
+        <commands>
+            <command APIName="getXPEDX_MyItemsList_List" APIType="SERVICE" Name="getListOfXPEDXMyItemsLists" URL="DEFAULT" outputNamespace="getXPEDX_MyItemsList_List_output" version=""/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" outputNamespace="XPXGetParentCustomerListService_output" version=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" outputNamespace="getCustomerList_output" version=""/>
+            <command APIName="multiApi" APIType="API" Name="multiApi" URL="DEFAULT" outputNamespace="multiApi_output" version=""/>
+            <command APIName="changeXPEDX_MyItemsList" APIType="SERVICE" Name="changeXPEDX_MyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="changeXPEDX_MyItemsList_output" version="ver77"/>
+            <command APIName="XPXCustomerHierarchyViewService" APIType="SERVICE" Name="XPXCustomerHierarchyViewService" URL="DEFAULT" inputNamespace=""
+                outputNamespace="XPXCustomerHierarchyViewService_output" version="ver77"/>
+            <command APIName="changeXPEDX_MyItemsList" APIType="SERVICE" Name="updateXPEDXMyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="changeXPEDX_MyItemsList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
+            <namespace name="XPXGetParentCustomerListService_output" templateName="XPXGetParentCustomerListService_output" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="multiApi_output" templateName="multiApi_output" type="output"/>
+            <namespace name="changeXPEDX_MyItemsList_output" templateName="changeXPEDX_MyItemsList_output" type="output"/>
+            <namespace name="XPXCustomerHierarchyViewService_output" templateName="XPXCustomerHierarchyViewService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXMyItemsListDetailsPanel">
+        <commands>
+            <command APIName="getXPEDX_MyItemsList_List" APIType="SERVICE" Name="getXPEDXMyItemsListDetail" URL="DEFAULT" outputNamespace="getXPEDX_MyItemsList_List_output" version=""/>
+            <command APIName="changeXPEDX_MyItemsList" APIType="SERVICE" Name="updateXPEDXMyItemsList" URL="DEFAULT" outputNamespace="changeXPEDX_MyItemsList_output" version=""/>
+            <command APIName="multiApi" APIType="API" Name="multiApi" OutputTemplateName="multiApi" URL="DEFAULT" postCommand="" preCommand=""/>
+            <command APIName="getItemUOMMasterList" APIType="API" Name="XPXGetItemUOMMasterList" URL="DEFAULT" inputNamespace="Input_XPXGetItemUOMMasterList"
+                outputNamespace="XPXGetItemUOMMasterList_output" version="ver77"/>
+            <command APIName="getCompleteItemList" APIType="API" Name="getCompleteItemList" URL="DEFAULT" inputNamespace="" outputNamespace="getCompleteItemList"/>
+            <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetSKUDetailsService_output" version="ver77"/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
+            <namespace name="changeXPEDX_MyItemsList_output" templateName="changeXPEDX_MyItemsList_output" type="output"/>
+            <namespace name="multiApi" templateName="multiApi" type="output"/>
+            <namespace name="XPXGetItemUOMMasterList_output" templateName="XPXGetItemUOMMasterList" type="output"/>
+            <namespace name="getCompleteItemList" templateName="getCompleteItemList_output" type="output"/>
+            <namespace name="XPXGetSKUDetailsService_output" templateName="XPXGetSKUDetailsService_output" type="output"/>
+            <namespace name="XPXGetParentCustomerListService" templateName="XPXGetParentCustomerListService" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.myitems.screen.XPXMyItemsReplacementToolPanel">
+        <commands>
+            <command APIName="getXPEDX_MyItemsList_List_Hdr" APIType="SERVICE" Name="getListOfXPEDXMyItemsLists" OutputTemplateName="getXPEDX_MyItemsList_List_output" URL="" postCommand="" preCommand=""/>
+            <command APIName="XPXItemReplacementToolForMyItemsService" APIType="SERVICE" Name="XPXItemReplacementToolForMyItemsService" OutputTemplateName="XPXItemReplacementToolForMyItemsService"
+                URL="" postCommand="" preCommand=""/>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="" outputNamespace="getCustomerList_output" postCommand="" preCommand=""/>
+            <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version=""/>
+            <command APIName="XPXMILItemReplacementToolForDivisionsService" APIType="SERVICE" Name="XPXMILItemReplacementToolForDivisionsService"
+                OutputTemplateName="XPXMILItemReplacementToolForDivisionsService_output" URL="" postCommand="" preCommand=""/>
+            <command APIName="XPXGetParentCustomerListService" APIType="SERVICE" Name="XPXGetParentCustomerListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+            <command APIName="XPXGetBothMyItemsList" APIType="SERVICE" Name="XPXGetBothMyItemsList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetBothMyItemsList_output" version="ver77"/>
+            <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetCustomerContactList_output" version="ver77"/>
+            <command APIName="getTeamList" APIType="API" Name="getTeamList" URL="DEFAULT" inputNamespace="" outputNamespace="getTeamList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
+            <namespace name="XPXItemReplacementToolForMyItemsService" templateName="XPXItemReplacementToolForMyItemsService" type="output"/>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="getPage" templateName="getPage" type="output"/>
+            <namespace name="XPXGetParentCustomerListService" templateName="XPXGetParentCustomerListService" type="output"/>
+            <namespace name="OrganizationList" templateName="OrganizationList" type="output"/>
+            <namespace name="XPXGetBothMyItemsList_output" templateName="XPXGetBothMyItemsList_output" type="output"/>
+            <namespace name="XPXGetCustomerContactList_output" templateName="XPXGetCustomerContactList_output" type="output"/>
+            <namespace name="getTeamList_output" templateName="getTeamList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.customerSearch.wizards.YCDCustomerSearchWizard">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="XPXGetDivisionList" URL="DEFAULT" outputNamespace="getDivisionList" postCommand="" preCommand="" version=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetBrandCodeList" URL="DEFAULT" outputNamespace="getBrandCodeList" postCommand="" preCommand="" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="getDivisionList" templateName="getDivisionList" type="output"/>
+            <namespace name="getBrandCodeList" templateName="getBrandCodeList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.user.internal.screen.XPXCreateInternalUserPanel">
+        <commands>
+            <command APIName="createUserHierarchy" APIType="API" Name="createUserHierarchy" URL="DEFAULT" outputNamespace="getUserHierarchy" version=""/>
+            <command APIName="getQueryTypeList" APIType="API" Name="getQueryTypeList" URL="DEFAULT" outputNamespace="getQueryTypeList" version=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="getOrganizationList" version=""/>
+            <command APIName="getUserGroupList" APIType="API" Name="getUserGroupList" URL="DEFAULT" outputNamespace="getUserGroupList" version=""/>
+            <command APIName="getUserHierarchy" APIType="API" Name="getUserHierarchy" URL="DEFAULT" outputNamespace="getUserHierarchy" version=""/>
+            <command APIName="modifyUserHierarchy" APIType="API" Name="modifyUserHierarchy" URL="DEFAULT" outputNamespace="getUserHierarchy" version=""/>
+            <command APIName="getTeamList" APIType="API" Name="getTeamList" URL="DEFAULT" outputNamespace="getTeamList" version=""/>
+            <command APIName="XPXLDAPSearchDetails" APIType="SERVICE" Name="XPXLDAPSearchDetails" URL="DEFAULT" inputNamespace="XPXLDAPSearchDetails_input"
+                outputNamespace="XPXLDAPSearchDetails_output" version=""/>
+            <command APIName="XPXGetSalesRepCustomersService" APIType="SERVICE" Name="XPXGetSalesRepCustomersService" URL="DEFAULT" inputNamespace="getSalesRepDetails_input"
+                outputNamespace="getSalesRepDetails_output" version="ver77"/>
+            <command APIName="changeSalesRepDetails" APIType="SERVICE" Name="changeSalesRepDetails" URL="DEFAULT" inputNamespace="changeSalesRepDetails_input"
+                outputNamespace="changeSalesRepDetails_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getUserHierarchy" templateName="getUserHierarchy_output" type="output"/>
+            <namespace name="getUserGroupList" templateName="getUserGroupList" type="output"/>
+            <namespace name="getOrganizationList" templateName="getOrganizationList" type="output"/>
+            <namespace name="getTeamList" templateName="getTeamList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.user.internal.screen.XPXInternalUserSearchListScreen">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="" version=""/>
+            <command APIName="getQueryTypeList" APIType="API" Name="getQueryTypeList" URL="DEFAULT" outputNamespace="" version=""/>
+            <command APIName="getUserList" APIType="API" Name="getUserList" URL="DEFAULT" outputNamespace="" version=""/>
+        </commands>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.util.XPXApplicationInitializerExtn">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" inputNamespace="" outputNamespace="getOrganizationList_output" version=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="getAllOrganizationsForUser" URL="DEFAULT" inputNamespace="" outputNamespace="getOrganizationList_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="getOrganizationList_output" templateName="getOrganizationList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizards.YCDCustomerWizard">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" inputNamespace="" outputNamespace="getCustomerList_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.tasks.myitems.screen.XPXAddItemPopupPanel">
+        <commands>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetLineTypeList" URL="" inputNamespace="Input_XPXGetLineTypeList" outputNamespace="LineTypeList" postCommand="" preCommand=""/>
+            <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="XPXGetSKUDetailsService_input" outputNamespace="Item" version=""/>
+            <command APIName="getItemUOMMasterList" APIType="API" Name="XPXGetItemUOMMasterList" URL="" inputNamespace="Input_XPXGetItemUOMMasterList" outputNamespace="XPXGetItemUOMMasterList_output"
+                postCommand="" preCommand=""/>
+            <command APIName="changeXPEDX_MyItemsList" APIType="SERVICE" Name="updateXPEDXMyItemsList" URL="DEFAULT" outputNamespace="changeXPEDX_MyItemsList_output" version=""/>
+        </commands>
+        <namespaces>
+            <namespace name="LineTypeList" templateName="LineTypeList" type="output"/>
+            <namespace name="XPXGetItemUOMMasterList_output" templateName="XPXGetItemUOMMasterList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.cache.XPXCache">
+        <commands>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetLineTypeList" URL="" inputNamespace="Input_XPXGetLineTypeList" outputNamespace="LineTypeList" postCommand="" preCommand=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="XPXGetOrderChargesList" URL="" inputNamespace="Input_XPXGetOrderChargesList" outputNamespace="OrderCharges" postCommand="" preCommand=""/>
+            <command APIName="getItemUOMMasterList" APIType="API" Name="XPXGetItemUOMMasterList" URL="" inputNamespace="Input_XPXGetItemUOMMasterList" outputNamespace="XPXGetItemUOMMasterList_output"
+                postCommand="" preCommand=""/>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" outputNamespace="getOrganizationList_output" version=""/>
+            <command APIName="XPXGetDivisionsManagedByTeamService" APIType="SERVICE" Name="XPXGetDivisionsManagedByTeam" URL="DEFAULT" outputNamespace="OrganizationList" postCommand="" preCommand="" version=""/>
+            <command APIName="getCommonCodeList" APIType="API" Name="getCommonCodeList" URL="DEFAULT" inputNamespace="" outputNamespace="getCommonCodeList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="Input_XPXGetLineTypeList" templateName="Input_XPXGetLineTypeList" type="input"/>
+            <namespace name="LineTypeList" templateName="LineTypeList" type="output"/>
+            <namespace name="XPXGetItemUOMMasterList_output" templateName="XPXGetItemUOMMasterList" type="output"/>
+            <namespace name="getOrganizationList_output" templateName="getOrganizationList_output" type="output"/>
+            <namespace name="getCommonCodeList_output" templateName="getCommonCodeList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementPanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerList" URL="DEFAULT" inputNamespace="input_XPXGetCustomerList" outputNamespace="XPXGetCustomerList" version="ver77"/>
+            <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXManageCustomer_input" outputNamespace="XPXManageCustomer_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerList" templateName="XPXGetCustomerList" type="output"/>
+            <namespace name="XPXManageCustomer_output" templateName="XPXManageCustomer_output" type="output"/>
+            <namespace name="XPXManageCustomer_input" templateName="XPXManageCustomer_input" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.customerprofilerule.screen.DivisionEntitlementTreePanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="XPXGetCustomerList" URL="DEFAULT" inputNamespace="input_XPXGetCustomerList" outputNamespace="XPXGetCustomerList" version="ver77"/>
+            <command APIName="XPXManageCustomersAPIService" APIType="SERVICE" Name="XPXManageCustomersAPIService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerList" templateName="XPXGetCustomerList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfUsersPanel">
+        <commands>
+            <command APIName="getCustomerContactList" APIType="API" Name="getCustomerContactList" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetCustomerContactList_output" version="ver77"/>
+            <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version="ver77"/>
+            <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetSKUDetailsService_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetCustomerContactList_output" templateName="XPXGetCustomerContactList_output" type="output"/>
+            <namespace name="getPage" templateName="getPage" type="output"/>
+            <namespace name="XPXGetSKUDetailsService_output" templateName="XPXGetSKUDetailsService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.orderhistory.screen.XPXOrderHistoryPanel">
+        <commands>
+            <command APIName="getOrganizationList" APIType="API" Name="getOrganizationList" URL="DEFAULT" inputNamespace="OrgListInput" outputNamespace="OrgList" version="ver77"/>
+            <command APIName="getXPXReferenceOrderListService" APIType="SERVICE" Name="getXPXReferenceOrderListService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="changeXPXRefOrderHdr" APIType="SERVICE" Name="changeXPXRefOrderHdr" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="XPXReprocessReferenceOrderService" APIType="SERVICE" Name="XPXReprocessReferenceOrderService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+            <command APIName="XPXGetChildCustomerListService" APIType="SERVICE" Name="XPXGetChildCustomerListService" URL="DEFAULT" inputNamespace=""
+                outputNamespace="XPXGetChildCustomerListService_output" version="ver77"/>
+            <command APIName="getOrderList" APIType="API" Name="getOrderList" URL="DEFAULT" inputNamespace="" outputNamespace="getOrderList_Output" version="ver77"/>
+            <command APIName="getPage" APIType="API" Name="getPage" URL="DEFAULT" inputNamespace="" outputNamespace="getPage" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="OrgListInput" templateName="getOrganizationListInput" type="output"/>
+            <namespace name="OrgList" templateName="getOrganizationList" type="output"/>
+            <namespace name="XPXReferenceOrderList" templateName="XPXReferenceOrderList" type="output"/>
+            <namespace name="XPXReprocessReferenceOrderServiceOutput" templateName="XPXReprocessReferenceOrderServiceOutputs" type="output"/>
+            <namespace name="XPXGetChildCustomerListService_output" templateName="XPXGetChildCustomerListService_output" type="output"/>
+            <namespace name="getOrderList_Output" templateName="getOrderList_Output" type="output"/>
+            <namespace name="getPage" templateName="getPage" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfUOMPanel">
+        <commands>
+            <command APIName="XPXGetSKUDetailsService" APIType="SERVICE" Name="XPXGetSKUDetailsService" URL="DEFAULT" inputNamespace="" outputNamespace="XPXGetSKUDetailsService_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetSKUDetailsService_output" templateName="XPXGetSKUDetailsService_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfCustomerPanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" inputNamespace="" outputNamespace="getCustomerList_output" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowItemListDetailPanel">
+        <commands>
+            <command APIName="getXPEDX_MyItemsList_List" APIType="SERVICE" Name="getXPEDXMyItemsListDetail" URL="DEFAULT" inputNamespace="" outputNamespace="getXPEDX_MyItemsList_List_output" version="ver77"/>
+            <command APIName="getCompleteItemList" APIType="API" Name="getCompleteItemList" URL="DEFAULT" inputNamespace="" outputNamespace="getCompleteItemList" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getXPEDX_MyItemsList_List_output" templateName="getXPEDX_MyItemsList_List_output" type="output"/>
+            <namespace name="getCompleteItemList" templateName="getCompleteItemList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.csrmanagement.screen.XPXCSRMaintenancePanel">
+        <commands>
+            <command APIName="getCustomerList" APIType="API" Name="getCustomerList" URL="DEFAULT" inputNamespace="" outputNamespace="getCustomerList_output" version="ver77"/>
+            <command APIName="getUserList" APIType="API" Name="XPXGetUserList" URL="DEFAULT" inputNamespace="XPXGetUserList_input" outputNamespace="XPXGetUserList" version="ver77"/>
+            <command APIName="XPXManageCustomersAPIService" APIType="SERVICE" Name="XPXManageCustomersAPIService" URL="DEFAULT" inputNamespace="" outputNamespace="" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="getCustomerList_output" templateName="getCustomerList_output" type="output"/>
+            <namespace name="XPXGetUserList" templateName="XPXGetUserList" type="output"/>
+        </namespaces>
+    </form>
+    <form Id="com.xpedx.sterling.rcp.pca.sharedTasks.shiptolookup.XPXShowListOfAuthorizedLocationsPanel">
+        <commands>
+            <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
+                inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
+        </commands>
+        <namespaces>
+            <namespace name="XPXGetListOfAssignedShipTosForAUserService_out" templateName="CustomerAssignmentList" type="output"/>
+        </namespaces>
+    </form>
+</forms>

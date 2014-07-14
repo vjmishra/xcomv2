@@ -1,0 +1,142 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="xpedx.home" namespace="/home" extends="home">
+		
+		<action name="home" class="com.sterlingcommerce.xpedx.webchannel.home.CustomHomeAction">
+			<param name="resourceId">/swc/home</param>
+			<result name="main" >/xpedx/jsp/home/XPEDXhome.jsp</result>
+			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+			<result name="changePreferredShip" type="redirectAction">
+				<param name="actionName">setCurrentCustomerIntoContext-punchout</param>
+				<param name="namespace">/common</param>
+				<param name="setSelectedAsDefault">true</param>
+				<param name="initPrefs">true</param>
+				<param name="selectedCurrentCustomer">${prefferedShipToCustomer}</param>				
+			</result>			
+		</action>
+		
+		<action name="logout" class="com.sterlingcommerce.xpedx.webchannel.home.XPEDXLogoutAction">			
+			<result name="WebUser">/swc/jsp/home/homeRedirector.jsp</result>
+			<result name="SalesRepUser" type="redirectAction">
+				<param name="actionName">salesReploginFullPage</param>				
+			</result>			 
+			<result name="punchoutUser">/xpedx/jsp/punchout/punchoutThankyou.jsp</result>			 
+		</action>
+		<action name="saleslogout" class="com.sterlingcommerce.xpedx.webchannel.home.XPEDXSalesRepLogoutAction">			
+			<result name="WebUser">/swc/jsp/home/homeRedirector.jsp</result>
+			<result name="SalesRepUser" type="redirectAction">
+				<param name="actionName">salesReploginFullPage</param>				
+			</result>			 
+		</action>
+		
+		<!--RUgrani:Adding cart widget  -->
+		<action name="portalHome" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <param name="resourceId">/swc/portalHome</param>
+            <result>/xpedx/jsp/home/XPEDXPortalHome.jsp</result>
+        </action>
+        
+        <action name="xpedxCatalogHomePageB2BAsset" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/home/xpedxCatalogHomePageB2BAssetWidget.jsp</result>
+        </action>
+        
+        <action name="xpedxCatalogPromotions" class="com.sterlingcommerce.xpedx.webchannel.home.XPEDXCatalogHomePageAssetWidgetAction" method="getCatalogPromotions">
+            <param name="resourceId">/swc/home</param>
+            <result>/xpedx/jsp/home/xpedxCatalogPromotions.jsp</result>
+        </action>
+        
+        <!-- For JIRA 2486 and added a new mapping for Sales Rep login-->
+         <action name="salesReploginFullPage" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
+        </action>
+              
+        <action name="loginFullPage" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/home/XPEDXhome.jsp</result>
+        </action>
+        
+         <action name="xpedxCustomerAnnouncements" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle">
+           <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetArticleListBinding.xml</param>
+			<param name="mashups">XPEDXArticleList</param>
+            <result>/xpedx/jsp/home/XPEDXCustomerAnnouncements.jsp</result>
+        </action>
+
+		<action name="xpedxLearnMoreArticle" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetArticle">
+            <param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXGetArticleListBinding.xml</param>
+			<param name="mashups">XPEDXArticleList</param>
+            <result>/xpedx/jsp/home/XPEDXCustomerArticleView.jsp</result>
+        </action>
+        
+        <action name="xpedxAnnouncements" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXGetDivisionArticle">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/profile/org/XPEDXDivisionArticleListBinding.xml</param>
+			<param name="mashups">XPEDXDivisionArticleList</param>
+            <result>/xpedx/jsp/home/XPEDXAnnouncements.jsp</result>
+        </action>
+        
+        <action name="MyTermsOfAccess" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/home/XPEDXTermsOfAccess.jsp</result>
+        </action>
+        
+         <action name="MyPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/home/XPEDXPrivacyPolicy.jsp</result>
+        </action>
+        
+        <action name="forgotPwd" class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+			<param name="mashups">userNameForgotPwd</param>
+			<param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
+			<result name="success">/xpedx/jsp/home/XPEDXusername.jsp</result> 
+		</action>
+		
+		<action name="resetPassword"
+			class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+			<param name="mashups">userNameForgotPwd</param>
+			<param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">usernameSubmit</param>
+				<param name="UserId">${#parameters.userID}</param>
+				<param name="validationField">true</param>
+				<param name="requestId">${#parameters.requestId}</param>
+			</result>
+		</action>
+		
+		<action name="usernameSubmit" class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+            <param name="mashups">getAuthQuestionList</param>
+            <param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordFormsValidation</param>
+            <result name="questionList">/xpedx/jsp/home/XPEDXsecretQuestionList.jsp</result>
+            <result name="requestIDvalidationSuccess">/xpedx/jsp/home/XPEDXnewPwd.jsp</result>
+            <result name="usernameerror">/xpedx/jsp/home/XPEDXusername.jsp</result>
+            <result name="requestIDvalidationerror">/xpedx/jsp/home/XPEDXusername.jsp</result>
+        </action>
+        
+        <action name="answerSubmit"
+            class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+            <param name="mashups">validateAuthAnswers</param>
+            <param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordFormsValidation</param>
+            <result name="success">/xpedx/jsp/home/XPEDXnewPwd.jsp</result>
+            <result name="wronganswererror">/xpedx/jsp/home/XPEDXsecretQuestionList.jsp</result>
+            <result name="reqPwdReset">/xpedx/jsp/home/XPEDXpwdchangesuccess.jsp</result>
+            <result name="pwdresetrequesterror">/xpedx/jsp/home/XPEDXpwdchangeerror.jsp</result>
+            <result name="maxattemptserror">/xpedx/jsp/home/XPEDXpwdchangeerror.jsp</result>
+        </action>
+        
+        <action name="changePwdForgotPwd"
+            class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+            <param name="mashups">changePwdForgotPwd</param>
+            <param name="xmlBindingFile">ForgotPasswordAction_binding.xml</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordFormsValidation</param>
+            <result name="success">/xpedx/jsp/home/XPEDXpwdchangesuccess.jsp</result>
+            <result name="passworderror">/xpedx/jsp/home/XPEDXnewPwd.jsp</result>
+        </action>
+
+        <action name="cancelForgotPassword"
+            class="com.sterlingcommerce.webchannel.home.forgotPassword.ForgotPasswordAction">
+            <param name="mashups">cancelForgotPassword</param>
+            <result name="success" type="redirectAction">
+				<param name="namespace">/home</param>
+                <param name="actionName">home</param>
+            </result>
+        </action>
+	</package>
+</struts>

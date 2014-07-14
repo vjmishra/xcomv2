@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		
+		<Entity Cacheable="true" ApiNeeded="Y" AuditRequired="N" HasHistory="N" Prefix="XPX"
+			TableName="XPX_ERROR_LOOKUP">
+			<Attributes>
+			<!-- Mandatory Columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Create TimeStamp" />
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Modify TimeStamp" />
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Creating User ID" />
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Modifying User ID" />
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Creating Program ID" />
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Modifying Program ID" />
+				<Attribute ColumnName="LOCKID" DataType="Lockid"
+					DefaultValue="0" Description="Lock ID" />
+					<!-- Created for New Enhancement (PSR Task22) -->
+					
+				<Attribute ColumnName="STARTDOWNTIME" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Start Planned Down time" XMLName="StartDownTime" />
+
+				<Attribute ColumnName="ENDDOWNTIME" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="End Planned Down time" XMLName="EndDownTime" />
+					
+				<Attribute ColumnName="DOWNTIME_NOTIFICATION" DataType="Text-254"
+					DefaultValue="" Description="Notifies Planned Downtime"
+					Nullable="true" XMLName="DownTimeNotification" />
+				
+					<!-- Primary key -->
+				<Attribute ColumnName="ERROR_LOOKUP_KEY" DataType="Key"
+					DefaultValue="' '" Description="Primary Key for the Table"
+					XMLName="ErrorLookupKey" />
+				
+				<Attribute ColumnName="SOURCE_SYSTEM" DataType="Text-254"
+					DefaultValue="Sterling" Description="Source System, which is always Sterling"
+					Nullable="true" XMLName="SourceSystem" />
+				<Attribute ColumnName="TARGET_SYSTEM" DataType="Text-254"
+					DefaultValue="" Description="Target System, like wM, LDAP, etc"
+					Nullable="true" XMLName="TargetSystem" />
+				<Attribute ColumnName="ERROR_CLASS" DataType="Text-254"
+					DefaultValue="" Description="The type of Error"
+					Nullable="true" XMLName="ErrorClass" />
+				<Attribute ColumnName="TRANS_TYPE" DataType="Text-254"
+					DefaultValue="" Description="The type of transaction like LDAP, Reporting, Cust-B, etc"
+					Nullable="true" XMLName="TransType" />
+				<Attribute ColumnName="COMM_METHOD" DataType="Text-254"
+					DefaultValue="" Description="Communication Method. This gives the priority"
+					Nullable="true" XMLName="CommMethod" />
+				<Attribute ColumnName="QUEUE_NAME" DataType="Text-254"
+					DefaultValue="" Description="USD Queue Name or Email User Group"
+					Nullable="true" XMLName="QueueName" />
+				
+			</Attributes>
+			<PrimaryKey Name="ERROR_LOOKUP_PK">
+				<Attribute ColumnName="ERROR_LOOKUP_KEY" />
+			</PrimaryKey>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

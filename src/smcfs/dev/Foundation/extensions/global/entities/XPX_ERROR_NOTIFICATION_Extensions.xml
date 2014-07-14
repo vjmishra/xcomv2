@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		
+		<Entity Cacheable="true" ApiNeeded="Y" AuditRequired="N" HasHistory="N" Prefix="XPX"
+			TableName="XPX_ERROR_NOTIFICATION">
+			<Attributes>
+			<!-- Mandatory Columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Create TimeStamp" />
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Modify TimeStamp" />
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Creating User ID" />
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Modifying User ID" />
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Creating Program ID" />
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Modifying Program ID" />
+				<Attribute ColumnName="LOCKID" DataType="Lockid"
+					DefaultValue="0" Description="Lock ID" />
+					<!-- Primary key -->
+				<Attribute ColumnName="ERROR_NOTIFICATION_KEY" DataType="Key"
+					DefaultValue="' '" Description="Primary Key for the Table"
+					XMLName="ErrorNotificationKey" />
+				
+				<Attribute ColumnName="STACK_TRACE" DataType="CLOB" DefaultValue="''" Description="Description of exception" Nullable="true" XMLName="StackTrace" />
+				<Attribute ColumnName="XML_FILE" Type="CLOB"
+					 Description="The i/p xml"
+					Nullable="true" XMLName="XmlFile" />
+				<Attribute ColumnName="EXCEPTION_ID" DataType="Text-254" DefaultValue="" Description="Exception ID to use as reference" Nullable="true" XMLName="ExceptionID" />
+				<!--System_name for Jira EB-517-->
+				<Attribute ColumnName="HOST_NAME" DataType="Text-60" DefaultValue="" Description="server name to use as reference" Nullable="true" XMLName="Host_Name" />
+								
+			</Attributes>
+			<PrimaryKey Name="ERROR_NOTIFY_PK">
+				<Attribute ColumnName="ERROR_NOTIFICATION_KEY" />
+			</PrimaryKey>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

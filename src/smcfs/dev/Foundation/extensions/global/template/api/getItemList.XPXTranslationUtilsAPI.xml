@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ItemList>
+<Item CanUseAsServiceTool=" " Createprogid=" " Createts=" "
+    Createuserid=" " GlobalItemID=" "
+    InheritAttributesFromClassification=" " IsShippingCntr=" "
+    ItemGroupCode=" " ItemID=" " ItemKey=" " Lockid=" " MaxModifyTS=" "
+    Modifyprogid=" " Modifyts=" " Modifyuserid=" " OrganizationCode=" "
+    RemoteModifyTS=" " SubCatalogOrganizationCode=" " SyncTS=" "
+    UPCCompanyPrefixLength=" " UnitOfMeasure=" ">
+    
+    <ClassificationCodes CommodityCode=" " ECCNNo=" " HarmonizedCode=" "
+        HazmatClass=" " Model=" " NAICSCode=" " NMFCClass=" "
+        NMFCCode=" " OperationalConfigurationComplete=" "
+        PickingType=" " PostingClassification=" " Schedule_B_Code=" "
+        StorageType=" " TaxProductCode=" " UNSPSC=" " VelocityCode=" "/>
+   
+</Item>
+</ItemList>

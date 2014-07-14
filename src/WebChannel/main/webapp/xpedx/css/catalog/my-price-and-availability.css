@@ -1,0 +1,74 @@
+.show-hide-wrap{ border-left:1px solid #cccccc; border-right: 1px solid #cccccc; }
+.catalog-my-price-availability
+{
+	font-size: 10px;
+	width: 98%;
+	margin: 0 auto;
+}
+.catalog-my-price-availability tr.my-headings
+{
+	background: url('../../images/global/dot-gray.gif') repeat-x left center;
+}
+.itemdiv .catalog-my-price-availability tr.my-headings td span
+{
+	font-style: italic;
+	padding: 0px 6px;
+	background: #fff;
+}
+.itemdiv.over .catalog-my-price-availability tr.my-headings td span
+{
+	background: #EBF7D2;
+}
+.catalog-my-price-availability td
+{
+	padding: 0 0 0 3px;
+}
+.catalog-my-price-availability td.leftmost,
+.catalog-my-price-availability td.my-price,
+.catalog-my-price-availability td.my-ext-price
+{
+	padding-left: 7px;
+}
+.my-price, .my-available, .my-ext-price
+{
+	font-weight: bold;
+	min-width: 5em;
+}
+.my-ext-price
+{
+	width: 8em;
+}
+.my-local-availability
+{
+	font-style: italic;
+}
+.my-uom
+{
+	text-align: left;
+	min-width: 7em;
+}
+.my-timeframe
+{
+	text-align: center;
+}
+.my-bracket
+{
+	min-width: 5em;
+	text-align: right;
+}
+tr.my-headings .my-bracket
+{
+	text-align: center;
+}
+.my-number
+{
+	text-align: right;
+}
+.my-decimal
+{
+	text-align: left;
+}
+div.green-background table.mil-my-price-availability td span{ background-color: #EBF7D2; }
+div.green-background table.mil-my-price-availability { background-color: #EBF7D2; }
+div table.mil-my-price-availability td span{ background-color: white; padding-right:5px;}
+div table.mil-my-price-availability  { background-color:white; } 

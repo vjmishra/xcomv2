@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+  <Entities>        
+    
+    <Entity TableName="XPX_ORDER_ADJUSTMENTS_INFO" ApiNeeded="Y" AuditRequired="N" Description="Adjustment info tables" HasHistory="False" Prefix="XPX" >
+     <Attributes>
+		  <Attribute ColumnName="ORDER_ADJUSTMENT_INFO_KEY" DataType="Key" Description="The primary key for the YFS_ORDER_ADJUSTMENT_INFO table." Name="OrderAdjustmentInfoKey" Nullable="false" XMLName="OrderAdjustmentInfoKey"/>
+      
+        <Attribute ColumnName="ORDER_HEADER_KEY" DataType="Key"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." Name="OrderHeaderKey"
+					Nullable="true" XMLName="OrderHeaderKey" />
+					
+		<Attribute ColumnName="ORDER_LINE_KEY" DataType="Key"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." Name="OrderLineKey"
+					Nullable="true" XMLName="OrderLineKey" />
+					
+		<Attribute ColumnName="ADJUSTMENT_ID" DataType="Text-50" DefaultValue="' '" Description="This is adjustment id if discount type is coupon then coupon id will be adjustment id"
+					Name="AdjustmentID" Nullable="true" Size="" XMLName="AdjustmentID" />  
+		
+		<Attribute ColumnName="ADJUSTMENT_APPLIED" DataType="Money" DefaultValue="0" Description="This is total adjsutment applied to line or order" Nullable="true" Size="" 
+         	 Name="AdjustmentApplied" XMLName="AdjustmentApplied" />
+         	 
+        <Attribute ColumnName="ADJUSTMENT_AVAILABLE" DataType="Money" DefaultValue="0" Description="This is total adjsutment avilable  to line or order" Nullable="true" Size="" 
+         	 Name="AdjustmentAvailable" XMLName="AdjustmentAvailable" />
+		
+		<Attribute ColumnName="CURRENCY_CODE" DataType="Currency" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          	Name="Currency" XMLName="Currency" />
+		
+		<Attribute ColumnName="DESCRIPTION" DataType="Text-2000" DefaultValue="' '" Description=" Adjustment Description" Nullable="true" Size="" 
+         	Name="Description"  XMLName="Description" />
+		
+		<Attribute ColumnName="DISTRIBUTED_ADJUSTMENT" DataType="Text-10" DefaultValue="' '" Description=" Flag to say whether adjustment is distributed or not " Nullable="true" Size="" 
+         	Name="DistributedAdjustment"  XMLName="DistributedAdjustment" />
+        
+        <Attribute ColumnName="END_DATE_ACTIVE" Nullable="true" DataType="TimeStamp"  Description="End date Active" Name="EndDateActive" XMLName="EndDateActive" /> 	
+        <Attribute ColumnName="ORGANIZATION_CODE" DataType="OrgCode" DefaultValue="' '" Description="Storefront code" Name="OrganizationCode" Nullable="true" XMLName="OrganizationCode"/> 	
+		
+		<Attribute ColumnName="PRICING_RULE_KEY" DataType="Text-50" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="PricingRuleKey"  XMLName="PricingRuleKey" />
+		
+		<Attribute ColumnName="PRICING_RULE_ACTION_KEY" DataType="Text-50" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="PricingRuleActionKey"  XMLName="PricingRuleKey" />
+         	
+		<Attribute ColumnName="PRICING_RULE_NAME" DataType="Text-150" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="PricingRuleName"  XMLName="PricingRuleName" /> 	
+       
+       <Attribute ColumnName="RULE_CATEGORY" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="RuleCategory"  XMLName="RuleCategory" /> 
+      
+      <Attribute ColumnName="RULE_TYPE" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="RuleType"  XMLName="RuleType" />    	
+      
+      <Attribute ColumnName="START_DATE_ACTIVE" DataType="TimeStamp"  Nullable="true" Description="End date Active" Name="StartDateActive" XMLName="StartDateActive" />   	
+         	
+	  <Attribute ColumnName="PRICING_STATUS" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="PricingStatus"  XMLName="PricingStatus" />  
+ 	
+ 	  <Attribute ColumnName="ADJUSTMENT" DataType="Money" DefaultValue="0" Description="This is total adjsutment avilable  to line or order.If Adjustment type is percentage then this field will have percentage value if Adjustment type is Absolute then this is the actual discounted price" Nullable="true" Size="" 
+         	 Name="Adjustment" XMLName="Adjustment" />
+ 	 
+ 	  <Attribute ColumnName="ADJUSTMENT_TYPE" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="AdjustmentType"  XMLName="AdjustmentType" />
+ 	  
+ 	  <Attribute ColumnName="CHARGE_CATEGORY" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="ChargeCategory"  XMLName="ChargeCategory" />	
+ 		
+ 	  <Attribute ColumnName="CHARGE_NAME" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="ChargeName"  XMLName="ChargeName" />
+      
+      <Attribute ColumnName="ORDER_TOTAL" DataType="Money" DefaultValue="0" Description="If Order total is greater than this order total then adjustment will be applied so basically this field is adjustment order total " Nullable="true" Size="" 
+         	 Name="OrderTotal" XMLName="OrderTotal" />
+      
+      <Attribute ColumnName="QUANTITY" DataType="Quantity" DefaultValue="0" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="Quantity"  XMLName="Quantity" />    		
+      
+      <Attribute ColumnName="WHEN_TO_APPLY" DataType="Text-40" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="WhenToApply"  XMLName="WhenToApply" />   
+         	
+      <Attribute ColumnName="IS_ITEM_RULE" DataType="Text-1" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="IsItemRule"  XMLName="IsItemRule" />    
+      
+       <Attribute ColumnName="IS_COUPON_RULE" DataType="Text-1" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="IsCouponRule"  XMLName="IsCouponRule" />    
+         		
+      <Attribute ColumnName="IGNORE_RULE_ON_PRICE_LOCK" DataType="Text-1" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="IgnoreRuleOnPriceLock"  XMLName="IgnoreRuleOnPriceLock" /> 	
+     
+      <Attribute ColumnName="IS_ITEM_ATTRIBUTE_VALUE_RULE" DataType="Text-1" DefaultValue="' '" Description=" PricingRuleKey " Nullable="true" Size="" 
+         	Name="IsItemAttributeValueRule"  XMLName="IsItemAttributeValueRule" />  	
+	
+	  <Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+	  <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+	  <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+	  <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+	  <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+	  <Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+	  <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+	
+    </Attributes>	
+    
+    <PrimaryKey Name="XPX_ADJUST_PK">
+				<Attribute ColumnName="ORDER_ADJUSTMENTS_INFO" Name="OrderAdjustmentInfoKey"/>
+	</PrimaryKey>	
+	<Parent ParentTableName="YFS_ORDER_HEADER" >
+				<Attribute ColumnName="ORDER_HEADER_KEY" ParentColumnName="ORDER_HEADER_KEY" />
+	 </Parent>
+  </Entity>
+
+ </Entities>
+</DBSchema>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--getOrderList Output XML-->
+<OrderList  LastOrderHeaderKey="" LastRecordSet="" ReadFromHistory="" TotalOrderList="">
+   <Order AllocationRuleID="" AutoCancelDate="" AuthorizationExpirationDate=""
+        BillToID="" BuyerOrganizationCode="" CarrierAccountNo=""
+        CarrierServiceCode="" ChargeActualFreightFlag=""
+        CustomerEMailID="" CustomerPONo="" CustCustPONo="" DeliveryCode="" Division=""
+        DocumentType="" DraftOrderFlag="" EnteredBy="" EnterpriseCode=""
+        EntryType="" FreightTerms="" HoldFlag=""
+        HoldReasonCode="" MaxOrderStatus="" MaxOrderStatusDesc=""
+        MinOrderStatus="" MinOrderStatusDesc="" NotificationReference=""
+        NotificationType="" NotifyAfterShipmentFlag="" OrderDate=""
+        OrderHeaderKey="" OrderName="" OrderNo="" OrderType=""
+        OriginalTax="" OriginalTotalAmount="" OtherCharges=""
+        PaymentStatus="" PersonalizeCode="" PriceProgramKey=""
+        PriorityCode="" PriorityNumber="" Purpose="" ReceivingNode="" ReqCancelDate=""
+        ReqDeliveryDate="" ReqShipDate="" SCAC=""
+        ScacAndService="" ScacAndServiceKey="" SearchCriteria1=""
+        SearchCriteria2="" SellerOrganizationCode="" ShipCompleteFlag=""
+        ShipToID="" Status="" TaxExemptFlag=""
+        TaxExemptionCertificate="" TaxJurisdiction="" TaxPayerId=""
+        TermsCode="" TotalAdjustmentAmount="" isHistory="" ShipNode="" CustomerContactID="">
+		<Extn /> 
+		<PersonInfoShipTo AddressLine1="" AddressLine2="" City="" State="" ZipCode="" Country="" />
+		<Instructions>
+		 <!--  NumberOfInstructions is not a template driven attribute. --> 
+		<Instruction InstructionText="" InstructionType="" /> 
+		</Instructions>
+
+		<OrderLines>
+			<OrderLine>
+				<Extn/>
+				<Item/>
+				<LinePriceInfo/>
+				<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+				<OrderStatuses>
+					<OrderStatus/>
+				</OrderStatuses>
+				<Instructions>
+				 <!--  NumberOfInstructions is not a template driven attribute. --> 
+					<Instruction InstructionText="" InstructionType="" /> 
+				</Instructions>
+			</OrderLine>
+		</OrderLines>
+	</Order>
+</OrderList>

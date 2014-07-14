@@ -1,0 +1,654 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Save As dialog window</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/tree.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript"> 
+var p=parent
+_root = p._root
+_appExt = p._appExt
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"saveAsDlg")
+querySave = requestQueryString(window,"querySave")
+strQuerySave = ""
+if (querySave) {
+strQuerySave = (querySave == "yes")?"&querySave=true":""
+}
+isFromHyperlinkEditor = requestQueryString(window,"isFromHyperlinkEditor")
+_isFromHyperlinkEditor = (isFromHyperlinkEditor == 'yes')
+if (_isFromHyperlinkEditor) 
+{ 
+_callBackHyperlink = requestQueryString(window,"callback");
+}
+_currentTreeElem=null
+_subFolderTree=null
+_updateFromIframeCB = null
+_maxPage = -1
+_pageNb = 1
+_pagesPerIdx = 5
+function newDocPropsForSave(name,desc,keyw,bRefOnOpen,bFormat,folderID)
+{
+var o=new Object
+o.name=name
+o.description=desc
+o.keywords=keyw
+o.bRegionalFormatting=bFormat
+o.bRefreshOnOpen=bRefOnOpen
+o.folderID=folderID
+return o
+}
+var url =  p._root + "incSave" + p._appExt
+url += p.urlParamsNoBID() + "&id=" + p.strDocID + "&isNew=" + p.isNew
+includeScript(url)
+</script>
+<script language="javascript">
+var buttonsWidth= 60
+var showOptions= (p._showSaveOptions=="1")
+var dlgFullHeight= 362 
+var dlgReducedHeight = 316
+var dlgHeight= _isFromHyperlinkEditor?dlgReducedHeight:(showOptions?dlgFullHeight:dlgReducedHeight)
+var treeWidth= 224
+var treeHeight= (_ie6||_ie7) ? 190:190
+var filesListWidth = treeWidth + 30
+var tabWidth= treeWidth+filesListWidth+6;
+var palHeight= 24 
+var tabHeight= treeHeight + palHeight + 8;
+var dlgWidth= tabWidth + 10
+var initialized= false
+var oldDocName = null, newDocName = null
+var selectFile=true;
+var isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+function loadCB()
+{
+var labelDlgTitle = _isFromHyperlinkEditor?"Choose a document":"Save As";
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+p.advDisplayViewerErrorMsgDlg(_displayErrorMessage,labelDlgTitle);
+return;
+}
+if (!initialized)
+{
+initialized = true
+_img=p._img
+saveAsDlg = newDialogBoxWidget("saveAsDlg",labelDlgTitle,dlgWidth,dlgHeight,
+okCB,cancelCB);
+tzone = newTabbedZone("saveZone",zoneCB,tabWidth,tabHeight);
+tzone.add("Folders","properties");
+tzone.add("Categories","categories");
+searchArea = newWidget("searchArea")
+searchName = newTextFieldWidget("searchName", validateSearchFieldCB, 200, validateSearchFieldCB, searchClickCB, true, "Do not use characters like $%*...", 194)
+searchIcon = newIconWidget("searchIcon", _img+"standard.gif", searchClickCB, null, null,16,16,32,0,32,16)
+fileNameLabel = newWidget("fileNameLabel")
+fileName = newTextFieldWidget("fileName", null, 255, null, null, null, null);
+xtraInfoBt = newToggleButtonWidget("saveAsDlgXtraInfoBt", "Advanced", xtraInfoBtCB, null, null, "Click here to show or hide the document description, keywords and options",null,null, _skin+'buttonIcons.gif', 16,16, 0,176, true, 0,0, 0,192)
+descKeywordOptionsZone = newWidget("descKeywordOptionsZone")
+bottomSaveDialogZone = newWidget("bottomSaveDialogZone")
+descriptionArea = newTextAreaWidget("saveAsDlgDescription", 5, _moz?34:44);
+keywordsArea = newTextFieldWidget("saveAsDlgKeywords",  null, null, null, null, true, null, 180);
+permFormattingCheck = newCheckWidget("saveAsDlgPermFormattingCheck","Permanent regional formatting")
+refreshCheck = newCheckWidget("saveAsDlgRefreshCheck","Refresh on open")
+myFolders = newTreeWidgetElem(0, "My Folders", 0, "My Folders",null, "My Folders",null,null,null, _root + 'getKindIcon' + _appExt + '?progID=CrystalEnterprise.Folder');
+myFolders.expanded=true
+locationTree = new newTreeWidget("saveAsDlgLocationTree",treeWidth, _isFromHyperlinkEditor?treeHeight:(treeHeight+palHeight), _img + "locations.gif",locationTreeCB,dblClickLocationTreeCB,null)
+locationTree.add(myFolders)
+locationTree.expanded=true
+favoritesFolder = newTreeWidgetElem(0, "Favorites Folder", favoritesFolderID, "Favorites Folder",null, "My Folders",null,null,null, _root + 'getKindIcon' + _appExt + '?progID=CrystalEnterprise.FavoritesFolder');
+myFolders.add(favoritesFolder);
+favoritesFolder.expanded=false;
+favoritesFolder.setIncomplete(loadSubFolderCB);
+publicFolder = newTreeWidgetElem(0, "Public Folders", publicFolderID, "Public Folders",null, "Public Folders",null,null,null, _root + 'getKindIcon' + _appExt + '?progID=CrystalEnterprise.Folder');
+locationTree.add(publicFolder);
+publicFolder.expanded=false;
+publicFolder.setIncomplete(loadSubFolderCB);
+categoriesTree = new newTreeWidget("saveAsDlgCategoriesTree",treeWidth,treeHeight + palHeight, _img + "locations.gif",categoryTreeCB,dblClickCategoryTreeCB,null)
+personnalCategories = newTreeWidgetElem(0, "Personal Categories", personalCategoriesID, "Personal Categories",null, "Personal Categories",null,null,null, _root + 'getKindIcon' + _appExt + '?progID=CrystalEnterprise.PersonalCategory');
+personnalCategories.isCheck=false;
+personnalCategories.isPersonal=true;
+categoriesTree.add(personnalCategories);
+personnalCategories.expanded=false;
+personnalCategories.setIncomplete(loadSubPersCatCB);
+corporateCategories = newTreeWidgetElem(0, "Corporate Categories", corporateCategoriesID, "Corporate Categories",null, "Corporate Categories",null,null,null, _root + 'getKindIcon' + _appExt + '?progID=CrystalEnterprise.Category');
+corporateCategories.isCheck=false;
+categoriesTree.add(corporateCategories);
+corporateCategories.expanded=false;
+corporateCategories.setIncomplete(loadSubCatCB);
+filesList = filesList1 = newIconListWidget("saveAsDlgFilesList1", filesListWidth, treeHeight, _img + "locations.gif", filesListCB, _isFromHyperlinkEditor?okCB:null);
+filesList2 = newIconListWidget("saveAsDlgFilesList2", filesListWidth, treeHeight + palHeight, _img + "locations.gif", filesListCB, _isFromHyperlinkEditor?okCB:null);
+pal=filesListPal=newPaletteWidget("filesListPal")
+curIcon="navigation.gif"
+filesListPalArea = newWidget("filesListPalArea")
+pal.beginRightZone() 
+filesListFirstIdx=newIconWidget("filesListFirstIdx", _img+curIcon, pageNumberCB,"","Go to first index",7,16,0*7,0,0*7,16)
+filesListFirstIdx.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+pal.add(filesListFirstIdx)
+filesListPrevIdx=newIconWidget("filesListPrevIdx", _img+curIcon, pageNumberCB,"","Go to previous index",7,16,1*7,0,1*7,16)
+filesListPrevIdx.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+pal.add(filesListPrevIdx)
+filesListPage1=addPageNavigationIcn("filesListPage1","1","1", true)
+filesListPage1.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+filesListPage2=addPageNavigationIcn("filesListPage2","2","2", true)
+filesListPage2.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+filesListPage3=addPageNavigationIcn("filesListPage3","3","3", true)
+filesListPage3.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+filesListPage4=addPageNavigationIcn("filesListPage4","4","4", true)
+filesListPage4.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+filesListPage5=addPageNavigationIcn("filesListPage5","5","5", true)
+filesListPage5.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+filesListNextIdx=newIconWidget("filesListNextIdx", _img+curIcon, pageNumberCB,"","Go to next index",7,16,2*7,0,2*7,16)
+filesListNextIdx.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+pal.add(filesListNextIdx)
+filesListLastIdx=newIconWidget("filesListLastIdx", _img+curIcon, pageNumberCB,"","Go to last index",7,16,3*7,0,3*7,16)
+filesListLastIdx.setClasses("iconnochecknobg", "iconcheckwhite", "iconhovernobg", "iconcheckhovernobg")
+pal.add(filesListLastIdx)
+okButton = newButtonWidget("saveAsDlgOkButton", "OK", 
+"okCB()", buttonsWidth, "OK", 
+"OK", 0, 0);
+cancelButton = newButtonWidget("saveAsDlgCancelButton", "Cancel", 
+"cancelCB()", buttonsWidth, "Cancel", 
+"Cancel", 0, 0);
+helpButton = newButtonWidget("saveAsDlgHelpButton", "Help", 
+"helpCB()", buttonsWidth, "Help", 
+"Help", 0, 0);
+saveAsDlg.attachDefaultButton(okButton);
+}
+if ( !_curWin.saveAsDlgInitialized )
+{
+_curWin.saveAsDlgInitialized = true;
+var arHTML = new Array(), i=0
+arHTML[i++] = saveAsDlg.beginHTML()
+arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="5" border="0" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" cellspacing="2" cellpadding="0" border="0" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = tzone.beginHTML()
+arHTML[i++] = tzone.beginTabHTML(0)
+arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>'
+arHTML[i++] = '<tr><td valign="top">'
+arHTML[i++] = '<table cellspacing="0" cellpadding="0" border="0" width="100%">'
+arHTML[i++] =        '<tbody><tr><td valign="top" colspan="2">' + locationTree.getHTML() + '</td></tr></tbody>'
+arHTML[i++] = '<tbody id="searchArea" style="display:none"><tr><td class="dialogzone">' + searchName.getHTML() + '</td><td>' + searchIcon.getHTML() + '</td></tr>'
+arHTML[i++] = '</tbody></table></td>'
+arHTML[i++] = '<td valign="top" style="overflow-y:hidden;">' + filesList1.getHTML()
+arHTML[i++] ='<div id="filesListPalArea" style="background-color:white;border:1px solid #808080;">' + filesListPal.getHTML()+ '</div></td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.beginTabHTML(1)
+arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top">' + categoriesTree.getHTML() + '</td>'
+arHTML[i++] = '<td valign="top" style="overflow-y:hidden;">' + filesList2.getHTML()+ '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = tzone.endTabHTML()
+arHTML[i++] = tzone.endHTML()
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr></tbody>'
+arHTML[i++] = '<tbody id="bottomSaveDialogZone"><tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" cellspacing="2" cellpadding="2" border="0" width="100%"><tbody>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'+ '<span id ="fileNameLabel">' + 'Name'+ '</span>' + '</td>'
+arHTML[i++] = '<td>'+ fileName.getHTML() + '</td>'
+arHTML[i++] ='<td align="right">'+ xtraInfoBt.getHTML() +'</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td>'
+arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="2" border="0" width="100%">'
+arHTML[i++] ='<tbody id="descKeywordOptionsZone">'
+arHTML[i++] = '<tr>'
+arHTML[i++] = '<td valign="top">'
+arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="2" border="0"><tbody>' 
+arHTML[i++] = '<tr><td>' + 'Description' + '</td></tr>'
+arHTML[i++] = '<tr><td>' + descriptionArea.getHTML() + '</td></tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '<td valign="top">'
+arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="2" border="0"><tbody>' 
+arHTML[i++] = '<tr><td>' + 'Keywords' + '</td></tr>'
+arHTML[i++] = '<tr><td>' + keywordsArea.getHTML() + '</td></tr>'
+arHTML[i++] = '<tr><td>' + permFormattingCheck.getHTML() + '</td></tr>'
+arHTML[i++] = '<tr><td>' + refreshCheck.getHTML() + '</td></tr>'
+arHTML[i++] ='</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = '</td>'
+arHTML[i++] = '</tr>'
+   arHTML[i++] = '<tr>'
+   arHTML[i++] = '<td align="right">'
+   arHTML[i++] = '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody>'
+   arHTML[i++] = '<tr>'
+   arHTML[i++] = '<td>' + okButton.getHTML() + '</td>'
+   arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>'
+   arHTML[i++] = '<td>' + cancelButton.getHTML() + '</td>'
+   arHTML[i++] = '<td>' + getSpace(5,1)+ '</td>'
+   arHTML[i++] = '<td>' + helpButton.getHTML() + '</td>'
+arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+   arHTML[i++] = '</td>'
+   arHTML[i++] = '</tr>'
+arHTML[i++] = '</tbody></table>'
+arHTML[i++] = saveAsDlg.endHTML()
+targetApp(arHTML.join(''))
+arHTML=null
+}
+saveAsDlg.init()
+saveAsDlg.setTitle(_isFromHyperlinkEditor?"Choose a document":"Save As")
+tzone.init()
+okButton.init()
+cancelButton.init()
+helpButton.init()
+helpButton.setDisplay(false)
+searchName.init()
+searchIcon.init()
+searchArea.init()
+searchArea.setDisplay(_isFromHyperlinkEditor)
+searchName.setHelpTxt("Search by name")
+fileNameLabel.init()
+fileName.init()
+locationTree.init()
+xtraInfoBt.init()
+xtraInfoBt.check(showOptions)
+descKeywordOptionsZone.init()
+descKeywordOptionsZone.setDisplay(showOptions)
+descriptionArea.init()
+keywordsArea.init()
+permFormattingCheck.init()
+refreshCheck.init()
+filesListPal.init()
+filesListPalArea.init()
+filesListPalArea.setDisplay(false)
+filesList1.init()
+filesList2.init()
+oldDocName = docPropsForSave.name
+locationTree.rebuildHTML()
+bottomSaveDialogZone.init()
+bottomSaveDialogZone.setDisplay(!_isFromHyperlinkEditor)
+fillWidgets()
+tzone.showTab(0, true)
+locationTree.resize(null, _isFromHyperlinkEditor?(treeHeight + 4):(treeHeight+palHeight + 6))
+locationTree.selectByData(favoritesFolderID)
+fillCategoriesArray()
+saveAsDlg.layer.style.visibility=_hide
+saveAsDlg.show(true)
+fileName.resize(tabWidth - fileNameLabel.getWidth() - xtraInfoBt.getWidth() - 20)
+saveAsDlg.layer.style.visibility=_show
+setTimeout("safeSetFocus(fileName.layer);fileName.select()",1)
+}
+function loadSubFolderCB() {
+p.wt(true)
+_updateFromIframeCB = updateFolderTreeCB
+_currentTreeElem = this
+var folderID = this.userData
+filesList.deleteAll()
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&folderID=" + folderID
+frameNav("updateSaveFrame",url)
+}
+function updateFilesListFromNavigation(pageNb) {
+p.wt(true)
+_currentTreeElem = filesList
+_updateFromIframeCB = updateFilesListCB
+filesList.deleteAll()
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&pageListNb=" + pageNb
+frameNav("updateSaveFrame",url)
+}
+function updateFilesListFromIdxNavigation(idx) {
+p.wt(true)
+_currentTreeElem = filesList
+_updateFromIframeCB = updateFilesListCB
+filesList.deleteAll()
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&indexListNb=" + idx
+frameNav("updateSaveFrame",url)
+}
+function loadSubPersCatCB() {
+p.wt(true)
+_updateFromIframeCB = updateFolderTreeCB
+_currentTreeElem=this
+var folderID = this.userData
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&persCatID=" + folderID + "&sHyperlink=" + _isFromHyperlinkEditor
+frameNav("updateSaveFrame",url)
+}
+function loadSubCatCB() {
+p.wt(true)
+_updateFromIframeCB = updateFolderTreeCB
+_currentTreeElem=this
+var folderID = this.userData
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&catID=" + folderID + "&sHyperlink=" + _isFromHyperlinkEditor
+frameNav("updateSaveFrame",url)
+}
+function updateFolderTreeCB() {
+_currentTreeElem.finishComplete()
+_currentTreeElem.expanded=true
+checkCategories()
+updateNavigationIconsCB()
+}
+function initCategoriesCB() {
+categoriesTree.init()
+categoriesTree.rebuildHTML()
+checkCategories()
+}
+_persCatAssocAr = new Array
+_corpCatAssocAr = new Array
+function fillCategoriesArray()
+{
+for (var i = 0; i < _persCatIds.length; i++){
+_persCatAssocAr[_persCatIds[i]] = true
+    }
+for (var i = 0; i < _corpCatIds.length; i++){
+_corpCatAssocAr[_corpCatIds[i]] = true    
+}    
+}
+function checkCategories(){
+for (var i = 0; i < _persCatIds.length; i++){
+    elem = categoriesTree.findByData(_persCatIds[i])
+if (elem) elem.check(true)
+}
+for (var i = 0; i < _corpCatIds.length; i++){
+    elem = categoriesTree.findByData(_corpCatIds[i])
+if (elem) elem.check(true)
+}
+}
+function locationTreeCB(id) {
+p.wt(true)
+okButton.setDisabled((id == "0") || (id == publicFolderID))
+filesList.deleteAll()
+_currentTreeElem = filesList
+_updateFromIframeCB = updateFilesListCB
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&filesFolderID=" + id
+frameNav("updateSaveFrame",url)
+}
+function categoryTreeCB(id) {
+p.wt(true)
+filesList.deleteAll()
+_currentTreeElem = filesList
+_updateFromIframeCB = updateFilesListCB
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&filesCatID=" + id
+frameNav("updateSaveFrame",url)
+}
+function dblClickLocationTreeCB() {
+}
+function updateFilesListCB() {
+filesList.rebuildHTML()
+if (selectFile)
+{
+filesList.selectByData(p.strDocID)
+selectFile=false;
+}
+updateNavigationIconsCB()
+}
+checkTreeCB=categoryCheckCB
+function categoryCheckCB(elem) {    
+    if (elem) {
+if (elem.isPersonal) {
+_persCatAssocAr[elem.userData] = elem.isChecked()
+} else {
+_corpCatAssocAr[elem.userData] = elem.isChecked()
+}
+}    
+}
+function dblClickCategoryTreeCB() {
+}
+function addPageNavigationIcn(id,text,tooltip, isCheck)
+{
+var ic=pal.add(isCheck?newIconCheckWidget(id,null,pageNumberCB,text,tooltip):newIconWidget(id,null,pageNumberCB,text,tooltip))
+ic.resize(isCheck?25:20)
+ic.txtAlign=isCheck?"right":"center"
+return ic
+}
+function fillWidgets()
+{
+fileName.setValue(docPropsForSave.name);
+permFormattingCheck.check(docPropsForSave.bRegionalFormatting)
+refreshCheck.check(docPropsForSave.bRefreshOnOpen)
+descriptionArea.setValue(docPropsForSave.description)
+keywordsArea.setValue(docPropsForSave.keywords)
+}
+function getFlatArray(assAr){
+var flatAr = new Array, i=0
+for (var el in assAr) {
+if (assAr[el]) {
+flatAr[i++]=el
+}
+}
+return flatAr.join(",")
+}
+saveDuplicateDocNameEvent = p.newObserverOneEvent(p._EVT_SAVE_DUPLICATE_DOCNAME, saveDuplicateDocNameEventCB)
+function saveDuplicateDocNameEventCB() {
+p.showPromptDialog("This document name already exists. Do you want to overwrite it ?","Save",p._promptDlgInfo, overwriteOkCB, noCB)
+}
+processSaveEvent = p.newObserverOneEvent(p._EVT_PROCESS_SAVE,processSaveEventCB)
+function processSaveEventCB() {
+saveAsDlg.show(false)
+okButton.setDisabled(false)
+}
+saveNonAuthorizedDirEvent =  p.newObserverOneEvent(p._EVT_SAVE_NONAUTH_DIR, saveNonAuthorizedDirEventCB)
+function saveNonAuthorizedDirEventCB() {
+p.showAlertDialog("You do not have the right to add objects to the folder. Please contact your administrator if you need this right.","Save",p._promptDlgCritical,noOKCB)
+}
+function overwriteOkCB() {
+okCB(true)
+saveAsDlg.show(false)
+okButton.setDisabled(false)
+}
+function detachEvents()
+{
+if (window.saveDuplicateDocNameEvent) p.eventManager.detach(saveDuplicateDocNameEvent);
+if (window.processSaveEvent) p.eventManager.detach(processSaveEvent);
+if (window.saveNonAuthorizedDirEvent) p.eventManager.detach(saveNonAuthorizedDirEvent);
+}
+function okCB(forceOverwrite)
+{
+p.wt(false)
+if (_isFromHyperlinkEditor) 
+{ 
+okButton.setDisabled(true);
+saveAsDlg.show(false)
+var docID = filesList.getSelectedItem().userData
+eval(_callBackHyperlink + '(' + docID + ')')
+} else {
+bOverwrite = forceOverwrite?true:false
+if (!bOverwrite) {
+submitUrl = formGetUrl()
+}
+if (!submitUrl) return;
+okButton.setDisabled(true);
+if (bOverwrite) submitUrl += "&overwrite=true" 
+document.saveAsForm.action = submitUrl
+setTimeout("document.saveAsForm.submit()",1)
+}
+}
+function isValidFileName(name)
+{
+var arr=name.split(""); 
+for (var i=0; i<arr.length; i++)
+{
+if (arr[i]!=' ')
+return true;
+}
+return false;
+}
+function formGetUrl() {
+newDocName = trim(fileName.getValue())
+if (!isValidFileName(newDocName))
+{
+p.showAlertDialog("Invalid file name.","Save As",_promptDlgWarning);
+return null;
+}
+var f=document.saveAsForm;
+f.name.value = newDocName
+f.description.value= descriptionArea.getValue()
+f.keywords.value= keywordsArea.getValue()
+f.folderId.value= (locationTree.getSelections().length>0)? ((locationTree.getSelections())[0]).userData:docPropsForSave.folderID
+f.categories.value= getFlatArray(_corpCatAssocAr)
+f.personalCategories.value= getFlatArray(_persCatAssocAr)
+f.refreshOnOpen.value= "" + refreshCheck.isChecked()
+f.permanentRegionalFormatting.value= "" + permFormattingCheck.isChecked()
+var params = p.urlParamsNoBID()
+var submitUrl = p._root + "processSave" + p._appExt;
+submitUrl += params + "&ViewType="+p.strViewType+"&isNew="+p.isNew+"&repotype="+p.strRepoType+"&doctype="+p.strDocType+"&forceViewType="+p.getForceViewType() + "&id=" + p.strDocID
+submitUrl += strQuerySave 
+return submitUrl
+}
+function cancelCB()
+{
+saveAsDlg.show(false);
+}
+function noCB()
+{
+okButton.setDisabled(false)
+}
+function noOKCB()
+{
+okButton.setDisabled(true)
+}
+function helpCB()
+{
+p.showAlertDialog("Not implemented yet !","Development version",0);
+saveAsDlg.show(false);
+}
+function zoneCB(id)
+{
+if (id == 0) { 
+locationTree.resize(null, _isFromHyperlinkEditor?(treeHeight + 4):(treeHeight+palHeight + 6))
+updateNavigationIconsCB() 
+} else if (id == 1){
+initCategoriesCB()
+categoriesTree.resize(null, treeHeight + palHeight +6)
+filesList2.resize(null,treeHeight + palHeight + 6)
+}
+}
+function filesListCB()
+{
+var name = filesList.getSelectedItem().name
+fileName.setValue(name)
+}
+function xtraInfoBtCB()
+{
+var isChecked = xtraInfoBt.isChecked()
+saveAsDlg.resize(dlgWidth,isChecked?dlgFullHeight:dlgReducedHeight)
+descKeywordOptionsZone.setDisplay(isChecked)
+p._showSaveOptions = isChecked?"1":"0"
+p.recordProp("CDZ_VIEW_showSaveOptions",p._showSaveOptions)
+}
+function pageNumberCB()
+{
+p.wt(true)
+var id = this.id
+if (id == "filesListPrevIdx") {
+updateFilesListFromIdxNavigation(_currentIdxNb-1)
+} else if (id == "filesListNextIdx") {
+updateFilesListFromIdxNavigation(_currentIdxNb+1)
+} else if (id == "filesListFirstIdx") {
+updateFilesListFromIdxNavigation(0)
+} else if (id == "filesListLastIdx") {
+updateFilesListFromIdxNavigation(-1)
+} else {
+var pageNb = parseInt(this.text, 10)
+if (pageNb > 0) {
+updateFilesListFromNavigation(pageNb)
+}
+}
+}
+function updateNavigationIconsCB()
+{
+if ((_maxPage > 1) || (_hasPrevIndex || _hasNextIndex)) {
+filesListPalArea.setDisplay(true)
+filesList1.resize(null,treeHeight+4)
+filesList2.resize(null,treeHeight+4)
+filesListFirstIdx.setDisabled(!_hasPrevIndex)
+filesListPrevIdx.setDisabled(!_hasPrevIndex)
+filesListNextIdx.setDisabled(!_hasNextIndex)
+filesListLastIdx.setDisabled(!_hasNextIndex)
+for (var i=1; i <= _pagesPerIdx; i++) {
+var curWidget = eval('filesListPage' + i)
+var pgNb = ((_currentIdxNb-1) * _pagesPerIdx) + i
+curWidget.changeText(pgNb)
+curWidget.changeTooltip(pgNb)
+curWidget.show(i <= _maxPage)
+curWidget.check(pgNb == _pageNb)
+}
+} else {
+filesListPalArea.setDisplay(false)
+filesList1.resize(null,treeHeight + palHeight + 6)
+filesList2.resize(null,treeHeight + palHeight + 6)
+}
+p.hideBlockWhileWaitWidget()
+}
+function searchClickCB() 
+{
+validateSearchFieldCB()
+var txt = trim(searchName.getValue())
+if (!txt || txt=="") return
+p.wt(true)
+locationTree.selectByData(-1)
+filesList.deleteAll()
+filesList.rebuildHTML()
+_currentTreeElem = filesList
+_updateFromIframeCB = updateFilesListCB
+var url =  p._root + "updateSave" + p._appExt
+url += p.urlParamsNoBID() + "&searchName=" + txt
+frameNav("updateSaveFrame",url)
+}
+var regNonAlpha = new RegExp("[,;/!'<>%*&\"]+")
+function validateSearchFieldCB() {
+var txt = searchName.getValue()
+if (txt.length > 200) {
+p.showAlertDialog("The text is too long", "Web Intelligence", 0)
+searchName.setValue(txt.substring(0,200))
+}
+if (regNonAlpha.test(txt)) {
+p.showAlertDialog("The text contains illegal characters.", "Web Intelligence", 0)
+searchName.setValue(txt.replace(regNonAlpha,""))
+}
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)" onUnload="detachEvents()">
+<iframe name="updateSaveFrame" src="../../../lib/empty.html"></iframe>
+<form target="SecondDlgFrame" style="DISPLAY:none" name="saveAsForm" method="post" action=""
+ID="saveAsForm">
+<input type="hidden" name="name" id="name"> <input type="hidden" name="description" id="description">
+<input type="hidden" name="keywords" id="keywords"> <input type="hidden" name="folderId" id="folderId">
+<input type="hidden" name="categories" id="categories"> <input type="hidden" name="personalCategories" id="personalCategories">
+<input type="hidden" name="refreshOnOpen" id="refreshOnOpen"> <input type="hidden" name="permanentRegionalFormatting" id="permanentRegionalFormatting">
+</form>
+</body>
+</html>

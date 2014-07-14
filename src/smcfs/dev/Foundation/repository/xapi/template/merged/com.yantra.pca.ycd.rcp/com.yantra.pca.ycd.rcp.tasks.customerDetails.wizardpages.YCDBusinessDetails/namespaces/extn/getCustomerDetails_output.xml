@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Customer AggregateStatus="" BuyerOrganizationCode="" CustomerClassificationCode="" CustomerID="" CustomerKey="" CustomerType="" OrganizationCode="" ProfileLevel="" ProfileType="" Status="" Vertical="">
+	<ParentCustomer CustomerID="" CustomerKey="">
+        <BuyerOrganization OrganizationCode="" OrganizationName=""/>
+    </ParentCustomer>
+    <BuyerOrganization DunsNumber="" OrganizationCode="" OrganizationName="" PrimaryUrl="" TaxExemptFlag="" TaxExemptionCertificate=""/>
+    <CustomerContactList>
+        <CustomerContact AggregateStatus="" CustomerContactID="" DateOfBirth="" DayFaxNo="" DayPhone="" EmailID="" EveningFaxNo="" EveningPhone="" FirstName="" LastName="" MiddleName="" MobilePhone=""
+            Status="" Title="" UserID="" Createts="">
+			<Extn />
+            <CustomerAdditionalAddressList>
+                <CustomerAdditionalAddress AddressType="" CustomerAdditionalAddressID="" IsBillTo="" IsDefaultBillTo="" IsDefaultShipTo="" IsDefaultSoldTo="" IsShipTo="" IsSoldTo="">
+                    <PersonInfo AddressID="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" Company="" Country="" FirstName="" LastName=""
+                        MiddleName="" State="" Title="" ZipCode=""/>
+                </CustomerAdditionalAddress>
+            </CustomerAdditionalAddressList>
+            <User DisplayUserID="">
+			<UserGroupLists>
+			<UserGroupList/>
+			</UserGroupLists>
+			</User>
+        </CustomerContact>
+    </CustomerContactList>
+    <CustomerAdditionalAddressList>
+        <CustomerAdditionalAddress AddressType="" CustomerAdditionalAddressID="" IsBillTo="" IsDefaultBillTo="" IsDefaultShipTo="" IsDefaultSoldTo="" IsShipTo="" IsSoldTo="">
+            <PersonInfo AddressID="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" Company="" Country="" DayFaxNo="" DayPhone="" EMailID=""
+                FirstName="" LastName="" MiddleName="" MobilePhone="" OtherPhone="" State="" Title="" ZipCode="">
+                <Extn />
+            </PersonInfo>
+        </CustomerAdditionalAddress>
+    </CustomerAdditionalAddressList>
+    <CustomerPaymentMethodList TotalNumberOfRecords="">
+        <CustomerPaymentMethod AccountLimit="" AccountLimitCurrency="" AvailableAccountBalance="" CreditCardExpDate="" CreditCardName="" CreditCardType="" DisplayCreditCardNo=""
+            DisplayCustomerAccountNo="" DisplayPaymentReference1="" FirstName="" IsDefaultMethod="" LastName="" MiddleName="" PaymentReference1="" PaymentReference2="" PaymentReference3="" PaymentType=""/>
+    </CustomerPaymentMethodList>
+    <NoteList>
+        <Note AuditTransactionId="" ContactReference="" ContactTime="" ContactType="" ContactUser="" CustomerSatIndicator="" NoteText="" Priority="" ReasonCode="" SequenceNo="" VisibleToAll="">
+            <User Username=""/>
+        </Note>
+    </NoteList>
+</Customer>

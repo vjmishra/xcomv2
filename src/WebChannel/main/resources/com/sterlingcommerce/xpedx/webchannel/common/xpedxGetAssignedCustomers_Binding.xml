@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for XPEDXGetPaginatedCustomerAssignments and XPEDXSearchCustomerAssignmentsPaginated</comment>
+	<entry key="pageNumber.toString()">XPEDXGetPaginatedCustomerAssignments:/Page/@PageNumber,XPEDXSearchCustomerAssignmentsPaginated:/Page/@PageNumber</entry>
+	<entry key="pageSize.toString()">XPEDXGetPaginatedCustomerAssignments:/Page/@PageSize,XPEDXSearchCustomerAssignmentsPaginated:/Page/@PageSize</entry>
+	<entry key="pageSetToken">XPEDXGetPaginatedCustomerAssignments:/Page/@PageSetToken</entry>
+	<entry key="customerContactId">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/@UserId,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/@UserId</entry>
+	<entry key="orderByDesc">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Desc,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Desc</entry>
+	<entry key="orderByAttribute">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Name,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/OrderBy/Attribute/@Name</entry>
+	<entry key="searchTerm">XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/@ShipToAddressString</entry>
+	<entry key="status">XPEDXGetPaginatedCustomerAssignments:/Page/API/Input/XPXCustomerAssignmentView/@Status,XPEDXSearchCustomerAssignmentsPaginated:/Page/API/Input/XPXCustomerAssignmentView/@Status</entry>
+</properties>

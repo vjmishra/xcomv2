@@ -1,0 +1,193 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2003 Business Objects S.A.
+All rights reserved
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+File: basicDialog.html
+=============================================================
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"TDCAutoUpdateDlg");
+</script>
+<script language="javascript">
+var TDCAutoUpdateDlg = null;
+var info = null;
+var okButton = null;
+var cancelButton = null;
+autoUpdateRadio= null;
+currentDataRadio= null;
+refreshNowCheck= null;
+var buttonsWidth= 60;
+var buttonsHeight= 52;
+var dlgWidth= 500;
+var dlgHeight= 100;
+var frmZoneWidth= 0.99*dlgWidth;
+var frmZoneHeight= 0.9*dlgHeight;
+var initialized= false;
+</script>
+<script language="javascript">
+function okCB( )
+{
+TDCAutoUpdateDlg.show(false);
+p._bTdcActivate=true;
+p._bTDCAutoUpdateDataOnRefresh = autoUpdateRadio.isChecked(); 
+p.recordProp("CDZ_VIEW_tdcAutoMode",p._bTDCAutoUpdateDataOnRefresh?"1":"0"); 
+p.setTDC(refreshNowCheck.isChecked());
+p.eventManager.notify(p._EVT_TDC_CHANGED);
+}
+function cancelCB()
+{
+p.tdcActivateIcon.check(false)
+p._bTdcActivate=false
+TDCAutoUpdateDlg.show(false);
+}
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+TDCAutoUpdateDlg = newDialogBoxWidget("TDCAutoUpdateDlg","Activate Data Tracking",dlgWidth,dlgHeight,
+okCB,cancelCB,true);
+        autoUpdateRadio=newRadioWidget("autoUpdateRadio","setRefGroup","Auto-update the reference date with each data refresh")
+        var curDataAsRef="Use the current data as reference data (data on"+" "+convStr(p.strLastRefreshDate)+")"
+        currentDataRadio=newRadioWidget("currentDataRadio","setRefGroup",curDataAsRef)
+refreshNowCheck=newCheckWidget("refreshNowCheck","Refresh now")
+info = newInfoWidget("TDCAutoUpdateinfo","More Information","","Use this dialog box to set the reference data for data tracking.")
+framezone = newFrameZoneWidget("TDCAutoUpdateframezone",frmZoneWidth,frmZoneHeight);
+okButton = newButtonWidget("TDCAutoUpdateokButton", "OK", 
+"okCB()", buttonsWidth, "OK", 
+"OK", 0, 0);
+cancelButton = newButtonWidget("TDCAutoUpdatecancelButton", "Cancel", 
+"cancelCB()", buttonsWidth, "Cancel", 
+"Cancel", 0, 0);
+TDCAutoUpdateDlg.attachDefaultButton(okButton);
+}
+if ( !_curWin.TDCAutoUpdateDlgInitialized )
+{
+_curWin.TDCAutoUpdateDlgInitialized = true;
+targetApp(
+TDCAutoUpdateDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+framezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody>' +
+'<tr>' +
+'<td>'+
+'<table border="0" class="dialogzone"><tbody>'+
+'<tr>' +
+'<td>'+
+'Set the reference data for data tracking' +
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+
+autoUpdateRadio.getHTML() +
+'</td>'+
+'</tr>' +
+'<tr">' +
+'<td>'+
+currentDataRadio.getHTML() +
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr><td>' + getSep() + '</td></tr>' +
+'<tr >' +
+'<td>'+
+'<table border="0" class="dialogzone"><tbody>'+
+'<tr >' +
+'<td>'+
+'You need to refresh the document to see changed data' +
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+
+refreshNowCheck.getHTML() +
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+framezone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center" valign="right">' +
+   info.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   okButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   cancelButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+'</tr></tbody></table>'+   
+   '</table>' +
+   '</td>' +
+   '</tr>' + 
+'</table>' +
+TDCAutoUpdateDlg.endHTML()
+);
+}
+// --------------------------------------------------------
+// Init widgets
+// --------------------------------------------------------
+TDCAutoUpdateDlg.init();
+info.init();
+okButton.init();
+cancelButton.init();
+autoUpdateRadio.init();
+currentDataRadio.init();
+refreshNowCheck.init();
+if (p._tdcAutoMode)
+autoUpdateRadio.check(true)
+else
+currentDataRadio.check(true);
+// --------------------------------------------------------
+// Show the dialog box
+// --------------------------------------------------------
+TDCAutoUpdateDlg.show(true);
+}
+// 
+// END OF FUNCTIONS
+//
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

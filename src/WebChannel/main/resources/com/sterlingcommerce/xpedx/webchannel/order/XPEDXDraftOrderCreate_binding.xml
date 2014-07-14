@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>This binding file is not used for mashup invoke. It is required for validation.</comment>
+    <entry key="OrderName" >draftOrderCreate:/Order/@OrderName</entry>
+    <!--
+    <entry key="orderHeaderKey">xpedx_me_changeOrderHeader:/Order/@OrderHeaderKey</entry>
+    <entry key="orderName">xpedx_me_changeOrderHeader:/Order/@OrderName</entry>
+    <entry key="orderDescription">xpedx_me_changeOrderHeader:/Order/Extn/@ExtnOrderDesc</entry>
+    -->
+</properties>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for User List</comment>
+	<!-- 
+	<entry key="wCContext.customerContactId">getXpedxUserList://CustomerContact/@CustomerContactID</entry>
+	 -->
+	<entry key="pageNumber">getXpedxUserList://Page/@PageNumber</entry>
+	<entry key="pageSize">getXpedxUserList://Page/@PageSize</entry>
+	<entry key="pageSetToken">getXpedxUserList://Page/@PageSetToken</entry>
+	<entry key="customerID">getXpedxUserList://Page/API/Input/CustomerContact/Customer/@CustomerID,getBuyerOrganizationForCustomer://Customer/@CustomerID</entry>
+	<entry key="WCContext.storefrontId">getXpedxUserList://Page/API/Input/CustomerContact/Customer/@CallingOrganizationCode,getBuyerOrganizationForCustomer://Customer/@OrganizationCode</entry>
+	
+	<entry key="orderByAttribute">getXpedxUserList://Page/API/Input/CustomerContact/OrderBy/Attribute/@Name</entry>
+	<entry key="orderDesc">getXpedxUserList://Page/API/Input/CustomerContact/OrderBy/Attribute/@Desc</entry>
+	
+	<entry key="LastNameQryType">getXpedxUserList://Page/API/Input/CustomerContact/@LastNameQryType</entry>
+	<entry key="LastName">getXpedxUserList://Page/API/Input/CustomerContact/@LastName</entry>
+	<entry key="FirstNameQryType">getXpedxUserList://Page/API/Input/CustomerContact/@FirstNameQryType</entry>
+	<entry key="FirstName">getXpedxUserList://Page/API/Input/CustomerContact/@FirstName</entry>
+	<entry key="EmailIDQryType">getXpedxUserList://Page/API/Input/CustomerContact/@EmailIDQryType</entry>
+	<entry key="EmailID">getXpedxUserList://Page/API/Input/CustomerContact/@EmailID</entry>
+	<entry key="DayPhoneQryType">getXpedxUserList://Page/API/Input/CustomerContact/@DayPhoneQryType</entry>
+	<entry key="DayPhone">getXpedxUserList://Page/API/Input/CustomerContact/@DayPhone</entry>
+	
+</properties>

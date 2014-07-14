@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="" HasHistory="False" Prefix="XPEDX" TableName="XPEDX_MY_ITEMS_LIST">
+			<Attributes>
+				
+				<Attribute ColumnName="MODIFYTS" 	 DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp"/>
+				<Attribute ColumnName="CREATEUSERID" DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID"/>
+				<Attribute ColumnName="CREATEUSERNAME" DataType="Text-60" 	DefaultValue="' '" Description="Creating User Name"/>
+				<Attribute ColumnName="MODIFYUSERID" DataType="Text-55" 		DefaultValue="' '" Description="Modifying User ID"/>
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID" 	DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" 	DefaultValue="' '" Description="Modifying Program ID"/>
+				<Attribute ColumnName="LOCKID" 		 DataType="Lockid" 		DefaultValue="0" Description="Lock ID"/>
+				
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY"  	DataType="Key" 			Description="" Nullable="False" XMLName="MyItemsListKey"/>
+				<Attribute ColumnName="LIST_NAME"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Name"/>
+				<Attribute ColumnName="LIST_DESC"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Desc"/>
+				<Attribute ColumnName="CUSTOMER_ID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="CustomerID"/>		
+				
+				<Attribute ColumnName="LIST_ORDER"  		DataType="Integer"  	DefaultValue="0" Description="" Nullable="False" XMLName="ListOrder"/>
+				<Attribute ColumnName="SHARE_ADMIN_ONLY"  	DataType="Flag"  		DefaultValue="N" Description="" Nullable="False" XMLName="ShareAdminOnly"/>
+				<Attribute ColumnName="SHARE_PRIVATE"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="SharePrivate"/>
+				<Attribute ColumnName="MODIFYUSERNAME" DataType="Text-60" 	DefaultValue="' '" Description="Modifying User Name" XMLName="ModifyUserName"/>
+				<Attribute ColumnName="CREATETS" 	 DataType="TimeStamp" 	DefaultValue="sysdate" Description="create TimeStamp"/>
+				
+			</Attributes>
+				
+			
+			<PrimaryKey Name="MY_ITEMS_LIST_PK">
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY"/>
+			</PrimaryKey>
+			
+			<Indices>
+			</Indices>
+			
+		</Entity>
+	</Entities>
+</DBSchema>

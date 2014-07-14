@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Stores Articles." HasHistory="False" Prefix="XPX" TableName="XPX_ARTICLE">
+			<Attributes>
+				<Attribute ColumnName="ARTICLE_KEY" DataType="Key" DefaultValue="' '" Description="The primary key for the XPX_ARTICLE table." Name="ArticleKey" Nullable="false" XMLName="ArticleKey"/>
+				<Attribute ColumnName="ORGANIZATION_CODE" DataType="OrgCode" DefaultValue="' '" Description="Storefront code" Name="OrganizationCode" Nullable="false" XMLName="OrganizationCode"/>
+				<Attribute ColumnName="CUSTOMER_ID" DataType="CustomerId" DefaultValue="'N/A'" Description="Customer Id" Name="CustomerId" Nullable="false" XMLName="CustomerID"/>
+				<Attribute ColumnName="XPX_DIVISION" DataType="DivisionNo"  DefaultValue="'N/A'" Description="XPEDX Division/Branch against which this association is made." Name="XPXDivision" Nullable="false" XMLName="XPXDivision"  />
+				<Attribute ColumnName="ARTICLE_TYPE" DataType="Text-1"  DefaultValue="D" Description="Article type can be either Division(D), Customer(C) or StoreFront(S) specific" Name="ArticleType" Nullable="false" XMLName="ArticleType"  />
+				
+				<Attribute ColumnName="ARTICLE_NAME" DataType="Text-50" DefaultValue="' '" Description="Article name" Name="ArticleName" Nullable="false" XMLName="ArticleName"/>
+				<Attribute ColumnName="ARTICLE_BODY" DataType="Text-2000" DefaultValue="' '" Description="Article Content" Name="Article" Nullable="true" XMLName="Article"/>
+				<Attribute ColumnName="START_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the article will be active." Name="StartDate"/>
+			    <Attribute ColumnName="END_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp after which the article will be expired." Name="EndDate"/>
+			    <Attribute ColumnName="FORCED_MESSAGE" DataType="Text-1"  DefaultValue="' '" Description="Is article a Forced Message" Name="ForcedMessage" Nullable="false" XMLName="ForcedMessage"  />
+			    
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			<PrimaryKey Name="XPX_ARTICLE_PK">
+				<Attribute ColumnName="ARTICLE_KEY" Name="ArticleKey" XmlName="ArticleKey"/>
+			</PrimaryKey>
+			<Indices>
+				<Index Name="XPX_ARTICLE_I01" Unique="True">
+					<Column Name="ORGANIZATION_CODE" />
+					<Column Name="CUSTOMER_ID" />
+					<Column Name="XPX_DIVISION" />
+					<Column Name="ARTICLE_NAME" />
+				</Index>
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

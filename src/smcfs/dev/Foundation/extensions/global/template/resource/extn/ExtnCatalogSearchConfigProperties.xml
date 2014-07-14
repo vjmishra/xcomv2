@@ -1,0 +1,106 @@
+<SearchConfigurations>
+	<IndexSets>
+		<IndexSet Name="CatalogIndex">		
+			<Entities>
+				<Entity Name="Item">
+					<Attributes>
+						<Attribute DefaultWeight="1.0"
+							GetExternalValue="Y" Index="ANALYZED" Store="Y"
+							IndexFieldName="customerNumberPlusPartNumber" Searchable="Y"
+							UseSynonyms="N" Sortable="N" />
+						<!-- <Attribute DefaultWeight="1.0"
+							GetExternalValue="Y" Index="NOT_ANALYZED" Store="Y"
+							IndexFieldName="showNormallyStockedItems" Searchable="N" 
+							UseSynonyms="N" Sortable="Y"/>  -->
+						<Attribute DefaultWeight="1.0"
+							GetExternalValue="Y" Index="ANALYZED" Store="Y"
+							IndexFieldName="showStockedItems" Searchable="Y"
+							UseSynonyms="N" Sortable="N"/>
+						<Attribute IndexFieldName="Item.ExtnMpc"
+							XMLName="ExtnMpc" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnSize"
+							XMLName="ExtnSize" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnColor"
+							XMLName="ExtnColor" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnBestMatch"
+							XMLName="ExtnBestMatch" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />	
+						<Attribute IndexFieldName="Item.ExtnBasis"
+							XMLName="ExtnBasis" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnPackMethod"
+							XMLName="ExtnPackMethod" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />	
+						<Attribute IndexFieldName="Item.ExtnMwt"
+							XMLName="ExtnMwt" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="Y" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnMaterial"
+							XMLName="ExtnMaterial" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnForm"
+							XMLName="ExtnForm" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnCapacity"
+							XMLName="ExtnCapacity" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnModel"
+							XMLName="ExtnModel" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnGauge"
+							XMLName="ExtnGauge" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnThickness"
+							XMLName="ExtnThickness" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnPly"
+							XMLName="ExtnPly" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnVendorNo"
+							XMLName="ExtnVendorNo" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnCert"
+							XMLName="ExtnCert" DefaultWeight="1.0" Index="NOT_ANALYZED"
+							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />
+						<Attribute IndexFieldName="Item.ExtnShortDescription" 
+							XMLName="ExtnShortDescription" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>														
+						<Attribute IndexFieldName="Item.ExtnDescription" 
+							XMLName="ExtnDescription" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
+						<Attribute IndexFieldName="Item.ExtnExtendedDesc" 
+							XMLName="ExtnExtendedDesc" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
+						<Attribute IndexFieldName="Item.ExtnKeywords" 
+							XMLName="ExtnKeywords" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="Y" Searchable="Y"/>
+						<Attribute IndexFieldName="Item.ShortDescription" 
+							XMLName="ShortDescription" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />
+						<Attribute IndexFieldName="Item.Description" 
+							XMLName="Description" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />
+						<Attribute IndexFieldName="Item.ExtendedDescription" 
+							XMLName="ExtendedDescription" DefaultWeight="1.0" Index="ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />
+						<Attribute IndexFieldName="Item.Keywords" 
+							XMLName="Keywords" DefaultWeight="1.0" Index="NOT_ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />	
+						<Attribute IndexFieldName="Item.ExtnMarketingGroupId" 
+							XMLName="ExtnMarketingGroupId" DefaultWeight="1.0" Index="NOT_ANALYZED" 
+							Store="N" UseSynonyms="N" Searchable="N" />	
+					</Attributes>					
+				</Entity>
+				<Entity Name="XPXCustItemCrossRef">
+					<Attributes>
+						<Attribute IndexFieldName="CustomerItemNumber" 
+						XMLName="CustomerItemNumber" DefaultWeight="1.0" Index="ANALYZED" Store="N" 
+						UseSynonyms="Y" Searchable="Y"/>
+					</Attributes>
+				</Entity>
+			</Entities>
+		</IndexSet>
+	</IndexSets>
+</SearchConfigurations>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Webi input prompt action</comment>
+	<entry key="WCContext.storefrontId">getCustomerExtnParameters:/Customer/@OrganizationCode</entry>
+	<entry key="WCContext.customerId">getCustomerExtnParameters:/Customer/@CustomerID</entry>
+</properties>

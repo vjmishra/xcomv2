@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Customer CustomerID="" CustomerType="" OrganizationCode="">
+    <BuyerOrganization OrganizationCode="" OrganizationName=""/>
+    <CustomerContactList>
+        <CustomerContact DayPhone="" EmailID="" FirstName="" LastName="" UserID="">
+            <CustomerAdditionalAddressList>
+                <CustomerAdditionalAddress>
+                    <PersonInfo AddressID="" AddressLine1="" ZipCode=""/>
+                </CustomerAdditionalAddress>
+            </CustomerAdditionalAddressList>
+        </CustomerContact>
+    </CustomerContactList>
+    <CustomerAdditionalAddressList>
+        <CustomerAdditionalAddress>
+            <PersonInfo AddressID="" AddressLine1="" ZipCode=""/>
+        </CustomerAdditionalAddress>
+    </CustomerAdditionalAddressList>
+	<Extn/>
+</Customer>

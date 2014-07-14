@@ -1,0 +1,125 @@
+<mashups>
+	<mashup id ='SendSampleServiceRequest' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Item Details Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="SampleEmailRequest">
+			<Input>
+				<Emails>
+					<Email Contact="" Phone="" Notes="" ServiceProvider="" Attention= "" ServiceProviderNumber="" FromEmail="" ToEmail="" CCEmail="" ImageUrl="" BillToCustid="" 
+					DivisionName="" BilltoFullName="" ExternalEmail="" subjectEmail="" salesProfessional="" headerEmail = "" RequestType="SampleServiceRequest">
+						<ShippingAddress address=""/>
+						<SampleRequest ItemNumber="" ProductType="" MfgSku="" Mfg="" Description="" Qty=""/>					
+					</Email>
+				</Emails>
+			</Input>
+        <Template>
+        <Emails />			
+		</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='getDivisionEmail' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Item Details Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXGetDivisonEmailService">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="" />
+			</Input>
+        <Template>
+        	<EMail EMailID=""/>			
+		</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='SendEmailItemReturnRequest' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Item Details Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="ItemReturnEmailRequest">
+			<Input>
+				<Emails>
+					<Email FromEmail="" ToEmail="" ServiceRequestType="" AccountNumber="" WCNumber="" OrderNumber="" RequestedBy="" Username="" Phone="" InputEmail="" Note="">
+						<ProductDetail ItemId="" ItemShortDescription="" QTYShipped="" QTYReturn="" UOM="" ReasontoReturn=""/>
+					</Email>				        
+				</Emails>
+			</Input>
+        <Template>
+        <Emails />			
+		</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='ItemReturnComplaintRequest' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Item Details Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="ItemReturnEmailRequest">
+			<Input>
+				<Emails>
+					<Email FromEmail="" ToEmail="" OrderDate="" OrderNumber="" ServiceRequestType="" RequestType="">
+						<ProductDetail ItemNumber="" ItemDescription="" Quantity="" UOM="" ReasonType="" ReasonForReturn=""/>
+					</Email>				        
+				</Emails>
+			</Input>
+        <Template>
+        <Emails />			
+		</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='xpedxGetCustomerOrgEmail' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerList">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="" />
+			</Input>
+			<Template>
+				<CustomerList>
+				    <Customer> 
+						<Extn ExtnSampleRoomEmailAddress=""/>
+				    </Customer>
+				</CustomerList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<!-- Mashup Added For Reporting -->
+	
+	<mashup id='XPEDXGetUserRole' transactional='true' mashuptype='XAPI'
+	endpoint='CUSTOMER' description="User Roles">
+	<classInformation
+		name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+	<API Name="getUserList">
+		<Input>
+			<User Loginid="" />
+		</Input>
+		<Template>
+			<UserList>
+				<User Loginid="" UserKey="">
+					<UserGroupLists>
+						<UserGroupList UsergroupKey="" />
+					</UserGroupLists>
+				</User>
+			</UserList>
+		</Template>
+	</API>
+</mashup>
+	
+	<mashup id='getCustomerExtnParameters' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Organization  mashup">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerDetails">
+			<Input>
+				<Customer CustomerID="" OrganizationCode=""/>
+			</Input>
+			<Template>
+				<Customer>
+					<Extn ExtnSAPNumber="" ExtnSAPParentAccNo="" ExtnLegacyCustNumber=""  ExtnSAPName=""/>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	
+			
+</mashups>

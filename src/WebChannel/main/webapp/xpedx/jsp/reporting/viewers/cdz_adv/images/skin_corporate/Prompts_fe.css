@@ -1,0 +1,121 @@
+DIV.CP_Warning
+{
+    FONT-SIZE: 12px;
+    COLOR: #ff4500;
+    FONT-FAMILY: Tahoma
+}
+FONT.CP_Prompt_Name
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+.CP_Prompt_Value
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+INPUT.CP_Button
+{
+    FONT-SIZE: 12px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #456e9e
+}
+FONT.P_Prompt_Name
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+INPUT.P_Button_Validation
+{
+    FONT-SIZE: 12px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #456e9e
+}
+INPUT.P_Button_Selection
+{
+    FONT-SIZE: 12px;
+    WIDTH: 50px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #456e9e
+}
+TD.P_General_Title
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 12px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma
+}
+TABLE.P_Border
+{
+    BACKGROUND-COLOR: #456e9e
+}
+TABLE.P_Background
+{
+    BACKGROUND-COLOR: #e1e8f0
+}
+DIV.P_Warning
+{
+    FONT-SIZE: 12px;
+    COLOR: #ff4500;
+    FONT-FAMILY: Tahoma
+}
+TD.P_General_Message
+{
+    FONT-SIZE: 12px;
+    COLOR: #456e9e;
+    FONT-FAMILY: Tahoma
+}
+INPUT.P_Button_Refresh
+{
+    FONT-SIZE: 12px;
+    COLOR: white;
+    FONT-FAMILY: Tahoma;
+    BACKGROUND-COLOR: #456e9e
+}
+SELECT.P_ListBox
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+INPUT.P_TextBox
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: Tahoma
+}
+HR.P_Separation
+{
+    BORDER-TOP: #e1e8f0 1px inset;
+    WIDTH: 94%;
+    BORDER-BOTTOM: white 1px inset;
+}
+TABLE.P_Header
+{
+    BORDER-TOP: #456e9e 1px solid;
+    BORDER-BOTTOM: #456e9e 1px solid;
+    BACKGROUND-COLOR: #456e9e
+}
+FONT.P_Prompt_Message
+{
+    FONT-SIZE: 12px;
+    COLOR: #456e9e;
+    FONT-FAMILY: Tahoma
+}
+FONT.P_Input_Format
+{
+    FONT-SIZE: 12px;
+    COLOR: #456e9e;
+    FONT-FAMILY: Tahoma
+}
+TD.CP_Separation
+{
+    BACKGROUND-COLOR: #456e9e
+}
+

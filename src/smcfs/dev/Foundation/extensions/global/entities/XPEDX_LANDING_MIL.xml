@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>  
+    <Entity EntityType="VIEW" View="true" Extensible="N" TableType="TRANSACTION" TableName="XPEDX_LANDING_MIL" ApiNeeded="Y"
+    	Description="MIL_LANDING" HasHistory="false" Prefix="XPEDX"	XMLName="XPEDXLandingMIL">
+        <Attributes>
+        
+        <Attribute ColumnName="NUMBER_OF_ITEMS" 
+          DataType="Number"
+          DefaultValue="' '" 
+          Description="NUMBER OF ITEMS from my items key" 
+		  Nullable="true" 
+          XMLName="NumberOFItems"
+          />
+        
+		  <Attribute ColumnName="MY_ITEMS_LIST_KEY" 
+          DataType="Key"
+          DefaultValue="MyItemsListKey taken from XPEDX_MY_ITEMS_LIST should be primary key" 
+          Description=""  
+          Nullable="false" 
+          XMLName="MyItemsListKey"
+          />	
+		  
+		   <Attribute ColumnName="USERNAME" 
+          DataType="UserName"
+          DefaultValue="' '" 
+          Description="USERNAME taken from YFS_USER"  
+          Nullable="true" 
+          XMLName="UserName"
+          />
+		  
+		  <Attribute ColumnName="CUSTOMER_ID" 
+          DataType="Text-255"
+          DefaultValue="' '" 
+          Description="CUSTOMER_ID taken from XPEDX_MY_ITEMS_LIST_SHARE"  
+          Nullable="true" 
+          XMLName="CustomerID"
+          />
+		  
+		  <Attribute ColumnName="LIST_DESC" 
+          DataType="Text-255"
+          DefaultValue="' '" 
+          Description="LIST_DESC taken from XPEDX_MY_ITEMS_LIST"  
+          Nullable="false" 
+          XMLName="ListDesc"
+          />
+          
+		  <Attribute ColumnName="LIST_NAME" 
+          DataType="Text-255"
+          DefaultValue="' '" 
+          Description="LIST_NAME taken from XPEDX_MY_ITEMS_LIST"  
+          Nullable="false" 
+          XMLName="ListName"
+           />  
+           
+          <Attribute ColumnName="CREATEUSERNAME" 
+          DataType="UserName"
+          DefaultValue="' '" 
+          Description="CREATEUSERNAME taken from XPEDX_MY_ITEMS_LIST"  
+          Nullable="false" 
+          XMLName="CreateUserName"
+           />   
+           
+          <Attribute ColumnName="SHARE_ADMIN_ONLY" 
+          DataType="Flag"
+          DefaultValue="' '" 
+          Description="SHARE_ADMIN_ONLY taken from XPEDX_MY_ITEMS_LIST"  
+          Nullable="false" 
+          XMLName="ShareAdminOnly"
+           />   
+           
+           <Attribute ColumnName="SHARE_PRIVATE" 
+          DataType="Text-255"
+          DefaultValue="' '" 
+          Description="SHARE_PRIVATE taken from XPEDX_MY_ITEMS_LIST"  
+          Nullable="false" 
+          XMLName="SharePrivate"
+           />
+           
+           <Attribute ColumnName="MODIFYTS" 
+	    DataType="TimeStamp"
+	    DefaultValue="sysdate" 
+	    Description="Modify TimeStamp"  
+	    Nullable="true" 
+	    XMLName="Modifyts"
+	   />   
+           
+	    <Attribute ColumnName="CREATEUSERID" 
+	    DataType="UserId"
+	    DefaultValue="' '" 
+	    Description="Creating User ID" 
+	    Nullable="true" 
+	    XMLName="Createuserid"
+	   />   
+	    <Attribute ColumnName="MODIFYUSERID" 
+	    DataType="UserId"
+	    DefaultValue="' '"
+	    Description="Modifying User ID" 
+	    Nullable="true" 
+	    XMLName="Modifyuserid"
+	   />
+	   <Attribute ColumnName="MODIFYUSERNAME" 
+	    DataType="UserId"
+	    DefaultValue="' '"
+	    Description="Modifying User Name" 
+	    Nullable="true" 
+	    XMLName="ModifyUserName"
+	   />         
+        </Attributes>
+        <PrimaryKey Name="XPX_LNDG_MIL_PK">
+		<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
+	</PrimaryKey>
+        </Entity>
+</Entities>
+</DBSchema>

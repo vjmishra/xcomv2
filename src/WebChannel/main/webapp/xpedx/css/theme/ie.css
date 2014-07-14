@@ -1,0 +1,116 @@
+/* #main-navigation ul li {
+  display: inline;
+} */
+.narrowbyattributes
+{
+	padding-right: 12px !important;
+}
+#item-box
+{
+	overflow: visible !important;
+}
+.table-header-bar-left, .table-header-bar-right
+{
+	background-color: #003399;
+}
+
+.ie_floatleft
+{
+ float:left;
+}
+
+.ie_tabsfix
+{
+ margin-top:9px;
+ float: left; 
+}                                        
+
+#search_searchTerm
+{
+	padding-top: 3px;
+	margin-top: -1px;
+}
+
+.mil-attr-wrap
+{
+	padding-bottom: 10px;
+}
+.xpedx-light-box span#catalog-descr
+{
+position:relative;
+ 	bottom:40px;
+}
+.xpedx-light-box textarea#Approve-Reject { width:382.6px; }
+.checkout-left textarea#comments { width:455px; }
+.email-confirm-left textarea { width:215px; }
+.checkout-body .address-block input[name="attn"] { width:145px; }
+.special-instructions-div input.special-instructions-input { margin-left: 114px !important; }
+.return-comment-div textarea { width:307.583px; }
+.right-section table.full-width textarea { width: 237px; }
+.email-confirm-left textarea { width: 400px; }
+fieldset div.return-comment-div textarea { margin-top: 0px; }
+div#replacementItemBody ul.mil-desc-attribute-list
+{
+height:auto;	
+}
+
+div#home-image-rotation-nav-inner { display: table-cell; }
+div#catalog-image-rotation-nav-inner { display: table-cell; }
+div#home-image-rotation-nav div.img-navi-right { margin-top: -17px; } 
+div#catalog-image-rotation-nav div.img-navi-right { margin-top: -10px; }
+
+
+/* Begin Catalog UI review Changes */
+#catalog-header-breadcrumbs .searchButton { margin-top: 3px; }
+div.catalog-search-container input#search_searchTerm { margin-top:-14px; }
+
+div.narrowbyattributes  ul li { width:100%; }
+table#top-section { margin-top: 10px; }
+
+/* #fancybox-close {
+	background-image: url('fancybox.png');
+} */
+
+div.catalog-search-container input#search_searchTerm {
+	height:16px;
+}
+
+div#catalog-landing fieldset {
+	padding-top: 0px;
+}
+div#home-image-rotation-nav-inner {
+	width: 683px;
+	}
+.userprofile div#searchtable ul {
+	margin-left: 100px;
+	width: 160px;
+	margin-top: -18px;
+}
+
+#right-col-int {
+	position: absolute;
+	right: 0px;
+	top: 185px;
+}
+#requestform .grey-ui-btn{
+	width: 75px;
+	margin-top: -20px;
+	margin-left: 120px;
+	}
+/* fieldset.mil-col-mil-div legend {
+	margin-bottom: 10px;
+} */
+
+#right-col-int.cat-landing a img {
+	float: right;
+	padding-right:17px;
+}
+.ad-float {
+	padding-right: 60px;
+	}
+
+.catalog .success { 
+	float: right;
+}
+/* END Catalog UI review Changes */
+

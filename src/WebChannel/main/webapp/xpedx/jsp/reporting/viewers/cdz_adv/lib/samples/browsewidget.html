@@ -1,0 +1,37 @@
+<html>
+<head>
+<script language="javascript" src="../deployed/dom.js"></script>
+<script language="javascript">
+var skin=parent._skin?parent._skin:"skin_standard";
+var lang=parent._lang?parent._lang:"en";
+initDom("../deployed/images/"+skin+"/",lang)
+styleSheet()
+</script>
+<script language="javascript">
+function clickCB()
+{
+alert( btn1.getValue() )
+}
+function loadCB()
+{
+btn1.init()
+btn2.init()
+}
+btn1=newBrowseWidget("btn1","Browse",false,20)
+btn2=newButtonWidget("btn2","Show value",clickCB)
+</script>
+</head>
+<body onload="loadCB()">
+<table width="100%"><tr><td align="center" valign="middle">
+<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+<form name="browsForm" method="post" ENCTYPE="multipart/form-data">
+<script language="javascript">
+document.write(btn1.getHTML())
+document.write('<br><br>')
+document.write(btn2.getHTML())
+</script>
+</form>
+</div></div>
+</td></tr></table>
+</body>
+</html>

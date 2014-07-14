@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+    <Entities>
+        <Entity
+            ApiNeeded = "Y"
+            AuditRequired = "Y"
+            Description = "XPedx Rule Definition"
+            Prefix = "XPX"
+            TableName = "XPX_RULE_DEFN">
+            <!--table columns -->
+            <Attributes>
+                <Attribute
+                    ColumnName = "RULE_KEY"
+                    DataType = "Key"
+                    DefaultValue = " "
+                    Nullable = "false"
+                    XMLName = "RuleKey"/>
+                <Attribute
+                    ColumnName = "RULE_ID"
+                    DataType = "RuleType-50"
+                    DefaultValue = " "
+                    Nullable = "false"
+                    XMLName = "RuleID"/>
+                <Attribute
+                    ColumnName = "RULE_DESC"
+                    DataType = "CodeShortDescription"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "RuleDesc"/>
+                <Attribute
+                    ColumnName = "RULE_LONG_DESC"
+                    DataType = "LongDescription"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "RuleLongDesc"/>
+				<Attribute
+                    ColumnName = "RULE_GROUP"
+                    DataType = "Text-2"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "RuleGroup"/>
+				<Attribute
+                    ColumnName = "B2B_FLAG"
+                    DataType = "Text-1"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "B2BFlag"/>
+				<Attribute
+                    ColumnName = "INTERACTIVE_FLAG"
+                    DataType = "Text-1"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "InteractiveFlag"/>		
+                <Attribute
+                    ColumnName = "CREATETS"
+                    DataType = "TimeStamp"
+                    DefaultValue = "sysdate"
+                    Description = "Create TimeStamp"/>
+                <Attribute
+                    ColumnName = "MODIFYTS"
+                    DataType = "TimeStamp"
+                    DefaultValue = "sysdate"
+                    Description = "Modify TimeStamp"/>
+                <Attribute
+                    ColumnName = "CREATEUSERID"
+                    DataType = "UserId"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Creating User ID"/>
+                <Attribute
+                    ColumnName = "MODIFYUSERID"
+                    DataType = "UserId"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Modifying User ID"/>
+                <Attribute
+                    ColumnName = "CREATEPROGID"
+                    DataType = "ProgramID"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Creating Program ID"/>
+                <Attribute
+                    ColumnName = "MODIFYPROGID"
+                    DataType = "ProgramID"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Modifying Program ID"/>
+                <Attribute
+                    ColumnName = "LOCKID"
+                    DataType = "Lockid"
+                    DefaultValue = "0"
+                    Description = "Lock ID"/>
+            </Attributes>
+            <!--PrimaryKey is a mandatory attribute in entity definition. This
+            element can have ONLY ONE attribute element -->
+            <PrimaryKey Name = "XPX_RULE_DEFN_PK">
+                <Attribute ColumnName = "RULE_KEY"/>
+            </PrimaryKey>
+        </Entity>
+        <Entity
+            ApiNeeded = "Y"
+            AuditRequired = "Y"
+            Description = "XPedx Customer Rules Profile"
+            Prefix = "XPX"
+            TableName = "XPX_CUSTOMER_RULES_PROFILE">
+            <!--table columns -->
+            <Attributes>
+                <Attribute
+                    ColumnName = "CUSTOMER_RULES_PROFILE_KEY"
+                    DataType = "Key"
+                    DefaultValue = " "
+                    Nullable = "false"
+                    XMLName = "CustomerRuleProfileKey"/>
+                <Attribute
+                    ColumnName = "CUSTOMER_KEY"
+                    DataType = "Key"
+                    DefaultValue = " "
+                    Nullable = "false"
+                    XMLName = "CustomerKey"/>
+                <Attribute
+                    ColumnName = "RULE_KEY"
+                    DataType = "Key"
+                    DefaultValue = " "
+                    Nullable = "false"
+                    XMLName = "RuleKey"/>
+                <Attribute
+                    ColumnName = "CUSTOMER_ID"
+                    DataType = "CustomerId"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "CustomerID"/>
+                <Attribute
+                    ColumnName = "ORGANIZATION_CODE"
+                    DataType = "OrgCode"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "OrganizationCode"/>
+				<Attribute
+                    ColumnName = "PARAM1"
+                    DataType = "Parameter"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "Param1"/>
+				<Attribute
+                    ColumnName = "PARAM2"
+                    DataType = "Parameter"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "Param2"/>
+				<Attribute
+                    ColumnName = "PARAM3"
+                    DataType = "Parameter"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "Param3"/>
+					
+				<Attribute
+                    ColumnName = "INVOICE_EDI_FLAG"
+                    DataType = "Text-1"
+                    DefaultValue = " "
+                    Nullable = "true"
+                    XMLName = "InvoiceEdiFlag"/>	
+
+                <Attribute
+                    ColumnName = "CREATETS"
+                    DataType = "TimeStamp"
+                    DefaultValue = "sysdate"
+                    Description = "Create TimeStamp"/>
+                <Attribute
+                    ColumnName = "MODIFYTS"
+                    DataType = "TimeStamp"
+                    DefaultValue = "sysdate"
+                    Description = "Modify TimeStamp"/>
+                <Attribute
+                    ColumnName = "CREATEUSERID"
+                    DataType = "UserId"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Creating User ID"/>
+                <Attribute
+                    ColumnName = "MODIFYUSERID"
+                    DataType = "UserId"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Modifying User ID"/>
+                <Attribute
+                    ColumnName = "CREATEPROGID"
+                    DataType = "ProgramID"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Creating Program ID"/>
+                <Attribute
+                    ColumnName = "MODIFYPROGID"
+                    DataType = "ProgramID"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Modifying Program ID"/>
+                <Attribute
+                    ColumnName = "LOCKID"
+                    DataType = "Lockid"
+                    DefaultValue = "0"
+                    Description = "Lock ID"/>
+            </Attributes>
+            <!--PrimaryKey is a mandatory attribute in entity definition. This
+            element can have ONLY ONE attribute element -->
+            <PrimaryKey Name = "XPX_CUST_RULES_PK">
+                <Attribute ColumnName = "CUSTOMER_RULES_PROFILE_KEY"/>
+            </PrimaryKey>
+            <ForeignKeys>
+                <ForeignKey ParentTableName = "XPX_RULE_DEFN" XMLName = "XPXRuleDefn">
+                    <Attribute ColumnName = "RULE_KEY" ParentColumnName = "RULE_KEY"/>
+                </ForeignKey>
+            </ForeignKeys>
+            <!--Relationship -->
+            <Parent ParentTableName = "YFS_CUSTOMER">
+                <Attribute ColumnName = "CUSTOMER_KEY" ParentColumnName = "CUSTOMER_KEY"/>
+            </Parent>
+            <Indices>
+				<Index Name="XPX_CUST_PR_RL_I01" Unique="False">
+					<Column Name="CUSTOMER_KEY" />
+				</Index>				
+			</Indices>
+        </Entity>
+    </Entities>
+</DBSchema>

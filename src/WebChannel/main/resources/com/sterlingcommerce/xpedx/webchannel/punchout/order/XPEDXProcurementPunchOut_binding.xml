@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+  <comment>Binding entries for draft order delete action.</comment>
+  
+  <entry key="orderHeaderKey">draftOrderDelete:/Order/@OrderHeaderKey,getSourceOrderForAribaPunchOut:/Order/@OrderHeaderKey</entry>
+ 
+  <entry key="identity">XPEDXGetPunchOutOrderMessageCXML:/PunchOutOrder/HeaderInfo/@Identity</entry>
+  <entry key="toIdentity">XPEDXGetPunchOutOrderMessageCXML:/PunchOutOrder/HeaderInfo/@ToIdentity</entry>
+  <entry key="userAgent">XPEDXGetPunchOutOrderMessageCXML:/PunchOutOrder/HeaderInfo/@UserAgent</entry>
+  <entry key="buyerCookie">XPEDXGetPunchOutOrderMessageCXML:/PunchOutOrder/HeaderInfo/@BuyerCookie</entry>
+
+  <entry key="xsltVersion">XPEDXGetPunchOutOrderMessageCXML:/PunchOutOrder/HeaderInfo/@XSLTVer</entry>
+  <entry key="xsltFileName">XPEDXGetPunchOutOrderMessageCXML:/PunchOutOrder/HeaderInfo/@XSLTFileName</entry>
+
+</properties>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Org articles</comment>
+    <entry key="custArticleSearchName">XPEDXDivisionArticleList:/XPXArticle/ComplexQuery/Or/And/Exp[]/@Name</entry>
+    <entry key="custArticleSearchValue">XPEDXDivisionArticleList:/XPXArticle/ComplexQuery/Or/And/Exp[]/@Value</entry>
+    <entry key="startTodayDate">XPEDXDivisionArticleList:/XPXArticle/@StartDate</entry>
+    <entry key="endTodayDate">XPEDXDivisionArticleList:/XPXArticle/@EndDate</entry>
+</properties>

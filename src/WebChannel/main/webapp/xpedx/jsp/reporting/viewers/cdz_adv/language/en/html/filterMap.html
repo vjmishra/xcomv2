@@ -1,0 +1,749 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#structureToolbar{ position:absolute;top:0px;left:0px;overflow:hidden;}
+#filtersTree{ position:absolute;top:25px;left:0px;}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript">
+p = parent
+initDom("../../../lib/images/"+p._skinName+"/", p._lang)
+initTooltipWin(p)
+p.setKeyCB(this, false)
+_del_full_filter = 0
+_del_part_of_filter = 1
+_move_filter = 2
+_copy_filter = 3
+var s_filter = "Filter:"
+var s_section = "Section"
+var s_cell = "Cell:"
+var s_sectioncell = "Section Cell:"
+var s_noUniverseErrorMsg = "Unable to show query filters because the universe cannot be found."
+var s_combinedQueryMsg = "Cannot be displayed because there is one or more combined queries."
+var _labFil = p._labFil
+var _labOperand = p._labOperand
+var _labRankTop = p._labRankTop
+var _labRankBottom = p._labRankBottom
+var _labRankPercTop=p._labRankPercTop
+var _fromClickCB = false
+</script>
+<script language="javascript">styleSheet()</script>
+<script language="javascript">
+_queyIconID = 54;
+_keydateUsedLabel = "Keydate used:";
+_lastAvailableLabel = "Last available";
+function formatSerializedDate(s)
+{
+var dt=new Date();
+dt.setDate(1);
+var arr=s.split(',');
+dt.setYear(arr[2]);
+dt.setMonth(arr[0]-1);
+dt.setDate(arr[1]);
+return formatDate(dt, p._inputFormatDate);
+}
+        function loadCB()
+        {
+        if (_error) {
+        if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+p.advDisplayViewerErrorMsgDlg(_displayErrorMessage,"Document Structure and Filters");
+p.hideBlockWhileWaitWidget();
+        return
+        }
+updateSelectionObs = p.newObserverOneEvent(p._EVT_SELECTION_CHANGES, updateSelectionCB)
+updateReportChg = p.newObserverOneEvent(p._EVT_REP_SELECTED, updateReportChgCB)
+updateNodeAfterErr = p.newObserverOneEvent(p._EVT_RESTORE_AFTER_ERR, updateNodeAfterErrCB);
+isPageLoaded = true
+structureToolbar.init()
+filterTb.init()
+removeTb.init()
+formatTb.init()
+filterTb.setDisabled(true)
+formatTb.setDisabled(true)
+removeTb.setDisabled(true)
+filtersTree.init()
+dragNDropTooltip.init()
+p.initUserRight(filterTb,p._usrCreateEditReportFilter);
+p.initUserRight(formatTb,p._usrUseFormatting);
+p.repairToolbar(structureToolbar) 
+resizeCB()
+if (p.editFilterID != null) { 
+filtersTree.selectById(p.editFilterID)
+if (p.editFilterReload) {
+p.frameNav('DlgFrame', 'editFilterDialog.html')
+}
+} 
+p.hideBlockWhileWaitWidget();
+        }
+function updateSelectionCB(evt, fromViewerClick)
+{
+_fromViewerClick = (fromViewerClick)?true:false
+if (_fromViewerClick) 
+{
+filtersTree.unselect(); 
+var sels = p.getSelectedElts(), len = sels.length
+if ((len > 1) && !p.isMultiTableCellInSameTable(sels)) {
+disableButtons()
+_fromViewerClick = false
+return
+}
+var el = (len > 0) ? sels[0]:null
+if (el != null) {
+selBid = (el.className == "tableCell") ? el.parent.parent.parent.bid : ((el.className == "body") ? el.parent.bid : el.bid)
+selectFromBidAndReport(filtersTree, selBid, p.getSelectedReportIndex())
+}
+_fromClickCB = false
+p.editFilterID=null; 
+}
+}
+function selectFromBidAndReport(filtersTree, selBid, reportIdx)
+{
+var o=filtersTree,sub=o.sub,item=null
+if (!sub) return
+for (var i in sub)
+{
+item=sub[i].findByData(selBid)
+if (item) {
+if (findReportIndex(item) == reportIdx) {
+item.select()
+return
+}
+}
+selectFromBidAndReport(sub[i], selBid, reportIdx)
+}
+}
+function updateReportChgCB()
+{
+if (!p.fromTreeReportChange)
+{
+filtersTree.unselect(); 
+p.editFilterID = null; 
+_fromClickCB = false
+} else {
+_fromClickCB = true
+}
+}
+function updateNodeAfterErrCB()
+{
+p.editFilterID = p.iReportID;
+}
+function detachEvents()
+{
+if (window.updateSelectionObs) p.eventManager.detach(updateSelectionObs);
+if (window.updateReportChg) p.eventManager.detach(updateReportChg);
+if (window.updateNodeAfterErr) p.eventManager.detach(updateNodeAfterErr);
+}
+    function resizeCB()
+    {   
+if (isPageLoaded)
+{    
+filtersTree.move(0,25)
+filtersTree.resize( Math.max(0,winWidth()+(_moz?4:0)), Math.max(0,winHeight()- (25 + (_moz?-4:0))))
+}
+    }
+function disableButtons() {
+filterTb.setDisabled(true)
+formatTb.setDisabled(true)
+removeTb.setDisabled(true)
+}
+    function clickCB()
+    {      
+if(! _fromViewerClick ) 
+p.escapeFormatPainter() 
+p.fromTreeReportChange = false
+_bid = null
+_selectedID = null
+_hasFilter = false
+_selectedEltType = 0
+_isSectionCell = false
+_isABlock = false
+_isAReport = false
+_isAFilter = false
+_formatActionID = ""
+_rmActionID = ""
+p._tableBid=null
+initSelection() 
+disableButtons()
+formatTb.setDisabled(_bid != "0")
+formatTb.changeText((_bid == "0") ? "Properties":"Format")
+        if ((_bid == null) || (_bid == "0")){
+filterTb.changeTooltip("Query filters are not editable from here. Use the query panel to edit them.")
+removeTb.changeTooltip("Remove the selected element")
+formatTb.changeTooltip("Edit document properties")
+_formatActionID = "docProps"
+_fromViewerClick = false
+p.deselectAll(_bid)
+p.selectionChanged()
+return
+}               
+if (("" + _bid).substr(0,2) == "QF" || ("" + _bid).substr(0,2) == "dp") {
+_fromViewerClick = false
+return; 
+        }
+var selReportIndex = "" + getSelReportIndex()
+if ( (selReportIndex != -1) && (selReportIndex != p.getSelectedReportIndex()))
+{
+p.editFilterID = _selectedID
+p.fromTreeReportChange = true
+p.selectReport(selReportIndex)
+_fromViewerClick = false
+return 
+}
+initTypeParam(_selectedEltType)   
+if (_fromViewerClick) {
+_fromViewerClick = false
+return 
+}                                   
+if (_selectedEltType == _filterIconID)
+p.deselectAll()
+else
+p.deselectAll(_bid)   
+if ((_selectedEltType != 0) && (_selectedEltType !=_filterIconID)) 
+{ 
+var followBid=_bid
+if (_isABlock) 
+{            
+elt = p.findByBID(p.doc, _bid)
+p.selectSingle(_bid, true)
+if (p.formatPainter) 
+{
+p._tableBid = _bid
+}
+} 
+else if (_isAReport) 
+{ 
+elt = p.findByBID(p.doc, _bid)
+if (elt.children.length > 0)
+{
+p.selectSingle(elt.children[1].bid, true)
+followBid=elt.children[1].bid
+}
+} 
+else 
+{ 
+p.selectSingle(_bid, true)
+}
+p._curIdRef=null
+p._curIdRefBid=followBid
+elt = p.findByBID(p.doc, followBid)
+var cn=elt?elt.className:""
+if (!((cn=="pageHeader")||(cn=="pageFooter")||(cn=="body")))
+{
+var arrLayers=p.bidTable[followBid]
+if(arrLayers!=null) 
+p._curIdRef=arrLayers[0].getAttribute("idref")
+}
+}
+_fromClickCB = true
+_fromViewerClick = false
+p.selectionChanged()
+    }
+    function initSelection()
+    {
+_selectedItem = filtersTree.getSelectedItem()
+if (_selectedItem != null) {
+_selectedID = _selectedItem.id
+_bid = _selectedItem.userData 
+_hasFilter = hasFilter(_selectedID, _bid)
+_selectedEltType = _selectedItem.iconId
+}
+    }
+    function initTypeParam(typeElt) {
+switch (typeElt){
+case _reportIconID :
+var _onlyOneReportLeft = (p.arrReports.length==1)
+filterTb.setDisabled(false)
+removeTb.setDisabled(_onlyOneReportLeft) 
+formatTb.setDisabled(false)
+filterTb.changeTooltip("Edit the report filters")
+removeTb.changeTooltip("Remove the selected report")
+formatTb.changeTooltip("Edit the report format settings")          
+_isAReport = true
+_rmActionID = _onlyOneReportLeft?"":"tabsZone_delete"
+_formatActionID = "cellFormatReport"
+return;
+case _sectionIconID :
+removeTb.setDisabled(false)
+filterTb.setDisabled(false)
+formatTb.setDisabled(false)
+removeTb.changeTooltip("Remove the selected section")
+formatTb.changeTooltip("Edit the section format settings")
+filterTb.changeTooltip("Edit the section filters")  
+    _rmActionID = "removeSect"
+    _formatActionID = "cellFormatSection"
+    return;
+case _filterIconID : 
+removeTb.setDisabled(!p.isEnableUserRight(p._usrCreateEditReportFilter))
+filterTb.setDisabled(false)
+removeTb.changeTooltip("Remove the selected filter")
+formatTb.changeTooltip("Edit the selected element format settings")
+filterTb.changeTooltip("Edit the selected filter") 
+_currentFilter = _selectedItem.obj
+var blockFlt = getBlockFilter(_bid) 
+var fcn=''
+switch (blockFlt.par.iconId) {
+case _reportIconID :
+fcn='report'
+break;
+case _sectionIconID :
+fcn='section'
+break;
+case _cellIconID : 
+break;
+case _bodyIconID :
+fcn='report'
+break;
+case _headerIconID :
+case _footerIconID :
+break;
+case 7 : 
+case 8 :
+case 9 :
+case 10 :
+default : 
+fcn='block'
+}
+_currentFilter.fcn=fcn
+_processReportElementFile = "processFilterMap" + p._appExt
+_isAFilter = true
+return;
+case _cellIconID : 
+removeTb.setDisabled(false)
+formatTb.setDisabled(false)
+_isSectionCell = (_selectedItem.isSectCell)?true:false 
+filterTb.setDisabled(!_isSectionCell)
+removeTb.changeTooltip("Remove the selected free-standing cell")
+formatTb.changeTooltip("Edit the cell format settings")
+filterTb.changeTooltip(_isSectionCell ? "Edit the section filters" : "Edit the selected element filters") 
+_rmActionID = "removeCell"
+_formatActionID = "cellFormatCell"
+return;
+case _bodyIconID :
+filterTb.setDisabled(false)
+removeTb.changeTooltip("Remove the selected report")
+filterTb.changeTooltip("Edit the report filters")
+formatTb.setDisabled(false)
+formatTb.changeTooltip("Edit the report format settings") 
+_formatActionID = "cellFormatReport" 
+return;
+case _headerIconID :
+case _footerIconID :
+removeTb.changeTooltip("Remove the selected element")
+filterTb.changeTooltip("Edit the selected element filters")
+formatTb.changeTooltip("Edit the selected element format settings") 
+return;
+case 7 : 
+case 8 :
+case 9 :
+case 10 :
+removeTb.setDisabled(false)
+filterTb.setDisabled(false)
+formatTb.setDisabled(false)
+removeTb.changeTooltip("Remove the selected table")
+formatTb.changeTooltip("Edit the table format settings")
+filterTb.changeTooltip("Edit the table filters")
+_isABlock = true
+_rmActionID = "removeBut" 
+_formatActionID = "cellFormatTable"
+    return;
+default : 
+removeTb.setDisabled(false)
+filterTb.setDisabled(false)
+formatTb.setDisabled(false)
+removeTb.changeTooltip("Remove the selected chart")
+formatTb.changeTooltip("Edit the chart format settings")
+filterTb.changeTooltip("Edit the chart filters")
+    _rmActionID = "removeBlock"
+    _formatActionID = "cellFormatChart"
+    return;    
+}
+}
+function dclickCB(data){
+if (isNaN(data)) {
+data=""+data;
+if (startsWithIgnoreCase(data,"dp"))
+return;
+}
+p.escapeFormatPainter()
+if (_isAFilter) {
+if (p.isEnableUserRight(p._usrCreateEditReportFilter)) {
+editFilterBtCB()
+}
+} else {
+formatEltBtCB()
+}
+    }
+    function deleteCB(data) {
+removeEltBtCB()              
+    }
+function filterBtCB() {
+initSelection()
+if (_isAFilter) {
+editFilterBtCB()
+} else {
+createFilterBtCB()
+}   
+    }        
+function removeEltBtCB() {
+p.escapeFormatPainter()
+if (_isAFilter) {
+rmFilterBtCB()
+} else {
+if (_rmActionID != "")
+{
+p.setClickCBID(_rmActionID)
+p.wt()
+p.clickCB()
+}
+}   
+    }
+function createFilterBtCB()
+{
+p.wt()
+p.frameNav('DlgFrame', 'editFilterDialog.html')
+}
+    function editFilterBtCB()
+    {
+p.escapeFormatPainter()
+var url = ""
+if (!_isSectionCell) {
+url = (!_hasFilter || _isBlockFilter) ? 'editFilterDialog.html':'partialFilterDialog.html'
+} else {
+url = 'partialFilterDialog.html?viewer'
+}
+p.wt()
+        p.frameNav('DlgFrame', p._root+"language/"+_lang+"/html/"+url)
+    }
+    function rmFilterBtCB()
+    {        
+        p.showPromptDialog("Are you sure you want to delete this filter?" , "Web Intelligence", parent._promptDlgWarning, doRmFilter)
+    }
+function doRmFilter()
+{
+var command = _isBlockFilter ? _del_full_filter : _del_part_of_filter
+var filterObj = null
+if (command == _del_part_of_filter)
+{
+_currentFilter.remove() 
+blockFilter = getBlockFilter(_bid) 
+if (_currentFilter.idx > 1) 
+{
+filterObj = blockFilter.obj
+} else {
+p.editFilterID = null
+command = _del_full_filter
+}
+}
+doProcess(command, _bid, filterObj)  
+}
+function formatEltBtCB()
+{
+if (_formatActionID != "")
+{
+p.setClickCBID(_formatActionID) 
+p.clickCB()
+}
+}
+    function getBlockFilter(filterID)
+    {
+len = _TreeWidgetElemInstances.length
+for (var i = 0; i < len; i++)
+{
+elem = _TreeWidgetElemInstances[i]
+if ((elem.userData == filterID) && (elem.par) && (elem.iconId == _filterIconID))
+{
+return elem
+}
+}
+return null
+    }
+    function hasFilter(nodeID, bid)
+    {
+_currentFilter = null 
+_isBlockFilter = false 
+len = _TreeWidgetElemInstances.length
+for (var i = parseInt(nodeID); i < len; i++)
+{
+elem = _TreeWidgetElemInstances[i]
+if (isAFilter(elem, bid))
+{
+_isBlockFilter = (_selectedItem.par)?true:false
+_currentFilter = elem.obj
+return true
+}
+}
+return false
+    }
+    function isAFilter(elem, bid)
+    {
+if ((elem != null) && (elem.userData == bid) && (elem.iconId == _filterIconID))
+{
+return true
+} else {
+return false
+}
+    }        
+function dragCB(source) {
+setTooltipOffset(p.leftPaneX+1,p.leftPaneY+28)
+initSelection()
+srcBid =_bid
+}
+function acceptDropCB(src,target,ctrl,shift,layer)
+{
+if ( !p.isEnableUserRight(p._usrCreateEditReportFilter) )
+return false
+var bAcceptDropCB = false
+if ((_selectedItem != null) && _selectedItem.obj) 
+{
+bAcceptDropCB = !(_selectedItem.obj.par) 
+}
+if (bAcceptDropCB && src && layer.domEltID) 
+{
+target.dropWidget = _TreeWidgetElemInstances[layer.domEltID]
+target.dropWidget.layer = layer
+var userData = "" + target.dropWidget.userData
+var iconId = target.dropWidget.iconId
+if ((userData.substr(0,2) != "QF") && (userData != srcBid) && (srcBid.substr(0,2) != "QF") && (iconId != _cellIconID) && (iconId != _documentIconID) && (iconId != _headerIconID) && (iconId != _bodyIconID) && (iconId != _footerIconID)) {
+bAcceptDropCB = true
+} else {
+bAcceptDropCB = false
+}
+} else {
+bAcceptDropCB = false
+}
+if (window.oldLayer && window.oldLayerFeedbackDDClass && (window.oldLayer.domEltID != layer.domEltID) &&(oldLayer.className == oldLayerFeedbackDDClass)) {
+oldLayer.className = oldLayerClassName
+}
+if (bAcceptDropCB) {
+if (layer.className != target.dropWidget.feedbackDDClass) {
+oldLayer = layer
+oldLayerClassName = layer.className
+layer.className = target.dropWidget.feedbackDDClass
+oldLayerFeedbackDDClass = target.dropWidget.feedbackDDClass
+}
+} 
+return bAcceptDropCB
+}
+function dropCB(source,target,ctrl,shift)
+{
+var dropWidget = target.dropWidget
+if (!dropWidget) return 
+var bid = dropWidget.userData
+var targetReportIndex = findReportIndex(dropWidget)
+doProcess( ctrl ?_copy_filter:_move_filter, bid, null, srcBid, targetReportIndex)
+target.dropWidget = null
+}
+function getBlockSubType(subType)
+{
+var subTypeString = new Array( "", "", "", "", "", "", "","Horizontal Table", "Vertical Table", "Crosstab", "Form", "Vertical Grouped", "Horizontal Grouped", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Bar", "Vertical \nBar & Line", "Horizontal \nBar & Line", "Vertical Mixed","Horizontal Mixed", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Line Chart", "3D Surface", "Vertical Absolute", "Horizontal Absolute", "Vertical Stacked", "Horizontal Stacked", "Vertical Percent", "Horizontal Percent", "3D Area", "3D Volume", "Pie", "Doughnut", "3D Pie", "3D Doughnut", "Radar Line", "Radar Stacked Area", "Polar", "Scatter");
+return subTypeString[subType];
+}
+function updateCurrentFilter() 
+{
+p.editFilterID = _selectedID
+blockFilter = getBlockFilter(_bid)
+doProcess(_del_part_of_filter, _bid, blockFilter.obj) 
+}
+function doProcess(command, bid, filterObj, srcBid, targetReportIndex)
+{
+p.updateParentIdRefBidForFilter(bid);
+_processReportElementFile = "processFilterMap" + p._appExt
+var f = self.document.processForm
+f.command.value = command
+f.filter.value = (filterObj)? encodeFilters(filterObj) : ""
+var url = p._root + _processReportElementFile
+var selRepIdx = getSelReportIndex()
+url += p.urlParamsNoBID(null,null, (selRepIdx != -1)?selRepIdx:targetReportIndex ) 
+url += "&sBid=" + bid
+if (srcBid && srcBid != "")
+url +=  "&srcBid=" + srcBid + "&targetReportIndex=" + targetReportIndex 
+f.action = url
+f.submit()
+}
+function getFilter()
+{
+return _currentFilter
+}
+function findReportID(elem)
+{
+var reportID = null;
+if(elem.className)
+if(elem.className=="report" )
+return elem.bid
+else
+return findReportID(elem.parent)
+else
+return null; 
+}
+function findReportfromID(bid)
+{
+var reports = p.doc.children 
+for (var i in reports)
+{
+var repBID=reports[i].bid
+if(bid == repBID )
+return i;
+}
+return null;
+}
+function findReportIndex(w)
+{
+if (w.reportIndex!=null)
+return w.reportIndex
+if ((w.obj!=null)&&(w.obj.reportIndex!=null))
+return w.obj.reportIndex
+if (w.par==null)
+return -1
+else
+return findReportIndex(w.par)
+}
+function getSelReportIndex()
+{
+var item = filtersTree.getSelectedItem()
+if (item)
+return findReportIndex(item)
+else
+return -1
+}
+function showContextMenu(id, ev)
+{
+p.escapeFormatPainter()
+var pos = getPos(p.lPaneWidget.layer), m
+e = _ie?_curWin.event:ev
+x=absxpos(e)+pos.x
+y=absypos(e)+pos.y
+initSelection()
+_isAFilter = isAFilter(_selectedItem, _bid)
+var elt= p.findByBID(doc,_bid), cn=elt?elt.className:""
+if (cn != "")
+{
+if (_isAFilter) {
+p.deselectAll()
+}
+else
+{
+p.deselectAll(_bid)
+p.selectSingle(_bid)
+}
+p._singleSel = elt
+if (_isAFilter) {
+m= p.isEnableUserRight(p._usrCreateEditReportFilter) ? filterContextMenu : null
+} else if (cn=="section") {
+m=p.sectContextMenu
+} else if (cn=="tableCell") {
+m=p.cellContextMenu
+} else if (cn=="reportCell") {
+if (elt.isSect) {
+m=p.reportSectCellContextMenu
+} else {
+m=p.freeCellContextMenu
+}
+} else if (cn=="cell") {
+m=p.freeCellContextMenu
+} else if (cn=="block") {
+m=p.blockContextMenu
+} else {
+m=p.reportContextMenu
+}
+if (m != null) {
+m.show(true,x,y)
+}
+}
+e.cancelBubble=true
+}
+filterContextMenu=m=p.newMenu("filterContextMenu",initFilterContextMenu)
+m.add("edit","Edit Filter", null, null, editFilterBtCB)
+m.add("removeFilter","Remove Filter","formula",1, rmFilterBtCB)
+function initFilterContextMenu()
+{
+var o=this
+p.repairMenu(o)
+}
+function addIcn(a,b,c,d,e)
+{
+return structureToolbar.add(newIconWidget(a,(b!=null)?_img+curIcon:null,e,c,d,16,16,b?b*16:0,0,b?b*16:0,16))
+}
+function sp()
+{
+return structureToolbar.add()
+}
+</script>  
+      <script language="javascript">
+        isPageLoaded=false  
+        var doc = p.doc
+_selectedID = -1
+_bid = 0
+_currentFilter = null 
+_fromViewerClick = false
+structureToolbar = newPaletteWidget("structureToolbar")
+curIcon="standard.gif"
+_img = '../../../images/main/'
+filterTb = addIcn("filterTb",13,"Filter","", editFilterBtCB)
+sp()
+removeTb = addIcn("removeTb",6,"Remove","", removeEltBtCB)
+sp()
+formatTb = addIcn("formatTb",9,"Format","", formatEltBtCB)
+filtersTree = newTreeWidget("filtersTree", 300, 400,  _img + "typeIcons.gif", clickCB, dclickCB, "dialogzone", null, null, deleteCB) 
+dragNDropTooltip = newTooltipWidget()
+filtersTree.setDragDrop(dragCB, acceptDropCB, dropCB)
+if (p.isEnableUserRight(p._usrShowRightClickMenu)) {
+filtersTree.setRightClickMenuCB(showContextMenu)
+}
+var url =  p._root + "incFilter" + p._appExt
+url += p.urlParams(false, true) 
+      </script>
+        <script language="javascript"> includeScript(url) </script>
+<script language="javascript">
+_error=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+function writeMyBody()
+{
+if (_error) return
+if (window.incFilterOK) {
+var s = new Array()
+var i=0
+s[i++] = dragNDropTooltip.getHTML()
+s[i++] = structureToolbar.getHTML()
+s[i++] = '<div class=treeZone style="height:' + (_ie?1:0) + 'px;overflow:hidden;position:absolute;top:24px;left:0px;width:100%;border-top-width:0px;border-left-width:0px;border-right-width:0px;"></div>'   
+s[i++] = filtersTree.getHTML()
+document.write(s.join(""))
+}
+}
+function lPaneContextMenu()
+{
+return false;
+}
+</script>  
+</head>
+<body class="dialogzone" style="overflow:hidden;" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" onLoad="loadCB()"  onUnload="detachEvents()" onresize="resizeCB()" oncontextmenu="return lPaneContextMenu();">
+<script language="javascript">writeMyBody()</script>
+<!-- Hidden form -->
+<form target="printWindow" style="display:none" name="submitForm" method="post" action="">
+<input type="hidden" name="title" id="title" value="">
+<input type="hidden" name="textToPrint" id="textToPrint" value="">
+</form>
+<form target="Report" style="display:none" name="processForm" method="post" action="">
+<input type="hidden" name="command" id="command" value="">
+<input type="hidden" name="filter" id="filter" value="">
+</form>
+</body>
+</html>

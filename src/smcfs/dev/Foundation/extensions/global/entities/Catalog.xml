@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+    
+      <Entity TableName="YFS_CATEGORY" >
+        <Attributes>
+        <Attribute ColumnName="EXTN_ONTOLOGY" 
+          DataType="CatalogId"
+          DefaultValue="' '" 
+          Description="Ontology associated with category "  
+          Nullable="false" 
+          XMLName="ExtnOntology"
+          XMLGroup="Extn" 
+          SqlServerDataType=""/>		  
+        </Attributes>		
+      </Entity>
+	 <!-- <Entity TableName="YFS_ITEM" >
+        <Attributes>
+        <Attribute ColumnName="EXTN_MPC" 
+          DataType="ItemID"
+          DefaultValue="' '" 
+          Description="Master Product Code"  
+          Nullable="false" 
+          XMLName="ExtnMpc"
+          XMLGroup="Extn" 
+          SqlServerDataType=""/>		  
+
+		<Attribute ColumnName="EXTN_SIZE"
+          DataType="Text-20"
+          DefaultValue="' '" 
+          Description="Size"  
+          Nullable="false" 
+          XMLName="ExtnSize"
+          XMLGroup="Extn" 
+          SqlServerDataType=""/>		  
+
+		<Attribute ColumnName="EXTN_COLOR" 
+          DataType="Text-20"
+          DefaultValue="' '" 
+          Description="Color"  
+          Nullable="false" 
+          XMLName="ExtnColor"
+          XMLGroup="Extn" 
+          SqlServerDataType=""/>		  
+
+		<Attribute ColumnName="EXTN_BASIS" 
+          DataType="Text-20"
+          DefaultValue="' '" 
+          Description="Basis"  
+          Nullable="false" 
+          XMLName="ExtnBasis"
+          XMLGroup="Extn" 
+          SqlServerDataType=""/>		  
+
+		<Attribute ColumnName="EXTN_MWT"
+          DataType="Text-20"
+          DefaultValue="' '" 
+          Description="M Weight"  
+          Nullable="false" 
+          XMLName="ExtnMwt"
+          XMLGroup="Extn" 
+          SqlServerDataType=""/>		  
+        </Attributes>
+      </Entity>-->
+
+    </Entities>
+</DBSchema>

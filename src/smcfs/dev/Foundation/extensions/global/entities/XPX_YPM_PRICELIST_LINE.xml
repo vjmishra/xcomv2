@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+    
+      <Entity TableName="YPM_PRICELIST_LINE" AuditRequired="N">
+        <Attributes>
+        <Attribute ColumnName="EXTN_PRICING_UOM" DataType="Text-20" DefaultValue="' '" Description="Indicates the environment from the Customer Profile" Nullable="true" Size="" XMLName="ExtnPricingUom" XMLGroup="Extn" />
+	  <Attribute ColumnName="EXTN_TIER_UOM" DataType="Text-20" DefaultValue="' '" Description="Indicated Company Code " Nullable="true" Size="" 
+          XMLName="ExtnTierUom" XMLGroup="Extn" />
+       <Attribute ColumnName="EXTN_MASTER_PRODUCT_CODE" DataType="Text-20" DefaultValue="' '" Description="Indicates the MPC" Nullable="true" Size="" XMLName="ExtnMasterProductCode" XMLGroup="Extn" />
+		<Attribute ColumnName="EXTN_STOCK_INDICATOR" DataType="Text-20" DefaultValue="' '" Description="Mill Item/Stocked Item" Nullable="true" Size="" XMLName="ExtnStockIndicator" XMLGroup="Extn" />   
+        
+      </Attributes>	
+      
+      <Indices>
+            <Index Name="EXTN_PL_LINE_I1" Unique="False">
+               <Column Name="MODIFYTS"/>
+            </Index>
+      </Indices>
+      	
+      </Entity>
+</Entities>
+</DBSchema> 

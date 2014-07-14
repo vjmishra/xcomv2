@@ -1,0 +1,1006 @@
+<mashups>
+<!--Start of JIRA 3487 changes -->
+<mashup id='SetSecretQuestion' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+    <CustomerContactList>
+        <CustomerContact CustomerContactID="">
+            <User Loginid="">               
+                <AuthAnswerList Reset="Y">
+                    <AuthAnswer Answer="" AuthQuestionKey=""/>
+                </AuthAnswerList>
+            </User>
+</CustomerContact>
+</CustomerContactList>
+</Customer>
+</Input>
+		</API>
+	</mashup>
+	<!--End of JIRA 3487 changes -->
+	<mashup id='ManageXpedxUser' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact Company="" CustomerContactID=""
+							DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+							EveningPhone="" FirstName="" JobTitle="" LastName=""
+							MobilePhone="" ApproverProxyUserId="" ApproverUserId="" 
+							SpendingLimit="" SpendingLimitCurrency="">
+							<User Activateflag="" EnterpriseCode=""
+								DisplayUserID="" GeneratePassword="Y" OrganizationKey=""
+								Username="" Localecode="" SessionTimeout="0">
+								<ContactPersonInfo EveningPhone=""
+									FirstName="" JobTitle="" Department="" DayFaxNo="" DayPhone=""
+									LastName="" EMailID="" Title="" />
+								<UserGroupLists Reset="Y">
+									<UserGroupList UsergroupKey="" />
+								</UserGroupLists>
+							</User>
+							<Extn ExtnEstimator="" ExtnPunchOutUser=""
+								ExtnStockCheckWS="" ExtnViewInvoices="" ExtnUserNetworkID=""
+								ExtnEmployeeID="" ExtnMaxOrderAmount="" ExtnMinOrderAmount=""
+								ExtnAddnlEmailAddrs="" ExtnPOList="" ExtnOrderEmailFormat=""
+								ExtnPrefCatalog="" ExtnDefaultShipTo="" ExtnPaper101Grade=""  ExtnOrderApprovalFlag=""
+								ExtnB2BCatalogView="" ExtnViewReportsFlag="" ExtnViewPricesFlag="" ExtnOrderConfEmailFlag=""/>
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress CustomerAdditionalAddressID="">
+									<PersonInfo AddressID="" AddressLine1="" AddressLine2="" AddressLine3="" 
+									City="" Country="" DayFaxNo="" DayPhone="" 
+									IsCommercialAddress="" PersonInfoKey="" 
+									State="" ZipCode="" /> 
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact Company="" CustomerContactID=""
+							DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+							EveningPhone="" FirstName="" JobTitle="" LastName=""
+							MobilePhone="" UserID=""  ApproverProxyUserId="" ApproverUserId="" 
+							SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+							<User Activateflag="" Loginid=""
+								EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+								Localecode="" Username="">
+								<ContactPersonInfo EveningPhone=""
+									FirstName="" Department="" DayFaxNo="" DayPhone="" JobTitle=""
+									LastName="" EMailID="" Title="" />
+								<UserGroupLists>
+									<UserGroupList UserGroupKey="">
+									</UserGroupList>
+								</UserGroupLists>
+							</User>
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									AddressType="" CustomerAdditionalAddressID="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnEstimator="" ExtnPunchOutUser=""
+								ExtnStockCheckWS="" ExtnViewInvoices=""  ExtnB2BCatalogView="" ExtnOrderApprovalFlag=""/>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='ManagePasswordUpdate' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+			    <CustomerContactList>
+			        <CustomerContact CustomerContactID="">
+			           <User EnterpriseCode="" DisplayUserID="" Localecode=""
+							 GeneratePassword="Y" OrganizationKey="" SessionTimeout="0">
+						</User>
+			         </CustomerContact>
+			    </CustomerContactList>
+			</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='getXpedxCustomerContactDetails' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Buyer User General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="">
+					<Customer CustomerID="" CallingOrganizationCode="" />
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="">
+							<ContactPersonInfo EveningPhone=""
+								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
+								EMailID="" Title="" />
+							<UserGroupLists BuyerApprover="">
+								<UserGroupList UsergroupKey="" BuyerApprover="">
+								</UserGroupList>
+							</UserGroupLists>
+							<AuthQuestionList>
+								<AuthQuestion AuthQuestionKey=""
+									QuestionText="" />
+							</AuthQuestionList>
+						</User>
+						<CustomerAdditionalAddressList>
+							<CustomerAdditionalAddress
+								CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+								IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+								IsDefaultSoldTo="">
+								<PersonInfo IsCommercialAddress=""
+									TaxGeoCode="" IsAddressVerified="" AddressID="" AddressLine1=""
+									AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
+									AddressLine6="" AlternateEmailID="" Beeper="" Company=""
+									DayFaxNo="" DayPhone="" Department="" ErrorTxt=""
+									EveningFaxNo="" EveningPhone="" HttpUrl="" JobTitle=""
+									Latitude="" Longitude="" MiddleName="" MobilePhone=""
+									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
+									VerificationStatus="" City="" Country="" FirstName=""
+									LastName="" PersonID="" State="" Title="" ZipCode=""
+									EMailID="" />
+							</CustomerAdditionalAddress>
+						</CustomerAdditionalAddressList>
+						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""
+							AggregateStatus="" OrganizationCode="">
+							<BuyerOrganization OrganizationCode=""
+								OrganizationName="" />
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+									IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+									IsDefaultSoldTo="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnMyItemsLink="" ExtnUseCustSKU="" ExtnUseOrderMulUOMFlag=""/>
+						</Customer>
+						<Extn/>
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='getXpedxCustomerContactDetailsList' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Buyer User General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="">
+					<Customer CustomerID="" CallingOrganizationCode="" />
+					<ComplexQuery>
+						<Or>
+						</Or>
+					</ComplexQuery>
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						FirstName="" LastName="" EmailID=""
+						 UserID="" ApproverProxyUserId="" ApproverUserId="">
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='getXpedxCustomerContactDetailsNew' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Buyer User General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="">
+					<Customer CustomerID="" CallingOrganizationCode="" />
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="" CustomerKey="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="" Modifyuserid="" Modifyts="" Createts="">
+							<ContactPersonInfo EveningPhone=""
+								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
+								EMailID="" Title="" />
+							<UserGroupLists BuyerApprover="">
+								<UserGroupList UsergroupKey="" BuyerApprover="">
+								</UserGroupList>
+							</UserGroupLists>
+							<AuthQuestionList>
+								<AuthQuestion AuthQuestionKey=""
+									QuestionText="" />
+							</AuthQuestionList>
+						</User>
+						<CustomerAdditionalAddressList>
+							<CustomerAdditionalAddress
+								CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+								IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+								IsDefaultSoldTo="">
+								<PersonInfo IsCommercialAddress=""
+									TaxGeoCode="" IsAddressVerified="" AddressID="" AddressLine1=""
+									AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
+									AddressLine6="" AlternateEmailID="" Beeper="" Company=""
+									DayFaxNo="" DayPhone="" Department="" ErrorTxt=""
+									EveningFaxNo="" EveningPhone="" HttpUrl="" JobTitle=""
+									Latitude="" Longitude="" MiddleName="" MobilePhone=""
+									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
+									VerificationStatus="" City="" Country="" FirstName=""
+									LastName="" PersonID="" State="" Title="" ZipCode=""
+									EMailID="" Modifyuserid="" Modifyts="" />
+							</CustomerAdditionalAddress>
+						</CustomerAdditionalAddressList>
+						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""
+							AggregateStatus="" OrganizationCode="">
+							<BuyerOrganization OrganizationCode=""
+								OrganizationName="" />
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+									IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+									IsDefaultSoldTo="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnMyItemsLink="" ExtnUseCustSKU=""/>
+						</Customer>
+						<Extn>
+						<XPXQuickLinkList>
+							<XPXQuickLink Createprogid="" Createts=""
+								Createuserid="" CustomerContactKey="" Lockid="" Modifyprogid=""
+								Modifyts="" Modifyuserid="" QuickLinkName="" QuickLinkUrl=""
+								URLOrder="" UserKey="" ShowQuickLink="">
+							</XPXQuickLink>
+						</XPXQuickLinkList>
+						</Extn>
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='ManageXpedxContact' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact Company="" CustomerContactID=""
+							DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+							EveningPhone="" FirstName="" JobTitle="" LastName=""
+							MobilePhone="" ApproverProxyUserId="" ApproverUserId="" 
+							SpendingLimit="" SpendingLimitCurrency="">
+							<Extn ExtnEstimator="" ExtnPunchOutUser="" ExtnAddnlEmailAddrs=""
+								ExtnStockCheckWS="" ExtnViewInvoices="" 
+								ExtnViewPricesFlag="" ExtnViewReportsFlag=""
+								ExtnInvoiceEMailID="" ExtnOrderConfEmailFlag="" ExtnOrderCancelEmailFlag=""
+								ExtnOrderShipEmailFlag="" ExtnBackOrderEmailFlag="" ExtnOrderApprovalFlag=""
+								ExtnB2BCatalogView=""/>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact Company="" CustomerContactID=""
+							DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+							EveningPhone="" FirstName="" JobTitle="" LastName=""
+							MobilePhone="" UserID="" ApproverProxyUserId="" ApproverUserId="" 
+							SpendingLimit="" SpendingLimitCurrency="">
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									AddressType="" CustomerAdditionalAddressID="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnEstimator="" ExtnPunchOutUser="" ExtnAddnlEmailAddrs=""
+								ExtnStockCheckWS="" ExtnViewInvoices="" ExtnB2BCatalogView="" ExtnAcceptTAndCFlag=""/>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	<!--
+	<mashup id='ManageXpedxContactEmailAddrs' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact CustomerContactID="">
+							<Extn ExtnAddnlEmailAddrs="" ExtnPOList=""/>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact CustomerContactID=""/>
+					</CustomerContactList>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	-->
+	<mashup id='xpedxGetCustomerUsers' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact>
+					<Customer CallingOrganizationCode="" CustomerID=""
+						CustomerType="01">
+					</Customer>
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContact Company="" CustomerContactID=""
+					DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+					EveningPhone="" FirstName="" LastName="" MiddleName=""
+					MobilePhone="" Status="" Title="" UserID=""/>
+			</Template>
+		</API>
+	</mashup>
+
+	<!-- STARTS - Customer-User Profile Changes - adsouza -->
+
+	<mashup id='xpedx-PreferredCatalogOptions' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG'
+		description="Get list of top Categories">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="1">
+					<Item>
+      					<CustomerInformation CustomerID=""/>
+    				</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CategoryDepth="">
+					<CategoryList>
+						<Category CategoryID="" Description=""
+							ShortDescription="" CategoryPath="">
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	<!-- ENDS - Customer-User Profile Changes - adsouza -->
+
+	<!-- STARTS - To get the user preferred category Assets-->
+
+	<mashup id='XPEDX-GetUserPreferredCategory' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Get the customer contact">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="" />
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact CustomerContactID="">
+						<Extn ExtnPrefCatalog="" />
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='XPEDX-GetUserList' transactional='true'
+		mashuptype='XAPI' endpoint='USER'
+		description="Get the user name">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getUserList">
+			<Input>
+				<User>
+					<Extn ExtnEmployeeId="" ExtnUserType="INTERNAL"/>	
+				</User>
+			</Input>
+			<Template>
+				<User Username=""/>										
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='XPEDX-getPrefCategoryPath' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG'
+		description="Get the Category List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCategoryList">
+			<Input>
+				<Category CategoryID="" />
+			</Input>
+			<Template>
+				<CategoryList>
+					<Category CategoryID="" CategoryPath=""
+						OrganizationCode="">
+					</Category>
+				</CategoryList>
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='XPEDX-getPrefCategoryAssets' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG'
+		description="Get the Category Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCategoryDetails">
+			<Input>
+				<Category CategoryPath="" OrganizationCode="" />
+			</Input>
+			<Template>
+				<Category CategoryID="" CategoryPath=""
+					OrganizationCode="" Description="" ShortDescription="">
+					<AssetList>
+						<Asset AssetID="" ContentID=""
+							ContentLocation="" Description="" Label="" Type="" />
+					</AssetList>
+				</Category>
+			</Template>
+		</API>
+	</mashup>
+	<!-- ENDS - To get the user preferred category Assets -->
+	<!-- Start Email new User info to CSR -->
+	<mashup id='xpedxGetCustomCommonCodesForCSREmailIDs'
+		transactional='true' mashuptype='XAPI' endpoint='CATALOG'
+		description="Getting all the CSR Email ID's from common codes">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCommonCodeList">
+			<Input>
+				<CommonCode CodeValue="" CodeType="CSREmailIDs" />
+			</Input>
+			<Template>
+				<CommonCodeList>
+					<CommonCode CodeValue="" CodeShortDescription="" />
+				</CommonCodeList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='XPEDXSendNewUserInfoToCSR' transactional='true'
+		mashuptype='XAPI' endpoint=''
+		description="Send the new user information to CSR">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="sendMail">
+			<Input>
+				<SendMail>
+					<MessageHeader FromAddress="" MailHost=""
+						MailPort="" MailProtocol="" SubjectText="" TemplateFile="">
+						<ToAddresses>
+							<ToAddress EmailID="" />
+						</ToAddresses>
+						<CCAddresses>
+							<CCAddress EmailID="" />
+						</CCAddresses>
+						<BCCAddresses>
+							<BCCAddress EmailID="" />
+						</BCCAddresses>
+					</MessageHeader>
+					<MessageDetail>
+						<NewUser FirstName="" LastName="" EmailID="" Phone=""
+							CompanyName="" Address1="" Address2="" City="" State="" ZipCode="" Comments="" ImageUrl="" Brand=""/>
+					</MessageDetail>
+				</SendMail>
+			</Input>
+		</API>
+	</mashup>
+	<mashup id='xpedxGetCustomCommonCodesForQuickLinks' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Getting all the CSR Email ID's from common codes">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCommonCodeList">
+			<Input>
+				<CommonCode CallingOrganizationCode="" CodeValue="" CodeType="" />
+			</Input>
+			<Template>
+				<CommonCodeList>
+					<CommonCode CodeValue="" CodeShortDescription="" />
+				</CommonCodeList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='getCustomerQuickLink' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="get quick links for logged in customer">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID=""> 
+					<Customer CustomerID="" OrganizationCode=""/>				
+				</CustomerContact>
+			</Input>
+	        <Template>
+	        	<CustomerContact  CustomerContactID=""  EmailID="">
+					<Extn ExtnZip4="" ExtnPrefCatalog="">
+						<XPXQuickLinkList>
+							<XPXQuickLink Createprogid="" Createts=""
+								Createuserid="" CustomerContactKey="" Lockid="" Modifyprogid=""
+								Modifyts="" Modifyuserid="" QuickLinkName="" QuickLinkUrl=""
+								URLOrder="" UserKey="" ShowQuickLink="">
+							</XPXQuickLink>
+						</XPXQuickLinkList>
+					</Extn>
+				</CustomerContact>			
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='manageCustomerQuickLink' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="create quick links for logged in customer">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact CustomerContactID="">
+							<Extn>
+								<XPXQuickLinkList Reset="">
+									<XPXQuickLink QuickLinkName="" QuickLinkUrl="" URLOrder="" ShowQuickLink=""></XPXQuickLink>
+								</XPXQuickLinkList>
+							</Extn>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Input>
+	        <Template>	        				
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='xpedxItemListUserContactName' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="For Item List User Name Info">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact CustomerContactID="">
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContact Company="" CustomerContactID=""
+					DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+					EveningPhone="" FirstName="" LastName="" MiddleName=""
+					MobilePhone="" Status="" Title="" UserID="" />
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='XPEDXBillTOAndShipToHierarchyMashup' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Hierarchy">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXGetBillToShipToHierarchy">
+			<Input>
+				<Customer CustomerKey="" />
+			</Input>
+	        <Template>
+	        	<BillToList>
+	        		<BillTo BillToID="">
+	        			<ShipToList>
+	        				<ShipTo ShipToID=""/>
+	        			</ShipToList>
+	        		</BillTo>
+	        	</BillToList>	        				
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedx-getSAPCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXCustomerAssignmentViewService">
+			<Input>
+				<XPXCustomerAssignmentView UserId="" />
+			</Input>
+	        <Template>
+	        	<XPXCustomerAssignmentViewList TotalNumberOfRecords="">
+					<XPXCustomerAssignmentView>	
+					</XPXCustomerAssignmentView>
+				</XPXCustomerAssignmentViewList>	        				
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedx-getCustomerAssignments' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+			<API Name="getCustomerAssignmentList">
+			<Input>
+				<CustomerAssignment UserId="" />
+			</Input>
+	        <Template>
+	        	<CustomerAssignmentList>
+	        		<CustomerAssignment UserId="" >
+	        			<Customer CustomerID="" >
+	        				<Extn ExtnCustomerName="" ExtnSuffixType=""/>
+        				</Customer>
+	        		</CustomerAssignment>
+	        	</CustomerAssignmentList>	        				
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedx-getAssignedShipTos-View' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Assignments">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXCustomerHierarchyViewService">
+			<Input>
+				<XPXCustomerHierarchyView ShipToCustomerID="" BillToCustomerID="" SAPCustomerID="" MSAPCustomerID="" />
+			</Input>
+	        <Template>
+        		<XPXCustHierarchyViewList TotalNumberOfRecords="" >
+        			<XPXCustHierarchyView />
+        		</XPXCustHierarchyViewList>	        				
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='getXpedxUserList' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER'
+        description="Get Customer Contact List">
+        <classInformation
+            name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+        <API Name="getPage">
+            <Input>
+                <Page PageNumber="" PageSize=""
+                    PaginationStrategy="GENERIC" PageSetToken="" Refresh="N">
+                    <PreviousPage PageNumber="" />
+                    <API Name="getCustomerContactList">
+                        <Input>
+                            <CustomerContact>
+                            <Extn ExtnIsSalesRep="Y" ExtnIsSalesRepQryType="NE"/>
+                                <OrderBy>
+                                    <Attribute Desc="" Name="" />
+                                </OrderBy>
+                                <Customer CustomerID=""
+                                    CallingOrganizationCode="" />
+                            </CustomerContact>
+                        </Input>
+                        <Template>
+                            <CustomerContactList>
+                                <CustomerContact
+                                    CustomerContactID="" FirstName=""
+                                    LastName="" EmailID="" DayPhone="">
+                                    <OrderBy>
+                                        <Attribute Desc=""
+                                            Name="" />
+                                    </OrderBy>
+                                    <Customer>
+                                        <BuyerOrganization
+                                            OrganizationName="" OrganizationCode=""/>
+                                    </Customer>	
+                                    <User Username="">
+										<UserGroupLists>
+												 <UserGroupList UsergroupKey="" />
+										</UserGroupLists>
+									</User>
+                                    
+                                    <Extn ExtnIsSalesRep=""/>								
+                                </CustomerContact>
+                            </CustomerContactList>
+                        </Template>
+                    </API>
+                </Page>
+            </Input>
+            <Template>
+                <Page GeneratedOn="" IsFirstPage="Y" IsLastPage="Y"
+                    IsValidPage="Y" PageNumber="" PageSetToken=""
+                    TotalNumberOfPages="">
+                    <Output />
+                </Page>
+            </Template>
+        </API>
+    </mashup>
+	<mashup id='getXpedxApproversList' transactional='true'
+		mashuptype='XAPI' endpoint='CUSTOMER'
+		description="Buyer Approvers List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact OrganizationCode="">
+					<Customer CustomerID=""/>
+				</CustomerContact>
+			</Input>
+			<Template>
+				<CustomerContactList>
+					<CustomerContact ApproverProxyUserId="" ApproverUserId="" Company="" CustomerContactID="" CustomerKey="">
+						<Customer CustomerID="" BuyerOrganizationCode="" OrganizationCode=""/>
+						<User DisplayUserID="" Username="">
+							<UserGroupLists>
+								<UserGroupList UsergroupKey="" />
+							</UserGroupLists>
+						</User>
+					</CustomerContact>
+				</CustomerContactList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='getXpedxCurrencyListForUserProfile' transactional='true' mashuptype='XAPI' endpoint='CUSTOMER' description="Customer Currency List">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCurrencyList">
+			<Input>
+				<Currency/>
+			</Input>
+	        <Template>
+	        	<CurrencyList>
+        				<Currency Currency="" CurrencyDescription=""/>
+	        	</CurrencyList>	        				
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='ManageXpedxUserForSalesRep' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Contact General Information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="manageCustomer">
+			<Input>
+				<Customer CustomerID="" IgnoreOrdering="" OrganizationCode="">
+			    <CustomerContactList>
+			        <CustomerContact CustomerContactID="">
+			            <User DisplayUserID=""
+			                EnterpriseCode="" 
+			                Localecode=""
+			                OrganizationKey="" SessionTimeout="0">
+			            </User>
+			            <Extn ExtnB2BCatalogView="" ExtnPrefCatalog="" 
+			            	ExtnPOList="" ExtnAddnlEmailAddrs=""
+							ExtnOrderConfEmailFlag="" ExtnOrderShipEmailFlag="" 
+							ExtnBackOrderEmailFlag="" ExtnOrderCancelEmailFlag=""/>
+			        </CustomerContact>
+			    </CustomerContactList>
+			</Customer>
+			</Input>
+			<Template>
+				<Customer CustomerID="" OrganizationCode="">
+					<CustomerContactList>
+						<CustomerContact Company="" CustomerContactID=""
+							DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+							EveningPhone="" FirstName="" JobTitle="" LastName=""
+							MobilePhone="" UserID=""  ApproverProxyUserId="" ApproverUserId="" 
+							SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+							<User Activateflag="" Loginid=""
+								EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+								Localecode="" Username="">
+								<ContactPersonInfo EveningPhone=""
+									FirstName="" Department="" DayFaxNo="" DayPhone="" JobTitle=""
+									LastName="" EMailID="" Title="" />
+								<UserGroupLists>
+									<UserGroupList UserGroupKey="">
+									</UserGroupList>
+								</UserGroupLists>
+							</User>
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									AddressType="" CustomerAdditionalAddressID="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnEstimator="" ExtnPunchOutUser=""
+								ExtnStockCheckWS="" ExtnViewInvoices=""  ExtnB2BCatalogView=""/>
+						</CustomerContact>
+					</CustomerContactList>
+				</Customer>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='SendOnEmailChangeEmail' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="Send Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="XPXSendUserUpdateEmailService">
+			<Input>
+				<UserUpdateEmail BrandName="" EntryType="" OldEmailID="" newEmailID="" EmailFromAddresses="" ImageUrl="" UserName="">			    
+			</UserUpdateEmail>
+			</Input>
+			
+		</API>
+	</mashup>
+	<mashup id='xpedxGetContactUserName' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="To get the cusotmer contact user Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerContactList">
+			<Input>
+				<CustomerContact OrganizationCode="">
+					<ComplexQuery Operator="AND">
+						<Or/>
+					</ComplexQuery>
+				</CustomerContact>
+			</Input>
+			<Template>				
+				<CustomerContactList>
+					<CustomerContact CustomerContactID=""
+						AggregateStatus="" FirstName="" LastName="" JobTitle="" EmailID="" MiddleName=""
+						Company="" Department="" DayFaxNo="" EveningFaxNo="" DayPhone="" Title=""
+						EveningPhone="" MobilePhone="" UserID="" Status="" 
+						ApproverProxyUserId="" ApproverUserId="" SpendingLimit="" SpendingLimitCurrency="" Modifyuserid="" Modifyts="" Createts="">
+						<User Activateflag="" Loginid="" 
+							EnterpriseCode="" OrganizationKey="" DisplayUserID=""
+							Localecode="" Username="">
+							<ContactPersonInfo EveningPhone=""
+								DayFaxNo="" DayPhone="" FirstName="" JobTitle="" LastName=""
+								EMailID="" Title="" />
+							<UserGroupLists BuyerApprover="">
+								<UserGroupList UsergroupKey="" BuyerApprover="">
+								</UserGroupList>
+							</UserGroupLists>
+							<AuthQuestionList>
+								<AuthQuestion AuthQuestionKey=""
+									QuestionText="" />
+							</AuthQuestionList>
+						</User>
+						<CustomerAdditionalAddressList>
+							<CustomerAdditionalAddress
+								CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+								IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+								IsDefaultSoldTo="">
+								<PersonInfo IsCommercialAddress=""
+									TaxGeoCode="" IsAddressVerified="" AddressID="" AddressLine1=""
+									AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
+									AddressLine6="" AlternateEmailID="" Beeper="" Company=""
+									DayFaxNo="" DayPhone="" Department="" ErrorTxt=""
+									EveningFaxNo="" EveningPhone="" HttpUrl="" JobTitle=""
+									Latitude="" Longitude="" MiddleName="" MobilePhone=""
+									OtherPhone="" PreferredShipAddress="" Suffix="" UseCount=""
+									VerificationStatus="" City="" Country="" FirstName=""
+									LastName="" PersonID="" State="" Title="" ZipCode=""
+									EMailID="" />
+							</CustomerAdditionalAddress>
+						</CustomerAdditionalAddressList>
+						<Customer BuyerOrganizationCode="" CustomerID="" CustomerKey=""
+							AggregateStatus="" OrganizationCode="">
+							<BuyerOrganization OrganizationCode=""
+								OrganizationName="" />
+							<CustomerAdditionalAddressList>
+								<CustomerAdditionalAddress
+									CustomerAdditionalAddressID="" AddressType="" IsBillTo=""
+									IsDefaultBillTo="" IsShipTo="Y" IsDefaultShipTo="" IsSoldTo=""
+									IsDefaultSoldTo="">
+									<PersonInfo IsCommercialAddress=""
+										TaxGeoCode="" IsAddressVerified="" AddressID=""
+										AddressLine1="" AddressLine2="" AddressLine3=""
+										AddressLine4="" AddressLine5="" AddressLine6=""
+										AlternateEmailID="" Beeper="" Company="" DayFaxNo=""
+										DayPhone="" Department="" ErrorTxt="" EveningFaxNo=""
+										EveningPhone="" HttpUrl="" JobTitle="" Latitude=""
+										Longitude="" MiddleName="" MobilePhone="" OtherPhone=""
+										PreferredShipAddress="" Suffix="" UseCount=""
+										VerificationStatus="" City="" Country="" FirstName=""
+										LastName="" PersonID="" State="" Title="" ZipCode=""
+										EMailID="" />
+								</CustomerAdditionalAddress>
+							</CustomerAdditionalAddressList>
+							<Extn ExtnMyItemsLink="" ExtnUseCustSKU="" ExtnUseOrderMulUOMFlag=""/>
+						</Customer>
+						<Extn/>
+					</CustomerContact>
+				</CustomerContactList>				
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='xpedxgetLoggedInCustomer' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="To get the cusotmer contact user Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerList">
+			<Input>
+				<Customer OrganizationCode="">
+					<ComplexQuery Operator="AND">
+						<Or/>
+					</ComplexQuery>
+				</Customer>
+			</Input>
+			<Template>
+				<CustomerList>
+					<Customer  CustomerKey="" CustomerID="" OrganizationCode="" RootCustomerKey="" >
+						<BuyerOrganization OrganizationCode="" OrganizationName="" />
+					</Customer>
+				</CustomerList>
+			</Template>
+		</API>
+	</mashup>
+	
+</mashups>

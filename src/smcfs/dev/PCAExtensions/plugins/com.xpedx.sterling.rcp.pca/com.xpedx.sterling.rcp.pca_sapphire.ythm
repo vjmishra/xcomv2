@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Theme id="sapphire">
+    <ThemeEntry Name="StyledText">
+        <Font Height="10" Name="Tahoma" Style="BOLD"/>
+        <ForegroundColor Blue="255" Green="255" Red="255"/>
+        <BackgroundColor Blue="0" Green="0" Red="0"/>
+    </ThemeEntry>
+    <ThemeEntry Name="Copy">
+        <Image Path="/icons/copy.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="Refresh">
+        <Image Path="/icons/refresh.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="XPXGroupStyle">
+        <Font Height="7" Name="Arial" Style="Bold"/>
+        <ForegroundColor Blue="0" Green="0" Red="255"/>
+        <BackgroundColor Blue="255" Green="255" Red="255"/>
+    </ThemeEntry>
+    <ThemeEntry Name="InvalidData">
+        <Font Height="8" Name="Arial" Style="BOLD"/>
+        <ForegroundColor Blue="255" Green="255" Red="255"/>
+        <BackgroundColor Blue="0" Green="0" Red="255"/>
+    </ThemeEntry>
+    <ThemeEntry Name="WillCall">
+        <Image Path="/icons/Will Call.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="RushOrder">
+        <Image Path="/icons/Rush Order.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="NeedsAttention">
+        <Image Path="/icons/Needs Attention.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="extnOUFailureLockFlag">
+        <Image Path="/icons/Can only Edit Order in MAX.gif"/>
+    </ThemeEntry>
+    <ThemeEntry Name="orderLockFlag">
+        <Image Path="/icons/OrderLockFlagIcon.gif"/>
+    </ThemeEntry>
+</Theme>

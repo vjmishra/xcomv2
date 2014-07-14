@@ -1,0 +1,21 @@
+<CustomerContactList>
+	<CustomerContact>
+		<Extn/>
+		<User>
+			<ContactPersonInfo/>
+		</User>
+		<Customer>
+			<Extn/>
+			<CustomerContactList>
+				<CustomerContact>
+					<User>
+						<UserGroupLists>
+							<UserGroupList UserGroupListKey="" UsergroupId="" UsergroupKey=""/>
+						</UserGroupLists>
+					</User>
+					<Extn/>
+				</CustomerContact>
+			</CustomerContactList>
+		</Customer>
+	</CustomerContact>
+</CustomerContactList>

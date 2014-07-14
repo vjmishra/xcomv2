@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for the customer quick link action</comment>
+	<entry key="organizationCode">xpedx-getCustomerQuickLinks:/Customer/@OrganizationCode</entry>
+	<entry key="customerId">xpedx-getCustomerQuickLinks:/Customer/@CustomerID</entry>
+</properties>

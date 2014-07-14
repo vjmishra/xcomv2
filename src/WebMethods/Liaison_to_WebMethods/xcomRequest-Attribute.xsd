@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="AttributeList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="Attribute" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Attribute">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="AttributeAllowedValueList" maxOccurs="1" minOccurs="0" />
+    		</xsd:sequence>
+    		<xsd:attribute name="AttributeDomainID" type="xsd:string" use="required" fixed="ItemAttribute" />
+    		<xsd:attribute name="AttributeGroupID" type="xsd:string" use="required" fixed="xpedx" />
+    		<xsd:attribute name="AttributeID" type="xsd:string" use="required" />
+    		<xsd:attribute name="DataType" type="xsd:string" use="required" />
+    		<xsd:attribute name="LongDescription" type="xsd:string" use="required" />
+    		<xsd:attribute name="IsAllowedValueDefined" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Y" />
+    					<xsd:enumeration value="N" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="Operation" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Manage" />
+    					<xsd:enumeration value="Delete" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="OrganizationCode" type="xsd:string" use="required" fixed="xpedx" />
+    		<xsd:attribute name="SquenceNo" type="xsd:string" use="optional" />
+    		<xsd:attribute name="ShortDescription" type="xsd:string" use="required" />
+    	</xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="AttributeAllowedValueList">
+    	<xsd:complexType>
+    		<xsd:sequence>
+    			<xsd:element ref="AttributeAllowedValue" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="AttributeAllowedValue">
+    	<xsd:complexType>
+    		<xsd:attribute name="LongDescription" type="xsd:string" use="required" />
+    		<xsd:attribute name="Operation" use="required">
+    			<xsd:simpleType>
+    				<xsd:restriction base="xsd:string">
+    					<xsd:enumeration value="Manage" />
+    					<xsd:enumeration value="Delete" />
+    				</xsd:restriction>
+    			</xsd:simpleType>
+    		</xsd:attribute>
+    		<xsd:attribute name="ShortDescription" type="xsd:string" use="required" />
+    		<xsd:attribute name="Value" type="xsd:string" use="required" />
+    	</xsd:complexType>
+    </xsd:element>
+</xsd:schema>

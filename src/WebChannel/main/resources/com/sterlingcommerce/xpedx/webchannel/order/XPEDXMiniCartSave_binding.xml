@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for saving mini cart changes</comment>
+    <entry key="#parameters.orderHeaderKey" >deleteLineForMiniCart:/Order/@OrderHeaderKey,updateOrderForMiniCart:/Order/@OrderHeaderKey,checkoutOrderForMiniCart:/Order/@OrderHeaderKey</entry>
+    <entry key="#parameters.delLineKey" >deleteLineForMiniCart:/Order/OrderLines/OrderLine/@OrderLineKey</entry>
+    <entry key="#parameters.lineKeys" >updateOrderForMiniCart:/Order/OrderLines/OrderLine[]/@OrderLineKey,checkoutOrderForMiniCart:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
+    <entry key="#parameters.orderLineQtys" >updateOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty,checkoutOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
+    <entry key="#parameters.orderLineReqUOMs" >updateOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM,checkoutOrderForMiniCart:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry>
+	<entry key="draftOrderFlag">deleteLineForMiniCart:/Order/@DraftOrderFlag,updateOrderForMiniCart:/Order/@DraftOrderFlag,checkoutOrderForMiniCart:/Order/@DraftOrderFlag</entry>
+</properties>

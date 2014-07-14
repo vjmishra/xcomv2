@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Forgot Password action</comment>
+	<entry key="WCContext.storefrontId">orderApprovalListWidget:/Page/API/Input/Order/@EnterpriseCode,orderApprovalList:/Page/API/Input/Order/@EnterpriseCode,userListForApproval:/CustomerContact/@OrganizationCode</entry>
+	<entry key="WCContext.LoggedInUserId">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@ResolverUserId,checkApproverRoleForUser:/User/@Loginid</entry>	
+	<entry key="#parameters.OrderHeaderKey">orderApproval:/Order/@OrderHeaderKey,xpedxCreateLegacyOrderOnApproval:/Order/@OrderHeaderKey</entry>
+	<entry key="#parameters.ReasonText">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@ReasonText</entry>
+	<entry key="#parameters.ApprovalAction">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@Status</entry>
+	<entry key="pageNumber.toString()">orderApprovalList:/Page/@PageNumber</entry>
+	<entry key="pageSetToken">orderApprovalList:/Page/@PageSetToken</entry>
+	<entry key="orderByAttribute">orderApprovalList:/Page/API/Input/Order/OrderBy/Attribute/@Name</entry>
+	<entry key="orderDesc">orderApprovalList:/Page/API/Input/Order/OrderBy/Attribute/@Desc</entry>
+	<entry key="userNameExp">userListForApproval:/CustomerContact/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="userList">userListForApproval:/CustomerContact/ComplexQuery/Or/Exp[]/@Value</entry>
+	<entry key="nameExp">orderApprovalList:/Page/API/Input/Order/OrderHoldType/ComplexQuery/Or/Exp[]/@Name,orderApprovalListWidget:/Page/API/Input/Order/OrderHoldType/ComplexQuery/Or/Exp[]/@Name</entry>
+	<entry key="oUserList">orderApprovalList:/Page/API/Input/Order/OrderHoldType/ComplexQuery/Or/Exp[]/@Value,orderApprovalListWidget:/Page/API/Input/Order/OrderHoldType/ComplexQuery/Or/Exp[]/@Value</entry>
+	<entry key="approvalHoldType">orderApproval:/Order/OrderHoldTypes/OrderHoldType/@HoldType,orderApprovalList:/Page/API/Input/Order/OrderHoldType/@HoldType,orderApprovalListWidget:/Page/API/Input/Order/OrderHoldType/@HoldType</entry>
+	<entry key="accountSearchFieldName">orderApprovalList:/Page/API/Input/Order/@BillToID</entry>
+  	<entry key="shipToSearchFieldName">orderApprovalList:/Page/API/Input/Order/@ShipToID</entry>
+  	<entry key="orderHeaderKey">xpedxCreateLegacyOrderOnApproval:/Order/@OrderHeaderKey,orderApproval:/Order/@OrderHeaderKey</entry>
+  	 <entry key="purchaseOrderNumberValue">orderApprovalList:/Page/API/Input/Order/@CustomerPONo</entry>
+  	 <entry key="webConfNumberValue">orderApprovalList:/Page/API/Input/Order/Extn/@ExtnWebConfNum</entry>
+  	 <entry key="OrderNameValue">orderApprovalList:/Page/API/Input/Order/Extn/@ExtnOrderedByName</entry> 
+</properties>

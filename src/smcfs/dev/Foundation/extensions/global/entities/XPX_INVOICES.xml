@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Legacy Invoices" Prefix="XPX" HasHistory="True" TableName="XPX_INVOICE_HDR">
+			<Attributes>
+				<Attribute ColumnName="INVOICE_HDR_KEY" DataType="Key" DefaultValue="' '" Description="Primary Key" Nullable="false" XMLName="InvoiceHeaderKey"/>
+				<Attribute ColumnName="ORDER_HDR_KEY" DataType="Key" DefaultValue="' '" Description="Order Header Key" Nullable="false" XMLName="OrderHeaderKey"/>
+				<Attribute ColumnName="ENVIRONMENT_ID" DataType="Text-20" DefaultValue="' '" Description="Environment ID" Nullable="false" XMLName="EnvironmentId"/>
+				<Attribute ColumnName="CUSTOMER_ENVIRONMENT_ID" DataType="Text-20" DefaultValue="' '" Description="CustomerEnvironment ID" Nullable="false" XMLName="CustomerEnvironmentId"/>
+				<Attribute ColumnName="CUSTOMER_BUYER_ID" DataType="Text-25" DefaultValue="' '" Description="Customer BuyerID " Nullable="true" Size="" XMLName="CustomerBuyerID" />
+				<Attribute ColumnName="COMPANY" DataType="Text-20" DefaultValue="' '" Description="Company" Nullable="false" XMLName="Company"/>
+				<Attribute ColumnName="WEB_CONFIRMATION_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description="Web Conf #" Nullable="false" XMLName="WebConfirmationNo"/>
+				<Attribute ColumnName="ORDERING_DIVISION" DataType="OrgCode" DefaultValue="' '" Description="Ordering Division" Nullable="false" XMLName="OrderingDivision"/>
+				<Attribute ColumnName="LEGACY_ORDER_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description="Legacy Order #" Nullable="false" XMLName="LegacyOrderNo"/>
+				<Attribute ColumnName="GENERATION_NO" DataType="LineNo" DefaultValue="0" Description="Generation #" Nullable="false" XMLName="GenerationNo"/>
+				<Attribute ColumnName="LEGACY_ORDER_TYPE" DataType="Text-20" DefaultValue="' '" Description="Legacy Order Type" Nullable="false" XMLName="LegacyOrderType"/>
+				<Attribute ColumnName="INVOICE_DIST_FLAG" DataType="Flag" DefaultValue="' '" Description="Invoice distribution flag" Nullable="false" XMLName="InvoiceDistFlag"/>
+				<Attribute ColumnName="SHIP_FROM_DIVISION" DataType="OrgCode" DefaultValue="' '" Description="Ship From Division" Nullable="false" XMLName="ShipFromDivision"/>
+				<Attribute ColumnName="CUSTOMER_DIVISION" DataType="OrgCode" DefaultValue="' '" Description="Customer Division" Nullable="false" XMLName="CustomerDivision"/>
+				<Attribute ColumnName="CUSTOMER_NO" DataType="Text-10" DefaultValue="' '" Description="Customer Number" Nullable="false" XMLName="CustomerNo"/>
+				<Attribute ColumnName="SHIP_TO_SUFFIX" DataType="Text-10" DefaultValue="' '" Description="Ship to suffix" Nullable="false" XMLName="ShipToSuffix"/>
+				<Attribute ColumnName="SHIP_TO_NAME" DataType="OrganizationName" DefaultValue="' '" Description="Ship To Name" Nullable="false" XMLName="ShipToName"/>
+				<Attribute ColumnName="ATTENTION_NAME" DataType="Text-40" DefaultValue="' '" Description="Attention Name" Nullable="false" XMLName="AttentionName"/>
+				<Attribute ColumnName="SHIP_TO_ADDR1" DataType="Address" DefaultValue="' '" Description="Ship To Address Line 1" Nullable="false" XMLName="ShipToAddr1"/>
+				<Attribute ColumnName="SHIP_TO_ADDR2" DataType="Address" DefaultValue="' '" Description="Ship To Address Line 2" Nullable="false" XMLName="ShipToAddr2"/>
+				<Attribute ColumnName="SHIP_TO_ADDR3" DataType="Address" DefaultValue="' '" Description="Ship To Address Line 3" Nullable="false" XMLName="ShipToAddr3"/>
+				<Attribute ColumnName="SHIP_TO_CITY" DataType="City" DefaultValue="' '" Description="Ship To City" Nullable="false" XMLName="ShipToCity"/>
+				<Attribute ColumnName="SHIP_TO_STATE" DataType="State" DefaultValue="' '" Description="Ship To State" Nullable="false" XMLName="ShipToState"/>
+				<Attribute ColumnName="SHIP_TO_ZIP" DataType="ZipCode" DefaultValue="' '" Description="Ship To Zip" Nullable="false" XMLName="ShipToZip"/>
+				<Attribute ColumnName="SHIP_TO_COUNTRY" DataType="Country" DefaultValue="' '" Description="Ship To Country" Nullable="false" XMLName="ShipToCountry"/>
+				<Attribute ColumnName="BILL_TO_SUFFIX" DataType="Text-10" DefaultValue="' '" Description="Bill to suffix" Nullable="false" XMLName="BillToSuffix"/>
+				<Attribute ColumnName="BILL_TO_NAME" DataType="OrganizationName" DefaultValue="' '" Description="Bill To Name" Nullable="false" XMLName="BillToName"/>
+				<Attribute ColumnName="BILL_TO_ADDR1" DataType="Address" DefaultValue="' '" Description="Bill To Address Line 1" Nullable="false" XMLName="BillToAddr1"/>
+				<Attribute ColumnName="BILL_TO_ADDR2" DataType="Address" DefaultValue="' '" Description="Bill To Address Line 2" Nullable="false" XMLName="BillToAddr2"/>
+				<Attribute ColumnName="BILL_TO_ADDR3" DataType="Address" DefaultValue="' '" Description="Bill To Address Line 3" Nullable="false" XMLName="BillToAddr3"/>
+				<Attribute ColumnName="BILL_TO_CITY" DataType="City" DefaultValue="' '" Description="Bill To City" Nullable="false" XMLName="BillToCity"/>
+				<Attribute ColumnName="BILL_TO_STATE" DataType="State" DefaultValue="' '" Description="Bill To State" Nullable="false" XMLName="BillToState"/>
+				<Attribute ColumnName="BILL_TO_ZIP" DataType="ZipCode" DefaultValue="' '" Description="Bill To Zip" Nullable="false" XMLName="BillToZip"/>
+				<Attribute ColumnName="BILL_TO_COUNTRY" DataType="Country" DefaultValue="' '" Description="Bill To Country" Nullable="false" XMLName="BillToCountry"/>
+				<Attribute ColumnName="CUSTOMER_PO_NO" DataType="Text-100" DefaultValue="' '" Description="Customer PO Number" Nullable="false" XMLName="CustomerPoNo"/>
+				<Attribute ColumnName="SHIP_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Ship Date" Nullable="false" XMLName="ShipDate"/>
+				<Attribute ColumnName="INSTRUCTION" DataType="FreeInstructionText" DefaultValue="' '" Description="Instruction" Nullable="false" XMLName="Instruction"/>
+				<Attribute ColumnName="ORDERED_BY" DataType="UserId" DefaultValue="' '" Description="Ordered By" Nullable="false" XMLName="OrderedBy"/>
+				<Attribute ColumnName="ORDER_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Order Date" Nullable="false" XMLName="OrderDate"/>
+				<Attribute ColumnName="CURRENCY_CODE" DataType="Text-3" DefaultValue="' '" Description="CurrencyCode" Nullable="false" XMLName="CurrencyCode"/>
+				<Attribute ColumnName="TOTAL_SHIPABLE_VALUE" DataType="UnitPrice" DefaultValue="0" Description="Total Shipable Value" Nullable="false" XMLName="TotalShipableValue"/>
+				<Attribute ColumnName="TOTAL_ORDER_VALUE" DataType="UnitPrice" DefaultValue="0" Description="Total Order Value" Nullable="false" XMLName="TotalOrderValue"/>
+				<Attribute ColumnName="SPECIAL_CHARGES" DataType="UnitPrice" DefaultValue="0" Description="Special Charges" Nullable="false" XMLName="SpecialCharges"/>
+				<Attribute ColumnName="TOTAL_FREIGHT" DataType="UnitPrice" DefaultValue="0" Description="Total Freight" Nullable="false" XMLName="TotalFreight"/>
+				<Attribute ColumnName="TOTAL_TAX" DataType="UnitPrice" DefaultValue="0" Description="Total Tax" Nullable="false" XMLName="TotalTax"/>
+				<Attribute ColumnName="PROCESSED_FLAG" DataType="Text-1" DefaultValue=" " Description="Processed Flag" Nullable="false" XMLName="ProcessedFlag"/>
+				<Attribute ColumnName="INVOICE_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="InvoiceDate" Nullable="false" XMLName="InvoiceDate"/>
+				<Attribute ColumnName="LD_INVOICE_NO" DataType="ID-35" DefaultValue="' '" Description="LDInvoice Number" Nullable="false" XMLName="LDInvoiceNo"/>
+				<Attribute ColumnName="SHIP_VIA" DataType="Text-40" DefaultValue="' '" Description="Ship via" Nullable="false" XMLName="ShipVia"/>
+				<Attribute ColumnName="CREDIT_TERMS" DataType="Text-40" DefaultValue="' '" Description="Credit Terms" Nullable="false" XMLName="CreditTerms"/>
+				<Attribute ColumnName="SALES_TAX_PCT" DataType="Percentage" DefaultValue="0" Description="Sales tax percentage" Nullable="false" XMLName="SalesTaxPct"/>
+				<Attribute ColumnName="SALES_TAX_AMNT" DataType="Number-22" DefaultValue="0" Description="Sales tax Amount" Nullable="false" XMLName="SalesTaxAmnt"/>
+				<Attribute ColumnName="INVOICE_TOTAL" DataType="Number-22" DefaultValue="0" Description="Invoice total" Nullable="false" XMLName="InvoiceTotal"/>
+				<Attribute ColumnName="TOTAL_DISCOUNT_ALLOWED" DataType="Money" DefaultValue="0" Description="Total Discount Allowed" Nullable="false" XMLName="TotalDiscountAllowed"/>
+				<Attribute ColumnName="SCAC_NUMBER" DataType="OrgCode" DefaultValue="' '" Description="SCACNumber" Nullable="false" XMLName="SCACNumber"/>
+				<Attribute ColumnName="CAREER_NAME" DataType="Text-40" DefaultValue="' '" Description="Career Name" Nullable="false" XMLName="CareerName"/>
+				<Attribute ColumnName="TERMS_NET_DAYS" DataType="NumberOfDays" DefaultValue=" " Description="Terms net Days" Nullable="false" XMLName="TermsNetDays"/>
+				<Attribute ColumnName="TERMS_PERCENT" DataType="Percentage" DefaultValue="0" Description="Terms Percent" Nullable="false" XMLName="TermsPercent"/>
+				<Attribute ColumnName="CASH_DISCOUNT_DAYS" DataType="NumberOfDays" DefaultValue=" " Description="Cash Discount Dyas" Nullable="false" XMLName="CashDiscountDays"/>
+				<Attribute ColumnName="DUE_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Due Date" Nullable="false" XMLName="DueDate"/>
+				<Attribute ColumnName="EMAIL_ADDR" DataType="EMailID" DefaultValue="' '" Description="Email address" Nullable="false" XMLName="EmailAddr"/>
+				<Attribute ColumnName="REMIT_TO_DUNS_NO" DataType="DunsNumber" DefaultValue="' '" Description=" "  Nullable="true" XMLName="RemitToDunsNo" />
+				<Attribute ColumnName="REMIT_TO_NAME" DataType="OrganizationName" DefaultValue="' '" Description=" "        Nullable="true" XMLName="RemitToName"  />
+				<Attribute ColumnName="REMIT_ADDR1" DataType="Address" DefaultValue="' '" Description=" "          Nullable="true" XMLName="RemitAddr1" />
+				<Attribute ColumnName="REMIT_ADDR2" DataType="Address" DefaultValue="' '" Description=" "            Nullable="true" XMLName="RemitAddr2" />
+				<Attribute ColumnName="REMIT_CITY" DataType="City" DefaultValue="' '" Description=" "  Nullable="true" XMLName="RemitCity" />
+				<Attribute ColumnName="REMIT_STATE" DataType="State" DefaultValue="' '" Description=" "  Nullable="true"        XMLName="RemitState" />
+				<Attribute ColumnName="REMIT_ZIP" DataType="ZipCode" DefaultValue="' '" Description=" "  Nullable="true"        XMLName="RemitZip" />
+				<Attribute 	ColumnName="BILL_TO_DUNS_NO" DataType="DunsNumber" DefaultValue="' '" Description="Bill To DUNS Number" Nullable="true" XMLName="BillToDunsNo"  />
+				<Attribute 	ColumnName="SELLER_DUNS_NO" DataType="DunsNumber" DefaultValue="' '" Description="Seller DUNS Number" Nullable="true" XMLName="SellerDunsNo"  />
+				<Attribute 	ColumnName="SHIP_TO_STORE_NO" DataType="ShipNode" DefaultValue="' '" Description="Ship to Number" Nullable="true" XMLName="ShipToStoreNo"  />
+				<Attribute 	ColumnName="NA_CUSTOMER_NO" DataType="AccountNo" DefaultValue="' '" Description="NA Customer Number" Nullable="true" XMLName="NACustomerNo"  />
+				<Attribute ColumnName="ETRADING_ID" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" Size="" XMLName="ETradingID" />
+
+
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_INV_HDR_PK">
+                <Attribute ColumnName="INVOICE_HDR_KEY" XmlName="InvoiceHdrKey"/>
+            </PrimaryKey>
+
+			<Parent ParentTableName="YFS_ORDER_HEADER" >
+				<Attribute ColumnName="ORDER_HDR_KEY" ParentColumnName="ORDER_HEADER_KEY" />
+			</Parent>
+		</Entity>
+
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Legacy Invoice Line" Prefix="XPX" HasHistory="True" TableName="XPX_INVOICE_LINE">
+			<Attributes>
+				<Attribute ColumnName="INVOICE_LINE_KEY" DataType="Key" DefaultValue="' '" Description="Primary Key" Nullable="false" XMLName="InvoiceLineKey"/>
+				<Attribute ColumnName="INVOICE_HDR_KEY" DataType="Key" DefaultValue="' '" Description="Invoice Header Key" Nullable="false" XMLName="InvoiceHeaderKey"/>
+				<Attribute ColumnName="WEB_LINE_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description="Web Line No" Nullable="false" XMLName="WebLineNo"/>
+				<Attribute ColumnName="LEGACY_LINE_NO" DataType="LineNo" DefaultValue="0" Description="Legacy Line No" Nullable="false" XMLName="LegacyLineNo"/>
+				<Attribute ColumnName="LINE_DIST_NO" DataType="LineNo" DefaultValue="0" Description="Line distribution No" Nullable="false" XMLName="LineDistNo"/>
+				<Attribute ColumnName="LEGACY_PRODUCT_CODE" DataType="ItemID" DefaultValue="' '" Description="Legacy Product Code" Nullable="false" XMLName="LegacyProductCode"/>
+				<Attribute ColumnName="CUSTOMER_PRODUCT_CODE" DataType="ItemID" DefaultValue="' '" Description="Customer Product Code" Nullable="false" XMLName="CustomerProductCode"/>
+				<Attribute ColumnName="BASE_UOM" DataType="UOM" DefaultValue="' '" Description="Base Unit Of Measure" Nullable="false" XMLName="BaseUom"/>
+				<Attribute ColumnName="ORDERED_QTY_IN_BASE_UOM" DataType="Quantity" DefaultValue="0" Description="Ordered Quantity in Base UOM" Nullable="false" XMLName="OrderedQtyInBaseUom"/>
+				<Attribute ColumnName="SHIPPED_QTY_IN_BASE_UOM" DataType="Quantity" DefaultValue="0" Description="Shipped Quantity in Base UOM" Nullable="false" XMLName="ShippedQtyInBaseUom"/>
+				<Attribute ColumnName="BACKORDER_QTY_IN_BASE_UOM" DataType="Quantity" DefaultValue="0" Description="Backordered Quantity in Base UOM" Nullable="false" XMLName="BackorderedQtyInBaseUom"/>
+				<Attribute ColumnName="PRICE_UOM" DataType="UOM" DefaultValue="' '" Description="Price Unit Of Measure" Nullable="false" XMLName="PriceUom"/>
+				<Attribute ColumnName="UNIT_PRICE" DataType="UnitPrice" DefaultValue="0" Description="Unit Price" Nullable="false" XMLName="UnitPrice"/>
+				<Attribute ColumnName="LINE_DESCRIPTION" DataType="Text-200" DefaultValue="' '" Description="Line Description" Nullable="false" XMLName="LineDescription"/>
+				<Attribute ColumnName="PRICE_OVERRIDE_FLAG" DataType="Flag" DefaultValue="' '" Description="Price override Flag " Nullable="false"   XMLName="PriceOverrideFlag" />
+				<Attribute ColumnName="REQ_UOM" DataType="UOM" DefaultValue="' '" Description="Requested Unit Of Measure" Nullable="false" XMLName="ReqUom"/>
+				<Attribute ColumnName="ORDERED_QTY_IN_REQ_UOM" DataType="Quantity" DefaultValue="0" Description="Ordered Quantity In Req UOM" Nullable="false" XMLName="OrderedQtyInReqUom"/>
+				<Attribute ColumnName="SHIPPABLE_QTY_IN_REQ_UOM" DataType="Quantity" DefaultValue="0" Description="Shippable quantity in Req UOM" Nullable="false" XMLName="ShippableQtyInReqUom"/>
+				<Attribute ColumnName="BACKORDER_QTY_IN_REQ_UOM" DataType="Quantity" DefaultValue="0" Description="Billable quantity in Req UOM" Nullable="false" XMLName="BackorderedQtyInReqUOM"/>
+				<Attribute ColumnName="CUSTOMER_LINE_SEQ_NO" DataType="LineNo" DefaultValue="0" Description="Customer Line Seq No" Nullable="false" XMLName="CustomerLineSeqNo"/>
+				<Attribute ColumnName="CUSTOMER_LINE_PO_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description="Customer Line PO No." Nullable="false" XMLName="CustomerLinePoNo"/>
+				<Attribute ColumnName="CUSTOMER_LINE_ACCNT_NO" DataType="AccountNo" DefaultValue="' '" Description="Customer Line Account No." Nullable="false" XMLName="CustomerLineAccntNo"/>
+				<Attribute ColumnName="CUST_USER_FIELD1" DataType="Text-50" DefaultValue="' '" Description="Customer Line field 1" Nullable="false" XMLName="CustUserField1"/>
+				<Attribute ColumnName="CUST_USER_FIELD2" DataType="Text-50" DefaultValue="' '" Description="Customer Line field 2" Nullable="false" XMLName="CustUserField2"/>
+				<Attribute ColumnName="CUST_USER_FIELD3" DataType="Text-50" DefaultValue="' '" Description="Customer Line field 3" Nullable="false" XMLName="CustUserField3"/>
+				<Attribute ColumnName="SHIP_FROM_BRANCH" DataType="OrgCode" DefaultValue="' '" Description="ShipFromBranch" Nullable="false" XMLName="ShipFromBranch"/>
+				<Attribute ColumnName="LINE_NOTES" DataType="FreeInstructionText" DefaultValue="' '" Description="Line Notes" Nullable="false" XMLName="LineNotes"/>
+				<Attribute ColumnName="LINE_SPECIAL_CHARGES" DataType="UnitPrice" DefaultValue="0" Description="Special Charges" Nullable="false" XMLName="LineSpecialCharges"/>
+				<Attribute ColumnName="LINE_TOTAL" DataType="UnitPrice" DefaultValue="0" Description="Line Total" Nullable="false" XMLName="LineTotal"/>
+				<Attribute ColumnName="LINE_FREIGHT" DataType="UnitPrice" DefaultValue="0" Description="Line Freight" Nullable="false" XMLName="LineFreight"/>
+				<Attribute ColumnName="SHIP_QTY_LINE_TOTAL" DataType="UnitPrice" DefaultValue="0" Description="Shipped Quantity Line Total" Nullable="false" XMLName="ShipQtyLineTotal"/>	
+				<Attribute ColumnName="LD_ORDER_NUMBER" DataType="VarcharDocumentNo" DefaultValue="' '" Description="LD Order Number" Nullable="false" XMLName="LDOrderNumber"/>
+				<Attribute ColumnName="MANUFACTURER_ITEM_NO" DataType="Text-100" DefaultValue="' '" Description="Manufacturer Item Number" Nullable="false" XMLName="ManufacturerItemNo"/>
+				<Attribute ColumnName="UNIT_WEIGHT" DataType="Dimension" DefaultValue="0" Description="Unit Weight" Nullable="false" XMLName="UnitWeight"/>
+				<Attribute ColumnName="WEIGHT_PER_CODE" DataType="Text-4" DefaultValue="''" Description="Weight per code" Nullable="true" XMLName="WeightPerCode"/>
+				<Attribute ColumnName="EXTENDED_WEIGHT" DataType="Dimension" DefaultValue="0" Description="Extended Weight" Nullable="false" XMLName="ExtendedWeight"/>
+				<Attribute ColumnName="FSC_CERT_CODE" DataType="Text-40" DefaultValue="' '" Description="FSC Certification Code" Nullable="false" XMLName="FSCCertCode"/>
+				<Attribute ColumnName="SFI_CERT_CODE" DataType="Text-40" DefaultValue="' '" Description="SFI Certification Code" Nullable="false" XMLName="SFICertCode"/>
+				<Attribute ColumnName="PEFC_CERT_CODE" DataType="Text-40" DefaultValue="' '" Description="PEFC Certification Code" Nullable="false" XMLName="PEFCCertCode"/>
+				<Attribute ColumnName="LINE_SHIP_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Line Ship Date" Nullable="false" XMLName="LineShipDate"/>
+				<Attribute ColumnName="EXTERNAL_COMMENTS" DataType="Comments" DefaultValue="' '" Description="External Comments" Nullable="false" XMLName="ExternalComments"/>
+				<Attribute ColumnName="NUM_OF_LINES" DataType="Count" DefaultValue="0" Description="Number Of Lines" Nullable="false" XMLName="NumOfLines"/>
+				<Attribute ColumnName="LINE_SALES_TAX_PERCENT" DataType="Percentage" DefaultValue="0" Description="Sales Tax Percentage" Nullable="false" XMLName="LineSalesTaxPercent"/>
+				<Attribute ColumnName="BASIS_WEIGHT" DataType="Dimension" DefaultValue="0" Description="Basis Weight" Nullable="false" XMLName="BasisWeight"/>
+				<Attribute ColumnName="ROLL_WIDTH" DataType="Dimension" DefaultValue="0" Description="Roll Width" Nullable="false" XMLName="RollWidth"/>
+				<Attribute ColumnName="ROLL_DIAMETER" DataType="Dimension" DefaultValue="0" Description="Roll Diameter" Nullable="false" XMLName="RollDiameter"/>
+				<Attribute ColumnName="BRAND" DataType="Text-40" DefaultValue="' '" Description="Brand" Nullable="false" XMLName="Brand"/>
+				<Attribute ColumnName="PROMOTION_CODE" DataType="PromoCode" DefaultValue="' '" Description="Promotion Code" Nullable="false" XMLName="PromotionCode"/>
+				<Attribute ColumnName="ADJUSTED_AMNT" DataType="Number-22" DefaultValue="0" Description="Adjustment Amount" Nullable="false" XMLName="AdjustmentAmnt"/>
+				<Attribute ColumnName="LINE_STATUS_CODE" DataType="ShortStatus" DefaultValue="' '" Description="Line Status Code" Nullable="false" XMLName="LineStatusCode"/>
+				<Attribute ColumnName="LINE_TAX" DataType="UnitPrice" DefaultValue="0" Description="Line Tax" Nullable="false" XMLName="LineTax"/>
+
+
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_INV_LINE_PK">
+                <Attribute ColumnName="INVOICE_LINE_KEY" XmlName="InvoiceLineKey"/>
+            </PrimaryKey>
+
+			<Parent ParentTableName="XPX_INVOICE_HDR" >
+				<Attribute ColumnName="INVOICE_HDR_KEY" ParentColumnName="INVOICE_HDR_KEY" />
+			</Parent>
+		</Entity>
+	</Entities>
+</DBSchema>

@@ -1,0 +1,8 @@
+<PersonInfoList TotalNumberOfRecords="">
+   <PersonInfo>
+  	<Extn/>
+    </PersonInfo>
+  <AddressVerificationResponseMessages>
+    <AddressVerificationResponseMessage MessageCode="" MessageText="" />
+  </AddressVerificationResponseMessages >
+</PersonInfoList>

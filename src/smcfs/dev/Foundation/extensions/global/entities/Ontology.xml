@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>
+      <Entity ApiNeeded="Y" AuditRequired="N" Description="Ontology" HasHistory="False" Prefix="XPX" TableName="XPX_ONTOLOGY">
+         <Attributes>
+            <Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Create TimeStamp" />
+
+            <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Modify TimeStamp" />
+
+            <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="&amp;apos; &amp;apos;" Description="Creating User ID" />
+
+            <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="&amp;apos; &amp;apos;" Description="Modifying User ID" />
+
+            <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="&amp;apos; &amp;apos;" Description="Creating Program ID" />
+
+            <Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="&amp;apos; &amp;apos;" Description="Modifying Program ID" />
+
+            <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="Lock ID" />
+
+            <Attribute ColumnName="ONTOLOGY_KEY" DataType="Key" DefaultValue=" " Description="Ontology Key" Nullable="False" XMLName="OntologyKey" />
+
+            <Attribute ColumnName="ONTOLOGY_NAME" DataType="Text-40" DefaultValue=" " Nullable="False" XMLName="OntologyName" />
+
+            <Attribute ColumnName="ATTRIBUTE01" DataType="Text-40" Nullable="True" XMLName="Attribute01" />
+
+            <Attribute ColumnName="ATTRIBUTE02" DataType="Text-40" Nullable="True" XMLName="Attribute02" />
+
+            <Attribute ColumnName="ATTRIBUTE03" DataType="Text-40" Nullable="True" XMLName="Attribute03" />
+
+            <Attribute ColumnName="ATTRIBUTE04" DataType="Text-40" Nullable="True" XMLName="Attribute04" />
+
+            <Attribute ColumnName="ATTRIBUTE05" DataType="Text-40" Nullable="True" XMLName="Attribute05" />
+
+            <Attribute ColumnName="ATTRIBUTE06" DataType="Text-40" Nullable="True" XMLName="Attribute06" />
+
+            <Attribute ColumnName="ATTRIBUTE07" DataType="Text-40" Nullable="True" XMLName="Attribute07" />
+
+            <Attribute ColumnName="ATTRIBUTE08" DataType="Text-40" Nullable="True" XMLName="Attribute08" />
+
+            <Attribute ColumnName="ATTRIBUTE09" DataType="Text-40" Nullable="True" XMLName="Attribute09" />
+
+            <Attribute ColumnName="ATTRIBUTE10" DataType="Text-40" Nullable="True" XMLName="Attribute10" />
+
+            <Attribute ColumnName="ATTRIBUTE11" DataType="Text-40" Nullable="True" XMLName="Attribute11" />
+
+            <Attribute ColumnName="ATTRIBUTE12" DataType="Text-40" Nullable="True" XMLName="Attribute12" />
+
+            <Attribute ColumnName="ATTRIBUTE13" DataType="Text-40" Nullable="True" XMLName="Attribute13" />
+
+            <Attribute ColumnName="ATTRIBUTE14" DataType="Text-40" Nullable="True" XMLName="Attribute14" />
+
+            <Attribute ColumnName="ATTRIBUTE15" DataType="Text-40" Nullable="True" XMLName="Attribute15" />
+
+            <Attribute ColumnName="ATTRIBUTE16" DataType="Text-40" Nullable="True" XMLName="Attribute16" />
+
+            <Attribute ColumnName="ATTRIBUTE17" DataType="Text-40" Nullable="True" XMLName="Attribute17" />
+
+            <Attribute ColumnName="ATTRIBUTE18" DataType="Text-40" Nullable="True" XMLName="Attribute18" />
+
+            <Attribute ColumnName="ATTRIBUTE19" DataType="Text-40" Nullable="True" XMLName="Attribute19" />
+
+            <Attribute ColumnName="ATTRIBUTE20" DataType="Text-40" Nullable="True" XMLName="Attribute20" />
+
+            <Attribute ColumnName="ATTRIBUTE21" DataType="Text-40" Nullable="True" XMLName="Attribute21" />
+
+            <Attribute ColumnName="ATTRIBUTE22" DataType="Text-40" Nullable="True" XMLName="Attribute22" />
+
+            <Attribute ColumnName="ATTRIBUTE23" DataType="Text-40" Nullable="True" XMLName="Attribute23" />
+
+            <Attribute ColumnName="ATTRIBUTE24" DataType="Text-40" Nullable="True" XMLName="Attribute24" />
+
+            <Attribute ColumnName="ATTRIBUTE25" DataType="Text-40" Nullable="True" XMLName="Attribute25" />
+
+            <Attribute ColumnName="ATTRIBUTE26" DataType="Text-40" Nullable="True" XMLName="Attribute26" />
+
+            <Attribute ColumnName="ATTRIBUTE27" DataType="Text-40" Nullable="True" XMLName="Attribute27" />
+
+            <Attribute ColumnName="ATTRIBUTE28" DataType="Text-40" Nullable="True" XMLName="Attribute28" />
+
+            <Attribute ColumnName="ATTRIBUTE29" DataType="Text-40" Nullable="True" XMLName="Attribute29" />
+
+            <Attribute ColumnName="ATTRIBUTE30" DataType="Text-40" Nullable="True" XMLName="Attribute30" />
+
+            <Attribute ColumnName="ATTRIBUTE31" DataType="Text-40" Nullable="True" XMLName="Attribute31" />
+
+            <Attribute ColumnName="ATTRIBUTE32" DataType="Text-40" Nullable="True" XMLName="Attribute32" />
+
+            <Attribute ColumnName="ATTRIBUTE33" DataType="Text-40" Nullable="True" XMLName="Attribute33" />
+
+            <Attribute ColumnName="ATTRIBUTE34" DataType="Text-40" Nullable="True" XMLName="Attribute34" />
+
+            <Attribute ColumnName="ATTRIBUTE35" DataType="Text-40" Nullable="True" XMLName="Attribute35" />
+
+            <Attribute ColumnName="ATTRIBUTE36" DataType="Text-40" Nullable="True" XMLName="Attribute36" />
+
+            <Attribute ColumnName="ATTRIBUTE37" DataType="Text-40" Nullable="True" XMLName="Attribute37" />
+
+            <Attribute ColumnName="ATTRIBUTE38" DataType="Text-40" Nullable="True" XMLName="Attribute38" />
+
+            <Attribute ColumnName="ATTRIBUTE39" DataType="Text-40" Nullable="True" XMLName="Attribute39" />
+
+            <Attribute ColumnName="ATTRIBUTE40" DataType="Text-40" Nullable="True" XMLName="Attribute40" />
+
+            <Attribute ColumnName="ATTRIBUTE41" DataType="Text-40" Nullable="True" XMLName="Attribute41" />
+
+            <Attribute ColumnName="ATTRIBUTE42" DataType="Text-40" Nullable="True" XMLName="Attribute42" />
+
+            <Attribute ColumnName="ATTRIBUTE43" DataType="Text-40" Nullable="True" XMLName="Attribute43" />
+
+            <Attribute ColumnName="ATTRIBUTE44" DataType="Text-40" Nullable="True" XMLName="Attribute44" />
+
+            <Attribute ColumnName="ATTRIBUTE45" DataType="Text-40" Nullable="True" XMLName="Attribute45" />
+
+            <Attribute ColumnName="ATTRIBUTE46" DataType="Text-40" Nullable="True" XMLName="Attribute46" />
+
+            <Attribute ColumnName="ATTRIBUTE47" DataType="Text-40" Nullable="True" XMLName="Attribute47" />
+
+            <Attribute ColumnName="ATTRIBUTE48" DataType="Text-40" Nullable="True" XMLName="Attribute48" />
+
+            <Attribute ColumnName="ATTRIBUTE49" DataType="Text-40" Nullable="True" XMLName="Attribute49" />
+
+            <Attribute ColumnName="ATTRIBUTE50" DataType="Text-40" Nullable="True" XMLName="Attribute50" />
+
+            <Attribute ColumnName="ATTRIBUTE51" DataType="Text-40" Nullable="True" XMLName="Attribute51" />
+
+            <Attribute ColumnName="ATTRIBUTE52" DataType="Text-40" Nullable="True" XMLName="Attribute52" />
+
+            <Attribute ColumnName="ATTRIBUTE53" DataType="Text-40" Nullable="True" XMLName="Attribute53" />
+
+            <Attribute ColumnName="ATTRIBUTE54" DataType="Text-40" Nullable="True" XMLName="Attribute54" />
+
+            <Attribute ColumnName="ATTRIBUTE55" DataType="Text-40" Nullable="True" XMLName="Attribute55" />
+
+            <Attribute ColumnName="ATTRIBUTE56" DataType="Text-40" Nullable="True" XMLName="Attribute56" />
+
+            <Attribute ColumnName="ATTRIBUTE57" DataType="Text-40" Nullable="True" XMLName="Attribute57" />
+
+            <Attribute ColumnName="ATTRIBUTE58" DataType="Text-40" Nullable="True" XMLName="Attribute58" />
+
+            <Attribute ColumnName="ATTRIBUTE59" DataType="Text-40" Nullable="True" XMLName="Attribute59" />
+
+            <Attribute ColumnName="ATTRIBUTE60" DataType="Text-40" Nullable="True" XMLName="Attribute60" />
+
+            <Attribute ColumnName="ATTRIBUTE61" DataType="Text-40" Nullable="True" XMLName="Attribute61" />
+
+            <Attribute ColumnName="ATTRIBUTE62" DataType="Text-40" Nullable="True" XMLName="Attribute62" />
+
+            <Attribute ColumnName="ATTRIBUTE63" DataType="Text-40" Nullable="True" XMLName="Attribute63" />
+
+            <Attribute ColumnName="ATTRIBUTE64" DataType="Text-40" Nullable="True" XMLName="Attribute64" />
+
+            <Attribute ColumnName="ATTRIBUTE65" DataType="Text-40" Nullable="True" XMLName="Attribute65" />
+
+            <Attribute ColumnName="ATTRIBUTE66" DataType="Text-40" Nullable="True" XMLName="Attribute66" />
+
+            <Attribute ColumnName="ATTRIBUTE67" DataType="Text-40" Nullable="True" XMLName="Attribute67" />
+
+            <Attribute ColumnName="ATTRIBUTE68" DataType="Text-40" Nullable="True" XMLName="Attribute68" />
+
+            <Attribute ColumnName="ATTRIBUTE69" DataType="Text-40" Nullable="True" XMLName="Attribute69" />
+
+            <Attribute ColumnName="ATTRIBUTE70" DataType="Text-40" Nullable="True" XMLName="Attribute70" />
+
+            <Attribute ColumnName="ATTRIBUTE71" DataType="Text-40" Nullable="True" XMLName="Attribute71" />
+
+            <Attribute ColumnName="ATTRIBUTE72" DataType="Text-40" Nullable="True" XMLName="Attribute72" />
+
+            <Attribute ColumnName="ATTRIBUTE73" DataType="Text-40" Nullable="True" XMLName="Attribute73" />
+
+            <Attribute ColumnName="ATTRIBUTE74" DataType="Text-40" Nullable="True" XMLName="Attribute74" />
+
+            <Attribute ColumnName="ATTRIBUTE75" DataType="Text-40" Nullable="True" XMLName="Attribute75" />
+         </Attributes>
+
+         <PrimaryKey Name="ONTOLOGY_PK">
+            <Attribute ColumnName="ONTOLOGY_KEY" />
+         </PrimaryKey>
+      </Entity>
+
+   
+   </Entities>
+</DBSchema>
+

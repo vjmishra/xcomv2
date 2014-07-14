@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+    <Entities>
+        <Entity
+            ApiNeeded = "Y"
+            AuditRequired = "Y"
+            Description = "XPedx Legacy UNSPSC  XREF Table"
+            Prefix = "XPX"
+            TableName = "XPX_B2B_LEGACY_UNSPSC_XREF">
+            <!--table columns -->
+            <Attributes>
+                <Attribute
+                    ColumnName = "MASTER_CUSTOMERID"
+                    DataType = "CustomerId"
+                    DefaultValue = " "
+                    Nullable = "false"
+                    Description = "Customer ID"
+                    XMLName = "MasterCustomerID"/>
+                <Attribute
+                    ColumnName = "XPEDX_UNSPSC"
+                    DataType = "Text-40"
+                    DefaultValue = "' '"
+					Nullable = "false"
+                    Description = "Xpedx UNSPSC"
+                    XMLName = "XpedxUNSPSC"/>
+                <Attribute
+                    ColumnName = "CUSTOMER_UNSPSC"
+                    DataType = "Text-40"
+                    DefaultValue = "' '"
+                    Nullable = "false"
+					Description = "Customer UNSPSC"
+                    XMLName = "CustomerUNSPSC"/>
+				<Attribute
+                    ColumnName = "LEGACY_ITEM_ID"
+                    DataType = "ItemID"
+                    DefaultValue = "' '"
+                    Nullable = "false"
+					Description = "Legacy ItemID"
+                    XMLName = "LegacyItemID"/>
+                <Attribute
+                    ColumnName = "CREATETS"
+                    DataType = "TimeStamp"
+                    DefaultValue = "sysdate"
+                    Description = "Create TimeStamp"/>
+                <Attribute
+                    ColumnName = "MODIFYTS"
+                    DataType = "TimeStamp"
+                    DefaultValue = "sysdate"
+                    Description = "Modify TimeStamp"/>
+                <Attribute
+                    ColumnName = "CREATEUSERID"
+                    DataType = "UserId"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Creating User ID"/>
+                <Attribute
+                    ColumnName = "MODIFYUSERID"
+                    DataType = "UserId"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Modifying User ID"/>
+                <Attribute
+                    ColumnName = "CREATEPROGID"
+                    DataType = "ProgramID"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Creating Program ID"/>
+                <Attribute
+                    ColumnName = "MODIFYPROGID"
+                    DataType = "ProgramID"
+                    DefaultValue = "&apos; &apos;"
+                    Description = "Modifying Program ID"/>
+                <Attribute
+                    ColumnName = "LOCKID"
+                    DataType = "Lockid"
+                    DefaultValue = "0"
+                    Description = "Lock ID"/>
+            </Attributes>
+            <!--PrimaryKey is a mandatory attribute in entity definition. This
+            element can have ONLY ONE attribute element -->
+            <PrimaryKey Name = "XPX_B2B_UNSPSC_PK">
+                <Attribute ColumnName = "MASTER_CUSTOMERID"/>
+				<Attribute ColumnName = "LEGACY_ITEM_ID"/>
+			    <Attribute ColumnName = "XPEDX_UNSPSC"/>
+            </PrimaryKey>
+        </Entity>
+    </Entities>
+</DBSchema>

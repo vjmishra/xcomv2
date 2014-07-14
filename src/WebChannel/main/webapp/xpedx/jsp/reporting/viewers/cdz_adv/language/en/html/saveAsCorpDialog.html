@@ -1,0 +1,307 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Save As Corporate dialog window</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/tree.js"></script>
+<script language="javascript"> 
+var url = parent._root + "incSave" + parent._appExt;
+url += parent.urlParams(true,true);
+url += "&from=Corporate";
+includeScript(url) ;
+</script>
+<script language="javascript">
+var saveAsCorpDlg = null;
+var info = null;
+var okButton = null;
+var cancelButton = null;
+var helpButton = null;
+var tzone = null;
+var corpDocIcn = null;
+var favDocIcn = null;
+var fileName = null;
+var domain = null;
+var yesRadio = null;
+var noRadio = null;
+var categoryList = null;
+var usrgpList = null;
+var buttonsWidth= 60;
+var buttonsHeight= 52;
+var dlgWidth= 450;
+var dlgHeight= 300;
+var tabWidth= 0.8*dlgWidth;
+var tabHeight= 0.75*dlgHeight;
+var frmZoneWidth= 0.2*dlgWidth;
+var frmZoneHeight= 0.9*dlgHeight;
+var textFieldWidth= frmZoneWidth;
+var categListWidth= 130;
+var categListHeight= 185;
+var usrgpListWidth= 140;
+var usrgpListHeight= 130;
+var iconW= 40;
+var iconH= iconW;
+var initialized= false;
+</script>
+<script language="javascript">
+function fillWidgets()
+{
+fileName.setValue(docName);
+var i;
+for ( i = 0; i < 10; i++ )
+domain.add(domainList[i],domainList[i],false,"");
+if ( bRefreshOnOpen )
+yesRadio.check( true )
+else
+noRadio.check( true );
+}
+function corpDocCB(index)
+{
+}
+function favDocCB(index)
+{
+}
+function tabCB(index)
+{
+}
+function okCB( )
+{
+}
+function cancelCB()
+{
+saveAsCorpDlg.show(false);
+}
+function helpCB()
+{
+parent.showAlertDialog("Not implemented yet !","Development version",0);
+saveAsCorpDlg.show(false);
+}
+function loadCB()
+{
+initDom(parent._skin, parent._lang, parent,"saveAsCorpDlg");
+if (!initialized)
+{
+initialized=true;
+saveAsCorpDlg = newDialogBoxWidget("saveAsCorpDlg","Save As",dlgWidth,dlgHeight,
+okCB,cancelCB,true);
+tzone = newTabbedZone("saveZone",tabCB,tabWidth,tabHeight);
+tzone.add("Main","main");
+tzone.add("Properties","properties");
+corpDocIcn = newIconRadioWidget("corpDocIcn","images/corporate.gif",corpDocCB,"","Corporate Documents",null,iconW,iconH);
+favDocIcn = newIconRadioWidget("favDocIcn","images/favorite.gif",favDocCB,"","My Favorites",null,iconW,iconH);
+framezone = newFrameZoneWidget("framezone",frmZoneWidth,frmZoneHeight);
+fileName = newTextFieldWidget("fileName", null, 255, null, null, null, null, 325);
+icons = new Array;
+icons[0] = new BOIconDesc(16,16,parent._img+"break.gif");
+categoryList = newIconListWidget("categoryList",categListWidth,categListHeight,
+icons,null,null);
+domain = newComboWidget("domain",null,null,null,"Domain:");
+usrgpList = newIconListWidget("usergpList",usrgpListWidth,usrgpListHeight,
+icons,null,null);
+yesRadio = newRadioWidget("yesRadio", "RadioGp1", "Yes", null, 
+false, "", 0, 0);
+noRadio = newRadioWidget("noRadio", "RadioGp1", "No", null, 
+false, "", 0, 0);
+description = newWidget("description");
+keywords = newWidget("keywords");
+info = newInfoWidget("saveAsCorpInfo","Details","","");
+okButton = newButtonWidget("saveAsCorpDlgOkButton", "OK", 
+"okCB()", buttonsWidth, "OK", 
+"OK", 0, 0);
+cancelButton = newButtonWidget("saveAsCorpCancelButton", "Cancel", 
+"cancelCB()", buttonsWidth, "Cancel", 
+"Cancel", 0, 0);
+helpButton = newButtonWidget("hsaveAsCorpHelpButton", "Help", 
+"helpCB()", buttonsWidth, "Help", 
+"Help", 0, 0);
+}
+if ( !_curWin.saveAsCorpDlgInitialized )
+{
+_curWin.saveAsCorpDlgInitialized = true;
+targetApp(
+saveAsCorpDlg.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="5" border="0" width="100%"><tbody>'+
+'<tr>'+
+'<td align="center" valign="center">' +
+'<table class="dialogzone" cellspacing="5" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>'+
+'<td align="center">'+
+framezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td align="center">'+ corpDocIcn.getHTML() + '</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="center">'+ 'Corporate Documents' + '</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="center">'+ favDocIcn.getHTML() + '</td>'+
+'</tr>' +
+'<tr>' +
+'<td align="center">'+ 'My Favorites' + '</td>'+
+'</tr>' +
+'</tbody></table>'+
+framezone.endHTML() +
+'</td>'+
+'<td align="center">'+
+tzone.beginHTML() +
+tzone.beginTabHTML(0) +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td>'+
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td valign="bottom">'+'Name' + '</td>'+
+'<td valign="bottom">'+ fileName.getHTML() + '</td>'+
+'</tr>' +
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td colspan="2" style="padding-top=5px" valign="bottom">'+
+'Save in:<BR>' +
+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td valign="top">' +
+categoryList.getHTML() +
+'</td>' +
+'<td valign="top">' +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td style="padding-left=5px" align="left" valign="top">' +
+'Domain:' +
+'</td>' +
+'<td align="right" valign="top">' +
+domain.getHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+'<td style="padding-left=5px" align="left" valign="top">' +
+'User groups:' +
+'</td>' +
+'<td align="right" valign="top">' +
+usrgpList.getHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+'<td valign="center" colspan="2">' +
+getSep() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+'<td colspan="2">' +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%" ><tbody>' +
+'<tr>' +
+'<td style="padding-left=5px" align="left" valign="center">' + 
+'Refresh on open' + '</td>'+
+'<td align="left" valign="center">'+ yesRadio.getHTML() + '</td>'+
+'<td align="left" valign="center">'+ noRadio.getHTML() + '</td>'+
+'</tr>' +
+'</tbody></table>'+
+'</td>' +
+'</tr>' +
+'</tbody></table>'+
+'</td>' +
+'</tr>' +
+'</tbody></table>'+
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+tzone.endTabHTML() +
+tzone.beginTabHTML(1) +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td style="padding-left=10px" align="right" valign="top">' +
+'Description' +
+'</td>' +
+'<td style="padding-left=10px" align="right" valign="top">' +
+'<textarea id="description" rows="6" cols="32" >' + 
+comments +
+'</textarea>' + 
+'</td>' +
+'</tr>' +
+'<tr>' +
+'<td style="padding-left=10px" align="left" valign="top">' +
+'Keywords' +
+'</td>' +
+'<td style="padding-left=10px" align="right" valign="top">' +
+'<textarea id="keywords" rows="3" cols="32" >' +
+keywords +
+'</textarea>' +
+'</td>' +
+'</tr>' +
+'</tbody></table>' +
+tzone.endTabHTML() +
+tzone.endHTML() +
+'</td>'+
+'</tr>' +
+'</tbody></table>'+
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center" valign="center">' +
+   info.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="50%"><tbody>' +
+   '<tr>' +
+   '<td align="right">' + okButton.getHTML() + '</td>' +
+   '<td align="right">' + getSpace(5,1)+ '</td>' +
+   '<td align="right">' + cancelButton.getHTML() + '</td>' +
+   '<td align="right">' + getSpace(5,1)+ '</td>' +   
+   '<td align="right">' + helpButton.getHTML() + '</td>' +
+'</tr>' +
+'</tbody></table>'+
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+saveAsCorpDlg.endHTML()
+);
+}
+saveAsCorpDlg.init();
+tzone.init();
+info.init();
+okButton.init();
+cancelButton.init();
+helpButton.init();
+corpDocIcn.init();
+favDocIcn.init();
+fileName.init();
+domain.init();
+yesRadio.init();
+noRadio.init();
+categoryList.init();
+usrgpList.init();
+fillWidgets();
+tzone.showTab( 0, true );
+tzone.select( 0 );
+saveAsCorpDlg.show(true);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+</body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order AllocationRuleID="" AutoCancelDate="" AuthorizationExpirationDate=""
+	BillToID="" BuyerOrganizationCode="" CarrierAccountNo=""
+	CarrierServiceCode="" ChargeActualFreightFlag=""
+	CustomerEMailID="" CustomerPONo="" CustCustPONo="" DeliveryCode="" Division=""
+	DocumentType="" DraftOrderFlag="" EnteredBy="" EnterpriseCode=""
+	EntryType="" FreightTerms="" HoldFlag=""
+	HoldReasonCode="" MaxOrderStatus="" MaxOrderStatusDesc=""
+	MinOrderStatus="" MinOrderStatusDesc="" NotificationReference=""
+	NotificationType="" NotifyAfterShipmentFlag="" OrderDate=""
+	OrderHeaderKey="" OrderName="" OrderNo="" OrderType=""
+	OriginalTax="" OriginalTotalAmount="" OtherCharges=""
+	PaymentStatus="" PersonalizeCode="" PriceProgramKey=""
+	PriorityCode="" PriorityNumber="" Purpose="" ReceivingNode="" ReqCancelDate=""
+	ReqDeliveryDate="" ReqShipDate="" SCAC=""
+	ScacAndService="" ScacAndServiceKey="" SearchCriteria1=""
+	SearchCriteria2="" SellerOrganizationCode="" ShipCompleteFlag=""
+	ShipToID="" Status="" TaxExemptFlag=""
+	TaxExemptionCertificate="" TaxJurisdiction="" TaxPayerId=""
+	TermsCode="" TotalAdjustmentAmount="" isHistory="" ShipNode="">
+	<Extn />
+	<PriceInfo Currency="" EnterpriseCurrency=""
+		ReportingConversionDate="" ReportingConversionRate="" TotalAmount=""/>
+	<OverallTotals GrandCharges="" GrandDiscount="" GrandTax=""
+		GrandTotal="" HdrCharges="" HdrDiscount="" HdrTax=""
+		HdrTotal="" LineSubTotal=""/>
+	<!-- OverallTotals is a template-driven element but its attributes are not. The element can be removed from the template, and prevented from appearing in the output. But if the attributes are removed from the template, they will still be present in the output xml. -->
+	<InvoicedTotals GrandCharges="" GrandDiscount="" GrandTax=""
+		GrandTotal="" HdrCharges="" HdrDiscount="" HdrTax=""
+		HdrTotal="" LineSubTotal=""/>
+	<!-- InvoicedTotals is a template-driven element but its attributes are not. The element can be removed from the template, and prevented from appearing in the output. But if the attributes are removed from the template, they will still be present in the output xml. -->
+	<RemainingTotals GrandCharges="" GrandDiscount="" GrandTax=""
+		GrandTotal="" HdrCharges="" HdrDiscount="" HdrTax=""
+		HdrTotal="" LineSubTotal=""/>
+	<!-- RemainingTotals is a template-driven element but its attributes are not. The element can be removed from the template, and prevented from appearing in the output. But if the attributes are removed from the template, they will still be present in the output xml. -->
+	<OrderLines>
+		<OrderLine>
+			<Extn/>
+			<Item/>
+			<LinePriceInfo/>
+			<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+			<OrderStatuses>
+				<OrderStatus/>
+			</OrderStatuses>
+			<Instructions>
+				<Instruction InstructionType="" InstructionText=""/>
+			</Instructions>
+			<LineCharges>
+				<LineCharge ChargeAmount=""/>
+			</LineCharges>
+			<Awards>
+				<Award AwardId=""/>
+			</Awards>
+		</OrderLine>
+	</OrderLines>
+	<PersonInfoShipTo AddressLine1="" AddressLine2="" AddressLine3="" City="" Country="" State="" ZipCode=""/>
+	<PersonInfoBillTo AddressLine1="" AddressLine2="" AddressLine3="" City="" Country="" State="" ZipCode=""/>
+	<Instructions>
+		<Instruction InstructionType="" InstructionText=""/>
+	</Instructions>
+</Order>

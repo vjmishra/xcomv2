@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="" HasHistory="False" Prefix="XPEDX" TableName="XPEDX_MY_ITEMS_LIST_SHARE">
+			<Attributes>
+				
+				<Attribute ColumnName="MODIFYTS" 	 DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp"/>
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId" 		DefaultValue="' '" Description="Creating User ID"/>
+				<Attribute ColumnName="CREATEUSERNAME" DataType="UserName" 	DefaultValue="' '" Description="Creating User Name"/>
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId" 		DefaultValue="' '" Description="Modifying User ID"/>
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID" 	DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" 	DefaultValue="' '" Description="Modifying Program ID"/>
+				<Attribute ColumnName="LOCKID" 		 DataType="Lockid" 		DefaultValue="0" Description="Lock ID"/>
+				
+				<Attribute ColumnName="MY_ITEMS_LIST_SHARE_KEY"  	DataType="Key" 			Description="" Nullable="False" XMLName="MyItemsListShareKey"/>
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY"  	 	 	DataType="Key" 			DefaultValue=" " Description="" Nullable="False" XMLName="MyItemsListKey"/>
+				<Attribute ColumnName="CUSTOMER_PATH"  	 	 		DataType="Text-1000" 	DefaultValue=" " Description="" Nullable="False" XMLName="CustomerPath"/>
+				<Attribute ColumnName="CUSTOMER_ID"  	 	 		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="CustomerID"/>
+				<Attribute ColumnName="DIVISION_ID"  	 	 		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="DivisionID"/>
+			</Attributes>
+			
+			<PrimaryKey Name="MY_ITEMS_SHARE_PK">
+				<Attribute ColumnName="MY_ITEMS_LIST_SHARE_KEY"/>
+			</PrimaryKey>
+			
+			<Parent ParentTableName="XPEDX_MY_ITEMS_LIST" >
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY" ParentColumnName="MY_ITEMS_LIST_KEY" />
+			</Parent>
+			<Indices>
+				<Index Name="XPEDX_MY_ITEMS_LIST_SHARE_I01" Unique="False">
+					<Column Name="MY_ITEMS_LIST_KEY" />
+				</Index>
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XPEDXOrderSearchListViewList>
+	<XPEDXOrderSearchListView OrderHeaderKey="" ShipToID=""  OrderName="" OrderType="" DraftOrderFlag="" CustomerPoNo="" OrderDate="" Currency="" Modifyts="" 
+	Modifyuserid="" ExtnWebConfNum="" ExtnOrderDivision="" ExtnLegacyOrderNo="" ExtnLegacyOrderType="" ExtnShipToName="" ExtnOrderedByName="" ExtnTotalOrderValue="" 
+	ExtnTotOrdValWithoutTaxes="" ExtnOrderSubTotal="" ExtnOrderStatus="" HoldStatus="" AddressLine1 ="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5=""
+	AddressLine6="" City="" State="" ZipCode="" Country="" StatusQuantity="" OrderStatus="" Status="" ExtnInvoiceNo="" ExtnInvoicedDate="" ExtnGenerationNo="" HoldType="" ResolverUserId=""/>
+</XPEDXOrderSearchListViewList>

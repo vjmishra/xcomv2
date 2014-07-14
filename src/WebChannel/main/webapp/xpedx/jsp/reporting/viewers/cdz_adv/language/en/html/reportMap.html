@@ -1,0 +1,614 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+#rmTree{position:absolute;top:0px;left:0px;}
+</style>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript">
+p=parent;
+initDom("../../../lib/images/"+p._skinName+"/", p._lang);
+p.setKeyCB(this, false)
+</script>
+<script language="javascript">
+p.arrReportMap=new Array();
+var url=p._root+"incReportMap"+p._appExt+"?sEntry="+p.strEntry;
+includeScript(url);
+</script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript">styleSheet()</script>
+<script language="javascript">
+isPageLoaded=false;
+isReportMap=true;
+blnSelectNode=true;
+blnAllowRefreshRM=false;
+curReportID=p.iReportID;
+curNodeID=p.iReportID;
+docMapID="DocMap";
+_root=null;
+_this=null;
+dirImg='../../../images/main/';
+rmTree=newTreeWidget('rmTree',160,280,dirImg+"docmap.gif",clickCB,null,"dialogzone",onExpandCB,onCollapseCB);
+arrExpandedNodes= new Array();
+maxToCollapse=200;
+isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+arrEvts=new Array();
+arrEvts[arrEvts.length]=p.newObserverOneEvent(p._EVT_BEFORE_TOKEN_UPDATE,beforeTokenUpdate);
+function beforeTokenUpdate()
+{
+p.setRepMapState(p.strEntry);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_UNDO_REDO,p._EVT_PAGE_LOADED,undoRedoRepMap);
+function undoRedoRepMap()
+{
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry;
+var arrExp=p.getRepMapState(p.strEntry);
+if (arrExp!=null && arrExp.length>0)
+{
+var lst=document.frmReportMap.lstNodes;
+lst.value="";
+for (var i=0; i<arrExp.length; i++)
+{
+lst.value=(lst.value=="")?arrExp[i]:lst.value+";"+arrExp[i];
+}
+submitForm2UpdateRepMap(url);
+}
+else
+{
+blnAllowRefreshRM=true;
+frameNav("HiddenRepMap",url,false);
+}
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REP_SELECTED,p._EVT_PAGE_LOADED,updateRepSelection);
+function updateRepSelection()
+{
+var iReport=parseInt(p.iReportID.split('-')[0]);
+selItemAfterSync(iReport);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REP_RENAMED,p._EVT_PAGE_LOADED,updateRepRenamed);
+function updateRepRenamed()
+{
+var iReport=parseInt(p.iReportID.split('-')[0]);
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+if (parseInt(p.arrReportMap[i][0])==iReport)
+{
+p.arrReportMap[i][1]=p.arrReports[iReport].name;
+break;
+}
+}
+buildTree();
+selItemAfterSync(iReport);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REP_DELETED,p._EVT_PAGE_LOADED,updateRepDeleted);
+function updateRepDeleted(evt,data)
+{
+arrExpandedNodes=new Array();
+var iRepDel=parseInt(data);
+var iVisibleItems=0; j=0;
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+var rm=p.arrReportMap[i];
+var strRootID=rm[0].split('-')[0];
+if (strRootID!=data)
+{
+iVisibleItems++;
+if (rm[8])
+{
+arrExpandedNodes[j]=rm[0];
+j++;
+}
+}
+}
+var lst=document.frmReportMap.lstNodes;
+lst.value="";
+for (var i=0; i<j; i++)
+{
+var iRootID=arrExpandedNodes[i].split('-')[0];
+if (iRootID>iRepDel)
+{
+var arr=arrExpandedNodes[i].split('-');
+arr[0]--;
+arrExpandedNodes[i]=arr.join('-');
+}
+lst.value=(lst.value=="")?arrExpandedNodes[i]:lst.value+";"+arrExpandedNodes[i];
+}
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry;
+if (iVisibleItems>maxToCollapse) url+="&sCollapse=yes";
+submitForm2UpdateRepMap(url);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REP_MOVED,p._EVT_PAGE_LOADED,updateRepMoved);
+function updateRepMoved(evt,data)
+{
+arrExpandedNodes=new Array();
+var j=0;
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+if (p.arrReportMap[i][8])
+{
+arrExpandedNodes[j]=p.arrReportMap[i][0];
+j++;
+}
+}
+data.from=parseInt(data.from.split('-')[0]);
+var diff=data.from-data.dest;
+var step=1;
+for (var i=0; i<j; i++)
+{
+var arr=arrExpandedNodes[i].split('-');
+var iRootID=parseInt(arr[0]);
+if (iRootID==data.from)
+{
+arr[0]=(data.from-diff).toString();
+arrExpandedNodes[i]=arr.join('-');
+}
+else if (iRootID>=data.dest && iRootID<data.from)
+{
+arr[0]=(iRootID+step).toString();
+arrExpandedNodes[i]=arr.join('-');
+}
+else if (iRootID>data.from && iRootID<=data.dest)
+{
+arr[0]=(iRootID-step).toString();
+arrExpandedNodes[i]=arr.join('-');
+}
+}
+var lst=document.frmReportMap.lstNodes;
+lst.value="";
+for (var i=0; i<j; i++)
+{
+lst.value=(lst.value=="")?arrExpandedNodes[i]:lst.value+";"+arrExpandedNodes[i];
+}
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry;
+var iVisibleItems=getNbVisibleItems();
+if (iVisibleItems>maxToCollapse) url+="&sCollapse=yes";
+submitForm2UpdateRepMap(url);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REP_DUPLICATED,p._EVT_PAGE_LOADED,updateRepDuplicated);
+function updateRepDuplicated()
+{
+blnAllowRefreshRM=true;
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry+"&sAppendRoot=yes";
+frameNav("HiddenRepMap",url,false);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REP_ADDED,p._EVT_PAGE_LOADED,updateRepAdded);
+function updateRepAdded()
+{
+blnAllowRefreshRM=true;
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry+"&sAppendRoot=yes";
+frameNav("HiddenRepMap",url,false);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REFRESH_DATA,p._EVT_PAGE_LOADED,updateDocRefreshed);
+function updateDocRefreshed()
+{
+var arrTmp=new Array();
+var nb=p.nbRepMapFields;
+var j=0;
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+if (p.arrReportMap[i][4]=="")
+{
+p.arrReportMap[i][7]=false;
+p.arrReportMap[i][8]=false;
+arrTmp[j]=new Array(nb);
+for (var k=0; k<nb; k++)
+{
+arrTmp[j][k]=p.arrReportMap[i][k];
+}
+j++;
+}
+}
+p.arrReportMap=new Array();
+for (var i=0; i<j; i++)
+{
+p.arrReportMap[i]=new Array(nb);
+for (var k=0; k<nb; k++)
+{
+p.arrReportMap[i][k]=arrTmp[i][k];
+}
+}
+buildTree();
+selItemAfterSync();
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_DOC_UPDATE,p._EVT_PAGE_LOADED,updateDocEdited);
+function updateDocEdited()
+{
+blnAllowRefreshRM=true;
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry;
+frameNav("HiddenRepMap",url,false);
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_REINIT_REPORTMAP_NODE,p._EVT_PAGE_LOADED,reInitRepNode);
+function reInitRepNode(evt,blnFolder)
+{
+var blnRebuildTree=false;
+var iNode=-1;
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+if (p.arrReportMap[i][0]==p.iReportID)
+{
+iNode=i;
+break;
+}
+}
+if (iNode>-1)
+{
+var rm=p.arrReportMap[iNode];
+if (rm[7])
+{
+var iNextNode=iNode+1;
+blnRebuildTree=true;
+var j=0;
+for (var i=iNextNode; i<p.arrReportMap.length; i++)
+{
+if (p.arrReportMap[i][0].split('-')[0]==p.iReportID)
+j++;
+else
+break;
+}
+splice(iNextNode, j);
+rm=p.arrReportMap[iNode];
+rm[7]=false;
+rm[8]=false;
+}
+if (typeof(blnFolder)!="undefined")
+{
+if (rm[2]==blnFolder)
+{
+rm[2]=!blnFolder;
+blnRebuildTree=true;
+}
+}
+if (blnRebuildTree)
+{
+buildTree();
+selItemAfterSync();
+}
+}
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_RESTORE_AFTER_ERR,p._EVT_PAGE_LOADED,restoreAfterError);
+function restoreAfterError()
+{
+updateRepSelection();
+}
+function submitForm2UpdateRepMap(url)
+{
+url+="&sTarget=SecondDlgFrame";
+blnAllowRefreshRM=true;
+parent.SecondDlgFrame.location.replace(url);
+}
+function selItemAfterSync(iReport)
+{
+iReport=(typeof(iReport)!="undefined")?iReport:parseInt(p.iReportID.split('-')[0]);
+blnSelectNode=false;
+var node=_root.findByData(iReport);
+if (node!=null)
+node.select();
+blnSelectNode=true;
+}
+function splice(iStart, iDeleteCount)
+{
+if (iDeleteCount>0)
+{
+var arrTmp=new Array();
+var iEnd=iStart + iDeleteCount - 1;
+var nb=p.nbRepMapFields;
+var j=0;
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+if (i<iStart || i>iEnd)
+{
+arrTmp[j]=new Array(nb);
+for (var k=0; k<nb; k++)
+{
+arrTmp[j][k]=p.arrReportMap[i][k];
+}
+j++;
+}
+}
+p.arrReportMap=new Array();
+for (var i=0; i<arrTmp.length; i++)
+{
+p.arrReportMap[i]=new Array(nb);
+for (var j=0; j<nb; j++)
+{
+p.arrReportMap[i][j]=arrTmp[i][j];
+}
+}
+arrTmp=null;
+}
+}
+function detachEvents()
+{
+for (var i=0; i<arrEvts.length; i++)
+{
+p.eventManager.detach(arrEvts[i]);
+}
+}
+function getNbVisibleItems()
+{
+var arrParents=new Array();
+arrParents[0]=true;
+var iNbVisible=0;
+for (var i=0; i<p.arrReportMap.length; i++)
+{
+if (arrParents[p.arrReportMap[i][3]])
+iNbVisible++;
+if (p.arrReportMap[i][7])
+arrParents[p.arrReportMap[i][3] + 1]= p.arrReportMap[i][8];
+}
+return iNbVisible;
+}
+function resizeCB()
+{
+if (isPageLoaded)
+rmTree.resize( Math.max(10,winWidth() + (_moz?4:0)), Math.max(10,winHeight() + (_moz?4:0)));
+}
+function getElementIndex(strID,iStart)
+{
+var iRet=null;
+iStart=(typeof(iStart)!="undefined")?iStart:0;
+for (var i=iStart;i<p.arrReportMap.length;i++)
+{
+if (p.arrReportMap[i]!=null)
+{
+if (p.arrReportMap[i][0]==strID)
+{
+iRet=i;
+break;
+}
+}
+}
+return iRet;
+}
+function appendNodes(strParentNode)
+{
+if (blnAllowRefreshRM)
+{
+blnAllowRefreshRM=false;
+var iPNIndex=0;
+var blnFoundParentNode=false;
+var iNbNodes=0;
+if (typeof(strParentNode) != "undefined") {
+iNbNodes=p.arrReportMap.length;
+for (var i=0; i<iNbNodes; i++)
+{
+if (p.arrReportMap[i][0]==strParentNode)
+{
+p.arrReportMap[i][7]=true;
+p.arrReportMap[i][8]=true;
+iPNIndex = i;
+blnFoundParentNode=true;
+break;
+}
+}
+}
+if (blnFoundParentNode)
+{
+var nb=p.nbRepMapFields;
+var fs=self.HiddenRepMap;
+var iCount=fs.arrRepMapItems.length;
+if (iCount>0)
+{
+var iEnd=iNbNodes-1;
+for (var i=iEnd; i>iPNIndex; i--)
+{
+var j=i+iCount;
+p.arrReportMap[j]=new Array(nb);
+for (var k=0; k<nb; k++)
+{
+p.arrReportMap[j][k]=p.arrReportMap[i][k];
+}
+}
+var iStart=iPNIndex+1;
+for (var i=0; i<iCount; i++)
+{
+var j=i+iStart;
+p.arrReportMap[j]=new Array(nb);
+for (var k=0; k<nb; k++)
+{
+p.arrReportMap[j][k]=fs.arrRepMapItems[i][k];
+}
+}
+for (var i=0; i<iCount; i++)
+{
+if (!fs.arrRepMapItems[i][2])
+{
+var w=_this.add(newTreeWidgetElem(1,fs.arrRepMapItems[i][1],fs.arrRepMapItems[i][0],null,null,null,p.getIconAlt(p._DOCMAP_IMG,1)));
+w.setIncomplete(querycompleteCB);
+}
+else
+_this.add(newTreeWidgetElem(1,fs.arrRepMapItems[i][1],fs.arrRepMapItems[i][0],null,null,null,p.getIconAlt(p._DOCMAP_IMG,1)));
+}
+_this.finishComplete();
+_this.expanded=true;
+}
+}
+}
+setTimeout("if (!p._doNotHideOnLoadReport) p.hideBlockWhileWaitWidget()", 1);
+}
+function buildTree()
+{
+rmTree.deleteAll();
+var docType=(p.strDocType=='rep')?3:2
+_root=rmTree.add(newTreeWidgetElem(docType,p.strDocName,docMapID,null,null,null,p.getIconAlt(p._DOCMAP_IMG,docType)));
+_root.expanded=true;
+var arrParentNodes=new Array();
+arrParentNodes[0]=_root;
+for (var i=0;i<p.arrReportMap.length;i++)
+{
+var iconType=(p.arrReportMap[i][0].indexOf('-')>=0)?1:0;
+var w=arrParentNodes[p.arrReportMap[i][3]].add(newTreeWidgetElem(iconType,p.arrReportMap[i][1],p.arrReportMap[i][0],null,null,null,p.getIconAlt(p._DOCMAP_IMG,iconType)));
+if (!p.arrReportMap[i][2])
+{
+if (!p.arrReportMap[i][7])
+w.setIncomplete(querycompleteCB);
+else
+{
+arrParentNodes[p.arrReportMap[i][3]+1]=w;
+if (p.arrReportMap[i][8])
+w.expanded=true;
+}
+}
+}
+rmTree.rebuildHTML();
+arrParentNodes=null;
+}
+function querycompleteCB()
+{
+_this=this;
+var i=getElementIndex(this.userData);
+if (i!=null)
+{
+blnAllowRefreshRM = true;
+var url=p._root+"reportMap"+p._appExt+"?sEntry="+p.strEntry+
+"&sPath="+p.arrReportMap[i][5]+"&sNodeID="+p.arrReportMap[i][0]+
+"&iLevel="+p.arrReportMap[i][3];
+p.wt();
+frameNav("HiddenRepMap",url,false);
+}
+}
+function onExpandCB(strID)
+{
+var i=getElementIndex(strID);
+if (i!=null) p.arrReportMap[i][8]=true;
+}
+function onCollapseCB(strID)
+{
+var i=getElementIndex(strID);
+if (i!=null) p.arrReportMap[i][8]=false;
+}
+function clickCB()
+{
+var node=this.getSelectedItem();
+if (node.userData!=curNodeID && node.userData!=docMapID)
+{
+curNodeID=node.userData;
+if (isPageLoaded && blnSelectNode)
+{
+var i=getElementIndex(curNodeID);
+if (i!=null)
+{
+var objTarget=p.Report;
+var arrNodes=p.arrReportMap[i][0].split('-');
+var iReport=arrNodes[0];
+var j=parseInt(iReport);
+    p._curIdRef=null
+var url=p.urlParamsNoBID(p.strEntry,null,iReport,p.arrReports[j].pageMode,p.arrReports[j].repMode,null);
+url=removeQueryParameter(url, "iPage")+'&nbPage='+p.arrReports[j].nbPage;
+    if (p.strPageMode!="Listing") url+='&sPath='+p.arrReportMap[i][5];
+url+='&sRSI=false&sUndoEnabled=false';
+if (p.arrReports[j].repMode=="Analysis")
+{
+if (iReport==p.iReportID.split('-')[0])
+{
+objTarget=objTarget.Reportbloc;
+url='viewReport'+p._appExt+url+'&sAnchor='+p.arrReportMap[i][6];
+}
+else
+url='report'+p._appExt+url+'&sAnchor='+p.arrReportMap[i][6];
+}
+else
+url='viewReport'+p._appExt+url+'&sAnchor='+p.arrReportMap[i][6];
+var blnShowHourglass=true;
+if (p.strPageMode=="Listing")
+{
+var r=getReportIDFromNode(curNodeID);
+blnShowHourglass=(r!=curReportID)?true:false;
+}
+else
+if (blnShowHourglass)
+    p.wt();
+objTarget.location.replace(p._root+url);
+var pMode=p.arrReports[j].pageMode;
+p.updatePageModeMenu(pMode);
+p.showPageNavigIcons((pMode=='Page'||pMode=='QuickDisplay')?true:false);
+}
+}
+curReportID=getReportIDFromNode(curNodeID);
+}
+}
+function getReportIDFromNode(strNode)
+{
+var arr=strNode.split('-');
+return arr[0];
+}
+function loadCB()
+{
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+p.showAlertDialog(_displayErrorMessage,p._ERR_REPORT_MAP,2);
+}
+else
+{
+rmTree.init();
+rmTree.deleteAll();
+isPageLoaded=true;
+resizeCB();
+var lst=document.frmReportMap.lstNodes;
+lst.value="";
+var arrExp=p.getRepMapState(p.strEntry);
+if (arrExp!=null && arrExp.length>0)
+{
+for (var i=0; i<arrExp.length; i++)
+{
+lst.value=(lst.value=="")?arrExp[i]:lst.value+";"+arrExp[i];
+}
+}
+if (lst.value=="")
+{
+buildTree();
+var node=_root.findByData(parseInt(p.iReportID));
+if (node!=null)
+node.select();
+}
+else
+{
+var url=p._root+"updateReportMap"+p._appExt+"?sEntry="+p.strEntry;
+submitForm2UpdateRepMap(url);
+}
+}
+}
+function writeMyBody()
+{
+if (!window._isSessionInvalid)
+{
+document.write('<script language="javascript">rmTree.write()</sc' + 'ript>')
+}
+}
+function onUnloadCB()
+{
+p.setRepMapState(p.strEntry);
+detachEvents();
+}
+function lPaneContextMenu()
+{
+return false;
+}
+</script>
+</head>
+<body style="overflow:hidden" class="dialogzone" scroll="no" marginheight="5" marginwidth="5" leftmargin="5" topmargin="5" onLoad="loadCB()" onUnload="onUnloadCB()" onresize="resizeCB()" oncontextmenu="return lPaneContextMenu();">
+<script language="javascript">writeMyBody()</script>
+<iframe name="HiddenRepMap" style="position:absolute;left:-100px;top:-100px;width:10px;height:10px;" src="../../../lib/empty.html"></iframe>
+<form name="frmReportMap" method="post">
+<input type="hidden" name="lstNodes" value="">
+</form>
+</body>
+</html>

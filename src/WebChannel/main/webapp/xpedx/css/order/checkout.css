@@ -1,0 +1,185 @@
+.checkout-body
+{
+	padding: 0px 10px;
+}
+.checkout-body textarea
+{
+    font-size: 12px;
+    height: 43px;
+    margin: 0 6px 6px 0;
+    width: 225px;
+}
+.checkout-body fieldset
+{
+	-moz-border-radius:5px;  
+  border-radius: 5px;  
+  -webkit-border-radius: 5px;
+	padding: 7px 8px 8px;
+	border: 1px solid #ccc;
+	margin-bottom: 12px;
+}
+.checkout-body th { font-weight: bold; }
+.checkout-body legend {
+	padding: 0 0.5em;
+}
+.address-block
+{
+	text-align: left;
+	vertical-align: top;
+	width: 260px;
+	float: left;
+}
+.address-block a { font-size: 0.9em; }
+.shipping-methods
+{
+	float: left;
+}
+.pick-up-location
+{
+	float: right;
+    margin: 3px 40px 0 5px;
+	width: 225px;
+}
+.checkout-left, .checkout-right
+{
+	margin-top: 20px;
+}
+div.checkout-left{
+	
+	}
+
+.block-label { display: block; }
+ .email-confirm-right
+{
+    margin-right: 2px;
+    width: 60%;
+	float: right;
+}
+.checkout-right {}
+.checkout-left textarea
+{
+	margin-bottom: 10px;
+}
+.email-confirm-right-legend
+{
+	background: #fff;
+	padding: 0px 2px;
+	width: 29em;
+}
+.cart-summary
+{
+	padding: 10px;
+}
+.cart-sum-left
+{
+	width: 49%;
+	float: left;
+}
+.cart-sum-right
+{    
+	background-color: #FAFAFA;
+    border: 1px solid #CCCCCC;
+    float: right;
+    padding: 5px;
+    	-moz-border-radius:5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.cart-sum-right table
+{
+	float: right;
+    width: 333px;
+}
+.cart-summary th
+{
+	font-weight: normal;
+}
+.cart-summary td
+{
+	text-align: right;
+	min-width: 10em;
+}
+.order-total
+{
+	background: #d6d6d6;
+	border: 1px solid #999;
+}
+.order-total th, .order-total td
+{
+	font-weight: bold;
+	padding: 4px
+}
+.mil-wrap
+{
+	width: auto;
+}
+
+.mil-wrap.last
+{
+	-moz-border-radius:0px 0px 5px 5px;
+	border-radius: 0px 0px 5px 5px;
+	-webkit-border-radius: 0px 0px 5px 5px;
+}
+#coupon-field
+{
+	width: 18em;
+     margin-left: -11px;
+}
+#coupon-field input
+{
+	width: 11em;
+	margin-top: 3px;
+}
+.brand-info {
+    margin-left: 16px;
+}
+.placed-by { margin-top: 10px; text-align:center;}
+.cust-field-summary { float: right; margin-top:27px; }
+.cust-field-summary td { padding: 3px 3px; }
+.cust-field-summary td.left { min-width: 8em; }
+.mil-action-list-wrap td { vertical-align: top; padding-right: 10px; }
+.float-right { float: right; }
+.float-left { float: left; }
+.print-ico-xpedx { margin-right:15px; }
+
+/* start shopping cart specific changes */
+div.shopping-cart .mil-checkbox-wrap { margin: 4px 0 0 5px; }
+div.shopping-cart .mil-wrap-condensed-desc { margin-left:9px; }
+div.shopping-cart .mil-attr-wrap { margin-left: 9px; }
+div.shopping-cart div.mil-edit-forms input { width:200px; }
+div.shopping-cart div.mil-edit-forms textarea { width:400px; }
+
+/* end shopping cart specific changes */
+
+/* start checkout specific changes */
+div#po_combo label { float: left; margin-right: 5px;  margin-top: 3px;}
+span#attn-text { float: left; margin-right: 5px;  margin-top: 3px; }
+div#wwgrp_ShipToAttn { float: left; }
+table#checkout-po-tbl td { padding:0px 10px 10px 0px; }
+table#checkout-po-tbl td.first-cell-first-row { width:250px; padding-bottom: 0; }
+table#checkout-po-tbl td.first-cell-second-row { padding-top: 0; }
+table#checkout-po-tbl td.second-cell-first-row { padding-bottom: 0; }
+table#checkout-po-tbl td.first-cell-second-row span { margin-bottom: 3px; }
+div.checkout div.short-description { margin-left: 15px; }
+table#checkout-table-header { width:100%; }
+div.checkout #checkout-table-header td { width: auto; padding-top: 10px 0px;}
+div.checkout .mil-wrap .bottom-mil-info .brand-info { margin-left: 15px; line-height:30px; float: left;}
+div.checkout .cart-summary { padding-right:0px; }
+div.checkout #po_combo_ctr { margin-left: 38px; }
+div.checkout #po_combo_ctr div {margin:0px; border-color:#cccccc;}
+div#checkout-container fieldset table { line-height: 16px; }
+
+/* end checkout specific changes */
+
+
+.font
+{
+font-size:12px;		
+}
+.email-textarea{width:370px;}
+p.email-list-prop { padding-left:5px; width: 224px; word-wrap:break-word; float:left;margin-top: -2px;}
+input#input-prop { float: left; }
+textarea#newEmailAddr { height:30px;  width: 360px; }
+.-padding-right-0 { padding-right: 0px; }
+table#textboxes td.second-cell { padding-left: 15px; }
+fieldset#bottom-fieldset { width: 933px; }

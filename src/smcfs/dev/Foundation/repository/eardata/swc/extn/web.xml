@@ -1,0 +1,1315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <context-param> 
+        <param-name>console-application-id</param-name> 
+        <param-value>/swc</param-value> 
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/configure.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/summary.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/addToCart.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <!-- Commented for JIRA 2486 and added a new mapping for Sales Rep login-->
+     <!--  <context-param>
+        <param-name>xpedx_sales_rep_login_url</param-name>
+        <param-value>/xpedx/jsp/salesrep/salesRepLogin.jsp</param-value>
+    </context-param> -->
+     <context-param>
+        <param-name>xpedx_sales_rep_login_url</param-name>
+        <param-value>/home/salesReploginFullPage.action</param-value>
+    </context-param>
+    <!-- End of JIRA 2486  -->
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/subModelConfig.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/resolveConflict.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/showRuleTrace.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/conflictResolution.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/testCart.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/configstatus.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/launchModel.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/home.action</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/configure.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/summary.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/addToCart.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/subModelConfig.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/resolveConflict.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/showRuleTrace.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/conflictResolution.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/testCart.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/configstatus.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/launchModel.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter::/configurator/home.do</param-name>
+        <param-value>com.comergent.security.xss.adapters.SICSubModelPunchOutRequestValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>csrf.bypass.uri.endswith.uifwkimpl.1</param-name>
+        <param-value>.js</param-value>
+    </context-param>
+    <context-param>
+        <param-name>csrf.bypass.uri.endswith.uifwkimpl.2</param-name>
+        <param-value>.css</param-value>
+    </context-param>
+    <context-param>
+        <param-name>csrf.bypass.uri.endswith.uifwkimpl.3</param-name>
+        <param-value>.gif</param-value>
+    </context-param>
+    <context-param>
+        <param-name>csrf.bypass.uri.endswith.uifwkimpl.4</param-name>
+        <param-value>.png</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.yfc.1</param-name>
+        <param-value>/RcpServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.yfc.2</param-name>
+        <param-value>/interop/InteropHttpServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.yfc.3</param-name>
+        <param-value>/RcpSSOServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.yfc.4</param-name>
+        <param-value>/RcpAutoUpdateServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.yfc.5</param-name>
+        <param-value>/yfc/popupframe.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.yfc.6</param-name>
+        <param-value>/yfshttpapi/genericinvoke.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookie.name.1</param-name>
+        <param-value>JSESSIONID</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookie.name.2</param-name>
+        <param-value>SCUI_COOKIE_NAME</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookie.name.3</param-name>
+        <param-value>isCookieDisabled</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookie.disabled</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-request-log-enabled</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-access-token-validation-method</param-name>
+        <param-value>POST</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-access-token-validation-secure</param-name>
+        <param-value>TRUE</param-value>
+    </context-param>
+    <context-param>
+        <param-name>yfc-filter-1</param-name>
+        <param-value>com.yantra.yfs.ui.backend.YFSCheckUserFilter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>sc-ui-pagination-sorting-type</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-request-validator-20</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.security.SCUIDirectAccessValidator</param-value>
+    </context-param>
+    <context-param>
+        <param-name>directaccess.restricted.uri.uifwkimpl.1</param-name>
+        <param-value>/wizardxmls/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>directaccess.restricted.uri.uifwkimpl.2</param-name>
+        <param-value>/mashupxmls/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>directaccess.restricted.uri.uifwkimpl.3</param-name>
+        <param-value>/builder/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-param-value-validation-adapter</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.security.SCUIImplParamValueValidationAdapter</param-value>
+    </context-param>
+    <context-param>
+        <param-name>request.validation.bypass.uri.uifwkimpl.1</param-name>
+        <param-value>/interop/InteropHttpServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.nouilogin.uifwkimpl.1</param-name>
+        <param-value>/NoUILoginServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-transaction-context-factory</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-secure-cookie-provider</param-name>
+        <param-value>com.sterlingcommerce.ui.web.framework.security.SCUISecureCookieProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-secure-token-generator</param-name>
+        <param-value>com.sterlingcommerce.ui.web.framework.security.SCUISecureTokenGenerator</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-authorization-provider</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.security.SCUIAuthorizationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-localization-provider</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.localization.SCUILocalizationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-datatype-provider</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.datatype.SCUIDataTypeProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-uistate-provider</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.state.SCUIStateProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-post-authentication-provider.uiFwkImpl.1</param-name>
+        <param-value>com.sterlingcommerce.ui.web.platform.custom.SCUIAdditionalThemeSupport</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookie.name.10</param-name>
+        <param-value>Theme</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookie.name.11</param-name>
+        <param-value>LocalCode</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-end-transaction-before-response</param-name>
+        <param-value>N</param-value>
+    </context-param>
+    <context-param>
+        <param-name>directaccess.restricted.uri.uifwkimpl.20</param-name>
+        <param-value>/swc/jsp/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>directaccess.restricted.uri.uifwkimpl.21</param-name>
+        <param-value>/yfscommon/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-suppress-request-validation</param-name>
+        <param-value>TRUE</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-authentication-provider</param-name>
+        <param-value>com.sterlingcommerce.xpedx.webchannel.security.XPEDXAuthenticationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-login-page</param-name>
+        <param-value>/home/loginFullPage.action</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-guest-login-error</param-name>
+        <param-value>/swc/jsp/guestLoginError.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-login-redirecor-page</param-name>
+        <param-value>/swc/jsp/home/loginRedirector.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui_login_post_url</param-name>
+        <param-value>login.action</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-postlogin-catalog-landingpage</param-name>
+        <param-value>/home/home.action</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-postlogin-account-landingpage</param-name>
+        <param-value>/home/home.action</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-storefront-errorpage</param-name>
+        <param-value>/jsp/invalidStorefrontError.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-loginhomepage-provider</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCHomePageProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-login-page-provider</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCLoginPageProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-post-authentication-provider.wc</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCPostAuthenticationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc.scui-post-authentication-provider.1</param-name>
+        <param-value>com.sterlingcommerce.xpedx.webchannel.security.XPEDXContextBuilder_PostAuthenticationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc.scui-post-authentication-provider.2</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCRememberMePostAuthenticationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc.scui-post-authentication-provider.3</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCRedirectPostAuthenticationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc.scui-post-authentication-provider.4</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCL10NPostAuthenticationProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>URLRedirectParamName</param-name>
+        <param-value>URLRedirectParamName</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-request-validator</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.storefront.WCStorefrontValidator
+				</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-guest-user</param-name>
+        <param-value>guest</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-guest-user-provider</param-name>
+        <param-value>com.sterlingcommerce.xpedx.webchannel.security.XPEDXGuestUserProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-auto-guest-login-provider</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.wcaas.WCAutoGuestLoginProvider</param-value>
+    </context-param>
+    <context-param>
+        <param-name>urlPath-sfid-locator</param-name>
+        <param-value>^http(s)?://[\.?\w]+(:\d{1,4})?/[\w]+/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>queryString-sfid-name</param-name>
+        <param-value>sfId</param-value>
+    </context-param>
+    <context-param>
+        <param-name>queryString-sftheme-name</param-name>
+        <param-value>sfTheme</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-sf-identifier</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.storefront.RequestAttribute_StorefrontIdentifier</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-sf-theme-identifier</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.storefront.RequestAttribute_StorefrontThemeIdentifier</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-sf-injector</param-name>
+        <param-value>com.sterlingcommerce.webchannel.core.storefront.URLPath_StorefrontInjector</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-param-value-validation-rule-properties</param-name>
+        <param-value>swc_ParamValue_ValidationRules.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-param-value-validation-rule-properties-extn</param-name>
+        <param-value>swc_ParamValue_ValidationRules_extn.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-input-type-validation-rule-properties</param-name>
+        <param-value>swc_InputType_ValidationRules.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-input-type-validation-rule-properties-extn</param-name>
+        <param-value>swc_InputType_ValidationRules_extn.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-global-validation-exception-handler-path</param-name>
+        <param-value>/swc/jsp/dataValidationError.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-validation-property-refresh-required</param-name>
+        <param-value>FALSE</param-value>
+    </context-param>
+    <context-param>
+        <param-name>wc-ariba-session-identifier</param-name>
+        <param-value>JSESSIONID</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.1</param-name>
+        <param-value>/console/login.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.2</param-name>
+        <param-value>/console/icons/sterling_logo.gif</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.3</param-name>
+        <param-value>/console/scripts/login.js</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.4</param-name>
+        <param-value>/yfcscripts/modalDialog_mb.js</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.16</param-name>
+        <param-value>/yfshttpapi/yantrahttpapitester.js</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.20</param-name>
+        <param-value>/yfshttpapi/yantrahttpapitester.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.119</param-name>
+        <param-value>/xpedx/jsp/procurement/oci/OCIPost.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.21</param-name>
+        <param-value>/css/sapphire.css</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.25</param-name>
+        <param-value>/interop/InteropHttpServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.26</param-name>
+        <param-value>/servlets/com.yantra.app.config.YantraConfigServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.27</param-name>
+        <param-value>/accessTokenServlet</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.77</param-name>
+        <param-value>/xpedx/jsp/salesrep/salesRepLogin.jsp</param-value>
+    </context-param>
+	<context-param>
+        <param-name>bypass.uri.endswith.wc.78</param-name>
+        <param-value>.jpg</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.wc.1</param-name>
+        <param-value>/interop/ariba</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.wc.2</param-name>
+        <param-value>/interop/oci</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.wc.3</param-name>
+        <param-value>/xpedx/jsp/procurement/oci/OCIPost.jsp</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.wc.4</param-name>
+        <param-value>/interop/cxml</param-value>
+    </context-param>    
+    <context-param>
+        <param-name>bypass.uri.wc.5</param-name>
+        <param-value>/interop/xcxml</param-value>
+    </context-param>    
+    <context-param>
+        <param-name>bypass.uri.endswith.wc.1</param-name>
+        <param-value>.css</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.endswith.wc.2</param-name>
+        <param-value>.gif</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.endswith.wc.3</param-name>
+        <param-value>.png</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.endswith.wc.4</param-name>
+        <param-value>.svg_png</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.endswith.wc.5</param-name>
+        <param-value>.svg</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.endswith.wc.6</param-name>
+        <param-value>.js</param-value>
+    </context-param>
+    <context-param>
+        <param-name>bypass.uri.startswith.wc.1</param-name>
+        <param-value>/swc/jsp/test</param-value>
+    </context-param>
+    <context-param>
+        <param-name>scui-stacktrace-resourceid</param-name>
+        <param-value>/swc/error-stack-trace</param-value>
+    </context-param>
+	<!--Session Manage Filter - Start 1650 -->
+	<context-param>
+	<param-name>defaultSfId</param-name>
+       <param-value>xpedx</param-value>
+	   </context-param>
+	<filter>
+	    <filter-name>SessionManageFilter</filter-name>
+	    <filter-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXSessionManageFilter</filter-class>
+		<init-param>
+	<param-name>excludeActions</param-name>
+	<param-value>brands.action,ajaxAutocomplete.action,login.action,home.action,gategorySubMenu.action,resetPassword.action,salesRepLogin.action,salesReploginFullPage.action,salesRepCustomerLogin.action,pLogin.action,validateResetPassword,validatePassword,changePwdForgotPwd,answerSubmit,forgotPwd,searchCustomer,logout,MyRegisterUser,MyContact,printOrderDetail,MyPrivacyPolicy.action,debugmgi.action</param-value>
+    </init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionManageFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<!--Session Manage Filter - End 1650 -->
+    <filter>
+        <filter-name>UIFwk Impl Filter</filter-name>
+        <filter-class>com.sterlingcommerce.ui.web.platform.filters.SCUIPlatformImplFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Safe Request Filter</filter-name>
+        <filter-class>com.sterlingcommerce.security.dv.web.SCUISafeRequestFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Request Validator Filter</filter-name>
+        <filter-class>com.sterlingcommerce.security.dv.web.SCUIRequestValidatorFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Request Log Filter</filter-name>
+        <filter-class>com.sterlingcommerce.ui.web.framework.filters.SCUIRequestLogFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Character Encoding Filter</filter-name>
+        <filter-class>com.sterlingcommerce.ui.web.framework.filters.SCUICharacterEncodingFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>UI Transaction Filter</filter-name>
+        <filter-class>com.sterlingcommerce.ui.web.framework.filters.SCUITransactionFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>UI Authentication Filter</filter-name>
+        <filter-class>com.sterlingcommerce.ui.web.framework.filters.SCUIAuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>platformActionResultFilter</filter-name>
+        <filter-class>com.sterlingcommerce.ui.web.platform.filters.SCUIPlatformActionResultFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>struts-cleanup</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Ariba Integration Filter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.servlet.eprocurement.AribaIntegrationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>OCI Integration Filter</filter-name>
+        <filter-class>com.sterlingcommerce.xpedx.webchannel.punchout.servlet.OciIntegrationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Temp Validation Rule Initializer Filter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.core.security.xss.SWCValidationRuleInjectorFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>struts</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+        <init-param>
+            <param-name>struts.devMode</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>actionPackages</param-name>
+            <param-value>com.sterlingcommerce.imagebuilder.actions</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>swc_struts_defaults.xml,struts-plugin.xml,struts.xml</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>svg-transcoder-filter</filter-name>
+        <filter-class>com.sterlingcommerce.imagebuilder.filters.ServerSideSVGFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>charsetfilter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.common.CharsetFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CacheFilter</filter-name>
+        <filter-class>com.sterlingcommerce.imagebuilder.filters.CacheFilter</filter-class>
+        <init-param>
+            <param-name>cacheTimeout</param-name>
+            <param-value>60</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>WCRequestLoggingFilter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.common.WCRequestLoggingFilter</filter-class>
+        <!-- true to log all incoming requests -->
+        <init-param>
+            <param-name>logAll</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <!-- if logAll is false, only request with matching suffixes is logged -->
+        <init-param>
+            <param-name>suffixes</param-name>
+            <param-value>.action, .do</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>WC Storefront Identification Filter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.servlet.WCStorefrontIdentificationFilter</filter-class>
+        <init-param>
+            <param-name>defaultSfId</param-name>
+            <param-value>xpedx</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>WC Secure Filter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.servlet.WCSecureFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>Ariba Session Identifier Filter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.servlet.eprocurement.AribaSessionIdentifierFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>WCExpiresFilter</filter-name>
+        <filter-class>com.sterlingcommerce.webchannel.servlet.WCExpiresFilter</filter-class>
+        <init-param>
+            <param-name>TimeToLive</param-name>
+            <param-value>86400</param-value>
+        </init-param>
+    </filter> 
+    <filter-mapping>
+        <filter-name>Ariba Integration Filter</filter-name>
+        <url-pattern>/interop/ariba</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+    <filter-name>Ariba Integration Filter</filter-name>
+        <url-pattern>/interop/cxml</url-pattern>
+    </filter-mapping>    
+    <filter-mapping>
+    <filter-name>Ariba Integration Filter</filter-name>
+        <url-pattern>/interop/xcxml</url-pattern>
+    </filter-mapping>    
+    <filter-mapping>
+        <filter-name>OCI Integration Filter</filter-name>
+        <url-pattern>/interop/oci</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Temp Validation Rule Initializer Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCRequestLoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>UIFwk Impl Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Safe Request Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Request Validator Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCExpiresFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCExpiresFilter</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCExpiresFilter</filter-name>
+        <url-pattern>*.gif</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCExpiresFilter</filter-name>
+        <url-pattern>*.bmp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCExpiresFilter</filter-name>
+        <url-pattern>*.png</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WCExpiresFilter</filter-name>
+        <url-pattern>*.img</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>charsetfilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WC Storefront Identification Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>WC Secure Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Ariba Session Identifier Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheFilter</filter-name>
+        <url-pattern>*.svg_png</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>svg-transcoder-filter</filter-name>
+        <url-pattern>*.svg_png</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Request Log Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>Character Encoding Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>UI Transaction Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>UI Authentication Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>platformActionResultFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>struts-cleanup</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>struts</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <listener id="listener_1">
+        <listener-class>com.sterlingcommerce.ui.web.framework.listeners.SCUISessionListener</listener-class>
+    </listener>
+    <listener id="listener_2">
+        <listener-class>com.yantra.ycp.ui.backend.YCPSessionListener</listener-class>
+    </listener>
+    <servlet id="Servlet_1">
+        <servlet-name>InitializationServlet</servlet-name>
+        <servlet-class>com.comergent.reference.apps.configurator.InitializationServlet</servlet-class>
+        <init-param>
+            <param-name>ObjectMap</param-name>
+            <param-value>ObjectMap.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>EhCache</param-name>
+            <param-value>EhCache.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>CacheTypes</param-name>
+            <param-value>cacheTypes.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>FunctionHandler</param-name>
+            <param-value>functionHandlers.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sic-param-value-validation-rule-properties</param-name>
+            <param-value>sic_ParamValue_ValidationRules.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sic-param-value-validation-rule-properties-extn</param-name>
+            <param-value>sic_ParamValue_ValidationRules_extn.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sic-input-type-validation-rule-properties</param-name>
+            <param-value>sic_InputType_ValidationRules.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sic-input-type-validation-rule-properties-extn</param-name>
+            <param-value>sic_InputType_ValidationRules_extn.properties</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_2">
+        <description>SCUIAdapterInitializerServlet</description>
+        <display-name>SCUIAdapterInitializerServlet</display-name>
+        <servlet-name>SCUIAdapterInitializerServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.security.dv.ui.SCUIAdapterInitializerServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_3">
+        <description>requestValidationInitServlet</description>
+        <display-name>requestValidationInitServlet</display-name>
+        <servlet-name>requestValidationInitServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.security.dv.web.SCUIValidationInitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_4">
+        <description>SCUIDataValidationInitServlet</description>
+        <display-name>SCUIDataValidationInitServlet</display-name>
+        <servlet-name>SCUIDataValidationInitServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.security.SCUIDataValidationInitServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_5">
+        <description>Load Library Servlet</description>
+        <display-name>Load Library Servlet</display-name>
+        <servlet-name>jsLibServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.servlets.SCUIJSLibServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_6">
+        <description>DataType Servlet</description>
+        <display-name>DataType Servlet</display-name>
+        <servlet-name>dataTypeServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.servlets.SCUIDataTypeServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_7">
+        <description>Server Date Servlet</description>
+        <display-name>Server Date Servlet</display-name>
+        <servlet-name>serverDateServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.servlets.SCUIServerDateFetchServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_8">
+        <description>Sterling web ui state manager servlet</description>
+        <display-name>SC UI State Servlet</display-name>
+        <servlet-name>SCUIStateServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.servlets.state.SCUIStateServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_9">
+        <display-name>BaseUIFrameworkInitializerServlet</display-name>
+        <servlet-name>baseUIInitializerServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.servlets.SCUIInitializerServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_10">
+        <display-name>cacheHandlerServlet</display-name>
+        <servlet-name>cacheHandlerServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.framework.servlets.SCUICacheHandlerServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_11">
+        <description>Access Token Validator Servlet</description>
+        <display-name>Access Token Validator Servlet</display-name>
+        <servlet-name>accessTokenValidatorServlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.AccessTokenValidatorServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_12">
+        <description>Authentication Servlet</description>
+        <display-name>Auth Servlet</display-name>
+        <servlet-name>authservlet</servlet-name>
+        <servlet-class>com.yantra.ycp.cognos.YantraAuthenticationServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_13">
+        <description>Saved Search Servlet</description>
+        <display-name>Saved Search Servlet</display-name>
+        <servlet-name>savedsearchservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.SavedSearchServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_14">
+        <description>Image Servlet</description>
+        <display-name>Image Servlet</display-name>
+        <servlet-name>imageservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.ImageServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_15">
+        <description>Post Initialization Servlet</description>
+        <display-name>Post Initialization Servlet</display-name>
+        <servlet-name>postinitservlet</servlet-name>
+        <servlet-class>com.yantra.appserver.PostServletInitializer</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_16">
+        <description>Initializer Servlet</description>
+        <display-name>Initializer Servlet</display-name>
+        <servlet-name>initservlet</servlet-name>
+        <servlet-class>com.yantra.appserver.ConsoleUIInitializer</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_17">
+        <servlet-name>Initializer</servlet-name>
+        <servlet-class>com.yantra.appserver.ServletInitializer</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_18">
+        <description>List Servlet</description>
+        <display-name>List Servlet</display-name>
+        <servlet-name>listservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.ListServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_19">
+        <description>Detail Servlet</description>
+        <display-name>Detail Servlet</display-name>
+        <servlet-name>detailservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.DetailServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_20">
+        <description>Search Servlet</description>
+        <display-name>Search Servlet</display-name>
+        <servlet-name>searchservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.SearchServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_21">
+        <description>Console Servlet</description>
+        <display-name>Console Servlet</display-name>
+        <servlet-name>consoleservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.ConsoleServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_22">
+        <description>Action Servlet</description>
+        <display-name>Action Servlet</display-name>
+        <servlet-name>actionservlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.ActionServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_23">
+        <servlet-name>InteropHttpServlet</servlet-name>
+        <servlet-class>com.yantra.interop.client.InteropHttpServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_24">
+        <servlet-name>WmConfigServlet</servlet-name>
+        <servlet-class>com.yantra.interop.ui.backend.WmConfigServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_25">
+        <servlet-name>entityservlet</servlet-name>
+        <servlet-class>com.yantra.util.YEntityServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_26">
+        <servlet-name>APIServlet</servlet-name>
+        <servlet-class>com.yantra.ycp.util.YCPAPIServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_27">
+        <servlet-name>YHMMonitorServlet</servlet-name>
+        <servlet-class>com.yantra.ycp.hm.ui.backend.YHMMonitorServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_28">
+        <servlet-name>YCRNServlet</servlet-name>
+        <servlet-class>com.yantra.ycp.cognos.YCRNServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_29">
+        <description>Sterling No UI Login Servlet</description>
+        <display-name>No UI Login Servlet</display-name>
+        <servlet-name>NoUILoginServlet</servlet-name>
+        <servlet-class>com.yantra.yfc.servlets.YFCNoUILoginServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_30">
+        <description>Sterling rich client backend gateway Servlet</description>
+        <display-name>Rcp Servlet</display-name>
+        <servlet-name>RcpServlet</servlet-name>
+        <servlet-class>com.yantra.ycp.rcp.backend.YRCServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_31">
+        <description>Sterling application rich client single sign-on  Servlet</description>
+        <display-name>Rcp Single Sign-On Servlet</display-name>
+        <servlet-name>RcpSSOServlet</servlet-name>
+        <servlet-class>com.yantra.ycp.rcp.backend.YRCSSOServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_32">
+        <description>Sterling rich client backend Servlet for Auto Update</description>
+        <display-name>Rcp  Auto Update Servlet</display-name>
+        <servlet-name>RcpAutoUpdateServlet</servlet-name>
+        <servlet-class>com.yantra.ycp.rcp.backend.YRCAutoUpdateServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_33">
+        <servlet-name>JasperPDFReport</servlet-name>
+        <servlet-class>com.yantra.interop.client.InteropJasperServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_34">
+        <servlet-name>YFCJasperServlet</servlet-name>
+        <servlet-class>com.yantra.yfc.ui.backend.servlets.YFCJasperServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_35">
+        <description>SCUIImplDataValidationInitServlet</description>
+        <display-name>SCUIImplDataValidationInitServlet</display-name>
+        <servlet-name>SCUIImplDataValidationInitServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.platform.security.SCUIImplDataValidationInitServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_36">
+        <description>platformLoggingInitializeServlet</description>
+        <display-name>platformLoggingInitializeServlet</display-name>
+        <servlet-name>platformLoggingInitializeServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.platform.servlets.SCUIPlatformLoggingInitializerServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_37">
+        <description>platformInitializeServlet</description>
+        <display-name>platformInitializeServlet</display-name>
+        <servlet-name>platformInitializeServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.platform.servlets.SCUIPlatformInitializerServlet</servlet-class>
+        <load-on-startup>201</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_38">
+        <description>includeMenuServlet</description>
+        <display-name>includeMenuServlet</display-name>
+        <servlet-name>includeMenuServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.platform.servlets.SCUIIncludeMenuServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_39">
+        <display-name>logLevelEnableServlet</display-name>
+        <servlet-name>logLevelEnableServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.platform.servlets.SCUILogLevelEnableServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_40">
+        <description>includeResourcePermissionServlet</description>
+        <display-name>includeResourcePermissionServlet</display-name>
+        <servlet-name>includeResourcePermissionServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.ui.web.platform.servlets.SCUIIncludeResourcePermissionServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_41">
+        <description>WebChannelServletInitializer</description>
+        <display-name>WebChannelServletInitializer</display-name>
+        <servlet-name>WebChannelServletInitializer</servlet-name>
+        <servlet-class>com.sterlingcommerce.webchannel.servlet.WebChannelServletInitializer</servlet-class>
+        <load-on-startup>500</load-on-startup>
+    </servlet>
+    <servlet id="Servlet_42">
+        <description>AribaIntegrationServlet</description>
+        <display-name>AribaIntegrationServlet</display-name>
+        <servlet-name>AribaIntegrationServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.webchannel.servlet.eprocurement.AribaIntegrationServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_43">
+        <description>OciIntegrationServlet</description>
+        <display-name>OciIntegrationServlet</display-name>
+        <servlet-name>OciIntegrationServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.punchout.servlet.OciIntegrationServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_44">
+        <description>XPEDXOciServlet</description>
+        <display-name>XPEDXOciServlet</display-name>
+        <servlet-name>XPEDXOciServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.punchout.servlet.XPEDXOciServlet</servlet-class>
+    </servlet>
+    <servlet id="Servlet_45">
+        <description>XPEDXServletInitializer</description>
+        <display-name>XPEDXServletInitializer</display-name>
+        <servlet-name>XPEDXServletInitializer</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.XPEDXServletInitializer</servlet-class>
+        <load-on-startup>600</load-on-startup>
+    </servlet> 
+    <servlet id="Servlet_46">
+        <description>XPEDXAribaIntegrationServlet</description>
+        <display-name>XPEDXAribaIntegrationServlet</display-name>
+        <servlet-name>XPEDXAribaIntegrationServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXAribaIntegrationServlet</servlet-class>
+    </servlet> 
+    <servlet id="Servlet_47">
+        <description>XPEDXPunchoutServlet</description>
+        <display-name>XPEDXPunchoutServlet</display-name>
+        <servlet-name>XPEDXPunchoutServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutServlet</servlet-class>
+    </servlet> 
+    <servlet id="Servlet_48">
+		<servlet-name>SalesRepLogin</servlet-name>
+        <jsp-file>/xpedx/jsp/salesrep/salesRepLogin.jsp</jsp-file>
+	</servlet>	
+	<servlet>
+		<display-name>DownloadSample</display-name>
+		<servlet-name>DownloadSample</servlet-name>
+		<servlet-class>com.sterlingcommerce.xpedx.webchannel.common.DownloadSampleServlet</servlet-class>
+	</servlet>	
+	
+    <servlet-mapping id="ServletMapping_1">
+        <servlet-name>dataTypeServlet</servlet-name>
+        <url-pattern>/dataType/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_2">
+        <servlet-name>serverDateServlet</servlet-name>
+        <url-pattern>/dateutil/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_3">
+        <servlet-name>SCUIStateServlet</servlet-name>
+        <url-pattern>/platform/UIState/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_4">
+        <servlet-name>cacheHandlerServlet</servlet-name>
+        <url-pattern>/cache/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_5">
+        <servlet-name>jsLibServlet</servlet-name>
+        <url-pattern>/loadJSLib/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_6">
+        <servlet-name>accessTokenValidatorServlet</servlet-name>
+        <url-pattern>/accessTokenServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_7">
+        <servlet-name>NoUILoginServlet</servlet-name>
+        <url-pattern>/NoUILoginServlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_8">
+        <servlet-name>RcpServlet</servlet-name>
+        <url-pattern>/RcpServlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_9">
+        <servlet-name>RcpAutoUpdateServlet</servlet-name>
+        <url-pattern>/RcpAutoUpdateServlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_10">
+        <servlet-name>RcpSSOServlet</servlet-name>
+        <url-pattern>/RcpSSOServlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_11">
+        <servlet-name>imageservlet</servlet-name>
+        <url-pattern>/console/icons/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_12">
+        <servlet-name>imageservlet</servlet-name>
+        <url-pattern>/yfcicons/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_13">
+        <servlet-name>savedsearchservlet</servlet-name>
+        <url-pattern>/savedsearch/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_14">
+        <servlet-name>InteropHttpServlet</servlet-name>
+        <url-pattern>/interop/InteropHttpServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_15">
+        <servlet-name>WmConfigServlet</servlet-name>
+        <url-pattern>/interop/wm/WmConfigServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_16">
+        <servlet-name>listservlet</servlet-name>
+        <url-pattern>/list/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_17">
+        <servlet-name>detailservlet</servlet-name>
+        <url-pattern>/detail/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_18">
+        <servlet-name>searchservlet</servlet-name>
+        <url-pattern>/search/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_19">
+        <servlet-name>actionservlet</servlet-name>
+        <url-pattern>/action/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_20">
+        <servlet-name>entityservlet</servlet-name>
+        <url-pattern>/entities/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_21">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.detail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_22">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_23">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.ppc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_24">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_25">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.ajax</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_26">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.rf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_27">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.action</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_28">
+        <servlet-name>consoleservlet</servlet-name>
+        <url-pattern>*.wizard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_29">
+        <servlet-name>authservlet</servlet-name>
+        <url-pattern>*.auth</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_30">
+        <servlet-name>APIServlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_31">
+        <servlet-name>YHMMonitorServlet</servlet-name>
+        <url-pattern>/servlets/com.yantra.ycp.hm.ui.backend.YHMMonitorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_32">
+        <servlet-name>YCRNServlet</servlet-name>
+        <url-pattern>/ycrn/YCRNServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_33">
+        <servlet-name>JasperPDFReport</servlet-name>
+        <url-pattern>/servlets/reports/com.yantra.interop.client.InteropJasperServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_34">
+        <servlet-name>YFCJasperServlet</servlet-name>
+        <url-pattern>/servlets/reports/com.yantra.yfc.ui.backend.servlets.YFCJasperServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_35">
+        <servlet-name>logLevelEnableServlet</servlet-name>
+        <url-pattern>/loglevel/loggername.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_36">
+        <servlet-name>includeMenuServlet</servlet-name>
+        <url-pattern>/includeMenu/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_37">
+        <servlet-name>includeResourcePermissionServlet</servlet-name>
+        <url-pattern>/permission/resource.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_38">
+        <servlet-name>AribaIntegrationServlet</servlet-name>
+        <url-pattern>/interop/ariba</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_39">
+        <servlet-name>OciIntegrationServlet</servlet-name>
+        <url-pattern>/interop/oci</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_40">
+        <servlet-name>XPEDXOciServlet</servlet-name>
+        <url-pattern>/interop/xoci</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_41">
+        <servlet-name>XPEDXAribaIntegrationServlet</servlet-name>
+        <url-pattern>/interop/cxml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_42">
+        <servlet-name>XPEDXPunchoutServlet</servlet-name>
+        <url-pattern>/interop/xcxml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping id="ServletMapping_43">
+			<servlet-name>SalesRepLogin</servlet-name>
+			<url-pattern>/salesRepLoginPage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping id="ServletMapping_44">
+			<servlet-name>DownloadSample</servlet-name>
+			<url-pattern>/downloadsample</url-pattern>
+	</servlet-mapping>
+       
+    <session-config>
+        <session-timeout>300</session-timeout>
+    </session-config>
+    <mime-mapping>
+        <extension>htc</extension>
+        <mime-type>text/x-component</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>svg</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dsvg</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>svg_png</extension>
+        <mime-type>image/png</mime-type>
+    </mime-mapping>
+    <welcome-file-list>
+        <welcome-file>/console/start.jsp</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/swc/jsp/systemError.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/swc/jsp/systemError.jsp</location>
+    </error-page>
+    <jsp-config>
+        <taglib>
+            <taglib-uri>scuiTag</taglib-uri>
+            <taglib-location>/WEB-INF/scui.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>scuiimpltag</taglib-uri>
+            <taglib-location>/WEB-INF/scuiimpl.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>swc</taglib-uri>
+            <taglib-location>/WEB-INF/swc.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>xpedx</taglib-uri>
+            <taglib-location>/WEB-INF/xpedx.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+</web-app>

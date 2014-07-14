@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension id="com.xpedx.sterling.rcp.pca.AutoLoader" point="com.yantra.yfc.rcp.YRCPluginAutoLoader">
+        <AutoLoad
+            ClassToLoad="com.xpedx.sterling.rcp.pca.ExtnAutoLoader" LoadOrder="500"/>
+    </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            class="com.xpedx.sterling.rcp.pca.orderlines.editor.XPXOrderLinesEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.orderlines.editor.XPXOrderLinesEditor" name="com.xpedx.sterling.rcp.pca.orderlines.editor.XPXOrderLinesEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.customerprofilerule.editor.XPXCustomerProfileRuleEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.customerprofilerule.editor.XPXCustomerProfileRuleEditor" name="com.xpedx.sterling.rcp.pca.customerprofilerule.editor.XPXCustomerProfileRuleEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionSearchEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionSearchEditor" name="com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionSearchEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionMaintainanceEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionMaintainanceEditor" name="com.xpedx.sterling.rcp.pca.divisionMaintainance.editor.XPXDivisionMaintainanceEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor" name="com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.articles.editor.XPXArticleMaintenanceEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.articles.editor.XPXArticleMaintenanceEditor" name="com.xpedx.sterling.rcp.pca.articles.editor.XPXArticleMaintenanceEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.csrmanagement.editor.XPXCSRMaintenanceEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.csrmanagement.editor.XPXCSRMaintenanceEditor" name="com.xpedx.sterling.rcp.pca.csrmanagement.editor.XPXCSRMaintenanceEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor" name="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderSearchEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderSearchEditor" name="com.xpedx.sterling.rcp.pca.referenceorder.editor.XPXRefOrderSearchEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.myitems.editor.XPXMyItemsSearchListEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.myitems.editor.XPXMyItemsSearchListEditor" name="com.xpedx.sterling.rcp.pca.myitems.editor.XPXMyItemsSearchListEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor" name="com.xpedx.sterling.rcp.pca.myitems.editor.XPXManageMyItemsListEditor"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor"
+            icon=""
+            id="com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor" name="com.xpedx.sterling.rcp.pca.orderhistory.editor.XPXOrderHistoryEditor"/>
+    </extension>
+    <extension id="org.eclipse.ui.actionSets" point="org.eclipse.ui.actionSets">
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXShowOrderLinesActionSet"
+            label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXShowOrderLinesActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderlines.action.XPXShowOrderLinesAction"
+                id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXShowOrderLinesAction"
+                label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXShowOrderLinesAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXAddOrderLinesActionSet"
+            label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXAddOrderLinesActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderlines.action.XPXAddOrderLinesAction"
+                id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXAddOrderLinesAction"
+                label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXAddOrderLinesAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderActionSet"
+            label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderAction"
+                id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderAction"
+                label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXUpdateOrderAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXShowCustomerProfileRuleActionSet"
+            label="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXShowCustomerProfileRuleActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXShowCustomerProfileRuleAction"
+                id="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXShowCustomerProfileRuleAction"
+                label="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXShowCustomerProfileRuleAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileRuleActionSet"
+            label="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileRuleActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileRuleAction"
+                id="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileRuleAction"
+                label="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileRuleAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteActionSet"
+            label="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction"
+                id="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction"
+                label="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXConfirmOrderActionSet"
+            label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXConfirmOrderActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderlines.action.XPXConfirmOrderAction"
+                id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXConfirmOrderAction"
+                label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXConfirmOrderAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXPlaceOrderActionSet"
+            label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXPlaceOrderActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderlines.action.XPXPlaceOrderAction"
+                id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXPlaceOrderAction"
+                label="com.xpedx.sterling.rcp.pca.orderlines.action.XPXPlaceOrderAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoActionSet"
+            label="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction"
+                id="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction"
+                label="com.xpedx.sterling.rcp.pca.customerprofilerule.action.XPXUpdateCustomerProfileInfoAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.divisionMaintainance.action.XPXDivisionMaintainanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.divisionMaintainance.action.XPXDivisionMaintainanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.divisionMaintainance.action.XPXDivisionMaintainanceAction"
+                id="com.xpedx.sterling.rcp.pca.divisionMaintainance.action.XPXDivisionMaintainanceAction"
+                label="com.xpedx.sterling.rcp.pca.divisionMaintainance.action.XPXDivisionMaintainanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileActionSet"
+            label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction"
+                id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction"
+                label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileActionSet"
+            label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileAction"
+                id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileAction"
+                label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceAction"
+                id="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceAction"
+                label="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceAction"
+                id="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceAction"
+                label="com.xpedx.sterling.rcp.pca.csrmanagement.action.XPXCSRMaintenanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXReferenceOrderSearchUIActionSet"
+            label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXReferenceOrderSearchUIActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXReferenceOrderSearchUIAction"
+                id="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXReferenceOrderSearchUIAction"
+                label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXReferenceOrderSearchUIAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.myitems.action.XPXMyItemsSearchListUIActionSet"
+            label="com.xpedx.sterling.rcp.pca.myitems.action.XPXMyItemsSearchListUIActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.myitems.action.XPXMyItemsSearchListUIAction"
+                id="com.xpedx.sterling.rcp.pca.myitems.action.XPXMyItemsSearchListUIAction"
+                label="com.xpedx.sterling.rcp.pca.myitems.action.XPXMyItemsSearchListUIAction"
+                state="true" style="push"/>
+        </actionSet>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard" name="%com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard"/>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            id="com.yantra.pca.ycd.rcp.tasks.customerDetails.wizards.YCDCustomerWizard" name="%com.yantra.pca.ycd.rcp.tasks.customerDetails.wizards.YCDCustomerWizard"/>
+    </extension>
+    <extension point="org.eclipse.ui.actionSets">
+        <actionSet
+            id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard.extn.actionSet"
+            label="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard.extn.actionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction"
+                definitionId="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction.extn.command"
+                id="com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction"
+                label="%com.xpedx.sterling.rcp.pca.ordersummary.action.XPXMarkOrderCompleteAction" style="push"/>
+        </actionSet>
+    </extension>
+    <extension
+        id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard.extn.commands"
+        name="%com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard.extn.commands" point="org.eclipse.ui.commands">
+        <command
+            id="com.xpedx.sterling.rcp.pca.orderlines.action.XPXMarkOrderCompleteAction.extn.command" name="%com.xpedx.sterling.rcp.pca.orderlines.action.XPXMarkOrderCompleteAction.extn.command"/>
+    </extension>
+    <extension
+        id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard.extn.bindings"
+        name="%com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard.extn.bindings" point="org.eclipse.ui.bindings">
+        <key
+            commandId="com.xpedx.sterling.rcp.pca.orderlines.action.XPXMarkOrderCompleteAction.extn.command"
+            contextId="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard"
+            schemeId="defaultYantraKeyConfigurations" sequence="M1+M3+X"/>
+    </extension>
+    <extension point="org.eclipse.ui.actionSets">
+        <actionSet
+            id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard.extn.actionSet"
+            label="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard.extn.actionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction"
+                definitionId="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction.extn.command"
+                id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction"
+                label="%com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction" style="push"/>
+            <action class="YCDCustomerContactEntryUserRoleHelpAction"
+                definitionId="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.actions.YCDCustomerContactEntryUserRoleHelpAction.extn.command"
+                id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.actions.YCDCustomerContactEntryUserRoleHelpAction"
+                label="%com.yantra.pca.ycd.rcp.tasks.customerContactEntry.actions.YCDCustomerContactEntryUserRoleHelpAction" style="push"/>
+        </actionSet>
+    </extension>
+    <extension
+        id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard.extn.commands"
+        name="%com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard.extn.commands" point="org.eclipse.ui.commands">
+        <command
+            id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction.extn.command" name="%com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction.extn.command"/>
+        <command
+            id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.actions.YCDCustomerContactEntryUserRoleHelpAction.extn.command" name="%com.yantra.pca.ycd.rcp.tasks.customerContactEntry.actions.YCDCustomerContactEntryUserRoleHelpAction.extn.command"/>
+    </extension>
+    <extension
+        id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard.extn.bindings"
+        name="%com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard.extn.bindings" point="org.eclipse.ui.bindings">
+        <key
+            commandId="com.xpedx.sterling.rcp.pca.userprofile.action.XPXShowUserProfileAction.extn.command"
+            contextId="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard"
+            schemeId="defaultYantraKeyConfigurations" sequence="M1+M2+U"/>
+        <key
+            commandId="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.actions.YCDCustomerContactEntryUserRoleHelpAction.extn.command"
+            contextId="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard"
+            schemeId="defaultYantraKeyConfigurations" sequence="&quot;&quot;"/>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            id="com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard" name="%com.yantra.pca.ycd.rcp.tasks.customerContactEntry.wizards.YCDCustomerContactEntryWizard"/>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            id="com.yantra.pca.ycd.rcp.tasks.customerContactDetails.wizards.YCDCustomerContactWizard" name="%com.yantra.pca.ycd.rcp.tasks.customerContactDetails.wizards.YCDCustomerContactWizard"/>
+    </extension>
+    <extension point="com.yantra.yfc.rcp.YRCSharedTasks">
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateArticleSharedTask"
+            description="ManageArticle"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateArticleSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateArticleSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask"
+            description="Authorized Locations"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAuthorizedLocationsSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask"
+            description="Select Ship To"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXShipToLookupSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateCatalogExportSharedTask"
+            description="ManageCatalogExport"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateCatalogExportSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateCatalogExportSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask"
+            description="Launches CustomerTree popup"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPEDXCreateSharedListTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask"
+            description="Launches Customer List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCustomerSearchSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask"
+            description="Launches CustomerContact List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUserLookUpSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask"
+            description="Launches Child Customer Tree PopUp"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXCreateMyItemsListSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUOMDropDownSharedTask"
+            description="Launches Alternate UOM List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUOMDropDownSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXUOMDropDownSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask"
+            description="Launches Alternate UOM List"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXItemsListDetailSharedTask"/>
+        <SharedTask
+            class="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask"
+            description="Launches Add New Item popup"
+            id="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask" name="com.xpedx.sterling.rcp.pca.sharedTasks.XPXAddNewItemSharedTask"/>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            id="com.yantra.pca.ycd.rcp.tasks.quickAccess.wizards.YCDQuickAccessWizard" name="%com.yantra.pca.ycd.rcp.tasks.quickAccess.wizards.YCDQuickAccessWizard"/>
+    </extension>
+    <extension point="org.eclipse.ui.contexts">
+        <context
+            id="com.yantra.pca.ycd.rcp.tasks.quickAccess.wizardpages.YCDQuickAccess" name="%com.yantra.pca.ycd.rcp.tasks.quickAccess.wizardpages.YCDQuickAccess"/>
+    </extension>
+    <extension id="XpedxCategory1" name="XpedxCategory1" point="com.yantra.yfc.rcp.YRCRelatedTaskCategories">
+        <categories id="com.xpedx.sterling.rcp.pca.categories1">
+            <category id="YCD_GLOBAL_RELATED">
+                <tasks id="com.xpedx.sterling.rcp.pca.tasks1">
+                    <task id="Create Internal Users"/>
+                    <task id="Modify Internal Users"/>
+                    <task id="Division Maintenance"/>
+                    <task id="ReferenceOrderSearch"/>
+                    <task id="ArticleMaintenance"/>
+                    <task id="ViewInvoices"/>
+                    <task id="BusinessExchange"/>
+                    <task id="Help"/>
+                    <task id="Replacement Items"/>
+                    <task id="CSRMaintenance"/>
+                </tasks>
+            </category>
+            <category id="XPX_REPLACEMENT_ITEM">
+                <tasks id="com.xpedx.sterling.rcp.pca.tasks2">
+                    <task id="Replacement Items"/>
+                </tasks>
+            </category>
+            <category id="XPX_CREATE_USER">
+                <tasks id="com.xpedx.sterling.rcp.pca.tasks3">
+                    <task id="Create Internal Users"/>
+                </tasks>
+            </category>
+            <category id="XPX_MODIFY_USER">
+                <tasks id="com.xpedx.sterling.rcp.pca.tasks4">
+                    <task id="Modify Internal Users"/>
+                </tasks>
+            </category>
+            <category id="XPX_GLOBAL">
+                <tasks id="com.xpedx.sterling.rcp.pca.tasks5">
+                    <task id="YCD_TASK_QUICK_ACCESS"/>
+                </tasks>
+            </category>
+            <category id="XPX_DIVISIONMAINTAINANCE_CATEGORY">
+                <tasks id="com.xpedx.sterling.rcp.pca.tasks5">
+                    <task id="Division Maintenance"/>
+                </tasks>
+            </category>
+            <category id="YCD_ORDER_RELATED">
+                <tasks id="YCD_TASK_SEND_MAIL_NEED_ATTENTION">
+                    <task id="SendMailTONeedAttention"/>
+                </tasks>
+            </category>
+            <category id="YCD_CUSTOMER_DETAIL_RELATED">
+                <tasks id="YCD_TASK_SEND_MAIL_NEED_ATTENTION">
+                    <task id="MyItemsSearch"/>
+                    <task id="CustomerOrderSearch"/>
+                </tasks>
+            </category>
+        </categories>
+    </extension>
+    <extension id="XpedxTasks" name="XpedxTasks" point="com.yantra.yfc.rcp.YRCRelatedTasks">
+        <tasks id="com.xpedx.sterling.rcp.pca.tasks1">
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXCreateUserTaskAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="Create Internal Users" isExtension="false"
+                name="Create Internal Users" permissionId="ycdRCP01001">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_MODIFY_USER"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXModifyUserTaskAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="Modify Internal Users" isExtension="false"
+                name="Modify Internal Users" permissionId="ycdRCP01001">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_CREATE_USER"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="Replacement Items" isExtension="false"
+                name="Replacement Items" permissionId="ycdRCP01002">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_MODIFY_USER"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="Division Maintenance" isExtension="false"
+                name="Division Maintenance" permissionId="ycdRCPXPX002">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="ReferenceOrderSearch" isExtension="false"
+                name="Reference Order Search" permissionId="ycdRCPX008">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="ArticleMaintenance" isExtension="false"
+                name="Article Maintenance" permissionId="ycdRCPXPX004">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="CSRMaintenance" isExtension="false"
+                name="CSR Maintenance" permissionId="ycdRCPXPXCSR0001">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                  <category id="XPX_GLOBAL"/>
+                </categories>
+             </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
+                filterRequired="false" groupId="Search_Tasks"
+                id="MyItemsSearch" isExtension="false"
+                name="My Items Search" permissionId="ycdRCPX006">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="YCD_CUSTOMER_DETAIL_RELATED"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="ViewInvoices" isExtension="false"
+                name="View Invoices" permissionId="ycdRCPX007">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+                filterRequired="false" groupId="Other_Tasks"
+                id="BusinessExchange" isExtension="false"
+                name="Business Exchange" permissionId="">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+                filterRequired="false" groupId="Other_Tasks" id="Help"
+                isExtension="false" name="Help Documents" permissionId="">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                </categories>
+            </task>
+            <task actionId="" filterRequired="false"
+                groupId="Search_Tasks" id="DivisionMaintainance"
+                isExtension="false" name="DivisionMaintainance">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="XPX_GLOBAL"/>
+                    <category id="XPX_DIVISIONMAINTAINANCE_CATEGORY"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
+                filterRequired="false" groupId="Modify_Tasks"
+                id="SendMailTONeedAttention" isExtension="false" name="SendMailTONeedAttention">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="YCD_ORDER_RELATED"/>
+                </categories>
+            </task>
+            <task
+                actionId="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                filterRequired="false" groupId="Search_Tasks"
+                id="CustomerOrderSearch" isExtension="false"
+                name="Customer Order Search" permissionId="ycdRCPX006">
+                <categories id="com.xpedx.sterling.rcp.pca.categories1">
+                    <category id="YCD_CUSTOMER_DETAIL_RELATED"/>
+                </categories>
+            </task>
+        </tasks>
+    </extension>
+    <extension id="XPXActionSets" name="XPXActionSets" point="org.eclipse.ui.actionSets">
+        <actionSet id="XpedxactionSet1" label="XpedxactionSet1" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXCreateUserTaskAction"
+                id="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXCreateUserTaskAction"
+                label="%com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXCreateUserTaskAction" style="push"/>
+        </actionSet>
+        <actionSet id="com.xpedx.sterling.rcp.pca.actionSet1"
+            label="com.xpedx.sterling.rcp.pca.actionSet1" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXModifyUserTaskAction"
+                id="com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXModifyUserTaskAction"
+                label="%com.xpedx.sterling.rcp.pca.user.internal.task.action.XPXModifyUserTaskAction" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceAction"
+                id="com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceAction"
+                label="%com.xpedx.sterling.rcp.pca.divisionMaintainance.task.action.XPXDivisionMaintainanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIActionSet"
+            label="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIAction"
+                id="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIAction"
+                label="com.xpedx.sterling.rcp.pca.referenceorder.task.action.XPXReferenceOrderSearchUIAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
+                id="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
+                label="com.xpedx.sterling.rcp.pca.articles.task.action.XPXArticleMaintainanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceActionSet"
+            label="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                id="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                label="com.xpedx.sterling.rcp.pca.csrmanagement.task.action.XPXCSRMaintenanceAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIActionSet"
+            label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
+                id="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
+                label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXMyItemsSearchListUIAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+            label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+                id="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+                label="com.xpedx.sterling.rcp.pca.referenceorder.action.XPXViewInvoicesUIAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+            label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+                id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+                label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXBusinessExchangeAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+            label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+                id="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+                label="com.xpedx.sterling.rcp.pca.relatedTasks.action.XPXHelpDocuments"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+            label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+                id="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+                label="com.xpedx.sterling.rcp.pca.myitems.task.action.XPXReplacementToolAction"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
+            label="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
+                id="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
+                label="com.xpedx.sterling.rcp.pca.ordersummary.action.SendNeedAttentionMail"
+                state="true" style="push"/>
+        </actionSet>
+        <actionSet
+            id="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+            label="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                id="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                label="com.xpedx.sterling.rcp.pca.orderhistory.task.action.XPXOrderHistoryUIAction"
+                state="true" style="push"/>
+        </actionSet>
+    </extension>
+    <extension id="XpedxEditors" name="XpedxEditors" point="org.eclipse.ui.editors">
+        <editor
+            class="com.xpedx.sterling.rcp.pca.user.internal.editor.XPXCreateUserEditor"
+            default="false" icon="icons/copy.gif"
+            id="com.xpedx.sterling.rcp.pca.user.internal.editor.XPXCreateUserEditor" name="Create User"/>
+        <editor
+            class="com.xpedx.sterling.rcp.pca.user.internal.editor.XPXSearchUserEditor"
+            default="false" icon="icons/copy.gif"
+            id="com.xpedx.sterling.rcp.pca.user.internal.editor.XPXSearchUserEditor" name="Modify User"/>
+    </extension>
+    <extension point="com.yantra.yfc.rcp.YRCRelatedTasksExtensionContributor">
+        <relatedTasksExtensionContributor
+            class="com.xpedx.sterling.rcp.pca.customerDetails.Contributor.XPXCustomerEditorContributor" editorId="com.yantra.pca.ycd.rcp.editors.YCDCustomerEditor"/>
+    </extension>
+    <extension point="com.yantra.yfc.rcp.YRCRelatedTasksExtensionContributor">
+        <relatedTasksExtensionContributor
+            class="com.xpedx.sterling.rcp.pca.orderheader.screen.XPXOrderEditorContributor" editorId="com.yantra.pca.ycd.rcp.editors.YCDOrderEditor"/>
+    </extension>
+    <extension id="Xpedx" name="Xpedx" point="com.yantra.yfc.rcp.YRCRelatedTaskGroups">
+        <groups id="com.xpedx.sterling.rcp.pca.groups1">
+            <group id="Xpedx_Group" name="Xpedx_Group" sequence="1"/>
+        </groups>
+    </extension>
+    <extension
+        id="com.xpedx.sterling.rcp.pca.util.XPXApplicationInitializerExtn"
+        name="XPXApplicationInitializerExtn" point="com.yantra.yfc.rcp.YRCApplicationInitializer">
+        <Initializer class="com.xpedx.sterling.rcp.pca.util.XPXApplicationInitializerExtn"/>
+    </extension>
+</plugin>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for deleting line items from an order.</comment>
+    <entry key="#parameters.orderHeaderKey" >xpedx_me_draftOrderDeleteLineItems:/Order/@OrderHeaderKey</entry>
+    <entry key="selectedLineItem" >xpedx_me_draftOrderDeleteLineItems:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
+    <entry key="deleteActions" >xpedx_me_draftOrderDeleteLineItems:/Order/OrderLines/OrderLine[]/@Action</entry>
+    <entry key="deleteQuantities" >xpedx_me_draftOrderDeleteLineItems:/Order/OrderLines/OrderLine[]/@OrderedQty</entry>
+    <entry key="recordPendingChanges">xpedx_me_draftOrderDeleteLineItems:/Order/PendingChanges/@RecordPendingChanges</entry>
+    <entry key="draftOrderFlag">xpedx_me_draftOrderDeleteLineItems:/Order/@DraftOrderFlag</entry>
+</properties>

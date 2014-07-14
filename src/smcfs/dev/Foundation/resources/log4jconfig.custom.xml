@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+   <appender name="SOCKET" class="org.apache.log4j.net.SocketHubAppender">
+       <param name="Port" value="1652"/>
+       <param name="RemoteHost" value="127.0.0.1"/>
+       <param name="ReconnectionDelay" value="60000"/>
+       <param name="Threshold" value="ERROR"/>
+    </appender> 
+    
+    <appender name="ALL" class="com.sterlingcommerce.woodstock.util.frame.logex.SCIAppender">
+        <param name="rotateLogs" value="true" />
+        <param name="maxLogSize" value="100000" />
+        <param name="file" value="${LOG_DIR}/sci.log" />
+        <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+            <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+        </layout>
+        <!-- layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIBasicLayout" / -->
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCICommonFilter" />
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+            <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+        </layout>
+        <!-- layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCILayout" / -->
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCICommonFilter" />
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+
+    <appender name="AGENT_LOG_APPENDER" class="com.sterlingcommerce.woodstock.util.frame.logex.SCIAppender">
+        <param name="rotateLogs" value="true" />
+        <param name="maxLogSize" value="100000" />
+        <param name="file" value="${LOG_DIR}/agentserver.log" />
+        <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+            <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+        </layout>
+        <!-- layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIBasicLayout" / -->
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+    
+    <appender name="SECURITY_LOG_APPENDER" class="org.apache.log4j.RollingFileAppender">
+        <param name="MaxFileSize" value="2048KB" />
+        <param name="MaxBackupIndex" value="2" />
+        <param name="File" value="${LOG_DIR}/securityinfo.log" />
+        <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+            <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+        </layout>
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+    
+    <appender name="LOGIN_CLIENT_IP_DETAILS" class="org.apache.log4j.RollingFileAppender">
+            <param name="MaxFileSize" value="2048KB" />
+            <param name="MaxBackupIndex" value="2" />
+            <param name="File" value="${LOG_DIR}/login_ip_details.log" />
+            <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+                <param name="ConversionPattern" value="%d:%-7p:%t: %-60m: %-25c{1}%n"/>
+            </layout>
+            <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+
+      <appender name="PROPERTY_MANAGER" class="com.sterlingcommerce.woodstock.util.frame.logex.SCIAppender">
+        <param name="rotateLogs" value="true" />
+        <param name="maxLogSize" value="100000" />
+        <param name="file" value="${LOG_DIR}/property_manager.log" />
+        <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+            <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+        </layout>       
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+
+    <appender name="REQUEST_LOG_APPENDER" class="org.apache.log4j.RollingFileAppender">
+        <param name="MaxFileSize" value="2048KB" />
+        <param name="MaxBackupIndex" value="2" />
+        <param name="File" value="${LOG_DIR}/requestinfo.log" />
+        <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+            <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+        </layout>
+        <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+
+    <appender name="CENT_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+            <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+            <param name="File" value="${CENT_LOG_DIR}/centLog.log" />
+            <layout class="org.apache.log4j.PatternLayout">
+             	 <param name="ConversionPattern" value="%X{AppUserId}|%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n" />
+            </layout>
+            <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>
+    
+
+   	<!--  <appender name="CUSTOMER_APPENDER" class="com.sterlingcommerce.woodstock.util.frame.logex.SCIAppender">
+            <param name="rotateLogs" value="true" />
+            <param name="maxLogSize" value="100000" />
+            <param name="File" value="${LOG_DIR}/customerCommonLog.log" />
+            <layout class="com.sterlingcommerce.woodstock.util.frame.logex.SCIFilteredPatternLayout">
+                <param name="ConversionPattern" value="%d:%-7p:%t: %-60m [%X{AppUserId}]: %-25c{1}%n"/>
+            </layout>
+            <filter class="com.sterlingcommerce.woodstock.util.frame.logex.SCIPatternFilter" />
+    </appender>  -->
+
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	
+	<!-- 
+		3/29/2012 Vignesh Govindan - FOR PRODUCTION ENVIRONMENT
+		DO NOT CHANGE LOGGING LEVELS. High performance risk. If required test it thoroughly. 
+		Very specifically don't change the logging levels for com.yantra and it's child packages.
+		If new packages are created in application add a category for it and set the level
+		to VERBOSE here. In the code use debug(), and avoid using levels like info() and warn().
+		Avoid creating com.yantra packages in application.
+	-->
+
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+	<!-- ####### CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION  ####### -->
+
+    <category  name="requestlogger" class="com.yantra.yfc.log.YFCLogCategory" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+         <appender-ref ref="REQUEST_LOG_APPENDER" />
+    </category>
+
+    <category  name="com.yantra.tools.property" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="PROPERTY_MANAGER" /> 	 
+        <appender-ref ref="CONSOLE" /> 	 
+    </category>
+
+
+    <category  name="com.yantra" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" />
+        <!-- <appender-ref ref="ALL" /> -->
+    </category>
+
+    <category  name="com.yantra.ycm.business.search.YCMSearchIndexCacheTimerTask" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  />
+        
+        <appender-ref ref="CONSOLE" />
+    </category>
+	<category  name="com.yantra.ycp.core.YCPSystem" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" />
+    </category>
+
+    <category  name="com.sterlingcommerce" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" />
+        <!-- <appender-ref ref="ALL" /> -->
+    </category>
+
+    <category  name="org.apache.struts2" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" />
+        <!-- <appender-ref ref="ALL" /> -->
+    </category>
+	
+    <category  name="net.sf.ehcache" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+         <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+         
+         <appender-ref ref="CONSOLE" />
+         <!-- <appender-ref ref="ALL" /> -->
+     </category>
+
+     <category  name="com.opensymphony.xwork2" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" />
+        <!-- <appender-ref ref="ALL" /> -->
+    </category>
+
+   <category  name="com.stercomm.SecurityLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  /> 
+        
+        <appender-ref ref="SECURITY_LOG_APPENDER" />
+    </category>
+
+    <category  name="api.security" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" /> 
+        <!-- <appender-ref ref="ALL" /> -->
+    </category>
+
+    <category  name="com.yantra.integration.adapter" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <priority class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" /> 
+        <appender-ref ref="AGENT_LOG_APPENDER" />
+    </category>
+    
+
+   <category  name="com.yantra.yfs.ui.backend.YFSLoginIPLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+       <priority class="com.yantra.yfc.log.YFCLogLevel" value="INFO"  /> 
+       
+       <appender-ref ref="CONSOLE" />
+       <!-- <appender-ref ref="ALL" /> -->
+       <appender-ref ref="LOGIN_CLIENT_IP_DETAILS" />
+   </category>
+
+   <category  name="DataValidationLogger" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+        
+        <appender-ref ref="CONSOLE" />
+        <!-- <appender-ref ref="ALL" /> -->
+    </category>
+    
+    <category name="com.xpedx.nextgen.log" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
+       <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+       
+	   <appender-ref ref="CONSOLE" />		 
+	   <!-- <appender-ref ref="ALL" /> -->
+    </category>
+
+	 <category name="com.xpedx.nextgen.cent" class="com.yantra.yfc.log.YFCLogCategory" additivity="true" >
+       <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />
+	   <appender-ref ref="CENT_APPENDER" />
+	   <!-- <appender-ref ref="ALL" /> -->
+    </category>
+	
+	<!-- PMR 73002,442,000 - Help Fix STUCK Threads issue and reduce logging for webchannel to stdout.-->
+	<category  name="com.sterlingcommerce.webchannel" class="com.yantra.yfc.log.YFCLogCategory" additivity="false" >          
+        <level class="com.yantra.yfc.log.YFCLogLevel" value="ERROR"  />                                          
+        <appender-ref ref="CONSOLE" />                                  
+        <!-- <appender-ref ref="ALL" /> -->                             
+    </category>
+
+	
+</log4j:configuration>

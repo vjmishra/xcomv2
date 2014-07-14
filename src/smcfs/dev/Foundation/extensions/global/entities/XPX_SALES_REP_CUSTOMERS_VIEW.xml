@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBSchema>
+   <Entities>  
+    <Entity EntityType="VIEW" View="true" TableType="TRANSACTION" TableName="XPX_SALES_REP_CUSTOMERS" ApiNeeded="Y" AuditRequired="N" Description="Sales Rep" HasHistory="false" Prefix="XPX">
+        <Attributes>
+        
+		  <Attribute ColumnName="CUSTOMER_NO" 
+          DataType="AccountNo"
+          DefaultValue="' '" 
+          Description="Legacy Customer Number from Customer table"  
+          Nullable="false" 
+          XMLName="ExtnCustomerNo" />	
+		  
+		   <Attribute ColumnName="CUSTOMER_NAME" 
+          DataType="Text-100"
+          DefaultValue="' '" 
+          Description="Customer Name from Customer Table"  
+          Nullable="true" 
+          XMLName="ExtnCustomerName" />
+          
+		  <Attribute ColumnName="CUSTOMER_ID" 
+          DataType="CustomerId"
+          DefaultValue="' '" 
+          Description="Customer to whom the Sales Rep is assigned"  
+          Nullable="false" 
+          XMLName="CustomerID" />  
+		   
+		  <Attribute ColumnName="MSAP_ORGANIZATION_NAME" 
+          DataType="Text-100"
+          DefaultValue="' '" 
+          Description="MSAP Organization Name"  
+          Nullable="false" 
+          XMLName="ExtnMSAPOrganizationName" />
+		  
+		  <Attribute ColumnName="MSAP_ORGANIZATION_CODE" 
+          DataType="Text-100"
+          DefaultValue="' '" 
+          Description="MSAP Organization Code"  
+          Nullable="false" 
+          XMLName="ExtnMSAPOrganizationCode" />
+           
+		  <Attribute ColumnName="USER_ID" 
+          DataType="UserId"
+          DefaultValue="' '" 
+          Description="Sales Rep user"  
+          Nullable="false" 
+          XMLName="UserID" />  
+           
+          <Attribute ColumnName="SALES_REP_ID" 
+           DataType="Text-40"
+           DefaultValue="' '" 
+           Description="Sales Rep ID"  
+           Nullable="true" 
+           XMLName="SalesRepID" />   
+           
+          <Attribute ColumnName="SR_FIRST_NAME" 
+          DataType="varchar2-64"
+          DefaultValue="' '" 
+          Description="Sales Rep First Name"  
+          Nullable="true" 
+          XMLName="FirstName" />   
+           
+           <Attribute ColumnName="SR_LAST_NAME" 
+          DataType="varchar2-64"
+          DefaultValue="' '" 
+          Description="Sales Rep Last Name"  
+          Nullable="true" 
+          XMLName="LastName" />   
+           
+           <Attribute ColumnName="SR_EMAILID" 
+          DataType="EMailID"
+          DefaultValue="' '" 
+          Description="Sales Rep Emaid ID"  
+          Nullable="true" 
+          XMLName="EmailID" />   
+           
+           <Attribute ColumnName="EXTN_SALT_KEY" 
+           DataType="Text-20"
+           DefaultValue="' '"
+           Description="Indicates the user salt key"
+           Nullable="true" 
+           Size="" 
+           XMLName="SaltKey" />
+            
+        </Attributes>
+         <PrimaryKey Name="XPEDX_SALES_REP_PK">
+		      <Attribute ColumnName="CUSTOMER_ID" XMLName="CustomerID"/>
+		      <Attribute ColumnName="USER_ID" XMLName="UserID"/>
+		 </PrimaryKey>
+      </Entity>
+</Entities>
+</DBSchema>
+

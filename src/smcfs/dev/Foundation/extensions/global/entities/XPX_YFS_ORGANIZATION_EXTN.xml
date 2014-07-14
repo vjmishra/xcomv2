@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+
+<DBSchema>
+
+   <Entities>        
+
+	    <Entity TableName="YFS_ORGANIZATION" AuditRequired="N" >
+
+        <Attributes>
+
+        <Attribute ColumnName="EXTN_PRICING_WAREHOUSE" 
+
+          DataType="OrgCode"
+
+		  DefaultValue=" "
+
+		  Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnPriceWarehouse"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_GEO_CODE" 
+
+          DataType="Text-20"
+
+		   DefaultValue=" "        
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnGeoCode"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_JDE_CODE" 
+
+          DataType="Text-10"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnJdeCode"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_ETRADING_ID" 
+
+          DataType="Text-40"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnEtradingID"
+
+          XMLGroup="Extn" />
+
+		   <Attribute ColumnName="EXTN_BRAND_CODE" 
+
+          DataType="Text-40"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnBrandCode"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_CURRENCY_CODE" 
+
+          DataType="Currency"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnCurrencyCode"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_ENVIRONMENT_ID" 
+
+          DataType="Text-2"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnEnvtId"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_COMPANY_CODE" 
+
+          DataType="Text-2"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnCompanyCode"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_LEGACY_SYSTEM" 
+
+          DataType="Text-10"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnLegacySystem"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_USE_ADDNL_STOCK_LOC" 
+
+          DataType="Flag"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnUseAddnlStockLoc"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_REGION" 
+
+          DataType="ID-40"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRegion"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_GROUP_ID" 
+
+          DataType="Text-20"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnGroupId"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_MAX_ORDER_AMOUNT" 
+
+          DataType="Money"
+
+		  DefaultValue="0" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnMaxOrderAmt"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_MIN_ORDER_AMOUNT" 
+
+          DataType="Money"
+
+		  DefaultValue="0" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnMinOrderAmt"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_SMALL_ORDER_FREE" 
+
+          DataType="Money"
+
+		  DefaultValue="0" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnSmallOrderFee"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_SAMPLE_ROOM_EMAIL_ID" 
+
+          DataType="EMailID"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnSampleRoomEMailID"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_WILL_CALL_INFO" 
+
+          DataType="varchar2-1000"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnWillCallInfo"
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_DELIVERY_CUT_OFF_TIME" 
+
+          DataType="Text-10"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnDeliveryCutOffTime"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_NEXT_DAY_CUT_OFF_TIME" 
+
+          DataType="Text-10"
+
+		  DefaultValue=" " 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnNextDayCutOffTime"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_TO_DUNS_NO" 
+
+          DataType="DunsNumber"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitToDunsNo"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_TO_NAME" 
+
+          DataType="OrganizationName"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitToName"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_ADDR1" 
+
+          DataType="Address"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitAddr1"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_ADDR2" 
+
+          DataType="Address"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitAddr2"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_CITY" 
+
+          DataType="City"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitCity"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_STATE" 
+
+          DataType="State"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitState"
+
+          XMLGroup="Extn" />
+
+		  <Attribute ColumnName="EXTN_REMIT_ZIP" 
+
+          DataType="ZipCode"
+
+		  DefaultValue="' '" 
+
+          Description=" "  
+
+          Nullable="true" 
+
+          XMLName="ExtnRemitZip"
+
+          XMLGroup="Extn" />
+
+          
+
+          <Attribute ColumnName="EXTN_DIVISION_TYPE" DataType="Text-20" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDivisionType" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_PHONE_2" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnPhone2" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_FAX_2" DataType="Text-25" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnFax2" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_DIVISION_CONTACT" DataType="Text-40" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDivisionContact" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_DIV_EMAIL_PAPER" DataType="varchar2-255" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDivEmailPaper" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_DIV_EMAIL_NON_PAPER" DataType="varchar2-255" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDivEmailNonPaper" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_DELIVERY_INFO" DataType="varchar2-1000" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDeliveryInfo" 
+
+          XMLGroup="Extn" />
+
+          <Attribute ColumnName="EXTN_PRICING_WAREHOUSE_NAME" DataType="OrganizationName" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnPriceWareHouseName" 
+
+          XMLGroup="Extn" />
+		
+		 <Attribute ColumnName="EXTN_APPLY_MIN_ORDER_CHARGE" DataType="Text-2" DefaultValue="'Y'" Description=" " Nullable="true" XMLName="ExtnApplyMinOrderCharge" 
+
+          XMLGroup="Extn" />
+
+		 <Attribute ColumnName="EXTN_APPLY_MIN_ORDER_BRANDS" DataType="Text-40" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnApplyMinOrderBrands" 
+
+          XMLGroup="Extn" />
+
+		 <Attribute ColumnName="EXTN_DELIVERY_INFO_SAAL" DataType="varchar2-1000" DefaultValue="' '" Description=" " Nullable="true" XMLName="ExtnDeliveryInfoSaal" 
+
+          XMLGroup="Extn" />
+          
+
+        </Attributes>
+
+        <Indices>
+
+			<Index Name="XPX_YFS_ORG_I1" Unique="False">
+
+				<Column Name="CATALOG_ORGANIZATION_CODE" />
+
+			</Index>
+
+			<Index Name="XPX_YFS_ORG_I2" Unique="False">
+
+				<Column Name="PRICING_ORGANIZATION_CODE" />
+
+			</Index>
+
+			<Index Name="XPX_YFS_ORG_I3" Unique="False">
+
+				<Column Name="IS_ENTERPRISE" />
+
+			</Index>
+
+			<Index Name="XPX_YFS_ORG_I4" Unique="False">
+
+				<Column Name="ORGANIZATION_NAME" />
+
+			</Index>
+			
+			<Index Name="XPX_YFS_ORG_I5" Unique="False">
+
+				<Column Name="IS_HUB_ORGANIZATION" />
+
+			</Index>
+			
+         </Indices>
+
+      </Entity>
+
+	  <Entity ApiNeeded="Y" AuditRequired="Y" Description="XPedx Division and Brand Table"
+
+		 Prefix="XPX"	TableName="XPX_DIV_BRAND" >
+
+<!-- table columns -->
+
+<Attributes>
+
+<Attribute ColumnName="DIV_BRAND_KEY" DataType="Key" DefaultValue=" " Nullable="false"
+
+ XMLName="DivBrandKey" />
+
+<Attribute ColumnName="ORGANIZATION_KEY" DataType="Key" DefaultValue=" "
+
+ XMLName="OrganizationKey" />
+
+ <Attribute ColumnName="DIVISION_NO" DataType="OrgCode"  DefaultValue=" "	Nullable="true"
+
+ XMLName="DivisionNo"  />
+
+ <Attribute ColumnName="BRAND_CODE" DataType="Text-40"  DefaultValue=" "  Nullable="true"
+
+ XMLName="BrandCode"  />
+
+<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+
+DefaultValue="sysdate" Description="Create TimeStamp" />
+
+<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+
+DefaultValue="sysdate" Description="Modify TimeStamp" />
+
+<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+
+DefaultValue="&apos; &apos;" Description="Creating User ID" />
+
+<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+
+DefaultValue="&apos; &apos;" Description="Modifying User ID" />
+
+<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+
+DefaultValue="&apos; &apos;" Description="Creating Program ID" />
+
+<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+
+DefaultValue="&apos; &apos;" Description="Modifying Program ID" />
+
+<Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0"
+
+Description="Lock ID" />
+
+
+
+</Attributes>
+
+<!-- PrimaryKey is a mandatory attribute in entity definition. This
+
+element can have ONLY ONE attribute element -->
+
+<PrimaryKey Name="XPX_DIV_BRAND_PK">
+
+<Attribute ColumnName="DIV_BRAND_KEY" />
+
+</PrimaryKey>
+
+
+
+<!-- Relationship -->
+
+<Parent ParentTableName="YFS_ORGANIZATION"  >
+
+<Attribute ColumnName="ORGANIZATION_KEY"
+
+ParentColumnName="ORGANIZATION_KEY" />
+
+</Parent>
+
+</Entity>
+
+
+
+<Entity ApiNeeded="Y" AuditRequired="Y" Description="XPedx Transfer Circle"
+
+		 Prefix="XPX"	TableName="XPX_XFER_CIRCLE" >
+
+<!-- table columns -->
+
+<Attributes>
+
+<Attribute ColumnName="XFER_CIRCLE_KEY" DataType="Key"  DefaultValue=" "  Nullable="false"
+
+ XMLName="XferCircleKey" />
+
+<Attribute ColumnName="ORGANIZATION_KEY" DataType="Key"  DefaultValue=" "
+
+ XMLName="OrganizationKey" />
+
+ <Attribute ColumnName="SEQUENCE_NO" DataType="SequenceNo"  DefaultValue=" "  Nullable="true"
+
+ XMLName="SequenceNo" />
+
+ <Attribute ColumnName="DIVISION_NO" DataType="OrgCode"  DefaultValue=" "   Nullable="true"
+
+ XMLName="DivisionNo" />
+
+ <Attribute ColumnName="DIVISION_NAME" DataType="OrganizationName"  DefaultValue=" "  Nullable="true"
+
+ XMLName="DivisionName" />
+
+ <Attribute ColumnName="NO_OF_DAYS" DataType="NumberOfDays" DefaultValue=" "	Nullable="true"
+
+ XMLName="NoOfDays" />
+
+ <Attribute ColumnName="ORDER_CUTOFF_TIME" DataType="Time"  DefaultValue=" "	Nullable="true"
+
+ XMLName="OrderCutOffTime" />
+
+ <Attribute ColumnName="SRC_DIV" DataType="OrgCode"   DefaultValue=" "	Nullable="true"
+
+ XMLName="SourceDivision" />
+
+<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+
+DefaultValue="sysdate" Description="Create TimeStamp" />
+
+<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+
+DefaultValue="sysdate" Description="Modify TimeStamp" />
+
+<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+
+DefaultValue="&apos; &apos;" Description="Creating User ID" />
+
+<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+
+DefaultValue="&apos; &apos;" Description="Modifying User ID" />
+
+<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+
+DefaultValue="&apos; &apos;" Description="Creating Program ID" />
+
+<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+
+DefaultValue="&apos; &apos;" Description="Modifying Program ID" />
+
+<Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0"
+
+Description="Lock ID" />
+
+
+
+</Attributes>
+
+<!-- PrimaryKey is a mandatory attribute in entity definition. This
+
+element can have ONLY ONE attribute element -->
+
+<PrimaryKey Name="XPX_XFER_CIRCLE_PK">
+
+<Attribute ColumnName="XFER_CIRCLE_KEY" />
+
+</PrimaryKey>
+
+
+
+<!-- Relationship -->
+
+<Parent ParentTableName="YFS_ORGANIZATION"  >
+
+<Attribute ColumnName="ORGANIZATION_KEY"
+
+ParentColumnName="ORGANIZATION_KEY" />
+
+</Parent>
+
+</Entity>
+
+	<Entity ApiNeeded="Y" AuditRequired="Y" Description="Xpedx Catalog Exports"
+
+		 Prefix="XPX"	TableName="XPX_CATALOG_EXP" >
+
+	<!-- table columns -->
+
+		<Attributes>
+
+			<Attribute ColumnName="CATALOG_EXPORT_KEY" DataType="Key"  DefaultValue=" "  Nullable="false"
+
+				XMLName="CatalogExportKey" />
+
+			<Attribute ColumnName="ORGANIZATION_KEY" DataType="Key"  DefaultValue=" "
+
+				XMLName="OrganizationKey" />
+
+			<Attribute ColumnName="URL" DataType="URL"  DefaultValue=" "  Nullable="false"
+
+				XMLName="Url" />
+
+			<Attribute ColumnName="LABEL" DataType="Text-255"  DefaultValue=" "   Nullable="true"
+
+				XMLName="Label" />
+
+			<Attribute ColumnName="BRAND_CODE" DataType="Text-40"
+
+			DefaultValue=" "  Nullable="false" XMLName="BrandCode" />
+
+				
+
+			<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+
+				DefaultValue="sysdate" Description="Create TimeStamp" />
+
+			<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+
+				DefaultValue="sysdate" Description="Modify TimeStamp" />
+
+			<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+
+				DefaultValue="&apos; &apos;" Description="Creating User ID" />
+
+			<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+
+				DefaultValue="&apos; &apos;" Description="Modifying User ID" />
+
+			<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+
+				DefaultValue="&apos; &apos;" Description="Creating Program ID" />
+
+			<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+
+				DefaultValue="&apos; &apos;" Description="Modifying Program ID" />
+
+			<Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0"
+
+				Description="Lock ID" />
+
+	</Attributes>
+
+	<!-- PrimaryKey is a mandatory attribute in entity definition. This element can have ONLY ONE attribute element -->
+
+			<PrimaryKey Name="CATALOG_EXPORT_PK">
+
+				<Attribute ColumnName="CATALOG_EXPORT_KEY" />
+
+			</PrimaryKey>
+
+			<!-- Relationship -->
+
+			<Parent ParentTableName="YFS_ORGANIZATION"  >
+
+				<Attribute ColumnName="ORGANIZATION_KEY"
+
+					ParentColumnName="ORGANIZATION_KEY" />
+
+			</Parent>
+
+		</Entity>
+
+    </Entities>
+
+</DBSchema>
+

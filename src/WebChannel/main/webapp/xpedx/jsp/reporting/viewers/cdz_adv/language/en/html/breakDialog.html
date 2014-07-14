@@ -1,0 +1,759 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Break Properties Dialog</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/treeview.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../scripts/breaks.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"breakDlg")
+p._globalWOMCallback = null
+</script>
+<script language="javascript">
+var HORIZ_TAB=0
+var VERTI_TAB=1
+var selTab=HORIZ_TAB
+var curBrk=0
+var dlgW= 450
+var dlgH= 380
+var dlgSpacing= 2
+var tabZoneWidth= dlgW-2*dlgSpacing-20
+var tabZoneHeight= 4*dlgH/7
+var brkListWidth= 17*tabZoneWidth/64
+var brkListHeight= 6*tabZoneHeight/7
+var buttonsWidth= 60
+var initialized= false
+var curEntry=p.strEntry
+var url = p._root + "incBreaks" + p._appExt
+url += p.urlParams(true,false,curEntry)
+url += "&blockID="+p._breakBlockBID
+includeScript(url)
+</script>
+<script language="javascript">
+function getBreaksArray()
+{
+var arr=null
+switch (sTableType)
+{
+case 'HTABLE':
+arr=blockVBrk; break
+case 'VTABLE':
+case 'FORM':
+arr=blockHBrk;break
+case 'XTABLE':
+arr=(selTab==HORIZ_TAB)?blockHBrk:blockVBrk;break
+}
+return arr
+}
+function setUpDownArrow(brk)
+{
+var arr=getBreaksArray()
+if (arr.length==0)
+return
+var nb=arr.length
+var up=(selTab==HORIZ_TAB)?brkUpArrowH:brkUpArrowV
+var down=(selTab==HORIZ_TAB)?brkDownArrowH:brkDownArrowV
+up.setDisabled( (brk==0) || (nb==1) )
+down.setDisabled( (brk==(nb-1)) || (nb==1) )
+}
+function disableHWidget(b)
+{
+brkHeaderH.check(false)
+brkFooterH.check(false)
+brkRmvDuplH.check(false)
+brkCenterValH.check(false)
+brkApplySortH.check(false)
+brkNewPageH.check(false)
+noBrkInBlkH.check(false)
+brkRepHeaderH.check(false)
+brkRepBrkValH.check(false)
+brkListH.setDisabled(b)
+brkHeaderH.setDisabled(b)
+brkFooterH.setDisabled(b)
+brkRmvDuplH.setDisabled(b)
+brkCenterValH.setDisabled(b)
+brkApplySortH.setDisabled(b)
+brkNewPageH.setDisabled(b)
+noBrkInBlkH.setDisabled(b)
+brkRepHeaderH.setDisabled(b)
+brkRepBrkValH.setDisabled(b)
+brkRemoveButtonH.setDisabled(b)
+brkUpArrowH.setDisabled(b)
+brkDownArrowH.setDisabled(b)
+}
+function disableVWidget(b)
+{
+brkHeaderV.check(false)
+brkFooterV.check(false)
+brkRmvDuplV.check(false)
+brkCenterValV.check(false)
+brkApplySortV.check(false)
+brkNewPageV.check(false)
+noBrkInBlkV.check(false)
+brkRepHeaderV.check(false)
+brkRepBrkValV.check(false)
+brkListV.setDisabled(b)
+brkHeaderV.setDisabled(b)
+brkFooterV.setDisabled(b)
+brkRmvDuplV.setDisabled(b)
+brkCenterValV.setDisabled(b)
+brkApplySortV.setDisabled(b)
+brkNewPageV.setDisabled(b)
+noBrkInBlkV.setDisabled(b)
+brkRepHeaderV.setDisabled(b)
+brkRepBrkValV.setDisabled(b)
+brkRemoveButtonV.setDisabled(b)
+brkUpArrowV.setDisabled(b)
+brkDownArrowV.setDisabled(b)
+}
+function setBreakProperties(idx)
+{
+var arr=getBreaksArray()
+if ( arr.length==0 )
+{
+if (selTab==HORIZ_TAB)
+disableHWidget(true)
+else
+disableVWidget(true)
+return
+}
+if (selTab==HORIZ_TAB)
+{
+disableHWidget(false)
+brkHeaderH.check(arr[idx].header)
+brkFooterH.check(arr[idx].footer)
+brkRmvDuplH.check(arr[idx].removeDupl)
+brkCenterValH.check(arr[idx].centerVal)
+brkApplySortH.check(arr[idx].applySort)
+brkNewPageH.check(arr[idx].newPage)
+noBrkInBlkH.check(arr[idx].noBrkIncBlk)
+brkRepHeaderH.check(arr[idx].repHeader)
+brkRepBrkValH.check(arr[idx].repBrkVal)
+}
+else
+{
+disableVWidget(false)
+brkHeaderV.check(arr[idx].header)
+brkFooterV.check(arr[idx].footer)
+brkRmvDuplV.check(arr[idx].removeDupl)
+brkCenterValV.check(arr[idx].centerVal)
+brkApplySortV.check(arr[idx].applySort)
+brkNewPageV.check(arr[idx].newPage)
+noBrkInBlkV.check(arr[idx].noBrkIncBlk)
+brkRepHeaderV.check(arr[idx].repHeader)
+brkRepBrkValV.check(arr[idx].repBrkVal)
+}
+}
+function setBrkList(tab)
+{
+var arr=getBreaksArray()
+var list=(tab==HORIZ_TAB)?brkListH:brkListV
+list.deleteAll()
+for (var i=0;i<arr.length;i++)
+{
+var elem=newTreeWidgetElem(3,arr[i].expr,arr[i].expr,"")
+if (arr[i].selected)
+curBrk=i
+list.add(elem)
+}
+list.rebuildHTML()
+}
+function setBrkDlgWidgets()
+{
+var arr=getBreaksArray()
+if (arr.length==0)
+{
+if (selTab==HORIZ_TAB)
+{
+brkListH.deleteAll()
+brkListH.rebuildHTML()
+disableHWidget(true)
+}
+else
+{
+brkListV.deleteAll()
+brkListV.rebuildHTML()
+disableVWidget(true)
+}
+}
+else
+{
+setBrkList(selTab)
+if (selTab==HORIZ_TAB)
+brkListH.select(curBrk)
+else
+brkListV.select(curBrk)
+setBreakProperties(curBrk)
+setUpDownArrow(curBrk)
+}
+waitCursor.show(false)
+}
+function updateBrkDlgWidgets(bh,bv,s,sBrk)
+{
+blockHBrk=bh
+blockVBrk=bv
+curEntry=s
+curBrk=sBrk
+setBrkDlgWidgets()
+}
+function brkTabCB(index)
+{
+var arr=getBreaksArray()
+selTab=index
+arr=(selTab==HORIZ_TAB ? blockHBrk : blockVBrk)
+setBrkList(selTab)
+curBrk=0
+if (arr.length != 0)
+{
+if (selTab==HORIZ_TAB)
+brkListH.select(curBrk)
+else
+brkListV.select(curBrk)
+}
+setBreakProperties(curBrk)
+setUpDownArrow(curBrk)
+brkTabZone.showTab(selTab,true)
+}
+function buildBreaksURL(iAction,bWriteInHiddenFrame,iMove)
+{
+var arr=getBreaksArray()
+var brkURL=p._root+'processBreaks'+p._appExt
+brkURL += p.urlParams(true,false,curEntry)
+brkURL += (iAction!=null)?('&iAction='+iAction):''
+brkURL += '&bWriteInHiddenFrame='+((bWriteInHiddenFrame!=null)?bWriteInHiddenFrame:false)
+brkURL += (iMove!=null)?('&iMove='+iMove):''
+brkURL += (arr[curBrk]!=null)?('&iAxis='+arr[curBrk].axis+'&iId='+arr[curBrk].id):''
+brkURL += '&sBlockID='+p._breakBlockBID
+brkURL += '&bAddTableHeader='+p._addTableHeader
+return brkURL
+}
+function brkClickCB()
+{
+var arr=getBreaksArray()
+brkOkButton.setDisabled(false)
+brkApplyButton.setDisabled(false)
+var id=this.id
+switch(id)
+{
+case "brkHeaderH":
+case "brkHeaderV":
+arr[curBrk].header=this.isChecked()?true:false
+break;
+case "brkFooterH":
+case "brkFooterV":
+arr[curBrk].footer=this.isChecked()?true:false
+break;
+case "brkRmvDuplH":
+case "brkRmvDuplV":
+if (!this.isChecked())
+{
+if (selTab==HORIZ_TAB)
+brkCenterValH.check(false)
+else
+brkCenterValV.check(false)
+arr[curBrk].centerVal=false
+}
+arr[curBrk].removeDupl=this.isChecked()?true:false
+break;
+case "brkCenterValH":
+case "brkCenterValV":
+if (this.isChecked())
+{
+if (selTab==HORIZ_TAB)
+{
+brkRmvDuplH.check(true)
+brkRepBrkValH.check(false)
+}
+else
+{
+brkRmvDuplV.check(true)
+brkRepBrkValV.check(false)
+}
+arr[curBrk].removeDupl=true
+arr[curBrk].repBrkVal=false
+}
+arr[curBrk].centerVal=this.isChecked()?true:false
+break;
+case "brkApplySortH":
+case "brkApplySortV":
+arr[curBrk].applySort=this.isChecked()?true:false
+break;
+case "brkNewPageH":
+case "brkNewPageV":
+arr[curBrk].newPage=this.isChecked()?true:false
+break;
+case "noBrkInBlkH":
+case "noBrkInBlkV":
+arr[curBrk].noBrkIncBlk=this.isChecked()?true:false
+break;
+case "brkRepHeaderH":
+case "brkRepHeaderV":
+arr[curBrk].repHeader=this.isChecked()?true:false
+break;
+case "brkRepBrkValH":
+case "brkRepBrkValV":
+if (this.isChecked())
+{
+if (selTab==HORIZ_TAB)
+brkCenterValH.check(false)
+else
+brkCenterValV.check(false)
+arr[curBrk].centerVal=false
+}
+arr[curBrk].repBrkVal=this.isChecked()?true:false
+break;
+case "brkUpArrowH":
+case "brkUpArrowV":
+waitCursor.show(true)
+var url=buildBreaksURL(3,true,-1)
+frameNav("brkFrame",url,true)
+break;
+case "brkDownArrowH":
+case "brkDownArrowV":
+waitCursor.show(true)
+var url=buildBreaksURL(3,true,1)
+frameNav("brkFrame",url,true)
+break;
+case "brkListH":
+case "brkListV":
+var brkSelected;
+if (selTab==HORIZ_TAB)
+brkSelected=brkListH.getSelection().index
+else
+brkSelected=brkListV.getSelection().index
+if (brkSelected != curBrk)
+{
+curBrk=brkSelected
+setBreakProperties(curBrk)
+}
+setUpDownArrow(brkSelected)
+break;
+case "brkRemoveButtonH":
+case "brkRemoveButtonV":
+waitCursor.show(true)
+var url=buildBreaksURL(0,true)
+frameNav("brkFrame",url,true)
+break;
+}
+}
+function okCB(bApplyBtn)
+{
+brkOkButton.setDisabled(true)
+brkApplyButton.setDisabled(true)
+var arr=getBreaksArray()
+var tmp=''
+var i=0
+for (i=0;i<arr.length;i++)
+{
+tmp += arr[i].toString()
+if (i<(arr.length-1))
+tmp += ";"
+}
+if (sTableType=='XTABLE')
+{
+if (tmp!='')
+tmp += ";"
+if (selTab==HORIZ_TAB)
+arr=blockVBrk
+else
+arr=blockHBrk
+for (i=0;i< arr.length;i++)
+{
+tmp += arr[i].toString()
+if (i<(arr.length-1))
+tmp += ";"
+}
+}
+self.document.brkForm.sBreaksProps.value=tmp
+document.brkForm.action=buildBreaksURL(2,false)
+setTimeout("document.brkForm.submit()",1)
+p.wt(bApplyBtn)
+if (bApplyBtn)
+{
+brkDlg.unload()
+p._brkCurTab=selTab
+p._globalWOMCallback=p.breakDlg_globalWOMCallback
+}
+else
+{
+brkDlg.show(false)
+p._brkCurTab=null
+}
+brkOkButton.setDisabled(false)
+brkApplyButton.setDisabled(false)
+}
+function cancelCB()
+{
+brkDlg.show(false)
+var url=p._root + "processCleanSession" + p._appExt
+url += p.urlParams(true,true)    
+frameNav("brkFrame",url);
+}
+function helpCB()
+{
+p.showAlertDialog("Not implemented yet !","Development version",0)
+brkDlg.show(false)
+}
+function loadCB()
+{
+if (window._isSessionInvalid)
+{
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized=true
+brkDlg=newDialogBoxWidget("brkDlg","Break Properties",dlgW,dlgH,okCB,cancelCB)
+brkTabZone=newTabbedZone("brkZone",brkTabCB,tabZoneWidth,tabZoneHeight)
+brkTabZone.add("Horizontal Breaks","horiz")
+brkTabZone.add("Vertical Breaks","vert")
+brkListH=newIconListWidget("brkListH",brkListWidth,
+brkListHeight,p._img+"report.gif",brkClickCB,brkClickCB)
+brkListH.iconOrientVertical=false
+brkListV=newIconListWidget("brkListV",brkListWidth,
+brkListHeight,p._img+"report.gif",brkClickCB,brkClickCB)
+brkListV.iconOrientVertical=false
+brkHeaderH=newCheckWidget("brkHeaderH","Break header",brkClickCB)
+brkHeaderV=newCheckWidget("brkHeaderV","Break header",brkClickCB)
+brkFooterH=newCheckWidget("brkFooterH","Break footer",brkClickCB)
+brkFooterV=newCheckWidget("brkFooterV","Break footer",brkClickCB)
+brkRmvDuplH=newCheckWidget("brkRmvDuplH","Remove duplicates",brkClickCB)
+brkRmvDuplV=newCheckWidget("brkRmvDuplV","Remove duplicates",brkClickCB)
+brkCenterValH=newCheckWidget("brkCenterValH","Center value across break",brkClickCB)
+brkCenterValV=newCheckWidget("brkCenterValV","Center value across break",brkClickCB)
+brkApplySortH=newCheckWidget("brkApplySortH","Apply Sort",brkClickCB)
+brkApplySortV=newCheckWidget("brkApplySortV","Apply Sort",brkClickCB)
+brkNewPageH=newCheckWidget("brkNewPageH","Start on a new page",brkClickCB)
+brkNewPageV=newCheckWidget("brkNewPageV","Start on a new page",brkClickCB)
+noBrkInBlkH=newCheckWidget("noBrkInBlkH","Avoid page breaks in block",brkClickCB)
+noBrkInBlkV=newCheckWidget("noBrkInBlkV","Avoid page breaks in block",brkClickCB)
+brkRepHeaderH=newCheckWidget("brkRepHeaderH","Repeat header on every page",brkClickCB)
+brkRepHeaderV=newCheckWidget("brkRepHeaderV","Repeat header on every page",brkClickCB)
+brkRepBrkValH=newCheckWidget("brkRepBrkValH","Repeat break value on new page",brkClickCB)
+brkRepBrkValV=newCheckWidget("brkRepBrkValV","Repeat break value on new page",brkClickCB)
+brkRemoveButtonH=newButtonWidget("brkRemoveButtonH","Remove",brkClickCB,buttonsWidth)
+brkRemoveButtonV=newButtonWidget("brkRemoveButtonV","Remove",brkClickCB,buttonsWidth)
+brkUpArrowH=newButtonWidget("brkUpArrowH",null,brkClickCB,
+null,null,"Move break up",null,null,_skin+'buttonIcons.gif',16,16,0,64,null,16,64);
+brkUpArrowV=newButtonWidget("brkUpArrowV",null,brkClickCB,
+null,null,"Move break up",null,null,_skin+'buttonIcons.gif',16,16,0,64,null,16,64);
+brkDownArrowH=newButtonWidget("brkDownArrowH",null,brkClickCB,
+null,null,"Move break down",null,null,_skin+'buttonIcons.gif',16,16,0,80,null,16,80);
+brkDownArrowV=newButtonWidget("brkDownArrowV",null,brkClickCB,
+null,null,"Move break down",null,null,_skin+'buttonIcons.gif',16,16,0,80,null,16,80);
+brkDownArrowH.extraStyle=brkUpArrowH.extraStyle=brkDownArrowV.extraStyle=brkUpArrowV.extraStyle="margin-top:2px;"
+brkInfo=newInfoWidget("brkInfo","More Information","","You can define how breaks (or groups of data) on tables are formatted here.")
+brkOkButton=newButtonWidget("brkOkButton","OK","okCB(false)",buttonsWidth)
+brkCancelButton=newButtonWidget("brkCancelButton","Cancel",cancelCB,buttonsWidth)
+brkHelpButton=newButtonWidget("brkHelpButton","Help",helpCB,buttonsWidth)
+brkApplyButton=newButtonWidget("brkApplyButton","Apply","okCB(true)",buttonsWidth)
+waitCursor = newBlockWhileWaitWidget() 
+brkDlg.attachDefaultButton(brkOkButton);
+}
+if (!_curWin.breakDlgInitialized)
+{
+_curWin.breakDlgInitialized=true;
+targetApp(
+brkDlg.beginHTML() +
+'<table cellspacing="'+ dlgSpacing +'px" cellpadding="0" width="100%" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+'<table cellspacing="0" cellpadding="0" width="100%" border="0" class="dialogzone"><tbody>'+
+'<tr>'+
+'<td>'+
+brkTabZone.beginHTML() +
+brkTabZone.beginTabHTML(0) +
+'<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+'<tr>' +
+'<td>' +
+   '<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+   '<tr>' +
+   '<td width="25%" align="center" valign="top">' + 
+   brkListH.getHTML() +
+   '</td>'+
+'<td rowspan="2" align="center" valign="top">' +
+brkUpArrowH.getHTML() +
+   brkDownArrowH.getHTML() +
+  '</td>' +
+   '<td rowspan="2" valign="top">' +
+   '<table cellspacing="0" cellpadding="0" class="dialogzone" width="100%" border="0"><tbody>' +
+   '<tr>' +
+   '<td>' +
+   'Display Properties' +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkHeaderH.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkFooterH.getHTML()+
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkRmvDuplH.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td style="padding-left:18px">' +
+   brkCenterValH.getHTML() +
+   '</td>' +   
+   '</tr>' +   
+   '<tr>' +
+   '<td>' +
+   brkApplySortH.getHTML() +
+   '</td>' +
+   '</tr>' +    
+   '<tr>' +
+   '<td class="dialogzone" style="padding-top:18px">'+
+   'Page Layout' +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkNewPageH.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   noBrkInBlkH.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkRepHeaderH.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkRepBrkValH.getHTML() +
+   '</td>' +
+   '</tr>' +       
+   '</tbody></table>' +
+   '</td>' +   
+   '</tr>' +
+   '<tr>' +
+   '<td width="25%" align="center" valign="bottom">' +
+   brkRemoveButtonH.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+brkTabZone.endTabHTML() +
+brkTabZone.beginTabHTML(1) +
+'<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+'<tr>' +
+'<td align="center" valign="middle">' +
+   '<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+   '<tr>' +
+   '<td width="25%" align="center" valign="top">' +   
+brkListV.getHTML() +
+   '</td>' +
+      '<td rowspan="2" align="center" valign="top">' +
+      brkUpArrowV.getHTML() +
+   brkDownArrowV.getHTML() +
+   '</td>' +
+   '<td rowspan="2" valign="top">' +
+   '<table cellspacing="0" cellpadding="0" width="100%" border="0"><tbody>' +
+   '<tr>' +
+   '<td class="dialogzone">' +
+   'Display Properties' +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkHeaderV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkFooterV.getHTML()+
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkRmvDuplV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td style="padding-left:18px">' +
+   brkCenterValV.getHTML() +
+   '</td>' +   
+   '</tr>' +   
+   '<tr>' +
+   '<td>' +
+   brkApplySortV.getHTML() +
+   '</td>' +
+   '</tr>' +   
+   '<tr>' +
+   '<td class="dialogzone" style="padding-top:18px">'+
+   'Page Layout' +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkNewPageV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   noBrkInBlkV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkRepHeaderV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   brkRepBrkValV.getHTML() +
+   '</td>' +
+   '</tr>' +       
+   '</tbody></table>' +
+   '</td>' +   
+   '</tr>' +
+   '<tr>' +
+   '<td width="25%" align="center" valign="bottom">' +
+   brkRemoveButtonV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>' +
+   '</tr>' +
+'</tbody></table>' +
+brkTabZone.endTabHTML() +
+brkTabZone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td style="padding-top:5px;" align="center" valign="middle">' + brkInfo.getHTML() +'</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td style="padding-top:5px;" align="right" valign="middle">' +
+   '<table cellspacing="0" cellpadding="0" border="0"><tbody>' +
+   '<tr>' +
+   '<td>' +   
+   brkOkButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   brkCancelButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   brkApplyButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   brkHelpButton.getHTML() +
+   '</td>' +
+'</tr>' +
+'</tbody></table>'+
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+'</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+brkDlg.endHTML()
+);
+}
+brkDlg.init()
+brkTabZone.init()
+brkInfo.init()
+brkOkButton.init()
+brkCancelButton.init()
+brkHelpButton.init()
+brkApplyButton.init()
+waitCursor.init()
+brkListH.init()
+brkHeaderH.init()
+brkFooterH.init()
+brkRmvDuplH.init()
+brkCenterValH.init()
+brkApplySortH.init()
+brkNewPageH.init()
+noBrkInBlkH.init()
+brkRepHeaderH.init()
+brkRepBrkValH.init()
+brkRemoveButtonH.init()
+brkUpArrowH.init()
+brkDownArrowH.init()
+brkListV.init()
+brkHeaderV.init()
+brkFooterV.init()
+brkRmvDuplV.init()
+brkCenterValV.init()
+brkApplySortV.init()
+brkNewPageV.init()
+noBrkInBlkV.init()
+brkRepHeaderV.init()
+brkRepBrkValV.init()
+brkRemoveButtonV.init()
+brkUpArrowV.init()
+brkDownArrowV.init()
+setBrkDlgWidgets()
+var sH,sV
+if (sTableType=='HTABLE')
+{
+sH=true
+sV=false
+}
+if ((sTableType=='VTABLE') || (sTableType=='FORM'))
+{
+sH=false
+sV=true
+}
+if (sTableType=='XTABLE')
+{
+sH=true
+sV=true
+}
+brkTabZone.showTab(HORIZ_TAB,sH)
+brkTabZone.showTab(VERTI_TAB,sV)
+if ( p._brkCurTab != null )
+selTab=p._brkCurTab
+brkTabZone.select(selTab)
+waitCursor.show(false)
+brkHelpButton.setDisplay(false)
+brkDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden frame -->
+<iframe name="brkFrame" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="brkForm" method="post" action="">
+<input type="hidden" name="sBreaksProps" id="sBreaksProps">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

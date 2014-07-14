@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for Secret Question Set </comment>
+    <entry key="organizationCode">getOrgSecretQuestionList:/AuthQuestion/@CallingOrganizationCode</entry>
+</properties>

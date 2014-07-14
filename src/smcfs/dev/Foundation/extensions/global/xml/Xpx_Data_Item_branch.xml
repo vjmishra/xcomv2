@@ -1,0 +1,24 @@
+<FlatfileDelimitedSchema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation='delimitedreceiver.xsd'>
+   <ParserDefaults DefaultRecordDelimiter="Newline" DefaultFieldDelimiter="," DefaultPadCharacter="#" RecordIdStartPosition="1">
+       </ParserDefaults>
+
+   <Root Name="ItemBranchs">
+	 <Header Name="ItemBranch" RecordName="DIC" MinOccurrence="1" MaxOccurrence="1"/>
+   </Root>
+	  <RecordDefinitions>
+		  <Record RecordId="DIC" Name="DIC" XMLName="ItemBranch">
+		     <Field Name="Environment"       FieldPosition="2" XMLName="EnvironmentId"/>
+			<Field Name="Company"       FieldPosition="3" XMLName="CompanyCode"/>
+			<Field Name="ProcessCode"   FieldPosition="4" XMLName="ProcessCode"/>
+			<Field Name="MPC"           FieldPosition="5" XMLName="MasterProductCode"/>
+			<Field Name="LegacyPartNum" FieldPosition="6" XMLName="LegacyProductNumber"/>
+			<Field Name="Division"      FieldPosition="7" XMLName="DivisionNumber"/>
+			<Field Name="CustomerNumber" FieldPosition="8" XMLName="CustomerNumber"/>
+			<Field Name="ProdutStatus"  FieldPosition="9" XMLName="ProdutStatus" />
+			<Field Name="ItemStockStat" FieldPosition="10" XMLName="ItemStockStatus"/>
+			<Field Name="InvIndicator" 	FieldPosition="11" XMLName="InventoryIndicator"/>
+			<Field Name="OrderMultiple"	FieldPosition="12" XMLName="OrderMultiple"/>
+		  </Record>      
+	   </RecordDefinitions>
+</FlatfileDelimitedSchema>
+

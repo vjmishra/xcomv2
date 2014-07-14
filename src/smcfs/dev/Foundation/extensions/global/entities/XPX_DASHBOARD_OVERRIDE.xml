@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Dashboard Order Overrides." Prefix="XPX" TableName="XPX_DASHBOARD_OVERRIDE">
+			<Attributes>
+				<Attribute ColumnName="OVERRIDE_KEY" DataType="Key" DefaultValue="' '" Description="Primary Key." Name="Override_Key" Nullable="false" XMLName="OverrideKey"/>
+				<Attribute ColumnName="ORDER_HEADER_KEY" DataType="Key" DefaultValue="' '" Description="Order Header Key to which this Override is tagged." Name="Order_Header_Key" Nullable="false" XMLName="OrderHeaderKey"/>
+				<Attribute ColumnName="ORDER_LINE_KEY" DataType="Key" DefaultValue="' '" Description="Order Line Key to which this override is tagged." Name="Order_Line_Key" Nullable="true" XMLName="OrderLineKey"/>
+				<Attribute ColumnName="RULE_ID" DataType="Key" DefaultValue="' '" Description="Rule Id." Name="Rule_Id" Nullable="false" XMLName="RuleId"/>
+				<Attribute ColumnName="OVERRIDE_FLAG" DataType="Flag" DefaultValue="'N'" Description="Override Flag." Name="Override_Flag" Nullable="false" XMLName="OverrideFlag"/>
+				
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_OVRRID_PK">
+                <Attribute ColumnName="OVERRIDE_KEY" Name="Override_Key" XmlName="OverrideKey"/>
+            </PrimaryKey>
+
+			<Parent ParentTableName="YFS_ORDER_HEADER" >
+				<Attribute ColumnName="ORDER_HEADER_KEY" ParentColumnName="ORDER_HEADER_KEY" />
+			</Parent>
+		</Entity>
+	</Entities>
+</DBSchema>

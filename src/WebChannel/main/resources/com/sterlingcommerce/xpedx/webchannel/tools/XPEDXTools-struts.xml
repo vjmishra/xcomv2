@@ -1,0 +1,57 @@
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+  <package name="xpedx.tools" namespace='/tools' extends="wcDefault">
+	
+	<action name="MyTools" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/XPEDXTools.jsp</result>
+	</action>
+	
+	<action name="calculator" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/calculator.jsp</result>
+	</action>
+	<action name="Ream-Weights" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/Ream-Weights.jsp</result>
+	</action>
+	<action name="M-Weight" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/M-Weight.jsp</result>
+	</action>
+	<action name="rool-Weight" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/rool-Weight.jsp</result>
+	</action>
+	<action name="Linear-Footage-Calculator" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/Linear-Footage-Calculator.jsp</result>
+	</action>
+	<action name="basis-Weight-Conversion-Chart" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/basis-Weight-Conversion-Chart.jsp</result>
+	</action>
+	<action name="GSMCalculator" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/GSMCalculator.jsp</result>
+	</action>
+	<action name="PagesInch-calculator" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/PagesInch-calculator.jsp</result>
+	</action>
+	<action name="Weight-of-odd-num-of-sheet" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/Weight-of-odd-num-of-sheet.jsp</result>
+	</action>
+	<action name="SheetDensity" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/SheetDensity.jsp</result>
+	</action>
+	<action name="Equivalent-weight" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<result name="success">/xpedx/jsp/tools/Equivalent-weight.jsp</result>
+	</action>
+	
+	<action name="MyImpositionCalculator" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXImpositionCalculator" >						
+		<param name="resourceId">/swc/profile/ManageUserProfile</param>
+		<result name="success">/xpedx/jsp/tools/XPEDViewCalculator.jsp</result>
+	</action>	
+	<action name="MyViewImpCalculation" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXImpositionCalculator" method="getCalculation">						
+		<param name="resourceId">/swc/profile/ManageUserProfile</param>
+		<result name="success">/xpedx/jsp/tools/XPEDCalculatedValues.jsp</result>
+	</action>	
+	<action name="MyImpCalculationPage" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXImpositionCalculator" method="getPageDetails">						
+		<param name="resourceId">/swc/profile/ManageUserProfile</param>
+		<result name="success">/xpedx/jsp/tools/XPEDCalculatedPageDetails.jsp</result>
+	</action>
+		
+ </package>
+</struts>

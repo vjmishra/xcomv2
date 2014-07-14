@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" Extensible="N" Description="The View to Get All Order for assigned customer"
+			EntityType="VIEW" Prefix="XPX" TableName="XPX_ORDER_LINE_SEARCH_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPEDXOrderSearchLineListView">
+			<Attributes>
+			
+				<Attribute ColumnName="ORDER_HEADER_KEY" DataType="Key"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="false" XMLName="OrderHeaderKey" />
+				<Attribute ColumnName="DOCUMENT_TYPE" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="DocumentType" />
+				<Attribute ColumnName="ENTERPRISE_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="EnterpriseCode" />
+				<Attribute ColumnName="ORDER_NO" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="OrderNo" />
+				<Attribute ColumnName="BUYER_ORGANIZATION_CODE" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="BuyerOrganizationCode" />
+				<Attribute ColumnName="BILL_TO_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="BillToKey" />
+				<Attribute ColumnName="BILL_TO_ID" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="BillToID" />
+				<Attribute ColumnName="SHIP_TO_KEY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="ShipToKey" />
+				<Attribute ColumnName="SHIP_TO_ID" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="ShipToID" />
+				<Attribute ColumnName="ORDER_NAME" DataType="Text-100"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="OrderName" />
+				<Attribute ColumnName="REQ_SHIP_DATE" DataType="TimeStamp"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="ReqShipDate" />
+				<Attribute ColumnName="ORDER_TYPE" DataType="Text-20"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="OrderType" />
+				<Attribute ColumnName="DRAFT_ORDER_FLAG" DataType="Text-1"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="DraftOrderFlag" />
+				<Attribute ColumnName="STATUS" DataType="Text-15"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="Status" />	
+				<Attribute ColumnName="CUSTOMER_PO_NO" DataType="Text-100"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="CustomerPONo" />
+				<Attribute ColumnName="CUSTOMER_LINE_PO_NO" DataType="Text-100"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_LINE table." 
+					Nullable="true" XMLName="CustomerLinePONo" />
+				 <Attribute ColumnName="ORDER_DATE" DataType="TimeStamp"
+                    DefaultValue="sysdate "
+                    Description="The date on which the order was taken. If not passed during order creation, it is defaulted to current system date."
+                    Name="Order_Date" Nullable="true" XMLName="OrderDate"/>
+				<Attribute ColumnName="CURRENCY" DataType="Currency"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="Currency" />
+				<Attribute ColumnName="CUSTOMER_CONTACT_ID" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="CustomerContactID" />
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="Modifyts" />
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="Modifyuserid" />
+				<Attribute ColumnName="ITEM_ID" DataType="ItemID" DefaultValue="' '" Description="Item ID" Nullable="true"
+					 XMLName="ItemID"/>
+				<Attribute ColumnName="EXTN_WEB_CONF_NUM" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnWebConfNum" />
+				<Attribute ColumnName="EXTN_ORDER_DIVISION" DataType="OrgCode"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnOrderDivision" />
+				<Attribute ColumnName="EXTN_LEGACY_ORDER_NO" DataType="VarcharDocumentNo"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnLegacyOrderNo" />
+				<Attribute ColumnName="EXTN_LEGACY_ORDER_TYPE" DataType="Text-20"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnLegacyOrderType" />
+				<Attribute ColumnName="EXTN_SHIP_TO_NAME" DataType="OrganizationName"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnShipToName" />
+				<Attribute ColumnName="EXTN_ORDERED_BY_NAME" DataType="Text-256"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnOrderedByName" />
+				<Attribute ColumnName="EXTN_CURRENCY_CODE" DataType="Currency"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnCurrenctCode" />
+				<Attribute ColumnName="EXTN_TOTAL_ORDER_VALUE" DataType="UnitPrice"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnTotalOrderValue" />
+				<Attribute ColumnName="EXTN_TOT_ORD_VAL_WITHOUT_TAXES" DataType="UnitPrice"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="ExtnTotOrdValWithoutTaxes" />
+				<Attribute ColumnName="EXTN_ORDER_SUB_TOTAL" DataType="UnitPrice"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnOrderSubTotal" />
+				<Attribute ColumnName="EXTN_ORDER_STATUS" DataType="Text-10"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ExtnOrderStatus" />
+				<Attribute ColumnName="EXTN_GENERATION_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description=" " Nullable="true" Size="" 
+          			XMLName="ExtnGenerationNo" />	
+          
+				  <Attribute ColumnName="EXTN_INVOICE_NO" DataType="InvoiceNo" Description="Invoice number" DefaultValue="' '" Nullable="true" 
+            		XMLName="ExtnInvoiceNo"/>	
+            	<Attribute ColumnName="EXTN_INVOICED_DATE" DataType="Date" Description="Grand total for the invoice" Nullable="true" XMLName="ExtnInvoicedDate"/>							
+				<Attribute ColumnName="HOLD_TYPE" DataType="Text-20"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="HoldType" />
+				 <Attribute ColumnName="RESOLVER_USER_ID"
+                    DataType="LoginId"
+                    Description="This is the user who can resolve or reject this hold. This field maps to User_Id field of YFS_Customer_Contact."
+                    HasSkewedData="true" Name="Resolver_User_Id"
+                    Nullable="true" XMLName="ResolverUserId"/>
+				<Attribute ColumnName="HOLD_STATUS" DataType="Text-15"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="HoldStatus" />	
+				<Attribute ColumnName="ADDRESS_LINE1" DataType="Address"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="AddressLine1" />
+				<Attribute ColumnName="ADDRESS_LINE2" DataType="Address"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="AddressLine2" />
+				<Attribute ColumnName="ADDRESS_LINE3" DataType="Address"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="AddressLine3" />
+				<Attribute ColumnName="ADDRESS_LINE4" DataType="Address"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="AddressLine4" />	
+				<Attribute ColumnName="ADDRESS_LINE5" DataType="Address"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="AddressLine5" />
+				<Attribute ColumnName="ADDRESS_LINE6" DataType="Address"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="AddressLine6" />						
+				<Attribute ColumnName="CITY" DataType="City"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="City" />
+				<Attribute ColumnName="STATE" DataType="State"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="State" />	
+				<Attribute ColumnName="ZIP_CODE" DataType="ZipCode"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table."
+					Nullable="true" XMLName="ZipCode" />
+				<Attribute ColumnName="COUNTRY" DataType="Country"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="Country" />
+				<Attribute ColumnName="STATUS_QUANTITY" DataType="Text-50"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="StatusQuantity" />
+				<Attribute ColumnName="ORDER_STATUS" DataType="Text-15"
+					DefaultValue="' '" Description="Refers to the primary key of the YFS_ORDER_HEADER table." 
+					Nullable="true" XMLName="OrderStatus" />
+			</Attributes>
+			<PrimaryKey Name="XPX_ODER_SARCH_PK">
+				<Attribute ColumnName="ORDER_HEADER_KEY" />
+			</PrimaryKey>
+			<!--
+			<Indices>
+				<Index Name="XPX_ORDER_SEARCH_LIST_VIEW_I01" Unique="True">
+					<Column Name="ORDER_HEADER_KEY" />
+				</Index>
+				<Index Name="XPX_ORDER_SEARCH_LIST_VIEW_I02" Unique="False">
+					<Column Name="SHIP_TO_KEY" />
+				</Index>				
+			</Indices>
+			-->
+		</Entity>
+	</Entities>
+</DBSchema>

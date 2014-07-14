@@ -1,0 +1,31 @@
+
+.quick-add-form {
+    background: url("../../images/theme/theme-1/quick-add/quickadd-rpt-bg-mid.png") repeat-y scroll center top transparent!important;
+    margin-bottom: 10px;
+    width: 550px;
+}
+
+
+
+
+.quick-add-form-top {
+    background: url("../../images/theme/theme-1/quick-add/quickadd-large-bg-PO-mid.png") no-repeat scroll 0 0 #FFFFFF!important;
+    height: 5px;
+    position: absolute;
+    width: 550px;
+}
+
+
+
+.quick-add-form-bot {
+    background: url("../../images/theme/theme-1/quick-add/quick-add-bg-bottom-mid.gif") no-repeat scroll 0 0 #FFFFFF!important;
+    height: 37px;
+    position: absolute;
+    width: 550px!important;
+}
+
+
+.del-quick-add {
+    color: #FF0000 !important;
+    font-weight: bold !important;
+}

@@ -1,0 +1,18 @@
+#!/bin/ksh
+
+echo "time: "`date +"%Y%m%d-%H%M"`
+HOST_NAME="$(hostname)"
+echo $HOST_NAME
+ftp -i -n ftp.ipaper.com <<EOF
+user xpedxweb NextGen123
+cd /MAX/MAXFLAG
+if ["$HOST_NAME" -eq "zxpappt01"]; then
+put /home/share/xpadmin/scripts/orderupdateserver/oufiles/MAXOUT3STOP.TXT /MAX/MAXFLAG/MAXOUT3STOP.TXT
+fi
+ls -ltr
+EOF
+
+#log the result
+LOG=./Logs/MAXOUT3STOP_`date +"%Y%m%d-%H%M"`.log
+echo `date +"%m/%d/%Y-%H:%M"` > $LOG
+echo "MAXOUT3STOP.TXT has been FTPd to ftp.ipaper.com from $HOST_NAME" >> $LOG

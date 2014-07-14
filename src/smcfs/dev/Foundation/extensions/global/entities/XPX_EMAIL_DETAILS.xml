@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" HasHistory="False" Prefix="XPX"
+			TableName="XPX_EMAIL_DETAILS">
+			<Attributes>
+				<Attribute ColumnName="EMAIL_DETAILS_KEY" DataType="Key"
+					DefaultValue=" " Nullable="false" Description="Primary key" XMLName="EmailDetailsKey"/>
+				<Attribute ColumnName="EMAIL_TYPE" DataType="varchar2-60"
+					DefaultValue=" " Description="Type of email being sent" XMLName="EmailType"/>
+				<Attribute ColumnName="EMAIL_XML" DataType="CLOB"
+					Description="The Input xml for the email" Nullable="true" XMLName="EmailXML" />
+				<Attribute ColumnName="EMAIL_SUBJECT" DataType="varchar2-200"
+					DefaultValue=" " Description="The subject of the email" XMLName="EmailSubject" />
+				<Attribute ColumnName="EMAIL_ORG_CODE" DataType="varchar2-30"
+					DefaultValue=" " Description="The organization code for the email being sent"
+					XMLName="EmailOrgCode" />
+				<Attribute ColumnName="EMAIL_FROM" DataType="varchar2-200"
+					DefaultValue=" " Description="The from address for the email being sent"
+					XMLName="EmailFrom" />
+				<Attribute ColumnName="EMAIL_RETRY_COUNT" Type="NUMBER"
+					Size="2" DefaultValue=" "
+					Description="The count of emails being retried in case of failure."
+					XMLName="EmailRetryCount" />
+				<Attribute ColumnName="EMAIL_ERROR_MESSAGE" DataType="CLOB"
+					DefaultValue=" " Description="The error message in case of any failure"
+					Nullable="true" XMLName="EmailErrorMessage" />
+				<Attribute ColumnName="BUSINESS_IDENTIFIER" DataType="varchar2-100"
+					DefaultValue=" " Description="Identifies Unique Object of email" Nullable="true" XMLName="BusinessIdentifier"/>
+				<!-- Begin - Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			    <!-- End - Mandatory columns -->
+
+			</Attributes>
+			<PrimaryKey Name="EMAIL_DTL_KEY_PK">
+				<Attribute ColumnName="EMAIL_DETAILS_KEY" />
+			</PrimaryKey>
+			
+			<Indices>
+				<Index Name="EMAIL_TYPE_IDX1" Unique="False">
+					<Column Name="EMAIL_TYPE" />
+				</Index>
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

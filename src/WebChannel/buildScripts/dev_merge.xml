@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project name="Web Channel Merge Build Script" default="merge">
+
+	<property name="custommashups" value="custommashups" />
+	<property name="swc" value="swc" />
+
+	<property file="devMerge.properties" />
+	<property name="source_project_dir" value="${source_project_dir}" />
+	<property name="swc_build_dir" value="${swc_exploded_dir}" />
+	<property name="source_webapps_dir" value="${source_project_dir}/main/webapp" />
+	<property name="classes_dir" value="${swc_build_dir}/WEB-INF/classes" />
+	<property name="resources_dir" value="${source_project_dir}/main/resources" />
+	<property name="custom_struts_xml" value="${custom_struts_xml}" />
+	<property name="mashupxmlsDestinationDir" value="${swc_exploded_dir}/mashupxmls/webchannel/extn/swc" />
+	<property name="src_WEBINF_dir" value="${source_webapps_dir}/WEB-INF" />
+	<property name="destination_WEBINF_dir" value="${swc_exploded_dir}/WEB-INF" />
+
+	<target name="merge">
+		<copy overwrite="true" todir="${classes_dir}">
+			<fileset dir="${resources_dir}">
+				<different targetdir="${classes_dir}" ignoreFileTimes="true" />
+				<include name="*/**" />
+			</fileset>
+		</copy>
+		<copy overwrite="true" todir="${classes_dir}">
+			<fileset dir="${resources_dir}">
+				<different targetdir="${classes_dir}" ignoreFileTimes="true" />
+				<include name="com/**" />
+			</fileset>
+		</copy>
+		<copy overwrite="true" todir="${classes_dir}">
+			<fileset dir="${source_classes_dir}">
+				<different targetdir="${classes_dir}" ignoreFileTimes="true" />
+				<include name="*/**" />
+			</fileset>
+		</copy>
+		<copy overwrite="true" todir="${swc_build_dir}">
+			<fileset dir="${source_webapps_dir}">
+				<different targetdir="${swc_build_dir}" ignoreFileTimes="true" />
+				<include name="*/**" />
+			</fileset>
+		</copy>
+		<copy overwrite="true" todir="${mashupxmlsDestinationDir}">
+			<fileset dir="${source_webapps_dir}/${custommashups}">
+				<different targetdir="${mashupxmlsDestinationDir}" ignoreFileTimes="true" />
+				<include name="${swc_custom_dir}/**" />
+			</fileset>
+		</copy>
+		
+		<copy overwrite="true" todir="${destination_WEBINF_dir}">
+			<fileset dir="${src_WEBINF_dir}">
+				<different targetdir="${destination_WEBINF_dir}" ignoreFileTimes="true" />
+				<include name="*.xml" />
+			</fileset>
+		</copy>
+	</target>
+</project>

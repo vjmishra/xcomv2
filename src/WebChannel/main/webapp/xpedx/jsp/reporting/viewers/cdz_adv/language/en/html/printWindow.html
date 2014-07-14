@@ -1,0 +1,183 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Printer Friendly</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript"> 
+_skin = requestQueryString(window,"skin")
+_lang = requestQueryString(window,"lang")
+initDom(_skin,_lang)
+</script>
+<script language="javascript"> 
+switch(_lang)
+{
+case 'ja':
+case 'ko':
+case 'zh':
+includeCSS('print_fe',true)
+break;
+default:
+includeCSS('print',true) 
+break;
+}
+</script>
+<style type="text/css">
+#grabberTD{background-color:#888888}
+</style>
+<script language="javascript">
+rep = "../../../images/main/"
+var grabber = !(requestQueryString(window,"noGrabber") == 'yes')
+ruleIdx = grabber? 0 : 1 
+var rules
+if (document.styleSheets[0].cssRules) 
+{
+rules = document.styleSheets[0].cssRules[ruleIdx] 
+} else if (document.styleSheets[0].rules) { 
+rules = document.styleSheets[0].rules[ruleIdx]  
+}
+var forms = window.opener.document.forms[0]
+window.document.title = forms.title.value
+text = forms.textToPrint.value
+fontSizeNameList = new Array('Smallest', 'Smaller', 'Medium', 'Larger', 'Largest')
+fontSizeList = new Array('xx-small', 'x-small', 'small', 'medium', 'large') 
+fontSizeListLength = fontSizeList.length
+fontSizeIdx = 1
+rules.style.fontSize = fontSizeList[fontSizeIdx]
+init_w = 160
+delta = 21
+_x = init_w + delta
+_y = 78
+_w = 3
+_h = 50
+grabberTD = newGrabberWidget("grabberTD",resizeCB,_x,_y,_w,_h,true) 
+grabberTD.setMinMax(_x, 500)
+printHeader = newWidget("printHeader")
+fontText =  newWidget("fontText")
+resizableTD = newWidget("resizableTD")
+function resizeCB(x,y)
+{
+getLayer("resizableTD").style.pixelWidth = x - delta
+}
+function loadCB()
+{
+printHeader.init()
+fontText.init()
+grabberTD.init()
+if (grabber)
+{
+resizableTD.init()
+fontText.setHTML(fontSizeNameList[fontSizeIdx])
+getLayer("resizableTD").style.pixelWidth = init_w
+grabberTD.move(_x, _y)
+}
+else
+{
+fontText.setHTML(fontSizeNameList[fontSizeIdx])
+grabberTD.setDisplay(false)
+}
+}
+function doPrint()
+{
+printHeader.show(false)
+if (grabber)
+{
+grabberTD.show(false)
+print()
+grabberTD.show(true)
+}
+else
+{
+print()
+}
+printHeader.show(true)
+}
+function fontSize(op)
+{
+switch(op)
+{
+case '+' :
+if (fontSizeIdx < fontSizeListLength - 1)
+{
+fontSizeIdx++
+} 
+break;
+case '-' :
+if (fontSizeIdx > 0)
+{
+fontSizeIdx--
+}
+break;
+}
+fontText.setHTML(fontSizeNameList[fontSizeIdx])
+rules.style.fontSize = fontSizeList[fontSizeIdx]
+}
+</script>
+</head>
+<body onLoad="loadCB()">
+<table id ="printHeader" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td align="center">
+<table border="0" cellpadding="0" cellspacing="0" class="headerPrint">
+<tbody>
+<tr>
+<td>Select the font size:</td>
+<td width="15" align="right">
+<a href="javascript:fontSize('-');">
+<script language="javascript">
+document.write(imgOffset(rep +'printer_minus.gif',20,20, 0,0))
+</script>
+</a> 
+</td>
+<td width="80"><div id ="fontText" align="center"></div></td>
+<td width="15" align="left">
+<a href="javascript:fontSize('+');">
+<script language="javascript">
+document.write(imgOffset(rep +'printer_plus.gif',20,20, 0,0))
+</script>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td align="center">
+<table border="0" cellpadding="0" cellspacing="0" class="headerPrint">
+<tbody>
+<tr>
+<td>Click here to print this page:&nbsp;</td>
+<td align="center">
+<a href="javascript:doPrint();">
+<img src="../../../images/main/print.gif" width="23" height="18" border="0">
+</a>  
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor="#999999"><img src="../../../lib/images/skin_default/sep.gif" width="1" height="1" border="0">
+</td>
+ </tr>
+</table>
+<p>
+<script language="javascript"> grabberTD.write() </script>
+<script language="javascript"> document.write(text) </script>
+</body>
+</html>

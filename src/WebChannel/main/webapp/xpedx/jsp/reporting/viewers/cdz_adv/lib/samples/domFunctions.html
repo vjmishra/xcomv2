@@ -1,0 +1,98 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2003 Business Objects S.A.
+All rights reserved
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+File: waitDialog.html
+=============================================================
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>dhtmlLib</title>
+<script language="javascript" src="../deployed/dom.js"></script>
+<script language="javascript">
+var skin=parent._skin?parent._skin:"skin_standard";
+var lang=parent._lang?parent._lang:"en";
+initDom("../deployed/images/"+skin+"/",lang)
+styleSheet()
+</script>
+<script language="javascript">
+absSquare=newWidget("absSquare")
+eventGetXLayer=newWidget("eventGetXLayer")
+eventGetYLayer=newWidget("eventGetYLayer")
+xposLayer=newWidget("xposLayer")
+yposLayer=newWidget("yposLayer")
+winW=newWidget("winW")
+winH=newWidget("winH")
+function initCB()
+{
+absSquare.init()
+eventGetXLayer.init()
+eventGetYLayer.init()
+xposLayer.init()
+yposLayer.init()
+winW.init()
+winH.init()
+onresizeCB()
+}
+function mouseMoveCB(e)
+{
+status="move"
+eventGetXLayer.setHTML("eventGetX() = " + eventGetX(e))
+eventGetYLayer.setHTML("eventGetY() = " + eventGetY(e))
+xposLayer.setHTML("xpos() = " + xpos(absSquare.layer, e))
+yposLayer.setHTML("ypos() = " + ypos(absSquare.layer, e))
+}
+function onresizeCB() {        
+winW.setHTML("winWidth() = " + winWidth())
+winH.setHTML("winHeight() = " + winHeight())
+}
+</script>
+</head>
+<body class="dialogzone" onmousemove="mouseMoveCB(event)" onload="initCB()" onresize="onresizeCB();">
+<img src="dhtmlLib.gif" /><P><br />
+<div class="titlezone"> DhtmlLib Definition </div>
+The DhtmlLib is a JavaScript-based library. It provides a set of widgets to build nicely and user friendly UI in web application. <br />
+The DHTML Library provides basic component like text field, label and list box, and also rich component like tree view, tab and toolbar.<br /> 
+The UI of WebI Interactive Viewer for instance is completely built with the DTML Library. <br />
+Some samples on how to start using DHTML Library widgets are available after adding DHTML Library into your web application.<br />
+<br /><br />
+<span style="color:black;">&lt;script language="javascript" src="../dom.js"&gt;&lt;/script&gt;</span>&nbsp;
+    <span style="color:black;"> &lt;script language="javascript"&gt;<br />
+    var skinPath = "../images/" + "skin_standard/" ;<br />
+var lang = "en" ;<br />
+    initDom(skinPath, lang)</span> &nbsp;
+<span style="color:black;"> styleSheet()</span>&nbsp;
+    <span style="color:black;">&lt;/script&gt;</span><br /> 
+<div id="absSquare" style="position:absolute;top:200px;left:380px;border:solid 1px red;width:80px;height:30px">
+<div style="position:absolute;top:150px;left:-5px;border:solid 1px black;padding:8px;width:300px">
+These functions must give the mouse position, regardless of scrolling<br />
+<span style="color:black;"> 
+<nobr id="eventGetXLayer">eventGetX(e) = </nobr><br />
+<nobr id="eventGetYLayer">eventGetY(e) = </nobr><br />
+eventGetX(e,w), eventGetY(e,w)<br />
+            </span>
+<br />
+These functions give the mouse position in the red rectangle<br />
+<span style="color:black;"> 
+<nobr id="xposLayer">xpos() = </nobr><br />
+<nobr id="yposLayer">ypos() = </nobr><br />
+xpos(o,e,doc,zoom)<br />
+</span>
+<br />
+Window width & height (resize the window to see):
+<span style="color:black;"> 
+<nobr id="winW">winWidth() = </nobr><br />
+<nobr id="winH">winHeight() = </nobr><br />
+            </span>
+</div>
+<div style="position:absolute;top:0px;left:0px;width:3000px;height:3000px"></div>
+</body>
+</html>

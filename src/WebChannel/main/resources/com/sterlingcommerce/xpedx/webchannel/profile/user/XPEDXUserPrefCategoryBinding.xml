@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="customerContactID">XPEDX-GetUserPreferredCategory:/CustomerContact/@CustomerContactID</entry>
+	<entry key="prefCategory">XPEDX-getPrefCategoryPath:/Category/@CategoryID</entry>
+	<entry key="prefCategoryPath">XPEDX-getPrefCategoryAssets:/Category/@CategoryPath</entry>
+	<entry key="organizationCode">XPEDX-getPrefCategoryAssets:/Category/@OrganizationCode</entry>
+	<entry key="categoryDepth">xpedxHomeCatalogPage:/SearchCatalogIndex/@CategoryDepth</entry>
+	<entry key="custId">xpedxHomeCatalogPage:/SearchCatalogIndex/Item/CustomerInformation/@CustomerID</entry>
+	<entry key="WCContext.storefrontId">xpedxHomeCatalogPage:/SearchCatalogIndex/@CallingOrganizationCode</entry>
+	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">xpedxHomeCatalogPage:/SearchCatalogIndex/@DisplayLocalizedFieldInLocale</entry>
+	<entry key="#parameters.OrganizationCode">xpedxHomeCatalogPage:/SearchCatalogIndex/@OrganizationCode</entry>
+</properties>

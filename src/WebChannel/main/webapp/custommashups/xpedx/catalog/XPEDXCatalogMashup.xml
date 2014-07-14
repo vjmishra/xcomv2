@@ -1,0 +1,1187 @@
+<mashups>
+	<mashup id='xpedxItemDetails' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Item Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" Currency="" ItemID=""
+					UnitOfMeasure="" ShowFinalSupersededItemOnly="Y"
+					IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y"
+					DisplayLocalizedFieldInLocale="" UnitOfMeasureQryType=""
+					IgnoreInvalidItems="N">
+					<CustomerInformation CustomerID="" />
+					<ItemAssociationTypeList>
+						<ItemAssociationType Type="CrossSell" />
+						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start - Fetching alternative items from business Center -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
+					</ItemAssociationTypeList>
+					<ItemAttributeGroupTypeList>
+						<ItemAttributeGroupType
+							ClassificationPurposeCode="SPECIFICATION" />
+					</ItemAttributeGroupTypeList>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="">
+					<Item ItemID="" UnitOfMeasure="" IsItemSuperseded="">
+						<PrimaryInformation Description="" ImageID=""
+							ImageLabel="" ImageLocation="" IsConfigurable=""
+							IsDeliveryAllowed="" IsModelItem="" IsPickupAllowed=""
+							IsPreConfigured="" IsShippingAllowed="" ShortDescription=""
+							ExtendedDescription="" KitCode="" MaxOrderQuantity=""
+							MinOrderQuantity="" UnitHeight="" UnitHeightUOM="" UnitLength=""
+							UnitLengthUOM="" UnitVolume="" UnitVolumeUOM="" UnitWeight=""
+							UnitWeightUOM="" UnitWidth="" UnitWidthUOM="" ConfigurationKey=""
+							ConfigurationModelName="" IsValid="" ManufacturerItem="" ManufacturerName="" 
+							PricingUOM="" PricingQuantityConvFactor="" />
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
+						</CategoryList>
+						<Availability AlertLevel="" AlertPeriodEnd=""
+							AlertPeriodStart="" AlertQuantity="" AlertRaisedOn="" AlertType=""
+							CurrentAvailableQty="" FirstFutureAvailableDate=""
+							FutureAvailableDate="" FutureAvailableQuantity=""
+							OnhandAvailableDate="" OnhandAvailableQuantity="" />
+						<ComputedPrice BundleTotal="" UnitPrice="" />
+						<AssociationTypeList>
+							<AssociationType CodeLongDescription=""
+								CodeShortDescription="" Type="">
+								<AssociationList>
+									<Association AssociatedQuantity=""
+										AssociationGroup="" AssociationType="" EffectiveFrom=""
+										EffectiveTo="" Priority="">
+										<Item ItemID="" UnitOfMeasure="">
+											<PrimaryInformation ShortDescription="" />
+											<ComputedPrice BundleTotal="" UnitPrice="" />
+											<AssetList TotalNumberOfRecords="">
+												<Asset AssetID="" AssetKey="" ContentID=""
+													ContentLocation="" ContentSize="" Description="" Label=""
+													Type="" />
+											</AssetList>
+										</Item>
+									</Association>
+								</AssociationList>
+							</AssociationType>
+						</AssociationTypeList>
+						<ItemAttributeGroupTypeList>
+							<ItemAttributeGroupType
+								ClassificationPurposeCode="" Description=""
+								IsAdditionalAttributeAllowed="" IsSingleGroup=""
+								ItemAttributeGroupType="" ItemAttributeGroupTypeKey=""
+								IsValidForCategory="" IsValidForClassification="">
+								<ItemAttributeGroupList>
+									<ItemAttributeGroup CategoryKey=""
+										IsInherited="" AttributeGroupPath=""
+										ItemAttributeGroupDescription="" ItemAttributeGroupID=""
+										ItemAttributeGroupKey="" SequenceNo="">
+										<ItemAttributeList>
+											<ItemAttribute IsKeyAttribute=""
+												ItemAttributeDescription="" ItemAttributeGroupKey=""
+												ItemAttributeKey="" ItemAttributeName="" SequenceNo=""
+												IsInherited="" Value="">
+												<AssignedValueList>
+													<AssignedValue DoubleValue="" IntegerValue=""
+														Value="" />
+												</AssignedValueList>
+												<Attribute AllowMultipleValues=""
+													AllowedValueLength="" AttributeDomainID=""
+													AttributeGroupID="" AttributeID="" AttributeKey=""
+													AttributePostFix="" DataType="" IsAllowedValueDefined=""
+													IsValueMandatory="" LongDescription="" OrganizationCode=""
+													SequenceNo="" ShortDescription="" DerivedFromAttributeKey="" />
+											</ItemAttribute>
+										</ItemAttributeList>
+									</ItemAttributeGroup>
+								</ItemAttributeGroupList>
+							</ItemAttributeGroupType>
+						</ItemAttributeGroupTypeList>
+						<Components>
+							<Component ComponentDescription=""
+								ComponentShortDescription="" ComponentItemID=""
+								ComponentKitCode="" ComponentUnitOfMeasure="" KitQuantity="" />
+						</Components>
+						<AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+						<Extn ExtnMwt="" ExtnCert="" ExtnSellText="" ExtnMpc="" ExtnSupplierNameDisplay="" />
+						<AlternateUOMList>
+							<AlternateUOM Quantity="" UnitOfMeasure="" IsOrderingUOM=""/>
+						</AlternateUOMList>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxItemDetailsMIL' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Item Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" Currency="" ItemID=""
+					UnitOfMeasure="" ShowFinalSupersededItemOnly="Y"
+					IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y"
+					DisplayLocalizedFieldInLocale="" UnitOfMeasureQryType=""
+					IgnoreInvalidItems="N">
+					<CustomerInformation CustomerID="" />
+					<ItemAssociationTypeList>
+						<ItemAssociationType Type="CrossSell" />
+						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
+					</ItemAssociationTypeList>
+					<ItemAttributeGroupTypeList>
+						<ItemAttributeGroupType
+							ClassificationPurposeCode="SPECIFICATION" />
+					</ItemAttributeGroupTypeList>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="">
+					<Item ItemID="" UnitOfMeasure="" IsItemSuperseded="">
+						<PrimaryInformation Description="" ImageID=""
+							ImageLabel="" ImageLocation="" IsConfigurable=""
+							IsDeliveryAllowed="" IsModelItem="" IsPickupAllowed=""
+							IsPreConfigured="" IsShippingAllowed="" ShortDescription=""
+							ExtendedDescription="" KitCode="" MaxOrderQuantity=""
+							MinOrderQuantity="" UnitHeight="" UnitHeightUOM="" UnitLength=""
+							UnitLengthUOM="" UnitVolume="" UnitVolumeUOM="" UnitWeight=""
+							UnitWeightUOM="" UnitWidth="" UnitWidthUOM="" ConfigurationKey=""
+							ConfigurationModelName="" IsValid="" ManufacturerItem=""
+							PricingUOM="" PricingQuantityConvFactor="" />
+						<Availability AlertLevel="" AlertPeriodEnd=""
+							AlertPeriodStart="" AlertQuantity="" AlertRaisedOn="" AlertType=""
+							CurrentAvailableQty="" FirstFutureAvailableDate=""
+							FutureAvailableDate="" FutureAvailableQuantity=""
+							OnhandAvailableDate="" OnhandAvailableQuantity="" />
+						<ComputedPrice BundleTotal="" UnitPrice="" />
+						<AssociationTypeList>
+							<AssociationType CodeLongDescription=""
+								CodeShortDescription="" Type="">
+								<AssociationList>
+									<Association AssociatedQuantity=""
+										AssociationGroup="" AssociationType="" EffectiveFrom=""
+										EffectiveTo="" Priority="">
+										<Item ItemID="" UnitOfMeasure="">
+											<PrimaryInformation ShortDescription="" />
+											<ComputedPrice BundleTotal="" UnitPrice="" />
+											<AssetList TotalNumberOfRecords="">
+												<Asset AssetID="" AssetKey="" ContentID=""
+													ContentLocation="" ContentSize="" Description="" Label=""
+													Type="" />
+											</AssetList>
+										</Item>
+									</Association>
+								</AssociationList>
+							</AssociationType>
+						</AssociationTypeList>
+						<Components>
+							<Component ComponentDescription=""
+								ComponentShortDescription="" ComponentItemID=""
+								ComponentKitCode="" ComponentUnitOfMeasure="" KitQuantity="" />
+						</Components>
+						<AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id='xpedxItemDetailsMILRelatedItems' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Item Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" Currency="" ItemID=""
+					UnitOfMeasure="" ShowFinalSupersededItemOnly="Y"
+					IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y"
+					DisplayLocalizedFieldInLocale="" UnitOfMeasureQryType=""
+					IgnoreInvalidItems="N">
+					<CustomerInformation CustomerID="" />
+					<ItemAssociationTypeList>
+						<ItemAssociationType Type="CrossSell" />
+						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
+					</ItemAssociationTypeList>
+					<ItemAttributeGroupTypeList>
+						<ItemAttributeGroupType
+							ClassificationPurposeCode="SPECIFICATION" />
+					</ItemAttributeGroupTypeList>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="">
+					<Item ItemID="" UnitOfMeasure="" IsItemSuperseded="">
+						<AssociationTypeList>
+							<AssociationType CodeLongDescription=""
+								CodeShortDescription="" Type="">
+								<AssociationList>
+									<Association AssociatedQuantity=""
+										AssociationGroup="" AssociationType="" EffectiveFrom=""
+										EffectiveTo="" Priority="">
+										<Item ItemID="" UnitOfMeasure="">
+											<PrimaryInformation ShortDescription="" />
+											<ComputedPrice BundleTotal="" UnitPrice="" />
+											<AssetList TotalNumberOfRecords="">
+												<Asset AssetID="" AssetKey="" ContentID=""
+													ContentLocation="" ContentSize="" Description="" Label=""
+													Type="" />
+											</AssetList>
+										</Item>
+									</Association>
+								</AssociationList>
+							</AssociationType>
+						</AssociationTypeList>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxRelatedItemDetails' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Item Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" Currency="" ItemID=""
+					UnitOfMeasure="" ShowFinalSupersededItemOnly="Y"
+					IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y"
+					DisplayLocalizedFieldInLocale="" UnitOfMeasureQryType=""
+					IgnoreInvalidItems="N">
+					<CustomerInformation CustomerID="" />
+					<ItemAssociationTypeList>
+						<ItemAssociationType Type="CrossSell" />
+						<ItemAssociationType Type="UpSell" />
+						<!-- XB-673 Changes Start -->
+						<ItemAssociationType Type="Alternative.Y" />
+						<!-- XB-673 Changes End -->
+					</ItemAssociationTypeList>
+					<ItemAttributeGroupTypeList>
+						<ItemAttributeGroupType
+							ClassificationPurposeCode="SPECIFICATION" />
+					</ItemAttributeGroupTypeList>
+					<Extn>
+						<XPXItemExtnList>
+							<XPXItemExtn XPXDivision="" EnvironmentID="" />
+						</XPXItemExtnList>
+					</Extn>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="">
+					<Item ItemID="" UnitOfMeasure="" IsItemSuperseded="">
+						<PrimaryInformation Description="" ImageID=""
+							ImageLabel="" ImageLocation="" IsConfigurable=""
+							IsDeliveryAllowed="" IsModelItem="" IsPickupAllowed=""
+							IsPreConfigured="" IsShippingAllowed="" ShortDescription=""
+							ExtendedDescription="" KitCode="" MaxOrderQuantity=""
+							MinOrderQuantity="" UnitHeight="" UnitHeightUOM="" UnitLength=""
+							UnitLengthUOM="" UnitVolume="" UnitVolumeUOM="" UnitWeight=""
+							UnitWeightUOM="" UnitWidth="" UnitWidthUOM="" ConfigurationKey=""
+							ConfigurationModelName="" IsValid="" ManufacturerItem=""
+							PricingUOM="" PricingQuantityConvFactor="" />
+						<Availability AlertLevel="" AlertPeriodEnd=""
+							AlertPeriodStart="" AlertQuantity="" AlertRaisedOn="" AlertType=""
+							CurrentAvailableQty="" FirstFutureAvailableDate=""
+							FutureAvailableDate="" FutureAvailableQuantity=""
+							OnhandAvailableDate="" OnhandAvailableQuantity="" />
+						<ComputedPrice BundleTotal="" UnitPrice="" />
+						<AssociationTypeList>
+							<AssociationType CodeLongDescription=""
+								CodeShortDescription="" Type="">
+								<AssociationList>
+									<Association AssociatedQuantity=""
+										AssociationGroup="" AssociationType="" EffectiveFrom=""
+										EffectiveTo="" Priority="">
+										<Item ItemID="" UnitOfMeasure="">
+											<PrimaryInformation ShortDescription="" />
+											<ComputedPrice BundleTotal="" UnitPrice="" />
+											<AssetList TotalNumberOfRecords="">
+												<Asset AssetID="" AssetKey="" ContentID=""
+													ContentLocation="" ContentSize="" Description="" Label=""
+													Type="" />
+											</AssetList>
+										</Item>
+									</Association>
+								</AssociationList>
+							</AssociationType>
+						</AssociationTypeList>
+						<ItemAttributeGroupTypeList>
+							<ItemAttributeGroupType
+								ClassificationPurposeCode="" Description=""
+								IsAdditionalAttributeAllowed="" IsSingleGroup=""
+								ItemAttributeGroupType="" ItemAttributeGroupTypeKey=""
+								IsValidForCategory="" IsValidForClassification="">
+								<ItemAttributeGroupList>
+									<ItemAttributeGroup CategoryKey=""
+										IsInherited="" AttributeGroupPath=""
+										ItemAttributeGroupDescription="" ItemAttributeGroupID=""
+										ItemAttributeGroupKey="" SequenceNo="">
+										<ItemAttributeList>
+											<ItemAttribute IsKeyAttribute=""
+												ItemAttributeDescription="" ItemAttributeGroupKey=""
+												ItemAttributeKey="" ItemAttributeName="" SequenceNo=""
+												IsInherited="" Value="">
+												<AssignedValueList>
+													<AssignedValue DoubleValue="" IntegerValue=""
+														Value="" />
+												</AssignedValueList>
+												<Attribute AllowMultipleValues=""
+													AllowedValueLength="" AttributeDomainID=""
+													AttributeGroupID="" AttributeID="" AttributeKey=""
+													AttributePostFix="" DataType="" IsAllowedValueDefined=""
+													IsValueMandatory="" LongDescription="" OrganizationCode=""
+													SequenceNo="" ShortDescription="" DerivedFromAttributeKey="" />
+											</ItemAttribute>
+										</ItemAttributeList>
+									</ItemAttributeGroup>
+								</ItemAttributeGroupList>
+							</ItemAttributeGroupType>
+						</ItemAttributeGroupTypeList>
+						<Components>
+							<Component ComponentDescription=""
+								ComponentShortDescription="" ComponentItemID=""
+								ComponentKitCode="" ComponentUnitOfMeasure="" KitQuantity="" />
+						</Components>
+						<AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+						<Extn>
+							<XPXItemExtnList>
+								<XPXItemExtn>
+									<XPXItemAssociationsList>
+										<XPXItemAssociations AssociatedItemID=""
+											AssociationType="" />
+									</XPXItemAssociationsList>
+								</XPXItemExtn>
+							</XPXItemExtnList>
+						</Extn>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxItemCustXRef' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Item customer X reference Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		 <API FlowName="getXPXItemcustXrefList">
+            <Input>
+  				<XPXItemcustXref EnvironmentCode=""  CustomerNumber="" LegacyItemNumber="" CustomerDivision="" />
+            </Input>
+            <Template>
+			<XPXItemcustXrefList>
+			    <XPXItemcustXref />
+			</XPXItemcustXrefList>
+            </Template>
+        </API>
+	</mashup>
+
+	<mashup id='xpedxCatalogSearch' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Search and Navigation in Catalog">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" SortField=""
+					SortDescending="" PageSize="" PageNumber="" CategoryPath="">
+					<Item GetAvailabilityFromCache='Y' Currency=""
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="" />
+						<AdditionalCatalogIndexInformationList>
+							<AdditionalCatalogIndexInformation
+								IndexFieldName="customerNumberPlusPartNumber" />
+							<!--  <AdditionalCatalogIndexInformation
+								IndexFieldName="showNormallyStockedItems" />  -->							
+						</AdditionalCatalogIndexInformationList>
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" PageNumber=""
+					PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">
+					<SortFieldList>
+						<SortField IndexFieldName="" />
+					</SortFieldList>
+					<CategoryDomain AttributeName="" CategoryDomain=""
+						Description="" IsClassification="" ShortDescription="" />
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Count="" Description=""
+							SequenceNo="" ShortDescription="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Count="" Description=""
+									SequenceNo="" ShortDescription="">
+								</Category>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+					<!--  commented since this will be part of ajax call EB-1731
+					<FacetList>
+						<ItemAttribute IndexFieldName="" ItemAttributeName=""
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="">
+							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
+								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
+								ShortDescription="" /> 
+ 
+							<AssignedValueList>
+								<AssignedValue Count="" Value="" IsProvidedFilter="" />
+							</AssignedValueList>
+						</ItemAttribute>
+					</FacetList>
+					 -->
+					<ItemList Currency="">
+						<Item IsItemSuperseded="" ItemID="" ItemKey="" UnitOfMeasure="">
+							<Extn/>
+							<PrimaryInformation Description="" IsValid=""
+								ShortDescription="" KitCode="" IsConfigurable=""
+								IsPreConfigured="" IsModelItem="" IsShippingAllowed=""
+								IsPickupAllowed="" MinOrderQuantity="" ImageID="" ImageLabel=""
+								ImageLocation="" ConfigurationKey="" ConfigurationModelName="" ManufacturerItem=""/>
+							
+							 <ComputedPrice BundleTotal="" ListPrice=""
+								RetailPrice="" UnitPrice="">
+								<QuantityRangePriceList>
+									<QuantityRangePrice BreakQtyHigh=""
+										BreakQtyLow="" RegionKey="" UnitPrice="">
+										<Region RegionDescription="" RegionKey=""
+											RegionLevelName="" RegionName="" />
+									</QuantityRangePrice>
+								</QuantityRangePriceList>
+							</ComputedPrice>
+							<CategoryList>
+						<Category CategoryID="" CategoryPath="" Count="" Description=""
+							SequenceNo="" ShortDescription="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Count="" Description=""
+									SequenceNo="" ShortDescription="">
+								</Category>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+						</Item>
+					</ItemList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='xpedxItemDetailsEmail' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Item Details Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="SampleEmailRequest">
+			<Input>
+				<Emails>
+					<Email AccountNumber="" CityRequest="" ContactPhoneNumber=""
+						CustomerContactName="" CustomerJobTitle="" CustomerName=""
+						DivisionNumber="" Itemdescription=""
+						ManufacturerPartNumber="" Notes="" Quantity=""
+						RequestedDeliveryDate="" SalesRepresentative1="" ShippingAddress1=""
+						ShippingAddress2="" ShippingAddress3="" StateRequest=""
+						UnitofMeasure1="" ZipRequest="" FromEmail="" ToEmail=""
+						RequestType="SampleRequest" />
+				</Emails>
+			</Input>
+			<Template>
+				<Emails />
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='xpedxgetCustomerList' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Item Details Email">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCustomerList">
+			<Input>
+				<Customer CustomerID="" OrganizationCode="" />
+			</Input>
+			<Template>
+				<CustomerList>
+					<Customer>
+						<Extn />
+					</Customer>
+				</CustomerList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='xpedxGetCustomCommonCodesForCatBrowse'
+		transactional='true' mashuptype='XAPI' endpoint='CATALOG'
+		description="Getting all the Column names for a particular product Type">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getCommonCodeList">
+			<Input>
+				<CommonCode CodeValue="" CodeType="XPXCatBrowseCol" />
+			</Input>
+			<Template>
+				<CommonCodeList>
+					<CommonCode CodeValue="" CodeLongDescription="" />
+				</CommonCodeList>
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxGetExtnCertImage' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Getting the environmental logo image path">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode="" />
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode="">
+					<CategoryDomain CategoryDomain="">
+						<AssetList TotalNumberOfRecords="">
+							<Asset />
+						</AssetList>
+					</CategoryDomain>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
+
+	<mashup id='MainCategories' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Filter out the categories from the Catalog Index Search">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					OrganizationCode="" CategoryDomain="" CategoryDepth=""
+					DisplayLocalizedFieldInLocale=" ">
+					<Item>
+						<CustomerInformation CustomerID="" />
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					OrganizationCode="" SortDescending="" CategoryDepth=""
+					DisplayLocalizedFieldInLocale="" CategoryPath="">
+					<CategoryDomain AttributeName="" CategoryDomain=""
+						Description="" IsClassification="" ShortDescription="">
+						<AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</CategoryDomain>
+
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Description=""
+							ShortDescription="" Count="">
+							<AssetList TotalNumberOfRecords="">
+								<Asset AssetID="" AssetKey="" ContentID=""
+									ContentLocation="" ContentSize="" Description="" Label="" Type="" />
+							</AssetList>
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id='xpedxHomeCatalogPage' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG'
+		description="Filter out the categories from the Catalog Index Search">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					OrganizationCode="" CategoryDomain="" CategoryDepth=""
+					DisplayLocalizedFieldInLocale=" ">
+					<Item>
+        				<CustomerInformation CustomerID=""/>
+    				</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					OrganizationCode="" SortDescending="" CategoryDepth=""
+					DisplayLocalizedFieldInLocale="" CategoryPath="">
+					<CategoryDomain AttributeName="" CategoryDomain=""
+						Description="" IsClassification="" ShortDescription="">
+						<AssetList TotalNumberOfRecords=""/>
+					</CategoryDomain>
+
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Description=""
+							ShortDescription="" Count="">
+							<AssetList TotalNumberOfRecords="">
+								<Asset AssetID='' AssetKey="" ContentID="" ContentLocation="" Description="" Label="" Type=""/>
+							</AssetList>
+							<ChildCategoryList>
+								<Category CategoryPath="" ShortDescription=""
+									Description="" />
+							</ChildCategoryList>
+							<AssetList TotalNumberOfRecords="">
+								<Asset AssetID="" AssetKey="" ContentID=""
+									ContentLocation="" ContentSize="" Description="" Label="" Type="" />
+							</AssetList>
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	
+
+	<mashup id='xpedxGetAttributeDetails' transactional='true'
+		mashuptype='XAPI' endpoint='CATALOG' description="Getting the Attribute Name for a ID">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="getAttributeDetails">
+			<Input>
+				<Attribute AttributeID="" OrganizationCode=""
+					AttributeDomainID="" AttributeGroupID="" />
+			</Input>
+			<Template>
+				<Attribute ShortDescription="" />
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxPnAWebService' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Calling the PnA Service">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="XPXPandAWebService">
+			<Input />
+			<Template />
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxMinimalItemDetails' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" ShowFinalSupersededItemOnly="Y" IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y">
+					<CustomerInformation CustomerID="" />
+					<ComplexQuery>
+						<Or>
+							<!--  Exp Name="ItemID" Value="" /-->
+						</Or>
+					</ComplexQuery>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="" >
+					<Item ItemID="" ItemKey="" UnitOfMeasure="">
+						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ManufacturerItem=""/>
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
+						</CategoryList>
+						<ComputedPrice UnitPrice=""/>
+						<Extn ExtnMpc ="" ExtnCert=""/>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxGetItemCustXRef' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getItemCustXrefListService">
+			<Input>
+				<XPXItemcustXref EnvironmentCode="" CustomerDivision="" CustomerNumber="" CompanyCode="" >
+					<ComplexQuery Operator="And">
+						<Or>
+							<!--  Exp Name="ItemID" Value="" /-->
+						</Or>
+					</ComplexQuery>
+				</XPXItemcustXref >
+			</Input>
+			<Template>
+				<XPXItemcustXrefList >
+					<XPXItemcustXref />
+				</XPXItemcustXrefList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxItemDetailsForItemAssociation' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" ShowFinalSupersededItemOnly="Y" IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y">
+					<CustomerInformation CustomerID="" />
+					<ItemAssociationTypeList>
+						  <ItemAssociationType Type="CrossSell"/>
+						  <ItemAssociationType Type="UpSell"/>
+						  <!-- XB-673 Changes Start -->
+						  <ItemAssociationType Type="Alternative.Y"/>
+						  <!-- XB-673 Changes End -->
+					</ItemAssociationTypeList>
+					<ComplexQuery>
+						<Or>
+							<!-- Exp Name="ItemID" Value="2267326" /-->
+						</Or>
+					</ComplexQuery>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="" >
+					<Item ItemID=""  UnitOfMeasure="" ItemKey="">
+					<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" PricingUOM="" IsSoldSeparately=""
+							IsModelItem="" DefaultProductClass="" MinOrderQuantity="" ImageID="" ImageLocation="" ManufacturerItem="" ManufacturerName=""/>
+					<AssociationTypeList>
+						<AssociationType CodeShortDescription="" Type="">
+						 <AssociationList>
+							 <Association AssociatedQuantity="" AssociationType="" EffectiveFrom="" EffectiveTo="" Priority="">
+								 <Item ItemID="" UnitOfMeasure="" >
+								   <PrimaryInformation Description="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ExtendedDescription="" IsValid=""/>
+								   <AssetList TotalNumberOfRecords="">
+								      <Asset AssetID="" AssetKey="" ContentID="" ContentLocation="" ContentSize="" Description="" Label="" Type=""/>
+								   </AssetList>
+								 </Item>
+							 </Association>
+						  </AssociationList>
+						</AssociationType>
+					</AssociationTypeList>
+					<Extn ExtnMpc=""/>
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedxItemBranchDetailsForItemAssociation' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPXItemBranchListService" >
+			<Input>
+				<XPXItemExtn CustomerID="" XPXDivision="" EnvironmentID="">
+						<ComplexQuery>
+						<Or>
+							<!-- Exp Name="ItemID" Value="2267326" /-->
+						</Or>
+					</ComplexQuery>
+				</XPXItemExtn>
+			</Input>
+			<Template>
+				<XPXItemExtnList>
+					<XPXItemExtn ItemID="">
+						<XPXItemAssociationsList>
+							<XPXItemAssociations AssociatedItemID="" AssociationType="" />
+						</XPXItemAssociationsList>
+					</XPXItemExtn>
+				</XPXItemExtnList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedxXPXItemExtnList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPXItemExtnList" >
+			<Input>
+				<XPXItemExtn XPXDivision="" EnvironmentID="">
+						<ComplexQuery>
+						<Or>
+							<!-- Exp Name="ItemID" Value="2267326" /-->
+						</Or>
+					</ComplexQuery>
+				</XPXItemExtn>
+			</Input>
+			<Template>
+				<XPXItemExtnList>
+					<XPXItemExtn/>
+				</XPXItemExtnList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedxItemExtnListMashup' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" >
+					<CustomerInformation CustomerID="" />
+					<ComplexQuery>
+						<Or>
+							<!-- Exp Name="ItemID" Value="2267326" /-->
+						</Or>
+					</ComplexQuery>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList Currency="" >
+					<Item ItemID=""  UnitOfMeasure="">
+						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ManufacturerItem=""/>
+						<ComputedPrice UnitPrice=""/>
+						<Extn ExtnCert="" ExtnMpc="" ExtnMwt="" ExtnSellText="" ExtnSupplierNameDisplay="" />
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedxItemExtnList' transactional='true' mashuptype='XAPI' endpoint='ITEM' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPXItemBranchListService">
+			<Input>
+				<XPXItemExtn EnvironmentID="" XPXDivision=""  >
+					<ComplexQuery Operation="Or">
+						<Or>
+							<!-- Exp Name="ItemID" Value="2267326" /-->
+						</Or>
+					</ComplexQuery>
+				</XPXItemExtn>
+			</Input>
+			<Template>
+				<ItemList Currency="" >
+					<Item ItemID=""  UnitOfMeasure="">
+						<PrimaryInformation Description="" ExtendedDescription="" IsValid="" ShortDescription="" ImageID="" ImageLabel="" ImageLocation="" ManufacturerItem=""/>
+						<ComputedPrice UnitPrice=""/>
+						<Extn ExtnCert="" ExtnMpc="" ExtnMwt="" ExtnSellText="" ExtnSupplierNameDisplay="" />
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	<mashup id ='xpedxItemBranchDetails' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="getXPXItemBranchListService" >
+			<Input>
+				<XPXItemExtn CustomerID="" XPXDivision="" EnvironmentID="" ItemID=""/>
+			</Input>
+			<Template>
+				<XPXItemExtnList>
+					<XPXItemExtn ItemID="" InventoryIndicator="">
+						<XPXItemAssociationsList>
+							<XPXItemAssociations AssociatedItemID="" AssociationType="" />
+						</XPXItemAssociationsList>
+					</XPXItemExtn>
+				</XPXItemExtnList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxItemDetailsForPricingInfo' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getCompleteItemList">
+			<Input>
+				<Item CallingOrganizationCode="" ShowFinalSupersededItemOnly="Y" IgnoreUnorderableItems="Y" GetAvailabilityFromCache="Y">
+					<CustomerInformation CustomerID="" />
+					<ComplexQuery>
+						<Or>
+							<!--  Exp Name="ItemID" Value="" /-->
+						</Or>
+					</ComplexQuery>
+				</Item>
+			</Input>
+			<Template>
+				<ItemList>
+					<Item ItemID="" ItemKey="" UnitOfMeasure="">
+						<PrimaryInformation Description="" MinOrderQuantity="" PricingUOM="" PricingQuantityConvFactor=""/>
+						<CategoryList>
+							<Category CategoryID="" CategoryKey="" CategoryPath="" OrganizationCode="" ShortDescription="" Description=""/>
+						</CategoryList>
+						<AlternateUOMList>
+							<AlternateUOM ItemKey="" ItemUOMKey="" Quantity=""
+											UnitOfMeasure="" />
+						</AlternateUOMList>
+						
+						<Extn ExtnMwt="" />
+					</Item>
+				</ItemList>
+			</Template>
+		</API>
+	</mashup>
+	
+	
+	<mashup id='xpedxCatalogLandingSearch' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Search for Catalog Landing">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" SortField=""
+					SortDescending="" PageSize="" PageNumber="" CategoryPath="">
+					<Item GetAvailabilityFromCache="Y" Currency=""
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="" />
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode="" CategoryDepth="" DisplayLocalizedFieldInLocale="" PageNumber="" PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">
+					<SortFieldList>
+						<SortField IndexFieldName="" />
+					</SortFieldList>
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Count="" Description="" SequenceNo="" ShortDescription="">
+							<AssetList TotalNumberOfRecords="">
+								<Asset AssetID="" ContentID="" ContentLocation="" Description="" Label="" Type="" />
+							</AssetList>
+							<ChildCategoryList>
+								<Category CategoryPath="" Count="" Description="" SequenceNo="" ShortDescription="">
+									<AssetList TotalNumberOfRecords="">
+										<Asset AssetID="" ContentID="" ContentLocation="" Description="" Label="" Type="" />
+									</AssetList>
+								</Category>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+					<CurrentCategory CategoryPath="" Count="" ShortDescription=""/>
+					<!--  commented since this will be part of ajax call EB-1731
+					<FacetList>
+						<ItemAttribute IndexFieldName="" ItemAttributeName="" IsProvidedFilter="" ItemAttributeKey="">
+							<Attribute AllowMultipleValues="" AttributeDomainID="" AttributeGroupID="" 
+								AttributeID="" AttributeKey="" IsAllowedValueDefined="" LongDescription="" OrganizationCode="" SequenceNo="" 
+								ShortDescription="" /> 
+ 
+							<AssignedValueList>
+								<AssignedValue Count="" Value="" IsProvidedFilter="" />
+							</AssignedValueList>
+						</ItemAttribute>
+					</FacetList>
+					-->
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxYpmPricelistLine' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getPricelistLineList" >
+			<Input>
+				<PricelistLine PricingStatus="ACTIVE">
+				<Item OrganizationCode=""/>
+					<ComplexQuery>
+       				 <Or>
+       				 </Or>
+					</ComplexQuery>
+					<PricelistHeader PricelistHeaderKey=""/>
+				</PricelistLine>
+			</Input>
+			<Template>
+				<PricelistLine FromQuantity="" ItemID="" ListPrice="">
+					<Extn/>
+				</PricelistLine>
+			</Template>
+		</API>
+	</mashup>
+	
+		<mashup id ='xpedxYpmPricelistAssignmentList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getPricelistAssignmentList" >
+			<Input>
+				<PricelistAssignment CustomerID="" >
+				</PricelistAssignment>
+			</Input>
+			<Template>
+			<PricelistAssignmentList TotalNumberOfRecords="">
+				<PricelistAssignment PricelistHeaderKey="" >
+  				</PricelistAssignment>
+  			</PricelistAssignmentList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxYpmPriceLinelistAssignmentList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Additional item information">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="getPricelistAssignmentList" >
+			<Input>
+				<PricelistAssignment CustomerID="" >
+					<PricelistLine PricingStatus="ACTIVE">
+					<Item OrganizationCode=""/>
+						<ComplexQuery Operator="And">
+       					 <Or>
+       					 </Or>
+						</ComplexQuery>
+					</PricelistLine>
+				</PricelistAssignment>
+			</Input>
+			<Template>
+			<PricelistLineList>
+			<PricelistLine FromQuantity="" ItemID="" ListPrice="">
+					<Extn/>
+				</PricelistLine>
+			</PricelistLineList>
+			</Template>
+		</API>
+	</mashup>
+	
+	<!-- Added for performance : overriding outOfBox catalogNavBar -->
+	<mashup id ='xpedxCatalogNavBar' transactional='true' mashuptype='XAPI' endpoint='CATALOG'
+		description="Filter out the categories from the Catalog Index Search">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="searchCatalogIndex">
+			<Input>
+				<CatalogSearch CallingOrganizationCode="" OrganizationCode="" CategoryDomain=""
+								CategoryDepth="" DisplayLocalizedFieldInLocale=" " >
+					<Item>
+						<CustomerInformation CustomerID=""/>
+					</Item>
+				</CatalogSearch>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode="" OrganizationCode="" SortDescending=""
+						CategoryDepth="" DisplayLocalizedFieldInLocale="" CategoryPath="">
+					<CategoryDomain AttributeName="" CategoryDomain="" Description="" IsClassification="" ShortDescription="">
+						<AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation="" ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</CategoryDomain>
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Description="" ShortDescription="" Count="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Description="" ShortDescription="" Count=""/>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+	
+	<mashup id ='xpedxgetAllAPI' transactional='true' mashuptype='XAPI' endpoint='CATALOG'
+		description="Filter out the categories from the Catalog Index Search">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API FlowName="XPXCatalogAllAPIService">
+			<Input>
+				<XPXCatalogAllAPIService />
+			</Input>
+			<Template>
+				<XPXCatalogAllAPIService />
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxNarrowByCatalogSearch' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Search and Navigation in Catalog">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" SortField=""
+					SortDescending="" PageSize="" PageNumber="" CategoryPath="">
+					<Item GetAvailabilityFromCache='Y' Currency=""
+						ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID="" />						
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode=""
+					CategoryDepth="" DisplayLocalizedFieldInLocale="" PageNumber=""
+					PageSize="" SortDescending="" SortField="" TotalHits="" TotalPages="">					
+					<FacetList>
+						<ItemAttribute IndexFieldName="" ItemAttributeName=""
+							IsProvidedFilter="" SequenceNo="" ItemAttributeKey="" >
+							<Attribute AllowMultipleValues="" AllowedValueLength="" AttributeDomainID="" AttributeGroupID="" 
+								AttributeID="" AttributeKey="" AttributePostFix="" DataType="" DerivedFromAttributeKey=""
+								IsAllowedValueDefined="" IsValueMandatory="" LongDescription="" OrganizationCode="" 
+								ShortDescription="" /> 
+							<AssignedValueList HasMoreAssignedValues="">
+								<AssignedValue Count="" Value="" IsProvidedFilter="" />
+							</AssignedValueList>
+						</ItemAttribute>
+					</FacetList>					
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
+	<mashup id='xpedxGetBrands' transactional='true' mashuptype='XAPI'
+		endpoint='CATALOG' description="Populate Brands List page">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode="" IgnoreOrdering="Y"
+					CategoryPath="" CategoryDepth="2" DisplayLocalizedFieldInLocale="">
+					<Item GetAvailabilityFromCache='Y' ShowFinalSupersededItemOnly="Y" ExcludeChildItemsOfModelItems="Y">
+						<CustomerInformation CustomerID=""/>
+					</Item>
+					<ShowAllAssignedValues ConsiderOnlyAllAssignedValueAttributes="Y">
+						<ItemAttribute IndexFieldName=""/>
+					</ShowAllAssignedValues>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+			<CatalogSearch TotalHits="">
+			    <FacetList>
+			        <ItemAttribute ItemAttributeKey="" ItemAttributeName="">
+			            <Attribute AttributeID="" AttributeKey="" DataType="" LongDescription="" ShortDescription=""/>
+			            <AssignedValueList HasMoreAssignedValues="">
+			                <AssignedValue Count="" Value=""/>
+			            </AssignedValueList>
+			        </ItemAttribute>
+			    </FacetList>
+			</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
+	<!-- EB-694 xpedx catalog URL display for FSC, PEFC and SFI  -->
+	<mashup id='xpedxgetItemList' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="getItemList API returns a list of Items">
+        <classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+        <API Name="getItemList">
+            <Input>
+			 <Item CallingOrganizationCode=''>
+                      <ComplexQuery Operator='AND'>
+                        <Or>                            
+                        </Or>
+                    </ComplexQuery>
+                    <CustomerInformation CustomerID=''/>
+                  </Item>
+  
+            </Input>
+            <Template>
+                <ItemList>
+                    <Item> 
+                    <AssetList TotalNumberOfRecords="">
+							<Asset AssetID="" AssetKey="" ContentID="" ContentLocation=""
+								ContentSize="" Description="" Label="" Type="" />
+						</AssetList>
+					</Item>
+                </ItemList>
+            </Template>    
+        </API>
+    </mashup>
+	
+	<!-- EB-3981 mega menu -->
+	<mashup id='xpedxMegaMenuCategories' transactional='true' mashuptype='XAPI' endpoint='CATALOG' description="Returns a list of all cat1, cat2, and cat3 with item counts">
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup"/>
+		<API Name="searchCatalogIndex">
+			<Input>
+				<SearchCatalogIndex CallingOrganizationCode="" CategoryDepth="3" IgnoreOrdering="Y" PageNumber="1" PageSize="1">
+					<Item ExcludeChildItemsOfModelItems="Y" GetAvailabilityFromCache="Y" ShowFinalSupersededItemOnly="Y">
+						<CustomerInformation CustomerID=""/>
+					</Item>
+				</SearchCatalogIndex>
+			</Input>
+			<Template>
+				<CatalogSearch CallingOrganizationCode="" CategoryDepth="">
+					<CategoryList>
+						<Category CategoryID="" CategoryPath="" Count="" ShortDescription="">
+							<ChildCategoryList>
+								<Category CategoryPath="" Count="" ShortDescription=""/>
+							</ChildCategoryList>
+						</Category>
+					</CategoryList>
+				</CatalogSearch>
+			</Template>
+		</API>
+	</mashup>
+
+</mashups>

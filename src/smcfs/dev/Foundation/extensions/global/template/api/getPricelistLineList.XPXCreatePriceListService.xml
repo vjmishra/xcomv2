@@ -1,0 +1,7 @@
+<PricelistLineList>
+ <PricelistLine PricelistLineKey="">
+ <PricelistLineQuantityTierList>
+ <PricelistLineQuantityTier PricelistLineKey="" />
+</PricelistLineQuantityTierList>
+ </PricelistLine>
+</PricelistLineList>  

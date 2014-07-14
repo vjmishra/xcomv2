@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<project name="ConverEARToWAR" basedir="." default="all">
+	<target name="all">
+		<antcall target="convertEARtoWAR">
+			<param name="earpath" value="C:/xpedx"/>
+			<param name="earname" value="swc"/>
+		</antcall>
+	</target>
+	 <target name="convertEARtoWAR">
+		 <unzip src="${earpath}/${earname}.ear" dest="${basedir}/ear-tmp"/>
+		 <zip update="true" destfile="${basedir}/ear-tmp/${earname}.war" >
+			 <zipfileset dir="${basedir}/ear-tmp" includes="*.jar" prefix="WEB-INF/lib"/>
+		 </zip>
+		 <copy todir="${earpath}" file="${basedir}/ear-tmp/${earname}.war"/>
+		 <delete dir="${basedir}/ear-tmp"/>
+	 </target>
+</project>

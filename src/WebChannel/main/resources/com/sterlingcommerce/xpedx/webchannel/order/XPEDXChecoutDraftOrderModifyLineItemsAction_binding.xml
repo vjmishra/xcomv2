@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for changing draft order line information.</comment>
+    
+    <entry key="#parameters.orderHeaderKey">me_changeOrderLineDetails:/Order/@OrderHeaderKey</entry>
+    <entry key="#parameters.orderLineKeys">me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@OrderLineKey</entry>
+    <entry key="#parameters.orderLineQuantities">me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@OrderedQty</entry>
+    <entry key="#parameters.selectedDeliveryMethods">me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/@DeliveryMethod</entry>
+    <entry key="#parameters.orderLineQuantities">me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
+    <entry key="#parameters.itemUOMs">me_changeOrderLineDetails:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry>
+    <entry key="recordPendingChanges">me_changeOrderLineDetails:/Order/PendingChanges/@RecordPendingChanges</entry>
+	
+</properties>

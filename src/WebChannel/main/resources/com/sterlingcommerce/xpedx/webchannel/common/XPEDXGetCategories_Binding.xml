@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for header customer information</comment>
+	<entry key="organizationCode">xpedxCatalogNavBar:/CatalogSearch/@OrganizationCode</entry>
+	<entry key="customerId">xpedxCatalogNavBar:/CatalogSearch/Item/CustomerInformation/@CustomerID</entry> 
+	<entry key="WCContext.storefrontId">xpedxCatalogNavBar:/CatalogSearch/@CallingOrganizationCode</entry>
+	<entry key="#parameters.CategoryDomain">xpedxCatalogNavBar:/CatalogSearch/@CategoryDomain</entry>
+	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">xpedxCatalogNavBar:/CatalogSearch/@DisplayLocalizedFieldInLocale</entry>
+	<entry key="categoryDepth">xpedxCatalogNavBar:/CatalogSearch/@CategoryDepth</entry>
+</properties>

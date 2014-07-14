@@ -1,0 +1,325 @@
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+  <package name="xpedx.myItems" namespace='/myItems' extends="wcDefault">
+	
+	<action name="MyItemsList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListAction">
+		<param name="mashups">XPEDXMyItemsList</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsList_binding.xml</param>
+		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsList.jsp</result>
+		<result name="displayAsSubMenu">/xpedx/jsp/MyItems/XPEDXMyItemsListDisplayAsSubMenu.jsp</result>
+		<result name="displayAsDropdownList">/xpedx/jsp/MyItems/XPEDXMyItemsListDisplayAsDropdownList.jsp</result>
+		<result name="displayAsRadioButton">/xpedx/jsp/MyItems/XPEDXMyItemsListDisplayAsRadioButtons.jsp</result>
+	</action>
+	
+	<action name="MyItemsDetails" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAction">
+		<param name="mashups">XPEDXMyItemsDetails</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetails_binding.xml</param>
+		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetails.jsp</result>
+		<result name="export">/xpedx/jsp/MyItems/XPEDXCopyListSuccess.jsp</result>
+		<result name="noListKey" type="redirectAction">
+			<param name="actionName">MyItemsList</param>
+			<param name="namespace">/myItems</param>
+		</result>
+	</action>
+
+	<action name="XPEDXMyItemsListCreate" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListCreateAction">
+		<param name="mashups">XPEDXMyItemsListCreate</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListCreate_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsList</param>
+			<param name="namespace">/myItems</param>
+		</result>
+	</action>
+	
+	<action name="XPEDXMyItemsListDelete" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListDeleteAction">
+		<param name="mashups">XPEDXMyItemsListDelete</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListDelete_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsList</param>
+			<param name="namespace">/myItems</param>
+			<param name="filterBySelectedListChk">${filterBySelectedListChk}</param>
+			<param name="filterByMyListChk">${filterByMyListChk}</param>
+			<param name="customerIds">${customerIds}</param>
+			<param name="customerPaths">${customerPaths}</param>
+			<param name="deleteClicked">${deleteClicked}</param>
+		</result>
+	</action>
+	
+	<action name="XPEDXMyItemsListChange" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListChangeAction">
+		<param name="mashups">XPEDXMyItemsListChange</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsListChange_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsList</param>
+			<param name="namespace">/myItems</param>
+		</result>
+	</action>
+<!-- START Details-->
+	<action name="XPEDXMyItemsDetailsCreate" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsCreateAction">
+		<param name="mashups">XPEDXMyItemsDetailsCreate</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsCreate_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="itemCount">${itemCount}</param>
+		</result>
+		<result name="error" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="errorMsg">${errorMsg}</param>
+		</result>
+	</action>
+	
+	<action name="MyItemsDetailsDelete" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsDeleteAction">
+		<param name="mashups">XPEDXMyItemsDetailsDelete</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsDelete_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="itemDeleted">true</param>
+		</result>
+	</action>
+	
+	<action name="MyItemsDetailsChange" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeAction">
+		<param name="mashups">XPEDXMyItemsDetailsChange</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChange_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="editMode">${editMode}</param>
+		</result>
+		<result name="error" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="errorMsg">${errorMsg}</param>
+		</result>
+	</action>
+	
+	<action name="XPEDXMyItemsDetailsAddFromCatalog" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAddFromCatalogAction">
+		<param name="mashups">XPEDXMyItemsDetailsAddFromCatalog</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsAddFromCatalog_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">XPEDXMyItemsDetailsCreate</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			
+			<param name="name">${name}</param>
+			<param name="qty">${qty}</param>
+			<param name="order">${order}</param>
+			<param name="desc">${desc}</param>
+			<param name="jobId">${jobId}</param>
+			<param name="itemId">${itemId}</param>
+			<param name="ItemType">${itemType}</param>
+		</result>
+	</action>
+	
+	<action name="MyItemsDetailsImportPrepare" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsImportPrepareAction">
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsCreate_binding.xml</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">XPEDXMyItemsDetailsImportCreate</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="errorMsgRowsMissingItemId">${errorMsgRowsMissingItemId}</param>
+		</result>
+		<result name="failure" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="errorMsg">${errorMsg}</param>
+			<param name="sharePermissionLevel">${sharePermissionLevel}</param>
+			<param name="shareAdminOnly">${shareAdminOnly}</param>
+			<param name="listOwner">${listOwner}</param>
+			<param name="listCustomerId">${listCustomerId}</param>
+		</result>
+	</action>
+	
+	<action name="XPEDXMyItemsDetailsImportCreate" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsImportCreateAction">
+		<param name="mashups">XPEDXMyItemsDetailsCreate</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsCreate_binding.xml</param>
+		
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="errorMsg">${errorMsg}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="errorMsgRowsMissingItemId">${errorMsgRowsMissingItemId}</param>
+		</result>
+		<result name="failure" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="errorMsg">${errorMsg}</param>
+			<param name="errorMsgRowsMissingItemId">${errorMsgRowsMissingItemId}</param>
+		</result>
+	</action>
+	
+	<action name="XPEDXMyItemsDetailsAddToCart" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAddToCartAction">
+		<param name="mashups">XPEDXMyItemsDetailsAddToCart</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsAddToCart_binding.xml</param>
+		
+        <result name="success" type="redirectAction">
+            <param name="actionName">draftOrderDetails</param>
+            <param name="namespace">/order</param>
+            <param name="orderHeaderKey">${#parameters.orderHeaderKey}</param>
+            <param name="zipCode">${#parameters.zipCode}</param>
+            <param name="quickAddErrorListSessionKey">${quickAddErrorListSessionKey}</param>
+            <param name="draft">${draft}</param>
+        </result>
+        <result name="MaxError">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsAddtoCartError.jsp
+		</result>
+		<result name="error">/xpedx/jsp/MyItems/XPEDXAddToCartFailure.jsp
+		</result>
+		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
+		<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>
+	</action>
+	              
+	<action name="XPEDXMyItemsDetailsGetShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsGetShareListAction">
+		<param name="mashups">XPEDXMyItemsDetailsGetShareList</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsGetShareList_binding.xml</param>
+        <result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsGetShareList.jsp</result>
+	</action>
+	<action name="XPEDXMyItemsDetailsChangeShareListForItemDetail" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
+		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
+	</action>	
+	
+	<action name="MyItemsDetailsChangeShareList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsChangeShareListAction">
+		<param name="mashups">XPEDXMyItemsDetailsChangeShareList</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsChangeShareList_binding.xml</param>
+		 <result name="copy" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>			
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="sharePrivateField">${sharePermissionLevel}</param>
+			<param name="sharePermissionLevel">${sharePermissionLevel}</param>
+			<param name="shareAdminOnly">${shareAdminOnly}</param>
+		</result> 
+		 <result name="success" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>			
+			<param name="listKey">${listKey}</param>
+			<param name="listName">${listName}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="editMode">${editMode}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="sharePrivateField">${sharePermissionLevel}</param>
+			<param name="sharePermissionLevel">${sharePermissionLevel}</param>
+			<param name="shareAdminOnly">${shareAdminOnly}</param>
+		</result>
+	</action>
+	
+	<action name="XPEDXMyItemsDetailsGetPrice" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsGetPriceAction">
+		<param name="mashups">XPEDXMyItemsDetailsGetPrice</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsGetPriceAndAvail_binding.xml</param>
+        <result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsGetPrice.jsp</result>
+	</action>
+	
+	<action name="XPEDXMyItemsDetailsGetAvail" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsGetAvailAction">
+		<param name="mashups">XPEDXMyItemsDetailsGetPrice</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsGetPriceAndAvail_binding.xml</param>
+        <result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsGetAvail.jsp</result>
+	</action>
+
+	<action name="MyItemsDetailsQuickAdd" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsQuickAddAction">
+		<param name="mashups">XPEDXMyItemsDetailsQuickAdd</param>
+		<param name="resourceId">/swc/AuthUsersPage</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsQuickAdd_binding.xml</param>
+		<result name="success" type="redirectAction">
+			<param name="actionName">MyItemsDetails</param>
+			<param name="namespace">/myItems</param>
+			<param name="listKey">${listKey}</param>
+			<param name="listDesc">${listDesc}</param>
+			<param name="listName">${listName}</param>
+			<param name="itemCount">${itemCount}</param>
+			<param name="editMode">${editMode}</param>
+		</result>
+		<result name="validate_item">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsQuickAdd.jsp</result>
+	</action>
+	
+	<action name="getItemAvailabilty" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAction" method="preparePnAjaxData">
+		<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
+		</result>
+		<result name="error">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
+		</result>
+	</action>
+	
+	<action name="getItemAvailabiltyForSelected" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAction" method="pricecheck">
+	<param name="mashups">XPEDXMyItemsDetails</param>
+		<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+		<result name="success">/xpedx/jsp/MyItems/XPEDXPriceDisplayForMultipleItems.jsp
+		</result>
+		<result name="error">/xpedx/jsp/MyItems/XPEDXPriceDisplayForMultipleItems.jsp
+		</result>
+	</action>
+	
+	<action name="addMyItemToCart" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAddToCartAction" method="addMyItemToCart">		
+        <param name="resourceId">/swc/order/guestShopping</param>
+        <param name="mashups">XPEDXMyItemsDetailsAddToCart</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/MyItems/XPEDXMyItemsDetailsAddItemToCart_binding.xml</param>
+		<result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
+		</result>
+		<result name="MaxError">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsAddtoCartError.jsp
+		</result>
+		<result name="error">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsItemAvailability.jsp
+		</result>
+		<result name="DraftErrorCat">/xpedx/jsp/MyItems/XPEDXDraftOrderFlagCatErr.jsp</result>
+		<result name="OUErrorPage">/xpedx/jsp/common/XPEDXErrorMessage.jsp</result>
+	</action>
+
+  </package>
+</struts>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project name="Web Channel Merge Build Script" default="clean">
+
+	<property name="custommashups" value="custommashups" />
+	<property file="devMerge.properties" />
+	<property name="swc_build_dir" value="${swc_exploded_dir}" />
+	<property name="classes_dir" value="${swc_build_dir}/WEB-INF/classes" />
+	<property name="mashupxmlsDestinationDir" value="${swc_exploded_dir}/mashupxmls/webchannel/extn/swc" />
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes_dir}" includes="com/*" />
+		</delete>
+		<delete includeemptydirs="true">
+			<fileset dir="${swc_build_dir}">
+				<include name="${swc_custom_dir}/**" />
+				<include name="${custommashups}/**" />
+			</fileset>
+		</delete>
+		<delete includeemptydirs="true">
+			<fileset dir="${mashupxmlsDestinationDir}" includes="**/*"/>
+		</delete>
+		<ant antfile="dev_merge.xml" target="merge"/>
+	</target>
+</project>

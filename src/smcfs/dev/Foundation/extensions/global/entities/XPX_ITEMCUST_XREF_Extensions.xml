@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<!--  <Entity TableName="XPX_ITEMCUST_XREF" > -->
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Sales Rep"
+			HasHistory="true" Prefix="XPX" TableName="XPX_ITEMCUST_XREF" Name="XPXCustItemCrossRef">
+			<Attributes>
+				<Attribute ColumnName="ITEMCUST_REF_KEY" DataType="Key"
+					DefaultValue="' '" Description="Primary key of this table" Name="ItemcustRefKey"
+					Nullable="false" XMLName="ItemcustRefKey" />
+				
+				<Attribute ColumnName="CUSTOMER_NUMBER" DataType="AccountNo"
+					DefaultValue="" Description="Customer Number" Nullable="true"
+					XMLName="CustomerNumber" />
+
+				<Attribute ColumnName="MPC" DataType="ItemID"
+					DefaultValue="' '" Description="MPC" Nullable="true" XMLName="MPC" />
+
+				<Attribute ColumnName="LEGACY_ITEM_NUMBER" DataType="ItemID"
+					DefaultValue="" Description="Legacy Item Number" Nullable="true"
+					XMLName="LegacyItemNumber" />
+
+				<Attribute ColumnName="CUSTOMER_PART_NUMBER" DataType="ItemID"
+					DefaultValue="" Description="Customer Part Number" Nullable="true"
+					XMLName="CustomerPartNumber" />
+					
+				<Attribute ColumnName="CUSTOMER_ITEM_NUMBER" DataType="ItemID"
+					DefaultValue="" Description="Customer Part Number" Nullable="true"
+					XMLName="CustomerItemNumber" />	
+
+				<Attribute ColumnName="CUSTOMER_DESCRIPTION" DataType="Text-255"
+					DefaultValue="' '" Description="Customer Decription" Nullable="true"
+					XMLName="CustomerDecription" />
+
+				<Attribute ColumnName="CUSTOMER_UNIT" DataType="UOM"
+					DefaultValue="' '" Description="Customer Unit" Nullable="true"
+					XMLName="CustomerUnit" />
+
+				<Attribute ColumnName="CONV_FACTOR" DataType="ConversionFactor"
+					DefaultValue="" Description="Conv Factor" Nullable="true" XMLName="ConvFactor" />
+
+				<Attribute ColumnName="IS_CUST_UOM_EXCL" DataType="Flag"
+					DefaultValue="' '" Description="Flag to check whether the Customer UOM is Exclusive"
+					Nullable="false" XMLName="IsCustUOMExcl" />
+
+				<Attribute ColumnName="ENVIRONMENT_CODE" DataType="Text-25"
+					DefaultValue="' '" Description="Environment Code" Nullable="true"
+					XMLName="EnvironmentCode" />
+
+				<Attribute ColumnName="COMPANY_CODE" DataType="Text-25"
+					DefaultValue="' '" Description="Company Code" Nullable="true"
+					XMLName="CompanyCode" />
+
+				<Attribute ColumnName="CUSTOMER_DIVISION" DataType="OrgCode"
+					DefaultValue="' '" Description="CustomerDivision" Nullable="true"
+					XMLName="CustomerDivision" />
+					
+				<Attribute ColumnName="LEGACY_UOM" DataType="UOM"
+					DefaultValue="' '" Description="Legacy UOM" Nullable="true"
+					XMLName="LegacyUom" />
+				<Attribute ColumnName="CUSTOMER_UOM" DataType="UOM"
+					DefaultValue="' '" Description="Customer UOM" Nullable="true"
+					XMLName="CustomerUom" />
+					
+
+				<!-- Mandatory Attributes -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was created."
+					Name="Createts" />
+
+				<Attribute ColumnName="MODIFYTS" DataType="TimeStamp"
+					DefaultValue="sysdate" Description="Timestamp when the record was last modified."
+					Name="Modifyts" />
+
+				<Attribute ColumnName="CREATEUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Creating User ID" />
+
+				<Attribute ColumnName="MODIFYUSERID" DataType="UserId"
+					DefaultValue="' '" Description="Modifying User ID" />
+
+				<Attribute ColumnName="CREATEPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Creating Program ID" />
+
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID"
+					DefaultValue="' '" Description="Modifying Program ID" />
+
+				<Attribute ColumnName="LOCKID" DataType="Lockid"
+					DefaultValue="0"
+					Description="An integer used to track and prevent concurrent modifications." />
+			</Attributes>
+			
+			<PrimaryKey Name="XPEDX_REF_PK">
+				<Attribute ColumnName="ITEMCUST_REF_KEY" Name="ItemcustRefKey" />
+			</PrimaryKey>
+			
+			<Indices>
+				<Index Name="XREF_INDEX_I1" Unique="True">
+					<Column Name="CUSTOMER_NUMBER" />
+					<Column Name="CUSTOMER_DIVISION" />
+					<Column Name="ENVIRONMENT_CODE" />
+					<Column Name="LEGACY_ITEM_NUMBER" />
+					<Column Name="CUSTOMER_ITEM_NUMBER"/>
+				</Index>
+				
+				<Index Name="ITEM_CUSTXREF_INDEX_I2" Unique="False">
+					<Column Name="LEGACY_ITEM_NUMBER" />
+				</Index>
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

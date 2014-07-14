@@ -1,0 +1,496 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Title zone</title>
+<style type="text/css">
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+p = parent
+_topfs=getTopFrameset()
+initDom( p._root + "lib/images/"+p._skinName+"/", p._lang, _topfs,"queryProperties")
+initialized=false
+queryPropDlg=null
+currentDP=null
+queryPanelFrame=getFrame("querypanel",p)
+if(queryPanelFrame && queryPanelFrame._isPageLoaded)
+currentDP =queryPanelFrame._currentDP
+inputRow = currentDP.maxRows
+inputTime = currentDP.maxTime
+inputSampling = (currentDP.samplingSize>0)?currentDP.samplingSize:500
+bChangeSrc=false;
+_curEntry=p.strEntry
+_sOldDSID=queryPanelFrame._currentUnv.id
+_sNewDSID=null
+_sNewDSName=""
+</script>
+<script language="javascript">
+currentDP.resetContexts(); 
+var url =  p._root + "incQueryProperties" + p._appExt
+url += p.urlParams(false,true,_curEntry)
+url += "&iDPIndex="+p.getSelectedDPIndex()
+includeScript(url) 
+</script>
+<script language="javascript">
+function loadDialog()
+{
+if (!initialized)
+{
+initialized=true
+queryPropDlg = newDialogBoxWidget("queryPropDlg","Query Properties",615,400,okCB,closeDlg,false)
+queryPropZone=newFrameZoneWidget("queryPropZone")
+queryPropName= newTextFieldWidget("queryPropName",null,50,null,okCB,true,null,500)
+unvName= newTextFieldWidget("unvName",null,50,null,okCB,true,null,465)
+unvName.setReadOnly(true);
+changeSourceBtn= newButtonWidget("changeSourceBtn",null,changeSourceCB,null,null,"Change the query universe",null,null,p._img+'changeSource.gif',16,16,48,0,null,48,16)
+haveMaxRows       = newCheckWidget('haveMaxRows',"Max rows retrieved",inputChanged)
+haveMaxTime       = newCheckWidget('haveMaxTime',"Max retrieval time",inputChanged)
+getDupRows        = newCheckWidget('getDupRows',"Retrieve duplicate rows",null)
+allowEditQueries  = newCheckWidget('allowEditQueries',"Allow other users to edit all queries",null)
+setRefreshCtx     = newCheckWidget('setRefreshCtx',"Reset contexts on refresh",null)
+maxRowsInput      = newIntFieldWidget('maxRowsInput',inputChanged,null,null,safeEnterCB,true,null,50)
+maxTimeInput      = newIntFieldWidget('maxTimeInput',inputChanged,null,null,safeEnterCB,true,null,50)
+contextsList  = newListWidget("contextsList",null,0,200,5,null);
+promptsList  = newListWidget("promptsList",updateArrow,0,300,7,null);
+clearCtxsBtn      = newButtonWidget("clearCtxsBtn","Clear context",clearCtxsCB,null,null,"Clear context");
+scopeList  = newComboWidget("scopeList",null,true,null,"Scope of analysis:")
+haveSampling   = newCheckWidget('haveSampling',"Sample result set",inputChanged)
+seededSampling     = newCheckWidget('seededSampling',"Fixed",inputChanged)
+samplingInput      = newIntFieldWidget('samplingInput',inputChanged,null,null,safeEnterCB,true,null,50)
+OKButton=newButtonWidget("queryPropOK","OK","okCB()",60)
+CancelButton=newButtonWidget("queryPropCancel","Cancel","closeDlg()",60)
+HelpButton=newButtonWidget("queryPropHelp","Help",null,60)
+queryPropDlg.attachDefaultButton(OKButton);
+queryPropInfo= newInfoWidget("queryPropInfo","More Information","","Select query properties here to minimize the size of documents and the query run time.")
+upArrow=newButtonWidget("arrowUp",null,filterOrder_moveUp,null,null,"Move Up",null,null,_skin+'buttonIcons.gif',16,16,0,64,null,16,64)
+downArrow=newButtonWidget("arrowDown",null,filterOrder_moveDown,null,null,"Move Down",null,null,_skin+'buttonIcons.gif',16,16,0,80,null,16,80)
+downArrow.extraStyle=upArrow.extraStyle="margin-top:2px;"
+}
+if (_curWin.queryPropertiesInitialized!=true)
+{
+_curWin.queryPropertiesInitialized=true
+targetApp
+(
+queryPropDlg.beginHTML()+
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td>'+
+queryPropZone.beginHTML()+
+'<table class="dialogzone"  cellpadding="0" cellspacing="0" border="0"><tbody>'+
+'<tr><td>'+
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td>Query name:</td>'+
+'<td colspan="2">'+queryPropName.getHTML()+'</td></tr>'+
+'<tr><td>Universe:</td>'+
+'<td>'+unvName.getHTML()+'</td>'+
+'<td>'+changeSourceBtn.getHTML()+'</td></tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'<tr><td>'+getSep()+'</td></tr>'+
+'<tr><td>'+
+'<table cellpadding="0" cellspacing="0" border="0"><tbody>'+
+'<tr valign="top"><td style="padding-right:10px">'+
+'<table cellpadding="0" cellspacing="4" border="0"><tbody>'+
+'<tr valign="middle">'+
+'<td>'+haveMaxRows.getHTML()+'</td>'+
+'<td width="1"></td>'+
+'<td>'+maxRowsInput.getHTML()+'</td>'+
+'</tr>'+
+'<tr valign="middle">'+
+'<td>'+haveMaxTime.getHTML()+'</td>'+
+'<td width="1"></td>'+
+'<td width="10">'+maxTimeInput.getHTML()+'</td>'+
+'<td class="dialogzone">sec</td>'+
+'</tr>'+
+'<tr valign="middle">'+
+'<td colspan="4">'+getDupRows.getHTML()+'</td>'+
+'</tr>'+
+'<tr valign="middle">'+
+'<td colspan="4">'+setRefreshCtx.getHTML()+'</td>'+
+'</tr>'+
+'<tr valign="middle">'+
+'<td colspan="4" style="padding-left:21px">'+contextsList.getHTML()+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td colspan="4"  align="right">'+clearCtxsBtn.getHTML()+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td>'+
+'<td>'+
+'<table cellpadding="0" cellspacing="4" border="0"><tbody>'+
+'<tr><td>'+
+'<table cellpadding="0" cellspacing="0" border="0"><tbody>'+
+'<tr>'+
+'<td>'+haveSampling.getHTML()+'</td>'+
+'<td width="20"></td>'+
+'<td>'+samplingInput.getHTML()+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td  colspan="3" style="padding-left:30px">'+seededSampling.getHTML()+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'<tr>'+
+'<td colspan="2">'+allowEditQueries.getHTML()+'</td>'+
+'</tr>'+
+'<tr><td colspan="2">'+getSep()+'</td></tr>'+
+'<tr>'+
+'<td class="dialogzone" colspan="2">Prompt order:</td>'+
+'</tr>'+
+'<tr>'+
+'<td>'+promptsList.getHTML()+'</td>'+
+'<td valign="top"  class="dialogzone">'+
+upArrow.getHTML()+
+downArrow.getHTML()+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td>'+
+'</tr>'+
+'<tr><td>'+getSep()+'</td></tr>'+
+'<tr><td>'+
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td>Scope of analysis:</td>'+
+'<td width="22"> </td>'+
+'<td>'+scopeList.getHTML()+'</td></tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+queryPropZone.endHTML()+
+'</td></tr>'+
+'<tr><td>'+
+queryPropInfo.getHTML()+
+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr>'+
+'<td>'+OKButton.getHTML()+'</td>'+
+'<td>'+CancelButton.getHTML()+'</td>'+
+'<td>'+HelpButton.getHTML()+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+queryPropDlg.endHTML()
+)
+}
+queryPropDlg.init();
+queryPropZone.init();
+queryPropName.init();
+unvName.init();
+changeSourceBtn.init();
+queryPropInfo.init();
+OKButton.init();
+CancelButton.init();
+HelpButton.init();
+HelpButton.setDisplay(false)
+haveMaxRows.init();
+haveMaxTime.init();
+getDupRows.init();
+allowEditQueries.init();
+setRefreshCtx.init();
+maxRowsInput.init();
+maxTimeInput.init();  
+contextsList.init();
+promptsList.init();
+scopeList.init();
+clearCtxsBtn.init();
+upArrow.init();
+downArrow.init();
+haveSampling.init();
+samplingInput.init();
+seededSampling.init();
+samplingInput.setMin(1);
+samplingInput.setMax(2000000000);
+maxRowsInput.setMin(0);
+maxTimeInput.setMin(0);
+fillWidgets()
+queryPropDlg.show(true)
+}
+function updateQueryPropertiesDialog(action,sEntry,newdsname,arrCtx)
+{
+if (sEntry!=null)
+_curEntry=sEntry
+switch (action)
+{
+case 0:
+_mustGenerateQuery=false
+showAddQueryDialogCB()
+break;
+case 1:
+if (newdsname!=null)
+unvName.setValue(newdsname)
+else if(_sNewDSName)
+unvName.setValue(_sNewDSName)
+bChangeSrc=true
+_sOldDSID=_sNewDSID
+updateContexts(arrCtx);
+break;
+}
+}
+function updateQueryPanelAfterChangeSource()
+{
+p.resetQueriesFromUnv(queryPanelFrame._currentUnv.id)
+p.selectDP(true)
+}
+function okCB()
+{
+if (currentDP.name != queryPropName.getValue())
+saveDPName()
+else
+saveProperties()
+if ( _curEntry != p.strEntry )
+changeEntry(_curEntry)
+if(bChangeSrc)
+updateQueryPanelAfterChangeSource()
+}
+function closeDlg(){queryPropDlg.show(false)}
+function safeEnterCB(){}
+function saveDPName()
+{
+p.goToProcessQueryPanel("&iDPIndex="+p.getSelectedDPIndex(), queryPropName.getValue(), "validate", _curEntry);
+}
+function renameDP(sName)
+{
+currentDP.name=sName
+p.renameDP(sName)
+}
+function saveProperties()
+{
+currentDP.haveMaxRows=haveMaxRows.isChecked()
+currentDP.haveMaxTime=haveMaxTime.isChecked()
+if (currentDP.haveMaxRows) currentDP.maxRows= maxRowsInput.intPosValue(inputRow);
+if (currentDP.haveMaxTime) currentDP.maxTime= maxTimeInput.intPosValue(inputTime);
+if(currentDP.allowDuplicateRows)
+currentDP.duplicateRows=getDupRows.isChecked()
+currentDP.refreshContexts=setRefreshCtx.isChecked()
+p.allUsersEditQueries = allowEditQueries.isChecked()
+currentDP.scope=scopeList.getSelection().index
+if(haveSampling.isChecked())
+{
+if(seededSampling.isChecked())
+currentDP.samplingMode="seeded"
+else
+currentDP.samplingMode="free"
+currentDP.samplingSize = samplingInput.intPosValue(inputSampling);
+}
+else
+{
+currentDP.samplingMode="none"
+}
+var len = promptsList.getCount();
+currentDP.resetPrompt();
+for(var i=0; i<len; i++ )
+currentDP.addPrompt(promptsList.getValue(i).value)
+if(contextsList.getCount() == 0)
+currentDP.contexts.length=0;
+currentDP.setModified()
+queryPropDlg.show(false)
+}
+function inputChanged()
+{
+var isChecked = haveMaxRows.isChecked()
+maxRowsInput.setDisabled(!isChecked)
+inputRow = maxRowsInput.intPosValue(inputRow)
+maxRowsInput.setValue(isChecked?inputRow:'')
+isChecked = haveMaxTime.isChecked()
+maxTimeInput.setDisabled(!isChecked)
+inputTime = maxTimeInput.intPosValue(inputTime)
+maxTimeInput.setValue(isChecked?inputTime:'')
+isChecked = haveSampling.isChecked()
+inputSampling = samplingInput.intPosValue(inputSampling)
+if(isChecked)
+{
+samplingInput.setDisabled(false)
+samplingInput.setValue(isChecked?inputSampling:'')
+seededSampling.setDisabled(false)
+}
+else
+{
+samplingInput.setDisabled(true)
+samplingInput.setValue(isChecked?inputSampling:'')
+seededSampling.setDisabled(true)
+seededSampling.check(false)
+}
+}
+function fillWidgets()
+{
+queryPropName.setValue(currentDP.name)
+unvName.setValue(queryPanelFrame._currentUnv.name)
+changeSourceBtn.setDisabled(currentDP.objs.length==0)
+haveMaxRows.check(currentDP.haveMaxRows)
+maxRowsInput.setDisabled(!currentDP.haveMaxRows)
+maxRowsInput.setValue(currentDP.haveMaxRows?currentDP.maxRows:'')
+haveMaxTime.check(currentDP.haveMaxTime)
+maxTimeInput.setDisabled(!currentDP.haveMaxTime)
+maxTimeInput.setValue(currentDP.haveMaxTime?inputTime:'')
+if(currentDP.allowDuplicateRows)
+{
+getDupRows.setDisplay(true);
+getDupRows.check(currentDP.duplicateRows)
+contextsList.change(null,5);
+}
+else
+{
+getDupRows.setDisplay(false);
+contextsList.change(null,6);
+}
+var bsampling=(currentDP.samplingMode!="none");
+var bseededSampling=(currentDP.samplingMode=="seeded");
+haveSampling.setDisplay(currentDP.allowSampling);
+samplingInput.setDisplay(currentDP.allowSampling);
+seededSampling.setDisplay(currentDP.allowSeededSampling);
+haveSampling.check(bsampling);
+seededSampling.check(bseededSampling);
+seededSampling.setDisabled(!bsampling);
+samplingInput.setDisabled(!bsampling);
+samplingInput.setValue(bsampling?currentDP.samplingSize:'');
+setRefreshCtx.check(currentDP.refreshContexts)
+allowEditQueries.check(parent.allUsersEditQueries)
+var ctx = currentDP.contexts
+var lenCtx=currentDP.contexts.length
+contextsList.del()
+for(var i=0; i<lenCtx; i++)
+{
+contextsList.add(ctx[i])
+}
+contextsList.select()
+clearCtxsBtn.setDisabled(lenCtx==0);
+promptsList.del();
+fillPromptList(currentDP.prompts);
+promptsList.select(0);
+if (scopeList.getCount()==0)
+{
+scopeList.add("None", "0",true)
+scopeList.add("One Level", "1")
+scopeList.add("Two Levels", "2")
+scopeList.add("Three Levels", "3")
+}
+if(p.bUseQueryDrill || !p.isEnableUserRight(p._usrExtendScope))
+{
+scopeList.setDisabled(true);
+}
+else
+{
+scopeList.select(currentDP.scope);
+scopeList.setDisabled(false);
+}
+updateArrow();
+} 
+function fillPromptList(arr)
+{
+for (var i=0;i<arr.length ;i++) 
+{
+promptsList.add(arr[i],arr[i]);
+}
+}
+function filterOrder_moveUp()
+{
+promptsList.move(-1)
+updateArrow();
+}
+function filterOrder_moveDown()
+{
+promptsList.move(1)
+updateArrow();
+}
+function changeEntry(s)
+{
+parent.strEntry=s
+}
+function showAddQueryDialogCB()
+{
+p.frameNav("SecondDlgFrame",p._root + "language/"+p._lang+"/html/addQueryDialog.html?iAction=1")
+}
+function changeSourceCB()
+{
+    _mustGenerateQuery = false
+    var arr = p.getDPListFromUnv(_sOldDSID)
+    for(var i=0;i<arr.length;i++)
+    {
+        if(arr[i].isModified)
+        {
+            _mustGenerateQuery = true;
+            break;
+        }
+    }
+if (_mustGenerateQuery)
+{
+document.QPropForm.WOMqueries.value=queryPanelFrame.encodeAllQueries()
+document.QPropForm.target='validate'
+var url = p._root + "processGenerateQuery" + p._appExt
+url += p.urlParams(true,true,_curEntry)
+document.QPropForm.action = url
+setTimeout("document.QPropForm.submit()",1)
+}
+else
+showAddQueryDialogCB()
+}
+function clearCtxsCB()
+{
+p.goToProcessQueryPanel("&iDPIndex="+p.getSelectedDPIndex()+"&bClearCtxs=true", null, "validate", _curEntry);
+}
+function updateAfterClearContexts(sEntry)
+{
+contextsList.del();
+clearCtxsBtn.setDisabled(true);
+if(sEntry)
+_curEntry=sEntry;
+}
+function updateContexts(arrCtx)
+{
+var lenCtx=0;
+contextsList.del();
+if(arrCtx == null)
+{
+currentDP.contexts.length=0;
+}
+else
+{ 
+lenCtx=arrCtx.length;
+for(var i=0;i<lenCtx;i++)
+{
+contextsList.add(arrCtx[i])
+}
+currentDP.contexts = arrCtx; 
+}
+clearCtxsBtn.setDisabled(lenCtx==0);
+}
+function endQProperties()
+{
+saveProperties();
+}
+function updateArrow()
+{
+var sel=promptsList.getSelection();
+upArrow.setDisabled(sel?(sel.index>0?false:true):true);
+downArrow.setDisabled(sel?(sel.index==(promptsList.getCount()-1)?true:false):true);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadDialog()',1)">
+<iframe name="validate" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="" style="display:none" name="QPropForm" method="post" action="">
+<input type="hidden" name="WOMqueries" id="WOMqueries">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

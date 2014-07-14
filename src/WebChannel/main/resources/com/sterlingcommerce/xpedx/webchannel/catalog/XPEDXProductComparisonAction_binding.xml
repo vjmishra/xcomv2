@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries Product Comparison action prodCompare</comment>
+	<!-- TODO: Need to revisit this section once we have product list page is ready,
+		Few parameters like CallingOrganizationCode, CustomerID avaialable through
+		WCContext
+	-->
+	<entry key="WCContext.storefrontId">ProductComparison:/Item/@CallingOrganizationCode, xpedxProductComparison:/Item/@CallingOrganizationCode,xpedxProductComparisonExcluded:/Item/@CallingOrganizationCode</entry>
+	<entry key="currencyInContext">ProductComparison:/Item/@Currency,xpedxProductComparison:/Item/@Currency,ProductComparisonExcluded:/Item/@Currency,xpedxProductComparisonExcluded:/Item/@Currency</entry>
+	<entry key="#parameters.ShowKeyItemAttributesOnly">ProductComparison:/Item/@ShowKeyItemAttributesOnly,xpedxProductComparison:/Item/@ShowKeyItemAttributesOnly</entry>
+	<entry key="#parameters.showAttributesWithDifferentValuesOnly">ProductComparison:/Item/@ShowAttributesWithDifferentValuesOnly,xpedxProductComparison:/Item/@ShowAttributesWithDifferentValuesOnly</entry>
+	<entry key="WCContext.SCUIContext.userPreferences.locale.localeCode">ProductComparison:/Item/@DisplayLocalizedFieldInLocale,xpedxProductComparison:/Item/@DisplayLocalizedFieldInLocale,ProductComparisonExcluded:/Item/@DisplayLocalizedFieldInLocale,xpedxProductComparisonExcluded:/Item/@DisplayLocalizedFieldInLocale</entry>
+	<entry key="WCContext.customerId">ProductComparison:/Item/CustomerInformation/@CustomerID,xpedxProductComparison:/Item/CustomerInformation/@CustomerID,ProductComparisonExcluded:/Item/CustomerInformation/@CustomerID,xpedxProductComparisonExcluded:/Item/CustomerInformation/@CustomerID</entry>
+	<entry key="includedComparisonSetName">ProductComparison:/Item/ComplexQuery/Or/And[]/Exp[1]/@Name,xpedxProductComparison:/Item/ComplexQuery/Or/And[]/Exp[1]/@Name</entry>
+	<entry key="includedComparisonSet">ProductComparison:/Item/ComplexQuery/Or/And[]/Exp[1]/@Value,xpedxProductComparison:/Item/ComplexQuery/Or/And[]/Exp[1]/@Value</entry>
+	<entry key="excludedComparisonSetName">ProductComparisonExcluded:/Item/ComplexQuery/Or/And[]/Exp[1]/@Name,xpedxProductComparisonExcluded:/Item/ComplexQuery/Or/And[]/Exp[1]/@Name</entry>
+	<entry key="excludedComparisonSet">ProductComparisonExcluded:/Item/ComplexQuery/Or/And[]/Exp[1]/@Value,xpedxProductComparisonExcluded:/Item/ComplexQuery/Or/And[]/Exp[1]/@Value</entry>		
+	<entry key="effectiveCurrency">ProductComparison:/Item/@Currency,xpedxProductComparisonExcluded:/Item/@Currency,xpedxProductComparison:/Item/@Currency,xpedxProductComparisonExcluded:/Item/@Currency</entry>
+</properties>
+

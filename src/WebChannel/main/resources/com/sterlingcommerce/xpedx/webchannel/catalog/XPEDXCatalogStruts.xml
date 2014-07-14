@@ -1,0 +1,246 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="xpedx.catalogFragment" namespace='/catalog'
+		extends="catalogFragment">
+
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+		
+		<action name="itemDetails"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemDetailsAction">
+			<param name="mashups">xpedxItemDetails</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXItemDetailsBinding.xml</param>
+			<param name="numOfItemsPerPromotion">2</param>
+			<param name="validationClass">com.sterlingcommerce.webchannel.catalog.ItemDetailsValidation</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXItemDetails.jsp</result>
+			<result name="goToPrintPage">/swc/jsp/catalog/printItem.jsp</result>
+		</action>
+		<action name="xpedxItemDetailsPandA"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemDetailsAction" method="callPriceAndAvailability">
+			<result name="success">/xpedx/jsp/catalog/XPEDXItemDetailsAvailability.jsp</result>
+		</action>
+		
+		
+		<action name="search"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="search">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+			<result name="retrySearch" type="redirectAction">
+				<param name="actionName">newSearch</param>
+				<param name="namespace">/catalog</param>			
+				<param name="tryAgain">true</param>
+				<param name="searchTerm">${searchTerm}</param>
+				<param name="remSearchTerms">${remSearchTerms}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>				
+			</result>
+			<result name="singleItem" type="redirectAction">
+				<param name="actionName">itemDetails</param>
+				<param name="namespace">/catalog</param>
+				<param name="parse">true</param>
+				<param name="itemID">${itemID}</param>
+				<!-- Added goBackFlag for Back button issues for JIRA #828 -->
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>
+				<param name="unitOfMeasure">${unitOfMeasure}</param>
+			</result>
+		</action>
+		<action name="newSearch"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="newSearch">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+			<!-- result name="error">/swc/jsp/catalog/searchError.jsp</result-->
+			<result name="error">/error/jsp/common/GeneralSystemError.jsp</result>
+			<result name="retrySearch" type="redirectAction">
+				<param name="actionName">newSearch</param>
+				<param name="namespace">/catalog</param>			
+				<param name="tryAgain">true</param>
+				<param name="searchTerm">${searchTerm}</param>
+				<param name="remSearchTerms">${remSearchTerms}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>				
+			</result>
+			<result name="singleItem" type="redirectAction">
+				<param name="actionName">itemDetails</param>
+				<param name="namespace">/catalog</param>
+				<param name="parse">true</param>
+				<param name="itemID">${itemID}</param>
+				<param name="goBackFlag">true</param>
+				<param name="scFlag">Y</param>
+				<param name="unitOfMeasure">${unitOfMeasure}</param>
+			</result>
+		</action>
+		
+		<action name="ajaxAutocomplete" class="com.sterlingcommerce.xpedx.webchannel.catalog.AjaxAutocompleteAction">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result type="json"></result>
+			<result type="json" name="error"></result>
+		</action>
+		<action name="debugmgi" class="com.sterlingcommerce.xpedx.webchannel.catalog.DebugMarketingGroupIndexAction">
+			<result type="json"></result>
+		</action>
+		
+		<action name="prodCompare"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXProductComparisonAction">
+			<param name="mashups">ProductComparison</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXProductComparisonAction_binding.xml</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXproductComparisonExt.jsp
+			</result>
+		</action>
+		<action name="itemDetailsEmail"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXItemDetailsAction1">
+			<param name="mashups">xpedxItemDetailsEmail</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXItemDetailsEmailBinding.xml</param>
+			<param name="numOfItemsPerPromotion">2</param>
+		</action>
+
+		<!-- Begin: Catalog display Change: RUgrani -->
+		<action name="navigate" class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="navigate">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="catalogLandingMashupID">xpedxCatalogLandingSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+			<result name="CatalogLanding">/xpedx/jsp/catalog/XPEDXCatalogLanding.jsp</result>
+		</action>
+
+		<action name="filter"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="filter">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+		</action>
+
+		<action name="sortResultBy"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="sortResultBy">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+		</action>
+		<action name="goToPage"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="goToPage">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+		</action>
+		<action name="selectPageSize"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="selectPageSize">
+			<param name="mashupID">xpedxCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result>/xpedx/jsp/catalog/XPEDXCatalogExt.jsp</result>
+		</action>
+
+		<action name="ajaxAvailabilityJson"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="praparePnAjaxData">
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJson.jsp
+			</result>
+			<result name="error">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJsonFailure.jsp
+			</result>
+		</action>
+		<action name="ajaxAvailabilityJson_Price"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction"
+			method="praparePnAjaxData">
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJsonPrice.jsp
+			</result>
+			<result name="error">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJsonFailure.jsp
+			</result>
+		</action>
+		<!-- End: Catalog display Change: RUgrani -->
+
+		<action name="xpedxMainCategoriesAction"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXMainCategoriesAction">
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<param name="categoryDepth">2</param>
+			<param name="mashups">MainCategories</param>
+			<param name="xmlBindingFile">XPEDXMainCategories_binding.xml</param>
+			<result>/xpedx/jsp/home/XPEDXMainCategories.jsp</result>
+		</action>
+		
+		<action name="xpedxMainCategoriesHomeAction"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXMainCategoriesAction">
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<param name="categoryDepth">2</param>
+			<param name="mashups">MainCategories</param>
+			<param name="xmlBindingFile">XPEDXMainCategories_binding.xml</param>
+			<result>/xpedx/jsp/home/XPEDXMainCategoriesHome.jsp</result>
+		</action>
+		
+		
+		<action name="getCatalogItemAvailabilty" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAction" method="preparePnAjaxData">
+			<param name="resourceId">/swc/catalog/catalogBrowsing</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXItemAvailability.jsp
+			</result>
+			<result name="error">/xpedx/jsp/catalog/XPEDXItemAvailability.jsp
+			</result>
+		</action>
+		
+		<action name="getPriceAndAvailabilityForItems" class="com.sterlingcommerce.xpedx.webchannel.catalog.PriceAndAvailabilityForItemsAction">
+			<result type="json"></result>
+		</action>
+		
+		<action name="xpedxLink2CatalogAction" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/home/XPEDXLink2Catalog.jsp</result>
+		</action>
+		<action name="setStockedCheckbox"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="setNormallyStockedCheckbox">
+			<result>/xpedx/jsp/home/XPEDXMainCategories.jsp</result>
+		</action>
+
+<!-- Added for JIRA EB-1731 to getAllFacetList for narrowBy -->
+		<action name="getFacetList"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="getFacetList">
+			<param name="mashupID">xpedxNarrowByCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXMoreNarrowBy.jsp</result>
+		</action>
+		<action name="getNarrowByList"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="getFacetList">
+			<param name="mashupID">xpedxNarrowByCatalogSearch</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/catalog/XPEDXCatalogSearchBinding.xml</param>
+			<param name="categoryDepth">2</param>
+			<result name="success">/xpedx/jsp/catalog/XPEDXNarrowBy.jsp</result>
+		</action>
+
+		<action name="brands"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.BrandListAction">
+			<param name="mashupID">xpedxGetBrands</param>
+			<result name="success">/xpedx/jsp/catalog/BrandList.jsp</result>
+		</action>
+
+	</package>
+</struts>

@@ -1,0 +1,9 @@
+.commonHeader { background: transparent url(../images/998x107_background_bd.jpg) no-repeat; }
+.commonHeader .logo a
+{
+	height: 50px;
+	left: 30px;
+	position: absolute;
+	top: 16px;
+	width: 200px;
+}

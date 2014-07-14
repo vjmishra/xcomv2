@@ -1,0 +1,149 @@
+.t1-main-content { width: 748px;}
+#items { margin: 0 !important; }
+.bgleftcol
+{
+	border: 1px dotted #ccc;
+}
+.compare-left
+{
+	text-align: center;
+	padding: 10px;
+}
+.compare-left .grey-ui-btn
+{
+	float: none;
+}
+.cl-heading
+{
+	padding: 3px 5px;
+	border: 1px dotted #ccc;
+	margin-bottom: 10px;
+}
+.compare-view #item-ct dd.over {
+  background-color: #fff;
+}
+.compare-view #item-ct dd .buttons  {
+    display:none;
+}
+.compare-view #item-ct dd .prodImg {
+    width:150px;
+    height:150px;
+}
+
+.compare-view #item-ct dd .imgs {
+    width:150px;
+    height:150px;
+    float:none;
+    margin-left:auto;
+    margin-right: auto;
+}
+.compare-view #item-ct dd .contents img {
+	display:inline;
+}
+
+.compare-view #item-ct dd .contents{
+	float: none;
+	display:inline;
+    padding: 5px 5px 5px 5px;
+    margin: 0 0 0 0;
+}
+
+.compare-view #item-ct dd .buttons {
+	float: none;
+	width: 95%;
+	margin:5px 0 5px 0;
+    padding:5px 0 5px 0;
+	text-align:center;
+}
+
+.compare-view #item-ct dd .buttons .submitBtnBg2
+{
+	float:none;
+	display:inline;
+	white-space:nowrap;
+	font-size: 0.9em;
+}
+
+.compare-view #item-ct dd .pprice {
+    text-align:center;
+}
+
+.compare-view #item-ct dd .productName
+{
+	text-align:center;
+}
+
+.compare-view #item-ct dd .productName a
+{
+	font-size: 1.0em;
+}
+.compare-view #item-ct dd .supersedelink
+{
+	text-align: center;
+}
+.compare-view #item-ct dd
+{
+	cursor: default;
+	float: left;
+	text-align: center;
+	height: auto;
+	padding: 0px;
+	width: 178px;
+	position: relative;
+	margin-right: -1px;
+}
+.compare-view #item-ct dd .dd-body
+{
+	padding: 0px 6px;
+}
+.compare-view .addtocart
+{
+	margin: 5px auto 0;
+}
+.compare-view #item-ct dd .ddesc
+{
+	font-weight: bold;
+	height: 10.5em;
+}
+.compare-view .quantity_box div
+{
+	margin-bottom: 3px;
+}
+.compare-view .item_number
+{
+	margin-bottom: 6px;
+	height: 3.5em;
+}
+.compare-view .availablelink {
+	display: none;
+}
+.compare-view .remove-link
+{
+	border-collapse: collapse;
+	border: 1px dotted #ccc;
+	padding: 3px 0px;
+}
+.compare-view .remove-link a { display: block; }
+.compare-view .remove-link a:hover { text-decoration: underline !important; }
+
+.compare-grid
+{
+	position: absolute;
+	left: 13px;
+}
+.compare-grid table, .compare-grid table th, .compare-grid table td
+{
+	border: 1px dotted #ccc;
+}
+.compare-grid table th
+{
+	width: 200px;
+	padding: 3px 6px;
+	font-weight: bold;
+}
+.compare-grid table td
+{
+	width: 178px;
+	text-align: center;
+	padding: 3px 0px;
+}

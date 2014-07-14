@@ -1,0 +1,660 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Users Preferences</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/psheet.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"prefDlg");
+</script>
+<script language="javascript">
+function frmkPrefs(prefSnapToGrid, prefShowGrid, gridSpacing, 
+prefShowDesc, prefDispMenuHeaders, ctxMenu)
+{
+var o=this;
+o.prefSnapToGrid=prefSnapToGrid;
+o.prefShowGrid=prefShowGrid;
+o.gridSpacing=gridSpacing;
+o.prefShowDesc=prefShowDesc;
+o.prefDispMenuHeaders=prefDispMenuHeaders;
+o.ctxMenu=ctxMenu;
+return o;
+}
+function repRulesPrefs(prefAppFmt, prefAddTableHeader, sortPriority, 
+drillCustomFmt, drillUnderlined, drillBgColor, drillFgColor)
+{
+var o=this;
+o.prefAppFmt=prefAppFmt;
+o.prefAddTableHeader=prefAddTableHeader;
+o.sortPriority=sortPriority;
+o.drillCustomFmt=drillCustomFmt;
+o.drillUnderlined=drillUnderlined;
+o.drillBgColor=drillBgColor;
+o.drillFgColor=drillFgColor;
+return o;
+}
+function queryRulesPrefs(a)
+{
+var o=this
+o.queryFilter=a
+}
+</script>
+<script language="javascript">
+var prefDlg = null;
+var prefInfo = null;
+var prefOkButton = null;
+var prefCancelButton = null;
+var prefHelpButton = null;
+var buttonsWidth= 60;
+var buttonsHeight= 52;
+var dlgWidth= 570;
+var dlgHeight= 418;
+var tabWidth= dlgWidth-30;
+var tabHeight= dlgHeight - 180;
+var initialized= false;
+var url = p._root + "incUserPref" + p._appExt;
+url += p.urlParams(true,true);
+includeScript(url);
+</script>
+<script language="javascript">
+var prefDlg = null;
+var prefTabZone = null;
+var prefMouseAct = null;
+var prefRClickAct = null;
+var prefNoAct = null;
+varprefUnit = null;
+var prefAppFmt = null;
+var prefShowDesc = null;
+var prefDispMenuHeaders = null;
+var prefSortTop = null;
+var prefSortBot = null;
+var prefFmtDflt = null;
+var prefFmtCust = null;
+var prefSnapToGrid = null;
+var prefShowGrid = null;
+var prefSpacing = null;
+varprefAddTableHeader = null;
+var prefQFilterCst = null;
+var prefQFilterNoLOV = null;
+var prefQFilterLOV = null;
+var prefInfo = null;
+var prefOkButton = null;
+var prefCancelButton = null;
+var prefHelpButton = null;
+var prefUnitShort = null;
+function setUserPref()
+{
+prefUnit.del(null); 
+prefUnit.add("Inches", "inches", true, "");
+prefUnit.add("Centimeters", "cm", false, "");
+if ( p._unitIsInch == true )
+prefUnit.select(0);
+else
+prefUnit.select(1);
+prefUnitShort.setHTML(prefUnit.getSelection().value);
+prefSnapToGrid.check(frmkP.prefSnapToGrid);
+prefShowGrid.check(frmkP.prefShowGrid);
+var tmp=parseFloat(frmkP.gridSpacing);
+if (!isNaN(tmp))
+prefSpacing.setValue(tmp)
+prefShowDesc.check(frmkP.prefShowDesc);
+prefDispMenuHeaders.check(frmkP.prefDispMenuHeaders);
+if ( frmkP.ctxMenu == "mouse" )
+prefMouseAct.check(true);
+else if (frmkP.ctxMenu == "rclick")
+prefRClickAct.check(true);
+else
+prefNoAct.check(true);
+prefAppFmt.check(repP.prefAppFmt);
+prefAddTableHeader.check(repP.prefAddTableHeader);
+if ( repP.sortPriority == "highest" )
+prefSortTop.check(true);
+else
+prefSortBot.check(true);
+if (repP.drillCustomFmt)
+{
+prefFmtDflt.check(false);
+prefFmtCust.check(true);
+prefUnder.setDisabled(false);
+prefBgColor.setDisabled(false);
+prefFgColor.setDisabled(false);
+prefUnder.check(repP.drillUnderlined);
+if (repP.drillBgColor!="") 
+prefBgColor.setColor(repP.drillBgColor.replace(/\./g, ","));
+if (repP.drillFgColor!="")
+prefFgColor.setColor(repP.drillFgColor.replace(/\./g, ","));
+}
+else
+{
+prefFmtDflt.check(true);
+prefFmtCust.check(false);
+prefUnder.setDisabled(true);
+prefBgColor.setColor(null);
+prefBgColor.setDisabled(true);
+prefFgColor.setColor(null);
+prefFgColor.setDisabled(true);
+}
+if ( queryP.queryFilter == "constant" )
+prefQFilterCst.check(true);
+else if ( queryP.queryFilter == "promptNoLOV" )
+prefQFilterNoLOV.check(true);
+else
+prefQFilterLOV.check(true);
+}
+function changeFntColorCB()
+{
+if (this.getColor()==null)
+{
+p._currColorCombo= this
+p._currColorCB=changeColorPreviewFntCB
+p.frameNav("SecondDlgFrame","colorPickerDialog.html")
+} 
+else 
+{
+p.addLastUsedColor(this.getColor())
+}
+}
+function changeColorPreviewFntCB(c)
+{
+p._currColorCombo.setColor(c)
+p._currColorCombo.hasChanged=true
+p.addLastUsedColor(c)
+}
+function changeCB()
+{
+var oldVal = prefSpacing.getValue();
+var oldUnit = p._unitIsInch;
+if ( prefUnit.getSelection().index == 0 )
+{
+p._unitIsInch = true ;
+p._unitLabel = 'inches';
+}
+else
+{
+p._unitIsInch = false ;
+p._unitLabel = 'cm';
+}
+var newVal = p.toUserUnit(oldVal, oldUnit);
+prefSpacing.setValue(newVal);
+prefUnitShort.setHTML(prefUnit.getSelection().value);
+}
+function clickCB()
+{
+var id=this.id
+switch(id)
+{
+case "prefFmtCust":
+if (prefFmtCust.isChecked())
+{
+prefUnder.setDisabled(false);
+prefBgColor.setColor(null);
+prefBgColor.setDisabled(false);
+prefFgColor.setColor(null);
+prefFgColor.setDisabled(false);
+}
+break;
+case "prefFmtDflt":
+if (prefFmtDflt.isChecked())
+{
+prefUnder.setDisabled(true);
+prefBgColor.setDisabled(true);
+prefFgColor.setDisabled(true);
+}
+break;
+case "prefUnder":
+break;
+default:
+break;
+}
+}
+function okCB()
+{
+prefDlg.show(false);
+if ( prefUnit.getSelection().index == 0 )
+{
+p._unitIsInch = true ;
+p._unitLabel = 'inches';
+}
+else
+{
+p._unitIsInch = false ;
+p._unitLabel = 'cm';
+}
+p._snapToGrid = false;
+p._showGrid = false;
+p._showDesc = false;
+p._gridSpacing = NaN;
+p._dispMenuHeaders = prefDispMenuHeaders.isChecked();
+if ( prefMouseAct.isChecked() )
+p._ctxMenu="mouse";
+else if ( prefRClickAct.isChecked() )
+p._ctxMenu="rclick";
+else
+p._ctxMenu="no";
+p._appFmt = prefAppFmt.isChecked();
+p._addTableHeader = prefAddTableHeader.isChecked();
+if ( prefSortTop.isChecked() )
+p._sortPriority="highest";
+else
+p._sortPriority="lowest";
+p._drillCustomFmt=prefFmtCust.isChecked();
+p._drillUnderlined=prefFmtCust.isChecked()?prefUnder.isChecked():false;
+p._drillBgColor=prefBgColor.getColor()!=null?prefBgColor.getColor():"";
+p._drillFgColor=prefFgColor.getColor()!=null?prefFgColor.getColor():"";
+if ( prefQFilterCst.isChecked() )
+p._defaultQueryFilter = "constant";
+else if ( prefQFilterNoLOV.isChecked() )
+p._defaultQueryFilter = "promptNoLOV";
+else
+p._defaultQueryFilter = "promptLOV";
+var tmp = p._unitIsInch?"inch":"centimeter";
+tmp+=";"+p._snapToGrid+";"+p._showGrid+";";
+tmp += p._gridSpacing+";"+p._showDesc+";"+p._dispMenuHeaders+";"+p._ctxMenu;
+self.document.prefSubmitForm.framework.value=tmp;
+tmp = p._appFmt+";"+p._addTableHeader+";"+p._sortPriority+";";
+tmp +=p._drillCustomFmt+";"+p._drillUnderlined+";"+p._drillBgColor.replace(/,/g, ".")+";"+p._drillFgColor.replace(/,/g, ".");
+self.document.prefSubmitForm.repRules.value=tmp;
+tmp = p._defaultQueryFilter;
+self.document.prefSubmitForm.queryRules.value=tmp;
+var url = p._root + "processUserPref" + p._appExt;
+url += p.urlParams(true, true);
+url += "&sFrom=userPrefDlg";
+document.prefSubmitForm.action = url;
+document.prefSubmitForm.target = p.getReportFrame().name; 
+p.wt()
+setTimeout("document.prefSubmitForm.submit()",1);
+}
+function cancelCB()
+{
+prefDlg.show(false);
+}
+function helpCB()
+{
+p.showAlertDialog("Not implemented yet !","Development version",0);
+prefDlg.show(false);
+}
+function loadCB()
+{
+if (window._isSessionInvalid)
+{
+p.alertSessionInvalid()
+return
+}
+if (!initialized)
+{
+initialized=true;
+prefDlg = newDialogBoxWidget("prefDlg","Preferences",
+dlgWidth,dlgHeight,okCB,cancelCB,false);
+prefTabZone = newTabbedZone("prefZone",null,tabWidth,tabHeight);
+prefTabZone.add("My Workspace","gen");
+prefTabZone.add("Reporting Rules","reprules");
+prefTabZone.add("Query Rules","queryrules");
+prefMouseAct = newRadioWidget("prefMouseAct","RadioGp1", 
+"Activate contextual menus using mouse over",null,false,"",0,0);
+prefRClickAct = newRadioWidget("prefRClickAct","RadioGp1",
+"Activate contextual menus using right-click",null,false,"",0,0);
+prefNoAct = newRadioWidget("prefNoAct","RadioGp1",
+"Do not activate contextual menus",null,false,"",0,0);
+prefUnit = newComboWidget("prefUnit",changeCB,true,100,"");
+prefUnitShort = newWidget("prefUnitShort");
+prefAppFmt = newCheckWidget("prefAppFmt","Apply format modifications automatically (If this option is not selected, you can apply modifications manually using the Apply button on the toolbar.)",
+null,false,"",0,0);
+prefAppFmt.nobr=false
+prefShowDesc = newCheckWidget("prefShowDesc","Display object descriptors in ToolTips",
+null,false,"",0,0);
+onContextMenuZone = newWidget("onContextMenuZone")
+prefDispMenuHeaders = newCheckWidget("prefDispMenuHeaders",
+"Display the name of the selected report element on contextual menus",null,false,"",0,0);
+prefDispMenuHeaders.nobr=false
+prefSortTop = newRadioWidget("prefSortTop","RadioGp2",
+"The last sort added always takes precedence",null,false,"",0,0);
+prefSortBot = newRadioWidget("prefSortBot","RadioGp2",
+"The last sort added is applied after any other sorts",null,false,"",0,0);
+prefFmtDflt = newRadioWidget("prefFmtDflt","RadioGp3",
+"Apply the default format settings to drillable cells when selected",clickCB,false,"",0,0);
+prefFmtCust = newRadioWidget("prefFmtCust","RadioGp3",
+"Apply custom highlighting to drillable cells when selected, as defined here:",clickCB,false,"",0,0);
+prefUnder = newIconCheckWidget("prefUnder",p._img+"format.gif",
+clickCB,null,"Underlined",16,16,80,0,80,16)
+prefBgColor = newIconColorMenuWidget("prefBgColor",
+p._img+"format.gif",changeFntColorCB,null,"Background color",
+16,16,6*16,0,6*16,16,null);
+prefFgColor = newIconColorMenuWidget("prefFgColor",
+p._img+"format.gif",changeFntColorCB,null,"Text color",
+16,16,7*16,0,7*16,16,null);
+prefSnapToGrid = newCheckWidget("prefSnapToGrid",
+"Snap to grid",null,false,"",0,0);
+prefShowGrid = newCheckWidget("prefShowGrid",
+"Show grid",null,false,"",0,0);
+prefSpacing = newFloatFieldWidget("prefSpacing",null,4,null,
+null,true,'Grid spacing',40);
+prefAddTableHeader = newCheckWidget("prefAddTableHeader","Always display headers on tables",
+null,false,"",0,0);
+prefQFilterCst = newRadioWidget("prefQFilterCst","RadioGp4",
+"a filter",null,false,"",0,0);
+prefQFilterNoLOV = newRadioWidget("prefQFilterNoLOV","RadioGp4",
+"a prompt without a List of Values",null,false,"",0,0);
+prefQFilterLOV = newRadioWidget("prefQFilterLOV","RadioGp4",
+"a prompt with a List of Values",null,false,"",0,0);
+prefInfo = newInfoWidget("prefInfo","More Information","","Select your preferences for how Web Intelligence performs query and reporting tasks and for how you want your workspace to appear.")
+prefOkButton = newButtonWidget("prefOkButton","OK", 
+okCB,buttonsWidth,"OK","OK", 0, 0);
+prefCancelButton = newButtonWidget("prefCancelButton","Cancel", 
+cancelCB,buttonsWidth,"Cancel", 
+"Cancel",0,0);
+prefHelpButton = newButtonWidget("prefHelpButton","Help", 
+helpCB, buttonsWidth,"Break properties help.", 
+"Break properties help.",0,0);
+prefDlg.attachDefaultButton(prefOkButton);
+prefSep1Widget = newWidget("prefSep1Widget");
+prefGridWidget = newWidget("prefGridWidget");
+prefSep2Widget = newWidget("prefSep2Widget");
+}
+if ( !_curWin.prefDlgInitialized )
+{
+_curWin.prefDlgInitialized = true;
+targetApp(
+prefDlg.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="5" border="0" width="100%"><tbody>'+
+'<tr>'+
+'<td align="right">' +
+prefTabZone.beginHTML() +
+prefTabZone.beginTabHTML(0) +
+   '<table class="dialogzone" cellspacing="0" cellpadding="2" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td>' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="50%"><tbody>' +
+   '<tr>' +
+   '<td>' +
+   'Measurement unit ' + 
+   '</td>' +
+   '<td>' +   
+   prefUnit.getHTML() +      
+   '</td>' + 
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>' +
+   '</tr>' +
+   '<tr><td id="prefSep1Widget">' + getSep() + '</td></tr>' +
+   '<tr>' +
+   '<td id="prefGridWidget">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td width="40%">' +
+   prefSnapToGrid.getHTML() +
+   '</td>' + 
+   '<td width="60%">' +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="50%"><tbody>' +
+   '<tr>' +
+   '<td>' +
+   'Grid spacing: ' + 
+   '</td>' +
+   '<td>' +
+   prefSpacing.getHTML() + 
+   '</td>' +
+   '<td>' +
+   '<span id="prefUnitShort">'+prefUnitShort.getHTML()+'</span>' +
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>'+
+   '</tr>' +
+   '<tr>' +
+   '<td colspan="2">' +
+   prefShowGrid.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>' +     
+   '</tr>' +
+   '</tbody>' +  
+   '<tbody id="onContextMenuZone">' +
+   '<tr>' + '<td id="prefSep2Widget">'+getSep()+'</td>'+ '</tr>' +
+   '<tr>' + '<td>' + prefShowDesc.getHTML() + '</td>' +'</tr>' +
+   '<tr>' + '<td>'+ getSep() + '</td>' + '</tr>' +
+   '<tr>' +
+   '<td>' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td width="40%">'+
+   prefDispMenuHeaders.getHTML() +
+   '</td>' +
+   '<td width="60%">'+
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td>'+
+   'Contextual menus:' +
+   '</td>'+
+'</tr>' +
+'<tr>' +
+   '<td>'+
+   prefMouseAct.getHTML() +
+   '</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefRClickAct.getHTML() +
+   '</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefNoAct.getHTML() +
+   '</td>'+
+   '</tr>' +
+   '</tbody></table>'+
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>'+
+   '</td>' + 
+   '</tr>' +
+   '</tbody></table>'+      
+prefTabZone.endTabHTML() +
+prefTabZone.beginTabHTML(1) +
+'<table class="dialogzone" cellspacing="0" cellpadding="2px" border="0" width="100%"><tbody>' +
+   '<tr>' +   
+'<td>' +
+   prefAppFmt.getHTML() +   
+   '</td>' +    
+   '</tr>' +
+   '<tr>' +
+   '<td>'+getSep()+'</td>'+
+   '</tr>'+
+   '<tr>' +   
+'<td>' +
+   prefAddTableHeader.getHTML() +   
+   '</td>' +    
+   '</tr>' +
+   '<tr>' +
+   '<td>'+getSep()+'</td>'+
+   '</tr>' +
+   '<tr>' +   
+   '<td>' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td>'+
+   'Sort Prioritization' +
+   '</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefSortTop.getHTML() +
+   '</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefSortBot.getHTML() +
+   '</td>'+
+   '</tr>' +
+   '</tbody></table>'+
+   '</td>' +   
+   '</tr>' +
+   '<tr>' +
+   '<td>'+getSep()+'</td>'+
+   '</tr>' +
+   '<tr>' +   
+   '<td>' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="2px" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td colspan="4">' +  
+   'Cell Highlighting for Drill' +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td colspan="4">' +
+   prefFmtDflt.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '<tr>' +
+   '<td>' +
+   prefFmtCust.getHTML() +
+   '</td>' +
+   '<td>' +
+   prefUnder.getHTML() +
+   '</td>' +
+   '<td>' +
+   prefBgColor.getHTML() +
+   '</td>' +
+   '<td>' +
+   prefFgColor.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>' +   
+   '</tr>' +
+   '</tbody></table>' +
+prefTabZone.endTabHTML() +
+prefTabZone.beginTabHTML(2) +
+'<table class="dialogzone" cellspacing="0" cellpadding="2px" border="0" width="100%"><tbody>' +
+   '<tr>' +   
+'<td>' +
+'<table class="dialogzone" cellspacing="0" cellpadding="2px" border="0" width="100%"><tbody>' +
+   '<tr>' +
+   '<td>' +
+'The default filter type for new custom query filters or prompts is' +
+'</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefQFilterCst.getHTML() +
+   '</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefQFilterNoLOV.getHTML() +
+   '</td>'+
+   '</tr>' +
+'<tr>' +
+   '<td>'+
+   prefQFilterLOV.getHTML() +
+   '</td>' +
+   '</tr>' +
+   '</tbody></table>' +
+   '</td>' +   
+   '</tr>' +   
+   '</tbody></table>' +
+prefTabZone.endTabHTML() +
+prefTabZone.endHTML() +
+'</td>' +
+'</tr>'+
+'<tr>' +
+   '<td>' +
+   prefInfo.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table cellspacing="0" cellpadding="0" border="0"><tbody>' +
+   '<td>' +
+   prefOkButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   prefCancelButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   prefHelpButton.getHTML() +
+   '</td>' +
+'</tr>' +
+'</tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+prefDlg.endHTML()
+);
+}
+prefDlg.init();
+prefTabZone.init();
+prefMouseAct.init();
+prefRClickAct.init();
+prefNoAct.init();
+prefUnit.init();
+prefAppFmt.init();
+onContextMenuZone.init();
+prefShowDesc.init();
+prefDispMenuHeaders.init();
+prefSortTop.init();
+prefSortBot.init();
+prefUnder.init();
+prefBgColor.init();
+prefFgColor.init();
+prefFmtDflt.init();
+prefFmtCust.init();
+prefSnapToGrid.init();
+prefShowGrid.init();
+prefGridWidget.init();
+prefSep1Widget.init();
+prefSep2Widget.init()
+prefSpacing.init();
+prefAddTableHeader.init();
+prefUnitShort.init();
+prefQFilterCst.init();
+prefQFilterNoLOV.init();
+prefQFilterLOV.init();
+prefInfo.init();
+prefOkButton.init();
+prefCancelButton.init();
+prefHelpButton.init();
+setUserPref();
+prefSep1Widget.setDisplay(false);
+prefGridWidget.setDisplay(false);
+prefSep2Widget.setDisplay(false);
+prefShowDesc.setDisplay(false);
+prefDispMenuHeaders.setDisplay(false);
+onContextMenuZone.setDisplay(false);
+prefTabZone.showTab( 0, true );
+prefTabZone.select( 0 );
+prefHelpButton.setDisplay(false);
+prefDlg.show(true);
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden form -->
+<form target="SecondDlgFrame" style="display:none" name="prefSubmitForm" method="post" action="">
+<input type="hidden" name="framework" id="framework">
+<input type="hidden" name="repRules" id="repRules">
+<input type="hidden" name="queryRules" id="queryRules">
+<input type="hidden" name="bidon" id="bidon">
+</form>
+</body>
+</html>

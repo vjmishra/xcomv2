@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PLT_DB_POOLList TableName="PLT_DB_POOL">
+<DBPool Createprogid="YSCPreInstallMetadataCreator"
+    Createts="2010-04-20T21:01:31-04:00" Createuserid="SYSTEM"
+    DbPoolKey="20100420210131820" Lockid="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-20T21:01:31-04:00"
+    Modifyuserid="ng"
+    PoolConfig="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;jdbc>&#xa;    &lt;param name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@10.11.26.179:1521:orcl&quot;/>&#xa;    &lt;param name=&quot;user&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;password&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot;/>&#xa;    &lt;param name=&quot;schema&quot; value=&quot;NILEUSER&quot;/>&#xa;&lt;/jdbc>&#xa;" PoolId="DEFAULT_MASTER_90"/>
+<DBPool Createprogid="YSCPreInstallMetadataCreator"
+    Createts="2010-04-20T21:01:31-04:00" Createuserid="SYSTEM"
+    DbPoolKey="20100420210131822" Lockid="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-20T21:01:31-04:00"
+    Modifyuserid="ng"
+    PoolConfig="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;jdbc>&#xa;    &lt;param name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@10.11.26.179:1521:orcl&quot;/>&#xa;    &lt;param name=&quot;user&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;password&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot;/>&#xa;    &lt;param name=&quot;schema&quot; value=&quot;NILEUSER&quot;/>&#xa;&lt;/jdbc>&#xa;" PoolId="DEFAULT_CONFIGURATION_90"/>
+<DBPool Createprogid="YSCPreInstallMetadataCreator"
+    Createts="2010-04-20T21:01:31-04:00" Createuserid="SYSTEM"
+    DbPoolKey="20100420210131824" Lockid="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-20T21:01:31-04:00"
+    Modifyuserid="ng"
+    PoolConfig="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;jdbc>&#xa;    &lt;param name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@10.11.26.179:1521:orcl&quot;/>&#xa;    &lt;param name=&quot;user&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;password&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot;/>&#xa;    &lt;param name=&quot;schema&quot; value=&quot;NILEUSER&quot;/>&#xa;&lt;/jdbc>&#xa;" PoolId="DEFAULT_TRANSACTION_90"/>
+<DBPool Createprogid="YSCPreInstallMetadataCreator"
+    Createts="2010-04-20T21:01:31-04:00" Createuserid="SYSTEM"
+    DbPoolKey="20100420210131826" Lockid="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-20T21:01:31-04:00"
+    Modifyuserid="ng"
+    PoolConfig="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;jdbc>&#xa;    &lt;param name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@10.11.26.179:1521:orcl&quot;/>&#xa;    &lt;param name=&quot;user&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;password&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot;/>&#xa;    &lt;param name=&quot;schema&quot; value=&quot;NILEUSER&quot;/>&#xa;&lt;/jdbc>&#xa;" PoolId="DEFAULT_METADATA"/>
+<DBPool Createprogid="YSCPreInstallMetadataCreator"
+    Createts="2010-04-20T21:01:31-04:00" Createuserid="SYSTEM"
+    DbPoolKey="20100420210131828" Lockid="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-04-20T21:01:31-04:00"
+    Modifyuserid="ng"
+    PoolConfig="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xa;&lt;jdbc>&#xa;    &lt;param name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@10.11.26.179:1521:orcl&quot;/>&#xa;    &lt;param name=&quot;user&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;password&quot; value=&quot;NILEUSER&quot;/>&#xa;    &lt;param name=&quot;driver&quot; value=&quot;oracle.jdbc.OracleDriver&quot;/>&#xa;    &lt;param name=&quot;schema&quot; value=&quot;NILEUSER&quot;/>&#xa;&lt;/jdbc>&#xa;" PoolId="DEFAULT_STATISTICS_90"/>
+</PLT_DB_POOLList>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Order Place</comment>
+	<entry key="orderHeaderKey">
+		me_validateItemForOrdering:/Order/@OrderHeaderKey,
+		xpedxConfirmDraftOrder:/ConfirmDraftOrder/@OrderHeaderKey,
+		me_processOrderPayment:/Order/@OrderHeaderKey,
+		me_getBillToAddressForValidationAndSourceForMaxChargeAmounts:/Order/@OrderHeaderKey,
+		XPEDXGetConfirmationPageDetails:/Order/@OrderHeaderKey,
+		xpedx_me_changeOrderDate:/Order/@OrderHeaderKey,
+		XPXIsPendingApprovalOrder:/Order/@OrderHeaderKey</entry>
+	<entry key="paymentKeys">me_processOrderPayment:/Order/PaymentMethods/PaymentMethod[]/@PaymentKey</entry>
+	<entry key="cvvList">me_processOrderPayment:/Order/PaymentMethods/PaymentMethod[]/@SecureAuthenticationCode</entry>
+	<entry key="maxChargeLimits">me_processOrderPayment:/Order/PaymentMethods/PaymentMethod[]/@MaxChargeLimit</entry>
+	<entry key="unlimitedCharges">me_processOrderPayment:/Order/PaymentMethods/PaymentMethod[]/@UnlimitedCharges</entry>
+	<entry key="WCContext.storefrontId">subItemDetails:/Item/@CallingOrganizationCode</entry>
+	<entry key="itemID">subItemDetails:/Item/@ItemID</entry>
+	<entry key="unitOfMeasure">subItemDetails:/Item/@UnitOfMeasure</entry>
+	<entry key="WCContext.customerId">subItemDetails:/Item/CustomerInformation/@CustomerID</entry>
+	<entry key="currency">subItemDetails:/Item/@Currency</entry>
+	<entry key="skipBOMValidationsValue">me_validateItemForOrdering:/Order/@SkipBOMValidations</entry>
+	<entry key="orderPlaceDate">xpedx_me_changeOrderDate:/Order/@OrderDate</entry>
+	<entry key="customerContactID">XPXIsPendingApprovalOrder:/Order/@CustomerContactID</entry>
+	<entry key="draftOrderflagOrderSubmit">XPXIsPendingApprovalOrder:/Order/@DraftOrderFlag</entry>
+</properties>
+

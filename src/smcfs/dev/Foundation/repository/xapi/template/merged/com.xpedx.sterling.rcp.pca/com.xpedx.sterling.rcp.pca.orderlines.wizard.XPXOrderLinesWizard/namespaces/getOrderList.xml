@@ -1,0 +1,13 @@
+<OrderList>
+<Order OrderNo=''>
+<Extn ExtnHeaderStatusCode='' ExtnEnvtId='' ExtnLegacyOrderNo=''/>
+<OrderLines>
+<OrderLine>
+<Extn ExtnWebLineNumber='' ExtnLineStatusCode=''/>
+</OrderLine>
+</OrderLines>
+    <OrderHoldTypes>
+        <OrderHoldType HoldType="" Status="" ResolverUserId=""  Modifyuserid="" Modifyts="" />
+    </OrderHoldTypes>
+</Order>
+</OrderList>

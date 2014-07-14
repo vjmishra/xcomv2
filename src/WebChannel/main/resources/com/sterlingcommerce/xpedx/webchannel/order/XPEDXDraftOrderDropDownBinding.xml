@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>Binding entries for draft order drop down action.</comment>
+  <entry key="WCContext.storefrontId">xpedxDraftOrderDropDown:/Order/@EnterpriseCode</entry>
+  <entry key="WCContext.customerId">xpedxDraftOrderDropDown:/Order/@BuyerOrganizationCode</entry>  
+</properties>

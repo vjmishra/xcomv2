@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--getOrderList Output XML-->
+<OrderList  LastOrderHeaderKey="" LastRecordSet="" ReadFromHistory="" TotalOrderList="">
+    <Order BillToID="" BuyerOrganizationCode="" 
+        CarrierServiceCode=""   EnterpriseCode="" MinOrderStatus="" MinOrderStatusDesc=""
+        EntryType=""  HoldFlag="" OrderNo="" Status=""
+        HoldReasonCode="" MaxOrderStatus="" MaxOrderStatusDesc="" OrderType=""
+		ReqDeliveryDate="" ShipToID=""  ShipNode="" OrderHeaderKey="" Division="" HeaderProcessCode="" CustomerContactID="">
+		<Extn/>
+		<OrderHoldTypes/>
+		<Instructions>
+		 <!--  NumberOfInstructions is not a template driven attribute. --> 
+		<Instruction /> 
+		</Instructions>
+
+		<OrderLines>
+			<OrderLine CarrierServiceCode="" HoldFlag="" LineType="" OrderHeaderKey="" OrderLineKey="" OrderedQty="" PrimeLineNo="" ShipNode="" ShipToID="" SubLineNo="" >
+				<Extn/>
+				<Item  CustomerItem="" ItemID=""  UnitOfMeasure=""/>
+				<LinePriceInfo  LineTotal="" PricingUOM="" UnitPrice="" Tax=""/>
+				<OrderLineTranQuantity OrderedQty="" TransactionalUOM=""/>
+				<OrderStatuses>
+					<OrderStatus OrderHeaderKey="" OrderLineKey=""  Status=""  StatusQty="" />
+				</OrderStatuses>
+				<Instructions>
+				 <!--  NumberOfInstructions is not a template driven attribute. --> 
+					<Instruction /> 
+				</Instructions>
+			</OrderLine>
+		</OrderLines>
+	</Order>
+</OrderList>

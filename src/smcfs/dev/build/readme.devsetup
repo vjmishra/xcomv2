@@ -1,0 +1,64 @@
+1)SMCFS and COM build(build script location : %cvs.fetch.dir%\smcfs\dev\build)
+
+build.properties
+
+change 
+cvs.fetch.dir=D:/Eclipse/eclipse/smcfs
+cvs.module.name=smcfs/dev
+wls.dir=C:/bea
+
+
+disable the CDT related targets:
+
+cdt_import
+cdt_export
+
+<target name="all_excluding_CDT"  depends="clean, cvs-fetch, build-jars, copy-files, deploy-extensions, build-ear,build-pca" description="Executes all the targets">
+
+copy the build.xml and build.properties to the Sterling foundation folder.
+run the build script.
+bin\sci_ant.cmd -f build.xml all_excluding_CDT
+
+
+
+2)COM build
+
+
+Sync %cvs.fetch.dir%\smcfs\dev\PCAExtensions with CVS
+
+copy the build.xml and build.properties to the Sterling foundation folder.
+Execute the command in command prompt
+
+bin\sci_ant.cmd -f build.xml build-pca
+
+com zip wil be built in
+%INSTALL_DIR%\rcpdrop\windows\9.0
+
+rename .\plugins\com.yantra.yfc.rcp_1.0.0\locations.ycfg.sample to .\plugins\com.yantra.yfc.rcp_1.0.0\locations.ycfg
+
+location.ycfg file change ‘/yantra’ string to ‘/smcfs’
+
+Copy the templates 
+
+from:
+D:\Eclipse\eclipse\xpedxCVS\smcfs\dev\Foundation\repository\xapi
+
+to:
+C:\smcfs\WEB-INF\classes(smcfs exploded directory)
+
+In custom_overrides place this property yfs.yfs.rcp.devmode=Y
+
+
+
+3)webchannel build(for development)(build script location : %cvs.fetch.dir%\WebChannel\buildScripts
+
+change the devMerge.properties to point to your local swc exploded folder
+
+swc_exploded_dir=C:/swc
+source_project_dir=D:/Eclipse/eclipse/SWC/WebChannel
+source_classes_dir=D:/Eclipse/eclipse/SWC/WebChannel/output
+
+run the devMerge.xml
+
+restart the server
+

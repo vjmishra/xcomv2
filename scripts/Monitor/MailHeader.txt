@@ -1,0 +1,6 @@
+MIME-Version: 1.0
+From: xpbuild@zxpappd01.ipaper.com
+To: mahmoud.lamriben@hp.com
+Cc: mlamriben@gmail.com
+Subject: TESTING: List of Agent Servers Down on <PRODUCTION (xpagnt01 and 02)>
+Content-Type: text/html

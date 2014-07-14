@@ -1,0 +1,324 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Document Properties</title>
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../scripts/docProps.js"></script>
+<script language="javascript">
+var p=parent
+initDom(p._root + "lib/images/"+p._skinName+"/", p._lang,p,"docPropsDlg");
+</script>
+<script language="javascript">
+var docPropsDlg=null
+var docPInfo=null
+var docPOkButton=null
+var docPCancelButton=null
+var docPHelpButton=null
+var docName=null
+var docAuthor=null
+var docDesc=null
+var docKeyw=null
+var docRefreshDate=null
+var docRefreshDuration=null
+var docLocale=null
+var docVersion=null
+var docPVersion=null
+var docPEnhanced=null
+var docPFormatting=null
+var docPRefresh=null
+var docPDataTracking=null
+var docPTDCReference=null
+var docPTDCReferenceMode=null
+var docPTDCReferenceDate=null
+var docPUseQueryDrill=null
+var docPMergeDimensions=null
+var buttonsWidth= 60
+var dlgWidth= 500
+var dlgHeight= 430
+var frameWidth= dlgWidth-10
+var frameHeight= dlgHeight-125
+var initialized= false
+var url =  p._root + "incDocumentProperties" + p._appExt
+url +=  p.urlParams(true,true)
+includeScript(url)
+</script>
+<script language="javascript">
+function docPSetWidgetsValue()
+{
+docName.setHTML(convStr(docProps.name))
+docAuthor.setHTML(docProps.author)
+var val=p.longText('Description',docProps.description,null,null,'SecondDlgFrame')
+docDesc.setHTML(val)
+val=p.longText('Keywords',docProps.keywords,null,null,'SecondDlgFrame')
+docKeyw.setHTML(val)
+docRefreshDate.setHTML(p.strLastRefreshDate)
+var ret=p.formatDuration(docProps.lastRefreshDuration)
+val='%h%h %m%m %s%s'
+val=val.replace(/%h%/g,ret.hh)
+val=val.replace(/%m%/g,ret.mm)
+val=val.replace(/%s%/g,ret.ss)
+docRefreshDuration.setHTML(val)
+docLocale.setHTML(docProps.locale)
+docVersion.setHTML(docProps.version)
+docPVersion.setHTML(docProps.previousVersion)
+docPEnhanced.check(docProps.bEnhancedViewing)
+docPFormatting.check(docProps.bRegionalFormatting)
+docPRefresh.check(docProps.bRefreshOnOpen)
+docPUseQueryDrill.setDisabled(p._bDrillMode)
+docPUseQueryDrill.check(docProps.bUseQueryDrill)
+docPMergeDimensions.check(docProps.bMergeDimensions)
+docPDataTracking.setHTML((p._bTdcActivate)?"On":"Off")
+docPTDCReference.setDisplay(p._bTdcActivate)
+docPTDCReferenceMode.setDisplay(p._bTdcActivate)
+docPTDCReferenceDate.setDisplay(p._bTdcActivate)
+if (p._bTdcActivate)
+{
+docPTDCReference.setHTML(convStr("Data tracking reference mode"))
+docPTDCReferenceMode.setHTML(convStr((p._bTDCAutoUpdateDataOnRefresh)?"Auto-update data based on:":"Fixed data based on:"))
+docPTDCReferenceDate.setHTML(convStr(p._refTDCDate))
+}
+}
+function showErrorMsg()
+{
+docPUseQueryDrill.check(false)
+p.showAlertDialog("Scope of analysis is defined on at least one query. You must clear the scope of analysis of all queries before using query drill.","Document Properties - Use Query Drill",p._promptDlgWarning)
+}
+function docPClickCB()
+{
+var id=this.id
+switch(id)
+{
+case "docPUseQueryDrill":
+if (this.isChecked())
+{
+var url=p._root + "processDocumentProperties" + p._appExt
+url += p.urlParams(true,true)
+url += "&bQueryDrillOnly=true"
+url += "&bUseQueryDrill=true"
+frameNav("docPFrame",url,true);
+}
+break
+}
+}
+function okCB( )
+{
+p.eventManager.notify(p._EVT_DOC_PROPERTIES);
+docPropsDlg.show(false);
+p.bUseQueryDrill=docPUseQueryDrill.isChecked()
+p.bMergeDimensions=docPMergeDimensions.isChecked()
+var url=p._root + "processDocumentProperties" + p._appExt
+url += p.urlParams(true,true)
+url += "&bEnhanced="+docPEnhanced.isChecked()
+url += "&bRegionalFormatting="+docPFormatting.isChecked()
+url += "&bRefreshOnOpen="+docPRefresh.isChecked()
+url += "&bUseQueryDrill="+docPUseQueryDrill.isChecked()
+url += "&bMergeDimensions="+docPMergeDimensions.isChecked()
+document.docPForm.action=url
+p.wt()
+setTimeout("document.docPForm.submit()",1)
+}
+function cancelCB()
+{
+docPropsDlg.show(false);
+}
+function helpCB()
+{
+parent.showAlertDialog("Not implemented yet !","Development version",0);
+docPropsDlg.show(false);
+}
+function loadCB()
+{
+if (!initialized)
+{
+initialized=true;
+docPropsDlg = newDialogBoxWidget("docPropsDlg","Document Properties",dlgWidth,dlgHeight,okCB,cancelCB)
+docPFramezone = newFrameZoneWidget("docPFramezone",frameWidth,frameHeight)
+docName = newWidget("docName")
+docAuthor = newWidget("docAuthor")
+docDesc = newWidget("docDesc")
+docKeyw = newWidget("docKeyw")
+docRefreshDate = newWidget("docRefreshDate")
+docRefreshDuration = newWidget("docRefreshDuration")
+docLocale = newWidget("docLocale")
+docVersion = newWidget("docVersion")
+docPVersion = newWidget("docPVersion")
+docPEnhanced=newCheckWidget("docPEnhanced","Enhanced viewing mode")
+docPEnhanced.nobr=false
+docPFormatting=newCheckWidget("docPFormatting","Permanent regional formatting")
+docPFormatting.nobr=false
+docPRefresh=newCheckWidget("docPRefresh","Refresh on open")
+docPRefresh.nobr=false
+docPUseQueryDrill=newCheckWidget("docPUseQueryDrill","Use query drill",docPClickCB)
+docPUseQueryDrill.nobr=false
+docPMergeDimensions=newCheckWidget("docPMergeDimensions","Auto-merge dimensions")
+docPMergeDimensions.nobr=false
+docPDataTracking=newWidget("docPDataTracking");
+docPTDCReference=newWidget("docPTDCReference");
+docPTDCReferenceMode=newWidget("docPTDCReferenceMode");
+docPTDCReferenceDate=newWidget("docPTDCReferenceDate");
+docPInfo=newInfoWidget("docPInfo","More Information","","You can optimize how reports appear on your computer screen by selecting Enhanced viewing mode. You can request Web Intelligence to update results on reports each time the document is opened by selecting Refresh on open.")
+docPOkButton=newButtonWidget("docPOkButton","OK",okCB,buttonsWidth)
+docPCancelButton=newButtonWidget("docPCancelButton","Cancel",cancelCB,buttonsWidth)
+docPHelpButton=newButtonWidget("docPHelpButton","Help",helpCB,buttonsWidth)
+docPropsDlg.attachDefaultButton(docPOkButton);
+}
+if ( !_curWin.docPropsDlgInitialized )
+{
+_curWin.docPropsDlgInitialized=true
+targetApp(
+docPropsDlg.beginHTML() +
+'<table cellspacing="0" cellpadding="5" border="0" class="dialogzone" width="100%"><tbody>'+
+'<tr>'+
+'<td>'+
+docPFramezone.beginHTML() +
+'<table class="dialogzone" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody>' +
+'<tr>' +
+'<td><b>'+'Name'+'</b></td>'+
+'<td><b><span id="docName">'+docName.getHTML()+'</span></b></td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+'Author'+'</td>'+
+'<td><span id="docAuthor">'+docAuthor.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr>' +
+'<td valign="top">'+'Description'+'</td>'+
+'<td><span id="docDesc">'+docDesc.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr>' +
+'<td valign="top">'+'Keywords'+'</td>'+
+'<td><span id="docKeyw">'+docKeyw.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+'Last refresh date'+'</td>'+
+'<td><span id="docRefreshDate">'+docRefreshDate.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+'Duration of the previous Refresh'+'</td>'+
+'<td><span id="docRefreshDuration">'+docRefreshDuration.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr >' +
+'<td >&nbsp;</td>' + 
+'</tr>' +
+'<tr >' +
+'<td>'+'Data Tracking'+'</td>'+
+'<td><span id="docPDataTracking"></span></td>'+
+'</tr>' +
+'<tr>' +
+'<td id="docPTDCReference"></td>'+
+'<td><span id="docPTDCReferenceMode"></span></td>'+
+'</tr>' +
+'<tr>' +
+'<td> </td>'+
+'<td><span id="docPTDCReferenceDate"></span></td>'+
+'</tr>' +
+'<tr >' +
+'<td >&nbsp;</td>' + 
+'</tr>' +
+'<tr >' +
+'<td>'+'Locale'+'</td>'+
+'<td><span id="docLocale">'+docLocale.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+'Version'+'</td>'+
+'<td><span id="docVersion">'+docVersion.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+'Previous version'+'</td>'+
+'<td><span id="docPVersion">'+docPVersion.getHTML()+'</span></td>'+
+'</tr>' +
+'<tr><td colspan="2">' + getSep() + '</td></tr>' +
+'<tr>' +
+'<td>'+docPEnhanced.getHTML()+'</td>'+
+'<td>'+docPFormatting.getHTML()+'</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+docPRefresh.getHTML()+ '</td>'+
+'</tr>' +
+'<tr>' +
+'<td>'+docPUseQueryDrill.getHTML()+ '</td>'+
+'<td>'+ docPMergeDimensions.getHTML()+ '</td>'+
+'</tr>' +
+'</tbody></table>'+
+docPFramezone.endHTML() +
+'</td>' +
+'</tr>' +
+'<tr>' +
+   '<td align="center" valign="right">' +
+   docPInfo.getHTML() +
+   '</td>' +
+   '</tr>' + 
+   '<tr>' +
+   '<td align="right" valign="center">' +
+   '<table class="dialogzone" cellspacing="0" cellpadding="0" border="0"><tbody><tr>' +
+   '<td>' +   
+   docPOkButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +
+   '<td>' +
+   docPCancelButton.getHTML() +
+   '</td>' +
+   '<td>' + getSpace(5,1)+ '</td>' +   
+   '<td>' +
+   docPHelpButton.getHTML() +
+   '</td>' +
+'</tr></tbody></table>'+   
+   '</td>' +
+   '</tr>' + 
+'</tbody></table>' +
+docPropsDlg.endHTML()
+);
+}
+docPropsDlg.init()
+docName.init()
+docAuthor.init()
+docDesc.init()
+docKeyw.init()
+docRefreshDate.init()
+docRefreshDuration.init()
+docLocale.init()
+docVersion.init()
+docPVersion.init()
+docPEnhanced.init()
+docPFormatting.init()
+docPRefresh.init()
+docPUseQueryDrill.init()
+docPMergeDimensions.init()
+docPDataTracking.init()
+docPTDCReference.init()
+docPTDCReferenceMode.init()
+docPTDCReferenceDate.init()
+docPInfo.init()
+docPOkButton.init()
+docPCancelButton.init()
+docPHelpButton.init()
+docPSetWidgetsValue()
+p.initUserRight(docPMergeDimensions,p._usrCreateMergeDimension);
+docPHelpButton.setDisplay(false)
+docPropsDlg.show(true)
+}
+</script>
+</head>
+<body class="dialogzone" onload="setTimeout('loadCB()',1)">
+<!-- Hidden frame -->
+<iframe name="docPFrame" src="../../../lib/empty.html"></iframe>
+<!-- Hidden form -->
+<form target="Report" style="display:none" name="docPForm" method="post" action="">
+<input type="hidden" name="sDocProps" id="sDocProps">
+</form>
+</body>
+</html>

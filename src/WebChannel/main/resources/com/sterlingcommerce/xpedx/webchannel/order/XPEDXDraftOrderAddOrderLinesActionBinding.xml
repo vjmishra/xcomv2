@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Binding entries for adding line items to a draft order (via Quick Add).</comment>
+    
+    <entry key="WCContext.storefrontId">addToCartGetCompleteItemList:/Item/@CallingOrganizationCode,XPEDXValidateItemEntitlement:/Item/@CallingOrganizationCode, xpedxAddToCartGetCompleteItemList:/Item/@CallingOrganizationCode, xpedxGetCompleteItemListWithMpc:/Item/@CallingOrganizationCode</entry>
+    <entry key="productID">addToCartGetCompleteItemList:/Item/@ItemID, XPEDXValidateItemEntitlement:/Item/@ItemID, xpedxAddToCartGetCompleteItemList:/Item/PrimaryInformation/@ManufacturerItem, xpedxGetCompleteItemListWithMpc:/Item/Extn/@ExtnMpc</entry>
+    <entry key="associationTypesOfInterest">addToCartGetCompleteItemList:/Item/ItemAssociationTypeList/ItemAssociationType[]/@Type, xpedxAddToCartGetCompleteItemList:/Item/ItemAssociationTypeList/ItemAssociationType[]/@Type</entry>
+	<entry key="WCContext.customerId">addToCartGetCompleteItemList:/Item/CustomerInformation/@CustomerID, xpedxAddToCartGetCompleteItemList:/Item/CustomerInformation/@CustomerID,XPEDXValidateItemEntitlement:/Item/CustomerInformation/@CustomerID</entry>
+    <entry key="currency">addToCartGetCompleteItemList:/Item/@Currency, xpedxAddToCartGetCompleteItemList:/Item/@Currency</entry>
+    <entry key="#parameters.orderHeaderKey">xpedx_me_draftOrderAddOrderLines:/Order/@OrderHeaderKey</entry>
+    <entry key="orderedProductIDs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@ItemID</entry>
+    <entry key="orderedQuantities">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@OrderedQty</entry>
+    <entry key="orderedTranQuantities">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@OrderedQty</entry>
+    <entry key="orderedProductUOMs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@UnitOfMeasure</entry>
+    <entry key="orderedProductDefaultUOMs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/OrderLineTranQuantity/@TransactionalUOM</entry>
+    <entry key="orderedProductClasses">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@ProductClass</entry>
+    <entry key="orderedProductDescs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Item/@ItemShortDesc</entry>
+    <entry key="orderedJobIDs">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnCustLineAccNo</entry>
+    <entry key="isEditNewline">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/Extn/@ExtnEditOrderFlag</entry>
+    <entry key="orderedLineTypes">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@LineType</entry>
+    <entry key="orderedPONos">xpedx_me_draftOrderAddOrderLines:/Order/OrderLines/OrderLine[]/@CustomerPONo</entry>
+    <entry key="recordPendingChanges">xpedx_me_draftOrderAddOrderLines:/Order/PendingChanges/@RecordPendingChanges</entry>
+    <entry key="draftOrderFlag">xpedx_me_draftOrderAddOrderLines:/Order/@DraftOrderFlag</entry>
+</properties>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_COMMON_CODE_ATTRIBUTEList TableName="YFS_COMMON_CODE_ATTRIBUTE">
+<CommonCodeAttribute CommonCodeAttributeKey="2014012405392165070"
+    CommonCodeKey="2014012405392165067"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-01-24T05:39:20-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-01-24T05:39:20-05:00" Modifyuserid="admin" Name=" " Value=" "/>
+<CommonCodeAttribute CommonCodeAttributeKey="2014021906050367004"
+    CommonCodeKey="2014021906050367001"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-02-19T06:05:02-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-02-19T06:05:02-05:00" Modifyuserid="admin" Name="" Value=""/>
+<CommonCodeAttribute CommonCodeAttributeKey="2014021906053867009"
+    CommonCodeKey="2014021906053867006"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-02-19T06:05:38-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-02-19T06:05:38-05:00" Modifyuserid="admin" Name="" Value=""/>
+<CommonCodeAttribute CommonCodeAttributeKey="2014021906060267014"
+    CommonCodeKey="2014021906060267011"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-02-19T06:06:02-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-02-19T06:06:02-05:00" Modifyuserid="admin" Name="" Value=""/>
+<CommonCodeAttribute CommonCodeAttributeKey="2014021906062567019"
+    CommonCodeKey="2014021906062567016"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-02-19T06:06:25-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-02-19T06:06:25-05:00" Modifyuserid="admin" Name="" Value=""/>
+<CommonCodeAttribute CommonCodeAttributeKey="2014021906064467024"
+    CommonCodeKey="2014021906064467021"
+    Createprogid="SterlingHttpTester"
+    Createts="2014-02-19T06:06:44-05:00" Createuserid="admin" Lockid="0"
+    Modifyprogid="SterlingHttpTester"
+    Modifyts="2014-02-19T06:06:44-05:00" Modifyuserid="admin" Name="" Value=""/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_80_01"
+    CommonCodeKey="INSTRUCTION_TYPE_80_01" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="CopyMatchingItemInstruction" Value="Y"/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_85_01"
+    CommonCodeKey="COUNTRY1" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="ZIPCODEREGEX" Value="^(\d{5})-?\s?(?:\d{4})?$"/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_85_02"
+    CommonCodeKey="COUNTRY_CA" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="ZIPCODEREGEX" Value="^([a-zA-Z&amp;&amp;[^dfioquDFIOQU]]\d[a-zA-Z&amp;&amp;[^dfioquDFIOQU]])\s?\d[\w&amp;&amp;\D]\d$"/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_85_03"
+    CommonCodeKey="COUNTRY_GB" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="ZIPCODEREGEX" Value="^([a-zA-Z]{1,2}[0-9Rr]\w?) \d[a-zA-Z&amp;&amp;[^cikmovCIKMOV]]{2}$"/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_85_04"
+    CommonCodeKey="COUNTRY_JP" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="ZIPCODEREGEX" Value="^(\d{3})(?:\s|-)?(?:\d{4})?$"/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_85_05"
+    CommonCodeKey="COUNTRY_FR" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="ZIPCODEREGEX" Value="^\d{5}$"/>
+<CommonCodeAttribute CommonCodeAttributeKey="CODE_ATTR_85_06"
+    CommonCodeKey="COUNTRY_DE" Createprogid="XMLMigrator"
+    Createts="2011-07-14T14:37:31-04:00" Createuserid="SYSTEM"
+    Lockid="0" Modifyprogid="XMLMigrator"
+    Modifyts="2011-07-14T14:37:31-04:00" Modifyuserid="SYSTEM"
+    Name="ZIPCODEREGEX" Value="^\d{5}$"/>
+</YFS_COMMON_CODE_ATTRIBUTEList>

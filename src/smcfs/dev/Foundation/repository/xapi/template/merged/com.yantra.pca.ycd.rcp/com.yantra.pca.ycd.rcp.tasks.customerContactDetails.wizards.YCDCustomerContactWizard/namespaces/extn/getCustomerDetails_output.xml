@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Customer AggregateStatus="" CustomerID="" CustomerKey="" CustomerType="" OrganizationCode="">
+    <CustomerContactList>
+        <CustomerContact AggregateStatus="" ApproverProxyUserId="" ApproverUserId="" CustomerContactID="" CustomerContactKey="" DateOfBirth="" DayFaxNo="" DayPhone="" Department="" EmailID="" EveningFaxNo=""
+            EveningPhone="" FirstName="" JobTitle="" LastName="" MiddleName="" MobilePhone="" SpendingLimit="" SpendingLimitCurrency="" SpouseDateOfBirth="" Status="" Title="" UserID="" WeddingAnniversaryDate="">
+            <CustomerAdditionalAddressList>
+                <CustomerAdditionalAddress CustomerAdditionalAddressKey="" IsDefaultBillTo="" IsDefaultShipTo="" IsDefaultSoldTo="">
+                    <PersonInfo AddressID="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" Company="" Country="" Department="" FirstName=""
+                        JobTitle="" LastName="" MiddleName="" PersonInfoKey="" State="" Title="" ZipCode=""/>
+                </CustomerAdditionalAddress>
+            </CustomerAdditionalAddressList>
+            <NoteList>
+                <Note AuditTransactionId="" ContactReference="" ContactTime="" ContactType="" ContactUser="" CustomerSatIndicator="" NoteText="" Priority="" ReasonCode="" SequenceNo="" VisibleToAll="">
+					<User Username=""/>
+				</Note>
+            </NoteList>
+            <User DisplayUserID="" Loginid="" OrganizationKey="" Activateflag="">
+            <UserGroupLists>
+            <UserGroupList />
+            </UserGroupLists>
+            </User>
+			<Extn/>
+        </CustomerContact>
+    </CustomerContactList>
+    <CustomerAdditionalAddressList>
+        <CustomerAdditionalAddress IsDefaultBillTo="" IsDefaultShipTo="" IsDefaultSoldTo="">
+            <PersonInfo AddressID="" AddressLine1="" AddressLine2="" AddressLine3="" AddressLine4="" AddressLine5="" AddressLine6="" City="" Company="" Country="" Department="" FirstName=""
+                JobTitle="" LastName="" MiddleName="" State="" Title="" ZipCode=""/>
+        </CustomerAdditionalAddress>
+    </CustomerAdditionalAddressList>
+</Customer>

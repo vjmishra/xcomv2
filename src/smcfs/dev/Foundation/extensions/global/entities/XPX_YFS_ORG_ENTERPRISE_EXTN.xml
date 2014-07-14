@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+   <Entities>        
+    
+      <Entity TableName="YFS_ORG_ENTERPRISE" AuditRequired="N">
+		
+      </Entity>
+</Entities>
+</DBSchema> 

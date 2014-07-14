@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<project name="Web Channel Customization Build Script" basedir="." default="build">
+	<property file="build.properties"/>
+	
+	<property name="target.runtime.dir" value="build/runtime"/>
+	<property name="target.webapp.dir" value="build/webapp"/>
+	<property name="swc.lib.dir" value="${target.webapp.dir}/WEB-INF/lib"/>
+	<property name="target.webapp.dir.mashups" value="${target.webapp.dir}/mashupxmls/webchannel"/>
+	
+	<property name="sic.src.dir" value=""/>	
+	
+	<condition property="runtime.present" value="true">
+		<length string="${runtime}" when="greater" length="0" trim="true"/>
+	</condition>
+	
+	<condition property="sic.present" value="true">
+		<length string="${sic.src.dir}" when="greater" length="0" trim="true"/>
+	</condition>	
+	
+	<target name="-set-runtime-classpath" if="runtime.present">
+		<echo message="Using runtime libraries present in ${runtime}."/>
+		
+		<loadfile property="version.txt" srcfile="${runtime}/bin/version.txt"/>
+		<echo message="Building SWC Customization against Foundation ${version.txt}"/>
+		<path id="compile.classpath">
+			<fileset dir="${runtime}/jar">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+		<pathconvert property="webxml.classpath.ref" refid="compile.classpath" />
+	</target>
+	<target name="-compile" depends="clean, -set-runtime-classpath" description="compile any changed java files">
+		<mkdir dir="${target.webapp.dir}/temp/WEB-INF/classes"/>
+		<javac srcdir="${src.dir}" destdir="${target.webapp.dir}/temp/WEB-INF/classes" debug="${compile.debug}" classpathref="compile.classpath" source="1.5" target="1.5"/>
+        <copy  overwrite="true" todir="${target.webapp.dir}/temp/WEB-INF/classes" >
+            <fileset dir="${resources.dir}">
+                <include name="com/**"/>
+				<include name="custom_struts.xml"/>
+            	<!--<include name="DCL.xml"/>-->
+            </fileset>
+        </copy>				
+    </target>
+	<target name="-build-ui-jar" depends="-compile">
+		<mkdir dir="${target.webapp.dir}/WEB-INF/lib"/>
+		<mkdir dir="${target.webapp.dir}/yfscommon"/>
+		<!-- Modified for customization script-->
+		<jar destfile="${target.webapp.dir}/WEB-INF/lib/${cust.module.code}.jar">
+			<fileset dir="${target.webapp.dir}/temp/WEB-INF/classes/">
+				<include name="**/*"/>
+				<exclude name="com/sterlingcommerce/webchannel/config/**"/>
+				<exclude name="com/sterlingcommerce/webchannel/tools/mashup/**"/>
+				<exclude name="com/sterlingcommerce/webchannel/build/**"/>
+				<exclude name="com/sterlingcommerce/webchannel/xapi/**"/>
+			</fileset>
+		</jar>
+		<jar destfile="${target.webapp.dir}/WEB-INF/lib/${cust.module.code}_resourceBundles.jar">
+			<fileset dir="${target.webapp.dir}/temp/WEB-INF/classes/">
+				<include name="**/package.properties"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="-updwebapp">
+
+		<delete dir="${target.webapp.dir}/temp"/>
+		<copy overwrite="true" todir="${target.webapp.dir.mashups}/extn/swc" failonerror="false">
+			<fileset dir="${webapp.dir}/custommashups">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy overwrite="true" todir="${target.webapp.dir}">
+			<fileset dir="${webapp.dir}/">
+				<include name="**"/>
+				<exclude name="{webapp.dir}/custommashups/**"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="-updruntime" unless="devmode">
+	
+		<available type="file" file="${basedir}/../version.txt" property="swcversion.available"/>
+		<echo message="version.txt available? ${swcversion.available}"/>
+		<antcall target="-copyversionfile"/>
+		
+	</target>
+	
+	<target name="-copyversionfile" if="swcversion.available">
+		<copy overwrite="true" tofile="${target.runtime.dir}/files/bin/swcversion.txt" file="${basedir}/../version.txt"/>
+	</target>
+	
+	<target name="-copyresources" depends="-build-ui-jar">
+		<antcall target="-updwebapp"/>
+		<antcall target="-updruntime"/>
+	</target>
+
+	<target name="build" depends="-copyresources" unless="devmode">
+		<mkdir dir="${cust.package.dir}/${cust.module.code}"/>
+		<jar destfile="${cust.package.dir}/${cust.module.code}/${cust.module.package}.jar" update="false" >
+			<zipfileset dir="${target.webapp.dir}" excludes="WEB-INF/lib/${cust.module.code}.jar, yfscommon/**, WEB-INF/lib/${cust.module.code}_resourceBundles.jar" prefix="${module.code}/files/repository/eardata/${module.code}/war/" erroronmissingdir="false"/>
+			<zipfileset dir="${target.webapp.dir}" includes="yfscommon/${cust.module.code}ui.jar" prefix="${cust.module.code}/files/repository/eardata/config/war" erroronmissingdir="false"/>
+			<zipfileset dir="${target.webapp.dir}/WEB-INF/lib/" includes="${cust.module.code}.jar" prefix="${module.code}/jars/${cust.module.code}/1_0/" erroronmissingdir="false"/>
+			
+			<zipfileset dir="${resources.dir}/" includes="DCL.xml" prefix="${module.code}/jars/" erroronmissingdir="false"/>
+		</jar>
+		<copy file="${target.webapp.dir}/WEB-INF/lib/${cust.module.code}_resourceBundles.jar" todir="${cust.package.dir}/${cust.module.code}" overwrite="true" failonerror="false"/>
+	</target>
+	<target name="zip_source_code">
+		<echo message="Zipping the source and the built webapp"/>
+		<zip destfile="SWC_CUST_src.zip" update="false">
+			<fileset dir="${basedir}">
+				<exclude name="SWC_src.zip"/>
+				<exclude name="SWC.jar"/>
+				<exclude name="swc_developer_reference_data.zip"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="clean">
+		<delete dir="${target.runtime.dir}" />
+		<delete dir="${target.webapp.dir}" />
+	</target>
+</project>

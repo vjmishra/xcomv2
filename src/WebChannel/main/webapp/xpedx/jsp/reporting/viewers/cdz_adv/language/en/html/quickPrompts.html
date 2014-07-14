@@ -1,0 +1,997 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/calendar.js"></script>
+<script language="javascript" src="../../../lib/multilist.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript">
+initDom("../../../lib/images/"+parent._skinName+"/", parent._lang, self, "QuickPrompts");
+</script>
+<script language="javascript">
+prompts=new Array();
+isPageLoaded=false;
+isPromptsAnswered=false;
+isInitWidgets=false;
+goAdvPrompts=false;
+var url=parent._root+"incQuickPrompts"+parent._appExt+"?sEntry="+parent.strEntry;
+includeScript(url);
+</script>
+<script language="javascript">styleSheet()</script>
+<script language="javascript">
+labelLovNoValue="(--No value--)";
+labelPromptNoSelValue="(--No selected value--)";
+labelNoPromptsMsg="There are no prompts defined on the queries in this document.";
+labelAdvancedButton="Advanced";
+labelRunButton="Run";
+labelMoreValues="(--More values--)";
+labelRunQueryMsg="Running Query";
+labelPanelQuickPromptsTitle="User Prompt Input";
+labelShowValues="(--Show List Of Values--)";
+labelNeedAnswerNestedPrompts="The list of values cannot be displayed because it contains prompts. Click Advanced to supply prompt values.";
+labelOptionalPrompt="(optional)";
+p=parent;
+iNbPrompts=(typeof(iNbPrompts)=="undefined")?0:iNbPrompts;
+blnRefreshDoc=(p._usrRefreshDoc=="full")?true:false;
+blnReloadQuickPrompts=true;
+p.setKeyCB(this, false);
+isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+arrEvts=new Array();
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_PROMPTS_VALUES_CHANGED,p._EVT_PAGE_LOADED,updatePValuesCB);
+function updatePValuesCB(evt,data)
+{
+if (iNbPrompts==data)
+delayedUpdatePanel('no');
+else
+reloadQuickPromptsCB();
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_PROMPTS_LOV_REFRESHED,p._EVT_PAGE_LOADED,refreshQuickPromptsCB);
+function refreshQuickPromptsCB(evt,data)
+{
+if (iNbPrompts==data)
+{
+var strReloadLOV="no";
+for (var i=0; i<prompts.length; i++)
+{
+if (prompts[i].hasLOV && prompts[i].isConstrained && prompts[i].isLovLoaded)
+{
+strReloadLOV="yes";
+break;
+}
+}
+delayedUpdatePanel(strReloadLOV);
+}
+else
+reloadQuickPromptsCB();
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_DOC_UPDATE,p._EVT_PAGE_LOADED,reloadQuickPromptsCB);
+arrEvts[arrEvts.length]=p.newObserverOneEvent(p._EVT_PDF_VIEW,reloadQuickPromptsCB);
+function reloadQuickPromptsCB()
+{
+if (blnReloadQuickPrompts)
+{
+var url=p._root+"language/"+p._lang+"/html/quickPrompts.html";
+setTimeout('p.frameNav("'+self.name+'","'+url+'",false)',100);
+blnReloadQuickPrompts=false;
+}
+}
+arrEvts[arrEvts.length]=p.newObserverTwoEvents(p._EVT_UNDO_REDO,p._EVT_PAGE_LOADED,undoRedoQuickPrompts);
+function undoRedoQuickPrompts()
+{
+reloadQuickPromptsCB();
+}
+function delayedUpdatePanel(strReloadLOV)
+{
+if (iNbPrompts>0)
+{
+var promptIndexes="";
+if (strReloadLOV)
+{
+for (var i=0;i<prompts.length;i++)
+{
+if (prompts[i].isLovLoaded)
+promptIndexes+=((promptIndexes!="")?";":"")+prompts[i].index;
+}
+}
+var url=p._root+"updateQuickPrompts"+p._appExt+"?sEntry="+p.strEntry+"&sReloadLOV="+strReloadLOV+"&sReloadPrompts="+promptIndexes;
+setTimeout('frameNav("HiddenQuickPrompts","'+url+'",true)',100);
+}
+}
+function updatePrompts(s)
+{
+for (var i=0;i<prompts.length;i++)
+{
+var pt=prompts[i];
+var v=getValuesFromStringTokenizer(s.arrPromptValues[i]);
+pt.value=v[1];
+pt.valueIndex=v[0];
+var hasPreviousValues=(s.arrPromptValues[i]!="")?true:false;
+if (pt.hasLOV && pt.isConstrained)
+{
+lov=lstPromptValues[i];
+if (s.strReloadLov=="yes" && pt.isLovLoaded)
+{
+updatePromptLov(i,s,i,hasPreviousValues);
+}
+else if (pt.type=="Mono")
+{
+if (pt.isLovLoaded)
+{
+lov.select();
+if (hasPreviousValues)
+selectSingleLoadedValue(i);
+}
+else
+{
+lov.del();
+if (hasPreviousValues)
+lov.add(pt.value,pt.valueIndex+'_'+pt.value,true);
+lov.add(labelShowValues,"",false);
+if (!hasPreviousValues)
+lov.layer.options.selectedIndex=-1;
+}
+}
+else
+{
+if (pt.isLovLoaded)
+{
+lov.select();
+if (hasPreviousValues)
+selectMultiLoadedValues(i);
+}
+else
+{
+lov.freeze();
+lov.del();
+if (hasPreviousValues)
+{
+var arrValues=pt.value.split(';');
+var arrIndexes=pt.valueIndex.split(';');
+for (var j=0;j<arrValues.length;j++)
+{
+lov.add(arrValues[j],arrIndexes[j]+'_'+arrValues[j],true);
+}
+}
+lov.add(labelShowValues,"",false);
+lov.rebuildHTML();
+}
+}
+}
+else
+{
+txtPromptValue[i].setValue(pt.value);
+document.getElementById(pt.paramIndexName).value=pt.valueIndex;
+}
+}
+updateOKButton();
+}
+function updatePromptLov(iPrompt,s,index,hasPreviousValues)
+{
+displayWaitCursor.show(false);
+if (!s.hasNestedPrompts)
+{
+var lov=lstPromptValues[iPrompt];
+index=(index==null)?0:index;
+hasPreviousValues=(hasPreviousValues==null)?true:hasPreviousValues;
+var addPreviousValue=(hasPreviousValues && (prompts[iPrompt].isLovLoaded || lov.getCount()>1 || prompts[iPrompt].value!=''))?true:false;
+var arrSel=new Array();
+if (prompts[iPrompt].type=="Mono")
+{
+if (addPreviousValue)
+{
+arrSel[0]=new Array();
+arrSel[0][0]=prompts[iPrompt].valueIndex+'_'+prompts[iPrompt].value;
+arrSel[0][1]=false;
+}
+lov.del();
+if (s.arrNbLovItems[index]>0)
+{
+for (var i=0;i<s.arrNbLovItems[index];i++)
+{
+var t=null;
+var v=null;
+if (s.arrPrompts[index][7])
+{
+t=s.arrLovTexts[index][i][0];
+v=s.arrLovValues[index][i];
+}
+else
+{
+t=s.arrLovTexts[index][i];
+v=t;
+}
+v=s.arrLovIndexes[index][i]+'_'+v;
+var blnSelected=false;
+for (var j=0;j<arrSel.length;j++)
+{
+if (!arrSel[j][1] && arrSel[j][0]==v)
+{
+arrSel[j][1]=true;
+blnSelected=true;
+break;
+}
+}
+lov.add(t,v,blnSelected);
+}
+for (var i=0;i<arrSel.length;i++)
+{
+if (!arrSel[i][1])
+{
+var v=arrSel[i][0];
+var iPos=v.indexOf('_');
+var t=(iPos>=0)?v.substring(iPos+1):v;
+lov.add(t,v,true);
+}
+}
+if (s.arrNbBatchLovItems[index]>1)
+lov.add(labelMoreValues,"",false);
+if (!addPreviousValue)
+lov.layer.options.selectedIndex=-1;
+}
+else
+lov.add(labelLovNoValue,"",false);
+}
+else
+{
+if (addPreviousValue)
+{
+var sel=prompts[iPrompt].value.split(';');
+var selIdx=prompts[iPrompt].valueIndex.split(';');
+for (var i=0;i<sel.length;i++)
+{
+var len=arrSel.length;
+arrSel[len]=new Array(2);
+arrSel[len][0]=selIdx[i]+'_'+sel[i];
+arrSel[len][1]=false;
+}
+}
+lov.freeze();
+lov.del();
+lov.resetColums();
+arrNbLovItems[iPrompt]=s.arrNbLovItems[index];
+var hh=s.arrLovTitle[index];
+var colwidth=lov.w;
+if (s.arrNbLovItems[index]>0)
+{
+for (var i=0;i<s.arrNbLovItems[index];i++)
+{
+var t=null;
+var v=null;
+if (s.arrPrompts[index][7])
+{
+t=s.arrLovTexts[index][i][0];
+v=s.arrLovValues[index][i];
+}
+else
+{
+t=s.arrLovTexts[index][i];
+v=t;
+}
+v=s.arrLovIndexes[index][i]+'_'+v;
+var blnSelected=false;
+for (var j=0;j<arrSel.length;j++)
+{
+if (arrSel[j][0]==v)
+{
+arrSel[j][1]=true;
+blnSelected=true;
+break;
+}
+}
+lov.add(t,v,blnSelected);
+}
+for (var i=0;i<arrSel.length;i++)
+{
+if (!arrSel[i][1])
+{
+var v=arrSel[i][0];
+var iPos=v.indexOf('_');
+var t=(iPos>=0)?v.substring(iPos+1):v;
+lov.add(t,v,true);
+}
+}
+if (s.arrNbBatchLovItems[index]>1)
+lov.add(labelMoreValues,"",false);
+}
+else
+lov.add(labelLovNoValue,"",false);
+lov.rebuildHTML();
+}
+prompts[iPrompt].isLovLoaded=true;
+}
+else
+{
+if (prompts[iPrompt].type=="Mono")
+selectSingleLoadedValue(iPrompt);
+else
+selectMultiLoadedValues(iPrompt);
+p.showAlertDialog(labelNeedAnswerNestedPrompts,labelPanelQuickPromptsTitle,1);
+}
+}
+function detachEvents()
+{
+for (var i=0; i<arrEvts.length; i++)
+{
+p.eventManager.detach(arrEvts[i]);
+}
+}
+function newBOPrompt(arrPrompts)
+{
+if (arrPrompts==null) return null;
+var o=new Object;
+o.index=-1;
+o.name=arrPrompts[10];
+o.escapedName=arrPrompts[0];
+o.paramName=arrPrompts[1];
+o.paramIndexName=arrPrompts[1].replace('V','I');
+o.inputFormat=arrPrompts[2];
+o.isDate=arrPrompts[3];
+o.type=arrPrompts[4];
+o.hasLOV=arrPrompts[5];
+o.lovID=arrPrompts[11];
+o.isConstrained=arrPrompts[6];
+o.isMultiColumn=arrPrompts[7];
+var v=getValuesFromStringTokenizer(arrPrompts[8]);
+o.value=v[1];
+o.valueIndex=v[0];
+o.isRequired=arrPrompts[9];
+o.isOptional=arrPrompts[12];
+o.isLovLoaded=false;
+return o;
+}
+function getValuesFromStringTokenizer(s)
+{
+var ret=new Array(2);
+ret[0]="";
+ret[1]="";
+if (s!=null)
+{
+var arr=s.split(';');
+for (var i=0;i<arr.length;i++)
+{
+if (i>0)
+{
+ret[0]+=";";
+ret[1]+=";";
+}
+var idx=arr[i].indexOf('_');
+if (idx>=0)
+{
+ret[0]+=arr[i].substring(0,idx);
+ret[1]+=arr[i].substring(idx+1);
+}
+else
+ret[1]+=arr[i];
+}
+}
+return ret;
+}
+function getPromptIndex(strPromptName)
+{
+var iPrompt=null;
+for (var i=0;i<arrPrompts.length;i++)
+{
+if (prompts[i].paramName==strPromptName)
+{
+iPrompt=prompts[i].index;
+break;
+}
+}
+return iPrompt;
+}
+function getPromptsUI()
+{
+var o=new Object;
+o.iListBoxSize=8;
+o.iListBoxWidth=60;
+o.getWidgets=getPromptsWidgets;
+o.getHTML=getPromptsHTML;
+o.init=initPromptsUI;
+o.fill=fillPromptsUI;
+o.resize=resizePrompts;
+o.length=prompts.length;
+return o;
+}
+function getPromptsHTML()
+{
+var strPromptsHTML=promptsToolbar.getHTML()+
+'<div id="sepToolbar" class="treeZone" style="height:'+(_ie?1:0)+'px;overflow:hidden;position:absolute;top:25px;left:0px;width:100%;border-top-width:0px;border-left-width:0px;border-right-width:0px;"></div>'+
+'<form style="padding:0px;margin:0px" name="frmQuickPrompt" method="post" onSubmit="return false;">'+
+'<div id="idPromptsUI" style="overflow:auto;position:absolute;top:26px;left:0px;width:'+winWidth()+'px;height:'+(winHeight()-26)+'px">'+
+'<table border="0" style="margin-top:5px" cellpadding="0" cellspacing="0"><tbody>'+
+'<tr>'+
+'<td>'+
+getSpace(5,1)+
+'</td>'+
+'<td>'+
+'<table id="container" style="display:none" border="0" cellpadding="0" cellspacing="0"><tbody>'+
+'<tr>'+
+'<td>'+
+getSpace(1,1)+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td id="idNoPrompts" style="display:none">'+
+'<table border="0"cellpadding="0" cellspacing="0">'+
+'<tr>'+
+'<td class="dialogzone">'+
+'<i>'+labelNoPromptsMsg+'</i>'+
+'</td>'+
+'</tr>'+
+'</table>'+
+'</td>'+
+'</tr>';
+for (var i=0; i<iNbPrompts; i++)
+{
+strPromptsHTML+='<tr><td>';
+if (prompts[i].hasLOV && prompts[i].isConstrained)
+strPromptsHTML+=getPLovConstHTML(i);
+else if (!prompts[i].hasLOV && prompts[i].isConstrained)
+strPromptsHTML+=getPWithoutLovConstHTML(i);
+else
+strPromptsHTML+=getPFreeHTML(i);
+strPromptsHTML+='</td></tr>';
+if (i<iNbPrompts-1)
+strPromptsHTML+='<tr><td>'+getSep(0,false)+'</td></tr>';
+}
+strPromptsHTML+=''+
+'<tr>'+
+'<td height="5"></td>'+
+'</tr>'+
+'</tbody></table>'+
+'<input type="hidden" name="sLovID" value="">'+
+'</td>'+
+'</tr>'+
+'</tbody></table></div>'+
+'</form>';
+return strPromptsHTML;
+}
+function getPLovConstHTML(iPrompt)
+{
+var pt=prompts[iPrompt];
+var strPromptOutput=''+
+'<table border="0" cellpadding="0" cellspacing="0">'+
+'<tr>'+
+'<td align="left" class="dialogzone">'+
+'<label for="'+pt.paramName+'">'+
+'<b>'+pt.escapedName+'</b>'+
+(pt.isOptional?('&nbsp;<span style="color:#808080">'+labelOptionalPrompt+'</span>'):'')+
+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="left">'+
+'<table border="0" style="margin-top:2px" cellpadding="0" cellspacing="0">'+
+'<tr>'+
+'<td>'+
+lstPromptValues[iPrompt].getHTML()+
+'</td>'+
+'</tr>'+
+'</table>'+
+'<input type="hidden" id="'+pt.paramName+'" name="'+pt.paramName+'" value="">'+
+'<input type="hidden" id="'+pt.paramIndexName+'" name="'+pt.paramIndexName+'" value="">'+
+'</td>'+
+'</tr>'+
+'</table>';
+return strPromptOutput;
+}
+function getPWithoutLovConstHTML(iPrompt)
+{
+var pt=prompts[iPrompt];
+var strPromptOutput=''+
+'<table border="0" cellpadding="0" cellspacing="0">'+
+'<tr>'+
+'<td align="left" class="dialogzone">'+
+'<label for="'+pt.paramName+'">'+
+'<b>'+pt.escapedName+'</b>'+
+(pt.isOptional?('&nbsp;<span style="color:#808080">'+labelOptionalPrompt+'</span>'):'')+
+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="left">'+
+txtPromptValue[iPrompt].getHTML()+
+'<input type="hidden" id="'+pt.paramIndexName+'" name="'+pt.paramIndexName+'" value="">'+
+'</td>'+
+'</tr>'+
+'</table>';
+return strPromptOutput;
+}
+function getPFreeHTML(iPrompt)
+{
+var pt=prompts[iPrompt];
+var strPromptOutput=''+
+'<table border="0" cellpadding="0" cellspacing="0">'+
+'<tr>'+
+'<td align="left" class="dialogzone">'+
+'<label for="'+pt.paramName+'">'+
+'<b>'+pt.escapedName+'</b>'+
+(pt.isOptional?('&nbsp;<span style="color:#808080">'+labelOptionalPrompt+'</span>'):'')+
+'</label>'+
+'</td>'+
+'</tr>'+
+'<tr>'+
+'<td align="left">'+
+txtPromptValue[iPrompt].getHTML()+
+'<input type="hidden" id="'+pt.paramIndexName+'" name="'+pt.paramIndexName+'" value="">'+
+'</td>'+
+'</tr>';
+if (pt.inputFormat!="")
+{
+strPromptOutput+='<tr><td align="center" class="dialogzone">'+pt.inputFormat+'</td></tr>';
+}
+strPromptOutput+='</table>';
+return strPromptOutput;
+}
+function getPromptsWidgets()
+{
+for (var i=0; i<iNbPrompts; i++)
+{
+if (prompts[i].hasLOV && prompts[i].isConstrained)
+getPLovConstWidgets(i,this);
+else if (!prompts[i].hasLOV && prompts[i].isConstrained)
+getPWithoutLovConstWidgets(i,this);
+else
+getPFreeWidgets(i,this);
+}
+displayWaitCursor=newBlockWhileWaitWidget();
+promptsToolbar = newPaletteWidget("promptsToolbar");
+curIcon="standard.gif";
+_img="../../../images/main/";
+advButton=addIcn("advButton",8,labelAdvancedButton,"",advancedCB);
+sp();
+okButton=addIcn("okButton",7,labelRunButton,"", submitCB);
+}
+function getPLovConstWidgets(iPrompt,o)
+{
+if (typeof(lstPromptValues)=="undefined") lstPromptValues=new Array();
+if (prompts[iPrompt].type=="Mono")
+lstPromptValues[iPrompt]=newComboWidget(prompts[iPrompt].paramName+"List",onLstChangeCB,true,60,"");
+else
+{
+lstPromptValues[iPrompt]=newMultiColumnList(prompts[iPrompt].paramName+"List",onLstChangeCB,true,o.iListBoxWidth,0,null,null,true);
+lstPromptValues[iPrompt].setLines(o.iListBoxSize);
+}
+}
+function getPWithoutLovConstWidgets(iPrompt,o)
+{
+if (typeof(txtPromptValue)=="undefined") txtPromptValue=new Array();
+txtPromptValue[iPrompt]=newTextFieldWidget(prompts[iPrompt].paramName,onTxtChangeCB,null,null,null,true,"",60);
+}
+function getPFreeWidgets(iPrompt,o)
+{
+if (typeof(txtPromptValue)=="undefined") txtPromptValue=new Array();
+if (prompts[iPrompt].isDate)
+txtPromptValue[iPrompt]=newCalendarTextFieldButton(prompts[iPrompt].paramName+"Calendar",prompts[iPrompt].paramName,onDateChangeCB,null,null,submitCB,true,"",60,null,null,(prompts[iPrompt].inputFormat!="")?(prompts[iPrompt].inputFormat):null);
+else
+txtPromptValue[iPrompt]=newTextFieldWidget(prompts[iPrompt].paramName,onTxtChangeCB,null,null,submitCB,true,"",60);
+}
+function initPromptsUI()
+{
+var bAllowUseLov=(strUseLov=="full")?true:false;
+for (var i=0; i<iNbPrompts; i++)
+{
+if (prompts[i].hasLOV && prompts[i].isConstrained)
+lstPromptValues[i].init();
+else
+txtPromptValue[i].init();
+}
+displayWaitCursor.init();
+okButton.init();
+advButton.init();
+var blnDisabled=(iNbPrompts<1 || !blnRefreshDoc)?true:false;
+okButton.setDisabled(blnDisabled);
+advButton.setDisabled(blnDisabled);
+promptsToolbar.init();
+}
+function fillPromptsUI()
+{
+var blnFilled=true;
+for (var i=0; i<iNbPrompts; i++)
+{
+blnFilled=(prompts[i].value=="" && !prompts[i].isOptional)?false:blnFilled;
+if (prompts[i].hasLOV && prompts[i].isConstrained)
+fillPLovConstUI(i);
+else if (!prompts[i].hasLOV && prompts[i].isConstrained)
+fillPWithoutLovConstUI(i);
+else
+fillPFreeUI(i);
+}
+isPromptsAnswered=blnFilled;
+if (iNbPrompts>0)
+okButton.setDisabled(!blnFilled || !blnRefreshDoc);
+}
+function fillPLovConstUI(iPrompt)
+{
+lstPromptValues[iPrompt].del();
+var arrSelectedIndexes=new Array();
+var arrSelectedValues=new Array();
+if (prompts[iPrompt].value!="")
+{
+var arrTmp=prompts[iPrompt].value.split(';');
+for (var i=0;i<arrTmp.length;i++)
+{
+arrSelectedValues[i]=new Array(2);
+arrSelectedValues[i][0]=arrTmp[i];
+arrSelectedValues[i][1]=0;
+}
+arrSelectedIndexes=prompts[iPrompt].valueIndex.split(';');
+}
+for (var i=0;i<arrSelectedValues.length;i++)
+{
+if (arrSelectedValues[i][1]==0)
+{
+var t=arrSelectedValues[i][0];
+var v=arrSelectedIndexes[i]+'_'+t;
+lstPromptValues[iPrompt].add(t,v,true);
+}
+}
+lstPromptValues[iPrompt].add(labelShowValues,"",false);
+if (prompts[iPrompt].type=="Mono" && arrSelectedValues.length==0)
+lstPromptValues[iPrompt].layer.options.selectedIndex=-1;
+}
+function fillPWithoutLovConstUI(iPrompt)
+{
+txtPromptValue[iPrompt].setValue(prompts[iPrompt].value);
+txtPromptValue[iPrompt].setDisabled(true);
+document.getElementById(prompts[iPrompt].paramIndexName).value=prompts[iPrompt].valueIndex;
+}
+function fillPFreeUI(iPrompt)
+{
+txtPromptValue[iPrompt].setValue(prompts[iPrompt].value);
+document.getElementById(prompts[iPrompt].paramIndexName).value=prompts[iPrompt].valueIndex;
+}
+function resizePrompts()
+{
+var o=this;
+var pContainer=document.getElementById("idPromptsUI");
+pContainer.style.width=''+winWidth()+'px';
+var pSep=document.getElementById("sepToolbar");
+var h=winHeight()-pContainer.offsetTop;
+if (h <= 0) h = winHeight();
+pContainer.style.height=''+h+'px';
+var w=winWidth();
+var iWidth=Math.max(60,w-22);
+for (var i=0; i<iNbPrompts; i++)
+{
+if (prompts[i].hasLOV && prompts[i].isConstrained)
+lstPromptValues[i].resize(iWidth);
+else
+txtPromptValue[i].resize(iWidth);
+}
+var iWidth=Math.max(60,w-10);
+if (w<50)
+document.getElementById("sepToolbar").style.width=''+iWidth+'px';
+else
+document.getElementById("sepToolbar").style.width=''+w+'px';
+}
+function onDateChangeCB()
+{
+onChange(this.text.id);
+}
+function onTxtChangeCB()
+{
+onChange(this.id);
+}
+function onChange(strPromptName)
+{
+var iPrompt=getPromptIndex(strPromptName);
+document.getElementById(prompts[iPrompt].paramIndexName).value="";
+updateOKButton();
+var strValue=document.getElementById(prompts[iPrompt].paramName).value;
+document.getElementById(prompts[iPrompt].paramName).value=processFreeValues(strValue);
+}
+function updateOKButton()
+{
+isPromptsAnswered=true;
+for (var i=0;i<prompts.length;i++)
+{
+if (!prompts[i].isOptional)
+{
+var isList=(prompts[i].hasLOV && prompts[i].isConstrained)?true:false;
+var strElemName=prompts[i].paramName;
+if (isList) strElemName+="List";
+if (isList)
+{
+if (prompts[i].type=="Mono")
+{
+var objElem=document.getElementById(strElemName);
+if (isList)
+isPromptsAnswered=(objElem.selectedIndex==-1)?false:isPromptsAnswered;
+else
+isPromptsAnswered=(objElem.value=="")?false:isPromptsAnswered;
+}
+else
+{
+var sel=lstPromptValues[i].getMultiSelection();
+isPromptsAnswered=(sel.length==0)?false:isPromptsAnswered;
+}
+}
+else
+{
+var objElem=document.getElementById(strElemName);
+isPromptsAnswered=(objElem.value=="")?false:isPromptsAnswered;
+}
+}
+}
+okButton.setDisabled(!isPromptsAnswered || !blnRefreshDoc);
+}
+function onLstChangeCB()
+{
+var lov=this;
+var blnUpdateOKButton=true;
+var value="";
+var valueIndex="";
+var iPrompt=parseInt(lov.id.substring(2));
+iPrompt--;
+if (prompts[iPrompt].type=="Mono")
+{
+var objElem=document.frmQuickPrompt.elements[lov.id];
+var iIndex = objElem.selectedIndex;
+if ((iIndex+1)==objElem.options.length && objElem.options[iIndex].value=="")
+{
+objElem.options[iIndex].selected = false;
+objElem.value=prompts[iPrompt].valueIndex+'_'+prompts[iPrompt].value;
+blnUpdateOKButton=false;
+if (prompts[iPrompt].isLovLoaded)
+{
+selectSingleLoadedValue(iPrompt);
+advancedCB(iPrompt);
+}
+else
+showValues(iPrompt);
+return;
+}
+if (iIndex>=0)
+{
+value=objElem.value;
+var iPos=objElem.value.indexOf('_');
+valueIndex=(iPos>=0)?objElem.value.substring(0,iPos):"";
+}
+}
+else
+{
+var sel=lov.getMultiSelection();
+var nbItems=lov.getCount();
+for (var i=0;i<sel.length;i++)
+{
+if ((sel[i].index+1)==nbItems && sel[i].value=="")
+{
+blnUpdateOKButton=false;
+if (prompts[iPrompt].isLovLoaded)
+{
+selectMultiLoadedValues(iPrompt);
+advancedCB(iPrompt);
+}
+else
+showValues(iPrompt);
+return;
+}
+value+=(i>0)?";":"";
+var iPos=sel[i].value.indexOf('_');
+value+=(iPos>=0)?sel[i].value.substring(iPos+1):sel[i].value;
+valueIndex+=(i>0)?";":"";
+valueIndex+=(iPos>=0)?sel[i].value.substring(0,iPos):"";
+}
+}
+prompts[iPrompt].value=value;
+prompts[iPrompt].valueIndex=valueIndex;
+if (blnUpdateOKButton)
+updateOKButton();
+}
+function selectSingleLoadedValue(iPrompt)
+{
+var lov=lstPromptValues[iPrompt];
+var opts=lov.layer.options;
+opts.selectedIndex=-1;
+var v=prompts[iPrompt].valueIndex+'_'+prompts[iPrompt].value;
+for (var i=0;i<opts.length;i++)
+{
+if (opts[i].value==v)
+{
+opts[i].selected=true;
+break;
+}
+}
+}
+function selectMultiLoadedValues(iPrompt)
+{
+displayWaitCursor.show(true);
+var arrValues=prompts[iPrompt].value.split(';');
+var arrIndexes=prompts[iPrompt].valueIndex.split(';');
+var arrSel=new Array();
+for (var i=0;i<arrValues.length;i++)
+{
+arrSel[i]=arrIndexes[i]+'_'+arrValues[i];
+}
+var lov=lstPromptValues[iPrompt];
+lov.valueSelect(arrSel);
+displayWaitCursor.show(false);
+}
+function updatePLovConstValue()
+{
+for (var i=0;i<prompts.length;i++)
+{
+var pt=prompts[i];
+if (pt.hasLOV && pt.isConstrained)
+{
+var strValue="";
+var strIndex="";
+if (pt.type=="Mono")
+{
+var opts=document.frmQuickPrompt.elements[pt.paramName+"List"].options;
+for (var j=0;j<opts.length;j++)
+{
+if (opts[j].selected)
+{
+if (strIndex!="") strIndex+=';';
+if (strValue!="") strValue+=';';
+var val=opts[j].value;
+var idx=val.indexOf('_');
+if (idx>=0)
+{
+strIndex+=val.substring(0,idx);
+strValue+=val.substring(idx+1);
+}
+else
+strValue+=val;
+}
+}
+}
+else
+{
+var sel=lstPromptValues[i].getMultiSelection();
+for (var j=0;j<sel.length;j++)
+{
+if (strIndex!="") strIndex+=';';
+if (strValue!="") strValue+=';';
+var val=sel[j].value;
+var idx=val.indexOf('_');
+if (idx>=0)
+{
+strIndex+=val.substring(0,idx);
+strValue+=val.substring(idx+1);
+}
+else
+strValue+=val;
+}
+}
+document.getElementById(pt.paramName).value=strValue;
+document.getElementById(pt.paramIndexName).value=strIndex;
+}
+}
+}
+function showValues(iPrompt)
+{
+var url=p._root+"processShowValues"+p._appExt+"?";
+var strQueryParams="sEntry="+p.strEntry+"&iViewerID="+p.iViewerID+"&gIndex="+iPrompt.toString();
+document.frmQuickPrompt.elements["sLovID"].value=prompts[iPrompt].lovID;
+document.frmQuickPrompt.target="HiddenQuickPrompts";
+document.frmQuickPrompt.action=url+strQueryParams;
+document.frmQuickPrompt.submit();
+displayWaitCursor.show(true);
+}
+function initializePrompts()
+{
+for (var i=0;i<iNbPrompts;i++)
+{
+prompts[i]=newBOPrompt(arrPrompts[i]);
+prompts[i].index=i;
+}
+promptsUI=new getPromptsUI();
+container=newWidget("container");
+}
+function resizeCB()
+{
+if (isPageLoaded && isInitWidgets)
+promptsUI.resize();
+}
+function loadCB()
+{
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+p.showAlertDialog(_displayErrorMessage,p._ERR_PROMPTS,2);
+}
+else
+{
+isPageLoaded=true;
+resizeCB();
+}
+}
+function writeMyBody()
+{
+if (!isError)
+{
+initializePrompts();
+promptsUI.getWidgets();
+document.write(promptsUI.getHTML());
+setTimeout("delayedInitWidgets()",1);
+}
+}
+function delayedInitWidgets()
+{
+container.init();
+promptsUI.init();
+promptsUI.resize();
+container.setDisplay(true);
+if (iNbPrompts>0)
+setTimeout("promptsUI.fill()",1)
+else
+document.getElementById("idNoPrompts").style.display='';
+isInitWidgets=true;
+}
+function submitCB()
+{
+p.escapeFormatPainter()
+updateOKButton();
+if (isPromptsAnswered && blnRefreshDoc)
+{
+updatePLovConstValue();
+var strURL=p._root+"processPrompts"+p._appExt+p.urlParamsNoBID(null,null,null,null,null,1);
+strURL += "&defaultRepTitle="+convURL(p._defaultRepTitle);
+if (p.isPDF)
+strURL+="&viewType=P";
+strURL+="&sEmptyLab="+_emptyValueLab;
+document.frmQuickPrompt.target="DlgFrame";
+document.frmQuickPrompt.action=strURL;
+document.frmQuickPrompt.submit();
+p.eventManager.notify(p._EVT_REFRESH_DATA);
+p.launchRefreshWaitDlg(labelRunQueryMsg,true,true,true);
+}
+}
+function advancedCB(iSelPrompt)
+{
+p.escapeFormatPainter()
+if (blnRefreshDoc)
+{
+updatePLovConstValue();
+var strURL=p._root+"getPrompts"+p._appExt+"?sEntry="+p.strEntry+"&iViewerID="+p.iViewerID;
+if (typeof(iSelPrompt)!="undefined") strURL+="&iSelPrompt="+iSelPrompt.toString();
+if (parent.isPDF) strURL+="&viewType=P";
+goAdvPrompts=true;
+document.frmQuickPrompt.target="DlgFrame";
+document.frmQuickPrompt.action=strURL;
+document.frmQuickPrompt.submit();
+p.launchRefreshWaitDlg("Advanced Prompts",false,false,false);
+}
+}
+function addIcn(a,b,c,d,e)
+{
+return promptsToolbar.add(newIconWidget(a,(b!=null)?_img+curIcon:null,e,c,d,16,16,b?b*16:0,0,b?b*16:0,16));
+}
+function sp()
+{
+return promptsToolbar.add();
+}
+function lPaneContextMenu()
+{
+return false;
+}
+</script>
+</head>
+<body class="dialogzone" style="overflow:hidden;" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" onLoad="loadCB()" onUnload="detachEvents()" onresize="resizeCB()" oncontextmenu="return lPaneContextMenu();">
+<script language="javascript">
+writeMyBody();
+</script>
+<iframe name="HiddenQuickPrompts" style="position:absolute;left:-100px;top:-100px;width:10px;height:10px;" src="../../../lib/empty.html"></iframe>
+</body>
+</html>

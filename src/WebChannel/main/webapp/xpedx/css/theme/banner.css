@@ -1,0 +1,43 @@
+.ship_banner
+{
+height:22px;
+background-color:#a8c1e9;
+padding: 0px 10px;
+font-size: 11px;
+/* -moz-border-radius:5px;  
+border-radius: 5px;  
+-webkit-border-radius: 5px;
+border-collapse: separate;
+border: 1px solid #d6d6d6; */
+}
+
+.ship-banner-container
+{
+	background-color:white;
+	height:24px;
+	padding-top:1px;
+	}
+
+.ship_banner p
+{
+ color: #000;
+ font-family:Arial, Helvetica, sans-serif;
+ text-align: left;
+ padding-top: 4px;
+}
+
+.ship_banner a
+{
+	color: #fff;
+	/* float: right; */
+	padding-left: 10px;
+}
+.ship_banner a:hover { text-decoration: underline; }
+
+/*
+		<!-- ship to banner -->
+		<div class="ship_banner">
+		<p>Shopping for &lt;Ship-To Name&gt;, &lt;Ship-To Number&gt; &lt;address 1&gt;, &lt;address 2&gt;, &lt;address 3&gt;, &lt;city&gt;, &lt;state&gt;, &lt;zip+4&gt; &lt;country&gt; <a href="#">[Change]</a> </p>
+		</div>
+		<!-- end ship to banner -->
+*/

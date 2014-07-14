@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for Customer Profile general information</comment>
+	<entry key="organizationCode">xpedx-customer-getGeneralInformation:/Customer/@OrganizationCode,xpedx-cust-GetCustomerCorpInfo:/Customer/@OrganizationCode,cust-getCustomerList:/Customer/@OrganizationCode,customer-getPaymentInformation:/Customer/@OrganizationCode,PaymentTypeListUtil:/PaymentTypeList/@CallingOrganizationCode</entry>
+	<entry key="customerId">xpedx-customer-getGeneralInformation:/Customer/@CustomerID,xpedx-cust-GetCustomerCorpInfo:/Customer/@CustomerID,customer-getPaymentInformation:/Customer/@CustomerID</entry>
+	<entry key="parentCustomerKey">cust-getCustomerList:/Customer/@ParentCustomerKey</entry>
+	
+	<entry key="wCOrganizationCode">getLoggedInCustomer:/Customer/@OrganizationCode</entry>
+	<entry key="wCCustomerId">getLoggedInCustomer:/Customer/@CustomerID</entry>
+</properties>

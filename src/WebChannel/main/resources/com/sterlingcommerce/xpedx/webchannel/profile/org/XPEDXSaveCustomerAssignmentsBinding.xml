@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Binding entries for SaveUserInfo action</comment>
+	<entry key="WCContext.customerId">xpedxCustomerAssignment:/Customer/@CustomerID</entry>
+	<entry key="WCContext.storefrontId">xpedxCustomerAssignment:/Customer/@OrganizationCode</entry>
+</properties>

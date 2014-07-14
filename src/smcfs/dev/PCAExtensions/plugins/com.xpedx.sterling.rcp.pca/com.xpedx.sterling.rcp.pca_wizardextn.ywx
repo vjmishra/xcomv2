@@ -1,0 +1,30 @@
+<Wizards applicationId="YFSSYS00011">
+<Wizard id="com.yantra.pca.ycd.rcp.tasks.orderSummary.wizards.YCDOrderSummaryWizard">
+<WizardEntities>
+	<WizardEntity canBeHidden="true" description="" id="OrderLinesPanel" 
+		impl="com.xpedx.sterling.rcp.pca.orderlines.screen.OrderLinesPanel" last="false" type="PAGE"
+                    xPos="355" yPos="498"/>
+</WizardEntities>
+<WizardTransitions>
+	<WizardTransition id="regularOrderSummary" source="YCDOrderSummaryCompatibilityCheckRule">
+		<Output target="OrderLinesPanel" value="regularOrderSummary"/>
+		<Output target="OrderLinesPanel" value="minimumOrderSummary"/>
+	</WizardTransition>
+</WizardTransitions>
+</Wizard>
+<Wizard id="com.yantra.pca.ycd.rcp.tasks.orderEntry.wizards.YCDOrderEntryWizard">
+	<WizardEntities>
+		<WizardEntity canBeHidden="true" description="" id="OrderLinesPanel" 
+			impl="com.xpedx.sterling.rcp.pca.orderlines.screen.OrderLinesPanel" last="false" type="PAGE"
+	                    xPos="355" yPos="498"/>
+	</WizardEntities>
+	<WizardTransitions>
+		<WizardTransition id="DefTransitionFromSecondScreenRule" source="YCDOrderEntryGetSecondScreenRule">
+			<Output target="DeliveryOptionsPage" value="DeliveryOptionsPage" /> 
+			<Output target="AdvancedLineEntryPage" value="AdvancedLineEntryPage" /> 
+			<Output target="YCDOrderEntryDetermineCustomerPageRule" value="CustomerIdentificationPage" /> 
+			<Output target="OrderLinesPanel" value="MultiLineEntryPage" /> 
+		</WizardTransition>
+	</WizardTransitions>
+</Wizard>
+</Wizards>

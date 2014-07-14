@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Division-wise Item extentions." HasHistory="False" Prefix="XPX" TableName="XPX_ITEM_EXTN">
+			<Attributes>
+				<Attribute ColumnName="ITEM_KEY" DataType="Key" DefaultValue="' '" Description="Refers to the primary key of the YFS_ITEM table." Name="Item_Key" Nullable="false" XMLName="ItemKey"/>
+				<Attribute ColumnName="ITEM_EXTN_KEY" DataType="Key" DefaultValue="' ' " Description="The primary key for the XPX_ITEM_EXTN table." Name="ItemExtnKey" Nullable="false" XMLName="ItemExtnKey"/>
+				<Attribute ColumnName="ENVIRONMENT_ID" DataType="Text-10" DefaultValue="' '" Description="XPEDX external environment Id." Name="EnvironmentID" Nullable="true" XMLName="EnvironmentID"/>
+				<Attribute ColumnName="COMPANY_CODE" DataType="Text-10" DefaultValue="' '" Description="Company Code is used by webMethods as a queue identifier." Name="CompanyCode" Nullable="false" XMLName="CompanyCode"/>
+				<Attribute ColumnName="ITEM_ID" DataType="ItemID" DefaultValue="' '" Description="Legacy Product Number" Name="ItemID" Nullable="false" XMLName="ItemID"/>
+				<Attribute ColumnName="MASTER_PRODUCT_CODE" DataType="ItemID" DefaultValue="' '" Description="Master Product Code" Name="MasterProductCode" Nullable="false" XMLName="MasterProductCode"/>
+				<Attribute ColumnName="XPX_DIVISION" DataType="OrgCode" DefaultValue="' '" Description="XPEDX Division/Branch against which this association is made." Name="XPXDivision" Nullable="false" XMLName="XPXDivision"/>
+				<!-- Removed. 
+				<Attribute ColumnName="CUSTOMER_ID" DataType="CustomerId" DefaultValue="' ' " Description="Used in case of CDI only. Sterling will ignore this from this file; this will be used by the black box for generating entitlements." Name="Customer_ID" Nullable="true" XMLName="CustomerID"/>
+				
+				<Attribute ColumnName="ITEM_STATUS" DataType="ItemStatus" DefaultValue="' '" Description="Product Status: Valid values are ‘S’ for Suspended, blank for Active. This could drive messaging on the site but no functionality." Name="ItemStatus" Nullable="false" XMLName="ItemStatus"/>
+				-->
+				<Attribute ColumnName="ITEM_STOCK_STATUS" DataType="ItemStockStatus" DefaultValue="' '" Description="Valid Values could be ‘CloseOut’, ‘WriteDown’,’Discontinued’ etc. This could be used for site messaging, no functionality driven from this." Name="ItemStockStatus" Nullable="true" XMLName="ItemStockStatus"/>
+				<Attribute ColumnName="ORDER_MULTIPLE" DataType="OrderMultiple" DefaultValue="1" Description="Order Multiple in Item's Base UOM." Name="OrderMultiple" Nullable="false" XMLName="OrderMultiple"/>
+				<Attribute ColumnName="INVENTORY_INDICATOR" DataType="Text-10" DefaultValue="' '" Description="This is a flag with possible values of: W-Warehouse, I-Indirect, M-MILL, BLANK value - indicates assumed as direct item." Name="InventoryIndicator" Nullable="false" XMLName="InventoryIndicator"/>
+			
+				<Attribute ColumnName="ORIGINAL_INDICATOR" DataType="Text-10" DefaultValue="' '" Description="This is a flag with possible values of: W-Warehouse, I-Indirect- indicates assumed as direct item. It is original column of Inventory Indicator "   Name="OriginalIndicator"	  Nullable="false"  XMLName="OriginalIndicator"/>
+
+
+
+				
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			
+			
+				</Attributes>
+			
+			<PrimaryKey Name="XPX_ITM_EXTN_PK">
+                <Attribute ColumnName="ITEM_EXTN_KEY" Name="ItemExtnKey" XmlName="ItemExtnKey"/>
+            </PrimaryKey>
+
+			<Parent ParentTableName="YFS_ITEM" >
+				<Attribute ColumnName="ITEM_KEY" ParentColumnName="ITEM_KEY" />
+			</Parent>
+
+			<Indices>
+				<Index Name="XPX_ITM_EXTN_I01" Unique="True">
+					<Column Name="ITEM_ID" />
+					<Column Name="XPX_DIVISION" />
+					<Column Name="ENVIRONMENT_ID" />
+				</Index>
+				<Index Name="XPX_ITM_EXTN_I02" Unique="False">
+					<Column Name="ITEM_ID" />
+				</Index>
+				<Index Name="XPX_ITM_EXTN_I03" Unique="False">
+					<Column Name="XPX_DIVISION" />
+				</Index>	
+				<Index Name="XPX_ITM_EXTN_I04" Unique="False">
+					<Column Name="ITEM_KEY" />
+				</Index>					
+			</Indices>
+		</Entity>
+
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Division-wise extended Item associations." HasHistory="False" Prefix="XPX" TableName="XPX_ITEM_ASSOCIATIONS">
+			<Attributes>
+				<Attribute ColumnName="ITEM_ASSO_KEY" DataType="Key" DefaultValue="' ' " Description="The primary key for the XPX_ITEM_ASSOCIATIONS table." Name="ItemAssociationKey" Nullable="false" XMLName="ItemAssociationKey"/>
+				<Attribute ColumnName="ITEM_EXTN_KEY" DataType="Key" DefaultValue="' ' " Description="Refers to the primary key of the XPX_ITEM_EXTN table." Name="ItemExtnKey" Nullable="false" XMLName="ItemExtnKey"/>
+				<!-- Associated Item -->
+				<Attribute ColumnName="ASSO_ITEM_ID" DataType="ItemID" DefaultValue="' '" Description="Associated Master Product Code." Name="AssociatedItemID" Nullable="false" XMLName="AssociatedItemID"/>
+				<!-- Association Type -->
+				<Attribute ColumnName="ASSO_TYPE" DataType="AssociationType" DefaultValue="' '" Description="MPC association Type, A-Alternate, C-Complimentary, R-Replacement." Name="AssociationType" Nullable="false" XMLName="AssociationType"/>
+
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_ITEM_ASSO_PK">
+				<Attribute ColumnName="ITEM_ASSO_KEY" Name="ItemAssociationKey"/>
+			</PrimaryKey>
+			<Indices>
+				<Index Name="XPX_ITM_ASSO_I01" Unique="True">
+					<Column Name="ITEM_EXTN_KEY" />
+					<Column Name="ASSO_ITEM_ID" />
+					<Column Name="ASSO_TYPE" />
+				</Index>
+			</Indices>
+			<Parent ParentTableName="XPX_ITEM_EXTN" >
+				<Attribute ColumnName="ITEM_EXTN_KEY" ParentColumnName="ITEM_EXTN_KEY" />
+			</Parent>
+
+		</Entity>
+	</Entities>
+</DBSchema>

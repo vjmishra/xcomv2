@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<YFS_ATP_RULESList TableName="YFS_ATP_RULES">
+<AtpRules AccumulationDays="730" AdvanceNotificationTime="0"
+    AtpRule="Default ATP Rule for BD" AtpRuleKey="2010090121531745198"
+    AtpRuleName="Default ATP Rule for BD" BackwardConsumptionDays="730"
+    ConsiderPoForAlloc=" " Createprogid=".YEntityServlet"
+    Createts="2010-09-01T21:53:17-04:00" Createuserid="admin"
+    ForwardConsumptionDays="730" Lockid="0" MaxInventoryHoldDays="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T21:53:17-04:00"
+    Modifyuserid="ng" OrganizationCode="DEFAULT" PastDueDemandDays="730"
+    PastDueSupplyDays="730" ProcessingTime="0"/>
+<AtpRules AccumulationDays="730" AdvanceNotificationTime="0"
+    AtpRule="Default ATP Rule for CL" AtpRuleKey="2010090122313846409"
+    AtpRuleName="Default ATP Rule for CL" BackwardConsumptionDays="730"
+    ConsiderPoForAlloc=" " Createprogid=".YEntityServlet"
+    Createts="2010-09-01T22:31:38-04:00" Createuserid="admin"
+    ForwardConsumptionDays="730" Lockid="0" MaxInventoryHoldDays="0"
+    Modifyprogid="YDKConfigDeploy" Modifyts="2010-09-01T22:31:38-04:00"
+    Modifyuserid="ng" OrganizationCode="DEFAULT" PastDueDemandDays="730"
+    PastDueSupplyDays="730" ProcessingTime="0"/>
+<AtpRules AccumulationDays="730" AdvanceNotificationTime="0"
+    AtpRule="DEFAULT" AtpRuleKey="DEFAULT" AtpRuleName="DEFAULT"
+    BackwardConsumptionDays="730" ConsiderPoForAlloc="N"
+    Createprogid="XMLMigrator" Createts="2011-07-14T14:38:04-04:00"
+    Createuserid="SYSTEM" ForwardConsumptionDays="730" Lockid="0"
+    MaxInventoryHoldDays="730" Modifyprogid="SYSTEM"
+    Modifyts="2011-07-14T14:38:04-04:00" Modifyuserid="SYSTEM"
+    OrganizationCode="DEFAULT" PastDueDemandDays="730"
+    PastDueSupplyDays="730" ProcessingTime="0"/>
+</YFS_ATP_RULESList>

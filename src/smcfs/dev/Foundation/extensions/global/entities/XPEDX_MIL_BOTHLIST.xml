@@ -1,0 +1,50 @@
+<DBSchema>
+   <Entities>  
+    <Entity EntityType="VIEW" View="true" Extensible="N" TableType="TRANSACTION" TableName="XPEDX_MIL_BOTHLIST" ApiNeeded="Y"
+    	Description="MIL_BOTHLIST" HasHistory="false" Prefix="XPEDX"	XMLName="XpedxMilBothLst">
+        <Attributes>
+				<Attribute ColumnName="MODIFYTS" 	 		DataType="TimeStamp" 	DefaultValue="sysdate" Description="Modify TimeStamp" XMLName="Modifyts"/>
+				<Attribute ColumnName="CREATEUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Creating User ID" XMLName="Createuserid"/>
+				<Attribute ColumnName="CREATEUSERNAME" 		DataType="Text-60" 		DefaultValue="' '" Description="Creating User Name" XMLName="Createusername"/>
+				<Attribute ColumnName="MODIFYUSERID" 		DataType="Text-55" 		DefaultValue="' '" Description="Modifying User ID" XMLName="Modifyuserid"/>
+				<Attribute ColumnName="MODIFYUSERNAME" DataType="Text-60" 	DefaultValue="' '" Description="Modifying User Name" Nullable="true" XMLName="ModifyUserName"/>
+				<Attribute ColumnName="MY_ITEMS_LIST_KEY"  	DataType="Key" 	Description="" Nullable="False" XMLName="MyItemsListKey"/>
+				<Attribute ColumnName="LIST_NAME"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Name"/>
+				<Attribute ColumnName="LIST_DESC"  	 	 	DataType="Text-255" 	DefaultValue=" " Description="" Nullable="False" XMLName="Desc"/>
+				<Attribute ColumnName="CUSTOMER_ID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="CustomerID"/>		
+				<Attribute ColumnName="SHARE_CUSTOMER_ID"   DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="ShareCustomerID"/>		
+				<Attribute ColumnName="LIST_ORDER"  		DataType="Integer"  	DefaultValue="0" Description="" Nullable="False" XMLName="ListOrder"/>
+				<Attribute ColumnName="SHARE_ADMIN_ONLY"  	DataType="Flag"  		DefaultValue="N" Description="" Nullable="False" XMLName="ShareAdminOnly"/>
+				<Attribute ColumnName="SHARE_PRIVATE"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="SharePrivate"/>
+				<Attribute ColumnName="CUSTOMER_KEY"  		DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="CustomerKey"/>
+				<Attribute ColumnName="PARENT_CUSTOMER_KEY"  DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="true" XMLName="ParentCustomerKey"/>
+				<Attribute ColumnName="ROOT_CUSTOMER_KEY"  	DataType="Text-255"  	DefaultValue="' '" Description="" Nullable="False" XMLName="RootCustomerKey"/>
+				<Attribute ColumnName="CREATED_IS_SALES_REP"  	DataType="Text-1"  	DefaultValue="' '" Description="" Nullable="true" XMLName="CREATEDIsSalesRep"/>
+				<Attribute ColumnName="MODIFIED_IS_SALES_REP"  	DataType="Text-1"  	DefaultValue="' '" Description="" Nullable="true" XMLName="MODIFIEDIsSalesRep"/>
+				<Attribute ColumnName="EXTN_CUSTOMER_DIVISION" DataType="OrgCode"	DefaultValue="' '" Description="The ship node" Nullable="true" XMLName="ExtnCustomerDivision"
+				XMLGroup="Extn" />
+				<Attribute ColumnName="EXTN_SUFFIX_TYPE" DataType="Text-2" DefaultValue="' '" Description="ShipTo or BillTo"  Nullable="true" XMLName="ExtnSuffixType" XMLGroup="Extn"/>
+				<Attribute ColumnName="ORGANIZATION_CODE"  	 	 	DataType="OrgCode" 	DefaultValue=" " Description="" Nullable="true" XMLName="OrganizationCode"/>
+				<Attribute ColumnName="ORGANIZATION_NAME"  	 	 	DataType="OrganizationName" 	DefaultValue=" " Description="" Nullable="true" XMLName="OrganizationName"/>
+				<Attribute ColumnName="TOTALITEMS"  	 	 		DataType="Integer" 	DefaultValue=" " Description="" Nullable="true" XMLName="TotalItems"/>
+				<Attribute ColumnName="MSAPNAME"  	 	 			DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="MsapName"/>
+				<Attribute ColumnName="MSAPCUSTOMERID"  		DataType="Text-255" 	DefaultValue=" " Description="" Nullable="true" XMLName="MSAPCUSTOMERID"/>	
+        </Attributes>
+		<PrimaryKey Name="XPEDX_MIL_LST_PK">
+			<Attribute ColumnName="MY_ITEMS_LIST_KEY" />
+		</PrimaryKey>
+	<Indices>
+            <Index Name="CUST_KEY" Unique="False">
+            	<Column Name="CUSTOMER_KEY"/>
+             </Index>
+            
+            <Index Name="PARENT_CUST_KEY" Unique="False">           	
+                <Column Name="PARENT_CUSTOMER_KEY"/>
+            </Index>
+			<Index Name="ROOT_CUST_KEY" Unique="False">           	
+                <Column Name="ROOT_CUSTOMER_KEY"/>
+            </Index>
+      </Indices>
+    </Entity>
+</Entities>
+</DBSchema>

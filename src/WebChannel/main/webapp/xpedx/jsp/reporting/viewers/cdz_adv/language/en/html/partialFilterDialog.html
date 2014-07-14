@@ -1,0 +1,480 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Title zone</title>
+<style type="text/css">
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript" src="../../../lib/palette.js"></script>
+<script language="javascript" src="../../../lib/menu.js"></script>
+<script language="javascript" src="../../../lib/calendar.js"></script>
+<script language="javascript" src="../../../lib/lov.js"></script>
+<script language="javascript" src="../../../lib/bolist.js"></script>
+<script language="javascript" src="../../../lib/multilist.js"></script>
+<script language="javascript" src="../scripts/filterlov.js"></script>
+<script language="javascript" src="../../../scripts/CommonWom.js"></script>
+<script language="javascript" src="../../../scripts/Utils.js"></script>
+<script language="javascript">
+_topfs=getTopFrameset()
+_skin=_topfs._skin
+_img=_topfs._img
+_lang=_topfs._lang
+_root=_topfs._root
+_appExt=_topfs._appExt
+_width=240
+p = parent
+initDom(_root + "lib/images/"+_topfs._skinName+"/", _lang, parent, "filterBy")
+filterLOVDlg=null
+var referer = window.location.search.substring(1)
+_isFromViewer = (referer == "viewer") 
+_isFromDialog = false
+if (_isFromViewer) 
+{
+elts = _topfs.getSelectedElts()
+selElt = elts[0]
+elt = _topfs.searchClassName(selElt,"block")
+if (elt==null)
+{
+elt = _topfs.searchClassName(selElt,"section")
+var children = elt.children
+var lenChildren = children.length
+for (var j = 0; j < lenChildren; j++) 
+{
+if (children[j].isSect)
+{
+selElt = children[j]
+break
+}
+}
+}
+var url =  _root + "incFilter" + _appExt
+url += _topfs.urlParamsNoBID() 
+url += "&sBid=" + selElt.bid
+filtBid = elt.bid
+url += "&filtBid=" + filtBid
+} else {
+var layer=parent.getLayer(referer)
+_isFromDialog = (layer != null)
+}
+</script>
+<script language="javascript">if (_isFromViewer) includeScript(url)  </script>
+<script language="javascript">
+if (window._isSessionInvalid) 
+{
+_topfs.alertSessionInvalid()
+} 
+else  
+{
+if (_isFromViewer)
+{
+_filter = currFil
+} 
+else 
+{
+if(_isFromDialog)
+{
+var dlgfrm=getFrame("DlgFrame",parent);
+p=dlgfrm._widgets[layer._widget];
+_filter=p.getCurrentFilter();
+}
+else
+{
+p=_topfs.leftPane.getFrame();
+_filter = p.getFilter()
+}
+}
+_filterObj=_filter.obj
+_opCount=_filter.getOperandCount()
+_isListOp=_filter.isListOperator()
+_showTextField = true
+_showDateField=(_filterObj.dataType==_topfs._date)
+var arrLOV = null;
+var arrChunk = null;
+var _hasLov = (_filterObj.kind != _topfs._msr) 
+var paramLovName="PV1"
+var bCaseSensitive="no";
+var sSearchValue="";
+}
+</script>
+<script language="javascript">
+var b=t=null 
+if (!window._isSessionInvalid && _hasLov) 
+{
+var url = _root + "incLov" + _appExt;
+url += _topfs.urlParams(false,true);
+url += "&sDPid=" + _filterObj.id;
+url += "&sLovType=CUBE"
+url += "&iChunk=0"
+}
+</script>
+<script language="javascript"> if (_hasLov) includeScript(url) </script>
+<script language="javascript">
+isError=(typeof(_isSessionInvalid)!="undefined" || typeof(_displayErrorMessage)!="undefined")?true:false;
+        function loadCB()
+        {
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+_topfs.alertSessionInvalid();
+else if (typeof(_displayErrorMessage)!="undefined")
+_topfs.showAlertDialog(_displayErrorMessage,"Filter",2);
+return;
+}
+isPageLoaded = true
+initialized = false
+if (!initialized)
+{
+initialized = true     
+filterLOVDlg=newDialogBoxWidget("filterByDlg","Filter", null, null, okCB, cancelCB)
+filterLOVZone=newFrameZoneWidget("filterByZone",null,null)
+filterNoLOV=newWidget("filterNoLOV")
+filterLOVByLeft =newWidget("filterLOVByLeft")
+filterLOVLeft   =newLovWidget("filterByLeft","",_width,10,_showTextField,false,moveCB,refreshCB,searchCB,dblClickLOVCB,_isListOp,enterCB,_showDateField, !_hasLov)
+filterLOVLeft.lovList.sortCB=sortColumnValuesCB;
+filterLOVRight  =newSelectedValuesWidget("filterByRight",_opCount,_isListOp,9,_width,getSelectionCB, true, _hasLov, true,updateOK,opChangeCB) 
+filterLOVInfo=newInfoWidget("filterByInfo","More Information","","Select or enter the the values that you want to show on the selected table or cell.")
+OKButton=newButtonWidget("filterByOK","OK",okCB,60)
+CancelButton=newButtonWidget("filterByCancel","Cancel",cancelCB,60)
+HelpButton=newButtonWidget("filterByHelp","Help",null,60)
+filterLOVDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.filterByDlgInitialized!=true)
+{
+_curWin.filterByDlgInitialized=true
+targetApp
+(
+filterLOVDlg.beginHTML() +
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr><td align="center" valign="middle" width="100%">'+
+filterLOVZone.beginHTML()+
+'<table><tbody><tr>'+
+'<td id="filterLOVByLeft" valign ="top" width="200">'+
+filterLOVLeft.getHTML()+
+'<span class="dialogzone" id="filterNoLOV"><i>' + 'Reminder: A List of Values cannot be provided for a measure.' + '</i></span>' +
+'</td>'+
+'<td>'+
+filterLOVRight.getHTML()+
+'</td>'+
+'</tr></tbody></table>'+
+filterLOVZone.endHTML()+
+'</td></tr>'+
+'<tr><td>'+
+filterLOVInfo.getHTML()+
+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr>'+
+'<td>'+OKButton.getHTML()+'</td>'+
+'<td>'+CancelButton.getHTML()+'</td>'+
+'<td>'+HelpButton.getHTML()+'</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+filterLOVDlg.endHTML()
+)
+}
+filterLOVDlg.init()
+filterLOVZone.init()
+filterLOVByLeft.init()
+filterNoLOV.init()
+filterLOVLeft.init()
+filterLOVRight.init()
+filterLOVInfo.init()
+OKButton.init()
+CancelButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+initWidget()
+filterLOVDlg.show(true)
+}
+function initWidget()
+{
+if (_hasLov)
+{
+if(arrBatchLovTexts[0] && arrLovTexts[0])
+{
+arrChunk = arrBatchLovTexts[0];
+arrLOV = arrLovTexts[0];
+filterLOVLeft.fillLOV( arrLOV, null, arrLovTitle[0],iLovSortType[0], iLovSortedColumnIndex[0] )
+filterLOVLeft.fillChunk( arrChunk );
+}
+else
+{
+filterLOVLeft.fillLOV( new Array(_sNoValue),null );
+}
+}
+filterLOVRight.setValues(_filter.operands[0],_filter.operands[1], _filterObj.name, _filterObj.kind, _filter)
+filterLOVRight.setLabels("","And")
+if(_opCount == 0)
+{
+filterNoLOV.setDisplay(false)
+filterLOVLeft.setDisplay(false)
+filterLOVByLeft.css.width=0
+}
+else
+{
+filterNoLOV.setDisplay(!_hasLov)
+filterLOVLeft.setDisplay(true)
+filterLOVByLeft.css.width=200
+}
+filterLOVLeft.setFormatDate(_topfs._inputFormatDate)
+updateOK();
+}
+function updateOK()
+{
+var b= true;
+if(_opCount == 0) 
+{
+b = false;
+}
+else if(_opCount == 2) 
+{
+if((filterLOVRight.getValues(1)!="")||(filterLOVRight.getValues(2)!=""))
+b = false
+}
+else 
+{
+if(filterLOVRight.getValues(1)!="")
+b = false
+}
+OKButton.setDisabled(b)
+}
+function okCB()
+{
+updateCurrentFilter()
+if (_isFromDialog)
+{
+if(_filter.isQuickFilter) _filter.isQuickFilter=false;
+var sel= p.getCurrentFilterWidget();
+if(sel) sel.setText(_filter.getLabel());
+if(p.changeCB) p.changeCB();
+}
+else if (_isFromViewer)
+{
+var f = self.document.partialFilterDialog
+f.filtBid.value = filtBid
+f.sOperator.value = _filter.operator
+var sOperands = ""
+var val = _filter.operands[0]
+if (val == null) val = ""
+sOperands += "[" + val + "]"
+val = _filter.operands[1]
+if (val == null) val = ""
+sOperands += ",[" + val + "]"
+f.sOperands.value =  "[" + sOperands + "]"
+var url =_root + "processFilterBy" + _appExt
+url += _topfs.urlParamsNoBID() 
+url += "&sBid=" + selElt.bid
+f.action = url
+setTimeout("self.document.partialFilterDialog.submit()",1)
+_topfs.wt()
+} 
+else
+{
+p.updateCurrentFilter()
+}
+filterLOVDlg.show(false)
+var topP = parent.eventManager ? parent : parent.parent
+topP.eventManager.notify(topP._EVT_REINIT_REPORTMAP_NODE)
+}
+function cancelCB()
+{
+if(_filter.isQuickFilter)
+{ 
+p.removeCurrentFilter();
+}
+filterLOVDlg.show(false)
+}
+function updateCurrentFilter()
+{
+_filter.operator = filterLOVRight.operator.getSelection().value
+_filter.operands[0] = filterLOVRight.getValues(1)
+_filter.operands[1] = filterLOVRight.getValues(2)
+}
+function opChangeCB(isList,nbOperand)
+{
+_opCount = nbOperand; 
+_isListOp = isList;
+if(nbOperand == 0)
+{
+filterLOVLeft.setDisplay(false)
+filterNoLOV.setDisplay(false)
+filterLOVByLeft.css.width=0
+updateOK();
+return;
+}
+filterLOVLeft.setDisplay(true)
+filterNoLOV.setDisplay(!_hasLov)
+filterLOVByLeft.css.width=200
+var label=w=lines=showText=showRefresh=moveCB=refreshCB=searchCB=dblClickCB=multi=enterCB=showDate=showTextOnly=null
+multi=isList
+showTextOnly = !_hasLov
+filterLOVLeft.change(label,w,lines,showText,showRefresh,moveCB,refreshCB,searchCB,dblClickCB,multi,enterCB,showDate,showTextOnly)
+var listVals = filterLOVRight.valuesList
+if ((nbOperand == 1) && (listVals.getCount() == 1) && (listVals.getValue(0).value == "")) 
+{
+listVals.del()
+}
+updateOK();
+}
+function getSelectionCB()
+{
+var o=filterLOVRight
+return getLovChoices(filterLOVLeft,o.isList);
+}
+function dblClickLOVCB()
+{
+var o=filterLOVRight
+var sel = filterLOVLeft.getLOVSelection()
+var len=sel.length
+var selValues= new Array();
+if((len == 0) || (len==1 && (sel[0].value == _sNoValue)))return;
+var target= o.getTarget()
+for(var i=0;i<len;i++)
+{
+var v=sel[i].value
+selValues[i]=v;
+if(o.isList)
+{
+if(target.findByValue(v)==null)
+target.add(v,v)
+}
+else
+{
+target.setValue(v)
+break;
+}
+}
+o.updateOperands(selValues,target);
+updateOK();
+}
+function enterCB(ev)
+{
+var o=filterLOVRight
+var target= o.getTarget()
+var arr = null;
+if(isTextInput(ev)) 
+arr = getLovChoices(filterLOVLeft,o.isList,true,false,null) 
+else 
+arr = getLovChoices(filterLOVLeft,o.isList,null,false,true)
+var len=arr.length;
+if(len==0) return;
+if(o.isList)
+{
+for(var i=0;i<len;i++)
+{
+var v=arr[i]
+if(target.findByValue(v)==null)
+target.add(v,v)
+}
+}
+else
+{
+target.setValue(arr[0])
+}
+o.updateOperands(arr,target);
+updateOK();
+}
+function updateReportFltLOV(strAction,s)
+{
+if (strAction != "B")
+{
+arrChunk = s.arrBatchLovTexts[0]
+filterLOVLeft.fillChunk( arrChunk );
+}
+arrLOV =s.arrLovTexts[0]
+if(arrLOV!=null)
+filterLOVLeft.fillLOV( arrLOV, null, s.arrLovTitle[0],s.iLovSortType[0], s.iLovSortedColumnIndex[0]);
+else
+filterLOVLeft.fillLOV( new Array(_sNoValue),null );
+hideBlockWhileWaitWidget();
+}
+function moveCB()
+{
+var strId=""+filterLOVLeft.getChunkSelection().index;
+submitLovAction("B",strId);
+}
+function searchCB()
+{
+submitLovAction("S","0");
+}
+function refreshCB()
+{
+    submitLovAction("R","0");
+}
+function sortColumnValuesCB(colIndex)
+{
+this.sortedColumn=colIndex;
+var sortType=this.cols[colIndex].sortIcn;
+sortType++;
+if (sortType>1) sortType=-1;
+this.sortType=sortType;
+submitLovAction("SRT",0);
+}
+function submitLovAction(strAction,iChunk)
+{
+var url = _topfs._root + "processRefreshLOV" + _appExt + _topfs.urlParams(false,true);
+var strQueryParams=url+"&sLovID="+ _filterObj.id;
+strQueryParams+="&sAction="+strAction+"&sParamName="+paramLovName+"&gIndex=0&iChunk="+iChunk+"&sLovType=Cube"
+if(strAction=="S")
+{
+bCaseSensitive=filterLOVLeft.isCaseSensitive()?"yes":"no";
+sSearchValue=filterLOVLeft.getSearchValue();
+}
+strQueryParams+="&sCaseSensitive="+bCaseSensitive;
+if (strAction=="R")
+{
+filterLOVLeft.setSearchValue("");
+sSearchValue="";
+}
+strQueryParams+="&sEmptyLab="+convURL(_emptyValueLab);
+var colIndex=(typeof(filterLOVLeft.lovList.sortedColumn)!="undefined")?filterLOVLeft.lovList.sortedColumn:0;
+var sortType=(typeof(filterLOVLeft.lovList.sortType)!="undefined")?filterLOVLeft.lovList.sortType:filterLOVLeft.lovList.cols[colIndex].sortIcn;
+strQueryParams+="&colIndex="+colIndex+"&sortType="+sortType;
+generateLOVForm()
+var nLovForm = document.getElementById("nestedLovForm");
+nLovForm.action=strQueryParams
+nLovForm.submit();
+}
+function generateLOVForm()
+{
+var strForm='<form target="lovDlgFrame" style="display:none" name="nestedLovForm" id="nestedLovForm" method="post" action="">'
+var sParam = 'L'+paramLovName+'_searchVal'
+strForm +='<input type="hidden" id="'+sParam+'" name="'+sParam+'" value="'+sSearchValue+'">';
+strForm +='</form>';
+var nLovForm = document.getElementById("nestedLovForm");
+if(nLovForm!=null)
+document.body.removeChild(nLovForm)
+append(document.body,strForm,document)
+}
+function displayErrorMsg(strMsg)
+{
+_topfs.showAlertDialog(strMsg,null,2);
+}
+</script>
+</head>
+<body style="overflow:hidden" class="dialogzone" scroll="no" marginheight="5" marginwidth="5" leftmargin="5" topmargin="5" onLoad="setTimeout('loadCB()',1)" onresize="">
+<iframe name="lovDlgFrame" src="../../../lib/empty.html"></iframe>
+<form target="Report" style="display:none" name="partialFilterDialog" method="post" action="">
+<input type="hidden" name="sOperator" id="sOperator" value="">
+<input type="hidden" name="sOperands" id="sOperands" value="">
+<input type="hidden" name="filtBid" id="filtBid" value="">
+</form>
+</body>
+</html>

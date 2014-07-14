@@ -1,0 +1,374 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2005 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+=============================================================
+--><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Custom Order Dialog</title>
+<style type="text/css"></style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script language="javascript" src="../../../lib/dom.js"></script>
+<script language="javascript" src="../../../lib/dialog.js"></script>
+<script language="javascript">
+p=getTopFrameset()
+_skin=p._skin
+_img=p._img
+_lang=p._lang
+_root=p._root
+_appExt=p._appExt
+p._globalWOMCallback = null;
+p._doNotHideOnLoadReport=false
+customSortListW=260
+lines=18
+initDom(_root + "lib/images/"+p._skinName+"/", _lang, parent, "customSort")
+customSortDlg=null
+expIconLyr=null
+var url =  _root + "incCustomSort" + _appExt
+url += p.urlParamsNoBID()
+ID = requestQueryString(window,"ID")
+if (p.customSortID) ID = p.customSortID
+if (ID && ID != "") {
+url += "&sID=" + ID
+} else {
+var elts = p.getSelectedElts(), selElt = elts[0]
+url += "&sBid=" + selElt.bid
+}
+</script>
+<script language="javascript"> includeScript(url) </script>
+<script language="javascript">
+if (window._isSessionInvalid) {
+p.alertSessionInvalid()
+} 
+isError=typeof(_isSessionInvalid)!="undefined" ?true:false;
+</script>
+<script language="javascript">
+        function loadCB()
+        {
+if (isError)
+{
+if (typeof(_isSessionInvalid)!="undefined")
+p.alertSessionInvalid();
+return;
+}
+if (window.bIncCustomSortOK)
+{
+if (!canApplyCustomSort) {
+p.showAlertDialog("The custom sort cannot be created.","Web Intelligence",p._promptDlgCritical, noCB)
+return
+}
+} else {
+if (isCustomSortDefined) {
+var txt = "This object has more values than the supported limit." + "\n" + "The custom sort cannot be edited."
+txt += "\n" + "Delete custom sort?"
+_delCustomSort = true
+p.showPromptDialog(txt,"Web Intelligence",p._promptDlgCritical, submitCB, noCB)
+} else {
+var txt = "This object has more values than the supported limit." + "\n" + "The custom sort cannot be created."
+p.showAlertDialog(txt,"Web Intelligence",p._promptDlgCritical, noCB)
+}
+return
+}
+isPageLoaded = true
+initialized = false
+if (!initialized)
+{
+initialized = true     
+customSortDlg=newDialogBoxWidget("customSortDlg","Custom Sort", null, null, okCB, cancelCB)
+customOrderZone = newFrameZoneWidget("customOrderZone")
+expID = newWidget("expID")
+tmpValueField= newTextFieldWidget("tmpValueField",txtChangeCB,200,txtChangeCB,addValuesCB,true,null,200)
+addValuesBtn= newButtonWidget("addTmpValueBtn",null,addValuesCB,null,null,"",null,null,_skin+'buttonIcons.gif',16,16,0,0,null,16,0)
+delValuesBtn= newButtonWidget("delTmpValueBtn",null,removeValuesCB,null,null,"",null,null,_skin+'buttonIcons.gif',16,16,0,16,null,16,16)
+customSortList = newListWidget("customSortList", listClickCB, false, customSortListW, lines, null, removeValuesCB)
+sortUpArrow = newButtonWidget("sortUpArrow",null,arrowsClickCB,null,null,"Move up",null,null,_skin+'buttonIcons.gif',16,16,0,64,null,16,64)
+sortDownArrow = newButtonWidget("sortDownArrow",null,arrowsClickCB,null,null,"Move down",null,null,_skin+'buttonIcons.gif',16,16,0,80,null,16,80)
+sortRemoveBtn = newButtonWidget("sortRemoveBtn","Delete Custom Sort", rmBtnCB)
+info = newInfoWidget("customSortInfo","More Information","","Use this dialog box to define the custom sort order of the values of the object you selected to sort.",80)
+OKButton=newButtonWidget("customSortOK","OK","okCB(false)",60)
+CancelButton=newButtonWidget("customSortCancel","Cancel",cancelCB,60)
+HelpButton=newButtonWidget("customSortHelp","Help",null,60)
+applyButton = newButtonWidget("customSortApplyButton", "Apply", 
+"okCB(true)", 60, "Apply", 
+"Apply", 0, 0);
+customSortDlg.attachDefaultButton(OKButton);
+}
+if (_curWin.customSortDlgInitialized!=true)
+{
+_curWin.customSortDlgInitialized=true
+targetApp
+(
+customSortDlg.beginHTML() +
+'<table class="dialogzone" cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr>'+
+'<td align="center" valign="middle" width="100%">'+
+customOrderZone.beginHTML() +
+'<table class="dialogzone" cellpadding="0" cellspacing="0" border="0"><tbody>'+
+'<tr>'+
+'<td align="center" valign="middle" width="100%">'+
+'<table cellspacing="0" cellpadding="2" border="0"><tbody>' + 
+   '<tr>'+
+   '<td class="dialogzone"><b>' + "Temporary values" + '</b></td>'+   
+   '</tr>'+ 
+   '<tr>'+
+   '<td class="dialogzone">' + tmpValueField.getHTML() + '</td>'+   
+   '</tr>'+     
+   '<tr>'+
+   '<td class="dialogzone" width="200">' + "To include a value that does not appear in the document, type it above then add it to the list of values" + '</td>'+   
+   '</tr>'+ 
+   '</tbody></table>' + 
+'</td>'+
+'<td align="center" valign="middle" width="100%">'+
+'<table cellspacing="0" cellpadding="2" border="0"><tbody>' +   
+   '<tr><td>' + addValuesBtn.getHTML() + '</td></tr>'+
+   '<tr><td>' + delValuesBtn.getHTML() + '</td></tr>'+     
+   '</tbody></table>' +
+'</td><td>'+
+'<table cellspacing="0" cellpadding="2" border="0"><tbody>' +
+   '<tr>'+
+   '<td colspan="2">' + 
+   '<table class="dialogzone" cellspacing="2" cellpadding="0" border="0"><tbody><tr>' +
+   '<td valign="bottom">' + simpleImgOffset(_img+"qualificationIcons.gif",16,16,0,0,"expIconID",null,null,null,"bottom") + '</td>' +
+'<td id="expID">' + _expID + '</td>' +
+'</tr></tbody></table>' +
+   '</td>'+
+   '</tr>'+  
+   '<tr>' +
+   '<td>' + customSortList.getHTML() + '</td>' +
+   '<td valign="top" align="left" rowspan="2">' + 
+   '<table cellspacing="1" cellpadding="0" border="0"><tbody>' +
+   '<tr><td align="left">' + sortUpArrow.getHTML() + '</td></tr>' +
+'<tr><td align="left">' + sortDownArrow.getHTML() + '</td></tr>' +
+'</tbody></table>' +
+   '</td>'+
+   '</tr>'+
+   '<tr>'+
+   '<td  valign="top" align="right">' + sortRemoveBtn.getHTML() + '</td>'+   
+   '</tr>'+   
+   '</tbody></table>'+
+   '</td></tr>'+
+'</tbody></table>'+
+customOrderZone.endHTML() +
+'</td></tr>'+
+'<tr>'+
+'<td align="center" valign="middle" width="100%">'+
+'<table class="dialogzone" cellpadding="0" cellspacing="0" border="0" width="100%"><tbody>'+
+'<tr><td>'+
+info.getHTML()+
+'</td></tr>'+
+'<tr><td align="right">'+
+'<table cellpadding="0" cellspacing="5" border="0"><tbody>'+
+'<tr>'+
+'<td>' + OKButton.getHTML() +'</td>'+
+'<td>' + CancelButton.getHTML() +'</td>'+
+'<td>' + HelpButton.getHTML() +'</td>'+
+'<td>' + applyButton.getHTML() + '</td>'+
+'</tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+'</td></tr>'+
+'</tbody></table>'+
+customSortDlg.endHTML()
+)
+}
+_myForm = self.document.customSortForm
+_delCustomSort = false
+initWidgets()
+buildList(customSortList,aCustomSortLOV,aTmpVals)
+listClickCB()
+applyButton.setDisabled(true) 
+customSortDlg.show(true)
+}
+function initWidgets()
+{
+customSortDlg.init()
+customOrderZone.init()
+tmpValueField.init()
+tmpValueField.setHelpTxt("Type new value here")
+addValuesBtn.init()
+addValuesBtn.setDisabled(true)
+delValuesBtn.init()
+expID.init()
+expID.setHTML(_expID) 
+if (expIconLyr==null)
+expIconLyr=getLayer("expIconID")
+var dy = 32 
+switch(_qualif) {
+case p._dim:
+dy=2*16
+break
+case p._dtl:
+dy=4*16
+break
+case p._linkDim:
+dy=8*16
+break
+}
+changeSimpleOffset(expIconLyr,0,dy)
+customSortList.init()
+sortUpArrow.init()
+sortUpArrow.setDisabled(true)
+sortDownArrow.init()
+sortRemoveBtn.init()
+sortRemoveBtn.setDisabled(!isCustomSortDefined)
+info.init()
+OKButton.init()
+OKButton.setDisabled(false)
+CancelButton.init()
+HelpButton.init()
+HelpButton.setDisplay(false)
+applyButton.init()
+}
+function buildList(list, arr, tmpValArr)
+{
+list.del()
+if (!arr || (arr.length==0)) {
+lenList = 0
+return
+}
+lenList = arr.length
+lenTmpVal= tmpValArr.length
+for (var i=0,k=0; i < lenList; i++)
+{
+if ((k < lenTmpVal) && (tmpValArr[k]==i))
+{
+k++;
+list.add(arr[i], "" + arr[i], (i==0), null, true)
+} else {
+list.add(arr[i], "" + arr[i], (i==0))
+}
+}
+}
+function okCB(apply)
+{
+if (applyButton.isDisabled()) { 
+customSortDlg.show(false); 
+return; 
+}
+p.customSortID = apply?ID:null
+var sCustomSortLOV = "" 
+lenList=customSortList.getCount()
+for (var i=0; i < lenList; i++)
+{
+sCustomSortLOV += "[" + customSortList.getValue(i).value + "]"
+if (i < lenList-1) sCustomSortLOV += ","
+}
+_myForm.customSortLOV.value = "[" + sCustomSortLOV + "]"
+p.wt(apply)
+submitCB()
+if (apply)
+{ 
+p._globalWOMCallback = p.customSort_globalWOMCallback;
+customSortDlg.unload()
+} else {
+customSortDlg.show(false)
+}
+applyButton.setDisabled(apply)
+}
+function cancelCB(){
+p.customSortID = null
+customSortDlg.show(false)
+}
+function txtChangeCB(){
+addValuesBtn.setDisabled(tmpValueField.getValue() == "")
+}
+function addValuesCB(){
+var val = tmpValueField.getValue()
+if (val == "") return
+if (customSortList.findByText(val)==null)
+{
+var addPos = customSortList.getSelection().index
+customSortList.add(val,val,true,null,true,null,addPos);
+applyButton.setDisabled(false);
+listClickCB();
+tmpValueField.setValue("");
+addValuesBtn.setDisabled(true);
+}
+else
+{
+p.showAlertDialog("This value already exists. Please enter a different value.","Custom Sort",2);
+}
+}
+function removeValuesCB(){
+var idx = customSortList.getSelection().index
+if (customSortList.isGrayed(idx))
+{
+customSortList.del(idx);
+applyButton.setDisabled(false)
+listClickCB()
+}
+}
+function arrowsClickCB(){
+switch(this.id)
+{
+case 'sortUpArrow': 
+customSortList.move(-1)
+break
+case 'sortDownArrow': 
+customSortList.move(+1)
+break
+}
+listClickCB()
+}
+function listClickCB(){
+lenList=customSortList.getCount()
+if (customSortList.getSelection()) {
+var idx = customSortList.getSelection().index
+sortUpArrow.setDisabled(idx == 0)
+sortDownArrow.setDisabled((idx == (lenList-1)) || (lenList<=1))
+applyButton.setDisabled(false)
+delValuesBtn.setDisabled((lenList==0) || (!customSortList.isGrayed(idx)))
+}
+}
+function rmBtnCB(){
+applyButton.setDisabled(false)
+p.showPromptDialog("Are you sure you want to delete the custom sort?","Delete Custom Sort",p._promptDlgWarning, delSubmitCB, noCB)
+}
+function delSubmitCB()
+{
+_delCustomSort = true
+okCB(true)
+}
+function submitCB()
+{
+var url = _root + "processCustomSort" + _appExt
+url += p.urlParamsNoBID()
+if (ID && ID != "") {
+url += "&sID=" + ID
+} else {
+url += "&sBid=" + selElt.bid
+}
+if (_delCustomSort) url += "&delCS=true"
+p.eventManager.notify(p._EVT_CUSTOMSORT_ACTION)
+if (!window._myForm) {
+p.frameNav("Report", url)
+return
+}
+_myForm.action = url
+setTimeout("document.customSortForm.submit()",1)
+}
+function noCB()
+{
+}
+function displayErrorMsg(strMsg)
+{
+p.showAlertDialog(strMsg,null,2);
+}
+</script>
+</head>
+<body style="overflow:hidden" class="dialogzone" scroll="no" marginheight="5" marginwidth="5" leftmargin="5" topmargin="5" onLoad="setTimeout('loadCB()',1)" onresize="">
+<form name="customSortForm" target="Report" method="post" style="display:none" id="customSortForm">
+<input type="hidden" name="customSortLOV" id="customSortLOV" value="">
+</form>
+</body>
+</html>

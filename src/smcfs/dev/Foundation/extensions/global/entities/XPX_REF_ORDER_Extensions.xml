@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Reference Order" Prefix="XPX" HasHistory="True" TableName="XPX_REF_ORDER_HDR">
+			<Attributes>
+				<Attribute ColumnName="REF_ORDER_HDR_KEY" DataType="Key" DefaultValue="' '" Description="Primary Key" Nullable="false" XMLName="RefOrderHdrKey"/>
+				<!--<Attribute ColumnName="BILL_TO_ID" DataType="ID-40" DefaultValue="' '" Description="BillTo ID" Nullable="true" XMLName="BillToId"/>-->
+				<!--<Attribute ColumnName="BUYER_ORGANIZATION_CODE" DataType="OrgCode" DefaultValue="' '" Description="Buyer Organization code" Nullable="true" XMLName="BuyerOrganizationCode"/>-->
+				<Attribute ColumnName="ORDER_DATE" DataType="TimeStamp" DefaultValue="sysdate" Description="Order date" Nullable="false" XMLName="OrderDate"/>
+				<Attribute ColumnName="CUSTOMERPONO" DataType="Text-100" DefaultValue="' '" Description="Customer PO NO" Nullable="false" XMLName="CustomerPONO"/>
+				<Attribute ColumnName="ENTERPRISE_KEY" DataType="OrgCode" DefaultValue="' '" Description="Enterprise key" Nullable="false" XMLName="EnterpriseKey"/>
+				<!--<Attribute ColumnName="DRAFT_ORDER_FLAG" DataType="Flag" DefaultValue="' '" Description="" Nullable="false" XMLName="DraftOrderFlag"/>-->
+				<Attribute ColumnName="ENTRY_TYPE" DataType="Text-20" DefaultValue="' '" Description="Entry Type" Nullable="false" XMLName="EntryType"/>
+				<Attribute ColumnName="CURRENCY" DataType="Currency" DefaultValue="' '" Description="Currency" Nullable="false" XMLName="Currency"/>
+				<Attribute ColumnName="ETRADING_ID" DataType="OrgCode" DefaultValue="' '" Description="Etrading ID" Nullable="true" XMLName="EtradingID"/>
+				<Attribute ColumnName="BUYER_ID" DataType="OrgCode" DefaultValue="' '" Description="Buyer ID" Nullable="true" XMLName="BuyerID"/>
+				<Attribute ColumnName="SHIP_TO_NAME" DataType="OrganizationName" DefaultValue="' '" Description="Ship To Name " Nullable="true" XMLName="ShipToName"/>
+				<Attribute ColumnName="BILL_TO_NAME" DataType="Text-50" DefaultValue="' '" Description="Bill To NAme " Nullable="true" XMLName="BillToName"/>
+				<Attribute ColumnName="SHIP_TO_ADDR1" DataType="Address" DefaultValue="' '" Description="ShipTo Address Line 1" Nullable="false" XMLName="ShipToAddr1"/>
+				<Attribute ColumnName="SHIP_TO_ADDR2" DataType="Address" DefaultValue="' '" Description="ShipTo Address Line 2" Nullable="false" XMLName="ShipToAddr2"/>
+				<Attribute ColumnName="SHIP_TO_ADDR3" DataType="Address" DefaultValue="' '" Description="ShipTo Address Line 3" Nullable="false" XMLName="ShipToAddr3"/>
+				<Attribute ColumnName="SHIP_TO_ZIP" DataType="ZipCode" DefaultValue="' '" Description="Ship To ZipCode" Nullable="false" XMLName="ShipToZip"/>
+				<Attribute ColumnName="SHIP_TO_CITY" DataType="City" DefaultValue="' '" Description="Ship To City" Nullable="false" XMLName="ShipToCity"/>
+				<Attribute ColumnName="SHIP_TO_STATE" DataType="State" DefaultValue="' '" Description="Ship To State" Nullable="false" XMLName="ShipToState"/>
+
+				<Attribute ColumnName="SHIP_TO_COUNTRY" DataType="Country" DefaultValue="' '" Description="Ship To Country" Nullable="false" XMLName="ShipToCountry"/>
+				<!--<Attribute ColumnName="BILL_TO_ADDR1" DataType="Address" DefaultValue="' '" Description="Bill To Address Line1" Nullable="false" XMLName="BillToAddr1"/>
+				<Attribute ColumnName="BILL_TO_ZIP" DataType="ZipCode" DefaultValue="' '" Description="" Nullable="false" XMLName="BillToZip"/>
+				<Attribute ColumnName="BILL_TO_CITY" DataType="City" DefaultValue="' '" Description="Bill To City" Nullable="false" XMLName="BillToCity"/>
+				<Attribute ColumnName="BILL_TO_STATE" DataType="State" DefaultValue="' '" Description="Bill To State" Nullable="false" XMLName="BillToState"/>-->
+				<Attribute ColumnName="HEADER_COMMENTS" DataType="FreeInstructionText" DefaultValue="' '" Description="Header Comments" Nullable="false" XMLName="HeaderComments"/>
+				<Attribute ColumnName="MSG_HEADER_ID" DataType="VarcharDocumentNo" Description="MSG ID sent by WebMethods on B2B orders" DefaultValue="''" Nullable="true" XMLName="MsgHeaderId"/>
+				<Attribute ColumnName="ATTENTION_NAME" DataType="Text-256" Description="Attention Name" DefaultValue="' '" Nullable="false" XMLName="AttentionName"/>
+				<Attribute ColumnName="HEADER_PROCESS_CODE" DataType="Text-40" Description="Header process code" DefaultValue="' '" Nullable="false" XMLName="HeaderProcessCode"/>
+				<Attribute ColumnName="IS_REPROCESSIBLE_FLAG" DataType="Flag" DefaultValue="'Y'" Description=" " Nullable="true" 
+				Size="" XMLName="IsReprocessibleFlag" />
+				<Attribute ColumnName="IS_MARK_ODR_COMPLETE_FLAG" DataType="Flag" DefaultValue="'N'" Description=" " Nullable="true" 
+				XMLName="IsMarkOdrCompleteFlag" />
+				<Attribute ColumnName="CUSTOMER_NAME" DataType="Text-240" DefaultValue="' '" Description="Customer Name " Nullable="true" XMLName="CustomerName" />
+				<Attribute ColumnName="CUSTOMER_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description="Customer number " Nullable="true" XMLName="CustomerNo" />
+				<Attribute ColumnName="SHIP_METHOD" DataType="Text-40" DefaultValue="' '" Description="ship method"  Nullable="false" XMLName="ShipMethod"/>	
+				<Attribute ColumnName="SHIP_TO_ID" DataType="ID-40" Description="The identifier of the customer that this order is being shipped to." Nullable="true" XMLName="ShipToId"/>
+				<Attribute ColumnName="TOTAL_AMOUNT" DataType="Money" DefaultValue="0" Description=" "  Nullable="true" 
+				XMLName="TotalAmount" />
+				<Attribute ColumnName="SHIP_DATE" DataType="TimeStamp" Description="Ship Date." Name="Ship_Date" Nullable="true" XMLName="ShipDate"/>
+				<Attribute ColumnName="ORDERED_BY_NAME" DataType="Text-256" Description="OrderedByName" Name="OrderedByName" Nullable="true" XMLName="OrderedByName"/>
+				<!-- Attribute added for CR 853 - Error Resolution of B2B (EDI) orders -->
+				<Attribute ColumnName="IS_INVALID_ETRADING_ID" DataType="Flag" DefaultValue="'N'" Description="Denotes an invalid etrading id passed in B2B Order creation" Nullable="false" XMLName="IsInvalidETradingID"/>
+				<Attribute ColumnName="CUSTOMER_DIVISION" DataType="OrgCode" DefaultValue="' '" Description="The customer division of the ShipTo" Nullable="true" Size="" XMLName="CustomerDivision"/>
+				
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_REF_HDR_PK">
+                <Attribute ColumnName="REF_ORDER_HDR_KEY" XmlName="RefOrderHdrKey"/>
+            </PrimaryKey>
+
+			
+		</Entity>
+
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="Reference Order Line" Prefix="XPX" HasHistory="True" TableName="XPX_REF_ORDER_LINE">
+			<Attributes>
+				<Attribute ColumnName="REF_ORDER_LINE_KEY" DataType="Key" DefaultValue="' '" Description="Primary Key" Nullable="false" XMLName="RefOrderLineKey"/>
+				<Attribute ColumnName="REF_ORDER_HDR_KEY" DataType="Key" DefaultValue="' '" Description="Primary Key of parent table" Nullable="false" XMLName="RefOrderHdrKey"/>
+				<!--<Attribute ColumnName="PRIME_LINE_NO" DataType="LineNo" DefaultValue="0" Description="Prime Line No" Nullable="false" XMLName="PrimeLineNO"/>-->
+				<Attribute ColumnName="LINE_TYPE" DataType="LineType" DefaultValue="' '" Description="Line Type" Nullable="false" XMLName="LineType"/>
+				<Attribute ColumnName="UNIT_PRICE" DataType="UnitPrice" DefaultValue="0" Description="Unit Price" Nullable="false" XMLName="UnitPrice"/>
+				<Attribute ColumnName="PRICING_UOM" DataType="UOM" DefaultValue="' '" Description="Pricing UOM" Nullable="false" XMLName="PricingUOM"/>
+				<Attribute ColumnName="ITEM_ID" DataType="ItemID" DefaultValue="' '" Description="Item ID" Nullable="false" XMLName="ItemID"/>
+				<Attribute ColumnName="ITEM_DESC" DataType="ItemDesc" DefaultValue="' '" Description="Item Description(line description)" Nullable="false" XMLName="ItemDesc"/>
+				<Attribute ColumnName="TRANSACTIONAL_UOM" DataType="UOM" DefaultValue="' '" Description="Requested Transactional UOM" Nullable="false" XMLName="TransactionalUOM"/>
+				<Attribute ColumnName="ORDERED_QTY" DataType="Quantity" DefaultValue="0" Description="Ordered Quantity" Nullable="false" XMLName="OrderedQty"/>
+				<!--<Attribute ColumnName="CURRENCY" DataType="Currency" DefaultValue="' '" Description="Currency code" Nullable="false" XMLName="Currency"/>-->
+				<Attribute ColumnName="LINE_NOTES" DataType="FreeInstructionText" DefaultValue="0" Description="Line Notes" Nullable="false" XMLName="LineNotes"/>
+				<Attribute ColumnName="MSG_LINE_ID" DataType="VarcharDocumentNo" Description="MSG ID sent by WebMethods on B2B orders" DefaultValue="''" Nullable="true" XMLName="MsgLineId"/>
+				<Attribute ColumnName="LINE_PROCESS_CODE" DataType="Text-40" Description="Line process code" DefaultValue="' '" Nullable="false" XMLName="LineProcessCode"/>
+				<Attribute ColumnName="CUSTOMER_PRODUCT_CODE" DataType="ItemID" DefaultValue="' '" Description="Customer Product Code" Nullable="false" XMLName="CustomerProductCode"/>
+				<Attribute ColumnName="MANUFACTURER_PRODUCT_CODE" DataType="ItemID" DefaultValue="' '" Description="Manufacturer Product Code" Nullable="false" XMLName="ManufacturerProductCode"/>
+				<Attribute ColumnName="MPC" DataType="ItemID" DefaultValue="' '" Description="Master Product Code"  Nullable="false" XMLName="Mpc"/>
+				<Attribute ColumnName="REQ_LINE_DELVRY_DATE" DataType="TimeStamp" Description=" Requested Line delivery date" Nullable="true" XMLName="ReqLineDelvryDate"/>
+				<Attribute ColumnName="CUSTOMER_LINE_NO" DataType="LineNo" DefaultValue="0" Description="Customer Line No" Nullable="false" XMLName="CustomerLineNO"/>
+				<Attribute ColumnName="CUSTOMER_LINE_PO_NO" DataType="VarcharDocumentNo" DefaultValue="' '" Description="Customer Line PO No." Nullable="false" XMLName="CustomerLinePoNo"/>
+				<Attribute ColumnName="CUSTOMER_LINE_ACCNT_NO" DataType="AccountNo" DefaultValue="' '" Description="Customer Line Account No." Nullable="false" XMLName="CustomerLineAccntNo"/>
+				<Attribute ColumnName="CUST_USER_FIELD1" DataType="Text-50" DefaultValue="' '" Description="Customer Line field 1" Nullable="false" XMLName="CustUserField1"/>
+				<Attribute ColumnName="CUST_USER_FIELD2" DataType="Text-50" DefaultValue="' '" Description="Customer Line field 2" Nullable="false" XMLName="CustUserField2"/>
+				<Attribute ColumnName="CUST_USER_FIELD3" DataType="Text-50" DefaultValue="' '" Description="Customer Line field 3" Nullable="false" XMLName="CustUserField3"/>
+				<!-- Attribute added for CR 853 - Error Resolution of B2B (EDI) orders -->
+				<Attribute ColumnName="IS_INVALID_ITEM_ID" DataType="Flag" DefaultValue="'N'" Description="Denotes an invalid item id passed in B2B Order creation" Nullable="false" XMLName="IsInvalidItemID"/>
+				<Attribute ColumnName="IS_INVALID_UOM" DataType="Flag" DefaultValue="'N'" Description="Denotes an invalid UOM passed in B2B Order creation" Nullable="false" XMLName="IsInvalidUOM"/>
+				
+				
+				<!-- Mandatory columns -->
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was created." Name="Createts"/>
+			    <Attribute ColumnName="MODIFYTS" DataType="TimeStamp" DefaultValue="sysdate" Description="Timestamp when the record was last modified." Name="Modifyts"/>
+			    <Attribute ColumnName="CREATEUSERID" DataType="UserId" DefaultValue="' '" Description="Creating User ID"/>
+			    <Attribute ColumnName="MODIFYUSERID" DataType="UserId" DefaultValue="' '" Description="Modifying User ID"/>
+			    <Attribute ColumnName="CREATEPROGID" DataType="ProgramID" DefaultValue="' '" Description="Creating Program ID"/>
+				<Attribute ColumnName="MODIFYPROGID" DataType="ProgramID" DefaultValue="' '" Description="Modifying Program ID"/>
+			    <Attribute ColumnName="LOCKID" DataType="Lockid" DefaultValue="0" Description="An integer used to track and prevent concurrent modifications."/>
+			</Attributes>
+			
+			<PrimaryKey Name="XPX_REF_LINE_PK">
+                <Attribute ColumnName="REF_ORDER_LINE_KEY" XmlName="RefOrderLineKey"/>
+            </PrimaryKey>
+
+			<Parent ParentTableName="XPX_REF_ORDER_HDR" >
+				<Attribute ColumnName="REF_ORDER_HDR_KEY" ParentColumnName="REF_ORDER_HDR_KEY" />
+			</Parent>
+		</Entity>
+	</Entities>
+</DBSchema>

@@ -1,0 +1,232 @@
+<?xml version="1.0" ?>
+<project name="Build Script For xpedx_smcfs" default="all" basedir=".">
+	<!-- Set the tstamp property in order to use timestamp and datestamp properties -->
+<!--	xpedx Specific CDT Ant script.
+		Author:		Winston Edwards
+		Date:		5/11/2011
+		Environment Specific Targets:
+			Dev Target:		cdt_dev_import
+			Stage Target:	cdt_stage_import
+			Prod Target:	cdt_prod_import
+-->
+	<tstamp/>
+    <property file="xpedxCDTBuild.properties"/>
+	<property environment="env"/>
+
+	<path id="implementation.class.path">
+			
+		<fileset dir="${env.INSTALL_DIR}/jar/smcfs/9.0">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/commons_digester/1_8">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/platform_afc/5_5">
+			<include name="**/*.jar"/>
+		</fileset>
+
+		<fileset dir="${env.INSTALL_DIR}/jar/platform_uifwk">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/platform/5_5">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/log4j/1_2_15">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/repository/eardata/platform/war/yfscommon">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/platform_afc_ui_impl/5_5">
+			<include name="**/*.jar"/>
+		</fileset>	
+
+
+		<fileset dir="${env.INSTALL_DIR}/jar/scecore/9.0">
+			<include name="**/*.jar"/>
+		</fileset>			
+		
+	
+		<fileset dir="${env.INSTALL_DIR}/jar">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${wls.dir}/wlserver_10.3/server/lib">
+			<include name="wlfullclient.jar"/>
+		</fileset>
+		
+		<fileset dir="${devhome}/Foundation/jar">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/commons_collections/3_2">
+			<include name="*.jar"/>
+		</fileset>
+		
+		<fileset dir="${env.INSTALL_DIR}/jar/COM_Add-in/9.0_9.0">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="project.class.path">
+		<path refid="implementation.class.path" />
+	</path>
+
+	<target name="cdt_import_setup" description="Deletes Previous Imported CDT XML Files" >
+		<!-- 
+		04/04/2013-ML: changed process to not rely on zipping the entire CDT export/import.
+		This was done to primarily reduce the size of files checked into GIT/repository. 
+		-->
+		
+		<echo>CDT Target: cdt_import_setup</echo>
+
+		<!-- available file="/xpedx/sterling/Foundation/database/cdt/original-master-db.xml.DO_NOT_USE" property="isFileAvail" value="true" / -->
+		<!-- property name="isFileAvail" value="true" / -->
+		<!-- fail if="isFileAvail" message="Extra Build File Exists! - ${isFileAvail}" / -->
+
+		<!-- echo>isFileAvail=${toString:isFileAvail}</echo -->
+
+		<!-- fail message="Aborting CDT Build - ${isFileAvail}" / -->
+		<!-- Delete directories -->
+		<!-- <delete dir="${cdt.import.dir}" /> -->
+
+		<!-- Re-create directories just in case it was deleted before. This line will just fail if already there. -->
+		<mkdir dir="${cdt.import.dir}" />
+
+		<!-- now get them from master config -->
+		<!-- <unzip src="${cdt.master.config.zip.file}" dest="${cdt.import.dir}"/> -->
+		<!-- Archive the previous import-->
+		<zip destfile="${Xpedx.release.dir}/archive/XpedxMasterConfig_${DSTAMP}_${TSTAMP}.zip" basedir="${cdt.import.dir}" excludes="cdt_metadata.xml" whenempty="create"/>
+		<!-- Copy ydkprefs.xml to /xpedx/sterling/Foundation/resources/ydkresources/ -->
+		<copy file="${cdt.fetch.dir}/ydkprefs.xml" todir="${env.INSTALL_DIR}/resources/ydkresources" />
+
+		<!-- Copy xpedxcdtshell.sh to /xpedx/sterling/Foundation/bin/ -->
+		<copy file="${cdt.fetch.dir}/xpedxcdtshell.sh" todir="${env.INSTALL_DIR}/bin" />
+
+		<exec dir="${env.INSTALL_DIR}/bin" executable="chmod">
+			<arg line="777 xpedxcdtshell.sh"/>
+		</exec>
+
+
+	</target>
+	
+	<target name="cdt_export_setup" description="Deletes Previous Exported CDT XML Files" >
+		<!-- 
+		04/04/2013-ML: changed process to not rely on zipping the entire CDT export/import.
+		This was done to primarily reduce the size of files checked into GIT/repository. 
+		-->
+		<!-- Delete directories -->
+		<!-- <delete dir="${cdt.export.dir}" /> -->
+
+		<!-- Re-create directories just in case it was deleted before. This line will just fail if already there. -->
+		<mkdir dir="${cdt.export.dir}" />
+		
+		<echo>Archiving files to "${Xpedx.release.dir}/archive/XpedxMasterConfig_${DSTAMP}_${TSTAMP}.zip"</echo>
+		<!-- Archive the previous export-->
+		<zip destfile="${Xpedx.release.dir}/archive/XpedxMasterConfig_${DSTAMP}_${TSTAMP}.zip" basedir="${cdt.export.dir}" excludes="cdt_metadata.xml" whenempty="create"/>
+		
+		<!-- Copy xpedxcdtshell.sh to /xpedx/sterling/Foundation/bin/ -->
+		<copy file="${Xpedx.release.dir}/xpedxcdtshell.sh" todir="${env.INSTALL_DIR}/bin" />
+
+		<exec dir="${env.INSTALL_DIR}/bin" executable="chmod">
+			<arg line="777 xpedxcdtshell.sh"/>
+		</exec>
+
+	</target>
+	<target name="cdt_masterconfig_import" depends="cdt_import_setup" description="Imports the CDT XML files Prod Instance">
+
+		<echo>CDT Target: cdt_masterconfig_import</echo>
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.file.db.import}" />
+			<arg value="${cdt.file.db.import.password}"/>
+			<arg value="${cdt.masterconfig.db}"/>
+			<arg value="${cdt.masterconfig.db.password}"/>							  
+		</exec>
+		
+	</target>
+	
+	<target name="cdt_dev_import" depends="cdt_import_setup" description="Imports the CDT XML files Dev Instance">
+
+		<echo>CDT Target: cdt_dev_import</echo>
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.file.db.import}" />
+			<arg value="${cdt.file.db.import.password}"/>
+			<arg value="${cdt.dev.db}"/>
+			<arg value="${cdt.dev.db.password}"/>							  
+		</exec>
+		
+	</target>
+	<!-- note: envrionment name must match what's after the "cdt_xxx_import" below or CDT build won't work. See the buildcdt.sh and other build scripts for more info. -->
+	<target name="cdt_integration_import" depends="cdt_import_setup" description="Imports the CDT XML files for INTEGRATION (INT1) Instance">
+
+		<echo>Executing CDT Target: cdt_integration_import</echo>
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.file.db.import}" />
+			<arg value="${cdt.file.db.import.password}"/>
+			<arg value="${cdt.integration.db}"/>
+			<arg value="${cdt.integration.db.password}"/>							  
+		</exec>
+		
+	</target>
+
+	<target name="cdt_stage_import" depends="cdt_import_setup" description="Imports the CDT XML files Stage Instance">
+
+		<echo>CDT Target: cdt_stage_import</echo>
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.file.db.import}" />
+			<arg value="${cdt.file.db.import.password}"/>
+			<arg value="${cdt.stage.db}"/>
+			<arg value="${cdt.stage.db.password}"/>							  
+		</exec>
+		
+	</target>
+
+	<target name="cdt_prod_import" depends="cdt_import_setup" description="Imports the CDT XML files Prod Instance">
+
+		<echo>CDT Target: cdt_prod_import</echo>
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.file.db.import}" />
+			<arg value="${cdt.file.db.import.password}"/>
+			<arg value="${cdt.prod.db}"/>
+			<arg value="${cdt.prod.db.password}"/>							  
+		</exec>
+		
+	</target>
+	<target name="cdt_masterconfig_export" depends="cdt_export_setup" description="Exports the Master Config as CDT XML Files">
+
+		<exec executable="${env.INSTALL_DIR}/bin/${cdtCommand}">
+			<arg value="${cdt.masterconfig.db}" />
+			<arg value="${cdt.masterconfig.db.password}"/>
+			<arg value="${cdt.file.db.export}"/>	
+			<arg value="${cdt.file.db.export.password}"/>
+		</exec>
+			
+		<!-- 
+		04/04/2013-ML: changed process to not rely on zipping the entire CDT export/import.
+		This was done to primarily reduce the size of files checked into GIT/repository. 
+		-->
+		<!-- Delete directories -->
+		<!-- <delete dir="${cdt.master.config.zip.dir}" /> -->
+
+		<!-- Re-create directories -->
+		<!-- <mkdir dir="${cdt.master.config.zip.dir}" />-->
+		
+		<!-- create a new master config zip -->
+		<!--<zip destfile="${cdt.master.config.zip.file}" basedir="${cdt.export.dir}" excludes="cdt_metadata.xml" whenempty="create"/> -->
+		<!-- Delete the cdt_metadata.xml so it doesn't get imported on the rest of the environments. -->
+		<delete file="${cdt.export.dir}/cdt_metadata.xml" /> 
+		
+	</target>
+</project>
+

@@ -1,0 +1,309 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="xpedx.commonFragment" namespace="/common"
+		extends="commonFragment">
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+		<action name="login" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/XPEDXlogin.jsp</result>
+		</action>
+		<action name="footer" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<!-- param name="resourceId">/swc/common/footer</param -->
+			<result>/xpedx/jsp/common/XPEDXFooter.jsp</result>
+		</action>
+		<action name="xpedxFooter" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<!-- param name="resourceId">/swc/common/footer</param -->
+			<result>/xpedx/jsp/common/XPEDXPrepareFooter.jsp</result>
+		</action>
+		<action name="header"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">2</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result>/xpedx/jsp/common/XPEDXheader.jsp</result>
+		</action>
+		<action name="xpedxHeader"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">2</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result>/xpedx/jsp/common/XPEDXPrepareHeader.jsp</result>
+		</action>
+		<action name="xpedxShiptoHeader"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">2</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result>/xpedx/jsp/common/XPEDXShiptoHeader.jsp</result>
+		</action>
+		<action name="xpedxShiptoHeaderCat3"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">3</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result>/xpedx/jsp/common/XPEDXShiptoHeader.jsp</result>
+		</action>
+		
+		<action name="displayAddressBook"
+			class="com.sterlingcommerce.xpedx.webchannel.common.address.XPEDXGetAddressBookAction">
+			<param name="mashupId">getAddressBook</param>
+			<result name="success">/xpedx/jsp/common/address/XPEDXAddressBook.jsp
+			</result>
+		</action>
+		<action name="xpedxGetAssignedCustomers"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="getPaginatedAssignedCustomers">
+			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+		
+		<action name="xpedxGetAssignedCustomersForOrderList"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="getPaginatedAssignedCustomers">
+			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+		
+		<!-- JIRA 1878 Added for getting preselect Default Ship to in assigned customer list -->
+		<action name="xpedxGetAssignedCustomersForDefaultShipTo"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="getPaginatedAssignedCustomersForDefaultShipTo">
+			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+
+		<!-- JIRA 2737 For Admin - My Profile - User Profile Authorized Locations screen -->
+		<action name="xpedxGetAssignedCustomersForUserProfile"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="getPaginatedAssignedCustomersForDefaultShipTo">
+			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+		
+		<action name="setCurrentCustomerIntoContext"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="setCurrentCustomerIntoContext">
+		</action>
+		<action name="setCurrentCustomerIntoContext-punchout" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"	method="setCurrentCustomerIntoContextFromPunchout">
+				<result name="success" type="redirectAction">
+					<param name="actionName">home</param>
+					<param name="postCustomerSelectionFlag">Y</param>
+					<param name="namespace">/home</param>
+					<param name="parse">true</param>
+				</result>
+		</action>
+		<action name="setCurrentCustomerIntoContext-shipTo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"	method="setCurrentCustomerIntoContextFromShipTo">
+				<result name="success" type="redirectAction">
+					<param name="actionName">home</param>
+					<param name="postCustomerSelectionFlag">Y</param>
+					<param name="namespace">/home</param>
+					<param name="parse">true</param>
+				</result>
+		</action>
+		<action name="refreshCustomerIntoContextForMIL"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHeaderAction">
+			<param name="categoryDepth">2</param>
+			<param name="mashups">xpedx-customer-getHeaderInformation</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetHeaderInformationActionBinding.xml</param>
+			<result name="success" type="redirectAction">
+				<param name="actionName">MyItemsList</param>		
+				<param name="namespace">/myItems</param>   		
+			</result>
+		</action>
+		
+		<action name="setSelectedShipToAsDefault"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="setSelectedShipToAsDefault">
+		</action>
+		<action name="homePageSignUpNow" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/XPEDXHomeSignUpNow.jsp</result>
+		</action>
+		<action name="xpedxBuildSimpleTable"
+			class="com.sterlingcommerce.webchannel.common.SimpleTableBuilderAction">
+			<result name="success">/xpedx/jsp/common/XPEDXSimpleTableBuilder.jsp
+			</result>
+		</action>
+		
+		<action name="xpedxDynamicPromotionsAction"
+			class="com.sterlingcommerce.xpedx.webchannel.common.promotions.XPEDXDynamicPromotionsAction">
+			<result name="error">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJsonFailure.jsp</result>			
+			<result name="success">/xpedx/jsp/common/promotions/XPEDXDynamicPromotions.jsp</result>
+		</action>
+		
+		<action name="xpedxDynamicPromotions"
+			class="com.sterlingcommerce.xpedx.webchannel.common.promotions.XPEDXDynamicPromotions">
+			<result name="error">/xpedx/jsp/catalog/XPEDXAjaxAvailabilityJsonFailure.jsp</result>			
+			<result name="success">/xpedx/jsp/common/promotions/XPEDXDynamicPromotions.jsp</result>
+		</action>
+		<action name="MyContact" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXContactAction">
+			<result>/xpedx/jsp/admin/XPEDXContactUs.jsp</result>
+		</action>
+		<action name="xpedxContactUsSendMail" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXContactAction" 
+		method="sendEmail">
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXContactUsEmailBinding.xml</param>
+			<result>/xpedx/jsp/admin/XPEDXContactUsResponse.jsp</result>
+		</action>
+		<action name="getUOMDescription"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXCommonActions" method="getUOMDescription">
+		</action>
+		<action name="xpedxGetTermsOfAccess" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/XPEDTermsOfAccessModal.jsp</result>
+		</action>
+		<!-- JIRA 3487 Security Question Modal -->
+		<action name="xpedxGetSecurityQuestion" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSetSecurityQuestionAction">
+			<param name="mashups">getOrgSecretQuestionList</param> 
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXSetSecurityQuestionActionBinding.xml</param>
+			<result name="success">/xpedx/jsp/home/XPEDXSecrectQuestionModal.jsp</result>
+		</action>
+		
+		<action name="xpedxPasswordUpdate" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction">
+			<result name="success">/xpedx/jsp/home/XPEDXPasswordUpdateModal.jsp</result>
+		</action>
+		<action name="xpedxPasswordValidation" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordUpdateValidation">
+			<result name="success">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+		</action>
+		<action name="XPEDXPasswordSubmit" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPasswordUpdateAction" method="passwordChange">
+			<param name="mashups">ManagePasswordUpdate</param>
+			<result name="errorPwd">/xpedx/jsp/profile/user/XPEDXPasswordValidationError.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/home</param>
+				<param name="parse">true</param>
+			</result>
+		</action>
+		
+		<action name="xpedxSubmitSecurityQuestion" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSetSecurityQuestionAction" method="saveAnswer">
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/home</param>
+				<param name="parse">true</param>
+			</result>
+		</action>
+		<!-- JIRA 3487 Security Question Modal End -->
+		<action name="MyPrivacyPolicy" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/XPEDXPrivacyPolicy.jsp</result>
+		</action>
+		<action name="MyPrivacyPolicyModal" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/XPEDXPrivacyPolicyForModal.jsp</result>
+		</action>
+		<action name="xpedxPasswordHeader"	class="com.sterlingcommerce.webchannel.core.WCAction">	
+			<result>/xpedx/jsp/common/XPEDXPasswordHeader.jsp</result>
+		</action>
+		
+		<action name="getOrderMultiple"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXCommonActions" method="getOrderMultiple">
+		</action>
+		<action name="getItemUomsURL"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXCommonActions" method="getItemUomsAndConversionsAsString">
+		</action>
+		
+		<action name="XPEDXRegisterUserTOA" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXTermsOfAccessAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+				<param name="namespace">/home</param>
+				<param name="parse">true</param>
+			</result>
+		</action>
+			
+		<!-- <action name="salesReploginFullPage" class="com.sterlingcommerce.webchannel.core.WCAction">
+            <result>/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
+        </action> -->
+			
+		<action name="salesRepLogin"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
+			method="getCustomersForSalesRep">
+			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
+			<result name="error">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
+		</action>
+		<action name="salesrepLogout"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
+			method="logoutSalesRep">
+			<result name="success" type="redirectAction">
+				<param name="actionName">salesReploginFullPage</param>				
+			</result>	
+		</action>
+		<action name="salesRepCustomerLogin"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepCustomerLoginAction">
+			<param name="mashups">XPEDXGetSalesRepCustomersDetails</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/XPEDXGetCustomerDetailsBinding.xml</param>
+			<result name="success">/xpedx/jsp/salesrep/customerlogin.jsp</result>
+			<result name="error">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
+		</action>
+		
+		<action name="pLogin"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+			<result name="success">/xpedx/jsp/punchout/punchoutlogin.jsp</result>				
+		</action>
+		
+		
+	<!--<action name="punchoutCustomerLogin"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+			<result name="success">/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+		</action>-->
+		<action name="searchCustomer"
+			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
+			method="getCustomersForSalesRep">
+			<param name="mashups">XPEDXGetSalesRepCustomersDetails</param>
+			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
+		</action>
+		
+		<action name="xpedxSearchAssignedCustomers"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="searchShipToAddress">
+			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+		<action name="xpedxSearchAssignedCustomersForOrderList"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="searchShipToAddress">
+			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+		<action name="xpedxSearchAssignedCustomersForReporting"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="searchShipToAddress">
+			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/services/XPEDXAssignedCustomersForReporting.jsp
+			</result>
+		</action>
+		<action name="xpedxSearchAssignedCustomersForUserProfile"
+			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+			method="searchShipToAddress">
+			<param name="mashups">XPEDXSearchCustomerAssignmentsPaginated</param>
+			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+			<result name="success">/xpedx/jsp/common/XPEDXAssignedCustomers.jsp
+			</result>
+		</action>
+		
+		<action name="httpaction" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXHTTPAction">
+			<result>/xpedx/jsp/common/XPEDXHTTPData.jsp</result>
+		</action>
+		
+		<action name="megaMenu" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/MegaMenu.jsp</result>
+		</action>
+		<action name="changeShipTo" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/ChangeShipTo.jsp</result>
+		</action>
+		<action name="getAssignedShipToCustomers" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxGetAssignedShipToCustomersAction">		
+			<result type="json"></result>
+		</action>
+	</package>
+</struts>

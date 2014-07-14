@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="B2BInvoice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="EnvironmentId"/>
+        <xs:element ref="Company"/>
+        <xs:element ref="BuyerID"/>
+        <xs:element ref="WebConfirmationNumber"/>
+        <xs:element ref="OrderingDivision"/>
+        <xs:element ref="LegacyOrderNumber"/>
+        <xs:element ref="GenerationNumber"/>
+        <xs:element ref="LegacyOrderType"/>
+        <xs:element ref="InvoiceDistributionFlag"/>
+        <xs:element ref="ShipFromDivision"/>
+        <xs:element ref="CustomerEnvironmentID"/>
+        <xs:element ref="CustomerDivision"/>
+        <xs:element ref="CustomerNumber"/>
+        <xs:element ref="ShipToSuffix"/>
+        <xs:element ref="ShipToName"/>
+        <xs:element ref="AttentionName"/>
+        <xs:element ref="ShipToAddress1"/>
+        <xs:element ref="ShipToAddress2"/>
+        <xs:element ref="ShipToAddress3"/>
+        <xs:element ref="ShipToCity"/>
+        <xs:element ref="ShipToState"/>
+        <xs:element ref="ShipToZIP"/>
+        <xs:element ref="ShipToCountryCode"/>
+        <xs:element ref="BillToSuffix"/>
+        <xs:element ref="BillToName"/>
+        <xs:element ref="BillToAddress1"/>
+        <xs:element ref="BillToAddress2"/>
+        <xs:element ref="BillToAddress3"/>
+        <xs:element ref="BillToCity"/>
+        <xs:element ref="BillToState"/>
+        <xs:element ref="BillToZIP"/>
+        <xs:element ref="BillToCountryCode"/>
+        <xs:element ref="CustomerHeaderPONumber"/>
+        <xs:element ref="ShipDate"/>
+        <xs:element ref="HeaderComments"/>
+        <xs:element ref="OrderedByName"/>
+        <xs:element ref="OrderCreateDate"/>
+        <xs:element ref="CurrencyCode"/>
+        <xs:element ref="TotalShippableValue"/>
+        <xs:element ref="TotalOrderValue"/>
+        <xs:element ref="OrderSpecialCharges"/>
+        <xs:element ref="TotalOrderFreight"/>
+        <xs:element ref="TotalOrderTax"/>
+        <xs:element ref="InvoicedDate"/>
+        <xs:element ref="LDInvoiceNumber"/>
+        <xs:element ref="ShipVia"/>
+        <xs:element ref="CreditTerms"/>
+        <xs:element ref="SalesTaxPercentage"/>
+        <xs:element ref="SalesTaxAmount"/>
+        <xs:element ref="InvoiceTotal"/>
+        <xs:element ref="TotalDiscountAllowed"/>
+        <xs:element ref="SCACNumber"/>
+        <xs:element ref="CarrierNameDescription"/>
+        <xs:element ref="TermsNetDays"/>
+        <xs:element ref="TermsPercent"/>
+        <xs:element ref="CashDiscountDays"/>
+        <xs:element ref="DueDate"/>
+        <xs:element ref="RemitToDUNSNumber"/>
+        <xs:element ref="RemitToName"/>
+        <xs:element ref="RemitAddress1"/>
+        <xs:element ref="RemitAddress2"/>
+        <xs:element ref="RemitCity"/>
+        <xs:element ref="RemitState"/>
+        <xs:element ref="RemitZip"/>
+        <xs:element ref="BillToDUNSNumber"/>
+        <xs:element ref="SellerDUNSNumber"/>
+        <xs:element ref="ShiptoStoreNumber"/>
+        <xs:element ref="EmailAddress"/>
+        <xs:element ref="eTradingID"/>
+        <xs:element ref="LineItems"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EnvironmentId">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="Company">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BuyerID">
+    <xs:simpleType>
+      <xs:restriction  base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="WebConfirmationNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="OrderingDivision">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LegacyOrderNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="GenerationNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LegacyOrderType">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="InvoiceDistributionFlag">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipFromDivision">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerEnvironmentID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerDivision">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToSuffix">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="AttentionName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToAddress1">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToAddress2">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToAddress3">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToCity">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToState">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToZIP">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipToCountryCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToSuffix">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToAddress1">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToAddress2">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToAddress3">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToCity">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToState">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToZIP">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToCountryCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerHeaderPONumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="HeaderComments">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="OrderedByName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="OrderCreateDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CurrencyCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TotalShippableValue">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TotalOrderValue">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="OrderSpecialCharges">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TotalOrderFreight">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TotalOrderTax">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="InvoicedDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LDInvoiceNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipVia">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CreditTerms">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="SalesTaxPercentage">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="SalesTaxAmount">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="InvoiceTotal">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TotalDiscountAllowed">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="SCACNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CarrierNameDescription">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TermsNetDays">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="TermsPercent">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CashDiscountDays">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="DueDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitToDUNSNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitToName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitAddress1">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitAddress2">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitCity">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitState">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RemitZip">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BillToDUNSNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="SellerDUNSNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShiptoStoreNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="EmailAddress">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="eTradingID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineItems">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="LineItem"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LineItem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="WebLineNumber"/>
+        <xs:element ref="LegacyLineNumber"/>
+        <xs:element ref="LineDistributionNumber"/>
+        <xs:element ref="LineType"/>
+        <xs:element ref="LegacyProductCode"/>
+        <xs:element ref="CustomerProductCode"/>
+        <xs:element ref="BaseUnitOfMeasure"/>
+        <xs:element ref="OrderedQtyInBase"/>
+        <xs:element ref="ShippableQtyInBase"/>
+        <xs:element ref="BackOrderQtyInBase"/>
+        <xs:element ref="PriceUnitOfMeasure"/>
+        <xs:element ref="UnitPrice"/>
+        <xs:element ref="LineDescription"/>
+        <xs:element ref="RequestedUnitOfMeasure"/>
+        <xs:element ref="OrderedQtyInRequestedUoM"/>
+        <xs:element ref="ShippableQtyInRequestedUoM"/>
+        <xs:element ref="BackOrderQtyInRequestedUoM"/>
+        <xs:element ref="CustomerLineSequenceNumber"/>
+        <xs:element ref="CustomerLinePONumber"/>
+        <xs:element ref="CustomerLineAccountNumber"/>
+        <xs:element ref="CustomerLineField1"/>
+        <xs:element ref="CustomerLineField2"/>
+        <xs:element ref="CustomerLineField3"/>
+        <xs:element ref="ShipFromBranch"/>
+        <xs:element ref="LineNotes"/>
+        <xs:element ref="LineTax"/>
+        <xs:element ref="LineTotal"/>
+        <xs:element ref="ShippableQtyLineTotal"/>
+        <xs:element ref="LDOrderNumber"/>
+        <xs:element ref="ManufacturerItemNumber"/>
+        <xs:element ref="UnitWeight"/>
+        <xs:element ref="WeightPerCode"/>
+        <xs:element ref="ExtendedWeight"/>
+        <xs:element ref="FSCCertificationCode"/>
+        <xs:element ref="SFICertificationCode"/>
+        <xs:element ref="PEFCCertificationCode"/>
+        <xs:element ref="LineShipDate"/>
+        <xs:element ref="CustomerPODate"/>
+        <xs:element ref="LineSalesTaxPercentage"/>
+        <xs:element ref="BasisWeight"/>
+        <xs:element ref="RollWidth"/>
+        <xs:element ref="RollDiameter"/>
+        <xs:element ref="Brand"/>
+        <xs:element ref="Unspsc"/>
+        <xs:element ref="PklvOneUPC"/>
+        <xs:element ref="PklvTwoUPC"/>
+        <xs:element ref="PklvThreeUPC"/>
+        <xs:element ref="PklvFourUPC"/>
+        <xs:element ref="PklvFiveUPC"/>
+        <xs:element ref="PromotionCode"/>
+        <xs:element ref="AdjustedAmount"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="WebLineNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LegacyLineNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineDistributionNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineType">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LegacyProductCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerProductCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BaseUnitOfMeasure">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="OrderedQtyInBase">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShippableQtyInBase">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BackOrderQtyInBase">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PriceUnitOfMeasure">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="UnitPrice">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineDescription">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RequestedUnitOfMeasure">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="OrderedQtyInRequestedUoM">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShippableQtyInRequestedUoM">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BackOrderQtyInRequestedUoM">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerLineSequenceNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerLinePONumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerLineAccountNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerLineField1">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerLineField2">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerLineField3">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShipFromBranch">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineNotes">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineTax">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineTotal">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ShippableQtyLineTotal">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LDOrderNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ManufacturerItemNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="UnitWeight">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="WeightPerCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="ExtendedWeight">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="FSCCertificationCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="SFICertificationCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PEFCCertificationCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineShipDate">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="CustomerPODate">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="LineSalesTaxPercentage">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="BasisWeight">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RollWidth">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RollDiameter">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="Brand">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="Unspsc">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PklvOneUPC">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PklvTwoUPC">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PklvThreeUPC">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PklvFourUPC">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PklvFiveUPC">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="PromotionCode">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="AdjustedAmount">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+</xs:schema>
