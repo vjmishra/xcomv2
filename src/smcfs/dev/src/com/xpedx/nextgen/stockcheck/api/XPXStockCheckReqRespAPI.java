@@ -32,20 +32,24 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private static final String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
 	private static final String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
 
+	private static final String ERROR_LEVEL_COMPLETE_SUCCESS = "0";
+	private static final String ERROR_LEVEL_PARTIAL_FAILURE = "1";
+	private static final String ERROR_LEVEL_COMPLETE_FAILURE = "2";
 	private static final String errorMessage_503 = "503 - An application error has occurred. If this error persists, please call the eBusiness " +
 			"Customer Support desk at 1-877-269-1784.";
-	private static final String errorMessage_105 = "105 – The stock check request is not in the correct format.  " +
+	private static final String errorMessage_105 = "105 - The stock check request is not in the correct format.  " +
 			"Please contact your CSR or eBusiness Customer Support at 1- 877-269-1784.";
-	private static final String errorMessage_104 = "104 – Please restrict your Stock Check request to 200 items or less.";
+	private static final String errorMessage_104 = "104 - Please restrict your Stock Check request to 200 items or less.";
 	private static final String errorMessage_100 = "100 - Sorry, we could not verify the User ID / Password that was sent.";
 	private static final String errorMessage_101 = "101 - Sorry, the user credentials supplied is not authorized to access the Stock Check Web Service.";
 	private static final String errorMessage_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
+
+	private static final String B2BSourceIndicator = "1";
 
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
 	private static Map<String,String> uomDescMap;
 
-	private final String B2BSourceIndicator = "1";
 
 	static {
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
@@ -60,9 +64,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 	public Document sendStockCheckResponse(YFSEnvironment env, Document inputXML) throws YFSUserExitException, RemoteException
 	{
-		// The uncompleted version of this code from the past called API that doesn't exist now.
-		// So replaced with call to existing P&A that MIL uses.
-
 		log.info("Received Stock Check Web Service request");
 		log.debug("The stock check input xml is: "+SCXmlUtil.getString(inputXML));
 
@@ -136,18 +137,18 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		  else
 		  {
 			  //The following comment and errorDescription seem wrong - is this else actually for problem on creating P&A *request*???
-		    	//This is the stock check error document.
-                com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
+			  //This is the stock check error document.
+			  com.xpedx.nextgen.common.cent.Error errorObject = new com.xpedx.nextgen.common.cent.Error();
 
-				errorObject.setTransType("B2B-PA");
-				errorObject.setErrorClass("Unexpected / Invalid");
-				errorObject.setInputDoc(inputXML);
+			  errorObject.setTransType("B2B-PA");
+			  errorObject.setErrorClass("Unexpected / Invalid");
+			  errorObject.setInputDoc(inputXML);
 
-				YFSException exceptionMessage = new YFSException();
-				exceptionMessage.setErrorDescription("P&A returned a null response");
+			  YFSException exceptionMessage = new YFSException();
+			  exceptionMessage.setErrorDescription("P&A returned a null response");
 
-				ErrorLogger.log(errorObject, env);
-		    	return pAndArequestInputDocument;
+			  ErrorLogger.log(errorObject, env);
+			  return pAndArequestInputDocument;
 		    }
 	    }
 		else
@@ -182,7 +183,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 
 		Element errorCodeElement = stockCheckErrorDoc.createElement("ErrorCode");
-		errorCodeElement.setTextContent("2");
+		errorCodeElement.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
 		rootErrorInfo.appendChild(errorCodeElement);
 
 		Element errorMessageElement = stockCheckErrorDoc.createElement("ErrorMessage");
@@ -202,8 +203,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		Element userPassword = stockCheckErrorDoc.createElement("UserPassword");
 		userPassword.setTextContent(SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserPassword").getTextContent());
 		senderCredentials.appendChild(userPassword);
-
-
 
 		/*****************************************************************************/
 
@@ -247,6 +246,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private boolean checkIfLoginValid(YFSEnvironment env, Element stockCheckInputDocRoot)
 	{
 		boolean isLoginValid = true;
+
+		//TODO if empty request is received (just nothing inside xpedxStockCheckWSRequest) then NPE occurs in this method
 
 		String loginId = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserEmail").getTextContent();
 
@@ -434,7 +435,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  item.appendChild(indexID);
 
 					  Element xpedxPartNumber = stockCheckResponseDocument.createElement("xpedxPartNumber");
-					  xpedxPartNumber.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent());
+					  String legacyProductCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent();
+					  xpedxPartNumber.setTextContent(legacyProductCode);
 					  item.appendChild(xpedxPartNumber);
 
 					  //Retrieving CustomerItemNo from XRef table using legacy product code passed
@@ -456,22 +458,32 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  unitOfMeasure.setTextContent(convertedBaseUom);
 					  item.appendChild(unitOfMeasure);
 
-					  //Dont know what to map(Level 3 error codes)
-					  Element errorCode2 = stockCheckResponseDocument.createElement("ErrorCode");
-					  errorCode2.setTextContent("0");
-					  item.appendChild(errorCode2);
 
-					  //Dont know what to map(Level 3 error codes)
+					  // Process MAX error codes as Level 3 errors
+					  Element errorCode2 = stockCheckResponseDocument.createElement("ErrorCode");
 					  Element errorMessage2 = stockCheckResponseDocument.createElement("ErrorMessage");
+					  String maxErrorCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineStatusCode").getTextContent();
+					  String respErrorCode = ERROR_LEVEL_COMPLETE_SUCCESS;
+					  String respErrorMessage = "";
+
+					  if (Integer.parseInt(maxErrorCode) != 0) {
+						  log.info("SCWS: MAX returned error on P&A for item " + legacyProductCode +" - "+ maxErrorCode); //TODO make debug
+						  respErrorCode = ERROR_LEVEL_COMPLETE_FAILURE;
+						  //TODO map MAX codes to messages - for now create temp message with code
+						  respErrorMessage = "MAX LineStatusCode: " + maxErrorCode;
+					  }
+					  errorCode2.setTextContent(respErrorCode);
+					  errorMessage2.setTextContent(respErrorMessage);
+					  item.appendChild(errorCode2);
 					  item.appendChild(errorMessage2);
 
-					  Element customerNumber = stockCheckResponseDocument.createElement("CustomerNumber");
 
-					  //Replacing customerid with SAP Parent account number
+					  // Replacing customerid with SAP Parent account number
+					  Element customerNumber = stockCheckResponseDocument.createElement("CustomerNumber");
 					  customerNumber.setTextContent(sapParentAccountNo);
 					  item.appendChild(customerNumber);
 
-					  Document getItemDetailsOutputDoc = getItemDetails(env,SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent());
+					  Document getItemDetailsOutputDoc = getItemDetails(env,legacyProductCode);
 					  log.debug("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc));
 
 					  Element getCategoryOutputDocRoot =  getItemDetailsOutputDoc.getDocumentElement();
@@ -612,7 +624,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 				      }//end no warehouse info in P&A
 
-					  // Order Multiple - should this come from P&A or ItemBranch??
+					  // Order Multiple - TODO this likely needs to be changed to come from P&A rather than ItemBranch
 					  // Logic for OrderMultiple and OrderMultiple Message and ItemStatus by invoking ItemBranch table
 				      Document getItemBranchDetailsOutputDoc = getItemBranchDetails(env, envtId, companyCode, shipFromBranch, xpedxPartNumber.getTextContent());
 				      Element getXPXItemBranchListOutputDocRoot = getItemBranchDetailsOutputDoc.getDocumentElement();
@@ -640,16 +652,16 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						{
 							if(inventoryIndicator.equalsIgnoreCase("M"))
 							{
-								errorCode2.setTextContent("2");
-								errorMessage2.setTextContent("1000 – This item is currently not stocked in your primary warehouse. " +
+								errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+								errorMessage2.setTextContent("1000 - This item is currently not stocked in your primary warehouse. " +
 										"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
 										"Customer Support at 1- 877-269-1784.");
 							}
 						}
 						else if(XPXItemExtnElement!=null)
 						{
-								errorCode2.setTextContent("2");
-								errorMessage2.setTextContent("1000 – This item is currently not stocked in your primary warehouse. " +
+								errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+								errorMessage2.setTextContent("1000 - This item is currently not stocked in your primary warehouse. " +
 										"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
 										"Customer Support at 1- 877-269-1784.");
 						}
@@ -760,67 +772,73 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  else
 					  {
 						  //Item does not exist in catalog, so its error code
-						  errorCode2.setTextContent("2");
-						  errorMessage2.setTextContent("1003 – The item is not stocked in the Ordering Warehouse. " +
+						  errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+						  errorMessage2.setTextContent("1003 - The item is not stocked in the Ordering Warehouse. " +
 						  		"Please enter another Part Number.");
 					  }
 
-					  if(!errorCode2.getTextContent().equalsIgnoreCase("2"))
-						{
-							errorCode2.setTextContent("0");
-						}
+					  if (!errorCode2.getTextContent().equalsIgnoreCase(ERROR_LEVEL_COMPLETE_FAILURE))
+					  {
+						  errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_SUCCESS);
+					  }
 
-						log.debug("The final item element is: "+SCXmlUtil.getString(item));
-						items.appendChild(item);
+					  log.debug("The final item element is: "+SCXmlUtil.getString(item));
+					  items.appendChild(item);
 				}
 			}
-		}
+		} // end Items
 
 		stockCheckResponse.appendChild(items);
 
-		//Setting error code at Level 2...checking if one or more items have succeeded or failed.
+		// Setting error code at Level 2...checking if one or more items have succeeded or failed.
+		// Note: code above seems to force only complete failure or success so why check partial here??
 		NodeList itemListInStockCheckResponse = items.getElementsByTagName("Item");
 		int countError2 = 0;
 		int countError1 = 0;
 		int countError0 = 0;
-		for(int i=0; i<itemListInStockCheckResponse.getLength();i++)
+		int numItemsInResponse = itemListInStockCheckResponse.getLength();
+
+		for (int i=0; i<numItemsInResponse;i++)
 		{
 			Element itemElement = (Element) itemListInStockCheckResponse.item(i);
 
 			String errorCodeValue = SCXmlUtil.getXpathElement(itemElement, "./ErrorCode").getTextContent();
 
-			if(errorCodeValue!=null && errorCodeValue.trim().length()>0)
+			if (errorCodeValue!=null && errorCodeValue.trim().length()>0)
 			{
-				if(errorCodeValue.equalsIgnoreCase("2"))
+				if (errorCodeValue.equalsIgnoreCase(ERROR_LEVEL_COMPLETE_FAILURE))
 				{
 					countError2 ++;
 				}
-				if(errorCodeValue.equalsIgnoreCase("1"))
+				if (errorCodeValue.equalsIgnoreCase(ERROR_LEVEL_PARTIAL_FAILURE)) //probably unused
 				{
 					countError1 ++;
 				}
-				if(errorCodeValue.equalsIgnoreCase("0"))
+				if (errorCodeValue.equalsIgnoreCase(ERROR_LEVEL_COMPLETE_SUCCESS))
 				{
 					countError0 ++;
 				}
 		 	}
 		}
+		if (countError2 > 0) {
+			log.info("SCWS response has " + countError2 + " item failures (out of " + numItemsInResponse + " items)");
+		}
 
-		if(countError2==itemListInStockCheckResponse.getLength())
+		if (countError2 == numItemsInResponse)
 		{
-			errorCode1.setTextContent("2");
-			errorMessage1.setTextContent("1011 – One or more Items have not completely succeeded. " +
+			errorCode1.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+			errorMessage1.setTextContent("1011 - One or more Items have not completely succeeded. " +
 					"Please check the item level error for more details.");
 		}
-		else if(countError1 > 0 || (countError2 > 0 && countError2!=itemListInStockCheckResponse.getLength()))
+		else if (countError1 > 0 || (countError2 > 0 && countError2!=numItemsInResponse))
 		{
-			errorCode1.setTextContent("1");
-			errorMessage1.setTextContent("1011 – One or more Items have not completely succeeded. " +
+			errorCode1.setTextContent(ERROR_LEVEL_PARTIAL_FAILURE);
+			errorMessage1.setTextContent("1011 - One or more Items have not completely succeeded. " +
 					"Please check the item level error for more details.");
 		}
-		else if(countError0==itemListInStockCheckResponse.getLength())
+		else if (countError0 == numItemsInResponse)
 		{
-			errorCode1.setTextContent("0");
+			errorCode1.setTextContent(ERROR_LEVEL_COMPLETE_SUCCESS);
 		}
 
 		stockCheckResponses.appendChild(stockCheckResponse);
@@ -835,15 +853,15 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 			Element errorCodeSecondLevel  = (Element) stockChkResponse.getElementsByTagName("ErrorCode").item(0);
 
-			if(errorCodeSecondLevel.getTextContent().equalsIgnoreCase("2"))
+			if(errorCodeSecondLevel.getTextContent().equalsIgnoreCase(ERROR_LEVEL_COMPLETE_FAILURE))
 			{
 				countError2SecondLevel ++;
 			}
-			if(errorCodeSecondLevel.getTextContent().equalsIgnoreCase("1"))
+			if(errorCodeSecondLevel.getTextContent().equalsIgnoreCase(ERROR_LEVEL_PARTIAL_FAILURE))
 			{
 				countError1SecondLevel ++;
 			}
-			if(errorCodeSecondLevel.getTextContent().equalsIgnoreCase("0"))
+			if(errorCodeSecondLevel.getTextContent().equalsIgnoreCase(ERROR_LEVEL_COMPLETE_SUCCESS))
 			{
 				countError0SecondLevel ++;
 			}
@@ -851,19 +869,21 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		if(countError2SecondLevel==stockCheckResponseList.getLength())
 		{
-			errorCode.setTextContent("2");
-			errorMessage.setTextContent("1011 – One or more Items have not completely succeeded. " +
+			errorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+			errorMessage.setTextContent("1011 - One or more Items have not completely succeeded. " +
 					"Please check the item level error for more details.");
+			log.info("SCWS response was complete failure");
 		}
 		else if(countError1SecondLevel > 0 || (countError2SecondLevel > 0 && countError2SecondLevel!=stockCheckResponseList.getLength()))
 		{
-			errorCode.setTextContent("1");
-			errorMessage.setTextContent("1011 – One or more Items have not completely succeeded. " +
+			errorCode.setTextContent(ERROR_LEVEL_PARTIAL_FAILURE);
+			errorMessage.setTextContent("1011 - One or more Items have not completely succeeded. " +
 					"Please check the item level error for more details.");
+			log.info("SCWS response contained partial failure");
 		}
 		else if(countError0SecondLevel==stockCheckResponseList.getLength())
 		{
-			errorCode.setTextContent("0");
+			errorCode.setTextContent(ERROR_LEVEL_COMPLETE_SUCCESS);
 		}
 
 		return stockCheckResponseDocument;
