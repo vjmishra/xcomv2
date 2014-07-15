@@ -261,7 +261,15 @@ h4 {
    font-weight: normal;
  }
  .filterinput{
- margin-left:-29px;
+	background: url(../../images/icons/magnify.jpg) no-repeat scroll 3px 6px #FFFFFF;
+	border: 1px solid #D9D9D9;
+	border-radius: 0;
+	color: #000000;
+	font-size: 12px;
+	height: 25px;
+	padding: 1px 0 0 22px;
+	width: 138px;
+ 	margin-left:-29px;
  }
  .ul-po-results-error{
  font-family: Arial,Helvetica,sans-serif;
