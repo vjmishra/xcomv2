@@ -2515,7 +2515,7 @@ function callAjaxForSorting(url,divId)
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark='<s:property value="rememberNewSearchText" />' />
+						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
 			
 			<div id="tips-container">
