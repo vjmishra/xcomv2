@@ -795,13 +795,13 @@ div.catalog-search-container input#search_searchTerm {
     margin-top: 15px;
 }
 .filterinput {
-	background: url(../../images/icons/magnify.jpg) no-repeat scroll 3px 6px #FFFFFF;
+	background: url(../../images/icons/magnify.jpg) no-repeat scroll 2px 3px #FFFFFF;
 	border: 1px solid #D9D9D9;
 	border-radius: 0;
 	color: #000000;
 	font-size: 12px;
-	height: 25px;
-	padding: 1px 0 0 22px;
+	height: 20px;
+	padding: 2px 0 0 18px;
 	width: 138px;
 }
 #header input {
@@ -972,7 +972,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	margin-top: 6px;
 }
 .qa-add-wrap .qa-button-wrap-alt {
-	width: 235px;
+	width: 617px;
 	clear: both;
 }
 .qa-divider {
