@@ -59,11 +59,21 @@
 		}
 		var data="false";
 	</script>
-
 </head>
+
 <body class="loading">
- 	
-	 <div id="main">
+	<s:url id="getSalesRepCustomerListid" namespace="/common" action="getSalesProCustomersList" escapeAmp="false">
+		<s:param name="status">30</s:param>
+	</s:url>
+	<s:hidden id="getSalesRepCustomerURL" value="%{#getSalesRepCustomerListid}" />
+	
+	<s:url id='selectCustomerBaseURLid' namespace='/common' action='salesRepCustomerLogin'></s:url>
+	<s:hidden id="selectCustomerBaseURL" value="%{#selectCustomerBaseURLid}" />
+	
+	<s:url id='salesRepLoginURLid' namespace='/home' action='salesReploginFullPage'></s:url>
+	<s:hidden id="salesRepLoginURL" value="%{#salesRepLoginURLid}" />
+	
+	<div id="main">
 		<div id="container" class="container content-container" style="display:none;">
 			
 			<div id="scroll-up-down">
@@ -71,15 +81,6 @@
 				<div style="display: none;" class="nav_down" id="nav_down"></div>
 			</div>
 			
-			<s:url id='selectedCustURL' namespace='/common'
-				action='salesRepCustomerLogin'></s:url>
-			<s:hidden id="selectedCustURL" value="%{#selectedCustURL}" />
-			<s:url id="getSalesRepCustomerListid" namespace="/common"
-				action="getSalesProCustomersList" escapeAmp="false">
-				<s:param name="status">30</s:param>
-			</s:url>
-			<s:hidden id="getSalesRepCustomerURL" value="%{#getSalesRepCustomerListid}" />
-	
 			<s:url id='logoutURL' namespace='/home' action='saleslogout' includeParams='none' />
 			<p class="logout">
 				<s:a href="%{#logoutURL}">Log Out</s:a>
