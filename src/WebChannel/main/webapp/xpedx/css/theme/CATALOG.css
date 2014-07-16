@@ -593,6 +593,9 @@ width:100%;
 	 width: auto;
 	 margin: 4px;
 }
+.normal-view .success {
+    margin-top: 6px;
+}
 .normal-view #item-ct dd .cart-pa-button-wrap {
     clear: none;
     float: right;
