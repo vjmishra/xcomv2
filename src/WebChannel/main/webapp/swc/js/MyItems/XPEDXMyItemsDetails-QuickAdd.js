@@ -209,6 +209,8 @@ $(document).ready(function() {
 		// clear all inputs and hide all but first 5 rows
 		$('.qa-listrow input').val('');
 		$('.qa-listrow').slice(5, -1).hide();
+		$('.producterrorLine').hide();
+		$('.errorIcon').css('visibility', 'hidden');
 	});
 	
 	$('#btn-reset-copy-paste').click(function() {

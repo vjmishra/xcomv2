@@ -2366,7 +2366,7 @@ function showSharedListForm(){
 											<s:iterator value="%{new int[#numRows]}" status="itemline">
 												<s:div id='%{"qa-listrow_" + #itemline.count}' cssStyle='%{#itemline.count > 5 ? "display:none;" : ""}' cssClass="qa-listrow">
 													<div class="qa-error-icon" style="visibility: hidden">
-														<input type="image" id="errorIcon_<s:property value='#itemline.count'/>" 
+														<input type="image" id="errorIcon_<s:property value='#itemline.count'/>" class="errorIcon" 
 																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_red_x<s:property value='#wcUtil.xpedxBuildKey' />.png"  />
 													</div>
 													<div class="label-item">
