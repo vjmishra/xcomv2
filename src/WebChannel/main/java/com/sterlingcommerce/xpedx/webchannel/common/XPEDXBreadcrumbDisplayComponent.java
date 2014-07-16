@@ -56,28 +56,121 @@ public class XPEDXBreadcrumbDisplayComponent
     public boolean end(Writer writer, String body)
     {
 		List<Breadcrumb> bcl = (List<Breadcrumb>) req.getAttribute(BreadcrumbHelper.BREADCRUMB_LIST);
-		if (bcl != null) {
-			try {
-				if (bcl.size() > 1) {
+		
+			/*String name = req.getParameter("searchTerm");
+			if (name==null){
+				try{
 					Breadcrumb bc = bcl.get(1);
-					// String searchTerm = bc.getParams().get("searchTerm");
-					if (bc.getParams().containsKey("searchTerm")) {
-						writer.append(renderSearchTermBreadcrumb(bcl));
-					} else {
-						writer.append(renderCategoryBreadcrumb(bcl));
-					}
+				
+					if (bc.getParams().containsKey("marketingGroupName")) {
+						System.out.println("issue--2");
+						writer.append(renderMGIBreadcrumb(bcl));
 
-				} else {
-					// category landing page
-					writer.append(renderCategoryBreadcrumb(bcl));
 				}
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}*/
+			
+		if (bcl != null) {
+			try {
+				/*String name = req.getParameter("searchTerm");
+				if (name==null){
+					try{
+						Breadcrumb bc = bcl.get(1);
+					
+						if (bc.getParams().containsKey("marketingGroupName")) {
+							System.out.println("issue--2");
+							writer.append(renderMGIBreadcrumb(bcl));
+
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}*/
+				Breadcrumb bcRoot = bcl.get(0);
+				if (bcRoot.getParams().containsKey("marketingGroupName")) {
+					System.out.println("issue--2");
+					writer.append(renderMGIBreadcrumb(bcl));
+
+				} else {
+					if (bcl.size() > 1) {
+						Breadcrumb bc = bcl.get(1);
+						 //String searchTerm = bc.getParams().get("searchTerm");
+						if (bc.getParams().containsKey("marketingGroupName")) {
+							System.out.println("issue--2");
+							writer.append(renderMGIBreadcrumb(bcl));
+
+						} else if (bc.getParams().containsKey("searchTerm")) {
+							System.out.println("issue");
+							writer.append(renderSearchTermBreadcrumb(bcl));
+
+						} else {
+							System.out.println("issue--3");
+							writer.append(renderCategoryBreadcrumb(bcl));
+						}
+
+					} else {
+						// category landing page
+						writer.append(renderCategoryBreadcrumb(bcl));
+					}
+				}
+			}
+				
+			catch (IOException e) {
 				log.error("Error writing to JSP", e);
 				// re-throw as runtime exception?
 			}
 		}
 
     	return super.end(writer, body);
+    }
+    
+    private String renderMGIBreadcrumb(List<Breadcrumb> bcl) {
+		StringBuilder sb = new StringBuilder(1024);
+
+		// 1: skip output for root breadcrumb
+		int rootIndex = this.determineDisplayRootIndex(bcl) + 1;
+
+		// 2: render initial search term (not search within)
+		Breadcrumb bcMain = bcl.get(rootIndex);
+		String searchTerm = bcMain.getParams().get("marketingGroupName");
+		String searchResultsForDisp = this.getRootBreadcrumbDisplay(String.format("Group results for \"%s\"", searchTerm));
+		sb.append(searchResultsForDisp);
+		if (bcl.size() > 2) {
+			sb.append(this.getSeparator());
+		}
+
+		// 3: generate output for regular breadcrumbs
+		for (int i = rootIndex + 1; i < bcl.size(); i++) {
+			boolean firstIter = i == rootIndex + 1;
+			boolean lastIter = i == bcl.size() - 1;
+			boolean onlyIter = firstIter && lastIter;
+
+			// The link for the breadcrumb itself
+			sb.append(this.getBreadcrumbDisplay(i, bcl, null, false));
+
+			// If the breadcrumb is configured to be removable
+			if (tag.isRemovable() && !onlyIter) {
+				if (lastIter) {
+					// override url in remove breadcrumb display
+					String url = getBreadcrumbURL(i - 1, bcl, null, false);
+					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, url));
+
+				} else {
+					sb.append(this.getRemoveBreadcrumbDisplay(bcl, i, null));
+				}
+			}
+
+			if (!lastIter) {
+				// append the separator
+				sb.append(this.getSeparator());
+			}
+		}
+
+		return sb.toString();
     }
 
     /**
@@ -130,6 +223,7 @@ public class XPEDXBreadcrumbDisplayComponent
 		return sb.toString();
     }
 
+    
     /**
      * Renders root and cat1 as plain text. Other breadcrumbs are rendered as normal
      * @param bcl
