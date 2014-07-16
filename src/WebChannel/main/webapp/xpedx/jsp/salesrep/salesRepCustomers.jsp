@@ -73,49 +73,52 @@
 	<s:url id='salesRepLoginURLid' namespace='/home' action='salesReploginFullPage'></s:url>
 	<s:hidden id="salesRepLoginURL" value="%{#salesRepLoginURLid}" />
 	
-	<div id="main">
-		<div id="container" class="container content-container" style="display:none;">
-			
-			<div id="scroll-up-down">
-				<div style="display: none;" class="nav_up" id="nav_up"></div>
-				<div style="display: none;" class="nav_down" id="nav_down"></div>
-			</div>
-			
-			<s:url id='logoutURL' namespace='/home' action='saleslogout' includeParams='none' />
-			<p class="logout">
-				<s:a href="%{#logoutURL}">Log Out</s:a>
-			</p>
-			
-			<h1>Select an Account</h1>
-			<p class="addpadbottom20">
-				<strong>Note:</strong> Please ensure correct Ship-To has been selected once you are logged in.
-				You can view/change Ship-To by clicking on customer name on top right corner.
-			</p>
-			
-			<s:set name='_action' value='[0]' />
-			<s:set name='wcContext' value="#_action.getWCContext()" />
-
-			<div class="search">
-				<div class="ship-search-input-wrap">
-					<form class="filterform" action="#">
-						<input id="searchTerm" class="filterinput input-watermark-color" type="text" data-watermark="Search" />
-						<span class="resetlink">
-							<a href="#">Reset</a>
-						</span>
-					</form>
+	<div id="main-container">
+		<div id="main">
+			<div id="container" class="container content-container" style="display:none;">
+				
+				<div id="scroll-up-down">
+					<div style="display: none;" class="nav_up" id="nav_up"></div>
+					<div style="display: none;" class="nav_down" id="nav_down"></div>
 				</div>
-			</div>
-			
-			<div class="table" id="listOfCustomers">
-				<%-- dynamically populate data here with salesRepCustomers javascript  --%>
-			</div>
-			
-		</div> <%-- / container --%>
-	</div> <%-- / main --%>
+				
+				<s:url id='logoutURL' namespace='/home' action='saleslogout' includeParams='none' />
+				<p class="logout">
+					<s:a href="%{#logoutURL}">Log Out</s:a>
+				</p>
+				
+				<h1>Select an Account</h1>
+				<p class="addpadbottom20">
+					<strong>Note:</strong> Please ensure correct Ship-To has been selected once you are logged in.
+					You can view/change Ship-To by clicking on customer name on top right corner.
+				</p>
+				
+				<s:set name='_action' value='[0]' />
+				<s:set name='wcContext' value="#_action.getWCContext()" />
+	
+				<div class="search">
+					<div class="ship-search-input-wrap">
+						<form class="filterform" action="#">
+							<input id="searchTerm" class="filterinput input-watermark-color" type="text" data-watermark="Search" />
+							<span class="resetlink">
+								<a href="#">Reset</a>
+							</span>
+						</form>
+					</div>
+				</div>
+				
+				<div class="table" id="listOfCustomers">
+					<%-- dynamically populate data here with salesRepCustomers javascript  --%>
+				</div>
+				
+			</div> <%-- / container --%>
+		</div> <%-- / main --%>
+	</div> <%-- / main-container --%>
 	
 	<div class="loading-wrap"  style="display:none;">
 		 <div class="load-modal" ><div class="loading-icon" style="display:none;"></div></div>
 	</div>
 
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-scroll-nav<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 </body>
 </html>

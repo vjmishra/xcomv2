@@ -446,11 +446,6 @@ strong {
 #scroll-up-down {
 	display: block;
 }
-@media only screen and (max-width: 1150px) {
-	#scroll-up-down {
-		display: none;
-	}
-}
 
 th p {
 	text-align: center;

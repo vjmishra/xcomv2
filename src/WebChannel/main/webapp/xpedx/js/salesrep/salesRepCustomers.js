@@ -122,10 +122,6 @@ $(document).ready(function() {
 				});
 			}	
 		}
-
-		if ($("body").height() < $(window).height()) {
-			$("#scroll-up-down").hide();
-		}
 	}
 	
 	// initial fetch allows retry
