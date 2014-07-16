@@ -158,6 +158,21 @@
 				}
 				
 				function submitSL(){
+					try{
+								
+						if (checkifShared() == "shared" && checkAddressSelection() != "")
+						{							
+							var returnErrorMsgHL="Please select at least one location to share.";
+							document.getElementById("errorMsgForAddressFieldsHL1").innerHTML =returnErrorMsgHL;
+						//	alert(document.getElementById("errorMsgForAddressFieldsHL1").innerHTML);
+							document.getElementById("errorMsgForAddressFieldsHL1").style.display = "inline";
+							
+							return;
+						}
+					}catch(err){
+						
+					}
+					
 					var customerPaths=document.getElementsByName("customerPaths");
 					var custID;
 					for(var i=0;i<customerPaths.length;i++)
@@ -188,7 +203,15 @@
 					Ext.get('XPEDXMyItemsDetailsChangeShareList').dom.submit();
 				}
 			</script>
-		
+			
+				
+			
+			<div class="fFVVEM_wrap">
+				<div class="clear"></div>
+				<div class="error" id="errorMsgForAddressFieldsHL1" style="display: none"></div>	
+				<div class="error" id="errorMsgForMandatoryFieldsHL1" style="display: none"></div>
+			
+			</div>
 			
 			<div class="button-container addpadtop15">
 				<input class="btn-gradient floatright addmarginright10" type="submit" value="Save" onclick="submitSL(); return false;" />
