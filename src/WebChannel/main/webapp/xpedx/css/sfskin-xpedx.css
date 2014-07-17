@@ -494,10 +494,10 @@ ul.megamenu {
 	font-weight: 800;
 	padding: 5px 13px 5px 28px;
 	text-decoration: none;
-	background: url(../images/megamenu/arrow-orange.png) 7px 4px no-repeat #ffffff;
+	background: url(../images/megamenu/arrow-orange.png) 7px 5px no-repeat #ffffff;
 }
 .btn-nav-list:hover {
-	background: url(../images/megamenu/arrow-orange.png) 7px -21px no-repeat #f6f6f6;
+	background: url(../images/megamenu/arrow-orange.png) 7px -20px no-repeat #f6f6f6;
 }
 
 #order-edit a {
