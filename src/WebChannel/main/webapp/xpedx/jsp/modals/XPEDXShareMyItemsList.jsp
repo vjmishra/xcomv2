@@ -157,10 +157,34 @@
 					return;
 				}
 				
-				function submitSL(){
+
+				function checkifSharedisSelected() {					
+					var radioObj =document.getElementById("XPEDXMyItemsDetailsChangeShareList").sharePermissionLevel
+					
+					if(!radioObj)
+						return "";
+					var radioLength = radioObj.length;
+					
+					if(radioLength == undefined)
+						if(radioObj.checked)
+							return radioObj.value;
+						else
+							return "";
+					for(var i = 0; i < radioLength; i++) {						
+						if(radioObj[i].checked) {
+				                        if(radioObj[i].id =="rbPermissionShared")
+				                            return "shared";
+				                        else
+				                            return radioObj[i].value;
+						}
+					}
+					return "";
+				}		
+				
+				function submitSL(){					
 					try{
 								
-						if (checkifShared() == "shared" && checkAddressSelection() != "")
+						if (checkifSharedisSelected() == "shared" && checkAddressSelection() != "")
 						{							
 							var returnErrorMsgHL="Please select at least one location to share.";
 							document.getElementById("errorMsgForAddressFieldsHL1").innerHTML =returnErrorMsgHL;
