@@ -1,6 +1,8 @@
 /**
  * This snippet of code emulates the HTML5 'placeholder' attribute, which we can't use because IE9 doesn't support it.
- * Usage: <input type="text" data-watermark="My placeholder text" />
+ * Usage: <input type="text" data-watermark="My placeholder text" disabled="disabled"/>
+ * 
+ * disabled attribute needed to prevent users from typing in until page is completely loaded.
  */
 function do_watermark(selector) {
 	var inputs = $(selector);

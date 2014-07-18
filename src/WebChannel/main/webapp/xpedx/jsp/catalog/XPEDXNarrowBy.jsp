@@ -35,6 +35,10 @@ function setStockItemFlag()
 	}
 }
 </script>
+<!-- Added script to disable the user to enter text in searchbox before the page loads completely -->
+<script type="text/javascript">
+window.addEventListener("load", function() { document.getElementById('search_searchTerm').disabled = false; }, false);
+</script>
 
 <!-- begin left column -->
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
@@ -51,7 +55,7 @@ function setStockItemFlag()
 	<s:form name='narrowSearch' action="search">
 		<div class="searchbox-form1">
 			<div class="catalog-search-container">
-				<input id="search_searchTerm" class="x-input input-watermark" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text">
+				<input id="search_searchTerm" class="x-input input-watermark" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text" disabled="disabled">
 				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
 			</div>
 		</div>

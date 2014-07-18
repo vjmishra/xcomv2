@@ -16,6 +16,10 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/watermark.js"></script>
+<!-- Added script to disable the user to enter text in searchbox before the page loads completely -->
+<script type="text/javascript">
+window.addEventListener("load", function() { document.getElementById('searchString').disabled = false; }, false);
+</script>
 </head>
 
 <body class="bodyclass">
@@ -37,7 +41,7 @@
     
      <s:form  id="punchoutShipToSearchForm" name="punchoutShipToSearchForm" action="punchoutShipToSearchAction" namespace="/punchout" method="post" >
         
-          <input type="text" class="filterinput input-watermark-color" id="searchString" name="searchString" data-watermark="Search"/>
+          <input type="text" class="filterinput input-watermark-color" id="searchString" name="searchString" data-watermark="Search" disabled="disabled"/>
         
         <span class="resetlink">Reset</span>
     </s:form>
