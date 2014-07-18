@@ -237,8 +237,13 @@ function showSharedListForm(){
 	var validAddtoCartItemsFlag  = new Array();
 	// EB-3973 share private list is not displayed and  the locations are not shown if private list is checked.
 	function hideSharedListFormIfPrivate() {
-		if($("#XPEDXMyItemsDetailsChangeShareList #rbPermissionPrivate").is(':checked')){
-			document.getElementById("dynamiccontent").style.display = "none";
+		 var shareprivateflg = document.getElementById("XPEDXMyItemsDetailsChangeShareList_sharePrivateFlag").value;		 
+		//alert(test1.trim()!= "");
+		if(shareprivateflg.trim()!= ""){			
+			hideSharedListForm();
+		}
+		else{
+			showSharedListForm();
 		}
 	}
 </script>

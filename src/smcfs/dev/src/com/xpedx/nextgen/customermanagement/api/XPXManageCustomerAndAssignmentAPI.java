@@ -166,7 +166,8 @@ private static YFCLogCategory log;
 		}
 			
 		pltQryBuilder.append(")");
-		pltQryBuilder.append("AND USER_ID ='"+userId+"' AND ORGANIZATION_CODE ='"+organizationCode+"'");
+		pltQryBuilder.appendString("AND USER_ID", "=", userId);
+		pltQryBuilder.append(" AND ORGANIZATION_CODE ='"+organizationCode+"'");
 		
 		List<YFS_Customer_Assignment> yfsCustomerAssinedList=YFS_Customer_AssignmentDBHome.getInstance().listWithWhere((YFSContext)env, pltQryBuilder,5000);		
 		for( YFS_Customer_Assignment custAssingment : yfsCustomerAssinedList)

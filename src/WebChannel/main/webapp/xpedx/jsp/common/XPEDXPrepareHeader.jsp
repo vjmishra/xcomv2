@@ -129,17 +129,18 @@ It is not a good practice but creating on every jsp page is also not convenient 
 			};
 			
 			var acSelect = function(event, ui) {
-				// autocomplete console.log('BEGIN acSelect');
-				// autocomplete console.log('ui.item = ' , ui.item);
+				 console.log('BEGIN acSelect');
+			     console.log('ui.item = ' , ui.item);
 				
 				if (ui.item.isNormalSearch) {
 					$('#newSearch').submit();
 					
 				} else {
 					var url = '<s:property value="#newSearchURL" escape="false" />';
-					url += '&searchTerm='; // necessary for bookmarkability of search result page
+					url += '&searchTerm='+ encodeURIComponent(ui.item.name); // necessary for bookmarkability of search result page
 					url += '&cname=' + encodeURIComponent(ui.item.name);
 					url += '&marketingGroupId=' + encodeURIComponent(ui.item.key);
+					url += '&marketingGroupName=' + encodeURIComponent(ui.item.name);
 					url += '&path=' + encodeURIComponent('/');
 					url += '&rememberNewSearchText=' + encodeURIComponent($('#newSearch_searchTerm').val());
 					
@@ -148,6 +149,7 @@ It is not a good practice but creating on every jsp page is also not convenient 
 					window.location.href = url;
 				}
 			};
+			
 			
 			var acOptions = {
 					minLength: 3

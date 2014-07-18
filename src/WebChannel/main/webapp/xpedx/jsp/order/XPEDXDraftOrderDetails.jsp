@@ -1071,6 +1071,9 @@ var currentAadd2ItemList = new Object();
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("HdrShippingTotal"))' />
 <s:set name="shippingAdjCounter" value="false" /> <s:set
 	name="allAdjCounter" value="false" />
+<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() != "Y"}'>	
+	<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />
+</s:if>
 <!-- Pricing -->
 <%--	Using CustomerContactBean object from session
 <s:if test='%{#session.viewPricesFlag == "Y"}'>

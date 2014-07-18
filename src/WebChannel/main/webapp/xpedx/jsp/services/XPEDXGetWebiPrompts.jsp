@@ -432,6 +432,7 @@ $(function() {
       		}
       		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val(); 
       		$('#selectedCustId').val(selectedShipCustomer); 
+      		$('#selectedLocationType').val('Ship To');
       		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
       		$('#txtLocation').val($('#shipToMultiRowDisplay_'+selectedShipCustomer).val());
       		$.fancybox.close(); 

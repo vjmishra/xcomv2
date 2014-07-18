@@ -746,9 +746,9 @@
 						<td><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/></td>
 						<td>
 						<xsl:choose>
-						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
-						</xsl:when>
+							<xsl:when test='starts-with(OrderLineTranQuantity/@UOMDescription,"M_")'>
+								<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+							</xsl:when>
 						<xsl:otherwise>
 						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
 						</xsl:otherwise>
@@ -779,9 +779,9 @@
 									<td><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/></td>
 										<td>
 										<xsl:choose>
-										<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-										<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
-										</xsl:when>
+											<xsl:when test='starts-with(OrderLineTranQuantity/@UOMDescription,"M_")'>
+												<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+											</xsl:when>
 										<xsl:otherwise>
 										<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
 										</xsl:otherwise>
@@ -799,8 +799,8 @@
 								 <td><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/></td>
 										<td>
 										<xsl:choose>
-										<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-										<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+										<xsl:when test='starts-with(OrderLineTranQuantity/@UOMDescription,"M_")'>
+											<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
 										</xsl:when>
 										<xsl:otherwise>
 										<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>

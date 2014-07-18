@@ -733,6 +733,8 @@
 									<s:hidden name="command" value="edit_list" />
 									<s:hidden name="itemCount" value="%{#numOfItems}" />
 									<s:hidden name="editMode" value="%{true}" />
+									<s:hidden name="shareAdminOnly" value="%{#spShareAdminOnly}" />
+									<s:hidden name='sharePrivateField' value='%{#spLevels}' />
 								</s:form>
 								
 								<s:form id="doAction_export_%{#uId}" action="MyItemsDetails" method="post">
