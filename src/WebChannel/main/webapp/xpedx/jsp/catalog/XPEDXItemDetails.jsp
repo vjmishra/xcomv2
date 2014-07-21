@@ -322,7 +322,7 @@
 													onmouseover="qtyInputCheck(this);"
 													/>
 											<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
-											<s:hidden name="c" id="OrderMultiple" value="%{#mulVal}" />
+											<s:hidden name="c" id="%{'orderMultiple_' + #itemID}" value="%{#mulVal}" />
 											<s:set name="itemuomMap" value='#_action.getDisplayItemUOMsMap()' />
 											<s:select name="itemUOMsSelect" id="%{'itemUomList_' + #itemID}" onchange='updateUOMFields()'
 													cssClass="qty_selector" list="itemuomMap" listKey="key"
