@@ -19,7 +19,7 @@
 			</Attributes>
 			
 			<PrimaryKey Name="XPEDX_PUNCHOUT_CXML_SESSION_PK">
-				<Attribute ColumnName="CXML_SESSION_ID" />
+				<Attribute ColumnName="PUNCHOUT_CXML_SESSION_ID" />
 			</PrimaryKey>
 			
 		</Entity>
