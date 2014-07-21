@@ -25,6 +25,7 @@ function do_watermark(selector) {
 				$this.addClass('input-watermark-color');
 			}
 		});
+		$input.blur();
 	}	
 }
 

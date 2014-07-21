@@ -2452,11 +2452,8 @@ function callAjaxForSorting(url,divId)
 <div class="noScript"><s:text name='NoScriptWarning' /></div>
 </noscript>
 
-<!-- Added script to disable the user to enter text in searchbox before the page loads completely -->
 
-<script type="text/javascript">
-window.addEventListener("load", function() { document.getElementById('newSearch_searchTerm').disabled = false; }, false);
-</script>
+
 
 <!-- begin t1-header -->
 <!-- <div id="noassignedShipto" style="display:none;color:red;">There are no shipTo locations assigned for your profile, Please contact administrator..</div> commented for jira2881-->
@@ -2494,11 +2491,11 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 	   		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark="Search Catalog..." onclick="clearTxt();" disabled="disabled" />
+						data-watermark="Search Catalog..."   />
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />' disabled="disabled" />
+						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
 			
 			<div id="tips-container">
@@ -2520,11 +2517,11 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 	  		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark="Search Catalog..." onclick="clearTxt();" disabled="disabled" />
+						data-watermark="Search Catalog..."  />
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />' disabled="disabled" />
+						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
 			
 			<div id="tips-container">
