@@ -4,7 +4,7 @@
 	<Entities>
 		<Entity ApiNeeded="Y" AuditRequired="N" Description="Persists session data for CXML token-based authentication. Tokens are short lived, invalid after a few minutes" HasHistory="False" Prefix="XPEDX" TableName="XPEDX_PUNCHOUT_CXML_SESSION">
 			<Attributes>
-				<Attribute ColumnName="PUNCHOUT_CXML_SESSION_ID" DataType="Text-32" Description="UUID to uniquely identify this session token" Nullable="False" XMLName="CxmlSessionId" />
+				<Attribute ColumnName="PUNCHOUT_CXML_SESSION_ID" DataType="Text-32" Description="UUID to uniquely identify this session token" Nullable="False" XMLName="PunchoutCxmlSessionId" />
 				
 				<Attribute ColumnName="USER_ID" DataType="Text-255" DefaultValue="" Description="Encrypted user id" Nullable="false" XMLName="UserId" />
 				<Attribute ColumnName="PASSWORD" DataType="Text-255" DefaultValue="" Description="Encrypted password" Nullable="false" XMLName="Password" />
