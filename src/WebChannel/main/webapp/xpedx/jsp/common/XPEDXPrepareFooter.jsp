@@ -60,7 +60,7 @@
 							</td>
 						</tr>
 					</table>
-					<div id="footer-copyright">&copy; International Paper Company. All rights reserved.</div>
+					<div id="footer-copyright">&copy; 2014. All Rights Reserved.</div>
 				</td>
 					<!-- EB-1848 As a web channel user I would like to see updated and new social media icons on the footer page of xpedx.com so that the site reflects the new branding standards -->
 					
