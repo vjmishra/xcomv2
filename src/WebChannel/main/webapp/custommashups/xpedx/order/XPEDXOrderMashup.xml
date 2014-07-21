@@ -1853,7 +1853,7 @@
 						<Extn ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice=''  ExtnExtendedPrice=''/>		  
 						<ItemDetails ItemID=''>
 							<PrimaryInformation Description="" ExtendedDescription=""/>
-							<Extn ExtnUNSPSC=''/>
+							<Extn ExtnUNSPSC='' ExtnSupplierNameDisplay=''/>
 						</ItemDetails>"
 					</OrderLine>
 				</OrderLines>
