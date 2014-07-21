@@ -18,7 +18,7 @@
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
 			</Attributes>
 			
-			<PrimaryKey Name="XPEDX_CXML_SESSION_PK">
+			<PrimaryKey Name="XPEDX_PUNCHOUT_CXML_SESSION_PK">
 				<Attribute ColumnName="CXML_SESSION_ID" />
 			</PrimaryKey>
 			
