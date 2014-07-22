@@ -2493,12 +2493,12 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	   		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark="Search Catalog..." onclick="clearTxt();" disabled="disabled" />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput input-watermark-color" 
+						data-watermark="Search Catalog..." />
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />' disabled="disabled" />
+						value='<s:property value="rememberNewSearchText" />'  />
 	   		</s:else>
 			
 			<div id="tips-container">
@@ -2519,12 +2519,12 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	  		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark="Search Catalog..." onclick="clearTxt();" disabled="disabled" />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput input-watermark-color" 
+						data-watermark="Search Catalog..." />
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />' disabled="disabled" />
+						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
 			
 			<div id="tips-container">
