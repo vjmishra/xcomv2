@@ -264,7 +264,9 @@ span.underlink:hover {
             <div class="container content-container">
             	<!--  <div id="breadcumbs-list-name" class="page-title">My Carts </div> --> 
             	 <h1><s:text name='MSG.SWC.CART.CARTLIST.GENERIC.PGTITLE' /></h1>
-                	<div id="tool-bar-bottom" style="margin-top: 10px; padding-bottom: 5px;">
+            	 <input class="btn-gradient floatright addmargintop-10" id="various1" type="button" href="#createNewCartDlg" value="Create New Cart" />
+				 <div class="clearfix"></div>
+                <div id="tool-bar-bottom">
                  <!-- Webtrends Tag starts -->
      				<script type="text/javascript">
      				var tag = "WT.ti,DCSext.w_x_cart_em";
@@ -272,29 +274,26 @@ span.underlink:hover {
      			</script>
      			<!-- Added for EB-2395 As a Saalfeld user,want to view the Saalfeld cart page with the Saalfeld stylesheet so that I view the correct Saalfeld branding  Starts -->
      			<s:set name='storefrontId' value="wCContext.storefrontId" />
-     			     <span class="float-left">
+     			     <span class="float-left addpadleft10">
      			    <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
      			     	<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" 
-     			     		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_blue_cart_on.png"  > 
+     			     		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_blue_cart_on.png"  /> 
      			    </s:if>
      			    <s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
 					<img height="20" class="cart-image" width="20" title="Active Cart" alt="active cart" 
-     			     		src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_green_cart_on.png"  > 
+     			     		src="<s:property value='#wcUtil.staticFileLocation' />/Saalfeld/images/20x20_green_cart_on.png"  /> 
 					</s:elseif>
 					<!-- EB-2395 END -->
      			     		<!-- is your active cart. --> 
      			     		<s:text name='MSG.SWC.CART.CARTLIST.INFO.ACTIVECART' />
      			    </span>
      			    <%-- (This used to have onclick="writeMetaTag(tag,content,2);" on top button but not bottom) --%> 
-					<input class="btn-gradient floatright" id="various1" type="button" href="#createNewCartDlg"
-						value="Create New Cart" />
-                 </div> 
-                <br />
-                <div class="clear">&nbsp;</div>
-   				 <p class="search-pagination-top" align="right" style="float: right;">
+					</div> 
+              
+   				 <p class="search-pagination-top">
                  	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#draftOrderListPaginationURL}"/>
                  </p>
-                <div class="clear">&nbsp;</div>
+                <div class="clearfix"></div>
                
                 <swc:sortctl sortField="%{orderByAttribute}" sortDirection="%{orderDesc}" down="Y" up="N" urlSpec="%{#draftOrderListSortURL}">
                     <s:set name="iter" value="#util.getElements(#sdoc, '//Page/Output/XPXOrderListViewList/XPXOrderListView')"/>
@@ -305,9 +304,9 @@ span.underlink:hover {
                         <s:param name="iterable" value="#iter"/>
                        
                         <s:param name="columnSpecs[0].label" value="'Name'"/>
-                         <s:param name="columnSpecs[0].align" value="''"/>
+                        <s:param name="columnSpecs[0].align" value="''"/>
                         <s:param name="columnSpecs[0].dataField" value="'OrderName'"/>
-                        <s:param name="columnSpecs[0].labelCssClass" value="'table-header-bar-left width-460'"/>
+                        <s:param name="columnSpecs[0].labelCssClass" value="'width-460'"/>
                         <s:param name="columnSpecs[0].fieldCssClass" value="''"/>
                         <s:param name="columnSpecs[0].sortable" value="'true'"/>
                         <s:param name="columnSpecs[0].dataCellBuilder" value="'xpedxDraftOrderListOrderNameAnchor'"/>
@@ -334,7 +333,7 @@ span.underlink:hover {
 
 						<s:param name="columnSpecs[3].label" value="''"/>
 						 <s:param name="columnSpecs[3].align" value="''"/>
-						<s:param name="columnSpecs[3].labelCssClass" value="'no-border-right table-header-bar-right'"/>
+						<s:param name="columnSpecs[3].labelCssClass" value="'no-border-right'"/>
 						<%-- <s:param name="columnSpecs[3].fieldCssClass" value="'actions'"/> --%>
                         <s:param name="columnSpecs[3].sortable" value="'false'"/>
                         <s:param name="columnSpecs[3].dataCellBuilder" value="'xpedxDraftOrderListActionAnchor'"/>
@@ -345,23 +344,15 @@ span.underlink:hover {
                   </s:action>
               </swc:sortctl>
                     <div id="tool-bar-bottom" class="float-right">
-					<p class="search-pagination-bottom" align="right" style="float: right;">
+					<p class="search-pagination-bottom">
 						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#draftOrderListPaginationURL}"/>
-					</p><br/><br/>
+					</p>
 					<input class="btn-gradient floatright" id="createCart2" type="button" href="#createNewCartDlg"
 						value="Create New Cart" />
                     </div>
-                    <br />
-
-                    <br />
-                    <br />
+               
                     <!-- <div type="text" id="example10" class="target">hover</div> -->
                     <!-- <a href="tool-tip-content.html">Tool Tip</a> -->
-                
-                <!-- End mid-col-mil -->
-                
-                <div style="height:200px;"></div>
-                
             </div>
         </div>
 </div>

@@ -717,3 +717,23 @@ ul.megamenu {
     padding: 0 0 10px;
     margin-bottom: 5px;
 }
+
+/************TABLE HEADERS****************/
+.standard-table th {
+	background: #003399;
+	line-height: 32px;
+	text-align: center;
+	border-right: 1px solid #cccccc;
+	}
+.standard-table th:first-child {
+	border-radius: 6px 0px 0px 0px;
+	text-align: left;
+	padding-left: 10px;
+	border-right: 1px solid #cccccc;
+	}
+.standard-table th:last-child {
+	border-radius: 0px 6px 0px 0px;
+	border-right: none;
+	}
+/*******/
+
