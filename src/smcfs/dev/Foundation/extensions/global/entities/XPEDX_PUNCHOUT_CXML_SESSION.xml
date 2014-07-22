@@ -13,7 +13,7 @@
 				<Attribute ColumnName="BUYER_COOKIE" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="BuyerCookie" />
 				<Attribute ColumnName="FROM_IDENTITY" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="FromIdentity" />
 				<Attribute ColumnName="TO_IDENTITY" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="ToIdentity" />
-				<Attribute ColumnName="RETURN_URL" DataType="Text-4000" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="ReturnUrl" />
+				<Attribute ColumnName="RETURN_URL" DataType="Text-2000" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="ReturnUrl" />
 				
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
 			</Attributes>
