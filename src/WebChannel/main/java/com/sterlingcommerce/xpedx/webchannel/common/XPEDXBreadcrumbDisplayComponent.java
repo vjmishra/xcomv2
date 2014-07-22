@@ -75,45 +75,24 @@ public class XPEDXBreadcrumbDisplayComponent
 			
 		if (bcl != null) {
 			try {
-				/*String name = req.getParameter("searchTerm");
-				if (name==null){
-					try{
-						Breadcrumb bc = bcl.get(1);
-					
-						if (bc.getParams().containsKey("marketingGroupName")) {
-							System.out.println("issue--2");
-							writer.append(renderMGIBreadcrumb(bcl));
-
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				}*/
+				
 				Breadcrumb bcRoot = bcl.get(0);
 				if (bcRoot.getParams().containsKey("marketingGroupName")) {
-					System.out.println("issue--2");
 					writer.append(renderMGIBreadcrumb(bcl));
-
 				} else {
 					if (bcl.size() > 1) {
 						Breadcrumb bc = bcl.get(1);
-						 //String searchTerm = bc.getParams().get("searchTerm");
-						if (bc.getParams().containsKey("marketingGroupName")) {
-							System.out.println("issue--2");
+						
+						if (bc.getParams().containsKey("marketingGroupName")) {						
 							writer.append(renderMGIBreadcrumb(bcl));
-
 						} else if (bc.getParams().containsKey("searchTerm")) {
-							System.out.println("issue");
 							writer.append(renderSearchTermBreadcrumb(bcl));
 
 						} else {
-							System.out.println("issue--3");
 							writer.append(renderCategoryBreadcrumb(bcl));
 						}
 
 					} else {
-						// category landing page
 						writer.append(renderCategoryBreadcrumb(bcl));
 					}
 				}
