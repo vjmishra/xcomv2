@@ -63,12 +63,6 @@
 				</SupplierPartAuxiliaryID>
 			</ItemID>
 			<ItemDetail>
-				<ManufacturerPartID>
-					<xsl:value-of select="Item/@ManufacturerItem" />
-				</ManufacturerPartID>
-				<ManufacturerName>
-					<xsl:value-of select="ItemDetails/Extn/@ExtnSupplierNameDisplay" />
-				</ManufacturerName>
 				<UnitPrice>
 					<Money currency="USD">
 						<xsl:choose>
@@ -93,6 +87,12 @@
 				<Classification domain="UNSPSC">
 					<xsl:value-of select="ItemDetails/Extn/@ExtnUNSPSC" />
 				</Classification>
+				<ManufacturerPartID>
+					<xsl:value-of select="Item/@ManufacturerItem" />
+				</ManufacturerPartID>
+				<ManufacturerName>
+					<xsl:value-of select="ItemDetails/Extn/@ExtnSupplierNameDisplay" />
+				</ManufacturerName>
 			</ItemDetail>
 		</ItemIn>
 	</xsl:template>
