@@ -2086,6 +2086,7 @@ div.specs-tab {
 	clear: none;
 }
 
+
 /*************CART LIST PAGE******************/
 table#mil-carts-list td {
     border-bottom: 1px solid #cccccc;
@@ -2101,3 +2102,33 @@ table#mil-carts-list .left-cell {
 	padding-top: 10px;
 	}
 /******/
+
+/*******NEW FOR CART HEADER*********/
+.cart-info-wrap {
+	clear: none;
+	float: left;
+	width: 49%;
+}
+
+.cart-info-wrap label {
+	clear: both;
+	display: block;
+	margin-bottom: 2px;
+	width: auto;
+}
+
+.cart-info-wrap textarea,.cart-info-wrap input {
+	margin-bottom: 8px;
+}
+
+.mil-edit-forms .cart-info-wrap textarea {
+	height: 30px;
+}
+
+.cart-btn-wrap {
+	clear: none;
+	float: right;
+	margin-top: 75px;
+	width: 49%;
+}
+

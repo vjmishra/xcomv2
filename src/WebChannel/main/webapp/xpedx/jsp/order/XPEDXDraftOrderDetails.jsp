@@ -614,7 +614,7 @@ $(document).ready(function(){
        	</s:else>
 	</s:else>
 </h1>
-<div style="margin-right: 0px;" class="print-ico-xpedx orders underlink">
+<div class="print-ico-xpedx orders underlink">
 	<a href="javascript:window.print()">
 		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />
     	Print Page
@@ -622,57 +622,14 @@ $(document).ready(function(){
 </div>
 
 <div class="float-right">
-	<!-- promotion -->
-	<div class="ad-margin">
-		<!-- ad placeholder, per the mockup. Ad Juggler Starts -->
-		<s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
-		 <s:set name='storefrontId' value="wCContext.storefrontId" />
-		<s:if test="%{!#isPunchoutUser}">
-			<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="advertisement" />advertisement</div>
-		</s:if>
-		 	<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
-				<img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:if>
-				<s:elseif test="%{#isPunchoutUser}">
-				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
-				<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXDraftOrderDetails.jsp')" />
-					<s:if test="%{#isPunchoutimageExists}">
-					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src="<s:property value='punchoutImagepath'/> "/>
-				 </s:if>
-				</s:elseif>
 	
-		<s:else>
-		<s:if test="#ad_keyword != null" >
-			<s:if  test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:if>
-		</s:if>	
-			<s:else>
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:else>
-		</s:else>
-		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>  
-		<!-- Ad Juggler Tag Ends -->
-				
-			
-		<div class="clear">&nbsp;</div>
-	</div>
-</div>
-<!-- end promotion space -->
 <!-- List Item Description -->
 <div class="mil-edit-forms">
 
+<div class="cart-info-wrap">
 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	<s:if test="#canChangeOrderName">
-		Name
+		<label>Name</label>
 		<s:textfield name='cartName_new' id="cartName_new" size="35"
 			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'35');"
 			value='%{#orderDetails.getAttribute("OrderName")}' tabindex="3400" />
@@ -682,7 +639,7 @@ $(document).ready(function(){
 	</s:else>
 </s:if>
 	
-	<br />
+	
 	
 	
 	
@@ -693,8 +650,8 @@ $(document).ready(function(){
 			value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}'
 			tabindex="3400" /> --%>
 		
-			Description
-			<br/>
+			<label>Description</label>
+			
 			<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
 				<textarea  tabindex="3401" id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255'); "></textarea>
 			</s:if>
@@ -741,44 +698,40 @@ $(document).ready(function(){
 	</s:else>
 
 </s:else>	
-	<div class="clearall">&nbsp;</div>
+	</div>
+	<div class="cart-btn-wrap">
 	
-	<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>	
-		<ul class="float-right tool-bar-bottom sc-btn-list margin-top-15">
-	</s:if>
-	<s:else>
-		<ul class="float-right tool-bar-bottom sc-btn-list">
-	</s:else>
 	
-	<li class="float-right">
 		<s:url id='quickAddURL' namespace="/order" action='quickAdd' escapeAmp="false">
 			<s:param name="selectedHeaderTab">QuickAdd</s:param>
 			<s:param name="quickAdd" value="%{true}" />
 		</s:url>
-		<input type="button" id="quick-add-button" tabindex="3403" class="btn-neutral floatright addmarginright10"
+		<input type="button" id="quick-add-button" tabindex="3403" class="btn-neutral floatright"
 			value="Go to Quick Add" onclick="window.location='${quickAddURL}';" />
-	</li>
+	
     <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 		<input type="button" id="otherCartActions" tabindex="3402" class="btn-neutral floatright addmarginright10"
 			value="Copy Cart" onclick="actionOnList('Copy');" />
     </s:if>	
 	<s:if test='majorLineElements.size() > 0'>
 		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-			<li>
+			
 			<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
 				value="Update Cart" onclick="update();" />
-			</li>
+			
 		</s:if>
 		<s:else>
-		<li>
+		
 		 	<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
 				value="Update Order" onclick="update();" />
-		</li>
+		
 		</s:else>
 	</s:if>
+	</div>
+	
 
-</ul>
-	<br />
+
+	
 	
 </div>
 
@@ -787,7 +740,7 @@ $(document).ready(function(){
 <div class="clear">&nbsp;</div>
 <!-- end item description -->
 
-	<br />
+	
 	
 	<div class="mil-wrap-condensed-container">
 
