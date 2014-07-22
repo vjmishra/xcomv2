@@ -6,8 +6,8 @@
 			<Attributes>
 				<Attribute ColumnName="PUNCHOUT_CXML_SESSION_ID" DataType="Text-32" Description="UUID to uniquely identify this session token" Nullable="False" XMLName="PunchoutCxmlSessionId" />
 				
-				<Attribute ColumnName="USER_ID" DataType="Text-255" DefaultValue="" Description="Encrypted user id" Nullable="false" XMLName="UserId" />
-				<Attribute ColumnName="PASSWORD" DataType="Text-255" DefaultValue="" Description="Encrypted password" Nullable="false" XMLName="Password" />
+				<Attribute ColumnName="USER" DataType="Text-255" DefaultValue="" Description="Encrypted user id" Nullable="false" XMLName="User" />
+				<Attribute ColumnName="PASS" DataType="Text-255" DefaultValue="" Description="Encrypted password" Nullable="false" XMLName="Pass" />
 				
 				<Attribute ColumnName="PAYLOAD_ID" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="PayloadId" />
 				<Attribute ColumnName="BUYER_COOKIE" DataType="Text-255" DefaultValue="" Description="Data provided by customer in CXML request" Nullable="true" XMLName="BuyerCookie" />
