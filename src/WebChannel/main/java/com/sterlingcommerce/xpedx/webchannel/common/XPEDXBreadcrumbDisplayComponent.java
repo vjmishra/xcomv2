@@ -56,20 +56,18 @@ public class XPEDXBreadcrumbDisplayComponent
     public boolean end(Writer writer, String body)
     {
 		List<Breadcrumb> bcl = (List<Breadcrumb>) req.getAttribute(BreadcrumbHelper.BREADCRUMB_LIST);
-		
 		if (bcl != null) {
 			try {
+
 				Breadcrumb bcRoot = bcl.get(0);
 				if (bcRoot.getParams().containsKey("marketingGroupName")) {
-					System.out.println("issue--2");
-
+					writer.append(renderMGIBreadcrumb(bcl));
 				} else {
 					if (bcl.size() > 1) {
 						Breadcrumb bc = bcl.get(1);
-						 //String searchTerm = bc.getParams().get("searchTerm");
+
 						if (bc.getParams().containsKey("marketingGroupName")) {
 							writer.append(renderMGIBreadcrumb(bcl));
-
 						} else if (bc.getParams().containsKey("searchTerm")) {
 							writer.append(renderSearchTermBreadcrumb(bcl));
 
@@ -83,7 +81,7 @@ public class XPEDXBreadcrumbDisplayComponent
 					}
 				}
 			}
-				
+
 			catch (IOException e) {
 				log.error("Error writing to JSP", e);
 				// re-throw as runtime exception?
@@ -92,7 +90,7 @@ public class XPEDXBreadcrumbDisplayComponent
 
     	return super.end(writer, body);
     }
-    
+
     private String renderMGIBreadcrumb(List<Breadcrumb> bcl) {
 		StringBuilder sb = new StringBuilder(1024);
 
@@ -188,7 +186,7 @@ public class XPEDXBreadcrumbDisplayComponent
 		return sb.toString();
     }
 
-    
+
     /**
      * Renders root and cat1 as plain text. Other breadcrumbs are rendered as normal
      * @param bcl
