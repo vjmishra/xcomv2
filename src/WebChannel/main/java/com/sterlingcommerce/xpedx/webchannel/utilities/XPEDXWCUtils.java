@@ -5,7 +5,6 @@ package com.sterlingcommerce.xpedx.webchannel.utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -42,7 +41,6 @@ import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -96,7 +94,6 @@ import com.yantra.yfc.dom.YFCNodeList;
 import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfc.util.YFCConfigurator;
-import com.yantra.yfc.util.YFCException;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -1891,12 +1888,12 @@ public class XPEDXWCUtils {
 	}
 
 	/**
-	 * Look up UNSPSC in mapping table. If exists for this master customer and item ID, return it, 
+	 * Look up UNSPSC in mapping table. If exists for this master customer and item ID, return it,
 	 * else Lookup for the same table. If exists for this master customer and xpedx UNSPSC code then return it, otherwise return null;
 	 */
 	public static String getReplacementUNSPSC(YFSEnvironment env, String masterCustomer, String itemID, String xpedxUnspsc)
 			throws YFSException, RemoteException, YIFClientCreationException {
-		
+
 		String customerUnspsc = null;
 		// lookup is by item # and master customer #
 		Document inputSterlingUnspscDoc = SCXmlUtil.createDocument("XPXB2bLegacyUnspscXref");
@@ -1904,7 +1901,7 @@ public class XPEDXWCUtils {
 		inputsterlingUnspscElement.setAttribute("LegacyItemID", itemID);
 		inputsterlingUnspscElement.setAttribute("MasterCustomerID", masterCustomer);
 		customerUnspsc = invokeAPIForCustomerUNSPSC(env,inputSterlingUnspscDoc);
-		
+
 		if (SCUIUtils.isVoid(customerUnspsc) && !SCUIUtils.isVoid(xpedxUnspsc)){
 			// lookup is by item's UNSPSC and master customer #
 			inputSterlingUnspscDoc = SCXmlUtil.createDocument("XPXB2bLegacyUnspscXref");
@@ -1913,11 +1910,11 @@ public class XPEDXWCUtils {
 			inputsterlingUnspscElement.setAttribute("XpedxUNSPSC", xpedxUnspsc);
 			customerUnspsc = invokeAPIForCustomerUNSPSC(env,inputSterlingUnspscDoc);
 		}
-		
+
 		return customerUnspsc;
 	}
 	/**
-	 * 
+	 *
 	 * @param env
 	 * @param inputSterlingUnspscDoc
 	 * @return returning Customer UNSPSC value if exist based on input document otherwise return null
@@ -1925,16 +1922,16 @@ public class XPEDXWCUtils {
 	 * @throws RemoteException
 	 * @throws YIFClientCreationException
 	 */
-	private static String invokeAPIForCustomerUNSPSC(YFSEnvironment env, Document inputSterlingUnspscDoc) 
+	private static String invokeAPIForCustomerUNSPSC(YFSEnvironment env, Document inputSterlingUnspscDoc)
 		throws YFSException, RemoteException, YIFClientCreationException{
-		
+
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 		Document outputCustomerUnspscDoc = api.executeFlow(env, "getXPXB2BLegacyUnspscXrefList", inputSterlingUnspscDoc);
 		NodeList unspscNodeList = outputCustomerUnspscDoc.getElementsByTagName("XPXB2bLegacyUnspscXref");
 		int unspscLength = unspscNodeList.getLength();
 		if (unspscLength != 0) {
 			Element unspscElement = (Element)unspscNodeList.item(0);
-			return unspscElement.getAttribute("CustomerUNSPSC");			
+			return unspscElement.getAttribute("CustomerUNSPSC");
 		}
 		return null;
 	}
@@ -6824,61 +6821,55 @@ public class XPEDXWCUtils {
 		return punchOutComments;
 	}
 	/**
-	 * for calling an any API before authentication
+	 * For calling an any API before authentication
 	 * @param apiName
-	 * @param apiData
+	 * @param inputXml
+	 * @param isFlow
+	 * @param template
+	 * @return Returns null if an error occurs.
+	 */
+	public static Document handleApiRequestBeforeAuthentication(String apiName, String inputXml, String isFlowStr, String template) {
+		try {
+			boolean isFlow = !YFCCommon.isVoid(isFlowStr) && isFlowStr.equalsIgnoreCase("Y");
+			YFCDocument apiDoc = YFCDocument.parse(inputXml);
+			return handleApiRequestBeforeAuthentication(apiName, apiDoc.getDocument(), isFlow, template);
+		} catch (Exception e) {
+			log.fatal("Error invoking api: " + apiName, e);
+			return null;
+		}
+	}
+
+	/**
+	 * For calling an any API before authentication
+	 * @param apiName
+	 * @param inputDoc
 	 * @param isFlow
 	 * @param template
 	 * @return
+	 * @throws RuntimeException All exceptions are rethrown as RuntimeException
 	 */
-	public static Document handleApiRequestBeforeAuthentication(String apiName,String apiData,String isFlow,String template)
-    {
-	  if(YFCCommon.isVoid(isFlow) || YFCCommon.isVoid(apiData) || YFCCommon.isVoid(apiName) )
-        {
+	public static Document handleApiRequestBeforeAuthentication(String apiName, Document inputDoc, boolean isFlow, String template) {
+		if (YFCCommon.isVoid(isFlow) || YFCCommon.isVoid(inputDoc) || YFCCommon.isVoid(apiName)) {
 			return null;
-        }
-		Document retDoc = null;
-		YIFApi localApi;
-        InteropEnvStub envStub = new InteropEnvStub("admin", "SterlingHttpTester");
-        envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());
-        try
-        {
-              YFCDocument apiDoc = YFCDocument.parse(apiData);
-              localApi = YIFClientFactory.getInstance().getLocalApi();
-	          log.debug("Successfully intialized the local api");
-            if(!YFCCommon.isVoid(isFlow) && isFlow.equalsIgnoreCase("Y"))
-            {
-                retDoc = localApi.executeFlow(envStub, apiName, apiDoc.getDocument());
-            } else
-            {
-                retDoc = localApi.invoke(envStub, apiName, apiDoc.getDocument());
-            }
-        }
-        catch(YIFClientCreationException e)
-        {
-        	log.fatal("Could not create local client", e);
-        }
-        catch(SAXException e)
-        {
-        	log.fatal((new StringBuilder()).append("SAX Exception while invoking api ").append(apiName).toString(), e);
-        }
-        catch(IOException e)
-        {
-        	log.fatal((new StringBuilder()).append("IO Exception while invoking api ").append(apiName).toString(), e);
-        }
-        catch(YFSException e)
-        {
-        	log.fatal((new StringBuilder()).append("YFS Exception while invoking api ").append(apiName).toString(), e);
-        }
-        catch(YFCException e)
-        {
-        	log.fatal((new StringBuilder()).append("YFC Exception while invoking api ").append(apiName).toString(), e);
+		}
 
-        }
-        finally{
-        	 return retDoc;
-        }
-    }
+		try {
+			InteropEnvStub envStub = new InteropEnvStub("admin", "SterlingHttpTester");
+			envStub.setApiTemplate(apiName, YFCDocument.getDocumentFor(template).getDocument());
+			YIFApi localApi = YIFClientFactory.getInstance().getLocalApi();
+			log.debug("Successfully intialized the local api");
+
+			Document retDoc;
+			if (isFlow) {
+				retDoc = localApi.executeFlow(envStub, apiName, inputDoc);
+			} else {
+				retDoc = localApi.invoke(envStub, apiName, inputDoc);
+			}
+			return retDoc;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * @param context

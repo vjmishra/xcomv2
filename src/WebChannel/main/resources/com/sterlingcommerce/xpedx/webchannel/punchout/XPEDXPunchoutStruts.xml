@@ -1,12 +1,17 @@
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd">
-	<struts>
-		<package name="xpedx.punchout" namespace="/punchout" extends="wcDefault">
-			
-			<action name="punchoutShipToSearchAction" class="com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutShipToSearchAction">		
-				<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>				
-			</action>	
-			
-		</package>
-	</struts>
+		"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+		"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="xpedx.punchout" namespace="/punchout" extends="wcDefault">
+		
+		<action name="cxmlLogin" class="com.sterlingcommerce.xpedx.webchannel.common.PunchoutCxmlLoginAction">
+			<result>/xpedx/jsp/punchout/punchoutlogin.jsp</result>
+			<result name="error">/xpedx/jsp/punchout/punchoutTimeout.jsp</result>
+		</action>
+		
+		<action name="punchoutShipToSearchAction" class="com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutShipToSearchAction">
+			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+		</action>
+		
+	</package>
+</struts>

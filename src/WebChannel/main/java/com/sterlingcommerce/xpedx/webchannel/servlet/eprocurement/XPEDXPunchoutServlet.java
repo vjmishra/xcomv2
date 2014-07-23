@@ -4,7 +4,7 @@
 package com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement;
 
 import java.io.IOException;
-import java.net.URLEncoder;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +34,18 @@ import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.eprocurement.XPEDXCXMLMessageFields;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
+import com.yantra.yfs.core.YFSSystem;
 
+/**
+ * This handles the CXML authentication handshake. The customer makes a POST request to this servlet with a CXML document
+ *  containing their identity and secret (and other metadata). On successful authentication, they are sent a url that
+ *  will allow them access to punchout (in web channel).
+ * <br>
+ * The response contains a url that points to PunchoutCxmlLoginAction
+ * @see PunchoutCxmlLoginAction
+ */
 public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
+
 	private static final String PARAMNAME_PASSWORD = "p=";
 	private static final String PARAMNAME_USERID = "?u=";
 	XPEDXCXMLMessageFields cXMLFields = null;
@@ -48,79 +58,102 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 	protected SCUISecurityResponse authenticateRequest(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 
-		//SCUISecurityResponse securityResponse = super.authenticateRequest(req, res);
-    	SCUISecurityResponse securityResponse =  null;
-    	String startPageURL;
+		try {
+			// Initialize fields from incoming cXML
+			Document doc = (Document)req.getAttribute(IAribaConstants.ARIBA_CXML_REQUEST_ATTRIBUTE_KEY);
+			cXMLFields = new XPEDXCXMLMessageFields(doc);
 
-    	try {
-    		// Initialize fields from incoming cXML
-    		Document doc = (Document)req.getAttribute(IAribaConstants.ARIBA_CXML_REQUEST_ATTRIBUTE_KEY);
-    		cXMLFields = new XPEDXCXMLMessageFields(doc);
-
-    		String custIdentity	= cXMLFields.getCustomerIdentity();
+			String custIdentity	= cXMLFields.getCustomerIdentity();
 			String cxmlSecret   = cXMLFields.getAuthPassword();
 			String buyerCookie	= cXMLFields.getBuyerCookie();
 			String returnUrl   = cXMLFields.getReturnURL();
 			String toIdentity	= cXMLFields.getToIdentity();
-			String payLoadID	= cXMLFields.getPayLoadId();
+			String payloadId	= cXMLFields.getPayLoadId();
 
 			// Extract credentials from incoming cXML to compare to customer in DB
-    		Element custExtnElement = XPEDXWCUtils.getPunchoutConfigForCustomerIdentity(custIdentity);
-    		if (custExtnElement == null) {
+			Element custExtnElement = XPEDXWCUtils.getPunchoutConfigForCustomerIdentity(custIdentity);
+			if (custExtnElement == null) {
 				log.warn("Can't get Punchout config for cust identity in cXML: " + custIdentity);
 				return new SCUISecurityResponse(false, "Invalid Identity");
-    		}
+			}
 
 			String dbSecret = SCXmlUtil.getAttribute(custExtnElement, "ExtnSharedSecret");
 			String dbStartPage = SCXmlUtil.getAttribute(custExtnElement, "ExtnStartPageURL");
-			//String userXPath = SCXmlUtil.getAttribute(custExtnElement, "ExtnCXmlUserXPath"); might support later
 
-    		// validate SharedSecret matches DB for cust
+			// validate SharedSecret matches DB for cust
 			if (!cxmlSecret.equals(dbSecret)) {
 				log.warn("Shared Secret from cXML \'" + cxmlSecret + "\' does not match DB cust identity " + custIdentity);
 				return new SCUISecurityResponse(false, "Invalid SharedSecret");
 			}
-
 
 			//TODO later for Toys'R'Us: extract user from incoming cXML and use it instead
 			// *if* the one specified is valid punchout user in system; otherwise keep default
 
 			// Not sure if we need to login actual user here, could auth some other way
 			// but do want to make sure valid before return URL
-    		//From 2010: "TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return"
-    		String userid = obtainUserid(dbStartPage);
+			//From 2010: "TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return"
+
+			// TODO eventually we want to store user/pass in dedicated db columns (and avoid the startPage column altogether)
+			String userid = obtainUserid(dbStartPage);
 			String passwd = obtainPassword(dbStartPage);
 
 			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(userid, passwd);
-    		securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
+			SCUISecurityResponse securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
 
-    		if (securityResponse.getReturnStatus())
-    			log.info("Authentication successful for user " + userid + " - PayLoadID:" + cXMLFields.getPayLoadId());
-    		else {
-    			log.warn("Authentication failed for user " + userid + " - PayLoadID:" + cXMLFields.getPayLoadId());
-    			return new SCUISecurityResponse(false, "Invalid User");
-    		}
+			if (securityResponse.getReturnStatus()) {
+				log.info("Authentication successful for user " + userid + " - PayLoadID:" + cXMLFields.getPayLoadId());
+			} else {
+				log.warn("Authentication failed for user " + userid + " - PayLoadID:" + cXMLFields.getPayLoadId());
+				return new SCUISecurityResponse(false, "Invalid User");
+			}
 
-    		//TODO later for TRU: if userid specified in cXML, update URL with it
+			//TODO later for TRU: if userid specified in cXML, update URL with it
 
-    		// Add params to start URL from DB for this customer
-    		String moreParams = "&payLoadID="+payLoadID+
-    							// don't need now - later? "&operation=1&orderHeaderKey=val&selectedCategory=val&selectedItem=val&selectedItemUOM=val"+
-    							"&buyerCookie="+buyerCookie+"&fromIdentity="+toIdentity+"&toIdentity="+custIdentity+"&sfId=xpedx" +
-    							"&returnURL="+URLEncoder.encode(returnUrl,"UTF-8");
+			// eb-6915: create a cxml session and return url with token in it
+			String sessionId = persistCxmlSession(userid, passwd, payloadId, buyerCookie, toIdentity, custIdentity, returnUrl);
 
-    		startPageURL = dbStartPage + moreParams;
-    	}
-    	catch(Exception e){
-    		logError("Exception during authentication", e);
-    		throw new WCException("Exception during XPEDXPunchoutServlet.processRequest", e);  //does this work right?
-    	}
+			String startPageURL = YFSSystem.getProperty("punchout.cxml.login.url") + "?sfId=xpedx&sessionId=" + sessionId;
 
-    	log.info("Punchout cXML setup: start URL to return: " + startPageURL);
-		cXMLFields.setStartPageURL(startPageURL );
+			log.info("Punchout cXML setup: start URL to return: " + startPageURL);
+			cXMLFields.setStartPageURL(startPageURL );
 
-    	return securityResponse;
- 	}
+			return securityResponse;
+
+		} catch(Exception e){
+			logError("Exception during authentication", e);
+			throw new WCException("Exception during XPEDXPunchoutServlet.processRequest", e);  //does this work right?
+		}
+	}
+
+	/**
+	 * @param userid
+	 * @param passwd Encrypted password
+	 * @param payloadId
+	 * @param buyerCookie
+	 * @param fromIdentity
+	 * @param toIdentity
+	 * @param returnUrl This is the hook url provided by customer, where web channel will post cxml cart data when user has completed shopping.
+	 * @return
+	 */
+	private String persistCxmlSession(String userid, String passwd, String payloadId, String buyerCookie, String fromIdentity, String toIdentity, String returnUrl) {
+		String sessionId = UUID.randomUUID().toString().replace("-", "");
+
+		Element punchoutCxmlSessionElem = SCXmlUtil.createDocument("XPEDXPunchoutCxmlSession").getDocumentElement();
+
+		punchoutCxmlSessionElem.setAttribute("PunchoutCxmlSessionId", sessionId);
+		punchoutCxmlSessionElem.setAttribute("Userid", userid);
+		punchoutCxmlSessionElem.setAttribute("Passwd", passwd);
+		punchoutCxmlSessionElem.setAttribute("PayloadId", payloadId);
+		punchoutCxmlSessionElem.setAttribute("BuyerCookie", buyerCookie);
+		punchoutCxmlSessionElem.setAttribute("FromIdentity", fromIdentity);
+		punchoutCxmlSessionElem.setAttribute("ToIdentity", toIdentity);
+		punchoutCxmlSessionElem.setAttribute("ReturnUrl", returnUrl);
+
+		Document outputDoc = XPEDXWCUtils.handleApiRequestBeforeAuthentication("createPunchoutCxmlSession", punchoutCxmlSessionElem.getOwnerDocument(), true, null);
+		System.out.println("outputDoc:\n" + SCXmlUtil.getString(outputDoc));
+
+		return sessionId;
+	}
 
 	// Extract user/pwd from DB configured start URL: "http://xxx?u=advance@punchout.com&p=punchout123"
 	private String obtainUserid(String dbStartPage) {
@@ -143,91 +176,91 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 			throws ServletException, IOException {
 		try {
 
-    		// NOTE: not sure what these calls to Sterling APIs do - need them all?
+			// NOTE: not sure what these calls to Sterling APIs do - need them all?
 
-    		SCUISecurityResponse securityResponse = postAuthenticateUser(req, res);
-    		if(YFCCommon.equals(SCUISecurityResponse.SUCCESS,securityResponse.getReturnStatus())) {
+			SCUISecurityResponse securityResponse = postAuthenticateUser(req, res);
+			if(YFCCommon.equals(SCUISecurityResponse.SUCCESS,securityResponse.getReturnStatus())) {
 
-    			// Process Setup request
-    			if(!YFCCommon.isVoid(cXMLFields) &&
-       					YFCCommon.equals(IAribaConstants.CXML_REQUEST_SETUP_TAG,cXMLFields.getCXMLRequestType()))
-    			{
-    				log.info("Punchout post Authentication Successful");
+				// Process Setup request
+				if(!YFCCommon.isVoid(cXMLFields) &&
+						YFCCommon.equals(IAribaConstants.CXML_REQUEST_SETUP_TAG,cXMLFields.getCXMLRequestType()))
+				{
+					log.info("Punchout post Authentication Successful");
 
-    				populateAribaContext(wcContext);
+					populateAribaContext(wcContext);
 
-    				if(YFCCommon.equals(IAribaConstants.ARIBA_OPERATION_EDIT_STRING, cXMLFields.getOperation(), true)||
-       						YFCCommon.equals(IAribaConstants.ARIBA_OPERATION_INSPECT_STRING, cXMLFields.getOperation(),true))
-       				{
-       					if(YFCCommon.isVoid(cXMLFields.getOrderHeaderKey())) {
-           	    			return sendFailureResponse("Mandatory parameter missing for EDIT/INSPECT: Order Header key is not present",
-           	    					IWCIntegrationStatusCodes.MANDATORY_PARAMETER_MISSING);
-       					}
-       				}
+					if(YFCCommon.equals(IAribaConstants.ARIBA_OPERATION_EDIT_STRING, cXMLFields.getOperation(), true)||
+							YFCCommon.equals(IAribaConstants.ARIBA_OPERATION_INSPECT_STRING, cXMLFields.getOperation(),true))
+					{
+						if(YFCCommon.isVoid(cXMLFields.getOrderHeaderKey())) {
+							return sendFailureResponse("Mandatory parameter missing for EDIT/INSPECT: Order Header key is not present",
+									IWCIntegrationStatusCodes.MANDATORY_PARAMETER_MISSING);
+						}
+					}
 
-    				try {
-       					CommerceContextHelper.processProcurementPunchIn(wcContext); // what does this do?
-       				}
-       		    	catch(Exception e) {
-       	    			return sendFailureResponse("Failed to process the commerce context",
-       	    					IWCIntegrationStatusCodes.COMMERCE_CONTEXT_FAILED);
-       		    	}
+					try {
+						CommerceContextHelper.processProcurementPunchIn(wcContext); // what does this do?
+					}
+					catch(Exception e) {
+						return sendFailureResponse("Failed to process the commerce context",
+								IWCIntegrationStatusCodes.COMMERCE_CONTEXT_FAILED);
+					}
 
-    				// Shouldn't need this since we're now defining our own URL
-    				// Note that it gives wrong server port - assumes 8001 regardless if running on 7002!
-    				//String aribaStartPageURL = WCIntegrationHelper.getAribaStartPageURL(cXMLFields, wcContext);
+					// Shouldn't need this since we're now defining our own URL
+					// Note that it gives wrong server port - assumes 8001 regardless if running on 7002!
+					//String aribaStartPageURL = WCIntegrationHelper.getAribaStartPageURL(cXMLFields, wcContext);
 
-    				//TODO "&" getting turned into "&amp;" - matter?
-    		    	String startPageURL = cXMLFields.getStartPageURL(); // our custom URL from authenticateRequest
+					//TODO "&" getting turned into "&amp;" - matter?
+					String startPageURL = cXMLFields.getStartPageURL(); // our custom URL from authenticateRequest
 
-       				if(!YFCCommon.isVoid(startPageURL)) {
-       		    		log.info("Start page URL being returned:" + startPageURL);
+					if(!YFCCommon.isVoid(startPageURL)) {
+						log.info("Start page URL being returned:" + startPageURL);
 
-       		    		//cXMLFields.setStartPageURL(startPageURL); we've already set this earlier
+						//cXMLFields.setStartPageURL(startPageURL); we've already set this earlier
 
-       		    		wcResponse = sendSuccessResponse("Request for Auth setup is success");
-       				}
-       				else {
-       	    			return sendFailureResponse("Cannot form start page url:",
-       	    					IWCIntegrationStatusCodes.SERVER_ERROR);
-       				}
-       			}
+						wcResponse = sendSuccessResponse("Request for Auth setup is success");
+					}
+					else {
+						return sendFailureResponse("Cannot form start page url:",
+								IWCIntegrationStatusCodes.SERVER_ERROR);
+					}
+				}
 
 
-    			// Process Order request
-    			//TODO when is this used? Do we need story to support this?
-    			else if(!YFCCommon.isVoid(cXMLFields) &&
-       					YFCCommon.equals(IAribaConstants.CXML_REQUEST_ORDER_TAG,cXMLFields.getCXMLRequestType())) {
+				// Process Order request
+				//TODO when is this used? Do we need story to support this?
+				else if(!YFCCommon.isVoid(cXMLFields) &&
+						YFCCommon.equals(IAribaConstants.CXML_REQUEST_ORDER_TAG,cXMLFields.getCXMLRequestType())) {
 
-    				//Invoke the helper class which will call the service.
-       				wcResponse = WCIntegrationHelper.processAribaOrderRequest(cXMLFields.getRequestDoc(), wcContext); //TODO what does?
+					//Invoke the helper class which will call the service.
+					wcResponse = WCIntegrationHelper.processAribaOrderRequest(cXMLFields.getRequestDoc(), wcContext); //TODO what does?
 
-       				if(wcResponse.getReturnStatus()) {
-       					cXMLFields.setProcessStatus(true);  //TODO move this in success method so applies to setup too?
-       		    		wcResponse = sendSuccessResponse("Order request processed successfully");
-       				}
-       				else {
-       					cXMLFields.setProcessStatus(false);
-       	    			return sendFailureResponse("Order request process failed:",
-       	    					IWCIntegrationStatusCodes.API_ERROR);
-       				}
-       			}
-    		}
+					if(wcResponse.getReturnStatus()) {
+						cXMLFields.setProcessStatus(true);  //TODO move this in success method so applies to setup too?
+						wcResponse = sendSuccessResponse("Order request processed successfully");
+					}
+					else {
+						cXMLFields.setProcessStatus(false);
+						return sendFailureResponse("Order request process failed:",
+								IWCIntegrationStatusCodes.API_ERROR);
+					}
+				}
+			}
 
-    		else {
-    			return sendFailureResponse("Post Authentication failed",
-    					IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
-    		}
-    	}
-    	catch(Exception e) {
-    		logError("Exception in XPEDXPunchoutServlet.processRequest",e);
+			else {
+				return sendFailureResponse("Post Authentication failed",
+						IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
+			}
+		}
+		catch(Exception e) {
+			logError("Exception in XPEDXPunchoutServlet.processRequest",e);
 			return sendFailureResponse("Post Authentication failed",
 					IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
-    	}
+		}
 
-    	log.info("Post Authentication process End");
-    	return wcResponse;
-    }
+		log.info("Post Authentication process End");
+		return wcResponse;
+	}
 
 	private WCIntegrationResponse sendSuccessResponse(String errorMessage) {
 
