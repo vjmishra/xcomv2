@@ -121,20 +121,41 @@ public class AutocompleteCacheUtil {
 		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		Document inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");		
-		Document xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList",inXML);
-		Element outputListElement = xpxMgiListOutDoc.getDocumentElement();
-		if(outputListElement!=null){
-			NodeList xpxArchiveExtnNL = outputListElement.getElementsByTagName("XPXMgiArchive");
-			if(xpxArchiveExtnNL.getLength() > 0 ){
-				Element xpxmgiExtnEle = (Element)xpxArchiveExtnNL.item(0);
-				if(xpxmgiExtnEle!=null) {
-					return xpxmgiExtnEle.getAttribute("IndexPath");
+		Document inXML = null;		
+		Document xpxMgiListOutDoc = null;
+		Element outputListElement = null;
+		//EB-6981 - 07/23/2014 - ML: fixing connection leak causing JDBC connection pool to reach its limit. 
+		//	Adding a call to releaseTransactionContext to trigger the connection close. 
+		try
+		{
+			inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");		
+			xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList",inXML);
+			outputListElement = xpxMgiListOutDoc.getDocumentElement();
+			
+			if(outputListElement!=null){
+				NodeList xpxArchiveExtnNL = outputListElement.getElementsByTagName("XPXMgiArchive");
+				if(xpxArchiveExtnNL.getLength() > 0 ){
+					Element xpxmgiExtnEle = (Element)xpxArchiveExtnNL.item(0);
+					if(xpxmgiExtnEle!=null) {
+						return xpxmgiExtnEle.getAttribute("IndexPath");
+					}
 				}
 			}
-		}
 
-		throw new IllegalStateException("No Active Index path Found");
+		}
+		catch (Exception ex) {		
+			//rollback the tran
+			scuiTransactionContext.rollback();
+			throw new IllegalStateException("No Active Index path Found");
+		} finally {
+			if (scuiTransactionContext != null) {
+				//release the transaction to close the connection.
+				SCUITransactionContextHelper.releaseTransactionContext(
+						scuiTransactionContext, wSCUIContext);
+				scuiTransactionContext=null;
+			}
+		}			
+		
 	}
 
 }
