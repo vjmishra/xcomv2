@@ -49,9 +49,26 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
 	private static Map<String,String> uomDescMap;
+	private static final Map<String,String> maxItemErrorMap;
 
 
 	static {
+		// MAX item error codes with messages
+		maxItemErrorMap = new HashMap<String, String>(20);
+		maxItemErrorMap.put("01", "Invalid Item Number");
+		maxItemErrorMap.put("02", "Item number missing");
+		maxItemErrorMap.put("03", "Bad UOM Not a MAX Primary or alternate UOM");
+		maxItemErrorMap.put("04", "Overflow error");
+		maxItemErrorMap.put("05", "Order Branch Missing");
+		maxItemErrorMap.put("06", "Item is suspended");
+		maxItemErrorMap.put("07", "Item is non-standard");
+		maxItemErrorMap.put("08", "Item Balance Record Missing");
+		maxItemErrorMap.put("09", "Suspended Item Balance");
+		maxItemErrorMap.put("10", "Requested Quantity has non-numberic data");
+		maxItemErrorMap.put("11", "Requested UOM missing");
+		maxItemErrorMap.put("12", "Requested UOM not in EWF003");
+		maxItemErrorMap.put("14", "Order Multiple Error");
+
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		try
 		{
@@ -469,8 +486,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					  if (Integer.parseInt(maxErrorCode) != 0) {
 						  log.info("SCWS: MAX returned error on P&A for item " + legacyProductCode +" - "+ maxErrorCode); //TODO make debug
 						  respErrorCode = ERROR_LEVEL_COMPLETE_FAILURE;
-						  //TODO map MAX codes to messages - for now create temp message with code
-						  respErrorMessage = "MAX LineStatusCode: " + maxErrorCode;
+						  respErrorMessage = convertMaxErrorCode(maxErrorCode);
 					  }
 					  errorCode2.setTextContent(respErrorCode);
 					  errorMessage2.setTextContent(respErrorMessage);
@@ -889,6 +905,16 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		return stockCheckResponseDocument;
 	}
 
+	private String convertMaxErrorCode(String maxErrorCode) {
+
+		String message = maxItemErrorMap.get(maxErrorCode);
+
+		if (message != null) {
+			return maxErrorCode + "-" + message;
+		}
+		return "Problem getting Pricing and Availability - MAX Error Code: " + maxErrorCode;
+	}
+
 	/**
 	 * Get UOM description using previously loaded info
 	 * @param legacyUom - uom to get description for (e.g. M_SHT)
@@ -1161,7 +1187,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 
 	    			    legacyItemNumber = getLegacyItemNumberFromXref(env,customerPartNo,envtId,companyCode,legacyCustomerNumber);
-
 	    			    sLegacyProductCode.setTextContent(legacyItemNumber);
 
 	    				//xpedxPartNo exists so setting this value as Legacy Product Code
@@ -1367,7 +1392,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		    		Element primInfo = (Element) itemElement.getElementsByTagName("PrimaryInformation").item(0);
 
-		    		minOrderQty = primInfo.getAttribute("MinOrderQuantity");
+		    		if (primInfo != null) {
+		    			minOrderQty = primInfo.getAttribute("MinOrderQuantity"); //TODO NPE if response doesn't contain PrimaryInformation
+		    		}
 
 		    		log.debug("The minimum order quantity is: "+minOrderQty);
 		    	}
@@ -1382,34 +1409,34 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		Document getItemXRefListOutputDoc = null;
 		String legacyItemNumber = null;
 
-         Document getItemXRefListDoc = YFCDocument.createDocument("XPXItemcustXref").getDocument();
+		Document getItemXRefListDoc = YFCDocument.createDocument("XPXItemcustXref").getDocument();
 
-         getItemXRefListDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
-         getItemXRefListDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
-         getItemXRefListDoc.getDocumentElement().setAttribute("CustomerNumber",legacyCustomerNumber);
-         getItemXRefListDoc.getDocumentElement().setAttribute("CustomerItemNumber", customerPartNo);
+		getItemXRefListDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
+		getItemXRefListDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
+		getItemXRefListDoc.getDocumentElement().setAttribute("CustomerNumber",legacyCustomerNumber);
+		getItemXRefListDoc.getDocumentElement().setAttribute("CustomerItemNumber", customerPartNo);
 
-        	 log.debug("The input to Xref TABLE is: "+SCXmlUtil.getString(getItemXRefListDoc));
-			getItemXRefListOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, getItemXRefListDoc);
-			log.debug("The output of Xref TABLE is: "+SCXmlUtil.getString(getItemXRefListOutputDoc));
+		log.debug("The input to Xref TABLE is: "+SCXmlUtil.getString(getItemXRefListDoc));
+		getItemXRefListOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, getItemXRefListDoc);
+		log.debug("The output of Xref TABLE is: "+SCXmlUtil.getString(getItemXRefListOutputDoc));
 
 
 		if(getItemXRefListOutputDoc != null)
 		{
-		Element XREFOutputDocRoot = getItemXRefListOutputDoc.getDocumentElement();
+			Element XREFOutputDocRoot = getItemXRefListOutputDoc.getDocumentElement();
 
-		NodeList XREFCustElementList = XREFOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_CUST_XREF);
+			NodeList XREFCustElementList = XREFOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_CUST_XREF);
 
-		if(XREFCustElementList.getLength() > 0)
-		{
+			if(XREFCustElementList.getLength() > 0)
+			{
 
-			        Element XREFElement = (Element) XREFCustElementList.item(0);
+				Element XREFElement = (Element) XREFCustElementList.item(0);
 
-			        legacyItemNumber = XREFElement.getAttribute("LegacyItemNumber");
-			        log.debug("The legacy item number is: "+legacyItemNumber);
+				legacyItemNumber = XREFElement.getAttribute("LegacyItemNumber");
+				log.debug("The legacy item number is: "+legacyItemNumber);
+			}
+
 		}
-
-	    }
 
 		return legacyItemNumber;
 	}
