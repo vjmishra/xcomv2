@@ -129,8 +129,8 @@ It is not a good practice but creating on every jsp page is also not convenient 
 			};
 			
 			var acSelect = function(event, ui) {
-				 //console.log('BEGIN acSelect');
-			     //console.log('ui.item = ' , ui.item);
+				 // autocomplete console.log('BEGIN acSelect');
+			     // autocomplete console.log('ui.item = ' , ui.item);
 				
 				if (ui.item.isNormalSearch) {
 					$('#newSearch').submit();
