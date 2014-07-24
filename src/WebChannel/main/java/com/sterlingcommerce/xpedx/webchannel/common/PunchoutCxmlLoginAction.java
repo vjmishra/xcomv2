@@ -59,19 +59,7 @@ public class PunchoutCxmlLoginAction extends WCAction {
 
 	private static Element getPunchoutCxmlSession(String sessionId) {
 		Element punchoutCxmlSessionElem = SCXmlUtil.createDocument("XPEDXPunchoutCxmlSession").getDocumentElement();
-		Element complexQueryInputElem = SCXmlUtil.createChild(punchoutCxmlSessionElem, "ComplexQuery");
-		Element andInputElem = SCXmlUtil.createChild(complexQueryInputElem, "And");
-
-		Element expTimestampInputElemElem = SCXmlUtil.createChild(andInputElem, "Exp");
-		expTimestampInputElemElem.setAttribute("Name", "PunchoutCxmlSessionId");
-		expTimestampInputElemElem.setAttribute("Value", sessionId);
-		expTimestampInputElemElem.setAttribute("QryType", "EQ");
-
-		// TODO do not provide CreateTs here, instead rely on external process to purge expired sessions. avoids timezone issues
-//		Element expSessionIdInputElem = SCXmlUtil.createChild(andInputElem, "Exp");
-//		expSessionIdInputElem.setAttribute("Name", "CreateTs");
-//		expSessionIdInputElem.setAttribute("Value", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:Z").format(new Date()));
-//		expSessionIdInputElem.setAttribute("QryType", "GE");
+		punchoutCxmlSessionElem.setAttribute("PunchoutCxmlSessionId", sessionId);
 
 		Element punchoutCxmlSessionListOutputElem = XPEDXWCUtils.handleApiRequestBeforeAuthentication("getPunchoutCxmlSessionList", punchoutCxmlSessionElem.getOwnerDocument(), true, null).getDocumentElement();
 
