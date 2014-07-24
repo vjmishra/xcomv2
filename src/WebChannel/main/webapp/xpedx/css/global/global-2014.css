@@ -1384,3 +1384,24 @@ h3 {
 	margin-top: 2px;
 }
 /*-------------- end Quick Add ----------- */
+
+/*-----modals----------*/
+.ship-to-address-list {
+    border: 1px solid #ccc;
+    height: auto;
+    overflow: auto;
+}
+
+.bill-to-address-list {
+    border-bottom: 1px solid #ccc;
+    height: auto;
+    overflow: auto;
+}
+
+.account-list{
+	 border-bottom: 1px solid #ccc;
+    height: auto;
+    overflow: auto;
+}
+
+

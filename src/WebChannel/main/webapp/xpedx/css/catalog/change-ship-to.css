@@ -62,12 +62,7 @@ margin-right:38px;
 float: left;
 width: 740px;	
 }
-.ship-to-address-list
-{
-border: 1px solid #CCC; 
-height: 216px;
-overflow: auto;
-}
+
 .ship-to-list
 {
 width:232px;

@@ -125,7 +125,7 @@
 			},
 			'autoDimensions'	: false,
 			'width' 			: 880,
-			'height' 			: 420,
+			'height' 			: 480,
 			'scrolling'			:'no',
 			//XNGTP - JIRA- 489 
 			'onClosed' : function(){				

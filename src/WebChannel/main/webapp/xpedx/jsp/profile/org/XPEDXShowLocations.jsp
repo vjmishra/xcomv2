@@ -69,7 +69,7 @@ div#fancybox-content
 	<s:hidden name='orgCode' value="%{#_action.getWCContext().getStorefrontId()}" />
 	<input type="hidden" name="sapCustomerID" value="<s:property value='shownCustomerId' />" />
 	    <h1>Change Location</h1>
-		<br /> 
+		
 		<div class="radio-container">
 		<s:property value="%{#_action.getBuyrOrgName()}"/><br />
 			<ul id="">

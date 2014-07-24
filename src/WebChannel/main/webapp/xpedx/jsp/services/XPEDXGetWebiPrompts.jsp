@@ -185,12 +185,12 @@
                        var currentTagTokens = token.split( ";" );
                        var textedit = currentTagTokens[0];
                        //Editing billtoname start
-                       var editbillto = textedit.split(",");
+                       var editbillto = textedit.split(", ");
                        var editbilltoone = editbillto[0];
                        var editbilltotwo = editbilltoone.split(" ");
                        var display_BillToname = "";
                        for (var i = 1; i< editbilltotwo.length;i++){
-                           display_BillToname = display_BillToname + " " + editbilltotwo[i];
+                           display_BillToname = display_BillToname + editbilltotwo[i] + " " ;
                            }
                        //Editing billtoname end
                        //Editing Address Start
@@ -202,18 +202,24 @@
                            }
                        //Editing City, zipcode, country
                        var editaddress1="";
-                       for (var i = editbillto.length-3; i< editbillto.length;i++){
+                       for (var i = editbillto.length-3; i< editbillto.length-2;i++){
                             if(editaddress1 =="")
                                 editaddress1= editbillto[i];
                             else
-                           editaddress1= editaddress1 +"," +editbillto[i] ;
+                           editaddress1= editaddress1 +"\n" +editbillto[i] ;
                            
-                               }
+                      	}
+                       var cityandstate=  editbillto[editbillto.length-2]+", "+editbillto[editbillto.length-1];
                        //Editing Address End
                        var stringone =  textedit.split(" ");
                        var displayid = stringone[0];
                        var displaycustid_with_BillToname = displayid + "\n" +  display_BillToname;
-                       textElement.value = displaycustid_with_BillToname + "\n" +     editaddress  + editaddress1  ;                    
+                       if(editaddress==""){
+                    	   textElement.value = displaycustid_with_BillToname + "\n" + editaddress1+ "\n"+ cityandstate;
+                       }
+                       else{
+                       		textElement.value = displaycustid_with_BillToname + "\n" +  editaddress + "\n" + editaddress1+ "\n"+ cityandstate; 
+                       }
                        var hdnLocType = document.getElementById('selectedLocationType');
                        hdnLocType.value="Bill To";
                        var hdnCustId = document.getElementById('selectedCustId');
@@ -462,8 +468,9 @@ $(function() {
                }
                },
                'autoDimensions'    : false,
-               'width'             : 800,
-               'height'             : 340,
+               'width'             : 880,
+               'height'            : 480,
+               'scrolling'		   :'no',
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showLocationsDiv").innerHTML = '';
@@ -499,8 +506,10 @@ $(function() {
                }
                },
                'autoDimensions'    : false,
-               'width'             : 800,
-               'height'             : 400,
+               'width'             : 880,
+               'height'            : 480,
+               'scrolling'		   :'no',
+               
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showBillToDiv").innerHTML = '';
