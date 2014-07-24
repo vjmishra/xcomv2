@@ -50,8 +50,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
 	private static Map<String,String> uomDescMap;
+	private static final Map<String,String> maxHeaderErrorMap;
 	private static final Map<String,String> maxItemErrorMap;
-	
+
     private String masterCustomerId;
     private Document shipToCustomerListOutputDoc ;
     private Document masterCustomerDetailsOutputDoc;
@@ -62,6 +63,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
     private NodeList stockCheckItemList;
 
 	static {
+		// MAX header error codes with messages
+		maxHeaderErrorMap = new HashMap<String, String>();
+		maxHeaderErrorMap.put("01", "Invalid Customer");
+		maxHeaderErrorMap.put("02", "Company # missing/blank");
+		maxHeaderErrorMap.put("03", "Invalid Ship-to# for this customer");
+
 		// MAX item error codes with messages
 		maxItemErrorMap = new HashMap<String, String>(20);
 		maxItemErrorMap.put("01", "Invalid Item Number");
@@ -99,7 +106,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		boolean dataValidationFlag = true;
 		Element stockCheckInputDocRoot = inputXML.getDocumentElement();
 
-		try {	
+		try {
 			formatValidationFlag = validateRequestXML(stockCheckInputDocRoot);
 			if(!formatValidationFlag)
 				return stockCheckOutputDocument;
@@ -119,20 +126,32 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			Document pAndAResponseDocument = api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
 			log.info("The P&A reponse output is: "+SCXmlUtil.getString(pAndAResponseDocument)); //TODO debug log
 
-			if(pAndAResponseDocument!=null)
-			{
+			if (pAndAResponseDocument!=null) {
+				Element pAndAResponseDocRoot = pAndAResponseDocument.getDocumentElement();
+				String headerStatusCode = SCXmlUtil.getXpathElement(pAndAResponseDocRoot,"./HeaderStatusCode").getTextContent();
 
-				stockCheckOutputDocument = createStockCheckOutput(env,pAndAResponseDocument,stockCheckInputDocRoot);	
+				if (Integer.parseInt(headerStatusCode) == 0 ) {
 
-			}else{
+					stockCheckOutputDocument = createStockCheckOutput(env,pAndAResponseDocRoot,stockCheckInputDocRoot);
+				}
+				else {
+					String errorMsg = "Problem getting Pricing and Availability - HeaderStatusCode: " + headerStatusCode;
+					String message = maxHeaderErrorMap.get(headerStatusCode);
+					if (message != null) {
+						errorMsg =  headerStatusCode + "-" + message;
+					}
+					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,
+							errorMessage_503 + " MAX: " + errorMsg);
+				}
+			}
+			else {
 				stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_503); //TODO if P&A returns null;
 			}
 
-
-
 			log.info("Final stock check doc: "+SCXmlUtil.getString(stockCheckOutputDocument)); //TODO log debug
 			log.info("Completed Stock Check Web Service request");
-		}catch(Exception ex){
+		}
+		catch(Exception ex){
 			ex.printStackTrace();
 			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_503);
 		}
@@ -152,10 +171,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	}
 
 
-	private Document createStockCheckOutput(YFSEnvironment env, Document pandAResponseDocument, Element stockCheckInputDocRoot) throws
-	                              YFSException, RemoteException, DOMException, YIFClientCreationException,NullPointerException, YFSException, Exception
-	{
-		//TODO clean up unused
+	private Document createStockCheckOutput(YFSEnvironment env, Element pAndAResponseDocRoot, Element stockCheckInputDocRoot)
+			throws YFSException, RemoteException, DOMException, YIFClientCreationException,NullPointerException, YFSException, Exception {
 		String envtId = null;
 		String companyCode = null;
 		String shipFromBranch = null;
@@ -163,19 +180,18 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		String customerItemNumber = null;
 		String customerID = null;
 		String organizationCode = null;
-		String sameDayQty = null;
-		String nextDayQty = null;
-		String twoDayQty = null;
 		String inventoryIndicator = null;
 		String orderMultiple = null;
 		String sapParentAccountNo = null;
+		// If init these null, have seen case where MAX unexpectedly returns only two warehouses which causes NPE later on twoDayQty
+		String sameDayQty = "0";
+		String nextDayQty = "0";
+		String twoDayQty = "0";
 
 		int listLength = 0;
 
 		Document stockCheckResponseDocument = YFCDocument.createDocument("xpedxStockCheckWSResponse").getDocument();
 		Element stockCheckResponseDocRoot = stockCheckResponseDocument.getDocumentElement();
-
-		Element pAndAResponseDocRoot = pandAResponseDocument.getDocumentElement();
 
 		/**
 		 * Root Error Info----Gap here so left it at just element creation(Level 1 error codes)
@@ -212,7 +228,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		/**
 		 * eTradingPartnerID
 		 */
-		Element eTradingIDElement = stockCheckResponseDocument.createElement("eTradingPartnerID");		
+		Element eTradingIDElement = stockCheckResponseDocument.createElement("eTradingPartnerID");
 		eTradingIDElement.setTextContent(eTradingId);
 		stockCheckResponseDocRoot.appendChild(eTradingIDElement);
 
@@ -852,7 +868,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
 
 
-
 		Element aItems = pAndARequestInputDoc.createElement("Items");
 
 		for(int i=0; i<stockCheckItemList.getLength(); i++)
@@ -899,7 +914,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 				sRequestedQty.setTextContent(minimumOrderQty);
 
-				// As quantity was not sent in request, ignore the UOM sent in and query using Manohar's method to fetch it.
+				//[OLD: As quantity was not sent in request, ignore the UOM sent in and query using Manohar's method to fetch it.]
 
 				Document invokeUOMListApiInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
 				invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID, legacyItemNumber);
@@ -939,8 +954,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				}
 				sRequestedQty.setTextContent(SCXmlUtil.getXpathElement(itemElement,"./Quantity").getTextContent());
 
-				//Prashant had asked to include a dummy method to convert the UOM sent in Stock check to the the EDI or Legacy or
-				// Customer preferred UOM...right now no clarity on that so not doing it
+				//[OLD: Prashant had asked to include a dummy method to convert the UOM sent in Stock check to the the EDI or Legacy or
+				// Customer preferred UOM...right now no clarity on that so not doing it]
 
 				if(SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent()==null ||
 						SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent().trim().length()==0)
@@ -1178,7 +1193,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	public void setProperties(Properties arg0) throws Exception {
 		// Auto-generated method stub
 	}
-	
+
 	/**
 	 * All the input XML format validations
 	 * @param stockCheckInputDocRoot
@@ -1187,7 +1202,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private boolean validateRequestXML(Element stockCheckInputDocRoot){
 		Element userEmeialElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserEmail");
 		if(userEmeialElement==null || YFCUtils.isVoid(userEmeialElement.getTextContent())){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);			
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
 			return false;
 		}
 		Element pwdElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserPassword");
@@ -1228,7 +1243,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		userEmail= SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserEmail").getTextContent();
 		password= SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserPassword").getTextContent();
-		eTradingId= SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./eTradingPartnerID").getTextContent();	
+		eTradingId= SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./eTradingPartnerID").getTextContent();
 		Document loginInputDocument = YFCDocument.createDocument("Login").getDocument();
 		loginInputDocument.getDocumentElement().setAttribute("LoginID", userEmail);
 		loginInputDocument.getDocumentElement().setAttribute("Password",password);
@@ -1236,8 +1251,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		try
 		{
 
-			log.debug("The input to Login API is: "+SCXmlUtil.getString(loginInputDocument));	
-			Document loginOutputDocument = api.invoke(env, "login", loginInputDocument);	
+			log.debug("The input to Login API is: "+SCXmlUtil.getString(loginInputDocument));
+			Document loginOutputDocument = api.invoke(env, "login", loginInputDocument);
 			log.info("The output after Login API is: "+SCXmlUtil.getString(loginOutputDocument));
 			masterCustomerId = loginOutputDocument.getDocumentElement().getAttribute("OrganizationCode");
 		}
@@ -1247,7 +1262,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			return false;
 		}
 		masterCustomerDetailsOutputDoc = getMasterCustomerDetailsOutput(env);
-		Element masterCustomerDetailsElement =  (Element)masterCustomerDetailsOutputDoc.getDocumentElement();
+		Element masterCustomerDetailsElement =  masterCustomerDetailsOutputDoc.getDocumentElement();
 		Element customerContact = (Element)masterCustomerDetailsElement.getElementsByTagName("CustomerContactList").item(0);
 		Element customerContactExtn = (Element)customerContact.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
 
@@ -1314,10 +1329,10 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			organizationCode= "Saalfeld";
 		}
 		customerDetailsInputDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
-		YFCElement customerContactElement = customerDetailsInputDoc.createElement("CustomerContact");     
+		YFCElement customerContactElement = customerDetailsInputDoc.createElement("CustomerContact");
 		customerContactElement.setAttribute("CustomerContactID", userEmail);
 		customerContactElement.setAttribute("UserID", userEmail);
-		customerDetailsInputDoc.getDocumentElement().appendChild(customerContactElement);	
+		customerDetailsInputDoc.getDocumentElement().appendChild(customerContactElement);
 
 		String customerDetailsTemplate =   "<Customer  CustomerID='' CustomerKey='' CustomerType=''  OrganizationCode=''>"
 				+ "<Extn ExtnStockCheckOption=''/>"
