@@ -303,5 +303,12 @@
 		<action name="getAssignedShipToCustomers" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxGetAssignedShipToCustomersAction">		
 			<result type="json"></result>
 		</action>
+		
+		<action name="PunchoutUtilities" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/PunchoutUtilities.jsp</result>
+		</action>
+		<action name="ajaxCreatePunchoutOciDataParam" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxCreatePunchoutOciDataParam">
+			<result type="json"></result>
+		</action>
 	</package>
 </struts>
