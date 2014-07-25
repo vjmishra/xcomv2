@@ -44,7 +44,7 @@ import com.yantra.yfs.core.YFSSystem;
  * The response contains a url that points to PunchoutCxmlLoginAction
  * @see PunchoutCxmlLoginAction
  */
-public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
+public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 
 	private static final String PARAMNAME_PASSWORD = "p=";
 	private static final String PARAMNAME_USERID = "?u=";
@@ -313,6 +313,6 @@ public class XPEDXPunchoutServlet extends AribaIntegrationServlet {
 		return docString;
 	}
 
-	private static final Logger log = Logger.getLogger(XPEDXPunchoutServlet.class);
+	private static final Logger log = Logger.getLogger(XPEDXPunchoutCxmlServlet.class);
 
 }

@@ -21,16 +21,16 @@ import com.sterlingcommerce.webchannel.core.WCException;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.servlet.common.IntegrationServlet;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
+import com.sterlingcommerce.xpedx.webchannel.common.PunchoutOciLoginAction;
 import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
 import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
 import com.yantra.yfc.util.YFCCommon;
 
-/*
- * This handles OCI URL requests from external procurement systems. It was
- * initially copied from (unfinished) OciIntegrationServlet.java of 2010.
- * Changes have been made to work around issues in base Sterling code and
- * use a custom approach for authenticating and redirecting to site.
- * (Also tried to refactor some of the convoluted code from that class)
+/**
+ * This handles OCI URL requests from external procurement systems. It was initially copied from (unfinished) OciIntegrationServlet.java of 2010.
+ * Changes have been made to work around issues in base Sterling code and use a custom approach for authenticating and redirecting to site. (Also tried to refactor some of the convoluted code from that class)
+ *
+ * @see PunchoutOciLoginAction
  */
 public class XPEDXOciServlet extends IntegrationServlet {
 

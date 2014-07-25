@@ -1072,10 +1072,10 @@
         <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXAribaIntegrationServlet</servlet-class>
     </servlet> 
     <servlet id="Servlet_47">
-        <description>XPEDXPunchoutServlet</description>
-        <display-name>XPEDXPunchoutServlet</display-name>
-        <servlet-name>XPEDXPunchoutServlet</servlet-name>
-        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutServlet</servlet-class>
+        <description>XPEDXPunchoutCxmlServlet</description>
+        <display-name>XPEDXPunchoutCxmlServlet</display-name>
+        <servlet-name>XPEDXPunchoutCxmlServlet</servlet-name>
+        <servlet-class>com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutCxmlServlet</servlet-class>
     </servlet> 
     <servlet id="Servlet_48">
 		<servlet-name>SalesRepLogin</servlet-name>
@@ -1252,7 +1252,7 @@
         <url-pattern>/interop/cxml</url-pattern>
     </servlet-mapping>
     <servlet-mapping id="ServletMapping_42">
-        <servlet-name>XPEDXPunchoutServlet</servlet-name>
+        <servlet-name>XPEDXPunchoutCxmlServlet</servlet-name>
         <url-pattern>/interop/xcxml</url-pattern>
     </servlet-mapping>
     <servlet-mapping id="ServletMapping_43">

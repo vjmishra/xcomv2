@@ -4,13 +4,13 @@ import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
-import com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutServlet;
+import com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutCxmlServlet;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 /**
  * After the CXML authentication handshake (see identity/secret in XPEDXPunchoutServlet), the user is returned a url that points to this action.
  * This action uses the seesionId parameter to fetch the CXML settings (user, password, etc).
- * @see XPEDXPunchoutServlet
+ * @see XPEDXPunchoutCxmlServlet
  */
 public class PunchoutCxmlLoginAction extends WCAction {
 
