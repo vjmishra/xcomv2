@@ -1063,7 +1063,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	padding: 6px 0px 0px 15px;
 }
 .qa-listheader {
-	margin-left: 12px;
+	margin-left: 15px;
 }
 .qa-listrow, .qa-listheader {
 	clear: both;
@@ -1291,12 +1291,12 @@ h3 {
 .mil-qa-list-po .mil-qa-button-wrap {
 	width: auto;
 	clear: both;
-	padding: 10px 0 0 388px;
+	padding: 10px 0 0 400px;
 }
 .mil-qa-list-wrap .mil-qa-button-wrap {
-	width: 500px;
 	clear: both;
-	padding: 10px 0 0 0px;
+	padding: 10px 0px 0px 220px;
+	width: 500px;
 }
 .mil-qa-list-po .qa-button-wrap {
 	width: 338px;
