@@ -41,10 +41,10 @@
 	<s:include value="../order/XPEDXRefreshMiniCart.jsp"/>	
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.mousewheel-3.0.2.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/common/PunchoutUtilities<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+	<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/swc/js/punchout/PunchoutUtilities<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 </head>
 <body class="ext-gecko ext-gecko3">
-	<s:url id='punchoutCreateDataParamURLid' namespace='/common' action='ajaxCreatePunchoutOciDataParam' escapeAmp="false" />
+	<s:url id='punchoutCreateDataParamURLid' namespace='/punchout' action='ajaxCreatePunchoutOciDataParam' escapeAmp="false" />
 	<s:hidden id="punchoutCreateDataParamURL" value="%{#punchoutCreateDataParamURLid}" />
 	
 	<s:set name="isUserAdmin" value="@com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils@isCurrentUserAdmin(wCContext)" />

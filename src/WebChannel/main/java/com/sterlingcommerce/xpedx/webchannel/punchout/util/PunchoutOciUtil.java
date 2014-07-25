@@ -1,4 +1,4 @@
-package com.sterlingcommerce.xpedx.webchannel.common.punchout;
+package com.sterlingcommerce.xpedx.webchannel.punchout.util;
 
 import com.sterlingcommerce.xpedx.webchannel.crypto.EncryptionUtils;
 

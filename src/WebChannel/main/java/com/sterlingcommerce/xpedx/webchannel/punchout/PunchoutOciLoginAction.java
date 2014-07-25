@@ -1,8 +1,8 @@
-package com.sterlingcommerce.xpedx.webchannel.common;
+package com.sterlingcommerce.xpedx.webchannel.punchout;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
-import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
-import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
+import com.sterlingcommerce.xpedx.webchannel.punchout.util.PunchoutOciUtil;
+import com.sterlingcommerce.xpedx.webchannel.punchout.util.PunchoutOciUtil.OciCredentials;
 
 /**
  * XPEDXOciServlet redirects here with the encrypted data parameter (contains userId and password).

@@ -9,8 +9,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
-import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
+import com.sterlingcommerce.xpedx.webchannel.punchout.util.PunchoutOciUtil;
+import com.sterlingcommerce.xpedx.webchannel.punchout.util.PunchoutOciUtil.OciCredentials;
 
 /**
  * @author http://techie-experience.blogspot.com/2012/10/encryption-and-decryption-using-aes.html

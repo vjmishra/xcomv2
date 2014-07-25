@@ -21,9 +21,9 @@ import com.sterlingcommerce.webchannel.core.WCException;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.servlet.common.IntegrationServlet;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
-import com.sterlingcommerce.xpedx.webchannel.common.PunchoutOciLoginAction;
-import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
-import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
+import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutOciLoginAction;
+import com.sterlingcommerce.xpedx.webchannel.punchout.util.PunchoutOciUtil;
+import com.sterlingcommerce.xpedx.webchannel.punchout.util.PunchoutOciUtil.OciCredentials;
 import com.yantra.yfc.util.YFCCommon;
 
 /**

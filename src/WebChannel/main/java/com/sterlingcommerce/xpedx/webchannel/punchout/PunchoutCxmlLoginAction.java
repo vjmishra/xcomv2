@@ -1,4 +1,4 @@
-package com.sterlingcommerce.xpedx.webchannel.common;
+package com.sterlingcommerce.xpedx.webchannel.punchout;
 
 import org.w3c.dom.Element;
 
