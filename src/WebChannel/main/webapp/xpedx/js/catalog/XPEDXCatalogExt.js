@@ -1321,10 +1321,10 @@ $(document).ready(function() {
 		'height' 			: 262  
 	});
 });
-function addItemToWishList(itemid,name) {
+function addItemToWishList(itemid) {
 	$("#itemIDForMyItemsList").val(itemid);
 	document.OrderDetailsForm.orderLineItemIDs.value=itemid;	
-	document.OrderDetailsForm.orderLineItemNames.value=name;
+	//document.OrderDetailsForm.orderLineItemNames.value=name;
 	$("#dlgAddToListLink").trigger('click');
 	
 }
