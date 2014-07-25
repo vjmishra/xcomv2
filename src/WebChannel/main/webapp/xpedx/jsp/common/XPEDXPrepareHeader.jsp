@@ -129,8 +129,8 @@ It is not a good practice but creating on every jsp page is also not convenient 
 			};
 			
 			var acSelect = function(event, ui) {
-				 console.log('BEGIN acSelect');
-			     console.log('ui.item = ' , ui.item);
+				 // autocomplete console.log('BEGIN acSelect');
+			     // autocomplete console.log('ui.item = ' , ui.item);
 				
 				if (ui.item.isNormalSearch) {
 					$('#newSearch').submit();
@@ -2452,11 +2452,8 @@ function callAjaxForSorting(url,divId)
 <div class="noScript"><s:text name='NoScriptWarning' /></div>
 </noscript>
 
-<!-- Added script to disable the user to enter text in searchbox before the page loads completely -->
 
-<script type="text/javascript">
-window.addEventListener("load", function() { document.getElementById('newSearch_searchTerm').disabled = false; }, false);
-</script>
+
 
 <!-- begin t1-header -->
 <!-- <div id="noassignedShipto" style="display:none;color:red;">There are no shipTo locations assigned for your profile, Please contact administrator..</div> commented for jira2881-->
@@ -2493,12 +2490,12 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	   		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput input-watermark-color" 
-						data-watermark="Search Catalog..." />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
+						data-watermark="Search Catalog..."   />
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />'  />
+						value='<s:property value="rememberNewSearchText" />' />
 	   		</s:else>
 			
 			<div id="tips-container">
@@ -2519,8 +2516,8 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
 	  		<!-- XBT-391 removed the onkeydown event -->
 	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput input-watermark-color" 
-						data-watermark="Search Catalog..." />
+				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
+						data-watermark="Search Catalog..."  />
 	   		</s:if>
 	   		<s:else>
 				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
@@ -2625,7 +2622,7 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 					<!--  Drop down fields  -->
 					<div id="welcome-address-popup" style="display: none;">
 						 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	         				Shopping for : 
+	         				<strong>Shopping for : </strong>
 	       				</s:if>
 	       				<s:else>
 	         				Orders for :
@@ -2640,11 +2637,12 @@ window.addEventListener("load", function() { document.getElementById('newSearch_
 							<s:a id="changeShipToURL" href="%{#changeShipToURLid}">[Change]</s:a>
 							</s:else>
 						</s:if>						
-						<br/> 
-					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/>  																	
-						 <s:if test="{#defualtShipTAddress.getLocationID()!=null && #defualtShipTAddress.getLocationID().trim().length() > 0}">
+						<hr/> 
+					  	<s:property value='loggerInUserCustomerName'/> (<s:property value='#shipToCustomerDisplayStr'/>)<br/> 
+					  																	
+						 <s:if test="%{#defualtShipTAddress.getLocationID().trim() != ''}">
 							Local ID: <s:property value='#defualtShipTAddress.getLocationID()'/><br/>
-						</s:if>						
+						</s:if >						
 						<s:iterator value="#defualtShipTAddress.getAddressList()" id='addressline' >
 							<s:if test='#addressline.length() > 30'>
 							<s:set name='addressline' value='%{#addressline.substring(0,30)}'/>

@@ -1376,7 +1376,7 @@ h3 {
 }
 .print-ico-xpedx {
     margin-right: 8px;
-    margin-top: -48px;
+    margin-top: -34px;
 	cursor: pointer;
 }
 .producterrorLine {
@@ -1405,3 +1405,30 @@ h3 {
 }
 
 
+#welcome-address-popup {
+	background: none repeat scroll 0 0 #fafafa;
+	border: 2px solid #cccccc;
+	color: #000000;
+	cursor: default;
+	font-size: 12px;
+	line-height: 16px;
+	margin-top: 5px;
+	padding: 5px;
+	position: relative;
+	text-align: left;
+	z-index: 5000;
+}
+
+#welcome-address-popup a {
+	color: #003399;
+	font-size: 12px;
+	font-weight: bold;
+	margin-left: 10px;
+}
+
+#welcome-address-popup hr {
+	height: 1px;
+	border: 0;
+	margin: 4px 0px;
+	background: #cccccc;
+}
