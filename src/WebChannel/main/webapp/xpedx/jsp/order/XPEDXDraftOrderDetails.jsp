@@ -26,6 +26,8 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 <![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/carts-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
@@ -621,10 +623,10 @@ $(document).ready(function(){
 	</a>
 </div>
 
-<div class="float-right">
+
 	
 <!-- List Item Description -->
-<div class="mil-edit-forms">
+
 
 <div class="cart-info-wrap">
 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
@@ -733,7 +735,7 @@ $(document).ready(function(){
 
 	
 	
-</div>
+
 
 <div id="errorMsgTop" class="textAlignCenter" style="display: none"><p class="error"></p></div>
 
@@ -1187,7 +1189,7 @@ var currentAadd2ItemList = new Object();
 <div id="errorMsgBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 
 <!--bottom button 'bar' -->
-</div>
+
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
 <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
