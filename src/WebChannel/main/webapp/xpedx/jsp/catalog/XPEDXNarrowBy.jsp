@@ -35,10 +35,7 @@ function setStockItemFlag()
 	}
 }
 </script>
-<!-- Added script to disable the user to enter text in searchbox before the page loads completely -->
-<script type="text/javascript">
-window.addEventListener("load", function() { document.getElementById('search_searchTerm').disabled = false; }, false);
-</script>
+
 
 <!-- begin left column -->
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />

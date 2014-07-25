@@ -2189,14 +2189,12 @@ function showSharedListForm(){
 					<p class="return-link">
 						<a href="javascript:cancelChanges();">&lsaquo; Return to List</a>
 					</p>
+					<h1>Edit My Items List:&nbsp;<span><s:property value="listName" /></span></h1>
 				</s:if>
+				<s:else>
+					<h1><s:text name='MSG.SWC.MIL.DETL.GENERIC.PGTITLE' />:&nbsp;<span><s:property value="listName" /></span></h1>
+				</s:else>
 				
-				<h1>
-					Edit My Items List:
-					<span class="list-name">
-						<s:property value="listName" />
-					</span>
-				</h1>
 				<div id="printButton" class="print-ico-xpedx underlink">
 					<a href="javascript:window.print()">
 						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"

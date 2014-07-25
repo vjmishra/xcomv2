@@ -283,7 +283,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 </s:form>
 
 <div id="footer">
-	<p>© International Paper Company. All rights reserved.</p>
+	<p>© 2014. All Rights Reserved.</p>
 </div>
 
 </div> <!-- End id="login" -->
