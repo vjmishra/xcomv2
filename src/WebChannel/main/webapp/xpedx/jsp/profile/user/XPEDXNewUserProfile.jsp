@@ -83,7 +83,7 @@
 				}catch(err){
 				}
 				
-				if(document.getElementById("userName").value.contains("'") || document.getElementById("userName").value.contains("?"))
+				if((document.addNewUserForm.userName.value.indexOf("'") > -1 || document.getElementById("userName").value.indexOf("?") > -1))
 				{
 					document.getElementById("errorMsgForLoginIdInvalidChar").style.display="block";
 					document.getElementById("userName").style.borderColor="#FF0000";
