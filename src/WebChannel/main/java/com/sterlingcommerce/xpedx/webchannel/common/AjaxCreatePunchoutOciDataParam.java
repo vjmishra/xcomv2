@@ -2,7 +2,8 @@ package com.sterlingcommerce.xpedx.webchannel.common;
 
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils;
-import com.sterlingcommerce.xpedx.webchannel.crypto.EncryptionUtils;
+import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
+import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
 
 /*
  * Created on Oct 21, 2013
@@ -27,7 +28,7 @@ public class AjaxCreatePunchoutOciDataParam extends WCAction {
 		}
 
 		// per convention, data parameter is space-delimited userId and password
-		String data = EncryptionUtils.encryptToUrl(userId + " " + password);
+		String data = PunchoutOciUtil.encryptData(new OciCredentials(userId, password));
 
 		StringBuilder buf = new StringBuilder(256);
 		buf.append(request.getScheme()).append("://").append(request.getServerName());

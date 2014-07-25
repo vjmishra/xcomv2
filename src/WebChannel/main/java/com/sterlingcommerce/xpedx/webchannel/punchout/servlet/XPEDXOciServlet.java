@@ -21,7 +21,8 @@ import com.sterlingcommerce.webchannel.core.WCException;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.servlet.common.IntegrationServlet;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
-import com.sterlingcommerce.xpedx.webchannel.crypto.EncryptionUtils;
+import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
+import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
 import com.yantra.yfc.util.YFCCommon;
 
 /*
@@ -60,8 +61,7 @@ public class XPEDXOciServlet extends IntegrationServlet {
 
 			if (wcIntegrationResp.getReturnStatus()) {
 				// *** Success - redirect to catalog/site via pLogin.action
-				response.sendRedirect(getResponseDoc(wcIntegrationResp.getErrorObj(),
-						wcIntegrationResp.getReturnStatus(), wcContext));
+				response.sendRedirect(getResponseDoc(wcIntegrationResp.getErrorObj(), wcIntegrationResp.getReturnStatus(), wcContext));
 				return;
 			}
 		}
@@ -73,19 +73,68 @@ public class XPEDXOciServlet extends IntegrationServlet {
 		response.sendError(HttpServletResponse.SC_FORBIDDEN, errorMessage);
 	}
 
+	// not sure if/when this gets called by parent (called directly from this doPost)
+	@Override
+	protected SCUISecurityResponse authenticateRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		if (req.getParameter("data") != null) {
+			// eb-4834: encrypted user/pass
+			try {
+				OciCredentials cred = PunchoutOciUtil.decryptData(req.getParameter("data"));
+				id = cred.getUserId();
+				pwd = cred.getPassword();
+
+			} catch (Exception e) {
+				logError("Failed to decrypt parameter: data");
+				throw new WCException("Parameter 'data' is not formatted properly", e);
+			}
+
+		} else if (req.getParameter("id") != null && req.getParameter("pwd") != null) {
+			// legacy mode: unencryptd user/pass (available until R17)
+			id = req.getParameter("id");
+			pwd = req.getParameter("pwd");
+
+		} else {
+			// TODO return meaningful security response
+			logError("Missing required parameter: data");
+			throw new WCException("Missing required parameter: data");
+		}
+
+		try {
+			SCUISecurityResponse scuiSecurityResponse = authenticateUser(req, res);
+
+			if (YFCCommon.equals(SCUISecurityResponse.SUCCESS, scuiSecurityResponse.getReturnStatus())) {
+				logInfo("OCI Authentication Successful for " + id);
+			}
+
+			return scuiSecurityResponse;
+
+		} catch (Exception e) {
+			logError("Problem authenticating OCI user: " + id, e);
+			throw new WCException("Problem authenticating specified OCI user", e);
+		}
+	}
+
 	@Override
 	protected WCIntegrationResponse processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		try {
 			// Need to pass along the URL of the procurement system for later checkout
 			// [does hook that includes params pass through ok to this servlet and from here to pLogin.action ?]
 			String hookUrl = wcContext.getSCUIContext().getRequest().getParameter("hook_url");
-			String encodedHookUrl = URLEncoder.encode(hookUrl,"UTF-8");
+			String encodedHookUrl = URLEncoder.encode(hookUrl, "UTF-8");
 
 			// Create custom URL and redirect to that
 			// -> reusing the login action from cXML
 			String sfId = wcContext.getStorefrontId();
 
-			landingURL = String.format("/swc/common/pLogin.action?u=%s&p=%s&sfId=%s&returnURL=%s", id, pwd, sfId, encodedHookUrl);
+			if (req.getParameter("data") != null) {
+				String encodedData = URLEncoder.encode(req.getParameter("data"),"UTF-8");
+				// TODO should we skip ociLogin.action and set the request attributes and display punchoutlogin.jsp directly?
+				landingURL = String.format("/swc/punchout/ociLogin.action?sfId=%s&data=%s&returnURL=%s", sfId, encodedData, encodedHookUrl);
+
+			} else {
+				// legacy: this will go away in R17
+				landingURL = String.format("/swc/common/pLogin.action?u=%s&p=%s&sfId=%s&returnURL=%s", id, pwd, sfId, encodedHookUrl);
+			}
 
 			errorCode = new Long(IWCIntegrationStatusCodes.SUCCESS);
 			logInfo("OCI login page URL: " + landingURL);
@@ -104,43 +153,6 @@ public class XPEDXOciServlet extends IntegrationServlet {
 	@Override
 	public String getResponseDoc(Error errObj, boolean resStatus, IWCContext ctx) {
 		return landingURL;
-	}
-
-	// not sure if/when this gets called by parent (called directly from this doPost)
-	@Override
-	protected SCUISecurityResponse authenticateRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		if (req.getParameter("id") != null && req.getParameter("pwd") != null) {
-			// legacy mode: unencryptd user/pass (available until R17)
-			id = req.getParameter("id");
-			pwd = req.getParameter("pwd");
-
-		} else if (req.getParameter("data") != null) {
-			// eb-4834: encrypted user/pass
-			String[] tokens = EncryptionUtils.decrypt(req.getParameter("data")).split(" ");
-			if (tokens.length < 2) {
-				throw new IllegalArgumentException("Invalid data");
-			}
-
-			id = tokens[0];
-			pwd = tokens[1];
-
-		} else {
-			throw new IllegalArgumentException("Missing required parameter: data");
-		}
-
-		try {
-			SCUISecurityResponse scuiSecurityResponse = authenticateUser(req, res);
-
-			if (YFCCommon.equals(SCUISecurityResponse.SUCCESS, scuiSecurityResponse.getReturnStatus())) {
-				logInfo("OCI Authentication Successful for " + id);
-			}
-
-			return scuiSecurityResponse;
-
-		} catch (Exception e) {
-			logError("Problem authenticating OCI user: " + id, e);
-			throw new WCException("Problem authenticating specified OCI user", e);
-		}
 	}
 
 	private SCUISecurityResponse authenticateUser(HttpServletRequest req, HttpServletResponse res) {

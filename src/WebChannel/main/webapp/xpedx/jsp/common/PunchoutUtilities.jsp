@@ -65,8 +65,12 @@
 	      			
 					<s:if test="isUserAdmin">
 		      			<form id="dataForm" onsubmit="encryptUserIdAndPassword(); return false;">
-		      				<input type="text" id="userId" />
-		      				<input type="text" id="password" />
+		      				<div>
+		      					User ID: <input type="text" id="userId" />
+		      				</div>
+		      				<div>
+		      					Password: <input type="password" id="password" />
+		      				</div>
 		      				<input type="submit" value="Generate URL" />
 		      			</form>
 		      			

@@ -17,11 +17,10 @@ function encryptUserIdAndPassword() {
 			password: $('#password').val()
 		},
 		success: function(data) {
-			console.log('data = ' , data);
 			if (data.url) {
 				var html = [];
-				html.push('<div>This is the URL to give to the customer. Their procurement system will append an extra "hook_url".</div>');
-				html.push('<input type="text" id="punchoutUrl" value="' , data.url , '" style="width:99%;" />');
+				html.push('<div>This is the URL to give to the customer. Their procurement system will append an extra "hook_url" parameter.</div>');
+				html.push('<input type="text" id="punchoutUrl" value="' , data.url , '" style="width:99%;" disabled="disabled" />');
 				$('#ajax-output').get(0).innerHTML = html.join('');
 			} else {
 				showError('Unable to generate URL');

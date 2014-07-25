@@ -9,6 +9,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil;
+import com.sterlingcommerce.xpedx.webchannel.common.punchout.PunchoutOciUtil.OciCredentials;
+
 /**
  * @author http://techie-experience.blogspot.com/2012/10/encryption-and-decryption-using-aes.html
  */
@@ -71,12 +74,11 @@ public class EncryptionUtils {
 			return;
 		}
 
-		String username = args[0];
+		String userId = args[0];
 		String password = args[1];
-		String combined = username + " " + password;
 
-		System.out.println("Encrypted:	" + encrypt(combined));
-		System.out.println("For URL:	" + encryptToUrl(combined));
+		String encrypted = PunchoutOciUtil.encryptData(new OciCredentials(userId, password));
+		System.out.println("URL parameter:	" + encrypted);
 
 
 //		for (String arg : args) {

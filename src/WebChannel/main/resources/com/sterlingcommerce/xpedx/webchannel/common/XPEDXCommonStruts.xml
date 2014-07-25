@@ -241,8 +241,11 @@
 			<result name="error">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 		</action>
 		
-		<action name="pLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+		<!--
+			pLogin is deprecated as of R16. It will be removed in R17. Use PunchoutCxmlLoginAction or OCIPost.jsp instead.
+			We're keeping this action in R16 strictly for backwards compatibility for OCI customers. See eb-4834 for details.
+		-->
+		<action name="pLogin" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
 			<result name="success">/xpedx/jsp/punchout/punchoutlogin.jsp</result>				
 		</action>
 		

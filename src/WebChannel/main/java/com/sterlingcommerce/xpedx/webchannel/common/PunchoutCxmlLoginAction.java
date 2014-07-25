@@ -43,7 +43,7 @@ public class PunchoutCxmlLoginAction extends WCAction {
 		request.setAttribute("toIdentity", punchoutCxmlSessionElem.getAttribute("ToIdentity"));
 		request.setAttribute("returnURL", punchoutCxmlSessionElem.getAttribute("ReturnUrl"));
 
-		// these fields are static
+		// these fields are static for cxml
 		request.setAttribute("isProcurementUser", "Y");
 		request.setAttribute("operation", null);
 		request.setAttribute("orderHeaderKey", null);
