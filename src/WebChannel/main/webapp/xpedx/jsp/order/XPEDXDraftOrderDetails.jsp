@@ -569,9 +569,9 @@ $(document).ready(function(){
 		</div>
 	</s:if>
 </s:if>
-<div id="minOrderErrorMessage" class="error" style="display: none"></div>
+<div id="minOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
 <div id="maxOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
-<div id="entitleErrorMessage"  class="error" style="display: none"></div>
+<div id="entitleErrorMessage"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 	
 <s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
