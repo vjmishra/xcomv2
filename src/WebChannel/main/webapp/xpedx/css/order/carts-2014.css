@@ -28,3 +28,23 @@
 	width: 49%;
 }
 
+/*************CART LIST PAGE******************/
+table#carts-list td {
+    border-bottom: 1px solid #cccccc;
+    padding: 8px;
+}
+
+table#carts-list tbody img {
+    float: left;
+    margin-right: 5px;
+    margin-top: -2px;
+}
+table#carts-list .left-cell {
+	padding-top: 10px;
+	}
+
+.cart-list-desc{
+	font-size:11px;
+	color:#808080;
+	}
+/******/

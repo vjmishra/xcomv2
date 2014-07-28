@@ -43,4 +43,4 @@
 </s:else>
 
 </div>
-<p class="grey-mil"><s:property  value="%{row.getAttribute('ExtnOrderDesc')}"/></p>
+<p class="cart-list-desc"><s:property  value="%{row.getAttribute('ExtnOrderDesc')}"/></p>

@@ -2087,19 +2087,5 @@ div.specs-tab {
 }
 
 
-/*************CART LIST PAGE******************/
-table#mil-carts-list td {
-    border-bottom: 1px solid #cccccc;
-    padding: 8px;
-}
 
-table#mil-carts-list tbody img {
-    float: left;
-    margin-right: 5px;
-    margin-top: -2px;
-}
-table#mil-carts-list .left-cell {
-	padding-top: 10px;
-	}
-/******/
 
