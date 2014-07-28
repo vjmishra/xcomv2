@@ -452,7 +452,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		lblcXmlOnly.setText("cXML Only :");
 		lblcXmlOnly.setLayoutData(gridDataSpan2);
         
-	    // Identity
+// 		Identity
         Label lblIdentity = new Label(pnlPunchOut, SWT.RIGHT);
         lblIdentity.setText("Identity");
         lblIdentity.setLayoutData(gridData1);
@@ -484,60 +484,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtStartPageURL.setText("12345678B");
         txtStartPageURL.setTextLimit(100);
 
-
-        
-//      Path of User ID
-//        Label lblPathOfUserId = new Label(pnlPunchOut, SWT.RIGHT);
-//        lblPathOfUserId.setText("Path_of_user_id");
-//        lblPathOfUserId.setLayoutData(gridData1);
-//        lblPathOfUserId.setData("name", "lblPathOfUserId");
-//        txtPathOfUserId = new Text(pnlPunchOut, SWT.BORDER);
-//        txtPathOfUserId.setLayoutData(gridData2);
-//        txtPathOfUserId.setData("name", "txtPathOfUserId");
-
-//      Show My Items
-//        Label lblShowMyItems = new Label(pnlPunchOut, SWT.RIGHT);
-//        lblShowMyItems.setText("Show_My_Items");
-//        lblShowMyItems.setLayoutData(gridData1);
-//        lblShowMyItems.setData("name", "lblShowMyItems");
-//        chkShowMyItems = new Button(pnlPunchOut, SWT.CHECK);
-//		chkShowMyItems.setLayoutData(new GridData());
-//		chkShowMyItems.setData("name", "chkShowMyItems");
-		
-//		UNSPSC Code Required
-//        Label lblUNSPSCCodeReg = new Label(pnlPunchOut, SWT.RIGHT);
-//        lblUNSPSCCodeReg.setText("UNSPSC_Code_Required");
-//        lblUNSPSCCodeReg.setLayoutData(gridData1);
-//        lblUNSPSCCodeReg.setData("name", "lblUNSPSCCodeReg");
-//        chkUNSPSCCodeReg = new Button(pnlPunchOut, SWT.CHECK);
-//		chkUNSPSCCodeReg.setLayoutData(new GridData());
-//		chkUNSPSCCodeReg.setData("name", "chkUNSPSCCodeReg");
-
-//		Replace C Filename
-//        Label lblReplaceChars = new Label(pnlPunchOut, SWT.RIGHT);
-//        lblReplaceChars.setText("Replace_Chars");
-//        lblReplaceChars.setLayoutData(gridData1);
-//        lblReplaceChars.setData("name", "lblReplaceChars");
-//        txtReplaceChars = new Text(pnlPunchOut, SWT.BORDER);
-//        txtReplaceChars.setLayoutData(gridData2);
-//        txtReplaceChars.setData("name", "txtReplaceChars");
-//        txtReplaceChars.setText("12345678B");
-//        txtReplaceChars.setTextLimit(20);
-        
-       
-//        Label lblOCISAPMaint = new Label(pnlPunchOut, SWT.BOLD);
-//        lblOCISAPMaint.setText("OCI_SAP_Maintenance");
-//        lblOCISAPMaint.setLayoutData(gridDataSpan2);
-//        lblOCISAPMaint.setData("name", "lblOCISAPMaint");
-
-//        Label lblUseOCISAPParam = new Label(pnlPunchOut, SWT.RIGHT);
-//        lblUseOCISAPParam.setText("Use_OCI_r_SAP_Param");
-//        lblUseOCISAPParam.setLayoutData(gridData1);
-//        lblUseOCISAPParam.setData("name", "lblUseOCISAPParam");
-//        chkUseOCISAPParam = new Button(pnlPunchOut, SWT.CHECK);
-//		chkUseOCISAPParam.setLayoutData(new GridData());
-//		chkUseOCISAPParam.setData("name", "chkUseOCISAPParam");
-		
+//      Username
         Label lblUserNameParam = new Label(pnlPunchOut, SWT.RIGHT);
         lblUserNameParam.setText("Username");
         lblUserNameParam.setLayoutData(gridData1);
@@ -547,15 +494,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtUserNameParam.setData("name", "txtUserNameParam");
         txtUserNameParam.setTextLimit(30);
         
-//        Label lblUserEmailTemplate = new Label(pnlPunchOut, SWT.RIGHT);
-//        lblUserEmailTemplate.setText("User_email_template");
-//        lblUserEmailTemplate.setLayoutData(gridData1);
-//        lblUserEmailTemplate.setData("name", "lblUserEmailTemplate");
-//        txtUserEmailTemplate = new Text(pnlPunchOut, SWT.BORDER);
-//        txtUserEmailTemplate.setLayoutData(new GridData());
-//        txtUserEmailTemplate.setData("name", "txtUserEmailTemplate");
-//        txtUserEmailTemplate.setTextLimit(30);
-
+//      Password
         Label lblUserpwdParam = new Label(pnlPunchOut, SWT.RIGHT);
         lblUserpwdParam.setText("Password");
         lblUserpwdParam.setLayoutData(gridData1);
