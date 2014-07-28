@@ -1002,5 +1002,21 @@
 			</Template>
 		</API>
 	</mashup>
+	<mashup id='xpedxgetAllChildCustomers' transactional='true' mashuptype='XAPI'
+		endpoint='CUSTOMER' description="To get the cusotmer contact user Details">
+		<classInformation
+			name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="getXPXChildCustomerViewService">
+			<Input>
+				<Customer ParentCustomerID="" EnterpriseCode="">
+				</Customer>
+			</Input>
+			<Template>
+				<XPXChildCustomersViewList>
+					<XPXChildCustomersView />
+				</XPXChildCustomersViewList>
+			</Template>
+		</API>
+	</mashup>
 	
 </mashups>
