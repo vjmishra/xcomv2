@@ -31,7 +31,7 @@ public class XPEDXCustomerContactInfoBean {
     private String spendingLimit;
     private String orderApproveFlag ; //added for XB 226
     private String extnIsSalesRep;    
-
+    private Boolean extnPunchOutUser;
 	//JIRA 3488 Start
 	 private String extnmaxOrderAmount;
 	 public void setExtnmaxOrderAmount(String extnmaxOrderAmount) {
@@ -68,7 +68,7 @@ public class XPEDXCustomerContactInfoBean {
 			String extnViewReportsFlag, String extnViewPricesFlag,
 			ArrayList<String> usergroupKeyList, String extnDefaultShipTo,
 			String extnPrefCatalog, String isApprover, Boolean usergroupKeyListActive, String extnMyItemsLink, Integer numberOfAssignedShioTos, String extnB2BCatalogView
-			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
+			,String extnOrderConfEmailFlag,String emailID,String extnUseOrderMulUOMFlag,String personInfoEmailID,String maxOrderAmt,String spendingLimit,String orderApproveFlag, Boolean extnPunchOutUser) {//added maxOrderAmt for JIRA 3488 orderApproveFalg for Jira226
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -94,6 +94,7 @@ public class XPEDXCustomerContactInfoBean {
 		this.extnmaxOrderAmount=maxOrderAmt;//JIRA 3488 
 		this.spendingLimit=spendingLimit;
 		this.orderApproveFlag = orderApproveFlag;//XB 226
+		this.extnPunchOutUser=extnPunchOutUser;
 	}
       
     public String getExtnIsSalesRep() {
@@ -290,6 +291,12 @@ public class XPEDXCustomerContactInfoBean {
 	public void setOrderApproveFlag(String orderApproveFlag) {
 		this.orderApproveFlag = orderApproveFlag;
 	}
-
-
+	
+	public boolean isExtnPunchOutUser() {
+		return extnPunchOutUser;
+	}
+	public void setExtnPunchOutUser(boolean extnPunchOutUser) {
+		this.extnPunchOutUser = extnPunchOutUser;
+	}
+	
 }

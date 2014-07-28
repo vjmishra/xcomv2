@@ -5884,7 +5884,8 @@ public class XPEDXWCUtils {
 			}
 			boolean usergroupKeyListActive = false;
 			boolean isEstimator = false;
-
+			boolean extnPunchoutUser=false;
+			
 			Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 			Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
 
@@ -5897,7 +5898,10 @@ public class XPEDXWCUtils {
 				}
 				usergroupKeyListActive = true;
 			}
-
+			
+			if(newusergroupkey.contains("PROCUREMENT-USER")){
+				extnPunchoutUser=true;
+			}
 			String isApprover = "N";
 			if(approverElem!=null) {
 				isApprover = "Y";
@@ -5943,7 +5947,7 @@ public class XPEDXWCUtils {
 						viewReportFlag, viewPricesFlag,
 						newusergroupkey, defaultShipTo,
 						userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
+						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag, extnPunchoutUser);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
 		}
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 		return xpedxCustomerContactInfoBean;

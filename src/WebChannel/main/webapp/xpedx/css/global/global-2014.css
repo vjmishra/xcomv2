@@ -1432,3 +1432,18 @@ h3 {
 	margin: 4px 0px;
 	background: #cccccc;
 }
+
+/*-------contact-modal---------*/
+.contact-modal {
+	margin:0px;
+	padding:20px;
+	text-align:left;
+	color:#000000;
+}
+.contact-modal p{
+	padding-bottom:10px;
+}
+.contact-modal h2 {
+    font-size: 16px;
+    padding: 10px 0 20px;
+}

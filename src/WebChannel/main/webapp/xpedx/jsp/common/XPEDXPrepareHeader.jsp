@@ -960,6 +960,8 @@ var selectedShipCustomer = null;
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
 <s:set name="loggedInUser" value="%{#_action.getWCContext().getLoggedInUserId()}"/>
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
+<s:set name="extnPunchOutUser" value='%{#xpedxCustomerContactInfoBean.isExtnPunchOutUser()}' />
+<s:hidden id='extnPunchOutUserValue' value='%{#extnPunchOutUser}' /> 
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
@@ -1038,7 +1040,7 @@ var selectedShipCustomer = null;
 </s:url>
 <s:url id='passwordUpdate' namespace='/common' action='xpedxPasswordUpdate' >
 </s:url>
-
+<a href="#procurementValidation" id="extnPunchOutModal" style="display: none;"></a>
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
 		style="width: auto; height: auto; ">
@@ -1229,7 +1231,20 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     	
     	showShiptos("Select Preferred Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	null,	applyShipToChanges,	null, applyNoShioTo);
     }
-    
+     function showContactModal()
+    {
+    		var $procurementValidationDiv = $('#procurementValidation');
+			var html = [];
+			html.push('			<div class="contact-modal">');
+			html.push('			<p>	We','\'','re sorry, this User ID can only access the website via your system using "Punchout".</p>');
+			html.push('			<h3>Please contact the eBusiness Customer Support Desk at 1-877-269-1784 or ebusiness@vertivcorp.com. </h3>');
+			html.push('			</div>');
+			html.push('			<div>');
+			html.push('					<input class="btn-gradient float-left addmarginleft20" type="submit" value="Sign Out" id ="signOutButton"  onclick="javascript:signOutFunction()"/>');
+			html.push('			</div>');
+			$procurementValidationDiv.get(0).innerHTML = html.join('');	
+    }
+     
     function signOutFunction(){
     	window.location.href =$('#shipTologoutURL').val();
     }
@@ -1860,11 +1875,30 @@ function passwordUpdateModal()
 		var assgnCustomerSize ='<s:property value="#assgnCustomers.size()"/>';
 		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
 		var isPunchoutUser = '<s:property value="#isPunchoutUser"/>';
+		var extnPunchOutUser='<s:property value="#extnPunchOutUser"/>'
+		
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
-			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";
-			if((!isSalesRep) && (isPunchoutUser!="true") && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
+			var isDefaultShipToSuspended = "<s:property value='#isDefaultShipToSuspended'/>";		
+			
+			if((isPunchoutUser=="false") && (extnPunchOutUser=="true")){				
+				$("#extnPunchOutModal").fancybox({					
+					'onStart' 	: function(){
+						if(isguestuser!="true"){
+							showContactModal();
+						}            		
+				},
+					
+				'hideOnOverlayClick': false,
+				'showCloseButton'	: false,
+				'enableEscapeButton': false,
+				'autoDimensions'	: false,
+			 	'width' 			: 400,
+			 	'height' 			: 150
+				}).trigger('click');
+			} 
+			else if((!isSalesRep) && (isPunchoutUser!="true") && (passwordUpdateFlag == "true") && (isTOAaccepted== "Y")){
 				
 				passwordUpdateModal();
 				Ext.Msg.hide();
