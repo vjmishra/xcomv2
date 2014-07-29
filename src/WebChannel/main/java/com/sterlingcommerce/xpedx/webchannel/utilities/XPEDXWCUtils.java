@@ -1952,8 +1952,7 @@ public class XPEDXWCUtils {
 	}
 
 	public static boolean isPunchoutUser(IWCContext wcContext) {
-		Object isPunchoutUser = wcContext.getWCAttribute("isPunchoutUser");
-		return Boolean.parseBoolean((String) isPunchoutUser);
+		return Boolean.parseBoolean((String) wcContext.getWCAttribute("isPunchoutUser"));
 	}
 
 	public static boolean isShipToAddressOveridden(IWCContext wcContext) {
@@ -5885,7 +5884,7 @@ public class XPEDXWCUtils {
 			boolean usergroupKeyListActive = false;
 			boolean isEstimator = false;
 			boolean extnPunchoutUser=false;
-			
+
 			Element userElem = SCXmlUtil.getChildElement(contactElem, "User");
 			Element approverElem = SCXmlUtil.getElementByAttribute(userElem, "UserGroupLists/UserGroupList", "UsergroupKey", "BUYER-APPROVER");
 
@@ -5898,7 +5897,7 @@ public class XPEDXWCUtils {
 				}
 				usergroupKeyListActive = true;
 			}
-			
+
 			if(newusergroupkey.contains("PROCUREMENT-USER")){
 				extnPunchoutUser=true;
 			}

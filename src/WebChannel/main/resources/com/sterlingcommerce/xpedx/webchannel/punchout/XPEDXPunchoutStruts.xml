@@ -16,6 +16,10 @@
 			<result>/xpedx/jsp/punchout/punchoutlogin.jsp</result>
 		</action>
 		
+		<action name="punchoutTimeout" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/punchout/punchoutTimeout.jsp</result>
+		</action>
+		
 		<action name="punchoutShipToSearchAction" class="com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutShipToSearchAction">
 			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
 		</action>
