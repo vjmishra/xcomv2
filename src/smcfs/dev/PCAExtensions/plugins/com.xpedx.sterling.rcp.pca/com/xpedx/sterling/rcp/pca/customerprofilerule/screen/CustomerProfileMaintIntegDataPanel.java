@@ -145,41 +145,41 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		tbd.setName("txtXSLTFilename");
 		txtXSLTFilename.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCXmlUserXPath");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCXmlUserXPath");
-		tbd.setName("txtPathOfUserId");
-		txtPathOfUserId.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+//		tbd = new YRCTextBindingData();
+//		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCXmlUserXPath");
+//		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCXmlUserXPath");
+//		tbd.setName("txtPathOfUserId");
+//		txtPathOfUserId.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMyItemsLink");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMyItemsLink");
-		chkBd.setName("chkShowMyItems");
-		chkShowMyItems.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMyItemsLink");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMyItemsLink");
+//		chkBd.setName("chkShowMyItems");
+//		chkShowMyItems.setData("YRCButtonBindingDefination", chkBd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUNSPSCRequired");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUNSPSCRequired");
-		chkBd.setName("chkUNSPSCCodeReg");
-		chkUNSPSCCodeReg.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUNSPSCRequired");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUNSPSCRequired");
+//		chkBd.setName("chkUNSPSCCodeReg");
+//		chkUNSPSCCodeReg.setData("YRCButtonBindingDefination", chkBd);
 	    
-	    tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnReplaceCharacter");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnReplaceCharacter");
-		tbd.setName("txtReplaceChars");
-		txtReplaceChars.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+//	    tbd = new YRCTextBindingData();
+//		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnReplaceCharacter");
+//		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnReplaceCharacter");
+//		tbd.setName("txtReplaceChars");
+//		txtReplaceChars.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseOCInSAPParamFlag");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseOCInSAPParamFlag");
-		chkBd.setName("chkUseOCISAPParam");
-		chkUseOCISAPParam.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseOCInSAPParamFlag");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseOCInSAPParamFlag");
+//		chkBd.setName("chkUseOCISAPParam");
+//		chkUseOCISAPParam.setData("YRCButtonBindingDefination", chkBd);
 
 		
 	    tbd = new YRCTextBindingData();
@@ -188,12 +188,12 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		tbd.setName("txtUserNameParam");
 		txtUserNameParam.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-	    tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserEmailTemplate");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserEmailTemplate");
-		tbd.setName("txtUserEmailTemplate");
-		txtUserEmailTemplate.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+//	    tbd = new YRCTextBindingData();
+//		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserEmailTemplate");
+//		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserEmailTemplate");
+//		tbd.setName("txtUserEmailTemplate");
+//		txtUserEmailTemplate.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+//		
 	    tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserPwdParam");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserPwdParam");
@@ -227,13 +227,13 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radBd.setCheckedBinding("N");
 		radIsXpedxUom.setData("YRCButtonBindingDefination", radBd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnStockCheckOption");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStockCheckOption");
-		chkBd.setName("chkStockChkWeb");
-		chkStockChkWeb.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnStockCheckOption");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStockCheckOption");
+//		chkBd.setName("chkStockChkWeb");
+//		chkStockChkWeb.setData("YRCButtonBindingDefination", chkBd);
 		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSupportEmailAddress");
@@ -576,16 +576,16 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radIsXpedxUom.setData("yrc:customType", "Label");
 		
 		//Stock Check Web Service
-		Label lblStockCheckWeb = new Label(pnlB2BMaint, SWT.LEFT);
-		lblStockCheckWeb.setText("Stock Check Web Service");
-		lblStockCheckWeb.setLayoutData(gridData1);
-		lblStockCheckWeb.setData("name", "lblStockCheckWeb");
-		chkStockChkWeb = new Button(pnlB2BMaint, SWT.CHECK|SWT.LEFT);
-		chkStockChkWeb.setText("");
-		chkStockChkWeb.setVisible(true);
-		chkStockChkWeb.setData("yrc:customType", "Label");
-		chkStockChkWeb.setLayoutData(gridData2);
-		chkStockChkWeb.setData("name", "chkStockChkWeb");
+//		Label lblStockCheckWeb = new Label(pnlB2BMaint, SWT.LEFT);
+//		lblStockCheckWeb.setText("Stock Check Web Service");
+//		lblStockCheckWeb.setLayoutData(gridData1);
+//		lblStockCheckWeb.setData("name", "lblStockCheckWeb");
+//		chkStockChkWeb = new Button(pnlB2BMaint, SWT.CHECK|SWT.LEFT);
+//		chkStockChkWeb.setText("");
+//		chkStockChkWeb.setVisible(true);
+//		chkStockChkWeb.setData("yrc:customType", "Label");
+//		chkStockChkWeb.setLayoutData(gridData2);
+//		chkStockChkWeb.setData("name", "chkStockChkWeb");
 		
 		// Support Email Address
         Label lblSupportEmailAddr = new Label(pnlB2BMaint, SWT.LEFT);
