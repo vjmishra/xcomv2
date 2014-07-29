@@ -23,7 +23,7 @@ public class XPEDXSessionManageFilter implements Filter {
 
 	private String[] excludeActions;// --Actions to Exclude -- Read from Web.xml
 	private String timeoutUrlPattern; // use String.format(timeoutUrlPattern, sfId)
-	private String salesrepTimeoutUrlPattern; // use String.format(timeoutUrlPattern, sfId)
+	private String salesrepTimeoutUrlPattern;
 	private String punchoutTimeoutUrlPattern; // use String.format(timeoutUrlPattern, sfId)
 	private String defaultSfId;
 
@@ -47,7 +47,7 @@ public class XPEDXSessionManageFilter implements Filter {
 		StringBuilder salesrepTimeoutUrl = new StringBuilder(128);
 		salesrepTimeoutUrl.append(config.getServletContext().getContextPath());
 		salesrepTimeoutUrl.append(config.getServletContext().getInitParameter("xpedx_sales_rep_login_url"));
-		salesrepTimeoutUrl.append("?sfId=%s&error=sessionExpired");
+		salesrepTimeoutUrl.append("?error=sessionExpired");
 		salesrepTimeoutUrlPattern = salesrepTimeoutUrl.toString();
 
 		StringBuilder punchoutTimeoutUrl = new StringBuilder(128);
@@ -90,7 +90,7 @@ public class XPEDXSessionManageFilter implements Filter {
 			boolean isPunchoutUser = isPunchoutUser(req);
 			cleanupCookies(req, resp);
 			if (isSalesrepUser) {
-				resp.sendRedirect(String.format(salesrepTimeoutUrlPattern, getCurrentStorefrontId(req)));
+				resp.sendRedirect(salesrepTimeoutUrlPattern);
 			} else if (isPunchoutUser) {
 				resp.sendRedirect(String.format(punchoutTimeoutUrlPattern, getCurrentStorefrontId(req)));
 			} else {
