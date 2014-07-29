@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -14,7 +12,6 @@ import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
 import com.sterlingcommerce.xpedx.webchannel.punchout.DivisionBean;
 import com.sterlingcommerce.xpedx.webchannel.punchout.ShipToCustomerBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -26,22 +23,7 @@ public class CustomHomeAction extends WCAction {
 	{
 		super.execute();
 
-
 		String aribaFlag = (String) wcContext.getSCUIContext().getSession(false).getAttribute("aribaFlag");
-
-		String sfId = (String) wcContext.getSCUIContext().getSession(false).getAttribute("EnterpriseCode");
-
-		if (sfId != null) {
-			// create or update cookie with this storefront id
-			Cookie cookie = CookieUtil.getCookie(wcContext.getSCUIContext().getRequest(), CookieUtil.STOREFRONT_ID);
-			if (cookie == null) {
-				cookie = new Cookie(CookieUtil.STOREFRONT_ID, sfId);
-				cookie.setMaxAge(-1); // until user closes browser
-			} else {
-				cookie.setValue(sfId);
-			}
-			wcContext.getSCUIContext().getResponse().addCookie(cookie);
-		}
 
 		if (aribaFlag!=null && aribaFlag.equals("Y"))
 		{
@@ -199,19 +181,19 @@ public class CustomHomeAction extends WCAction {
 
 		String shipToCustomerID = shipToCustomerBean.getShipToCustomerID();
 		String shipToCustomer = shipToCustomerID.substring(0,shipToCustomerID.lastIndexOf("-M-XX-S"));
-		
+
 		String zipCode=shipToCustomerBean.getZipCode();
 		String firstZip=zipCode;
 		String lastZip="";
-	
+
 		if(zipCode!=null && zipCode.length()>5){
 		    firstZip=zipCode.substring(0, 5);
 		    lastZip="-"+zipCode.substring(5);
 		  }
-		
+
 
 		String ShipToDisplayString = shipToCustomerBean.getShipToCustomerName() + " ("+ shipToCustomer + ") " + shipToCustomerBean.getAddressLine1() + ", " + shipToCustomerBean.getCity()+ ", " +shipToCustomerBean.getState()+", "+ firstZip + lastZip + ", " + shipToCustomerBean.getCountry();
-      
+
 		shipToCustomerBean.setShipToDisplayString(ShipToDisplayString);
 		return shipToCustomerBean;
 	}
