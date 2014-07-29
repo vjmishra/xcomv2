@@ -7,9 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.yantra.yfc.log.YFCLogCategory;
 
 /**
- * Helper classes for http cookies.
- *
- * @author Trey Howard
+ * Helper classes for http cookies. All cookies use path=/swc and maxAge=-1 (expire when the user closes their browser).
  */
 public class CookieUtil {
 
@@ -17,6 +15,7 @@ public class CookieUtil {
 
 	public static final String STOREFRONT_ID = "sfId";
 	public static final String SALESREP = "salesrep";
+	public static final String PUNCHOUT = "punchout";
 
 	private static final String PATH_ROOT = "/swc";
 	private static final int AGE_FOREVER = -1;

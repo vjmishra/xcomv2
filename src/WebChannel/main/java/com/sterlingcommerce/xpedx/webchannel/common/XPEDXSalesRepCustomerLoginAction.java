@@ -10,7 +10,7 @@ public class XPEDXSalesRepCustomerLoginAction extends WCAction {
 	public String execute()
     {
 		SCUIContext scuiContext = getWCContext().getSCUIContext();
-		CookieUtil.setCookie(scuiContext.getRequest(), scuiContext.getResponse(), CookieUtil.SALESREP, "Y");
+		CookieUtil.setCookie(scuiContext.getRequest(), scuiContext.getResponse(), CookieUtil.SALESREP, "true");
 
 		(new XPEDXSalesRepUtils()).fetchCustomerLogin(request, wcContext);
 

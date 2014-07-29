@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.webchannel.core.wcaas.Logout;
+import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 @SuppressWarnings("serial")
@@ -33,6 +34,8 @@ public class XPEDXLogoutAction extends Logout {
 		} catch (Exception e) {
 			LOG.error("Error during logout " + e.getMessage());
 		}
+
+		CookieUtil.deleteCookie(scuiContext.getRequest(), scuiContext.getResponse(), CookieUtil.PUNCHOUT);
 
 		return returnType;
 	}

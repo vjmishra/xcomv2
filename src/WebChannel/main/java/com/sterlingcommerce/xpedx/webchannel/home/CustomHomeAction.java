@@ -9,9 +9,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
 import com.sterlingcommerce.xpedx.webchannel.punchout.DivisionBean;
 import com.sterlingcommerce.xpedx.webchannel.punchout.ShipToCustomerBean;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -36,7 +38,13 @@ public class CustomHomeAction extends WCAction {
 				if(shipToCustomers!=null && shipToCustomers.size()>0){
 					ShipToCustomerBean shipToCustomerBean = shipToCustomers.get(0);
 					XPEDXWCUtils.setCurrentCustomerIntoContext(shipToCustomerBean.getMSAPCustomerID(),wcContext);
+
 					wcContext.setWCAttribute("isPunchoutUser", "true",WCAttributeScope.LOCAL_SESSION);
+
+					// eb-4953: also create a cookie so we can properly handle a session timeout
+					SCUIContext scuiContext = getWCContext().getSCUIContext();
+					CookieUtil.setCookie(scuiContext.getRequest(), scuiContext.getResponse(), CookieUtil.PUNCHOUT, "true");
+
 					wcContext.setWCAttribute("isTACheckReqForPunchoutUser", "Y",WCAttributeScope.LOCAL_SESSION);
 					if(divisionBeanList.size()==1 && shipToCustomers.size()==1 ){
 						wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
