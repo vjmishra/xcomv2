@@ -31,7 +31,6 @@ import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -68,7 +67,6 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.YfsUtils;
-import com.sterlingcommerce.xpedx.webchannel.common.CookieUtil;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXShipToComparator;
@@ -1954,14 +1952,7 @@ public class XPEDXWCUtils {
 	}
 
 	public static boolean isPunchoutUser(IWCContext wcContext) {
-		if (Boolean.parseBoolean((String) wcContext.getWCAttribute("isPunchoutUser"))) {
-			return true;
-		} else {
-			// eb-4953: session may have timed out, check cookie
-			SCUIContext scuiContext = wcContext.getSCUIContext();
-			Cookie cookie = CookieUtil.getCookie(scuiContext.getRequest(), CookieUtil.PUNCHOUT);
-			return cookie != null && "true".equals(cookie.getValue());
-		}
+		return Boolean.parseBoolean((String) wcContext.getWCAttribute("isPunchoutUser"));
 	}
 
 	public static boolean isShipToAddressOveridden(IWCContext wcContext) {

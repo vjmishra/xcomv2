@@ -8,6 +8,9 @@ import com.yantra.yfc.log.YFCLogCategory;
 
 /**
  * Helper classes for http cookies. All cookies use path=/swc and maxAge=-1 (expire when the user closes their browser).
+ *
+ * Developer note: Be careful about relying too heavily on cookies, for security reasons.
+ * A malicious user could easily hack the cookie. For example, Firebug allows cookies to be edited.
  */
 public class CookieUtil {
 
