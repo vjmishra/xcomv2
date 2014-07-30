@@ -94,16 +94,7 @@ public class DynamicQueryAction extends WCMashupAction {
 		Object obj = null;
 		assignedCustomerList = (List) XPEDXWCUtils
 				.getObjectFromCache("AUTHORIZED_LOCATIONS");
-		
-		
-		NodeList customerNodeList=(NodeList)XPEDXWCUtils.getObjectFromCache("MASTER_CUSTOMER_ELEMENT");
-		XPEDXWCUtils.removeObectFromCache("MASTER_CUSTOMER_ELEMENT");		
-		Element customerElement=(Element)customerNodeList.item(0);
-		String MsapId=customerElement.getAttribute("CustomerID");
-		Element buyerOrganizationElement=(Element)customerElement.getElementsByTagName("BuyerOrganization").item(0);
-		String grpVal = getCustomerInfo(buyerOrganizationElement);
-		//Commented for EB-309 perormance fix
-		/*String rootCustomerKey = (String) wcContext
+		String rootCustomerKey = (String) wcContext
 				.getWCAttribute(XPEDXWCUtils.LOGGED_IN_CUSTOMER_KEY);
 
 		Map<String, String> valueMap = new HashMap<String, String>();
@@ -124,8 +115,8 @@ public class DynamicQueryAction extends WCMashupAction {
 			log.debug("XPXCustomerInfo" + SCXmlUtil.getString(outDoc));
 		}
 		String MsapId = SCXmlUtil.getXpathAttribute(
-				outDoc.getDocumentElement(), "//Customer/@CustomerID");*/
-		
+				outDoc.getDocumentElement(), "//Customer/@CustomerID");
+		String grpVal = getCustomerInfo(wcContext, MsapId);
 		if (assignedCustomerList != null
 				&& assignedCustomerList.contains(MsapId)) {
 			grpVal = grpVal + "^^^" + "checked";
@@ -157,16 +148,15 @@ public class DynamicQueryAction extends WCMashupAction {
 		Document outDoc = null;
 		Object obj = null;
 		Element input;
-		//Commented for EB-309 perormance fix
-		//getCustomerInfo(wcContext, sParentID);
+		getCustomerInfo(wcContext, sParentID);
 
-		valueMap.put("/Customer/@ParentCustomerID", sParentID);
+		valueMap.put("/Customer/@CustomerID", sParentID);
 		//valueMap.put("/Customer/@OrganizationCode", "xpedx");
-		valueMap.put("/Customer/@EnterpriseCode", wcContext.getStorefrontId());
-		input = WCMashupHelper.getMashupInput("xpedxgetAllChildCustomers",
+		valueMap.put("/Customer/@OrganizationCode", wcContext.getStorefrontId());
+		input = WCMashupHelper.getMashupInput("XPEDXMyItemsGetCustomersList",
 				valueMap, wcContext.getSCUIContext());
 
-		obj = WCMashupHelper.invokeMashup("xpedxgetAllChildCustomers",
+		obj = WCMashupHelper.invokeMashup("XPEDXMyItemsGetCustomersList",
 				input, wcContext.getSCUIContext());
 
 		if (obj != null) {
@@ -176,17 +166,25 @@ public class DynamicQueryAction extends WCMashupAction {
 					+ SCXmlUtil.getString(outDoc));
 
 			NodeList nlCustomerList = outDoc
-					.getElementsByTagName("XPXChildCustomersView");
+					.getElementsByTagName("CustomerList");
 
-			for (int i = 0; nlCustomerList != null && nlCustomerList.getLength() > 0 && i < nlCustomerList.getLength() ; i++) 
-			{
-					
-						Element eleChildCustomer = (Element) nlCustomerList.item(i);
+			if (nlCustomerList != null && nlCustomerList.getLength() > 1) {
+				int i = 1;
+				Element eleCustomerList = (Element) nlCustomerList.item(i);
+				NodeList nlCustomerListchild = eleCustomerList
+						.getElementsByTagName("Customer");
+
+				if (nlCustomerListchild != null
+						&& nlCustomerListchild.getLength() > 0) {
+
+					for (i = 0; i < nlCustomerListchild.getLength(); i++) {
+
+						Element eleChildCustomer = (Element) nlCustomerListchild
+								.item(i);
 						String EleCustID = SCXmlUtil.getAttribute(
 								eleChildCustomer, "CustomerID");
-						if(PrntChildComb != null && PrntChildComb.contains(EleCustID))
-							continue;
-						String grpVal = getCustomerInfo(eleChildCustomer); //getCustomerInfo(wcContext, EleCustID);
+
+						String grpVal = getCustomerInfo(wcContext, EleCustID);
 						if (assignedCustomerList != null
 								&& assignedCustomerList.contains(EleCustID)) {
 							grpVal = grpVal + "^^^" + "checked";
@@ -207,58 +205,13 @@ public class DynamicQueryAction extends WCMashupAction {
 						PrntChildComb = PrntChildComb + "|" + tempValue;
 
 					}
+				}
+
+			}
 		} 
 
 		return PrntChildComb;
 
-	}
-	private String getCustomerInfo(Element eleChildCustomer)
-	{
-		
-		String CmbString = null;
-		String AddressLine1 = null;
-		String City = null;
-		String state = null;
-		String zipcode = null;
-		String country = null;
-		String suspendedString = "";
-		
-		
-		if(eleChildCustomer == null)
-			return "";
-
-			String OrgName = eleChildCustomer.getAttribute("OrganizationName");
-
-			String OrgCode = eleChildCustomer.getAttribute("OrganizationCode");
-			String extnSuffixType=eleChildCustomer.getAttribute("ChildExtnSuffixType");
-			
-			if ("S".equals(extnSuffixType) || "B".equals(extnSuffixType) || OrgCode.endsWith("S") || OrgCode.endsWith("B")) {
-
-				AddressLine1 = eleChildCustomer.getAttribute("AddressLine1");
-
-				City =eleChildCustomer.getAttribute("City");
-
-				state = eleChildCustomer.getAttribute("State");
-
-				zipcode = eleChildCustomer.getAttribute("ZipCode");
-
-				country = eleChildCustomer.getAttribute("Country");
-				
-				//suspendedString = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status")=="30"?"(Suspended)":"";
-				String statusCode = eleChildCustomer.getAttribute("Status");
-				if(statusCode!=null && statusCode.trim().length() > 0 && statusCode.trim().equals("30")){
-				suspendedString = "(Suspended)";
-				
-		}
-
-				OrgCode = XPEDXWCUtils.formatBillToShipToCustomer(OrgCode);
-
-				CmbString = suspendedString+OrgName + "(" + OrgCode + ")" + AddressLine1 + ","
-						+ City + "," + state + "," + zipcode + "," + country;
-			} else {
-				CmbString = OrgName + "(" + OrgCode + ")";
-			}
-		return CmbString;
 	}
 
 	public String getCustomerInfo(IWCContext wcContext, String sCustID)
