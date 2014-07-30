@@ -358,13 +358,12 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 		} else {
 			this.isChildCustomer = "TRUE";
 		}
-		//commented for EB-309 for performance fix 
-		/*try {
+		try {
 			putAllAvailableAndAuthorizeLocationTOCache(wcContext);
 		} catch (Exception e) {
 			log.error("Exception while Setting Authorized and available location in to cache", e);
 			// XPEDXWCUtils.logExceptionIntoCent(e);
-		}*/
+		}
 		// setQuickLinksForUser(); Performance Fix - Removed a mashup call for
 		// getCustomerQuickLink
 		return getUserDetails();
@@ -694,7 +693,6 @@ public class XPEDXUserGeneralInfo extends WCMashupAction
 			Map<String, Element> outputMaps = prepareAndInvokeMashups();
 			this.customerContactList = outputMaps
 					.get("getXpedxCustomerContactDetailsNew");
-			XPEDXWCUtils.setObectInCache("MASTER_CUSTOMER_ELEMENT", customerContactList.getElementsByTagName("Customer"));
 			SCXmlUtil.getString(customerContactList);
 			NodeList customerContact = customerContactList
 					.getElementsByTagName("CustomerContact");
