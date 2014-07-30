@@ -168,11 +168,14 @@ function setTotalPrice(val){
 			po_comboObj.style.borderColor="";
 			errordiv.style.display="none";
 			errordiv.innerHTML="";
-			if(emailObj!=null && emailObj.value!=''){
-				if(!validateEmail()){
+			
+			if(emailObj != null && emailObj.value != ''){
+				// only validate email if checkbox is selected
+				if ($('#emailAddrSaveNeeded').is(':checked') && !validateEmail()) {
 					return false;
 				}
 			}
+			
 			validateFormSubmit();	
 			return false; //changed by bb6
 		}
@@ -234,26 +237,32 @@ function isValidDate(dtStr)
 //EN of EB 2458
 
 //Added for EB-5457 - Email validation for comma saprated email addresses
-function validateEmail(){
+function validateEmail() {
 	var errorMsg = document.getElementById("errorMsg");
 	
 	errorMsg.style.display="none";
 	errorMsg.innerHTML ="";
 	var emailObj=document.getElementById("newEmailAddr");
 	emailObj.style.borderColor="";
-	var email = document.getElementById("newEmailAddr").value;
+	var emailStr = document.getElementById("newEmailAddr").value;
 
 	var pattern=/^[A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Z]{2,4}(?:[,][A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Z]{2,4})*$/i;
 
-	if(!pattern.test(email)){
-		errorMsg.innerHTML = "Invalid email address. Please enter valid email addresses separated by commas.";
-		errorMsg.style.display="inline";			
-		emailObj.style.borderColor="#FF0000";
-		return false;
-		
-    }
+	var emailArray = emailStr.match(/[^\r\n\t\s,]+/g);
+	for (var i = 0, len = emailArray.length; i < len; i++) {
+		var email = emailArray[i];
+
+		if(!pattern.test(email)){
+			errorMsg.innerHTML = "Invalid email address. Please enter valid email addresses separated by commas.";
+			errorMsg.style.display="inline";			
+			emailObj.style.borderColor="#FF0000";
+			return false;
+	    }
+	}
+	
     return true;
 }
+
 function validateFormSubmit(){
 		//Added For Jira 3232
 	    //Commented for 3475
