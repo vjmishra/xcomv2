@@ -208,7 +208,7 @@ public class DynamicQueryAction extends WCMashupAction {
 				}
 
 			}
-		}
+		} 
 
 		return PrntChildComb;
 

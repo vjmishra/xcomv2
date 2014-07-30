@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Searcher;
-import org.apache.struts2.ServletActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -15,14 +14,12 @@ import org.w3c.dom.NodeList;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
+import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.webchannel.core.IWCContext;
-import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
-import com.yantra.custom.api.CustomApiImpl;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
-import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
 import com.yantra.yfs.japi.YFSException;
@@ -30,8 +27,6 @@ import com.yantra.yfs.japi.YFSException;
 
 /**
  * Stateless singleton for managing the cached Lucene Searcher used by autocomplete. This does NOT cache the Lucene results.
- *
- * @author Trey Howard
  */
 public class AutocompleteCacheUtil {
 
@@ -41,7 +36,7 @@ public class AutocompleteCacheUtil {
 
 	private Searcher cachedSearcher;
 	private long cacheLastUpdated;
-	
+
 
 	/**
 	 * Thread-safe lazy-loader for cachedSearcher.
@@ -65,7 +60,7 @@ public class AutocompleteCacheUtil {
 
 	/**
 	 * Initializes the cachedSearcher. The old cachedSearcher is closed (if applicable).
-	 * 
+	 *
 	 * @param context
 	 * @throws IllegalStateException If missing config. If missing active XPXMgiArchive. If missing the Lucene directory.
 	 * @throws YIFClientCreationException API error
@@ -80,9 +75,8 @@ public class AutocompleteCacheUtil {
 		if (mgiRoot == null) {
 			throw new IllegalStateException("Missing YFS setting in customer_overrides.properties: yfs.marketingGroupIndex.rootDirectory");
 		}
-		try
-		{
-		String indexPath = getActiveIndexPath(context);	
+
+		String indexPath = getActiveIndexPath(context);
 		File mgiPath = new File(mgiRoot, indexPath);
 
 		if (!mgiPath.canRead()) {
@@ -105,7 +99,6 @@ public class AutocompleteCacheUtil {
 			} catch (Exception ignore) {
 			}
 		}
-		}catch(Exception ex){}
 	}
 
 	/**
@@ -113,28 +106,54 @@ public class AutocompleteCacheUtil {
 	 *
 	 * @param context
 	 * @return Returns the IndexPath for the active XPXMgiArchive. Returns null if none found.
+	 * @throws YIFClientCreationException API error.
 	 * @throws IllegalStateException If no active XPXMgiArchive
-	 * @throws RuntimeException Database error
 	 */
-	public String getActiveIndexPath(IWCContext context) throws Exception {
+	public String getActiveIndexPath(IWCContext context) throws YIFClientCreationException {
 		SCUIContext wSCUIContext = context.getSCUIContext();
 		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-		Document inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");		
-		Document xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList",inXML);
-		Element outputListElement = xpxMgiListOutDoc.getDocumentElement();
-		if(outputListElement!=null){
-			NodeList xpxArchiveExtnNL = outputListElement.getElementsByTagName("XPXMgiArchive");
-			if(xpxArchiveExtnNL.getLength() > 0 ){
-				Element xpxmgiExtnEle = (Element)xpxArchiveExtnNL.item(0);
-				if(xpxmgiExtnEle!=null) {
-					return xpxmgiExtnEle.getAttribute("IndexPath");
+
+		// EB-6981 - 07/23/2014 - ML: fixing connection leak causing JDBC connection pool to reach its limit.
+		// Adding a call to releaseTransactionContext to trigger the connection close.
+		try {
+			Document inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");
+			Document xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList", inXML);
+			Element outputListElement = xpxMgiListOutDoc.getDocumentElement();
+
+			if (outputListElement != null) {
+				NodeList xpxArchiveExtnNL = outputListElement.getElementsByTagName("XPXMgiArchive");
+				if (xpxArchiveExtnNL.getLength() > 0) {
+					Element xpxmgiExtnEle = (Element) xpxArchiveExtnNL.item(0);
+					if (xpxmgiExtnEle != null) {
+						return xpxmgiExtnEle.getAttribute("IndexPath");
+					}
+				}
+			}
+
+			return null;
+
+		} catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException("No Active Index path Found", e);
+
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
 				}
 			}
 		}
-
-		throw new IllegalStateException("No Active Index path Found");
 	}
 
 }

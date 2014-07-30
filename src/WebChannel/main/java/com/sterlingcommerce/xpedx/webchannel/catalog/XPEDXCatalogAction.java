@@ -115,6 +115,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 
 	public String getCustomerPOLabel() {
+		if(customerPOLabel!=null && customerPOLabel.contains("'")){
+			customerPOLabel = customerPOLabel.replace("\'", "\\'");			
+		}
 		return customerPOLabel;
 	}
 
@@ -123,6 +126,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 
 	public String getCustLineAccNoLabel() {
+		if(custLineAccNoLabel!=null && custLineAccNoLabel.contains("'")){
+			custLineAccNoLabel = custLineAccNoLabel.replace("\'", "\\'");			
+		}
+	
 		return custLineAccNoLabel;
 	}
 

@@ -797,7 +797,7 @@ function getNormalView() {
 							<s:if test='!#guestUser'>
 								'<div class="cart-pa-button-wrap">',
 									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
-									'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\',\'{name}\'); return false;" value="Add to List">',
+									'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\'); return false;" value="Add to List">',
 									'<div class="availablelink">',
 										'<input type=\'hidden\' id=\'baseUOMs_{itemid}\' name=\'baseUOMs_{itemid}\' value=\'{uomDesc}\'/>',
 										'<div class=\"itemOption\">',

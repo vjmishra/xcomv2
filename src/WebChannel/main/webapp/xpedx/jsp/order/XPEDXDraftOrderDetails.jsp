@@ -571,7 +571,7 @@ $(document).ready(function(){
 </s:if>
 <div id="minOrderErrorMessage" class="error" style="display: none"></div>
 <div id="maxOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
-<div id="entitleErrorMessage"  class="error" style="display: none"></div>
+<div id="entitleErrorMessageBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 	
 <s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
