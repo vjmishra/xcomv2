@@ -445,7 +445,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		txtComments.setData("yrc:customType", "Text");
 		txtComments.setData("name", "txtComments");
 		txtComments.setText("Enter Comments");
-		txtComments.setTextLimit(250);
+		txtComments.setTextLimit(500);
 		
 		
 		Label lblcXmlOnly = new Label(pnlPunchOut, SWT.BOLD);
