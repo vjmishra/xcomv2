@@ -8161,6 +8161,7 @@ li.ship-to-list  {
 }
 .ui-autocomplete {
 	position:absolute;
+	z-index: 100 !important; /* must override z-index:3 defined in 3rd party javascript */
 	max-height: 250px;
 	overflow-y: auto;
 	/* prevent horizontal scrollbar */

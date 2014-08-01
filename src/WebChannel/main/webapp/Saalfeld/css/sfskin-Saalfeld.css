@@ -1126,3 +1126,25 @@ ul.megamenu {
     margin-bottom: 5px;
 }
 
+.searchbox-1 .input-group-btn .search-go {
+	position: absolute;
+	left: 270px;
+	margin: 0;
+	clear: none;
+	width: auto;
+	height: 25px;
+	background: #128b65;
+	color: #ffffff;
+	border: 0px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 0;
+	cursor: pointer;
+}
+.searchbox-1 .input-group-btn .search-go:hover,
+.searchbox-1 .input-group-btn .search-go:active,
+.searchbox-1 .input-group-btn .search-go:focus {
+	background: #c2e5d1;
+	color: #012c12;
+}
