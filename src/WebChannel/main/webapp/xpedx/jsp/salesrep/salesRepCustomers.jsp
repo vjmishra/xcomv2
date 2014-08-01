@@ -73,6 +73,8 @@
 	<s:url id='salesRepLoginURLid' namespace='/home' action='salesReploginFullPage'></s:url>
 	<s:hidden id="salesRepLoginURL" value="%{#salesRepLoginURLid}" />
 	
+	<s:hidden id="displayUserID" value="%{displayUserID}" />
+	
 	<div id="main-container">
 		<div id="main">
 			<div id="container" class="container content-container" style="display:none;">

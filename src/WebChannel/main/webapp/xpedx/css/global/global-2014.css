@@ -861,11 +861,12 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	color: #000000;
 }
 #tips-container {
-	width: 268px;
+	width: 75px;
 	margin-top: 25px;
+	margin-left: 210px;
 	color: #0CF;
 	font-family: Verdana, Geneva, sans-serif;
-	text-align: right;
+	padding-top: 4px;
 }
 #tips-container a {
 	color: #7cb3ff;
@@ -1446,4 +1447,19 @@ h3 {
 .contact-modal h2 {
     font-size: 16px;
     padding: 10px 0 20px;
+}
+
+.input-group {
+	width: 320px;
+	margin: 0;
+	padding: 0;
+}
+.input-group .form-control {
+	position: relative;
+	z-index: 2;
+	float: left;
+	width: 250px;
+	height: 22px;
+	margin-bottom: 0;
+	display: inline-block;
 }

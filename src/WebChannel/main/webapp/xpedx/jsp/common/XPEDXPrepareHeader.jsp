@@ -2511,59 +2511,47 @@ function callAjaxForSorting(url,divId)
 		<s:a href="%{homeLink}">&nbsp;</s:a>
 	</div> 
   <!-- Edit: IW-DH -->
- <s:if test='(isThereAUser == true) || (#isGuestUser != true)'>   	
-    <!-- Close Customer Block -->   
-	  <s:url id='newCatSearch' action='newSearch' namespace='/catalog' >
-	  </s:url>
-	  <div  class="searchbox-1 auth">
-	  <!-- XBT-391 Removed submit event from Submit button and added to form -->
+	
+	<s:div cssClass="%{'searchbox-1 ' + (isThereAUser || !#isGuestUser ? 'auth' : '')}">
+		<div class="input-group">
+			<s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
+				<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
+				<s:hidden name='scFlag' id='scFlag' value="Y" />
+				<s:if test="#isGuestUser">
+					<s:hidden name='scGuestUser' id='scGuestUser' value="Y" />
+				</s:if>
+				<s:hidden name='path' id='path' value="/" />
+				<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
+				<input type="text" id="newSearch_searchTerm" name="searchTerm" class="form-control filterinput"
+						value='<s:property value="rememberNewSearchText" />' placeholder="Search Catalog..." />
+				<span class="input-group-btn">
+					<input type="submit" class="search-go" value="Go" />
+				</span>
+			</s:form>
+		</div>
+		<div id="tips-container">
+			<a class="underlink" id="inline" href="#searchTips">Search Tips</a>
+		</div>
+	</s:div>
+	
+<%--
+	<s:div cssClass="%{'searchbox-1 ' + (isThereAUser || !#isGuestUser ? 'auth' : '')}">
 		<s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
-	  		<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
-	  		<s:hidden name='scFlag' id='scFlag' value="Y" />
+			<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
+			<s:hidden name='scFlag' id='scFlag' value="Y" />
+			<s:if test="#isGuestUser">
+				<s:hidden name='scGuestUser' id='scGuestUser' value="Y" />
+			</s:if>
 			<s:hidden name='path' id='path' value="/" />
 			<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
-	   		<!-- XBT-391 removed the onkeydown event -->
-	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark="Search Catalog..."   />
-	   		</s:if>
-	   		<s:else>
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />' />
-	   		</s:else>
-			
+			<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" value='<s:property value="rememberNewSearchText" />' placeholder="Search Catalog..." />
 			<div id="tips-container">
-				 <a class="underlink" id="inline" href="#searchTips"> Search Tips </a>
+				<a class="underlink" id="inline" href="#searchTips">Search Tips</a>
 			</div>
 		</s:form>
-		<!-- END wctheme.form-close.ftl --> 
-	  </div>
- </s:if> 
- <s:if test='(#isGuestUser == true)'> 
-	<div  class="searchbox-1">
-	<!-- XBT-391 Removed submit event from Submit button and added to form -->
-	  <s:form method="get" name='newSearch' action='newSearch' namespace='/catalog' onSubmit="newSearch_searchTerm_onclick();newSearch_onsubmit(event);return;">
-	  		<s:hidden name='sfId' id='sfId' value="%{wCContext.storefrontId}" />
-	  		<s:hidden name='scFlag' id='scFlag' value="Y" />
-	  		<s:hidden name='scGuestUser' id='scGuestUser' value="Y" />
-	  		<s:hidden name='path' id='path' value="/" />
-	  		<s:hidden name='rememberNewSearchText' id='newSearch_rememberNewSearchText' value='' />
-	  		<!-- XBT-391 removed the onkeydown event -->
-	   		<s:if test="rememberNewSearchText == null || rememberNewSearchText == ''">
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						data-watermark="Search Catalog..."  />
-	   		</s:if>
-	   		<s:else>
-				<input type="text" name="searchTerm" tabindex="2012" id="newSearch_searchTerm" class="searchTermBox filterinput" 
-						value='<s:property value="rememberNewSearchText" />' />
-	   		</s:else>
-			
-			<div id="tips-container">
-				<a class="underlink" id="inline" href="#searchTips"> Search Tips </a>
-			</div> 
-	   </s:form>
-	 </div>
- </s:if>   
+	</s:div>
+--%>
+
   <s:if test='(isThereAUser == true) || (#isGuestUser != true)'>
   	<%-- Minicart --%>
 	<s:set name='shoppingCartResId' value='"/swc/order/guestShopping"' />

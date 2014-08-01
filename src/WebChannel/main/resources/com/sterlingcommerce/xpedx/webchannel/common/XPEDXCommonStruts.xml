@@ -217,9 +217,8 @@
 			</result>
 		</action>
 			
-		<action name="salesRepLogin" class="com.sterlingcommerce.webchannel.core.WCAction">
+		<action name="salesRepLogin" class="com.sterlingcommerce.xpedx.webchannel.common.SalesProLoginAction">
 			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
-			<result name="error">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
 		</action>
 		
 		<action name="getSalesProCustomersList" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxGetSalesProCustomersListAction">		
