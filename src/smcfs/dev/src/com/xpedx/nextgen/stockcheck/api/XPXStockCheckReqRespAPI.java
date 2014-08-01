@@ -1,9 +1,14 @@
 package com.xpedx.nextgen.stockcheck.api;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -12,7 +17,6 @@ import org.w3c.dom.NodeList;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.common.util.XPXLiterals;
-import com.xpedx.nextgen.common.util.XPXUtils;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -44,7 +48,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private static final String errorMessage_101 = "101 - Sorry, the user credentials supplied is not authorized to access the Stock Check Web Service.";
 	private static final String errorMessage_102 = "102 - Sorry, the customer is not authorized to access the Stock Check Web Service.";
 	private static final String errorMessage_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
-
 	private static final String B2BSourceIndicator = "1";
 
 	private static YFCLogCategory log;
@@ -61,7 +64,33 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
     private String eTradingId;
     private Document stockCheckOutputDocument;
     private NodeList stockCheckItemList;
-
+    private Map<Integer,String> requestedXpedxItemsMap; // Valid items for for P and A request
+    private Map<Integer,String> qtysForValidPositions; //Quantities of valid Items for P and A request
+    private Map<Integer,String> uomsForValidPositions; //UOMS of valid Items for P and A request
+    private Map<String,Element> validItemElementsMap; // Valid Elements map
+    private Map<String,String> xpedxItemsOMQtyMap; //Order multiple quantities map of valid  items
+    private Map<String,String> xpedxItemsInventoryMap; // Inventory indicator map of valid  items
+    private Map<String,String> validItemsUOMMap; // one of the valid UOMs for each valid Item
+    private Set<Integer> inValidItemPositions; // invalid positions
+    private Set<Integer> inValidUOMPositionsForValidItems; // invalid UOM postions for valid Items
+    private Map<String,Element> uomListForValidItemsMap; // List of UOMs(Ex: Carton, package, Sheet) for each valid item
+    private Map<String,String> uomToLegacyMap; // UOM to Legacy Map
+    private Map<String,String> legacyToUOMMap; // Legacy to UOM Map
+    
+    /* Ship-to information */
+    private String envtId = null;
+    private String companyCode = null;
+    private String shipToSuffix = null;
+    private String shipFromBranch = null;
+    private String legacyCustomerNumber = null;
+    private String customerOrderBranch = null;
+    private String customerEnvtId = null;
+    private String customerID = null;
+    private String organizationCode = null;
+    private String sapParentAccountNo = null;
+    
+    private Document pAndAResponseDocument;
+    
 	static {
 		// MAX header error codes with messages
 		maxHeaderErrorMap = new HashMap<String, String>();
@@ -104,8 +133,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		boolean formatValidationFlag = true;
 		boolean dataValidationFlag = true;
+		
 		Element stockCheckInputDocRoot = inputXML.getDocumentElement();
-
+		log.info("stockCheckInputDocRoot : "+SCXmlUtil.getString(stockCheckInputDocRoot));
 		try {
 			formatValidationFlag = validateRequestXML(stockCheckInputDocRoot);
 			if(!formatValidationFlag)
@@ -114,48 +144,54 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			dataValidationFlag = validateRequestXMLData(env,stockCheckInputDocRoot);
 			if(!dataValidationFlag)
 				return stockCheckOutputDocument;
+			
+			initialization();			
+		    validateXpedxItemNumbers(env);
+		    if(inValidItemPositions.size() == stockCheckItemList.getLength()){
+		    	stockCheckOutputDocument = createStockCheckOutput(env,stockCheckInputDocRoot);
+		    	return stockCheckOutputDocument;
+		    }
+		    setQtysAndUOMsForValidItems(env);			
+			
+			if(isPandACallNeeded()){
+				pAndArequestInputDocument = createPandARequestInputDocument(env,stockCheckInputDocRoot);
+				log.info("The P&A request xml is: "+SCXmlUtil.getString(pAndArequestInputDocument)); //TODO debug log
 
-			// load the uom descriptions for later lookups
-			uomDescMap = getUOMList(env);
+				pAndAResponseDocument = api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
+				log.info("The P&A reponse output is: "+SCXmlUtil.getString(pAndAResponseDocument)); //TODO debug log
 
+				if (pAndAResponseDocument!=null) {
+					Element pAndAResponseDocRoot = pAndAResponseDocument.getDocumentElement();
+					String headerStatusCode = SCXmlUtil.getXpathElement(pAndAResponseDocRoot,"./HeaderStatusCode").getTextContent();
 
-			pAndArequestInputDocument = createPandARequestInputDocument(env,stockCheckInputDocRoot);
-			log.info("The P&A request xml is: "+SCXmlUtil.getString(pAndArequestInputDocument)); //TODO debug log
-
-
-			Document pAndAResponseDocument = api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
-			log.info("The P&A reponse output is: "+SCXmlUtil.getString(pAndAResponseDocument)); //TODO debug log
-
-			if (pAndAResponseDocument!=null) {
-				Element pAndAResponseDocRoot = pAndAResponseDocument.getDocumentElement();
-				String headerStatusCode = SCXmlUtil.getXpathElement(pAndAResponseDocRoot,"./HeaderStatusCode").getTextContent();
-
-				if (Integer.parseInt(headerStatusCode) == 0 ) {
-
-					stockCheckOutputDocument = createStockCheckOutput(env,pAndAResponseDocRoot,stockCheckInputDocRoot);
+					if (Integer.parseInt(headerStatusCode) == 0 ) {
+						// load the uom descriptions for later lookups. we need only if PandA response success
+						uomDescMap = getUOMList(env);
+						stockCheckOutputDocument = createStockCheckOutput(env,stockCheckInputDocRoot);
+					}
+					else {
+						String errorMsg = "Problem getting Pricing and Availability - HeaderStatusCode: " + headerStatusCode;
+						String message = maxHeaderErrorMap.get(headerStatusCode);
+						if (message != null) {
+							errorMsg =  headerStatusCode + "-" + message;
+						}
+						stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,
+								errorMessage_503 + " MAX: " + errorMsg);
+					}
 				}
 				else {
-					String errorMsg = "Problem getting Pricing and Availability - HeaderStatusCode: " + headerStatusCode;
-					String message = maxHeaderErrorMap.get(headerStatusCode);
-					if (message != null) {
-						errorMsg =  headerStatusCode + "-" + message;
-					}
-					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,
-							errorMessage_503 + " MAX: " + errorMsg);
+					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_503); //TODO if P&A returns null;
 				}
+			}else{
+				stockCheckOutputDocument = createStockCheckOutput(env,stockCheckInputDocRoot);	
 			}
-			else {
-				stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_503); //TODO if P&A returns null;
-			}
-
-			log.info("Final stock check doc: "+SCXmlUtil.getString(stockCheckOutputDocument)); //TODO log debug
-			log.info("Completed Stock Check Web Service request");
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
 			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_503);
 		}
-
+		log.info("Final stock check doc: "+SCXmlUtil.getString(stockCheckOutputDocument)); //TODO log debug
+		log.info("Completed Stock Check Web Service request");
 		return stockCheckOutputDocument;
 	}
 
@@ -171,24 +207,39 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	}
 
 
-	private Document createStockCheckOutput(YFSEnvironment env, Element pAndAResponseDocRoot, Element stockCheckInputDocRoot)
+	private Document createStockCheckOutput(YFSEnvironment env, Element stockCheckInputDocRoot)
 			throws YFSException, RemoteException, DOMException, YIFClientCreationException,NullPointerException, YFSException, Exception {
-		String envtId = null;
-		String companyCode = null;
-		String shipFromBranch = null;
-		String legacyCustomerNumber = null;
-		String customerItemNumber = null;
-		String customerID = null;
-		String organizationCode = null;
+
 		String inventoryIndicator = null;
-		String orderMultiple = null;
-		String sapParentAccountNo = null;
+
 		// If init these null, have seen case where MAX unexpectedly returns only two warehouses which causes NPE later on twoDayQty
 		String sameDayQty = "0";
 		String nextDayQty = "0";
 		String twoDayQty = "0";
 
-		int listLength = 0;
+
+		Map<Integer,Element> pAndAResponseMap= new HashMap<Integer,Element>(); 
+
+		if(pAndAResponseDocument!=null && pAndAResponseDocument.getDocumentElement()!=null){
+			Element pAndAResponseDocRoot = pAndAResponseDocument.getDocumentElement();
+			Element aItemsFromPandA = (Element) pAndAResponseDocRoot.getElementsByTagName("Items").item(0);			
+
+			if(aItemsFromPandA!=null)
+			{
+				NodeList itemListFromPandA = aItemsFromPandA.getElementsByTagName("Item");
+
+				if(itemListFromPandA.getLength()>0)
+				{
+					//Items exist in P&A response
+
+					for(int i=0; i<itemListFromPandA.getLength(); i++)
+					{
+						Element itemElementFromPandA = (Element) itemListFromPandA.item(i);
+						pAndAResponseMap.put(Integer.parseInt(SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineNumber").getTextContent()), itemElementFromPandA);
+					}
+				}
+			} // end Items
+		}
 
 		Document stockCheckResponseDocument = YFCDocument.createDocument("xpedxStockCheckWSResponse").getDocument();
 		Element stockCheckResponseDocRoot = stockCheckResponseDocument.getDocumentElement();
@@ -232,396 +283,271 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		eTradingIDElement.setTextContent(eTradingId);
 		stockCheckResponseDocRoot.appendChild(eTradingIDElement);
 
-			Element customerElement = (Element) shipToCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
+		/*****************************************************************************/
 
-			customerID = customerElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);
-			organizationCode = customerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
+		/**
+		 * Customer Number
+		 */
+		Element customerNumber = stockCheckResponseDocument.createElement("CustomerNumber");
+		customerNumber.setTextContent(sapParentAccountNo);
+		stockCheckResponseDocRoot.appendChild(customerNumber);
 
-			Element customerExtnElement = (Element) customerElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
-
-			envtId = customerExtnElement.getAttribute("ExtnEnvironmentCode");
-			companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
-			shipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch");
-			legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
-			sapParentAccountNo = customerExtnElement.getAttribute("ExtnSAPParentAccNo");
-			log.debug("The sap parent account number from getCustomer output is: "+sapParentAccountNo);
+		Element items = stockCheckResponseDocument.createElement("Items"); 
 
 
-		Element items = stockCheckResponseDocument.createElement("Items"); //Dont forget to append to stockCheckResponse
-
-		Element aItemsFromPandA = (Element) pAndAResponseDocRoot.getElementsByTagName("Items").item(0);
-
-		// Creating the item element in the stock check response
-		if(aItemsFromPandA!=null)
-		{
-			NodeList itemListFromPandA = aItemsFromPandA.getElementsByTagName("Item");
-
-			if(itemListFromPandA.getLength()>0)
-			{
-				//Items exist in P&A response
-
-				for(int i=0; i<itemListFromPandA.getLength(); i++)
-				{
-					  Element itemElementFromPandA = (Element) itemListFromPandA.item(i);
-
-					  Element item = stockCheckResponseDocument.createElement("Item");
-
-					  Element indexID = stockCheckResponseDocument.createElement("IndexID");
-					  indexID.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineNumber").getTextContent());
-					  item.appendChild(indexID);
-
-					  Element xpedxPartNumber = stockCheckResponseDocument.createElement("xpedxPartNumber");
-					  String legacyProductCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LegacyProductCode").getTextContent();
-					  xpedxPartNumber.setTextContent(legacyProductCode);
-					  item.appendChild(xpedxPartNumber);
-
-					  //Retrieving CustomerItemNo from XRef table using legacy product code passed
-					  Element customerPartNumber = stockCheckResponseDocument.createElement("CustomerPartNumber");
-					  customerItemNumber = getCustomerItemNumberFromXref(env,xpedxPartNumber.getTextContent(),envtId,companyCode,legacyCustomerNumber);
-					  customerPartNumber.setTextContent(customerItemNumber);
-					  item.appendChild(customerPartNumber);
-
-					  Element quantity = stockCheckResponseDocument.createElement("Quantity");
-					  quantity.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQty").getTextContent());
-					  item.appendChild(quantity);
-
-					  //[OLD: Not sure as to why requestedUOM is not passed here but the pricing UOM is passed...need to ask Prashant...I changed it to RequestedUom...
-					  Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
-					  String baseUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent();
-					  String convertedBaseUom = XPXUtils.replaceOutgoingUOMFromLegacy(
-							  env, baseUom, xpedxPartNumber.getTextContent());
-					  String baseUomDescription = getUomDesc(baseUom, convertedBaseUom);
-					  unitOfMeasure.setTextContent(convertedBaseUom);
-					  item.appendChild(unitOfMeasure);
 
 
-					  // Process MAX error codes as Level 3 errors
-					  Element errorCode2 = stockCheckResponseDocument.createElement("ErrorCode");
-					  Element errorMessage2 = stockCheckResponseDocument.createElement("ErrorMessage");
-					  String maxErrorCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineStatusCode").getTextContent();
-					  String respErrorCode = ERROR_LEVEL_COMPLETE_SUCCESS;
-					  String respErrorMessage = "";
+		for(int i=0; i<stockCheckItemList.getLength(); i++)	{
+			Element requestedItemElement = (Element) stockCheckItemList.item(i);
 
-					  if (Integer.parseInt(maxErrorCode) != 0) {
-						  log.info("SCWS: MAX returned error on P&A for item " + legacyProductCode +" - "+ maxErrorCode); //TODO make debug
-						  respErrorCode = ERROR_LEVEL_COMPLETE_FAILURE;
-						  respErrorMessage = convertMaxErrorCode(maxErrorCode);
-					  }
-					  errorCode2.setTextContent(respErrorCode);
-					  errorMessage2.setTextContent(respErrorMessage);
-					  item.appendChild(errorCode2);
-					  item.appendChild(errorMessage2);
+			Element item = stockCheckResponseDocument.createElement("Item");
+
+			Element indexID = stockCheckResponseDocument.createElement("IndexID");
+			indexID.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./IndexID").getTextContent());		
+
+			Element customerPartNumber = stockCheckResponseDocument.createElement("CustomerPartNumber");
+			customerPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./CustomerPartNumber").getTextContent());
+
+			Element xpedxPartNumber = stockCheckResponseDocument.createElement("xpedxPartNumber");			
+			Element quantity = stockCheckResponseDocument.createElement("Quantity");
+			Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
+
+			Element itemLevelErrorCode = stockCheckResponseDocument.createElement("ErrorCode");
+			Element itemLevelErrorMessage = stockCheckResponseDocument.createElement("ErrorMessage");
+
+			Element category1 = stockCheckResponseDocument.createElement("Category1");
+			Element category2 = stockCheckResponseDocument.createElement("Category2");
+			Element category3 = stockCheckResponseDocument.createElement("Category3");
+			Element category4 = stockCheckResponseDocument.createElement("Category4");
+
+			Element itemDescription = stockCheckResponseDocument.createElement("ItemDescription");
+			Element itemSellText = stockCheckResponseDocument.createElement("ItemSellText");
+
+			Element sameDayDesc = stockCheckResponseDocument.createElement("SameDayDescription");
+			Element sameDayQuantity = stockCheckResponseDocument.createElement("SameDayQuantity");
+			Element nextDayDesc = stockCheckResponseDocument.createElement("NextDayDescription");
+			Element nextDayQuantity = stockCheckResponseDocument.createElement("NextDayQuantity");
+			Element twoDayDesc = stockCheckResponseDocument.createElement("TwoDayDescription");
+			Element twoDayQuantity = stockCheckResponseDocument.createElement("TwoDayQuantity");
+			Element availMessage = stockCheckResponseDocument.createElement("AvailabilityMessage");
+			Element backOrderMessage = stockCheckResponseDocument.createElement("BackOrderMessage");
+
+			Element orderMultipleElement = stockCheckResponseDocument.createElement("OrderMultiple");
+			Element orderMultipleMessage = stockCheckResponseDocument.createElement("OrderMultipleMessage");
+			Element totalPrice = stockCheckResponseDocument.createElement("TotalPrice");
+			Element manufacturer = stockCheckResponseDocument.createElement("Manufacturer");
+			Element manufacturerPartNo = stockCheckResponseDocument.createElement("ManufacturerPartNumber");
+			Element itemStatus = stockCheckResponseDocument.createElement("ItemStatus");
+
+			Element unitPrice1 = stockCheckResponseDocument.createElement("UnitPrice1");
+			Element unitPrice2 = stockCheckResponseDocument.createElement("UnitPrice2");
+
+			Element uomNodeList = stockCheckResponseDocument.createElement("UOMList");
+			Element catalogAttributeList = stockCheckResponseDocument.createElement("CatalogAttributeList");
 
 
-					  // Replacing customerid with SAP Parent account number
-					  Element customerNumber = stockCheckResponseDocument.createElement("CustomerNumber");
-					  customerNumber.setTextContent(sapParentAccountNo);
-					  item.appendChild(customerNumber);
 
-					  Document getItemDetailsOutputDoc = getItemDetails(env,legacyProductCode);
-					  log.debug("The item details output is: "+SCXmlUtil.getString(getItemDetailsOutputDoc));
+			if(inValidItemPositions.contains(i)){
+				xpedxPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./xpedxPartNumber").getTextContent());
+				quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
+				unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
+				itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+				itemLevelErrorMessage.setTextContent("1003 - The item is not stocked in the Ordering Warehouse. Please enter another Part Number.");
 
-					  Element getCategoryOutputDocRoot =  getItemDetailsOutputDoc.getDocumentElement();
-					  Element itemElement = (Element) getCategoryOutputDocRoot.getElementsByTagName("Item").item(0);
-					  if(itemElement!=null)
-					  {
-						  // Obtain descriptions for Category1-4.  XML data from item response includes this:
-						  //   "<CategoryList><Category CategoryPath="/MasterCatalog/300057/300166/300340"/></CategoryList>"
-						  if (itemElement.getElementsByTagName("CategoryList").getLength() > 0)
-						  {
-							  Element categoryListElement = (Element) itemElement.getElementsByTagName("CategoryList").item(0);
-							  if(categoryListElement.getElementsByTagName("Category").getLength()>0)
-							  {
-								  Element categoryElement = (Element) categoryListElement.getElementsByTagName("Category").item(0);
+			}else{
+				String legacyProductCode = requestedXpedxItemsMap.get(i);
+				xpedxPartNumber.setTextContent(legacyProductCode);
 
-								  String[] cats = categoryElement.getAttribute("CategoryPath").split("/");
-								    // cat[0]="", cat[1]="MasterCatalog"
-								  if (cats.length > 4)
-								  {
-									  Element category1 = stockCheckResponseDocument.createElement("Category1");
-									  category1.setTextContent(getCategoryShortDescription(cats[2], organizationCode, env));
-									  item.appendChild(category1);
+				Element itemElementFromPandA = (Element) pAndAResponseMap.get(i);
+				if(itemElementFromPandA!=null){
+					quantity.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQty").getTextContent());	
+					String requestedUOM = (SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent());
+					String requestedUOMDescription = uomDescMap.get(requestedUOM);			
+					unitOfMeasure.setTextContent(legacyToUOMMap.get(requestedUOM).replace(envtId+"_",""));
+					String maxErrorCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineStatusCode").getTextContent();
+					String respErrorCode = ERROR_LEVEL_COMPLETE_SUCCESS;
+					String respErrorMessage = "";
 
-									  Element category2 = stockCheckResponseDocument.createElement("Category2");
-									  category2.setTextContent(getCategoryShortDescription(cats[3], organizationCode, env));
-									  item.appendChild(category2);
+					if (Integer.parseInt(maxErrorCode) != 0) {
+						log.info("SCWS: MAX returned error on P&A for item " + legacyProductCode +" - "+ maxErrorCode); //TODO make debug
+						respErrorCode = ERROR_LEVEL_COMPLETE_FAILURE;
+						respErrorMessage = convertMaxErrorCode(maxErrorCode);
+					}
+					itemLevelErrorCode.setTextContent(respErrorCode);
+					itemLevelErrorMessage.setTextContent(respErrorMessage);		
 
-									  Element category3 = stockCheckResponseDocument.createElement("Category3");
-									  category3.setTextContent(getCategoryShortDescription(cats[4], organizationCode, env));
-									  item.appendChild(category3);
+					// Going by the logic that the first element in the warehouse locations is the primary warehouse.
+					// -> if warehouse info missing in P&A, skipping these - is that ok?
+					Element wareHouseLocations = SCXmlUtil.getXpathElement(itemElementFromPandA, "./WarehouseLocationList");
+					if (wareHouseLocations != null)
+					{
+						NodeList wareHouseLocationsList =  wareHouseLocations.getElementsByTagName("WarehouseLocation");
 
-									  // If no cat4, output "<Category4/>" (or skip?)
-									  //  Does "Paper Category" in fields count as cat4?
-									  String cat4 = "";
-									  if (cats.length > 5)
-									  {
-										  cat4 = getCategoryShortDescription(cats[5], organizationCode, env);
-									  }
-									  Element category4 = stockCheckResponseDocument.createElement("Category4");
-									  category4.setTextContent(cat4);
-									  item.appendChild(category4);
-								  }
-							  }
-						  }
-
-					  // Item description and Item Sell text
-					  Element itemDescription = stockCheckResponseDocument.createElement("ItemDescription");
-					  Element primaryInfoElement = (Element) itemElement.getElementsByTagName("PrimaryInformation").item(0);
-					  itemDescription.setTextContent(primaryInfoElement.getAttribute("ExtendedDescription"));
-					  item.appendChild(itemDescription);
-
-					  Element itemSellText = stockCheckResponseDocument.createElement("ItemSellText");
-					  Element itemExtnElement = (Element) itemElement.getElementsByTagName("Extn").item(0);
-					  itemSellText.setTextContent(itemExtnElement.getAttribute("ExtnSellText"));
-					  item.appendChild(itemSellText);
-
-					  // Going by the logic that the first element in the warehouse locations is the primary warehouse.
-					  // -> if warehouse info missing in P&A, skipping these - is that ok?
-					  Element wareHouseLocations = SCXmlUtil.getXpathElement(itemElementFromPandA, "./WarehouseLocationList");
-					  if (wareHouseLocations != null)
-					  {
-				        NodeList wareHouseLocationsList =  wareHouseLocations.getElementsByTagName("WarehouseLocation");
-
-				        if(wareHouseLocationsList != null && wareHouseLocationsList.getLength()>0)
-				        {
-				    	  for(int m=0; m<wareHouseLocationsList.getLength();m++)
-				    	  {
-				    		  Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);
-
-				    		  if(m==0)
-				    		  {
-				    			  //Primary Warehouse
-				    			  Element sameDayDesc = stockCheckResponseDocument.createElement("SameDayDescription");
-								  sameDayDesc.setTextContent(SCXmlUtil.getXpathElement(wareHouseLocation,"./Warehouse").getTextContent());
-								  item.appendChild(sameDayDesc);
-
-				    			  Element sameDayQuantity = stockCheckResponseDocument.createElement("SameDayQuantity");
-				    			  sameDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
-				    			  sameDayQuantity.setTextContent(sameDayQty);
-								  item.appendChild(sameDayQuantity);
-				    		  }
-
-				    		  if(m==1)
-				    		  {
-				    			  // Next Day warehouse
-                                  // Hard coded to next day
-					    		  Element nextDayDesc = stockCheckResponseDocument.createElement("NextDayDescription");
-				    			  nextDayDesc.setTextContent("Next Day");
-								  item.appendChild(nextDayDesc);
-
-								  Element nextDayQuantity = stockCheckResponseDocument.createElement("NextDayQuantity");
-				    			  nextDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
-				    			  nextDayQuantity.setTextContent(nextDayQty);
-								  item.appendChild(nextDayQuantity);
-				    		  }
-
-				    		  if(m==2)
-				    		  {
-				    			  //Two Day Warehouse
-				    			  //Hardcoded to 2+days
-				    			  Element twoDayDesc = stockCheckResponseDocument.createElement("TwoDayDescription");
-				    			  twoDayDesc.setTextContent("2+ Days");
-								  item.appendChild(twoDayDesc);
-
-								  Element twoDayQuantity = stockCheckResponseDocument.createElement("TwoDayQuantity");
-				    			  twoDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
-				    			  twoDayQuantity.setTextContent(twoDayQty);
-								  item.appendChild(twoDayQuantity);
-				    		  }
-				    	  }
-				        }
-
-				      //Logic for availability message
-				      Element availMessage = stockCheckResponseDocument.createElement("AvailabilityMessage");
-				      String availabilityMessage = getAvailabilityMessage(env,quantity.getTextContent(),sameDayQty,nextDayQty,twoDayQty);
-				      availMessage.setTextContent(availabilityMessage);
-				      item.appendChild(availMessage);
-
-				      // Logic for back order message
-				      Element backOrderMessage = stockCheckResponseDocument.createElement("BackOrderMessage");
-				      item.appendChild(backOrderMessage);
-
-				      log.debug("The quantity value is: "+quantity.getTextContent());
-				      log.debug("The sameDayQty value is: "+sameDayQty);
-				      log.debug("The nextDayQty value is: "+nextDayQty);
-				      log.debug("The twoDayQty value is: "+twoDayQty);
-
-				      if(Integer.parseInt(quantity.getTextContent()) > 0 &&
-				    	(Integer.parseInt(quantity.getTextContent()) > (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty))))
-				      {
-					     int backOrderQty = Integer.parseInt(quantity.getTextContent()) - (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty));
-
-					     String backOrderedMessage = Integer.toString(backOrderQty)+""+unitOfMeasure.getTextContent()+""+"not currently available";
-
-					     backOrderMessage.setTextContent(backOrderedMessage);
-					     item.appendChild(backOrderMessage);
-				      }
-
-				      }//end no warehouse info in P&A
-
-					  // Order Multiple - TODO this likely needs to be changed to come from P&A rather than ItemBranch
-					  // Logic for OrderMultiple and OrderMultiple Message and ItemStatus by invoking ItemBranch table
-				      Document getItemBranchDetailsOutputDoc = getItemBranchDetails(env, envtId, companyCode, shipFromBranch, xpedxPartNumber.getTextContent());
-				      Element getXPXItemBranchListOutputDocRoot = getItemBranchDetailsOutputDoc.getDocumentElement();
-					  Element XPXItemExtnElement = (Element)getXPXItemBranchListOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_EXTN).item(0);
-
-						if(XPXItemExtnElement!=null)
+						if(wareHouseLocationsList != null && wareHouseLocationsList.getLength()>0)
 						{
-							inventoryIndicator = XPXItemExtnElement.getAttribute(XPXLiterals.A_INVENTORY_INDICATOR);
-							orderMultiple = XPXItemExtnElement.getAttribute("OrderMultiple");
-						}
-
-						Element orderMultipleElement = stockCheckResponseDocument.createElement("OrderMultiple");
-						orderMultipleElement.setTextContent(orderMultiple);
-						item.appendChild(orderMultipleElement);
-
-						if(orderMultiple!=null && orderMultiple.trim().length()!=0)
-						{
-						  Element orderMultipleMessage = stockCheckResponseDocument.createElement("OrderMultipleMessage");
-						  orderMultipleMessage.setTextContent("Must be ordered in units of "+orderMultiple+" "+baseUomDescription);
-						  item.appendChild(orderMultipleMessage);
-						}
-
-						//Setting error code as 1000 if the item is a mill item
-						if(inventoryIndicator!=null && inventoryIndicator.trim().length()>0)
-						{
-							if(inventoryIndicator.equalsIgnoreCase("M"))
+							for(int m=0; m<wareHouseLocationsList.getLength();m++)
 							{
-								errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-								errorMessage2.setTextContent("1000 - This item is currently not stocked in your primary warehouse. " +
-										"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
-										"Customer Support at 1- 877-269-1784.");
-							}
-						}
-						else if(XPXItemExtnElement!=null)
-						{
-								errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-								errorMessage2.setTextContent("1000 - This item is currently not stocked in your primary warehouse. " +
-										"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
-										"Customer Support at 1- 877-269-1784.");
-						}
+								Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);
 
-					    // Logic for Total Price
-						Element totalPrice = stockCheckResponseDocument.createElement("TotalPrice");
-						totalPrice.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./ExtendedPrice").getTextContent());
-						item.appendChild(totalPrice);
-
-						//Logic for Manufacturer and Manufacturer Part Number
-						Element manufacturer = stockCheckResponseDocument.createElement("Manufacturer");
-						manufacturer.setTextContent(itemExtnElement.getAttribute("ExtnSupplierNameDisplay"));
-						item.appendChild(manufacturer);
-
-						Element manufacturerPartNo = stockCheckResponseDocument.createElement("ManufacturerPartNumber");
-						manufacturerPartNo.setTextContent(primaryInfoElement.getAttribute("ManufacturerItem"));
-						item.appendChild(manufacturerPartNo);
-
-						Element itemStatus = stockCheckResponseDocument.createElement("ItemStatus");
-						itemStatus.setTextContent(inventoryIndicator);
-						item.appendChild(itemStatus);
-
-						//Logic for UnitPrice 1&2, UOMCode1&2 and UOMDescription1&2...right now only requested UOM and pricing UOM are returned
-						//Need to confirm with Prashant 28-09-2010
-						Element unitPrice1 = stockCheckResponseDocument.createElement("UnitPrice1");
-						Element unitPrice2 = stockCheckResponseDocument.createElement("UnitPrice2");
-						unitPrice1.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent()
-								+"/"+baseUomDescription);
-						item.appendChild(unitPrice1);
-
-						if(!SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent().
-								equals(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()))
-						{
-							String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
-							String convertedPricingUom = XPXUtils.replaceOutgoingUOMFromLegacy(
-									env, pricingUom, xpedxPartNumber.getTextContent());
-
-							String pricingUomDescription = getUomDesc(pricingUom, convertedPricingUom);
-							unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()
-									+"/"+pricingUomDescription);
-							item.appendChild(unitPrice2);
-						}
-
-
-						//Logic for retrieving UOM Codes and description(?) is to retrieve UOMs from XPXUOMListAPI
-						Document getXPXUOMListAPIOutputDoc = getXPXUomList(env,xpedxPartNumber.getTextContent(), customerID, organizationCode);
-						NodeList uomList = getXPXUOMListAPIOutputDoc.getDocumentElement().getElementsByTagName("UOM");
-
-						Element uomNodeList = stockCheckResponseDocument.createElement("UOMList");
-
-						for(int b=0; b<uomList.getLength();b++)
-						{
-							Element uomElement  =  (Element) uomList.item(b);
-							String xpxUom = uomElement.getAttribute("UnitOfMeasure");
-
-							Element uom = stockCheckResponseDocument.createElement("UOM");
-							Element uomCode1 = stockCheckResponseDocument.createElement("UOMCode"+(b+1));
-							Element uomDescription1 = stockCheckResponseDocument.createElement("UOMDescription"+(b+1));
-
-							String convertedToCustomerUom = XPXUtils.replaceOutgoingUOMFromLegacy(
-									env, xpxUom, xpedxPartNumber.getTextContent());
-
-							String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
-
-							uomCode1.setTextContent(convertedToCustomerUom);
-							uom.appendChild(uomCode1);
-							uomDescription1.setTextContent(uomDesc);
-							uom.appendChild(uomDescription1);
-							uomNodeList.appendChild(uom);
-						}
-						item.appendChild(uomNodeList);
-
-
-						// Logic for catalog attribute name and value...Not sure which one....ItemAttribute or Attribute
-						Element additionalAttrList = (Element) itemElement.getElementsByTagName("AdditionalAttributeList").item(0);
-
-						if (additionalAttrList != null) {
-							NodeList additionalAttributeList = additionalAttrList.getElementsByTagName("AdditionalAttribute");
-
-							if(additionalAttributeList.getLength()>0)
-							{
-								//Catalog attributes exist
-								additionalAttributeList.getLength();
-								if(additionalAttributeList.getLength()<75)
+								if(m==0)
 								{
-									listLength = additionalAttributeList.getLength();
-								}
-								else
-								{
-									listLength = 75;
+									//Primary Warehouse					
+									sameDayDesc.setTextContent(SCXmlUtil.getXpathElement(wareHouseLocation,"./Warehouse").getTextContent());			
+									sameDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
+									sameDayQuantity.setTextContent(sameDayQty);								
 								}
 
-								for(int a=0; a<listLength; a++)
+								if(m==1)
 								{
-									Element additionalAttributeElement = (Element) additionalAttributeList.item(a);
+									// Next Day warehouse
+									// Hard coded to next day								
+									nextDayDesc.setTextContent("Next Day");	
+									nextDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
+									nextDayQuantity.setTextContent(nextDayQty);								
+								}
 
-									Element catalogAttributeName = stockCheckResponseDocument.createElement("CatalogAttributeName"+(a+1));
-									catalogAttributeName.setTextContent(additionalAttributeElement.getAttribute("Name"));
-									Element catalogAttributeValue = stockCheckResponseDocument.createElement("CatalogAttributeValue"+(a+1));
-									catalogAttributeValue.setTextContent(additionalAttributeElement.getAttribute("Value"));
-
-									item.appendChild(catalogAttributeName);
-									item.appendChild(catalogAttributeValue);
+								if(m==2)
+								{
+									//Two Day Warehouse
+									//Hardcoded to 2+days								
+									twoDayDesc.setTextContent("2+ Days");
+									twoDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
+									twoDayQuantity.setTextContent(twoDayQty);								
 								}
 							}
 						}
-					  }
-					  else
-					  {
-						  //Item does not exist in catalog, so its error code
-						  errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-						  errorMessage2.setTextContent("1003 - The item is not stocked in the Ordering Warehouse. " +
-						  		"Please enter another Part Number.");
-					  }
 
-					  if (!errorCode2.getTextContent().equalsIgnoreCase(ERROR_LEVEL_COMPLETE_FAILURE))
-					  {
-						  errorCode2.setTextContent(ERROR_LEVEL_COMPLETE_SUCCESS);
-					  }
+						//Logic for availability message					
+						String availabilityMessage = getAvailabilityMessage(env,quantity.getTextContent(),sameDayQty,nextDayQty,twoDayQty);
+						availMessage.setTextContent(availabilityMessage);			
 
-					  log.debug("The final item element is: "+SCXmlUtil.getString(item));
-					  items.appendChild(item);
+						// Logic for back order message	
+						if(Integer.parseInt(quantity.getTextContent()) > 0 &&
+								(Integer.parseInt(quantity.getTextContent()) > (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty))))
+						{
+							int backOrderQty = Integer.parseInt(quantity.getTextContent()) - (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty));
+							String backOrderedMessage = Integer.toString(backOrderQty)+""+unitOfMeasure.getTextContent()+""+"not currently available";
+							backOrderMessage.setTextContent(backOrderedMessage);
+
+						}
+
+					}//end no warehouse info in P&A
+
+					String orderMultipleQty = SCXmlUtil.getXpathElement(itemElementFromPandA,"./OrderMultipleQty").getTextContent();
+					String orderMultipleUOM = SCXmlUtil.getXpathElement(itemElementFromPandA,"./OrderMultipleUOM").getTextContent();
+					if(!YFCUtils.isVoid(orderMultipleQty) && Integer.parseInt(orderMultipleQty) > 0 && !YFCUtils.isVoid(orderMultipleUOM)){
+						orderMultipleElement.setTextContent(orderMultipleQty);				
+						String orderMultipleUOMDescription = getUomDesc(orderMultipleUOM, orderMultipleUOM.replace(envtId+"_",""));
+						orderMultipleMessage.setTextContent("Must be ordered in units of "+orderMultipleQty+" "+orderMultipleUOMDescription);
+					}
+
+					// Logic for Total Price					
+					totalPrice.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./ExtendedPrice").getTextContent());
+					unitPrice1.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent() +"/"+requestedUOMDescription);			
+					if(!SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent().
+							equals(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()))
+					{
+						String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
+						String convertedPricingUom = legacyToUOMMap.get(pricingUom);
+						String pricingUomDescription = getUomDesc(pricingUom, convertedPricingUom);
+						unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent() +"/"+pricingUomDescription);						
+					}	
+				}	else{
+					if(inValidUOMPositionsForValidItems.contains(i)){
+						quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
+						unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
+						itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+						itemLevelErrorMessage.setTextContent("1004 - Invalid UOM value. Please enter valid UOM.");
+					}
+				}
+
+				Element itemElement = validItemElementsMap.get(legacyProductCode);
+				if(itemElement!=null){
+					if (itemElement.getElementsByTagName("CategoryList").getLength() > 0)
+					{
+						Element categoryListElement = (Element) itemElement.getElementsByTagName("CategoryList").item(0);
+						if(categoryListElement.getElementsByTagName("Category").getLength()>0)
+						{
+							Element categoryElement = (Element) categoryListElement.getElementsByTagName("Category").item(0);
+
+							String[] cats = categoryElement.getAttribute("CategoryPath").split("/");
+
+							if (cats.length > 4)
+							{
+								category1.setTextContent(getCategoryShortDescription(cats[2], organizationCode, env));
+								category2.setTextContent(getCategoryShortDescription(cats[3], organizationCode, env));
+								category3.setTextContent(getCategoryShortDescription(cats[4], organizationCode, env));
+								// If no cat4, output "<Category4/>" (or skip?)
+								//  Does "Paper Category" in fields count as cat4?
+								String cat4 = "";
+								if (cats.length > 5)
+								{
+									cat4 = getCategoryShortDescription(cats[5], organizationCode, env);
+								}
+								category4.setTextContent(cat4);
+							}
+						}
+					}
+					// Item description and Item Sell text				
+					Element primaryInfoElement = (Element) itemElement.getElementsByTagName("PrimaryInformation").item(0);
+					itemDescription.setTextContent(primaryInfoElement.getAttribute("ExtendedDescription"));				 
+					Element itemExtnElement = (Element) itemElement.getElementsByTagName("Extn").item(0);
+					itemSellText.setTextContent(itemExtnElement.getAttribute("ExtnSellText"));
+					manufacturer.setTextContent(itemExtnElement.getAttribute("ExtnSupplierNameDisplay"));
+					manufacturerPartNo.setTextContent(primaryInfoElement.getAttribute("ManufacturerItem"));
+					inventoryIndicator = xpedxItemsInventoryMap.get(requestedXpedxItemsMap.get(i));
+					//Setting error code as 1000 if the item is a mill item
+					if(!YFCUtils.isVoid(inventoryIndicator))
+					{
+						if(inventoryIndicator.equalsIgnoreCase("M"))
+						{
+							itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
+							itemLevelErrorMessage.setTextContent("1000 - This item is currently not stocked in your primary warehouse. " +
+									"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
+									"Customer Support at 1- 877-269-1784.");
+						}
+					}
+					itemStatus.setTextContent(inventoryIndicator);					
+					createUOMListForStockCheckResponse(legacyProductCode,uomNodeList,stockCheckResponseDocument);
+					createCatalogAttributeListForStockCheckResponse(itemElement,catalogAttributeList,stockCheckResponseDocument);
 				}
 			}
-		} // end Items
+
+			item.appendChild(indexID);
+			item.appendChild(xpedxPartNumber);
+			item.appendChild(customerPartNumber);
+			item.appendChild(quantity);
+			item.appendChild(unitOfMeasure);
+			item.appendChild(itemLevelErrorCode);
+			item.appendChild(itemLevelErrorMessage);
+			item.appendChild(category1);
+			item.appendChild(category2);
+			item.appendChild(category3);
+			item.appendChild(category4);
+			item.appendChild(itemDescription);
+			item.appendChild(itemSellText);
+			item.appendChild(sameDayDesc);
+			item.appendChild(sameDayQuantity);
+			item.appendChild(nextDayDesc);
+			item.appendChild(nextDayQuantity);
+			item.appendChild(twoDayDesc);
+			item.appendChild(twoDayQuantity);
+			item.appendChild(availMessage);
+			item.appendChild(backOrderMessage);
+			item.appendChild(orderMultipleElement);
+			item.appendChild(orderMultipleMessage);
+			item.appendChild(totalPrice);
+			item.appendChild(manufacturer);
+			item.appendChild(manufacturerPartNo);
+			item.appendChild(itemStatus);
+			item.appendChild(unitPrice1);
+			item.appendChild(unitPrice2);
+			item.appendChild(uomNodeList);
+			item.appendChild(catalogAttributeList);
+
+			items.appendChild(item);
+		}
+
 
 		stockCheckResponseDocRoot.appendChild(items);
 
@@ -646,7 +572,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				{
 					successCount ++;
 				}
-		 	}
+			}
 		}
 		if (errorCount > 0) {
 			log.info("SCWS response has " + errorCount + " item failures (out of " + numItemsInResponse + " items)");
@@ -695,45 +621,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		return uomDesc;
 	}
 
-	private Document getXPXUomList(YFSEnvironment env, String itemID, String customerID, String organizationCode) throws YFSException, RemoteException
-	{
-		Document uomListOutputDoc = null;
 
-		Document invokeUOMlistAPIDoc = YFCDocument.createDocument("UOM").getDocument();
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("ItemID", itemID);
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("CustomerID", customerID);
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
 
-    	log.info("XPXUOMListAPI input: "+SCXmlUtil.getString(invokeUOMlistAPIDoc)); //TODO remove
-		uomListOutputDoc = api.executeFlow(env, "XPXUOMListAPI", invokeUOMlistAPIDoc);
-    	log.info("XPXUOMListAPI output: "+SCXmlUtil.getString(uomListOutputDoc)); //TODO remove
-
-		return uomListOutputDoc;
-	}
-
-	private Document getItemBranchDetails(YFSEnvironment env,String envtId, String companyCode, String division, String itemId)
-	{
-		Document getItemBranchDetailsOutputDoc = null;
-
-		Document getItemBranchDetailsInputDoc = YFCDocument.createDocument(XPXLiterals.E_XPX_ITEM_EXTN).getDocument();
-		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID, itemId);
-		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute("EnvironmentID",envtId);
-		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute("CompanyCode",companyCode);
-		getItemBranchDetailsInputDoc.getDocumentElement().setAttribute("XPXDivision",division);
-
-		try {
-			log.info("getXPXItemBranchListService in: " + SCXmlUtil.getString(getItemBranchDetailsInputDoc)); //TODO remove
-			getItemBranchDetailsOutputDoc = api.executeFlow(env,XPXLiterals.GET_XPX_ITEM_BRANCH_LIST_SERVICE, getItemBranchDetailsInputDoc);
-			log.info("getXPXItemBranchListService out: " + SCXmlUtil.getString(getItemBranchDetailsOutputDoc)); //TODO remove
-		} catch (YFSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-
-		return getItemBranchDetailsOutputDoc;
-	}
 
 	private String getAvailabilityMessage(YFSEnvironment env, String reqQty, String sameDayQty, String nextDayQty, String twoDayQty)
 	{
@@ -765,242 +654,38 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		return availabilityMessage;
 	}
 
-	private Document getItemDetails(YFSEnvironment env, String itemID)
-	{
-		Document getItemListOutputDoc = null;
-		if(itemID!=null && itemID.trim().length()>0)
-	    {
-        Document getItemDetailsInputDoc = YFCDocument.createDocument("Item").getDocument();
-
-
-        getItemDetailsInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID,itemID);
-
-    	try {
-        	log.debug("The input to getItemList: "+SCXmlUtil.getString(getItemDetailsInputDoc));
-			 env.setApiTemplate(XPXLiterals.GET_ITEM_LIST_API, getItemListTemplate);
-			 getItemListOutputDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, getItemDetailsInputDoc);
-			 env.clearApiTemplate(XPXLiterals.GET_ITEM_LIST_API);
-	        log.debug("The output from getItemList: "+SCXmlUtil.getString(getItemListOutputDoc));
-		} catch (YFSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	    }
-		return getItemListOutputDoc;
-	}
-
-	private String getCustomerItemNumberFromXref(YFSEnvironment env, String xpedxPartNo, String envtId, String companyCode, String legacyCustomerNumber)
-	{
-		Document getItemXRefListOutputDoc = null;
-		String customerItemNumber = null;
-
-         Document getItemXRefListDoc = YFCDocument.createDocument("XPXItemcustXref").getDocument();
-
-         getItemXRefListDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
-         getItemXRefListDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId); //TODO always "M" so hardcode?
-         getItemXRefListDoc.getDocumentElement().setAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO,legacyCustomerNumber);
-         getItemXRefListDoc.getDocumentElement().setAttribute("LegacyItemNumber", xpedxPartNo);
-
-         try {
-        	log.debug("The input to customer Xref list: "+SCXmlUtil.getString(getItemXRefListDoc));
-			getItemXRefListOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, getItemXRefListDoc);
-			log.debug("The output of customer Xref list: "+SCXmlUtil.getString(getItemXRefListDoc));
-		} catch (YFSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-
-		if(getItemXRefListOutputDoc != null)
-		{
-		Element XREFOutputDocRoot = getItemXRefListOutputDoc.getDocumentElement();
-
-		NodeList XREFCustElementList = XREFOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_CUST_XREF);
-
-		if(XREFCustElementList.getLength() > 0)
-		{
-
-			        Element XREFElement = (Element) XREFCustElementList.item(0);
-
-			        customerItemNumber = XREFElement.getAttribute("CustomerItemNumber");
-			        log.debug("The customer item number is: "+customerItemNumber);
-		}
-
-	    }
-
-		return customerItemNumber;
-	}
 
 	private Document createPandARequestInputDocument(YFSEnvironment env, Element stockCheckInputDocRoot) throws Exception
 	{
-		String envtId = null;
-		String companyCode = null;
-		String shipToSuffix = null;
-		String shipFromBranch = null;
-		String legacyCustomerNumber = null;
-		String customerOrderBranch = null;
-		String customerEnvtId = null;
-		String legacyItemNumber = null;
-		String customerID = null;
-		String organizationCode = null;
-
-		Document stockCheckErrorDocument = null;
-
 		Document pAndARequestInputDoc = YFCDocument.createDocument("PriceAndAvailability").getDocument();
 		Element pAndARequestInputDocRoot = pAndARequestInputDoc.getDocumentElement();
 
-
-		Element customerElement = (Element) shipToCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-
-		customerID = customerElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);
-		organizationCode = customerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
-		Element customerExtnElement = (Element) customerElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
-
-		envtId = customerExtnElement.getAttribute("ExtnEnvironmentCode");
-		companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
-		shipToSuffix = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_SHIP_TO_SUFFIX);
-		shipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch");
-		legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
-		customerOrderBranch = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_CUSTOMER_ORDER_BRANCH);
-		customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
-
-
 		Element aItems = pAndARequestInputDoc.createElement("Items");
-
 		for(int i=0; i<stockCheckItemList.getLength(); i++)
 		{
-			Element itemElement = (Element) stockCheckItemList.item(i);
 
-			Element aItem = pAndARequestInputDoc.createElement("Item");
+			if(!inValidItemPositions.contains(i) && !inValidUOMPositionsForValidItems.contains(i)){
 
-			Element sLineNumber = pAndARequestInputDoc.createElement("LineNumber");
-			sLineNumber.setTextContent(SCXmlUtil.getXpathElement(itemElement,"./IndexID").getTextContent());
+				Element aItem = pAndARequestInputDoc.createElement("Item");
+				Element sLineNumber = pAndARequestInputDoc.createElement("LineNumber");
+				sLineNumber.setTextContent(""+i);
 
-			Element sLegacyProductCode = pAndARequestInputDoc.createElement("LegacyProductCode");
+				Element sLegacyProductCode = pAndARequestInputDoc.createElement("LegacyProductCode");
+				sLegacyProductCode.setTextContent(requestedXpedxItemsMap.get(i));
 
-			if(SCXmlUtil.getXpathElement(itemElement,"./CustomerPartNumber").getTextContent()!=null &&
-					SCXmlUtil.getXpathElement(itemElement,"./CustomerPartNumber").getTextContent().trim().length()!=0)
-			{
-				log.debug("xpedxPartNo not avaialble.....");
-				String customerPartNo = SCXmlUtil.getXpathElement(itemElement,"./CustomerPartNumber").getTextContent();
+				Element sRequestedQtyUOM = pAndARequestInputDoc.createElement("RequestedQtyUOM");
+				Element sRequestedQty = pAndARequestInputDoc.createElement("RequestedQty");
+				sRequestedQty.setTextContent(qtysForValidPositions.get(i)); 
+				sRequestedQtyUOM.setTextContent(uomsForValidPositions.get(i));
 
-				legacyItemNumber = getLegacyItemNumberFromXref(env,customerPartNo,envtId,companyCode,legacyCustomerNumber);
-				sLegacyProductCode.setTextContent(legacyItemNumber);
+				aItem.appendChild(sLineNumber);
+				aItem.appendChild(sLegacyProductCode);
+				aItem.appendChild(sRequestedQtyUOM);
+				aItem.appendChild(sRequestedQty);
 
-				//xpedxPartNo exists so setting this value as Legacy Product Code
+				aItems.appendChild(aItem);
 			}
-			else
-			{
-				//xpedxPartNo not avaialble.Get Customer Part No and query Customer X ref table to retrieve LegacyItemNumber
-
-				log.debug("As xpedxPARTNo is there.....");
-				legacyItemNumber = SCXmlUtil.getXpathElement(itemElement,"./xpedxPartNumber").getTextContent();
-				sLegacyProductCode.setTextContent(legacyItemNumber);
-			}
-
-			Element sRequestedQtyUOM = pAndARequestInputDoc.createElement("RequestedQtyUOM");
-			Element sRequestedQty = pAndARequestInputDoc.createElement("RequestedQty");
-
-			if(SCXmlUtil.getXpathElement(itemElement,"./Quantity").getTextContent()==null ||
-					SCXmlUtil.getXpathElement(itemElement,"./Quantity").getTextContent().trim().length()==0)
-			{
-				//Quantity not sent in the stock check request...so fetch MinimumOrderQty from Item table..as per logic
-				// in ItemDetails paage in SWC...need to check with Prashant as this goes against what he mentioned.
-
-				String minimumOrderQty = getMinOrderQty(env,legacyItemNumber);
-
-				sRequestedQty.setTextContent(minimumOrderQty);
-
-				//[OLD: As quantity was not sent in request, ignore the UOM sent in and query using Manohar's method to fetch it.]
-
-				Document invokeUOMListApiInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
-				invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID, legacyItemNumber);
-				invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID,customerID);
-				invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-				invokeUOMListApiInputDoc.getDocumentElement().setAttribute("EntryType","B2B");
-
-				log.debug("The input to Manohar's method is(1): "+SCXmlUtil.getString(invokeUOMListApiInputDoc));
-				Document invokeUOMListApiOutputDoc = api.executeFlow(env,"XPXUOMListAPI",invokeUOMListApiInputDoc );
-				log.debug("The output of Manohar's method is(1): "+SCXmlUtil.getString(invokeUOMListApiOutputDoc));
-
-				if(invokeUOMListApiOutputDoc != null)
-				{
-					Element firstUOMElement = (Element) invokeUOMListApiOutputDoc.getDocumentElement().getElementsByTagName("UOM").item(0);
-
-					String baseUOM = firstUOMElement.getAttribute("UnitOfMeasure");
-
-					sRequestedQtyUOM.setTextContent(baseUOM);
-				}
-			}
-
-			else
-			{
-				String itemQty = SCXmlUtil.getXpathElement(itemElement,"./Quantity").getTextContent();
-
-				for(int strLength = 0; strLength<itemQty.trim().length(); strLength++)
-				{
-					//If we find a non-digit character we return false.
-
-					log.debug("The item qty is: "+itemQty);
-					if (!Character.isDigit(itemQty.charAt(strLength)))
-					{
-						log.debug("Getting into the IF loop");
-						stockCheckErrorDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
-						return stockCheckErrorDocument;
-					}
-				}
-				sRequestedQty.setTextContent(SCXmlUtil.getXpathElement(itemElement,"./Quantity").getTextContent());
-
-				//[OLD: Prashant had asked to include a dummy method to convert the UOM sent in Stock check to the the EDI or Legacy or
-				// Customer preferred UOM...right now no clarity on that so not doing it]
-
-				if(SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent()==null ||
-						SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent().trim().length()==0)
-				{
-					//UOM empty so populate it from the XPXUOMListAPI
-
-					Document invokeUOMListApiInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER).getDocument();
-					invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID, legacyItemNumber);
-					invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_CUSTOMER_ID,customerID);
-					invokeUOMListApiInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-					//Added to distinguish this request as a B2B order
-					invokeUOMListApiInputDoc.getDocumentElement().setAttribute("EntryType","B2B");
-
-					log.info("The input to XPXUOMListAPI (2) is: "+SCXmlUtil.getString(invokeUOMListApiInputDoc));
-					Document invokeUOMListApiOutputDoc = api.executeFlow(env,"XPXUOMListAPI",invokeUOMListApiInputDoc );
-					log.info("The output from XPXUOMListAPI (2)is: "+SCXmlUtil.getString(invokeUOMListApiOutputDoc)); //TODO debug
-					if(invokeUOMListApiOutputDoc != null)
-					{
-						Element firstUOMElement = (Element) invokeUOMListApiOutputDoc.getDocumentElement().getElementsByTagName("UOM").item(0);
-
-						String baseUOM = firstUOMElement.getAttribute("UnitOfMeasure");
-
-						log.debug("The base UOM is: "+baseUOM);
-
-						sRequestedQtyUOM.setTextContent(baseUOM);
-					}
-				}
-				else
-				{
-					String uom = SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent();
-
-					String convertedUom = XPXUtils.replaceIncomingUOMFromCustomer(
-							env, uom, sLegacyProductCode.getTextContent(), shipToCustomerListOutputDoc);
-					sRequestedQtyUOM.setTextContent(convertedUom);
-				}
-			}
-
-			aItem.appendChild(sLineNumber);
-			aItem.appendChild(sLegacyProductCode);
-			aItem.appendChild(sRequestedQtyUOM);
-			aItem.appendChild(sRequestedQty);
-
-			aItems.appendChild(aItem);
 		}
-
 		// Creating the P&A request xml with Header level attributes
 		Element sSourceIndicator = pAndARequestInputDoc.createElement("SourceIndicator");
 		sSourceIndicator.setTextContent(B2BSourceIndicator);
@@ -1037,81 +722,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		pAndARequestInputDocRoot.appendChild(aItems);
 		return pAndARequestInputDoc;
-	}
-
-	private String getMinOrderQty(YFSEnvironment env, String legacyItemNumber) throws Exception
-	{
-        String minOrderQty = null;
-
-		Document getItemListOutputDoc = null;
-        Document getItemListInputDoc = YFCDocument.createDocument("Item").getDocument();
-
-        if(legacyItemNumber!=null && legacyItemNumber.trim().length()!=0)
-        {
-        	getItemListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ITEM_ID, legacyItemNumber);
-        }
-
-        	log.debug("The input to getItemList for Minimum OrderQty is: "+SCXmlUtil.getString(getItemListInputDoc));
-			getItemListOutputDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, getItemListInputDoc);
-			log.debug("The output of getItemList for Minimum OrderQty is: "+SCXmlUtil.getString(getItemListOutputDoc));
-
-
-		    if(getItemListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_ITEM).getLength() > 0 )
-		    {
-		    	NodeList itemsList = getItemListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_ITEM);
-		    	for(int i=0; i<itemsList.getLength();i++)
-		    	{
-		    		Element itemElement = (Element) itemsList.item(i);
-
-		    		Element primInfo = (Element) itemElement.getElementsByTagName("PrimaryInformation").item(0);
-
-		    		if (primInfo != null) {
-		    			minOrderQty = primInfo.getAttribute("MinOrderQuantity"); //TODO NPE if response doesn't contain PrimaryInformation
-		    		}
-
-		    		log.debug("The minimum order quantity is: "+minOrderQty);
-		    	}
-		    }
-
-		return minOrderQty;
-	}
-
-	private String getLegacyItemNumberFromXref(YFSEnvironment env, String customerPartNo, String envtId,
-			String companyCode, String legacyCustomerNumber) throws Exception
-	{
-		Document getItemXRefListOutputDoc = null;
-		String legacyItemNumber = null;
-
-		Document getItemXRefListDoc = YFCDocument.createDocument("XPXItemcustXref").getDocument();
-
-		getItemXRefListDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
-		getItemXRefListDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
-		getItemXRefListDoc.getDocumentElement().setAttribute("CustomerNumber",legacyCustomerNumber);
-		getItemXRefListDoc.getDocumentElement().setAttribute("CustomerItemNumber", customerPartNo);
-
-		log.debug("The input to Xref TABLE is: "+SCXmlUtil.getString(getItemXRefListDoc));
-		getItemXRefListOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, getItemXRefListDoc);
-		log.debug("The output of Xref TABLE is: "+SCXmlUtil.getString(getItemXRefListOutputDoc));
-
-
-		if(getItemXRefListOutputDoc != null)
-		{
-			Element XREFOutputDocRoot = getItemXRefListOutputDoc.getDocumentElement();
-
-			NodeList XREFCustElementList = XREFOutputDocRoot.getElementsByTagName(XPXLiterals.E_XPX_ITEM_CUST_XREF);
-
-			if(XREFCustElementList.getLength() > 0)
-			{
-
-				Element XREFElement = (Element) XREFCustElementList.item(0);
-
-				legacyItemNumber = XREFElement.getAttribute("LegacyItemNumber");
-				log.debug("The legacy item number is: "+legacyItemNumber);
-			}
-
-		}
-
-		return legacyItemNumber;
 	}
 
 	/**
@@ -1398,5 +1008,424 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 		return stockCheckErrorDoc;
 	}
+	
+	/**
+	 * get and validate XPEDX Item numbers
+	 * @param env
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private void validateXpedxItemNumbers(YFSEnvironment env) throws YFSException, RemoteException {
+		requestedXpedxItemsMap = new HashMap<Integer,String>(stockCheckItemList.getLength());
+		 Set<String> customerPartNoSet = new HashSet<String>(stockCheckItemList.getLength());
+		 inValidItemPositions = new TreeSet<Integer>();
+		 Set<Integer> customerPartNoPositions = new TreeSet<Integer>();
+		 Map<String,String> cpToXpedx = null;
+		 
+		for(int i=0; i<stockCheckItemList.getLength(); i++)
+		{
+			Element itemElement = (Element) stockCheckItemList.item(i);
+			Element xpedxItemElement = SCXmlUtil.getXpathElement(itemElement,"./xpedxPartNumber");
+			if(xpedxItemElement!=null && !YFCUtils.isVoid(xpedxItemElement.getTextContent())){ // XPEDX number
+				requestedXpedxItemsMap.put(i,xpedxItemElement.getTextContent().trim());
+			}else{ // no XPEDX number
+				Element customerPartNumberElement = SCXmlUtil.getXpathElement(itemElement,"./CustomerPartNumber");
+				if(customerPartNumberElement!=null && !YFCUtils.isVoid(customerPartNumberElement.getTextContent())){ // Customer Part number	
+					customerPartNoSet.add(customerPartNumberElement.getTextContent().trim());
+					customerPartNoPositions.add(i);
+				}else{ // no XPEDX number and  Customer Part number
+					inValidItemPositions.add(i);	
+				}
+			}
+		}
+		
+			if(customerPartNoSet!=null && customerPartNoSet.size() > 0){ 
+				cpToXpedx = getItemNumbersForCustomerPartNumbers(env,customerPartNoSet); //for getting XPEDX numbers for corresponding Customer Part numbers
+		
+			}
+		
+			for (Integer customerPartNoPosition : customerPartNoPositions) {
+				Element itemElement = (Element) stockCheckItemList.item(customerPartNoPosition);
+				Element customerPartNumberElement = SCXmlUtil.getXpathElement(itemElement,"./CustomerPartNumber");
+				if(cpToXpedx!= null && !YFCUtils.isVoid(cpToXpedx.get(customerPartNumberElement.getTextContent().trim()))){ //found XPEDX number for corresponding Customer Part number
+					requestedXpedxItemsMap.put(customerPartNoPosition, cpToXpedx.get(customerPartNumberElement.getTextContent().trim()));
+				}else{ //not found XPEDX number for corresponding Customer Part number
+					inValidItemPositions.add(customerPartNoPosition);
+				}
+			}
+		
+			validItemElementsMap = getItemsDetails(env);
+	}
+	
+	/**
+	 * Get XPEDX item number for corresponding Customer Item numbers
+	 * @param env
+	 * @param customerPartNumbers
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private Map<String,String> getItemNumbersForCustomerPartNumbers(YFSEnvironment env, Set<String> customerPartNumbers) throws YFSException, RemoteException
+	{
+		Document xpedxItemCustXRefInputDoc = YFCDocument.createDocument("XPXItemcustXref").getDocument();
+		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
+		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
+		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute("CustomerNumber",legacyCustomerNumber);
+		Element complexQueryElement = SCXmlUtil.createChild(xpedxItemCustXRefInputDoc.getDocumentElement(), "ComplexQuery");
+		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");	
+		for (String customerPartNumber : customerPartNumbers) {
+			Element expElement = SCXmlUtil.createChild(orElement, "Exp");
+			expElement.setAttribute("Name", "CustomerItemNumber");
+			expElement.setAttribute("Value", customerPartNumber);
+		}
+		Document xpedxItemCustXRefOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST, xpedxItemCustXRefInputDoc);
+		Element xpedxItemCustXRefOutputElement = xpedxItemCustXRefOutputDoc.getDocumentElement();	
+		Map <String,String>xpedxItemIdsForCustomerItems = new LinkedHashMap<String, String>(customerPartNumbers.size());
+		ArrayList<Element> xpedxItemCustXRefElements = SCXmlUtil.getElements(xpedxItemCustXRefOutputElement, XPXLiterals.E_XPX_ITEM_CUST_XREF);
+		for (Element xpedxItemCustXRefElement : xpedxItemCustXRefElements) {
+			if (xpedxItemCustXRefElement != null) {
+				xpedxItemIdsForCustomerItems.put(xpedxItemCustXRefElement.getAttribute("CustomerItemNumber"), xpedxItemCustXRefElement.getAttribute("LegacyItemNumber"));
+			}			
+		}
+		return xpedxItemIdsForCustomerItems;
+	}
+	
+	/**
+	 * get the Qtys for P and A.
+	 * @param env
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private void setQtysAndUOMsForValidItems(YFSEnvironment env) throws YFSException, RemoteException {
+		qtysForValidPositions = new HashMap<Integer,String>(stockCheckItemList.getLength()); // this map will be used for P&A requested qty
+		xpedxItemsOMQtyMap = getOMQtyForXpedxItems(env, validItemElementsMap.keySet());	//getting the order multiples for valid items.
+		
+		uomListForValidItemsMap = getXPXUomListForValidItems(env);//get the UOM List for all Items
+		getUOMAndLegacyUOMsForValidXPXItems(env);
+		
+		inValidUOMPositionsForValidItems = new TreeSet<Integer>();
+		uomsForValidPositions = new HashMap<Integer,String>();
+		for(int i=0; i<stockCheckItemList.getLength(); i++)	{
+			if(!inValidItemPositions.contains(i)){
+				Element itemElement = (Element) stockCheckItemList.item(i);
+				Element qtyElement	= SCXmlUtil.getXpathElement(itemElement,"./Quantity");
+				Element uomElement	= SCXmlUtil.getXpathElement(itemElement,"./UOM");
+				if (qtyElement==null || YFCUtils.isVoid(qtyElement.getTextContent()) 
+						|| uomElement == null 
+						|| YFCUtils.isVoid(uomElement.getTextContent())
+						|| !isPositivAndNonZeroInteger(qtyElement.getTextContent().trim())) 
+				{
+					String omQty = xpedxItemsOMQtyMap.get(requestedXpedxItemsMap.get(i));
+					qtysForValidPositions.put(i,!YFCUtils.isVoid(omQty) ? omQty:"1");
+					uomsForValidPositions.put(i,validItemsUOMMap.get(requestedXpedxItemsMap.get(i)));
+				}else{
+					qtysForValidPositions.put(i,qtyElement.getTextContent().trim());
+					
+					String uom = SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent().trim();
+					String legacyUOM = uomToLegacyMap.get(envtId+"_"+uom);
+					if(legacyUOM!=null && isValidUOMForItem(requestedXpedxItemsMap.get(i),legacyUOM)){
+					 uomsForValidPositions.put(i,legacyUOM);
+					}
+					else{
+						inValidUOMPositionsForValidItems.add(i);
+					}
+				}
+			}	
+		}
+	}
+	
+	/**
+	 * get the Order multiple using Complex Query and Inventory indicator
+	 * @param env
+	 * @param itemsForOMQtySet
+	 * @return
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private Map<String,String> getOMQtyForXpedxItems(YFSEnvironment env,Set<String> itemsForOMQtySet) throws YFSException, RemoteException{
+		Document itemBranchDetailsInputDoc = YFCDocument.createDocument(XPXLiterals.E_XPX_ITEM_EXTN).getDocument();
+		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("EnvironmentID",envtId);
+		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("CompanyCode",companyCode);
+		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("XPXDivision",shipFromBranch);	
+		Element complexQueryElement = SCXmlUtil.createChild(itemBranchDetailsInputDoc.getDocumentElement(), "ComplexQuery");
+		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");	
+		for (String itemId : itemsForOMQtySet) {
+			Element expElement = SCXmlUtil.createChild(orElement, "Exp");
+			expElement.setAttribute("Name", "ItemID");
+			expElement.setAttribute("Value", itemId);
+		}
+		log.info("itemBranchDetailsInputDoc: "+SCXmlUtil.getString(itemBranchDetailsInputDoc.getDocumentElement()));
+		String  itemBranchDetailsTemplate =   "<XPXItemExtnList>"
+				+ "<XPXItemExtn InventoryIndicator ='' ItemID ='' OrderMultiple ='' />"
+				+" </XPXItemExtnList>";
+		
+		env.setApiTemplate(XPXLiterals.GET_XPX_ITEM_BRANCH_LIST_SERVICE, SCXmlUtil.createFromString(itemBranchDetailsTemplate));
+		Document itemBranchDetailsOutputDoc = api.executeFlow(env,XPXLiterals.GET_XPX_ITEM_BRANCH_LIST_SERVICE, itemBranchDetailsInputDoc);
+		env.clearApiTemplate(XPXLiterals.GET_XPX_ITEM_BRANCH_LIST_SERVICE); 
+		
+		Element itemBranchDetailsOutputElement = itemBranchDetailsOutputDoc.getDocumentElement();		 
+		ArrayList<Element> XPXItemExtnElements = SCXmlUtil.getElements(itemBranchDetailsOutputElement, XPXLiterals.E_XPX_ITEM_EXTN);
+		Map<String,String> omQtyMap = new HashMap<String,String>(XPXItemExtnElements.size());
+		xpedxItemsInventoryMap = new HashMap<String,String>(XPXItemExtnElements.size());	
+		for (Element XPXItemExtnElement : XPXItemExtnElements) {
+			if (XPXItemExtnElement != null) {
+				omQtyMap.put(XPXItemExtnElement.getAttribute("ItemID"), !YFCUtils.isVoid(XPXItemExtnElement.getAttribute("OrderMultiple")) ? XPXItemExtnElement.getAttribute("OrderMultiple"):"1");
+				xpedxItemsInventoryMap.put(XPXItemExtnElement.getAttribute("ItemID"),XPXItemExtnElement.getAttribute(XPXLiterals.A_INVENTORY_INDICATOR));
+			}			
+		}
+		return omQtyMap;
+	}
 
+	/**
+	 * get the Items details
+	 * @param env
+	 * @return
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private Map<String,Element> getItemsDetails(YFSEnvironment env) throws YFSException, RemoteException	{	
+		Document xpedxItemCustXRefInputDoc = YFCDocument.createDocument("Item").getDocument();
+		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
+		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
+		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute("CustomerNumber",legacyCustomerNumber);
+		Element complexQueryElement = SCXmlUtil.createChild(xpedxItemCustXRefInputDoc.getDocumentElement(), "ComplexQuery");
+		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");
+		for (Integer position : requestedXpedxItemsMap.keySet()) {
+			Element expElement = SCXmlUtil.createChild(orElement, "Exp");
+			expElement.setAttribute("Name", "ItemID");
+			expElement.setAttribute("Value", requestedXpedxItemsMap.get(position));			
+		}
+		
+		env.setApiTemplate(XPXLiterals.GET_ITEM_LIST_API, getItemListTemplate);
+		Document xpedxItemCustXRefOutputDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, xpedxItemCustXRefInputDoc);
+		env.clearApiTemplate(XPXLiterals.GET_ITEM_LIST_API); 
+		
+		Element xpedxItemCustXRefOutputElement = xpedxItemCustXRefOutputDoc.getDocumentElement();
+		ArrayList<Element> xpedxItemElements = SCXmlUtil.getElements(xpedxItemCustXRefOutputElement, XPXLiterals.E_ITEM);
+		validItemsUOMMap  = new HashMap<String,String>(xpedxItemElements.size());
+		Map<String,Element> validXpedxItemElements = new HashMap<String,Element>(xpedxItemElements.size());
+		for (Element xpedxItemElement : xpedxItemElements) {
+			if (xpedxItemElement != null) {
+				validItemsUOMMap.put(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement.getAttribute("UnitOfMeasure"));
+				validXpedxItemElements.put(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement);
+			}
+
+		}
+		/* for trying to find invalid items */
+		if( validXpedxItemElements.size()>=0){
+			for (Integer position : requestedXpedxItemsMap.keySet()) {
+				String itemId	= requestedXpedxItemsMap.get(position);
+				if(!validXpedxItemElements.keySet().contains(itemId)) inValidItemPositions.add(position);		
+			}
+		}
+		return validXpedxItemElements;
+	}
+	
+/**
+ * get the UOM List for all Items. For example: 2001020 has 3 UOMS( Carton, Package, Sheet)
+ * @param env
+ * @throws YFSException
+ * @throws RemoteException
+ */
+	private Map<String,Element> getXPXUomListForValidItems(YFSEnvironment env) throws YFSException, RemoteException
+	{
+		Document xpxUomListForValidItemInputDoc = YFCDocument.createDocument("UOM").getDocument();
+		xpxUomListForValidItemInputDoc.getDocumentElement().setAttribute("CustomerID", customerID);
+		xpxUomListForValidItemInputDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
+		Element complexQueryElement = SCXmlUtil.createChild(xpxUomListForValidItemInputDoc.getDocumentElement(), "ComplexQuery");
+		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");
+		for (String itemId : validItemElementsMap.keySet()) {
+			Element expElement = SCXmlUtil.createChild(orElement, "Exp");
+			expElement.setAttribute("Name", "ItemID");
+			expElement.setAttribute("Value", itemId);			
+		}   
+		
+		String  xpxUOMListAPITemplate =  " <ItemList>" 
+										 +   "<Item ItemID=''>"
+										 +    "<UOMList><UOM Conversion='' UnitOfMeasure=''/></UOMList>"
+									     +  "</Item>"
+										 + "</ItemList>";		
+		env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(xpxUOMListAPITemplate));
+		Document xpxUomListForValidItemOutputDoc = api.executeFlow(env, "XPXUOMListAPI", xpxUomListForValidItemInputDoc);
+		env.clearApiTemplate("XPXUOMListAPI");
+		
+		ArrayList<Element> xpedxItemUomListElements = SCXmlUtil.getElements(xpxUomListForValidItemOutputDoc.getDocumentElement(), XPXLiterals.E_ITEM);
+		Map<String,Element> uomListForValidItemsMap = new HashMap<String,Element>(xpedxItemUomListElements.size());
+		for (Element xpedxItemUomListElement : xpedxItemUomListElements) {
+			if (xpedxItemUomListElement != null) {				
+				uomListForValidItemsMap.put(xpedxItemUomListElement.getAttribute("ItemID"),  SCXmlUtil.getElements(xpedxItemUomListElement, "UOMList").get(0));
+			}		
+	   }
+		return uomListForValidItemsMap;
+	}
+	
+	/**
+	 * 
+	 * @param env
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private void getUOMAndLegacyUOMsForValidXPXItems(YFSEnvironment env) throws YFSException, RemoteException{
+		Document uOMAndLegacyUOMsInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
+		uOMAndLegacyUOMsInputDoc.getDocumentElement().setAttribute("LegacyType", envtId);
+		uOMAndLegacyUOMsInputDoc.getDocumentElement().setAttribute("CompanyCode", companyCode);
+		
+		String  getLegacyUomXrefServiceTemplate =   "<XPEDXLegacyUomXrefList><XPEDXLegacyUomXref UOM ='' LegacyUOM =''/></XPEDXLegacyUomXrefList>";
+		env.setApiTemplate("XPXGetLegacyUomXrefService", SCXmlUtil.createFromString(getLegacyUomXrefServiceTemplate));
+		Document uOMAndLegacyUOMsOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", uOMAndLegacyUOMsInputDoc); 
+		env.clearApiTemplate("XPXGetLegacyUomXrefService"); 
+		
+		ArrayList<Element>  uOMAndLegacyUOMElements = SCXmlUtil.getElements(uOMAndLegacyUOMsOutputDoc.getDocumentElement(), "XPEDXLegacyUomXref");
+		uomToLegacyMap = new HashMap<String,String>(uOMAndLegacyUOMElements.size());
+		legacyToUOMMap = new HashMap<String,String>(uOMAndLegacyUOMElements.size());
+		for (Element uOMAndLegacyUOMElement : uOMAndLegacyUOMElements) {
+			if (uOMAndLegacyUOMElement != null) {				
+				uomToLegacyMap.put(uOMAndLegacyUOMElement.getAttribute("UOM"),uOMAndLegacyUOMElement.getAttribute("LegacyUOM"));
+				legacyToUOMMap.put(uOMAndLegacyUOMElement.getAttribute("LegacyUOM"),uOMAndLegacyUOMElement.getAttribute("UOM"));
+			}		
+	   }
+	}
+	/**
+	 * 
+	 * @param itemId
+	 * @param uom
+	 * @return
+	 */
+	private boolean isValidUOMForItem(String itemId,String uom){		
+		Element xpedxItemUomListElement = uomListForValidItemsMap.get(itemId);
+	    ArrayList<Element> xpedxItemUoms = SCXmlUtil.getElements(xpedxItemUomListElement, "UOM");
+		for (Element xpedxItemUom : xpedxItemUoms) {
+			if (xpedxItemUom != null && uom.equalsIgnoreCase(xpedxItemUom.getAttribute("UnitOfMeasure"))) {	
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * checking Qty postivive or not
+	 * @param stringValue
+	 * @return
+	 */
+	private boolean isPositivAndNonZeroInteger(String stringValue){
+		try{
+			Integer integerValue = Integer.parseInt(stringValue);
+			if(integerValue.intValue() > 0){
+				return true;
+			}
+		}catch(Exception ex){
+			return false;
+		}
+		return false;
+	}
+	
+	/**
+	 * initializing ship to information
+	 */
+	private void initialization() {
+		Element customerElement = (Element) shipToCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
+		Element customerExtnElement = (Element) customerElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
+
+		envtId = customerExtnElement.getAttribute("ExtnEnvironmentCode");
+		companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
+		shipToSuffix = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_SHIP_TO_SUFFIX);
+		shipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch");
+		legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
+		customerOrderBranch = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_CUSTOMER_ORDER_BRANCH);
+		customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
+		customerID = customerElement.getAttribute(XPXLiterals.A_CUSTOMER_ID);
+		organizationCode = customerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
+		sapParentAccountNo = customerExtnElement.getAttribute("ExtnSAPParentAccNo");
+	}
+	
+	/**
+	 * checking P&A call needed or not.
+	 * @return
+	 */
+	private boolean isPandACallNeeded(){
+		
+		int inValidItemsCount = inValidItemPositions!=null? inValidItemPositions.size():0;
+		int inValidUOMForValidItemsCount = inValidUOMPositionsForValidItems!=null? inValidUOMPositionsForValidItems.size():0;		
+		int totalInvalid = inValidItemsCount +inValidUOMForValidItemsCount;
+		int rquestedStockCheckItemCount = stockCheckItemList.getLength();
+		
+		if(totalInvalid == rquestedStockCheckItemCount){
+			return false;
+		}		
+		return true;
+	}
+	
+	/**
+	 * create UOMList  for stock check  response
+	 * @param itemId
+	 * @param uomNodeList
+	 * @param stockCheckResponseDocument
+	 */
+	private void createUOMListForStockCheckResponse(String itemId,Element uomNodeList,Document stockCheckResponseDocument){
+		Element itemUOMListElement = uomListForValidItemsMap.get(itemId);					
+		ArrayList<Element> xpedxItemUoms = SCXmlUtil.getElements(itemUOMListElement, "UOM");
+		for (Element xpedxItemUom : xpedxItemUoms) {
+			if (xpedxItemUom != null && !YFCUtils.isVoid(xpedxItemUom.getAttribute("UnitOfMeasure"))) {	
+				
+				String xpxUom =  xpedxItemUom.getAttribute("UnitOfMeasure");
+				String convertedToCustomerUom = legacyToUOMMap.get(xpxUom);
+				String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
+				
+				Element uom = stockCheckResponseDocument.createElement("UOM");
+				
+				Element uomCode = stockCheckResponseDocument.createElement("UOMCode");
+				uomCode.setTextContent(convertedToCustomerUom.replace(envtId+"_",""));
+				
+				Element uomDescription = stockCheckResponseDocument.createElement("UOMDescription");							
+				uomDescription.setTextContent(uomDesc);
+				
+				uom.appendChild(uomCode);
+				uom.appendChild(uomDescription);
+				uomNodeList.appendChild(uom);
+			}		
+	   }
+	}
+	
+ /**
+  * create Catalog Attribute List  for stock check  response	
+  * @param itemElement
+  * @param catalogAttributeList
+  * @param stockCheckResponseDocument
+  */
+  private void createCatalogAttributeListForStockCheckResponse(Element itemElement,Element catalogAttributeList,Document stockCheckResponseDocument){
+		int listLength = 0;
+		Element additionalAttrList = (Element) itemElement.getElementsByTagName("AdditionalAttributeList").item(0);
+		if (additionalAttrList != null) {
+			NodeList additionalAttributeList = additionalAttrList.getElementsByTagName("AdditionalAttribute");
+
+			if(additionalAttributeList.getLength()>0)
+			{
+				//Catalog attributes exist
+				additionalAttributeList.getLength();
+				if(additionalAttributeList.getLength()<75)
+				{
+					listLength = additionalAttributeList.getLength();
+				}
+				else
+				{
+					listLength = 75;
+				}
+
+				for(int a=0; a<listLength; a++)
+				{
+					Element catalogAttribute = stockCheckResponseDocument.createElement("CatalogAttribute");
+					
+					Element additionalAttributeElement = (Element) additionalAttributeList.item(a);
+
+					Element catalogAttributeName = stockCheckResponseDocument.createElement("Name");
+					catalogAttributeName.setTextContent(additionalAttributeElement.getAttribute("Name"));
+					Element catalogAttributeValue = stockCheckResponseDocument.createElement("Value");
+					catalogAttributeValue.setTextContent(additionalAttributeElement.getAttribute("Value"));
+
+					catalogAttribute.appendChild(catalogAttributeName);
+					catalogAttribute.appendChild(catalogAttributeValue);
+					catalogAttributeList.appendChild(catalogAttribute);
+				}
+			}
+		}
+ }
 }
