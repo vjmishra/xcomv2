@@ -17,14 +17,14 @@
 }
 
 .cart-info-wrap textarea {
-	height: 30px;
+	height: 50px;
 	width: 500px;
 }
 
 .cart-btn-wrap {
 	clear: none;
 	float: right;
-	margin-top: 75px;
+	margin-top: 66px;
 	width: 49%;
 }
 
