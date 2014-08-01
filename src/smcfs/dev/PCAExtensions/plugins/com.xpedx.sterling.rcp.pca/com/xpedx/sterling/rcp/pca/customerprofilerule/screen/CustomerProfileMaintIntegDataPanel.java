@@ -227,13 +227,13 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radBd.setCheckedBinding("N");
 		radIsXpedxUom.setData("YRCButtonBindingDefination", radBd);
 		
-//		chkBd = new YRCButtonBindingData();
-//		chkBd.setCheckedBinding("Y");
-//		chkBd.setUnCheckedBinding("N");
-//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnStockCheckOption");
-//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStockCheckOption");
-//		chkBd.setName("chkStockChkWeb");
-//		chkStockChkWeb.setData("YRCButtonBindingDefination", chkBd);
+		chkBd = new YRCButtonBindingData();
+		chkBd.setCheckedBinding("Y");
+		chkBd.setUnCheckedBinding("N");
+		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnStockCheckOption");
+		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStockCheckOption");
+		chkBd.setName("chkStockChkWeb");
+		chkStockChkWeb.setData("YRCButtonBindingDefination", chkBd);
 		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSupportEmailAddress");
@@ -576,16 +576,16 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radIsXpedxUom.setData("yrc:customType", "Label");
 		
 		//Stock Check Web Service
-//		Label lblStockCheckWeb = new Label(pnlB2BMaint, SWT.LEFT);
-//		lblStockCheckWeb.setText("Stock Check Web Service");
-//		lblStockCheckWeb.setLayoutData(gridData1);
-//		lblStockCheckWeb.setData("name", "lblStockCheckWeb");
-//		chkStockChkWeb = new Button(pnlB2BMaint, SWT.CHECK|SWT.LEFT);
-//		chkStockChkWeb.setText("");
-//		chkStockChkWeb.setVisible(true);
-//		chkStockChkWeb.setData("yrc:customType", "Label");
-//		chkStockChkWeb.setLayoutData(gridData2);
-//		chkStockChkWeb.setData("name", "chkStockChkWeb");
+		Label lblStockCheckWeb = new Label(pnlB2BMaint, SWT.LEFT);
+		lblStockCheckWeb.setText("Stock Check Web Service");
+		lblStockCheckWeb.setLayoutData(gridData1);
+		lblStockCheckWeb.setData("name", "lblStockCheckWeb");
+		chkStockChkWeb = new Button(pnlB2BMaint, SWT.CHECK|SWT.LEFT);
+		chkStockChkWeb.setText("");
+		chkStockChkWeb.setVisible(true);
+		chkStockChkWeb.setData("yrc:customType", "Label");
+		chkStockChkWeb.setLayoutData(gridData2);
+		chkStockChkWeb.setData("name", "chkStockChkWeb");
 		
 		// Support Email Address
         Label lblSupportEmailAddr = new Label(pnlB2BMaint, SWT.LEFT);
