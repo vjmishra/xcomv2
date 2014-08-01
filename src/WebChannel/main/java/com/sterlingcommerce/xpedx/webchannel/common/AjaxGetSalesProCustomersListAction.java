@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,8 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 	private static String SR_SALESREP_EMAIL_ID = "SRSalesRepEmailID";
 
 	// input fields
-	private String networkId;
-	private String DisplayUserID = null;
-	protected HttpServletResponse response = null;
+	private String displayUserID;
+	protected HttpServletResponse response;
 
 	// output fields
 	private List<SalesProCustomer> customerList;
@@ -38,7 +38,6 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 	public String execute() throws Exception {
 		setRequiredAttributes();
 		try{
-			networkId = request.getParameter("DisplayUserID");
 			Document doc = getSalesRepCustomersDocument(wcContext);
 			Element outputXPXSalesRepCustomersListElem = doc.getDocumentElement();
 			customerList = getAllCustomerList(outputXPXSalesRepCustomersListElem);
@@ -53,12 +52,12 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 	}
 
 	private Document getSalesRepCustomersDocument(IWCContext context) throws Exception {
-		String customerContactId = context.getLoggedInUserId();
 		Map<String,String> valueMap = new HashMap<String,String>();
-		valueMap.put("/XPXSalesRepCustomers/@UserID", customerContactId);
+		valueMap.put("/XPXSalesRepCustomers/@UserID", displayUserID);
 
 		Element outputElem;
 		Element input = WCMashupHelper.getMashupInput("xpedxGetSRCustomersListService", valueMap, context.getSCUIContext());
+//		outputElem = SCXmlUtil.createFromString("<XPXSalesRepCustomersList/>").getDocumentElement();
 		outputElem = (Element) WCMashupHelper.invokeMashup("xpedxGetSRCustomersListService", input, context.getSCUIContext());
 		return outputElem.getOwnerDocument();
 	}
@@ -67,7 +66,7 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 	 * getting all customers for the corresponding sales professional
 	 */
 	private List<SalesProCustomer> getAllCustomerList(Element custAssignedEle) {
-		List<SalesProCustomer> returnCustomerList=null;
+		List<SalesProCustomer> returnCustomerList = new LinkedList<SalesProCustomer>();
 		List<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXSalesRepCustomers");
 
 		Map<String, String> customersMap = new LinkedHashMap<String, String>();
@@ -92,7 +91,7 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 				customersMap.put(srCustomer.getCustomerNo(), srCustomer.getCustomerName());
 				customerIDsMap.put(srCustomer.getCustomerNo(), srCustomer.getCustomerId());
 				storefrontIDsMap.put(srCustomer.getCustomerNo(),srCustomer.getStorefrontID());
-				salesRepIDsMap.put(networkId, srCustomer.getSalesRepID());
+				salesRepIDsMap.put(displayUserID, srCustomer.getSalesRepID());
 
 				wcContext.setWCAttribute(SR_CUSTOMER_ID_MAP, customerIDsMap, WCAttributeScope.SESSION);
 				wcContext.setWCAttribute(SR_STOREFRONT_ID_MAP, storefrontIDsMap, WCAttributeScope.SESSION);
@@ -121,10 +120,10 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 
 		if (sessionUserName == null  && requestUserName == null) {
 			request.getSession(false).setAttribute("IS_SALES_REP", "true");
-			request.getSession(false).setAttribute("loggedInUserId",DisplayUserID);
+			request.getSession(false).setAttribute("loggedInUserId",displayUserID);
 		} else if (requestUserName != null) {
 			request.getSession(false).setAttribute("IS_SALES_REP", "true");
-			request.getSession(false).setAttribute("loggedInUserId",DisplayUserID);
+			request.getSession(false).setAttribute("loggedInUserId",displayUserID);
 			request.getSession(false).setAttribute("loggedInUserName",requestUserName);
 			request.getSession(false).setAttribute("SRSalesRepEmailID",requestSREmailID);
 		}
@@ -132,12 +131,8 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 
 	// --- Input fields
 
-	public void setNetworkId(String networkId) {
-		this.networkId = networkId;
-	}
-
 	public void setDisplayUserID(String displayUserID) {
-		DisplayUserID = displayUserID;
+		this.displayUserID = displayUserID;
 	}
 
 	public void setResponse(HttpServletResponse response) {

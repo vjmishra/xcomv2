@@ -10,7 +10,10 @@ $(document).ready(function() {
 			type : 'GET',
 			url : url,
 			dataType : 'json',
-			timeout: allowRetry ? 10000 : 60000, // retry after 10 seconds
+			timeout: 30000,
+			data: {
+				displayUserID: $('#displayUserID').val()
+			},
 			success : function(data) {
 				var $customerListDiv = $('#listOfCustomers');
 
@@ -42,7 +45,7 @@ $(document).ready(function() {
 						customerList = data.customerList;
 					}
 
-					if (customerList.length > 0) {
+					if (customerList && customerList.length > 0) {
 						html.push('	    <table id="mil-list-new" class="salespro-accounts">');
 						html.push(' 		<thead>');
 						html.push(' 			<tr>');
