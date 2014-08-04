@@ -298,9 +298,26 @@ public class XPEDXOverrideGetOrderPriceUE implements YPMOverrideGetOrderPriceUE 
 					if(lineTotPrice==null || lineTotPrice.trim().length()==0){
 						lineTotPrice="0.0";
 					}
-					
+					if(lockPriceDiscount >0)
+					{
 					extnLineTotal=new BigDecimal(lineTotPrice);
 					extnLineTotal=extnLineTotal.subtract(new BigDecimal(lockPriceDiscount));
+					
+					}
+					else
+					{
+						String extendPrice=extendedPriceMap.get(orderLineKey);
+						if(!SCUtil.isVoid(extendPrice))
+						{
+							extnLineTotal=new BigDecimal(extendPrice);
+							lineTotPrice=extendedPriceMap.get(orderLineKey);
+						}
+						else
+						{
+							extnLineTotal=new BigDecimal(lineTotPrice);
+							extnLineTotal=extnLineTotal.subtract(new BigDecimal(lockPriceDiscount));
+						}
+					}
 					extnOrderSubTotal=extnOrderSubTotal.add(extnLineTotal);
 					changedOrderLineExtnEle.setAttribute(
 							"ExtnLineOrderedTotal", extnLineTotal.toString());
