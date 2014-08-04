@@ -1,5 +1,6 @@
 <UserList>
 <User UserKey="" Loginid="" >
 	<ContactPersonInfo EMailID="" FirstName="" LastName=""/>
+	<OrderBy>LastName</OrderBy>
 </User>
 </UserList>
