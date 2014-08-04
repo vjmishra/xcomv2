@@ -5,13 +5,23 @@ $(document).ready(function() {
 		var selectCustomerBaseURL = $('#selectCustomerBaseURL').val();
 		var getSalesRepCustomerURL = $('#getSalesRepCustomerURL').val();
 		var url = getSalesRepCustomerURL;
+		
+		var handleNullCustomerList = function() {
+			alert('Unable to retrieve customer list.\nPlease try again later.');
+			window.location.href = $('#salesRepLoginURL').val();
+		};
 
 		$.ajax({
 			type : 'GET',
 			url : url,
 			dataType : 'json',
-			timeout: allowRetry ? 10000 : 60000, // retry after 10 seconds
+			timeout: 30000, // retry after 30 seconds
 			success : function(data) {
+				if (data.customerList == null) {
+					handleNullCustomerList();
+					return;
+				}
+				
 				var $customerListDiv = $('#listOfCustomers');
 
 				$('.filterform').submit(function() {
@@ -92,11 +102,9 @@ $(document).ready(function() {
 					getSalesRepCustomers(false);
 				} else {
 					if (console) { console.log('ajax error: resp = ', resp, '   textStatus = ', textStatus, '   xhr = ', xhr); }
-					alert('Unable to retrieve customer list.\nPlease try again later.');
-					window.location.href = $('#salesRepLoginURL').val();
+					handleNullCustomerList();
 				}
 			}
-
 		});
 
 		function do_watermark(selector) {
