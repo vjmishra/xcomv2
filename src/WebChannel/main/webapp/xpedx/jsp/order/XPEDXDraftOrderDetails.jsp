@@ -569,7 +569,7 @@ $(document).ready(function(){
 		</div>
 	</s:if>
 </s:if>
-<div id="minOrderErrorMessage" class="error" style="display: none"></div>
+<div id="minOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
 <div id="maxOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
 <div id="entitleErrorMessageBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 	
@@ -1133,7 +1133,7 @@ var currentAadd2ItemList = new Object();
 	</table>
 </div>
 </s:if>
-<div class="clearall">&nbsp;</div>
+</div>
 
 <!--bottom button 'bar' -->
 <div class="bottom-btn-bar scp">
@@ -1179,7 +1179,7 @@ var currentAadd2ItemList = new Object();
 <!--Added for 3098  -->
 <!-- EB-66 Suspended ShipTo -->
 	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
-	<br/><br/><br/><h5 align="center"><b><font color="red">
+	<h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	
@@ -1194,7 +1194,6 @@ var currentAadd2ItemList = new Object();
 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
 <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
 <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
-<div class="clearall">&nbsp;</div>
 <div class="last-modified-div sc">
     Last modified by 
     <s:if test="%{#isSalesRep}">
