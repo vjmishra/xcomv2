@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.w3c.dom.Document;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
@@ -22,25 +19,32 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 @SuppressWarnings("serial")
 public class AjaxGetSalesProCustomersListAction extends WCAction {
 
+	private static final Logger log = Logger.getLogger(AjaxGetSalesProCustomersListAction.class);
+
 	private static String SR_CUSTOMER_ID_MAP = "SRCustomerIDMap";
 	private static String SR_STOREFRONT_ID_MAP = "SRStorefrontIDMap";
 	private static String SR_SALESREP_ID = "SRSalesRepID";
 	private static String SR_SALESREP_EMAIL_ID = "SRSalesRepEmailID";
 
 	// input fields
-	private String displayUserID;
-	protected HttpServletResponse response;
+	private String networkId;
 
 	// output fields
 	private List<SalesProCustomer> customerList;
 
 	@Override
 	public String execute() throws Exception {
-		setRequiredAttributes();
+		request.getSession(false).setAttribute("IS_SALES_REP", "true");
+
 		try{
-			Document doc = getSalesRepCustomersDocument(wcContext);
-			Element outputXPXSalesRepCustomersListElem = doc.getDocumentElement();
-			customerList = getAllCustomerList(outputXPXSalesRepCustomersListElem);
+			networkId = request.getParameter("DisplayUserID");
+
+			Element outputXPXSalesRepCustomersListElem = invokeGetSRCustomersListService(wcContext);
+			if (outputXPXSalesRepCustomersListElem != null) {
+				// null doc indicates user is not currently logged in
+				customerList = createCustomerList(outputXPXSalesRepCustomersListElem);
+			}
+
 			return WCAction.SUCCESS;
 
 		} catch (Exception e) {
@@ -51,22 +55,28 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 		}
 	}
 
-	private Document getSalesRepCustomersDocument(IWCContext context) throws Exception {
-		Map<String,String> valueMap = new HashMap<String,String>();
-		valueMap.put("/XPXSalesRepCustomers/@UserID", displayUserID);
+	/**
+	 * Invokes xpedxGetSRCustomersListService mashup and returns result.
+	 */
+	private Element invokeGetSRCustomersListService(IWCContext context) throws Exception {
+		String customerContactId = context.getLoggedInUserId();
+		if (customerContactId == null) {
+			log.error("customerContactId is null: Do not allow API call xpedxGetSRCustomersListService, since it would return all customers");
+			return null;
+		}
 
-		Element outputElem;
+		Map<String,String> valueMap = new HashMap<String,String>();
+		valueMap.put("/XPXSalesRepCustomers/@UserID", customerContactId);
+
 		Element input = WCMashupHelper.getMashupInput("xpedxGetSRCustomersListService", valueMap, context.getSCUIContext());
-//		outputElem = SCXmlUtil.createFromString("<XPXSalesRepCustomersList/>").getDocumentElement();
-		outputElem = (Element) WCMashupHelper.invokeMashup("xpedxGetSRCustomersListService", input, context.getSCUIContext());
-		return outputElem.getOwnerDocument();
+		return (Element) WCMashupHelper.invokeMashup("xpedxGetSRCustomersListService", input, context.getSCUIContext());
 	}
 
 	/**
-	 * getting all customers for the corresponding sales professional
+	 * Creates a list of SalesProCustomer from the api output.
 	 */
-	private List<SalesProCustomer> getAllCustomerList(Element custAssignedEle) {
-		List<SalesProCustomer> returnCustomerList = new LinkedList<SalesProCustomer>();
+	private List<SalesProCustomer> createCustomerList(Element custAssignedEle) {
+		List<SalesProCustomer> returnCustomerList=null;
 		List<Element> assignedCustElems = SCXmlUtil.getElements(custAssignedEle, "XPXSalesRepCustomers");
 
 		Map<String, String> customersMap = new LinkedHashMap<String, String>();
@@ -91,7 +101,7 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 				customersMap.put(srCustomer.getCustomerNo(), srCustomer.getCustomerName());
 				customerIDsMap.put(srCustomer.getCustomerNo(), srCustomer.getCustomerId());
 				storefrontIDsMap.put(srCustomer.getCustomerNo(),srCustomer.getStorefrontID());
-				salesRepIDsMap.put(displayUserID, srCustomer.getSalesRepID());
+				salesRepIDsMap.put(networkId, srCustomer.getSalesRepID());
 
 				wcContext.setWCAttribute(SR_CUSTOMER_ID_MAP, customerIDsMap, WCAttributeScope.SESSION);
 				wcContext.setWCAttribute(SR_STOREFRONT_ID_MAP, storefrontIDsMap, WCAttributeScope.SESSION);
@@ -113,30 +123,10 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 		return returnCustomerList;
 	}
 
-	private void setRequiredAttributes() {
-		String sessionUserName = (String) request.getSession(false).getAttribute("loggedInUserName");
-		String requestUserName = (String) request.getAttribute("loggedInUserName");
-		String requestSREmailID = (String) request.getAttribute("SRSalesRepEmailID");
-
-		if (sessionUserName == null  && requestUserName == null) {
-			request.getSession(false).setAttribute("IS_SALES_REP", "true");
-			request.getSession(false).setAttribute("loggedInUserId",displayUserID);
-		} else if (requestUserName != null) {
-			request.getSession(false).setAttribute("IS_SALES_REP", "true");
-			request.getSession(false).setAttribute("loggedInUserId",displayUserID);
-			request.getSession(false).setAttribute("loggedInUserName",requestUserName);
-			request.getSession(false).setAttribute("SRSalesRepEmailID",requestSREmailID);
-		}
-	}
-
 	// --- Input fields
 
-	public void setDisplayUserID(String displayUserID) {
-		this.displayUserID = displayUserID;
-	}
-
-	public void setResponse(HttpServletResponse response) {
-		this.response = response;
+	public void setNetworkId(String networkId) {
+		this.networkId = networkId;
 	}
 
 	// --- Output fields
