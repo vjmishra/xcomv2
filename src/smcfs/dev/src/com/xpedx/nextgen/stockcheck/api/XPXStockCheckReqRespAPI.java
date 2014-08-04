@@ -123,16 +123,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private String eTradingId;
 	private Document stockCheckOutputDocument;
 	private NodeList stockCheckItemList;
-	private Map<Integer,String> requestedXpedxItemsMap	= new HashMap<Integer,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // Valid items for for P and A request
-	private Map<Integer,String> qtysForValidPositions	= new HashMap<Integer,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); //Quantities of valid Items for P and A request
-	private Map<Integer,String> uomsForValidPositions	= new HashMap<Integer,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); //UOMS of valid Items for P and A request
-	private Map<String,Element> validItemElementsMap	= new HashMap<String,Element>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // Valid Elements map
-	private Map<String,String> xpedxItemsOMQtyMap	= new HashMap<String,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); //Order multiple quantities map of valid  items
-	private Map<String,String> xpedxItemsInventoryMap	=  new HashMap<String,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // Inventory indicator map of valid  items
-	private Map<String,String> validItemsUOMMap	=  new HashMap<String,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // one of the valid UOMs for each valid Item
+	private Map<Integer,ValidRequestItemInfo> validItemRequestInfoMap = new HashMap<Integer,ValidRequestItemInfo>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2);// Valid items request Info only for P&A. Key:index(position), Value: item info for request
+	private Map<String,ValidItemInfo> validItemInfoMap = new   HashMap<String,ValidItemInfo>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // Valid items Info. KEY:Item Id,Value: ItemInfo
+	
 	private Set<Integer> inValidItemPositions	= new HashSet<Integer>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // invalid positions
 	private Set<Integer> inValidUOMPositionsForValidItems	= new HashSet<Integer>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // invalid UOM positions for valid Items
-	private Map<String,Element> uomListForValidItemsMap	= new HashMap<String,Element>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // List of UOMs(Ex: Carton, package, Sheet) for each valid item
+	
 	private Map<String,String> uomToLegacyMap	= new HashMap<String,String>(); // UOM to Legacy Map
 	private Map<String,String> legacyToUOMMap	= new HashMap<String,String>(); // Legacy to UOM Map
 
@@ -400,7 +396,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				itemLevelErrorMessage.setTextContent("1003 - The item is not stocked in the Ordering Warehouse. Please enter another Part Number.");
 
 			}else{
-				String legacyProductCode = requestedXpedxItemsMap.get(i);
+				String legacyProductCode = validItemRequestInfoMap.get(i).getItemId();
 				xpedxPartNumber.setTextContent(legacyProductCode);
 
 				Element itemElementFromPandA = (Element) pAndAResponseMap.get(i);
@@ -508,7 +504,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					}
 				}
 
-				Element itemElement = validItemElementsMap.get(legacyProductCode);
+				Element itemElement = validItemInfoMap.get(legacyProductCode).getItemElement();
 				if(itemElement != null){
 					if (itemElement.getElementsByTagName("CategoryList").getLength() > 0)
 					{
@@ -542,7 +538,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					itemSellText.setTextContent(itemExtnElement.getAttribute("ExtnSellText"));
 					manufacturer.setTextContent(itemExtnElement.getAttribute("ExtnSupplierNameDisplay"));
 					manufacturerPartNo.setTextContent(primaryInfoElement.getAttribute("ManufacturerItem"));
-					inventoryIndicator = xpedxItemsInventoryMap.get(requestedXpedxItemsMap.get(i));
+					inventoryIndicator = validItemInfoMap.get(legacyProductCode).getInventoryIndicator();
 					//Setting error code as 1000 if the item is a mill item
 					if(! YFCUtils.isVoid(inventoryIndicator))
 					{
@@ -725,12 +721,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				sLineNumber.setTextContent("" + i);
 
 				Element sLegacyProductCode = pAndARequestInputDoc.createElement("LegacyProductCode");
-				sLegacyProductCode.setTextContent(requestedXpedxItemsMap.get(i));
+				sLegacyProductCode.setTextContent(validItemRequestInfoMap.get(i).getItemId());
 
 				Element sRequestedQtyUOM = pAndARequestInputDoc.createElement("RequestedQtyUOM");
 				Element sRequestedQty = pAndARequestInputDoc.createElement("RequestedQty");
-				sRequestedQty.setTextContent(qtysForValidPositions.get(i)); 
-				sRequestedQtyUOM.setTextContent(uomsForValidPositions.get(i));
+				sRequestedQty.setTextContent(validItemRequestInfoMap.get(i).getQuantity()); 
+				sRequestedQtyUOM.setTextContent(validItemRequestInfoMap.get(i).getUom());
 
 				aItem.appendChild(sLineNumber);
 				aItem.appendChild(sLegacyProductCode);
@@ -1085,7 +1081,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		Set<String> customerPartNoSet = new HashSet<String>(stockCheckItemList.getLength());
 		Set<Integer> customerPartNoPositions = new HashSet<Integer>();
 		Map<String,String> cpToXpedx = null;
-
+		Map<Integer,String> requestedXpedxItemsMap	= new HashMap<Integer,String>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2);
 		for(int i = 0; i < stockCheckItemList.getLength(); i++)
 		{
 			Element itemElement = (Element) stockCheckItemList.item(i);
@@ -1120,7 +1116,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			}
 		}
 
-		validItemElementsMap = getItemsDetails(env);
+		setItemsDetails(env, requestedXpedxItemsMap);
 	}
 
 	/**
@@ -1162,10 +1158,10 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 * @throws RemoteException
 	 */
 	private void setQtysAndUOMsForValidItems(YFSEnvironment env) throws YFSException, RemoteException {
-		//getting the order multiples for valid items.
-		xpedxItemsOMQtyMap = getOMQtyForXpedxItems(env, validItemElementsMap.keySet());	
-		//get the UOM List for all Items
-		uomListForValidItemsMap = getXPXUomListForValidItems(env);
+		//get and set the order multiples for valid items into  map
+		 setOMQtyForXpedxItems(env, validItemInfoMap.keySet());	
+		//get and set the UOM List Element for all Items into  map
+		 setXPXUomListForValidItems(env);
 		getUOMAndLegacyUOMs(env);
 
 		for(int i = 0; i < stockCheckItemList.getLength(); i++)	{
@@ -1178,16 +1174,15 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						|| YFCUtils.isVoid(uomElement.getTextContent())
 						|| !isPositivAndNonZeroInteger(qtyElement.getTextContent().trim())) 
 				{
-					String omQty = xpedxItemsOMQtyMap.get(requestedXpedxItemsMap.get(i));
-					qtysForValidPositions.put(i, !YFCUtils.isVoid(omQty) ? omQty : "1");
-					uomsForValidPositions.put(i, validItemsUOMMap.get(requestedXpedxItemsMap.get(i)));
+					String omQty = validItemInfoMap.get(validItemRequestInfoMap.get(i).getItemId()).getOrderMultiple();
+					validItemRequestInfoMap.get(i).setQuantity(!YFCUtils.isVoid(omQty) ? omQty : "1");
+					validItemRequestInfoMap.get(i).setUom(validItemInfoMap.get(validItemRequestInfoMap.get(i).getItemId()).getUom());
 				}else{
-					qtysForValidPositions.put(i, qtyElement.getTextContent().trim());
-
+					validItemRequestInfoMap.get(i).setQuantity(qtyElement.getTextContent().trim());
 					String uom = SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent().trim();
 					String legacyUOM = uomToLegacyMap.get(envtId + "_" + uom);
-					if(legacyUOM != null && isValidUOMForItem(requestedXpedxItemsMap.get(i), legacyUOM)){
-						uomsForValidPositions.put(i, legacyUOM);
+					if(legacyUOM != null && isValidUOMForItem(validItemRequestInfoMap.get(i).getItemId(), legacyUOM)){
+						validItemRequestInfoMap.get(i).setUom(validItemInfoMap.get(validItemRequestInfoMap.get(i).getItemId()).getUom());
 					}
 					else{
 						inValidUOMPositionsForValidItems.add(i);
@@ -1197,15 +1192,14 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 	}
 
-	/**
-	 * get the Order multiple and Inventory indicator using Complex Query 
-	 * @param env
-	 * @param itemsForOMQtySet
-	 * @return
-	 * @throws YFSException
-	 * @throws RemoteException
-	 */
-	private Map<String,String> getOMQtyForXpedxItems(YFSEnvironment env,Set<String> itemsForOMQtySet) throws YFSException, RemoteException{
+/**
+ * get and set the Order multiple and Inventory indicator using Complex Query
+ * @param env
+ * @param itemsForOMQtySet
+ * @throws YFSException
+ * @throws RemoteException
+ */
+	private void setOMQtyForXpedxItems(YFSEnvironment env,Set<String> itemsForOMQtySet) throws YFSException, RemoteException{
 		Document itemBranchDetailsInputDoc = YFCDocument.createDocument(XPXLiterals.E_XPX_ITEM_EXTN).getDocument();
 		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("EnvironmentID",envtId);
 		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("CompanyCode",companyCode);
@@ -1230,25 +1224,24 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		Element itemBranchDetailsOutputElement = itemBranchDetailsOutputDoc.getDocumentElement();		 
 		List<Element> XPXItemExtnElements = SCXmlUtil.getElements(itemBranchDetailsOutputElement, XPXLiterals.E_XPX_ITEM_EXTN);
-		Map<String,String> omQtyMap = new HashMap<String,String>(XPXItemExtnElements.size());
 
 		for (Element XPXItemExtnElement : XPXItemExtnElements) {
 			if (XPXItemExtnElement != null) {
-				omQtyMap.put(XPXItemExtnElement.getAttribute("ItemID"), !YFCUtils.isVoid(XPXItemExtnElement.getAttribute("OrderMultiple")) ? XPXItemExtnElement.getAttribute("OrderMultiple") : "1");
-				xpedxItemsInventoryMap.put(XPXItemExtnElement.getAttribute("ItemID"), XPXItemExtnElement.getAttribute(XPXLiterals.A_INVENTORY_INDICATOR));
+				ValidItemInfo validItemInfo = validItemInfoMap.get(XPXItemExtnElement.getAttribute("ItemID"));
+				validItemInfo.setOrderMultiple(!YFCUtils.isVoid(XPXItemExtnElement.getAttribute("OrderMultiple")) ? XPXItemExtnElement.getAttribute("OrderMultiple") : "1");
+				validItemInfo.setInventoryIndicator(XPXItemExtnElement.getAttribute(XPXLiterals.A_INVENTORY_INDICATOR));				
 			}			
 		}
-		return omQtyMap;
 	}
 
-	/**
-	 * get the Items details
-	 * @param env
-	 * @return
-	 * @throws YFSException
-	 * @throws RemoteException
-	 */
-	private Map<String,Element> getItemsDetails(YFSEnvironment env) throws YFSException, RemoteException	{	
+/**
+ * validate and set the valid Items details into map
+ * @param env
+ * @param requestedXpedxItemsMap
+ * @throws YFSException
+ * @throws RemoteException
+ */
+	private void setItemsDetails(YFSEnvironment env, Map<Integer,String> requestedXpedxItemsMap) throws YFSException, RemoteException	{	
 		Document xpedxItemCustXRefInputDoc = YFCDocument.createDocument("Item").getDocument();
 		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
 		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
@@ -1267,38 +1260,39 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		Element xpedxItemCustXRefOutputElement = xpedxItemCustXRefOutputDoc.getDocumentElement();
 		List<Element> xpedxItemElements = SCXmlUtil.getElements(xpedxItemCustXRefOutputElement, XPXLiterals.E_ITEM);
-		Map<String,Element> validXpedxItemElements = new HashMap<String,Element>(xpedxItemElements.size());
 		for (Element xpedxItemElement : xpedxItemElements) {
 			if (xpedxItemElement != null) {
-				validItemsUOMMap.put(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement.getAttribute("UnitOfMeasure"));
-				validXpedxItemElements.put(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement);
+				validItemInfoMap.put(xpedxItemElement.getAttribute("ItemID"), new ValidItemInfo(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement, xpedxItemElement.getAttribute("UnitOfMeasure")));
 			}
 
 		}
 		/* for trying to find invalid items. If not valid set the invalid item position*/
-		if( validXpedxItemElements.size( ) >= 0){
+		if( validItemInfoMap.size( ) >= 0){
 			for (Integer position : requestedXpedxItemsMap.keySet()) {
 				String itemId	= requestedXpedxItemsMap.get(position);
-				if(!validXpedxItemElements.keySet().contains(itemId)) inValidItemPositions.add(position);		
+				if(!validItemInfoMap.keySet().contains(itemId)){
+					inValidItemPositions.add(position);		
+				}else{
+					validItemRequestInfoMap.put(position, new ValidRequestItemInfo(itemId));
+				}
 			}
-		}
-		return validXpedxItemElements;
+		}		
 	}
 
-	/**
-	 * get the UOM List for all Items. For example: 2001020 has 3 UOMS( Carton, Package, Sheet)
-	 * @param env
-	 * @throws YFSException
-	 * @throws RemoteException
-	 */
-	private Map<String,Element> getXPXUomListForValidItems(YFSEnvironment env) throws YFSException, RemoteException
+/**
+ * get and set the UOM List Element for all Items into map. For example: 2001020 has 3 UOMS( Carton, Package, Sheet)
+ * @param env
+ * @throws YFSException
+ * @throws RemoteException
+ */
+	private void setXPXUomListForValidItems(YFSEnvironment env) throws YFSException, RemoteException
 	{
 		Document xpxUomListForValidItemInputDoc = YFCDocument.createDocument("UOM").getDocument();
 		xpxUomListForValidItemInputDoc.getDocumentElement().setAttribute("CustomerID", customerID);
 		xpxUomListForValidItemInputDoc.getDocumentElement().setAttribute("OrganizationCode", organizationCode);
 		Element complexQueryElement = SCXmlUtil.createChild(xpxUomListForValidItemInputDoc.getDocumentElement(), "ComplexQuery");
 		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");
-		for (String itemId : validItemElementsMap.keySet()) {
+		for (String itemId : validItemInfoMap.keySet()) {
 			Element expElement = SCXmlUtil.createChild(orElement, "Exp");
 			expElement.setAttribute("Name", "ItemID");
 			expElement.setAttribute("Value", itemId);			
@@ -1314,17 +1308,16 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		env.clearApiTemplate("XPXUOMListAPI");
 
 		List<Element> xpedxItemUomListElements = SCXmlUtil.getElements(xpxUomListForValidItemOutputDoc.getDocumentElement(), XPXLiterals.E_ITEM);
-		Map<String,Element> uomListForValidItemsMap = new HashMap<String,Element>(xpedxItemUomListElements.size());
 		for (Element xpedxItemUomListElement : xpedxItemUomListElements) {
 			if (xpedxItemUomListElement != null) {				
-				uomListForValidItemsMap.put(xpedxItemUomListElement.getAttribute("ItemID"),  SCXmlUtil.getElements(xpedxItemUomListElement, "UOMList").get(0));
+				validItemInfoMap.get(xpedxItemUomListElement.getAttribute("ItemID")).setUomListElement(SCXmlUtil.getElements(xpedxItemUomListElement, "UOMList").get(0));
 			}		
 		}
-		return uomListForValidItemsMap;
+
 	}
 
 	/**
-	 * get the UOMs and Legacy UOMs basded on environment id and company code
+	 * get the UOMs and Legacy UOMs based on environment id and company code
 	 * @param env
 	 * @throws YFSException
 	 * @throws RemoteException
@@ -1356,7 +1349,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 * @return
 	 */
 	private boolean isValidUOMForItem(String itemId,String uom){		
-		Element xpedxItemUomListElement = uomListForValidItemsMap.get(itemId);
+		Element xpedxItemUomListElement = validItemInfoMap.get(itemId).getUomListElement();
 		List<Element> xpedxItemUoms = SCXmlUtil.getElements(xpedxItemUomListElement, "UOM");
 		for (Element xpedxItemUom : xpedxItemUoms) {
 			if (xpedxItemUom != null && uom.equalsIgnoreCase(xpedxItemUom.getAttribute("UnitOfMeasure"))) {	
@@ -1426,7 +1419,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 * @param stockCheckResponseDocument
 	 */
 	private void addUOMsToUOMListForStockCheckResponse(String itemId, Element uomNodeList, Document stockCheckResponseDocument){
-		Element itemUOMListElement = uomListForValidItemsMap.get(itemId);					
+		Element itemUOMListElement = validItemInfoMap.get(itemId).getUomListElement();					
 		List<Element> xpedxItemUoms = SCXmlUtil.getElements(itemUOMListElement, "UOM");
 		for (Element xpedxItemUom : xpedxItemUoms) {
 			if (xpedxItemUom != null && !YFCUtils.isVoid(xpedxItemUom.getAttribute("UnitOfMeasure"))) {	
@@ -1492,5 +1485,80 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * Item related info for P&A request.
+	 *
+	 */
+	private static class ValidRequestItemInfo {
+		
+		private String itemId;
+		private String quantity;
+		private String uom;
+		
+		private ValidRequestItemInfo(String itemId){
+			this.itemId = itemId;
+		}
+		public String getItemId() {
+			return itemId;
+		}
+		public String getQuantity() {
+			return quantity;
+		}
+		public void setQuantity(String quantity) {
+			this.quantity = quantity;
+		}
+		public String getUom() {
+			return uom;
+		}
+		public void setUom(String uom) {
+			this.uom = uom;
+		}
+
+	}
+	/**
+	 * 
+	 * Item related information. got the data using few complex queries
+	 *
+	 */
+	private static class ValidItemInfo {
+		private String itemId; //item id. not needed just for informational which item id info
+		private Element itemElement; // item Element
+		private Element uomListElement; // uom list element
+		private String orderMultiple; // item order multiple value
+		private String inventoryIndicator; //inventory indicator status
+		private String uom;// one of the List of UOMS
+		
+		private ValidItemInfo(String itemId, Element itemElement, String uom){
+			this.itemId = itemId;
+			this.itemElement = itemElement;
+			this.uom = uom;
+		}
+		public Element getItemElement() {
+			return itemElement;
+		}
+		public Element getUomListElement() {
+			return uomListElement;
+		}
+		public void setUomListElement(Element element) {
+			this.uomListElement = element;
+		}
+		public String getOrderMultiple() {
+			return orderMultiple;
+		}
+		public void setOrderMultiple(String orderMultiple) {
+			this.orderMultiple = orderMultiple;
+		}
+		public String getInventoryIndicator() {
+			return inventoryIndicator;
+		}
+		public void setInventoryIndicator(String inventoryIndicator) {
+			this.inventoryIndicator = inventoryIndicator;
+		}
+		public String getUom() {
+			return uom;
+		}		
 	}
 }
