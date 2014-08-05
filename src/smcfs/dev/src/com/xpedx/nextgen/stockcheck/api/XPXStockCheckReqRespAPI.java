@@ -1182,7 +1182,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					String uom = SCXmlUtil.getXpathElement(itemElement,"./UOM").getTextContent().trim();
 					String legacyUOM = uomToLegacyMap.get(envtId + "_" + uom);
 					if(legacyUOM != null && isValidUOMForItem(validItemRequestInfoMap.get(i).getItemId(), legacyUOM)){
-						validItemRequestInfoMap.get(i).setUom(validItemInfoMap.get(validItemRequestInfoMap.get(i).getItemId()).getUom());
+						validItemRequestInfoMap.get(i).setUom(legacyUOM);
 					}
 					else{
 						inValidUOMPositionsForValidItems.add(i);
