@@ -1134,7 +1134,7 @@ var currentAadd2ItemList = new Object();
 </div>
 </s:if>
 </div>
-
+<div class="clearfix"></div>
 <!--bottom button 'bar' -->
 <div class="bottom-btn-bar scp">
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
