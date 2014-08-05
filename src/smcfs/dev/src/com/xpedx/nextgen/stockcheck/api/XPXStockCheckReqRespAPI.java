@@ -1386,7 +1386,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		envtId = customerExtnElement.getAttribute("ExtnEnvironmentCode");
 		companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
 		shipToSuffix = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_SHIP_TO_SUFFIX);
-		shipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch");
+		shipFromBranch = customerExtnElement.getAttribute("ExtnCustomerDivision"); //This one used for Order multiple(XPXDivision) and P&A(CustomerBranch)
 		legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
 		customerOrderBranch = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_CUSTOMER_ORDER_BRANCH);
 		customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
@@ -1424,21 +1424,23 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		for (Element xpedxItemUom : xpedxItemUoms) {
 			if (xpedxItemUom != null && !YFCUtils.isVoid(xpedxItemUom.getAttribute("UnitOfMeasure"))) {	
 
-				String xpxUom =  xpedxItemUom.getAttribute("UnitOfMeasure");
+				String xpxUom =  xpedxItemUom.getAttribute("UnitOfMeasure");				
 				String convertedToCustomerUom = legacyToUOMMap.get(xpxUom);
-				String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
-
-				Element uom = stockCheckResponseDocument.createElement("UOM");
-
-				Element uomCode = stockCheckResponseDocument.createElement("UOMCode");
-				uomCode.setTextContent(convertedToCustomerUom.replace(envtId + "_", ""));
-
-				Element uomDescription = stockCheckResponseDocument.createElement("UOMDescription");							
-				uomDescription.setTextContent(uomDesc);
-
-				uom.appendChild(uomCode);
-				uom.appendChild(uomDescription);
-				uomNodeList.appendChild(uom);
+				if(!YFCUtils.isVoid(convertedToCustomerUom)){
+					String uomDesc = getUomDesc(xpxUom, convertedToCustomerUom);
+	
+					Element uom = stockCheckResponseDocument.createElement("UOM");
+	
+					Element uomCode = stockCheckResponseDocument.createElement("UOMCode");
+					uomCode.setTextContent(convertedToCustomerUom.replace(envtId + "_", ""));
+	
+					Element uomDescription = stockCheckResponseDocument.createElement("UOMDescription");							
+					uomDescription.setTextContent(uomDesc);
+	
+					uom.appendChild(uomCode);
+					uom.appendChild(uomDescription);
+					uomNodeList.appendChild(uom);
+				}
 			}		
 		}
 	}
