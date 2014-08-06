@@ -30,14 +30,7 @@ public class AjaxCreatePunchoutOciDataParam extends WCAction {
 		// per convention, data parameter is space-delimited userId and password
 		String data = PunchoutOciUtil.encryptData(new OciCredentials(userId, password));
 
-		StringBuilder buf = new StringBuilder(256);
-		buf.append(request.getScheme()).append("://").append(request.getServerName());
-		if (request.getServerPort() != 80 && request.getServerPort() != 443) {
-			buf.append(":").append(request.getServerPort());
-		}
-		buf.append("/swc/xpedx/jsp/interop/oci/OCIPost.jsp?sfId=xpedx&data=").append(data);
-
-		url = buf.toString();
+		url = String.format("https://punchoutorder.com/swc/xpedx/jsp/interop/oci/OCIPost.jsp?sfId=xpedx&data=%s", data);
 
 		return SUCCESS;
 	}

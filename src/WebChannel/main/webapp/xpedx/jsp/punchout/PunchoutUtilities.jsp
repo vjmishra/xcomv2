@@ -23,6 +23,7 @@
 	    <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/punchout/PunchoutUtilities<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	
 	<style>
 		#ajax-output {
@@ -61,18 +62,22 @@
 				</s:url>
 				<s:hidden id="getAssignedShipTosForChangeShipToURL" value="%{#getAssignedShipTosForChangeShipToURLid}" /> 
 				<div class="content-container">
-	      			<h1>Encrypt OCI User ID and Password</h1>
-	      			
+					<h1>Encrypt OCI User ID and Password</h1>
+					
 					<s:if test="isUserAdmin">
-		      			<form id="dataForm" onsubmit="encryptUserIdAndPassword(); return false;">
-		      				<div>
-		      					User ID: <input type="text" id="userId" />
-		      				</div>
-		      				<div>
-		      					Password: <input type="password" id="password" />
-		      				</div>
-		      				<input type="submit" value="Generate URL" />
-		      			</form>
+						<form id="dataForm" onsubmit="encryptUserIdAndPassword(); return false;">
+							<div class="utility-row">
+								<label>User ID:</label>
+								<input id="userId" type="text" />
+							</div>
+							<div class="utility-row">
+								<label>Password:</label>
+								<input id="password" type="password" />
+							</div>
+							<div class="utility-row">
+								<input value="Generate URL" type="submit" class="btn-neutral" />
+							</div>
+						</form>
 		      			
 		      			<div id="ajax-output">
 		      				<%-- dynamically populated by javascript --%>
