@@ -586,7 +586,7 @@ $(document).ready(function(){
 
 <!-- EB-66 Suspended ShipTo -->
 	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
-	<br/><br/><br/><h5 align="center"><b><font color="red">
+	<h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	
