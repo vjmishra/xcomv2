@@ -62,6 +62,8 @@
 </head>
 
 <body class="loading">
+	<s:hidden id="DisplayUserID" value="%{#parameters.DisplayUserID}" />
+	
 	<s:url id="getSalesRepCustomerListid" namespace="/common" action="getSalesProCustomersList" escapeAmp="false">
 		<s:param name="status">30</s:param>
 	</s:url>
