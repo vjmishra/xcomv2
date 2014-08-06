@@ -15,6 +15,7 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.yantra.yfc.util.YFCCommon;
 
 @SuppressWarnings("serial")
 public class AjaxGetSalesProCustomersListAction extends WCAction {
@@ -56,17 +57,17 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 	}
 
 	/**
-	 * Invokes xpedxGetSRCustomersListService mashup and returns result.
+	 * Invokes xpedxGetSRCustomersListService mashup with networkId and returns result.
+	 * Returns null if networkId is null
 	 */
 	private Element invokeGetSRCustomersListService(IWCContext context) throws Exception {
-		String customerContactId = context.getLoggedInUserId();
-		if (customerContactId == null) {
+		if (YFCCommon.isVoid(networkId)) {
 			log.error("customerContactId is null: Do not allow API call xpedxGetSRCustomersListService, since it would return all customers");
 			return null;
 		}
 
 		Map<String,String> valueMap = new HashMap<String,String>();
-		valueMap.put("/XPXSalesRepCustomers/@UserID", customerContactId);
+		valueMap.put("/XPXSalesRepCustomers/@UserID", networkId);
 
 		Element input = WCMashupHelper.getMashupInput("xpedxGetSRCustomersListService", valueMap, context.getSCUIContext());
 		return (Element) WCMashupHelper.invokeMashup("xpedxGetSRCustomersListService", input, context.getSCUIContext());
