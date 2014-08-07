@@ -14,6 +14,9 @@ $(document).ready(function() {
 		$.ajax({
 			type : 'GET',
 			url : url,
+			data: {
+				DisplayUserID: $('#DisplayUserID').val()
+			},
 			dataType : 'json',
 			timeout: 30000, // retry after 30 seconds
 			success : function(data) {
