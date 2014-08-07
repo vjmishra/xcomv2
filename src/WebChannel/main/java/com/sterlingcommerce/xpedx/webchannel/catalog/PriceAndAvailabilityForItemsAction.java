@@ -70,9 +70,13 @@ public class PriceAndAvailabilityForItemsAction extends WCAction {
 		divisionName = XPEDXWCUtils.getDivisionName();
 
 		uomDescriptions = new LinkedHashMap<String, String>();
-		for (XPEDXItem xItem : xItems) {
-			String uomDesc = XPEDXWCUtils.getUOMDescription(xItem.getRequestedQtyUOM());
-			uomDescriptions.put(xItem.getRequestedQtyUOM(), uomDesc);
+		for (XPEDXItem xItem : priceAndAvailability.getItems()) {
+			if (xItem.getRequestedQtyUOM() != null) {
+				uomDescriptions.put(xItem.getRequestedQtyUOM(), XPEDXWCUtils.getUOMDescription(xItem.getRequestedQtyUOM()));
+			}
+			if (xItem.getOrderMultipleUOM() != null) {
+				uomDescriptions.put(xItem.getOrderMultipleUOM(), XPEDXWCUtils.getUOMDescription(xItem.getOrderMultipleUOM()));
+			}
 		}
 
 		itemCategories = new LinkedHashMap<String, String>();

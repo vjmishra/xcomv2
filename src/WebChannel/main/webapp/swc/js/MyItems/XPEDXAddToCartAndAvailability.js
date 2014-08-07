@@ -52,20 +52,16 @@
 			
 		}
 	}
-	var myMask;
 	function addItemToCart(itemId,uid) {
 		//added for jira 3974
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
+		showProcessingIcon();
 
 		 //commented for jira 3253 resetQuantityError(uid);
 		//reset the Qty box- Jira 3197- MIL Messaging
 		document.getElementById('qtys_'+uid).style.borderColor="";
 		 if(validateOrderMultiple(true,uid) == false)
 		 {
-		 	Ext.Msg.hide();
-		    myMask.hide();
+		 	hideProcessingIcon();
 			return;
 		 }
 		var qty = document.getElementById('QTY_'+uid).value;
@@ -120,8 +116,7 @@
 		            if(draftErr.indexOf("This cart has already been submitted, please refer to the Order Management page to review the order.") >-1)
 		            {		refreshWithNextOrNewCartInContext();
 		                    draftErrDiv.innerHTML = "<h5 align='left'><b><font color=red>" + response.responseText + "</font></b></h5>";
-		                    Ext.Msg.hide();
-		                	myMask.hide();
+		                    hideProcessingIcon();
 		        	}
 		            else if(draftErr.indexOf("We were unable to add some items to your cart as there was an invalid quantity in your list. Please correct the qty and try again.") >-1)
 		             {
@@ -135,8 +130,7 @@
 		            	errorDiv.setAttribute("class", "error");
 		            	errorDiv.setAttribute("style", "margin-right:5px;float:right;");
 		            	errorDiv.value = true;						
-						Ext.Msg.hide();
-						myMask.hide();
+						hideProcessingIcon();
 						return false;
 		           }
 		            else if(draftErr.indexOf("Exception While Applying cheanges .Order Update was finished before you update") >-1)
@@ -160,16 +154,14 @@
 		            	divVal.style.display = "inline-block"; 
 						divVal.setAttribute("style", "margin-right:5px;float:right;");
 						divVal.setAttribute("class", "error");
-			                    Ext.Msg.hide();
-			                	myMask.hide();	
+			                   hideProcessingIcon();
 			                	//EB-44
 								$('#uoms_'+ uid).val(document.getElementById('initialUOM_key_'+ uid).value).change();
 			        }
 					else if(responseText.indexOf("Error")>-1)
 					{
 						refreshMiniCartLink();
-						Ext.Msg.hide();
-						myMask.hide();
+						hideProcessingIcon();
 						alert("Error Adding the Item to the cart. Please try again later");
 					}
 					else
@@ -199,8 +191,7 @@
 						divVal.setAttribute("style", "margin-right:5px;float:right;");
 						divVal.setAttribute("class", "success");
 				       		 //end of addition 3253
-						Ext.Msg.hide();
-						myMask.hide();
+						hideProcessingIcon();
 						//JQuery Popup: 3 sec popup dispaly. 
 						// commented for 3105
 						//$.jqDialog.notify("Item successfully added to cart", 3);
@@ -227,8 +218,7 @@
 				failure: function (response, request){
 					refreshMiniCartLink();
 				    //Ext.MessageBox.hide(); 
-					Ext.Msg.hide();
-					myMask.hide();
+					hideProcessingIcon();
 				    alert("Error Adding the Item to the cart. Please try again later");
 				}
 			});
@@ -271,12 +261,9 @@
 		
 	}
 	//-- Web Trends tag end --
-	var myMask;
-	function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM,pnaRequestedCustomerUOM, qtyTextBox) {
+	  function displayAvailability(itemId,qty,uom,myItemsKey,url,validateOM,pnaRequestedCustomerUOM, qtyTextBox) {
 		//added for jira 3974
-		var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
+		showProcessingIcon();
 		if(itemId == null || itemId =="") {
 			alert("Item ID cannot be null to make a PnA call");
 		}
@@ -363,8 +350,7 @@
 		            	}
 		            	//End of BR1 XB 214
 		            	
-	            		Ext.Msg.hide();
-				myMask.hide();
+	            	   	hideProcessingIcon();
 	            		//-- Web Trends tag start --
 	            		writeWebtrendTag(responseText);
 	            		//-- Web Trends tag end --
@@ -387,8 +373,7 @@
 	        		'<td></td></tr></tbody>';
 					//document.getElementById('availabilityRow_'+myItemsKey).innerHTML=responseText;
 					document.getElementById('availabilityRow_'+myItemsKey).style.display = '';
-					Ext.Msg.hide();
-					myMask.hide();
+					hideProcessingIcon();
 	                //alert('Failure');
 	            },
 	        });

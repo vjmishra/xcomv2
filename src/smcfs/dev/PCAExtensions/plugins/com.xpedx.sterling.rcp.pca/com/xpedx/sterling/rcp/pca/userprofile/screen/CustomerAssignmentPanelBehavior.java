@@ -62,8 +62,11 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 
 	public void initPage() {
 		String[] apinames = {"getCustomerAssignmentList","getCustomerList"};
+		//user
+		Document inputXML=YRCXmlUtils.createFromString("<CustomerAssignment />");
+		inputXML.getDocumentElement().setAttribute("UserId", userID);
 		Document[] docInput = {
-				YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>"),
+				inputXML,
 				YRCXmlUtils.createFromString("<Customer CustomerID='"+UserOrgCode+"' OrganizationCode='"+organizationCode+"'/>")										
 		};
 		callApis(apinames, docInput);
@@ -158,8 +161,11 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	private void getCustomerAssignmentsAfterUpdate()
 	{
 		String[] apinames = {"getCustomerAssignmentList"};
+		Document inputXML=YRCXmlUtils.createFromString("<CustomerAssignment />");
+		inputXML.getDocumentElement().setAttribute("UserId", userID);
 		Document[] docInput = {
-				YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>"),
+				//YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>"),
+				inputXML,
 		};
 		callApis(apinames, docInput);
 	
@@ -167,8 +173,11 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	
 	public void getShipToID(){
 		String[] apinames = {"XPXGetListOfAssignedShipTosForAUserService"};
+		Document inputXML=YRCXmlUtils.createFromString("<XPXCustomerAssignmentView />");
+		inputXML.getDocumentElement().setAttribute("UserId", userID);
 		Document[] docInput = {
-				YRCXmlUtils.createFromString("<XPXCustomerAssignmentView UserId='" + userID + "'/>"),
+				//YRCXmlUtils.createFromString("<XPXCustomerAssignmentView UserId='" + userID + "'/>"),
+				inputXML,
 		};
 		callApis(apinames, docInput);
 	}
@@ -305,7 +314,7 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	public boolean isThisCustomerAssigned(Element eleCust) {
 		return assignedList.contains(eleCust.getAttribute("CustomerID"));
 		
-	}
+	}	
 	public void showAuthLocations(){
 		Document docInput = YRCXmlUtils.createDocument("User");		
 		Element eleInput = docInput.getDocumentElement();

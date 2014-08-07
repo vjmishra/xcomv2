@@ -70,6 +70,15 @@
 </style>
 
 <script type="text/javascript">
+
+$(document).ready(function() {
+	
+	$("#cancelId").click(function(){
+		var url = $('#homePageId').val();
+		window.location.href = url;
+		return false;
+	});
+});
 function usernameSubmit(){
     var usernameField = document.forgotPwdForm.UserId;
     var errorDiv = document.getElementById("errorMsgForUsername");
@@ -111,25 +120,20 @@ function usernameSubmit(){
     	<script type="text/javascript">
 			document.getElementById("newSearch").style.display = 'none';
 		</script>
-    	<div class="container">
-      	<!-- breadcrumb -->
-       		<s:set name='wcContext' value="#_action.getWCContext()"/>
-      		<div id="mid-col-mil"> 
-		    <div>
-		   
-		    
-		    <% if(null != request.getParameter("requestId")){%>
-		     <div class="padding-top3 page-title black"><strong class="black"> <s:text name="Reset.Password"/></strong></div>
-		    <%}
-		    else{ %>		    
-      		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>      		
-      		<%} %>
-			</div>
-			<div class=" padding-bottom clearview"> </div>
-				
-		<!-- begin progress bar -->
+    	<div class="container content-container">
+    		
+		   		<% if(null != request.getParameter("requestId")){%>
+		     		<h1><s:text name="Reset.Password"/></h1>
+		    	<%}
+		    	else{ %>		    
+      				<h1><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></h1>      		
+      			<%} %>
 			
-		<div id="second-navigation">
+      	
+       		<s:set name='wcContext' value="#_action.getWCContext()"/>
+  		
+  		<!-- begin progress bar -->
+			<div id="second-navigation">
              <ul id="main-nav" class="dropdown">
 				<li class="active">
 				     <span class="link" >Confirm your identity</span>
@@ -154,6 +158,8 @@ function usernameSubmit(){
 			
 			
 			<s:url id='homePage' namespace='/home' action='home' />
+			<s:hidden id="homePageId" value="%{#homePage}"/>
+			
 			
 			<table class="full-width">
           		<tbody>
@@ -187,10 +193,10 @@ function usernameSubmit(){
 						<div class="fp-btn-container">
 							<ul class="float-right margin-right-10">
 								<li class="float-left margin-10">
-									<s:a href='%{homePage}' cssClass="grey-ui-btn"><span>Cancel</span></s:a>
+									<input id="cancelId" class="btn-neutral" type="button" value="Cancel"/>
 								</li>
 								<li class="float-left">
-									<s:a href="#" onclick="usernameSubmit();" cssClass="orange-ui-btn oub-fix"><span>Submit</span></s:a>
+									<input  onclick="usernameSubmit();" class="btn-gradient" type="button" value="Submit"></input>
 								</li>
 							</ul>
               			</div></td>
@@ -229,8 +235,6 @@ function usernameSubmit(){
         	</table>
         	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
-  
-			</div>
       		<br />
     	</div>
 	</div>

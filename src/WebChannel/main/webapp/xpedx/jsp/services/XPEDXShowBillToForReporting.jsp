@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="xpedx" uri="xpedx" %>
-
+<s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/locationModal-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <style>
 .right {
 	text-align:right;
@@ -16,74 +16,54 @@
 
 </head>
 <body>
-
-
- <!-- modal window container -->
-    <div class="xpedx-light-box" id="change-bill-to">    
+	<!-- modal window container -->
+    <div class="share-modal1 xpedx-light-box" id="change-bill-to">    
     
-	<!-- START modal 'header' -->
-	<div class="ship-to-header">
-		<h2 class="no-border" >Choose Bill-To</h2>
-		
-</div>
-<div class="clearall">&nbsp;</div>
-<!-- END modal header -->
+    <!-- START modal 'header' -->
+		<h1>Select Bill-To</h1>
+	<!-- END modal header -->
 
-    <!-- START static top section with a top border -->
-    <!-- hemantha -->
- 
-    
-<!-- END top static section -->
-        
-        
-        
-    <!-- START main body (with scroll bar) -->
+      <!-- START main body (with scroll bar) -->
    
-	<div class="ship-to-body">
-		<div id="billtoaddress-list"  style="height: 250px;" class="x-corners ship-to-address-list">
+	
+		<div id="billtoaddress-list"   class="radio-container">
 
 			<form>
 				<ul>
 				
-		<s:if test='billToMap!=null && billToMap.size()>0' >
-				<s:iterator id="billToDetail" value="billToMap" status="accIndex" >
-					<li class="ship-to-list">
-					
-						<s:set name="key" value='key' />
-						<input type="radio" name="customerId" id="customerId_<s:property value="key"/>" value="<s:property value="value"/>;<s:property value="key"/>" />
-						<s:property value="value"/>
-					</li>
-				<br/>
-				</s:iterator>
-			</s:if>
-			<s:else>
-				<li>
-					<h5 align="center"><b><font color="red">You do not have sufficient security for this selection. Please contact your administrator to modify your security profile.</font></b></h5>	
-				</li>
-			</s:else>
-</ul>
-</form>
+					<s:if test='billToMap!=null && billToMap.size()>0' >
+						<s:iterator id="billToDetail" value="billToMap" status="accIndex" >
+							<li>
+								<s:set name="key" value='key' />
+								<input type="radio" name="customerId" id="customerId_<s:property value="key"/>" value="<s:property value="value"/>;<s:property value="key"/>"/>
+								<s:property value="value"/>
+							</li>
+				
+						</s:iterator>
+					</s:if>
+					<s:else>
+						<li>
+							<h5 align="center"><b><font color="red">You do not have sufficient security for this selection. Please contact your administrator to modify your security profile.</font></b></h5>	
+						</li>
+					</s:else>
+				</ul>
+			</form>
 
-
-<div class="clearall"></div>
-</div>
- <div class="clearview">&nbsp;</div>
+			<div class="clearall"></div>
+		</div>
+ 
 <div class="float-right">
-<ul id="tool-bar" class="tool-bar-bottom">
+	<ul id="tool-bar" class="tool-bar-bottom">
 
 		<li>
-			<a class="grey-ui-btn" href="#" style="" onclick="javascript:$.fancybox.close()"><span>Cancel</span></a>
+			<input class="btn-neutral" onclick="javascript:$.fancybox.close()" type="button" value="Cancel"/>
 		</li>
-	<li>
-		<a class="green-ui-btn" href="javascript:submitBillToForm();"><span>Apply</span></a>
-	</li>
-</ul>
-	
+		
+		<li>
+			<input class="btn-gradient addmarginright10"  onclick="javascript:submitBillToForm();" type="button" value="Select"/>
+		</li>
+	</ul>	
 </div>
 </div>
-
-</div>
-
-
 </body>
 </html>

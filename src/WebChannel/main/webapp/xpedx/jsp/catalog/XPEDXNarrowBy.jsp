@@ -21,16 +21,6 @@
 	name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils'
 	id='util' />
 <s:set name='isGuestUser' value="wCContext.guestUser" />
-<script type="text/javascript">	
-	function context_newSearch_searchTerm_onclick(obj){
-		if(obj.value == 'Search Within Results...')
-	  		{ obj.value=''; }
-		else
-			{ }
-	  	return;
-	  }
-	  
-</script>
 
 <script type="text/javascript">	
 function setStockItemFlag()
@@ -46,6 +36,7 @@ function setStockItemFlag()
 }
 </script>
 
+
 <!-- begin left column -->
 <s:set name='FacetsList' value='XMLUtils.getElements(#catDoc, "//FacetList/ItemAttribute")' />
 <s:set name='narrowByCatalogItemsCount' value='%{0}' />
@@ -58,11 +49,11 @@ function setStockItemFlag()
 	<div id="left-col">
 	<div class="bgleftcol">
 
-	<s:form name='narrowSearch' action="search" onsubmit="setDefaultSearchText();">
+	<s:form name='narrowSearch' action="search">
 		<div class="searchbox-form1">
 			<div class="catalog-search-container">
-				<input class="x-input" id="search_searchTerm" value="Search Within Results..." name="searchTerm"
-					tabindex="1002" onclick="javascript:context_newSearch_searchTerm_onclick(this)" type="text">
+
+				<input id="search_searchTerm" class="x-input input-watermark input-watermark-color" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text" >
 				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
 			</div>
 		</div>
@@ -270,11 +261,8 @@ function showViewAllDialog(attr)
     svg_classhandlers_decoratePage();
 }
 var myMask;
-function setDefaultSearchText()
+function showProcessingMessage()
 {
-	if( document.getElementById("search_searchTerm").value=="Search Within Results..."){
-		document.getElementById("search_searchTerm").value="";
-	}
 	//added for jira 3974
 	var waitMsg = Ext.Msg.wait("Processing...");
 	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});

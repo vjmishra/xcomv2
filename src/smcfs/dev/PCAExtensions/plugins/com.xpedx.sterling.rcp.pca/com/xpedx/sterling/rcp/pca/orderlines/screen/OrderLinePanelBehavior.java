@@ -273,11 +273,10 @@ public class OrderLinePanelBehavior extends YRCBehavior {
 			//setFieldValue("lblPlacedOrderErr", "Unknown Line Error");
 
 		} else {
-			//Added by Vijay to remove Invalid order multiple error.
-			if(!status.equalsIgnoreCase("M_M0080")){
+
 				setFieldValue("lblPlacedOrderErr", (page.getOrderLinesPanel()
 						.getPageBehavior().PlacedOrderLineError).get(status));
-			}
+
 			
 		}
 

@@ -10,7 +10,7 @@
 <body>
 <table width="600" border="0" align="center" cellpadding="2" cellspacing="2">
   <tr>
-    <td height="44"><img src="{$brandLogo}" width="216" height="69" alt="xpedx"  /></td>
+    <td height="44"><img src="{$brandLogo}" width="210" height="47" alt="xpedx"  /></td>
   </tr>
   <tr>
     <td ><table width="100%" border="0" cellpadding="0" cellspacing="0">

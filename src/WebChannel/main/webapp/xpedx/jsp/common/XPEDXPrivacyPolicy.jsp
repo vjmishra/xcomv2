@@ -19,7 +19,7 @@
 </s:if>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MISC<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
-	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
 
 <s:if test="#isGuestUser == true">
@@ -48,6 +48,10 @@ $(document).ready(function() {
 		'transitionIn'		: 'fade',
 		'transitionOut'		: 'fade'
 	});
+	
+	$("#printButton").click(function(){
+		window.print();
+	});
 });
 </script>
   
@@ -63,23 +67,18 @@ $(document).ready(function() {
 				
 				<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 				
-				<div class="container">
+				<div class="container content-container">
 					<!-- breadcrumb -->
-
-					<div id="mid-col-mil">
-
-						<div>
-							<div class="padding-top2 float-right">
-								<a href="javascript:window.print()"><span class="print-ico-xpedx underlink"><img
-										height="15" width="16" alt="Print This Page"
-										src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif">Print Page
-								</span>
-								</a>
+						<h1>Privacy Policy</h1>
+							
+							<div id="printButton" class="print-ico-xpedx underlink print-adjust" >
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16" onclick="javascript:window.print()"/>Print Page
 							</div>
+					
 							<div class="padding-top3 black">
 							</div>
 
-						</div>
+					
 						<br/>
 						<br/>
 						
@@ -94,7 +93,7 @@ $(document).ready(function() {
 							</tbody>
 						</table>
 
-					</div>
+					
 					<!-- End Pricing -->
 					<br />
 				</div>

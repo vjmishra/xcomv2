@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,7 +33,7 @@ import com.yantra.yfs.core.YFSSystem;
 
 /**
  * Helper class to encapsulate the searchCatalogIndex API call and converting it to a list of MegaMenuItem objects.
- * Note that all methods take a context parameter since the mega menu is cached in the session.
+ * Note that all methods take a context parameter since the mega menu is cached either in the session (authenticated users) or statically (for each anonymous storefront).
  */
 public class MegaMenuUtil {
 
@@ -38,33 +41,84 @@ public class MegaMenuUtil {
 
 	public static final String ATTR_MEGA_MENU = "MegaMenuUtil.data"; // session attribute
 
-	/**
-	 * @param context
-	 * @return Returns true if the menu is cached in the session.
-	 */
-	public boolean isDataAvailable(IWCContext context) {
-		return context.getWCAttribute(ATTR_MEGA_MENU) != null;
+	// key = storefrontId, value = mega menu
+	private static final Cache ANONYMOUS_MEGAMENU;
+	static {
+		// cache anonymous mega menu for 8 hours (28800 seconds)
+		final long timeToLive = 28800;
+		CacheManager cacheManager = CacheManager.create();
+		cacheManager.addCache(new Cache("anonymousMegaMenu", 10, false, false, timeToLive, timeToLive));
+		ANONYMOUS_MEGAMENU = cacheManager.getCache("anonymousMegaMenu");
+	}
+
+	// key = storefrontId, value = mutex
+	private static final Map<String, Object> ANONYMOUS_MUTEX = new LinkedHashMap<String, Object>();
+	static {
+		ANONYMOUS_MUTEX.put("xpedx", new Object());
+		ANONYMOUS_MUTEX.put("Saalfeld", new Object());
+	}
+
+	private static boolean isAnonymous(IWCContext context) {
+		return context.getCustomerId() == null;
+	}
+
+	private static Object getMutex(IWCContext context) {
+		if (isAnonymous(context)) {
+			// anonymous mega menu is statically synchronized per storefront
+			return ANONYMOUS_MUTEX.get(context.getStorefrontId());
+		} else {
+			// use session as mutex to avoid multiple identical calls (eg, user loads multiple pages before the API call finishes)
+			return context;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static List<MegaMenuItem> getCachedMegaMenu(IWCContext context) {
+		if (isAnonymous(context)) {
+			net.sf.ehcache.Element elem = ANONYMOUS_MEGAMENU.get(context.getStorefrontId());
+			return (List<MegaMenuItem>) (elem == null ? null : elem.getValue());
+		} else {
+			return (List<MegaMenuItem>) context.getWCAttribute(ATTR_MEGA_MENU);
+		}
+	}
+
+	private static void seCachedMegaMenu(IWCContext context, List<MegaMenuItem> megaMenu) {
+		if (isAnonymous(context)) {
+			ANONYMOUS_MEGAMENU.put(new net.sf.ehcache.Element(context.getStorefrontId(), megaMenu));
+		} else {
+			context.setWCAttribute(ATTR_MEGA_MENU, megaMenu, WCAttributeScope.LOCAL_SESSION);
+		}
 	}
 
 	/**
-	 * Removes the mega menu from the session.
+	 * @param context
+	 * @return Returns true if the menu is cached.
+	 */
+	public boolean isDataAvailable(IWCContext context) {
+		return getCachedMegaMenu(context) != null;
+	}
+
+	/**
+	 * Purges the cached menu.
 	 * @param context
 	 */
 	public void purgeData(IWCContext context) {
-		context.removeWCAttribute(ATTR_MEGA_MENU, WCAttributeScope.LOCAL_SESSION);
+		if (isAnonymous(context)) {
+			ANONYMOUS_MEGAMENU.remove(context.getStorefrontId());
+		} else {
+			context.removeWCAttribute(ATTR_MEGA_MENU, WCAttributeScope.LOCAL_SESSION);
+		}
 	}
 
 	/**
-	 * Lazy-loads session cached mega menu data model.
+	 * Lazy-loads cached mega menu data model.
 	 * @param context
-	 * @return Returns the mega menu data model that is cached in the session. If not currently in the session, then performs an API call to fetch it and caches it in the session.
+	 * @return Returns the mega menu data model that is cached. If not cached,  then performs an API call to fetch it and cache it.
 	 * @throws RuntimeException If an API error.
 	 */
-	@SuppressWarnings("unchecked")
 	public List<MegaMenuItem> getMegaMenu(IWCContext context) {
-		// use session as mutex to avoid multiple identical calls (eg, user loads multiple pages before the API call finishes)
-		synchronized (context) {
-			List<MegaMenuItem> megaMenu = (List<MegaMenuItem>) context.getWCAttribute(ATTR_MEGA_MENU);
+		synchronized (getMutex(context)) {
+			List<MegaMenuItem> megaMenu = getCachedMegaMenu(context);
 			if (megaMenu == null) {
 				try {
 					log.debug("Making API call to get mega menu data model");
@@ -85,7 +139,7 @@ public class MegaMenuUtil {
 
 					megaMenu = convertCatalogSearch(searchCatalogIndexOutputElem, context);
 
-					context.setWCAttribute(ATTR_MEGA_MENU, megaMenu, WCAttributeScope.LOCAL_SESSION);
+					seCachedMegaMenu(context, megaMenu);
 
 					if (log.isDebugEnabled()) {
 						if (megaMenu == null) {

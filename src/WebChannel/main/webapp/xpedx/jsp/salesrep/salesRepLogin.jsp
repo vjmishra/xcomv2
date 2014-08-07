@@ -17,7 +17,7 @@
 <%-- <title><s:property value="wCContext.storefrontId" /> - <s:text name="MSG.SWC.SPRO.LGIN.GENERIC.TABTITLE"/> </title> --%>
 
 <!-- styles 
-<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2.css" />
+<link media="all" type="text/css" rel="stylesheet" href="/swc/xpedx/css/theme/theme-xpedx_v1.2<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/lib<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/salesrep/SpryTooltip<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -86,21 +86,6 @@ function validateOnEnter(e){
 		validateForm();        
 	  return ;     
 	} 
-}
-function loadWindow(){
-   <s:url id='alogoutURL' namespace='/common' action='salesrepLogout'></s:url>
-        
-    var url = "<s:property value='alogoutURL'/>";
-    url = ReplaceAll(url,"&amp;",'&');
-	Ext.Ajax.request({
-		url: url,
-		method: 'POST',
-		params: { logoutMethod: "AJAX" },
-		success: function (response, request){
-		},
-		failure: function (response, request){
-		}
-	});
 }
 
 </script>
@@ -188,7 +173,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 
 </head>
 
-<body onload="clearFields();loadWindow();">
+<body onload="clearFields();">
 <div id="container">
 <div id="login">
 <div>
@@ -283,7 +268,7 @@ h1 { margin-bottom: 0px; padding-top:200px; }
 </s:form>
 
 <div id="footer">
-	<p>© International Paper Company. All rights reserved.</p>
+	<p>© 2014. All Rights Reserved.</p>
 </div>
 
 </div> <!-- End id="login" -->

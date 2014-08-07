@@ -19,6 +19,8 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
+
+import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteCacheUtil;
 import com.sterlingcommerce.xpedx.webchannel.catalog.autocomplete.AutocompleteMarketingGroup;
@@ -71,7 +73,7 @@ public class AjaxAutocompleteAction extends WCAction {
 		// it's important that we assign the sharedSearcher to a local variable for thread-safety
 		Searcher searcher;
 		try {
-			searcher = CACHE_UTIL.getSearcher(refresh);
+			searcher = CACHE_UTIL.getSearcher(refresh,wcContext);
 		} catch (Exception e) {
 			log.error("Failed to initialize sharedSearcher", e);
 			resultStatus = ResultStatus.CONFIG_ERROR;

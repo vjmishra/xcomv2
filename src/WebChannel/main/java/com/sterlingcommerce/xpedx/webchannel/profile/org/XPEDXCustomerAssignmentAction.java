@@ -1493,6 +1493,11 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		XPEDXWCUtils.removeObectFromCache("divisionBeanList");
 		return SUCCESS;
 	}
+	
+	public String setCurrentCustomerIntoContextFromShipTo() throws CannotBuildInputException{
+		setCurrentCustomerIntoContext();		
+		return SUCCESS;
+	}
 	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";
 
 	public boolean isAdminMode() {

@@ -369,6 +369,30 @@
 	</mashup>	
 	<!-- end of the custom sales rep  view -->
 	
+	<!-- start of customers for sales rep-->
+	<mashup id='xpedxGetSRCustomersListService' transactional='true'
+		mashuptype='XAPI' endpoint=''>
+		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+		<API FlowName="XPXGetSRCustomersListService">
+			<Input>
+				<XPXSalesRepCustomers UserID="">
+					<OrderBy>
+						<Attribute Desc="N" Name="ExtnCustomerName" />
+					</OrderBy>
+				</XPXSalesRepCustomers>
+			</Input>
+			<Template>
+				<XPXSalesRepCustomersList TotalNumberOfrecords="">
+					<XPXSalesRepCustomers 
+				    CustomerID=" " ExtnCustomerNo=" " ExtnCustomerName=" "
+				    ExtnMSAPOrganizationName=" " ExtnMSAPOrganizationCode= " " SalesRepID=" " EmailID=" " 
+				    UserID=" " FirstName=" " LastName=" "/>
+				</XPXSalesRepCustomersList>
+			</Template>
+		</API>
+	</mashup>
+	<!-- end of customers for sales rep-->
+	
 	<mashup id='xpedxLeadTimeOfDivision' transactional='true'
 		mashuptype='XAPI' endpoint=''>
 		<classInformation name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
@@ -845,6 +869,22 @@
               <API FlowName="XPXCustomerAssignmentViewService">
                      <Input>
                            <XPXCustomerAssignmentView UserId="" Status="30"  StatusQryType="NE"/>
+                     </Input>
+                     <Template>
+                           <XPXCustomerAssignmentViewList>
+                                  <XPXCustomerAssignmentView>                                          
+                                  </XPXCustomerAssignmentView>
+                           </XPXCustomerAssignmentViewList>
+                     </Template>
+              </API>
+       </mashup>
+	<mashup id='XPEDXGetAllShipToList-ShipTo' transactional='true' mashuptype='XAPI'
+              endpoint='CUSTOMER' description="Ship-To List">
+              <classInformation
+                     name="com.sterlingcommerce.ui.web.platform.mashup.SCUIXAPIMashup" />
+              <API FlowName="XPXCustomerAssignmentViewService">
+                     <Input>
+                           <XPXCustomerAssignmentView UserId="" Status=""  StatusQryType="NE"/>
                      </Input>
                      <Template>
                            <XPXCustomerAssignmentViewList>

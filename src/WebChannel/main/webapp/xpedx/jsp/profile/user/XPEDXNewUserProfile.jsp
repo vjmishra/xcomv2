@@ -83,6 +83,12 @@
 				}catch(err){
 				}
 				
+				if((document.addNewUserForm.userName.value.indexOf("'") > -1 || document.getElementById("userName").value.indexOf("?") > -1))
+				{
+					document.getElementById("errorMsgForLoginIdInvalidChar").style.display="block";
+					document.getElementById("userName").style.borderColor="#FF0000";
+					return false;
+				}
 				var email=document.getElementById("emailId").value;
 			    len=email.length;
 			    var no=0;
@@ -154,6 +160,13 @@
 		            	component.style.borderColor="";
 		    	    }
 		    	}
+				var displayChar=document.getElementById("errorMsgForLoginIdInvalidChar").style.display;
+				if(displayChar =="block")
+				{
+					document.getElementById("errorMsgForLoginIdInvalidChar").style.display="none";
+					document.getElementById("userName").style.borderColor="";
+					
+				}
 		    }
 
 			function confirmFieldValidation(component, compareWith){
@@ -210,6 +223,7 @@
 						<s:hidden name="#action.name" value="saveNewUserInfo" />
 						<s:hidden name='buyerOrgCode' value='%{#_action.getBuyerOrgCode()}' />
 						<s:hidden name="preferredLocale" id="saveNewUserInfo_preferredLocale" value="%{'en_US_EST'}"/>
+						<s:hidden name='orderConfirmationEmailFlag' value='Y' />
 			
 			      	<s:hidden id="mandatoryFieldCheckFlag_addNewUserForm" name="mandatoryFieldCheckFlag_addNewUserForm" value="%{false}"/>
 			       <div id="mid-col-mil">
@@ -375,6 +389,7 @@
 			      <%--Code Added For XNGTP-3196 --%>
 			         <div class="error" id="errorMsgForMandatoryFields_addNewUserForm" style="display : none; float: right"/></div>
 			         <div class="error" id="errorMsgFor_emailId" style="display : none; float: right"/>Please enter the same email address in both Email Address and Confirm Email Address fields.</div>
+			         <div class="error" id="errorMsgForLoginIdInvalidChar" style="display : none; float: right"/>Please remove ' or ? from Username.</div>
 			      <%-- End fix for XNGTP-3196 --%> 
 			     
 			          

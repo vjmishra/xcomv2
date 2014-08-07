@@ -106,7 +106,7 @@
 			document.getElementById("newSearch").style.display = 'none';
 		</script>
     	
-    	<div class="container">
+    	<div class="container content-container">
       	<!-- breadcrumb -->
        		<s:set name='wcContext' value="#_action.getWCContext()"/>
 			<s:set name='error' value="#_action.getErrorMessageType()"/>
@@ -127,17 +127,16 @@
 		    <s:text name="system.error.change.pwd"/>
 			</s:if>
 			</div>
-      		<div id="mid-col-mil"> 
-		    <div>
+      		
       		<%-- <div class="padding-top3 page-title black"><strong class="black"> Forgot Password</strong></div> --%>
       		<% if(null != request.getParameter("requestId")){%>
-		     <div class="padding-top3 page-title black"><strong class="black"> <s:text name="Reset.Password"/></strong></div>
+		   		<h1><s:text name="Reset.Password"/></h1>
 		    <%}
 		    else{ %>
-      		<div class="padding-top3 page-title black"><strong class="black"> <s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></strong></div>
+      			<h1><s:text name="MSG.SWC.MISC.FORGOTPASSWORD.GENERIC.PGTITLE"/></h1>
       		<%}%>
-			</div>
-			<div class=" padding-bottom clearview"> </div>
+			
+			
 			<div class="reset-wrap"> <h3>Enter a new password</h3>
 			 <div class="reset-left-col">
 			
@@ -195,8 +194,6 @@
         	</s:form>
           	<div class=" bot-margin"> &nbsp; </div>
         	<div class=" bot-margin"> &nbsp;</div>
-  
-			</div>
       		<br />
     	</div>
 	</div>

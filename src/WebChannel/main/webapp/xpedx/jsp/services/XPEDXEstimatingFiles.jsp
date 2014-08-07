@@ -78,21 +78,21 @@ $("#various4").fancybox();
     <form id="contact_form" name="contact_form" method="post" action="#">
 
 	
-		<div class="container">
-		<div id="mid-col-mil"><br/>
-        <div class="page-title"> 
+		<div class="container content-container">
+		
+        
 			<!-- Printable Catalogs & Estimating Files -->
 			 <!-- Added for EB-1641 Remove any associations to estimating files Starts -->
 				<s:set name='storefrontId' value="wCContext.storefrontId" />
 				  <s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-				<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE" />
+				<h1><s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE" /></h1>
 				</s:if>
 				<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-						<s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE_SAALFELD" />
+						<h1><s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE_SAALFELD" /></h1>
 				</s:elseif> 
 			  <!--  EB-1641 End -->
-		</div>
-    <div class="x-input margin-top2">
+	<div id="mid-col-mil">
+   
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
            
           	<tr>
@@ -137,7 +137,7 @@ $("#various4").fancybox();
           </tr>
         </table> 
  
-</div>
+
         
  
           

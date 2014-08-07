@@ -83,24 +83,14 @@
 <body class="ext-gecko ext-gecko3">
     <div id="main-container">
         <div id="main">
-
-		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 		
-
-
-
-            <div class="container"> 
+			<div class="container content-container"> 
+             	<h1><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></h1>
                 <!-- breadcrumb -->
-               
-                <div id="mid-col-mil">
-				<br/>
+               <div id="mid-col-mil">
 				
-				
-				 <div  class="padding-bottom3" >
-                	  <span class="page-title"><s:text name="MSG.SWC.MISC.TOOLS.GENERIC.PGTITLE" /></span><!--  > Commented for jira 1538-->
-                </div>
-				
-               	<div class="underlines x-input"> 
+				<div class="underlines x-input"> 
             <ul class="tools-page">
 
             <!---->

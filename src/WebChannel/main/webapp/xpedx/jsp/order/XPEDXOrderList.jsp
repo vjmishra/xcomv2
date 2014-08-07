@@ -13,15 +13,19 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
 <%--
-<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.1<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base.js"></script>
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all.js"></script>
@@ -83,8 +87,49 @@ $(function() {
 	$(document).ready(function(){
 		$(".splitExpandInit").each(function(){
 			linkedRowToggle($(this).attr('orderHeaderKey'));
-		})
+		});
+		$("#shipToOrderSearch").fancybox({
+    		'onStart' 	: function(){	    		
+    			showShipToModalForOrderSearch();
+    		},
+    		'onClosed' : function() {    			
+    			if(!$('#shipToSelectedOnShipToModal').val().trim()){
+    				$("select#shipToSearchFieldName").attr('selectedIndex', 0);        				
+    			}
+      		},
+			'autoDimensions'	: false,
+			'width' 			: 800,
+	 		'height' 			: 400  
+		}); 
 	});
+	
+    function showShipToModalForOrderSearch() {
+    	var customerContactId = $('#LoggedInUserIdForShipTo').val();
+    	var getAssignedShipToURL = $('#getAssignedShipTosForSelectURL').val();
+    	var includeShoppingForAndDefaultShipTo = "false";
+    	$('#shipToSelectedOnShipToModal').val('');
+    	/* Select Button click functionality */
+    	selectShipToChanges = function selectShipToChanges(){
+    		if (!$("input[name='selectedShipTo']:checked").val()) {
+    			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+    			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+    			return false;
+    		}
+    		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val();
+    		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
+    		removeOptionAll();
+        	var formattedShipTo = formatBillToShipToCustomer(selectedShipCustomer); 
+    		appendOptionLast(selectedShipCustomer,formattedShipTo);
+    		document.orderListForm.shipToSearchFieldName1.value = selectedShipCustomer;        	
+    		$.fancybox.close();    		
+    	};
+    	/* Cancel Button click functionality */
+    	cancelShipToChanges = function cancelShipToChanges(){
+    		$('#shipToSelectedOnShipToModal').val('');
+    		$.fancybox.close();
+    	};
+    	showShiptos("Select Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, null, selectShipToChanges, null);
+    }
 </script>
 
 <script type="text/javascript">
@@ -208,6 +253,9 @@ function printPOs(customerPos) {
 </head>
 
 <body class="ext-gecko ext-gecko3" onLoad="setDateFields();hideSearchField(false);">
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div> 
 <div id="main-container">
 <div id="main">
 
@@ -216,9 +264,12 @@ function printPOs(customerPos) {
 <!-- // header end -->
 
 <s:set name="ViewReportsFlag" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getReportsFlagForLoggedInUser(wCContext)" />
-
+<s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
+<s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
 <div class='x-hidden dialog-body ' id="shipToDivforordersearch">
-	<div id="shipToOrderSearchDiv"></div>
+	<div class="ship-container" id="ship-container">
+    	<%-- dynamicaly populate data here  --%>
+	</div>
 </div>
 		<div id="view-order-popup" style="display: none;">
 			<div class="float-right">
@@ -238,14 +289,10 @@ function printPOs(customerPos) {
 			</div>
 		</div>
 		<!-- end tooltip boxes -->
-            <div class="container orders-page" > 
-                <!-- breadcrumb -->
-                <div class="OM-breadcrumb">
-                	<%-- <p><span class="page-title"> Order Management</span></p> --%>
-                	 <p><span class="page-title"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.PGTITLE' /> </span></p>
-                	<!-- <div id="divid" align="center" style="color:red;">&nbsp;</div>  --> 
-                </div>
-                <!-- end breadcrumb -->
+
+		<div class="container content-container" >
+			<h1><s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.PGTITLE' /></h1>
+
                 <!-- begin top section -->
                 <s:set name="selectedHeaderTab" value="#_action.getSelectedHeaderTab()"> </s:set>
                 <s:set name="blankValue" value="%{#selectedHeaderTab ==#blankValue}" />
@@ -259,10 +306,10 @@ function printPOs(customerPos) {
 	                	<s:set name='openOrder' value="%{'true'}"/>
 	                	<%-- End of Fix : JIRA - 3123 --%>
                 	</s:if>
-<br/>
-                <div class="rounded-border top-section ">
+                	<br/>
+                <div class="rounded-border top-section addmarginleft0">
                 	<!-- begin content w/border -->
-			<fieldset class="x-corners mil-col-mil-div">
+			<fieldset class="x-corners mil-col-mil-div addmarginright5">
 			<!-- text on border -->
 			<s:if test="%{#ViewReportsFlag}">
 			    <legend class="search-legend"> <s:text name='MSG.SWC.ORDR.ORDRLIST.GENERIC.ORDRLAST6MONTHS' /> <a href="#" id="" ><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_charcoal_help.png" alt="" 
@@ -333,17 +380,19 @@ function printPOs(customerPos) {
 						<td> Ship-To: </td>
 						<td colspan="2"> 
 						<s:select cssClass=" " name="shipToSearchFieldName" headerValue="All Ship-Tos"
-						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTos();"/>
+						 list="shipToSearchList" value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" onchange="javascript:showShipTosOnSelect();"/>
 						<s:hidden name="shipToSearchFieldName1" id="shipToSearchFieldName1" value="%{getShipToSearchFieldName()}" />
-						<%--<s:select cssClass="ship-to-input-field x-input" name="shipToSearchFieldName" list="shipToList" 
-							listKey="key" listValue="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@formatBillToShipToCustomer(key)"
-							value="%{#parameters.shipToSearchFieldName}" id="shipToSearchFieldName" /> --%>
-						<a href='#shipToOrderSearchDiv' id="shipToOrderSearch"></a></td>
-						<td colspan="1"><a class="orange-ui-btn float-right" href="javascript:submit_orderListForm();"><span>Search </span></a> 
-						<a class="grey-ui-btn float-right" href="javascript:clearFilters_onclick()" ><span>Clear </span></a> </td>
+						<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
+						<a href='#ship-container' id="shipToOrderSearch"></a></td>
+
+						<td colspan="1">
+							<input class="btn-gradient floatright addmarginright10" type="button" value="Search" onclick="submit_orderListForm();" />
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Clear" onclick="clearFilters_onclick();" />
+						</td>
                         </tr>
                         </table> <!-- end content-holding table -->
                 </fieldset><!-- end border content -->
+
                 <div id="search-view-links">
 					<s:url id='reportsLink' namespace='/services' action='myreports'>
 						<s:param name="selectedHeaderTab">ServicesTab</s:param>
@@ -363,7 +412,7 @@ function printPOs(customerPos) {
 			</s:form>
 			
 	    <!-- Begin mid-section -->
-	    <div class="midsection"> <!-- Begin mid-section container -->
+	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
 		
              <div id="open-orders-Msg-top"  style="display: none;position:relative;left:375px;color:red;" class="error">&nbsp;</div> 
             <div class="search-pagination-bottom">
@@ -675,7 +724,8 @@ function printPOs(customerPos) {
 											 	<s:set name='primaryApprover' value="%{#_action.getPrimaryApproverID()}"/>
 											 	<s:set name='proxyApprover' value="%{#_action.getProxyApproverID()}"/>
 											 	<s:if test='%{#xpedxCustomerContactInfoBean.getIsApprover() == "Y" && (#primaryApprover == #loggedInUser || #proxyApprover == #loggedInUser) && #parentOrder.getAttribute("Status") != "Cancelled"}'>
-													<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{customerOhk}'); " cssClass="grey-ui-btn" cssStyle="margin-right:5px;" tabindex="91" theme="simple"><span>Approve / Reject</span></s:a>
+												<input class="btn-neutral floatright addmarginright20" type="button" tabindex="91"
+													value="Approve / Reject" onclick="openNotePanel('approvalNotesPanel', 'Approve','<s:property value="customerOhk"/>');" />
 												</s:if><br/>
 											</s:if>
 											<s:elseif test='#isPendingApproval && #isOrderRejected && #parentOrder.getAttribute("Status") != "Cancelled"'>
@@ -809,7 +859,10 @@ function printPOs(customerPos) {
 	<!-- // footer end -->
 	<%-- Add the Approval Panel --%>
 	
-		<swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 		
+		<swc:dialogPanel title="" isModal="true" id="approvalNotesPanel"> 
+		<div >
+             <div class="loading-icon" style="display:none;"></div>
+         </div>		
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
 			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			
@@ -828,8 +881,14 @@ function printPOs(customerPos) {
 					</ul>
 				</s:form>
 				</div>
+				<div class="loading-wrap"  style="display:none;">
+                     <div class="load-modal" ></div>
+                 </div>
 		 </swc:dialogPanel> 
     </div><!-- end container  -->
+    <div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 	
 </body>
 
@@ -934,13 +993,11 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 	 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 	}
 	
-	var myMask;
    function openNotePanelSetAction(actionValue){
-	   var waitMsg = Ext.Msg.wait("Processing...");
-		myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-		myMask.show();
+	   
 		//end for XBT - 322
 	 if(actionValue == "Accept"){
+	     showProcessingIcon();
 	     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 	     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
 	 		document.getElementById("ReasonText").value="Empty";
@@ -1017,13 +1074,16 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 		document.getElementById("errorDateDiv").innerHTML = '';
 		//document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
 	}
-	function showShipTos(){		
+	function showShipTosOnSelect(){		
 		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
-			$('a[href="#shipToOrderSearchDiv"]').click(); }
+			$('#shipToOrderSearch').click();
+			}
 		else if(document.getElementById("shipToSearchFieldName").selectedIndex=='0'){
-			document.getElementById("shipToSearchFieldName1").value="";}
+			document.getElementById("shipToSearchFieldName1").value="";
+			}
 		else{
-			document.getElementById("shipToSearchFieldName1").value=document.getElementById("shipToSearchFieldName").value}
+			document.getElementById("shipToSearchFieldName1").value=document.getElementById("shipToSearchFieldName").value
+			}
 		return;
 		}
 	

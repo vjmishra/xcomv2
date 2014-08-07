@@ -14,6 +14,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/RESOURCES<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" /> 
 <!-- styles -->
@@ -102,11 +103,11 @@
        var selectedvalue = null;
        
        arr = document.getElementsByName('selectedShipTo');
-       for(var i = 0; i < arr.length; i++)        
+       for(var j = 0; j < arr.length; j++)        
         {            
-            var obj = arr.item(i);     
+            var obj = arr.item(j);     
             if(obj.checked == true)  {     
-                selectedvalue= arr[i].value;
+                selectedvalue= arr[j].value;
                 var hdnOrganization = document.getElementById('selectedorganization');
                 var hdnCompany = document.getElementById('selectedcompany');
                 var hdnAddress = document.getElementById('selectedaddressList');
@@ -173,9 +174,9 @@
            $.fancybox.close();
            var arr = new Array();
            arr = document.getElementsByName('customerId');
-           for(var i = 0; i < arr.length; i++)        
+           for(var j = 0; j < arr.length; j++)        
            {            
-               var obj = arr.item(i);     
+               var obj = arr.item(j);     
                if(obj.checked == true)  {     
            
                    var textElement = document.getElementById('txtLocation');
@@ -184,12 +185,12 @@
                        var currentTagTokens = token.split( ";" );
                        var textedit = currentTagTokens[0];
                        //Editing billtoname start
-                       var editbillto = textedit.split(",");
+                       var editbillto = textedit.split(", ");
                        var editbilltoone = editbillto[0];
                        var editbilltotwo = editbilltoone.split(" ");
                        var display_BillToname = "";
                        for (var i = 1; i< editbilltotwo.length;i++){
-                           display_BillToname = display_BillToname + " " + editbilltotwo[i];
+                           display_BillToname = display_BillToname + editbilltotwo[i] + " " ;
                            }
                        //Editing billtoname end
                        //Editing Address Start
@@ -201,18 +202,24 @@
                            }
                        //Editing City, zipcode, country
                        var editaddress1="";
-                       for (var i = editbillto.length-3; i< editbillto.length;i++){
+                       for (var i = editbillto.length-3; i< editbillto.length-2;i++){
                             if(editaddress1 =="")
                                 editaddress1= editbillto[i];
                             else
-                           editaddress1= editaddress1 +"," +editbillto[i] ;
+                           editaddress1= editaddress1 +"\n" +editbillto[i] ;
                            
-                               }
+                      	}
+                       var cityandstate=  editbillto[editbillto.length-2]+", "+editbillto[editbillto.length-1];
                        //Editing Address End
                        var stringone =  textedit.split(" ");
                        var displayid = stringone[0];
                        var displaycustid_with_BillToname = displayid + "\n" +  display_BillToname;
-                       textElement.value = displaycustid_with_BillToname + "\n" +     editaddress  + editaddress1  ;                    
+                       if(editaddress==""){
+                    	   textElement.value = displaycustid_with_BillToname + "\n" + editaddress1+ "\n"+ cityandstate;
+                       }
+                       else{
+                       		textElement.value = displaycustid_with_BillToname + "\n" +  editaddress + "\n" + editaddress1+ "\n"+ cityandstate; 
+                       }
                        var hdnLocType = document.getElementById('selectedLocationType');
                        hdnLocType.value="Bill To";
                        var hdnCustId = document.getElementById('selectedCustId');
@@ -310,6 +317,11 @@ $(function() {
            $('#split-order-overlay').toggle();
            return false;
    });
+   $("#cancelId").click(function(){
+		var url = $('#backLinkId').val();
+		window.location.href = url;
+		return false;
+	});
 });
                    
            function showAllAccounts() {
@@ -410,53 +422,34 @@ $(function() {
                    });
        
                }
-           }            
-           function showAllShipToLocations() {
-               var url = document.getElementById("showShipToLocationUrl").value;
-               var customerId = document.getElementById("customerId").value;
-               
-               
-               if(url!=null) {
-                   //Added For Jira 2903
-                   //Commented for 3475
-                   //Ext.Msg.wait("Processing..."); 
-                   //Ext.Msg.wait("Getting the Ship-To Locations.... Please Wait..."); 
-                   Ext.Ajax.request({
-                       url: url,
-                       params: {
-                           //organizationCode: organizationCode
-                           userId : customerId,
-                           orderByAttribute:'ShipToCustomerID'
-                           },
-                       method: 'POST',
-                       success: function (response, request){
-                           var responseText = response.responseText;
-                           if(responseText.indexOf("Error")>-1)
-                           {
-                               alert("Error Getting the Locations. Please try again later");
-                               Ext.MessageBox.hide();
-                               $.fancybox.close();
-                           }
-                           else
-                           {
-                               Ext.MessageBox.hide(); 
-                                                       
-                               document.getElementById('showShipToLocationsDiv').innerHTML = responseText;
-                                var x = document.getElementById('showShipToLocationsDiv').getElementsByTagName("script");   
-                                  for( var i=0; i < x.length; i++) {  
-                                    eval(x[i].text);  
-                                  }  
-                           }    
-                       },
-                       failure: function (response, request){
-                           alert("Error Getting the Locations. Please try again later");
-                           Ext.MessageBox.hide();
-                           $.fancybox.close();
-                       },
-                   });
-       
-               }
-           }
+           } 
+           
+      function showShipToModalForReports() {
+      	var customerContactId = $('#LoggedInUserIdForShipTo').val();
+      	var getAssignedShipToURL = $('#getAssignedShipTosForSelectURL').val();
+      	var includeShoppingForAndDefaultShipTo = "false"; 
+      	$('#shipToSelectedOnShipToModal').val('');
+      	/* Select Button click functionality */
+      	selectShipToChanges = function selectShipToChanges(){
+      		if (!$("input[name='selectedShipTo']:checked").val()) {
+      			$('.shipToErrTxt').removeClass("notice").addClass("error");		
+      			$('.shipToErrTxt').text("Please select a Ship-To Location.");		
+      			return false;
+      		}
+      		var selectedShipCustomer = $("input[name='selectedShipTo']:checked").val(); 
+      		$('#selectedCustId').val(selectedShipCustomer); 
+      		$('#selectedLocationType').val('Ship To');
+      		$('#shipToSelectedOnShipToModal').val(selectedShipCustomer);
+      		$('#txtLocation').val($('#shipToMultiRowDisplay_'+selectedShipCustomer).val());
+      		$.fancybox.close(); 
+      	};
+      	/* Cancel Button click functionality */
+      	cancelShipToChanges = function cancelShipToChanges(){      		
+      		$('#shipToSelectedOnShipToModal').val('');
+    		$.fancybox.close();
+      	};
+      	showShiptos("Select Ship-To",	customerContactId,	getAssignedShipToURL,	includeShoppingForAndDefaultShipTo,	cancelShipToChanges, null, selectShipToChanges, null);
+      }
                
    $(document).ready(function() {
        $(document).pngFix();
@@ -475,8 +468,9 @@ $(function() {
                }
                },
                'autoDimensions'    : false,
-               'width'             : 800,
-               'height'             : 340,
+               'width'             : 880,
+               'height'            : 480,
+               'scrolling'		   :'no',
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showLocationsDiv").innerHTML = '';
@@ -486,27 +480,16 @@ $(function() {
        });    
        $("#varShipTo").fancybox({
            'onStart'        :    function(){
-           //Show location fancybox
-           if(document.getElementById("showLocationsUrl").value == '')    
-                   {    
-                   
-                   $.fancybox.close();
-               }
-           else
-               {
-                   //showLocations();
-                   showAllShipToLocations();
-               }
+        	   showShipToModalForReports();
                },
                'autoDimensions'    : false,
-               'width'             : 740,
-               'height'             : 370,
-               //XNGTP - JIRA- 489 
+               'width'             : 800,
+               'height'            : 400,
                'onClosed' : function(){                
-                   document.getElementById("showShipToLocationsDiv").innerHTML = '';
-                   //alert("Closed .. " );
-               },        
-                               
+            	   if(!$('#shipToSelectedOnShipToModal').val().trim()){
+       				$("select#optsLocations").attr('selectedIndex', 0);        				
+       			 }                  
+               }, 
        });
        $("#varBillTo").fancybox({
            'onStart'        :    function(){
@@ -523,8 +506,10 @@ $(function() {
                }
                },
                'autoDimensions'    : false,
-               'width'             : 800,
-               'height'             : 400,
+               'width'             : 880,
+               'height'            : 480,
+               'scrolling'		   :'no',
+               
                //XNGTP - JIRA- 489 
                'onClosed' : function(){                
                    document.getElementById("showBillToDiv").innerHTML = '';
@@ -536,18 +521,18 @@ $(function() {
 </script>
 </head>
 <body class="ext-gecko ext-gecko3">
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div>
 <div id="main-container">
   <div id="main" class="min-height-fix">
      <s:action name="xpedxHeader" executeResult="true"
        namespace="/common" />
-    <div class="container">
+    <div class="container content-container">
       <!-- breadcrumb -->
+      <h1><s:property value="%{name}"/></h1>
       <div id="mid-col-mil"> 
-      <div class="clearview"> &nbsp;</div>
-   <div class="padding-bottom3"><p><span class="page-title"><s:property value="%{name}" /> </span></p>
-       </div>
-    
-          <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
+    		 <s:if test="getErrorNames() != null && getErrorNames().size() > 0">
                  <s:iterator value="getErrorNames()" status="errorListStatus" id="listId">
                   <font color = "red"><s:property/></font>
               </s:iterator>                            
@@ -558,7 +543,8 @@ $(function() {
           
            <div id="hidden_clicker" style="display:none">
                <a id="varSAP" href="#showLocationsDlg" >Hidden Clicker 1</a>
-               <a id="varShipTo" href="#showShipToLocationsDlg" >Hidden Clicker 2</a>
+               	<s:hidden name="shipToSelectedOnShipToModal" id="shipToSelectedOnShipToModal" value='' />
+               <a id="varShipTo" href="#ship-container" >Hidden Clicker 2</a>
                <a id="varBillTo" href="#showBillToDlg" >Hidden Clicker 3</a>
            </div>
           
@@ -678,6 +664,7 @@ $(function() {
           </table>
           <s:url id='backLink' namespace='/services' action='myreports'>
        </s:url>
+       <s:hidden id="backLinkId" value="%{#backLink}"/>
                
           <div class="clearview">&nbsp;</div>
           <div class="form-service"> 
@@ -686,8 +673,8 @@ $(function() {
                 <td>&nbsp;</td>
                 <td>  <div id="cart-actions" >
             <ul id="cart-actions" class="float-right">
-              <li class="float-left"><s:a href="%{backLink}" cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
-              <li><a href="#" onclick="return submitReportForm();" class="orange-ui-btn"><span>Submit Report</span></a></li>
+              <li class="float-left"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/></li>
+              <li><input href="#" onclick="return submitReportForm();" class="btn-gradient" type="button" value="Submit Report"/></li>
             </ul>
           </div></td>
               </tr>
@@ -720,19 +707,20 @@ $(function() {
    
    </div>
 </div>
-<div style="display: none;">    
-   
-   <div title="Showing the Ship-To Locations" id="showShipToLocationsDlg">
-       <div id="showShipToLocationsDiv">
-           
-       </div>
-   
-   </div>
+<s:url id="getAssignedShipTosForSelectURLid" namespace="/common" action="getAssignedShipToCustomers" />
+<s:hidden id="getAssignedShipTosForSelectURL" value="%{#getAssignedShipTosForSelectURLid}" />
+<div class='x-hidden dialog-body' id="showShipToLocationsDlg">
+	<div class="ship-container" id="ship-container">
+	   <%-- dynamically populate data here with ShipToComponent javascript  --%>
+	</div>
 </div>
 <!-- LB CODE End -->
     <!-- end main  -->
     <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 <!-- end container  -->
+<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 </body>
 <script type="text/javascript">
 <s:if test="getRenderReport() == 'true'">

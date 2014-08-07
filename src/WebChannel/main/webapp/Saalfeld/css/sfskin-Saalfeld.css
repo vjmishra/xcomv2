@@ -161,7 +161,7 @@ a.green-ui-btn:active span {
 /*EB-1689*/
 /*EB-2727*/
 .underlines a:link{text-decoration:none;color: #006a3a;}
-.underlines a:hover{text-decoration:underline;color: #006a3a;}
+.underlines a:hover{text-decoration:underline;color: #006a3a;} 
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
 .whitest {
     color: #006a3a;
@@ -588,7 +588,7 @@ ul.megamenu {
 	display: none;
 	position: absolute;
 	left: 0px;
-	top: 33px;
+	top: 32px;
 }
 .megamenu li ul ul {
 	display: none;
@@ -697,7 +697,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/facility.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/facilities.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -706,7 +706,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/packaging.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/packaging.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -715,7 +715,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/paper.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/paper.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -724,7 +724,7 @@ ul.megamenu {
 	clear: none;
 	width: 264px;
 	height: 478px;
-	background: url(../../xpedx/images/megamenu/graphics.jpg) no-repeat #3e4853;
+	background: url(../images/megamenu/graphics.jpg) no-repeat #3e4853;
 	padding-bottom: 400px;
 	margin-bottom: -400px;
 }
@@ -767,11 +767,11 @@ ul.megamenu {
 	display: block;
 	background-color: #fff;
 	border-bottom: #e2e7ee 1px solid;
-	padding: 10px 0px 10px 10px;
+	padding: 9px 0px 10px 6px;
 	color: #05865e;
 	font-size: 11px;
 	line-height: normal;
-	width: 192px;
+	width: 200px;
 	margin-left: 0px;
 }
 .megamenu ul li a.mega-cat-2.last {
@@ -787,8 +787,11 @@ ul.megamenu {
 	margin: -2px 0px 0px 0px;
 }
 .megamenu ul li a.mega-cat-2 .cat-2-arrow {
+	width: 16px;
+	height: 18px;
 	font-size: 16px;
 	font-family: "Arial Black", Gadget, sans-serif;
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px 2px no-repeat;
 }
 .megamenu ul li a.mega-cat-2:hover {
 	color: #0b4b23;
@@ -846,13 +849,14 @@ ul.megamenu {
 }
 .megamenu ul li .cat3-content {
 	margin: 30px 0px 0px 20px;
+	width: 300px;
 }
 .megamenu ul li .cat3-content a {
 	background-color: #c2e5d1;
 	border: none;
-	width: 280px;
+	width: 300px;
 	color: #128b65;
-	padding: 4px;
+	padding: 5px 0px 5px 0px;
 	font-size: 12px;
 	margin: 0px;
 }
@@ -877,20 +881,28 @@ ul.megamenu {
 	margin-top: 15px;
 	margin-bottom: 5px;
 }
-
 .btn-nav-list {
-	border: 1px solid #016747;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	text-decoration: none;
+	-moz-box-shadow: 1px 1px 1px 0px #999;
+	-webkit-box-shadow: 1px 1px 1px 0px #999;
+	box-shadow: 1px 1px 1px 0px #999;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #a1a1a1;
 	display: inline-block;
-	font-size: 10px;
-	color: #05865e;
-	padding: 4px;
-	background: #ffffff;
 	cursor: pointer;
+	color: #d56000;
+	font-family: arial;
+	font-size: 11px;
+	font-weight: 800;
+	padding: 5px 13px 5px 28px;
+	text-decoration: none;
+	background: url(../images/megamenu/arrow-orange.png) 7px 5px no-repeat #ffffff;
 }
+.btn-nav-list:hover {
+	background: url(../images/megamenu/arrow-orange.png) 7px -20px no-repeat #f6f6f6;
+}
+
 #order-edit a {
 	display: block;
 	width: 146px;
@@ -908,10 +920,10 @@ ul.megamenu {
 	background: #f6e630;
 	padding: 2px 0px 2px 10px;
 	font-weight: bold;
-	}
+}
 .order-edit-banner span {
 	margin-left: 30px;
-	}
+}
 .btn-order-edit {
 	cursor: pointer;
 	border: 1px solid #c5c5c5;
@@ -1005,7 +1017,7 @@ ul.megamenu {
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	color: #085525;
-	}
+}
 .alpha-letter-inactive {
 	width: 8px;
 	height: 10px;
@@ -1018,9 +1030,150 @@ ul.megamenu {
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	}
+}
 .alpha-list {
 	width: 94%;
 	border-top: #d5dfdb 1px solid;
 	padding: 5px 0px;
+}
+
+.megamenu ul li a.mega-cat-2 .cat-2-arrow {
+    width: 16px;
+	height: 18px;
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px 2px no-repeat;
+}	
+	
+.megamenu ul li a.mega-cat-2:hover .cat-2-arrow {
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px -22px no-repeat;
+}
+
+.megamenu ul li a.mega-cat-2-active .cat-2-arrow {
+	background: url(../images/megamenu/menu-arrow-button.gif) 0px -22px no-repeat;
+}
+.content-container h1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 18px;
+	color: #006A3A;
+	font-weight: normal;
+	margin: 0 0 16px 0;
+}
+.qa-marketing-copy {
+	font-size: 13px;
+	color: #006A3A;
+	font-style: italic;
+	padding-top: 20px;
+}
+.qa-marketing-copy span {
+	font-weight: bold;
+}
+/*-------Search Tips-------*/
+#searchTips h2 {
+	color: #006A3A;
 	}
+#searchTips h3{
+	font-size: 13px;
+	font-weight: bold;
+	margin-top: 12px;
+	}
+#searchTips ul li {
+	margin-top: 5px;
+	}
+#home-image-rotation-nav a.activeSlide {
+    background: #69e295;
+}
+#tips-container a {
+	color: #006A3A;
+}
+
+/*---------Processing icon ---------*/
+.loading-icon {
+	padding: 0;
+	position: fixed;
+	top: 40%;
+	left: 50%;
+	width: 80px;
+	height: 100px;
+	background: url(../images/common/loading-saalfeld.gif) no-repeat;
+	margin-left: -40px;
+	margin-top: -50px;
+	-webkit-opacity: 1;
+	-moz-opacity: 1;
+	opacity: 1;
+	z-index: 3000;
+}
+
+.ship-search-wrap span.resetlink {
+	color: #006A3A;
+}
+
+.core-item {
+	position: absolute;
+	left: 59px;
+	background: url(../images/catalog/best-seller.png) no-repeat;
+	width: 91px;
+	height: 70px;
+}
+
+.xpedx-light-box h1 {
+	color: #006A3A;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0 0 16px;
+    padding: 0 0 10px;
+    margin-bottom: 5px;
+}
+
+/************TABLE HEADERS****************/
+.standard-table th {
+	background: #006A3A;
+	line-height: 32px;
+	text-align: center;
+	border-right: 1px solid #cccccc;
+	}
+.standard-table th:first-child {
+	border-radius: 6px 0px 0px 0px;
+	text-align: left;
+	padding-left: 10px;
+	border-right: 1px solid #cccccc;
+	}
+.standard-table th:last-child {
+	border-radius: 0px 6px 0px 0px;
+	border-right: none;
+	}
+/*******/
+
+/*-----modal----------*/
+#change-bill-to ul li{
+	padding: 0px 0px 6px;
+	color: #006A3A;
+}
+
+#account-list ul li{
+	padding: 0px 0px 6px;
+	color: #006A3A;
+}
+
+.searchbox-1 .input-group-btn .search-go {
+	position: absolute;
+	left: 270px;
+	margin: 0;
+	clear: none;
+	width: auto;
+	height: 25px;
+	background: #81c1ad;
+	color: #ffffff;
+	border: 0px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 0;
+	cursor: pointer;
+}
+.searchbox-1 .input-group-btn .search-go:hover,
+.searchbox-1 .input-group-btn .search-go:active,
+.searchbox-1 .input-group-btn .search-go:focus {
+	background: #c2e5d1;
+	color: #012c12;
+}

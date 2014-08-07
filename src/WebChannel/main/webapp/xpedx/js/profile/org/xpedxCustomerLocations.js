@@ -6,7 +6,7 @@ function showLocations() {
 		sapCustomerID=customerId;
 	var organizationCode = document.getElementById("organizationCode").value;
 	if(url!=null) {
-		Ext.Msg.wait("Getting the Locations.... Please Wait..."); 
+		
 		Ext.Ajax.request({
 		    url: url,
 		    params: {

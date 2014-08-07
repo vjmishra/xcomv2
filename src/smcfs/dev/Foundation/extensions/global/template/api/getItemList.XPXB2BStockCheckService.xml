@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- getItemList Output XML -->
+<!-- TODO don't need all these for stock check -->
+<ItemList LastItemKey="" LastRecordSet="" TotalItemList="" >
+    <Item ItemID="" ItemKey="" ItemGroupCode="" OrganizationCode="" UnitOfMeasure="" GlobalItemID="" CanUseAsServiceTool="" >
+		<Extn ExtnSellText="" ExtnSupplierNameDisplay="" />
+		<PrimaryInformation  CostCurrency=" " CountryOfOrigin=" " CreditWOReceipt=" " DefaultProductClass=" " Description=" "   ExtendedDescription=" "  FixedCapacityQtyPerLine=" " FixedPricingQtyPerLine=" " InvoiceBasedOnActuals=" "  IsDeliveryAllowed=" " IsPickupAllowed=" " IsReturnService=" " IsReturnable=" " IsShippingAllowed=" " ItemType=" " KitCode=" " ManufacturerItem=" " ManufacturerItemDesc=" " ManufacturerName=" "  MasterCatalogID=" " MaxOrderQuantity=" "  MinOrderQuantity=" " MinimumCapacityQuantity=" " MultipleProdLineAllowed=" " PricingQuantityConvFactor=" " PricingQuantityStrategy=" " PricingUOM=" " PricingUOMStrategy=" " PrimaryEnterpriseCode=" " ProductLine=" " RequiresProdAssociation=" " ReturnWindow=" " SerializedFlag=" " ShortDescription=" " Status=" "  TaxableFlag=" " UnitCost=" " UnitHeight=" " UnitHeightUOM=" " UnitLength=" " UnitLengthUOM=" " UnitWeight=" " UnitWeightUOM=" " UnitWidth=" " UnitWidthUOM=" " InvolvesSegmentChange=" " IsParcelShippingAllowed="" PrimarySupplier="" ComputedUnitCost="" IsHazmat="" />
+		<CategoryList>
+			<Category CategoryID="" CategoryPath=""/>
+		</CategoryList>
+		<AdditionalAttributeList>
+			<AdditionalAttribute Name="" Value=""/>
+		</AdditionalAttributeList>
+    </Item>
+</ItemList>

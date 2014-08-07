@@ -1,19 +1,32 @@
 /**
- * @param items array containing item ids
- * @param qtys array containing quantities
- * @param uoms array containing units of measure
+ * @param options.modal If true, displays processing bar during ajax call.
+ * @param options.items array containing item ids.
+ * @param options.qtys array containing quantities. If not provided, will extract values from the DOM id='Qty_<code>ITEMID</code>'.
+ * @param options.uoms array containing units of measure. If not provided, will extract values from the DOM id='itemUomList_<code>ITEMID</code>'.
+ * @param options.success Callback function called upon completion of ajax response is successfully processed. Callback function takes a single parameter, the ajax response.
+ * @output For each item, the rendered HTML is set as the innerHTML of the DOM element with id=availabilty_<code>ITEMID</code> (note the misspelling!).
  */
-function getPriceAndAvailabilityForItems(items, qtys, uoms) {
-	var waitMsg = Ext.Msg.wait("Processing...");
-	myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-	myMask.show();
+function getPriceAndAvailabilityForItems(options) {
+	if (options.modal) {
+		showProcessingIcon();
+	}
 	var url = $('#getPriceAndAvailabilityForItemsURL').val();
 	
+	var items = options.items;
+	var qtys = options.qtys;
+	var uoms = options.uoms;
+	
+	for (var i = 0, len = items.length; i < len; i++) {
+		$('#availabilty_' + items[i]).hide().get(0).innerHTML = '';
+	}
+	
+	var origQty = [];
 	if (!qtys) {
 		qtys = [];
 		for (var i = 0, len = items.length; i < len; i++) {
 			var qty = $('#Qty_' + items[i]).val().trim();
 			qtys.push(qty);
+			origQty.push(qty);
 		}
 	}
 	
@@ -25,19 +38,36 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 		}
 	}
 	
+	// if qty is blank, set qty and uom to default for order multiple
+	for (var i = 0, len = qtys.length; i < len; i++) {
+		if (qtys[i].trim().length == 0) {
+			qtys[i] = $('#orderMultiple_' + items[i]).val();
+			
+			var baseUom = $('#baseUOMItem_' + items[i]).val();
+			if (uoms[i] != baseUom) {
+				// adjust order multiple quantity for the requested uom
+				var uomConvFactor = $('#convF_' + uoms[i]).val();
+				if (qtys[i] % uomConvFactor == 0) {
+					qtys[i] = (qtys[i] / uomConvFactor) + '';
+				} else {
+					qtys[i] = '1';
+				}
+			}
+		}
+	}
+	
 	$.ajax({
 		url: url,
 		dataType: 'json',
 		data: {
-			'stockCheckAll': true,
-			'validateOM': true,
 			'items': items.join('*'),
 			'qtys': qtys.join('*'),
 			'uoms': uoms.join('*')
 		},
 		complete: function() {
-			Ext.Msg.hide();
-			myMask.hide();
+			if (options.modal) {
+				hideProcessingIcon();
+			}
 		},
 		success: function(data) {
 			var pna = data.priceAndAvailability;
@@ -48,12 +78,14 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				return;
 			}
 			
+			var pnaSuccess = true;
 			for (var i = 0, len = pna.items.length; i < len; i++) {
 				var pnaItem = pna.items[i];
 				
 				var $divItemAvailability = $('#availabilty_' + pnaItem.legacyProductCode);
 				if ($divItemAvailability.length == 0) {
-					console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode);
+					if (console) { console.log('Element not found: #availabilty_' + pnaItem.legacyProductCode); }
+					pnaSuccess = false;
 					continue;
 				}
 				
@@ -64,6 +96,23 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					html.push('			<h5 align="center"><b><font color="red">', htmlEncode(lineErrorMessage), '</font></b></h5>');
 					html.push('		</div>');
 					$divItemAvailability.show().get(0).innerHTML = html.join('');
+					pnaSuccess = false;
+					continue;
+				}
+				
+				// order multiple messaging
+				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
+				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
+				var cssClass = isOrderMultipleError ? 'error' : 'notice';
+				cssClass += ' pnaOrderMultipleMessage';
+				$divErrorMsgForQty.attr('class', cssClass);
+				
+				var html = [];
+				html.push('Must be ordered in units of ', pnaItem.orderMultipleQty, ' ', data.uomDescriptions[pnaItem.orderMultipleUOM]);
+				$divErrorMsgForQty.show().get(0).innerHTML = html.join('');
+				$('#Qty_' + pnaItem.legacyProductCode).css('border-color', isOrderMultipleError ? 'red' : '');
+				if (isOrderMultipleError) {
+					pnaSuccess = false;
 					continue;
 				}
 				
@@ -96,7 +145,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				var requestedQty = parseFloat(pnaItem.requestedQty);
 				
-				if (qtys[i].trim().length > 0) {
+				if (origQty[i].trim().length > 0) {
 					// only display 'ready to ship' message if user requested a qty (omit message if user left qty field blank)
 					if (pnaAvail['total'] == 0) {
 						html.push('			<div class="pa-row pa-status ready-not-available-color">Not Available</div>');
@@ -161,7 +210,7 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 					
 					for (var j = 0, lenj = pricingForItem.displayPriceForUoms.length; j < lenj; j++) {
 						var displayPriceForUom = pricingForItem.displayPriceForUoms[j];
-						var isZero = displayPriceForUom.bracketPrice.indexOf('$0.') != -1;
+						var isZero = displayPriceForUom.bracketPrice == '$0.00000' || displayPriceForUom.bracketPrice == '$0.00';
 						if (j < lenj - 1) {
 							// bracket price
 							html.push('		<div class="pa-row">');
@@ -194,9 +243,13 @@ function getPriceAndAvailabilityForItems(items, qtys, uoms) {
 				
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
 			}
+			
+			if (pnaSuccess && typeof(options.success) === 'function') {
+				options.success(data);
+			}
 		},
 		failure: function(jqXHR, textStatus) {
-			console.log('ajax failure:\njqXHR:\n' , jqXHR , '\ntextStatus:\n' , textStatus);
+			if (console) { console.log('ajax failure:\njqXHR:\n' , jqXHR , '\ntextStatus:\n' , textStatus); }
 		}
 	});
 }
@@ -214,15 +267,6 @@ function calculateAvailability(warehouseLocationList) {
 			'total': 0
 	};
 	
-	// workaround for inexactness of JavaScript floating point math - we must explicitly round after adding
-	//     so we must track the number so the rounding preserves the significant digits of all the numbers added into each bucket
-	var significantDigits = {
-		'0': 0,
-		'1': 0,
-		'2': 0,
-		'total': 0
-	};
-	
 	for (var i = 0, len = warehouseLocationList.length; i < len; i++) {
 		var warehouse = warehouseLocationList[i];
 		var numQty = parseFloat(warehouse.availableQty);
@@ -235,46 +279,17 @@ function calculateAvailability(warehouseLocationList) {
 		
 		qtys[numDays] += numQty;
 		qtys['total'] += numQty;
-		
-		var tmpSignificantDigits = getSignificantDigits(warehouse.availableQty);
-		significantDigits[numDays] = Math.max(significantDigits[warehouse.numberOfDays], tmpSignificantDigits);
-		significantDigits['total'] = Math.max(significantDigits['total'], tmpSignificantDigits);
 	}
 	
 	// next day includes immediate
 	qtys['1'] += qtys['0'];
-	significantDigits['1'] = Math.max(significantDigits['1'], significantDigits['0']);
 	
-	// round to significant digits
-	if ((qtys['0'] + '').indexOf('.') != -1) {
-		qtys['0'] = parseFloat(qtys['0'].toFixed(significantDigits['0']));
-	}
-	if ((qtys['1'] + '').indexOf('.') != -1) {
-		qtys['1'] = parseFloat(qtys['1'].toFixed(significantDigits['1']));
-	}
-	if ((qtys['2'] + '').indexOf('.') != -1) {
-		qtys['2'] = parseFloat(qtys['2'].toFixed(significantDigits['2']));
-	}
-	if ((qtys['total'] + '').indexOf('.') != -1) {
-		qtys['total'] = parseFloat(qtys['total'].toFixed(significantDigits['total']));
+	// workaround for inexactness of JavaScript floating point math - we must explicitly round after adding
+	for (var i in qtys) {
+		qtys[i] = parseFloat(qtys[i].toFixed(5));
 	}
 	
 	return qtys;
-}
-
-/**
- * @param numStr
- * @returns Number of digits after the decimal
- */
-function getSignificantDigits(numStr) {
-	var idxDecimal = numStr.indexOf('.');
-	var numAfterDecimal;
-	if (idxDecimal == -1) {
-		numAfterDecimal = 0;
-	} else {
-		numAfterDecimal = numStr.length - idxDecimal - 1;
-	}
-	return numAfterDecimal;
 }
 
 /**
@@ -297,3 +312,5 @@ function numberWithCommas(num) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
+
+

@@ -1000,6 +1000,12 @@
                <Column Name="ORGANIZATION_CODE"/>               
             </Index>
 			<!-- End : New index created for XBT-361 -->			
+			<Index Name="XPX_YFS_CUSTOMER_I11" Unique="False">
+               <Column Name="EXTN_BUYER_ID"/>
+            </Index>
+			<Index Name="XPX_YFS_CUSTOMER_I12" Unique="False">
+               <Column Name="EXTN_ETRADING_ID"/>
+            </Index>
         </Indices> 
 		 
       </Entity>

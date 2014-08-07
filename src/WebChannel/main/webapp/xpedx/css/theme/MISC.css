@@ -129,7 +129,7 @@ a { outline:0px;}
 .margin-left7{	margin-left:7px;}
 .align-right{ text-align:right;}
 .float-right-new{ float:right}
-.grey-italic{color:#999; font-style:italic;}
+.regular-black{color:#000000;}
 .x-corners-borders{width:100%; border: 1px solid #CCC; width: auto; padding: 20px; -moz-border-radius:6px 6px 6px 6px; -webkit-border-radius:6px 6px 6px 6px;  border-radius:6px 6px 6px 6px;} 
 .black{color:#000;}
 .black h2{color:#000;}

@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.xpath.XPath;
@@ -44,24 +45,28 @@ import com.yantra.yfs.japi.YFSException;
 
 /**
  * @author sdodda
- * 
+ *
  *         Holds Project Util methods
- * 
+ *
  */
 public class XPXUtils implements YIFCustomApi {
 
 	private static final String GLOBAL_TEMPLATE_API_GET_ORGANIZATION_LIST_XPX_GET_ARTICLE_DETAILS_SERVICE = "global/template/api/getOrganizationList.XPXGetArticleDetailsService.xml";
-	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";	
-	/** API object. */
-	private static YIFApi api = null;
+	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml";
+	private static final String propertyFile="/xpedx/sterling/Foundation/properties/centExempt.properties";
+
 	private static YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 	private static final XPathFactory xPathFactory = XPathFactory.newInstance();
-	private static final String propertyFile="/xpedx/sterling/Foundation/properties/centExempt.properties";
-	static {
-		
-		try {
 
+	private static YIFApi api = null;
+	private static Map<String,String> uomIncomingXrefMap;
+	private static Map<String,String> uomOutgoingXrefMap;
+	static {
+		try {
 			api = YIFClientFactory.getInstance().getApi();
+
+			uomIncomingXrefMap = new HashMap<String, String>();
+			uomOutgoingXrefMap = new HashMap<String, String>();
 
 		} catch (YIFClientCreationException e) {
 			// TODO Auto-generated catch block
@@ -70,6 +75,7 @@ public class XPXUtils implements YIFCustomApi {
 	}
 	private Properties _properties = null;
 
+	@Override
 	public void setProperties(Properties properties) throws Exception {
 		_properties = properties;
 	}
@@ -99,7 +105,7 @@ public class XPXUtils implements YIFCustomApi {
 
 	/**
 	 * Input XML: <br/>
-	 * 
+	 *
 	 * <pre>
 	 * &lt;Root ServiceName='' ApiName=''&gt;
 	 * &lt;Node ..../&gt;
@@ -108,7 +114,7 @@ public class XPXUtils implements YIFCustomApi {
 	 * ...
 	 * &lt;/Root&gt;
 	 * </pre>
-	 * 
+	 *
 	 * @param env
 	 * @param inXML
 	 * @return
@@ -186,8 +192,8 @@ public class XPXUtils implements YIFCustomApi {
 	 * In case of EOF:
 	 * <EOFRootName>ServicesToEnable:<ServiceId1>,<ServiceId2>,...,<ServiceIdn>
 	 * <EOFRootName>ServicesToDisable:<ServiceId1>,<ServiceId2>,...,<ServiceIdn>
-	 * 
-	 * 
+	 *
+	 *
 	 * @param env
 	 * @param inXML
 	 * @return
@@ -208,7 +214,7 @@ public class XPXUtils implements YIFCustomApi {
 			 * @author asekhar-tw on 11-Jan-2011 @ modified by Prasanth Nair Log
 			 *         the message into CENT showing that this is an EOF/SOF
 			 *         message
-			 * 
+			 *
 			 *         Need to first validate which feed in coming in and them
 			 *         pass the literals accordingly strRoot is used to identify
 			 *         and switch Load Service.
@@ -303,7 +309,7 @@ public class XPXUtils implements YIFCustomApi {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param env
 	 * @param inXML
 	 * @throws YIFClientCreationException
@@ -756,15 +762,15 @@ public class XPXUtils implements YIFCustomApi {
 	}
 
 	/**
-	 * 
+	 *
 	 * Input XML format:
-	 * 
+	 *
 	 * <pre>
 	 * &lt;XPXArticle ArticleKey='required' RequestedByUsersTeamId='required'/&gt;
 	 * </pre>
-	 * 
+	 *
 	 * Output XML format:
-	 * 
+	 *
 	 * <pre>
 	 * &lt;XPXArticle ...&gt;
 	 * &lt;Divisions&gt;
@@ -779,7 +785,7 @@ public class XPXUtils implements YIFCustomApi {
 	 * &lt;/AssignedDivisions&gt;
 	 * &lt;/XPXArticle&gt;
 	 * </pre>
-	 * 
+	 *
 	 * @param env
 	 * @param docInput
 	 * @return
@@ -961,22 +967,22 @@ public class XPXUtils implements YIFCustomApi {
 	}
 
 	/**
-	 * 
+	 *
 	 * Input XML format:
-	 * 
+	 *
 	 * <pre>
 	 * &lt;Team RequestedByUsersTeamId='required'/&gt;
 	 * </pre>
-	 * 
+	 *
 	 * Output XML format:
-	 * 
+	 *
 	 * <pre>
-	 * 
+	 *
 	 * &lt;OrganizationList&gt;
 	 * &lt;Organization OrganizationCode=&quot;&quot; OrganizationKey=&quot;&quot; OrganizationName=&quot;&quot;/&gt;
 	 * &lt;/OrganizationList&gt;
 	 * </pre>
-	 * 
+	 *
 	 * @param env
 	 * @param docInput
 	 * @return
@@ -1116,12 +1122,11 @@ public class XPXUtils implements YIFCustomApi {
 			customerOrderBranch = outputExtnElement
 					.getAttribute("ExtnCustOrderBranch");
 
-			String envtCode = outputExtnElement
-					.getAttribute("ExtnEnvironmentCode");
+			//TODO remove this since always "M"?
+			String envtCode = outputExtnElement.getAttribute("ExtnEnvironmentCode");
 			if (envtCode == null || envtCode.trim().length() <= 0) {
 				// Throw new YFSException with the description
-				throw new YFSException(
-						"Environment code for the customer is null or empty");
+				throw new YFSException("Environment code for the customer is null or empty");
 			}
 
 			if (customerDivision.trim().length() > 0) {
@@ -1161,18 +1166,12 @@ public class XPXUtils implements YIFCustomApi {
 		return divisionCodes;
 	}
 
+
+	// Keep this old signature as wrapper method though the one caller is hopefully not using it anymore
 	public static String replaceOutgoingUOMFromLegacy(YFSEnvironment env,
 			String incomingUOM, String itemID, String buyerID, String eTradingID)
 			throws YFSException, RemoteException, YIFClientCreationException,
 			NullPointerException, Exception {
-		String replacedUOM = null;
-		String legacyCustomerNumber = null;
-		String environment_id = null;
-		String company_code = null;
-		String customerID = null;
-		String sapCustOrgCode = null;
-		String extnUomType = null;
-		// api = YIFClientFactory.getInstance().getApi();
 
 		if (env == null) {
 			// Throw new YFSException with the description
@@ -1196,485 +1195,138 @@ public class XPXUtils implements YIFCustomApi {
 					"IncomingUOM cannot be null or empty to XPXUtils.replaceOutgoingUOMFromLegacy)");
 		}
 
-		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(
-				env, buyerID);
-		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		sapCustOrgCode = sapCustomerElement
-				.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
+		return replaceOutgoingUOMFromLegacy(env, incomingUOM, itemID);
+	}
 
-		// With the SAP parent customer org code and the etrading id,we retrieve
-		// the ship to customer
+	public static String replaceOutgoingUOMFromLegacy(YFSEnvironment env,String incomingUOM, String itemID)
+			throws YFSException, RemoteException, YIFClientCreationException, NullPointerException {
 
-		Document getShipToCustomerDetailsOutputDoc = getCustomerDetailsOutput(
-				env, eTradingID, sapCustOrgCode);
-		Element customerElement = (Element) getShipToCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		customerID = customerElement.getAttribute("CustomerID");
-		Element extnCustomerElement = (Element) customerElement
-				.getElementsByTagName("Extn").item(0);
-		extnUomType = extnCustomerElement.getAttribute("ExtnUomType");
-
-		// Tokenizing the customer id to get the envt id, legacy customer no,
-		// company code
-		if (customerID != null || customerID.trim().length() != 0) {
-			/*
-			 * String tempBuyerOrgCode = "30-057520-200-DEV-MM"; String[]
-			 * splitArrayOnBuyerOrgCode = tempBuyerOrgCode.split("-");
-			 */
-
-			String[] splitArrayOnBuyerOrgCode = customerID.split("-");
-
-			for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
-				if (i == 1) {
-					legacyCustomerNumber = splitArrayOnBuyerOrgCode[i];
-					log.debug("The shipToSuffix is: " + legacyCustomerNumber);
-				}
-				if (i == 3) {
-					environment_id = splitArrayOnBuyerOrgCode[i];
-					if(log.isDebugEnabled()){
-						log.debug("The envt code is: " + environment_id);
-					}
-				}
-				if (i == 4) {
-					company_code = splitArrayOnBuyerOrgCode[i];
-					if(log.isDebugEnabled()){
-						log.debug("The comp code is: " + company_code);
-					}
-				}
-
-			}
-		}
-
-		// Split the incoming uom to retrieve the uom value and discard the envt
-		// id
-		/*
-		 * String[] splitArrayOnUom = incomingUOM.split("_");
-		 * 
-		 * for(int i=0; i<splitArrayOnUom.length; i++) { if(i==1) { incomingUOM
-		 * = splitArrayOnUom[i];
-		 * log.debug("The incoming UOM after the split is: "+incomingUOM); } }
-		 */
-
+		// (removed cust lookup for env since always "M")
+		String environment_id = "M";
 		if (!incomingUOM.contains("_")) {
 			incomingUOM = environment_id + "_" + incomingUOM;
 		}
 
-		// First step is to query Cust Xref table with the leagcy item id,
-		// customer id and the envt id and company code.
+		String replacedUOM = null;
 
-		// Added for testing
-		// environment_id="A";
-		// itemID="5384385";
-		Document XREFOutputDoc = invokeXREF(env, itemID, legacyCustomerNumber,
-				environment_id, company_code);
-
-		if (XREFOutputDoc.getDocumentElement()
-				.getElementsByTagName("XPXItemcustXref").getLength() > 0) {
-			if(log.isDebugEnabled()){
-				log.debug("Inside the loop where there is a item cust xref entry");
-			}
-
-			Element itemCustElement = (Element) XREFOutputDoc
-					.getDocumentElement()
-					.getElementsByTagName("XPXItemcustXref").item(0);
-
-			String legacyUom = itemCustElement.getAttribute("LegacyUom");
-
-			if (incomingUOM.equals(legacyUom)) {
-				if(log.isDebugEnabled()){
-					log.debug("Inside the loop where incoming uom = legacy uom in itemcustxref");
-				}
-				replacedUOM = itemCustElement.getAttribute("CustomerUom");
-			}
-
+		if (uomOutgoingXrefMap.containsKey(incomingUOM)) {
+			replacedUOM = uomOutgoingXrefMap.get(incomingUOM);
+			log.info("Legacy UOM xref cache hit: " + incomingUOM + " -> "+replacedUOM); //TODO remove
 		}
+		else {
+			// Lookup legacy UOM in xref table & cache
+			Document legacyUomOutputDoc = null;
+			Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
+			legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", environment_id);
+			legacyUomInputDoc.getDocumentElement().setAttribute("LegacyUOM", incomingUOM);
 
-		if (replacedUOM == null || replacedUOM.trim().length() <= 0) {
-			// Not in Xref table, so query B2B UOM table
-			if(log.isDebugEnabled()){
-				log.debug("Inside the loop where there is no entry in the item cust xref table");
-			}
-			Document getB2BUOMXRefOutputDoc = null;
-			String customerUom = null;
-			String xpedxUom = null;
-			// String splitUom = null;
+			log.info("The input to getLegacyUomXrefService is : " + SCXmlUtil.getString(legacyUomInputDoc)); //TODO debug
+			legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService", legacyUomInputDoc);
+			log.info("The output of getLegacyUomXrefService is : " + SCXmlUtil.getString(legacyUomOutputDoc)); //TODO debug
 
-			Document getB2BUOMXRefInputDoc = YFCDocument.createDocument(
-					"XPXB2bLegacyUomXref").getDocument();
-			getB2BUOMXRefInputDoc.getDocumentElement().setAttribute(
-					"MasterCustomerID", buyerID);
-			getB2BUOMXRefInputDoc.getDocumentElement().setAttribute(
-					"LegacyUOM", incomingUOM);
-			if(log.isDebugEnabled()){
-				log.debug("The input to B2BUOMXref list is: "
-					+ SCXmlUtil.getString(getB2BUOMXRefInputDoc));
-			}
-			getB2BUOMXRefOutputDoc = api.executeFlow(env, "XPXB2BUOMXrefList",
-					getB2BUOMXRefInputDoc);
-			if(log.isDebugEnabled()){ 
-				log.debug("The output of B2BUOMXref list is: "
-					+ SCXmlUtil.getString(getB2BUOMXRefOutputDoc));
-			}
-			// Document getEffectiveUomList = getXPXUomList(env,itemID,
-			// customerID, sapCustOrgCode);
-			// Element itemElement = (Element)
-			// getEffectiveUomList.getDocumentElement().getElementsByTagName("Item").item(0);
-			// Element alternateUomListElement = (Element)
-			// itemElement.getElementsByTagName("AlternateUOMList").item(0);
-			// NodeList uomList =
-			// alternateUomListElement.getElementsByTagName("AlternateUOM");
+			if (legacyUomOutputDoc != null) {
+				Element legacyUomXrefElement = (Element) legacyUomOutputDoc.getDocumentElement()
+						.getElementsByTagName("XPEDXLegacyUomXref").item(0);
 
-			if (getB2BUOMXRefOutputDoc.getDocumentElement()
-					.getElementsByTagName("XPXB2bLegacyUomXref").getLength() > 0) {
-				NodeList b2bUomList = getB2BUOMXRefOutputDoc
-						.getDocumentElement().getElementsByTagName(
-								"XPXB2bLegacyUomXref");
-				for (int i = 0; i < b2bUomList.getLength(); i++) {
-					Element b2UomElement = (Element) b2bUomList.item(i);
-					customerUom = b2UomElement.getAttribute("CustomerUOM");
-					xpedxUom = b2UomElement.getAttribute("LegacyUOM");
-					if (xpedxUom.equals(incomingUOM)) {
-						if(log.isDebugEnabled()){
-							log.debug("Inside the loop where the xpedx uom equals the incoming uom");
-						}
-						// for(int j=0; j < uomList.getLength(); j++)
-						// {
-						// Element uomElement = (Element) uomList.item(j);
-						// String unitOfMeasure =
-						// uomElement.getAttribute("UnitOfMeasure");
-						// String[] splitArrayOnUnitOfMeasure =
-						// unitOfMeasure.split("_");
-						// for(int k=0; k<splitArrayOnUnitOfMeasure.length; k++)
-						// {
-						// if(k==1)
-						// {
-						// splitUom = splitArrayOnUnitOfMeasure[k];
-						// if(splitUom.equals(xpedxUom))
-						// {
-						replacedUOM = customerUom;
+				if (legacyUomXrefElement != null) {
+					String ediUom = legacyUomXrefElement.getAttribute("UOM");
 
-						// }
-						// }
-
-						// }
-
-						// }
-
-					}
-
-				}
-			}
-			// Xpedx uom not in effective list so go to method 3.
-
-			if (replacedUOM == null || replacedUOM.trim().length() <= 0) {
-				if(log.isDebugEnabled()){
-					log.debug("Inside the loop where there is no entry in b2b uom table or where there is no xpedx uom in effective list");
-				}
-				Document legacyUomOutputDoc = null;
-				Document legacyUomInputDoc = YFCDocument.createDocument(
-						"XPEDXLegacyUomXref").getDocument();
-				legacyUomInputDoc.getDocumentElement().setAttribute(
-						"LegacyType", environment_id);
-				legacyUomInputDoc.getDocumentElement().setAttribute(
-						"LegacyUOM", incomingUOM);
-				if(log.isDebugEnabled()){
-					log.debug("The input to getLegacyUomXrefService is : "
-						+ SCXmlUtil.getString(legacyUomInputDoc));
-				}
-				legacyUomOutputDoc = api.executeFlow(env,
-						"XPXGetLegacyUomXrefService", legacyUomInputDoc);
-				if(log.isDebugEnabled()){
-					log.debug("The output of getLegacyUomXrefService is : "
-						+ SCXmlUtil.getString(legacyUomOutputDoc));
-				}
-
-				if (extnUomType.equalsIgnoreCase("E")) {
-					log.debug("Inside the loop where the uom type is E");
-					// EDI UOM
-					if (legacyUomOutputDoc != null) {
-						Element legacyUomXrefElement = (Element) legacyUomOutputDoc
-								.getDocumentElement()
-								.getElementsByTagName("XPEDXLegacyUomXref")
-								.item(0);
-						if (legacyUomXrefElement != null) {
-							String ediUom = legacyUomXrefElement
-									.getAttribute("UOM");
-							if (ediUom != null && ediUom.trim().length() > 0) {
-								replacedUOM = ediUom;
-							} else {
-								throw new YFSException(
-										"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
-							}
-						} else {
-							throw new YFSException(
-									"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
-						}
+					if (ediUom != null && ediUom.trim().length() > 0) {
+						replacedUOM = ediUom;
 					} else {
-						throw new YFSException(
-								"UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table when UOM type is 'E'.");
+						throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 					}
 				} else {
-					log.debug("Inside the loop where the uom type is L");
-					replacedUOM = incomingUOM;
+					throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 				}
+			} else {
+				throw new YFSException("UOM Doesn't exist in XPEDX_Legacy_Uom_Xref table.");
 			}
 
-		}
+			if (replacedUOM.contains("_")) {
+				// Means the envt id is appended to this uom....in this case, strip
+				// the envt id and then send it to customer
+				String[] splitArrayOnUom = replacedUOM.split("_");
 
-		if (replacedUOM.contains("_")) {
-			// Means the envt id is appended to this uom....in this case, strip
-			// the envt id and then send it to customer
-			String[] splitArrayOnUom = replacedUOM.split("_");
-
-			for (int i = 0; i < splitArrayOnUom.length; i++) {
-				if (i == 1) {
-					replacedUOM = splitArrayOnUom[i];
-					if(log.isDebugEnabled()){
-						log.debug("The replacedUOM UOM after the split is: "
-							+ replacedUOM);
+				for (int i = 0; i < splitArrayOnUom.length; i++) {
+					if (i == 1) {
+						replacedUOM = splitArrayOnUom[i];
+						log.info("The replacedUOM UOM after the split is: " + replacedUOM); //TODO debug
 					}
 				}
 			}
-		}
-		if(log.isDebugEnabled()){
-			log.debug("The final replaced uom in the replaceOutgoing method is: "
-				+ replacedUOM);
+			{
+				log.info("The final replaced uom in the replaceOutgoing method is: "
+					+ replacedUOM);
+			}
+			uomOutgoingXrefMap.put(incomingUOM, replacedUOM);
 		}
 		return replacedUOM;
 	}
 
+
+	// Keep this old signature as wrapper method though the one caller is hopefully not using it anymore
 	public static String replaceIncomingUOMFromCustomer(YFSEnvironment env,
 			String incomingUOM, String itemID, String buyerID, String eTradingID)
-			throws YFSException, RemoteException, YIFClientCreationException,
-			NullPointerException, Exception {
-		String replacedUOM = null;
-		String convertedUOM = null;
-		String legacyCustomerNumber = null;
-		String environment_id = null;
-		String company_code = null;
-		String customerID = null;
-		String sapCustOrgCode = null;
-		String extnUomType = null;
-		// Need to enquire if master customer id is the buyer id itself or the
-		// customer id resolved from it.
+			throws YFSException, RemoteException, YIFClientCreationException {
 
 		if (env == null) {
-			// Throw new YFSException with the description
 			throw new YFSException(
 					"YFSEnvironment cannot be null or invalid to XPXUtils.replaceIncomingUOMFromCustomer()");
 		} else if (buyerID == null || buyerID.trim().length() <= 0) {
-			// Throw new YFSException with the description
 			throw new YFSException(
 					"Customer ID cannot be null or empty to XPXUtils.replaceIncomingUOMFromCustomer()");
 		} else if (eTradingID == null || eTradingID.trim().length() <= 0) {
-			// Throw new YFSException with the description
 			throw new YFSException(
 					"BuyerID cannot be null or empty to XPXUtils.replaceIncomingUOMFromCustomer()");
 		} else if (itemID == null || itemID.trim().length() <= 0) {
-			// Throw new YFSException with the description
 			throw new YFSException(
 					"ItemID cannot be null or empty to XPXUtils.replaceIncomingUOMFromCustomer()");
 		} else if (incomingUOM == null || incomingUOM.trim().length() <= 0) {
-			// Throw new YFSException with the description
 			throw new YFSException(
 					"IncomingUOM cannot be null or empty to XPXUtils.replaceIncomingUOMFromCustomer()");
 		}
 
-		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(
-				env, buyerID);
-		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		sapCustOrgCode = sapCustomerElement
-				.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
-		Element extnSAPCustomerElement = (Element) sapCustomerElement
-		.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
-           extnUomType = extnSAPCustomerElement.getAttribute("ExtnUomType");
+		Document getSAPCustomerDetailsOutputDoc = getSAPCustomerDetailsOutput(env, buyerID);
 
-		// With the SAP parent customer org code and the etrading id,we retrieve
-		// the ship to customer
-
-		Document getShipToCustomerDetailsOutputDoc = getCustomerDetailsOutput(
-				env, eTradingID, sapCustOrgCode);
-		Element customerElement = (Element) getShipToCustomerDetailsOutputDoc
-				.getDocumentElement()
-				.getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
-		customerID = customerElement.getAttribute("CustomerID");
-		Element extnCustomerElement = (Element) customerElement
-				.getElementsByTagName("Extn").item(0);
-		
-		/**********Commented out as per review comments on 12/05/2011***/
-		//extnUomType = extnCustomerElement.getAttribute("ExtnUomType");
-
-		// Tokenizing the customer id to get the envt id, legacy customer no,
-		// company code
-		if (customerID != null || customerID.trim().length() != 0) {
-			/*
-			 * String tempBuyerOrgCode = "30-057520-200-DEV-MM"; String[]
-			 * splitArrayOnBuyerOrgCode = tempBuyerOrgCode.split("-");
-			 */
-
-			String[] splitArrayOnBuyerOrgCode = customerID.split("-");
-
-			for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
-				if (i == 1) {
-					legacyCustomerNumber = splitArrayOnBuyerOrgCode[i];
-					
-					log.debug("The shipToSuffix is: " + legacyCustomerNumber);
-				}
-				if (i == 3) {
-					environment_id = splitArrayOnBuyerOrgCode[i];
-					if(log.isDebugEnabled()){
-						log.debug("The envt code is: " + environment_id);
-					}
-				}
-				if (i == 4) {
-					company_code = splitArrayOnBuyerOrgCode[i];
-					if(log.isDebugEnabled()){
-						log.debug("The comp code is: " + company_code);
-					}
-				}
-
-			}
-		}
-
-		/*** Added as of 30/03/2010 ******/
-
-		incomingUOM = environment_id + "_" + incomingUOM;
-
-		// First step is to query Cust Xref table with the leagcy item id,
-		// customer id and the envt id and company code.
-
-		// Added for testing
-		// environment_id="A";
-		// itemID="5384385";
-		// legacyCustomerNumber="123";
-		Document XREFOutputDoc = invokeXREF(env, itemID, legacyCustomerNumber,
-				environment_id, company_code);
-
-		if (XREFOutputDoc.getDocumentElement()
-				.getElementsByTagName("XPXItemcustXref").getLength() > 0) {
-			Element itemCustElement = (Element) XREFOutputDoc
-					.getDocumentElement()
-					.getElementsByTagName("XPXItemcustXref").item(0);
-
-			String customerUom = itemCustElement.getAttribute("CustomerUom");
-			String customerExclFlag = itemCustElement
-					.getAttribute("IsCustUOMExcl");
-			if(log.isDebugEnabled()){
-				log.debug("The customer exclusive flag is: " + customerExclFlag);
-			}
-			/**
-			 * The customer exclusive flag check has been added so that the
-			 * comparison between the uoms should only take place if this value
-			 * is set as 'Y'
-			 **/
-			if (customerUom != null && customerUom.trim().length() > 0
-					&& "Y".equalsIgnoreCase(customerExclFlag)) {
-
-				if (incomingUOM.equals(customerUom)) {
-					if(log.isDebugEnabled()){
-						log.debug("Inside second loop where incoming uom = customer uom");
-					}
-					String legacyUom = itemCustElement
-							.getAttribute("LegacyUom");
-
-					if (legacyUom.contains("_")) {
-						// Means the legacy uom is of the format <envtid>_<uom>
-						validateUOMWithItemUOMMaster(env, legacyUom,
-								sapCustOrgCode, itemID);
-						return legacyUom;
-					} else {
-
-						// Means the legacy uom is of the format <uom> and so
-						// envtid should be appended to it
-						replacedUOM = environment_id + "_" + legacyUom;
-						validateUOMWithItemUOMMaster(env, replacedUOM,
-								sapCustOrgCode, itemID);
-						return replacedUOM;
-					}
-
-				} else {
-					// Throw new YFSException with the description
-					throw new YFSException(
-							"No Customer UOM available in CustXRef table despite flag being being set!!!");
-				}
-
-			} else {
-				if(log.isDebugEnabled()){
-					log.debug("Inside loop where customeExclFlag is N");
-				}
-				// Method 2;
-				replacedUOM = checkB2BUOMTable(env, itemID, customerID,
-						sapCustOrgCode, buyerID, incomingUOM, extnUomType);
-				if (replacedUOM.contains("_")) {
-					validateUOMWithItemUOMMaster(env, replacedUOM,
-							sapCustOrgCode, itemID);
-					return replacedUOM;
-				} else {
-					convertedUOM = environment_id + "_" + replacedUOM;
-					validateUOMWithItemUOMMaster(env, convertedUOM,
-							sapCustOrgCode, itemID);
-					return convertedUOM;
-				}
-			}
-		} else {
-			if(log.isDebugEnabled()){
-				log.debug("Inside the third loop where no entry in cust xref table");
-			}
-			// Method2;
-			replacedUOM = checkB2BUOMTable(env, itemID, customerID,
-					sapCustOrgCode, buyerID, incomingUOM, extnUomType);
-		}
-
-		if (replacedUOM.contains("_")) {
-			validateUOMWithItemUOMMaster(env, replacedUOM, sapCustOrgCode,
-					itemID);
-			return replacedUOM;
-		} else {
-			convertedUOM = environment_id + "_" + replacedUOM;
-			if(log.isDebugEnabled()){
-				log.debug("convertedUOM: " + convertedUOM);
-			}
-			validateUOMWithItemUOMMaster(env, convertedUOM, sapCustOrgCode,
-					itemID);
-			return convertedUOM;
-		}
+		return replaceIncomingUOMFromCustomer(env, incomingUOM, itemID, getSAPCustomerDetailsOutputDoc);
 	}
 
-	private static Document getCustomerDetailsOutput(YFSEnvironment env,
-			String eTradingId, String sapCustOrgCode) throws YFSException,
-			RemoteException {
+	public static String replaceIncomingUOMFromCustomer(YFSEnvironment env,
+			String incomingUOM, String itemID, Document getSAPCustomerDetailsOutputDoc)
+			throws YFSException, RemoteException, YIFClientCreationException, NullPointerException {
 
-		Document getCustomerDetailsOutputDoc = null;
+		Element sapCustomerElement = (Element) getSAPCustomerDetailsOutputDoc
+				.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).item(0);
+		String sapCustOrgCode = sapCustomerElement.getAttribute(XPXLiterals.A_ORGANIZATION_CODE);
 
-		YFCDocument getCustomerDetailsInputDoc = YFCDocument
-				.createDocument(XPXLiterals.E_CUSTOMER);
-		getCustomerDetailsInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_ORGANIZATION_CODE, sapCustOrgCode);
-		YFCElement extnElement = getCustomerDetailsInputDoc
-				.createElement(XPXLiterals.E_EXTN);
-		extnElement.setAttribute("ExtnETradingID", eTradingId);
+		// (removed cust lookup for env since always "M")
+		String environment_id = "M";
 
-		getCustomerDetailsInputDoc.getDocumentElement()
-				.appendChild(extnElement);
+		/*** Added as of 30/03/2010 ******/
+		incomingUOM = environment_id + "_" + incomingUOM;
 
-		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,
-				getCustomerListTemplate);
-		getCustomerDetailsOutputDoc = api.invoke(env,
-				XPXLiterals.GET_CUSTOMER_LIST_API,
-				getCustomerDetailsInputDoc.getDocument());
-		if(log.isDebugEnabled()){
-			log.debug("The shipto customer details are: "
-				+ SCXmlUtil.getString(getCustomerDetailsOutputDoc));
+		String replacedUOM;
+		if (uomIncomingXrefMap.containsKey(incomingUOM)) {
+			replacedUOM = uomIncomingXrefMap.get(incomingUOM);
+			log.info("In Legacy UOM xref cache hit: " + incomingUOM + " -> "+replacedUOM); //TODO remove
 		}
-		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
+		else {
+			// This is what actually converts the UOM from customer to legacy
+			replacedUOM = checkCustomerProfileUom(env, incomingUOM, itemID);
 
-		return getCustomerDetailsOutputDoc;
-
+			if (replacedUOM.contains("_")) {
+				validateUOMWithItemUOMMaster(env, replacedUOM, sapCustOrgCode, itemID);
+			} else {
+				replacedUOM = environment_id + "_" + replacedUOM;
+				{
+					log.info("convertedUOM: " + replacedUOM);
+				}
+				validateUOMWithItemUOMMaster(env, replacedUOM, sapCustOrgCode,itemID);
+			}
+			uomIncomingXrefMap.put(incomingUOM, replacedUOM);
+		}
+		return replacedUOM;
 	}
 
 	private static Document getSAPCustomerDetailsOutput(YFSEnvironment env,
@@ -1694,9 +1346,11 @@ public class XPXUtils implements YIFCustomApi {
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,
 				getCustomerListTemplate);
 
+		log.info("getCustomerList1: " + SCXmlUtil.getString(getCustomerDetailsInputDoc.getDocument())); //TODO debug
 		getCustomerDetailsOutputDoc = api.invoke(env,
 				XPXLiterals.GET_CUSTOMER_LIST_API,
 				getCustomerDetailsInputDoc.getDocument());
+		log.info("getCustomerList1 output: " + SCXmlUtil.getString(getCustomerDetailsOutputDoc)); //TODO debug
 
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 
@@ -1704,288 +1358,51 @@ public class XPXUtils implements YIFCustomApi {
 
 	}
 
-	private static String checkB2BUOMTable(YFSEnvironment env, String itemID,
-			String customerID, String organizationCode, String buyerID,
-			String incomingUOM, String extnUomType) throws YFSException,
-			RemoteException, NullPointerException, Exception
+	private static String checkCustomerProfileUom(YFSEnvironment env, String incomingUOM, String itemID)
+					throws YFSException, RemoteException, NullPointerException {
 
-	{
-		if(log.isDebugEnabled()){
-			log.debug("Inside check B2BUOMTable");
-		}
-		String b2bUOM = null;
-		Document getB2BUOMXRefOutputDoc = null;
-		String customerUom = null;
-		String xpedxUom = null;
-		String splitUom = null;
-
-		Document getB2BUOMXRefInputDoc = YFCDocument.createDocument(
-				"XPXB2bLegacyUomXref").getDocument();
-		// Added for testing
-		// buyerID="123456";
-		getB2BUOMXRefInputDoc.getDocumentElement().setAttribute(
-				"MasterCustomerID", buyerID);
-		if(log.isDebugEnabled()){
-			log.debug("The input to b2b uom xref table is: "
-				+ SCXmlUtil.getString(getB2BUOMXRefInputDoc));
-		}
-		getB2BUOMXRefOutputDoc = api.executeFlow(env, "XPXB2BUOMXrefList",
-				getB2BUOMXRefInputDoc);
-		if(log.isDebugEnabled()){
-			log.debug("The output of b2b uom xref table is: "
-				+ SCXmlUtil.getString(getB2BUOMXRefOutputDoc));
-		}
-		Document getEffectiveUomList = getXPXUomList(env, itemID, customerID,
-				organizationCode);
-		if(log.isDebugEnabled()){
-			log.debug("The getEffectiveUomList output is: "
-				+ SCXmlUtil.getString(getEffectiveUomList));
-		}
-		/*
-		 * Element itemElement = (Element)
-		 * getEffectiveUomList.getDocumentElement
-		 * ().getElementsByTagName("Item").item(0); Element
-		 * alternateUomListElement = (Element)
-		 * itemElement.getElementsByTagName("AlternateUOMList").item(0);
-		 */
-		NodeList uomList = getEffectiveUomList.getDocumentElement()
-				.getElementsByTagName("UOM");
-
-		if (getB2BUOMXRefOutputDoc.getDocumentElement()
-				.getElementsByTagName("XPXB2bLegacyUomXref").getLength() > 0) {
-			if(log.isDebugEnabled()){
-				log.debug("Inside loop of XPXB2bLegacyUomXref");
-			}
-			NodeList b2bUomList = getB2BUOMXRefOutputDoc.getDocumentElement()
-					.getElementsByTagName("XPXB2bLegacyUomXref");
-			for (int i = 0; i < b2bUomList.getLength(); i++) {
-				Element b2UomElement = (Element) b2bUomList.item(i);
-				customerUom = b2UomElement.getAttribute("CustomerUOM");
-				// Added for testing
-				// customerUom ="XXX";
-				xpedxUom = b2UomElement.getAttribute("LegacyUOM");
-				if(log.isDebugEnabled()){
-					log.debug("The customer uom is: " + customerUom
-						+ " and the incoming uom is: " + incomingUOM);
-				}
-				if (customerUom.equals(incomingUOM)) {
-					if(log.isDebugEnabled()){
-						log.debug("Inside loop of customer uom = incoming uom");
-					}
-					for (int j = 0; j < uomList.getLength(); j++) {
-						Element uomElement = (Element) uomList.item(j);
-						String unitOfMeasure = uomElement
-								.getAttribute("UnitOfMeasure");
-						if (xpedxUom != null && xpedxUom.trim().length() > 0
-								&& xpedxUom.equals(unitOfMeasure)) {
-							if(log.isDebugEnabled()){
-								log.debug("The alternate uom equals the xpedx uom");
-							}
-							b2bUOM = xpedxUom;
-							return b2bUOM;
-						}
-
-						// Added for unit testing
-						// unitOfMeasure= "A_EA";
-						/*
-						 * String[] splitArrayOnUnitOfMeasure =
-						 * unitOfMeasure.split("_"); for(int k=0;
-						 * k<splitArrayOnUnitOfMeasure.length; k++) { if(k==1) {
-						 * splitUom = splitArrayOnUnitOfMeasure[k];
-						 * if(splitUom.equals(xpedxUom)) {
-						 * log.debug("The alternate uom equals the xpedx uom");
-						 * b2bUOM = xpedxUom; return b2bUOM; } }
-						 * 
-						 * 
-						 * }
-						 */
-
-					}
-
-				}
-			}
-			// Means no entry found in B2B UOM table where the UOM matches
-			if(log.isDebugEnabled()){
-				log.debug("Inside the second loop of b2bUOM == NULL");
-			}
-			b2bUOM = checkCustomerProfileUom(env, incomingUOM, customerID,
-					organizationCode, extnUomType, itemID);
-			return b2bUOM;
-
-		}
-		// Means there is no entry in B2B UOM table where the buyer id exists.
-		if(log.isDebugEnabled()){
-			log.debug("Inside the third loop of b2bUOM == NULL");
-		}
-		b2bUOM = checkCustomerProfileUom(env, incomingUOM, customerID,
-				organizationCode, extnUomType, itemID);
-
-		return b2bUOM;
-	}
-
-	private static String checkCustomerProfileUom(YFSEnvironment env,
-			String incomingUOM, String customerID, String organizationCode,
-			String extnUomType, String itemID) throws YFSException,
-			RemoteException, NullPointerException, Exception {
-		if(log.isDebugEnabled()){
-			log.debug("Inside checkCustomerProfileUom");
-		}
 		String customerProfileUOM = null;
-		String environment_id = null;
 		Document legacyUomOutputDoc = null;
-		if(log.isDebugEnabled()){
-			log.debug("The customer id is: " + customerID);
-		}
-		String[] splitArrayOnBuyerOrgCode = customerID.split("-");
 
-		for (int i = 0; i < splitArrayOnBuyerOrgCode.length; i++) {
+		// (removed cust lookup for env since always "M")
+		String environment_id = "M";
 
-			if (i == 3) {
-				environment_id = splitArrayOnBuyerOrgCode[i];
-				if(log.isDebugEnabled()){
-					log.debug("The envt code in checkCustomerProfileUom is: "
-						+ environment_id);
-				}
-			}
-
-		}
-
-		Document legacyUomInputDoc = YFCDocument.createDocument(
-				"XPEDXLegacyUomXref").getDocument();
-		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType",
-				environment_id);
-
-		/*
-		 * if(incomingUOM.contains("_")) { String[] splitArrayOnUom =
-		 * incomingUOM.split("_");
-		 * 
-		 * for(int i=0; i<splitArrayOnUom.length; i++) {
-		 * 
-		 * if(i==1) { incomingUOM = splitArrayOnUom[i];
-		 * log.debug("The edi uom used for validation is: "+incomingUOM); }
-		 * 
-		 * } }
-		 */
+		// TODO cache these? (template to reduce data?)
+		Document legacyUomInputDoc = YFCDocument.createDocument("XPEDXLegacyUomXref").getDocument();
+		legacyUomInputDoc.getDocumentElement().setAttribute("LegacyType", environment_id);
 		legacyUomInputDoc.getDocumentElement().setAttribute("UOM", incomingUOM);
-		if(log.isDebugEnabled()){
-			log.debug("The i/p doc to getlegacyUomXref is: "
-				+ SCXmlUtil.getString(legacyUomInputDoc));
+
+		{
+			log.info("The i/p doc to getlegacyUomXref is: " + SCXmlUtil.getString(legacyUomInputDoc));
 		}
 		legacyUomOutputDoc = api.executeFlow(env, "XPXGetLegacyUomXrefService",
 				legacyUomInputDoc);
-		if(log.isDebugEnabled()){
-			log.debug("The o/p doc o getlegacyUomXref is: "
-				+ SCXmlUtil.getString(legacyUomOutputDoc));
-			log.debug("The extn uom type in the last loop is: " + extnUomType);
+		{
+			log.info("The o/p doc o getlegacyUomXref is: " + SCXmlUtil.getString(legacyUomOutputDoc));
 		}
-		if (extnUomType.equalsIgnoreCase("E")) {
-			// EDI UOM
-			if(log.isDebugEnabled()){
-				log.debug("Inside the loop where extn uom type is E");
-			}
-			Element legacyUomXrefElement = (Element) legacyUomOutputDoc
-					.getDocumentElement()
-					.getElementsByTagName("XPEDXLegacyUomXref").item(0);
-			if (legacyUomXrefElement != null) {
-				String legacyUom = legacyUomXrefElement
-						.getAttribute("LegacyUOM");
-				if (legacyUom != null && legacyUom.trim().length() > 0) {
-					if(log.isDebugEnabled()){
-						log.debug("The legacy uom is: " + legacyUom);
-					}
-					customerProfileUOM = legacyUom;
-				} else {
-					// No Legacy UOM attribute value available
-					throw new YFSException(
-							"No Legacy UOM available despite EDI flag being being set!!!");
-				}
-			} else {
-				// No entry in Legacy UOM Xref table despite flag being EDI
-				// Throw new YFSException with the description
-				throw new YFSException(
-						"No Legacy UOM XRef entry available despite EDI flag being being set!!!");
 
+		Element legacyUomXrefElement = (Element) legacyUomOutputDoc.getDocumentElement()
+				.getElementsByTagName("XPEDXLegacyUomXref").item(0);
+		if (legacyUomXrefElement != null) {
+			String legacyUom = legacyUomXrefElement.getAttribute("LegacyUOM");
+			if (legacyUom != null && legacyUom.trim().length() > 0) {
+				if(log.isDebugEnabled()){
+					log.debug("The legacy uom is: " + legacyUom);
+				}
+				customerProfileUOM = legacyUom;
+			} else {
+				throw new YFSException("No Legacy UOM available");
 			}
 		} else {
-			log.debug("Inside the loop where extn uom type is not E");
-			customerProfileUOM = incomingUOM;
+			throw new YFSException("No Legacy UOM XRef entry available");
 		}
 		return customerProfileUOM;
 	}
 
-	private static Document getXPXUomList(YFSEnvironment env, String itemID,
-			String customerID, String organizationCode) throws YFSException,
-			RemoteException, Exception {
-		Document uomListOutputDoc = null;
-
-		Document invokeUOMlistAPIDoc = YFCDocument.createDocument("UOM")
-				.getDocument();
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("ItemID", itemID);
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute("CustomerID",
-				customerID);
-		invokeUOMlistAPIDoc.getDocumentElement().setAttribute(
-				"OrganizationCode", organizationCode);
-
-		uomListOutputDoc = api.executeFlow(env, "XPXUOMListAPI",
-				invokeUOMlistAPIDoc);
-
-		/*
-		 * YFCDocument inputDocument = YFCDocument.createDocument("Item");
-		 * YFCElement inputElement = inputDocument.getDocumentElement();
-		 * inputElement.setAttribute("ItemID", itemID);
-		 * inputElement.setAttribute("OrganizationCode", organizationCode);
-		 * env.setApiTemplate("getItemList", SCXmlUtil.createFromString("" +
-		 * "<ItemList><Item><AlternateUOMList><AlternateUOM />" +
-		 * "</AlternateUOMList></Item></ItemList>"));
-		 * 
-		 * 
-		 * log.debug("The input to get the effective list of uoms is: "+SCXmlUtil
-		 * .getString(inputDocument.getDocument())); uomListOutputDoc =
-		 * api.invoke(env, "getItemList",inputDocument.getDocument());
-		 * log.debug(
-		 * "The output of get the effective list of uoms is: "+SCXmlUtil
-		 * .getString(uomListOutputDoc)); env.clearApiTemplate("getItemList");
-		 */
-
-		return uomListOutputDoc;
-	}
-
-	private static Document invokeXREF(YFSEnvironment env, String itemID,
-			String legacyCustomerNumber, String environment_id,
-			String company_code) throws YFSException, RemoteException,
-			Exception {
-		Document XREFOutputDoc = null;
-
-		Document XREFInputDoc = YFCDocument.createDocument(
-				XPXLiterals.E_XPX_ITEM_CUST_XREF).getDocument();
-		XREFInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ENVT_CODE,
-				environment_id);
-		XREFInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_COMPANY_CODE, company_code);
-		XREFInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_CUSTOMER_NO, legacyCustomerNumber);
-		XREFInputDoc.getDocumentElement().setAttribute(
-				XPXLiterals.A_LEGACY_ITEM_NO, itemID);
-		if(log.isDebugEnabled()){
-		log.debug("The input to getXrefList is: "
-				+ SCXmlUtil.getString(XREFInputDoc));
-		}
-		// <XPXItemcustXrefList />
-
-		// log.debug("The input to getXRefList is: "+SCXmlUtil.getString(XREFInputDoc));
-		XREFOutputDoc = api.executeFlow(env, XPXLiterals.GET_XREF_LIST,
-				XREFInputDoc);
-		if(log.isDebugEnabled()){
-		log.debug("The output of getXrefList is: "
-				+ SCXmlUtil.getString(XREFOutputDoc));
-		}
-
-		return XREFOutputDoc;
-	}
 
 	/**
 	 * Appends EnvtId and Node in this format[if both are not null]:NODE_ENVTID
-	 * 
+	 *
 	 * @param strEnvtId
 	 * @param strNode
 	 * @return
@@ -1999,35 +1416,20 @@ public class XPXUtils implements YIFCustomApi {
 		return strNode;
 	}
 
-	/**
-	 * Validates the replaced UOM with the ItemUOMMaster.
-	 * 
-	 * @param incomingUOM
-	 *            - Replaced UOM that needs to be validated with the master
-	 *            table.
-	 * @param organizationCode
-	 * @return incomingUOM (If its a valid UOM else throws a exception as
-	 *         invalid UOM)
-	 */
-
-	private static void validateUOMWithItemUOMMaster(YFSEnvironment env,
-			String incomingUOM, String organizationCode, String itemID)
-			throws YFSException, NullPointerException, Exception {
+	private static void validateUOMWithItemUOMMaster(YFSEnvironment env, String incomingUOM, String organizationCode, String itemID)
+			throws YFSException, NullPointerException, RemoteException {
 		if(log.isDebugEnabled()){
 			log.debug("Validate UOM with the Item UOM master table.");
 		}
-		boolean itemIDUOMExist = false;
-		boolean entryInItemMaster = false;
-		boolean validUOM = false;
 		String itemUOMTemplate = "global/template/api/getItemUOMListTemplate.xml";
 
 		// Validate incoming UOM based on Item UOM Master list.
 		if (YFCObject.isNull(incomingUOM) || YFCObject.isVoid(incomingUOM)) {
-			throw new Exception("UOM is empty");
+			throw new IllegalArgumentException("UOM is empty");
 		}
 		if (YFCObject.isNull(organizationCode)
 				|| YFCObject.isVoid(organizationCode)) {
-			throw new Exception("Organization code is empty");
+			throw new IllegalArgumentException("Organization code is empty");
 		}
 
 		/* Input xml : <Item ItemID="" OrganizationCode="" /> */
@@ -2041,42 +1443,40 @@ public class XPXUtils implements YIFCustomApi {
 
 		// To set API Template for getItemUOMList
 		env.setApiTemplate("getItemUOMList", itemUOMTemplate);
-		if(log.isDebugEnabled()){
-			log.debug("itemUOMInputDoc = " + SCXmlUtil.getString(itemUOMInputDoc));
+		{
+			log.info("itemUOMInputDoc = " + SCXmlUtil.getString(itemUOMInputDoc));
 		}
-		Document itemUOMOutputDoc = api.invoke(env, "getItemUOMList",
-				itemUOMInputDoc);
-		if(log.isDebugEnabled()){
-			log.debug("itemUOMOutputDoc = " + SCXmlUtil.getString(itemUOMOutputDoc));
+		Document itemUOMOutputDoc = api.invoke(env, "getItemUOMList", itemUOMInputDoc);
+		{
+			log.info("itemUOMOutputDoc = " + SCXmlUtil.getString(itemUOMOutputDoc));
 		}
 		// To clear the api template.
 		env.clearApiTemplate("getItemUOMList");
 
+		boolean itemIDUOMExist = false;
+		boolean validUOM = false;
+
 		if (itemUOMOutputDoc != null) {
-			NodeList itemUOMList = itemUOMOutputDoc.getDocumentElement()
-					.getElementsByTagName("ItemUOM");
+				NodeList itemUOMList = itemUOMOutputDoc.getDocumentElement().getElementsByTagName("ItemUOM");
+
 			int itemUOMListSize = itemUOMList.getLength();
 			for (int itemUOMCount = 0; itemUOMCount < itemUOMListSize; itemUOMCount++) {
+
 				// Item UOM Exists for the item Id.
-				Element itemUOMElement = (Element) itemUOMList
-						.item(itemUOMCount);
-				if (itemUOMElement != null
-						&& itemUOMElement.hasAttribute("IsOrderingUOM")) {
-					String itemUOM = itemUOMElement
-							.getAttribute("UnitOfMeasure");
-					// To check if incoming UOM is equal with the UOM in
-					// yfs_item_uom table.
-					if (itemUOM != null
-							&& itemUOM.equalsIgnoreCase(incomingUOM)) {
+				Element itemUOMElement = (Element) itemUOMList.item(itemUOMCount);
+				if (itemUOMElement != null&& itemUOMElement.hasAttribute("IsOrderingUOM")) {
+					String itemUOM = itemUOMElement.getAttribute("UnitOfMeasure");
+
+					// To check if incoming UOM is equal with the UOM in yfs_item_uom table.
+					if (itemUOM != null && itemUOM.equalsIgnoreCase(incomingUOM)) {
 						itemIDUOMExist = true;
-						String isOrderingUOM = itemUOMElement
-								.getAttribute("IsOrderingUOM");
+
+						String isOrderingUOM = itemUOMElement.getAttribute("IsOrderingUOM");
 						if (!YFCObject.isNull(isOrderingUOM)) {
+
 							// To check if the UOM is an ordering UOM.
 							if (isOrderingUOM.equalsIgnoreCase("Y")) {
-								if(log.isDebugEnabled()){
-									log.debug("Valid UOM");
-								}
+								if(log.isDebugEnabled()){ log.debug("Valid UOM"); }
 								validUOM = true;
 								break;
 							}
@@ -2087,17 +1487,17 @@ public class XPXUtils implements YIFCustomApi {
 
 			// Throw the exception based on the flags set above.
 			if (!itemIDUOMExist) {
-				throw new Exception(
+				throw new IllegalArgumentException(
 						"Invalid UOM as Item ID UOM combination isn't available with Item ID = "
 								+ itemID + " and UOM = " + incomingUOM);
 			}
 			if (!validUOM) {
-				throw new Exception(
+				throw new IllegalArgumentException(
 						"Invalid UOM as Item UOM is not available for ordering.");
 			}
 
 		} else {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"Invalid UOM as Item ID UOM combination isn't available with Item ID = "
 							+ itemID + " and UOM = " + incomingUOM);
 		}
@@ -2116,7 +1516,7 @@ public class XPXUtils implements YIFCustomApi {
 			if (log.isDebugEnabled()) {
 				log.debug("imagesRootFolder: " + imagesRootFolder);
 			}
-		
+
 			String orgCode = inputDocument.getDocumentElement().getAttribute("EnterpriseCode");
 
 			if (null != orgCode && null != imagesRootFolder) {
@@ -2137,14 +1537,14 @@ public class XPXUtils implements YIFCustomApi {
 
 		/**
 		 * Comment added by Arun Sekhar on 26-April-2011
-		 * 
+		 *
 		 * NOTE: The image names are assigned based on the current naming
 		 * convention followed for XPEDX logo(SellerOrgCode_r_rgb_lo.jpg).
-		 * 
+		 *
 		 * This needs to be revisited once the logo image names are confirmed.
 		 **/
 		if ("xpedx".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/xpedx_r_rgb_lo.jpg";
+			_imageName = "/logo-email.jpg";
 		} else if ("BulkleyDunton".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/BulkleyDunton_r_rgb_lo.jpg";
 		} else if ("CentralLewmar".equalsIgnoreCase(sellerOrgCode)) {
@@ -2152,7 +1552,7 @@ public class XPXUtils implements YIFCustomApi {
 		} else if ("CentralMarquardt".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/CentralMarquardt_r_rgb_lo.jpg";
 		} else if ("Saalfeld".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/Saalfeld_r_rgb_lo.jpg";
+			_imageName = "/saalfeld_210x47px.jpg";
 		} else if ("StrategicPaper".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/StrategicPaper_r_rgb_lo.jpg";
 		} else if ("WesternPaper".equalsIgnoreCase(sellerOrgCode)) {
@@ -2162,8 +1562,8 @@ public class XPXUtils implements YIFCustomApi {
 		} else if ("Zellerbach".equalsIgnoreCase(sellerOrgCode)) {
 			_imageName = "/Zellerbach_r_rgb_lo.jpg";
 		} else if ("xpedxCanada".equalsIgnoreCase(sellerOrgCode)) {
-			_imageName = "/xpedx_r_rgb_lo.jpg";
-		} 
+			_imageName = "/logo-email.jpg";
+		}
 		return _imageName;
 	}
 
@@ -2174,7 +1574,7 @@ public class XPXUtils implements YIFCustomApi {
 	 */
 	public String stampOrderSubjectLine(YFSEnvironment env,
 			Document inputDocument, String orderOperation) throws Exception {
-		
+
 		String brand = inputDocument.getDocumentElement().getAttribute(
 				"EnterpriseCode");
 		String customerPO = inputDocument.getDocumentElement().getAttribute(
@@ -2183,47 +1583,47 @@ public class XPXUtils implements YIFCustomApi {
 				"OrderNo");
 		StringBuilder _subjectLine = null;
 		String emailStr = null;
-		
+
 		if("OrderPlacement".equals(orderOperation)) {
 			emailStr="Order Submitted Notification";
 		} else {
 			emailStr="Order Edit Notification";
 		}
-		
+
 		if("Saalfeld".equalsIgnoreCase(brand)){
 			_subjectLine = new StringBuilder(brand.concat("redistribution.com ").concat(emailStr).concat(" "));
 		}else{
 			_subjectLine = new StringBuilder(brand.concat(".com ").concat(emailStr).concat(" "));
 		}
-		
+
 		YFCDocument inDoc = YFCDocument.getDocumentFor(inputDocument);
 		YFCElement orderElem = inDoc.getDocumentElement();
-		
-		if (orderElem != null) 
+
+		if (orderElem != null)
 		{
 			if(!YFCObject.isVoid(customerPO))
 			{
 				_subjectLine.append("- PO # ").append(customerPO);
 			}
-			
+
 			if (!YFCObject.isVoid(orderNo))
 			{
 				if(!YFCObject.isVoid(customerPO))
 				{
 				_subjectLine.append(", Order # ").append(orderNo);
-				
+
 				}else {
 					_subjectLine.append("- Order # ").append(orderNo);
 				}
-				
+
 			}
-		}	
-        
+		}
+
 		if(log.isDebugEnabled())
 		{
 			log.debug("Inside XPXUtils.stampOrderSubjectLine method - Order Confirmation email's subject Line : " + _subjectLine);
 		}
-		
+
 		if(YFCObject.isVoid(_subjectLine)){
 			log.error("Inside XPXUtils.stampOrderSubjectLine method - Order Confirmation email's subject Line is empty.");
 		}
@@ -2231,12 +1631,12 @@ public class XPXUtils implements YIFCustomApi {
 
 		return _subjectLine.toString();
 	}
-	
+
 	public void stampOrderChangeStatusSubjectLine(YFSEnvironment env,
 			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
-		
+
 		String brand = orderElement.getAttribute("EnterpriseCode");
-		String customerPO = orderElement.getAttribute("CustomerPONo");		
+		String customerPO = orderElement.getAttribute("CustomerPONo");
 		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
 		StringBuilder _subjectLine = null;
 		if("Saalfeld".equalsIgnoreCase(brand)){
@@ -2244,7 +1644,7 @@ public class XPXUtils implements YIFCustomApi {
 		}else{
 			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
 		}
-		
+
 		if(!YFCObject.isVoid(customerPO))
 		{
 			_subjectLine.append(" - PO # ").append(customerPO);
@@ -2254,46 +1654,46 @@ public class XPXUtils implements YIFCustomApi {
 			if(!YFCObject.isVoid(customerPO))
 			{
 				_subjectLine.append(", Order # ").append(formattedOrderNo);
-			
+
 			}else {
 				_subjectLine.append("- Order # ").append(formattedOrderNo);
 			}
 		}
 		orderElement.setAttribute("Subject", _subjectLine.toString());
-		
+
 		log.debug("_subjectLine: " + _subjectLine);
 	}
-	
+
 	public Document stampSubjectLine_UserProfChange(YFSEnvironment env,
 			Document inputDocument) throws Exception {
-		
+
 		String _subjectLine = null;
 		String imageUrl = "";
 		Element rootElem = inputDocument.getDocumentElement();
 
 		String brand = rootElem.getAttribute("SellerOrganizationCode");
 		imageUrl = rootElem.getAttribute("ImageUrl");
-		
-		
+
+
 		if("Saalfeld".equalsIgnoreCase(brand)){
 			_subjectLine = brand.concat("redistribution.com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
 		}else{
 			_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
 		}
-		
-		
+
+
 		//_subjectLine = brand.concat(".com").concat(" ").concat("User Profile Updated Notification"); //Start - Jira 3262
-		
+
 		log.debug("brand:" + brand);
 		log.debug("imageUrl:" + imageUrl);
 		log.debug("_subjectLine:" + _subjectLine);
-		
-		if( !YFCObject.isNull(brand) && !YFCObject.isVoid(brand) 
-				&& (YFCObject.isNull(imageUrl) || YFCObject.isVoid(imageUrl)) ) {	
+
+		if( !YFCObject.isNull(brand) && !YFCObject.isVoid(brand)
+				&& (YFCObject.isNull(imageUrl) || YFCObject.isVoid(imageUrl)) ) {
 				String imageName = getLogoImageName(env, brand);
 				String imagesRootFolder = null;
 				if("Saalfeld".equalsIgnoreCase(brand)){
-					imagesRootFolder=YFSSystem.getProperty("SaalfeldImagesRootFolder");	
+					imagesRootFolder=YFSSystem.getProperty("SaalfeldImagesRootFolder");
 				}else{
 					imagesRootFolder=YFSSystem.getProperty("ImagesRootFolder");
 				}
@@ -2303,14 +1703,14 @@ public class XPXUtils implements YIFCustomApi {
 					rootElem.setAttribute("ImageUrl",imageUrl);
 				}
 		}
-		
+
 		rootElem.setAttribute("Subject", _subjectLine);
-		
+
 		if(log.isDebugEnabled()){
 			log.debug("stampSubjectLine_UserProfChange()_OutXML: "+ SCXmlUtil.getString(inputDocument));
 		}
 		String inputXML=SCXmlUtil.getString(inputDocument);
-		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;		
+		String emailType=XPXEmailUtil.USER_PROFILE_UPDATED_NOTIFICAON;
 		String emailFrom = null;
 		if("Saalfeld".equalsIgnoreCase(brand)){
 			emailFrom=YFSSystem.getProperty("saalFeldEMailFromAddresses");  // new attribute defined in customer_overides properties….
@@ -2318,14 +1718,14 @@ public class XPXUtils implements YIFCustomApi {
 		} else {
 			emailFrom = YFSSystem.getProperty("EMailFromAddresses");
 		}
-		
-			
+
+
 		String emailOrgCode= (rootElem.getAttribute("SellerOrganizationCode")!=null?rootElem.getAttribute("SellerOrganizationCode"):"");
 		String businessIdentifier = rootElem.getAttribute("UserName");
 		XPXEmailUtil.insertEmailDetailsIntoDB(env,inputXML, emailType, _subjectLine, emailFrom, emailOrgCode,businessIdentifier);
 		return inputDocument;
 	}
-	
+
 	// Added for JIRA 1998 - Email Addr change on User Profile
 	public Document stampSubjectLine_UserEmailAddrChange(YFSEnvironment env,
 			Document inputDocument) throws Exception {
@@ -2426,20 +1826,20 @@ public class XPXUtils implements YIFCustomApi {
 		return organizationCode;
 	}
 	/***************************** Arun's changes end here **************************************/
-	
+
 	/**
 	 * @param env
 	 * @param invIndicator - inventory indicator
 	 * @param itemId
 	 * @param lineType - Line type of the line.
 	 * @return stockType - stock type of the line item.
-	 * 
+	 *
 	 * @throws YFSException
 	 * @throws RemoteException
 	 */
 	public static String getLineTypeFromInventoryIndicator(YFSEnvironment env,
 			String invIndicator, String itemId, String lineType) throws YFSException, RemoteException {
-		
+
 		String stockType = "";
 		boolean callItemList = false;
 		Document itemDoc;
@@ -2448,27 +1848,27 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		if(YFCObject.isNull(invIndicator) || YFCObject.isVoid(invIndicator)) {
 			callItemList = true;
-		} else {			
+		} else {
 			if("W".equalsIgnoreCase(invIndicator) || "I".equalsIgnoreCase(invIndicator)) {
 				stockType = "STOCK";
 			} else if("M".equalsIgnoreCase(invIndicator)) {
 				stockType = "DIRECT";
 			}
 		}
-		
+
 		if(callItemList) {
 			YFCDocument getItemListOutXML = null;
-			
+
 			YFCDocument getItemListInXML = YFCDocument.getDocumentFor("<Item/>");
 			YFCElement itemListEle = getItemListInXML.getDocumentElement();
 			itemListEle.setAttribute("ItemID", itemId);
-			
+
 			if(log.isDebugEnabled()){
 				log.debug("XPXUtils-XPXGetItemList-InXML:"+getItemListInXML.getString());
 			}
 			log.verbose("");
 			log.verbose("XPXUtils-XPXGetItemList-InXML:"+getItemListInXML.getString());
-			
+
 			itemDoc = api.executeFlow(env, "XPXGetItemList", getItemListInXML.getDocument());
 			if(itemDoc != null) {
 				getItemListOutXML = YFCDocument.getDocumentFor(itemDoc);
@@ -2482,55 +1882,55 @@ public class XPXUtils implements YIFCustomApi {
 					}
 				}
 			}
-		}		
+		}
 		return stockType;
 	}
-	
+
 	/**
 	 * @param env
 	 * @param shipToID - Ship To ID of the customer.
 	 * @return allowDirectOrderFlag - returns the flag whether direct orders are allowed or not.
-	 * 
+	 *
 	 * @throws YFSException
 	 * @throws RemoteException
 	 */
 	public static String getAllowDirectOrderForShipToCust(YFSEnvironment env,
 			String shipToID) throws YFSException, RemoteException {
-		
+
 		String allowDirectOrderFlag = "";
-		
+
 		// To get the allow direct order flag from ship to customer.
 		Document getCustListInDoc = YFCDocument.createDocument("Customer").getDocument();
 		getCustListInDoc.getDocumentElement().setAttribute("CustomerID", shipToID);
-		
+
 		Document custListOutDoc = api.executeFlow(env, "XPXGetCustomerList", getCustListInDoc);
-		
+
 		// To retrieve allowDirectOrderFlag from the customer output document.
 		if(custListOutDoc.hasChildNodes()){
 			Element extnElement = (Element) custListOutDoc.getDocumentElement().getElementsByTagName("Extn").item(0);
 			if(extnElement.hasAttribute("ExtnAllowDirectOrderFlag")){
 				allowDirectOrderFlag = extnElement.getAttribute("ExtnAllowDirectOrderFlag");
-			} 
+			}
 		}
 		if(log.isDebugEnabled()){
 			log.debug("");
-			log.debug("allowDirectOrderFlag : " + allowDirectOrderFlag);		
+			log.debug("allowDirectOrderFlag : " + allowDirectOrderFlag);
 			log.debug("");
 			log.debug("allowDirectOrderFlag = " + allowDirectOrderFlag);
 		}
 		return allowDirectOrderFlag;
 	}
-	
+
 	public Document getAdditionalAttributes(YFSEnvironment env,
 			Document inputDocument) throws Exception {
-		
+
 		if(log.isDebugEnabled()){
 			log.debug("getAdditionalAttributes Start Method - inputDocument : "+SCXmlUtil.getString(inputDocument) );
 		}
 		String storeFrontId = SCXmlUtil.getAttribute(
 				inputDocument.getDocumentElement(), "EnterpriseCode");
 		StringBuffer sb = new StringBuffer();
-		
+
 		try{
 			String emailSubject="";
 			String emailType="";
@@ -2538,7 +1938,7 @@ public class XPXUtils implements YIFCustomApi {
 			{
 				String userName = YFSSystem.getProperty("fromAddress.username");
 				String suffix = YFSSystem.getProperty("fromAddress.suffix");
-				//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding 
+				//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding
 				if("Saalfeld".equalsIgnoreCase(storeFrontId)){
 					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
 				}
@@ -2551,31 +1951,31 @@ public class XPXUtils implements YIFCustomApi {
 				}else{
 					resetSubString= storeFrontId + ".com" + " Password Reset Request Notification ";
 					}
-				Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				Element resetSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
 				"ResetPwdEmailSubject");
-					resetSubject.setAttribute("Subject", resetSubString);				
-				
+					resetSubject.setAttribute("Subject", resetSubString);
+
 				String requestID =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@RequestId");
 				String genPwd =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@GeneratedPassword");
-				
-				
+
+
 				if(requestID!=null && !requestID.equalsIgnoreCase(""))
 				{
 					emailType=XPXEmailUtil.USER_RESET_PASSWORD_EMAIL_TYPE;
 					// EB-2447 As a Saalfeld Product owner, I want to view the Saalfeld Password Reset Request Notification email ...
 					if("Saalfeld".equalsIgnoreCase(storeFrontId)){
 						emailSubject=storeFrontId + "redistribution.com" +" Password Reset Request Notification ";
-					} else{						
+					} else{
 						emailSubject=storeFrontId + ".com" + " Password Reset Request Notification ";
 					}
 				}
 				else if(genPwd != null && !genPwd.equalsIgnoreCase(""))
 			    {
 					emailType=XPXEmailUtil.USER_NOTIFICATION_EMAIL_TYPE;
-					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding... 
+					//EB-1723 As a Saalfeld product owner, I want to view the Saalfeld New User Email with correct Saalfeld branding...
 					if("xpedx".equalsIgnoreCase(storeFrontId)){
 					emailSubject = storeFrontId + ".com" + " User Creation Notification";
-					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){						
+					}else if("Saalfeld".equalsIgnoreCase(storeFrontId)){
 						emailSubject = storeFrontId + "redistribution.com" + " User Creation Notification";
 					}
 				}
@@ -2583,45 +1983,45 @@ public class XPXUtils implements YIFCustomApi {
 				{
 					emailType=XPXEmailUtil.USER_CHANGE_PASSWORD_EMAIL_TYPE;
 					//emailSubject=storeFrontId + ".com" + " User Password Change Notification ";
-					//EB-2445 As a Saalfeld product owner, I want to view the Saalfeld User Password Change email with correct Saalfeld branding.. 
-					if("xpedx".equalsIgnoreCase(storeFrontId)){						
+					//EB-2445 As a Saalfeld product owner, I want to view the Saalfeld User Password Change email with correct Saalfeld branding..
+					if("xpedx".equalsIgnoreCase(storeFrontId)){
 						emailSubject = storeFrontId + ".com" + " User Password Change Notification";
 						}
-						else if("Saalfeld".equalsIgnoreCase(storeFrontId)){											
+						else if("Saalfeld".equalsIgnoreCase(storeFrontId)){
 						emailSubject = storeFrontId + "redistribution.com" + " User Password Change Notification";
 						}
 				}
-				Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				Element notificationSubject = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
 					"NotificationPwdEmailSubject");
 					notificationSubject.setAttribute("Subject", emailSubject);
-					
+
 					String readENV = YFSSystem.getProperty("environment");
-					
+
 					if(readENV!=null)
 					{
-						Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+						Element notificationEnvironment = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
 						"NotificationENV");
 						if(readENV.trim().equalsIgnoreCase("DEVELOPMENT")){
 							notificationEnvironment.setAttribute("environment", "dev.");
-									
+
 						}else if(readENV.trim().equalsIgnoreCase("STAGING")){
 							notificationEnvironment.setAttribute("environment", "stg.");
-							
-						}			
+
+						}
 						else
 						{
 							notificationEnvironment.setAttribute("environment","");
 						}
 					}
-				
+
 				String imageName = getLogoImageName(env,storeFrontId);
 				String imagesRootFolder = YFSSystem.getProperty("ImagesRootFolder");
-				
+
 				if ("Saalfeld".equals(storeFrontId)) {
 					// replace host name, since we don't have a brand-specific setting in customer overrides props
 					imagesRootFolder = imagesRootFolder.replace("xpedx.com", "saalfeldredistribution.com");
 				}
-				
+
 				/**
 				 * In case, value form the property file is not retrieve by any
 				 * chance or there is no entry in the customer_overrides.properties,
@@ -2633,49 +2033,49 @@ public class XPXUtils implements YIFCustomApi {
 							.getProperty("IMAGES_ROOT_FOLDER");
 				}
 				log.debug("imagesRootFolder: " + imagesRootFolder);
-	
+
 				String url = imagesRootFolder + imageName;
-				Element brandImageUrl = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+				Element brandImageUrl = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
 					"BrandImageURL");
 				brandImageUrl.setAttribute("URL",url);
-				
+
 			}
-			
-			Element fromAddrElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
+
+			Element fromAddrElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
 					"FromAddr");
 			fromAddrElem.setAttribute("Email", sb.toString());
-			
+
 			// fetching the server and port details for the email template.
 			String url = null;
 			String ipaddress = YFSSystem.getProperty("ipaddress");
-			
-			
-			
+
+
+
 			String portno = YFSSystem.getProperty("portnumber");
 			String resetPasswordUrl = YFSSystem.getProperty("ResetPasswordUrl");
-			
+
 			if ("Saalfeld".equals(storeFrontId)) {
 				resetPasswordUrl = resetPasswordUrl.replace("xpedx.com", "saalfeldredistribution.com");
 			}
-			
+
 			if(!YFCUtils.isVoid(resetPasswordUrl)){
 				resetPasswordUrl = resetPasswordUrl + "/swc/home/resetPassword.action?";
-				Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-				"URLInfo");			
+				Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
+				"URLInfo");
 				urlElem.setAttribute("URL", resetPasswordUrl);
 			} else {
 				if(!(YFCUtils.isVoid(ipaddress)) && !(YFCUtils.isVoid(portno))){
 					url = "http://" +ipaddress+":"+portno+"/swc/home/resetPassword.action?";
 				}
 				if(!YFCUtils.isVoid(url)){
-					Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(), 
-					"URLInfo");			
+					Element urlElem = SCXmlUtil.createChild(inputDocument.getDocumentElement(),
+					"URLInfo");
 					urlElem.setAttribute("URL", url);
 				}
 			}
-			
+
 			/*XB-461 : Begin - Sending email through Java Mail API now*/
-			String emailXML=SCXmlUtil.getString(inputDocument);	
+			String emailXML=SCXmlUtil.getString(inputDocument);
 			String businessIdentifier =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/@Loginid");
 	        XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType, emailSubject, sb.toString(), storeFrontId,businessIdentifier);
 	        /*XB-461 : End - Sending email through Java Mail API now*/
@@ -2689,23 +2089,23 @@ public class XPXUtils implements YIFCustomApi {
 		if(log.isDebugEnabled()){
 			log.debug("End - getAdditionalAttributes method - Email was sent successfully : "+SCXmlUtil.getString(inputDocument) );
 		}
-		
+
 		return inputDocument;
 	}
-	
+
 	public  void deleteFromPLTUserLoginFailAgent(YFSEnvironment env,Document inputDocument)throws Exception{
 		try{
 			String inputXML = SCXmlUtil.getString(inputDocument);
-			String user_key =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@UserKey");			
+			String user_key =SCXmlUtil.getXpathAttribute(inputDocument.getDocumentElement(), "/User/User/@UserKey");
 			System.out.println("**********Input for reset password in delete is : "+inputXML);
 			System.out.println("******************************userkey="+user_key);
 			PLTQueryBuilder pltQryBuilder = PLTQueryBuilderHelper.createPLTQueryBuilder();
 			pltQryBuilder.setCurrentTable("PLT_USER_LOGIN_FAIL");
 			pltQryBuilder.appendString("USER_KEY", "=", user_key);
 			int loginFail = PLT_User_Login_FailDBHome.getInstance().deleteWithWhere((YFSContext)env, pltQryBuilder);
-			
+
 		}
-	
+
 	catch(Exception e){
 		log.error("Exception: " + e.getStackTrace());
 
@@ -2718,14 +2118,14 @@ public class XPXUtils implements YIFCustomApi {
 	      return xPathFactory.newXPath();
 	    }
 	}
-	
+
 	public static final List<Element> getElements(Node node, String expression) throws XPathExpressionException
-    {	      
+    {
 	    XPathExpression xpr = getXPathInstance().compile(expression);
 	    NodeList list=null;
 	    if(xpr!=null)
 	    	list = (NodeList)xpr.evaluate(node, XPathConstants.NODESET);
-	      
+
 	    List toReturn = new ArrayList();
 	    if(list!=null)
 	    {
@@ -2734,21 +2134,21 @@ public class XPXUtils implements YIFCustomApi {
 		      Node n = list.item(i);
 		      if (1 != n.getNodeType())
 		        continue;
-		      toReturn.add((Element)n);
+		      toReturn.add(n);
 		    }
-	    }	
-	    return toReturn;	    
+	    }
+	    return toReturn;
 	}
-	
+
 	public boolean checkIfOrderOnPendingHold(Document orderDocument) {
-		
+
 		YFCDocument yfcOrderDetailDoc = YFCDocument.getDocumentFor(orderDocument);
-			
+
 	    boolean isOrderOnHold = false;
 	    if (log.isDebugEnabled()) {
-	    	log.debug("XPXUtils_checkIfOrderOnPendingHold(): "+ yfcOrderDetailDoc.getString());   
+	    	log.debug("XPXUtils_checkIfOrderOnPendingHold(): "+ yfcOrderDetailDoc.getString());
 	    }
-	    
+
 	    YFCElement rootElem = yfcOrderDetailDoc.getDocumentElement();
 	    YFCElement orderHoldTypesElem = rootElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
 	    if (orderHoldTypesElem != null) {
@@ -2764,18 +2164,18 @@ public class XPXUtils implements YIFCustomApi {
 			    		   }
 			               isOrderOnHold = true;
 			               break;
-			            } 
+			            }
 	        	   }
-	           
+
 	    	}
 	    }
 	    return isOrderOnHold;
 	}
-	
+
 	public static String getFormattedOrderNumber(String orderBranch, String legacyOrderNum, String generationNum)
 	{
-		StringBuffer sb = new StringBuffer();			
-			
+		StringBuffer sb = new StringBuffer();
+
 		if(orderBranch!=null && orderBranch.length()>0)
 		{
 			if(orderBranch.length()>2) {
@@ -2786,7 +2186,7 @@ public class XPXUtils implements YIFCustomApi {
 		}
 		if(legacyOrderNum!=null && legacyOrderNum.length()>0)
 		{
-			sb.append(legacyOrderNum);				
+			sb.append(legacyOrderNum);
 			sb.append("-");
 		}
 		if(generationNum!=null && generationNum.length()>0)
@@ -2794,19 +2194,19 @@ public class XPXUtils implements YIFCustomApi {
 			if(generationNum.trim().length()==1)
 			{
 				generationNum="0"+generationNum;
-			}				
+			}
 			sb.append(generationNum);
-			
+
 		}
-		
+
 		return sb.toString();
 	}
-	
+
 	public static HashMap<String, String> readCentPropertiesFile(){
 		HashMap<String, String> map = null;
 		try
-	    { 
-			 map = XPXUtils.getProperties(propertyFile);			
+	    {
+			 map = XPXUtils.getProperties(propertyFile);
 	    }
 	    catch(Exception e)
 	    {
@@ -2814,7 +2214,7 @@ public class XPXUtils implements YIFCustomApi {
 	    }
 	    return map;
 	}
-	
+
 	public static HashMap<String, String> getProperties(String infile) throws IOException {
         final int lhs = 0;
         final int rhs = 1;
@@ -2831,7 +2231,7 @@ public class XPXUtils implements YIFCustomApi {
         bfr.close();
         return(map);
     }
-	
+
 	/**
 	 * @param applyMinimumOrderBrands The comma-delimited list of brands that apply minimum order charge.
 	 * @param storefrontId
@@ -2841,20 +2241,20 @@ public class XPXUtils implements YIFCustomApi {
 		if (applyMinimumOrderBrands == null || storefrontId == null) {
 			return false;
 		}
-		
+
 		// database stores storefrontId as uppercase and truncated at 4 characters (eg, "XPED,SAAL")
 		//		so we can uppercase and truncate the storefrontId
 		String searchKey = storefrontId.length() > 4 ? storefrontId.substring(0, 4) : storefrontId;
 		searchKey = searchKey.toUpperCase();
 		return applyMinimumOrderBrands.contains(searchKey);
 	}
-	
-	
+
+
 	public String getOrderStatusSubjectLine(YFSEnvironment env,
 			Element orderElement, String holdStatus, String orderStatusSubjectLine) throws Exception {
-		
+
 		String brand = orderElement.getAttribute("EnterpriseCode");
-		String customerPO = orderElement.getAttribute("CustomerPONo");		
+		String customerPO = orderElement.getAttribute("CustomerPONo");
 		String formattedOrderNo = orderElement.getAttribute("FormattedOrderNo");
 		StringBuilder _subjectLine = null;
 		if("Saalfeld".equalsIgnoreCase(brand)){
@@ -2862,7 +2262,7 @@ public class XPXUtils implements YIFCustomApi {
 		}else{
 			_subjectLine = new StringBuilder(brand.concat(".com ").concat(orderStatusSubjectLine));
 		}
-		
+
 		if(!YFCObject.isVoid(customerPO))
 		{
 			_subjectLine.append(" - PO # ").append(customerPO);
@@ -2872,7 +2272,7 @@ public class XPXUtils implements YIFCustomApi {
 			if(!YFCObject.isVoid(customerPO))
 			{
 				_subjectLine.append(", Order # ").append(formattedOrderNo);
-			
+
 			}else {
 				_subjectLine.append("- Order # ").append(formattedOrderNo);
 			}
@@ -2881,57 +2281,82 @@ public class XPXUtils implements YIFCustomApi {
 		return _subjectLine.toString();
 		//log.debug("_subjectLine: " + _subjectLine);
 	}
-	
+
 	public YFCDocument createOrderApprovedEmailInputDoc(YFCElement cOrderEle) {
 		//	<OrderHoldType FromStatus='' HoldType='' OrderHeaderKey='' ReasonText='' ResolverUserId='' Status='' TransactionId=''>
 		//		<Order BillToID='' CustomerContactID='' DocumentType='' EnterpriseCode='' OrderHeaderKey='' OrderNo=''/>
-		//	</OrderHoldType>		
-		
+		//	</OrderHoldType>
+
 		YFCElement cOrderHoldTypesElem = cOrderEle.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPES);
 		YFCElement cOrderHoldTypeElem  = cOrderHoldTypesElem.getChildElement(XPXLiterals.E_ORDER_HOLD_TYPE);
-		
+
 		YFCDocument orderHoldTypeDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER_HOLD_TYPE);
-		YFCElement orderHoldTypeEle = orderHoldTypeDoc.getDocumentElement();		
+		YFCElement orderHoldTypeEle = orderHoldTypeDoc.getDocumentElement();
 		orderHoldTypeEle.setAttribute(XPXLiterals.A_HOLD_TYPE, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_HOLD_TYPE));
-		orderHoldTypeEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));		
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
 		orderHoldTypeEle.setAttribute(XPXLiterals.HOLD_RELEASE_DESC, cOrderHoldTypeElem.getAttribute(XPXLiterals.HOLD_RELEASE_DESC));
 		orderHoldTypeEle.setAttribute(XPXLiterals.RESOLVER_USER_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.RESOLVER_USER_ID));
 		orderHoldTypeEle.setAttribute(XPXLiterals.A_STATUS, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_STATUS));
-		orderHoldTypeEle.setAttribute(XPXLiterals.A_TRANSACTION_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_TRANSACTION_ID));		
-		
+		orderHoldTypeEle.setAttribute(XPXLiterals.A_TRANSACTION_ID, cOrderHoldTypeElem.getAttribute(XPXLiterals.A_TRANSACTION_ID));
+
 		YFCElement orderEle = orderHoldTypeEle.createChild(XPXLiterals.E_ORDER);
 		orderEle.setAttribute(XPXLiterals.A_BILL_TO_ID, cOrderEle.getAttribute(XPXLiterals.A_BILL_TO_ID));
 		orderEle.setAttribute(XPXLiterals.CUSTOMER_CONTACT_ID, cOrderEle.getAttribute(XPXLiterals.CUSTOMER_CONTACT_ID));
 		orderEle.setAttribute(XPXLiterals.A_DOCUMENT_TYPE, cOrderEle.getAttribute(XPXLiterals.A_DOCUMENT_TYPE));
 		orderEle.setAttribute(XPXLiterals.A_ENTERPRISE_CODE, cOrderEle.getAttribute(XPXLiterals.A_ENTERPRISE_CODE));
 		orderEle.setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderEle.getAttribute(XPXLiterals.A_ORDER_HEADER_KEY));
-		orderEle.setAttribute(XPXLiterals.A_ORDER_NO, cOrderEle.getAttribute(XPXLiterals.A_ORDER_NO));		
-		
+		orderEle.setAttribute(XPXLiterals.A_ORDER_NO, cOrderEle.getAttribute(XPXLiterals.A_ORDER_NO));
+
 		return orderHoldTypeDoc;
 	}
-	
+
 	public void callChangeOrder(YFSEnvironment env, String cOrderHeaderKey, String orderConfirmationEmailSentFlag, String className) {
 		YFCDocument changeOrderInputDoc=null;
 		try {
 			changeOrderInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER);
 			changeOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHeaderKey);
-			
+
 			YFCElement extnOrderEle = changeOrderInputDoc.getDocumentElement().createChild("Extn");
 			extnOrderEle.setAttribute(XPXLiterals.ORDER_CONFIRMATION_EMAIL_SENT_FLAG, orderConfirmationEmailSentFlag);
-			
+
 			if(log.isDebugEnabled()){
 				log.debug("Inside callChangeOrder method of "+className+" class. changeOrder-InXML: " + changeOrderInputDoc.getString());
 			}
 			api.invoke(env, "changeOrder", changeOrderInputDoc.getDocument());
-			
+
 		}catch (Exception e) {
 			e.printStackTrace();
 			log.error("Inside callChangeOrder method of "+className+" class. changeOrder API call failed while updating ExtnOrderConfirmationEmailSentFlag value: ["
 						+ orderConfirmationEmailSentFlag+"] for order: ["+cOrderHeaderKey+"]");
-			
+
 			prepareErrorObject(e, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, changeOrderInputDoc.getDocument());
-	        
-		}		
+
+		}
 	}
-	
+
+	public boolean updateEmailSentFlag(YFSEnvironment env, String cOrderHeaderKey, String orderConfirmationEmailSentFlag, String className) {
+		YFCDocument changeOrderInputDoc=null;
+		try {
+			changeOrderInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORDER);
+			changeOrderInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORDER_HEADER_KEY, cOrderHeaderKey);
+
+			YFCElement extnOrderEle = changeOrderInputDoc.getDocumentElement().createChild("Extn");
+			extnOrderEle.setAttribute(XPXLiterals.ORDER_CONFIRMATION_EMAIL_SENT_FLAG, orderConfirmationEmailSentFlag);
+
+			if(log.isDebugEnabled()){
+				log.debug("Inside callChangeOrder method of "+className+" class. changeOrder-InXML: " + changeOrderInputDoc.getString());
+			}
+			api.invoke(env, "changeOrder", changeOrderInputDoc.getDocument());
+			return true;
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error("Inside callChangeOrder method of "+className+" class. changeOrder API call failed while updating ExtnOrderConfirmationEmailSentFlag value: ["
+						+ orderConfirmationEmailSentFlag+"] for order: ["+cOrderHeaderKey+"]");
+
+			prepareErrorObject(e, XPXLiterals.OU_TRANS_TYPE, XPXLiterals.YFE_ERROR_CLASS, env, changeOrderInputDoc.getDocument());
+	        return false;
+		}
+	}
+
 }

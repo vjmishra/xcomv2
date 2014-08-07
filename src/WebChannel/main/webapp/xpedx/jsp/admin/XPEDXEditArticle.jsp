@@ -68,6 +68,11 @@
 			buttonImage: '<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/calendar-icon.png',
 			buttonImageOnly: true
 		});
+		$("#cancelpage").click(function(){
+			var url = $('#toolsNewsMaintLinkId').val();
+			window.location.href = url;
+			return false;
+		});
 	});
 </script>
 
@@ -152,25 +157,20 @@
 				
 				<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 				<!-- // header end -->			
-			<div class="container no-padding">
+			<div class="container content-container">
 			      <!-- breadcrumb -->
-			     <div id="mid-col-mil">
-			      <br/>
+			     <h1><s:text name='MSG.SWC.NEWSARTL.EDIT.GENERIC.PGTITLE'/></h1>
+			      
 			      <s:url id='toolsLink' namespace='/tools' action='MyTools'>
 						<s:param name="selectedHeaderTab">ToolsTab</s:param>
 				  </s:url>
 				  <s:url id='toolsNewsMaintLink' namespace="/profile/user" action='MyNewsMaintenance'>					
 				  </s:url>
+				  <s:hidden id="toolsNewsMaintLinkId" value="%{#toolsNewsMaintLink}"/>
 <%-- 				  <div id="breadcumbs-list-name" class="page-title"><s:a href="%{toolsLink}">Tools</s:a> /  <s:a href="%{toolsNewsMaintLink}"> News Maintenance</s:a> /  <span class="breadcrumb-inactive">  New Article</span> <a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:property value='#util.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15" alt="Print This Page" />Print Page</span></a>     </div> --%>
 			     
 			       <div id="requestform">
-			        <div>
-          				<%-- <a class="underlines" href="javascript:history.go(-1)">Back</a>&nbsp;/&nbsp;<strong><s:property value='#xutil.getAttribute(#articleElement,"ArticleName")'/></strong> --%>
-      					<%-- <span class="page-title">News Maintenance</span> --%> 
-      					<span class="page-title">  <s:text name='MSG.SWC.NEWSARTL.EDIT.GENERIC.PGTITLE' /> </span> 
- 				  </div> 
- 				  <br/>
-		          <s:form name="newArticleForm" action="MyViewArticle" namespace="/profile/user" method="POST">
+			       <s:form name="newArticleForm" action="MyViewArticle" namespace="/profile/user" method="POST">
 				  <input type="hidden" name="nextActionName" value="xpedxUpdateArticle"/>
 				  <input type="hidden" name="backActionName" value="MyEditArticle"/>
 				  <input type="hidden" name="articleKey" value="<s:property value="#parameters['articleKey']"/>"/>
@@ -196,10 +196,10 @@
 		              <td  colspan="4"><textarea cols="9" name="articleBody" id="articleBody" rows="20" class="ckeditor x-input article-textarea" style="width:924px;" maxlength="2000" onkeyup="return ismaxlength(this)"><s:property value='#xutil.getAttribute(#articleElement,"Article")'/></textarea></td>
 		            </tr>
 		           <tr>
-		              <td colspan="4"><ul id="cart-actions" class="float-right">
-		            <li><s:a cssClass="grey-ui-btn" cssStyle="margin-top: 0px;" href="%{toolsNewsMaintLink}"><span>Cancel</span></s:a></li>
+		              <td colspan="4"><ul id="cart-actions" class="float-right news-page">
+		            <li><input type="button" class="btn-neutral" style="margin-top: 0px;" id="cancelpage" value="Cancel"/></li>
 		         <!-- <li><s:a href="javascript:document.newArticleForm.submit();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>   -->
-		            <li><s:a href="#" onclick="javascript:articleFormValidation();" cssClass="orange-ui-btn"><span>Preview</span></s:a></li>
+		            <li><input type="button" onclick="javascript:articleFormValidation();" class="btn-gradient" value="Preview"/></li>
 		          	</ul></td>
 		            </tr>
 		          </table>
@@ -207,7 +207,7 @@
 		        </div> 
 		<div class="clearview">&nbsp;</div>  
 		      
-		</div>
+		
 			</div>
 			      <!-- End Pricing -->
 			   <br />

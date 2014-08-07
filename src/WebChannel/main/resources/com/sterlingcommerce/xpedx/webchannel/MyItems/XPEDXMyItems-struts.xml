@@ -1,6 +1,9 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
   <package name="xpedx.myItems" namespace='/myItems' extends="wcDefault">
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
 	
 	<action name="MyItemsList" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsListAction">
 		<param name="mashups">XPEDXMyItemsList</param>
@@ -274,6 +277,7 @@
         <result name="success">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsGetAvail.jsp</result>
 	</action>
 
+	<!-- TODO delete this action. has been replaced by ajaxAddItemsToMIL -->
 	<action name="MyItemsDetailsQuickAdd" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsQuickAddAction">
 		<param name="mashups">XPEDXMyItemsDetailsQuickAdd</param>
 		<param name="resourceId">/swc/AuthUsersPage</param>
@@ -288,6 +292,9 @@
 			<param name="editMode">${editMode}</param>
 		</result>
 		<result name="validate_item">/xpedx/jsp/MyItems/XPEDXMyItemsDetailsQuickAdd.jsp</result>
+	</action>
+	<action name="ajaxAddItemsToMIL" class="com.sterlingcommerce.xpedx.webchannel.MyItems.AjaxAddItemsToMILAction">
+		<result type="json"></result>
 	</action>
 	
 	<action name="getItemAvailabilty" class="com.sterlingcommerce.xpedx.webchannel.MyItems.XPEDXMyItemsDetailsAction" method="preparePnAjaxData">

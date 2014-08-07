@@ -1,30 +1,20 @@
 package com.sterlingcommerce.xpedx.webchannel.profile.org;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCMashupAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
-import com.sterlingcommerce.xpedx.webchannel.profile.user.XPEDXUserGeneralInfo;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONArray;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -40,6 +30,7 @@ public class DynamicQueryAction extends WCMashupAction {
 	private String customerID = null;
 	private List<String> assignedCustomerList = null;
 
+	@Override
 	public String execute() {
 
 		String output = "None";
@@ -208,9 +199,9 @@ public class DynamicQueryAction extends WCMashupAction {
 							grpVal =grpVal.replace("'", "\\'");
 						}
 						String status="30";
-						String tempValue = EleCustID + "##" + grpVal+"##"+status;  
+						String tempValue = EleCustID + "##" + grpVal+"##"+status;
 						//EB 4152 : replacing single quote, since its giving javascript error for displaying authorized locations
-						 
+
 						PrntChildComb = PrntChildComb + "|" + tempValue;
 
 					}
@@ -260,7 +251,7 @@ public class DynamicQueryAction extends WCMashupAction {
 					outDoc.getDocumentElement(),
 					"//Customer/BuyerOrganization/@OrganizationCode");
 
-			
+
 			if (OrgCode.endsWith("S") || OrgCode.endsWith("B")) {
 
 				AddressLine1 = SCXmlUtil
@@ -287,15 +278,17 @@ public class DynamicQueryAction extends WCMashupAction {
 						.getXpathAttribute(
 								outDoc.getDocumentElement(),
 								"//Customer/CustomerAdditionalAddressList/CustomerAdditionalAddress/PersonInfo/@Country");
-				
+
 				//suspendedString = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status")=="30"?"(Suspended)":"";
 				String statusCode = SCXmlUtil.getXpathAttribute(outDoc.getDocumentElement(),"//Customer/@Status");
 				if(statusCode!=null && statusCode.trim().length() > 0 && statusCode.trim().equals("30")){
 				suspendedString = "(Suspended)";
-				
+
 				}
 
 				OrgCode = XPEDXWCUtils.formatBillToShipToCustomer(OrgCode);
+
+				zipcode = XPEDXWCUtils.getFormattedZipCode(zipcode);
 
 				CmbString = suspendedString+OrgName + "(" + OrgCode + ")" + AddressLine1 + ","
 						+ City + "," + state + "," + zipcode + "," + country;
@@ -330,7 +323,7 @@ public class DynamicQueryAction extends WCMashupAction {
 
 	public static void main(String[] args) throws JSONException {
 
-	
+
 
 	}
 

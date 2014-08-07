@@ -171,7 +171,7 @@ public class XPEDXPaginationComponent extends Component
          		out.append(html);*/
          if(getIsAjax())
          {
-        	 out.append(" <a href=\"#\" tabindex=\"").append(startTabIndex == null ? "" : ((CharSequence) (Integer.toString(tabindex++)))).append("\" onclick=\"javascript: callAjaxForPagination('").append(url).append("','").append(getDivId()).append("')\" >").append(label).append("</a>");
+        	 out.append(" <a href=\"#\" tabindex=\"").append(startTabIndex == null ? "" : ((CharSequence) (Integer.toString(tabindex++)))).append("\" onclick=\"javascript: callAjaxForPagination('").append(url).append("','").append(getDivId()).append("'); return false;\" >").append(label).append("</a>");
          }
          else{
         	 out.append(" <a href=\"").append(url).append("\" tabindex=\"").append(startTabIndex == null ? "" : ((CharSequence) (Integer.toString(tabindex++)))).append("\">").append(label).append("</a>");

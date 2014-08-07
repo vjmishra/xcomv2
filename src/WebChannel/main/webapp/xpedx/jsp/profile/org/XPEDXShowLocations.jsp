@@ -15,6 +15,7 @@
 <s:set name="sapParentName" value="%{#_action.getmSapName()}" />
 <s:set name="msap" value="%{#_action.getBuyrOrgName()}"/>
 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/locationModal-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/js/jquery-ui-1.8.2.custom.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.shorten<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -33,8 +34,8 @@
 </script>
 
 <style>
-.share-modal1 h2{ margin-bottom:5px; color:#000;}
-.share-modal1 {width:650px; height:auto;} 
+
+
 .indent-tree { margin-left:15px; }    
 .indent-tree-act { margin-left:25px; } 
 .checkboxTree input[type=radio]{ margin-top:1px; }
@@ -44,16 +45,6 @@ ul.checkboxTree li
 	color: #000;
 	font-weight: normal;
 	font-size: 11.7px;
-}
-.radio-container
-{
-	min-height: 200px;
-	max-height: 300px;
-	width:650px;
-	overflow: auto;
-	border: 1px solid #ccc;
-	margin: 0px 0px 10px 0px;
-	white-space: nowrap;
 }
 #collapseAllButtonsTree
 {
@@ -73,12 +64,12 @@ div#fancybox-content
 
 </style>
   
-<div class="share-modal1 xpedx-light-box" style="border-left:solid 0px; border-right:solid 0px; height:auto;">
+<div class="share-modal1 xpedx-light-box">
 <s:form name="locatoinsForm" id="locatoinsForm" namespace="/profile/org" action="getShipToBillToInfo">
 	<s:hidden name='orgCode' value="%{#_action.getWCContext().getStorefrontId()}" />
 	<input type="hidden" name="sapCustomerID" value="<s:property value='shownCustomerId' />" />
-	    <h2 style="color:#000;">Change Location</h2>
-		<br /> 
+	    <h1>Change Location</h1>
+		
 		<div class="radio-container">
 		<s:property value="%{#_action.getBuyrOrgName()}"/><br />
 			<ul id="">
@@ -95,20 +86,16 @@ div#fancybox-content
 			</ul>
 		</div>
 		<div style="" class="clearview"> 
-			<div>
+		
 	            <ul class="float-right">
 	              <li class="float-left margin-10">
-	              	<s:a cssClass="grey-ui-btn "	href="javascript:$.fancybox.close();">
-						<span>Cancel</span>
-						</s:a>
+	              		<input type="button" class="btn-neutral" onclick="javascript:$.fancybox.close();" value="Cancel"/>
 					</li>
 	              <li class="float-right">
-	              	<s:a href="javascript:submitForm()" cssClass="green-ui-btn">
-							<span>Apply</span>
-						</s:a>
+	              		<input  type="button" class="btn-gradient" onclick="javascript:submitForm()" value="Apply"/>
 					</li>
 	            </ul>
-	          </div>
+	         
          </div>
 </s:form>
 </div>		

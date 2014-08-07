@@ -1,3 +1,7 @@
+/**
+ * NOTE: This file was developed by Sterling(IBM) consultants in 2010 - it was never actually used.
+ * See CustomPunchoutOrderAction.java for the 2014 code that was implemented by xpedx instead.
+ */
 package com.sterlingcommerce.xpedx.webchannel.punchout.order;
 
 import java.util.Map;
@@ -37,6 +41,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
  * (i.e. return to) an e-procurement system.  The initial version
  * only supports Ariba e-procurement systems.
  */
+@Deprecated
 public class XPEDXProcurementPunchOutAction extends WCMashupAction
 {
     public static final String MODE_SAVE = "save";

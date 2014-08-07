@@ -291,7 +291,7 @@ sorttable = {
         sortrevind = document.createElement('span');
         sortrevind.setAttribute("class","white");
         sortrevind.id = "sorttable_sortrevind";
-        sortrevind.innerHTML = '&nbsp<img alt="" src="/swc/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
+        sortrevind.innerHTML = '&nbsp<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/icons/12x12_white_down.png" class="sort-order sort-desc">';
         thisS.appendChild(sortrevind);
         return;
       }
@@ -305,7 +305,7 @@ sorttable = {
         sortfwdind = document.createElement('span');
         sortfwdind.setAttribute("class","white");
         sortfwdind.id = "sorttable_sortfwdind";
-        sortfwdind.innerHTML = '&nbsp<img alt="" src="/swc/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
+        sortfwdind.innerHTML = '&nbsp<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
         thisS.appendChild(sortfwdind);
         return;
       }
@@ -327,7 +327,7 @@ sorttable = {
       sortfwdind = document.createElement('span');
       sortfwdind.setAttribute("class","white");
       sortfwdind.id = "sorttable_sortfwdind";
-      sortfwdind.innerHTML = '&nbsp;<img alt="" src="/swc/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
+      sortfwdind.innerHTML = '&nbsp;<img alt="" src="' + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/icons/12x12_white_up.png" class="sort-order sort-desc">';
       thisS.appendChild(sortfwdind);
 
         // build an array to sort. This is a Schwartzian transform thing,

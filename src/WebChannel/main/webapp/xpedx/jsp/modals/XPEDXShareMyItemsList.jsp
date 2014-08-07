@@ -39,6 +39,8 @@
 			<s:hidden name="editMode" value="%{editMode}"></s:hidden>
 			<s:hidden name="itemCount" value="%{itemCount}"></s:hidden>
 			<s:hidden name="shareAdminOnly1" value="%{shareAdminOnly}"></s:hidden>
+			<s:hidden name="sharePrivateFlag" value="%{getSharePrivateField().trim()}"></s:hidden>
+		
 			
 			<s:set name="rbPermissionShared" value="%{''}" />
 			<s:set name="rbPermissionPrivate" value="%{''}" />
@@ -49,10 +51,18 @@
 			<s:else>
 				<s:set name="rbPermissionPrivate" value="%{' checked '}" />
 			</s:else>
-			<s:if test="getSharePrivateField() != '' && getSharePrivateField() != null" >
+			
+			
+			<s:if test='%{getSharePrivateField()!= null && getSharePrivateField().trim() != ""}'>
+				<s:hidden name="test11" value="%{getSharePrivateField().trim()}"></s:hidden>
 				<s:set name="rbPermissionShared" value="%{''}" />
 				<s:set name="rbPermissionPrivate" value="%{' checked '}" />
 			</s:if>
+			<s:else>
+				<s:set name="rbPermissionPrivate" value="" />
+				<s:set name="rbPermissionShared" value="%{' checked '}" />
+			</s:else>
+			
 			<s:set name="saCV" value="%{''}" />
 			<s:if test='%{shareAdminOnly == "Y"}'>
 				<s:set name="saCV" value="%{' checked '}" />
@@ -147,7 +157,46 @@
 					return;
 				}
 				
-				function submitSL(){
+
+				function checkifSharedisSelected() {					
+					var radioObj =document.getElementById("XPEDXMyItemsDetailsChangeShareList").sharePermissionLevel
+					
+					if(!radioObj)
+						return "";
+					var radioLength = radioObj.length;
+					
+					if(radioLength == undefined)
+						if(radioObj.checked)
+							return radioObj.value;
+						else
+							return "";
+					for(var i = 0; i < radioLength; i++) {						
+						if(radioObj[i].checked) {
+				                        if(radioObj[i].id =="rbPermissionShared")
+				                            return "shared";
+				                        else
+				                            return radioObj[i].value;
+						}
+					}
+					return "";
+				}		
+				
+				function submitSL(){					
+					try{
+								
+						if (checkifSharedisSelected() == "shared" && checkAddressSelection() != "")
+						{							
+							var returnErrorMsgHL="Please select at least one location to share.";
+							document.getElementById("errorMsgForAddressFieldsHL1").innerHTML =returnErrorMsgHL;
+						//	alert(document.getElementById("errorMsgForAddressFieldsHL1").innerHTML);
+							document.getElementById("errorMsgForAddressFieldsHL1").style.display = "inline";
+							
+							return;
+						}
+					}catch(err){
+						
+					}
+					
 					var customerPaths=document.getElementsByName("customerPaths");
 					var custID;
 					for(var i=0;i<customerPaths.length;i++)
@@ -178,7 +227,15 @@
 					Ext.get('XPEDXMyItemsDetailsChangeShareList').dom.submit();
 				}
 			</script>
-		
+			
+				
+			
+			<div class="fFVVEM_wrap">
+				<div class="clear"></div>
+				<div class="error" id="errorMsgForAddressFieldsHL1" style="display: none"></div>	
+				<div class="error" id="errorMsgForMandatoryFieldsHL1" style="display: none"></div>
+			
+			</div>
 			
 			<div class="button-container addpadtop15">
 				<input class="btn-gradient floatright addmarginright10" type="submit" value="Save" onclick="submitSL(); return false;" />

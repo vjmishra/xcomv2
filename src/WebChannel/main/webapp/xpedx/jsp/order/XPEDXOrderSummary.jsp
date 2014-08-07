@@ -35,9 +35,13 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
  <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+ <!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!--  End Styles -->
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
@@ -139,25 +143,40 @@ function setTotalPrice(val){
 	}
 	
 	function validateCustomerPO()
-	{
-		
-		var errordiv=document.getElementById("requiredCustomerPOErrorDiv");
-		var errorMsg = document.getElementById("errorMsg");
+	{		
+		var errordiv=document.getElementById("requiredCustomerPOErrorDiv");		
 		errordiv.style.display="none";
+		var errorMsg = document.getElementById("errorMsg");
 		errorMsg.style.display="none";
+		errorMsg.innerHTML="";
+		var emailObj=document.getElementById("newEmailAddr");
+		emailObj.style.borderColor="";
 		var splInstructionsField = document.getElementById("OrderSummaryForm_SpecialInstructions");
 		splInstructionsField.style.borderColor="";
 		var po_comboObj=document.getElementById("po_combo_input");
+
 		if(po_comboObj.value.trim().length == 0)
 		{			
 			errordiv.style.display="block";
 			po_comboObj.style.borderColor="#FF0000";
+			errordiv.innerHTML="PO #: is required field";
 			return false;
 		}
 		else
 		{
 			//setCustomerPONumber();validateForm_OrderSummaryForm;submitOrder();
-			validateFormSubmit();
+			po_comboObj.style.borderColor="";
+			errordiv.style.display="none";
+			errordiv.innerHTML="";
+			
+			if(emailObj != null && emailObj.value != ''){
+				// only validate email if checkbox is selected
+				if ($('#emailAddrSaveNeeded').is(':checked') && !validateEmail()) {
+					return false;
+				}
+			}
+			
+			validateFormSubmit();	
 			return false; //changed by bb6
 		}
 	}
@@ -216,7 +235,35 @@ function isValidDate(dtStr)
 	return true
 	}
 //EN of EB 2458
-	function validateFormSubmit(){
+
+//Added for EB-5457 - Email validation for comma saprated email addresses
+function validateEmail() {
+	var errorMsg = document.getElementById("errorMsg");
+	
+	errorMsg.style.display="none";
+	errorMsg.innerHTML ="";
+	var emailObj=document.getElementById("newEmailAddr");
+	emailObj.style.borderColor="";
+	var emailStr = document.getElementById("newEmailAddr").value;
+
+	var pattern=/^[A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Z]{2,4}(?:[,][A-Z0-9\._%-]+@[A-Z0-9\.-]+\.[A-Z]{2,4})*$/i;
+
+	var emailArray = emailStr.match(/[^\r\n\t\s,]+/g);
+	for (var i = 0, len = emailArray.length; i < len; i++) {
+		var email = emailArray[i];
+
+		if(!pattern.test(email)){
+			errorMsg.innerHTML = "Invalid email address. Please enter valid email addresses separated by commas.";
+			errorMsg.style.display="inline";			
+			emailObj.style.borderColor="#FF0000";
+			return false;
+	    }
+	}
+	
+    return true;
+}
+
+function validateFormSubmit(){
 		//Added For Jira 3232
 	    //Commented for 3475
 		//Ext.Msg.wait("Processing...");
@@ -313,7 +360,7 @@ function isValidDate(dtStr)
 		}
     	//ENd of EB 1975
     	//Added for 3475
-    	Ext.Msg.wait("Processing...");
+    	showProcessingIcon();
     	validateForm_OrderSummaryForm(),submitOrder()
    // document.OrderSummaryForm.submit();
     returnval = true;
@@ -668,6 +715,10 @@ from session . We have customer Contact Object in session .
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
 <s:set name="pnaErrorStatusMsg" value="#_action.getAjaxLineStatusCodeMsg()"/>
 <body class="ext-gecko ext-gecko3">
+
+<div >
+     <div class="loading-icon" style="display:none;"></div>
+</div> 
 <div id="main-container">
 <div id="main">
 <s:action name="xpedxHeader" executeResult="true" namespace="/common" >
@@ -683,12 +734,14 @@ from session . We have customer Contact Object in session .
 	namespace="/order" method="POST">
 	<s:hidden name='fullBackURL' value='%{#returnURL}' />
 	<s:hidden name='customerHoldCheck' value='' id='customerHoldCheck'/>
-	<div class="container checkout"><!-- breadcrumb -->
-		<div id="breadcrumbs-list-name" class="breadcrumbs-no-float">
-		<span class="page-title">Checkout</span>
-	<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink" style="margin-top:0px;">
-		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
-		</div>
+
+	<div class="container content-container">
+			<h1>Checkout</h1>
+			<a href="javascript:window.print();"> <span class="print-ico-xpedx underlink">
+				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif"
+					width="16" height="15" alt="Print Page" />Print Page</span></a>
+		
+
 		<!--Commented for 3098  -->
 		<!-- <div class="error"  style="float:right; margin-right: 12px;display:none;" id="errorMsg" ></div> -->
 		<%--jira 2885 --%>
@@ -712,7 +765,7 @@ from session . We have customer Contact Object in session .
 	    --%>
 <!-- 	new ui	 -->
 	<s:set name='renderPersonInfo' value='#billTo' />
-	<div class="checkout-body" id="checkout-container">
+	<div class="checkout-body" id="checkout-container" style="margin:0px">
 		<fieldset>
 			<legend>
 
@@ -1729,7 +1782,7 @@ from session . We have customer Contact Object in session .
 				<s:set name = "setTBD" value="%{true}"/>
 			</s:if>
 			<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<div class="cart-sum-right">
+			<div class="cart-sum-right" style="margin-right:-10px">
 			<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 				<table cellspacing="0"  align="right">
 					<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
@@ -1835,27 +1888,28 @@ from session . We have customer Contact Object in session .
 		<!--bottom button bar -->
 		<div class="bottom-btn-bar">
 		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-			<a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Cart</span></a>
+			<input class="btn-neutral floatleft" type="button" value="Edit Cart" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>";' />
 		</s:if>
-		<s:else><a class="grey-ui-btn" id="left" href="#" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>"'><span>Edit Order</span></a>
+		<s:else>
+			<input class="btn-neutral floatleft" type="button" value="Edit Order" onclick='window.location="<s:property value="#draftOrderDetailsURL"/>";' />
 		</s:else>	
 		
 		<s:if test="#_action.getIsCustomerPOMandatory() =='true'" >
 			<%-- <a class="orange-ui-btn" id="right" href="#" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a> --%>
 			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Approve and Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Approve and Submit Order" onclick='validateCustomerPO();' />
 			</s:if>
 			<s:else>
-				<a class="orange-ui-btn" id="right" href="" onclick='javascript:return validateCustomerPO();'><span>Submit Order</span></a>
+				<input class="btn-gradient floatright" type="button" value="Submit Order" onclick='validateCustomerPO();' />
 			</s:else>	
 		</s:if>
 		<s:else>
 <%-- 				 <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateRushOrderCommentSubmit(),setCustomerPONumber(),validateForm_OrderSummaryForm(),submitOrder()'><span>Submit Order</span></a>  --%>
 			<s:if test="%{#editOrderFlag == 'true' && #approveOrderFlag == 'true'}">				
-			     <a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Approve and Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Approve and Submit Order" onclick='validateFormSubmit();' />
 			</s:if>
 			<s:else>
-				<a class="orange-ui-btn" id="right" href="#" onclick='javascript:validateFormSubmit();'><span>Submit Order</span></a>
+				<input class="btn-gradient floatright addmarginright10" type="button" value="Submit Order" onclick='validateFormSubmit();' />
 			</s:else>    
 		</s:else>	
 			
@@ -1896,6 +1950,9 @@ from session . We have customer Contact Object in session .
 </s:form>
 
 </div>
+<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ></div>
+    </div>
 <!-- id="main" -->
 </div>
 <!-- id="main-container" -->

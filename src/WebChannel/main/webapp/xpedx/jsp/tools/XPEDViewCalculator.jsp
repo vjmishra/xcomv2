@@ -14,7 +14,7 @@
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
@@ -31,13 +31,16 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/theme-xpedx_v1.2<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-mil<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-mil-new<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-forms<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/xpedx-quick-add<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/prod-details<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
-
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 
      
    
@@ -102,16 +105,16 @@
         <div id="main">
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
         
-			<div class="container"> 
+			<div class="container content-container"> 
+					<h1> Imposition Calculator</h1>
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <a href="<s:url action="XPEDXTools" namespace="/xpedx/tools" includeParams='none'/>">Tools</a>  / <span class="breadcrumb-inactive">Imposition Calculater</span> Commented for jira 1538-->
                 </div>                               
                 
                 <div id="mid-col-mil"><div style=" width: 600px;">  
-                 <div class="clearview">&nbsp;</div>
-                 <h2> Imposition Calculator</h2>
-                  To calculate the possible options for cutting a smaller sheet size from a larger sheet size, enter as much information as possible for the most accurate calculations.
+                 
+                 To calculate the possible options for cutting a smaller sheet size from a larger sheet size, enter as much information as possible for the most accurate calculations.
                   
                   <div id="requestform">
 <div class="clearview">&nbsp;</div> 
@@ -178,7 +181,7 @@
                           <td colspan="5"> 
                             <!-- <ul id="cart-actions"><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="clearValues();"><span>Clear</span></a></li>-->
                               <!-- Changes done for jira 1538 -->
-                              <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onClick="clearValues();"><span>Clear</span></a></li><li><a href="#" onclick="return checkCalculatorValues();" class="green-ui-btn"><span>Calculate</span></a></li>  
+                              <ul id="cart-actions" style="height:auto;"><li><input class="btn-neutral" type="button" href="#" onClick="clearValues();" value="Clear"/></li><li><input href="#" onclick="return checkCalculatorValues();" class="btn-gradient" type="button" value="Calculate"/></li>  
                             </ul>
                          </td>
                         </tr>                       

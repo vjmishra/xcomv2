@@ -1,12 +1,13 @@
 package com.sterlingcommerce.xpedx.webchannel.common.megamenu;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Simple data structure for mega menu items.
  */
-public class MegaMenuItem {
+public class MegaMenuItem implements Serializable {
 
 	private String id;
 	private String path;

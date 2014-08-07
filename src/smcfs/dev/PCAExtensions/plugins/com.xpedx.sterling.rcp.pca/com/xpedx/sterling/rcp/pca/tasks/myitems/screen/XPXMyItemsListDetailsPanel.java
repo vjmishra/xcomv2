@@ -247,7 +247,7 @@ public class XPXMyItemsListDetailsPanel extends Composite implements IYRCComposi
 
 		txtListDesc = new Text(grpSearchFields, SWT.BORDER);
 		txtListDesc.setLayoutData(gdListName);
-		txtListDesc.setTextLimit(50);
+		txtListDesc.setTextLimit(250);
 		txtListDesc.setData("yrc:customType", "Text");
 		txtListDesc.setData("name", "txtListDesc");
 		

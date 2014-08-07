@@ -19,11 +19,15 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link rel="stylesheet" type="text/css"
                href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!-- javascript -->
 <!-- sterling 9.0 base  do not edit  javascript move all functions to js/global-xpedx-functions.js -->
@@ -235,13 +239,11 @@ function showSplitDiv(divId)
 		 document.forms["approval"].elements["OrderHeaderKey"].value = orderHeaderKey;
 		}
 		//modified for jira 3484
-		var myMask;
 	    function openNotePanelSetAction(actionValue,orderHeaderKey){
-	    	var waitMsg = Ext.Msg.wait("Processing...");
-			myMask = new Ext.LoadMask(Ext.getBody(), {msg:waitMsg});
-			myMask.show();
+	    	
 			//end for XBT - 322
 		 if(actionValue == "Accept"){
+			 showProcessingIcon();
 		     document.forms["approval"].elements["ApprovalAction"].value = "1300";
 		     if(document.getElementById("ReasonText1")!=null && document.getElementById("ReasonText1").value==""){
 			 		document.getElementById("ReasonText").value="Empty";
@@ -444,29 +446,30 @@ function showSplitDiv(divId)
 
 <body class="  ext-gecko ext-gecko3" >
 <div id="main-container">
-    <div id="main" class=" order-pages">
-        <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-        <div class="container orders-page">
-        
-        <!-- breadcrumb -->
-                <div id="breadcumbs-list-name" >
-                	<span class="page-title">
-                	<s:if test='#orderType != "Customer" ' >
-                		<!-- Order Detail  -->
-                		 <s:text name='MSG.SWC.ORDR.ORDRDETAIL.GENERIC.PGTITLE' />
-                	</s:if>
-                	<s:else>
-                		<!-- Web Confirmation Detail -->
-                	   <s:text name='MSG.SWC.ORDR.WEBCONFDETAIL.GENERIC.PGTITLE' />
-                	</s:else>
-                	</span>
-                	<a href="javascript:window.print()"><span style="margin-top: 5px" class="print-ico-xpedx orders underlink"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />Print Page</span></a>
-					<s:if test = "#_action.isOrderInPendingChageState()" >
-                	   <div style="margin-right:5px; font-weight: normal;float:right;" class="notice">Click 'Refresh' to cancel changes in progress and return to the original order</div>
-                	  
-              	  	</s:if>
-                </div>
-                <!-- end breadcrumb -->
+	<div id="main" class=" order-pages">
+		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+		<div class="container content-container">
+
+			<s:if test='#orderType != "Customer" '>
+				<!-- Order Detail  -->
+				<h1><s:text name='MSG.SWC.ORDR.ORDRDETAIL.GENERIC.PGTITLE' /></h1>
+			</s:if>
+			<s:else>
+				<!-- Web Confirmation Detail -->
+				<h1><s:text name='MSG.SWC.ORDR.WEBCONFDETAIL.GENERIC.PGTITLE' /></h1>
+			</s:else>
+
+       		<div style="margin-right: 0px;" class="print-ico-xpedx orders underlink">
+       			<a href="javascript:window.print()">
+       				<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />
+          			Print Page
+         		</a>
+   			</div>
+
+			<s:if test = "#_action.isOrderInPendingChageState()" >
+				<div style="margin-right:5px; font-weight: normal;float:right;" class="notice">Click 'Refresh' to cancel changes in progress and return to the original order</div>
+			</s:if>
+
                 <h5 align="center"><b><font color="red"><s:property value="#_action.getErrorMsg()"/></font></b></h5>
                 <s:if test='%{#extnOUFailureFlag == "Y"}'>
                 	<h5 align="center"><b><font color="red">Please contact your CSR for current information on this order.</font></b></h5>
@@ -479,7 +482,7 @@ function showSplitDiv(divId)
                 </s:if>
                 
                 <!-- begin top section -->
-                <div id="wc-btn-bar" style="width:98.3%;padding-top:5px">
+                <div id="wc-btn-bar" style="width:976px;padding-top:5px; margin-left:-20px">
                 <s:form namespace="/order" method="post"  id= "postOrderForm" name='postOrderForm'>
 		            <s:hidden name="orderHeaderKey" value="%{dorderHeaderKey}" />
 		            <s:hidden name="draft" value="%{#draftOrderFlag}"/>
@@ -492,23 +495,23 @@ function showSplitDiv(divId)
 			            <s:set name='orderLineKey' value='#xutil.getAttribute(#orderLine,"OrderLineKey")'/>
 			            <s:hidden name="orderLineKeyList" value='%{#orderLineKey}' id='orderLineKeyList_<s:property value="#orderLineKey"/>'/>
 		            </s:iterator>
-		            <s:a id='returnOrderListId' href='%{orderListReturnUrl}' cssClass="grey-ui-btn float-left top-gray-btn"><span>Return to Orders</span></s:a>
-	                
+					<input class="btn-neutral floatleft top-gray-btn" id='returnOrderListId' type="button"
+						value="Return to Orders" onclick='window.location="<s:property value="orderListReturnUrl"/>";' />
+
 	                <s:if test ="#_action.approvalAllowed() && #status != 'Cancelled'" >
-		                <s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve /Reject Order</span></s:a>
-<%-- 						<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Reject Order</span></s:a> --%>
+	                	<input class="btn-neutral floatright" type="button" value="Approve / Reject Order" onclick="openNotePanel('approvalNotesPanel', 'Approve','<s:property value="dorderHeaderKey"/>');" />
 		            </s:if>
 		              
 	            <s:set name="isEstimator" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	            <%--	Using CustomerContactBean object from session
 	            <s:set name="isEstimator" value="%{#wcContext.getWCAttribute('isEstimator')}" />
 	            --%>
-	            <s:if test="!#isEstimator">
-	               <s:if test='%{#status != "Cancelled"}'>
+				<s:if test="!#isEstimator">
+					<s:if test='%{#status != "Cancelled"}'>
 					<s:if test="#_action.canOrderAgain() && #orderType == 'Customer' ">
 						<%--Added the below condition for extnLegOrderType for Jira 3544 --%>
 						<s:if test='(#extnLegOrderType != "Q" && #extnLegOrderType != "F" && #extnLegOrderType != "R" && #extnLegOrderType != "I")'>
-						<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn orders"><span>Re-Order</span></a>
+							<input class="btn-neutral orders floatright addmarginright10" type="button" value="Re-Order" onclick="xpedxOrderAgain();" />
 						</s:if>
 					</s:if>
 					</s:if>
@@ -528,18 +531,18 @@ function showSplitDiv(divId)
 						<s:param name="approvalAllowedFlag" value="#approvalAllowed"></s:param>												
 					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
-								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
-							</s:if>
+						<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag !="Y"'>					
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+						</s:if>
 					</s:if>				
 					<s:else>					
 						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>
-							<a href="javascript:editOrder('${urlEditOrderId}');"  style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>					
 					</s:else>
 				 </s:if>
 				 <s:if test = "#_action.isOrderInPendingChageState()" >
-					 <a href="javascript:refreshOrder('${urlResetOrderId}');" style="float:right" class="grey-ui-btn" id='refreshButtonId'><span>Refresh</span></a>
+					<input type="button" id='refreshButtonId' class="btn-neutral floatright addmarginright10" value="Refresh" onclick="refreshOrder('${urlResetOrderId}');" />
                		<%--OOTB button for refreshing order -Amar 
                		 	<s:submit type="button"   key='ORDER_REFRESH' id='refreshButtonId'  value='ORDER_REFRESH' onclick="javascript:refreshOrder('%{urlResetOrderId}');return false" cssClass='submitBtnBg1' tabindex="96"/>
               	  	--%>
@@ -547,7 +550,7 @@ function showSplitDiv(divId)
 					<br/> <br/> <br/>
                  </s:form>
                  </div>
-                <div class="rounded-border top-section">
+                <div class="rounded-border top-section" style="margin-left:0px">
                 	<!-- begin content w/border -->
 			<fieldset class="x-corners mil-col-mil-div">
 			<!-- text on border -->
@@ -758,7 +761,7 @@ function showSplitDiv(divId)
                         <br/><!-- blank line for george -->
                         <!-- Start Jira 4303 - Kubra -->
                          <s:if test='#isFOMessageDisplay  && #orderType == "Customer" '>
-							<div class="noticewebconfpage" id="msgForOrder" style="display : block;"> To see current fulfillment information, please go to the Order Detail page by clicking on the Order Number.&nbsp;<br/></div>
+							<div  id="msgForOrder" style="display : block;"><p class="noticewebconfpage"> To see current fulfillment information, please go to the Order Detail page by clicking on the Order Number.&nbsp;</p></div>
 						 </s:if>
                          <!-- End Jira 4303 - Kubra -->
                         
@@ -801,7 +804,7 @@ function showSplitDiv(divId)
 	    </div>
 	    
 	    <!-- begin table header -->
-	    <div class="wc-table-header">
+	    <div class="wc-table-header" style="margin-left:-9px">
 	    <table class="full-width no-border">
 	    		<tr>
 	    			<td class="text-right table-header-bar-left white">Price (<s:property value='%{currencyCode}'/>)</td>
@@ -875,7 +878,7 @@ function showSplitDiv(divId)
 			<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
 			<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 			
-			    <div 
+			    <div style="margin-left:0px"
 			    <s:if test='%{#orderLineStatIndexSize == 1}'>class="middle-section rounded-border rr-border WC" id="one-item"</s:if>
 			    	<s:elseif test='%{#orderLineStatIndex.count == 1}'>class="middle-section rounded-border rr-border WC" id="first-item"</s:elseif>
 					<s:elseif test="#orderLineStatIndex.last">class="middle-section rounded-border rr-border WC" id="last-item"</s:elseif>
@@ -1390,7 +1393,7 @@ function showSplitDiv(divId)
 		<s:set name='shippableOrderPrice' value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#orderDetailExtn.getAttribute("ExtnTotalShipValue"))'/>
 		
 		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
-			<div class="cart-sum-right">
+			<div class="cart-sum-right" style="margin-right:-10px">
 				<table cellspacing="0"  align="right">
 					<tr>
 						<th>Subtotal:</th>
@@ -1553,9 +1556,11 @@ function showSplitDiv(divId)
 		</s:if>		
 		<div class="clearall">&nbsp;</div>
 		
-		<div id="wc-btn-bar" class="padding-top" style="width:98.3%">
-		<!--Changed returnOrderListId for  Jira 2039  -->
-			<s:a id='returnOrderListId' href='%{orderListReturnUrl}' cssClass="grey-ui-btn return-orders float-left"><span>Return to Orders</span></s:a>
+		<div id="wc-btn-bar" class="padding-top" style="width:960px; margin-left:0px">
+			<!--Changed returnOrderListId for  Jira 2039  -->
+			<input class="btn-neutral return-orders floatleft addmarginright10" id='returnOrderListId' type="button"
+				value="Return to Orders" onclick='window.location="<s:property value="orderListReturnUrl"/>";' />
+
 			<s:if test="%{'Invoiced' == #xutil.getAttribute(#orderDetail,'Status')}">
 			<!--<s:a href="%{returnItemsLink}" cssClass="grey-ui-btn float-left"><span>Return Items</span></s:a>-->
 			</s:if>
@@ -1564,27 +1569,26 @@ function showSplitDiv(divId)
 			<s:if test="!#isEstimator">
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
 							<s:if test="#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview()">
-			      				<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+								<input class="btn-neutral" type="button" value="Cancel Order" onclick="cancelOrder();" />
 			     			</s:if>
 					</s:if>
 					<s:else>				
 						<s:if test="#_action.isEditableOrder()">
-							<a href="javascript:cancelOrder();" class="grey-ui-btn"><span>Cancel Order</span></a>
+								<input class="btn-neutral" type="button" value="Cancel Order" onclick="cancelOrder();" />
 					  	</s:if>				
 					</s:else>
 			</s:if>
 						
 			<s:if test ="#_action.approvalAllowed() && #status != 'Cancelled'" >
-				<s:a key="accept" href="javascript:openNotePanel('approvalNotesPanel', 'Approve','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Approve / Reject Order</span></s:a>
-<%-- 				<s:a key="reject" href="javascript:openNotePanel('approvalNotesPanel', 'Reject','%{dorderHeaderKey}'); " cssClass="grey-ui-btn" cssStyle="float:right"><span>Reject Order</span></s:a> --%>
+				<input class="btn-neutral floatright" type="button" value="Approve / Reject Order" onclick="openNotePanel('approvalNotesPanel', 'Approve','<s:property value="dorderHeaderKey"/>');" />
 			</s:if>
 			
 			<s:if test="!#isEstimator">
-			<s:if test='%{#status != "Cancelled"}'>
+				<s:if test='%{#status != "Cancelled"}'>
 				<s:if test="#_action.canOrderAgain()  && #orderType == 'Customer'">
 					<%--Added the below condition for extnLegOrderType for Jira 3544 --%>
 					<s:if test='(#extnLegOrderType != "Q" && #extnLegOrderType != "F" && #extnLegOrderType != "R" && #extnLegOrderType != "I")'>
-					<a href="javascript:xpedxOrderAgain();" style="float:right" class="grey-ui-btn re-order"><span>Re-Order</span></a>
+						<input class="btn-neutral re-order floatright addmarginright10" type="button" value="Re-Order" onclick="xpedxOrderAgain();" />
 					</s:if>
 				</s:if>
 				</s:if>
@@ -1602,13 +1606,13 @@ function showSplitDiv(divId)
 						<s:param name="approvalAllowedFlag" value="#approvalAllowed"></s:param>												
 					</s:url>
 					<s:if test='#_action.isCustomerOrder(#orderDetail)'>					
-							<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
-								<a href="javascript:editOrder('${urlEditOrderId}');" style="float:right" class="grey-ui-btn edit-order"><span>Edit Order</span></a>
-							</s:if>
+						<s:if test='#_action.isEditableOrder() && ! #_action.isFOCreated() && ! #_action.isCSRReview() && #extnOUFailureFlag != "Y"'>
+							<input class="btn-neutral edit-order floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
+						</s:if>
 					</s:if>		
 					<s:else>				
 						<s:if test='#_action.isEditableOrder() && #extnOUFailureFlag != "Y"'>			     
-							<a href="javascript:editOrder('${urlEditOrderId}');"  style="float:right" class="grey-ui-btn"><span>Edit Order</span></a>					
+							<input class="btn-neutral floatright addmarginright10" type="button" value="Edit Order" onclick="editOrder('${urlEditOrderId}');" />
 						</s:if>				
 					</s:else>
 			</s:if>
@@ -1621,19 +1625,6 @@ function showSplitDiv(divId)
 <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </div>
 
-
-<script type="text/javascript">
-/* 	Ext.onReady(function(){             	          		 
-        		  new Ext.ToolTip({        
-        			  	 target: 'tip_${orderHeaderKey}',
-					 anchor: 'right',
-					 html:	Ext.DomQuery.selectNode('.orderTotalAdjustmentLightBox').innerHTML,													
-					 autoHide: true,
-					 closable: true
-				});
-        		 	Ext.QuickTips.init();
-        		 }); */
-</script>
 
 <div id="split-order-overlay" style="display: none; right:893px; top:215.5px;">
 	<div>
@@ -1834,6 +1825,9 @@ function showSplitDiv(divId)
 <a href="#adjustmentsLightBox1" id="adjustmentsLightBox" style="display:none"></a>
 <s:if test ="#_action.approvalAllowed()" >
 	<swc:dialogPanel  title="" isModal="true" id="approvalNotesPanel"> 
+	    <div >
+             <div class="loading-icon" style="display:none;"></div>
+         </div>	
 			
 		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
 			<h2>Approval / Rejection Comments</h2>
@@ -1857,6 +1851,9 @@ function showSplitDiv(divId)
 				</ul>
 			</s:form>
 		</div>
+		<div class="loading-wrap"  style="display:none;">
+            <div class="load-modal" ></div>
+         </div>
 	 </swc:dialogPanel>   
 </s:if>     
 <!-- end container  -->

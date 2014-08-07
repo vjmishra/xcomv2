@@ -88,6 +88,11 @@ public class XPEDXOrderUtils {
 	public final static String ITEM_EXTN_KEY = "ITEM_EXTN";
 	public final static String ITEM_LIST_KEY = "ITEM_LIST_KEY";
 	public static ArrayList<String> itemList = new ArrayList<String>();
+
+	public static enum CartSummaryPriceStatus {
+		NORMAL, TBD;
+	}
+
 	//XB-687 changes Start
 	//This map will have item id as key and value as a map with all UOMs and "Y" or "N" flag to indicate if it is a customer UOM or not
 	/*public static LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
@@ -1373,6 +1378,209 @@ public class XPEDXOrderUtils {
 		ServletActionContext.getRequest().setAttribute("ItemCustomerUomConvFactHashMap", itemCustomerUomConvFactHashMap);
 		return itemIdsUOMsDescMap;
 
+	}
+	/**
+	 * Added for EB-5895 - Retrieving UOMs codes and deciding the default UOM for the corresponding list of Items. Returning only default UOMs list for the given items list
+	 * @param customerID
+	 * @param items
+	 * @param StoreFrontID	 * @return
+	 */
+	public static Map<String,String>  getDefaultTransactionalUOMsForQuickAdd(String customerID,List<String> items, String StoreFrontID) {
+		LinkedHashMap<String, Map<String,String>> itemUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		LinkedHashMap<String, Map<String,String>> itemUomIsCustomerUomHashMap = new LinkedHashMap<String, Map<String,String>>();
+		Map<String,String> itemDefaultUOMMap = new HashMap<String,String> ();
+		
+		if(items!=null && items.size()>=1) {
+			IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
+			SCUIContext wSCUIContext = context.getSCUIContext();
+			ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			try {
+			
+				YFCDocument inputDocument = YFCDocument.createDocument("UOMList");
+				YFCElement documentElement = inputDocument.getDocumentElement();
+
+				documentElement.setAttribute("CustomerID", customerID);
+				documentElement.setAttribute("OrganizationCode", StoreFrontID);
+
+				YFCElement complexQueryElement = documentElement.createChild("ComplexQuery");
+				YFCElement complexQueryOrElement = documentElement.createChild("Or");
+				for (int i = 0; i < items.size(); i++) {
+					YFCElement expElement = documentElement.createChild("Exp");
+					expElement.setAttribute("Name", "ItemID");
+					expElement.setAttribute("Value", items.get(i));
+					complexQueryOrElement.appendChild((YFCNode)expElement);
+				}
+				complexQueryElement.setAttribute("Operator", "AND");
+				complexQueryElement.appendChild(complexQueryOrElement);
+
+				YIFApi api = YIFClientFactory.getInstance().getApi();
+				env.setApiTemplate("XPXUOMListAPI", SCXmlUtil.createFromString(""
+						+ "<ItemList><Item><UOMList><UOM>" + "</UOM></UOMList></Item></ItemList>"));
+				Document outputListDocument = api.executeFlow(env, "XPXUOMListAPI",inputDocument.getDocument());
+				Element wElement = outputListDocument.getDocumentElement();
+
+				
+				if (wElement!=null && wElement.getChildNodes()!=null) {
+					NodeList wNodeList = wElement.getChildNodes();
+					int length = wNodeList.getLength();
+					String conversion;
+					String isCustomerUOMFlg="";
+					for (int i = 0; i < length; i++) {
+						Node wNode = wNodeList.item(i);
+						if (wNode != null) {
+							NamedNodeMap nodeAttributes = wNode.getAttributes();
+							if (nodeAttributes != null) {
+								Node itemId = nodeAttributes.getNamedItem("ItemID");
+								if(itemId!=null) {
+									LinkedHashMap<String, String> wUOMsAndConFactors = new LinkedHashMap<String, String>();
+									LinkedHashMap<String, String> wUOMsAndCustomerUOMFlag = new LinkedHashMap<String, String>();
+									Element uomListElement =null;
+									if(wNode instanceof Element){
+										List<Element> uomListNodeList=SCXmlUtil.getChildrenList((Element) wNode);
+										uomListElement=uomListNodeList.get(0);
+									}
+									else
+									{
+										NodeList uomListNodeList =	wNode.getChildNodes();
+										uomListElement = (Element)uomListNodeList.item(0);
+									}
+									if (uomListElement != null) {
+										List<Element> listOfUOMElements = SCXmlUtil.getChildrenList((Element) uomListElement);
+										Collections.sort(listOfUOMElements, new XpedxSortUOMListByConvFactor());
+
+										for (Element uomNode : listOfUOMElements) {
+
+											if (uomNode != null) {
+												NamedNodeMap uomAttributes = uomNode.getAttributes();
+												if (uomAttributes != null) {
+													Node UnitOfMeasure = uomAttributes.getNamedItem("UnitOfMeasure");
+													Node Conversion = uomAttributes.getNamedItem("Conversion");
+													Node CustomerUOmFlag = uomAttributes.getNamedItem("IsCustUOMFlag");
+													isCustomerUOMFlg = "";
+													if (UnitOfMeasure != null && Conversion != null) {
+														conversion = Conversion.getTextContent();
+														if(CustomerUOmFlag!=null){
+															isCustomerUOMFlg = CustomerUOmFlag.getTextContent();
+														}
+														if(!YFCUtils.isVoid(conversion)){
+															long convFactor = Math.round(Double.parseDouble(conversion));
+															wUOMsAndConFactors.put(UnitOfMeasure.getTextContent(), Long.toString(convFactor));
+														}
+														if(!YFCUtils.isVoid(isCustomerUOMFlg)){
+															wUOMsAndCustomerUOMFlag.put(UnitOfMeasure.getTextContent(), isCustomerUOMFlg);															
+														}
+														else{
+															wUOMsAndCustomerUOMFlag.put(UnitOfMeasure.getTextContent(), "N");
+														}
+
+													}
+												}
+											}
+										}
+									}
+
+									itemUomHashMap.put(itemId.getTextContent(), wUOMsAndConFactors);
+									itemUomIsCustomerUomHashMap.put(itemId.getTextContent(), wUOMsAndCustomerUOMFlag);
+								}
+							}
+						}
+					}
+				}
+
+
+				String msapOrderMultipleFlag = "";
+				ArrayList<String> itemIdsList = new ArrayList<String>();
+				itemIdsList.addAll(itemUomHashMap.keySet());
+				Map<String,String> orderMultipleMap=getOrderMultipleForItems(itemIdsList);
+				XPEDXCustomerContactInfoBean xpedxCustomerContactInfoBean = (XPEDXCustomerContactInfoBean)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
+				if(xpedxCustomerContactInfoBean!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=null && xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag()!=""){
+					msapOrderMultipleFlag = xpedxCustomerContactInfoBean.getMsapExtnUseOrderMulUOMFlag();
+				}
+
+				double minFractUOM = 0.00;
+				double maxFractUOM = 0.00;
+				String lowestUOM = "";
+				String highestUOM = "";			
+				String orderMultiple = "";
+				String defaultUOMCode = "";
+				String customerUOM = "";
+
+				if(itemUomHashMap!=null && itemUomHashMap.size()>0) {
+					for(int i=0; i<items.size(); i++) {
+						Map<String, String> displayUomMap = new HashMap<String, String>();
+						String strItemID = items.get(i);
+						displayUomMap = itemUomHashMap.get(strItemID);
+						minFractUOM = 0.00;
+						maxFractUOM = 0.00;
+						lowestUOM = "";
+						highestUOM = "";
+						defaultUOMCode = "";
+						customerUOM = "";
+
+						Map<String,String> uomIsCustomermap = itemUomIsCustomerUomHashMap.get(strItemID);
+
+						for (Iterator<String> it = displayUomMap.keySet().iterator(); it.hasNext();) {
+							try {
+								String uom =  it.next();
+								Object objConversionFactor = displayUomMap.get(uom);
+								String isCustomerUom = (String)uomIsCustomermap.get(uom);
+
+								orderMultiple = orderMultipleMap.get(strItemID);
+								if("Y".equals(msapOrderMultipleFlag) && Integer.valueOf(orderMultiple) > 1 && !"1".equals(objConversionFactor)){
+
+									if(objConversionFactor.toString() == orderMultiple){
+										minFractUOM = 1;
+										lowestUOM = uom;
+									}else {
+										double conversion = getConversion(objConversionFactor, orderMultiple);
+										if (conversion != -1 && uom != null	&& uom.length() > 0) {
+											if(conversion <= 1 && conversion >= minFractUOM){
+												minFractUOM = conversion;
+												lowestUOM = uom;
+											}else if(conversion>1 && ( conversion < maxFractUOM || maxFractUOM == 0)){
+												maxFractUOM = conversion;
+												highestUOM = uom;
+											}
+										}
+									}
+								}
+								if(isCustomerUom!=null && isCustomerUom.equalsIgnoreCase("Y")){
+									customerUOM = uom;									
+								}
+							} catch (Exception e) {
+								log.error("Error while getting the UOM Description.....");
+								e.printStackTrace();
+							}
+						}
+
+						if(minFractUOM == 1.0 && minFractUOM != 0.0){
+							defaultUOMCode = lowestUOM;
+						}else if(maxFractUOM > 1.0){
+							defaultUOMCode = highestUOM;
+						}else{
+							defaultUOMCode = lowestUOM;
+						}
+						if (customerUOM != null && customerUOM.length() > 0) {
+							itemDefaultUOMMap.put(strItemID, customerUOM);
+						} else {
+							itemDefaultUOMMap.put(strItemID, defaultUOMCode);
+						}
+						
+					}
+				}		
+				return itemDefaultUOMMap;	
+			} catch (Exception ex) {
+				log.error(ex.getMessage());
+			}
+			finally {
+				scuiTransactionContext.end();
+				env.clearApiTemplate("XPXUOMListAPI");
+				SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+				env = null;
+			}
+		}
+		return itemDefaultUOMMap;
 	}
 
 	//Added for XB-687 - Retrieving UOMs code and description for a single Item
@@ -2843,21 +3051,32 @@ public class XPEDXOrderUtils {
 	}
 	//End of JIRA 3523
 
+	public static void refreshMiniCart(IWCContext webContext, Element output, boolean isGetCompleteOrder, boolean readOrderLinesFromStart, int maxElements) {
+		refreshMiniCart(webContext, output, isGetCompleteOrder, readOrderLinesFromStart, maxElements, CartSummaryPriceStatus.NORMAL);
+	}
 
-	public static void refreshMiniCart(IWCContext webContext,Element output,boolean isGetCompleteOrder,boolean readOrderLinesFromStart,int maxElements)
+	/**
+	 * @param webContext
+	 * @param output
+	 * @param isGetCompleteOrder
+	 * @param readOrderLinesFromStart
+	 * @param maxElements
+	 * @param status If TBD, forces the cart summary to be 'TBD'.
+	 */
+	public static void refreshMiniCart(IWCContext webContext, Element output, boolean isGetCompleteOrder, boolean readOrderLinesFromStart, int maxElements, CartSummaryPriceStatus status)
 	{
-		 List<String> itemAndTotalList=new ArrayList<String>();
+		List<String> itemAndTotalList=new ArrayList<String>();
 		Element orderElement=null;
-		 if(output == null)
-		 {
-			 itemAndTotalList.add("0");
-		   	 itemAndTotalList.add("0");
-		   	 itemAndTotalList.add(webContext.getDefaultCurrency());
-		   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
-		   	 XPEDXWCUtils.setObectInCache("OrderLinesInContext",new ArrayList<Element>());
-		   	 //refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
-		   	 return;
-		 }
+		if(output == null)
+		{
+			itemAndTotalList.add("0");
+			itemAndTotalList.add("0");
+			itemAndTotalList.add(webContext.getDefaultCurrency());
+			XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
+			XPEDXWCUtils.setObectInCache("OrderLinesInContext",new ArrayList<Element>());
+			//refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
+			return;
+		}
 		if(isGetCompleteOrder == false)
 		{
 
@@ -2871,129 +3090,137 @@ public class XPEDXOrderUtils {
 			orderElement=output;
 		}
 
-		 String orderTotal= SCXmlUtil.getXpathAttribute(orderElement, "//Order/Extn/@ExtnTotalOrderValue");
-		 Element orderLinesEleme=(Element)orderElement.getElementsByTagName("OrderLines").item(0);
-	   	 itemAndTotalList.add(orderTotal);
-	   	 itemAndTotalList.add(orderLinesEleme.getAttribute("TotalNumberOfRecords"));
-	   	 try
-	   	 {
-		   	 String currency=SCXmlUtil.getXpathAttribute(orderElement, "//Order/PriceInfo/@Currency");
-		   	 if(YFCCommon.isVoid(currency))
-		   	 {
-		   		currency=webContext.getDefaultCurrency();
-		   	 }
-		   	 itemAndTotalList.add(currency);
-	   	 }
-	   	 catch(Exception e)
-	   	 {
+		String orderTotal;
+		if (status == CartSummaryPriceStatus.TBD) {
+			orderTotal = "TBD";
+		} else {
+			orderTotal = SCXmlUtil.getXpathAttribute(orderElement, "//Order/Extn/@ExtnTotalOrderValue");
+		}
 
-	   		 e.printStackTrace();
-	   		 log.error("Error while adding currency for minicart");
-	   	 }
+		Element orderLinesEleme=(Element)orderElement.getElementsByTagName("OrderLines").item(0);
+		itemAndTotalList.add(orderTotal);
+		itemAndTotalList.add(orderLinesEleme.getAttribute("TotalNumberOfRecords"));
+		try
+		{
+			String currency=SCXmlUtil.getXpathAttribute(orderElement, "//Order/PriceInfo/@Currency");
+			if(YFCCommon.isVoid(currency))
+			{
+				currency=webContext.getDefaultCurrency();
+			}
+			itemAndTotalList.add(currency);
+		}
+		catch(Exception e)
+		{
 
-	   	 XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
-	   	 XPEDXWCUtils.setObectInCache("OrderHeaderInContext", orderElement.getAttribute("OrderHeaderKey"));
-	   	refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
+			e.printStackTrace();
+			log.error("Error while adding currency for minicart");
+		}
+
+		XPEDXWCUtils.setObectInCache("CommerceContextHelperOrderTotal", itemAndTotalList);
+		XPEDXWCUtils.setObectInCache("OrderHeaderInContext", orderElement.getAttribute("OrderHeaderKey"));
+		refreshMiniCartDisplay(webContext,orderElement,readOrderLinesFromStart,maxElements,true);
 	}
-	public static void refreshMiniCartDisplay(IWCContext webContext,Element orderElement,boolean readOrderLinesFromStart,int maxElements,boolean isOrderByModifyTs)
+
+	public static void refreshMiniCartDisplay(IWCContext webContext, Element orderElement,boolean readOrderLinesFromStart,int maxElements,boolean isOrderByModifyTs)
 	{
 		try
 		{
-				ArrayList<Element> majorLineElements = new ArrayList<Element>();
-				if(orderElement != null)
+			ArrayList<Element> majorLineElements = new ArrayList<Element>();
+			if(orderElement != null)
+			{
+				NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
+				int length = orderLines.getLength();
+				boolean hasMore = false;
+				if(isOrderByModifyTs)
 				{
-	            NodeList orderLines = (NodeList) XMLUtilities.evaluate("//Order/OrderLines/OrderLine", orderElement, XPathConstants.NODESET);
-	            int length = orderLines.getLength();
-	            boolean hasMore = false;
-	            if(isOrderByModifyTs)
-	            {
-	            	for (int i = 0; i < length; i++) {
-	            		Element currNode = (Element) orderLines.item(i);
-	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    if(log.isDebugEnabled()){
-	                    log.debug("linekey-->"+lineKey);
-	                    }
-	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0) )
-	                    {
-	                            // Haven't hit the max number yet, so go ahead and add it to the list.
-	                            majorLineElements.add(currNode);
-	                    }
-	                }
+					for (int i = 0; i < length; i++) {
+						Element currNode = (Element) orderLines.item(i);
+						String lineKey = currNode.getAttribute("OrderLineKey");
+						if(log.isDebugEnabled()){
+							log.debug("linekey-->"+lineKey);
+						}
+						NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+						if ( (bundleParentLines.getLength() == 0) )
+						{
+							// Haven't hit the max number yet, so go ahead and add it to the list.
+							majorLineElements.add(currNode);
+						}
+					}
 
-	            	Collections.sort(majorLineElements, new XPEDXMiniCartComparator());
-	            	for (int i = majorLineElements.size()-1; i >0 ;) {
-	            		if(i>4)
-	            			majorLineElements.remove(i);
-	            		else
-	            			break;
-	            		i=majorLineElements.size()-1;
-	            	}
-	            }
-	            else if(readOrderLinesFromStart){
-	            	for (int i = 0; i < length; i++) {
-	            		Element currNode = (Element) orderLines.item(i);
-	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    if(log.isDebugEnabled()){
-		                    log.debug("linekey-->"+lineKey);
-	                    }
-	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0) &&
-	                         (!OrderHelper.isCancelledLine(currNode)) )
-	                    {
-	                    	if(log.isDebugEnabled()){
-	    	                    log.debug(lineKey+ " it's major line");
-	                    	}
-	                        if(majorLineElements.size() == maxElements)
-	                        {
-	                            // Already have accumulated the maximum number of line items to display.
-	                            // Set the "More..." indicator and break out of the loop.
-	                            hasMore = true;
-	                            break;
-	                        }
-	                        else
-	                        {
-	                            // Haven't hit the max number yet, so go ahead and add it to the list.
-	                            majorLineElements.add(currNode);
-	                        }
-	                    }
-	                }
-	            }
-	            else{
-	            	for (int i = length-1; i > -1; i--) {
-	                    Element currNode = (Element) orderLines.item(i);
-	                    String lineKey = currNode.getAttribute("OrderLineKey");
-	                    if(log.isDebugEnabled()){
-		                    log.debug("linekey-->"+lineKey);
-	                    }
-	                    NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
-	                    if ( (bundleParentLines.getLength() == 0))
-	                    {
+					Collections.sort(majorLineElements, new XPEDXMiniCartComparator());
+					for (int i = majorLineElements.size()-1; i >0 ;) {
+						if(i>4)
+							majorLineElements.remove(i);
+						else
+							break;
+						i=majorLineElements.size()-1;
+					}
+				}
+				else if(readOrderLinesFromStart){
+					for (int i = 0; i < length; i++) {
+						Element currNode = (Element) orderLines.item(i);
+						String lineKey = currNode.getAttribute("OrderLineKey");
+						if(log.isDebugEnabled()){
+							log.debug("linekey-->"+lineKey);
+						}
+						NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+						if ( (bundleParentLines.getLength() == 0) &&
+								(!OrderHelper.isCancelledLine(currNode)) )
+						{
+							if(log.isDebugEnabled()){
+								log.debug(lineKey+ " it's major line");
+							}
+							if(majorLineElements.size() == maxElements)
+							{
+								// Already have accumulated the maximum number of line items to display.
+								// Set the "More..." indicator and break out of the loop.
+								hasMore = true;
+								break;
+							}
+							else
+							{
+								// Haven't hit the max number yet, so go ahead and add it to the list.
+								majorLineElements.add(currNode);
+							}
+						}
+					}
+				}
+				else{
+					for (int i = length-1; i > -1; i--) {
+						Element currNode = (Element) orderLines.item(i);
+						String lineKey = currNode.getAttribute("OrderLineKey");
+						if(log.isDebugEnabled()){
+							log.debug("linekey-->"+lineKey);
+						}
+						NodeList bundleParentLines = currNode.getElementsByTagName("BundleParentLine");
+						if ( (bundleParentLines.getLength() == 0))
+						{
 
-	                        if(majorLineElements.size() == maxElements)
-	                        {
-	                            // Already have accumulated the maximum number of line items to display.
-	                            // Set the "More..." indicator and break out of the loop.
-	                            hasMore = true;
-	                            break;
-	                        }
-	                        else
-	                        {
-	                            // Haven't hit the max number yet, so go ahead and add it to the list.
-	                            majorLineElements.add(currNode);
-	                        }
-	                    }
-	                }
-	            }
-	            //commented for performance to since minicart is not getting displayed.
-	            //XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
+							if(majorLineElements.size() == maxElements)
+							{
+								// Already have accumulated the maximum number of line items to display.
+								// Set the "More..." indicator and break out of the loop.
+								hasMore = true;
+								break;
+							}
+							else
+							{
+								// Haven't hit the max number yet, so go ahead and add it to the list.
+								majorLineElements.add(currNode);
+							}
+						}
+					}
+				}
+				//commented for performance to since minicart is not getting displayed.
+				//XPEDXWCUtils.setObectInCache("OrderLinesInContext", majorLineElements);
 
 			}
-        } catch (Exception e) {
-        	log.error("++++++++ Got exception while refreshing mini cart display +++++++++++++");
-            e.printStackTrace();
-        }
+		} catch (Exception e) {
+			log.error("++++++++ Got exception while refreshing mini cart display +++++++++++++");
+			e.printStackTrace();
+		}
 	}
+
 	/*Begin - Changes made by Mitesh Parikh for JIRA 3581*/
 	public String getBillTofromOrderElement(Element orderElement)
 	{

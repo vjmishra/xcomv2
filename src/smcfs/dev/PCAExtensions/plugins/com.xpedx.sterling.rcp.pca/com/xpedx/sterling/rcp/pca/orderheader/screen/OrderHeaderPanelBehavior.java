@@ -154,19 +154,52 @@ public class OrderHeaderPanelBehavior extends YRCBehavior {
 			}
 		
 		String webconfNum = YRCXmlUtils.getAttributeValue(referenceElement,"/Order/Extn/@ExtnWebConfNum");
-	
-		
-		String[] apinames = {"getCustomerContactList" , "getOrderList","getCustomerContactList" };
-		Document[] docInput = {
-				
-				YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+customerContactId+"'/>"),
-				YRCXmlUtils.createFromString("<Order> <Extn  ExtnWebConfNum = '"+webconfNum+"'/> </Order>") , 
-				YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+ resolverUserId +"'/>") , 
-		};
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId("com.xpedx.sterling.rcp.pca.orderheader.screen.OrderHeaderPanel");
-		ctx.setApiNames(apinames);
-		ctx.setInputXmls(docInput);
+		if(!YRCPlatformUI.isVoid(customerContactId) &&  !YRCPlatformUI.isVoid(resolverUserId))
+		{
+			String[] apinames = {"getCustomerContactList" , "getOrderList","getCustomerContactList" };
+			Document[] docInput = {
+					
+					YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+customerContactId+"'/>"),
+					YRCXmlUtils.createFromString("<Order> <Extn  ExtnWebConfNum = '"+webconfNum+"'/> </Order>") , 
+					YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+ resolverUserId +"'/>") , 
+			};
+			ctx.setApiNames(apinames);
+			ctx.setInputXmls(docInput);
+		}
+		else if(!YRCPlatformUI.isVoid(customerContactId) )
+		{
+			String[] apinames = {"getCustomerContactList" , "getOrderList" };
+			Document[] docInput = {
+					
+					YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+customerContactId+"'/>"),
+					YRCXmlUtils.createFromString("<Order> <Extn  ExtnWebConfNum = '"+webconfNum+"'/> </Order>") ,
+			};
+			ctx.setApiNames(apinames);
+			ctx.setInputXmls(docInput);
+		}
+		else if(!YRCPlatformUI.isVoid(resolverUserId) )
+		{
+			String[] apinames = {"getOrderList","getCustomerContactList" };
+			Document[] docInput = {
+					
+					YRCXmlUtils.createFromString("<Order> <Extn  ExtnWebConfNum = '"+webconfNum+"'/> </Order>") ,
+					YRCXmlUtils.createFromString("<CustomerContact CustomerContactID='"+ resolverUserId +"'/>") , 
+			};
+			ctx.setApiNames(apinames);
+			ctx.setInputXmls(docInput);
+		}
+		else
+		{
+			String[] apinames = {"getOrderList"};
+			Document[] docInput = {
+					
+					YRCXmlUtils.createFromString("<Order> <Extn  ExtnWebConfNum = '"+webconfNum+"'/> </Order>") ,
+			};
+			ctx.setApiNames(apinames);
+			ctx.setInputXmls(docInput);
+		}
 		if (!page.isDisposed())
 			callApi(ctx, page);
 	}

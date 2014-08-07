@@ -483,7 +483,7 @@ h6 {
     padding-top: 15px;
 }
 .commonHeader {
-    background: url("../../images/theme/theme-1/998x107_background.png") no-repeat scroll 0 0 transparent;
+    background: url("../../images/998x107_xpedx-veritiv.png") no-repeat scroll 0 0 transparent;
     height: 107px;
 }
 #breadcumbs-list-name a:hover {
@@ -2015,7 +2015,6 @@ input, select {
     width: 5px;
 }
 
-
 .xpedx-light-box {
     height: auto;
     padding: 10px;
@@ -2028,8 +2027,6 @@ input, select {
     margin: 0 0 10px;
     padding: 0 0 10px;
 }
-
-
 
 .cancel-float-right {
     float: right !important;
@@ -4284,7 +4281,7 @@ table.catalog-row-five td img {
 #signon-table {
     background-color: white;
     height: 320px;
-    width: 998px;
+    width: 1000px;
 }
 #signon-table td img {
     display: inline;
@@ -4341,9 +4338,6 @@ table.catalog-row-five td img {
     color: #000000;
     text-align: right;
 }
-#headerContainer.signOnHeader {
-    height: 78px;
-}
 #main-navigation ul li.lighter {
     background: url("../../images/theme/theme-1/navigation/order_msg_bkgrnd.png") repeat-x scroll 0 0 transparent;
 }
@@ -4380,6 +4374,7 @@ table.catalog-row-five td img {
     position: relative;
     text-align: left;
     z-index: 100;
+    cursor:default;
 }
 #welcome-address-popup-close {
     float: right;
@@ -8166,6 +8161,7 @@ li.ship-to-list  {
 }
 .ui-autocomplete {
 	position:absolute;
+	z-index: 100 !important; /* must override z-index:3 defined in 3rd party javascript */
 	max-height: 250px;
 	overflow-y: auto;
 	/* prevent horizontal scrollbar */

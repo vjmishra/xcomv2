@@ -32,6 +32,15 @@ public class XPEDXItem {
 	private String orderMultipleQty;
 	private String orderMultipleUOM;
 	private String orderMultipleErrorFromMax;
+	private String discontinuedItemErrorFromMax;
+
+	public String getDiscontinuedItemErrorFromMax() {
+		return discontinuedItemErrorFromMax;
+	}
+
+	public void setDiscontinuedItemErrorFromMax(String discontinuedItemErrorFromMax) {
+		this.discontinuedItemErrorFromMax = discontinuedItemErrorFromMax;
+	}
 
 	public String getOrderMultipleErrorFromMax() {
 		return orderMultipleErrorFromMax;

@@ -10,8 +10,8 @@
 <head>
 <meta content='IE=8' http-equiv='X-UA-Compatible' />
 <!-- Webtrend tag starts -->
-<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.rollweight.title" />'
-<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.rollweight.title" />'>
+<meta name="WT.ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.rollweight.title" />'></meta>
+<meta name="DCSext.w_x_tools_ti" content='<s:property value="wCContext.storefrontId" /> - <s:text name="tools.rollweight.title" />'></meta>
 <!-- Webtrend tag stops --> 
 <!-- styles -->
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -72,7 +72,8 @@
         <div id="main">
 
         	 <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-            <div class="container"> 
+            <div class="container content-container"> 
+            	<h1> Roll Weight</h1>
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 <s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -81,8 +82,6 @@
                 	<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="breadcrumb-inactive"><s:text name="tools.rollweight.title" /></span> Commented for jira 1538-->
                 </div>
                 <div id="mid-col-mil"><div style=" width: 600px;">  
-                 <div class="clearview">&nbsp;</div>
-                 <h2> Roll Weight</h2>
  <p> 	
 To find the approximate weight of a roll multiply roll diameter squared minus core diameter squared by roll width and appropriate factor.
 </p> 
@@ -130,7 +129,7 @@ To find the approximate weight of a roll multiply roll diameter squared minus co
                         <tr>
                           <td colspan="2">
                             <!-- <ul id="cart-actions"><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onclick="javascript:document.eform.reset()"><span>Clear</span></a></li> Changes done for jira 1538-->
-                           <ul id="cart-actions"><li><a class="grey-ui-btn" href="#" onclick="javascript:document.eform.reset()"><span>Clear</span></a></li><li><a href="#" onclick="javascript:validateForm();" class="green-ui-btn"><span>Calculate</span></a></li>    
+                           <ul id="cart-actions" style="height:auto;"><li><input class="btn-neutral" type="button" href="#" onclick="javascript:document.eform.reset()" value="Clear"/></li><li><input href="#" onclick="javascript:validateForm();" class="btn-gradient" type="button" value="Calculate"/></li>    
                             </ul>
                          </td>
                         </tr>

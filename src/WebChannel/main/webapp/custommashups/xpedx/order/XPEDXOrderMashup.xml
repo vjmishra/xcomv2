@@ -1850,10 +1850,10 @@
 					<OrderLine OrderedQty='' PrimeLineNo=''>
 						<Item ItemID='' ItemShortDesc='' ItemDesc='' UnitOfMeasure='' ManufacturerItem=''/>
 						<OrderLineTranQuantity OrderedQty='' TransactionalUOM=''/>
-						<Extn ExtnExtendedPrice=''/>		  
+						<Extn ExtnReqUOMUnitPrice='' ExtnAdjUOMUnitPrice=''  ExtnExtendedPrice=''/>		  
 						<ItemDetails ItemID=''>
 							<PrimaryInformation Description="" ExtendedDescription=""/>
-							<Extn ExtnUNSPSC=''/>
+							<Extn ExtnUNSPSC='' ExtnSupplierNameDisplay=''/>
 						</ItemDetails>"
 					</OrderLine>
 				</OrderLines>

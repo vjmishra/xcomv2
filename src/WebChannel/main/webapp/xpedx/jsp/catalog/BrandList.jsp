@@ -21,6 +21,9 @@
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<!--[if IE]> 
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+	<![endif]--> 
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/CATALOG<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -81,9 +84,10 @@
 		<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 	</s:else>
 
-	<div class="container container-pad">
-
-		<div class="page-title">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
+	<div class="container  content-container">
+		<h1>Brands</h1>
+		
+		<div class="page-title" style="padding:10px 25px">Brands for <s:property value='%{#cat1name + " / " + #cat2name}' /></div>
 		<div class="alphabet">
 			<p>
 				<%-- row of letters across the top --%>

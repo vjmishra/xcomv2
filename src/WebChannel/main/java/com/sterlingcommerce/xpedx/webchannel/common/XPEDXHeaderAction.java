@@ -186,10 +186,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.CHANGE_SHIP_TO_IN_TO_CONTEXT, "false");
 			setupLogoURL();
-			String servletPath = request.getServletPath();
-			if (!getWCContext().isGuestUser()){
-				prepareHeaderNavigationHighlight(servletPath);
-			}
+			prepareHeaderNavigationHighlight(request.getServletPath());
 			if (!getWCContext().isGuestUser()){
 				//checkMultiStepCheckout();
 				if(XPEDXWCUtils.isCustomerSelectedIntoConext(wcContext))
@@ -352,6 +349,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 			if (!getWCContext().isGuestUser()
 					&& !XPEDXWCUtils.isCustomerSelectedIntoConext(getWCContext())) {
 				assignedShipTos = XPEDXWCUtils.getPaginatedAssignedCustomers(getWCContext());
+				//XPEDXWCUtils.setCurrentCustomerIntoContext(assignedShipTos.get(0),getWCContext());
 			 if(wcContext.getSCUIContext().getSession().getAttribute(
 						XPEDXWCUtils.LOGGED_IN_FORMATTED_CUSTOMER_ID_MAP) == null){
 					XPEDXWCUtils.getFormattedMasterCustomer(wcContext.getCustomerId(), wcContext.getStorefrontId());
@@ -1126,41 +1124,41 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		String logo = (String) wcContext.getWCAttribute("SF_THEME_LOGO",
 				WCAttributeScope.LOCAL_SESSION);
 		if (logo != null && logo.length() > 0) {
-			log.debug((new StringBuilder()).append(
+			log.debug((new StringBuilder(256)).append(
 					"Found Logo URL in the context=").append(logo).toString());
 			setLogoURL(logo);
 			return;
 		}
 		ServletContext servletCtx = ServletActionContext.getServletContext();
-		String baseLogoURL = (new StringBuilder()).append(
-				request.getContextPath()).append("/swc/images/logo/").append(
+		String baseLogoURL = (new StringBuilder(256)).append(
+				XPEDXWCUtils.getStaticFileLocation()).append("/images/logo/").append(
 						getSFLogoDir()).toString();
-		logo = (new StringBuilder()).append(baseLogoURL).append("/logo.gif")
+		logo = (new StringBuilder(256)).append(baseLogoURL).append("/logo.gif")
 				.toString();
 		String theme = getSFTheme();
 		if (servletCtx != null && theme != null && theme.length() > 0) {
-			String themeLogoURL = (new StringBuilder()).append(
-					"/swc/images/logo/").append(getSFLogoDir())
+			String themeLogoURL = new StringBuilder(256).append(
+					XPEDXWCUtils.getStaticFileLocation()).append("/images/logo/").append(getSFLogoDir())
 					.append("/logo-").append(theme).append(".gif").toString();
-			log.debug((new StringBuilder()).append(
+			log.debug((new StringBuilder(256)).append(
 					"Checking for theme specific logo [").append(themeLogoURL)
 					.append("]").toString());
 			try {
 				java.net.URL url = servletCtx.getResource(themeLogoURL);
-				log.debug((new StringBuilder()).append(
+				log.debug((new StringBuilder(256)).append(
 						"URL from servletContext=").append(url).toString());
 				if (url != null) {
-					log.debug((new StringBuilder()).append(
+					log.debug((new StringBuilder(256)).append(
 							"Using theme based LogoURL [").append(url).append(
 									"]").toString());
-					logo = (new StringBuilder()).append(baseLogoURL).append(
+					logo = (new StringBuilder(256)).append(baseLogoURL).append(
 							"/logo-").append(theme).append(".gif").toString();
 				}
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
-		log.debug((new StringBuilder()).append("Logo URL =[").append(logo)
+		log.debug((new StringBuilder(256)).append("Logo URL =[").append(logo)
 				.append("]").toString());
 		setLogoURL(logo);
 		wcContext.setWCAttribute("SF_THEME_LOGO", logo,
@@ -1203,7 +1201,7 @@ public class XPEDXHeaderAction extends WCMashupAction {
 		}
 		return sapCustomerDocument;
 	}*/
-	
+
 	private void getCategories() {
 		SCUIContext uictx = getWCContext().getSCUIContext();
 		Document outDoc = null;

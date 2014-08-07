@@ -100,8 +100,9 @@ function Clear()
 			}
 			},
 			'autoDimensions'	: false,
-			'width' 			: 670,
-			'height' 			: 420,
+			'width' 			: 880,
+			'height' 			: 480,
+			'scrolling'			:'no',
 			//XNGTP - JIRA- 489 
 			'onClosed' : function(){				
 		    	document.getElementById("showLocationsDiv").innerHTML = '';
@@ -173,13 +174,7 @@ ul.checkboxTree li
 	font-weight: normal;
 	font-size: 11.7px;
 }
-.radio-container
-{
-	max-height: 200px;
-	overflow: auto;
-	border: 1px solid #ccc;
-	margin: 0px 0px 10px 0px;
-}
+
 #collapseAllButtonsTree
 {
 	padding: 0px 20px;
@@ -202,22 +197,15 @@ ul.checkboxTree li
 		<div id="main">
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 			
-			<div class="container bill-to">
-		      <!-- breadcrumb -->
-		      <div id="mid-col-mil">
-		      <!-- 
-		      <div id="searchBreadcrumb" class="page-title">
-		      	<a href="#"><s:text name="admin.title" /></a> / <a href="#"><s:text name="admin.customerprofile.title" /></a> / <span class="breadcrumb-inactive"><s:text name="admin.billto.title" /></span> 
-		      </div> -->
-		      	<br/>
-		      	<div class="underlines">
-	 	 	<s:url id='showLocationUrlId' namespace="/profile/org" action='xpedxShowLocations' ></s:url>
-	    	<s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
-         	<strong>Bill-To</strong>: <s:property value="displayCustomerFormat"/>
+			<div class="container bill-to content-container">
+			<h1>Bill-To:&nbsp;<span><s:property value="displayCustomerFormat"/></span>
          	<br/>
-         	<span class="txt-small underlines">
-			<a href="#showLocationsDlg" class="underlines" name="changeLocationCL" id="changeLocationCL">[Change Location]</a></span></div>
-			<div class="clearview">&nbsp;</div>
+     		&nbsp;<span class="txt-small underlines">
+			<a href="#showLocationsDlg" class="underlines" name="changeLocationCL" id="changeLocationCL" style="font-size:12px">[Change Location]</a></span></h1>
+		    
+		    <s:url id='showLocationUrlId' namespace="/profile/org" action='xpedxShowLocations' ></s:url>
+	    	<s:hidden id="showLocationsUrl" name='showLocationsUrl' value='%{#showLocationUrlId}' />
+         	
         		<s:form name="billToInfo" action="xpedxSaveBillToInfo" namespace="/profile/org">
         		<div id="requestform">
         			<s:hidden name="customerId" id="customerId" value="%{#sdoc.getAttribute('CustomerID')}" />
@@ -669,14 +657,14 @@ ul.checkboxTree li
             	<div id="cart-actions" class="float-right">    
                     <ul id="cart-actions">
                        
-                       	<li><a href="#" onclick="javascript:window.location.reload();" class="grey-ui-btn"><span>Cancel</span></a></li>
-                        <li><a class="green-ui-btn" href="javascript:(function(){document.billToInfo.submit();})();"><span>Save</span></a></li>
+                       	<li><input type="button" onclick="javascript:window.location.reload();" class="btn-neutral" value="Cancel"/></li>
+                        <li><input type="button" class="btn-gradient" onclick="javascript:(function(){document.billToInfo.submit();})();" value="Save"/></li>
                     </ul>
                 </div>
                 <div class="clearview">&nbsp;</div>
                 <%--Code Added For XNGTP-3196 --%>
         		<s:if test="%{#_action.isSuccess()}">
-					<div class="success" id="successMsgFor_save" style="display : inline; float: right"/>Bill-To Profile has been updated successfully.</div>
+					<div class="success" id="successMsgFor_save" style="display : inline; float: right">Bill-To Profile has been updated successfully.</div>
 				</s:if>
          		<%-- End fix for XNGTP-3196 --%>
         
@@ -690,7 +678,7 @@ ul.checkboxTree li
           		<div class="clearview">&nbsp;</div>
           	</div>
           </s:form>
-          <div style="display: none;">
+        <div style="display: none;">
 			<div title="Showing the Locations" id="showLocationsDlg">
 				<div id="showLocationsDiv">
 		
@@ -701,9 +689,8 @@ ul.checkboxTree li
    </div>
    <br />
     </div>
-        		
-		</div>
-	</div>
+</div>
+	
 	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 </body>
 </html>

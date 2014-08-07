@@ -195,10 +195,10 @@
 					<td align="left">
 						
 							<xsl:if test = 'Order/@EnterpriseCode="xpedx"'>							
-								<img src="{$brandLogo}" width="108" height="32" />							
+								<img src="{$brandLogo}" width="210" height="47" />							
 							</xsl:if>
 							 <xsl:if test = 'Order/@EnterpriseCode="Saalfeld"'>							
-								<img src="{$brandLogo}" width="216" height="64" />							
+								<img src="{$brandLogo}" width="210" height="47" />							
 							 </xsl:if>
 					</td>
 				</tr>
@@ -672,6 +672,7 @@
 						 </xsl:otherwise>
 						 </xsl:choose>
 						
+                		
 						<th bgcolor="#003399" class="align-center" valign="top">My<br/>Price&#160;(USD)</th>
 						 <xsl:choose>
 						 <xsl:when test = '(Order/OrderLines/OrderLine/Extn/@ExtnTotalOfShippableTotals!="") ' > 
@@ -745,9 +746,9 @@
 						<td><xsl:value-of select='format-number(OrderLineTranQuantity/@OrderedQty,"#")'/></td>
 						<td>
 						<xsl:choose>
-						<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-						<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
-						</xsl:when>
+							<xsl:when test='starts-with(OrderLineTranQuantity/@UOMDescription,"M_")'>
+								<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+							</xsl:when>
 						<xsl:otherwise>
 						<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
 						</xsl:otherwise>
@@ -778,9 +779,9 @@
 									<td><xsl:value-of select='format-number(Extn/@ExtnReqShipOrdQty,"#")'/></td>
 										<td>
 										<xsl:choose>
-										<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-										<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
-										</xsl:when>
+											<xsl:when test='starts-with(OrderLineTranQuantity/@UOMDescription,"M_")'>
+												<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+											</xsl:when>
 										<xsl:otherwise>
 										<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
 										</xsl:otherwise>
@@ -798,8 +799,8 @@
 								 <td><xsl:value-of select='format-number(Extn/@ExtnReqBackOrdQty,"#")'/></td>
 										<td>
 										<xsl:choose>
-										<xsl:when test = 'OrderLineTranQuantity/@UOMDescription="M_PC"' >
-										<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
+										<xsl:when test='starts-with(OrderLineTranQuantity/@UOMDescription,"M_")'>
+											<xsl:value-of select="substring(OrderLineTranQuantity/@UOMDescription,3,4)"/>
 										</xsl:when>
 										<xsl:otherwise>
 										<xsl:value-of select="OrderLineTranQuantity/@UOMDescription"/>
@@ -928,9 +929,15 @@
 											</xsl:if>
 											<xsl:if test = 'Item/@CustomerItem!=""' >
 											<td>My Item #: <xsl:value-of select="Item/@CustomerItem"/></td>
-											</xsl:if>	
+											</xsl:if>
+												
 											</xsl:if>
 											</tr>
+											<xsl:if test='Extn/@ExtnLineStatusCode="M0100"'>
+											<tr>
+													<td class="labelText" style="font-family: Arial, Geneva, sans-serif;font-size:12px;  color:#000; color:#000;padding:10px 2px; ">This item has been discontinued and no backorders will be accepted.</td>
+											</tr>
+											</xsl:if>
 										</table>
 									</td>
 							 		<td colspan="3" style="padding-bottom:10px;border-bottom:1px solid #cccccc;"></td>

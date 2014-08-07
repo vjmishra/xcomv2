@@ -5,20 +5,23 @@
 
 <html>
 <head>
-<title>Auto Login Inprogress...</title>
+<title>Auto Login In Progress...</title>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' /><s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' /><s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/salesrep/sales-rep<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 </head>
 
 <body onload="document.singForm.submit();">
 
 <script type="text/javascript">
-Ext.onReady(function() {    
-	//Added For Jira 2903
-	Ext.Msg.wait("Processing..."); 
-   });
+$(document).ready(function() {
+    $(".loading-wrap").css('display','block');
+	$(".loading-icon").css('display','block');
+	$("body").css("overflow", "hidden");
+      
+});
 </script> 
 
 	<div>
@@ -33,5 +36,8 @@ Ext.onReady(function() {
 			<a href="javascript:(function(){document.singForm.submit();})();"><span></span></a>
 		</s:form>
 	</div>
+	<div class="loading-wrap"  style="display:none;">
+         <div class="load-modal" ><div class="loading-icon" style="display:none;"></div></div>
+    </div>
 </body>
 </html>

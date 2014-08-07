@@ -23,7 +23,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 <!-- end styles -->
 
@@ -95,30 +95,20 @@ $("#various5").fancybox();
 
 	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
     
-    <div class="container">
+    <div class="container content-container">
       <!-- breadcrumb -->
+      <h1><s:text name='MSG.SWC.NEWSARTL.PREVIEW.GENERIC.PGTITLE' /><br/>&nbsp;
+      <span class="dkcharcole" style="font-size:12px"> <s:text name='MSG.SWC.NEWSARTL.PREVIEW.INFO.PREVIEWNOTE'/></span></h1>
 	  
-      <div id="mid-col-mil"><br />
-      
-      <div>
-      
-       <span class="page-title"><s:text name='MSG.SWC.NEWSARTL.PREVIEW.GENERIC.PGTITLE' /> </span> 
-       
-		<div class="float-right clearview padding-bottom3" ><a href="javascript:window.print()"><span
+	  <div class="clearview padding-bottom3" style="padding-bottom:5px"><a href="javascript:window.print()"><span
 			class="print-ico-xpedx underlink"><img
 			src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15"
 			alt="Print This Page" />Print Page</span></a></div>
-
-		<div>
-		
-	
-		
-
-		 <div>
- 			 <%-- <span class="dkcharcole"> Note: News article will not be saved until you click on the Publish button. </span> --%>
+		<%-- <div>
+ 			 <span class="dkcharcole"> Note: News article will not be saved until you click on the Publish button. </span>
  			 <span class="dkcharcole"> <s:text name='MSG.SWC.NEWSARTL.PREVIEW.INFO.PREVIEWNOTE' /> </span>
 		 </div>
-		<br/>
+		<br/> --%>
 			
 		<hr class="lightgray"></hr>
 		<br/>
@@ -167,13 +157,11 @@ $("#various5").fancybox();
 			<div class="clearview">
 			<!--removed, causing format issue when text is large : style="float:right;" -->
 				<ul id="tool-bar" class="tool-bar-bottom" style="float: right;">
-					<li><a class="grey-ui-btn" href="javascript:history.back();"><span>Cancel</span></a></li>
-					<li ><a class="orange-ui-btn" href="javascript:document.newArticleForm.submit();"><span>Publish</span></a></li>
+					<li><input type="button" class="btn-neutral" onclick="javascript:history.back();" value="Cancel"/></li>
+					<li><input type="button" class="btn-gradient" onclick="javascript:document.newArticleForm.submit();" value="Publish"/></li>
 				</ul>
 			</div>
-		</div>				
-
-<s:form name="newArticleForm" action="%{#parameters['nextActionName']}" namespace="/profile/user" method="POST">
+		<s:form name="newArticleForm" action="%{#parameters['nextActionName']}" namespace="/profile/user" method="POST">
 		<input type="hidden" name="articleKey" value="<s:property value="#parameters['articleKey']"/>"/>
 		<input type="hidden" name="articleName" value="<s:property value="#parameters['articleName']"/>"/>
 		<input type="hidden" name="submittedTSFrom" value="<s:property value="#parameters['submittedTSFrom']"/>"/>
@@ -181,8 +169,6 @@ $("#various5").fancybox();
 		<input type="hidden" name="forcedMessage" value="<s:property value="#parameters['forcedMessage']"/>"/>
 		<input type="hidden" name="articleBody" value="<s:property escape='true' value='#parameters["articleBody"]' />"/>
 		</s:form>
-      </div>
-</div>
       <!-- End Pricing -->
       <br />
     </div>

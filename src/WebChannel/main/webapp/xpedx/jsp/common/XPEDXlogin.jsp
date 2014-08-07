@@ -9,7 +9,7 @@
 	value="#wcCtx.getWCAttribute('RememberMeRule')" />
 <s:set name='sfid' value='wCContext.storefrontId'/>
 <s:url id="MyRegisterUserURL" namespace='/profile/user' action='MyRegisterUser' />
-
+<s:hidden id="myregisterId" value="%{#MyRegisterUserURL}"/>
 <head>
 <!-- This needs to be at the top to ensure the 'Sign In' link is never seen. -->
 <script type="text/javascript">
@@ -17,9 +17,10 @@
 var sign = document.getElementById("signIn");
 sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 </script>
-<%-- <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
      <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
- --%> <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" /> 
+  	<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+  	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
 </head>
 <table id="signon-table">
 		<tr>
@@ -91,8 +92,9 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					<p><a class="underlink" href="<s:url action="forgotPwd" namespace="/home" />"><s:text name="login.forgotPwd"/></a></p>
 					
 					<div class="button-row">
-						<a href="#" id="loginFormSignInLink" class="orange-ui-btn"><span>Sign In</span></a> 
-						<a href="<s:property value='MyRegisterUserURL' />" class="underlink">Register</a>
+						<input type="button"  id="loginFormSignInLink" class="btn-gradient addmarginright10" value="Sign In"/> 
+						<%-- <a href="<s:property value='MyRegisterUserURL' />" class="underlink addpadleft20">Register</a> --%>
+						<input id="registerId" class="btn-neutral" type="button" value="Register"/>
 					</div>
 					
 					<%-- eb-2749: in order for IE to remember the password, we must submit the form using a real button --%>
@@ -188,5 +190,11 @@ $(document).ready(function() {
 	{
 		$('[name="RememberMe"]').attr('checked', true);
 	}
+	
+	$("#registerId").click(function(){
+		var url = $('#myregisterId').val();
+		window.location.href = url;
+		return false;
 	});
+});
 </script>

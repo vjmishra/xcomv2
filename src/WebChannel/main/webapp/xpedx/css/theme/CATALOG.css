@@ -545,7 +545,7 @@ width:100%;
     width: 50%;
 }
 .normal-view #item-ct dd .ddesc {
-	width: 555px;
+	width: 325px;
 }
 .normal-view #item-ct dd #prodlist {
 	clear: both;
@@ -554,7 +554,7 @@ width:100%;
 	float: right;
 	clear: none;
 	width: 365px;
-	top: 45px;
+	top: 30px;
 	left: 424px;
 	position: absolute;
 }
@@ -591,6 +591,10 @@ width:100%;
 	 float: right;
 	 clear: none;
 	 width: auto;
+	 margin: 4px;
+}
+.normal-view .success {
+    margin-top: 6px;
 }
 .normal-view #item-ct dd .cart-pa-button-wrap {
     clear: none;
@@ -602,6 +606,7 @@ width:100%;
 .normal-view #item-ct dd .cart-pa-button-wrap input {
 	float: right;
 	clear: none;
+	margin-left: 5px;
 	width: auto;
 }
 .normal-view #item-ct dd .order-input-wrap .order-input input {
@@ -1031,11 +1036,15 @@ ul
 
 .quantity_box input
 {
-	width: 7em;
+	width: 5em;
 }
 .quantity_box select, .uom-select select
 {
-	width: 9em;
+	width: auto;
+	margin-bottom: 6px;
+}
+.cart-pa-button input {
+	width: auto;
 }
 
 .condensed-view #item-ct dd {
@@ -1141,7 +1150,16 @@ ul
 	clear: none;
 	margin-top: 8px;
 }
-
+.normal-view .availablelink .submitBtnBg1 {
+    display: block;
+    margin: 8px 0 0 16px;
+    padding: 0px;
+    text-align: left;
+	width: auto;
+	float: left;
+	clear: none;
+	font-weight: normal;
+}
 
 #item-box #item-box-inner dd a:hover { text-decoration: none; }
 
@@ -1160,7 +1178,7 @@ ul
 }
 .papergrid-view #x-tbl-cmmn
 {
-	width: 724px;
+	width: 787px;
 	border: none !important;
 	margin-left: 1px;
 	font-size: 0.95em;
@@ -1285,9 +1303,145 @@ img#youtube { margin-right: 9px; }
 }
 
 .replacement-item {
-	color: #ff0000;
-	padding-right:2px;
-	font-weight:bold; 
-	float:left; 
-	clear: none;"
+	clear: none;
+	color: #FF0000;
+	float: right;
+	font-weight: bold;
+	padding: 10px;
 }
+
+/* condensed view */
+.condensed-view .two-item-wrap {
+	overflow: hidden;
+	border-bottom: 1px dotted #cccccc;
+	border-right: 1px dotted #cccccc;
+	border-top: 1px dotted #cccccc;
+}
+.condensed-view #item-ct dd {
+    float: left;
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    width: 388px;
+	border: none;
+	border-left: 1px dotted #cccccc;
+	padding-bottom: 500px;
+	margin-bottom: -500px;
+}
+.condensed-view #item-ct dd .contents {
+	float:left;
+	clear: none;
+	width:220px;
+	padding-left: 10px;
+	overflow:visible;
+	margin:1px 0 0 0;
+	min-height: 145px;
+}
+.condensed-view #item-ct dd .ddesc {
+	font-weight: bold;
+	padding-top: 4px;
+	width: 210px;
+	position: relative;
+}
+
+.condensed-view  #item-ct dd .buttons {
+    padding-top:0px;
+}
+.condensed-view  #item-ct dd #prodlist {
+    clear: both;
+    padding-top: 8px;
+}
+.condensed-view  #item-ct dd .replacement-item {
+	margin-top: 5px;
+}
+
+.condensed-view #item-ct dd .order-input-wrap {
+	float: right;
+	clear: none;
+	width: 220px;
+	margin-top: 14px;
+	text-align: right;
+	padding-right: 10px;
+}
+.condensed-view #item-ct dd .order-row {
+	height: 25px;
+}
+.condensed-view #item-ct dd .order-input-wrap .order-label {
+	float: left;
+	width: 135px;
+	clear: none;
+	text-align: right;
+	padding: 3px 6px 6px 0px;
+}
+.condensed-view  #item-ct dd .cart-pa-button {
+	width: 320px;
+	float: right;
+	clear: both;
+	text-align: right;
+	margin: 25px 0px 16px 0px;
+}
+
+.condensed-view  #item-ct dd .mill-mfg {
+	margin-top: 6px;
+}
+.condensed-view .order-input select {
+	width: 107px;
+}
+
+.condensed-view  #item-ct dd .item-numbers {
+	position: absolute;
+	top: 165px;
+	left: 10px;
+	clear: both;
+}
+
+.item-numbers img {
+	display: inline;
+}
+
+/* mini view */
+
+.mini-view #item-ct dd .cart-pa-button {
+	text-align: center;
+}
+.mini-view #item-ct dd .ddesc {
+	padding-bottom: 6px;
+}
+.mini-view .quantity_box .qty {
+	padding-top: 6px;
+}
+.mini-view .four-item-wrap {
+	display: block;
+	width: 792px;
+	height: auto;
+	overflow: hidden;
+	border-bottom: 1px dotted #cccccc;
+	border-right: 1px dotted #cccccc;
+	border-top: 1px dotted #cccccc;
+}
+.mini-view #item-ct dd {
+	float: left;
+	height: auto;
+	margin: 0;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+	width: 185px;
+	border: none;
+	border-left: 1px dotted #cccccc;
+	padding-bottom: 200px;
+	margin-bottom: -200px;
+}
+
+.height {
+	height: 5px;
+}
+.condensed-view  #item-ct dd .error {
+	float: right;
+	margin-bottom: 10px;
+	}
+.condensed-view  #item-ct dd .notice {
+	margin-bottom: 10px;
+	}

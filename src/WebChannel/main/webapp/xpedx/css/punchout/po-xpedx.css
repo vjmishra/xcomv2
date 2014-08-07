@@ -17,11 +17,13 @@ a:link {
 	min-height:700px;
 }
 .ui-po-brand {
-	background: url("../../images/punchout/po-xpedx-logo.gif") no-repeat #062c77;
+	background: url("../../images/998x107_xpedx-veritiv.png") no-repeat #062c77;
 	height: 75px;
 }
 .ui-po-content {
 	padding: 30px;
+	margin-top: -17px;
+	position: absolute;
 }
 .ui-po-search {
 	width: 300px;
@@ -52,28 +54,16 @@ a:link {
 .ul-po-results {
 	font-size: 13px;
 	font-family: Arial, Helvetica, sans-serif;
-	padding: 10px 0px 10px 20px;
+	padding: 60px 0px 0px 28px;
 	color: #666666;
 	font-weight: bold;
+	
 }
 .ui-searchbox {
 	height: 20px;
 	width: 265px;
 }
-.ui-po-searchinput {
-	padding-top: 15px;
-	width: 265px;
-	float: left;
-	clear: none;
-}
-.ui-po-floatbtn {
-	position: relative;
-	width: 30px;
-	float: left;
-	clear: none;
-	padding-top: 12px;
-	padding-left: 5px;
-}
+
 .magnify-icon {
 	position: absolute;
 	left: 11px;
@@ -87,15 +77,16 @@ a:link {
 	clear: both;
 }
 #wrapper {
-  width: 900px;
-  margin-left: 20px;
+  width: 950px;
+  margin-left: -3px;
     padding-top:10px;
     font-family:verdana;
     font-size:12px;
+    margin-top: -15px;
   }
 
 .question {  
-  width: 880px;
+  width: 927px;
   float: left;
   background: #eeeeee;
   padding:8px 0px 8px 25px;
@@ -108,7 +99,7 @@ a:link {
   }
   
 .answer {  
-  width: 902px;
+  width: 950px;
   float: left;
   background: #fff;
   border-left:#ccc 1px solid;
@@ -119,7 +110,7 @@ a:link {
 	list-style: none;
 	}
 .answer li {
-	padding: 3px;margin-left:21px;
+	padding: 8px;
 	}
 
 
@@ -163,7 +154,7 @@ a:link {
 
 .po-thanks {
 	display: block;
-	margin: auto;
+	margin-left: 300px;
 	width: 300px;
 	padding: 18px;
 	background-color: #f0f1f3;
@@ -190,10 +181,13 @@ a:link {
 
 .customer-comment {
 	font-family: Arial, Helvetica, sans-serif;
-	width: 580px;
+	width: 500px;
 	font-size: 12px;
-	float: right;
+	font-weight: bold;
 	line-height: 17px;
+	margin-left: 457px;
+	margin-top: -97px;
+	position: absolute;
 }
 
 .search-message {
@@ -203,3 +197,83 @@ a:link {
 	margin: 3px 0px 6px 16px;
 	font-style: italic;
 }
+
+/*-------Processing Icon---------*/
+
+.loading-wrap {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.load-modal {
+    /* position: fixed; */
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 20%; 
+    background: #113c7b; 
+    text-align:center;
+    display:block;
+    
+}
+
+.loading-icon { 
+	padding:0; 
+    position: fixed;
+    top: 40%; 
+    left: 50%;   
+    width: 80px;
+    height: 100px;
+    background: url(../../images/common/loading-xpedx.gif) no-repeat;
+    margin-left:-40px;
+    margin-top:-50px;  
+    text-align:center;
+    z-index: 3000;
+     
+}
+a:hover {
+  color: #003399;
+  text-decoration: underline;
+}
+.resetlink {
+   font-family:Arial, Helvetica, sans-serif;
+   font-size: 12px;
+   color: #003399;
+   cursor: pointer;
+   line-height: 27px;
+   margin: 5px 0 0 15px;
+}
+.resetlink:hover {
+   text-decoration: underline;
+}
+  
+.ship-search-input-wrap {
+   margin-top: 30px;
+}
+  
+h4 {
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 14px;
+   color: #333;
+   font-weight: normal;
+ }
+ .filterinput{
+	background: url(../../images/icons/magnify.jpg) no-repeat scroll 3px 6px #FFFFFF;
+	border: 1px solid #D9D9D9;
+	border-radius: 0;
+	color: #000000;
+	font-size: 12px;
+	height: 25px;
+	padding: 1px 0 0 22px;
+	width: 138px;
+ 	margin-left:-29px;
+ }
+ .ul-po-results-error{
+ font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    position: absolute;
+ }

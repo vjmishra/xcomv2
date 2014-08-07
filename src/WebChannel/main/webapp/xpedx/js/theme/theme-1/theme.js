@@ -20,7 +20,7 @@ var decorators= {
 	var test = new Image();
 	var tmp = new Date();
 	var suffix = tmp.getTime();
-	test.src = this.getContext() + '/swc/xpedx/images/common/fir_assumptions.gif?'+suffix;
+	test.src = this.getContext() + XPEDXWCUtils_STATIC_FILE_LOCATION + '/xpedx/images/common/fir_assumptions.gif?'+suffix;
 	test.onload = function() {
             decorators.imagesLoaded = true;
             decorators.decoratePage();

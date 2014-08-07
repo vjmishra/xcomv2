@@ -27,6 +27,9 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-ext-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>		
 		<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/common/xpedx-header<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
@@ -77,6 +80,11 @@
 						 var myContent = this.href; 
 						 $(myContent).unwrap(); 
 					}
+		});
+		$("#cancelId").click(function(){
+				var url = $('#homePageId').val();
+				window.location.href = url;
+				return false;
 		});
 	});	
 </script>
@@ -286,7 +294,7 @@
 <s:hidden name='newUserName' id='newUserName' value="" />
 
 <s:url id='homePage' namespace='/home' action='home' />
-
+<s:hidden id="homePageId" value="%{#homePage}"/>
 <div class="error" id="errorMsg" style="display : none"></div>
 
 
@@ -391,8 +399,8 @@
               <td class="grey  no-border-right-user">&nbsp;</td>
               <td colspan="3" class="no-border-right-user"><div style="width: 263px;">
                 <ul class="float-right  padding-left3 margin-right-10">
-                	<li class="float-left margin-10"><s:a href='%{homePage}' cssClass="grey-ui-btn"><span>Cancel</span></s:a></li>
-					<li class="float-right"><a href="javascript:userRegSubmit();" class="orange-ui-btn"><span>Submit</span></a></li>
+                	<li class="float-left margin-10"><input id="cancelId" class="btn-neutral" type="button" value="Cancel"/></li>
+					<li class="float-right"><input type="button" onclick="javascript:userRegSubmit();" class="btn-gradient" value="Submit"/></li>
                 </ul>
               </div></td>
               

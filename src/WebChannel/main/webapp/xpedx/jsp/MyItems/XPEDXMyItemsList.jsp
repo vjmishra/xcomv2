@@ -20,6 +20,9 @@
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/MIL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+	<!--[if IE]> 
+	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+	<![endif]--> 
 	<!--[if IE]>
 	<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 	<![endif]-->
@@ -650,10 +653,8 @@
 			   <s:param name='shipToBanner' value="%{'true'}" />
 			</s:action>
 			
-			<div class="container">
-				<div id="breadcumbs-list-name" class="page-title">
-					<s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' />
-				</div>
+			<div class="container content-container">
+				<h1><s:text name='MSG.SWC.MIL.MYITEMLISTS.GENERIC.PGTITLE' /></h1>
 				
 				<div class="mil-lists-legend">
 					<div class="mil-lists-personal">Personal</div>
@@ -666,7 +667,7 @@
 					</s:if>
 				</div>
 				
-				<div class="mil-lists-toolbar">
+				<div class="mil-lists-toolbar" style="margin-right:0">
 					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 					
 					<div class="search-pagination search-pagination-top clearboth addpadtop5">
@@ -675,7 +676,7 @@
 					</div>
 				</div>
 				
-				<table id="mil-list" class="standard-table">
+				<table id="mil-list" class="standard-table" style="margin:0px">
 					<swc:sortctl sortField='%{orderByAttribute}' sortDirection='%{orderDesc}' down="Y" up="N" urlSpec='%{#milListSortURL}'>
 						<tbody>
 							<tr id="none" class="table-header-bar ">
@@ -728,9 +729,12 @@
 								<s:form id="doAction_edit_%{#uId}" action="MyItemsDetails" method="post">
 									<s:hidden name="listKey" value="%{#id}" />
 									<s:hidden name="listName" value="%{#name}" />
+									<s:hidden name="listDesc" value="%{#desc}" />
 									<s:hidden name="command" value="edit_list" />
 									<s:hidden name="itemCount" value="%{#numOfItems}" />
 									<s:hidden name="editMode" value="%{true}" />
+									<s:hidden name="shareAdminOnly" value="%{#spShareAdminOnly}" />
+									<s:hidden name='sharePrivateField' value='%{#spLevels}' />
 								</s:form>
 								
 								<s:form id="doAction_export_%{#uId}" action="MyItemsDetails" method="post">
@@ -831,7 +835,7 @@
 					</swc:sortctl>	
 				</table>
 				
-				<div class="mil-lists-toolbar">
+				<div class="mil-lists-toolbar" style="margin-right:0">
 					<div class="search-pagination search-pagination-bottom clearboth addpadtop5">
 						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}"
 								showFirstAndLast="False" urlSpec="%{#orderListPaginationURL}" isAjax="false"/>

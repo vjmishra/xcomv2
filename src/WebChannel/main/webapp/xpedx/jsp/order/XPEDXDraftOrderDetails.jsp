@@ -22,7 +22,12 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<!--[if IE]> 
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-ie-<s:property value="wCContext.storefrontId" /><s:property value='#wcUtil.xpedxBuildKey' />.css" /> 
+<![endif]--> 
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/ORDERS<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/order/carts-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
+
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
@@ -555,125 +560,78 @@ $(document).ready(function(){
 
 
 
-<div class="container shopping-cart">
+<div class="container content-container shopping-cart">
 
 <s:if test='ajaxLineStatusCodeMsg!=null'>
-	<div id="errorMsgDiv">
-	<s:if test='#pnaErrorStatusMsg !=null && pnaErrorStatusMsg != "" '>
-	<h5 align="center"><b><font color="red"><s:property value="pnaErrorStatusMsg" /></font></b></h5><br/>
+	<s:if test='#pnaErrorStatusMsg !=null && pnaErrorStatusMsg.trim() != "" '>
+		<div id="errorMsgDiv" class="error">
+			<s:property value="pnaErrorStatusMsg" />
+		</div>
 	</s:if>
-<%--	<h5 align="center"><b><font color="red"><s:property
-		value="ajaxLineStatusCodeMsg" /></font></b></h5>  --%>
-	</div>
 </s:if>
-<h5 align="center"><b><font color="red"><div id="minOrderErrorMessage"></div></font></b></h5><br/>
-	<h5 align="center"><b><font color="red"><div id="maxOrderErrorMessage"></div></font></b></h5><br/>
-	<h5 align="center"><b><font color="red"><div id="entileErrorMessade"></div></font></b></h5><br/>
+<div id="minOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="maxOrderErrorMessage" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="entitleErrorMessageBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 	
 <s:set name="draftOrderErrorFlag" value='%{#_action.getDraftOrderError()}'/>
 <s:if test='%{#draftOrderErrorFlag == "true" || #draftOrderErrorFlag("true")}'>
 	<h5 align="center"><b><font color="red">This cart has already been submitted, please refer to the Order Management page to review the order.</font></b></h5><br/>
 </s:if>
+
 <div id="infoMessage">
 	<s:if test=' "" != duplicateInfoMsg '>		
 		<s:property value="duplicateInfoMsg" />
 	</s:if>
 </div>
+
 <!-- EB-66 Suspended ShipTo -->
 	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
-	<br/><br/><br/><h5 align="center"><b><font color="red">
+	<h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	
-<!-- breadcrumb / 'print page' button -->
-<div class="breadcrumb-title" id="breadcumbs-list-name">
-	<span class="page-title">
+<h1>
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		 My Cart:&nbsp;
+		 My Cart:
+        <span>
 		<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>
 			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
-        	 Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
-        </s:if>
-        <s:else>
-        	Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/>
-        </s:else>
-	</s:if>
-	<s:else>
-			 	<s:property value='#orderDetails.getAttribute("OrderName")' />
-		</s:else>
-	</s:if>
-	<s:else>
-			<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
-        		<b>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/></b>
-        	</s:if>
-        	<s:else>
-        		<b>Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/></b>
-        	</s:else>
-	</s:else>
-	
-	</span>
-	
-
-<br/><br/>
-<a href="javascript:window.print()"><span class="print-ico-xpedx"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" /><span class="underlink">Print Page</span></span></a>
-</div>
-
-<div id="mid-col-mil">
-
-<div class="mil-edit">
-
-<div class="float-right">
-	<!-- promotion -->
-	<div class="ad-margin">
-		<!-- ad placeholder, per the mockup. Ad Juggler Starts -->
-		<s:set name='ad_keyword' value='%{#_action.getAdjCatTwoShortDesc()}' />
-		 <s:set name='storefrontId' value="wCContext.storefrontId" />
-		<s:if test="%{!#isPunchoutUser}">
-			<div class="float-none ad-float smallBody"><img height="4" width="7" class="ad-img" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/ad-arrow<s:property value='#wcUtil.xpedxBuildKey' />.gif" alt="advertisement" />advertisement</div>
+        		 Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/>
+	        </s:if>
+	        <s:else>
+	        	Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/>
+	        </s:else>
 		</s:if>
-		 	<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>			
-				<img width="468" height="60" border="0" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/SD_468x60<s:property value='#wcUtil.xpedxBuildKey' />.jpg"/>
-				</s:if>
-				<s:elseif test="%{#isPunchoutUser}">
-				<s:set name="isPunchoutimageExists" value="#wcUtil.isCheckPunchoutimageExists()" />
-				<s:set name="punchoutImagepath" value="#wcUtil.getPuchoutImagelocation('XPEDXDraftOrderDetails.jsp')" />
-					<s:if test="%{#isPunchoutimageExists}">
-					<img width="468" height="60" border="0" alt="" style="margin-top: 0px; padding-right: 0px;" src="<s:property value='punchoutImagepath'/> "/>
-				 </s:if>
-				</s:elseif>
-	
 		<s:else>
-		<s:if test="#ad_keyword != null" >
-			<s:if  test='%{#storefrontId == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT}' >
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<s:property value="%{#ad_keyword}" />';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:if>
-		</s:if>	
-			<s:else>
-				<script type="text/javascript" language="JavaScript">
-				aj_server = '<%=session.getAttribute("AJ_SERVER_URL_KEY")%>'; aj_tagver = '1.0';
-				aj_zone = 'ipaper'; aj_adspot = '115718'; aj_page = '0'; aj_dim ='114881'; aj_ch = ''; aj_ct = ''; aj_kw = '<%=session.getAttribute("CUST_PREF_CATEGORY_DESC")%>';
-				aj_pv = true; aj_click = '';
-				</script>
-			</s:else>
+		 	<s:property value='#orderDetails.getAttribute("OrderName")' />
 		</s:else>
-		<script type="text/javascript" language="JavaScript" src="https://img.hadj7.adjuggler.net/banners/ajtg.js"></script>  
-		<!-- Ad Juggler Tag Ends -->
-				
-			
-		<div class="clear">&nbsp;</div>
-	</div>
+        </span>
+	</s:if>
+	<s:else>
+		<s:if test='#orderDetails.getAttribute("OrderType") != "Customer" ' > 
+       		<b>Order #: <s:property value='@com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils@getFormattedOrderNumber(#orderExtn)'/></b>
+       	</s:if>
+       	<s:else>
+       		<b>Web Confirmation: <s:property value='#orderExtn.getAttribute("ExtnWebConfNum")'/></b>
+       	</s:else>
+	</s:else>
+</h1>
+<div class="print-ico-xpedx orders underlink">
+	<a href="javascript:window.print()">
+		<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon<s:property value='#wcUtil.xpedxBuildKey' />.gif" width="16" height="15" alt="Print Page" />
+    	Print Page
+	</a>
 </div>
-<!-- end promotion space -->
-<!-- List Item Description -->
-<div class="mil-edit-forms">
 
+
+	
+<!-- List Item Description -->
+
+
+<div class="cart-info-wrap">
 <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
 	<s:if test="#canChangeOrderName">
-		Name
+		<label>Name</label>
 		<s:textfield name='cartName_new' id="cartName_new" size="35"
 			cssClass="x-input" onkeyup="javascript:maxNewLength(this,'35');"
 			value='%{#orderDetails.getAttribute("OrderName")}' tabindex="3400" />
@@ -683,7 +641,7 @@ $(document).ready(function(){
 	</s:else>
 </s:if>
 	
-	<br />
+	
 	
 	
 	
@@ -694,8 +652,8 @@ $(document).ready(function(){
 			value='%{#extnOrderDetails.getAttribute("ExtnOrderDesc")}'
 			tabindex="3400" /> --%>
 		
-			Description
-			<br/>
+			<label>Description</label>
+			
 			<s:if test='%{#resetDescFlag == "true" || #resetDescFlag.contains("true")}'>
 				<textarea  tabindex="3401" id="cartDesc_new" name="cartDesc_new" onkeyup="javascript:maxNewLength(this,'255'); "></textarea>
 			</s:if>
@@ -742,45 +700,49 @@ $(document).ready(function(){
 	</s:else>
 
 </s:else>	
-	<div class="clearall">&nbsp;</div>
+	</div>
+	<div class="cart-btn-wrap">
 	
-	<s:if test='%{#editOrderFlag == "true" || #editOrderFlag.contains("true")}'>	
-		<ul class="float-right tool-bar-bottom sc-btn-list margin-top-15">
-	</s:if>
-	<s:else>
-		<ul class="float-right tool-bar-bottom sc-btn-list">
-	</s:else>
 	
-	<li class="float-right">
 		<s:url id='quickAddURL' namespace="/order" action='quickAdd' escapeAmp="false">
 			<s:param name="selectedHeaderTab">QuickAdd</s:param>
 			<s:param name="quickAdd" value="%{true}" />
 		</s:url>
-		<a tabindex="3403" id="quick-add-button" class="grey-ui-btn" href="<s:property value='%{#quickAddURL}'/>">
-			<span>Go to Quick Add</span>
-		</a>
-	</li>
-    <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-    	<li><a href="#" tabindex="3402" name="otherCartActions" id="otherCartActions" class="grey-ui-btn" onclick="javascript:actionOnList('Copy');" /><span>Copy Cart</span></a></li>
-    </s:if>	
-<s:if test='majorLineElements.size() > 0'>
-	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-   	 <li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a></li>
-   	 </s:if>
-   	 <s:else>
-   	 	<li><a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a></li>
-   	 </s:else>
- </s:if>
-
-</ul>
-	<br />
+		<input type="button" id="quick-add-button" tabindex="3403" class="btn-neutral floatright"
+			value="Go to Quick Add" onclick="window.location='${quickAddURL}';" />
 	
-</div>
-<br/><div class="error" id="errorMsgTop" style="display:none;position:relative;margin-left:445px;" ></div>
+    <s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		<input type="button" id="otherCartActions" tabindex="3402" class="btn-neutral floatright addmarginright10"
+			value="Copy Cart" onclick="actionOnList('Copy');" />
+    </s:if>	
+	<s:if test='majorLineElements.size() > 0'>
+		<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+			
+			<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+				value="Update Cart" onclick="update();" />
+			
+		</s:if>
+		<s:else>
+		
+		 	<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+				value="Update Order" onclick="update();" />
+		
+		</s:else>
+	</s:if>
+	</div>
+	
+
+
+	
+	
+
+
+<div id="errorMsgTop" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+
 <div class="clear">&nbsp;</div>
 <!-- end item description -->
 
-	<br />
+	
 	
 	<div class="mil-wrap-condensed-container">
 
@@ -1027,11 +989,8 @@ function prepareDiv(data, itemId, name, desc, qty, uom){
 var currentAadd2ItemList = new Object();
 
 </script>
- 
-</div>
-</s:if>
-</div>
 
+</s:if>
 <div class="clearall">&nbsp;</div>
 <br />
 
@@ -1067,6 +1026,9 @@ var currentAadd2ItemList = new Object();
 	value='#util.formatPriceWithCurrencySymbol(#wcContext,#currencyCode,#overallTotals.getAttribute("HdrShippingTotal"))' />
 <s:set name="shippingAdjCounter" value="false" /> <s:set
 	name="allAdjCounter" value="false" />
+<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() != "Y"}'>	
+	<s:set name='adjustedSubtotalWithoutTaxes'  value='#orderExtn.getAttribute("ExtnTotalOrderValue")' />
+</s:if>
 <!-- Pricing -->
 <%--	Using CustomerContactBean object from session
 <s:if test='%{#session.viewPricesFlag == "Y"}'>
@@ -1171,22 +1133,17 @@ var currentAadd2ItemList = new Object();
 	</table>
 </div>
 </s:if>
-<div class="clearall">&nbsp;</div>
-
+</div>
+<div class="clearfix"></div>
 <!--bottom button 'bar' -->
 <div class="bottom-btn-bar scp">
-<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-	<a id="otherCartActions"  class="grey-ui-btn pointers" onclick="javascript:actionOnList('Delete');"><span>Delete Cart</span></a>
-</s:if>
-<s:else>
-	<s:url id="cancelEditOrderChanges" includeParams="none"
-							action='MyResetPendingOrder' namespace='/order' escapeAmp="false">
-							<s:param name="orderHeaderKey" value='%{#isEditOrderHeaderKey}' />
-	</s:url>
-	<a id="cancel-btn" class="grey-ui-btn" href="<s:property value="#cancelEditOrderChanges"/>"><span>Cancel Changes</span></a>
-	
-	
-</s:else>	
+	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
+		<input type="button" id="otherCartActions" class="btn-neutral floatleft" value="Delete Cart" onclick="actionOnList('Delete');" />
+	</s:if>
+	<s:else>
+		<input class="btn-neutral floatleft" type="button" value="Cancel Changes" onclick="window.location='${cancelEditOrderChanges}'" />
+	</s:else>	
+
 	<s:set name="ohk" value='%{#orderHeaderKey}' />
 	<s:set name="isEstimator" value='%{#xpedxCustomerContactInfoBean.isEstimator()}' />
 	<%--	Using CustomerContactBean object from session
@@ -1195,47 +1152,48 @@ var currentAadd2ItemList = new Object();
 	<s:if test="!#isEstimator">
 	<s:if test='majorLineElements.size() > 0'>
 		<s:if test='!#isPunchoutUser'>
-			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">		    
-		    	<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Checkout</span></a>	    	
+			<s:if test="%{#shipToCustomer.getCustomerStatus() != '30' && #billToCustomer.getCustomerStatus() != '30'}">
+				<input type="button" id="checkout-btn" class="btn-gradient floatright" value="Checkout" onclick="checkOut();" />
 			</s:if> 
 		    <s:if test='#hasPendingChanges == "Y"'>
-	        	<a id="reset-btn" class="grey-ui-btn" href="<s:property value="#discardPendingChangesURL"/>"><span>Reset Changes</span></a> 
+	        	<input type="button" id="reset-btn" class="btn-neutral floatleft" value="Reset Changes" onclick="window.location='<s:property value="#discardPendingChangesURL"/>'" />
 	        </s:if>
 		</s:if>
 		<s:else>
-			<a id="checkout-btn" class="orange-ui-btn" href="javascript:checkOut();"><span>Submit Cart</span></a>
+			<input type="button" id="checkout-btn" class="btn-gradient floatright" value="Submit Cart" onclick="checkOut();" />
 		</s:else>
 	</s:if>
 	</s:if>
 
 	<s:if test="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ">
-		<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Cart</span></a>
+		<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+			value="Update Cart" onclick="update();" />
 	</s:if>
 	<s:else>
-		<a class="grey-ui-btn sc-update-cart" href="javascript:update();"><span>Update Order</span></a>
+		<input type="button" class="btn-neutral floatright addmarginright10 sc-update-cart"
+			value="Update Order" onclick="update();" />
 	</s:else>
 </div>
+<div class="clearfix"></div>
 
 <!--Added for 3098  -->
 <!-- EB-66 Suspended ShipTo -->
 	<s:if test="%{#billToCustomer.getCustomerStatus() == '30'|| #shipToCustomer.getCustomerStatus() == '30' }">
-	<br/><br/><br/><h5 align="center"><b><font color="red">
+	<h5 align="center"><b><font color="red">
 		We cannot accept your order at this time. Please contact your CSR to resolve an issue with your account.
 	</font></b></h5></s:if>
 	
-<br/><h5 align="center"><b><font color="red"><div id="maxOrderErrorMessageBottom"></div></font></b></h5>
-<br/><h5 align="center"><b><div  id="entitleErrorMessageBottom" style="position:relative;color:red;display:inline" ></div></b></h5>
-<br/><h5 align="center"><b><font color="red"><div 	id="minOrderErrorMessageBottom"></div></font></b></h5>
-<br/><div  class="error" id="errorMsgBottom" style="display:none;position:relative;left:800px;" ></div> 
+<div id="maxOrderErrorMessageBottom" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="minOrderErrorMessageBottom" class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="entitleErrorMessageBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
+<div id="errorMsgBottom"  class="textAlignCenter" style="display: none"><p class="error"></p></div>
 
-<div id="errorDiv_orderHeader" style="color:red;" ></div>
 <!--bottom button 'bar' -->
-</div>
+
 <s:set name="isSalesRep" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute('IS_SALES_REP')}"/>
 <s:set name='lastModifiedDateString' value="getLastModifiedDateToDisplay()" />
 <s:set name='lastModifiedUserId' value="lastModifiedUserId" />
 <s:set name='modifiedBy' value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getLoginUserName(#lastModifiedUserId)' />
-<div class="clearall">&nbsp;</div>
 <div class="last-modified-div sc">
     Last modified by 
     <s:if test="%{#isSalesRep}">
@@ -1647,59 +1605,34 @@ function validateOrder()
 	var fmtdchargeAmount='<s:property value='#fmtdchargeAmount' />';//JIRA 3547
 	var erroMsg = '<s:property value='#erroMsg' />';//Added for JIRA 3523
 	
-	//Added for JIRA 3523
 	if(erroMsg != null && erroMsg != ""){
-		var divId=document.getElementById("entileErrorMessade");
-		var divId1 = document.getElementById("entitleErrorMessageBottom");
-		if(divId != null)
-		{		
-			
-			divId.innerHTML="Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.";
-		}
-		if(divId1 != null)
-		{
-			divId1.innerHTML="Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.";
-		}
+		$('#entitleErrorMessage,#entitleErrorMessageBottom').each(function(){
+			$(this).find('p').text("Item # "+erroMsg+" is currently not valid. Please delete it from your cart and contact Customer Service.");
+			$(this).show();
+		});
 	}
-	
-	//JIRA 3488 start
+
 	if(maxAmount > 0 && totalAmountNum>maxAmount)
 	{
-		var divId=document.getElementById("maxOrderErrorMessage");
-		var divId1 = document.getElementById("maxOrderErrorMessageBottom");
-		if(divId != null)
-		{		
-			
-			divId.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
-		}
-		if(divId1 != null)
-		{
-			divId1.innerHTML="Order exceeds allowable maximum of "+fmtdMaxOrderAmount;
-		}
-			
+		$('#maxOrderErrorMessage,#maxOrderErrorMessageBottom').each(function(){
+			$(this).find('p').text("Order exceeds allowable maximum of "+fmtdMaxOrderAmount);
+			$(this).show();
+		});
 	}
-	//JIRA 3488 end
+
 	if(minAmount >totalAmountNum)
 	{
-		var divId=document.getElementById("minOrderErrorMessage");
-		var divId1=document.getElementById("minOrderErrorMessageBottom");
-		if(divId != null)
-		{		
-			//Start fix for 3547
-			//divId.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
-			divId.innerHTML="To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + "."
-		}
-		if(divId1 != null)
-		{
-			divId1.innerHTML="To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + ".";
-			//divId1.innerHTML="Order minimum is "+minAmount+". A Penalty of "+chargeAmount+" will be charged.";
-			//End fix for 3547
-		}
+		$('#minOrderErrorMessage,#minOrderErrorMessageBottom').each(function(){
+			$(this).find('p').text("To avoid a Minimum Order Charge of "+fmtdchargeAmount+" at the time of order placement, this order must meet the minimum order amount of " + fmtdMinOrderAmount + ".");
+			$(this).show();
+		});
 	}
 }
-	function updateValidation(){
-		$(".numeric").numeric();	
-	}
+
+function updateValidation(){
+	$(".numeric").numeric();	
+}
+
 	updateValidation();
 
 	// seems like we do want to do this on punchout too

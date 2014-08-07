@@ -24,12 +24,12 @@
 <meta name="webapp-context" content="/swc" />
 
 <!-- begin styles. -->
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <!-- end styles -->
 <!--[if IE]>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE.css" />
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <![endif]-->
 
 <!-- jQuery Base & jQuery UI -->
@@ -66,6 +66,9 @@
 			buttonImage: '<s:property value='#util.staticFileLocation' />/images/theme/theme-1/calendar-icon.png',
 			buttonImageOnly: true
 		});
+		$("#printButton").click(function(){
+			window.print();
+		});
 	});
 </script>
 
@@ -98,30 +101,22 @@
 	<div id="main-container">
 		<div id="main"><s:action name="xpedxHeader" executeResult="true"
 				namespace="/common" /> <!-- // header end -->
-		<div class="container"><!-- breadcrumb -->
-			<div id="mid-col-mil"><br />
-
-				<div>
-					
-					<div class="float-right clearview padding-bottom3" ><a href="javascript:window.print()"><span
-							class="print-ico-xpedx underlink"><img
-							src="<s:property value='#util.staticFileLocation' />/xpedx/images/common/print-icon.gif" width="16" height="15"
-							alt="Print This Page" />Print Page</span></a></div>
-					
-					<div>
-					<h2></h2>
+		<div class="container content-container"><!-- breadcrumb -->
+		
+				<h1><s:text name='MSG.SWC.NEWSARTL.READ.GENERIC.PGTITLE'/></h1>
 				
+			   <div id="printButton" class="print-ico-xpedx underlink print-adjust" >
+						<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
+				</div> 
+			   	
 				<table class="form margin-15 underlines" style="margin-bottom: 10px;">
 					<tr>
 						<td class="no-padding no-border-right-user underlines" width="100%">
-	
-						<%-- <span class="page-title">News Article</span> --%>
-						<span class="page-title"> <s:text name='MSG.SWC.NEWSARTL.READ.GENERIC.PGTITLE' /> </span>
-						<br/><br/><span class="bold"><s:property value='#xutil.getAttribute(#articleElement,"ArticleName")' /> </span><br/>
+						<span class="bold"><s:property value='#xutil.getAttribute(#articleElement,"ArticleName")' /> </span><br/>
 						<s:property value='%{#dateUtilBean.formatDate(#xutil.getAttribute(#articleElement,"Createts"),wCContext)}' />
 						</td>
 					</tr>
-				</table>
+				</table> 
 				
 						<!-- <div class="table-top-bar" style="width: 100%;">
 						<div class="table-top-bar-L"></div>
@@ -141,10 +136,9 @@
 					</div> -->
 					<br />
 					<div class="clearview"></div>
-				</div>
-</div>
+				
+
 <!-- End Pricing -->
-</div>
 </div>
 </div>
 </div>

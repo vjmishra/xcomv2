@@ -70,6 +70,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 	private Button radIsXpedxUom;
 	private Text txtSupportEmailAddr;
 	private Button chkPurchaseOrd;
+	private Button chkStockChkWeb;
 	private Text txtPOComments;
 	private Button chkPOConfirmation;
 	private Text txtPOConfirmationComments;
@@ -144,41 +145,41 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		tbd.setName("txtXSLTFilename");
 		txtXSLTFilename.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCXmlUserXPath");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCXmlUserXPath");
-		tbd.setName("txtPathOfUserId");
-		txtPathOfUserId.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+//		tbd = new YRCTextBindingData();
+//		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnCXmlUserXPath");
+//		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnCXmlUserXPath");
+//		tbd.setName("txtPathOfUserId");
+//		txtPathOfUserId.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMyItemsLink");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMyItemsLink");
-		chkBd.setName("chkShowMyItems");
-		chkShowMyItems.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnMyItemsLink");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnMyItemsLink");
+//		chkBd.setName("chkShowMyItems");
+//		chkShowMyItems.setData("YRCButtonBindingDefination", chkBd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUNSPSCRequired");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUNSPSCRequired");
-		chkBd.setName("chkUNSPSCCodeReg");
-		chkUNSPSCCodeReg.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUNSPSCRequired");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUNSPSCRequired");
+//		chkBd.setName("chkUNSPSCCodeReg");
+//		chkUNSPSCCodeReg.setData("YRCButtonBindingDefination", chkBd);
 	    
-	    tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnReplaceCharacter");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnReplaceCharacter");
-		tbd.setName("txtReplaceChars");
-		txtReplaceChars.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+//	    tbd = new YRCTextBindingData();
+//		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnReplaceCharacter");
+//		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnReplaceCharacter");
+//		tbd.setName("txtReplaceChars");
+//		txtReplaceChars.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		chkBd = new YRCButtonBindingData();
-		chkBd.setCheckedBinding("Y");
-		chkBd.setUnCheckedBinding("N");
-		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseOCInSAPParamFlag");
-		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseOCInSAPParamFlag");
-		chkBd.setName("chkUseOCISAPParam");
-		chkUseOCISAPParam.setData("YRCButtonBindingDefination", chkBd);
+//		chkBd = new YRCButtonBindingData();
+//		chkBd.setCheckedBinding("Y");
+//		chkBd.setUnCheckedBinding("N");
+//		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUseOCInSAPParamFlag");
+//		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUseOCInSAPParamFlag");
+//		chkBd.setName("chkUseOCISAPParam");
+//		chkUseOCISAPParam.setData("YRCButtonBindingDefination", chkBd);
 
 		
 	    tbd = new YRCTextBindingData();
@@ -187,12 +188,12 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		tbd.setName("txtUserNameParam");
 		txtUserNameParam.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-	    tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserEmailTemplate");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserEmailTemplate");
-		tbd.setName("txtUserEmailTemplate");
-		txtUserEmailTemplate.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
-		
+//	    tbd = new YRCTextBindingData();
+//		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserEmailTemplate");
+//		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserEmailTemplate");
+//		tbd.setName("txtUserEmailTemplate");
+//		txtUserEmailTemplate.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+//		
 	    tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnUserPwdParam");
 		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUserPwdParam");
@@ -225,6 +226,14 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnUomType");
 		radBd.setCheckedBinding("N");
 		radIsXpedxUom.setData("YRCButtonBindingDefination", radBd);
+		
+		chkBd = new YRCButtonBindingData();
+		chkBd.setCheckedBinding("Y");
+		chkBd.setUnCheckedBinding("N");
+		chkBd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnStockCheckOption");
+		chkBd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStockCheckOption");
+		chkBd.setName("chkStockChkWeb");
+		chkStockChkWeb.setData("YRCButtonBindingDefination", chkBd);
 		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnSupportEmailAddress");
@@ -395,8 +404,55 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         GridData gridData2 = new GridData();
         gridData2.horizontalAlignment = SWT.BEGINNING;
         gridData2.widthHint = 200;
+        
+        GridData gridDataSpan2 = new GridData();
+        gridDataSpan2.horizontalAlignment = SWT.FILL;
+        gridDataSpan2.grabExcessHorizontalSpace = true;
+        gridDataSpan2.horizontalSpan = 3;
+        gridDataSpan2.minimumWidth = 150;
+        
+        Label lblcXmlOCI = new Label(pnlPunchOut, SWT.BOLD);
+        lblcXmlOCI.setText("cXML and OCI :");
+        lblcXmlOCI.setLayoutData(gridDataSpan2);
+        
+//      XSLT Filename
+        Label lblXSLTFilename = new Label(pnlPunchOut, SWT.RIGHT);
+        lblXSLTFilename.setText("XSLT_Filename");
+        lblXSLTFilename.setLayoutData(gridData1);
+        lblXSLTFilename.setData("name", "lblXSLTFilename");
+        txtXSLTFilename = new Text(pnlPunchOut, SWT.BORDER);
+        txtXSLTFilename.setLayoutData(gridData2);
+        txtXSLTFilename.setData("name", "txtXSLTFilename");
+        txtXSLTFilename.setText("12345678B");
+        txtXSLTFilename.setTextLimit(60);
 
-        // Identity
+//      Comments
+        Label lblComments = new Label(pnlPunchOut, SWT.BOLD);
+        lblComments.setText("Comments: (will appear on the landing page)");
+        lblComments.setLayoutData(gridDataSpan2);
+        lblComments.setData("name", "lblComments");
+        
+        GridData gridDataSpan2b = new GridData();
+		gridDataSpan2b.horizontalAlignment = SWT.FILL;
+		gridDataSpan2b.verticalAlignment = SWT.FILL;
+		gridDataSpan2b.grabExcessHorizontalSpace = true;
+		gridDataSpan2b.grabExcessVerticalSpace = true;
+		gridDataSpan2b.heightHint = 75;
+		gridDataSpan2b.horizontalSpan = 2;
+		
+		txtComments = new Text(pnlPunchOut, 2626);
+		txtComments.setLayoutData(gridDataSpan2b);
+		txtComments.setData("yrc:customType", "Text");
+		txtComments.setData("name", "txtComments");
+		txtComments.setText("Enter Comments");
+		txtComments.setTextLimit(500);
+		
+		
+		Label lblcXmlOnly = new Label(pnlPunchOut, SWT.BOLD);
+		lblcXmlOnly.setText("cXML Only :");
+		lblcXmlOnly.setLayoutData(gridDataSpan2);
+        
+// 		Identity
         Label lblIdentity = new Label(pnlPunchOut, SWT.RIGHT);
         lblIdentity.setText("Identity");
         lblIdentity.setLayoutData(gridData1);
@@ -428,74 +484,9 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtStartPageURL.setText("12345678B");
         txtStartPageURL.setTextLimit(100);
 
-//      XSLT Filename
-        Label lblXSLTFilename = new Label(pnlPunchOut, SWT.RIGHT);
-        lblXSLTFilename.setText("XSLT_Filename");
-        lblXSLTFilename.setLayoutData(gridData1);
-        lblXSLTFilename.setData("name", "lblXSLTFilename");
-        txtXSLTFilename = new Text(pnlPunchOut, SWT.BORDER);
-        txtXSLTFilename.setLayoutData(gridData2);
-        txtXSLTFilename.setData("name", "txtXSLTFilename");
-        txtXSLTFilename.setText("12345678B");
-        txtXSLTFilename.setTextLimit(60);
-        
-        Label lblPathOfUserId = new Label(pnlPunchOut, SWT.RIGHT);
-        lblPathOfUserId.setText("Path_of_user_id");
-        lblPathOfUserId.setLayoutData(gridData1);
-        lblPathOfUserId.setData("name", "lblPathOfUserId");
-        txtPathOfUserId = new Text(pnlPunchOut, SWT.BORDER);
-        txtPathOfUserId.setLayoutData(gridData2);
-        txtPathOfUserId.setData("name", "txtPathOfUserId");
-
-//      Show My Items
-        Label lblShowMyItems = new Label(pnlPunchOut, SWT.RIGHT);
-        lblShowMyItems.setText("Show_My_Items");
-        lblShowMyItems.setLayoutData(gridData1);
-        lblShowMyItems.setData("name", "lblShowMyItems");
-        chkShowMyItems = new Button(pnlPunchOut, SWT.CHECK);
-		chkShowMyItems.setLayoutData(new GridData());
-		chkShowMyItems.setData("name", "chkShowMyItems");
-		
-//		UNSPSC Code Required
-        Label lblUNSPSCCodeReg = new Label(pnlPunchOut, SWT.RIGHT);
-        lblUNSPSCCodeReg.setText("UNSPSC_Code_Required");
-        lblUNSPSCCodeReg.setLayoutData(gridData1);
-        lblUNSPSCCodeReg.setData("name", "lblUNSPSCCodeReg");
-        chkUNSPSCCodeReg = new Button(pnlPunchOut, SWT.CHECK);
-		chkUNSPSCCodeReg.setLayoutData(new GridData());
-		chkUNSPSCCodeReg.setData("name", "chkUNSPSCCodeReg");
-
-//		XSLT Filename
-        Label lblReplaceChars = new Label(pnlPunchOut, SWT.RIGHT);
-        lblReplaceChars.setText("Replace_Chars");
-        lblReplaceChars.setLayoutData(gridData1);
-        lblReplaceChars.setData("name", "lblReplaceChars");
-        txtReplaceChars = new Text(pnlPunchOut, SWT.BORDER);
-        txtReplaceChars.setLayoutData(gridData2);
-        txtReplaceChars.setData("name", "txtReplaceChars");
-        txtReplaceChars.setText("12345678B");
-        txtReplaceChars.setTextLimit(20);
-        
-        GridData gridDataSpan2 = new GridData();
-        gridDataSpan2.horizontalAlignment = SWT.BEGINNING;
-        gridDataSpan2.grabExcessHorizontalSpace = true;
-        gridDataSpan2.horizontalSpan = 2;
-        gridDataSpan2.minimumWidth = 150;
-        Label lblOCISAPMaint = new Label(pnlPunchOut, SWT.BOLD);
-        lblOCISAPMaint.setText("OCI_SAP_Maintenance");
-        lblOCISAPMaint.setLayoutData(gridDataSpan2);
-        lblOCISAPMaint.setData("name", "lblOCISAPMaint");
-
-        Label lblUseOCISAPParam = new Label(pnlPunchOut, SWT.RIGHT);
-        lblUseOCISAPParam.setText("Use_OCI_r_SAP_Param");
-        lblUseOCISAPParam.setLayoutData(gridData1);
-        lblUseOCISAPParam.setData("name", "lblUseOCISAPParam");
-        chkUseOCISAPParam = new Button(pnlPunchOut, SWT.CHECK);
-		chkUseOCISAPParam.setLayoutData(new GridData());
-		chkUseOCISAPParam.setData("name", "chkUseOCISAPParam");
-		
+//      Username
         Label lblUserNameParam = new Label(pnlPunchOut, SWT.RIGHT);
-        lblUserNameParam.setText("Username_Param");
+        lblUserNameParam.setText("Username");
         lblUserNameParam.setLayoutData(gridData1);
         lblUserNameParam.setData("name", "lblUserNameParam");
         txtUserNameParam = new Text(pnlPunchOut, SWT.BORDER);
@@ -503,17 +494,9 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtUserNameParam.setData("name", "txtUserNameParam");
         txtUserNameParam.setTextLimit(30);
         
-        Label lblUserEmailTemplate = new Label(pnlPunchOut, SWT.RIGHT);
-        lblUserEmailTemplate.setText("User_email_template");
-        lblUserEmailTemplate.setLayoutData(gridData1);
-        lblUserEmailTemplate.setData("name", "lblUserEmailTemplate");
-        txtUserEmailTemplate = new Text(pnlPunchOut, SWT.BORDER);
-        txtUserEmailTemplate.setLayoutData(new GridData());
-        txtUserEmailTemplate.setData("name", "txtUserEmailTemplate");
-        txtUserEmailTemplate.setTextLimit(30);
-
+//      Password
         Label lblUserpwdParam = new Label(pnlPunchOut, SWT.RIGHT);
-        lblUserpwdParam.setText("Userpwd_Param");
+        lblUserpwdParam.setText("Password");
         lblUserpwdParam.setLayoutData(gridData1);
         lblUserpwdParam.setData("name", "lblUserpwdParam");
         txtUserpwdParam = new Text(pnlPunchOut, SWT.BORDER);
@@ -521,24 +504,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtUserpwdParam.setData("name", "txtUserpwdParam");
         txtUserpwdParam.setTextLimit(30);
         
-		Label lblComments = new Label(pnlPunchOut, SWT.BOLD);
-        lblComments.setText("Comments:");
-        lblComments.setLayoutData(gridDataSpan2);
-        lblComments.setData("name", "lblComments");
-        
-        GridData gridDataSpan2b = new GridData();
-		gridDataSpan2b.horizontalAlignment = SWT.FILL;
-		gridDataSpan2b.verticalAlignment = SWT.FILL;
-		gridDataSpan2b.grabExcessHorizontalSpace = true;
-		gridDataSpan2b.grabExcessVerticalSpace = true;
-		gridDataSpan2b.heightHint = 75;
-		gridDataSpan2b.horizontalSpan = 2;
-		
-		txtComments = new Text(pnlPunchOut, 2626);
-		txtComments.setLayoutData(gridDataSpan2b);
-		txtComments.setData("yrc:customType", "Text");
-		txtComments.setData("name", "txtComments");
-		txtComments.setTextLimit(500);
+
 	}
 
 	private void createB2BMaintComposite() {
@@ -608,6 +574,18 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		radIsXpedxUom.setText("xpedx");
 		radIsXpedxUom.setData("name", "radIsXpedxUom");
 		radIsXpedxUom.setData("yrc:customType", "Label");
+		
+		//Stock Check Web Service
+		Label lblStockCheckWeb = new Label(pnlB2BMaint, SWT.LEFT);
+		lblStockCheckWeb.setText("Stock Check Web Service");
+		lblStockCheckWeb.setLayoutData(gridData1);
+		lblStockCheckWeb.setData("name", "lblStockCheckWeb");
+		chkStockChkWeb = new Button(pnlB2BMaint, SWT.CHECK|SWT.LEFT);
+		chkStockChkWeb.setText("");
+		chkStockChkWeb.setVisible(true);
+		chkStockChkWeb.setData("yrc:customType", "Label");
+		chkStockChkWeb.setLayoutData(gridData2);
+		chkStockChkWeb.setData("name", "chkStockChkWeb");
 		
 		// Support Email Address
         Label lblSupportEmailAddr = new Label(pnlB2BMaint, SWT.LEFT);

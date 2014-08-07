@@ -22,7 +22,7 @@ function viewAccountDetails()
 <div style="display: none;" >
 	
 	<div id="dlgSelectAccountBox" class="xpedx-light-box select-account" >
-	<h2 style="margin-bottom:10px; color:#000;"><span>Select Account</span></h2>
+	<h1>Select Account</h1>
 	
 	<div class="form-service-light"> 
 	<s:form id="selectAccountForm" name="selectAccountForm" namespace='/profile/org' action='MyGetCustomerInfo'>
@@ -42,8 +42,8 @@ function viewAccountDetails()
          <tr>
            		<td>                          
            		<ul id="tool-bar" class="tool-bar-bottom float-right">
-             		<li style="float:left;" class="margin-10"><a class="grey-ui-btn" href="javascript:$.fancybox.close();" ><span>Cancel</span></a></li>
-             		<li style="float:right;"><a class="green-ui-btn" href="javascript:viewAccountDetails();" ><span>Select</span></a></li>
+             		<li style="float:left;" class="margin-10"><input class="btn-neutral" type="button" onclick="javascript:$.fancybox.close();" value="Cancel"/></li>
+             		<li style="float:right;"><input class="btn-gradient" type="button" onclick="javascript:viewAccountDetails();" value="Select"/></li>
                	</ul>
              	</td>
          </tr> 
@@ -53,4 +53,5 @@ function viewAccountDetails()
        </s:form>
      </div>
      </div>
+     
 </div>

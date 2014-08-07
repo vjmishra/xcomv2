@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -42,6 +44,7 @@ import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.utilities.CommerceContext;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.webchannel.utilities.WCUtils;
 import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutRequest;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -75,7 +78,6 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 	protected String cxmlData = null;
 	protected String ociData = null;
 
-	protected String msap = null;
 	private PunchoutRequest punchoutRequest = null;
 
 	private static final Logger LOG = Logger.getLogger(CustomPunchoutOrderAction.class);
@@ -103,6 +105,10 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 				ociFormat(outputData);
 			}
 
+			if(LOG.isDebugEnabled()){
+				LOG.debug("Punchout output: " + outputData);
+			}
+
 			deleteCart(cc.getOrderHeaderKey());
 
 		} catch (Exception e) {
@@ -115,8 +121,8 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		return toReturn;
 	}
 
-	private String populatePunchOutOrderMessage(String orderHeaderKey,
-			IAribaContext aribaContext) throws Exception {
+	private String populatePunchOutOrderMessage(String orderHeaderKey, IAribaContext aribaContext)
+			throws Exception {
 
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
@@ -124,22 +130,64 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 
-		String customerID = context.getCustomerId();
-		String storeFrontId = context.getStorefrontId();
-		msap = XPXTranslationUtilsAPI.getMsap(env, customerID, storeFrontId);
-
-		// replaceChars not supported (later?). Is xslt version being set/used??
-		Document CustDetails = XPEDXWCUtils.getCustomerDetails(msap, storeFrontId);
-		String xsltVersion = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(),"/Customer/Extn/@ExtnXSLTVer");
-		String xsltFileName = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
-		String replaceChars = SCXmlUtil.getXpathAttribute( CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
+		Document custDetails = getCustDetails(context, env);
+		String xsltFileName = SCXmlUtil.getXpathAttribute(custDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
+		// v1 replaceChars functionality not yet supported. [Is xslt version needed?]
+		//String replaceChars = SCXmlUtil.getXpathAttribute( CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
+		//String xsltVersion = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(),"/Customer/Extn/@ExtnXSLTVer");
 
 		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);
 
 		updateOrderUoms(env, orderOutputDoc);
-		updateLineNos(env, orderOutputDoc);
+		updateLineNos(orderOutputDoc);
+		addRoundedUnitPrices(orderOutputDoc);
+		updateCustomUnspsc(context, env, orderOutputDoc);
 
 		return transformUsingXslt(orderOutputDoc, xsltFileName);
+	}
+
+	/**
+	 * If custom UNSPSC mapped for an item, use it instead of UNSPSC stored on the item
+	 */
+	private void updateCustomUnspsc(IWCContext context, YFSEnvironment env, Document orderOutputDoc) {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element orderLine = (Element) nodeList.item(i);
+
+			try {
+				// lookup is by item # (not by item's UNSPSC)
+				String itemId = SCXmlUtil.getXpathAttribute(orderLine, "Item/@ItemID");
+				if (itemId == null) {
+					LOG.warn("Punchout: null ItemId on item when looking for custom UNSPSC for customer: " + context.getCustomerId());
+					return;
+				}
+				Element extnElem = SCXmlUtil.getXpathElement(orderLine, "ItemDetails/Extn");
+				String xpedxUnspsc = extnElem.getAttribute("ExtnUNSPSC");
+				String customUnspsc = XPEDXWCUtils.getReplacementUNSPSC(env, context.getBuyerOrgCode(), itemId, xpedxUnspsc);
+
+				if (customUnspsc !=null) {
+					if(LOG.isDebugEnabled()){
+						LOG.debug("Punchout: for item: " + itemId + " replacing with custom UNSPCS: " + customUnspsc);
+					}
+					
+					extnElem.setAttribute("ExtnUNSPSC", customUnspsc);
+				}
+			}
+			catch (Exception e) {
+				LOG.error("Punchout: problem converting to custom UNSPSC", e);
+			}
+		}
+	}
+
+	private Document getCustDetails(IWCContext context, YFSEnvironment env)
+			throws RemoteException, CannotBuildInputException {
+
+		String customerID = context.getCustomerId();
+		String storeFrontId = context.getStorefrontId();
+		String msap = XPXTranslationUtilsAPI.getMsap(env, customerID, storeFrontId);
+		Document CustDetails = XPEDXWCUtils.getCustomerDetails(msap, storeFrontId);
+		return CustDetails;
 	}
 
 	private void cXmlFormat(String outputData)
@@ -164,7 +212,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 		ociData = outputData;
 	}
 
-	private void updateLineNos(YFSEnvironment env, Document orderOutputDoc)
+	private void updateLineNos(Document orderOutputDoc)
 			throws RemoteException, YIFClientCreationException {
 		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
 
@@ -187,6 +235,28 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 			element.setAttribute("TransactionalUOM", convertedBaseUom);
 		}
 	}
+
+	/** This method assumes the unitPrice to be rounded is always in ExtnReqUOMUnitPrice
+	    and that it should be rounded to two decimal digits (rounding to nearest/larger). */
+	private void addRoundedUnitPrices(Document orderOutputDoc)
+			throws RemoteException, YIFClientCreationException {
+		NodeList nodeList = orderOutputDoc.getElementsByTagName("OrderLine");
+
+		// Add price rounded to two decimal digits
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			NodeList extnElems = element.getElementsByTagName("Extn");
+			Element extnElem = (Element)extnElems.item(0);
+
+			double price = Double.valueOf(extnElem.getAttribute("ExtnReqUOMUnitPrice"));
+			DecimalFormat df = new DecimalFormat("0.##");
+			df.setRoundingMode(RoundingMode.HALF_UP);
+			String priceRounded = df.format(price);
+
+			extnElem.setAttribute("UnitPriceRounded", priceRounded);
+		}
+	}
+
 	private void deleteCart(String deleteOrderHeaderKey) throws Exception {
 		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();

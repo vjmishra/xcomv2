@@ -2,8 +2,8 @@ function checkOut()
 {
 	//Added for JIRA 3523
 	var entitleErrorMessage;
-	if(document.getElementById("entileErrorMessade")!=null){
-		entitleErrorMessage=document.getElementById("entileErrorMessade").innerHTML;
+	if(document.getElementById("entitleErrorMessage")!=null){
+		entitleErrorMessage=document.getElementById("entitleErrorMessage").innerHTML;
 		if(entitleErrorMessage !=null && entitleErrorMessage.trim().length>0){
 			return;
 		}
@@ -13,7 +13,7 @@ function checkOut()
 	//Added for JIRA 3958
 	var maxOrderAmtMsg = null; 
 	if(document.getElementById("maxOrderErrorMessage") != null && document.getElementById("maxOrderErrorMessage") != "" && document.getElementById("maxOrderErrorMessage")!= 'undefined' ){
-		maxOrderAmtMsg=document.getElementById("maxOrderErrorMessage").innerHTML;
+		maxOrderAmtMsg=$("#maxOrderErrorMessage p").text();
 	}
 	if(maxOrderAmtMsg !=null && maxOrderAmtMsg.trim().length>0){
 		return;
@@ -331,15 +331,10 @@ function update()
 	
 	if(document.getElementById('cartName_new')!=null && document.getElementById('cartName_new').value.trim() == "")
 	{
-		//commented for 3098
-		//alert("Cart name can't be blank, please add a valid name for cart.");
-		document.getElementById("errorMsgTop").innerHTML = "Name is required." ;
-        	document.getElementById("errorMsgTop").style.display = "inline";
-        
-        	document.getElementById("errorMsgBottom").innerHTML = "Name is required." ;
-        	document.getElementById("errorMsgBottom").style.display = "inline";
-		//3098
-		
+		$('#errorMsgTop,#errorMsgBottom').each(function(){
+			$(this).find('p').text("Name is required.");
+			$(this).show();
+		});
 		return;
 	}
 	var orderLinesCount = document.OrderDetailsForm.OrderLinesCount.value;

@@ -4,7 +4,9 @@
 <struts>
 	<package name="xpedx.commonFragment" namespace="/common"
 		extends="commonFragment">
-
+		<result-types>
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
 		<action name="login" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/XPEDXlogin.jsp</result>
 		</action>
@@ -94,6 +96,14 @@
 			method="setCurrentCustomerIntoContext">
 		</action>
 		<action name="setCurrentCustomerIntoContext-punchout" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"	method="setCurrentCustomerIntoContextFromPunchout">
+				<result name="success" type="redirectAction">
+					<param name="actionName">home</param>
+					<param name="postCustomerSelectionFlag">Y</param>
+					<param name="namespace">/home</param>
+					<param name="parse">true</param>
+				</result>
+		</action>
+		<action name="setCurrentCustomerIntoContext-shipTo" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"	method="setCurrentCustomerIntoContextFromShipTo">
 				<result name="success" type="redirectAction">
 					<param name="actionName">home</param>
 					<param name="postCustomerSelectionFlag">Y</param>
@@ -207,23 +217,15 @@
 			</result>
 		</action>
 			
-		<!-- <action name="salesReploginFullPage" class="com.sterlingcommerce.webchannel.core.WCAction">
-            <result>/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
-        </action> -->
-			
-		<action name="salesRepLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
-			method="getCustomersForSalesRep">
+		<action name="salesRepLogin" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 			<result name="error">/xpedx/jsp/salesrep/salesRepLogin.jsp</result>
 		</action>
-		<action name="salesrepLogout"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
-			method="logoutSalesRep">
-			<result name="success" type="redirectAction">
-				<param name="actionName">salesReploginFullPage</param>				
-			</result>	
+		
+		<action name="getSalesProCustomersList" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxGetSalesProCustomersListAction">		
+			<result type="json"></result>
 		</action>
+		
 		<action name="salesRepCustomerLogin"
 			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepCustomerLoginAction">
 			<param name="mashups">XPEDXGetSalesRepCustomersDetails</param>
@@ -232,21 +234,12 @@
 			<result name="error">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 		</action>
 		
-		<action name="pLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
+		<!--
+			pLogin is deprecated as of R16. It will be removed in R17. Use PunchoutCxmlLoginAction or OCIPost.jsp instead.
+			We're keeping this action in R16 strictly for backwards compatibility for OCI customers. See eb-4834 for details.
+		-->
+		<action name="pLogin" class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
 			<result name="success">/xpedx/jsp/punchout/punchoutlogin.jsp</result>				
-		</action>
-		
-		
-	<!--<action name="punchoutCustomerLogin"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXPunchoutCustomerLoginAction" method="getCustomersForPunchout">
-			<result name="success">/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
-		</action>-->
-		<action name="searchCustomer"
-			class="com.sterlingcommerce.xpedx.webchannel.common.XPEDXSalesRepLoginAction"
-			method="getCustomersForSalesRep">
-			<param name="mashups">XPEDXGetSalesRepCustomersDetails</param>
-			<result name="success">/xpedx/jsp/salesrep/salesRepCustomers.jsp</result>
 		</action>
 		
 		<action name="xpedxSearchAssignedCustomers"
@@ -289,6 +282,15 @@
 		<action name="megaMenu" class="com.sterlingcommerce.webchannel.core.WCAction">
 			<result>/xpedx/jsp/common/MegaMenu.jsp</result>
 		</action>
+		<action name="debugMegaMenu" class="com.sterlingcommerce.xpedx.webchannel.common.DebugMegaMenuAction">
+			<result type="json"></result>
+		</action>
 		
+		<action name="changeShipTo" class="com.sterlingcommerce.webchannel.core.WCAction">
+			<result>/xpedx/jsp/common/ChangeShipTo.jsp</result>
+		</action>
+		<action name="getAssignedShipToCustomers" class="com.sterlingcommerce.xpedx.webchannel.common.AjaxGetAssignedShipToCustomersAction">		
+			<result type="json"></result>
+		</action>
 	</package>
 </struts>

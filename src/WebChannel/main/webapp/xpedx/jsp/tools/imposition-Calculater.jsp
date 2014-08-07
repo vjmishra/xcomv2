@@ -58,7 +58,7 @@
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
-	 <div class="container"> 
+	 <div class="container content-container"> 
                 <!-- breadcrumb -->
                 <div id="searchBreadcrumb">
                 	<s:url id='toolsLink' namespace='/tools' action='MyTools'>
@@ -66,7 +66,7 @@
 		</s:url>
           <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="page-title"><s:text name="tools.impositioncalculator.title" /></span>
                 </div>
-                <div id="mid-col-mil"><div style=" width: 600px;">   <h2> Imposition Calculator</h2>
+                <div id="mid-col-mil"><div style=" width: 600px;">   <h1> Imposition Calculator</h1>
                  <p style="width: 600px;">To calculate the possible options for cutting a smaller sheet size from a larger sheet size, enter as much information as possible for the most accurate calculations.</p>
                  <br />
                  
@@ -118,7 +118,7 @@
                         <tr>
                           <td>&nbsp;</td>
                           <td colspan="5"> 
-                            <ul id="cart-actions"><li><a href="#" onclick="return check5();" class="green-ui-btn"><span>Calculate</span></a></li><li><a class="grey-ui-btn" href="#" onClick="javascript:document.form_Ream.reset()"><span>Clear</span></a></li>
+                            <ul id="cart-actions"><li><a href="#" onclick="return check5();" class="btn-gradient"><span>Calculate</span></a></li><li><a class="btn-neutral" href="#" onClick="javascript:document.form_Ream.reset()"><span>Clear</span></a></li>
                                 
                             </ul>
                          </td>

@@ -8,13 +8,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Punchout Landing Page</title>
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/punchout/po-xpedx<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
+<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/punchout/po-xpedx<s:property value='#wcUtil.xpedxBuildKey' />.css"/>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-1.4.2.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/pngFix/jquery.pngFix.pack<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery.dropdownPlain<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.core<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui-1/development-bundle/ui/jquery.ui.widget<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/watermark.js"></script>
+
 </head>
 
 <body class="bodyclass">
@@ -28,19 +30,22 @@
 </div>
 <div class="ui-po-wrap" id="main">
   <div class="ui-po-brand"></div>
+  <div class="content-container">
+  <h1>Select Ship-To Location</h1>
+  <h4>Please select a Ship-To location to start shopping.<br />
+  For assistance, contact eBusiness support at 877-269-1784.</h4>
   <div class="ui-po-content">
-    <div class="ui-po-search"> <span>Search for Ship To Location</span>
+    
      <s:form  id="punchoutShipToSearchForm" name="punchoutShipToSearchForm" action="punchoutShipToSearchAction" namespace="/punchout" method="post" >
-        <div class="ui-po-searchinput">
-          <input type="text" class="ui-searchbox" id="searchString" name="searchString"/>
-        </div>
-        <div class="ui-po-floatbtn">
-          <input name="search" type="button" class="po-search-btn" onclick="searchPunchoutShipTo()"/>
-        </div>
+        
+          <input type="text" class="filterinput input-watermark-color" id="searchString" name="searchString" data-watermark="Search"/>
+        
+        <span class="resetlink">Reset</span>
     </s:form>
     </div>
     <div class="customer-comment">
-    	<s:property value="punchoutMessage" />
+    Comments: <br/>
+    	<s:property value="punchoutMessage" /> 
     </div>
     <div class="clearfix" ></div>
     <s:set name='searchedString' value='searchString'/>
@@ -53,22 +58,20 @@
 									<s:hidden id="selectedCurrentCustomer" value="" name="selectedCurrentCustomer"/>									
 								</s:form>
 							</div>
-							<p class="search-message">Click the search icon to reset to the original list.</p>
                          <s:if test="%{#searchedString==null && #arraySize==0}">
-			                   <div class="ul-po-results">Search Results for: <span class="blackText" id="searchedValue"><s:property
-							         value="#searchedString" /></span>
+			                   <div class="ul-po-results">
 				               </div>
 						 </s:if>
 			             <s:else>
 			               <s:if test="%{#arraySize==0}">
 				              <div class="ul-po-results">
-					              <span class="redText bold">No search results found for <s:property
-							            value="#searchedString" />.</span>
+					              
 				             </div>
+				             <span class="redText bold ul-po-results-error">No search results found for <s:property
+							            value="#searchedString" />.</span>
 			              </s:if>
 			              <s:else>
-				                  <div class="ul-po-results"> Search Results for: <span class="blackText"><s:property
-							           value="#searchedString" /></span>
+				                  <div class="ul-po-results">
 				                  </div>
 					              <div id="wrapper" class="location-list">    
    			 				<div class="expand-links"><a href="javascript:void(0)" class="expand">Expand All</a> | <a href="javascript:void(0)" class="collapse">Collapse All</a></div>
@@ -96,6 +99,7 @@
 				        </div>
 				   </s:else>
 			</s:else> 
+			</div>
   </div>
    <div class="clearfix" ></div>
    <div style="height:100px"></div>
@@ -158,6 +162,10 @@ $(document).ready(function() {
 	    	searchPunchoutShipTo();
 	    }
 	});
+  $('.resetlink').click(function(){
+	  document.punchoutShipToSearchForm.searchString.value="";
+	  document.punchoutShipToSearchForm.submit();
+  });
 });
 </script>  
 
