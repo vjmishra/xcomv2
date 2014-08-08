@@ -131,7 +131,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	
 	private Map<String,String> uomToLegacyMap	= new HashMap<String,String>(); // UOM to Legacy Map
 	private Map<String,String> legacyToUOMMap	= new HashMap<String,String>(); // Legacy to UOM Map
-
+    
+	private Map<String,String> categoryMap =  new HashMap<String,String>(); // Category Map. Key: Category Id, Value: Category description  
 	/* Ship-to information */
 	private String envtId = null;
 	private String companyCode = null;
@@ -517,15 +518,15 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 							if (cats.length > 4)
 							{
-								category1.setTextContent(getCategoryShortDescription(cats[2], organizationCode, env));
-								category2.setTextContent(getCategoryShortDescription(cats[3], organizationCode, env));
-								category3.setTextContent(getCategoryShortDescription(cats[4], organizationCode, env));
+								category1.setTextContent(categoryMap.get(cats[2]));
+								category2.setTextContent(categoryMap.get(cats[3]));
+								category3.setTextContent(categoryMap.get(cats[4]));
 								// If no cat4, output "<Category4/>" (or skip?)
 								//  Does "Paper Category" in fields count as cat4?
 								String cat4 = "";
 								if (cats.length > 5)
 								{
-									cat4 = getCategoryShortDescription(cats[5], organizationCode, env);
+									cat4 = categoryMap.get(cats[5]);
 								}
 								category4.setTextContent(cat4);
 							}
@@ -772,35 +773,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		pAndARequestInputDocRoot.appendChild(aItems);
 		return pAndARequestInputDoc;
-	}
-
-	/**
-	 * Get the short desc of the category
-	 *
-	 * @param categoryID from category path (e.g. "300057")
-	 * @param organizationCode is this always "xpedx"?
-	 */
-	private String getCategoryShortDescription(String categoryID, String organizationCode, YFSEnvironment env) throws Exception
-	{
-		//TODO cache the categories??
-
-		Document inputDoc = YFCDocument.createDocument("Category").getDocument();
-		inputDoc.getDocumentElement().setAttribute("CategoryID", categoryID);
-		inputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);
-
-		env.setApiTemplate("getCategoryList", getCategoryListTemplate);
-		Document outputDoc = api.invoke(env, "getCategoryList", inputDoc);
-		env.clearApiTemplate("getCategoryList");
-
-		NodeList outputList = outputDoc.getElementsByTagName("Category");
-		String desc = "";
-		if(outputList.getLength() > 0)
-		{
-			Element catelem = (Element) outputList.item(0);
-			desc = catelem.getAttribute("ShortDescription");
-		}
-
-		return desc;
 	}
 
 	/**
@@ -1260,11 +1232,30 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		Element xpedxItemCustXRefOutputElement = xpedxItemCustXRefOutputDoc.getDocumentElement();
 		List<Element> xpedxItemElements = SCXmlUtil.getElements(xpedxItemCustXRefOutputElement, XPXLiterals.E_ITEM);
+		Set<String> categorySet = new HashSet<String>();
 		for (Element xpedxItemElement : xpedxItemElements) {
 			if (xpedxItemElement != null) {
 				validItemInfoMap.put(xpedxItemElement.getAttribute("ItemID"), new ValidItemInfo(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement, xpedxItemElement.getAttribute("UnitOfMeasure")));
+				if (xpedxItemElement.getElementsByTagName("CategoryList").getLength() > 0) {
+					Element categoryListElement = (Element) xpedxItemElement.getElementsByTagName("CategoryList").item(0);
+					if(categoryListElement.getElementsByTagName("Category").getLength()>0) {
+						Element categoryElement = (Element) categoryListElement.getElementsByTagName("Category").item(0);
+						int i = 0;
+						for ( String catId : categoryElement.getAttribute("CategoryPath").split("/")) {
+							//ignoring first two values from path /MasterCatalog/300057/300166/300340 for each item.
+							if(i >= 2){
+								categorySet.add(catId);
+							}
+							i++;
+						}
+					}
+				}
 			}
 
+		}
+		//get Category descriptions; this info need even if we are not calling p&a for valid Items
+		if (categorySet != null && categorySet.size() > 0) {
+			setCategoryShortDescriptions(env, categorySet);
 		}
 		/* for trying to find invalid items. If not valid set the invalid item position*/
 		if( validItemInfoMap.size( ) >= 0){
@@ -1486,6 +1477,39 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					catalogAttributeList.appendChild(catalogAttribute);
 				}
 			}
+		}
+	}
+	
+	/**
+	 * This method get all the Category descriptions for corresponding Category IDs and set into hash map.
+	 * @param env
+	 * @param categoryIDs
+	 * @throws YFSException
+	 * @throws RemoteException
+	 */
+	private void setCategoryShortDescriptions(YFSEnvironment env, Set<String> categoryIDs) throws YFSException, RemoteException 
+	{
+
+		Document inputDoc = YFCDocument.createDocument("Category").getDocument();
+		inputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, organizationCode);		
+		Element complexQueryElement = SCXmlUtil.createChild(inputDoc.getDocumentElement(), "ComplexQuery");
+		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");	
+		for (String categoryID : categoryIDs) {
+			Element expElement = SCXmlUtil.createChild(orElement, "Exp");
+			expElement.setAttribute("Name", "CategoryID");
+			expElement.setAttribute("Value", categoryID);
+		}
+		
+		env.setApiTemplate("getCategoryList", getCategoryListTemplate);
+		Document outputDoc = api.invoke(env, "getCategoryList", inputDoc);
+		env.clearApiTemplate("getCategoryList");
+		
+		List<Element> categoryElements = SCXmlUtil.getElements(outputDoc.getDocumentElement(), "Category");
+		
+		for (Element categoryElement : categoryElements) {
+			if (categoryElement != null) {				
+				categoryMap.put(categoryElement.getAttribute("CategoryID"), categoryElement.getAttribute("ShortDescription"));
+			}	
 		}
 	}
 	
