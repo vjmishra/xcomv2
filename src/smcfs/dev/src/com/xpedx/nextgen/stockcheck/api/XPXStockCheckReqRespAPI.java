@@ -254,12 +254,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		String inventoryIndicator = null;
 
-		// If init these null, have seen case where MAX unexpectedly returns only two warehouses which causes NPE later on twoDayQty
-		String sameDayQty = "0";
-		String nextDayQty = "0";
-		String twoDayQty = "0";
-
-
 		Map<Integer,Element> pAndAResponseMap= new HashMap<Integer,Element>(); 
 
 		if(pAndAResponseDocument != null && pAndAResponseDocument.getDocumentElement() != null){
@@ -426,53 +420,47 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					if (wareHouseLocations != null)
 					{
 						NodeList wareHouseLocationsList =  wareHouseLocations.getElementsByTagName("WarehouseLocation");
-
+						Float[] qtyInDays = { 0.0f, 0.0f, 0.0f };
 						if(wareHouseLocationsList != null && wareHouseLocationsList.getLength() > 0)
 						{
+				
+							
+							String sameDayWareHouse = "";
 							for(int m = 0; m < wareHouseLocationsList.getLength(); m++)
 							{
-								Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);
-
-								if(m == 0)
-								{
-									//Primary Warehouse					
-									sameDayDesc.setTextContent(SCXmlUtil.getXpathElement(wareHouseLocation,"./Warehouse").getTextContent());			
-									sameDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
-									sameDayQuantity.setTextContent(sameDayQty);								
+								Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);								
+								if(m == 0) {
+									sameDayWareHouse = SCXmlUtil.getXpathElement(wareHouseLocation,"./Warehouse").getTextContent();
 								}
-
-								if(m == 1)
-								{
-									// Next Day warehouse
-									// Hard coded to next day								
-									nextDayDesc.setTextContent("Next Day");	
-									nextDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
-									nextDayQuantity.setTextContent(nextDayQty);								
+								Float availableQty = Float.parseFloat(SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent());
+								int numberOfDays = Integer.parseInt(SCXmlUtil.getXpathElement(wareHouseLocation,"./NumberOfDays").getTextContent());
+								if(numberOfDays > 2){
+									numberOfDays = 2;
 								}
-
-								if(m == 2)
-								{
-									//Two Day Warehouse
-									//Hardcoded to 2+days								
-									twoDayDesc.setTextContent("2+ Days");
-									twoDayQty = SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent();
-									twoDayQuantity.setTextContent(twoDayQty);								
-								}
+								qtyInDays[numberOfDays] = qtyInDays[numberOfDays] + availableQty;
 							}
-						}
+									sameDayDesc.setTextContent(sameDayWareHouse);			
+									sameDayQuantity.setTextContent(String.valueOf(qtyInDays[0]));	
 
-						//Logic for availability message					
-						String availabilityMessage = getAvailabilityMessage(env,quantity.getTextContent(),sameDayQty,nextDayQty,twoDayQty);
+									nextDayDesc.setTextContent("Next Day");		
+									nextDayQuantity.setTextContent(String.valueOf(qtyInDays[1] + qtyInDays[0])); // next day includes same day
+									
+									twoDayDesc.setTextContent("2+ Days");		
+									twoDayQuantity.setTextContent(String.valueOf(qtyInDays[2]));				
+							}
+
+						//Logic for availability message
+						Float reqQuantity = Float.parseFloat(quantity.getTextContent());;
+						String availabilityMessage = getAvailabilityMessage(env, reqQuantity, qtyInDays);
 						availMessage.setTextContent(availabilityMessage);			
 
 						// Logic for back order message	
-						if(Integer.parseInt(quantity.getTextContent()) > 0 &&
-								(Integer.parseInt(quantity.getTextContent()) > (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty)+ Integer.parseInt(twoDayQty))))
+						if(reqQuantity > 0 &&
+								(reqQuantity > (qtyInDays[0] + qtyInDays[1] + qtyInDays[2])))
 						{
-							int backOrderQty = Integer.parseInt(quantity.getTextContent()) - (Integer.parseInt(sameDayQty) + Integer.parseInt(nextDayQty) + Integer.parseInt(twoDayQty));
-							String backOrderedMessage = Integer.toString(backOrderQty) + "" + unitOfMeasure.getTextContent() +"" + "not currently available";
+							Float backOrderQty = reqQuantity - (qtyInDays[0] + qtyInDays[1] + qtyInDays[2]);
+							String backOrderedMessage = String.valueOf(backOrderQty) + " " + unitOfMeasure.getTextContent() + " " + "not currently available";
 							backOrderMessage.setTextContent(backOrderedMessage);
-
 						}
 
 					}//end no warehouse info in P&A
@@ -667,30 +655,37 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 
 
-
-	private String getAvailabilityMessage(YFSEnvironment env, String reqQty, String sameDayQty, String nextDayQty, String twoDayQty)
+	/**
+	 * get the availability message based on requested and available quantity on different warehouse locations.
+	 * @param env
+	 * @param reqQty
+	 * @param qtyInDays
+	 * @return
+	 */
+	private String getAvailabilityMessage(YFSEnvironment env, Float reqQty, Float[] qtyInDays)
 	{
-		String availabilityMessage = null;
+		String availabilityMessage = "";
+		Float totalAvailableQty = qtyInDays[0] + qtyInDays[1] + + qtyInDays[2];
 
-		if(Integer.parseInt(reqQty) <= Integer.parseInt(sameDayQty))
+		if(reqQty <= qtyInDays[0])
 		{
 			availabilityMessage = "Ready To Ship";
 		}
-		else if((Integer.parseInt(reqQty) > Integer.parseInt(sameDayQty)) &&
-				(Integer.parseInt(reqQty) <= (Integer.parseInt(sameDayQty)+Integer.parseInt(nextDayQty))))
+		else if(reqQty > qtyInDays[0] &&
+				(reqQty <= (qtyInDays[0] + qtyInDays[1])))
 		{
 			availabilityMessage = "Ready To Ship Next Day";
 		}
-		else if((Integer.parseInt(reqQty) > (Integer.parseInt(sameDayQty) + Integer.parseInt(nextDayQty)))&&
-				(Integer.parseInt(reqQty) <= (Integer.parseInt(sameDayQty) + Integer.parseInt(nextDayQty) + Integer.parseInt(twoDayQty))))
+		else if(reqQty > (qtyInDays[0] + qtyInDays[1]) &&
+				(reqQty <= totalAvailableQty))
 		{
-			availabilityMessage = "Ready To Ship Next Day";
+			availabilityMessage = "Ready to Ship Two Plus Days";
 		}
-		else if((Integer.parseInt(sameDayQty) + Integer.parseInt(nextDayQty) + Integer.parseInt(twoDayQty))==0)
+		else if(totalAvailableQty == 0)
 		{
 			availabilityMessage = "Not Available";
 		}
-		else
+		else if( totalAvailableQty > 0 && (reqQty > totalAvailableQty))
 		{
 			availabilityMessage = "Partial Quantity Available";
 		}
