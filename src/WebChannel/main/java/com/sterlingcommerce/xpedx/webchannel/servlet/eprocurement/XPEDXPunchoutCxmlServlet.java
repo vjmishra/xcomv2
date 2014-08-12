@@ -101,6 +101,7 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 				String dbStartPage = SCXmlUtil.getAttribute(custExtnElement, "ExtnStartPageURL");
 				userid = obtainUserid(dbStartPage);
 				passwd = obtainPassword(dbStartPage);
+				encrypted = passwd; // temp
 			}
 
 			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(userid, passwd);
@@ -114,7 +115,7 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 			}
 
 			// eb-6915: create a cxml session and return url with token in it
-			String sessionId = persistCxmlSession(userid, passwd, payloadId, buyerCookie, toIdentity, custIdentity, returnUrl);
+			String sessionId = persistCxmlSession(userid, encrypted, payloadId, buyerCookie, toIdentity, custIdentity, returnUrl);
 
 			String startPageURL = YFSSystem.getProperty("punchout.cxml.login.url") + "?sfId=xpedx&sessionId=" + sessionId;
 

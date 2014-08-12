@@ -1,9 +1,11 @@
 package com.sterlingcommerce.xpedx.webchannel.punchout;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.webchannel.core.WCAction;
+import com.sterlingcommerce.xpedx.webchannel.crypto.EncryptionUtils;
 import com.sterlingcommerce.xpedx.webchannel.servlet.eprocurement.XPEDXPunchoutCxmlServlet;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 
@@ -33,10 +35,19 @@ public class PunchoutCxmlLoginAction extends WCAction {
 			return ERROR;
 		}
 
-		// TODO decrypt password
+		// Password should now be encrypted in DB so unencrypt here
+		String encrypted = punchoutCxmlSessionElem.getAttribute("Passwd");
+		String passwd = encrypted;
+		try {
+			passwd = EncryptionUtils.decrypt(encrypted);
+		}
+		catch (Exception e) {
+			log.error("problem while decrypting password for cXML login for user: " + punchoutCxmlSessionElem.getAttribute("Userid"), e);
+		}
+
 		request.setAttribute("selected_storefrontId", sfId);
 		request.setAttribute("dum_username", punchoutCxmlSessionElem.getAttribute("Userid"));
-		request.setAttribute("dum_password", punchoutCxmlSessionElem.getAttribute("Passwd"));
+		request.setAttribute("dum_password", passwd);
 		request.setAttribute("payLoadID", punchoutCxmlSessionElem.getAttribute("PayloadId"));
 		request.setAttribute("buyerCookie", punchoutCxmlSessionElem.getAttribute("BuyerCookie"));
 		request.setAttribute("fromIdentity", punchoutCxmlSessionElem.getAttribute("FromIdentity"));
@@ -66,4 +77,5 @@ public class PunchoutCxmlLoginAction extends WCAction {
 		return SCXmlUtil.getChildElement(punchoutCxmlSessionListOutputElem, "XPEDXPunchoutCxmlSession");
 	}
 
+	private static final Logger log = Logger.getLogger(PunchoutCxmlLoginAction.class);
 }
