@@ -90,6 +90,7 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 			returnCustomerList =  new ArrayList<SalesProCustomer>(assignedCustElems.size());
 			for (Element assignedCustElem : assignedCustElems) {
 				SalesProCustomer srCustomer = new SalesProCustomer();
+
 				srCustomer.setCustomerNo(SCXmlUtil.getAttribute(assignedCustElem, "ExtnCustomerNo"));
 				srCustomer.setCustomerName(SCXmlUtil.getAttribute(assignedCustElem,"ExtnCustomerName"));
 				srCustomer.setCustomerId(SCXmlUtil.getAttribute(assignedCustElem,"CustomerID"));
@@ -118,7 +119,7 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 				if(srCustomer.getUserName() != null && !srCustomer.getUserName().isEmpty() ) {
 					wcContext.setWCAttribute("loggedInUserName", srCustomer.getUserName(), WCAttributeScope.SESSION);
 				}
-
+				
 				returnCustomerList.add(srCustomer);
 			}
 			Collections.sort(returnCustomerList,SalesProCustomer.COMPARATOR_DISPLAY);
