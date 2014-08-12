@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -2094,10 +2093,11 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 		 * 
 		 * */
 		if (strEnterpriseCode != null && !strEnterpriseCode.trim().isEmpty()) {
-			String userName = YFSSystem.getProperty("fromAddress.username");
-			String suffix = YFSSystem.getProperty("fromAddress.suffix");
-			sb.append(userName).append("@").append(strEnterpriseCode)
-					.append(suffix);
+			if("Saalfeld".equalsIgnoreCase(strEnterpriseCode)){
+				sb.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
+			}else{
+				sb.append(YFSSystem.getProperty("EMailFromAddresses"));
+			}
 			emailFromAddresses = sb.toString();
 
 		}

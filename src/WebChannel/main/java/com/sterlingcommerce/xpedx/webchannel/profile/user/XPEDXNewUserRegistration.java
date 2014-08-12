@@ -70,12 +70,10 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 		String storeFrontId = wcContext.getStorefrontId();
 		if (storeFrontId != null && storeFrontId.length() > 0) {
-			String userName = YFSSystem.getProperty("fromAddress.username");
-			String suffix = YFSSystem.getProperty("fromAddress.suffix");
 			if("Saalfeld".equalsIgnoreCase(storeFrontId)){
-					sb.append(userName).append("@").append(storeFrontId).append("redistribution").append(suffix);
+					sb.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
 			}else{
-				sb.append(userName).append("@").append(storeFrontId).append(suffix);
+				sb.append(YFSSystem.getProperty("EMailFromAddresses"));
 			}
 			
 			// String marketingCC = "marketing";
@@ -159,7 +157,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			String brand=newUserElement.getAttribute("Brand");
 			// EB- 2048-As a Saalfeld product owner, I want to view the Saalfeld Registration Email with correct Saalfeld branding
 			if("Saalfeld".equalsIgnoreCase(brand)){
-				emailFrom = "ebusiness@Saalfeldredistribution.com";
+				emailFrom = YFSSystem.getProperty("saalFeldEMailFromAddresses");
 				_subjectLine=brand.concat("redistribution.com").concat(" ").concat(getMailSubject());
 			}else{
 				_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
