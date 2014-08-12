@@ -191,8 +191,8 @@ public class XPEDXConstants {
 			SHIP_TO_CUSTOMER_SUFFIX_TYPE = "S";
 	}
 	
-	public static final String SAALFELD_EBUSINESS_EMAIL_ADDRESS="ebusiness@Saalfeldredistribution.com";
-	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@xpedx.com";
+	public static final String SAALFELD_EBUSINESS_EMAIL_ADDRESS="ebusiness2@veritivcorp.com";
+	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@veritivcorp.com";
 	
 	public static final String APPROVE_ORDER_FLAG="approveOrderFlag";
 	public static final String EDIT_ORDER_NO="EDIT_ORDER_NO";

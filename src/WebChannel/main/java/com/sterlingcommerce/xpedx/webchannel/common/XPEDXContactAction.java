@@ -36,9 +36,9 @@ public class XPEDXContactAction extends WCMashupAction {
 			String stroeFrontName =  wcContext.getStorefrontId();
 			 // Added for EB-1689 view the correct support information on the Contact Us page Starts 
 			if(XPEDXConstants.XPEDX_STORE_FRONT.equals(stroeFrontName)){
-				eBusinessEmailID = "eBusiness@"+stroeFrontName+".com";	
+				eBusinessEmailID = "eBusiness@veritivcorp.com";	
 			}else if(XPEDXConstants.SAALFELD_STORE_FRONT.equals(stroeFrontName))
-				eBusinessEmailID = "eBusiness@"+stroeFrontName+"redistribution.com";			
+				eBusinessEmailID = "eBusiness2@veritivcorp.com";			
 			// EB-1689 END
 			emailSubjects = new HashMap();
 			emailSubjects.put("Order Status", "Order Status");
@@ -160,6 +160,7 @@ public class XPEDXContactAction extends WCMashupAction {
 		}
 		setMailSubject(mailSubject);
 		setTemplatePath("/global/template/email/ContactUsEmailTemplate.xsl");
+		String stroeFrontName =  wcContext.getStorefrontId();
 		try
 		{
 			
@@ -171,12 +172,20 @@ public class XPEDXContactAction extends WCMashupAction {
 				}
 				else
 				{
-					appendedCSREmailIDs = "eBusiness@"+wcContext.getStorefrontId()+".com";
+					if(XPEDXConstants.XPEDX_STORE_FRONT.equals(stroeFrontName)){
+						appendedCSREmailIDs = "eBusiness@veritivcorp.com";	
+					}else if (XPEDXConstants.SAALFELD_STORE_FRONT.equals(stroeFrontName))
+						appendedCSREmailIDs = "eBusiness2@veritivcorp.com";			
+					
 				}
 			}
 			else
 			{
-				appendedCSREmailIDs = "eBusiness@"+wcContext.getStorefrontId()+".com";
+				if(XPEDXConstants.XPEDX_STORE_FRONT.equals(stroeFrontName)){
+					appendedCSREmailIDs = "eBusiness@veritivcorp.com";	
+				}else if (XPEDXConstants.SAALFELD_STORE_FRONT.equals(stroeFrontName))
+					appendedCSREmailIDs = "eBusiness2@veritivcorp.com";	
+				
 			}
 			prepareAndInvokeMashup("XPEDXSendMailFromContactUs");
 			
