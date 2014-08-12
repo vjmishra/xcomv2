@@ -245,7 +245,13 @@ public class XPEDXSalesRepUtils {
 		if(!YFCUtils.isVoid(selectedCustomer)){
 			//selectedCustomer = "CD-"+selectedCustomer+"-M-XPED-CC";
 			//loginId = getCustomerContactFromMSAPCustNo(wcContext, selectedCustomer);
-			Map<String, String> customerIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_CUSTOMER_ID_MAP, WCAttributeScope.SESSION);
+			Map<String, String> customerIDsMap = (HashMap<String, String>)XPEDXWCUtils.getObjectFromCache(SR_CUSTOMER_ID_MAP);
+			if(customerIDsMap != null)
+				System.out.println("*************  SalesRep Customer cout from session in class XPEDXSalesRepUtils   =====  "+customerIDsMap.size() );
+			else
+				System.out.println("************* *************  SalesRep Customer cout from session in class XPEDXSalesRepUtils  is 0 ");
+			
+			//Map<String, String> customerIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_CUSTOMER_ID_MAP, WCAttributeScope.SESSION);
 			customerId = customerIDsMap.get(selectedCustomer);
 			Map<String, String> storefrontIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_STOREFRONT_ID_MAP, WCAttributeScope.SESSION);
 			storefrontId = storefrontIDsMap.get(selectedCustomer);
