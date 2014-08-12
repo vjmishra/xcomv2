@@ -2828,7 +2828,8 @@ public class XPEDXWCUtils {
 		String apiName="getCustomerList";
 		String apiData="<Customer><Extn ExtnCustIdentity='"+custIdentity+"'/></Customer>";
 		String isFlow="N";
-		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";
+		//TODO start URL can be remove when fully replaced by user and pwd fields
+		String template="<Customer CustomerID=''><Extn ExtnSharedSecret='' ExtnUsernameParam='' ExtnUserPwdParam='' ExtnStartPageURL='' ExtnCXmlUserXPath=''></Extn></Customer>";
 		Document customerDetailsOutputDoc = handleApiRequestBeforeAuthentication(apiName,apiData,isFlow,template);
 		if(customerDetailsOutputDoc != null){
 			Document outputDoc = customerDetailsOutputDoc.getDocumentElement().getOwnerDocument();

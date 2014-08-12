@@ -32,6 +32,8 @@ import com.sterlingcommerce.webchannel.servlet.eprocurement.AribaIntegrationServ
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationHelper;
 import com.sterlingcommerce.webchannel.utilities.WCIntegrationXMLUtils;
 import com.sterlingcommerce.xpedx.webchannel.common.eprocurement.XPEDXCXMLMessageFields;
+import com.sterlingcommerce.xpedx.webchannel.crypto.EncryptionUtils;
+import com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutCxmlLoginAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
@@ -78,7 +80,6 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 			}
 
 			String dbSecret = SCXmlUtil.getAttribute(custExtnElement, "ExtnSharedSecret");
-			String dbStartPage = SCXmlUtil.getAttribute(custExtnElement, "ExtnStartPageURL");
 
 			// validate SharedSecret matches DB for cust
 			if (!cxmlSecret.equals(dbSecret)) {
@@ -86,16 +87,21 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 				return new SCUISecurityResponse(false, "Invalid SharedSecret");
 			}
 
-			//TODO later for Toys'R'Us: extract user from incoming cXML and use it instead
-			// *if* the one specified is valid punchout user in system; otherwise keep default
-
 			// Not sure if we need to login actual user here, could auth some other way
 			// but do want to make sure valid before return URL
-			//From 2010: "TODO Call platform exposed method authenticate(loginDoc, request,response)once available; should return"
+			//From 2010: "Call platform exposed method authenticate(loginDoc, request,response)once available; should return"
 
-			// TODO eventually we want to store user/pass in dedicated db columns (and avoid the startPage column altogether)
-			String userid = obtainUserid(dbStartPage);
-			String passwd = obtainPassword(dbStartPage);
+			String userid = SCXmlUtil.getAttribute(custExtnElement, "ExtnUsernameParam");
+			String encrypted = SCXmlUtil.getAttribute(custExtnElement, "ExtnUserPwdParam");
+			String passwd = "";
+			if (!userid.isEmpty()) {
+				passwd = EncryptionUtils.decrypt(encrypted);
+			}
+			else { //TODO remove support for start URL soon
+				String dbStartPage = SCXmlUtil.getAttribute(custExtnElement, "ExtnStartPageURL");
+				userid = obtainUserid(dbStartPage);
+				passwd = obtainPassword(dbStartPage);
+			}
 
 			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(userid, passwd);
 			SCUISecurityResponse securityResponse = SCUIPlatformUtils.login(loginDoc,SCUIContextHelper.getUIContext(req, res));
@@ -106,8 +112,6 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 				log.warn("Authentication failed for user " + userid + " - PayLoadID:" + cXMLFields.getPayLoadId());
 				return new SCUISecurityResponse(false, "Invalid User");
 			}
-
-			//TODO later for TRU: if userid specified in cXML, update URL with it
 
 			// eb-6915: create a cxml session and return url with token in it
 			String sessionId = persistCxmlSession(userid, passwd, payloadId, buyerCookie, toIdentity, custIdentity, returnUrl);
@@ -150,11 +154,12 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 		punchoutCxmlSessionElem.setAttribute("ReturnUrl", returnUrl);
 
 		Document outputDoc = XPEDXWCUtils.handleApiRequestBeforeAuthentication("createPunchoutCxmlSession", punchoutCxmlSessionElem.getOwnerDocument(), true, null);
-		System.out.println("outputDoc:\n" + SCXmlUtil.getString(outputDoc));
+		logDebug("outputDoc: " + SCXmlUtil.getString(outputDoc));
 
 		return sessionId;
 	}
 
+	//TODO remove/change these to instead read from user and password fields once popuplated
 	// Extract user/pwd from DB configured start URL: "http://xxx?u=advance@punchout.com&p=punchout123"
 	private String obtainUserid(String dbStartPage) {
 		int userStart = dbStartPage.indexOf(PARAMNAME_USERID);
@@ -185,7 +190,7 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 				if(!YFCCommon.isVoid(cXMLFields) &&
 						YFCCommon.equals(IAribaConstants.CXML_REQUEST_SETUP_TAG,cXMLFields.getCXMLRequestType()))
 				{
-					log.info("Punchout post Authentication Successful");
+					log.debug("Punchout post Authentication Successful");
 
 					populateAribaContext(wcContext);
 
@@ -210,11 +215,10 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 					// Note that it gives wrong server port - assumes 8001 regardless if running on 7002!
 					//String aribaStartPageURL = WCIntegrationHelper.getAribaStartPageURL(cXMLFields, wcContext);
 
-					//TODO "&" getting turned into "&amp;" - matter?
+					// "&" getting turned into "&amp;" - ok?
 					String startPageURL = cXMLFields.getStartPageURL(); // our custom URL from authenticateRequest
 
 					if(!YFCCommon.isVoid(startPageURL)) {
-						log.info("Start page URL being returned:" + startPageURL);
 
 						//cXMLFields.setStartPageURL(startPageURL); we've already set this earlier
 
@@ -227,16 +231,15 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 				}
 
 
-				// Process Order request
-				//TODO when is this used? Do we need story to support this?
+				// Process Order request - TODO remove this if not going to support
 				else if(!YFCCommon.isVoid(cXMLFields) &&
 						YFCCommon.equals(IAribaConstants.CXML_REQUEST_ORDER_TAG,cXMLFields.getCXMLRequestType())) {
 
 					//Invoke the helper class which will call the service.
-					wcResponse = WCIntegrationHelper.processAribaOrderRequest(cXMLFields.getRequestDoc(), wcContext); //TODO what does?
+					wcResponse = WCIntegrationHelper.processAribaOrderRequest(cXMLFields.getRequestDoc(), wcContext); // what does this do?
 
 					if(wcResponse.getReturnStatus()) {
-						cXMLFields.setProcessStatus(true);  //TODO move this in success method so applies to setup too?
+						cXMLFields.setProcessStatus(true);  // move this in success method so applies to setup too?
 						wcResponse = sendSuccessResponse("Order request processed successfully");
 					}
 					else {
@@ -258,7 +261,6 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 					IWCIntegrationStatusCodes.REQUEST_AUTHENTICATION_FAILED);
 		}
 
-		log.info("Post Authentication process End");
 		return wcResponse;
 	}
 
