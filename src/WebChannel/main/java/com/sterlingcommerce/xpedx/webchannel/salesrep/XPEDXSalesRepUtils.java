@@ -228,6 +228,8 @@ public class XPEDXSalesRepUtils {
 	public void fetchCustomerLogin(HttpServletRequest request, IWCContext wcContext){
 		
 		String selectedCustomer = request.getParameter("selectedCustomer");
+		String customerID = request.getParameter("customerId");
+		String storefrontID=request.getParameter("storeFront");
 		// set the selected customer in the session
 		request.getSession(false).setAttribute("selectedCustomer", selectedCustomer);
 		LOG.debug(" Selected Customer is:: " + selectedCustomer);
@@ -245,16 +247,41 @@ public class XPEDXSalesRepUtils {
 		if(!YFCUtils.isVoid(selectedCustomer)){
 			//selectedCustomer = "CD-"+selectedCustomer+"-M-XPED-CC";
 			//loginId = getCustomerContactFromMSAPCustNo(wcContext, selectedCustomer);
-			Map<String, String> customerIDsMap = (HashMap<String, String>)XPEDXWCUtils.getObjectFromCache(SR_CUSTOMER_ID_MAP);
-			if(customerIDsMap != null)
-				System.out.println("*************  SalesRep Customer cout from session in class XPEDXSalesRepUtils   =====  "+customerIDsMap.size() );
+			Element salesRepCustomerElement=null;
+			if(!YFCUtils.isVoid(customerID) && !YFCUtils.isVoid(storefrontID) )
+			{
+				customerId=customerID;
+				storefrontId=storefrontID;
+			}
 			else
-				System.out.println("************* *************  SalesRep Customer cout from session in class XPEDXSalesRepUtils  is 0 ");
+			{
+				Map<String, String> customerIDsMap = (HashMap<String, String>)XPEDXWCUtils.getObjectFromCache(SR_CUSTOMER_ID_MAP);
+				if(customerIDsMap != null)
+				{
+					System.out.println("*************  SalesRep Customer cout from session in class XPEDXSalesRepUtils   =====  "+customerIDsMap.size() );
+					customerId = customerIDsMap.get(selectedCustomer);
+					Map<String, String> storefrontIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_STOREFRONT_ID_MAP, WCAttributeScope.SESSION);
+					storefrontId = storefrontIDsMap.get(selectedCustomer);
+				}
+				else
+				{
+					System.out.println("************* *************  SalesRep Customer cout from session in class XPEDXSalesRepUtils  is 0 ");
+					try
+					{
+						salesRepCustomerElement=getCustoemrElementForAccount(networkId,selectedCustomer,wcContext);
+						customerId=salesRepCustomerElement.getAttribute("CustomerID");
+						storefrontId=salesRepCustomerElement.getAttribute("ExtnMSAPOrganizationCode");
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
 			
 			//Map<String, String> customerIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_CUSTOMER_ID_MAP, WCAttributeScope.SESSION);
-			customerId = customerIDsMap.get(selectedCustomer);
-			Map<String, String> storefrontIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_STOREFRONT_ID_MAP, WCAttributeScope.SESSION);
-			storefrontId = storefrontIDsMap.get(selectedCustomer);
+			
+			
 		}
 		
 		// Construct the UserId or the CustomerContact - Ex: SalesRepTest@CD-101-M-XPED-CC.com
@@ -282,6 +309,23 @@ public class XPEDXSalesRepUtils {
 			request.getSession(false).setAttribute("IS_SALES_REP", new Boolean(true));
 			request.getSession(false).setAttribute("SRSalesRepEmailID", SREmailID);
 		}
+	}
+	
+	private Element getCustoemrElementForAccount(String networkId,String selectedCustomer,IWCContext wcContext) throws Exception
+	{
+		if(YFCUtils.isVoid(networkId) || YFCUtils.isVoid(selectedCustomer))
+		{
+			LOG.error(" Networkid ="+networkId+"   or selectedCustomer=="+selectedCustomer+"  is void so can not get any customerid returning null");
+			return null;
+		}
+		Map<String,String> valueMap = new HashMap<String,String>();
+		valueMap.put("/XPXSalesRepCustomers/@UserID", networkId);
+		valueMap.put("/XPXSalesRepCustomers/@ExtnCustomerNo", selectedCustomer);
+		
+
+		Element input = WCMashupHelper.getMashupInput("xpedxGetSRCustomersListService", valueMap, wcContext.getSCUIContext());
+		return (Element) WCMashupHelper.invokeMashup("xpedxGetSRCustomersListService", input, wcContext.getSCUIContext());
+		
 	}
 	
 	private String getEmployeeId(String networkId, IWCContext wcContext) {

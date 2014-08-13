@@ -70,6 +70,8 @@ $(document).ready(function() {
 							var sRCustomer = customerList[k];
 							var customerNo = sRCustomer.customerNo;
 							var customerName = sRCustomer.customerName; 
+							var customerID= sRCustomer.customerId;
+							var storeFront= sRCustomer.storefrontID;
 
 							html.push('    		 <tr>');
 							html.push('    		 	<td>');
@@ -77,7 +79,7 @@ $(document).ready(function() {
 							html.push('				</td>');
 							html.push('    		 	<td valign="top">' , customerNo , '</td>');
 							html.push('    		 	<td valign="top">');
-							html.push('    				<a href="' , selectCustomerBaseURL , '&selectedCustomer=' , customerNo , '">Select</a>');
+							html.push('    				<a href="' , selectCustomerBaseURL , '&selectedCustomer=' , customerNo,'&customerId=' , customerID ,'&storeFront=' , storeFront, '">Select</a>');
 							html.push('				</td>');
 							html.push('    		 </tr>');
 						}

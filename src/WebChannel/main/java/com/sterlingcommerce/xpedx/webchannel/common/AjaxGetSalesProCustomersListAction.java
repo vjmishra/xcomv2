@@ -90,7 +90,6 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 			returnCustomerList =  new ArrayList<SalesProCustomer>(assignedCustElems.size());
 			for (Element assignedCustElem : assignedCustElems) {
 				SalesProCustomer srCustomer = new SalesProCustomer();
-				System.out.println("*************  Inside Loop" );
 				srCustomer.setCustomerNo(SCXmlUtil.getAttribute(assignedCustElem, "ExtnCustomerNo"));
 				srCustomer.setCustomerName(SCXmlUtil.getAttribute(assignedCustElem,"ExtnCustomerName"));
 				srCustomer.setCustomerId(SCXmlUtil.getAttribute(assignedCustElem,"CustomerID"));
