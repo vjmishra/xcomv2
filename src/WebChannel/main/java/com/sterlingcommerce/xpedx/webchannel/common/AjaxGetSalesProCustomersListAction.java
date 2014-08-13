@@ -15,6 +15,7 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAction;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
+import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.util.YFCCommon;
 
 @SuppressWarnings("serial")
@@ -84,12 +85,11 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 		Map<String, String> customerIDsMap = new HashMap<String, String>();
 		Map<String, String> storefrontIDsMap = new HashMap<String, String>();
 		Map<String, String> salesRepIDsMap = new HashMap<String, String>();
-
+		System.out.println("*************  assignedCustElems.size() = "+assignedCustElems.size() );
 		if (assignedCustElems != null && assignedCustElems.size() > 0) {
 			returnCustomerList =  new ArrayList<SalesProCustomer>(assignedCustElems.size());
 			for (Element assignedCustElem : assignedCustElems) {
 				SalesProCustomer srCustomer = new SalesProCustomer();
-
 				srCustomer.setCustomerNo(SCXmlUtil.getAttribute(assignedCustElem, "ExtnCustomerNo"));
 				srCustomer.setCustomerName(SCXmlUtil.getAttribute(assignedCustElem,"ExtnCustomerName"));
 				srCustomer.setCustomerId(SCXmlUtil.getAttribute(assignedCustElem,"CustomerID"));
@@ -103,11 +103,14 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 				customerIDsMap.put(srCustomer.getCustomerNo(), srCustomer.getCustomerId());
 				storefrontIDsMap.put(srCustomer.getCustomerNo(),srCustomer.getStorefrontID());
 				salesRepIDsMap.put(networkId, srCustomer.getSalesRepID());
-
-				wcContext.setWCAttribute(SR_CUSTOMER_ID_MAP, customerIDsMap, WCAttributeScope.SESSION);
+				XPEDXWCUtils.setObectInCache(SR_CUSTOMER_ID_MAP, customerIDsMap);
+				XPEDXWCUtils.setObectInCache(SR_STOREFRONT_ID_MAP, storefrontIDsMap);
+				XPEDXWCUtils.setObectInCache(SR_SALESREP_ID, srCustomer.getSalesRepID());
+				XPEDXWCUtils.setObectInCache(SR_SALESREP_EMAIL_ID, srCustomer.getSalesRepEmailID());
+				/*wcContext.setWCAttribute(SR_CUSTOMER_ID_MAP, customerIDsMap, WCAttributeScope.SESSION);
 				wcContext.setWCAttribute(SR_STOREFRONT_ID_MAP, storefrontIDsMap, WCAttributeScope.SESSION);
 				wcContext.setWCAttribute(SR_SALESREP_ID, srCustomer.getSalesRepID(), WCAttributeScope.SESSION);
-				wcContext.setWCAttribute(SR_SALESREP_EMAIL_ID, srCustomer.getSalesRepEmailID(), WCAttributeScope.SESSION);
+				wcContext.setWCAttribute(SR_SALESREP_EMAIL_ID, srCustomer.getSalesRepEmailID(), WCAttributeScope.SESSION);*/
 
 				if((srCustomer.getFirstName() != null && !srCustomer.getFirstName().isEmpty()) && (srCustomer.getLastName() != null && !srCustomer.getLastName().isEmpty())) {
 					srCustomer.setUserName(srCustomer.getFirstName()+" "+srCustomer.getLastName());
@@ -120,7 +123,11 @@ public class AjaxGetSalesProCustomersListAction extends WCAction {
 			}
 			Collections.sort(returnCustomerList,SalesProCustomer.COMPARATOR_DISPLAY);
 		}
-
+		Map<String, String> customersMapFromSession =(Map<String, String>)XPEDXWCUtils.getObjectFromCache(SR_CUSTOMER_ID_MAP);
+		if(customersMapFromSession != null)
+			System.out.println("*************  SalesRep Customer cout from session in class AjaxGetSalesProCustomersListAction   =====  "+customersMapFromSession.size() );
+		else
+			System.out.println("*************  SalesRep Customer cout from session in class AjaxGetSalesProCustomersListAction   is 0 ");
 		return returnCustomerList;
 	}
 
