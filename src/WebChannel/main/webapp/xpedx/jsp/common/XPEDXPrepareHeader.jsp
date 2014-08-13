@@ -962,6 +962,8 @@ var selectedShipCustomer = null;
 <s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <s:set name="extnPunchOutUser" value='%{#xpedxCustomerContactInfoBean.isExtnPunchOutUser()}' />
 <s:hidden id='extnPunchOutUserValue' value='%{#extnPunchOutUser}' /> 
+<s:set name="extnStockCheck" value='%{#xpedxCustomerContactInfoBean.getExtnStockCheckWS()}' />
+<s:hidden id='extnstockCheckValue' value='%{#extnStockCheck}' />
 <s:set name="logUser" value ="%{#_action.getWCContext().getSCUIContext().getSecurityContext().getLoginId()}"/>
 <s:set name="assgnCustomers" value="#_action.getAssignedShipTos()" />
 <s:set name="fromWhichPage" value="#_action.getIsFromWhichPage()"/>
@@ -1041,6 +1043,8 @@ var selectedShipCustomer = null;
 <s:url id='passwordUpdate' namespace='/common' action='xpedxPasswordUpdate' >
 </s:url>
 <a href="#procurementValidation" id="extnPunchOutModal" style="display: none;"></a>
+<a href="#stockCheckvalidation" id="extnStockCheckModal" style="display: none;"></a>
+
 <div class='x-hidden dialog-body ' id="securityQueContent">
 	<div id="ajax-securityQueContent" class="xpedx-light-box"
 		style="width: auto; height: auto; ">
@@ -1243,6 +1247,20 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
 			html.push('					<input class="btn-gradient float-left addmarginleft20" type="submit" value="Sign Out" id ="signOutButton"  onclick="javascript:signOutFunction()"/>');
 			html.push('			</div>');
 			$procurementValidationDiv.get(0).innerHTML = html.join('');	
+    }
+     
+    function showStockCheckModal()
+    {
+    	var $stockCheckvalidationDiv = $('#stockCheckvalidation');
+		var html = [];
+		html.push('			<div class="stockcheck-modal">');
+		html.push('			<p>	We','\'','re sorry, this User ID can only access the website via your system using "StockCheck".</p>');
+		html.push('			<h3>Please contact the eBusiness Customer Support Desk at 1-877-269-1784 or ebusiness@vertivcorp.com. </h3>');
+		html.push('			</div>');
+		html.push('			<div>');
+		html.push('					<input class="btn-gradient float-left addmarginleft20" type="submit" value="Sign Out" id ="signOutButton"  onclick="javascript:signOutFunction()"/>');
+		html.push('			</div>');
+		$stockCheckvalidationDiv.get(0).innerHTML = html.join('');	
     }
      
     function signOutFunction(){
@@ -1876,7 +1894,7 @@ function passwordUpdateModal()
 		var isSalesRep = "<s:property value='%{wCContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP")}'/>";
 		var isPunchoutUser = '<s:property value="#isPunchoutUser"/>';
 		var extnPunchOutUser='<s:property value="#extnPunchOutUser"/>'
-		
+		var extnStockCheck='<s:property value="#extnStockCheck"/>';
 		if(isguestuser!="true"){
 			var defaultShipTo = '<%=request.getParameter("defaultShipTo")%>';
 			var isCustomerSelectedIntoConext="<s:property value='#isCustomerSelectedIntoConext'/>";
@@ -1887,6 +1905,23 @@ function passwordUpdateModal()
 					'onStart' 	: function(){
 						if(isguestuser!="true"){
 							showContactModal();
+						}            		
+				},
+					
+				'hideOnOverlayClick': false,
+				'showCloseButton'	: false,
+				'enableEscapeButton': false,
+				'autoDimensions'	: false,
+			 	'width' 			: 400,
+			 	'height' 			: 150
+				}).trigger('click');
+			} 
+			
+			else if ((isPunchoutUser=="false") && (extnStockCheck=="Y")){				
+				$("#extnStockCheckModal").fancybox({					
+					'onStart' 	: function(){
+						if(isguestuser!="true"){
+							showStockCheckModal();
 						}            		
 				},
 					

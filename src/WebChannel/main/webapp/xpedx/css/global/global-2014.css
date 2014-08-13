@@ -1449,6 +1449,21 @@ h3 {
     padding: 10px 0 20px;
 }
 
+/*-------stockcheck-modal---------*/
+.stockcheck-modal {
+	margin:0px;
+	padding:20px;
+	text-align:left;
+	color:#000000;
+}
+.stockcheck-modal p{
+	padding-bottom:10px;
+}
+.stockcheck-modal h2 {
+    font-size: 16px;
+    padding: 10px 0 20px;
+}
+
 .input-group {
 	width: 320px;
 	margin: 0;

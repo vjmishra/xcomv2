@@ -5865,6 +5865,7 @@ public class XPEDXWCUtils {
 			String b2bViewFromDB = SCXmlUtil.getAttribute(extnElem, "ExtnB2BCatalogView");
 			String maxOrderAmt=SCXmlUtil.getAttribute(extnElem, "ExtnMaxOrderAmount");//JIRA 3488 start
 			String orderApproveFlag = SCXmlUtil.getAttribute(extnElem, "ExtnOrderApprovalFlag");//added for XB 226
+			String stockCheckWS= SCXmlUtil.getAttribute(extnElem, "ExtnStockCheckWS");
 
 			if (b2bViewFromDB != null && b2bViewFromDB.trim().length() > 0) {
 				b2bViewFromDB = b2bViewFromDB.trim();
@@ -5946,7 +5947,7 @@ public class XPEDXWCUtils {
 						viewReportFlag, viewPricesFlag,
 						newusergroupkey, defaultShipTo,
 						userPrefCategory, isApprover, usergroupKeyListActive, myItemsLink, 0 , b2bViewFromDB,orderConfirmationFalg,
-						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag, extnPunchoutUser);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
+						emailID,extnUseOrderMulUOMFlag,personInfoElement,maxOrderAmt,spendingLimit,orderApproveFlag, extnPunchoutUser, stockCheckWS);//added maxOrderAmt for JIRA 3488  added orderApproveFlag xb-226
 		}
 		XPEDXWCUtils.setObectInCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean, xpedxCustomerContactInfoBean);
 		return xpedxCustomerContactInfoBean;
