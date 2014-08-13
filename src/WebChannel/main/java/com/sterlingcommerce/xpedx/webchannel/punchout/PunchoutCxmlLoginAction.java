@@ -43,6 +43,7 @@ public class PunchoutCxmlLoginAction extends WCAction {
 		}
 		catch (Exception e) {
 			log.error("problem while decrypting password for cXML login for user: " + punchoutCxmlSessionElem.getAttribute("Userid"), e);
+			return ERROR;
 		}
 
 		request.setAttribute("selected_storefrontId", sfId);

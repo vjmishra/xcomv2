@@ -48,8 +48,6 @@ import com.yantra.yfs.core.YFSSystem;
  */
 public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 
-	private static final String PARAMNAME_PASSWORD = "p=";
-	private static final String PARAMNAME_USERID = "?u=";
 	XPEDXCXMLMessageFields cXMLFields = null;
 	WCIntegrationResponse wcResponse = null;
 
@@ -96,12 +94,6 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 			String passwd = "";
 			if (!userid.isEmpty()) {
 				passwd = EncryptionUtils.decrypt(encrypted);
-			}
-			else { //TODO remove support for start URL soon
-				String dbStartPage = SCXmlUtil.getAttribute(custExtnElement, "ExtnStartPageURL");
-				userid = obtainUserid(dbStartPage);
-				passwd = obtainPassword(dbStartPage);
-				encrypted = passwd; // temp
 			}
 
 			Document loginDoc = WCIntegrationXMLUtils.prepareLoginInputDoc(userid, passwd);
@@ -158,22 +150,6 @@ public class XPEDXPunchoutCxmlServlet extends AribaIntegrationServlet {
 		logDebug("outputDoc: " + SCXmlUtil.getString(outputDoc));
 
 		return sessionId;
-	}
-
-	//TODO remove/change these to instead read from user and password fields once popuplated
-	// Extract user/pwd from DB configured start URL: "http://xxx?u=advance@punchout.com&p=punchout123"
-	private String obtainUserid(String dbStartPage) {
-		int userStart = dbStartPage.indexOf(PARAMNAME_USERID);
-		int userEnd   = dbStartPage.indexOf("&");
-		return dbStartPage.substring(userStart+PARAMNAME_USERID.length(), userEnd);
-	}
-	private String obtainPassword(String dbStartPage) {
-		// look for '&' to end pwd string in case they add more params to URL in DB
-		int pwdStart = dbStartPage.indexOf(PARAMNAME_PASSWORD);
-		int pwdAmp   = dbStartPage.indexOf("&", pwdStart);
-		int pwdEnd = (pwdAmp != -1) ? pwdAmp : dbStartPage.length();
-
-		return dbStartPage.substring(pwdStart+PARAMNAME_PASSWORD.length(), pwdEnd);
 	}
 
 

@@ -132,9 +132,8 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 		Document custDetails = getCustDetails(context, env);
 		String xsltFileName = SCXmlUtil.getXpathAttribute(custDetails.getDocumentElement(), "/Customer/Extn/@ExtnXSLTFileName");
-		// v1 replaceChars functionality not yet supported. [Is xslt version needed?]
-		//String replaceChars = SCXmlUtil.getXpathAttribute( CustDetails.getDocumentElement(), "/Customer/Extn/@ExtnReplaceCharacter");
-		//String xsltVersion = SCXmlUtil.getXpathAttribute(CustDetails.getDocumentElement(),"/Customer/Extn/@ExtnXSLTVer");
+
+		//TODO should verify file exists otherwise get exceptions during xslt processing
 
 		Document orderOutputDoc = getOrderDetails(orderHeaderKey, env);
 
@@ -170,7 +169,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 					if(LOG.isDebugEnabled()){
 						LOG.debug("Punchout: for item: " + itemId + " replacing with custom UNSPCS: " + customUnspsc);
 					}
-					
+
 					extnElem.setAttribute("ExtnUNSPSC", customUnspsc);
 				}
 			}
@@ -282,6 +281,7 @@ public class CustomPunchoutOrderAction extends WCMashupAction {
 
 		Element orderElement = (Element)WCMashupHelper.invokeMashup(
 				GET_PUNCHOUT_ORDER_DETAILS_MASHUP,inputOrderElement, wcContext.getSCUIContext());
+
 
 		return orderElement.getOwnerDocument();
 	}
