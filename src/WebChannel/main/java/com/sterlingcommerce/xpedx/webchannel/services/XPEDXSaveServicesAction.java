@@ -421,8 +421,11 @@ public class XPEDXSaveServicesAction extends WCMashupAction {
 			 */
 			
 			if(storefrontId!=null && storefrontId.trim().length() > 0){
-				String userName = YFSSystem.getProperty("fromAddress.username");
-				sb.append(userName).append("@").append(createHostName());
+				if("Saalfeld".equalsIgnoreCase(storefrontId)){
+					sb.append(YFSSystem.getProperty("saalFeldEMailFromAddresses"));
+				}else{
+					sb.append(YFSSystem.getProperty("EMailFromAddresses"));
+				}
 				customerEmail = sb.toString();
 				
 			}
