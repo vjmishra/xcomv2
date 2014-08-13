@@ -13,7 +13,6 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils' id='utilMIL' />
 <s:set name='scuicontext' value="uiContext" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <swc:html isXhtml="true">
@@ -404,8 +403,11 @@
 						</s:if>
 						<div class="pa-wrap">
 							<%-- This will be filled by ajax as the PnA call happens on page load as Ajax --%>
-							<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability"></div>
+								<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability">
+								
 						</div>
+						</div>
+						
 					</div> <%-- / order-wrap --%>
 				</div> <%-- / image-order-container --%>
 				

@@ -529,7 +529,7 @@ public class XPEDXPriceandAvailabilityUtil {
 					}
 					if(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX.equals(item.getLineStatusCode())){
 						item.setDiscontinuedItemErrorFromMax("true");
-						item.setLineStatusErrorMsg(WS_DISCONTINUED_ITEM_LINESTATUS_ERROR);
+						//item.setLineStatusErrorMsg(WS_DISCONTINUED_ITEM_LINESTATUS_ERROR);
 					}
 					if(!"00".equals(item.getLineStatusCode()) && !WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode()) && !WS_DISCONTINUED_ITEM_ERROR_FROM_MAX.equals(item.getLineStatusCode())) {
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));
@@ -931,6 +931,9 @@ public class XPEDXPriceandAvailabilityUtil {
 				break;
 			case 12:
 				errorMessage = " Requested UOM not in eCommerce UOM";
+				break;
+			case 15:
+				errorMessage = "Item discontinued.";
 				break;
 			default:
 				errorMessage = "Unknown error";
@@ -1437,8 +1440,11 @@ public class XPEDXPriceandAvailabilityUtil {
 				XPEDXItem item=items.get(i);
 				String itemID=item.getLegacyProductCode();
 				//if(!"00".equals(item.getLineStatusCode())){
-				if(item.getLineStatusErrorMsg() == null || item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX) || item.getLineStatusCode().equalsIgnoreCase(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX)){
+				if(item.getLineStatusErrorMsg() == null || item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 					errorMessage="";
+				}
+				if(item.getLineStatusCode().equalsIgnoreCase(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX)){
+					errorMessage= WS_DISCONTINUED_ITEM_LINESTATUS_ERROR;
 				}
 				else{
 				       errorMessage = item.getLineStatusErrorMsg();
