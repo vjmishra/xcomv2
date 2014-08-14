@@ -1254,7 +1254,7 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
     	var $stockCheckvalidationDiv = $('#stockCheckvalidation');
 		var html = [];
 		html.push('			<div class="stockcheck-modal">');
-		html.push('			<p>	We','\'','re sorry, this User ID can only access the website via your system using "StockCheck".</p>');
+		html.push('			<p>	We','\'','re sorry, this User ID can only access the website via your system using "Stock Check Web Service".</p>');
 		html.push('			<h3>Please contact the eBusiness Customer Support Desk at 1-877-269-1784 or ebusiness@vertivcorp.com. </h3>');
 		html.push('			</div>');
 		html.push('			<div>');
