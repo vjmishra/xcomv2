@@ -7,11 +7,11 @@ import java.util.Map;
 
 import javax.xml.xpath.XPathConstants;
 
-import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.xpedx.sterling.rcp.pca.util.EncryptionUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCEditorInput;
@@ -29,8 +29,8 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	public CustomerProfileMaintenanceBehavior(
 			CustomerProfileMaintenance customerProfileMaintenance,
 			Object inputObject) {
-		
-		super((Composite) customerProfileMaintenance, customerProfileMaintenance.getFormId(), inputObject);
+
+		super(customerProfileMaintenance, customerProfileMaintenance.getFormId(), inputObject);
 		this.page = customerProfileMaintenance;
 		this.inputElement=((YRCEditorInput) inputObject).getXml();
 		initPage();
@@ -71,7 +71,7 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	}
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.yantra.yfc.rcp.YRCBaseBehavior#handleApiCompletion(com.yantra.yfc.rcp.YRCApiContext)
 	 */
 	@Override
@@ -83,8 +83,15 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 				String[] apinames = ctx.getApiNames();
 				for (int i = 0; i < apinames.length; i++) {
 					String apiname = apinames[i];
+
 					if ("XPXGetCustomerListService".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
+
+						// the password is encrypted when stored in DB - unencrypt for display/edit
+						String encrypted = YRCXmlUtils.getAttributeValue(outXml, "/CustomerList/Customer/Extn/@ExtnUserPwdParam");
+						String password = EncryptionUtils.decrypt(encrypted);
+						YRCXmlUtils.setAttributeValue(outXml, "/CustomerList/Customer/Extn/@ExtnUserPwdParam", password);
+
 						setModel("XPXCustomerIn",outXml);
 						prepareSalesRepModel(outXml);
 						String suffixType = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer/Extn"), "ExtnSuffixType");
@@ -92,19 +99,18 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 							Element emailListEle=createModelForAdditionalEmails(outXml);
 							setModel("XPXBillToLevelEmailList", emailListEle);
 						}
-						
 					}
 					if ("XPXGetParentCustomerListService".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						updateModelWithParentInfo(outXml);
-					}						
+					}
 					if ("XPXGetUserList".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						setModel("XPXGetUserList",outXml);
 					}
 				}
 				/*if ("XPXPnAService".equals(ctx.getApiName())) {
-					
+
 				}*/
 			}
 		}
@@ -123,7 +129,7 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 				}
 			}
 		super.handleApiCompletion(ctx);
-		
+
 	}
 	/*public void handleApiCompletion(YRCApiContext ctx) {
 		if (ctx.getInvokeAPIStatus() > 0)
@@ -136,16 +142,16 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 					prepareSalesRepModel(outXml);
 					setModel("Vikas",outXml);
 					page.createTabFolder(outXml);
-				}				
+				}
 			}
 		super.handleApiCompletion(ctx);
 	}*/
-	
+
 	private void updateModelWithParentInfo(Element outXml) {
 
 		Element generalInfo = getModel("XPXCustomerIn");
 		String suffixType = YRCXmlUtils.getAttribute(YRCXmlUtils.getXPathElement(generalInfo, "/CustomerList/Customer/Extn"), "ExtnSuffixType");
-		
+
 		ArrayList listCustomers = YRCXmlUtils.getChildren(generalInfo, "Customer");
 		ArrayList listParentCustomers = YRCXmlUtils.getChildren(outXml, "Customer");
 		if (!YRCPlatformUI.isVoid(listParentCustomers) && !YRCPlatformUI.isVoid(listCustomers)) {
@@ -153,7 +159,7 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 			if ("MC".equals(suffixType)) {
 				Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
 				YRCXmlUtils.importElement(eleParentMasterCustomer, (Element) listParentCustomers.get(0));
-			}			
+			}
 			if ("C".equals(suffixType)) {
 				Element eleParentMasterCustomer = YRCXmlUtils.createChild(customerEle, "ParentMasterCustomer");
 				Element eleParentCustomer = YRCXmlUtils.createChild(customerEle, "ParentCustomerCustomer");
@@ -179,7 +185,7 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 
 	}
 
-	
+
 	private void callApi(String apinames, Document inputXml) {
 		YRCApiContext ctx = new YRCApiContext();
 		ctx.setFormId(page.getFormId());
@@ -206,33 +212,33 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 				if("Y".equals(salesRep.getAttribute("PrimarySalesRepFlag"))){
 					primarySalesRepId=SalesRepID;
 					childSalesRepEle = YRCXmlUtils.createChild(PrimarySalesRepDoc, "SalesRep");
-					
+
 				} else {
 					childSalesRepEle = YRCXmlUtils.createChild(salesRepDoc, "SalesRep");
 				}
-				
+
 					Element userElement = YRCXmlUtils.getXPathElement(
 							salesRep, "/XPEDXSalesRep/YFSUser");
 					if(null !=userElement)
 					childSalesRepEle.setAttribute("SalesRepName", userElement
 							.getAttribute("Username"));
-				
-				
+
+
 			}
 		}
 		setModel("SalesRepList",salesRepDoc);
 		setModel("PrimarySalesRepList",PrimarySalesRepDoc);
 	}
-	
+
 	public Element getCustomerDetails() {
 		return customerDetails;
 	}
 	public void setCustomerDetails(Element customerDetails) {
 		this.customerDetails = customerDetails;
 	}
-	
+
 	public Element createModelForAdditionalEmails(Element outXml) {
-		
+
 		Element emailListEle = YRCXmlUtils.createFromString("<EmailList/>").getDocumentElement();
 		Element extnCustListParentEle = YRCXmlUtils.getXPathElement(outXml, "/CustomerList/Customer/Extn/XPXCustomerExtnListList/");
 		List extnCustListChildList  = YRCXmlUtils.getChildren(extnCustListParentEle, "XPXCustomerExtnList");
@@ -251,8 +257,8 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 				}
 			}
 		}
-		return emailListEle;		
-		
+		return emailListEle;
+
 	}
 	public List<String> getExistingEmailList() {
 		return existingEmailList;
@@ -266,5 +272,5 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	public void setEmailMap(Map<String, String> emailMap) {
 		this.emailMap = emailMap;
 	}
-	
+
 }
