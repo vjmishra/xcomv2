@@ -31,7 +31,7 @@ public class PunchoutCxmlLoginAction extends WCAction {
 	public String execute() {
 		Element punchoutCxmlSessionElem = getPunchoutCxmlSession(sessionId);
 		if (punchoutCxmlSessionElem == null) {
-			// the cxml session has timed out. the session is only valid for a few minutes after creation
+			// the cxml sessionId has timed out (only valid for few minutes) or is missing
 			return ERROR;
 		}
 
@@ -70,12 +70,19 @@ public class PunchoutCxmlLoginAction extends WCAction {
 	}
 
 	private static Element getPunchoutCxmlSession(String sessionId) {
+		if (sessionId == null) {
+			return null;
+		}
 		Element punchoutCxmlSessionElem = SCXmlUtil.createDocument("XPEDXPunchoutCxmlSession").getDocumentElement();
 		punchoutCxmlSessionElem.setAttribute("PunchoutCxmlSessionId", sessionId);
 
 		Element punchoutCxmlSessionListOutputElem = XPEDXWCUtils.handleApiRequestBeforeAuthentication("getPunchoutCxmlSessionList", punchoutCxmlSessionElem.getOwnerDocument(), true, null).getDocumentElement();
 
-		return SCXmlUtil.getChildElement(punchoutCxmlSessionListOutputElem, "XPEDXPunchoutCxmlSession");
+		Element responseElem = SCXmlUtil.getChildElement(punchoutCxmlSessionListOutputElem, "XPEDXPunchoutCxmlSession");
+		if (responseElem != null && !sessionId.equals(responseElem.getAttribute("PunchoutCxmlSessionId"))) {
+			return null;
+		}
+		return responseElem;
 	}
 
 	private static final Logger log = Logger.getLogger(PunchoutCxmlLoginAction.class);
