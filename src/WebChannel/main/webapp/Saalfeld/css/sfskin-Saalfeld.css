@@ -1160,8 +1160,9 @@ ul.megamenu {
 	left: 270px;
 	margin: 0;
 	clear: none;
-	width: auto;
+	width: 32px;
 	height: 25px;
+	line-height: 24px;
 	background: #81c1ad;
 	color: #ffffff;
 	border: 0px;
