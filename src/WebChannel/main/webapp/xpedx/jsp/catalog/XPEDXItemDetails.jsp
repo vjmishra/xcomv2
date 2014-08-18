@@ -275,9 +275,7 @@
 						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
 							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
 						</s:if>
-						<s:if test='%{#isStocked !="Y"}'>
-							<div class="mill-mfg-message">Mill / Mfg. Item - Additional charges may apply</div>
-						</s:if>
+						
 						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
 							<div class="detail-msds-button">
 								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
@@ -372,8 +370,22 @@
 								</div>
 							</div> <%-- / item-button-wrap --%>
 							
-							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom20" cssStyle="display:inline-block;"></s:div>
+							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom10" cssStyle="display:inline-block;"></s:div>
 						</s:else> <%-- / if-else guest user --%>
+						
+						<s:if test='%{#isStocked=="I"}'>
+							<div class="non-stock-item"><div class="stock-icon">
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges"/>
+								</div>Not a Stocked item<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+						</s:if>
+						<s:if test='%{#isStocked=="M"}'>
+							<div class="non-stock-item"><div class="stock-icon">
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges"/>
+								</div>Item ships directly from Mfr<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+						</s:if>
+						<s:if test='%{#isStocked=="W"}'>
+							<div class="mill-mfg-message"></div>
+						</s:if>
 						
 						<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
 							<div class="replacement-item">

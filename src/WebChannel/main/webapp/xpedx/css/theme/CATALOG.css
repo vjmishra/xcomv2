@@ -1380,7 +1380,7 @@ img#youtube { margin-right: 9px; }
 	float: right;
 	clear: both;
 	text-align: right;
-	margin: 25px 0px 16px 0px;
+	margin: 25px 0px 5px 0px;
 }
 
 .condensed-view  #item-ct dd .mill-mfg {
@@ -1445,3 +1445,36 @@ img#youtube { margin-right: 9px; }
 .condensed-view  #item-ct dd .notice {
 	margin-bottom: 10px;
 	}
+
+	/*----------NON STOCK ITEMS------------*/
+.mini-view .non-stock-item {
+	font-weight: bold;
+	font-style: italic;
+	color: #000000;
+	text-align: right;
+	clear: both;
+	font-size: 12px;
+	padding: 15px 10px 0 0;
+	}
+.mini-view .non-stock-item .stock-icon {
+	float: right;
+	clear: none;
+	margin-left: 5px;
+	margin-top: -6px;
+	}
+.condensed-view .non-stock-item {
+	font-weight: bold;
+	font-style: italic;
+	color: #000000;
+	text-align: right;
+	clear: both;
+	font-size: 12px;
+	padding: 5px 10px 15px 0;
+	}
+.condensed-view .non-stock-item .stock-icon {
+	float: right;
+	clear: none;
+	margin-left: 5px;
+	margin-top: -6px;
+	}
+	

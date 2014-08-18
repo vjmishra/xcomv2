@@ -4154,12 +4154,12 @@ public class XPEDXWCUtils {
 					String division = xpxExtnElem.getAttribute("XPXDivision");
 					if(shipFromBranch.equalsIgnoreCase(division)) {
 						divisionFlag = true;
-						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") )
-							inventoryIndicator =  "Y" ;
+						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("M") )
+							inventoryIndicator =  "M" ;
 						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") )
 							inventoryIndicator =  "I" ;
 						else
-							inventoryIndicator =  "N" ;
+							inventoryIndicator =  "W" ;
 						break;
 					}
 				}

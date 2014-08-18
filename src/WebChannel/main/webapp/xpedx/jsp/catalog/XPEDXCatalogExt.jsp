@@ -878,7 +878,7 @@ function getCondensedView() {
 									</s:if>
 									
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									'{itemtypedesc}', 
+									 
 
 								'</div>', // end item-numbers
 								
@@ -908,6 +908,7 @@ function getCondensedView() {
 							</s:if>
 							
 							'<div class="uomLink" id="errorMsgForQty_{itemid}">{uomLink}</div>',
+							'{itemtypedesccondensed}',
 							'<div class="clearfix"></div>',
 						'</dd>',
 						'<tpl if="itemindex % 2 == 1">',
@@ -963,7 +964,7 @@ function getMiniView() {
 									</s:if>
 										
 									<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-									'{itemtypedesc}',
+									
 								'</div>', // end item_number
 								
 								'<div class="quantity_box">',
@@ -998,6 +999,7 @@ function getMiniView() {
 									<s:if test='!#guestUser'>
 										'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 									</s:if>
+										'{itemtypedescmini}',
 								'</div>',
 								<s:if test='!#guestUser'>
 									'<div>',

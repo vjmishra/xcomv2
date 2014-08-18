@@ -2695,9 +2695,14 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 							String inventoryIndicator = SCXmlUtil.getAttribute(itemExtn, "InventoryIndicator");
 							String orderMultiple = SCXmlUtil.getAttribute(itemExtn, "OrderMultiple");
 							if (inventoryIndicator.equalsIgnoreCase("W"))
-								inventoryMap.put(currItemId, "Y");
-							else
-								inventoryMap.put(currItemId, "N");
+								inventoryMap.put(currItemId, "W");
+							else if (inventoryIndicator.equalsIgnoreCase("M")){
+								inventoryMap.put(currItemId, "M");
+							}
+							else if (inventoryIndicator.equalsIgnoreCase("I")){
+								inventoryMap.put(currItemId, "I");
+							}
+								
 							if (orderMultiple == null || orderMultiple.trim().length() == 0) {
 								orderMultiple = "1";
 							}
