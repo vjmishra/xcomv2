@@ -356,6 +356,8 @@ public class XPEDXOrderPlaceAction extends OrderSaveBaseAction {
 						if(orderExtnElement!=null)
 						{
 							orderExtnElement.setAttribute("ExtnOrderEditCustContactID", wcContext.getLoggedInUserId());
+							if(!orderExtnElement.hasAttribute("ExtnAttentionName"))
+								orderExtnElement.setAttribute("ExtnAttentionName", "");
 						}
 						orderUpdateObj = WCMashupHelper.invokeMashup("xpedxOrderUpdateToLegacyFlow", orderDetailDocument.getDocumentElement(), wcContext.getSCUIContext());
 
