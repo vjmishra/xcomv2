@@ -2236,7 +2236,10 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 	}
 
 	public void setIsStocked(String stocked) {
-			this.isStocked=stocked;
+		if (stocked.equalsIgnoreCase("W"))
+			this.isStocked = "Y";
+		else
+			this.isStocked="N";
 	}
 
 	public String getOrganizationCode() {

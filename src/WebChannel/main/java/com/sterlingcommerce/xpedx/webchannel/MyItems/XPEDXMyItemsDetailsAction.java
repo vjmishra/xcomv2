@@ -2198,20 +2198,19 @@ public class XPEDXMyItemsDetailsAction extends WCMashupAction implements
 						if(environmentId.equalsIgnoreCase(envCode) && division.equalsIgnoreCase(customerDivision)) {
 							String inventoryIndicator = SCXmlUtil.getAttribute(itemExtn, "InventoryIndicator");
 							String orderMultiple = SCXmlUtil.getAttribute(itemExtn, "OrderMultiple");
-							if (inventoryIndicator.equalsIgnoreCase("I")){
-								inventoryMap.put(currItemId, "I");
-								itemTypeMap.put(currItemId,"InDirect");
-								
-							}else if(inventoryIndicator.equalsIgnoreCase("") ||inventoryIndicator.equalsIgnoreCase("M")){
-								inventoryMap.put(currItemId, "M");
-								itemTypeMap.put(currItemId,"Mill");
-								
-							}
-							else if(inventoryIndicator.equalsIgnoreCase("W")){
-								inventoryMap.put(currItemId, "W");
+							if (inventoryIndicator.equalsIgnoreCase("W")){
+								inventoryMap.put(currItemId, "Y");
 								itemTypeMap.put(currItemId,"Stocked");
+							}else{
+								inventoryMap.put(currItemId, "N");
 							}
-							
+							/*start of webtrends */
+							if (inventoryIndicator.equalsIgnoreCase("I")){
+								itemTypeMap.put(currItemId,"InDirect");
+							}else if (inventoryIndicator.equalsIgnoreCase("") || inventoryIndicator.equalsIgnoreCase("M")){
+								itemTypeMap.put(currItemId,"Mill");
+							}
+							/*End of webtrends */
 							if (orderMultiple == null || orderMultiple.trim().length() == 0) {
 								orderMultiple = "1";
 							}

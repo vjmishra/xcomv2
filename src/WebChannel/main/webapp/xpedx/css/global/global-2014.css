@@ -156,9 +156,6 @@
 .floatright {
 	float: right;
 }
-.addmarginleft130{
-	margin-left: 130px;
-}
 .form input.btn-gradient.floatright{
 	display: inline;
 	float: right;
@@ -895,9 +892,7 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	margin-right: 5px;
 	font-weight: normal;
 	float: right;
-	
 }
-
 .detail-view .pnaOrderMultipleMessage {
 	margin-right: 18px;
 }
@@ -1508,50 +1503,3 @@ h3 {
 	height: 42px;
 	background: url(../../images/punchout/blue-clock.png);
 }
-
-
-/*---Catalog Styles Move to global-2014 for more access-----*/
-
-.replacement-item {
-	clear: none;
-	color: #e16901;
-	float: right;
-	font-weight: bold;
-	margin: 5px 15px 0 0;
-}
-.non-stock-item {
-	font-weight: bold;
-	font-style: italic;
-	color: #000000;
-	text-align: right;
-	clear: both;
-	font-size: 12px;
-	padding: 5px 10px 0 0;
-}
-.non-stock-item .contact{
-	font-weight: normal;
-	font-size: 11px;
-	margin-right: 25px;
-}
-.non-stock-item .stock-icon {
-	float: right;
-	clear: none;
-	margin-left: 5px;
-	}
-	
-.non-stock-item-shorter {
-	font-weight: bold;
-	font-style: italic;
-	color: #000000;
-	text-align: right;
-	clear: both;
-	font-size: 12px;
-	padding: 5px 10px 0 0;
-	}
-.non-stock-item-shorter .stock-icon {
-	float: right;
-	clear: none;
-	margin-left: 5px;
-	margin-top: -6px;
-	}
-/*---*/

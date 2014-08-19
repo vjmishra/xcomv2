@@ -106,7 +106,7 @@ function getPriceAndAvailabilityForItems(options) {
 				$divErrorMsgForQty = $('#errorMsgForQty_' + pnaItem.legacyProductCode);
 				var isOrderMultipleError = pnaItem.orderMultipleErrorFromMax == 'true' && pnaItem.requestedQty;
 				var cssClass = isOrderMultipleError ? 'error' : 'notice';
-				cssClass += ' pnaOrderMultipleMessage addmarginbottom10';
+				cssClass += ' pnaOrderMultipleMessage';
 				$divErrorMsgForQty.attr('class', cssClass);
 				
 				var html = [];

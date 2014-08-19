@@ -6411,6 +6411,10 @@ BEGIN 2014 styles
 	height: auto;
 }
 
+.mil-action-list-wrap .notice {
+	border: none;
+}
+
 .mil-edit-forms {
 	width: 360px;
 	float: left;
