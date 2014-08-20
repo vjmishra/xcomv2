@@ -2692,20 +2692,6 @@ function showSharedListForm(){
 														</p>
 													</s:if>
 												</s:if>
-												<div class="red">
-													<s:if test="%{#itemType != '99.00'}">
-														<s:set name="isStocked"
-															value="inventoryCheckForItemsMap.get(#itemId)"></s:set>
-														<s:if test="#isStocked !=null">
-															<s:if test='%{#isStocked !="Y"}'>
-																<p>Mill / Mfg. Item - Additional charges may apply</p>
-															</s:if>
-														</s:if>
-														<s:else>
-															<p>Mill / Mfg. Item - Additional charges may apply</p>
-														</s:else>
-													</s:if>
-												</div>
 												
 												<s:if test='editMode != true'>
 													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
@@ -2913,10 +2899,10 @@ function showSharedListForm(){
 											<s:hidden name="baseUOM" id="baseUOM_%{#id}" value="%{#baseUOM}" />
 											<s:set name="baseUOMCode" value="#baseUOMs.get(#itemId)"></s:set>
 											<s:hidden name="baseUOMCode" id="baseUOMCode_%{#id}" value="%{#baseUOMCode}" />
-											
-											
+											<s:set name="displayInventoryIndicator" value="displayInventoryCheckForItemsMap.get(#itemId)"></s:set>
+											<s:hidden name="displayInventoryIndicatorvalue" value="#displayInventoryIndicator"></s:hidden>
 											<s:if test='editMode != true'>
-												<div class="cart-btn-wrap">
+												<div class="cart-btn-wrap addmarginbottom10">
 													<div class="mil-avail-link">
 														<a id="PAAClick_<s:property value="#id"/>" href="javascript:writeMetaTag('DCSext.w_x_sc_count,DCSext.w_x_sc_itemtype','1,' + '<s:property value="#webtrendsItemType"/>');checkAvailability('<s:property value="#itemId"/>','<s:property value="#id"/>')">
 															Show Price &amp; Availability
@@ -2937,10 +2923,11 @@ function showSharedListForm(){
 												<s:hidden name="isEditOrder" id="isEditOrder" value="%{#isEditOrderHeaderKey}" />
 												
 												<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;">
+												
+													<div  id="errorDiv_qtys_<s:property value='%{#id}' />"><p class="notice addmarginbottom10">
 														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
 														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}" />
-														<s:property value="#baseUOMDesc"></s:property>
+														<s:property value="#baseUOMDesc"></s:property></p>
 													</div>
 													<s:hidden name="hiddenUOMOrdMul_%{#id}"
 															id="hiddenUOMOrdMul_%{#id}"
@@ -2951,7 +2938,7 @@ function showSharedListForm(){
 													<s:hidden name="hiddenId" id="hiddenId" value="%{#id}" />
 												</s:if>
 												<s:else>
-													<div class="notice" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: inline; float: right;"></div>
+													<div class="notice addmarginbottom10" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: none; float: right;"></div>
 												</s:else>
 												
 												<s:if test='%{#erroMsg !=null && #erroMsg !=""}'>
@@ -2960,22 +2947,47 @@ function showSharedListForm(){
 												<s:else>
 													<div class="error" style="display: none;" id="errorDiv_qtys_<s:property value='%{#id}' />" style="color:red"></div>
 												</s:else>
-												<br />
-		
-												<div class="clearall">&nbsp;</div>
+												<div class="clearfix"></div>
 		
 											</s:if>
 											<s:else> <%-- end editMode --%>
 												<s:if test='%{#mulVal >"1" && #mulVal !=null}'>
-													<div class="notice"
-															id="errorDiv_qtys_<s:property value='%{#id}' />"
-															style="display: inline; float: right;">
-														<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
+													<div 
+															id="errorDiv_qtys_<s:property value='%{#id}' />"><p class="notice addmarginbottom10">
+															<s:text name='MSG.SWC.CART.ADDTOCART.ERROR.ORDRMULTIPLES' />
 														<s:property value="%{#xpedxUtilBean.formatQuantityForCommas(#mulVal)}"></s:property>
-														<s:property value="#baseUOMDesc"></s:property>
+														<s:property value="#baseUOMDesc"></s:property></p>
 													</div>
 												</s:if>
+												<s:else>
+													<div class="notice addmarginbottom10" id="errorDiv_qtys_<s:property value='%{#id}' />" style="display: none; float: right;"></div>
+												</s:else>
 											</s:else>
+											<s:if test='%{#displayInventoryIndicator=="I"}'>
+															<div class="non-stock-item-shorter">
+																<div class="stock-icon">
+																	<img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png"
+																		width="25" height="25"
+																		title="Contact Customer Service to confirm pricing and any additional charges" />
+																</div>
+																Not a Stocked item
+															</div>
+														</s:if>
+														<s:if test='%{#displayInventoryIndicator=="M"}'>
+															<div class="non-stock-item-shorter">
+																<div class="stock-icon">
+																	<img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png"
+																		width="25" height="25"
+																		title="Contact Customer Service to confirm pricing and any additional charges" />
+																</div>
+																Item ships directly from Mfr
+															</div>
+														</s:if>
+														<s:if test='%{#displayInventoryIndicator=="W"}'>
+														
+														</s:if>
 		
 										</div> <%-- / mil-action-list-wrap --%>
 									</div> <%-- / mil-wrap-condensed or mil-wrap-condensed-mid or mil-wrap-condensed-bot --%>

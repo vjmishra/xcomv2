@@ -663,13 +663,35 @@
 				<div class="clearall">&nbsp; </div>
 			    	<div class="red float-left">
 			    		<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-				    	<s:iterator value="inventoryMap" id="inventoryMap" status="status" >
+				    	<s:iterator value="displayInventoryMap" id="displayInventoryMap" status="status" >
 							<s:set name="inventoryChk" value="value" />
 							<s:set name="itemId" value="key" />
 							<s:if test='#item.getAttribute("ItemID") == #itemId'>
-								<s:if test='%{#inventoryChk !="Y"}'>								
-									<p class="red">Mill / Mfg. Item - Additional charges may apply</p>
-								</s:if>
+								<s:if test='%{#inventoryChk=="I"}'>
+															<div class="non-stock-item-shorter addmarginleft130">
+																<div class="stock-icon">
+																	<img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png"
+																		width="25" height="25"
+																		title="Contact Customer Service to confirm pricing and any additional charges" />
+																</div>
+																Not a Stocked item
+															</div>
+														</s:if>
+														<s:if test='%{#inventoryChk=="M"}'>
+															<div class="non-stock-item-shorter addmarginleft130">
+																<div class="stock-icon">
+																	<img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png"
+																		width="25" height="25"
+																		title="Contact Customer Service to confirm pricing and any additional charges" />
+																</div>
+																Item ships directly from Mfr
+															</div>
+														</s:if>
+														<s:if test='%{#inventoryChk=="W"}'>
+														
+														</s:if>
 							</s:if>	
 						</s:iterator>
 						</s:if>

@@ -2680,6 +2680,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		if(envCode==null || envCode.trim().length()==0)
 			envCode = XPEDXWCUtils.getEnvironmentCode(wcContext.getCustomerId());
 		HashMap<String,String> inventoryMap = new HashMap<String, String>();
+		HashMap<String,String> displayInventoryMap = new HashMap<String, String>();
 		HashMap<String,String> orderMultipleMap = new HashMap<String, String>();
 		if(allItemIds!=null && xpedxItemIDToItemExtnMap!=null) {
 			Iterator<String> itemIdIterator = allItemIds.iterator();
@@ -2694,10 +2695,18 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 						if(environmentId.equalsIgnoreCase(envCode) && division.equalsIgnoreCase(customerDivision)) {
 							String inventoryIndicator = SCXmlUtil.getAttribute(itemExtn, "InventoryIndicator");
 							String orderMultiple = SCXmlUtil.getAttribute(itemExtn, "OrderMultiple");
-							if (inventoryIndicator.equalsIgnoreCase("W"))
+							if (inventoryIndicator.equalsIgnoreCase("W")){
 								inventoryMap.put(currItemId, "Y");
-							else
+								displayInventoryMap.put(currItemId, "W");
+							}
+							else{
 								inventoryMap.put(currItemId, "N");
+								
+								if(inventoryIndicator.equalsIgnoreCase("M"))
+									displayInventoryMap.put(currItemId, "M");
+								else if(inventoryIndicator.equalsIgnoreCase("I"))
+									displayInventoryMap.put(currItemId, "I");
+								}
 							if (orderMultiple == null || orderMultiple.trim().length() == 0) {
 								orderMultiple = "1";
 							}
@@ -2717,6 +2726,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		}
 		setItemOrderMultipleMap(orderMultipleMap);
 		setInventoryMap(inventoryMap);
+		setDisplayInventoryMap(displayInventoryMap);
 	}
 
 	public boolean isSpecialLine(Element orderLine) {
@@ -3104,6 +3114,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 
 	protected HashMap<String, String> inventoryMap = new HashMap<String, String>();
+	protected HashMap<String, String> displayInventoryMap = new HashMap<String, String>();
+	
 	/**
 	 * @return the inventoryMap
 	 */
@@ -3117,6 +3129,18 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setInventoryMap(HashMap<String, String> inventoryMap) {
 		this.inventoryMap = inventoryMap;
 	}
+	
+	
+	public HashMap<String, String> getDisplayInventoryMap() {
+		return displayInventoryMap;
+	}
+
+
+	public void setDisplayInventoryMap(HashMap<String, String> displayInventoryMap) {
+		this.displayInventoryMap = displayInventoryMap;
+	}
+
+
 	public ArrayList<Element> getXpedxYouMightConsiderItems() {
 		return xpedxYouMightConsiderItems;
 	}

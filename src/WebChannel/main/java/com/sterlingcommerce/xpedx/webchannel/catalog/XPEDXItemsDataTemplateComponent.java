@@ -115,6 +115,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		String b2cPly = validate(b2cItemExtn.getAttribute("ExtnPly"));
 		String b2cPackMethod = validate(b2cItemExtn.getAttribute("ExtnPackMethod")); //added for XBT 262 & 258
 		String b2cstockStatus = validate(itemBranchBean.getInventoryIndicator());
+		String displayInventoryIndicator = validate(itemBranchBean.getInventoryIndicator());
 		String b2cSourcingStatus = validate(b2cItemExtn.getAttribute("ExtnSourcingStatus"));
 
 		String storeFrontId=(String) tag.getWcContext().getStorefrontId();
@@ -232,7 +233,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 
 			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
-				.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; font-weight: normal;float:right; display:inline;\\\">")
+				.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; margin-top:10px; font-weight: normal;float:right; display:inline;\\\">")
 				.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
 				.append(" ")
 				.append(uomDesc).append("</div>\",");
@@ -327,8 +328,36 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		sb.append(itemID).append("' value='");
 		sb.append(orderMultiple).append("'/>\",");
 		sb.append("itemtypedesc: \"");
-		if(!"W".equals(b2cstockStatus) && isGuestUser == false) {
-			sb.append("<div class=\'mill-mfg\'>Mill / Mfg. Item<span class=\'addl-chg\'> - Additional charges may apply</span></div>");
+		if("W".equals(displayInventoryIndicator) && isGuestUser == false) {
+			
+		}
+		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
+		}
+		if("M".equals(displayInventoryIndicator) && isGuestUser == false) {
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Item ships directly from Mfr<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
+		}
+		sb.append("\",");
+		sb.append("itemtypedesccondensed: \"");
+		if("W".equals(displayInventoryIndicator) && isGuestUser == false) {
+			
+		}
+		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked item</div>");
+		}
+		if("M".equals(displayInventoryIndicator) && isGuestUser == false) {
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Item ships directly from Mfr</div>");
+		}
+		sb.append("\",");
+		sb.append("itemtypedescmini: \"");
+		if("W".equals(displayInventoryIndicator) && isGuestUser == false) {
+		
+		}
+		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked item</div>");
+		}
+		if("M".equals(displayInventoryIndicator) && isGuestUser == false) {
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Item ships directly from Mfr</div>");
 		}
 		sb.append("\",");
 		if(replacmentList!=null && replacmentList.size()>0){

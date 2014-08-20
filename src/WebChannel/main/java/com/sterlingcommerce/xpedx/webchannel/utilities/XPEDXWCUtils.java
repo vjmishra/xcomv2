@@ -4114,6 +4114,7 @@ public class XPEDXWCUtils {
 
 	public HashMap<String, String> getInventoryCheckMap(Document outputDoc, String shipFromBranch, IWCContext wcContext) {
 		HashMap<String, String> inventoryCheckForItemsMap = new HashMap<String, String>();
+		HashMap<String, String> displayInventoryCheckForItemsMap = new HashMap<String, String>();
 
 		if(null == shipFromBranch || shipFromBranch.equals("")) {
 			try {
@@ -4154,12 +4155,18 @@ public class XPEDXWCUtils {
 					String division = xpxExtnElem.getAttribute("XPXDivision");
 					if(shipFromBranch.equalsIgnoreCase(division)) {
 						divisionFlag = true;
-						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") )
+						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") ){
 							inventoryIndicator =  "Y" ;
-						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") )
+							displayInventoryCheckForItemsMap.put(itemId,"W");
+						}
+						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") ){
 							inventoryIndicator =  "I" ;
-						else
+							displayInventoryCheckForItemsMap.put(itemId,"I");
+						}
+						else{
 							inventoryIndicator =  "N" ;
+							displayInventoryCheckForItemsMap.put(itemId,"M");
+						}
 						break;
 					}
 				}
@@ -4179,6 +4186,70 @@ public class XPEDXWCUtils {
 			}
 		}
 		return inventoryCheckForItemsMap;
+	}
+
+	public HashMap<String, String> getDisplayInventoryCheckMap(Document outputDoc, String shipFromBranch, IWCContext wcContext) {
+		
+		HashMap<String, String> displayInventoryCheckForItemsMap = new HashMap<String, String>();
+
+		if(null == shipFromBranch || shipFromBranch.equals("")) {
+			try {
+				shipFromBranch = getCustomerShipFromDivision(wcContext.getCustomerId(), wcContext.getStorefrontId());
+			} catch (CannotBuildInputException e) {
+				log.error("Unable to get Ship From Branch : " + e.getMessage());
+			}
+		}
+
+
+		NodeList orderLineList = outputDoc.getElementsByTagName("OrderLine");
+		Element orderLineElem;
+		Element itemDetailsElem;
+		Element xpxExtnElem;
+		for(int i=0; i<orderLineList.getLength(); i++){
+			orderLineElem = (Element)orderLineList.item(i);
+			itemDetailsElem = SCXmlUtil.getChildElement(orderLineElem, "ItemDetails");
+			if(itemDetailsElem !=null)
+			{
+				String itemId = itemDetailsElem.getAttribute("ItemID");
+				Element itemExtnEle = SCXmlUtil.getChildElement(itemDetailsElem, "Extn");
+
+				Element itemXPXExtnListEle = null;
+				NodeList xpxItemExtnList = null;
+				try {
+					itemXPXExtnListEle = XMLUtilities.getElement(itemExtnEle, "XPXItemExtnList");
+					xpxItemExtnList = itemXPXExtnListEle.getElementsByTagName("XPXItemExtn");
+
+				} catch (XPathExpressionException e) {
+					log.error("Unable to get XPXItemExtnList : " + e.getMessage());
+				}
+
+				boolean divisionFlag = false;
+				for (int j = 0; xpxItemExtnList != null && j < xpxItemExtnList.getLength(); j++){
+					xpxExtnElem = (Element) xpxItemExtnList.item(j);
+					// map
+					String division = xpxExtnElem.getAttribute("XPXDivision");
+					if(shipFromBranch.equalsIgnoreCase(division)) {
+						divisionFlag = true;
+						if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("W") ){
+							
+							displayInventoryCheckForItemsMap.put(itemId,"W");
+						}
+						else if(xpxExtnElem.getAttribute("InventoryIndicator").equalsIgnoreCase("I") ){
+						
+							displayInventoryCheckForItemsMap.put(itemId,"I");
+						}
+						else{
+					
+							displayInventoryCheckForItemsMap.put(itemId,"M");
+						}
+						break;
+					}
+				}
+				
+			}
+			
+		}
+		return displayInventoryCheckForItemsMap;
 	}
 
 	public static Element getMSAPCustomerContactFromContacts(Document  custOutDoc,IWCContext wcContext)

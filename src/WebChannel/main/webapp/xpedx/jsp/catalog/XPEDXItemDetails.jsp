@@ -131,6 +131,7 @@
 			<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />
 		</s:if>
 		<s:set name="isStocked" value="isStocked" />
+		<s:set name="displayInventoryIndicator" value="displayInventoryIndicator" />
 		<s:set name="orderMultiple" value="orderMultiple" />
 		<s:set name='showCurrencySymbol' value='true' />
 		<s:set name='currency' value='#xutil.getAttribute(#itemListElem,"Currency")' />
@@ -275,9 +276,7 @@
 						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
 							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
 						</s:if>
-						<s:if test='%{#isStocked !="Y"}'>
-							<div class="mill-mfg-message">Mill / Mfg. Item - Additional charges may apply</div>
-						</s:if>
+						
 						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
 							<div class="detail-msds-button">
 								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
@@ -372,8 +371,22 @@
 								</div>
 							</div> <%-- / item-button-wrap --%>
 							
-							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom20" cssStyle="display:inline-block;"></s:div>
+							<s:div id="%{'errorMsgForQty_' + #itemID}" cssClass="addmarginbottom10" cssStyle="display:inline-block;"></s:div>
 						</s:else> <%-- / if-else guest user --%>
+						
+						<s:if test='%{#displayInventoryIndicator=="I"}'>
+							<div class="non-stock-item"><div class="stock-icon">
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges"/>
+								</div>Not a Stocked item<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+						</s:if>
+						<s:if test='%{#displayInventoryIndicator=="M"}'>
+							<div class="non-stock-item"><div class="stock-icon">
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges"/>
+								</div>Item ships directly from Mfr<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+						</s:if>
+						<s:if test='%{#displayInventoryIndicator=="W"}'>
+							
+						</s:if>
 						
 						<s:if test="(replacementAssociatedItems!=null && replacementAssociatedItems.size() > 0)">
 							<div class="replacement-item">
