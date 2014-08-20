@@ -1443,7 +1443,7 @@ public class XPEDXPriceandAvailabilityUtil {
 				if(item.getLineStatusErrorMsg() == null || item.getLineStatusCode().equalsIgnoreCase(WS_ORDERMULTIPLE_ERROR_FROM_MAX)){
 					errorMessage="";
 				}
-				if(item.getLineStatusCode().equalsIgnoreCase(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX)){
+				if(item.getLineStatusErrorMsg() == null || item.getLineStatusCode().equalsIgnoreCase(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX)){
 					errorMessage= WS_DISCONTINUED_ITEM_LINESTATUS_ERROR;
 				}
 				else{
