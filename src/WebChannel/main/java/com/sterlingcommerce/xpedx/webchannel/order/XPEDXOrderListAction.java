@@ -430,7 +430,7 @@ public class XPEDXOrderListAction extends OrderListAction {
             setOrderNumberValue(value);
         
         else if("PurchaseOrderNumberValue".equals(getSearchFieldName()))
-            setPurchaseOrderNumberValue(value);
+        	setPurchaseOrderNumberSearchValue(value);
        
         else if("WebConfNumberValue".equals(getSearchFieldName()))
             setWebConfNumberValue(value);
@@ -1006,6 +1006,11 @@ public class XPEDXOrderListAction extends OrderListAction {
     		//}   
         } else if("PurchaseOrderNumberValue".equalsIgnoreCase(getSearchFieldName()))
         {
+        	String convertedSrchFieldValue = searchFieldValue;
+        	if(convertedSrchFieldValue.endsWith("*"))
+            {
+        		convertedSrchFieldValue = convertedSrchFieldValue.substring(0, convertedSrchFieldValue.length() - 1);
+            }
         	if(complexQueryElement == null)
 			{
 				complexQueryElement = orderElem.createChild("ComplexQuery");
@@ -1013,12 +1018,14 @@ public class XPEDXOrderListAction extends OrderListAction {
 			 	YFCElement complexQueryOrElement = complexQueryElement.createChild("Or");			 	
 			 	YFCElement expElementCustomerLinePONo = complexQueryOrElement.createChild("Exp");
 			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
-			    expElementCustomerLinePONo.setAttribute("Value",searchFieldValue);
+			    expElementCustomerLinePONo.setAttribute("Value",convertedSrchFieldValue.toUpperCase());
+			    expElementCustomerLinePONo.setAttribute("QryType","FLIKE");
 			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerLinePONo);
 			    
 			    YFCElement expElementCustomerPONo = complexQueryOrElement.createChild("Exp");
 			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
-			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
+			    expElementCustomerPONo.setAttribute("Value",convertedSrchFieldValue.toUpperCase());
+			    expElementCustomerPONo.setAttribute("QryType","FLIKE");
 			    complexQueryOrElement.appendChild((YFCNode)expElementCustomerPONo);		
 				
 			}
@@ -1028,12 +1035,14 @@ public class XPEDXOrderListAction extends OrderListAction {
         		YFCElement complexQueryInsideOrElement = complexQueryInsideAndElement.createChild("Or");			 	
 			 	YFCElement expElementCustomerLinePONo = complexQueryInsideOrElement.createChild("Exp");
 			    expElementCustomerLinePONo.setAttribute("Name", "CustomerLinePONo");
-			    expElementCustomerLinePONo.setAttribute("Value",searchFieldValue);
+			    expElementCustomerLinePONo.setAttribute("Value",convertedSrchFieldValue.toUpperCase());
+			    expElementCustomerLinePONo.setAttribute("QryType","FLIKE");
 			    complexQueryInsideOrElement.appendChild((YFCNode)expElementCustomerLinePONo);
 			    
 			    YFCElement expElementCustomerPONo = complexQueryInsideOrElement.createChild("Exp");
 			    expElementCustomerPONo.setAttribute("Name", "CustomerPONo");
-			    expElementCustomerPONo.setAttribute("Value",searchFieldValue);
+			    expElementCustomerPONo.setAttribute("Value",convertedSrchFieldValue.toUpperCase());
+			    expElementCustomerPONo.setAttribute("QryType","FLIKE");
 			    complexQueryInsideOrElement.appendChild((YFCNode)expElementCustomerPONo);		
         	}
 				
