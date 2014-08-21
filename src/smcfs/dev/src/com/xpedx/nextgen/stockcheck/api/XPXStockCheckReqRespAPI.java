@@ -1,6 +1,7 @@
 package com.xpedx.nextgen.stockcheck.api;
 
 import java.rmi.RemoteException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -152,8 +153,13 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 	public Document sendStockCheckResponse(YFSEnvironment env, Document inputXML) throws YFSUserExitException, RemoteException
 	{
+		StopWatch swTotal = new StopWatch();
+		StopWatch swPA    = new StopWatch();
+		swTotal.start();
+
+		System.out.println("Received Stock Check Web Service request");
+		log.info("Received Stock Check Web Service request");
 		if(log.isDebugEnabled()) {
-			log.debug("Received Stock Check Web Service request");
 			log.debug("The stock check input xml is: " + SCXmlUtil.getString(inputXML));
 		}
 
@@ -171,7 +177,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				return stockCheckOutputDocument;
 			}
 
-			//stock check request data validation
+			System.out.println("SCWS: processing items: " + stockCheckItemList.getLength());
+			log.info("SCWS: processing items: " + stockCheckItemList.getLength());
+
 			dataValidationFlag = validateRequestXMLData(env, stockCheckInputDocRoot);
 			if(!dataValidationFlag){
 				return stockCheckOutputDocument;
@@ -198,7 +206,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				// *** Call  P&A  service ***
 				Document pAndAResponseDocument = null;
 				try {
+					swPA.start();
 					pAndAResponseDocument =  api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
+					swPA.stop();
+
+					log.warn          ("SWCS: P&A call:   " + swPA.getTime() + " ms");
+					System.out.println("SWCS: P&A call:   " + swPA.getTime() + " ms");
 
 					if(log.isDebugEnabled()) {
 						log.debug("The P&A reponse output is: " + SCXmlUtil.getString(pAndAResponseDocument));
@@ -243,8 +256,17 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			log.debug("Final stock check doc: " + SCXmlUtil.getString(stockCheckOutputDocument));
 			log.debug("Completed Stock Check Web Service request");
 		}
+
+		swTotal.stop();
+		DecimalFormat formatPerc = new DecimalFormat("#");
+		System.out.println("SWCS: total time: " + swTotal.getTime() + " ms");
+		System.out.println("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
+		log.warn          ("SWCS: total time: " + swTotal.getTime() + " ms");
+		log.warn          ("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
+
 		return stockCheckOutputDocument;
 	}
+
 
 	public static Element importElement(Element parentEle,
 			Element ele2beImported) {
