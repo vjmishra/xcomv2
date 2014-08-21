@@ -119,6 +119,7 @@
 		
 		<s:hidden name="itemID" id="itemID" value="%{#itemID}" />
 		<s:hidden id="unitOfMeasure" name="unitOfMeasure" value="%{#unitOfMeasure}" />	
+		<s:hidden name='baseUnitOfMeasure' id='baseUnitOfMeasure'  value='%{#unitOfMeasure}' />
 		<s:hidden id="prodMweight" name="prodMweight" value="%{#prodMweight}" />
 		<s:hidden id="pricingUOMConvFactor" name="pricingUOMConvFactor" value="%{#pricingUOMConvFactor}" />
 			
