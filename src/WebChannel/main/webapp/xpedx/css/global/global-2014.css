@@ -159,6 +159,9 @@
 .addmarginleft130{
 	margin-left: 130px;
 }
+.addmarginright50 {
+	margin-right: 50px;
+}
 .form input.btn-gradient.floatright{
 	display: inline;
 	float: right;
@@ -1524,7 +1527,7 @@ h3 {
 	text-align: right;
 	clear: both;
 	font-size: 12px;
-	padding: 5px 10px 0 0;
+	padding: 15px 10px 0 0;
 }
 .non-stock-item .contact{
 	font-weight: normal;

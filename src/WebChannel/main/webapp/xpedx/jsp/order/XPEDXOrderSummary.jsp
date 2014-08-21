@@ -1491,28 +1491,10 @@ from session . We have customer Contact Object in session .
 								<td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td>
 							</tr>
 							<tr>
-								<td colspan="2" style="text-align:right;"> 
-								<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>									
-									<s:iterator value="inventoryIndicatorMap" id="inventoryIndicatorMap" status="status" >										
-										<s:set name="inventoryChk" value="value" />
-										<s:set name="itemId" value="key" />
-										<s:if test='#item.getAttribute("ItemID") == #itemId'>	
-											<s:if test='%{#inventoryChk !="Y"}'>
-												<p id="milltext">Mill / Mfg. Item - Additional charges may apply</p>
-												<s:if test='%{#inventoryChk !="I"}'>
-													<s:hidden name="inventoryInds" id="inventoryInd_%{#orderLineKey}" value='%{#orderLineKey}' />
-												</s:if>
-												
-											</s:if>
-										</s:if>	 
-									</s:iterator>
-								</s:if>
-								</td>
 								<td></td>
 								<td></td>
-							</tr>
-						
-						
+								<td></td>
+						</tr>
 						</tbody>
 				 	</table>
 				 	<div class="mill-discount-text">
@@ -1592,9 +1574,44 @@ from session . We have customer Contact Object in session .
 											<p class="fields-padding">
 												<s:property value="#customerItemLabel" />: <s:property value='#partItemVal' /></p>
 											</s:if>	
-							</s:if>		
-			    	</div>			    	
-			    	<div class="clearall">&nbsp; </div>
+							</s:if>	
+							<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>									
+									<s:iterator value="displayInventoryIndicatorMap" id="displayInventoryIndicatorMap" status="status" >										
+										<s:set name="inventoryChk" value="value" />
+										<s:set name="itemId" value="key" />
+										<s:if test='#item.getAttribute("ItemID") == #itemId'>	
+											<s:if test='%{#inventoryChk=="I"}'>
+															<div class="non-stock-item-shorter floatleft">
+																<div class="stock-icon addmarginright50" style="margin-top:0px">
+																	<img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png"
+																		width="25" height="25"
+																		title="Contact Customer Service to confirm pricing and any additional charges" />
+																</div>
+																Not a Stocked item
+															</div>
+														</s:if>
+														<s:if test='%{#inventoryChk=="M"}'>
+															<div class="non-stock-item-shorter floatleft">
+																<div class="stock-icon addmarginright50" style="margin-top:0px">
+																	<img
+																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png"
+																		width="25" height="25"
+																		title="Contact Customer Service to confirm pricing and any additional charges" />
+																</div>
+																Item ships directly from Mfr
+															</div>
+														</s:if>
+														<s:if test='%{#inventoryChk=="W"}'>
+														
+														</s:if>
+										</s:if>	 
+									</s:iterator>
+						</s:if>		    	
+								
+			    	</div>	
+			    	
+			    	<div class="clearfix"></div>
 
 			    		<table width="330" style="FONT-SIZE: 12px; MARGIN-LEFT: 336px; MARGIN-TOP: -60px;" border=0>
 			    			<tbody>
