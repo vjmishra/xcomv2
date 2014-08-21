@@ -1006,7 +1006,7 @@ public class XPEDXOrderListAction extends OrderListAction {
     		//}   
         } else if("PurchaseOrderNumberValue".equalsIgnoreCase(getSearchFieldName()))
         {
-        	String convertedSrchFieldValue = searchFieldValue;
+        	String convertedSrchFieldValue = searchFieldValue.trim();
         	if(convertedSrchFieldValue.endsWith("*"))
             {
         		convertedSrchFieldValue = convertedSrchFieldValue.substring(0, convertedSrchFieldValue.length() - 1);
