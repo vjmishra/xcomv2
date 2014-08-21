@@ -1099,12 +1099,13 @@ from session . We have customer Contact Object in session .
 			<s:hidden name="orderLineKeyForNote" id="orderLineKeyForNote" value="" />
 			<!-- <div class="mil-wrap-condensed-container"> -->
 			
-			<table id="checkout-table-header">
-
-			<td class="center white text-right table-header-bar-left"> Price (<s:property value='#currencyCode'/>) </td>
-			<td class="center white text-right pricing-border table-header-bar-right" style="width:143px;"> Extended Price (<s:property value='#currencyCode'/>)&nbsp;</td>
-
+			<table class="mil-top-border" border="0px solid red">
+			<tbody>
+			<tr class="table-header-bar">
+			<td class="text-right white table-header-bar-left"> Price (<s:property value='#currencyCode'/>) </td>
+			<td class="text-right white pricing-border mill-container-extended-pricing table-header-bar-right"> Extended Price (<s:property value='#currencyCode'/>)&nbsp;</td>
 			</tr>
+			</tbody>
 			</table>  
 			<%--jira 3788 --%>  
 				<s:set name="isOrderTBD" value="%{0}" />   
@@ -1425,11 +1426,11 @@ from session . We have customer Contact Object in session .
 		                        	<s:else> <!--  not first item -->
 		                        			
 	                        			<s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
-	                        			<tr><td colspan=4 class="center">&nbsp;</td></tr>
+	                        			<tr><td colspan="5" class="text-left">&nbsp;</td></tr>
 			                    	 	<tr>
-			                    	 		<td class="center">&nbsp;</td>
-						 					<td class="center">&nbsp;</td>
-				                        	<td class="text-right">
+			                    	 		<td class="text-right">&nbsp;</td>
+						 		<td width="157">&nbsp;</td>
+				                        	<td class="text-right" width="147">
 				                        	<%--	Using CustomerContactBean object from session
 				                        	<s:if test='%{#session.viewPricesFlag == "Y"}'>
 				                        	--%>
@@ -1440,8 +1441,8 @@ from session . We have customer Contact Object in session .
 														per&nbsp;<s:property value="#bracketUOMDesc" />
 												</s:if>
 											</s:if><%-- View Prices Flag is Y --%>
-											</td>
-											<td class="center">&nbsp;</td>
+								</td>
+								<td class="text-right" width="153">&nbsp;</td>
 		    	                    	</tr>
 		    	                    	</s:if>
 								 			
