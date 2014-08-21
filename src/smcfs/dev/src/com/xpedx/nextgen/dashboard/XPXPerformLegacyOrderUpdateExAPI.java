@@ -5695,14 +5695,6 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// Apply Needs Attention Hold.
 				rootEle.setAttribute("ApplyNeedsAttentionHold", "Y");
 			}
-			if (headerProcessCode.equalsIgnoreCase("C") && !YFCObject.isNull(headerStatusCode) && !YFCObject.isVoid(headerStatusCode) && !headerStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0100)) {
-				// To Permanently Lock Orders.
-				rootExtnEle.setAttribute("ExtnOUFailureLockFlag", "Y");
-				// Not Required To Check Line Error Codes When HPC Is 'D' And Header Status Code Is Not M0000 As MAX Didn't Create The Order.
-				checkLineStatusCode = false;
-				// Apply Needs Attention Hold.
-				rootEle.setAttribute("ApplyNeedsAttentionHold", "Y");
-			}
 		}
 		
 		// To Permanently Lock Orders On OER If There is A Header Status Code Or Line Status Code.
