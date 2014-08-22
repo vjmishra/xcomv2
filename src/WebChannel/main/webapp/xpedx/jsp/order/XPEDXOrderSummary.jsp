@@ -1102,7 +1102,7 @@ from session . We have customer Contact Object in session .
 			<table class="mil-top-border" border="0px solid red">
 			<tbody>
 			<tr class="table-header-bar">
-			<td class="text-right white table-header-bar-left"> Price (<s:property value='#currencyCode'/>) </td>
+			<td class="text-right white table-header-bar-left"> Price (<s:property value='#currencyCode'/>) &nbsp;&nbsp;&nbsp;</td>
 			<td class="text-right white pricing-border mill-container-extended-pricing table-header-bar-right"> Extended Price (<s:property value='#currencyCode'/>)&nbsp;</td>
 			</tr>
 			</tbody>
