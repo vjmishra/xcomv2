@@ -5741,7 +5741,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				// To Check Line Status Codes To Permanently Lock The Order.
 				if (checkLineStatusCode) {
 					lineStatusCode = rootOrdLineExtnEle.getAttribute("ExtnLineStatusCode");
-					if (!YFCObject.isNull(lineStatusCode) && !YFCObject.isVoid(lineStatusCode) && !lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0000) ||!lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0100)) {
+					if (!YFCObject.isNull(lineStatusCode) && !YFCObject.isVoid(lineStatusCode) && !lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0000) && !lineStatusCode.equalsIgnoreCase(XPXLiterals.NFE_M0100)) {
 						// Apply Needs Attention Hold.
 						rootEle.setAttribute("ApplyNeedsAttentionHold", "Y");
 						// Permanently Lock The Order.
