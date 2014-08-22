@@ -1917,7 +1917,7 @@ function passwordUpdateModal()
 				}).trigger('click');
 			} 
 			
-			else if ((isPunchoutUser=="false") && (extnStockCheck=="Y")){				
+			else if (extnStockCheck!=null && (extnStockCheck=="Y")){				
 				$("#extnStockCheckModal").fancybox({					
 					'onStart' 	: function(){
 						if(isguestuser!="true"){
