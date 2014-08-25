@@ -452,7 +452,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
 		
-		l//Hiding last modified by 
+		//Hiding last modified by 
 		/*lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
