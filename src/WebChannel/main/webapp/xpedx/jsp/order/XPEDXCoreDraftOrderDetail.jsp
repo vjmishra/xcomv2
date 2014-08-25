@@ -668,14 +668,14 @@
 							<s:set name="itemId" value="key" />
 							<s:if test='#item.getAttribute("ItemID") == #itemId'>
 								<s:if test='%{#inventoryChk=="I"}'>
-															<div class="non-stock-item-shorter addmarginleft130">
+															<div class="non-stock-item-shorter addmarginleft145 addmargintop10">
 																<div class="stock-icon">
 																	<img
 																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png"
 																		width="25" height="25"
 																		title="Contact Customer Service to confirm pricing and any additional charges" />
 																</div>
-																Not a Stocked item
+																Not a Stocked Item
 															</div>
 														</s:if>
 														<s:if test='%{#inventoryChk=="M"}'>
@@ -686,7 +686,7 @@
 																		width="25" height="25"
 																		title="Contact Customer Service to confirm pricing and any additional charges" />
 																</div>
-																Item ships directly from Mfr
+																Ships Directly from Mfr
 															</div>
 														</s:if>
 														<s:if test='%{#inventoryChk=="W"}'>

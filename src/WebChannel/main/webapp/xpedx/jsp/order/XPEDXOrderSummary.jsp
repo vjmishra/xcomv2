@@ -1588,7 +1588,7 @@ from session . We have customer Contact Object in session .
 																		width="25" height="25"
 																		title="Contact Customer Service to confirm pricing and any additional charges" />
 																</div>
-																Not a Stocked item
+																Not a Stocked Item
 															</div>
 														</s:if>
 														<s:if test='%{#inventoryChk=="M"}'>
@@ -1599,7 +1599,7 @@ from session . We have customer Contact Object in session .
 																		width="25" height="25"
 																		title="Contact Customer Service to confirm pricing and any additional charges" />
 																</div>
-																Item ships directly from Mfr
+																 Ships Directly from Mfr
 															</div>
 														</s:if>
 														<s:if test='%{#inventoryChk=="W"}'>

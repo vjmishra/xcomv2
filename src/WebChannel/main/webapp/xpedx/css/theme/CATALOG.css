@@ -554,9 +554,10 @@ width:100%;
 	float: right;
 	clear: none;
 	width: 365px;
-	top: 30px;
+	top: 10px;
 	left: 424px;
-	position: absolute;
+	margin-top:-155px;
+	width: 400px;
 }
 .normal-view #item-ct dd .order-row {
 	height: 25px;
@@ -566,7 +567,7 @@ width:100%;
 	float: left;
 	width: 160px;
 	text-align: right;
-	padding: 3px 6px 6px 0px;
+	padding: 3px 6px 6px 35px;
 }
 .normal-view #item-ct dd .order-input-wrap .order-input {
 	float: right;
@@ -1476,5 +1477,15 @@ img#youtube { margin-right: 9px; }
 	clear: none;
 	margin-left: 5px;
 	margin-top: -6px;
+	}
+.normal-view #item-ct dd.itemdiv .non-stock-item {
+   padding: 0px 5px 0px;
+}
+
+.replacement-text {
+	text-align: right;
+	width: 435px;
+	margin: 5px; 
+	padding: 2px;
 	}
 	

@@ -742,19 +742,7 @@ function getNormalView() {
 								'</div>',
 							</s:if>
 						'</div>',
-						
-						<s:if test='!#guestUser'>
-							<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
-							'{itemtypedesc}',
-						</s:if>
-						
 						'<div class="clearfix"></div>',
-						<s:if test='!#guestUser'>
-							'<div class="replacement-item">',
-								'{repItem}',
-							'</div>',
-						</s:if>
-						
 						'<div class="order-input-wrap">',
 							'<div class="order-row">',
 								<s:if test='!#guestUser'>
@@ -795,7 +783,7 @@ function getNormalView() {
 							
 							'<input type="hidden" name="isEditOrder" id="isEditOrder" value="<s:property value='#isEditOrderHeaderKey'/>"/>',
 							<s:if test='!#guestUser'>
-								'<div class="cart-pa-button-wrap">',
+								'<div class="cart-pa-button-wrap addmarginbottom10">',
 									'<input class="btn-gradient" type="button" onclick="javascript:addItemToCart(\'{itemid}\'); return false;" value="Add to <s:property value="#isEditOrderHeaderKey == null || #isEditOrderHeaderKey=='' ? 'Cart' : 'Order'"/>" />',
 									'<input class="btn-neutral" type="button" onclick="javascript:addItemToWishList(\'{itemid}\'); return false;" value="Add to List">',
 									'<div class="availablelink">',
@@ -805,19 +793,29 @@ function getNormalView() {
 										'</div>',
 									'</div>',
 								'</div>',
-								'<div class="clearfix height5"></div>',
+								'<div class="clearfix"></div>',
 								'<div class="uomLink" id="errorMsgForQty_{itemid}">',
 									'{uomLink}',
 								'</div>',
-								'<div class="clearfix height5"></div>',
 							</s:if>
+							<s:if test='!#guestUser'>
+								<%-- itemtypedesc contains <div class=mil-mfg> wrapper --%>
+									'{itemtypedesc}',
+								</s:if>
+								'<div class="clearfix"></div>',	
+								<s:if test='!#guestUser'>
+									'<div class="replacement-item replacement-text">',
+										'{repItem}',
+									'</div>',
+								</s:if>	
 						'</div>', <%-- / order-input-wrap" --%>
+						'<div class="clearfix"></div>',
 						
 						<s:if test='!#guestUser'>
 							'<div class=\'error\' id=\'errorMsgForQty_{itemid}\' style=\'display : none\'/>{qtyGreaterThanZeroMsg}</div>',
 						</s:if>
 							
-						'<div class="clearfix height5"></div>',
+						'<div class="clearfix"></div>',
 						
 						'<div class="show-hide-wrap">',
 							'<div style="display: none;" id="availabilty_{itemid}" class="price-and-availability">',

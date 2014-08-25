@@ -376,13 +376,13 @@
 						
 						<s:if test='%{#displayInventoryIndicator=="I"}'>
 							<div class="non-stock-item"><div class="stock-icon">
-								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges"/>
-								</div>Not a Stocked item<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
+								</div>Not a Stocked Item<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
 						</s:if>
 						<s:if test='%{#displayInventoryIndicator=="M"}'>
 							<div class="non-stock-item"><div class="stock-icon">
-								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25" title="Contact Customer Service to confirm pricing and any additional charges"/>
-								</div>Item ships directly from Mfr<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
+								<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25"/>
+								</div>Item Ships Directly from Mfr<div class="contact"> Contact Customer Service to confirm pricing and any additional charges</div></div>
 						</s:if>
 						<s:if test='%{#displayInventoryIndicator=="W"}'>
 							

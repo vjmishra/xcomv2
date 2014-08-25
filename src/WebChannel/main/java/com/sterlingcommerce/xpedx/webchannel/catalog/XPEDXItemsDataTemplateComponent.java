@@ -233,10 +233,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 
 			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
-				.append("<div class=\\\"notice\\\" style=\\\"margin-right:5px; margin-top:10px; font-weight: normal;float:right; display:inline;\\\">")
+				.append("<div >").append("<p class=\\\"notice\\\">")
 				.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
 				.append(" ")
-				.append(uomDesc).append("</div>\",");
+				.append(uomDesc).append("</p>").append("</div>\",");
 			} else {
 				sb.append("uomLink: \"\",");
 			}
@@ -332,10 +332,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			
 		}
 		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
-			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\"/></div>Not a Stocked Item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
 		}
 		if("M".equals(displayInventoryIndicator) && isGuestUser == false) {
-			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Item ships directly from Mfr<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\"/></div>Item Ships Directly from Mfr<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>");
 		}
 		sb.append("\",");
 		sb.append("itemtypedesccondensed: \"");
@@ -343,10 +343,10 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 			
 		}
 		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
-			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked item</div>");
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked Item</div>");
 		}
 		if("M".equals(displayInventoryIndicator) && isGuestUser == false) {
-			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Item ships directly from Mfr</div>");
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Ships Directly from Mfr</div>");
 		}
 		sb.append("\",");
 		sb.append("itemtypedescmini: \"");
@@ -354,16 +354,16 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 		
 		}
 		if("I".equals(displayInventoryIndicator) && isGuestUser == false) {
-			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked item</div>");
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-stock.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Not a Stocked Item</div>");
 		}
 		if("M".equals(displayInventoryIndicator) && isGuestUser == false) {
-			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Item ships directly from Mfr</div>");
+			sb.append("<div class='non-stock-item'><div class='stock-icon'><img src='" + XPEDXWCUtils.getStaticFileLocation() + "/xpedx/images/icons/icon-manufacturing.png' width=\\\"25\\\" height=\\\"25\\\" title=\\\"Contact Customer Service to confirm pricing and any additional charges\\\"/></div>Ships Directly from Mfr</div>");
 		}
 		sb.append("\",");
 		if(replacmentList!=null && replacmentList.size()>0){
 			StringBuffer repItemsForMiniView = new StringBuffer();
 			StringBuffer repItemsForCondensedView = new StringBuffer();
-			sb.append("repItem: \"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
+			sb.append("repItem: \" <span>This item will be replaced once inventory is depleted. Select item: </span>");
 			repItemsForCondensedView.append(",repItemsForCondensedView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 			repItemsForMiniView.append(",repItemsForMiniView:\"<span style=\\\"color:red;padding-right:2px;font-weight:bold\\\">This item will be replaced once inventory is depleted. Select item:</span>");
 			for(int i=0;i<replacmentList.size();i++ )

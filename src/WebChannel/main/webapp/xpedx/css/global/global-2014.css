@@ -156,8 +156,12 @@
 .floatright {
 	float: right;
 }
-.addmarginleft130{
+.addmarginleft130 {
 	margin-left: 130px;
+}
+
+.addmarginleft145 {
+	margin-left: 145px;
 }
 .addmarginright50 {
 	margin-right: 50px;
@@ -1037,10 +1041,6 @@ div#fancybox-content .error, div#fancybox-content .notice {
 }
 .auto-width {
 	width: auto;
-}
-.clearfix {
-	height: 1px;
-	clear: both;
 }
 .hidden {
 	display: none;
