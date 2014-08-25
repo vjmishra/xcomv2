@@ -169,6 +169,8 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Label lblLastModDate;
 
 	private Text txtLastModDate;
+
+	private Button btnDelete;
 	
 //	private Composite pnlRadioButtons;
 //	private Button radInternal;
@@ -223,7 +225,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Control[] getAllEditableControls() {
 		//removed txtAdditionalEmailAddress, comboReceiveOrderConfirmEmails, itemAdditionalEmails,
 		// should we have this editable: txtEmployeeId, 
-		return new Control[] { btnUpdate,txtLastName, txtMaxOrderAmount, txtMinOrderAmount,
+		return new Control[] { btnUpdate,btnDelete,txtLastName, txtMaxOrderAmount, txtMinOrderAmount,
 				txtPOList, defaultShipto,
 				comboPrefferedCatalog, itemPOList,
 				chkViewInvoices,
@@ -292,6 +294,11 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		btnUpdate.setText("Update_User_Profile");
 		btnUpdate.setLayoutData(gridData16);
 		btnUpdate.setData("name", "btnUpdate");
+		
+		btnDelete = new Button(pnlRoot, 0);
+		btnDelete.setText("Delete User");
+		btnDelete.setLayoutData(gridData16);
+		btnDelete.setData("name", "btnDelete");
 	}
 
 	
@@ -445,9 +452,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
 		
-		
-		
-		//Hiding last modified by 
+		l//Hiding last modified by 
 		/*lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
@@ -1473,8 +1478,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setName("txtLastLoginDate");
 		txtLastLoginDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		//Hiding Last modified by
-		/*tbd = new YRCTextBindingData();
+	/*	tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		//tbd.setDataType("Date");
@@ -1771,6 +1775,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		bbd.setActionId("com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileAction");
 		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
 
+		YRCButtonBindingData bbdel = new YRCButtonBindingData();
+		bbdel.setName("btnDelete");
+		bbdel.setActionHandlerEnabled(true);
+		bbdel.setActionId("com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileAction");
+		btnDelete.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbdel);
+		
+		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@DayFaxNo");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@DayFaxNo");

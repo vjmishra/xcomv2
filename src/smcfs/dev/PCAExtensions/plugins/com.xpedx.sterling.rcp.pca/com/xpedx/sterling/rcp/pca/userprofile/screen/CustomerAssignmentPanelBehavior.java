@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.xpedx.sterling.rcp.pca.userprofile.editor.XPXUserProfileEditor;
+import com.xpedx.sterling.rcp.pca.util.XPXUtils;
 import com.yantra.yfc.rcp.YRCApiContext;
 import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCDesktopUI;
@@ -41,6 +42,7 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 	private boolean extnDefaultShipTo = false;
 	private long startTimeCustomerService;
 	private long endTime,timespent;
+	public String custMsapId;
 	public CustomerAssignmentPanelBehavior(
 			CustomerAssignmentPanel customerAssignmentPanel,
 			Object inputObject,Element customerContactEle) {
@@ -100,13 +102,17 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
 						ArrayList list = YRCXmlUtils.getChildren(outXml,"CustomerAssignment");
 						assignedList = null;
+						XPXUtils.setAssignedCustomerList(assignedList);
 						if(null == assignedList){
 							assignedList = new ArrayList();
 						}
 						for (Object eleCustAssignment : list) {
 							String strCustID = YRCXmlUtils.getAttributeValue((Element)eleCustAssignment, "CustomerAssignment/Customer/@CustomerID");
 							assignedList.add(strCustID);
+							custMsapId = YRCXmlUtils.getAttributeValue((Element)eleCustAssignment, "CustomerAssignment/@OrganizationCode");
 						}
+						XPXUtils.setMsapCustomerOrgID(custMsapId);
+						XPXUtils.setAssignedCustomerList(assignedList);
 						page.resetTreeAssignedValues(assignedList);
 						setModel("XPXGetCustomerAssignmentList",outXml);
 						getShipToID();
@@ -130,6 +136,27 @@ public class CustomerAssignmentPanelBehavior extends YRCBehavior {
 							setModel("AssignedShipTos",outXml);
 							getCustomerAssignment();
 						}
+					  else if ("XPXCustomerAssignmentViewService".equals(apiname)) {
+							Element outXml1 = ctx.getOutputXmls()[i].getDocumentElement();
+							//setModel("AssignedShipTos",outXml);
+							//getCustomerAssignment();
+							ArrayList list = /*null;
+							Element ele =*/ YRCXmlUtils.getChildren(outXml1,"XPXCustomerAssignmentView");
+							assignedList = null;
+							XPXUtils.setAssignedCustomerList(assignedList);
+							if(null == assignedList){
+								assignedList = new ArrayList();
+							}
+							for (Object eleCustAssignment : list) {
+								String strCustID = YRCXmlUtils.getAttributeValue((Element)eleCustAssignment, "CustomerAssignment/Customer/@CustomerID");
+								assignedList.add(strCustID);
+							}
+							XPXUtils.setAssignedCustomerList(assignedList);
+						//	page.resetTreeAssignedValues(assignedList);
+							//setModel("XPXGetCustomerAssignmentList",outXml);
+							System.out.println("XML --" + YRCXmlUtils.getString(outXml1));
+						}
+					
 				}
 			}
 		}

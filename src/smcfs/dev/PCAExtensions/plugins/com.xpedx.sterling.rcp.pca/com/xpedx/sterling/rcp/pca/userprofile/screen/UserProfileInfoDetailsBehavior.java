@@ -48,6 +48,8 @@ public class UserProfileInfoDetailsBehavior extends YRCBehavior {
 	private String modifyTs;
 	private String modifyUserId;
 	private boolean isSalesRep=false;
+	Element multiAPIDocElement=null;
+	Element deleteCCDocElement=null;
 	
 	public UserProfileInfoDetailsBehavior(
 			UserProfileInfoDetails userProfileInfoDetails,
@@ -1016,6 +1018,70 @@ public void UpdateCustomer(){
 		}
 //		}
 	}
+	
+	public void deleteAction(){
+		
+		//GetCustomer Assignment List
+		ArrayList assignedList = null;
+		assignedList =XPXUtils.getAssignedCustomerList();
+		//Delete Customer Assignment List
+		createManageAssignmentInput(assignedList);
+		YRCApiContext ctx = new YRCApiContext();
+		String[] apinames ={"XPXManageCustomerAndAssignmentAPIService","manageCustomer","deleteUserHierarchy"};
+		ctx.setApiNames(apinames);
+		
+		Document[] docInput = {
+				multiAPIDocElement.getOwnerDocument(),
+				YRCXmlUtils.createFromString("<Customer CustomerID='"+XPXUtils.getMsapCustomerOrgID()+"' OrganizationCode='"+orgCode+"'><CustomerContactList><CustomerContact CustomerContactID='"+userID+"' Operation ='Delete'></CustomerContact></CustomerContactList></Customer> "),
+				YRCXmlUtils.createFromString("<User DisplayUserID='"+userID+"'  Loginid='"+userID+"' />  "),	
+			//	YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>")
+		};
+		callApis(apinames, docInput);
+		ctx.setInputXmls(docInput);
+		ctx.setFormId(page.getFormId());
+		ctx.setShowError(true);
+		ctx.setUserData("isRefreshReqd", String.valueOf(true));
+		callApi(ctx, page);
+		multiAPIDocElement = null;
+	
+	}
+
+	
+	
+	private void saveChanges(List<String> wList, String operation,Element customerAssignmentListElem) {
+		
+		for (int index = 0; index < wList.size(); index++) {
+			try {
+				if(wList.get(index) != null && wList.get(index).trim().length() ==0 )
+					continue;
+				Element customerAssignmentElem=YRCXmlUtils.createChild(customerAssignmentListElem, "CustomerAssignment");
+				customerAssignmentElem.setAttribute("CustomerID", wList.get(index));
+				customerAssignmentElem.setAttribute("OrganizationCode", XPXUtils.getMsapCustomerOrgID());
+				customerAssignmentElem.setAttribute("UserId", userID);
+				customerAssignmentElem.setAttribute("Operation", operation);
+				} catch (Exception ex) {
+				System.out.println("***********Record already exists");
+			}
+		}
+	}
+	
+	public void createManageAssignmentInput(List<String> wList){
+		if(null ==multiAPIDocElement){
+		multiAPIDocElement = YRCXmlUtils.createDocument("ManageCustomerAndAssignment").getDocumentElement();
+		
+		}
+		multiAPIDocElement.setAttribute("IgnoreOrdering", "Y");
+		Element custAssignmentele=(Element)multiAPIDocElement.getElementsByTagName("CustomerAssignmentList").item(0);
+		if(custAssignmentele == null)
+		{
+			custAssignmentele= YRCXmlUtils.createChild(multiAPIDocElement, "CustomerAssignmentList");
+		}
+		
+		saveChanges(wList, "Delete",custAssignmentele);
+		System.out.println("Final XML : " + YRCXmlUtils.getString(multiAPIDocElement));
+	}	
+	
+	
 	
 	 //including this method to validate input fields like MinOrdAmt/MaxOrdAmt
 	private boolean hasValidInputData()
