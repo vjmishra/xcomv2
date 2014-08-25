@@ -5889,7 +5889,7 @@ tr:hover {
 
 
 
-.table-header-bar {
+/* .table-header-bar {
 	background-color: #003399;	
 }
 
@@ -5902,7 +5902,7 @@ tr:hover {
 	background-image: url(../../images/theme/theme-1/mil/items-list-bg-RIGHT.gif);
 	background-repeat: no-repeat;
 	background-position: right top;
-}
+}*/
 
 /*
 #mil-list p {
@@ -5928,7 +5928,7 @@ tr:hover {
  
  
 /* Dan */ 
-#mil-list tr {
+/* #mil-list tr {
 	border-top:1px solid #d7d7d7;
 }
 
@@ -5938,7 +5938,7 @@ tr:hover {
 
 #mil-list tr a {
 	color: #003399;	
-}
+} */
 
 .mil-edit {
 	padding-left:0;
@@ -6177,11 +6177,11 @@ BEGIN 2014 styles
 	clear: both;
 	height: 5px;
 }
-.standard-table {
+/* .standard-table {
 	width: 950px;
 	margin: 0px 0px 0px 20px;
 }
-
+ */
 .graybar {
 	height: 25px;
 	background-color: #e9e9e9;
@@ -6373,7 +6373,7 @@ BEGIN 2014 styles
 .fixwidth200 {
 	width: 200px;
 }
-#mil-list.standard-table td.left-rounded-corner {
+/* #mil-list.standard-table td.left-rounded-corner {
 	color: #ffffff;
 	font-size:11px;
 	border-left: none;
@@ -6384,7 +6384,7 @@ BEGIN 2014 styles
 	font-size:11px;
 	border-right: none;
 	text-align: center;
-}
+} */
 .imagewrap {
 	float: left;
 	clear: none;

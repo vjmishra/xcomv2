@@ -41,10 +41,10 @@
 	<s:set name="mpcItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MPC_ITEM_LABEL"/>
 	<s:set name="myPriceValue" value="%{'false'}" />
 	
-    <table class="mil-top-border" border="0px solid red" class="float-right">
-	   <tr  class="table-header-bar">
-		<td class="text-right white table-header-bar-left" > Price (<s:property value='#currencyCode'/>) </td>
-		<td class="text-right white pricing-border mill-container-extended-pricing table-header-bar-right" > Extended Price (<s:property value='#currencyCode'/>) &nbsp;</td>
+    <table class="mil-top-border standard-table" border="0px solid red" class="float-right">
+	   <tr>
+		<th> Price (<s:property value='#currencyCode'/>) </th>
+		<th width="145"> Extended Price (<s:property value='#currencyCode'/>) &nbsp;</th>
 	   </tr>
 	</table>
 	

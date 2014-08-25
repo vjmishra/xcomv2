@@ -433,7 +433,7 @@
 	    </div> <!-- end top section -->
 	    <br/>
 	    <!-- Begin mid-section -->
-	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
+	    <div class="addmarginleft0"> <!-- Begin mid-section container -->
 	    	
 	       <div class="search-pagination-top">
 	       		  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
@@ -448,10 +448,10 @@
             <swc:sortctl sortField="%{orderByAttribute}"
 		                  sortDirection="%{orderDesc}" down="Y" up="N"
 		                  urlSpec="%{#approvalListSortURL}">			
-	    	<table class="search-table standard-table">
-	    		<thead>
+	    	<table class="standard-table-width standard-table">
+	    		
 	    			<tr id="top-bar">
-	    				<th class="table-header-bar-left " style="min-width: 10em;">
+	    				<th style="min-width: 10em;">
 						<swc:sortable  fieldname="%{'Extn_'+'ExtnWebConfNum'}">
 						<span style="color:white" class="underlink">Web&nbsp;Confirmation </span></swc:sortable>
 						</th>
@@ -460,9 +460,9 @@
 	    				<th style="min-width: 7em;"><swc:sortable fieldname="%{'Extn_'+'ExtnOrderedByName'}"><span class="underlink" style="color:white">Ordered&nbsp;By </span></swc:sortable></th>
 	    				<th style="min-width: 10em;"><swc:sortable fieldname="%{'Extn_'+'ExtnShipToName'}"><span class="underlink" style="color:white">Ship-To</span></swc:sortable> </th>
 	    				<th style="min-width: 8em;"><swc:sortable fieldname="%{'Extn_'+'ExtnTotalOrderValue'}"><span class="underlink" style="color:white">Amount </span></swc:sortable></th>
-	    				<th style="min-width: 10em;" class="table-header-bar-right"><span class="underlink" style="color:white">Status </span></th>
+	    				<th style="min-width: 10em;" ><span class="underlink" style="color:white">Status </span></th>
 	    			</tr>
-	    		</thead>
+	    		
                     <s:set name="parentOrderList" value="#util.getElements(#approvalListdoc, '//Page/Output/OrderList/Order')" />
 	    		<tbody>
 <!-- start -->

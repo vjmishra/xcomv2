@@ -899,32 +899,33 @@ $("#cancelId").click(function(){
             <li class="TabbedPanelsTab" tabindex="0">Paper</li>
           </ul>
           <div class="TabbedPanelsContentGroup">
-            <div class="TabbedPanelsContent"> <table width="100%" border="0" cellspacing="0" cellpadding="0" class="standard-table">
-                       <tbody>
-                              <tr class="table-header-bar" id="none">
-                                <td  width="16%" class=" table-header-bar-left padding8"><span class="red">*&nbsp;</span><span class="white">Mfg. Item # </span></td>
-                                <td width="16%" class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white"> Manufacturer</span></td>
-                                <td width="16%" class="border-left-gray padding8"><span class="white">Item #</span></td>
-                                <td  class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white"> Description</span></td>
-                                <td width="8%" class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white">Qty</span> </td>
-                                <td width="10%" class="border-left-gray table-header-bar-right"><span class="white">Action</span></td>
+            <div class="TabbedPanelsContent"> 
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="standard-table">
+                      
+                              <tr id="none">
+                                <th  width="16%"><span class="red">*&nbsp;</span>Mfg. Item #</th>
+                                <th width="16%"><span class="red">*&nbsp;</span>Manufacturer</th>
+                                <th width="16%">Item #</th>
+                                <th><span class="red">*&nbsp;</span>Description</th>
+                                <th width="8%"><span class="red">*&nbsp;</span>Qty</th>
+                                <th width="10%">Action</th>
                               </tr>
-                              
+                               <tbody>
                               <tr>
-                                <td width="16%" class="padding8 border-left-gray">
+                                <td width="16%">
                                 <input name="rmfg1" type="text" class="x-input width-100px" id="rmfg1" maxlength="27" />
                                 
                                </td>
-                                <td width="16%" class="padding8 border-left-gray">
+                                <td width="16%">
                                   <input name="rManufacturer1" type="text" class="x-input width-100px" id="rManufacturer1"  maxlength="255" />
                                 </td>
-                                <td width="16%" class="padding8 border-left-gray"><input name="rManufacturer2" type="text" class="x-input width-120px" id="rManufacturer2" maxlength="8" /></td>
-                                <td class="padding8 border-left-gray"> 
+                                <td width="16%"><input name="rManufacturer2" type="text" class="x-input width-120px" id="rManufacturer2" maxlength="8" /></td>
+                                <td> 
                                   <input name="rDescription1" type="text" class="x-input width-300px" id="rDescription1" maxlength="255" />
                                </td>
-                                <td width="8%" class="padding8 border-left-gray"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"/>
+                                <td width="8%"><input name="rQty" type="text" class="x-input width-50px" id="rQty" maxlength="7" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);"/>
                                </td>
-                                <td width="10%" class="padding8 border-left-gray  border-right-gray"><ul id="cart-actions">
+                                <td width="10%"><ul id="cart-actions">
                                   <li><input href="javascript:void(0)" class="btn-neutral" type="button" onclick=" return validateAndAddDataRecord('tbl_data_facilitySupplies');" value="Add"/></li> 
                                 </ul></td>
                               </tr>
@@ -938,17 +939,17 @@ $("#cancelId").click(function(){
                            <br></br>
                            <div id="facility-results-table" style="display:none;"><!-- begin facility-results-table -->
                         <table width="99%" cellspacing="0" cellpadding="0" border="0" align="center" class="standard-table" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_facilitySupplies">
-                            <tbody>
-                              <tr id="none" class="padding8 table-header-bar" >
-                                <td  width="16%"  class="padding8  table-header-bar-left"  style="word-wrap: break-word; width:130px;"><span class="white">Mfg. Item #</span></td>
-                                <td  width="16%" class="padding8 border-left-gray "><span class="white">Manufacturer</span></td>
-                                <td  width="16%" class="padding8 border-left-gray "><span class="white">Item #</span></td>
-                                <td   class="padding8 border-left-gray "  style="word-wrap: break-word; width:130px;"><span class="white"> Description</span></td>
-                                <td  width="8%" class="padding8 border-left-gray "><span class="white">Qty</span></td>
-                          		 <td width="10%" align="left" class="padding8 border-left-gray table-header-bar-right">&nbsp;<span class="white">Action</span></td>
+                            
+                              <tr id="none"  >
+                                <th  width="16%"   style="word-wrap: break-word; width:130px;">Mfg. Item #</th>
+                                <th  width="16%" >Manufacturer</th>
+                                <th  width="16%" >Item #</th>
+                                <th  style="word-wrap: break-word; width:130px;">Description</th>
+                                <th  width="8%" >Qty</th>
+                          		 <th width="10%" align="left">&nbsp;Action</th>
                               </tr>
              
-                            </tbody>
+                            
                           </table>
                           <s:url id='emailSampleLink' namespace='/services'	action='MyServicesHome'>
 							<s:param name="selectedHeaderTab">ServicesTab</s:param>
@@ -962,27 +963,27 @@ $("#cancelId").click(function(){
            			 </div>
             <div class="TabbedPanelsContent"> <table width="100%" border="0" cellspacing="0" cellpadding="0" class="standard-table">
                                     <tbody>
-                              <tr class="table-header-bar" id="none">
-                                <td width="16%" class=" table-header-bar-left padding8"><span class="white">Mfg. Item # </span></td>
-                                <td width="16%" class="border-left-gray padding8"><span class="white">Mill</span></td>
-                                 <td width="16%" class="border-left-gray padding8"><span class="white">Item #</span></td>
-                                <td class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white"> Description</span></td>                               
-                                <td  width="8%" class="border-left-gray padding8"><span class="red">*&nbsp;</span><span class="white"> Qty</span> </td>
-                                <td width="10%" class="border-left-gray table-header-bar-right"><span class="white">Action</span></td>
+                              <tr id="none">
+                                <th width="16%">Mfg. Item #</th>
+                                <th width="16%" >Mill</th>
+                                 <th width="16%" >Item #</th>
+                                <th ><span class="red">*&nbsp;</span>Description</th>                               
+                                <th  width="8%" ><span class="red">*&nbsp;</span>Qty </th>
+                                <th width="10%" >Action</th>
                                <!-- <td class="no-border-right table-header-bar-right"> </td>  --> 
                               </tr>
                               <tr>
-	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='mfg' name='mfg'  cssClass="x-input width-120px"	tabindex="" value='' size="10" />
+	                                <td  style="word-wrap: break-word; width:130px;"><s:textfield id='mfg' name='mfg'  cssClass="x-input width-120px"	tabindex="" value='' size="10" />
 	                                </td>
-	                                <td class="padding8 border-left-gray"><s:textfield id='mil' name='mil' maxlength="10" cssClass="x-input width-100px"	tabindex="" value='' size="10" />
+	                                <td ><s:textfield id='mil' name='mil' maxlength="10" cssClass="x-input width-100px"	tabindex="" value='' size="10" />
 	                                 </td>
-	                                <td class="padding8 border-left-gray"><s:textfield id='mfgsku' name='mfgsku' cssClass="x-input width-120px" tabindex="" value='' maxlength="8" size="10" />  
+	                                <td ><s:textfield id='mfgsku' name='mfgsku' cssClass="x-input width-120px" tabindex="" value='' maxlength="8" size="10" />  
 	                                         </td>
-	                                <td class="padding8 border-left-gray" style="word-wrap: break-word; width:130px;"><s:textfield id='description'	cssClass="x-input width-300px"   name='description' tabindex="" value='' maxlength="255" size="10" /> 
+	                                <td  style="word-wrap: break-word; width:130px;"><s:textfield id='description'	cssClass="x-input width-300px"   name='description' tabindex="" value='' maxlength="255" size="10" /> 
 	                                 </td>
-	                                <td class="padding8 border-left-gray"><s:textfield id='qty' name='qty' cssClass="x-input width-50px" tabindex="" value='' maxlength="7" size="10" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" /> 
+	                                <td ><s:textfield id='qty' name='qty' cssClass="x-input width-50px" tabindex="" value='' maxlength="7" size="10" onkeyup="javascript:isValidQuantityRemoveAlpha(this,event);" /> 
 	                                </td>
-	                                <td class="padding8 border-left-gray border-right-gray"><ul id="cart-actions">
+	                                <td ><ul id="cart-actions">
 	             							 <li><a href="javascript:void(0)" class="btn-neutral" onclick="return validateAndAddDataRecord('tbl_data_paperSupplies');"><span>Add</span></a></li> 
 	           							 </ul>
 	           						</td>
@@ -996,16 +997,16 @@ $("#cancelId").click(function(){
                <br></br>                          
                 <div id="paper-results-table" style="display:none;"><!-- begin paper-results-table -->
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" class="standard-table" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_paperSupplies">
-                            <tbody>
-                              <tr id="none" class="padding8 table-header-bar">
-                                <td  width="16%" class="padding8  table-header-bar-left"><span class="white">Mfg. Item #</span></td>
-                                <td  width="16%" class="padding8 border-left-gray "><span class="white">Mil</span></td>
-                                <td  width="16%" class="padding8 border-left-gray "><span class="white">Item #</span></td>
-                                <td class="padding8 border-left-gray "><span class="white"> Description</span></td>
-                                <td width="8%" class="padding8 border-left-gray "><span class="white">Qty</span></td>
-                          		 <td width="10%" align="left" class="padding8 border-left-gray table-header-bar-right">&nbsp;<span class="white">Action</span></td>
+                            
+                              <tr id="none">
+                                <td  width="16%">Mfg. Item #</td>
+                                <td  width="16%">Mil</td>
+                                <td  width="16%">Item #</td>
+                                <td > Description</td>
+                                <td width="8%">Qty</td>
+                          		 <td width="10%" align="left">&nbsp;Action</td>
                               </tr>
-                            </tbody>
+                            
                           </table>
                           <s:url id='emailSampleLink' namespace='/services'	action='MyServicesHome'>
 							<s:param name="selectedHeaderTab">ServicesTab</s:param>

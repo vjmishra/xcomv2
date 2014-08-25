@@ -200,20 +200,20 @@
 						  sortDirection="%{orderDesc}" down="Y" up="N"
 		                  urlSpec="%{#userListSortURL}" isAjax="true" divId="viewUsersDlg" >
 						  
-     <table cellspacing="0" cellpadding="0" class="sortable" id="user-header" style="background: none repeat scroll 0% 0% transparent; margin-left: 1px;">  
-                         <thead>
-                              <tr class="table-header-bar" id="none">
+     <table cellspacing="0" cellpadding="0" class="standard-table sortable" id="user-header" style="background: none repeat scroll 0% 0% transparent; margin-left: 1px;">  
+                         
+                              <tr id="none">
                              <!-- <th width="1%" class="no-border table-header-bar-left sorttable_nosort"></th>  --> 
-                                                              <th width="25%"  class="no-border  padding8 table-header-bar-left sortable"><xpedx:sortable fieldname="%{'CustomerContactID'}"><span class="white">Username</span></xpedx:sortable></th>
-                                <th width="21%" align="center" class="no-border padding8 sortable"><xpedx:sortable fieldname="%{'FirstName'}"><span class="white">First Name</span></xpedx:sortable></th>
-                                 <th width="21%" align="center" class="no-border padding8 sortable"><xpedx:sortable fieldname="%{'LastName'}"><span class="white">Last Name</span></xpedx:sortable></th>
-                                <th width="33%" class="no-border-right table-header-bar-right sortable padding8"><xpedx:sortable fieldname="%{'EmailID'}"><span class="white"><span class="padding8">Email Address</span></span></xpedx:sortable></th>
+                                <th width="25%"  class="sortable"><xpedx:sortable fieldname="%{'CustomerContactID'}">Username</xpedx:sortable></th>
+                                <th width="21%" align="center" class="sortable"><xpedx:sortable fieldname="%{'FirstName'}">First Name</xpedx:sortable></th>
+                                <th width="21%" align="center" class="sortable"><xpedx:sortable fieldname="%{'LastName'}">Last Name</xpedx:sortable></th>
+                                <th width="33%" class="sortable"><xpedx:sortable fieldname="%{'EmailID'}"><span class="padding8">Email Address</span></xpedx:sortable></th>
 
                                
                                 
                                 
                               </tr>
-                         </thead>      	
+                              	
 	    	       <input type="hidden" name="seletedUrl" id="seletedUrl" value="" />
 	    	<s:form name="selectUserForm" id="selectUserForm">
 	    	</s:form>

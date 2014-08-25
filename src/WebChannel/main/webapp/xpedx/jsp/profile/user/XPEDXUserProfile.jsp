@@ -36,7 +36,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/ADMIN<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree<s:property value='#wcUtil.xpedxBuildKey' />.css"	rel="stylesheet" type="text/css" id="skinSheet">
+<link media="all" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/user/ui.dynatree<s:property value='#wcUtil.xpedxBuildKey' />.css"	rel="stylesheet" type="text/css" id="skinSheet"/>
 <!--[if IE]>
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/IE<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ie-hacks<s:property value='#wcUtil.xpedxBuildKey' />.css" />
@@ -1357,7 +1357,6 @@ div table#myTable td input {
 }
 
 div table#user-header th {
-	padding: 5px;
 	width: 179px;
 }
 
@@ -1968,19 +1967,14 @@ a.underlink:hover {
 													<div class="txt-small clearview"></div>
 													<table width="100%" border="0" cellspacing="0"
 														cellpadding="0" id="tb1" class="standard-table">
-														<tbody>
-															<tr class="table-header-bar">
-																<td width="35%"
-																	class="no-border-left table-header-bar-left"><span
-																	class="white"> Name</span></td>
-																<td width="48%" align="left" class="  "><span
-																	class="white">URL</span></td>
-																<td width="8%" align="left"><span class="white">Show</span></td>
-																<td width="9%" align="left"
-																	class="no-border-right table-header-bar-right"><span
-																	class="white">Sequence</span></td>
+														
+															<tr>
+																<th width="35%">Name</th>
+																<th width="48%" align="left">URL</th>
+																<th width="8%" align="left">Show</th>
+																<th width="9%" align="left">Sequence</th>
 															</tr>
-														</tbody>
+														
 													</table>
 												</td>
 											</tr>
@@ -2957,19 +2951,14 @@ a.underlink:hover {
 														<div class="txt-small clearview"></div>
 														<table width="100%" border="0" cellspacing="0"
 															cellpadding="0" id="tb1" class="standard-table">
-															<tbody>
-																<tr class="table-header-bar">
-																	<td width="35%"
-																		class="no-border-left table-header-bar-left"><span
-																		class="white"> Name</span></td>
-																	<td width="48%" align="left" class="  "><span
-																		class="white">URL</span></td>
-																	<td width="8%" align="left"><span class="white">Show</span></td>
-																	<td width="9%" align="left"
-																		class="no-border-right table-header-bar-right"><span
-																		class="white">Sequence</span></td>
+															
+																<tr >
+																	<th width="35%">Name</th>
+																	<th width="48%" align="left" >URL</th>
+																	<th width="8%" align="left">Show</th>
+																	<th width="9%" align="left">Sequence</th>
 																</tr>
-															</tbody>
+															
 														</table>
 													</td>
 												</tr>

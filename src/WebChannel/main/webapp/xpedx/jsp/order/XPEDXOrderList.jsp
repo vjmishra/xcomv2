@@ -412,7 +412,7 @@ function printPOs(customerPos) {
 			</s:form>
 			
 	    <!-- Begin mid-section -->
-	    <div class="midsection addmarginleft0"> <!-- Begin mid-section container -->
+	    <div class="addmarginleft0"> <!-- Begin mid-section container -->
 		
              <div id="open-orders-Msg-top"  style="display: none;position:relative;left:375px;color:red;" class="error">&nbsp;</div> 
             <div class="search-pagination-bottom">
@@ -427,49 +427,49 @@ function printPOs(customerPos) {
 					<swc:sortctl sortField="%{orderByAttribute}"
 						  sortDirection="%{orderDesc}" down="Y" up="N"
 						  urlSpec="%{#orderListSortURL}">
-	    	<table class="search-table standard-table">
-	    			<tbody>
-							<tr class="table-header-bar">
-								<td class="table-header-bar-left " style="min-width: 10em;">
+	    	<table class=" standard-table-width standard-table">
+	    			
+							<tr>
+								<th style="min-width: 10em;">
 						<swc:sortable fieldname="%{'ExtnWebConfNum'}">
 										<span style="color: white" class="underlink">Web&nbsp;Confirmation
 										</span>
-									</swc:sortable></td>
-								<td style="min-width: 5.5em;">
+									</swc:sortable></th>
+								<th style="min-width: 5.5em;">
 									<span style="color: white">Order&nbsp;#</span>
-								</td>
-								<td style="min-width: 9.5em;"><swc:sortable
+								</th>
+								<th style="min-width: 9.5em;"><swc:sortable
 										fieldname="%{'CustomerPONo'}">
 										<span style="color: white;" class="underlink"> PO # </span>
-									</swc:sortable></td>
-								<td style="min-width: 6em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 6em;"><swc:sortable
 										fieldname="%{'OrderDate'}">
 										<span class="underlink" style="color: white;">Ordered</span>
-									</swc:sortable></td>
-								<td style="min-width: 7em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 7em;"><swc:sortable
 										fieldname="%{'ExtnOrderedByName'}">
 										<span class="underlink" style="color: white;">Ordered&nbsp;By
 										</span>
-									</swc:sortable></td>
-								<td style="min-width: 9.3em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 9.3em;"><swc:sortable
 										fieldname="%{'ExtnShipToName'}">
 										<span class="underlink" style="color: white;">Ship-To</span>
-									</swc:sortable></td>
-								<td style="min-width: 8em;"><swc:sortable
+									</swc:sortable></th>
+								<th style="min-width: 8em;"><swc:sortable
 										fieldname="%{'ExtnTotalOrderValue'}">
 										<span class="underlink" style="color: white;">Amount
 										</span>
-									</swc:sortable></td>
-								<td style="min-width: 10.7em;" class="table-header-bar-right"><span
+									</swc:sortable></th>
+								<th style="min-width: 10.7em;"><span
 									style="color: white">Status</span>
-								</td>
+								</th>
 	    			</tr>
 	    		<%-- 
 	            <s:set name="parentOrderList" value="#util.getElements(#sdoc, '//Page/Output/OrderList/Order')"/>
 	            --%>
 	            <%-- Parent customer order info is being read from xpedxParentOrderListMap --%>
 	            <s:set name="parentOrderList" value="xpedxParentOrderListMap"/>
-	            
+	            <tbody>
 	            <s:iterator  status='rowStatus' value='xpedxParentOrderListMap' >
 	            	<s:set name='parentOrder' value='value' />
 	            	<s:set name="priceInfo" value='#parentOrder'/>

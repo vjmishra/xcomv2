@@ -734,6 +734,15 @@ ul.megamenu {
 	border-radius: 0px 6px 0px 0px;
 	border-right: none;
 	}
+.standard-table th, .standard-table th a {
+	color: #ffffff;
+}
+.standard-table-width{
+width: 958px;
+}
+.standard-table tbody img {
+	float: none;
+}
 /*******/
 
 /*-----modal----------*/

@@ -269,10 +269,7 @@ span.underlink:hover, p.underlink:hover {
     text-align: right;
 }
 
-.standard-table thead td {
-    border-left: 1px solid #006a3a !important;
-    border-bottom: 0px solid
-}
+
 .midsection thead tr { background-color: #336633; color: #ffffff; }
 #checkout-table-header td {
     background-color: #336633;
@@ -1125,25 +1122,35 @@ ul.megamenu {
     margin-bottom: 5px;
 }
 
+
 /************TABLE HEADERS****************/
 .standard-table th {
-	background: #006A3A;
-	line-height: 32px;
-	text-align: center;
-	border-right: 1px solid #cccccc;
-	}
+    background: #045139;
+    line-height: 32px;
+    text-align: center;
+    border-right: 1px solid #cccccc;
+    }
 .standard-table th:first-child {
-	border-radius: 6px 0px 0px 0px;
-	text-align: left;
-	padding-left: 10px;
-	border-right: 1px solid #cccccc;
-	}
+    border-radius: 6px 0px 0px 0px;
+    text-align: left;
+    padding-left: 10px;
+    border-right: 1px solid #cccccc;
+    
+    }
 .standard-table th:last-child {
-	border-radius: 0px 6px 0px 0px;
-	border-right: none;
-	}
+    border-radius: 0px 6px 0px 0px;
+    border-right: none;
+    }
+.standard-table-width{
+	width: 958px;
+}
+.standard-table th, .standard-table th a {
+	color: #ffffff;
+}
+.standard-table tbody img {
+	float: none;
+}
 /*******/
-
 /*-----modal----------*/
 #change-bill-to ul li{
 	padding: 0px 0px 6px;

@@ -4928,7 +4928,7 @@ div.mini-cart-header tr {
 }
 /* Make the top row have no top border. */
 .standard-table tbody tr:first-of-type td {
-    border-top: 0px solid #cccccc !important;
+    border-top: 0px solid #cccccc;
 }
 .standard-table tbody img {
     margin-top: 3px;
@@ -4966,9 +4966,9 @@ div.mini-cart-header tr {
 #tbl tbody td {
     border-color: #CCCCCC;
 }
-#tbl {
+/* #tbl {
     font-size: 11px;
-}
+} */
 #user-header tr {
     border-left: 1px solid #CCCCCC;
     border-right: 1px solid #CCCCCC;
@@ -5000,9 +5000,9 @@ div.mini-cart-header tr {
 #user-header tbody img {
     margin-left: 9px;
 }
-div table#user-header th {
+/* div table#user-header th {
     padding: 10px !important;
-}
+} */
 #sorttable_sortfwdind {
     margin-left: 7px;
 }

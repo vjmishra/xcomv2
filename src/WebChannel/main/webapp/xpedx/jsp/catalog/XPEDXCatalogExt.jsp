@@ -1030,28 +1030,28 @@ var globaltheSpanNameValue='<%=request.getParameter("theSpanNameValue")%>';
 function getGridView() {
 return new Ext.XTemplate(
   '<div id="item-ct">',
-  '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">','<thead class="table-header-bar">',
-  '<tr>','<td class="table-header-bar-left desc-hname"><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
-   <s:if test='!#isReadOnly && !#guestUser'>'<td class="M-hname" style="width:20px;" title="Mill / Mfg. Item">M</td>',</s:if>
-  '<td class="Item-hname" style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></td>',
-  <s:if test='#allowedColumns.contains("Size")'>'<td class="Size-hname"><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Color")'>'<td class="Color-hname"><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Basis")'>'<td class="Basis-hname"><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Mwt")'>'<td class="Mwt-hname"><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Thickness")'>'<td class="Thickness-hname"><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></td>',</s:if>				                    
-  <s:if test='#allowedColumns.contains("Package")'>'<td class="Pack-hname"><a href="#" onclick="togglePackSort();">Pack<span id="directionPackArrow"></span></a></td>',</s:if>			                    
-  <s:if test='#allowedColumns.contains("Capacity")'>'<td class="Capacity-hname"><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Model")'>'<td class="Model-hname"><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Material")'>'<td class="Material-hname"><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Ply")'>'<td class="Ply-hname"><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></td>',</s:if>				                
-  <s:if test='#allowedColumns.contains("Form")'>'<td class="Form-hname"><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></td>',</s:if>			                    				  
-  <s:if test='#allowedColumns.contains("Gauge")'>'<td class="Gauge-hname"><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></td>',</s:if>
-  <s:if test='#allowedColumns.contains("Vendor")'>'<td class="Vendor-hname"><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></td>',</s:if>
-  <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if></s:if>
-  <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td class="Environment-hname table-header-bar-right"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
-  <s:if test='!#isReadOnly && !#guestUser'>'<td class="no border table-header-bar-right lprice-hname" style="width:120px;">List Price</td>',</s:if>
+  '<table id="x-tbl-cmmn" class="standard-table listTableHeader ${templateName}">',
+  '<tr>','<th><a href="#" onclick="toggleDescSort();">Description<span id="directionDescArrow"></span></a></td>',
+   <s:if test='!#isReadOnly && !#guestUser'>'<th style="width:20px;" title="Mill / Mfg. Item">M</th>',</s:if>
+  '<th style="width:58px;"><a href="#" onclick="toggleItemSort();">Item #<span id="directionItemArrow"></span></a></th>',
+  <s:if test='#allowedColumns.contains("Size")'>'<th><a href="#" onclick="toggleSizeSort();">Size<span id="directionSizeArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Color")'>'<th><a href="#" onclick="toggleColorSort();">Color<span id="directionColorArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Basis")'>'<th><a href="#" onclick="toggleBasisSort();">Basis<span id="directionBasisArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Mwt")'>'<th><a href="#" onclick="toggleMwtSort();">Mwt<span id="directionMwtArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Thickness")'>'<th><a href="#" onclick="toggleThicknessSort();">Thickness<span id="directionThicknessArrow"></span></a></th>',</s:if>				                    
+  <s:if test='#allowedColumns.contains("Package")'>'<th><a href="#" onclick="togglePackSort();">Pack<span id="directionPackArrow"></span></a></th>',</s:if>			                    
+  <s:if test='#allowedColumns.contains("Capacity")'>'<th><a href="#" onclick="toggleCapacitySort();">Capacity<span id="directionCapacityArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Model")'>'<th><a href="#" onclick="toggleModelSort();">Model<span id="directionModelArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Material")'>'<th><a href="#" onclick="toggleMaterialSort();">Material<span id="directionMaterialArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Ply")'>'<th><a href="#" onclick="togglePlySort();">Ply<span id="directionPlyArrow"></span></a></th>',</s:if>				                
+  <s:if test='#allowedColumns.contains("Form")'>'<th><a href="#" onclick="toggleFormSort();">Form<span id="directionFormArrow"></span></a></th>',</s:if>			                    				  
+  <s:if test='#allowedColumns.contains("Gauge")'>'<th><a href="#" onclick="toggleGaugeSort();">Gauge<span id="directionGaugeArrow"></span></a></th>',</s:if>
+  <s:if test='#allowedColumns.contains("Vendor")'>'<th><a href="#" onclick="toggleVendorSort();">Mfg. Item #<span id="directionVendorArrow"></span></a></th>',</s:if>
+  <s:if test='!#isReadOnly && !#guestUser'><s:if test='#allowedColumns.contains("Environment")'>'<th class="Environment-hname"><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </th>',</s:if></s:if>
+  <s:else><s:if test='#allowedColumns.contains("Environment")'>'<td ><a class="underlink" onclick="toggleLeafSort();"><img style="margin-left:0px; display: inline; padding: 5px 0px 5px 5px;" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/catalog/green-e-logo_small.png" ><span id="directionCertArrow"></span></a> </td>',</s:if> </s:else>
+  <s:if test='!#isReadOnly && !#guestUser'>'<th  style="width:120px;">List Price</th>',</s:if>
   <s:if test='!#isReadOnly && !#guestUser'>//	'<td class="no border table-header-bar-right sorttable_nosort" align="center">Action</td>',</s:if>
-  '</tr>','</thead>',
+  '</tr>',
   '<tpl for=".">','<tbody>',
   '<tpl for="items">',
    '<tr id="{itemkey}" class="itemrow">','<td id="desctab">'+'<a class="item-lnk" id="item-detail-lnk" href="{itemDetailURL}papergrid-view" tabindex="{tabidx}">',

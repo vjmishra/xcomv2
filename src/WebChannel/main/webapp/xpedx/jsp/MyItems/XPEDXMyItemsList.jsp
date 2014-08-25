@@ -678,28 +678,28 @@
 				
 				<table id="mil-list" class="standard-table" style="margin:0px">
 					<swc:sortctl sortField='%{orderByAttribute}' sortDirection='%{orderDesc}' down="Y" up="N" urlSpec='%{#milListSortURL}'>
-						<tbody>
-							<tr id="none" class="table-header-bar ">
-								<td class="left-cell left-rounded-corner" >
+						
+							<tr id="none">
+								<th>
 									<swc:sortable fieldname="%{'ListName'}">
 										<span class="white"> Name</span>
 									</swc:sortable>
-								</td>
-								<td class="list-of-lists-header fixwidth200">
+								</th>
+								<th>
 									<swc:sortable fieldname="%{'ModifyUserName'}">
 										<span class="white">Last Modified By</span>
 									</swc:sortable>
-								</td>
-								<td class="list-of-lists-header">
+								</th>
+								<th>
 									<swc:sortable fieldname="%{'Modifyts'}">			
 										<span class="white">Last Modified</span>
 									</swc:sortable>
-								</td>
-								<td class="right-rounded-corner" align="center" colspan="2">
+								</th>
+								<th>
 									&nbsp;
-								</td>
+								</th>
 							</tr>
-							
+							<tbody>
 							<s:set name="listModifiedByMap" value="getListModifiedByMap()" />
 							<s:set name="listSizeMap" value="getListSizeMap()" />		
 							<s:iterator status="status" id="item" value="listOfItems">

@@ -805,16 +805,21 @@ function showSplitDiv(divId)
 	    
 	    <!-- begin table header -->
 	    <div class="wc-table-header" style="margin-left:-9px">
-	    <table class="full-width no-border">
+	    <table class="full-width no-border standard-table">
 	    		<tr>
-	    			<td class="text-right table-header-bar-left white">Price (<s:property value='%{currencyCode}'/>)</td>
+	    		<s:if test="#orderType != 'Customer'">
+	    			<th>Price (<s:property value='%{currencyCode}'/>)</th>
+	    		</s:if>
+	    		<s:else>
+	    			<th  style="border-right:none;">Price (<s:property value='%{currencyCode}'/>)</th>
+	    		</s:else>
 	    			<s:if test="#orderType != 'Customer'">
-						<td class="text-right white" width="125">Shippable Price (<s:property value='%{currencyCode}'/>)</td>
+						<th width="150">Shippable Price (<s:property value='%{currencyCode}'/>)</th>
 					</s:if>
 					<s:else>
-						<td class="text-right white" width="125">&nbsp;</td>
+						<th width="125">&nbsp;</th>
 					</s:else>
-	    			<td class="text-right white table-header-bar-right" width="120">Extended Price (<s:property value='%{currencyCode}'/>)</td>
+	    			<th  width="135">Extended Price (<s:property value='%{currencyCode}'/>)</th>
 	    		</tr>
 	    </table>
 	    </div>
