@@ -48,6 +48,10 @@ public class XPXUtils {
 	public static String lineAcc;
 	public static ArrayList refDiv;
 	public static HashMap<String, String> webConfNumMap = new HashMap<String, String>(); // User from Order Search Page
+	public static ArrayList assignedCustomerList;
+	public static String msapCustomerOrgID;
+	
+
 	/**
 	 * Add's a Paint Listener to the given composite with background as 'TaskComposite'.
 	 */
@@ -702,6 +706,21 @@ public class XPXUtils {
 	public static void setWebConfNumMap(HashMap<String, String> webConfNumMap) {
 		XPXUtils.webConfNumMap = webConfNumMap;
 	}
+
+	public static ArrayList getAssignedCustomerList() {
+		return assignedCustomerList;
+	}
+
+	public static void setAssignedCustomerList(ArrayList assignedCustomerList) {
+		XPXUtils.assignedCustomerList = assignedCustomerList;
+	}
 	
+	public static String getMsapCustomerOrgID() {
+		return msapCustomerOrgID;
+	}
+
+	public static void setMsapCustomerOrgID(String msapCustomerOrgID) {
+		XPXUtils.msapCustomerOrgID = msapCustomerOrgID;
+	}
 	
 }
