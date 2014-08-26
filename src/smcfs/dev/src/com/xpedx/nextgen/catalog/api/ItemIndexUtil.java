@@ -1,6 +1,8 @@
 package com.xpedx.nextgen.catalog.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,7 +41,7 @@ public class ItemIndexUtil {
 	 * @return Returns a Map formatted as: key=ItemID, value=ItemMetadata
 	 * @throws Exception
 	 */
-	public Map<String, ItemMetadata> getItemMetadataForItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
+	public Map<String, ItemMetadata> getMetadataForItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
 		Map<String, ItemMetadata> metadata = new LinkedHashMap<String, ItemMetadata>();
 
 		// group the item ids for batched calls
@@ -207,6 +209,17 @@ public class ItemIndexUtil {
 		}
 	}
 
+	public static String join(Collection<String> strings, String separator) {
+		StringBuilder buf = new StringBuilder(20 * strings.size());
+		for (Iterator<String> strIter = strings.iterator(); strIter.hasNext();) {
+			buf.append(strIter.next());
+			if (strIter.hasNext()) {
+				buf.append(separator);
+			}
+		}
+		return buf.toString();
+	}
+
 //	// --- Debug/Testing
 //
 //	private static Document fakeItemListResponse() throws Exception {
@@ -220,18 +233,18 @@ public class ItemIndexUtil {
 //		DocumentBuilder db = dbf.newDocumentBuilder();
 //		return db.parse(new File("C:/Users/THOWA14/Desktop/3359/XPXItemcustXref-output.xml"));
 //	}
-//
-//	public static void main(String[] args) throws Exception {
-//		List<String> allItemIds = new ArrayList<String>();
-//		allItemIds.add("2001000");
-//		allItemIds.add("2001002");
-//
-//		Map<String, ItemMetadata> metadata = new ItemIndexUtil().getItemMetadata(null, allItemIds, "W");
-//		for (Entry<String, ItemMetadata> entry : metadata.entrySet()) {
-//			System.out.println("-----------------------------------");
-//			System.out.println(entry.getKey() + " = " + StringUtils.join(entry.getValue().getDivisionsInStock().iterator(), " "));
-//			System.out.println(entry.getKey() + " = " + StringUtils.join(entry.getValue().getCustomerAndItemNumbers().iterator(), " "));
-//		}
-//	}
+
+	public static void main(String[] args) throws Exception {
+		List<String> allItemIds = new ArrayList<String>();
+		allItemIds.add("2001000");
+		allItemIds.add("2001002");
+
+		Map<String, ItemMetadata> metadata = new ItemIndexUtil().getMetadataForItems(null, allItemIds, "W");
+		for (Entry<String, ItemMetadata> entry : metadata.entrySet()) {
+			System.out.println("-----------------------------------");
+			System.out.println(entry.getKey() + " = " + join(entry.getValue().getDivisionsInStock(), " "));
+			System.out.println(entry.getKey() + " = " + join(entry.getValue().getCustomerAndItemNumbers(), " "));
+		}
+	}
 
 }

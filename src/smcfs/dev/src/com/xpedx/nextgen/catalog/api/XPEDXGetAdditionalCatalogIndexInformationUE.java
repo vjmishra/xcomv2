@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
+
 import com.xpedx.nextgen.catalog.api.ItemIndexUtil.ItemMetadata;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.ycm.japi.ue.YCMGetAdditionalCatalogIndexInformationUE;
@@ -45,7 +45,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			YFCIterable<YFCElement> itemListIterator = inElem.getChildElement("ItemList").getChildren("Item");
 
 			List<String> allItemIDs = getItemIds(inElem.getChildElement("ItemList").getChildren("Item"));
-			Map<String, ItemMetadata> metadataForItems = new ItemIndexUtil().getItemMetadataForItems(env, allItemIDs, inStockStatus);
+			Map<String, ItemMetadata> metadataForItems = new ItemIndexUtil().getMetadataForItems(env, allItemIDs, inStockStatus);
 
 			YFCDocument outDoc = YFCDocument.createDocument("ItemList");
 			if ("en_US".equals(inElem.getAttribute("LocaleCode"))) {
@@ -86,7 +86,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 					if (log.isDebugEnabled()) {
 						log.debug("customerAndItemNumbers = " + customerAndItemNumbers);
 					}
-					valueElement.setAttribute("Value", StringUtils.join(customerAndItemNumbers.iterator(), " "));
+					valueElement.setAttribute("Value", ItemIndexUtil.join(customerAndItemNumbers, " "));
 				}
 
 				if ("showStockedItems".equals(searchFieldElement.getAttribute("IndexFieldName"))) {
@@ -94,7 +94,7 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 					if (log.isDebugEnabled()) {
 						log.debug("divisionsInStock = " + divisionsInStock);
 					}
-					valueElement.setAttribute("Value", StringUtils.join(divisionsInStock.iterator(), " "));
+					valueElement.setAttribute("Value", ItemIndexUtil.join(divisionsInStock, " "));
 				}
 			}
 		}
