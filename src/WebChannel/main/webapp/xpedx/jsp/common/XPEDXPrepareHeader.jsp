@@ -1959,8 +1959,8 @@ function passwordUpdateModal()
 				 	'showCloseButton'	: false,
 				 	'enableEscapeButton': false,
 				 	'autoDimensions'	: false,
-			 		'width' 		: 900,
-			 		'height' 		: 530  
+			 		'width' 		: 500,
+			 		'height' 		: 190  
 				}).trigger('click');
 			} /* EB-76 Code Changes End */
 			else if((defaultShipTo == "" || defaultShipTo == "null") && isCustomerSelectedIntoConext!="true"){	
@@ -1983,8 +1983,8 @@ function passwordUpdateModal()
 					 	'showCloseButton'	: false,
 					 	'enableEscapeButton': false,
 					 	'autoDimensions'	: false,
-				 		'width' 		: 900,
-				 		'height' 		: 530  
+				 		'width' 		: 500,
+				 		'height' 		: 190 
 					}).trigger('click');
 			} 
 			else if((!isSalesRep && (isPunchoutUser!="true")) && (isTOAaccepted== "Y") && (secrectQuestionSet == null || secrectQuestionSet == "" || secrectQuestionSet== "N")){
