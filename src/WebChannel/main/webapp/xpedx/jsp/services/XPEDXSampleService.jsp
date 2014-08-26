@@ -999,12 +999,12 @@ $("#cancelId").click(function(){
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" class="standard-table" style="background: none repeat scroll 0% 0% transparent;" id="tbl_data_paperSupplies">
                             
                               <tr id="none">
-                                <td  width="16%">Mfg. Item #</td>
-                                <td  width="16%">Mil</td>
-                                <td  width="16%">Item #</td>
-                                <td > Description</td>
-                                <td width="8%">Qty</td>
-                          		 <td width="10%" align="left">&nbsp;Action</td>
+                                <th  width="16%">Mfg. Item #</th>
+                                <th  width="16%">Mil</th>
+                                <th  width="16%">Item #</th>
+                                <th > Description</th>
+                                <th width="8%">Qty</th>
+                          		 <th width="10%" align="left">&nbsp;Action</th>
                               </tr>
                             
                           </table>
