@@ -808,10 +808,10 @@ function showSplitDiv(divId)
 	    <table class="full-width no-border standard-table">
 	    		<tr>
 	    		<s:if test="#orderType != 'Customer'">
-	    			<th>Price (<s:property value='%{currencyCode}'/>)</th>
+	    			<th class="text-right addpadright10">Price (<s:property value='%{currencyCode}'/>)</th>
 	    		</s:if>
 	    		<s:else>
-	    			<th  style="border-right:none;">Price (<s:property value='%{currencyCode}'/>)</th>
+	    			<th class="text-right addpadright10">Price (<s:property value='%{currencyCode}'/>)</th>
 	    		</s:else>
 	    			<s:if test="#orderType != 'Customer'">
 						<th width="135">Shippable Price (<s:property value='%{currencyCode}'/>)</th>

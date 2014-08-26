@@ -293,10 +293,7 @@
                            <!-- </div> 
     						 </div> -->
                             
-                             <div id="table-bottom-bar" style="width:100%; clear:both;"> 
-                            <div id="table-bottom-bar-L"></div>
-                            <div id="table-bottom-bar-R"></div>
-              </div>  
+                             
              
             </div>
 </div>	

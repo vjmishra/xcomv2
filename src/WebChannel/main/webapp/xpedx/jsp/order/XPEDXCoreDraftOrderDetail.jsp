@@ -43,7 +43,7 @@
 	
     <table class="mil-top-border standard-table" border="0px solid red" class="float-right">
 	   <tr>
-		<th> Price (<s:property value='#currencyCode'/>) </th>
+		<th class="text-right addpadright10"> Price (<s:property value='#currencyCode'/>) </th>
 		<th width="145"> Extended Price (<s:property value='#currencyCode'/>) &nbsp;</th>
 	   </tr>
 	</table>

@@ -166,6 +166,11 @@
 .addmarginright50 {
 	margin-right: 50px;
 }
+
+.addpadright10{
+	padding-right:10px;
+}
+/*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;
 	float: right;

@@ -736,6 +736,10 @@ ul.megamenu {
 	}
 .standard-table th, .standard-table th a {
 	color: #ffffff;
+	font-size: 11px;
+}
+.standard-table th.text-right, .standard-table th a.text-right{
+	text-align:right;
 }
 .standard-table-width{
 width: 958px;

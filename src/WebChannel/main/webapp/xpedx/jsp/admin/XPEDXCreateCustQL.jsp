@@ -433,7 +433,7 @@
 							<td class="no-border ">&nbsp;</td>
 							<td width="13%" colspan="2" align="left"
 								class="no-border-right table-header-bar-right"><span
-								class="white">seq</span></td>
+								class="white">Sequence</span></td>
 						</tr>
 					</tbody>
 				</table>

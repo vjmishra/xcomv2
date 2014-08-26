@@ -1146,6 +1146,7 @@ ul.megamenu {
 }
 .standard-table th, .standard-table th a {
 	color: #ffffff;
+	font-size: 11px;
 }
 .standard-table tbody img {
 	float: none;
