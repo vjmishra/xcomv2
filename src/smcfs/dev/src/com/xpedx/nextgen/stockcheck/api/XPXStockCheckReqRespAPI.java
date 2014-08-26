@@ -153,6 +153,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 	public Document sendStockCheckResponse(YFSEnvironment env, Document inputXML) throws YFSUserExitException, RemoteException
 	{
+		DecimalFormat formatSec = new DecimalFormat("#.#");
+		DecimalFormat formatPerc = new DecimalFormat("#");
 		StopWatch swTotal = new StopWatch();
 		StopWatch swPA    = new StopWatch();
 		swTotal.start();
@@ -210,8 +212,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					pAndAResponseDocument =  api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
 					swPA.stop();
 
-					log.warn          ("SWCS: P&A call:   " + swPA.getTime() + " ms");
-					System.out.println("SWCS: P&A call:   " + swPA.getTime() + " ms");
+					log.warn          ("SCWS: P&A call:   " + formatSec.format(swPA.getTime()/1000.0));
+					System.out.println("SCWS: P&A call:   " + formatSec.format(swPA.getTime()/1000.0));  //TODO remove all these println's
 
 					if(log.isDebugEnabled()) {
 						log.debug("The P&A reponse output is: " + SCXmlUtil.getString(pAndAResponseDocument));
@@ -219,6 +221,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				}
 				catch (Exception e) {
 					log.error("Unable to contact MAX P&A: " + e.getMessage()); // CENT log?
+					System.out.println("Unable to contact MAX P&A: " + e.getMessage());
 					return createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMessage_500);
 				}
 
@@ -242,7 +245,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					}
 				}
 				else {
-					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMessage_503); //TODO if P&A returns null;
+					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMessage_503);
 				}
 			} else {
 				stockCheckOutputDocument = createStockCheckOutput(env, stockCheckInputDocRoot, null);
@@ -258,10 +261,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 
 		swTotal.stop();
-		DecimalFormat formatPerc = new DecimalFormat("#");
-		System.out.println("SWCS: total time: " + swTotal.getTime() + " ms");
+		System.out.println("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0));
 		System.out.println("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
-		log.warn          ("SWCS: total time: " + swTotal.getTime() + " ms");
+		log.warn          ("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0));
 		log.warn          ("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
 
 		return stockCheckOutputDocument;
