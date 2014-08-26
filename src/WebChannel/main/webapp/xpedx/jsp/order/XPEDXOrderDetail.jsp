@@ -814,7 +814,7 @@ function showSplitDiv(divId)
 	    			<th  style="border-right:none;">Price (<s:property value='%{currencyCode}'/>)</th>
 	    		</s:else>
 	    			<s:if test="#orderType != 'Customer'">
-						<th width="150">Shippable Price (<s:property value='%{currencyCode}'/>)</th>
+						<th width="135">Shippable Price (<s:property value='%{currencyCode}'/>)</th>
 					</s:if>
 					<s:else>
 						<th width="125">&nbsp;</th>
