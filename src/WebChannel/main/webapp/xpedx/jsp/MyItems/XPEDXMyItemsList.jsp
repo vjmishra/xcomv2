@@ -790,10 +790,10 @@
 									<s:if test="#status.last" > last</s:if>">
 									<td class="left-cell">
 										<s:if test='%{#sharePrivateFlag.trim() != ""}'>
-											<img id="whitecart" class="mil-list-row-icon" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_personal_list.png"/>
+											<img id="whitecart" class="mil-list-row-icon float-left" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_personal_list.png"/>
 										</s:if>
 										<s:else>
-											<img id="whitecart" class="mil-list-row-icon" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_shared_list.png"/>
+											<img id="whitecart" class="mil-list-row-icon float-left" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/mil/20x20_shared_list.png"/>
 										</s:else>
 										<s:a  href="javascript:doAction('view', '%{#uId}'); ">
 											<s:property value="#name" /> (<s:property value="#numOfItems" />)
