@@ -10,10 +10,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
+import com.xpedx.nextgen.catalog.api.eb3359.StopWatchFor3359;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
@@ -28,6 +30,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 public class ItemIndexUtil {
 
 	private static final YFCLogCategory log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+	private static final Logger log4j = Logger.getLogger("veritiv.ItemIndex");
 
 	/**
 	 * Gathers additional item metadata needed to include the following in the Sterling/Lucene item index:
@@ -43,6 +46,8 @@ public class ItemIndexUtil {
 	 */
 	public Map<String, ItemMetadata> getMetadataForItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
 		Map<String, ItemMetadata> metadata = new LinkedHashMap<String, ItemMetadata>();
+
+		StopWatchFor3359 sw = new StopWatchFor3359(true);
 
 		// group the item ids for batched calls
 		SegmentedList<String> itemIDGroups = new SegmentedList<String>(itemIDs, 100);
@@ -61,6 +66,10 @@ public class ItemIndexUtil {
 				Set<String> customerAndItemNumbers = getCustomerPartNumbersForItem(env, itemID);
 				im.setCustomerAndItemNumbers(customerAndItemNumbers);
 			}
+		}
+
+		if (log4j.isDebugEnabled()) {
+			log4j.debug("Completed getMetadataForItems: elapsed = " + sw.stop());
 		}
 
 		return metadata;
@@ -105,7 +114,11 @@ public class ItemIndexUtil {
 			log.debug("templateXml = " + templateXml);
 		}
 
+		StopWatchFor3359 sw = new StopWatchFor3359(true);
 		Document itemListOutputDoc = api.invoke(env, "getItemList", itemInputDoc.getDocument());
+		if (log4j.isDebugEnabled()) {
+			log4j.debug("Completed API call getItemList (" + itemIDs.size() + " items): elapsed = " + sw.stop());
+		}
 
 		//		System.out.println("++++++++++++++++++++++++++++++++++++++++");
 		//		System.out.println("itemInputDoc:\n" + SCXmlUtil.getString(itemInputDoc.getDocument()));
@@ -155,7 +168,11 @@ public class ItemIndexUtil {
 			log.debug("templateXml = " + templateXml);
 		}
 
+		StopWatchFor3359 sw = new StopWatchFor3359(true);
 		Document xpxItemcustXrefListOutputDoc = api.executeFlow(env, "getXPXItemcustXrefList", xpxItemcustXrefInputDoc.getDocument());
+		if (log4j.isDebugEnabled()) {
+			log4j.debug("Completed API call getXPXItemcustXrefList (itemID=" + itemID + "): elapsed = " + sw.stop());
+		}
 
 		//		System.out.println("++++++++++++++++++++++++++++++++++++++++");
 		//		System.out.println("xpxItemcustXrefInputDoc:\n" + SCXmlUtil.getString(xpxItemcustXrefInputDoc.getDocument()));
