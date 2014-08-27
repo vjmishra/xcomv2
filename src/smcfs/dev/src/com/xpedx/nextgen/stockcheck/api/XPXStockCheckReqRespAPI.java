@@ -148,15 +148,13 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private String sapParentAccountNo = null;
 
 
-
-
-
 	public Document sendStockCheckResponse(YFSEnvironment env, Document inputXML) throws YFSUserExitException, RemoteException
 	{
-		DecimalFormat formatSec = new DecimalFormat("#.#");
-		DecimalFormat formatPerc = new DecimalFormat("#");
+		DecimalFormat formatSec   = new DecimalFormat("#.#");
+		DecimalFormat formatPerc  = new DecimalFormat("#");
 		StopWatch swTotal = new StopWatch();
 		StopWatch swPA    = new StopWatch();
+		StopWatch swPre   = new StopWatch();
 		swTotal.start();
 
 		System.out.println("Received Stock Check Web Service request");
@@ -164,6 +162,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		if(log.isDebugEnabled()) {
 			log.debug("The stock check input xml is: " + SCXmlUtil.getString(inputXML));
 		}
+		swPre.start();
 
 		boolean formatValidationFlag = true;
 		boolean dataValidationFlag = true;
@@ -198,6 +197,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 			setQtysAndUOMsForValidItems(env);
 
+			swPre.stop();
+
 			if(isPandACallNeeded()){
 
 				Document pAndArequestInputDocument = createPandARequestInputDocument(env,stockCheckInputDocRoot);
@@ -213,7 +214,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					swPA.stop();
 
 					log.warn          ("SCWS: P&A call:   " + formatSec.format(swPA.getTime()/1000.0));
-					System.out.println("SCWS: P&A call:   " + formatSec.format(swPA.getTime()/1000.0));  //TODO remove all these println's
+					System.out.println("SCWS: P&A: " + formatSec.format(swPA.getTime()/1000.0));  //TODO remove all these println's
 
 					if(log.isDebugEnabled()) {
 						log.debug("The P&A reponse output is: " + SCXmlUtil.getString(pAndAResponseDocument));
@@ -261,8 +262,11 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 
 		swTotal.stop();
+		System.out.println("SCWS: pre time:   " + formatSec.format(swPre.getTime()/1000.0) + " = "
+				+ formatPerc.format(100.0 * swPre.getTime() / swTotal.getTime()) + "%");
+		System.out.println("SCWS: P&A time:   "+ formatSec.format(swPA.getTime()/1000.0) + " = "
+				+ formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
 		System.out.println("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0));
-		System.out.println("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
 		log.warn          ("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0));
 		log.warn          ("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
 
@@ -1159,9 +1163,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 */
 	private void setQtysAndUOMsForValidItems(YFSEnvironment env) throws YFSException, RemoteException {
 		//get and set the order multiples for valid items into  map
-		 setOMQtyForXpedxItems(env, validItemInfoMap.keySet());
+		setOMQtyForXpedxItems(env, validItemInfoMap.keySet());
 		//get and set the UOM List Element for all Items into  map
-		 setXPXUomListForValidItems(env);
+		setXPXUomListForValidItems(env);
 		getUOMAndLegacyUOMs(env);
 
 		for(int i = 0; i < stockCheckItemList.getLength(); i++)	{
@@ -1242,6 +1246,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
  * @throws RemoteException
  */
 	private void setItemsDetails(YFSEnvironment env, Map<Integer,String> requestedXpedxItemsMap) throws YFSException, RemoteException	{
+
 		Document xpedxItemCustXRefInputDoc = YFCDocument.createDocument("Item").getDocument();
 		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_COMPANY_CODE, companyCode);
 		xpedxItemCustXRefInputDoc.getDocumentElement().setAttribute("EnvironmentCode", envtId);
@@ -1254,16 +1259,24 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			expElement.setAttribute("Value", requestedXpedxItemsMap.get(position));
 		}
 
+		DecimalFormat format = new DecimalFormat("#.#");
+		StopWatch sw = new StopWatch();
+		sw.start();
+
 		env.setApiTemplate(XPXLiterals.GET_ITEM_LIST_API, getItemListTemplate);
 		Document xpedxItemCustXRefOutputDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, xpedxItemCustXRefInputDoc);
 		env.clearApiTemplate(XPXLiterals.GET_ITEM_LIST_API);
+
+		sw.stop();
+		System.out.println("SCWS:getItemList: " + format.format(sw.getTime()/1000.0));  //TODO remove
 
 		Element xpedxItemCustXRefOutputElement = xpedxItemCustXRefOutputDoc.getDocumentElement();
 		List<Element> xpedxItemElements = SCXmlUtil.getElements(xpedxItemCustXRefOutputElement, XPXLiterals.E_ITEM);
 		Set<String> categorySet = new HashSet<String>();
 		for (Element xpedxItemElement : xpedxItemElements) {
 			if (xpedxItemElement != null) {
-				validItemInfoMap.put(xpedxItemElement.getAttribute("ItemID"), new ValidItemInfo(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement, xpedxItemElement.getAttribute("UnitOfMeasure")));
+				validItemInfoMap.put(xpedxItemElement.getAttribute("ItemID"),
+						new ValidItemInfo(xpedxItemElement.getAttribute("ItemID"), xpedxItemElement, xpedxItemElement.getAttribute("UnitOfMeasure")));
 				if (xpedxItemElement.getElementsByTagName("CategoryList").getLength() > 0) {
 					Element categoryListElement = (Element) xpedxItemElement.getElementsByTagName("CategoryList").item(0);
 					if(categoryListElement.getElementsByTagName("Category").getLength()>0) {
@@ -1281,10 +1294,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			}
 
 		}
+
 		//get Category descriptions; this info need even if we are not calling p&a for valid Items
 		if (categorySet != null && categorySet.size() > 0) {
 			setCategoryShortDescriptions(env, categorySet);
 		}
+
 		/* for trying to find invalid items. If not valid set the invalid item position*/
 		if( validItemInfoMap.size( ) >= 0){
 			for (Integer position : requestedXpedxItemsMap.keySet()) {
@@ -1296,6 +1311,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				}
 			}
 		}
+
 	}
 
 /**
