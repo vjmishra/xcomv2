@@ -5264,8 +5264,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 			Document getItemUOMListDoc = setItemUOMListTemplate(env);
 			//EB-6257
-			env.clearApiTemplates();
-			
+			//env.clearApiTemplates();			
 			env.setApiTemplate("getItemUOMList", getItemUOMListDoc);
 			Document temp = XPXPerformLegacyOrderUpdateExAPI.api.invoke(env, "getItemUOMList", itemEle.getOwnerDocument().getDocument());
 			env.clearApiTemplate("getItemUOMList");
