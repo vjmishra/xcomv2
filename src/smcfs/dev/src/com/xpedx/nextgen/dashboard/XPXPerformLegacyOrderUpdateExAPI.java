@@ -106,7 +106,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 		
 		//rootEle contains the Legacy XML document. 
 		YFCElement rootEle = yfcDoc.getDocumentElement();
-		Element orderextn=null;
+		Element orderextnExecption=null;
 		
 		try {
 			if(log.isDebugEnabled()) {
@@ -114,7 +114,9 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			}
 			ArrayList<Element> orderExtnList=SCXmlUtil.getElements(yfcDoc.getDocument().getDocumentElement(),"Extn");
 			if(orderExtnList != null ) {
-				 orderextn=orderExtnList.get(0);
+				Element orderextn=orderExtnList.get(0);
+				System.out.println("In XPXPerformLegacyOrderUpdateExAPI*****************************************************In orderExtnList if loop");
+				orderextnExecption=orderextn;
 				if(orderextn != null) {
 					String customerDivision=orderextn.getAttribute("ExtnCustomerDivision");			
 					if(customerDivision!=null && customerDivision.indexOf("_")!=-1) {
@@ -654,7 +656,7 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				}
 				//Start of EB-6257
 				System.out.println("In XPXPerformLegacyOrderUpdateExAPI*****************************************************before finally block start");
-				if(orderextn!=null && orderextn.hasAttribute("ExtnLegacyOrderNo") && !YFCObject.isVoid(orderextn.getAttribute("ExtnLegacyOrderNo")) && !isExtnProcessibleFlagUpdated)
+				if(orderextnExecption!=null && orderextnExecption.hasAttribute("ExtnLegacyOrderNo") && !YFCObject.isVoid(orderextnExecption.getAttribute("ExtnLegacyOrderNo")) && !isExtnProcessibleFlagUpdated)
 				{
 					YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
 					for(YFCElement orderElem :orderNodeList)							
