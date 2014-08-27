@@ -233,7 +233,7 @@ public class XPEDXItemsDataTemplateComponent extends Component {
 
 			if (!YFCCommon.isVoid(orderMultiple) && Integer.parseInt(orderMultiple) > 1) {
 				sb.append("uomLink: \"")
-				.append("<div >").append("<p class=\\\"notice\\\">")
+				.append("<div >").append("<p class=\\\"notice addmarginright5\\\">")
 				.append(tag.getOrderMultipleString()).append(com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean.formatQuantityForCommas(orderMultiple))
 				.append(" ")
 				.append(uomDesc).append("</p>").append("</div>\",");
