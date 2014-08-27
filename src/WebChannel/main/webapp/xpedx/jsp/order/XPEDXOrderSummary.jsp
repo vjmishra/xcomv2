@@ -1592,7 +1592,7 @@ from session . We have customer Contact Object in session .
 															</div>
 														</s:if>
 														<s:if test='%{#inventoryChk=="M"}'>
-															<div class="non-stock-item-shorter floatleft">
+															<div class="non-stock-item-shorter floatleft width-214">
 																<div class="stock-icon addmarginright50" style="margin-top:0px">
 																	<img
 																		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png"

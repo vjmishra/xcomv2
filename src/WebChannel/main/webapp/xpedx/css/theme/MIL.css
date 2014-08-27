@@ -6450,3 +6450,17 @@ BEGIN 2014 styles
 #mil-list .right-cell select {
 	width: 125px;
 }
+
+.mil-nonstock-adjust {
+	margin-left: -148px;
+	width: 400px;
+}
+
+.mil-replacement-adjust {
+	float: none;
+	margin-left: -65px;
+}
+
+.mil-edit-replacement-adjust {
+	margin-right: -20px;
+}

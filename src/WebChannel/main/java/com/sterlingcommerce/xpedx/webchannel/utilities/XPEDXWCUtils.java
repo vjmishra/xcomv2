@@ -4188,6 +4188,17 @@ public class XPEDXWCUtils {
 		return inventoryCheckForItemsMap;
 	}
 
+	/**
+	 * This is written for JIRA EB-7204
+	 * The following method is invoked to get the inventory indicator of items.
+	 * 
+	 *
+	 * @param outputDoc
+	 * @param shipFromBranch
+	 * @param wcContext
+	 * @return HashMap with the item id and inventory indicator.
+	 * 
+	 */
 	public HashMap<String, String> getDisplayInventoryCheckMap(Document outputDoc, String shipFromBranch, IWCContext wcContext) {
 		
 		HashMap<String, String> displayInventoryCheckForItemsMap = new HashMap<String, String>();

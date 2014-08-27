@@ -2693,29 +2693,7 @@ function showSharedListForm(){
 													</s:if>
 												</s:if>
 												
-												<s:if test='editMode != true'>
-													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-														<p class="replacementtext">
-															This item will be replaced once inventory is depleted.&nbsp;<img
-																alt="To replace or add item, click the Edit This List button."
-																title="To replace or add item, click the Edit This List button."
-																height="12" border="0" width="12"
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
-																style="margin-top: 2px; float: right;" />
-														</p>
-													</s:if>
-												</s:if>
-												<s:else> <%-- editMode --%>
-													<%-- Show Replacement link only in Edit mode --%>
-													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-														<p class="replacementtext">
-															<a href="#linkToReplacement" class="modal red"
-																	onclick='showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
-																This item will be replaced once inventory is depleted.
-															</a>
-														</p>
-													</s:if>
-												</s:else>
+												
 											</div>
 											
 											<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
@@ -2964,16 +2942,40 @@ function showSharedListForm(){
 												</s:else>
 											</s:else>
 											<s:if test='%{#displayInventoryIndicator=="I"}'>
-												<div class='non-stock-item'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
+												<div class='non-stock-item mil-nonstock-adjust'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-stock.png" width="25" height="25"/>
 												</div>Not a Stocked Item<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>
 											</s:if>
 											<s:if test='%{#displayInventoryIndicator=="M"}'>
-												<div class='non-stock-item'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25"/>
+												<div class='non-stock-item mil-nonstock-adjust'><div class='stock-icon'><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/icon-manufacturing.png" width="25" height="25"/>
 												</div>Item Ships Directly from Mfr<div class='contact'> Contact Customer Service to confirm pricing and any additional charges</div></div>
 											</s:if>
 											<s:if test='%{#displayInventoryIndicator=="W"}'>
 														
 											</s:if>
+											
+											<s:if test='editMode != true'>
+													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+														<div class="replacement-item width-315 mil-replacement-adjust">
+															This item will be replaced once inventory is depleted.&nbsp;<img
+																alt="To replace or add item, click the Edit This List button."
+																title="To replace or add item, click the Edit This List button."
+																height="12" border="0" width="12"
+																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
+																style="float: right;" />
+														</div>
+													</s:if>
+												</s:if>
+												<s:else> <%-- editMode --%>
+													<%-- Show Replacement link only in Edit mode --%>
+													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
+														<div class="replacement-item width-315 mil-edit-replacement-adjust">
+															<a href="#linkToReplacement" class="modal red"
+																	onclick='showXPEDXReplacementItems("<s:property value="#itemId"/>", "<s:property value="#id"/>", "<s:property value="#qty"/>");'>
+																This item will be replaced once inventory is depleted.
+															</a>
+														</div>
+													</s:if>
+												</s:else>
 		
 										</div> <%-- / mil-action-list-wrap --%>
 									</div> <%-- / mil-wrap-condensed or mil-wrap-condensed-mid or mil-wrap-condensed-bot --%>

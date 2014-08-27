@@ -1381,6 +1381,12 @@ h3 {
 .width-auto {
 	width: auto;
 }
+.width-315 {
+	width: 315px;
+}
+.width-214 {
+	width: 214px;
+}
 .return-link {
 	margin-bottom: 15px;
 	width: 150px;	
@@ -1519,7 +1525,7 @@ h3 {
 
 .replacement-item {
 	clear: none;
-	color: #e16901;
+	color: #ff0000;
 	float: right;
 	font-weight: bold;
 	margin: 5px 15px 0 0;
@@ -1539,10 +1545,11 @@ h3 {
 	margin-right: 25px;
 }
 .non-stock-item .stock-icon {
-	float: right;
-	clear: none;
-	margin-left: 5px;
-	}
+   clear: none;
+   float: right;
+   margin-left: 5px;
+   margin-top: 3px;
+}
 	
 .non-stock-item-shorter {
 	font-weight: bold;
