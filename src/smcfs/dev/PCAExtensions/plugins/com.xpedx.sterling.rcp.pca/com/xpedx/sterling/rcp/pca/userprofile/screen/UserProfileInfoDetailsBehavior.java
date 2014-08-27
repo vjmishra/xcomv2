@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -26,6 +27,7 @@ import com.yantra.yfc.rcp.YRCBehavior;
 import com.yantra.yfc.rcp.YRCButtonBindingData;
 import com.yantra.yfc.rcp.YRCDesktopUI;
 import com.yantra.yfc.rcp.YRCEditorInput;
+import com.yantra.yfc.rcp.YRCEditorPart;
 import com.yantra.yfc.rcp.YRCPlatformUI;
 import com.yantra.yfc.rcp.YRCSharedTaskOutput;
 import com.yantra.yfc.rcp.YRCValidationResponse;
@@ -1026,24 +1028,40 @@ public void UpdateCustomer(){
 		assignedList =XPXUtils.getAssignedCustomerList();
 		//Delete Customer Assignment List
 		createManageAssignmentInput(assignedList);
+		String message = "Do you want to delete user "+this.userID+" ?";
+		if(YRCPlatformUI.getConfirmation("Warning", message )){
+		try{
 		YRCApiContext ctx = new YRCApiContext();
-		String[] apinames ={"XPXManageCustomerAndAssignmentAPIService","manageCustomer","deleteUserHierarchy"};
+		String[] apinames ={"XPXManageCustomerAndAssignmentAPIService","manageCustomer"/*,"deleteUserHierarchy"*/};
 		ctx.setApiNames(apinames);
 		
 		Document[] docInput = {
 				multiAPIDocElement.getOwnerDocument(),
 				YRCXmlUtils.createFromString("<Customer CustomerID='"+XPXUtils.getMsapCustomerOrgID()+"' OrganizationCode='"+orgCode+"'><CustomerContactList><CustomerContact CustomerContactID='"+userID+"' Operation ='Delete'></CustomerContact></CustomerContactList></Customer> "),
-				YRCXmlUtils.createFromString("<User DisplayUserID='"+userID+"'  Loginid='"+userID+"' />  "),	
+				//YRCXmlUtils.createFromString("<User DisplayUserID='"+userID+"'  Loginid='"+userID+"' />  "),	
 			//	YRCXmlUtils.createFromString("<CustomerAssignment UserId='" + userID + "'/>")
 		};
-		callApis(apinames, docInput);
+
 		ctx.setInputXmls(docInput);
 		ctx.setFormId(page.getFormId());
 		ctx.setShowError(true);
 		ctx.setUserData("isRefreshReqd", String.valueOf(true));
-		callApi(ctx, page);
+		//callApi(ctx, page);
+		callApis(apinames, docInput);
 		multiAPIDocElement = null;
-	
+		apinames=null;
+		docInput=null;
+		
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);	
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
+	//	PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor((YRCEditorPart)YRCDesktopUI.getCurrentPart(), true);
+		}catch(Exception e){
+			System.out.println("Exception" + e);
+		}
+		}else{
+			
+		}
 	}
 
 	

@@ -247,7 +247,13 @@ public class XPEDXSalesRepUtils {
 		if(!YFCUtils.isVoid(selectedCustomer)){
 			//selectedCustomer = "CD-"+selectedCustomer+"-M-XPED-CC";
 			//loginId = getCustomerContactFromMSAPCustNo(wcContext, selectedCustomer);
-			Map<String, String> customerIDsMap = (HashMap<String, String>)wcContext.getWCAttribute(SR_CUSTOMER_ID_MAP, WCAttributeScope.SESSION);
+			Element salesRepCustomerElement=null;
+			if(!YFCUtils.isVoid(customerID) && !YFCUtils.isVoid(storefrontID) )
+			{
+				customerId=customerID;
+				storefrontId=storefrontID;
+			}
+			else
 			{
 				Map<String, String> customerIDsMap = (HashMap<String, String>)XPEDXWCUtils.getObjectFromCache(SR_CUSTOMER_ID_MAP);
 				if(customerIDsMap != null)
@@ -295,7 +301,7 @@ public class XPEDXSalesRepUtils {
 			}else{
 				request.setAttribute("dum_password", loginId.trim());
 			}
-			System.out.println("Salt key is " + saltKey );
+		//	System.out.println("Salt key is " + saltKey );
 		//	request.setAttribute("dum_password", loginId.trim());// the saltKeypassword remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
 			//SRSalesRepEmailID added for jira 3438
