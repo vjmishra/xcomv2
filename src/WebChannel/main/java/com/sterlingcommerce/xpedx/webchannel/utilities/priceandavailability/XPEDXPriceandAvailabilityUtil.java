@@ -96,7 +96,7 @@ public class XPEDXPriceandAvailabilityUtil {
 	//changed the PnA messages from max specific error messages to generic error message for jira 3707
 	public static final String WS_PRICEANDAVAILABILITY_TRANSMISSIONSTATUS_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, there was a problem processing your request. Please contact customer service or try again later.";Sorry, Price & Availability is not available, please try again or contact customer service.";
 	public static final String WS_PRICEANDAVAILABILITY_HEADERSTATUS_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, we could not verify your account information, please contact your customer service representative for price and availability.";"Sorry, Price & Availability is not available, please contact customer service.";
-    public static final String WS_DISCONTINUED_ITEM_LINESTATUS_ERROR = "This item has been discontinued and no backorders will be accepted.";
+    public static final String WS_DISCONTINUED_ITEM_LINESTATUS_ERROR = "Discontinued item, unavailable for backorder.";
 	public static final String WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR = "Real time Price & Availability is not available at this time. Please contact Customer Service.";//"Sorry, the item information for this item is not valid. Please contact customer service for price and availability.";
 	//end of changes for jira 3707
 	public static final String WS_PRICEANDAVAILABILITY_OUTPUT_XMLDOC_WITH_SERVICESTATUSDOWN_ERROR = "WSPriceAndAvailabilityOutputXmldocWithServiceStatusDownError.xml";
@@ -529,7 +529,6 @@ public class XPEDXPriceandAvailabilityUtil {
 					}
 					if(WS_DISCONTINUED_ITEM_ERROR_FROM_MAX.equals(item.getLineStatusCode())){
 						item.setDiscontinuedItemErrorFromMax("true");
-						//item.setLineStatusErrorMsg(WS_DISCONTINUED_ITEM_LINESTATUS_ERROR);
 					}
 					if(!"00".equals(item.getLineStatusCode()) && !WS_ORDERMULTIPLE_ERROR_FROM_MAX.equals(item.getLineStatusCode()) && !WS_DISCONTINUED_ITEM_ERROR_FROM_MAX.equals(item.getLineStatusCode())) {
 						//commented for jira 3707 item.setLineStatusErrorMsg(WS_PRICEANDAVAILABILITY_LINESTATUS_ERROR +"  "+getPnALineErrorMessage(item));

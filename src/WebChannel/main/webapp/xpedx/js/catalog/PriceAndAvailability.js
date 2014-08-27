@@ -246,13 +246,13 @@ function getPriceAndAvailabilityForItems(options) {
 				$divItemAvailability.show().get(0).innerHTML = html.join('');
 			}
 			if (lineErrorMessage && lineErrorMessage.trim().length > 0) {
-				
+				html.push('		</div>');
 				html.push('		<div class="pa-wrap">');
-				html.push('			<h5 align="center"><b><font color="red" >', htmlEncode(lineErrorMessage), '</font></b></h5>');
+				html.push('			<h5 class="suspended-item">', htmlEncode(lineErrorMessage), '</h5>');
 				html.push('		</div>');
 				$divItemAvailability.show().get(0).innerHTML= html.join('');
 				pnaSuccess = false;
-				//continue;
+				
 			}
 			if (pnaSuccess && typeof(options.success) === 'function') {
 				options.success(data);

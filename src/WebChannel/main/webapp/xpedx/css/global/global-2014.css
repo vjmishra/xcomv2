@@ -440,6 +440,15 @@
 .ready-partial-available-color {
 	color: #FF0000;
 }
+.suspended-item{
+	color: #FF0000;
+	text-align: left;
+	padding: 0 0 3px 10px;
+	font-weight: normal;
+}
+.suspended-item-pa{
+	padding: 0 0 3px 32px;
+}
 .pa-price-tbd-color {
 	font-weight: bold;
 	color: #FF0000;

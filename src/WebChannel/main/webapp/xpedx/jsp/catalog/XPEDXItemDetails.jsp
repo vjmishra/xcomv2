@@ -416,11 +416,11 @@
 						</s:if>
 						<div class="pa-wrap">
 							<%-- This will be filled by ajax as the PnA call happens on page load as Ajax --%>
-								<div style="display: none;" id="availabilty_<s:property value='%{#itemID}' />" class="price-and-availability">
-								
+							<div style="display: none;"
+								id="availabilty_<s:property value='%{#itemID}' />"
+								class="price-and-availability"></div>
 						</div>
-						</div>
-						
+
 					</div> <%-- / order-wrap --%>
 				</div> <%-- / image-order-container --%>
 				

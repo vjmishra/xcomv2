@@ -843,7 +843,7 @@
     				<s:set name="lineStatusCodeMsg" value="#pnALineErrorMessage.get(#itemID)"></s:set>
     				<s:if test='%{#lineStatusCodeMsg != null || #lineStatusCodeMsg != ""}'>
 						<div id="mid-col-mil">
-							<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
+							<h5 class="suspended-item"><s:property value="%{#lineStatusCodeMsg}" /></font></b></h5>
 						</div>
 					</s:if>
     				<%-- end of it 2885 --%>

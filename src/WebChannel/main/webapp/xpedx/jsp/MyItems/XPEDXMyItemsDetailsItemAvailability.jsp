@@ -15,7 +15,7 @@
     The explicit call style will also help the performance in evaluating Struts OGNL statements. --%>
 <!-- Web Trends tag start -->
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/webtrends/displayWebTag<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-<%final String WS_DISCONTINUED_ITEM_LINESTATUS_ERROR = "This item has been discontinued and no backorders will be accepted."; %>
+
 <!-- Web Trends tag end  -->
 
 <!-- <table width="100%" style='margin-top: -2px;border:0px;' class="mil-my-price-availability" border="0"> -->
@@ -31,6 +31,7 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXUtilBean' id='xpedxutil' />
 <s:set name='scuicontext' value="%{#_action.getWCContext().getSCUIContext()}" />
 <s:set name="xpedxCustomerContactInfoBean" value='@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getObjectFromCache("XPEDX_Customer_Contact_Info_Bean")' />
+<s:set name="suspendedErrorMsg" value="@com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil@WS_DISCONTINUED_ITEM_LINESTATUS_ERROR"/>
 <s:set name='showCurrencySymbol' value='true' />
 <s:set name='id' value='myItemsKey' />
 <s:set name="pnALineErrorMessage" value="#_action.getPnALineErrorMessage()" />
@@ -92,7 +93,7 @@
 		<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
 		<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 		
-		<s:if test='%{#lineStatusCodeMsg == WS_DISCONTINUED_ITEM_LINESTATUS_ERROR || #_action.getIsOMError() != "true"}'>
+		<s:if test='%{#lineStatusCodeMsg == #suspendedErrorMsg || #_action.getIsOMError() != "true"}'>
 			<s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #_action.getCatagory().trim().equals("Paper") && #_action.getValidateOM() == "true" && #isBracketPricing == "true"}' />
 			<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
 			<%-- since the availability/bracket/pricing columns may be hidden, we indicate whether the P&A section is 1, 2, or 3 columns. this allows css specificity to customize layout --%>
@@ -106,7 +107,7 @@
 				<s:set name="milPaWrapClass" value="%{'one-col'}" />
 			</s:else>
 			<s:div cssClass="mil-pa-wrap %{#milPaWrapClass}">
-				<s:if test='%{#lineStatusCodeMsg == WS_DISCONTINUED_ITEM_LINESTATUS_ERROR ||  #_action.getIsOMError() != "true" }'>
+				<s:if test='%{#lineStatusCodeMsg == #suspendedErrorMsg ||  #_action.getIsOMError() != "true" }'>
 					<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
 						<s:div cssStyle="color:%{#jsonAvailabilityMessageColor}; font-size:13px; padding-left:30px; line-height:22px;">
 							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
@@ -354,7 +355,7 @@
 				</s:if>
 				
 			</s:div> <%-- / mil-pa-wrap --%>
-			<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
+			<h5 class="suspended-item suspended-item-pa"><s:property value="%{#lineStatusCodeMsg}"/></h5>
 		</s:if>
 		<s:elseif test='%{#lineStatusCodeMsg != "" && #_action.getIsOMError() != "true"}'>
 			<div class="mil-pa-wrap">

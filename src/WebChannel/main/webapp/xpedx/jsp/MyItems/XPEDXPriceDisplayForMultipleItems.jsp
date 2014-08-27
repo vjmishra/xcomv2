@@ -9,13 +9,14 @@
 	When making changes to this page you will likely need to make changes to XPEDXMyItemsDetailsItemAvailability.
 	This is because the MIL page calls separate actions for single vs multiple Price and Availability (see EB-4767 for details).
 --%>
-<%final String WS_DISCONTINUED_ITEM_LINESTATUS_ERROR = "This item has been discontinued and no backorders will be accepted."; %>
+
 <s:set name='_action' value='[0]' />
 <s:set name="lineNumber" value="%{1}" />
 <s:set name='itemOrderSeq' value="%{1}" />	
 <meta name="DCSext.w_x_sc" content="1"></meta>	
 <meta name ="DCSext.w_x_scr" content='<s:property value="#webtrendTotalQty" />' />
 <s:set name='webtrendTotalQty' value="#_action.buildwebtrendTagForAll()" />
+<s:set name="suspendedErrorMsg" value="@com.sterlingcommerce.xpedx.webchannel.utilities.priceandavailability.XPEDXPriceandAvailabilityUtil@WS_DISCONTINUED_ITEM_LINESTATUS_ERROR"/>
 <s:iterator value='#_action.getCheckItemKeys()' id="item" status="status" >
 	<input type="hidden" name="availabilityRowsHide" id="hidden_availabilityRow_<s:property value='#item'/>" />               
 </s:iterator> 
@@ -114,7 +115,7 @@
 			<s:set name="jsonAvailabilityMessageColor" value="#json.get('AvailabilityMessageColor')" />
 			<s:set name="jsonAvailabilityBalance" value="#json.get('AvailabilityBalance')" />
 			
-			<s:if test='%{#lineStatusCodeMsg == WS_DISCONTINUED_ITEM_LINESTATUS_ERROR || #_action.getIsOMError() != "true"}'>
+			<s:if test='%{#lineStatusCodeMsg == #suspendedErrorMsg || #_action.getIsOMError() != "true"}'>
 				<s:set name="showPaBracket" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #category.trim().equals("Paper") && #_action.getValidateOMForMultipleItems() == "true" && #isBracketPricing == "true"}' />
 				<s:set name="showPaPrices" value='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y" && #displayPriceForUoms.size() > 0}' />
 				<%-- since the availability/bracket/pricing columns may be hidden, we indicate whether the P&A section is 1, 2, or 3 columns. this allows css specificity to customize layout --%>
@@ -128,7 +129,7 @@
 					<s:set name="milPaWrapClass" value="%{'one-col'}" />
 				</s:else>
 				<s:div cssClass="mil-pa-wrap %{#milPaWrapClass}">
-					<s:if test='%{#lineStatusCodeMsg == WS_DISCONTINUED_ITEM_LINESTATUS_ERROR || #_action.getIsOMError() != "true"}'>
+					<s:if test='%{#lineStatusCodeMsg == #suspendedErrorMsg || #_action.getIsOMError() != "true"}'>
 						<s:if test="%{#qtyTxtBox.get(#id) != null && #qtyTxtBox.get(#id)  != 0  && #jsonAvailabilityBalance != null}">
 							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
 							<s:div cssStyle="color:%{#jsonAvailabilityMessageColor}; font-size:13px; padding-left:30px; line-height:22px;">
@@ -383,7 +384,7 @@
 			</s:if>		
 			<s:elseif test='%{#lineStatusCodeMsg != ""}'>
 				<div class="mil-pa-wrap">
-					<h5 align="center"><b><font color="red"><s:property value="%{#lineStatusCodeMsg}"/></font></b></h5>
+					<h5 class="suspended-item suspended-item-pa"><s:property value="%{#lineStatusCodeMsg}"/></h5>
 				</div>
 			</s:elseif>	
 			<s:else>
