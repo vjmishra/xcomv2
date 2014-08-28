@@ -68,7 +68,7 @@
 	<div class="associated-items-wrap">
 		<h3>Popular Accessories</h3>
 		
-		<s:iterator value='combinedAlternateItems' id='itemElem'>
+		<s:iterator value='combinedCrosssellItems' id='itemElem'>
 			<div class="associated-image-group">
 				<s:set name="upItemPrimInfoElem" value='#xutil.getChildElement(#itemElem, "PrimaryInformation")' />
 				<s:set name="upItemComputedPrice" value='#xutil.getChildElement(#itemElem, "ComputedPrice")' />
