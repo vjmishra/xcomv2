@@ -591,11 +591,8 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					if("ITEM_DATA_SHEET".equalsIgnoreCase(assetType)) {
 						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;
 						if(!SCUtil.isVoid(msdsLocation) && msdsLocation.endsWith("/")){
-							//change here
-							msdsLocation="http://www.xpedx.infotrack.net/";
 							 msdsLink = msdsLocation+msdsContentId;
 						}else{
-							//change here
 							msdsLink = msdsLocation+"/"+msdsContentId;
 						}
 						isMSDSLink=true;
@@ -603,8 +600,6 @@ public class XPEDXItemDetailsAction extends ItemDetailsAction {
 					if("URL".equalsIgnoreCase(assetType)){
 						msdsLinkDesc = XPEDXConstants.MSDS_URL_DISPLAY;
 						if(!SCUtil.isVoid(msdsLocation)){
-							//change here
-							msdsLocation="http://www.xpedx.infotrack.net/";
 							msdsLink = msdsLocation;
 						}
 						isMSDSLink=true;
