@@ -30,7 +30,6 @@
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/catalog/catalogExt<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/styles<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/ext-all<s:property value='#wcUtil.xpedxBuildKey' />.css" />
-<link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/swc<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/theme/theme-xpedx_v1.2<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/css/sfskin-<s:property value="wCContext.storefrontId" />.css" />
 <!--[if IE]> 
@@ -106,170 +105,202 @@
 
 
 <body class="ext-gecko ext-gecko3">
-    <div id="main-container">
-        <div id="main">
-        	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
-        
-			<div class="container"> 
-                <!-- breadcrumb -->
-                <div id="searchBreadcrumb">
-                	<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <a href="<s:url action="XPEDXTools" namespace="/xpedx/tools" includeParams='none'/>">Tools</a>  / <span class="page-title">Imposition Calculater</span> Commented For Jira 1538 --> 
-                </div>                               
-                
-                <div id="mid-col-mil">
-                
-                
-                
-                
-                <div class="clearview"><div class="clearview">&nbsp;</div><h2>Possible Layouts:</h2></div><div class="clearview">&nbsp;</div>
-<table style="width: 100%;" id="mil-list-new">
-                      <tbody><tr class="table-header-bar">
-                       
-                                <td width="399" class="no-border table-header-bar-left "><span class="white txt-small"> Layout Method (click link to view layout)</span></td>
-                                <td width="82" align="left" class="no-border"><span class="white txt-small">Number out </span></td>
-                                <td align="left" class="no-border-right table-header-bar-right"><span class="white txt-small">Waste % </span> </td>
-                      </tr>
-                      
-                      <s:iterator status="stat" value="numoutWasteList" id="numWastMap">
-                      	<s:if test="#stat.index == 0">
-                      		<s:url id="option1" namespace="/tools" action="MyImpCalculationPage">
-                      			<s:param name="option" value="1"/>
-                      			<s:param name="sheetSizeW" value="#shtSizeW"/>
-                      			<s:param name="sheetSizeH" value="#shtSizeH"/>
-                      			<s:param name="trimSizeW" value="#trmSizeW"/>
-                      			<s:param name="trimSizeH" value="#trmSizeH"/>
-                      			<s:param name="gripperWidth" value="#grpWidth"/>
-                      			<s:param name="colorBarWidth" value="#clrBarWidth"/>
-                      			<s:param name="sideGuide" value="#sideGde"/>
-                      			<s:param name="gutter" value="#gtr"/>
-                      		</s:url>                      
-                            <tr class="odd">
-                                <td><s:a href="%{#option1}">1. Sheet Long Side / Trim Long Side</s:a></td>
-                                <s:set name="key1" value="#numWastMap.keySet().iterator().next()"/>
-                                <s:set name="value1" value="#numWastMap.values().iterator().next()"/>
-                              <td valign="top"><s:property value="#key1"/></td>
-                              <td width="103" valign="top"><s:property value="#value1"/> %</td>
-                            </tr>
-                        </s:if>
-                        <s:if test="#stat.index == 1">
-                        	<s:url id="option2" namespace="/tools" action="MyImpCalculationPage">
-                      			<s:param name="option" value="2"/>
-                      			<s:param name="sheetSizeW" value="#shtSizeW"/>
-                      			<s:param name="sheetSizeH" value="#shtSizeH"/>
-                      			<s:param name="trimSizeW" value="#trmSizeW"/>
-                      			<s:param name="trimSizeH" value="#trmSizeH"/>
-                      			<s:param name="gripperWidth" value="#grpWidth"/>
-                      			<s:param name="colorBarWidth" value="#clrBarWidth"/>
-                      			<s:param name="sideGuide" value="#sideGde"/>
-                      			<s:param name="gutter" value="#gtr"/>
-                      		</s:url>
-                            <tr>
-                              <td><s:a href="%{#option2}">2. Sheet Long Side / Trim Short Side</s:a></td>
-                              <s:set name="key2" value="#numWastMap.keySet().iterator().next()"/>
-                              <s:set name="value2" value="#numWastMap.values().iterator().next()"/>
-                              <td valign="top"><s:property value="#key2"/></td>
-                              <td valign="top"><s:property value="#value2"/> %</td>
-                            </tr>
-                        </s:if>
-                        <s:if test="#stat.index == 2">
-                        	<s:url id="option3" namespace="/tools" action="MyImpCalculationPage">
-                      			<s:param name="option" value="3"/>
-                      			<s:param name="sheetSizeW" value="#shtSizeW"/>
-                      			<s:param name="sheetSizeH" value="#shtSizeH"/>
-                      			<s:param name="trimSizeW" value="#trmSizeW"/>
-                      			<s:param name="trimSizeH" value="#trmSizeH"/>
-                      			<s:param name="gripperWidth" value="#grpWidth"/>
-                      			<s:param name="colorBarWidth" value="#clrBarWidth"/>
-                      			<s:param name="sideGuide" value="#sideGde"/>
-                      			<s:param name="gutter" value="#gtr"/>
-                      		</s:url>
-                            <tr class="odd">
-                              <td><s:a href="%{#option3}">3. Sheet Long Side / Trim Long Side use waste if possible</s:a></td>
-                              <s:set name="key3" value="#numWastMap.keySet().iterator().next()"/>
-                              <s:set name="value3" value="#numWastMap.values().iterator().next()"/>
-                              <td valign="top"><s:property value="#key3"/></td>
-                              <td valign="top"><s:property value="#value3"/> %</td>
-                            </tr>
-                        </s:if>
-                        <s:if test="#stat.index == 3">
-                        	<s:url id="option4" namespace="/tools" action="MyImpCalculationPage">
-                      			<s:param name="option" value="4"/>
-                      			<s:param name="sheetSizeW" value="#shtSizeW"/>
-                      			<s:param name="sheetSizeH" value="#shtSizeH"/>
-                      			<s:param name="trimSizeW" value="#trmSizeW"/>
-                      			<s:param name="trimSizeH" value="#trmSizeH"/>
-                      			<s:param name="gripperWidth" value="#grpWidth"/>
-                      			<s:param name="colorBarWidth" value="#clrBarWidth"/>
-                      			<s:param name="sideGuide" value="#sideGde"/>
-                      			<s:param name="gutter" value="#gtr"/>
-                      		</s:url>
-                            <tr>
-                              <td><s:a href="%{#option4}">4. Sheet Long Side / Trim Short Side use waste if possible</s:a></td>
-                              <s:set name="key4" value="#numWastMap.keySet().iterator().next()"/>
-                              <s:set name="value4" value="#numWastMap.values().iterator().next()"/>
-                              <td valign="top"><s:property value="#key4"/></td>
-                              <td valign="top"><s:property value="#value4"/> %</td>
-                            </tr>
-                      	</s:if>      
-                      </s:iterator>
-                            
-                            
-                            
-                            
-               	  </tbody></table><div style="width: 100%;" id="table-bottom-bar">
-<div id="table-bottom-bar-L"></div>
-                        <div id="table-bottom-bar-R"></div>
-</div>
-                    <div class="clearview">&nbsp;</div> 
-                     <table style="width: 100%;" id="mil-list-new">
-                      <tbody><tr class="table-header-bar">
-                       
-                                <td width="187" class="no-border table-header-bar-left noBorders-blue"><span class="white txt-small">Parameters</span></td>
-                                <td colspan="2" align="left" class="no-border-right table-header-bar-right"><span class="white txt-small"> </span></td>
-          </tr>
-                            <tr>
-                                <td class="noBorders-fff padding8">Sheet Size:</td>
-                              <td width="12" valign="middle" class="noBorders-fff padding8"> :</td>
-                              <td width="376" valign="middle" class="padding8"><s:property value='%{shtSizeW}' /> x <s:property value='%{shtSizeH}' /></td>
-                            </tr>
-                            <tr>
-                                <td class="noBorders-fff padding8">Trim Size:</td>
-                              <td width="12" valign="middle" class="noBorders-fff padding8"> :</td>
-                              <td width="376" valign="middle" class="padding8"><s:property value='%{trmSizeW}' /> x <s:property value='%{trmSizeH}' /></td>
-                            </tr>
-                            <tr>
-                                <td class="noBorders-fff padding8">Gripper Width:</td>
-                              <td width="12" valign="middle" class="noBorders-fff padding8"> :</td>
-                              <td width="376" valign="middle" class="padding8"><s:property value='%{grpWidth}' /></td>
-                            </tr>
-                            <tr>
-                                <td class="noBorders-fff padding8">Color Bar Width:</td>
-                              <td width="12" valign="middle" class="noBorders-fff padding8"> :</td>
-                              <td width="376" valign="middle" class="padding8"><s:property value='%{clrBarWidth}' /></td>
-                            </tr>
-                            <tr>
-                                <td class="noBorders-fff padding8">Side Guide Width:</td>
-                              <td width="12" valign="middle" class="noBorders-fff padding8"> :</td>
-                              <td width="376" valign="middle" class="padding8"><s:property value='%{sideGde}' /></td>
-                            </tr>
-                            <tr>
-                                <td class="noBorders-fff padding8">Gutter Width:</td>
-                              <td width="12" valign="middle" class="noBorders-fff padding8"> :</td>
-                              <td width="376" valign="middle" class="padding8"><s:property value='%{gtr}' /></td>
-                            </tr>
-               	  </tbody></table><div style="width: 100%;" id="table-bottom-bar">
-            <div id="table-bottom-bar-L"></div>
-                        <div id="table-bottom-bar-R"></div>
-                    </div>  <div class="clearview">&nbsp; </div> 
-                
-                            
-                <div class="bot-margin"></div>
+	<div id="main-container">
+		<div id="main">
+			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
+
+			<div class="container">
+				<!-- breadcrumb -->
+				<div id="searchBreadcrumb">
+					<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>">Home</a> / <a href="<s:url action="XPEDXTools" namespace="/xpedx/tools" includeParams='none'/>">Tools</a>  / <span class="page-title">Imposition Calculater</span> Commented For Jira 1538 -->
+				</div>
+
+				<div id="mid-col-mil">
+
+
+
+
+					<div class="clearview">
+						<div class="clearview">&nbsp;</div>
+						<h2>Possible Layouts:</h2>
+					</div>
+					<div class="clearview">&nbsp;</div>
+					<table style="width: 100%;" class="standard-table">
+						
+							<tr>
+
+								<th width="399" > Layout Method (click link to
+										view layout)</th>
+								<th width="82">Number out </th>
+								<th>Waste % </th>
+							</tr>
+						<tbody>
+							<s:iterator status="stat" value="numoutWasteList" id="numWastMap">
+								<s:if test="#stat.index == 0">
+									<s:url id="option1" namespace="/tools"
+										action="MyImpCalculationPage">
+										<s:param name="option" value="1" />
+										<s:param name="sheetSizeW" value="#shtSizeW" />
+										<s:param name="sheetSizeH" value="#shtSizeH" />
+										<s:param name="trimSizeW" value="#trmSizeW" />
+										<s:param name="trimSizeH" value="#trmSizeH" />
+										<s:param name="gripperWidth" value="#grpWidth" />
+										<s:param name="colorBarWidth" value="#clrBarWidth" />
+										<s:param name="sideGuide" value="#sideGde" />
+										<s:param name="gutter" value="#gtr" />
+									</s:url>
+									<tr class="odd">
+										<td style="border-right:none;"><s:a href="%{#option1}">1. Sheet Long Side / Trim Long Side</s:a></td>
+										<s:set name="key1"
+											value="#numWastMap.keySet().iterator().next()" />
+										<s:set name="value1"
+											value="#numWastMap.values().iterator().next()" />
+										<td valign="top" style="border-right:none;"><s:property value="#key1" /></td>
+										<td width="103" valign="top"><s:property value="#value1" />
+											%</td>
+									</tr>
+								</s:if>
+								<s:if test="#stat.index == 1">
+									<s:url id="option2" namespace="/tools"
+										action="MyImpCalculationPage">
+										<s:param name="option" value="2" />
+										<s:param name="sheetSizeW" value="#shtSizeW" />
+										<s:param name="sheetSizeH" value="#shtSizeH" />
+										<s:param name="trimSizeW" value="#trmSizeW" />
+										<s:param name="trimSizeH" value="#trmSizeH" />
+										<s:param name="gripperWidth" value="#grpWidth" />
+										<s:param name="colorBarWidth" value="#clrBarWidth" />
+										<s:param name="sideGuide" value="#sideGde" />
+										<s:param name="gutter" value="#gtr" />
+									</s:url>
+									<tr>
+										<td style="border-right:none;"><s:a href="%{#option2}">2. Sheet Long Side / Trim Short Side</s:a></td>
+										<s:set name="key2"
+											value="#numWastMap.keySet().iterator().next()" />
+										<s:set name="value2"
+											value="#numWastMap.values().iterator().next()" />
+										<td valign="top" style="border-right:none;"><s:property value="#key2" /></td>
+										<td valign="top"><s:property value="#value2" /> %</td>
+									</tr>
+								</s:if>
+								<s:if test="#stat.index == 2">
+									<s:url id="option3" namespace="/tools"
+										action="MyImpCalculationPage">
+										<s:param name="option" value="3" />
+										<s:param name="sheetSizeW" value="#shtSizeW" />
+										<s:param name="sheetSizeH" value="#shtSizeH" />
+										<s:param name="trimSizeW" value="#trmSizeW" />
+										<s:param name="trimSizeH" value="#trmSizeH" />
+										<s:param name="gripperWidth" value="#grpWidth" />
+										<s:param name="colorBarWidth" value="#clrBarWidth" />
+										<s:param name="sideGuide" value="#sideGde" />
+										<s:param name="gutter" value="#gtr" />
+									</s:url>
+									<tr class="odd">
+										<td style="border-right:none;"><s:a href="%{#option3}">3. Sheet Long Side / Trim Long Side use waste if possible</s:a></td>
+										<s:set name="key3"
+											value="#numWastMap.keySet().iterator().next()" />
+										<s:set name="value3"
+											value="#numWastMap.values().iterator().next()" />
+										<td valign="top" style="border-right:none;"><s:property value="#key3" /></td>
+										<td valign="top"><s:property value="#value3" /> %</td>
+									</tr>
+								</s:if>
+								<s:if test="#stat.index == 3">
+									<s:url id="option4" namespace="/tools"
+										action="MyImpCalculationPage">
+										<s:param name="option" value="4" />
+										<s:param name="sheetSizeW" value="#shtSizeW" />
+										<s:param name="sheetSizeH" value="#shtSizeH" />
+										<s:param name="trimSizeW" value="#trmSizeW" />
+										<s:param name="trimSizeH" value="#trmSizeH" />
+										<s:param name="gripperWidth" value="#grpWidth" />
+										<s:param name="colorBarWidth" value="#clrBarWidth" />
+										<s:param name="sideGuide" value="#sideGde" />
+										<s:param name="gutter" value="#gtr" />
+									</s:url>
+									<tr>
+										<td style="border-right:none;"> <s:a href="%{#option4}">4. Sheet Long Side / Trim Short Side use waste if possible</s:a></td>
+										<s:set name="key4"
+											value="#numWastMap.keySet().iterator().next()" />
+										<s:set name="value4"
+											value="#numWastMap.values().iterator().next()" />
+										<td valign="top" style="border-right:none;"><s:property value="#key4" /></td>
+										<td valign="top"><s:property value="#value4" /> %</td>
+									</tr>
+								</s:if>
+							</s:iterator>
+
+
+
+
+						</tbody>
+					</table>
+					
+					<div class="clearview">&nbsp;</div>
+					<table style="width: 100%;" class="standard-table">
+						
+							<tr>
+
+								<th width="187">Parameters</th>
+								<th colspan="2"></th>
+							</tr>
+							<tbody>
+							<tr>
+								<td style="border-right:none;">Sheet Size:</td>
+								<td width="12" valign="middle" style="border-right:none;border-left:none;">
+									:</td>
+								<td width="376" valign="middle" style="border-left:none;"><s:property
+										value='%{shtSizeW}' /> x <s:property value='%{shtSizeH}' /></td>
+							</tr>
+							<tr>
+								<td style="border-right:none;">Trim Size:</td>
+								<td width="12" valign="middle" style="border-right:none;border-left:none;">
+									:</td>
+								<td width="376" valign="middle" style="border-left:none;"><s:property
+										value='%{trmSizeW}' /> x <s:property value='%{trmSizeH}' /></td>
+							</tr>
+							<tr>
+								<td style="border-right:none;">Gripper Width:</td>
+								<td width="12" valign="middle" style="border-right:none;border-left:none;">
+									:</td>
+								<td width="376" valign="middle" style="border-left:none;"><s:property
+										value='%{grpWidth}' /></td>
+							</tr>
+							<tr>
+								<td style="border-right:none;">Color Bar Width:</td>
+								<td width="12" valign="middle" style="border-right:none;border-left:none;">
+									:</td>
+								<td width="376" valign="middle" style="border-left:none;"><s:property
+										value='%{clrBarWidth}' /></td>
+							</tr>
+							<tr>
+								<td style="border-right:none;">Side Guide Width:</td>
+								<td width="12" valign="middle" style="border-right:none;border-left:none;">
+									:</td>
+								<td width="376" valign="middle" style="border-left:none;"><s:property
+										value='%{sideGde}' /></td>
+							</tr>
+							<tr>
+								<td style="border-right:none;">Gutter Width:</td>
+								<td width="12" valign="middle" style="border-right:none; border-left:none;">
+									:</td>
+								<td width="376" valign="middle" style="border-left:none;"><s:property
+										value='%{gtr}' /></td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<div class="clearview">&nbsp;</div>
+
+
+					<div class="bot-margin"></div>
+				</div>
 			</div>
-        </div>
-        
-        </div>
+
+		</div>
 	</div>
- 
+
 	<!-- end main  -->
     	<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 
