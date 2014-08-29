@@ -46,7 +46,7 @@
 								<s:a href="%{contactUsLink}">Contact Us</s:a>
 							</td>
 							<td>
-								<a href="http://www.msdsonfile.com/" target="_blank">MSDS</a>
+								<a href="http://www.xpedx.infotrack.net/" target="_blank">MSDS</a>
 							</td>
 							<td>
 								<s:url id='termsOfAccessLink' namespace="/home" action='MyTermsOfAccess'>
