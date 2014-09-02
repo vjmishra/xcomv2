@@ -1741,7 +1741,6 @@ BEGIN 2014 styles
 }
 
 .detail-view .print-ico-xpedx {
-	margin-top: -10px;
 	margin-right: 8px;
 }
 .prodImg {
@@ -1784,13 +1783,14 @@ BEGIN 2014 styles
 	text-align: left;
 }
 .detail-view ul#prodlist, .detail-view li.prodlist{
-	margin: 0px 0px 20px 10px;
 	font-size: 13px;
 	overflow: visible;
 	max-height: none;
 }
 
-
+.detail-view h1 {
+	width: 760px;
+}
 .detail-view .price-wrap .pa-row .col-1 {
     clear: none;
     float: left;

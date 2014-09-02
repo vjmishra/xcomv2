@@ -186,7 +186,7 @@
 				<p class="addmarginbottom15"><a href="javascript:goBack();">&lsaquo; Back</a></p>
 				
 				<div id="errorMessageDiv"></div>
-				<h1 style="font-weight:bold; "><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
+				<h1><s:property	value='#xutil.getAttribute(#primaryInfoElem,"ShortDescription")' /></h1>
 				<div id="printButton" class="print-ico-xpedx underlink">
 					<img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/print-icon.gif" alt="Print Page" height="15" width="16"/>Print Page
 				</div>
@@ -241,26 +241,6 @@
 						<ul id="prodlist">
 							<s:property value='#xutil.getAttribute(#primaryInfoElem,"Description")' escape="false"/>
 						</ul>
-						<div class="relative">
-							<s:if test="%{#wcUtil.isCoreItem(#itemElem)}">
-								<div class="core-item"></div>
-							</s:if>
-							<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
-								<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
-								<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
-								<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
-								<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
-								<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
-								<s:if test='%{#imageMainURL=="/"}'>
-									<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
-								</s:if>
-								<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
-							</s:if>
-							<s:else>
-								<img src="<s:url value='%{#pImg}'/>"  class="prodImg" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
-							</s:else>
-						</div>
-						
 						<s:set name="xpedxItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_ITEM_LABEL"/>
 						<s:set name="customerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@CUSTOMER_ITEM_LABEL"/>
 						<s:set name="manufacturerItemLabel" value="@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@MANUFACTURER_ITEM_LABEL"/>
@@ -276,7 +256,25 @@
 						<s:if test= '%{#_action.getExtnCustomerItemFlag()== "Y"}'>
 							<div class="cust-numbers"><s:property value="#customerItemLabel" />: <s:property value='custPartNumber' /></div>
 						</s:if>
-						
+						<div class="relative">
+							<s:if test="%{#wcUtil.isCoreItem(#itemElem)}">
+								<div class="core-item"></div>
+							</s:if>
+							<s:if test="#itemMainImages != null && #itemMainImages.size() > 0">
+								<s:set name='imageMainLocation'	value="#xutil.getAttribute(#itemMainImages[0], 'ContentLocation')" />
+								<s:set name='imageMainId' value="#xutil.getAttribute(#itemMainImages[0], 'ContentID')" />
+								<s:hidden name="hdn_imageMainId" value="%{#imageMainId}" />
+								<s:set name='imageMainLabel' value="#xutil.getAttribute(#itemMainImages[0], 'Label')" />
+								<s:set name='imageMainURL'	value="#imageMainLocation + #imageMainId " />
+								<s:if test='%{#imageMainURL=="/"}'>
+									<s:set name='imageMainURL' value='%{"/xpedx/images/INF_150x150.jpg"}' />
+								</s:if>
+								<img src="<s:url value='%{#imageMainURL}' includeParams='none'/>" class="prodImg addmargintop10" id="productImg1" alt="<s:text name='%{#imageMainLabel}'/>" />
+							</s:if>
+							<s:else>
+								<img src="<s:url value='%{#pImg}'/>"  class="prodImg addmargintop10" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
+							</s:else>
+						</div>
 						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
 							<div class="detail-msds-button">
 								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
