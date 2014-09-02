@@ -51,7 +51,6 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 	private Button btnUpdate;
 	private Text txtIdentity;
     private Text txtSharedSecret;
-    private Text txtStartPageURL;
     private Text txtXSLTFilename;
     private Button chkShowMyItems;
     private Button chkUNSPSCCodeReg;
@@ -133,11 +132,7 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
 		tbd.setName("txtSharedSecret");
 		txtSharedSecret.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		tbd = new YRCTextBindingData();
-		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnStartPageURL");
-		tbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnStartPageURL");
-		tbd.setName("txtStartPageURL");
-		txtStartPageURL.setData( YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
+
 		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnXSLTFileName");
@@ -473,16 +468,6 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         txtSharedSecret.setText("12345678B");
         txtSharedSecret.setTextLimit(30);
         
-//      Start Page URL
-        Label lblStartPageURL = new Label(pnlPunchOut, SWT.RIGHT);
-        lblStartPageURL.setText("Start_Page_URL");
-        lblStartPageURL.setLayoutData(gridData1);
-        lblStartPageURL.setData("name", "lblStartPageURL");
-        txtStartPageURL = new Text(pnlPunchOut, SWT.BORDER);
-        txtStartPageURL.setLayoutData(gridData2);
-        txtStartPageURL.setData("name", "txtStartPageURL");
-        txtStartPageURL.setText("12345678B");
-        txtStartPageURL.setTextLimit(100);
 
 //      Username
         Label lblUserNameParam = new Label(pnlPunchOut, SWT.RIGHT);
@@ -490,9 +475,9 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         lblUserNameParam.setLayoutData(gridData1);
         lblUserNameParam.setData("name", "lblUserNameParam");
         txtUserNameParam = new Text(pnlPunchOut, SWT.BORDER);
-        txtUserNameParam.setLayoutData(new GridData());
+        txtUserNameParam.setLayoutData(gridData2);
         txtUserNameParam.setData("name", "txtUserNameParam");
-        txtUserNameParam.setTextLimit(30);
+        txtUserNameParam.setTextLimit(255);
         
 //      Password
         Label lblUserpwdParam = new Label(pnlPunchOut, SWT.RIGHT);
@@ -500,9 +485,9 @@ public class CustomerProfileMaintIntegDataPanel extends Composite implements IYR
         lblUserpwdParam.setLayoutData(gridData1);
         lblUserpwdParam.setData("name", "lblUserpwdParam");
         txtUserpwdParam = new Text(pnlPunchOut, SWT.BORDER);
-        txtUserpwdParam.setLayoutData(new GridData());
+        txtUserpwdParam.setLayoutData(gridData2);
         txtUserpwdParam.setData("name", "txtUserpwdParam");
-        txtUserpwdParam.setTextLimit(30);
+        txtUserpwdParam.setTextLimit(255);
         
 
 	}
