@@ -146,7 +146,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private String customerID = null;
 	private String organizationCode = null;
 	private String sapParentAccountNo = null;
-
+	private String extnShipFromBranch = null;
 
 	public Document sendStockCheckResponse(YFSEnvironment env, Document inputXML) throws YFSUserExitException, RemoteException
 	{
@@ -290,7 +290,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			throws YFSException, RemoteException, DOMException, YIFClientCreationException,NullPointerException, YFSException, Exception {
 
 		String inventoryIndicator = null;
-
+		String sameDayWareHouse = getPrimaryWarehouseLocationName(env);
 		Map<Integer,Element> pAndAResponseMap= new HashMap<Integer,Element>();
 
 		if(pAndAResponseDocument != null && pAndAResponseDocument.getDocumentElement() != null){
@@ -461,13 +461,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						{
 
 
-							String sameDayWareHouse = "";
 							for(int m = 0; m < wareHouseLocationsList.getLength(); m++)
 							{
 								Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);
-								if(m == 0) {
-									sameDayWareHouse = SCXmlUtil.getXpathElement(wareHouseLocation,"./Warehouse").getTextContent();
-								}
 								Float availableQty = Float.parseFloat(SCXmlUtil.getXpathElement(wareHouseLocation,"./AvailableQty").getTextContent());
 								int numberOfDays = Integer.parseInt(SCXmlUtil.getXpathElement(wareHouseLocation,"./NumberOfDays").getTextContent());
 								if(numberOfDays > 2){
@@ -1421,6 +1417,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
 		shipToSuffix = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_SHIP_TO_SUFFIX);
 		shipFromBranch = customerExtnElement.getAttribute("ExtnCustomerDivision"); //This one used for Order multiple(XPXDivision) and P&A(CustomerBranch)
+		extnShipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch"); //This one used for getting Organization Name
 		legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
 		customerOrderBranch = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_CUSTOMER_ORDER_BRANCH);
 		customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
@@ -1555,7 +1552,31 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			}
 		}
 	}
-
+	
+	/**
+	 * Get the Primary Warehouse location name(i.e Same day warehouse location) using extn_ship_from_branch column from yfs_customer for corresponding ship to and environment id
+	 * primary warehouse location was same for all Items under that ship to.
+	 * @return
+	 * @throws RemoteException 
+	 * @throws YFSException 
+	 */
+    private String getPrimaryWarehouseLocationName(YFSEnvironment env) throws YFSException, RemoteException{
+    	
+    	Document organizationInputDoc = YFCDocument.createDocument("Organization").getDocument();    	
+    	organizationInputDoc.getDocumentElement().setAttribute("OrganizationKey", extnShipFromBranch + "_" + envtId);
+    	
+    	String  organizationListAPITemplate =  " <OrganizationList>"
+				+   "<Organization OrganizationKey='' OrganizationCode='' OrganizationName='' />"
+				+ "</OrganizationList>";
+    	
+		env.setApiTemplate("getOrganizationList", SCXmlUtil.createFromString(organizationListAPITemplate));
+		Document organizationListOutputDoc = api.invoke(env, "getOrganizationList", organizationInputDoc);
+		env.clearApiTemplate("getOrganizationList");
+		
+		String sameDayWareHouse = SCXmlUtil.getXpathAttribute(organizationListOutputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName");		
+		return !YFCUtils.isVoid(sameDayWareHouse) ? sameDayWareHouse : "";
+    }
+    
 	/**
 	 *
 	 * Item related info for P&A request.
