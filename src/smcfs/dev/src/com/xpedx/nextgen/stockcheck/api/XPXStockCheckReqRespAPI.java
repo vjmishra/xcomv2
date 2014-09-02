@@ -37,8 +37,8 @@ import com.yantra.yfs.japi.YFSUserExitException;
  *  2)  Data validation on request document. if any data errors exist then send the corresponding error response to the requester.
  *	 	 For example: data validation check on SenderCredentials(user id,password,eTradingPartnerID and Items size limit etc)
  *  3)  Get and validate the master customer and ship to Information  for stock check option enabled or not if not send the error response to the requester.
- *  4)  Get the xpedxPartNumbers and set as XPEDX Item numbers even if xpedxPartNumber value is not valid XPEDX Item number.
- *  5)  Look for CustomerPartNumber only if xpedxPartNumber not exist and get the XPEDX Item numbers for corresponding CustomerPartNumbers
+ *  4)  Get the PartNumbers and set as XPEDX Item numbers even if PartNumber value is not valid XPEDX Item number.
+ *  5)  Look for CustomerPartNumber only if PartNumber not exist and get the XPEDX Item numbers for corresponding CustomerPartNumbers
  *  6)  Validate All XPEDX Item numbers. Identify the Invalid Items(positions) set them as Invalid Items(positions)
  *  7)  Set the Quantities and UOMs.
  *		 If either Quantity or UOM empty  then
@@ -107,7 +107,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		maxItemErrorMap.put("12", "Requested UOM not in EWF003");
 		maxItemErrorMap.put("14", "Order Multiple Error");
 
-		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
+		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log.scws");
 		try
 		{
 			api = YIFClientFactory.getInstance().getApi();
@@ -337,7 +337,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		 */
 		Element senderCredentials = stockCheckResponseDocument.createElement("SenderCredentials");
 
-		Element userEmailElement = stockCheckResponseDocument.createElement("UserEmail");
+		Element userEmailElement = stockCheckResponseDocument.createElement("UserId");
 		userEmailElement.setTextContent(userEmail);
 		senderCredentials.appendChild(userEmailElement);
 
@@ -367,21 +367,20 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		Element items = stockCheckResponseDocument.createElement("Items");
 
-
-
-
 		for(int i = 0; i < stockCheckItemList.getLength(); i++)	{
 			Element requestedItemElement = (Element) stockCheckItemList.item(i);
 
 			Element item = stockCheckResponseDocument.createElement("Item");
 
 			Element indexID = stockCheckResponseDocument.createElement("IndexID");
-			indexID.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./IndexID").getTextContent());
+			Element indexString = SCXmlUtil.getXpathElement(requestedItemElement,"./IndexID");
+			if (indexString != null)
+				indexID.setTextContent(indexString.getTextContent());
 
 			Element customerPartNumber = stockCheckResponseDocument.createElement("CustomerPartNumber");
 			customerPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./CustomerPartNumber").getTextContent());
 
-			Element xpedxPartNumber = stockCheckResponseDocument.createElement("xpedxPartNumber");
+			Element xpedxPartNumber = stockCheckResponseDocument.createElement("PartNumber");
 			Element quantity = stockCheckResponseDocument.createElement("Quantity");
 			Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
 
@@ -412,8 +411,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			Element manufacturerPartNo = stockCheckResponseDocument.createElement("ManufacturerPartNumber");
 			Element itemStatus = stockCheckResponseDocument.createElement("ItemStatus");
 
-			Element unitPrice1 = stockCheckResponseDocument.createElement("UnitPrice1");
-			Element unitPrice2 = stockCheckResponseDocument.createElement("UnitPrice2");
+			Element unitPriceReqUOM  = stockCheckResponseDocument.createElement("UnitPricePerRequestedUOM"); // was UnitPrice1
+			Element unitPricePricing = stockCheckResponseDocument.createElement("UnitPricePerPricingUOM");   // was UnitPrice2
 
 			Element uomNodeList = stockCheckResponseDocument.createElement("UOMList");
 			Element catalogAttributeList = stockCheckResponseDocument.createElement("CatalogAttributeList");
@@ -421,7 +420,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 
 			if(inValidItemPositions.contains(i)) {
-				xpedxPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./xpedxPartNumber").getTextContent());
+				xpedxPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./PartNumber").getTextContent());
 				quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
 				unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
 				itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
@@ -512,14 +511,14 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 					// Logic for Total Price
 					totalPrice.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./ExtendedPrice").getTextContent());
-					unitPrice1.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent() + "/" +requestedUOMDescription);
+					unitPriceReqUOM.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent() + "/" +requestedUOMDescription);
 					if(!SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerRequestedUOM").getTextContent().
 							equals(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent()))
 					{
 						String pricingUom = SCXmlUtil.getXpathElement(itemElementFromPandA,"./PricingUOM").getTextContent();
 						String convertedPricingUom = legacyToUOMMap.get(pricingUom);
 						String pricingUomDescription = getUomDesc(pricingUom, convertedPricingUom);
-						unitPrice2.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent() + "/" +pricingUomDescription);
+						unitPricePricing.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./UnitPricePerPricingUOM").getTextContent() + "/" +pricingUomDescription);
 					}
 				}	else{
 					if(inValidUOMPositionsForValidItems.contains(i)){
@@ -609,8 +608,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			item.appendChild(manufacturer);
 			item.appendChild(manufacturerPartNo);
 			item.appendChild(itemStatus);
-			item.appendChild(unitPrice1);
-			item.appendChild(unitPrice2);
+			item.appendChild(unitPriceReqUOM);
+			item.appendChild(unitPricePricing);
 			item.appendChild(uomNodeList);
 			item.appendChild(catalogAttributeList);
 
@@ -863,8 +862,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 * @return
 	 */
 	private boolean validateRequestXML(Element stockCheckInputDocRoot){
-		Element userEmeialElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserEmail");
-		if(userEmeialElement==null || YFCUtils.isVoid(userEmeialElement.getTextContent())){
+		Element userEmailElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserId");
+		if(userEmailElement==null || YFCUtils.isVoid(userEmailElement.getTextContent())){
 			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
 			return false;
 		}
@@ -904,7 +903,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 */
 	private boolean validateRequestXMLData(YFSEnvironment env, Element stockCheckInputDocRoot) throws RemoteException{
 
-		userEmail = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserEmail").getTextContent();
+		userEmail = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserId").getTextContent();
 		password = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserPassword").getTextContent();
 		eTradingId = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./eTradingPartnerID").getTextContent();
 		Document loginInputDocument = YFCDocument.createDocument("Login").getDocument();
@@ -1044,7 +1043,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		Element senderCredentials = stockCheckErrorDoc.createElement("SenderCredentials");
 
-		Element userEmailElement = stockCheckErrorDoc.createElement("UserEmail");
+		Element userEmailElement = stockCheckErrorDoc.createElement("UserId");
 		if(!YFCUtils.isVoid(userEmail)){
 			userEmailElement.setTextContent(userEmail);
 		}
@@ -1072,8 +1071,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 	/**
 	 * get and validate XPEDX Item numbers
-	 * if xpedxPartNumber is exist it will consider as XPEDX item number even if xpedxPartNumber is value is not valid XPEDX Item number
-	 * CustomerPartNumber considering only xpedxPartNumber empty. get the XPEDX item numbers based xpedxPartNumber numbers.
+	 * if PartNumber is exist it will consider as XPEDX item number even if PartNumber is value is not valid XPEDX Item number
+	 * CustomerPartNumber considering only PartNumber empty. get the XPEDX item numbers based PartNumber numbers.
 	 * Set valid items in map
 	 * Set positions for invalid XPEDX Item numbers
 	 * @param env
@@ -1089,7 +1088,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		for(int i = 0; i < stockCheckItemList.getLength(); i++)
 		{
 			Element itemElement = (Element) stockCheckItemList.item(i);
-			Element xpedxItemElement = SCXmlUtil.getXpathElement(itemElement,"./xpedxPartNumber");
+			Element xpedxItemElement = SCXmlUtil.getXpathElement(itemElement,"./PartNumber");
 			if(xpedxItemElement!=null && !YFCUtils.isVoid(xpedxItemElement.getTextContent())){ // XPEDX number
 				requestedXpedxItemsMap.put(i,xpedxItemElement.getTextContent().trim());
 			}else{ // no XPEDX number
