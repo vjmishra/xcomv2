@@ -130,7 +130,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 	private Set<Integer> inValidItemPositions	= new HashSet<Integer>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // invalid positions
 	private Set<Integer> inValidUOMPositionsForValidItems	= new HashSet<Integer>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // invalid UOM positions for valid Items
-
+	
 	private Map<String,String> uomToLegacyMap	= new HashMap<String,String>(); // UOM to Legacy Map
 	private Map<String,String> legacyToUOMMap	= new HashMap<String,String>(); // Legacy to UOM Map
 
@@ -1565,9 +1565,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
     	Document organizationInputDoc = YFCDocument.createDocument("Organization").getDocument();    	
     	organizationInputDoc.getDocumentElement().setAttribute("OrganizationKey", extnShipFromBranch + "_" + envtId);
     	
-    	String  organizationListAPITemplate =  " <OrganizationList>"
-				+   "<Organization OrganizationKey='' OrganizationCode='' OrganizationName='' />"
-				+ "</OrganizationList>";
+    	String  organizationListAPITemplate = "<OrganizationList>"
+											+  	 	"<Organization OrganizationKey = '' OrganizationCode = '' OrganizationName = '' />"
+											+ "</OrganizationList>";
     	
 		env.setApiTemplate("getOrganizationList", SCXmlUtil.createFromString(organizationListAPITemplate));
 		Document organizationListOutputDoc = api.invoke(env, "getOrganizationList", organizationInputDoc);
