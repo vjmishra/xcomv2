@@ -58,7 +58,6 @@ import com.yantra.yfs.japi.YFSUserExitException;
  */
 public class XPXStockCheckReqRespAPI implements YIFCustomApi
 {
-	private static final String getCustomerListTemplate = "global/template/api/getCustomerList.XPXB2BDraftOrderCreationService.xml"; //TODO doesn't exist? Need?
 	private static final String getCategoryListTemplate = "global/template/api/getCategoryList.XPXStockCheck.xml";
 	private static final String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
 	private static final String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
@@ -968,7 +967,14 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		customerExtnElement.setAttribute("ExtnETradingID", eTradingId);
 		customerExtnElement.setAttribute("ExtnSuffixType", "S");
 		getCustomerListInputDoc.getDocumentElement().appendChild(customerExtnElement);
-		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListTemplate);
+		
+		String customerListTemplate =   "<Customer CustomerID = '' OrganizationCode = ''> "
+									   +	"<Extn ExtnEnvironmentCode = '' ExtnCompanyCode = '' ExtnShipToSuffix = '' "
+									   +          "ExtnCustomerDivision = '' ExtnShipFromBranch = '' ExtnLegacyCustNumber = '' "
+									   +		  "ExtnCustOrderBranch = '' ExtnOrigEnvironmentCode = '' ExtnSAPParentAccNo = ''/> "
+									   + "</Customer>";
+		
+		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,SCXmlUtil.createFromString(customerListTemplate));
 		getShipToCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
 		if(log.isDebugEnabled()) {
