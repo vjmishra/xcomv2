@@ -56,33 +56,43 @@ import com.yantra.yfs.japi.YFSUserExitException;
  *	 	   Otherwise read the Price And Availability response and prepare the stock check response in the same requested items order and send the response to the requester
  * 11) Most of the API calls are implemented using Complex queries wherever needed.
  */
-public class XPXStockCheckReqRespAPI implements YIFCustomApi
-{
-	private static final String getCategoryListTemplate = "global/template/api/getCategoryList.XPXStockCheck.xml";
-	private static final String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
-	private static final String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
+public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 
 	private static final String ERROR_LEVEL_COMPLETE_SUCCESS = "0";
 	private static final String ERROR_LEVEL_PARTIAL_FAILURE = "1";
 	private static final String ERROR_LEVEL_COMPLETE_FAILURE = "2";
-	private static final String errorMessage_500 = "500 - Real-time inventory is currently not available.  Please try again later.";
-	private static final String errorMessage_503 = "503 - An application error has occurred. If this error persists, please call the eBusiness " +
-			"Customer Support desk at 1-877-269-1784.";
-	private static final String errorMessage_100 = "100 - Sorry, we could not verify the User ID / Password that was sent.";
-	private static final String errorMessage_101 = "101 - Sorry, the user credentials supplied is not authorized to access the Stock Check Web Service.";
-	private static final String errorMessage_102 = "102 - Sorry, the customer is not authorized to access the Stock Check Web Service.";
-	private static final String errorMessage_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
-	private static final String errorMessage_104 = "104 - Please restrict your Stock Check request to 200 items or less.";
-	private static final String errorMessage_105 = "105 - The stock check request is not in the correct format.  " +
+	private static final String ERROR_MESSAGE_100 = "100 - Sorry, we could not verify the User ID / Password that was sent.";
+	private static final String ERROR_MESSAGE_101 = "101 - Sorry, the user credentials supplied is not authorized to access the Stock Check Web Service.";
+	private static final String ERROR_MESSAGE_102 = "102 - Sorry, the customer is not authorized to access the Stock Check Web Service.";
+	private static final String ERROR_MESSAGE_103 = "103 - Sorry, the user is not authorized on the specified customer location (Invalid eTrading ID/Customer Location).";
+	private static final String ERROR_MESSAGE_104 = "104 - Please restrict your Stock Check request to 200 items or less.";
+	private static final String ERROR_MESSAGE_105 = "105 - The stock check request is not in the correct format.  " +
 			"Please contact your CSR or eBusiness Customer Support at 1- 877-269-1784.";
+	private static final String ERROR_MESSAGE_500 = "500 - Real-time inventory is currently not available.  Please try again later.";
+	private static final String ERROR_MESSAGE_503 = "503 - An application error has occurred. If this error persists, please call the eBusiness " +
+			"Customer Support desk at 1-877-269-1784.";
+	private static final String ERROR_MESSAGE_1001 = "1001"; // specific message is appended
+	private static final String ERROR_MESSAGE_1011 = "1011 - One or more Items have not completely succeeded. " +
+			"Please check the item level error for more details.";
+	private static final String ERROR_MESSAGE_1000 = "1000 - This item is currently not stocked in your primary warehouse. " +
+			"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
+			"Customer Support at 1- 877-269-1784.";
+	private static final String ERROR_MESSAGE_1004 = "1004 - Invalid UOM value. Please enter valid UOM.";
+	private static final String ERROR_MESSAGE_1003 = "1003 - The item is not stocked in the Ordering Warehouse. Please enter another Part Number.";
+
+	private static final String getCategoryListTemplate = "global/template/api/getCategoryList.XPXStockCheck.xml";
+	private static final String getItemListTemplate = "global/template/api/getItemList.XPXB2BStockCheckService.xml";
+	private static final String getItemUomMasterListTemplate = "global/template/api/getItemUomMasterList.XPXMasterUomLoad.xml";
+	private static final int STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT = 200;
 	private static final String B2BSourceIndicator = "1";
 
 	private static YFCLogCategory log;
 	private static YIFApi api = null;
 	private static Map<String,String> uomDescMap;
-	private static final int STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT = 200;
 	private static final Map<String,String> maxHeaderErrorMap;
 	private static final Map<String,String> maxItemErrorMap;
+	private static final Map<String,String> maxItemWarnMap;
+
 	static {
 		// MAX header error codes with messages
 		maxHeaderErrorMap = new HashMap<String, String>();
@@ -105,6 +115,10 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		maxItemErrorMap.put("11", "Requested UOM missing");
 		maxItemErrorMap.put("12", "Requested UOM not in EWF003");
 		maxItemErrorMap.put("14", "Order Multiple Error");
+
+		// MAX item warning codes with messages
+		maxItemWarnMap = new HashMap<String, String>(20);
+		maxItemWarnMap.put("15", "Item Suspended no backorders accepted");
 
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log.scws");
 		try
@@ -222,7 +236,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 				catch (Exception e) {
 					log.error("Unable to contact MAX P&A: " + e.getMessage()); // CENT log?
 					System.out.println("Unable to contact MAX P&A: " + e.getMessage());
-					return createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMessage_500);
+					return createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, ERROR_MESSAGE_500);
 				}
 
 				if (pAndAResponseDocument != null) {
@@ -235,17 +249,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						stockCheckOutputDocument = createStockCheckOutput(env, stockCheckInputDocRoot, pAndAResponseDocument);
 					}
 					else {
-						String errorMsg = "Problem getting Pricing and Availability - HeaderStatusCode: " + headerStatusCode;
-						String message = maxHeaderErrorMap.get(headerStatusCode);
-						if (message != null) {
-							errorMsg =  headerStatusCode + "-" + message;
-						}
-						stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,
-								errorMessage_503 + " MAX: " + errorMsg);
+						String errorMsg = convertMaxHeaderErrorNum(headerStatusCode);
+						stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMsg);
 					}
 				}
 				else {
-					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMessage_503);
+					stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, ERROR_MESSAGE_503);
 				}
 			} else {
 				stockCheckOutputDocument = createStockCheckOutput(env, stockCheckInputDocRoot, null);
@@ -253,7 +262,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 		catch(Exception ex) {
 			log.error(ex);
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, errorMessage_503);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, ERROR_MESSAGE_503);
 		}
 		if(log.isDebugEnabled()) {
 			log.debug("Final stock check doc: " + SCXmlUtil.getString(stockCheckOutputDocument));
@@ -313,7 +322,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			} // end Items
 		}
 
-		Document stockCheckResponseDocument = YFCDocument.createDocument("xpedxStockCheckWSResponse").getDocument();
+		Document stockCheckResponseDocument = YFCDocument.createDocument("StockCheckWSResponse").getDocument();
 		Element stockCheckResponseDocRoot = stockCheckResponseDocument.getDocumentElement();
 
 		/**
@@ -416,14 +425,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 			Element uomNodeList = stockCheckResponseDocument.createElement("UOMList");
 			Element catalogAttributeList = stockCheckResponseDocument.createElement("CatalogAttributeList");
 
-
-
 			if(inValidItemPositions.contains(i)) {
 				xpedxPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./PartNumber").getTextContent());
 				quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
 				unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
 				itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-				itemLevelErrorMessage.setTextContent("1003 - The item is not stocked in the Ordering Warehouse. Please enter another Part Number.");
+				itemLevelErrorMessage.setTextContent(ERROR_MESSAGE_1003);
 
 			}else{
 				String legacyProductCode = validItemRequestInfoMap.get(i).getItemId();
@@ -435,16 +442,23 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 					String requestedUOM = (SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent());
 					String requestedUOMDescription = uomDescMap.get(requestedUOM);
 					unitOfMeasure.setTextContent(legacyToUOMMap.get(requestedUOM).replace(envtId+"_",""));
-					String maxErrorCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineStatusCode").getTextContent();
+					String maxLineStatusCode = SCXmlUtil.getXpathElement(itemElementFromPandA,"./LineStatusCode").getTextContent();
 					String respErrorCode = ERROR_LEVEL_COMPLETE_SUCCESS;
 					String respErrorMessage = "";
 
-					if (Integer.parseInt(maxErrorCode) != 0) {
+					// If MAX returns error/warn, look up message
+					if (Integer.parseInt(maxLineStatusCode) != 0) {
 						if(log.isDebugEnabled()) {
-							log.debug("SCWS: MAX returned error on P&A for item " + legacyProductCode  + " - " + maxErrorCode);
+							log.debug("SCWS: MAX returned error on P&A for item " + legacyProductCode  + " - " + maxLineStatusCode);
 						}
-						respErrorCode = ERROR_LEVEL_COMPLETE_FAILURE;
-						respErrorMessage = convertMaxErrorCode(maxErrorCode);
+						if (maxItemWarnMap.containsKey(maxLineStatusCode)) {
+							respErrorCode = ERROR_LEVEL_PARTIAL_FAILURE;
+							respErrorMessage = convertMaxWarnNum(maxLineStatusCode);
+						}
+						else {
+							respErrorCode = ERROR_LEVEL_COMPLETE_FAILURE;
+							respErrorMessage = convertMaxItemErrorNum(maxLineStatusCode);
+						}
 					}
 					itemLevelErrorCode.setTextContent(respErrorCode);
 					itemLevelErrorMessage.setTextContent(respErrorMessage);
@@ -459,7 +473,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						if(wareHouseLocationsList != null && wareHouseLocationsList.getLength() > 0)
 						{
 
-
 							for(int m = 0; m < wareHouseLocationsList.getLength(); m++)
 							{
 								Element wareHouseLocation = (Element) wareHouseLocationsList.item(m);
@@ -470,15 +483,15 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 								}
 								qtyInDays[numberOfDays] = qtyInDays[numberOfDays] + availableQty;
 							}
-									sameDayDesc.setTextContent(sameDayWareHouse);
-									sameDayQuantity.setTextContent(String.valueOf(qtyInDays[0]));
+							sameDayDesc.setTextContent(sameDayWareHouse);
+							sameDayQuantity.setTextContent(String.valueOf(qtyInDays[0]));
 
-									nextDayDesc.setTextContent("Next Day");
-									nextDayQuantity.setTextContent(String.valueOf(qtyInDays[1] + qtyInDays[0])); // next day includes same day
+							nextDayDesc.setTextContent("Next Day");
+							nextDayQuantity.setTextContent(String.valueOf(qtyInDays[1] + qtyInDays[0])); // next day includes same day
 
-									twoDayDesc.setTextContent("2+ Days");
-									twoDayQuantity.setTextContent(String.valueOf(qtyInDays[2]));
-							}
+							twoDayDesc.setTextContent("2+ Days");
+							twoDayQuantity.setTextContent(String.valueOf(qtyInDays[2]));
+						}
 
 						//Logic for availability message
 						Float reqQuantity = Float.parseFloat(quantity.getTextContent());;
@@ -520,7 +533,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
 						unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
 						itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-						itemLevelErrorMessage.setTextContent("1004 - Invalid UOM value. Please enter valid UOM.");
+						itemLevelErrorMessage.setTextContent(ERROR_MESSAGE_1004);
 					}
 				}
 
@@ -565,9 +578,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 						if(inventoryIndicator.equalsIgnoreCase("M"))
 						{
 							itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-							itemLevelErrorMessage.setTextContent("1000 - This item is currently not stocked in your primary warehouse. " +
-									"However, we can source this product from the manufacturer. Please contact your CSR or eBusiness " +
-									"Customer Support at 1- 877-269-1784.");
+							itemLevelErrorMessage.setTextContent(ERROR_MESSAGE_1000);
 						}
 					}
 					itemStatus.setTextContent(inventoryIndicator);
@@ -627,7 +638,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 			if (errorCodeValue != null && errorCodeValue.trim().length() > 0)
 			{
-				if (errorCodeValue.equalsIgnoreCase(ERROR_LEVEL_COMPLETE_FAILURE))
+				if (errorCodeValue.equalsIgnoreCase(ERROR_LEVEL_COMPLETE_FAILURE) ||
+					errorCodeValue.equalsIgnoreCase(ERROR_LEVEL_PARTIAL_FAILURE))
 				{
 					errorCount ++;
 				}
@@ -644,14 +656,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		if (errorCount == numItemsInResponse)
 		{
 			errorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
-			errorMessage.setTextContent("1011 - One or more Items have not completely succeeded. " +
-					"Please check the item level error for more details.");
+			errorMessage.setTextContent(ERROR_MESSAGE_1011);
 		}
 		else if (errorCount > 0 && errorCount != numItemsInResponse)
 		{
 			errorCode.setTextContent(ERROR_LEVEL_PARTIAL_FAILURE);
-			errorMessage.setTextContent("1011 - One or more Items have not completely succeeded. " +
-					"Please check the item level error for more details.");
+			errorMessage.setTextContent(ERROR_MESSAGE_1011);
 		}
 		else if (successCount == numItemsInResponse)
 		{
@@ -661,14 +671,32 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		return stockCheckResponseDocument;
 	}
 
-	private String convertMaxErrorCode(String maxErrorCode) {
+	private String convertMaxHeaderErrorNum(String maxStatusCode) {
 
-		String message = maxItemErrorMap.get(maxErrorCode);
-
-		if (message != null) {
-			return maxErrorCode + "-" + message;
+		String message = maxHeaderErrorMap.get(maxStatusCode);
+		if (message == null) {
+			message = "Problem getting Pricing and Availability";
 		}
-		return "Problem getting Pricing and Availability - MAX Error Code: " + maxErrorCode;
+
+		return ERROR_MESSAGE_503 + " (" + maxStatusCode + "-" + message + ")";
+	}
+
+	private String convertMaxItemErrorNum(String maxStatusCode) {
+
+		String message = maxItemErrorMap.get(maxStatusCode);
+		if (message == null) {
+			message = "Problem getting Pricing and Availability";
+		}
+
+		return ERROR_MESSAGE_1001 + " - " + message + " (status code " + maxStatusCode + ")";
+	}
+
+	// Only call if the code is in this map
+	private String convertMaxWarnNum(String maxStatusCode) {
+
+		String message = maxItemWarnMap.get(maxStatusCode);
+
+		return ERROR_MESSAGE_1001 + " - " + message + " (status code " + maxStatusCode + ")";
 	}
 
 	/**
@@ -859,31 +887,31 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	private boolean validateRequestXML(Element stockCheckInputDocRoot){
 		Element userEmailElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserId");
 		if(userEmailElement==null || YFCUtils.isVoid(userEmailElement.getTextContent())){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_105);
 			return false;
 		}
 		Element pwdElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./SenderCredentials/UserPassword");
 		if(pwdElement==null || YFCUtils.isVoid(pwdElement.getTextContent())){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_105);
 			return false;
 		}
 		Element eTradingPartnerIDElement = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./eTradingPartnerID");
 		if(eTradingPartnerIDElement==null || YFCUtils.isVoid(eTradingPartnerIDElement.getTextContent())){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_105);
 			return false;
 		}
 		Element stockCheckItems = SCXmlUtil.getXpathElement(stockCheckInputDocRoot,"./Items");
 		if(stockCheckItems==null){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_105);
 			return false;
 		}
 		stockCheckItemList = stockCheckItems.getElementsByTagName("Item");
 		if(stockCheckItemList == null || stockCheckItemList.getLength()==0){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_105);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_105);
 			return false;
 		}
 		if(stockCheckItemList.getLength() > STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT){
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_104);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_104);
 			return false;
 		}
 		return true;
@@ -918,7 +946,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		}
 		catch (YFSException e)
 		{
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_100);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_100);
 			return false;
 		}
 		masterCustomerDetailsOutputDoc = getMasterCustomerDetailsOutput(env);
@@ -928,7 +956,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 
 		if(!"Y".equalsIgnoreCase(customerContactExtn.getAttribute("ExtnStockCheckWS")))
 		{
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_101);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_101);
 			return false;
 
 		}
@@ -936,14 +964,14 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		Element masterCustomerExtnElement = (Element) masterCustomerDetailsElement.getElementsByTagName(XPXLiterals.E_EXTN).item(0);
 
 		if(!"Y".equalsIgnoreCase(masterCustomerExtnElement.getAttribute("ExtnStockCheckOption")))		{
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_102);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_102);
 			return false;
 		}
 		shipToCustomerListOutputDoc = getShipToCustomerListDocument(env,rootCustomerKeyForShipTos);
 
 		if(shipToCustomerListOutputDoc.getDocumentElement().getElementsByTagName(XPXLiterals.E_CUSTOMER).getLength() == 0)
 		{
-			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,errorMessage_103);
+			stockCheckOutputDocument = createErrorDocumentForCompleteFailure(stockCheckInputDocRoot,ERROR_MESSAGE_103);
 			return false;
 		}
 
@@ -1030,7 +1058,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 	 */
 	private Document createErrorDocumentForCompleteFailure(Element stockCheckInputDocRoot, String errorMessage)
 	{
-		Document stockCheckErrorDoc = YFCDocument.createDocument("xpedxStockCheckWSResponse").getDocument();
+		Document stockCheckErrorDoc = YFCDocument.createDocument("StockCheckWSResponse").getDocument();
 
 		Element rootErrorInfo = stockCheckErrorDoc.createElement("RootErrorInfo");
 
