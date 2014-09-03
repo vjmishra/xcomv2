@@ -1318,7 +1318,7 @@ $(document).ready(function() {
 		},
 		'autoDimensions'	: false,
 		'width' 			: 380,
-		'height' 			: 262  
+		'height' 			: 290  
 	});
 });
 function addItemToWishList(itemid) {

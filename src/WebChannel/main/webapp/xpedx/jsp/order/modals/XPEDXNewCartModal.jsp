@@ -10,12 +10,9 @@
      <s:hidden id="actionName" name="#action.name" value="draftOrderCreate"/>
 
 <div class="xpedx-light-box" id="new-cart">
-     <!--  <h2>New Cart</h2> --> 
-      <h2><s:text name="MSG.SWC.CART.NEWCART.GENERIC.DLGTITLE" /></h2> 
-<!-- <div id="cr-cart-err-msg1" style="display: none;"><h5 align="left"><b><font color="red">Error: Please enter a Cart Description.</font></b></h5></div> for Jira2919 -->
-      <p>Name</p>
+      <h1><s:text name="MSG.SWC.CART.NEWCART.GENERIC.DLGTITLE" /></h1>
+      <p class="addmargintop0">Name</p>
       <div class="clear"></div>
-      
       <input value="" name="OrderName" id="newcartname" class="x-input text copy-cart-field-length" maxlength="35"/> 
       <p>Description</p>
       <div class="clear"></div>
@@ -24,8 +21,8 @@
       </br> <div class="clear"></div>
       
     	<ul id="tool-bar" class="tool-bar-bottom-right">
-    	<li><a class="grey-ui-btn button-margin"  href="#" onclick="$('#fancybox-close').click();return false;"><span>Cancel</span></a></li>
-      	<li><a class="green-ui-btn" href="javascript:saveNewCart();"><span>Save</span></a></li>
+    	<li><a class="btn-neutral"  href="#" onclick="$('#fancybox-close').click();return false;"><span>Cancel</span></a></li>
+      	<li><a class="btn-gradient" href="javascript:saveNewCart();"><span>Save</span></a></li>
       </ul>
  	</div> 
 	  <!--3098  -->

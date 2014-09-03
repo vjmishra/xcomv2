@@ -623,19 +623,19 @@
 		<div>
 			<div class="loading-icon" style="display:none;"></div>
  		</div>	
-		<div  class="xpedx-light-box" id="" style="width:400px; height:150px;">	    			
-			<h2> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h2>				    			
+		<div  class="xpedx-light-box approval-reject-adjustment" id="">	    			
+			<h1> <s:text name='MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT' /> </h1>				    			
 				<%--Start 3999 Changes Start --%><s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">
-					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="4" theme="simple" cssStyle="overflow:hidden;" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
+					<s:textarea id="ReasonText1" name="ReasonText1" cssClass="textarea-adjustment" cols="69" rows="4" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
 					<s:hidden name="#action.namespace" value="/order"/>
 					<s:hidden id="actionName" name="#action.name" value="approval"/>
 					<ul id="tool-bar" class="tool-bar-bottom" style="float:right">
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel'); return false;"><span>Cancel</span></a></li>
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
-						<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel'); return false;"><span>Cancel</span></a></li>
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
+						<li><a style="float:right;" class="btn-gradient" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>
 						
 					</ul>
 				</s:form>

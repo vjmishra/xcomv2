@@ -3276,12 +3276,12 @@ function showSharedListForm(){
 
 					<div id="replacement_<s:property value='key'/>"
 						class="xpedx-light-box">
-						<h2>
+						<h1>
 							Replacement Item(s) for
 							<s:property value="wCContext.storefrontId" />
 							Item #:
 							<s:property value='key' />
-						</h2>
+						</h1>
 						
 						<!-- Light Box -->
 						<s:div cssStyle="height: %{#altItemList.size() > 1 ? '202px' : '250px'}; width: 580px; overflow: auto; border: 1px solid #CCC; border-radius: 6px;">

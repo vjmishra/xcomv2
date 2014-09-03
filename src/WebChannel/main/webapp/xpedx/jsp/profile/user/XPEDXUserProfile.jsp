@@ -1571,7 +1571,7 @@ a.underlink:hover {
 
 																<a
 																	href="javascript:getNewContactInfo1('<s:url value="/profile/user/MyNewUserCreate.action"/>');"
-																	class="grey-ui-btn"> <span><s:text
+																	class="btn-neutral"> <span><s:text
 																			name='Add_User' /></span>
 																</a>
 															</ul>
@@ -2378,7 +2378,7 @@ a.underlink:hover {
 																<ul class="float-left">
 																	<s:url id="ResetPasswordURL" action="resetPassword" />
 																	<li><a href="javascript:resetPassword();"
-																		class="grey-ui-btn"><span><s:text
+																		class="btn-neutral"><span><s:text
 																					name="reset.Password" /></span></a></li>
 																</ul>
 															</td>

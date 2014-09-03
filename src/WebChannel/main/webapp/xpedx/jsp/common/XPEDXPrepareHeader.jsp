@@ -425,7 +425,9 @@ var selectedShipCustomer = null;
 			case 'delete':		
 				$.fancybox(
 					Ext.get("delete_my_item_list").dom.innerHTML,{
-					'autoDimensions'	: true
+						'autoDimensions'	: false,
+						'width' 			: 320,
+						'height' 			: 120  
 				});
 				var form = Ext.get("doAction_delete_item_list");
 				form.dom.listKey.value=listKey;

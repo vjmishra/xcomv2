@@ -1834,12 +1834,12 @@ function showSplitDiv(divId)
              <div class="loading-icon" style="display:none;"></div>
          </div>	
 			
-		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
-			<h2>Approval / Rejection Comments</h2>
+		<div  class="xpedx-light-box approval-reject-web-adjustment" id="">
+			<h1>Approval / Rejection Comments</h1>
 <!-- 			<p>Enter comments or instructions for the order owner:</p> -->
 			<s:form id="approval" name="approval" action="approvalAction" namespace="/order" validate="true" method="post">
 <%-- 				<span><s:text name="Approval/Rejection.Notes"/></span> --%>
-				<%--Start 3999 Changes Start --%><s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
+				<%--Start 3999 Changes Start --%><s:textarea id="ReasonText1" name="ReasonText1" cssClass="textarea-web-adjustment" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea><%--Start 3999 Changes End --%>
 				<s:hidden name="ReasonText" id="ReasonText" value="" />				
 				<s:hidden name="OrderHeaderKey" value="" />
 				<s:hidden name="ApprovalAction" value=""/>
@@ -1849,10 +1849,10 @@ function showSplitDiv(divId)
 				<s:hidden id="orderListReturnUrl" name="orderListReturnUrl" value="%{orderListReturnUrl}" />
 				
 				<s:hidden id="returnWebConfUrl" name="returnWebConfUrl" value="true" />
-				<ul id="tool-bar" class="tool-bar-bottom">
-					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
-					<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject','<s:property value="%{dorderHeaderKey}" />');"><span>Reject</span></a></li>
-					<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept','<s:property value="%{dorderHeaderKey}" />');"><span>Approve</span></a></li>									
+				<ul id="tool-bar" class="tool-bar-bottom float-right">
+					<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
+					<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:openNotePanelSetAction('Reject','<s:property value="%{dorderHeaderKey}" />');"><span>Reject</span></a></li>
+					<li><a style="float:right;" class="btn-gradient" href="#" onclick="javascript:openNotePanelSetAction('Accept','<s:property value="%{dorderHeaderKey}" />');"><span>Approve</span></a></li>									
 				</ul>
 			</s:form>
 		</div>

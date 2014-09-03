@@ -20,14 +20,14 @@
 
 	<div class="xpedx-light-box" id="dlgImportForm">
 		
-		<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
+		<h1><s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /></h1>
 		<div  id="importItems">
 			<s:form name="formImport" id="formImport" action="MyItemsDetailsImportPrepare" method="post" enctype="multipart/form-data">
 			  
 				<div id="errorMsgForRequiredField" class="error" style="display: none;"></div> 
 				
 				<div>
-		            <p>
+		            <p class="addmargintop0">
 		            	Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file.
 		            </p>
 		            
@@ -38,7 +38,7 @@
 					<input class="btn-neutral floatleft addmargintop10" type="submit" value="Download Sample" onclick="window.location.href='../sample/SampleImport.csv'; return false;" />
 		            
 		            <p>
-		            	Please note that an individual My Items List cannot exceed 200 items.
+		            	&nbsp; Please note that an individual My Items List cannot exceed 200 items.
 		            </p>
 		            
 		            <p>

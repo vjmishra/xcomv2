@@ -53,8 +53,8 @@
 					shareSelectAll(false);
 				},
 				'autoDimensions'	: false,
-				'width' 			: 820,
-				'height' 			: 250  
+				'width' 			: 748,
+				'height' 			: 272 
 			});
 			
 			$("#dlgImportItemsLink").fancybox({

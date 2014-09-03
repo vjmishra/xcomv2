@@ -169,8 +169,8 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 							$(document).ready(function(){
 		                		$("#confirmDeleteArticle").fancybox({
 		                			'autoDimensions'	: false,
-		                			'width' 			: 300,
-		                			'height' 			: 180  
+		                			'width' 			: 260,
+		                			'height' 			: 110  
 		                		}).trigger('click');
 		                	    
 		                	});							
@@ -207,8 +207,8 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 						$(document).ready(function(){
 				    		$("#confirmDeleteArticle").fancybox({
 				    			'autoDimensions'	: false,
-				    			'width' 			: 300,
-				    			'height' 			: 180  
+				    			'width' 			: 260,
+				    			'height' 			: 110  
 				    		}).trigger('click');
 				    	    
 				    	});
@@ -377,22 +377,17 @@ href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery
 		
 		<!-- added for jira 2484 confirmation box -->  
 		<div style="display: none;">
-	<div id="deleteArticleDiv">
-		<!-- <h2>Delete Article</h2> -->
-		<h2> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.PGTITLE' /> </h2>
-		
-		<br /><hr /><br></br>
-		
-		<!-- <p>Are you sure you would like to delete this article?</p><br></br> <br></br> -->
-		<p> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.DELETECONFIRM' /> </p><br></br> <br></br>
-			<ul id="tool-bar" class="tool-bar-bottom">
+	<div id="deleteArticleDiv" class="xpedx-light-box">
+		<h1> <s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.PGTITLE' /> </h1>
+		<p class="addmargintop0"><s:text name='MSG.SWC.NEWSARTL.DELETE.GENERIC.DELETECONFIRM' /></p>
+			<ul id="tool-bar" class="tool-bar-bottom float-right">
 			<li>
-				<a class="grey-ui-btn" href="javascript:$.fancybox.close();">
+				<a class="btn-neutral" href="javascript:$.fancybox.close();">
 					<span>No</span>
 				</a>
 			</li>
 			<li class="float-right">
-				<a class="green-ui-btn" href="javascript:fancyBoxCloseAndDelArticle();">
+				<a class="btn-gradient" href="javascript:fancyBoxCloseAndDelArticle();">
 					<span>Yes</span>
 				</a>
 			</li>

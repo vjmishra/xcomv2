@@ -102,6 +102,10 @@
 	margin-top: -10px;
 }
 
+.addmargintop-20 {
+	margin-top: -20px;
+}
+
 .indent20px {
 	padding-left: 20px;
 }
@@ -131,6 +135,9 @@
 }
 .addmarginright5 {
 	margin-right: 5px;
+}
+.addmarginright-3 {
+	margin-right: -3px;
 }
 .addmarginbottom10 {
 	margin-bottom: 10px;
@@ -1576,3 +1583,34 @@ h3 {
 	margin-top: -6px;
 	}
 /*---*/
+
+.replacement-adjustment {
+	height: 240px;
+	width: 590px;
+}
+
+.approval-reject-adjustment {
+	height: 160px;
+    width: 424px;
+}
+
+.textarea-adjustment {
+	width: 418px;
+	overflow: hidden;
+}
+
+.approval-reject-web-adjustment {
+	width: 570px;
+	height: 175px;
+}
+
+.textarea-web-adjustment {
+	width: 565px;
+	overflow: hidden;
+}
+
+.dialogue-box-adjustment {
+	width: 260px;
+	height: 90px;
+	overflow: auto;
+}

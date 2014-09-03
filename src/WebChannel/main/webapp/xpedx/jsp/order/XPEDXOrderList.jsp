@@ -863,21 +863,21 @@ function printPOs(customerPos) {
 		<div >
              <div class="loading-icon" style="display:none;"></div>
          </div>		
-		<div  class="xpedx-light-box" id="" style="width:400px; height:300px;">
+		<div  class="xpedx-light-box approval-reject-web-adjustment" id="">
 			<!-- <h2>Approval / Rejection Comments</h2>		 -->	
-			<h2><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h2>			
+			<h1><s:text name="MSG.SWC.ORDR.PENDAPPROVALS.GENERIC.APPROVALREJECTCOMMENT" /></h1>			
 				<s:form id="approval" action="approvalAction" namespace="/order" validate="true" method="post">					
-					<s:textarea id="ReasonText1" name="ReasonText1" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea>
+					<s:textarea id="ReasonText1" name="ReasonText1" cssClass="textarea-web-adjustment" cols="69" rows="5" theme="simple" onkeyup="restrictTextareaMaxLengthAlert(this,'255');"></s:textarea>
 					<s:hidden name="ReasonText" id="ReasonText" value="" />
 					<s:hidden name="OrderHeaderKey" value="" />
 					<s:hidden name="ApprovalAction" value=""/>
 					<s:hidden name="ApprovalActionRequestUrl" value="orderList"/>
 					<s:hidden name="#action.namespace" value="/order"/>
 					<s:hidden id="actionName" name="#action.name" value="approval"/>
-					<ul id="tool-bar" class="tool-bar-bottom">
-						<li><a style="float:right; class="grey-ui-btn" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
-						<li><a style="float:right;" class="grey-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
-						<li><a style="float:right;" class="green-ui-btn" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>						 
+					<ul id="tool-bar" class="tool-bar-bottom float-right">
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:DialogPanel.hide('approvalNotesPanel');"><span>Cancel</span></a></li>
+						<li><a style="float:right;" class="btn-neutral" href="#" onclick="javascript:openNotePanelSetAction('Reject');"><span>Reject</span></a></li>
+						<li><a style="float:right;" class="btn-gradient" href="#" onclick="javascript:openNotePanelSetAction('Accept');"><span>Approve</span></a></li>						 
 					</ul>
 				</s:form>
 				</div>

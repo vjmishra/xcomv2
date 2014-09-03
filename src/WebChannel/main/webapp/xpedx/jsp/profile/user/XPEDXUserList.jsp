@@ -174,7 +174,7 @@
 
             <div id="inline1" class="xpedx-light-box">
            <!-- <div style=" float:right; text-align:right; margin-top:-5px;" >User Search: <input name="textfield" type="text" class="x-input" style="width:120px; margin-bottom:15px;" id="textfield" />  <button type="submit" id="newSearch_0" value="Submit" class="searchButton"></button>     </div>  -->
-<h2><span style="margin:0px;">My Users</span></h2> 
+<h1><span style="margin:0px;">My Users</span></h1> 
 <s:set name='storefrontId' value="wCContext.storefrontId" />
 				<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 <p class="less-margin">  <img class="inline-image" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/20x20_admin.png" /> Denotes an Admin User
@@ -312,8 +312,8 @@
         <xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#userListPaginationURL}" isAjax="true"  divId="viewUsersDlg" showFirstAndLast="False" showMyUserFormat="true" /> 
         </span> </div><br/>
 		<ul id="tool-bar" class="tool-bar-bottom"  style="float:right; margin-right:13px;"  >
-	        <li><a class="grey-ui-btn" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
-            <li ><a class="green-ui-btn" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
+	        <li><a class="btn-neutral" href="javascript:$.fancybox.close()"><span>Cancel</span></a></li>
+            <li ><a class="btn-gradient" href="#" onclick="javascript: selectedUser('<s:property value="%{CustomerContactID}" />','<s:property value="%{CustomerID}" />','<s:property value="%{storeFrontID}" />'); return false;"><span>Select</span></a></li>
 	    </ul>
 	    <s:form name="userList" id="userList">
 		    <s:hidden name="customerID" value="%{#_action.getCustomerID()}"/>

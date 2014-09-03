@@ -5,7 +5,7 @@
 
 
 <style>
-	.share-modal-forLocations { width:800px!important; height:210px !important;}
+	.share-modal-forLocations { width:722px!important; height:210px !important;}
 	.indent-tree { margin-left:15px; }
 	.indent-tree-act { margin-left:25px; }
 	 
@@ -20,8 +20,8 @@
 </style>
 
 <div style="display: none;">
-	<div id="dlgSelectedList" class="share-modal-forLocations xpedx-light-box" style="width:722px; height:210px;">
-		<h2 id="smilTitle_2"><s:text name='MSG.SWC.MIL.MILLOC.GENERIC.DLGTITLE' /></h2>
+	<div id="dlgSelectedList" class="xpedx-light-box">
+		<h1 id="smilTitle_2"><s:text name='MSG.SWC.MIL.MILLOC.GENERIC.DLGTITLE'/></h1>
 		
 		<div class="clear"></div>
 		
@@ -109,7 +109,7 @@
 			Selecting an account or location will display all lists authorized for that location.
 		</div>
 		<div class="button-container">
-			<input class="btn-gradient floatright addmarginright10" type="submit" value="Apply" onclick="submitSelectedList(); return false;" />
+			<input class="btn-gradient floatright addmarginright5" type="submit" value="Apply" onclick="submitSelectedList(); return false;" />
 			<input class="btn-neutral floatright addmarginright10" type="submit" value="Cancel" onclick="$.fancybox.close(); resetclFromSelectedListId(); return false;" />
 		</div>
 		<div class="clearfix"></div>

@@ -40,7 +40,7 @@ function reset() {
 				var $shipTosContainerDiv = $('#ship-container');
 				var html = [];
 				if (titleOfModal){
-					html.push('		<h2>',	titleOfModal,	'</h2>');
+					html.push('		<h1>',	titleOfModal,	'</h1>');
 				}
 				html.push('			<input type="hidden" name="userIdForSelectOrChangeShipTo" id="userIdForSelectOrChangeShipTo" value="', customerContactId, '"/>');
 

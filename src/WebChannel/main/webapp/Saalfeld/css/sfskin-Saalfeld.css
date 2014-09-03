@@ -1122,7 +1122,20 @@ ul.megamenu {
     margin-bottom: 5px;
 }
 
+.xpedx-light-box p.addmargintop0 {
+	margin-top: 0px;
+}
 
+.xpedx-light-box p.addmargintop5 {
+	margin-top: 5px;
+}
+.ship-container h1 {
+    color: #006A3A;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    padding: 10px 0 20px;
+}
 /************TABLE HEADERS****************/
 .standard-table th {
     background: #045139;

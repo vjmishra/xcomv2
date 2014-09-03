@@ -33,9 +33,9 @@
 
 <div style="display: none;">
 	<s:div id="delete_my_item_list">
-		<div class="xpedx-light-box" style="width:250px; height:150px;">
-			<h2> <s:text name="MSG.SWC.MIL.DELMIL.GENERIC.DLGTITLE" /> </h2>
-			<p><s:text name="MSG.SWC.MIL.DELMIL.GENERIC.CONFIRM" /></p>
+		<div class="xpedx-light-box">
+			<h1> <s:text name="MSG.SWC.MIL.DELMIL.GENERIC.DLGTITLE" /> </h1>
+			<p class="addmargintop0"><s:text name="MSG.SWC.MIL.DELMIL.GENERIC.CONFIRM" /></p>
 			
 			<div class="button-container addpadtop15">
 				<input class="btn-gradient floatright addmarginright10" type="submit" value="Yes" onclick="submitForm(); return false;" />

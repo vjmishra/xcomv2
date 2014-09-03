@@ -435,7 +435,7 @@ ul.checkboxTree li
 <div title="Add New Quick Link" id="newQL"
 	style="width: 400px; height: 220px; overflow: auto;"
 	class="xpedx-light-box">
-<h2>Add New Quick Link</h2>
+<h1>Add New Quick Link</h1>
 <p><strong></strong></p>
 
 <table class="form" width="100%" style="clear: both">
@@ -454,11 +454,11 @@ ul.checkboxTree li
 </table>
 <div></div>
 <ul id="tool-bar" class="tool-bar-bottom float-right"  style="padding-top: 30px;">
-	<li><s:a cssClass="grey-ui-btn "
+	<li><s:a cssClass="btn-neutral"
 		href="#" onclick="javascript:$.fancybox.close();">
 		<span>Cancel</span>
 	</s:a></li>
-	<li><s:a href="javascript:addRow()" cssClass="green-ui-btn">
+	<li><s:a href="javascript:addRow()" cssClass="btn-gradient">
 		<span>Add</span>
 	</s:a></li>
 </ul>

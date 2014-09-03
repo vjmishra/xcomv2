@@ -19,23 +19,19 @@
 <div style="display: none;">
 	<div class="xpedx-light-box" id="dlgImportForm">
 		<s:if test='%{XMLUtils.getElements(#outDoc2, "XPEDXMyItemsItems").size < 200}'>
-			<%-- <h2>Import My Items List</h2> --%>
-			<h2> <s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /> </h2>
-			
+			<h1><s:text name="MSG.SWC.ITEM.LISTIMPORT.ERROR.PGTITLE" /></h1>
 			<s:form name="formImport" id="formImport" action="MyItemsDetailsImportPrepare" method="post" enctype="multipart/form-data">
 				<span id="errorMsgForRequiredField" style="display:none;"></span> 
 				<%--  Don't delete this 'errorMsgForRequiredField' tag it needed while close button js --%>
 				<div>
-					<p>Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. </p>
+					<p class="addmargintop0">Items can be imported from a file into new or existing My Items Lists. Files must be saved as a comma separated value (CSV) file. </p>
 					<p>A sample file is provided. Delete the item contents and enter your own data.</p>
 					
 					<input class="btn-neutral floatleft addmargintop10" type="submit" value="Download Sample" onclick="window.location.href='/swc/downloadsample'; return false;" />
 		
-					<p>Please note that an individual My Items List cannot exceed 200 items. </p>
+					<p>&nbsp; Please note that an individual My Items List cannot exceed 200 items. </p>
 					<p>To import the file, locate the file on your hard drive by using the 'Browse' button or by typing the file path in the box below. After the file is located, click 'Open' and then click the 'Import' button. </p>
 					<br />
-					
-					
 					<s:file name="upload" size="50" id="File"/>
 			
 					<center>

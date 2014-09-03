@@ -1293,7 +1293,7 @@ var currentAadd2ItemList = new Object();
 	
 	<div id="replacement_<s:property value='key'/>" class="xpedx-light-box" >
 	  <%-- <h2>Replacement Item(s) for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2> --%> <%-- key contains the original itemId --%>
-	  <h2><s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h2><%-- key contains the original itemId --%>
+	  <h1><s:text name='MSG.SWC.ITEM.REPLACEMENT.GENERIC.PGTITLE' /> for <s:property value="wCContext.storefrontId" /> Item #: <s:property value='key'/> </h1><%-- key contains the original itemId --%>
 	         <s:if test="#altItemList.size() > 1">
 	         <!-- Light Box --><div style=" height:202px; width:580px; overflow:auto;  border:1px solid #CCCCCC;">
 	         </s:if>
@@ -1438,10 +1438,10 @@ var currentAadd2ItemList = new Object();
 	
 		<div id="replacementItemBody"  class="xpedx-light-box"/> 
 	</div>
-	<ul class="tool-bar-bottom" id="tool-bar" style="margin-right:30px;float:right;">
-		<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="orange-ui-btn modal"><span>Replace</span></a></li>
-		<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="grey-ui-btn"><span>Add</span></a></li>
-		<li style="float: right;"><a href="javascript:$.fancybox.close();" class="grey-ui-btn"><span>Cancel</span></a></li>
+	<ul class="tool-bar-bottom float-right" id="tool-bar">
+		<li style="float: right;"><a href="javascript:replacementReplaceInList(selReplacementId);" class="btn-gradient"><span>Replace</span></a></li>
+		<li style="float: right; margin-right:5px;"><a href="javascript:replacementAddToList(selReplacementId);" class="btn-neutral"><span>Add</span></a></li>
+		<li style="float: right;"><a href="javascript:$.fancybox.close();" class="btn-neutral"><span>Cancel</span></a></li>
 	</ul>
 </s:form> 
 <s:form id="formRIAddToList" action="draftOrderAddReplacementOrderLines"
