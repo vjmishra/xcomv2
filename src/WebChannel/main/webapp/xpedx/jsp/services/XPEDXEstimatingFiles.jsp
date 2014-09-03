@@ -91,7 +91,6 @@ $("#various4").fancybox();
 						<h1><s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE_SAALFELD" /></h1>
 				</s:elseif> 
 			  <!--  EB-1641 End -->
-	<div id="mid-col-mil">
    
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
            
@@ -115,7 +114,7 @@ $("#various4").fancybox();
 			                          <span><s:property value='#CatalogExp.value'/></span></a>			                     
 			                     </li>
 			                   
-		                     </ul>	<ul>&nbsp;</ul>			
+		                     </ul>		
 					   </s:iterator> 
 					   			  
 			   </td>
@@ -136,24 +135,13 @@ $("#various4").fancybox();
 			   </td>
           </tr>
         </table> 
- 
-
-        
- 
-          
-           <div class="clearview">&nbsp;</div>
-        
         <!-- Pricing -->
          
-        <div class="clearview">&nbsp;</div>
          
-      </div>
 	   </div>
     </form>
     <!-- End Pricing -->
-    <br />
   </div>
-</div>
 </div>
      
     <!-- end main  -->

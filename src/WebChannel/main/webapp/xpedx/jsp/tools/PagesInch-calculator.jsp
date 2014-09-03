@@ -68,6 +68,7 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/page-inch<s:property value='#wcUtil.xpedxBuildKey' />.js" language="javascript"> </script>
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/backlink<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.pagesinchcalculator.title" /></title>
 </head>
@@ -77,25 +78,14 @@
 
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 			<div class="container content-container">
+			<p class="addmarginbottom15"><a class="back-resources">‹ Back</a></p>
 				<h1>Pages/Inch Calculator</h1>
-				<!-- breadcrumb -->
-				<div id="searchBreadcrumb">
-					<s:url id='toolsLink' namespace='/tools' action='MyTools'>
-						<s:param name="selectedHeaderTab">ToolsTab</s:param>
-					</s:url>
-					<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>/ <span class="page-title"><s:text name="tools.pagesinchcalculator.title" /></span> Commented for jira 1538 -->
-				</div>
-				<div id="mid-col-mil">
 					<div style="width: 600px;">
 
 						<p>
 							To determine the pages per inch (PPI), divide 2 by the caliper of
 							the given sheet.<br />
 						</p>
-
-						<div id="requestform">
-							<div class="clearview">&nbsp;</div>
-
 
 							<form name="eform" method="post" action="sc_PapCalcppinch.aspx"
 								id="eform" class="formborder">
@@ -141,7 +131,6 @@
 
 							<div class="clearview">&nbsp;</div>
 
-						</div>
 						<div class="clearview">
 							<h2>Specifications</h2>
 						</div>
@@ -214,22 +203,13 @@
 							<div id="table-bottom-bar-L"></div>
 							<div id="table-bottom-bar-R"></div>
 						</div>
-						<div class="clearview">&nbsp;</div>
-
-
-
-						<div class="x-corners">
-
-							<div>
-								<br /> <strong>Note</strong>:<br /> The results of the
+						<p class="addpadtop20">
+								<strong>Note</strong>: The results of the
 								Interactive Calculations System are estimates and are not
-								guaranteed by International Paper.<br /> <br /> <br />
-							</div>
-
-						</div>
+								guaranteed by xpedx, LLC.
+						</p>
 
 					</div>
-				</div>
 			</div>
 			<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	<!-- end main  -->

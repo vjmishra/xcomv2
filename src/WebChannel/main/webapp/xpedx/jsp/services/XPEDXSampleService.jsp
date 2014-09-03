@@ -781,7 +781,6 @@ $("#cancelId").click(function(){
   <h1>Request Sample</h1>
   
 
-	<div id="mid-col-mil" style="margin-left:0px;">
 			<s:if test="%{#_action.getErrorMesage()!=null}">
 				<h2><font size="2" color="red"><s:property
 					value='%{#_action.getErrorMesage()}' /></font></h2>
@@ -1052,7 +1051,6 @@ $("#cancelId").click(function(){
           </s:form>
 </div>
 <div class="clearview">&nbsp;</div>
-</div>
 </div>
 
 <script type="text/javascript">

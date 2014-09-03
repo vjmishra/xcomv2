@@ -64,7 +64,7 @@
 
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
-
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/backlink<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.reamweight.title" /></title>
 
 <!-- Webtrend tag starts -->
@@ -81,31 +81,23 @@
         	<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 
 			<div class="container content-container">
+			<p class="addmarginbottom15"><a class="back-resources">‹ Back</a></p>
 				<h1>Ream Weight Calculator</h1>
-				<!-- breadcrumb -->
-				<div id="searchBreadcrumb">
-					<s:url id='toolsLink' namespace='/tools' action='MyTools'>
-						<s:param name="selectedHeaderTab">ToolsTab</s:param>
-					</s:url>
-					<!-- a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="breadcrumb-inactive"><s:text name="tools.reamweight.title" /></span> Commented for jira 1538-->
-				</div>
-				<div id="mid-col-mil">
 					<div style="width: 600px;">
 						<div id="requestform">
 
 							<!-- Add comment for jira 1538 -->
-							<p style="width: 600px;">Enter all fields to calculate the
+							<p>Enter all fields to calculate the
 								weight of the given size.</p>
-							<p style="width: 600px;">
+							<p class="addpadtop10">
 								<strong>Note:</strong> For this tool, a ream is assumed to be
 								500 shts.
 							</p>
-							<br /> <br>
-							<p style="width: 600px;">To determine the ream weight of any
+							<p class="addpadtop10  width-525px">To determine the ream weight of any
 								given size sheet, multiply the square inches in the given size
 								by the given basis weight; divide the result by the square inch
 								area of the basic size.</p>
-							<br />
+							
 							<!-- <h2>Ream Weight Calculator</h2> changes done for jira 1538->		
 	<!-- dharish-->
 
@@ -115,7 +107,7 @@
 								<input type="hidden" name="__VIEWSTATE"
 									value="dDwtMTU3MTQ0MjQwMzs7Pg==" />
 
-								<table style="width: 600px;" class="form">
+								<table style="width: 600px;" class="form addmargintop20">
 									<tbody>
 
 										<tr>
@@ -350,19 +342,12 @@
 							<div id="table-bottom-bar-L"></div>
 							<div id="table-bottom-bar-R"></div>
 						</div>
-						<div class="x-corners">
-
-							<div>
-								<br />
-								<strong>Note:</strong><br /> The results of the Interactive
-								Calculations System are estimates and are not guaranteed by
-								International Paper.<br /> <br />
-							</div>
-
-						</div>
+						<p class="addpadtop20">
+                        <strong>Note:</strong>: The results of the
+								Interactive Calculations System are estimates and are not
+								guaranteed by xpedx, LLC.</p>
 
 					</div>
-				</div>
 			</div>
 			<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	<!-- end main  -->

@@ -73,6 +73,7 @@
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/gsm<s:property value='#wcUtil.xpedxBuildKey' />.js" language="javascript"> </script>
 
 <script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/jquery-ui.min<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/backlink<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 <title><s:property value="wCContext.storefrontId" /> - <s:text name="tools.gsmcalculator.title" /></title>
 </head>
@@ -82,15 +83,8 @@
 
         	 <s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 			<div class="container content-container">
+			<p class="addmarginbottom15"><a class="back-resources">‹ Back</a></p>
 				<h1>GSM Calculator</h1>
-				<!-- breadcrumb -->
-				<div id="searchBreadcrumb">
-					<s:url id='toolsLink' namespace='/tools' action='MyTools'>
-						<s:param name="selectedHeaderTab">ToolsTab</s:param>
-					</s:url>
-					<!-- <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a> / <span class="breadcrumb-inactive"><s:text name="tools.gsmcalculator.title" /></span> Commented for jira 1538-->
-				</div>
-				<div id="mid-col-mil">
 					<div style="width: 600px;">
 
 
@@ -197,7 +191,6 @@
 							<div id="table-bottom-bar-L"></div>
 							<div id="table-bottom-bar-R"></div>
 						</div>
-						<div class="clearview">&nbsp;</div>
 						<table style="width: 100%;" class="standard-table">
 								<tr>
 									<th width="199">Basic Sizes</th>
@@ -327,20 +320,14 @@
 						</div>
 						<div class="clearview">&nbsp;</div>
 
-
-
-						<div class="x-corners">
-
-							<div>
+							<p class=" addpadtop20">
 								<br /> <strong>Note</strong>:<br /> The results of the
 								Interactive Calculations System are estimates and are not
-								guaranteed by International Paper.<br /> <br />
-							</div>
+								guaranteed by xpedx, LLC.<br /> <br />
+							</p>
 
-						</div>
 
 					</div>
-				</div>
 			</div>
 			<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 	<!-- end main  -->

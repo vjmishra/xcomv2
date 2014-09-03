@@ -591,3 +591,7 @@ table.paper-calc ul#cart-actions  {
 table.pages-inch #cart-actions li {
 	margin-left: 3px;
 }
+.back-resources{
+	cursor: pointer;
+	cursor: hand;
+}

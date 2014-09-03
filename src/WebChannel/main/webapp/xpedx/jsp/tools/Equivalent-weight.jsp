@@ -31,7 +31,6 @@
 <!-- [endif]-->
 
 <!-- javascript -->
-
 <script type="text/javascript"
 	src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/global/ext-base<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <script type="text/javascript"
@@ -92,6 +91,7 @@
 	language="javascript">
 	
 </script>
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/backlink<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 
 
 <script type="text/javascript"
@@ -106,23 +106,13 @@
 
 			<s:action name="xpedxHeader" executeResult="true" namespace="/common" />
 			<div class="equivalent container content-container">
+				<p class="addmarginbottom15"><a class="back-resources">‹ Back</a></p>
 				<h1>Equivalent Basis Wts Chart</h1>
-				<!-- breadcrumb -->
-				<div id="searchBreadcrumb">
-					<s:url id='toolsLink' namespace='/tools' action='MyTools'>
-						<s:param name="selectedHeaderTab">ToolsTab</s:param>
-					</s:url>
-					<!--  <a href="<s:url action="home" namespace="/home" includeParams='none'/>"><s:text name="home.title" /></a> / <s:a href="%{toolsLink}"><s:text name="tools.title" /></s:a>  / <span class="page-title"><s:text name="tools.eqbasiswtchart.title" /></span>  Commented for jira 1538 -->
-				</div>
-				<div id="mid-col-mil">
 					<div style="width: 600px;">
 
 						<p>In reams (500 sheets); basis weights in bold type:</p>
 
-						<div id="requestform"></div>
-						<div class="clearview"></div>
-						<div class="clearview">&nbsp;</div>
-						<table style="width: 100%;" class="standard-table">
+						<table style="width: 100%;" class="standard-table addpadtop20">
 								<tr>
 									<th width="318" colspan="6">Book</th>
 									<th align="left"></th>
@@ -151,7 +141,7 @@
 											Metric<br /> g/m&sup2;
 										</div></td>
 								</tr>
-								<tr class="odd">
+								<tr class="odd" style="text-align:center;">
 									<td style="border-right: none; border-bottom: none;"><div align="center">30</div></td>
 									<td style="border-right: none; border-bottom: none;"><div align="center">12</div></td>
 									<td style="border-right: none; border-bottom: none;"><div align="center">16</div></td>
@@ -684,22 +674,14 @@
 							<div id="table-bottom-bar-L"></div>
 							<div id="table-bottom-bar-R"></div>
 						</div>
-						<div class="clearview">&nbsp;</div>
 
-
-						<div class="clearview">&nbsp;</div>
-						<div class="x-corners">
-
-							<div>
-								<br /> <strong>Note:</strong>: <br /> The results of the
+							
+								<p class="addpadtop20"><strong>Note:</strong>: The results of the
 								Interactive Calculations System are estimates and are not
-								guaranteed by International Paper.<br /> <br />
-							</div>
-
-						</div>
+								guaranteed by xpedx, LLC.<br /> <br /> </p>
 
 					</div>
-				</div>
+				
 			</div>
 			<s:action name="xpedxFooter" executeResult="true" namespace="/common" />
 			<!-- end main  -->
