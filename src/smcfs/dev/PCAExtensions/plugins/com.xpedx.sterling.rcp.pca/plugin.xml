@@ -163,6 +163,15 @@
                 label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileAction"
                 state="true" style="push"/>
         </actionSet>
+         <actionSet
+            id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileActionSet"
+            label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileActionSet" visible="true">
+            <action
+                class="com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileAction"
+                id="com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileAction"
+                label="com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileAction"
+                state="true" style="push"/>
+        </actionSet>
         <actionSet
             id="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceActionSet"
             label="com.xpedx.sterling.rcp.pca.articles.action.XPXArticleMaintainanceActionSet" visible="true">

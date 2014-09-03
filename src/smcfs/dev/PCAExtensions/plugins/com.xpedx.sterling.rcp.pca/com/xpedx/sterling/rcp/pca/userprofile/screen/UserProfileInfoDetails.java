@@ -171,6 +171,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Text txtLastModDate;
 
 	private Button btnDelete;
+	private Composite compositeMiscPnl;
 	
 //	private Composite pnlRadioButtons;
 //	private Button radInternal;
@@ -265,7 +266,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		
 		GridData pnlRootLayoutData = new GridData();
 		pnlRootLayoutData.horizontalAlignment = SWT.FILL;
-		pnlRootLayoutData.verticalAlignment = SWT.FILL;
+		pnlRootLayoutData.verticalAlignment = 3;
 		pnlRootLayoutData.grabExcessHorizontalSpace = true;
 		pnlRootLayoutData.grabExcessVerticalSpace = true;
 		pnlRoot.setLayoutData(pnlRootLayoutData);
@@ -283,22 +284,41 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	}
 	
 	private void createMiscPnl() {
-		GridData gridData16 = new GridData();
-		gridData16.horizontalAlignment = 3;
-		gridData16.grabExcessHorizontalSpace = true;
-		gridData16.horizontalSpan = 1;
-		gridData16.horizontalIndent = 0;
-		gridData16.verticalAlignment = 2;
-
-		btnUpdate = new Button(pnlRoot, 0);
+		GridData gridData10 = new GridData();
+		gridData10.heightHint = 25;
+		gridData10.widthHint = 80;
+		GridData gridData5 = new GridData();
+		gridData5.heightHint = 25;
+		gridData5.widthHint = 120;
+		GridData gridData2 = new GridData();
+		gridData2.horizontalAlignment = 3;
+		gridData2.grabExcessHorizontalSpace = true;
+		gridData2.verticalAlignment = SWT.BEGINNING;
+		GridLayout gridLayout2 = new GridLayout();
+		gridLayout2.numColumns = 4;
+		
+		compositeMiscPnl = new Composite(pnlRoot, 0);
+		compositeMiscPnl.setLayoutData(gridData2);
+		compositeMiscPnl.setLayout(gridLayout2);
+		compositeMiscPnl.setData("yrc:customType", "TaskComposite");
+		compositeMiscPnl.setData("name", "compositeMiscPnl");
+		
+	
+		GridData gridData6 = new GridData();
+		gridData6.heightHint = 25;
+		gridData6.widthHint = 145;
+		
+		btnUpdate = new Button(compositeMiscPnl, 0);
 		btnUpdate.setText("Update_User_Profile");
-		btnUpdate.setLayoutData(gridData16);
+		btnUpdate.setLayoutData(gridData2);
 		btnUpdate.setData("name", "btnUpdate");
 		
-		btnDelete = new Button(pnlRoot, 0);
-		btnDelete.setText("Delete User");
-		btnDelete.setLayoutData(gridData16);
+		btnDelete = new Button(compositeMiscPnl, 1);
+		btnDelete.setAlignment(SWT.LEFT);
+		btnDelete.setText("Delete User Profile ");
+		btnDelete.setLayoutData(gridData6);
 		btnDelete.setData("name", "btnDelete");
+		
 	}
 
 	
@@ -452,8 +472,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
 		
-		//Hiding last modified by 
-		/*lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
+		lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
 		lblLastModBy.setData("name", "lblLastModBy");
@@ -467,7 +486,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblLastModDate.setData("name", "lblLastModDate");
 		txtLastModDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtLastModDate.setLayoutData(gridData3);
-		txtLastModDate.setData("name", "txtLastModDate");*/
+		txtLastModDate.setData("name", "txtLastModDate");
 		
 		
 		
