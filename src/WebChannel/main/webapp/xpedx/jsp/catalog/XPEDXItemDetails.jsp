@@ -287,7 +287,7 @@
 					</div> <%-- / detail-image-wrap --%>
 					
 					<div class="order-wrap">
-						<p><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
+						<p class="addmarginbottom10"><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
 						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
 							<div class="addpadtop20 addpadright20">
 								<h4>Price and availability are offered to registered customers. Please contact us at

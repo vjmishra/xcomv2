@@ -1742,6 +1742,7 @@ BEGIN 2014 styles
 
 .detail-view .print-ico-xpedx {
 	margin-right: 8px;
+   	margin-top: -56px;
 }
 .prodImg {
     box-shadow: 1px 1px 4px #999999;
@@ -1763,7 +1764,7 @@ BEGIN 2014 styles
 .detail-view .order-input-wrap {
 	float:right;
 	display: block;
-	margin-top: 20px;
+	margin-top: 0px;
 }
 .detail-view .order-row {
 	height: 25px;
@@ -1869,6 +1870,7 @@ table#prod-details-tbl  {
 	width: 300px;
 	height: auto;
 	overflow: hidden;
+	margin-top: -23px;
 }
 .specs-wrap div.specs-trigger:nth-last-of-type(2) {
 	border-bottom: #cccccc 1px solid;
@@ -2085,7 +2087,3 @@ div.specs-tab {
 	float: left;
 	clear: none;
 }
-
-
-
-
