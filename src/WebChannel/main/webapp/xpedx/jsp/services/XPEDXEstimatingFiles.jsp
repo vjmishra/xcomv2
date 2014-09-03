@@ -143,7 +143,7 @@ $("#various4").fancybox();
     <!-- End Pricing -->
   </div>
 </div>
-     
+     </div>
     <!-- end main  -->
 
  <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
