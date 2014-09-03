@@ -1202,7 +1202,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		Document itemBranchDetailsInputDoc = YFCDocument.createDocument(XPXLiterals.E_XPX_ITEM_EXTN).getDocument();
 		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("EnvironmentID",envtId);
 		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("CompanyCode",companyCode);
-		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("XPXDivision",shipFromBranch);
+		itemBranchDetailsInputDoc.getDocumentElement().setAttribute("XPXDivision", extnShipFromBranch);
 		Element complexQueryElement = SCXmlUtil.createChild(itemBranchDetailsInputDoc.getDocumentElement(), "ComplexQuery");
 		Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");
 		for (String itemId : itemsForOMQtySet) {
@@ -1416,8 +1416,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi
 		envtId = customerExtnElement.getAttribute("ExtnEnvironmentCode");
 		companyCode = customerExtnElement.getAttribute("ExtnCompanyCode");
 		shipToSuffix = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_SHIP_TO_SUFFIX);
-		shipFromBranch = customerExtnElement.getAttribute("ExtnCustomerDivision"); //This one used for Order multiple(XPXDivision) and P&A(CustomerBranch)
-		extnShipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch"); //This one used for getting Organization Name
+		shipFromBranch = customerExtnElement.getAttribute("ExtnCustomerDivision"); //This one used for P&A(CustomerBranch)
+		extnShipFromBranch = customerExtnElement.getAttribute("ExtnShipFromBranch"); //This one used for getting Organization Name and for Order multiple from xpx_item_extn using XPXDivision
 		legacyCustomerNumber = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_LEGACY_CUST_NO);
 		customerOrderBranch = customerExtnElement.getAttribute(XPXLiterals.A_EXTN_CUSTOMER_ORDER_BRANCH);
 		customerEnvtId = customerExtnElement.getAttribute("ExtnOrigEnvironmentCode");
