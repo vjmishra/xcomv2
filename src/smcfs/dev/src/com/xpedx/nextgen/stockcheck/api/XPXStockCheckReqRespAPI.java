@@ -1148,8 +1148,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 				inValidItemPositions.add(customerPartNoPosition);
 			}
 		}
-
-		setItemsDetails(env, requestedXpedxItemsMap);
+		if(requestedXpedxItemsMap != null && requestedXpedxItemsMap.size() > 0)	{
+			setItemsDetails(env, requestedXpedxItemsMap);
+		}
 	}
 
 	/**
