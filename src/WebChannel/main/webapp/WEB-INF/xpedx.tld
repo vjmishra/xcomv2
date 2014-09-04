@@ -131,6 +131,152 @@
 	    <description>
 	      Generates a pagination control fragment.
 	    </description>
+	    <name>flexpagectl</name>
+	    <tag-class>com.sterlingcommerce.xpedx.webchannel.common.FlexPaginationTag</tag-class>
+	    <body-content>empty</body-content>
+	    <attribute>
+	      <description>
+	        The number of the current page. Control will suppress the link
+	        for this page. This attribute takes an OGNL expression.
+	      </description>
+	      <name>currentPage</name>
+	      <required>true</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.String</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        The number of the last page of the pageset, if available. If empty or
+	        missing this is interpreted as meaning that there are more pages, but
+	        the number is unknown. This attribute takes an OGNL expression.
+	      </description>
+	      <name>lastPage</name>
+	      <required>false</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.String</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        A java.text.MessageFormat template for the url to be generated to
+	        request a specified page. Tag will replace "{0}" with new page
+	        number to generate URL. This attribute takes an OGNL expression.
+	      </description>
+	      <name>urlSpec</name>
+	      <required>true</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.String</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        CSS class for the bounding html object generated for this
+	        control. This is used for binding to CSS rules.
+	      </description>
+	      <name>cssClass</name>
+	      <required>false</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.String</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        CSS class for the bounding html object generated for this
+	        control. This is used for binding to CSS rules.
+	      </description>
+	      <name>id</name>
+	      <required>false</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.String</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        Generates a control based on the assumption that there is a next page
+	        but the total number of pages is unknown. Defaults to false. If this
+	        value is set to true then the value of lastPage is ignored. If this
+	        value
+	        is false and the lastPage is undefined, then no control is generated.
+	        This attribute takes an OGNL expression.
+	      </description>
+	      <name>isLastUnknown</name>
+	      <required>false</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.Boolean</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        The max number of page numbers the control will generate.
+	        Defaults to five. This attribute takes an OGNL expression.
+	      </description>
+	      <name>numSpan</name>
+	      <required>false</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.Integer</type>
+	    </attribute>
+	    <attribute>
+	      <description>
+	        Whether to show the "first" and "last" pagination controls.
+	        Defaults to true.
+	      </description>
+	      <name>showFirstAndLast</name>
+	      <required>false</required>
+	      <rtexprvalue>false</rtexprvalue>
+	      <type>java.lang.Boolean</type>
+	    </attribute>
+	    <attribute>
+	        <description>
+	            Define the starting number to be used as tabindex in displayed anchors
+	        </description>
+	        <name>startTabIndex</name>
+	        <required>false</required>
+	        <rtexprvalue>false</rtexprvalue>
+	        <type>java.lang.Integer</type>
+	    </attribute>
+	     <attribute>
+	        <description>
+	            Define the starting number to be used as tabindex in displayed anchors
+	        </description>
+	        <name>isAjax</name>
+	        <required>true</required>
+	        <rtexprvalue>false</rtexprvalue>
+	        <type>java.lang.Boolean</type>
+	    </attribute>
+	     <attribute>
+	        <description>
+	            if isAjax is true then required a div to set the html value.
+	        </description>
+	        <name>divId</name>
+	        <required>false</required>
+	        <rtexprvalue>false</rtexprvalue>
+	        <type>java.lang.String</type>
+	    </attribute>
+	    <attribute>
+	        <description>
+	           Whether to show the my userlist format in the myUserList modal - pagination controls.
+	           <!-- <<< for first and >>> for the end -->
+			   Defaults to true.
+	        </description>
+	        <name>showMyUserFormat</name>
+	        <required>false</required>
+	        <rtexprvalue>false</rtexprvalue>
+	        <type>java.lang.Boolean</type>
+	    </attribute>
+	    <attribute>
+	        <description>
+	           The total number of results
+	           <!-- <<< for first and >>> for the end -->
+			   Defaults to null.
+	        </description>
+	        <name>totalResults</name>
+	        <required>false</required>
+	        <rtexprvalue>false</rtexprvalue>
+	        <type>java.lang.Integer</type>
+	    </attribute>
+	    <example>
+	      <![CDATA[<xpedx:flexpagectl currentPage='3' endPage='6' urlSpec="?page={0}" />]]>
+	    </example>
+  </tag>
+	<tag>
+	    <description>
+	      Generates a pagination control fragment.
+	    </description>
 	    <name>pagectl</name>
 	    <tag-class>com.sterlingcommerce.xpedx.webchannel.common.XPEDXPaginationTag</tag-class>
 	    <body-content>empty</body-content>

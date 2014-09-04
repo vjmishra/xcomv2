@@ -139,6 +139,9 @@
 .addmarginright-3 {
 	margin-right: -3px;
 }
+.addmarginbottom5 {
+	margin-bottom: 5px;
+}
 .addmarginbottom10 {
 	margin-bottom: 10px;
 }
@@ -155,13 +158,16 @@
 	margin-right: 20px;
 }
 .addmarginbottom15 {
-    margin: 0 0 15px;
+	margin: 0 0 15px;
 }
 .floatleft {
 	float: left;
 }
 .floatright {
 	float: right;
+}
+.textright {
+	text-align: right;
 }
 .addmarginleft130 {
 	margin-left: 130px;
@@ -305,7 +311,7 @@
 @media only screen and (max-width: 1115px) {
 	#scroll-up-down {
 		display: none;
-	}
+}
 }
 
 
@@ -391,7 +397,7 @@
 .change-pw-wrap h1 {
 	font-size: 16px;
 	padding: 10px 0px 20px 0px;
-	}
+}
 .change-pw-wrap h3 {
 	font-size: 13px;
 	padding-bottom: 18px;
@@ -710,40 +716,40 @@ div.catalog-search-container input#search_searchTerm {
 }
 
 .pagination {
-    background-color: #ececec;
-    background-image: none;
-    font-weight: bold;
-    height: 30px;
+	background-color: #ececec;
+	background-image: none;
+	font-weight: bold;
+	height: 30px;
 	position: relative;
 }
 .sortbycontrols {
-    min-width: 320px;
-	position: absolute;
-	left: 10px;
-	top: 2px;	
+	width: 100%;
+	background-color: #ececec;
+	height: 22px;
+	line-height: 23px;
 }
 .pageresults {
-    margin-top: -7px;
+	margin-top: -7px;
 }
 .content-container {
-    background-color: #FFFFFF;
-    clear: both;
-    min-height: 675px;
+	background-color: #FFFFFF;
+	clear: both;
+	min-height: 675px;
 	width: 950px;
-    padding: 20px 25px;
+	padding: 20px 25px;
 
 }
 
 .input-watermark {  
-    background: url("magnify.jpg") no-repeat scroll 2px 2px #FFFFFF;
-    border: 1px solid #D9D9D9;
-    border-radius: 0;
-    color: #000000;
-    font-size: 12px;
-    height: 18px;
-    margin: 4px 0 0 4px;
-    padding: 2px 0 0 18px;
-    width: 160px;
+	background: url("magnify.jpg") no-repeat scroll 2px 2px #FFFFFF;
+	border: 1px solid #D9D9D9;
+	border-radius: 0;
+	color: #000000;
+	font-size: 12px;
+	height: 18px;
+	margin: 4px 0 0 4px;
+	padding: 2px 0 0 18px;
+	width: 160px;
 }
 .input-watermark-color {
 	color: #a8a8a8 !important;
@@ -755,42 +761,42 @@ div.catalog-search-container input#search_searchTerm {
 	color: #3577d1;
 	font-weight: normal;
 	margin: 0 0 16px 0;
-	}
+}
 .container h3 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #000000;
 	font-weight: bold;
 	padding-bottom: 6px;
-	}
+}
 .ship-current-wrap, .ship-preferred-wrap {
 	width: 280px;
 	float: left;
 	clear: none;
 	padding-right: 10px;
 	line-height: 16px;
-	}
+}
 .preferred-select {
 	margin: 6px 0 0 0;
-	}
+}
 .preferred-select input {
 	float: left;
 	clear: none;
-	}
+}
 .preferred-select div {
 	font-size: 12px;
 	color: #666666;
 	margin-top: 8px;
 	float: left;
 	clear: none;
-	}
+}
 .ship-search-wrap {
 	padding: 0;
-	}
+}
 .ship-search-wrap span {
 	margin: 4px 0 0 40px;
 	line-height: 22px;
-	}
+}
 .ship-search-wrap span.resetlink {
 	margin: 4px 0 0 20px;
 	line-height: 27px;
@@ -798,32 +804,32 @@ div.catalog-search-container input#search_searchTerm {
 }
 .ship-search-wrap span a {
 	color: #e16901;
-	}
+}
 .ship-search-wrap span a:hover {
 	text-decoration: underline;
-	}
+}
 .ship-search-wrap h3 {
 	clear: both;
 	padding: 20px 0 10px 0 ;
-	}
+}
 .ship-search-wrap ul li {
 	padding: 0 0 6px 0;
-	}
+}
 .ship-search-wrap ul li input[type="radio"] {
 	vertical-align: bottom;
-	}
+}
 .ship-search-wrap ul li a {
 	vertical-align: bottom;
-	}
+}
 .divider-line {
 	border: none;
 	border-bottom: 1px #cccccc solid;
 	height: 1px;
 	margin-bottom: 10px;
-	}
+}
 #list {
-    clear: both;
-    margin-top: 15px;
+	clear: both;
+	margin-top: 15px;
 }
 .filterinput {
 	background: url(../../images/icons/magnify.jpg) no-repeat scroll 2px 3px #FFFFFF;
@@ -850,8 +856,8 @@ div.catalog-search-container input#search_searchTerm {
 	padding-bottom:10px;
 }
 .ship-container h2 {
-    font-size: 16px;
-    padding: 10px 0 20px;
+	font-size: 16px;
+	padding: 10px 0 20px;
 }
 .ship-search-input-wrap {
 	width:300px;
@@ -908,13 +914,13 @@ div#fancybox-content .error, div#fancybox-content .notice {
 	width: 10px;
 	border-radius: 5px;}
 #home-image-rotation-nav-inner a {
-    background: #ffffff;
-    display: inline-block;
-    font-size: 0;
-    height: 10px;
+	background: #ffffff;
+	display: inline-block;
+	font-size: 0;
+	height: 10px;
 	width: 10px;
-    border-radius: 5px;
-    margin: 3px;
+	border-radius: 5px;
+	margin: 3px;
 }
 
 .pnaOrderMultipleMessage {
@@ -1353,9 +1359,9 @@ h3 {
 	background: url(../../images/mil/view-quick-add-button.png) no-repeat 0px -25px;
 }
 .mil-qa-list-po hr.qa-horiz {
-    background: #cccccc;
-    border: 0 none;
-    height: 1px;
+	background: #cccccc;
+	border: 0 none;
+	height: 1px;
 	margin-top: 20px;
 }
 .mil-add-item-wrap hr.qa-horiz {
@@ -1408,8 +1414,8 @@ h3 {
 	width: 150px;	
 }
 .print-ico-xpedx {
-    margin-right: 8px;
-    margin-top: -34px;
+	margin-right: 8px;
+	margin-top: -34px;
 	cursor: pointer;
 }
 .producterrorLine {
@@ -1420,21 +1426,21 @@ h3 {
 
 /*-----modals----------*/
 .ship-to-address-list {
-    border: 1px solid #ccc;
-    height: auto;
-    overflow: auto;
+	border: 1px solid #ccc;
+	height: auto;
+	overflow: auto;
 }
 
 .bill-to-address-list {
-    border-bottom: 1px solid #ccc;
-    height: auto;
-    overflow: auto;
+	border-bottom: 1px solid #ccc;
+	height: auto;
+	overflow: auto;
 }
 
 .account-list{
 	 border-bottom: 1px solid #ccc;
-    height: auto;
-    overflow: auto;
+	height: auto;
+	overflow: auto;
 }
 
 
@@ -1477,8 +1483,8 @@ h3 {
 	padding-bottom:10px;
 }
 .contact-modal h2 {
-    font-size: 16px;
-    padding: 10px 0 20px;
+	font-size: 16px;
+	padding: 10px 0 20px;
 }
 
 /*-------stockcheck-modal---------*/
@@ -1492,8 +1498,8 @@ h3 {
 	padding-bottom:10px;
 }
 .stockcheck-modal h2 {
-    font-size: 16px;
-    padding: 10px 0 20px;
+	font-size: 16px;
+	padding: 10px 0 20px;
 }
 
 .input-group {
@@ -1575,14 +1581,14 @@ h3 {
 	clear: both;
 	font-size: 12px;
 	padding: 5px 10px 0 0;
-	}
+}
 .non-stock-item-shorter .stock-icon {
 	float: right;
 	clear: none;
 	margin-left: 5px;
 	margin-top: -6px;
-	}
-/*---*/
+}
+
 
 .replacement-adjustment {
 	height: 240px;
@@ -1613,4 +1619,28 @@ h3 {
 	width: 260px;
 	height: 90px;
 	overflow: auto;
+}
+
+/*------------PAGINATION--------------*/
+.drag-to-compare {
+	line-height: 30px;
+	width: 40%;
+	float: left;
+	clear: none;
+	padding-left: 10px;
+}
+.drag-to-compare:hover {
+	background: #ebf7d2;
+}
+.drag-to-compare, .drag-to-compare a {
+	color: #003399;
+}
+.sortbycontrols select {
+	margin-right: 10px;
+}
+.pagination-wrap {
+	width: 200px;
+	float: right;
+	clear: none;
+	text-align: right;
 }

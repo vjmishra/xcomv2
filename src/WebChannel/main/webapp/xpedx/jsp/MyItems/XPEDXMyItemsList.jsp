@@ -670,10 +670,7 @@
 				<div class="mil-lists-toolbar" style="margin-right:0">
 					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 					
-					<div class="search-pagination search-pagination-top clearboth addpadtop5">
-						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}"
-								showFirstAndLast="False" urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
-					</div>
+					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 				</div>
 				
 				<table id="mil-list" class="standard-table" style="margin:0px">
@@ -836,11 +833,7 @@
 				</table>
 				
 				<div class="mil-lists-toolbar" style="margin-right:0">
-					<div class="search-pagination search-pagination-bottom clearboth addpadtop5">
-						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<xpedx:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}"
-								showFirstAndLast="False" urlSpec="%{#orderListPaginationURL}" isAjax="false"/>
-					</div>
-					
+					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 				</div>
 				
