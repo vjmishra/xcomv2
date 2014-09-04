@@ -91,11 +91,12 @@ $("#various4").fancybox();
 						<h1><s:text name="MSG.SWC.MISC.ESTFS.GENERIC.PGTITLE_SAALFELD" /></h1>
 				</s:elseif> 
 			  <!--  EB-1641 End -->
-   
+	
+   <div class="estimators">
         <table width="100%" border="0" cellspacing="0" cellpadding="0" >
            
           	<tr>
-          	<div class="estimators">
+          	
            		 <td>
            		 <%-- Print Estimator for <s:property value='%{organizationName}'/> - <s:property value='%{pricingWareHouse}'/><br /> --%>
 					
@@ -110,7 +111,7 @@ $("#various4").fancybox();
 			                     --%>
 			                     <%-- jira 3709--%>
 			                      <li>
-			                          <span><a href="<s:property value='#CatalogExp.key'/>" target="_blank"></span>
+			                          <span><a href="<s:property value='#CatalogExp.key'/>" target="_blank"/></span>
 			                          <span><s:property value='#CatalogExp.value'/></span></a>			                     
 			                     </li>
 			                   
@@ -118,7 +119,7 @@ $("#various4").fancybox();
 					   </s:iterator> 
 					   			  
 			   </td>
-			   </div> 
+			   
 			   <td>
 			   		<s:if test="%{CatalogExp.size() <= 0 }">
 					   	<%-- <span>No Printable Catalogs & Estimating Files available </span> --%>
@@ -135,15 +136,25 @@ $("#various4").fancybox();
 			   </td>
           </tr>
         </table> 
+ 
+
+        
+ 
+          
+           
         <!-- Pricing -->
          
+        
          
+      
 	   </div>
     </form>
     <!-- End Pricing -->
+    <br />
   </div>
 </div>
-     </div>
+</div>
+     
     <!-- end main  -->
 
  <s:action name="xpedxFooter" executeResult="true" namespace="/common" />
