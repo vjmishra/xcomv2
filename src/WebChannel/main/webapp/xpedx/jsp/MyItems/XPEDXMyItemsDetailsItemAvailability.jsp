@@ -257,7 +257,10 @@
 												</s:if>
 												<s:else>
 													<s:set name="bracketUOMDesc" value="bracketUOM" />
-													<s:set name="bracketUOMDesc" value='%{#bracketUOMDesc.substring(2)}'/>
+													<s:set name="isM" value='%{#bracketUOMDesc.contains("M_")}' />
+													<s:if test='%{#isM==true}'>
+														<s:set name="bracketUOMDesc" value='%{#bracketUOMDesc.substring(2)}'/>
+													</s:if>
 												</s:else>
 												<s:set name='formattedbracketUOM' value='#bracketUOMDesc' />
 												<s:if test='%{#reqCustomerUOM==#jsonPricingUOM}'>
@@ -302,7 +305,6 @@
 											</s:if>
 											<s:else>
 												<s:set name="bracketUOMDesc" value="bracketUOM" />
-												<s:set name="bracketUOMDesc" value='%{#bracketUOMDesc.substring(2)}'/>
 											</s:else>
 											<s:set name="priceWithCurrencyTemp" value='%{#xpedxutil.formatPriceWithCurrencySymbol(wCContext, #currencyCode, "0")}' />
 											<s:set name="priceWithCurrencyTemp1" value='%{#xpedxutil.formatPriceWithCurrencySymbolWithPrecisionFive(wCContext, #currencyCode, "0")}' />
