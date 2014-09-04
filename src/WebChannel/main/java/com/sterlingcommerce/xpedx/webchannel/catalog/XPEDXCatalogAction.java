@@ -837,6 +837,8 @@ public class XPEDXCatalogAction extends CatalogAction {
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
 						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem) {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
+							//EB-7558
+							searchStringToken =searchStringToken+ "*";
 						} else {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
 						}
