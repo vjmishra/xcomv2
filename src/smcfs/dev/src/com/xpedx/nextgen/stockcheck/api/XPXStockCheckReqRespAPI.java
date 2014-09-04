@@ -118,7 +118,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 
 		// MAX item warning codes with messages
 		maxItemWarnMap = new HashMap<String, String>(20);
-		maxItemWarnMap.put("15", "Item Suspended no backorders accepted");
+		maxItemWarnMap.put("15", "Discontinued item, unavailable for backorder");
 
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log.scws");
 		try
@@ -143,7 +143,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 
 	private Set<Integer> inValidItemPositions	= new HashSet<Integer>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // invalid positions
 	private Set<Integer> inValidUOMPositionsForValidItems	= new HashSet<Integer>(STOCK_CHECK_REQ_ITEMS_SIZE_LIMIT * 2); // invalid UOM positions for valid Items
-	
+
 	private Map<String,String> uomToLegacyMap	= new HashMap<String,String>(); // UOM to Legacy Map
 	private Map<String,String> legacyToUOMMap	= new HashMap<String,String>(); // Legacy to UOM Map
 
@@ -995,13 +995,13 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 		customerExtnElement.setAttribute("ExtnETradingID", eTradingId);
 		customerExtnElement.setAttribute("ExtnSuffixType", "S");
 		getCustomerListInputDoc.getDocumentElement().appendChild(customerExtnElement);
-		
+
 		String customerListTemplate =   "<Customer CustomerID = '' OrganizationCode = ''> "
 									   +	"<Extn ExtnEnvironmentCode = '' ExtnCompanyCode = '' ExtnShipToSuffix = '' "
 									   +          "ExtnCustomerDivision = '' ExtnShipFromBranch = '' ExtnLegacyCustNumber = '' "
 									   +		  "ExtnCustOrderBranch = '' ExtnOrigEnvironmentCode = '' ExtnSAPParentAccNo = ''/> "
 									   + "</Customer>";
-		
+
 		env.setApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API,SCXmlUtil.createFromString(customerListTemplate));
 		getShipToCustomerListOutputDoc = api.invoke(env, XPXLiterals.GET_CUSTOMER_LIST_API, getCustomerListInputDoc);
 		env.clearApiTemplate(XPXLiterals.GET_CUSTOMER_LIST_API);
@@ -1587,31 +1587,31 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the Primary Warehouse location name(i.e Same day warehouse location) using extn_ship_from_branch column from yfs_customer for corresponding ship to and environment id
 	 * primary warehouse location was same for all Items under that ship to.
 	 * @return
-	 * @throws RemoteException 
-	 * @throws YFSException 
+	 * @throws RemoteException
+	 * @throws YFSException
 	 */
     private String getPrimaryWarehouseLocationName(YFSEnvironment env) throws YFSException, RemoteException{
-    	
-    	Document organizationInputDoc = YFCDocument.createDocument("Organization").getDocument();    	
+
+    	Document organizationInputDoc = YFCDocument.createDocument("Organization").getDocument();
     	organizationInputDoc.getDocumentElement().setAttribute("OrganizationKey", extnShipFromBranch + "_" + envtId);
-    	
+
     	String  organizationListAPITemplate = "<OrganizationList>"
 											+  	 	"<Organization OrganizationKey = '' OrganizationCode = '' OrganizationName = '' />"
 											+ "</OrganizationList>";
-    	
+
 		env.setApiTemplate("getOrganizationList", SCXmlUtil.createFromString(organizationListAPITemplate));
 		Document organizationListOutputDoc = api.invoke(env, "getOrganizationList", organizationInputDoc);
 		env.clearApiTemplate("getOrganizationList");
-		
-		String sameDayWareHouse = SCXmlUtil.getXpathAttribute(organizationListOutputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName");		
+
+		String sameDayWareHouse = SCXmlUtil.getXpathAttribute(organizationListOutputDoc.getDocumentElement(), "/OrganizationList/Organization/@OrganizationName");
 		return !YFCUtils.isVoid(sameDayWareHouse) ? sameDayWareHouse : "";
     }
-    
+
 	/**
 	 *
 	 * Item related info for P&A request.
