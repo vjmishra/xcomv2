@@ -286,8 +286,12 @@
 						</s:if>
 					</div> <%-- / detail-image-wrap --%>
 					
+					<s:set name='paragraph' value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' />
+					<s:hidden id='paragraphvalue'  value='%{#paragraph}'></s:hidden> 
 					<div class="order-wrap">
+						<s:if test='#paragraph!=""'>
 						<p class="addmarginbottom10"><s:property value='#xutil.getAttribute(#itemElemExtn,"ExtnSellText")' escape="false"/></p>
+						</s:if>
 						<s:if test='%{#_action.getWCContext().isGuestUser()}'>
 							<div class="addpadtop20 addpadright20">
 								<h4>Price and availability are offered to registered customers. Please contact us at
