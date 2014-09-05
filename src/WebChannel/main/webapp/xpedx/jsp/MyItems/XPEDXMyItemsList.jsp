@@ -834,7 +834,7 @@
 				
 				<div class="mil-lists-toolbar" style="margin-right:0">
 					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
-					<input name="button" type="button" class="btn-gradient floatright" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
+					<input name="button" type="button" class="btn-gradient floatright addmargintop10" value="Create New List" onclick="$('#dlgShareListLinkHL').click(); return false;" />
 				</div>
 				
 			</div> <%-- / container mil-list --%>
