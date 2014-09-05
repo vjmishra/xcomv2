@@ -260,17 +260,17 @@
 	    </attribute>
 	    <attribute>
 	        <description>
-	           The total number of results
+	           The total number of results. That is, the total number of *items* being paginated (not the number of *pages*)
 	           <!-- <<< for first and >>> for the end -->
 			   Defaults to null.
 	        </description>
 	        <name>totalResults</name>
 	        <required>false</required>
 	        <rtexprvalue>false</rtexprvalue>
-	        <type>java.lang.Integer</type>
+	        <type>java.lang.String</type>
 	    </attribute>
 	    <example>
-	      <![CDATA[<xpedx:flexpagectl currentPage='3' endPage='6' urlSpec="?page={0}" />]]>
+	      <![CDATA[<xpedx:flexpagectl currentPage='3' endPage='6' totalResults='77' urlSpec='?page={0}' isAjax='false' />]]>
 	    </example>
   </tag>
 	<tag>

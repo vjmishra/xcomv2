@@ -42,21 +42,15 @@ public class FlexPaginationComponent extends Component {
 
 	private Integer m_currentPage;
 	private Integer m_lastPage;
+	private Integer m_totalResults;
 	private String m_urlSpec; // note: custom mutator to decode brackets
 	private String m_cssClass;
 	private Boolean m_isLastUnknown;
 	private Boolean m_isAjax;
 	private String m_divId;
-	private Integer m_totalResults;
 
 	public FlexPaginationComponent(ValueStack stack) {
 		super(stack);
-		m_currentPage = null;
-		m_lastPage = null;
-		m_urlSpec = null;
-		m_cssClass = null;
-		m_isLastUnknown = null;
-		m_isAjax = false;
 	}
 
 	@Override
@@ -102,6 +96,14 @@ public class FlexPaginationComponent extends Component {
 					}
 
 					printPageElement(writer, hasNext, ElementType.ARROW_RIGHT, currentPage + 1);
+
+					printRootElementClose(writer);
+
+				} else if (getTotalResults() != null) {
+					// no pagination necessary, just display results
+					printRootElementOpen(writer, getId(), getCssClass());
+
+					printPageElement(writer, false, ElementType.RESULTS, null);
 
 					printRootElementClose(writer);
 				}
@@ -278,6 +280,14 @@ public class FlexPaginationComponent extends Component {
 		m_lastPage = lastPage;
 	}
 
+	public Integer getTotalResults() {
+		return m_totalResults;
+	}
+
+	public void setTotalResults(Integer totalResults) {
+		m_totalResults = totalResults;
+	}
+
 	public String getUrlSpec() {
 		return m_urlSpec;
 	}
@@ -318,14 +328,6 @@ public class FlexPaginationComponent extends Component {
 
 	public void setDivId(String divId) {
 		m_divId = divId;
-	}
-
-	public Integer getTotalResults() {
-		return m_totalResults;
-	}
-
-	public void setTotalResults(Integer totalResults) {
-		m_totalResults = totalResults;
 	}
 
 }
