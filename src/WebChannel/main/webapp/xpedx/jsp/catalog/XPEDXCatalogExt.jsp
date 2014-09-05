@@ -396,33 +396,18 @@
 							</s:else>
 						</s:if>
                  </div>   
-   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
-	<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
-	<s:set name='sortName' value='%{theSpanNameValue}' />
-	<s:set name='sortDir' value='%{sortDirection}' />           
-                 <p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
-                 <!-- Webtrend Meta Tag start -->
-                 <%--added for jira 3317 --%>
-                 <s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
-				 <s:property value="%{#pageNumber}"/>
-		 </s:if></span>
-                 <s:if test="%{searchMetaTag == true}">
-                 	<s:if test="%{#checkedval1 == true}" ><META Name="DCSext.w_x_ss" content="1"></s:if>
-					
-					<META Name="WT.ossr" content="<s:property value='%{#numResult}' />">
-					<META Name="WT.oss" content="<s:property value='%{#_action.getSearchTerm()}' />">
-				</s:if>
- 				<!-- Webtrend Meta Tag endt -->
- 
-                 	<s:url id="goToPageURL" action="goToPage">
-                 		<s:param name="sortDirection" value="#sortDir"/>
-						<s:param name="theSpanNameValue" value="#sortName"/>
-						<s:param name="pageNumber" value="'{0}'" />
-						<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
-					</s:url> <swc:pagectl currentPage='%{#pageNumber}'
-						lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
-						urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
-				  </p>
+			   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
+				<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
+				<s:set name='sortName' value='%{theSpanNameValue}' />
+				<s:set name='sortDir' value='%{sortDirection}' />
+				<s:url id="goToPageURL" action="goToPage">
+					<s:param name="sortDirection" value="#sortDir"/>
+					<s:param name="theSpanNameValue" value="#sortName"/>
+					<s:param name="pageNumber" value="'{0}'" />
+					<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+				</s:url>
+				<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
+							urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
           </div>
 	
 <!-- START of new MIL - PN -->
@@ -1197,21 +1182,14 @@ var ct = Ext.get('item-box-inner');
 	</div>
 	<%--Added hidden parameter searchTermString for JIRA #4195 --%>
 	<s:hidden id='searchTermString' name='searchTermString' value="%{searchString}" />
-	<p class="pageresults"><s:property value='#numResult' /> Results&nbsp;|<span>&nbsp;Page&nbsp
-	<s:if test="%{#totalNumberOfPages == 0 || #totalNumberOfPages == 1}">
-		<s:property value="%{#pageNumber}"/>
-	</s:if></span>
-	
 	<s:url id="goToPageURL" action="goToPage">		
 		<s:param name="sortDirection" value="#sortDir"/>
 		<s:param name="theSpanNameValue" value="#sortName"/>
 		<s:param name="pageNumber" value="'{0}'" />
 		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
 	</s:url> 
-	<swc:pagectl currentPage='%{#pageNumber}'
-		lastPage='%{#totalNumberOfPages}' showFirstAndLast='False'
-		urlSpec='%{#goToPageURL}' cssClass='pageresults' startTabIndex='51' />
-	</p>
+	<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
+				urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
 	</div>
 	</div>
 	<!-- old narrow by include -->
