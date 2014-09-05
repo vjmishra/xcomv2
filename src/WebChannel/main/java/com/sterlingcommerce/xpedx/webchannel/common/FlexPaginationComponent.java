@@ -194,7 +194,7 @@ public class FlexPaginationComponent extends Component {
 		if (makeLink && getUrlSpec() != null) {
 			if (getIsAjax()) {
 				String url = MessageFormat.format(getUrlSpec(), pageNumber);
-				out.append("		<a href='#' onclick='callAjaxForPagination('").append(url).append("', '").append(getDivId()).append("'); return false;' >");
+				out.append("		<a href='#' onclick='callAjaxForPagination(\"").append(url).append("\", \"").append(getDivId()).append("\"); return false;' >");
 				out.append(				label);
 				out.append("		</a>");
 
