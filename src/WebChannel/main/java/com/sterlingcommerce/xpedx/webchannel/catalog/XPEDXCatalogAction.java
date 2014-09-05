@@ -832,13 +832,18 @@ public class XPEDXCatalogAction extends CatalogAction {
 						if (searchStartsWithFlag && searchStringToken.length()>3 && (!searchStringToken.substring(searchStringToken.length()-1).equals("*"))) {
 							searchStringToken =searchStringToken+ "*";
 						}
+
+						//EB-7558 - When searched with singler term for eg 5T3, it should searc with 5T3*
+						if (searchStartsWithFlag && searchStringTokenList.length == 1 && searchStringToken.indexOf("*") == -1 ){							
+							searchStringToken =searchStringToken+ "*";
+						}
+						//End of //EB-7558
 						searchTerm=searchTerm+searchStringToken+" ";
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
 						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem) {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
-							//EB-7558
-							searchStringToken =searchStringToken+ "*";
+							
 						} else {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
 						}
