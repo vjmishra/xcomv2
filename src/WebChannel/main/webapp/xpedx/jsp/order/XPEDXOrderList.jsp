@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx"%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -412,14 +413,11 @@ function printPOs(customerPos) {
 			</s:form>
 			
 	    <!-- Begin mid-section -->
-	    <div class="addmarginleft0"> <!-- Begin mid-section container -->
+	    <div class="addmarginleft0 float-right"> <!-- Begin mid-section container -->
 		
              <div id="open-orders-Msg-top"  style="display: none;position:relative;left:375px;color:red;" class="error">&nbsp;</div> 
-            <div class="search-pagination-bottom">
-            	  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-                  <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#orderListPaginationURL}"/>
-			</div>
+           <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
+           <div class="clearfix"></div>
 <!--	    	<div class="search-pagination-top">Page&nbsp;&nbsp;<a class="underlink" href="#"><</a> <a class="underlink" href="#">1</a> <a class="underlink" href="#">2</a> <a class="underlink" href="#">3</a> <a class="underlink" href="#">4</a> <a class="underlink" href="#">5</a> <a class="underlink" href="#"> ></a></div> -->
 			<s:form id="dol" namespace="/order" method="post" onsubmit="return swc_validateForm('dol');" >
 				<s:hidden id="action_namespace" name="#action.namespace" value="/order"/>
@@ -842,11 +840,7 @@ function printPOs(customerPos) {
     </s:form>
     		<!-- <div id="table-bottom-bar" class="search-bottom-table-bar"><div id="table-bottom-bar-L"></div><div id="table-bottom-bar-R"></div></div> -->
     		
-            <div class="search-pagination-bottom">
-				 <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-                 <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#orderListPaginationURL}"/>
-			</div>
+            <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 		 <div id="open-orders-Msg-bottom" style="display: none;position:relative;left:375px;color:red;" align="center" class="error">&nbsp;</div> 
 		 
 	    </div> <!-- end mid-section container -->

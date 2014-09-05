@@ -187,6 +187,10 @@
 .small-text {
 	font-size: 11px;
 }
+.width100-percent{
+	width:100%;
+}
+
 /*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;

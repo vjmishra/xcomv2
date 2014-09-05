@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx" %>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -433,17 +434,11 @@
 	    </div> <!-- end top section -->
 	    <br/>
 	    <!-- Begin mid-section -->
+	    
+	    <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#approvalListPaginationURL}" isAjax="false" />
+	    <div class="clearfix"></div>
 	    <div class="addmarginleft0"> <!-- Begin mid-section container -->
 	    	
-	       <div class="search-pagination-top">
-	       		  <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-                  <s:if test="%{totalNumberOfPages>1}">
-                  	Page
-                  </s:if>
-                  
-                  	&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-                 	urlSpec="%{#approvalListPaginationURL}"/>
-			</div>
 	    	
             <swc:sortctl sortField="%{orderByAttribute}"
 		                  sortDirection="%{orderDesc}" down="Y" up="N"
@@ -597,11 +592,7 @@
 	    	</table>
 			</swc:sortctl>
 	    	
-			<div class="search-pagination-bottom">
-			        <s:if test="%{totalNumberOfPages == 0 || totalNumberOfPages == 1}">Page&nbsp;&nbsp;<s:property value = "%{pageNumber}" /></s:if>
-			        <s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False"
-			       	urlSpec="%{#approvalListPaginationURL}"/>
-			</div>
+			<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#approvalListPaginationURL}" isAjax="false" />
 	    	
 	    </div> <!-- end mid-section container -->
 	    <!-- End mid section -->

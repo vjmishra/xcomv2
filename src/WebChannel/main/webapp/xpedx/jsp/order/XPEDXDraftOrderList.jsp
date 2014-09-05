@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="swc" uri="swc"%>
+<%@ taglib prefix="xpedx" uri="xpedx" %>
 <%request.setAttribute("isMergedCSSJS","true");%>
 <s:bean name="com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils" id="wcUtil" />
 
@@ -289,11 +290,9 @@ span.underlink:hover {
      			     		<s:text name='MSG.SWC.CART.CARTLIST.INFO.ACTIVECART' />
      			    </span>
      			    <%-- (This used to have onclick="writeMetaTag(tag,content,2);" on top button but not bottom) --%> 
+					
 					</div> 
-              
-   				 <p class="search-pagination-top">
-                 	<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#draftOrderListPaginationURL}"/>
-                 </p>
+              <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#draftOrderListPaginationURL}" isAjax="false" />
                 <div class="clearfix"></div>
                
                 <swc:sortctl sortField="%{orderByAttribute}" sortDirection="%{orderDesc}" down="Y" up="N" urlSpec="%{#draftOrderListSortURL}">
@@ -301,7 +300,7 @@ span.underlink:hover {
                     <s:action name="xpedxBuildSimpleTable" executeResult="true" namespace="/common" >
                         <s:param name="id" value="'carts-list'"/>
                         <s:param name="summary" value="'Draft Order List Table'"/>
-                        <s:param name="cssClass" value="'standard-table'" />
+                        <s:param name="cssClass" value="'standard-table width100-percent'" />
                         <s:param name="iterable" value="#iter"/>
                        
                         <s:param name="columnSpecs[0].label" value="'Name'"/>
@@ -345,8 +344,8 @@ span.underlink:hover {
                   </s:action>
               </swc:sortctl>
                     <div id="tool-bar-bottom" class="float-right">
-					<p class="search-pagination-bottom">
-						<s:if test="%{totalNumberOfPages>1}">Page</s:if>&nbsp;&nbsp;<swc:pagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" showFirstAndLast="False" urlSpec="%{#draftOrderListPaginationURL}"/>
+                    <p>
+					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#draftOrderListPaginationURL}" isAjax="false" />
 					</p>
 					<input class="btn-gradient floatright" id="createCart2" type="button" href="#createNewCartDlg"
 						value="Create New Cart" />
