@@ -679,7 +679,7 @@ function showSplitDiv(divId)
                         <table class="width-44 float-right" id="OD-top-section-right" >
                         		<tr>
                         			<td colspan="2"><span class="boldText">Order Status: </span> 
-                        			<s:if test='%{#xutil.getAttribute(#orderDetail,"MaxOrderStatus") == "1310" || (#orderType == "Customer" && #isCSRReview)}'>
+                        			<s:if test='%{#orderType == "Customer" && #isCSRReview}'>
                         				Submitted (CSR Reviewing) 
                         			</s:if>
                         			<s:else>
