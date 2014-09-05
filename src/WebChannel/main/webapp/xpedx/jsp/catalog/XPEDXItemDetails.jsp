@@ -315,7 +315,7 @@
 										<s:hidden id="Qty_Check_Flag" name="Qty_Check_Flag" value="false"/>
 										<div class="order-label">Qty:</div>
 										<div class="order-input">
-											<s:textfield name='qtyBox' id="%{'Qty_' + #itemID}" size="7" maxlength="7"	
+											<s:textfield name='qtyBox' id="%{'Qty_' + #itemID}" size="6" maxlength="7"	
 													value="%{#_action.getRequestedQty()}"
 													theme="simple" onkeyup="isValidQuantityRemoveAlpha(this,event);"
 													onchange="isValidQuantity(this); qtyInputCheck(this);"

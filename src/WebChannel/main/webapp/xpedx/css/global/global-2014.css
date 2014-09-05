@@ -1666,3 +1666,7 @@ hr.shade {
 .xpedx-light-box p.addmargintop10 {
 	margin: 10px 0 0 0;
 }
+
+.detail-view .qty_selector {
+	size: auto;
+}
