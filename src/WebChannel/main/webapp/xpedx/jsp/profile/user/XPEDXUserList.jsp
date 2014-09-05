@@ -173,7 +173,7 @@
 						<xpedx:sortctl sortField="%{orderByAttribute}" sortDirection="%{orderDesc}" down="Y" up="N"
 								urlSpec="%{#userListSortURL}" isAjax="true" divId="viewUsersDlg">
 						  
-						<table cellspacing="0" cellpadding="0" class="standard-table sortable" id="user-header" style="background: none repeat scroll 0% 0% transparent; margin-left: 1px;">  
+						<table cellspacing="0" cellpadding="0" class="standard-table sortable addmargintop10" id="user-header" style="background: none repeat scroll 0% 0% transparent; margin-left: 1px;">  
                          
                               <tr id="none">
                              <!-- <th width="1%" class="no-border table-header-bar-left sorttable_nosort"></th>  --> 
