@@ -108,13 +108,6 @@
 			</s:else>
 			<s:div cssClass="mil-pa-wrap %{#milPaWrapClass}">
 				<s:if test='%{#lineStatusCodeMsg == #suspendedErrorMsg ||  #_action.getIsOMError() != "true" }'>
-					<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
-						<s:div cssStyle="color:%{#jsonAvailabilityMessageColor}; font-size:13px; padding-left:30px; line-height:22px;">
-							<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
-							<s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available
-						</s:div>
-					</s:if>
-					
 					<div class="mil-pa-avail">
 						<h4>Availability</h4>
 						<s:div id="availability_%{#id}" cssClass="addpadleft20">
@@ -203,6 +196,14 @@
 										</tr>
 									</tbody>
 								</table>
+									<s:if test='%{#qtyTxtBox != null && #qtyTxtBox != 0 && #jsonAvailabilityBalance != null}'>
+										<div class="clearfix"></div>
+										<div class="warning-icon">
+											<img width="12" height="12" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/warning.png"/>
+										</div>
+										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+										<div class="qty-unavailable"><s:property value="#xpedxutil.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> currently unavailable</div>
+									</s:if>
 								<table class="addpad3">
 									<tbody>
 										<tr>

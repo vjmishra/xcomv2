@@ -146,6 +146,7 @@ function getPriceAndAvailabilityForItems(options) {
 				html.push('				<div class="avail-wrap">');
 				
 				var requestedQty = parseFloat(pnaItem.requestedQty);
+				var notAvailQty=(requestedQty-pnaAvail['total']);
 				
 				if (origQty[i].trim().length > 0) {
 					// only display 'ready to ship' message if user requested a qty (omit message if user left qty field blank)
@@ -175,6 +176,16 @@ function getPriceAndAvailabilityForItems(options) {
 				html.push('						<div class="col-2">', numberWithCommas(pnaAvail['total']), '</div>');
 				html.push('						<div class="col-3">', data.uomDescriptions[pnaItem.requestedQtyUOM], '</div>');
 				html.push('					</div>');
+				html.push('					<div class="clearfix"></div>');
+				if (origQty[i].trim().length > 0) {
+					 if (pnaAvail['total'] > 0 && requestedQty > pnaAvail['total']) {
+					
+						html.push('					<div class="warning-icon">');
+						html.push('						<img width="12" height="12" alt="" src="'+XPEDXWCUtils_STATIC_FILE_LOCATION+'/xpedx/images/common/warning.png"/>')
+						html.push('					</div>');
+						html.push('          		<div class="qty-unavailable">',notAvailQty,' ', data.uomDescriptions[pnaItem.requestedQtyUOM],' currently unavailable</div>');
+					}
+				}
 				html.push('					<div class="pa-row pa-location">', numberWithCommas(pnaAvail['0']), ' ', data.uomDescriptions[pnaItem.requestedQtyUOM], ' available today at ', data.divisionName, '</div>');
 				html.push('				</div>'); // close avail-wrap
 				html.push('			</div>'); // close pa-avail

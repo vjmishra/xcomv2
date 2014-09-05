@@ -1674,3 +1674,16 @@ hr.shade {
 .detail-view .qty_selector {
 	size: auto;
 }
+
+.warning-icon {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 3px;
+	}
+.qty-unavailable {
+	color: #ff0000;	
+	color: #666;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 3px;
+	}

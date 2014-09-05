@@ -610,10 +610,6 @@
 				     	 <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
 					 		<table  cellspacing="0" cellpadding="0" border="0px solid red" class="mil-config" style="font-size:12px">
 						    	<tbody>
-						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
-										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
-										<p style="color:<s:property value='%{#jsonAvailabilityMessageColor}'/>;font-size:13px;padding-left:2px"><strong><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> <s:property value='%{#jsonUOMDesc}'/> not available</strong></p>
-									</s:if>
 									<tr>
 										<td align="left" style="color:${jsonAvailabilityMessageColor};font-size:13px;"><strong>${jsonAvailabilityMessage}</strong></td>
 									</tr>					    		
@@ -633,6 +629,21 @@
 										<td class="text-left">&nbsp;${jsonUOMDesc}</td>
 						    		</tr>
 						    		<%-- <s:if test="(#divName != null)"> --%>
+						    		
+						    		<s:if test='%{#jsonAvailabilityBalance != null}'>
+						    		<tr>
+						    		<td colspan="3">
+						    			<div class="clearfix"></div>
+										<div class="warning-icon">
+											<img width="12" height="12" alt="" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/common/warning.png"/>
+										</div>
+										<s:set name="jsonAvailabilityBalance" value="@com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils@getDecimalQty(#jsonAvailabilityBalance)"/>
+										<div class="qty-unavailable"><s:property value="#xpedxUtilBean.formatQuantityForCommas(#jsonAvailabilityBalance)"/> 
+											<s:property value='%{#jsonUOMDesc}'/> currently unavailable
+										</div>
+										</td>
+										</tr>
+									</s:if>
 						    		<tr>
 										<%-- <td colspan="3"><p class="italic">${jsonImmediate} available today at ${DivisionName}</p></td> --%>
 										<td colspan="3"><p class="italic">${jsonCommaFmtImmediate} &nbsp;${jsonUOMDesc}&nbsp;available today at ${DivisionName}</p></td> 
