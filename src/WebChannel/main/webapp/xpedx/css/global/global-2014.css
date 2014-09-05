@@ -183,6 +183,10 @@
 .addpadright10{
 	padding-right:10px;
 }
+
+.small-text {
+	font-size: 11px;
+}
 /*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;
@@ -1472,6 +1476,12 @@ h3 {
 	background: #cccccc;
 }
 
+hr.shade {
+	background: #cccccc;
+	height: 1px;
+	border:none;
+}
+
 /*-------contact-modal---------*/
 .contact-modal {
 	margin:0px;
@@ -1643,4 +1653,16 @@ h3 {
 	float: right;
 	clear: none;
 	text-align: right;
+}
+
+.xpedx-light-box p.addmarginbottom10 {
+	margin: 0 0 10px 0;
+}
+
+.xpedx-light-box p.small {
+	font-size: 11px;
+}
+
+.xpedx-light-box p.addmargintop10 {
+	margin: 10px 0 0 0;
 }

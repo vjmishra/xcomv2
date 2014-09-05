@@ -64,7 +64,7 @@ function showXPEDXReplacementItems(repItemID, orderLineKey, order) {
 		{
         	'autoDimensions'	: false,
 			'width'         	: 600,
-			'height'        	: 325
+			'height'        	: 360
 		}
 	);	  	
 }

@@ -6464,3 +6464,8 @@ BEGIN 2014 styles
 .mil-edit-replacement-adjust {
 	margin-right: -20px;
 }
+
+#fancybox-content{
+	height: 325px;
+}
+
