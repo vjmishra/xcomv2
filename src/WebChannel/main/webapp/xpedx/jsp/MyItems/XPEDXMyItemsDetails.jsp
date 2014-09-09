@@ -1997,7 +1997,30 @@ function showSharedListForm(){
 							}
                                      
                  }
-
+				  
+ function removeItem(itemKey){
+	 
+	 		$("#itemKeyForRemoveFromList").val(itemKey);
+	 		$("#listKeyForRemove").val($("#listKey").val());
+	 		$("#confirmDeleteItem").fancybox({				
+			'onClosed' : function() {    			
+				$("#itemKeyForRemoveFromList").val("");
+				$("#listKeyForRemove").val("");
+			},
+			'autoDimensions'	: false,
+			'width' 			: 300,
+			'height' 			: 120  
+				}).trigger('click');
+	 }
+	function fancyBoxCloseAndDelItem(){
+		var itemIdForRemoveFromListForm = document.getElementById("itemIdForRemoveFromListForm");
+		itemIdForRemoveFromListForm.listNameForRemove.value = Ext.get("listName").dom.value;
+		itemIdForRemoveFromListForm.listDescForRemove.value = Ext.get("listDesc").dom.value;
+		<s:url id='deleteListLink' action='MyItemsDetailsDelete.action' escapeAmp='false'></s:url>
+		itemIdForRemoveFromListForm.action = "<s:property value='%{deleteListLink}'/>";
+		$("#itemIdForRemoveFromListForm").submit();	
+		$.fancybox.close();
+	}		
     </script>
 
 </head>
@@ -2043,7 +2066,8 @@ function showSharedListForm(){
 		<s:url id='addToCartURLId' namespace="/myItems" action='addMyItemToCart' />
 		<s:hidden id='updatePandAURL' value='%{#addToCartURLId}' />
 		<s:hidden id='currentCartInContextOHKVal' value='%{#currentCartInContextOHK}' />
-
+		<div>
+		<a id="confirmDeleteItem" href="#deleteItemDiv"></a>
 		<!-- HTML Dialogs -->
 		<div style="display: none;">
 			<div id="dlgNewForm" class="dlgForm">
@@ -2692,8 +2716,9 @@ function showSharedListForm(){
 														</p>
 													</s:if>
 												</s:if>
-												
-												
+												<s:if test='editMode == true'>	
+													<input class="btn-neutral addmargintop10" type="button" value="Remove from List" name="button" onclick="removeItem('<s:property value="#id"/>');"/>
+												</s:if>	
 											</div>
 											
 											<s:if test='(xpedxItemIDUOMToComplementaryListMap.containsKey(#itemIDUOM))'>
@@ -2714,6 +2739,7 @@ function showSharedListForm(){
 												</p>
 												<br />
 											</s:if>
+											
 										</div> <%-- / mil-desc-wrap --%>
 		
 		
@@ -3399,6 +3425,31 @@ function showSharedListForm(){
 				</s:iterator>
 			</s:if>
 		</div> <%-- / wrapper for lightbox --%>
+	<div style="display: none;">
+		<div id="deleteItemDiv" class="xpedx-light-box">
+			<h1> <s:text name='Delete Item From My Items List' /></h1>
+			<s:form id="itemIdForRemoveFromListForm" method="post" name="itemIdForRemoveFromListForm" onsubmit="return false;">
+				<input id= "itemKeyForRemoveFromList" name = "itemKeys" type="hidden" value=""/>
+				<input id= "listKeyForRemove" name = "listKey" type="hidden" value=""/>
+				<input id= "editModeForRemove" name = "editMode" type="hidden" value="true"/>
+				<input id= "listNameForRemove" name = "listName" type="hidden" value=""/>
+				<input id= "listDescForRemove" name = "listDesc" type="hidden" value=""/>
+			</s:form>
+				<p class="addmargintop0"><s:text name='Are you sure want to delete this item from your My Items List?' /></p>
+					<ul id="tool-bar" class="tool-bar-bottom float-right">
+						<li>
+							<a class="btn-neutral" href="javascript:$.fancybox.close();">
+								<span>Cancel</span>
+							</a>
+						</li>
+						<li class="float-right">
+							<a class="btn-gradient" href="javascript:fancyBoxCloseAndDelItem();">
+								<span>Yes</span>
+							</a>
+						</li>
+					</ul>
+		</div>
+	</div>
 		
 		<s:form action="addComplementaryItemToCart" namespace="/order" method="POST" name="addReplacementItemToCartForm" id="addReplacementItemToCartForm">
 			<div id="replacementItems" style="height: 380px; display: none;">

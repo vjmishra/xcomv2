@@ -6469,3 +6469,9 @@ BEGIN 2014 styles
 	height: 325px;
 }
 
+.graybar a {
+	font-weight: bold;
+}
+.graybar a:hover {
+	text-decoration: underline;
+}
