@@ -7018,4 +7018,34 @@
     Modifyprogid="XMLMigrator" Modifyts="2011-07-14T14:37:59-04:00"
     Modifyuserid="SYSTEM" QueueKey=" " SeqNo="1" ServerKey=" "
     SubFlowKey="YIFSENT_TO_NODE" SubFlowName="YIFSENT_TO_NODE"/>
+	<SubFlow
+    ConfigXML="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>
+&lt;SubFlowConfig>
+    &lt;Node IsStartNode=&quot;N&quot; NodeGroup=&quot;&quot; NodeId=&quot;0&quot; NodeText=&quot;Start&quot; NodeType=&quot;Start&quot;/>
+    &lt;Link ConditionValue=&quot;&quot; FromNode=&quot;0&quot; IsReceiver=&quot;&quot;
+        LinkId=&quot;1410260904755&quot; ToNode=&quot;1410260898015&quot; TransportType=&quot;&quot; Type=&quot;Simple&quot;/>
+    &lt;Node IsStartNode=&quot;N&quot; NodeGroup=&quot;Flow&quot; NodeId=&quot;1410260898015&quot;
+        NodeText=&quot;API&quot; NodeType=&quot;API&quot;>
+        &lt;Properties APIName=&quot;getXPXChildCustomersViewList&quot;
+            APIType=&quot;HangoffCustom&quot; BackwardCompatibilityRequired=&quot;N&quot;
+            ClassName=&quot;com.yantra.custom.api.CustomApiImpl&quot;
+            IsStartNode=&quot;N&quot; MethodName=&quot;getXPXChildCustomersViewList&quot; Version=&quot;&quot;>
+            &lt;Args MaximumRecords=&quot;100&quot; ModifyFlag=&quot;Y&quot;
+                ResourceIDForMasterData=&quot;YCPIF024&quot;
+                TotalNumberOfRecords=&quot;0&quot; YFC_Locale_Code=&quot;en_US_EST&quot;/>
+            &lt;FactList MaximumRecords=&quot;100&quot; ModifyFlag=&quot;Y&quot;
+                ResourceIDForMasterData=&quot;YCPIF524&quot;
+                TotalNumberOfRecords=&quot;0&quot; YFC_Locale_Code=&quot;en_US_EST&quot;/>
+        &lt;/Properties>
+    &lt;/Node>
+    &lt;Link ConditionValue=&quot;&quot; FromNode=&quot;1410260898015&quot; IsReceiver=&quot;&quot;
+        LinkId=&quot;1410260912228&quot; ToNode=&quot;1410260888780&quot; TransportType=&quot;&quot; Type=&quot;Simple&quot;/>
+    &lt;Node IsStartNode=&quot;N&quot; NodeGroup=&quot;&quot; NodeId=&quot;1410260888780&quot;
+        NodeText=&quot;End&quot; NodeType=&quot;End&quot;/>
+&lt;/SubFlowConfig>"
+    Createprogid=".YIFUIManager" Createts="2014-09-09T14:37:59-04:00"
+    Createuserid="admin" FlowKey="201409090608041854511575" Lockid="0"
+    Modifyprogid=".YIFUIManager" Modifyts="2014-09-09T14:37:59-04:00"
+    Modifyuserid="SYSTEM" QueueKey=" " SeqNo="1" ServerKey=" "
+    SubFlowKey="201409090609351854511586" SubFlowName="YIFgetXPXChildCustomerViewService"/>
 </YFS_SUB_FLOWList>
