@@ -127,7 +127,8 @@
 		<s:set name='certFlag'	value="#xutil.getAttribute(#itemElemExtn, 'ExtnCert')" />
 		<s:set name="primaryInfoElem" value='#xutil.getChildElement(#itemElem,"PrimaryInformation")' />
 		<s:set name="itemAssets" value='#xutil.getChildElement(#itemElem,"AssetList")' />
-		<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' /> 
+		<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' />
+		<s:set name='imageLocation' value="#xutil.getAttribute(#primaryInfoElem, 'ImageLocation')" /> 
 		<s:set name='pImg' value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
 		<s:if test='%{#pImg=="/"}'>
 			<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />

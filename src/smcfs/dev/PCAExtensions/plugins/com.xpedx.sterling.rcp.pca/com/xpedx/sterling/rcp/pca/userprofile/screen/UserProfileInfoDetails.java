@@ -293,7 +293,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		GridData gridData2 = new GridData();
 		gridData2.horizontalAlignment = 3;
 		gridData2.grabExcessHorizontalSpace = true;
-		gridData2.verticalAlignment = SWT.BEGINNING;
+		//gridData2.verticalAlignment = SWT.END;
 		GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.numColumns = 4;
 		
@@ -307,17 +307,21 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		GridData gridData6 = new GridData();
 		gridData6.heightHint = 25;
 		gridData6.widthHint = 145;
+		gridData6.verticalAlignment = SWT.BEGINNING;
 		
-		btnUpdate = new Button(compositeMiscPnl, 0);
+		
+		btnDelete = new Button(compositeMiscPnl, 0);
+		//btnDelete.setAlignment(SWT.LEFT);
+		btnDelete.setText("Delete User Profile ");
+		btnDelete.setLayoutData(gridData2);
+		btnDelete.setData("name", "btnDelete");
+		
+		btnUpdate = new Button(compositeMiscPnl, 1);
 		btnUpdate.setText("Update_User_Profile");
-		btnUpdate.setLayoutData(gridData2);
+		btnUpdate.setLayoutData(gridData6);
 		btnUpdate.setData("name", "btnUpdate");
 		
-		btnDelete = new Button(compositeMiscPnl, 1);
-		btnDelete.setAlignment(SWT.LEFT);
-		btnDelete.setText("Delete User Profile ");
-		btnDelete.setLayoutData(gridData6);
-		btnDelete.setData("name", "btnDelete");
+	
 		
 	}
 

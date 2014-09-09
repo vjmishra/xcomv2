@@ -5755,4 +5755,12 @@
     IsRealTime="N" Lockid="0" Modifyprogid="XMLMigrator"
     Modifyts="2011-07-14T15:09:11-04:00" Modifyuserid="SYSTEM"
     OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
+<Flow Createprogid=".YCPWFRepositoryAPI" Createts="2014-09-09T15:09:11-04:00"
+    Createuserid="admin" FlowGroupName="XPXCustomerUtils"
+    FlowKey="201409090608041854511575"
+    FlowName="getXPXChildCustomerViewService" FlowType="00"
+    GraphUIKey="201409090608081854511578" IsOutGoing="Y" IsPrintService="N"
+    IsRealTime="N" Lockid="1" Modifyprogid=".YIFUIManager"
+    Modifyts="2014-09-09T15:09:11-04:00" Modifyuserid="admin"
+    OwnerKey="DEFAULT" ProcessTypeKey="GENERAL" SystemDefined="N" TransportTypeKey="LOCAL"/>
 </YFS_FLOWList>
