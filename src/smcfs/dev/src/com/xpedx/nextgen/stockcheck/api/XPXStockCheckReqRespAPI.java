@@ -386,8 +386,10 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 				indexID.setTextContent(indexString.getTextContent());
 
 			Element customerPartNumber = stockCheckResponseDocument.createElement("CustomerPartNumber");
-			customerPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./CustomerPartNumber").getTextContent());
-
+			Element reqCustNum = SCXmlUtil.getXpathElement(requestedItemElement,"./CustomerPartNumber");
+			if (reqCustNum != null) {
+				customerPartNumber.setTextContent(reqCustNum.getTextContent());
+			}
 			Element xpedxPartNumber = stockCheckResponseDocument.createElement("PartNumber");
 			Element quantity = stockCheckResponseDocument.createElement("Quantity");
 			Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
@@ -426,7 +428,10 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			Element catalogAttributeList = stockCheckResponseDocument.createElement("CatalogAttributeList");
 
 			if(inValidItemPositions.contains(i)) {
-				xpedxPartNumber.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./PartNumber").getTextContent());
+				Element reqPartNum = SCXmlUtil.getXpathElement(requestedItemElement,"./PartNumber");
+				if (reqPartNum != null) {
+					xpedxPartNumber.setTextContent(reqPartNum.getTextContent());
+				}
 				quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
 				unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
 				itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
