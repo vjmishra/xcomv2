@@ -31,7 +31,11 @@ public class CustomHomeAction extends WCAction {
 		{
 
 			getAllAssignedShiptosWithDivisionsForAUser();
-			if (divisionBeanList != null && divisionBeanList.size() >0) {
+			
+			if (divisionBeanList != null ) {
+				if(divisionBeanList.size()<=0){
+					return "noShipTo";
+				}
 				DivisionBean divisionBean = divisionBeanList.get(0);
 				ArrayList<ShipToCustomerBean>  shipToCustomers = divisionBean.getShipToCustomrs();
 
@@ -51,17 +55,21 @@ public class CustomHomeAction extends WCAction {
 						prefferedShipToCustomer=shipToCustomerBean.getShipToCustomerID();
 						return "changePreferredShip";
 					}
+					
 				}
+				wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
+				setPunchoutMessage(XPEDXWCUtils.getCustomerPunchoutMessage(wcContext));
+				// Remove data from session also
+				return "punchout";
 			}
-
-
+			
+			
 
 			wcContext.getSCUIContext().getSession(false).removeAttribute("aribaFlag");
-
 			setPunchoutMessage(XPEDXWCUtils.getCustomerPunchoutMessage(wcContext));
-
 			// Remove data from session also
 			return "punchout";
+			
 
 		} else {
 			return "main";

@@ -22,6 +22,7 @@
 		
 		<action name="punchoutShipToSearchAction" class="com.sterlingcommerce.xpedx.webchannel.punchout.PunchoutShipToSearchAction">
 			<result name="punchout" >/xpedx/jsp/punchout/PunchoutLandingPage.jsp</result>
+			<result name="noShipTo" >/xpedx/jsp/punchout/punchoutNoShipTo.jsp</result>
 		</action>
 		
 		<action name="PunchoutUtilities" class="com.sterlingcommerce.webchannel.core.WCAction">
