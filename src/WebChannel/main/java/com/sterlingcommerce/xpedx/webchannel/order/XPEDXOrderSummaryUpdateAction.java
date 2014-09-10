@@ -903,6 +903,7 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	private ArrayList<String> inventoryInds;
 	private String customerHoldCheck;
 	private String rushOrdrDateFlag = "false";
+	private String requestDeliveryDate;
 	
 	public String getRushOrdrDateFlag() {
 		return rushOrdrDateFlag;
@@ -1221,5 +1222,11 @@ public class XPEDXOrderSummaryUpdateAction extends OrderSummaryUpdateAction {
 	public void setInventoryInds(ArrayList<String> inventoryInds) {
 		this.inventoryInds = inventoryInds;
 	}
-
+	
+	public String getRequestDeliveryDate() {
+		return requestDeliveryDate;
+	}
+	public void setRequestDeliveryDate(String requestDeliveryDate) {
+		this.requestDeliveryDate = requestDeliveryDate;
+	}
 }
