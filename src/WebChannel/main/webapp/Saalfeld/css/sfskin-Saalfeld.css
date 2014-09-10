@@ -1320,6 +1320,45 @@ ul.megamenu {
 .pagination > li > span.more-pages:hover {
 	background: none repeat scroll 0 0 #ffffff;
 }
+/*-------Catalog Grid View Icons-------*/
+ul.cat-grid-icons {
+	float: right;
+	clear: none;
+	cursor: pointer;
+	cursor: hand;
+}
+ul.cat-grid-icons > li {
+	display: inline-block;
+	width: 31px;
+	height: 21px;
+	border-left: 1px #ffffff solid;
+}
+li.icon-normal-view {	
+	background:url(../../xpedx/images/catalog/icon-full-view.png) 5px 0px no-repeat;	
+}
+li.icon-condensed-view {
+	background:url(../../xpedx/images/catalog/icon-condensed-view.png) 5px 0px no-repeat;
+}
+li.icon-mini-view {
+	background:url(../../xpedx/images/catalog/icon-mini-view.png) 5px 0px no-repeat;
+}
+li.icon-grid-view {
+	background:url(../../xpedx/images/catalog/icon-grid-view.png) 5px 0px no-repeat;
+}
+li.icon-normal-view-select {	
+	background:url(../images/catalog/icon-full-view-select-sf.png) 5px 0px no-repeat;	
+}
+li.icon-condensed-view-select{
+	background:url(../images/catalog/icon-condensed-view-select-sf.png) 5px 0px no-repeat;
+}
+li.icon-mini-view-select{
+	background:url(../images/catalog/icon-mini-view-select-sf.png) 5px 0px no-repeat;
+}
+li.icon-grid-view-select{
+	background:url(../images/catalog/icon-grid-view-select-sf.png) 5px 0px no-repeat;
+}
+/*-----*/
+
 
 .login-register h3 {
 	font-size: 16px;
