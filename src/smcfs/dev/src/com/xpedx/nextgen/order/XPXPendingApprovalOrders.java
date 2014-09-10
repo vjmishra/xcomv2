@@ -354,6 +354,7 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 		log = (YFCLogCategory) YFCLogCategory.getLogger("com.xpedx.nextgen.log");
 		String resolverUserIds[] = null;
 		String orderStatusSubjectlLine=null;
+		boolean isBackOrderQty = false;
 		try {
 			api = YIFClientFactory.getInstance().getApi();
 		} catch (YIFClientCreationException e) {
@@ -476,11 +477,19 @@ public class XPXPendingApprovalOrders implements YIFCustomApi{
 	
 							}else{
 								orderLineExtnElem.setAttribute("ExtnPricingUOMDescription", orderLineExtnElem.getAttribute("ExtnPricingUOM"));
-	
-							}	
+							}
+							if(!isBackOrderQty && orderLineElement.getAttribute("LineType") != "C" && orderLineElement.getAttribute("LineType") != "M"){
+								 double backOrderedQty = Double.parseDouble(orderLineExtnElem.getAttribute("ExtnReqBackOrdQty"));
+								 if(backOrderedQty > 0) {
+									 isBackOrderQty = true;
+								 }
+							}
 						}
 					}
 				}
+			}
+			if(XPXEmailUtil.ORDER_APPROVED_EMAIL_TYPE.equals(emailType) && isBackOrderQty) {
+				orderElement.setAttribute("BackOrderQtyMsg", "Partial quantity available for shipment");
 			}
 			String baseURL = null;
 			String toApproveOrderURL =null;

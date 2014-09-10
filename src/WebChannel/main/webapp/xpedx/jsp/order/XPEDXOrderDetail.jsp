@@ -723,7 +723,9 @@ function showSplitDiv(divId)
                         			</td>
                         		</tr>
 			   				<tr>
-								<td>&nbsp;</td>
+								<td class="red"><s:if test="#_action.isBackOrderQty() == true">
+								Partial quantity available for shipment
+								</s:if></td>
 							</tr>
 								<s:if test='#_action.isDeliveryHold() == true || #_action.isShipComplete() == true  || #xpedxExtnRushOrderFlag == "Y" || #_action.isWillCall() == true '>
                         		<tr>
@@ -966,7 +968,7 @@ function showSplitDiv(divId)
 					    	<table class="full-width"> <!-- my-price-table -->
 					    		<tr>
 					    		 
-					    			<td class="text-right" width="81">
+					    			<td class="text-right" width="90">
 						    			<s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 						    			  Ordered&nbsp;Qty:
 						    			</s:if>
@@ -981,7 +983,7 @@ function showSplitDiv(divId)
 									<s:else>
 										<s:set name='uomDesc' value="#wcUtil.getUOMDescription(#uom)"/>
 									</s:else>
-					    			<td class="text-left"  width="175">	
+					    			<td class="text-left"  width="166">	
 						    			 <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>				    			
 						    			  <s:property value='#xpedxUtilBean.formatQuantityForCommas(#orderqty)'/>&nbsp;<s:property value='#uomDesc'/> 
 						    			 </s:if>
@@ -1074,8 +1076,8 @@ function showSplitDiv(divId)
 						    			</td>
 					    			</s:if>
 					    			<s:else>
-						    			<td class="text-right" width="81">&nbsp;</td>
-						    			<td class="text-left"  width="175">&nbsp;</td>
+						    			<td class="text-right" width="90">&nbsp;</td>
+						    			<td class="text-left"  width="166">&nbsp;</td>
 					    			</s:else>
 					    			<td class="text-right">					    			
 						    		<s:if test='%{#xpedxCustomerContactInfoBean.getExtnViewPricesFlag() == "Y"}'>
@@ -1098,7 +1100,7 @@ function showSplitDiv(divId)
 					    		</tr>
 					    		<tr>
 					    			<s:if test="#orderType != 'Customer'">
-						    			<td class="text-right">
+						    			<td class="text-right bold">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 						    			    Backorder Qty:
 						    			  </s:if>
@@ -1120,8 +1122,8 @@ function showSplitDiv(divId)
 						    		    </td>
 					    			</s:if>
 					    			<s:else>
-					    				<td class="text-right" width="81">&nbsp;</td>
-						    			<td class="text-left"  width="175">&nbsp;</td>
+					    				<td class="text-right" width="90">&nbsp;</td>
+						    			<td class="text-left"  width="166">&nbsp;</td>
 					    			</s:else>
 					    			<td class="text-right">&nbsp;</td>
 					    			<td class="text-right">&nbsp;</td>

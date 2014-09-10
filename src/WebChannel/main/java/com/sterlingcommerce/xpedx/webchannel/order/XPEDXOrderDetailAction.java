@@ -1,13 +1,10 @@
 /**
- * 
+ *
  */
 package com.sterlingcommerce.xpedx.webchannel.order;
 
 import java.net.URLEncoder;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -28,11 +25,10 @@ import com.sterlingcommerce.baseutil.SCUtil;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.tools.datavalidator.XmlUtils;
-import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.OrderConstants;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -43,13 +39,22 @@ import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * @author rugrani
- * 
+ *
  */
 public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 
 	private static final String customerExtnInformation = "xpedx-customer-getCustomerAllExtnInformation";
 	private String customerItemFlag;
     private String mfgItemFlag;
+    private boolean isBackOrderQty;
+
+	public boolean isBackOrderQty() {
+		return isBackOrderQty;
+	}
+
+	public void setBackOrderQty(boolean isBackOrderQty) {
+		this.isBackOrderQty = isBackOrderQty;
+	}
 	public String getCustomerItemFlag() {
 		return customerItemFlag;
 	}
@@ -68,7 +73,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.sterlingcommerce.webchannel.order.OrderDetailAction#execute()
 	 */
 	@Override
@@ -82,7 +87,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		ArrayList<Element> tempMajorLineElements = getMajorLineElements();
 		Collections.sort(tempMajorLineElements, new XpedxLineSeqNoComparator());
 		//END: sort the orderlines based on legacy line number
-				
+		isBackOrderQty = isBackorderQtyExists(tempMajorLineElements);
 		userKey = (String)getWCContext().getSCUIContext().getSession().getAttribute(ENC_USER_KEY);
 		if (userKey == null || userKey.trim().equals("")) {
 			//Getting the User Key from loginID
@@ -102,7 +107,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					userKey = URLEncoder.encode(userKey);
 					getWCContext().getSCUIContext().getSession().setAttribute(ENC_USER_KEY, userKey);
 				}
-				
+
 			} catch (CannotBuildInputException e) {
 				XPEDXWCUtils.logExceptionIntoCent(e); //JIRA 4289
 				LOG.error("Error while getting user key : "+ e);
@@ -114,15 +119,15 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		setValuesForChainedOrderMap();
 		setOrderSummaryFlagValues();
 		getCustomerLineDetails();
-		//Added For Jira - 4326		
+		//Added For Jira - 4326
 		isCSRReviewHold();
-		
+
 		try{
 			getAllItemSKUs();
 			//Start of EB-64 - getting the item id and customer UOM of that item, if it exist
 			Document xpxItemXRefDoc = (Document) XPEDXWCUtils.getObjectFromCache("xpxItemXRefDoc");
 			if(xpxItemXRefDoc!=null){
-				customerUOMMap =  new HashMap<String, String>(); 
+				customerUOMMap =  new HashMap<String, String>();
 				customerUOMMap = getItemIdCustomerUOM(xpxItemXRefDoc);
 			}
 			//End of EB-64
@@ -130,12 +135,12 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		catch (Exception ex) {
 			LOG.debug(ex.getMessage());
 		}
-		
+
 		invoiceURL = YFSSystem.getProperty("xpedx.invoicing.url"); //to take it from properties files.
-		
+
 		return returnString;
 	}
-	
+
 	//Added this method for Jira 4326 - CSR Review For FO
 	private void isCSRReviewHold()
 	{
@@ -152,7 +157,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				{
 					String holdTypeName=holdType.getAttribute("HoldType");
 					if(XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD.equals(holdTypeName)
-							|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName) 
+							|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName)
 							|| XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD.equals(holdTypeName)
 							|| XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(holdTypeName)
 							|| XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD.equals(holdTypeName))
@@ -160,20 +165,20 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						isFOCSRReview = true;
 						break;
 					}
-				}	
+				}
 			}
 		}
 	}
 	private void getAllItemSKUs() throws CannotBuildInputException, XPathExpressionException
 	{
-		
+
 		mfgItemFlag =(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_MFG_ITEM_FLAG);
 		customerItemFlag =(String)wcContext.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.BILL_TO_CUST_PART_ITEM_FLAG);
 		XPEDXShipToCustomer shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 		String envCode = shipToCustomer.getExtnEnvironmentCode();
 		String companyCode = shipToCustomer.getExtnCompanyCode();
 		String legacyCustomerNumber = shipToCustomer.getExtnLegacyCustNumber();
-		
+
 		if(envCode == null || companyCode==null || legacyCustomerNumber == null)
 		{
 			Set mashupSet = buildSetFromDelmitedList("draftOrderGetCustomerLineFields");
@@ -188,12 +193,12 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			shipToCustomer.setExtnLegacyCustNumber(legacyCustomerNumber);
 			XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER, shipToCustomer);
 		}
-		
+
 		/*if(useCustSku!=null && useCustSku.length()>0)
 		{
 			setCustomerSku(useCustSku);
 		}*/
-		
+
 		//Fetch all the items in Cart and get their respective SKUs
 		Document orderDoc = getOutputDocument();
 		Element orderLinesElement = SCXmlUtil.getChildElement(orderDoc
@@ -203,12 +208,12 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			return;
 		HashMap<String, String> itemSkuMap = new LinkedHashMap<String, String>();
 		setSkuMap(new HashMap<String, HashMap<String,String>>());
-		ArrayList<String> itemIdList = new ArrayList<String>();	
-		
-		if(!SCUtil.isVoid(mfgItemFlag) && mfgItemFlag.equalsIgnoreCase("Y")) {				
+		ArrayList<String> itemIdList = new ArrayList<String>();
+
+		if(!SCUtil.isVoid(mfgItemFlag) && mfgItemFlag.equalsIgnoreCase("Y")) {
 			HashMap<String, HashMap<String,String>> itemsSkuMap = new LinkedHashMap<String, HashMap<String,String>>();
 			for (int i = 0; i < orderLineElemList.size(); i++) {
-				Element orderLineElement = (Element)orderLineElemList.get(i);
+				Element orderLineElement = orderLineElemList.get(i);
 				Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
 				String itemId = itemElement.getAttribute("ItemID");
 
@@ -232,7 +237,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		}
 		// EB-64 - Getting the item id list
 		for (int i = 0; i < orderLineElemList.size(); i++) {
-			Element orderLineElement = (Element)orderLineElemList.get(i);
+			Element orderLineElement = orderLineElemList.get(i);
 			Element itemElement = SCXmlUtil.getChildElement(orderLineElement,"Item");
 			String itemId = itemElement.getAttribute("ItemID");
 			itemIdList.add(itemId);
@@ -240,7 +245,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		Document itemcustXrefDoc = XPEDXWCUtils.getXpxItemCustXRefDoc(itemIdList, getWCContext());
 		// EB-64 - Setting the ItemCustXREF doc in cache so that can retrieve the customerUOM flag for item and UOM for order detail page and Web Conf page
 		XPEDXWCUtils.setObectInCache("xpxItemXRefDoc",itemcustXrefDoc);
-		
+
 		if(!SCUtil.isVoid(customerItemFlag) && customerItemFlag.equalsIgnoreCase("Y")) {
 
 			if(itemcustXrefDoc!=null) {
@@ -274,12 +279,12 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 //	Added for EB-64 - getting the item id and customer Uoms
 	private HashMap<String, String> getItemIdCustomerUOM(Document xpxItemXRefDoc){
 		HashMap<String, String> custUomMap;
-		custUomMap = new HashMap<String, String>(); 
+		custUomMap = new HashMap<String, String>();
 		Element wElement = xpxItemXRefDoc.getDocumentElement();
 		NodeList wNodeList = wElement.getChildNodes();
 		if (wNodeList != null) {
 			int length = wNodeList.getLength();
-			
+
 			for (int i = 0; i < length; i++) {
 				Node wNode = wNodeList.item(i);
 				if (wNode != null) {
@@ -292,8 +297,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						if(itemId!=null && customerUOM!=null){
 							custUomMap.put(itemId.getTextContent(), customerUOM.getTextContent());
 						}
-						
-						
+
+
 					}
 				}
 			}
@@ -307,7 +312,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	 * @param inputItems
 	 * @return
 	 */
-	
+
 	protected LinkedHashMap getCustomerFieldsMapfromSession(){
 		/*HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
@@ -316,7 +321,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 		LinkedHashMap customerFieldsSessionMap = (LinkedHashMap)XPEDXWCUtils.getObjectFromCache("customerFieldsSessionMap");
         return customerFieldsSessionMap;
 	}
-	
+
 	protected void getCustomerLineDetails() {
 		//get the map from the session. if null query the DB
 		LinkedHashMap customerFieldsSessionMap = getCustomerFieldsMapfromSession();
@@ -327,7 +332,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
         }
      /* HttpServletRequest httpRequest = wcContext.getSCUIContext().getRequest();
         HttpSession localSession = httpRequest.getSession();
-		
+
         String customerId = wcContext.getCustomerId();
 		String orgCode = wcContext.getStorefrontId();
 
@@ -349,7 +354,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seecom.sterlingcommerce.webchannel.order.OrderDetailAction#
 	 * getOrderDetailsMashupName()
 	 */
@@ -360,7 +365,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.sterlingcommerce.webchannel.order.OrderDetailAction#isCancel()
 	 * Overriding this method to include other Order statuses for XPEDX which
 	 * needs to be allowed to Cancel
@@ -404,7 +409,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected String getHeaderCommentValue(){
 		Element orderElem = getElementOrder();
 		Element instructionsElem = SCXmlUtil.getChildElement(orderElem, "Instructions");
-		
+
 		if(instructionsElem != null){
 			NodeList instructionElemList = instructionsElem.getElementsByTagName("Instruction");
 
@@ -415,30 +420,30 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				}
 			}
 		}
-		
+
 		return getHeaderComment();
 
 	}
-	
+
 	protected void setOrderSummaryFlagValues() {
 		try {
 			String holdTypeForApproval = XPEDXConstants.HOLD_TYPE_FOR_PENDING_APPROVAL;
-			
+
 			Element orderElem = getOrderElementFromOutputDocument();
 			Element extnElem = XMLUtilities.getChildElementByName(orderElem,
 					"Extn");
-			
+
 			/*
 			 * CR 3999 Start-ReasonText will be dispaly in UI
 			 */
-			
+
 			Element orderHoldTypesElem = XMLUtilities.getChildElementByName(orderElem,
-			"OrderHoldTypes");			
-			
+			"OrderHoldTypes");
+
 			ArrayList<Element> orderholdtypeelemlist = SCXmlUtils.getInstance().getChildren(orderHoldTypesElem,OrderConstants.ORDER_HOLD_TYPE);
 			if(orderholdtypeelemlist.size() >0){
 			for (Iterator<Element> iter = orderholdtypeelemlist.iterator(); iter.hasNext();) {
-				Element orderholdtypeelem = (Element) iter.next();
+				Element orderholdtypeelem = iter.next();
 				if ((orderholdtypeelem.getAttribute(OrderConstants.HOLD_TYPE))
 						.trim().equals(holdTypeForApproval)) {
 					String holdstatus = orderholdtypeelem.getAttribute(
@@ -447,13 +452,13 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					{ //REJECT_HOLD_STATUS
 						pendingHoldStatus = holdstatus;
 						 reasonText = orderholdtypeelem.getAttribute("ReasonText");
-						
+
 					}
-					
+
 				}
-			  
+
 			}}
-			
+
 			/*
 			 * CR 3999 End -ReasonText will be display in UI
 			 */
@@ -472,8 +477,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				deliveryHoldFlag = true;
 			if ("Y".equals(wcFlag))
 				willCallFlag = true;
-			// Commenting the below check since, even though the ship complete option is not selected on OP even though the check box 
-			// was available(Y), the msg was being displayed on order details page. 
+			// Commenting the below check since, even though the ship complete option is not selected on OP even though the check box
+			// was available(Y), the msg was being displayed on order details page.
 			if (/*"Y".equals(shipCmpl) || */"C".equals(shipCmpl))
 				shipComplete = true;
 			String extnInvoiceNo = extnElem.getAttribute("ExtnInvoiceNo");
@@ -498,7 +503,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			//String dateTmp;
 			date = sdfSource.parse(extnInvoicedDate);
 
-			
+
 			} catch (ParseException e) {
 
 			// TODO Auto-generated catch block
@@ -512,9 +517,9 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			extnInvoicedDate  = sdfDestination.format(date);
 			} */
 			//End -Date format change to YYYYMMDD
-			
-			
-			
+
+
+
 			/*if (extnInvoicedDate != null && extnInvoicedDate.trim().length() > 0) {
 				encInvoiceDate = XPEDXWCUtils.encrypt(extnInvoicedDate);
 				encInvoiceDate = URLEncoder.encode(encInvoiceDate);
@@ -584,7 +589,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						{
 							String holdTypeName=orderHoldType.getAttribute("HoldType");
 							if(XPEDXConstants.HOLD_TYPE_FOR_LEGACY_LINE_HOLD.equals(holdTypeName)
-									|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName) 
+									|| XPEDXConstants.HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD.equals(holdTypeName)
 									|| XPEDXConstants.HOLD_TYPE_FOR_FATAL_ERR_HOLD.equals(holdTypeName)
 									|| XPEDXConstants.HOLD_TYPE_FOR_NEEDS_ATTENTION.equals(holdTypeName)
 									|| XPEDXConstants.HOLD_TYPE_FOR_ORDER_EXCEPTION_HOLD.equals(holdTypeName))
@@ -598,7 +603,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				if(null == legacyOrderNumber || "".equals(legacyOrderNumber.trim())) {
 					isCSRReview = true;
 				}
-				
+
 				if(extnInvoiceNumber != null && extnInvoiceNumber.trim().length() > 0) {
 					try {
 						extnInvoiceDate = XPEDXWCUtils.getDateFromInvoiceNo(extnInvoiceNumber);
@@ -611,11 +616,11 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						LOG.error("Error encrypting invoice no " + e);
 					}
 				}
-				//String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");				
+				//String extnInvoiceDate = orderExtn.getAttribute("ExtnInvoicedDate");
 				/*if(extnInvoiceDate != null && extnInvoiceDate.trim().length() > 0) {
-					try {						
+					try {
 						//String inputFormat = "yyyy-MM-dd";
-						//extnInvoiceDate = XPEDXWCUtils.getUnformattedDate(inputFormat, extnInvoiceDate);									
+						//extnInvoiceDate = XPEDXWCUtils.getUnformattedDate(inputFormat, extnInvoiceDate);
 						extnInvoiceDate = XPEDXWCUtils.encrypt(extnInvoiceDate);
 						extnInvoiceDate = URLEncoder.encode(extnInvoiceDate);
 					} catch (Exception e) {
@@ -637,16 +642,16 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						chainCustSuffix = URLEncoder.encode(chainCustSuffix);
 					}
 				}
-				
+
 				//Added for JIRA 2731
 				String formattedLegacyOrderNumber="";
-				
+
 				if(legacyOrderNo != null && !legacyOrderNo.equals("")){
 					formattedLegacyOrderNumber = XPEDXOrderUtils.getFormattedOrderNumber(orderExtn);
 				}else {
 					formattedLegacyOrderNumber="In progress";
 				}
-			
+
 				if((null != formattedLegacyOrderNumber) && !("".equals(formattedLegacyOrderNumber))){
 					if(!chainedFOMap.containsKey(orderHeaderKey))
 					{
@@ -657,10 +662,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 				/*else if((null != legacyOrderNo) && !("".equals(legacyOrderNumber))){
 					if(!chainedFOMap.containsKey(orderHeaderKey))
 					{
-						chainedFOMap.put(orderHeaderKey, legacyOrderNo);						
+						chainedFOMap.put(orderHeaderKey, legacyOrderNo);
 					}
-				} commented for 2731*/			
-				
+				} commented for 2731*/
+
 				//added for 2731
 				/*if(legacyOrderNumber == null || !legacyOrderNumber.equals("")){
 					legacyOrderNumber="In progress";
@@ -697,7 +702,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						chainedOrderMap.put(chainedFromOrderLineKey,
 								chainedOrderAttributes);
 					}
-					
+
 					YFCDocument inputDocument = YFCDocument.createDocument("Order");
 					YFCElement documentElement = inputDocument.getDocumentElement();
 					documentElement.setAttribute("OrderHeaderKey", orderHeaderKey);
@@ -713,10 +718,10 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 					if(chainedOrderCountMap.containsKey(chainedFromOrderLineKey))
 					{
 						List<YFCElement> orderHeaderList =chainedOrderCountMap.get(chainedFromOrderLineKey);
-						
-						
+
+
 						orderHeaderList.add(documentElement);
-						chainedOrderCountMap.put(chainedFromOrderLineKey, orderHeaderList);					
+						chainedOrderCountMap.put(chainedFromOrderLineKey, orderHeaderList);
 					}
 					else
 					{
@@ -725,7 +730,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 						chainedOrderCountMap.put(chainedFromOrderLineKey, orderHeaderList);
 					}
 				}
-				
+
 				if (null != chainedOrderMap
 						&& chainedOrderMap.size() > 0) {
 					isFOCreated = true;
@@ -858,15 +863,15 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	protected boolean isFOCSRReview = false;
 	protected String resetWithError = "N"; //added for XBT-109
 	private String isErrorMessage;
-	
+
 	/*
 	JIRA 3999 Start -Set and Get method for pending hold status and reson text
 	*/
-	
+
 	protected String reasonText = "";
 	protected String pendingHoldStatus = "";
-	
-	
+
+
 	public String getIsErrorMessage() {
 		return isErrorMessage;
 	}
@@ -910,7 +915,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	/*
 	JIRA 3999 End -Set and Get method for pending hold status and reson text
 	*/
-	
+
 
 	protected String userKey = "";
 	protected String headerComment = "";
@@ -937,8 +942,8 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	private String invoiceURL = "";
 	private String encInvoiceNo = "";
 	private String encInvoiceDate = "";
-	private String displayTaxAndShipHandlingAmt="N";	
-	
+	private String displayTaxAndShipHandlingAmt="N";
+
 	public String getDisplayTaxAndShipHandlingAmt() {
 		return displayTaxAndShipHandlingAmt;
 	}
@@ -989,7 +994,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 
 	/*set the errorMsg coming from either order cancel -> This page will be called from order cancel once the task is complete*/
 	protected String errorMsg;
-	
+
 	public String getErrorMsg() {
 		return errorMsg;
 	}
@@ -999,7 +1004,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
 	}
-	
+
 	public String getUserKey() {
 		return userKey;
 	}
@@ -1035,7 +1040,7 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 	public void setCustomerSku(String customerSku) {
 		this.customerSku = customerSku;
 	}
-	
+
 	public LinkedHashMap<String, List<YFCElement>> getChainedOrderCountMap() {
 		return chainedOrderCountMap;
 	}
@@ -1082,24 +1087,47 @@ public class XPEDXOrderDetailAction extends XPEDXExtendedOrderDetailAction {
 			Element orderLineTranQuantityElem = XmlUtils.getChildElement(orderLineElem, "OrderLineTranQuantity");
 			if(orderLineTranQuantityElem!=null)
 				orderLineTranQuantityOrderedQty = Double.parseDouble(orderLineTranQuantityElem.getAttribute("OrderedQty"));
-			else 
+			else
 				return "";
 			//calculatedOrderedQuantity = ((orderLineOriginalOrderedQty * orderLineTranQuantityOrderedQty)/orderLineOrderedQty) + "";
 			return orderLineTranQuantityOrderedQty + "";
 		}
 		return calculatedOrderedQuantity;
 	}
-	
+
 	public String getMaxOrderStatusValue(){
 		String maxOrderStatus = SCXmlUtil.getAttribute(getElementOrder(),"MaxOrderStatus");
 		if (maxOrderStatus.equals("1100.5700") || // INVOICED
 		    maxOrderStatus.equals("1100.5950") || // INVOICE ONLY
 		    maxOrderStatus.equals("1100.5750"))   // RETURN
 		{
-			return "Y";			
+			return "Y";
 		} else {
 			return "N";
-			
+
 		}
-	}	
+	}
+
+	/**
+	 * verifying is there Back order quantity exist in any of the order line. if exist then it returns true otherwise return false
+	 * @param tempMajorLineElements
+	 * @return
+	 */
+	private boolean isBackorderQtyExists(ArrayList<Element> tempMajorLineElements){
+		if(tempMajorLineElements != null && tempMajorLineElements.size() > 0){
+			for (int i = 0; i < tempMajorLineElements.size(); i++) {
+				Element orderLine = tempMajorLineElements.get(i);
+				 if (orderLine != null && orderLine.getAttribute("LineType") != "C" && orderLine.getAttribute("LineType") != "M"){
+					 Element orderLineExtnElem = XmlUtils.getChildElement(orderLine, "Extn");
+					 if(orderLineExtnElem !=null && !SCUtil.isVoid(orderLineExtnElem.getAttribute("ExtnReqBackOrdQty"))){
+						 double backOrderedQty = Double.parseDouble(orderLineExtnElem.getAttribute("ExtnReqBackOrdQty"));
+						 if(backOrderedQty > 0) {
+							 return true;
+						 }
+					 }
+				 }
+			}
+		}
+		return false;
+	}
 }
