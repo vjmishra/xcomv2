@@ -926,3 +926,10 @@ width: 958px;
 .pagination > li > span.more-pages:hover {
 	background: #ffffff;
 }
+
+.login-register h3 {
+	font-size: 16px;
+	font-style: italic;
+	color: #3577d1;
+	}
+	

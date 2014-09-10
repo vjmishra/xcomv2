@@ -1320,3 +1320,10 @@ ul.megamenu {
 .pagination > li > span.more-pages:hover {
 	background: none repeat scroll 0 0 #ffffff;
 }
+
+.login-register h3 {
+	font-size: 16px;
+	font-style: italic;
+	color: #006A3A;
+	}
+	

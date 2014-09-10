@@ -1687,3 +1687,26 @@ hr.shade {
 	vertical-align: middle;
 	margin-top: 3px;
 	}
+
+	/*------LOGIN----------*/
+.login-remember {
+	float: left;
+	clear: none;
+	margin: 5px 0 0 0;
+}
+.login-remember input {
+	float: left;
+	clear: none;
+	}
+.login-remember .txt-sml-gry {
+	float: left;
+	clear: none;
+	margin: 2px 0 0 3px;
+}
+.login-register {
+	border-top: 1px #ccc solid;
+	margin-top: 25px;
+	padding: 10px 0px;
+	width: 234px;
+}
+	
