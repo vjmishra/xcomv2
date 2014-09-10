@@ -63,22 +63,16 @@ public class XPEDXPrintOrderDetailAction extends XPEDXExtendedOrderDetailPrintAc
 		Element orgElem;
 		String organizationKey;
 		String organizationName;
-		Map<String, String> orgsKeyNameMap = (HashMap<String, String>)XPEDXWCUtils.getObjectFromCache("OrgKeyNameMAP");
-		if(orgsKeyNameMap == null) 
-		{
 		outputElem =  prepareAndInvokeMashup("XPXGetDivisionList");	
 		Element outputOrgElem = outputElem.getOwnerDocument().getDocumentElement();			
 		NodeList orgList = outputOrgElem.getElementsByTagName("Organization");
-			for (int i = 0; orgList != null && i < orgList.getLength(); i++) {
-				orgElem = (Element) orgList.item(i);
-				organizationKey = orgElem.getAttribute("OrganizationCode");
-				organizationName = orgElem.getAttribute("OrganizationName");
-				orgsKeyNameMap.put(organizationKey, organizationName);
-				wcContext.setWCAttribute("OrgKeyNameMAP", orgsKeyNameMap,
-						WCAttributeScope.SESSION);
-			}
+		for(int i=0;orgList!= null && i< orgList.getLength();i++ ){
+		orgElem = (Element) orgList.item(i);
+		organizationKey = orgElem.getAttribute("OrganizationCode");
+		organizationName = orgElem.getAttribute("OrganizationName");
+		orgsKeyNameMap.put(organizationKey, organizationName);
+		wcContext.setWCAttribute("OrgKeyNameMAP", orgsKeyNameMap, WCAttributeScope.SESSION);	
 		}
-		XPEDXWCUtils.setObectInCache("OrgKeyNameMAP", orgsKeyNameMap);
 		return orgsKeyNameMap;
 	}
 	
