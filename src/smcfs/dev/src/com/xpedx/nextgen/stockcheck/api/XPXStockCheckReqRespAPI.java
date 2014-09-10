@@ -381,15 +381,11 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			Element item = stockCheckResponseDocument.createElement("Item");
 
 			Element indexID = stockCheckResponseDocument.createElement("IndexID");
-			Element indexString = SCXmlUtil.getXpathElement(requestedItemElement,"./IndexID");
-			if (indexString != null)
-				indexID.setTextContent(indexString.getTextContent());
+			indexID.setTextContent(getTextValue(requestedItemElement,"./IndexID"));
 
 			Element customerPartNumber = stockCheckResponseDocument.createElement("CustomerPartNumber");
-			Element reqCustNum = SCXmlUtil.getXpathElement(requestedItemElement,"./CustomerPartNumber");
-			if (reqCustNum != null) {
-				customerPartNumber.setTextContent(reqCustNum.getTextContent());
-			}
+			customerPartNumber.setTextContent(getTextValue(requestedItemElement,"./CustomerPartNumber"));
+
 			Element xpedxPartNumber = stockCheckResponseDocument.createElement("PartNumber");
 			Element quantity = stockCheckResponseDocument.createElement("Quantity");
 			Element unitOfMeasure = stockCheckResponseDocument.createElement("UnitOfMeasure");
@@ -428,12 +424,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			Element catalogAttributeList = stockCheckResponseDocument.createElement("CatalogAttributeList");
 
 			if(inValidItemPositions.contains(i)) {
-				Element reqPartNum = SCXmlUtil.getXpathElement(requestedItemElement,"./PartNumber");
-				if (reqPartNum != null) {
-					xpedxPartNumber.setTextContent(reqPartNum.getTextContent());
-				}
-				quantity.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./Quantity").getTextContent());
-				unitOfMeasure.setTextContent(SCXmlUtil.getXpathElement(requestedItemElement,"./UOM").getTextContent());
+				xpedxPartNumber.setTextContent(getTextValue(requestedItemElement, "./PartNumber"));
+				quantity.setTextContent(getTextValue(requestedItemElement,"./Quantity"));
+				unitOfMeasure.setTextContent(getTextValue(requestedItemElement,"./UOM"));
 				itemLevelErrorCode.setTextContent(ERROR_LEVEL_COMPLETE_FAILURE);
 				itemLevelErrorMessage.setTextContent(ERROR_MESSAGE_1003);
 
@@ -443,7 +436,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 
 				Element itemElementFromPandA = pAndAResponseMap.get(i);
 				if(itemElementFromPandA != null) {
-					quantity.setTextContent(SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQty").getTextContent());
+					quantity.setTextContent(getTextValue(itemElementFromPandA,"./RequestedQty"));
 					String requestedUOM = (SCXmlUtil.getXpathElement(itemElementFromPandA,"./RequestedQtyUOM").getTextContent());
 					String requestedUOMDescription = uomDescMap.get(requestedUOM);
 					unitOfMeasure.setTextContent(legacyToUOMMap.get(requestedUOM).replace(envtId+"_",""));
@@ -676,6 +669,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 		return stockCheckResponseDocument;
 	}
 
+
 	private String convertMaxHeaderErrorNum(String maxStatusCode) {
 
 		String message = maxHeaderErrorMap.get(maxStatusCode);
@@ -715,6 +709,15 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			uomDesc = customerUom;
 		}
 		return uomDesc;
+	}
+
+	// avoid getting NPEs if XML element wasn't part of request (e.g. omitted qty)
+	private static String getTextValue(Element requestedItemElement, String xmlLabel) {
+		Element xpathElement = SCXmlUtil.getXpathElement(requestedItemElement,xmlLabel);
+		if (xpathElement == null) {
+			return "";
+		}
+		return xpathElement.getTextContent();
 	}
 
 
