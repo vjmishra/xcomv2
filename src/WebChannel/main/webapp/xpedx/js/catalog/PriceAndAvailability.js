@@ -146,7 +146,7 @@ function getPriceAndAvailabilityForItems(options) {
 				html.push('				<div class="avail-wrap">');
 				
 				var requestedQty = parseFloat(pnaItem.requestedQty);
-				var notAvailQty=(requestedQty-pnaAvail['total']);
+				var notAvailQty=parseFloat((requestedQty-pnaAvail['total']).toFixed(5));
 				
 				if (origQty[i].trim().length > 0) {
 					// only display 'ready to ship' message if user requested a qty (omit message if user left qty field blank)
