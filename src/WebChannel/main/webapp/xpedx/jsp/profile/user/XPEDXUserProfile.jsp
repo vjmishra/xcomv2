@@ -1674,7 +1674,7 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<div class="view1"></div>
-														<div>Full View - 1 item per row</div>
+														<div class="addpadtop2">Full View - 1 item per row</div>
 													</div>
 													<div class="divs">
 														<div>
@@ -1682,13 +1682,8 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<!-- 			<div class="view3"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/mini-view.png"
-																style="margin: 0 6px;" class="mini-view"
-																title="Mini View" alt="mini-view" />
-														</div>
-														<div>Mini View - 4 items per row</div>
+														<div class="view3"></div>
+														<div class="addpadtop2">Mini View - 4 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
@@ -1696,7 +1691,7 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<div class="view2"></div>
-														<div>Condensed View - 2 items per row</div>
+														<div class="addpadtop2">Condensed View - 2 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
@@ -1704,13 +1699,8 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<!-- 			<div class="view4"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/grid-view.png"
-																style="margin: 0 6px;" class="grid-view"
-																title="Grid View" alt="grid-view" />
-														</div>
-														<div>Grid View - No images</div>
+														<div class="view4"></div>
+														<div class="addpadtop2">Grid View - No images</div>
 													</div>
 												</td>
 											</tr>
@@ -2658,7 +2648,7 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<div class="view1"></div>
-														<div>Full View - 1 item per row</div>
+														<div class="addpadtop2">Full View - 1 item per row</div>
 													</div>
 													<div class="divs">
 														<div>
@@ -2666,13 +2656,8 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<!-- 			<div class="view3"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/mini-view.png"
-																style="margin: 0 6px;" class="mini-view"
-																title="Mini View" alt="mini-view" />
-														</div>
-														<div>Mini View - 4 items per row</div>
+														<div class="view3"></div>
+														<div class="addpadtop2">Mini View - 4 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
@@ -2680,7 +2665,7 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<div class="view2"></div>
-														<div>Condensed View - 2 items per row</div>
+														<div class="addpadtop2">Condensed View - 2 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
@@ -2688,13 +2673,8 @@ a.underlink:hover {
 																id="b2bCatalogView" value='defaultB2bCatalogView' />
 														</div>
 														<!-- 			<div class="view4"></div> -->
-														<div>
-															<img
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/theme/theme-1/grid-view.png"
-																style="margin: 0 6px;" class="grid-view"
-																title="Grid View" alt="grid-view" />
-														</div>
-														<div>Grid View - No images</div>
+														<div class="view4"></div>
+														<div class="addpadtop2">Grid View - No images</div>
 													</div>
 												</td>
 											</tr>

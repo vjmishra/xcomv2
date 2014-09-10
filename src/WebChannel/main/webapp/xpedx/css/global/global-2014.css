@@ -731,10 +731,10 @@ div.catalog-search-container input#search_searchTerm {
 	position: relative;
 }
 .sortbycontrols {
-	width: 100%;
 	background-color: #ececec;
 	height: 22px;
-	line-height: 23px;
+	/* line-height: 23px;
+	width: 100%; */
 }
 .pageresults {
 	margin-top: -7px;

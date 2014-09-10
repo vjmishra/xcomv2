@@ -395,6 +395,19 @@
 								</select> 
 							</s:else>
 						</s:if>
+						<ul class="cat-grid-icons" id="viewSelect">
+                    <li class="icon-normal-view normal-view" title="Full View" id="fview"></li>
+                    <li class="icon-condensed-view condensed-view" title="Condensed View" id="cview"></li>
+                    <li class="icon-mini-view mini-view" title="Mini View" id="mview"></li>
+                    <li class="icon-grid-view papergrid-view" title="Grid View" id="gview"></li>
+                    <s:if test='%{#session.selView != null}'>	
+			<input name="selectedView" value="<s:property value='%{#session.selView}' />" id="selectedView" type="hidden" />	
+		     <s:set name="selView" value="<s:property value=null />" scope="session"/> 
+	   </s:if>
+	   <s:else>
+	   		<input name="selectedView" value="icon-normal-view normal-view" id="selectedView" type="hidden" />
+	   </s:else>
+                         </ul>
                  </div>   
 			   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
 				<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
@@ -1068,8 +1081,7 @@ var ct = Ext.get('item-box-inner');
 
 	<div class="normal-view" id="items">
 	<div id="items-control">
-	<table width="100%" >
-	<tr ><td class="drag-to-compare"  id="items-combox" width="50%" >
+	<div class="drag-to-compare"  id="items-combox">
 	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
 	<s:if test="%{#totalNumberOfPages} == 0"> 
 	 	<div class="success"> Your search did not yield any results. Please try again. </div>
@@ -1079,30 +1091,8 @@ var ct = Ext.get('item-box-inner');
 			:<span id="comnum"> <s:text name='No_Items' /></span>
 	 </s:else>
 	 </a></h4>
-	</td>
-	<%--Start XB - 339 Label added to identify Catalog View icons --%>
-	<td class="drag-to-compare"  width="40%" align="right" ><h4><s:text name="MSG.SWC.COMP.CHGCATALOGVIEW.GENERIC.PGTITLE" /> :&nbsp;</h4></td>
-	<%--End XB - 339 --%>
-	<td id="items-cb" width="10%"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
-		class="normal-view" title="Full View"><img
-		src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif" class="condensed-view"
-		title="Condensed View"><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif"
-		class="mini-view" title="Mini View"><!-- IW 7/16/2010: new icon/button for papergrid-view --><img src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/global/s<s:property value='#wcUtil.xpedxBuildKey' />.gif" class="papergrid-view"
-		title="Grid View">
+	</div>
 		
-		
-	
-		
-		<s:if test='%{#session.selView != null}'>	
-			<input name="selectedView" value="<s:property value='%{#session.selView}' />" id="selectedView" type="hidden" />	
-		     <s:set name="selView" value="<s:property value=null />" scope="session"/> 
-	   </s:if>
-	   <s:else>
-	   		<input name="selectedView" value="normal-view" id="selectedView" type="hidden" />
-	   </s:else>
-		</td>
-		</tr>
-	</table>
 	</div>
 	
 	<s:if test='%{!errorCode.trim().equals("")}'>		
