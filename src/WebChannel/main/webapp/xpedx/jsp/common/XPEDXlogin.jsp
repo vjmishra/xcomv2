@@ -132,7 +132,6 @@ sign.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					
 				<div class="clearfix"></div>
 				<div class="login-register addpadtop20">
-				<s:hidden id="sfidvalue" value='%{#sfid}'/>
 					<s:if test="#sfid=='xpedx'">
 					<h3>Not currently an xpedx.com customer?</h3></s:if>
 					<s:else><h3>Not currently a Saalfeld </br>online customer?</h3></s:else>
