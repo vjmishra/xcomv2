@@ -29,7 +29,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger
 			.getLogger(XPEDXNewUserRegistration.class);
-
+	private String newUserAccountNumber = null;
 	private String newUserEmail = null;
 	private String newUserPhone = null;
 	private String newUserCompanyName = null;
@@ -44,6 +44,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	private String templatePath = null;
 	private String mailFromAddress = null;
 	private String mailCCAddress = null;
+	
+
 	private String newUserFirstName = null;
 	private String newUserLastName = null;
 	private String messageType = "NewUser";
@@ -259,6 +261,14 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	public void setNewUserEmail(String newUserEmail) {
 		this.newUserEmail = newUserEmail;
+	}
+	
+	public String getNewUserAccountNumber() {
+		return newUserAccountNumber;
+	}
+
+	public void setNewUserAccountNumber(String newUserAccountNumber) {
+		this.newUserAccountNumber = newUserAccountNumber;
 	}
 
 	public String getBrandEmail() {

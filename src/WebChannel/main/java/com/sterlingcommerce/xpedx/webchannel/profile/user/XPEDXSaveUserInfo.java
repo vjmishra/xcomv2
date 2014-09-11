@@ -710,19 +710,19 @@ public class XPEDXSaveUserInfo extends WCMashupAction
 					String selectView = null;
 					switch (Integer.parseInt(getB2bCatalogView())) {
 					case 0:
-						selectView = "normal-view";
+						selectView = "icon-normal-view normal-view";
 						break;
 					case 1:
-						selectView = "condensed-view";
+						selectView = "icon-condensed-view condensed-view";
 						break;
 					case 2:
-						selectView = "mini-view";
+						selectView = "icon-mini-view mini-view";
 						break;
 					case 3:
-						selectView = "papergrid-view";
+						selectView = "icon-grid-view papergrid-view";
 						break;
 					default:
-						selectView = "normal-view";
+						selectView = "icon-normal-view normal-view";
 						break;
 
 					}

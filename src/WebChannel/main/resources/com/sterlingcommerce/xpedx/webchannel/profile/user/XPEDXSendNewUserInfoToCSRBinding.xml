@@ -7,6 +7,7 @@
 	<entry key="mailCCAddress">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/CCAddresses/CCAddress/@EmailID</entry>
 	<entry key="mailSubject">XPEDXSendNewUserInfoToCSR:/SendMail/MessageHeader/@SubjectText</entry>
 	<!-- <entry key="newUserName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@Name</entry> -->
+	<entry key="newUserAccountNumber">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@AccountNumber</entry>
 	<entry key="newUserFirstName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@FirstName</entry>
 	<entry key="newUserLastName">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@LastName</entry>
 	<entry key="newUserEmail">XPEDXSendNewUserInfoToCSR:/SendMail/MessageDetail/NewUser/@EmailID</entry>
