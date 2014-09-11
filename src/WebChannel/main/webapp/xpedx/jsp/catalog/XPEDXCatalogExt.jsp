@@ -1344,7 +1344,7 @@ function LoadPage()
 		
 		}
 	if(document.getElementById('selectedView').value==""){	
-		document.getElementById('selectedView').value='normal-view';
+		document.getElementById('selectedView').value='icon-normal-view normal-view';
 	}	
 }
 String.prototype.trim = function () {
