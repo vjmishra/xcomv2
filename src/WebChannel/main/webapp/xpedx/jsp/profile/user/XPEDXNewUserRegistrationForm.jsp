@@ -220,62 +220,139 @@
 				<!-- breadcrumb -->
 
 
-				<!-- EB-1554 As a Saalfeld user, user want to view a Saalfeld specific Registration graphic on the Register Page so that user see Saalfeld specific branding -->
-				<s:set name='storefrontId' value="wCContext.storefrontId" />
-				<s:if
-					test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-					<div class="float-left">
-						<img border="0" alt="" width="505" height="229"
-							src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_main.jpg">
-					</div>
-					<div class="float-left">
-						<a href="https://www.xpedx.com/contact-us.aspx" target="_blank"><img
-							border="0" alt="" width="271" height="229"
-							src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/registration/not-customer.jpg"></a>
-					</div>
-				</s:if>
-				<s:elseif
-					test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
-					<div class="float-left">
-						<img border="0" alt="" width="505" height="229"
-							src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images//ster/register_main_saalfeld.jpg">
-					</div>
-					<div class="float-left">
-						<a href="http://saalfeldredistribution.com/ContactUs.aspx"
-							target="_blank"><img border="0" alt="" width="271"
-							height="229"
-							src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/registration/new-to-saalfeld.jpg"></a>
-					</div>
-				</s:elseif>
-				
-				
-				
-				<div style="display: none;">
-					<div id="viewVideoDlg" class="float-left">
-						<s:set name='storefrontId' value="wCContext.storefrontId" />
-						<s:if
-							test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
-							<iframe title="vimeo video " width="700" height="394"
-								scrolling="no"
-								src="https://player.vimeo.com/video/56046033?title=0&amp;byline=0&amp;portrait=0"
-								frameborder="0" allowfullscreen></iframe>
-						</s:if>
-					</div>
-				</div>
-				<s:form name="registrationForm" namespace='/profile/user'
-					action='XPEDXNewUserRegistrationAction' validate="true">
-					<!-- Webtrends Start  -->
-					<meta name="DCSext.w_x_reg" content="1" />
-					<!-- Webtrends End  -->
-					<s:hidden name='newUserName' id='newUserName' value="" />
-
-					<s:url id='homePage' namespace='/home' action='home' />
-					<s:hidden id="homePageId" value="%{#homePage}" />
-					<div class="error" id="errorMsg" style="display: none"></div>
-
-
-
+						
+							
+									<!-- EB-1554 As a Saalfeld user, user want to view a Saalfeld specific Registration graphic on the Register Page so that user see Saalfeld specific branding -->
+									<s:set name='storefrontId' value="wCContext.storefrontId" />
+									<s:if
+										test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+										<td><div class="float-left">
+												<img border="0" alt="" width="505" height="229"
+													src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_main.jpg">
+											</div></td>
+										<td><div class="float-left">
+												<a href="https://www.xpedx.com/locate-us.aspx"
+													target="_blank"><img border="0" alt="" width="271"
+													height="229"
+													src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/registration/not-customer.jpg"></a>
+											</div></td>
+									</s:if>
+									<s:elseif
+										test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+										<td><div class="float-left">
+												<img border="0" alt="" width="505" height="229"
+													src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images//ster/register_main_saalfeld.jpg">
+											</div></td>
+										<td><div class="float-left">
+												<a href="http://saalfeldredistribution.com/ContactUs.aspx"
+													target="_blank"><img border="0" alt="" width="271"
+													height="229"
+													src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/registration/new-to-saalfeld.jpg"></a>
+											</div></td>
+									</s:elseif>
+								
+								<s:if
+										test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+									<div class="float-left">
+											<table align="center" border="0" cellpadding="0"
+												cellspacing="0" width="505" height="193">
+												<tbody>
+													<s:set name='storefrontId' value="wCContext.storefrontId" />
+													
+													<s:if
+														test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+														<tr style="background-color: #006a3a; font-weight: bold">
+															<td align="left">&nbsp;<font color="white">Benefits
+																	of saalfeldredistribution.com</font></td>
+													</s:if>
+													<td align="center"><font color="white">Unregistered
+															User</font></td>
+													<td align="center"><font color="white">Registered
+															User</font></td>
+													</tr>
+													<tr>
+														<td style="color: #4c4c4c">Robust catalog search and
+															navigation</td>
+														<td style="text-align: center"><a
+															onmouseover="this.style.textDecoration='underline';"
+															onmouseout="this.style.textDecoration='none';"
+															href="/swc/catalog/navigate.action?sfId=<s:property value="wCContext.storefrontId" />&amp;scFlag=Y&amp;scGuestUser=Y&amp;_bcs_=_nb_">Browse
+																limited catalogs</a></td>
+														<td align="center"><img border="0" alt=""
+															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+													</tr>
+													<tr>
+														<td style="background-color: #efeff0; color: #4c4c4c">Check
+															prices, real-time inventory status</td>
+														<td
+															style="background-color: #efeff0; text-align: center; color: #4c4c4c; border: solid 0 white; border-left-width: 2px; border-right-width: 2px">N/A</td>
+														<td style="background-color: #efeff0" align="center"><img
+															border="0" alt=""
+															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+													</tr>
+													<tr>
+														<td style="color: #4c4c4c">Manage invoices
+															electronically</td>
+														<td style="text-align: center; color: #4c4c4c">N/A</td>
+														<td align="center"><img border="0" alt=""
+															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+													</tr>
+													<tr>
+														<td style="background-color: #efeff0; color: #4c4c4c">Ordering
+															templates</td>
+														<td
+															style="background-color: #efeff0; text-align: center; color: #4c4c4c; border: solid 0 white; border-left-width: 2px; border-right-width: 2px">N/A</td>
+														<td style="background-color: #efeff0" align="center"><img
+															style="align: center" border="0" alt=""
+															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+													</tr>
+													<tr>
+														<td style="color: #4c4c4c">Purchasing history reports</td>
+														<td style="text-align: center; color: #4c4c4c">N/A</td>
+														<td align="center"><img border="0" alt=""
+															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+													</tr>
+													<tr>
+														<td style="background-color: #efeff0; color: #4c4c4c">Control
+															spend with order approval</td>
+														<td
+															style="background-color: #efeff0; text-align: center; color: #4c4c4c; border: solid 0 white; border-left-width: 2px; border-right-width: 2px">N/A</td>
+														<td style="background-color: #efeff0" align="center"><img
+															src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/ster/images/register_checkmark.png"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										</s:if>
+									<s:set name='storefrontId'
+											value="wCContext.storefrontId" /> 
+									<s:if
+										test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+										<div class="float-left">
+											<a href="http://saalfeldredistribution.com/ContactUs.aspx"
+												target="_blank"><img border="0" title="" width="271"
+												height="193"
+												src="<s:property value='#wcUtil.staticFileLocation' />/<s:property value="wCContext.storefrontId" />/images/ster/register_video_thumb_saalfeld.jpg"></a>
+										</div>
+										
+									</s:if>
 					
+					
+					<s:form name="registrationForm" namespace='/profile/user'
+						action='XPEDXNewUserRegistrationAction' validate="true">
+						<!-- Webtrends Start  -->
+						<meta name="DCSext.w_x_reg" content="1" />
+						<!-- Webtrends End  -->
+						<s:hidden name='newUserName' id='newUserName' value="" />
+
+						<s:url id='homePage' namespace='/home' action='home' />
+						<s:hidden id="homePageId" value="%{#homePage}" />
+						
+						<div class="error" id="errorMsg" style="display: none"></div>
+
+
+					<div class="clearfix"></div>
+					<p class="black italic addpadtop5 addmarginleft230">Not a current customer? <a href="https://xpedx.com/locate-us.aspx">Locate a Customer Service Representative</a> in your area.</p>
 					<div class ="clearfix"></div>
 					<h1 class="addpadtop20 txt-large">Registration</h1>
 					<h2>Registration allows current customers to shop our website.</h2>
@@ -291,10 +368,11 @@
 										class="float-left" style="color: black">Account Number</div>&nbsp;*</td>
 							</tr>
 							<tr>
-								<td style="width: 278px;"
+								<td style="width: 278px;" colspan="2"
 									class="underlines no-border-right-user"><s:textfield
 										name="newUserAccountNumber" id="newUserAccountNumber"
-										cssClass="x-input width-250px" maxlength="50" /></td>
+										cssClass="x-input width-250px" maxlength="50"></s:textfield>
+									</td>
 							</tr>
 							<tr>
 								<td style="width: 180px; color: red"
@@ -466,7 +544,7 @@
 					</table>
 
 				</s:form>
-
+			
 			</div>
 
 		</div>

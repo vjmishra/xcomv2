@@ -133,6 +133,9 @@
 .addmarginleft0 {
 	margin-left: 0px;
 }
+.addmarginleft230 {
+	margin-left: 230px;
+}
 .addmarginright5 {
 	margin-right: 5px;
 }
@@ -1712,4 +1715,12 @@ hr.shade {
 	padding: 10px 0px;
 	width: 234px;
 }
-	
+.account-text {
+	font-size: 11px;
+	color: #666666;
+	font-style: italic;
+	display: inline-block;
+	vertical-align:top;
+	margin-left: 4px;
+	margin-top: -4px;
+}	
