@@ -1100,14 +1100,14 @@ function showSplitDiv(divId)
 					    		</tr>
 					    		<tr>
 					    			<s:if test="#orderType != 'Customer'">
-						    			<td class="text-right bold">
+					    				<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
+									    <s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />										
+						    			<td class="text-right <s:property value='%{#backqty > 0 ? "bold" : ""}'/>">
 						    			  <s:if test='(#orderLine.getAttribute("LineType") != "C") && (#orderLine.getAttribute("LineType") != "M")'>
 						    			    Backorder Qty:
 						    			  </s:if>
 						    			</td>
-						    			<s:set name='backqty' value='#orderLineExtnElem.getAttribute("ExtnReqBackOrdQty")' />
-										<s:set name='backqty' value='%{#strUtil.replace(#backqty, ".00", "")}' />
-										<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
+						    			<s:set name='backqty' value="#xpedxUtilBean.formatQuantityForCommas(#backqty)"/>
 										<s:if test="%{#customerUom == #uom}">											
 											<s:set name='customerUomWithoutM' value='%{#uom.substring(2, #uom.length())}' />
 											<s:set name='uomDesc' value="#customerUomWithoutM"/>

@@ -95,7 +95,9 @@
 	table.order-total td.totalLabelText {
 		padding-right: 5px;	
 	}
-	
+	.backOrdrQtyMsg {
+		color: red;
+	}		
 			
 
 	    </STYLE>
@@ -631,6 +633,19 @@
 									</td>
 									</xsl:if>
 									
+								</tr>
+							</table>
+						</td>
+					</tr>					
+					<tr>
+						<td>
+							<table cellpadding="4">
+								<tr>
+								<xsl:if test = '(Order/@BackOrderQtyMsg!="Empty") and (Order/@BackOrderQtyMsg!="") ' >									
+									<td valign="top" class="backOrdrQtyMsg">
+										<xsl:value-of select="Order/@BackOrderQtyMsg" />
+									</td>
+								</xsl:if>
 								</tr>
 							</table>
 						</td>
