@@ -872,7 +872,7 @@ public class XPEDXWCUtils {
 			IWCContext wcContext = WCContextHelper
 					.getWCContext(ServletActionContext.getRequest());
 			if(wcContext.isGuestUser()){
-				return "normal-view";
+				return "icon-normal-view normal-view";
 			}
 			Map<String, String> valueMap = new HashMap<String, String>();
 			valueMap.put("/CustomerContact/Customer/@OrganizationCode",
