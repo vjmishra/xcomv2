@@ -1721,6 +1721,7 @@ hr.shade {
 	font-style: italic;
 	display: inline-block;
 	vertical-align:top;
-	margin-left: 4px;
-	margin-top: -4px;
+	margin-right: 48px;
+	margin-top: -25px;
+	float:right;
 }	

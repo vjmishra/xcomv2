@@ -78,11 +78,13 @@
 													<table width="65%" border="0">
 														<tr>
 														<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
-																Account Number:
+																Account #:
 															</td>
 															<td style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;">
 																<xsl:value-of select="@AccountNumber"/><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
 															</td>
+															</tr>
+															<tr>
 															<td  style="font-family: Arial, Geneva, sans-serif;font-size:12px; color:#000;" >
 																Name:
 															</td>

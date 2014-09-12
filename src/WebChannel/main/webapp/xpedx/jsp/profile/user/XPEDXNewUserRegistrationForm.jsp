@@ -368,11 +368,18 @@
 										class="float-left" style="color: black">Account Number</div>&nbsp;*</td>
 							</tr>
 							<tr>
-								<td style="width: 278px;" colspan="2"
-									class="underlines no-border-right-user"><s:textfield
+								<td  colspan="2"
+									class="underlines no-border-right-user">
+									<s:textfield
 										name="newUserAccountNumber" id="newUserAccountNumber"
-										cssClass="x-input width-250px" maxlength="50"></s:textfield>
-									</td>
+										cssClass="x-input width-250px" maxlength="50">
+										</s:textfield>
+										<div class="account-text">Need Account Number?<br />
+											<a href="https://xpedx.com/locate-us.aspx" class="bright-link">Click to locate a Customer Serice Representative.
+											</a>
+										</div>
+										</td>
+										
 							</tr>
 							<tr>
 								<td style="width: 180px; color: red"
