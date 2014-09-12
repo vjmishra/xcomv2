@@ -1208,7 +1208,6 @@ ul.megamenu {
 .pagination li a:hover {
 	background-color: #eee;
 	border: 1px solid #ddd;
-	color: #1062d1;
 	padding: 6px;
 }
 .pagination {
@@ -1281,7 +1280,7 @@ ul.megamenu {
 	color: #ffffff;
 }
 .pagination .active span:hover {
-	background-color: #3577d1;
+	background-color: #1a8664;
 	color: #ffffff;
 }
 .pagination > li > span.results:hover {
