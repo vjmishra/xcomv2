@@ -170,7 +170,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 		StopWatch swPre   = new StopWatch();
 		swTotal.start();
 
-		System.out.println("Received Stock Check Web Service request");
 		log.info("Received Stock Check Web Service request");
 		if(log.isDebugEnabled()) {
 			log.debug("The stock check input xml is: " + SCXmlUtil.getString(inputXML));
@@ -190,9 +189,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			if(!formatValidationFlag) {
 				return stockCheckOutputDocument;
 			}
-
-			System.out.println("SCWS: processing items: " + stockCheckItemList.getLength());
-			log.info("SCWS: processing items: " + stockCheckItemList.getLength());
 
 			dataValidationFlag = validateRequestXMLData(env, stockCheckInputDocRoot);
 			if(!dataValidationFlag){
@@ -226,16 +222,12 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 					pAndAResponseDocument =  api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
 					swPA.stop();
 
-					log.warn          ("SCWS: P&A call:   " + formatSec.format(swPA.getTime()/1000.0));
-					System.out.println("SCWS: P&A: " + formatSec.format(swPA.getTime()/1000.0));  //TODO remove all these println's
-
 					if(log.isDebugEnabled()) {
 						log.debug("The P&A reponse output is: " + SCXmlUtil.getString(pAndAResponseDocument));
 					}
 				}
 				catch (Exception e) {
 					log.error("Unable to contact MAX P&A: " + e.getMessage()); // CENT log?
-					System.out.println("Unable to contact MAX P&A: " + e.getMessage());
 					return createErrorDocumentForCompleteFailure(stockCheckInputDocRoot, ERROR_MESSAGE_500);
 				}
 
@@ -270,13 +262,8 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 		}
 
 		swTotal.stop();
-		System.out.println("SCWS: pre time:   " + formatSec.format(swPre.getTime()/1000.0) + " = "
-				+ formatPerc.format(100.0 * swPre.getTime() / swTotal.getTime()) + "%");
-		System.out.println("SCWS: P&A time:   "+ formatSec.format(swPA.getTime()/1000.0) + " = "
-				+ formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
-		System.out.println("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0));
-		log.warn          ("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0));
-		log.warn          ("SCWS: ---> P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
+		log.info("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0) +
+				" P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
 
 		return stockCheckOutputDocument;
 	}
@@ -1297,16 +1284,9 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			expElement.setAttribute("Value", requestedXpedxItemsMap.get(position));
 		}
 
-		DecimalFormat format = new DecimalFormat("#.#");
-		StopWatch sw = new StopWatch();
-		sw.start();
-
 		env.setApiTemplate(XPXLiterals.GET_ITEM_LIST_API, getItemListTemplate);
 		Document xpedxItemCustXRefOutputDoc = api.invoke(env, XPXLiterals.GET_ITEM_LIST_API, xpedxItemCustXRefInputDoc);
 		env.clearApiTemplate(XPXLiterals.GET_ITEM_LIST_API);
-
-		sw.stop();
-		System.out.println("SCWS:getItemList: " + format.format(sw.getTime()/1000.0));  //TODO remove
 
 		Element xpedxItemCustXRefOutputElement = xpedxItemCustXRefOutputDoc.getDocumentElement();
 		List<Element> xpedxItemElements = SCXmlUtil.getElements(xpedxItemCustXRefOutputElement, XPXLiterals.E_ITEM);
