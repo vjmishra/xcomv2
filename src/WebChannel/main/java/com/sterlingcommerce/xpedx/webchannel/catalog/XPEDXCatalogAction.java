@@ -35,7 +35,6 @@ import com.sterlingcommerce.framework.utils.SCXmlUtils;
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
 import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
-import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFactory;
 import com.sterlingcommerce.ui.web.platform.utils.SCUIPlatformUtils;
 import com.sterlingcommerce.webchannel.catalog.CatalogAction;
 import com.sterlingcommerce.webchannel.common.Breadcrumb;
@@ -44,8 +43,8 @@ import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XpedxSortUOMListByConvFactor;
@@ -64,7 +63,6 @@ import com.yantra.yfc.dom.YFCElement;
 import com.yantra.yfc.dom.YFCNode;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
-import com.yantra.yfs.japi.YFSEnvironment;
 
 @SuppressWarnings("deprecation")
 public class XPEDXCatalogAction extends CatalogAction {
@@ -116,7 +114,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public String getCustomerPOLabel() {
 		if(customerPOLabel!=null && customerPOLabel.contains("'")){
-			customerPOLabel = customerPOLabel.replace("\'", "\\'");			
+			customerPOLabel = customerPOLabel.replace("\'", "\\'");
 		}
 		return customerPOLabel;
 	}
@@ -127,9 +125,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public String getCustLineAccNoLabel() {
 		if(custLineAccNoLabel!=null && custLineAccNoLabel.contains("'")){
-			custLineAccNoLabel = custLineAccNoLabel.replace("\'", "\\'");			
+			custLineAccNoLabel = custLineAccNoLabel.replace("\'", "\\'");
 		}
-	
+
 		return custLineAccNoLabel;
 	}
 
@@ -449,7 +447,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 						        flag=true;
 						        break;
 					}
-					      
+
 				    }
 				    if(!flag)
 				    	displaySearchTerm=displaySearchTerm+searchTermToken+" ";
@@ -699,13 +697,25 @@ public class XPEDXCatalogAction extends CatalogAction {
 			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 
 			categoryListElement = SCUIPlatformUtils.invokeXAPI("getCategoryList", categoryLstEle, template2.getDocumentElement(), wcContext.getSCUIContext());
-
+			scuiTransactionContext.commit();
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
-			scuiTransactionContext.rollback();
-		} finally {
+			// rollback the tran
 			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
 			}
 		}
 
@@ -741,16 +751,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 				if (bc.getAction() != null && bc.getAction().equals("filter")) {
 				//EB 4803 For a filter action indexField should not be null.
 				if(YFCCommon.isVoid(indexField))
-						indexField = (String) bc.getParams().get("indexField");
+						indexField = bc.getParams().get("indexField");
 					// String indexField = (String) bc.getParams().get(
 					// "indexField");
-					String filterDesc = (String) bc.getParams().get("filterDesc");
+					String filterDesc = bc.getParams().get("filterDesc");
 					if (log.isDebugEnabled()) {
 						log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : indexField=" + indexField);
 						log.debug("CatalogAction : setColumnListForUI(): Breadcrumb : filterDesc=" + filterDesc);
 					}
 					if (!YFCCommon.isVoid(indexField) && indexField.contains(XPEDXCatalogAction.XPEDX_PRODUCT_LINE_INDEX_FIELD)) {
-						String productType = (String) bc.getParams().get("cname");
+						String productType = bc.getParams().get("cname");
 						columnList = getListOfColumns(productType);
 						if (null == columnList || columnList.size() <= 0) {
 							isLayoutDefined = false;
@@ -780,19 +790,19 @@ public class XPEDXCatalogAction extends CatalogAction {
 	@Override
 	protected void populateMashupInput(String mashupId, Map<String, String> valueMap, Element mashupInput) throws WCMashupHelper.CannotBuildInputException {
 		int TERMS_NODE = 0;
-		
+
 		boolean searchStartsWithFlag = true; // indicates whether to auto-append '*' to search terms
-		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this.get_bcs_());	
+		List<Breadcrumb> bcl = BreadcrumbHelper.preprocessBreadcrumb(this.get_bcs_());
 		StringBuilder actionString = new StringBuilder();
 	/*	Searching for which action is triggered Search or newSearch*/
 		 for(int i = bcl.size() - 1; i >= 0; i--)
          {
-             Breadcrumb bc = (Breadcrumb)bcl.get(i);
+             Breadcrumb bc = bcl.get(i);
              System.out.println("Action called: "+bc.getAction()) ;
              actionString.append(bc.getAction()+",");
          }
 		 if(actionString.toString().contains("search")){
-			 searchStartsWithFlag = false; 
+			 searchStartsWithFlag = false;
 		 }
 
 		Set<String> keySet = valueMap.keySet();
@@ -1034,14 +1044,14 @@ public class XPEDXCatalogAction extends CatalogAction {
 									break;
 								}
 							}
-							
+
 							continue;
 						} else if (searchTermToken.indexOf("*") == -1) {
 							for ( String tempSearchTermToken : tempSearchTermList){
 								if(searchTermToken.substring(0,searchTermToken.length()-1).equals(tempSearchTermToken)){
 									strSearchTerm = strSearchTerm + tempSearchTermToken + " ";
 									break;
-									
+
 								}
 							}
 							continue;
@@ -1283,7 +1293,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 					YFCElement exp3Element = documentElement.createChild("Exp");
 					exp3Element.setAttribute("Name", "ItemID");
 					exp3Element.setAttribute("Value", itemid);
-					complexQueryOrElement.appendChild((YFCNode) exp3Element);
+					complexQueryOrElement.appendChild(exp3Element);
 					orderMultipleMap.put(itemid, "1");
 				}
 
@@ -1589,7 +1599,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 							Object objConversionFactor = displayUomMap.get(uom);
 							String isCustomerUom = "N";
 							if (uomIsCustomermap != null && uomIsCustomermap.get(uom) != null) {
-								isCustomerUom = (String) uomIsCustomermap.get(uom);
+								isCustomerUom = uomIsCustomermap.get(uom);
 								customUom = uom;
 							}
 							// Start- Code added to fix XNGTP 2964
@@ -1795,11 +1805,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 	private Map<String, Map<String, String>> getXpedxUOMList() {
 
 		LinkedHashMap<String, Map<String, String>> itemUomHashMap = new LinkedHashMap<String, Map<String, String>>();
-
-		IWCContext context = WCContextHelper.getWCContext(ServletActionContext.getRequest());
-		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 		try {
 
 			if (allAPIOutputDoc != null) {
@@ -1870,12 +1875,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
-		} finally {
-			scuiTransactionContext.end();
-			env.clearApiTemplate("XPXUOMListAPI");
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			env = null;
 		}
 		return itemUomHashMap;
 
@@ -2044,7 +2043,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		setAttributeListForUI();
 		prepareItemBranchInfoBean();
 		setColumnListForUI();
-		
+
 		path = tempCategoryPath;
 		categoryPath = path;
 
@@ -2713,7 +2712,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 				extnMpc = itemExtnElement.getAttribute("ExtnMpc");
 				Element primaryInformation = SCXmlUtil.getChildElement(itemElement, "PrimaryInformation");
 				manufacturerPartNo = primaryInformation.getAttribute("ManufacturerItem");
-				customerPartNumber = (String) itemToCustPartNoMap.get(itemID);
+				customerPartNumber = itemToCustPartNoMap.get(itemID);
 				HashMap<String, String> skuMap = new HashMap<String, String>();
 				skuMap.put("MPN", manufacturerPartNo);
 				skuMap.put("MPC", extnMpc);

@@ -11,8 +11,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
-import com.sterlingcommerce.ui.web.framework.helpers.SCUITransactionContextHelper;
 import com.sterlingcommerce.webchannel.order.OrderSaveBaseAction;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
@@ -25,7 +23,7 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 
 public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
-	
+
 	 private static final Logger LOG = Logger.getLogger(XPEDXUpdateMiniCartAction.class);
 	 protected String cicRefreshingMashupOrderHeaderKey = "";
 	 private static final String UPDATE_MINI_CART_MASHUP="updateOrderForMiniCart";
@@ -56,6 +54,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 		this.draftOrderFlag = draftOrderFlag;
 	}
 	//End of XBT- 248 & 252
+	@Override
 	public String execute()
 	 {
 		XPEDXWCUtils.setYFSEnvironmentVariables(wcContext);
@@ -65,35 +64,35 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 		//start of XBT 252 & 248
 			String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
 			if(YFCCommon.isVoid(editedOrderHeaderKey)){
-				draftOrderFlag="Y";	
+				draftOrderFlag="Y";
 			}
 			else {
-				draftOrderFlag="N";	
+				draftOrderFlag="N";
 			}
-			//end of XBT 252 & 248   
+			//end of XBT 252 & 248
 	        try
-	        {     	
+	        {
 	        	Map<String, Element> outputMap=prepareAndInvokeMashups();
 	        	if(getMashupIds().contains(CHECKOUT_MINI_CART_MASHUP))
 	        	{
 	        		orderLelement=outputMap.get(CHECKOUT_MINI_CART_MASHUP);
-	        		
+
 	        	//Added for Jira 3523
 	        		ArrayList<Element> itemList =SCXmlUtil.getElements(orderLelement,"OrderLines/OrderLine");
 	        		Iterator<Element> it=itemList.iterator();
 	        		while(it.hasNext())
 	        		{
-	        			Element orderLineElem=it.next();						
+	        			Element orderLineElem=it.next();
 	        			Element itemElement = (Element)orderLineElem.getElementsByTagName("Item").item(0);
 	        			String itemId = itemElement.getAttribute("ItemID");
         				//Element lineType=(Element)orderLineElem.getElementsByTagName("OrderLine").item(0);
         				String linetype = orderLineElem.getAttribute("LineType");
         				//For Charge line, we will not be checking for entitlements.
         				if(!"M".equals(linetype) &&  !"C".equals(linetype) && !allItemID.contains(itemId))
-        				{        				
+        				{
         					allItemID.add(itemId);
         				}
-	        		}        		
+	        		}
 	        		boolean entitleCheck = XPEDXOrderUtils.checkforNonEntitlement(allItemID , wcContext);
 	        		// If there is even a single item in mini cart which is non entitled, we will show error and not allow user to checkout.
 					if(entitleCheck){
@@ -115,21 +114,21 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        			XPEDXWCUtils.releaseEnv(wcContext);
 	        			return CART_ERROR;
 	        		}
-	        		
+
 	        		getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ, orderLelement.getOwnerDocument());
-	        		
+
 	        	}
-	        	else if(getMashupIds().contains(UPDATE_MINI_CART_MASHUP))	        		
+	        	else if(getMashupIds().contains(UPDATE_MINI_CART_MASHUP))
 	        	{
 	        		orderLelement=outputMap.get(UPDATE_MINI_CART_MASHUP);
-	        		
+
 	        		//check for cart errors to redirect it to cart page instead of checkout
 	        		boolean minOrderError = checkMinOrderFee(orderLelement);
 	        		if(minOrderError){
 	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 	        			XPEDXWCUtils.releaseEnv(wcContext);
 	        			return CART_ERROR;
-	        		}	        		
+	        		}
 	        		boolean maxOrderError = checkMaxOrderFee(orderLelement);
 	        		if(maxOrderError){
 	        			XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
@@ -141,14 +140,14 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        	{
 	        		orderLelement=outputMap.get(DELETE_MINI_CART_MASHUP);
 	        	}
-	        	
+
 	        	XPEDXOrderUtils.refreshMiniCart(wcContext, orderLelement, true, XPEDXConstants.MAX_ELEMENTS_IN_MINICART);
 	            returnValue=SUCCESS;
 	        }
 	        catch(XMLExceptionWrapper e)
             {
                   YFCElement errorXML=e.getXML();
-                  YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+                  YFCElement errorElement=errorXML.getElementsByTagName("Error").item(0);
                   String errorDeasc=errorElement.getAttribute("ErrorDescription");
                   if(errorDeasc.contains("Key Fields cannot be modified."))
                   {
@@ -169,7 +168,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 
 	        catch(Exception e)
 	        {
-	        	
+
 	        	e.printStackTrace();
 	            LOG.error(e);
 	            return ERROR;
@@ -177,7 +176,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 	        XPEDXWCUtils.releaseEnv(wcContext);
 	        return returnValue;
 	}
-	 
+
 	 private boolean checkMaxOrderFee(Element orderLelement){
 		 boolean maxOrderError = false;
 		 String maxOrderAmountStr=xpedxCustomerContactInfoBean.getExtnmaxOrderAmount();
@@ -201,26 +200,26 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 		 }
 		 if(orderLelement != null){
 				//find the order total without tax
-				String orderTotalStr = SCXmlUtil.getXpathAttribute(orderLelement, "//Order/Extn/@ExtnTotOrdValWithoutTaxes"); 
-				
+				String orderTotalStr = SCXmlUtil.getXpathAttribute(orderLelement, "//Order/Extn/@ExtnTotOrdValWithoutTaxes");
+
 				if (orderTotalStr != null && (!"".equals(orderTotalStr))) {
 					orderTotal = Float.parseFloat(orderTotalStr);
 				}
-				
+
 		}
 		if(maxOrderAmt != 0 && maxOrderAmt < orderTotal){
 				maxOrderError = true;
 			}
 		 return maxOrderError;
 	 }
-	
+
 	private boolean checkMinOrderFee(Element orderLelement) throws RemoteException {
 		boolean minOrderError = false;
 		//if the order total is less than min order, then redirect to cart page so that the user can correct it.
 		getCustomerDetails();
 		if(orderLelement != null){
 			//find the order total without tax
-			String orderTotalStr = SCXmlUtil.getXpathAttribute(orderLelement, "//Order/Extn/@ExtnTotOrdValWithoutTaxes"); 
+			String orderTotalStr = SCXmlUtil.getXpathAttribute(orderLelement, "//Order/Extn/@ExtnTotOrdValWithoutTaxes");
 			float orderTotal = 0;
 			if (orderTotalStr != null && (!"".equals(orderTotalStr))) {
 				orderTotal = Float.parseFloat(orderTotalStr);
@@ -231,15 +230,15 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 		}
 		return minOrderError;
 	}
-	
-	
+
+
 	public void setOrderHeaderKey(String orderHeaderKey)
     {
         cicRefreshingMashupOrderHeaderKey = orderHeaderKey;
     }
-	
+
 	private void getCustomerDetails() throws RemoteException {
-		ISCUITransactionContext scuiTransactionContext = null;
+
 		try {
 			shipToCustomer=(XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			if (wcContext.getCustomerId() != null) {
@@ -250,7 +249,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 				}
 				String minOrderAmountStr = shipToCustomer.getExtnMinOrderAmount();
 				String chargeAmountStr = shipToCustomer.getExtnMinChargeAmount();
-				
+
 				if (minOrderAmountStr != null && (!("".equals(minOrderAmountStr))) && (!"0".equals(minOrderAmountStr)) && (!"0.00".equals(minOrderAmountStr))) {
 					minOrderAmount = Float.parseFloat(minOrderAmountStr);
 					if (chargeAmountStr != null && (!"".equals(chargeAmountStr))) {
@@ -273,8 +272,8 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 							if (chargeAmountStr != null && (!"".equals(chargeAmountStr)) && chargeAmount <= 0) {
 								chargeAmount = Float .parseFloat(chargeAmountStr);
 							}
-							if (shipToCustomer.getShipToOrgExtnMinOrderAmt() == null 
-									&& shipToCustomer .getShipToOrgExtnSmallOrderFee() == null 
+							if (shipToCustomer.getShipToOrgExtnMinOrderAmt() == null
+									&& shipToCustomer .getShipToOrgExtnSmallOrderFee() == null
 									&& shipToCustomer.getShipToOrgOrganizationName() == null
 									&& shipToCustomer.getShipToOrgCorporatePersonInfoState() == null) {
 								shipFromDivision = shipToCustomer.getExtnShipFromBranch();
@@ -303,7 +302,7 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 									//Added For Jira 3465
 									shipToCustomer.setShipToDivdeliveryInfo(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(),"/OrganizationList/Organization/Extn/@ExtnDeliveryInfo"));
 									shipToCustomer.setShipToDivdeliveryInfoSaal(SCXmlUtil.getXpathAttribute(outputDoc.getDocumentElement(),"/OrganizationList/Organization/Extn/@ExtnDeliveryInfoSaal"));//EB-3624
-									
+
 									XPEDXWCUtils.setObectInCache(XPEDXConstants.SHIP_TO_CUSTOMER,shipToCustomer);
 								} catch (CannotBuildInputException e) {
 									LOG.error("Unable to get XPEDXGetShipOrgNodeDetails for "+ shipFromDivision + "_"+ envCode + ". ", e);
@@ -323,15 +322,12 @@ public class XPEDXUpdateMiniCartAction extends OrderSaveBaseAction{
 				}
 			}// if customerId is not null
 		} catch (Exception ex) {
-			scuiTransactionContext.rollback();
-		} finally {
-			if (scuiTransactionContext != null) {SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wcContext.getSCUIContext());
-			}
+
 		}
 
 	}
-	
-	protected XPEDXShipToCustomer shipToCustomer;	
+
+	protected XPEDXShipToCustomer shipToCustomer;
 	private float chargeAmount;
 	private float minOrderAmount;
 	protected String shipFromDivision;

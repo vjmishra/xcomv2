@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-import org.w3c.dom.Document;
 
 import com.sterlingcommerce.ui.web.framework.context.SCUIContext;
 import com.sterlingcommerce.ui.web.framework.extensions.ISCUITransactionContext;
@@ -13,7 +12,6 @@ import com.sterlingcommerce.ui.web.platform.transaction.SCUITransactionContextFa
 import com.sterlingcommerce.webchannel.core.IWCContext;
 import com.sterlingcommerce.webchannel.core.context.WCContextHelper;
 import com.sterlingcommerce.webchannel.order.ShippingOptionAction;
-import com.sterlingcommerce.xpedx.webchannel.order.utilities.XPEDXCommerceContextHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXOverriddenShipToAddress;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
@@ -40,17 +38,17 @@ public class XPEDXShippingOptionAction extends ShippingOptionAction {
 
 	String returnVal;
 	XPEDXOverriddenShipToAddress shipToAddress = null;
-	YFSEnvironment env;
-	ISCUITransactionContext scuiTransactionContext;
 
-	private String xpedxSTName = "";
-	private String xpedxSTStreet = "";
-	private String xpedxSTAddressLine2 = "";
-	private String xpedxSTAddressLine3 = "";
-	private String xpedxSTCity = "";
-	private String xpedxSTState = "";
-	private String xpedxSTZip = "";
 
+	private  String xpedxSTName = "";
+	private  String xpedxSTStreet = "";
+	private  String xpedxSTAddressLine2 = "";
+	private  String xpedxSTAddressLine3 = "";
+	private  String xpedxSTCity = "";
+	private  String xpedxSTState = "";
+	private  String xpedxSTZip = "";
+
+	@Override
 	public String execute() {
 
 		returnVal = super.execute();
@@ -60,6 +58,9 @@ public class XPEDXShippingOptionAction extends ShippingOptionAction {
 		documentElement.setAttribute("OrderHeaderKey", (String)XPEDXWCUtils.getObjectFromCache("OrderHeaderInContext"));
 		YFCElement eleElement = inputDocument.createElement("PersonInfoShipTo");
 		shipToAddress = XPEDXWCUtils.getShipToOveriddenAddress(wcContext);
+		YFSEnvironment env = null;
+		ISCUITransactionContext scuiTransactionContext = null;
+
 		if (shipToAddress == null) {
 			try {
 				shpCustomer = XPEDXWCUtils.getShipToAdress(wcContext
@@ -160,7 +161,7 @@ public class XPEDXShippingOptionAction extends ShippingOptionAction {
 				.getRequest());
 		SCUIContext wSCUIContext = context.getSCUIContext();
 		documentElement.setAttribute("Action", "MODIFY");
-		scuiTransactionContext =wSCUIContext
+		scuiTransactionContext = wSCUIContext
 				.getTransactionContext(true);
 		env = (YFSEnvironment) scuiTransactionContext
 				.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
@@ -168,13 +169,27 @@ public class XPEDXShippingOptionAction extends ShippingOptionAction {
 		try {
 			YIFApi api = YIFClientFactory.getInstance().getApi();
 			api.invoke(env, "changeOrder", inputDocument.getDocument());
+			scuiTransactionContext.commit();
 		} catch (Exception e) {
 			log.error(e);
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
 		} finally {
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			scuiTransactionContext = null;
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 		return returnVal;
 	}

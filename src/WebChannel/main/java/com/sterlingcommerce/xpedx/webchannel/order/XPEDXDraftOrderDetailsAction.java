@@ -40,8 +40,8 @@ import com.sterlingcommerce.webchannel.core.WCAttributeScope;
 import com.sterlingcommerce.webchannel.order.DraftOrderDetailsAction;
 import com.sterlingcommerce.webchannel.utilities.UtilBean;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
-import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
+import com.sterlingcommerce.webchannel.utilities.XMLUtilities;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXCustomerContactInfoBean;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
@@ -572,16 +572,30 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 		Document outputListDocument = api.invoke(env, "manageCustomer",
 				document);
 		LOG.debug(SCXmlUtil.getString(outputListDocument));
+		scuiTransactionContext.commit();
 	}
 	}
 	catch(Exception ex){
 		LOG.debug(ex);
+		// rollback the tran
+		if (scuiTransactionContext != null) {
+			try {
+				scuiTransactionContext.rollback();
+			} catch (Exception ignore) {
+			}
+		}
+		throw new IllegalStateException(ex);
 	}
 	finally {
-	SCUITransactionContextHelper.releaseTransactionContext(
-			scuiTransactionContext, wSCUIContext);
-	scuiTransactionContext = null;
-	env = null;
+		if (scuiTransactionContext != null && wSCUIContext != null) {
+			try {
+				// release the transaction to close the connection.
+				SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+				scuiTransactionContext = null;
+				env = null;
+			} catch (Exception ignore) {
+			}
+		}
 	}
 	}
 
@@ -912,7 +926,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	}
 	private void getCustomerDetails()
 	throws RemoteException {
-		ISCUITransactionContext scuiTransactionContext=null;
 		try
 		{
 			//Form the input
@@ -1157,12 +1170,6 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	} catch (Exception ex) {
 		//log.error(ex.getMessage());
-		scuiTransactionContext.rollback();
-	} finally {
-		if (scuiTransactionContext != null) {
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wcContext.getSCUIContext());
-		}
 	}
 
 	}
@@ -2701,7 +2708,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 							}
 							else{
 								inventoryMap.put(currItemId, "N");
-								
+
 								if(inventoryIndicator.equalsIgnoreCase("M"))
 									displayInventoryMap.put(currItemId, "M");
 								else if(inventoryIndicator.equalsIgnoreCase("I"))
@@ -3115,7 +3122,7 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 
 	protected HashMap<String, String> inventoryMap = new HashMap<String, String>();
 	protected HashMap<String, String> displayInventoryMap = new HashMap<String, String>();
-	
+
 	/**
 	 * @return the inventoryMap
 	 */
@@ -3129,8 +3136,8 @@ public void setSelectedShipToAsDefault(String selectedCustomerID) throws CannotB
 	public void setInventoryMap(HashMap<String, String> inventoryMap) {
 		this.inventoryMap = inventoryMap;
 	}
-	
-	
+
+
 	public HashMap<String, String> getDisplayInventoryMap() {
 		return displayInventoryMap;
 	}

@@ -1,5 +1,5 @@
 package com.sterlingcommerce.xpedx.webchannel.order;
- 
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,19 +46,19 @@ import com.yantra.yfc.ui.backend.util.APIManager.XMLExceptionWrapper;
 import com.yantra.yfc.util.YFCCommon;
 import com.yantra.yfs.core.YFSSystem;
 import com.yantra.yfs.japi.YFSEnvironment;
- 
+
 public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineItemsAction
 {
     public static final String CHANGE_ORDER_LINE_DETAILS_MASHUP = "xpedx_me_changeOrderLineDetails";
     public static final String CHECKOUT_ORDER_MASHUP="xpedx_checkout_changeOrderLineDetails";
     public static final String CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ = "changeOrderAPIOutputForCheckout";
     public static final String CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ = "changeOrderAPIOutputForOrderLinesModification";
-     
-    public String mashUpId = null;  
-     
+
+    public String mashUpId = null;
+
     /*Added  for Webtrends :  to check if "Save/Update Cart is hit */
     private boolean updateCartMetaTag = false;
-     
+
     protected String validateCustomerFields = "N";
     private boolean isAnyMLine=false;
     private String orderLineKey="";
@@ -70,15 +70,15 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     public String customerContactId;
 	public String draftOrderError;
     private boolean isOUErrorPage=false;
- 
+
     //Added for EB-464
     public ArrayList <String> orderedQtyForCustUom;
     public ArrayList <String> orderLineQuantities;
     public ArrayList <String> itemUOMs;
     public ArrayList <String> orderLineItemIDs;
     private ArrayList <String> customerUOMConvFactors;
-    
-    
+
+
     public ArrayList<String> getCustomerUOMConvFactors() {
 		return customerUOMConvFactors;
 	}
@@ -95,94 +95,95 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 		this.customerContactId = customerContactId;
 	}
 
-     
+
     public ArrayList<String> getOrderLineItemIDs() {
         return orderLineItemIDs;
     }
- 
+
     public ArrayList<String> getItemUOMs() {
         return itemUOMs;
     }
- 
+
     public ArrayList<String> getOrderLineQuantities() {
         return orderLineQuantities;
     }
- 
+
     public ArrayList<String> getOrderedQtyForCustUom() {
         return orderedQtyForCustUom;
     }
- 
+
     public void setOrderedQtyForCustUom(ArrayList<String> orderedQtyForCustUom) {
         this.orderedQtyForCustUom = orderedQtyForCustUom;
     }
- 
+
     public LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap = new LinkedHashMap<String, String>();
- 
+
     public LinkedHashMap<String, String> getItemAndCustomerUomWithConvHashMap() {
         return itemAndCustomerUomWithConvHashMap;
     }
- 
+
     public void setItemAndCustomerUomWithConvHashMap(
             LinkedHashMap<String, String> itemAndCustomerUomWithConvHashMap) {
         this.itemAndCustomerUomWithConvHashMap = itemAndCustomerUomWithConvHashMap;
     }
- 
+
     public String getDraftOrderError() {
         return draftOrderError;
     }
- 
+
     public void setDraftOrderError(String draftOrderError) {
         this.draftOrderError = draftOrderError;
     }
- 
+
     public String getDraftOrderFlag() {
         return draftOrderFlag;
     }
- 
+
     public void setDraftOrderFlag(String draftOrderFlag) {
         this.draftOrderFlag = draftOrderFlag;
     }
- 
+
     public String getModifyOrderLines() {
         return modifyOrderLines;
     }
- 
+
     public void setModifyOrderLines(String modifyOrderLines) {
         this.modifyOrderLines = modifyOrderLines;
     }
- 
+
     public boolean isUpdateCartMetaTag() {
         return updateCartMetaTag;
     }
- 
+
     public void setUpdateCartMetaTag(boolean updateCartMetaTag) {
         this.updateCartMetaTag = updateCartMetaTag;
-    }    
- 
+    }
+
     /**
      * @return the validateCustomerFields
      */
     public String getValidateCustomerFields() {
         return validateCustomerFields;
     }
- 
+
     /**
      * @param validateCustomerFields the validateCustomerFields to set
      */
     public void setValidateCustomerFields(String validateCustomerFields) {
         this.validateCustomerFields = validateCustomerFields;
     }
- 
+
     public XPEDXDraftOrderModifyLineItemsAction()
     {
         super();
         orderLineNote = null;
     }
-     
-    public String execute()
-    {        
+
+    @Override
+	public String execute()
+    {
     	long startTime=System.currentTimeMillis();
-    	
+
     	if(zeroOrderLines.equals("true")){
             mashUpId = "xpedx_me_changeOrderDetails";
         }
@@ -191,7 +192,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         }
         else{
             mashUpId = CHANGE_ORDER_LINE_DETAILS_MASHUP;
-             
+
         }
         String isSalesRep = (String) wcContext.getSCUIContext().getSession().getAttribute("IS_SALES_REP");
         if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
@@ -211,7 +212,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         HttpSession localSession = httpRequest.getSession();
         setUpdateCartMetaTag(true);
         String retVal="";
-        localSession.setAttribute("isUpdateCartMetaTag", "true");        
+        localSession.setAttribute("isUpdateCartMetaTag", "true");
         // Webtrends meta tag end here
         Document outputDocument=null;
         try
@@ -219,10 +220,10 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             //start of XBT 252 & 248
             String editedOrderHeaderKey = XPEDXWCUtils.getEditedOrderHeaderKeyFromSession(wcContext);
             if(YFCCommon.isVoid(editedOrderHeaderKey)){
-                draftOrderFlag="Y";    
+                draftOrderFlag="Y";
             }
             else {
-                draftOrderFlag="N";    
+                draftOrderFlag="N";
             }
             String customerUOMConvFact="";
             for(int i=0;orderLineItemIDs != null && i<orderLineItemIDs.size();i++)
@@ -253,9 +254,9 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	                    BigDecimal convFact = new BigDecimal(convFactor);
 	                    if(custUom.equalsIgnoreCase(itemUOMs.get(k))){
 	                        BigDecimal res = orderlineqty.multiply(convFact) ;
-	                         
-	                        int extnBaseOrderedQty = res.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();                          
-	                         
+
+	                        int extnBaseOrderedQty = res.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+
 	                        if(extnBaseOrderedQty==0)
 	                        {
 	                            extnBaseOrderedQty =1;
@@ -270,8 +271,8 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	                    orderedQtyForCustUom.add("0");
 	                }
 	            }
-	        }	        
-	       
+	        }
+
 	        if("false".equals(isEditOrder))
     		{
 	        	Set<String> mashupIdSet = new HashSet<String>();
@@ -283,26 +284,26 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 				changeOrderInputElem.setAttribute(XPXLiterals.CUSTOMER_CONTACT_ID, getCustomerContactId());
     			Element outputElement = (Element) WCMashupHelper.invokeMashup(mashUpId, changeOrderInputElem, wcContext.getSCUIContext());
     			outputDocument=outputElement.getOwnerDocument();
-    		
-    		} else {    			
+
+    		} else {
     			Map<String, Element> out = prepareAndInvokeMashups();
-	        	outputDocument = (Document)out.get(mashUpId).getOwnerDocument();
+	        	outputDocument = out.get(mashUpId).getOwnerDocument();
     		}
-		    
-	        retVal= SUCCESS;	              	        
-           
+
+	        retVal= SUCCESS;
+
             if("true".equals(isComingFromCheckout))
-            {            	
+            {
             	retVal=validateMaxOrderAmountWhileCheckOut(outputDocument);
             }
-            
-            
-            
+
+
+
          }
         catch(XMLExceptionWrapper e)
         {
               YFCElement errorXML=e.getXML();
-              YFCElement errorElement=(YFCElement)errorXML.getElementsByTagName("Error").item(0);
+              YFCElement errorElement=errorXML.getElementsByTagName("Error").item(0);
               String errorDeasc=errorElement.getAttribute("ErrorDescription");
               if(errorDeasc.contains("Key Fields cannot be modified."))
               {
@@ -335,27 +336,27 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
               //XBT 248
               if ("true".equals(isComingFromCheckout))
               {
-                      retVal= "checkoutError";  
+                      retVal= "checkoutError";
               }
               else
               {
-                  retVal= SUCCESS;  
+                  retVal= SUCCESS;
               }
-              
+
         }
         catch(Exception e)
         {
         	LOG.error(e.getMessage(), e);
-        	WCUtils.setErrorInContext(getWCContext(), e);     
+        	WCUtils.setErrorInContext(getWCContext(), e);
         	retVal= ERROR;
         }
-        
+
         if(!zeroOrderLines.equals("true"))
         {
             //Always validate customer fields after calling Update Cart
             setValidateCustomerFields("Y");
-        }        
-         
+        }
+
         XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(),new HashMap());
         boolean chngOrderOutputAvailable=false;
         if("true".equals(isComingFromCheckout) || "true".equals(modifyOrderLines))
@@ -372,47 +373,47 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                 {
                     String applyMinOrderBrands_DivisionLevel=shipToCustomer.getShipToOrgExtnApplyMinOrderBrands();
                     if(applyMinOrderBrands_DivisionLevel==null)
-                    {                        
-                        applyMinOrderBrands_DivisionLevel=getExtnApplyMinOrderBrands(shipToCustomer.getExtnEnvironmentCode(), shipToCustomer.getExtnShipFromBranch());                    
+                    {
+                        applyMinOrderBrands_DivisionLevel=getExtnApplyMinOrderBrands(shipToCustomer.getExtnEnvironmentCode(), shipToCustomer.getExtnShipFromBranch());
                     }
-                     
+
                     if (XPXUtils.isApplyMinimumOrderChargeForBrand(applyMinOrderBrands_DivisionLevel, getWCContext().getStorefrontId()))
                     {
                         processSpecialCharge(outputDocument, chngOrderOutputAvailable);
                     }
                 }
             }
-        }  
-                
+        }
+
         if(outputDocument!=null && retVal.equals(SUCCESS))
         {
             if("true".equals(isComingFromCheckout))
             {
                 getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_CHECKOUT_SESSION_OBJ, outputDocument);
-             
+
             }else if ("true".equals(modifyOrderLines))
             {
                 getWCContext().getSCUIContext().getSession().setAttribute(CHANGE_ORDEROUTPUT_MODIFYORDERLINES_SESSION_OBJ, outputDocument);
             }
-        
-        } 
-        
+
+        }
+
         XPEDXWCUtils.releaseEnv(wcContext);
-         
+
         long endTime=System.currentTimeMillis();
         System.out.println("Time taken in milliseconds in XPEDXDraftOrderModifyLineItemsAction class : "+(endTime-startTime));
         System.out.println("++++++++++++retVal+++++++++++++++++"+retVal);
         return retVal;
-   
-    }    
-     
+
+    }
+
     private void processSpecialCharge(Document outputDoc,  boolean chngOrderOutputAvailable)
     {
         try
         {
             LOG.debug("Calling processSpecialCharge");
             UtilBean util=new UtilBean();
-             
+
             Map<String, String> valueMap1 = new HashMap<String, String>();
             Element orderElem = null;
             Element input1=null;
@@ -420,17 +421,17 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             /*Begin - Changes made by Mitesh Parikh for JIRA#3595*/
             if(chngOrderOutputAvailable)
             {
-                valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);                
+                valueMap1.put("/Order/@OrderHeaderKey", orderHeaderKey);
                 input1 = WCMashupHelper.getMashupInput("xpedx_get_completeorderList",
                             valueMap1, wcContext.getSCUIContext());
                 obj1 = WCMashupHelper.invokeMashup("xpedx_get_completeorderList",
-                                input1, wcContext.getSCUIContext());        
-                 
+                                input1, wcContext.getSCUIContext());
+
                 orderElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
-             
+
             } else {
                 orderElem = outputDoc.getDocumentElement();
-             
+
             }
             /*End - Changes made by Mitesh Parikh for JIRA#3595*/
             Element orderExtn=util.getElement(orderElem, "Extn");
@@ -440,20 +441,20 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             {
                 valueMap1 = new HashMap<String, String>();
                 valueMap1.put("/Order/Extn/@ExtnWebConfNum", extnWebConfNum);
-                 
-                 
+
+
                 input1 = WCMashupHelper.getMashupInput("xpedx_get_orderList_for_special_charge",
                             valueMap1, wcContext.getSCUIContext());
-                 
-                 
+
+
                 obj1 = WCMashupHelper.invokeMashup("xpedx_get_orderList_for_special_charge",
                                 input1, wcContext.getSCUIContext());
-         
+
                 Element orderListElem = ((Element) obj1).getOwnerDocument().getDocumentElement();
                 if(orderListElem != null)
                 {
                     NodeList orderListNode=orderListElem.getElementsByTagName("Order");
-                     
+
                     for(int i=0;i<orderListNode.getLength();i++)
                     {
                         Element orderListOrderElem=(Element)orderListNode.item(i);
@@ -491,7 +492,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         }
         XPEDXWCUtils.releaseEnv(wcContext);
     }
-     
+
     private void validateSpecialLine(Element orderListOrderElem,UtilBean util) throws Exception
     {
         modifiedOrderHeaderKey=orderListOrderElem.getAttribute("OrderHeaderKey");
@@ -515,23 +516,23 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                 {
                     OrderItemID=itemElem.getAttribute("ItemID");
                 }
-                 
+
                 if("M".equals(lineType) && OrderItemID.equals(itemID) && Double.parseDouble(orderedQty)==1)
                 {
                     isAnyMLine=true;
                     orderLineKey=orderLineEle.getAttribute("OrderLineKey");
-                     
+
                     break;
                 }
             }
         }
     }
-     
+
     private Document createOrderDocumentForSpecialLine(Element orderExtn,String action,String orderHeaderKey,String orderLineKey)
     {
         Document inputDocument =SCXmlUtil.createDocument("Order");
         Element orderChangeElem=inputDocument.getDocumentElement();
-         
+
         orderChangeElem.setAttribute("OrderHeaderKey", orderHeaderKey);
         Element orderLinesChanegElem=SCXmlUtil.createChild(orderChangeElem, "OrderLines");
         Element orderLineChanegElem=SCXmlUtil.createChild(orderLinesChanegElem, "OrderLine");
@@ -558,7 +559,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             Element linePriceInfoElement = SCXmlUtil.createChild(orderLineChanegElem, "LinePriceInfo");
             linePriceInfoElement.setAttribute("UnitPrice", chargeAmount);
             linePriceInfoElement.setAttribute("IsPriceLocked", "Y");
-             
+
         }
         else
         {
@@ -567,7 +568,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         createOrderExtnElem(orderChangeElem,orderExtn,action);
         return inputDocument;
     }
-     
+
     private void createOrderExtnElem(Element orderElem,Element orderExtn,String action)
     {
         double totalOrderValue=SCXmlUtil.getDoubleAttribute(orderExtn, "ExtnTotalOrderValue");
@@ -606,21 +607,22 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             XPEDXWCUtils.setYFSEnvironmentVariables(getWCContext(), map);
         }
     }*/
-    protected void manipulateMashupInputs(Map mashupInputs)
+    @Override
+	protected void manipulateMashupInputs(Map mashupInputs)
     throws com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException
     {
         //if (!"true".equals(isComingFromCheckout))        // Removing changeOrder call for Performance improvement, while checkout
             manipulateMashupInputs(mashupInputs,zeroOrderLines);
     }
-     
+
     protected void manipulateMashupInputs(Map mashupInputs,String isOrderLine)
     throws com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException
     {
-       
+
     	Element inputXML = (Element)mashupInputs.get(mashUpId);
         if(inputXML == null)
             throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("Cannot locate InputXML for xpedx_me_changeOrderLineDetails mashup for manipulation");
-         
+
         if("true".equals(isOrderLine))
         {
             return;
@@ -633,13 +635,13 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         {
             for(int i = 0; i < originalDeliveryMethods.size(); i++)
             {
-                String originalMethod = (String)originalDeliveryMethods.get(i);
+                String originalMethod = originalDeliveryMethods.get(i);
                 if("PICK".equals(originalMethod))
                 {
-                   String selectedMethod = (String)selectedDeliveryMethods.get(i);
+                   String selectedMethod = selectedDeliveryMethods.get(i);
                     if(!originalMethod.equals(selectedMethod))
                     {
-                        String orderLineKey = (String)orderLineKeys.get(i);
+                        String orderLineKey = orderLineKeys.get(i);
                         Element orderLineEl = XMLUtilities.getElement(inputXML, (new StringBuilder()).append("/Order/OrderLines/OrderLine[@OrderLineKey='").append(orderLineKey).append("']").toString());
                         orderLineEl.setAttribute("ShipNode", "");
                         orderLineEl.setAttribute("ReqShipDate", "");
@@ -649,7 +651,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             NodeList inputNodeList = inputXML.getElementsByTagName("OrderLines");
             Element inputNodeListElemt = (Element)inputNodeList.item(0);
             SCXmlUtils util = SCXmlUtils.getInstance();
-             
+
             NodeList orderLineElemList = inputNodeListElemt.getElementsByTagName("OrderLine");
             if(orderLineElemList!=null && orderLineElemList.getLength()>0)
             {
@@ -658,7 +660,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                     Element orderLineElement = (Element)orderLineElemList.item(k);
                     String noteKey = (String)lineNotesKey.get(k);
                     String note = (String)orderLineNote.get(k);
-                     
+
                     /*Element orderLineNotesElement = util.createChild(orderLineElement, "Instructions");
                     Element orderLineNoteElement = util.createChild(orderLineNotesElement, "Instruction");*/
                     HashMap<String, String> attrMap =  new HashMap<String, String>();
@@ -692,7 +694,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                         }
                         orderLineNoteElement.setAttribute("InstructionType", "LINE");
                     }
-                     
+
                 }
             }
             String inputXml = SCXmlUtil.getString(inputXML);
@@ -703,7 +705,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             throw new com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException("Error encountered manipulating InputXML", e);
         }
     }
-     
+
     //This method is not being called owing to the latest changes in Draft Order Details jsp.
     public String updateNotes()
     {
@@ -714,7 +716,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             if(orderHeaderKey != null && orderHeaderKey.equals(XPEDXCommerceContextHelper.getCartInContextOrderHeaderKey(getWCContext())))
                 CommerceContextHelper.refreshCartInContextData(getWCContext());
             return "success";*/
-             
+
             Map<String, String> valueMap = new HashMap<String, String>();
             valueMap.put("/Order/@OrderHeaderKey", orderHeaderKey);
             //RUgrani - OrderChange: Record the pending changes
@@ -728,21 +730,21 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             {
                 index = orderLineKeys.indexOf(orderLineKeyForNote);
             }
-             
+
             if(index!= -1)
             {
                 String noteKey = (String)lineNotesKey.get(index);
                 String note = (String)orderLineNote.get(index);
-                 
+
                 SCXmlUtils util = SCXmlUtils.getInstance();
-                 
+
                 Element orderLineElement = util.createChild(inputNodeListElemt, "OrderLine");
                 orderLineElement.setAttribute("Action", "MODIFY");
                 orderLineElement.setAttribute("OrderLineKey", orderLineKeys.get(index));
-                 
+
                 Element orderLineNotesElement = util.createChild(orderLineElement, "Instructions");
                 Element orderLineNoteElement = util.createChild(orderLineNotesElement, "Instruction");
-                 
+
                 if(noteKey!=null && noteKey.trim().length() > 0)
                 {
                     orderLineNoteElement.setAttribute("InstructionDetailKey", noteKey);
@@ -764,9 +766,9 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
                     log.debug("Output XML: " + SCXmlUtil.getString((Element) obj));
                 }
             }
-             
+
             return "success";
-             
+
         }
         catch(Exception e)
         {
@@ -775,31 +777,31 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
             return "error";
         }
     }
-     
+
     public List getOrderLineNote() {
         return orderLineNote;
     }
- 
+
     public void setOrderLineNote(List orderLineNote) {
         this.orderLineNote = orderLineNote;
     }
- 
+
     public List getLineNotesKey() {
         return lineNotesKey;
     }
- 
+
     public void setLineNotesKey(List lineNotesKey) {
         this.lineNotesKey = lineNotesKey;
     }
-     
+
     public String getOrderLineKeyForNote() {
         return orderLineKeyForNote;
     }
- 
+
     public void setOrderLineKeyForNote(String orderLineKeyForNote) {
         this.orderLineKeyForNote = orderLineKeyForNote;
     }
-    
+
     protected List orderLineNote;
     protected List lineNotesKey;
     public String orderLineKeyForNote;
@@ -812,12 +814,12 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
     private String customerFieldsValidated;
     private String ajaxLineStatusCodeMsg = "";
     private Map<String,String> pnALineErrorMessage;
-    private HashMap<String, JSONObject> pnaHoverMap; 
+    private HashMap<String, JSONObject> pnaHoverMap;
     private HashMap<String, XPEDXItemPricingInfo> priceHoverMap;
-    private HashMap orderMultipleMapFromSourcing;	
+    private HashMap orderMultipleMapFromSourcing;
 	private HashMap useOrderMultipleMapFromSourcing;
-    
-	
+
+
     public HashMap getOrderMultipleMapFromSourcing() {
 		return orderMultipleMapFromSourcing;
 	}
@@ -842,7 +844,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	public void setPriceHoverMap(HashMap<String, XPEDXItemPricingInfo> priceHoverMap) {
 		this.priceHoverMap = priceHoverMap;
 	}
-	
+
 	public HashMap<String, JSONObject> getPnaHoverMap() {
 		return pnaHoverMap;
 	}
@@ -866,7 +868,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	public void setPnALineErrorMessage(Map<String, String> pnALineErrorMessage) {
 		this.pnALineErrorMessage = pnALineErrorMessage;
 	}
-	
+
     public String getCustomerFieldsValidated() {
 		return customerFieldsValidated;
 	}
@@ -882,39 +884,39 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
         this.isEditOrder = isEditOrder;
     }
     public final Logger log = Logger.getLogger(XPEDXDraftOrderModifyLineItemsAction.class);
- 
+
     public String getZeroOrderLines() {
         return zeroOrderLines;
     }
- 
+
     public void setZeroOrderLines(String zeroOrderLines) {
         this.zeroOrderLines = zeroOrderLines;
     }
- 
+
     public String getMinOrderAmount() {
         return minOrderAmount;
     }
- 
+
     public void setMinOrderAmount(String minOrderAmount) {
         this.minOrderAmount = minOrderAmount;
     }
- 
+
     public String getChargeAmount() {
         return chargeAmount;
     }
- 
+
     public void setChargeAmount(String chargeAmount) {
         this.chargeAmount = chargeAmount;
     }
- 
+
     public String getIsComingFromCheckout() {
         return isComingFromCheckout;
     }
- 
+
     public void setIsComingFromCheckout(String isComingFromCheckout) {
         this.isComingFromCheckout = isComingFromCheckout;
     }
- 
+
     public String getMaxOrderAmount() {
 		return maxOrderAmount;
 	}
@@ -922,72 +924,88 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 	public void setMaxOrderAmount(String maxOrderAmount) {
 		this.maxOrderAmount = maxOrderAmount;
 	}
-	
+
     private String getExtnApplyMinOrderBrands(String envCode, String shipFromBranch) {
         String extnApplyMinOrderBrands=null;
         if (shipFromBranch != null && shipFromBranch.trim().length() > 0)
         {
-                 
+
             if (envCode != null && envCode.trim().length() > 0)
             {
                 shipFromBranch = shipFromBranch    + "_" + envCode;
-            }                    
-             
+            }
+
             SCUIContext wSCUIContext = wcContext.getSCUIContext();
-            ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-            YFSEnvironment env  = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
-             
-            YFCDocument organizationListInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORGANIZATION);
-            organizationListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, shipFromBranch);
-             
-            env.setApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API, SCXmlUtil.createFromString("<OrganizationList><Organization OrganizationName=\"\"><Extn ExtnApplyMinOrderBrands=\"\"/></Organization></OrganizationList>"));
+            ISCUITransactionContext scuiTransactionContext = null;
+            YFSEnvironment env  = null;
             try
-            {            
+            {
+            	scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+            	env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+            	YFCDocument organizationListInputDoc = YFCDocument.createDocument(XPXLiterals.E_ORGANIZATION);
+            	organizationListInputDoc.getDocumentElement().setAttribute(XPXLiterals.A_ORGANIZATION_CODE, shipFromBranch);
+
+            	env.setApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API, SCXmlUtil.createFromString("<OrganizationList><Organization OrganizationName=\"\"><Extn ExtnApplyMinOrderBrands=\"\"/></Organization></OrganizationList>"));
+
                 Document organizationListOutDoc = YIFClientFactory.getInstance().getApi().invoke(env, XPXLiterals.GET_ORGANIZATION_LIST_API, organizationListInputDoc.getDocument());
                 env.clearApiTemplate(XPXLiterals.GET_ORGANIZATION_LIST_API);
                 if(organizationListOutDoc!=null)
                 {
                     extnApplyMinOrderBrands=SCXmlUtil.getXpathAttribute(organizationListOutDoc.getDocumentElement(), "/OrganizationList/Organization/Extn/@ExtnApplyMinOrderBrands");
-                     
+
                 }
+                scuiTransactionContext.commit();
             }catch(Exception ex)
             {
                 LOG.debug("Exception, inside getExtnApplyMinOrderBrands method of XPEDXDraftOrderModifyLineItemsAction class, while retrieving the value of ExtnApplyMinOrderBrands from yfs_organization table. Exception is : "+ ex);
-             
+    			// rollback the tran
+    			if (scuiTransactionContext != null) {
+    				try {
+    					scuiTransactionContext.rollback();
+    				} catch (Exception ignore) {
+    				}
+    			}
+    			throw new IllegalStateException(ex);
+
             }finally
             {
-                SCUITransactionContextHelper.releaseTransactionContext(
-                        scuiTransactionContext, wSCUIContext);
-                scuiTransactionContext = null;
-                env = null;
-            }            
+    			if (scuiTransactionContext != null && wSCUIContext != null) {
+    				try {
+    					// release the transaction to close the connection.
+    					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+    					scuiTransactionContext = null;
+    					env  = null;
+    				} catch (Exception ignore) {
+    				}
+    			}
+            }
         }
         return extnApplyMinOrderBrands;
-         
+
     }
-    
+
     /**
      * Added this validation method while doing checkout.
-     * EB-1389 - As a Customer User when I click either Update or Checkout from Cart, I should be stopped from proceeding to checkout if my order total exceeds the maximum set in CC 
+     * EB-1389 - As a Customer User when I click either Update or Checkout from Cart, I should be stopped from proceeding to checkout if my order total exceeds the maximum set in CC
      * @param outputDocument
      * @return
      */
-    private String validateMaxOrderAmountWhileCheckOut(Document outputDocument)    {    	
+    private String validateMaxOrderAmountWhileCheckOut(Document outputDocument)    {
     	double totOrdValWithoutTaxes = 0;
     	 if(YFCCommon.isVoid(maxOrderAmount))
          {
     		 maxOrderAmount="0";
-         }  
+         }
     	Element orderExtnElement = SCXmlUtil.getXpathElement(outputDocument.getDocumentElement(), "//Order/Extn");
     	totOrdValWithoutTaxes =  SCXmlUtil.getDoubleAttribute(orderExtnElement,"ExtnTotOrdValWithoutTaxes");
-		
-    	if(Double.parseDouble(maxOrderAmount) > 0 && totOrdValWithoutTaxes > Double.parseDouble(maxOrderAmount)){    
+
+    	if(Double.parseDouble(maxOrderAmount) > 0 && totOrdValWithoutTaxes > Double.parseDouble(maxOrderAmount)){
     		return "checkoutError";
     	}
     	return SUCCESS;
-    	
+
       }
-    
+
     private void setPnaHoverForEditOrderLine(XPEDXPriceAndAvailability pna, Document outputDocument, Document lineTpeMDoc)
 	{
 		try
@@ -1000,7 +1018,7 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 				List<Element> orderLines=SCXmlUtil.getElements(outputDocument.getDocumentElement(), "OrderLines/OrderLine");
 				if (orderLines != null && orderLines.size() > 0)
 				{
-					Iterator<Element> it=orderLines.iterator();					
+					Iterator<Element> it=orderLines.iterator();
 					Element lineTypeElem=lineTpeMDoc.getDocumentElement();
 					while(it.hasNext())
 					{
@@ -1041,6 +1059,6 @@ public class XPEDXDraftOrderModifyLineItemsAction extends DraftOrderModifyLineIt
 			LOG.error("Error setting the price for existing user during edititng cart "+e.getMessage());
 		}
 	}
-     
+
 }
 

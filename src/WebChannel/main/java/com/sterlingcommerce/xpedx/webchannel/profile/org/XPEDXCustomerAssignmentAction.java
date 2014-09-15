@@ -1160,14 +1160,28 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 				Document outputListDocument = api.invoke(env, "manageCustomer",
 						document);
 				LOG.debug(SCXmlUtil.getString(outputListDocument));
+				scuiTransactionContext.commit();
 			}
 		} catch (Exception ex) {
 			log.debug(ex);
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
 		} finally {
-			SCUITransactionContextHelper.releaseTransactionContext(
-					scuiTransactionContext, wSCUIContext);
-			scuiTransactionContext = null;
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 	}
 
@@ -1493,9 +1507,9 @@ public class XPEDXCustomerAssignmentAction extends WCMashupAction {
 		XPEDXWCUtils.removeObectFromCache("divisionBeanList");
 		return SUCCESS;
 	}
-	
+
 	public String setCurrentCustomerIntoContextFromShipTo() throws CannotBuildInputException{
-		setCurrentCustomerIntoContext();		
+		setCurrentCustomerIntoContext();
 		return SUCCESS;
 	}
 	private static final String CUSTOMER_SHIPTO_INFORMATION_MASHUP = "xpedx-customerlist-getCustomerAddressInformation";

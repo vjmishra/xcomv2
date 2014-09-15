@@ -23,7 +23,7 @@ import com.yantra.yfs.japi.YFSEnvironment;
 
 public class XPEDXNewUserRegistration extends WCMashupAction {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("unused")
@@ -44,7 +44,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	private String templatePath = null;
 	private String mailFromAddress = null;
 	private String mailCCAddress = null;
-	
+
 
 	private String newUserFirstName = null;
 	private String newUserLastName = null;
@@ -64,7 +64,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	@Override
 	public String execute() {
-
+		String returnValue = SUCCESS;
 		StringBuffer sb = new StringBuffer();
 		String _subjectLine=null;
 		// StringBuffer sbm = new StringBuffer();
@@ -77,7 +77,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			}else{
 				sb.append(YFSSystem.getProperty("EMailFromAddresses"));
 			}
-			
+
 			// String marketingCC = "marketing";
 			// suffix = YFSSystem.getProperty("fromAddress.suffix");
 			// sbm.append(marketingCC).append("@").append(storeFrontId).append(suffix);
@@ -87,8 +87,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 		/**
 		 * Start ------- JIRA 3261 for logo changes
-		 * 
-		 * 
+		 *
+		 *
 		 * */
 
 		// String imageUrl = "";
@@ -104,8 +104,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 		}
 		/**
 		 * End ------- JIRA 3261 for logo changes
-		 * 
-		 * 
+		 *
+		 *
 		 * */
 
 		// setMailCCAddress(sbm.toString());
@@ -164,32 +164,43 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 			}else{
 				_subjectLine=brand.concat(".com").concat(" ").concat(getMailSubject());
 			}
-				
+
 			//StringBuffer emailSubject = new StringBuffer(brand.concat(" ").concat(getMailSubject().toString()));
-			
+
 			String businessIdentifier=newUserElement.getAttribute("ToEmailId");
 			    XPXEmailUtil.insertEmailDetailsIntoDB(env, emailXML, emailType,
 			    		_subjectLine, emailFrom, storeFrontId,businessIdentifier);
 			/* XBT-73 : End - Sending email through Java Mail API now */
-
+			    scuiTransactionContext.commit();
 		} catch (Exception e) {
 			log.error("Couldn't send the Mail to CSR" + e.getMessage());
-			return ERROR;
-			// TODO: handle exception
+			returnValue = ERROR;
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
 		}
 		finally {
-			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
-	}
-		return SUCCESS;
+		return returnValue;
 	}
 
 	/**
 	 * Start JIRA 3261
-	 * 
-	 * 
+	 *
+	 *
 	 * */
 	private String getLogoName(String sellerOrgCode) {
 		String _imageName = "";
@@ -227,8 +238,8 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 
 	/**
 	 * End JIRA 3261
-	 * 
-	 * 
+	 *
+	 *
 	 * */
 
 	public String getNewUserAddress1() {
@@ -262,7 +273,7 @@ public class XPEDXNewUserRegistration extends WCMashupAction {
 	public void setNewUserEmail(String newUserEmail) {
 		this.newUserEmail = newUserEmail;
 	}
-	
+
 	public String getNewUserAccountNumber() {
 		return newUserAccountNumber;
 	}
