@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" Extensible="N" Description="The View to Get All Child Customers"
+			EntityType="VIEW" Prefix="XPX" TableName="XPX_CHILD_CUSTOMERS_VIEW" View="true"
+			TableType="TRANSACTION" XMLName="XPXChildCustomersView">
+			<Attributes>
+			<Attribute ColumnName="ORGANIZATION_NAME" DataType="OrganizationName"
+					Description="The Customer ID" Nullable="false" XMLName="OrganizationName" />
+			<Attribute ColumnName="ORGANIZATION_CODE" DataType="CustomerId"
+					Description="The Customer ID" Nullable="false" XMLName="OrganizationCode" />
+			<Attribute ColumnName="ROOT_CUSTOMER_KEY" DataType="Text-50"
+					Description="ROOT CUSTOMER KEY" Nullable="false" XMLName="RootCustomerKey" />
+			<Attribute ColumnName="PARENT_CUSTOMER_ID" DataType="CustomerId"
+					Description="The parent Customer ID" Nullable="false" XMLName="ParentCustomerID" />			
+			<Attribute ColumnName="PARENT_CUSTOMER_KEY" DataType="Text-50"
+					Description="The Customer ID" Nullable="false" XMLName="ParentCustomerKey" />
+			<Attribute ColumnName="CUSTOMER_ID" DataType="CustomerId"
+					Description="The Customer ID" Nullable="false" XMLName="CustomerID" />					
+			<Attribute ColumnName="CUSTOMER_KEY" DataType="Text-50"
+					Description="The Customer Name" Nullable="true" XMLName="CustomerKey" />
+			<Attribute ColumnName="CHILD_EXTN_SUFFIX_TYPE" DataType="Text-2"
+					Description="The Customer Store Name" Nullable="true" XMLName="ChildExtnSuffixType" />			
+			<Attribute ColumnName="ENTERPRISE_CODE" DataType="OrgCode"
+					Description="The Ship to Emterprise Code" Nullable="false" XMLName="EnterpriseCode" />
+			<Attribute ColumnName="FIRST_NAME" DataType="PersonName"
+					Description="The Ship to Customer Addresses's First Name " Nullable="true" XMLName="FirstName" />
+				<Attribute ColumnName="LAST_NAME" DataType="PersonName"
+					Description="The Ship to Customer Addresses's Last Name" Nullable="true" XMLName="LastName" />
+				<Attribute ColumnName="ADDR_LINE_1" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine1" />
+				<Attribute ColumnName="ADDR_LINE_2" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine2" />
+				<Attribute ColumnName="ADDR_LINE_3" DataType="Text-240"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="AddressLine3" />
+				<Attribute ColumnName="CITY" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="City" />
+				<Attribute ColumnName="STATE" DataType="Text-500"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="State" />
+				<Attribute ColumnName="ZIP_CODE" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="ZipCode" />
+				<Attribute ColumnName="EXTN_ZIP4" DataType="Text-10"
+					Description="The Ship to Customer Addresses's Extended 4 digit Zip Code" Nullable="true" XMLName="ExtnZip4" />
+				<Attribute ColumnName="COUNTRY" DataType="Text-50"
+					Description="The Ship to Customer Address Lines" Nullable="true" XMLName="Country" />
+				<Attribute ColumnName="EMAILID" DataType="EMailID"
+					Description="The Ship to Customer Addresses's EMail ID" Nullable="true" XMLName="EMailID" />
+				<Attribute ColumnName="ADDRESS_CUSTOMER_KEY" DataType="Text-50"
+					Description="The Customer Key" Nullable="true" XMLName="AddressCustomerKey" />
+				<Attribute ColumnName="STATUS" DataType="char-2" DefaultValue="' '" Description="Status of the customer"  
+          			Nullable="true" XMLName="Status" />
+			</Attributes>
+			<PrimaryKey Name="XPX_CHID_CUT_V_PK">
+				<Attribute ColumnName="CUSTOMER_ID" />
+			</PrimaryKey>
+			<Indices>
+				<Index Name="XPX_CHILD_CUSTOMERS_VIEW_I01" Unique="False">
+					<Column Name="PARENT_CUSTOMER_ID" />
+				</Index>
+				<Index Name="XPX_CHILD_CUSTOMERS_VIEW_I02" Unique="False">
+					<Column Name="PARENT_CUSTOMER_KEY" />
+				</Index>
+				<Index Name="XPX_CHILD_CUSTOMERS_VIEW_I03" Unique="False">
+					<Column Name="ENTERPRISE_CODE" />
+				</Index>
+				
+				</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>

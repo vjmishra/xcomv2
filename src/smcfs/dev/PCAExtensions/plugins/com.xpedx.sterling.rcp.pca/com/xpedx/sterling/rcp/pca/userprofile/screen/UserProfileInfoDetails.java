@@ -169,6 +169,9 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Label lblLastModDate;
 
 	private Text txtLastModDate;
+
+	private Button btnDelete;
+	private Composite compositeMiscPnl;
 	
 //	private Composite pnlRadioButtons;
 //	private Button radInternal;
@@ -223,7 +226,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	private Control[] getAllEditableControls() {
 		//removed txtAdditionalEmailAddress, comboReceiveOrderConfirmEmails, itemAdditionalEmails,
 		// should we have this editable: txtEmployeeId, 
-		return new Control[] { btnUpdate,txtLastName, txtMaxOrderAmount, txtMinOrderAmount,
+		return new Control[] { btnUpdate,btnDelete,txtLastName, txtMaxOrderAmount, txtMinOrderAmount,
 				txtPOList, defaultShipto,
 				comboPrefferedCatalog, itemPOList,
 				chkViewInvoices,
@@ -263,7 +266,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		
 		GridData pnlRootLayoutData = new GridData();
 		pnlRootLayoutData.horizontalAlignment = SWT.FILL;
-		pnlRootLayoutData.verticalAlignment = SWT.FILL;
+		pnlRootLayoutData.verticalAlignment = 3;
 		pnlRootLayoutData.grabExcessHorizontalSpace = true;
 		pnlRootLayoutData.grabExcessVerticalSpace = true;
 		pnlRoot.setLayoutData(pnlRootLayoutData);
@@ -281,17 +284,45 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 	}
 	
 	private void createMiscPnl() {
-		GridData gridData16 = new GridData();
-		gridData16.horizontalAlignment = 3;
-		gridData16.grabExcessHorizontalSpace = true;
-		gridData16.horizontalSpan = 1;
-		gridData16.horizontalIndent = 0;
-		gridData16.verticalAlignment = 2;
-
-		btnUpdate = new Button(pnlRoot, 0);
+		GridData gridData10 = new GridData();
+		gridData10.heightHint = 25;
+		gridData10.widthHint = 80;
+		GridData gridData5 = new GridData();
+		gridData5.heightHint = 25;
+		gridData5.widthHint = 120;
+		GridData gridData2 = new GridData();
+		gridData2.horizontalAlignment = 3;
+		gridData2.grabExcessHorizontalSpace = true;
+		//gridData2.verticalAlignment = SWT.END;
+		GridLayout gridLayout2 = new GridLayout();
+		gridLayout2.numColumns = 4;
+		
+		compositeMiscPnl = new Composite(pnlRoot, 0);
+		compositeMiscPnl.setLayoutData(gridData2);
+		compositeMiscPnl.setLayout(gridLayout2);
+		compositeMiscPnl.setData("yrc:customType", "TaskComposite");
+		compositeMiscPnl.setData("name", "compositeMiscPnl");
+		
+	
+		GridData gridData6 = new GridData();
+		gridData6.heightHint = 25;
+		gridData6.widthHint = 145;
+		gridData6.verticalAlignment = SWT.BEGINNING;
+		
+		
+		btnDelete = new Button(compositeMiscPnl, 0);
+		//btnDelete.setAlignment(SWT.LEFT);
+		btnDelete.setText("Delete User Profile ");
+		btnDelete.setLayoutData(gridData2);
+		btnDelete.setData("name", "btnDelete");
+		
+		btnUpdate = new Button(compositeMiscPnl, 1);
 		btnUpdate.setText("Update_User_Profile");
-		btnUpdate.setLayoutData(gridData16);
+		btnUpdate.setLayoutData(gridData6);
 		btnUpdate.setData("name", "btnUpdate");
+		
+	
+		
 	}
 
 	
@@ -445,10 +476,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		txtLastLoginDate.setLayoutData(gridData3);
 		txtLastLoginDate.setData("name", "txtLastLoginDate");
 		
-		
-		
-		//Hiding last modified by 
-		/*lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
+		lblLastModBy = new Label(pnlGeneralInfo, SWT.LEFT);
 		lblLastModBy.setText("Last Modified By");
 		lblLastModBy.setLayoutData(gridData2);
 		lblLastModBy.setData("name", "lblLastModBy");
@@ -462,7 +490,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		lblLastModDate.setData("name", "lblLastModDate");
 		txtLastModDate = new Text(pnlGeneralInfo, SWT.READ_ONLY);
 		txtLastModDate.setLayoutData(gridData3);
-		txtLastModDate.setData("name", "txtLastModDate");*/
+		txtLastModDate.setData("name", "txtLastModDate");
 		
 		
 		
@@ -1473,8 +1501,7 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		tbd.setName("txtLastLoginDate");
 		txtLastLoginDate.setData(YRCConstants.YRC_TEXT_BINDING_DEFINATION, tbd);
 		
-		//Hiding Last modified by
-		/*tbd = new YRCTextBindingData();
+	/*	tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		tbd.setTargetBinding("UserList:/UserList/User/ContactPersonInfo/@FirstName;UserList:/UserList/User/ContactPersonInfo/@LastName");
 		//tbd.setDataType("Date");
@@ -1771,6 +1798,13 @@ public class UserProfileInfoDetails extends Composite implements IYRCComposite {
 		bbd.setActionId("com.xpedx.sterling.rcp.pca.userprofile.action.XPXUpdateUserProfileAction");
 		btnUpdate.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbd);
 
+		YRCButtonBindingData bbdel = new YRCButtonBindingData();
+		bbdel.setName("btnDelete");
+		bbdel.setActionHandlerEnabled(true);
+		bbdel.setActionId("com.xpedx.sterling.rcp.pca.userprofile.action.XPXDeleteUserProfileAction");
+		btnDelete.setData(YRCConstants.YRC_BUTTON_BINDING_DEFINATION, bbdel);
+		
+		
 		tbd = new YRCTextBindingData();
 		tbd.setSourceBinding("XPXCustomerContactIn:/CustomerContact/@DayFaxNo");
 		tbd.setTargetBinding("XPXResultOut:/CustomerContact/@DayFaxNo");

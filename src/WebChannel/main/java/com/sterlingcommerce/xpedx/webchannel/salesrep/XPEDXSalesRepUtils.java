@@ -301,7 +301,7 @@ public class XPEDXSalesRepUtils {
 			}else{
 				request.setAttribute("dum_password", loginId.trim());
 			}
-			System.out.println("Salt key is " + saltKey );
+		//	System.out.println("Salt key is " + saltKey );
 		//	request.setAttribute("dum_password", loginId.trim());// the saltKeypassword remains the same as loginid - ASSUMPTION
 			request.setAttribute("selected_storefrontId", storefrontId);
 			//SRSalesRepEmailID added for jira 3438

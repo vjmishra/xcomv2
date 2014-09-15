@@ -214,6 +214,12 @@
                 outputNamespace="getBilltoExtnCustomerClass_output" version="ver77"/>
             <command APIName="getUserList" APIType="API" Name="getUserList" URL="DEFAULT" outputNamespace="getUserList" version=""/>
             <command APIName="getPersonInfoList" APIType="API" Name="getPersonInfoList" URL="DEFAULT" inputNamespace="getPersonInfoList" outputNamespace="getPersonInfoList" version="ver77"/>
+             <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXCustomerAssignmentViewService" URL="DEFAULT"
+                inputNamespace="" outputNamespace="XPXCustomerAssignmentViewService_out" version="ver77"/>
+            <command APIName="XPXManageCustomerAndAssignmentAPIService" APIType="SERVICE" Name="XPXManageCustomerAndAssignmentAPIService" OutputTemplateName="multiApi" URL="DEFAULT" inputNamespace=""
+                outputNamespace="" postCommand="" preCommand="" version="ver77"/>                
+     		<command APIName="deletUserHierarchy" APIType="API" Name="deletUserHierarchy" URL="DEFAULT" inputNamespace="deletUserHierarchy_input"
+                outputNamespace="" version=""/>              
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>
@@ -348,6 +354,9 @@
             <command APIName="manageCustomer" APIType="API" Name="manageCustomer" URL="DEFAULT" inputNamespace="XPXmanageCustomer_input" outputNamespace="XPXmanageCustomer" version="ver77"/>
             <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXGetListOfAssignedShipTosForAUserService" URL="DEFAULT"
                 inputNamespace="XPXGetListOfAssignedShipTosForAUserService_input" outputNamespace="XPXGetListOfAssignedShipTosForAUserService_out" version="ver77"/>
+                <command APIName="XPXCustomerAssignmentViewService" APIType="SERVICE" Name="XPXCustomerAssignmentViewService" URL="DEFAULT"
+                inputNamespace="" outputNamespace="XPXCustomerAssignmentViewService_out" version="ver77"/>
+                
         </commands>
         <namespaces>
             <namespace name="XPXGetCustomerAssignmentList" templateName="XPXGetCustomerAssignmentList" type="output"/>

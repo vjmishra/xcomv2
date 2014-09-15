@@ -69,7 +69,16 @@ public class AjaxAddItemsToMILAction extends WCAction {
 	private boolean allItemsValid;
 	private Map<String, Boolean> itemValidFlags = new LinkedHashMap<String, Boolean>();
 	private String unexpectedError;
+	/*Added for Jira 4134*/
+	private String createUserName;
+	public String getCreateUserName() {
+		return createUserName;
+	}
 
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+		/*End Added for Jira 4134*/
 	/**
 	 * @throws IllegalArgumentException If missing a parameter
 	 */
@@ -171,12 +180,22 @@ public class AjaxAddItemsToMILAction extends WCAction {
 				XPEDXCustomerContactInfoBean contactInfo = (XPEDXCustomerContactInfoBean) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.XPEDX_Customer_Contact_Info_Bean);
 
 				Map <String,String> defaultTransUOMMap = XPEDXOrderUtils.getDefaultTransactionalUOMsForQuickAdd(wcContext.getCustomerId(), new ArrayList<String>(itemDetails.keySet()), wcContext.getStorefrontId());
+				/*Added for Jira 4134*/
+				String isSalesRep = (String) getWCContext().getSCUIContext().getSession().getAttribute("IS_SALES_REP");
+				if(isSalesRep!=null && isSalesRep.equalsIgnoreCase("true")){
+					String salesreploggedInUserName = (String)getWCContext().getSCUIContext().getSession().getAttribute("loggedInUserName");
+					createUserName=salesreploggedInUserName;
+				}
+				else{
+					createUserName = wcContext.getLoggedInUserName();	
+				}
+					/*End Added for Jira 4134*/		
 
 				Map<String, String> valueMap = new LinkedHashMap<String, String>();
 
 				valueMap.put("/XPEDXMyItemsList/@MyItemsListKey", listKey);
 				valueMap.put("/XPEDXMyItemsList/XPEDXMyItemsItemsList/@MyItemsListKey", listKey);
-				valueMap.put("/XPEDXMyItemsList/@ModifyUserName", "createUserName");
+				valueMap.put("/XPEDXMyItemsList/@ModifyUserName", createUserName);
 
 				int itemIndex = currentItemCount + 1;
 				int xpathIndex = 1;

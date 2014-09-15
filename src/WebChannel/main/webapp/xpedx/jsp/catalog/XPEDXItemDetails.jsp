@@ -118,6 +118,7 @@
 		
 		<s:hidden name="itemID" id="itemID" value="%{#itemID}" />
 		<s:hidden id="unitOfMeasure" name="unitOfMeasure" value="%{#unitOfMeasure}" />	
+		<s:hidden name='baseUnitOfMeasure' id='baseUnitOfMeasure'  value='%{#unitOfMeasure}' />
 		<s:hidden id="prodMweight" name="prodMweight" value="%{#prodMweight}" />
 		<s:hidden id="pricingUOMConvFactor" name="pricingUOMConvFactor" value="%{#pricingUOMConvFactor}" />
 			
@@ -125,7 +126,8 @@
 		<s:set name='certFlag'	value="#xutil.getAttribute(#itemElemExtn, 'ExtnCert')" />
 		<s:set name="primaryInfoElem" value='#xutil.getChildElement(#itemElem,"PrimaryInformation")' />
 		<s:set name="itemAssets" value='#xutil.getChildElement(#itemElem,"AssetList")' />
-		<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' /> 
+		<s:set name="itemMainImages" value='#catalogUtil.getAssetList(#itemAssets,"ITEM_IMAGE_1")' />
+		<s:set name='imageLocation' value="#xutil.getAttribute(#primaryInfoElem, 'ImageLocation')" /> 
 		<s:set name='pImg' value='%{#imageLocation+"/"+#primaryInfoElem.getAttribute("ImageID")}' />
 		<s:if test='%{#pImg=="/"}'>
 			<s:set name='pImg' value='%{"/xpedx/images/INF_150x150.jpg"}' />

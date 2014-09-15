@@ -277,6 +277,10 @@
 														</s:if>
 														<s:else>
 															<s:set name="bracketUOMDesc" value="bracketUOM" />
+															<s:set name="isM" value='%{#bracketUOMDesc.contains("M_")}' />
+															<s:if test='%{#isM==true}'>
+																<s:set name="bracketUOMDesc" value='%{#bracketUOMDesc.substring(2)}'/>
+															</s:if>
 														</s:else>
 														<s:set name='formattedbracketUOM' value='#bracketUOMDesc' />
 														<s:if test='%{#reqCustomerUOM==#jsonPricingUOM}'>
