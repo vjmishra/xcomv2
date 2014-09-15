@@ -424,7 +424,7 @@
 							<tr>
 								<td colspan="3" class="underlines no-border-right-user"><s:textfield
 										id="newUserCompanyName" name="newUserCompanyName"
-										theme="simple" cssClass="x-input width-525px" maxlength="30" /></td>
+										theme="simple" cssClass="x-input width-525px" maxlength="180" /></td>
 							</tr>
 
 							<tr>
