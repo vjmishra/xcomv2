@@ -1,7 +1,6 @@
 package com.xpedx.nextgen.stockcheck.api;
 
 import java.rmi.RemoteException;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -163,18 +162,10 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 
 	public Document sendStockCheckResponse(YFSEnvironment env, Document inputXML) throws YFSUserExitException, RemoteException
 	{
-		DecimalFormat formatSec   = new DecimalFormat("#.#");
-		DecimalFormat formatPerc  = new DecimalFormat("#");
-		StopWatch swTotal = new StopWatch();
-		StopWatch swPA    = new StopWatch();
-		StopWatch swPre   = new StopWatch();
-		swTotal.start();
-
 		log.info("Received Stock Check Web Service request");
 		if(log.isDebugEnabled()) {
 			log.debug("The stock check input xml is: " + SCXmlUtil.getString(inputXML));
 		}
-		swPre.start();
 
 		boolean formatValidationFlag = true;
 		boolean dataValidationFlag = true;
@@ -206,8 +197,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 
 			setQtysAndUOMsForValidItems(env);
 
-			swPre.stop();
-
 			if(isPandACallNeeded()){
 
 				Document pAndArequestInputDocument = createPandARequestInputDocument(env,stockCheckInputDocRoot);
@@ -218,9 +207,7 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 				// *** Call  P&A  service ***
 				Document pAndAResponseDocument = null;
 				try {
-					swPA.start();
 					pAndAResponseDocument =  api.executeFlow(env, "XPXPandAWebService", pAndArequestInputDocument);
-					swPA.stop();
 
 					if(log.isDebugEnabled()) {
 						log.debug("The P&A reponse output is: " + SCXmlUtil.getString(pAndAResponseDocument));
@@ -260,10 +247,6 @@ public class XPXStockCheckReqRespAPI implements YIFCustomApi {
 			log.debug("Final stock check doc: " + SCXmlUtil.getString(stockCheckOutputDocument));
 			log.debug("Completed Stock Check Web Service request");
 		}
-
-		swTotal.stop();
-		log.info("SCWS: total time: " + formatSec.format(swTotal.getTime()/1000.0) +
-				" P&A was " + formatPerc.format(100.0 * swPA.getTime() / swTotal.getTime()) + "%");
 
 		return stockCheckOutputDocument;
 	}
