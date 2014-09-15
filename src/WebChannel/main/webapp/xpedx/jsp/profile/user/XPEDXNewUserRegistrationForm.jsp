@@ -352,7 +352,12 @@
 
 
 					<div class="clearfix"></div>
-					<p class="black italic addpadtop5 addmarginleft230">Not a current customer? <a href="https://xpedx.com/locate-us.aspx">Locate a Customer Service Representative</a> in your area.</p>
+					<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
+					<p class="black italic addpadtop5 addmarginleft230">Not a current customer? <a href="https://xpedx.com/locate-us.aspx" target="_blank">Locate a Customer Service Representative</a> in your area.</p>
+					</s:if>
+					<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+					<p class="black italic addpadtop5 addmarginleft230">Not a current customer? <a href="https://saalfeldredistribution.com/ContactUs.aspx" target="_blank">Locate a Customer Service Representative</a> in your area.</p>
+					</s:elseif>
 					<div class ="clearfix"></div>
 					<h1 class="addpadtop20 txt-large">Registration</h1>
 					<h2>Registration allows current customers to shop our website.</h2>
@@ -374,10 +379,18 @@
 										name="newUserAccountNumber" id="newUserAccountNumber"
 										cssClass="x-input width-250px" maxlength="50">
 										</s:textfield>
+										<s:if test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@XPEDX_STORE_FRONT.equals(#storefrontId)}'>
 										<div class="account-text">Need Account Number?<br />
-											<a href="https://xpedx.com/locate-us.aspx" class="bright-link">Click to locate a Customer Serice Representative.
-											</a>
+											<a href="https://xpedx.com/locate-us.aspx" class="bright-link" target="_blank">Click to locate a Customer Serice Representative.</a>
+											</div>
+										</s:if>
+										<s:elseif test='%{@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@SAALFELD_STORE_FRONT.equals(#storefrontId)}'>
+										<div class="account-text">Need Account Number?<br />
+										<a href="https://saalfeldredistribution.com/ContactUs.aspx" target="_blank">Click to locate a Customer Serice Representative.</a>
 										</div>
+										</s:elseif>
+											
+										
 										</td>
 										
 							</tr>
