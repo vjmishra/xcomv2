@@ -111,13 +111,15 @@ public class AutocompleteCacheUtil {
 	 */
 	public String getActiveIndexPath(IWCContext context) throws YIFClientCreationException {
 		SCUIContext wSCUIContext = context.getSCUIContext();
-		ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
-		YIFApi api = YIFClientFactory.getInstance().getLocalApi();
-		YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+		ISCUITransactionContext scuiTransactionContext = null;
 
 		// EB-6981 - 07/23/2014 - ML: fixing connection leak causing JDBC connection pool to reach its limit.
 		// Adding a call to releaseTransactionContext to trigger the connection close.
 		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			YIFApi api = YIFClientFactory.getInstance().getLocalApi();
+			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+
 			Document inXML = SCXmlUtil.createFromString("<XPXMgiArchive ActiveFlag='Y'></XPXMgiArchive>");
 			Document xpxMgiListOutDoc = api.executeFlow(env, "getXPXMgiArchiveList", inXML);
 			Element outputListElement = xpxMgiListOutDoc.getDocumentElement();
@@ -131,6 +133,8 @@ public class AutocompleteCacheUtil {
 					}
 				}
 			}
+
+			scuiTransactionContext.commit(); // read-only, but just to be thorough
 
 			return null;
 
