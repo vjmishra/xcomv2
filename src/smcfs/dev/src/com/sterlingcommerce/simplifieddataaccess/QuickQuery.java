@@ -48,17 +48,24 @@ public class QuickQuery {
 			if (!transactionExists) {
 				transactionContext.commit();
 				transactionContext.end();
-				SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
-				uiContext.removeTransactionContext();
 			}
 		} catch (Exception e) {
 			if (!transactionExists) {
+			try{
 				transactionContext.rollback();
 				transactionContext.end();
-				SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
-				uiContext.removeTransactionContext();
+			}catch (Exception ignore) {
+			}
 			}
 			throw e;
+		} finally {
+			if (transactionContext != null && uiContext != null){
+			try{
+			SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
+			uiContext.removeTransactionContext();
+			} catch (Exception e){
+			}
+			}
 		}
 		return result;
 	}
@@ -99,17 +106,24 @@ public class QuickQuery {
 			if (!transactionExists) {
 				transactionContext.commit();
 				transactionContext.end();
-				SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
-				uiContext.removeTransactionContext();
 			}
 		} catch (Exception e) {
 			if (!transactionExists) {
+				try{
 				transactionContext.rollback();
 				transactionContext.end();
-				SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
-				uiContext.removeTransactionContext();
+			}catch (Exception ignore) {
+			}
 			}
 			throw e;
+		} finally{
+			if(transactionContext != null && uiContext !=null){
+				try{
+			SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
+			uiContext.removeTransactionContext();
+				} catch (Exception ignore){
+				}
+			}
 		}
 		return result;
 	}
@@ -148,17 +162,25 @@ public class QuickQuery {
 			if (!transactionExists) {
 				transactionContext.commit();
 				transactionContext.end();
-				SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
-				uiContext.removeTransactionContext();
+				
 			}
 		} catch (Exception e) {
 			if (!transactionExists) {
+				try{
 				transactionContext.rollback();
 				transactionContext.end();
-				SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
-				uiContext.removeTransactionContext();
+				} catch (Exception ignore){
+				}				
 			}
 			throw e;
+		} finally {
+			if (transactionContext != null && uiContext !=null){
+				try {
+					SCUITransactionContextHelper.releaseTransactionContext(transactionContext, uiContext);
+					uiContext.removeTransactionContext();
+				} catch (Exception ignore){
+				}
+			}
 		}
 		return result;
 	}

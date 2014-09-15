@@ -529,13 +529,24 @@ public class XPEDXWCUtils {
 					listOfAssignedCustomers.add(customer);
 				}
 			}
+			scuiTransactionContext.commit();
 		} catch (Exception ex) {
-			log.error(ex.getMessage());
-			scuiTransactionContext.rollback();
-		} finally {
 			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
+
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
 			}
 		}
 		return listOfAssignedCustomers;
@@ -1552,14 +1563,16 @@ public class XPEDXWCUtils {
 
 	@SuppressWarnings("unchecked")
 	public static List<String> getAllAssignedShipToList(String userId, IWCContext context) {
+		SCUIContext wSCUIContext = context.getSCUIContext();
 		ArrayList<String> shipTos = new ArrayList<String>();
 		ArrayList<XPEDXShipToCustomer> shipTosAddress = new ArrayList<XPEDXShipToCustomer>();
 		HashMap<String, XPEDXShipToCustomer> shipToCustIdAndAddressMap = new HashMap<String, XPEDXShipToCustomer>();
+		ISCUITransactionContext scuiTransactionContext = null;
 		if(YFCUtils.isVoid(userId) || context==null) {
 			log.error("User ID is a mandatory field to get the assigned ship to's.... So returning Empty List");
 			return shipTos;
 		} else {
-			ISCUITransactionContext scuiTransactionContext = context.getSCUIContext().getTransactionContext(true);
+			scuiTransactionContext = context.getSCUIContext().getTransactionContext(true);
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext
 			.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			try {
@@ -1587,13 +1600,29 @@ public class XPEDXWCUtils {
 					shipTosAddress.add(shipToCustIdAndAddressMap.get(shipTos.get(i)));
 				}
 				env.clearApiTemplate("XPXGetListOfAssignedShipTosForAUserService");
-				return shipTos;
+				scuiTransactionContext.commit();
 			} catch (Exception e) {
 				env.clearApiTemplate("XPXGetListOfAssignedShipTosForAUserService");
 				log.error("Error Getting the Assigned Ship to For the User " + userId);
 				e.printStackTrace();
-				return shipTos;
+				if (scuiTransactionContext != null) {
+					try {
+						scuiTransactionContext.rollback();
+					} catch (Exception ignore) {
+					}
+				}
+				throw new IllegalStateException(e);
+			}finally {
+				if (scuiTransactionContext != null && wSCUIContext != null) {
+					try {
+						// release the transaction to close the connection.
+						SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+						scuiTransactionContext = null;
+					} catch (Exception ignore) {
+					}
+				}
 			}
+			return shipTos;
 		}
 	}
 
@@ -1769,13 +1798,29 @@ public class XPEDXWCUtils {
 			setYFSEnvironmentVariables(wcContext);
 			Document outputListDocument = api.invoke(env, "changeOrder",
 					inputDocument.getDocument());
+			scuiTransactionContext.commit();
 			log.debug(SCXmlUtil.getString(outputListDocument));
 		} catch (Exception ex) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
 			log.error(ex.getMessage());
+			throw new IllegalStateException(ex);
+			
 		} finally {
-			releaseEnv(wcContext);
-			scuiTransactionContext = null;
-			env = null;
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
 	}
 /*This provides input to the change order with the overridden ship to address */
@@ -1878,7 +1923,11 @@ public class XPEDXWCUtils {
 		SCUIContext uictx = wcContext.getSCUIContext();
 		ISCUITransactionContext iSCUITransactionContext = uictx.getTransactionContext();
 		if (iSCUITransactionContext != null)
+			try{
 			SCUITransactionContextHelper.releaseTransactionContext(iSCUITransactionContext, uictx);
+			iSCUITransactionContext = null;
+			}catch (Exception ignore) {
+			}
 	}
 
 	public static String getUOMReplacement(YFSEnvironment Env, String masterCust, String UOM) {
@@ -3354,13 +3403,25 @@ public class XPEDXWCUtils {
 							}
 						}
 					}
+				scuiTransactionContext.commit();
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
-				scuiTransactionContext.rollback();
-			} finally {
+				// rollback the tran
 				if (scuiTransactionContext != null) {
-					SCUITransactionContextHelper.releaseTransactionContext(
-							scuiTransactionContext, wSCUIContext);
+					try {
+						scuiTransactionContext.rollback();
+					} catch (Exception ignore) {
+					}
+				}
+				throw new IllegalStateException(ex);
+			} finally {
+				if (scuiTransactionContext != null && wSCUIContext != null) {
+					try {
+						// release the transaction to close the connection.
+						SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+						scuiTransactionContext = null;
+					} catch (Exception ignore) {
+					}
 				}
 			}
 		}
@@ -4969,11 +5030,24 @@ public class XPEDXWCUtils {
 		YFCElement categoryListEle = itemEle.getFirstChildElement();
 		YFCElement categoryEle = categoryListEle.getFirstChildElement();
 		categoryId = categoryEle.getAttribute("CategoryPath");
-		}
-		finally {
+		scuiTransactionContext.commit();
+		}catch (Exception e) {
+			// rollback the tran
 			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
 			}
 		}
 
@@ -4981,6 +5055,8 @@ public class XPEDXWCUtils {
 			context = WCContextHelper.getWCContext(ServletActionContext
 					.getRequest());
 			wSCUIContext = context.getSCUIContext();
+			scuiTransactionContext = wSCUIContext
+					.getTransactionContext(true);
 			StringTokenizer st = new StringTokenizer(categoryId, "/");
 			if(st.hasMoreTokens())
 			{
@@ -5021,13 +5097,25 @@ public class XPEDXWCUtils {
 			}
 
 			log.debug(" getCatTwoDescFromItemId  - result " + result);
+			scuiTransactionContext.commit();
 		}catch (Exception ex) {
 			log.error(ex.getMessage());
-			scuiTransactionContext.rollback();
-		} finally {
 			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
+
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
 			}
 		}
 
@@ -5087,15 +5175,32 @@ public class XPEDXWCUtils {
 		   YFCElement categoryEle = categoryListEle.getFirstChildElement();
 		   categoryId = categoryEle.getAttribute("CategoryPath");
 		   path=categoryId;
+		   scuiTransactionContext.commit();
 	   }
 	   else
 		   categoryId = path;
+	   
 	}// end of try
-	finally {
-			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+		catch (Exception e) {
+		// rollback the tran
+		if (scuiTransactionContext != null) {
+			try {
+				scuiTransactionContext.rollback();
+			} catch (Exception ignore) {
 			}
+		}
+		throw new IllegalStateException(e);
+
+	}
+	finally {
+		if (scuiTransactionContext != null && wSCUIContext != null) {
+			try {
+				// release the transaction to close the connection.
+				SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+				scuiTransactionContext = null;
+			} catch (Exception ignore) {
+			}
+		}
 	}
 
 	try{
@@ -5164,11 +5269,22 @@ public class XPEDXWCUtils {
 			log.debug(" getCatTwoDescFromItemId  - result " + result);
 		}catch (Exception ex) {
 			log.error(ex.getMessage());
-			scuiTransactionContext.rollback();
-		} finally {
 			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(ex);
+		
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
 			}
 		}
 
@@ -6381,13 +6497,27 @@ public class XPEDXWCUtils {
 		YFCElement categoryEle = categoryListEle.getFirstChildElement();
 		sCategoryPath = categoryEle.getAttribute("CategoryPath");
 
-
+		scuiTransactionContext.commit();
 		return sCategoryPath;
+		}catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+
 		}
 		finally {
-			if (scuiTransactionContext != null) {
-				SCUITransactionContextHelper.releaseTransactionContext(
-						scuiTransactionContext, wSCUIContext);
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
 			}
 		}
 	}
@@ -6746,16 +6876,33 @@ public class XPEDXWCUtils {
 				else
 					return XPEDXOrderUtils.getXpedxUOMDescList(context.getCustomerId(), items, context.getStorefrontId(),false);
 			}
+			scuiTransactionContext.commit();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+
+			
 		}
 		finally
 		{
 			scuiTransactionContext.end();
 			env.clearApiTemplate("XPXUOMListAPI");
-			SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
+			}
 			env = null;
 		}
 
@@ -6877,10 +7024,13 @@ public class XPEDXWCUtils {
 	 */
 	public static String getCustomerPunchoutMessage(IWCContext context) throws Exception {
 		String punchOutComments = (String) context.getWCAttribute("punchOutComments");
-		if (punchOutComments == null) {
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = null;
+		try{
+			if (punchOutComments == null) {
 			// call api to get data
-			SCUIContext wSCUIContext = context.getSCUIContext();
-			ISCUITransactionContext scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
 			YFSEnvironment env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
 			YIFApi api = YIFClientFactory.getInstance().getApi();
 
@@ -6904,8 +7054,33 @@ public class XPEDXWCUtils {
 				punchOutComments = extnElem.getAttribute("ExtnPunchOutComments");
 				context.setWCAttribute("punchOutComments", punchOutComments, WCAttributeScope.LOCAL_SESSION);
 			}
+		
+		
+		} 
+			scuiTransactionContext.commit();
+			return punchOutComments;
+		} catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+
+		} finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+				} catch (Exception ignore) {
+				}
+			}
 		}
-		return punchOutComments;
+		
+		
 	}
 	/**
 	 * For calling an any API before authentication
