@@ -374,7 +374,7 @@
 							</tr>
 							<tr>
 								<td  colspan="2"
-									class="underlines no-border-right-user">
+									class="no-border-right-user">
 									<s:textfield
 										name="newUserAccountNumber" id="newUserAccountNumber"
 										cssClass="x-input width-250px" maxlength="50">

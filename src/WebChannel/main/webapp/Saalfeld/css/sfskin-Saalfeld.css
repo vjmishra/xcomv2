@@ -162,6 +162,7 @@ a.green-ui-btn:active span {
 /*EB-2727*/
 .underlines a:link{text-decoration:none;color: #006a3a;}
 .underlines a:hover{text-decoration:underline;color: #006a3a;} 
+.account-text a:hover{text-decoration:underline;color: #006a3a;} 
 /*EB-2342  a Saalfeld user, I want to view the Saalfeld home page with the Saalfeld stylesheet - changing the footer color*/
 .whitest {
 	color: #006a3a;
@@ -1364,4 +1365,7 @@ li.icon-grid-view-select{
 	font-style: italic;
 	color: #006A3A;
 	}
+.account-text a {
+	color: #006A3A;
+}
 	
