@@ -584,13 +584,15 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			{
 				if(rootEle!=null && rootEle.hasAttribute("FromRetryAgent") && "Y".equals(rootEle.getAttribute("FromRetryAgent") ))
 				{
-					YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
-					for(YFCElement orderElem :orderNodeList)							
-					{
-						if(orderElem != null && rootEle.hasAttribute("OrderHeaderKey"))
+					if(cAndfOrderEle!=null){
+						YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
+						for(YFCElement orderElem :orderNodeList)							
 						{
-							updateIsReprocessFlagOnError(env,rootEle.getAttribute("OrderHeaderKey"));
-							isExtnProcessibleFlagUpdated=true;
+							if(orderElem != null && rootEle.hasAttribute("OrderHeaderKey"))
+							{
+								updateIsReprocessFlagOnError(env,rootEle.getAttribute("OrderHeaderKey"));
+								isExtnProcessibleFlagUpdated=true;
+							}
 						}
 					}
 				}
