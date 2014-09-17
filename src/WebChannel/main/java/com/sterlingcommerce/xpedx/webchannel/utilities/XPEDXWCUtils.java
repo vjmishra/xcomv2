@@ -1736,7 +1736,9 @@ public class XPEDXWCUtils {
 			String customerStatus = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/@Status");
 			shipToCustomer.setCustomerStatus(customerStatus);
 			String billToCustomerStatus = SCXmlUtil.getXpathAttribute(customerDetails.getDocumentElement(), "//Customer/ParentCustomer/@Status");
-			shipToCustomer.getBillTo().setCustomerStatus(billToCustomerStatus);
+			if (shipToCustomer.getBillTo() !=null) {
+				shipToCustomer.getBillTo().setCustomerStatus(billToCustomerStatus);
+			}
 			//End of EB 289
 
 			//Added for JIRA 4306
@@ -1761,7 +1763,9 @@ public class XPEDXWCUtils {
 				String billToKey;
 				Document billToCustomerDetails = XPEDXWCUtils.getCustomerDetails(billToCustomerID, wcContext.getStorefrontId(), "xpedx-customer-getCustomerAddressInfo");
 				//Additional change - JIRA 4306
+				if (shipToCustomer.getBillTo() !=null) {
 				shipToCustomer.getBillTo().setOrganizationName(SCXmlUtil.getXpathAttribute(billToCustomerDetails.getDocumentElement(),"//Customer/BuyerOrganization/@OrganizationName"));
+				}
 				//Additional change - JIRA 4306
 				Element billToAddressElement = SCXmlUtil.getElementByAttribute(billToCustomerDetails.getDocumentElement(),"CustomerAdditionalAddressList/CustomerAdditionalAddress", "IsDefaultBillTo", "Y");
 				if(billToAddressElement==null) {
@@ -1809,7 +1813,7 @@ public class XPEDXWCUtils {
 				}
 			}
 			log.error(ex.getMessage());
-			throw new IllegalStateException(ex);
+			//throw new IllegalStateException(ex);  //Planning to fix in future on technical debt story EB-7877
 			
 		} finally {
 			if (scuiTransactionContext != null && wSCUIContext != null) {
