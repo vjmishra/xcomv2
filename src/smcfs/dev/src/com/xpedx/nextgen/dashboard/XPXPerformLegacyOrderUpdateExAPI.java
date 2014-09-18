@@ -660,11 +660,13 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 				System.out.println("In XPXPerformLegacyOrderUpdateExAPI*****************************************************before finally block start");
 				if(orderextnExecption!=null && orderextnExecption.hasAttribute("ExtnLegacyOrderNo") && !YFCObject.isVoid(orderextnExecption.getAttribute("ExtnLegacyOrderNo")) && !isExtnProcessibleFlagUpdated)
 				{
-					YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
-					for(YFCElement orderElem :orderNodeList)							
-					{
-						if(orderElem != null && !"Customer".equals(orderElem.getAttribute("OrderType")))
-							updateIsReprocessFlagOnError(env,orderElem.getAttribute("OrderHeaderKey"));
+					if(cAndfOrderEle!=null){
+						YFCNodeList<YFCElement> orderNodeList=cAndfOrderEle.getElementsByTagName("Order");
+						for(YFCElement orderElem :orderNodeList)							
+						{
+							if(orderElem != null && !"Customer".equals(orderElem.getAttribute("OrderType")))
+								updateIsReprocessFlagOnError(env,orderElem.getAttribute("OrderHeaderKey"));
+						}
 					}
 				}//ENd of EB-6257
 				System.out.println("In XPXPerformLegacyOrderUpdateExAPI*****************************************************before finally block start2");
@@ -6552,17 +6554,20 @@ public class XPXPerformLegacyOrderUpdateExAPI implements YIFCustomApi {
 			if(YFCCommon.isVoid(orderHeaderKey))
 				return;
 			YFCDocument chngOrderInDoc=YFCDocument.getDocumentFor("<Order><Extn/></Order>");
-			YFCElement chngOrderEle = chngOrderInDoc.getDocumentElement();
-			chngOrderEle.setAttribute("OrderHeaderKey", orderHeaderKey);
-			chngOrderEle.getChildElement("Extn").setAttribute("ExtnIsReprocessibleFlag", "N");
-			//if(log.isDebugEnabled()){
-				log.error("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.ExtnIsReprocessibleFlag method]-InXML:" + chngOrderEle.getString());
-			//}
-			Document xpxChangeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.invoke(env, "changeOrder", chngOrderEle.getOwnerDocument().getDocument());
-			if(log.isDebugEnabled()){
-				YFCDocument chngOrderOutDoc = YFCDocument.getDocumentFor(xpxChangeOrderOutDoc);
-				log.debug("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.stampOUFailureLockFlag method]-OutXML:" +chngOrderOutDoc.getString());
-			}	
+			if(chngOrderInDoc!=null) {
+				YFCElement chngOrderEle = chngOrderInDoc.getDocumentElement();
+				if(chngOrderEle!=null){
+					chngOrderEle.setAttribute("OrderHeaderKey", orderHeaderKey);
+					chngOrderEle.getChildElement("Extn").setAttribute("ExtnIsReprocessibleFlag", "N");				
+					log.error("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.ExtnIsReprocessibleFlag method]-InXML:" + chngOrderEle.getString());
+			
+					Document xpxChangeOrderOutDoc = XPXPerformLegacyOrderUpdateExAPI.api.invoke(env, "changeOrder", chngOrderEle.getOwnerDocument().getDocument());
+					if(log.isDebugEnabled() && xpxChangeOrderOutDoc!=null){
+						YFCDocument chngOrderOutDoc = YFCDocument.getDocumentFor(xpxChangeOrderOutDoc);
+						log.debug("XPXChangeOrder[XPXPerformLegacyOrderUpdateAPI.stampOUFailureLockFlag method]-OutXML:" +chngOrderOutDoc.getString());
+					}	
+				}
+			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			log.error(ex);
