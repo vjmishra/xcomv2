@@ -31,13 +31,13 @@
 								  <td ><a href="http://www.xpedx.com/" target="_blank">About Us</a></td>
 						    </s:if>
 						    <s:elseif test="%{#theStoreFront=='Saalfeld'}">
-							      <td ><a href="http://saalfeldredistribution.com" target="_blank">About Us</a></td>
+							      <td ><a href="https://saalfeldredistribution.com" target="_blank">About Us</a></td>
 							</s:elseif>										    						    
 						    <s:elseif test="%{#theStoreFront=='xpedxCanada'}">
-								  <td><a href="http://www.xpedx.ca/" target="_blank">About Us</a></td>
+								  <td><a href="https://www.xpedx.ca/" target="_blank">About Us</a></td>
 						    </s:elseif>
 						    <s:elseif test="%{#theStoreFront=='BulkleyDunton'}">
-							      <td><a href="http://www.bulkleydunton.com/" target="_blank">About Us</a></td>
+							      <td><a href="https://www.bulkleydunton.com/" target="_blank">About Us</a></td>
 							</s:elseif>					
 							<td>
 								<s:url id='contactUsLink' namespace="/common" action='MyContact'>
@@ -46,7 +46,7 @@
 								<s:a href="%{contactUsLink}">Contact Us</s:a>
 							</td>
 							<td>
-								<a href="http://xpedx.infotrac.net/" target="_blank">MSDS</a>
+								<a href="https://www.msdsonfile.com/" target="_blank">MSDS</a>
 							</td>
 							<td>
 								<s:url id='termsOfAccessLink' namespace="/home" action='MyTermsOfAccess'>
@@ -81,5 +81,6 @@
 		</table>
 </div>
 <script src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/watermark.js"></script>
-
+<%-- 
 <s:include value="../../htmls/webtrends/webtrends.html"/><!--EB-519-->
+--%>
