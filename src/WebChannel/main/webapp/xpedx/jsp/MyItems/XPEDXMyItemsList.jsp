@@ -672,22 +672,22 @@
 					
 					<xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#orderListPaginationURL}" isAjax="false" />
 				</div>
-				
-				<table id="mil-list" class="standard-table" style="margin:0px">
+				<div class="clearfix"></div>
+				<table id="mil-list" class="standard-table addmargintop5" >
 					<swc:sortctl sortField='%{orderByAttribute}' sortDirection='%{orderDesc}' down="Y" up="N" urlSpec='%{#milListSortURL}'>
 						
 							<tr id="none">
-								<th>
+								<th class="width-460">
 									<swc:sortable fieldname="%{'ListName'}">
 										<span class="white"> Name</span>
 									</swc:sortable>
 								</th>
-								<th>
+								<th class="width-140">
 									<swc:sortable fieldname="%{'ModifyUserName'}">
 										<span class="white">Last Modified By</span>
 									</swc:sortable>
 								</th>
-								<th>
+								<th class="width-140">
 									<swc:sortable fieldname="%{'Modifyts'}">			
 										<span class="white">Last Modified</span>
 									</swc:sortable>

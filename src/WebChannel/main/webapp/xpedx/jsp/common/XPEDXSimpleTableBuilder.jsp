@@ -27,11 +27,12 @@ Class Model for this component:
 --%>
 <%--<swc:sortctl sortField="'sortField'" sortDirection="'sortDirection'"
     down="'sortDown'" up="'sortUp'" urlSpec="sortURL'">--%>
-<table class="<s:property value='cssClass'/> standard-table"
+    
+<table class="<s:property value='cssClass'/> standard-table addmargintop5"
        id="<s:property value='id'/>" summary="<s:property value='summary'/>">
 <!--        <tr id="none" class="table-header-bar">-->
 <!-- Arun Changing for carts listing page - have to customize this if there is a conflict with other ones -->
-		 <tr id="top-bar">
+		 <tr>
 		  <s:iterator value="columnSpecs" id="columnSpec" status="headerStatus">
              	
                 <th  align="<s:if test="#headerStatus.first"></s:if><s:else>center</s:else>" class="<s:property value='#columnSpec.labelCssClass'/>"

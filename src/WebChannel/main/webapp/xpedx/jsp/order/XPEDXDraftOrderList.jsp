@@ -292,6 +292,7 @@ span.underlink:hover {
      			    <%-- (This used to have onclick="writeMetaTag(tag,content,2);" on top button but not bottom) --%> 
 					
 					</div> 
+					
               <xpedx:flexpagectl currentPage="%{pageNumber}" lastPage="%{totalNumberOfPages}" urlSpec="%{#draftOrderListPaginationURL}" isAjax="false" />
                 <div class="clearfix"></div>
                
@@ -325,7 +326,7 @@ span.underlink:hover {
                         <s:param name="columnSpecs[2].label" value="'Last Modified'"/>
                         <s:param name="columnSpecs[2].align" value="'center'"/>
                         <s:param name="columnSpecs[2].dataField" value="'Modifyts'"/>
-                        <s:param name="columnSpecs[2].labelCssClass" value="' text-center'"/>
+                        <s:param name="columnSpecs[2].labelCssClass" value="'width-140 text-center'"/>
                         <s:param name="columnSpecs[2].sortable" value="'true'"/>
                         <!-- <s:param name="columnSpecs[2].fieldCssClass" value="'createdby-lastmod'"/> -->
                         <s:param name="columnSpecs[2].fieldCssClass" value="'width-100'"/> 
