@@ -1368,4 +1368,28 @@ li.icon-grid-view-select{
 .account-text a {
 	color: #006A3A;
 }
+.view1-selected{
+		background:url(../images/catalog/icon-full-view-select-sf.png) no-repeat;    
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
+.view2-selected{
+		background:url(../images/catalog/icon-condensed-view-select-sf.png) no-repeat;  
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
+.view3-selected{
+		background:url(../images/catalog/icon-mini-view-select-sf.png) no-repeat;  
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
+.view4-selected{
+		background:url(../images/catalog/icon-grid-view-select-sf.png) no-repeat;  
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
 	

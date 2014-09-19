@@ -166,6 +166,30 @@ a { outline:0px;}
 		height:21px;
 		margin:0px 6px 0px 6px;
 		}
+.view1-selected{
+		background:url(../../images/catalog/icon-full-view-select.png) no-repeat;    
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
+.view2-selected{
+		background:url(../../images/catalog/icon-condensed-view-select.png) no-repeat;  
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
+.view3-selected{
+		background:url(../../images/catalog/icon-mini-view-select.png) no-repeat;  
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
+.view4-selected{
+		background:url(../../images/catalog/icon-grid-view-select.png) no-repeat;  
+		width:21px; 
+		height:21px;
+		margin:0px 6px 0px 6px;
+		}
 
 /*****************************************************************************************************/
 /***********************************************/  

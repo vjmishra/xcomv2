@@ -1298,6 +1298,39 @@ function funDivOpenClose(val1)
 		}
 		//End of EB 1977
 	</script>
+	<script>
+	function imgChange(){
+		if(document.getElementById("b2bCatalogView0").checked)
+		{
+		document.getElementById("view1").className = "view1-selected";
+		document.getElementById("view2").className = "view2";
+		document.getElementById("view3").className = "view3";
+		document.getElementById("view4").className = "view4";
+		}
+		else if(document.getElementById("b2bCatalogView2").checked )
+		{
+		document.getElementById("view3").className = "view3-selected";
+		document.getElementById("view1").className = "view1";
+		document.getElementById("view2").className = "view2";
+		document.getElementById("view4").className = "view4";
+		}
+		else if(document.getElementById("b2bCatalogView1").checked )
+		{
+		document.getElementById("view2").className = "view2-selected";
+		document.getElementById("view1").className = "view1";
+		document.getElementById("view3").className = "view3";
+		document.getElementById("view4").className = "view4";
+		}
+		else if(document.getElementById("b2bCatalogView3").checked )
+		{
+		document.getElementById("view4").className = "view4-selected";
+		document.getElementById("view1").className = "view1";
+		document.getElementById("view2").className = "view2";
+		document.getElementById("view3").className = "view3";
+		}
+	}
+	window.onload = imgChange;
+	</script>
 
 <style type="text/css">
 .checkboxTree input[type=checkbox] {
@@ -1671,35 +1704,35 @@ a.underlink:hover {
 													<div class="divs">
 														<div>
 															<s:radio list="#{'0': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view1"></div>
+														<div class="view1" id="view1"></div>
 														<div class="addpadtop2">Full View - 1 item per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'2': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view3"></div> -->
-														<div class="view3"></div>
+														<div class="view3" id="view3"></div>
 														<div class="addpadtop2">Mini View - 4 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'1': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view2"></div>
+														<div class="view2" id="view2"></div>
 														<div class="addpadtop2">Condensed View - 2 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'3': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view4"></div> -->
-														<div class="view4"></div>
+														<div class="view4" id="view4"></div>
 														<div class="addpadtop2">Grid View - No images</div>
 													</div>
 												</td>
@@ -2645,35 +2678,35 @@ a.underlink:hover {
 													<div class="divs">
 														<div>
 															<s:radio list="#{'0': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view1"></div>
+														<div class="view1" id="view1"></div>
 														<div class="addpadtop2">Full View - 1 item per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'2': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view3"></div> -->
-														<div class="view3"></div>
+														<div class="view3" id="view3"></div>
 														<div class="addpadtop2">Mini View - 4 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'1': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
-														<div class="view2"></div>
+														<div class="view2" id="view2"></div>
 														<div class="addpadtop2">Condensed View - 2 items per row</div>
 													</div>
 													<div class="divs">
 														<div>
 															<s:radio list="#{'3': ''}" name="b2bCatalogView"
-																id="b2bCatalogView" value='defaultB2bCatalogView' />
+																id="b2bCatalogView" value='defaultB2bCatalogView' onclick="javascript:imgChange();"/>
 														</div>
 														<!-- 			<div class="view4"></div> -->
-														<div class="view4"></div>
+														<div class="view4" id="view4"></div>
 														<div class="addpadtop2">Grid View - No images</div>
 													</div>
 												</td>
