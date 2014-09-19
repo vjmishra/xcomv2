@@ -6457,8 +6457,8 @@ BEGIN 2014 styles
 }
 
 .mil-replacement-adjust {
-	float: none;
-	margin-left: -65px;
+	display:inline;
+	margin: 5px 0;
 }
 
 .mil-edit-replacement-adjust {

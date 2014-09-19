@@ -2981,13 +2981,12 @@ function showSharedListForm(){
 											
 											<s:if test='editMode != true'>
 													<s:if test="(xpedxItemIDUOMToReplacementListMap.containsKey(#itemId) && xpedxItemIDUOMToReplacementListMap.get(#itemId) != null)">
-														<div class="replacement-item width-315 mil-replacement-adjust">
-															This item will be replaced once inventory is depleted.&nbsp;<img
+														<div class="replacement-item width-315 mil-replacement-adjust"><p>
+															This item will be replaced once inventory is depleted.&nbsp;<span class="inline float-right"><img
 																alt="To replace or add item, click the Edit This List button."
 																title="To replace or add item, click the Edit This List button."
 																height="12" border="0" width="12"
-																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"
-																style="float: right;" />
+																src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/images/icons/12x12_grey_help.png"/></span></p>
 														</div>
 													</s:if>
 												</s:if>

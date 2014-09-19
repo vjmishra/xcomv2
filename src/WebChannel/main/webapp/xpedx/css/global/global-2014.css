@@ -197,6 +197,10 @@
 	width:100%;
 }
 
+.inline {
+	display:inline;
+}
+
 /*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;
