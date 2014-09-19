@@ -13,6 +13,7 @@
 <s:bean name='com.sterlingcommerce.xpedx.webchannel.MyItems.utils.XPEDXMyItemsUtils' id='utilMIL' />
 <s:set name='scuicontext' value="uiContext" />
 <s:set name="isEditOrderHeaderKey" value ="%{#_action.getWCContext().getSCUIContext().getSession().getAttribute(@com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@EDITED_ORDER_HEADER_KEY)}"/>
+<s:set name="isPunchoutUser" value="#wcUtil.isPunchoutUser(wCContext)"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <swc:html isXhtml="true">
@@ -277,6 +278,7 @@
 								<img src="<s:url value='%{#pImg}'/>"  class="prodImg addmargintop10" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
 							</s:else>
 						</div>
+						<s:if test="%{!#isPunchoutUser}"> 
 						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
 							<div class="detail-msds-button">
 								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
@@ -285,6 +287,7 @@
 										<input name="" type="button"  class="btn-neutral" value="MSDS" onclick="window.open('<s:property value='#link'/>');"/>
 								</s:iterator>									
 							</div>
+						</s:if>
 						</s:if>
 					</div> <%-- / detail-image-wrap --%>
 					
