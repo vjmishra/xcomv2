@@ -278,7 +278,6 @@
 								<img src="<s:url value='%{#pImg}'/>"  class="prodImg addmargintop10" id="productImg1" alt="<s:text name='%{#pImg}'/>"/>
 							</s:else>
 						</div>
-						<s:if test="%{!#isPunchoutUser}"> 
 						<s:if test="msdsLinkMap != null && msdsLinkMap.size() > 0">
 							<div class="detail-msds-button">
 								<s:iterator value="msdsLinkMap" id="msdsMap" status="status" >
@@ -287,7 +286,6 @@
 										<input name="" type="button"  class="btn-neutral" value="MSDS" onclick="window.open('<s:property value='#link'/>');"/>
 								</s:iterator>									
 							</div>
-						</s:if>
 						</s:if>
 					</div> <%-- / detail-image-wrap --%>
 					
