@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright  2009 Sterling Commerce, Inc. -->
+<DBSchema>
+	<Entities>
+		<Entity ApiNeeded="Y" AuditRequired="N" Description="List of contract items for a bill-to/customer" HasHistory="False" Prefix="XPEDX" TableName="XPEDX_ITEM_CONTRACT_EXTN">
+			<Attributes>
+				<Attribute ColumnName="ITEM_ID" DataType="ID-40" DefaultValue="" Description="Item id" Nullable="false" XMLName="ItemId" />
+				<Attribute ColumnName="CUSTOMER_ID" DataType="ID-40" DefaultValue="" Description="Bill-To Customer id" Nullable="false" XMLName="CustomerId" />
+				
+				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
+			</Attributes>
+
+			<Indices>
+				<Index Name="XPEDX_ITEM_CONTRACT_EXTN_I01" Unique="True">
+					<Column Name="ITEM_ID"/>
+					<Column Name="CUSTOMER_ID"/>
+				</Index>
+			</Indices>
+		</Entity>
+	</Entities>
+</DBSchema>
