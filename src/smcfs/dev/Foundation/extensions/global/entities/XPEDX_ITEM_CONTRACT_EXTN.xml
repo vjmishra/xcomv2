@@ -11,7 +11,10 @@
 			</Attributes>
 
 			<Indices>
-				<Index Name="XPEDX_ITEM_CONTRACT_EXTN_I01" Unique="True">
+				<Index Name="XPEDX_ITEM_CONTRACT_EXTN_I01" Unique="False">
+					<Column Name="ITEM_ID"/>
+				</Index>
+				<Index Name="XPEDX_ITEM_CONTRACT_EXTN_I02" Unique="True">
 					<Column Name="ITEM_ID"/>
 					<Column Name="CUSTOMER_ID"/>
 				</Index>
