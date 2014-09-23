@@ -10,16 +10,16 @@
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
 			</Attributes>
 
-			<PrimaryKey Name="XPX_ITEM_CONTRACT_EXTN_PK">
+			<PrimaryKey Name="XPX_ITEM_CONTRACT_PK">
 				<Attribute ColumnName="ITEM_ID" />
 				<Attribute ColumnName="CUSTOMER_ID" />
 			</PrimaryKey>
 
 			<Indices>
-				<Index Name="XPX_ITEM_CONTRACT_EXTN_I01" Unique="False">
+				<Index Name="XPX_ITEM_CONTRACT_I01" Unique="False">
 					<Column Name="ITEM_ID"/>
 				</Index>
-				<Index Name="XPX_ITEM_CONTRACT_EXTN_I02" Unique="True">
+				<Index Name="XPX_ITEM_CONTRACT_I02" Unique="True">
 					<Column Name="ITEM_ID"/>
 					<Column Name="CUSTOMER_ID"/>
 				</Index>
