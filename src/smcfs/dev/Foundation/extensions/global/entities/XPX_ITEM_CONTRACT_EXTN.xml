@@ -10,7 +10,7 @@
 				<Attribute ColumnName="CREATETS" DataType="TimeStamp" DefaultValue="sysdate" Description="Created TimeStamp" Nullable="false" XMLName="CreateTs" />
 			</Attributes>
 
-			<PrimaryKey Name="XPX_ITEM_CONTRACT_PK">
+			<PrimaryKey Name="XPX_ITEM_CNTRCT_PK">
 				<Attribute ColumnName="ITEM_ID" />
 				<Attribute ColumnName="CUSTOMER_ID" />
 			</PrimaryKey>
