@@ -238,7 +238,7 @@ function mandatoryFieldValidationHL(){
  */
 function writeMetaTag(tag,content) { 
 	
-		var iframeElement = document.createElement("iframe"); 
+	/*var iframeElement = document.createElement("iframe"); 
 		iframeElement.id = 'iframeElement'; 
 		document.body.appendChild(iframeElement);
 
@@ -256,12 +256,12 @@ function writeMetaTag(tag,content) {
 		iframeElement.style.display = 'none'; 
 		var linkUrl="/swc/webtrends/jsp/common/Webtrends.jsp?tag="+tag+"&content="+content;
 		linkUrl=addCSRFToken(linkUrl, 'link');
-		iframeElement.src =  linkUrl;
+		iframeElement.src =  linkUrl;*/
 }
 
 function writeMetaTag(tagList,contentList,cnt){ 	
 	
-	var iframeElement = document.createElement("iframe"); 
+	/*var iframeElement = document.createElement("iframe"); 
 	iframeElement.id = 'iframeElement'; 
 	document.body.appendChild(iframeElement);
 
@@ -279,7 +279,7 @@ function writeMetaTag(tagList,contentList,cnt){
 	iframeElement.style.display = 'none'; 
 	var linkUrl= "/swc/webtrends/jsp/common/Webtrends.jsp?tag="+tagList+"&content="+contentList+"&noOfTags="+cnt; 
 	linkUrl=addCSRFToken(linkUrl, 'link');
-	iframeElement.src =linkUrl;
+	iframeElement.src =linkUrl;*/
 }
 
 function ReplaceAll(Source,stringToFind,stringToReplace){
