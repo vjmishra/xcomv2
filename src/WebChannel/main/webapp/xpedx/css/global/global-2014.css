@@ -200,7 +200,10 @@
 .inline {
 	display:inline;
 }
-
+.pointer {
+	cursor: hand;
+	cursor: pointer;
+}
 /*---------------*/
 .form input.btn-gradient.floatright{
 	display: inline;
