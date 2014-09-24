@@ -96,6 +96,14 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 					}
 					valueElement.setAttribute("Value", ItemIndexUtil.join(divisionsInStock, " "));
 				}
+
+				if ("contractBillTos".equals(searchFieldElement.getAttribute("IndexFieldName"))) {
+					Set<String> contractBillTos = im.getContractBillTos();
+					//if (log.isDebugEnabled()) {
+						log.warn("contractBillTos = " + contractBillTos); //TODO debug
+					//}
+					valueElement.setAttribute("Value", ItemIndexUtil.join(contractBillTos, " "));
+				}
 			}
 		}
 	}

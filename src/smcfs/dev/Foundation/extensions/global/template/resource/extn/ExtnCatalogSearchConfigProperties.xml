@@ -16,6 +16,10 @@
 							GetExternalValue="Y" Index="ANALYZED" Store="Y"
 							IndexFieldName="showStockedItems" Searchable="Y"
 							UseSynonyms="N" Sortable="N"/>
+						<Attribute DefaultWeight="1.0"
+							GetExternalValue="Y" Index="ANALYZED" Store="Y"
+							IndexFieldName="contractBillTos" Searchable="Y"
+							UseSynonyms="N" Sortable="N"/>
 						<Attribute IndexFieldName="Item.ExtnMpc"
 							XMLName="ExtnMpc" DefaultWeight="1.0" Index="NOT_ANALYZED"
 							Store="N" UseSynonyms="N" Searchable="N" Sortable="Y" />

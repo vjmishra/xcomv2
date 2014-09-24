@@ -1,6 +1,6 @@
 package com.xpedx.nextgen.catalog.api;
 
-import java.util.ArrayList;
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,6 +20,7 @@ import org.w3c.dom.Element;
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.catalog.api.eb3359.StopWatchFor3359;
 import com.yantra.interop.japi.YIFApi;
+import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
 import com.yantra.util.YFCUtils;
 import com.yantra.yfc.dom.YFCDocument;
@@ -47,20 +51,26 @@ public class ItemIndexUtil {
 	public Map<String, ItemMetadata> getMetadataForItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
 		Map<String, ItemMetadata> metadata = new LinkedHashMap<String, ItemMetadata>();
 
-		StopWatchFor3359 sw = new StopWatchFor3359(true);
-
 		// group the item ids for batched calls
 		SegmentedList<String> itemIDGroups = new SegmentedList<String>(itemIDs, 100);
 		for (List<String> itemIDGroup : itemIDGroups) {
+
+			Map<String, Set<String>> contractBillTosForItem = getContractBillToIds(env, itemIDGroup);
+			log.warn("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());//TODO remove
+
+
 			Map<String, Set<String>> divisionsInStockForItem = getDivisionsInStockForAllItems(env, itemIDGroup, inStockStatus);
 			for (Entry<String, Set<String>> entry : divisionsInStockForItem.entrySet()) {
 				String itemID = entry.getKey();
+				log.warn("J:  MetaLoop processing item: " + itemID);//TODO remove
+				log.warn("J:   MetaLoop contactBillTos: " + contractBillTosForItem.get(itemID));//TODO remove
 				Set<String> divisionsInStock = entry.getValue();
 
 				ItemMetadata im = new ItemMetadata();
 				metadata.put(itemID, im);
 
 				im.setDivisionsInStock(divisionsInStock);
+				im.setContractBillTos(contractBillTosForItem.get(itemID));
 
 				// this call is NOT batched, since the api limits output to 5000 records and some items have thousands of records (as of Aug 2014, one item has 4000+)
 				Set<String> customerAndItemNumbers = getCustomerPartNumbersForItem(env, itemID);
@@ -68,17 +78,65 @@ public class ItemIndexUtil {
 			}
 		}
 
-		if (log4j.isDebugEnabled()) {
-			log4j.debug("Completed getMetadataForItems: elapsed = " + sw.stop());
+		return metadata;
+	}
+
+	private Map<String, Set<String>> getContractBillToIds(YFSEnvironment env, Collection<? extends String> itemIDs) throws Exception {
+		Map<String, Set<String>> contractBillTosForItems = new LinkedHashMap<String, Set<String>>();
+
+		Element itemListOutputElem = getContractElementsFromApi(env, itemIDs);
+
+		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
+		log.warn("J: # of XPXItemContractExtn: " + itemElems.size());//TODO remove
+		for (Element itemElem : itemElems) {
+			log.warn("J: itemElem: " + SCXmlUtil.getString(itemElem));//TODO remove
+			Set<String> contractBillTos = new LinkedHashSet<String>();
+			contractBillTosForItems.put(itemElem.getAttribute("ItemID"), contractBillTos);
+
+			List<Element> customerElems = SCXmlUtil.getElements(itemElem, "CustomerId");
+			log.warn("J:  # of CustomerId: " + customerElems.size());//TODO remove
+			for (Element extnElem : customerElems) {
+				contractBillTos.add(extnElem.getAttribute("CustomerId"));
+			}
 		}
 
-		return metadata;
+		return contractBillTosForItems;
+	}
+
+	private Element getContractElementsFromApi(YFSEnvironment env, Collection<? extends String> itemIDs) throws Exception {
+
+		// TODO replace this fake stuff with call to new API/Service!!!
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		Document doc = db.parse("<XPXItemContractExtnList> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2000920\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"12-0000304742-000-M-XX-B\" ItemId=\"2001020\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T10:50:39-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2001020\"/> </XPXItemContractExtnList>");
+		return doc.getDocumentElement();
 	}
 
 	// api calls batched for improved performance
 	private Map<String, Set<String>> getDivisionsInStockForAllItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
 		Map<String, Set<String>> divisionsInStockForItems = new LinkedHashMap<String, Set<String>>();
 
+		Element itemListOutputElem = getDivisionsFromApi(env, itemIDs);
+
+		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "Item");
+		for (Element itemElem : itemElems) {
+			Set<String> divisionsInStock = new LinkedHashSet<String>();
+			divisionsInStockForItems.put(itemElem.getAttribute("ItemID"), divisionsInStock);
+
+			List<Element> extnElems = SCXmlUtil.getElements(itemElem, "Extn/XPXItemExtnList/XPXItemExtn");
+			for (Element extnElem : extnElems) {
+				String inventoryIndicator = extnElem.getAttribute("InventoryIndicator"); // M, I, or W
+				if (inventoryIndicator != null && inventoryIndicator.equals(inStockStatus)) {
+					divisionsInStock.add(extnElem.getAttribute("XPXDivision"));
+				}
+			}
+		}
+
+		return divisionsInStockForItems;
+	}
+
+	private Element getDivisionsFromApi(YFSEnvironment env, Collection<? extends String> itemIDs)
+			throws YIFClientCreationException, RemoteException {
 		YFCDocument itemInputDoc = YFCDocument.createDocument("Item");
 		YFCElement itemInputElem = itemInputDoc.getDocumentElement();
 		itemInputElem.setAttribute("CallingOrganizationCode", "xpedx"); // all items are in xpedx org
@@ -114,35 +172,10 @@ public class ItemIndexUtil {
 			log.debug("templateXml = " + templateXml);
 		}
 
-		StopWatchFor3359 sw = new StopWatchFor3359(true);
 		Document itemListOutputDoc = api.invoke(env, "getItemList", itemInputDoc.getDocument());
-		if (log4j.isDebugEnabled()) {
-			log4j.debug("Completed API call getItemList (" + itemIDs.size() + " items): elapsed = " + sw.stop());
-		}
-
-		//		System.out.println("++++++++++++++++++++++++++++++++++++++++");
-		//		System.out.println("itemInputDoc:\n" + SCXmlUtil.getString(itemInputDoc.getDocument()));
-		//		Document itemListOutputDoc = fakeItemListResponse(); // XXX JUST FOR TESTING
 
 		Element itemListOutputElem = itemListOutputDoc.getDocumentElement();
-		//		System.out.println("========================================");
-		//		System.out.println("itemListOutputElem:\n" + SCXmlUtil.getString(itemListOutputElem));
-
-		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "Item");
-		for (Element itemElem : itemElems) {
-			Set<String> divisionsInStock = new LinkedHashSet<String>();
-			divisionsInStockForItems.put(itemElem.getAttribute("ItemID"), divisionsInStock);
-
-			List<Element> extnElems = SCXmlUtil.getElements(itemElem, "Extn/XPXItemExtnList/XPXItemExtn");
-			for (Element extnElem : extnElems) {
-				String inventoryIndicator = extnElem.getAttribute("InventoryIndicator"); // M, I, or W
-				if (inventoryIndicator != null && inventoryIndicator.equals(inStockStatus)) {
-					divisionsInStock.add(extnElem.getAttribute("XPXDivision"));
-				}
-			}
-		}
-
-		return divisionsInStockForItems;
+		return itemListOutputElem;
 	}
 
 	// calls NOT batched, since the api limits output to 5000 records and some items have thousands of records (as of Aug 2014, one item has 4000+)
@@ -174,13 +207,7 @@ public class ItemIndexUtil {
 			log4j.debug("Completed API call getXPXItemcustXrefList (itemID=" + itemID + "): elapsed = " + sw.stop());
 		}
 
-		//		System.out.println("++++++++++++++++++++++++++++++++++++++++");
-		//		System.out.println("xpxItemcustXrefInputDoc:\n" + SCXmlUtil.getString(xpxItemcustXrefInputDoc.getDocument()));
-		//		Document xpxItemcustXrefListOutputDoc = fakeXPXItemcustXrefResponse();
-
 		Element xpxItemcustXrefListOutputElem = xpxItemcustXrefListOutputDoc.getDocumentElement();
-		//		System.out.println("========================================");
-		//		System.out.println("xpxItemcustXrefListOutputElem:\n" + SCXmlUtil.getString(xpxItemcustXrefListOutputElem));
 
 		if (xpxItemcustXrefListOutputElem != null) {
 			// return a list of concatenated CustomerNumber and CustomerItemNumber
@@ -203,8 +230,9 @@ public class ItemIndexUtil {
 	public static class ItemMetadata {
 
 		private String itemID;
-		private Set<String> divisionsInStock = new LinkedHashSet<String>();
+		private Set<String> divisionsInStock       = new LinkedHashSet<String>();
 		private Set<String> customerAndItemNumbers = new LinkedHashSet<String>();
+		private Set<String> contractBillTos        = new LinkedHashSet<String>();
 
 		public String getItemID() {
 			return itemID;
@@ -224,6 +252,12 @@ public class ItemIndexUtil {
 		public void setCustomerAndItemNumbers(Set<String> customerAndItemNumbers) {
 			this.customerAndItemNumbers = customerAndItemNumbers;
 		}
+		public Set<String> getContractBillTos() {
+			return contractBillTos;
+		}
+		public void setContractBillTos(Set<String> contractBillTos) {
+			this.contractBillTos = contractBillTos;
+		}
 	}
 
 	public static String join(Collection<String> strings, String separator) {
@@ -235,33 +269,6 @@ public class ItemIndexUtil {
 			}
 		}
 		return buf.toString();
-	}
-
-//	// --- Debug/Testing
-//
-//	private static Document fakeItemListResponse() throws Exception {
-//		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder db = dbf.newDocumentBuilder();
-//		return db.parse(new File("C:/Users/THOWA14/Desktop/3359/getItemList-output.xml"));
-//	}
-//
-//	private static Document fakeXPXItemcustXrefResponse() throws Exception {
-//		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder db = dbf.newDocumentBuilder();
-//		return db.parse(new File("C:/Users/THOWA14/Desktop/3359/XPXItemcustXref-output.xml"));
-//	}
-
-	public static void main(String[] args) throws Exception {
-		List<String> allItemIds = new ArrayList<String>();
-		allItemIds.add("2001000");
-		allItemIds.add("2001002");
-
-		Map<String, ItemMetadata> metadata = new ItemIndexUtil().getMetadataForItems(null, allItemIds, "W");
-		for (Entry<String, ItemMetadata> entry : metadata.entrySet()) {
-			System.out.println("-----------------------------------");
-			System.out.println(entry.getKey() + " = " + join(entry.getValue().getDivisionsInStock(), " "));
-			System.out.println(entry.getKey() + " = " + join(entry.getValue().getCustomerAndItemNumbers(), " "));
-		}
 	}
 
 }
