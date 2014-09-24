@@ -54,7 +54,9 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			return outDoc.getDocument();
 
 		} catch (Exception ex) {
-			throw new YFSUserExitException();
+			ex.printStackTrace(); //TODO does log.error work?
+			log.error("Problem creating Search Index additional info in user exit", ex);
+			throw new YFSUserExitException(ex.getMessage());
 		}
 	}
 

@@ -56,14 +56,14 @@ public class ItemIndexUtil {
 		for (List<String> itemIDGroup : itemIDGroups) {
 
 			Map<String, Set<String>> contractBillTosForItem = getContractBillToIds(env, itemIDGroup);
-			log.warn("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());//TODO remove
+			System.out.println("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());//TODO remove
 
 
 			Map<String, Set<String>> divisionsInStockForItem = getDivisionsInStockForAllItems(env, itemIDGroup, inStockStatus);
 			for (Entry<String, Set<String>> entry : divisionsInStockForItem.entrySet()) {
 				String itemID = entry.getKey();
-				log.warn("J:  MetaLoop processing item: " + itemID);//TODO remove
-				log.warn("J:   MetaLoop contactBillTos: " + contractBillTosForItem.get(itemID));//TODO remove
+				System.out.println("J:  MetaLoop processing item: " + itemID);//TODO remove
+				System.out.println("J:   MetaLoop contactBillTos: " + contractBillTosForItem.get(itemID));//TODO remove
 				Set<String> divisionsInStock = entry.getValue();
 
 				ItemMetadata im = new ItemMetadata();
@@ -87,14 +87,14 @@ public class ItemIndexUtil {
 		Element itemListOutputElem = getContractElementsFromApi(env, itemIDs);
 
 		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
-		log.warn("J: # of XPXItemContractExtn: " + itemElems.size());//TODO remove
+		System.out.println("J: # of XPXItemContractExtn: " + itemElems.size());//TODO remove
 		for (Element itemElem : itemElems) {
-			log.warn("J: itemElem: " + SCXmlUtil.getString(itemElem));//TODO remove
+			System.out.println("J: itemElem: " + SCXmlUtil.getString(itemElem));//TODO remove
 			Set<String> contractBillTos = new LinkedHashSet<String>();
 			contractBillTosForItems.put(itemElem.getAttribute("ItemID"), contractBillTos);
 
 			List<Element> customerElems = SCXmlUtil.getElements(itemElem, "CustomerId");
-			log.warn("J:  # of CustomerId: " + customerElems.size());//TODO remove
+			System.out.println("J:  # of CustomerId: " + customerElems.size());//TODO remove
 			for (Element extnElem : customerElems) {
 				contractBillTos.add(extnElem.getAttribute("CustomerId"));
 			}
