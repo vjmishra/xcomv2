@@ -45,6 +45,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	private static YFCLogCategory log = YFCLogCategory.instance(XPXSendEmailAgent.class);
 	private static Map<String, YFCElement> emailDefnMap=new HashMap<String, YFCElement>();
 
+	@Override
 	public List getJobs(YFSEnvironment env, Document criteria, Document lastMessageCreated) {
 		Document emailDetailsInQry=null;
 		Document emailDetailsListOutDoc = null;
@@ -54,35 +55,35 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			YIFApi api = YIFClientFactory.getInstance().getLocalApi();
 			if(emailDefnMap.size()==0)
 			{
-				populateEmailDefnMap(env, api);	
+				populateEmailDefnMap(env, api);
 			}
 			if (log.isDebugEnabled()) {
 				log.debug("The input to getXPXEmailDetailsList is: " + SCXmlUtil.getString(emailDetailsInQry));
 			}
 			emailDetailsInQry=SCXmlUtil.createFromString("<XPXEmailDetails EmailRetryCount='-1' EmailRetryCountQryType='NE'><OrderBy><Attribute Desc='Y' Name='Createts'/></OrderBy></XPXEmailDetails>");
 			emailDetailsListOutDoc = api.executeFlow(env, "getXPXEmailDetailsList", emailDetailsInQry);
-			
+
 			if (log.isDebugEnabled()) {
 				log.debug(new StringBuilder("Inside XPXSendEmailAgent.getJobs() - Output document for Email Details list is ").append(YFCLogUtil.toString(emailDetailsListOutDoc)).toString());
 			}
-			
+
 			emailDetailsList = getEmailDetailsList(env, emailDetailsListOutDoc);
-		
-		} 
+
+		}
 		catch(Exception e){
 			StringBuffer centException=new StringBuffer();
 			if(e instanceof com.yantra.yfs.japi.YFSException) {
-            	YFSException yfe = (YFSException)e;            	
+            	YFSException yfe = (YFSException)e;
             	centException.append("YFSException caught inside XPXSendEmailAgent.getJobs(). "+yfe.getErrorCode()).append(":").append(yfe.getErrorDescription()).append(":").append(yfe.getErrorUniqueId());
-            	
+
             } else {
             	centException.append("Exception caught inside XPXSendEmailAgent.getJobs(). "+e);
-            	 	
+
             }
 			log.error(centException.toString());
-			
+
 		}
-		
+
 		if (log.isDebugEnabled()) {
 			log.debug("Inside XPXSendEmailAgent.getJobs method - The length of emailDetailsList is : " + emailDetailsList.size());
 		}
@@ -90,7 +91,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		return emailDetailsList;
 
 	}
-	
+
 	@Override
 	public void executeJob(YFSEnvironment env, Document emailDetailsInputDoc) throws Exception {
 
@@ -106,56 +107,56 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 
 		try {
 			if(emailDefnMap.size()==0){
-				populateEmailDefnMap(env, api);			
+				populateEmailDefnMap(env, api);
 			}
-			
-			String emailType = emailDetailsElement.getAttribute("EmailType");			
+
+			String emailType = emailDetailsElement.getAttribute("EmailType");
 			emailDefnElement = emailDefnMap.get(emailType);
-			
+
 			if(emailDefnElement==null){
 				errorMessage=new StringBuffer();
 				errorMessage.append("EmailType: ["+emailType+"] does not exist in the parent 'XPX_EMAIL_DEFN' table");
 				throw new Exception(errorMessage.toString());
 			}
-						
+
 			String emailXML = emailDetailsElement.getAttribute("EmailXML");
 			if(YFCCommon.isVoid(emailXML)){
 				errorMessage=new StringBuffer("Email XML not available to tranform and hence send an email.");
 				throw new Exception(errorMessage.toString());
 			}
-			
+
 			Element emailXMLElement=SCXmlUtil.createFromString(emailXML).getDocumentElement();
-			
+
 			String emailXSL=emailDefnElement.getAttribute("EmailXslPath");
-			
-			String emailFromAddress = emailDetailsElement.getAttribute("EmailFrom");		
-			
+
+			String emailFromAddress = emailDetailsElement.getAttribute("EmailFrom");
+
 			String emailToXPath = emailDefnElement.getAttribute("EmailToXPath");
 			emailToAddresses = retrieveEmailIds(emailXMLElement, emailToXPath);
-			
+
 			String emailCCXPath = emailDefnElement.getAttribute("EmailCcXPath");
 			String emailCCAddresses = retrieveEmailIds(emailXMLElement, emailCCXPath);
-			
+
 			String emailBCCXPath = emailDefnElement.getAttribute("EmailBccXPath");
 			String emailBCCAddresses = retrieveEmailIds(emailXMLElement, emailBCCXPath);
-			
+
 			validateEmailAddresses(emailDetailsElement, emailFromAddress, emailToAddresses, emailCCAddresses, emailBCCAddresses);
-			
+
 			Address[] toAddresses = InternetAddress.parse(emailToAddresses);
 			Address[] ccAddresses = InternetAddress.parse(emailCCAddresses);
-		    Address[] bccAddresses = InternetAddress.parse(emailBCCAddresses);		
-			
-			String emailSubject = emailDetailsElement.getAttribute("EmailSubject");			
+		    Address[] bccAddresses = InternetAddress.parse(emailBCCAddresses);
+
+			String emailSubject = emailDetailsElement.getAttribute("EmailSubject");
 			String htmlMailContent = applyXsltTemplate(emailXSL, emailXMLElement);
-			
+
 			String smtpHost = YFSSystem.getProperty("EMailServer");
 			if(YFCCommon.isVoid(smtpHost))
 			{
-				smtpHost = "smtp.ipaper.com";
+				smtpHost = "relay.veritiv.net";
 			}
-			
+
 			sendEmail(env, api, emailFromAddress, toAddresses, ccAddresses, bccAddresses, emailSubject, htmlMailContent, smtpHost, emailDetailsElement);
-			
+
 			if (log.isDebugEnabled()) {
 				log.debug(emailType+" sent successfully. Email Details Key is: ["+emailDetailsElement.getAttribute("EmailDetailsKey")+"].");
 			}
@@ -165,28 +166,28 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			emailSuccessEle.setAttribute("EmailRetryCount", "-1");
 			emailSuccessEle.setAttribute("EmailErrorMessage", "EMAIL_SUCCESS");
 			api.executeFlow(env, "changeXPXEmailDetails", emailSuccessDoc);
-			
+
 		} catch (Exception e) {
 			errorMessage=new StringBuffer();
 			Document emailExceptionDoc = SCXmlUtil.createFromString("<XPXEmailDetails/>");
 			Element emailExceptionEle = emailExceptionDoc.getDocumentElement();
 			String emailDetailsKey=emailDetailsElement.getAttribute("EmailDetailsKey");
 			emailExceptionEle.setAttribute("EmailDetailsKey", emailDetailsKey);
-			
+
 			if (e instanceof AddressException)
 			{
-				AddressException adrEx=(AddressException)e;				
-				errorMessage.append("AddressException message is : ").append(adrEx.getMessage());				
-				emailExceptionEle.setAttribute("EmailRetryCount", "-1");				
+				AddressException adrEx=(AddressException)e;
+				errorMessage.append("AddressException message is : ").append(adrEx.getMessage());
+				emailExceptionEle.setAttribute("EmailRetryCount", "-1");
 				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
-				log.error("AddressException caught inside XPXSendEmailAgent.sendEmail(). "+errorMessage+". Email Details Key is :["+emailDetailsKey+"]."); 
-			
-			} else if (e instanceof MessagingException) 
+				log.error("AddressException caught inside XPXSendEmailAgent.sendEmail(). "+errorMessage+". Email Details Key is :["+emailDetailsKey+"].");
+
+			} else if (e instanceof MessagingException)
 			{
 				if(e instanceof SendFailedException){
 					SendFailedException sfe = (SendFailedException)e;
 					emailExceptionEle.setAttribute("EmailRetryCount", "-1");
-					
+
 					errorMessage=new StringBuffer();
 					errorMessage.append("SendFailedException message is : "+sfe.getMessage());
 					errorMessage.append(" Valid Sent Addresses are : "+sfe.getValidSentAddresses());
@@ -194,39 +195,39 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 					errorMessage.append(" Invalid Addresses are : "+sfe.getInvalidAddresses());
 					emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
 					log.error("SendFailedException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorMessage.toString()+". Email Details Key is :["+emailDetailsKey+"].");
-				
-				}else 
+
+				}else
 				{
 					String emailRetryCount=emailDetailsElement.getAttribute("EmailRetryCount");
 					int intRetryCount=0;
 					if(!YFCCommon.isVoid(emailRetryCount))
 						intRetryCount = Integer.parseInt(emailRetryCount);
-					
+
 					MessagingException msgEx = (MessagingException)e;
 					if(intRetryCount > -1 && intRetryCount < 9 )
 					{
-						emailExceptionEle.setAttribute("EmailRetryCount", String.valueOf(++intRetryCount));				
-					
+						emailExceptionEle.setAttribute("EmailRetryCount", String.valueOf(++intRetryCount));
+
 					} else {
 						emailExceptionEle.setAttribute("EmailRetryCount", "-1");
-					
+
 					}
 					errorMessage.append("MessagingException message is : "+msgEx.getMessage());
 					emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
 					log.error("MessagingException caught, inside XPXSendEmailAgent.sendEmail(), while sending email. "+errorMessage.toString()+". Email Details Key is :["+emailDetailsKey+"].");
-				}				
-				
+				}
+
 			} else
 			{
 				errorMessage.append("Exception message is : "+e.getMessage());
 				emailExceptionEle.setAttribute("EmailRetryCount", "-1");
-				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());				
+				emailExceptionEle.setAttribute("EmailErrorMessage", errorMessage.toString());
 				log.error("Exception caught inside XPXSendEmailAgent.executeJob(). "+errorMessage.toString()+". Email Details Key is :["+emailDetailsKey+"].");
-				
-			}			
-			
+
+			}
+
 			api.executeFlow(env, "changeXPXEmailDetails", emailExceptionDoc);
-			
+
 		}
 
 		log.endTimer("executeJobs()");
@@ -235,7 +236,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 	private List getEmailDetailsList(YFSEnvironment env, Document emailDetailsListOutDoc) throws Exception {
 		NodeList nodeListEmails = emailDetailsListOutDoc.getDocumentElement().getElementsByTagName("XPXEmailDetails");
 		List listOfJobs = new ArrayList();
-		int emailDtlsNodeList = nodeListEmails.getLength();		
+		int emailDtlsNodeList = nodeListEmails.getLength();
 		for (int email= 0; email < emailDtlsNodeList; email++) {
 			Element emailDtlElement = (Element) nodeListEmails.item(email);
 			Document emailDetailDoc = SCXmlUtil.createFromString(SCXmlUtil.getString(emailDtlElement));
@@ -247,7 +248,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 
 	private String applyXsltTemplate(String emailXSL, Element emailXMLElement) throws Exception {
 		StringBuffer errorMessage=null;
-		try {			
+		try {
 			Document emailXMLDoc = SCXmlUtil.createFromString(SCXmlUtil.getString(emailXMLElement));
 			File emailXSLFile = new File(emailXSL);
 			StringWriter writer = new StringWriter();
@@ -257,9 +258,9 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 			javax.xml.transform.Result result = new javax.xml.transform.stream.StreamResult(out);
 			javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance();
 			try {
-				Transformer trans = transFact.newTransformer(xsltSource);			
+				Transformer trans = transFact.newTransformer(xsltSource);
 				trans.transform(xmlSource, result);
-			
+
 			} catch (TransformerException trnsFrmrEx){
 				errorMessage=new StringBuffer();
 				errorMessage.append("TransformerException occured, in XPXSendEmailAgent.applyXsltTemplate method, while transforming email XML. ");
@@ -270,7 +271,7 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 				throw trnsFrmrEx;
 			}
 			String htmlMailString = writer.toString();
-			
+
 			return htmlMailString;
 
 		} catch (Exception e) {
@@ -283,44 +284,44 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 
 	}
 
-	private static void sendEmail(YFSEnvironment env, YIFApi api, String from, Address[] toAddresses, Address[] ccAddresses, 
+	private static void sendEmail(YFSEnvironment env, YIFApi api, String from, Address[] toAddresses, Address[] ccAddresses,
 								  Address[] bccAddresses, String subject, String content, String smtpHost, Element emailDetailsElement) throws Exception
-	{		
+	{
 		Properties props = new Properties();
 
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.class", "com.sun.mail.smtp.SMTPTransport");
-        props.put("mail.smtp.host", smtpHost);        
+        props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.sendpartial", "true");
         //email logging issue
         if(YFSSystem.getProperty("mail.debug")!=null)
         {
         	props.put("mail.debug", YFSSystem.getProperty("mail.debug"));
-        
-        } else 
+
+        } else
         {
         	props.put("mail.debug", "false");
         }
-		
+
         Session emailSession = Session.getDefaultInstance(props);
-		
+
 		Message emailMessage = new MimeMessage(emailSession);
-		
-		if(toAddresses!=null && toAddresses.length>0)			
+
+		if(toAddresses!=null && toAddresses.length>0)
 			emailMessage.setRecipients(Message.RecipientType.TO, toAddresses);
-		
+
 		if(ccAddresses!=null && ccAddresses.length>0)
 			emailMessage.setRecipients(Message.RecipientType.CC, ccAddresses);
-		
+
 		if(bccAddresses!=null && bccAddresses.length>0)
 			emailMessage.setRecipients(Message.RecipientType.BCC, bccAddresses);
-		
+
 		String emltencoding = null;
         emltencoding = YFSSystem.getProperty("yfs.email.template.encoding");
         if (YFCCommon.isVoid(emltencoding)) {
           emltencoding = "UTF-8";
         }
-        
+
 		emailMessage.setFrom(new InternetAddress(from));
 		emailMessage.setSubject(subject);
 		//emailMessage.setContent(content, "text/plain");
@@ -328,53 +329,53 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		emailMessage.setSentDate(new java.util.Date());
 		//email logging issue
 		//emailSession.setDebug(true);
-		Transport.send(emailMessage);		
+		Transport.send(emailMessage);
 	}
-	
+
 	private String retrieveEmailIds(Element emailXMLElement, String emailXPath) throws Exception {
 		StringBuffer emailIdBuf=new StringBuffer("");
 		if(emailXPath==null || 	"".equals(emailXPath)){
 			return emailIdBuf.toString();
 		}
-			
+
 		String [] emailIdArr = emailXPath.split(",");
-		
+
 		if(emailIdArr.length==0)
 		{
 			emailIdBuf.append(SCXmlUtil.getXpathAttribute(emailXMLElement, emailXPath));
-		
+
 		} else {
 			for(int i=0;i<emailIdArr.length;i++)
 			{
-				if(i==(emailIdArr.length-1))		
+				if(i==(emailIdArr.length-1))
 				{
 					emailIdBuf.append(SCXmlUtil.getXpathAttribute(emailXMLElement, emailIdArr[i]));
-				
+
 				} else {
 					String emailId = SCXmlUtil.getXpathAttribute(emailXMLElement, emailIdArr[i]);
 					if(!"".equals(emailId))
 						emailIdBuf.append(emailId).append(",");
-				
+
 				}
 			}
 		}
-		
+
 		String emailIds=emailIdBuf.toString();
 		if (emailIds.indexOf(";") > -1) {
 			emailIds = emailIds.replace(";", ",");
 		}
-		
+
 		return emailIds;
 	}
-	
+
 	private void populateEmailDefnMap(YFSEnvironment env, YIFApi api) throws YFSException, RemoteException
 	{
-		env.setApiTemplate("getXPXEmailDefnList", "<XPXEmailDefnList><XPXEmailDefn/></XPXEmailDefnList>");			
+		env.setApiTemplate("getXPXEmailDefnList", "<XPXEmailDefnList><XPXEmailDefn/></XPXEmailDefnList>");
 		Document emailDefnInQry = SCXmlUtil.createFromString("<XPXEmailDefn/>");
 		if (log.isDebugEnabled()) {
 			log.debug("Inside XPXSendEmailAgent.populateEmailDefnMap(). The input to getXPXEmailDefnList is: " + SCXmlUtil.getString(emailDefnInQry));
 		}
-		
+
 		Document emailDefnListOutDoc = api.executeFlow(env, "getXPXEmailDefnList", emailDefnInQry);
 		env.clearApiTemplate("getXPXEmailDefnList");
 		YFCDocument yfcEmailDefnListDoc = YFCDocument.getDocumentFor(SCXmlUtil.getString(emailDefnListOutDoc));
@@ -388,18 +389,18 @@ public class XPXSendEmailAgent extends YCPBaseAgent {
 		   }
 		}
 	}
-	
+
 	private void validateEmailAddresses(Element emailDetailsElement, String emailFromAddress, String emailToAddresses, String emailCCAddresses, String emailBCCAddresses) throws AddressException
 	{
 		if(YFCCommon.isVoid(emailFromAddress))
 		{
-			throw new AddressException("'From' Email address is blank and so there's no need to hit SMTP email server.");				
-			
+			throw new AddressException("'From' Email address is blank and so there's no need to hit SMTP email server.");
+
 		} else if(YFCCommon.isVoid(emailToAddresses) && YFCCommon.isVoid(emailCCAddresses) && YFCCommon.isVoid(emailBCCAddresses))
 		{
 			throw new AddressException("Email addresses : 'To', 'CC' and 'BCC' are blank and so there's no need to hit SMTP email server.");
-		
-		}		
+
+		}
 	}
-	
+
 }

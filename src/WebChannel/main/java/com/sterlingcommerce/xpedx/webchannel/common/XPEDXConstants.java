@@ -4,12 +4,12 @@ import com.yantra.yfs.core.YFSSystem;
 
 
 /**
- * XPEDXConstants class will hold all common constants used internally by 
- * XPEDX application. 
+ * XPEDXConstants class will hold all common constants used internally by
+ * XPEDX application.
  *
  */
 public class XPEDXConstants {
-	
+
 	// Types for B2B catalog view
 	public static final int XPEDX_B2B_FULL_VIEW = 0;
 	public static final int XPEDX_B2B_CONDENCED_VIEW = 1;
@@ -21,25 +21,25 @@ public class XPEDXConstants {
 	public static final String XPEDX_CALLER_CATALOG_PAGE="Catalog";
 	public static final String XPEDX_CALLER_CATLANDING_PAGE="CatLanding";
 	public static final String XPEDX_CALLER_SIGNIN_PAGE="SignInPage";
-	
+
 	// promo page URL, SharedPath
 	public static final String REQUEST_ATTR_PROMO_PAGE_URL = "PROMO_PAGE_URL";
 	public static final String DYN_PROMO_SHARED_PATH_PROP = "promotions_shared_path";
-	
-	// Mega Menu unavailable Brand 
+
+	// Mega Menu unavailable Brand
 	public static final String MEGA_MENU_BRANDS_UNAVAILABLE_PROP = "megamenu_unavailable_brands";
-	
+
 	//Ad Jugler URL related constants
 	//jira 2890 - TEST was appended to url which is wrong, it should be prepended to aj_kw keyword for dev and staging, added "yfs." to the key
 	public static final String AD_JUGGLER_KEYWORD_PREFIX_PROP = "yfs.xpedx.adjuggler.keyword.attribute.prefix";
 	public static final String AD_JUGGLER_SUFFIX_PROP = "xpedx.adjuggler.suffix";
 	public static final String AJ_SERVER_URL_KEY = "AJ_SERVER_URL_KEY";
 	public static final String AJ_SERVER_URL = "https://rotator.hadj7.adjuggler.net:443/servlet/ajrotator/";
-	
+
 	public static final String CONTENT_LOCATION_CODE = "CONTENT_LOCATION";
 	public static final String IMAGE_SERVER_LOCATION = "IMAGE_SERVER_LOCATION";
-	
-	
+
+
 	public static final String IMAGE_SERVER = "IMAGE_SERVER";
 	public static final String CONTENT_SERVER_FSC_LOCATION = "CONTENT_SERVER_FSC_LOCATION";
 	public static final String CONTENT_SERVER_FSC = "CONTENT_SERVER_FSC";
@@ -76,7 +76,7 @@ public class XPEDXConstants {
 	public static final String IS_ESTIMATOR = "isEstimator";
 	public static final String IS_DEFAULT_CART_SET = "isDefaultCartSet";
 	public static final boolean DEBUG_TRACE = false;
-	
+
 	public static final String XPEDX_ITEM_LABEL = " Item #";
 	public static final String CUSTOMER_ITEM_LABEL = "My Item #"; /* <!-- -FXD-4 --> */
 	public static final String MANUFACTURER_ITEM_LABEL = "Mfg. Item #";
@@ -86,42 +86,42 @@ public class XPEDXConstants {
 	public static final String DEFAULT_SELECT_SEARCH_CRITERIA_LABEL = "- Select Search Criteria -";
 	//Added for JIRA 2770
 	public static final String DEFAULT_SELECT_SEARCH_SHIPTO_CRITERIA_LABEL1 = "All Ship-Tos";
-	public static final String DEFAULT_SELECT_SEARCH_SHIPTO_CRITERIA_LABEL2 = "- Select a Ship-To -";	
-	
+	public static final String DEFAULT_SELECT_SEARCH_SHIPTO_CRITERIA_LABEL2 = "- Select a Ship-To -";
+
 	public static final String CUST_SKU_FLAG_FOR_CUSTOMER_ITEM = "1";
 	public static final String CUST_SKU_FLAG_FOR_MANUFACTURER_ITEM = "2";
 	public static final String CUST_SKU_FLAG_FOR_MPC_ITEM = "3";
-	
+
 	public static final String SHIP_COMPLETE_Y = "Y";
 	public static final String SHIP_COMPLETE_C = "C";
 	public static final String SHIP_COMPLETE_N = "N";
-	
+
 	public static final String XPX_CUSTCONTACT_EXTN_ADDLN_EMAIL_ATTR = "AddnlEmailAddrs";
 	public static final String XPX_CUSTCONTACT_EXTN_PO_LIST_ATTR = "POList";
 	public static final String XPX_CUSTCONTACT_EXTN_REF_ATTR = "CustContRefKey";
 	public static final String XPX_CUSTCONTACT_EXTN_TC_FLAG_ATTR = "AcceptTAndCFlag";
 	public static final String XPX_CUSTCONTACT_EXTN_TC_ACCEPTED_ON_ATTR = "TAndCAcceptedOn";
 	public static final String XPX_CUSTCONTACT_EXTN_LAST_LOGIN_DATE = "LastLoginDate";
-	
+
 	public static final String DEFAULT_SHIP_TO_CHANGED = "DEFAULT_SHIP_TO_CHANGED";
 	public static final String MASHUP_SHOW_LOCATIONS = "xpedx-customer-showLocations";
-	
+
 	public static String MASTER_CUSTOMER_SUFFIX_TYPE;
 	public static String SAP_CUSTOMER_SUFFIX_TYPE;
 	public static String BILL_TO_CUSTOMER_SUFFIX_TYPE;
 	public static String SHIP_TO_CUSTOMER_SUFFIX_TYPE;
-	
+
 	public static String USER_CUSTOMER_NAME;
-	
+
 	public static String XPEDX_STORE_FRONT = "xpedx";
 	public static String SAALFELD_STORE_FRONT = "Saalfeld";
 	public static String STRAITEGIC_PPR_STORE_FRONT = "StrategicPaper";
 	public static String BULKLEY_DUNTON_STORE_FRONT = "BulkleyDunton";
-	public static String CANADA_STORE_FRONT = "xpedxCanada"; 
+	public static String CANADA_STORE_FRONT = "xpedxCanada";
 
-	
+
 	public static String EDITED_ORDER_HEADER_KEY="Edited_OrderHeaderKey";
-	
+
 	public static String HOLD_TYPE_FOR_PENDING_APPROVAL = "ORDER_LIMIT_APPROVAL";
 	public static String HOLD_TYPE_FOR_NEEDS_ATTENTION = "NEEDS_ATTENTION";
 	public static String HOLD_TYPE_FOR_LEGACY_CNCL_ORD_HOLD = "LEGACY_CNCL_ORD_HOLD";
@@ -130,7 +130,7 @@ public class XPEDXConstants {
 	public static String HOLD_TYPE_FOR_FATAL_ERR_HOLD = "LEG_ERR_CODE_HOLD";
 	public static String REQUIRE_CUSTOMER_PO_NO_RULE="RequireCustomerPO";
 	//Start Added for JIRA 3261
-	public static String MAIL_HOSTUSEREMAIL = "smtp.ipaper.com";
+	public static String MAIL_HOSTUSEREMAIL = "relay.veritiv.net";
 	public static String  XPEDX_LOGO = "xpedx";
 	public static String  BULKLEYDUNTON_LOGO = "BulkleyDunton";
 	public static String  CENTRAILEWMAR_LOG0 = "CentralLewmar";
@@ -142,7 +142,7 @@ public class XPEDXConstants {
 	public static String  ZELLERBACH_LOGO = "Zellerbach";
 	public static String  XPEDXCANADA_LOGO = "xpedxCanada";
 	//End Added for JIRA 3261
-	
+
 	// Added for JIRA 1998
 	public static final String ENTRY_TYPE_EMAIL_UPDATE = "EmailChange";
 	public static final String SHIP_TO_CUSTOMER = "shipToCustomer";
@@ -158,42 +158,42 @@ public class XPEDXConstants {
 	public static final String LAST_LOGIN_DATE_UPDATED="LAST_LOGIN_DATE_UPDATED";//EB-475
 	public static final String IS_SAP_STILL_NEED_TO_CHANGE ="IS_SAP_STILL_NEED_TO_CHANGE";//EB-1320
 	public static final String UE_ERROR_CODE1="com.yantra.yfs.japi.YFSUserExitException";
-	
+
 	public static final String DEFAULT_STOCKED_ITEM_VIEW_ALL          = "DEFAULT_ALL"; // eb-2297
 	public static final String DEFAULT_STOCKED_ITEM_VIEW_STOCKED      = "DEFAULT_STOCKED"; // eb-2297
 	public static final String DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED = "ONLY_STOCKED"; // eb-2297
-	
+
     public static void logMessage(String msg) {
  	   if ( XPEDXConstants.DEBUG_TRACE == true )
  		  System.out.print ("\n"+msg);
     }
-    
+
     // Added for JIRA 3895
     public static final String TAIL_END = "...";
     public static final String EMPTY_STRING = "";
-    
+
 	static{
-		
+
 		MASTER_CUSTOMER_SUFFIX_TYPE = YFSSystem.getProperty("xpedx.master.customer.suffix");
 		if(MASTER_CUSTOMER_SUFFIX_TYPE == null)
 			MASTER_CUSTOMER_SUFFIX_TYPE = "MC";
-		
+
 		SAP_CUSTOMER_SUFFIX_TYPE = YFSSystem.getProperty("xpedx.sap.customer.suffix");
 		if(SAP_CUSTOMER_SUFFIX_TYPE == null)
 			SAP_CUSTOMER_SUFFIX_TYPE = "C";
-		
+
 		BILL_TO_CUSTOMER_SUFFIX_TYPE = YFSSystem.getProperty("xpedx.billto.customer.suffix");
 		if(BILL_TO_CUSTOMER_SUFFIX_TYPE == null)
 			BILL_TO_CUSTOMER_SUFFIX_TYPE = "B";
-		
+
 		SHIP_TO_CUSTOMER_SUFFIX_TYPE = YFSSystem.getProperty("xpedx.shipto.customer.suffix");
 		if(SHIP_TO_CUSTOMER_SUFFIX_TYPE == null)
 			SHIP_TO_CUSTOMER_SUFFIX_TYPE = "S";
 	}
-	
+
 	public static final String SAALFELD_EBUSINESS_EMAIL_ADDRESS="ebusiness2@veritivcorp.com";
 	public static final String XPEDX_EBUSINESS_EMAIL_ADDRESS = "ebusiness@veritivcorp.com";
-	
+
 	public static final String APPROVE_ORDER_FLAG="approveOrderFlag";
 	public static final String EDIT_ORDER_NO="EDIT_ORDER_NO";
 }
