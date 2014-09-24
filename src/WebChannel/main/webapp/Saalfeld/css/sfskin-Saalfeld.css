@@ -1165,6 +1165,9 @@ ul.megamenu {
 .standard-table tbody img {
 	float: none;
 }
+.standard-table th.text-right, .standard-table th a.text-right{
+	text-align:right;
+}
 /*******/
 /*-----modal----------*/
 #change-bill-to ul li{
