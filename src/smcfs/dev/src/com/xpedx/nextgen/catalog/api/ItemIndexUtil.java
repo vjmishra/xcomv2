@@ -1,5 +1,6 @@
 package com.xpedx.nextgen.catalog.api;
 
+import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.catalog.api.eb3359.StopWatchFor3359;
@@ -108,7 +110,7 @@ public class ItemIndexUtil {
 		// TODO replace this fake stuff with call to new API/Service!!!
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse("<XPXItemContractExtnList> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2000920\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"12-0000304742-000-M-XX-B\" ItemId=\"2001020\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T10:50:39-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2001020\"/> </XPXItemContractExtnList>");
+		Document doc = db.parse(new InputSource(new StringReader("<XPXItemContractExtnList> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2000920\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"12-0000304742-000-M-XX-B\" ItemId=\"2001020\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T10:50:39-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2001020\"/> </XPXItemContractExtnList>")));
 		return doc.getDocumentElement();
 	}
 
