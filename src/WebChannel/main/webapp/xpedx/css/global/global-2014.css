@@ -108,7 +108,9 @@
 .addmargintop-20 {
 	margin-top: -20px;
 }
-
+.addmargintop2 {
+	margin-top: 2px;
+}
 .indent20px {
 	padding-left: 20px;
 }

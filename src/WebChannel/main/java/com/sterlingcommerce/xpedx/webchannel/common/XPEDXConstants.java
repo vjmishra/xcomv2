@@ -84,6 +84,7 @@ public class XPEDXConstants {
 	public static final String DEFAULT_SELECT_SHIP_TO_LABEL = "- Select Ship-To -";
 	public static final String DEFAULT_SELECT_ORDER_CRITERIA_LABEL = "- Select Order Criteria -";
 	public static final String DEFAULT_SELECT_SEARCH_CRITERIA_LABEL = "- Select Search Criteria -";
+	public static final String DEFAULT_ORDER_MORE_OPTIONS_LABEL = "- More Options -";
 	//Added for JIRA 2770
 	public static final String DEFAULT_SELECT_SEARCH_SHIPTO_CRITERIA_LABEL1 = "All Ship-Tos";
 	public static final String DEFAULT_SELECT_SEARCH_SHIPTO_CRITERIA_LABEL2 = "- Select a Ship-To -";

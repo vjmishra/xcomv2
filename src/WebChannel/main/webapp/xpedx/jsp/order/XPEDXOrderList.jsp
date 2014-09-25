@@ -101,7 +101,24 @@ $(function() {
 			'autoDimensions'	: false,
 			'width' 			: 800,
 	 		'height' 			: 400  
-		}); 
+		});
+		
+		if($("#statusSearchFieldName").attr("selectedIndex") == '0' && $("#filteredStatusSearchFieldName").attr("selectedIndex") == '0'){
+			 $("select#filteredStatusSearchFieldName").attr('selectedIndex', 1);  
+		 }
+		$("#filteredStatusSearchFieldName").change(function() {
+			 if($("#filteredStatusSearchFieldName").attr("selectedIndex") != '0'){
+					$("select#statusSearchFieldName").attr('selectedIndex', 0); 
+				}
+		});
+		$("#statusSearchFieldName").change(function() {
+			 if($("#statusSearchFieldName").attr("selectedIndex") != '0'){
+					$("select#filteredStatusSearchFieldName").attr('selectedIndex', 0); 
+				}
+			 if ($("#statusSearchFieldName").attr("selectedIndex") == '0'){
+					$("select#filteredStatusSearchFieldName").attr('selectedIndex', 1); 
+				}
+		});
 	});
 	
     function showShipToModalForOrderSearch() {
@@ -157,6 +174,7 @@ function printPOs(customerPos) {
     <s:param name="searchFieldName" value="getXpedxSearchFieldName()"/>
     <s:param name="searchFieldValue" value="searchFieldValue"/>
     <s:param name="statusSearchFieldName" value="getExactStatus()"/>
+    <s:param name="filteredStatusSearchFieldName" value="getFilteredStatusSearchFieldName()"/>
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
@@ -181,6 +199,7 @@ function printPOs(customerPos) {
     <s:param name="searchFieldName" value="getXpedxSearchFieldName()"/>
     <s:param name="searchFieldValue" value="searchFieldValue"/>
     <s:param name="statusSearchFieldName" value="getExactStatus()"/>
+    <s:param name="filteredStatusSearchFieldName" value="getFilteredStatusSearchFieldName()"/>
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
@@ -225,6 +244,7 @@ function printPOs(customerPos) {
     <s:param name="searchFieldName" value="getXpedxSearchFieldName()"/>
     <s:param name="searchFieldValue" value="searchFieldValue"/>
     <s:param name="statusSearchFieldName" value="getExactStatus()"/>
+    <s:param name="filteredStatusSearchFieldName" value="getFilteredStatusSearchFieldName()"/>
 	<s:param name="submittedTSFrom" value="submittedTSFrom"/>
 	<s:param name="submittedTSTo" value="submittedTSTo"/>
     <s:param name="shipToSearchFieldName" value="shipToSearchFieldName"/>
@@ -335,15 +355,17 @@ function printPOs(customerPos) {
 												</tr>
 												<tr>
 												<%-- start of Fix : JIRA - 3123 --%>
-	            									<s:if test='#blankValue'> 
+	            					<s:if test='#blankValue'> 
 	            							<td>Order Status: </td>
-													<td>
-														<s:select cssClass=" " name="statusSearchFieldName" list="statusSearchList" value="%{#parameters.statusSearchFieldName}" id="statusSearchFieldName"/>
+													<td colspan="3">
+														<s:select cssClass="float-left addmarginright10 addmargintop2" name="filteredStatusSearchFieldName" list="filteredStatusSearchList" value="%{#parameters.filteredStatusSearchFieldName}" id="filteredStatusSearchFieldName"/>
+														<div class="float-left margin-adjust italic grey">Or Select</div>													
+														<s:select cssClass="float-left addmarginleft10 addmargintop2" name="statusSearchFieldName" list="statusSearchList" value="%{#parameters.statusSearchFieldName}" id="statusSearchFieldName"/>
 														<s:set name='openOrder' value="%{'false'}"/>
 													</td>
-													<td colspan="2"></td>
+
 													
-							</s:if>
+								</s:if>
 							<%-- End of Fix : JIRA - 3123 --%>
                         </tr>
                         <tr>
@@ -1067,6 +1089,7 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 		Ext.fly('ToDate').dom.value= Ext.fly('initialToDateString').dom.value ;
 		document.getElementById("errorDateDiv").innerHTML = '';
 		//document.getElementById("shipToOrderSearch").innerHTML = '[Select]';
+		$("select#filteredStatusSearchFieldName").attr('selectedIndex', 1); 
 	}
 	function showShipTosOnSelect(){		
 		if (document.getElementById("shipToSearchFieldName").selectedIndex=='1'){	
@@ -1148,6 +1171,9 @@ function openNotePanel(id, actionValue,orderHeaderKey){
 			}
 			//end of jira 3542 changes
 		} 
+		if($("#statusSearchFieldName").attr("selectedIndex") == '0' && $("#filteredStatusSearchFieldName").attr("selectedIndex") == '0'){
+			 $("select#filteredStatusSearchFieldName").attr('selectedIndex', 1);  
+		 }
 		document.getElementById("errorDateDiv").innerHTML = '';
 		document.orderListForm.submit();
 	}
