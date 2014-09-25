@@ -50,7 +50,7 @@ public class ItemIndexUtil {
 		// group the item ids for batched calls
 		SegmentedList<String> itemIDGroups = new SegmentedList<String>(itemIDs, 100);
 		for (List<String> itemIDGroup : itemIDGroups) {
-			System.out.println("\nJ: ---------- Segment ------- ");
+			System.out.println("\nJ: ---------- Segment ------- "); //TODO remove all println
 
 			Map<String, Set<String>> contractBillTosForItem = getContractBillToIds(env, itemIDGroup);
 			System.out.println("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());
@@ -59,8 +59,6 @@ public class ItemIndexUtil {
 
 			for (Entry<String, Set<String>> entry : divisionsInStockForItem.entrySet()) {
 				String itemID = entry.getKey();
-				System.out.println("J:  MetaLoop processing item: " + itemID);
-				System.out.println("J:   MetaLoop contactBillTos: " + contractBillTosForItem.get(itemID));
 				Set<String> divisionsInStock = entry.getValue();
 
 				ItemMetadata im = new ItemMetadata();
@@ -68,6 +66,7 @@ public class ItemIndexUtil {
 
 				im.setDivisionsInStock(divisionsInStock);
 				if (contractBillTosForItem.get(itemID) != null) {
+					System.out.println("J:  MetaLoop found BillTos for item: " + itemID + " = " + contractBillTosForItem.get(itemID));
 					im.setContractBillTos(contractBillTosForItem.get(itemID));
 				}
 
@@ -80,36 +79,29 @@ public class ItemIndexUtil {
 		return metadata;
 	}
 
+	//--- Contract information - gather BillTos per item
 	private Map<String, Set<String>> getContractBillToIds(YFSEnvironment env, Collection<? extends String> itemIds) throws Exception {
 		Map<String, Set<String>> contractBillTosForItems = new LinkedHashMap<String, Set<String>>();
 
-		Element itemListOutputElem = getContractElementsFromApi(env, itemIds);
+		Element itemListOutputElem = getContractElementsFromDB(env, itemIds);
 
 		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
 		System.out.println("J: # of XPXItemContractExtn: " + itemElems.size());
+
 		for (Element itemElem : itemElems) {
 			System.out.println("J: itemElem: " + SCXmlUtil.getString(itemElem));
-			Set<String> contractBillTos = new LinkedHashSet<String>();
-			contractBillTosForItems.put(itemElem.getAttribute("ItemId"), contractBillTos);
-
-			List<Element> customerElems = SCXmlUtil.getElements(itemElem, "CustomerId");
-			System.out.println("J:  # of CustomerId: " + customerElems.size());
-			for (Element extnElem : customerElems) {
-				contractBillTos.add(extnElem.getAttribute("CustomerId"));
-			}
-			System.out.println("J:  # of Contracts : " + contractBillTos.size());
+			addBillToForItem(contractBillTosForItems, itemElem);
 		}
 
 		return contractBillTosForItems;
 	}
-
-	private Element getContractElementsFromApi(YFSEnvironment env, Collection<? extends String> itemIds) throws Exception {
+	private Element getContractElementsFromDB(YFSEnvironment env, Collection<? extends String> itemIds) throws Exception {
 
 		YFCDocument contractsInputDoc = getContractsApiInput(itemIds);
 
 		// Setting a template would only filter out createTs
 
-		if (log.isDebugEnabled()) {//TODO debug
+		if (log.isDebugEnabled()) {
 			log.warn("Invoking XPXGetItemContractExtn");
 			log.warn("itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
 		}
@@ -120,12 +112,6 @@ public class ItemIndexUtil {
 
 		System.out.println("J: output: " + contractsOutputDoc.getDocumentElement());
 		return contractsOutputDoc.getDocumentElement();
-
-		// TODO replace this fake stuff with call to new API/Service!!!
-//		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder db = dbf.newDocumentBuilder();
-//		Document doc = db.parse(new InputSource(new StringReader("<XPXItemContractExtnList> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2000920\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"12-0000304742-000-M-XX-B\" ItemId=\"2001020\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T10:50:39-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2001020\"/> </XPXItemContractExtnList>")));
-//		return doc.getDocumentElement();
 	}
 	private YFCDocument getContractsApiInput(Collection<? extends String> itemIds) {
 		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn");
@@ -144,13 +130,26 @@ public class ItemIndexUtil {
 		System.out.println("J: itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
 		return contractsInputDoc;
 	}
+	private void addBillToForItem(Map<String, Set<String>> contractBillTosForItems, Element itemElem) {
+		Set<String> contractBillTos;
+		String itemId = itemElem.getAttribute("ItemId");
+		if (contractBillTosForItems.containsKey(itemId)) {
+			contractBillTos = contractBillTosForItems.get(itemId);
+		}
+		else {
+			contractBillTos = new LinkedHashSet<String>();
+			contractBillTosForItems.put(itemId, contractBillTos);
+		}
 
+		contractBillTos.add(itemElem.getAttribute("CustomerId"));
+		System.out.println("J:  # of Contracts now : " + contractBillTos.size());
+	}
 
-	// api calls batched for improved performance
+	//--- Divisions that have item in stock (api calls batched for improved performance)
 	private Map<String, Set<String>> getDivisionsInStockForAllItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
 		Map<String, Set<String>> divisionsInStockForItems = new LinkedHashMap<String, Set<String>>();
 
-		Element itemListOutputElem = getDivisionsFromApi(env, itemIDs);
+		Element itemListOutputElem = getDivisionsFromDB(env, itemIDs);
 
 		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "Item");
 		for (Element itemElem : itemElems) {
@@ -168,7 +167,7 @@ public class ItemIndexUtil {
 
 		return divisionsInStockForItems;
 	}
-	private Element getDivisionsFromApi(YFSEnvironment env, Collection<? extends String> itemIDs)
+	private Element getDivisionsFromDB(YFSEnvironment env, Collection<? extends String> itemIDs)
 			throws YIFClientCreationException, RemoteException {
 
 		YFCDocument itemInputDoc = getDivisionsApiInput(itemIDs);
@@ -181,13 +180,11 @@ public class ItemIndexUtil {
 			log.debug("itemInputDoc = " + SCXmlUtil.getString(itemInputDoc.getDocument()));
 			log.debug("templateXml = " + templateXml);
 		}
-		System.out.println("J: Divisions input: " + SCXmlUtil.getString(itemInputDoc.getDocument()));
 
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 
 		Document itemListOutputDoc = api.invoke(env, "getItemList", itemInputDoc.getDocument());
 
-		System.out.println("J: Divisions output: " + SCXmlUtil.getString(itemListOutputDoc.getDocumentElement()));
 		return itemListOutputDoc.getDocumentElement();
 	}
 

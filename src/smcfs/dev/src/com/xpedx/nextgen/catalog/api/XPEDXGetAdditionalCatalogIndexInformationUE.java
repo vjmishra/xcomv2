@@ -102,8 +102,9 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 				if ("contractBillTos".equals(searchFieldElement.getAttribute("IndexFieldName"))) {
 					Set<String> contractBillTos = im.getContractBillTos();
 					//if (log.isDebugEnabled()) {
-						log.warn("contractBillTos = " + contractBillTos); //TODO debug
+//						log.warn("contractBillTos = " + contractBillTos); //TODO debug
 					//}
+					System.out.println("J: Locale: joined contractBillTos = " + ItemIndexUtil.join(contractBillTos, " ")); //TODO remove
 					valueElement.setAttribute("Value", ItemIndexUtil.join(contractBillTos, " "));
 				}
 			}
