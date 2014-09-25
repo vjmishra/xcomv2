@@ -15,7 +15,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
-import com.xpedx.nextgen.catalog.api.eb3359.StopWatchFor3359;
 import com.yantra.interop.japi.YIFApi;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.interop.japi.YIFClientFactory;
@@ -110,14 +109,14 @@ public class ItemIndexUtil {
 
 		// Setting a template would only filter out createTs
 
-		//if (log.isDebugEnabled()) {//TODO debug
+		if (log.isDebugEnabled()) {//TODO debug
 			log.warn("Invoking XPXGetItemContractExtn");
 			log.warn("itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
-//		}
+		}
 
 		YIFApi api = YIFClientFactory.getInstance().getApi();
 
-		Document contractsOutputDoc = api.invoke(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
+		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
 
 		System.out.println("J: output: " + contractsOutputDoc.getDocumentElement());
 		return contractsOutputDoc.getDocumentElement();
@@ -142,6 +141,7 @@ public class ItemIndexUtil {
 			expElem.setAttribute("Name", "ItemId");
 			expElem.setAttribute("Value", itemId);
 		}
+		System.out.println("J: itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
 		return contractsInputDoc;
 	}
 
@@ -246,11 +246,7 @@ public class ItemIndexUtil {
 			log.debug("templateXml = " + templateXml);
 		}
 
-		StopWatchFor3359 sw = new StopWatchFor3359(true);
 		Document xpxItemcustXrefListOutputDoc = api.executeFlow(env, "getXPXItemcustXrefList", xpxItemcustXrefInputDoc.getDocument());
-		if (log4j.isDebugEnabled()) {
-			log4j.debug("Completed API call getXPXItemcustXrefList (itemID=" + itemID + "): elapsed = " + sw.stop());
-		}
 
 		Element xpxItemcustXrefListOutputElem = xpxItemcustXrefListOutputDoc.getDocumentElement();
 
