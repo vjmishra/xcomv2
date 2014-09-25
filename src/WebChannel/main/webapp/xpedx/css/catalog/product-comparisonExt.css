@@ -116,11 +116,11 @@
 .comparisonTable .list-wrap {
 	padding-left: 40px;
 }
-.comparisonTable .list-wrap .pa-row .col-1 {
+#productComparison .list-wrap .pa-row .col-1 {
 	width: 45%;
 	display: inline-block;
 }
-.comparisonTable .list-wrap .pa-row .col-2 {
+#productComparison .list-wrap .pa-row .col-2 {
 	width: 35%;
 	display: inline-block;
 }
@@ -131,8 +131,8 @@
 	box-shadow: 1px 1px 4px #999999;
 	margin-bottom: 10px;
 }
-#productComparison .pa-wrap{
-	 width: 80%;
+#productComparison .pa-wrap {
+	 width: 100%;
 }
 #productComparison .two-col .pa-price {
     clear: none;
@@ -150,9 +150,23 @@
     width: 100%;
     border: none;
 }
-#productComparison .notice{
+#productComparison .notice {
 	float:left;
 }
-#productComparison .suspended-item{
+#productComparison .suspended-item {
 	padding: 6px 0px;
+}
+#productComparison .avail-wrap .pa-row .col-2 {
+	   	clear: none;
+    	float: left;
+    	min-width: 40px;
+    	text-align: right;
+}
+
+#productComparison .price-wrap .pa-row .col-1 {
+    clear: none;
+    float: left;
+    padding-right: 4px;
+    text-align: left;
+    width: 85px;
 }
