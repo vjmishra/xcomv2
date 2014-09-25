@@ -1,5 +1,6 @@
 package com.sterlingcommerce.xpedx.webchannel.catalog;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,9 +25,12 @@ import com.sterlingcommerce.webchannel.utilities.WCMashupHelper;
 import com.sterlingcommerce.webchannel.utilities.WCMashupHelper.CannotBuildInputException;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants;
 import com.sterlingcommerce.xpedx.webchannel.common.XPEDXSCXmlUtils;
+import com.sterlingcommerce.xpedx.webchannel.order.XPEDXOrderUtils;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
+import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.yfc.dom.YFCDocument;
 import com.yantra.yfc.dom.YFCElement;
+import com.yantra.yfs.japi.YFSException;
 
 public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	String myString = null;
@@ -206,7 +210,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	
 	//PnA call removed as per Pawan's mail dated 9/4/2011
 	private void getProductComparisonOutputDetails()
-			throws InstantiationException, IllegalAccessException {
+			throws InstantiationException, IllegalAccessException, YFSException, RemoteException, YIFClientCreationException {
 		String sProdComparisonDoc = getXMLUtils().getString(
 				prodComparisonOutputDoc);
 		Document docProdCmpOputDocDetails = prodComparisonOutputDoc;
@@ -223,6 +227,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 		YFCElement inputItmElement;
 		YFCElement inputAssignedValueListElement;
 		YFCElement inputAssignedValueElement;
+		List<String> items = new ArrayList<String>();
 		String[] sItmIds = new String[iTotItmList];
 		String[] sUoms = new String[iTotItmList];
 		String[] sArrListPrice = new String[iTotItmList];
@@ -239,6 +244,7 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			}
 			sItmIds[i] = SCXmlUtil.getAttribute(eleItemDetails, "ItemID");
 			sUoms[i] = SCXmlUtil.getAttribute(eleItemDetails, "UnitOfMeasure");
+			items.add(sItmIds[i]);
 			/*String listPrice = SCXmlUtil.getXpathAttribute(eleItemDetails,
 					"./ComputedPrice/@ListPrice");
 			if (listPrice != null && listPrice.trim().length() > 0) {
@@ -246,6 +252,10 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 			}
 			sArrListPrice[i] = price > 0 ? "$" + price : "";*/
 		}
+		
+			itemOrderMultipleMap = XPEDXOrderUtils
+					.getOrderMultipleFoXPXItems(items);
+		
 		/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/	
 		Element outputItem = null;
 		try {
@@ -471,7 +481,8 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	protected String baseUOM = null;
 	protected String prodMweight = null;
 	protected Element m_itemListElem;	
-
+	protected Map itemOrderMultipleMap;
+	
 	private static final Logger log = Logger
 			.getLogger(XPEDXProductComparisonAction.class);
 	private String itemListMapHTMLString;
@@ -495,7 +506,14 @@ public class XPEDXProductComparisonAction extends ProductComparisonAction {
 	public void setItemDtlBackPageURL(String itemDtlBackPageURL) {
 		this.itemDtlBackPageURL = itemDtlBackPageURL;
 	}
-    
+	public Map getItemOrderMultipleMap() {
+		return itemOrderMultipleMap;
+	}
+
+	public void setItemOrderMultipleMap(Map itemOrderMultipleMap) {
+		this.itemOrderMultipleMap = itemOrderMultipleMap;
+	}
+
 	/*EB-694 xpedx catalog URL display for FSC, PEFC and SFI*/
 	
 	private Element getItemElement(String[] itemId) throws Exception {

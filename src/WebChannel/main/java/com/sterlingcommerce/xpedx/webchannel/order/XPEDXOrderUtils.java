@@ -3314,6 +3314,92 @@ public class XPEDXOrderUtils {
 
 	}
 	/*End - Changes made by Mitesh Parikh for JIRA 3581*/
+	
+	public static Map<String, String> getOrderMultipleFoXPXItems(List<String> items)
+			throws YIFClientCreationException, YFSException, RemoteException {
+		Map<String, String> itemOrderMultipleMap = new HashMap<String, String>();
+		String shipFromBranch = "";
+		String enviCode = null;
+		XPEDXShipToCustomer customer = (XPEDXShipToCustomer)XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
+		if (customer != null)
+			enviCode = customer.getExtnEnvironmentCode();
+
+		IWCContext context = WCContextHelper.getWCContext(ServletActionContext
+				.getRequest());
+		SCUIContext wSCUIContext = context.getSCUIContext();
+		ISCUITransactionContext scuiTransactionContext = null;
+		YFSEnvironment env = null;
+		String customerID = context.getCustomerId();
+		String storeFrontId = context.getStorefrontId();
+
+		try {
+			scuiTransactionContext = wSCUIContext.getTransactionContext(true);
+			env = (YFSEnvironment) scuiTransactionContext.getTransactionObject(SCUITransactionContextFactory.YFC_TRANSACTION_OBJECT);
+			HashMap<String, String> customerDetails = getCustomerDetails(env, customerID, storeFrontId);
+			shipFromBranch = customerDetails.get("shipFromBranch");
+			String envCode = (String)context.getSCUIContext().getLocalSession().getAttribute(XPEDXConstants.ENVIRONMENT_CODE);
+			Document itemBranchDetailsInputDoc = YFCDocument.createDocument("XPXItemExtn").getDocument();
+			itemBranchDetailsInputDoc.getDocumentElement().setAttribute("XPXDivision", shipFromBranch);
+			itemBranchDetailsInputDoc.getDocumentElement().setAttribute("EnvironmentID", enviCode);
+  		    Element complexQueryElement = SCXmlUtil.createChild(itemBranchDetailsInputDoc.getDocumentElement(), "ComplexQuery");
+			Element orElement = SCXmlUtil.createChild(complexQueryElement, "Or");
+			for (String itemId : items) {
+				Element expElement = SCXmlUtil.createChild(orElement, "Exp");
+				expElement.setAttribute("Name", "ItemID");
+				expElement.setAttribute("Value", itemId);
+			}
+			String  itemBranchDetailsTemplate =   "<XPXItemExtnList>"
+					+ "<XPXItemExtn InventoryIndicator = '' ItemID = '' OrderMultiple = '' />"
+					+" </XPXItemExtnList>";
+
+				   YIFApi api = YIFClientFactory.getInstance().getApi();
+
+				   env.setApiTemplate("getXPXItemBranchListService", SCXmlUtil.createFromString(itemBranchDetailsTemplate));
+					Document itemBranchDetailsOutputDoc = api.executeFlow(env, "getXPXItemBranchListService", itemBranchDetailsInputDoc);
+					env.clearApiTemplate("getXPXItemBranchListService");
+
+					Element itemBranchDetailsOutputElement = itemBranchDetailsOutputDoc.getDocumentElement();
+					List<Element> XPXItemExtnElements = SCXmlUtil.getElements(itemBranchDetailsOutputElement, "XPXItemExtn");
+
+					for (Element XPXItemExtnElement : XPXItemExtnElements) {
+						if (XPXItemExtnElement != null) {
+						   String itemId = XPXItemExtnElement.getAttribute("ItemID");
+						   String orderMultiple=(!YFCUtils.isVoid(XPXItemExtnElement.getAttribute("OrderMultiple")) ? XPXItemExtnElement.getAttribute("OrderMultiple") : "1");							
+							itemOrderMultipleMap.put(itemId, orderMultiple);
+						}
+					}
+					for (String itemId : items) {
+						if(!itemOrderMultipleMap.containsKey(itemId)){
+							itemOrderMultipleMap.put(itemId, "1");
+						}
+					}
+			scuiTransactionContext.commit();
+		}//if itemId, shipFromBranch and envCode are not null
+		catch (Exception e) {
+			// rollback the tran
+			if (scuiTransactionContext != null) {
+				try {
+					scuiTransactionContext.rollback();
+				} catch (Exception ignore) {
+				}
+			}
+			throw new IllegalStateException(e);
+
+		}
+		finally {
+			if (scuiTransactionContext != null && wSCUIContext != null) {
+				try {
+					// release the transaction to close the connection.
+					SCUITransactionContextHelper.releaseTransactionContext(scuiTransactionContext, wSCUIContext);
+					scuiTransactionContext = null;
+					env = null;
+				} catch (Exception ignore) {
+				}
+			}
+		}
+		
+		return itemOrderMultipleMap;
+	}
 
 	private static final Logger LOG = Logger.getLogger(XPEDXOrderUtils.class);
 }

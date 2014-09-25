@@ -100,6 +100,7 @@
 <link rel="stylesheet" type="text/css" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/fancybox/jquery.fancybox-1.3.4<s:property value='#wcUtil.xpedxBuildKey' />.css" media="screen" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/GLOBAL<s:property value='#wcUtil.xpedxBuildKey' />.css" />
 <link media="all" type="text/css" rel="stylesheet" href="<s:property value='#wcUtil.staticFileLocation' />/xpedx/css/global/global-2014<s:property value='#wcUtil.xpedxBuildKey' />.css" />
+<script type="text/javascript" src="<s:property value='#wcUtil.staticFileLocation' />/xpedx/js/catalog/PriceAndAvailability<s:property value='#wcUtil.xpedxBuildKey' />.js"></script>
 <!-- Page Calls -->
 </head>
 <body class="ext-gecko ext-gecko3">
@@ -176,6 +177,18 @@
 			</script>
 			<p class="addmarginbottom15"><a href="javascript:getbackUrl();">&lsaquo; Back</a></p> <%-- / <span class="page-title"> Compare Items </span> --%>
 			<h1>Compare Items</h1>
+			<s:url id="getPriceAndAvailabilityForItemsURLid" action="getPriceAndAvailabilityForItems" namespace="/catalog" />
+			<s:hidden id="getPriceAndAvailabilityForItemsURL" value="%{#getPriceAndAvailabilityForItemsURLid}" />
+				<s:iterator value='#xutil.getChildren(#prodCompElement, "Item")' id='item' status="iterStatus">
+					<s:set name='itemID' value='#xutil.getAttribute(#item,"ItemID")'/>
+					<s:set name='unitOfMeasure' value='#xutil.getAttribute(#item,"UnitOfMeasure")'/>
+					<s:set name="mulVal" value='itemOrderMultipleMap[#itemID]' />
+					<s:hidden name='orderMultiple' id="orderMultiple_%{#itemID}" value="%{#mulVal}"/>	
+					<s:hidden name='baseUOM' id="baseUOMItem_%{#itemID}" value="%{#unitOfMeasure}"/>
+					<s:hidden name='qtyBox' id="Qty_%{#itemID}" value=""/>	
+					<s:hidden name='itemUOMsSelect' id="itemUomList_%{#itemID}" value="%{#unitOfMeasure}"/>
+					<s:hidden name='convF_' id="convF_%{#itemUOMsSelect}" value=""/>
+				</s:iterator>
 			<%--<s:property value='%{#session.lastPage}' />
 			 String referer = request.getHeader("referer");
 			
@@ -249,7 +262,14 @@
 			</s:if>
 			<s:hidden name="showAttributesWithDifferentValuesOnly"
 				id="showAttributesWithDifferentValuesOnly" />
-			<script type="text/javascript">
+<script type="text/javascript">
+		
+	function pandACall(){
+		<s:iterator value='#xutil.getChildren(#prodCompElement, "Item")' id='item' status="iterStatus">
+			<s:set name='itemID' value='#xutil.getAttribute(#item,"ItemID")'/>
+			getPriceAndAvailabilityForItems({modal:true, items:['<s:property value='%{#itemID}' />']});
+		</s:iterator>
+			}
 /*
  * Functions for add to cart operation
  */	
@@ -618,6 +638,7 @@ Ext.onReady(function(){
 			'afterrender': {    
 				fn: function() {      
 	           		svg_classhandlers_decoratePage();
+	           		pandACall();
 		    	},    
 		    	delay:500  
 		    }
@@ -853,8 +874,9 @@ var prodData = {
 			<s:set name='isModelItem' value='#xutil.getAttribute(#primeInfo,"IsModelItem")'/>
 			<s:set name='isConfigurable' value='#xutil.getAttribute(#primeInfo,"IsConfigurable")'/>
 			<s:set name='isPreConfigured' value='#xutil.getAttribute(#primeInfo,"IsPreConfigured")'/>
-			'<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>':{'info':['<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>','<a href=\'javascript:processDetail("<s:property value='#itemID'/>\", \"<s:property value='#unitOfMeasure'/>\");\' tabindex=\'<s:property value="(#iterStatus.count)+240"/>\' ><img src="<s:property value="#imgURL"/>" alt="<s:property value="#shortDesc"/>" title="<s:property value="#shortDesc"/>" height="125px" width="125"/><s:property value="#shortDesc"/></a>','', '<s:property value="#displayPrice"/>', '<s:property value="#desc" escape="false"/>',
-    <s:if test='!#isReadOnly'>            
+			'<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>':{'info':['<s:property value="#itemID"/><s:property value="#unitOfMeasure"/>','<div><a href=\'javascript:processDetail("<s:property value='#itemID'/>\", \"<s:property value='#unitOfMeasure'/>\");\' tabindex=\'<s:property value="(#iterStatus.count)+240"/>\' ><img src="<s:property value="#imgURL"/>" alt="<s:property value="#shortDesc"/>" title="<s:property value="#shortDesc"/>" height="125px" width="125"/><s:property value="#shortDesc"/></a><div  style="display: block;" id="availabilty_<s:property value="#itemID"/>"  class="price-and-availability"></div><div id="errorMsgForQty_<s:property value="#itemID"/>" cssClass="addmarginbottom10" cssStyle="display:inline-block;"></div></div>','', '<s:property value="#displayPrice"/>', '<s:property value="#desc" escape="false"/>',
+			  
+			<s:if test='!#isReadOnly'>            
 			 
 			<s:if test='{!#guestUser}'>
 				'<tr><td>',

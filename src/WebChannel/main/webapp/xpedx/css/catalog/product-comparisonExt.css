@@ -111,6 +111,48 @@
 	text-align:center;
 }
 
+/***2014-Update****/
 
-
-
+.comparisonTable .list-wrap {
+	padding-left: 40px;
+}
+.comparisonTable .list-wrap .pa-row .col-1 {
+	width: 45%;
+	display: inline-block;
+}
+.comparisonTable .list-wrap .pa-row .col-2 {
+	width: 35%;
+	display: inline-block;
+}
+.comparisonTable .pa-wrap h4 {
+	margin-top: 6px;	
+}
+.comparisonTable img {
+	box-shadow: 1px 1px 4px #999999;
+	margin-bottom: 10px;
+}
+#productComparison .pa-wrap{
+	 width: 80%;
+}
+#productComparison .two-col .pa-price {
+    clear: none;
+    float: left;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    width: 100%;
+    border: none;
+}
+#productComparison .two-col .pa-avail  {
+    clear: none;
+    float: left;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    width: 100%;
+    border: none;
+}
+#productComparison .notice{
+	float:left;
+}
+#productComparison .suspended-item{
+	padding: 6px 0px;
+}
