@@ -110,7 +110,7 @@ public class ItemIndexUtil {
 
 		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
 
-		System.out.println("J: output: " + contractsOutputDoc.getDocumentElement());
+		System.out.println("J: output: " + SCXmlUtil.getString(contractsOutputDoc.getDocumentElement()));
 		return contractsOutputDoc.getDocumentElement();
 	}
 	private YFCDocument getContractsApiInput(Collection<? extends String> itemIds) {
@@ -127,7 +127,7 @@ public class ItemIndexUtil {
 			expElem.setAttribute("Name", "ItemId");
 			expElem.setAttribute("Value", itemId);
 		}
-		System.out.println("J: itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
+//		System.out.println("J: itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
 		return contractsInputDoc;
 	}
 	private void addBillToForItem(Map<String, Set<String>> contractBillTosForItems, Element itemElem) {
