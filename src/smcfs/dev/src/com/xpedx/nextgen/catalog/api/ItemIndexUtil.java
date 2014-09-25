@@ -141,7 +141,11 @@ public class ItemIndexUtil {
 			contractBillTosForItems.put(itemId, contractBillTos);
 		}
 
-		contractBillTos.add(itemElem.getAttribute("CustomerId"));
+		// drop chars after first 13 and strip "-" so get "900000442599"
+		String billTo = itemElem.getAttribute("CustomerId");
+		String[] billToParts = billTo.split("-");
+		contractBillTos.add(billToParts[0]+billToParts[1]);
+		System.out.println("J:   stripped: " + billToParts[0]+billToParts[1]);
 		System.out.println("J:  # of Contracts now : " + contractBillTos.size());
 	}
 
