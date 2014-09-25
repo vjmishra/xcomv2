@@ -129,7 +129,7 @@ public class ItemIndexUtil {
 //		return doc.getDocumentElement();
 	}
 	private YFCDocument getContractsApiInput(Collection<? extends String> itemIds) {
-		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn ");
+		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn");
 		YFCElement contractsInputElem = contractsInputDoc.getDocumentElement();
 
 		YFCElement complexQueryElem = contractsInputElem.createChild("ComplexQuery");
