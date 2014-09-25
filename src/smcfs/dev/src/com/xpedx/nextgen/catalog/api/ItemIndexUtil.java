@@ -1,6 +1,5 @@
 package com.xpedx.nextgen.catalog.api;
 
-import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,13 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 
 import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.catalog.api.eb3359.StopWatchFor3359;
@@ -56,23 +51,26 @@ public class ItemIndexUtil {
 		// group the item ids for batched calls
 		SegmentedList<String> itemIDGroups = new SegmentedList<String>(itemIDs, 100);
 		for (List<String> itemIDGroup : itemIDGroups) {
+			System.out.println("\nJ: ---------- Segment ------- ");
 
 			Map<String, Set<String>> contractBillTosForItem = getContractBillToIds(env, itemIDGroup);
-			System.out.println("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());//TODO remove
-
+			System.out.println("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());
 
 			Map<String, Set<String>> divisionsInStockForItem = getDivisionsInStockForAllItems(env, itemIDGroup, inStockStatus);
+
 			for (Entry<String, Set<String>> entry : divisionsInStockForItem.entrySet()) {
 				String itemID = entry.getKey();
-				System.out.println("J:  MetaLoop processing item: " + itemID);//TODO remove
-				System.out.println("J:   MetaLoop contactBillTos: " + contractBillTosForItem.get(itemID));//TODO remove
+				System.out.println("J:  MetaLoop processing item: " + itemID);
+				System.out.println("J:   MetaLoop contactBillTos: " + contractBillTosForItem.get(itemID));
 				Set<String> divisionsInStock = entry.getValue();
 
 				ItemMetadata im = new ItemMetadata();
 				metadata.put(itemID, im);
 
 				im.setDivisionsInStock(divisionsInStock);
-				im.setContractBillTos(contractBillTosForItem.get(itemID));
+				if (contractBillTosForItem.get(itemID) != null) {
+					im.setContractBillTos(contractBillTosForItem.get(itemID));
+				}
 
 				// this call is NOT batched, since the api limits output to 5000 records and some items have thousands of records (as of Aug 2014, one item has 4000+)
 				Set<String> customerAndItemNumbers = getCustomerPartNumbersForItem(env, itemID);
@@ -83,36 +81,70 @@ public class ItemIndexUtil {
 		return metadata;
 	}
 
-	private Map<String, Set<String>> getContractBillToIds(YFSEnvironment env, Collection<? extends String> itemIDs) throws Exception {
+	private Map<String, Set<String>> getContractBillToIds(YFSEnvironment env, Collection<? extends String> itemIds) throws Exception {
 		Map<String, Set<String>> contractBillTosForItems = new LinkedHashMap<String, Set<String>>();
 
-		Element itemListOutputElem = getContractElementsFromApi(env, itemIDs);
+		Element itemListOutputElem = getContractElementsFromApi(env, itemIds);
 
 		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
-		System.out.println("J: # of XPXItemContractExtn: " + itemElems.size());//TODO remove
+		System.out.println("J: # of XPXItemContractExtn: " + itemElems.size());
 		for (Element itemElem : itemElems) {
-			System.out.println("J: itemElem: " + SCXmlUtil.getString(itemElem));//TODO remove
+			System.out.println("J: itemElem: " + SCXmlUtil.getString(itemElem));
 			Set<String> contractBillTos = new LinkedHashSet<String>();
-			contractBillTosForItems.put(itemElem.getAttribute("ItemID"), contractBillTos);
+			contractBillTosForItems.put(itemElem.getAttribute("ItemId"), contractBillTos);
 
 			List<Element> customerElems = SCXmlUtil.getElements(itemElem, "CustomerId");
-			System.out.println("J:  # of CustomerId: " + customerElems.size());//TODO remove
+			System.out.println("J:  # of CustomerId: " + customerElems.size());
 			for (Element extnElem : customerElems) {
 				contractBillTos.add(extnElem.getAttribute("CustomerId"));
 			}
+			System.out.println("J:  # of Contracts : " + contractBillTos.size());
 		}
 
 		return contractBillTosForItems;
 	}
 
-	private Element getContractElementsFromApi(YFSEnvironment env, Collection<? extends String> itemIDs) throws Exception {
+	private Element getContractElementsFromApi(YFSEnvironment env, Collection<? extends String> itemIds) throws Exception {
+
+		YFCDocument contractsInputDoc = getContractsApiInput(itemIds);
+
+		// Setting a template would only filter out createTs
+
+		//if (log.isDebugEnabled()) {//TODO debug
+			log.warn("Invoking XPXGetItemContractExtn");
+			log.warn("itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
+//		}
+
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+
+		Document contractsOutputDoc = api.invoke(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
+
+		System.out.println("J: output: " + contractsOutputDoc.getDocumentElement());
+		return contractsOutputDoc.getDocumentElement();
 
 		// TODO replace this fake stuff with call to new API/Service!!!
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse(new InputSource(new StringReader("<XPXItemContractExtnList> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2000920\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"12-0000304742-000-M-XX-B\" ItemId=\"2001020\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T10:50:39-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2001020\"/> </XPXItemContractExtnList>")));
-		return doc.getDocumentElement();
+//		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder db = dbf.newDocumentBuilder();
+//		Document doc = db.parse(new InputSource(new StringReader("<XPXItemContractExtnList> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2000920\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T13:12:32-04:00\" CustomerId=\"12-0000304742-000-M-XX-B\" ItemId=\"2001020\"/> <XPXItemContractExtn CreateTs=\"2014-09-23T10:50:39-04:00\" CustomerId=\"60-0006020657-000-M-XX-B\" ItemId=\"2001020\"/> </XPXItemContractExtnList>")));
+//		return doc.getDocumentElement();
 	}
+	private YFCDocument getContractsApiInput(Collection<? extends String> itemIds) {
+		YFCDocument contractsInputDoc = YFCDocument.createDocument("XPXItemContractExtn ");
+		YFCElement contractsInputElem = contractsInputDoc.getDocumentElement();
+
+		YFCElement complexQueryElem = contractsInputElem.createChild("ComplexQuery");
+		complexQueryElem.setAttribute("Operation", "OR");
+
+		YFCElement orElem = complexQueryElem.createChild("Or");
+
+		for (String itemId : itemIds) {
+			YFCElement expElem = orElem.createChild("Exp");
+			expElem.setAttribute("Name", "ItemId");
+			expElem.setAttribute("Value", itemId);
+		}
+		return contractsInputDoc;
+	}
+
 
 	// api calls batched for improved performance
 	private Map<String, Set<String>> getDivisionsInStockForAllItems(YFSEnvironment env, Collection<? extends String> itemIDs, String inStockStatus) throws Exception {
@@ -136,9 +168,30 @@ public class ItemIndexUtil {
 
 		return divisionsInStockForItems;
 	}
-
 	private Element getDivisionsFromApi(YFSEnvironment env, Collection<? extends String> itemIDs)
 			throws YIFClientCreationException, RemoteException {
+
+		YFCDocument itemInputDoc = getDivisionsApiInput(itemIDs);
+
+		String templateXml = getDivisionsApiTemplate(env);
+		env.setApiTemplate("getItemList", SCXmlUtil.createFromString(getDivisionsApiTemplate(env)));
+
+		if (log.isDebugEnabled()) {
+			log.debug("Invoking getItemList");
+			log.debug("itemInputDoc = " + SCXmlUtil.getString(itemInputDoc.getDocument()));
+			log.debug("templateXml = " + templateXml);
+		}
+		System.out.println("J: Divisions input: " + SCXmlUtil.getString(itemInputDoc.getDocument()));
+
+		YIFApi api = YIFClientFactory.getInstance().getApi();
+
+		Document itemListOutputDoc = api.invoke(env, "getItemList", itemInputDoc.getDocument());
+
+		System.out.println("J: Divisions output: " + SCXmlUtil.getString(itemListOutputDoc.getDocumentElement()));
+		return itemListOutputDoc.getDocumentElement();
+	}
+
+	private YFCDocument getDivisionsApiInput(Collection<? extends String> itemIDs) {
 		YFCDocument itemInputDoc = YFCDocument.createDocument("Item");
 		YFCElement itemInputElem = itemInputDoc.getDocumentElement();
 		itemInputElem.setAttribute("CallingOrganizationCode", "xpedx"); // all items are in xpedx org
@@ -153,7 +206,9 @@ public class ItemIndexUtil {
 			expElem.setAttribute("Name", "ItemID");
 			expElem.setAttribute("Value", itemID);
 		}
-
+		return itemInputDoc;
+	}
+	private String getDivisionsApiTemplate(YFSEnvironment env) {
 		String templateXml = ""
 				+ "	<ItemList>"
 				+ "		<Item ItemID=''>"
@@ -164,21 +219,9 @@ public class ItemIndexUtil {
 				+ "			</Extn>"
 				+ "		</Item>"
 				+ "	</ItemList>";
-		env.setApiTemplate("getItemList", SCXmlUtil.createFromString(templateXml));
-
-		YIFApi api = YIFClientFactory.getInstance().getApi();
-
-		if (log.isDebugEnabled()) {
-			log.debug("Invoking getItemList");
-			log.debug("itemInputDoc = " + SCXmlUtil.getString(itemInputDoc.getDocument()));
-			log.debug("templateXml = " + templateXml);
-		}
-
-		Document itemListOutputDoc = api.invoke(env, "getItemList", itemInputDoc.getDocument());
-
-		Element itemListOutputElem = itemListOutputDoc.getDocumentElement();
-		return itemListOutputElem;
+		return templateXml;
 	}
+
 
 	// calls NOT batched, since the api limits output to 5000 records and some items have thousands of records (as of Aug 2014, one item has 4000+)
 	private Set<String> getCustomerPartNumbersForItem(YFSEnvironment env, String itemID) throws Exception {
