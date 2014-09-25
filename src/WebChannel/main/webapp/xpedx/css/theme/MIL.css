@@ -5507,6 +5507,7 @@ div#replacementItemBody .mil-wrap-condensed {
 	float: left;
 	display: block;
 	clear: none;	
+	box-shadow: 1px 1px 4px #999999;
 }
 .hide-item-thumbnails .mil-wrap-condensed-container .item-thumbnail {
 	width: 0px;
@@ -6387,8 +6388,6 @@ BEGIN 2014 styles
 .imagewrap {
 	float: left;
 	clear: none;
-	height: 150px;
-	width: 150px;
 	margin: -15px 0px 0px 20px;
 }
 .mil-checkbox-wrap {
