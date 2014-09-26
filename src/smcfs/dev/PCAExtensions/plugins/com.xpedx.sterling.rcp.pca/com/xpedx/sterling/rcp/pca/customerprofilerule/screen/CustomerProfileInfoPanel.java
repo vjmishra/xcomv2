@@ -2128,23 +2128,21 @@ IYRCComposite {
 		// eCSR to be done
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("/ContactPersonInfo@LastName; /ContactPersonInfo/@FirstName; @Loginid");
-		cbd.setListBinding("XPXGetUserList:/UserList/User");
+		cbd.setDescriptionBinding("@userNameAndLoginId");
+		cbd.setListBinding("XPXGetUserSortedList:/UserList/User");
 		cbd
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR1Key");
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR1Key");
-		cbd.setKey("salesrep");
 		cbd.setName("comboECSR");
 		comboECSR.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
 
 		cbd = new YRCComboBindingData();
 		cbd.setCodeBinding("@UserKey");
-		cbd.setDescriptionBinding("/ContactPersonInfo@LastName; /ContactPersonInfo/@FirstName; @Loginid");
-		cbd.setListBinding("XPXGetUserList:/UserList/User");
+		cbd.setDescriptionBinding("@userNameAndLoginId");
+		cbd.setListBinding("XPXGetUserSortedList:/UserList/User");
 		cbd
 		.setSourceBinding("XPXCustomerIn:/CustomerList/Customer/Extn/@ExtnECSR2Key");
 		cbd.setTargetBinding("XPXCustomerOut:/Customer/Extn/@ExtnECSR2Key");
-		cbd.setKey("salesrep");
 		cbd.setName("comboECSR2");
 		comboECSR2.setData(YRCConstants.YRC_COMBO_BINDING_DEFINATION, cbd);
 

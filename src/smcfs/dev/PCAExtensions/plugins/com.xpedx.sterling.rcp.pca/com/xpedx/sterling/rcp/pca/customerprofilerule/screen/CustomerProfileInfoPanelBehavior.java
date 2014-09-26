@@ -56,6 +56,7 @@ public class CustomerProfileInfoPanelBehavior extends YRCBehavior {
 		this.parentObj = parentObj;
 		Element generalInfo= parentObj.getBehavior().getLocalModel("XPXCustomerIn");
 		setModel("XPXGetUserList",parentObj.getBehavior().getLocalModel("XPXGetUserList"));
+		setModel("XPXGetUserSortedList",parentObj.getBehavior().getLocalModel("XPXGetUserSortedList"));
 		setModel("SalesRepList",parentObj.getBehavior().getLocalModel("SalesRepList"));
 		setModel("PrimarySalesRepList",parentObj.getBehavior().getLocalModel("PrimarySalesRepList"));
 		setModel("XPXUseSKUList", YRCXmlUtils.createFromString("<UseSKUList><UseSKU Code='1' Description='Customer Item#' /><UseSKU Code='2' Description='Manufacturer Item#' /><UseSKU Code='3' Description='MPC SKU' /></UseSKUList>").getDocumentElement());

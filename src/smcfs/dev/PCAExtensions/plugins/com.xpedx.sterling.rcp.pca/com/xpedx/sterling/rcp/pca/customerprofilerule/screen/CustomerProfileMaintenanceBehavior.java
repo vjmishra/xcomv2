@@ -106,7 +106,7 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 					}
 					if ("XPXGetUserList".equals(apiname)) {
 						Element outXml = ctx.getOutputXmls()[i].getDocumentElement();
-						setModel("XPXGetUserList",outXml);
+						updateXPXGetUserList(outXml);
 					}
 				}
 				/*if ("XPXPnAService".equals(ctx.getApiName())) {
@@ -272,5 +272,34 @@ public class CustomerProfileMaintenanceBehavior extends YRCBehavior {
 	public void setEmailMap(Map<String, String> emailMap) {
 		this.emailMap = emailMap;
 	}
+	private void updateXPXGetUserList(Element outXml){
+		Element elemUsrList = YRCXmlUtils.createDocument("UserList").getDocumentElement();
+		Document usrDocument= outXml.getOwnerDocument();
+		TreeMap<String,String> usrTreeMap = new TreeMap<String,String>(new Comparator<String>(){
+			public int compare(String str1, String str2) {
+		        return str1.toLowerCase().compareTo(str2.toLowerCase());
+		    }
+		});
+		NodeList nodeList	=	usrDocument.getElementsByTagName("User");
+		
+		for(int j=0;j<nodeList.getLength();j++){	
+			Element  eleUser = (Element)nodeList.item(j);
+			String loginId=eleUser.getAttribute("Loginid");
+			NodeList contactPersonInfoNodeList =  eleUser.getElementsByTagName("ContactPersonInfo");
+			Element  eleContactPersonInfo = (Element)contactPersonInfoNodeList.item(0);
+			String usrName = eleContactPersonInfo.getAttribute("LastName")+","+eleContactPersonInfo.getAttribute("FirstName");
+			String 	usrNameWithLoginId = usrName+" ("+loginId+")";
+			eleContactPersonInfo.setAttribute("userName", usrName);
+			eleUser.setAttribute("userNameAndLoginId", usrNameWithLoginId);	
+			usrTreeMap.put(usrNameWithLoginId, eleUser.getAttribute("UserKey"));
+	   }
+		for(Entry<String,String> entry:usrTreeMap.entrySet()){
+			Element eleUser = YRCXmlUtils.createChild(elemUsrList, "User");
+			eleUser.setAttribute("UserKey", entry.getValue());
+			eleUser.setAttribute("userNameAndLoginId", entry.getKey());
+		}	
+		setModel("XPXGetUserList",usrDocument.getDocumentElement());
+		setModel("XPXGetUserSortedList",elemUsrList);
+	}	
 
 }
