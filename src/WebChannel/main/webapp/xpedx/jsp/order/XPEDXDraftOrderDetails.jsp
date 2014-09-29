@@ -1156,7 +1156,7 @@ var currentAadd2ItemList = new Object();
 				<input type="button" id="checkout-btn" class="btn-gradient floatright" value="Checkout" onclick="checkOut();" />
 			</s:if> 
 		    <s:if test='#hasPendingChanges == "Y"'>
-	        	<input type="button" id="reset-btn" class="btn-neutral floatleft" value="Reset Changes" onclick="window.location='<s:property value="#discardPendingChangesURL"/>'" />
+	        	<input type="button" id="reset-btn" class="btn-neutral floatleft addmarginleft10" value="Reset Changes" onclick="window.location='<s:property value="#discardPendingChangesURL"/>'" />
 	        </s:if>
 		</s:if>
 		<s:else>

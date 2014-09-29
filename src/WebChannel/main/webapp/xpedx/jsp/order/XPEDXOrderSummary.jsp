@@ -1182,7 +1182,7 @@ from session . We have customer Contact Object in session .
                 <!-- begin description  -->
                <s:if test='#orderLine.getAttribute("LineType") !="C" && #orderLine.getAttribute("LineType") !="M" '>
                 <div class="mil-desc-wrap">
-                     <div id="description-text" class="short-description chkout" > 
+                     <div id="description-text" class="short-description chkout addmarginleft10" > 
 	  	  
                     
                         <s:a href="javascript:processDetail('%{#item.getAttribute('ItemID')}', '%{#item.getAttribute('UnitOfMeasure')}')" >
