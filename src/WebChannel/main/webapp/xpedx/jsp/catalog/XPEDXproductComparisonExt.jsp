@@ -265,11 +265,13 @@
 <script type="text/javascript">
 		
 	function pandACall(){
+	 	var items=[];
 		<s:iterator value='#xutil.getChildren(#prodCompElement, "Item")' id='item' status="iterStatus">
 			<s:set name='itemID' value='#xutil.getAttribute(#item,"ItemID")'/>
-			getPriceAndAvailabilityForItems({modal:true, items:['<s:property value='%{#itemID}' />']});
+			items.push('<s:property value='%{#itemID}' />');
 		</s:iterator>
-			}
+		getPriceAndAvailabilityForItems({modal:true, items:items});
+		}
 /*
  * Functions for add to cart operation
  */	
