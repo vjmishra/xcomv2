@@ -29,9 +29,21 @@ function setStockItemFlag()
 	{
 		document.getElementById('stockedItem').value = true;
 	}
-	if(document.getElementById('stockedItemChkBtm').value == 'true')
+	if(document.getElementById('stockedItemChkBtm').checked)
 	{
 		document.getElementById('stockedItem').value = true;
+	}
+}
+function setContractItemFlag()
+{
+	//TODO uncomment once update bottom tags
+// 	if(document.getElementById('contractItemChk').value == 'true')
+// 	{
+// 		document.getElementById('contractItem').value = true;
+// 	}
+	if(document.getElementById('contractItemChkBtm').checked)
+	{
+		document.getElementById('contractItem').value = true;
 	}
 }
 </script>
@@ -55,6 +67,7 @@ function setStockItemFlag()
 
 				<input id="search_searchTerm" class="x-input input-watermark input-watermark-color" data-watermark="Search Within Results..." name="searchTerm" tabindex="1002" type="text" >
 				<input name="stockedItem" value="false" id="stockedItem" type="hidden">
+				<input name="contractItem" value="false" id="contractItem" type="hidden">
 			</div>
 		</div>
 	</s:form>

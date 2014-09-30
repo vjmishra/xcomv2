@@ -219,6 +219,10 @@
 			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="setNormallyStockedCheckbox">
 			<result>/xpedx/jsp/home/XPEDXMainCategories.jsp</result>
 		</action>
+		<action name="setContractCheckbox"
+			class="com.sterlingcommerce.xpedx.webchannel.catalog.XPEDXCatalogAction" method="setContractCheckbox">
+			<result>/xpedx/jsp/home/XPEDXMainCategories.jsp</result>
+		</action>
 
 <!-- Added for JIRA EB-1731 to getAllFacetList for narrowBy -->
 		<action name="getFacetList"

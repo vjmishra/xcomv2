@@ -1060,6 +1060,7 @@ var selectedShipCustomer = null;
 <%--JIRA 3487 end--%>
 <s:url id='searchURL' namespace='/common' action='xpedxSearchAssignedCustomers' />
 <s:url id='setStockedCheckboxURL' action="setStockedCheckbox" namespace="/catalog"/>
+<s:url id='setContractCheckboxURL' action="setContractCheckbox" namespace="/catalog"/>
 <input type="hidden" value="" id="orderDescending" name="orderDescending" />
 <script type="text/javascript">
 	function setNormallyStockedCheckbox() {
@@ -1090,7 +1091,7 @@ var selectedShipCustomer = null;
           		},
       		method: 'POST',
       		success: function (response, request){
-if(searchTermString!=null && searchTermString.trim().length != 0){
+				if(searchTermString!=null && searchTermString.trim().length != 0){
                   	  var searchTermSuffix = '&searchTerm='+searchTermString;
             		  window.location.href=window.location.href+searchTermSuffix;  
                     }
@@ -1103,9 +1104,41 @@ if(searchTermString!=null && searchTermString.trim().length != 0){
    		});
 	}
 	function setNormallyStockedSelectDropDownBottom() {
-		var isSelected = document.getElementById('stockedItemChkBtm').value;	
+		var isSelected = document.getElementById('stockedItemChkBtm').checked;	
 		setNormallyStockedAjaxCall(isSelected);
 	}
+
+	// Contract items
+	function setContractSelectDropDown() {
+		var isSelected = document.getElementById('contractItemChk').value;	
+		setContractAjaxCall(isSelected);
+	}	
+	function setContractAjaxCall(isSelected) {
+		var searchTermString = document.getElementById("searchTermString").value;
+		Ext.Ajax.request({
+      		url: '<s:property value="#setContractCheckboxURL"/>',
+      		params: {
+      			contractCheckboxSelected: isSelected
+          		},
+      		method: 'POST',
+      		success: function (response, request){
+				if(searchTermString!=null && searchTermString.trim().length != 0){
+                  	  var searchTermSuffix = '&searchTerm='+searchTermString;
+            		  window.location.href=window.location.href+searchTermSuffix;  
+                    }
+                    else{
+      			window.location.reload();
+			}
+      		},
+      		failure: function (response, request){
+      		}
+   		});
+	}
+	function setContractSelectDropDownBottom() {
+		var isSelected = document.getElementById('contractItemChkBtm').checked;	
+		setContractAjaxCall(isSelected);
+	}
+
 	function shipToSearchSubmit(e,divId,url){
 		var searchTxt = document.getElementById('Text1').value;
 		var keycode;

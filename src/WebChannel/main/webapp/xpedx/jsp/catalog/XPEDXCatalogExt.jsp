@@ -337,92 +337,106 @@
 	
 	<div class="t1-main-content-alt" id="navigateContainer"> 
 	
-	 <div class="pagination">
-                 <div class="sortbycontrols"> <span class="checkboxtxt">Sort By:&nbsp;</span>
-                     <select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldUpper"
-						onchange="javascript:processSortByUpper()">
-                		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
-                		<%-- <s:if test='%{#sortField.key.equals(sortField)}'> --%>
-							<s:iterator id='sortListFeild' value='#sortList'>
-                         	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
-								<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
-									value='#sortListFeild.value' /></option>
-							</s:if>
-							<s:else>
-								<option value="<s:property value='#sortListFeild.key'/>"><s:property
-									value='#sortListFeild.value' /></option>
-							</s:else>		
-							</s:iterator>							
-						<%-- </s:if> --%>
-						<%-- <s:else> --%>
-							<!-- <option  value="<s:property value='#sortField.key'/>"><s:property
-							value='#sortField.value' /></option> -->
-						<%-- </s:else>	--%>
-						<%-- </s:iterator> --%>
-                     </select>
-                     <span class="checkboxtxt">Show:&nbsp;</span>
-                      <s:set name='pageNumList'	value='#{"20":"20 per page", "40":"40 per page", "60":"60 per page"}' />
-                     	<select name="pageSize" class="xpedx_select_sm" tabindex="81"
-								id="pageSizeUpper" onchange="javascript:processPageSizeUpper();">
-								
-                         	<s:iterator id='pageSizeField' value='#pageNumList'>
-                         	<s:if test='%{#pageSizeField.key.equals(pageSize)}'>
-								<option selected value="<s:property value='#pageSizeField.key'/>"><s:property
-									value='#pageSizeField.value' /></option>
-							</s:if>
-							<s:else>
-								<option value="<s:property value='#pageSizeField.key'/>"><s:property
-									value='#pageSizeField.value' /></option>
-							</s:else>		
-							</s:iterator>
-                    	 </select>
-                     
-						<s:if test="#isGuestUser == false">	
-							<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
-								<s:hidden name="stockedItemChkBtm" value="true" />
-							</s:if>
-							<s:else>
-								<s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-								<span class="checkboxtxt">View:&nbsp;</span>	
-								<select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
-									<option value="false">All Items</option>
-									<s:if test='#checkedval'>
-										<option value="true" selected="selected">Normally Stocked</option>
-									</s:if>							
-									<s:else>
-										<option value="true">Normally Stocked</option>
-									</s:else>
-								</select> 
-							</s:else>
-						</s:if>
-						<ul class="cat-grid-icons" id="viewSelect">
-                    <li class="icon-normal-view normal-view" title="Full View" id="fview"></li>
-                    <li class="icon-condensed-view condensed-view" title="Condensed View" id="cview"></li>
-                    <li class="icon-mini-view mini-view" title="Mini View" id="mview"></li>
-                    <li class="icon-grid-view papergrid-view" title="Grid View" id="gview"></li>
-                    <s:if test='%{#session.selView != null}'>	
-			<input name="selectedView" value="<s:property value='%{#session.selView}' />" id="selectedView" type="hidden" />	
-		     <s:set name="selView" value="<s:property value=null />" scope="session"/> 
-	   </s:if>
-	   <s:else>
-	   		<input name="selectedView" value="icon-normal-view normal-view" id="selectedView" type="hidden" />
-	   </s:else>
-                         </ul>
-                 </div>   
-			   <input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
-				<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
-				<s:set name='sortName' value='%{theSpanNameValue}' />
-				<s:set name='sortDir' value='%{sortDirection}' />
-				<s:url id="goToPageURL" action="goToPage">
-					<s:param name="sortDirection" value="#sortDir"/>
-					<s:param name="theSpanNameValue" value="#sortName"/>
-					<s:param name="pageNumber" value="'{0}'" />
-					<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
-				</s:url>
-				<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
-							urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
-          </div>
-	
+	<div class="sortbycontrols">
+		<div class="showall-check">
+			<input id="showAllItemChk" type="checkbox" checked="checked" value="true" class="addmargintop5">
+		</div>
+		<div class="showall">Show All Products</div>
+		<div class="float-right">
+			<span>Sort By:</span>
+			<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldUpper"
+				onchange="javascript:processSortByUpper()">
+					<s:iterator id='sortListFeild' value='#sortList'>
+				 	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
+						<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
+							value='#sortListFeild.value' /></option>
+					</s:if>
+					<s:else>
+						<option value="<s:property value='#sortListFeild.key'/>"><s:property
+							value='#sortListFeild.value' /></option>
+					</s:else>		
+					</s:iterator>							
+			</select>
+			<span>Display:</span>
+			<s:set name='pageNumList'	value='#{"20":"20 per page", "40":"40 per page", "60":"60 per page"}' />
+		 	<select name="pageSize" class="xpedx_select_sm addmarginright20" tabindex="81"
+					id="pageSizeUpper" onchange="javascript:processPageSizeUpper();">
+					
+			 	<s:iterator id='pageSizeField' value='#pageNumList'>
+			 	<s:if test='%{#pageSizeField.key.equals(pageSize)}'>
+					<option selected value="<s:property value='#pageSizeField.key'/>"><s:property
+						value='#pageSizeField.value' /></option>
+				</s:if>
+				<s:else>
+					<option value="<s:property value='#pageSizeField.key'/>"><s:property
+						value='#pageSizeField.value' /></option>
+				</s:else>		
+				</s:iterator>
+			</select>
+		 
+			<ul class="cat-grid-icons" id="viewSelect">
+				<li class="icon-normal-view normal-view" title="Full View" id="fview"></li>
+				<li class="icon-condensed-view condensed-view" title="Condensed View" id="cview"></li>
+				<li class="icon-mini-view mini-view" title="Mini View" id="mview"></li>
+				<li class="icon-grid-view papergrid-view" title="Grid View" id="gview"></li>
+				<s:if test='%{#session.selView != null}'>	
+				<input name="selectedView" value="<s:property value='%{#session.selView}' />" id="selectedView" type="hidden" />	
+				 <s:set name="selView" value="<s:property value=null />" scope="session"/> 
+				   </s:if>
+				   <s:else>
+				   		<input name="selectedView" value="icon-normal-view normal-view" id="selectedView" type="hidden" />
+				   </s:else>
+			</ul>
+		</div>
+	</div>
+
+	<s:if test="#isGuestUser == false">	
+		<div class="filter-by">
+			<div class="title">Filter By:</div>
+			<div><input id="bestSellerItemChkBtm" type="checkbox" <s:if test="%{false}">checked</s:if> />Best Seller</div> <!-- TODO -->
+
+			<s:set name="isContractChecked" value="%{getWCContext().getWCAttribute('ContractCheckbox')}"/> <!-- TODO -->
+			<div><input id="contractItemChkBtm"   type="checkbox" <s:if test="%{isContractChecked}">checked</s:if>
+				onchange="setContractSelectDropDownBottom(); setContractItemFlag();"/>Contract Pricing</div>
+
+			<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
+				<s:hidden name="stockedItemChkBtm" value="true" />
+			</s:if>
+			<s:else>
+				<s:set name="isStockChecked" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
+				<div><input id="stockedItemChkBtm" type="checkbox"  <s:if test="%{#isStockChecked}">checked</s:if>
+					onchange="setNormallyStockedSelectDropDownBottom(); setStockItemFlag();"/>Normally Stocked</div>
+<%-- 
+			<span class="checkboxtxt">View:&nbsp;</span>	
+			<select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
+				<option value="false">All Items</option>
+				<s:if test='#checkedval'>
+					<option value="true" selected="selected">Normally Stocked</option>
+				</s:if>							
+				<s:else>
+					<option value="true">Normally Stocked</option>
+				</s:else>
+			</select>  --%>
+			</s:else>
+		</div>
+	</s:if>
+
+	<!-- TODO verify pagination still works -->
+	<input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
+	<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
+
+	<s:set name='sortName' value='%{theSpanNameValue}' />
+	<s:set name='sortDir' value='%{sortDirection}' />
+	<s:url id="goToPageURL" action="goToPage">
+		<s:param name="sortDirection" value="#sortDir"/>
+		<s:param name="theSpanNameValue" value="#sortName"/>
+		<s:param name="pageNumber" value="'{0}'" />
+		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+	</s:url>
+	<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
+				urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
+
+
 <!-- START of new MIL - PN -->
 <div style="display: none;">
 	<a id="dlgShareListLink" href="#dlgShareList"> show new list</a>
@@ -1012,7 +1026,7 @@ function getMiniView() {
 				'</dl>',
 			'</tpl>',
 			'<div style="clear:left"></div>',
-		'</div>'                        
+		'</div>'
 	);
 }
 	
@@ -1150,7 +1164,7 @@ var ct = Ext.get('item-box-inner');
 							</s:else>		
 							</s:iterator>
                     	 </select>
-                     
+                     <!-- TODO this has to be redone like top of screen -->
 						<s:if test="#isGuestUser == false">	
 							<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
 								<s:hidden name="stockedItemChk" value="true" />

@@ -67,16 +67,20 @@ import com.yantra.yfs.core.YFSSystem;
 @SuppressWarnings("deprecation")
 public class XPEDXCatalogAction extends CatalogAction {
 
+	private static final String STOCKED_CHECKBOX = "StockedCheckbox";
+	private static final String CONTRACT_CHECKBOX = "ContractCheckbox";
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(XPEDXCatalogAction.class);
 
 	private String customerNumber = null;
 	private boolean isStockedItem = false;
+	private boolean isContractItem = false;
 	private boolean CategoryC3 = false;
 	private String priceCurrencyCode;
 	private static final String CUSTOMER_PART_NUMBER_FLAG = "1";
 	private boolean stockedCheckeboxSelected;
+	private boolean contractCheckboxSelected;
 	private Map<String, Map<String, String>> itemUomHashMap = new HashMap<String, Map<String, String>>();
 	private Map<String, String> uomConvFactorMap = new HashMap<String, String>();
 	ArrayList<String> itemIDList = new ArrayList<String>();
@@ -348,11 +352,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 		CategoryC3 = categoryC3;
 	}
 
+	// Stocked Items checkbox support
 	public boolean isStockedCheckeboxSelected() {
-
 		return stockedCheckeboxSelected;
 	}
-
 	public void setStockedCheckeboxSelected(boolean stockedCheckeboxSelected) {
 		this.stockedCheckeboxSelected = stockedCheckeboxSelected;
 	}
@@ -360,26 +363,48 @@ public class XPEDXCatalogAction extends CatalogAction {
 	public boolean isStockedItem() {
 		return isStockedItem;
 	}
-
 	public void setStockedItem(boolean isStockedItem) {
-
 		this.isStockedItem = isStockedItem;
 	}
 
 	private void setStockedItemFromSession() {
-		if (getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION) == null) {
+		if (getWCContext().getWCAttribute(STOCKED_CHECKBOX, WCAttributeScope.SESSION) == null) {
 			// init session value from bill-to setting
 			shipToCustomer = (XPEDXShipToCustomer) XPEDXWCUtils.getObjectFromCache(XPEDXConstants.SHIP_TO_CUSTOMER);
 			if (shipToCustomer != null) {
 				String defaultStockedItemView = shipToCustomer.getBillTo().getExtnDefaultStockedItemView();
 				setStockedCheckeboxSelected(defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_STOCKED)
 						|| defaultStockedItemView.equals(XPEDXConstants.DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED));
-				getWCContext().setWCAttribute("StockedCheckbox", isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
+				getWCContext().setWCAttribute(STOCKED_CHECKBOX, isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 			}
 		}
-		Object sessionStockedCheckbox = getWCContext().getWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
+		Object sessionStockedCheckbox = getWCContext().getWCAttribute(STOCKED_CHECKBOX, WCAttributeScope.SESSION);
 		if (sessionStockedCheckbox != null) {
 			isStockedItem = sessionStockedCheckbox.toString().equalsIgnoreCase("true");
+		}
+	}
+
+	// Contract Items checkbox support
+	public boolean isContractCheckboxSelected() {
+		return contractCheckboxSelected;
+	}
+	public void setContractCheckboxSelected(boolean contractCheckboxSelected) {
+		this.contractCheckboxSelected = contractCheckboxSelected;
+	}
+	public boolean isContractItem() {
+		return isContractItem;
+	}
+	public void setContractItem(boolean isContractItem) {
+		this.isContractItem = isContractItem;
+	}
+
+	private void setContractItemFromSession() {
+		if (getWCContext().getWCAttribute(CONTRACT_CHECKBOX, WCAttributeScope.SESSION) == null) {
+			getWCContext().setWCAttribute(CONTRACT_CHECKBOX, false, WCAttributeScope.SESSION);
+		}
+		Object contractCheckboxSelected = getWCContext().getWCAttribute(CONTRACT_CHECKBOX, WCAttributeScope.SESSION);
+		if (contractCheckboxSelected != null) {
+			isContractItem = contractCheckboxSelected.toString().equalsIgnoreCase("true");
 		}
 	}
 
@@ -835,7 +860,9 @@ public class XPEDXCatalogAction extends CatalogAction {
 			String[] searchStringTokenList = searchStringValue.split(" ");
 			searchTerm="";
 			setStockedItemFromSession();
+			setContractItemFromSession();
 			List<String> specialWords = Arrays.asList(luceneEscapeWords);
+
 			for (String searchStringToken : searchStringTokenList) {
 				if (!specialWords.contains(searchStringToken.trim().toLowerCase())) {
 					if (!"".equals(searchStringToken.trim())) {
@@ -844,16 +871,16 @@ public class XPEDXCatalogAction extends CatalogAction {
 						}
 
 						//EB-7558 - When searched with singler term for eg 5T3, it should searc with 5T3*
-						if (searchStartsWithFlag && searchStringTokenList.length == 1 && searchStringToken.indexOf("*") == -1 ){							
+						if (searchStartsWithFlag && searchStringTokenList.length == 1 && searchStringToken.indexOf("*") == -1 ){
 							searchStringToken =searchStringToken+ "*";
 						}
-						//End of //EB-7558
 						searchTerm=searchTerm+searchStringToken+" ";
+
 						valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Value", searchStringToken.trim());
 						// eb-3685: marketing group search 'search within results' cannot use SHOULD
-						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem) {
+						if (searchStringTokenList.length == 1 && getMarketingGroupId() == null && !isStockedItem && !isContractItem) {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "SHOULD");
-							
+
 						} else {
 							valueMap.put("/SearchCatalogIndex/Terms/Term[" + termIndex + "]/@Condition", "MUST");
 						}
@@ -936,22 +963,41 @@ public class XPEDXCatalogAction extends CatalogAction {
 			String shipFromDivision = shipToCustomer.getExtnShipFromBranch();
 
 			if (shipFromDivision != null && shipFromDivision.trim().length() > 0) {
-				Element terms = null;
-				if (elements != null && elements.size() > 0) {
-					terms = elements.get(TERMS_NODE);
-				} else {
-					terms = SCXmlUtil.createChild(mashupInput, "Terms");
-				}
-
-				Element term = SCXmlUtil.createChild(terms, "Term");
+				Element term = createTerm(elements, mashupInput, TERMS_NODE);
 				term.setAttribute("Condition", "MUST");
 				term.setAttribute("IndexFieldName", "showStockedItems");
 				term.setAttribute("Value", shipFromDivision);
 			}
 		}
+
+		setContractItemFromSession();
+		if (isContractItem) {
+			String billToCustomer = shipToCustomer.getBillTo().getCustomerID();
+			if (billToCustomer != null && billToCustomer.trim().length() > 0) {
+				String[] billToParts = billToCustomer.split("-");
+				elements = SCXmlUtil.getElements(mashupInput, "Terms"); //elements not updated above?
+				Element term = createTerm(elements, mashupInput, TERMS_NODE);
+				term.setAttribute("Condition", "MUST");
+				term.setAttribute("IndexFieldName", "contractBillTos");
+				term.setAttribute("Value", billToParts[0]+billToParts[1]);
+			}
+		}
+
 		// EB-1731 Adding api inputXML in request so that it should not do all calculation on View all link
 		//         the size of this xml will be around 100 bytes so there will not be any latency.
 		searchIndexInputXML = SCXmlUtil.getString(mashupInput).replace("\n", "");
+	}
+
+	private Element createTerm(ArrayList<Element> elements, Element mashupInput, int TERMS_NODE) {
+		Element terms = null;
+		if (elements != null && elements.size() > 0) {
+			terms = elements.get(TERMS_NODE);
+		} else {
+			terms = SCXmlUtil.createChild(mashupInput, "Terms");
+		}
+
+		Element term = SCXmlUtil.createChild(terms, "Term");
+		return term;
 	}
 
 	private void changeBasis() {
@@ -1461,7 +1507,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 			boolean isCategoryLanding = determineCatalogLandingRedirection(bcl, pathDepth);
 			// Added below condn for XBT-269
 			if (!"2".equals(categoryDepthNarrowBy) && isCategoryLanding) {
-				getWCContext().removeWCAttribute("StockedCheckbox", WCAttributeScope.SESSION);
+				getWCContext().removeWCAttribute(STOCKED_CHECKBOX, WCAttributeScope.SESSION);
 				// call the catalog landing mashup
 				setMashupID(getCatalogLandingMashupID());
 			}
@@ -2063,6 +2109,7 @@ public class XPEDXCatalogAction extends CatalogAction {
 		if (isStockedItem) {
 			setsearchMetaTag(true);
 		}
+		//TODO need something like this for Contract?
 
 		getCatTwoDescFromItemIdForpath(getOutDoc().getDocumentElement(), path);
 
@@ -2841,7 +2888,13 @@ public class XPEDXCatalogAction extends CatalogAction {
 
 	public String setNormallyStockedCheckbox() {
 		init();
-		getWCContext().setWCAttribute("StockedCheckbox", isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
+		getWCContext().setWCAttribute(STOCKED_CHECKBOX, isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
+		return SUCCESS;
+	}
+
+	public String setContractCheckbox() {
+		init();
+		getWCContext().setWCAttribute(CONTRACT_CHECKBOX, isContractCheckboxSelected(), WCAttributeScope.SESSION);
 		return SUCCESS;
 	}
 

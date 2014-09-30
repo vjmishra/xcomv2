@@ -752,7 +752,7 @@ div.catalog-search-container input#search_searchTerm {
 	width: 100%; */
 }
 .pageresults {
-	margin-top: -7px;
+	margin: 6px 2px 3px 0px;
 }
 .content-container {
 	background-color: #FFFFFF;
@@ -1655,20 +1655,18 @@ hr.shade {
 
 /*------------PAGINATION--------------*/
 .drag-to-compare {
-	line-height: 30px;
-	width: 40%;
+	width: 320px;
+	margin-left: 14px;
 	float: left;
 	clear: none;
-	padding-left: 10px;
+	padding-left: 11px;
+	margin-top: -4px;
 }
 .drag-to-compare:hover {
 	background: #ebf7d2;
 }
 .drag-to-compare, .drag-to-compare a {
 	color: #003399;
-}
-.sortbycontrols select {
-	margin-right: 10px;
 }
 .pagination-wrap {
 	width: 300px;
@@ -1741,3 +1739,44 @@ hr.shade {
 	margin-left:auto;
 	margin-right: 160px;
 }
+
+/*-----------CATALOG FILTERS-----------*/
+
+.sortbycontrols span {
+	color: #333333;
+	font-weight: normal;
+}
+.showall {
+	font-weight: bold;
+	display: inline;
+	margin-left: -3px;
+	vertical-align: 2px;
+}
+.sortbycontrols select {
+	margin-right: 20px;
+	margin-top: 2px;
+}
+.showall-check {
+	display: inline;
+	width: 30px;
+}
+.filter-by {
+	width: 100%;
+	border-bottom: 1px #ececec solid;
+	height: 28px;
+	padding-top: 8px;	
+}
+.filter-by div {
+	display: inline;
+	margin-left: 20px;
+	color: #0849a1;
+}
+.filter-by input {
+	vertical-align: -2px;
+	margin-right: 4px;
+	}
+.filter-by .title {
+	font-weight: bold;
+	color: #000000;
+	margin-left: 25px;
+	}
