@@ -109,6 +109,15 @@ function clearCreateNewList()
 	$.fancybox.close();
 }
 
+function clearCatalogFilters()
+{			
+	document.getElementById('stockedItem').value = false;
+	document.getElementById('contractItem').value = false;
+	document.getElementById("stockedItemChk").checked=false;
+	document.getElementById("contractItemChk").checked=false;
+	setCatalogFilters();
+}
+
 /*if ("<s:property value="rbPermissionPrivate"/>" != ""){
 	hideForm('ShareListShared');
 }*/

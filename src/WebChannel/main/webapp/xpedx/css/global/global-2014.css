@@ -748,8 +748,7 @@ div.catalog-search-container input#search_searchTerm {
 .sortbycontrols {
 	background-color: #ececec;
 	height: 22px;
-	/* line-height: 23px;
-	width: 100%; */
+	padding-left: 25px;
 }
 .pageresults {
 	margin: 6px 2px 3px 0px;
@@ -1742,23 +1741,9 @@ hr.shade {
 
 /*-----------CATALOG FILTERS-----------*/
 
-.sortbycontrols span {
-	color: #333333;
-	font-weight: normal;
-}
-.showall {
-	font-weight: bold;
-	display: inline;
-	margin-left: -3px;
-	vertical-align: 2px;
-}
 .sortbycontrols select {
 	margin-right: 20px;
 	margin-top: 2px;
-}
-.showall-check {
-	display: inline;
-	width: 30px;
 }
 .filter-by {
 	width: 100%;
@@ -1769,7 +1754,6 @@ hr.shade {
 .filter-by div {
 	display: inline;
 	margin-left: 20px;
-	color: #0849a1;
 }
 .filter-by input {
 	vertical-align: -2px;

@@ -23,25 +23,13 @@
 <s:set name='isGuestUser' value="wCContext.guestUser" />
 
 <script type="text/javascript">	
-function setStockItemFlag()
+function setFilterItemFlags()
 {
 	if(document.getElementById('stockedItemChk').value == 'true')
 	{
 		document.getElementById('stockedItem').value = true;
 	}
-	if(document.getElementById('stockedItemChkBtm').checked)
-	{
-		document.getElementById('stockedItem').value = true;
-	}
-}
-function setContractItemFlag()
-{
-	//TODO uncomment once update bottom tags
-// 	if(document.getElementById('contractItemChk').value == 'true')
-// 	{
-// 		document.getElementById('contractItem').value = true;
-// 	}
-	if(document.getElementById('contractItemChkBtm').checked)
+	if(document.getElementById('contractItemChk').checked)
 	{
 		document.getElementById('contractItem').value = true;
 	}

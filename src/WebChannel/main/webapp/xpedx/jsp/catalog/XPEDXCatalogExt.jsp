@@ -338,30 +338,25 @@
 	<div class="t1-main-content-alt" id="navigateContainer"> 
 	
 	<div class="sortbycontrols">
-		<div class="showall-check">
-			<input id="showAllItemChk" type="checkbox" checked="checked" value="true" class="addmargintop5">
-		</div>
-		<div class="showall">Show All Products</div>
+	<div>
+		<span class="bold">Sort By:</span>
+		<select name="pageSize"tabindex="81" id="sortFieldUpper" onchange="processSortByUpper()">
+				<s:iterator id='sortListFeild' value='#sortList'>
+			 	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
+					<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
+						value='#sortListFeild.value' /></option>
+				</s:if>
+				<s:else>
+					<option value="<s:property value='#sortListFeild.key'/>"><s:property
+						value='#sortListFeild.value' /></option>
+				</s:else>		
+				</s:iterator>							
+		</select>
 		<div class="float-right">
-			<span>Sort By:</span>
-			<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldUpper"
-				onchange="javascript:processSortByUpper()">
-					<s:iterator id='sortListFeild' value='#sortList'>
-				 	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
-						<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
-							value='#sortListFeild.value' /></option>
-					</s:if>
-					<s:else>
-						<option value="<s:property value='#sortListFeild.key'/>"><s:property
-							value='#sortListFeild.value' /></option>
-					</s:else>		
-					</s:iterator>							
-			</select>
 			<span>Display:</span>
 			<s:set name='pageNumList'	value='#{"20":"20 per page", "40":"40 per page", "60":"60 per page"}' />
-		 	<select name="pageSize" class="xpedx_select_sm addmarginright20" tabindex="81"
-					id="pageSizeUpper" onchange="javascript:processPageSizeUpper();">
-					
+		 	<select name="pageSize" class="addmarginright20" tabindex="81" id="pageSizeUpper"
+			 		onchange="javascript:processPageSizeUpper();">
 			 	<s:iterator id='pageSizeField' value='#pageNumList'>
 			 	<s:if test='%{#pageSizeField.key.equals(pageSize)}'>
 					<option selected value="<s:property value='#pageSizeField.key'/>"><s:property
@@ -389,39 +384,29 @@
 			</ul>
 		</div>
 	</div>
+	</div>
 
 	<s:if test="#isGuestUser == false">	
 		<div class="filter-by">
 			<div class="title">Filter By:</div>
-			<div><input id="bestSellerItemChkBtm" type="checkbox" <s:if test="%{false}">checked</s:if> />Best Seller</div> <!-- TODO -->
+			<div><input id="bestSellerItemChk" type="checkbox" <s:if test="%{false}">checked</s:if> />Best Seller</div> <!-- TODO -->
 
-			<s:set name="isContractChecked" value="%{getWCContext().getWCAttribute('ContractCheckbox')}"/> <!-- TODO -->
-			<div><input id="contractItemChkBtm"   type="checkbox" <s:if test="%{isContractChecked}">checked</s:if>
-				onchange="setContractSelectDropDownBottom(); setContractItemFlag();"/>Contract Pricing</div>
+			<s:set name="isContractChecked" value="%{getWCContext().getWCAttribute('ContractCheckbox')}"/>
+			<div><input id="contractItemChk"   type="checkbox" <s:if test="%{isContractChecked}">checked</s:if>
+				onchange="setFilterItemFlags();setCatalogFilters();"/>Contract Pricing</div>
 
 			<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
-				<s:hidden name="stockedItemChkBtm" value="true" />
+				<s:hidden name="stockedItemChk" value="true" />
 			</s:if>
 			<s:else>
 				<s:set name="isStockChecked" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-				<div><input id="stockedItemChkBtm" type="checkbox"  <s:if test="%{#isStockChecked}">checked</s:if>
-					onchange="setNormallyStockedSelectDropDownBottom(); setStockItemFlag();"/>Normally Stocked</div>
-<%-- 
-			<span class="checkboxtxt">View:&nbsp;</span>	
-			<select id="stockedItemChkBtm" name="stockedItemChkBtm"  onchange="javascript:setNormallyStockedSelectDropDownBottom();setStockItemFlag();">
-				<option value="false">All Items</option>
-				<s:if test='#checkedval'>
-					<option value="true" selected="selected">Normally Stocked</option>
-				</s:if>							
-				<s:else>
-					<option value="true">Normally Stocked</option>
-				</s:else>
-			</select>  --%>
+				<div><input id="stockedItemChk" type="checkbox"  <s:if test="%{#isStockChecked}">checked</s:if>
+					onchange="setFilterItemFlags();setCatalogFilters();"/>Normally Stocked</div>
 			</s:else>
+			<div><a href="javascript:clearCatalogFilters()" class="underline">Clear Filters</a></div>
 		</div>
 	</s:if>
 
-	<!-- TODO verify pagination still works -->
 	<input type="hidden" id="theSpanNameValue" name="theSpanNameValue" value=<%=request.getParameter("theSpanNameValue")%> />
 	<input type="hidden" id="sortDirection" name="sortDirection" value=<%=request.getParameter("sortDirection")%> /> 
 
@@ -442,7 +427,7 @@
 	<a id="dlgShareListLink" href="#dlgShareList"> show new list</a>
 	<div id="dlgShareList" class="share-modal xpedx-light-box">
 	<h2 id="smilTitle">Share My Items List</h2>
-	<br>
+	<br/>
 	
 	<!-- CODE_START MIL - PN --> 
 	<s:form 
@@ -1096,15 +1081,17 @@ var ct = Ext.get('item-box-inner');
 	<div class="normal-view" id="items">
 	<div id="items-control">
 	<div class="drag-to-compare"  id="items-combox">
-	<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
-	<s:if test="%{#totalNumberOfPages} == 0"> 
-	 	<div class="success"> Your search did not yield any results. Please try again. </div>
-	 </s:if> 
-	 <s:else>
-			<s:text name="MSG.SWC.COMP.DRAGTOCOMPARE.GENERIC.PGTITLE" />	
-			:<span id="comnum"> <s:text name='No_Items' /></span>
-	 </s:else>
-	 </a></h4>
+		<h4><a href="javascript:validationforDragToCompare();" tabindex="41">
+			<s:if test="%{#totalNumberOfPages} == 0"> 
+			 	<div class="success"> Your search did not yield any results. Please try again. </div>
+			</s:if> 
+			<s:else>
+				<s:text name="MSG.SWC.COMP.DRAGTOCOMPARE.GENERIC.PGTITLE" />	
+				:<span id="comnum"> <s:text name='No_Items' /></span>
+		 	</s:else>
+			</a>
+			<span>(drag, drop, and click to compare)</span>
+		</h4>
 	</div>
 		
 	</div>
@@ -1123,80 +1110,50 @@ var ct = Ext.get('item-box-inner');
 	</form>
 	
 	<div class="clearall">&nbsp;</div>
-	<div class="pagination line-spacing">
-	<div class="sortbycontrols">
-					<span class="checkboxtxt">Sort By:&nbsp;</span> 
-					<select name="pageSize" class="xpedx_select_sm" tabindex="81" id="sortFieldLower" name="sortFieldLower"
-						onchange="javascript:processSortByLower()">
-                		<%-- <s:iterator id='sortField' value='%{sortFieldList}'> --%>
-                		<%-- <s:if test='%{#sortField.key.equals(sortField)}'> --%>
-							<s:iterator id='sortListFeild' value='#sortList'>
-                         	<s:if test='%{#sortListFeild.key.equals(sortField)}'>
-								<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
-									value='#sortListFeild.value' /></option>
-							</s:if>
-							<s:else>
-								<option value="<s:property value='#sortListFeild.key'/>"><s:property
-									value='#sortListFeild.value' /></option>
-							</s:else>		
-							</s:iterator>							
-						<%-- </s:if> --%>
-						<%-- <s:else> --%>
-							<!-- <option  value="<s:property value='#sortField.key'/>"><s:property
-							value='#sortField.value' /></option> -->
-						<%-- </s:else>	--%>
-						<%-- </s:iterator> --%>
-                     </select>
-                     
-                     <span class="checkboxtxt">Show:&nbsp;</span>
-                      <s:set name='pageNumList'	value='#{"20":"20 per page", "40":"40 per page", "60":"60 per page"}' />
-                     	<select name="pageSizeLower" class="xpedx_select_sm" tabindex="81"
-								id="pageSizeLower" onchange="javascript:processPageSizeLower();">
-								
-                         	<s:iterator id='pageSizeField' value='#pageNumList'>
-                         	<s:if test='%{#pageSizeField.key.equals(pageSize)}'>
-								<option selected value="<s:property value='#pageSizeField.key'/>"><s:property
-									value='#pageSizeField.value' /></option>
-							</s:if>
-							<s:else>
-								<option value="<s:property value='#pageSizeField.key'/>"><s:property
-									value='#pageSizeField.value' /></option>
-							</s:else>		
-							</s:iterator>
-                    	 </select>
-                     <!-- TODO this has to be redone like top of screen -->
-						<s:if test="#isGuestUser == false">	
-							<s:if test="#currentShipTo.billTo.extnDefaultStockedItemView == @com.sterlingcommerce.xpedx.webchannel.common.XPEDXConstants@DEFAULT_STOCKED_ITEM_VIEW_ONLY_STOCKED">
-								<s:hidden name="stockedItemChk" value="true" />
-							</s:if>
-							<s:else>
-								<s:set name="checkedval" value="%{getWCContext().getWCAttribute('StockedCheckbox')}"/>
-								<span class="checkboxtxt">View:&nbsp;</span>	
-								<select id="stockedItemChk" name="stockedItemChk"  onchange="javascript:setNormallyStockedSelectDropDown();setStockItemFlag();">
-									<option value="false">All Items</option>
-									<s:if test='#checkedval'>
-										<option value="true" selected="selected">Normally Stocked</option>
-									</s:if>							
-									<s:else>
-										<option value="true">Normally Stocked</option>
-									</s:else>
-								</select> 
-							</s:else>
-						</s:if>
-	</div>
-	<%--Added hidden parameter searchTermString for JIRA #4195 --%>
-	<s:hidden id='searchTermString' name='searchTermString' value="%{searchString}" />
-	<s:url id="goToPageURL" action="goToPage">		
-		<s:param name="sortDirection" value="#sortDir"/>
-		<s:param name="theSpanNameValue" value="#sortName"/>
-		<s:param name="pageNumber" value="'{0}'" />
-		<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
-	</s:url> 
-	<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
+	<div>
+		<div class="sortbycontrols">
+			<span class="bold">Sort By:</span> 
+			<select name="pageSize"tabindex="81" id="sortFieldLower" name="sortFieldLower"
+				onchange="javascript:processSortByLower()">
+				<s:iterator id='sortListFeild' value='#sortList'>
+					<s:if test='%{#sortListFeild.key.equals(sortField)}'>
+					<option selected value="<s:property value='#sortListFeild.key'/>"><s:property
+						value='#sortListFeild.value' /></option>
+				</s:if>
+				<s:else>
+					<option value="<s:property value='#sortListFeild.key'/>"><s:property
+						value='#sortListFeild.value' /></option>
+				</s:else>		
+				</s:iterator>							
+			</select>
+
+			<span>Display:</span>
+			<s:set name='pageNumList'	value='#{"20":"20 per page", "40":"40 per page", "60":"60 per page"}' />
+			<select name="pageSizeLower" tabindex="81" id="pageSizeLower"
+					onchange="javascript:processPageSizeLower();">
+			 	<s:iterator id='pageSizeField' value='#pageNumList'>
+			 	<s:if test='%{#pageSizeField.key.equals(pageSize)}'>
+					<option selected value="<s:property value='#pageSizeField.key'/>"><s:property
+						value='#pageSizeField.value' /></option>
+				</s:if>
+				<s:else>
+					<option value="<s:property value='#pageSizeField.key'/>"><s:property
+						value='#pageSizeField.value' /></option>
+				</s:else>		
+				</s:iterator>
+			</select>
+		</div>
+		<%--Added hidden parameter searchTermString for JIRA #4195 --%>
+		<s:hidden id='searchTermString' name='searchTermString' value="%{searchString}" />
+		<s:url id="goToPageURL" action="goToPage">		
+			<s:param name="sortDirection" value="#sortDir"/>
+			<s:param name="theSpanNameValue" value="#sortName"/>
+			<s:param name="pageNumber" value="'{0}'" />
+			<s:param name="marketingGroupId" value="#parameters.marketingGroupId" />
+		</s:url> 
+		<xpedx:flexpagectl currentPage='%{#pageNumber}' lastPage='%{#totalNumberOfPages}' totalResults='%{#numResult}'
 				urlSpec='%{#goToPageURL}' cssClass='pageresults' isAjax="false" />
 	</div>
-	</div>
-	<!-- old narrow by include -->
 	</div>
 	<div class="loading-wrap"  style="display:none;">
          <div class="load-modal" ></div>
@@ -1234,7 +1191,6 @@ var ct = Ext.get('item-box-inner');
 x-dd-drop-nodrop">
 <div class="x-dd-drop-icon"></div>
 <div id="ext-gen4" class="x-dd-drag-ghost"></div>
-</div>
 </div>
 <s:url id="ajaxAvailabilityJsonURL" action="ajaxAvailabilityJson" namespace="/catalog"/>
 <s:url id="ajaxAvailabilityJson_PriceURL" action="ajaxAvailabilityJson_Price" namespace="/catalog"/>

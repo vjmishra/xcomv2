@@ -360,13 +360,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 		this.stockedCheckeboxSelected = stockedCheckeboxSelected;
 	}
 
-	public boolean isStockedItem() {
-		return isStockedItem;
-	}
-	public void setStockedItem(boolean isStockedItem) {
-		this.isStockedItem = isStockedItem;
-	}
-
 	private void setStockedItemFromSession() {
 		if (getWCContext().getWCAttribute(STOCKED_CHECKBOX, WCAttributeScope.SESSION) == null) {
 			// init session value from bill-to setting
@@ -390,12 +383,6 @@ public class XPEDXCatalogAction extends CatalogAction {
 	}
 	public void setContractCheckboxSelected(boolean contractCheckboxSelected) {
 		this.contractCheckboxSelected = contractCheckboxSelected;
-	}
-	public boolean isContractItem() {
-		return isContractItem;
-	}
-	public void setContractItem(boolean isContractItem) {
-		this.isContractItem = isContractItem;
 	}
 
 	private void setContractItemFromSession() {
@@ -2886,14 +2873,10 @@ public class XPEDXCatalogAction extends CatalogAction {
 		return _pricelistLineMap;
 	}
 
-	public String setNormallyStockedCheckbox() {
+	//TODO add Best
+	public String setCatalogFilters() {
 		init();
-		getWCContext().setWCAttribute(STOCKED_CHECKBOX, isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
-		return SUCCESS;
-	}
-
-	public String setContractCheckbox() {
-		init();
+		getWCContext().setWCAttribute(STOCKED_CHECKBOX,  isStockedCheckeboxSelected(), WCAttributeScope.SESSION);
 		getWCContext().setWCAttribute(CONTRACT_CHECKBOX, isContractCheckboxSelected(), WCAttributeScope.SESSION);
 		return SUCCESS;
 	}
