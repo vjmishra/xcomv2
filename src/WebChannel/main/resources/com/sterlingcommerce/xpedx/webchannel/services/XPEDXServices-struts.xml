@@ -11,19 +11,6 @@
 		<result name="success">/xpedx/jsp/services/XPEDXEstimatingFiles.jsp</result>
 	</action>
 	
-	<!-- Start For Reporting -->
-	<action name="XPEDXReports" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXChangeReportingAction">
-		<result name="success">/xpedx/jsp/services/XPEDXAllCRReports.jsp</result>
-		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>
-				
-	</action>
-	<!--  End For Reporting -->
-	 	
-	<action name="myreports" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAllReportsAction">
-		<result name="success">/xpedx/jsp/services/XPEDXGetAllReports.jsp</result>
-		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>				
-	</action>
-		
 	<action name="MyTools" class="com.sterlingcommerce.webchannel.core.WCAction">
 		<result name="success">/xpedx/jsp/tools/XPEDXTools.jsp</result>
 	</action>
@@ -65,7 +52,17 @@
 		<result name="success">/xpedx/jsp/services/XPEDXServicesHome.jsp</result>
 		<result name="orderDetailError">/error/jsp/common/GeneralSystemError.jsp</result>
 	</action>
-	<!-- Start For Reporting  -->
+	
+	
+	<!-- =======Start OF  BOE REPORTING SECTION ==================================================================== -->
+	<!-- EB-7221 - cleanup/document used/unused BI/BOE classes -->
+	<!-- NOT used - OLD BOE action class. -->
+	<action name="XPEDXReports" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXChangeReportingAction">
+		<result name="success">/xpedx/jsp/services/XPEDXAllCRReports.jsp</result>
+		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>				
+	</action>	
+
+	<!-- -NOT used  - OLD BOE-->
 	<action name="promptInput" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
 		<result name="WebiInputPrompt" type="redirectAction">
 		     <param name="actionName">getWebiInputPrompt</param>
@@ -73,30 +70,15 @@
 		     <param name="cuid">${cuid}</param>
 		     <param name="kind">${kind}</param>
 		      <param name="name">${name}</param>
-		    
-		     
-		</result>
-		 
-		</action>
-		
-	<action name="getprompts" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
-		<result name="WebiInputPrompt" type="redirectAction">
-		     <param name="actionName">getinputprompt</param>
-		     <param name="id">${id}</param>	    
-		     <param name="name">${name}</param>		     
-		</result>
-		 
-	</action>	
-	
-	<action name="getinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetWebiPromptsAction">		
-		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
-		<result name="success">/xpedx/jsp/services/XPEDXGetWebiPrompts.jsp</result>
+		</result>		 
 	</action>
+	<!-- -NOT used  - OLD BOE - displays the report details page / i.e parameter prompts-->
 	<action name="getWebiInputPrompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXWebiInputPromptAction">		
 		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
 		<result name="success">/xpedx/jsp/services/XPEDXWebiInputPrompt.jsp</result>
 	</action>
 	
+	<!-- -NOT used  - OLD BOE-->
 	<action name="processWebiInputPrompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXProcessWebiPromptAction">				
 		<result name="success" type="redirectAction">
 			<param name="actionName">getWebiInputPrompt</param>
@@ -110,6 +92,33 @@
 		    	    
 		</result>
 	</action>
+	<!-- =======END OF  BOE REPORTING SECTION ==================================================================== -->
+	
+	
+	
+	<!-- =======Start OF  BI4 REPORTING SECTION - EB-7221 ==================================================================== -->
+	
+	<!-- used - Step 1  -  New BI4 - displays the REPORTLIST page-->
+	<action name="myreports" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAllReportsAction">
+		<result name="success">/xpedx/jsp/services/XPEDXGetAllReports.jsp</result>
+		<result name="error">/xpedx/jsp/services/xpedxErrorReport.jsp</result>				
+	</action>
+	<!-- -used - Step 2-A  - New BI4 - used as a redirect before displaying the report details page / i.e parameter prompts  -->	
+	<action name="getprompts" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXDivertInputPromptAction">
+		<result name="WebiInputPrompt" type="redirectAction">
+		     <param name="actionName">getinputprompt</param>
+		     <param name="id">${id}</param>	    
+		     <param name="name">${name}</param>		     
+		</result>
+		 
+	</action>		
+	<!-- -used  - Step 2-B - New BI4 - displays the report details page / i.e parameter prompts @ swc/services/getinputprompt.action-->	
+	<action name="getinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetWebiPromptsAction">		
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/services/XPEDXWebiInputPrompts_binding.xml</param>
+		<result name="success">/xpedx/jsp/services/XPEDXGetWebiPrompts.jsp</result>
+	</action> 
+	
+	<!-- used - Step 3 - BI4 - processes the post after the user selects the report parameters and clicks SUBMIT, then redirects to the getinputprompt.action again -->
 	<action name="processinputprompt" class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXProcessPromptsAction">				
 		<result name="success" type="redirectAction">
 		     <param name="actionName">getinputprompt</param>
@@ -120,26 +129,25 @@
 		</result>
 	</action>
 	
-		<!-- For Account and Bill To In Reporting -->
-		<!--  <action name="xpedxShowLocationsForReporting" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXShowLocations">-->
-	 	<action name="xpedxShowLocationsForReporting" 
-	 		class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAssignedLocationsForReporting" 
-	 		method="getAssignedLocations">
-			<param name="mashups">xpedx-getCustomerAssignments</param>
-			<result name="success">/xpedx/jsp/services/XPEDXShowLocationsForReporting.jsp</result>
-			<result name="bill-to">/xpedx/jsp/services/XPEDXShowBillToForReporting.jsp</result>
-		</action>		
+	<!-- For Account and Bill To In Reporting -->
+	<!--  <action name="xpedxShowLocationsForReporting" class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXShowLocations">-->
+	<action name="xpedxShowLocationsForReporting" 
+		class="com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAssignedLocationsForReporting" 
+		method="getAssignedLocations">
+		<param name="mashups">xpedx-getCustomerAssignments</param>
+		<result name="success">/xpedx/jsp/services/XPEDXShowLocationsForReporting.jsp</result>
+		<result name="bill-to">/xpedx/jsp/services/XPEDXShowBillToForReporting.jsp</result>
+	</action>		
 
 	<!-- Action For Ship To In Reporting -->	
-		 <action name="xpedxGetAssignedCustomersForReporting"
-			class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
-			method="getPaginatedAssignedCustomers">
-			<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
-			<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
-			<result name="success">/xpedx/jsp/services/XPEDXAssignedCustomersForReporting.jsp
-			</result>
-		</action>
-		<!--End For Reporting  -->
+	<action name="xpedxGetAssignedCustomersForReporting"
+		class="com.sterlingcommerce.xpedx.webchannel.profile.org.XPEDXCustomerAssignmentAction"
+		method="getPaginatedAssignedCustomers">
+		<param name="mashups">XPEDXGetPaginatedCustomerAssignments</param>
+		<param name="xmlBindingFile">com/sterlingcommerce/xpedx/webchannel/common/xpedxGetAssignedCustomers_Binding.xml</param>
+		<result name="success">/xpedx/jsp/services/XPEDXAssignedCustomersForReporting.jsp</result>
+	</action>
+	<!-- =======END OF  BI4 REPORTING SECTION ==================================================================== -->
 	
 	
   </package>

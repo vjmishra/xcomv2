@@ -256,6 +256,10 @@
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/ypmbe.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/yscpbe.jar"/>
 	<classpathentry kind="var" path="SWC_WAR/WEB-INF/lib/yscwbe.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/smcfs"/>		
+	<classpathentry combineaccessrules="false" kind="src" path="/smcfs"/>
+	<classpathentry kind="var" path="SWC_WAR"/>
+	<classpathentry kind="var" path="WEBLOGIC_HOME"/>
+	<classpathentry kind="lib" path="C:/deployments/swc/WEB-INF/lib/opencsv-2.1.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
