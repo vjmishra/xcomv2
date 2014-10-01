@@ -178,7 +178,7 @@ private void writetoFile(String errorMessage,String itemId, String division) thr
 	//Write to a  file
 	try {	
 			String content = sb.toString();		
-			String filename="itembrancherrors.log";
+			String filename="/xpedx/logfiles/itembrancherrors.log";
     	    String [] commands = { "bash", "-c", "echo hello > hello.txt" };
     	      
     	    commands[2]="echo "+ content + " >> " + filename;
