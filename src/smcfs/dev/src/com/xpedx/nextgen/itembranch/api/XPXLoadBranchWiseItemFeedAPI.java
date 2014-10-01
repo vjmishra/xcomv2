@@ -1,6 +1,9 @@
 package com.xpedx.nextgen.itembranch.api;
 
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 import org.w3c.dom.Document;
@@ -173,17 +176,24 @@ private void writetoFile(String errorMessage,String itemId, String division) thr
 	
 	StringBuilder sb=new StringBuilder("");
 			
-	sb.append("\n " + itemId + "|" + division + "|" +errorMessage);
+	
 			
 	//Write to a  file
-	try {	
-			String content = sb.toString();		
-			String filename="/xpedx/logfiles/itembrancherrors.log";
-    	    String [] commands = { "bash", "-c", "echo hello > hello.txt" };
-    	      
-    	    commands[2]="echo "+ content + " >> " + filename;
-    	    Runtime.getRuntime().exec(commands);    	   
-
+	try {						
+			String filename="/xpedx/logfiles/itembrancherrors.csv";
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date nowdate = new Date();
+			String logtime = dateFormat.format(nowdate);
+			
+        	sb.append("${nl} " + logtime + ","+itemId + "," + division + "," +errorMessage);
+        	String content = sb.toString();		
+        	System.out.println("Content of error to be displayed for item branch is : "+content);
+			
+			String [] commands = { "bash", "-c", "echo hello > hello.txt" };			
+			commands[2]="echo "+ content + " >> " + filename;
+			
+    	    Runtime.getRuntime().exec(commands);   
+    	    
 		System.out.println("Done with write in a file");
 
 	}catch (IOException x) {
