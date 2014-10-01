@@ -23,7 +23,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.linar.jintegra.Log;
+//import com.linar.jintegra.Log;
 import com.reports.service.Report;
 import com.sterlingcommerce.xpedx.webchannel.services.XPEDXGetAllReportsAction;
 import com.sterlingcommerce.xpedx.webchannel.utilities.XPEDXWCUtils;
