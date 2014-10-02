@@ -50,10 +50,8 @@ public class ItemIndexUtil {
 		// group the item ids for batched calls
 		SegmentedList<String> itemIDGroups = new SegmentedList<String>(itemIDs, 100);
 		for (List<String> itemIDGroup : itemIDGroups) {
-			System.out.println("\nJ: ---------- Segment ------- "); //TODO remove all println
 
 			Map<String, Set<String>> contractBillTosForItem = getContractBillToIds(env, itemIDGroup);
-			System.out.println("J: Meta contractBillTosForItem #: " + contractBillTosForItem.size());
 
 			Map<String, Set<String>> divisionsInStockForItem = getDivisionsInStockForAllItems(env, itemIDGroup, inStockStatus);
 
@@ -66,7 +64,6 @@ public class ItemIndexUtil {
 
 				im.setDivisionsInStock(divisionsInStock);
 				if (contractBillTosForItem.get(itemID) != null) {
-					System.out.println("J:  MetaLoop found BillTos for item: " + itemID + " = " + contractBillTosForItem.get(itemID));
 					im.setContractBillTos(contractBillTosForItem.get(itemID));
 				}
 
@@ -86,10 +83,8 @@ public class ItemIndexUtil {
 		Element itemListOutputElem = getContractElementsFromDB(env, itemIds);
 
 		List<Element> itemElems = SCXmlUtil.getElements(itemListOutputElem, "XPXItemContractExtn");
-		System.out.println("J: # of XPXItemContractExtn: " + itemElems.size());
 
 		for (Element itemElem : itemElems) {
-			System.out.println("J: itemElem: " + SCXmlUtil.getString(itemElem));
 			addBillToForItem(contractBillTosForItems, itemElem);
 		}
 
@@ -110,7 +105,6 @@ public class ItemIndexUtil {
 
 		Document contractsOutputDoc = api.executeFlow(env, "XPXGetItemContractExtn", contractsInputDoc.getDocument());
 
-		System.out.println("J: output: " + SCXmlUtil.getString(contractsOutputDoc.getDocumentElement()));
 		return contractsOutputDoc.getDocumentElement();
 	}
 	private YFCDocument getContractsApiInput(Collection<? extends String> itemIds) {
@@ -127,7 +121,6 @@ public class ItemIndexUtil {
 			expElem.setAttribute("Name", "ItemId");
 			expElem.setAttribute("Value", itemId);
 		}
-//		System.out.println("J: itemInputDoc = " + SCXmlUtil.getString(contractsInputDoc.getDocument()));
 		return contractsInputDoc;
 	}
 	private void addBillToForItem(Map<String, Set<String>> contractBillTosForItems, Element itemElem) {
@@ -145,8 +138,6 @@ public class ItemIndexUtil {
 		String billTo = itemElem.getAttribute("CustomerId");
 		String[] billToParts = billTo.split("-");
 		contractBillTos.add(billToParts[0]+billToParts[1]);
-		System.out.println("J:   stripped: " + billToParts[0]+billToParts[1]);
-		System.out.println("J:  # of Contracts now : " + contractBillTos.size());
 	}
 
 	//--- Divisions that have item in stock (api calls batched for improved performance)

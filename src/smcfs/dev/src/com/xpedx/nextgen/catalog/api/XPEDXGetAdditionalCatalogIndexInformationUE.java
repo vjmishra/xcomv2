@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.w3c.dom.Document;
 
-import com.sterlingcommerce.baseutil.SCXmlUtil;
 import com.xpedx.nextgen.catalog.api.ItemIndexUtil.ItemMetadata;
 import com.yantra.interop.japi.YIFClientCreationException;
 import com.yantra.ycm.japi.ue.YCMGetAdditionalCatalogIndexInformationUE;
@@ -52,7 +51,6 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 			if ("en_US".equals(inElem.getAttribute("LocaleCode"))) {
 				getLocaleDoc(env, outDoc, searchFieldListIterator, itemListIterator, metadataForItems);
 			}
-			System.out.println("J: localeDoc = " + SCXmlUtil.getString(outDoc.getDocument())); //TODO remove
 			return outDoc.getDocument();
 
 		} catch (Exception ex) {
@@ -105,8 +103,6 @@ public class XPEDXGetAdditionalCatalogIndexInformationUE implements YCMGetAdditi
 					if (log.isDebugEnabled()) {
 						log.debug("contractBillTos = " + contractBillTos);
 					}
-					if (contractBillTos.size() > 0) //TODO remove
-						System.out.println("J: Locale: joined contractBillTos = " + ItemIndexUtil.join(contractBillTos, " "));
 					valueElement.setAttribute("Value", ItemIndexUtil.join(contractBillTos, " "));
 				}
 			}
